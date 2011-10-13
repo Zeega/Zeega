@@ -1,0 +1,21 @@
+ZeegaEditorBundle_playground:
+    pattern: /playground/{short}
+    defaults: { _controller:  ZeegaEditorBundle:Editor:index }
+
+ZeegaEditorBundle_editor:
+    pattern: /playground/{short}/route/{route}
+    defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
+
+ZeegaEditorBundle_faq:
+    pattern: /faq
+    defaults: { _controller:  ZeegaEditorBundle:Editor:faq }
+
+
+ZeegaEditorBundle_admin:
+    pattern: /admin
+    defaults: { _controller:  ZeegaEditorBundle:Editor:admin }
+
+ZeegaEditorBundle_account:
+    pattern: /account
+    defaults: { _controller:  ZeegaEditorBundle:Editor:account }
+

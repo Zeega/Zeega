@@ -1,0 +1,7 @@
+parameters:
+#    zeega_ingest.example.class: Zeega\IngestBundle\Example
+
+services:
+#    zeega_ingest.example:
+#        class: %zeega_ingest.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

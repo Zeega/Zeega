@@ -1,0 +1,9 @@
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.ini
+/web/gamma/js/zeega.config.js
+/web/gamma/iamges/tmp/*
+/web/gamma/iamges/thumbs/*

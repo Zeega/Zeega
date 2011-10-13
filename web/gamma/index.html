@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+
+		<title>Zeega Editor</title>
+		<link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
+		<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		
+	
+		<!-- twitter bootstrap -->
+		<link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+		<link rel="stylesheet" media="screen" type="text/css" href="js/jquery/plugins/colorpicker/css/colorpicker.css" />
+		
+		<link rel="stylesheet" href="css/zeega.css" type="text/css" media="screen" />
+		
+		
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+
+		
+	</head>
+
+	<body>
+
+<!--  tester -->
+
+		<div id='header-bg'></div>
+		
+		<!--
+		<div id='node-bg'></div>
+		-->
+		
+		<div id="wrapper">
+		
+<!-- HEADER -->		
+		<div id="header">
+			<div id="header-title">
+				<b>Culture and Belief 11: Medicine and the Body in East Asia and Europe // phoenix  2</b>
+			</div>
+	
+			<div id="header-nav">
+
+				<ul>
+					<li class='item'><a href="http://cb11.zeega.org/faq.php">FAQ</a></li>
+					<li class='item'><a href="loader.php">Add Media</a></li>
+					<li class='item'><a href="http://mlhplayground.org/Symfony/web/app_dev.php/login">Login</a> </li>
+					
+					<li class='drop-down clearfix item'>
+						Logged in as <a href='#' class='drop-down-toggle'>jshapins</a>
+						<ul class='drop-down-menu'>
+							<li><a href='#'>Admin</a></li>
+							<li><a href='#'>Settings</a></li>
+							<li><a id='css-change' href='#'>CSS   </a></li>
+							<li><a href='#'>Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+
+			</div> <!-- #headerLoggedInWrapper -->
+			
+		</div> <!-- #header -->
+<!-- END HEADER -->		
+			
+		<div id='editor'>
+
+			<div id="route-header" class='clearfix'>
+				<div id='route-title'>Untitled</div>
+				
+				<input id="route-id" type="hidden" value="10"/>
+				<input id="project-id" type="hidden" value="15"/>
+				
+				
+				<div id='route-publish'>
+					
+					<ul class='pill-buttons'>
+						<li><a id='share' href='#'>Share</a></li>
+						<li><a id='embed' href='#'>Embed</a></li>
+						<li><a id='preview' href='#'>Preview</a></li>
+					</ul>
+				</div>
+			</div>
+
+
+			<button id='add-node' class='btn small'>+ add node</button>
+
+				<div id="node-drawer">
+					<ul></ul>
+				</div>
+				<div id="edit-drawer" class='clearfix'>
+					
+					
+						
+					<div id="sidebar" class='clearfix' >
+						
+						<ul class='tabs'>
+							<li class='active tab-heads'><a id='database-tab' href="#">Database</a></li>
+							<li class='tab-heads'><a id='layers-tab' href="#">Layers</a></li>
+							<li class='tab-heads'><a id='branch-tab' href="#">Branches</a></li>
+						</ul>
+						
+						<div id='tab-content' class='clearfix'>
+							<div id="tab-database">
+								<div id="db-nav-controls">
+							
+									<form action="" method="">
+										<input id='database-search' type='text' name='database-search' value='search' class='span6'/>
+								
+										<select id='database-filter' class='span2'>
+										  <option value="all">All</option>
+										  <option value="image">Images</option>
+										  <option value="video">Video</option>
+										  <option value="audio">Audio</option>
+										</select>
+							
+										<input class='btn success' type="button" value="go" onclick ='var form=$(this).closest("form");Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );return false;'/>
+									</form>
+							
+								</div>
+						
+								<div id='asset-preview'>
+									<a id='asset-preview-close' href='#'>x</a>
+									<div id='asset-preview-media'></div>
+									<div id='asset-preview-meta'>Title</div>
+								</div>
+								
+								<a href='#' id='refresh-database'>refresh</a>
+								<span id="database-pager"></span>
+								
+								<div id='tab-database-slide-window'></div>
+						
+							</div>
+							<div id="tab-layers">
+								<div id='new-layer'>
+									<button id='add-new-layer' class='btn success small'>add new layer</button>
+								</div>
+						
+								<ul id="sortable-layers"></ul>
+						
+						
+							</div>
+							<div id="tab-branches">
+								<div id='branch-info'>
+							 		<p class="">Nonlinear branching details coming soon</p>
+								</div>
+							</div>
+						</div><!-- tab-content -->
+				
+					</div>
+					<div id='workspace-wrapper' class='clearfix'>
+						<div id="workspace"></div>
+						<div id='node-controls'>
+							Auto-Advance: 
+							<div id="radio">
+									<input type="radio" value ='0' id="manual" name="radio" checked="checked"/><label for="manual"> Manually</label>
+									<input type="radio" value='-1' id="playback" name="radio"  /><label for="playback"> After playback</label>
+									<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
+								</div>
+						</div>
+					</div>
+				</div>
+
+				<footer>
+					<a href="http://zeega.org">About Zeega</a> * Creative Commons Open Source License
+				</footer>
+
+
+			</div><!--#wrapper-->
+		
+		</div><!-- #editor -->
+
+		
+<!--		
+		<div id="new-layer-form" title="Create new layer">
+			
+			<form>
+			<fieldset>
+				<label for="type">Layer Type</label>
+				<select id='new-layer-type'>
+				  <option value="Geo">Map</option>
+				  <option value="Text">Text</option>
+				</select>
+			</fieldset>
+			</form>
+		</div>
+-->
+
+		<div id="add-layer-modal" class="modal hide">
+			<div class="modal-header">
+				<a href="#" class="close">&times;</a>
+				<h3>New Layer</h3>
+			</div>
+			<div class="modal-body">
+				<p>Choose a new layer type</p>
+				<form>
+				<fieldset>
+					<select id='new-layer-type'>
+					  <option value="Geo">Map</option>
+					  <option value="Text">Text</option>
+					</select>
+				</fieldset>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" id='add-layer' class="btn primary">Add</a>
+				<a href="#" id='cancel-add-layer' class="btn secondary">Cancel</a>
+			</div>
+		</div>
+
+		
+
+
+<!-- this should probably be moved to an external file! -->
+		<script id='workspace-preview-nav' type='x-jquery-tmpl'>
+			<div id='workspace-preview-controls'>
+				<div id='preview-left' class='preview-nav-arrow'>
+					<img src='images/mediaPlayerArrow_shadow.png'>
+				</div>
+				<div id='preview-right' class='preview-nav-arrow'>
+					<img src='images/mediaPlayerArrow_shadow.png'>
+				</div>
+			</div>
+		</script>
+		<script id='branch-overlay-template' type='x-jquery-tmpl'>
+			<div id='branch-overlay'>
+				<div id='branch-top' class='branch-drop-wrapper'>
+					<!--<img class='arrow arrow-top' src='images/mediaPlayerArrow_shadow.png'>-->
+					<div class='branch-drop'></div>
+				</div>
+				<div id='branch-right' class='branch-drop-wrapper'>
+					<div class='branch-drop'></div>
+					<!--<img class='arrow arrow-right' src='images/mediaPlayerArrow_shadow.png'>-->
+				</div>
+				<div id='branch-bottom' class='branch-drop-wrapper'>
+					<div class='branch-drop'></div>
+					<!--<img class='arrow arrow-bottom' src='images/mediaPlayerArrow_shadow.png'>-->
+				</div>
+				<div id='branch-left' class='branch-drop-wrapper'>
+					<!--<img class='arrow arrow-left' src='images/mediaPlayerArrow_shadow.png'>-->
+					<div class='branch-drop'></div>
+				</div>
+			</div>
+		</script>
+		
+		<div id='templates' class='hidden'>
+			
+			<div id="database-asset-template" class="hidden">
+				<span class="float-left asset-type-icon ui-icon"></span>
+				<img/>
+				<div class="item-title"></div>
+				<div class="item-meta"></div>
+			</div>
+
+			<div id="layer-list-template" class="layer-list clearfix">
+				<div class='layer-uber-bar clearfix'>
+					<div class='layer-icon'>
+						<span class="asset-type-icon ui-icon ui-icon-pin-w">
+					</div>
+					<div class='layer-title'>Layer Name</div>
+					<div class='layer-uber-controls'>
+						<span class='delete-layer ui-icon ui-icon-trash'></span>
+					</div>
+					<div class='layer-drag-handle'>
+						<span class='ui-icon ui-icon-grip-solid-horizontal'></span>
+					</div>
+				</div>
+				<div class='hidden layer-content clearfix'>
+					<div id='controls'></div>
+					<br />
+					<form id='layer-persist'>
+						<input id='persist' type="checkbox" name="vehicle" value="persist" /> <label for='persist'>Persist</label>
+					</form>
+				</div>
+			</div>
+			
+			<div id="node-item-template" class=""><div class='node-overlay'></div><div class='node-background'></div><a href='#' class='delete-node hidden'>&times;</a></div>
+			
+		</div>
+		
+		<script data-main="js/main.js" src="js/libraries/require-jquery.js"></script>
+		<!-- Aloha requirements are not easily amenable to require-jquery, 
+		     focusing on functionality for now -->
+		
+		<script src="http://mlhplayground.org/gamma-james/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
+		<script src="http://mlhplayground.org/gamma-james/js/ext-3.2.1/ext-all.js"></script>
+		<script src="http://mlhplayground.org/gamma-james/js/aloha/aloha-nodeps.js"></script>
+		<script src="http://mlhplayground.org/gamma-james/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
+		<script src="http://mlhplayground.org/gamma-james/js/aloha-config.js"></script>
+		
+	</body>
+
+</html>
+

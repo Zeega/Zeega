@@ -1,0 +1,58 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+ 	<div class="item-title" style="font-size: 24px; ">{{playground.title}}</div><br><br>
+ 	<div class="item-title" style="font-size: 14px; ">{{message}}</div><br><br>
+	<div id="projects">
+			<br><br>
+	
+			<div id="user-add-button">
+					<ul class="pill-buttons">
+						<li><a id="new-user" href="#">Add User</a></li>
+					</ul>
+			</div>
+			<br><br>
+			
+			
+			<div id="user-add" style="display:none; background:white; width:300px; padding:10px;">		
+				<form action="" method="post" {{ form_enctype(form) }}>
+					{{ form_widget(form) }}
+				
+					<input type="submit" />
+				</form>
+			</div>
+			<div id="projects-lists">
+				
+
+				<br></br>
+				<div class="item-title" style="font-size: 16px; ">Users</div> <br><br>
+				<div id="all-projects" style="padding-left:20px;">
+					{% for user in users %}
+						<a>{{user.display_name}}</a> <span class="timeStamp"> - </span> <a style="color:red" href="#">remove</a><br>
+					{% endfor %}
+				</div>
+			</div> <!--#projects-list-->
+			
+			<div id="projects-lists">
+				
+
+				<br></br>
+				<div class="item-title" style="font-size: 16px; ">Recently Upated Projects</div> <br><br>
+				<div id="all-projects" style="padding-left:20px;">
+					{% for project in projects %}
+						<a>{{project.title}}</a> <span class="timeStamp"> - </span> <a style="color:red" href="#">delete</a><br>
+					{% endfor %}
+				</div>
+			</div> <!--#projects-list-->
+			
+</div>	<!--#projects-->
+
+{% endblock %}	
+
+{% block playgroundadmin %}
+		
+{% endblock %}

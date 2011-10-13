@@ -1,0 +1,970 @@
+body {
+
+background-image: url('http://zeega.org/projects/cb11/images/bg.jpg');
+background-color: red;
+
+}
+
+#wrapper
+{
+
+	width:1000px;
+	height:600px;
+	margin:0 auto;
+	
+	
+}
+
+#projects {
+
+background-color: white;
+padding: 10px;
+margin-top: 10px;
+border-radius: 5px;
+
+}
+
+#projects a {
+
+border-bottom: 1px dotted black;
+text-decoration: none;
+
+}
+
+
+h3 a.button {
+
+background-color: #000;
+text-decoration: none;
+font-weight: normal;
+padding: 5px;
+color: #fff;
+border: 0;
+font-size: 14px;
+cursor: pointer;
+margin-bottom: 10px;
+
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+
+}
+
+h3 a.button:hover {
+
+background-color: #000;
+color: red;
+display: inline;
+font-size: 14px;
+border: 0;
+
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+
+}
+
+
+h10 { 
+
+font-size: 12px;
+font-weight: bold;
+padding: 0;
+margin-top: 5px;
+margin-bottom: 5px;
+
+
+}
+
+.timeStamp {
+
+padding-left: 10px;
+font-size: 12px;
+color: rgba(0,0,0,.3);
+}
+
+#projectsList a {
+
+color: black;
+
+}
+
+
+.downArrowRightSmall {
+
+height: 8px;
+width: 12px;
+transform:rotate(270deg);
+-webkit-transform:rotate(270deg);
+-moz-transform:rotate(270deg);
+
+}
+
+
+.userList {
+
+font-weight: bold;
+
+}
+
+#editorHeader {
+
+width: 800px;
+
+}
+
+.hidden
+{
+	display:none;
+}
+
+#node-drawer
+{
+	background:#eee;
+	margin-bottom:10px;
+	padding:10px;
+	overflow:hidden;
+}
+
+#node
+{
+	height:100%;
+	width:100%;
+}
+
+#node a
+{
+	background:yellow;
+	float: right;
+	height: 20px;
+	text-decoration: none;
+	width: 20px;
+	text-align: center;
+}
+
+#edit-drawer
+
+
+{
+
+}
+
+#sidebar
+{
+	width:382px;
+	min-height:394px;
+	float:left;
+	margin-right:10px;
+}
+
+#workspace
+{
+	width:600px;
+	height:400px;
+	float:left;
+	background:#000;
+	overflow:hidden;
+	position:relative;
+}
+
+#tab-layers,
+#tab-database
+{
+	padding:0;
+	margin:0;
+}
+
+#new-layer
+{
+	padding:10px;
+}
+#new-layer span
+{
+	margin-right:10px;
+}
+
+#sortable-layers li
+{
+	min-height:25px;
+	background:#eee;
+	margin:1px 0;
+	padding: 0 10px;
+}
+
+#sortable-layers li>div
+{
+	padding:10px 0;
+}
+
+
+#sortable-layers .ui-icon
+{
+	position:relative;
+	top:4px;
+	margin-right:5px;
+}
+
+.fullscreen-submit {
+
+float: left;
+margin-top: 10px;
+
+}
+
+.delete-layer {
+
+margin-top: 10px;
+
+}
+
+span.layer-title {
+
+width: 250px;
+float: left;
+
+
+}
+
+.float-left
+{
+	float:left;
+}
+
+.float-right
+{
+	float:right;
+}
+
+#sidebar ul li:hover
+{
+	background:#ddd;
+}
+
+#node-drawer ul li:hover
+{
+}
+
+
+
+#database-search
+{
+	color:#ccc;
+}
+
+
+/*
+
+FAKE STUFF
+
+*/
+
+.node-thumb
+{
+	height:50px;
+	width:50px;
+	background:#ccc;
+	float:left;
+	margin-left:10px;
+}
+
+#db-nav-controls
+{
+	overflow:hidden;
+	margin:5px 0;
+}
+
+#db-nav-controls span
+{
+	float:left;
+}
+
+#tab-database-slide-window
+{
+	width:100%;
+	margin-top: 10px;
+}
+
+.slider
+{
+	width:100%;
+}
+
+.database-asset
+{
+	padding:0px;
+	margin-bottom:1px;
+	background:#eee;
+	border:1px solid #ddd;
+	overflow:hidden;
+	width:100%;
+}
+
+.item-title,
+.database-asset img
+{
+	float:left;
+}
+
+.database-asset span
+{
+	vertical-align:middle;
+}
+
+.database-asset img
+{
+	margin: 0 2px;
+}
+
+.item-meta
+{
+	font-size:.8em;
+	color:#aaa;
+	float:right;
+	margin-right:2px;
+}
+
+.node-selected
+{
+
+border-bottom: solid red 5px;
+
+}
+
+
+
+
+/* 
+---------------------------------
+Media Player and Controls
+---------------------------------
+*/ 
+
+/*TIME_LEF*/
+
+.timeLEF {
+
+position: relative;
+border: 1px dotted #999;
+height: 95px;
+margin-top: 5px;
+margin-left: 3px;
+
+}
+
+
+
+#avStart {
+
+position: absolute;
+margin-top: 4px;
+
+left: 10px;
+}
+
+#avStop {
+
+position: absolute;
+
+left: 125px;
+margin-top: 4px;
+
+}
+
+
+input[name=avStartMinutes] {
+
+
+
+width:25px;	
+border: none;
+background-color:#E6E6E6;
+text-align:right;
+}
+
+input[name=avStopMinutes] {
+
+
+
+width:25px;	
+border: none;
+background-color:#E6E6E6;
+text-align:right;
+}
+input[name=avStartSeconds] {
+
+width:35px;	
+border: none;
+background-color:#E6E6E6;
+text-align:left;
+}
+
+input[name=avStopSeconds] {
+
+width:35px;	
+border: none;
+background-color:#E6E6E6;
+text-align:left;
+}
+
+
+#durationWrapper{
+position: absolute;
+margin-top: 4px;
+left:10px;
+display: none;
+
+
+}
+
+#avControls{
+position: absolute;
+margin-top: 4px;
+top:5px;
+width:278px;
+
+}
+#avVolumeWrapper{
+position: absolute;
+margin-top: 4px;
+top:65px;
+
+}
+
+#avVolumeLabel{
+position:absolute;
+left: 10px;
+}
+
+#avVolumeSlider {
+
+position:absolute;
+width: 145px;
+left: 65px;
+
+}
+
+#mediaPlayerMP { 
+
+position: absolute;
+bottom: 0px;
+left: 0px;
+right: 0px;
+width: 100%;
+height: 40px;
+background-color: rgba(0,0,0,.2);
+padding: 0;
+margin: 0;
+z-index: 100;
+
+
+}
+
+
+#playMP {
+
+position: absolute;
+top: 10px;
+left: 10px;
+cursor:pointer;
+}
+
+#playMP:hover {
+
+border-left-color:red;
+border-right-color:red;
+
+}
+
+#audioButton:hover {
+cursor:pointer;
+
+}
+
+.playButtonMP {
+
+width: 0;
+height: 0;
+border-top: 10px solid transparent;
+border-bottom: 10px solid transparent;
+border-left: 10px solid white;
+cursor: pointer;
+
+}
+
+
+
+.pauseButtonMP {
+
+position: absolute;
+width: 5px; 
+height: 20px; 
+border-top: 0px; border-left: 3px solid rgba(255,255,255,.8); border-bottom: 0px; border-right: 3px solid rgba(255,255,255,.8);
+cursor: pointer;
+
+}
+
+#loadingOutsideMP {
+
+position: absolute;
+top: 16px;
+left: 32px;
+right: 55px;
+background-color: rgba(255,255,255,.8);
+
+
+}
+
+
+#loadingInsideMP {
+
+position: absolute;
+background-color: red;
+opacity: .8;
+width:0px;
+height: 10px;
+
+
+
+}
+
+#loadingStatusMP {
+
+background-color: red;
+opacity: .2;
+width:0px;
+height: 10px;
+
+}
+
+#timeWrapperMP {
+
+position: absolute;
+bottom: 10px;
+right: 5px;
+height: 15px;
+width: 35px;
+border-radius: 5px;
+-moz-border-radius: 5px;
+color: white;
+font-size: 10px;
+
+}
+
+#loadingCircleMP {
+
+position: absolute;
+width: 14px; height: 14px; 
+background-color: black;
+border-radius: 7px; -webkit-border-radius: 7px; -moz-border-radius: 7px;
+z-index: 10;
+}
+
+
+.markerMP{
+position: absolute;
+cursor:pointer;
+height: 10px;
+width:2px;
+}
+
+
+#startMP{
+
+
+left:0px;
+top:0px;
+background-color:black;
+z-index:21;
+}
+
+#stopMP{
+
+
+right:0px;
+top:0px;
+background-color:black;
+z-index:20;
+
+}
+
+#currentMP{
+
+border-color:red;
+left:0px;
+top:0px;
+height:20px;
+background-color:red;
+z-index:22;
+
+}
+
+
+#startBar{
+
+position:absolute;
+left:0px;
+height:10px;
+z-index:10;
+background-color:white;
+opacity:0.4;
+width:0px;
+
+}
+
+
+#stopBar{
+
+position:absolute;
+right:0px;
+height:10px;
+z-index:10;
+background-color:black;
+opacity:0.4;
+width:0px;
+
+}
+
+div.arrow-down {
+  position:absolute;
+  width:0px; 
+  height:0px;
+  left:-4px;
+  top:-9px;
+  
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:10px solid #2f2f2f;
+  font-size:0px;
+  line-height:0px;
+}
+
+
+div.box{
+
+
+  position:absolute;
+  width:8px; 
+  height:8px;
+  left:-3px;
+  bottom:-2px;
+  background-color:red;
+}
+
+div.arrow-up {
+  position:absolute;
+  width:0px; 
+  height:0px;
+  left:-4px;
+  bottom:-9px;
+  width:0px; 
+  height:0px; 
+  border-left:5px solid transparent;  /* left arrow slant */
+  border-right:5px solid transparent; /* right arrow slant */
+  border-bottom:10px solid red; /* bottom, add background color here */
+  font-size:0px;
+  line-height:0px;
+}
+
+/************************** 
+ *      Text layer        *
+ **************************/
+div#workspace > div.text-layer-container {
+	      padding:5px;
+	      border:transparent solid 1px;
+	      border-top:transparent solid 10px;
+}
+div#workspace > div.text-layer-container.text-layer-chrome-visible {
+	      border: dashed white 1px;
+	      border-top: gray 10px solid;
+}
+
+/***  PAGINATION  ***/
+
+#database-pager a,
+#page-left,
+#page-right
+{
+	display:block;
+	padding: 2px;
+	margin:1px;
+	float:left;
+	text-decoration:none;
+}
+
+#database-pager {
+
+margin-top: 10px;
+
+}
+
+#leftPageScroll {
+
+margin-top: 10px;
+float: left;
+
+}
+
+.activeSlide
+{
+	background:#ccc;
+}
+
+/*
+.pagination {
+            font-size: 80%;
+        }
+        
+.pagination a {
+    text-decoration: none;
+	border: solid 1px #AAE;
+	color: #15B;
+}
+
+.pagination a, .pagination span {
+    display: block;
+    float: left;
+    padding: 0.3em 0.5em;
+    margin-right: 5px;
+	margin-bottom: 5px;
+	min-width:1em;
+	text-align:center;
+}
+
+.pagination .current {
+    background: #26B;
+    color: #fff;
+	border: solid 1px #AAE;
+}
+
+.pagination .current.prev, .pagination .current.next{
+	color:#999;
+	border-color:#999;
+	background:#fff;
+}
+*/
+
+
+/* --------------------------------------------------------------
+
+   Node Publishing Buttons (ported from old Zeega by jms)
+
+-------------------------------------------------------------- */
+
+#nodePublishing {
+
+float: right;
+
+}
+
+#previewProject {
+
+cursor: pointer;
+font-size: 14px;
+font-variant: small-caps;
+margin-top: 10px;
+float: right;
+margin-left: 5px;
+
+
+}
+
+#previewProject a {
+
+cursor: pointer;
+font-size: 14px;
+font-variant: small-caps;
+margin-top: 10px;
+background-color: #000;
+padding: 5px;
+color: #fff;
+border: 0;
+display: inline;
+font-size: 14px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+cursor: pointer;
+text-decoration: none;
+
+}
+
+#previewProject:hover a {
+
+color: white;
+background-color: red;
+
+}
+
+
+#embedProject {
+
+cursor: pointer;
+margin-top: 10px;
+margin-left: 5px;
+float: right;
+
+
+}
+
+#embedProject a {
+
+cursor: pointer;
+font-size: 14px;
+font-variant: small-caps;
+
+background-color: #000;
+padding: 5px;
+color: #fff;
+border: 0;
+display: inline;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+text-decoration: none;
+
+}
+
+#embedProject:hover a {
+
+color: white;
+background-color: red;
+
+}
+
+#shareProject {
+
+cursor: pointer;
+font-size: 14px;
+font-variant: small-caps;
+margin-top: 10px;
+float: right;
+
+
+}
+
+#shareProject a {
+
+cursor: pointer;
+font-size: 14px;
+font-variant: small-caps;
+margin-top: 10px;
+
+background-color: #000;
+padding: 5px;
+color: #fff;
+border: 0;
+display: inline;
+font-size: 14px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+cursor: pointer;
+text-decoration: none;
+
+}
+
+#shareProject:hover a {
+
+color: white;
+background-color: red;
+
+}
+
+.clear {
+
+clear: both;
+
+}
+
+
+/* --------------------------------------------------------------
+
+   General Header/Footer (ported from old Zeega by jms)
+
+-------------------------------------------------------------- */
+
+#zeegaHeader {
+
+background-color: #e6e6e6;
+position: relative;
+padding-left: 10px;
+padding-right: 10px;
+padding-top: 10px;
+padding-bottom: 5px;
+
+width: 980px;
+float: left;
+margin-bottom: 10px;
+margin-left: 0px;
+
+
+border-top-right-radius: 5px;
+border-top-left-radius: 5px;
+
+
+}
+
+#zeegaHeader a {
+
+color: black;
+
+}
+
+#headerLogo {
+
+float: left;
+
+}
+
+
+#headerLoggedInWrapper {
+
+
+}
+
+#headerNav {
+
+float: left;
+
+}
+
+#headerAccountLoggedIn , #headerAccountLoggedOut{
+
+float: right;
+
+}
+
+#headerLoggedOutWrapper {
+
+
+}
+
+#footerWrapper {
+
+position: absolute;
+margin: 0 auto;
+bottom: 10px;
+width: 1000px;
+
+
+}
+
+#footer {
+
+padding: 5px;
+font-size: 12px;
+text-align: right;
+color: #666666;
+
+}
+
+#footer a {
+
+color: #666666;
+border-bottom: 1px dotted #666666;
+text-decoration: none;
+
+}
+
+#footer a:hover {
+
+text-decoration: underline;
+border-bottom: 0px;
+
+
+}

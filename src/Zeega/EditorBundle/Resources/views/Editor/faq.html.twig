@@ -1,0 +1,68 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+
+
+{% block body %}
+	
+<div id="faq" style='color:white; padding:10px;'> 
+
+
+<div class="item-title" style="font-size: 24px; ">FAQ</div><br><br>
+
+<br>
+<br>
+<div class="faq1"> 
+	<div class="questionDiv"><h4 class="question">What is Zeega?</h4></div> 
+	<p class="answer"> 
+Zeega is an open-source HTML5 toolkit built on public APIs that enables individuals and organizations to collaboratively produce, curate and publish immersive multimedia projects on mobile, tablet and web platforms without having to write a line of code. Zeega empowers citizens, journalists and scholars to author embeddable nonlinear narratives that seamlessly combine professional content with photos, videos, text, audio and maps from social media sites (e.g. Flickr, YouTube, SoundCloud), news organizations (e.g. NPR, NYTimes) and libraries (e.g. Free Music Archive, Library of Congress, Harvard Libraries).<br /><br /> 
+ 
+Zeega's core method is based on hosting dynamic databases that reference content across the web through open APIs. Zeega never copies or hosts media files, and always displays proper citation and trackback URLs, ensuring that projects do not infringe on copyright. Through this innovative approach, Zeega transforms the Internet's medium-specific silos (i.e. YouTube for video, Flickr for images, etc.) into a shared transmedia collection of editable assets freely available for citizens, journalists and scholars to legally remix and combine with their own content.<br /><br /> 
+ 
+Leveraging HTML5's &lt;audio&gt; and &lt;video&gt; tags, all projects created using Zeega can be experienced through mobile and tablet web browsers. In addition, Zeega will provide iPhone and Android apps that enable citizens, journalists and scholars to contribute and geolocate images, audio and video from their mobile device for any Zeega project.<br /><br /> 
+</p> 
+</div> 
+ 
+<div class="faq2"> 
+	<div class="questionDiv"><h4 class="question">How is Zeega innovative?</h4></div> 
+	<p class="answer"> 
+Zeega synthesizes HTML5 and open APIs, two of contemporary technology's most significant cutting-edge developments. Currently, there is no software available that provides an HTML5 interface to edit audio, video and images into nonlinear digital narratives. While there are online audio and video editing sites, none of these use HTML5, offer the ability to author branching nonlinear pathways, and they rely on media hosted on a site's servers.<br /><br /> 
+ 
+Zeega's foundation on top of public APIs is a new approach to media access, editing and distribution. While there has long been experimentation in making media available for remixing, it has relied on users downloading files onto local hard drives and remixing the media using a desktop application. For this reason, most remixing has infringed upon copyright. Because Zeega never copies actual media files and observes API terms of service through proper attribution and trackbacks, it is a novel means for legally accessing and re-interpreting the vast repositories of digital media now available online.<br /><br /> 
+	</p> 
+</div> 
+ 
+<div class="faq1"> 
+	<div class="questionDiv"><h4 class="question">What do you hope to change through Zeega?</h4></div> 
+	<p class="answer"> 
+There is an emerging digital divide separating major media companies from local news organizations, ordinary citizens and scholars. Zeega aims to bridge this gap, empowering individuals and organizations to create stories and scholarship about their communities and daily lives using the power of emerging media.<br /><br /> 
+ 
+While media entities with big budgets (e.g. The New York Times) are able to produce iPhone apps, complex multimedia features and other digital projects that deeply engage audiences, most news organizations, citizen journalists and scholars cannot realize the full potential of emerging media. Low-cost, open-source tools are available to create websites (e.g. WordPress). However, there is nothing that makes it possible for people without programming knowledge to access the APIs of major news, social media and library sites, filter this information, and contextualize it through maps, annotations, investigative stories, and citizen media contributions. <a href="http://interactive.nfb.ca/" target="_blank">Canada's National Film Board</a> has demonstrated the potential for a common codebase to make ongoing interactive documentary experiments possible. However, this codebase is not open source and it is Flash-based, thereby inaccesssible on mobile devices. After the completion of Zeega, anyone will have the ability to create similarly complex interactive documentaries, without having to write any code and they will be accessible on multiple platforms.<br /><br /> 
+</p> 
+</div> 
+ 
+<div class="faq2"> 
+	<div class="questionDiv"><h4 class="question">Who is behind Zeega?</h4></div> 
+	<p class="answer"> 
+Zeega is lead by <a href="http://www.karaoehler.com/" target="_blank">Kara Oehler</a>, <a href="http://media-and-place.org/#james" target="_blank">James Burns</a> and <a href="http://jesseshapins.net/" target="_blank">Jesse Shapins</a>. In addition to our core team, we have an extensive network of partners and support. <a href="http://prx.org" target="_blank">PRX</a> and the <a href="http://cyber.law.harvard.edu" target="_blank">Berkman Center for Internet and Society at Harvard</a> have been substantive advisors since the beginning. <a href="http://sel.fas.harvard.edu" target="_blank" target="_blank">The Sensory Ethnography Lab</a>, <a href="http://metalab.harvard.edu" target="_blank">metaLAB(at)Harvard</a>, Harvard's <a href="http://atg.fas.harvard.edu/icb/icb.do" target="_blank">Academic Technology Group</a> and <a href="http://uniondocs.org" target="_blank">UnionDocs</a> are crucial spaces for incubation. <a href="http://www.sensatejournal.com/" target="_blank">Sensate</a>, a new multimedia journal, will use Zeega for its groundbreaking publication. We receive legal support from Proskauer LLP through the <a href="http://www.citmedialaw.org/" target="_blank">Citizen Media Law Project</a>. Laura Kurgan, founder of <a href="http://www.spatialinformationdesignlab.org/" target="_blank">Columbia University's Spatial Information Design Lab</a>, is a longstanding project advisor.<br /><br /> 
+</p> 
+</div> 
+ 
+<div class="faq1"> 
+	<div class="questionDiv"><h4 class="question">Where did the name Zeega come from?</h4></div> 
+	<p class="answer"> 
+Zeega is an intentional misspelling of Dziga Vertov, one of our favorite media artists. Born Denis Kaufman, Vertov chose to rename himself "dziga" because the word means spinning top in Russian and also makes the sound of a turning camera. Vertov is one of the pioneers of visionary, experimental media practice, starting a "Laboratory of Hearing" in 1918; founding a collaborative documentary team called the "Kinoks"; instigating public projections; and pioneering database-driven forms of documentary. He is most well-known for his groundbreaking 1927 film <a href="http://video.google.com/videoplay?docid=-2809965914189244913#" target="_blank"><i>Man with a Movie Camera</i></a>. One of the best essays written on Vertov and <i>Man with a Movie Camera</i> is Annette Michelson's <a href="downloads/Michelson_EpistemologisttoMagician.pdf" target="_blank">"From Magician to Epistemologist"</a> (1971), and Lucy Fischer has written on Vertov's radio work in her essay <a href="downloads/KinoEyetoRadioEye.pdf">"Enthusiasm: From Kino-Eye to Radio-Eye"</a> (1977).<br /><br /> 
+<br /><br /> 
+</p> 
+</div> 
+ 
+ 
+	
+	
+	
+</div> <!-- FOR FAQ-->	
+
+{% endblock %}				

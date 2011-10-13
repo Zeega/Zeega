@@ -1,0 +1,7 @@
+parameters:
+#    zeega_user.example.class: Zeega\UserBundle\Example
+
+services:
+#    zeega_user.example:
+#        class: %zeega_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

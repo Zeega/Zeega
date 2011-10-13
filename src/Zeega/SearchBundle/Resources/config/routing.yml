@@ -1,0 +1,3 @@
+ZeegaSearch_search:
+    pattern:   /search
+    defaults: { _controller: ZeegaSearchBundle:Search:search }

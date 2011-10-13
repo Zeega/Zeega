@@ -1,0 +1,38 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Node.orm.yml
+Zeega\EditorBundle\Entity\Node:
+   type: entity
+   repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
+   manyToOne:
+    user:
+     targetEntity: Zeega\UserBundle\Entity\User
+    route:
+     targetEntity: Route
+    link_up:
+     targetEntity: Node
+    link_down:
+     targetEntity: Node
+    link_left:
+     targetEntity: Node
+    link_right:
+     targetEntity: Node
+   id:
+    id:
+     type: integer
+     generator: { strategy: AUTO }
+   fields:
+    route_index:
+     type: integer
+     length: 2
+     nullable: true
+    layers:
+     type: array
+     nullable: true
+    attr:
+     type: array
+     nullable: true
+    thumb_url:
+     type: string
+     length: 100
+     nullable: true
+
+ 

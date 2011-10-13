@@ -1,0 +1,37 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+ 	<div class="item-title" style="font-size: 24px; ">{{playground.title}}</div><br><br>
+	<div id="projects">
+			<br><br>
+			<div id="project-create">
+					<ul class="pill-buttons">
+						<li><a id="new-project" href="{{ path('ZeegaEditorBundle_project', { 'short': playground.short }) }}">Create New Project</a></li>
+					</ul>
+			</div>
+			<br><br>
+			<div id="projects-lists">
+				<div class="item-title" style="font-size: 16px; ">My Projects</div><br><br>
+				<div id="my-projects" style="padding-left:20px;">
+					{% for project in myprojects %}
+						<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}">{{project.title}}</a> <span class="timeStamp"></span><br>
+					{% endfor %}
+				</div>
+
+				<br></br>
+				<div class="item-title" style="font-size: 16px; ">Recently Upated Projects</div> <br><br>
+				<div id="all-projects" style="padding-left:20px;">
+					{% for project in projects %}
+						<a>{{project.title}}</a> <span class="timeStamp"></span><br>
+					{% endfor %}
+				</div>
+			</div> <!--#projects-list-->
+			
+</div>	<!--#projects-->
+
+{% endblock %}	
+

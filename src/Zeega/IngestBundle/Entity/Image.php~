@@ -1,0 +1,115 @@
+<?php
+
+// src/Zeega/IngestBundle/Entity/Image.php
+
+namespace Zeega\IngestBundle\Entity;
+
+class Image
+{
+	
+	protected $width;
+	
+	protected $height;
+	
+	protected $format;
+	
+	protected $colors;
+	
+	protected $uri;
+
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set width
+     *
+     * @param integer $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    /**
+     * Get width
+     *
+     * @return integer 
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * Set height
+     *
+     * @param integer $height
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+    }
+
+    /**
+     * Get height
+     *
+     * @return integer 
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * Set format
+     *
+     * @param string $format
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+    }
+
+    /**
+     * Get format
+     *
+     * @return string 
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     * Set colors
+     *
+     * @param integer $colors
+     */
+    public function setColors($colors)
+    {
+        $this->colors = $colors;
+    }
+
+    /**
+     * Get colors
+     *
+     * @return integer 
+     */
+    public function getColors()
+    {
+        return $this->colors;
+    }
+}

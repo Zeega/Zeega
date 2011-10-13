@@ -1,0 +1,47 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+
+<div class="item-title" style="font-size: 24px; ">{{displayname}}</div><br><br>
+<div style="clear:both;"></div>
+ <br><br>
+<div id="user-info" style="color:white">
+	<div id="user-thumb" style="width:100px; float:left; border: 2px solid white;" ><img width="96px" height="96px" src="{{thumb}}" /></div>
+	<div id="user-bio" style="padding-left: 20px; width:300px; height:100px; float:left" >{{ bio }}</div>
+</div>
+<div style="clear:both;"></div>
+<br><br>
+			{% if super %}
+			
+				<div id="create-playground">
+					<ul class="pill-buttons">
+						<li><a id="new-playground" href="#">Create New Playground</a></li>
+					</ul>
+				</div>
+				
+			{% endif %}
+			
+			
+			<div id="playgrounds-list">
+				<div class="item-title" style="font-size: 16px; ">My Playgrounds</div><br><br>
+				<div id="my-projects" style="padding-left:20px;">
+					{% for playground in playgrounds %}
+						<a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a> <span class="timeStamp"></span><br>
+					{% endfor %}
+				</div>
+			</div> <!--#playgrounds-list-->
+
+
+
+<br><br>
+			
+<br><br>
+
+
+{% endblock %}		
+
+	

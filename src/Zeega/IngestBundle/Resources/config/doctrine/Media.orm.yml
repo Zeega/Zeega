@@ -1,0 +1,42 @@
+# src/Zeega/IngestBundle/Resources/config/doctrine/Media.orm.yml
+Zeega\IngestBundle\Entity\Media:
+ type: entity
+ id:
+  id:
+   type: integer
+   generator: { strategy: AUTO }
+ fields:
+  file_format:
+   type: string
+   length: 15
+   nullable: true
+  bit_rate:
+   type: integer
+   size: 10
+   nullable: true
+  size:
+   type: integer
+   length: 15
+   nullable: true
+  duration:
+   type: integer
+   length: integer
+   nullable: true
+  width:
+   type: integer
+   length: 10
+   nullable: true
+  height:
+   type: integer
+   length: 10
+   nullable: true
+  colors:
+   type: integer
+   length: 10
+   nullable: true
+  length:
+   type: integer
+   length: 10
+   nullable: true
+  
+        
