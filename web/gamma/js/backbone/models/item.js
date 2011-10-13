@@ -6,9 +6,12 @@ var Item = Backbone.Model.extend({
 
 var ItemCollection = Backbone.Collection.extend({
 	model : Item,
-	offset:0,
+	offset:0
+	
+	/*,
 	url: function(){
 		return Zeega.url_prefix+"search/items/"+ this.offset +"/100";
 	}
+	*/
 	
 });

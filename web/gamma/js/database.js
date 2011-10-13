@@ -15,6 +15,9 @@ var Database = {
 		console.log('loading database');
 		var z = this;
 		this.collection = new ItemCollection;
+		
+		this.collection.url = Zeega.url_prefix+"search/items/0/100";
+		
 		this.collection.fetch({
 			success: function(items, response){
 				z.viewCollection = new ItemViewCollection({ collection : items });
@@ -43,6 +46,7 @@ var Database = {
 	//add new database items for endless paging of items
 	append : function()
 	{
+		//look into setting {add:true} in the collection
 		var d = this;
 		var newItems = new ItemCollection;
 		newItems.offset = _.size(this.collection);
@@ -120,19 +124,47 @@ var Database = {
 	//what happens if you search for something in the search bar
 	search : function( query, contentType )
 	{
+		var d = this;
+		/*
 		if( !this.customSearch )
 		{
+		*/
 			this.reset();
 			this.customSearch = true;
-		}
+		//}
 		
 		this.setQuery(query,contentType);
 		
-		$.post('http://mlhplayground.org/Symfony/web/app_dev.php/search', this.postdata, function(data) {
+		this.customSearch = new ItemCollection;
+		
+		$.post('http://alpha.zeega.org/joseph/web/app_dev.php/search', this.postdata, function(data) {
 			var response = $.parseJSON(data);
-			console.log(response.items);
-
+			_.each(response.items, function(item){
+				//make search items into bb models
+				var newItem = new Item;
+				
+				newItem.id = item.id;
+				newItem.set({
+					'title':item.title,
+					'item_url':item.item_url,
+					'geo_lng':item.geo_lng,
+					'geo_lat':item.geo_lat,
+					'depth':item.depth,
+					'date_created_start':item.date_created_start,
+					'date_created_end':item.date_created_end,
+					'creator':item.creator,
+					'content_type':item.content_type,
+					'attribution_url':item.attribution_url,
+					'archive':item.archive
+				});
+				
+				d.collection.add(newItem);
+				//console.log(newItem);
+			});
+			d.viewCollection = new ItemViewCollection({ collection : d.collection });
+			insertPager( _.size(d.collection), d.page );
 		});
+		
 
 		this.page++;
 	}
