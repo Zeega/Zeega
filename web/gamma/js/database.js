@@ -15,6 +15,9 @@ var Database = {
 		console.log('loading database');
 		var z = this;
 		this.collection = new ItemCollection;
+		var temp =this.collection.url;
+		console.log(temp);
+		console.log(Zeega.url_prefix);
 		this.collection.fetch({
 			success: function(items, response){
 				z.viewCollection = new ItemViewCollection({ collection : items });

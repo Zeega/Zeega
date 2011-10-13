@@ -16,6 +16,11 @@
 
 *********************************************/
 
+function getBaseURL()
+{
+	if( window.URL_PREFIX ) Zeega.url_prefix = URL_PREFIX;
+}
+
 var Zeega = {
 	routeID : 1,
 	currentNode : null,
@@ -24,7 +29,7 @@ var Zeega = {
 	nodesReady : false,
 	layersReady : false,
 	
-	url_prefix : "",
+	url_prefix : "http://alpha.zeega.org/test/web/app_dev.php/",
 	
 	url_hash : {
 		'route' : null,
@@ -35,7 +40,7 @@ var Zeega = {
 	init : function()
 	{
 		//test to see if the URL_PREFIX constant has been set and add it if it has
-		if( window.URL_PREFIX ) this.url_prefix = URL_PREFIX;
+		getBaseURL();
 	},
 	//set the route without loading it
 	//do we need this?

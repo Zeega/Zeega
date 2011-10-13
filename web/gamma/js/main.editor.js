@@ -38,6 +38,14 @@ var loadFiles = [
 	'order!jquery/plugins/jquery.paging',
 	'order!jquery/plugins/colorpicker/js/colorpicker',
 	
+	//broken
+	'order!jquery/plugins/jquerygetUrlParam',
+	'order!jquery/plugins/jqueryjson',
+	'order!jquery/plugins/jquerycookie',
+	'order!jquery/plugins/jquerytmpl',
+	'order!jquery/plugins/bootstrapmodal',
+	
+	
 	//mvc
 	'order!backbone/models/route',
 	'order!backbone/models/item',
