@@ -34,4 +34,6 @@
 </div>	<!--#projects-->
 
 {% endblock %}	
-
+{% block scripts %}
+      <script data-main="{{ asset('gamma/js/main.playground.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+{% endblock %}
