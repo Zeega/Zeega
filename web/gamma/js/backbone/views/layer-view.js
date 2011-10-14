@@ -13,6 +13,7 @@ var LayerView = Backbone.View.extend({
 	
 	
 	render : function() {
+
 		this.model.bind('remove',this.remove);
 		var that = this;
 		var text = this.model.get('text');
@@ -38,71 +39,81 @@ var LayerView = Backbone.View.extend({
 		
 		layerClass.load(this.model);
 
-		layerClass.drawPreview();
+		if(Zeega.previewMode)
+		{
+			console.log('in preview mode');
+			layerClass.drawPublish();
+		}else{
+			console.log('not in preview mode');
+
+			layerClass.drawPreview();
 		
-		//set initial layer order in the workspace
-		var layerOrder = Zeega.currentNode.get('layers');
-		layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+			//set initial layer order in the workspace
+			var layerOrder = Zeega.currentNode.get('layers');
+			layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
 		
-		//insert the special layer controls into the template
-		layerClass.drawControls(template);
-		//save the layer element into the view object
-		this.workspacePreview = layerClass;
+			//insert the special layer controls into the template
+			layerClass.drawControls(template);
+			//save the layer element into the view object
+			this.workspacePreview = layerClass;
 		
-		//label the li element so we can return something when sorting
-		$(this.el).attr('id', 'layer-'+ this.model.id);
-		$(this.el).html(template);
+			//label the li element so we can return something when sorting
+			$(this.el).attr('id', 'layer-'+ this.model.id);
+			$(this.el).html(template);
 		
-		//set persistance
-		$(this.el).find('#persist').change(function(){
-			//console.log($(this).is(':checked') );
-			if( $(this).is(':checked')){
-				var layer = that.model;
-				Zeega.persistLayerOverNodes(layer);
-			}
-		});
+			//set persistance
+			$(this.el).find('#persist').change(function(){
+				//console.log($(this).is(':checked') );
+				if( $(this).is(':checked')){
+					var layer = that.model;
+					Zeega.persistLayerOverNodes(layer);
+				}
+			});
 		
 		
 		
-		//	open/close and expanding layer items
-		$(this.el).find('.layer-title').click(function(){
+			//	open/close and expanding layer items
+			$(this.el).find('.layer-title').click(function(){
 			
-			//close all other open layers.
-			//not working
-			//console.log( $('#sortable-layers .open').find('.layer-expand').not( $(this)) );
-			//$('#sortable-layers .open').find('.layer-expand').not( $(this)).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
-			//collapse all other layer controls
-			if($(this).closest('li').hasClass("open")){
-				//hide layer controls
-				$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
-				$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
-				$(this).closest('li').removeClass('open');
-				that.workspacePreview.closeControls();
-				return false;
-			}else{
-				//show layer controls
-				$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
-				$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){that.workspacePreview.openControls();});
-				$(this).closest('li').addClass('open');
-				return false;
-			}
-		});
+				//close all other open layers.
+				//not working
+				//console.log( $('#sortable-layers .open').find('.layer-expand').not( $(this)) );
+				//$('#sortable-layers .open').find('.layer-expand').not( $(this)).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
+				//collapse all other layer controls
+				if($(this).closest('li').hasClass("open")){
+					//hide layer controls
+					$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
+					$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
+					$(this).closest('li').removeClass('open');
+					that.workspacePreview.closeControls();
+					return false;
+				}else{
+					//show layer controls
+					$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
+					$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){that.workspacePreview.openControls();});
+					$(this).closest('li').addClass('open');
+					return false;
+				}
+			});
 		
-		//delete this layer from the DB and view
-		$(this.el).find('.delete-layer').click(function(){
-			//verify you with alert
-			var response = confirm('Delete Layer?');
-			if(response)
-			{
-				//remove the layer controls
-				that.remove();
-				//remove the workspace preview
-				that.workspacePreview.remove();
+			//delete this layer from the DB and view
+			$(this.el).find('.delete-layer').click(function(){
+				//verify you with alert
+				var response = confirm('Delete Layer?');
+				if(response)
+				{
+					//remove the layer controls
+					that.remove();
+					//remove the workspace preview
+					that.workspacePreview.remove();
 				
-				Zeega.removeLayerFromNode( Zeega.currentNode, that.model );
-			}
-			return false;
-		});
+					Zeega.removeLayerFromNode( Zeega.currentNode, that.model );
+				}
+				return false;
+			});
+		
+		
+		} //end if previewMode
 		
 		
 		//	end jQuery interactions

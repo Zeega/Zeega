@@ -20,6 +20,8 @@ var Zeega = {
 	routeID : 1,
 	currentNode : null,
 	
+	previewMode:false,
+	
 	//ready flags
 	nodesReady : false,
 	layersReady : false,
@@ -172,30 +174,28 @@ var Zeega = {
 	loadNode : function( node )
 	{
 		// only load the node if it's not already on display
-		if(this.currentNode != node)
-		{
-			console.log('loadingnode');
-			//clear workspace
-			Zeega.route.layerViewCollection._rendered = false;
-			Zeega.route.layerViewCollection._layerViews = [];
-			$('#workspace').empty();
-			//remove a prexisiting node style
-			if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
-			//set global currentNode to the selected node
-			this.currentNode = node;
-			//add a new current node style
-			$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+
+		console.log('loadingnode');
+		//clear workspace
+		Zeega.route.layerViewCollection._rendered = false;
+		Zeega.route.layerViewCollection._layerViews = [];
+		$('#workspace').empty();
+		//remove a prexisiting node style
+		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		//set global currentNode to the selected node
+		this.currentNode = node;
+		//add a new current node style
+		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+		
+		//display the node's layers
+		//this is done in z-index order
+		
+		_.each( this.currentNode.get('layers'), function(layerID){
+			//test to make sure it's not a filler layer!
+			if(layerID != -1) Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
+		});
+		Zeega.route.layerViewCollection.render();
 			
-			//display the node's layers
-			//this is done in z-index order
-			
-			_.each( this.currentNode.get('layers'), function(layerID){
-				//test to make sure it's not a filler layer!
-				if(layerID != -1) Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
-			});
-			Zeega.route.layerViewCollection.render();
-			
-		}
 		// window.location.hash = 'node/'+ node.id; //change location hash
 		
 	},

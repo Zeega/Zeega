@@ -111,6 +111,49 @@ var ImageLayer = ProtoLayer.extend({
 		this.addToWorkspace(this.dom);
 	},
 	
+	drawPublish : function(){
+		//make dom object
+		//maybe these should all be wrapped in divs?
+		var div = $('<div>');
+		var cssObj = {
+			'position' : 'absolute',
+			'top' : this.attr.y  +'%',
+			'left' : this.attr.x  +'%',
+			'z-index' : this.zIndex,
+			'width' : this.attr.w+'%',
+			'opacity' : this.attr.opacity
+		};
+		
+		div.addClass('media editable draggable')
+			.attr({
+				'id' : 'layer-preview-'+this.model.id,
+				'data-layer-id' : this.model.id
+			})
+			.css(cssObj);
+		//need this to be accessable inside the draggable function
+		var that  = this;
+		
+
+		div.draggable({
+			//when the image stops being dragged
+			stop : function(){
+				that.updateAttr();
+			}
+		});
+
+		
+		var img=$('<img>')
+			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
+			.css({'width':'100%'});
+		
+		this.dom = div;
+		
+		//make dom
+		$(this.dom).append(img);
+		//add to dom
+		$('#workspace-preview-wrapper').append(this.dom);
+	},
+	
 	updateAttr: function(){
 	
 		//get a copy of the old attributes into a variable

@@ -165,14 +165,17 @@ $(document).ready(function() {
 	
 	$('#preview').click(function(){
 		
+		Zeega.previewMode = true;
 		//remove branch viewer if present
 		$('#branch-overlay').remove();
 		
 		var wrapper = $('<div>')
 			.attr('id','workspace-preview-wrapper');
+		/*
 		var p = $('#workspace')
 			.clone()
 			.attr('id','workspace-preview');
+		*/
 		
 		//add node navigation controls
 		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
@@ -185,9 +188,13 @@ $(document).ready(function() {
 		});
 		//add editing capabilities // optional?
 			
-		wrapper.append(p)
+		//wrapper.append(p)
+
 		$('body').append(wrapper);
 		wrapper.fadeIn();
+		
+		Zeega.loadNode(Zeega.currentNode);
+		
 	});
 	
 	
@@ -201,6 +208,8 @@ $(document).ready(function() {
 	$(document).keyup(function(e){
 		if (e.which ==27) //	ESC
 		{
+			Zeega.previewMode = false;
+			Zeega.loadNode(Zeega.currentNode);
 			if($('#workspace-preview-wrapper')) $('#workspace-preview-wrapper').fadeOut(450,function(){$(this).remove()});
 		}
 	});	
