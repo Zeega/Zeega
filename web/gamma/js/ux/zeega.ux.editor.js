@@ -15,7 +15,9 @@ function initUX(){
 	
 	$('#tab-content').cycle({
 		timeout: 0,
-		speed: 300
+		speed: 300,
+		width:490,
+		fit:1
 	});
 	
 	$('#database-tab').click(function(){
