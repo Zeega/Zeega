@@ -127,7 +127,7 @@ function insertPager(items, page)
 	});
 }
 
-function submitenter(myfield,e)
+function submitenter(inputfield,e)
 {
 	var keycode;
 	
@@ -139,12 +139,19 @@ function submitenter(myfield,e)
 
 	if (keycode == 13)
 	{
-		var form=$(myfield).closest("form");
+		var form=$(inputfield).closest("form");
 		Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );
 		return false;
 	}else{
 		return true;
 	}
+}
+
+function submitbutton(button)
+{
+	var form=$(button).closest("form");
+	Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );
+	return false;
 }
 
 
