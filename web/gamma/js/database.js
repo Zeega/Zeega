@@ -158,7 +158,11 @@ var Database = {
 		var d = this;
 		
 		//test to see if this is a new search
-		
+		if(this.postdata)
+		{
+			if( this.postdata.query[0].tags != [query] ||this.postdata.query[0].contentType != contentType ) this.customSearch = false;
+		}
+	
 		if( this.customSearch )
 		{
 
@@ -209,7 +213,9 @@ var Database = {
 			
 			}else{
 				//if the search returns nothing
-				console.log('No results returned');
+				var error = $("<div class='alert-message error'><p>We couldn't find what you're looking for :( Try again?</p></div>");
+				$('#database-pager').fadeOut('fast',function(){$(this).empty();$(this).show();});
+				$('#tab-database-slide-window').html(error);
 			}
 		});
 		
