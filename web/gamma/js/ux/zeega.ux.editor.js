@@ -13,9 +13,13 @@ function initUX(){
 
 	initHeaderUX();
 	
+	
+	//database tab switching
+	
 	$('#tab-content').cycle({
+		fx: 'fade',
 		timeout: 0,
-		speed: 300,
+		speed: 500,
 		width:490,
 		fit:1
 	});

@@ -38,6 +38,8 @@ var Database = {
 		$('#tab-database-slide-window').cycle('destroy');
 		$('#tab-database-slide-window').empty();
 		
+		this.postdata = {};
+		
 		this.collection = new ItemCollection;
 		this.viewCollection.collection.reset();
 		this.viewCollection._itemViews = [];
@@ -95,7 +97,7 @@ var Database = {
 	setQuery : function( query, contentType )
 	{
 
-		if(query == "")
+		if(query == [])
 		{
 			console.log('empty query');
 			this.refresh();
@@ -148,9 +150,7 @@ var Database = {
 					],
 			};
 			
-			console.log(this.postdata);
-			
-			
+
 			
 		}
 
@@ -163,7 +163,8 @@ var Database = {
 		
 		if(this.postdata)
 		{
-			if( this.postdata.query[0].tags != [query] ||this.postdata.query[0].contentType != contentType ) this.customSearch = false;
+			if( query == "" || contentType != 'all' ) this.customSearch = false;
+			else if( this.postdata.query[0].tags != [query] ||this.postdata.query[0].contentType != contentType ) this.customSearch = false;
 		}
 	
 		if( this.customSearch )
