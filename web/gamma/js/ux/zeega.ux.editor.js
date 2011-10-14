@@ -127,6 +127,27 @@ function insertPager(items, page)
 	});
 }
 
+function submitenter(myfield,e)
+{
+	var keycode;
+	
+	console.log('submitenter');
+	
+	if (window.event) keycode = window.event.keyCode;
+	else if (e) keycode = e.which;
+	else return true;
+
+	if (keycode == 13)
+	{
+		var form=$(myfield).closest("form");
+		Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
 
 $(document).ready(function() {
 	
@@ -209,7 +230,7 @@ $(document).ready(function() {
 		$(this).css('color','#333');
 		$(this).val('');
 	});
-
+	
 
 	
 	//hide layer content initially
