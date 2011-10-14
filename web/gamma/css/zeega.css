@@ -466,6 +466,54 @@ body
 	
 *******************************/
 
+
+#database-search
+{
+	width: 490px;
+}
+
+#form-left
+{
+	background:white;
+	float:left;
+}
+
+#form-right
+{
+	float:left;
+}
+
+#database-search-text
+{
+	border:none;
+	width:370px;
+	font-size:1.5em;
+}
+
+#database-search-filter
+{
+	background:white;
+	border: none;
+	height:23px;
+	vertical-align:top;
+}
+
+#database-search-button
+{
+	background: #DDD;
+	border: none;
+	margin: 0;
+	height: 24px;
+	-webkit-border-radius: 0 6px 6px 0px;
+	cursor: pointer;
+	background-image: -webkit-linear-gradient(top, #62c462, #57a957);
+	color: white;
+	width: 42px;
+	font-size: 1em;
+}
+
+
+
 #db-nav-controls
 {
 	overflow:hidden;

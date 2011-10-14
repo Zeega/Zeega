@@ -134,8 +134,8 @@ img {
   -ms-interpolation-mode: bicubic;
 }
 button,
-input,
-select,
+
+
 textarea {
   font-size: 100%;
   margin: 0;
@@ -606,8 +606,8 @@ form .clearfix:after {
   clear: both;
 }
 label,
-input,
-select,
+
+
 textarea {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -631,9 +631,9 @@ form .input {
 input[type=checkbox], input[type=radio] {
   cursor: pointer;
 }
-input,
+
 textarea,
-select,
+
 .uneditable-input {
   display: inline-block;
   width: 210px;
@@ -672,7 +672,7 @@ input[type=button], input[type=reset], input[type=submit] {
   width: auto;
   height: auto;
 }
-select, input[type=file] {
+ input[type=file] {
   height: 27px;
   line-height: 27px;
   *margin-top: 4px;
@@ -700,7 +700,7 @@ textarea {
 ::-webkit-input-placeholder {
   color: #bfbfbf;
 }
-input, textarea {
+ textarea {
   -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
@@ -734,7 +734,7 @@ form div.clearfix.error {
 form div.clearfix.error > label, form div.clearfix.error span.help-inline, form div.clearfix.error span.help-block {
   color: #9d261d;
 }
-form div.clearfix.error input, form div.clearfix.error textarea {
+form div.clearfix.error  form div.clearfix.error textarea {
   border-color: #c87872;
   -webkit-box-shadow: 0 0 3px rgba(171, 41, 32, 0.25);
   -moz-box-shadow: 0 0 3px rgba(171, 41, 32, 0.25);
@@ -948,7 +948,7 @@ textarea[readonly] {
 .inline-inputs span {
   padding: 0 2px 0 1px;
 }
-.input-prepend input, .input-append input {
+.input-prepend  .input-append input {
   -webkit-border-radius: 0 3px 3px 0;
   -moz-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;

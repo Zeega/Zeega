@@ -94,9 +94,10 @@ var Database = {
 	
 	setQuery : function( query, contentType )
 	{
-	
+
 		if(query == "")
 		{
+			console.log('empty query');
 			this.refresh();
 			
 		}else{
@@ -147,6 +148,9 @@ var Database = {
 					],
 			};
 			
+			console.log(this.postdata);
+			
+			
 			
 		}
 
@@ -157,7 +161,6 @@ var Database = {
 	{
 		var d = this;
 		
-		//test to see if this is a new search
 		if(this.postdata)
 		{
 			if( this.postdata.query[0].tags != [query] ||this.postdata.query[0].contentType != contentType ) this.customSearch = false;
@@ -173,8 +176,7 @@ var Database = {
 			//parse the query here <<<<<
 			
 			this.setQuery([query],contentType);
-		}
-		
+		}		
 		
 		//this.customSearch = new ItemCollection;
 		

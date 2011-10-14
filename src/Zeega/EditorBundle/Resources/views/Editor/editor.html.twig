@@ -44,18 +44,25 @@
 							<div id="tab-database">
 								<div id="db-nav-controls">
 							
-									<form action="" method="">
-										<input id='database-search' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search' class='span6'/>
-								
-										<select id='database-filter' class='span2'>
-										  <option value="all">All</option>
-										  <option value="image">Images</option>
-										  <option value="video">Video</option>
-										  <option value="audio">Audio</option>
-										</select>
-							
-										<input class='btn success' type="button" value="go" onclick =' return submitbutton(this)'/>
-									</form>
+									<div id='database-search' class='clearfix'>
+
+										<form action="" method="">
+											<div id='form-left'>
+												<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search' class='span6'/>
+
+												<select id='database-search-filter' class=''>
+												  <option value="all">All</option>
+												  <option value="image">Images</option>
+												  <option value="video">Video</option>
+												  <option value="audio">Audio</option>
+												</select>
+											</div>
+											<div id='form-right'>
+												<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>
+											</div>
+										</form>
+
+									</div>
 							
 								</div>
 						

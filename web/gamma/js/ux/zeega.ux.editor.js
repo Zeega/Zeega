@@ -140,7 +140,7 @@ function submitenter(inputfield,e)
 	if (keycode == 13)
 	{
 		var form=$(inputfield).closest("form");
-		Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );
+		Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
 		return false;
 	}else{
 		return true;
@@ -150,7 +150,7 @@ function submitenter(inputfield,e)
 function submitbutton(button)
 {
 	var form=$(button).closest("form");
-	Database.search( form.find("#database-search").val(), form.find("#database-filter").val() );
+	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
 	return false;
 }
 
@@ -233,7 +233,7 @@ $(document).ready(function() {
 
 	
 	//search bar focus stuff
-	$('#database-search').focus(function(){
+	$('#database-search-text').focus(function(){
 		$(this).css('color','#333');
 		$(this).val('');
 	});
