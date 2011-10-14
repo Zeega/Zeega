@@ -16,11 +16,6 @@
 
 *********************************************/
 
-function getBaseURL()
-{
-	if( window.URL_PREFIX ) Zeega.url_prefix = URL_PREFIX;
-}
-
 var Zeega = {
 	routeID : 1,
 	currentNode : null,
@@ -40,8 +35,14 @@ var Zeega = {
 	init : function()
 	{
 		//test to see if the URL_PREFIX constant has been set and add it if it has
-		getBaseURL();
+		this.setURLPrefix();
 	},
+	
+	setURLPrefix : function()
+	{
+		if( window.URL_PREFIX ) Zeega.url_prefix = URL_PREFIX;
+	},
+	
 	//set the route without loading it
 	//do we need this?
 	setRoute : function(routeID)
