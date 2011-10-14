@@ -36,7 +36,7 @@ function initHeaderUX(){
 		$('.item-title').css('color','white');
 	});
 	
-	$('#add-media').toggle(function(){$('#add-media').fadeIn('fast');},function(){$('#add-media').fadeOut('fast');});
+	$('.add-media').toggle(function(){$('#add-media').fadeIn('fast');$('body').bind('click',function(){$('#add-media').fadeOut();$(this).unbind();});},function(){$('#add-media').fadeOut('fast');});
 
 }
 

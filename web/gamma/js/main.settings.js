@@ -30,6 +30,11 @@ var loadFiles = [
 	'order!jquery/plugins/jquery-cycle',
 	'order!jquery/plugins/jquery.paging',
 	'order!jquery/plugins/colorpicker/js/colorpicker',
+	'order!jquery/plugins/jquerygetUrlParam',
+	'order!jquery/plugins/jqueryjson',
+	'order!jquery/plugins/jquerycookie',
+	'order!jquery/plugins/jquerytmpl',
+	'order!jquery/plugins/bootstrapmodal',
 	
 	//mvc
 

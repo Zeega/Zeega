@@ -1,3 +1,67 @@
+// Settings
+
+
+
+
+
+#user-add {
+	display: none;
+	position: absolute;
+	z-index:1000;
+	left:30%;
+	width:40%;
+	background-color: gray;
+	padding:10px 10px 10px 10px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+#playground-add {
+	display: none;
+	position: absolute;
+	z-index:1000;
+	left:30%;
+	width:40%;
+	background-color: gray;
+	padding:10px 10px 10px 10px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+.admin-form form {
+	overflow: hidden;
+	clear: both;
+	width: 400px;
+}
+.admin-form label{
+	color: white;
+	clear: left;
+	float: left;
+	width: 41%;
+	padding-right: 2%;
+	height: 1em;
+	margin-bottom: 10px;
+	
+	text-align: right;
+}
+.admin-form input{
+	float: left;
+	
+	margin-bottom: 15px;
+}
+#password-change{
+
+	position: absolute;
+	z-index:10000;
+	left:30%;
+	width:40%;
+	background-color: gray;
+	padding:10px 10px 10px 10px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+
+}
+
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
@@ -1666,3 +1730,5 @@ a .ui-slider-handle
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
 }
+
+

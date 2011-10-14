@@ -10,6 +10,8 @@ use Zeega\EditorBundle\Entity\Playground;
 use Zeega\EditorBundle\Entity\Node;
 use Zeega\UserBundle\Entity\User;
 use Zeega\EditorBundle\Form\Type\UserType;
+use Zeega\EditorBundle\Form\Type\PlaygroundType;
+use Zeega\EditorBundle\Form\Type\PasswordType;
 
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
@@ -71,7 +73,9 @@ class EditorController extends Controller
 			$users=	$this->getDoctrine()
 						->getRepository('ZeegaEditorBundle:Playground')
 						->findUsersByPlayground($playground->getId());
-			
+			$newUser = new User();
+       		$form = $this->createForm(new UserType(), $newUser);    
+			$request = $this->getRequest();
             
 			return $this->render('ZeegaEditorBundle:Editor:playground.admin.html.twig', array(
 				// last displayname entered by the user
@@ -87,7 +91,7 @@ class EditorController extends Controller
 				'users'=>$users[0]['users'],
 				'form' => $form->createView(),
 				'message'=>$message,
-            'page'=>'admin',
+            	
 			));
     	}
     	
@@ -98,7 +102,28 @@ class EditorController extends Controller
     public function homeAction(){
     	
   		$user = $this->get('security.context')->getToken()->getUser();
-  		if($user){
+  		$newPlayground= new Playground();
+  		$form = $this->createForm(new PlaygroundType(), $newPlayground);    
+		$request = $this->getRequest();				
+		$message="";
+    	if ($request->getMethod() == 'POST') {
+        	$form->bindRequest($request);
+			if ($form->isValid()) {
+				$em = $this->getDoctrine()->getEntityManager();
+				$newPlayground=$form->getData();
+				$newPlayground->addUser($user);
+				$em->persist($newPlayground);
+				$em->flush();
+				$message=$newPlayground->getTitle()." has been added.";
+       		}
+       		else {
+       			$message="Unable to add new playground";
+       		
+       		}
+    	}
+  		
+  		
+ 
   			if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
     		else $super=false;
   			$playgrounds=$this->getDoctrine()
@@ -114,11 +139,10 @@ class EditorController extends Controller
             'super'=>true,
             'title'=>'',
             'page'=>'home',
+            'form' => $form->createView(),
+            'message'=>$message,
         ));
-    	}
-    	else{
-    		return $this->render('ZeegaEditorBundle:Editor:welcome.html.twig');
-    	}
+    	
     }
 
 	public function playgroundAction($short){
@@ -163,6 +187,7 @@ class EditorController extends Controller
 		'title'=>$playground->getTitle(),
 		'projectsMenu'=>false,
 		'page'=>'playground',
+		
 	));
 	
 	}
@@ -289,7 +314,10 @@ class EditorController extends Controller
 	
 	public function settingsAction(){
 		$user = $this->get('security.context')->getToken()->getUser();		
-			if($user){
+		if($user){
+				$newUser = new User();
+				$form = $this->createForm(new PasswordType(), $newUser);    
+				$request = $this->getRequest();
 				if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
 				else $super=false;
 				return $this->render('ZeegaEditorBundle:Editor:settings.html.twig', array(
@@ -302,6 +330,7 @@ class EditorController extends Controller
 				'super'=>$super,
 				'title'=>'',
 				'page'=>'home',
+				'form'=>$form->createView(),
 			));
     	}
     	else  $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);

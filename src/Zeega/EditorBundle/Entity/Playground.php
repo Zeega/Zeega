@@ -18,6 +18,7 @@ class Playground
         $this->created_at = new \DateTime();
     }
  
+
     /**
      * @var integer $id
      */
@@ -42,6 +43,16 @@ class Playground
      * @var datetime $created_at
      */
     private $created_at;
+
+    /**
+     * @var Zeega\UserBundle\Entity\User
+     */
+    private $users;
+
+    /**
+     * @var Zeega\UserBundle\Entity\User
+     */
+    private $admins;
 
 
     /**
@@ -133,16 +144,6 @@ class Playground
     {
         return $this->created_at;
     }
-    /**
-     * @var Zeega\UserBundle\Entity\User
-     */
-    private $users;
-
-    /**
-     * @var Zeega\UserBundle\Entity\User
-     */
-    private $admins;
-
 
     /**
      * Add users
@@ -153,6 +154,9 @@ class Playground
     {
         $this->users[] = $users;
     }
+    
+    
+ 
 
     /**
      * Get users
@@ -172,25 +176,5 @@ class Playground
     public function getAdmins()
     {
         return $this->admins;
-    }
-
-    /**
-     * Add users
-     *
-     * @param Zeega\UserBundle\Entity\User $users
-     */
-    public function addUsers(\Zeega\UserBundle\Entity\User $users)
-    {
-        $this->users[] = $users;
-    }
-
-    /**
-     * Add admins
-     *
-     * @param Zeega\UserBundle\Entity\User $admins
-     */
-    public function addAdmins(\Zeega\UserBundle\Entity\User $admins)
-    {
-        $this->admins[] = $admins;
     }
 }
