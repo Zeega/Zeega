@@ -177,13 +177,6 @@ var NodeViewCollection = Backbone.View.extend({
 	},
 	
 	remove : function(node) {
-		/*
-		console.log(this);
-		//var viewToRemove = _(this._nodeViews.select(function(nv){return nv.model === model;}))[0];
-		this._nodeViews = _(this._nodeViews).without(this);
-		
-		this.remove();
-		*/
 	},
 	
 	
@@ -197,6 +190,11 @@ var NodeViewCollection = Backbone.View.extend({
 		_(this._nodeViews).each(function(node){
 			$(that.el).append(node.render().el);
 		});
+		
+		console.log('renderNodes');
+		var addNodeButton = $('<div id="add-node"><a href="#" onClick="Zeega.addNode();return false;"><img src="../../../../gamma/images/addnode.png" height="25" width="25"/></a></div>');
+		
+		$('#node-drawer').append(addNodeButton);
 		
 		return this;
 	}

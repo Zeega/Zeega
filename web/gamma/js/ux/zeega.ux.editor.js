@@ -211,6 +211,11 @@ $(document).ready(function() {
 	$('#node-drawer').find('ul').sortable({  
 		axis : 'x',
 		forceHelperSize : true,
+		placeholder: "node-thumb ui-state-highlight",
+		forcePlaceholderSize:true,
+		forceHelperSize:true,
+		tolerance: 'pointer',
+		
 		stop : function(){
 			Zeega.route.set({'nodesOrder':$(this).sortable('toArray')});
 			Zeega.route.save();
@@ -218,11 +223,13 @@ $(document).ready(function() {
 		}
 	});
 
+/*
 	//add new node
 	$( "#add-node" ).click( function() {
 		Zeega.addNode();
 			//Zeega.route.nodeViewCollection.add( new Node );
 	});
+*/
 	
 	//add new layer
 	$('#add-layer').click(function(){
