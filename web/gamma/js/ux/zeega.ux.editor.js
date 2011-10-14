@@ -158,6 +158,9 @@ function submitbutton(button)
 
 $(document).ready(function() {
 	
+	//fadeIn the sidebar
+	$('#sidebar').fadeIn('fast');
+	
 	//$( "#radio" ).buttonset();
 	
 	$('#preview').click(function(){
