@@ -21,6 +21,10 @@ items:
   type:     rest
   resource: Zeega\EditorBundle\Controller\ItemsController
   
+playgrounds:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\PlaygroundsController
+  
 ItemSearch:
 
     pattern:   /search/items/{offset}/{limit}

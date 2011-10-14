@@ -18,7 +18,7 @@
 				<div class="item-title" style="font-size: 16px; ">My Projects</div><br><br>
 				<div id="my-projects" style="padding-left:20px;">
 					{% for project in myprojects %}
-						<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}">{{project.title}}</a> <span class="timeStamp"></span><br>
+						<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}">{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a><br>
 					{% endfor %}
 				</div>
 

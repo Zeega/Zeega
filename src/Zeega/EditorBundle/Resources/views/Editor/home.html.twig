@@ -7,6 +7,7 @@
 {% block body %}
 
 <div class="item-title" style="font-size: 24px; ">{{displayname}}</div><br><br>
+<div class="item-title" style="font-size: 14px; ">{{message}}</div><br><br>
 <div style="clear:both;"></div>
  <br><br>
 <div id="user-info" style="color:white">
@@ -17,9 +18,9 @@
 <br><br>
 			{% if super %}
 			
-				<div id="create-playground">
+				<div id='add-playground'>
 					<ul class="pill-buttons">
-						<li><a id="new-playground" href="#">Create New Playground</a></li>
+						<li><a  href="#">Create New Playground</a></li>
 					</ul>
 				</div>
 				
@@ -44,7 +45,18 @@
 
 {% endblock %}		
 
-	
+	{% block extras %}
+		<div id="playground-add" style='display:none;'>		
+				<form class='admin-form' action="" method="post" {{ form_enctype(form) }}>
+					{{ form_widget(form) }}
+					<span class='admin-submit'>
+					<input type="submit" value="Cancel" id="playground-add-cancel" />
+					<input type="submit" />
+					</span>
+				</form>
+			</div>
+		<div >
+{% endblock %}
 {% block scripts %}
       <script data-main="{{ asset('gamma/js/main.home.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
 {% endblock %}

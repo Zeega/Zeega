@@ -7,6 +7,10 @@ Zeega\EditorBundle\Entity\Node:
      targetEntity: Zeega\UserBundle\Entity\User
     route:
      targetEntity: Route
+     joinColumns:
+       route_id:
+        referencedColumnName: id
+        onDelete: CASCADE
     link_up:
      targetEntity: Node
     link_down:
@@ -32,7 +36,7 @@ Zeega\EditorBundle\Entity\Node:
      nullable: true
     thumb_url:
      type: string
-     length: 100
+     length: 101
      nullable: true
 
  

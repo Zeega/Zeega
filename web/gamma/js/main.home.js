@@ -22,7 +22,7 @@ var loadFiles = [
 	
 	//custom
 	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.playground',
+	'order!ux/zeega.ux.home',
 
 	
 	//plugins

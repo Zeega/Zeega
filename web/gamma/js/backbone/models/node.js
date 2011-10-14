@@ -21,7 +21,7 @@ var Node = Backbone.Model.extend({
 	updateThumb : function(){
 		console.log('updating thumbnail');
 		var that=this;
-		$.get('http://core.zeega.org/utilities/node_thumb.php?id='+this.id,function(data){
+		$.get('http://core.zeega.org/utilities/local_thumb.php?id='+this.id,function(data){
 			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){$(this).css('background-image','url("'+data+'")').fadeIn('slow');});
 			that.set({thumb_url:data});
 			that.save();

@@ -27,7 +27,7 @@ require(loadFiles, function($) {
 
 var nodeId = window.location.hash.substr(1);
 
-$.getJSON('http://mlhplayground.org/Symfony/web/app_dev.php/nodes/'+nodeId+'/layers',function(data){
+$.getJSON('http://alpha.zeega.org/test/web/app_dev.php/nodes/'+nodeId+'/layers',function(data){
 
 console.log(data);
 console.log(data[0].attr);

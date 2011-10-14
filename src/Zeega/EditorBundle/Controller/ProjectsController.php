@@ -66,6 +66,17 @@ class ProjectsController extends Controller
     
     	$em = $this->getDoctrine()->getEntityManager();
      	$project= $em->getRepository('ZeegaEditorBundle:Project')->find($project_id);
+     	/*
+     	$routes=$em->getRepository('ZeegaEditorBundle:Route')
+        				->findRoutesByProject($project_id);
+     	foreach($routes as $route){
+     	
+     		$r=$em->getRepository('ZeegaEditorBundle:Route')
+        				->find($route['id']);
+     		$em->remove($r);
+     	
+     	}
+     	*/
     	$em->remove($project);
     	$em->flush();
     	return new Response('SUCCESS',200);

@@ -19,6 +19,7 @@ function initUX(){
 $(document).ready(function() {
 	
 
-
+	$('#add-playground').click(function(){ console.log('clicl');$('#playground-add').fadeIn('fast'); return false;});
+	$('#playground-add-cancel').click(function(){$('#playground-add').fadeOut(); return false;});
 
 });

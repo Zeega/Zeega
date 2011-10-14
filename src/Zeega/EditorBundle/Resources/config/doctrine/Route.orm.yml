@@ -5,6 +5,11 @@ Zeega\EditorBundle\Entity\Route:
    manyToOne:
     project:
      targetEntity: Project
+     onDelete: CASCADE
+     joinColumns:
+       project_id:
+        referencedColumnName: id
+        onDelete: CASCADE
    manyToMany:
     layers:
      targetEntity: Layer
