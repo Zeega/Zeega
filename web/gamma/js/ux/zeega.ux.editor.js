@@ -169,6 +169,7 @@ $(document).ready(function() {
 	
 	//$( "#radio" ).buttonset();
 	
+/*	
 	$('#preview').click(function(){
 		
 		Zeega.previewMode = true;
@@ -177,11 +178,7 @@ $(document).ready(function() {
 		
 		var wrapper = $('<div>')
 			.attr('id','workspace-preview-wrapper');
-		/*
-		var p = $('#workspace')
-			.clone()
-			.attr('id','workspace-preview');
-		*/
+
 		
 		//add node navigation controls
 		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
@@ -202,7 +199,7 @@ $(document).ready(function() {
 		Zeega.loadNode(Zeega.currentNode);
 		
 	});
-	
+*/	
 	
 	//refresh database
 	$('#refresh-database').click(function(){
@@ -237,14 +234,6 @@ $(document).ready(function() {
 			console.log($(this).sortable('toArray'));
 		}
 	});
-
-/*
-	//add new node
-	$( "#add-node" ).click( function() {
-		Zeega.addNode();
-			//Zeega.route.nodeViewCollection.add( new Node );
-	});
-*/
 	
 	//add new layer
 	$('#add-layer').click(function(){
@@ -255,15 +244,11 @@ $(document).ready(function() {
 		$('#add-layer-modal').modal('hide');
 	});
 	
-
-	
 	//search bar focus stuff
 	$('#database-search-text').focus(function(){
 		$(this).css('color','#333');
 		$(this).val('');
 	});
-	
-
 	
 	//hide layer content initially
 	$(".layer-list a:first").click(function(){
@@ -279,7 +264,6 @@ $(document).ready(function() {
 	});
 	
 	$( "#sortable-layers" )
-		.addClass('clearfix')
 		.sortable({
 		
 			//define a grip handle for sorting

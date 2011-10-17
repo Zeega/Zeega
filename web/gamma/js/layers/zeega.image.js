@@ -151,7 +151,7 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		$('#workspace-preview-wrapper').append(this.dom);
+		$('#preview-media').append(this.dom);
 	},
 	
 	updateAttr: function(){

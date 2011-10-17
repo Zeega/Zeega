@@ -214,9 +214,8 @@ body
 {
 	position: absolute;
 	top:0;
-	width:100%;
+	width:1004px;
 	height:30px;
-	float: left;
 }
 
 #header-title
@@ -952,7 +951,10 @@ body
 	top:175px;
 }
 
-
+.preview-nav
+{
+	z-index:1000;
+}
 
 
 .preview-nav-arrow

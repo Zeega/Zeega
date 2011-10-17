@@ -126,7 +126,7 @@ var ProtoLayer = Class.extend({
 		
 		this.type = model.get('type');
 		
-		this.zIndex=model.get('zindex');
+		this.zIndex = model.get('zindex');
 	},
 	
 	

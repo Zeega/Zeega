@@ -17,7 +17,7 @@
 					<ul class='pill-buttons'>
 						<li><a id='share' href='#'>Share</a></li>
 						<li><a id='embed' href='#'>Embed</a></li>
-						<li><a id='preview' href='#'>Preview</a></li>
+						<li><a id='preview' href='http://www.getjavascript.com' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
 					</ul>
 				</div>
 			</div>
@@ -141,12 +141,13 @@
 	</div>
 	<script id='workspace-preview-nav' type='x-jquery-tmpl'>
 		<div id='workspace-preview-controls'>
-			<div id='preview-left' class='preview-nav-arrow'>
-				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}">
+			<div id='preview-left' class='preview-nav-arrow preview-nav'>
+				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}" onclick="Zeega.loadLeftNode();return false">
 			</div>
-			<div id='preview-right' class='preview-nav-arrow'>
-				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}">
+			<div id='preview-right' class='preview-nav-arrow preview-nav'>
+				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}" onclick="Zeega.loadRightNode();return false">
 			</div>
+			<div id='preview-media'></div>
 		</div>
 	</script>
 	<script id='branch-overlay-template' type='x-jquery-tmpl'>

@@ -130,8 +130,7 @@ var Zeega = {
 				
 				z.nodesReady = true;
 				z.testIfReady();
-				
-				console.log(nodes)
+
 			}
 		});
 	},
@@ -170,17 +169,17 @@ var Zeega = {
 			}else{
 				this.loadNode( this.route.nodes.at(0) );
 			}
+			
+			this.nodeSort();
 		}
 	},
 	
 	loadNode : function( node )
 	{
-
-		console.log('loadingnode');
-		//clear workspace
+		window.location.hash = '/node/'+ node.id; //change location hash
 		Zeega.route.layerViewCollection._rendered = false;
 		Zeega.route.layerViewCollection._layerViews = [];
-		$('#workspace').empty();
+
 		//remove a prexisiting node style
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		//set global currentNode to the selected node
@@ -188,17 +187,15 @@ var Zeega = {
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 		
-		//display the node's layers
-		//this is done in z-index order
+		if(this.previewMode) $('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
+		else $('#workspace').empty();
 		
-		_.each( this.currentNode.get('layers'), function(layerID){
+		_.each( _.without( this.currentNode.get('layers'), -1) , function(layerID){
 			//test to make sure it's not a filler layer!
-			if(layerID != -1) Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
+			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
 		Zeega.route.layerViewCollection.render();
-			
-		window.location.hash = '/node/'+ node.id; //change location hash
-		
+
 	},
 	
 	addNode : function()
@@ -337,14 +334,6 @@ var Zeega = {
 
 	},
 	
-	/*
-	destroyLayer : function(layer)
-	{
-		console.log('destroyLayer');
-		layer.destroy();
-	},
-	*/
-	
 	destroyNode : function( view )
 	{
 		var response = confirm('Delete Node?')
@@ -383,42 +372,54 @@ var Zeega = {
 		console.log(order);
 	},
 	
+	previewRoute : function()
+	{
+		console.log('PREVIEWING');
+		this.previewMode = true;
+		//remove branch viewer if present
+		
+		var wrapper = $('<div>').attr('id','workspace-preview-wrapper');
+		
+		//add node navigation controls
+		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
+		
+		$('body').append(wrapper);
+		wrapper.fadeIn();
+		
+		this.loadNode(this.currentNode);
+	},
+	
 	getLeftNode : function()
 	{
-		this.nodeSort(); // this should not need to be here. It should just be there
 		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
-		if(currentNodeIndex > 0 )return this.route.nodes.at( currentNodeIndex-1 );
-		else return -1;
+		if(currentNodeIndex > 0 ) return this.route.nodes.at( currentNodeIndex-1 );
+		else return false;
 	},
 	
 	getRightNode : function()
 	{
-		this.nodeSort(); // this should not need to be here. It should just be there
 		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
-		console.log('node: '+currentNodeIndex);
 		if(currentNodeIndex < _.size( this.route.nodes )-1 )return this.route.nodes.at( currentNodeIndex+1 );
-		else return -1;
+		else return false;
 	},
 	
 	loadLeftNode : function()
 	{
-		var n = this.getLeftNode();
-		if(n!=-1)
-		{
-			$('#workspace-preview').empty();
-			this.loadNode(n)
-		}
+		var node = this.getLeftNode();
+		console.log(node);
+		if(node) this.loadNode(node)
 	},
 	
 	loadRightNode : function()
 	{
-		var n = this.getRightNode();
-		console.log(n);
-		if(n!=-1)
-		{
-			$('#workspace-preview').empty();
-			this.loadNode(n)
-		}
+		var node = this.getRightNode();
+		console.log(node);
+		
+		if(node) this.loadNode(node)
 	}
 	
 };
+
+
+
+

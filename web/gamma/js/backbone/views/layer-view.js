@@ -43,7 +43,12 @@ var LayerView = Backbone.View.extend({
 		if(Zeega.previewMode)
 		{
 			console.log('in preview mode');
+			
 			layerClass.drawPublish();
+			
+			var layerOrder = Zeega.currentNode.get('layers');
+			layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+			
 		}else{
 			console.log('not in preview mode');
 
