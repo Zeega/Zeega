@@ -190,8 +190,8 @@ var Zeega = {
 		if(this.previewMode) $('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
 		else $('#workspace').empty();
 		
-		_.each( _.without( this.currentNode.get('layers'), -1) , function(layerID){
-			//test to make sure it's not a filler layer!
+		var layerArray = _.without( this.currentNode.get('layers'), -1)
+		_.each( layerArray , function(layerID){
 			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
 		Zeega.route.layerViewCollection.render();
