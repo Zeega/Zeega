@@ -18,10 +18,13 @@ var Node = Backbone.Model.extend({
 	initialize : function() { },
 	
 	//update the node thumbnail
-	updateThumb : function(){
+	updateThumb : function()
+	{
 		console.log('updating thumbnail');
 		var that=this;
-		$.get('http://core.zeega.org/utilities/local_thumb.php?id='+this.id,function(data){
+		var thumbURL = 'http://core.zeega.org/utilities/local_thumb.php?id='+this.id;
+		$.get( thumbURL, function(data)
+		{
 			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){$(this).css('background-image','url("'+data+'")').fadeIn('slow');});
 			that.set({thumb_url:data});
 			that.save();
@@ -29,11 +32,13 @@ var Node = Backbone.Model.extend({
 	
 	},
 	
-	noteChange:function(){
+	noteChange:function()
+	{
 		console.log('changed');
 		this.changed=true;
 	},
-	clearChange:function(){
+	clearChange:function()
+	{
 		console.log('change cleared');
 		this.changed=false;
 	}
@@ -42,11 +47,13 @@ var Node = Backbone.Model.extend({
 
 var NodeCollection = Backbone.Collection.extend({
 	model: Node,
-	url : function(){
+	url : function()
+	{
 		return Zeega.url_prefix+"routes/"+ Zeega.route.id +"/nodes";
 	},
 	
-	initialize : function(){
+	initialize : function()
+	{
 		
 	}
 });

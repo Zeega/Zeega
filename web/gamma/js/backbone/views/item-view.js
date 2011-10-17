@@ -5,7 +5,8 @@ var ItemView = Backbone.View.extend({
 	
 	initialize : function() {},
 	
-	render: function(i) {
+	render: function(i)
+	{
 		
 		var that = this;
 		//use template to clone the database items into
@@ -37,55 +38,6 @@ var ItemView = Backbone.View.extend({
 		//copy the cloned item into the el
 		$(this.el).html(template);
 		$(this.el).addClass('database-asset');
-		
-		$(this.el).click(function(){
-			$('#asset-preview').fadeIn();
-			
-			$('#asset-preview-media').empty();
-
-			//uglyness this should be more like layers?
-			var media = null;
-			switch (that.model.get('content_type'))
-			{
-				case 'Image':
-					media = $('<img>').attr('src', that.model.get('item_url') );
-					break;
-				case 'Video':
-					media = $('<video>').attr('controls','controls');
-					var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
-					media.append(src);
-					//do stuff
-					break;
-				case 'Audio':
-					media = $('<video>').attr('controls','controls');
-					var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
-					media.append(src);
-					break;
-			}
-			$('#asset-preview-media').append(media);
-			
-			//this needs to test for the type of media and place the appropriate image/player etc in there
-			//$('#asset-preview-image img').attr('src','http://mlhplayground.org/Symfony/web/images/thumbs/'+that.model.id+'_s.jpg');
-			
-			
-			console.log(that);
-			
-			
-			
-			var metaTitle = $('<div>').addClass('meta-title').html(that.model.get('title'));
-			var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ that.model.get('creator'));
-			var l = $('<a>').attr('href',that.model.get('attribution_url')).attr('target','blank').html('View Source');
-			var metaLink = $('<div>').addClass('meta-link').append(l);
-			
-			$('#asset-preview-meta')
-				.empty()
-				.append(metaTitle)
-				.append(metaAuthor)
-				.append(metaLink);
-				
-				
-				
-		});
 		
 		//drag drop functionality
 		$(this.el).draggable({
@@ -127,25 +79,55 @@ var ItemView = Backbone.View.extend({
 	},
 	
 	events: {
-		//"click" : "clickedItem",
-		'dblclick' : "doubleClick",
+		"click" : "previewItem"
+		//'dblclick' : "doubleClick",
 		
-	},
-	
-	dropItem:function(){
-	
-	
 	},
 	
 	//item events
-	clickedItem: function(){
-		//console.log('clicked: '+this.model.cid);
+	previewItem: function(){
+		var that = this;
+		
+		$('#asset-preview').fadeIn();
+		
+		$('#asset-preview-media').empty();
+
+		//uglyness this should be more like layers?
+		var media = null;
+		switch (that.model.get('content_type'))
+		{
+			case 'Image':
+				media = $('<img>').attr('src', that.model.get('item_url') );
+				break;
+			case 'Video':
+				media = $('<video>').attr('controls','controls');
+				var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
+				media.append(src);
+				//do stuff
+				break;
+			case 'Audio':
+				media = $('<video>').attr('controls','controls');
+				var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
+				media.append(src);
+				break;
+		}
+		$('#asset-preview-media').append(media);
+		
+		//this needs to test for the type of media and place the appropriate image/player etc in there
+		//$('#asset-preview-image img').attr('src','http://mlhplayground.org/Symfony/web/images/thumbs/'+that.model.id+'_s.jpg');
+		
+		var metaTitle = $('<div>').addClass('meta-title').html(that.model.get('title'));
+		var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ that.model.get('creator'));
+		var l = $('<a>').attr('href',that.model.get('attribution_url')).attr('target','blank').html('View Source');
+		var metaLink = $('<div>').addClass('meta-link').append(l);
+		
+		$('#asset-preview-meta')
+			.empty()
+			.append(metaTitle)
+			.append(metaAuthor)
+			.append(metaLink);
+		
 	},
-	doubleClick: function(){
-		
-		//console.log(this.cid);
-		
-	}
 });
 
 var ItemViewCollection = Backbone.View.extend({

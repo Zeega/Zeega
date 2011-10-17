@@ -4,7 +4,7 @@ var Project =  Backbone.Model.extend({
 	
 	defaults :{},
 	
-	initialize: function(){	},
+	initialize: function(){},
 	
 
 });

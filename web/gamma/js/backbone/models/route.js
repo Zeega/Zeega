@@ -7,17 +7,20 @@ var Route = Backbone.Model.extend({
 		//title : "Untitled"
 		},
 		
-	url : function() {
+	url : function()
+	{
 		var base = Zeega.url_prefix+'routes';
 		if (this.isNew()) return base;
 		return base + '/' + this.id;
 	},
 
-	initialize : function() {
+	initialize : function()
+	{
 		
 	},
 	
-	loadNodes : function(){
+	loadNodes : function()
+	{
 		
 		console.log('loading nodes');
 		
@@ -35,7 +38,8 @@ var Route = Backbone.Model.extend({
 		this.nodes = new NodeCollection;
 		//get all existing nodes
 		this.nodes.fetch({
-			success : function(nodes){
+			success : function(nodes)
+			{
 				//make a node view collection
 				//fancy!
 				that.nodeViewCollection = new NodeViewCollection({

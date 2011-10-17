@@ -11,17 +11,14 @@ var Layer =  Backbone.Model.extend({
 var LayerCollection = Backbone.Collection.extend({
 	model : Layer,
 
-	url : function(){
+	url : function()
+	{
 		return Zeega.url_prefix+"routes/"+ Zeega.route.id +"/layers";
 	},
 	
-	initialize : function(){
+	initialize : function()
+	{
 		
-	}/*,
-	
-	remove : function( layer ){
-		layer.destroy();
 	}
-	*/
 	
 });

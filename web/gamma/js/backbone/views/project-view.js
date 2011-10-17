@@ -1,7 +1,8 @@
 var ProjectView = Backbone.View.extend({
 	tagName: 'span',
 	
-	render: function() {
+	render: function()
+	{
 		var that = this;
 		$(this.el).html(this.model.get('title'));
 		//$('#route-title').empty();

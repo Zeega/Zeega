@@ -1,7 +1,8 @@
 var NodeView = Backbone.View.extend({
 	tagName: 'li',
 	
-	render: function() {
+	render: function()
+	{
 		var that = this;
 		var template = $("#node-item-template")
 			.clone()
@@ -88,17 +89,6 @@ var NodeView = Backbone.View.extend({
 		);
 			
 		return this;
-	},
-	
-	//	events defining user interactions with the nodes
-	events: {
-		//"click" : "selectNode",
-	},
-	
-	//	do this when the node is selected
-	// not using this because it includes the delete button
-	selectNode : function() {
-		//Zeega.loadNode(this.model);
 	}
 	
 });
@@ -108,7 +98,8 @@ var NodeViewCollection = Backbone.View.extend({
 	//set the location where the nodes are to be drawn
 	el : $('#node-drawer ul'),
 	
-	initialize : function() {
+	initialize : function()
+	{
 		
 		//	bind add & remove actions
 		_(this).bindAll('add','remove');
@@ -125,7 +116,8 @@ var NodeViewCollection = Backbone.View.extend({
 		
 	},
 	
-	add : function(node) {
+	add : function(node)
+	{
 		var z = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
 		
@@ -151,8 +143,6 @@ var NodeViewCollection = Backbone.View.extend({
 			this.pushView(new NodeView({ model : node }));
 		}
 		
-
-
 	},
 	
 	pushView : function( nv )
@@ -172,11 +162,8 @@ var NodeViewCollection = Backbone.View.extend({
 		}
 	},
 	
-	remove : function(node) {
-	},
-	
-	
-	render : function(){
+	render : function()
+	{
 		this._rendered = true;
 		var that = this;
 		

@@ -12,7 +12,8 @@ var LayerView = Backbone.View.extend({
 	},
 	
 	
-	render : function() {
+	render : function()
+	{
 
 		this.model.bind('remove',this.remove);
 		var that = this;
@@ -128,8 +129,8 @@ var LayerViewCollection = Backbone.View.extend({
 	//see the NodeViewCollection below for documentation
 	el : $('#tab-layers ul')[0],
 	
-	initialize : function(){
-		
+	initialize : function()
+	{
 		_(this).bindAll('add', 'remove');
 		this._layerViews = [];
 		this.collection.each(this.add);
