@@ -20,7 +20,7 @@ function initUX(){
 		fx: 'fade',
 		timeout: 0,
 		speed: 500,
-		width:490,
+		width:394,
 		fit:1
 	});
 	

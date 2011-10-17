@@ -175,7 +175,8 @@ body
 #wrapper
 {
 	position:relative;
-	width:1100px;
+	width:1004px;
+	padding:0 10px;
 	margin:0 auto;
 }
 
@@ -481,7 +482,7 @@ body
 
 #sidebar
 {
-	width:490px;
+	width:394px;
 	min-height:394px;
 	float:left;
 	margin-right:10px;
@@ -527,7 +528,7 @@ body
 #database-search-text
 {
 	border:none;
-	width:370px;
+	width:275px;
 	font-size:1.5em;
 }
 
@@ -708,7 +709,7 @@ body
 	color: #ddd;
 	font-size: .8em;
 	font-weight: bold;
-	width: 400px;
+	width: 310px;
 	overflow:hidden;
 	float:left;
 	cursor:pointer;
