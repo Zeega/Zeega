@@ -163,10 +163,10 @@ var Zeega = {
 				var newNode = new Node;
 				this.route.nodeViewCollection.add(newNode);
 				this.loadNode( newNode );
-			}else if(!this.url_hash.node){
-				this.loadNode( this.route.nodes.at(0) );
-			}else{
+			}else if(this.url_hash.node){
 				this.loadNode( this.route.nodes.get(this.url_hash.node) );
+			}else{
+				this.loadNode( this.route.nodes.at(0) );
 			}
 		}
 	},
@@ -196,7 +196,7 @@ var Zeega = {
 		});
 		Zeega.route.layerViewCollection.render();
 			
-		// window.location.hash = 'node/'+ node.id; //change location hash
+		window.location.hash = '/node/'+ node.id; //change location hash
 		
 	},
 	
