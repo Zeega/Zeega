@@ -82,12 +82,7 @@ var GeoLayer = ProtoLayer.extend({
 			css: 'height',
 			suffix: '%',
 		};
-		
-		
-	
-		
-	
-		
+
 		//Load Sliders + Button
 		
 		template.find('#controls').append( makeCSSLayerSlider(widthArgs) );
@@ -196,77 +191,86 @@ var GeoLayer = ProtoLayer.extend({
 	
 		//Load map/streetview into template controls 
 		
-		if(!this.editorLoaded){
-		
-		var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
-		var tempType=this.attr.mapType.toUpperCase();
-		eval( 'var mapType = google.maps.MapTypeId.'+tempType+';' );
-		
-		var mapOptions = {
-			zoom: this.attr.zoom,
-			center: centerLatLng,
-			mapTypeId: mapType,
-			disableDoubleClickZoom: true,
+		if(!this.editorLoaded)
+		{
 			
-		};
+			// throws error: 'google is not defined'
+			var centerLatLng = new google.maps.LatLng(this.attr.lat, this.attr.lng);
+			var tempType=this.attr.mapType.toUpperCase();
+			
+			
+			
+			
+			eval( 'var mapType = google.maps.MapTypeId.'+tempType+';' );
 		
-		this.map = new google.maps.Map(document.getElementById('map-'+this.model.id), mapOptions);
+			var mapOptions = {
+				zoom: this.attr.zoom,
+				center: centerLatLng,
+				mapTypeId: mapType,
+				disableDoubleClickZoom: true,
+			
+			};
+		
+			this.map = new google.maps.Map(document.getElementById('map-'+this.model.id), mapOptions);
 	
-		this.streetView=this.map.getStreetView();
-		this.geocoder = new google.maps.Geocoder();
+			this.streetView=this.map.getStreetView();
+			this.geocoder = new google.maps.Geocoder();
 		
-		// Check if streetView
+			// Check if streetView
 		
-		if(this.attr.type=="streetview") {
-			var pov={
-					heading:this.attr.heading,
-					pitch:this.attr.pitch,
-					zoom:this.attr.streetZoom,
+			if(this.attr.type=="streetview")
+			{
+				var pov={
+						heading:this.attr.heading,
+						pitch:this.attr.pitch,
+						zoom:this.attr.streetZoom,
+						}
+				this.streetView.setPosition(centerLatLng);
+				this.streetView.setPov(pov);
+				this.streetView.setVisible(true);
+		
+			}
+		
+			// Add event listeners
+			var that=this;
+		
+			google.maps.event.addListener(this.streetView, 'pov_changed', function() { that.updateAttr();});
+			google.maps.event.addListener(this.streetView, 'visible_changed', function() { that.updateAttr();});
+			google.maps.event.addListener(this.map, 'zoom_changed', function() { that.updateAttr(); });
+			google.maps.event.addListener(this.map, 'center_changed', function() { that.updateAttr(); });
+			google.maps.event.addListener(this.map, 'maptypeid_changed', function() { that.updateAttr(); });
+		
+		
+		
+			// Activate search field
+		
+			$('#map-submit-'+this.model.id).click(function(){
+				that.geocoder.geocode( { 'address': $('#map-search-'+that.model.id).val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						if(that.streetView.getVisible()) that.streetView.setVisible(false);
+						var mLatlng=results[0].geometry.location;
+						that.map.setCenter(mLatlng);
 					}
-			this.streetView.setPosition(centerLatLng);
-			this.streetView.setPov(pov);
-			this.streetView.setVisible(true);
-		
-		}
-		
-		// Add event listeners
-		var that=this;
-		
-		google.maps.event.addListener(this.streetView, 'pov_changed', function() { that.updateAttr();});
-		google.maps.event.addListener(this.streetView, 'visible_changed', function() { that.updateAttr();});
-		google.maps.event.addListener(this.map, 'zoom_changed', function() { that.updateAttr(); });
-		google.maps.event.addListener(this.map, 'center_changed', function() { that.updateAttr(); });
-		google.maps.event.addListener(this.map, 'maptypeid_changed', function() { that.updateAttr(); });
-		
-		
-		
-		// Activate search field
-		
-		$('#map-submit-'+this.model.id).click(function(){
-			that.geocoder.geocode( { 'address': $('#map-search-'+that.model.id).val()}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-					if(that.streetView.getVisible()) that.streetView.setVisible(false);
-					var mLatlng=results[0].geometry.location;
-					that.map.setCenter(mLatlng);
-				}
-				else alert("Geocoder failed at address look for "+$('#map-search-'+that.model.id).val()+": " + status);
+					else alert("Geocoder failed at address look for "+$('#map-search-'+that.model.id).val()+": " + status);
+				});
 			});
-		});
 	
-		$('#map-search-'+this.model.id).keypress(function(event) {
-		  if ( event.which == 13 ) {
-			 event.preventDefault();
-			 that.geocoder.geocode( { 'address': $('#map-search-'+that.model.id).val()}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-					if(that.streetView.getVisible()) that.streetView.setVisible(false);
-					var mLatlng=results[0].geometry.location;
-					that.map.setCenter(mLatlng);
-				}
-				else alert("Geocoder failed at address look for "+$('#map-search-'+that.model.id).val()+": " + status);
+			$('#map-search-'+this.model.id).keypress(function(event){
+				if ( event.which == 13 )
+				{
+					event.preventDefault();
+					that.geocoder.geocode( { 'address': $('#map-search-'+that.model.id).val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK)
+					{
+						if(that.streetView.getVisible()) that.streetView.setVisible(false);
+						var mLatlng=results[0].geometry.location;
+						that.map.setCenter(mLatlng);
+					}
+					else alert("Geocoder failed at address look for "+$('#map-search-'+that.model.id).val()+": " + status);
+				});
+			   }
 			});
-		   }
-		});
-		this.editorLoaded=true;
+			this.editorLoaded=true;
 		}
 	},
 	
