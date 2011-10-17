@@ -68,7 +68,23 @@ var ItemView = Backbone.View.extend({
 			//$('#asset-preview-image img').attr('src','http://mlhplayground.org/Symfony/web/images/thumbs/'+that.model.id+'_s.jpg');
 			
 			
-			$('#asset-preview-meta').html(that.model.get('title'));
+			console.log(that);
+			
+			
+			
+			var metaTitle = $('<div>').addClass('meta-title').html(that.model.get('title'));
+			var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ that.model.get('creator'));
+			var l = $('<a>').attr('href',that.model.get('attribution_url')).attr('target','blank').html('View Source');
+			var metaLink = $('<div>').addClass('meta-link').append(l);
+			
+			$('#asset-preview-meta')
+				.empty()
+				.append(metaTitle)
+				.append(metaAuthor)
+				.append(metaLink);
+				
+				
+				
 		});
 		
 		//drag drop functionality
