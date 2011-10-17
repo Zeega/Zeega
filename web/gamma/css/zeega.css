@@ -510,11 +510,11 @@ body
 
 #database-search
 {
-	width: 490px;
 }
 
 #form-left
 {
+	-webkit-border-radius: 6px 0 0 6px;
 	background:white;
 	float:left;
 	height:24px;

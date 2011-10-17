@@ -2,7 +2,6 @@ var NodeView = Backbone.View.extend({
 	tagName: 'li',
 	
 	render: function() {
-		console.log(this.model.get('thumb_url'));
 		var that = this;
 		var template = $("#node-item-template")
 			.clone()
@@ -20,9 +19,6 @@ var NodeView = Backbone.View.extend({
 				Zeega.loadNode(that.model);
 				return false;
 				});
-				
-		this.model.updateThumb();
-		console.log(this.model.get('thumb_url'));
 
 		// node delete function
 		template.find('.delete-node')

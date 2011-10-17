@@ -130,6 +130,8 @@ var Zeega = {
 				
 				z.nodesReady = true;
 				z.testIfReady();
+				
+				console.log(nodes)
 			}
 		});
 	},
@@ -173,7 +175,6 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
-		// only load the node if it's not already on display
 
 		console.log('loadingnode');
 		//clear workspace
@@ -224,6 +225,7 @@ var Zeega = {
 						else Zeega.route.layers.add( savedLayer,{silent:true} );
 						
 						Zeega.updateAndSaveNodeLayer(node,savedLayer);
+						node.updateThumb();
 					}
 				});
 			//save the new layer then prepend the layer id into the node layers array
@@ -231,6 +233,8 @@ var Zeega = {
 			console.log('this is an old layer');
 			//prepend the layer id into the node layers array
 			this.updateAndSaveNodeLayer(node,layer);
+			
+			node.updateThumb();
 		}
 		
 	},
@@ -257,10 +261,15 @@ var Zeega = {
 		//remove from node.layer and save it back
 		var layerOrder = node.get('layers');
 		layerOrder = _.without(layerOrder,layer.id);
+		//set array to -1 if empty  //weirdness
+		if(layerOrder.length == 0) layerOrder.push(-1);
 		node.set({'layers':layerOrder});
 		node.save();
 		
 		this.destroyOrphans();
+		
+		node.updateThumb();
+		
 	},
 	
 	destroyOrphans : function()
@@ -270,6 +279,7 @@ var Zeega = {
 		_.each( _.toArray(this.route.nodes), function(node){
 			layersInNodes = _.union(node.get('layers'), layersInNodes);
 		});
+		
 		layersInNodes = _.without(layersInNodes, -1); //remove the default -1 value
 		
 		// make a giant array of all the layer IDs saved in the route
@@ -286,10 +296,13 @@ var Zeega = {
 				var orphan = Zeega.route.layers.get(orphanID);
 				Zeega.route.layers.remove(orphan)
 				orphan.destroy();
+				
 			})
 		}else{
 			return false;
 		}
+		
+		
 	},
 	
 	persistLayerOverNodes : function(layer)
@@ -318,13 +331,19 @@ var Zeega = {
 		//update the layerOrder array 
 		this.currentNode.set({'layers':layerIDs})
 		this.currentNode.save();
+
+		//update node thumb
+		this.currentNode.updateThumb();
+
 	},
 	
+	/*
 	destroyLayer : function(layer)
 	{
 		console.log('destroyLayer');
 		layer.destroy();
 	},
+	*/
 	
 	destroyNode : function( view )
 	{
