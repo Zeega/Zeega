@@ -70,7 +70,7 @@ var NodeView = Backbone.View.extend({
 				$('#layers-tab').effect("highlight", {}, 3000);
 				
 			}
-	});
+		});
 
 		
 		//enable the hover when dragging DB items	

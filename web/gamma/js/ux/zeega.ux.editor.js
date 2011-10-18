@@ -56,11 +56,7 @@ function initUX(){
 		$('#add-layer-modal').modal('hide');
 	});
 	
-	//number of items, page number to start on
-
-	$('#share').click(function(){
-		Database.append();
-	});
+	
 }
 
 function insertPager(items, page)
@@ -160,6 +156,26 @@ function submitbutton(button)
 	return false;
 }
 
+function shareButton()
+{
+	
+}
+
+function embedButton()
+{
+	/*
+	console.log('restoring layers and node layer order');
+	
+	_.each( _.toArray( Zeega.route.layers), function(layer){
+		//console.log(layer.id)
+		layer.destroy();
+	});
+	
+	var emptyArray = [-1];
+	Zeega.currentNode.set({'layers':emptyArray});
+	Zeega.currentNode.save();
+	*/
+}
 
 
 $(document).ready(function() {
@@ -312,21 +328,6 @@ $(document).ready(function() {
 	},function(){
 		$('body').css('background','');
 		$('#route-header').css('color','')
-	});
-	
-	//delete all layers
-	$('#embed').click(function(){
-		console.log('restoring layers and node layer order');
-		
-		_.each( _.toArray( Zeega.route.layers), function(layer){
-			//console.log(layer.id)
-			layer.destroy();
-		});
-		
-		var emptyArray = [-1];
-		Zeega.currentNode.set({'layers':emptyArray});
-		Zeega.currentNode.save();
-		
 	});
 
 
