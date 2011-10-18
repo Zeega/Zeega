@@ -167,40 +167,6 @@ $(document).ready(function() {
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
 	
-	//$( "#radio" ).buttonset();
-	
-/*	
-	$('#preview').click(function(){
-		
-		Zeega.previewMode = true;
-		//remove branch viewer if present
-		$('#branch-overlay').remove();
-		
-		var wrapper = $('<div>')
-			.attr('id','workspace-preview-wrapper');
-
-		
-		//add node navigation controls
-		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
-		//forward/back buttons
-		$(wrapper).find('#preview-left').click(function(){
-			Zeega.loadLeftNode();
-		});
-		$(wrapper).find('#preview-right').click(function(){
-			Zeega.loadRightNode();
-		});
-		//add editing capabilities // optional?
-			
-		//wrapper.append(p)
-
-		$('body').append(wrapper);
-		wrapper.fadeIn();
-		
-		Zeega.loadNode(Zeega.currentNode);
-		
-	});
-*/	
-	
 	//refresh database
 	$('#refresh-database').click(function(){
 		Database.refresh();
