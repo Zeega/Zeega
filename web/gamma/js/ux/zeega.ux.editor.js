@@ -13,7 +13,6 @@ function initUX(){
 
 	initHeaderUX();
 	
-	
 	//database tab switching
 	
 	$('#tab-content').cycle({

@@ -72,6 +72,7 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div>');
+		//div.data('layer-id',this.model.id);
 		var cssObj = {
 			'position' : 'absolute',
 			'top' : this.attr.y  +'%',
@@ -80,6 +81,7 @@ var ImageLayer = ProtoLayer.extend({
 			'width' : this.attr.w+'%',
 			'opacity' : this.attr.opacity
 		};
+
 		
 		div.addClass('media editable draggable')
 			.attr({
@@ -115,6 +117,7 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div>');
+				
 		var cssObj = {
 			'position' : 'absolute',
 			'top' : this.attr.y  +'%',
@@ -125,6 +128,10 @@ var ImageLayer = ProtoLayer.extend({
 		};
 		
 		div.css(cssObj);
+		
+		$(div).attr('data-layer',this.model.id);
+		
+		
 		//need this to be accessable inside the draggable function
 		var that  = this;
 		

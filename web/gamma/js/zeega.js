@@ -187,8 +187,23 @@ var Zeega = {
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 		
-		if(this.previewMode) $('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
-		else $('#workspace').empty();
+		
+		if(this.previewMode)
+		{
+			//store media elements
+			var media = $('#preview-media').children();
+			var layerIDs = [];
+			_.each(media,function(el){
+				layerIDs.push( $(el).attr('data-layer') );
+			});
+
+			//find persisting IDs
+
+			//remove all non peristing layers
+			$('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
+		}else{
+			$('#workspace').empty();
+		}
 		
 		var layerArray = _.without( this.currentNode.get('layers'), -1)
 		_.each( layerArray , function(layerID){
