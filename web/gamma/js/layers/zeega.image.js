@@ -124,23 +124,9 @@ var ImageLayer = ProtoLayer.extend({
 			'opacity' : this.attr.opacity
 		};
 		
-		div.addClass('media editable draggable')
-			.attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-			})
-			.css(cssObj);
+		div.css(cssObj);
 		//need this to be accessable inside the draggable function
 		var that  = this;
-		
-
-		div.draggable({
-			//when the image stops being dragged
-			stop : function(){
-				that.updateAttr();
-			}
-		});
-
 		
 		var img=$('<img>')
 			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})

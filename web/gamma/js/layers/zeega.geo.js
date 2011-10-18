@@ -111,6 +111,68 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
+	drawPublish : function(){
+		
+		console.log('map drawPublish');
+		//Create dom element
+		this.editorLoaded=false;
+		var div = $('<div>');
+		var cssObj = {
+			'position' : 'absolute',
+			'top' : this.attr.y,
+			'left' : this.attr.x,
+			'z-index' : this.zIndex,
+			'width' : this.attr.w+"%",
+			//'height' : this.attr.h+"%",
+			'opacity' : this.attr.opacity
+		};
+		
+		
+		div.addClass('media editable draggable')
+			.attr({
+				'id' : 'layer-preview-'+this.model.id,
+				'data-layer-id' : this.model.id
+			})
+			.css(cssObj);
+			
+		var that  = this;
+	
+		
+		//Create static map object and attach to workspace
+		
+		var img = $('<img>').css({'width':'100%'}).attr({'id':'layer-image-'+this.model.id});
+		
+		this.dom = div;
+		
+		//Pull static map image using google api
+		
+		if(this.attr.type=='map'){
+			var w=Math.floor(7.20*this.attr.w);
+			var h=Math.floor(4.80*this.attr.h);
+			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
+		
+		}else{
+		
+			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
+			var service=new google.maps.StreetViewService();
+			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
+				that.attr.panoId=data.location.pano;
+				var x=2;
+				var y=1;
+				if(that.attr.pitch>25) y=0;
+				else if(that.attr.pitch<-25) y=2;
+				x=(Math.floor((that.attr.heading+360)/60))%6;
+				console.log('load moment');
+				img.attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+			});
+		}
+		
+		div.append(img);
+		$('#preview-media').append(div);
+		
+
+	},
+	
 	drawPreview : function(){
 		
 		//Create dom element
