@@ -21,6 +21,7 @@ var loadFiles = [
 	//libraries
 	'order!libraries/underscore',
 	'order!libraries/backbone',
+	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!jquery/ui/js/jquery-ui.min',
 	
 	//custom
@@ -66,9 +67,11 @@ var loadFiles = [
 	'order!layers/zeega.image',
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
+	'order!layers/zeega.rdio',
 	
 	//players
-	'order!players/zeega.html5av'
+	'order!players/zeega.html5av',
+	'order!players/zeega.rdio'
 	
 	];
 

@@ -29,7 +29,10 @@ var AudioLayer = ProtoLayer.extend({
 	
 	var that=this;
 		if(!this.editorLoaded){
-			$('#player-'+this.model.id).load('http://mlhplayground.org/gamma-james/js/templates/zeega.av.html',function(){
+		    currPathName = window.location.pathname.split('/',2)[1];
+		    templateUrl = window.location.protocol + '//' + window.location.hostname + '/' + currPathName + '/web/gamma/js/templates/zeega.av.html';
+
+			$('#player-'+this.model.id).load(templateUrl,function(){
 				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
 				
 				//player triggers 'update' event to persist changes
