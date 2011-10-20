@@ -181,11 +181,6 @@ $(document).ready(function() {
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
 	
-	//refresh database
-	$('#refresh-database').click(function(){
-		Database.refresh();
-	});
-	
 	$('#database-search-filter').change(function(){
 		Database.changeFilter(this);
 	});

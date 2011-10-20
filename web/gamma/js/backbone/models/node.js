@@ -24,7 +24,7 @@ var Node = Backbone.Model.extend({
 		var that=this;
 		var thumbURL = 'http://core.zeega.org/utilities/local_thumb.php?id='+this.id;
 		//turn on spinner
-		$('.node-thumb-'+that.id).find('.node-overlay').spin('small','white');
+		$('.node-thumb-'+that.id).find('.node-overlay').spin('tiny','white');
 		$.get( thumbURL, function(data)
 		{
 			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
