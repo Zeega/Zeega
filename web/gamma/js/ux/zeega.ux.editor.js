@@ -186,6 +186,10 @@ $(document).ready(function() {
 		Database.refresh();
 	});
 	
+	$('#database-search-filter').change(function(){
+		Database.changeFilter(this);
+	});
+	
 	
 	//try to remove preview window
 	$(document).keyup(function(e){

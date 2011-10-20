@@ -13,7 +13,7 @@ $("#el").spin(false); // Kills the spinner.
 (function($) {
 	$.fn.spin = function(opts, color) {
 		var presets = {
-			"tiny": { lines: 8, length: 2, width: 2, radius: 3 },
+			"tiny": { lines: 9, length: 1, width: 1, radius: 2 },
 			"small": { lines: 8, length: 4, width: 3, radius: 5 },
 			"large": { lines: 10, length: 8, width: 4, radius: 8 }
 		};
