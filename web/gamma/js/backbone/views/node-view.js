@@ -15,11 +15,13 @@ var NodeView = Backbone.View.extend({
 				'height' : '50px',
 				'width' : '50px',
 				'position' : 'absolute'
-				})
+				});
+				
+		template.find('.node-overlay')
 			.click(function(){
 				Zeega.loadNode(that.model);
 				return false;
-				});
+			});
 
 		// node delete function
 		template.find('.delete-node')
