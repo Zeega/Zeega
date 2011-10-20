@@ -308,10 +308,10 @@ var Zeega = {
 	persistLayerOverNodes : function(layer)
 	{
 		console.log('peristing');
-		console.log(layer);
 		//function(layer,[nodes])
 		//eventually you should pass in an array of node IDs and only add to those nodes
 		//for now we persist to all nodes EXCEPT the currentNode
+		/*
 		_.each( _.toArray(this.route.nodes), function(node){
 			if(node != Zeega.currentNode)
 			{
@@ -320,6 +320,22 @@ var Zeega = {
 				if( ! _.include(layerArray,layer.id) ) Zeega.addLayerToNode(node, layer);
 			}
 		});
+		*/
+		
+		
+		console.log(this.route);
+		//add to the route persistLayers array
+		var attr = this.route.get('attr');
+		
+		if(attr && attr.persistLayers) attr.persistLayers.push(layer.id);
+		else attr = {"persistLayers":[layer.id]};
+		
+		//this.route.set({'attr':attr});
+		//this.route.save();
+		
+		console.log(attr);
+		
+		
 		
 	},
 	
