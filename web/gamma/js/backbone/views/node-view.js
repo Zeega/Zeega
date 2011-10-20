@@ -128,13 +128,21 @@ var NodeViewCollection = Backbone.View.extend({
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
 		
 			node.save(
-				{thumb_url:'images/thumb.png'},
+				{thumb_url:''},
 				{
 					success : function()
 					{
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
 						z.pushView(new NodeView({ model : node }));
+						
+						//add persisting layers to new nodes
+						var persistLayers = Zeega.route.get('attr').persistLayers;
+						_.each(persistLayers,function(layerID){
+							Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
+						});
+						
+						
 					}
 				}
 				
