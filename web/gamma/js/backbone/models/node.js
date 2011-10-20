@@ -23,9 +23,16 @@ var Node = Backbone.Model.extend({
 		console.log('updating thumbnail');
 		var that=this;
 		var thumbURL = 'http://core.zeega.org/utilities/local_thumb.php?id='+this.id;
+		//turn on spinner
+		$('.node-thumb-'+that.id).find('.node-overlay').spin('small','white');
 		$.get( thumbURL, function(data)
 		{
-			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){$(this).css('background-image','url("'+data+'")').fadeIn('slow');});
+			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
+				$(this).css('background-image','url("'+data+'")').fadeIn('slow');
+				//turn off spinner
+				$('.node-thumb-'+that.id).find('.node-overlay').spin(false);
+			});
+			
 			that.set({thumb_url:data});
 			that.save();
 		});

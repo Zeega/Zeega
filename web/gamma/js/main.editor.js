@@ -21,6 +21,7 @@ var loadFiles = [
 	//libraries
 	'order!libraries/underscore',
 	'order!libraries/backbone',
+	'order!libraries/spin',
 	'order!jquery/ui/js/jquery-ui.min',
 	
 	//custom
@@ -29,10 +30,15 @@ var loadFiles = [
 	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
 	'order!helpers/sugar',
-	'order!zeega',
-	'order!database',
+	
+	//core
+	'order!core/zeega',
+	'order!core/zpub',
+	'order!core/player',
+	'order!core/database',
 	
 	//plugins
+	'order!jquery/plugins/spin',
 	'order!jquery/plugins/jeditable.min',
 	'order!jquery/plugins/jquery-cycle',
 	'order!jquery/plugins/jquery.paging',

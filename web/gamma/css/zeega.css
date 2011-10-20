@@ -451,6 +451,12 @@ body
 {
 	height:50px;
 	width:50px;
+	z-index:2;
+}
+
+.node-background
+{
+	background:#000;
 }
 
 .delete-node,
