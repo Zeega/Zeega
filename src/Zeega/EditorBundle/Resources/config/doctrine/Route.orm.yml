@@ -33,5 +33,8 @@ Zeega\EditorBundle\Entity\Route:
     title:
      type: string
      length: 255
+    attr:
+     type: array
+     nullable: true
 
  
