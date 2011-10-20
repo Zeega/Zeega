@@ -70,9 +70,11 @@ var LayerView = Backbone.View.extend({
 			//set persistance
 			$(this.el).find('#persist').change(function(){
 				//console.log($(this).is(':checked') );
+				var layer = that.model;
 				if( $(this).is(':checked')){
-					var layer = that.model;
 					Zeega.persistLayerOverNodes(layer);
+				}else{
+					Zeega.removeLayerPersist(layer);
 				}
 			});
 		
