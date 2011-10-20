@@ -162,7 +162,7 @@ function shareButton()
 
 function embedButton()
 {
-	/*
+	//nuke layers
 	console.log('restoring layers and node layer order');
 	
 	_.each( _.toArray( Zeega.route.layers), function(layer){
@@ -173,7 +173,6 @@ function embedButton()
 	var emptyArray = [-1];
 	Zeega.currentNode.set({'layers':emptyArray});
 	Zeega.currentNode.save();
-	*/
 }
 
 

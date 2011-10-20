@@ -138,14 +138,14 @@ var Zeega = {
 	loadLayers : function()
 	{
 		var z = this;
-		//create a node collection inside the route model
+		//create a layer collection inside the route model
 		this.route.layers = new LayerCollection;
 		//get all existing layers
 		
 		this.route.layers.fetch({
 			success : function(layers){
 				
-				//make a node view collection
+				//make a layer view collection
 				z.route.layerViewCollection = new LayerViewCollection({ collection : layers });
 				
 				z.layersReady = true;
@@ -176,34 +176,22 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
+		//remove a prexisiting node style
+		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		
+		this.currentNode = node;
+
 		window.location.hash = '/node/'+ node.id; //change location hash
+		
 		Zeega.route.layerViewCollection._rendered = false;
 		Zeega.route.layerViewCollection._layerViews = [];
 
-		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		//set global currentNode to the selected node
-		this.currentNode = node;
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 		
-		
-		if(this.previewMode)
-		{
-			//store media elements
-			var media = $('#preview-media').children();
-			var layerIDs = [];
-			_.each(media,function(el){
-				layerIDs.push( $(el).attr('data-layer') );
-			});
-
-			//find persisting IDs
-
-			//remove all non peristing layers
-			$('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
-		}else{
-			$('#workspace').empty();
-		}
+		//clear the workspace
+		$('#workspace').empty();
 		
 		var layerArray = _.without( this.currentNode.get('layers'), -1)
 		_.each( layerArray , function(layerID){
@@ -351,8 +339,7 @@ var Zeega = {
 	
 	destroyNode : function( view )
 	{
-		var response = confirm('Delete Node?')
-		if(response)
+		if( confirm('Delete Node?') )
 		{
 			//clear workspace if it's the current node
 			if(view.model == this.currentNode) $('#workspace').empty();
@@ -363,11 +350,14 @@ var Zeega = {
 			  this.loadNode( this.route.nodes.at( _.indexOf( _.toArray( this.route.nodes ), this.currentNode) -1 ) );
 			}
 			//remove the node from the node collection
-			this.route.nodes.remove(view.model);
-		
+			this.route.nodes.remove();
+			
 			view.model.destroy();
 			view.remove();
 			//if it's the last node, make a new, empty one
+			
+			console.log( _.size(Zeega.route.nodes) );
+			
 			if( _.size(Zeega.route.nodes) == 0 )
 			{
 				var newNode = new Node;
