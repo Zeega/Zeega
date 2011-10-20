@@ -95,7 +95,7 @@ var VideoLayer = ProtoLayer.extend({
 	openControls: function(){
 			var that=this;
 			if(!this.editorLoaded){
-			$('#player-'+this.model.id).load('http://mlhplayground.org/gamma-james/js/templates/zeega.av.html',function(){
+			$('#player-'+this.model.id).load('http://alpha.zeega.org/test/web/gamma/js/templates/zeega.av.html',function(){
 				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
 				
 				//player triggers 'update' event to persist changes
