@@ -42,6 +42,9 @@ var Node = Backbone.Model.extend({
 	noteChange:function()
 	{
 		console.log('changed');
+		
+		
+		
 		this.changed=true;
 	},
 	clearChange:function()
