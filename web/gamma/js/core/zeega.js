@@ -322,7 +322,8 @@ var Zeega = {
 		});
 		*/
 		
-		
+		/*
+		//works
 		console.log(this.route);
 		//add to the route persistLayers array
 		var attr = this.route.get('attr');
@@ -330,11 +331,11 @@ var Zeega = {
 		if(attr && attr.persistLayers) attr.persistLayers.push(layer.id);
 		else attr = {"persistLayers":[layer.id]};
 		
-		//this.route.set({'attr':attr});
-		//this.route.save();
+		this.route.set({'attr':attr});
+		this.route.save();
 		
 		console.log(attr);
-		
+		*/
 		
 		
 	},
