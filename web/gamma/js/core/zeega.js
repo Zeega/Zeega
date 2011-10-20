@@ -1,11 +1,11 @@
 
 /********************************************
 
-	APPPLICATION.JS 
+	ZEEGA.JS 
 
-	CORE APPLICATION OBJECTS
+	CORE APPLICATION OBJECT
 	
-	VERSION 0.1
+	VERSION 1.0
 	
 	
 *********************************************/
@@ -383,6 +383,10 @@ var Zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 		
+		this.getZPub();
+		/*
+		//  rethink this
+		
 		var wrapper = $('<div>').attr('id','workspace-preview-wrapper');
 		
 		//add node navigation controls
@@ -392,6 +396,20 @@ var Zeega = {
 		wrapper.fadeIn();
 		
 		this.loadNode(this.currentNode);
+		*/
+	},
+	
+	/***************
+	*
+	*	returns the rout as zPub json data
+	*
+	*****************/
+	getZPub : function()
+	{
+		this.zPubData = 'tester';
+		
+		
+		console.log(this.zPubData);
 	},
 	
 	getLeftNode : function()
