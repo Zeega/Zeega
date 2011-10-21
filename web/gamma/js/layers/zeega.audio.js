@@ -29,7 +29,7 @@ var AudioLayer = ProtoLayer.extend({
 	
 	var that=this;
 		if(!this.editorLoaded){
-			$('#player-'+this.model.id).load('http://mlhplayground.org/gamma-james/js/templates/zeega.av.html',function(){
+			$('#player-'+this.model.id).load('http://alpha.zeega.org/demo/web/gamma/js/templates/zeega.av.html',function(){
 				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
 				
 				//player triggers 'update' event to persist changes
@@ -59,7 +59,7 @@ var AudioLayer = ProtoLayer.extend({
 				'z-index':'1000',
 				'top':'10px',
 				'right':'15px',
-				'background-image':'url("http://mlhplayground.org/gamma-james/css/layers/icons/zeega.audio.icon.png")',
+				'background-image':'url("http://demo/web/gammaalpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
 				'width':'48px',
 				'height':'40px'
 				});
