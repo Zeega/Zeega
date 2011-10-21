@@ -794,6 +794,11 @@ body
 	padding:20px;
 }
 
+#layer-persist
+{
+	float:right;
+}
+
 /*******************************
 
 	BRANCHES TAB

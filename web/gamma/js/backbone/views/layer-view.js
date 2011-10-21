@@ -16,7 +16,7 @@ var LayerView = Backbone.View.extend({
 	{
 
 		this.model.bind('remove',this.remove);
-		var that = this;
+		var _this = this;
 		var text = this.model.get('text');
 		var type = this.model.get('type');
 		
@@ -67,10 +67,15 @@ var LayerView = Backbone.View.extend({
 			$(this.el).attr('id', 'layer-'+ this.model.id);
 			$(this.el).html(template);
 		
-			//set persistance
+			//check or uncheck the layer persist box
+			if( _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+			{
+				$(this.el).find('#persist').attr('checked','true');
+			}
+
+			//set persistance action
 			$(this.el).find('#persist').change(function(){
-				//console.log($(this).is(':checked') );
-				var layer = that.model;
+				var layer = _this.model;
 				if( $(this).is(':checked')){
 					Zeega.persistLayerOverNodes(layer);
 				}else{
@@ -93,12 +98,12 @@ var LayerView = Backbone.View.extend({
 					$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
 					$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
 					$(this).closest('li').removeClass('open');
-					that.workspacePreview.closeControls();
+					_this.workspacePreview.closeControls();
 					return false;
 				}else{
 					//show layer controls
 					$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
-					$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){that.workspacePreview.openControls();});
+					$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){_this.workspacePreview.openControls();});
 					$(this).closest('li').addClass('open');
 					return false;
 				}
@@ -111,11 +116,11 @@ var LayerView = Backbone.View.extend({
 				if(response)
 				{
 					//remove the layer controls
-					that.remove();
+					_this.remove();
 					//remove the workspace preview
-					that.workspacePreview.remove();
+					_this.workspacePreview.remove();
 				
-					Zeega.removeLayerFromNode( Zeega.currentNode, that.model );
+					Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
 				}
 				return false;
 			});
@@ -172,12 +177,12 @@ var LayerViewCollection = Backbone.View.extend({
 	render : function()
 	{
 		this._rendered = true;
-		var that = this;
+		var _this = this;
 		
 		//clear out any old stuff inside this.el
 		$(this.el).empty();
-		//add EACH model's view to the that.el and render it
-		_.each(this._layerViews, function(layer){ $(that.el).append(layer.render().el) });
+		//add EACH model's view to the _this.el and render it
+		_.each(this._layerViews, function(layer){ $(_this.el).append(layer.render().el) });
 		
 		return this;
 	}

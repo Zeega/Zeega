@@ -344,11 +344,12 @@ var Zeega = {
 	
 	removeLayerPersist : function(layer)
 	{
+		console.log('remove persistance!');
 		//removes layers from the route layerPersist array
 		//does not affect existing layers or nodes
 		//future nodes will not have the persisting layers
 		var attr = this.route.get('attr');
-		attr.layerPersist = _.without( attr.layerPersist, layer.id );
+		attr.persistLayers = _.without( attr.persistLayers, layer.id );
 		this.route.set({'attr':attr});
 		this.route.save();
 	},
