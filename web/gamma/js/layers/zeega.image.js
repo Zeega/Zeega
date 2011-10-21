@@ -113,15 +113,15 @@ var ImageLayer = ProtoLayer.extend({
 		this.addToWorkspace(this.dom);
 	},
 	
-	drawPublish : function(){
+	preLoad : function(){
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div>');
 				
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y  +'%',
-			'left' : this.attr.x  +'%',
+			'top' : '-100%',
+			'left' : '-100%',
 			'z-index' : this.zIndex,
 			'width' : this.attr.w+'%',
 			'opacity' : this.attr.opacity
@@ -144,7 +144,15 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		$('#preview-media').append(this.dom);
+		$('#zeega-player').append(this.dom).trigger('ready',{'id':this._id});
+
+		
+	},
+	
+	
+	drawPublish : function(z){
+		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+
 	},
 	
 	updateAttr: function(){

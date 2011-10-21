@@ -74,7 +74,8 @@ var loadFiles = [
 	'order!layers/zeega.video',
 	
 	//players
-	'order!players/zeega.html5av'
+	'order!players/zeega.html5av',
+		'order!players/zeega.av.publish'
 	
 	];
 

@@ -165,6 +165,55 @@ var VideoLayer = ProtoLayer.extend({
 		
 	},
 	
+	
+	preLoad : function(){
+		//make dom object
+		var that=this;
+		var container= $('<div>');
+		
+		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
+		console.log(h);
+		var cssObj = {
+			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+			'position' : 'absolute',
+			'top' : "-100%",
+			'left' : "-100%",
+			'z-index' : this.zIndex,
+			'width' : this.attr.w+"%",
+			'height' : h+"%",
+			'opacity' : this.attr.opacity
+		};
+		
+		
+		container.addClass('media editable draggable')
+			.attr({
+				'id' : 'layer-publish-'+this.model.id,
+				'data-layer-id' : this.model.id
+			})
+			.css(cssObj);
+			
+		
+		
+		//$('#layer_'+this.model.id).append(img);
+		this.dom = container;
+		
+		//draw to the workspace
+		$('#zeega-player').append(this.dom);
+		
+		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
+				
+		
+	},
+	
+	drawPublish : function(z){
+		//make dom object
+		
+		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+		this.player.play();
+		
+		
+	},
 	updateAttr: function(){
 	
 		//get a copy of the old attributes into a variable
@@ -188,6 +237,11 @@ var VideoLayer = ProtoLayer.extend({
 		this.saveLayer();
 	
 	
+	},
+	exit: function(){
+	
+		this.player.pause();
 	}
+	
 	
 });
