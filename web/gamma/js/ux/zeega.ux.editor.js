@@ -185,6 +185,7 @@ $(document).ready(function() {
 		Database.changeFilter(this);
 	});
 	
+	/*
 	
 	//try to remove preview window
 	$(document).keyup(function(e){
@@ -195,7 +196,7 @@ $(document).ready(function() {
 			if($('#workspace-preview-wrapper')) $('#workspace-preview-wrapper').fadeOut(450,function(){$(this).remove()});
 		}
 	});	
-	
+	*/
 	
 	//node tray sortable and sorting events
 	

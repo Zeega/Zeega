@@ -396,8 +396,6 @@ var Zeega = {
 			view.remove();
 			//if it's the last node, make a new, empty one
 			
-			console.log( _.size(Zeega.route.nodes) );
-			
 			if( _.size(Zeega.route.nodes) == 0 )
 			{
 				var newNode = new Node;
@@ -423,7 +421,12 @@ var Zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 		
-		this.getZPub();
+		projectData = '';
+		
+		Player.projectData = projectData;
+		Player.currentNode = this.currentNode;
+		Player.init();
+		
 		/*
 		//  rethink this
 		
@@ -446,6 +449,7 @@ var Zeega = {
 	*****************/
 	getZPub : function()
 	{
+		//dead fxn?
 		this.zPubData = 'tester';
 		
 		
@@ -481,8 +485,6 @@ var Zeega = {
 		if(node) this.loadNode(node)
 	}
 	
+	
 };
-
-
-
 
