@@ -84,6 +84,12 @@ var ProtoLayer = Class.extend({
 		//draw layer contents in published node space
 	},
 	
+	preLoad : function(){
+		//preLoad layer contents
+		
+		$('#zeega-player').trigger('ready',{'id':this.model.id});
+	},
+	
 	updateAttr: function(){
 		//update local layer attributes
 	},
