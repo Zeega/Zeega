@@ -25,6 +25,41 @@ var Player = {
 	//stuff to do at the start
 	init : function()
 	{
+		console.log('Zeega Player Initialized');
+		var _this = this;
+		
+		$(window).bind( 'keydown', function(e){
+			switch(e.which)
+			{
+				case 27:
+					_this.close();
+					break;
+				case 37:
+					_this.goLeft();
+					break;
+				case 39:
+					_this.goRight();
+					break;
+				case 38:
+					_this.goUp();
+					break;
+				case 40:
+					_this.goDown();
+					break;
+			}
+		});
+		
+		// all layers will make this call
+		$('#zeega-player').bind('ready',function(data){
+			console.log(data.id);
+		});
+		
+		// not all layers will call this
+		$('#zeega-player').bind('ended',function(data){
+			console.log(data.id);
+		});
+		
+		this.draw();
 		
 	},
 	
@@ -32,11 +67,17 @@ var Player = {
 	draw : function()
 	{
 		
+		$('body').append(this.template);
+		
 	},
 	
 	// removes the player from the dom // resets the player? probably.
 	close : function()
 	{
+		console.log('Zeega Player Close');
+		$(window).unbind( 'keydown' ); //remove keylistener
+		
+		$('#zeega-player').fadeOut( 450, function(){ $(this).remove() } );
 		
 	},
 	
@@ -75,24 +116,28 @@ var Player = {
 	
 	goLeft : function()
 	{
-		
+		console.log('goLeft')
 	},
 	
 	goRight : function()
 	{
+		console.log('goRight')
 		
 	},
 	
 	goUp : function()
 	{
-		
+		console.log('goUp')
 	},
 	
 	goDown : function()
 	{
-		
-	}
+		console.log('goDown')
+	},
 	
+	template : $(this.templateString),
+	
+	templateString : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>"
 	
 	
 	
