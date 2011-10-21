@@ -5,6 +5,7 @@ var Route = Backbone.Model.extend({
 	//set defaults for empty route
 	defaults : {
 		//title : "Untitled"
+	
 		},
 		
 	url : function()

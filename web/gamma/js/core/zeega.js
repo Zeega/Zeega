@@ -109,6 +109,14 @@ var Zeega = {
 				z.loadNodes();
 				z.loadLayers();
 				z.loadProject();
+				
+				if(!route.get('attr')){
+				route.set({'attr':{}});
+				
+				}
+				console.log(route);
+					console.log(Zeega.route);
+				
 			}
 		});
 	},
@@ -325,7 +333,7 @@ var Zeega = {
 		var attr = this.route.get('attr');
 		
 		//if the array exists and the layer isn't already inside it
-		if( attr && attr.persistLayers && !_.include( _.toArray(attr.persistLayers),layer.id) )
+		if( attr.persistLayers && !_.include( _.toArray(attr.persistLayers),layer.id) )
 		{
 			attr.persistLayers.push(layer.id);
 			attr.persistLayers = _.uniq(attr.persistLayers);
@@ -335,6 +343,7 @@ var Zeega = {
 			
 		//if the array doesn't exist
 		}else{
+			
 			attr.persistLayers = [layer.id];
 			this.route.set({'attr':attr});
 			this.route.save();

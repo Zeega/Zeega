@@ -67,11 +67,12 @@ var LayerView = Backbone.View.extend({
 			$(this.el).attr('id', 'layer-'+ this.model.id);
 			$(this.el).html(template);
 		
+			
 			//check or uncheck the layer persist box
-			if( _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
-			{
-				$(this.el).find('#persist').attr('checked','true');
-			}
+				if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+				{
+					$(this.el).find('#persist').attr('checked','true');
+				}
 
 			//set persistance action
 			$(this.el).find('#persist').change(function(){
