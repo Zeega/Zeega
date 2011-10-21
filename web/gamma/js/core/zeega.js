@@ -424,7 +424,7 @@ var Zeega = {
 		projectData = '';
 		
 		Player.projectData = projectData;
-		Player.currentNode = this.currentNode;
+		Player.currentNode = this.currentNode.id;
 		Player.init();
 		
 		/*
