@@ -94,7 +94,10 @@ var ProtoLayer = Class.extend({
 		//update local layer attributes
 	},
 
-
+	exit: function(){
+	
+		//called on exit during playback
+	},
 
 
 

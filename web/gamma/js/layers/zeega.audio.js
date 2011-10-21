@@ -72,7 +72,7 @@ var AudioLayer = ProtoLayer.extend({
 	},
 	preLoad : function(){
 		//make dom object
-
+		var that=this;
 		var container= $('<div>').attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id
@@ -96,13 +96,18 @@ var AudioLayer = ProtoLayer.extend({
 				
 		
 	},
-	
 	drawPublish : function(){
 		//make dom object
 		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
 		
 	},
+	exit: function(){
+	
+		this.player.pause();
+	},
+	
+	
 	
 	updateAttr: function(){
 	

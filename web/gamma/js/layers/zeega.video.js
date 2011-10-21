@@ -168,7 +168,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	preLoad : function(){
 		//make dom object
-
+		var that=this;
 		var container= $('<div>');
 		
 		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
@@ -206,10 +206,12 @@ var VideoLayer = ProtoLayer.extend({
 		
 	},
 	
-	drawPublish : function(){
+	drawPublish : function(z){
 		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
+		
+		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
+		
 		
 	},
 	updateAttr: function(){
@@ -235,6 +237,11 @@ var VideoLayer = ProtoLayer.extend({
 		this.saveLayer();
 	
 	
+	},
+	exit: function(){
+	
+		this.player.pause();
 	}
+	
 	
 });

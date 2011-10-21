@@ -111,7 +111,7 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
-	drawPublish : function(){
+	preLoad : function(){
 		
 		console.log('map drawPublish');
 		//Create dom element
@@ -119,11 +119,10 @@ var GeoLayer = ProtoLayer.extend({
 		var div = $('<div>');
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y,
-			'left' : this.attr.x,
-			'z-index' : this.zIndex,
+			'top' : '-100%',
+			'left' : '-100%',
 			'width' : this.attr.w+"%",
-			//'height' : this.attr.h+"%",
+			'height' : this.attr.h+"%",
 			'opacity' : this.attr.opacity
 		};
 		
@@ -168,9 +167,14 @@ var GeoLayer = ProtoLayer.extend({
 		}
 		
 		div.append(img);
-		$('#zeega-player').append(div);
+		$('#zeega-player').append(this.dom).trigger('ready',{'id':this._id});
+
 		
 
+	},
+	
+	drawPublish : function(z){
+		this.dom.css({'z-index':z,'top':this.attr.y+'%','left':this.attr.x+'%'});
 	},
 	
 	drawPreview : function(){
@@ -180,11 +184,11 @@ var GeoLayer = ProtoLayer.extend({
 		var div = $('<div>');
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y,
-			'left' : this.attr.x,
+			'top' : this.attr.y+"%",
+			'left' : this.attr.x+"%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.w+"%",
-			//'height' : this.attr.h+"%",
+			'height' : this.attr.h+"%",
 			'opacity' : this.attr.opacity
 		};
 		
@@ -343,8 +347,8 @@ var GeoLayer = ProtoLayer.extend({
 			
 		//set the new dom attributes
 		
-		newAttr.x = this.dom.css('left');
-		newAttr.y = this.dom.css('top');
+		newAttr.x = Math.floor( this.dom.position().left/6);
+		newAttr.y = Math.floor( this.dom.position().top/4);
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
 		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
 		newAttr.h = $('#layer-edit-'+this.model.id).find('#Height-slider').slider('value');
