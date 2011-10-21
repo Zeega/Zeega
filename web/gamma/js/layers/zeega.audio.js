@@ -70,6 +70,39 @@ var AudioLayer = ProtoLayer.extend({
 		$('#workspace').append(this.dom);
 		
 	},
+	preLoad : function(){
+		//make dom object
+
+		var container= $('<div>').attr({
+				'id' : 'layer-preview-'+this.model.id,
+				'data-layer-id' : this.model.id
+				}).css({
+				
+				'position':'absolute',
+				'z-index':'1000',
+				'top':'10px',
+				'right':'15px',
+				'background-image':'url("http://demo/web/gammaalpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
+				'width':'48px',
+				'height':'40px'
+				});
+				
+		this.dom = container;
+		
+		//draw to the workspace
+		$('#zeega-player').append(this.dom);
+		
+		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
+				
+		
+	},
+	
+	drawPublish : function(){
+		//make dom object
+		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
+		this.player.play();
+		
+	},
 	
 	updateAttr: function(){
 	

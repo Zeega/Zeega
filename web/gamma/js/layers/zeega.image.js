@@ -144,7 +144,7 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		$('#preview-media').append(this.dom);
+		$('#zeega-player').append(this.dom);
 	},
 	
 	updateAttr: function(){

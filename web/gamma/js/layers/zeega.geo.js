@@ -168,7 +168,7 @@ var GeoLayer = ProtoLayer.extend({
 		}
 		
 		div.append(img);
-		$('#preview-media').append(div);
+		$('#zeega-player').append(div);
 		
 
 	},
