@@ -320,8 +320,13 @@ var GeoLayer = ProtoLayer.extend({
 					else alert("Geocoder failed at address look for "+$('#map-search-'+that.model.id).val()+": " + status);
 				});
 			});
-	
+			$('#map-search-'+this.model.id).change(function(){
+				that.attr.title=$(this).val();
+				$('#layer-edit-'+that.model.id).find('.layer-title').html($(this).val());
+			});
+			
 			$('#map-search-'+this.model.id).keypress(function(event){
+				
 				if ( event.which == 13 )
 				{
 					event.preventDefault();
