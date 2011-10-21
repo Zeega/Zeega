@@ -29,17 +29,16 @@ var AudioLayer = ProtoLayer.extend({
 	
 	var that=this;
 		if(!this.editorLoaded){
-			$('#player-'+this.model.id).load('http://alpha.zeega.org/demo/web/gamma/js/templates/zeega.av.html',function(){
-				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-				
-				//player triggers 'update' event to persist changes
-				$('#player-'+that.model.id).bind('updated',function(){
-					that.updateAttr();
-				});
-				that.editorLoaded=true;
+			var html = this.getTemplate();
+			$('#player-'+this.model.id).html(html);
+			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+			
+			//player triggers 'update' event to persist changes
+			$('#player-'+that.model.id).bind('updated',function(){
+				that.updateAttr();
 			});
-		
-			}
+			that.editorLoaded=true;		
+		}
 	},
 	
 	closeControls: function(){
@@ -59,7 +58,7 @@ var AudioLayer = ProtoLayer.extend({
 				'z-index':'1000',
 				'top':'10px',
 				'right':'15px',
-				'background-image':'url("http://demo/web/gammaalpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
+				'background-image':'url("alpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
 				'width':'48px',
 				'height':'40px'
 				});
@@ -70,7 +69,7 @@ var AudioLayer = ProtoLayer.extend({
 		$('#workspace').append(this.dom);
 		
 	},
-	preLoad : function(){
+	preloadMedia : function(){
 		//make dom object
 		var that=this;
 		var container= $('<div>').attr({
@@ -82,7 +81,7 @@ var AudioLayer = ProtoLayer.extend({
 				'z-index':'1000',
 				'top':'10px',
 				'right':'15px',
-				'background-image':'url("http://demo/web/gammaalpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
+				'background-image':'url("alpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
 				'width':'48px',
 				'height':'40px'
 				});
@@ -126,6 +125,43 @@ var AudioLayer = ProtoLayer.extend({
 		this.saveLayer();
 	
 	
+	},
+	
+	getTemplate : function(){
+	
+		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
+		html +='<div id="avControls"> ';
+		html +='<div id="avStart"> ';
+		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='</div>';
+		html +='<div id="avStop"> ';
+		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +=	'</div>';
+		html +='</div>';
+		html +='<div id="avVolumeWrapper">';
+		html +='</div> ';
+		html +='<div class="avComponent"> ';
+		html +='	<div id="mediaPlayerMP"> ';
+		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
+		html +='		<div id="playMP" class="playButtonMP"> </div> ';
+		html +='		<div id="loadingOutsideMP"> ';
+		html +='			<div id="startBar"></div>';
+		html +='			<div id="stopBar"></div>';
+		html +='			<div id="startMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
+		html +='			<div id="stopMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
+		html +='			<div id="currentMP" class="markerMP"><div class="box"></div></div>';
+		html +='			<div id="loadingInsideMP"> </div> ';
+		html +='			<div id="loadingStatusMP"></div> ';
+		html +='		</div> ';
+		html +='		<div id="timeWrapperMP"><span id="currentTime"></span> </div>';
+		html +='	</div>				';	 
+		html +='</div> <!-- #avComponent --> ';
+		html +='<div id="clear"></div> ';
+		html +='<div id ="volumeMP">';
+		html +='<h4>Volume</h4>';
+		html +='<div id="volume-slider" ></div>';
+		html +='</div>';
+		return html;
 	}
 	
 });

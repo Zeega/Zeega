@@ -113,7 +113,7 @@ var ImageLayer = ProtoLayer.extend({
 		this.addToWorkspace(this.dom);
 	},
 	
-	preLoad : function(){
+	preloadMedia : function(){
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div>');

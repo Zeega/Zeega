@@ -111,7 +111,7 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
-	preLoad : function(){
+	preloadMedia : function(){
 		
 		console.log('map drawPublish');
 		//Create dom element
