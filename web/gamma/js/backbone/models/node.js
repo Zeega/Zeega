@@ -21,6 +21,10 @@ var Node = Backbone.Model.extend({
 	updateThumb : function()
 	{
 		console.log('updating thumbnail');
+		
+		//kill any preexisting thumb updates
+		if(this.t) clearTimeout(this.t);
+		
 		var that=this;
 		var thumbURL = 'http://core.zeega.org/utilities/local_thumb.php?id='+this.id;
 		//turn on spinner
@@ -42,8 +46,10 @@ var Node = Backbone.Model.extend({
 	noteChange:function()
 	{
 		console.log('changed');
-		
-		
+		var _this = this;
+		//kill any preexisting thumb updates
+		if(this.t) clearTimeout(this.t);
+		this.t = setTimeout(function(){_this.updateThumb()}, 5000)
 		
 		this.changed=true;
 	},
