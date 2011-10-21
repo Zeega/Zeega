@@ -18,7 +18,7 @@ function initUX(){
 
 $(document).ready(function() {
 	
-	
+
 	$('.project-delete').click(function(){if(confirm('Delete Project?')){
 		var id =$(this).data('id'); 
 		$('.project-'+id).fadeOut(); 
@@ -30,6 +30,18 @@ $(document).ready(function() {
 			}
 		});
 		}
+	});
+	
+	$('#new-project').click(function(){
+		console.log('creating new project');
+		$.ajax({
+				url: window.URL_PREFIX+'playgrounds/'+$('.playground-title').data('id')+'/project',
+				type: 'POST',
+				success: function(data){
+				window.location=window.URL_PREFIX+'playground/'+$('.playground-title').data('short')+'/project/'+data;
+			}
+		});
+
 	});
 
 });

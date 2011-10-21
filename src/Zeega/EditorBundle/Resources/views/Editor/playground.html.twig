@@ -5,12 +5,12 @@
 {% block title %}Zeega Alpha{% endblock %}
 
 {% block body %}
- 	<div class="item-title" style="font-size: 24px; ">{{playground.title}}</div><br><br>
+ 	<div class="item-title playground-title" data-id="{{playground.id}}"  data-short="{{playground.short}}" style="font-size: 24px; ">{{playground.title}}</div><br><br>
 	<div id="projects">
 			<br><br>
 			<div id="project-create">
 					<ul class="pill-buttons">
-						<li><a id="new-project" href="{{ path('ZeegaEditorBundle_project', { 'short': playground.short }) }}">Create New Project</a></li>
+						<li><a id="new-project" href="#">Create New Project</a></li>
 					</ul>
 			</div>
 			<br><br>

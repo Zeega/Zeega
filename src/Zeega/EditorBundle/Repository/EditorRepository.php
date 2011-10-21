@@ -98,7 +98,8 @@ class EditorRepository extends EntityRepository
 			   ->innerJoin('p.playground', 'g')
 			   ->add('where', 'g.id = :id')
 			   ->setParameter('id',$id)
-				->getQuery();
+			   ->orderBy('p.id','DESC')
+			   ->getQuery();
 
 
 			return $query->getArrayResult();
@@ -140,7 +141,8 @@ class EditorRepository extends EntityRepository
 			   ->add('where', 'u.id = :userId')
 			   ->andWhere('s.id = :playgroundId')
 			   ->setParameters(array('playgroundId'=>$playgroundId,'userId'=>$userId))
-				->getQuery();
+				 ->orderBy('p.id','DESC')
+				 ->getQuery();
 
 
 			return $query->getArrayResult();
