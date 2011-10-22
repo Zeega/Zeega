@@ -166,7 +166,7 @@ var VideoLayer = ProtoLayer.extend({
 	},
 	
 	
-	preLoad : function(){
+	preloadMedia : function(){
 		//make dom object
 		var that=this;
 		var container= $('<div>');

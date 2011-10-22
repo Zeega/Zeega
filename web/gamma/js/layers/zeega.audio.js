@@ -70,7 +70,7 @@ var AudioLayer = ProtoLayer.extend({
 		$('#workspace').append(this.dom);
 		
 	},
-	preLoad : function(){
+	preloadMedia : function(){
 		//make dom object
 		var that=this;
 		var container= $('<div>').attr({

@@ -110,12 +110,7 @@ var Zeega = {
 				z.loadLayers();
 				z.loadProject();
 				
-				if(!route.get('attr')){
-				route.set({'attr':{}});
-				
-				}
-				console.log(route);
-					console.log(Zeega.route);
+				if(!route.get('attr')) route.set({'attr':{}});
 				
 			}
 		});

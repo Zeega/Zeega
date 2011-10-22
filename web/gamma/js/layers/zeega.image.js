@@ -113,7 +113,7 @@ var ImageLayer = ProtoLayer.extend({
 		this.addToWorkspace(this.dom);
 	},
 	
-	preLoad : function(){
+	preloadMedia : function(){
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div>');
@@ -144,13 +144,13 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		$('#zeega-player').append(this.dom).trigger('ready',{'id':this._id});
-
+		$('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this._id});
 		
 	},
 	
 	
 	drawPublish : function(z){
+		console.log('image drawPublish');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 
 	},
