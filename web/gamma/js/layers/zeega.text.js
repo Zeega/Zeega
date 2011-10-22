@@ -351,6 +351,14 @@ var TextLayer = ProtoLayer.extend({
 		    newAttr.content = '';
 		}
 		console.log(newAttr.content);
+		
+		//update layer title
+		
+		newAttr.title =newAttr.content.substr(0,60);
+		$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
+		
+		
+		
 		//Ensures that empty text-boxes have visible borders
 		if (newAttr.content.match(/\S/)){
 		    console.log('removeClass');
