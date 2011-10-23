@@ -19,7 +19,7 @@ layers:
   
 items:
   type:     rest
-  resource: Zeega\EditorBundle\Controller\ItemsController
+  resource: Zeega\IngestBundle\Controller\ItemsController
   
 playgrounds:
   type:     rest

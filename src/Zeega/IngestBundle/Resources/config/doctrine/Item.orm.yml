@@ -47,6 +47,9 @@ Zeega\IngestBundle\Entity\Item:
     item_url:
      type: string
      length: 200
+    item_uri:
+     type: string
+     length: 200
     attribution_url:
      type: string
      length: 200
@@ -70,6 +73,10 @@ Zeega\IngestBundle\Entity\Item:
     content_type:
      type: string
      length: 100
+    source_type:
+     type: string
+     length: 100
+     nullable: true
     archive:
      type: string
      length: 100

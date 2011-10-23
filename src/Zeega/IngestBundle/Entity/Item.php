@@ -541,4 +541,54 @@ class Item
     {
         return $this->user;
     }
+    /**
+     * @var string $source_type
+     */
+    private $source_type;
+
+
+    /**
+     * Set source_type
+     *
+     * @param string $sourceType
+     */
+    public function setSourceType($sourceType)
+    {
+        $this->source_type = $sourceType;
+    }
+
+    /**
+     * Get source_type
+     *
+     * @return string 
+     */
+    public function getSourceType()
+    {
+        return $this->source_type;
+    }
+    /**
+     * @var string $item_uri
+     */
+    private $item_uri;
+
+
+    /**
+     * Set item_uri
+     *
+     * @param string $itemUri
+     */
+    public function setItemUri($itemUri)
+    {
+        $this->item_uri = $itemUri;
+    }
+
+    /**
+     * Get item_uri
+     *
+     * @return string 
+     */
+    public function getItemUri()
+    {
+        return $this->item_uri;
+    }
 }

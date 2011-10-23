@@ -1,38 +1,24 @@
 
-<html> 
+
+{# src/Zeega/IngestBundle/Resources/views/Widget/fail.widget.html.twig #}
+
+{% extends '::widget.base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+
+<div id="extensionWrapper" style="margin-top:20px; color: white; font-size:14px;"> 
  
-<head> 
-    <title>Zeega Alpha</title> 
- 
- 
-<!-- Other Scripts/Fonts/ETC --> 
- 
-<link href='http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&subset=latin' rel='stylesheet' type='text/css'> 
- 
- 
-<link rel="stylesheet" type="text/css" href="{{asset('css/zeegaPages.css')}}" /> 
-<link rel="icon" type="image/png" href="{{asset('images/zeega.ico')}}"> 
- 
-  
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>  
-<script type="text/javascript" src="{{asset('js/widget/drag.js')}}"></script> 
- 
- 
- 
- 
- 
-<body> 
- 
-<div id="extensionWrapper"> 
- 
-We cannot detect the media you are trying to add to Zeega. Drag the item from the page to the space below and we'll see if we can make it work.
- {{url}}
-<div id="extensionDrag"> 
+<h>We cannot detect the media you are trying to add to Zeega. Drag the item from the page to the space below and we'll see if we can make it work.</h>
+
+<div style="width:100%; text-align:center;">
+<div id="extensionDrag" style="margin-left:25px;margin-top:35px; width:400px; height:500px; background-color: #FFFF66;"> 
 </div> 
- 
+ </div>
 </div> 
- 
-</body> 
- 
- 
-</html>
+
+{% endblock %}	
+{% block scripts %}
+     <script type="text/javascript" src="{{asset('gamma/js/widget/drag.js')}}"></script>  
+{% endblock %}

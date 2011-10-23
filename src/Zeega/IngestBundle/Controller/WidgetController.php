@@ -108,7 +108,7 @@ class WidgetController extends Controller
 
 			if($check){
 				return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
-						'username' => $user->getDisplayname(),
+						'displayname' => $user->getDisplayname(),
 						'playground'=>$playgrounds[0],
 						'title'=>$check['title'],
 						 strtolower($check['content_type'])=>true,
@@ -152,9 +152,10 @@ class WidgetController extends Controller
     			}
 		if(!isset($item)) {
 			return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
-            'username' => $user->getDisplayname(),
+            'displayname' => $user->getDisplayname(),
             'message'=>'Unable to process the media at this URL:',
             'url'=>json_encode($widgetId),
+            'title'=>'temp title',
             ));
 		}
 		
@@ -193,7 +194,7 @@ class WidgetController extends Controller
     	//return new Response($archive.': '.$url);
     	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
        
-            'username' => $user->getDisplayname(),
+            'displayname' => $user->getDisplayname(),
             'title'=>$item->getTitle(),
             'tags'=>$attr['tags'],
             'description'=>$metadata->getDescription(),
@@ -228,7 +229,7 @@ class WidgetController extends Controller
 		
     	  return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
        
-            'username' => $user->getDisplayname(),
+            'displayname' => $user->getDisplayname(),
             'playground'=>$playgrounds[0],
             'data'=>$data,
             'thumbs'=>$thumbs,

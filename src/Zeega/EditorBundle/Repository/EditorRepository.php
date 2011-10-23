@@ -67,6 +67,22 @@ class EditorRepository extends EntityRepository
      }
      
      
+          public function findPlaygroundByUser($id)
+     {
+     	return $this->getEntityManager()
+				->createQueryBuilder()
+				->add('select', 'p')
+			   ->add('from', ' ZeegaEditorBundle:Playground p')
+			   ->join('p.users','u')
+			   ->andwhere('u.id = :id')
+			   ->setParameter('id',$id)
+			   ->getQuery()
+			   ->getResult();
+
+		  
+     }
+     
+     
      
       public function checkAdmin($short,$id)
      {

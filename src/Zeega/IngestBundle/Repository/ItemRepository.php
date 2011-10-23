@@ -22,6 +22,21 @@ class ItemRepository extends EntityRepository
 			}  
     }
      
+     
+          
+     public function findItemById($id)
+     {
+     	return $this->getEntityManager()
+				->createQueryBuilder()
+				->add('select', 'i')
+			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->andwhere('i.id = :id')
+			   ->setParameter('id',$id)
+			   ->getQuery()
+			   ->getArrayResult();
+     }
+     
+     
      public function findItemsGeoTime($request)
    		{
    			$qbs=array();

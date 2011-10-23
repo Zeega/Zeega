@@ -16,8 +16,8 @@ bookmarklet = function(opts){fullFunc(opts)};
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 var bm = new bookmarklet({
  
-    css : ['http://mlhplayground.org/gamma-james/js/widget/style.css'],
-    js  : ['http://alpha.zeega.org/Symfony/web/js/jquery/ui/js/jquery-ui.min'],    
+    css : ['http:///alpha.zeega.org/test/web/gamma/js/widget/style.css'],
+    js  : ['http://alpha.zeega.org/test/web/gamma/js/jquery/ui/js/jquery-ui.min.js'],    
 //	jqpath : 'myCustomjQueryPath.js', <-- option to include your own path to jquery
     ready : function(){
     			var zeegaBM = {
@@ -31,7 +31,7 @@ var bm = new bookmarklet({
 				'position':'fixed',
 				'right': 0,
 				'top':0,
-				'background-color':'#EDEDED',
+				'background-color':'#333',
 				'width':0,
 				'height':'100%',
 				'opacity':1,
@@ -44,12 +44,12 @@ var bm = new bookmarklet({
 			$('body').append(overlay);
 			$('body img').draggable({  cursorAt: { left: 5, top:5},helper:function(){return $(this).clone().css({'width':'75px','height':'75px','border':'2px solid red',"z-index":1000000});},stack: 'iframe' }).addClass('zeega-draggable').css({ 'z-index' : '100001'});
 			
-			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; border:solid 1px gray' src='http://mlhplayground.org/Symfony/web/app_dev.php/widget?url="+url+"' />")
+			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; border:solid 1px gray' src='http://alpha.zeega.org/test/web/app_dev.php/widget?url="+url+"' />")
 				.animate({
    				  'width': 470 }, 500, function() {
     // Animation complete.
   });
-  			$('#zeega-overlay').droppable({accept:'.zeega-draggable',iframeFix: true, drop: function(event, ui) { var src=ui.draggable.attr('src'); $('#zeega-widget-iframe').attr('src','http://mlhplayground.org/Symfony/web/app_dev.php/widget?url='+encodeURIComponent(src));console.log('dropping'); }});
+  			$('#zeega-overlay').droppable({accept:'.zeega-draggable',iframeFix: true, drop: function(event, ui) { var src=ui.draggable.attr('src'); $('#zeega-widget-iframe').attr('src','http://alpha.zeega.org/test/web/app_dev.php/widget?url='+encodeURIComponent(src));console.log('dropping'); }});
 		
 			
 			
