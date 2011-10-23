@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+       	<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>{% block title %}Zeega Alpha{% endblock %}</title>
+         
+         
+         {% block stylesheets %}
+            <link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
+			<meta name="robots" content="noindex,follow">
+			<meta name="description" content="">
+			<meta name="keywords" content="">
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" />
+			
+			<link rel="icon" type="image/png" href="{{asset('gamma/images/zeega.ico')}}"> 
+		{% endblock %}
+
+		
+    </head>
+  <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
+  
+  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='http://alpha.zeega.org/test/web/gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
+  
+    	{% block header %}
+    	<div id='header-bg'></div>
+    	<div id="wrapper" style="width:450px; overflow:hidden;" >
+    		
+    			
+    			
+				<div id="header" style="width:430px;">
+					<div id="header-title">
+						<ul>
+						
+							
+								<li class='drop-down clearfix '>
+									
+									<a  class='drop-down-toggle' href="#">  Playground Title</a>
+									<ul class='drop-down-menu'>
+											<li><a href="#">Projects</a></li>
+									</ul>
+									
+									
+									
+								</li>
+						
+						</ul>
+						
+						
+						
+					</div>
+					
+	
+					<div id="header-nav">
+		
+						<ul>
+												
+							<li >
+								Logged in as <a href='#' >{{displayname}}</a>
+							</li>
+						</ul>
+					</div> <!-- #headerLoggedInWrapper -->
+			</div> <!-- #header -->	
+			{% endblock %}
+		
+
+			<div id="editor">
+				{% block body %}{% endblock %}
+		   
+			<br><br><br>
+				<div id="footer">
+					{% block footer %}
+						<div id="footerWrapper">
+							<div id="footer">
+						<a href="http://zeega.org">About Zeega</a> * Creative Commons Open Source License
+							</div>
+						</div>
+					{% endblock %}
+				</div>
+			 </div> <!-- #editor -->	
+         </div> <!-- #wrapper -->
+         
+         {% block extras %}
+         
+         {% endblock %}
+         
+         {% block scripts %}
+			
+
+
+		{% endblock %}
+  
+		
+		
+         
+    </body>
+</html>
