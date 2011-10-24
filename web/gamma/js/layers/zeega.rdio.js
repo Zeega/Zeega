@@ -6,7 +6,6 @@
 
 ************************************/
 
-var rdioListener;
 
 var RdioLayer = ProtoLayer.extend({
 	defaultAttributes : {
@@ -37,7 +36,7 @@ var RdioLayer = ProtoLayer.extend({
 			$('#player-'+this.model.id).load(templateUrl,function(){
 			    console.log("out " + that.attr.out);
 				that.player=new ZeegaRdioPlayer(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-                rdioListener = that.player;
+                window['rdioListener'+that.model.id] = that.player;
                 var div = $('<div>').attr('id','apiswf-'+that.model.id);
                 $('#player-'+that.model.id).append(div);
                 // load the rdio player
@@ -45,7 +44,7 @@ var RdioLayer = ProtoLayer.extend({
                 var flashvars1 = {
                        'playbackToken': playback_token, // from token.js
                        'domain': domain,                // from token.js
-                       'listener': 'rdioListener'    // the global name of the object that will receive callbacks from the SWF
+                       'listener': 'rdioListener'+that.model.id    // the global name of the object that will receive callbacks from the SWF
                        };
                 var params = { 'allowScriptAccess': 'always' };
                 var attributes = {};       
