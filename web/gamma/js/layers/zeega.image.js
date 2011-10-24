@@ -131,10 +131,6 @@ var ImageLayer = ProtoLayer.extend({
 		
 		$(div).attr('data-layer',this.model.id);
 		
-		
-		//need this to be accessable inside the draggable function
-		var that  = this;
-		
 		var img=$('<img>')
 			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
 			.css({'width':'100%'});
@@ -144,7 +140,8 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		$('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this._id});
+
+		$('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this.model.id});
 		
 	},
 	
@@ -153,6 +150,12 @@ var ImageLayer = ProtoLayer.extend({
 		console.log('image drawPublish');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 
+	},
+	
+	hidePublish :function()
+	{
+		console.log('image hidePublish');
+		this.dom.css({'top':"-100%",'left':"-100%"});
 	},
 	
 	updateAttr: function(){
