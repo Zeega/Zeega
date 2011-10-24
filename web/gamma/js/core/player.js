@@ -328,9 +328,12 @@ var Player = {
 		this.layersLoaded = [];
 		this.nodesLoading = [];
 		this.layersLoading = [];
+		this.layersOnStage = [];
+		
 		this.layers = null;			// collection of layers
 		this.layerClasses = {};	// array of layerClasses
 	}
+	
 	
 	
 	
