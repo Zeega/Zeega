@@ -203,7 +203,7 @@ class ImportWidget
 			
 			if($info['dates']['taken']) $item->setDateCreatedStart(new DateTime($info['dates']['taken']));
 		
-			
+			$metadata->setThumbUrl($sizes['Small']['source']);
 			$item->setItemUrl($sizes[$itemSize]['source']);
 			$media->setWidth($sizes[$itemSize]['width']);
 			$media->setHeight($sizes[$itemSize]['height']);

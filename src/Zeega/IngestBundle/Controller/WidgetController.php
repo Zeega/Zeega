@@ -16,9 +16,99 @@ use SimpleXMLElement;
 class WidgetController extends Controller
 {
     
-  
+	  public function persistAction(){
+	  
+		$request=$this->getRequest();
+    	$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$widgetId=$request->request->get('widgetId');
+		$em=$this->getDoctrine()->getEntityManager();
+		
+		if($widgetId) {
+    		
+    		
+    		$items=$session->get('items');
+    		$item=$items[$widgetId];
+    		
+			$em=$this->getDoctrine()->getEntityManager();
+			$em->persist($item->getMetadata());
+			$em->persist($item->getMedia());
+			$em->flush();
+			$em->persist($item);
+			$em->flush();
+    		
+    		$metadata=$item->getMetadata();
+    		$media=$item->getMedia();
+    		
+			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
+			
+			
+			$thumbUrl=false;
+			
+			if($metadata->getThumbUrl()){
+				$thumbUrl=$metadata->getThumbUrl();
+				@$img=file_get_contents($thumbUrl);
+			}
+			
+			
+			
+			if(!$thumbUrl||$img==FALSE){
+				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
+				$url=explode(":/var/www/",$output[4]);
+				$thumbUrl='http://core.zeega.org/'.$url[1];
+				@$img=file_get_contents($thumbUrl);
+			}
+		
+		
+			if($img==FALSE){
+				return new Response(json_encode('Failed to Add'));	
 
-	
+			}
+			else{		
+			
+				$name=tempnam("/var/www/images/tmp/","image".$item->getId());
+				file_put_contents($name,$img);
+				$square = new Imagick($name);
+				$thumb = $square->clone();
+
+				if($square->getImageWidth()>$square->getImageHeight()){
+					$thumb->thumbnailImage(144, 0);
+					$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
+					$h=$square->getImageHeight();		
+					$square->chopImage($x, 0, 0, 0);
+					$square->chopImage($x, 0, $h, 0);
+				} 
+				else{
+					$thumb->thumbnailImage(0, 144);
+					$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
+					$w=$square->getImageWidth();
+					$square->chopImage(0, $y, 0, 0);
+					$square->chopImage(0, $y, 0, $w);
+				}
+			
+				$square->thumbnailImage(144,0);
+			
+				$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage('/var/www/images/items/'.$item->getId().'_s.jpg');
+			
+		
+		
+				$response=$this->getDoctrine()
+								->getRepository('ZeegaIngestBundle:Item')
+								->findItemById($item->getId());					
+				return new Response(json_encode($item->getId()));
+    		  
+	  	}
+	  
+	  
+	  }
+	  else
+	  {
+				return new Response(json_encode('Failed to Add:'.$widgetId));	
+
+			}
+
+	}
 	
 	public function urlAction()
     {
@@ -28,73 +118,7 @@ class WidgetController extends Controller
 		$widgetId=$request->query->get('widget-id');
 		$em=$this->getDoctrine()->getEntityManager();
 		
-		if($widgetId) {
-    	
-    		
-    		$playgroundId=$request->query->get('playground-id');
-    		$itemId=$session->get($widgetId);
-    		
-    		
-    		$item=$em
-				->getRepository('ZeegaIngestBundle:Item')
-				->find($itemId);
-			$playground=$em
-				->getRepository('ZeegaEditorBundle:Playground')
-				->find($playgroundId);
-				
-			
-			if(	$request->query->get('geo-lat')&&$item->getGeoLat()!=$request->query->get('geo-lat')) $item->setGeoLat(	$request->query->get('geo-lat'));
-			if(	$request->query->get('geo-lng')&&$item->getGeoLng()!=$request->query->get('geo-lng')) $item->setGeoLng(	$request->query->get('geo-lng'));
-			if(	$request->query->get('title')&&$item->getTitle()!=$request->query->get('title')) $item->setTitle(	$request->query->get('title'));
-			if(	$request->query->get('creator')&&$item->getCreator()!=$request->query->get('creator')) $item->setCreator(	$request->query->get('creator'));
-			
-			
-			$metadata=$item->getMetadata();
-			$attr=$metadata->getAttr();
-			if(	$request->query->get('description')) $metadata->setDescription(	$request->query->get('description'));
-			if(	$request->query->get('tags')) $attr['tags']=$request->query->get('tags');
-			
-			
-			$metadata->setAttr($attr);
-			
 		
-			$item->setPlayground($playground);
-    		$item->setUser($user);
-    		$em->flush();
-    	
-    		//Create Thumb
-		
-			$img=file_get_contents($metadata->getThumbUrl());
-			
-			$name=tempnam("images/tmp/","image".$item->getId());
-			file_put_contents($name,$img);
-
-
-			$square = new Imagick($name);
-			
-			if($square->getImageWidth()>$square->getImageHeight()){
-				$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
-				$h=$square->getImageHeight();
-				$square->chopImage($x, 0, 0, 0);
-				$square->chopImage($x, 0, $h, 0);
-			} 
-			else{
-				$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
-				$w=$square->getImageWidth();
-				$square->chopImage(0, $y, 0, 0);
-				$square->chopImage(0, $y, 0, $w);
-			}
-			
-			$square->thumbnailImage(75,0);
-			$square->writeImage('images/thumbs/'.$item->getId().'_s.jpg');
-		
-			unlink($name);
-							
-    		return new Response('Successfully uploaded '.$item->getTitle());
-    	}
-    	
-    	
-    	else{
     	
 			$playgrounds=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Playground')
@@ -171,19 +195,12 @@ class WidgetController extends Controller
 		else $multiuser=false;
 
     	if(!$batch){
-    	
-    	
-    	
-    	
-    	$item->setAttributionUrl($url);
-    	$em=$this->getDoctrine()->getEntityManager();
-    	$em->persist($item->getMetadata());
-    	$em->persist($item->getMedia());
-		$em->flush();
-		$em->persist($item);
-		$em->flush();
-		$widgetId=rand(0,100000);
-		$session->set($widgetId,$item->getId());
+    		$item->setAttributionUrl($url);
+    		$widgetId=rand(0,100000);
+			if($session->get('items'))$newItems=$session->get('items');
+		
+			$newItems[$widgetId]=$item;
+			$session->set('items',$newItems);
     	
     	
     	
@@ -196,18 +213,9 @@ class WidgetController extends Controller
        
             'displayname' => $user->getDisplayname(),
             'title'=>$item->getTitle(),
-            'tags'=>$attr['tags'],
-            'description'=>$metadata->getDescription(),
-            'creator'=>$metadata->getAltCreator(),
-            'alt_creator'=>$item->getCreator(),
-            'content_type'=>$item->getContentType(),
-            'geo_lat'=>$item->getGeoLng(),
-            'geo_lng'=>$item->getGeoLat(),
-            'playground'=>$playgrounds[0],
-            'license'=>$metadata->getLicense(),
-            'item_url'=>$item->getItemUrl(),
+            'creator'=>$item->getCreator(),
             'widget_id'=>$widgetId,
-            strtolower($item->getContentType())=>true,
+            'thumb_url'=>$metadata->getThumbUrl(),
         ));
         
         }
@@ -239,7 +247,7 @@ class WidgetController extends Controller
 		}
         }
        }
-       }
+       
     }
 	 
   	  
