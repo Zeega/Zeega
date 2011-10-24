@@ -114,7 +114,7 @@ var ItemView = Backbone.View.extend({
 		$('#asset-preview-media').append(media);
 		
 		//this needs to test for the type of media and place the appropriate image/player etc in there
-		//$('#asset-preview-image img').attr('src','http://mlhplayground.org/Symfony/web/images/thumbs/'+that.model.id+'_s.jpg');
+		
 		
 		var metaTitle = $('<div>').addClass('meta-title').html(that.model.get('title'));
 		var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ that.model.get('creator'));

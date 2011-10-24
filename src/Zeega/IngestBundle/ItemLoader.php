@@ -161,6 +161,41 @@ class ItemLoader
 	
 	}
 	
+	public function createItemThumb($attributionUrl,$thumbUrl=null){
+	
+		if(IS_NULL($thumbUrl)){
+			exec('/opt/webcapture/webpage_capture -t 50x50 -crop http://alpha.zeega.org/test/web/gamma/node.html#'.$id.' /var/www/images/nodes',$output);
+			$url=explode(":/var/www/",$output[4]);
+			$thumbUrl='http://core.zeega.org/'.$url[1];
+		}
+		
+		$img=file_get_contents($thumbUrl);
+		$name=tempnam("/var/www/images/tmp/","image".$item->getId());
+		file_put_contents($name,$img);
+		$square = new Imagick($name);
+		$thumb = $square->clone();
+				
+		if($square->getImageWidth()>$square->getImageHeight()){
+			$thumb->thumbnailImage(144, 0);
+			$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
+			$h=$square->getImageHeight();		
+			$square->chopImage($x, 0, 0, 0);
+			$square->chopImage($x, 0, $h, 0);
+		} 
+		else{
+			$thumb->thumbnailImage(0, 144);
+			$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
+			$w=$square->getImageWidth();
+			$square->chopImage(0, $y, 0, 0);
+			$square->chopImage(0, $y, 0, $w);
+		}
+		
+		$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
+		$square->thumbnailImage(144,0);
+		$square->writeImage('/var/www/images/items/'.$item->getId().'_s.jpg');
+	
+	}
+	
 
 
 	public function loadTagThumbs($doc){
