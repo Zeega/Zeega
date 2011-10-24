@@ -71,7 +71,8 @@ var loadFiles = [
 	
 	//players
 	'order!players/zeega.html5av',
-	'order!players/zeega.rdio'
+	'order!players/zeega.rdio',
+	'order!players/zeega.rdio.token'
 	
 	];
 
