@@ -19,9 +19,11 @@ var ZeegaRdioPlayer = Class.extend({
 		this._id = id;      
 		this._url = url;
 		this._dur = 30;
-		this._start_time = parseInt(mediaIn);
+		this._start_time = parseFloat(mediaIn);
+		this._start_time = this._start_time.toFixed(3);
 		this._stop_time = (parseFloat(mediaOut) == 0) ? this._dur : parseInt(mediaOut);
-		this._vol = parseInt(mediaVol);
+		this._stop_time = this._stop_time.toFixed(3);
+		this._vol = parseFloat(mediaVol);
 		console.log("vol from db " + this._vol);
 		this._wrapper_id=wrapperId;
 		this._selectedArrow='none';
@@ -206,8 +208,11 @@ var ZeegaRdioPlayer = Class.extend({
             console.log("seeking to " + this._seek_to);
             if(this._last_known_state == 0 || this._last_known_state == 4)
                 this.play();
-            if(this._seek_to >= 1)
-                this._seek_to = this._seek_to - 1;
+            
+            this._seek_to = this._seek_to - 1;
+            console.log("seeking to before ternary " + this._seek_to);
+            this._seek_to = (this._seek_to >= 0) ? this._seek_to : 0;
+            console.log("seeking to " + this._seek_to);
             this._asset.rdio_seek(this._seek_to);
         }        
     },
@@ -264,12 +269,20 @@ var ZeegaRdioPlayer = Class.extend({
                 this._seek_to = position;
                 this.setMode('readyToPlay');
             }
-//	    	else
-//		        this.timeUpdate(position);
 		}
 		else if(this._mode == 'playing')
 		{
-		    this.timeUpdate(position);
+		    console.log("position " + position + " stop_time " + this._stop_time);
+		    if(position > (parseFloat(this._stop_time) + 0.2))
+    		{
+    		    this.playPause();
+    		    this._seek_to = this._start_time;
+    		    this.setMode('seeking');
+    		}
+    		else
+    		{
+		        this.timeUpdate(position);
+		    }
 		}
 	},
 	

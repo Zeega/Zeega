@@ -21,6 +21,7 @@ var loadFiles = [
 	//libraries
 	'order!libraries/underscore',
 	'order!libraries/backbone',
+	'order!libraries/spin',
 	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!jquery/ui/js/jquery-ui.min',
 	
@@ -38,6 +39,7 @@ var loadFiles = [
     'order!core/database',
 	
 	//plugins
+	'order!jquery/plugins/spin',
 	'order!jquery/plugins/jeditable.min',
 	'order!jquery/plugins/jquery-cycle',
 	'order!jquery/plugins/jquery.paging',
@@ -75,6 +77,7 @@ var loadFiles = [
 	
 	//players
 	'order!players/zeega.html5av',
+	'order!players/zeega.av.publish',
 	'order!players/zeega.rdio',
 	'order!players/zeega.rdio.token'
 	
