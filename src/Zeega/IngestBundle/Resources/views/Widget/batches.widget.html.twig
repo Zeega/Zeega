@@ -1,0 +1,79 @@
+
+<html> 
+ 
+<head> 
+    <title>Zeega Alpha</title> 
+ 
+ 
+<!-- Other Scripts/Fonts/ETC --> 
+ 
+<link href='http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&subset=latin' rel='stylesheet' type='text/css'> 
+ 
+ 
+<!-- ZeegaCode --> 
+ 
+<link rel="stylesheet" type="text/css" href="{{asset('css/zeegaPages.css')}}" /> 
+<link rel="icon" type="image/png" href="{{asset('images/zeega.ico')}}"> 
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>  
+<script type="text/javascript" src="{{asset('js/widget/batch.js')}}"></script> 
+ 
+ 
+ 
+ 
+ 
+ 
+<body> 
+ 		<div id="headerLeft" class="floatLeft"> 
+			Zeega Alpha | {{playground.title}}
+		</div> <!--#headerLeft--> 
+		
+		<div id="headerRight" class="floatRight"> 
+		 {{username}} | <a href="../logout">Logout</a>
+		</div> <!--#headerRight--> 
+		<div class="clear"></div> 
+	
+	</div> <!--#header--> 
+
+
+<div id="widgetWrapper"> 
+ <br><br>
+ <br>
+<div id="setThumbs"> 
+ 
+
+{% for thumb in thumbs %}
+
+	<img src="{{thumb}}" class="widgetThumb" /> 
+{% endfor %} 
+
+<div class="clear"></div> 
+ 
+</div> 
+ <br>
+ <br>
+You have successfully added the {{data}} to your collection. 
+ 
+<label>Batch Add Tags</label> 
+ 
+<input type="hidden" 
+
+<form>
+
+<textarea name="batchTag">{{thumbs}}</textarea> 
+
+<input type='hidden' id='batch' value='{{batch}}'/>
+<input type='hidden' id='batch' value='{{batch}}'/>
+
+<br>
+
+<a href="" class="button" type="submit" >Add Media to the Database</a> 
+
+</form>
+</div> <!-- #wrapper -->	
+ 
+</body> 
+ 
+ 
+</html>
+

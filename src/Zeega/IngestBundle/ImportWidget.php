@@ -31,7 +31,7 @@ class ImportWidget
 		$fileFormat=strtolower(substr($urlClean,strlen($urlClean)-4));
 		$fileFormatLong=strtolower(substr($urlClean,strlen($urlClean)-5));
 		
-		$urlParse['fileFormat']=$fileFormat;
+		$urlInfo['fileFormat']=$fileFormat;
 			
 			
 		/**  ABSOLUTE URL ************************************/
@@ -41,16 +41,16 @@ class ImportWidget
 			if(in_array($fileFormat,array('.jpg','.png','.gif'))) $contentType='Image';
 			elseif(in_array($fileFormat,array('.mov','.mp4')))$contentType='Video';
 			elseif(in_array($fileFormat,array('.wav','.mp3','.aiff'))){
-				if($fileFormatLong=='.aiff') $urlParse['fileFormat']=$fileFormatLong;
+				if($fileFormatLong=='.aiff') $urlInfo['fileFormat']=$fileFormatLong;
 				$contentType='Audio';
 			}
 			$archive='Absolute';
 			$split= explode('/',$urlClean);
 			$title=$split[count($split)-1];
-			$urlParse['itemUrl']=$url;
-			$urlParse['thumbUrl']=$url;
-			$urlParse['title']=$title;
-			$urlParse['contentType']=$contentType;
+			$urlInfo['itemUrl']=$url;
+			$urlInfo['thumbUrl']=$url;
+			$urlInfo['title']=$title;
+			$urlInfo['contentType']=$contentType;
 			$id='';
 		}
 
@@ -68,7 +68,7 @@ class ImportWidget
 		
 		
 		
-		elseif(strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/')){
+		elseif(strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/')&&!strstr($url,'sets')){
 			$archive='Flickr';
 			if(strstr($url,'sets')) $split=explode('/sets/',$url);
 			else $split=explode('/photos/',$url);
@@ -156,9 +156,30 @@ class ImportWidget
 		}
 		
 		
-		$urlParse['id']=$id;
-		$urlParse['archive']=$archive;
-		return $urlParse;
+		$urlInfo['id']=$id;
+		$urlInfo['archive']=$archive;
+		return $urlInfo;
+	}
+	
+	public function parseAbsolute($urlInfo){
+	
+		$item=new Item();
+		$item->setContentType($urlInfo['contentType']);
+		$item->setItemUrl($urlInfo['itemUrl']);
+		$item->setTitle($urlInfo['title']);
+		$item->setCreator('Unknown');
+		$metadata=new Metadata();
+		$metadata->setDescription('None');
+		$item->setArchive($urlInfo['archive']);
+		$metadata->setAltCreator('');
+		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
+		$metadata->setAltCreator('');
+		$metadata->setTagList('');
+		$media=new Media();
+		$media->setFileFormat($urlInfo['fileFormat']);
+		$item->setMedia($media);
+		$item->setMetadata($metadata);
+		return $item;
 	}
 	
 	public function parseFlickr($id){
@@ -300,12 +321,15 @@ class ImportWidget
 			$item->setMetadata($metadata);
 			$item->setMedia($media);
 			
-			
-		array_push($items,$item);
+			$items[]=$item;
+
 		
 		}
 		
-		return $items;
+		$collection['title'] = $item->getTitle();
+		$collection['creator'] = $item->getCreator();
+		$collection['items']=$items;
+		return $collection;
 		
 	
 	}

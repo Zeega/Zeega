@@ -10,11 +10,12 @@
 
 
 	<div id="widget-wrapper" data-id="{{widget_id}}" style="margin-top:20px; color: white; font-size:14px;"> 
-	<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
-	<div style="position:relative; width:200px; height: 200px; float:left;">
+		<h>Import Media:</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+			<div style="position:relative; width:200px; height: 200px; float:left;">
 		<div id="import-item" style='text-align:center; vertical-align:center;'><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="{{thumb_url}}" class="scaled" /></div>
 	</div>
-	<div style="position:relative; width:250px; float:right;">
+			<div style="position:relative; width:250px; float:right;">
 	<h>Title: {{title}}</h><br>
 	<h>Author: {{creator}}</h><br><br><br><br><br><br>
 
@@ -29,25 +30,11 @@
 			</div>
 			<div id='message'></div>
 </div>
-		
-		
-		<div  style="clear: both; border-top:dotted 1px red;  margin-top:20px;  margin-bottom:20px; margin-right:25px; width:100%; height:0px;"></div> 
+		</div>	
+	</div>
+{% endblock %}		
 	
-		<h>Collection Title</h>
 
-		<div id="collection" style="margin-top:20px; border: solid 1px white; width:400px; min-height:100px;"> 
-		
-		<ul style="padding:10px;">
-		
-		</ul>
-		
-		</div>
-
-</div> 
-
-
-
-{% endblock %}	
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/widget.js')}}"></script>  
+     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
 {% endblock %}	

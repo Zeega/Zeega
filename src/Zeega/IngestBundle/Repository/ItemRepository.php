@@ -11,7 +11,7 @@ class ItemRepository extends EntityRepository
     {
         $query = $this->getEntityManager()
 				->createQuery(
-					'SELECT i.item_url,i.content_type,i.title FROM ZeegaIngestBundle:Item i
+					'SELECT i.id,i.content_type,i.title FROM ZeegaIngestBundle:Item i
 					WHERE i.attribution_url = :url'
 				)->setParameter('url',$url);
 
@@ -33,6 +33,21 @@ class ItemRepository extends EntityRepository
 			   ->andwhere('i.id = :id')
 			   ->setParameter('id',$id)
 			   ->getQuery()
+			   ->getArrayResult();
+     }
+     
+      public function findUserItems($id)
+     {
+     	return $this->getEntityManager()
+				->createQueryBuilder()
+				->add('select', 'i.id,i.title')
+			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->innerJoin('i.user', 'u')
+			   ->andwhere('u.id = :id')
+			   ->setParameter('id',$id)
+			    ->orderBy('i.id','DESC')
+			   ->getQuery()
+			   ->setMaxResults(15)
 			   ->getArrayResult();
      }
      

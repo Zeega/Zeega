@@ -1,38 +1,33 @@
 
 
-{# src/Zeega/IngestBundle/Resources/views/Widget/fail.widget.html.twig #}
+{# src/Zeega/IngestBundle/Resources/views/Widget/duplicate.widget.html.twig #}
 
 {% extends '::widget.base.html.twig' %}
 
-{% block title %}Zeega Alpha{% endblock %}
+{% block title %}Zeega Alpha {% endblock %}
 
 {% block body %}
 
 
-
-
-	<div id="extensionWrapper" style="margin-top:20px; color: white; font-size:14px;"> 
+	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
+		<h>This {{content_type}} has already been uploaded to the {{playground.title}} playground.</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+		
+			<div style="position:relative; width:200px; height: 200px; float:left;">
+				<div id="import-item" style='text-align:center; vertical-align:center;'><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="http://core.zeega.org/images/items/{{item_id}}_t.jpg" class="scaled" >
+				</div>
+			</div>
+		</div>	
+	</div>
 	
-	<h>This {{content_type}} has already been uploaded to the {{playground.title}} playground.</h><br>
-
-		<div>
-		<div id="import-item" style="margin-left:25px;margin-top:35px; border: solid 1px white; width:100px; height:100px;"><img id="image" width="100px" height="100px" src="{{item_url}}" class="scaled" /></div> 
-
-		</div>
-		<div  style="clear: both; border-top:dotted 1px red;  margin-top:20px;  margin-bottom:20px; width:100%; height:0px;"></div> 
 	
-		<h>Collection Title</h>
-
-		<div id="collection" style="margin-left:25px;margin-top:20px; border: solid 1px white; width:400px; min-height:100px;"> </div>
-
-</div> 
-
-	
-
-			
 
 
 {% endblock %}	
+
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/widget.js')}}"></script>  
+     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
 {% endblock %}
+
+
+

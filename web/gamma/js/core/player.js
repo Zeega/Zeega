@@ -70,9 +70,13 @@ var Player = {
 			this.layers = Zeega.route.layers;
 		}
 		
-		// all layers will make this call
+	
+		
+		this.draw();
+
+			// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
-			console.log(data.id);
+			console.log('Layer ready:'+data.id);
 			return false;
 		});
 		
@@ -82,8 +86,7 @@ var Player = {
 			return false;
 		});
 		
-		this.draw();
-
+		
 		this.gotoNode(this.currentNode);
 		
 	},

@@ -38,11 +38,11 @@ var widget = {
 			 
 			 }
 			 console.log(postdata);
-			 $.post('http://alpha.zeega.org/test/web/app_dev.php/widget/persist',postdata,function(data){
+			 $.post(URL_PREFIX+'widget/persist',postdata,function(data){
 			 	console.log(data);
 			 	$('#add-item').fadeOut();
 			 	$('#message').html('Media Successfuly Added');
-			 	$('#collection').find('ul').append('<li><img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="75px" height="75px"/></li>');
+			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
 			 
 			 });
 			return false;
