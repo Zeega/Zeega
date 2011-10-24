@@ -20,8 +20,8 @@ $(document).ready(function() {
 	
 
 	$('.project-delete').click(function(){if(confirm('Delete Project?')){
-		$(this).parent().fadeOut(); var id =$(this).data('id'); 
-	
+		var id =$(this).data('id'); 
+		$('.project-'+id).fadeOut(); 
 		$.ajax({
 				url: window.URL_PREFIX+'projects/'+id,
 				type: 'DELETE',
@@ -30,6 +30,18 @@ $(document).ready(function() {
 			}
 		});
 		}
+	});
+	
+	$('#new-project').click(function(){
+		console.log('creating new project');
+		$.ajax({
+				url: window.URL_PREFIX+'playgrounds/'+$('.playground-title').data('id')+'/project',
+				type: 'POST',
+				success: function(data){
+				window.location=window.URL_PREFIX+'playground/'+$('.playground-title').data('short')+'/project/'+data;
+			}
+		});
+
 	});
 
 });

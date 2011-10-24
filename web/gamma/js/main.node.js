@@ -34,10 +34,10 @@ console.log(data[0].attr);
 
 for(var i=0;i<data.length;i++){
 
-if(data[i].type=="Video") videoPreview(data[i].attr,i);
-else if(data[i].type=="Image") imagePreview(data[i].attr,i);
-else if(data[i].type=="Geo") geoPreview(data[i].attr,i);
-else if(data[i].type=="Text") textPreview(data[i].attr,i);
+if(data[i].type=="Video") videoPreview(data[i].attr,100-i);
+else if(data[i].type=="Image") imagePreview(data[i].attr,100-i);
+else if(data[i].type=="Geo") geoPreview(data[i].attr,100-i);
+else if(data[i].type=="Text") textPreview(data[i].attr,100-i);
 
 }
 

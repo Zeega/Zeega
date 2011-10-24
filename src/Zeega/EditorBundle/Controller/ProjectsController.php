@@ -9,6 +9,7 @@ use Zeega\EditorBundle\Entity\Node;
 use Zeega\EditorBundle\Entity\Layer;
 use Zeega\EditorBundle\Entity\Route;
 use Zeega\EditorBundle\Entity\Project;
+use Zeega\EditorBundle\Entity\Playground;
 use Zeega\UserBundle\Entity\User;
 
 class ProjectsController extends Controller
@@ -18,6 +19,9 @@ class ProjectsController extends Controller
 	 // `post_project`   [POST] /projects
     public function postProjectAction()
     {
+    	$playground=$this->getDoctrine()
+        ->getRepository('ZeegaEditorBundle:Playground')
+        ->find($playground_id);
 		$project= new Project();
 		$route = new Route();
 		$node = new Node();
@@ -32,13 +36,15 @@ class ProjectsController extends Controller
 		$em->persist($project);
 		$em->persist($node);
 		$em->flush();
-		return new Response(json_encode($project->getId()));
+		$id=$project->getId();
+		return new Response(json_encode(78));
         
     }
 
 	// `get_project`     [GET] /projects/{project_id}
     public function getProjectAction($project_id)
     {
+    
     	$project=$this->getDoctrine()
         ->getRepository('ZeegaEditorBundle:Route')
         ->findProjectById($project_id);

@@ -30,8 +30,12 @@ var loadFiles = [
 	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
 	'order!helpers/sugar',
-	'order!zeega',
-	'order!database',
+
+	//core
+	'order!core/zeega',
+    'order!core/zpub',
+    'order!core/player',
+    'order!core/database',
 	
 	//plugins
 	'order!jquery/plugins/jeditable.min',

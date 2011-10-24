@@ -9,6 +9,7 @@ use Zeega\EditorBundle\Entity\Node;
 use Zeega\EditorBundle\Entity\Layer;
 use Zeega\EditorBundle\Entity\Route;
 use Zeega\EditorBundle\Entity\Playground;
+use Zeega\EditorBundle\Entity\Project;
 use Zeega\UserBundle\Entity\User;
 
 class PlaygroundsController extends Controller
@@ -57,6 +58,31 @@ class PlaygroundsController extends Controller
 		$em->persist($playground);
     	return new Response('Success');
     
+    }
+    
+    
+     // `post_playground`   [POST] playground/{playground_id}/project
+    public function postPlaygroundProjectAction($playground_id)
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	$playground=$this->getDoctrine()
+        ->getRepository('ZeegaEditorBundle:Playground')
+        ->find($playground_id);
+    	$project= new Project();
+		$route = new Route();
+		$node = new Node();
+		$node->setRoute($route);
+		$project->setPlayground($playground);
+		$project->addUsers($user);
+		$route->setProject($project);
+		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		$em=$this->getDoctrine()->getEntityManager();
+		$em->persist($route);
+		$em->persist($project);
+		$em->persist($node);
+		$em->flush();
+		return new Response($project->getId());
     }
 /*
 

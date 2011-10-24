@@ -15,9 +15,9 @@
 				<div id='route-publish'>
 					
 					<ul class='pill-buttons'>
-						<li><a id='share' href='#' onclick='shareButton();return false;'>Share</a></li>
-						<li><a id='embed' href='#' onclick='embedButton();return false;'>Embed</a></li>
-						<li><a id='preview' href='http://www.getjavascript.com' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
+						<li><a id='share' href='http://www.getjavascript.com' onclick='shareButton();return false;'>Share</a></li>
+						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Embed</a></li>
+						<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
 					</ul>
 				</div>
 			</div>
@@ -27,6 +27,7 @@
 
 				<div id="node-drawer">
 					<ul></ul>
+					<div id="add-node"><a href="#" onClick="Zeega.addNode();return false;"><img src="{{ asset('gamma/images/addnode.png') }}" height="25" width="25"/></a></div>
 				</div>
 				<div id="edit-drawer" class='clearfix'>
 					
@@ -37,7 +38,7 @@
 						<ul class='tabs'>
 							<li class='active tab-heads'><a id='database-tab' href="#">Database</a></li>
 							<li class='tab-heads'><a id='layers-tab' href="#">Layers</a></li>
-							<li class='tab-heads'><a id='branch-tab' href="#">Branches</a></li>
+							<!-- <li class='tab-heads'><a id='branch-tab' href="#">Branches</a></li> -->
 						</ul>
 						
 						<div id='tab-content' class='clearfix'>
@@ -74,7 +75,7 @@
 									<div id='asset-preview-meta'>Title</div>
 								</div>
 								
-								<a href='#' id='refresh-database'>refresh</a>
+								<a href='#' id='refresh-database' onclick='Database.refresh();return false;'>reset</a>
 								<span id="database-pager"></span>
 								
 								<div id='tab-database-slide-window'></div>
@@ -196,7 +197,7 @@
 				<div id='controls'></div>
 				<br />
 				<form id='layer-persist'>
-					<input id='persist' type="checkbox" name="vehicle" value="persist" /> <label for='persist'>Persist</label>
+					<input id='persist' type="checkbox" name="vehicle" value="persist" /> <label for='persist'>Persist layer to route</label>
 				</form>
 			</div>
 		</div>

@@ -69,9 +69,11 @@ float: right;
 
 }
 
-#mediaThumb {
+.widget-image {
 
-text-align:center;
+max-width:450px;
+max-height:350px;
+
 
 }
 
@@ -481,6 +483,14 @@ color: red;
 width: 60px;
 display: inline;
 font-size: 10px;
+}
 
+
+.extensionDrag {
+
+width:300px;
+height:300px;
+margin:30px 30px 30px 30px;
+background-color: #FFFF66;
 }
 

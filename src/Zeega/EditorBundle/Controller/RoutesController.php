@@ -75,6 +75,7 @@ class RoutesController extends Controller
       	$em = $this->getDoctrine()->getEntityManager();
      	$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
     	if($request->request->get('title'))$route->setTitle($request->request->get('title'));
+    	if($request->request->get('attr'))$route->setAttr($request->request->get('attr'));
 		$em->flush();
 		
 		if($request->request->get('nodesOrder')){
@@ -139,6 +140,11 @@ class RoutesController extends Controller
 		$node->setRoute($route);
 		if($request->request->get('thumb_url')){
 		$node->setThumbUrl($request->request->get('thumb_url'));
+		
+		}
+		
+		if($request->request->get('attr')){
+		$node->setAttr($request->request->get('attr'));
 		
 		}
 		if($request->request->get('link_right')){

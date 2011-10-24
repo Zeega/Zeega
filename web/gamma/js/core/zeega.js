@@ -1,11 +1,11 @@
 
 /********************************************
 
-	APPPLICATION.JS 
+	ZEEGA.JS 
 
-	CORE APPLICATION OBJECTS
+	CORE APPLICATION OBJECT
 	
-	VERSION 0.1
+	VERSION 1.0
 	
 	
 *********************************************/
@@ -109,6 +109,9 @@ var Zeega = {
 				z.loadNodes();
 				z.loadLayers();
 				z.loadProject();
+				
+				if(!route.get('attr')) route.set({'attr':{}});
+				
 			}
 		});
 	},
@@ -138,14 +141,14 @@ var Zeega = {
 	loadLayers : function()
 	{
 		var z = this;
-		//create a node collection inside the route model
+		//create a layer collection inside the route model
 		this.route.layers = new LayerCollection;
 		//get all existing layers
 		
 		this.route.layers.fetch({
 			success : function(layers){
 				
-				//make a node view collection
+				//make a layer view collection
 				z.route.layerViewCollection = new LayerViewCollection({ collection : layers });
 				
 				z.layersReady = true;
@@ -176,34 +179,22 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
+		//remove a prexisiting node style
+		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		
+		this.currentNode = node;
+
 		window.location.hash = '/node/'+ node.id; //change location hash
+		
 		Zeega.route.layerViewCollection._rendered = false;
 		Zeega.route.layerViewCollection._layerViews = [];
 
-		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		//set global currentNode to the selected node
-		this.currentNode = node;
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 		
-		
-		if(this.previewMode)
-		{
-			//store media elements
-			var media = $('#preview-media').children();
-			var layerIDs = [];
-			_.each(media,function(el){
-				layerIDs.push( $(el).attr('data-layer') );
-			});
-
-			//find persisting IDs
-
-			//remove all non peristing layers
-			$('#preview-media').empty();//<<<<-----------Don't empty this automatically!!
-		}else{
-			$('#workspace').empty();
-		}
+		//clear the workspace
+		$('#workspace').empty();
 		
 		var layerArray = _.without( this.currentNode.get('layers'), -1)
 		_.each( layerArray , function(layerID){
@@ -320,10 +311,10 @@ var Zeega = {
 	persistLayerOverNodes : function(layer)
 	{
 		console.log('peristing');
-		console.log(layer);
 		//function(layer,[nodes])
 		//eventually you should pass in an array of node IDs and only add to those nodes
 		//for now we persist to all nodes EXCEPT the currentNode
+
 		_.each( _.toArray(this.route.nodes), function(node){
 			if(node != Zeega.currentNode)
 			{
@@ -333,6 +324,38 @@ var Zeega = {
 			}
 		});
 		
+		//add to the route persistLayers array
+		var attr = this.route.get('attr');
+		
+		//if the array exists and the layer isn't already inside it
+		if( attr.persistLayers && !_.include( _.toArray(attr.persistLayers),layer.id) )
+		{
+			attr.persistLayers.push(layer.id);
+			attr.persistLayers = _.uniq(attr.persistLayers);
+			console.log('new layer persisting')
+			this.route.set({'attr': attr});
+			this.route.save();
+			
+		//if the array doesn't exist
+		}else{
+			
+			attr.persistLayers = [layer.id];
+			this.route.set({'attr':attr});
+			this.route.save();
+		}
+		
+	},
+	
+	removeLayerPersist : function(layer)
+	{
+		console.log('remove persistance!');
+		//removes layers from the route layerPersist array
+		//does not affect existing layers or nodes
+		//future nodes will not have the persisting layers
+		var attr = this.route.get('attr');
+		attr.persistLayers = _.without( attr.persistLayers, layer.id );
+		this.route.set({'attr':attr});
+		this.route.save();
 	},
 	
 	updateLayerOrder : function(layerIDs)
@@ -351,8 +374,7 @@ var Zeega = {
 	
 	destroyNode : function( view )
 	{
-		var response = confirm('Delete Node?')
-		if(response)
+		if( confirm('Delete Node?') )
 		{
 			//clear workspace if it's the current node
 			if(view.model == this.currentNode) $('#workspace').empty();
@@ -363,11 +385,12 @@ var Zeega = {
 			  this.loadNode( this.route.nodes.at( _.indexOf( _.toArray( this.route.nodes ), this.currentNode) -1 ) );
 			}
 			//remove the node from the node collection
-			this.route.nodes.remove(view.model);
-		
+			this.route.nodes.remove();
+			
 			view.model.destroy();
 			view.remove();
 			//if it's the last node, make a new, empty one
+			
 			if( _.size(Zeega.route.nodes) == 0 )
 			{
 				var newNode = new Node;
@@ -393,6 +416,15 @@ var Zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 		
+		projectData = '';
+		
+		Player.projectData = projectData;
+		Player.currentNode = this.currentNode.id;
+		Player.init();
+		
+		/*
+		//  rethink this
+		
 		var wrapper = $('<div>').attr('id','workspace-preview-wrapper');
 		
 		//add node navigation controls
@@ -402,6 +434,21 @@ var Zeega = {
 		wrapper.fadeIn();
 		
 		this.loadNode(this.currentNode);
+		*/
+	},
+	
+	/***************
+	*
+	*	returns the rout as zPub json data
+	*
+	*****************/
+	getZPub : function()
+	{
+		//dead fxn?
+		this.zPubData = 'tester';
+		
+		
+		console.log(this.zPubData);
 	},
 	
 	getLeftNode : function()
@@ -433,8 +480,6 @@ var Zeega = {
 		if(node) this.loadNode(node)
 	}
 	
+	
 };
-
-
-
 

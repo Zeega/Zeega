@@ -84,7 +84,6 @@ var AudioLayer = ProtoLayer.extend({
 			newAttr.out=this.player._stop_time;
 			newAttr.volume = Math.floor(this.player._vol*100.0);
 		}
-		
 		//set the attributes into the layer
 		this.updateLayerAttr(newAttr);
 		//save the layer back to the database

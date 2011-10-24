@@ -3,6 +3,8 @@ var Layer =  Backbone.Model.extend({
 	
 	defaults :{},
 	
+	layerClass :{},
+	
 	initialize: function(){	},
 	
 

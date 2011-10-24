@@ -15,11 +15,13 @@ var NodeView = Backbone.View.extend({
 				'height' : '50px',
 				'width' : '50px',
 				'position' : 'absolute'
-				})
+				});
+				
+		template.find('.node-overlay')
 			.click(function(){
 				Zeega.loadNode(that.model);
 				return false;
-				});
+			});
 
 		// node delete function
 		template.find('.delete-node')
@@ -29,9 +31,7 @@ var NodeView = Backbone.View.extend({
 				//if the node being deleted is the only node, then just delete all the layers inside the node
 				Zeega.destroyNode(that);
 				return false;
-				})
-			.hide();
-
+				});
 		
 		//copy the cloned item into the el
 		$(this.el).html(template)
@@ -128,13 +128,21 @@ var NodeViewCollection = Backbone.View.extend({
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
 		
 			node.save(
-				{thumb_url:'images/thumb.png'},
+				{thumb_url:''},
 				{
 					success : function()
 					{
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
 						z.pushView(new NodeView({ model : node }));
+						
+						//add persisting layers to new nodes
+						var persistLayers = Zeega.route.get('attr').persistLayers;
+						_.each(persistLayers,function(layerID){
+							Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
+						});
+						
+						
 					}
 				}
 				
@@ -175,10 +183,7 @@ var NodeViewCollection = Backbone.View.extend({
 		});
 		
 		console.log('renderNodes');
-		var addNodeButton = $('<div id="add-node"><a href="#" onClick="Zeega.addNode();return false;"><img src="../../../../gamma/images/addnode.png" height="25" width="25"/></a></div>');
-		
-		$('#node-drawer').append(addNodeButton);
-		
+
 		return this;
 	}
 	

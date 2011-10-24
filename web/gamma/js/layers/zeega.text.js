@@ -252,6 +252,83 @@ var TextLayer = ProtoLayer.extend({
 		$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
 		
         },
+    drawPublish : function(){
+		//make dom object
+		//maybe these should all be wrapped in divs?
+		var div = $('<div />');
+		var cssObj = {
+			'position' : 'absolute',
+			'top' : this.attr.y,
+			'left' : this.attr.x,
+			'z-index' : this.zIndex,//layers.length - i,
+			'width' : this.attr.w,
+			'height' : this.attr.h,
+			'font-size' : this.attr.size + 'px'
+		};
+		div
+		.addClass('text-layer-container')
+		.attr({
+				'id' : 'layer-preview-'+this.model.id,
+				'data-layer-id' : this.model.id,
+			})
+		.css(cssObj);
+
+		if (this.attr.content == ''){
+		    div.addClass('text-layer-chrome-visible');
+		}
+
+		//need this to be accessable inside various functions
+		var that  = this;
+		
+		div.draggable({
+			
+			//when the image stops being dragged
+			stop : function(){
+				that.updateAttr();
+			},
+			containment: 'parent'
+			});
+		div.resizable({
+			stop : function (){
+			    that.updateAttr();
+			},
+		        containment:'parent',
+		        minHeight: 50,
+			minWidth: 50,
+			autoHide: true
+		});
+		
+		var content = $('<div />').css({'width' : '100%', 
+						'height' : '100%', 
+		                                'overflow' : 'auto',
+						'column-count' : this.attr.columns,
+						'-moz-column-count' : this.attr.columns,
+						'padding-top' : this.attr.padding + 'px',
+						'padding-left' : this.attr.padding + 'px',
+						'padding-right' : this.attr.padding + 'px',
+						'padding-bottom' : this.attr.padding + 'px',
+						'text-indent': this.attr.indent + 'px',
+					        'box-sizing' : 'border-box',
+						'-moz-box-sizing' : 'border-box',
+						'-webkit-box-sizing' : 'border-box'
+		                           })
+		                          .addClass('text-layer-content');
+		
+		content.html(that.attr.content);
+
+		content.bind('click mousedown', function(event) { event.stopPropagation()});
+	        content.bind('blur change', function(){that.updateAttr()});
+		div.append(content);
+		this.dom = div;
+		//draw to the workspace
+		$('#zeega-player').append(this.dom);
+		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
+		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
+		//$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
+		
+        },
 	
 	updateAttr: function(){
 	 
@@ -274,6 +351,14 @@ var TextLayer = ProtoLayer.extend({
 		    newAttr.content = '';
 		}
 		console.log(newAttr.content);
+		
+		//update layer title
+		
+		newAttr.title =newAttr.content.substr(0,60);
+		$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
+		
+		
+		
 		//Ensures that empty text-boxes have visible borders
 		if (newAttr.content.match(/\S/)){
 		    console.log('removeClass');

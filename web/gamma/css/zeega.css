@@ -451,6 +451,12 @@ body
 {
 	height:50px;
 	width:50px;
+	z-index:2;
+}
+
+.node-background
+{
+	background:#000;
 }
 
 .delete-node,
@@ -788,6 +794,11 @@ body
 	padding:20px;
 }
 
+#layer-persist
+{
+	float:right;
+}
+
 /*******************************
 
 	BRANCHES TAB
@@ -842,7 +853,15 @@ body
 }
 
 
-#workspace-preview-wrapper
+/******************************
+
+	PREVIEW WINDOW
+	
+******************************/
+
+
+
+#zeega-player
 {
 	width:100%;
 	height:100%;
@@ -855,6 +874,7 @@ body
 	z-index:10000;
 }
 
+/*
 #workspace-preview-controls
 {
 	z-index:1000;
@@ -862,7 +882,7 @@ body
 	height:100%;
 	width:100%;
 }
-
+*/
 
 /*******************************
 

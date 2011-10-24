@@ -8,7 +8,7 @@
 var Database = {
 	
 	page : 0,
-	customSearch: false,
+	customSearch : false,
 	
 	
 	init : function()
@@ -28,6 +28,8 @@ var Database = {
 			}
 		});
 		
+		this.setQuery(null,'all');
+		
 	},
 	
 	//useful? maybe
@@ -37,8 +39,7 @@ var Database = {
 		//_.each(this.viewCollection._itemViews,function(view){ view.remove() });
 		$('#tab-database-slide-window').cycle('destroy');
 		$('#tab-database-slide-window').empty();
-		
-		this.postdata = {};
+
 		
 		this.collection = new ItemCollection;
 		this.viewCollection.collection.reset();
@@ -46,6 +47,8 @@ var Database = {
 		this.viewCollection._itemBundles = [];
 		this.viewCollection._rendered = false;
 		this.page = 0;
+
+		$('#tab-database-slide-window').spin('small','white');
 	},
 	
 	
@@ -74,6 +77,12 @@ var Database = {
 		}
 	},
 	
+	changeFilter : function(el)
+	{
+		var filter = $(el).val();
+		this.search( null, filter );
+	},
+	
 	//refresh the current items. reset to page 0. see if any items added to database
 	refresh : function()
 	{
@@ -97,62 +106,53 @@ var Database = {
 	setQuery : function( query, contentType )
 	{
 
-		if(query == [])
-		{
-			console.log('empty query');
-			this.refresh();
-			
-		}else{
-			
-			// parse the query here. something that can be done later
+
+		// parse the query here. something that can be done later
+		var itemsToReturn = 100;
 		
-			var itemsToReturn = 100;
-			this.postdata = {
+		this.postdata = {
+			//Array of query objects - results use OR operator over queries
+			//For now, disabled multiple queries
+			query:[ 
+				{
+						/**	contentType [OPTIONAL]				*/
+						/**	String 								*/
+						/**	'all','image','video','audio'		*/
 
-					//Array of query objects - results use OR operator over queries
-					//For now, disabled multiple queries
-					query:[ 
-						{
-								/**	contentType [OPTIONAL]				*/
-								/**	String 								*/
-								/**	'all','image','video','audio'		*/
+					contentType: contentType,
 
-							contentType: contentType,
+						/**	tag [OPTIONAL]						*/
+						/**	String Array						*/
+						/**	AND operator over Array Elements	*/
 
-								/**	tag [OPTIONAL]						*/
-								/**	String Array						*/
-								/**	AND operator over Array Elements	*/
+					tags: query ,  
 
-						tags: query ,  
+						/**	geo [OPTIONAL]						*/
+						/**	Object		  						*/
+						/**	south,north,east,west 				*/
 
-								/**	geo [OPTIONAL]						*/
-								/**	Object		  						*/
-								/**	south,north,east,west 				*/
+					//geo: {south:41,north:42.4,west:-99.2,east:-87.6},
 
-							//geo: {south:41,north:42.4,west:-99.2,east:-87.6},
+						/**	time [OPTIONAL]						*/
+						/**	Object								*/
+						/**	earliest,latest						*/
 
-								/**	time [OPTIONAL]						*/
-								/**	Object								*/
-								/**	earliest,latest						*/
+					//time: {earliest: -218799493233,latest: 218799493233},
 
-							//time: {earliest: -218799493233,latest: 218799493233},
+						/**	output [REQUIRED]									*/
+						/**														*/
+						/**	type (String) 'geo','time','collection','item'		*/
+						/** 													*/
+						/** resolution 											*/
+						/** limit	 											*/
+						/** offset 												*/
 
-								/**	output [REQUIRED]									*/
-								/**														*/
-								/**	type (String) 'geo','time','collection','item'		*/
-								/** 													*/
-								/** resolution 											*/
-								/** limit	 											*/
-								/** offset 												*/
-
-							output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(this.collection) }
-						},
-					],
-			};
+					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(this.collection) }
+				},
+			],
+		};
 			
-
 			
-		}
 
 	},
 	
@@ -160,26 +160,28 @@ var Database = {
 	search : function( query, contentType )
 	{
 		var d = this;
+		this.reset();
 		
-		if(this.postdata)
+		//if the query is null && there is no existing query in postdata then do a general search for filter type. no query. change filter
+		if(query == null && this.postdata.query[0].tags == null)
 		{
-			if( query == "" || contentType != 'all' ) this.customSearch = false;
-			else if( this.postdata.query[0].tags != [query] ||this.postdata.query[0].contentType != contentType ) this.customSearch = false;
-		}
-	
-		if( this.customSearch )
-		{
+			this.setQuery( [], contentType );
 
+		//if query is null && there IS an existing query, then filter that query  by type. retain existing query. change filter
+		}else if(query == null && this.postdata.query[0].tags != null){
+			this.setQuery( this.postdata.query[0].tags, contentType );
+			
+		// new query, new filter
+		}else if(query == '' && contentType == 'all'){
+			this.refresh();
+			return false;
+		}else if(query == ''){
+			this.setQuery( [], contentType );
 		}else{
-			this.reset();
-			this.customSearch = true;
-			
-			//parse the query here <<<<<
-			
-			this.setQuery([query],contentType);
-		}		
+			console.log('new query');
+			this.setQuery( [query], contentType );
+		}
 		
-		//this.customSearch = new ItemCollection;
 		
 		$.post('http://alpha.zeega.org/joseph/web/app_dev.php/search', this.postdata, function(data) {
 			var response = $.parseJSON(data);
@@ -219,10 +221,17 @@ var Database = {
 				var error = $("<div class='alert-message error'><p>We couldn't find what you're looking for :( Try again?</p></div>");
 				$('#database-pager').fadeOut('fast',function(){$(this).empty();$(this).show();});
 				$('#tab-database-slide-window').html(error);
+				
 			}
+			$('#tab-database-slide-window').spin(false);
+			
 		});
 		
+		
+
+		
 	}
+	
 	
 };
 

@@ -17,10 +17,9 @@ function initUX(){
 }
 
 $(document).ready(function() {
-	
 	$('.project-delete').click(function(){if(confirm('Delete Project?')){
-		$(this).parent().fadeOut(); var id =$(this).data('id'); 
-	
+		var id =$(this).data('id'); 
+		$('.project-'+id).fadeOut(); 
 		$.ajax({
 				url: window.URL_PREFIX+'projects/'+id,
 				type: 'DELETE',
