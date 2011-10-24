@@ -8,7 +8,7 @@
 ************************************/
 
 
-var debug=false;
+var debug=true;
 
 
 var ZeegaRdioPlayer = Class.extend({
@@ -29,6 +29,7 @@ var ZeegaRdioPlayer = Class.extend({
 		this._dragging = false;
         this._loaded = false;
 		this._mode = 'idle';
+		this._last_known_state = 0;
 	},
 	
 	/**
@@ -202,8 +203,11 @@ var ZeegaRdioPlayer = Class.extend({
         else if(this._mode == 'seeking')
         {
             this._asset.rdio_setVolume(0);
-            this.playPause();
             console.log("seeking to " + this._seek_to);
+            if(this._last_known_state == 0 || this._last_known_state == 4)
+                this.play();
+            if(this._seek_to >= 1)
+                this._seek_to = this._seek_to - 1;
             this._asset.rdio_seek(this._seek_to);
         }        
     },
@@ -212,7 +216,8 @@ var ZeegaRdioPlayer = Class.extend({
     {
         // The playback state has changed.
         // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
-        if(debug) console.log("playStateChange " + playState + " - " + this._mode);
+        console.log("playStateChange " + playState + " - " + this._mode);
+        this._last_known_state = playState;
         if(playState == 1)
         {
             if(this._mode == 'loading')
@@ -221,6 +226,15 @@ var ZeegaRdioPlayer = Class.extend({
                     this.setMode('readyToPlay');
                 else
                     this.setMode('seeking');
+            }
+        }
+        else if(playState == 2)
+        {
+            if(this._mode != 'loading')
+            {
+                this._seek_to = this._start_time;
+                this.playPause();
+                this.setMode('loading');
             }
         }
     },
@@ -241,16 +255,17 @@ var ZeegaRdioPlayer = Class.extend({
 	
 	positionChanged:function(position) 
 	{
-	    if(debug) console.log("positionChanged " + position);
+	    if(debug) console.log("positionChanged " + position + " mode " + this._mode);
         if(this._mode == 'seeking')
         {
-            if((position >= (parseInt(this._seek_to,10) + 1)) && (position <= (parseInt(this._seek_to,10) + 2)))
+            if((position >= (parseInt(this._seek_to,10) + 1)) && (position <= (parseInt(this._seek_to,10) + 5)))
             {
                 console.log("stop seeking at " + position);
+                this._seek_to = position;
                 this.setMode('readyToPlay');
             }
-	    	else
-		        this.timeUpdate(position);
+//	    	else
+//		        this.timeUpdate(position);
 		}
 		else if(this._mode == 'playing')
 		{
@@ -285,7 +300,7 @@ var ZeegaRdioPlayer = Class.extend({
 	},
 	
 	informNumericInput:function(startTime,stopTime){
-		if(debug)console.log("informNumericInput:" + startTime + "," + stopTime);
+		if(debug) console.log("informNumericInput:" + startTime + "," + stopTime);
 		if(startTime!=-1){
 			var m=getMinutes(startTime);
 			var s=getSeconds(startTime);
@@ -318,7 +333,11 @@ var ZeegaRdioPlayer = Class.extend({
 
 		$('#player-'+this._id).trigger('updated');	
 	},
-	setCurrentTime:function(currentTime){	    
+	setCurrentTime:function(currentTime)
+	{
+	    if(this._last_known_state == 1)
+	    	this.playPause();
+	    	
 	    this._seek_to = currentTime;
 	    this._seek_to = this._seek_to.toFixed(3);
 	    this.setMode('seeking');		
@@ -358,8 +377,11 @@ var ZeegaRdioPlayer = Class.extend({
 	
 	play:function()
 	{
-	    if(debug) console.log("play");	    
-	    this._asset.rdio_play();
+	    if(debug) console.log("play");
+	    if(this._last_known_state == 2) // stopped. reload the file.
+	        this._asset.rdio_play(this._url);
+	    else
+	        this._asset.rdio_play();
 	},
 	
 	updatePlaybackControls:function(state)
