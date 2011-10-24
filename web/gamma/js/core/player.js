@@ -70,19 +70,20 @@ var Player = {
 			this.layers = Zeega.route.layers;
 		}
 		
+		this.draw();
+
 		// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
-			console.log(data.id);
+			console.log('layer ready to do stuff: ' + data.id);
 			return false;
 		});
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
-			console.log(data.id);
+			console.log('layer playback ended: ' + data.id);
 			return false;
 		});
 		
-		this.draw();
 
 		this.gotoNode(this.currentNode);
 		
