@@ -112,6 +112,12 @@ var Player = {
 		// remove the player div
 		$('#zeega-player').fadeOut( 450, function(){ $(this).remove() } ); 
 		
+		if(this.zeega)
+		{
+			Zeega.previewMode = false;
+			Zeega.loadNode(Zeega.route.nodes.get(this.currentNode));
+			
+		}
 	},
 	
 	// goes to an arbitrary node
