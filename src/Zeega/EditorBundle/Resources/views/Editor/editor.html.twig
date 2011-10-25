@@ -7,6 +7,8 @@
 {% block body %}
  
 	<div id='editor'>
+		
+		<!-- amoeba -->
 
 			<div id="route-header" class='clearfix'>
 				<div id='route-title'>{{projecttitle}}</div>
@@ -107,15 +109,29 @@
 						</div><!-- tab-content -->
 				
 					</div>
-					<div id='workspace-wrapper' class='clearfix'>
-						<div id="workspace"></div>
-						<div id='node-controls'>
-							Auto-Advance: 
-							<div id="radio">
-									<input type="radio" value ='0' id="manual" name="radio" checked="checked"/><label for="manual"> Manually</label>
-									<input type="radio" value='-1' id="playback" name="radio"  /><label for="playback"> After playback</label>
-									<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
-								</div>
+					<div id='workspace-wrapper'>
+						<div id='visual-editor-wrapper' class='wrapper'>
+							<div id='visual-editor-bar' class='clearfix'>
+								<div class='bar-title'><a href="#" id='ve-toggle' onclick='toggleWorkspace( this );return false;'>–</a>&nbsp;Visual Editor</div>
+								<div class='bar-icon-tray'></div>
+							</div>
+							
+							<div id="workspace" class='workspace'></div>
+							
+						</div>
+						
+						<div id='interactive-editor-wrapper'>
+							<div id='node-controls'>
+								Auto-Advance: 
+								<div id="radio">
+										<input type="radio" value ='0' id="manual" name="radio" checked="checked"/><label for="manual"> Manually</label>
+										<input type="radio" value='-1' id="playback" name="radio"  /><label for="playback"> After playback</label>
+										<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
+									</div>
+							</div>
+							
+							<div id='interactive-workspace' class='workspace'></div>
+							
 						</div>
 					</div>
 				</div>

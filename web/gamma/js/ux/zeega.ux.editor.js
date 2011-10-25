@@ -182,6 +182,19 @@ function addLayer(type)
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
 
+function toggleWorkspace(dom)
+{
+	var w = $(dom).closest('.wrapper').find('.workspace');
+	if(w.is(':hidden'))
+	{
+		w.show('blind',{'direction':'vertical'});
+		$(dom).html('–');
+	}else{
+		w.hide('blind',{'direction':'vertical'});
+		$(dom).html('+');
+	}
+}
+
 
 $(document).ready(function() {
 	

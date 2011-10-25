@@ -853,6 +853,29 @@ body
 	background:#000;
 	overflow:hidden;
 	position:relative;
+	margin-bottom:10px;
+}
+
+#visual-editor-bar
+{
+	-webkit-border-radius: 4px 4px 0 0;
+
+	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
+	
+	padding: 5px 10px;
+	color: #ddd;
+	border : 1px solid #555;
+	margin-bottom:10px;
+}
+
+.bar-title
+{
+	float:left;
+}
+
+.bar-icon-tray
+{
+	float:right;
 }
 
 #node-controls
@@ -860,8 +883,6 @@ body
 	color: #ddd;
 	clear:both;
 	padding: 10px;
-	position: relative;
-	top:10px;
 	
 	-webkit-border-radius: 0 0 4px 4px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
