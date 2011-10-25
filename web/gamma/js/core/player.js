@@ -154,26 +154,10 @@ var Player = {
 				
 				if(_this.currentNode == nodeID)
 				{
-					_this.drawCurrentNode();
+					_this.drawCurrentNode(); 
 				}
 			}
 		})
-	},
-	
-	cleanupLayers : function()
-	{
-		// find the uncommon layers and call hidePublish on them
-		_this = this;
-		var newNode = this.nodes.get(this.currentNode);
-		
-		
-		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
-		
-		_.each(layersToRemove,function(layerID){
-			_this.layerClasses[layerID].hidePublish();
-		});
-		
-		this.layersOnStage = _.without(this.layersOnStage,layersToRemove);
 	},
 	
 	//this should only happen if the node's layers have completely loaded
@@ -186,11 +170,41 @@ var Player = {
 		this.cleanupLayers();
 
 		//draw each layer
-		_.each(targetNode.get('layers'), function(layerID, i){
-			_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
-			_this.layersOnStage.push(layerID);
+		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
+		
+		_.each( targetNode.get('layers') , function(layerID, i){
+			if( _.include(layersToDraw,layerID) )
+			{
+				//draw new layer to the preview window
+				console.log('drawing layer: '+layerID)
+				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
+				_this.layersOnStage.push(layerID);
+			
+			}else{
+				//update existing persistant layer with new z-index
+				_this.layerClasses[layerID].updateZIndex( targetNode.get('layers').length - i);
+				console.log('omitting layer: '+layerID)
+			}
+			
 		})
 	},
+	
+	cleanupLayers : function()
+	{
+		// find the uncommon layers and call hidePublish on them
+		_this = this;
+		var newNode = this.nodes.get(this.currentNode);
+
+		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
+		
+		_.each(layersToRemove,function(layerID){
+			console.log(layerID);
+			_this.layerClasses[layerID].hidePublish();
+		});
+		
+		this.layersOnStage = _.difference(this.layersOnStage,layersToRemove);
+	},
+	
 	
 	setAdvance : function()
 	{
@@ -209,7 +223,9 @@ var Player = {
 			this.nodesLoading.push( nodeID );
 			
 			//preload each layer inside the node
-			_.each(this.nodes.get(nodeID).get('layers'),function(layerID){
+			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
+			
+			_.each(layersToPreload,function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			

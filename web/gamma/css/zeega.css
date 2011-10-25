@@ -423,7 +423,6 @@ body
 #node-drawer ul {
 	margin-left: -5px;
 	height: 50px;
-	float:left;
 }
 
 #node
@@ -450,6 +449,7 @@ body
 	background:#ccc;
 	float:left;
 	margin-left: 10px;
+	margin-bottom:10px;
 }
 
 

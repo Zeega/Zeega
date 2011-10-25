@@ -132,6 +132,9 @@ var NodeViewCollection = Backbone.View.extend({
 				{
 					success : function()
 					{
+						//go to the new node
+						Zeega.loadNode(node);
+						
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
 						z.pushView(new NodeView({ model : node }));
