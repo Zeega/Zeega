@@ -783,11 +783,7 @@ body
 	-webkit-transform: rotate(0deg);
 	-moz-transform: rotate(0deg);
 }
-.arrow-down
-{
-	-webkit-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-}
+
 .arrow-left
 {
 	-webkit-transform: rotate(180deg);
