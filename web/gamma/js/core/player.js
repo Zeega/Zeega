@@ -155,26 +155,10 @@ var Player = {
 				
 				if(_this.currentNode == nodeID)
 				{
-					_this.drawCurrentNode();
+					_this.drawCurrentNode(); 
 				}
 			}
 		})
-	},
-	
-	cleanupLayers : function()
-	{
-		// find the uncommon layers and call hidePublish on them
-		_this = this;
-		var newNode = this.nodes.get(this.currentNode);
-		
-		
-		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
-		
-		_.each(layersToRemove,function(layerID){
-			_this.layerClasses[layerID].hidePublish();
-		});
-		
-		this.layersOnStage = _.without(this.layersOnStage,layersToRemove);
 	},
 	
 	//this should only happen if the node's layers have completely loaded
@@ -187,11 +171,44 @@ var Player = {
 		this.cleanupLayers();
 
 		//draw each layer
-		_.each(targetNode.get('layers'), function(layerID, i){
-			_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
-			_this.layersOnStage.push(layerID);
+		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
+		console.log("***********");
+		console.log(layersToDraw)
+		
+		_.each( targetNode.get('layers') , function(layerID, i){
+			//if( _.include(layersToDraw,layerID) )
+			//{
+				console.log('drawing layer: '+layerID)
+				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
+				_this.layersOnStage.push(layerID);
+			/*
+			}else{
+				console.log('omitting layer: '+layerID)
+			}
+			*/
 		})
 	},
+	
+	cleanupLayers : function()
+	{
+		// find the uncommon layers and call hidePublish on them
+		_this = this;
+		var newNode = this.nodes.get(this.currentNode);
+		
+		console.log(newNode.get('layers'));
+		console.log(this.layersOnStage);
+		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
+		
+		console.log(layersToRemove);
+		
+		_.each(layersToRemove,function(layerID){
+			_this.layerClasses[layerID].hidePublish();
+		});
+		
+		this.layersOnStage = _.difference(this.layersOnStage,layersToRemove);
+		console.log('layers on stage: '+this.layersOnStage)
+	},
+	
 	
 	setAdvance : function()
 	{
