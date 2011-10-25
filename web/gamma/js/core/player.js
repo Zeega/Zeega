@@ -176,16 +176,16 @@ var Player = {
 		console.log(layersToDraw)
 		
 		_.each( targetNode.get('layers') , function(layerID, i){
-			//if( _.include(layersToDraw,layerID) )
-			//{
+			if( _.include(layersToDraw,layerID) )
+			{
 				console.log('drawing layer: '+layerID)
 				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
 				_this.layersOnStage.push(layerID);
-			/*
+			
 			}else{
 				console.log('omitting layer: '+layerID)
 			}
-			*/
+			
 		})
 	},
 	
@@ -202,6 +202,7 @@ var Player = {
 		console.log(layersToRemove);
 		
 		_.each(layersToRemove,function(layerID){
+			console.log(layerID);
 			_this.layerClasses[layerID].hidePublish();
 		});
 		
@@ -227,7 +228,9 @@ var Player = {
 			this.nodesLoading.push( nodeID );
 			
 			//preload each layer inside the node
-			_.each(this.nodes.get(nodeID).get('layers'),function(layerID){
+			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
+			
+			_.each(layersToPreload,function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			

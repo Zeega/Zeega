@@ -22,6 +22,8 @@ var VideoLayer = ProtoLayer.extend({
 						},
 	drawControls : function(template){
 		
+		console.log('drawing video controls');
+		
 		//need this to be accessable inside the draggable function
 		var that  = this;
 		
@@ -95,6 +97,7 @@ var VideoLayer = ProtoLayer.extend({
 	openControls: function(){
 			var that=this;
 			if(!this.editorLoaded){
+				
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
 				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
@@ -110,16 +113,15 @@ var VideoLayer = ProtoLayer.extend({
 		
 		if(this.player) this.player.pause();
 		
-		console.log('editClose');
 		
 	},
 	drawPreview : function(){
 		//make dom object
 
+
 		var container= $('<div>');
 		
 		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
-		console.log(h);
 		var cssObj = {
 			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
@@ -165,12 +167,13 @@ var VideoLayer = ProtoLayer.extend({
 	
 	
 	preloadMedia : function(){
+		
 		//make dom object
 		var that=this;
 		var container= $('<div>');
 		
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
-		console.log(h);
+
 		var cssObj = {
 			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
@@ -205,7 +208,6 @@ var VideoLayer = ProtoLayer.extend({
 	
 	drawPublish : function(z){
 		//make dom object
-		console.log('video draw publish');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
 		
@@ -213,6 +215,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	hidePublish :function()
 	{
+		
 		this.dom.css({'top':"-100%",'left':"-100%"});
 		this.player.pause();
 	},
@@ -242,7 +245,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	},
 	exit: function(){
-	
+		
 		this.player.pause();
 	},
 	
