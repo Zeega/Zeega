@@ -141,7 +141,7 @@ class ImportWidget
 		 
 		
 		elseif(strstr($url,'youtube.com')){
-			$archive='youtube';
+			$archive='Youtube';
 			$split=explode('v=',$url);
 			$split=explode('&',$split[1]);
 			$id=$split[0];
@@ -160,6 +160,53 @@ class ImportWidget
 		$urlInfo['archive']=$archive;
 		return $urlInfo;
 	}
+	
+	
+	
+	
+	
+	public function parseYoutube($id){
+	
+		$originalUrl='http://gdata.youtube.com/feeds/api/videos/'.$id;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+	
+		$file_contents=str_replace ( "a:", "a", $file_contents );
+		$file_contents=str_replace ( "o:l", "ol", $file_contents );
+		$file_contents=str_replace ( "l:p", "lp", $file_contents );
+		$file_contents=str_replace ( "l:P", "lP", $file_contents );
+		$file_contents=str_replace ( "s:w", "sw", $file_contents );
+		
+		curl_close($ch);
+		
+		//echo $file_contents;
+		$xml = new SimpleXMLElement($file_contents);
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		
+		
+		$item->setTitle((string) $xml->title);
+		$item->setItemUri($id);
+		$item->setItemUrl($id);
+		$item->setAttributionUrl('http://www.youtube.com/watch?v='+$id);
+		$item->setCreator((string)$xml->author->name);
+		$item->setContentType('Youtube');
+		$item->setSourceType('Youtube');
+		$item->setArchive('Youtube');
+		$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+		$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+		$metadata->setThumbUrl((string)$xml->mediagroup->mediathumbnail['url']);
+		$item->setMedia($media);
+		$item->setMetadata($metadata);
+		
+		return($item);
+	}
+	
 	
 	public function parseAbsolute($urlInfo){
 	
@@ -304,9 +351,10 @@ class ImportWidget
 			$item->setCreator((string)$xml->{'user'}->{'username'});
 			$metadata->setAltCreator((string)$xml->{'user'}->{'username'});
 			$item->setContentType('Audio');
+			$item->setSourceType('Audio');
 			$item->setArchive('SoundCloud');
 			$item->setItemUrl((string)$xml->{'stream-url'});
-			$item->setDateCreatedStart($xml->{'created-at'});
+			//$item->setDateCreatedStart((string)$xml->{'created-at'});
 			$duration=(string)$xml->{'duraton'};
 			$media->setDuration(floor($duration/1000));
 			if(!strpos($item->getItemUrl(),'stream')){
@@ -326,7 +374,7 @@ class ImportWidget
 		
 		}
 		
-		$collection['title'] = $item->getTitle();
+		$collection['title'] = (string)$xmlSet->{'title'};
 		$collection['creator'] = $item->getCreator();
 		$collection['items']=$items;
 		return $collection;

@@ -421,20 +421,7 @@ var Zeega = {
 		Player.projectData = projectData;
 		Player.currentNode = this.currentNode.id;
 		Player.init();
-		
-		/*
-		//  rethink this
-		
-		var wrapper = $('<div>').attr('id','workspace-preview-wrapper');
-		
-		//add node navigation controls
-		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
-		
-		$('body').append(wrapper);
-		wrapper.fadeIn();
-		
-		this.loadNode(this.currentNode);
-		*/
+	
 	},
 	
 	/***************

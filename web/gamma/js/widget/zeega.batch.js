@@ -42,7 +42,7 @@ var widget = {
 					console.log(data);
 					$('#add-item').fadeOut();
 					//$('#message').html('Media Successfuly Added');
-					$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
+					$('#collection').prepend('<img style="border: solid 1px white; padding:2px;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
 				 
 				 });
 			}

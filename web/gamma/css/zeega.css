@@ -140,6 +140,12 @@ a, a:active, a:visited
 }
 a:hover 
 {
+	color: white;
+	text-decoration:underline;
+}
+
+a.dark:hover 
+{
 	color: #036;
 	text-decoration:underline;
 }

@@ -159,6 +159,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='SoundCloud') 	  	$item=$import->parseSoundCloud($urlInfo['id']);
 			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
+			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
 			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo['id']);
 
 			//Store media item(s) to session and render widget
@@ -167,9 +168,10 @@ class WidgetController extends Controller
 		
 				
 				if($session->get('items'))$newItems=$session->get('items');			
-				$newItems[$widgetId]=$item;
-				$widgetId=rand(0,100000000);
+				
+				$widgetId=rand(0,100);
 				$item->setAttributionUrl($url);
+				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
     			
@@ -194,7 +196,7 @@ class WidgetController extends Controller
 					$thumbUrl=$metadata->getThumbUrl();
 					$thumbUrls[]=array('thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
 					$widgetIds[]=$widgetId;
-					//$newItems[$widgetId]=$item;
+					$newItems[$widgetId]=$item;
 				}
 				$session->set('items',$newItems);
 				return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
