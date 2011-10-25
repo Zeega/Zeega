@@ -53,6 +53,7 @@ var GeoLayer = ProtoLayer.extend({
 
 	drawControls : function(template)
 	{
+		console.log('drawing geo controls');
 		var opacityArgs = {
 			min:0,
 			max:1,
@@ -112,79 +113,9 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
-	preloadMedia : function()
-	{
-		
-		console.log('map drawPublish');
-		//Create dom element
-		this.editorLoaded=false;
-		var div = $('<div>');
-		var cssObj = {
-			'position' : 'absolute',
-			'top' : '-100%',
-			'left' : '-100%',
-			'width' : this.attr.w+"%",
-			'height' : this.attr.h+"%",
-			'opacity' : this.attr.opacity
-		};
-		
-		
-		div.addClass('media editable draggable')
-			.attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-			})
-			.css(cssObj);
-			
-		var that  = this;
-	
-		
-		//Create static map object and attach to workspace
-		
-		var img = $('<img>').css({'width':'100%'}).attr({'id':'layer-image-'+this.model.id});
-		
-		this.dom = div;
-		
-		//Pull static map image using google api
-		
-		if(this.attr.type=='map'){
-			var w=Math.floor(7.20*this.attr.w);
-			var h=Math.floor(4.80*this.attr.h);
-			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
-		
-		}else{
-		
-			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
-			var service=new google.maps.StreetViewService();
-			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
-				that.attr.panoId=data.location.pano;
-				var x=2;
-				var y=1;
-				if(that.attr.pitch>25) y=0;
-				else if(that.attr.pitch<-25) y=2;
-				x=(Math.floor((that.attr.heading+360)/60))%6;
-				console.log('load moment');
-				img.attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
-			});
-		}
-		
-		div.append(img);
-		$('#zeega-player').append(this.dom).trigger('ready',{'id':this._id});
-
-	},
-	
-	drawPublish : function(z)
-	{
-		this.dom.css({'z-index':z,'top':this.attr.y+'%','left':this.attr.x+'%'});
-	},
-	
-	hidePublish : function()
-	{
-		this.dom.css({'top':'-100%','left':'-100%'});		
-	},
-	
 	drawPreview : function()
 	{
+		console.log('drawing geo preview');
 		
 		//Create dom element
 		this.editorLoaded=false;
@@ -199,6 +130,7 @@ var GeoLayer = ProtoLayer.extend({
 			'opacity' : this.attr.opacity
 		};
 		
+		console.log(cssObj);
 		
 		div.addClass('media editable draggable')
 			.attr({
@@ -207,18 +139,14 @@ var GeoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-		var that  = this;
+		var _this  = this;
 		
 		div.draggable({
 			stop : function(){
 				
-				//Update x,y attributes
-				
-				that.attr.x=$(this).css('left');
-				that.attr.y=$(this).css('top');
-				
-				//save the layer to the database
-				that.saveLayer();
+				_this.attr.x = Math.floor( $(this).position().left / 6);
+				_this.attr.y = Math.floor( $(this).position().top / 4);
+				_this.saveLayer();
 			}
 		});
 		
@@ -259,6 +187,76 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
+	preloadMedia : function()
+	{
+		
+		console.log('map preloadMedia');
+		//Create dom element
+		this.editorLoaded=false;
+		var div = $('<div>');
+		this.dom = div;
+		var cssObj = {
+			'position' : 'absolute',
+			'top' : '-100%',
+			'left' : '-100%',
+			'width' : this.attr.w+"%",
+			'height' : this.attr.h+"%",
+			'opacity' : this.attr.opacity,
+		};
+		
+		this.dom.css(cssObj)
+			
+		var that  = this;
+	
+		//Create static map object and attach to workspace
+		
+		var img = $('<img>').css({'width':'100%'});
+		
+		this.dom.attr({'id':'layer-image-'+this.model.id});
+		
+		
+		//Pull static map image using google api
+		
+		if(this.attr.type=='map'){
+			var w=Math.floor(7.20*this.attr.w);
+			var h=Math.floor(4.80*this.attr.h);
+			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
+		}else{
+		
+			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
+			var service=new google.maps.StreetViewService();
+			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
+				that.attr.panoId=data.location.pano;
+				var x=2;
+				var y=1;
+				if(that.attr.pitch>25) y=0;
+				else if(that.attr.pitch<-25) y=2;
+				x=(Math.floor((that.attr.heading+360)/60))%6;
+				console.log('load moment');
+				img.attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+			});
+		}
+		
+		this.dom.append(img);
+
+		$('#zeega-player').find('#preview-media')
+			.append(this.dom)
+			.trigger('ready',{'id':this.model.id});
+
+	},
+
+	drawPublish : function(z)
+	{
+		console.log('geo Publish');
+		console.log(this.attr);
+		console.log(this.dom);
+		this.dom.css({'z-index':z,'top':this.attr.y+'%','left':this.attr.x+'%'});
+	},
+	
+	hidePublish : function()
+	{
+		this.dom.css({'top':'-100%','left':'-100%'});
+	},
 	
 	openControls: function()
 	{
@@ -355,14 +353,16 @@ var GeoLayer = ProtoLayer.extend({
 	
 	updateAttr: function()
 	{
-		
+		console.log('updating the geo layer!');
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
 			
 		//set the new dom attributes
 		
-		newAttr.x = Math.floor( this.dom.position().left/6);
-		newAttr.y = Math.floor( this.dom.position().top/4);
+		newAttr.x = Math.floor( this.dom.position().left / 6);
+		newAttr.y = Math.floor( this.dom.position().top / 4);
+
+		
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
 		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
 		newAttr.h = $('#layer-edit-'+this.model.id).find('#Height-slider').slider('value');

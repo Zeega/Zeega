@@ -182,10 +182,14 @@ var Player = {
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
 		
 		_.each( targetNode.get('layers') , function(layerID, i){
+			
+			console.log('drawing layer: '+layerID);
+			console.log(targetNode.get('layers').length - i);
+			
 			if( _.include(layersToDraw,layerID) )
 			{
 				//draw new layer to the preview window
-				console.log('drawing layer: '+layerID)
+				
 				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
 				_this.layersOnStage.push(layerID);
 			
