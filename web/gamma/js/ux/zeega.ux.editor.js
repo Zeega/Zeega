@@ -182,17 +182,34 @@ function addLayer(type)
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
 
-function toggleWorkspace(dom)
+function toggleWorkspace(el)
 {
-	var w = $(dom).closest('.wrapper').find('.workspace');
+	var w = $(el).closest('.wrapper').find('.workspace');
 	if(w.is(':hidden'))
 	{
 		w.show('blind',{'direction':'vertical'});
-		$(dom).html('–');
+		$(el).html('–');
 	}else{
 		w.hide('blind',{'direction':'vertical'});
-		$(dom).html('+');
+		$(el).html('+');
 	}
+}
+
+function expandLayer(el)
+{
+	console.log('expanding layer');
+	var w = $(el).closest('.layer-wrapper').find('.layer-content');
+	if(w.is(':hidden'))
+	{
+		w.show('blind',{'direction':'vertical'});
+	}else{
+		w.hide('blind',{'direction':'vertical'});
+	}
+}
+
+function deleteLayer()
+{
+	console.log('deleting')
 }
 
 

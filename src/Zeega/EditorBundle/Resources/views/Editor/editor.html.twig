@@ -110,9 +110,9 @@
 				
 					</div>
 					<div id='workspace-wrapper'>
-						<div id='visual-editor-wrapper' class='wrapper'>
+						<div id='visual-editor-wrapper' class='wrapper clearfix'>
 							<div id='visual-editor-bar' class='clearfix'>
-								<div class='bar-title'><a href="#" id='ve-toggle' onclick='toggleWorkspace( this );return false;'>–</a>&nbsp;Visual Editor</div>
+								<div class='bar-title'><a href="#" id='ve-toggle' onclick='toggleWorkspace(this);return false;'>–</a>&nbsp;Visual Editor</div>
 								<div class='bar-icon-tray'></div>
 							</div>
 							
@@ -121,16 +121,50 @@
 						</div>
 						
 						<div id='interactive-editor-wrapper'>
-							<div id='node-controls'>
-								Auto-Advance: 
-								<div id="radio">
+
+							<div id='interactive-workspace' class='workspace'>
+								
+								
+								<div id="i-layer-template" class="i-layer clearfix layer-wrapper">
+									<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
+										<div class='layer-icon'>
+											<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>
+										</div>
+										<div class='i-layer-title'>Layer Name</div>
+										<div class='i-layer-uber-controls'>
+											<span class='i-layer-delete ui-icon ui-icon-trash' onclick="deleteLayer();return true;"></span>
+										</div>
+									</div>
+									<div class='hidden layer-content clearfix'>
+										<div id='controls'></div>
+										<br />
+										<form id='layer-persist'>
+											<input id='persist' type="checkbox" name="vehicle" value="persist" /> <label for='persist'>Persist layer to route</label>
+										</form>
+									</div>
+								</div>
+								
+								
+								
+							</div>
+							
+							<div id="node-advance" class="i-layer layer-wrapper">
+								<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
+									<div class='layer-icon'>
+										<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>
+									</div>
+									<div class='i-layer-title'></span>Auto Advance</div>
+								</div>
+								<div class='hidden layer-content clearfix'>
+									<div id='controls'>
 										<input type="radio" value ='0' id="manual" name="radio" checked="checked"/><label for="manual"> Manually</label>
 										<input type="radio" value='-1' id="playback" name="radio"  /><label for="playback"> After playback</label>
 										<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
 									</div>
+								</div>
 							</div>
 							
-							<div id='interactive-workspace' class='workspace'></div>
+							
 							
 						</div>
 					</div>
