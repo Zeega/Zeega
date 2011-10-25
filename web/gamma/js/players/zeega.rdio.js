@@ -194,7 +194,8 @@ var ZeegaRdioPlayer = Class.extend({
             if(!this._loaded)
             {
                 this._loaded = true;
-                this.setup();                
+                this.setup();
+                this.canPlay();                
             }
 
             this.pause();
@@ -246,9 +247,8 @@ var ZeegaRdioPlayer = Class.extend({
 	
 	canPlay:function(){
 	
-		if(debug) console.log("canPlay");
-		this._canplay=1;
-		this.setup();
+		if(debug) console.log("rdio:canPlay");
+		$('#player-'+this._id).trigger('ready');	
 	},
 	
 	durationChange:function(){

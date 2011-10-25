@@ -174,6 +174,7 @@ var Player = {
 		{
 			//console.log( Zeega.route.nodes.get(nodeID) );
 			_.each( this.nodes.get(nodeID).get('layers'), function(layerID){
+			    console.log("loadNodeAssets " + layerID);
 				var layer = _this.layers.get(layerID);
 				var layerType = layer.get('type');
 				

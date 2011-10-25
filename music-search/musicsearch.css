@@ -1,0 +1,18 @@
+#searchResults
+{
+    width: 600px;
+    float: left;
+    
+}
+
+#audioPlayer
+{
+    width: 500px;
+    float: left;
+    border: 1px solid black;
+}
+
+#freq div {
+  height: 10px;
+  background-color: red;
+}

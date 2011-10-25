@@ -16,6 +16,8 @@ var RdioLayer = ProtoLayer.extend({
 							'volume' : 50,
 							
 						},
+	getAttr : function(){return this.defaultAttributes},
+	
 	drawControls : function(template){
 		
 		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
@@ -62,7 +64,62 @@ var RdioLayer = ProtoLayer.extend({
 			});
 		}
 	},
+	/*
+	preloadMedia : function(){
+	    console.log("preload for " + this.model.id);
+		//make dom object
+		var that = this;
+		var container= $('<div>');
+		
+		container.attr({
+				'id' : 'layer-publish-'+this.model.id,
+				'data-layer-id' : this.model.id
+			});
+		
+		//$('#layer_'+this.model.id).append(img);
+		this.dom = container;
+		
+		//draw to the workspace
+		$('#zeega-player').append(this.dom);
+		
+		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
+        
+        window['rdioListener-publish'+this.model.id] = this.player;
+        
+        var div = $('<div>').attr('id','apiswf-'+this.model.id);
+        $('#player-'+this.model.id).append(div);
+        // load the rdio player
+
+        var flashvars1 = {
+            'playbackToken': playback_token, // from token.js
+            'domain': domain,                // from token.js
+            'listener': 'rdioListener-publish'+this.model.id    // the global name of the object that will receive callbacks from the SWF
+            };
+        var params = { 'allowScriptAccess': 'always' };
+        var attributes = {};       
+		
+		swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
+            'apiswf-'+this.model.id, // the ID of the element that will be replaced with the SWF
+            1, 1, '9.0.0', 'expressInstall.swf', flashvars1, params, attributes);
+                     
+		//player triggers 'update' event to persist changes
+		$('#player-'+this.model.id).bind('updated',function()
+		{
+			console.log("loaded edit controls")
+			that.updateAttr();
+		});
+		
+		//player triggers 'ready' event to persist changes
+		$('#player-'+this.model.id).bind('ready',function()
+		{
+			that.ready();
+		});
+	},
 	
+	drawPublish : function(z){
+		console.log('rdio drawPublish');
+	},
+	*/
 	closeControls: function(){
 	
 		if(this.player) this.player.pause();
@@ -108,8 +165,10 @@ var RdioLayer = ProtoLayer.extend({
 		this.updateLayerAttr(newAttr);
 		//save the layer back to the database
 		this.saveLayer();
+	},
 	
-	
+	ready: function(){
+	    $('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this._id});
 	}
 	
 });
