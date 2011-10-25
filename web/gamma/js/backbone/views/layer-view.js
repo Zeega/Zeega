@@ -210,3 +210,22 @@ layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="p
 layerTemplate += 		'</form>';
 layerTemplate += 	'</div>';
 layerTemplate += '</div>';
+
+var iLayerTemplate = 	"<div id='i-layer-template' class='i-layer clearfix layer-wrapper'>";
+iLayerTemplate +=			"<div class='i-layer-uber-bar clearfix' onclick='expandLayer(this);return false;'>";
+iLayerTemplate +=				"<div class='layer-icon'>";
+iLayerTemplate +=					"<span class='asset-type-icon ui-icon ui-icon-pin-w'></span>";
+iLayerTemplate +=				"</div>";
+iLayerTemplate +=				"<div class='i-layer-title'>Layer Name</div>";
+iLayerTemplate +=				"<div class='i-layer-uber-controls'>";
+iLayerTemplate +=					"<span class='i-layer-delete ui-icon ui-icon-trash' onclick='deleteLayer();return false;'></span>";
+iLayerTemplate +=				"</div>";
+iLayerTemplate +=			"</div>";
+iLayerTemplate +=			"<div class='hidden layer-content clearfix'>";
+iLayerTemplate +=				"<div id='controls'></div>";
+iLayerTemplate +=				"<br />";
+iLayerTemplate +=				"<form id='layer-persist'>";
+iLayerTemplate +=					"<input id='persist' type='checkbox' name='vehicle' value='persist' /> <label for='persist'>Persist layer to route</label>";
+iLayerTemplate +=				"</form>";
+iLayerTemplate +=			"</div>";
+iLayerTemplate +=		"</div>";
