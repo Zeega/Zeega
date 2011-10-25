@@ -101,7 +101,7 @@ var VideoLayer = ProtoLayer.extend({
 				
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
-				that.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+				_this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
 			
 				//player triggers 'update' event to persist changes
 				$('#player-'+_this.model.id).bind('updated',function(){
