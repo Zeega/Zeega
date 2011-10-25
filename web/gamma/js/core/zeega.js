@@ -424,19 +424,6 @@ var Zeega = {
 	
 	},
 	
-	/***************
-	*
-	*	returns the rout as zPub json data
-	*
-	*****************/
-	getZPub : function()
-	{
-		//dead fxn?
-		this.zPubData = 'tester';
-		
-		
-		console.log(this.zPubData);
-	},
 	
 	getLeftNode : function()
 	{
