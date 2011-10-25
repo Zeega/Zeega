@@ -72,11 +72,12 @@ var loadFiles = [
 	'order!layers/zeega.image',
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
+	'order!layers/zeega.youtube',
 	
 	//players
 	'order!players/zeega.html5av',
-		'order!players/zeega.av.publish'
-	
+	'order!players/zeega.av.publish',
+	'order!players/zeega.player.youtube',	
 	];
 
 require(loadFiles, function($) {
