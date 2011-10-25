@@ -84,6 +84,11 @@ var ProtoLayer = Class.extend({
 		//draw layer contents in workspace - called on layer view display
 	},
 	
+	updateZIndex : function(z)
+	{
+		this.dom.css({'z-index':z});
+	},
+	
 	drawPublish : function()
 	{
 		//draw layer contents in published node space

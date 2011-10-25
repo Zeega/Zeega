@@ -172,8 +172,6 @@ var Player = {
 
 		//draw each layer
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
-		console.log("***********");
-		console.log(layersToDraw)
 		
 		_.each( targetNode.get('layers') , function(layerID, i){
 			if( _.include(layersToDraw,layerID) )
@@ -183,6 +181,7 @@ var Player = {
 				_this.layersOnStage.push(layerID);
 			
 			}else{
+				_this.layerClasses[layerID].updateZIndex( targetNode.get('layers').length - i);
 				console.log('omitting layer: '+layerID)
 			}
 			
@@ -194,12 +193,8 @@ var Player = {
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
 		var newNode = this.nodes.get(this.currentNode);
-		
-		console.log(newNode.get('layers'));
-		console.log(this.layersOnStage);
+
 		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
-		
-		console.log(layersToRemove);
 		
 		_.each(layersToRemove,function(layerID){
 			console.log(layerID);
@@ -207,7 +202,6 @@ var Player = {
 		});
 		
 		this.layersOnStage = _.difference(this.layersOnStage,layersToRemove);
-		console.log('layers on stage: '+this.layersOnStage)
 	},
 	
 	
