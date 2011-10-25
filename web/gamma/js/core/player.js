@@ -176,11 +176,13 @@ var Player = {
 		_.each( targetNode.get('layers') , function(layerID, i){
 			if( _.include(layersToDraw,layerID) )
 			{
+				//draw new layer to the preview window
 				console.log('drawing layer: '+layerID)
 				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
 				_this.layersOnStage.push(layerID);
 			
 			}else{
+				//update existing persistant layer with new z-index
 				_this.layerClasses[layerID].updateZIndex( targetNode.get('layers').length - i);
 				console.log('omitting layer: '+layerID)
 			}
