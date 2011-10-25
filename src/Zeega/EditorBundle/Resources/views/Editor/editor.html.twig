@@ -93,10 +93,6 @@
 
 									</ul>
 
-
-									
-									
-									<!-- <button id='add-new-layer' class='btn success small'>add new layer</button> -->
 								</div>
 						
 								<ul id="sortable-layers"></ul>
@@ -132,58 +128,6 @@
 {% endblock %}				
 
 {% block extras %}
-	<div id="add-layer-modal" class="modal hide">
-		<div class="modal-header">
-			<a href="#" class="close">&times;</a>
-			<h3>New Layer</h3>
-		</div>
-		<div class="modal-body">
-			<p>Choose a new layer type</p>
-			<form>
-			<fieldset>
-				<select id='new-layer-type'>
-				  <option value="Geo">Map</option>
-				  <option value="Text">Text</option>
-				</select>
-			</fieldset>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<a href="#" id='add-layer' class="btn primary">Add</a>
-			<a href="#" id='cancel-add-layer' class="btn secondary">Cancel</a>
-		</div>
-	</div>
-	<script id='workspace-preview-nav' type='x-jquery-tmpl'>
-		<div id='workspace-preview-controls'>
-			<div id='preview-left' class='preview-nav-arrow preview-nav'>
-				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}" onclick="Zeega.loadLeftNode();return false">
-			</div>
-			<div id='preview-right' class='preview-nav-arrow preview-nav'>
-				<img src="{{ asset('gamma/images/mediaPlayerArrow_shadow.png') }}" onclick="Zeega.loadRightNode();return false">
-			</div>
-			<div id='preview-media'></div>
-		</div>
-	</script>
-	<script id='branch-overlay-template' type='x-jquery-tmpl'>
-		<div id='branch-overlay'>
-			<div id='branch-top' class='branch-drop-wrapper'>
-				<!--<img class='arrow arrow-top' src='images/mediaPlayerArrow_shadow.png'>-->
-				<div class='branch-drop'></div>
-			</div>
-			<div id='branch-right' class='branch-drop-wrapper'>
-				<div class='branch-drop'></div>
-				<!--<img class='arrow arrow-right' src='images/mediaPlayerArrow_shadow.png'>-->
-			</div>
-			<div id='branch-bottom' class='branch-drop-wrapper'>
-				<div class='branch-drop'></div>
-				<!--<img class='arrow arrow-bottom' src='images/mediaPlayerArrow_shadow.png'>-->
-			</div>
-			<div id='branch-left' class='branch-drop-wrapper'>
-				<!--<img class='arrow arrow-left' src='images/mediaPlayerArrow_shadow.png'>-->
-				<div class='branch-drop'></div>
-			</div>
-		</div>
-	</script>
 	<div id='templates' class='hidden'>
 		
 		<div id="database-asset-template" class="hidden">
