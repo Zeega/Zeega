@@ -140,7 +140,7 @@ var LayerView = Backbone.View.extend({
 
 var LayerViewCollection = Backbone.View.extend({
 	//see the NodeViewCollection below for documentation
-	el : $('#tab-layers ul')[0],
+	el : $('#tab-layers').find('#sortable-layers'),
 	
 	initialize : function()
 	{

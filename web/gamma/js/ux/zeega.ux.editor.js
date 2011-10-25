@@ -175,6 +175,13 @@ function embedButton()
 	Zeega.currentNode.save();
 }
 
+function addLayer(type)
+{
+	//add new layer
+	var newLayer = new Layer({'type':type});
+	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
+}
+
 
 $(document).ready(function() {
 	
@@ -185,18 +192,6 @@ $(document).ready(function() {
 		Database.changeFilter(this);
 	});
 	
-	/*
-	
-	//try to remove preview window
-	$(document).keyup(function(e){
-		if (e.which ==27) //	ESC
-		{
-			Zeega.previewMode = false;
-			Zeega.loadNode(Zeega.currentNode);
-			if($('#workspace-preview-wrapper')) $('#workspace-preview-wrapper').fadeOut(450,function(){$(this).remove()});
-		}
-	});	
-	*/
 	
 	//node tray sortable and sorting events
 	
@@ -213,15 +208,6 @@ $(document).ready(function() {
 			Zeega.route.save();
 			console.log($(this).sortable('toArray'));
 		}
-	});
-	
-	//add new layer
-	$('#add-layer').click(function(){
-		var newLayer = new Layer({'type':$('#new-layer-type').val()});
-		
-		Zeega.addLayerToNode( Zeega.currentNode, newLayer );
-
-		$('#add-layer-modal').modal('hide');
 	});
 	
 	//search bar focus stuff

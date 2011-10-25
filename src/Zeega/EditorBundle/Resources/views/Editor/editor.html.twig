@@ -84,8 +84,19 @@
 						
 							</div>
 							<div id="tab-layers">
-								<div id='new-layer'>
-									<button id='add-new-layer' class='btn success small'>add new layer</button>
+								<div id='new-layer' class='clearfix'>
+									
+									<ul>
+
+										<li class='new-layer-icon' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+										<li class='new-layer-icon' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+
+									</ul>
+
+
+									
+									
+									<!-- <button id='add-new-layer' class='btn success small'>add new layer</button> -->
 								</div>
 						
 								<ul id="sortable-layers"></ul>

@@ -688,6 +688,16 @@ body
 	font-size:0.8em;
 }
 
+.new-layer-icon
+{
+	float:left;
+}
+
+.new-layer-icon+.new-layer-icon
+{
+	margin-left:10px;
+}
+
 #sortable-layers li
 {
 	min-height:25px;
