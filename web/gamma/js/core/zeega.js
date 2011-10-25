@@ -421,35 +421,9 @@ var Zeega = {
 		Player.projectData = projectData;
 		Player.currentNode = this.currentNode.id;
 		Player.init();
-		
-		/*
-		//  rethink this
-		
-		var wrapper = $('<div>').attr('id','workspace-preview-wrapper');
-		
-		//add node navigation controls
-		$('#workspace-preview-nav').tmpl().prependTo(wrapper);
-		
-		$('body').append(wrapper);
-		wrapper.fadeIn();
-		
-		this.loadNode(this.currentNode);
-		*/
+	
 	},
 	
-	/***************
-	*
-	*	returns the rout as zPub json data
-	*
-	*****************/
-	getZPub : function()
-	{
-		//dead fxn?
-		this.zPubData = 'tester';
-		
-		
-		console.log(this.zPubData);
-	},
 	
 	getLeftNode : function()
 	{

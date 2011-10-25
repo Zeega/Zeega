@@ -16,236 +16,214 @@ use SimpleXMLElement;
 class WidgetController extends Controller
 {
     
-  
+	  public function persistAction(){
+	  
+		$request=$this->getRequest();
+    	$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$widgetId=$request->request->get('widgetId');
+		$em=$this->getDoctrine()->getEntityManager();
+		
+		if($widgetId) {
+    		
+    		
+    		$items=$session->get('items');
+    		$item=$items[$widgetId];
+    		
+    		$user = $this->get('security.context')->getToken()->getUser();
+    		
+    		$item->setUser($user);
+    		
+			$em=$this->getDoctrine()->getEntityManager();
+			$em->persist($item->getMetadata());
+			$em->persist($item->getMedia());
+			$em->flush();
+			$em->persist($item);
+			$em->flush();
+    		
+    		$metadata=$item->getMetadata();
+    		$media=$item->getMedia();
+    		
+			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
+			
+			
+			$thumbUrl=false;
+			
+			if($metadata->getThumbUrl()){
+				$thumbUrl=$metadata->getThumbUrl();
+				@$img=file_get_contents($thumbUrl);
+			}
+			
+			
+			
+			if(!$thumbUrl||$img==FALSE){
+				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
+				$url=explode(":/var/www/",$output[4]);
+				$thumbUrl='http://core.zeega.org/'.$url[1];
+				@$img=file_get_contents($thumbUrl);
+			}
+		
+		
+			if($img==FALSE){
+				return new Response(json_encode('Failed to Add'));	
 
-	
+			}
+			else{		
+			
+				$name=tempnam("/var/www/images/tmp/","image".$item->getId());
+				file_put_contents($name,$img);
+				$square = new Imagick($name);
+				$thumb = $square->clone();
+
+				if($square->getImageWidth()>$square->getImageHeight()){
+					$thumb->thumbnailImage(144, 0);
+					$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
+					$h=$square->getImageHeight();		
+					$square->chopImage($x, 0, 0, 0);
+					$square->chopImage($x, 0, $h, 0);
+				} 
+				else{
+					$thumb->thumbnailImage(0, 144);
+					$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
+					$w=$square->getImageWidth();
+					$square->chopImage(0, $y, 0, 0);
+					$square->chopImage(0, $y, 0, $w);
+				}
+			
+				$square->thumbnailImage(144,0);
+			
+				$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage('/var/www/images/items/'.$item->getId().'_s.jpg');
+			
+		
+		
+				$response=$this->getDoctrine()
+								->getRepository('ZeegaIngestBundle:Item')
+								->findItemById($item->getId());					
+				return new Response(json_encode($item->getId()));
+    		  
+	  	}
+	  
+	  
+	  }
+	  else
+	  {
+				return new Response(json_encode('Failed to Add:'.$widgetId));	
+
+			}
+
+	}
 	
 	public function urlAction()
     {
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
+		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
+		
+		
 		$em=$this->getDoctrine()->getEntityManager();
-		
-		if($widgetId) {
-    	
-    		
-    		$playgroundId=$request->query->get('playground-id');
-    		$itemId=$session->get($widgetId);
-    		
-    		
-    		$item=$em
-				->getRepository('ZeegaIngestBundle:Item')
-				->find($itemId);
-			$playground=$em
-				->getRepository('ZeegaEditorBundle:Playground')
-				->find($playgroundId);
-				
-			
-			if(	$request->query->get('geo-lat')&&$item->getGeoLat()!=$request->query->get('geo-lat')) $item->setGeoLat(	$request->query->get('geo-lat'));
-			if(	$request->query->get('geo-lng')&&$item->getGeoLng()!=$request->query->get('geo-lng')) $item->setGeoLng(	$request->query->get('geo-lng'));
-			if(	$request->query->get('title')&&$item->getTitle()!=$request->query->get('title')) $item->setTitle(	$request->query->get('title'));
-			if(	$request->query->get('creator')&&$item->getCreator()!=$request->query->get('creator')) $item->setCreator(	$request->query->get('creator'));
-			
-			
-			$metadata=$item->getMetadata();
-			$attr=$metadata->getAttr();
-			if(	$request->query->get('description')) $metadata->setDescription(	$request->query->get('description'));
-			if(	$request->query->get('tags')) $attr['tags']=$request->query->get('tags');
-			
-			
-			$metadata->setAttr($attr);
-			
-		
-			$item->setPlayground($playground);
-    		$item->setUser($user);
-    		$em->flush();
-    	
-    		//Create Thumb
-		
-			$img=file_get_contents($metadata->getThumbUrl());
-			
-			$name=tempnam("images/tmp/","image".$item->getId());
-			file_put_contents($name,$img);
-
-
-			$square = new Imagick($name);
-			
-			if($square->getImageWidth()>$square->getImageHeight()){
-				$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
-				$h=$square->getImageHeight();
-				$square->chopImage($x, 0, 0, 0);
-				$square->chopImage($x, 0, $h, 0);
-			} 
-			else{
-				$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
-				$w=$square->getImageWidth();
-				$square->chopImage(0, $y, 0, 0);
-				$square->chopImage(0, $y, 0, $w);
-			}
-			
-			$square->thumbnailImage(75,0);
-			$square->writeImage('images/thumbs/'.$item->getId().'_s.jpg');
-		
-			unlink($name);
-							
-    		return new Response('Successfully uploaded '.$item->getTitle());
-    	}
-    	
-    	
-    	else{
-    	
-			$playgrounds=$this->getDoctrine()
+		$playgrounds=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Playground')
 							->findPlaygroundsByUser($user->getId());
 							
-			$url=$request->query->get('url');
+		$url=$request->query->get('url');
 			
-			$check=$this->getDoctrine()
+		$check=$this->getDoctrine()
 					->getRepository('ZeegaIngestBundle:Item')
 					->findItemByAttributionUrl($url);
 
-			if($check){
-				return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
-						'displayname' => $user->getDisplayname(),
-						'playground'=>$playgrounds[0],
-						'title'=>$check['title'],
-						 strtolower($check['content_type'])=>true,
-						'item_url'=>$check['item_url'],
-						'content_type'=>$check['content_type'],
-				));
+		if($check){
+			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
+				'displayname' => $user->getDisplayname(),
+				'playground'=>$playgrounds[0],
+				'title'=>$check['title'],
+				'item_id'=>$check['id'],
+				'content_type'=>$check['content_type'],
+				 'mycollection'=>$mycollection,
+			));
+		}
+		else{
+		
+			$import = $this->get('import_widget');	
+			
+			//Parse url
+			
+			$urlInfo=$import->parseUrl($url);
+			
+			
+			//Create item objects using API if applicable
+			
+			if($urlInfo['archive']=='Flickr') 			  	$item=$import->parseFlickr($urlInfo['id']);
+			elseif($urlInfo['archive']=='SoundCloud') 	  	$item=$import->parseSoundCloud($urlInfo['id']);
+			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
+			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
+			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
+			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo['id']);
+
+			//Store media item(s) to session and render widget
+
+			if(isset($item)){
+		
 				
+				if($session->get('items'))$newItems=$session->get('items');			
+				
+				$widgetId=rand(0,100);
+				$item->setAttributionUrl($url);
+				$newItems[$widgetId]=$item;
+				$metadata=$item->getMetadata();
+    			$session->set('items',$newItems);
+    			
+		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
+       
+					'displayname' => $user->getDisplayname(),
+					'title'=>$item->getTitle(),
+					'creator'=>$item->getCreator(),
+					'widget_id'=>$widgetId,
+					'thumb_url'=>$metadata->getThumbUrl(),
+					'mycollection'=>$mycollection,
+				));
+			}
+        	elseif(isset($collection)){
+				$thumbUrls=array();
+				$widgetIds=array();
+				if($session->get('items'))$newItems=$session->get('items');			
+				foreach($collection['items'] as $item){
+					$widgetId=rand(0,1000);
+					$item->setAttributionUrl($url."#".$item->getId());
+					$metadata=$item->getMetadata();
+					$thumbUrl=$metadata->getThumbUrl();
+					$thumbUrls[]=array('thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
+					$widgetIds[]=$widgetId;
+					$newItems[$widgetId]=$item;
+				}
+				$session->set('items',$newItems);
+				return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
+					'displayname' => $user->getDisplayname(),
+					'title'=>$collection['title'],
+					'creator'=>$collection['creator'],
+					'widget_ids'=>$widgetIds,
+					'thumb_urls'=>$thumbUrls,
+					'mycollection'=>$mycollection,
+					'count'=>count($thumbUrls),
+				));
+		
 			}
 			else{
-				$batch=false;
-	
-				$import = $this->get('import_widget');
-
-		    	$urlParse=$import->parseUrl($url);
-    			
-    			if($urlParse['archive']=='Flickr') 			$item=$import->parseFlickr($urlParse['id']);
-    			elseif($urlParse['archive']=='SoundCloud') 	$item=$import->parseSoundCloud($urlParse['id']);
-    			elseif($urlParse['archive']=='blip.tv') 	$item=$import->parseBlipTv($urlParse['id']);
-    			elseif($urlParse['archive']=='SoundCloudSet'){
-    				$item=$import->parseSoundCloudSet($urlParse['id']);
-    				$batch=true;
-    			}
-    			elseif($urlParse['archive']=='Absolute'){
-    				$item=new Item();
-    				$item->setContentType($urlParse['contentType']);
-    				$item->setItemUrl($urlParse['itemUrl']);
-    				$item->setTitle($urlParse['title']);
-    				$item->setCreator('Unknown');
-    				$metadata=new Metadata();
-    				$metadata->setDescription('None');
-    				$item->setArchive($urlParse['archive']);
-    				$metadata->setAltCreator('');
-    				if($urlParse['contentType']=='Image') $metadata->setThumbUrl($urlParse['itemUrl']);
-    				//else $metadata->setThumbUrl(???);
-    				$metadata->setAltCreator('');
-    				$metadata->setTagList('');
-    				$media=new Media();
-    				$media->setFileFormat($urlParse['fileFormat']);
-    				$item->setMedia($media);
-    				$item->setMetadata($metadata);
-    			}
-		if(!isset($item)) {
-			return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
-            'displayname' => $user->getDisplayname(),
-            'message'=>'Unable to process the media at this URL:',
-            'url'=>json_encode($widgetId),
-            'title'=>'temp title',
-            ));
-		}
-		
-    	else{
-    	
-    	
-    	
-    	$playgrounds=$this->getDoctrine()
-						->getRepository('ZeegaEditorBundle:Playground')
-						->findPlaygroundsByUser($user->getId());
-						
-		if(count($playgrounds)>1) $multiuser=true;
-		else $multiuser=false;
-
-    	if(!$batch){
-    	
-    	
-    	
-    	
-    	$item->setAttributionUrl($url);
-    	$em=$this->getDoctrine()->getEntityManager();
-    	$em->persist($item->getMetadata());
-    	$em->persist($item->getMedia());
-		$em->flush();
-		$em->persist($item);
-		$em->flush();
-		$widgetId=rand(0,100000);
-		$session->set($widgetId,$item->getId());
-    	
-    	
-    	
-    	$metadata=$item->getMetadata();
-    	$media=$item->getMedia();
-    	//$attr=$metadata->getAttr();
-    	$attr['tags']="none";
-    	//return new Response($archive.': '.$url);
-    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-       
-            'displayname' => $user->getDisplayname(),
-            'title'=>$item->getTitle(),
-            'tags'=>$attr['tags'],
-            'description'=>$metadata->getDescription(),
-            'creator'=>$metadata->getAltCreator(),
-            'alt_creator'=>$item->getCreator(),
-            'content_type'=>$item->getContentType(),
-            'geo_lat'=>$item->getGeoLng(),
-            'geo_lng'=>$item->getGeoLat(),
-            'playground'=>$playgrounds[0],
-            'license'=>$metadata->getLicense(),
-            'item_url'=>$item->getItemUrl(),
-            'widget_id'=>$widgetId,
-            strtolower($item->getContentType())=>true,
-        ));
-        
-        }
-        else{
-		
-		$thumbs=array();
-		
-		$data=count($item);
-		foreach($item as $i){
-		
-		
-		$i->setAttributionUrl($url);
-		$m=$i->getMetadata();
-		$thumb=$m->getThumbUrl();
-		array_push($thumbs,$thumb);
-		
-		
-		}
-		
-    	  return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
-       
-            'displayname' => $user->getDisplayname(),
-            'playground'=>$playgrounds[0],
-            'data'=>$data,
-            'thumbs'=>$thumbs,
-            'batch'=>$batch,
-        ));
-		
-		}
-        }
-       }
-       }
-    }
-	 
+				return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
+            		'displayname' => $user->getDisplayname(),
+					'message'=>'Unable to process the media at this URL:',
+					'url'=>json_encode($widgetId),
+					'title'=>'temp title',
+					'mycollection'=>$mycollection,
+					));
+			} 
+    	}
+	}
   	  
     
-     public function thumbAction($query="Help")
-    {
+     public function thumbAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');
@@ -256,8 +234,7 @@ class WidgetController extends Controller
    
     }
     
-     public function mediadataAction($query="Help")
-    {
+     public function mediadataAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');

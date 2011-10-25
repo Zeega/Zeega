@@ -57,19 +57,23 @@ var ProtoLayer = Class.extend({
 	
 	
 	
-	drawControls : function(){
+	drawControls : function()
+	{
 		//draws the specific layer control items inside the sidebar
 	},
 	
-	openControls: function(){
+	openControls: function()
+	{
 		//called when layer controls are expanded and editing template exposed
 	},
 	
-	closeControls: function(){
+	closeControls: function()
+	{
 		//called when layer controls are minimized and editing template closes
 	},
 	
-	drawPreview : function(){
+	drawPreview : function()
+	{
 		//Load icon into icon drawer above workspace
 		
 		if(this.icon){
@@ -80,22 +84,35 @@ var ProtoLayer = Class.extend({
 		//draw layer contents in workspace - called on layer view display
 	},
 	
-	drawPublish : function(){
+	updateZIndex : function(z)
+	{
+		this.dom.css({'z-index':z});
+	},
+	
+	drawPublish : function()
+	{
 		//draw layer contents in published node space
 	},
 	
-	preloadMedia : function(){
+	hidePublish : function()
+	{
+		
+	},
+	
+	preloadMedia : function()
+	{
 		//preLoad layer contents
 		
 		$('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
-	updateAttr: function(){
+	updateAttr: function()
+	{
 		//update local layer attributes
 	},
 
-	exit: function(){
-	
+	exit: function()
+	{
 		//called on exit during playback
 	},
 
@@ -116,14 +133,16 @@ var ProtoLayer = Class.extend({
 	//init with a layer model
 	
 	
-	init : function(){
+	init : function()
+	{
 		this.icon=false;
 	},
 	
 	// Populate layer attributes from layer model attributes, using
 	// default values to fill in absent values
 	
-	load : function(model){
+	load : function(model)
+	{
 		this.model = model;
 		
 		this.attr = this.model.get('attr');
@@ -141,45 +160,55 @@ var ProtoLayer = Class.extend({
 	
 	//Activate layer icon for display in workspace icon drawer
 	
-	setIcon : function(){
+	setIcon : function()
+	{
 		this.icon=true;
 	},
-	getModel : function(){
+	getModel : function()
+	{
 		return this.model
 	},
-	setModel : function(model){
+	setModel : function(model)
+	{
 		this.model = model;
 		return this;
 	},
-	getTitle : function(){
+	getTitle : function()
+	{
 		return this.model;
 	},
-	setTitle : function(title){
+	setTitle : function(title)
+	{
 		this.title = title;
 		return this;
 	},	
 	
 	//updates the layer order accordingly
-	updateZIndex : function(zIndex){
+	updateZIndex : function(zIndex)
+	{
 		this.dom.css( 'z-index', zIndex );
 	},
 	
-	updateLayerAttr : function(newAttr){
+	updateLayerAttr : function(newAttr)
+	{
 		this.model.set({ 'attr' : newAttr });
 	},
 	
-	updateLayerText : function(newText){
+	updateLayerText : function(newText)
+	{
 		this.model.set({ 'text' : newText });
 	},
 	
-	saveLayer : function(){
+	saveLayer : function()
+	{
 		//kept separate from updateLayerAttr because there may be reasons to set but not save yet
 		console.log('save()');
 		Zeega.currentNode.noteChange();
 		this.model.save(); //saves the current model
 	},
 	
-	remove : function(){
+	remove : function()
+	{
 		this.dom.remove();
 	},
 	

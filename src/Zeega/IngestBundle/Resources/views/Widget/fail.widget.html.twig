@@ -8,15 +8,19 @@
 
 {% block body %}
 
-<div id="extensionWrapper" style="margin-top:20px; color: white; font-size:14px;"> 
- 
-<h>We cannot detect the media you are trying to add to Zeega. Drag the item from the page to the space below and we'll see if we can make it work.</h>
 
-<div style="width:100%; text-align:center;">
-<div id="extensionDrag" style="margin-left:25px;margin-top:35px; width:400px; height:500px; background-color: #FFFF66;"> 
-</div> 
- </div>
-</div> 
+	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
+	<h>We cannot detect the media you are trying to add to Zeega. Drag the item from the page to the space below and we'll see if we can make it work.</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+		
+			<div style="position:relative; width:200px; height: 200px; float:left;">
+				<div id="import-item" style='text-align:center; vertical-align:center;'><div style="border: dotted 1px white; width:150px; height:150px;"  >
+				</div>
+			</div>
+		</div>	
+	</div>
+	
+	
 
 {% endblock %}	
 {% block scripts %}

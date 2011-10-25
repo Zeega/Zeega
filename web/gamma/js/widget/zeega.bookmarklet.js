@@ -36,22 +36,58 @@ var bm = new bookmarklet({
 				'height':'100%',
 				'opacity':1,
 				'z-index':500000,
+				'overflow':'hidden',
 				
 			}).attr('id','zeega-overlay');
 			
 			var url=encodeURIComponent(window.location.href);
 	
 			$('body').append(overlay);
+			
+			var cover=$('<div>').css({
+				'position':'relative',
+				'background-color':'#333',
+				'width':'100%',
+				'height':'100%',
+				'z-index':5,
+				'background-image':'url("http://zeega.org/images/zeega_clear2.png")',
+				'background-size':'100% 100%',
+				
+			}).attr('id','zeega-cover');
+			
+			
+			var highlight=$('<div>').css({
+				'position':'absolute',
+				'left':37,
+				'top' :148,
+				'background-color':'red',
+				'width':'150px',
+				'height':'150px',
+				'z-index':60000,
+				'display':'none',
+				'opacity':0.5,
+			}).attr('id','zeega-highlight');
+			
+			
+			overlay.append(cover);
+			overlay.append(highlight);
+			
+			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='http://alpha.zeega.org/test/web/app_dev.php/widget?url="+url+"' />").animate({
+   				  'width': 470 }, 500, function() {
+    			 $('#zeega-cover').fadeOut('slow');
+  			});
+  			$('#zeega-overlay').droppable({accept:'.zeega-draggable',  out:function(event,ui){$('#zeega-highlight').hide();}, over: function(event,ui){$('#zeega-highlight').show();}, drop: function(event, ui) {
+  				$('#zeega-highlight').hide(); 
+  				var src=ui.draggable.attr('src'); 
+  				$('#zeega-widget-iframe').attr('src','http://alpha.zeega.org/test/web/app_dev.php/widget?url='+encodeURIComponent(src));
+  				 }
+  				
+  				});
+		
+		
 			$('body img').draggable({  cursorAt: { left: 5, top:5},helper:function(){return $(this).clone().css({'width':'75px','height':'75px','border':'2px solid red',"z-index":1000000});},stack: 'iframe' }).addClass('zeega-draggable').css({ 'z-index' : '100001'});
 			
-			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; border:solid 1px gray' src='http://alpha.zeega.org/test/web/app_dev.php/widget?url="+url+"' />")
-				.animate({
-   				  'width': 470 }, 500, function() {
-    // Animation complete.
-  });
-  			$('#zeega-overlay').droppable({accept:'.zeega-draggable',iframeFix: true, drop: function(event, ui) { var src=ui.draggable.attr('src'); $('#zeega-widget-iframe').attr('src','http://alpha.zeega.org/test/web/app_dev.php/widget?url='+encodeURIComponent(src));console.log('dropping'); }});
-		
-			
+			//$('#zeega-widget-iframe').ready(function(event){console.log(event);});
 			
 			$('body').click(function(){
 			

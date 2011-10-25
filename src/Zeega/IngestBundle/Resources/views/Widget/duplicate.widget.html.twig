@@ -1,41 +1,33 @@
 
 
-{# src/Zeega/IngestBundle/Resources/views/Widget/fail.widget.html.twig #}
+{# src/Zeega/IngestBundle/Resources/views/Widget/duplicate.widget.html.twig #}
 
 {% extends '::widget.base.html.twig' %}
 
-{% block title %}Zeega Alpha{% endblock %}
+{% block title %}Zeega Alpha {% endblock %}
 
 {% block body %}
 
-	<br><br>
-	<div id="message" style='color: white; width:100%;' text-align:center">This {{content_type}} has already been uploaded to the {{playground.title}} playground.</div>
-	<br><br>
 
-<div id="mediaThumb" style="width:450px; max-height:350px">
-	{% if image is defined %}
-	
-	<img id="image" width="450" src="{{item_url}}" class="widget-image">
-	{% endif %}
-	{% if video is defined %}
-	
-	<video width="450" controls="true">
-  		<source src="{{item_url}}" type="video/mp4; codecs=&quot;avc1.64001E, mp4a.40.2&quot;">
-  	</video>
-  	{% endif %}
-  	
-  	{% if audio is defined %}
-  	<audio class="extAudio" controls="true" src="{{item_url}}"></audio>
-	{% endif %}
+	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
+		<h>This {{content_type}} has already been uploaded to the {{playground.title}} playground.</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+		
+			<div style="position:relative; width:200px; height: 200px; float:left;">
+				<div id="import-item" style='text-align:center; vertical-align:center;'><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="http://core.zeega.org/images/items/{{item_id}}_t.jpg" class="scaled" >
+				</div>
+			</div>
+		</div>	
+	</div>
 	
 	
-</div>
-	
-
-			
 
 
 {% endblock %}	
+
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/widget.js')}}"></script>  
+     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
 {% endblock %}
+
+
+

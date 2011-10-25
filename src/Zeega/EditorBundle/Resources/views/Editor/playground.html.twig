@@ -13,23 +13,22 @@
 						<li><a id="new-project" href="#">Create New Project</a></li>
 					</ul>
 			</div>
-			<br><br>
 			<div id="projects-lists">
 				<div class="item-title" style="font-size: 16px; ">My Projects</div><br><br>
-				<div id="my-projects" style="padding-left:20px;">
+				<div id="my-projects" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}'><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" >{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li>
+							<img src="http://zeega.org/images/about/james.jpg" class="projects-thumb" style="height: 30px; margin-right: 5px; float: left;" /><li class='project-{{project.id}}' style="margin-bottom: 20px; padding-top: 8px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" >{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>
 
-				<br></br>
-				<div class="item-title" style="font-size: 16px; ">Recently Upated Projects</div> <br><br>
-				<div id="all-projects" style="padding-left:20px;">
+
+				<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{playground.title}}</div> <br><br>
+				<div id="all-projects" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}'><a>{{project.title}}</a> <span class="timeStamp"> </li>
+							<img src="http://zeega.org/images/about/james.jpg" class="projects-thumb" style="height: 30px; margin-right: 5px; float: left;" /><li class='project-{{project.id}}' style="margin-bottom: 20px; padding-top: 8px;"><a>{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>

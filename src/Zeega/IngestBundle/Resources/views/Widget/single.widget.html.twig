@@ -4,156 +4,37 @@
 
 {% extends '::widget.base.html.twig' %}
 
-{% block title %}Zeega Alpha{% endblock %}
+{% block title %}Zeega Alpha {% endblock %}
 
 {% block body %}
 
 
-	
-	<div  style="text-align:left; width:395px; height: 60px;" >
-		<ul class='add-to-database' >
-			<li class="AddtoDB">
-				<input type="submit" class='add-media-submit' value="Add to Database" id="saveButton" />
-				
-			</li>
+	<div id="widget-wrapper" data-id="{{widget_id}}" style="margin-top:20px; color: white; font-size:14px;"> 
+		<h>Import Media:</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+			<div style="position:relative; width:200px; height: 200px; float:left;">
+		<div id="import-item" style='text-align:center; vertical-align:center;'><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="{{thumb_url}}" class="scaled" /></div>
+	</div>
+			<div style="position:relative; width:250px; float:right;">
+	<h>Title: {{title}}</h><br>
+	<h>Author: {{creator}}</h><br><br><br><br><br><br>
+
+
+
+		 
 		
-		</ul>	
-	</div><br />
-	
-
-
-<div id="mediaThumb">
-	{% if image is defined %}
-	
-	<img style="" id="image" src="{{item_url}}" class="scaled" '="">
-	{% endif %}
-	{% if video is defined %}
-	
-	<video width="375" controls="true">
-  		<source src="{{item_url}}" type="video/mp4; codecs=&quot;avc1.64001E, mp4a.40.2&quot;">
-  	</video>
-  	{% endif %}
-  	
-  	{% if audio is defined %}
-  	<audio class="extAudio" controls="true" src="{{item_url}}"></audio>
-	{% endif %}
-	
-	
+			<div id="item-add" >
+					<ul class="pill-buttons">
+						<li><a id="add-item" href="#">Add to Collection</a></li>
+					</ul>
+			</div>
+			<div id='message'></div>
 </div>
-	
-<form id="media_upload_form">
-
-	<div style="width:395px;">
-	<br><br>
-		<div id="mediaTitleLeft" style='float:left'>
-			<label for="title">Title</label>
-				<input name="title" id="title"  type="text" value="{{title}}">
-		</div>
-
-	<div id="clear"></div>
-
-
-		<div id="creator" style='float:left;'>
-			<label for="creator">Author</label>
-				<input name="creator" type="text" style="width:180px;" value="{{creator}}">
-		</div>
-		
-		<div id="alt_creator" style='float:right;'>
-			<label for="alt_creator">Author Handle</label>
-				<input name="alt_creator"  style="width:180px;"  value="{{alt_creator}}">
 		</div>	
-
-	<div id="clear"></div>
-	
-	
-
-		<div id="content_type"style='float:left;'>
-			<label for="content_type">Content Type</label>
-				<input name="content_type" style="width:180px;"  value="{{content_type}}">
-		</div>
-		<div id="date_created_start" style='float:right;'>
-			<label for="date_created_start">Date Created</label>
-				<input name="date_created_start"  style="width:180px;"  type="text" value="">
-		</div>	
-
-	<div id="clear"></div>
-	
-
-
-	<div id="mediaDescriptionWrapper">
-		<label for="description">Description</label>
-		<textarea type="textarea" name="description" id="description">{{description}}</textarea>
-	</div>	
-	
-	<label for="tags">Tags (comma separated)</label>
-		<textarea type="textarea" name="tags" id="tags">{{tags}}</textarea>
-	
-</div>
-
-
-	<div id="location">
-		
-			<label for="mapSearch">Location</label>
-			<input style="width:330px" name="map-search" id="map-search-input" type="text">
-				
-				<input type="button" id="map-search-submit"  value="Find" class="Find" ><br>
-			
-		<div id="map" style="position: relative; background-color: rgb(229, 227, 223); overflow-x: hidden; overflow-y: hidden; "><div style="position: absolute; left: 0px; top: 0px; overflow-x: hidden; overflow-y: hidden; width: 100%; height: 100%; z-index: 0; "><div style="position: absolute; left: 0px; top: 0px; overflow-x: hidden; overflow-y: hidden; width: 100%; height: 100%; z-index: 0; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default; -webkit-transform: translate(0px, 0px) scale(1); "><div style="z-index: 100; position: absolute; left: 0px; top: 0px; "><div style="position: absolute; left: 0px; top: 0px; z-index: 0; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="width: 256px; height: 256px; position: absolute; left: -81px; top: -77px; "></div><div style="width: 256px; height: 256px; position: absolute; left: -81px; top: 179px; "></div><div style="width: 256px; height: 256px; position: absolute; left: 175px; top: -77px; "></div><div style="width: 256px; height: 256px; position: absolute; left: 175px; top: 179px; "></div></div></div></div><div style="z-index: 101; position: absolute; left: 0px; top: 0px; "></div><div style="z-index: 102; position: absolute; left: 0px; top: 0px; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: -81px; top: -77px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: -81px; top: 179px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 175px; top: -77px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 175px; top: 179px; "></div></div></div><div style="width: 37px; height: 34px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 90px; top: 66px; z-index: 100; "><img style="position: absolute; left: -20px; top: 0px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 57px; height: 34px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/markers/marker_sprite.png"></div></div><div style="z-index: 103; position: absolute; left: 0px; top: 0px; "><div style="position: absolute; left: 0px; top: 0px; z-index: -1; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: -81px; top: -77px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: -81px; top: 179px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 175px; top: -77px; "></div><div style="width: 256px; height: 256px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 175px; top: 179px; "></div></div></div><div style="width: 20px; height: 34px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 90px; top: 66px; z-index: 100; "><img style="position: absolute; left: 0px; top: 0px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 57px; height: 34px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/markers/marker_sprite.png"></div></div><div style="z-index: 104; position: absolute; left: 0px; top: 0px; "></div><div style="z-index: 105; position: absolute; left: 0px; top: 0px; "><div style="width: 20px; height: 34px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 90px; top: 66px; z-index: 100; opacity: 0.01; " class="gmnoprint"><img style="position: absolute; left: 0px; top: 0px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 20px; height: 34px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/markers/marker_sprite.png" usemap="#gmimap0"><map name="gmimap0" id="gmimap0"><area href="javascript:void(0)" log="miw" coords="9,0,6,1,4,2,2,4,0,8,0,12,1,14,2,16,5,19,7,23,8,26,9,30,9,34,11,34,11,30,12,26,13,24,14,21,16,18,18,16,20,12,20,8,18,4,16,2,15,1,13,0" shape="poly" title="" style="cursor: pointer; "></map></div></div><div style="z-index: 106; position: absolute; left: 0px; top: 0px; "></div><div style="position: absolute; z-index: 0; left: 0px; top: 0px; "><div style="overflow-x: hidden; overflow-y: hidden; width: 200px; height: 200px; "><img style="width: 200px; height: 200px; " src="http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&amp;1i79185&amp;2i96845&amp;2e1&amp;3u10&amp;4m2&amp;1u200&amp;2u200&amp;5m3&amp;1e0&amp;2b1&amp;5sen-US&amp;token=10388"></div></div><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="position: absolute; left: 0px; top: 0px; z-index: 1; "><div style="position: absolute; left: 175px; top: -77px; width: 256px; height: 256px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 256px; height: 256px; " src="http://mt0.googleapis.com/vt?lyrs=m@160096930&amp;src=apiv3&amp;hl=en-US&amp;x=310&amp;y=378&amp;z=10&amp;s=Gali&amp;style=api%7Csmartmaps"></div><div style="position: absolute; left: -81px; top: -77px; width: 256px; height: 256px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 256px; height: 256px; " src="http://mt1.googleapis.com/vt?lyrs=m@160108173&amp;src=apiv3&amp;hl=en-US&amp;x=309&amp;y=378&amp;z=10&amp;s=G&amp;style=api%7Csmartmaps"></div><div style="position: absolute; left: -81px; top: 179px; width: 256px; height: 256px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 256px; height: 256px; " src="http://mt1.googleapis.com/vt?lyrs=m@160108371&amp;src=apiv3&amp;hl=en-US&amp;x=309&amp;y=379&amp;z=10&amp;s=Ga&amp;style=api%7Csmartmaps"></div><div style="position: absolute; left: 175px; top: 179px; width: 256px; height: 256px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 256px; height: 256px; " src="http://mt0.googleapis.com/vt?lyrs=m@160107071&amp;src=apiv3&amp;hl=en-US&amp;x=310&amp;y=379&amp;z=10&amp;s=Galil&amp;style=api%7Csmartmaps"></div></div></div></div></div><div style="margin-top: 2px; margin-bottom: 2px; margin-left: 2px; margin-right: 5px; z-index: 1000000; position: absolute; left: 0px; bottom: 0px; "><a style="position: static; overflow-x: visible; overflow-y: visible; float: none; display: inline; " title="Click to see this area on Google Maps" target="_blank" href="http://maps.google.com/maps?ll=42.373563,-71.118964&amp;z=10&amp;t=m&amp;hl=en-US"><div style="width: 62px; height: 24px; cursor: pointer; "><img style="position: absolute; left: 0px; top: 0px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 62px; height: 24px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/google_white.png"></div></a></div><div style="z-index: 1000001; position: absolute; right: 0px; bottom: 0px; "><div style="position: static; overflow-x: visible; overflow-y: visible; float: none; color: black; font-family: Arial, sans-serif; -webkit-user-select: none; display: block; font-size: 11px; white-space: nowrap; text-align: right; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; direction: ltr; "><span style="text-decoration: underline; cursor: pointer; color: rgb(119, 119, 204); ">Map Data</span><span style="color: rgb(0, 0, 0); display: none; ">Map data ©2011 Google</span><span style="color: rgb(0, 0, 0); "> - </span><a href="http://www.google.com/intl/en-US_US/help/terms_maps.html" target="_blank" style="color: rgb(119, 119, 204); ">Terms of Use</a></div></div><div style="position: absolute; font-family: Arial, sans-serif; z-index: 1000; overflow-x: visible; overflow-y: visible; -webkit-user-select: none; cursor: default; display: none; width: 200px; height: 180px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; position: relative; opacity: 0.9; width: 300px; height: 180px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/iphone-dialog-bg.png"><div style="font-weight: bold; color: white; text-align: center; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; position: absolute; left: 0px; top: 0px; font-size: 15px; width: 190px; ">Map Data</div><div style="position: absolute; font-family: inherit; bottom: 15px; cursor: pointer; background-color: transparent; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; font-size: 13px; left: 45px; width: 110px; height: 37px; "><img style="position: absolute; left: 0px; top: 0px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 120px; height: 40px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/iphone-dialog-button.png"><span style="color: white; text-align: center; width: 100%; height: 100%; background-color: transparent; position: absolute; left: 0px; top: 0px; padding-top: 9px; ">Close</span></div><div style="color: white; text-align: center; font-size: 13px; position: absolute; left: 25px; top: 38px; width: 150px; ">Map data ©2011 Google</div></div><div class="gmnoprint" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; -webkit-user-select: none; position: absolute; left: 0px; top: 0px; " controlwidth="32" controlheight="85"><div style="cursor: url(http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur), default; position: absolute; left: 0px; top: 0px; " controlwidth="32" controlheight="38"><div style="width: 32px; height: 38px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 0px; top: 0px; "><img style="position: absolute; left: -9px; top: -102px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 1029px; height: 255px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/cb/mod_cb_scout/cb_scout_sprite_api_002.png"></div><div style="width: 32px; height: 38px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 0px; top: 0px; visibility: hidden; "><img style="position: absolute; left: -107px; top: -102px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 1029px; height: 255px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/cb/mod_cb_scout/cb_scout_sprite_api_002.png"></div><div style="width: 32px; height: 38px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 0px; top: 0px; visibility: hidden; "><img style="position: absolute; left: -58px; top: -102px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 1029px; height: 255px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/cb/mod_cb_scout/cb_scout_sprite_api_002.png"></div><div style="width: 32px; height: 38px; overflow-x: hidden; overflow-y: hidden; position: absolute; left: 0px; top: 0px; visibility: hidden; "><img style="position: absolute; left: -205px; top: -102px; -webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; -webkit-user-drag: none; width: 1029px; height: 255px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/cb/mod_cb_scout/cb_scout_sprite_api_002.png"></div></div><div class="gmnoprint" controlwidth="0" controlheight="0" style="display: none; position: absolute; "><img src="http://maps.gstatic.com/intl/en_us/mapfiles/rotate.png" style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; cursor: pointer; width: 20px; height: 20px; " title="Rotate map 90 degrees"></div><div class="gmnoprint" controlwidth="19" controlheight="42" style="position: absolute; left: 7px; top: 43px; "><img style="-webkit-user-select: none; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; width: 19px; height: 42px; " src="http://maps.gstatic.com/intl/en_us/mapfiles/szc3d.png"><div style="position: absolute; left: 0px; top: 0px; width: 19px; height: 21px; cursor: pointer; " title="Zoom in"></div><div style="position: absolute; left: 0px; top: 21px; width: 19px; height: 21px; cursor: pointer; " title="Zoom out"></div></div></div></div></div>
-		<div id="locationDetails">	
-			<ul>
-				<li>
-					<label for="geo-lat">Latitude</label>
-						<input name="geo-lat" id="geo-lat" type="text" value="{{geo_lng}}">
-				</li>
-				<li>
-					<label for="geo-lng">Longitude</label>
-						<input name="geo-lng" id="geo-lng" type="text" value="{{geo_lat}}">
-				</li>
-				<li>
-					<label for="geo-city">City</label>
-						<input name="geo-city" id="geo-city" type="text">
-				</li>
-				<li>
-					<label for="geo-state">State</label>
-						<input name="geo-state" id="geo-state" type="text">
-				</li>
-				<li>
-					<label for="geo-neighborhood">Neighborhood</label>
-						<input name="geo-neighborhood" id="geo-neighborhood" type="text">
-				</li>
-			</ul>				
-		</div>
 	</div>
-	<div id="clear"><br></div>
-
-				
-				
-				<input type='hidden' id='widget-id' name='widget-id' value='{{widget_id}}'/>
-				<input type='hidden' id='playground-id'  name='playground-id' value='{{playground.id}}'/>
-	<div style="float:left;">
-	<label for="license">Licensing</label>
-		<span id="license" >{{license}}</span>
-		</div>
-
-	<div  style="float:right; width:180px;">
-		
-		<ul>
-			<li class="AddtoDB">
-				<input type="submit" class='add-media-submit' action="" value="Add to Database" id="saveButton" />
-			</li>
-		
-		</ul>	
-	</div>
-
-			</form>
-			
-			<br><br>
-	<div id="message" style="display:none; text-align:center"></div>
-	<br><br>
+{% endblock %}		
 	
-	
-	</div>
-{% endblock %}	
+
 {% block scripts %}
-     <script type="text/javascript" src="http://mlhplayground.org/gamma-james/js/widget/widget.js"></script> 
-{% endblock %}
+     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
+{% endblock %}	

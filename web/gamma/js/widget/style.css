@@ -1,0 +1,17 @@
+
+
+#zeega-overlay{
+		position:fixed;
+				right: 0;
+				top:0;
+				background-color:#333;
+				width:0;
+				height:150px;
+				opacity:.9;
+				z-index:500000;
+				border-radius-left:5px;
+
+
+
+
+}

@@ -27,8 +27,30 @@ function parseAddress(result){
 	}
 
 var widget = {
-
-	init:function(){
+	init: function(){
+	
+		$('#add-item').click(function(){
+			 $(this).fadeOut();
+			 console.log('form submitted');
+			 postdata={
+			 
+			 widgetId:$('#widget-wrapper').data('id'),
+			 
+			 }
+			 console.log(postdata);
+			 $.post(URL_PREFIX+'widget/persist',postdata,function(data){
+			 	console.log(data);
+			 	$('#add-item').fadeOut();
+			 	$('#message').html('Media Successfuly Added');
+			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
+			 
+			 });
+			return false;
+		
+		});
+	},
+	
+	initmap:function(){
 		var that=this;
 		if($('#zeega-lat').val()){
 		this.centerLatLng=new google.maps.LatLng($('#geo-lat').val(),$('#geo-lng').val());
@@ -86,21 +108,7 @@ var widget = {
 		
 		});
 		
-		$('.add-media-submit').click(function(){
-			 $(this).fadeOut();
-			 console.log('form submitted');
-			 var postdata=$('form').serialize();
-			 console.log(postdata);
-			 $.get('http://mlhplayground.org/Symfony/web/app_dev.php/widget?'+postdata,function(data){
-			 	console.log(data);
-			 	$('form').fadeOut();
-			 	$('.add-to-database').fadeOut();
-			 	$('#message').html(data).fadeIn();
-			 
-			 });
-			return false;
 		
-		});
 		
 		
 		

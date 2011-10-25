@@ -44,6 +44,10 @@ _security_check:
 _security_logout:
     pattern:  /logout
 
+persist:
+    pattern: /widget/persist
+    defaults: { _controller:  ZeegaIngestBundle:Widget:persist }
+
 widget:
     pattern: /widget/
     defaults: { _controller:  ZeegaIngestBundle:Widget:url }
