@@ -74,11 +74,14 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
+	'order!layers/zeega.rdio',
 	
 	//players
 	'order!players/zeega.html5av',
 	'order!players/zeega.av.publish',
-	'order!players/zeega.player.youtube',	
+	'order!players/zeega.player.youtube',
+	'order!players/zeega.rdio',
+	'order!players/zeega.rdio.token'	
 	];
 
 require(loadFiles, function($) {

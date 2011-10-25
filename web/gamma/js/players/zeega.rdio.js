@@ -15,7 +15,7 @@ var ZeegaRdioPlayer = Class.extend({
 
 	init: function(id,url,mediaIn,mediaOut,mediaVol,wrapperId){
 	
-		if(debug)console.log("rdioplayer:init");
+		if(debug)console.log("rdioplayer:init " + id); 
 		this._id = id;      
 		this._url = url;
 		this._dur = 30;
@@ -24,7 +24,6 @@ var ZeegaRdioPlayer = Class.extend({
 		this._stop_time = (parseFloat(mediaOut) == 0) ? this._dur : parseInt(mediaOut);
 		this._stop_time = this._stop_time.toFixed(3);
 		this._vol = parseFloat(mediaVol);
-		console.log("vol from db " + this._vol);
 		this._wrapper_id=wrapperId;
 		this._selectedArrow='none';
 	    this._seek_to = this._start_time;
@@ -32,6 +31,8 @@ var ZeegaRdioPlayer = Class.extend({
         this._loaded = false;
 		this._mode = 'idle';
 		this._last_known_state = 0;
+		if(debug)console.log("rdioplayer:init ended"); 
+		
 	},
 	
 	/**
@@ -39,7 +40,7 @@ var ZeegaRdioPlayer = Class.extend({
     */ 
 	ready:function ready() 
 	{
-	    if(debug) console.log("ready");
+	    console.log("ready");
         this._asset = $('#'+'apiswf-' + this._id).get(0);       //  get the swf object
         this.setMode('loading');                                //  ready to load
     },
@@ -222,7 +223,7 @@ var ZeegaRdioPlayer = Class.extend({
     {
         // The playback state has changed.
         // The state can be: 0 - paused, 1 - playing, 2 - stopped, 3 - buffering or 4 - paused.
-        console.log("playStateChange " + playState + " - " + this._mode);
+        
         this._last_known_state = playState;
         if(playState == 1)
         {
@@ -272,7 +273,6 @@ var ZeegaRdioPlayer = Class.extend({
 		}
 		else if(this._mode == 'playing')
 		{
-		    console.log("position " + position + " stop_time " + this._stop_time);
 		    if(position > (parseFloat(this._stop_time) + 0.2))
     		{
     		    this.playPause();
@@ -334,7 +334,6 @@ var ZeegaRdioPlayer = Class.extend({
 		if(debug)console.log("setVolume "+volume);	    
 	    this._vol = parseInt(volume);
 		this._asset.rdio_setVolume(this._vol / 100);
-		console.log("volume " + volume);
 	},
 	
 	updateAsset:function(startTime,stopTime){

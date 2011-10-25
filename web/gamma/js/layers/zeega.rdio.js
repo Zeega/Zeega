@@ -64,7 +64,7 @@ var RdioLayer = ProtoLayer.extend({
 			});
 		}
 	},
-	/*
+	
 	preloadMedia : function(){
 	    console.log("preload for " + this.model.id);
 		//make dom object
@@ -73,7 +73,7 @@ var RdioLayer = ProtoLayer.extend({
 		
 		container.attr({
 				'id' : 'layer-publish-'+this.model.id,
-				'data-layer-id' : this.model.id
+				'data-layer-id' : 'apiswf-'+this.model.id
 			});
 		
 		//$('#layer_'+this.model.id).append(img);
@@ -82,44 +82,42 @@ var RdioLayer = ProtoLayer.extend({
 		//draw to the workspace
 		$('#zeega-player').append(this.dom);
 		
-		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
+		this.player = new ZeegaRdioPlayer('player'+this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
         
         window['rdioListener-publish'+this.model.id] = this.player;
         
-        var div = $('<div>').attr('id','apiswf-'+this.model.id);
-        $('#player-'+this.model.id).append(div);
+        globalRdio = this.player;
+        var div = $('<div>').attr('id','apiswf-player'+this.model.id);
+        //$('#player-'+this.model.id).append(div);
         // load the rdio player
-
+        $(this.dom).append(div);
+        var that = this;
         var flashvars1 = {
             'playbackToken': playback_token, // from token.js
             'domain': domain,                // from token.js
-            'listener': 'rdioListener-publish'+this.model.id    // the global name of the object that will receive callbacks from the SWF
+            'listener': 'globalRdio'    // the global name of the object that will receive callbacks from the SWF
             };
         var params = { 'allowScriptAccess': 'always' };
         var attributes = {};       
 		
 		swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
-            'apiswf-'+this.model.id, // the ID of the element that will be replaced with the SWF
+            'apiswf-player'+this.model.id, // the ID of the element that will be replaced with the SWF
             1, 1, '9.0.0', 'expressInstall.swf', flashvars1, params, attributes);
-                     
-		//player triggers 'update' event to persist changes
-		$('#player-'+this.model.id).bind('updated',function()
-		{
-			console.log("loaded edit controls")
-			that.updateAttr();
-		});
-		
-		//player triggers 'ready' event to persist changes
-		$('#player-'+this.model.id).bind('ready',function()
-		{
-			that.ready();
-		});
+    
+	    console.log("rdio preload finished");
 	},
 	
 	drawPublish : function(z){
-		console.log('rdio drawPublish');
+		console.log('rdio drawPublish ');
+		if(this.player) this.player.play();
 	},
-	*/
+	
+	hidePublish : function(z){
+		console.log('rdio hidePublish ');
+		if(this.player) this.player.pause();
+	},
+	
+	
 	closeControls: function(){
 	
 		if(this.player) this.player.pause();
@@ -137,7 +135,6 @@ var RdioLayer = ProtoLayer.extend({
 				'z-index':'1000',
 				'top':'10px',
 				'right':'15px',
-				'background-image':'url("http://mlhplayground.org/gamma-james/css/layers/icons/zeega.audio.icon.png")',
 				'width':'48px',
 				'height':'40px'
 				});
@@ -168,6 +165,7 @@ var RdioLayer = ProtoLayer.extend({
 	},
 	
 	ready: function(){
+	    console.log("Player is ready");
 	    $('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this._id});
 	}
 	
