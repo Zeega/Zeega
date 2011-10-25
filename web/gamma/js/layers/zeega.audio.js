@@ -15,7 +15,9 @@ var AudioLayer = ProtoLayer.extend({
 							'volume' : 50,
 							
 						},
-	drawControls : function(template){
+						
+	drawControls : function(template)
+	{
 		
 		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
 		template.find('#controls').append(div);
@@ -24,7 +26,8 @@ var AudioLayer = ProtoLayer.extend({
 
 	},
 	
-	openControls: function(){
+	openControls: function()
+	{
 	console.log('Audio Controls Opened');
 	
 	var that=this;
@@ -41,7 +44,8 @@ var AudioLayer = ProtoLayer.extend({
 		}
 	},
 	
-	closeControls: function(){
+	closeControls: function()
+	{
 	
 		if(this.player) this.player.pause();
 		
@@ -69,6 +73,7 @@ var AudioLayer = ProtoLayer.extend({
 		$('#workspace').append(this.dom);
 		
 	},
+	
 	preloadMedia : function(){
 		//make dom object
 		var that=this;
@@ -95,20 +100,25 @@ var AudioLayer = ProtoLayer.extend({
 				
 		
 	},
-	drawPublish : function(){
+	drawPublish : function()
+	{
 		//make dom object
 		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
-		
 	},
-	exit: function(){
 	
+	hidePublish : function()
+	{
 		this.player.pause();
 	},
 	
+	exit: function()
+	{
+		this.player.pause();
+	},
 	
-	
-	updateAttr: function(){
+	updateAttr: function()
+	{
 	
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
@@ -127,7 +137,8 @@ var AudioLayer = ProtoLayer.extend({
 	
 	},
 	
-	getTemplate : function(){
+	getTemplate : function()
+	{
 	
 		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';

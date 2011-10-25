@@ -7,20 +7,23 @@
 
 var VideoLayer = ProtoLayer.extend({
 	
-	defaultAttributes : {
-							'title' : 'Video Layer',
-							'url' : 'none',
-							'x' : 0,
-							'y' : 0,
-							'h' : 100,
-							'w' : 100,
-							'volume' : 50,
-							'in'  : 0,
-							'out' : 0,
-							'opacity':1,
-							'aspect':1.33
-						},
-	drawControls : function(template){
+	defaultAttributes : 
+	{
+		'title' : 'Video Layer',
+		'url' : 'none',
+		'x' : 0,
+		'y' : 0,
+		'h' : 100,
+		'w' : 100,
+		'volume' : 50,
+		'in'  : 0,
+		'out' : 0,
+		'opacity':1,
+		'aspect':1.33
+	},
+						
+	drawControls : function(template)
+	{
 		
 		console.log('drawing video controls');
 		
@@ -55,73 +58,70 @@ var VideoLayer = ProtoLayer.extend({
 			suffix:'%'
 		};
 		
-	
-		
-		
 		template.find('#controls').append( makeCSSLayerSlider(widthArgs) );
+		
 		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
-		
-		
-		
 		
 		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
 			
-			$('#layer-preview-'+that.model.id).css({'height':$('#media_'+that.model.id).height(),'backgroundImage':'url(http://core.zeega.org/images/items/'+that.attr.item_id+'_s.jpg)'});
+			$('#layer-preview-'+that.model.id).css({
+				'height':$('#media_'+that.model.id).height(),
+				'backgroundImage':'url(http://core.zeega.org/images/items/'+that.attr.item_id+'_s.jpg)'
+			});
 			that.updateAttr();
 			
 		});
 		
-		template.find('#controls').find('.layer-slider').bind( "slidestart", function(event, ui) {
-			
-			
-			$('#layer-preview-'+that.model.id).css({'backgroundImage':'none'});
-			
+		template.find('#controls')
+			.find('.layer-slider')
+			.bind( "slidestart", function(event, ui) {
+				$('#layer-preview-'+that.model.id).css({'backgroundImage':'none'});
 			});
 		
-		
 		template.find('#controls').append( makeFullscreenButton());
-		template.find('#controls').find('.fullscreen-submit').click(function(){
-			$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-			$('#layer-edit-'+that.model.id).find('#Width-slider').slider("option", "value", 100 );
-			that.updateAttr();
-		});
+		
+		template.find('#controls').find('.fullscreen-submit')
+			.click(function(){
+				$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
+				$('#layer-edit-'+that.model.id).find('#Width-slider')
+					.slider("option", "value", 100 );
+				that.updateAttr();
+			});
 		
 		//change icon on layer template
 		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
 		template.find('.asset-type-icon').addClass('ui-icon-image');
 		
-		
-		
-		
 	},
-	openControls: function(){
-			var that=this;
+	
+	openControls: function()
+	{
+			var _this = this;
 			if(!this.editorLoaded){
 				
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
-				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+				that.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
 			
 				//player triggers 'update' event to persist changes
-				$('#player-'+that.model.id).bind('updated',function(){
-					that.updateAttr();
+				$('#player-'+_this.model.id).bind('updated',function(){
+					_this.updateAttr();
 				});
-				that.editorLoaded=true;
+				_this.editorLoaded=true;
 			}
 	},
-	closeControls: function(){
-		
+	
+	closeControls: function()
+	{
 		if(this.player) this.player.pause();
-		
-		
 	},
-	drawPreview : function(){
+	
+	drawPreview : function()
+	{
 		//make dom object
-
-
 		var container= $('<div>');
 		
-		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
+		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
 			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
@@ -142,13 +142,10 @@ var VideoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-			
-			
 		//need this to be accessable inside the draggable function
 		var that  = this;
 		
 		container.draggable({
-			
 			//when the image stops being dragged
 			stop : function(){
 				that.updateAttr();
@@ -166,10 +163,11 @@ var VideoLayer = ProtoLayer.extend({
 	},
 	
 	
-	preloadMedia : function(){
+	preloadMedia : function()
+	{
 		
 		//make dom object
-		var that=this;
+		var _this = this;
 		var container= $('<div>');
 		
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
@@ -202,11 +200,12 @@ var VideoLayer = ProtoLayer.extend({
 		//draw to the workspace
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		
-		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
+		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
 		
 	},
 	
-	drawPublish : function(z){
+	drawPublish : function(z)
+	{
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
@@ -220,7 +219,8 @@ var VideoLayer = ProtoLayer.extend({
 		this.player.pause();
 	},
 	
-	updateAttr: function(){
+	updateAttr: function()
+	{
 	
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
@@ -229,7 +229,8 @@ var VideoLayer = ProtoLayer.extend({
 		newAttr.y = this.dom.position().top/4.0;
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
 		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
-		if(this.editorLoaded){
+		if(this.editorLoaded)
+		{
 			console.log('Volume: '+this.player._vol);
 			newAttr.in=this.player._start_time;
 			newAttr.out=this.player._stop_time;
@@ -244,8 +245,8 @@ var VideoLayer = ProtoLayer.extend({
 	
 	
 	},
-	exit: function(){
-		
+	exit: function()
+	{
 		this.player.pause();
 	},
 	

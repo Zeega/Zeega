@@ -51,7 +51,8 @@ var GeoLayer = ProtoLayer.extend({
 				mapType:'satellite',
 			},
 
-	drawControls : function(template){
+	drawControls : function(template)
+	{
 		var opacityArgs = {
 			min:0,
 			max:1,
@@ -111,7 +112,8 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
-	preloadMedia : function(){
+	preloadMedia : function()
+	{
 		
 		console.log('map drawPublish');
 		//Create dom element
@@ -169,15 +171,20 @@ var GeoLayer = ProtoLayer.extend({
 		div.append(img);
 		$('#zeega-player').append(this.dom).trigger('ready',{'id':this._id});
 
-		
-
 	},
 	
-	drawPublish : function(z){
+	drawPublish : function(z)
+	{
 		this.dom.css({'z-index':z,'top':this.attr.y+'%','left':this.attr.x+'%'});
 	},
 	
-	drawPreview : function(){
+	hidePublish : function()
+	{
+		this.dom.css({'top':'-100%','left':'-100%'});		
+	},
+	
+	drawPreview : function()
+	{
 		
 		//Create dom element
 		this.editorLoaded=false;
@@ -253,7 +260,8 @@ var GeoLayer = ProtoLayer.extend({
 	},
 	
 	
-	openControls: function(){
+	openControls: function()
+	{
 	
 		//Load map/streetview into template controls 
 		
@@ -345,7 +353,8 @@ var GeoLayer = ProtoLayer.extend({
 		}
 	},
 	
-	updateAttr: function(){
+	updateAttr: function()
+	{
 		
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
@@ -360,7 +369,8 @@ var GeoLayer = ProtoLayer.extend({
 		
 		//check if map or streetview
 		
-		if(this.streetView.getVisible()){
+		if(this.streetView.getVisible())
+		{
 		
 			newAttr.type='streetview';
 			
@@ -375,8 +385,7 @@ var GeoLayer = ProtoLayer.extend({
 			if(this.streetView.getPano()){
 			newAttr.panoId=this.streetView.getPano();
 			}
-		}
-		else{
+		}else{
 		
 			newAttr.type='map';
 			
@@ -397,10 +406,10 @@ var GeoLayer = ProtoLayer.extend({
 		this.saveLayer();
 		
 		//update the dom map/streetview image
-		if(this.attr.type=='map'){
+		if(this.attr.type=='map')
+		{
 			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+$('#layer-preview-'+this.model.id).width()+"x"+$('#layer-preview-'+this.model.id).height()+"&maptype="+this.attr.mapType+"&sensor=false");
-		}
-		else{
+		}else{
 		
 		
 			//Sloppy attempt to pull corresponding streetview static tile

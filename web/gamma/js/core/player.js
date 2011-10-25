@@ -107,15 +107,24 @@ var Player = {
 	close : function()
 	{
 		console.log('Zeega Player Close');
+		var _this = this;
 		$(window).unbind( 'keydown' ); //remove keylistener
+		
+		//turn off/pause all media first
+		_.each(this.layersOnStage, function(layerID){
+			_this.layerClasses[layerID].hidePublish();
+		});
+		
+		
 		// remove the player div
 		$('#zeega-player').fadeOut( 450, function(){ $(this).remove() } ); 
 		
 		if(this.zeega)
 		{
+			//turn off previewMode
 			Zeega.previewMode = false;
+			//go to the node last viewed in the player
 			Zeega.loadNode(Zeega.route.nodes.get(this.currentNode));
-			
 		}
 	},
 	
