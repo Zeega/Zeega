@@ -196,13 +196,44 @@ var TextLayer = ProtoLayer.extend({
 			})
 		.css(cssObj);
 
+
+		div.addClass('text-layer-chrome-visible');
+		
+		/*
 		if (this.attr.content == ''){
 		    div.addClass('text-layer-chrome-visible');
 		}
+		
+		*/
 
 		//need this to be accessable inside various functions
 		var that  = this;
 		
+		
+		
+		
+		var mouseELmaster = function (event) {
+		    that.toggleFrameVis();
+		}
+
+		/* This bunch of stuff shows and hides the handle and outline, based on mouseover.
+		   It's only this complicated because the mouse isn't constrained within the workspace while dragging the layer */
+		//div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
+		/*
+		
+		div.bind('mousedown', function(event){
+			div.unbind('mouseenter.tl_master mouseleave.tl_master');
+			$(document).one('mouseup.tl_temp', function (event){
+				div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
+				var div_pos = div.offset();
+				if (event.pageX <= div_pos.left || event.pageX >= div_pos.left + div.width() || event.pageY <= div_pos.top || event.pageY >= div_pos.top + div.height()){
+				    that.toggleFrameVis();
+				}
+			    });
+		    });
+		    
+		   */ 
+		    
 		div.draggable({
 			
 			//when the image stops being dragged
@@ -273,10 +304,20 @@ var TextLayer = ProtoLayer.extend({
 			})
 		.css(cssObj);
 
+		/*
 		if (this.attr.content == ''){
 		    div.addClass('text-layer-chrome-visible');
 		}
-
+		
+		UNTIL RESOLVED CHROME ALWAYS VISIBLE
+		
+		*/
+		
+		
+ 		div.addClass('text-layer-chrome-visible');
+ 		
+ 		
+ 		
 		//need this to be accessable inside various functions
 		var that  = this;
 		
@@ -318,6 +359,9 @@ var TextLayer = ProtoLayer.extend({
 
 		content.bind('click mousedown', function(event) { event.stopPropagation()});
 	        content.bind('blur change', function(){that.updateAttr()});
+	        
+	        
+	        
 		div.append(content);
 		this.dom = div;
 		//draw to the workspace
@@ -326,7 +370,7 @@ var TextLayer = ProtoLayer.extend({
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
 		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		//$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
+		$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
 		
         },
 	
@@ -357,7 +401,7 @@ var TextLayer = ProtoLayer.extend({
 		newAttr.title =newAttr.content.substr(0,60);
 		$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
 		
-		
+		/*
 		
 		//Ensures that empty text-boxes have visible borders
 		if (newAttr.content.match(/\S/)){
@@ -368,6 +412,10 @@ var TextLayer = ProtoLayer.extend({
 		    console.log('addClass');
 		    this.dom.addClass('text-layer-chrome-visible');
 		}
+		
+		
+		*/
+		
 		// Note: These if statements protect (x,x,x,1) from conversion to plain rgb 
 		var newColor = contentPanel[0].style.color.replace(/[rgba()\s]/g,'').split(',');
 		if (newColor.length == 3){

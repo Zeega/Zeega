@@ -5,6 +5,7 @@
 	position: absolute;
 	background: url(../images/colorpicker_background.png);
 	font-family: Arial, Helvetica, sans-serif;
+	z-index:10;
 	display: none;
 }
 .colorpicker_color {
