@@ -30,6 +30,9 @@ var Player = {
 	nodesLoading : [],
 	layersLoading : [],
 	layersOnStage : [],
+	
+	waitToFinish : [],
+	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
 	
@@ -86,7 +89,7 @@ var Player = {
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
-			console.log('layer playback ended: ' + data.id);
+			_this.onPlaybackEnd(data.id);
 			return false;
 		});
 		
@@ -180,11 +183,16 @@ var Player = {
 
 		this.cleanupLayers();
 
+		//set timeout for auto advance
+		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
+		if(advanceValue) this.setAdvance( advanceValue );
+		
+		
 		//draw each layer
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
 		
 		_.each( targetNode.get('layers') , function(layerID, i){
-			
+
 			if( _.include(layersToDraw,layerID) )
 			{
 				//draw new layer to the preview window
@@ -200,10 +208,8 @@ var Player = {
 			
 		})
 		
-		//set timeout for auto advance
-		
-		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
-		if(advanceValue) this.setAdvance( advanceValue );
+
+			
 	},
 	
 	cleanupLayers : function()
@@ -323,6 +329,12 @@ var Player = {
 	advanceAfterMedia : function()
 	{
 		
+	},
+	
+	onPlaybackEnd : function(layerID)
+	{
+		console.log('layer playback ended: ' + layerID);
+		this.goRight();
 	},
 
 	// directional navigation
