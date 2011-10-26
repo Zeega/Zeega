@@ -76,7 +76,7 @@ function insertPager(items, page)
 					when we get up to within a threshold in the pages
 					then make another call to the database and make a new pager
 				*/
-				if(this.pages - page < 3)
+				if(this.pages - page < 3 && !Database.endOfItems)
 				{
 					console.log('load more!');
 					// call the database and add more item divs

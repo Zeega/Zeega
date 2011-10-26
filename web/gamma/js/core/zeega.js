@@ -183,7 +183,7 @@ var Zeega = {
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
 		//clear out existing stuff in icon tray
-		$('.bar-icon-tray').empty();
+		$('.icon-tray').empty();
 
 		//clear the workspace
 		$('#workspace').empty();
