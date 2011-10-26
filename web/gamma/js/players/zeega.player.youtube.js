@@ -178,7 +178,7 @@ var ZeegaYoutube = Class.extend({
 		$('#player-'+this._id).find('#volume-slider').slider({
 				min : 0,
 				max : 100,
-				value : vol,
+				value : that._vol,
 				step : 1,
 				slide: function(e,ui){
 					that._vol=ui.value;
