@@ -50,7 +50,7 @@ var ZeegaAV = Class.extend({
 	
 	canPlay:function(){
 	
-		if(debug)console.log("player:canPlay");
+		if(debug)console.log("player:canPlay"+ this._id);
 		this._canplay=1;
 		this._asset.currentTime=this._start_time;
 		this._asset.volume=this._vol;
@@ -69,15 +69,15 @@ var ZeegaAV = Class.extend({
 	
 	timeUpdate:function(){
 		
-		if(debug)console.log("player:updateCurrentTime");
+		if(debug)console.log("player:updateCurrentTime ");
 		
-		if(this._asset.currentTime>this._stop_time||this._asset.currentTime<this._start_time){
+		//	must include a slight margin of error (+/- 0.1) due to the impresision of in/out points
+		if(this._asset.currentTime > this._stop_time + .1 || this._asset.currentTime < this._start_time - .1){
 			$('#'+this._playerId).trigger('ended',{'id':this._id});
 			this.pause();
 			this._asset.currentTime=this._start_time;
 				
 		}
-	
 		
 		
 	},
