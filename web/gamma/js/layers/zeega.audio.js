@@ -34,16 +34,20 @@ var AudioLayer = ProtoLayer.extend({
 	
 	var that=this;
 		if(!this.editorLoaded){
-			var html = this.getTemplate();
-			$('#player-'+this.model.id).html(html);
-			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-			
-			//player triggers 'update' event to persist changes
-			$('#player-'+that.model.id).bind('updated',function(){
-				that.updateAttr();
+		    currPathName = window.location.pathname.split('/',2)[1];
+		    templateUrl = window.location.protocol + '//' + window.location.hostname + '/' + currPathName + '/web/gamma/js/templates/zeega.av.html';
+
+			$('#player-'+this.model.id).load(templateUrl,function(){
+				that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+				
+				//player triggers 'update' event to persist changes
+				$('#player-'+that.model.id).bind('updated',function(){
+					that.updateAttr();
+				});
+				that.editorLoaded=true;
 			});
-			that.editorLoaded=true;		
-		}
+		
+			}
 	},
 	
 	closeControls: function()
@@ -123,7 +127,6 @@ var AudioLayer = ProtoLayer.extend({
 			newAttr.out=this.player._stop_time;
 			newAttr.volume = Math.floor(this.player._vol*100.0);
 		}
-		
 		//set the attributes into the layer
 		this.updateLayerAttr(newAttr);
 		//save the layer back to the database

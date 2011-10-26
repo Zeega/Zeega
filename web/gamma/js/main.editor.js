@@ -22,6 +22,7 @@ var loadFiles = [
 	'order!libraries/underscore',
 	'order!libraries/backbone',
 	'order!libraries/spin',
+	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!jquery/ui/js/jquery-ui.min',
 	
 	//custom
@@ -30,12 +31,12 @@ var loadFiles = [
 	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
 	'order!helpers/sugar',
-	
+
 	//core
 	'order!core/zeega',
-	'order!core/zpub',
-	'order!core/player',
-	'order!core/database',
+    'order!core/zpub',
+    'order!core/player',
+    'order!core/database',
 	
 	//plugins
 	'order!jquery/plugins/spin',
@@ -73,12 +74,14 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
+	'order!layers/zeega.rdio',
 	
 	//players
 	'order!players/zeega.html5av',
 	'order!players/zeega.av.publish',
 	'order!players/zeega.player.youtube',	
-	
+	'order!players/zeega.rdio',
+	'order!players/zeega.rdio.token',
 	'order!zeega.config',
 	];
 
