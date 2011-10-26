@@ -177,16 +177,24 @@ var Zeega = {
 		}
 	},
 	
-	loadNode : function( node )
+	clearCurrentNode : function ()
 	{
 		//remove a prexisiting node style
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
 		//clear out existing stuff in icon tray
-		$('.bar-icon-tray').empty();
+		$('.icon-tray').empty();
 
 		//clear the workspace
 		$('#workspace').empty();
+		
+		Zeega.route.layerViewCollection._rendered = false;
+		Zeega.route.layerViewCollection._layerViews = [];
+	},
+	
+	loadNode : function( node )
+	{
+		this.clearCurrentNode();
 		
 		
 		//set global currentNode to the selected node
@@ -194,8 +202,7 @@ var Zeega = {
 
 		window.location.hash = '/node/'+ node.id; //change location hash
 		
-		Zeega.route.layerViewCollection._rendered = false;
-		Zeega.route.layerViewCollection._layerViews = [];
+
 
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
