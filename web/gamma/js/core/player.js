@@ -302,7 +302,7 @@ var Player = {
 		{
 			//after time in seconds
 			this.advanceAfterTimeElapsed(advanceValue)
-		}else if(adv == 0){
+		}else if(advanceValue == 0){
 			//after media
 			this.advanceAfterMedia();
 		}else{
