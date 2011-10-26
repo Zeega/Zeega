@@ -162,7 +162,7 @@ var YoutubeLayer = VideoLayer.extend({
 			console.log('Volume: '+this.player._vol);
 			newAttr.in=this.player._start_time;
 			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
+			newAttr.volume = this.player._vol;
 			
 
 		}
@@ -183,10 +183,10 @@ var YoutubeLayer = VideoLayer.extend({
 		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
-		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='<h4>In</h4><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
 		html +='</div>';
 		html +='<div id="avStop"> ';
-		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +='<h4>Out</h4> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
 		html +=	'</div>';
 		html +='</div>';
 		html +='<div id="avVolumeWrapper">';
