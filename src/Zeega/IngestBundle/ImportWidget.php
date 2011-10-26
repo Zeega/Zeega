@@ -140,7 +140,7 @@ class ImportWidget
 		 /** YOUTUBE ******************************************/   
 		 
 		
-		elseif(strstr($url,'youtube.com')){
+		elseif(strstr($url,'youtube.com')&&strstr($url,'v=')){
 			$archive='Youtube';
 			$split=explode('v=',$url);
 			$split=explode('&',$split[1]);

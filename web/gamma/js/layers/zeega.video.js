@@ -178,8 +178,8 @@ var VideoLayer = ProtoLayer.extend({
 			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
-			'top' : "-100%",
-			'left' : "-100%",
+			'top' : "-200%",
+			'left' : "-200%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.w+"%",
 			'height' : h+"%",
@@ -216,7 +216,7 @@ var VideoLayer = ProtoLayer.extend({
 	hidePublish :function()
 	{
 		
-		this.dom.css({'top':"-100%",'left':"-100%"});
+		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();
 	},
 	

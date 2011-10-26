@@ -28,7 +28,7 @@ var YoutubeLayer = VideoLayer.extend({
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
 				//that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-				that.player=new ZeegaYoutube(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id,600,400);
+				that.player=new ZeegaYoutube(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id,that.attr.w,that.attr.h);
 			
 				//player triggers 'update' event to persist changes
 				$('#player-'+that.model.id).bind('updated',function(){
@@ -106,8 +106,8 @@ var YoutubeLayer = VideoLayer.extend({
 			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
-			'top' : "-100%",
-			'left' : "-100%",
+			'top' : "-200%",
+			'left' : "-200%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.w+"%",
 			'height' : h+"%",
@@ -129,8 +129,9 @@ var YoutubeLayer = VideoLayer.extend({
 		
 		//draw to the workspace
 		$('#zeega-player').find('#preview-media').append(this.dom);
-		
-		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
+		that.player=new ZeegaYoutubePublish(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player', this.attr.w,this.attr.h);
+			
+		//this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
 		
 	},
 	
@@ -144,7 +145,7 @@ var YoutubeLayer = VideoLayer.extend({
 	hidePublish :function()
 	{
 		
-		this.dom.css({'top':"-100%",'left':"-100%"});
+		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();
 	},
 	
