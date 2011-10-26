@@ -21,6 +21,31 @@ class EditorController extends Controller
 {
     
  
+ 	public function initAction (){
+ 	
+ 	$users=$this->getDoctrine()
+						->getRepository('ZeegaUserBundle:User')
+						->findAll();
+	if(count($users)<1){
+				$factory = $this->get('security.encoder_factory');
+				$user = new User();
+				$user->setDisplayName('Admin');
+				$user->setUsername('Admin');
+				$user->setBio($user->getDisplayName().' is a pioneer in interactive documentary film, a newsreel director and a cinema theorist');
+				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
+				$user->setSalt(md5(time()));
+				$encoder = $factory->getEncoder($user);
+				$password = $encoder->encodePassword('admin', $user->getSalt());
+				$user->setUserRoles('ROLE_SUPER_ADMIN');
+				$user->setPassword($password);
+				$em->persist($user);
+				$em->flush();
+				return new Response('Initial User added');
+	}
+ 	else return new Response('Users already exist');
+ 	        	
+ 	
+ 	}
     
 	public function adminAction($short){
 	
@@ -98,7 +123,7 @@ class EditorController extends Controller
     	else return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
    	}
 
-    	
+    
     public function homeAction(){
     	
   		$user = $this->get('security.context')->getToken()->getUser();
