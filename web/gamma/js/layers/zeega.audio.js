@@ -62,6 +62,16 @@ var AudioLayer = ProtoLayer.extend({
 		var container= $('<div>').attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id
+				}).css({
+				
+				'position':'absolute',
+				'z-index':'1000',
+				'top':'10px',
+				'right':'15px',
+				//'background-image':'url("alpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
+				'width':'48px',
+				'height':'40px'
+
 				});
 				
 		this.dom = container;
@@ -84,7 +94,7 @@ var AudioLayer = ProtoLayer.extend({
 				
 		this.dom = container;
 		
-		//draw to the workspace
+		//draw to the player
 		$('#zeega-player').append(this.dom);
 		
 		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
@@ -93,23 +103,21 @@ var AudioLayer = ProtoLayer.extend({
 	},
 	drawPublish : function()
 	{
-		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
 	},
-	
-	hidePublish : function()
+
+	hidePublish :function()
 	{
+		
 		this.player.pause();
 	},
 	
-	exit: function()
-	{
+	exit: function(){
+	
 		this.player.pause();
 	},
 	
-	updateAttr: function()
-	{
+	updateAttr: function(){
 	
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;

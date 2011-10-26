@@ -9,6 +9,7 @@ Zeega\IngestBundle\Entity\Item:
       name: parent_collections
     parent_collections:
      targetEntity: Item
+     onDelete: CASCADE
      inversedBy:
       name: myParents
      joinTable:

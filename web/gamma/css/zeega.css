@@ -1339,7 +1339,7 @@ position: absolute;
 top: 16px;
 left: 32px;
 right: 55px;
-background-color: rgba(255,255,255,.8);
+background-color: rgba(0,0,0,.8);
 
 
 }
@@ -1348,8 +1348,8 @@ background-color: rgba(255,255,255,.8);
 #loadingInsideMP {
 
 position: absolute;
-background-color: red;
-opacity: .8;
+background-color: white;
+opacity: 1;
 width:0px;
 height: 10px;
 
@@ -1359,7 +1359,7 @@ height: 10px;
 
 #loadingStatusMP {
 
-background-color: red;
+background-color: white;
 opacity: .2;
 width:0px;
 height: 10px;
@@ -1418,7 +1418,7 @@ width:2px;
 
 left:0px;
 top:0px;
-background-color:black;
+background-color:green;
 z-index:21;
 }
 
@@ -1427,7 +1427,7 @@ z-index:21;
 
 right:0px;
 top:0px;
-background-color:black;
+background-color:red;
 z-index:22;
 
 }
@@ -1450,7 +1450,7 @@ border-color:red;
 left:0px;
 top:0px;
 height:20px;
-background-color:red;
+background-color:white;
 z-index:22;
 
 }
@@ -1462,8 +1462,8 @@ position:absolute;
 left:0px;
 height:10px;
 z-index:10;
-background-color:white;
-opacity:0.4;
+background-color:black;
+opacity:0.6;
 width:0px;
 
 }
@@ -1475,13 +1475,13 @@ position:absolute;
 right:0px;
 height:10px;
 z-index:10;
-background-color:black;
+background-color:white;
 opacity:0.4;
 width:0px;
 
 }
 
-div.arrow-down {
+#startMP .arrow-down {
   position:absolute;
   width:0px; 
   height:0px;
@@ -1490,7 +1490,21 @@ div.arrow-down {
   
   border-left:5px solid transparent;
   border-right:5px solid transparent;
-  border-top:10px solid #2f2f2f;
+  border-top:10px solid green;
+  font-size:0px;
+  line-height:0px;
+}
+
+#stopMP .arrow-down {
+  position:absolute;
+  width:0px; 
+  height:0px;
+  left:-4px;
+  top:-9px;
+  
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:10px solid red;
   font-size:0px;
   line-height:0px;
 }
@@ -1504,7 +1518,7 @@ div.box{
   height:8px;
   left:-3px;
   bottom:-2px;
-  background-color:red;
+  background-color:white;
 }
 
 div.arrow-up {

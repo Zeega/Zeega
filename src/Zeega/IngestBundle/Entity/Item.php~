@@ -566,4 +566,29 @@ class Item
     {
         return $this->source_type;
     }
+    /**
+     * @var string $item_uri
+     */
+    private $item_uri;
+
+
+    /**
+     * Set item_uri
+     *
+     * @param string $itemUri
+     */
+    public function setItemUri($itemUri)
+    {
+        $this->item_uri = $itemUri;
+    }
+
+    /**
+     * Get item_uri
+     *
+     * @return string 
+     */
+    public function getItemUri()
+    {
+        return $this->item_uri;
+    }
 }
