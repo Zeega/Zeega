@@ -58,11 +58,11 @@ class ImportWidget
 		
 		/**  ARCHIVE>ORG **************************************/
 		
-		
+		/*  NOT ACTIVE
 		
 		elseif(strstr($url,'archive.org/details')) $archive='archive.org';
 		
-		
+		*/
 	
 		/**  FLICKR   *****************************************/
 		
@@ -104,25 +104,32 @@ class ImportWidget
 		
 		/** BLIP.TV ********************************************/   									
 		
-		
+		/*  NOT ACTIVE
+	
 		elseif(strstr($url,'blip.tv')){
 				$archive='blip.tv';
 				$id=substr($urlClean[0],7);
 		}
+		*/
 		
 		
 		 /** FREE MUSIC ARCHIVE *******************************/
 		
-		
+		/*  NOT ACTIVE
+
 		elseif(strstr($url,'freemusicarchive.org/music/')){
 				$archive='Free Music Archive';
 				$split=explode('/music/',$url);
 				$id=$split[1];
 		}
 		 
-		 
+		*/
+		
+		
+		
 		 /** NATIONAL PUBLIC RADIO (NPR) ***********************/
 		 
+		  /*  NOT ACTIVE
 		  
 		elseif(strstr($url,'npr.org')){
 			$archive='NPR';
@@ -135,7 +142,7 @@ class ImportWidget
 				$id=$split[count($split)-2];
 			}
 		}
-		
+		*/
 		
 		 /** YOUTUBE ******************************************/   
 		 

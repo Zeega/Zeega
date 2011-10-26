@@ -15,7 +15,7 @@ class SearchController extends Controller
   
   
     public function searchAction(){
-	
+		$user = $this->get('security.context')->getToken()->getUser();
 		$queries=$this->getRequest()->get('query');
 		$results=array();
 		
@@ -27,7 +27,7 @@ class SearchController extends Controller
 				/** CHECK FOR SEARCH PARAMETERS, USE DEFAULTS WHEN NECESSARY */
 				
 				
-				
+				$query['userId']=$user->getId();
 				
 				if(!isset($query['output']))$query['output']=array();
 				else $output=$query['output'];
