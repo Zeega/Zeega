@@ -103,6 +103,9 @@ var Player = {
 		//add the player div
 		var t = $(this.template);
 		$('body').append(t);
+		
+		Zeega.clearCurrentNode();
+		
 		t.fadeIn();
 		
 	},
