@@ -688,6 +688,16 @@ body
 	font-size:0.8em;
 }
 
+.new-layer-icon
+{
+	float:left;
+}
+
+.new-layer-icon+.new-layer-icon
+{
+	margin-left:10px;
+}
+
 #sortable-layers li
 {
 	min-height:25px;
@@ -802,6 +812,37 @@ body
 	float:right;
 }
 
+.i-layer
+{
+	min-height:25px;
+	background:#444;
+	margin:1px 0;
+	overflow:hidden;
+	border:1px solid #555;
+}
+
+.i-layer-uber-bar
+{
+	padding:5px;
+}
+
+.i-layer-delete
+{
+	float:right;
+}
+
+.i-layer-title
+{
+	color: #ddd;
+	font-size: .8em;
+	font-weight: bold;
+	width: 545px;
+	overflow:hidden;
+	float:left;
+	cursor:pointer;
+}
+
+
 /*******************************
 
 	BRANCHES TAB
@@ -839,20 +880,38 @@ body
 	background:#000;
 	overflow:hidden;
 	position:relative;
+	margin-bottom:10px;
 }
 
-#node-controls
+.i-layer
 {
-	color: #ddd;
-	clear:both;
-	padding: 10px;
-	position: relative;
-	top:10px;
-	
-	-webkit-border-radius: 0 0 4px 4px;
+	margin-bottom:2px;
+}
+
+#visual-editor-bar
+{
+	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
+	padding: 5px 10px;
+	color: #ddd;
 	border : 1px solid #555;
-	
+	margin-bottom:10px;
+}
+
+.bar-title
+{
+	float:left;
+}
+
+.bar-icon-tray
+{
+	float:right;
+}
+
+#node-advance
+{
+	-webkit-border-radius: 0 0 4px 4px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));	
 }
 
 
