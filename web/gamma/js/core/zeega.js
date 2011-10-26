@@ -26,7 +26,7 @@ var Zeega = {
 	nodesReady : false,
 	layersReady : false,
 	
-	url_prefix : "http://alpha.zeega.org/test/web/app_dev.php/",
+	url_prefix : "",
 	
 	url_hash : {
 		'route' : null,
