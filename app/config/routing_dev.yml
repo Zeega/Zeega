@@ -48,6 +48,10 @@ persist:
     pattern: /widget/persist
     defaults: { _controller:  ZeegaIngestBundle:Widget:persist }
 
+init:
+    pattern: /init
+    defaults: { _controller:  ZeegaEditorBundle:Editor:init }
+
 widget:
     pattern: /widget/
     defaults: { _controller:  ZeegaIngestBundle:Widget:url }

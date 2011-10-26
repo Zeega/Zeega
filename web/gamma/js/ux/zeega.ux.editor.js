@@ -65,7 +65,7 @@ function insertPager(items, page)
 		.empty()
 		.paging( items, {
 //			format: "<(qqq-) nncnn (-ppp)>",
-			format: "[<nncnnn>",
+			format: "[<nncnn>",
 			perpage: 10,
 			lapping: 0,
 			page: page,
@@ -175,6 +175,43 @@ function embedButton()
 	Zeega.currentNode.save();
 }
 
+function addLayer(type)
+{
+	//add new layer
+	var newLayer = new Layer({'type':type});
+	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
+}
+
+function toggleWorkspace(el)
+{
+	var w = $(el).closest('.wrapper').find('.workspace');
+	if(w.is(':hidden'))
+	{
+		w.show('blind',{'direction':'vertical'});
+		$(el).html('–');
+	}else{
+		w.hide('blind',{'direction':'vertical'});
+		$(el).html('+');
+	}
+}
+
+function expandLayer(el)
+{
+	console.log('expanding layer');
+	var w = $(el).closest('.layer-wrapper').find('.layer-content');
+	if(w.is(':hidden'))
+	{
+		w.show('blind',{'direction':'vertical'});
+	}else{
+		w.hide('blind',{'direction':'vertical'});
+	}
+}
+
+function deleteLayer()
+{
+	console.log('deleting')
+}
+
 
 $(document).ready(function() {
 	
@@ -185,18 +222,6 @@ $(document).ready(function() {
 		Database.changeFilter(this);
 	});
 	
-	/*
-	
-	//try to remove preview window
-	$(document).keyup(function(e){
-		if (e.which ==27) //	ESC
-		{
-			Zeega.previewMode = false;
-			Zeega.loadNode(Zeega.currentNode);
-			if($('#workspace-preview-wrapper')) $('#workspace-preview-wrapper').fadeOut(450,function(){$(this).remove()});
-		}
-	});	
-	*/
 	
 	//node tray sortable and sorting events
 	
@@ -213,15 +238,6 @@ $(document).ready(function() {
 			Zeega.route.save();
 			console.log($(this).sortable('toArray'));
 		}
-	});
-	
-	//add new layer
-	$('#add-layer').click(function(){
-		var newLayer = new Layer({'type':$('#new-layer-type').val()});
-		
-		Zeega.addLayerToNode( Zeega.currentNode, newLayer );
-
-		$('#add-layer-modal').modal('hide');
 	});
 	
 	//search bar focus stuff
@@ -279,9 +295,11 @@ $(document).ready(function() {
 	});
 	
 
-	$('#radio input').change(function(){
+	$('#advance-controls input').change(function(){
 		var attr = Zeega.currentNode.get('attr');
-		attr.advance = $(this).val();
+		if(attr) attr.advance = $(this).val();
+		else attr = {'advance':$(this).val()}
+		
 		Zeega.currentNode.set({'attr':attr});
 		Zeega.currentNode.save();
 	});

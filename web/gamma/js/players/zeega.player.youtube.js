@@ -178,7 +178,7 @@ var ZeegaYoutube = Class.extend({
 		$('#player-'+this._id).find('#volume-slider').slider({
 				min : 0,
 				max : 100,
-				value : vol,
+				value : that._vol,
 				step : 1,
 				slide: function(e,ui){
 					that._vol=ui.value;
@@ -286,8 +286,8 @@ var ZeegaYoutube = Class.extend({
 	setVolume:function(volume){
 		if(isInt(volume)){
 			if(volume<=100&&volume>=0){
-				that._vol=volume;
-				that.youtubePlayer.setVolume(that._vol);
+				this._vol=volume;
+				this.youtubePlayer.setVolume(this._vol);
 			}
 		}
 	
@@ -339,7 +339,7 @@ var ZeegaYoutube = Class.extend({
 	},
 		
 	pause:function(){
-			if(this._interval){clearInterval(interval);}
+			if(this._interval){clearInterval(this._interval);}
 			if(debug)console.log("player:pause");
 			if(this._canplay){
 				this.youtubePlayer.pauseVideo();
@@ -349,7 +349,7 @@ var ZeegaYoutube = Class.extend({
 			
 	},
 	playPause:function(){
-		if(this._interval){clearInterval(interval);}
+		if(this._interval){clearInterval(this._interval);}
 		if(debug)console.log("player:playPause");
 		if(this.youtubePlayer){
 			if(this.youtubePlayer.getPlayerState()==1){
@@ -388,6 +388,7 @@ var ZeegaYoutubePublish = Class.extend({
 		this._can_play=0;
 		this._player_id=playerId;
 		this.youtubePlayer;
+		this._interval;
 		var youtubeWrapper=document.createElement('div');
 		youtubeWrapper.setAttribute('id','youtube-player-'+id);
 		$('#'+this._wrapper_id).append(youtubeWrapper);
@@ -407,16 +408,17 @@ var ZeegaYoutubePublish = Class.extend({
 		
 		this._loaded=true;
 		
-		addGlobal(id,'stateChange','layer-publish-'+id);
+		addGlobal(id,'stateChangePublish','layer-publish-'+id);
 		$('#layer-publish-'+id).bind('stateChangePublish',function(event,data){that.event(data);});
-		addGlobal(id,'timeUpdate','layer-publish-'+id);
+		addGlobal(id,'timeUpdatePublish','layer-publish-'+id);
 		$('#layer-publish-'+id).bind('timeUpdatePublish',function(event,data){that.timeUpdate(data);});
 		
 	},
 	
 	event: function(state){
 	console.log(state);
-		if(state==1&&this._canplay==0){			
+		if(state==1&&this._canplay==0){
+			console.log('setting vol');
 			this.youtubePlayer.pauseVideo();
 			this.youtubePlayer.setVolume(this._vol);
 			this._canplay=1;
@@ -437,13 +439,18 @@ var ZeegaYoutubePublish = Class.extend({
 	
 	timeUpdate:function(){
 		
+	
+		
 		if(debug)console.log("player:updateCurrentTime");
 		
-		if(this.youtubePlayer.getCurrentTime()>this._stop_time||this.youtubePlayer.getCurrentTime()<this._start_time){
+		if(this.youtubePlayer.getCurrentTime()>this._stop_time+2||this.youtubePlayer.getCurrentTime()<this._start_time-2){
 			if(interval){clearInterval(interval);}
+			$('#'+this._player_id).trigger('ended',{'id':this._id});
+			
 			this.youtubePlayer.seekTo(this._start_time);
 			this.pause();	
-			$('#'+this._playerId).trigger('ended',{'id':this._id});
+			$('#'+this._player_id).trigger('ended',{'id':this._id});
+			
 			console.log('youtube ended');
 		}
 		
@@ -517,8 +524,8 @@ var ZeegaYoutubePublish = Class.extend({
 	setVolume:function(volume){
 		if(isInt(volume)){
 			if(volume<=100&&volume>=0){
-				that._vol=volume;
-				that.youtubePlayer.setVolume(that._vol);
+				this._vol=volume;
+				this.youtubePlayer.setVolume(this._vol);
 			}
 		}
 	
@@ -568,7 +575,7 @@ var ZeegaYoutubePublish = Class.extend({
 	},
 		
 	pause:function(){
-			if(this._interval){clearInterval(interval);}
+			if(this._interval){clearInterval(this._interval);}
 			if(debug)console.log("player:pause");
 			if(this._canplay){
 				this.youtubePlayer.pauseVideo();
@@ -579,17 +586,19 @@ var ZeegaYoutubePublish = Class.extend({
 	},
 	
 	play:function(){
-			if(debug)console.log("player:play");
+	if(this._interval){clearInterval(this._interval);}
+			if(debug)console.log("youtube player:play");
 			if(this._canplay){
+				
+				this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
 				this.youtubePlayer.playVideo();
-				this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish",250);
 			}
 			
 			
 	},
 	playPause:function(){
-		if(this._interval){clearInterval(interval);}
-		if(debug)console.log("player:playPause");
+		if(this._interval){clearInterval(this._interval);}
+		if(debug)console.log("youtube player:playPause");
 		if(this.youtubePlayer){
 			if(this.youtubePlayer.getPlayerState()==1){
 				this.youtubePlayer.pauseVideo();
@@ -597,7 +606,8 @@ var ZeegaYoutubePublish = Class.extend({
 			}
 			else{
 				this.youtubePlayer.playVideo();
-				 interval=setInterval("LayerGlobals["+this._id+"].timeUpdatePublish",250);
+				
+				 this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
 				$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
 			}
 		}

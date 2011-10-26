@@ -90,13 +90,13 @@ var ImageLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 		//need this to be accessable inside the draggable function
-		var that  = this;
+		var _this  = this;
 		
 
 		div.draggable({
 			//when the image stops being dragged
 			stop : function(){
-				that.updateAttr();
+				_this.updateAttr();
 			}
 		});
 
@@ -141,15 +141,17 @@ var ImageLayer = ProtoLayer.extend({
 		$(this.dom).append(img);
 		//add to dom
 
-		$('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this.model.id});
+		$('#zeega-player').find('#preview-media')
+			.append(this.dom)
+			.trigger('ready',{'id':this.model.id});
 		
 	},
 	
 	
-	drawPublish : function(z){
+	drawPublish : function(z)
+	{
 		console.log('image drawPublish');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
-
 	},
 	
 	hidePublish :function()

@@ -135,6 +135,12 @@ class ItemRepository extends EntityRepository
 				$query->add('where', 'i.content_type != :tag')
 			   		->setParameter('tag','Tag');
 			}
+			elseif($request['contentType']=='mine'){
+			
+				$query->innerJoin('i.user', 'u')
+			   		->add('where', 'u.id =:userId')
+			   		->setParameter('userId',$request['userId']);
+			}
 			else{
 				$query->add('where', 'i.content_type = :contentType')
 			   		->setParameter('contentType',$request['contentType']);
@@ -184,6 +190,7 @@ class ItemRepository extends EntityRepository
 			if(!IS_NULL($request['offset']))$query->setFirstResult($request['offset']);
 			
 			   return $query
+			   	->orderBy('i.id','DESC')
 				->getQuery()
 				->getArrayResult();
 			  

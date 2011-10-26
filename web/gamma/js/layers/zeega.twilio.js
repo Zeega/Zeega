@@ -1,12 +1,12 @@
 
 /************************************
 
-	AUDIO LAYER CHILD CLASS
+	TWILIO LAYER CHILD CLASS
 	
 
 ************************************/
 
-var AudioLayer = ProtoLayer.extend({
+var TwilioLayer = ProtoLayer.extend({
 	defaultAttributes : {
 							'title' : 'Video Layer',
 							'url' : 'none',
@@ -81,7 +81,7 @@ var AudioLayer = ProtoLayer.extend({
 		this.dom = container;
 		
 		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
+		$('#zeega-player').append(this.dom);
 		
 		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
 				

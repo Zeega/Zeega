@@ -125,8 +125,6 @@ input:invalid, textarea:invalid { border-radius: 1px; -moz-box-shadow: 0px 0px 5
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: #f0dddd; }
 
 
-::-moz-selection{ background: #FF5E99; color:#fff; text-shadow: none; }
-::selection { background:#FF5E99; color:#fff; text-shadow: none; }
 a:link { -webkit-tap-highlight-color: #FF5E99; }
 button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
@@ -688,6 +686,16 @@ body
 	font-size:0.8em;
 }
 
+.new-layer-icon
+{
+	float:left;
+}
+
+.new-layer-icon+.new-layer-icon
+{
+	margin-left:10px;
+}
+
 #sortable-layers li
 {
 	min-height:25px;
@@ -802,6 +810,37 @@ body
 	float:right;
 }
 
+.i-layer
+{
+	min-height:25px;
+	background:#444;
+	margin:1px 0;
+	overflow:hidden;
+	border:1px solid #555;
+}
+
+.i-layer-uber-bar
+{
+	padding:5px;
+}
+
+.i-layer-delete
+{
+	float:right;
+}
+
+.i-layer-title
+{
+	color: #ddd;
+	font-size: .8em;
+	font-weight: bold;
+	width: 545px;
+	overflow:hidden;
+	float:left;
+	cursor:pointer;
+}
+
+
 /*******************************
 
 	BRANCHES TAB
@@ -839,20 +878,38 @@ body
 	background:#000;
 	overflow:hidden;
 	position:relative;
+	margin-bottom:10px;
 }
 
-#node-controls
+.i-layer
 {
-	color: #ddd;
-	clear:both;
-	padding: 10px;
-	position: relative;
-	top:10px;
-	
-	-webkit-border-radius: 0 0 4px 4px;
+	margin-bottom:2px;
+}
+
+#visual-editor-bar
+{
+	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));
+	padding: 5px 10px;
+	color: #ddd;
 	border : 1px solid #555;
-	
+	margin-bottom:10px;
+}
+
+.bar-title
+{
+	float:left;
+}
+
+.bar-icon-tray
+{
+	float:right;
+}
+
+#node-advance
+{
+	-webkit-border-radius: 0 0 4px 4px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));	
 }
 
 
@@ -1108,10 +1165,9 @@ Media Player and Controls
 .timeLEF {
 
 position: relative;
-border: 1px dotted #999;
 height: 145px;
-margin-top: 15px;
-margin-left: 3px;
+
+
 
 }
 
@@ -1127,9 +1183,8 @@ width: 100%;
 #avStart {
 
 position: absolute;
-margin-top: 4px;
 
-left: 10px;
+
 }
 
 #avStop {
@@ -1137,7 +1192,7 @@ left: 10px;
 position: absolute;
 
 left: 125px;
-margin-top: 4px;
+
 
 }
 
@@ -1148,7 +1203,7 @@ input[name=avStartMinutes] {
 
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:#555;
 text-align:right;
 }
 
@@ -1158,14 +1213,14 @@ input[name=avStopMinutes] {
 
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:#555;
 text-align:right;
 }
 input[name=avStartSeconds] {
 
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:#555;
 text-align:left;
 }
 
@@ -1173,7 +1228,7 @@ input[name=avStopSeconds] {
 
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:#555;
 text-align:left;
 }
 
@@ -1280,7 +1335,7 @@ position: absolute;
 top: 16px;
 left: 32px;
 right: 55px;
-background-color: rgba(255,255,255,.8);
+background-color: rgba(0,0,0,.8);
 
 
 }
@@ -1289,8 +1344,8 @@ background-color: rgba(255,255,255,.8);
 #loadingInsideMP {
 
 position: absolute;
-background-color: red;
-opacity: .8;
+background-color: white;
+opacity: 1;
 width:0px;
 height: 10px;
 
@@ -1300,7 +1355,7 @@ height: 10px;
 
 #loadingStatusMP {
 
-background-color: red;
+background-color: white;
 opacity: .2;
 width:0px;
 height: 10px;
@@ -1359,7 +1414,7 @@ width:2px;
 
 left:0px;
 top:0px;
-background-color:black;
+background-color:green;
 z-index:21;
 }
 
@@ -1368,7 +1423,7 @@ z-index:21;
 
 right:0px;
 top:0px;
-background-color:black;
+background-color:red;
 z-index:22;
 
 }
@@ -1391,7 +1446,7 @@ border-color:red;
 left:0px;
 top:0px;
 height:20px;
-background-color:red;
+background-color:white;
 z-index:22;
 
 }
@@ -1403,8 +1458,8 @@ position:absolute;
 left:0px;
 height:10px;
 z-index:10;
-background-color:white;
-opacity:0.4;
+background-color:black;
+opacity:0.6;
 width:0px;
 
 }
@@ -1416,13 +1471,13 @@ position:absolute;
 right:0px;
 height:10px;
 z-index:10;
-background-color:black;
+background-color:white;
 opacity:0.4;
 width:0px;
 
 }
 
-div.arrow-down {
+#startMP .arrow-down {
   position:absolute;
   width:0px; 
   height:0px;
@@ -1431,7 +1486,21 @@ div.arrow-down {
   
   border-left:5px solid transparent;
   border-right:5px solid transparent;
-  border-top:10px solid #2f2f2f;
+  border-top:10px solid green;
+  font-size:0px;
+  line-height:0px;
+}
+
+#stopMP .arrow-down {
+  position:absolute;
+  width:0px; 
+  height:0px;
+  left:-4px;
+  top:-9px;
+  
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:10px solid red;
   font-size:0px;
   line-height:0px;
 }
@@ -1445,7 +1514,7 @@ div.box{
   height:8px;
   left:-3px;
   bottom:-2px;
-  background-color:red;
+  background-color:white;
 }
 
 div.arrow-up {

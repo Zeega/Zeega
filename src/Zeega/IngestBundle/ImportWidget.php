@@ -58,11 +58,11 @@ class ImportWidget
 		
 		/**  ARCHIVE>ORG **************************************/
 		
-		
+		/*  NOT ACTIVE
 		
 		elseif(strstr($url,'archive.org/details')) $archive='archive.org';
 		
-		
+		*/
 	
 		/**  FLICKR   *****************************************/
 		
@@ -104,25 +104,32 @@ class ImportWidget
 		
 		/** BLIP.TV ********************************************/   									
 		
-		
+		/*  NOT ACTIVE
+	
 		elseif(strstr($url,'blip.tv')){
 				$archive='blip.tv';
 				$id=substr($urlClean[0],7);
 		}
+		*/
 		
 		
 		 /** FREE MUSIC ARCHIVE *******************************/
 		
-		
+		/*  NOT ACTIVE
+
 		elseif(strstr($url,'freemusicarchive.org/music/')){
 				$archive='Free Music Archive';
 				$split=explode('/music/',$url);
 				$id=$split[1];
 		}
 		 
-		 
+		*/
+		
+		
+		
 		 /** NATIONAL PUBLIC RADIO (NPR) ***********************/
 		 
+		  /*  NOT ACTIVE
 		  
 		elseif(strstr($url,'npr.org')){
 			$archive='NPR';
@@ -135,7 +142,7 @@ class ImportWidget
 				$id=$split[count($split)-2];
 			}
 		}
-		
+		*/
 		
 		 /** YOUTUBE ******************************************/   
 		 
@@ -213,6 +220,7 @@ class ImportWidget
 		$item=new Item();
 		$item->setContentType($urlInfo['contentType']);
 		$item->setItemUrl($urlInfo['itemUrl']);
+		$item->setItemUri($urlInfo['itemUrl']);
 		$item->setTitle($urlInfo['title']);
 		$item->setCreator('Unknown');
 		$metadata=new Metadata();
@@ -273,6 +281,7 @@ class ImportWidget
 		
 			$metadata->setThumbUrl($sizes['Small']['source']);
 			$item->setItemUrl($sizes[$itemSize]['source']);
+			$item->setItemUri($sizes[$itemSize]['source']);
 			$media->setWidth($sizes[$itemSize]['width']);
 			$media->setHeight($sizes[$itemSize]['height']);
 			
@@ -354,6 +363,7 @@ class ImportWidget
 			$item->setSourceType('Audio');
 			$item->setArchive('SoundCloud');
 			$item->setItemUrl((string)$xml->{'stream-url'});
+			$item->setItemUri((string)$xml->{'stream-url'});
 			//$item->setDateCreatedStart((string)$xml->{'created-at'});
 			$duration=(string)$xml->{'duraton'};
 			$media->setDuration(floor($duration/1000));
@@ -416,6 +426,7 @@ class ImportWidget
 	$item->setContentType('Audio');
 	$item->setArchive('SoundCloud');
 	$item->setItemUrl((string)$xml->{'stream-url'});
+	$item->setItemUri((string)$xml->{'stream-url'});
 	$item->setDateCreatedStart(new DateTime((string)$xml->{'created-at'}));
 	$duration=(string)$xml->{'duraton'};
 	$media->setDuration(floor($duration/1000));
@@ -499,7 +510,9 @@ class ImportWidget
 				{
 					$att=$blipmedia->{'link'}->attributes();
 					if(strstr($att['type'],'m4v')&&$blipmedia->{'role'}=='Blip SD'){
-						{$item->setItemUrl((string)$att['href']); $mediaFound=1;
+						{
+						$item->setItemUrl((string)$att['href']); $mediaFound=1;
+						$item->setItemUri((string)$att['href']); $mediaFound=1;
 						$media->setWidth((int)$blipmedia->{'width'});
 						$media->setHeight((int)$blipmedia->{'height'});
 						$media->setDuration((int)$blipmedia->{'duration'});

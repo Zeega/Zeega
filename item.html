@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  
+
+
+<!-- jQuery -->
+
+<script type="text/javascript" src="http://zeega.org/jquery/js/jquery-1.4.2.min.js"></script> 
+
+<script>
+
+$(document).ready(function(){
+
+$('body').keydown(function(event) {
+				
+			console.log("key: "+event.keyCode);
+				});
+
+var rand =Math.floor(Math.random()*1000);
+var postdata={
+
+	title: 'Adele - Lullaby',
+	creator: 'Filipe',
+	item_url: 'http://freemusicarchive.org/music/download/71323663dfdc9bcff9b7f40fa7fd5a8707186477',
+    attribution_url: 'http://freemusicarchive.org/music/_ghost/ccMixter_1108/ghost_-_Lullaby',
+    content_type:'Audio',
+    source_type:'Audio',
+    archive: 'FMA archive',
+    //thumb_url: 'http://memory.loc.gov/award/mhsdalad/010000/010001r.jpg',
+};
+
+$.post('http://alpha.zeega.org/test/web/app_dev.php/items',postdata, function(data) {
+  $('.result').html('<img src="http://core.zeega.org/images/items/'+data+'_t.jpg" />');
+});
+
+
+});
+
+</script>
+
+</head>
+<body>
+
+<div id="output" class='result'>
+</div>
+</body>
+
+
