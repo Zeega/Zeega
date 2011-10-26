@@ -9,6 +9,7 @@ var Database = {
 	
 	page : 0,
 	customSearch : false,
+	endOfItems : false,
 	
 	
 	init : function()
@@ -49,6 +50,9 @@ var Database = {
 		this.viewCollection._itemBundles = [];
 		this.viewCollection._rendered = false;
 		this.page = 0;
+		
+		this.endOfItems = false;
+		
 
 		$('#tab-database-slide-window').spin('small','white');
 	},
@@ -187,6 +191,12 @@ var Database = {
 		
 		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
 			var response = $.parseJSON(data);
+			
+			
+			if(response.items.length < 100)
+			{
+				this.endOfItems = true;
+			}
 			
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
