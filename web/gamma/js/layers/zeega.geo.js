@@ -247,9 +247,6 @@ var GeoLayer = ProtoLayer.extend({
 
 	drawPublish : function(z)
 	{
-		console.log('geo Publish');
-		console.log(this.attr);
-		console.log(this.dom);
 		this.dom.css({'z-index':z,'top':this.attr.y+'%','left':this.attr.x+'%'});
 	},
 	

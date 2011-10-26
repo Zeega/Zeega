@@ -295,9 +295,11 @@ $(document).ready(function() {
 	});
 	
 
-	$('#radio input').change(function(){
+	$('#advance-controls input').change(function(){
 		var attr = Zeega.currentNode.get('attr');
-		attr.advance = $(this).val();
+		if(attr) attr.advance = $(this).val();
+		else attr = {'advance':$(this).val()}
+		
 		Zeega.currentNode.set({'attr':attr});
 		Zeega.currentNode.save();
 	});
