@@ -58,7 +58,7 @@ var AudioLayer = ProtoLayer.extend({
 				'z-index':'1000',
 				'top':'10px',
 				'right':'15px',
-				'background-image':'url("alpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
+				//'background-image':'url("alpha.zeega.org/demo/web/gamma/css/layers/icons/zeega.audio.icon.png")',
 				'width':'48px',
 				'height':'40px'
 				});
@@ -101,12 +101,17 @@ var AudioLayer = ProtoLayer.extend({
 		this.player.play();
 		
 	},
+	hidePublish :function()
+	{
+		
+		this.dom.css({'top':"-200%",'left':"-200%"});
+		this.player.pause();
+	},
+	
 	exit: function(){
 	
 		this.player.pause();
 	},
-	
-	
 	
 	updateAttr: function(){
 	
