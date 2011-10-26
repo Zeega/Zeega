@@ -11,10 +11,10 @@ var LayerView = Backbone.View.extend({
 		});
 	},
 	
-	
+	//draws the controls
 	render : function()
 	{
-
+		
 		this.model.bind('remove',this.remove);
 		var _this = this;
 		var text = this.model.get('text');
@@ -25,9 +25,7 @@ var LayerView = Backbone.View.extend({
 		
 		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
 		
-		var template = $('#layer-list-template')
-			.clone()
-			.attr('id', 'layer-edit-'+this.model.id );
+		var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
 		
 		//shorten title if necessary
 		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
@@ -140,7 +138,7 @@ var LayerView = Backbone.View.extend({
 
 var LayerViewCollection = Backbone.View.extend({
 	//see the NodeViewCollection below for documentation
-	el : $('#tab-layers ul')[0],
+	el : $('#tab-layers').find('#sortable-layers'),
 	
 	initialize : function()
 	{
@@ -189,3 +187,45 @@ var LayerViewCollection = Backbone.View.extend({
 	}
 	
 });
+
+
+var layerTemplate = '<div id="" class="layer-list clearfix">';
+layerTemplate += 		'<div class="layer-uber-bar clearfix">';
+layerTemplate += 			'<div class="layer-icon">';
+layerTemplate += 				'<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>';
+layerTemplate += 			'</div>';
+layerTemplate += 		'<div class="layer-title">Layer Name</div>';
+layerTemplate += 		'<div class="layer-uber-controls">';
+layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
+layerTemplate += 		'</div>';
+layerTemplate += 		'<div class="layer-drag-handle">';
+layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
+layerTemplate += 		'</div>';
+layerTemplate += 	'</div>';
+layerTemplate += 	'<div class="hidden layer-content clearfix">';
+layerTemplate += 		'<div id="controls"></div>';
+layerTemplate += 		'<br />';
+layerTemplate += 		'<form id="layer-persist">';
+layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist layer to route</label>';
+layerTemplate += 		'</form>';
+layerTemplate += 	'</div>';
+layerTemplate += '</div>';
+
+var iLayerTemplate = 	"<div id='i-layer-template' class='i-layer clearfix layer-wrapper'>";
+iLayerTemplate +=			"<div class='i-layer-uber-bar clearfix' onclick='expandLayer(this);return false;'>";
+iLayerTemplate +=				"<div class='layer-icon'>";
+iLayerTemplate +=					"<span class='asset-type-icon ui-icon ui-icon-pin-w'></span>";
+iLayerTemplate +=				"</div>";
+iLayerTemplate +=				"<div class='i-layer-title'>Layer Name</div>";
+iLayerTemplate +=				"<div class='i-layer-uber-controls'>";
+iLayerTemplate +=					"<span class='i-layer-delete ui-icon ui-icon-trash' onclick='deleteLayer();return false;'></span>";
+iLayerTemplate +=				"</div>";
+iLayerTemplate +=			"</div>";
+iLayerTemplate +=			"<div class='hidden layer-content clearfix'>";
+iLayerTemplate +=				"<div id='controls'></div>";
+iLayerTemplate +=				"<br />";
+iLayerTemplate +=				"<form id='layer-persist'>";
+iLayerTemplate +=					"<input id='persist' type='checkbox' name='vehicle' value='persist' /> <label for='persist'>Persist layer to route</label>";
+iLayerTemplate +=				"</form>";
+iLayerTemplate +=			"</div>";
+iLayerTemplate +=		"</div>";

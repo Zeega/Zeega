@@ -1,12 +1,12 @@
 
 /************************************
 
-	AUDIO LAYER CHILD CLASS
+	TWILIO LAYER CHILD CLASS
 	
 
 ************************************/
 
-var AudioLayer = ProtoLayer.extend({
+var TwilioLayer = ProtoLayer.extend({
 	defaultAttributes : {
 							'title' : 'Video Layer',
 							'url' : 'none',

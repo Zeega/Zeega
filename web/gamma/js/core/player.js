@@ -90,7 +90,6 @@ var Player = {
 			return false;
 		});
 		
-
 		this.gotoNode(this.currentNode);
 		
 	},
@@ -109,15 +108,24 @@ var Player = {
 	close : function()
 	{
 		console.log('Zeega Player Close');
+		var _this = this;
 		$(window).unbind( 'keydown' ); //remove keylistener
+		
+		//turn off/pause all media first
+		_.each(this.layersOnStage, function(layerID){
+			_this.layerClasses[layerID].hidePublish();
+		});
+		
+		
 		// remove the player div
 		$('#zeega-player').fadeOut( 450, function(){ $(this).remove() } ); 
 		
 		if(this.zeega)
 		{
+			//turn off previewMode
 			Zeega.previewMode = false;
+			//go to the node last viewed in the player
 			Zeega.loadNode(Zeega.route.nodes.get(this.currentNode));
-			
 		}
 	},
 	
@@ -126,7 +134,8 @@ var Player = {
 	{
 		this.currentNode = nodeID;
 		// try to preload the node
-		this.preloadNode(nodeID);
+		//this.preloadNode(nodeID);
+		this.preloadAhead(nodeID);
 	},
 	
 	onLayerLoad : function(layerID)
@@ -175,10 +184,11 @@ var Player = {
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
 		
 		_.each( targetNode.get('layers') , function(layerID, i){
+			
 			if( _.include(layersToDraw,layerID) )
 			{
 				//draw new layer to the preview window
-				console.log('drawing layer: '+layerID)
+				
 				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
 				_this.layersOnStage.push(layerID);
 			
@@ -189,31 +199,29 @@ var Player = {
 			}
 			
 		})
+		
+		//set timeout for auto advance
+		
+		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
+		if(advanceValue) this.setAdvance( advanceValue );
 	},
 	
 	cleanupLayers : function()
 	{
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
+		
 		var newNode = this.nodes.get(this.currentNode);
 
 		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
 		
 		_.each(layersToRemove,function(layerID){
-			console.log(layerID);
 			_this.layerClasses[layerID].hidePublish();
 		});
 		
 		this.layersOnStage = _.difference(this.layersOnStage,layersToRemove);
 	},
-	
-	
-	setAdvance : function()
-	{
 		
-	},
-	
-	
 	preloadNode : function(nodeID)
 	{
 		//if not loading or already loaded
@@ -264,33 +272,51 @@ var Player = {
 	// compares the lookAhead to the loaded nodes and loads within the lookAhead horizon
 	preloadAhead : function(nodeID)
 	{
-		if(this.zeega)
+
+		//find the node you're coming from and where it is in the order
+		var nodesOrder = this.route.get('nodesOrder');
+		var index = _.indexOf(nodesOrder, nodeID);
+		
+		//see if node's layers are preloaded // starting with the currentNode
+		//look ahead 2 and behind 2 // include current node also
+		
+		for (var i = 0  ; i < this.lookAhead * 2 + 1 ; i++ )
 		{
-			//find the node you're coming from and where it is in the order
-			var nodesOrder = this.route.get('nodesOrder');
-			var index = _.indexOf(nodesOrder, nodeID);
-			
-			//see if node's layers are preloaded // starting with the currentNode
-			//look ahead 2 and behind 2 // include current node also
-			
-			for (var i = 0  ; i < this.lookAhead*2+1 ; i++ )
+			//the offset spirals outward to load nearest nodes first
+			var offset = Math.ceil(i/2) * (-1+(2*(i%2)));
+			var tryIndex = index + offset;
+			if(tryIndex >= 0 && tryIndex < nodesOrder.length)
 			{
-				//the offset spirals outward to load nearest nodes first
-				var offset = Math.ceil(i/2) * (-1+(2*(i%2)));
-				var tryNode = nodesOrder[index+offset];
-				this.preloadNode(tryNode);
+				var tryNodeID = nodesOrder[tryIndex];
+				this.preloadNode(tryNodeID);
 			}
 			
-		}else{
-			// for standalone player // do later
 		}
+			
 	},
 	
+	
+	setAdvance : function(advanceValue)
+	{
+		if(advanceValue > 0)
+		{
+			//after time in seconds
+			this.advanceAfterTimeElapsed(advanceValue)
+		}else if(adv == 0){
+			//after media
+			this.advanceAfterMedia();
+		}else{
+			// do nothing. manual control
+		}
+	},
 	
 	// advance node after a defined number of seconds have passed
 	advanceAfterTimeElapsed : function(seconds)
 	{
+		if(this.timeout) clearTimeout(this.timeout);
+		var _this = this;
 		
+		this.timeout = setTimeout(function(){_this.goRight()}, seconds*1000);
 	},
 	
 	// advance node after the media inside it have finished playing
@@ -298,12 +324,13 @@ var Player = {
 	{
 		
 	},
-	
 
 	// directional navigation
 	
 	goLeft : function()
 	{
+		if(this.timeout) clearTimeout(this.timeout);
+		
 		console.log('goLeft');
 		var nodesOrder = this.route.get('nodesOrder');
 		var index = _.indexOf(nodesOrder, this.currentNode);
@@ -315,6 +342,8 @@ var Player = {
 	
 	goRight : function()
 	{
+		if(this.timeout) clearTimeout(this.timeout);
+		
 		console.log('goRight');
 		var nodesOrder = this.route.get('nodesOrder');
 		var index = _.indexOf(nodesOrder, this.currentNode);
@@ -325,11 +354,15 @@ var Player = {
 	
 	goUp : function()
 	{
+		if(this.timeout) clearTimeout(this.timeout);
+		
 		console.log('goUp')
 	},
 	
 	goDown : function()
 	{
+		if(this.timeout) clearTimeout(this.timeout);
+		
 		console.log('goDown')
 	},
 		
