@@ -60,13 +60,17 @@ var RdioLayer = ProtoLayer.extend({
 		container.attr({
 				'id' : 'layer-publish-'+this.model.id,
 				'data-layer-id' : 'apiswf-'+this.model.id
-			});
-		
+		}).css({
+		    'top': '-100%',
+		    'position' : 'absolute',
+		    'left': '-100%'
+		});
+
 		//$('#layer_'+this.model.id).append(img);
 		this.dom = container;
-		
+
 		//draw to the workspace
-		$('#zeega-player').append(this.dom);
+		$('#zeega-player').find('#preview-media').append(this.dom);
 		
 		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
         
