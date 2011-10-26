@@ -21,6 +21,7 @@ var Database = {
 		
 		this.collection.url = this.basicURL;
 		
+		
 		this.collection.fetch({
 			success: function(items, response){
 				z.viewCollection = new ItemViewCollection({ collection : items });
@@ -29,6 +30,7 @@ var Database = {
 		});
 		
 		this.setQuery(null,'all');
+		//this.search(null,'all');
 		
 	},
 	
@@ -234,12 +236,5 @@ var Database = {
 	
 	
 };
-
-
-
-
-
-
-
 
 

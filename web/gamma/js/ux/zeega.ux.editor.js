@@ -65,7 +65,7 @@ function insertPager(items, page)
 		.empty()
 		.paging( items, {
 //			format: "<(qqq-) nncnn (-ppp)>",
-			format: "[<nncnnn>",
+			format: "[<nncnn>",
 			perpage: 10,
 			lapping: 0,
 			page: page,
