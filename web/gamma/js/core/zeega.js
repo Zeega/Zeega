@@ -26,7 +26,7 @@ var Zeega = {
 	nodesReady : false,
 	layersReady : false,
 	
-	url_prefix : "http://alpha.zeega.org/test/web/app_dev.php/",
+	url_prefix : "",
 	
 	url_hash : {
 		'route' : null,
@@ -182,6 +182,14 @@ var Zeega = {
 		//remove a prexisiting node style
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
+		//clear out existing stuff in icon tray
+		$('.bar-icon-tray').empty();
+
+		//clear the workspace
+		$('#workspace').empty();
+		
+		
+		//set global currentNode to the selected node
 		this.currentNode = node;
 
 		window.location.hash = '/node/'+ node.id; //change location hash
@@ -189,17 +197,49 @@ var Zeega = {
 		Zeega.route.layerViewCollection._rendered = false;
 		Zeega.route.layerViewCollection._layerViews = [];
 
-		//set global currentNode to the selected node
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 		
-		//clear the workspace
-		$('#workspace').empty();
+		//update the auto advance tray
+		//make sure the attribute exists
+		var adv = this.currentNode.get('attr').advance;
+		if(adv)
+		{
+			if(adv > 0)
+			{
+				//after time in seconds
+				$('#advance-controls').find('#time').attr('checked','true');
+				$('#advance-controls').find('#manual').removeAttr('checked');
+				$('#advance-controls').find('#playback').removeAttr('checked');
+				$('#advance-time').val(adv);
+			}else if(adv == 0){
+				//after media
+				$('#advance-controls').find('#time').removeAttr('checked');
+				$('#advance-controls').find('#manual').removeAttr('checked');
+				$('#advance-controls').find('#playback').attr('checked','true');
+				$('#advance-time').val(10);
+			}else{
+				//manual
+				$('#advance-controls').find('#time').removeAttr('checked');
+				$('#advance-controls').find('#manual').attr('checked','true');
+				$('#advance-controls').find('#playback').removeAttr('checked');
+				$('#advance-time').val(10);
+			}
+		//if the attr doesn't exist, then give it default values
+		}else{
+			$('#advance-controls').find('#time').removeAttr('checked');
+			$('#advance-controls').find('#manual').attr('checked','true');
+			$('#advance-controls').find('#playback').removeAttr('checked');
+			$('#advance-time').val(10);
+		}
 		
+		//add the node's layers
 		var layerArray = _.without( this.currentNode.get('layers'), -1)
 		_.each( layerArray , function(layerID){
 			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
+		
+		//draw the layers
 		Zeega.route.layerViewCollection.render();
 
 	},

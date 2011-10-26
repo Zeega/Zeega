@@ -16,7 +16,7 @@ var loadFiles = [
 	//'text!../css/all.css', //not quite
 	
 	//config
-	'order!zeega.config',
+	
 	
 	//libraries
 	'order!libraries/underscore',
@@ -79,9 +79,9 @@ var loadFiles = [
 	//players
 	'order!players/zeega.html5av',
 	'order!players/zeega.av.publish',
-	'order!players/zeega.player.youtube',
-	'order!players/zeega.rdio',
-	'order!players/zeega.rdio.token'	
+	'order!players/zeega.player.youtube',	
+	
+	'order!zeega.config',
 	];
 
 require(loadFiles, function($) {
@@ -89,6 +89,7 @@ require(loadFiles, function($) {
 	//once the files have been loaded do this
 	var route = $('#route-id').val();
 	//console.log(route);
+	Zeega.init();
 	if(!route) Zeega.createRoute();
 	else Zeega.loadRoute(route);
 	

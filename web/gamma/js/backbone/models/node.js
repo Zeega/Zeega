@@ -15,7 +15,11 @@ var Node = Backbone.Model.extend({
 	},
 	*/
 	
-	initialize : function() { },
+	initialize : function() {
+		
+		if(!this.get('attr')) this.set({'attr':{'advance':0}})
+		
+	},
 	
 	//update the node thumbnail
 	updateThumb : function()
