@@ -183,7 +183,7 @@ var Database = {
 		}
 		
 		
-		$.post('http://alpha.zeega.org/joseph/web/app_dev.php/search', this.postdata, function(data) {
+		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
 			var response = $.parseJSON(data);
 			
 			//make sure there's something in the results and give a friendly notice if not

@@ -77,7 +77,7 @@ class EditorController extends Controller
 				
 				$em = $this->getDoctrine()->getEntityManager();
 				$em->persist($newUser);
-				$playground->addUsers($newUser);
+				$playground->addUser($newUser);
 				$em->persist($playground);
 				$em->flush();
 				$message=$newUser->getDisplayName()." has been added to ".$playground->getTitle();
