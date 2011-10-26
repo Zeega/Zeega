@@ -45,7 +45,6 @@ var Database = {
 		
 		this.endOfItems = false;
 		
-
 		$('#tab-database-slide-window').spin('small','white');
 	},
 	
@@ -62,7 +61,6 @@ var Database = {
 			
 		}else{
 
-			//this.setQuery(null,'all');
 
 			this.search(null,'all',false);
 		}
@@ -82,11 +80,9 @@ var Database = {
 		this.customSearch = false;
 		this.page = 0;
 
-		this.reset();
-
 		//this.setQuery(null,'all');
 		
-		this.search(null,'all');
+		this.search(null,'all', true);
 	},
 	
 	setQuery : function( query, contentType )
@@ -173,10 +169,7 @@ var Database = {
 			var response = $.parseJSON(data);
 			
 			
-			if(response.items.length < 100)
-			{
-				this.endOfItems = true;
-			}
+			if(response.items.length < 100) this.endOfItems = true;
 			
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
