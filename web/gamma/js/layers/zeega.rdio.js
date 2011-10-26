@@ -71,6 +71,7 @@ var RdioLayer = ProtoLayer.extend({
 		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
         
 	    console.log("rdio preload finished");
+	    $('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
 	drawPublish : function(z){
