@@ -31,8 +31,27 @@ var ZeegaRdioPlayer = Class.extend({
         this._loaded = false;
 		this._mode = 'idle';
 		this._last_known_state = 0;
+		this._player_id = this._wrapper_id + '-rdioplayer';
+		
 		if(debug)console.log("rdioplayer:init ended"); 
 		
+		window['rdioListener'+this._id] = this;
+        var div = $('<div>').attr('id',this._player_id);
+        console.log("wrapper id" + this._player_id);
+        $('#'+this._wrapper_id).append(div);
+        // load the rdio player
+
+        var flashvars1 = {
+            'playbackToken': playback_token, // from token.js
+            'domain': domain,                // from token.js
+            'listener': 'rdioListener'+this._id    // the global name of the object that will receive callbacks from the SWF
+        };
+        
+        var params = { 'allowScriptAccess': 'always' };
+        var attributes = {};       
+	    swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
+           this._player_id, // the ID of the element that will be replaced with the SWF
+            1, 1, '9.0.0', 'expressInstall.swf', flashvars1, params, attributes);
 	},
 	
 	/**
@@ -41,7 +60,7 @@ var ZeegaRdioPlayer = Class.extend({
 	ready:function ready() 
 	{
 	    console.log("ready");
-        this._asset = $('#'+'apiswf-' + this._id).get(0);       //  get the swf object
+        this._asset = $('#'+this._player_id).get(0);       //  get the swf object
         this.setMode('loading');                                //  ready to load
     },
 

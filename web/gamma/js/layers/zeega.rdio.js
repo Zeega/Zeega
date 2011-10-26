@@ -35,31 +35,17 @@ var RdioLayer = ProtoLayer.extend({
 		    currPathName = window.location.pathname.split('/',2)[1];
 		    templateUrl = window.location.protocol + '//' + window.location.hostname + '/' + currPathName + '/web/gamma/js/templates/zeega.av.html';
 
-			$('#player-'+this.model.id).load(templateUrl,function(){
-			    console.log("out " + that.attr.out);
-				that.player=new ZeegaRdioPlayer(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-                window['rdioListener'+that.model.id] = that.player;
-                var div = $('<div>').attr('id','apiswf-'+that.model.id);
-                $('#player-'+that.model.id).append(div);
-                // load the rdio player
-
-                var flashvars1 = {
-                       'playbackToken': playback_token, // from token.js
-                       'domain': domain,                // from token.js
-                       'listener': 'rdioListener'+that.model.id    // the global name of the object that will receive callbacks from the SWF
-                       };
-                var params = { 'allowScriptAccess': 'always' };
-                var attributes = {};       
-				swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
-                         'apiswf-'+that.model.id, // the ID of the element that will be replaced with the SWF
-                         1, 1, '9.0.0', 'expressInstall.swf', flashvars1, params, attributes);
-                         
-				//player triggers 'update' event to persist changes
+			$('#player-'+this.model.id).load(templateUrl,function()
+			{
+				that.player = new ZeegaRdioPlayer(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'player-'+that.model.id);
+   
+   				//player triggers 'update' event to persist changes
 				$('#player-'+that.model.id).bind('updated',function()
 				{
 				    console.log("loaded edit controls")
 					that.updateAttr();
 				});
+
 				that.editorLoaded=true;
 			});
 		}
@@ -82,28 +68,8 @@ var RdioLayer = ProtoLayer.extend({
 		//draw to the workspace
 		$('#zeega-player').append(this.dom);
 		
-		this.player = new ZeegaRdioPlayer('player'+this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
+		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
         
-        window['rdioListener-publish'+this.model.id] = this.player;
-        
-        globalRdio = this.player;
-        var div = $('<div>').attr('id','apiswf-player'+this.model.id);
-        //$('#player-'+this.model.id).append(div);
-        // load the rdio player
-        $(this.dom).append(div);
-        var that = this;
-        var flashvars1 = {
-            'playbackToken': playback_token, // from token.js
-            'domain': domain,                // from token.js
-            'listener': 'globalRdio'    // the global name of the object that will receive callbacks from the SWF
-            };
-        var params = { 'allowScriptAccess': 'always' };
-        var attributes = {};       
-		
-		swfobject.embedSWF('http://www.rdio.com/api/swf/', // the location of the Rdio Playback API SWF
-            'apiswf-player'+this.model.id, // the ID of the element that will be replaced with the SWF
-            1, 1, '9.0.0', 'expressInstall.swf', flashvars1, params, attributes);
-    
 	    console.log("rdio preload finished");
 	},
 	
@@ -116,8 +82,7 @@ var RdioLayer = ProtoLayer.extend({
 		console.log('rdio hidePublish ');
 		if(this.player) this.player.pause();
 	},
-	
-	
+		
 	closeControls: function(){
 	
 		if(this.player) this.player.pause();
@@ -162,11 +127,5 @@ var RdioLayer = ProtoLayer.extend({
 		this.updateLayerAttr(newAttr);
 		//save the layer back to the database
 		this.saveLayer();
-	},
-	
-	ready: function(){
-	    console.log("Player is ready");
-	    $('#zeega-player').find('#preview-media').append(this.dom).trigger('ready',{'id':this._id});
-	}
-	
+	}	
 });
