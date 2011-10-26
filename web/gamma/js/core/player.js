@@ -247,7 +247,7 @@ var Player = {
 			//preload each layer inside the node
 			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
 			
-			_.each(layersToPreload,function(layerID){
+			_.each( _.without(layersToPreload, -1),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			
