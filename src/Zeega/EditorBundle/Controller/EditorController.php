@@ -27,10 +27,11 @@ class EditorController extends Controller
 						->getRepository('ZeegaUserBundle:User')
 						->findAll();
 	if(count($users)<1){
+				$em = $this->getDoctrine()->getEntityManager();
 				$factory = $this->get('security.encoder_factory');
 				$user = new User();
-				$user->setDisplayName('Admin');
-				$user->setUsername('Admin');
+				$user->setDisplayName('James Burns');
+				$user->setUsername('james');
 				$user->setBio($user->getDisplayName().' is a pioneer in interactive documentary film, a newsreel director and a cinema theorist');
 				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
 				$user->setSalt(md5(time()));
@@ -38,6 +39,7 @@ class EditorController extends Controller
 				$password = $encoder->encodePassword('admin', $user->getSalt());
 				$user->setUserRoles('ROLE_SUPER_ADMIN');
 				$user->setPassword($password);
+				$user->setEmail('james@zeega.org');
 				$em->persist($user);
 				$em->flush();
 				return new Response('Initial User added');
