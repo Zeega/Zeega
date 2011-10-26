@@ -61,11 +61,12 @@
 												</select>
 												
 												
-												<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search' class='span6'/>
+												<input disabled id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search coming soon' class='span6'/>
 												
 											</div>
 											<div id='form-right'>
-												<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>
+												<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
+												<input id='database-search-button' class='' type="button" value="go" onclick ='return false' style="cursor:progress"/>
 											</div>
 										</form>
 
@@ -125,7 +126,7 @@
 
 							<div id='interactive-workspace' class='workspace'>
 								
-								<!--
+
 								<div id="i-layer-template" class="i-layer clearfix layer-wrapper">
 									<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
 										<div class='layer-icon'>
@@ -144,7 +145,7 @@
 										</form>
 									</div>
 								</div>
-								-->
+
 								
 								
 							</div>
