@@ -213,15 +213,19 @@ var ZeegaRdioPlayer = Class.extend({
             this.setMode('paused'); //not sure about this recursion
             if(!this._loaded)
             {
-                this._loaded = true;
-                this.setup();
-                this.canPlay();                
+                this.setup();                
             }
 
             this.pause();
             this.setVolume(this._vol);
             this._dragging = false;
             this.timeUpdate(this._seek_to);
+            
+            if(!this._loaded) // ugly... can't merge with the previous if
+            {
+                this._loaded = true;
+                this.canPlay();
+            }
         }
         else if(this._mode == 'seeking')
         {
@@ -268,7 +272,8 @@ var ZeegaRdioPlayer = Class.extend({
 	canPlay:function(){
 	
 		if(debug) console.log("rdio:canPlay");
-		$('#player-'+this._id).trigger('ready');
+		//$('#player-'+this._id).trigger('ready');
+		$('#zeega-player').trigger('ready',{'id':this._id});
 	},
 	
 	durationChange:function(){

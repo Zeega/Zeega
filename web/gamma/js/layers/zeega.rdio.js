@@ -71,7 +71,6 @@ var RdioLayer = ProtoLayer.extend({
 		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
         
 	    console.log("rdio preload finished");
-	    $('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
 	drawPublish : function(z){
@@ -81,7 +80,11 @@ var RdioLayer = ProtoLayer.extend({
 	
 	hidePublish : function(z){
 		console.log('rdio hidePublish ');
-		if(this.player) this.player.pause();
+		var that = this;
+		setTimeout(function(){
+            that.player.pause();
+        }, 1500); 
+		//if(this.player) this.player.pause();
 	},
 		
 	closeControls: function(){
