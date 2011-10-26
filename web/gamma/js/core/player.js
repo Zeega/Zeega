@@ -121,7 +121,13 @@ var Player = {
 		
 		
 		// remove the player div
-		$('#zeega-player').fadeOut( 450, function(){ $(this).remove() } ); 
+		$('#zeega-player').fadeOut( 450, function(){
+			
+			_.each( $(this).find('video'), function(video){
+				$(video).attr('src','')
+			});
+			$(this).remove() 
+		}); 
 		
 		if(this.zeega)
 		{
