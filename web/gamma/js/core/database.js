@@ -15,23 +15,11 @@ var Database = {
 	init : function()
 	{
 		console.log('loading database');
-		var z = this;
-		this.basicURL = Zeega.url_prefix+"search/items/0/100";
-		
-		this.collection = new ItemCollection;
-		
-		this.collection.url = this.basicURL;
-		
-		
-		this.collection.fetch({
-			success: function(items, response){
-				z.viewCollection = new ItemViewCollection({ collection : items });
-				insertPager( _.size(items), this.page );
-			}
-		});
+		this.reset();
 		
 		this.setQuery(null,'all');
-		//this.search(null,'all');
+		
+		this.search(null,'all', false);
 		
 	},
 	
@@ -45,15 +33,18 @@ var Database = {
 
 		
 		this.collection = new ItemCollection;
-		this.viewCollection.collection.reset();
-		this.viewCollection._itemViews = [];
-		this.viewCollection._itemBundles = [];
-		this.viewCollection._rendered = false;
+		
+		if(this.viewCollection)
+		{
+			this.viewCollection.collection.reset();
+			this.viewCollection._itemViews = [];
+			this.viewCollection._itemBundles = [];
+			this.viewCollection._rendered = false;
+		}
 		this.page = 0;
 		
 		this.endOfItems = false;
 		
-
 		$('#tab-database-slide-window').spin('small','white');
 	},
 	
@@ -69,17 +60,9 @@ var Database = {
 			this.search();
 			
 		}else{
-			
-			//look into setting {add:true} in the collection
-			var d = this;
-			var newItems = new ItemCollection;
-			newItems.url = Zeega.url_prefix+"search/items/"+ _.size(this.collection) +"/100";
-			
-			//newItems.offset = _.size(this.collection);
-			newItems.fetch({
-				success: function(items,response){ d.viewCollection.append(items) }
-			})
-			
+
+
+			this.search(null,'all',false);
 		}
 	},
 	
@@ -96,17 +79,10 @@ var Database = {
 		var d = this;
 		this.customSearch = false;
 		this.page = 0;
-		this.reset();
+
+		//this.setQuery(null,'all');
 		
-		this.collection.url = this.basicURL;
-		
-		this.collection.fetch({
-			success: function(items, response){
-				d.viewCollection = new ItemViewCollection({ collection : items });
-				insertPager( _.size(items), this.page );
-			}
-		});
-		
+		this.search(null,'all', true);
 	},
 	
 	setQuery : function( query, contentType )
@@ -163,10 +139,10 @@ var Database = {
 	},
 	
 	//what happens if you search for something in the search bar
-	search : function( query, contentType )
+	search : function( query, contentType, reset )
 	{
 		var d = this;
-		this.reset();
+		if(reset) this.reset();
 		
 		//if the query is null && there is no existing query in postdata then do a general search for filter type. no query. change filter
 		if(query == null && this.postdata.query[0].tags == null)
@@ -193,10 +169,7 @@ var Database = {
 			var response = $.parseJSON(data);
 			
 			
-			if(response.items.length < 100)
-			{
-				this.endOfItems = true;
-			}
+			if(response.items.length < 100) this.endOfItems = true;
 			
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
