@@ -1007,9 +1007,54 @@ body
 	margin:10px 0;
 }
 
+.controls
+{
+	
+}
 
+.interaction-instructions
+{
+}
+.controls textarea
+{
+	width:100%;
+	resize:vertical;
+	margin:10px 0;
+}
 
+.twilio-table
+{
+	position:relative;
+	width:100%;
+}
 
+.item-drop
+{
+	width:100%;
+	border:2px dashed #ccc;
+	-webkit-border-radius: 8px;
+	margin:10px 0;
+}
+
+.interactive-drop-hover
+{
+	border:2px dashed yellow;
+}
+
+#drop-content
+{
+	padding:10px;
+}
+
+td
+{
+	min-width:20px;
+}
+
+td+td
+{
+	width:100%;
+}
 
 
 

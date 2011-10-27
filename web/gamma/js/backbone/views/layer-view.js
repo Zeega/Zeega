@@ -243,7 +243,7 @@ iLayerTemplate +=					"<span id='delete-layer' class='i-layer-delete ui-icon ui-
 iLayerTemplate +=				"</div>";
 iLayerTemplate +=			"</div>";
 iLayerTemplate +=			"<div class='hidden layer-content clearfix'>";
-iLayerTemplate +=				"<div id='controls'></div>";
+iLayerTemplate +=				"<div id='controls' class='twilio-controls controls'>";
 iLayerTemplate +=				"<br />";
 iLayerTemplate +=				"<form id='layer-persist'>";
 iLayerTemplate +=					"<input id='persist' type='checkbox' name='vehicle' value='persist' /> <label for='persist'>Persist layer to route</label>";

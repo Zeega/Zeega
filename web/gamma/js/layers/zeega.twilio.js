@@ -13,7 +13,7 @@ var TwilioLayer = ProtoLayer.extend({
 	defaultAttributes : 
 	{
 		'title' : 'Twilio Layer',
-		'phone'  : 5555555555
+		'phone'  : '+1 (555) 555-5555'
 	},
 						
 	drawControls : function(template)
@@ -40,8 +40,108 @@ var TwilioLayer = ProtoLayer.extend({
 			return false;
 		});
 		
+		//determine checkbox activity
+		var txtCheck;
+		var phoneCheck;
+		if(_this.model.get('attr').call) phoneCheck ='checked'; 
+		if(_this.model.get('attr').txt) txtCheck = 'checked';
+		
+		//default text in the dropbox
+		var dropBox = "Drag audio into this box";
+		if(_this.model.get('attr').audioItemID)
+		{
+			//if something already exists in the dropbox
+			dropBox = _this.model.get('attr').audioTitle;
+		}
+		
+		
 		//load controls
-		controls.find('#controls').html(this.getTemplate());
+		var tmp = _.template(this.getTemplate());
+		var content = 
+			{
+				code : _this.model.id,
+				phone_number : _this.defaultAttributes.phone,
+				drop_box : dropBox,
+				txt_body : _this.model.get('attr').txtBody,
+				txt_checked : txtCheck,
+				phone_checked : phoneCheck
+				/*
+				//this is better, but broken
+				txt_checked : function(){ if(_this.model.get('attr').txt) return 'checked' },
+				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
+				*/
+			};
+
+		controls.find('#controls').html( tmp(content) );
+		
+		//make droppable
+		controls.find('.item-drop').droppable({
+				accept : '.database-asset',
+				hoverClass : 'interactive-drop-hover',
+				tolerance : 'pointer',
+
+				//this happens when you drop a database item onto a node
+				drop : function( event, ui )
+					{
+						console.log(Zeega.draggedItem);
+						var source = Zeega.draggedItem;
+						//make sure it's an audio file
+						if(source.get('content_type') == 'Audio')
+						{
+							ui.draggable.draggable('option','revert',false);
+
+							//save to layer
+							var attr = _this.model.get('attr');
+							attr.call = true;
+							attr.audioURL = source.get('item_url');
+							attr.audioItemID = source.id;
+							attr.audioTitle = source.get('title');
+							
+							_this.model.set({'attr':attr});
+							_this.model.save();
+							//draw audio controls
+							
+							//auto check the phone checkbox
+							controls.find('input[name$="phone"]').attr('checked','true');
+							
+							//replace content with audio info
+							$("#drop-content").html('media accepted! '+ attr.audioTitle);
+
+						}else{
+							$("#drop-content").html('This media will not work in with twilio. Try searching audio.');
+						}
+						
+					}
+			});
+			
+		// activate text area
+		controls.find('textarea').focus(function(){
+			controls.find('input[name$="txt"]').attr('checked','true');
+		});
+		
+		controls.find('textarea').blur(function(){
+			// save txtBody
+			var attr = _this.model.get('attr');
+			attr.txtBody = $(this).val();
+			attr.txt = true;
+			_this.model.set({'attr':attr});
+			_this.model.save();
+			console.log(attr.txtBody);
+		});
+		
+		controls.find('input[type="checkbox"]').change(function(){
+			console.log(this);
+			console.log($(this).is(':checked'));
+			var attr = _this.model.get('attr');
+			
+			if( $(this).attr('name') == 'phone' ) attr.call = $(this).is(':checked');
+			if( $(this).attr('name') == 'txt' ) attr.txt = $(this).is(':checked');
+			console.log(attr);
+			_this.model.set({'attr':attr});
+			_this.model.save();
+		});
+		
+		
 		
 		//draw controls
 		$('#interaction-workspace').append(controls);
@@ -94,40 +194,24 @@ var TwilioLayer = ProtoLayer.extend({
 	getTemplate : function()
 	{
 	
-		var html ='<div id="twilio">twilio controls</div>'
-		/*
-		html +='<div id="avControls"> ';
-		html +='<div id="avStart"> ';
-		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
-		html +='</div>';
-		html +='<div id="avStop"> ';
-		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
-		html +=	'</div>';
-		html +='</div>';
-		html +='<div id="avVolumeWrapper">';
-		html +='</div> ';
-		html +='<div class="avComponent"> ';
-		html +='	<div id="mediaPlayerMP"> ';
-		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
-		html +='		<div id="playMP" class="playButtonMP"> </div> ';
-		html +='		<div id="loadingOutsideMP"> ';
-		html +='			<div id="startBar"></div>';
-		html +='			<div id="stopBar"></div>';
-		html +='			<div id="startMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
-		html +='			<div id="stopMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
-		html +='			<div id="currentMP" class="markerMP"><div class="box"></div></div>';
-		html +='			<div id="loadingInsideMP"> </div> ';
-		html +='			<div id="loadingStatusMP"></div> ';
-		html +='		</div> ';
-		html +='		<div id="timeWrapperMP"><span id="currentTime"></span> </div>';
-		html +='	</div>				';	 
-		html +='</div> <!-- #avComponent --> ';
-		html +='<div id="clear"></div> ';
-		html +='<div id ="volumeMP">';
-		html +='<h4>Volume</h4>';
-		html +='<div id="volume-slider" ></div>';
-		html +='</div>';
-		*/
+		var html = "<div class='alert-message info interaction-instructions'>Text <%= code %> to <%= phone_number %> </div>"
+		html +=	"<table class='twilio-table'>";
+		html +=		"<tr>";
+		html +=		"<td><input type='checkbox' name='phone' value='phone' <%= phone_checked %>/></td>";
+		html +=		"<td>";
+		html +=			"Get a phone call and play:";
+		html +=			"<div class='twilio-audio-drop item-drop' data-type='audio' ><div id='drop-content'><%= drop_box %></div></div>";
+		html +=		"</td>";
+		html +=	"</tr>";
+		html +=	"<tr>";
+		html +=		"<td><input type='checkbox' name='txt' value='txt' <%= txt_checked %>/></td>";
+		html +=		"<td>";
+		html +=			"Get a text";
+		html +=			"<div><textarea id='txt-area' rows='2' cols='58' maxlength='160'><%= txt_body %></textarea></div>";
+		html +=		"</td>";
+		html +=	"</tr>";
+		html += "</table>";
+
 		return html;
 	}
 	

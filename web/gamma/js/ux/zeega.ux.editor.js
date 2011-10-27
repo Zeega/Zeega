@@ -298,6 +298,7 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
+	
 	/*****  		CRITICAL		*******/
 	
 	//enable the workspace as a valid drop location for DB items
