@@ -18,9 +18,30 @@ var TwilioLayer = ProtoLayer.extend({
 						
 	drawControls : function(template)
 	{
+		console.log("************twilio draw preview");
+		var _this = this;
+		var controls = $(iLayerTemplate);
 		
-		var div = $('<div>');
-		template.find('#controls').append(div);
+		controls.find('.i-layer-title').html(this.model.get('type')+ " Layer");
+		
+		controls.find('#delete-layer').click(function(){
+			//verify you with alert
+			if( confirm('Delete Layer?') )
+			{
+				//remove the layer controls
+				controls.remove();
+				//remove the workspace preview
+
+				Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
+			}
+			return false;
+		});
+		
+		controls.find('#controls').html(this.getTemplate());
+		
+		
+		
+		$('#interactive-workspace').append(controls);
 
 	},
 	
@@ -33,42 +54,30 @@ var TwilioLayer = ProtoLayer.extend({
 				
 		this.dom = container;
 		
+		
+		
 		$('.interaction-icon-tray').append('twilio');
 		
 	},
 	
-	preloadMedia : function(){
-		//make dom object
-		var that=this;
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#zeega-player').append(this.dom);
-		
-		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
-				
+	preloadMedia : function()
+	{
 		
 	},
+	
 	drawPublish : function()
 	{
-		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
-		this.player.play();
+
 	},
 	
 	hidePublish : function()
 	{
-		this.player.pause();
+
 	},
 	
 	exit: function()
 	{
-		this.player.pause();
+		
 	},
 	
 	updateAttr: function()
@@ -77,11 +86,7 @@ var TwilioLayer = ProtoLayer.extend({
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
 		
-		if(this.editorLoaded){
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
-		}
+		
 		
 		//set the attributes into the layer
 		this.updateLayerAttr(newAttr);
@@ -94,7 +99,8 @@ var TwilioLayer = ProtoLayer.extend({
 	getTemplate : function()
 	{
 	
-		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
+		var html ='<div id="twilio">twilio controls</div>'
+		/*
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
 		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
@@ -126,6 +132,7 @@ var TwilioLayer = ProtoLayer.extend({
 		html +='<h4>Volume</h4>';
 		html +='<div id="volume-slider" ></div>';
 		html +='</div>';
+		*/
 		return html;
 	}
 	

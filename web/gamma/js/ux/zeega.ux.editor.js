@@ -202,10 +202,6 @@ function expandLayer(el)
 	}
 }
 
-function deleteLayer()
-{
-	console.log('deleting')
-}
 
 
 $(document).ready(function() {

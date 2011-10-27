@@ -30,6 +30,11 @@ var LayerView = Backbone.View.extend({
 		//do if interaction layer
 		if(layerClass.interaction)
 		{
+			console.log('interactive******');
+			layerClass.load(this.model);
+			layerClass.drawControls();
+
+			console.log(layerClass);
 			
 			/*
 			
@@ -233,9 +238,9 @@ iLayerTemplate +=			"<div class='i-layer-uber-bar clearfix' onclick='expandLayer
 iLayerTemplate +=				"<div class='layer-icon'>";
 iLayerTemplate +=					"<span class='asset-type-icon ui-icon ui-icon-pin-w'></span>";
 iLayerTemplate +=				"</div>";
-iLayerTemplate +=				'<div class="layer-title">Layer Name</div>';
+iLayerTemplate +=				'<div class="i-layer-title">Layer Name</div>';
 iLayerTemplate +=				"<div class='layer-uber-controls'>";
-iLayerTemplate +=					"<span class='i-layer-delete ui-icon ui-icon-trash' onclick='deleteLayer();return false;'></span>";
+iLayerTemplate +=					"<span id='delete-layer' class='i-layer-delete ui-icon ui-icon-trash' ></span>";
 iLayerTemplate +=				"</div>";
 iLayerTemplate +=			"</div>";
 iLayerTemplate +=			"<div class='hidden layer-content clearfix'>";
