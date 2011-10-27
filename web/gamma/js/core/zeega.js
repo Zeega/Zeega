@@ -23,8 +23,8 @@ var Zeega = {
 	
 	previewMode:false,
 	
-	maxNodesPerRoute : 0,
-	maxLayersPerNode : 5,
+	maxNodesPerRoute : 0, // 0 = no limit
+	maxLayersPerNode : 5, // 0 = no limit
 	
 	//ready flags
 	nodesReady : false,
@@ -281,13 +281,13 @@ var Zeega = {
 	addLayerToNode : function( node, layer )
 	{
 		//reject if there are too many layers inside the node
-		if(node.get('layers') && node.get('layers').length < this.maxLayersPerNode)
+		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{
 			console.log('addLayerToNode');
 			//add URL to layer model
 			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
 		
-			//check to see if the layer is saved or not. save if needed
+			//check to see if the layer is saved or not. save if ndeeded
 			if( layer.isNew() )
 			{
 				console.log('this is a new layer');
