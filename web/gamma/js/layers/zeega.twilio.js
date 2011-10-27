@@ -71,7 +71,6 @@ var TwilioLayer = ProtoLayer.extend({
 				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
 				*/
 			};
-
 		controls.find('#controls').html( tmp(content) );
 		
 		//make droppable
