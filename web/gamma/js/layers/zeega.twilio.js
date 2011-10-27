@@ -18,12 +18,16 @@ var TwilioLayer = ProtoLayer.extend({
 						
 	drawControls : function(template)
 	{
-		console.log("************twilio draw preview");
+		//this should go top to bottom
 		var _this = this;
+		
+		//set the ilayer template
 		var controls = $(iLayerTemplate);
 		
+		//set title
 		controls.find('.i-layer-title').html(this.model.get('type')+ " Layer");
 		
+		//set delete button
 		controls.find('#delete-layer').click(function(){
 			//verify you with alert
 			if( confirm('Delete Layer?') )
@@ -31,32 +35,23 @@ var TwilioLayer = ProtoLayer.extend({
 				//remove the layer controls
 				controls.remove();
 				//remove the workspace preview
-
 				Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
 			}
 			return false;
 		});
 		
+		//load controls
 		controls.find('#controls').html(this.getTemplate());
 		
-		
-		
-		$('#interactive-workspace').append(controls);
+		//draw controls
+		$('#interaction-workspace').append(controls);
 
 	},
 	
 	
 	drawPreview : function(){
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		
-		
-		$('.interaction-icon-tray').append('twilio');
+		//put icon in icon tray
+		$('#interaction-icon-tray').append('twilio');
 		
 	},
 	

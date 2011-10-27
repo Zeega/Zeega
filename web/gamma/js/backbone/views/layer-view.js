@@ -33,8 +33,7 @@ var LayerView = Backbone.View.extend({
 			console.log('interactive******');
 			layerClass.load(this.model);
 			layerClass.drawControls();
-
-			console.log(layerClass);
+			layerClass.drawPreview();
 			
 			/*
 			

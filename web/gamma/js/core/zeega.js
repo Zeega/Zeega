@@ -186,8 +186,12 @@ var Zeega = {
 		//clear out existing stuff in icon tray
 		$('.icon-tray').empty();
 
-		//clear the workspace
+		//clear the workspaces
 		$('#workspace').empty();
+		$('#interaction-workspace').empty();
+		//$('.workspace').empty();
+		
+		
 		
 		Zeega.route.layerViewCollection._rendered = false;
 		Zeega.route.layerViewCollection._layerViews = [];
@@ -248,8 +252,8 @@ var Zeega = {
 		//if the attr doesn't exist, then give it default values
 		}else{
 			$('#advance-controls').find('#time').removeAttr('checked');
-			$('#advance-controls').find('#manual').attr('checked','true');
-			$('#advance-controls').find('#playback').removeAttr('checked');
+			$('#advance-controls').find('#manual').removeAttr('checked');
+			$('#advance-controls').find('#playback').attr('checked', true);
 			$('#advance-time').val(10);
 		}
 		
