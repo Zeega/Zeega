@@ -38,6 +38,8 @@ class ImportWidget
 		
 		
 		if(in_array($fileFormat,array('.jpg','.png','.gif'))||in_array($fileFormat,array('.mov','.mp4'))||in_array($fileFormat,array('.wav','.mp3','.aiff'))){
+			
+			
 			if(in_array($fileFormat,array('.jpg','.png','.gif'))) $contentType='Image';
 			elseif(in_array($fileFormat,array('.mov','.mp4')))$contentType='Video';
 			elseif(in_array($fileFormat,array('.wav','.mp3','.aiff'))){
