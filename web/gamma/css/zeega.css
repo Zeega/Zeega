@@ -1122,11 +1122,13 @@ td+td
 	padding:10px;
 	margin:10px;
 	opacity:0.4;
+	-webkit-border-radius: 8px;
 }
 
 .preview-nav-arrow:hover
 {
 	opacity:1;
+	background:rgba(255,0,0,.25);
 }
 
 #preview-right
