@@ -27,17 +27,19 @@ class EditorController extends Controller
 						->getRepository('ZeegaUserBundle:User')
 						->findAll();
 	if(count($users)<1){
+				$em = $this->getDoctrine()->getEntityManager();
 				$factory = $this->get('security.encoder_factory');
 				$user = new User();
-				$user->setDisplayName('Admin');
-				$user->setUsername('Admin');
+				$user->setDisplayName('Zeega');
+				$user->setUsername('zeega');
 				$user->setBio($user->getDisplayName()." is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ÔLaboratories of HearingÕ to experiment with sound as art. In the 1920s, Kaufman adopted the name \"Dziga Vertov,\" which translates loosely as 'spinning top' and also was chosen because it makes the \"z-z-z-z\" sound when cranking a camera.");
 				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
 				$user->setSalt(md5(time()));
 				$encoder = $factory->getEncoder($user);
-				$password = $encoder->encodePassword('admin', $user->getSalt());
+				$password = $encoder->encodePassword('dziga', $user->getSalt());
 				$user->setUserRoles('ROLE_SUPER_ADMIN');
 				$user->setPassword($password);
+				$user->setEmail('james@zeega.org');
 				$em->persist($user);
 				$em->flush();
 				return new Response('Initial User added');

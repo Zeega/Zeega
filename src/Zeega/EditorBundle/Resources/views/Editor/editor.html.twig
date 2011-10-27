@@ -17,8 +17,8 @@
 				<div id='route-publish'>
 					
 					<ul class='pill-buttons'>
-						<li><a id='share' href='http://www.getjavascript.com' onclick='shareButton();return false;'>Share</a></li>
-						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Embed</a></li>
+						<!--<li><a id='share' href='http://www.getjavascript.com' onclick='shareButton();return false;'>Share</a></li>-->
+						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 						<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
 					</ul>
 				</div>
@@ -99,7 +99,13 @@
 
 								</div>
 						
-								<ul id="sortable-layers"></ul>
+								<ul id="sortable-layers">
+									
+									<div class=​"alert-message warning">
+										<strong>No layers to display. Add some?</strong>
+									</div>
+									
+								</ul>
 						
 						
 							</div>
@@ -122,38 +128,15 @@
 							
 						</div>
 						
-						<div id='interactive-editor-wrapper'>
+						<div id='interaction-editor-wrapper'>
 
-							<div id='interactive-editor-bar' class='clearfix'>
+							<div id='interaction-editor-bar' class='clearfix'>
 								<div class='bar-title'>Interaction Editor</div>
-								<div id='interactive-icon-tray' class='icon-tray'>ilayer</div>
+								<div id='interaction-icon-tray' class='icon-tray'>ilayer</div>
 							</div>
 
-							<div id='interactive-workspace' class='workspace'>
-								
-
-								<div id="i-layer-template" class="i-layer clearfix layer-wrapper">
-									<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
-										<div class='layer-icon'>
-											<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>
-										</div>
-										<div class='i-layer-title'>Layer Name</div>
-										<div class='i-layer-uber-controls'>
-											<span class='i-layer-delete ui-icon ui-icon-trash' onclick="deleteLayer();return true;"></span>
-										</div>
-									</div>
-									<div class='hidden layer-content clearfix'>
-										<div id='controls'></div>
-										<br />
-										<form id='layer-persist'>
-											<input id='persist' type="checkbox" name="vehicle" value="persist" /> <label for='persist'>Persist layer to route</label>
-										</form>
-									</div>
-								</div>
-
-								
-								
-							</div>
+							<div id='interaction-workspace' class='workspace'></div>
+				
 							
 							<div id="node-advance" class="i-layer layer-wrapper">
 								<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
@@ -165,8 +148,8 @@
 								<div class='hidden layer-content clearfix'>
 									<div id='controls'>
 										<div id='advance-controls'>
-											<input type="radio" value ='0' id="manual" name="radio" checked="checked"/><label for="manual"> Manually</label>
-											<input type="radio" value='-1' id="playback" name="radio"  /><label for="playback"> After playback</label>
+											<input type="radio" value='0' id="playback" name="radio" checked="true" /><label for="playback"> After playback</label>
+											<input type="radio" value ='-1' id="manual" name="radio" /><label for="manual"> Manually</label>
 											<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
 										</div>
 									</div>

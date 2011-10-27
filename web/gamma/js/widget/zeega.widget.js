@@ -41,8 +41,8 @@ var widget = {
 			 $.post(URL_PREFIX+'widget/persist',postdata,function(data){
 			 	console.log(data);
 			 	$('#add-item').fadeOut();
-			 	$('#message').html('Media Successfuly Added');
-			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
+			 	$('#message').html('Media successfuly added to your Zeega Collection');
+			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="80px" height="80px"/>');
 			 
 			 });
 			return false;

@@ -55,7 +55,7 @@ var NodeView = Backbone.View.extend({
 				var settings = {
 					url: Zeega.url_prefix + 'nodes/'+ that.model.id +'/layers',
 					type: Zeega.draggedItem.get('content_type'),
-					zIndex: Zeega.currentNode.get('layers').length+1,
+//					zIndex: Zeega.currentNode.get('layers').length+1,
 					attr: {
 						'item_id' : Zeega.draggedItem.id,
 						'title' : Zeega.draggedItem.get('title'),
@@ -144,7 +144,8 @@ var NodeViewCollection = Backbone.View.extend({
 						_.each(persistLayers,function(layerID){
 							Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
 						});
-						
+						//add a new current node style
+						$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
 						
 					}
 				}

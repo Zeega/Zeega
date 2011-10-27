@@ -5,7 +5,9 @@ var Layer =  Backbone.Model.extend({
 	
 	layerClass :{},
 	
-	initialize: function(){	},
+	initialize: function(){
+		if(!this.get('attr')) this.set({'attr':{}})
+	},
 	
 
 });
