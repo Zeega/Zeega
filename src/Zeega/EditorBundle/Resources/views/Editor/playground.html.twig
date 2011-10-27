@@ -18,7 +18,7 @@
 				<div id="my-projects" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
-							<img src="http://zeega.org/images/about/james.jpg" class="projects-thumb" style="height: 30px; margin-right: 5px; float: left;" /><li class='project-{{project.id}}' style="margin-bottom: 20px; padding-top: 8px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" >{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" >{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>
@@ -28,7 +28,7 @@
 				<div id="all-projects" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
-							<img src="http://zeega.org/images/about/james.jpg" class="projects-thumb" style="height: 30px; margin-right: 5px; float: left;" /><li class='project-{{project.id}}' style="margin-bottom: 20px; padding-top: 8px;"><a>{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding-top: 8px;"><a>{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>

@@ -16,8 +16,8 @@ bookmarklet = function(opts){fullFunc(opts)};
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 var bm = new bookmarklet({
  
-    css : ['http:///alpha.zeega.org/demo/web/gamma/js/widget/style.css'],
-    js  : ['http://alpha.zeega.org/demo/web/gamma/js/jquery/ui/js/jquery-ui.min.js'],    
+    css : ['http:///alpha.zeega.org/jesse/web/gamma/js/widget/style.css'],
+    js  : ['http://alpha.zeega.org/jesse/web/gamma/js/jquery/ui/js/jquery-ui.min.js'],    
 //	jqpath : 'myCustomjQueryPath.js', <-- option to include your own path to jquery
     ready : function(){
     			var zeegaBM = {
@@ -58,11 +58,12 @@ var bm = new bookmarklet({
 			
 			var highlight=$('<div>').css({
 				'position':'absolute',
-				'left':37,
+				'left':12,
 				'top' :148,
 				'background-color':'red',
 				'width':'150px',
 				'height':'150px',
+				'border-radius' :3,
 				'z-index':60000,
 				'display':'none',
 				'opacity':0.5,
@@ -72,14 +73,14 @@ var bm = new bookmarklet({
 			overlay.append(cover);
 			overlay.append(highlight);
 			
-			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='http://alpha.zeega.org/demo/web/app_dev.php/widget?url="+url+"' />").animate({
+			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='http://alpha.zeega.org/jesse/web/app_dev.php/widget?url="+url+"' />").animate({
    				  'width': 470 }, 500, function() {
     			 $('#zeega-cover').fadeOut('slow');
   			});
   			$('#zeega-overlay').droppable({accept:'.zeega-draggable',  out:function(event,ui){$('#zeega-highlight').hide();}, over: function(event,ui){$('#zeega-highlight').show();}, drop: function(event, ui) {
   				$('#zeega-highlight').hide(); 
   				var src=ui.draggable.attr('src'); 
-  				$('#zeega-widget-iframe').attr('src','http://alpha.zeega.org/demo/web/app_dev.php/widget?url='+encodeURIComponent(src));
+  				$('#zeega-widget-iframe').attr('src','http://alpha.zeega.org/jesse/web/app_dev.php/widget?url='+encodeURIComponent(src));
   				 }
   				
   				});
