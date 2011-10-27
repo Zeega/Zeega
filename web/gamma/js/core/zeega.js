@@ -195,7 +195,6 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
-		console.log('********loadingnode');
 		
 		this.clearCurrentNode();
 		
@@ -209,11 +208,15 @@ var Zeega = {
 		
 		
 		//open/close visual editor
-		if(!this.currentNode.get('attr').editorHidden && $('#workspace').is(':hidden'))
+		var el = $('#workspace');
+		if(!this.currentNode.get('attr').editorHidden && el.is(':hidden'))
 		{
-			$('#workspace').show('blind',{'direction':'vertical'});
-		}else if( this.currentNode.get('attr').editorHidden && $('#workspace').is(':visible')){
-			$('#workspace').hide('blind',{'direction':'vertical'});
+			el.show('blind',{'direction':'vertical'});
+			$('#ve-toggle').html('–');
+			
+		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible')){
+			el.hide('blind',{'direction':'vertical'});
+			$('#ve-toggle').html('+');
 		}
 		
 		
