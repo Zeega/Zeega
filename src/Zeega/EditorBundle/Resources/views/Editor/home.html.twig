@@ -11,8 +11,8 @@
 <div style="clear:both;"></div>
  <br><br>
 <div id="user-info" style="color:white">
-	<div id="user-thumb" style="width:100px; float:left; border: 2px solid white;" ><img width="96px" height="96px" src="{{thumb}}" /></div>
-	<div id="user-bio" style="padding-left: 20px; width:300px; height:100px; float:left" >{{ bio }}</div>
+	<div id="user-thumb" style="width:105px; height: 105px; float:left; border: 2px solid white;" ><img width="105px" height="105px" src="{{thumb}}" /></div>
+	<div id="user-bio" style="padding-left: 20px; width:380px; height:100px; float:left" >{{displayname}} {{ bio }}</div>
 </div>
 <div style="clear:both;"></div>
 <br><br>
@@ -29,9 +29,9 @@
 			
 			<div id="playgrounds-list">
 				<div class="item-title" style="font-size: 16px; ">My Playgrounds</div><br><br>
-				<div id="my-projects" style="padding-left:20px;">
+				<div id="my-projects" style="padding-left:5px;">
 					{% for playground in playgrounds %}
-						<a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a> <span class="timeStamp"></span><br>
+						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a><span class="timeStamp"></span></li> 
 					{% endfor %}
 				</div>
 			</div> <!--#playgrounds-list-->

@@ -354,6 +354,7 @@ body
 	zoom: 1;
 }
 
+
 .pill-buttons:before,
 .pill-buttons:after
 {
@@ -382,9 +383,28 @@ body
 	background: #444;
 
 }
+
+.pill-buttons-widget a {
+	color: white;
+	margin: 5px 3px 5px 0px;
+	padding: 10px;
+	line-height: 30px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	background: red;
+
+}
+
 .pill-buttons a:hover {
   background: #eee;
   color: #333;
+  text-decoration: none;
+}
+
+.pill-buttons-widget a:hover {
+  background: #eee;
+  color: red;
   text-decoration: none;
 }
 .pill-buttons .active a {

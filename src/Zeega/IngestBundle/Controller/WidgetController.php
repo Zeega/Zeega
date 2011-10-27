@@ -160,7 +160,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
-			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo['id']);
+			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo);
 
 			//Store media item(s) to session and render widget
 
