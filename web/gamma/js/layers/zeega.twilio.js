@@ -59,7 +59,7 @@ var TwilioLayer = ProtoLayer.extend({
 		var tmp = _.template(this.getTemplate());
 		var content = 
 			{
-				code : _this.model.id,
+				code : 'WFMU-'+ _this.model.id,
 				phone_number : _this.defaultAttributes.phone,
 				drop_box : dropBox,
 				txt_body : _this.model.get('attr').txtBody,
