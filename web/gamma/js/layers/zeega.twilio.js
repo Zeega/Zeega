@@ -13,7 +13,7 @@ var TwilioLayer = ProtoLayer.extend({
 	defaultAttributes : 
 	{
 		'title' : 'Twilio Layer',
-		'phone'  : '+1 (555) 555-5555'
+		'phone'  : '+1 (617) 500-7254'
 	},
 						
 	drawControls : function(template)
