@@ -69,7 +69,7 @@ var Database = {
 	changeFilter : function(el)
 	{
 		var filter = $(el).val();
-		this.search( null, filter );
+		this.search( null, filter, true );
 	},
 	
 	//refresh the current items. reset to page 0. see if any items added to database

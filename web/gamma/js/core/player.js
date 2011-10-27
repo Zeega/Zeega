@@ -32,7 +32,7 @@ var Player = {
 	layersOnStage : [],
 	
 	waitToFinish : [],
-	advanceOnPlayback = false,
+	advanceOnPlayback : false,
 	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
