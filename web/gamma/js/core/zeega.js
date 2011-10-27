@@ -492,7 +492,6 @@ var Zeega = {
 	{
 		var nodeOrder = this.route.get('nodesOrder');
 		var currentNodeIndex = _.indexOf( nodeOrder,this.currentNode.id );
-		console.log(currentNodeIndex);
 		if( currentNodeIndex ) return this.route.nodes.get( nodeOrder[ currentNodeIndex-1 ] );
 		else return false;
 	},
