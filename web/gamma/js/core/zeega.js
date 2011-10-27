@@ -490,16 +490,17 @@ var Zeega = {
 	
 	getLeftNode : function()
 	{
-		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
+		var nodeOrder = this.route.get('nodesOrder');
+		var currentNodeIndex = _.indexOf( nodeOrder,this.currentNode.id );
 		console.log(currentNodeIndex);
-		if(currentNodeIndex > 0 ) return this.route.nodes.at( currentNodeIndex-1 );
+		if( currentNodeIndex ) return this.route.nodes.get( nodeOrder[ currentNodeIndex-1 ] );
 		else return false;
 	},
 	
 	getRightNode : function()
 	{
 		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
-		if(currentNodeIndex < _.size( this.route.nodes )-1 )return this.route.nodes.at( currentNodeIndex+1 );
+		if(currentNodeIndex < _.size( this.route.nodes )-1 ) return this.route.nodes.at( currentNodeIndex+1 );
 		else return false;
 	},
 	
