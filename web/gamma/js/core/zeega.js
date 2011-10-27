@@ -17,10 +17,14 @@
 *********************************************/
 
 var Zeega = {
+	
 	routeID : 1,
 	currentNode : null,
 	
 	previewMode:false,
+	
+	maxNodesPerRoute : 0,
+	maxLayersPerNode : 5,
 	
 	//ready flags
 	nodesReady : false,
@@ -276,35 +280,38 @@ var Zeega = {
 	
 	addLayerToNode : function( node, layer )
 	{
-		console.log('addLayerToNode');
-		//add URL to layer model
-		layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
-		
-		//check to see if the layer is saved or not. save if needed
-		if( layer.isNew() )
+		//reject if there are too many layers inside the node
+		if(node.get('layers') && node.get('layers').length < this.maxLayersPerNode)
 		{
-			console.log('this is a new layer');
-			layer.save(
-				{},
-				{
-					success : function(savedLayer, response){
-						//Add to the collection
-						if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
-						else Zeega.route.layers.add( savedLayer,{silent:true} );
-						
-						Zeega.updateAndSaveNodeLayer(node,savedLayer);
-						node.updateThumb();
-					}
-				});
-			//save the new layer then prepend the layer id into the node layers array
-		}else{
-			console.log('this is an old layer');
-			//prepend the layer id into the node layers array
-			this.updateAndSaveNodeLayer(node,layer);
-			
-			node.updateThumb();
-		}
+			console.log('addLayerToNode');
+			//add URL to layer model
+			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
 		
+			//check to see if the layer is saved or not. save if needed
+			if( layer.isNew() )
+			{
+				console.log('this is a new layer');
+				layer.save(
+					{},
+					{
+						success : function(savedLayer, response){
+							//Add to the collection
+							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
+							else Zeega.route.layers.add( savedLayer,{silent:true} );
+						
+							Zeega.updateAndSaveNodeLayer(node,savedLayer);
+							node.updateThumb();
+						}
+					});
+				//save the new layer then prepend the layer id into the node layers array
+			}else{
+				console.log('this is an old layer');
+				//prepend the layer id into the node layers array
+				this.updateAndSaveNodeLayer(node,layer);
+			
+				node.updateThumb();
+			}
+		}
 	},
 	
 	updateAndSaveNodeLayer : function(node, layer)
@@ -316,7 +323,7 @@ var Zeega = {
 			//if the layer array already exists
 			layerOrder = node.get('layers');
 			//add the layer id to the layer order array
-			layerOrder.unshift( layer.id );
+			layerOrder.unshift( layer.id );  //change this to PUSH and reverse the order of layers
 		}
 		
 		//set the layerOrder array inside the node
@@ -493,7 +500,7 @@ var Zeega = {
 		var nodeOrder = this.route.get('nodesOrder');
 		var currentNodeIndex = _.indexOf( nodeOrder,this.currentNode.id );
 		if( currentNodeIndex ) return this.route.nodes.get( nodeOrder[ currentNodeIndex-1 ] );
-		else return false;
+		else return this.route.nodes.get( nodeOrder[1] );
 	},
 	
 	getRightNode : function()
@@ -507,7 +514,6 @@ var Zeega = {
 	{
 		console.log('loading left node')
 		var node = this.getLeftNode();
-		console.log(node);
 		if(node) this.loadNode(node)
 	},
 	
