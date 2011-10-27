@@ -125,6 +125,8 @@ input:invalid, textarea:invalid { border-radius: 1px; -moz-box-shadow: 0px 0px 5
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: #f0dddd; }
 
 
+::-moz-selection{ background: #FF5E99; color:#fff; text-shadow: none; }
+::selection { background:#FF5E99; color:#fff; text-shadow: none; }
 a:link { -webkit-tap-highlight-color: #FF5E99; }
 button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
@@ -896,7 +898,7 @@ body
 	margin-bottom:10px;
 }
 
-#interactive-editor-bar
+#interaction-editor-bar
 {
 	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#444));
@@ -1176,9 +1178,10 @@ Media Player and Controls
 .timeLEF {
 
 position: relative;
+border: 1px dotted #999;
 height: 145px;
-
-
+margin-top: 15px;
+margin-left: 3px;
 
 }
 
@@ -1194,8 +1197,9 @@ width: 100%;
 #avStart {
 
 position: absolute;
+margin-top: 4px;
 
-
+left: 10px;
 }
 
 #avStop {
@@ -1203,7 +1207,7 @@ position: absolute;
 position: absolute;
 
 left: 125px;
-
+margin-top: 4px;
 
 }
 
@@ -1214,7 +1218,7 @@ input[name=avStartMinutes] {
 
 width:25px;	
 border: none;
-background-color:#555;
+background-color:#E6E6E6;
 text-align:right;
 }
 
@@ -1224,14 +1228,14 @@ input[name=avStopMinutes] {
 
 width:25px;	
 border: none;
-background-color:#555;
+background-color:#E6E6E6;
 text-align:right;
 }
 input[name=avStartSeconds] {
 
 width:35px;	
 border: none;
-background-color:#555;
+background-color:#E6E6E6;
 text-align:left;
 }
 
@@ -1239,7 +1243,7 @@ input[name=avStopSeconds] {
 
 width:35px;	
 border: none;
-background-color:#555;
+background-color:#E6E6E6;
 text-align:left;
 }
 

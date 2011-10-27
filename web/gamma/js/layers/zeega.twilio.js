@@ -7,54 +7,25 @@
 ************************************/
 
 var TwilioLayer = ProtoLayer.extend({
-	defaultAttributes : {
-							'title' : 'Video Layer',
-							'url' : 'none',
-							'in'  : 0,
-							'out' : 0,
-							'volume' : 50,
-							
-						},
+	
+	interaction: true,
+	
+	defaultAttributes : 
+	{
+		'title' : 'Twilio Layer',
+		'phone'  : 5555555555
+	},
 						
 	drawControls : function(template)
 	{
 		
-		var div = $('<div>')
-			.addClass('timeLEF layerEditingFrame')
-			.attr('id','player-'+this.model.id);
+		var div = $('<div>');
 		template.find('#controls').append(div);
-		this.editorLoaded=false;
-		
 
 	},
 	
-	openControls: function()
-	{
-	console.log('Audio Controls Opened');
-	
-	var that=this;
-		if(!this.editorLoaded){
-			var html = this.getTemplate();
-			$('#player-'+this.model.id).html(html);
-			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-			
-			//player triggers 'update' event to persist changes
-			$('#player-'+that.model.id).bind('updated',function(){
-				that.updateAttr();
-			});
-			that.editorLoaded=true;		
-		}
-	},
-	
-	closeControls: function()
-	{
-	
-		if(this.player) this.player.pause();
-		
-	},
 	
 	drawPreview : function(){
-		//make dom object - css should move to css file!
 		var container= $('<div>').attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id
@@ -62,11 +33,7 @@ var TwilioLayer = ProtoLayer.extend({
 				
 		this.dom = container;
 		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		//add icon into icon tray
-		$('.bar-icon-tray').append('audio');
+		$('.interaction-icon-tray').append('twilio');
 		
 	},
 	

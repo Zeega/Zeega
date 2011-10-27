@@ -42,18 +42,7 @@ function initUX(){
 		return false;
 	});
 	
-	$('#add-layer-modal').modal({
-		closeOnEscape: true
-	});
-	
-	$('#add-new-layer').click(function(){
-		$('#add-layer-modal').modal('show');
-		
-	});
-	
-	$('#cancel-add-layer').click(function(){
-		$('#add-layer-modal').modal('hide');
-	});
+
 	
 	
 }
@@ -179,20 +168,26 @@ function addLayer(type)
 {
 	//add new layer
 	var newLayer = new Layer({'type':type});
+	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
 
 function toggleWorkspace(el)
 {
+	var attr = Zeega.currentNode.get('attr');
 	var w = $(el).closest('.wrapper').find('.workspace');
 	if(w.is(':hidden'))
 	{
 		w.show('blind',{'direction':'vertical'});
 		$(el).html('–');
+		attr.editorHidden = false;
 	}else{
 		w.hide('blind',{'direction':'vertical'});
 		$(el).html('+');
+		attr.editorHidden = true;
 	}
+	Zeega.currentNode.set({'attr':attr});
+	Zeega.currentNode.save();
 }
 
 function expandLayer(el)

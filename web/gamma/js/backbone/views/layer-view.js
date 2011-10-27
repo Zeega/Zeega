@@ -21,114 +21,131 @@ var LayerView = Backbone.View.extend({
 		var type = this.model.get('type');
 		
 		//create the correct layer Child object
+		console.log(this.model.get('type'));
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
+		
 		
 		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
 		
-		var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
-		
-		//shorten title if necessary
-		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
+		//do if interaction layer
+		if(layerClass.interaction)
 		{
-			var title = this.model.get('attr').title.substr(0,70)+"…";
+			
+			/*
+			
+			//dont make a layer for ilayers
+			
+			$(this.el).append( $(iLayerTemplate).attr('id', 'layer-edit-'+this.model.id ) );
+			var title = this.model.get('type');
+			$(this.el).find('.layer-title').html( title );
+			console.log(this.el)
+			
+			
+			*/
+			this.el = "";
+		
+		//do if visual layer
 		}else{
-			var title = this.model.get('attr').title;
-		}
-		template.find('.layer-title').html( title );
-		
-		layerClass.load(this.model);
+			var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
+			var title;
+			//shorten title if necessary
+			if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
+			{
+				title = this.model.get('attr').title.substr(0,70)+"…";
+			}else{
+				title = this.model.get('attr').title;
+			}
+			
+			template.find('.layer-title').html( title );
 
-		if(Zeega.previewMode)
-		{
-			console.log('in preview mode');
-			
-			layerClass.drawPublish();
-			
-			var layerOrder = Zeega.currentNode.get('layers');
-			layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
-			
-		}else{
-			console.log('not in preview mode');
+			layerClass.load(this.model);
 
-			layerClass.drawPreview();
-		
-			//set initial layer order in the workspace
-			var layerOrder = Zeega.currentNode.get('layers');
-			layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
-		
-			//insert the special layer controls into the template
-			layerClass.drawControls(template);
-			//save the layer element into the view object
-			this.workspacePreview = layerClass;
-		
-			//label the li element so we can return something when sorting
-			$(this.el).attr('id', 'layer-'+ this.model.id);
-			$(this.el).html(template);
-		
-			
-			//check or uncheck the layer persist box
-				if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
-				{
-					$(this.el).find('#persist').attr('checked','true');
-				}
+			if(Zeega.previewMode)
+			{
+				console.log('in preview mode');
 
-			//set persistance action
-			$(this.el).find('#persist').change(function(){
-				var layer = _this.model;
-				if( $(this).is(':checked')){
-					Zeega.persistLayerOverNodes(layer);
-				}else{
-					Zeega.removeLayerPersist(layer);
-				}
-			});
-		
-		
-		
-			//	open/close and expanding layer items
-			$(this.el).find('.layer-title').click(function(){
-			
-				//close all other open layers.
-				//not working
-				//console.log( $('#sortable-layers .open').find('.layer-expand').not( $(this)) );
-				//$('#sortable-layers .open').find('.layer-expand').not( $(this)).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
-				//collapse all other layer controls
-				if($(this).closest('li').hasClass("open")){
-					//hide layer controls
-					$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
-					$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
-					$(this).closest('li').removeClass('open');
-					_this.workspacePreview.closeControls();
+				layerClass.drawPublish();
+
+				var layerOrder = Zeega.currentNode.get('layers');
+				layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+
+			}else{
+				console.log('not in preview mode');
+
+				layerClass.drawPreview();
+
+				//set initial layer order in the workspace
+				var layerOrder = Zeega.currentNode.get('layers');
+				layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+
+				//insert the special layer controls into the template
+				layerClass.drawControls(template);
+				//save the layer element into the view object
+				this.workspacePreview = layerClass;
+
+				//label the li element so we can return something when sorting
+				$(this.el).attr('id', 'layer-'+ this.model.id);
+				$(this.el).html(template);
+
+
+				//check or uncheck the layer persist box
+					if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+					{
+						$(this.el).find('#persist').attr('checked','true');
+					}
+
+				//set persistance action
+				$(this.el).find('#persist').change(function(){
+					var layer = _this.model;
+					if( $(this).is(':checked')){
+						Zeega.persistLayerOverNodes(layer);
+					}else{
+						Zeega.removeLayerPersist(layer);
+					}
+				});
+				//	open/close and expanding layer items
+				$(this.el).find('.layer-title').click(function(){
+
+					if($(this).closest('li').hasClass("open")){
+						//hide layer controls
+						$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
+						$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
+						$(this).closest('li').removeClass('open');
+						_this.workspacePreview.closeControls();
+						return false;
+					}else{
+						//show layer controls
+						$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
+						$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){_this.workspacePreview.openControls();});
+						$(this).closest('li').addClass('open');
+						return false;
+					}
+				});
+
+				//delete this layer from the DB and view
+				$(this.el).find('.delete-layer').click(function(){
+					//verify you with alert
+					var response = confirm('Delete Layer?');
+					if(response)
+					{
+						//remove the layer controls
+						_this.remove();
+						//remove the workspace preview
+						_this.workspacePreview.remove();
+
+						Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
+					}
 					return false;
-				}else{
-					//show layer controls
-					$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
-					$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){_this.workspacePreview.openControls();});
-					$(this).closest('li').addClass('open');
-					return false;
-				}
-			});
+				});
+
+
+			} //end if previewMode
+			
+			
+			
+		}// end if visual layer
 		
-			//delete this layer from the DB and view
-			$(this.el).find('.delete-layer').click(function(){
-				//verify you with alert
-				var response = confirm('Delete Layer?');
-				if(response)
-				{
-					//remove the layer controls
-					_this.remove();
-					//remove the workspace preview
-					_this.workspacePreview.remove();
-				
-					Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
-				}
-				return false;
-			});
-		
-		
-		} //end if previewMode
-		
-		
-		//	end jQuery interactions
+
 		return this;
 		
 	}
@@ -216,8 +233,8 @@ iLayerTemplate +=			"<div class='i-layer-uber-bar clearfix' onclick='expandLayer
 iLayerTemplate +=				"<div class='layer-icon'>";
 iLayerTemplate +=					"<span class='asset-type-icon ui-icon ui-icon-pin-w'></span>";
 iLayerTemplate +=				"</div>";
-iLayerTemplate +=				"<div class='i-layer-title'>Layer Name</div>";
-iLayerTemplate +=				"<div class='i-layer-uber-controls'>";
+iLayerTemplate +=				'<div class="layer-title">Layer Name</div>';
+iLayerTemplate +=				"<div class='layer-uber-controls'>";
 iLayerTemplate +=					"<span class='i-layer-delete ui-icon ui-icon-trash' onclick='deleteLayer();return false;'></span>";
 iLayerTemplate +=				"</div>";
 iLayerTemplate +=			"</div>";

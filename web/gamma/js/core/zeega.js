@@ -179,6 +179,7 @@ var Zeega = {
 	
 	clearCurrentNode : function ()
 	{
+		console.log('clearing current node');
 		//remove a prexisiting node style
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
@@ -194,18 +195,27 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
-		this.clearCurrentNode();
+		console.log('********loadingnode');
 		
+		this.clearCurrentNode();
 		
 		//set global currentNode to the selected node
 		this.currentNode = node;
 
 		window.location.hash = '/node/'+ node.id; //change location hash
 		
-
-
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+		
+		
+		//open/close visual editor
+		if(!this.currentNode.get('attr').editorHidden && $('#workspace').is(':hidden'))
+		{
+			$('#workspace').show('blind',{'direction':'vertical'});
+		}else if( this.currentNode.get('attr').editorHidden && $('#workspace').is(':visible')){
+			$('#workspace').hide('blind',{'direction':'vertical'});
+		}
+		
 		
 		//update the auto advance tray
 		//make sure the attribute exists
@@ -270,7 +280,7 @@ var Zeega = {
 				{},
 				{
 					success : function(savedLayer, response){
-						//Add to the collectin
+						//Add to the collection
 						if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
 						else Zeega.route.layers.add( savedLayer,{silent:true} );
 						

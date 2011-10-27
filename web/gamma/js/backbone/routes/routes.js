@@ -17,7 +17,7 @@ var MyRouter = Backbone.Router.extend({
 				else Zeega.url_hash.node = nodeid;
 			}
 			//check to see if the node is already loaded, or if it should move to that node
-			if(Zeega.route.nodes) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+			if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
 		
 	},
 

@@ -196,7 +196,6 @@ var Player = {
 		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
 		if(advanceValue) this.setAdvance( advanceValue );
 		
-		
 		//draw each layer
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
 		
