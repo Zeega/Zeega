@@ -32,6 +32,7 @@ var Player = {
 	layersOnStage : [],
 	
 	waitToFinish : [],
+	advanceOnPlayback = false,
 	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
@@ -318,7 +319,7 @@ var Player = {
 			this.advanceAfterTimeElapsed(advanceValue)
 		}else if(advanceValue == 0){
 			//after media
-			this.advanceAfterMedia();
+			this.advanceOnPlayback = true;
 		}else{
 			// do nothing. manual control
 		}
@@ -336,13 +337,13 @@ var Player = {
 	// advance node after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
+		if(this.advanceOnPlayback) this.goRight();
 		
 	},
 	
 	onPlaybackEnd : function(layerID)
 	{
 		console.log('layer playback ended: ' + layerID);
-		this.goRight();
 	},
 
 	// directional navigation
