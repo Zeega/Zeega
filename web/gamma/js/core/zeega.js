@@ -207,8 +207,7 @@ var Zeega = {
 
 		window.location.hash = '/node/'+ node.id; //change location hash
 		
-		//add a new current node style
-		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+
 		
 		
 		//open/close visual editor
@@ -266,6 +265,8 @@ var Zeega = {
 		//draw the layers
 		Zeega.route.layerViewCollection.render();
 
+		//add a new current node style
+		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 	},
 	
 	addNode : function()
@@ -440,15 +441,10 @@ var Zeega = {
 	{
 		if( confirm('Delete Node?') )
 		{
-			//clear workspace if it's the current node
-			if(view.model == this.currentNode) $('#workspace').empty();
-			//if not the last node, then load the node to the left of the current node
-			if( view.model == this.currentNode && this.route.nodes.length > 1 )
-			{
-			  //if the node is the current node load new node
-			  this.loadNode( this.route.nodes.at( _.indexOf( _.toArray( this.route.nodes ), this.currentNode) -1 ) );
-			}
-			//remove the node from the node collection
+
+			//try to move to left node
+			if( view.model == this.currentNode) this.loadLeftNode();
+
 			this.route.nodes.remove();
 			
 			view.model.destroy();
@@ -462,6 +458,9 @@ var Zeega = {
 				Zeega.loadNode( newNode );
 			}
 			this.nodeSort();
+			
+
+			
 		}
 	},
 		
@@ -492,6 +491,7 @@ var Zeega = {
 	getLeftNode : function()
 	{
 		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
+		console.log(currentNodeIndex);
 		if(currentNodeIndex > 0 ) return this.route.nodes.at( currentNodeIndex-1 );
 		else return false;
 	},
@@ -505,6 +505,7 @@ var Zeega = {
 	
 	loadLeftNode : function()
 	{
+		console.log('loading left node')
 		var node = this.getLeftNode();
 		console.log(node);
 		if(node) this.loadNode(node)
