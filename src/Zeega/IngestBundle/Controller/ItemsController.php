@@ -19,8 +19,8 @@ class ItemsController extends Controller
 
     public function postItemsAction()
     {
+    	
     	$user = $this->get('security.context')->getToken()->getUser();
-    	if($user){
 		$request = $this->getRequest();
 		if($request->request->get('attribution_url')&&$request->request->get('content_type')&&$request->request->get('item_url')){
  			
@@ -124,15 +124,11 @@ class ItemsController extends Controller
 								->findItemById($item->getId());					
 				return new Response(json_encode($response[0]['id']));
 			}
-		}
-    
+		
 
 	}
 
-	else{
-	
-		return new Response(-1);
-	}
+
 	} // `post_items`   [POST] /Items
 
     public function getItemAction($item_id)
