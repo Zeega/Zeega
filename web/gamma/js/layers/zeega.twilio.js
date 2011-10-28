@@ -85,7 +85,7 @@ var TwilioLayer = ProtoLayer.extend({
 						console.log(Zeega.draggedItem);
 						var source = Zeega.draggedItem;
 						//make sure it's an audio file
-						if(source.get('content_type') == 'Audio')
+						if(source.get('content_type') == 'Audio' && source.get('archive') != 'FMA' && source.get('archive') != 'Rdio' && source.get('archive') != 'SoundCloud' )
 						{
 							ui.draggable.draggable('option','revert',false);
 
@@ -205,7 +205,7 @@ var TwilioLayer = ProtoLayer.extend({
 		html +=	"<tr>";
 		html +=		"<td><input type='checkbox' name='txt' value='txt' <%= txt_checked %>/></td>";
 		html +=		"<td>";
-		html +=			"Get a text";
+		html +=			"Get an SMS text message";
 		html +=			"<div><textarea id='txt-area' rows='2' cols='58' maxlength='160'><%= txt_body %></textarea></div>";
 		html +=		"</td>";
 		html +=	"</tr>";
