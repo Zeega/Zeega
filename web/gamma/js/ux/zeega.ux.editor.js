@@ -216,8 +216,12 @@ $(document).ready(function() {
 
 		start : function(e,ui)
 		{
-			//this.xPos = ui.position.left;
-		
+			this.num= Math.floor( ui.position.left / 55 );
+			//console.log(this.num);
+		},
+		containment : 'parent',
+		helper :function() {
+			return $('<div>');
 		},
 		
 		drag : function(e,ui)
@@ -228,19 +232,19 @@ $(document).ready(function() {
 			{
 				var _this = this;
 				$('.ghost-node').remove();
-				_.times(temp, function(){
+				_.times(temp-this.num, function(){
 					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
-			this.num = temp;
+			//this.num = temp;
 
 		},
 		
 		stop : function(e,ui)
 		{
 			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
 		}
 	});
 	
