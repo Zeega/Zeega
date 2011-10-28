@@ -163,8 +163,8 @@ var GeoLayer = ProtoLayer.extend({
 		//Pull static map image using google api
 		
 		if(this.attr.type=='map'){
-			var w=Math.floor(7.20*this.attr.w);
-			var h=Math.floor(4.80*this.attr.h);
+			var w=6*parseInt(this.attr.w);
+			var h=4*parseInt(this.attr.h);
 			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		
 		}
@@ -218,8 +218,8 @@ var GeoLayer = ProtoLayer.extend({
 		//Pull static map image using google api
 		
 		if(this.attr.type=='map'){
-			var w=Math.floor(7.20*this.attr.w);
-			var h=Math.floor(4.80*this.attr.h);
+			var w=Math.floor($(window).width()*parseInt(this.attr.w)/100.0);
+			var h=Math.floor($(window).height()*parseInt(this.attr.h)/100.0);
 			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		}else{
 		
@@ -356,8 +356,8 @@ var GeoLayer = ProtoLayer.extend({
 			
 		//set the new dom attributes
 		
-		newAttr.x = Math.floor( this.dom.position().left / 6);
-		newAttr.y = Math.floor( this.dom.position().top / 4);
+		newAttr.x = Math.floor( this.dom.position().left / 6.0);
+		newAttr.y = Math.floor( this.dom.position().top / 4.0);
 
 		
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');

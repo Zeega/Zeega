@@ -65,7 +65,7 @@ class WidgetController extends Controller
 		
 		
 			if($img==FALSE){
-				return new Response(json_encode('Failed to Add'));	
+				return new Response(0);	
 
 			}
 			else{		
@@ -108,7 +108,7 @@ class WidgetController extends Controller
 	  }
 	  else
 	  {
-				return new Response(json_encode('Failed to Add:'.$widgetId));	
+				return new Response(0);	
 
 			}
 

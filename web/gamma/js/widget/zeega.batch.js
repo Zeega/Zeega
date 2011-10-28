@@ -35,14 +35,14 @@ var widget = {
 				 $(this).fadeOut();
 				 console.log('form submitted');
 				 postdata={
-					widgetId:$("#import-item img:nth-child(2)").data('id'),
+					widgetId:$("#import-item img:nth-child("+i+")").data('id'),
 				 }
 				 console.log(postdata);
 				 $.post(URL_PREFIX+'widget/persist',postdata,function(data){
 					console.log(data);
 					$('#add-item').fadeOut();
-					//$('#message').html('Media Successfuly Added');
-					$('#collection').prepend('<img style="border: solid 1px white; padding:2px;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="72px" height="72px"/>');
+					
+					if(data>0) $('#collection').prepend('<li><img style="border: solid 1px white;" title="none" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="80px" height="80px"/></li>');
 				 
 				 });
 			}
