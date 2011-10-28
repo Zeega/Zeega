@@ -8,15 +8,7 @@
  	<div class="item-title" style="font-size: 24px; ">{{playground.title}}</div><br><br>
  	<div class="item-title" style="font-size: 14px; ">{{message}}</div><br><br>
  	<div id="projects">
-			<br><br>
-	
-			
-			<br><br>
-			
-	
-				
 
-				<br></br>
 				<div class="item-title" style="font-size: 16px; ">Users</div> <br><br>
 				<div style="padding-left:20px;">
 					<ul>
@@ -28,21 +20,21 @@
 			</div><br><br>
 			<div id="new-user-add-button" style="padding-left:20px;">
 					<ul class="pill-buttons">
-						<li><a id="new-user" href="#">Add New User</a></li>
+						<li><a id="new-user" href="#" class="white">Add New User</a></li>
 						<!--<li><a id="add-user" href="#">Add Existing User</a></li> -->
 						
 					</ul>
 			</div>
 			<div >
 
-				<div class="item-title" style="font-size: 16px; ">Recently Upated Projects</div> <br><br>
+				<!--<div class="item-title" style="font-size: 16px; ">Recently Upated Projects</div> <br><br>
 				<div style="padding-left:20px;">
 					<ul>
 						{% for project in projects %}
-							<li class='project-{{project.id}}'><a>{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li>
+							<li class='project-{{project.id}}'><a class="white">{{project.title}}</a> <span class="timeStamp"> - </span> <a class='project-delete' style="color:red" data-id="{{project.id}}" href="#">delete</a></li>
 						{% endfor %}
 					</ul>
-				</div>
+				</div>-->
 			</div> <!--#projects-list-->
 			
 </div>	<!--#projects-->
