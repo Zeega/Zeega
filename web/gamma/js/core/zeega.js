@@ -333,20 +333,38 @@ var Zeega = {
 	removeLayerFromNode : function( node, layer )
 	{
 		//remove from node.layer and save it back
-		var layerOrder = node.get('layers');
-		layerOrder = _.without(layerOrder,layer.id);
+		
 		
 		//remove icon from tray
 		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
 		
-		//set array to -1 if empty  //weirdness
-		if(layerOrder.length == 0) layerOrder.push(-1);
-		node.set({'layers':layerOrder});
-		node.save();
+	
 		
+		//test to see if the layer is a persisting layer and destroy it from all nodes if so
+		var attr = this.route.get('attr');
+		
+		if(_.include(attr.persistLayers,layer.id))
+		{
+			this.removeLayerPersist(layer)
+			_.each( _.toArray(this.route.nodes), function(_node){
+				var layerOrder = _node.get('layers');
+				layerOrder = _.without(layerOrder,layer.id);
+				if(layerOrder.length == 0) layerOrder = new Array();
+				_node.set({'layers':layerOrder});
+				_node.save();
+				_node.updateThumb();
+			});
+		}else{
+			var layerOrder = node.get('layers');
+			layerOrder = _.without(layerOrder,layer.id);
+			//set array to -1 if empty  //weirdness
+			if(layerOrder.length == 0) layerOrder = new Array();
+			node.set({'layers':layerOrder});
+			node.save();
+			node.updateThumb();
+		}
 		this.destroyOrphans();
 		
-		node.updateThumb();
 		
 	},
 	
@@ -431,6 +449,8 @@ var Zeega = {
 		attr.persistLayers = _.without( attr.persistLayers, layer.id );
 		this.route.set({'attr':attr});
 		this.route.save();
+		
+		
 	},
 	
 	updateLayerOrder : function(layerIDs)
@@ -449,7 +469,8 @@ var Zeega = {
 	
 	destroyNode : function( view )
 	{
-		if( confirm('Delete Node?') )
+//		if( confirm('Delete Node?') )
+		if( true )
 		{
 
 			//try to move to left node

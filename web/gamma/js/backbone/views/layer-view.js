@@ -129,8 +129,8 @@ var LayerView = Backbone.View.extend({
 				//delete this layer from the DB and view
 				$(this.el).find('.delete-layer').click(function(){
 					//verify you with alert
-					var response = confirm('Delete Layer?');
-					if(response)
+//					if(confirm('Delete Layer?'))
+					if(true)
 					{
 						//remove the layer controls
 						_this.remove();
