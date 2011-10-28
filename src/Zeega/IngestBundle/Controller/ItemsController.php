@@ -19,9 +19,11 @@ class ItemsController extends Controller
 
     public function postItemsAction()
     {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	if($user){
 		$request = $this->getRequest();
 		if($request->request->get('attribution_url')&&$request->request->get('content_type')&&$request->request->get('item_url')){
- 			$user = $this->get('security.context')->getToken()->getUser();
+ 			
 			$em=$this->getDoctrine()->getEntityManager();
 			$session=$request->getSession();
 			if($session->get('Playground')) $playground=$session->get('Playground');
@@ -125,9 +127,12 @@ class ItemsController extends Controller
 		}
     
 
+	}
 
-
-
+	else{
+	
+		return new Response(-1);
+	}
 	} // `post_items`   [POST] /Items
 
     public function getItemAction($item_id)
