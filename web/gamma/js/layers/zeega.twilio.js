@@ -85,7 +85,7 @@ var TwilioLayer = ProtoLayer.extend({
 						console.log(Zeega.draggedItem);
 						var source = Zeega.draggedItem;
 						//make sure it's an audio file
-						if(source.get('content_type') == 'Audio')
+						if(source.get('content_type') == 'Audio' && source.get('archive') != 'FMA' && source.get('archive') != 'Rdio' && source.get('archive') != 'SoundCloud' )
 						{
 							ui.draggable.draggable('option','revert',false);
 
