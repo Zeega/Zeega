@@ -230,7 +230,7 @@ var ZeegaRdioPlayer = Class.extend({
             this._asset.rdio_setVolume(0);
             console.log("seeking to " + this._seek_to);
             if(this._last_known_state == 0 || this._last_known_state == 4)
-                this.play();
+                this._asset.rdio_play();
             
             this._seek_to = this._seek_to - 1;
             console.log("seeking to before ternary " + this._seek_to);
