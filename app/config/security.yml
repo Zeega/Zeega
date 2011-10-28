@@ -25,6 +25,12 @@ security:
         nodes:
             pattern:  ^/nodes
             anonymous: ~
+        layers:
+            pattern:  ^/layers/
+            anonymous: ~
+        routes:
+            pattern:  ^/routes/
+            anonymous: ~
         secured_area:
             pattern:    ^/
             form_login:
