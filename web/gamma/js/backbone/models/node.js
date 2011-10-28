@@ -4,7 +4,7 @@ var Node = Backbone.Model.extend({
 		"name" : "Untitled",
 		"attr" : {
 			"advance": 0,
-			"editorHidden":true
+			"editorHidden":false
 		}
 	},
 	
@@ -17,7 +17,7 @@ var Node = Backbone.Model.extend({
 	
 	initialize : function() {
 		
-		if(!this.get('attr')) this.set({'attr':{'advance':0}})		
+		if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
 	},
 	
 	//update the node thumbnail

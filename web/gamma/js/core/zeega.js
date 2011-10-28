@@ -211,12 +211,11 @@ var Zeega = {
 
 		window.location.hash = '/node/'+ node.id; //change location hash
 		
-
-		
 		
 		//open/close visual editor
 		var el = $('#workspace');
-		if(!this.currentNode.get('attr').editorHidden && el.is(':hidden'))
+
+		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden'))
 		{
 			el.show('blind',{'direction':'vertical'});
 			$('#ve-toggle').html('–');

@@ -126,7 +126,7 @@ var NodeViewCollection = Backbone.View.extend({
 		{
 			_(Zeega.route.nodes).push(node);
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
-		
+			node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
 			node.save(
 				{thumb_url:''},
 				{
