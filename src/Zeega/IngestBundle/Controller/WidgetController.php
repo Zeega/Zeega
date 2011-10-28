@@ -57,15 +57,25 @@ class WidgetController extends Controller
 			
 			
 			if(!$thumbUrl||$img==FALSE){
-				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
-				$url=explode(":/var/www/",$output[4]);
-				$thumbUrl='http://core.zeega.org/'.$url[1];
-				@$img=file_get_contents($thumbUrl);
+				if($item->getContentType()=='Image'){
+					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
+					$url=explode(":/var/www/",$output[4]);
+					$thumbUrl='http://core.zeega.org/'.$url[1];
+					@$img=file_get_contents($thumbUrl);
+				}
+				elseif($item->getContentType()=='Audio'){
+					@$img=file_get_contents('http://alpha.zeega.org/images/templates/audio.jpg');
+				
+				}
+				elseif($item->getContentType()=='Video'){
+					@$img=file_get_contents('http://alpha.zeega.org/images/templates/video.jpg');
+				
+				}
 			}
 		
 		
 			if($img==FALSE){
-				return new Response(json_encode('Failed to Add'));	
+				return new Response(0);	
 
 			}
 			else{		
@@ -108,7 +118,7 @@ class WidgetController extends Controller
 	  }
 	  else
 	  {
-				return new Response(json_encode('Failed to Add:'.$widgetId));	
+				return new Response(0);	
 
 			}
 
@@ -160,7 +170,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
-			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo['id']);
+			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo);
 
 			//Store media item(s) to session and render widget
 
@@ -170,7 +180,7 @@ class WidgetController extends Controller
 				if($session->get('items'))$newItems=$session->get('items');			
 				
 				$widgetId=rand(0,100);
-				$item->setAttributionUrl($url);
+				$item->setAttributionUrl($url."#".$user->getId());
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);

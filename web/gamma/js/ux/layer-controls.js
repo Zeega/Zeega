@@ -77,7 +77,13 @@ function makeCSSLayerSlider(args)
 }
 
 
+function textArea()
+{
+	var html = "<input type='textarea'>";
 
+	
+	return template;
+}
 
 
 function makeColorPicker(args)

@@ -32,6 +32,7 @@ var Player = {
 	layersOnStage : [],
 	
 	waitToFinish : [],
+	advanceOnPlayback : false,
 	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
@@ -89,7 +90,7 @@ var Player = {
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
-			_this.onPlaybackEnd(data.id);
+			_this.advanceAfterMedia(data.id);
 			return false;
 		});
 		
@@ -166,6 +167,9 @@ var Player = {
 		//loop through each node that is loading
 		_.each(this.nodesLoading,function(nodeID){
 			var layers = _this.nodes.get(nodeID).get('layers');
+			
+			if(_this.currentNode == nodeID) _this.loadingBar.update();
+			
 			//if all the layers are loaded in a node
 			if( _.difference( layers, _this.layersLoaded ).length == 0 )
 			{
@@ -178,6 +182,7 @@ var Player = {
 				if(_this.currentNode == nodeID)
 				{
 					_this.drawCurrentNode(); 
+					_this.loadingBar.remove();
 				}
 			}
 		})
@@ -194,8 +199,7 @@ var Player = {
 
 		//set timeout for auto advance
 		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
-		if(advanceValue) this.setAdvance( advanceValue );
-		
+		this.setAdvance( advanceValue );
 		
 		//draw each layer
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
@@ -239,11 +243,16 @@ var Player = {
 		
 	preloadNode : function(nodeID)
 	{
+		
+		
 		//if not loading or already loaded
 		if( !_.include( this.nodesLoaded, nodeID ) && !_.include(this.nodesLoading,nodeID))
 		{
 			_this = this;
 			console.log('preloading node: '+nodeID);
+			
+			if(nodeID == this.currentNode) this.loadingBar.draw();
+			
 			//put node id into the nodesLoading Array
 			this.nodesLoading.push( nodeID );
 			
@@ -313,13 +322,14 @@ var Player = {
 	
 	setAdvance : function(advanceValue)
 	{
+		console.log('********* '+advanceValue);
 		if(advanceValue > 0)
 		{
 			//after time in seconds
 			this.advanceAfterTimeElapsed(advanceValue)
 		}else if(advanceValue == 0){
 			//after media
-			this.advanceAfterMedia();
+			this.advanceOnPlayback = true;
 		}else{
 			// do nothing. manual control
 		}
@@ -337,14 +347,41 @@ var Player = {
 	// advance node after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
+		if(this.advanceOnPlayback) this.goRight();
 		
 	},
 	
-	onPlaybackEnd : function(layerID)
-	{
-		console.log('layer playback ended: ' + layerID);
-		this.goRight();
-	},
+	loadingBar :
+		{
+			count:0,
+			
+			draw : function()
+			{
+				var container = $('<div id="loading-container">').append($('<div id="progress-bar">'));
+				$('#zeega-player').append(container);
+			},
+			update : function()
+			{
+				this.count++;
+				//var layers = _this.nodes.get(nodeID).get('layers');
+				
+				var p = this.count / Player.layers.length *100;
+				console.log(this.count);
+				console.log(Player.nodes.get(Player.currentNode).get('layers').length);
+				
+				console.log(p);
+				
+				
+				$('#progress-bar').css('width',p+'%');
+				
+			},
+			remove : function()
+			{
+				$('#loading-container').fadeOut('fast',function(){$(this).remove()});
+			}
+			
+		},
+
 
 	// directional navigation
 	
@@ -364,6 +401,11 @@ var Player = {
 	goRight : function()
 	{
 		if(this.timeout) clearTimeout(this.timeout);
+		
+		/*
+		$('#preview-right').css({'opacity':1,'background':'rgba(255,0,0,.25)'});
+		$('#preview-right').fadeTo(100,0);
+		*/
 		
 		console.log('goRight');
 		var nodesOrder = this.route.get('nodesOrder');
@@ -387,7 +429,7 @@ var Player = {
 		console.log('goDown')
 	},
 		
-	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
+	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
 	
 	
 	reset : function()

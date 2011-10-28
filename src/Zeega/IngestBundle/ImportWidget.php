@@ -38,6 +38,8 @@ class ImportWidget
 		
 		
 		if(in_array($fileFormat,array('.jpg','.png','.gif'))||in_array($fileFormat,array('.mov','.mp4'))||in_array($fileFormat,array('.wav','.mp3','.aiff'))){
+			
+			
 			if(in_array($fileFormat,array('.jpg','.png','.gif'))) $contentType='Image';
 			elseif(in_array($fileFormat,array('.mov','.mp4')))$contentType='Video';
 			elseif(in_array($fileFormat,array('.wav','.mp3','.aiff'))){
@@ -202,7 +204,7 @@ class ImportWidget
 		$item->setItemUrl($id);
 		$item->setAttributionUrl('http://www.youtube.com/watch?v='+$id);
 		$item->setCreator((string)$xml->author->name);
-		$item->setContentType('Youtube');
+		$item->setContentType('Video');
 		$item->setSourceType('Youtube');
 		$item->setArchive('Youtube');
 		$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
@@ -214,11 +216,11 @@ class ImportWidget
 		return($item);
 	}
 	
-	
 	public function parseAbsolute($urlInfo){
 	
 		$item=new Item();
 		$item->setContentType($urlInfo['contentType']);
+		$item->setSourceType($urlInfo['contentType']);
 		$item->setItemUrl($urlInfo['itemUrl']);
 		$item->setItemUri($urlInfo['itemUrl']);
 		$item->setTitle($urlInfo['title']);
@@ -228,6 +230,8 @@ class ImportWidget
 		$item->setArchive($urlInfo['archive']);
 		$metadata->setAltCreator('');
 		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl('http://alpha.zeega.org/images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl('http://alpha.zeega.org/images/templates/video.jpg');
 		$metadata->setAltCreator('');
 		$metadata->setTagList('');
 		$media=new Media();
@@ -308,6 +312,7 @@ class ImportWidget
 		
 			$item->setArchive('Flickr'); 
 			$item->setContentType('Image');
+			$item->setSourceType('Image');
 			$metadata->setAttr($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);
@@ -424,6 +429,7 @@ class ImportWidget
 	$item->setCreator((string)$xml->{'user'}->{'username'});
 	$metadata->setAltCreator((string)$xml->{'user'}->{'username'});
 	$item->setContentType('Audio');
+	$item->setSourceType('Audio');
 	$item->setArchive('SoundCloud');
 	$item->setItemUrl((string)$xml->{'stream-url'});
 	$item->setItemUri((string)$xml->{'stream-url'});
@@ -486,7 +492,8 @@ class ImportWidget
 		$item->setCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$metadata->setAltCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$item->setArchive('blip.tv');
-		$item->setContentType('video');
+		$item->setContentType('Video');
+		$item->setSourceType('Video');
 		$item->setTitle((string)$info->{'title'});
 		$description=(string)$info->{'description'};
 		$metadata->setDescription(str_replace('<br />','',$description));

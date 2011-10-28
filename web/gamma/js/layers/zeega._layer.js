@@ -132,6 +132,7 @@ var ProtoLayer = Class.extend({
 
 	//init with a layer model
 	
+	interaction : false,
 	
 	init : function()
 	{

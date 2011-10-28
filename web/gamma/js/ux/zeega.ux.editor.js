@@ -42,18 +42,7 @@ function initUX(){
 		return false;
 	});
 	
-	$('#add-layer-modal').modal({
-		closeOnEscape: true
-	});
-	
-	$('#add-new-layer').click(function(){
-		$('#add-layer-modal').modal('show');
-		
-	});
-	
-	$('#cancel-add-layer').click(function(){
-		$('#add-layer-modal').modal('hide');
-	});
+
 	
 	
 }
@@ -76,12 +65,15 @@ function insertPager(items, page)
 					when we get up to within a threshold in the pages
 					then make another call to the database and make a new pager
 				*/
-				if(this.pages - page < 3)
+				
+				/*
+				if(this.pages - page < 3 && !Database.endOfItems)
 				{
 					console.log('load more!');
 					// call the database and add more item divs
-					Database.append();
+					//Database.append();
 				}
+				*/
 			
 		},
 		
@@ -179,20 +171,26 @@ function addLayer(type)
 {
 	//add new layer
 	var newLayer = new Layer({'type':type});
+	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
 
 function toggleWorkspace(el)
 {
+	var attr = Zeega.currentNode.get('attr');
 	var w = $(el).closest('.wrapper').find('.workspace');
 	if(w.is(':hidden'))
 	{
 		w.show('blind',{'direction':'vertical'});
 		$(el).html('–');
+		attr.editorHidden = false;
 	}else{
 		w.hide('blind',{'direction':'vertical'});
 		$(el).html('+');
+		attr.editorHidden = true;
 	}
+	Zeega.currentNode.set({'attr':attr});
+	Zeega.currentNode.save();
 }
 
 function expandLayer(el)
@@ -207,13 +205,46 @@ function expandLayer(el)
 	}
 }
 
-function deleteLayer()
-{
-	console.log('deleting')
-}
 
 
 $(document).ready(function() {
+	
+	
+	$('#add-node').draggable({
+		axis:'x',
+		revert:true,
+
+		start : function(e,ui)
+		{
+			//this.xPos = ui.position.left;
+		
+		},
+		
+		drag : function(e,ui)
+		{
+			//console.log('moved'+ ui.position.left)
+			var temp = Math.floor( ui.position.left / 55 );
+			if(this.num != temp)
+			{
+				var _this = this;
+				$('.ghost-node').remove();
+				_.times(temp, function(){
+					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					
+				})
+			}
+			this.num = temp;
+
+		},
+		
+		stop : function(e,ui)
+		{
+			$('.ghost-node').remove();
+			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
+		}
+	});
+	
+	
 	
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
@@ -304,6 +335,7 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
+	
 	/*****  		CRITICAL		*******/
 	
 	//enable the workspace as a valid drop location for DB items
@@ -319,7 +351,7 @@ $(document).ready(function() {
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('content_type'),
+						type: Zeega.draggedItem.get('source_type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
@@ -340,10 +372,14 @@ $(document).ready(function() {
 	// FAKE STUFF
 	$('#css-change').toggle(function(){
 		$('body').css('background','#fff');
-		$('#route-header').css('color','#444')
+		$('#route-header').css('color','#444');
+		$('#node-drawer').css('background','#fff');
+		$('.database-asset').css('background','#fff');
 	},function(){
 		$('body').css('background','');
-		$('#route-header').css('color','')
+		$('#route-header').css('color','');
+		$('#node-drawer').css('background','');
+		$('.database-asset').css('background','');
 	});
 
 

@@ -66,7 +66,7 @@ var AudioLayer = ProtoLayer.extend({
 		$('#workspace').append(this.dom);
 		
 		//add icon into icon tray
-		$('.bar-icon-tray').append('audio');
+		$('#visual-icon-tray').append('audio');
 		
 	},
 	

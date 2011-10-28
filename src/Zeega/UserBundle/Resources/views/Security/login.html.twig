@@ -1,28 +1,111 @@
-{% block content %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<title>{% block title %}Zeega Alpha{% endblock %}</title>
+
+<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+
+<style type="text/css">
+
+body {margin: 0px; padding: 0px; background-color: red; font-family: Helvetica, Sans Serif; color: white; }
+
+#main {margin: 0 auto; width: 400px; text-align: center; margin-top: 40px;} 
+
+div.box {
+background: transparent;
+position:relative;
+top:20px;
+float: left;
+text-align: center;	
+}
+
+div.box .input_text {
+padding:10px 10px;
+width:375px;
+background:#870000;
+border-bottom: 1px double #870000;
+border-top: 1px double #870000;
+border-left:1px double #870000;
+border-right:1px double #870000;
+color: white;
+font-size: 18px;
+}
+
+div.box .button
+{
+margin:0 0 10px 0;
+padding:4px 7px;
+background:#870000;
+border:0px;
+position: relative;
+float: left;
+width:100px;
+color: red;
+
+}
+
+div.box .button:hover
+{
+
+cursor: pointer;
+color: white;
+
+}
+
+label {
+
+display: block;
+font-variant: small-caps;
+margin-top: 10px;
+font-weight: bold;
+text-align: left;
+font-size: 14px;
+
+}
+
+input:-webkit-autofill {
+
+background:#870000 !important;
+
+}
+
+</style>
+
+<body>
+
+	<div id="main">
+		<img src="{{asset('gamma/images/zeegaAlpha.png')}}" /><br>
+		<span style="font-size: 14px; color: white; opacity: .6; text-align: right; display: block;">alpha</span>
+	
+    {% block content %}
+
+
     {% if error %}
         <div class="error">{{ error.message }}</div>
     {% endif %}
- 
+    
+    
     <form action="{{ path('_security_check') }}" method="POST">
-        <table>
-            <tr>
-                <td>
-                    <label for="username">Username:</label>
-                </td>
-                <td>
-                    <input type="text" id="username" name="_username" value="{{ last_username }}" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="password">Password:</label>
-                </td>
-                <td>
-                    <input type="password" id="password" name="_password" />
-                </td>
-            </tr>
-        </table>
-        <input type="submit" name="login" value="submit" />
+          <div class="box">
+          
+        		<label>Username</label>
+            	<input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" /><br>
+
+            	<label>Password</label>
+            	<input type="password" id="password" name="_password" class="input_text" /><br><br>
+  
+         		<input type="submit" name="login" value="submit" class="button" />
+				<br><br>
+            
+            
+         </div>
+ 
+        
 
     </form>
+    
 {% endblock %}
+
+    </div> <!--#main-->
+
+</body>
+</html>

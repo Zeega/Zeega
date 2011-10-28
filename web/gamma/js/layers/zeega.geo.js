@@ -115,6 +115,7 @@ var GeoLayer = ProtoLayer.extend({
 	
 	drawPreview : function()
 	{
+		var _this  = this;
 		console.log('drawing geo preview');
 		
 		//Create dom element
@@ -139,7 +140,6 @@ var GeoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-		var _this  = this;
 		
 		div.draggable({
 			stop : function(){
@@ -163,8 +163,8 @@ var GeoLayer = ProtoLayer.extend({
 		//Pull static map image using google api
 		
 		if(this.attr.type=='map'){
-			var w=Math.floor(7.20*this.attr.w);
-			var h=Math.floor(4.80*this.attr.h);
+			var w=6*parseInt(this.attr.w);
+			var h=4*parseInt(this.attr.h);
 			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		
 		}
@@ -173,14 +173,14 @@ var GeoLayer = ProtoLayer.extend({
 			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
 			var service=new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
-				that.attr.panoId=data.location.pano;
+				_this.attr.panoId=data.location.pano;
 				var x=2;
 				var y=1;
-				if(that.attr.pitch>25) y=0;
-				else if(that.attr.pitch<-25) y=2;
-				x=(Math.floor((that.attr.heading+360)/60))%6;
+				if(_this.attr.pitch>25) y=0;
+				else if(_this.attr.pitch<-25) y=2;
+				x=(Math.floor((_this.attr.heading+360)/60))%6;
 				console.log('load moment');
-				$('#layer-image-'+that.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+				$('#layer-image-'+_this.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+_this.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
 			});
 		}
 		
@@ -218,8 +218,8 @@ var GeoLayer = ProtoLayer.extend({
 		//Pull static map image using google api
 		
 		if(this.attr.type=='map'){
-			var w=Math.floor(7.20*this.attr.w);
-			var h=Math.floor(4.80*this.attr.h);
+			var w=Math.floor($(window).width()*parseInt(this.attr.w)/100.0);
+			var h=Math.floor($(window).height()*parseInt(this.attr.h)/100.0);
 			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		}else{
 		
@@ -356,8 +356,8 @@ var GeoLayer = ProtoLayer.extend({
 			
 		//set the new dom attributes
 		
-		newAttr.x = Math.floor( this.dom.position().left / 6);
-		newAttr.y = Math.floor( this.dom.position().top / 4);
+		newAttr.x = Math.floor( this.dom.position().left / 6.0);
+		newAttr.y = Math.floor( this.dom.position().top / 4.0);
 
 		
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');

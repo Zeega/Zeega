@@ -8,5 +8,4 @@
 /web/gamma/iamges/tmp/*
 /web/gamma/iamges/thumbs/*
 /music-search/
-/musicsearch/
-/musicsearchold/
+/web/gamma/js/widget/zeega.bookmarklet.js

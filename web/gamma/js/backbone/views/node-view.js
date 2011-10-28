@@ -52,14 +52,16 @@ var NodeView = Backbone.View.extend({
 				
 				ui.draggable.draggable('option','revert',false);
 				//make the new layer model
+				
 				var settings = {
 					url: Zeega.url_prefix + 'nodes/'+ that.model.id +'/layers',
-					type: Zeega.draggedItem.get('content_type'),
-					zIndex: Zeega.currentNode.get('layers').length+1,
+					type: Zeega.draggedItem.get('source_type'),
+//					zIndex: Zeega.currentNode.get('layers').length+1,
 					attr: {
 						'item_id' : Zeega.draggedItem.id,
 						'title' : Zeega.draggedItem.get('title'),
-						'url' : Zeega.draggedItem.get('item_url')
+						'url' : Zeega.draggedItem.get('item_url'),
+						'uri' : Zeega.draggedItem.get('item_url'),
 					}
 				};
 				var newLayer = new Layer( settings );
@@ -144,7 +146,8 @@ var NodeViewCollection = Backbone.View.extend({
 						_.each(persistLayers,function(layerID){
 							Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
 						});
-						
+						//add a new current node style
+						$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
 						
 					}
 				}

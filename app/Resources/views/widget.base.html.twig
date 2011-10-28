@@ -77,13 +77,13 @@
 				<div id="collection-wrapper" style="margin-top:20px; color: white; font-size:14px;"> 
 					<div  style="clear: both; border-top:dotted 1px red;  margin-top:20px;  margin-bottom:20px; margin-right:25px; width:100%; height:0px;"></div> 
 				
-					<b>My Collection:</b>
+					<b>My Zeega Collection</b>
 			
-					<div id="collection" style="margin-left:25px; margin-top:20px; width:400px;"> 
+					<div id="collection" style="margin-top:20px; width:426px;"> 
 						
 					
 						{% for item in mycollection %}
-					<img style="border: solid 1px white;" title="{{item.title}}" src="http://core.zeega.org/images/items/{{item.id}}_s.jpg" width="72px" height="72px"/>
+					<img style="border: solid 1px white;" title="{{item.title}}" src="http://core.zeega.org/images/items/{{item.id}}_s.jpg" width="80px" height="80px"/>
 						{% endfor %}
 					
 					
@@ -96,7 +96,7 @@
 					{% block footer %}
 						<div id="footerWrapper">
 							<div id="footer">
-						<a href="http://zeega.org">About Zeega</a> * Creative Commons Open Source License
+						&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> 2011 * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
 							</div>
 						</div>
 					{% endblock %}

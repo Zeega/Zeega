@@ -34,7 +34,6 @@ var loadFiles = [
 
 	//core
 	'order!core/zeega',
-    'order!core/zpub',
     'order!core/player',
     'order!core/database',
 	
@@ -75,6 +74,7 @@ var loadFiles = [
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
 	'order!layers/zeega.rdio',
+	'order!layers/zeega.twilio',
 	
 	//players
 	'order!players/zeega.html5av',

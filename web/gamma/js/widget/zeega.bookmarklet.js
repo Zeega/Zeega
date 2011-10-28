@@ -58,11 +58,12 @@ var bm = new bookmarklet({
 			
 			var highlight=$('<div>').css({
 				'position':'absolute',
-				'left':37,
+				'left':12,
 				'top' :148,
 				'background-color':'red',
 				'width':'150px',
 				'height':'150px',
+				'border-radius' :3,
 				'z-index':60000,
 				'display':'none',
 				'opacity':0.5,

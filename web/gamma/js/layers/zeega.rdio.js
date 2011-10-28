@@ -12,7 +12,7 @@ var RdioLayer = ProtoLayer.extend({
 							'title' : 'Video Layer',
 							'url' : 'none',
 							'in'  : 0,
-							'out' : 0,
+							'out' : 4,
 							'volume' : 50,
 							
 						},
@@ -98,20 +98,24 @@ var RdioLayer = ProtoLayer.extend({
 	},
 	
 	drawPreview : function(){
-		//make dom object - css should move to css file!
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				}).css({
-				
-				'position':'absolute',
-				'z-index':'1000',
-				'top':'10px',
-				'right':'15px',
-				'width':'48px',
-				'height':'40px'
-				});
-				
+	
+		//make dom object
+		var container= $('<div>');
+		
+		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
+		var cssObj = {
+			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+			'position' : 'absolute',
+			'top' : "40%",
+			'left' : "40%",
+			'z-index' : this.zIndex,
+			'width' : "20%",
+			'height' : "20%",
+		};
+		
+		
+		container.css(cssObj);
 		this.dom = container;
 		
 		//draw to the workspace
