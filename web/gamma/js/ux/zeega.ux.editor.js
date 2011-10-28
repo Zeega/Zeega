@@ -205,11 +205,6 @@ function expandLayer(el)
 	}
 }
 
-function selectAllText(textbox) {
-    textbox.focus();
-    textbox.select();
-}
-
 
 
 $(document).ready(function() {
