@@ -66,14 +66,14 @@ function insertPager(items, page)
 					then make another call to the database and make a new pager
 				*/
 				
-				/*
+				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
 					console.log('load more!');
 					// call the database and add more item divs
-					//Database.append();
+					Database.append();
 				}
-				*/
+				
 			
 		},
 		
@@ -154,17 +154,7 @@ function shareButton()
 
 function embedButton()
 {
-	//nuke layers
-	console.log('restoring layers and node layer order');
-	
-	_.each( _.toArray( Zeega.route.layers), function(layer){
-		//console.log(layer.id)
-		layer.destroy();
-	});
-	
-	var emptyArray = [-1];
-	Zeega.currentNode.set({'layers':emptyArray});
-	Zeega.currentNode.save();
+
 }
 
 function addLayer(type)
@@ -182,11 +172,11 @@ function toggleWorkspace(el)
 	if(w.is(':hidden'))
 	{
 		w.show('blind',{'direction':'vertical'});
-		$(el).html('–');
+		$('#ve-toggle').html('–');
 		attr.editorHidden = false;
 	}else{
 		w.hide('blind',{'direction':'vertical'});
-		$(el).html('+');
+		$('#ve-toggle').html('+');
 		attr.editorHidden = true;
 	}
 	Zeega.currentNode.set({'attr':attr});
@@ -373,18 +363,18 @@ $(document).ready(function() {
 				}
 		});
 		
-	// FAKE STUFF
-	$('#css-change').toggle(function(){
-		$('body').css('background','#fff');
-		$('#route-header').css('color','#444');
-		$('#node-drawer').css('background','#fff');
-		$('.database-asset').css('background','#fff');
-	},function(){
-		$('body').css('background','');
-		$('#route-header').css('color','');
-		$('#node-drawer').css('background','');
-		$('.database-asset').css('background','');
-	});
+		// FAKE STUFF
+		$('#css-change').toggle(function(){
+			$('body').css('background','#fff');
+			$('#route-header').css('color','#444');
+			$('#node-drawer').css('background','#fff');
+			$('.database-asset').css('background','#fff');
+		},function(){
+			$('body').css('background','');
+			$('#route-header').css('color','');
+			$('#node-drawer').css('background','');
+			$('.database-asset').css('background','');
+		});
 
 
 });

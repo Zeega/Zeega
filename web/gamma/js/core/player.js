@@ -221,6 +221,20 @@ var Player = {
 			
 		})
 		
+		//check to see if the current node is first or last and remove the correct arrow
+
+		var nodesOrder = this.route.get('nodesOrder');
+		if( _.indexOf(nodesOrder,this.currentNode) == 0 )
+		{
+			$('#preview-left').fadeOut();
+		}else if( _.indexOf(nodesOrder,this.currentNode) == nodesOrder.length-1 ){
+			$('#preview-right').fadeOut();
+		}else if( 	$('#preview-left').is(':hidden') ){
+			$('#preview-left').fadeIn()
+		}else if( 	$('#preview-right').is(':hidden') ){
+			$('#preview-right').fadeIn()
+		}
+		
 
 			
 	},
@@ -357,8 +371,11 @@ var Player = {
 			
 			draw : function()
 			{
-				var container = $('<div id="loading-container">').append($('<div id="progress-bar">'));
-				$('#zeega-player').append(container);
+				if(Player.layers.length)
+				{
+					var container = $('<div id="loading-container">').append($('<div id="progress-bar">'));
+					$('#zeega-player').append(container);
+				}
 			},
 			update : function()
 			{
@@ -366,11 +383,6 @@ var Player = {
 				//var layers = _this.nodes.get(nodeID).get('layers');
 				
 				var p = this.count / Player.layers.length *100;
-				console.log(this.count);
-				console.log(Player.nodes.get(Player.currentNode).get('layers').length);
-				
-				console.log(p);
-				
 				
 				$('#progress-bar').css('width',p+'%');
 				

@@ -33,8 +33,6 @@ var ZeegaRdioPlayer = Class.extend({
 		this._last_known_state = 0;
 		this._player_id = this._wrapper_id + '-rdioplayer';
 		
-		if(debug)console.log("rdioplayer:init ended"); 
-		
 		window['rdioListener'+this._id] = this;
         var div = $('<div>').attr('id',this._player_id);
         console.log("wrapper id" + this._player_id);
@@ -232,7 +230,7 @@ var ZeegaRdioPlayer = Class.extend({
             this._asset.rdio_setVolume(0);
             console.log("seeking to " + this._seek_to);
             if(this._last_known_state == 0 || this._last_known_state == 4)
-                this.play();
+                this._asset.rdio_play();
             
             this._seek_to = this._seek_to - 1;
             console.log("seeking to before ternary " + this._seek_to);
@@ -265,6 +263,7 @@ var ZeegaRdioPlayer = Class.extend({
                 this._seek_to = this._start_time;
                 this.playPause();
                 this.setMode('loading');
+                this.ended();
             }
         }
     },
@@ -293,6 +292,7 @@ var ZeegaRdioPlayer = Class.extend({
                 console.log("stop seeking at " + position);
                 this._seek_to = position;
                 this.setMode('readyToPlay');
+                this.ended();
             }
 		}
 		else if(this._mode == 'playing')
@@ -302,6 +302,7 @@ var ZeegaRdioPlayer = Class.extend({
     		    this.playPause();
     		    this._seek_to = this._start_time;
     		    this.setMode('seeking');
+    		    this.ended();
     		}
     		else
     		{
@@ -311,10 +312,11 @@ var ZeegaRdioPlayer = Class.extend({
 	},
 	
 	ended: function(){
-		if(debug)console.log("ended");
-		this.pause();
-		$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
-		this.timeUpdate(this._start_time);
+		if(debug) console.log("ENDED");
+		//this.pause();
+		//$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
+		//this.timeUpdate(this._start_time);
+		$('#zeega-player').trigger('ended',{'id':this._id});
 	},
 	
 	informGraphicInput:function(duration,startTime,stopTime,volume){
@@ -369,6 +371,7 @@ var ZeegaRdioPlayer = Class.extend({
 
 		$('#player-'+this._id).trigger('updated');	
 	},
+	
 	setCurrentTime:function(currentTime)
 	{
 	    if(this._last_known_state == 1)
@@ -417,7 +420,10 @@ var ZeegaRdioPlayer = Class.extend({
 	    if(this._last_known_state == 2) // stopped. reload the file.
 	        this._asset.rdio_play(this._url);
 	    else
+	    {
+	        this._mode = 'playing';
 	        this._asset.rdio_play();
+	    }
 	},
 	
 	updatePlaybackControls:function(state)

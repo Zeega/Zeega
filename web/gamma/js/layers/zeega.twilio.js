@@ -150,7 +150,7 @@ var TwilioLayer = ProtoLayer.extend({
 	
 	drawPreview : function(){
 		//put icon in icon tray
-		$('#interaction-icon-tray').append('twilio');
+		$('#interaction-icon-tray').append('<span class="twilio-tray-icon">Twilio</span>');
 		
 	},
 	
