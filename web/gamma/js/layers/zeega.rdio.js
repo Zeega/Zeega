@@ -109,9 +109,12 @@ var RdioLayer = ProtoLayer.extend({
 		console.log('rdio hidePublish ');
 		this.dom.css({'z-index':z,'top':"-100%",'left':"100%"});
 		var that = this;
-		setTimeout(function(){
-            that.player.pause();
-        }, 1500); 
+		if(!that.player.isPlaying())
+		{
+			setTimeout(function(){
+				that.player.pause();
+			}, 1500); 
+		}
 		//if(this.player) this.player.pause();
 	},
 		
