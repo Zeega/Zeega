@@ -289,12 +289,6 @@ var Player = {
 		}
 	},
 	
-	wait : function()
-	{
-		
-	},
-
-	
 	preloadLayer : function(layerID)
 	{
 		//if not loading or already loaded

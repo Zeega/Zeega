@@ -44,8 +44,18 @@ $(document).ready(function() {
 	});
 	*/
 
-	$('#new-user').click(function(){ $('#new-user-add').fadeIn('fast'); return false;});
 	$('#add-user').click(function(){ $('#user-add').fadeIn('fast'); return false;});
 	$('#user-add-cancel').click(function(){$('#user-add').fadeOut(); return false;});
 	$('#new-user-add-cancel').click(function(){ $('#new-user-add').fadeOut(); return false;});
+
+
+
+	$('#new-user').click(function(){
+		
+		console.log('modal me');
+		$('#new-user-add').modal('show');
+		return false;
+	});
+
+
 });
