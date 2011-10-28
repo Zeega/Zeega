@@ -16,6 +16,7 @@ var loadFiles = [
 	'order!js/layers/previews/zeega.image.preview.js',
 	'order!js/layers/previews/zeega.geo.preview.js',
 	'order!js/layers/previews/zeega.text.preview.js',
+	'order!js/layers/previews/zeega.rdio.preview.js',
 
 	
 	
@@ -38,6 +39,7 @@ if(data[i].type=="Video"||data[i].type=="Youtube") videoPreview(data[i].attr,100
 else if(data[i].type=="Image") imagePreview(data[i].attr,100-i);
 else if(data[i].type=="Geo") geoPreview(data[i].attr,100-i);
 else if(data[i].type=="Text") textPreview(data[i].attr,100-i);
+else if(data[i].type=="Rdio") rdioPreview(data[i].attr,100-i);
 
 }
 

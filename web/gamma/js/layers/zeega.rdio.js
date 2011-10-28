@@ -11,8 +11,8 @@ var RdioLayer = ProtoLayer.extend({
 	defaultAttributes : {
 							'title' : 'Video Layer',
 							'url' : 'none',
-							'in'  : 0,
-							'out' : 4,
+							'in'  : 10,
+							'out' : 20,
 							'volume' : 50,
 							
 						},
@@ -73,17 +73,41 @@ var RdioLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		
 		this.player = new ZeegaRdioPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id);
-        
+        //make dom object
+		var container= $('<div>');
+		
+		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
+		var cssObj = {
+			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100% 100%',
+			'position' : 'absolute',
+			'top' : "-100%",
+			'left' : "-100%",
+			'z-index' : this.zIndex,
+			'width' : "200px",
+			'height' : "200px",
+			
+		};
+		
+		
+		container.css(cssObj);
+		this.dom = container;
+		
+		//draw to preview
+		$('#zeega-player').find('#preview-media').append(this.dom);
 	    console.log("rdio preload finished");
 	},
 	
 	drawPublish : function(z){
 		console.log('rdio drawPublish ');
+		this.dom.css({'z-index':z,'top':"40%",'left':"40%"});
+		
 		if(this.player) this.player.play();
 	},
 	
 	hidePublish : function(z){
 		console.log('rdio hidePublish ');
+		this.dom.css({'z-index':z,'top':"-100%",'left':"100%"});
 		var that = this;
 		setTimeout(function(){
             that.player.pause();
@@ -105,13 +129,13 @@ var RdioLayer = ProtoLayer.extend({
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
 			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
-			'backgroundSize': '100px 100px',
+			'backgroundSize': '100% 100%',
 			'position' : 'absolute',
-			'top' : "40%",
-			'left' : "40%",
+			'top' : "133px",
+			'left' : "233px",
 			'z-index' : this.zIndex,
-			'width' : "20%",
-			'height' : "20%",
+			'width' : "144px",
+			'height' : "144px",
 		};
 		
 		
