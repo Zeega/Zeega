@@ -205,14 +205,46 @@ function expandLayer(el)
 	}
 }
 
-function selectAllText(textbox) {
-    textbox.focus();
-    textbox.select();
-}
-
 
 
 $(document).ready(function() {
+	
+	
+	$('#add-node').draggable({
+		axis:'x',
+		revert:true,
+
+		start : function(e,ui)
+		{
+			//this.xPos = ui.position.left;
+		
+		},
+		
+		drag : function(e,ui)
+		{
+			//console.log('moved'+ ui.position.left)
+			var temp = Math.floor( ui.position.left / 55 );
+			if(this.num != temp)
+			{
+				var _this = this;
+				$('.ghost-node').remove();
+				_.times(temp, function(){
+					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					
+				})
+			}
+			this.num = temp;
+
+		},
+		
+		stop : function(e,ui)
+		{
+			$('.ghost-node').remove();
+			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
+		}
+	});
+	
+	
 	
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();

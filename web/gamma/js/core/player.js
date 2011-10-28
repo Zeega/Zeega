@@ -167,6 +167,9 @@ var Player = {
 		//loop through each node that is loading
 		_.each(this.nodesLoading,function(nodeID){
 			var layers = _this.nodes.get(nodeID).get('layers');
+			
+			if(_this.currentNode == nodeID) _this.loadingBar.update();
+			
 			//if all the layers are loaded in a node
 			if( _.difference( layers, _this.layersLoaded ).length == 0 )
 			{
@@ -179,6 +182,7 @@ var Player = {
 				if(_this.currentNode == nodeID)
 				{
 					_this.drawCurrentNode(); 
+					_this.loadingBar.remove();
 				}
 			}
 		})
@@ -239,11 +243,16 @@ var Player = {
 		
 	preloadNode : function(nodeID)
 	{
+		
+		
 		//if not loading or already loaded
 		if( !_.include( this.nodesLoaded, nodeID ) && !_.include(this.nodesLoading,nodeID))
 		{
 			_this = this;
 			console.log('preloading node: '+nodeID);
+			
+			if(nodeID == this.currentNode) this.loadingBar.draw();
+			
 			//put node id into the nodesLoading Array
 			this.nodesLoading.push( nodeID );
 			
@@ -341,6 +350,37 @@ var Player = {
 		if(this.advanceOnPlayback) this.goRight();
 		
 	},
+	
+	loadingBar :
+		{
+			count:0,
+			
+			draw : function()
+			{
+				var container = $('<div id="loading-container">').append($('<div id="progress-bar">'));
+				$('#zeega-player').append(container);
+			},
+			update : function()
+			{
+				this.count++;
+				//var layers = _this.nodes.get(nodeID).get('layers');
+				
+				var p = this.count / Player.layers.length *100;
+				console.log(this.count);
+				console.log(Player.nodes.get(Player.currentNode).get('layers').length);
+				
+				console.log(p);
+				
+				
+				$('#progress-bar').css('width',p+'%');
+				
+			},
+			remove : function()
+			{
+				$('#loading-container').fadeOut('fast',function(){$(this).remove()});
+			}
+			
+		},
 
 
 	// directional navigation
@@ -362,10 +402,10 @@ var Player = {
 	{
 		if(this.timeout) clearTimeout(this.timeout);
 		
+		/*
 		$('#preview-right').css({'opacity':1,'background':'rgba(255,0,0,.25)'});
 		$('#preview-right').fadeTo(100,0);
-		
-		
+		*/
 		
 		console.log('goRight');
 		var nodesOrder = this.route.get('nodesOrder');
