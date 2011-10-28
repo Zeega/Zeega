@@ -437,7 +437,7 @@ class ImportWidget
 	$duration=(string)$xml->{'duraton'};
 	$media->setDuration(floor($duration/1000));
 	if(!strpos($item->getItemUrl(),'stream')){
-		return fail;
+		return false;
 	}
 	else{
 		$url=$item->getItemUrl();
