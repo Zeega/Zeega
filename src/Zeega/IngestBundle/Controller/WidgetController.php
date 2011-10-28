@@ -57,10 +57,20 @@ class WidgetController extends Controller
 			
 			
 			if(!$thumbUrl||$img==FALSE){
-				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
-				$url=explode(":/var/www/",$output[4]);
-				$thumbUrl='http://core.zeega.org/'.$url[1];
-				@$img=file_get_contents($thumbUrl);
+				if($item->getContentType()=='Image'){
+					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
+					$url=explode(":/var/www/",$output[4]);
+					$thumbUrl='http://core.zeega.org/'.$url[1];
+					@$img=file_get_contents($thumbUrl);
+				}
+				elseif($item->getContentType()=='Audio'){
+					@$img=file_get_contents('http://alpha.zeega.org/images/templates/audio.jpg');
+				
+				}
+				elseif($item->getContentType()=='Video'){
+					@$img=file_get_contents('http://alpha.zeega.org/images/templates/video.jpg');
+				
+				}
 			}
 		
 		

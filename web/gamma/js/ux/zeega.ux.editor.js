@@ -351,7 +351,7 @@ $(document).ready(function() {
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('content_type'),
+						type: Zeega.draggedItem.get('source_type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),

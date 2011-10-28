@@ -189,6 +189,7 @@ var Database = {
 						'date_created_end':item.date_created_end,
 						'creator':item.creator,
 						'content_type':item.content_type,
+						'source_type':item.content_type,
 						'attribution_url':item.attribution_url,
 						'archive':item.archive
 					});
