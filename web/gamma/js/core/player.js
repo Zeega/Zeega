@@ -130,6 +130,7 @@ var Player = {
 			_.each( $(this).find('video'), function(video){
 				$(video).attr('src','')
 			});
+			_this.reset();
 			$(this).remove() 
 		}); 
 		
@@ -457,6 +458,7 @@ var Player = {
 		
 		this.layers = null;			// collection of layers
 		this.layerClasses = {};	// array of layerClasses
+		if(this.timeout) clearTimeout(this.timeout);
 	}
 	
 	
