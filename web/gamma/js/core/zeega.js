@@ -335,6 +335,10 @@ var Zeega = {
 		//remove from node.layer and save it back
 		var layerOrder = node.get('layers');
 		layerOrder = _.without(layerOrder,layer.id);
+		
+		//remove icon from tray
+		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
+		
 		//set array to -1 if empty  //weirdness
 		if(layerOrder.length == 0) layerOrder.push(-1);
 		node.set({'layers':layerOrder});
