@@ -20,7 +20,11 @@
 			</div><br><br>
 			<div id="new-user-add-button" style="padding-left:20px;">
 					<ul class="pill-buttons">
+<<<<<<< HEAD
 						<li><a id="new-user" href="#" class="white">Add New User</a></li>
+=======
+						<li><a id="new-user" href="#" >Add New User</a></li>
+>>>>>>> 41a3feec6ec09dd185d76fd2fd2b3080e0732590
 						<!--<li><a id="add-user" href="#">Add Existing User</a></li> -->
 						
 					</ul>
@@ -46,14 +50,25 @@
 {% endblock %}
 
 {% block extras %}
-		<div id="new-user-add" style='display:none;'>		
+		<div id="new-user-add" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Add New User</h3>
+			</div>
+			<div class="modal-body clearfix">
 				<form class='admin-form' action="" method="post" {{ form_enctype(form) }}>
 					{{ form_widget(form) }}
-					<span class='admin-submit'>
+					
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
 					<input type="submit" value="Cancel" id="new-user-add-cancel" />
 					<input type="submit" />
-					</span>
-				</form>
+				</span>
+			</form>
+			</div>
+			
+				
 			</div>
 		<div >	
 		

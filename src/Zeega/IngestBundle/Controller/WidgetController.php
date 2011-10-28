@@ -174,7 +174,7 @@ class WidgetController extends Controller
 
 			//Store media item(s) to session and render widget
 
-			if(isset($item)){
+			if(isset($item)&&$item){
 		
 				
 				if($session->get('items'))$newItems=$session->get('items');			

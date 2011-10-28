@@ -16,6 +16,10 @@
 	-moz-border-radius: 15px;
 }
 
+#new-user-add>div
+{
+}
+
 #playground-add {
 	display: none;
 	position: absolute;
@@ -34,7 +38,7 @@
 	width: 400px;
 }
 .admin-form label{
-	color: white;
+	color: #333;
 	clear: left;
 	float: left;
 	width: 41%;
@@ -457,10 +461,9 @@ body
 {
 	background:yellow;
 	float: right;
-	height: 20px;
 	text-decoration: none;
-	width: 20px;
 	text-align: center;
+	-webkit-border-radius: 0 0 4px 0;
 }
 
 .node-thumb
