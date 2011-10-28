@@ -362,6 +362,11 @@ var Player = {
 	{
 		if(this.timeout) clearTimeout(this.timeout);
 		
+		$('#preview-right').css({'opacity':1,'background':'rgba(255,0,0,.25)'});
+		$('#preview-right').fadeTo(100,0);
+		
+		
+		
 		console.log('goRight');
 		var nodesOrder = this.route.get('nodesOrder');
 		var index = _.indexOf(nodesOrder, this.currentNode);
@@ -384,7 +389,7 @@ var Player = {
 		console.log('goDown')
 	},
 		
-	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><img src='' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
+	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
 	
 	
 	reset : function()

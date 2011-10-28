@@ -18,7 +18,8 @@ var ProjectView = Backbone.View.extend({
 			{
 				indicator : 'Saving...',
 				tooltip   : 'Click to edit...',
-				indicator : '<img src="images/loading.gif">'
+				indicator : '<img src="images/loading.gif">',
+				select : true
 			});
 		
 		$('#route-title').html(this.el);

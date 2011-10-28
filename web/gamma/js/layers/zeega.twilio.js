@@ -13,7 +13,7 @@ var TwilioLayer = ProtoLayer.extend({
 	defaultAttributes : 
 	{
 		'title' : 'Twilio Layer',
-		'phone'  : '+1 (555) 555-5555'
+		'phone'  : '+1 (617) 500-7254'
 	},
 						
 	drawControls : function(template)
@@ -59,7 +59,7 @@ var TwilioLayer = ProtoLayer.extend({
 		var tmp = _.template(this.getTemplate());
 		var content = 
 			{
-				code : _this.model.id,
+				code : 'WFMU-'+ _this.model.id,
 				phone_number : _this.defaultAttributes.phone,
 				drop_box : dropBox,
 				txt_body : _this.model.get('attr').txtBody,
