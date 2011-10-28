@@ -1191,6 +1191,24 @@ margin-top: 10px;
 	color:#ccc;
 }
 
+#loading-container
+{
+	height:2px;
+	width:100%;
+	border:1px solid #333;
+	position:absolute;
+	top:15%;
+	
+	z-index:999;
+}
+
+#progress-bar
+{
+	background:red;
+	height:100%;
+	width:0;
+}
+
 
 /*
 
