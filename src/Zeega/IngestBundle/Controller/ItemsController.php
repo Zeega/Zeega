@@ -58,7 +58,8 @@ class ItemsController extends Controller
 			if($request->request->get('archive')) $item->setArchive($request->request->get('archive'));
 			
 			if($request->request->get('source_type')) $item->setSourceType($request->request->get('source_type'));
-			else $item->setSourceType($request->request->get('content_type'));
+			else $item->setSourceType($request->request->get('source_type'));
+			
 			
 			if($request->request->get('item_uri')) $item->setItemUri($request->request->get('item_uri'));
 			
