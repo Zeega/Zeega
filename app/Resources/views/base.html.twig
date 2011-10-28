@@ -45,7 +45,7 @@
 									{% if projectsMenu %}
 									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
 									<ul class='drop-down-menu'>
-											{% if adminMenu %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}">Admin</a></li>{% endif %}
+											{% if adminMenu %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
 											<li><a href="{{path('ZeegaEditorBundle_playground', { 'short': short })}}" class="dark">Projects</a></li>
 									</ul>
 									{% elseif adminMenu %}

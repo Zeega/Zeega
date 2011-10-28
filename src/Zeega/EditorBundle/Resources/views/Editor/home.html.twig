@@ -31,7 +31,7 @@
 				<div class="item-title" style="font-size: 16px; ">My Playgrounds</div><br><br>
 				<div id="my-projects" style="padding-left:5px;">
 					{% for playground in playgrounds %}
-						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a><span class="timeStamp"></span></li> 
+						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}" class="white">{{playground.title}}</a><span class="timeStamp"></span></li> 
 					{% endfor %}
 				</div>
 			</div> <!--#playgrounds-list-->

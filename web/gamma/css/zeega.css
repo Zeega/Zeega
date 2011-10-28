@@ -140,13 +140,13 @@ a, a:active, a:visited
 }
 a:hover 
 {
-	color: white;
+	color: #036;
 	text-decoration:underline;
 }
 
-a.dark:hover 
+a.white:hover 
 {
-	color: #036;
+	color: white;
 	text-decoration:underline;
 }
 
