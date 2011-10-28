@@ -115,6 +115,7 @@ var GeoLayer = ProtoLayer.extend({
 	
 	drawPreview : function()
 	{
+		var _this  = this;
 		console.log('drawing geo preview');
 		
 		//Create dom element
@@ -139,7 +140,6 @@ var GeoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-		var _this  = this;
 		
 		div.draggable({
 			stop : function(){
@@ -173,14 +173,14 @@ var GeoLayer = ProtoLayer.extend({
 			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
 			var service=new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
-				that.attr.panoId=data.location.pano;
+				_this.attr.panoId=data.location.pano;
 				var x=2;
 				var y=1;
-				if(that.attr.pitch>25) y=0;
-				else if(that.attr.pitch<-25) y=2;
-				x=(Math.floor((that.attr.heading+360)/60))%6;
+				if(_this.attr.pitch>25) y=0;
+				else if(_this.attr.pitch<-25) y=2;
+				x=(Math.floor((_this.attr.heading+360)/60))%6;
 				console.log('load moment');
-				$('#layer-image-'+that.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+				$('#layer-image-'+_this.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+_this.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
 			});
 		}
 		
