@@ -170,7 +170,7 @@ class WidgetController extends Controller
 				if($session->get('items'))$newItems=$session->get('items');			
 				
 				$widgetId=rand(0,100);
-				$item->setAttributionUrl($url);
+				$item->setAttributionUrl($url."#".$user->getId());
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
