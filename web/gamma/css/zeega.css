@@ -613,11 +613,12 @@ body
 .database-asset
 {
 	padding:0px;
-	margin-bottom:1px;
+	margin-bottom:3px;
 	background:#555;
 	overflow:hidden;
 	width:100%;
-	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #555;
 	
 }
 
@@ -645,7 +646,8 @@ body
 	font-size:.8em;
 	color:#aaa;
 	float:right;
-	margin-right:2px;
+	margin-right:5px;
+	margin-top: 5px;
 }
 
 #asset-preview

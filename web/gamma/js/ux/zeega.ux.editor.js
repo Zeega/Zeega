@@ -372,10 +372,14 @@ $(document).ready(function() {
 	// FAKE STUFF
 	$('#css-change').toggle(function(){
 		$('body').css('background','#fff');
-		$('#route-header').css('color','#444')
+		$('#route-header').css('color','#444');
+		$('#node-drawer').css('background','#fff');
+		$('.database-asset').css('background','#fff');
 	},function(){
 		$('body').css('background','');
-		$('#route-header').css('color','')
+		$('#route-header').css('color','');
+		$('#node-drawer').css('background','');
+		$('.database-asset').css('background','');
 	});
 
 
