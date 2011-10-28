@@ -469,7 +469,8 @@ var Zeega = {
 	
 	destroyNode : function( view )
 	{
-		if( confirm('Delete Node?') )
+//		if( confirm('Delete Node?') )
+		if( true )
 		{
 
 			//try to move to left node

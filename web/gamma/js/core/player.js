@@ -33,6 +33,7 @@ var Player = {
 	
 	waitToFinish : [],
 	advanceOnPlayback : false,
+	isFirstNode : true,
 	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
@@ -185,6 +186,7 @@ var Player = {
 					_this.drawCurrentNode(); 
 					_this.loadingBar.remove();
 				}
+				
 			}
 		})
 	},
@@ -193,6 +195,10 @@ var Player = {
 	drawCurrentNode : function()
 	{
 		_this = this;
+		
+		console.log('draw this!!!!!!!');
+		_this.isFirstNode = false;
+		
 		
 		var targetNode = this.nodes.get(this.currentNode);
 
@@ -281,6 +287,11 @@ var Player = {
 		}else{
 			this.drawCurrentNode();
 		}
+	},
+	
+	wait : function()
+	{
+		
 	},
 
 	
@@ -447,6 +458,7 @@ var Player = {
 	
 	reset : function()
 	{
+		this.isFirstNode = true;
 		this.lookAhead = 2;		// the number of nodes to preload ahead of the currentNode
 		this.route = null;			//collection of routes
 		this.nodes = null;			// collection of nodes
