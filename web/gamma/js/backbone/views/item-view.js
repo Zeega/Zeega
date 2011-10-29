@@ -28,7 +28,7 @@ var ItemView = Backbone.View.extend({
 			.attr('width','25');
 		
 		//shorten title if necessary
-		if(	this.model.get('title').length > 55) var title=this.model.get('title').substr(0,55)+"...";
+		if(	this.model.get('title').length > 45) var title=this.model.get('title').substr(0,45)+"...";
 		else var title=this.model.get('title');
 		
 		template.children(".item-title").html( title ).css({'font-size':'10px'});
