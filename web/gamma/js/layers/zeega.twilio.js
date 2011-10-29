@@ -21,6 +21,10 @@ var TwilioLayer = ProtoLayer.extend({
 		//this should go top to bottom
 		var _this = this;
 		
+		console.log(this);
+		console.log(this.model);
+		
+		
 		//set the ilayer template
 		var controls = $(iLayerTemplate);
 		
@@ -50,10 +54,13 @@ var TwilioLayer = ProtoLayer.extend({
 		var dropBox = "Drag audio into this box";
 		if(_this.model.get('attr').audioItemID)
 		{
+			dropBox = '';
 			//if something already exists in the dropbox
-			dropBox = _this.model.get('attr').audioTitle;
+			dropBox += _this.model.get('attr').audioTitle;
 		}
 		
+		var tb = '';
+		if(_this.model.get('attr').txtBody) tb += _this.model.get('attr').txtBody;
 		
 		//load controls
 		var tmp = _.template(this.getTemplate());
@@ -62,7 +69,7 @@ var TwilioLayer = ProtoLayer.extend({
 				code : 'WFMU-'+ _this.model.id,
 				phone_number : _this.defaultAttributes.phone,
 				drop_box : dropBox,
-				txt_body : _this.model.get('attr').txtBody,
+				txt_body : tb,
 				txt_checked : txtCheck,
 				phone_checked : phoneCheck
 				/*
