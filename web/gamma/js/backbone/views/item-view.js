@@ -163,25 +163,33 @@ var ItemViewCollection = Backbone.View.extend({
 	
 	render : function(){
 		
-		var that = this;
+		var _this = this;
 		$('#tab-database-slide-window').empty();
 		var temp = $('<div id="db-1" class="slider" />');
 		
 		//add EACH model's view to the that.el and render it
-		_(this._itemViews).each(function(item, i){
-			
-			//console.log(item);
-			
+		_.each(this._itemViews, function(item, i){
+
 			$(temp).append(item.render().el);
 			if( i % 10 == 9 )
 			{
-				that._itemBundles.push(temp);
+				_this._itemBundles.push(temp);
 				$('#tab-database-slide-window').append(temp);
 				//reset the temp
 				temp = $('<div class="slider" />').append($('<ul>'));
+			}else if(_this._itemViews.length-1 == i){
+				$('#tab-database-slide-window').append(temp);
+				Database.endOfItems = true;
 			}
 		});
-				
+		
+		/*
+		if(this._itemViews.length < 100)
+		{
+			console.log('lesssssss')
+		}
+		*/
+		
 		// database window slider
 		$('#tab-database-slide-window').cycle({ 
 			fx : 'scrollHorz',
