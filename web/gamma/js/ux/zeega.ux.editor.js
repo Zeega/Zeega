@@ -66,6 +66,7 @@ function insertPager(items, page)
 					then make another call to the database and make a new pager
 				*/
 				
+				console.log(Database.endOfItems);
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
@@ -206,12 +207,8 @@ $(document).ready(function() {
 
 		start : function(e,ui)
 		{
-			this.num= Math.floor( ui.position.left / 55 );
-			//console.log(this.num);
-		},
-		containment : 'parent',
-		helper :function() {
-			return $('<div>');
+			//this.xPos = ui.position.left;
+		
 		},
 		
 		drag : function(e,ui)
@@ -222,19 +219,19 @@ $(document).ready(function() {
 			{
 				var _this = this;
 				$('.ghost-node').remove();
-				_.times(temp-this.num, function(){
+				_.times(temp, function(){
 					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
-			//this.num = temp;
+			this.num = temp;
 
 		},
 		
 		stop : function(e,ui)
 		{
 			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
+			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
 		}
 	});
 	
@@ -345,7 +342,7 @@ $(document).ready(function() {
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source_type'),
+						type: Zeega.draggedItem.get('content_type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
