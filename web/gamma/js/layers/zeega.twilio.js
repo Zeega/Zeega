@@ -55,7 +55,7 @@ var TwilioLayer = ProtoLayer.extend({
 		if(_this.model.get('attr').audioItemID)
 		{
 			dropBox = '';
-			//if something already exists in the dropbox
+			//if something already exists in the dropbox 
 			dropBox += _this.model.get('attr').audioTitle;
 		}
 		
