@@ -107,7 +107,7 @@ var TwilioLayer = ProtoLayer.extend({
 							$("#drop-content").html('media accepted! '+ attr.audioTitle);
 
 						}else{
-							$("#drop-content").html('This media will not work in with twilio. Try searching audio.');
+							$("#drop-content").html('This media will not work in with Twilio. Only MP3s uploaded to Hacking the City will work.');
 						}
 						
 					}
