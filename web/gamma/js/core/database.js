@@ -180,8 +180,6 @@ var Database = {
 			{
 				_.each(response.items, function(item){
 					
-					console.log(item);
-					
 					//make search items into bb models
 					var newItem = new Item;
 				
@@ -196,7 +194,7 @@ var Database = {
 						'date_created_end':item.date_created_end,
 						'creator':item.creator,
 						'content_type':item.content_type,
-						'source_type':item.content_type,
+						'source_type':item.source_type,
 						'attribution_url':item.attribution_url,
 						'archive':item.archive
 					});

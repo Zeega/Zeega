@@ -155,8 +155,26 @@ function shareButton()
 
 function embedButton()
 {
-
+	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
+	
+	console.log(ex);
+	
+	$('#export').modal('show');
+	$('#export-json').val(ex);
+	
+	$('#export-json').focus( function(){
+		$('#export-json').select();
+	});
+	
+	$('#close-modal').mouseup(function(){
+		console.log('select all export');
+		$('#export').modal('hide');
+	})
+	
+	return false;
 }
+
+
 
 function addLayer(type)
 {

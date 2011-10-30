@@ -167,7 +167,7 @@
 
 			</div><!--#editor-->
 
-{% endblock %}				
+{% endblock %}
 
 {% block extras %}
 	<div id='templates' class='hidden'>
@@ -178,6 +178,26 @@
 			<div class="item-title"></div>
 			<div class="item-meta"></div>
 		</div>
+
+
+		<div id="export" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Data Export</h3>
+			</div>
+			<div class="modal-body clearfix">
+				<textarea id='export-json' rows="2" cols="20" readonly></textarea>
+					
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<a href='#' id='close-modal' class='btn secondary'>close</a>
+				</span>
+			</div>
+			
+				
+			</div>
+		<div >
 
 		
 		
