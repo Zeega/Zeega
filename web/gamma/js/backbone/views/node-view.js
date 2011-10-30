@@ -49,6 +49,7 @@ var NodeView = Backbone.View.extend({
 			{
 				
 				//that.model.noteChange();
+				console.log(Zeega.draggedItem);
 				
 				ui.draggable.draggable('option','revert',false);
 				//make the new layer model
@@ -61,7 +62,6 @@ var NodeView = Backbone.View.extend({
 						'item_id' : Zeega.draggedItem.id,
 						'title' : Zeega.draggedItem.get('title'),
 						'url' : Zeega.draggedItem.get('item_url'),
-						'uri' : Zeega.draggedItem.get('item_url'),
 					}
 				};
 				var newLayer = new Layer( settings );

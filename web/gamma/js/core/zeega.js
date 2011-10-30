@@ -228,17 +228,18 @@ var Zeega = {
 		
 		//update the auto advance tray
 		//make sure the attribute exists
-		var adv = this.currentNode.get('attr').advance;
-		if(adv)
+		var attr = this.currentNode.get('attr');
+		
+		if(attr.advance)
 		{
-			if(adv > 0)
+			if(attr.advance > 0)
 			{
 				//after time in seconds
 				$('#advance-controls').find('#time').attr('checked','true');
 				$('#advance-controls').find('#manual').removeAttr('checked');
 				$('#advance-controls').find('#playback').removeAttr('checked');
-				$('#advance-time').val(adv);
-			}else if(adv == 0){
+				$('#advance-time').val(attr.advance);
+			}else if(attr.advance == 0){
 				//after media
 				$('#advance-controls').find('#time').removeAttr('checked');
 				$('#advance-controls').find('#manual').removeAttr('checked');
@@ -258,6 +259,9 @@ var Zeega = {
 			$('#advance-controls').find('#playback').attr('checked', true);
 			$('#advance-time').val(10);
 		}
+
+		$('#random').removeAttr('checked');
+		if(attr.advanceRandom) $('#random').attr('checked', true);
 		
 		//add the node's layers
 		var layerArray = _.without( this.currentNode.get('layers'), -1)

@@ -34,6 +34,7 @@ var Player = {
 	waitToFinish : [],
 	advanceOnPlayback : false,
 	isFirstNode : true,
+	advanceRandom : false,
 	
 	layers : null,			// collection of layers
 	layerClasses : {},	// array of layerClasses
@@ -148,8 +149,8 @@ var Player = {
 	gotoNode : function(nodeID)
 	{
 		this.currentNode = nodeID;
+		
 		// try to preload the node
-		//this.preloadNode(nodeID);
 		this.preloadAhead(nodeID);
 	},
 	
@@ -195,18 +196,16 @@ var Player = {
 	drawCurrentNode : function()
 	{
 		_this = this;
-		
-		console.log('draw this!!!!!!!');
 		_this.isFirstNode = false;
-		
 		
 		var targetNode = this.nodes.get(this.currentNode);
 
 		this.cleanupLayers();
 
+		var attr = this.nodes.get(this.currentNode).get('attr');
 		//set timeout for auto advance
-		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
-		this.setAdvance( advanceValue );
+		this.setAdvance( attr.advance );
+		
 		
 		//draw each layer
 		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
@@ -317,6 +316,7 @@ var Player = {
 	preloadAhead : function(nodeID)
 	{
 
+		console.log(this.route);
 		//find the node you're coming from and where it is in the order
 		var nodesOrder = this.route.get('nodesOrder');
 		var index = _.indexOf(nodesOrder, nodeID);
@@ -361,7 +361,17 @@ var Player = {
 		if(this.timeout) clearTimeout(this.timeout);
 		var _this = this;
 		
-		this.timeout = setTimeout(function(){_this.goRight()}, seconds*1000);
+		
+
+		var attr = this.nodes.get(this.currentNode).get('attr');
+		var nodeOrder = this.route.get('nodesOrder');
+		
+		var id = nodeOrder[Math.floor(Math.random()* nodeOrder.length)];
+		
+		if(this.timeout) clearTimeout(this.timeout);
+		
+		if(attr.advanceRandom) this.timeout = setTimeout(function(){ _this.gotoNode(id)}, seconds*1000);
+		else this.timeout = setTimeout(function(){_this.goRight()}, seconds*1000);
 	},
 	
 	// advance node after the media inside it have finished playing
@@ -461,6 +471,7 @@ var Player = {
 		this.nodesLoading = [];
 		this.layersLoading = [];
 		this.layersOnStage = [];
+		this.advanceRandom = false;
 		
 		this.layers = null;			// collection of layers
 		this.layerClasses = {};	// array of layerClasses

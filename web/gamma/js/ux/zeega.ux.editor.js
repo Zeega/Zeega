@@ -344,6 +344,14 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
+	$('#node-advance-random input').change(function(){
+		var attr = Zeega.currentNode.get('attr');
+		if( $(this).is(':checked') ) attr.advanceRandom = true;
+		else attr.advanceRandom = false;
+		
+		Zeega.currentNode.set({'attr':attr});
+		Zeega.currentNode.save();
+	});
 	
 	/*****  		CRITICAL		*******/
 	
@@ -360,11 +368,12 @@ $(document).ready(function() {
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('content_type'),
+						type: Zeega.draggedItem.get('source_type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('item_url')
+							'url' : Zeega.draggedItem.get('item_url'),
+							'uri' : Zeega.draggedItem.get('item_url')
 						}
 					};
 					var layerToSave = new Layer(settings);
