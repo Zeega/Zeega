@@ -1,6 +1,10 @@
 var Item = Backbone.Model.extend({
 	defaults : {
 		title : 'Untitled'
+	},
+	
+	initialize : function()
+	{
 	}
 });
 

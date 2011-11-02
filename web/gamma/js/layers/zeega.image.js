@@ -24,6 +24,7 @@ var ImageLayer = ProtoLayer.extend({
 	
 	getAttr : function(){return this.defaultAttributes},
 	
+
 	drawControls : function(template){
 		
 		var opacityArgs = {

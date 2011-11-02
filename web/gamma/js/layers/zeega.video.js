@@ -165,6 +165,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	preloadMedia : function()
 	{
+		console.log('video preloadMedia');
 		
 		//make dom object
 		var _this = this;
@@ -173,7 +174,7 @@ var VideoLayer = ProtoLayer.extend({
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 
 		var cssObj = {
-			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			//'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : "-200%",
@@ -201,11 +202,17 @@ var VideoLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		
 		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
-		
+		//this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id);
+		console.log(this.dom);
+		console.log(this.player);
 	},
 	
 	drawPublish : function(z)
 	{
+		console.log('video drawPublish');
+		
+		console.log(this.dom);
+		
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
@@ -214,6 +221,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	hidePublish :function()
 	{
+		console.log('video hidePublish');
 		
 		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();

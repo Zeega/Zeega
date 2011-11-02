@@ -16,6 +16,8 @@ var ZeegaMP = Class.extend({
 	init: function(id,url,mediaIn,mediaOut,mediaVol,wrapperId){
 	
 		if(debug)console.log("player:init");
+		console.log('yyyyyyyyyyyyyy');
+		
 		this._id=id;
 		this._url=url;
 		this._start_time=parseFloat(mediaIn);
@@ -42,6 +44,10 @@ var ZeegaMP = Class.extend({
 		this._asset.addEventListener('durationchange', function () {that.durationChange();},false);
 		$('#'+this._wrapper_id).html(this._asset);
 		if(this._asset.duration>0) this.canPlay();
+		
+		console.log('xxxxxxxxxxxxxx');
+		console.log(this._asset);
+		console.log($('#'+this._wrapper_id));
 		
 	},
 	
@@ -327,44 +333,3 @@ var ZeegaMP = Class.extend({
 });
 
 
-//Utilities
-
-
-
-function convertTime(seconds){
-	
-	var m=Math.floor(seconds/60);
-	var s=Math.floor(seconds%60);
-	if(s<10) s="0"+s;
-	return m+":"+s;
-}
-
-function deconvertTime(minutes,seconds){
-
-	return 60*minutes+parseInt(seconds);
-}
-
-function getMinutes(seconds){
-
-	return Math.floor(parseInt(seconds)/60.0);
-}
-
-function getSeconds(seconds){
-
-	var s=Math.floor((seconds%60)*10)/10.0;
-	if(s<10) s="0"+s;
-	return s;
-
-}
-
-function isInt(x) {
-	   var y=parseInt(x);
-	   if (isNaN(y)) return false;
-	   return x==y && x.toString()==y.toString();
-}
-
-function isPercent(x){
-
-	return isInt(x)&&parseInt(x)<=100;
-
-}

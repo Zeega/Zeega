@@ -71,7 +71,7 @@ var LayerView = Backbone.View.extend({
 				layerClass.drawPublish();
 
 				var layerOrder = Zeega.currentNode.get('layers');
-				layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+				layerClass.updateZIndex(_.indexOf(layerOrder, this.model.id));
 
 			}else{
 				console.log('not in preview mode');
@@ -80,7 +80,7 @@ var LayerView = Backbone.View.extend({
 
 				//set initial layer order in the workspace
 				var layerOrder = Zeega.currentNode.get('layers');
-				layerClass.updateZIndex( _.size(layerOrder) - _.indexOf(layerOrder, this.model.id));
+				layerClass.updateZIndex( _.indexOf(layerOrder, this.model.id));
 
 				//insert the special layer controls into the template
 				layerClass.drawControls(template);
@@ -93,10 +93,10 @@ var LayerView = Backbone.View.extend({
 
 
 				//check or uncheck the layer persist box
-					if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
-					{
-						$(this.el).find('#persist').attr('checked','true');
-					}
+				if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+				{
+					$(this.el).find('#persist').attr('checked','true');
+				}
 
 				//set persistance action
 				$(this.el).find('#persist').change(function(){
@@ -202,7 +202,7 @@ var LayerViewCollection = Backbone.View.extend({
 		//clear out any old stuff inside this.el
 		$(this.el).empty();
 		//add EACH model's view to the _this.el and render it
-		_.each(this._layerViews, function(layer){ $(_this.el).append(layer.render().el) });
+		_.each(this._layerViews, function(layer){ $(_this.el).prepend(layer.render().el) });
 		
 		return this;
 	}
