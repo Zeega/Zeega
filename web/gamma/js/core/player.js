@@ -21,8 +21,7 @@ var Player = {
 	projectData :null,		// project data
 	currentRoute : 0,		// the current route // default = 0
 	currentNode : 0,		// the node currently on/to start on // default = 0
-	lookAhead : 2,			// the number of nodes to preload ahead of the currentNode
-	zeega : false,			// does the editor exist?
+	lookAhead : 0,			// does the editor exist?
 	route : null,			//collection of routes
 	nodes : null,			// collection of nodes
 	nodesLoaded : [],
@@ -113,6 +112,8 @@ var Player = {
 		
 	},
 	
+	
+	//not sure I need this
 	cleanWindow : function()
 	{
 		_.each( $('video'), function(video){
@@ -226,12 +227,12 @@ var Player = {
 			{
 				//draw new layer to the preview window
 				
-				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
+				_this.layerClasses[layerID].drawPublish(i);
 				_this.layersOnStage.push(layerID);
 			
 			}else{
 				//update existing persistant layer with new z-index
-				_this.layerClasses[layerID].updateZIndex( targetNode.get('layers').length - i);
+				_this.layerClasses[layerID].updateZIndex(i);
 				console.log('omitting layer: '+layerID)
 			}
 			
@@ -301,16 +302,17 @@ var Player = {
 	preloadLayer : function(layerID)
 	{
 		//if not loading or already loaded
-		if( !_.include( this.layersLoaded, layerID ) || !_.include(this.layersLoading,layerID))
+		if( !_.include( this.layersLoaded, layerID ) && !_.include(this.layersLoading,layerID))
 		{
-			console.log('preloading: '+ layerID)
+			//put the layer id into the layers Loading array
+			this.layersLoading.push(layerID);
+
+			console.log('preloading layer: '+ layerID)
 			//get the layer model
 			var layer = this.layers.get(layerID);
 			//get the layer type
 			var layerType = layer.get('type');
 
-			//put the layer id into the layers Loading array
-			this.layersLoading.push(layerID);
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
