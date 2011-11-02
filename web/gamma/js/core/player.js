@@ -79,7 +79,8 @@ var Player = {
 			this.layers = Zeega.route.layers;
 		}
 		
-
+		this.cleanWindow();
+		
 		this.draw();
 
 		// all layers will make this call
@@ -110,6 +111,14 @@ var Player = {
 		
 		t.fadeIn();
 		
+	},
+	
+	cleanWindow : function()
+	{
+		_.each( $('video'), function(video){
+			$(video).attr('src','');
+			$(video).remove();
+		});
 	},
 	
 	// removes the player from the dom // resets the player? probably.
@@ -280,7 +289,7 @@ var Player = {
 			//preload each layer inside the node
 			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
 			
-			_.each( _.without(layersToPreload, -1),function(layerID){
+			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			

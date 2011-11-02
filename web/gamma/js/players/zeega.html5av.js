@@ -16,6 +16,8 @@ var ZeegaMP = Class.extend({
 	init: function(id,url,mediaIn,mediaOut,mediaVol,wrapperId){
 	
 		if(debug)console.log("player:init");
+		console.log('yyyyyyyyyyyyyy');
+		
 		this._id=id;
 		this._url=url;
 		this._start_time=parseFloat(mediaIn);
@@ -42,6 +44,10 @@ var ZeegaMP = Class.extend({
 		this._asset.addEventListener('durationchange', function () {that.durationChange();},false);
 		$('#'+this._wrapper_id).html(this._asset);
 		if(this._asset.duration>0) this.canPlay();
+		
+		console.log('xxxxxxxxxxxxxx');
+		console.log(this._asset);
+		console.log($('#'+this._wrapper_id));
 		
 	},
 	

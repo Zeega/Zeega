@@ -259,7 +259,7 @@ var Zeega = {
 		}
 		
 		//add the node's layers
-		var layerArray = _.without( this.currentNode.get('layers'), -1)
+		var layerArray = _.compact( this.currentNode.get('layers'))
 		_.each( layerArray , function(layerID){
 			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
@@ -344,6 +344,7 @@ var Zeega = {
 		
 		if(_.include(attr.persistLayers,layer.id))
 		{
+			console.log('a persistent layer');
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
@@ -354,10 +355,12 @@ var Zeega = {
 				_node.updateThumb();
 			});
 		}else{
+			console.log('NOT a persistent layer');
+			
 			var layerOrder = node.get('layers');
 			layerOrder = _.without(layerOrder,layer.id);
-			//set array to -1 if empty  //weirdness
-			if(layerOrder.length == 0) layerOrder = new Array();
+			//set array to false if empty  //weirdness
+			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
 			node.set({'layers':layerOrder});
 			node.save();
 			node.updateThumb();
@@ -375,7 +378,7 @@ var Zeega = {
 			layersInNodes = _.union(node.get('layers'), layersInNodes);
 		});
 		
-		layersInNodes = _.without(layersInNodes, -1); //remove the default -1 value
+		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
 		
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
