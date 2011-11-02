@@ -88,7 +88,6 @@ var Zeega = {
 	//this is the first function called when loading the editor in dev
 	loadProject : function()
 	{
-		
 		var z = this;
 		this.projectID =  $('#project-id').val();
 		console.log(this.projectID);

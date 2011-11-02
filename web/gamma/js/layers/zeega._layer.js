@@ -233,17 +233,3 @@ var ProtoLayer = Class.extend({
 	
 });
 
-
-
-/**  LAYER GLOBAL EVENT LISTENERS  **/
-
-
-
-
-
-var LayerGlobals = new Array();
-
-function addGlobal(layerId,event,elementId){
-		if(!LayerGlobals[layerId])LayerGlobals[layerId]={};
-		eval('LayerGlobals[layerId].'+event+'= function(data){$("#'+elementId+'").trigger("'+event+'",data);}');
-}
