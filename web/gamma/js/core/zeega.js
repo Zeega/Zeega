@@ -210,18 +210,16 @@ var Zeega = {
 
 		window.location.hash = '/node/'+ node.id; //change location hash
 		
-		
 		//open/close visual editor
 		var el = $('#workspace');
 
-		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden'))
+		if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
 		{
-			el.show('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('–');
-			
-		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible')){
 			el.hide('blind',{'direction':'vertical'});
 			$('#ve-toggle').html('+');
+		}else{
+			el.show('blind',{'direction':'vertical'});
+			$('#ve-toggle').html('–');
 		}
 		
 		
@@ -263,6 +261,8 @@ var Zeega = {
 		_.each( layerArray , function(layerID){
 			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
+		
+		console.log(layerArray);
 		
 		//draw the layers
 		Zeega.route.layerViewCollection.render();
@@ -321,7 +321,7 @@ var Zeega = {
 			//if the layer array already exists
 			layerOrder = node.get('layers');
 			//add the layer id to the layer order array
-			layerOrder.unshift( layer.id );  //change this to PUSH and reverse the order of layers
+			layerOrder.push( layer.id );
 		}
 		
 		//set the layerOrder array inside the node
@@ -349,7 +349,7 @@ var Zeega = {
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
 				layerOrder = _.without(layerOrder,layer.id);
-				if(layerOrder.length == 0) layerOrder = new Array();
+				if(layerOrder.length == 0) layerOrder = [false];
 				_node.set({'layers':layerOrder});
 				_node.save();
 				_node.updateThumb();
@@ -365,8 +365,8 @@ var Zeega = {
 			node.save();
 			node.updateThumb();
 		}
-		this.destroyOrphans();
 		
+		this.destroyOrphans();
 		
 	},
 	
