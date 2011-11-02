@@ -21,7 +21,7 @@ var Player = {
 	projectData :null,		// project data
 	currentRoute : 0,		// the current route // default = 0
 	currentNode : 0,		// the node currently on/to start on // default = 0
-	lookAhead : 0,			// does the editor exist?
+	lookAhead : 2,			// does the editor exist?
 	route : null,			//collection of routes
 	nodes : null,			// collection of nodes
 	nodesLoaded : [],
@@ -165,6 +165,7 @@ var Player = {
 	
 	onLayerLoad : function(layerID)
 	{
+		console.log('loaded: '+layerID);
 		//remove from the layers loading array
 		this.layersLoading = _.without(this.layersLoading,layerID);
 		//add to the layers loaded array

@@ -24,7 +24,6 @@ var LayerView = Backbone.View.extend({
 		console.log(this.model.get('type'));
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
 		
-		
 		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
 		
 		//do if interaction layer
@@ -52,6 +51,9 @@ var LayerView = Backbone.View.extend({
 		}else{
 			var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
 			var title;
+			var layerOrder = _.compact( Zeega.currentNode.get('layers') );
+			
+			
 			//shorten title if necessary
 			if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
 			{
@@ -70,16 +72,13 @@ var LayerView = Backbone.View.extend({
 
 				layerClass.drawPublish();
 
-				var layerOrder = Zeega.currentNode.get('layers');
 				layerClass.updateZIndex(_.indexOf(layerOrder, this.model.id));
 
 			}else{
 				console.log('not in preview mode');
 
 				layerClass.drawPreview();
-
-				//set initial layer order in the workspace
-				var layerOrder = Zeega.currentNode.get('layers');
+				
 				layerClass.updateZIndex( _.indexOf(layerOrder, this.model.id));
 
 				//insert the special layer controls into the template
@@ -177,7 +176,7 @@ var LayerViewCollection = Backbone.View.extend({
 		
 		var lv = new LayerView({ model : layer });
 		this._layerViews.push(lv);
-		if(this._rendered) $(this.el).prepend(lv.render().el);
+		if(this._rendered) $(this.el).append(lv.render().el);
 	},
 	
 	remove : function(layer)

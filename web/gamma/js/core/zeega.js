@@ -225,18 +225,17 @@ var Zeega = {
 		
 		//update the auto advance tray
 		//make sure the attribute exists
-		var attr = this.currentNode.get('attr');
-		
-		if(attr.advance)
+		var adv = this.currentNode.get('attr').advance;
+		if(adv)
 		{
-			if(attr.advance > 0)
+			if(adv > 0)
 			{
 				//after time in seconds
 				$('#advance-controls').find('#time').attr('checked','true');
 				$('#advance-controls').find('#manual').removeAttr('checked');
 				$('#advance-controls').find('#playback').removeAttr('checked');
-				$('#advance-time').val(attr.advance);
-			}else if(attr.advance == 0){
+				$('#advance-time').val(adv);
+			}else if(adv == 0){
 				//after media
 				$('#advance-controls').find('#time').removeAttr('checked');
 				$('#advance-controls').find('#manual').removeAttr('checked');
@@ -256,9 +255,6 @@ var Zeega = {
 			$('#advance-controls').find('#playback').attr('checked', true);
 			$('#advance-time').val(10);
 		}
-
-		$('#random').removeAttr('checked');
-		if(attr.advanceRandom) $('#random').attr('checked', true);
 		
 		//add the node's layers
 		var layerArray = _.compact( this.currentNode.get('layers'))
@@ -297,11 +293,12 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
+							Zeega.updateAndSaveNodeLayer(node,savedLayer);
+							
 							//Add to the collection
 							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
 							else Zeega.route.layers.add( savedLayer,{silent:true} );
 						
-							Zeega.updateAndSaveNodeLayer(node,savedLayer);
 							node.updateThumb();
 						}
 					});
@@ -322,12 +319,11 @@ var Zeega = {
 		var layerOrder = [layer.id];
 		if( node.get('layers') )
 		{
-			//if the layer array already exists
-			layerOrder = node.get('layers');
+			//if the layer array already exists eliminate false values if they exist
+			layerOrder = _.compact( node.get('layers') );
 			//add the layer id to the layer order array
 			layerOrder.push( layer.id );
 		}
-		
 		//set the layerOrder array inside the node
 		node.set({'layers':layerOrder});
 		node.save();
