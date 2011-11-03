@@ -180,9 +180,13 @@ var GeoLayer = ProtoLayer.extend({
 				if(_this.attr.pitch>25) y=0;
 				else if(_this.attr.pitch<-25) y=2;
 				x=(Math.floor((_this.attr.heading+360)/60))%6;
+				
+				var w = 6*parseInt(_this.attr.w);
+				var h = 4*parseInt(_this.attr.h);
+				
 				console.log('load moment');
 				console.log(_this);
-				$('#layer-image-'+_this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size=600x400&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
+				$('#layer-image-'+_this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size='+w+'x'+h+'&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
 			});
 		}
 		
