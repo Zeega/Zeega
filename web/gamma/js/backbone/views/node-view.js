@@ -134,8 +134,7 @@ var NodeViewCollection = Backbone.View.extend({
 				{
 					success : function()
 					{
-						//go to the new node
-						Zeega.loadNode(node);
+
 						
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
@@ -149,6 +148,8 @@ var NodeViewCollection = Backbone.View.extend({
 						//add a new current node style
 						$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
 						
+						//go to the new node
+						Zeega.loadNode(node);
 					}
 				}
 				
