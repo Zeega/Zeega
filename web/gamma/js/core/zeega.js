@@ -213,13 +213,13 @@ var Zeega = {
 		//open/close visual editor
 		var el = $('#workspace');
 
-		if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
+		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden')){
+			el.show('blind',{'direction':'vertical'});
+			$('#ve-toggle').html('–');
+		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
 		{
 			el.hide('blind',{'direction':'vertical'});
 			$('#ve-toggle').html('+');
-		}else{
-			el.show('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('–');
 		}
 		
 		

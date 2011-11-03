@@ -151,6 +151,7 @@ var ImageLayer = ProtoLayer.extend({
 	
 	drawPublish : function(z)
 	{
+
 		console.log('image drawPublish');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},

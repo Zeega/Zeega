@@ -288,16 +288,18 @@ var TextLayer = ProtoLayer.extend({
 		
         },
 
-    drawPublish : function(z)
+	preloadMedia : function()
 	{
+		
+		console.log('preload media text');
+		
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y,
-			'left' : this.attr.x,
-			'z-index' : z,//layers.length - i,
+			'top' : '-100%',
+			'left' : '-100%',
 			'width' : this.attr.w,
 			'height' : this.attr.h,
 			'font-size' : this.attr.size + 'px'
@@ -341,7 +343,8 @@ var TextLayer = ProtoLayer.extend({
 			autoHide: true
 		});
 		
-		var content = $('<div />').css({'width' : '100%', 
+		var content = $('<div />').css({
+						'width' : '100%', 
 						'height' : '100%', 
 						'overflow' : 'auto',
 						'column-count' : this.attr.columns,
@@ -361,26 +364,38 @@ var TextLayer = ProtoLayer.extend({
 
 		content.bind('click mousedown', function(event) { event.stopPropagation()});
 
-		content.bind('blur change', function(){that.updateAttr()});
+		content.bind('blur change', function(){_this.updateAttr()});
 
 		div.append(content);
 		this.dom = div;
 		//draw to the workspace
-		$('#zeega-player').append(this.dom);
+		$('#zeega-player').find('#preview-media').append(this.dom);
 		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
 		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
 		
-        },
-
-	hidePubish : function()
-	{
-		this.dom.css({'top':"-100%",'left':"-100%"});
-		console.log('hiding the text layer:');
-		console.log(this.dom);
+		$('#zeega-player').find('#preview-media')
+			.append(this.dom)
+			.trigger('ready',{'id':this.model.id});
+		
 	},
+
+    drawPublish : function(z)
+	{
+		console.log('text drawPublish');
+		console.log(z);
+		console.log(this.attr);
+		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+	},
+
+	hidePublish : function()
+	{
+		console.log('text hidePublish');
+		this.dom.css({'top':"-100%",'left':"-100%"});
+	},
+	
 	
 	updateAttr: function()
 	{
@@ -392,11 +407,12 @@ var TextLayer = ProtoLayer.extend({
 		    newAttr.title = "Untitled Layer";
 		}
 		//set the new x/y coords into the attributes
-		newAttr.x = this.dom.css('left');
-		newAttr.y = this.dom.css('top');
+		newAttr.x = Math.floor( this.dom.position().left/6);
+		newAttr.y = Math.floor( this.dom.position().top/4);
 		newAttr.w = this.dom.css('width');
 		newAttr.h = this.dom.css('height');
 		
+		console.log(newAttr);
 		var contentPanel = this.dom.children('.text-layer-content');
 		newAttr.content = contentPanel.html();
 		//Clean up broken html left behind by Aloha on empty elements
