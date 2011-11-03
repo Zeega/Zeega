@@ -239,7 +239,11 @@ var GeoLayer = ProtoLayer.extend({
 				else if(that.attr.pitch<-25) y=2;
 				x=(Math.floor((that.attr.heading+360)/60))%6;
 				console.log('load moment');
-				img.attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+that.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+				
+				var w = 6*parseInt(_this.attr.w);
+				var h = 4*parseInt(_this.attr.h);
+				
+				img.attr('src','http://maps.googleapis.com/maps/api/streetview?size='+w+'x'+h+'&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
 			});
 		}
 		
@@ -414,25 +418,7 @@ var GeoLayer = ProtoLayer.extend({
 			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+$('#layer-preview-'+this.model.id).width()+"x"+$('#layer-preview-'+this.model.id).height()+"&maptype="+this.attr.mapType+"&sensor=false");
 		}else{
 		
-			console.log('######## streetview ########');
-			console.log(this);
-			//Sloppy attempt to pull corresponding streetview static tile
-			
-			var x=2;
-			var y=1;
-			if(newAttr.pitch>25) y=0;
-			else if(newAttr.pitch<-25) y=2;
-			x=(Math.floor((newAttr.heading+360)/60))%6;
-			
-			/*****  This returns tile data, should be able to infer from heading info appropriate tile to retrieve 
-			
-			var service=new google.maps.StreetViewService();
-			service.getPanoramaById(this.streetView.getPano(),function(data,status){
-			console.log(data.tiles.centerHeading);
-			});
-			
-			*/
-			
+
 			console.log('save moment');
 			
 			$('#layer-image-'+this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size=600x400&fov='+180 / Math.pow(2,this.attr.streetZoom)+'&location='+this.attr.lat+','+this.attr.lng+'&heading='+this.attr.heading+'&pitch='+this.attr.pitch+'&sensor=false');

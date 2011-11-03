@@ -77,13 +77,6 @@ var TwilioLayer = ProtoLayer.extend({
 				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
 				*/
 			};
-			
-				console.log(this.getTemplate());
-				console.log(tmp);
-				console.log(_this.model);
-				console.log(content);
-				console.log(tmp(content));
-				
 				
 		controls.find('#controls').html( tmp(content) );
 		
