@@ -170,7 +170,8 @@ var GeoLayer = ProtoLayer.extend({
 		}
 		else{
 		
-			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
+			var centerLatLng = new google.maps.LatLng(this.attr.lat, this.attr.lng);
+
 			var service=new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
 				_this.attr.panoId=data.location.pano;
@@ -180,7 +181,8 @@ var GeoLayer = ProtoLayer.extend({
 				else if(_this.attr.pitch<-25) y=2;
 				x=(Math.floor((_this.attr.heading+360)/60))%6;
 				console.log('load moment');
-				$('#layer-image-'+_this.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+_this.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+				console.log(_this);
+				$('#layer-image-'+_this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size=600x400&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
 			});
 		}
 		
@@ -408,7 +410,8 @@ var GeoLayer = ProtoLayer.extend({
 			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+$('#layer-preview-'+this.model.id).width()+"x"+$('#layer-preview-'+this.model.id).height()+"&maptype="+this.attr.mapType+"&sensor=false");
 		}else{
 		
-		
+			console.log('######## streetview ########');
+			console.log(this);
 			//Sloppy attempt to pull corresponding streetview static tile
 			
 			var x=2;
@@ -427,7 +430,8 @@ var GeoLayer = ProtoLayer.extend({
 			*/
 			
 			console.log('save moment');
-			$('#layer-image-'+this.model.id).attr('src','http://cbk0.google.com/cbk?output=tile&panoid='+this.attr.panoId+'&x='+x+'&y='+y+'&zoom=3');
+			
+			$('#layer-image-'+this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size=600x400&fov='+180 / Math.pow(2,this.attr.streetZoom)+'&location='+this.attr.lat+','+this.attr.lng+'&heading='+this.attr.heading+'&pitch='+this.attr.pitch+'&sensor=false');
 		
 		}
 		
