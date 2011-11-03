@@ -208,8 +208,8 @@ var Zeega = {
 		//set global currentNode to the selected node
 		this.currentNode = node;
 
-		window.location.hash = '/node/'+ node.id; //change location hash
-		
+		if(node) window.location.hash = '/node/'+ node.id; //change location hash
+		else window.location.hash = 'newNode';
 		//open/close visual editor
 		var el = $('#workspace');
 
@@ -372,6 +372,7 @@ var Zeega = {
 	
 	destroyOrphans : function()
 	{
+		_this = this;
 		// make a giant array of all the layer IDs in use by nodes
 		var layersInNodes = [];
 		_.each( _.toArray(this.route.nodes), function(node){
@@ -392,6 +393,7 @@ var Zeega = {
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
 				var orphan = Zeega.route.layers.get(orphanID);
+				_this.removeLayerPersist(orphan);
 				Zeega.route.layers.remove(orphan)
 				orphan.destroy();
 				
@@ -495,7 +497,7 @@ var Zeega = {
 			}
 			this.nodeSort();
 			
-
+			this.destroyOrphans();
 			
 		}
 	},
