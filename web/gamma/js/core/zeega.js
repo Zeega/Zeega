@@ -457,8 +457,11 @@ var Zeega = {
 	
 	updateLayerOrder : function(layerIDs)
 	{
+		console.log('updateLayerOrder');
+		layerIDs = layerIDs.reverse();
 		// updates z-index of divs in workspace
-		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', _.size(layerIDs) - i) });
+		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
+		console.log(layerIDs)
 
 		//update the layerOrder array 
 		this.currentNode.set({'layers':layerIDs})

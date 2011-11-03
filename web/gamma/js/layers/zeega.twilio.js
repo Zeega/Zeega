@@ -21,10 +21,6 @@ var TwilioLayer = ProtoLayer.extend({
 		//this should go top to bottom
 		var _this = this;
 		
-		console.log(this);
-		console.log(this.model);
-		
-		
 		//set the ilayer template
 		var controls = $(iLayerTemplate);
 		
@@ -64,7 +60,10 @@ var TwilioLayer = ProtoLayer.extend({
 		
 		//load controls
 		var tmp = _.template(this.getTemplate());
-		var content = 
+		
+	
+		var content = {};
+		content = 
 			{
 				code : 'WFMU-'+ _this.model.id,
 				phone_number : _this.defaultAttributes.phone,
@@ -78,6 +77,14 @@ var TwilioLayer = ProtoLayer.extend({
 				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
 				*/
 			};
+			
+				console.log(this.getTemplate());
+				console.log(tmp);
+				console.log(_this.model);
+				console.log(content);
+				console.log(tmp(content));
+				
+				
 		controls.find('#controls').html( tmp(content) );
 		
 		//make droppable

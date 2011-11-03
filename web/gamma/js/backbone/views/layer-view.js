@@ -176,7 +176,7 @@ var LayerViewCollection = Backbone.View.extend({
 		
 		var lv = new LayerView({ model : layer });
 		this._layerViews.push(lv);
-		if(this._rendered) $(this.el).append(lv.render().el);
+		if(this._rendered) $(this.el).prepend(lv.render().el);
 	},
 	
 	remove : function(layer)
