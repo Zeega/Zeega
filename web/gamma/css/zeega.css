@@ -728,7 +728,7 @@ body
 	margin-left:10px;
 }
 
-#sortable-layers li
+#layers-list-visual li
 {
 	min-height:25px;
 	background:#555;
@@ -902,7 +902,7 @@ body
 	position:relative;
 }
 
-#workspace
+#visual-editor-workspace
 {
 	width:100%;
 	height:400px;

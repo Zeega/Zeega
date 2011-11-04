@@ -7,6 +7,11 @@ var Layer =  Backbone.Model.extend({
 	
 	initialize: function(){
 		if(!this.get('attr')) this.set({'attr':{}})
+		
+		//store a copy of the layer class inside the model
+		eval( 'this.layerClass = new '+ this.get('type')+'Layer();' );
+
+		this.layerClass.load(this);
 	},
 	
 

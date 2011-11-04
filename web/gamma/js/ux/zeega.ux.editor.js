@@ -356,7 +356,7 @@ $(document).ready(function() {
 	/*****  		CRITICAL		*******/
 	
 	//enable the workspace as a valid drop location for DB items
-	$('#workspace').droppable({
+	$('#visual-editor-workspace').droppable({
 			accept : '.database-asset',
 			hoverClass : 'workspace-item-hover',
 			tolerance : 'pointer',

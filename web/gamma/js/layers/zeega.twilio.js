@@ -8,7 +8,7 @@
 
 var TwilioLayer = ProtoLayer.extend({
 	
-	interaction: true,
+	layerType : 'interaction',
 	
 	defaultAttributes : 
 	{
@@ -29,14 +29,10 @@ var TwilioLayer = ProtoLayer.extend({
 		
 		//set delete button
 		controls.find('#delete-layer').click(function(){
-			//verify you with alert
-			if( confirm('Delete Layer?') )
-			{
-				//remove the layer controls
-				controls.remove();
-				//remove the workspace preview
-				Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
-			}
+			//remove the layer controls
+			controls.remove();
+			//remove the workspace preview
+			Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
 			return false;
 		});
 		
@@ -69,13 +65,13 @@ var TwilioLayer = ProtoLayer.extend({
 				phone_number : _this.defaultAttributes.phone,
 				drop_box : dropBox,
 				txt_body : tb,
-				txt_checked : txtCheck,
-				phone_checked : phoneCheck
-				/*
+				//txt_checked : txtCheck,
+				//phone_checked : phoneCheck
+				
 				//this is better, but broken
 				txt_checked : function(){ if(_this.model.get('attr').txt) return 'checked' },
 				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
-				*/
+				
 			};
 				
 		controls.find('#controls').html( tmp(content) );
@@ -147,10 +143,8 @@ var TwilioLayer = ProtoLayer.extend({
 			_this.model.save();
 		});
 		
-		
-		
-		//draw controls
-		$('#interaction-workspace').append(controls);
+		//return  controls
+		return controls;
 
 	},
 	

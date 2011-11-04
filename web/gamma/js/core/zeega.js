@@ -26,10 +26,6 @@ var Zeega = {
 	maxNodesPerRoute : 0, // 0 = no limit
 	maxLayersPerNode : 5, // 0 = no limit
 	
-	//ready flags
-	nodesReady : false,
-	layersReady : false,
-	
 	url_prefix : "",
 	
 	url_hash : {
@@ -42,6 +38,9 @@ var Zeega = {
 	{
 		//test to see if the URL_PREFIX constant has been set and add it if it has
 		this.setURLPrefix();
+		// makes sure that zeega only advances after both nodes and layers are loaded
+		this.zeegaReady = _.after(2,this.nodesAndLayersReady);
+
 	},
 	
 	setURLPrefix : function()
@@ -61,17 +60,17 @@ var Zeega = {
 		//make a new and empty route
 		
 		var newRoute = new Route();
-		var z=this;
+		var _this = this;
 		
 		newRoute.save({},{
 		
 			success: function(route,response){
-				z.route=route;
-				z.routeID= route.id;
-				z.routeView = new RouteView({ model : z.route });
-				z.routeView.render();
-				z.loadNodes();
-				z.loadLayers();
+				_this.route = route;
+				_this.routeID= route.id;
+				_this.routeView = new RouteView({ model : z.route });
+				_this.routeView.render();
+				_this.loadNodes();
+				_this.loadLayers();
 			
 				console.log('new route created with id: '+ route.id);
 			},
@@ -102,26 +101,27 @@ var Zeega = {
 	loadRoute : function(routeID)
 	{
 		
-		var z = this;
+		var _this = this;
 		this.routeID = routeID;
 		this.route = new Route({ 'id' : this.routeID });
 		this.route.fetch({
 			success: function(route){
-				console.log('route: ');
-				console.log(route);
-				z.loadNodes();
-				z.loadLayers();
-				z.loadProject();
+				_this.loadNodes();
+				_this.loadLayers();
+				_this.loadProject();
 				
-				if(!route.get('attr')) route.set({'attr':{}});
-				
+				//if(!route.get('attr')) route.set({'attr':{}});
 			}
 		});
+		
+		//make the view collections for visible and interaction layers
+		this.route.visualLayerListViewCollection = new VisualLayerListViewCollection;
+		this.route.interactionLayerListViewCollection = new InteractionLayerListViewCollection;
 	},
 	
 	loadNodes : function()
 	{
-		var z = this;
+		var _this = this;
 		//create a node collection inside the route model
 		this.route.nodes = new NodeCollection;
 		//get all existing nodes
@@ -130,20 +130,18 @@ var Zeega = {
 			success : function(nodes){
 				
 				//make a node view collection
-				z.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
+				_this.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
 				//render everything in the nodeViewCollection
-				z.route.nodeViewCollection.render();
+				_this.route.nodeViewCollection.render();
 				
-				z.nodesReady = true;
-				z.testIfReady();
-
+				_this.zeegaReady();
 			}
 		});
 	},
 	
 	loadLayers : function()
 	{
-		var z = this;
+		var _this = this;
 		//create a layer collection inside the route model
 		this.route.layers = new LayerCollection;
 		//get all existing layers
@@ -151,33 +149,51 @@ var Zeega = {
 		this.route.layers.fetch({
 			success : function(layers){
 				
-				//make a layer view collection
-				z.route.layerViewCollection = new LayerViewCollection({ collection : layers });
+				console.log(layers);
 				
-				z.layersReady = true;
-				z.testIfReady();
+				_.each( _.toArray( layers ) ,function(layer){
+					
+					switch(layer.layerClass.layerType)
+					{
+						case 'visual':
+							//add to the visual collection
+							_this.route.visualLayerListViewCollection.add(layer);
+							break;
+						case 'interaction':
+							//add to the interaction collection
+							console.log('adding interaction layer');
+							_this.route.interactionLayerListViewCollection.add(layer);
+							break;
+						default:
+							console.log('this layer type is not recognized. It should be visual or interaction');
+							break
+					}
+					
+					
+				});
+
+
+				_this.zeegaReady();
 			}
 		});
 	},
 	
-	testIfReady : function()
+	nodesAndLayersReady : function()
 	{
-		if(this.layersReady && this.nodesReady)
+		//if no nodes exist, create one
+		if( _.size(this.route.nodes) == 0 )
 		{
-			//if no nodes exist, create one
-			if( _.size(this.route.nodes) == 0 )
-			{
-				var newNode = new Node;
-				this.route.nodeViewCollection.add(newNode);
-				this.loadNode( newNode );
-			}else if(this.url_hash.node){
-				this.loadNode( this.route.nodes.get(this.url_hash.node) );
-			}else{
-				this.loadNode( this.route.nodes.at(0) );
-			}
-			
-			this.nodeSort();
+			var newNode = new Node;
+			this.route.nodeViewCollection.add(newNode);
+			this.loadNode( newNode );
+		}else if(this.url_hash.node){
+			this.loadNode( this.route.nodes.get(this.url_hash.node) );
+		}else{
+			this.loadNode( this.route.nodes.at(0) );
 		}
+		
+		this.nodeSort();
+		
 	},
 	
 	clearCurrentNode : function ()
@@ -186,22 +202,22 @@ var Zeega = {
 		//remove a prexisiting node style
 		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
-		//clear out existing stuff in icon tray
+		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();
 
 		//clear the workspaces
-		$('#workspace').empty();
-		$('#interaction-workspace').empty();
-		//$('.workspace').empty();
+		$('#visual-editor-workspace').empty();
+		$('#layers-list-interaction').empty();
 		
-		
-		
-		Zeega.route.layerViewCollection._rendered = false;
-		Zeega.route.layerViewCollection._layerViews = [];
+		Zeega.route.visualLayerListViewCollection._rendered = false;
+		Zeega.route.visualLayerListViewCollection._layerViews = [];
+		Zeega.route.interactionLayerListViewCollection._rendered = false;
+		Zeega.route.interactionLayerListViewCollection._layerViews = [];
 	},
 	
 	loadNode : function( node )
 	{
+		var _this = this;
 		
 		this.clearCurrentNode();
 		
@@ -258,14 +274,13 @@ var Zeega = {
 		
 		//add the node's layers
 		var layerArray = _.compact( this.currentNode.get('layers'))
+		
 		_.each( layerArray , function(layerID){
-			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
+			_this.addToLayerCollections( _this.currentNode, _this.route.layers.get(layerID) );
 		});
+		Zeega.route.visualLayerListViewCollection.render();
+		Zeega.route.interactionLayerListViewCollection.render();
 		
-		console.log(layerArray);
-		
-		//draw the layers
-		Zeega.route.layerViewCollection.render();
 
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
@@ -276,11 +291,28 @@ var Zeega = {
 		this.route.nodes.add(new Node);
 	},
 	
+	addToLayerCollections : function(node,layer)
+	{
+		//only add to the layers collection if it's not already there!
+		if( !this.route.layers.get(layer.id) )
+		{
+			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
+			if(node == this.currentNode) this.route.layers.add( layer );
+			//if it's not the current node, then be quiet about it
+			else this.route.layers.add( layer,{silent:true} );
+		}
+
+		//add it to the visual or interactive collections // only add if viewing current node
+		if(node == this.currentNode) eval( 'this.route.'+ layer.layerClass.layerType +'LayerListViewCollection.add( layer)' );
+	},
+	
 	addLayerToNode : function( node, layer )
 	{
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{
+			var _this = this;
+			
 			console.log('addLayerToNode');
 			//add URL to layer model
 			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
@@ -294,11 +326,8 @@ var Zeega = {
 					{
 						success : function(savedLayer, response){
 							Zeega.updateAndSaveNodeLayer(node,savedLayer);
-							
-							//Add to the collection
-							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
-							else Zeega.route.layers.add( savedLayer,{silent:true} );
-						
+							_this.addToLayerCollections(node, savedLayer);
+
 							node.updateThumb();
 						}
 					});

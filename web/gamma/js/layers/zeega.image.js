@@ -11,6 +11,9 @@
 ************************************/
 
 var ImageLayer = ProtoLayer.extend({
+	
+	layerType : 'visual',
+	
 	defaultAttributes : {
 							'title' : 'Image Layer',
 							'url' : 'none',
@@ -69,6 +72,8 @@ var ImageLayer = ProtoLayer.extend({
 		template.find('.asset-type-icon').addClass('ui-icon-image');
 	},
 	
+	
+	//should return a complete dom object
 	drawPreview : function(){
 		//make dom object
 		//maybe these should all be wrapped in divs?
@@ -111,7 +116,8 @@ var ImageLayer = ProtoLayer.extend({
 		//make dom
 		$(this.dom).append(img);
 		//add to dom
-		this.addToWorkspace(this.dom);
+		//this.addToWorkspace(this.dom);
+		return(this.dom);
 	},
 	
 	preloadMedia : function(){
