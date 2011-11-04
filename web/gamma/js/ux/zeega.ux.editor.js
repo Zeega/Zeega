@@ -66,6 +66,7 @@ function insertPager(items, page)
 					then make another call to the database and make a new pager
 				*/
 				
+				console.log(Database.endOfItems);
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
@@ -154,8 +155,26 @@ function shareButton()
 
 function embedButton()
 {
-
+	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
+	
+	console.log(ex);
+	
+	$('#export').modal('show');
+	$('#export-json').val(ex);
+	
+	$('#export-json').focus( function(){
+		$('#export-json').select();
+	});
+	
+	$('#close-modal').mouseup(function(){
+		console.log('select all export');
+		$('#export').modal('hide');
+	})
+	
+	return false;
 }
+
+
 
 function addLayer(type)
 {
@@ -206,12 +225,8 @@ $(document).ready(function() {
 
 		start : function(e,ui)
 		{
-			this.num= Math.floor( ui.position.left / 55 );
-			//console.log(this.num);
-		},
-		containment : 'parent',
-		helper :function() {
-			return $('<div>');
+			//this.xPos = ui.position.left;
+		
 		},
 		
 		drag : function(e,ui)
@@ -222,19 +237,19 @@ $(document).ready(function() {
 			{
 				var _this = this;
 				$('.ghost-node').remove();
-				_.times(temp-this.num, function(){
+				_.times(temp, function(){
 					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
-			//this.num = temp;
+			this.num = temp;
 
 		},
 		
 		stop : function(e,ui)
 		{
 			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
+			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
 		}
 	});
 	
@@ -329,6 +344,14 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
+	$('#node-advance-random input').change(function(){
+		var attr = Zeega.currentNode.get('attr');
+		if( $(this).is(':checked') ) attr.advanceRandom = true;
+		else attr.advanceRandom = false;
+		
+		Zeega.currentNode.set({'attr':attr});
+		Zeega.currentNode.save();
+	});
 	
 	/*****  		CRITICAL		*******/
 	
@@ -349,7 +372,8 @@ $(document).ready(function() {
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('item_url')
+							'url' : Zeega.draggedItem.get('item_url'),
+							'uri' : Zeega.draggedItem.get('item_url')
 						}
 					};
 					var layerToSave = new Layer(settings);

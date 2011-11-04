@@ -50,19 +50,25 @@ var TwilioLayer = ProtoLayer.extend({
 		var dropBox = "Drag audio into this box";
 		if(_this.model.get('attr').audioItemID)
 		{
-			//if something already exists in the dropbox
-			dropBox = _this.model.get('attr').audioTitle;
+			dropBox = '';
+			//if something already exists in the dropbox 
+			dropBox += _this.model.get('attr').audioTitle;
 		}
 		
+		var tb = '';
+		if(_this.model.get('attr').txtBody) tb += _this.model.get('attr').txtBody;
 		
 		//load controls
 		var tmp = _.template(this.getTemplate());
-		var content = 
+		
+	
+		var content = {};
+		content = 
 			{
 				code : 'WFMU-'+ _this.model.id,
 				phone_number : _this.defaultAttributes.phone,
 				drop_box : dropBox,
-				txt_body : _this.model.get('attr').txtBody,
+				txt_body : tb,
 				txt_checked : txtCheck,
 				phone_checked : phoneCheck
 				/*
@@ -71,6 +77,7 @@ var TwilioLayer = ProtoLayer.extend({
 				phone_checked : function(){ if(_this.model.get('attr').phone) return 'checked' }
 				*/
 			};
+				
 		controls.find('#controls').html( tmp(content) );
 		
 		//make droppable
@@ -107,7 +114,7 @@ var TwilioLayer = ProtoLayer.extend({
 							$("#drop-content").html('media accepted! '+ attr.audioTitle);
 
 						}else{
-							$("#drop-content").html('This media will not work in with twilio. Try searching audio.');
+							$("#drop-content").html('This media will not work in with Twilio. Only MP3s uploaded to Hacking the City will work.');
 						}
 						
 					}

@@ -49,6 +49,7 @@ var NodeView = Backbone.View.extend({
 			{
 				
 				//that.model.noteChange();
+				console.log(Zeega.draggedItem);
 				
 				ui.draggable.draggable('option','revert',false);
 				//make the new layer model
@@ -61,7 +62,6 @@ var NodeView = Backbone.View.extend({
 						'item_id' : Zeega.draggedItem.id,
 						'title' : Zeega.draggedItem.get('title'),
 						'url' : Zeega.draggedItem.get('item_url'),
-						'uri' : Zeega.draggedItem.get('item_url'),
 					}
 				};
 				var newLayer = new Layer( settings );
@@ -128,14 +128,13 @@ var NodeViewCollection = Backbone.View.extend({
 		{
 			_(Zeega.route.nodes).push(node);
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
-			node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
+			if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
 			node.save(
 				{thumb_url:''},
 				{
 					success : function()
 					{
-						//go to the new node
-						Zeega.loadNode(node);
+
 						
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
@@ -149,6 +148,8 @@ var NodeViewCollection = Backbone.View.extend({
 						//add a new current node style
 						$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
 						
+						//go to the new node
+						Zeega.loadNode(node);
 					}
 				}
 				

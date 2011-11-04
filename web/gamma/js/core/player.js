@@ -21,8 +21,7 @@ var Player = {
 	projectData :null,		// project data
 	currentRoute : 0,		// the current route // default = 0
 	currentNode : 0,		// the node currently on/to start on // default = 0
-	lookAhead : 2,			// the number of nodes to preload ahead of the currentNode
-	zeega : false,			// does the editor exist?
+	lookAhead : 2,			// does the editor exist?
 	route : null,			//collection of routes
 	nodes : null,			// collection of nodes
 	nodesLoaded : [],
@@ -79,7 +78,8 @@ var Player = {
 			this.layers = Zeega.route.layers;
 		}
 		
-
+		this.cleanWindow();
+		
 		this.draw();
 
 		// all layers will make this call
@@ -110,6 +110,16 @@ var Player = {
 		
 		t.fadeIn();
 		
+	},
+	
+	
+	//not sure I need this
+	cleanWindow : function()
+	{
+		_.each( $('video'), function(video){
+			$(video).attr('src','');
+			$(video).remove();
+		});
 	},
 	
 	// removes the player from the dom // resets the player? probably.
@@ -155,6 +165,7 @@ var Player = {
 	
 	onLayerLoad : function(layerID)
 	{
+		console.log('loaded: '+layerID);
 		//remove from the layers loading array
 		this.layersLoading = _.without(this.layersLoading,layerID);
 		//add to the layers loaded array
@@ -217,12 +228,12 @@ var Player = {
 			{
 				//draw new layer to the preview window
 				
-				_this.layerClasses[layerID].drawPublish( targetNode.get('layers').length - i);
+				_this.layerClasses[layerID].drawPublish(i);
 				_this.layersOnStage.push(layerID);
 			
 			}else{
 				//update existing persistant layer with new z-index
-				_this.layerClasses[layerID].updateZIndex( targetNode.get('layers').length - i);
+				_this.layerClasses[layerID].updateZIndex(i);
 				console.log('omitting layer: '+layerID)
 			}
 			
@@ -280,7 +291,7 @@ var Player = {
 			//preload each layer inside the node
 			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
 			
-			_.each( _.without(layersToPreload, -1),function(layerID){
+			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			
@@ -292,16 +303,17 @@ var Player = {
 	preloadLayer : function(layerID)
 	{
 		//if not loading or already loaded
-		if( !_.include( this.layersLoaded, layerID ) || !_.include(this.layersLoading,layerID))
+		if( !_.include( this.layersLoaded, layerID ) && !_.include(this.layersLoading,layerID))
 		{
-			console.log('preloading: '+ layerID)
+			//put the layer id into the layers Loading array
+			this.layersLoading.push(layerID);
+
+			console.log('preloading layer: '+ layerID)
 			//get the layer model
 			var layer = this.layers.get(layerID);
 			//get the layer type
 			var layerType = layer.get('type');
 
-			//put the layer id into the layers Loading array
-			this.layersLoading.push(layerID);
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class

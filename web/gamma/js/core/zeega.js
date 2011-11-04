@@ -88,7 +88,6 @@ var Zeega = {
 	//this is the first function called when loading the editor in dev
 	loadProject : function()
 	{
-		
 		var z = this;
 		this.projectID =  $('#project-id').val();
 		console.log(this.projectID);
@@ -209,18 +208,16 @@ var Zeega = {
 		//set global currentNode to the selected node
 		this.currentNode = node;
 
-		window.location.hash = '/node/'+ node.id; //change location hash
-		
-		
+		if(node) window.location.hash = '/node/'+ node.id; //change location hash
+		else window.location.hash = 'newNode';
 		//open/close visual editor
 		var el = $('#workspace');
 
-		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden'))
-		{
+		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden')){
 			el.show('blind',{'direction':'vertical'});
 			$('#ve-toggle').html('–');
-			
-		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible')){
+		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
+		{
 			el.hide('blind',{'direction':'vertical'});
 			$('#ve-toggle').html('+');
 		}
@@ -260,10 +257,12 @@ var Zeega = {
 		}
 		
 		//add the node's layers
-		var layerArray = _.without( this.currentNode.get('layers'), -1)
+		var layerArray = _.compact( this.currentNode.get('layers'))
 		_.each( layerArray , function(layerID){
 			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
 		});
+		
+		console.log(layerArray);
 		
 		//draw the layers
 		Zeega.route.layerViewCollection.render();
@@ -294,11 +293,12 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
+							Zeega.updateAndSaveNodeLayer(node,savedLayer);
+							
 							//Add to the collection
 							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
 							else Zeega.route.layers.add( savedLayer,{silent:true} );
 						
-							Zeega.updateAndSaveNodeLayer(node,savedLayer);
 							node.updateThumb();
 						}
 					});
@@ -319,12 +319,11 @@ var Zeega = {
 		var layerOrder = [layer.id];
 		if( node.get('layers') )
 		{
-			//if the layer array already exists
-			layerOrder = node.get('layers');
+			//if the layer array already exists eliminate false values if they exist
+			layerOrder = _.compact( node.get('layers') );
 			//add the layer id to the layer order array
-			layerOrder.unshift( layer.id );  //change this to PUSH and reverse the order of layers
+			layerOrder.push( layer.id );
 		}
-		
 		//set the layerOrder array inside the node
 		node.set({'layers':layerOrder});
 		node.save();
@@ -345,38 +344,42 @@ var Zeega = {
 		
 		if(_.include(attr.persistLayers,layer.id))
 		{
+			console.log('a persistent layer');
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
 				layerOrder = _.without(layerOrder,layer.id);
-				if(layerOrder.length == 0) layerOrder = new Array();
+				if(layerOrder.length == 0) layerOrder = [false];
 				_node.set({'layers':layerOrder});
 				_node.save();
 				_node.updateThumb();
 			});
 		}else{
+			console.log('NOT a persistent layer');
+			
 			var layerOrder = node.get('layers');
 			layerOrder = _.without(layerOrder,layer.id);
-			//set array to -1 if empty  //weirdness
-			if(layerOrder.length == 0) layerOrder = new Array();
+			//set array to false if empty  //weirdness
+			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
 			node.set({'layers':layerOrder});
 			node.save();
 			node.updateThumb();
 		}
-		this.destroyOrphans();
 		
+		this.destroyOrphans();
 		
 	},
 	
 	destroyOrphans : function()
 	{
+		_this = this;
 		// make a giant array of all the layer IDs in use by nodes
 		var layersInNodes = [];
 		_.each( _.toArray(this.route.nodes), function(node){
 			layersInNodes = _.union(node.get('layers'), layersInNodes);
 		});
 		
-		layersInNodes = _.without(layersInNodes, -1); //remove the default -1 value
+		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
 		
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
@@ -390,6 +393,7 @@ var Zeega = {
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
 				var orphan = Zeega.route.layers.get(orphanID);
+				_this.removeLayerPersist(orphan);
 				Zeega.route.layers.remove(orphan)
 				orphan.destroy();
 				
@@ -455,8 +459,11 @@ var Zeega = {
 	
 	updateLayerOrder : function(layerIDs)
 	{
+		console.log('updateLayerOrder');
+		layerIDs = layerIDs.reverse();
 		// updates z-index of divs in workspace
-		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', _.size(layerIDs) - i) });
+		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
+		console.log(layerIDs)
 
 		//update the layerOrder array 
 		this.currentNode.set({'layers':layerIDs})
@@ -490,7 +497,7 @@ var Zeega = {
 			}
 			this.nodeSort();
 			
-
+			this.destroyOrphans();
 			
 		}
 	},

@@ -169,12 +169,17 @@ var Database = {
 			var response = $.parseJSON(data);
 			
 			
-			if(response.items.length < 100) this.endOfItems = true;
+			if(response.items.length < 100)
+			{
+				console.log('the end');
+				this.endOfItems = true;
+			}
 			
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
 			{
 				_.each(response.items, function(item){
+					
 					//make search items into bb models
 					var newItem = new Item;
 				
@@ -189,7 +194,7 @@ var Database = {
 						'date_created_end':item.date_created_end,
 						'creator':item.creator,
 						'content_type':item.content_type,
-						'source_type':item.content_type,
+						'source_type':item.source_type,
 						'attribution_url':item.attribution_url,
 						'archive':item.archive
 					});
@@ -220,5 +225,4 @@ var Database = {
 	
 	
 };
-
 

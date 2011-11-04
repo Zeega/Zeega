@@ -30,7 +30,8 @@ var loadFiles = [
 	'order!ux/zeega.ux.header',
 	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
-	'order!helpers/sugar',
+	'order!helpers/zeega.extends',
+	'order!helpers/zeega.helpers',
 
 	//core
 	'order!core/zeega',
