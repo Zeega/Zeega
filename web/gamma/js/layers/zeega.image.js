@@ -29,6 +29,7 @@ var ImageLayer = ProtoLayer.extend({
 	
 
 	drawControls : function(template){
+		var _this  = this;
 		
 		var opacityArgs = {
 			min:0,
@@ -51,25 +52,31 @@ var ImageLayer = ProtoLayer.extend({
 			suffix: '%',
 		};
 		
+		var controls = $('<div>');
+		controls.append( makeCSSLayerSlider(widthArgs) );
+		controls.append( makeCSSLayerSlider(opacityArgs) );
 		
-		template.find('#controls').append( makeCSSLayerSlider(widthArgs) );
-		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
-		
-		//need this to be accessable inside the event functions
-		var that  = this;
-		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-			that.updateAttr();
+		controls.find('.layer-slider')
+			.bind( "slidestop", function(event, ui) {
+				_this.updateAttr();
 			});
-		template.find('#controls').append( makeFullscreenButton());
-		template.find('#controls').find('.fullscreen-submit').click(function(){
-			$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-			$('#layer-edit-'+that.model.id).find('#Width-slider').slider("option", "value", 100 );
-			that.updateAttr();
-		});
+			
+		controls.append( makeFullscreenButton() );
+		controls.find('.fullscreen-submit')
+			.click(function(){
+				$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
+				$('#layer-edit-'+that.model.id).find('#Width-slider').slider("option", "value", 100 );
+				that.updateAttr();
+			});
 		
 		//change icon on layer template
+		/*
+		//change a different way
 		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
 		template.find('.asset-type-icon').addClass('ui-icon-image');
+		*/
+
+		return(controls);
 	},
 	
 	

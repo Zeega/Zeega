@@ -1,12 +1,11 @@
 var VisualLayerListView = Backbone.View.extend({
-	tagName : 'li',
 	
+	tagName : 'li',
 	
 	initialize : function(options)
 	{
 		// add a visual view into this view
 		this._visualEditorView = new LayerVisualEditorView({ model : this.model })
-		console.log(this._visualEditorView);
 		
 		this.model.bind( 'change', function(){
 			console.log('layer change!!');
@@ -16,9 +15,14 @@ var VisualLayerListView = Backbone.View.extend({
 	//draws the controls
 	render : function()
 	{
+		var _this = this;
+		
+		//render the visual editor view
+		this._visualEditorView.render();
+		
+		//this.model.layerClass.load(this.model);
 		
 		this.model.bind('remove',this.remove);
-		var _this = this;
 		var text = this.model.get('text');
 		var type = this.model.get('type');
 		
@@ -26,93 +30,92 @@ var VisualLayerListView = Backbone.View.extend({
 		if( !this.model.get('attr') ) this.model.set({ attr : this.model.layerClass.defaultAttributes });
 		
 		
-			var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
-			var layerOrder = _.compact( Zeega.currentNode.get('layers') );
-			var title;
-			
-			//render the visual editor view
-			this._visualEditorView.render();
-
-			//shorten title if necessary
-			if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
-			{
-				title = this.model.get('attr').title.substr(0,70)+"…";
-			}else{
-				title = this.model.get('attr').title;
-			}
-			
-			template.find('.layer-title').html( title );
-
-			this.model.layerClass.load(this.model);
-
-			if(Zeega.previewMode)
-			{
-			
-
-			}else{
-				console.log('not in preview mode');
-
-				//insert the special layer controls into the template
-				this.model.layerClass.drawControls(template);
-				//save the layer element into the view object
-				this.workspacePreview = this.model.layerClass;
-
-				//label the li element so we can return something when sorting
-				$(this.el).attr('id', 'layer-'+ this.model.id);
-				$(this.el).html(template);
-
-
-				//check or uncheck the layer persist box
-				if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
-				{
-					$(this.el).find('#persist').attr('checked','true');
-				}
-
-				//set persistance action
-				$(this.el).find('#persist').change(function(){
-					var layer = _this.model;
-					if( $(this).is(':checked')){
-						Zeega.persistLayerOverNodes(layer);
-					}else{
-						Zeega.removeLayerPersist(layer);
-					}
-				});
-				//	open/close and expanding layer items
-				$(this.el).find('.layer-title').click(function(){
-
-					if($(this).closest('li').hasClass("open")){
-						//hide layer controls
-						$(this).find('span').removeClass('arrow-up').addClass('arrow-down');
-						$(this).closest('li').find('.layer-content').hide('blind',{'direction':'vertical'});
-						$(this).closest('li').removeClass('open');
-						_this.workspacePreview.closeControls();
-						return false;
-					}else{
-						//show layer controls
-						$(this).find('span').removeClass('arrow-down').addClass('arrow-up');
-						$(this).closest('li').find('.layer-content').show('blind',{'direction':'vertical'},function(){_this.workspacePreview.openControls();});
-						$(this).closest('li').addClass('open');
-						return false;
-					}
-				});
-
-				//delete this layer from the DB and view
-				$(this.el).find('.delete-layer').click(function(){
-					_this.remove();
-					Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
-					return false;
-				});
-
-
-			} //end if previewMode
-			
-			
-			
+		//var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
 		
+		var layerOrder = _.compact( Zeega.currentNode.get('layers') );
+
+		//shorten title if necessary
+		var title;
+		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
+		{
+			title = this.model.get('attr').title.substr(0,70)+"…";
+		}else{
+			title = this.model.get('attr').title;
+		}
+		
+		var persist;
+		if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+		{
+			persist = 'checked';
+		}else{
+			persist = '';
+		}
+
+		//set values to be filled into template
+		var values = {
+			id : 'layer-edit-'+this.model.id,
+			layerName : title,
+			persist : persist
+		}
+		//make template
+		var tmpl = _.template(layerTemplate);
+		//fill in template with values
+		$(this.el).html( tmpl(values) );
+		//set the id of the parent element
+		$(this.el).attr('id', 'layer-'+ this.model.id);
+		//add the controls to the layer
+		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
 
 		return this;
+	},
+	
+	
+	
+	/***********************
+	
+			EVENTS
+	
+	***********************/
+	
+	events : {
+		'click .delete-layer'		: 'delete',
+		'click .layer-title'		: 'expand',
+		'change #persist'			: 'persist'
+	},
+	
+	//delete this layer from the DB and view
+	delete : function()
+	{
+		this.remove();
+		Zeega.removeLayerFromNode( Zeega.currentNode, this.model );
+	},
+	
+	//	open/close and expanding layer items
+	expand :function()
+	{
+		var _this = this;
+		if( $(this.el).find('.layer-content').is(':visible') )
+		{
+			//hide layer controls
+			$(this.el).find('.layer-content').hide('blind',{'direction':'vertical'});
+			this.model.layerClass.closeControls();
+			return false;
+		}else{
+			//show layer controls
+			$(this.el).find('.layer-content').show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.openControls() });
+			return false;
+		}
 		
+	},
+	
+	//set persistance action
+	persist : function()
+	{
+		if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverNodes(this.model);
+		else Zeega.removeLayerPersist(this.model);
 	}
+	
+	
 });
 
 
@@ -169,12 +172,12 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 });
 
 
-var layerTemplate = '<div id="" class="layer-list clearfix">';
+var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
 layerTemplate += 		'<div class="layer-uber-bar clearfix">';
 layerTemplate += 			'<div class="layer-icon">';
 layerTemplate += 				'<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>';
 layerTemplate += 			'</div>';
-layerTemplate += 		'<div class="layer-title">Layer Name</div>';
+layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
 layerTemplate += 		'<div class="layer-uber-controls">';
 layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
 layerTemplate += 		'</div>';
@@ -186,7 +189,7 @@ layerTemplate += 	'<div class="hidden layer-content clearfix">';
 layerTemplate += 		'<div id="controls"></div>';
 layerTemplate += 		'<br />';
 layerTemplate += 		'<form id="layer-persist">';
-layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist layer to route</label>';
+layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
 layerTemplate += 		'</form>';
 layerTemplate += 	'</div>';
 layerTemplate += '</div>';

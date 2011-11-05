@@ -299,7 +299,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$( "#sortable-layers" )
+	$( "#layers-list-visual" )
 		.sortable({
 		
 			//define a grip handle for sorting
