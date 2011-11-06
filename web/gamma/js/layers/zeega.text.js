@@ -293,6 +293,9 @@ var TextLayer = ProtoLayer.extend({
 		
 		console.log('preload media text');
 		
+		var previewFontSize = this.attr.size/600 * window.innerWidth;
+		var previewWidth = this.attr.w/600 * window.innerWidth;
+		var previewHeight = this.attr.h/400 * window.innerHeight
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
@@ -300,9 +303,9 @@ var TextLayer = ProtoLayer.extend({
 			'position' : 'absolute',
 			'top' : '-100%',
 			'left' : '-100%',
-			'width' : this.attr.w,
-			'height' : this.attr.h,
-			'font-size' : this.attr.size + 'px'
+			'width' : previewWidth,
+			'height' : previewHeight,
+			'font-size' : previewFontSize + 'px'
 		};
 		div.addClass('text-layer-container')
 			.attr({
