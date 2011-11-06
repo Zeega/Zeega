@@ -1219,6 +1219,12 @@ margin-top: 10px;
 	width:0;
 }
 
+#layer-status ul li
+{
+	color: white;
+	margin-left: 10px;
+}
+
 .ghost-node
 {
 }

@@ -185,8 +185,8 @@ var TextLayer = ProtoLayer.extend({
 		var div = $('<div />');
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y,
-			'left' : this.attr.x,
+			'top' : this.attr.y+'%',
+			'left' : this.attr.x+'%',
 			'z-index' : this.zIndex,//layers.length - i,
 			'width' : this.attr.w,
 			'height' : this.attr.h,
@@ -411,6 +411,9 @@ var TextLayer = ProtoLayer.extend({
 		newAttr.y = Math.floor( this.dom.position().top/4);
 		newAttr.w = this.dom.css('width');
 		newAttr.h = this.dom.css('height');
+		
+		console.log('$$$$$$$$$$$$$$$$$$');
+		console.log(newAttr);
 		
 		console.log(newAttr);
 		var contentPanel = this.dom.children('.text-layer-content');
