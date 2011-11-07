@@ -1,9 +1,12 @@
 /*
    Class: Database
    Manages the connection to the database
+   
+   TO-DO: Move all dom manipulation actions to zeega.ux.editor
 */
 var Database = new function()
 {	
+    var debug = false;
     var that = this;
 	this.page = 0;
 	this.customSearch = false;
@@ -11,78 +14,39 @@ var Database = new function()
 		
 	this.init = function()
 	{
-		console.log('loading database');
+		if(debug) console.log('database:init');
 		reset();
-		setQuery(null,'all');
-		
 		this.search(null,'all', false);
 	};
 
-    /* 
-       Function: Append
-       Loads more items from the database.
-
-       See Also:
-          <Search>
-    */
-	this.appender = function()
-	{
-		setQuery(this.postdata.query[0].queryString, this.postdata.query[0].contentType, false);
-		console.log('load more from the custom search');
-		this.search();
-	};
-	
-	// deprecated - use search instead
-	this.changeFilter = function(el)
-	{
-	    console.log("database:changeFilter");
-		var filter = $(el).val();
-		this.search( null, filter, true );
-	};
-	
-	//refresh the current items. reset to page 0. see if any items added to database
-	this.refresh = function()
-	{
-		console.log('reloading database');
-		var d = this;
-		this.customSearch = false;
-		this.page = 0;
-
-		//setQuery(null,'all');
-		
-		this.search(this.postdata.query[0].queryString,this.postdata.query[0].contentType, true);
-	};
-	
 	//what happens if you search for something in the search bar
 	this.search = function( query, contentType, reset )
 	{
 	    if(_.isNull(query) || _.isUndefined(query))
 	        query = '';
 	        
-	    console.log("database:search " + query + "," + contentType + "," +reset);   
+	    if(debug) console.log("database:search " + query + "," + contentType + "," +reset);   
 		
 		if(reset)
 		{
 		    that.collection = new ItemCollection;
 		    that.page = 0;
+		    that.endOfItems = false;
 		}
 		
 		setQuery( query, contentType );
 		
 		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
-		    //console.log("database:search " + data);
 			var response = $.parseJSON(data);
 			
 			if(response.items.length < 100)
 			{
-				console.log('the end');
 				this.endOfItems = true;
 			}
 			
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
 			{
-			    
 				_.each(response.items, function(item){
 					
 					//make search items into bb models
@@ -211,7 +175,6 @@ var Database = new function()
 		};
 	};
 	
-	//useful? maybe
 	var reset = function()
 	{
 		console.log('empty database');

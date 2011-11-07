@@ -70,10 +70,10 @@ function insertPager(items, page)
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
-					console.log('load more!');
+					//console.log('load more!');
 					// call the database and add more item divs
 					//Database.append();
-					return search('#database-pager',false);
+					return search(this,false);
 				}
 				
 			
@@ -147,10 +147,10 @@ function submitbutton(button)
 
 function search(triggerElement, discardCurrentResultSet)
 {
-    var form = $(triggerElement).closest("form");
-    if(form == undefined) form = ("#form-search");
-    
-	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
+    //var form = $(triggerElement).closest("form");
+    //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
+    // this is not very elegant...
+    Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
 	return false;	
 }
 
@@ -269,7 +269,7 @@ $(document).ready(function() {
 	});
 	
 	$('#refresh-database').click(function(){
-	    return Database.refresh();
+	    return search(this,true);
 	});
 	
 	//node tray sortable and sorting events
