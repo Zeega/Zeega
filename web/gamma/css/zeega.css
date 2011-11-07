@@ -842,6 +842,12 @@ body
 	float:right;
 }
 
+.copy-to-next
+{
+	float:right;
+	clear:both;
+}
+
 .i-layer
 {
 	min-height:25px;

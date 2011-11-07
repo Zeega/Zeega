@@ -405,6 +405,13 @@ var Zeega = {
 		
 	},
 	
+	copyLayerToNextNode : function(layer)
+	{
+		console.log('copy to next layer');
+		var nextNode = this.getRightNode();
+		if (nextNode) this.addLayerToNode(nextNode,layer);
+	},
+	
 	persistLayerOverNodes : function(layer)
 	{
 		console.log('peristing');
