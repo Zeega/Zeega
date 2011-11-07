@@ -21,16 +21,17 @@ var LayerView = Backbone.View.extend({
 		var type = this.model.get('type');
 		
 		//create the correct layer Child object
-		console.log(this.model.get('type'));
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
 		
 		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
+
+		console.log(this.model);
+		layerClass.load(this.model);
 		
 		//do if interaction layer
 		if(layerClass.interaction)
 		{
 			console.log('interactive******');
-			layerClass.load(this.model);
 			layerClass.drawControls();
 			layerClass.drawPreview();
 			
@@ -64,8 +65,6 @@ var LayerView = Backbone.View.extend({
 			
 			template.find('.layer-title').html( title );
 
-			layerClass.load(this.model);
-
 			if(Zeega.previewMode)
 			{
 				console.log('in preview mode');
@@ -75,8 +74,6 @@ var LayerView = Backbone.View.extend({
 				layerClass.updateZIndex(_.indexOf(layerOrder, this.model.id));
 
 			}else{
-				console.log('not in preview mode');
-
 				layerClass.drawPreview();
 				
 				layerClass.updateZIndex( _.indexOf(layerOrder, this.model.id));

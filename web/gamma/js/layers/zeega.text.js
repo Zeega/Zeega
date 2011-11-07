@@ -12,7 +12,7 @@ var TextLayer = ProtoLayer.extend({
 
 	defaultAttributes: {
 				type:'text',
-			        title:'Text Layer',
+				title:'Text Layer',
 				content: '',
 				x:0,
 				y:0,
@@ -26,8 +26,12 @@ var TextLayer = ProtoLayer.extend({
 				indent: 0
 			},
 
-	drawControls : function(template)
+	drawControls : function(tmp)
 	{
+		//need this to be accessable inside the various functions
+	    var _this  = this;
+		var template = $(tmp);
+		
 	    var fontSizeArgs = {
 		min: 8,
 		max: 50,
@@ -38,24 +42,26 @@ var TextLayer = ProtoLayer.extend({
 		css: 'font-size',
 		suffix: 'px'
 	    };
+	
 	    template.find('#controls').append( makeCSSLayerSlider(fontSizeArgs) );
 
 	    var paddingArgs = {
-		min: 0,
-		max: 25,
-		value: this.attr.padding,
-		step:1,
-		layer_id: this.model.id,
-		label: 'Padding',
-		custom_handler: function(e, ui, layer_id){
-		    $('#layer-preview-'+layer_id).children('.text-layer-content')
-		        .css({'padding-left': ui.value + 'px',
-			      'padding-right': ui.value + 'px',
-			      'padding-top': ui.value + 'px',
-			      'padding-bottom': ui.value + 'px',
-			    });
-		}
+			min: 0,
+			max: 25,
+			value: this.attr.padding,
+			step:1,
+			layer_id: this.model.id,
+			label: 'Padding',
+			custom_handler: function(e, ui, layer_id){
+			    $('#layer-preview-'+layer_id).children('.text-layer-content')
+			        .css({'padding-left': ui.value + 'px',
+				      'padding-right': ui.value + 'px',
+				      'padding-top': ui.value + 'px',
+				      'padding-bottom': ui.value + 'px',
+				    });
+			}
 	    };
+	
 	    template.find('#controls').append( this.makeCustomSlider(paddingArgs) );
 	    
 	    var indentArgs = {
@@ -103,51 +109,49 @@ var TextLayer = ProtoLayer.extend({
 		    }   
 	    };
 	    template.find('#controls').append( this.makeCustomSlider(bgOpacityArgs) );
-	
-	    //need this to be accessable inside the various functions
-	    var that  = this;
 	    
 	    var colorPickerArgs = {
-		'layer_id' : this.model.id,
-		'color' : {'r' : this.attr.color[0],
-			   'g' : this.attr.color[1],
-			   'b' : this.attr.color[2]
-		          },
-		'label' : 'Text Color',
-		'that' : this,
-		'custom_handler' : function(rgb, layer_id){
-		    var content = $('#layer-preview-'+layer_id).children('.text-layer-content');
-		    var currentColor = content[0].style.color.replace(/[rgba()\s]/g,'').split(',');
-		    if (currentColor.length == 3){
-			currentColor[3] = 1;
-		    }
-		    currentColor[0] = rgb.r;
-		    currentColor[1] = rgb.g;
-		    currentColor[2] = rgb.b;
-		    content[0].style.color = 'rgba('+currentColor.join(',')+')';
-		}
+			'layer_id' : this.model.id,
+			'color' : {'r' : this.attr.color[0],
+				   'g' : this.attr.color[1],
+				   'b' : this.attr.color[2]
+			          },
+			'label' : 'Text Color',
+			'_this' : this,
+			'custom_handler' : function(rgb, layer_id)
+			{
+				var content = $('#layer-preview-'+layer_id).children('.text-layer-content');
+				var currentColor = content[0].style.color.replace(/[rgba()\s]/g,'').split(',');
+				if (currentColor.length == 3){
+					currentColor[3] = 1;
+				}
+				currentColor[0] = rgb.r;
+				currentColor[1] = rgb.g;
+				currentColor[2] = rgb.b;
+				content[0].style.color = 'rgba('+currentColor.join(',')+')';
+			}
 	    };
 	    template.find('#controls').append( makeColorPicker(colorPickerArgs));
 
 	    var bgColorPickerArgs = {
-		'layer_id' : this.model.id,
-		'color' : {'r' : this.attr.bgColor[0],
-			   'g' : this.attr.bgColor[1],
-			   'b' : this.attr.bgColor[2]
-		          },
-		'label' : 'Background Color',
-		'that' : this,
-		'custom_handler' : function(rgb, layer_id){
-		    var content = $('#layer-preview-'+layer_id);
-		    var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-		    if (currentColor.length == 3){
-			currentColor[3] = 1;
-		    }
-		    currentColor[0] = rgb.r;
-		    currentColor[1] = rgb.g;
-		    currentColor[2] = rgb.b;
-		    content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
-		}
+			'layer_id' : this.model.id,
+			'color' : {'r' : this.attr.bgColor[0],
+				   'g' : this.attr.bgColor[1],
+				   'b' : this.attr.bgColor[2]
+			          },
+			'label' : 'Background Color',
+			'_this' : this,
+			'custom_handler' : function(rgb, layer_id){
+			    var content = $('#layer-preview-'+layer_id);
+			    var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
+			    if (currentColor.length == 3){
+				currentColor[3] = 1;
+			    }
+			    currentColor[0] = rgb.r;
+			    currentColor[1] = rgb.g;
+			    currentColor[2] = rgb.b;
+			    content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
+			}
 	    };
 	    template.find('#controls').append( makeColorPicker(bgColorPickerArgs));
 
@@ -167,7 +171,7 @@ var TextLayer = ProtoLayer.extend({
 	    };
 	    template.find('#controls').append( this.makeCustomSlider(columnsArgs));	    				
 	    template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-		    that.updateAttr();
+		    _this.updateAttr();
 		});
 	    
 	    //change icon on layer template
@@ -180,6 +184,12 @@ var TextLayer = ProtoLayer.extend({
 	closeControls : function(){},
 	
 	drawPreview : function(){
+		
+		//need this to be accessable inside various functions
+		var _this  = this;
+		
+		
+		this.attr = this.defaultAttributes;
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
@@ -192,13 +202,12 @@ var TextLayer = ProtoLayer.extend({
 			'height' : this.attr.h,
 			'font-size' : this.attr.size + 'px'
 		};
-		div
-		.addClass('text-layer-container')
-		.attr({
+		div.addClass('text-layer-container')
+			.attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id,
 			})
-		.css(cssObj);
+			.css(cssObj);
 
 
 		div.addClass('text-layer-chrome-visible');
@@ -210,14 +219,8 @@ var TextLayer = ProtoLayer.extend({
 		
 		*/
 
-		//need this to be accessable inside various functions
-		var that  = this;
-		
-		
-		
-		
 		var mouseELmaster = function (event) {
-		    that.toggleFrameVis();
+		    _this.toggleFrameVis();
 		}
 
 		/* This bunch of stuff shows and hides the handle and outline, based on mouseover.
@@ -231,7 +234,7 @@ var TextLayer = ProtoLayer.extend({
 				div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
 				var div_pos = div.offset();
 				if (event.pageX <= div_pos.left || event.pageX >= div_pos.left + div.width() || event.pageY <= div_pos.top || event.pageY >= div_pos.top + div.height()){
-				    that.toggleFrameVis();
+				    _this.toggleFrameVis();
 				}
 			    });
 		    });
@@ -242,13 +245,13 @@ var TextLayer = ProtoLayer.extend({
 			
 			//when the image stops being dragged
 			stop : function(){
-				that.updateAttr();
+				_this.updateAttr();
 			},
 			containment: 'parent'
 			});
 		div.resizable({
 			stop : function (){
-			    that.updateAttr();
+			    _this.updateAttr();
 			},
 		        containment:'parent',
 		        minHeight: 50,
@@ -256,26 +259,32 @@ var TextLayer = ProtoLayer.extend({
 			autoHide: true
 		});
 		
-		var content = $('<div />').css({'width' : '100%', 
-						'height' : '100%', 
-		                                'overflow' : 'auto',
-						'column-count' : this.attr.columns,
-						'-moz-column-count' : this.attr.columns,
-						'padding-top' : this.attr.padding + 'px',
-						'padding-left' : this.attr.padding + 'px',
-						'padding-right' : this.attr.padding + 'px',
-						'padding-bottom' : this.attr.padding + 'px',
-						'text-indent': this.attr.indent + 'px',
-					        'box-sizing' : 'border-box',
-						'-moz-box-sizing' : 'border-box',
-						'-webkit-box-sizing' : 'border-box'
-		                           })
-		                          .addClass('text-layer-content');
+		var content = $('<div />').css({
+				'width' : '100%', 
+				'height' : '100%', 
+				                'overflow' : 'auto',
+				'column-count' : this.attr.columns,
+				'-moz-column-count' : this.attr.columns,
+				'padding-top' : this.attr.padding + 'px',
+				'padding-left' : this.attr.padding + 'px',
+				'padding-right' : this.attr.padding + 'px',
+				'padding-bottom' : this.attr.padding + 'px',
+				'text-indent': this.attr.indent + 'px',
+				    'box-sizing' : 'border-box',
+				'-moz-box-sizing' : 'border-box',
+				'-webkit-box-sizing' : 'border-box'
+			})
+			.addClass('text-layer-content');
 		
-		content.html(that.attr.content);
+		console.log('CONTENT');
+		console.log( _this );
+		
+		console.log( _this.attr.content );
+		
+		content.html(_this.attr.content);
 
 		content.bind('click mousedown', function(event) { event.stopPropagation()});
-	        content.bind('blur change', function(){that.updateAttr()});
+	        content.bind('blur change', function(){_this.updateAttr()});
 		div.append(content);
 		this.dom = div;
 		//draw to the workspace
@@ -347,21 +356,21 @@ var TextLayer = ProtoLayer.extend({
 		});
 		
 		var content = $('<div />').css({
-						'width' : '100%', 
-						'height' : '100%', 
-						'overflow' : 'auto',
-						'column-count' : this.attr.columns,
-						'-moz-column-count' : this.attr.columns,
-						'padding-top' : this.attr.padding + 'px',
-						'padding-left' : this.attr.padding + 'px',
-						'padding-right' : this.attr.padding + 'px',
-						'padding-bottom' : this.attr.padding + 'px',
-						'text-indent': this.attr.indent + 'px',
-						'box-sizing' : 'border-box',
-						'-moz-box-sizing' : 'border-box',
-						'-webkit-box-sizing' : 'border-box'
-		                           })
-		                          .addClass('text-layer-content');
+				'width' : '100%', 
+				'height' : '100%', 
+				'overflow' : 'auto',
+				'column-count' : this.attr.columns,
+				'-moz-column-count' : this.attr.columns,
+				'padding-top' : this.attr.padding + 'px',
+				'padding-left' : this.attr.padding + 'px',
+				'padding-right' : this.attr.padding + 'px',
+				'padding-bottom' : this.attr.padding + 'px',
+				'text-indent': this.attr.indent + 'px',
+				'box-sizing' : 'border-box',
+				'-moz-box-sizing' : 'border-box',
+				'-webkit-box-sizing' : 'border-box'
+			})
+			.addClass('text-layer-content');
 		
 		content.html( _this.attr.content );
 
@@ -402,7 +411,7 @@ var TextLayer = ProtoLayer.extend({
 	
 	updateAttr: function()
 	{
-	 	if(!Player)
+		if(!Zeega.previewMode)
 		{
 			//get a copy of the old attributes into a variable
 			var newAttr = this.attr;
@@ -415,11 +424,7 @@ var TextLayer = ProtoLayer.extend({
 			newAttr.y = Math.floor( this.dom.position().top/4);
 			newAttr.w = this.dom.css('width');
 			newAttr.h = this.dom.css('height');
-		
-			console.log('$$$$$$$$$$$$$$$$$$');
-			console.log(newAttr);
-		
-			console.log(newAttr);
+
 			var contentPanel = this.dom.children('.text-layer-content');
 			newAttr.content = contentPanel.html();
 			//Clean up broken html left behind by Aloha on empty elements
@@ -430,12 +435,12 @@ var TextLayer = ProtoLayer.extend({
 		
 			//update layer title
 		
-			newAttr.title =newAttr.content.substr(0,60);
+			newAttr.title = newAttr.content.substr(0,60);
 			$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
 		
 			/*
 		
-			//Ensures that empty text-boxes have visible borders
+			//Ensures _this empty text-boxes have visible borders
 			if (newAttr.content.match(/\S/)){
 			    console.log('removeClass');
 			    this.dom.removeClass('text-layer-chrome-visible');
