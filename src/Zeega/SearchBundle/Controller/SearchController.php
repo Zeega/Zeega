@@ -11,10 +11,73 @@ use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 class SearchController extends Controller
 {
-   
-  
-  
+    public function searchAction2()
+    {
+        $logger = $this->get('logger');
+        $logger->err("yo");
+        $request = array();
+        $request['contentType'] = 'all';
+        $request['queryString'] = '';
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        $items=$this->getDoctrine()
+					->getRepository('ZeegaIngestBundle:Item')
+					->findItems($request,0,100);								
+        //$logger->err($items->getSQL());        
+		$results[]=array('items'=>$items,'count'=>sizeof($items));
+        
+        return new Response(json_encode($results[0]));
+		
+    }
     public function searchAction(){
+        $user = $this->get('security.context')->getToken()->getUser();
+		$queries=$this->getRequest()->get('query');
+		
+		$results=array();
+		
+		//$logger = $this->get('logger');
+		
+		if(is_array($queries) &&sizeof($queries)>0)
+		{
+			foreach($queries as $query)
+			{
+				/** CHECK FOR SEARCH PARAMETERS, USE DEFAULTS WHEN NECESSARY */
+				$query['userId'] = $user->getId();
+
+                if(!isset($query['contentType']))   $query['contentType'] = 'all';
+				if(!isset($query['queryString']))   $query['queryString'] = '';
+				if(!isset($query['output']))        $query['output'] = array();
+				
+				$output = $query['output'];
+				
+				if(!isset($output['limit']))        $output['limit'] = null;
+				if(!isset($output['offset']))       $output['offset'] = null;
+				
+				if($output['type'] == 'item')       $output['resolution'] = 1;
+				
+				$query['limit'] = $output['limit'];
+				$query['offset'] = $output['offset'];
+				
+
+				/** EXECUTE QUERY */
+				if($output['resolution'] <= 1)
+				{
+                    //$logger->err('yo');
+					$items=$this->getDoctrine()
+								->getRepository('ZeegaIngestBundle:Item')
+								->findItems($query,0,$query['limit']);								
+
+					$results[]=array('items'=>$items,'count'=>sizeof($items));
+				}
+				
+			}
+			if(sizeof($queries)==1) return new Response(json_encode($results[0]));
+			else return new Response(json_encode($results));
+		}
+		else return new Response("Error: Query is not correctly formatted2");
+    }
+  
+    public function searchOldAction(){
 		$user = $this->get('security.context')->getToken()->getUser();
 		$queries=$this->getRequest()->get('query');
 		$results=array();

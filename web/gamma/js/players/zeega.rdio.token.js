@@ -9,11 +9,10 @@
 // if you want to do playback as a particular user, pass --authenticate to rdio-call
 // then update playback_token below with YOUR_PLAYBACK_TOKEN and the domain below with YOUR_DOMAIN
 
-/*
 var playback_token = "GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=";
 var domain = "localhost";
-*/
 
+/*
 var playback_token = "GA9OoGEX_____2s1NmJ3OGtrNjhoNTZxejhhOG1lNmgzOGFscGhhLnplZWdhLm9yZ-f8_u5g1y5xfVUoELFHCa8=";
 var domain = "alpha.zeega.org";
-
+*/

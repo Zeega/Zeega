@@ -7,6 +7,45 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    
+    public function findItems($query, $offset,$limit)
+    {
+        // $qb instanceof QueryBuilder
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('i')
+                  ->from('ZeegaIngestBundle:Item', 'i')
+                  ->innerjoin('i.metadata', 'm')
+                  //->where('u.username LIKE ?') ->andWhere('u.is_active = 1');
+                  /*->add('where', $qb->expr()->orx(
+                      $qb->expr()->like('i.title', '?1'),
+                      $qb->expr()->like('i.creator', '?1')
+                  ))*/
+                  ->where('i.title LIKE ?1')
+                  //->where('i.title LIKE ?1 OR i.creator = ?1')
+                  ->orderBy('i.id','DESC')
+       		   ->setMaxResults($limit)
+       		   ->setFirstResult($offset)
+       		   ->getQuery();
+        
+        if($query['contentType']!='all')
+        {
+            $qb->andWhere('i.content_type = ?2')
+                ->setParameter(2, $query['contentType']);       
+        }         
+       		   
+       $q = $qb->getQuery();         		   
+       $q->setParameter(1, '%' . $query['queryString'] . '%');
+       /*if($query['contentType'] != 'all')
+       {
+           
+       }*/
+       //return $q;        
+	 
+
+       return $q->getArrayResult();
+    }
+    
       public function findItemByAttributionUrl($url)
     {
         $query = $this->getEntityManager()
