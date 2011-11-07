@@ -402,82 +402,84 @@ var TextLayer = ProtoLayer.extend({
 	
 	updateAttr: function()
 	{
-	 
-		//get a copy of the old attributes into a variable
-		var newAttr = this.attr;
-		//Without a title, layers display wrongly and are undeletable.
-		if (!newAttr.title) {
-		    newAttr.title = "Untitled Layer";
-		}
-		//set the new x/y coords into the attributes
-		newAttr.x = Math.floor( this.dom.position().left/6);
-		newAttr.y = Math.floor( this.dom.position().top/4);
-		newAttr.w = this.dom.css('width');
-		newAttr.h = this.dom.css('height');
-		
-		console.log('$$$$$$$$$$$$$$$$$$');
-		console.log(newAttr);
-		
-		console.log(newAttr);
-		var contentPanel = this.dom.children('.text-layer-content');
-		newAttr.content = contentPanel.html();
-		//Clean up broken html left behind by Aloha on empty elements
-		if (newAttr.content == '<br>'){
-		    newAttr.content = '';
-		}
-		console.log(newAttr.content);
-		
-		//update layer title
-		
-		newAttr.title =newAttr.content.substr(0,60);
-		$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
-		
-		/*
-		
-		//Ensures that empty text-boxes have visible borders
-		if (newAttr.content.match(/\S/)){
-		    console.log('removeClass');
-		    this.dom.removeClass('text-layer-chrome-visible');
-		}
-		else {
-		    console.log('addClass');
-		    this.dom.addClass('text-layer-chrome-visible');
-		}
-		
-		
-		*/
-		
-		// Note: These if statements protect (x,x,x,1) from conversion to plain rgb 
-		var newColor = contentPanel[0].style.color.replace(/[rgba()\s]/g,'').split(',');
-		if (newColor.length == 3){
-		    newColor[3] = 1;
-		}
-		newAttr.color = newColor;
-
-		var newBgColor = this.dom[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-		if (newBgColor.length == 3){
-		    newBgColor[3] = 1;
-		}
-		newAttr.bgColor = newBgColor;
-		newAttr.size = contentPanel.css('font-size').replace(/px/, '');
-		newAttr.padding = contentPanel.css('padding-top').replace(/px/, '');
-		console.log(contentPanel.css('text-indent').replace(/em/, ''));
-		newAttr.indent = contentPanel.css('text-indent').replace(/px/, '');
-		if (contentPanel.css('column-count')){
-		    newAttr.columns = contentPanel.css('column-count');
-		}else if (contentPanel[0].style.WebkitColumnCount){
-		    newAttr.columns = contentPanel[0].style.WebkitColumnCount;
-		}
-		else if (contentPanel.css('-moz-column-count'))
+	 	if(!Player)
 		{
-		    newAttr.columns = contentPanel.css('-moz-column-count');
-		}else {
-		    newAttr.columns = 1;
+			//get a copy of the old attributes into a variable
+			var newAttr = this.attr;
+			//Without a title, layers display wrongly and are undeletable.
+			if (!newAttr.title) {
+			    newAttr.title = "Untitled Layer";
+			}
+			//set the new x/y coords into the attributes
+			newAttr.x = Math.floor( this.dom.position().left/6);
+			newAttr.y = Math.floor( this.dom.position().top/4);
+			newAttr.w = this.dom.css('width');
+			newAttr.h = this.dom.css('height');
+		
+			console.log('$$$$$$$$$$$$$$$$$$');
+			console.log(newAttr);
+		
+			console.log(newAttr);
+			var contentPanel = this.dom.children('.text-layer-content');
+			newAttr.content = contentPanel.html();
+			//Clean up broken html left behind by Aloha on empty elements
+			if (newAttr.content == '<br>'){
+			    newAttr.content = '';
+			}
+			console.log(newAttr.content);
+		
+			//update layer title
+		
+			newAttr.title =newAttr.content.substr(0,60);
+			$('#layer-edit-'+this.model.id).find('.layer-title').html(newAttr.title );
+		
+			/*
+		
+			//Ensures that empty text-boxes have visible borders
+			if (newAttr.content.match(/\S/)){
+			    console.log('removeClass');
+			    this.dom.removeClass('text-layer-chrome-visible');
+			}
+			else {
+			    console.log('addClass');
+			    this.dom.addClass('text-layer-chrome-visible');
+			}
+		
+		
+			*/
+		
+			// Note: These if statements protect (x,x,x,1) from conversion to plain rgb 
+			var newColor = contentPanel[0].style.color.replace(/[rgba()\s]/g,'').split(',');
+			if (newColor.length == 3){
+			    newColor[3] = 1;
+			}
+			newAttr.color = newColor;
+
+			var newBgColor = this.dom[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
+			if (newBgColor.length == 3){
+			    newBgColor[3] = 1;
+			}
+			newAttr.bgColor = newBgColor;
+			newAttr.size = contentPanel.css('font-size').replace(/px/, '');
+			newAttr.padding = contentPanel.css('padding-top').replace(/px/, '');
+			console.log(contentPanel.css('text-indent').replace(/em/, ''));
+			newAttr.indent = contentPanel.css('text-indent').replace(/px/, '');
+			if (contentPanel.css('column-count')){
+			    newAttr.columns = contentPanel.css('column-count');
+			}else if (contentPanel[0].style.WebkitColumnCount){
+			    newAttr.columns = contentPanel[0].style.WebkitColumnCount;
+			}
+			else if (contentPanel.css('-moz-column-count'))
+			{
+			    newAttr.columns = contentPanel.css('-moz-column-count');
+			}else {
+			    newAttr.columns = 1;
+			}
+			//set the attributes into the layer
+			this.updateLayerAttr(newAttr);
+			//save the layer back to the database
+			this.saveLayer();
 		}
-		//set the attributes into the layer
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();	
 	},
 	
 	toggleFrameVis : function ()
