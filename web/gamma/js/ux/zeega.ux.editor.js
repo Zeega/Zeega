@@ -72,7 +72,8 @@ function insertPager(items, page)
 				{
 					console.log('load more!');
 					// call the database and add more item divs
-					Database.append();
+					//Database.append();
+					return search('#database-pager',false);
 				}
 				
 			
@@ -141,9 +142,16 @@ function submitenter(inputfield,e)
 
 function submitbutton(button)
 {
-	var form=$(button).closest("form");
-	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), true);
-	return false;
+    return search(button,true);
+}
+
+function search(triggerElement, discardCurrentResultSet)
+{
+    var form = $(triggerElement).closest("form");
+    if(form == undefined) form = ("#form-search");
+    
+	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
+	return false;	
 }
 
 function shareButton()
@@ -257,10 +265,12 @@ $(document).ready(function() {
 	$('#sidebar').fadeIn();
 	
 	$('#database-search-filter').change(function(){
-	    var form=$(this).closest("form");
-		Database.search(form.find("#database-search-text").val(), form.find("#database-search-filter").val(), true);
+	    return search(this,true);
 	});
 	
+	$('#refresh-database').click(function(){
+	    return Database.refresh();
+	});
 	
 	//node tray sortable and sorting events
 	

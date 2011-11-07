@@ -12,38 +12,37 @@ class ItemRepository extends EntityRepository
     {
         // $qb instanceof QueryBuilder
         $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('i')
-                  ->from('ZeegaIngestBundle:Item', 'i')
-                  ->innerjoin('i.metadata', 'm')
-                  //->where('u.username LIKE ?') ->andWhere('u.is_active = 1');
-                  /*->add('where', $qb->expr()->orx(
-                      $qb->expr()->like('i.title', '?1'),
-                      $qb->expr()->like('i.creator', '?1')
-                  ))*/
-                  ->where('i.title LIKE ?1')
-                  //->where('i.title LIKE ?1 OR i.creator = ?1')
-                  ->orderBy('i.id','DESC')
-       		   ->setMaxResults($limit)
-       		   ->setFirstResult($offset)
-       		   ->getQuery();
         
-        if($query['contentType']!='all')
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.metadata', 'm')
+            ->where('i.title LIKE ?1')
+            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('m.description LIKE ?1')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        
+        // filter by type or by userId
+        if($query['contentType'] == 'mine')
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?3')
+			   ->setParameter(3,$query['userId']);
+		}
+        elseif($query['contentType'] != 'all')
         {
             $qb->andWhere('i.content_type = ?2')
                 ->setParameter(2, $query['contentType']);       
         }         
-       		   
-       $q = $qb->getQuery();         		   
-       $q->setParameter(1, '%' . $query['queryString'] . '%');
-       /*if($query['contentType'] != 'all')
-       {
-           
-       }*/
-       //return $q;        
-	 
-
-       return $q->getArrayResult();
+       	
+       	// get query and add parameter - for some reason set parameter in this
+       	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
+        $q = $qb->getQuery();         		   
+        $q->setParameter(1, '%' . $query['queryString'] . '%');
+        
+        return $q->getArrayResult();
     }
     
       public function findItemByAttributionUrl($url)

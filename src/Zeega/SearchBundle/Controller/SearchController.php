@@ -11,24 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 class SearchController extends Controller
 {
-    public function searchAction2()
-    {
-        $logger = $this->get('logger');
-        $logger->err("yo");
-        $request = array();
-        $request['contentType'] = 'all';
-        $request['queryString'] = '';
-        
-        $user = $this->get('security.context')->getToken()->getUser();
-        $items=$this->getDoctrine()
-					->getRepository('ZeegaIngestBundle:Item')
-					->findItems($request,0,100);								
-        //$logger->err($items->getSQL());        
-		$results[]=array('items'=>$items,'count'=>sizeof($items));
-        
-        return new Response(json_encode($results[0]));
-		
-    }
     public function searchAction(){
         $user = $this->get('security.context')->getToken()->getUser();
 		$queries=$this->getRequest()->get('query');
@@ -65,7 +47,7 @@ class SearchController extends Controller
                     //$logger->err('yo');
 					$items=$this->getDoctrine()
 								->getRepository('ZeegaIngestBundle:Item')
-								->findItems($query,0,$query['limit']);								
+								->findItems($query,$query['offset'],$query['limit']);								
 
 					$results[]=array('items'=>$items,'count'=>sizeof($items));
 				}

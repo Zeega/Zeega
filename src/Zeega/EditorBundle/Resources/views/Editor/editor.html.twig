@@ -49,7 +49,7 @@
 							
 									<div id='database-search' class='clearfix'>
 
-										<form action="" method="">
+										<form action="" method="" id="form-search">
 											<div id='form-left'>
 												<select id='database-search-filter' class=''>
 												  <option value="all">All</option>
@@ -61,7 +61,7 @@
 												</select>
 												
 												
-												<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search coming soon' class='span6'/>
+												<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' class='span6'/>
 												
 											</div>
 											<div id='form-right'>
@@ -80,7 +80,7 @@
 									<div id='asset-preview-meta'>Title</div>
 								</div>
 								
-								<a href='#' id='refresh-database' onclick='Database.refresh();return false;'>reset</a>
+								<a href='#' id='refresh-database'>reset</a>
 								<span id="database-pager"></span>
 								
 								<div id='tab-database-slide-window'></div>

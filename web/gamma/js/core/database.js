@@ -25,7 +25,7 @@ var Database = new function()
        See Also:
           <Search>
     */
-	this.append = function()
+	this.appender = function()
 	{
 		setQuery(this.postdata.query[0].queryString, this.postdata.query[0].contentType, false);
 		console.log('load more from the custom search');
@@ -50,7 +50,7 @@ var Database = new function()
 
 		//setQuery(null,'all');
 		
-		this.search(null,'all', true);
+		this.search(this.postdata.query[0].queryString,this.postdata.query[0].contentType, true);
 	};
 	
 	//what happens if you search for something in the search bar
@@ -61,13 +61,12 @@ var Database = new function()
 	        
 	    console.log("database:search " + query + "," + contentType + "," +reset);   
 		
-		var d = that;
-		//if(reset) reset();
+		if(reset)
+		{
+		    that.collection = new ItemCollection;
+		    that.page = 0;
+		}
 		
-		/*if(query == '' && contentType == 'all'){
-			this.refresh();
-			return false;
-		*/
 		setQuery( query, contentType );
 		
 		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
@@ -83,7 +82,7 @@ var Database = new function()
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
 			{
-			    if(reset) d.collection = new ItemCollection;
+			    
 				_.each(response.items, function(item){
 					
 					//make search items into bb models
@@ -105,13 +104,13 @@ var Database = new function()
 						'archive':item.archive
 					});
 				
-					d.collection.add(newItem);
+					that.collection.add(newItem);
 				});
 				
 				//add to the view collection and add to the dom
-				d.viewCollection = new ItemViewCollection({ collection : d.collection });
-				insertPager( _.size(d.collection), d.page );
-				this.page++;
+				that.viewCollection = new ItemViewCollection({ collection : that.collection });
+				insertPager( _.size(that.collection), that.page );
+				that.page++;
 			
 			}else{
 				//if the search returns nothing
@@ -155,7 +154,7 @@ var Database = new function()
 						/**	Object		  						*/
 						/**	south,north,east,west 				*/
 
-					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(this.collection) }
+					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(that.collection) }
 				},
 			],
 		};
