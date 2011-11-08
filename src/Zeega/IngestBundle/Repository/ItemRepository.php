@@ -37,6 +37,12 @@ class ItemRepository extends EntityRepository
                 ->setParameter(2, $query['contentType']);       
         }         
        	
+       	if(is_array($query['userPlaygrounds']) && sizeof($query['userPlaygrounds']) > 0)
+       	{
+       	    $qb->andWhere('i.playground = ?3')
+                ->setParameter(3, $query['userPlaygrounds'][0]['id']);       
+       	}
+       	
        	// get query and add parameter - for some reason set parameter in this
        	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
         $q = $qb->getQuery();         		   

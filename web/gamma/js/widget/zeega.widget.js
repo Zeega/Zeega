@@ -38,6 +38,7 @@ var widget = {
 			 
 			 }
 			 console.log(postdata);
+			 console.log(URL_PREFIX+'widget/persist');
 			 $.post(URL_PREFIX+'widget/persist',postdata,function(data){
 			 	console.log(data);
 			 	$('#add-item').fadeOut();

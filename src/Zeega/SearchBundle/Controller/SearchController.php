@@ -11,13 +11,22 @@ use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 class SearchController extends Controller
 {
+    public function searchAction2()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $query['userPlaygrounds'] = $this->getDoctrine()
+						                ->getRepository('ZeegaEditorBundle:Playground')
+						                ->findPlaygroundsByUser($user->getId());
+		echo $query['userPlaygrounds'][0]['id'];
+    }
+    
     public function searchAction(){
         $user = $this->get('security.context')->getToken()->getUser();
 		$queries=$this->getRequest()->get('query');
 		
 		$results=array();
 		
-		//$logger = $this->get('logger');
+		$logger = $this->get('logger');
 		
 		if(is_array($queries) &&sizeof($queries)>0)
 		{
@@ -25,7 +34,15 @@ class SearchController extends Controller
 			{
 				/** CHECK FOR SEARCH PARAMETERS, USE DEFAULTS WHEN NECESSARY */
 				$query['userId'] = $user->getId();
-
+				$query['userPlaygrounds'] = $this->getDoctrine()
+        						                ->getRepository('ZeegaEditorBundle:Playground')
+        						                ->findPlaygroundsByUser($user->getId());
+        						
+				$logger->err("teste 12");
+                $logger->err($query['userPlaygrounds'][0]['id']);
+                //foreach ($query['userPlaygrounds'] as $value)
+                //    $logger->err(join(',',$value));
+                
                 if(!isset($query['contentType']))   $query['contentType'] = 'all';
 				if(!isset($query['queryString']))   $query['queryString'] = '';
 				if(!isset($query['output']))        $query['output'] = array();

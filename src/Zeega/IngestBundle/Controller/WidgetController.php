@@ -8,6 +8,7 @@ use Zeega\IngestBundle\Entity\Media;
 use Zeega\IngestBundle\Entity\Metadata;
 use Zeega\IngestBundle\Entity\Tag;
 use Zeega\IngestBundle\Entity\Item;
+use Zeega\EditorBundle\Entity\Playground;
 use Zeega\UserBundle\Entity\User;
 use Imagick;
 use DateTime;
@@ -34,7 +35,19 @@ class WidgetController extends Controller
     		
     		$item->setUser($user);
     		
+    		if($session->get('Playground')) 
+    		    $playground=$session->get('Playground');
+    		else 
+    		{
+    			$playgrounds = $this->getDoctrine()
+    					            ->getRepository('ZeegaEditorBundle:Playground')
+    							    ->findPlaygroundByUser($user->getId());
+    			$playground=$playgrounds[0];
+    		}
+			$item->setPlayground($playground);
+			
 			$em=$this->getDoctrine()->getEntityManager();
+			//$em->persist($item->getPlayground());
 			$em->persist($item->getMetadata());
 			$em->persist($item->getMedia());
 			$em->flush();
@@ -147,7 +160,7 @@ class WidgetController extends Controller
 		if($check){
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0],
+				'playground'=>$playgrounds[0]['id'],
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
 				'content_type'=>$check['content_type'],

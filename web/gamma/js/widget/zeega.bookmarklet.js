@@ -73,7 +73,7 @@ var bm = new bookmarklet({
 			overlay.append(cover);
 			overlay.append(highlight);
 			
-			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='http://alpha.zeega.org/test/web/app_dev.php/widget?url="+url+"' />").animate({
+			$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='http://localhost:8888/zeega/web/app_dev.php/widget?url="+url+"' />").animate({
    				  'width': 470 }, 500, function() {
     			 $('#zeega-cover').fadeOut('slow');
   			});

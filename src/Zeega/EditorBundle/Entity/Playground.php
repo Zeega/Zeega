@@ -53,8 +53,18 @@ class Playground
      * @var Zeega\UserBundle\Entity\User
      */
     private $admins;
-
-
+    
+    
+    /**
+     * Set id
+     *
+     * @return integer 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    
     /**
      * Get id
      *
