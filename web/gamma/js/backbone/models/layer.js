@@ -11,7 +11,7 @@ var Layer =  Backbone.Model.extend({
 		//store a copy of the layer class inside the model
 		eval( 'this.layerClass = new '+ this.get('type')+'Layer();' );
 
-		this.layerClass.load(this);
+		this.layerClass.util.load(this);
 	},
 	
 

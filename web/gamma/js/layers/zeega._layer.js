@@ -1,10 +1,10 @@
 /************************
 
-	LAYERS.JS
+	_zeega._layer.js
 	
-	LAYERS PLUGIN
+	PROTO-LAYER
 	
-	Version 0.1
+	Version 2.0
 	
 *************************/
 
@@ -55,181 +55,166 @@ var ProtoLayer = Class.extend({
 
 	/** EXTENDABLE LAYER FUNCTIONS **/
 	
-	
-	
-	drawControls : function()
-	{
-		//draws the specific layer control items inside the sidebar
-	},
-	
-	openControls: function()
-	{
-		//called when layer controls are expanded and editing template exposed
-	},
-	
-	closeControls: function()
-	{
-		//called when layer controls are minimized and editing template closes
-	},
-	
-	drawPreview : function()
-	{
-		//Load icon into icon drawer above workspace
-		
-		if(this.icon){
-			//Need to add icon drawer and set to empty on node unload
-			//$('#workspace-icon-drawer').append($('<img>').attr('src','css/layers/icons/zeega.'+this.type.'+.icon.png');
-		}
-	
-		//draw layer contents in workspace - called on layer view display
-	},
-	
-	updateZIndex : function(z)
-	{
-		this.dom.css({'z-index':z});
-	},
-	
-	drawPublish : function()
-	{
-		//draw layer contents in published node space
-	},
-	
-	hidePublish : function()
-	{
-		
-	},
-	
-	preloadMedia : function()
-	{
-		//preLoad layer contents
-		
-		$('#zeega-player').trigger('ready',{'id':this.model.id});
-	},
-	
-	updateAttr: function()
-	{
-		//update local layer attributes
-	},
-
-	exit: function()
-	{
-		//called on exit during playback
-	},
-
-
-
-	/** 
-	
-		CORE LAYER FUNCTIONS 
-	
-		SHOULD NOT BE EXTENDED
-	
-	
-	**/
-
-
-
-
-	//init with a layer model
-	
-	interaction : false,
-	
 	init : function()
 	{
-		this.icon=false;
-	},
-	
-	// Populate layer attributes from layer model attributes, using
-	// default values to fill in absent values
-	
-	load : function(model)
-	{
-		this.model = model;
+		this.controls.parent = this;
+		this.editor.parent = this;
+		this.editor.visual.parent = this;
+		this.editor.interaction.parent = this;
+		this.player.parent = this;
+		this.util.parent = this;
 		
-		this.attr = this.model.get('attr');
+		console.log('$$$$$$this');
+		console.log(this);
 		
-		_.defaults( this.attr , this.defaultAttributes );
+	},
+	
+	controls : {
 		
-		this.model.set({attr:this.attr})
-		this.title = this.attr.title;
+		draw : function()
+		{
+			
+		},
 		
-		this.type = model.get('type');
+		onOpen : function()
+		{
+			
+		},
 		
-		this.zIndex = model.get('zindex');
-	},
+		onClose : function()
+		{
+			
+		}
+	}, // controls
 	
-	
-	//Activate layer icon for display in workspace icon drawer
-	
-	setIcon : function()
-	{
-		this.icon=true;
-	},
-	getModel : function()
-	{
-		return this.model
-	},
-	setModel : function(model)
-	{
-		this.model = model;
-		return this;
-	},
-	getTitle : function()
-	{
-		return this.model;
-	},
-	setTitle : function(title)
-	{
-		this.title = title;
-		return this;
-	},	
-	
-	//updates the layer order accordingly
-	updateZIndex : function(zIndex)
-	{
-		this.dom.css( 'z-index', zIndex );
-	},
-	
-	updateLayerAttr : function(newAttr)
-	{
-		this.model.set({ 'attr' : newAttr });
-	},
-	
-	updateLayerText : function(newText)
-	{
-		this.model.set({ 'text' : newText });
-	},
-	
-	saveLayer : function()
-	{
-		//kept separate from updateLayerAttr because there may be reasons to set but not save yet
-		console.log('save()');
-		Zeega.currentNode.noteChange();
-		this.model.save(); //saves the current model
-	},
-	
-	remove : function()
-	{
-		this.dom.remove();
-	},
-	
-	addToWorkspace : function(dom)
-	{
+	editor : {
 		
-		var pDom = dom.clone();
-		//var wDom = obj.dom.clone();
-		//pDom.draggable({ stop : function(){ obj.updateAttr(); } });
-		//wDom.draggable({ stop : function(){ obj.updateAttr(); } });
+		visual : {
+			
+			draw : function()
+			{
+				
+			}
+		}, // visual
 		
-		$('#workspace').append(dom);
+		interaction : {
+			
+			draw : function()
+			{
+				// ??
+			}
+		},
 		
-		//add to node preview if open
-		if($('#workspace-preview-wrapper')) $('#workspace-preview').append(pDom);
-	}
+		onAttributeUpdate : function()
+		{
+
+		},
+
+		onExit : function()
+		{
+
+		}
+		
+	}, // editor
 	
+	player : {
+		
+		preload : function()
+		{
+			$('#zeega-player').trigger('ready',{'id':this.parent.model.id});
+		},
+		
+		play : function()
+		{
+			
+		},
+		
+		pause : function()
+		{
+			
+		},
+		
+		stash : function()
+		{
+			
+		},
+		
+		playUnsupported : function()
+		{
+			
+		},
+		
+		onExit : function()
+		{
+
+		}
+		
+	}, // player
 	
-	
-	
+	util : {
+		
+		load : function( model )
+		{
+			this.parent.model = model;
+
+			this.parent.attr = this.parent.model.get('attr');
+
+			//_.defaults( this.parent.attr , this.parent.defaultAttributes );
+			
+			console.log(this.parent.attr);
+			console.log(this.parent.defaultAttributes);
+			
+			
+			this.parent.model.set({attr:this.parent.attr})
+			this.parent.title = this.parent.attr.title;
+
+			this.parent.type = model.get('type');
+			
+		},
+		
+		setZIndex : function(z)
+		{
+			this.parent.dom.css( 'z-index', z );
+		},
+		
+		onStateChange : function()
+		{
+			
+		},
+		
+		onError : function()
+		{
+			
+		},
+		
+		setText : function( newText )
+		{
+			this.parent.model.set({ 'text' : newText });
+		},
+		
+		setAttributes : function( newAttr )
+		{
+			//this.parent.model.set({ 'attr' : newAttr });
+			
+			var attr = this.parent.model.get('attr');
+			var n = _.extend( attr, newAttr );
+			console.log(attr);
+			console.log(newAttr);
+			console.log(n);
+			
+			//this.parent.model.set( _.extend( attr, newAttr ) );
+			
+		},
+		
+		save : function()
+		{
+			//kept separate from updateLayerAttr because there are reasons to set but not save yet
+			console.log('save()');
+			Zeega.currentNode.noteChange();
+			this.parent.model.save(); //saves the current model
+		}
+		
+	}//events
 	
 });
 

@@ -64,7 +64,7 @@ var VisualLayerListView = Backbone.View.extend({
 		//set the id of the parent element
 		$(this.el).attr('id', 'layer-'+ this.model.id);
 		//add the controls to the layer
-		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
+		$(this.el).find('#controls').append( this.model.layerClass.controls.draw() );
 
 		return this;
 	},

@@ -148,9 +148,7 @@ var Zeega = {
 		
 		this.route.layers.fetch({
 			success : function(layers){
-				
-				console.log(layers);
-				
+
 				_.each( _.toArray( layers ) ,function(layer){
 					
 					switch(layer.layerClass.layerType)
