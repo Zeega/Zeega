@@ -31,7 +31,6 @@ var ImageLayer = ProtoLayer.extend({
 		draw : function()
 		{
 			var _this  = this.parent;
-			console.log( _this );
 
 			var opacityArgs = {
 				min : 0,
@@ -73,16 +72,7 @@ var ImageLayer = ProtoLayer.extend({
 
 			return(controls);
 		},
-		
-		onOpen : function()
-		{
-			
-		},
-		
-		onClose : function()
-		{
-			
-		}
+
 	}, // controls
 	
 	editor : {
@@ -109,14 +99,6 @@ var ImageLayer = ProtoLayer.extend({
 			}
 		}, // visual
 		
-		interaction : {
-			
-			draw : function()
-			{
-				// not needed
-			}
-		},
-		
 		onAttributeUpdate : function()
 		{
 			var _this = this.parent;
@@ -135,10 +117,6 @@ var ImageLayer = ProtoLayer.extend({
 			_this.util.save();
 		},
 
-		onExit : function()
-		{
-			//	not needed
-		}
 		
 	}, // editor
 	
@@ -195,16 +173,6 @@ var ImageLayer = ProtoLayer.extend({
 			console.log('image player.stash');
 			this.dom.css({'top':"-100%",'left':"-100%"});
 		},
-		
-		playUnsupported : function()
-		{
-			// not needed
-		},
-		
-		onExit : function()
-		{
-			// not needed
-		}
 		
 	} // player
 		
