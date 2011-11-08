@@ -11,20 +11,20 @@
 var TextLayer = ProtoLayer.extend({
 
 	defaultAttributes: {
-				type:'text',
-			        title:'Text Layer',
-				content: '',
-				x:0,
-				y:0,
-				h:100,
-				w:400,
-				color: Array(255,255,255,1),
-				bgColor: Array(200,200,0,0),
-				size: 26,
-				columns: 1,
-				padding:5,
-				indent: 0
-			},
+		type:'text',
+		title:'Text Layer',
+		content: '',
+		x:0,
+		y:0,
+		h:100,
+		w:400,
+		color: Array(255,255,255,1),
+		bgColor: Array(200,200,0,0),
+		size: 26,
+		columns: 1,
+		padding:5,
+		indent: 0
+	},
 
 	drawControls : function(template)
 	{
@@ -105,7 +105,7 @@ var TextLayer = ProtoLayer.extend({
 	    template.find('#controls').append( this.makeCustomSlider(bgOpacityArgs) );
 	
 	    //need this to be accessable inside the various functions
-	    var that  = this;
+	    var _this  = this;
 	    
 	    var colorPickerArgs = {
 		'layer_id' : this.model.id,
@@ -114,7 +114,7 @@ var TextLayer = ProtoLayer.extend({
 			   'b' : this.attr.color[2]
 		          },
 		'label' : 'Text Color',
-		'that' : this,
+		'_this' : this,
 		'custom_handler' : function(rgb, layer_id){
 		    var content = $('#layer-preview-'+layer_id).children('.text-layer-content');
 		    var currentColor = content[0].style.color.replace(/[rgba()\s]/g,'').split(',');
@@ -136,7 +136,7 @@ var TextLayer = ProtoLayer.extend({
 			   'b' : this.attr.bgColor[2]
 		          },
 		'label' : 'Background Color',
-		'that' : this,
+		'_this' : this,
 		'custom_handler' : function(rgb, layer_id){
 		    var content = $('#layer-preview-'+layer_id);
 		    var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
@@ -167,7 +167,7 @@ var TextLayer = ProtoLayer.extend({
 	    };
 	    template.find('#controls').append( this.makeCustomSlider(columnsArgs));	    				
 	    template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-		    that.updateAttr();
+		    _this.updateAttr();
 		});
 	    
 	    //change icon on layer template
@@ -185,21 +185,19 @@ var TextLayer = ProtoLayer.extend({
 		var div = $('<div />');
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.y,
-			'left' : this.attr.x,
+			'top' : this.attr.y+'%',
+			'left' : this.attr.x+'%',
 			'z-index' : this.zIndex,//layers.length - i,
 			'width' : this.attr.w,
 			'height' : this.attr.h,
 			'font-size' : this.attr.size + 'px'
 		};
-		div
-		.addClass('text-layer-container')
-		.attr({
+		div.addClass('text-layer-container')
+			.attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id,
 			})
-		.css(cssObj);
-
+			.css(cssObj);
 
 		div.addClass('text-layer-chrome-visible');
 		
@@ -211,13 +209,13 @@ var TextLayer = ProtoLayer.extend({
 		*/
 
 		//need this to be accessable inside various functions
-		var that  = this;
+		var _this  = this;
 		
 		
 		
 		
 		var mouseELmaster = function (event) {
-		    that.toggleFrameVis();
+		    _this.toggleFrameVis();
 		}
 
 		/* This bunch of stuff shows and hides the handle and outline, based on mouseover.
@@ -231,7 +229,7 @@ var TextLayer = ProtoLayer.extend({
 				div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
 				var div_pos = div.offset();
 				if (event.pageX <= div_pos.left || event.pageX >= div_pos.left + div.width() || event.pageY <= div_pos.top || event.pageY >= div_pos.top + div.height()){
-				    that.toggleFrameVis();
+				    _this.toggleFrameVis();
 				}
 			    });
 		    });
@@ -242,13 +240,13 @@ var TextLayer = ProtoLayer.extend({
 			
 			//when the image stops being dragged
 			stop : function(){
-				that.updateAttr();
+				_this.updateAttr();
 			},
 			containment: 'parent'
 			});
 		div.resizable({
 			stop : function (){
-			    that.updateAttr();
+			    _this.updateAttr();
 			},
 		        containment:'parent',
 		        minHeight: 50,
@@ -272,10 +270,11 @@ var TextLayer = ProtoLayer.extend({
 		                           })
 		                          .addClass('text-layer-content');
 		
-		content.html(that.attr.content);
+		content.html(_this.attr.content);
 
 		content.bind('click mousedown', function(event) { event.stopPropagation()});
-	        content.bind('blur change', function(){that.updateAttr()});
+		content.bind('blur change', function(){_this.updateAttr()});
+		
 		div.append(content);
 		this.dom = div;
 		//draw to the workspace
@@ -290,9 +289,14 @@ var TextLayer = ProtoLayer.extend({
 
 	preloadMedia : function()
 	{
+		//need this to be accessable inside various functions
+		var _this  = this;
 		
 		console.log('preload media text');
 		
+		var previewFontSize = this.attr.size/600 * window.innerWidth;
+		var previewWidth = this.attr.w/600 * window.innerWidth;
+		var previewHeight = this.attr.h/400 * window.innerHeight
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
@@ -300,9 +304,9 @@ var TextLayer = ProtoLayer.extend({
 			'position' : 'absolute',
 			'top' : '-100%',
 			'left' : '-100%',
-			'width' : this.attr.w,
-			'height' : this.attr.h,
-			'font-size' : this.attr.size + 'px'
+			'width' : previewWidth,
+			'height' : previewHeight,
+			'font-size' : previewFontSize + 'px'
 		};
 		div.addClass('text-layer-container')
 			.attr({
@@ -320,13 +324,7 @@ var TextLayer = ProtoLayer.extend({
 		
 		*/
 		
-		
  		div.addClass('text-layer-chrome-visible');
- 		
- 		
- 		
-		//need this to be accessable inside various functions
-		var _this  = this;
 		
 		div.draggable({
 			
@@ -364,7 +362,7 @@ var TextLayer = ProtoLayer.extend({
 
 		content.bind('click mousedown', function(event) { event.stopPropagation()});
 
-		content.bind('blur change', function(){_this.updateAttr()});
+		content.bind('blur change', function(){ _this.updateAttr() });
 
 		div.append(content);
 		this.dom = div;
@@ -384,15 +382,11 @@ var TextLayer = ProtoLayer.extend({
 
     drawPublish : function(z)
 	{
-		console.log('text drawPublish');
-		console.log(z);
-		console.log(this.attr);
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
 
 	hidePublish : function()
 	{
-		console.log('text hidePublish');
 		this.dom.css({'top':"-100%",'left':"-100%"});
 	},
 	
@@ -412,6 +406,9 @@ var TextLayer = ProtoLayer.extend({
 		newAttr.w = this.dom.css('width');
 		newAttr.h = this.dom.css('height');
 		
+		console.log('$$$$$$$$$$$$$$$$$$');
+		console.log(newAttr);
+		
 		console.log(newAttr);
 		var contentPanel = this.dom.children('.text-layer-content');
 		newAttr.content = contentPanel.html();
@@ -428,7 +425,7 @@ var TextLayer = ProtoLayer.extend({
 		
 		/*
 		
-		//Ensures that empty text-boxes have visible borders
+		//Ensures _this empty text-boxes have visible borders
 		if (newAttr.content.match(/\S/)){
 		    console.log('removeClass');
 		    this.dom.removeClass('text-layer-chrome-visible');
@@ -512,4 +509,3 @@ var TextLayer = ProtoLayer.extend({
 	return sliderDiv;
 	}
 });
-

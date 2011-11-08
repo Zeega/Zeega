@@ -195,6 +195,7 @@ var GeoLayer = ProtoLayer.extend({
 	
 	preloadMedia : function()
 	{
+		var _this  = this;
 		
 		console.log('map preloadMedia');
 		//Create dom element
@@ -212,7 +213,6 @@ var GeoLayer = ProtoLayer.extend({
 		
 		this.dom.css(cssObj)
 			
-		var that  = this;
 	
 		//Create static map object and attach to workspace
 		
@@ -232,16 +232,20 @@ var GeoLayer = ProtoLayer.extend({
 			var centerLatLng=new google.maps.LatLng(this.attr.lat, this.attr.lng);
 			var service=new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
-				that.attr.panoId=data.location.pano;
-				var x=2;
-				var y=1;
-				if(that.attr.pitch>25) y=0;
-				else if(that.attr.pitch<-25) y=2;
-				x=(Math.floor((that.attr.heading+360)/60))%6;
+				_this.attr.panoId = data.location.pano;
+				var x = 2;
+				var y = 1;
+				if( _this.attr.pitch > 25 ) y = 0;
+				else if( _this.attr.pitch < -25 ) y=2;
+				x = ( Math.floor( ( _this.attr.heading+360 ) /60 ) ) % 6;
 				console.log('load moment');
 				
-				var w = 6*parseInt(_this.attr.w);
-				var h = 4*parseInt(_this.attr.h);
+				var w = 6 * parseInt( _this.attr.w );
+				var h = 4 * parseInt( _this.attr.h );
+				
+				console.log(_this.attr);
+				console.log(w);
+				console.log(h);
 				
 				img.attr('src','http://maps.googleapis.com/maps/api/streetview?size='+w+'x'+h+'&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
 			});

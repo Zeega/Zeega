@@ -165,11 +165,13 @@ var Player = {
 	
 	onLayerLoad : function(layerID)
 	{
-		console.log('loaded: '+layerID);
 		//remove from the layers loading array
 		this.layersLoading = _.without(this.layersLoading,layerID);
 		//add to the layers loaded array
 		this.layersLoaded.push(layerID);
+		
+		$('#layer-loading-'+layerID).html( 'loaded: '+ this.layers.get(layerID).get('attr').title );
+		console.log( 'loaded: '+ this.layers.get(layerID).get('attr').title );
 
 		this.updateNodeStatus();
 	},
@@ -322,6 +324,16 @@ var Player = {
 			//add the layer class to the layer class array
 			this.layerClasses[layerID] = layerClass;
 			layerClass.preloadMedia();
+			
+			
+			//add layer info to layer-status update bar
+			console.log( this.layers.get(layerID) );
+			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
+			if( this.layers.get(layerID).get('type') != 'Image' )
+				loadingLayer.append( 'loading: '+ this.layers.get(layerID).get('attr').title );
+			else loadingLayer.append( 'loaded: '+ this.layers.get(layerID).get('attr').title );
+			$('#layer-status ul').append(loadingLayer)
+			
 		}
 	},
 	
@@ -391,7 +403,9 @@ var Player = {
 			{
 				if(Player.layers.length)
 				{
-					var container = $('<div id="loading-container">').append($('<div id="progress-bar">'));
+					var container = $('<div id="loading-container">')
+						.append($('<div id="progress-bar">'))
+						.append($('<div id="layer-status"><ul>'));
 					$('#zeega-player').append(container);
 				}
 			},

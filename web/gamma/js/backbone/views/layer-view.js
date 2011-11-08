@@ -14,17 +14,18 @@ var LayerView = Backbone.View.extend({
 	//draws the controls
 	render : function()
 	{
+		var _this = this;
 		
 		this.model.bind('remove',this.remove);
-		var _this = this;
 		var text = this.model.get('text');
 		var type = this.model.get('type');
 		
 		//create the correct layer Child object
-		console.log(this.model.get('type'));
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
 		
-		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
+		var defaults = deepCopy(this.defaultAttributes );
+		
+		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		//do if interaction layer
 		if(layerClass.interaction)
@@ -53,7 +54,6 @@ var LayerView = Backbone.View.extend({
 			var title;
 			var layerOrder = _.compact( Zeega.currentNode.get('layers') );
 			
-			
 			//shorten title if necessary
 			if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
 			{
@@ -64,7 +64,10 @@ var LayerView = Backbone.View.extend({
 			
 			template.find('.layer-title').html( title );
 
-			layerClass.load(this.model);
+			console.log(this);
+			console.log(this.model);
+
+			layerClass.load( this.model );
 
 			if(Zeega.previewMode)
 			{

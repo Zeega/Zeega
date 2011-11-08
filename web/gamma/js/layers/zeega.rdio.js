@@ -105,9 +105,9 @@ var RdioLayer = ProtoLayer.extend({
 		if(this.player) this.player.play();
 	},
 	
-	hidePublish : function(z){
+	hidePublish : function(){
 		console.log('rdio hidePublish ');
-		this.dom.css({'z-index':z,'top':"-100%",'left':"100%"});
+		this.dom.css({'top':"-100%",'left':"100%"});
 		var that = this;
 		if(!that.player.isPlaying())
 		{
