@@ -6,7 +6,7 @@
 */
 var Database = new function()
 {	
-    var debug = false;
+    var debug = true;
     var that = this;
 	this.page = 0;
 	this.customSearch = false;
@@ -16,7 +16,7 @@ var Database = new function()
 	{
 		if(debug) console.log('database:init');
 		reset();
-		this.search(null,'all', false);
+		this.search(null,'all', true);
 	};
 
 	//what happens if you search for something in the search bar
@@ -37,11 +37,12 @@ var Database = new function()
 		setQuery( query, contentType );
 		
 		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
+
 			var response = $.parseJSON(data);
 			
 			if(response.items.length < 100)
 			{
-				this.endOfItems = true;
+				that.endOfItems = true;
 			}
 			
 			//make sure there's something in the results and give a friendly notice if not
