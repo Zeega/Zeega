@@ -23,8 +23,6 @@ var LayerView = Backbone.View.extend({
 		//create the correct layer Child object
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
 		
-		if( this.model.get('attr') ) console.log(this.model.get('attr').content);
-		
 		var defaults = deepCopy(this.defaultAttributes );
 		
 		if( !this.model.get('attr') ) this.model.set({ attr : defaults });

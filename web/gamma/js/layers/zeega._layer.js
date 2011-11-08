@@ -148,18 +148,10 @@ var ProtoLayer = Class.extend({
 		
 		this.attr = this.model.get('attr');
 		
-		console.log('lAYERRRRRR');
-		console.log(""+this.defaultAttributes.content);
-		console.log(""+this.attr.content);
-		
 		var defaults = deepCopy(this.defaultAttributes );
-		
 		this.attr = _.defaults(this.attr, defaults);
 		
-		console.log(""+this.defaultAttributes.content);
-		console.log(""+this.attr.content);
-		
-		this.model.set({attr:this.attr})
+		this.model.set({ attr:this.attr })
 		this.title = this.attr.title;
 		
 		this.type = model.get('type');
