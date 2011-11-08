@@ -19,15 +19,16 @@ var VisualLayerListView = Backbone.View.extend({
 		
 		//render the visual editor view
 		this._visualEditorView.render();
+		this.model.layerClass.util.load(this.model);
 		
-		//this.model.layerClass.load(this.model);
 		
 		this.model.bind('remove',this.remove);
 		var text = this.model.get('text');
 		var type = this.model.get('type');
 		
-		
-		if( !this.model.get('attr') ) this.model.set({ attr : this.model.layerClass.defaultAttributes });
+		// make sure we have a deep copy and not a reference that can be edited
+		var defaults = deepCopy(this.model.layerClass.defaultAttributes);
+		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		
 		//var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );

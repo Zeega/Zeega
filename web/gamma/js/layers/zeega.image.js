@@ -13,6 +13,7 @@
 var ImageLayer = ProtoLayer.extend({
 	
 	layerType : 'visual',
+	draggable : true,
 
 	defaultAttributes : {
 		'title' : 'Image Layer',
@@ -91,48 +92,19 @@ var ImageLayer = ProtoLayer.extend({
 			draw : function()
 			{
 				var _this = this.parent;
-				console.log('inside editor.visual.draw');
-				console.log( _this );
-				//console.log(this._this.model);
 
-				//make dom object
-				//maybe these should all be wrapped in divs?
-				var div = $('<div>');
-				//div.data('layer-id',this.model.id);
-				var cssObj = {
-					'position' : 'absolute',
-					'top' : _this.attr.y  +'%',
-					'left' : _this.attr.x  +'%',
-					'z-index' : _this.zIndex,
-					'width' : _this.attr.w+'%',
-					'opacity' : _this.attr.opacity
-				};
+				var el = $('<div>');
 
-
-				div.addClass('media editable draggable')
-					.attr({
-						'id' : 'layer-preview-'+ _this.model.id,
-						'data-layer-id' : _this.model.id
-					})
-					.css(cssObj);
-
-				div.draggable({
-					//when the image stops being dragged
-					stop : function(){
-						_this.editor.onAttributeUpdate();
-					}
-				});
-
-				var img=$('<img>')
-					.attr({'src': _this.attr.url,'id':'layer-image-' + _this.model.id})
+				var img = $('<img>')
+					.attr({'src': _this.model.get('attr').url,'id':'layer-image-' + _this.model.id})
 					.css({'width':'100%'});
 				
 				//set for access later
-				_this.dom = div;
+				_this.dom = el;
 				
-				div.append(img);
+				el.append(img);
 				//add to dom
-				return(div);
+				return( el );
 			
 			}
 		}, // visual
@@ -148,19 +120,9 @@ var ImageLayer = ProtoLayer.extend({
 		onAttributeUpdate : function()
 		{
 			var _this = this.parent;
-			console.log( _this );
 			
+			console.log( _this.dom.position() );
 			
-			/*
-			//get a copy of the old attributes into a variable
-			var newAttr = _this.attr;
-			//set the new x/y coords into the attributes
-			newAttr.x = Math.floor( _this.dom.position().left/6);
-			newAttr.y = Math.floor( _this.dom.position().top/4);
-
-			newAttr.opacity = $('#layer-edit-'+_this.model.id).find('#Opacity-slider').slider('value');
-			newAttr.w = $('#layer-edit-'+_this.model.id).find('#Width-slider').slider('value');
-*/
 			var newAttr = {
 				x : Math.floor( _this.dom.position().left/6),
 				y : Math.floor( _this.dom.position().top/4),
@@ -168,13 +130,9 @@ var ImageLayer = ProtoLayer.extend({
 				w : $('#layer-edit-'+_this.model.id).find('#Width-slider').slider('value'),
 			}
 
-
-
-			//set the attributes into the layer
-//			_this.util.setAttributes(newAttr);
 			_this.util.setAttributes(newAttr);
-			//save the layer back to the database
-			//_this.util.save();
+
+			_this.util.save();
 		},
 
 		onExit : function()

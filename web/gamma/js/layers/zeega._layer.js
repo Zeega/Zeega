@@ -64,8 +64,6 @@ var ProtoLayer = Class.extend({
 		this.player.parent = this;
 		this.util.parent = this;
 		
-		console.log('$$$$$$this');
-		console.log(this);
 		
 	},
 	
@@ -158,14 +156,12 @@ var ProtoLayer = Class.extend({
 			this.parent.model = model;
 
 			this.parent.attr = this.parent.model.get('attr');
-
-			//_.defaults( this.parent.attr , this.parent.defaultAttributes );
 			
-			console.log(this.parent.attr);
-			console.log(this.parent.defaultAttributes);
-			
+			_.defaults( this.parent.attr , deepCopy( this.parent.defaultAttributes ) );
 			
 			this.parent.model.set({attr:this.parent.attr})
+			
+			
 			this.parent.title = this.parent.attr.title;
 
 			this.parent.type = model.get('type');
@@ -194,15 +190,13 @@ var ProtoLayer = Class.extend({
 		
 		setAttributes : function( newAttr )
 		{
-			//this.parent.model.set({ 'attr' : newAttr });
 			
 			var attr = this.parent.model.get('attr');
 			var n = _.extend( attr, newAttr );
-			console.log(attr);
-			console.log(newAttr);
-			console.log(n);
 			
-			//this.parent.model.set( _.extend( attr, newAttr ) );
+			console.log(n)
+			
+			this.parent.model.set( n );
 			
 		},
 		
