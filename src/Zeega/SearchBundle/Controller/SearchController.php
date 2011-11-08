@@ -38,11 +38,6 @@ class SearchController extends Controller
         						                ->getRepository('ZeegaEditorBundle:Playground')
         						                ->findPlaygroundsByUser($user->getId());
         						
-				$logger->err("teste 12");
-                $logger->err($query['userPlaygrounds'][0]['id']);
-                //foreach ($query['userPlaygrounds'] as $value)
-                //    $logger->err(join(',',$value));
-                
                 if(!isset($query['contentType']))   $query['contentType'] = 'all';
 				if(!isset($query['queryString']))   $query['queryString'] = '';
 				if(!isset($query['output']))        $query['output'] = array();
