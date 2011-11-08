@@ -14,24 +14,26 @@ var LayerView = Backbone.View.extend({
 	//draws the controls
 	render : function()
 	{
+		var _this = this;
 		
 		this.model.bind('remove',this.remove);
-		var _this = this;
 		var text = this.model.get('text');
 		var type = this.model.get('type');
 		
 		//create the correct layer Child object
 		eval( 'var layerClass = new '+ this.model.get('type')+'Layer();' );
 		
-		if( !this.model.get('attr') ) this.model.set({ attr : layerClass.defaultAttributes });
-
-		console.log(this.model);
-		layerClass.load(this.model);
+		if( this.model.get('attr') ) console.log(this.model.get('attr').content);
+		
+		var defaults = deepCopy(this.defaultAttributes );
+		
+		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		//do if interaction layer
 		if(layerClass.interaction)
 		{
 			console.log('interactive******');
+			layerClass.load(this.model);
 			layerClass.drawControls();
 			layerClass.drawPreview();
 			
@@ -54,7 +56,6 @@ var LayerView = Backbone.View.extend({
 			var title;
 			var layerOrder = _.compact( Zeega.currentNode.get('layers') );
 			
-			
 			//shorten title if necessary
 			if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
 			{
@@ -65,6 +66,11 @@ var LayerView = Backbone.View.extend({
 			
 			template.find('.layer-title').html( title );
 
+			console.log(this);
+			console.log(this.model);
+
+			layerClass.load( this.model );
+
 			if(Zeega.previewMode)
 			{
 				console.log('in preview mode');
@@ -74,6 +80,8 @@ var LayerView = Backbone.View.extend({
 				layerClass.updateZIndex(_.indexOf(layerOrder, this.model.id));
 
 			}else{
+				console.log('not in preview mode');
+
 				layerClass.drawPreview();
 				
 				layerClass.updateZIndex( _.indexOf(layerOrder, this.model.id));
@@ -137,13 +145,6 @@ var LayerView = Backbone.View.extend({
 					}
 					return false;
 				});
-				
-				
-				$(this.el).find('.copy-to-next').click(function(){
-					Zeega.copyLayerToNextNode(_this.model)
-				});
-				
-				
 
 
 			} //end if previewMode
@@ -230,9 +231,8 @@ layerTemplate += 	'<div class="hidden layer-content clearfix">';
 layerTemplate += 		'<div id="controls"></div>';
 layerTemplate += 		'<br />';
 layerTemplate += 		'<form id="layer-persist">';
-layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist to route</label>';
+layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist layer to route</label>';
 layerTemplate += 		'</form>';
-layerTemplate +=		'<a href="#" class="copy-to-next btn small">Copy to next node</a>'
 layerTemplate += 	'</div>';
 layerTemplate += '</div>';
 
