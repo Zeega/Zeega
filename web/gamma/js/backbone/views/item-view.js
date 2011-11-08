@@ -195,6 +195,7 @@ var ItemViewCollection = Backbone.View.extend({
 			fx : 'scrollHorz',
 			timeout: 0, 
 			speed:   300,
+			height: 400,
 			startingSlide: Database.page
 		});
 		this._rendered = true;
