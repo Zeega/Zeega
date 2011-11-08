@@ -154,18 +154,11 @@ var ProtoLayer = Class.extend({
 		load : function( model )
 		{
 			this.parent.model = model;
-
-			this.parent.attr = this.parent.model.get('attr');
 			
-			_.defaults( this.parent.attr , deepCopy( this.parent.defaultAttributes ) );
-			
-			this.parent.model.set({attr:this.parent.attr})
-			
-			
-			this.parent.title = this.parent.attr.title;
+			var def = _.defaults( this.parent.model.get('attr') , deepCopy( this.parent.defaultAttributes ) );
+			this.parent.model.set({attr:def})
 
 			this.parent.type = model.get('type');
-			
 		},
 		
 		setZIndex : function(z)

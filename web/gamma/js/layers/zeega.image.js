@@ -65,9 +65,9 @@ var ImageLayer = ProtoLayer.extend({
 			controls.append( makeFullscreenButton() );
 			controls.find('.fullscreen-submit')
 				.click(function(){
-					$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-					$('#layer-edit-'+that.model.id).find('#Width-slider').slider("option", "value", 100 );
-					that.updateAttr();
+					$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
+					$('#layer-edit-'+_this.model.id).find('#Width-slider').slider("option", "value", 100 );
+					_this.editor.onAttributeUpdate();
 				});
 
 			return(controls);
@@ -88,12 +88,11 @@ var ImageLayer = ProtoLayer.extend({
 				var img = $('<img>')
 					.attr({'src': _this.model.get('attr').url,'id':'layer-image-' + _this.model.id})
 					.css({'width':'100%'});
-				
-				//set for access later
-				_this.dom = el;
-				
+								
 				el.append(img);
+				
 				//add to dom
+				_this.dom = el;
 				return( el );
 			
 			}
@@ -108,8 +107,8 @@ var ImageLayer = ProtoLayer.extend({
 			var newAttr = {
 				x : Math.floor( _this.dom.position().left/6),
 				y : Math.floor( _this.dom.position().top/4),
-				opacity : $('#layer-edit-'+_this.model.id).find('#Opacity-slider').slider('value'),
-				w : $('#layer-edit-'+_this.model.id).find('#Width-slider').slider('value'),
+				opacity : _this.dom.find('#Opacity-slider').slider('value'),
+				w :_this.dom.find('#Width-slider').slider('value'),
 			}
 
 			_this.util.setAttributes(newAttr);
@@ -124,6 +123,8 @@ var ImageLayer = ProtoLayer.extend({
 		
 		preload : function()
 		{
+			
+			/**************** NEEDS UPGRADING *******************/
 			//make dom object
 			//maybe these should all be wrapped in divs?
 			var div = $('<div>');
