@@ -4,10 +4,10 @@
 
 
 
-exec('/opt/webcapture/webpage_capture -t 50x50 -crop http://alpha.zeega.org/Symfony/web/node.html#'.$_GET['n'].' /var/www/Symfony/web/images/nodes',$output);
+exec('/opt/webcapture/webpage_capture -t 50x50 -crop http://alpha.zeega.org/joseph/web/gamma/node.html#'.$_GET['n'].' /var/www/joseph/web/images/nodes',$output);
 
 
-$url=explode(":/var/www/Symfony/web/",$output[4]);
+$url=explode(":/var/www/joseph/web/",$output[4]);
 //echo "<img src='../".$url[1]."' />";
 
 //echo 'images/thumb.png';

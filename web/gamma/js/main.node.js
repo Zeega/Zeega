@@ -10,17 +10,13 @@
 
 var loadFiles = [
 	'jquery',
-	
-	
+		
 	'order!js/layers/previews/zeega.video.preview.js',
 	'order!js/layers/previews/zeega.image.preview.js',
 	'order!js/layers/previews/zeega.geo.preview.js',
 	'order!js/layers/previews/zeega.text.preview.js',
 	'order!js/layers/previews/zeega.rdio.preview.js',
 
-	
-	
-	
 	];
 
 require(loadFiles, function($) {
@@ -30,7 +26,6 @@ require(loadFiles, function($) {
 
 	$.getJSON( 'http://alpha.zeega.org/test/web/app_dev.php/nodes/'+nodeId+'/layers', function(data){
 
-		console.log('HELLLLLLLLOOOOOOOO');
 		console.log(data);
 		console.log(data[0].attr);
 
