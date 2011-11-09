@@ -143,7 +143,10 @@ var LayerView = Backbone.View.extend({
 					}
 					return false;
 				});
-
+				
+				$(this.el).find('.copy-to-next').click(function(){
+					Zeega.copyLayerToNextNode(_this.model)
+				});
 
 			} //end if previewMode
 			
@@ -229,8 +232,9 @@ layerTemplate += 	'<div class="hidden layer-content clearfix">';
 layerTemplate += 		'<div id="controls"></div>';
 layerTemplate += 		'<br />';
 layerTemplate += 		'<form id="layer-persist">';
-layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist layer to route</label>';
+layerTemplate +=       '<input id="persist" type="checkbox" name="vehicle" value="persist" /> <label for="persist">Persist to route</label>';
 layerTemplate += 		'</form>';
+layerTemplate +=    '<a href="#" class="copy-to-next btn small">Copy to next node</a>'
 layerTemplate += 	'</div>';
 layerTemplate += '</div>';
 
