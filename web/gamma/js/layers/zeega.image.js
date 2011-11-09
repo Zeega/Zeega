@@ -102,17 +102,13 @@ var ImageLayer = ProtoLayer.extend({
 		{
 			var _this = this.parent;
 			
-			console.log( _this.dom.position() );
-			
-			var newAttr = {
-				x : Math.floor( _this.dom.position().left/6),
-				y : Math.floor( _this.dom.position().top/4),
-				opacity : _this.dom.find('#Opacity-slider').slider('value'),
-				w :_this.dom.find('#Width-slider').slider('value'),
-			}
+			var newAttr = {};
+			newAttr.x = Math.floor( _this.dom.position().left/6),
+			newAttr.y = Math.floor( _this.dom.position().top/4),
+			newAttr.opacity = _this.dom.find('#Opacity-slider').slider('value'),
+			newAttr.w = _this.dom.find('#Width-slider').slider('value'),
 
 			_this.util.setAttributes(newAttr);
-
 			_this.util.save();
 		},
 
