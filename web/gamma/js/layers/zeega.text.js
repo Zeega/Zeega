@@ -142,13 +142,15 @@ var TextLayer = ProtoLayer.extend({
 		    var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
 		    if (currentColor.length == 3) currentColor[3] = 1;
 
-		    currentColor[0] = rgb.r;
-		    currentColor[1] = rgb.g;
-		    currentColor[2] = rgb.b;
+			currentColor[0] = rgb.r;
+			currentColor[1] = rgb.g;
+			currentColor[2] = rgb.b;
 		
-		console.log(currentColor);
-		
-		    content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
+			console.log(currentColor);
+			console.log(content);
+			console.log('rgba('+currentColor.join(',')+')');
+			$(content[0]).css('background': 'rgba('+currentColor.join(',')+')');
+			//content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
 		}
 	    };
 	    template.find('#controls').append( makeColorPicker(bgColorPickerArgs));
