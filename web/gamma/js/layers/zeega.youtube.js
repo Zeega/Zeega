@@ -51,7 +51,7 @@ var YoutubeLayer = VideoLayer.extend({
 		
 		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
-			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(http://alpha1.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : this.attr.y+"%",
@@ -103,7 +103,7 @@ var YoutubeLayer = VideoLayer.extend({
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 
 		var cssObj = {
-			'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(http:/alpha1.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : "-200%",

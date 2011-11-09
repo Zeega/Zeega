@@ -244,15 +244,17 @@ var Player = {
 		//check to see if the current node is first or last and remove the correct arrow
 
 		var nodesOrder = this.route.get('nodesOrder');
-		if( _.indexOf(nodesOrder,this.currentNode) == 0 )
+		//if there's only one node. show no arrows
+		if( nodesOrder.length == 1)
 		{
-			$('#preview-left').fadeOut();
-		}else if( _.indexOf(nodesOrder,this.currentNode) == nodesOrder.length-1 ){
-			$('#preview-right').fadeOut();
-		}else if( 	$('#preview-left').is(':hidden') ){
-			$('#preview-left').fadeIn()
-		}else if( 	$('#preview-right').is(':hidden') ){
-			$('#preview-right').fadeIn()
+			$('#preview-left').hide();
+			$('#preview-right').hide();
+		}else{
+			if( _.indexOf(nodesOrder,this.currentNode) == 0 ) $('#preview-left').fadeOut();
+			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
+
+	 		if( _.indexOf(nodesOrder,this.currentNode) == nodesOrder.length-1 ) $('#preview-right').fadeOut();
+			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
 		
 
@@ -473,7 +475,7 @@ var Player = {
 		console.log('goDown')
 	},
 		
-	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
+	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
 	
 	
 	reset : function()

@@ -43,7 +43,7 @@ var widget = {
 			 	console.log(data);
 			 	$('#add-item').fadeOut();
 			 	$('#message').html('Media successfuly added to your Zeega Collection');
-			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://core.zeega.org/images/items/'+data+'_s.jpg" width="80px" height="80px"/>');
+			 	$('#collection').prepend('<img style="border: solid 1px white;" src="http://alpha1.zeega.org/images/items/'+data+'_s.jpg" width="80px" height="80px"/>');
 			 
 			 });
 			return false;

@@ -24,8 +24,6 @@ class ImportWidget
 	
 	public function parseUrl($url){
 
-		
-		
 		$urlSplit=explode('?',$url);
 		$urlClean=$urlSplit[0];
 		$fileFormat=strtolower(substr($urlClean,strlen($urlClean)-4));
@@ -38,8 +36,6 @@ class ImportWidget
 		
 		
 		if(in_array($fileFormat,array('.jpg','.png','.gif'))||in_array($fileFormat,array('.mov','.mp4'))||in_array($fileFormat,array('.wav','.mp3','.aiff'))){
-			
-			
 			if(in_array($fileFormat,array('.jpg','.png','.gif'))) $contentType='Image';
 			elseif(in_array($fileFormat,array('.mov','.mp4')))$contentType='Video';
 			elseif(in_array($fileFormat,array('.wav','.mp3','.aiff'))){
@@ -230,8 +226,8 @@ class ImportWidget
 		$item->setArchive($urlInfo['archive']);
 		$metadata->setAltCreator('');
 		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl('http://alpha.zeega.org/images/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl('http://alpha.zeega.org/images/templates/video.jpg');
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl('http://alpha1.zeega.org/images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl('http://alpha1.zeega.org/images/templates/video.jpg');
 		$metadata->setAltCreator('');
 		$metadata->setTagList('');
 		$media=new Media();

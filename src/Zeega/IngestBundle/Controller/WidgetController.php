@@ -18,7 +18,7 @@ class WidgetController extends Controller
 {
     
 	  public function persistAction(){
-	  
+	  	$logger = $this->get('logger');
 		$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
 		$session = $request->getSession();
@@ -26,8 +26,6 @@ class WidgetController extends Controller
 		$em=$this->getDoctrine()->getEntityManager();
 		
 		if($widgetId) {
-    		
-    		
     		$items=$session->get('items');
     		$item=$items[$widgetId];
     		
@@ -61,27 +59,25 @@ class WidgetController extends Controller
 			
 			
 			$thumbUrl=false;
-			
+			$logger->err('getting thumb url');	
 			if($metadata->getThumbUrl()){
 				$thumbUrl=$metadata->getThumbUrl();
 				@$img=file_get_contents($thumbUrl);
 			}
 			
-			
-			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
 					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
 					$url=explode(":/var/www/",$output[4]);
-					$thumbUrl='http://core.zeega.org/'.$url[1];
+					$thumbUrl='http://alpha1.zeega.org/'.$url[1];
 					@$img=file_get_contents($thumbUrl);
 				}
 				elseif($item->getContentType()=='Audio'){
-					@$img=file_get_contents('http://alpha.zeega.org/images/templates/audio.jpg');
+					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/audio.jpg');
 				
 				}
 				elseif($item->getContentType()=='Video'){
-					@$img=file_get_contents('http://alpha.zeega.org/images/templates/video.jpg');
+					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/video.jpg');
 				
 				}
 			}
@@ -92,7 +88,6 @@ class WidgetController extends Controller
 
 			}
 			else{		
-			
 				$name=tempnam("/var/www/images/tmp/","image".$item->getId());
 				file_put_contents($name,$img);
 				$square = new Imagick($name);
@@ -112,7 +107,7 @@ class WidgetController extends Controller
 					$square->chopImage(0, $y, 0, 0);
 					$square->chopImage(0, $y, 0, $w);
 				}
-			
+				$logger->err("writing image");
 				$square->thumbnailImage(144,0);
 			
 				$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
@@ -144,7 +139,7 @@ class WidgetController extends Controller
 		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
-		
+		$logger = $this->get('logger');
 		
 		$em=$this->getDoctrine()->getEntityManager();
 		$playgrounds=$this->getDoctrine()
@@ -197,9 +192,7 @@ class WidgetController extends Controller
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
-    			
 		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-       
 					'displayname' => $user->getDisplayname(),
 					'title'=>$item->getTitle(),
 					'creator'=>$item->getCreator(),
@@ -222,6 +215,7 @@ class WidgetController extends Controller
 					$newItems[$widgetId]=$item;
 				}
 				$session->set('items',$newItems);
+
 				return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'title'=>$collection['title'],

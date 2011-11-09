@@ -16,8 +16,8 @@
 </div>
 <div style="clear:both;"></div>
 <br><br>
-			{% if super %}
-			
+			{% if is_granted('ROLE_SUPER_USER') %}
+
 				<div id='add-playground'>
 					<ul class="pill-buttons">
 						<li><a  href="#">Create New Playground</a></li>
