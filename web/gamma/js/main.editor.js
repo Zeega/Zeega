@@ -16,7 +16,7 @@ var loadFiles = [
 	//'text!../css/all.css', //not quite
 	
 	//config
-	
+	'order!zeega.config',
 	
 	//libraries
 	'order!libraries/underscore',
@@ -83,7 +83,6 @@ var loadFiles = [
 	'order!players/zeega.player.youtube',	
 	'order!players/zeega.rdio',
 	'order!players/zeega.rdio.token',
-	'order!zeega.config',
 	];
 
 require(loadFiles, function($) {

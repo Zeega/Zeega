@@ -842,6 +842,12 @@ body
 	float:right;
 }
 
+.copy-to-next
+{
+	float:right;
+	clear:both;
+}
+
 .i-layer
 {
 	min-height:25px;
@@ -1217,6 +1223,12 @@ margin-top: 10px;
 	background:red;
 	height:100%;
 	width:0;
+}
+
+#layer-status ul li
+{
+	color: white;
+	margin-left: 10px;
 }
 
 .ghost-node

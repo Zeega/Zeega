@@ -148,9 +148,10 @@ var ProtoLayer = Class.extend({
 		
 		this.attr = this.model.get('attr');
 		
-		_.defaults( this.attr , this.defaultAttributes );
+		var defaults = deepCopy(this.defaultAttributes );
+		this.attr = _.defaults(this.attr, defaults);
 		
-		this.model.set({attr:this.attr})
+		this.model.set({ attr:this.attr })
 		this.title = this.attr.title;
 		
 		this.type = model.get('type');
@@ -194,12 +195,12 @@ var ProtoLayer = Class.extend({
 	{
 		this.model.set({ 'attr' : newAttr });
 	},
-	
+
 	updateLayerText : function(newText)
 	{
 		this.model.set({ 'text' : newText });
 	},
-	
+
 	saveLayer : function()
 	{
 		//kept separate from updateLayerAttr because there may be reasons to set but not save yet
@@ -207,29 +208,29 @@ var ProtoLayer = Class.extend({
 		Zeega.currentNode.noteChange();
 		this.model.save(); //saves the current model
 	},
-	
+
 	remove : function()
 	{
 		this.dom.remove();
 	},
-	
+
 	addToWorkspace : function(dom)
 	{
-		
+
 		var pDom = dom.clone();
 		//var wDom = obj.dom.clone();
 		//pDom.draggable({ stop : function(){ obj.updateAttr(); } });
 		//wDom.draggable({ stop : function(){ obj.updateAttr(); } });
-		
+
 		$('#workspace').append(dom);
-		
+
 		//add to node preview if open
 		if($('#workspace-preview-wrapper')) $('#workspace-preview').append(pDom);
 	}
-	
-	
-	
-	
-	
-});
 
+
+
+
+
+});
+	
