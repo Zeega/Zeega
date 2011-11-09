@@ -56,6 +56,7 @@ var ProtoLayer = Class.extend({
 	
 	init : function()
 	{
+		console.log(this);
 		this.controls.parent = this;
 		this.editor.parent = this;
 		this.editor.visual.parent = this;

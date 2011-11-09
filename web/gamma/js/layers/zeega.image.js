@@ -35,7 +35,7 @@ var ImageLayer = ProtoLayer.extend({
 			var opacityArgs = {
 				min : 0,
 				max : 1,
-				value : _this.attr.opacity,
+				value : _this.model.get('attr').opacity,
 				step : 0.01,
 				layer_id : _this.model.id,
 				label : 'Opacity',
@@ -45,7 +45,7 @@ var ImageLayer = ProtoLayer.extend({
 			var widthArgs = {
 				min : 0,
 				max : 100,
-				value : _this.attr.w,
+				value : _this.model.get('attr').w,
 				step : 1,
 				layer_id : _this.model.id,
 				label : 'Width',
@@ -98,6 +98,8 @@ var ImageLayer = ProtoLayer.extend({
 			}
 		}, // visual
 		
+		interaction : {},
+		
 		onAttributeUpdate : function()
 		{
 			var _this = this.parent;
@@ -110,7 +112,8 @@ var ImageLayer = ProtoLayer.extend({
 
 			_this.util.setAttributes(newAttr);
 			_this.util.save();
-		},
+		}
+		
 
 		
 	}, // editor
