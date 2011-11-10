@@ -25,7 +25,10 @@ function parseAddress(result){
 		}
 		return address;
 	}
-
+    function getHost()
+    {
+        return  window.location.protocol + "//" + window.location.host;        
+    }
 var widget = {
 	init: function(){
 	
