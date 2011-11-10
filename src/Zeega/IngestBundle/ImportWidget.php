@@ -226,8 +226,8 @@ class ImportWidget
 		$item->setArchive($urlInfo['archive']);
 		$metadata->setAltCreator('');
 		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl('http://alpha1.zeega.org/images/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl('http://alpha1.zeega.org/images/templates/video.jpg');
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($this->container->getParameter('hostname') . '/images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($this->container->getParameter('hostname') . '/images/templates/video.jpg');
 		$metadata->setAltCreator('');
 		$metadata->setTagList('');
 		$media=new Media();

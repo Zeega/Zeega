@@ -1,2 +1,2 @@
 <?php
-header('Location: http://alpha1.zeega.org/web');
+header('Location: http://' . $_SERVER['HTTP_HOST'] . '/web');

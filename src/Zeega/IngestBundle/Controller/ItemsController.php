@@ -82,7 +82,7 @@ class ItemsController extends Controller
 			if(!$thumbUrl||$img==FALSE){
 				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$request->request->get('attribution_url').' /var/www/images/items',$output);
 				$url=explode(":/var/www/",$output[4]);
-				$thumbUrl='http://alpha1.zeega.org/'.$url[1];
+				$thumbUrl = $this->container->getParameter('hostname') . $url[1];
 				@$img=file_get_contents($thumbUrl);
 			}
 		

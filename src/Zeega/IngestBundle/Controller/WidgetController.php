@@ -69,15 +69,15 @@ class WidgetController extends Controller
 				if($item->getContentType()=='Image'){
 					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
 					$url=explode(":/var/www/",$output[4]);
-					$thumbUrl='http://alpha1.zeega.org/'.$url[1];
+					$thumbUrl=$this->container->getParameter('hostname') . $url[1];
 					@$img=file_get_contents($thumbUrl);
 				}
 				elseif($item->getContentType()=='Audio'){
-					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/audio.jpg');
+					@$img=file_get_contents($this->container->getParameter('hostname') . '/images/templates/audio.jpg');
 				
 				}
 				elseif($item->getContentType()=='Video'){
-					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/video.jpg');
+					@$img=file_get_contents($this->container->getParameter('hostname') . '/images/templates/video.jpg');
 				
 				}
 			}

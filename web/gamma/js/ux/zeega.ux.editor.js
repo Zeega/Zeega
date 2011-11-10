@@ -161,6 +161,8 @@ function shareButton()
 
 function embedButton()
 {
+    console.log(Zeega.helpers.getHost());
+	/*
 	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
 	
 	console.log(ex);
@@ -176,8 +178,9 @@ function embedButton()
 		console.log('select all export');
 		$('#export').modal('hide');
 	})
-	
+
 	return false;
+	*/
 }
 
 
