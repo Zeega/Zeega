@@ -22,6 +22,7 @@ twig:
     strict_variables: %kernel.debug%
     globals:
         hostname: %hostname%
+        thumbnails_uri: %thumbnails_uri%
 
 # Assetic Configuration
 assetic:

@@ -166,7 +166,7 @@ class ItemLoader
 		if(IS_NULL($thumbUrl)){
 			exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' + $this->container->getParameter('hostname') + '/web/gamma/node.html#'.$id.' /var/www/images/nodes',$output);
 			$url=explode(":/var/www/",$output[4]);
-			$thumbUrl=$this->container->getParameter('hostname') . $url[1];
+			$thumbUrl=$this->container->getParameter('thumbnails_uri') . $url[1];
 		}
 		
 		$img=file_get_contents($thumbUrl);

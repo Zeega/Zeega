@@ -226,8 +226,8 @@ class ImportWidget
 		$item->setArchive($urlInfo['archive']);
 		$metadata->setAltCreator('');
 		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($this->container->getParameter('hostname') . '/images/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($this->container->getParameter('hostname') . '/images/templates/video.jpg');
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($this->container->getParameter('thumbnails_uri') . '/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($this->container->getParameter('thumbnails_uri') . '/templates/video.jpg');
 		$metadata->setAltCreator('');
 		$metadata->setTagList('');
 		$media=new Media();
