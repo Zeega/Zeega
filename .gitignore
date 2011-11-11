@@ -5,8 +5,9 @@
 /vendor/
 /app/config/parameters.ini
 /web/gamma/js/zeega.config.js
-/web/gamma/iamges/tmp/*
-/web/gamma/iamges/thumbs/*
+/web/gamma/images/tmp/*
+/web/gamma/images/thumbs/*
+/web/gamma/images/nodes/*
 /musicsearch/
 /web/gamma/js/widget/zeega.bookmarklet.js
 /web/gamma/js/players/zeega.rdio.token.js

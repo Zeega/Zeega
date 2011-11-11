@@ -80,8 +80,8 @@ class ItemsController extends Controller
 			
 			
 			if(!$thumbUrl||$img==FALSE){
-				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$request->request->get('attribution_url').' /var/www/images/items',$output);
-				$url=explode(":/var/www/",$output[4]);
+				exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$request->request->get('attribution_url').' /var/www/'.$this->get('container')->getParameter('directory').'web/images/items',$output);
+				$url=explode(':/var/www/'.$this->get('container')->getParameter('directory'),$output[4]);
 				$thumbUrl = $this->container->getParameter('thumbnails_uri') . $url[1];
 				@$img=file_get_contents($thumbUrl);
 			}
@@ -93,7 +93,7 @@ class ItemsController extends Controller
 			}
 			else{		
 			
-				$name=tempnam("/var/www/images/tmp/","image".$item->getId());
+				$name=tempnam('/var/www/'.$this->get('container')->getParameter('directory').'web/images/tmp/','image'.$item->getId());
 				file_put_contents($name,$img);
 				$square = new Imagick($name);
 				$thumb = $square->clone();
@@ -115,8 +115,8 @@ class ItemsController extends Controller
 			
 				$square->thumbnailImage(144,0);
 			
-				$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage('/var/www/images/items/'.$item->getId().'_s.jpg');
+				$thumb->writeImage('/var/www/'.$this->get('container')->getParameter('directory').'web/images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage('/var/www/'.$this->get('container')->getParameter('directory').'web/images/items/'.$item->getId().'_s.jpg');
 			
 		
 		

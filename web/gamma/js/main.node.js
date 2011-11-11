@@ -17,6 +17,7 @@ var loadFiles = [
 	'order!js/layers/previews/zeega.geo.preview.js',
 	'order!js/layers/previews/zeega.text.preview.js',
 	'order!js/layers/previews/zeega.rdio.preview.js',
+		'order!helpers/zeega.helpers',
 
 	
 	
@@ -28,7 +29,7 @@ require(loadFiles, function($) {
 
 	var nodeId = window.location.hash.substr(1);
 
-	$.getJSON(getHost() + '/web/app_dev.php/nodes/'+nodeId+'/layers',function(data){
+	$.getJSON(getHost() + '/test/web/app_dev.php/nodes/'+nodeId+'/layers',function(data){
 
 		console.log(data);
 		console.log(data[0].attr);
