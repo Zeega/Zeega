@@ -115,8 +115,9 @@ var Zeega = {
 		});
 		
 		//make the view collections for visible and interaction layers
-		this.route.visualLayerListViewCollection = new VisualLayerListViewCollection;
-		this.route.interactionLayerListViewCollection = new InteractionLayerListViewCollection;
+		//dont' need
+		//this.route.visualLayerListViewCollection = new VisualLayerListViewCollection;
+		//this.route.interactionLayerListViewCollection = new InteractionLayerListViewCollection;
 	},
 	
 	loadNodes : function()
@@ -143,34 +144,13 @@ var Zeega = {
 	{
 		var _this = this;
 		//create a layer collection inside the route model
-		this.route.layers = new LayerCollection;
+		this.layerCollection = new LayerCollection;
 		//get all existing layers
-		
-		this.route.layers.fetch({
+		console.log(this.layerCollection);
+		this.layerCollection.fetch({
+			
 			success : function(layers){
-
-				_.each( _.toArray( layers ) ,function(layer){
-					
-					switch(layer.layerClass.layerType)
-					{
-						case 'visual':
-							//add to the visual collection
-							_this.route.visualLayerListViewCollection.add(layer);
-							break;
-						case 'interaction':
-							//add to the interaction collection
-							console.log('adding interaction layer');
-							_this.route.interactionLayerListViewCollection.add(layer);
-							break;
-						default:
-							console.log('this layer type is not recognized. It should be visual or interaction');
-							break
-					}
-					
-					
-				});
-
-
+				_this.layerCollection.parseLayers();
 				_this.zeegaReady();
 			}
 		});
@@ -178,6 +158,10 @@ var Zeega = {
 	
 	nodesAndLayersReady : function()
 	{
+		
+		this.currentNode = this.route.nodes.at(0);
+		
+		/*
 		//if no nodes exist, create one
 		if( _.size(this.route.nodes) == 0 )
 		{
@@ -191,7 +175,7 @@ var Zeega = {
 		}
 		
 		this.nodeSort();
-		
+		*/
 	},
 	
 	clearCurrentNode : function ()

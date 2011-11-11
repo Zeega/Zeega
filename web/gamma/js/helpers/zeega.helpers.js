@@ -62,3 +62,8 @@ function deepCopy(p,c) {
 	}
 	return c;
 }
+
+// make capital case
+String.prototype.toCapitalCase = function() {
+    return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();
+}

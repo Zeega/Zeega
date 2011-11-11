@@ -44,9 +44,6 @@
 ******************************************/
 
 
-
-
-
 /**	LAYER PARENT CLASS	**/
 
 var ProtoLayer = Class.extend({
@@ -56,152 +53,125 @@ var ProtoLayer = Class.extend({
 	
 	init : function()
 	{
-		console.log(this);
-		this.controls.parent = this;
-		this.editor.parent = this;
-		this.editor.visual.parent = this;
-		this.editor.interaction.parent = this;
-		this.player.parent = this;
-		this.util.parent = this;
-		
+
+	},
+	
+
+	drawControls : function()
+	{
+
+	},
+
+	onControlsOpen : function()
+	{
+
+	},
+
+	onControlsClose : function()
+	{
+
+	},
+
+	drawToVisualEditor : function()
+	{
 		
 	},
 	
-	controls : {
+	onAttributeUpdate : function()
+	{
+
+	},
+
+	onExit : function()
+	{
+
+	},
+
+	////////// player
 		
-		draw : function()
-		{
-			
-		},
-		
-		onOpen : function()
-		{
-			
-		},
-		
-		onClose : function()
-		{
-			
-		}
-	}, // controls
+	preload : function()
+	{
+		$('#zeega-player').trigger('ready',{'id':this.parent.model.id});
+	},
 	
-	editor : {
+	play : function()
+	{
 		
-		visual : {
-			
-			draw : function()
-			{
-				
-			}
-		}, // visual
-		
-		interaction : {
-			
-			draw : function()
-			{
-				// ??
-			}
-		},
-		
-		onAttributeUpdate : function()
-		{
-
-		},
-
-		onExit : function()
-		{
-
-		}
-		
-	}, // editor
+	},
 	
-	player : {
+	pause : function()
+	{
 		
-		preload : function()
-		{
-			$('#zeega-player').trigger('ready',{'id':this.parent.model.id});
-		},
-		
-		play : function()
-		{
-			
-		},
-		
-		pause : function()
-		{
-			
-		},
-		
-		stash : function()
-		{
-			
-		},
-		
-		playUnsupported : function()
-		{
-			
-		},
-		
-		onExit : function()
-		{
-
-		}
-		
-	}, // player
+	},
 	
-	util : {
+	stash : function()
+	{
 		
-		load : function( model )
-		{
-			this.parent.model = model;
-			
-			var def = _.defaults( this.parent.model.get('attr') , deepCopy( this.parent.defaultAttributes ) );
-			this.parent.model.set({attr:def})
-
-			this.parent.type = model.get('type');
-		},
-		
-		setZIndex : function(z)
-		{
-			this.parent.dom.css( 'z-index', z );
-		},
-		
-		onStateChange : function()
-		{
-			
-		},
-		
-		onError : function()
-		{
-			
-		},
-		
-		setText : function( newText )
-		{
-			this.parent.model.set({ 'text' : newText });
-		},
-		
-		setAttributes : function( newAttr )
-		{
-			
-			var attr = this.parent.model.get('attr');
-			var n = _.extend( attr, newAttr );
-			
-			console.log(n)
-			
-			this.parent.model.set( n );
-			
-		},
-		
-		save : function()
-		{
-			//kept separate from updateLayerAttr because there are reasons to set but not save yet
-			console.log('save()');
-			Zeega.currentNode.noteChange();
-			this.parent.model.save(); //saves the current model
-		}
-		
-	}//events
+	},
 	
+	playUnsupported : function()
+	{
+		
+	},
+	
+	onExit : function()
+	{
+
+	},
+	
+
+	// utlities
+		
+	load : function( model )
+	{
+		this.model = model;
+		
+		var def = _.defaults( this.model.get('attr') , deepCopy( this.defaultAttributes ) );
+		this.model.set({attr:def})
+
+		this.type = model.get('type');
+	},
+	
+	setZIndex : function(z)
+	{
+		this.visualEditorElement.css( 'z-index', z );
+	},
+	
+	onStateChange : function()
+	{
+		
+	},
+	
+	onError : function()
+	{
+		
+	},
+	
+	setText : function( newText )
+	{
+		this.model.set({ 'text' : newText });
+	},
+	
+	setAttributes : function( newAttr )
+	{
+		
+		var attr = this.model.get('attr');
+		var n = _.extend( attr, newAttr );
+		
+		console.log(n)
+		
+		this.model.set( n );
+		
+	},
+	
+	save : function()
+	{
+		//kept separate from updateLayerAttr because there are reasons to set but not save yet
+		console.log('save()');
+		Zeega.currentNode.noteChange();
+		this.model.save(); //saves the current model
+	}
+	
+
 });
 

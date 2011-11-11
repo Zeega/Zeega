@@ -1,3 +1,6 @@
+
+
+
 var VisualLayerListView = Backbone.View.extend({
 	
 	tagName : 'li',
@@ -5,8 +8,10 @@ var VisualLayerListView = Backbone.View.extend({
 	initialize : function(options)
 	{
 		// add a visual view into this view
-		this._visualEditorView = new LayerVisualEditorView({ model : this.model })
-		
+		//this._visualEditorView = new LayerVisualEditorView({ model : this.model })
+		//eval( 'this.layerClass = new '+ this.model.get('type')+'Layer()' );
+		//this.layerClass.load(this.model);
+				
 		this.model.bind( 'change', function(){
 			console.log('layer change!!');
 		});
@@ -16,12 +21,7 @@ var VisualLayerListView = Backbone.View.extend({
 	render : function()
 	{
 		var _this = this;
-		
-		//render the visual editor view
-		this._visualEditorView.render();
-		this.model.layerClass.util.load(this.model);
-		
-		
+
 		this.model.bind('remove',this.remove);
 		var text = this.model.get('text');
 		var type = this.model.get('type');
@@ -31,9 +31,7 @@ var VisualLayerListView = Backbone.View.extend({
 		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		
-		//var template = $(layerTemplate).attr('id', 'layer-edit-'+this.model.id );
-		
-		var layerOrder = _.compact( Zeega.currentNode.get('layers') );
+		//var layerOrder = _.compact( Zeega.currentNode.get('layers') );
 
 		//shorten title if necessary
 		var title;
@@ -59,14 +57,15 @@ var VisualLayerListView = Backbone.View.extend({
 			persist : persist
 		}
 		//make template
-		var tmpl = _.template(layerTemplate);
+		var tmpl = _.template( this.getTemplate() );
 		//fill in template with values
 		$(this.el).html( tmpl(values) );
 		//set the id of the parent element
 		$(this.el).attr('id', 'layer-'+ this.model.id);
 		//add the controls to the layer
-		$(this.el).find('#controls').append( this.model.layerClass.controls.draw() );
-
+		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
+		
+		
 		return this;
 	},
 	
@@ -99,11 +98,11 @@ var VisualLayerListView = Backbone.View.extend({
 		{
 			//hide layer controls
 			$(this.el).find('.layer-content').hide('blind',{'direction':'vertical'});
-			this.model.layerClass.closeControls();
+			this.model.layerClass.onControlsClose();
 			return false;
 		}else{
 			//show layer controls
-			$(this.el).find('.layer-content').show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.openControls() });
+			$(this.el).find('.layer-content').show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.onControlsOpen() });
 			return false;
 		}
 		
@@ -114,6 +113,33 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverNodes(this.model);
 		else Zeega.removeLayerPersist(this.model);
+	},
+	
+	getTemplate : function()
+	{
+		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
+		layerTemplate += 		'<div class="layer-uber-bar clearfix">';
+		layerTemplate += 			'<div class="layer-icon">';
+		layerTemplate += 				'<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>';
+		layerTemplate += 			'</div>';
+		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
+		layerTemplate += 		'<div class="layer-uber-controls">';
+		layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
+		layerTemplate += 		'</div>';
+		layerTemplate += 		'<div class="layer-drag-handle">';
+		layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
+		layerTemplate += 		'</div>';
+		layerTemplate += 	'</div>';
+		layerTemplate += 	'<div class="hidden layer-content clearfix">';
+		layerTemplate += 		'<div id="controls"></div>';
+		layerTemplate += 		'<br />';
+		layerTemplate += 		'<form id="layer-persist">';
+		layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
+		layerTemplate += 		'</form>';
+		layerTemplate += 	'</div>';
+		layerTemplate += '</div>';
+		
+		return layerTemplate;
 	}
 	
 	
@@ -126,8 +152,14 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 	
 	initialize : function()
 	{
+		var _this = this;
+		_.each(_.toArray( this.collection ), function(layer){ _this.add(layer) })
+
+		/*
 		_(this).bindAll('add', 'remove');
 		this._layerViews = [];
+		*/
+		
 		/*
 		this.collection.each(this.add);
 		this.collection.bind('add',this.add);
@@ -138,11 +170,17 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 	
 	add : function ( layer )
 	{
+		var listView = new VisualLayerListView({ model : layer });
+		//this._layerViews.push( layer )
+		$(this.el).prepend( listView.render().el );
+		
+		/*
 		layer.url = Zeega.url_prefix+'layers/'+ layer.id;
 		
 		var lv = new VisualLayerListView({ model : layer });
 		this._layerViews.push(lv);
 		if(this._rendered) $(this.el).prepend(lv.render().el);
+		*/
 	},
 	
 	remove : function(layer)
@@ -170,27 +208,9 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		return this;
 	}
 	
+	
+	
 });
 
 
-var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
-layerTemplate += 		'<div class="layer-uber-bar clearfix">';
-layerTemplate += 			'<div class="layer-icon">';
-layerTemplate += 				'<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>';
-layerTemplate += 			'</div>';
-layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
-layerTemplate += 		'<div class="layer-uber-controls">';
-layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
-layerTemplate += 		'</div>';
-layerTemplate += 		'<div class="layer-drag-handle">';
-layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
-layerTemplate += 		'</div>';
-layerTemplate += 	'</div>';
-layerTemplate += 	'<div class="hidden layer-content clearfix">';
-layerTemplate += 		'<div id="controls"></div>';
-layerTemplate += 		'<br />';
-layerTemplate += 		'<form id="layer-persist">';
-layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
-layerTemplate += 		'</form>';
-layerTemplate += 	'</div>';
-layerTemplate += '</div>';
+

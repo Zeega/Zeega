@@ -32,11 +32,14 @@ function makeFullscreenButton(){
 function makeLayerSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')
-		.append( $("<h4>").html(args.label) )
-		.append( $('<div>').attr({
+		.append( $("<h4>")
+		.html(args.label) )
+		.append( $('<div>')
+		.attr({
 			'id': args.label+'-slider',
 			'data-layer-id': args.layer_id
-		}).addClass('layer-slider'));
+		})
+		.addClass('layer-slider'));
 		
 	sliderDiv.find('.layer-slider').slider({
 		min : args.min,
@@ -54,12 +57,25 @@ function makeLayerSlider(args)
 
 function makeCSSLayerSlider(args)
 {
-	var sliderDiv = $('<div>').addClass('layer-slider-div')
-		.append( $("<h4>").html(args.label) )
-		.append( $('<div>').attr({
+	
+	var defaults = {
+		min : 0,
+		max : 100,
+		step : 1,
+	};
+	
+	args = _.defaults(args,defaults);
+	
+	var sliderDiv = $('<div>')
+		.addClass('layer-slider-div')
+		.append( $("<h4>")
+		.html(args.label) )
+		.append( $('<div>')
+		.attr({
 			'id': args.label+'-slider',
 			'data-layer-id': args.layer_id
-		}).addClass('layer-slider'));
+		})
+		.addClass('layer-slider'));
 		
 	sliderDiv.find('.layer-slider').slider({
 		min : args.min,
@@ -70,6 +86,10 @@ function makeCSSLayerSlider(args)
 			if(args.css!='none'){
 				$('#layer-preview-'+args.layer_id ).css( args.css, ui.value+args.suffix);
 			}
+		},
+		stop : function(e,ui)
+		{
+			console.log(args.layerClass)
 		}
 	});
 	
