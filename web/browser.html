@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+       	<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Zeega Browser Alpha</title>
+         
+         
+         
+            <link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
+			<meta name="robots" content="noindex,follow">
+			<meta name="description" content="">
+			<meta name="keywords" content="">
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			
+			
+			<link rel="stylesheet" href="gamma/css/bootstrap.css"  type="text/css" media="screen">
+			<link rel="stylesheet" href="gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+			
+			<link rel="stylesheet" media="screen" type="text/css" href="gamma/css/zeega.css" />
+			<link rel="stylesheet" href="gamma/js/jquery/plugins/colorpicker/css/colorpicker.css" />
+	
+
+		
+    </head>
+  <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
+  
+  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'> </div>
+    	
+    	<div id='header-bg'></div>
+    	<div id="wrapper" >
+    		
+    			
+    			
+				<div id="header">
+					<div id="header-title">
+						<ul>
+						
+							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"> Zeega Alpha </a></li>
+							
+						</ul>
+						
+						
+						
+					</div>
+					
+	
+					<div id="header-nav">
+		
+						<ul>
+							<li class='item'><a href="{{ path('ZeegaEditorBundle_faq')}}">FAQ</a></li>
+							<li class='item add-media' ><a href="#">Add Media</a></li>							
+							<li class='drop-down clearfix item'>
+								Logged in as <a href='#' class='drop-down-toggle'>{{displayname}}</a>
+								<ul class='drop-down-menu'>	
+									<li id="css-change"><a href="#">Presentation</a></li>
+									<li><a href="{{ path('ZeegaEditorBundle_settings')}}">Settings</a></li>
+									<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div> <!-- #headerLoggedInWrapper -->
+			</div> <!-- #header -->	
+			
+
+			<div id="browser">
+				<!-- BEGIN BROWSER BODY CODE HERE -->
+
+				<div id="browser-my-collections-wrapper">
+					<div id="browser-my-collections-label">
+						<p>My Collections</p>
+					</div>
+					<div id="browser-my-collections">
+						<div class="browser-my-collection">
+							<p>City Streets <br><span class="browser-item-count">12 items</span></p><img class="large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" "="" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							
+						</div>
+						<div class="browser-my-collection">
+							<p>More City Streets <br><span class="browser-item-count">12 items</span></p><img class="large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" "="" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+							
+						</div>
+					</div>
+				</div>
+				<div id="browser-search-filter-toggle">
+					<div id="browser-toggle-all-media-vs-my-media"><a href="#">All Media</a> | <a href="#">My Media</a> </div>
+					<div id="database-search" class="clearfix">
+
+						<form action="" method="" id="form-search">
+							<div id="form-left">
+								<select id="database-search-filter" class="">
+								  <option value="all">All</option>
+								  <option value="image">Images</option>
+								  <option value="video">Video</option>
+								  <option value="audio">Audio</option>
+								  <option value="-" disabled="true">---</option>
+								  <option value="mine">Mine</option>
+								</select>
+								
+								
+								<input id="database-search-text" onkeypress="return submitenter(this,event)" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
+								
+							</div>
+							<div id="form-right">
+								<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
+								<input id="database-search-button" class="" type="button" value="go" onclick="return false" style="cursor:progress">
+							</div>
+						</form>
+
+					</div>
+					<div id="browser-toggle-items-vs-collections"><a href="#">43 items</a> in <a href="#">3 collections</a></div>
+				</div>
+				<div id="browser-results">
+				 	<div class="browser-results-item" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Images Of America: Lantern Slide Collection</span><br><span class="browser-item-count">2924 items</span></p></a></div>
+				 	<div class="browser-results-item" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Something Else</span><br><span class="browser-item-count">12 items</span></p></a></div>
+				</div>
+				<!-- END BROWSER BODY CODE HERE -->
+		   
+			<br><br><br>
+				<div id="footer">
+					
+						<div id="footerWrapper">
+							<div id="footer">
+						&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> 2011 * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
+							</div>
+						</div>
+					
+				</div>
+			 </div> <!-- #editor -->	
+         </div> <!-- #wrapper -->
+         
+         
+		
+		
+         
+    </body>
+</html>
