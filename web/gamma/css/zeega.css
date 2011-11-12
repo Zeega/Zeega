@@ -10,18 +10,17 @@
 #browser-results{
 	
 	padding:5px 0 5px 3px;
-	
-	-webkit-box-shadow: inset 2px 2px 2px 2px #222;
-	-moz-box-shadow: inset 2px 2px 2px 2px #222;
-	box-shadow: inset 2px 2px 2px 2px #222;
+	margin-top:-4px;
+	float:none;
 	
 }
 
-#browser-my-collections-label p{
+#browser-my-collections-label p, #browser-toggle-all-media-vs-my-media p{
 	color:#FFF;
 	background:#444;
 	padding:7px;
 	display:inline;
+
 	-moz-border-radius-topleft: 10px;
 	-moz-border-radius-topright: 10px;
 	-moz-border-radius-bottomright: 0px;
@@ -34,6 +33,7 @@
 #browser-my-collections{
 	
 	margin-top:5px;
+	padding:0 !important;
 	
 }
 .browser-my-collection{
@@ -50,27 +50,17 @@
 	padding-right:0;
 	
 }
- .browser-my-collection p {
-	width: 80%;
-	color:#EEE;
-	background: rgba(0, 0, 0, 0.2);
-	padding:3px 3px 3px 10px;
-	line-height: 12px;
 
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 10px;
-	-moz-border-radius-bottomleft: 0px;
-	-webkit-border-radius: 0px 0px 10px 0px;
-	border-radius: 0px 0px 10px 0px;
-}
 
 #browser-search-filter-toggle{
-	margin:10px 0;
+	margin: 40px 0 0 0;
+	height: 24px;
 }
 #browser-toggle-all-media-vs-my-media{
 	float:left;
+	width:150px;
 }
+
 
 #browser-toggle-items-vs-collections{
 	float:right;
@@ -91,16 +81,51 @@
 	border:none;
 	text-decoration:none;
 }
+ .browser-my-collection p {
+ 	
+	width: 80%;
+	color:#EEE;
+	background: rgba(0, 0, 0, 0.2);
+	padding:3px 3px 3px 10px;
+	line-height: 12px;
+
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-radius: 0px 0px 10px 0px;
+	border-radius: 0px 0px 10px 0px;
+	white-space:normal;
+	
+}
+.browser-create-new-collection{
+
+	font-style:italic;
+	line-height:26px !important;
+	width:124px !important;
+	height:80 !important;
+	margin:2px;
+	-webkit-border-radius: 10px 10px 10px 10px !important;
+	border:1px dashed #555;
+	padding:20px;
+}
 .browser-results-item p
 {
 	position:relative;
-	top: -110px;
+	top: -108px;
 	left: 0;
-	width: 90%;
+	width: 80%;
 	color:#EEE;
 	background: rgba(0, 0, 0, 0.5);
 	padding:3px 4px 1px 4px;
 	line-height: 12px;
+
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-radius: 0px 10px 10px 0px;
+	border-radius: 0px 10px 10px 0px;
 }
 .browser-results-item p .title{
 	font-size:11.5px;
