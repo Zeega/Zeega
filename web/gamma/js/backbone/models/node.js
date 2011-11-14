@@ -28,35 +28,25 @@ var Node = Backbone.Model.extend({
 		//kill any preexisting thumb updates
 		if(this.t) clearTimeout(this.t);
 		
-		var thumbURL = getHost() + '/utilities/local_thumb.php?id='+this.id;
-		//turn on spinner
-		$('.node-thumb-'+that.id).find('.node-overlay').spin('tiny','white');
-		$.get( thumbURL, function(data)
-		{
-			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
-				$(this).css('background-image','url("'+data+'")').fadeIn('slow');
+		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
+		this.set({thumb_url:0});
+		
+		var that=this;
+		this.save({},{
+		
+			success: function(node,response){
+				$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
+				$('.node-thumb-'+that.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
+				that.set({thumb_url:response[0].thumb_url});
 				//turn off spinner
 				$('.node-thumb-'+that.id).find('.node-overlay').spin(false);
 			});
 			
-			that.set({thumb_url:data});
-			that.save();
-		});
-		*/
-		
-		
-		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
-		this.set({thumb_url:0});
-		this.save();
-		
+			}});
 		//THIS SHOULD BE CALLED ON SUCESSS 
 		
-		var that=this;
-		$('.node-thumb-'+this.id).find('.node-background').fadeOut('fast',function(){
-				$(this).css('background-image','url("'+that.get('thumb_url')+'")').fadeIn('slow');
-				//turn off spinner
-				$('.node-thumb-'+that.id).find('.node-overlay').spin(false);
-			});
+		
+	
 	
 	},
 	

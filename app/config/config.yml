@@ -23,6 +23,7 @@ twig:
     globals:
         hostname: %hostname%
         thumbnails_uri: %thumbnails_uri%
+        directory: %directory%
 
 # Assetic Configuration
 assetic:

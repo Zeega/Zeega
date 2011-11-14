@@ -57,7 +57,7 @@ class NodesController extends Controller
 		else{
 			exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'gamma/node.html#'.$node_id.' /var/www/'.$this->container->getParameter('directory').'images/nodes',$output);
 			$url=explode(':/var/www/',$output[4]);
-			$node->setThumbUrl($this->container->getParameter('hostname').$url[1]);
+			$node->setThumbUrl($this->container->getParameter('hostname') . $url[1]);
 			
 		}
 		

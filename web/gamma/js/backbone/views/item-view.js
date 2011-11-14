@@ -23,7 +23,7 @@ var ItemView = Backbone.View.extend({
 			
 		template.children('img')
 			.addClass('item-thumb')
-			.attr("src", getHost() + "/test/web/images/items/"+this.model.id+"_s.jpg")
+			.attr("src", $("#header").data("hostname") + $("#header").data("directory") + "images/items/" + this.model.id+"_s.jpg")
 			.attr('height','25')
 			.attr('width','25');
 		

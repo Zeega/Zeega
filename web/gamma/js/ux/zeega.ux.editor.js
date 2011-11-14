@@ -238,6 +238,7 @@ $(document).ready(function() {
 		
 		},
 		
+		
 		drag : function(e,ui)
 		{
 			//console.log('moved'+ ui.position.left)
