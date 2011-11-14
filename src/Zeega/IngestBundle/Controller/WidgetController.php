@@ -67,17 +67,17 @@ class WidgetController extends Controller
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/images/items',$output);
-					$url=explode(":/var/www/",$output[4]);
-					$thumbUrl='http://alpha1.zeega.org/'.$url[1];
+					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
+					$url=explode(':/var/www/',$output[4]);
+					$thumbUrl=$this->container->getParameter('hostname').$url[1];
 					@$img=file_get_contents($thumbUrl);
 				}
 				elseif($item->getContentType()=='Audio'){
-					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/audio.jpg');
+					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
 				
 				}
 				elseif($item->getContentType()=='Video'){
-					@$img=file_get_contents('http://alpha1.zeega.org/images/templates/video.jpg');
+					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/video.jpg');
 				
 				}
 			}
@@ -85,10 +85,9 @@ class WidgetController extends Controller
 		
 			if($img==FALSE){
 				return new Response(0);	
-
 			}
 			else{		
-				$name=tempnam("/var/www/images/tmp/","image".$item->getId());
+				$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
 				file_put_contents($name,$img);
 				$square = new Imagick($name);
 				$thumb = $square->clone();
@@ -110,15 +109,15 @@ class WidgetController extends Controller
 				$logger->err("writing image");
 				$square->thumbnailImage(144,0);
 			
-				$thumb->writeImage('/var/www/images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage('/var/www/images/items/'.$item->getId().'_s.jpg');
+				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
 			
 		
 		
 				$response=$this->getDoctrine()
 								->getRepository('ZeegaIngestBundle:Item')
 								->findItemById($item->getId());					
-				return new Response(json_encode($item->getId()));
+				return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
     		  
 	  	}
 	  
@@ -199,6 +198,8 @@ class WidgetController extends Controller
 					'widget_id'=>$widgetId,
 					'thumb_url'=>$metadata->getThumbUrl(),
 					'mycollection'=>$mycollection,
+					'hostname'=>$this->container->getParameter('hostname'),
+					'directory'=>$this->container->getParameter('directory') 
 				));
 			}
         	elseif(isset($collection)){
@@ -224,6 +225,8 @@ class WidgetController extends Controller
 					'thumb_urls'=>$thumbUrls,
 					'mycollection'=>$mycollection,
 					'count'=>count($thumbUrls),
+					'hostname'=>$this->container->getParameter('hostname'),
+					'directory'=>$this->container->getParameter('directory') 
 				));
 		
 			}
@@ -234,6 +237,8 @@ class WidgetController extends Controller
 					'url'=>json_encode($widgetId),
 					'title'=>'temp title',
 					'mycollection'=>$mycollection,
+					'hostname'=>$this->container->getParameter('hostname'),
+					'directory'=>$this->container->getParameter('directory') 
 					));
 			} 
     	}
