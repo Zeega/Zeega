@@ -51,7 +51,7 @@ var YoutubeLayer = VideoLayer.extend({
 		
 		var h=Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
-			'backgroundImage':'url(' + getHost() +'/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(' + $("#header").data("hostname") + $("#header").data("directory") + 'images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : this.attr.y+"%",

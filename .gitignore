@@ -8,6 +8,7 @@
 /web/images/tmp/*
 /web/images/thumbs/*
 /web/images/nodes/*
+/web/images/items/*
 /musicsearch/
 /web/gamma/js/widget/zeega.bookmarklet.js
 /web/gamma/js/players/zeega.rdio.token.js
