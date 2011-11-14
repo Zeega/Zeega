@@ -409,6 +409,11 @@ var Zeega = {
 	{
 		console.log('copy to next layer');
 		var nextNode = this.getRightNode();
+		
+		console.log(this.currentNode);
+		console.log(nextNode);
+		
+		
 		if (nextNode) this.addLayerToNode(nextNode,layer);
 	},
 	

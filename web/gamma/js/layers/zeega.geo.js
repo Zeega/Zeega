@@ -2,12 +2,7 @@
 
 	GEO LAYER CHILD CLASS
 
-
-
-
-
 TODO
-
 
 	
 	Features:
@@ -15,20 +10,7 @@ TODO
 		-Allow static/interactive choice for maps/streetview
 
 
-
-
-
-
-
-
-
 ************************************/
-
-
-
-
-
-
 
 
 var GeoLayer = ProtoLayer.extend({

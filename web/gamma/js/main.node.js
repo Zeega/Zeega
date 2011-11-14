@@ -11,15 +11,11 @@
 var loadFiles = [
 	'jquery',
 	
-	
 	'order!js/layers/previews/zeega.video.preview.js',
 	'order!js/layers/previews/zeega.image.preview.js',
 	'order!js/layers/previews/zeega.geo.preview.js',
 	'order!js/layers/previews/zeega.text.preview.js',
 	'order!js/layers/previews/zeega.rdio.preview.js',
-
-	
-	
 	
 	];
 

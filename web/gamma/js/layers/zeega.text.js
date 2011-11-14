@@ -146,10 +146,7 @@ var TextLayer = ProtoLayer.extend({
 			currentColor[1] = rgb.g;
 			currentColor[2] = rgb.b;
 		
-			console.log(currentColor);
-			console.log(content);
-			console.log('rgba('+currentColor.join(',')+')');
-			$(content[0]).css('background': 'rgba('+currentColor.join(',')+')');
+			$(content[0]).css('backgroundColor', 'rgba('+currentColor.join(',')+')');
 			//content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
 		}
 	    };
