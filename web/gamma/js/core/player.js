@@ -1,54 +1,101 @@
-
-/********************************************
-
-	PLAYER.JS 
-
-	CORE Player Preview OBJECT
-	
-	VERSION 0.5
-	
-	
-*********************************************/
-
-/********************************************
-
-	THE Zeega preview player
-
-*********************************************/
-
 var Player = {
 	
-	projectData :null,		// project data
-	currentRoute : 0,		// the current route // default = 0
-	currentNode : 0,		// the node currently on/to start on // default = 0
-	lookAhead : 2,			// does the editor exist?
-	route : null,			//collection of routes
-	nodes : null,			// collection of nodes
-	nodesLoaded : [],
-	layersLoaded : [],
-	nodesLoading : [],
-	layersLoading : [],
-	layersOnStage : [],
-	
-	waitToFinish : [],
-	advanceOnPlayback : false,
+	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
-	layers : null,			// collection of layers
-	layerClasses : {},	// array of layerClasses
+	//player : this,
+	currentRoute : 0,
+	currentNodeID : null,
 	
+	loadingNodes : [],
+	loadedNodes : [],
+	loadingLayers : [],
+	loadedLayers : [],
+	layersOnStage : [],
+	layerClasses : [],
 	
-	//stuff to do at the start
-	init : function()
+	init : function( data, route, nodeID )
 	{
 		console.log('Zeega Player Initialized');
 		var _this = this;
+
+		//test to see if Zeega is installed
+		if(Zeega)
+		{
+			this.zeega = true;
+			Zeega.previewMode = false;
+		}
+
+		this.removeAllVideoElements();
 		
-		this.reset();
+		//if the data passed in is a string, then parse it into an object
+		if( _.isString( data) ) this.data = $.parseJSON(data);
+		else this.data = data;
 		
-		//test to see if Zeega is installed // if it is, use existing data models
-		if(Zeega) this.zeega = true;
+		//this.parseProject;
+		this.draw();
+		this.setListeners();
 		
+		this.gotoNode(nodeID);
+	},
+	
+	parseProject : function(data)
+	{
+		//parse JSON into something?
+		// don't need?
+	},
+	
+	draw : function()
+	{
+		//add the player div
+		var overlay = $(this.getTemplate());
+		$('body').append(overlay);
+		
+		//Zeega.clearCurrentNode();
+		
+		overlay.fadeIn();
+	},
+	
+	close : function()
+	{
+		console.log('Zeega Player Close');
+		var _this = this;
+		
+		this.unsetListeners();
+		
+		//turn off/pause all media first
+		_.each(this.layersOnStage, function(layerID){
+			_this.layerClasses[layerID].hidePublish();
+		});
+		
+		
+		// remove the player div
+		$('#zeega-player').fadeOut( 450, function(){
+			_this.removeAllVideoElements();
+			_this.reset();
+			$(this).remove() 
+		}); 
+		
+		if(this.zeega)
+		{
+			//turn off previewMode
+			Zeega.previewMode = false;
+			//go to the node last viewed in the player
+			Zeega.loadNode(Zeega.route.nodes.get(this.currentNodeID));
+		}
+	},
+	
+	removeAllVideoElements : function()
+	{
+		_.each( $('video'), function(video){
+			$(video).attr('src','');
+			$(video).remove();
+		});
+	},
+	
+	setListeners : function()
+	{
+		var _this = this;
 		$(window).bind( 'keydown', function(e){
 			switch(e.which)
 			{
@@ -70,22 +117,9 @@ var Player = {
 			}
 		});
 		
-		//init data structure
-		if(this.zeega)
-		{
-			this.route = Zeega.route;
-			this.nodes = Zeega.route.nodes;
-			this.layers = Zeega.route.layers;
-		}
-		
-		this.cleanWindow();
-		
-		this.draw();
-
 		// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
 			_this.onLayerLoad(data.id);
-
 			return false;
 		});
 		
@@ -94,84 +128,24 @@ var Player = {
 			_this.advanceAfterMedia(data.id);
 			return false;
 		});
-		
-		this.gotoNode(this.currentNode);
-		
 	},
 	
-	// draws the player to the page // appends to body
-	draw : function()
+	unsetListeners : function()
 	{
-		//add the player div
-		var t = $(this.template);
-		$('body').append(t);
-		
-		Zeega.clearCurrentNode();
-		
-		t.fadeIn();
-		
-	},
-	
-	
-	//not sure I need this
-	cleanWindow : function()
-	{
-		_.each( $('video'), function(video){
-			$(video).attr('src','');
-			$(video).remove();
-		});
-	},
-	
-	// removes the player from the dom // resets the player? probably.
-	close : function()
-	{
-		console.log('Zeega Player Close');
-		var _this = this;
 		$(window).unbind( 'keydown' ); //remove keylistener
-		
-		//turn off/pause all media first
-		_.each(this.layersOnStage, function(layerID){
-			_this.layerClasses[layerID].hidePublish();
-		});
-		
-		
-		// remove the player div
-		$('#zeega-player').fadeOut( 450, function(){
-			
-			_.each( $(this).find('video'), function(video){
-				$(video).attr('src','')
-			});
-			_this.reset();
-			$(this).remove() 
-		}); 
-		
-		if(this.zeega)
-		{
-			//turn off previewMode
-			Zeega.previewMode = false;
-			//go to the node last viewed in the player
-			Zeega.loadNode(Zeega.route.nodes.get(this.currentNode));
-		}
-	},
-	
-	// goes to an arbitrary node
-	gotoNode : function(nodeID)
-	{
-		this.currentNode = nodeID;
-		// try to preload the node
-		//this.preloadNode(nodeID);
-		this.preloadAhead(nodeID);
 	},
 	
 	onLayerLoad : function(layerID)
 	{
 		//remove from the layers loading array
-		this.layersLoading = _.without(this.layersLoading,layerID);
+		this.loadingLayers = _.without( this.loadingLayers, layerID );
 		//add to the layers loaded array
-		this.layersLoaded.push(layerID);
+		this.loadedLayers.push(layerID);
 		
-		$('#layer-loading-'+layerID).html( 'loaded: '+ this.layers.get(layerID).get('attr').title );
-		console.log( 'loaded: '+ this.layers.get(layerID).get('attr').title );
+		var layer = this.getLayer( layerID );
+		
+		
+		$('#layer-loading-'+layerID).html( 'loaded: '+ layer.attr.title );
 
 		this.updateNodeStatus();
 	},
@@ -180,23 +154,26 @@ var Player = {
 	{
 		_this = this;
 		//loop through each node that is loading
-		_.each(this.nodesLoading,function(nodeID){
-			var layers = _this.nodes.get(nodeID).get('layers');
+		_.each(this.loadingNodes, function(nodeID){
+			var dataNodeOrder = _.pluck( _this.data.project.routes[_this.currentRoute].nodes, 'id' );
+			var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
+			var nodeObject = _this.data.project.routes[_this.currentRoute].nodes[nodeIndex];
 			
-			if(_this.currentNode == nodeID) _this.loadingBar.update();
+			var layers = nodeObject.layers;
+			
+			if( _this.currentNodeID == nodeID) _this.loadingBar.update();
 			
 			//if all the layers are loaded in a node
-			if( _.difference( layers, _this.layersLoaded ).length == 0 )
+			if( _.difference( layers, _this.loadedLayers ).length == 0 )
 			{
 				//remove from nodes loading array
-				_this.nodesLoading = _.without(_this.nodesLoading,nodeID);
+				_this.loadingNodes = _.without( _this.loadingNodes , nodeID );
 				// add to nodes loaded array
-				_this.nodesLoaded.push(nodeID);
-				console.log('loaded node: '+ nodeID);
+				_this.loadedNodes.push(nodeID);
 				
-				if(_this.currentNode == nodeID)
+				if( _this.currentNodeID == nodeID)
 				{
-					_this.drawCurrentNode(); 
+					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
 				}
 				
@@ -204,29 +181,107 @@ var Player = {
 		})
 	},
 	
-	//this should only happen if the node's layers have completely loaded
-	drawCurrentNode : function()
+	preload : function()
+	{
+		
+		//find the node you're coming from and where it is in the order
+		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var index = _.indexOf(nodeOrder, this.currentNodeID);
+
+		//see if node's layers are preloaded // starting with the currentNode
+		//look ahead 2 and behind 2 // include current node also
+		
+		for (var i = 0  ; i < this.lookahead * 2 + 1 ; i++ )
+		{
+			//the offset spirals outward to load nearest nodes first
+			var offset = Math.ceil(i/2) * (-1+(2*(i%2)));
+			var tryIndex = index + offset;
+			if(tryIndex >= 0 && tryIndex < nodeOrder.length)
+			{
+				var nodeID = nodeOrder[tryIndex];
+				this.preloadNode(nodeID);
+			}	
+		}
+	},
+	
+	preloadNode : function( nodeID )
+	{
+		//if not loading or already loaded
+		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
+		{
+			_this = this;
+
+			if(nodeID == this.currentNodeID) this.loadingBar.draw();
+
+			//put node id into the nodesLoading Array
+			this.loadingNodes.push( nodeID );
+			
+			var nodeObject = this.getNode( nodeID );
+
+			var layersToPreload = _.difference( _.compact( nodeObject.layers ), this.layersOnStage );
+
+			_.each( _.compact(layersToPreload),function(layerID){
+				_this.preloadLayer(layerID);
+			});
+			
+		}else if( nodeID == this.currentNodeID ){
+			this.drawNode( nodeID );
+		}
+	},
+	
+	preloadLayer : function( layerID )
+	{
+		//if not loading or already loaded
+		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
+		{
+			//put the layer id into the layers Loading array
+			this.loadingLayers.push(layerID);
+
+			var layerObject = this.getLayer( layerID );
+			
+			var layerType = layerObject.type;
+
+			//make a new layer class
+			eval( 'var layerClass = new '+ layerType +'Layer();' );
+			//initialize the new layer class
+			layerClass.load( layerObject );
+			//call the preload function for the layer
+			//add the layer class to the layer class array
+			this.layerClasses[layerID] = layerClass;
+			
+			layerClass.preloadMedia();
+			
+			//add layer info to layer-status update bar
+			//move this to the loading bar??
+			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
+			if( layerObject.type != 'Image' )
+				loadingLayer.append( 'loading: '+ layerObject.attr.title );
+			else loadingLayer.append( 'loaded: '+ layerObject.attr.title );
+			$('#layer-status ul').append(loadingLayer)
+			
+		}
+	},
+	
+	drawNode : function( nodeID )
 	{
 		_this = this;
 		
-		console.log('draw this!!!!!!!');
 		_this.isFirstNode = false;
 		
-		
-		var targetNode = this.nodes.get(this.currentNode);
+		var targetNode = this.getNode( nodeID );
 
 		this.cleanupLayers();
 
 		//set timeout for auto advance
-		var advanceValue = this.nodes.get(this.currentNode).get('attr').advance;
+		var advanceValue = targetNode.attr.advance;
 		this.setAdvance( advanceValue );
 		
-		//draw each layer
-		var layersToDraw = _.difference(targetNode.get('layers'),this.layersOnStage);
+		//draw each layer but not layers already drawn
+		var layersToDraw = _.difference(targetNode.layers, this.layersOnStage );
 		
-		_.each( targetNode.get('layers') , function(layerID, i){
+		_.each( targetNode.layers, function(layerID, i){
 
-			if( _.include(layersToDraw,layerID) )
+			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
 				
@@ -236,139 +291,45 @@ var Player = {
 			}else{
 				//update existing persistant layer with new z-index
 				_this.layerClasses[layerID].updateZIndex(i);
-				console.log('omitting layer: '+layerID)
 			}
 			
 		})
 		
 		//check to see if the current node is first or last and remove the correct arrow
 
-		var nodesOrder = this.route.get('nodesOrder');
+		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
 		//if there's only one node. show no arrows
-		if( nodesOrder.length == 1)
+		if( nodeOrder.length == 1)
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
 		}else{
-			if( _.indexOf(nodesOrder,this.currentNode) == 0 ) $('#preview-left').fadeOut();
+			if( !this.getLeft( this.currentNodeID, 1 ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( _.indexOf(nodesOrder,this.currentNode) == nodesOrder.length-1 ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentNodeID, 1 ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
-		
-
-			
 	},
-	
+		
 	cleanupLayers : function()
 	{
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
 		
-		var newNode = this.nodes.get(this.currentNode);
+		var newNode = this.getNode(this.currentNodeID);
 
-		var layersToRemove = _.difference( this.layersOnStage, newNode.get('layers') );
-		
-		_.each(layersToRemove,function(layerID){
+		var layersToRemove = _.difference( this.layersOnStage, newNode.layers );
+
+		_.each( layersToRemove, function( layerID ){
 			_this.layerClasses[layerID].hidePublish();
 		});
+		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
-		this.layersOnStage = _.difference(this.layersOnStage,layersToRemove);
-	},
-		
-	preloadNode : function(nodeID)
-	{
-		
-		
-		//if not loading or already loaded
-		if( !_.include( this.nodesLoaded, nodeID ) && !_.include(this.nodesLoading,nodeID))
-		{
-			_this = this;
-			console.log('preloading node: '+nodeID);
-			
-			if(nodeID == this.currentNode) this.loadingBar.draw();
-			
-			//put node id into the nodesLoading Array
-			this.nodesLoading.push( nodeID );
-			
-			//preload each layer inside the node
-			var layersToPreload = _.difference( this.nodes.get(nodeID).get('layers'), this.layersOnStage );
-			
-			_.each( _.compact(layersToPreload),function(layerID){
-				_this.preloadLayer(layerID);
-			});
-			
-		}else{
-			this.drawCurrentNode();
-		}
 	},
 	
-	preloadLayer : function(layerID)
+	setAdvance : function( advanceValue )
 	{
-		//if not loading or already loaded
-		if( !_.include( this.layersLoaded, layerID ) && !_.include(this.layersLoading,layerID))
-		{
-			//put the layer id into the layers Loading array
-			this.layersLoading.push(layerID);
-
-			console.log('preloading layer: '+ layerID)
-			//get the layer model
-			var layer = this.layers.get(layerID);
-			//get the layer type
-			var layerType = layer.get('type');
-
-			//make a new layer class
-			eval( 'var layerClass = new '+ layerType +'Layer();' );
-			//initialize the new layer class
-			layerClass.load( _this.layers.get(layerID) );
-			//call the preload function for the layer
-			//add the layer class to the layer class array
-			this.layerClasses[layerID] = layerClass;
-			layerClass.preloadMedia();
-			
-			
-			//add layer info to layer-status update bar
-			console.log( this.layers.get(layerID) );
-			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
-			if( this.layers.get(layerID).get('type') != 'Image' )
-				loadingLayer.append( 'loading: '+ this.layers.get(layerID).get('attr').title );
-			else loadingLayer.append( 'loaded: '+ this.layers.get(layerID).get('attr').title );
-			$('#layer-status ul').append(loadingLayer)
-			
-		}
-	},
-	
-	// compares the lookAhead to the loaded nodes and loads within the lookAhead horizon
-	preloadAhead : function(nodeID)
-	{
-
-		//find the node you're coming from and where it is in the order
-		var nodesOrder = this.route.get('nodesOrder');
-		var index = _.indexOf(nodesOrder, nodeID);
-		
-		//see if node's layers are preloaded // starting with the currentNode
-		//look ahead 2 and behind 2 // include current node also
-		
-		for (var i = 0  ; i < this.lookAhead * 2 + 1 ; i++ )
-		{
-			//the offset spirals outward to load nearest nodes first
-			var offset = Math.ceil(i/2) * (-1+(2*(i%2)));
-			var tryIndex = index + offset;
-			if(tryIndex >= 0 && tryIndex < nodesOrder.length)
-			{
-				var tryNodeID = nodesOrder[tryIndex];
-				this.preloadNode(tryNodeID);
-			}
-			
-		}
-			
-	},
-	
-	
-	setAdvance : function(advanceValue)
-	{
-		console.log('********* '+advanceValue);
 		if(advanceValue > 0)
 		{
 			//after time in seconds
@@ -387,115 +348,162 @@ var Player = {
 		if(this.timeout) clearTimeout(this.timeout);
 		var _this = this;
 		
-		this.timeout = setTimeout(function(){_this.goRight()}, seconds*1000);
+		this.timeout = setTimeout(function(){ _this.goRight() }, seconds*1000);
 	},
 	
 	// advance node after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
 		if(this.advanceOnPlayback) this.goRight();
-		
 	},
-	
+
+
 	loadingBar :
+	{
+		count:0,
+		
+		draw : function()
 		{
-			count:0,
-			
-			draw : function()
+			if(Player.data.project.routes[Player.currentRoute].layers.length)
 			{
-				if(Player.layers.length)
-				{
-					var container = $('<div id="loading-container">')
-						.append($('<div id="progress-bar">'))
-						.append($('<div id="layer-status"><ul>'));
-					$('#zeega-player').append(container);
-				}
-			},
-			update : function()
-			{
-				this.count++;
-				//var layers = _this.nodes.get(nodeID).get('layers');
-				
-				var p = this.count / Player.layers.length *100;
-				
-				$('#progress-bar').css('width',p+'%');
-				
-			},
-			remove : function()
-			{
-				$('#loading-container').fadeOut('fast',function(){$(this).remove()});
+				var container = $('<div id="loading-container">')
+					.append($('<div id="progress-bar">'))
+					.append($('<div id="layer-status"><ul>'));
+				$('#zeega-player').append(container);
 			}
+		},
+		update : function()
+		{
+			this.count++;
+			
+			var p = this.count / Player.data.project.routes[Player.currentRoute].layers.length *100;
+			
+			$('#progress-bar').css('width',p+'%');
 			
 		},
-
-
-	// directional navigation
-	
-	goLeft : function()
-	{
-		if(this.timeout) clearTimeout(this.timeout);
-		
-		console.log('goLeft');
-		var nodesOrder = this.route.get('nodesOrder');
-		var index = _.indexOf(nodesOrder, this.currentNode);
-		
-		if( index > 0 ) this.gotoNode( nodesOrder[index-1] )
-		else console.log('end of the line');
+		remove : function()
+		{
+			$('#loading-container').fadeOut('fast',function(){$(this).remove()});
+		}
 		
 	},
+		
+
 	
-	goRight : function()
+	getLayer : function( layerID )
 	{
-		if(this.timeout) clearTimeout(this.timeout);
-		
-		/*
-		$('#preview-right').css({'opacity':1,'background':'rgba(255,0,0,.25)'});
-		$('#preview-right').fadeTo(100,0);
-		*/
-		
-		console.log('goRight');
-		var nodesOrder = this.route.get('nodesOrder');
-		var index = _.indexOf(nodesOrder, this.currentNode);
-		
-		if( nodesOrder.length-1 > index ) this.gotoNode( nodesOrder[index+1] )
-		else console.log('end of the line');
+		//returns the layer object
+		var dataLayerOrder = _.pluck( this.data.project.routes[this.currentRoute].layers, 'id' );
+		var layerIndex = _.indexOf( dataLayerOrder, layerID)
+		var layerObject = this.data.project.routes[this.currentRoute].layers[layerIndex];
+		return layerObject
+	},
+	
+	getNode : function( nodeID )
+	{
+		//returns the node object
+		var dataNodeOrder = _.pluck( this.data.project.routes[this.currentRoute].nodes, 'id' );
+		var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
+		var nodeObject = this.data.project.routes[this.currentRoute].nodes[nodeIndex];
+		return nodeObject;
+	},
+	
+	gotoNode : function(nodeID)
+	{
+		this.currentNodeID = nodeID;
+		this.preload();
 	},
 	
 	goUp : function()
 	{
+		console.log('go up…');
+	},
+	
+	goRight : function()
+	{
+		console.log('go Right');
+
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		console.log('goUp')
+		var nextNodeID = this.getRight( this.currentNodeID, 1 );
+		
+		if( nextNodeID ) this.gotoNode( nextNodeID )
+		else console.log('end of the line');
 	},
 	
 	goDown : function()
 	{
+		console.log('go down…')
+	},
+	
+	goLeft : function()
+	{
+		console.log('goLeft');
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		console.log('goDown')
-	},
+		var nextNodeID = this.getLeft( this.currentNodeID, 1 );
 		
-	template : "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>",
+		if( nextNodeID ) this.gotoNode( nextNodeID )
+		else console.log('end of the line');
+	},
 	
+	//returns the id of the node in any direction n nodes ahead
+	getUp : function( nodeID, dist )
+	{
+		
+	},
+	
+	getRight : function( nodeID, dist )
+	{
+		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var index = _.indexOf( nodeOrder, nodeID );
+		
+		//test if out of bounds
+		if( index + dist > nodeOrder.length || index + dist < 0 ) return false;
+		else return nodeOrder[index+dist]
+	},
+	
+	getDown : function( nodeID, dist )
+	{
+		
+	},
+	
+	getLeft : function( nodeID, dist )
+	{
+		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var index = _.indexOf( nodeOrder, nodeID );
+		
+		//test if out of bounds
+		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
+		else return nodeOrder[ index - dist ]
+	},
 	
 	reset : function()
 	{
-		this.isFirstNode = true;
-		this.lookAhead = 2;		// the number of nodes to preload ahead of the currentNode
-		this.route = null;			//collection of routes
-		this.nodes = null;			// collection of nodes
-		this.nodesLoaded = [];
-		this.layersLoaded = [];
-		this.nodesLoading = [];
-		this.layersLoading = [];
-		this.layersOnStage = [];
 		
-		this.layers = null;			// collection of layers
-		this.layerClasses = {};	// array of layerClasses
+		currentRoute = 0;
+		currentNodeID = null;
+		this.data = null,
+		
+		this.isFirstNode = true;
+
+		this.loadingNodes = [];
+		this.loadedNodes = [];
+		this.loadingLayers = [];
+		this.loadedLayers = [];
+		this.layersOnStage = [];
+		this.layerClasses = [];
+		
 		if(this.timeout) clearTimeout(this.timeout);
+	},
+	
+	getTemplate : function()
+	{
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>";
+		return html;
 	}
-	
-	
-	
-	
-} // Player
+
+
+
+
+}
