@@ -34,7 +34,8 @@
     		
     			
     			
-				<div id="header">
+				<div id="header" data-hostname="{{hostname}}" data-directory="{{directory}}">
+					
 					<div id="header-title">
 						<ul>
 						
@@ -45,10 +46,10 @@
 									{% if projectsMenu %}
 									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
 									<ul class='drop-down-menu'>
-											{% if adminMenu %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
+											{% if adminMenu and is_granted('ROLE_SUPER_USER') %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
 											<li><a href="{{path('ZeegaEditorBundle_playground', { 'short': short })}}" class="dark">Projects</a></li>
 									</ul>
-									{% elseif adminMenu %}
+									{% elseif adminMenu and is_granted('ROLE_SUPER_USER')%}
 									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
 									<ul class='drop-down-menu'>
 											<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}">Admin</a></li>

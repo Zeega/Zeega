@@ -201,6 +201,7 @@ var Player = {
 				var nodeID = nodeOrder[tryIndex];
 				this.preloadNode(nodeID);
 			}	
+
 		}
 	},
 	
@@ -467,6 +468,7 @@ var Player = {
 	{
 		
 	},
+
 	
 	getLeft : function( nodeID, dist )
 	{

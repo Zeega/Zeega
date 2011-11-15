@@ -70,9 +70,10 @@ function insertPager(items, page)
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
-					console.log('load more!');
+					//console.log('load more!');
 					// call the database and add more item divs
-					Database.append();
+					//Database.append();
+					return search(this,false);
 				}
 				
 			
@@ -133,9 +134,7 @@ function submitenter(inputfield,e)
 
 	if (keycode == 13)
 	{
-		var form=$(inputfield).closest("form");
-		Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
-		return false;
+	    return submitbutton(inputfield);
 	}else{
 		return true;
 	}
@@ -143,9 +142,16 @@ function submitenter(inputfield,e)
 
 function submitbutton(button)
 {
-	var form=$(button).closest("form");
-	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
-	return false;
+    return search(button,true);
+}
+
+function search(triggerElement, discardCurrentResultSet)
+{
+    //var form = $(triggerElement).closest("form");
+    //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
+    // this is not very elegant...
+    Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+	return false;	
 }
 
 function shareButton()
@@ -155,6 +161,8 @@ function shareButton()
 
 function embedButton()
 {
+    console.log(Zeega.helpers.getHost());
+	/*
 	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
 	
 	console.log(ex);
@@ -170,8 +178,9 @@ function embedButton()
 		console.log('select all export');
 		$('#export').modal('hide');
 	})
-	
+
 	return false;
+	*/
 }
 
 
@@ -229,6 +238,7 @@ $(document).ready(function() {
 		
 		},
 		
+		
 		drag : function(e,ui)
 		{
 			//console.log('moved'+ ui.position.left)
@@ -259,9 +269,12 @@ $(document).ready(function() {
 	$('#sidebar').fadeIn();
 	
 	$('#database-search-filter').change(function(){
-		Database.changeFilter(this);
+	    return search(this,true);
 	});
 	
+	$('#refresh-database').click(function(){
+	    return search(this,true);
+	});
 	
 	//node tray sortable and sorting events
 	

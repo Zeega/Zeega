@@ -1,91 +1,132 @@
-
-/********************************************
-
-	The Database object
-
-*********************************************/
-
-var Database = {
-	
-	page : 0,
-	customSearch : false,
-	endOfItems : false,
-	
-	
-	init : function()
+/*
+   Class: Database
+   Manages the connection to the database
+   
+   TO-DO: Move all dom manipulation actions to zeega.ux.editor
+*/
+var Database = new function()
+{	
+    var debug = true;
+    var that = this;
+	this.page = 0;
+	this.customSearch = false;
+	this.endOfItems = false;
+		
+	this.init = function()
 	{
-		console.log('loading database');
-		this.reset();
-		
-		this.setQuery(null,'all');
-		
-		this.search(null,'all', false);
-		
-	},
-	
-	//useful? maybe
-	reset : function()
-	{
-		console.log('empty database');
-		//_.each(this.viewCollection._itemViews,function(view){ view.remove() });
-		$('#tab-database-slide-window').cycle('destroy');
-		$('#tab-database-slide-window').empty();
-
-		
-		this.collection = new ItemCollection;
-		
-		if(this.viewCollection)
-		{
-			this.viewCollection.collection.reset();
-			this.viewCollection._itemViews = [];
-			this.viewCollection._itemBundles = [];
-			this.viewCollection._rendered = false;
-		}
-		this.page = 0;
-		
-		this.endOfItems = false;
-		
-		$('#tab-database-slide-window').spin('small','white');
-	},
-	
-	
-	//add new database items for endless paging of items
-	append : function()
-	{
-		//check to see if it's a custom search or not
-		if(this.customSearch)
-		{
-			this.setQuery(this.postdata.query[0].tags, this.postdata.query[0].contentType);
-			console.log('load more from the custom search');
-			this.search();
-			
-		}else{
-
-
-			this.search(null,'all',false);
-		}
-	},
-	
-	changeFilter : function(el)
-	{
-		var filter = $(el).val();
-		this.search( null, filter, true );
-	},
-	
-	//refresh the current items. reset to page 0. see if any items added to database
-	refresh : function()
-	{
-		console.log('reloading database');
-		var d = this;
-		this.customSearch = false;
-		this.page = 0;
-
-		//this.setQuery(null,'all');
-		
+		if(debug) console.log('database:init');
+		reset();
 		this.search(null,'all', true);
-	},
+	};
+
+	//what happens if you search for something in the search bar
+	this.search = function( query, contentType, reset )
+	{
+	    if(_.isNull(query) || _.isUndefined(query))
+	        query = '';
+	        
+	    if(debug) console.log("database:search " + query + "," + contentType + "," +reset);   
+		
+		if(reset)
+		{
+		    that.collection = new ItemCollection;
+		    that.page = 0;
+		    that.endOfItems = false;
+		}
+		
+		setQuery( query, contentType );
+		
+		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
+
+			var response = $.parseJSON(data);
+			
+			if(response.items.length < 100)
+			{
+				that.endOfItems = true;
+			}
+			
+			//make sure there's something in the results and give a friendly notice if not
+			if(response.items.length)
+			{
+				_.each(response.items, function(item){
+					
+					//make search items into bb models
+					var newItem = new Item;
+				
+					newItem.id = item.id;
+					newItem.set({
+						'title':item.title,
+						'item_url':item.item_url,
+						'geo_lng':item.geo_lng,
+						'geo_lat':item.geo_lat,
+						'depth':item.depth,
+						'date_created_start':item.date_created_start,
+						'date_created_end':item.date_created_end,
+						'creator':item.creator,
+						'content_type':item.content_type,
+						'source_type':item.source_type,
+						'attribution_url':item.attribution_url,
+						'archive':item.archive
+					});
+				
+					that.collection.add(newItem);
+				});
+				
+				//add to the view collection and add to the dom
+				that.viewCollection = new ItemViewCollection({ collection : that.collection });
+				insertPager( _.size(that.collection), that.page );
+				that.page++;
+			
+			}else{
+				//if the search returns nothing
+				var error = $("<div class='alert-message error'><p>We couldn't find what you're looking for :( Try again?</p></div>");
+				$('#database-pager').fadeOut('fast',function(){$(this).empty();$(this).show();});
+				$('#tab-database-slide-window').html(error);
+				
+			}
+			$('#tab-database-slide-window').spin(false);
+			
+		});
+	};
 	
-	setQuery : function( query, contentType )
+	// PRIVATE
+	
+	var setQuery = function( query, contentType )
+	{
+	    console.log("database:setQuery " + query + "," + contentType);
+		// parse the query here. something that can be done later
+		var itemsToReturn = 100;
+		if(query == null) query = '';
+
+		that.postdata = {
+			//Array of query objects - results use OR operator over queries
+			//For now, disabled multiple queries
+			query:[ 
+				{
+						/**	contentType [OPTIONAL]				*/
+						/**	String 								*/
+						/**	'all','image','video','audio'		*/
+
+					contentType: contentType,
+
+						/**	tag [OPTIONAL]						*/
+						/**	String Array						*/
+						/**	AND operator over Array Elements	*/
+
+					queryString: query ,  
+
+						/**	geo [OPTIONAL]						*/
+						/**	Object		  						*/
+						/**	south,north,east,west 				*/
+
+					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(that.collection) }
+				},
+			],
+		};
+	};
+	
+	// deprecated
+	var setQueryOld = function( query, contentType )
 	{
 
 
@@ -133,96 +174,28 @@ var Database = {
 				},
 			],
 		};
-			
-			
-
-	},
+	};
 	
-	//what happens if you search for something in the search bar
-	search : function( query, contentType, reset )
+	var reset = function()
 	{
-		var d = this;
-		if(reset) this.reset();
+		console.log('empty database');
+		//_.each(this.viewCollection._itemViews,function(view){ view.remove() });
+		$('#tab-database-slide-window').cycle('destroy');
+		$('#tab-database-slide-window').empty();
+
+		that.collection = new ItemCollection;
 		
-		//if the query is null && there is no existing query in postdata then do a general search for filter type. no query. change filter
-		if(query == null && this.postdata.query[0].tags == null)
+		if(that.viewCollection)
 		{
-			this.setQuery( [], contentType );
-
-		//if query is null && there IS an existing query, then filter that query  by type. retain existing query. change filter
-		}else if(query == null && this.postdata.query[0].tags != null){
-			this.setQuery( this.postdata.query[0].tags, contentType );
-			
-		// new query, new filter
-		}else if(query == '' && contentType == 'all'){
-			this.refresh();
-			return false;
-		}else if(query == ''){
-			this.setQuery( [], contentType );
-		}else{
-			console.log('new query');
-			this.setQuery( [query], contentType );
+			that.viewCollection.collection.reset();
+			that.viewCollection._itemViews = [];
+			that.viewCollection._itemBundles = [];
+			that.viewCollection._rendered = false;
 		}
+		that.page = 0;
+		that.endOfItems = false;
 		
-		
-		$.post(Zeega.url_prefix+'search', this.postdata, function(data) {
-			var response = $.parseJSON(data);
-			
-			
-			if(response.items.length < 100)
-			{
-				console.log('the end');
-				this.endOfItems = true;
-			}
-			
-			//make sure there's something in the results and give a friendly notice if not
-			if(response.items.length)
-			{
-				_.each(response.items, function(item){
-					
-					//make search items into bb models
-					var newItem = new Item;
-				
-					newItem.id = item.id;
-					newItem.set({
-						'title':item.title,
-						'item_url':item.item_url,
-						'geo_lng':item.geo_lng,
-						'geo_lat':item.geo_lat,
-						'depth':item.depth,
-						'date_created_start':item.date_created_start,
-						'date_created_end':item.date_created_end,
-						'creator':item.creator,
-						'content_type':item.content_type,
-						'source_type':item.source_type,
-						'attribution_url':item.attribution_url,
-						'archive':item.archive
-					});
-				
-					d.collection.add(newItem);
-				});
-				
-				//add to the view collection and add to the dom
-				d.viewCollection = new ItemViewCollection({ collection : d.collection });
-				insertPager( _.size(d.collection), d.page );
-				this.page++;
-			
-			}else{
-				//if the search returns nothing
-				var error = $("<div class='alert-message error'><p>We couldn't find what you're looking for :( Try again?</p></div>");
-				$('#database-pager').fadeOut('fast',function(){$(this).empty();$(this).show();});
-				$('#tab-database-slide-window').html(error);
-				
-			}
-			$('#tab-database-slide-window').spin(false);
-			
-		});
-		
-		
-
-		
-	}
-	
-	
+		$('#tab-database-slide-window').spin('small','white');
+	};
 };
 

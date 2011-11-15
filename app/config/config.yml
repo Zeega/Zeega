@@ -20,6 +20,10 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        hostname: %hostname%
+        thumbnails_uri: %thumbnails_uri%
+        directory: %directory%
 
 # Assetic Configuration
 assetic:

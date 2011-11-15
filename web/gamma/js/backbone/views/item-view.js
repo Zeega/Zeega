@@ -23,7 +23,7 @@ var ItemView = Backbone.View.extend({
 			
 		template.children('img')
 			.addClass('item-thumb')
-			.attr("src", "http://core.zeega.org/images/items/"+this.model.id+"_s.jpg")
+			.attr("src", $("#header").data("hostname") + $("#header").data("directory") + "images/items/" + this.model.id+"_s.jpg")
 			.attr('height','25')
 			.attr('width','25');
 		
@@ -195,6 +195,7 @@ var ItemViewCollection = Backbone.View.extend({
 			fx : 'scrollHorz',
 			timeout: 0, 
 			speed:   300,
+			height: 400,
 			startingSlide: Database.page
 		});
 		this._rendered = true;

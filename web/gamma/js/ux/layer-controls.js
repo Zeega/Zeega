@@ -88,26 +88,38 @@ function textArea()
 
 function makeColorPicker(args)
 {
+	console.log('colorrrrrrr');
+	console.log(args)
     //clean label of spaces
     var cleanLabel = args.label.replace(/\s/g, '_');
     var pickerDiv = $('<div/>').addClass('layer-colorPicker-div')
-	.append($('<h4>').html(args.label))
-	.append($('<input />').attr({
-		    'id' : cleanLabel+'-colorPicker-'+args.layer_id,
-		    'data-layer-id' : args.layer_id,
-		    'readonly' : 'readonly',
-		    'value' : RGBToHex(args.color)
-		}).addClass('layer-colorPicker'));
-    var picker = pickerDiv.find('.layer-colorPicker').ColorPicker({
-	    'color' : args.color,
-	    'onChange' : function(hsb, hex, rgb){
-		$('input#'+cleanLabel+'-colorPicker-'+args.layer_id).val(hex);
-		args.custom_handler(rgb, args.layer_id);
+		.append($('<h4>').html(args.label))
+		.append($('<input />').attr({
+			id : cleanLabel+'-colorPicker-'+args.layer_id,
+			'data-layer-id' : args.layer_id,
+			readonly : 'readonly',
+			value : RGBToHex(args.color)
+		})
+		.addClass('layer-colorPicker'));
+		
+	var picker = pickerDiv.find('.layer-colorPicker').ColorPicker({
+		color : args.color,
+		onShow : function(c)
+		{
+			$(c).fadeIn();
+		},
+		
+	    onHide : function(c){
+			$(c).fadeOut();
+			args._this.updateAttr();
 	    },
-	    'onHide' : function(){
-		args.that.updateAttr();
-	    }
-		});
+	
+		onChange : function(hsb, hex, rgb){
+			$('input#'+cleanLabel+'-colorPicker-'+args.layer_id).val(hex);
+			args.custom_handler(rgb, args.layer_id);
+		}
+	});
+	
     return pickerDiv;
 }
 

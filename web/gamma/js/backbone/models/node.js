@@ -28,21 +28,26 @@ var Node = Backbone.Model.extend({
 		//kill any preexisting thumb updates
 		if(this.t) clearTimeout(this.t);
 		
+		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
+		this.set({thumb_url:0});
+		
 		var that=this;
-		var thumbURL = 'http://alpha.zeega.org/utilities/local_thumb.php?id='+this.id;
-		//turn on spinner
-		$('.node-thumb-'+that.id).find('.node-overlay').spin('tiny','white');
-		$.get( thumbURL, function(data)
-		{
-			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
-				$(this).css('background-image','url("'+data+'")').fadeIn('slow');
+
+		this.save({},{
+		
+			success: function(node,response){
+				$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
+				$('.node-thumb-'+that.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
+				that.set({thumb_url:response[0].thumb_url});
 				//turn off spinner
 				$('.node-thumb-'+that.id).find('.node-overlay').spin(false);
 			});
 			
-			that.set({thumb_url:data});
-			that.save();
-		});
+			}});
+		//THIS SHOULD BE CALLED ON SUCESSS 
+		
+		
+	
 	
 	},
 	
@@ -51,10 +56,10 @@ var Node = Backbone.Model.extend({
 		console.log('changed');
 		var _this = this;
 		//kill any preexisting thumb updates
-		if(this.t) clearTimeout(this.t);
-		this.t = setTimeout(function(){_this.updateThumb()}, 5000)
+		if(_this.t) clearTimeout(this.t);
+		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
 		
-		this.changed=true;
+		_this.changed=true;
 	},
 	clearChange:function()
 	{

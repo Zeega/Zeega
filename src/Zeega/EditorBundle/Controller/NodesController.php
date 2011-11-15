@@ -46,67 +46,33 @@ class NodesController extends Controller
     public function putNodeAction($node_id)
     {
     	$em=$this->getDoctrine()->getEntityManager();
-		$request = $this->getRequest();
     	$node=$em->getRepository('ZeegaEditorBundle:Node')
 					->find($node_id);
     	
-    	/*
+    	$request = $this->getRequest();
     	
-      	
-  		
-    	$linkUp=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findNodeById($request->request->get('link_up'));
-        $linkDown=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findNodeById($request->request->get('link_down'));
-        $linkRight=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findNodeById($request->request->get('link_right'));
-    	$linkLeft=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findNodeById($request->request->get('link_left'));
-    	
-
-    	if($linkUp){
-    		$node->setLinkUp($linkUp);
-    	
-    	}
-    	if($linkDown) $node->setLinkDown($linkDown);
-    	if($linkRight) $node->setLinkRight($linkRight);
-    	if($linkLeft) $node->setLinkLeft($linkLeft);
-    	
-    	if($request->request->get('advance'))$node->setAdvance($request->request->get('advance'));
-     	if($request->request->get('advance_time'))$node->setAdvanceTime($request->request->get('advance_time'));
-     	
-     	
-		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($node);
-		$em->flush();
-		*/
+		if($request->request->get('thumb_url')!=0){
+			$node->setThumbUrl($request->request->get('thumb_url'));
+		}
+		else{
+			exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'gamma/node.html#'.$node_id.' /var/www/'.$this->container->getParameter('directory').'images/nodes',$output);
+			$url=explode(':/var/www/',$output[4]);
+			$node->setThumbUrl($this->container->getParameter('hostname') . $url[1]);
+			
+		}
 		
-		
-		if($request->request->get('thumb_url'))$node->setThumbUrl($request->request->get('thumb_url'));
 		if($request->request->get('layers'))$node->setLayers($request->request->get('layers'));
      	
-		
-		if($request->request->get('attr')){		
-			
-					
+		if($request->request->get('attr')){			
 			$node->setAttr($request->request->get('attr'));
 			$em->persist($node);
 			$em->flush();
 		}
 		
-		
 		$em->flush();
 		
-		
-		
-		
     	return new Response(json_encode($em->getRepository('ZeegaEditorBundle:Node')
-        		->findNodeById($node_id)));
-        		
+        		->findNodeById($node_id)));		
         
     } // `put_node`     [PUT] /nodes/{node_id}
 
