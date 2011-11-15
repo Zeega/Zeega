@@ -409,11 +409,6 @@ var Zeega = {
 	{
 		console.log('copy to next layer');
 		var nextNode = this.getRightNode();
-		
-		console.log(this.currentNode);
-		console.log(nextNode);
-		
-		
 		if (nextNode) this.addLayerToNode(nextNode,layer);
 	},
 	
@@ -530,16 +525,9 @@ var Zeega = {
 		//remove branch viewer if present
 		
 		
-		//console.log(this.exportProject());
+		// init( project JSON data , route index , starting node )
 		Player.init( this.exportProject(), 0, this.currentNode.id );
 		//Player.currentNodeID = this.currentNode.id;
-		
-		/*
-		projectData = '';
-		Player.projectData = projectData;
-		Player.currentNode = this.currentNode.id;
-		Player.init();
-		*/
 	
 	},
 	
