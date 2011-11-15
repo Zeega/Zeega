@@ -105,7 +105,9 @@ var Zeega = {
 		this.routeID = routeID;
 		this.route = new Route({ 'id' : this.routeID });
 		this.route.fetch({
-			success: function(route){
+			success: function(route, response){
+				console.log(response);
+
 				_this.loadNodes();
 				_this.loadLayers();
 				_this.loadProject();
@@ -114,10 +116,7 @@ var Zeega = {
 			}
 		});
 		
-		//make the view collections for visible and interaction layers
-		//dont' need
-		//this.route.visualLayerListViewCollection = new VisualLayerListViewCollection;
-		//this.route.interactionLayerListViewCollection = new InteractionLayerListViewCollection;
+
 	},
 	
 	loadNodes : function()
@@ -128,8 +127,7 @@ var Zeega = {
 		//get all existing nodes
 
 		this.route.nodes.fetch({
-			success : function(nodes){
-				
+			success : function(nodes,response){
 				//make a node view collection
 				_this.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
 				//render everything in the nodeViewCollection
@@ -144,13 +142,12 @@ var Zeega = {
 	{
 		var _this = this;
 		//create a layer collection inside the route model
-		this.layerCollection = new LayerCollection;
+		this.route.layerCollection = new LayerCollection;
 		//get all existing layers
-		console.log(this.layerCollection);
-		this.layerCollection.fetch({
+		this.route.layerCollection.fetch({
 			
 			success : function(layers){
-				_this.layerCollection.parseLayers();
+				_this.route.layerCollection.parseLayers();
 				_this.zeegaReady();
 			}
 		});
@@ -158,10 +155,8 @@ var Zeega = {
 	
 	nodesAndLayersReady : function()
 	{
-		
 		this.currentNode = this.route.nodes.at(0);
 		
-		/*
 		//if no nodes exist, create one
 		if( _.size(this.route.nodes) == 0 )
 		{
@@ -175,26 +170,7 @@ var Zeega = {
 		}
 		
 		this.nodeSort();
-		*/
-	},
-	
-	clearCurrentNode : function ()
-	{
-		console.log('clearing current node');
-		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
-		//clear out existing stuff in icon trays
-		$('.icon-tray').empty();
-
-		//clear the workspaces
-		$('#visual-editor-workspace').empty();
-		$('#layers-list-interaction').empty();
-		
-		Zeega.route.visualLayerListViewCollection._rendered = false;
-		Zeega.route.visualLayerListViewCollection._layerViews = [];
-		Zeega.route.interactionLayerListViewCollection._rendered = false;
-		Zeega.route.interactionLayerListViewCollection._layerViews = [];
 	},
 	
 	loadNode : function( node )
@@ -254,18 +230,34 @@ var Zeega = {
 			$('#advance-time').val(10);
 		}
 		
-		//add the node's layers
+		// add the node's layers // remove falsy values
 		var layerArray = _.compact( this.currentNode.get('layers'))
 		
 		_.each( layerArray , function(layerID){
-			_this.addToLayerCollections( _this.currentNode, _this.route.layers.get(layerID) );
+			_this.addToLayerCollections( _this.currentNode, _this.route.layerCollection.get(layerID) ); //route.layers no longer exists
 		});
-		Zeega.route.visualLayerListViewCollection.render();
-		Zeega.route.interactionLayerListViewCollection.render();
+		
+		
+		//call render on the entire collection. it should have the logic to draw what's needed
+		Zeega.route.layerCollection.render( this.currentNode );
 		
 
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+	},
+	
+	clearCurrentNode : function ()
+	{
+		//remove a prexisiting node style
+		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		
+		//clear out existing stuff in icon trays
+		$('.icon-tray').empty();
+
+		//clear the workspaces
+		//$('#visual-editor-workspace').empty();
+		//$('#layers-list-interaction').empty();
+		
 	},
 	
 	addNode : function()
@@ -276,16 +268,16 @@ var Zeega = {
 	addToLayerCollections : function(node,layer)
 	{
 		//only add to the layers collection if it's not already there!
-		if( !this.route.layers.get(layer.id) )
+		if( !this.route.layerCollection.get(layer.id) )
 		{
 			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
-			if(node == this.currentNode) this.route.layers.add( layer );
+			if(node == this.currentNode) this.route.layerCollection.add( layer );
 			//if it's not the current node, then be quiet about it
-			else this.route.layers.add( layer,{silent:true} );
+			else this.route.layerCollection.add( layer,{silent:true} );
 		}
 
 		//add it to the visual or interactive collections // only add if viewing current node
-		if(node == this.currentNode) eval( 'this.route.'+ layer.layerClass.layerType +'LayerListViewCollection.add( layer)' );
+		//if(node == this.currentNode) eval( 'this.route.'+ layer.layerClass.layerType +'LayerListViewCollection.add( layer)' );
 	},
 	
 	addLayerToNode : function( node, layer )
@@ -343,19 +335,18 @@ var Zeega = {
 	removeLayerFromNode : function( node, layer )
 	{
 		//remove from node.layer and save it back
-		
-		
 		//remove icon from tray
 		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
 		
 	
-		
 		//test to see if the layer is a persisting layer and destroy it from all nodes if so
-		var attr = this.route.get('attr');
+		//var routeAttributes = this.route.get('attr');
 		
-		if(_.include(attr.persistLayers,layer.id))
+		if( _.include( this.route.get('attr').persistLayers , layer.id ) )
 		{
 			console.log('a persistent layer');
+			
+			
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
@@ -365,6 +356,8 @@ var Zeega = {
 				_node.save();
 				_node.updateThumb();
 			});
+			
+			
 		}else{
 			console.log('NOT a persistent layer');
 			
@@ -375,6 +368,7 @@ var Zeega = {
 			node.set({'layers':layerOrder});
 			node.save();
 			node.updateThumb();
+			
 		}
 		
 		this.destroyOrphans();
@@ -519,7 +513,6 @@ var Zeega = {
 		var order = _.map( $('#node-drawer ul').sortable('toArray'), function(str){ return parseInt(str) });
 		this.route.set({'nodesOrder': order});
 		this.route.save();
-		console.log(order);
 	},
 	
 	previewRoute : function()

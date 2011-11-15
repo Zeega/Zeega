@@ -13,7 +13,7 @@ var VisualLayerEditorView = Backbone.View.extend({
 	},
 	
 	//draws the controls
-	render : function()
+	render : function(i)
 	{
 		var _this = this;
 		//remove this view when the model is removed
@@ -44,18 +44,18 @@ var VisualLayerEditorView = Backbone.View.extend({
 			'position' : 'absolute',
 			'top' : _this.model.get('attr').y  +'%',
 			'left' : _this.model.get('attr').x  +'%',
-			'z-index' : _this.model.layerClass.zIndex,
 			'width' : _this.model.get('attr').w+'%',
 			'opacity' : _this.model.get('attr').opacity
 		};
 
 		this.el.css(cssObj);
 		
-		/*
+		
 		//set the z-index of the layer
-		var layerOrder = _.compact( Zeega.currentNode.get('layers') );
-		this.layerClass.setZIndex( _.indexOf(layerOrder, this.model.id) );
-		*/
+/*		var layerOrder = _.compact( Zeega.currentNode.get('layers') );
+		this.model.layerClass.setZIndex( _.indexOf(layerOrder, this.model.id) );
+*/		this.model.layerClass.setZIndex( i );
+		
 		
 		//put the view element into the workspace
 		$('#visual-editor-workspace').append($(this.el));
@@ -72,8 +72,24 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 	
 	initialize : function()
 	{
-		console.log(this.collection);
-		this.collection.each(this.add);
+		var _this = this;
+		
+		//make arrays to store the views in
+		this._allViews = [];
+		this._renderedViews =[];
+		
+		_.each( _.toArray( this.collection ), function(layer){
+			_this.addLayerToViewArrays(layer);
+		})
+		
+		//this.collection.bind('add',this.add);
+		
+		/*
+		this.collection.bind("add", function(layer) {
+			// should draw the layer if it's in the node
+			_this.addLayerToViewArrays(layer);
+		});
+*/
 
 		/*
 		_(this).bindAll('add', 'remove');
@@ -89,20 +105,15 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		*/
 	},
 	
-	add : function ( layer )
+	addLayerToViewArrays : function( layer )
 	{
+		console.log('layerviewvisualeditor: '+layer.id)
+		var editorView = new VisualLayerEditorView({ model : layer });
 
-		var listView = new VisualLayerEditorView({ model : layer });
-		//this._layerViews.push( layer )
-		$(this.el).prepend( listView.render().el );
-		
-		/*
-		layer.url = Zeega.url_prefix+'layers/'+ layer.id;
-		
-		var lv = new VisualLayerListView({ model : layer });
-		this._layerViews.push(lv);
-		if(this._rendered) $(this.el).prepend(lv.render().el);
-		*/
+		this._allViews[layer.id] = editorView;
+
+		this._renderedViews.push(editorView);
+		editorView.render(this._renderedViews.length);
 	},
 	
 	remove : function(layer)
@@ -116,18 +127,27 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		
 	},
 	
-	
-	render : function()
+	removeAll : function()
 	{
-		this._rendered = true;
+		//remove from the dom
+		_.each( this.renderedViews, function(view){
+			view.remove();
+		});
+		//empty array
+		this._renderedViews = [];
+		
+		this.el.empty();
+	},
+	
+	render : function(layerIDs)
+	{
 		var _this = this;
-		
-		//clear out any old stuff inside this.el
-		$(this.el).empty();
-		//add EACH model's view to the _this.el and render it
-		_.each(this._layerViews, function(layer){ $(_this.el).prepend(layer.render().el) });
-		
-		return this;
+		_.each( layerIDs, function(layerID, i){
+			var layerToRender = _this._allViews[layerID];
+			_this._renderedViews.push( layerToRender )
+			layerToRender.render(i);
+		})
+
 	}
 	
 	

@@ -2,12 +2,12 @@
 
 var Route = Backbone.Model.extend({
 	
-	//set defaults for empty route
+	//set defaults for empty route	
 	defaults : {
-		//title : "Untitled"
-		attr : {}
+		
+		'attr' : {'persistLayers':[]},
 	
-		},
+	},
 		
 	url : function()
 	{
@@ -16,23 +16,15 @@ var Route = Backbone.Model.extend({
 		return base + '/' + this.id;
 	},
 
-	initialize : function()
-	{
-		
-	},
+	initialize : function(){},
 	
 	loadNodes : function()
 	{
 		
 		console.log('loading nodes');
 		
-		
-		var routeView = new RouteView({
-			model : this
-		});
-		
-		//console.log(this);
-		
+		var routeView = new RouteView({ model : this });
+				
 		routeView.render();
 		
 		//create a node collection inside the route model
@@ -51,7 +43,6 @@ var Route = Backbone.Model.extend({
 				that.nodeViewCollection.render();
 				
 				/**	Load the first node into the editor	**/
-				
 				loadNode( nodes.at(0) );
 				
 			}

@@ -10,14 +10,14 @@ var VisualLayerViewCollection = Backbone.View.extend({
 
 	initialize : function()
 	{
-		this._listViews = [];
-		this._editorViews = [];
+		this._renderCollection = _();
+		
+		this.editorViewCollection = new VisualLayerEditorViewCollection
+		this.listViewCollection = new VisualLayerListViewCollection
 		
 		/*
 		_(this).bindAll('add', 'remove');
-		this._layerViews = [];
-		*/
-		/*
+
 		this.collection.each(this.add);
 		this.collection.bind('add',this.add);
 		this.collection.bind('remove',this.remove);
@@ -32,22 +32,28 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		//set the collection
 		this.collection = collection;
 		
+		/*
+		this.collection.bind("add", function(layer) {
+			// should draw the layer if it's in the node
+			//this.add(layer);
+		});
+		*/
+		this.collection.bind('add',this.add);
+		/*
+		//this.collection.each(this.add);
+		this.collection.bind('remove',this.remove);
+		this.collection.bind('destroy', this.remove);
+		*/
+		
 		//explicitly set these because we know what they will be ahead of time
-		this.editorViewCollection = new VisualLayerEditorViewCollection({collection:this.collection});
-		this.listViewCollection = new VisualLayerListViewCollection({collection:this.collection});
+		//this.editorViewCollection.collection = this.collection;
+		//this.listViewCollection.collection = this.collection;
 		
 	},
 	
-	add : function ( layer )
-	{
-		//make and store the various views
-		//LIST
-		
-		//VISUAL EDITOR
-		
-		
-		console.log(layer);
-	},
+	
+	add : function ( layer ){},
+	
 	
 	remove : function(layer)
 	{
@@ -61,15 +67,16 @@ var VisualLayerViewCollection = Backbone.View.extend({
 	},
 	
 	
-	render : function()
+	render : function(layerIDs)
 	{
-		this._rendered = true;
-		var _this = this;
+		//should these remove all fxns live somewhere else // their own function?
+		this.editorViewCollection.removeAll();
+		this.listViewCollection.removeAll();
 		
-		//clear out any old stuff inside this.el
-		$(this.el).empty();
-		//add EACH model's view to the _this.el and render it
-		_.each(this._layerViews, function(layer){ $(_this.el).prepend(layer.render().el) });
+		
+		this.editorViewCollection.render(layerIDs);
+		this.listViewCollection.render(layerIDs);
+		
 		
 		return this;
 	},

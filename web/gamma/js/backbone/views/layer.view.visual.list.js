@@ -7,18 +7,14 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	initialize : function(options)
 	{
-		// add a visual view into this view
-		//this._visualEditorView = new LayerVisualEditorView({ model : this.model })
-		//eval( 'this.layerClass = new '+ this.model.get('type')+'Layer()' );
-		//this.layerClass.load(this.model);
-				
+
 		this.model.bind( 'change', function(){
 			console.log('layer change!!');
 		});
 	},
 	
 	//draws the controls
-	render : function()
+	render : function( )
 	{
 		var _this = this;
 
@@ -65,6 +61,8 @@ var VisualLayerListView = Backbone.View.extend({
 		//add the controls to the layer
 		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
 		
+		//prepend to maintain layer order
+		$('#layers-list-visual').prepend($(this.el));
 		
 		return this;
 	},
@@ -93,6 +91,7 @@ var VisualLayerListView = Backbone.View.extend({
 	//	open/close and expanding layer items
 	expand :function()
 	{
+		console.log('expanding layer');
 		var _this = this;
 		if( $(this.el).find('.layer-content').is(':visible') )
 		{
@@ -153,8 +152,23 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 	initialize : function()
 	{
 		var _this = this;
-		_.each(_.toArray( this.collection ), function(layer){ _this.add(layer) })
-
+		
+		//make arrays to store the views in
+		this._allViews = [];
+		this._renderedViews =[];
+		
+		_.each( _.toArray( this.collection ), function(layer){
+			_this.addLayerToViewArrays(layer);
+		})
+		
+		//this.collection.bind('add',this.add);
+		
+		this.collection.bind("add", function(layer) {
+			// should draw the layer if it's in the node
+			_this.addLayerToViewArrays(layer);
+		});
+		
+		
 		/*
 		_(this).bindAll('add', 'remove');
 		this._layerViews = [];
@@ -168,44 +182,69 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		*/
 	},
 	
+	addLayerToViewArrays : function( layer )
+	{
+		console.log('VisualLayerListView: '+layer.id)
+		var listView = new VisualLayerListView({ model : layer });
+
+		listView.bind("remove", function(layer) {
+			// should draw the layer if it's in the node
+			console.log('removed')
+		});
+		this._allViews[layer.id] = listView;
+		
+		this._renderedViews.push(listView);
+		//listView.render();
+	},
+	
+	
 	add : function ( layer )
 	{
-		var listView = new VisualLayerListView({ model : layer });
-		//this._layerViews.push( layer )
-		$(this.el).prepend( listView.render().el );
-		
 		/*
-		layer.url = Zeega.url_prefix+'layers/'+ layer.id;
-		
-		var lv = new VisualLayerListView({ model : layer });
-		this._layerViews.push(lv);
-		if(this._rendered) $(this.el).prepend(lv.render().el);
+		console.log('visuallayerlistviewcollection: '+layer.id)
+		var listView = new VisualLayerListView({ model : layer });
+		this._allViews[layer.id] = listView;
 		*/
 	},
+	
 	
 	remove : function(layer)
 	{
 		console.log('rmvCollection')
 		
+		console.log(this);
+		console.log(layer);
+		
+		/*
+		
 		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
 		this._layerViews = _(this._layerViews).without(viewToRemove);
 		
 		Zeega.currentNode.noteChange();
-		
+		*/
 	},
 	
-	
-	render : function()
+	removeAll : function()
 	{
-		this._rendered = true;
+		//remove from the dom
+		_.each( this.renderedViews, function(view){
+			view.remove();
+		});
+		//empty array
+		this._renderedViews = [];
+		
+		this.el.empty();
+	},
+	
+	render : function( layerIDs )
+	{
 		var _this = this;
 		
-		//clear out any old stuff inside this.el
-		$(this.el).empty();
-		//add EACH model's view to the _this.el and render it
-		_.each(this._layerViews, function(layer){ $(_this.el).prepend(layer.render().el) });
-		
-		return this;
+		_.each( layerIDs, function(layerID, i){
+			var layerToRender = _this._allViews[layerID];
+			_this._renderedViews.push( layerToRender )
+			layerToRender.render(  );
+		})
 	}
 	
 	

@@ -15,6 +15,11 @@ var Layer =  Backbone.Model.extend({
 
 	},
 	
+	show : function()
+	{
+		console.log('layer: '+this.id+ " showing")
+	}
+	
 
 });
 
@@ -27,33 +32,45 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	initialize :function()
 	{
+		var _this = this;
 		//collections live in this object
 		// this makes sure that if there are other types that we indroduce, they will automatically populate into here\
 		this.layerCollectionArray = {};
+		
+		this.bind("add", function(layer) { _this.addToLayerTypeCollection(layer) });
+		
 	},
 	
 	parseLayers : function()
 	{
 		var _this = this;
-		_.each(this.models, function(layer){
-			
-			// get, create, and load the layer class
-			// if a layerCollection doesn't exist in the layerCollectionArray already, then create it
-			eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
-			var type = layerClass.layerType.toLowerCase();
-			eval( "if( !_this.layerCollectionArray."+ type +" ) _this.layerCollectionArray."+ type +" = new LayerTypeCollection");
-			
-			// set this to a variable, because we can't add things in the eval
-			eval( 'var collection = _this.layerCollectionArray.' + type );
-			
-			//add attributes to the collection
-			collection.type = type;
-			collection.add(layer)
-			
-		});
+		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer) });
 		// layers are loaded into their collections
 		// activate each collection
 		_.each( this.layerCollectionArray, function(collection){ collection.createViewCollections() });
+	},
+	
+	addToLayerTypeCollection : function(layer)
+	{
+		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
+		var type = layerClass.layerType.toLowerCase();
+		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
+		eval( 'var collection = this.layerCollectionArray.' + type );
+		
+ 		collection.type = type;
+		collection.add(layer)
+	},
+	
+	render : function( node )
+	{
+		var _this = this;
+		// should render the current node
+		
+		//cycle through each view collection
+		_.each( this.layerCollectionArray, function(layerCollection){
+			layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
+		})
+
 	}
 	
 });
@@ -70,11 +87,22 @@ var LayerTypeCollection = Backbone.Collection.extend({
 		// make a view collection. this view collection has specific instructions on where and what to draw and interact
 		eval( "this.viewCollection = new "+ classType +"LayerViewCollection" );
 		
+		// add a layerRenderCollection to each viewCollection. This will be what gets rendered
+		this.viewCollection.collection = new LayerRenderCollection
+		
 		// set the collection into the view collection
-		this.viewCollection.loadCollection(this);
+		//this.viewCollection.loadCollection(this);
 		
 		//the viewCollection should take over from here
 	}
+	
+})
+
+var LayerRenderCollection = Backbone.Collection.extend({
+	
+	model : Layer
+	
+
 	
 })
 
