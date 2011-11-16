@@ -161,12 +161,13 @@ function shareButton()
 
 function embedButton()
 {
-    console.log(Zeega.helpers.getHost());
-	/*
-	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
+    //console.log(Zeega.helpers.getHost());
+	
+	var ex = Zeega.exportProject(true)
 	
 	console.log(ex);
 	
+		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -180,7 +181,7 @@ function embedButton()
 	})
 
 	return false;
-	*/
+	
 }
 
 
