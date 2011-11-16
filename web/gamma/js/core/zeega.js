@@ -526,7 +526,7 @@ var Zeega = {
 		
 		
 		// init( project JSON data , route index , starting node )
-		Player.init( this.exportProject(), 0, this.currentNode.id );
+		Player.init( this.exportProject(), this.route.id, this.currentNode.id );
 		//Player.currentNodeID = this.currentNode.id;
 	
 	},

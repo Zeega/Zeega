@@ -1,9 +1,17 @@
+/*---------------------------------------------
+
+
+	Object: Player
+	The Zeega project web player. Part of Core.
+
+
+---------------------------------------------*/
+
 var Player = {
 	
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
-	//player : this,
 	currentRoute : 0,
 	currentNodeID : null,
 	
@@ -14,10 +22,24 @@ var Player = {
 	layersOnStage : [],
 	layerClasses : [],
 	
-	init : function( data, route, nodeID )
+	
+	/*
+		Method: init
+		Initializes the player object
+		
+		Parameters:
+			
+			data - A Zeega data object in JSON.
+			route - The route index of the starting node.
+			nodeID - The id of the starting node.
+	
+	*/
+	init : function( data, routeID, nodeID )
 	{
 		console.log('Zeega Player Initialized');
 		var _this = this;
+		
+		this.currentRouteID = routeID; // this should
 
 		//test to see if Zeega is installed
 		if(Zeega)
@@ -39,12 +61,10 @@ var Player = {
 		this.gotoNode(nodeID);
 	},
 	
-	parseProject : function(data)
-	{
-		//parse JSON into something?
-		// don't need?
-	},
-	
+	/*
+		Method: draw
+		Draws the player dom object into the browser window
+	*/
 	draw : function()
 	{
 		//add the player div
@@ -56,6 +76,10 @@ var Player = {
 		overlay.fadeIn();
 	},
 	
+	/*
+		Method: close
+		Removes the player from the dom
+	*/
 	close : function()
 	{
 		console.log('Zeega Player Close');
@@ -85,6 +109,10 @@ var Player = {
 		}
 	},
 	
+	/*
+		Method: removeAllVideoElements
+		Removes all video sources and elements in an attempt to stop loading and help resolve conflicts
+	*/
 	removeAllVideoElements : function()
 	{
 		_.each( $('video'), function(video){
@@ -93,6 +121,10 @@ var Player = {
 		});
 	},
 	
+	/*
+		Method: setListeners
+		Binds the listeners for key navigation and layer ready events
+	*/
 	setListeners : function()
 	{
 		var _this = this;
@@ -130,11 +162,23 @@ var Player = {
 		});
 	},
 	
+	/*
+		Method: unsetListeners
+		Unbinds the listeners for key navigation events
+	*/
 	unsetListeners : function()
 	{
 		$(window).unbind( 'keydown' ); //remove keylistener
 	},
 	
+	/*
+		Method: onLayerLoad
+		Called when a layer is loaded and calls 'ready'
+		
+		Parameters:
+		
+			layerID - the id of the layer that called 'ready'.
+	*/
 	onLayerLoad : function(layerID)
 	{
 		//remove from the layers loading array
@@ -150,6 +194,10 @@ var Player = {
 		this.updateNodeStatus();
 	},
 	
+	/*
+		Method: updateNodeStatus
+		Checks nodes to see if all their layers are loaded. If their layers are loaded, then the node id is added to the loadedNodes array.
+	*/
 	updateNodeStatus : function()
 	{
 		_this = this;
@@ -181,6 +229,10 @@ var Player = {
 		})
 	},
 	
+	/*
+		Method: preload
+		Tries to preload nodes starting with the current node +/- the lookahead amount. The pattern is 0,1,-1,2,-2,…
+	*/
 	preload : function()
 	{
 		
@@ -201,10 +253,17 @@ var Player = {
 				var nodeID = nodeOrder[tryIndex];
 				this.preloadNode(nodeID);
 			}	
-
 		}
 	},
 	
+	/*
+		Method: preloadNode
+		Tries to preload a node by preloading all it's layers. It first checks to see if the node has already been completely loaded.
+		
+		Parameters:
+		
+			nodeID - the id of the node being preloaded/checked
+	*/
 	preloadNode : function( nodeID )
 	{
 		//if not loading or already loaded
@@ -230,6 +289,14 @@ var Player = {
 		}
 	},
 	
+	/*
+		Method: preloadLayer
+		Tries to preload a layer. It first checks to see if the layer has already been loaded.
+		
+		Parameters:
+			
+			layerID - the id of the layer being preloaded/checked
+	*/
 	preloadLayer : function( layerID )
 	{
 		//if not loading or already loaded
@@ -263,6 +330,14 @@ var Player = {
 		}
 	},
 	
+	/*
+		Method: drawNode
+		Places a completely preloaded node into view. Also manages the state of the navigation arrows.
+		
+		Parameters:
+			
+			nodeID - The id of the node to be drawn.
+	*/
 	drawNode : function( nodeID )
 	{
 		_this = this;
@@ -285,19 +360,15 @@ var Player = {
 			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
-				
 				_this.layerClasses[layerID].drawPublish(i);
 				_this.layersOnStage.push(layerID);
-			
 			}else{
 				//update existing persistant layer with new z-index
 				_this.layerClasses[layerID].updateZIndex(i);
 			}
-			
 		})
 		
 		//check to see if the current node is first or last and remove the correct arrow
-
 		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
 		//if there's only one node. show no arrows
 		if( nodeOrder.length == 1)
@@ -312,7 +383,11 @@ var Player = {
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
 	},
-		
+	
+	/*
+		Method: cleanupLayers
+		removes layers that should no longer be in view.
+	*/
 	cleanupLayers : function()
 	{
 		// find the uncommon layers and call hidePublish on them
@@ -329,6 +404,16 @@ var Player = {
 		
 	},
 	
+	/*
+		Method: setAdvance
+		Sets the advance type
+		
+		Parameters:
+		
+			advanceValue - 	0 = after playback.
+							>0 = after time in seconds.
+							<0 = manual advance.
+	*/
 	setAdvance : function( advanceValue )
 	{
 		if(advanceValue > 0)
@@ -343,7 +428,14 @@ var Player = {
 		}
 	},
 	
-	// advance node after a defined number of seconds have passed
+	/*
+		Method: advanceAfterTimeElapsed
+		Sets the timeout for a timed advance.
+		
+		Parameters:
+		
+			seconds - the number of seconds that should elapse before advancing
+	*/
 	advanceAfterTimeElapsed : function(seconds)
 	{
 		if(this.timeout) clearTimeout(this.timeout);
