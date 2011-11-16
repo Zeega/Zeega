@@ -12,8 +12,8 @@ var Player = {
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
-	currentRoute : 0,
-	currentNodeID : null,
+	currentRoute : null,
+	currentNode : null,
 	
 	loadingNodes : [],
 	loadedNodes : [],
@@ -39,10 +39,8 @@ var Player = {
 		console.log('Zeega Player Initialized');
 		var _this = this;
 		
-		this.currentRouteID = routeID; // this should
-
 		//test to see if Zeega is installed
-		if(Zeega)
+		if( window.Zeega )
 		{
 			this.zeega = true;
 			Zeega.previewMode = false;
@@ -54,11 +52,24 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		//set the current route
+		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
+		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
+		
+		//set the current node
+		if( nodeID )
+		{
+			this.currentNode = this.getNode( nodeID );
+		}else{
+			var nodeOrder = this.data.project.routes[this.currentRouteID].nodeOrder;
+			this.currentNode = this.getNode( nodeOrder[0] );
+		}
+		
 		//this.parseProject;
 		this.draw();
 		this.setListeners();
 		
-		this.gotoNode(nodeID);
+		this.gotoNode( this.currentNode.id );
 	},
 	
 	/*
@@ -105,7 +116,7 @@ var Player = {
 			//turn off previewMode
 			Zeega.previewMode = false;
 			//go to the node last viewed in the player
-			Zeega.loadNode(Zeega.route.nodes.get(this.currentNodeID));
+			Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
 		}
 	},
 	
@@ -202,14 +213,12 @@ var Player = {
 	{
 		_this = this;
 		//loop through each node that is loading
-		_.each(this.loadingNodes, function(nodeID){
-			var dataNodeOrder = _.pluck( _this.data.project.routes[_this.currentRoute].nodes, 'id' );
-			var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
-			var nodeObject = _this.data.project.routes[_this.currentRoute].nodes[nodeIndex];
+		_.each( this.loadingNodes, function( nodeID ){
+			var node = _this.getNode( nodeID ); 
+			var layers = node.layers;
 			
-			var layers = nodeObject.layers;
-			
-			if( _this.currentNodeID == nodeID) _this.loadingBar.update();
+			//updated the loading bar
+			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
 			//if all the layers are loaded in a node
 			if( _.difference( layers, _this.loadedLayers ).length == 0 )
@@ -219,7 +228,7 @@ var Player = {
 				// add to nodes loaded array
 				_this.loadedNodes.push(nodeID);
 				
-				if( _this.currentNodeID == nodeID)
+				if( _this.currentNode.id == nodeID)
 				{
 					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
@@ -235,10 +244,9 @@ var Player = {
 	*/
 	preload : function()
 	{
-		
 		//find the node you're coming from and where it is in the order
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
-		var index = _.indexOf(nodeOrder, this.currentNodeID);
+		var nodeOrder = this.currentRoute.nodeOrder;
+		var index = _.indexOf( nodeOrder, this.currentNode.id );
 
 		//see if node's layers are preloaded // starting with the currentNode
 		//look ahead 2 and behind 2 // include current node also
@@ -271,14 +279,14 @@ var Player = {
 		{
 			_this = this;
 
-			if(nodeID == this.currentNodeID) this.loadingBar.draw();
+			if(nodeID == this.currentNode.id) this.loadingBar.draw();
 
 			//put node id into the nodesLoading Array
 			this.loadingNodes.push( nodeID );
-			
-			var nodeObject = this.getNode( nodeID );
 
-			var layersToPreload = _.difference( _.compact( nodeObject.layers ), this.layersOnStage );
+			//determine the layers that need to be preloaded 
+			var node = this.getNode( nodeID );
+			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
@@ -305,14 +313,13 @@ var Player = {
 			//put the layer id into the layers Loading array
 			this.loadingLayers.push(layerID);
 
-			var layerObject = this.getLayer( layerID );
-			
-			var layerType = layerObject.type;
+			var layer = this.getLayer( layerID );
+			var layerType = layer.type;
 
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-			layerClass.load( layerObject );
+			layerClass.load( layer );
 			//call the preload function for the layer
 			//add the layer class to the layer class array
 			this.layerClasses[layerID] = layerClass;
@@ -322,9 +329,9 @@ var Player = {
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
 			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
-			if( layerObject.type != 'Image' )
-				loadingLayer.append( 'loading: '+ layerObject.attr.title );
-			else loadingLayer.append( 'loaded: '+ layerObject.attr.title );
+			if( layer.type != 'Image' )
+				loadingLayer.append( 'loading: '+ layer.attr.title );
+			else loadingLayer.append( 'loaded: '+ layer.attr.title );
 			$('#layer-status ul').append(loadingLayer)
 			
 		}
@@ -369,17 +376,17 @@ var Player = {
 		})
 		
 		//check to see if the current node is first or last and remove the correct arrow
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		//if there's only one node. show no arrows
 		if( nodeOrder.length == 1)
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
 		}else{
-			if( !this.getLeft( this.currentNodeID, 1 ) ) $('#preview-left').fadeOut();
+			if( !this.getLeft( this.currentNode.id, 1 ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( !this.getRight( this.currentNodeID, 1 ) ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentNode.id, 1 ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
 	},
@@ -393,12 +400,12 @@ var Player = {
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
 		
-		var newNode = this.getNode(this.currentNodeID);
+		var nextNode = this.getNode( this.currentNode.id );
 
-		var layersToRemove = _.difference( this.layersOnStage, newNode.layers );
+		var layersToRemove = _.difference( this.layersOnStage, nextNode.layers );
 
 		_.each( layersToRemove, function( layerID ){
-			_this.layerClasses[layerID].hidePublish();
+			_this.layerClasses[ layerID ].hidePublish();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
@@ -457,7 +464,7 @@ var Player = {
 		
 		draw : function()
 		{
-			if(Player.data.project.routes[Player.currentRoute].layers.length)
+			if(Player.currentRoute.layers.length)
 			{
 				var container = $('<div id="loading-container">')
 					.append($('<div id="progress-bar">'))
@@ -469,7 +476,7 @@ var Player = {
 		{
 			this.count++;
 			
-			var p = this.count / Player.data.project.routes[Player.currentRoute].layers.length *100;
+			var p = this.count / Player.currentRoute.layers.length *100;
 			
 			$('#progress-bar').css('width',p+'%');
 			
@@ -481,24 +488,31 @@ var Player = {
 		
 	},
 		
-
-	
-	getLayer : function( layerID )
+	getRoute : function( routeID )
 	{
-		//returns the layer object
-		var dataLayerOrder = _.pluck( this.data.project.routes[this.currentRoute].layers, 'id' );
-		var layerIndex = _.indexOf( dataLayerOrder, layerID)
-		var layerObject = this.data.project.routes[this.currentRoute].layers[layerIndex];
-		return layerObject
+		//returns the node object
+		var dataRouteOrder = _.pluck( this.data.project.routes, 'id' );
+		var routeIndex = _.indexOf( dataRouteOrder, routeID)
+		var routeObject = this.data.project.routes[routeIndex];
+		return routeObject;
 	},
 	
 	getNode : function( nodeID )
 	{
 		//returns the node object
-		var dataNodeOrder = _.pluck( this.data.project.routes[this.currentRoute].nodes, 'id' );
+		var dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
 		var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
-		var nodeObject = this.data.project.routes[this.currentRoute].nodes[nodeIndex];
+		var nodeObject = this.currentRoute.nodes[nodeIndex];
 		return nodeObject;
+	},
+	
+	getLayer : function( layerID )
+	{
+		//returns the layer object
+		var dataLayerOrder = _.pluck( this.currentRoute.layers, 'id' );
+		var layerIndex = _.indexOf( dataLayerOrder, layerID)
+		var layerObject = this.currentRoute.layers[layerIndex];
+		return layerObject;
 	},
 	
 	gotoNode : function(nodeID)
@@ -548,7 +562,7 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
 		
 		//test if out of bounds
@@ -564,7 +578,7 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
 		
 		//test if out of bounds
@@ -575,8 +589,8 @@ var Player = {
 	reset : function()
 	{
 		
-		currentRoute = 0;
-		currentNodeID = null;
+		currentRoute = null;
+		currentNode = null;
 		this.data = null,
 		
 		this.isFirstNode = true;
