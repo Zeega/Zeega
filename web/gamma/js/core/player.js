@@ -38,7 +38,7 @@ var Player = {
 	{
 		console.log('Zeega Player Initialized');
 		var _this = this;
-		
+				
 		//test to see if Zeega is installed
 		if( window.Zeega )
 		{
@@ -61,7 +61,7 @@ var Player = {
 		{
 			this.currentNode = this.getNode( nodeID );
 		}else{
-			var nodeOrder = this.data.project.routes[this.currentRouteID].nodeOrder;
+			var nodeOrder = this.currentRoute.nodeOrder;
 			this.currentNode = this.getNode( nodeOrder[0] );
 		}
 		
