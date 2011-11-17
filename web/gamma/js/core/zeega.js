@@ -524,14 +524,33 @@ var Zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 		
-		projectData = '';
 		
-		Player.projectData = projectData;
-		Player.currentNode = this.currentNode.id;
-		Player.init();
+		// init( project JSON data , route index , starting node )
+		Player.init( this.exportProject(), this.route.id, this.currentNode.id );
+		//Player.currentNodeID = this.currentNode.id;
 	
 	},
 	
+	exportProject : function( string )
+	{
+		var routes = [{
+			'id' : this.route.id,
+			'nodeOrder' : this.route.get('nodesOrder'),
+			'nodes' : this.route.nodes.toJSON(),
+			'layers' : this.route.layers.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
+		}];
+		
+		var project = {
+			'id' : this.project.id,
+			'title' : this.project.get('title'),
+			'routes' : routes
+		};
+		
+		var exportObject = { 'project' : project };
+		
+		if(string) return JSON.stringify(exportObject);
+		else return exportObject;
+	},	
 	
 	getLeftNode : function()
 	{

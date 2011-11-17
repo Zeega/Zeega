@@ -12,11 +12,11 @@ function videoPreview(attr,zIndex){
 
 		//make dom object
 	console.log('drawing video preview');
-		var div= $('<div>');
+		var div = $('<div>');
 		
-		var h=Math.floor(attr.w*1.5/attr.aspect);
+		var h = Math.floor( attr.w * 1.5 / attr.aspect );
 		var cssObj = {
-			'backgroundImage':'url(http://alpha.zeega.org/images/items/'+attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(' + getHost() + '/web/images/items/'+attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : attr.y+"%",
@@ -28,7 +28,7 @@ function videoPreview(attr,zIndex){
 		};
 		
 		
-			div.css(cssObj);
+		div.css(cssObj);
 			
 		//draw to the workspace
 		$('#workspace').append(div);

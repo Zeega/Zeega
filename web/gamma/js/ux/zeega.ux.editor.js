@@ -161,10 +161,13 @@ function shareButton()
 
 function embedButton()
 {
-	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
+    //console.log(Zeega.helpers.getHost());
+	
+	var ex = Zeega.exportProject(true)
 	
 	console.log(ex);
 	
+		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -176,8 +179,9 @@ function embedButton()
 		console.log('select all export');
 		$('#export').modal('hide');
 	})
-	
+
 	return false;
+	
 }
 
 
@@ -221,6 +225,21 @@ function expandLayer(el)
 }
 
 
+function closeCitationBar()
+{
+	$('#citation').animate({ height : '20px' })
+	//$('#hide-citation').fadeOut();
+	closeOpenCitationTabs();
+}
+
+function closeOpenCitationTabs()
+{
+	$('.citation-tab').closest('ul').children('li').each(function(i,el){
+		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
+	})	
+}
+
+
 
 $(document).ready(function() {
 	
@@ -234,6 +253,7 @@ $(document).ready(function() {
 			//this.xPos = ui.position.left;
 		
 		},
+		
 		
 		drag : function(e,ui)
 		{

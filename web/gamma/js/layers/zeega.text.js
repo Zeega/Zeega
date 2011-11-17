@@ -95,13 +95,13 @@ var TextLayer = ProtoLayer.extend({
 		    layer_id:this.model.id,
 		    label:'Background Opacity',
 		    custom_handler: function (e, ui, layer_id){
-		                    var content = $('#layer-preview-'+layer_id);
-		                    var currentBgColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-		                    currentBgColor[3] = ui.value;
-				    console.log(ui.value);
-				    content[0].style.backgroundColor = 'rgba('+currentBgColor.join(',')+')';
-		    }   
-	    };
+				var content = $('#layer-preview-'+layer_id);
+				var currentBgColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
+				currentBgColor[3] = ui.value;
+				console.log(ui.value);
+				content[0].style.backgroundColor = 'rgba('+currentBgColor.join(',')+')';
+			}   
+		};
 	    template.find('#controls').append( this.makeCustomSlider(bgOpacityArgs) );
 	
 	    //need this to be accessable inside the various functions
@@ -140,13 +140,14 @@ var TextLayer = ProtoLayer.extend({
 		'custom_handler' : function(rgb, layer_id){
 		    var content = $('#layer-preview-'+layer_id);
 		    var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-		    if (currentColor.length == 3){
-			currentColor[3] = 1;
-		    }
-		    currentColor[0] = rgb.r;
-		    currentColor[1] = rgb.g;
-		    currentColor[2] = rgb.b;
-		    content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
+		    if (currentColor.length == 3) currentColor[3] = 1;
+
+			currentColor[0] = rgb.r;
+			currentColor[1] = rgb.g;
+			currentColor[2] = rgb.b;
+		
+			$(content[0]).css('backgroundColor', 'rgba('+currentColor.join(',')+')');
+			//content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
 		}
 	    };
 	    template.find('#controls').append( makeColorPicker(bgColorPickerArgs));
@@ -172,7 +173,7 @@ var TextLayer = ProtoLayer.extend({
 	    
 	    //change icon on layer template
 	    template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
-	    template.find('.asset-type-icon').addClass('ui-icon-document');
+	    template.find('.asset-type-icon').addClass('ui-icon-pencil');
 	},
 	
 	openControls : function(){},
