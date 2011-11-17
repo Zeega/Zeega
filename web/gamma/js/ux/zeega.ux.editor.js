@@ -13,38 +13,6 @@ function initUX(){
 
 	initHeaderUX();
 	
-	//database tab switching
-	
-	$('#tab-content').cycle({
-		fx: 'fade',
-		timeout: 0,
-		speed: 500,
-		width:394,
-		fit:1
-	});
-	
-	$('#database-tab').click(function(){
-		$('#tab-content').cycle(0);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#layers-tab').click(function(){
-		$('#tab-content').cycle(1);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#branch-tab').click(function(){
-		$('#tab-content').cycle(2);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	
-
-	
-	
 }
 
 function insertPager(items, page)
@@ -381,6 +349,19 @@ $(document).ready(function() {
 		Zeega.currentNode.set({'attr':attr});
 		Zeega.currentNode.save();
 	});
+	
+	
+	$('.editor-title-bar-expander').click(function(){
+		var expander = $(this).next('div');
+		if( expander.is(':visible'))
+		{
+			expander.hide('blind',{'direction':'vertical'})
+		}else{
+			expander.show('blind',{'direction':'vertical'})			
+		}
+	})
+	
+	
 	
 	/*****  		CRITICAL		*******/
 	

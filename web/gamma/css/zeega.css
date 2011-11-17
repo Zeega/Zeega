@@ -934,7 +934,8 @@ body
 	margin-bottom:10px;
 }
 
-#interaction-editor-bar
+#interaction-editor-bar,
+.editor-title-bar-expander
 {
 	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#444));
