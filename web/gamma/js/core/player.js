@@ -160,6 +160,12 @@ var Player = {
 			}
 		});
 		
+		
+		$('#citation').mouseleave(function(){
+			closeCitationBar();
+		})
+		
+		
 		// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
 			_this.onLayerLoad(data.id);
@@ -359,10 +365,31 @@ var Player = {
 		var advanceValue = targetNode.attr.advance;
 		this.setAdvance( advanceValue );
 		
+		/////
+		//empty the citation bar
+		closeCitationBar();
+		$('#citation ul').empty();
+		
+		//////
 		//draw each layer but not layers already drawn
 		var layersToDraw = _.difference(targetNode.layers, this.layersOnStage );
 		
+		var temp = _.template( this.getCitationTemplate() );
 		_.each( targetNode.layers, function(layerID, i){
+			
+			
+			
+			/////excise this stuff
+			//add layer to the citation bar
+			var listItem = $(temp({title: _this.getLayer( layerID ).attr.title }));
+			listItem.find('.citation-tab').click(function(){
+				$('#citation').animate({ height : '100px' })
+				closeOpenCitationTabs();
+				$(this).closest('li').find('.citation-content').fadeIn();
+			})
+			$('#citation ul').append( listItem );
+
+			//^^^^^^^excise this stuff
 
 			if( _.include( layersToDraw, layerID ) )
 			{
@@ -608,6 +635,13 @@ var Player = {
 	getTemplate : function()
 	{
 	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>";
+		html += "<div id='citation'><ul class='clearfix'></ul></div>"
+		return html;
+	},
+	
+	getCitationTemplate : function()
+	{
+		html = '<li class="clearfix"><div class="citation-tab"><div class="citation-icon"></div></div><div class="citation-content hidden"><div class="citation-title"><%= title %></div><div class="citation-body"><div class="citation-thumb"><img/></div><div class="citation-metadata">This is citation content</div></div></div></li>';
 		return html;
 	}
 

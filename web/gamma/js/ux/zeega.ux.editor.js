@@ -225,6 +225,21 @@ function expandLayer(el)
 }
 
 
+function closeCitationBar()
+{
+	$('#citation').animate({ height : '20px' })
+	//$('#hide-citation').fadeOut();
+	closeOpenCitationTabs();
+}
+
+function closeOpenCitationTabs()
+{
+	$('.citation-tab').closest('ul').children('li').each(function(i,el){
+		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
+	})	
+}
+
+
 
 $(document).ready(function() {
 	

@@ -993,6 +993,80 @@ body
 }
 */
 
+#citation
+{
+	background:rgba(255,255,255,0.2);
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	height:20px;
+	overflow:hidden;
+	z-index:10001;
+}
+#citation ul
+{
+	height:100%;
+	float:left;
+}
+#citation ul li
+{
+	float:left;
+	background:white;
+	margin:1px;
+	padding:2px;
+	height: 100%;
+}
+.citation-tab
+{
+	width:16px;
+	height:100%;
+	float:left;
+}
+.citation-icon
+{
+	height:10px;
+	width:10px;
+	background:black;
+	overflow:hidden;
+}
+
+
+.citation-title
+{
+	font-weight:bold;
+	clear:both;
+	margin-bottom:5px;
+}
+
+.citation-body
+{
+	float:left;
+}
+.citation-thumb
+{
+	height:50px;
+	width:50px;
+	background:blue;
+	float:left;
+}
+.citation-content
+{			
+	width:250px;
+	float:left;
+}
+.citation-metadata
+{
+	float:left;
+	width:190px;
+	padding:0 5px;
+}
+#hide-citation
+{
+	float:left;
+}
+
+
 /*******************************
 
 	CONTROLS STYLES
