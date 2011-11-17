@@ -550,7 +550,7 @@ body
 #form-left
 {
 	-webkit-border-radius: 6px 0 0 6px;
-	background:white;
+	background:#bbb;
 	float:left;
 	height:24px;
 }
@@ -562,6 +562,7 @@ body
 
 #database-search-text
 {
+	background:transparent;
 	border:none;
 	width:275px;
 	font-size:1.5em;
@@ -569,7 +570,6 @@ body
 
 #database-search-filter
 {
-	background:white;
 	border: none;
 	height:23px;
 	vertical-align:top;
