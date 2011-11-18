@@ -172,7 +172,6 @@ var ProtoLayer = Class.extend({
 			this.title = this.attr.title;
 			this.type = model.type;
 			this.zIndex = model.zindex;
-			console.log(this);
 		}
 
 	},
