@@ -9,7 +9,12 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		var itemCount = 20;
 		for (var i=0;i<itemCount;i++){
 			var item = new Item();
+			if (i%4 ==0)
+			{
+				item.set({type: "image"});
+			}
 			var itemView = new BrowserSearchItemView({model: item});
+
 			itemView.render();
 		}
 		//draw the search items

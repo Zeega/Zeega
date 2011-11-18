@@ -20,8 +20,33 @@ function initUX(){
 		$(this).siblings().addClass('browser-unselected-toggle');
 		return false;
 	});
-}
+	$('#browser-toggle-items-vs-collections li').click(function(){
+		$('#browser-results-collections').toggle();
+		$('#browser-results-items').toggle();
 
+		return false;
+	});
+}
+function toggleFilterDrawer(){
+
+	if( $('#browser-right-sidebar').css('position') == 'absolute') {
+		$('#browser-right-sidebar').css('position', 'relative');
+		$('#browser-right-sidebar').css('float', 'right');
+		$('#browser-right-sidebar').css('width', '530px');
+		$('#browser-right-sidebar').css('height', '400px');
+		$('#browser-toggle-items-vs-collections').css('right', '');
+		$('#browser-toggle-items-vs-collections').css('left', '297px');
+	}
+	else{
+		$('#browser-right-sidebar').css('position', 'absolute');
+		$('#browser-right-sidebar').css('float', 'none');
+		$('#browser-right-sidebar').css('width', '48px');
+		$('#browser-right-sidebar').css('height', '100px');
+		$('#browser-toggle-items-vs-collections').css('right', '82px');
+		$('#browser-toggle-items-vs-collections').css('left', '');
+	}
+		
+}
 $(document).ready(function() {
 	
 	//Load MyCollections
@@ -38,8 +63,13 @@ $(document).ready(function() {
 
 	searchView.render();
 
+	//Show more results link (TODO: only if search yields more than 100)
 	$('#browser-show-more-results').show();
 
+	//Hide loading spinner
 	$('#browser-results .browser-loading').hide();
+
+	//For filters - testing visual stuff
+	$('.time, .space').click( toggleFilterDrawer);
 
 });

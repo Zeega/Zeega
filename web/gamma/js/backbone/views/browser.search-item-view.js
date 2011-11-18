@@ -1,14 +1,34 @@
-//renders individual items in a search be they collection or item type
+//renders individual items in a search be they collection or image or audio or video type
 var BrowserSearchItemView = Backbone.View.extend({
 	
 	
 	initialize : function() {
 		
-		//draw the item for the first time
-		var template = $("#browser-results-item-template").clone();
-		template.addClass('browser-results-item');
-		template.removeAttr('id');
-		template.insertAfter($("#browser-toggle-items-vs-collections"));
+		switch (this.model.get("type"))
+		{
+			case 'collection':
+				var template = $("#browser-results-collection-template").clone();
+				template.addClass('browser-results-collection');
+				template.removeAttr('id');
+				$('#browser-results-collections').append(template);
+			break;
+
+			case 'image':
+				var template = $("#browser-results-image-template").clone();
+				template.addClass('browser-results-image');
+				template.removeAttr('id');
+				$('#browser-results-items').append(template);
+			break;
+
+			case 'audio':
+
+			break;
+
+			case 'video':
+
+			break;
+		}
+		
 	},
 	
 	render: function()

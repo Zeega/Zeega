@@ -1,7 +1,13 @@
 var BrowserSearch =  Backbone.Model.extend({
 	url : function(){return Zeega.url_prefix + "search/"},
 	
-	//defaults :{ 'attr' : {} },
+	/*default search is to get all media associated with current user
+	*/
+	defaults :{ 
+
+		'user_id' : -1 //sending -1 gets current user's stuff
+
+	},
 	
 	//initialize does a default search for all 'My Media'
 	initialize: function(){
@@ -16,7 +22,7 @@ var BrowserSearch =  Backbone.Model.extend({
 
 			success : function()
 			{
-				//did something
+				//render stuff here?
 			}
 		});
 	}
