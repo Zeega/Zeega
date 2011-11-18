@@ -54,9 +54,12 @@ var loadFiles = [
 	'order!backbone/models/browser.myCollections',
 	'order!backbone/models/browser.search',
 	'order!backbone/models/item',
-	'order!backbone/views/browser.search-collection-view',
-	'order!backbone/views/browser.search-item-view',
+
 	'order!backbone/views/browser.my-collections-view',
+	'order!backbone/views/browser.search-item-view',
+	'order!backbone/views/browser.search-items-view',
+	'order!backbone/views/browser.search-map-view',
+	'order!backbone/views/browser.search-time-view',
 	
 
 	];

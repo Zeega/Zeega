@@ -1,11 +1,12 @@
-var Search =  Backbone.Model.extend({
+var BrowserSearch =  Backbone.Model.extend({
 	url : function(){return Zeega.url_prefix + "search/"},
 	
 	//defaults :{ 'attr' : {} },
 	
-	
+	//initialize does a default search for all 'My Media'
 	initialize: function(){
-		this.set('query') ='';
+		
+
 	},
 
 	//updates query and fetches results from DB
