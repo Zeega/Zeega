@@ -56,11 +56,12 @@ class ImportWidget
 		
 		/**  ARCHIVE>ORG **************************************/
 		
-		/*  NOT ACTIVE
-		
-		elseif(strstr($url,'archive.org/details')) $archive='archive.org';
-		
-		*/
+	
+		elseif(strstr($url,'archive.org/details')){
+			$archive='archive.org';
+			$id='';
+		}
+	
 	
 		/**  FLICKR   *****************************************/
 		
@@ -163,11 +164,112 @@ class ImportWidget
 		
 		$urlInfo['id']=$id;
 		$urlInfo['archive']=$archive;
+		$urlInfo['url']=$url;
 		return $urlInfo;
 	}
 	
 	
 	
+	
+	public function parseArchiveDotOrg($urlInfo){
+	
+		$originalUrl=$urlInfo['url']."?output=json";
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
+	
+		$json = json_decode($file_contents);
+	
+		$mdata=$json->metadata;
+		$files=(array)$json->files;
+		$fileKeys=array_keys($files);
+		$dir=$json->dir;
+		$misc=$json->misc;
+	
+	
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		$attr=array();
+		
+		$attr['tags']=str_replace("; ",",",(string)$mdata->subject[0]);
+	
+		$item->setTitle((string)$mdata->title[0]);
+	
+		if(!$item->getTitle()){return false;}
+	
+		$metadata->setDescription((string)$mdata->description[0]);
+		$metadata->setDescription(str_replace('<br />','',$metadata->getDescription()));
+		$metadata->setThumbUrl(urldecode($misc->image));
+		$item->setCreator((string)$mdata->creator[0]);
+		
+	
+	
+	
+	
+		$newUrl=str_replace( "details" , "download" , $urlInfo['url']);
+		$type=(string)$mdata->mediatype[0];
+	
+	
+		if($type=='movingImage'||$type=='movies'){	
+			$index=0;
+			$format="mp4";
+			for($i=0;$i<sizeof($fileKeys);$i++){
+			if(strstr($fileKeys[$i],$format)&&$index==0) {
+				$index=$i;
+				
+				}
+			}
+			$item->setContentType('Video');
+			$item->setSourceType('Video');
+			$item->setItemUrl($newUrl.$fileKeys[$index]);
+			$item->setItemUri($newUrl.$fileKeys[$index]);
+		}
+		
+		else if($type=='audio'){	
+			$index=0;
+			$format="mp3";
+			for($i=0;$i<sizeof($fileKeys);$i++){
+			if(strstr($fileKeys[$i],$format)&&$index==0) {
+				$index=$i;
+				
+				}
+			}
+			$item->setContentType('Audio');
+			$item->setSourceType('Audio');
+			$item->setItemUrl($newUrl.$fileKeys[$index]);
+			$item->setItemUri($newUrl.$fileKeys[$index]);
+		}
+		
+		else if($type=='image'){	
+			$index=0;
+			$format="JPEG";
+			for($i=0;$i<sizeof($fileKeys);$i++){
+			if(strstr($fileKeys[$i],$format)&&$index==0) {
+				$index=$i;
+				
+				}
+			}
+			$item->setContentType('Image');
+			$item->setSourceType('Image');
+			$item->setItemUrl($newUrl.$fileKeys[$index]);
+			$item->setItemUri($newUrl.$fileKeys[$index]);
+		}
+		
+		else return false;	
+		
+		$item->setArchive('archive.org');
+		$metadata->setAttr($attr);
+		$item->setMetadata($metadata);
+		$item->setMedia($media);
+		
+		return $item;
+		
+	}
 	
 	
 	public function parseYoutube($id){
@@ -212,7 +314,7 @@ class ImportWidget
 		return($item);
 	}
 	
-	public function parseAbsolute($urlInfo){
+	public function parseAbsolute($urlInfo,$container){
 	
 		$item=new Item();
 		$item->setContentType($urlInfo['contentType']);
@@ -226,8 +328,8 @@ class ImportWidget
 		$item->setArchive($urlInfo['archive']);
 		$metadata->setAltCreator('');
 		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($this->container->getParameter('thumbnails_uri') . '/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($this->container->getParameter('thumbnails_uri') . '/templates/video.jpg');
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
 		$metadata->setAltCreator('');
 		$metadata->setTagList('');
 		$media=new Media();

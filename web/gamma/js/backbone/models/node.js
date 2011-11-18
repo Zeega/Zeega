@@ -35,6 +35,7 @@ var Node = Backbone.Model.extend({
 		this.save({},{
 		
 			success: function(node,response){
+		
 				$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
 				$('.node-thumb-'+_this.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
 				_this.set({thumb_url:response[0].thumb_url});
@@ -43,9 +44,7 @@ var Node = Backbone.Model.extend({
 			});
 			
 		}});
-		//THIS SHOULD BE CALLED ON SUCESSS 
-		
-		
+	
 	
 	
 	},

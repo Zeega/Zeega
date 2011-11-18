@@ -14,7 +14,7 @@ var loadFiles = [
 	
 	//css?
 	//'text!../css/all.css', //not quite
-	'order!zeega.config',
+
 	
 	//libraries
 	'order!libraries/underscore',

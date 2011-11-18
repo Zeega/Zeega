@@ -83,8 +83,8 @@ class ItemRepository extends EntityRepository
       public function findUserItems($id)
      {
      	return $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'i.id,i.title')
+			   ->createQueryBuilder()
+			   ->add('select', 'i.id,i.title')
 			   ->add('from', ' ZeegaIngestBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
