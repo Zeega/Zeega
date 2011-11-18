@@ -7,19 +7,27 @@
 	position: relative;
 	top: 50px;
 }
+
 #browser-results{
 	
-	padding:5px 0 5px 3px;
-	margin-top:-4px;
+	padding:0px 0 5px 3px !important;
+	margin-top:-3px;
 	float:none;
-	
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-radius: 0px 0px 10px 10px !important;
+	border-radius: 0px 0px 10px 10px;
+	-webkit-box-shadow: inset 2px 2px 2px 2px #333;
+-moz-box-shadow: inset 2px 2px 2px 2px #333;
+box-shadow: inset 2px 2px 2px 2px #333;
 }
-
 #browser-my-collections-label p, #browser-toggle-all-media-vs-my-media p{
 	color:#FFF;
 	background:#444;
 	padding:7px;
-	display:inline;
+	display:inline-block;
 
 	-moz-border-radius-topleft: 10px;
 	-moz-border-radius-topright: 10px;
@@ -29,14 +37,33 @@
 	border-radius: 10px 10px 0px 0px;
 	border: 1px solid #555;
 	border-bottom:none;
+	margin-bottom:-1px;
+}
+#browser-toggle-items-vs-collections p{
+	color:#FFF;
+	background:#444;
+	padding:7px;
+	display:inline-block;
+
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 0px 10px 10px;
+	border: 1px solid #555;
+	border-top:none;
+	
+}
+#browser-my-collections-wrapper{
+	margin-bottom:20px;
 }
 #browser-my-collections{
 	
-	margin-top:5px;
 	padding:0 !important;
 	
 }
-.browser-my-collection{
+.browser-my-collection, #browser-create-new-collection{
 	float:left;
 	background-color:#999;
 	width:144px;
@@ -53,8 +80,16 @@
 
 
 #browser-search-filter-toggle{
-	margin: 40px 0 0 0;
-	height: 24px;
+	margin: 0;
+	background:#555;
+	border: 1px solid #555;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-radius: 0px 10px 0px 0px !important;
+	border-radius: 0px 10px 0px 0px;
+	width:100%;
 }
 #browser-toggle-all-media-vs-my-media{
 	float:left;
@@ -64,13 +99,14 @@
 
 #browser-toggle-items-vs-collections{
 	float:right;
+	
 }
 .browser-results-item{
 
 	float: left;
 	margin: 0;
 	/*border-radius: 3px;*/
-	padding:5px;
+	padding:10px 4px;
 	width:  144px;
 	height: 110px;/*94*/
 	margin-left:5px;
@@ -81,7 +117,7 @@
 	border:none;
 	text-decoration:none;
 }
- .browser-my-collection p {
+ .browser-my-collection p, #browser-create-new-collection p {
  	
 	width: 80%;
 	color:#EEE;
@@ -98,16 +134,17 @@
 	white-space:normal;
 	
 }
-.browser-create-new-collection{
+#browser-create-new-collection p{
 
+	width:auto;
 	font-style:italic;
 	line-height:26px !important;
-	width:124px !important;
-	height:80 !important;
+	
+	height:98px !important;
 	margin:2px;
 	-webkit-border-radius: 10px 10px 10px 10px !important;
 	border:1px dashed #555;
-	padding:20px;
+	
 }
 .browser-results-item p
 {
@@ -154,7 +191,33 @@
 	height: 110px;
 
 }
+#browser-unselected-media{
+	border-bottom:1px solid #555 !important;
+}
+#browser-selected-media {
+	background-color:#555 !important;
+	
+}
+#browser-selected-media a{
+	
+	color:#fff;
+}
+.browser-filter-icon {
+	
+	width:  40px;
+	height: 40px;
+	z-index:100;
+	float:left;
+	background-image:url('../images/filter-icons.png'); 
+	margin:-7px 0 0 7px;
+}
 
+.space {background-position: -82px -82px;}
+.time {background-position: -41px -82px;}
+
+#browser-form-search{
+	margin:10px;
+}
 // Settings
 
 

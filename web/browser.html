@@ -18,11 +18,12 @@
 			
 			<link rel="stylesheet" href="gamma/css/bootstrap.css"  type="text/css" media="screen">
 			<link rel="stylesheet" href="gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" />
+
 			
 			<link rel="stylesheet" media="screen" type="text/css" href="gamma/css/zeega.css" />
 			<link rel="stylesheet" href="gamma/js/jquery/plugins/colorpicker/css/colorpicker.css" />
 	
-
+			
 		
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
@@ -73,55 +74,49 @@
 						<p>My Collections</p>
 					</div>
 					<div id="browser-my-collections">
-						<div class="browser-my-collection">
+						<div id="browser-create-new-collection">
 
-							<p class="browser-create-new-collection">Drag media to create a new collection</p>
+							<p>Drag media to create a new collection</p>
 							
 						</div>
-						<div class="browser-my-collection">
-							<p>City Streets <br><span class="browser-item-count">12 items</span></p><img class="large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" "="" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							
-						</div>
-						<div class="browser-my-collection">
-							<p>More City Streets <br><span class="browser-item-count">12 items</span></p><img class="large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" "="" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
-							
-						</div>
+						
 					</div>
 				</div>
+				<div id="browser-toggles">
+					<div id="browser-toggle-all-media-vs-my-media"><p id="browser-selected-media"><a href="#">My Media</a></p> <p id="browser-unselected-media"><a href="#">All Media</a></p> </div>
+					
+					<div style="clear:both"></div>
+				</div>
 				<div id="browser-search-filter-toggle">
-					<div id="browser-toggle-all-media-vs-my-media"><p><a href="#">All Media</a> | <a href="#">My Media</a></p> </div>
-					<div id="database-search" >
-
-						<form action="" method="" id="form-search">
-							<div id="form-left">
-								<select id="database-search-filter" class="">
-								  <option value="all">All</option>
-								  <option value="image">Images</option>
-								  <option value="video">Video</option>
-								  <option value="audio">Audio</option>
-								  <option value="-" disabled="true">---</option>
-								  <option value="mine">Mine</option>
-								</select>
-								
-								
-								<input id="database-search-text" onkeypress="return submitenter(this,event)" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
-								
-							</div>
-							<div id="form-right">
-								<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
-								<input id="database-search-button" class="" type="button" value="go" onclick="return false" style="cursor:progress">
-							</div>
-						</form>
-
-					</div>
-					<div id="browser-toggle-items-vs-collections"><a href="#">43 items</a> in <a href="#">3 collections</a></div>
+					<form action="" method="" id="browser-form-search">
+						<div id="form-left">
+							<select id="database-search-filter" class="">
+							  <option value="all">All</option>
+							  <option value="image">Images</option>
+							  <option value="video">Video</option>
+							  <option value="audio">Audio</option>
+							  
+							</select>
+							
+							
+							<input id="database-search-text" onkeypress="return submitenter(this,event)" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
+							
+						</div>
+						<div id="form-right">
+							<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
+							<input id="database-search-button" class="" type="button" value="go" onclick="return false" style="cursor:progress">
+						</div>
+					</form>
+				
+					
+					<div class="browser-filter-icon time"></div>
+					<div class="browser-filter-icon space"></div>
+					<div style="clear:both;padding-bottom:4px;"></div>
+					
 				</div>
 
 				<div id="browser-results">
+					<div id="browser-toggle-items-vs-collections"><p style="background-color:#555;"><a href="#" style="color:white;">43 items</a></p> <p> <a href="#">3 collections</a></p> </div>
 				 	<div class="browser-results-item" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Images Of America: Lantern Slide Collection</span><br><span class="browser-item-count">2924 items</span></p></a></div>
 				 	<div class="browser-results-item" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Something Else</span><br><span class="browser-item-count">12 items</span></p></a></div>
 				</div>
@@ -139,10 +134,29 @@
 				</div>
 			 </div> <!-- #editor -->	
          </div> <!-- #wrapper -->
+
+         <!-- TEMPLATES -->
+         <div id='templates' class='hidden'>
+         	<div id="browser-my-collection-template">
+				<p>City Streets <br><span class="browser-item-count">12 items</span></p><img class="large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+				<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+				<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
+				
+			</div>
+         </div>
+
+         <!-- /TEMPLATES -->
          
-         
+		<!-- SCRIPTS -->
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script data-main="gamma/js/main.browser.js" src="gamma/js/libraries/require-jquery.js"></script>
+		<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
+		<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
+		<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
+		<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
+		<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
 		
-		
+
          
     </body>
 </html>
