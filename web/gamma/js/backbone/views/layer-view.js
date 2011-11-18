@@ -64,9 +64,6 @@ var LayerView = Backbone.View.extend({
 			
 			template.find('.layer-title').html( title );
 
-			console.log(this);
-			console.log(this.model);
-
 			layerClass.load( this.model );
 
 			if(Zeega.previewMode)
