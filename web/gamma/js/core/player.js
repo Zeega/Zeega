@@ -145,7 +145,7 @@ var Player = {
 			switch(e.which)
 			{
 				case 27:
-					_this.close();
+					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
 					_this.goLeft();
