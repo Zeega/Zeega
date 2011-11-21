@@ -874,7 +874,7 @@ body
 #form-left
 {
 	-webkit-border-radius: 6px 0 0 6px;
-	background:white;
+	background:#bbb;
 	float:left;
 	height:24px;
 }
@@ -886,6 +886,7 @@ body
 
 #database-search-text
 {
+	background:transparent;
 	border:none;
 	width:275px;
 	font-size:1.5em;
@@ -893,7 +894,6 @@ body
 
 #database-search-filter
 {
-	background:white;
 	border: none;
 	height:23px;
 	vertical-align:top;
@@ -1258,7 +1258,8 @@ body
 	margin-bottom:10px;
 }
 
-#interaction-editor-bar
+#interaction-editor-bar,
+.editor-title-bar-expander
 {
 	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#444));

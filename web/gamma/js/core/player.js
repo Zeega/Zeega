@@ -5,6 +5,9 @@
 	The Zeega project web player. Part of Core.
 
 
+	ideas:
+	master list of layers/nodes - loading/loaded to check against
+
 ---------------------------------------------*/
 
 var Player = {
@@ -20,7 +23,6 @@ var Player = {
 	loadingLayers : [],
 	loadedLayers : [],
 	layersOnStage : [],
-	layerClasses : [],
 	
 	
 	/*
@@ -100,7 +102,7 @@ var Player = {
 		
 		//turn off/pause all media first
 		_.each(this.layersOnStage, function(layerID){
-			_this.layerClasses[layerID].hidePublish();
+			_this.getLayer(layerID).layerClass.hidePublish();
 		});
 		
 		
@@ -143,7 +145,7 @@ var Player = {
 			switch(e.which)
 			{
 				case 27:
-					_this.close();
+					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
 					_this.goLeft();
@@ -204,7 +206,6 @@ var Player = {
 		this.loadedLayers.push(layerID);
 		
 		var layer = this.getLayer( layerID );
-		
 		
 		$('#layer-loading-'+layerID).html( 'loaded: '+ layer.attr.title );
 
@@ -298,7 +299,7 @@ var Player = {
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNodeID ){
+		}else if( nodeID == this.currentNode.id ){
 			this.drawNode( nodeID );
 		}
 	},
@@ -317,7 +318,7 @@ var Player = {
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
 			//put the layer id into the layers Loading array
-			this.loadingLayers.push(layerID);
+			this.loadingLayers.push( layerID );
 
 			var layer = this.getLayer( layerID );
 			var layerType = layer.type;
@@ -328,7 +329,7 @@ var Player = {
 			layerClass.load( layer );
 			//call the preload function for the layer
 			//add the layer class to the layer class array
-			this.layerClasses[layerID] = layerClass;
+			this.getLayer(layerID).layerClass = layerClass;
 			
 			layerClass.preloadMedia();
 			
@@ -355,8 +356,6 @@ var Player = {
 	{
 		_this = this;
 		
-		_this.isFirstNode = false;
-		
 		var targetNode = this.getNode( nodeID );
 
 		this.cleanupLayers();
@@ -377,8 +376,6 @@ var Player = {
 		var temp = _.template( this.getCitationTemplate() );
 		_.each( targetNode.layers, function(layerID, i){
 			
-			
-			
 			/////excise this stuff
 			//add layer to the citation bar
 			var listItem = $(temp({title: _this.getLayer( layerID ).attr.title }));
@@ -394,11 +391,11 @@ var Player = {
 			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
-				_this.layerClasses[layerID].drawPublish(i);
+				_this.getLayer(layerID).layerClass.drawPublish(i);
 				_this.layersOnStage.push(layerID);
 			}else{
 				//update existing persistant layer with new z-index
-				_this.layerClasses[layerID].updateZIndex(i);
+				_this.getLayer(layerID).layerClass.updateZIndex(i);
 			}
 		})
 		
@@ -428,11 +425,12 @@ var Player = {
 		_this = this;
 		
 		var nextNode = this.getNode( this.currentNode.id );
-
+		
 		var layersToRemove = _.difference( this.layersOnStage, nextNode.layers );
 
 		_.each( layersToRemove, function( layerID ){
-			_this.layerClasses[ layerID ].hidePublish();
+			console.log('removing layer: '+layerID);
+			_this.getLayer(layerID).layerClass.hidePublish();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
@@ -544,7 +542,7 @@ var Player = {
 	
 	gotoNode : function(nodeID)
 	{
-		this.currentNodeID = nodeID;
+		this.currentNode = this.getNode(nodeID);
 		this.preload();
 	},
 	
@@ -559,7 +557,7 @@ var Player = {
 
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getRight( this.currentNodeID, 1 );
+		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
 		if( nextNodeID ) this.gotoNode( nextNodeID )
 		else console.log('end of the line');
@@ -575,7 +573,7 @@ var Player = {
 		console.log('goLeft');
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getLeft( this.currentNodeID, 1 );
+		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
 		
 		if( nextNodeID ) this.gotoNode( nextNodeID )
 		else console.log('end of the line');
@@ -627,15 +625,14 @@ var Player = {
 		this.loadingLayers = [];
 		this.loadedLayers = [];
 		this.layersOnStage = [];
-		this.layerClasses = [];
 		
 		if(this.timeout) clearTimeout(this.timeout);
 	},
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>";
-		html += "<div id='citation'><ul class='clearfix'></ul></div>"
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
+		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
 		return html;
 	},
 	

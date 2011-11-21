@@ -150,11 +150,11 @@ class WidgetController extends Controller
 		$check=$this->getDoctrine()
 					->getRepository('ZeegaIngestBundle:Item')
 					->findItemByAttributionUrl($url);
-
+	
 		if($check){
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0]['id'],
+				'playground'=>$playgrounds[0],
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
 				'content_type'=>$check['content_type'],
@@ -177,7 +177,8 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
-			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo);
+			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
+			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
 
 			//Store media item(s) to session and render widget
 
@@ -198,8 +199,6 @@ class WidgetController extends Controller
 					'widget_id'=>$widgetId,
 					'thumb_url'=>$metadata->getThumbUrl(),
 					'mycollection'=>$mycollection,
-					'hostname'=>$this->container->getParameter('hostname'),
-					'directory'=>$this->container->getParameter('directory') 
 				));
 			}
         	elseif(isset($collection)){
@@ -225,8 +224,6 @@ class WidgetController extends Controller
 					'thumb_urls'=>$thumbUrls,
 					'mycollection'=>$mycollection,
 					'count'=>count($thumbUrls),
-					'hostname'=>$this->container->getParameter('hostname'),
-					'directory'=>$this->container->getParameter('directory') 
 				));
 		
 			}
@@ -237,8 +234,6 @@ class WidgetController extends Controller
 					'url'=>json_encode($widgetId),
 					'title'=>'temp title',
 					'mycollection'=>$mycollection,
-					'hostname'=>$this->container->getParameter('hostname'),
-					'directory'=>$this->container->getParameter('directory') 
 					));
 			} 
     	}

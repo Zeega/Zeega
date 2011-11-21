@@ -13,38 +13,6 @@ function initUX(){
 
 	initHeaderUX();
 	
-	//database tab switching
-	
-	$('#tab-content').cycle({
-		fx: 'fade',
-		timeout: 0,
-		speed: 500,
-		width:394,
-		fit:1
-	});
-	
-	$('#database-tab').click(function(){
-		$('#tab-content').cycle(0);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#layers-tab').click(function(){
-		$('#tab-content').cycle(1);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#branch-tab').click(function(){
-		$('#tab-content').cycle(2);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	
-
-	
-	
 }
 
 function insertPager(items, page)
@@ -244,16 +212,19 @@ function closeOpenCitationTabs()
 $(document).ready(function() {
 	
 	
-	$('#add-node').draggable({
+		$('#add-node').draggable({
 		axis:'x',
 		revert:true,
 
 		start : function(e,ui)
 		{
-			//this.xPos = ui.position.left;
-		
+			this.num= Math.floor( ui.position.left / 55 );
+			//console.log(this.num);
 		},
-		
+		containment : 'parent',
+		helper :function() {
+			return $('<div>');
+		},
 		
 		drag : function(e,ui)
 		{
@@ -263,19 +234,19 @@ $(document).ready(function() {
 			{
 				var _this = this;
 				$('.ghost-node').remove();
-				_.times(temp, function(){
+				_.times(temp-this.num, function(){
 					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
-			this.num = temp;
+			//this.num = temp;
 
 		},
 		
 		stop : function(e,ui)
 		{
 			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
 		}
 	});
 	
@@ -381,6 +352,19 @@ $(document).ready(function() {
 		Zeega.currentNode.set({'attr':attr});
 		Zeega.currentNode.save();
 	});
+	
+	
+	$('.editor-title-bar-expander').click(function(){
+		var expander = $(this).next('div');
+		if( expander.is(':visible'))
+		{
+			expander.hide('blind',{'direction':'vertical'})
+		}else{
+			expander.show('blind',{'direction':'vertical'})			
+		}
+	})
+	
+	
 	
 	/*****  		CRITICAL		*******/
 	

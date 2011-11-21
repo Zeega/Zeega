@@ -1,16 +1,16 @@
-/**
+/********************************************
 
-	MAIN.JS
+	main.route-viewer.JS
 	
 	VERSION 0.1
 	
 	LOADS JS FILES
 
-**/
+*********************************************/
 
 var loadFiles = [
 	'jquery',
-	'order!core/nodePlayer',
+	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	'order!libraries/underscore',
@@ -22,15 +22,14 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.rdio',
 	       
-
+	'order!core/player'
 	];
 
 require(loadFiles, function($) {
-	var nodeId = sessionStorage.getItem('nodeId');
-
+	var nodeId = window.location.hash.substr(1);
 	//this url needs to change
-	$.getJSON(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+nodeId+'/layers',function(data){
-		NodePlayer.init( data );
-
+	$.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){
+		Player.init(data);
 	});
+
 });

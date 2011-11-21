@@ -64,9 +64,6 @@ var LayerView = Backbone.View.extend({
 			
 			template.find('.layer-title').html( title );
 
-			console.log(this);
-			console.log(this.model);
-
 			layerClass.load( this.model );
 
 			if(Zeega.previewMode)
@@ -164,7 +161,7 @@ var LayerView = Backbone.View.extend({
 
 var LayerViewCollection = Backbone.View.extend({
 	//see the NodeViewCollection below for documentation
-	el : $('#tab-layers').find('#sortable-layers'),
+	el : $('#sortable-layers'),
 	
 	initialize : function()
 	{
