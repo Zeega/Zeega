@@ -16,3 +16,9 @@
     locale            = en
 
     secret            = 
+
+	    
+    hostname          = http://alpha.zeega.org/
+    directory = test/web/
+    
+    thumbnails_uri    = http://alpha.zeega.org/test/images

@@ -13,38 +13,6 @@ function initUX(){
 
 	initHeaderUX();
 	
-	//database tab switching
-	
-	$('#tab-content').cycle({
-		fx: 'fade',
-		timeout: 0,
-		speed: 500,
-		width:394,
-		fit:1
-	});
-	
-	$('#database-tab').click(function(){
-		$('#tab-content').cycle(0);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#layers-tab').click(function(){
-		$('#tab-content').cycle(1);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	$('#branch-tab').click(function(){
-		$('#tab-content').cycle(2);
-		$('.tab-heads').removeClass('active');
-		$(this).closest('li').addClass('active');
-		return false;
-	});
-	
-
-	
-	
 }
 
 function insertPager(items, page)
@@ -70,9 +38,10 @@ function insertPager(items, page)
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
 				{
-					console.log('load more!');
+					//console.log('load more!');
 					// call the database and add more item divs
-					Database.append();
+					//Database.append();
+					return search(this,false);
 				}
 				
 			
@@ -133,9 +102,7 @@ function submitenter(inputfield,e)
 
 	if (keycode == 13)
 	{
-		var form=$(inputfield).closest("form");
-		Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
-		return false;
+	    return submitbutton(inputfield);
 	}else{
 		return true;
 	}
@@ -143,9 +110,16 @@ function submitenter(inputfield,e)
 
 function submitbutton(button)
 {
-	var form=$(button).closest("form");
-	Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val() );
-	return false;
+    return search(button,true);
+}
+
+function search(triggerElement, discardCurrentResultSet)
+{
+    //var form = $(triggerElement).closest("form");
+    //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
+    // this is not very elegant...
+    Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+	return false;	
 }
 
 function shareButton()
@@ -155,10 +129,13 @@ function shareButton()
 
 function embedButton()
 {
-	var ex = '{"project":{"id":'+Zeega.project.id+',"title":"'+Zeega.project.get('title')+'","routes":{"nodes":'+JSON.stringify(Zeega.route.nodes)+',"layers":'+JSON.stringify(Zeega.route.layers)+'}}}';
+    //console.log(Zeega.helpers.getHost());
+	
+	var ex = Zeega.exportProject(true)
 	
 	console.log(ex);
 	
+		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -170,15 +147,16 @@ function embedButton()
 		console.log('select all export');
 		$('#export').modal('hide');
 	})
-	
+
 	return false;
+	
 }
 
 
 
 function addLayer(type)
 {
-	//add new layer
+	//add new layer model
 	var newLayer = new Layer({'type':type});
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
@@ -215,18 +193,37 @@ function expandLayer(el)
 }
 
 
+function closeCitationBar()
+{
+	$('#citation').animate({ height : '20px' })
+	//$('#hide-citation').fadeOut();
+	closeOpenCitationTabs();
+}
+
+function closeOpenCitationTabs()
+{
+	$('.citation-tab').closest('ul').children('li').each(function(i,el){
+		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
+	})	
+}
+
+
 
 $(document).ready(function() {
 	
 	
-	$('#add-node').draggable({
+		$('#add-node').draggable({
 		axis:'x',
 		revert:true,
 
 		start : function(e,ui)
 		{
-			//this.xPos = ui.position.left;
-		
+			this.num= Math.floor( ui.position.left / 55 );
+			//console.log(this.num);
+		},
+		containment : 'parent',
+		helper :function() {
+			return $('<div>');
 		},
 		
 		drag : function(e,ui)
@@ -237,19 +234,19 @@ $(document).ready(function() {
 			{
 				var _this = this;
 				$('.ghost-node').remove();
-				_.times(temp, function(){
+				_.times(temp-this.num, function(){
 					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
-			this.num = temp;
+			//this.num = temp;
 
 		},
 		
 		stop : function(e,ui)
 		{
 			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55 ), function(){ Zeega.addNode() });
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
 		}
 	});
 	
@@ -259,9 +256,12 @@ $(document).ready(function() {
 	$('#sidebar').fadeIn();
 	
 	$('#database-search-filter').change(function(){
-		Database.changeFilter(this);
+	    return search(this,true);
 	});
 	
+	$('#refresh-database').click(function(){
+	    return search(this,true);
+	});
 	
 	//node tray sortable and sorting events
 	
@@ -352,6 +352,19 @@ $(document).ready(function() {
 		Zeega.currentNode.set({'attr':attr});
 		Zeega.currentNode.save();
 	});
+	
+	
+	$('.editor-title-bar-expander').click(function(){
+		var expander = $(this).next('div');
+		if( expander.is(':visible'))
+		{
+			expander.hide('blind',{'direction':'vertical'})
+		}else{
+			expander.show('blind',{'direction':'vertical'})			
+		}
+	})
+	
+	
 	
 	/*****  		CRITICAL		*******/
 	

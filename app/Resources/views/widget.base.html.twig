@@ -16,18 +16,20 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 			<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
-			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" />
-			 <script type="text/javascript" src="{{asset('gamma/js/zeega.config.js')}}"></script>  
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" /> 
 			 
 			 
 			<link rel="icon" type="image/png" href="{{asset('gamma/images/zeega.ico')}}"> 
 		{% endblock %}
-
+		<script> 
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+		</script>
 		
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
   
-  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='http://alpha.zeega.org/test/web/gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
+  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='{{hostname}}/web/gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
   
     	{% block header %}
     	<div id='header-bg'></div>
@@ -83,7 +85,7 @@
 						
 					
 						{% for item in mycollection %}
-					<img style="border: solid 1px white;" title="{{item.title}}" src="http://core.zeega.org/images/items/{{item.id}}_s.jpg" width="80px" height="80px"/>
+					<img style="border: solid 1px white;" title="{{item.title}}" src="{{hostname}}{{directory}}images/items/{{item.id}}_s.jpg" width="80px" height="80px"/>
 						{% endfor %}
 					
 					

@@ -63,10 +63,9 @@ var VideoLayer = ProtoLayer.extend({
 		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
 		
 		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-			
 			$('#layer-preview-'+that.model.id).css({
 				'height':$('#media_'+that.model.id).height(),
-				'backgroundImage':'url(http://core.zeega.org/images/items/'+that.attr.item_id+'_s.jpg)'
+				'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+that.attr.item_id+'_s.jpg)'
 			});
 			that.updateAttr();
 			
@@ -90,7 +89,7 @@ var VideoLayer = ProtoLayer.extend({
 		
 		//change icon on layer template
 		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
-		template.find('.asset-type-icon').addClass('ui-icon-image');
+		template.find('.asset-type-icon').addClass('ui-icon-video');
 		
 	},
 	
@@ -123,7 +122,7 @@ var VideoLayer = ProtoLayer.extend({
 		
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
-			'backgroundImage':'url(http://core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : this.attr.y+"%",

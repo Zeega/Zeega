@@ -550,7 +550,7 @@ body
 #form-left
 {
 	-webkit-border-radius: 6px 0 0 6px;
-	background:white;
+	background:#bbb;
 	float:left;
 	height:24px;
 }
@@ -562,6 +562,7 @@ body
 
 #database-search-text
 {
+	background:transparent;
 	border:none;
 	width:275px;
 	font-size:1.5em;
@@ -569,7 +570,6 @@ body
 
 #database-search-filter
 {
-	background:white;
 	border: none;
 	height:23px;
 	vertical-align:top;
@@ -842,6 +842,12 @@ body
 	float:right;
 }
 
+.copy-to-next
+{
+	float:right;
+	clear:both;
+}
+
 .i-layer
 {
 	min-height:25px;
@@ -928,7 +934,8 @@ body
 	margin-bottom:10px;
 }
 
-#interaction-editor-bar
+#interaction-editor-bar,
+.editor-title-bar-expander
 {
 	-webkit-border-radius: 4px 4px 0 0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#444));
@@ -986,6 +993,80 @@ body
 	width:100%;
 }
 */
+
+#citation
+{
+	background:rgba(255,255,255,0.2);
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	height:20px;
+	overflow:hidden;
+	z-index:10001;
+}
+#citation ul
+{
+	height:100%;
+	float:left;
+}
+#citation ul li
+{
+	float:left;
+	background:white;
+	margin:1px;
+	padding:2px;
+	height: 100%;
+}
+.citation-tab
+{
+	width:16px;
+	height:100%;
+	float:left;
+}
+.citation-icon
+{
+	height:10px;
+	width:10px;
+	background:black;
+	overflow:hidden;
+}
+
+
+.citation-title
+{
+	font-weight:bold;
+	clear:both;
+	margin-bottom:5px;
+}
+
+.citation-body
+{
+	float:left;
+}
+.citation-thumb
+{
+	height:50px;
+	width:50px;
+	background:blue;
+	float:left;
+}
+.citation-content
+{			
+	width:250px;
+	float:left;
+}
+.citation-metadata
+{
+	float:left;
+	width:190px;
+	padding:0 5px;
+}
+#hide-citation
+{
+	float:left;
+}
+
 
 /*******************************
 
@@ -1217,6 +1298,12 @@ margin-top: 10px;
 	background:red;
 	height:100%;
 	width:0;
+}
+
+#layer-status ul li
+{
+	color: white;
+	margin-left: 10px;
 }
 
 .ghost-node

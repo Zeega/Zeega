@@ -10,8 +10,19 @@ function addGlobal(layerId,event,elementId){
 
 
 //Utilities
+function getHost()
+{
+    return  window.location.protocol + "//" + window.location.host;        
+}
 
-
+function getBaseURL()
+{
+    var currPath = window.location.pathname.split("/");        
+    var splitIdx = currPath.indexOf("/web/");        
+    var urlPath = window.location.pathname.substring(0,splitIdx+4);
+    
+    return  urlPath;
+}
 
 function convertTime(seconds){
 	
@@ -66,4 +77,5 @@ function deepCopy(p,c) {
 // make capital case
 String.prototype.toCapitalCase = function() {
     return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();
+
 }

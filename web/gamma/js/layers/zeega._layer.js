@@ -124,12 +124,36 @@ var ProtoLayer = Class.extend({
 		
 	load : function( model )
 	{
-		this.model = model;
+		//test to see if it's a model or just a layer data object
+		if(model.attributes)
+		{
+			this.model = model;
 		
-		var def = _.defaults( this.model.get('attr') , deepCopy( this.defaultAttributes ) );
-		this.model.set({attr:def})
+			this.attr = model.get('attr');
+		
+			var defaults = deepCopy(this.defaultAttributes );
+			this.attr = _.defaults(this.attr, defaults);
+		
+			this.model.set({ attr:this.attr })
+			this.title = this.attr.title;
+		
+			this.type = model.get('type');
+		
+			this.zIndex = model.get('zindex');
+		}else{
+			//make it possible to load objects and not models.
+			this.model = model;
+			this.attr = model.attr;
+		
+			var defaults = deepCopy(this.defaultAttributes );
 
-		this.type = model.get('type');
+			this.attr = _.defaults(this.attr, defaults);
+			this.model.attr = this.attr;
+			this.title = this.attr.title;
+			this.type = model.type;
+			this.zIndex = model.zindex;
+		}
+
 	},
 	
 	setZIndex : function(z)
@@ -175,3 +199,9 @@ var ProtoLayer = Class.extend({
 
 });
 
+
+
+
+
+
+	

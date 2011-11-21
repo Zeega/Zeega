@@ -36,17 +36,14 @@ var Zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
-		//test to see if the URL_PREFIX constant has been set and add it if it has
-		this.setURLPrefix();
+
 		// makes sure that zeega only advances after both nodes and layers are loaded
+		//commented out??
 		this.zeegaReady = _.after(2,this.nodesAndLayersReady);
 
+		Zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
-	setURLPrefix : function()
-	{
-		if( window.URL_PREFIX ) Zeega.url_prefix = URL_PREFIX;
-	},
 	
 	//set the route without loading it
 	//do we need this?
@@ -410,6 +407,13 @@ var Zeega = {
 		
 	},
 	
+	copyLayerToNextNode : function(layer)
+	{
+		console.log('copy to next layer');
+		var nextNode = this.getRightNode();
+		if (nextNode) this.addLayerToNode(nextNode,layer);
+	},
+	
 	persistLayerOverNodes : function(layer)
 	{
 		console.log('peristing');
@@ -521,14 +525,33 @@ var Zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 		
-		projectData = '';
 		
-		Player.projectData = projectData;
-		Player.currentNode = this.currentNode.id;
-		Player.init();
+		// init( project JSON data , route index , starting node )
+		Player.init( this.exportProject(), this.route.id, this.currentNode.id );
+		//Player.currentNodeID = this.currentNode.id;
 	
 	},
 	
+	exportProject : function( string )
+	{
+		var routes = [{
+			'id' : this.route.id,
+			'nodeOrder' : this.route.get('nodesOrder'),
+			'nodes' : this.route.nodes.toJSON(),
+			'layers' : this.route.layers.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
+		}];
+		
+		var project = {
+			'id' : this.project.id,
+			'title' : this.project.get('title'),
+			'routes' : routes
+		};
+		
+		var exportObject = { 'project' : project };
+		
+		if(string) return JSON.stringify(exportObject);
+		else return exportObject;
+	},	
 	
 	getLeftNode : function()
 	{
@@ -562,4 +585,3 @@ var Zeega = {
 	
 	
 };
-

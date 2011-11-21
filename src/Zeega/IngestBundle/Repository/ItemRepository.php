@@ -7,6 +7,50 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    
+    public function findItems($query, $offset,$limit)
+    {
+        // $qb instanceof QueryBuilder
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.metadata', 'm')
+            ->where('i.title LIKE ?1')
+            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('m.description LIKE ?1')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        
+        // filter by type or by userId
+        if($query['contentType'] == 'mine')
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?3')
+			   ->setParameter(3,$query['userId']);
+		}
+        elseif($query['contentType'] != 'all')
+        {
+            $qb->andWhere('i.content_type = ?2')
+                ->setParameter(2, $query['contentType']);       
+        }         
+       	
+       	if(is_array($query['userPlaygrounds']) && sizeof($query['userPlaygrounds']) > 0)
+       	{
+       	    $qb->andWhere('i.playground = ?4')
+                ->setParameter(4, $query['userPlaygrounds'][0]['id']);       
+       	}
+       	
+       	// get query and add parameter - for some reason set parameter in this
+       	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
+        $q = $qb->getQuery();         		   
+        $q->setParameter(1, '%' . $query['queryString'] . '%');
+        
+        return $q->getArrayResult();
+    }
+    
       public function findItemByAttributionUrl($url)
     {
         $query = $this->getEntityManager()
@@ -39,8 +83,8 @@ class ItemRepository extends EntityRepository
       public function findUserItems($id)
      {
      	return $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'i.id,i.title')
+			   ->createQueryBuilder()
+			   ->add('select', 'i.id,i.title')
 			   ->add('from', ' ZeegaIngestBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')

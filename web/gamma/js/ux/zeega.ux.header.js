@@ -9,10 +9,8 @@
 
 //	stuff that has to happen after the js fully loads
 function initHeaderUX(){
-
-	//dropdown menu
-	
-	$('.drop-down').click(function(){
+   	//dropdown menu
+    $('.drop-down').click(function(){
 		if( $(this).hasClass('open') ) $(this).removeClass('open');
 		else{ $(this).addClass('open');
 		
@@ -39,7 +37,7 @@ function initHeaderUX(){
 	
 
 	$('.add-media').toggle(function(){$('#add-media').fadeIn('fast');$('body').bind('click',function(){$('#add-media').fadeOut();$(this).unbind();});},function(){$('#add-media').fadeOut('fast');});
-	$('#add-media').html("<h1>Drag this <a href=\"javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='http://alpha.zeega.org/demo/web/gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0\">Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project.</h1>");
+	$('#add-media').html("<h1>Drag this <a href=\"javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='" + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  + "gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0\">Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project.</h1>");
 	
 }
 

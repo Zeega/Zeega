@@ -11,6 +11,7 @@ var Route = Backbone.Model.extend({
 		
 	url : function()
 	{
+		console.log(Zeega.url_prefix);
 		var base = Zeega.url_prefix+'routes';
 		if (this.isNew()) return base;
 		return base + '/' + this.id;

@@ -23,11 +23,13 @@ var Node = Backbone.Model.extend({
 	//update the node thumbnail
 	updateThumb : function()
 	{
+		var _this = this;
 		console.log('updating thumbnail');
 		
 		//kill any preexisting thumb updates
 		if(this.t) clearTimeout(this.t);
 		
+<<<<<<< HEAD
 		var that=this;
 		var thumbURL = 'http://alpha.zeega.org/utilities/local_thumb.php?id='+this.id;
 		//turn on spinner
@@ -36,13 +38,25 @@ var Node = Backbone.Model.extend({
 		{
 			$('.node-thumb-'+that.id).find('.node-background').fadeOut('fast',function(){
 				$(this).css('background-image','url("'+data+'")').fadeIn('slow');
+=======
+		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
+		this.set({ thumb_url : 0 });
+		
+		this.save({},{
+		
+			success: function(node,response){
+		
+				$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
+				$('.node-thumb-'+_this.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
+				_this.set({thumb_url:response[0].thumb_url});
+>>>>>>> 740f33cb3079d394e5a64a34891d7d2ca9436290
 				//turn off spinner
-				$('.node-thumb-'+that.id).find('.node-overlay').spin(false);
+				$('.node-thumb-'+_this.id).find('.node-overlay').spin(false);
 			});
 			
-			that.set({thumb_url:data});
-			that.save();
-		});
+		}});
+	
+	
 	
 	},
 	
@@ -51,10 +65,10 @@ var Node = Backbone.Model.extend({
 		console.log('changed');
 		var _this = this;
 		//kill any preexisting thumb updates
-		if(this.t) clearTimeout(this.t);
-		this.t = setTimeout(function(){_this.updateThumb()}, 5000)
+		if(_this.t) clearTimeout(this.t);
+		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
 		
-		this.changed=true;
+		_this.changed=true;
 	},
 	clearChange:function()
 	{

@@ -269,4 +269,3 @@ var GeoLayer = ProtoLayer.extend({
 	
 	
 });
-

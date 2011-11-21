@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<title>Node Viewr</title>
+		<meta name="robots" content="noindex,follow">
+		<link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
+		<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script> 
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+			sessionStorage.setItem('nodeId','{{nodeId}}');
+		</script>
+		<style type="text/css">
+			body
+			{
+				padding:0;
+				margin:0;
+				background:#000000;
+			}
+		</style>
+
+		<script data-main="{{ asset('gamma/js/main.node.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+
+	</head>
+
+	<body>
+		<div id="zeega-player" style="width:600px; height:400px"><div id='preview-media' style="position:absolute;overflow:hidden;width:600px; height:400px"></div></div>
+	</body>
+
+</html>

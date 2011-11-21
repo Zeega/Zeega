@@ -2,7 +2,7 @@
 var Layer =  Backbone.Model.extend({
 	url : function(){ return Zeega.url_prefix + "layers/" + this.id },
 	
-	defaults :{},
+	defaults :{ 'attr' : {} },
 	
 	layerClass :{},
 	
