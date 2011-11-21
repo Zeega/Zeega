@@ -7,6 +7,72 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    public function searchItems($query)
+    {
+        //return array("items" => "teste");
+         // $qb instanceof QueryBuilder
+        
+        
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['page']);
+
+        if(isset($query['queryString']))
+        {
+            $qb->innerjoin('i.metadata', 'm')
+               ->where('i.title LIKE ?1')
+               ->orWhere('i.creator LIKE ?1')
+               ->orWhere('m.description LIKE ?1')
+               ->setParameter(1,'%' . $query['queryString'] . '%');
+        }
+        
+        if(isset($query['userId']))
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?2')
+			   ->setParameter(2,$query['userId']);
+		} 
+		
+		if(isset($query['collectionId']))
+      	{
+			 $qb->innerjoin('i.parent_collections', 'c')
+                ->andWhere('c.item_id = ?3')
+                ->setParameter(3, $query['collectionId']);
+		}
+		   
+        /*
+        // filter by type or by userId
+        if($query['contentType'] == 'mine')
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?3')
+			   ->setParameter(3,$query['userId']);
+		}
+        elseif($query['contentType'] != 'all')
+        {
+            $qb->andWhere('i.content_type = ?2')
+                ->setParameter(2, $query['contentType']);       
+        }         
+
+       	if(is_array($query['userPlaygrounds']) && sizeof($query['userPlaygrounds']) > 0)
+       	{
+       	    $qb->andWhere('i.playground = ?4')
+                ->setParameter(4, $query['userPlaygrounds'][0]['id']);       
+       	}
+
+       	// get query and add parameter - for some reason set parameter in this
+       	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
+        $q = $qb->getQuery();         		   
+        $q->setParameter(1, '%' . $query['queryString'] . '%');
+        */
+        $q = $qb->getQuery();         		   
+        return $q->getArrayResult();
+    }
     
     public function findItems($query, $offset,$limit)
     {
