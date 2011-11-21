@@ -13,21 +13,12 @@
 function initUX(){
 	initHeaderUX();
 
-	$('#browser-toggle-items-vs-collections li, #browser-toggle-all-media-vs-my-media li,').click(function(){
-		$(this).closest('li').removeClass('browser-unselected-toggle');
-		$(this).closest('li').addClass('browser-selected-toggle');
-		$(this).siblings().removeClass('browser-selected-toggle');
-		$(this).siblings().addClass('browser-unselected-toggle');
-		return false;
-	});
-	$('#browser-toggle-items-vs-collections li').click(function(){
-		$('#browser-results-collections').toggle();
-		$('#browser-results-items').toggle();
+	
 
-		return false;
-	});
 }
+//Toggles filters on and off, temporary until we figure out exactly how this'll look
 function toggleFilterDrawer(){
+
 
 	if( $('#browser-right-sidebar').css('position') == 'absolute') {
 		$('#browser-right-sidebar').css('position', 'relative');
@@ -55,7 +46,8 @@ $(document).ready(function() {
 		
 	myCollectionsView.render();
 
-	$('#browser-my-collections .browser-loading').remove();
+	//Hide the loading spinner for the myCollections drawer
+	$('#browser-my-collections .browser-loading').hide();
 
 	//Load Search items
 	var search = new BrowserSearch();
@@ -63,13 +55,34 @@ $(document).ready(function() {
 
 	searchView.render();
 
-	//Show more results link (TODO: only if search yields more than 100)
-	$('#browser-show-more-results').show();
-
-	//Hide loading spinner
+	//Hide results drawer's loading spinner
 	$('#browser-results .browser-loading').hide();
 
 	//For filters - testing visual stuff
 	$('.time, .space').click( toggleFilterDrawer);
+
+	//Set up toggling between My Media/All Media and Items/Collections
+	$('#browser-toggle-items-vs-collections li, #browser-toggle-all-media-vs-my-media li,').click(function(){
+		$(this).closest('li').removeClass('browser-unselected-toggle');
+		$(this).closest('li').addClass('browser-selected-toggle');
+		$(this).siblings().removeClass('browser-selected-toggle');
+		$(this).siblings().addClass('browser-unselected-toggle');
+		return false;
+	});
+
+	//Switches the results drawer between items and collections
+	$('#browser-toggle-items-vs-collections li').click(function(){
+		$('#browser-results-collections').toggle();
+		$('#browser-results-items').toggle();
+
+		return false;
+	});
+
+	//makes call to server to load All Media vs. My Media
+	$('#browser-toggle-all-media-vs-my-media li').click(function(){
+		search.set({allMediaVSMyMedia: $(this).text()});
+		console.log($(this).text());
+		searchView.render();
+	});
 
 });

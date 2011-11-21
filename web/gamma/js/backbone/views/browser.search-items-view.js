@@ -1,23 +1,32 @@
 //presents results of a search
 var BrowserSearchItemsView = Backbone.View.extend({
 	
-	
-	initialize : function() {},
+	// ??? tagName: 'browser-results',
+
+	initialize : function() {
+		
+		this.model.bind('change', this.render, this);
+    	this.model.bind('destroy', this.remove, this);
+	},
 	
 	render: function()
 	{
-		var itemCount = 20;
-		for (var i=0;i<itemCount;i++){
-			var item = new Item();
-			if (i%4 ==0)
-			{
-				item.set({type: "image"});
-			}
+		//Show results drawer's loading spinner
+		$('#browser-results .browser-loading').show();
+		
+		var results = this.model.get("resultSet");
+		
+		for (var i=0;i<results;i++){
+			var item = results[i];
 			var itemView = new BrowserSearchItemView({model: item});
-
 			itemView.render();
 		}
-		//draw the search items
+		//Show more results link (TODO: only if search yields more than 100)
+		$('#browser-show-more-results').show();
+
+		//Hide results drawer's loading spinner
+		$('#browser-results .browser-loading').hide();
+		
 		return this;
 	},
 	
