@@ -1,4 +1,4 @@
-
+/**
 
 	MAIN.JS
 	
@@ -6,11 +6,11 @@
 	
 	LOADS JS FILES
 
-
+**/
 
 var loadFiles = [
 	'jquery',
-	
+	'order!core/nodePlayer',
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	'order!libraries/underscore',
@@ -22,14 +22,14 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.rdio',
 	       
-	'order!js/core/nodePlayer.js'
+
 	];
 
 require(loadFiles, function($) {
-	var nodeId = window.location.hash.substr(1);
+	var nodeId = sessionStorage.getItem('nodeId');
 
 	//this url needs to change
-	$.getJSON('http://alpha.zeega.org/joseph/web/app_dev.php/nodes/'+nodeId+'/layers',function(data){
+	$.getJSON(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+nodeId+'/layers',function(data){
 		NodePlayer.init( data );
 
 	});
