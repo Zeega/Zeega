@@ -1,14 +1,14 @@
 <?php
 
-// src/Zeega/IngestBundle/Entity/Item.php
-
 namespace Zeega\IngestBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zeega\IngestBundle\Entity\Item
+ */
 class Item
 {
- 
-    
-  
     /**
      * @var integer $id
      */
@@ -25,9 +25,24 @@ class Item
     private $creator;
 
     /**
-     * @var string $uri
+     * @var string $item_url
      */
-    private $uri;
+    private $item_url;
+
+    /**
+     * @var string $item_uri
+     */
+    private $item_uri;
+
+    /**
+     * @var string $attribution_url
+     */
+    private $attribution_url;
+
+    /**
+     * @var boolean $depth
+     */
+    private $depth;
 
     /**
      * @var float $geo_lat
@@ -50,9 +65,19 @@ class Item
     private $date_created_end;
 
     /**
-     * @var integer $type
+     * @var string $content_type
      */
-    private $type;
+    private $content_type;
+
+    /**
+     * @var string $source_type
+     */
+    private $source_type;
+
+    /**
+     * @var string $archive
+     */
+    private $archive;
 
     /**
      * @var Zeega\IngestBundle\Entity\Media
@@ -65,19 +90,29 @@ class Item
     private $metadata;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\EditorBundle\Entity\Playground
      */
-    private $items;
+    private $playground;
+
+    /**
+     * @var Zeega\UserBundle\Entity\User
+     */
+    private $user;
 
     /**
      * @var Zeega\IngestBundle\Entity\Item
      */
-    private $parent_collections;
+    private $child_items;
+
+    /**
+     * @var Zeega\IngestBundle\Entity\Item
+     */
+    private $parent_items;
 
     public function __construct()
     {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->parent_collections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -131,23 +166,83 @@ class Item
     }
 
     /**
-     * Set uri
+     * Set item_url
      *
-     * @param string $uri
+     * @param string $itemUrl
      */
-    public function setUri($uri)
+    public function setItemUrl($itemUrl)
     {
-        $this->uri = $uri;
+        $this->item_url = $itemUrl;
     }
 
     /**
-     * Get uri
+     * Get item_url
      *
      * @return string 
      */
-    public function getUri()
+    public function getItemUrl()
     {
-        return $this->uri;
+        return $this->item_url;
+    }
+
+    /**
+     * Set item_uri
+     *
+     * @param string $itemUri
+     */
+    public function setItemUri($itemUri)
+    {
+        $this->item_uri = $itemUri;
+    }
+
+    /**
+     * Get item_uri
+     *
+     * @return string 
+     */
+    public function getItemUri()
+    {
+        return $this->item_uri;
+    }
+
+    /**
+     * Set attribution_url
+     *
+     * @param string $attributionUrl
+     */
+    public function setAttributionUrl($attributionUrl)
+    {
+        $this->attribution_url = $attributionUrl;
+    }
+
+    /**
+     * Get attribution_url
+     *
+     * @return string 
+     */
+    public function getAttributionUrl()
+    {
+        return $this->attribution_url;
+    }
+
+    /**
+     * Set depth
+     *
+     * @param boolean $depth
+     */
+    public function setDepth($depth)
+    {
+        $this->depth = $depth;
+    }
+
+    /**
+     * Get depth
+     *
+     * @return boolean 
+     */
+    public function getDepth()
+    {
+        return $this->depth;
     }
 
     /**
@@ -231,23 +326,63 @@ class Item
     }
 
     /**
-     * Set type
+     * Set content_type
      *
-     * @param integer $type
+     * @param string $contentType
      */
-    public function setType($type)
+    public function setContentType($contentType)
     {
-        $this->type = $type;
+        $this->content_type = $contentType;
     }
 
     /**
-     * Get type
+     * Get content_type
      *
-     * @return integer 
+     * @return string 
      */
-    public function getType()
+    public function getContentType()
     {
-        return $this->type;
+        return $this->content_type;
+    }
+
+    /**
+     * Set source_type
+     *
+     * @param string $sourceType
+     */
+    public function setSourceType($sourceType)
+    {
+        $this->source_type = $sourceType;
+    }
+
+    /**
+     * Get source_type
+     *
+     * @return string 
+     */
+    public function getSourceType()
+    {
+        return $this->source_type;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
     }
 
     /**
@@ -291,213 +426,6 @@ class Item
     }
 
     /**
-     * Add items
-     *
-     * @param Zeega\IngestBundle\Entity\Item $items
-     */
-    public function addItems(\Zeega\IngestBundle\Entity\Item $items)
-    {
-        $this->items[] = $items;
-    }
-
-    /**
-     * Get items
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * Add parent_collections
-     *
-     * @param Zeega\IngestBundle\Entity\Item $parentCollections
-     */
-    public function addParentCollections(\Zeega\IngestBundle\Entity\Item $parentCollections)
-    {
-        $this->parent_collections[] = $parentCollections;
-    }
-
-    /**
-     * Get parent_collections
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getParentCollections()
-    {
-        return $this->parent_collections;
-    }
-    /**
-     * @var string $content_type
-     */
-    private $content_type;
-
-
-    /**
-     * Set content_type
-     *
-     * @param string $contentType
-     */
-    public function setContentType($contentType)
-    {
-        $this->content_type = $contentType;
-    }
-
-    /**
-     * Get content_type
-     *
-     * @return string 
-     */
-    public function getContentType()
-    {
-        return $this->content_type;
-    }
-    /**
-     * @var bool $depth
-     */
-    private $depth;
-
-
-    /**
-     * Set depth
-     *
-     * @param bool $depth
-     */
-    public function setDepth(\bool $depth)
-    {
-        $this->depth = $depth;
-    }
-
-    /**
-     * Get depth
-     *
-     * @return bool 
-     */
-    public function getDepth()
-    {
-        return $this->depth;
-    }
-  
-
-    /**
-     * @var string $url
-     */
-    private $url;
-
-    /**
-     * @var string $attribution_url
-     */
-    private $attribution_url;
-
-
-    /**
-     * Set url
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Set attribution_url
-     *
-     * @param string $attributionUrl
-     */
-    public function setAttributionUrl($attributionUrl)
-    {
-        $this->attribution_url = $attributionUrl;
-    }
-
-    /**
-     * Get attribution_url
-     *
-     * @return string 
-     */
-    public function getAttributionUrl()
-    {
-        return $this->attribution_url;
-    }
-    /**
-     * @var string $item_url
-     */
-    private $item_url;
-
-
-    /**
-     * Set item_url
-     *
-     * @param string $itemUrl
-     */
-    public function setItemUrl($itemUrl)
-    {
-        $this->item_url = $itemUrl;
-    }
-
-    /**
-     * Get item_url
-     *
-     * @return string 
-     */
-    public function getItemUrl()
-    {
-        return $this->item_url;
-    }
-
-    /**
-     * Add items
-     *
-     * @param Zeega\IngestBundle\Entity\Item $items
-     */
-    public function addItem(\Zeega\IngestBundle\Entity\Item $items)
-    {
-        $this->items[] = $items;
-    }
-    /**
-     * @var string $archive
-     */
-    private $archive;
-
-    /**
-     * @var Zeega\EditorBundle\Entity\Playground
-     */
-    private $playground;
-
-
-    /**
-     * Set archive
-     *
-     * @param string $archive
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    }
-
-    /**
-     * Get archive
-     *
-     * @return string 
-     */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
-
-    /**
      * Set playground
      *
      * @param Zeega\EditorBundle\Entity\Playground $playground
@@ -516,11 +444,6 @@ class Item
     {
         return $this->playground;
     }
-    /**
-     * @var Zeega\UserBundle\Entity\User
-     */
-    private $user;
-
 
     /**
      * Set user
@@ -541,54 +464,34 @@ class Item
     {
         return $this->user;
     }
-    /**
-     * @var string $source_type
-     */
-    private $source_type;
-
 
     /**
-     * Set source_type
+     * Add child_items
      *
-     * @param string $sourceType
+     * @param Zeega\IngestBundle\Entity\Item $childItems
      */
-    public function setSourceType($sourceType)
+    public function addItem(\Zeega\IngestBundle\Entity\Item $childItems)
     {
-        $this->source_type = $sourceType;
+        $this->child_items[] = $childItems;
     }
 
     /**
-     * Get source_type
+     * Get child_items
      *
-     * @return string 
+     * @return Doctrine\Common\Collections\Collection 
      */
-    public function getSourceType()
+    public function getChildItems()
     {
-        return $this->source_type;
-    }
-    /**
-     * @var string $item_uri
-     */
-    private $item_uri;
-
-
-    /**
-     * Set item_uri
-     *
-     * @param string $itemUri
-     */
-    public function setItemUri($itemUri)
-    {
-        $this->item_uri = $itemUri;
+        return $this->child_items;
     }
 
     /**
-     * Get item_uri
+     * Get parent_items
      *
-     * @return string 
+     * @return Doctrine\Common\Collections\Collection 
      */
-    public function getItemUri()
+    public function getParentItems()
     {
-        return $this->item_uri;
+        return $this->parent_items;
     }
 }

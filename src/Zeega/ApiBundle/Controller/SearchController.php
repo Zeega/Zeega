@@ -3,7 +3,7 @@
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class SearchController extends Controller
 {
@@ -48,8 +48,10 @@ class SearchController extends Controller
 					 ->searchItems($query);								
 
 		$results[] = array('items'=>$items,'count'=>sizeof($items));
-
-        return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
+		$response = new Response(json_encode($results));
+		$response->headers->set('Content-Type', 'application/json');
+        //return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
+        return $response;
 		// IF ERROR return new Response(json_encode($results[0]));
 		//else return new Response("Error: Query is not correctly formatted2");
     }

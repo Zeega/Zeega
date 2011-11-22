@@ -9,10 +9,6 @@ class ItemRepository extends EntityRepository
 {
     public function searchItems($query)
     {
-        //return array("items" => "teste");
-         // $qb instanceof QueryBuilder
-        
-        
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         // search query
@@ -40,7 +36,7 @@ class ItemRepository extends EntityRepository
 		
 		if(isset($query['collectionId']))
       	{
-			 $qb->innerjoin('i.parent_collections', 'c')
+			 $qb->innerjoin('i.parent_items', 'c')
                 ->andWhere('c.id = ?3')
                 ->setParameter(3, $query['collectionId']);
 		}
@@ -60,6 +56,7 @@ class ItemRepository extends EntityRepository
         
         $q = $qb->getQuery();         		   
         return $q->getArrayResult();
+        //return $qb->getQuery()->getSQL();
     }
     
     public function findItems($query, $offset,$limit)

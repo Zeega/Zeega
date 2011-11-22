@@ -3,23 +3,21 @@ Zeega\IngestBundle\Entity\Item:
    type: entity
    repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
    manyToMany:
-    items:
-     targetEntity: Item
-     mappedBy:
-      name: parent_collections
-    parent_collections:
-     targetEntity: Item
-     onDelete: CASCADE
-     inversedBy:
-      name: myParents
-     joinTable:
-      name: collections
-      joinColumns:
-       item_id:
-        referencedColumnName: id
-      inverseJoinColumns:
-       child_item_id:
-        referencedColumnName: id
+        child_items: 
+            targetEntity: Item
+            inversedBy: parent_items
+            joinTable:
+                name: collections
+                joinColumns:
+                    item_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    child_item_id:
+                        referencedColumnName: id
+        parent_items:
+            targetEntity: Item
+            mappedBy: child_items
+     
    manyToOne:
     playground:
      targetEntity: Zeega\EditorBundle\Entity\Playground
