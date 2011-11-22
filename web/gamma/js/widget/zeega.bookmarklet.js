@@ -15,8 +15,8 @@ bookmarklet = function(opts){fullFunc(opts)};
  
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 var bm = new bookmarklet({
-    css : ['http:///alpha.zeega.org/test/web/gamma/js/widget/style.css'],
-    js  : ['http://alpha.zeega.org/test/web/gamma/js/jquery/ui/js/jquery-ui.min.js'],    
+    css : ['http:///core.zeega.org/Libraries/css/style.css'],
+    js  : ['http://core.zeega.org/Libraries/js/jquery-ui.min.js'],    
 //	jqpath : 'myCustomjQueryPath.js', <-- option to include your own path to jquery
     
     ready : function()

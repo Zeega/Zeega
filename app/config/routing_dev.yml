@@ -67,6 +67,7 @@ ZeegaEditorBundle_home:
 ZeegaEditorBundle_playground:
     pattern: /playground/{short}
     defaults: { _controller:  ZeegaEditorBundle:Editor:playground }
+    
 ZeegaEditorBundle_admin:
     pattern: /playground/{short}/admin
     defaults: { _controller:  ZeegaEditorBundle:Editor:admin }
@@ -79,9 +80,19 @@ ZeegaEditorBundle_project:
     pattern: /playground/{short}/project
     defaults: { _controller:  ZeegaEditorBundle:Editor:project }
     
+
+    
 ZeegaEditorBundle_faq:
     pattern: /faq
     defaults: { _controller:  ZeegaEditorBundle:Editor:faq }
+
+ZeegaEditorBundle_node_publish:
+    pattern: /node/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:node }
+
+ZeegaEditorBundle_project_publish:
+    pattern: /project/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:project }
 
 
 ZeegaEditorBundle_siteadmin:

@@ -22,7 +22,10 @@
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" />
 			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/plugins/colorpicker/css/colorpicker.css')}}" />
 		{% endblock %}
-
+		<script> 
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+		</script>
 		
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
@@ -31,10 +34,10 @@
     	{% block header %}
     	<div id='header-bg'></div>
     	<div id="wrapper" >
-    		
+    	
     			
     			
-				<div id="header" data-hostname="{{hostname}}" data-directory="{{directory}}">
+				<div id="header">
 					
 					<div id="header-title">
 						<ul>

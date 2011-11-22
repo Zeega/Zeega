@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+	
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="{{ asset('gamma/css/zeega.css')}}">
+
+	<script> 
+		sessionStorage.setItem('directory', '{{directory}}');
+		sessionStorage.setItem('hostname','{{hostname}}');
+		sessionStorage.setItem('projectId','{{projectId}}');
+	</script>
+	
+	<script data-main="{{ asset('gamma/js/main.route-viewer.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+	
+	
+</head>
+
+<body>
+
+
+
+	<script type="text/javascript" language="Javascript">
+		$('.citation-tab').click(function(){
+			
+			$('#citation').animate({ height : '100px' })
+			
+			closeOpenCitationTabs();
+			
+			$(this).closest('li').find('.citation-content').fadeIn();
+		})
+		
+
+		$('#citation').mouseleave(function(){
+			closeCitationBar();
+		})
+		
+		function closeCitationBar()
+		{
+			$('#citation').animate({ height : '20px' })
+			//$('#hide-citation').fadeOut();
+			closeOpenCitationTabs();
+		}
+		
+		function closeOpenCitationTabs()
+		{
+			$('.citation-tab').closest('ul').children('li').each(function(i,el){
+				if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
+			})	
+		}
+
+
+	</script> 
+
+</body>
+</html>

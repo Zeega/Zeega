@@ -16,7 +16,7 @@ function videoPreview(attr,zIndex){
 		
 		var h = Math.floor( attr.w * 1.5 / attr.aspect );
 		var cssObj = {
-			'backgroundImage':'url(' + getHost() + '/web/images/items/'+attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(http://alpha.zeega.org/test/web/images/items/'+attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : attr.y+"%",

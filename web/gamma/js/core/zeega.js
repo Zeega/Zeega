@@ -41,13 +41,9 @@ var Zeega = {
 	init : function()
 	{
 		//test to see if the URL_PREFIX constant has been set and add it if it has
-		this.setURLPrefix();
+		Zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
-	setURLPrefix : function()
-	{
-		if( window.URL_PREFIX ) Zeega.url_prefix = URL_PREFIX;
-	},
 	
 	//set the route without loading it
 	//do we need this?

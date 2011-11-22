@@ -22,11 +22,17 @@ security:
         login:
             pattern:  ^/login$
             anonymous: ~
+        node:
+            pattern:  ^/node/
+            anonymous: ~
         nodes:
             pattern:  ^/nodes
             anonymous: ~
         layers:
             pattern:  ^/layers/
+            anonymous: ~
+        route:
+            pattern:  ^/route/
             anonymous: ~
         routes:
             pattern:  ^/routes/

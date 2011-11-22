@@ -5,6 +5,9 @@
 	The Zeega project web player. Part of Core.
 
 
+	ideas:
+	master list of layers/nodes - loading/loaded to check against
+
 ---------------------------------------------*/
 
 var Player = {
@@ -12,15 +15,14 @@ var Player = {
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
-	currentRoute : 0,
-	currentNodeID : null,
+	currentRoute : null,
+	currentNode : null,
 	
 	loadingNodes : [],
 	loadedNodes : [],
 	loadingLayers : [],
 	loadedLayers : [],
 	layersOnStage : [],
-	layerClasses : [],
 	
 	
 	/*
@@ -38,11 +40,9 @@ var Player = {
 	{
 		console.log('Zeega Player Initialized');
 		var _this = this;
-		
-		this.currentRouteID = routeID; // this should
-
+				
 		//test to see if Zeega is installed
-		if(Zeega)
+		if( window.Zeega )
 		{
 			this.zeega = true;
 			Zeega.previewMode = false;
@@ -54,11 +54,24 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		//set the current route
+		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
+		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
+		
+		//set the current node
+		if( nodeID )
+		{
+			this.currentNode = this.getNode( nodeID );
+		}else{
+			var nodeOrder = this.currentRoute.nodeOrder;
+			this.currentNode = this.getNode( nodeOrder[0] );
+		}
+		
 		//this.parseProject;
 		this.draw();
 		this.setListeners();
 		
-		this.gotoNode(nodeID);
+		this.gotoNode( this.currentNode.id );
 	},
 	
 	/*
@@ -89,7 +102,7 @@ var Player = {
 		
 		//turn off/pause all media first
 		_.each(this.layersOnStage, function(layerID){
-			_this.layerClasses[layerID].hidePublish();
+			_this.getLayer(layerID).layerClass.hidePublish();
 		});
 		
 		
@@ -105,7 +118,7 @@ var Player = {
 			//turn off previewMode
 			Zeega.previewMode = false;
 			//go to the node last viewed in the player
-			Zeega.loadNode(Zeega.route.nodes.get(this.currentNodeID));
+			Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
 		}
 	},
 	
@@ -132,7 +145,7 @@ var Player = {
 			switch(e.which)
 			{
 				case 27:
-					_this.close();
+					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
 					_this.goLeft();
@@ -148,6 +161,12 @@ var Player = {
 					break;
 			}
 		});
+		
+		
+		$('#citation').mouseleave(function(){
+			closeCitationBar();
+		})
+		
 		
 		// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
@@ -188,7 +207,6 @@ var Player = {
 		
 		var layer = this.getLayer( layerID );
 		
-		
 		$('#layer-loading-'+layerID).html( 'loaded: '+ layer.attr.title );
 
 		this.updateNodeStatus();
@@ -202,14 +220,12 @@ var Player = {
 	{
 		_this = this;
 		//loop through each node that is loading
-		_.each(this.loadingNodes, function(nodeID){
-			var dataNodeOrder = _.pluck( _this.data.project.routes[_this.currentRoute].nodes, 'id' );
-			var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
-			var nodeObject = _this.data.project.routes[_this.currentRoute].nodes[nodeIndex];
+		_.each( this.loadingNodes, function( nodeID ){
+			var node = _this.getNode( nodeID ); 
+			var layers = node.layers;
 			
-			var layers = nodeObject.layers;
-			
-			if( _this.currentNodeID == nodeID) _this.loadingBar.update();
+			//updated the loading bar
+			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
 			//if all the layers are loaded in a node
 			if( _.difference( layers, _this.loadedLayers ).length == 0 )
@@ -219,7 +235,7 @@ var Player = {
 				// add to nodes loaded array
 				_this.loadedNodes.push(nodeID);
 				
-				if( _this.currentNodeID == nodeID)
+				if( _this.currentNode.id == nodeID)
 				{
 					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
@@ -235,10 +251,9 @@ var Player = {
 	*/
 	preload : function()
 	{
-		
 		//find the node you're coming from and where it is in the order
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
-		var index = _.indexOf(nodeOrder, this.currentNodeID);
+		var nodeOrder = this.currentRoute.nodeOrder;
+		var index = _.indexOf( nodeOrder, this.currentNode.id );
 
 		//see if node's layers are preloaded // starting with the currentNode
 		//look ahead 2 and behind 2 // include current node also
@@ -271,20 +286,20 @@ var Player = {
 		{
 			_this = this;
 
-			if(nodeID == this.currentNodeID) this.loadingBar.draw();
+			if(nodeID == this.currentNode.id) this.loadingBar.draw();
 
 			//put node id into the nodesLoading Array
 			this.loadingNodes.push( nodeID );
-			
-			var nodeObject = this.getNode( nodeID );
 
-			var layersToPreload = _.difference( _.compact( nodeObject.layers ), this.layersOnStage );
+			//determine the layers that need to be preloaded 
+			var node = this.getNode( nodeID );
+			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNodeID ){
+		}else if( nodeID == this.currentNode.id ){
 			this.drawNode( nodeID );
 		}
 	},
@@ -303,28 +318,27 @@ var Player = {
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
 			//put the layer id into the layers Loading array
-			this.loadingLayers.push(layerID);
+			this.loadingLayers.push( layerID );
 
-			var layerObject = this.getLayer( layerID );
-			
-			var layerType = layerObject.type;
+			var layer = this.getLayer( layerID );
+			var layerType = layer.type;
 
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-			layerClass.load( layerObject );
+			layerClass.load( layer );
 			//call the preload function for the layer
 			//add the layer class to the layer class array
-			this.layerClasses[layerID] = layerClass;
+			this.getLayer(layerID).layerClass = layerClass;
 			
 			layerClass.preloadMedia();
 			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
 			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
-			if( layerObject.type != 'Image' )
-				loadingLayer.append( 'loading: '+ layerObject.attr.title );
-			else loadingLayer.append( 'loaded: '+ layerObject.attr.title );
+			if( layer.type != 'Image' )
+				loadingLayer.append( 'loading: '+ layer.attr.title );
+			else loadingLayer.append( 'loaded: '+ layer.attr.title );
 			$('#layer-status ul').append(loadingLayer)
 			
 		}
@@ -342,8 +356,6 @@ var Player = {
 	{
 		_this = this;
 		
-		_this.isFirstNode = false;
-		
 		var targetNode = this.getNode( nodeID );
 
 		this.cleanupLayers();
@@ -352,34 +364,53 @@ var Player = {
 		var advanceValue = targetNode.attr.advance;
 		this.setAdvance( advanceValue );
 		
+		/////
+		//empty the citation bar
+		closeCitationBar();
+		$('#citation ul').empty();
+		
+		//////
 		//draw each layer but not layers already drawn
 		var layersToDraw = _.difference(targetNode.layers, this.layersOnStage );
 		
+		var temp = _.template( this.getCitationTemplate() );
 		_.each( targetNode.layers, function(layerID, i){
+			
+			/////excise this stuff
+			//add layer to the citation bar
+			var listItem = $(temp({title: _this.getLayer( layerID ).attr.title }));
+			listItem.find('.citation-tab').click(function(){
+				$('#citation').animate({ height : '100px' })
+				closeOpenCitationTabs();
+				$(this).closest('li').find('.citation-content').fadeIn();
+			})
+			$('#citation ul').append( listItem );
+
+			//^^^^^^^excise this stuff
 
 			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
-				_this.layerClasses[layerID].drawPublish(i);
+				_this.getLayer(layerID).layerClass.drawPublish(i);
 				_this.layersOnStage.push(layerID);
 			}else{
 				//update existing persistant layer with new z-index
-				_this.layerClasses[layerID].updateZIndex(i);
+				_this.getLayer(layerID).layerClass.updateZIndex(i);
 			}
 		})
 		
 		//check to see if the current node is first or last and remove the correct arrow
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		//if there's only one node. show no arrows
 		if( nodeOrder.length == 1)
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
 		}else{
-			if( !this.getLeft( this.currentNodeID, 1 ) ) $('#preview-left').fadeOut();
+			if( !this.getLeft( this.currentNode.id, 1 ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( !this.getRight( this.currentNodeID, 1 ) ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentNode.id, 1 ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
 	},
@@ -393,12 +424,13 @@ var Player = {
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
 		
-		var newNode = this.getNode(this.currentNodeID);
-
-		var layersToRemove = _.difference( this.layersOnStage, newNode.layers );
+		var nextNode = this.getNode( this.currentNode.id );
+		
+		var layersToRemove = _.difference( this.layersOnStage, nextNode.layers );
 
 		_.each( layersToRemove, function( layerID ){
-			_this.layerClasses[layerID].hidePublish();
+			console.log('removing layer: '+layerID);
+			_this.getLayer(layerID).layerClass.hidePublish();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
@@ -457,7 +489,7 @@ var Player = {
 		
 		draw : function()
 		{
-			if(Player.data.project.routes[Player.currentRoute].layers.length)
+			if(Player.currentRoute.layers.length)
 			{
 				var container = $('<div id="loading-container">')
 					.append($('<div id="progress-bar">'))
@@ -469,7 +501,7 @@ var Player = {
 		{
 			this.count++;
 			
-			var p = this.count / Player.data.project.routes[Player.currentRoute].layers.length *100;
+			var p = this.count / Player.currentRoute.layers.length *100;
 			
 			$('#progress-bar').css('width',p+'%');
 			
@@ -481,29 +513,36 @@ var Player = {
 		
 	},
 		
-
-	
-	getLayer : function( layerID )
+	getRoute : function( routeID )
 	{
-		//returns the layer object
-		var dataLayerOrder = _.pluck( this.data.project.routes[this.currentRoute].layers, 'id' );
-		var layerIndex = _.indexOf( dataLayerOrder, layerID)
-		var layerObject = this.data.project.routes[this.currentRoute].layers[layerIndex];
-		return layerObject
+		//returns the node object
+		var dataRouteOrder = _.pluck( this.data.project.routes, 'id' );
+		var routeIndex = _.indexOf( dataRouteOrder, routeID)
+		var routeObject = this.data.project.routes[routeIndex];
+		return routeObject;
 	},
 	
 	getNode : function( nodeID )
 	{
 		//returns the node object
-		var dataNodeOrder = _.pluck( this.data.project.routes[this.currentRoute].nodes, 'id' );
+		var dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
 		var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
-		var nodeObject = this.data.project.routes[this.currentRoute].nodes[nodeIndex];
+		var nodeObject = this.currentRoute.nodes[nodeIndex];
 		return nodeObject;
+	},
+	
+	getLayer : function( layerID )
+	{
+		//returns the layer object
+		var dataLayerOrder = _.pluck( this.currentRoute.layers, 'id' );
+		var layerIndex = _.indexOf( dataLayerOrder, layerID)
+		var layerObject = this.currentRoute.layers[layerIndex];
+		return layerObject;
 	},
 	
 	gotoNode : function(nodeID)
 	{
-		this.currentNodeID = nodeID;
+		this.currentNode = this.getNode(nodeID);
 		this.preload();
 	},
 	
@@ -518,7 +557,7 @@ var Player = {
 
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getRight( this.currentNodeID, 1 );
+		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
 		if( nextNodeID ) this.gotoNode( nextNodeID )
 		else console.log('end of the line');
@@ -534,7 +573,7 @@ var Player = {
 		console.log('goLeft');
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getLeft( this.currentNodeID, 1 );
+		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
 		
 		if( nextNodeID ) this.gotoNode( nextNodeID )
 		else console.log('end of the line');
@@ -548,7 +587,7 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
 		
 		//test if out of bounds
@@ -564,7 +603,7 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
-		var nodeOrder = this.data.project.routes[this.currentRoute].nodeOrder;
+		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
 		
 		//test if out of bounds
@@ -575,8 +614,8 @@ var Player = {
 	reset : function()
 	{
 		
-		currentRoute = 0;
-		currentNodeID = null;
+		currentRoute = null;
+		currentNode = null;
 		this.data = null,
 		
 		this.isFirstNode = true;
@@ -586,14 +625,20 @@ var Player = {
 		this.loadingLayers = [];
 		this.loadedLayers = [];
 		this.layersOnStage = [];
-		this.layerClasses = [];
 		
 		if(this.timeout) clearTimeout(this.timeout);
 	},
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div></div>";
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
+		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
+		return html;
+	},
+	
+	getCitationTemplate : function()
+	{
+		html = '<li class="clearfix"><div class="citation-tab"><div class="citation-icon"></div></div><div class="citation-content hidden"><div class="citation-title"><%= title %></div><div class="citation-body"><div class="citation-thumb"><img/></div><div class="citation-metadata">This is citation content</div></div></div></li>';
 		return html;
 	}
 
