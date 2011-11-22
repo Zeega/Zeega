@@ -37,8 +37,8 @@ var LayerCollection = Backbone.Collection.extend({
 		// this makes sure that if there are other types that we indroduce, they will automatically populate into here\
 		this.layerCollectionArray = {};
 		
-		this.bind("add", function(layer,show) { _this.addToLayerTypeCollection(layer,show) });
-//		this.bind("add", this.add );
+		this.bind("add", function(layer) { _this.addToLayerTypeCollection(layer,true) });
+		this.bind("remove", this.remove );
 		
 	},
 	
@@ -49,25 +49,17 @@ var LayerCollection = Backbone.Collection.extend({
 		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer, true) });
 		
 		_.each( this.layerCollectionArray, function(collection){ collection.initViewCollection() });
-		
-		
-		// layers are loaded into their collections
-		// activate each collection
-		//_.each( this.layerCollectionArray, function(collection){ collection.createViewCollections() });
+
 	},
-	/*
-	add : function(layer)
+
+	
+	remove : function( layer )
 	{
-		console.log('ADDING TO COLLECTION')
-		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
-		var type = layerClass.layerType.toLowerCase();
-		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
-		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );
-		
- 		layerTypeCollection.type = type;
-		layerTypeCollection.add(layer)
+		_.each( this.layerCollectionArray, function(layerCollection){
+			//layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
+			layerCollection.remove( layer );
+		})
 	},
-	*/
 	
 	addToLayerTypeCollection : function(layer, render)
 	{
@@ -90,7 +82,6 @@ var LayerCollection = Backbone.Collection.extend({
 		
 		//cycle through each view collection
 		_.each( this.layerCollectionArray, function(layerCollection){
-			//layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
 			layerCollection.render( _.compact(node.get('layers')) );
 		})
 
@@ -111,6 +102,7 @@ var LayerTypeCollection = Backbone.Collection.extend({
 		this.renderCollection = new LayerRenderCollection;
 		
 		this.bind("add", function(layer) { _this.addToRenderCollection(layer) });
+		this.bind("remove", this.remove);
 		
 	},
 	
@@ -132,6 +124,12 @@ var LayerTypeCollection = Backbone.Collection.extend({
 		
 		// make a view collection. this view collection has specific instructions on where and what to draw and interact
 		eval( "this.viewCollection = new "+ classType +"LayerViewCollection({collection:this.renderCollection})" );
+	},
+	
+	remove : function( layer )
+	{
+		console.log('LayerTypeCollection REMOVE LAYER');
+		this.renderCollection.remove(layer);
 	},
 	
 	render : function( layers )

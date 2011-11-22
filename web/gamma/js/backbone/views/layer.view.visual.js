@@ -83,17 +83,6 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		this.listViewCollection.render();
 	},
 	
-	remove : function(layer)
-	{
-		console.log('rmvCollection')
-		
-		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
-		this._layerViews = _(this._layerViews).without(viewToRemove);
-		
-		Zeega.currentNode.noteChange();
-		
-	},
-	
 	getTemplate : function()
 	{
 		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';

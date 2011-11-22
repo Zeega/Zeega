@@ -275,8 +275,10 @@ var Zeega = {
 			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
 			if(node == this.currentNode)
 			{
+				console.log('layer should be added to the editor window')
 				this.route.layerCollection.add( layer );
 			}else{
+				console.log('layer should not be drawn')
 			//if it's not the current node, then be quiet about it
 				this.route.layerCollection.add( layer , {silent:true} );
 				//we still need to add it to the type collection though
@@ -290,6 +292,11 @@ var Zeega = {
 	
 	addLayerToNode : function( node, layer )
 	{
+		console.log('ADDLAYERTONODE');
+		console.log(this);
+		console.log(node);
+		console.log(layer);
+		
 		
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
@@ -386,9 +393,11 @@ var Zeega = {
 	
 	destroyOrphans : function()
 	{
+		console.log('destroyOrphans');
 		_this = this;
 		// make a giant array of all the layer IDs in use by nodes
 		var layersInNodes = [];
+		
 		_.each( _.toArray(this.route.nodes), function(node){
 			layersInNodes = _.union(node.get('layers'), layersInNodes);
 		});
@@ -397,18 +406,21 @@ var Zeega = {
 		
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
-		_.each( _.toArray(this.route.layers), function(layer){
+		_.each( _.toArray(this.route.layerCollection), function(layer){
 			layersInRoute.push(layer.id);
 		});
+		
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
 		
 		if(orphanIDs)
 		{
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
-				var orphan = Zeega.route.layers.get(orphanID);
+				var orphan = Zeega.route.layerCollection.get(orphanID);
 				_this.removeLayerPersist(orphan);
-				Zeega.route.layers.remove(orphan)
+				
+				//remove from the layer collection
+				Zeega.route.layerCollection.remove(orphan)
 				orphan.destroy();
 				
 			})
