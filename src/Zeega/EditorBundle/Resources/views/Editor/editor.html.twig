@@ -8,8 +8,6 @@
  
 	<div id='editor'>
 		
-		<!-- amoeba -->
-
 			<div id="route-header" class='clearfix'>
 				<div id='route-title'>{{projecttitle}}</div>
 				<input id="route-id" type="hidden" value="{{route.id}}"/>
@@ -35,88 +33,84 @@
 					
 					
 						
-					<div id="sidebar" class='hidden clearfix' >
+					<div id="sidebar" class='clearfix' >
+					
 						
-						<ul class='tabs'>
-							<li class='active tab-heads'><a id='database-tab' href="#">Database</a></li>
-							<li class='tab-heads'><a id='layers-tab' class="dark" href="#">Layers</a></li>
-							<!-- <li class='tab-heads'><a id='branch-tab' href="#">Branches</a></li> -->
-						</ul>
-						
-						<div id='tab-content' class='clearfix'>
-							<div id="tab-database">
-								<div id="db-nav-controls">
+						<div id='item-view-bar' class='clearfix editor-title-bar-expander'>
+							<div class='bar-title'>Item Viewer</div>
+						</div>
 							
-									<div id='database-search' class='clearfix'>
+							<div id='database'>
+							<div id="db-nav-controls">
+					
+								<div id='database-search' class='clearfix'>
 
-										<form action="" method="" id="form-search">
-											<div id='form-left'>
-												<select id='database-search-filter' class=''>
-												  <option value="all">All</option>
-												  <option value="image">Images</option>
-												  <option value="video">Video</option>
-												  <option value="audio">Audio</option>
-												  <option value="-" disabled ="true">---</option>
-												  <option value="mine">Mine</option>
-												</select>
-												
-												
-												<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' class='span6'/>
-												
-											</div>
-											<div id='form-right'>
-												<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
-												<input id='database-search-button' class='' type="button" value="go" onclick ='return false' style="cursor:progress"/>
-											</div>
-										</form>
-
-									</div>
-							
-								</div>
-						
-								<div id='asset-preview'>
-									<a id='asset-preview-close' href='#'>x</a>
-									<div id='asset-preview-media'></div>
-									<div id='asset-preview-meta'>Title</div>
-								</div>
-								
-								<a href='#' id='refresh-database'>refresh</a>
-								<span id="database-pager"></span>
-								
-								<div id='tab-database-slide-window'></div>
-						
-							</div>
-							<div id="tab-layers">
-								<div id='new-layer' class='clearfix'>
-									
-									<ul>
-
-										<li class='new-layer-icon' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
-										<li class='new-layer-icon' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
-										<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
-
-									</ul>
+									<form action="" method="" id="form-search">
+										<div id='form-left'>
+											<select id='database-search-filter' class=''>
+											  <option value="all">All</option>
+											  <option value="image">Images</option>
+											  <option value="video">Video</option>
+											  <option value="audio">Audio</option>
+											  <option value="-" disabled ="true">---</option>
+											  <option value="mine">Mine</option>
+											</select>
+										
+										
+											<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' class='span6'/>
+										
+										</div>
+										<div id='form-right'>
+											<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
+											<input id='database-search-button' class='' type="button" value="go" onclick ='return false' style="cursor:progress"/>
+										</div>
+									</form>
 
 								</div>
-						
-								<ul id="sortable-layers">
-									
-									<div class=​"alert-message warning">
-										<strong>No layers to display. Add some?</strong>
-									</div>
-									
-								</ul>
-						
-						
-							</div>
-							<div id="tab-branches">
-								<div id='branch-info'>
-							 		<p class="">Nonlinear branching details coming soon</p>
-								</div>
-							</div>
-						</div><!-- tab-content -->
+							</div><!-- db-nav-controls -->
 				
-					</div>
+							<div id='asset-preview'>
+								<a id='asset-preview-close' href='#'>x</a>
+								<div id='asset-preview-media'></div>
+								<div id='asset-preview-meta'>Title</div>
+							</div>
+						
+							<a href='#' id='refresh-database'>refresh</a>
+							<span id="database-pager"></span>
+						
+							<div id='tab-database-slide-window'></div>
+						</div><!-- database -->
+						
+							
+						<div id='layer-view-bar' class='clearfix editor-title-bar-expander'>
+							<div class='bar-title'>Layer Viewer</div>
+						</div>
+						
+						<div id='layers'>
+							<div id='new-layer' class='clearfix'>
+								
+								<ul>
+
+									<li class='new-layer-icon' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
+
+								</ul>
+
+							</div>
+					
+							<ul id="sortable-layers">
+								
+								<div class=​"alert-message warning">
+									<strong>No layers to display. Add some?</strong>
+								</div>
+								
+							</ul>
+						</div> <!-- layers -->
+				
+					</div> <!-- sidebar -->
+					
+					
 					<div id='workspace-wrapper'>
 						<div id='visual-editor-wrapper' class='wrapper clearfix'>
 							<div id='visual-editor-bar' class='clearfix'>

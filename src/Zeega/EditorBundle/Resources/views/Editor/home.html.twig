@@ -12,12 +12,12 @@
  <br><br>
 <div id="user-info" style="color:white">
 	<div id="user-thumb" style="width:105px; height: 105px; float:left; border: 2px solid white;" ><img width="105px" height="105px" src="{{thumb}}" /></div>
-	<div id="user-bio" style="padding-left: 20px; width:380px; height:100px; float:left" >{{displayname}} {{ bio }}</div>
+	<div id="user-bio" style="padding-left: 20px; width:380px; height:100px; float:left" >{{ bio }}</div>
 </div>
 <div style="clear:both;"></div>
 <br><br>
-			{% if super %}
-			
+			{% if is_granted('ROLE_SUPER_USER') %}
+
 				<div id='add-playground'>
 					<ul class="pill-buttons">
 						<li><a  href="#">Create New Playground</a></li>

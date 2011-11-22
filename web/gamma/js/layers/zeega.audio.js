@@ -25,6 +25,10 @@ var AudioLayer = ProtoLayer.extend({
 		template.find('#controls').append(div);
 		this.editorLoaded=false;
 		
+		
+		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
+		template.find('.asset-type-icon').addClass('ui-icon-volume-on');
+		
 
 	},
 	

@@ -152,13 +152,13 @@ var ImageLayer = ProtoLayer.extend({
 	drawPublish : function(z)
 	{
 
-		console.log('image drawPublish');
+		console.log('image drawPublish: '+ this.model.id);
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
 	
 	hidePublish :function()
 	{
-		console.log('image hidePublish');
+		console.log('image hidePublish: ' + this.model.id);
 		this.dom.css({'top':"-100%",'left':"-100%"});
 	},
 	
