@@ -18,67 +18,12 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		this.editorViewCollection.render();
 		this.listViewCollection.render();
 		
-		this.collection.bind('reset', function(layer) {
-			_this.reset();
-		});
-		
-		//this.editorViewCollection = new VisualLayerEditorViewCollection;
-		//this.listViewCollection = new VisualLayerListViewCollection;
-		
-		/*
-		_(this).bindAll('add', 'remove');
-
-		this.collection.each(this.add);
-		this.collection.bind('add',this.add);
-		this.collection.bind('remove',this.remove);
-		this.collection.bind('destroy', this.remove);
-		*/
-	},
-	
-	//only happens once at the start
-	loadCollection : function( collection )
-	{
-		var _this = this;
-		//set the collection
-		this.collection = collection;
-
-
-		this.editorViewCollection = new VisualLayerEditorViewCollection({ collection : this.collection });
-		this.listViewCollection = new VisualLayerListViewCollection({ collection : this.collection });
-
-		
-		this.editorViewCollection.render();
-		this.listViewCollection.render();
-		
-		/*
-		this.collection.bind("add", function(layer) {
-			// should draw the layer if it's in the node
-			//this.add(layer);
-		});
-		*/
-		//this.collection.bind('add',this.add);
-		//this.collection.bind('reset',this.reset);
-		
-		this.collection.bind('reset', function(layer) {
-			_this.reset();
-		});
-		
-		/*
-		//this.collection.each(this.add);
-		this.collection.bind('remove',this.remove);
-		this.collection.bind('destroy', this.remove);
-		*/
-		
-		//explicitly set these because we know what they will be ahead of time
-		//this.editorViewCollection.collection = this.collection;
-		//this.listViewCollection.collection = this.collection;
-		
+		this.collection.bind('reset', function(layer){ _this.reset() });
 	},
 	
 		
 	reset : function()
 	{
-		console.log('RESET collection');
 		this.editorViewCollection.render();
 		this.listViewCollection.render();
 	},
