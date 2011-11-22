@@ -24,13 +24,11 @@ var VisualLayerEditorView = Backbone.View.extend({
 		
 		if(this.model.layerClass.draggable)
 		{
-			
 			$(this.el).draggable({
 				stop : function(){
 					_this.model.layerClass.onAttributeUpdate();
 				}
 			});
-			
 		}
 
 		this.el.addClass('media')
@@ -56,9 +54,7 @@ var VisualLayerEditorView = Backbone.View.extend({
 		this.model.layerClass.setZIndex( _.indexOf(layerOrder, this.model.id) );
 */		this.model.layerClass.setZIndex( i );
 		
-		
-		//put the view element into the workspace
-		$('#visual-editor-workspace').append($(this.el));
+
 		
 		//return the view
 		return this;
@@ -70,15 +66,17 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 
 	el : $('#visual-editor-workspace'),
 	
-	initialize : function()
+	initialize : function( options )
 	{
 		var _this = this;
+		
 		
 		//make arrays to store the views in
 		this._renderedViews =[];
 		
 		this.collection.bind("add", function(layer) {
 			// should draw the layer if it's in the node
+			console.log('layer added to layerViewVisualEditor collection');
 			_this.add(layer);
 		});
 		
@@ -108,7 +106,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 	add : function ( layer ){
 		var layerView = new VisualLayerEditorView({ model : layer });
 		this._renderedViews.push( layerView );
-		layerView.render();
+		$(this.el).append( layerView.render().el );
 	},
 	
 	remove : function(layer)

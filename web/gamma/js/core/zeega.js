@@ -24,7 +24,7 @@ var Zeega = {
 	previewMode:false,
 	
 	maxNodesPerRoute : 0, // 0 = no limit
-	maxLayersPerNode : 5, // 0 = no limit
+	maxLayersPerNode : 0, // 0 = no limit
 	
 	url_prefix : "",
 	
@@ -264,13 +264,21 @@ var Zeega = {
 	
 	addToLayerCollections : function(node,layer)
 	{
+		console.log('addLayerToNode');
+		console.log(node);
+		console.log(layer);
+		
 		//only add to the layers collection if it's not already there!
 		if( !this.route.layerCollection.get(layer.id) )
 		{
+			console.log('not in collection');
+			
+			this.route.layerCollection.add( layer );
+			
 			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
-			if(node == this.currentNode) this.route.layerCollection.add( layer );
+			//if(node == this.currentNode) this.route.layerCollection.add( layer );
 			//if it's not the current node, then be quiet about it
-			else this.route.layerCollection.add( layer,{silent:true} );
+			//else this.route.layerCollection.add( layer,{silent:true} );
 		}
 
 		//add it to the visual or interactive collections // only add if viewing current node
@@ -279,9 +287,7 @@ var Zeega = {
 	
 	addLayerToNode : function( node, layer )
 	{
-		console.log('addLayerToNode');
-		console.log(node);
-		console.log(layer);
+		
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{

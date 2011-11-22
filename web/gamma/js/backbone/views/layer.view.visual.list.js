@@ -60,10 +60,7 @@ var VisualLayerListView = Backbone.View.extend({
 		$(this.el).attr('id', 'layer-'+ this.model.id);
 		//add the controls to the layer
 		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
-		
-		//prepend to maintain layer order
-		$('#layers-list-visual').prepend($(this.el));
-		
+				
 		return this;
 	},
 	
@@ -186,6 +183,8 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		var layerView = new VisualLayerListView({ model : layer });
 		this._renderedViews.push( layerView );
 		layerView.render();
+		$(this.el).prepend( layerView.render().el );
+		
 	},
 	
 	

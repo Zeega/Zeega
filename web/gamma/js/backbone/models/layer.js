@@ -38,6 +38,7 @@ var LayerCollection = Backbone.Collection.extend({
 		this.layerCollectionArray = {};
 		
 		this.bind("add", function(layer) { _this.addToLayerTypeCollection(layer) });
+//		this.bind("add", this.add );
 		
 	},
 	
@@ -54,6 +55,19 @@ var LayerCollection = Backbone.Collection.extend({
 		// activate each collection
 		//_.each( this.layerCollectionArray, function(collection){ collection.createViewCollections() });
 	},
+	/*
+	add : function(layer)
+	{
+		console.log('ADDING TO COLLECTION')
+		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
+		var type = layerClass.layerType.toLowerCase();
+		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
+		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );
+		
+ 		layerTypeCollection.type = type;
+		layerTypeCollection.add(layer)
+	},
+	*/
 	
 	addToLayerTypeCollection : function(layer)
 	{
@@ -85,27 +99,41 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	
 	model : Layer,
 	
+	initialize : function()
+	{
+		var _this = this;
+
+		//left off here. this whole fxn needs to get done
+		this.renderCollection = new LayerRenderCollection;
+		
+		this.bind("add", function(layer) { _this.addToRenderCollection(layer) });
+		
+	},
+	
+	addToRenderCollection : function( layer )
+	{
+
+		var layerModel = this.get(layer.id);
+		if( !_.isUndefined( layerModel ) )
+		{
+			//add it to the view collection
+			this.renderCollection.add( layerModel );
+		}
+		
+	},
+	
 	initViewCollection : function()
 	{
-		this.renderCollection = new LayerRenderCollection;
 		var classType = this.type.toCapitalCase();
 		
 		// make a view collection. this view collection has specific instructions on where and what to draw and interact
-		eval( "this.viewCollection = new "+ classType +"LayerViewCollection" );
-		this.viewCollection.loadCollection( this.renderCollection );
+		eval( "this.viewCollection = new "+ classType +"LayerViewCollection({collection:this.renderCollection})" );
 	},
 	
 	render : function( layers )
 	{
 		var _this = this;
-		console.log( 'render: ' + this.type );
 		
-		/*
-		_.each( _.toArray( _this.renderCollection ), function(layer){
-			console.log(layer.id)
-			
-		});
-		*/
 		this.renderCollection.reset();
 		
 		_.each( layers, function( layerID ){
