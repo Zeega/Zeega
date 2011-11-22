@@ -1,16 +1,6 @@
 
 
 var VisualLayerEditorView = Backbone.View.extend({	
-		
-	initialize : function(options)
-	{
-		//eval( 'this.layerClass = new '+ this.model.get('type')+'Layer()' );
-		//this.layerClass.load(this.model);
-		
-		this.model.bind( 'change', function(){
-			console.log('layer change!!');
-		});
-	},
 	
 	//draws the controls
 	render : function(i)
@@ -51,13 +41,7 @@ var VisualLayerEditorView = Backbone.View.extend({
 
 		this.el.css(cssObj);
 		
-		
-		//set the z-index of the layer
-/*		var layerOrder = _.compact( Zeega.currentNode.get('layers') );
-		this.model.layerClass.setZIndex( _.indexOf(layerOrder, this.model.id) );
-*/		this.model.layerClass.setZIndex( i );
-		
-
+		this.model.layerClass.setZIndex( i );
 		
 		//return the view
 		return this;
@@ -73,37 +57,19 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 	{
 		var _this = this;
 		
-		
 		//make arrays to store the views in
 		this._renderedViews =[];
 		
 		this.collection.bind("add", function(layer) {
 			// should draw the layer if it's in the node
-			console.log('layer added to layerViewVisualEditor collection');
 			_this.add(layer);
 		});
-		
 		
 		this.collection.bind("remove", function(layer) {
 			// should draw the layer if it's in the node
 			_this.remove(layer);
 		});
-		
-		//this.collection.bind('remove',this.remove);
 
-
-		/*
-		_(this).bindAll('add', 'remove');
-		this._layerViews = [];
-		*/
-		
-		
-		/*
-		this.collection.each(this.add);
-		this.collection.bind('add',this.add);
-		this.collection.bind('remove',this.remove);
-		this.collection.bind('destroy', this.remove);
-		*/
 	},
 	
 	add : function ( layer ){
@@ -135,9 +101,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		
 		return this;
 	}
-	
-	
-	
+
 });
 
 

@@ -5,14 +5,6 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	tagName : 'li',
 	
-	initialize : function(options)
-	{
-
-		this.model.bind( 'change', function(){
-			console.log('layer change!!');
-		});
-	},
-	
 	//draws the controls
 	render : function( )
 	{
@@ -88,7 +80,6 @@ var VisualLayerListView = Backbone.View.extend({
 	//	open/close and expanding layer items
 	expand :function()
 	{
-		console.log('expanding layer');
 		var _this = this;
 		if( $(this.el).find('.layer-content').is(':visible') )
 		{
@@ -157,26 +148,7 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 			// should draw the layer if it's in the node
 			_this.add(layer);
 		});
-		
-		//this.collection.bind('add',this.add);
-/*		
-		this.collection.bind("add", function(layer) {
-			// should draw the layer if it's in the node
-			_this.addLayerToViewArrays(layer);
-		});
-*/		
-		
-		/*
-		_(this).bindAll('add', 'remove');
-		this._layerViews = [];
-		*/
-		
-		/*
-		this.collection.each(this.add);
-		this.collection.bind('add',this.add);
-		this.collection.bind('remove',this.remove);
-		this.collection.bind('destroy', this.remove);
-		*/
+
 	},
 	
 	add : function ( layer ){
@@ -185,23 +157,6 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		layerView.render();
 		$(this.el).prepend( layerView.render().el );
 		
-	},
-	
-	
-	remove : function(layer)
-	{
-		console.log('rmvCollection')
-		
-		console.log(this);
-		console.log(layer);
-		
-		/*
-		
-		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
-		this._layerViews = _(this._layerViews).without(viewToRemove);
-		
-		Zeega.currentNode.noteChange();
-		*/
 	},
 	
 	render : function()
@@ -214,9 +169,7 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		});
 		return this;
 	}
-	
-	
-	
+
 });
 
 

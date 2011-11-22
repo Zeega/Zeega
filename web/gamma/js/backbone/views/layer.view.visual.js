@@ -6,8 +6,6 @@
 
 var VisualLayerViewCollection = Backbone.View.extend({
 
-
-
 	initialize : function( options )
 	{
 		var _this = this;
@@ -21,7 +19,6 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		this.collection.bind('reset', function(layer){ _this.reset() });
 	},
 	
-		
 	reset : function()
 	{
 		this.editorViewCollection.render();
