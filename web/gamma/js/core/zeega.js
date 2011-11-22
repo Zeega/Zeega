@@ -264,21 +264,24 @@ var Zeega = {
 	
 	addToLayerCollections : function(node,layer)
 	{
-		console.log('addLayerToNode');
-		console.log(node);
-		console.log(layer);
-		
+
 		//only add to the layers collection if it's not already there!
 		if( !this.route.layerCollection.get(layer.id) )
 		{
 			console.log('not in collection');
 			
-			this.route.layerCollection.add( layer );
+			//this.route.layerCollection.add( layer );
 			
 			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
-			//if(node == this.currentNode) this.route.layerCollection.add( layer );
+			if(node == this.currentNode)
+			{
+				this.route.layerCollection.add( layer );
+			}else{
 			//if it's not the current node, then be quiet about it
-			//else this.route.layerCollection.add( layer,{silent:true} );
+				this.route.layerCollection.add( layer , {silent:true} );
+				//we still need to add it to the type collection though
+			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
+			}
 		}
 
 		//add it to the visual or interactive collections // only add if viewing current node

@@ -37,7 +37,7 @@ var LayerCollection = Backbone.Collection.extend({
 		// this makes sure that if there are other types that we indroduce, they will automatically populate into here\
 		this.layerCollectionArray = {};
 		
-		this.bind("add", function(layer) { _this.addToLayerTypeCollection(layer) });
+		this.bind("add", function(layer,show) { _this.addToLayerTypeCollection(layer,show) });
 //		this.bind("add", this.add );
 		
 	},
@@ -46,7 +46,7 @@ var LayerCollection = Backbone.Collection.extend({
 	{
 		var _this = this;
 		//load with models
-		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer) });
+		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer, true) });
 		
 		_.each( this.layerCollectionArray, function(collection){ collection.initViewCollection() });
 		
@@ -69,7 +69,7 @@ var LayerCollection = Backbone.Collection.extend({
 	},
 	*/
 	
-	addToLayerTypeCollection : function(layer)
+	addToLayerTypeCollection : function(layer, render)
 	{
 		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
 		var type = layerClass.layerType.toLowerCase();
@@ -77,7 +77,11 @@ var LayerCollection = Backbone.Collection.extend({
 		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );
 		
  		layerTypeCollection.type = type;
-		layerTypeCollection.add(layer)
+
+		//pass as silent if it's not the current node being displayed
+		if(render) layerTypeCollection.add(layer);
+		else layerTypeCollection.add(layer, {silent:true} );
+		
 	},
 	
 	render : function( node )
