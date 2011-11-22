@@ -2,7 +2,7 @@ _configurator:
     resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
     prefix:   /_configurator
 
-api_hello:
+api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
 
 projects:

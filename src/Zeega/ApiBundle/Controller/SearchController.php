@@ -41,19 +41,14 @@ class SearchController extends Controller
 		if(!isset($query['limit']))         $query['limit'] = 100;
 		if(!isset($query['userId']) || $query['userId'] == -1) $query['userId'] = $user->getId();
 				
-        //$logger->err('yo');
-
-        // 
+        //  execute the query
 		$items =$this->getDoctrine()
 					 ->getRepository('ZeegaIngestBundle:Item')
 					 ->searchItems($query);								
 
 		$results[] = array('items'=>$items,'count'=>sizeof($items));
-		//print_r($results);
-        //return new Response(json_encode($results));
-        //return $this->render('ZeegaApiBundle:Default:index.html.twig', array('name' => json_encode($results)));
-        return $this->render('ZeegaApiBundle:Default:index.html.twig', array('name' => json_encode($results)));
-        
+
+        return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
 		// IF ERROR return new Response(json_encode($results[0]));
 		//else return new Response("Error: Query is not correctly formatted2");
     }

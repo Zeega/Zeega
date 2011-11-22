@@ -41,35 +41,23 @@ class ItemRepository extends EntityRepository
 		if(isset($query['collectionId']))
       	{
 			 $qb->innerjoin('i.parent_collections', 'c')
-                ->andWhere('c.item_id = ?3')
+                ->andWhere('c.id = ?3')
                 ->setParameter(3, $query['collectionId']);
 		}
-		   
-        /*
-        // filter by type or by userId
-        if($query['contentType'] == 'mine')
+        
+        if(isset($query['contentType']))
       	{
-			$qb->innerJoin('i.user', 'u')
-			   ->andWhere('u.id = ?3')
-			   ->setParameter(3,$query['userId']);
+      	    $content_type = strtoupper($query['contentType']);
+
+      	    if( $content_type == "AUDIO" ||
+      	        $content_type == "VIDEO" ||
+      	        $content_type == "IMAGE" )
+      	    {
+      	        $qb->andWhere('i.content_type = ?4')
+                   ->setParameter(4, $query['contentType']);
+      	    }
 		}
-        elseif($query['contentType'] != 'all')
-        {
-            $qb->andWhere('i.content_type = ?2')
-                ->setParameter(2, $query['contentType']);       
-        }         
-
-       	if(is_array($query['userPlaygrounds']) && sizeof($query['userPlaygrounds']) > 0)
-       	{
-       	    $qb->andWhere('i.playground = ?4')
-                ->setParameter(4, $query['userPlaygrounds'][0]['id']);       
-       	}
-
-       	// get query and add parameter - for some reason set parameter in this
-       	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
-        $q = $qb->getQuery();         		   
-        $q->setParameter(1, '%' . $query['queryString'] . '%');
-        */
+        
         $q = $qb->getQuery();         		   
         return $q->getArrayResult();
     }
