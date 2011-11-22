@@ -36,10 +36,11 @@ class SearchController extends Controller
 		$query["returnItems"]   = $request->query->get('r_items');   //  bool
 
 		//  set defaults for missing parameters  
-		if(!isset($query['contentType']))   $query['contentType'] = 'all';
 		if(!isset($query['page']))          $query['page'] = 0;
 		if(!isset($query['limit']))         $query['limit'] = 100;
-		if(!isset($query['userId']) || $query['userId'] == -1) $query['userId'] = $user->getId();
+		if($query['limit'] > 100) 	        $query['limit'] = 100;
+	
+		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
 				
         //  execute the query
 		$items =$this->getDoctrine()
