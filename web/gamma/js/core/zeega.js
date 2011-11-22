@@ -279,6 +279,9 @@ var Zeega = {
 	
 	addLayerToNode : function( node, layer )
 	{
+		console.log('addLayerToNode');
+		console.log(node);
+		console.log(layer);
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{

@@ -392,10 +392,7 @@ $(document).ready(function() {
 					var layerToSave = new Layer(settings);
 
 					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
-					
-					//flash the layers tab
-					$('#layers-tab').effect("highlight", {}, 3000);
-					
+										
 					console.log('update node thumb for node: '+ Zeega.currentNode.id);
 				}
 		});

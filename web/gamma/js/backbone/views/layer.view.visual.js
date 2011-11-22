@@ -10,10 +10,9 @@ var VisualLayerViewCollection = Backbone.View.extend({
 
 	initialize : function()
 	{
-		this._renderCollection = _();
 		
-		this.editorViewCollection = new VisualLayerEditorViewCollection
-		this.listViewCollection = new VisualLayerListViewCollection
+		//this.editorViewCollection = new VisualLayerEditorViewCollection;
+		//this.listViewCollection = new VisualLayerListViewCollection;
 		
 		/*
 		_(this).bindAll('add', 'remove');
@@ -31,6 +30,14 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		var _this = this;
 		//set the collection
 		this.collection = collection;
+
+		this.editorViewCollection = new VisualLayerEditorViewCollection({ collection : this.collection });
+		this.listViewCollection = new VisualLayerListViewCollection({ collection : this.collection });
+		//this.editorViewCollection.collection = collection;
+		//this.listViewCollection.collection = collection;
+		
+		this.editorViewCollection.render();
+		this.listViewCollection.render();
 		
 		/*
 		this.collection.bind("add", function(layer) {
@@ -38,7 +45,13 @@ var VisualLayerViewCollection = Backbone.View.extend({
 			//this.add(layer);
 		});
 		*/
-		this.collection.bind('add',this.add);
+		//this.collection.bind('add',this.add);
+		//this.collection.bind('reset',this.reset);
+		
+		this.collection.bind('reset', function(layer) {
+			_this.reset();
+		});
+		
 		/*
 		//this.collection.each(this.add);
 		this.collection.bind('remove',this.remove);
@@ -50,10 +63,13 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		//this.listViewCollection.collection = this.collection;
 		
 	},
-	
-	
-	add : function ( layer ){},
-	
+		
+	reset : function()
+	{
+		console.log('RESET collection');
+		this.editorViewCollection.render();
+		this.listViewCollection.render();
+	},
 	
 	remove : function(layer)
 	{
@@ -64,21 +80,6 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		
 		Zeega.currentNode.noteChange();
 		
-	},
-	
-	
-	render : function(layerIDs)
-	{
-		//should these remove all fxns live somewhere else // their own function?
-		this.editorViewCollection.removeAll();
-		this.listViewCollection.removeAll();
-		
-		
-		this.editorViewCollection.render(layerIDs);
-		this.listViewCollection.render(layerIDs);
-		
-		
-		return this;
 	},
 	
 	getTemplate : function()

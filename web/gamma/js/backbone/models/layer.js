@@ -44,10 +44,15 @@ var LayerCollection = Backbone.Collection.extend({
 	parseLayers : function()
 	{
 		var _this = this;
+		//load with models
 		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer) });
+		
+		_.each( this.layerCollectionArray, function(collection){ collection.initViewCollection() });
+		
+		
 		// layers are loaded into their collections
 		// activate each collection
-		_.each( this.layerCollectionArray, function(collection){ collection.createViewCollections() });
+		//_.each( this.layerCollectionArray, function(collection){ collection.createViewCollections() });
 	},
 	
 	addToLayerTypeCollection : function(layer)
@@ -55,20 +60,20 @@ var LayerCollection = Backbone.Collection.extend({
 		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
 		var type = layerClass.layerType.toLowerCase();
 		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
-		eval( 'var collection = this.layerCollectionArray.' + type );
+		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );
 		
- 		collection.type = type;
-		collection.add(layer)
+ 		layerTypeCollection.type = type;
+		layerTypeCollection.add(layer)
 	},
 	
 	render : function( node )
 	{
-		var _this = this;
 		// should render the current node
 		
 		//cycle through each view collection
 		_.each( this.layerCollectionArray, function(layerCollection){
-			layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
+			//layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
+			layerCollection.render( _.compact(node.get('layers')) );
 		})
 
 	}
@@ -80,30 +85,45 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	
 	model : Layer,
 	
-	createViewCollections : function()
+	initViewCollection : function()
 	{
+		this.renderCollection = new LayerRenderCollection;
 		var classType = this.type.toCapitalCase();
 		
 		// make a view collection. this view collection has specific instructions on where and what to draw and interact
 		eval( "this.viewCollection = new "+ classType +"LayerViewCollection" );
+		this.viewCollection.loadCollection( this.renderCollection );
+	},
+	
+	render : function( layers )
+	{
+		var _this = this;
+		console.log( 'render: ' + this.type );
 		
-		// add a layerRenderCollection to each viewCollection. This will be what gets rendered
-		this.viewCollection.collection = new LayerRenderCollection
+		/*
+		_.each( _.toArray( _this.renderCollection ), function(layer){
+			console.log(layer.id)
+			
+		});
+		*/
+		this.renderCollection.reset();
 		
-		// set the collection into the view collection
-		//this.viewCollection.loadCollection(this);
-		
-		//the viewCollection should take over from here
+		_.each( layers, function( layerID ){
+			var layerModel = _this.get(layerID);
+			if( !_.isUndefined( layerModel ) )
+			{
+				//add it to the view collection
+				_this.renderCollection.add( layerModel );
+			}
+		})
 	}
 	
 })
 
-var LayerRenderCollection = Backbone.Collection.extend({
-	
-	model : Layer
-	
 
-	
+//simple collection that is populated with only layers being displayed
+var LayerRenderCollection = Backbone.Collection.extend({
+	model : Layer
 })
 
 

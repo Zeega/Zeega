@@ -75,21 +75,21 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		var _this = this;
 		
 		//make arrays to store the views in
-		this._allViews = [];
 		this._renderedViews =[];
 		
-		_.each( _.toArray( this.collection ), function(layer){
-			_this.addLayerToViewArrays(layer);
-		})
-		
-		//this.collection.bind('add',this.add);
-		
-		/*
 		this.collection.bind("add", function(layer) {
 			// should draw the layer if it's in the node
-			_this.addLayerToViewArrays(layer);
+			_this.add(layer);
 		});
-*/
+		
+		
+		this.collection.bind("remove", function(layer) {
+			// should draw the layer if it's in the node
+			_this.remove(layer);
+		});
+		
+		//this.collection.bind('remove',this.remove);
+
 
 		/*
 		_(this).bindAll('add', 'remove');
@@ -105,20 +105,15 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		*/
 	},
 	
-	addLayerToViewArrays : function( layer )
-	{
-		console.log('layerviewvisualeditor: '+layer.id)
-		var editorView = new VisualLayerEditorView({ model : layer });
-
-		this._allViews[layer.id] = editorView;
-
-		this._renderedViews.push(editorView);
-		editorView.render(this._renderedViews.length);
+	add : function ( layer ){
+		var layerView = new VisualLayerEditorView({ model : layer });
+		this._renderedViews.push( layerView );
+		layerView.render();
 	},
 	
 	remove : function(layer)
 	{
-		console.log('rmvCollection')
+		console.log('REMOVE from Collection')
 		
 		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
 		this._layerViews = _(this._layerViews).without(viewToRemove);
@@ -127,27 +122,17 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		
 	},
 	
-	removeAll : function()
-	{
-		//remove from the dom
-		_.each( this.renderedViews, function(view){
-			view.remove();
-		});
-		//empty array
-		this._renderedViews = [];
-		
-		this.el.empty();
-	},
 	
-	render : function(layerIDs)
+	render : function()
 	{
 		var _this = this;
-		_.each( layerIDs, function(layerID, i){
-			var layerToRender = _this._allViews[layerID];
-			_this._renderedViews.push( layerToRender )
-			layerToRender.render(i);
-		})
-
+		
+		$(this.el).empty();
+		_.each( _this.renderedViews , function(view){
+			$(this.el).append(view.render().el);
+		});
+		
+		return this;
 	}
 	
 	
