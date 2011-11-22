@@ -69,7 +69,7 @@ var ImageLayer = ProtoLayer.extend({
 		
 		//set to layer controls
 		this.layerControls = controls;
-		return(controls);
+		return controls;
 		
 	},
 	
@@ -97,13 +97,14 @@ var ImageLayer = ProtoLayer.extend({
 	
 	onAttributeUpdate : function()
 	{
-		var newAttr = {};
+		var _this = this;
+		var newAttr = {
+			x : Math.floor( _this.visualEditorElement.position().left/6),
+			y : Math.floor( _this.visualEditorElement.position().top/4),
+			opacity : Math.floor( _this.layerControls.find('#opacity-slider').slider('value') * 100 )/100,
+			w : Math.floor( _this.layerControls.find('#width-slider').slider('value') ),
+		};
 		
-		newAttr.x = Math.floor( this.visualEditorElement.position().left/6),
-		newAttr.y = Math.floor( this.visualEditorElement.position().top/4),
-		newAttr.opacity = Math.floor( this.layerControls.find('#opacity-slider').slider('value') * 100 )/100,
-		newAttr.w = Math.floor( this.layerControls.find('#width-slider').slider('value') ),
-
 		this.setAttributes(newAttr);
 		this.save();
 	},	

@@ -16,6 +16,9 @@ var VisualLayerEditorView = Backbone.View.extend({
 	render : function(i)
 	{
 		var _this = this;
+		
+		console.log(this);
+		
 		//remove this view when the model is removed
 		this.model.bind('remove',function(){ _this.remove() });
 				
