@@ -87,6 +87,8 @@ var Player = {
 		//Zeega.clearCurrentNode();
 		
 		overlay.fadeIn();
+		
+		document.getElementById('zeega-player').webkitRequestFullScreen();
 	},
 	
 	/*
@@ -95,6 +97,7 @@ var Player = {
 	*/
 	close : function()
 	{
+		document.getElementById('zeega-player').webkitCancelFullScreen();
 		console.log('Zeega Player Close');
 		var _this = this;
 		
