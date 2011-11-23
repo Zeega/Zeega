@@ -1,45 +1,53 @@
-var BrowserSearch =  Backbone.Model.extend({
+var BrowserSearch =  Backbone.Collection.extend({
+
+	model :Item,
 	url : function(){return Zeega.url_prefix + "search/"},
 	
-	/*default search is to get all media associated with current user
-	*/
-	defaults :{ 
+	userID:-1, 
+	allMediaVSMyMedia:'My Media',
 
-		'user_id' : -1, //sending -1 gets current user's stuff
-		'AllMediaVSMyMedia' : 'My Media'
-	},
+	itemCount : 0,
+	collectionCount : 0,
+
 	
-	//initialize does a default search for all 'My Media'
+	
+	//initialize default search for all 'My Media'
 	initialize: function(){
 		
-		resultSet = new ItemCollection();
-		resultSet.bind("add", function(item) {
-  			alert("Added item  " + item.get("type") + "!");
-		});
-
+		
+		
+		
 	},
 
-	//updates query and fetches results from DB
+	
+	
+	//updates query and then fetches results from DB
 	updateQuery: function(){
-
-		for (var i=0;i<20;i++){
+		//reset resultSet
+		
+		//this is generating random data
+		var randomNum =Math.floor(Math.random()*21);
+		for (var i=0;i<randomNum;i++){
 			var item = new Item();
 		
 			if (i%4 ==0)
 			{
-				item.set({type: "image"});
+				item.set({itemType: "image"});
+				this.itemCount++;
+			} else {
+				this.collectionCount++;
 			}
-			resultSet.add(item);
+			this.add(item);
 		}
 
 		//do something
-		this.fetch({
+		/*this.fetch({
 
 			success : function()
 			{
 				//render stuff here?
 			}
-		});
+		});*/
 	}
 
 });

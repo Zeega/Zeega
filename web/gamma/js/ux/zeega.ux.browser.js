@@ -39,6 +39,13 @@ function toggleFilterDrawer(){
 		
 }
 $(document).ready(function() {
+
+	$(".fancybox").fancybox({
+		openSpeed	: 'fast',
+		closeSpeed	: 'fast'
+	});
+	
+
 	
 	//Load MyCollections
 	var myCollectionsModel = new MyCollections({ 'id' : 23 });
@@ -80,7 +87,8 @@ $(document).ready(function() {
 
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(){
-		search.set({allMediaVSMyMedia: $(this).text()});
+		search.allMediaVSMyMedia = $(this).text();
+		search.updateQuery();
 		console.log($(this).text());
 		searchView.render();
 	});

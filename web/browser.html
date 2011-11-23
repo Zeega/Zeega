@@ -122,7 +122,7 @@
 							<div class="browser-filter-icon time"></div>
 							<div class="browser-filter-icon space"></div>
 						</div>
-						<div id="browser-toggle-items-vs-collections"><ul><li class="browser-unselected-toggle"> 3 collections</li><li class="browser-selected-toggle">43 items</li> </ul> </div>
+						<div id="browser-toggle-items-vs-collections"><ul><li id="browser-collection-count" class="browser-unselected-toggle">collections</li><li id="browser-item-count" class="browser-selected-toggle">items</li> </ul> </div>
 						
 						
 						<div class="browser-loading"><img src="gamma/images/loading.gif"></div>
@@ -159,7 +159,7 @@
 			<div id="browser-results-collection-template" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Images Of America: Lantern Slide Collection</span><br><span class="browser-item-count">2924 items</span></p></a></div>
 
 			<div id="browser-results-image-template">
-				<a href="."><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/1823_s.jpg" alt="080120v" title="080120v"></a>
+				<a class="fancybox" rel="group" href="http://memory.loc.gov/award/mhsdalad/310000/310043r.jpg"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/1823_s.jpg" alt="080120v" title="080120v"></a>
 			</div>
          </div>
 
@@ -174,7 +174,15 @@
 		<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
 		<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
 		
+		<!-- FANCYBOX -->
+		<!-- Optionaly include easing and/or mousewheel plugins -->
+		<script type="text/javascript" src="gamma/js/fancybox/jquery.easing-1.3.pack.js"></script>
+		<script type="text/javascript" src="gamma/js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
 
+		<!-- Add fancyBox -->
+		<link rel="stylesheet" href="gamma/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="gamma/js/fancybox/jquery.fancybox.js"></script>
+		<script type="text/javascript" src="gamma/js/fancybox/jquery.fancybox.pack.js"></script>
          
     </body>
 </html>

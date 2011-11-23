@@ -4,7 +4,16 @@ var BrowserSearchItemView = Backbone.View.extend({
 	
 	initialize : function() {
 		
-		switch (this.model.get("type"))
+		//listens for changes to its model, re-rendering
+		this.model.bind('change', this.render, this);
+    	this.model.bind('destroy', this.remove, this);
+		
+	},
+	
+	render: function()
+	{
+		
+		switch (this.model.get("itemType"))
 		{
 			case 'collection':
 				var template = $("#browser-results-collection-template").clone();
@@ -28,13 +37,6 @@ var BrowserSearchItemView = Backbone.View.extend({
 
 			break;
 		}
-		
-	},
-	
-	render: function()
-	{
-		
-		
 
 		return this;
 	},

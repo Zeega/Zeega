@@ -1,12 +1,13 @@
 var Item = Backbone.Model.extend({
 	defaults : {
 		title : 'Untitled',
-		type : 'collection'
+		itemType : 'collection'
 	},
 	
 	initialize : function()
 	{
 	}
+
 });
 
 var ItemCollection = Backbone.Collection.extend({
