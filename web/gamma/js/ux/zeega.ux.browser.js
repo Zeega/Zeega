@@ -47,23 +47,7 @@ $(document).ready(function() {
 	
 
 	
-	//Load MyCollections
-	var myCollectionsModel = new MyCollections({ 'id' : 23 });
-	var myCollectionsView = new MyCollectionsView({ model : myCollectionsModel });
-		
-	myCollectionsView.render();
-
-	//Hide the loading spinner for the myCollections drawer
-	$('#browser-my-collections .browser-loading').hide();
-
-	//Load Search items
-	var search = new BrowserSearch();
-	var searchView = new BrowserSearchItemsView({model: search});
-
-	searchView.render();
-
-	//Hide results drawer's loading spinner
-	$('#browser-results .browser-loading').hide();
+	
 
 	//For filters - testing visual stuff
 	$('.time, .space').click( toggleFilterDrawer);

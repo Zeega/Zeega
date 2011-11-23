@@ -34,6 +34,7 @@ var loadFiles = [
 
 	//core
 	'order!core/zeega',
+	'order!core/zeegaBrowser',
 	
 	//plugins
 	'order!jquery/plugins/spin',
@@ -51,16 +52,16 @@ var loadFiles = [
 	
 	//mvc
 	'order!backbone/models/item',
+	'order!backbone/models/browser.collection',
+	'order!backbone/models/browser.item',
 	'order!backbone/models/browser.myCollections',
 	'order!backbone/models/browser.search',
-	
-	
 
 	'order!backbone/views/browser.my-collections-view',
-	'order!backbone/views/browser.search-item-view',
-	'order!backbone/views/browser.search-items-view',
+	'order!backbone/views/browser.search-collections-view',
+	'order!backbone/views/browser.search-item-views',
 	'order!backbone/views/browser.search-map-view',
-	'order!backbone/views/browser.search-time-view',
+	'order!backbone/views/browser.search-time-view'
 	
 
 	];
@@ -68,7 +69,7 @@ var loadFiles = [
 require(loadFiles, function($) {
     
 	
-	
+	ZeegaBrowser.init();
 	
 	
 	initUX();
