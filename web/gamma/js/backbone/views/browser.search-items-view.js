@@ -16,6 +16,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
     	this.model.bind('add',   this.addItem, this);
       	//this.model.bind('all',   this.render, this);
 
+      	//this.collecion.bind();
       	this.model.bind("add", function(item) {
   			console.log("Added item  " + item.get("itemType") + "!");
 		});
