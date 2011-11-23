@@ -22,19 +22,19 @@ var YoutubeLayer = VideoLayer.extend({
 						},
 	
 	openControls: function(){
-			var that=this;
+			var _this = this;
 			if(!this.editorLoaded){
 				
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
 				//that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
-				that.player=new ZeegaYoutube(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id,that.attr.w,that.attr.h);
+				_this.player=new ZeegaYoutube(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id,_this.attr.w,_this.attr.h);
 			
 				//player triggers 'update' event to persist changes
-				$('#player-'+that.model.id).bind('updated',function(){
-					that.updateAttr();
+				$('#player-'+_this.model.id).bind('updated',function(){
+					_this.updateAttr();
 				});
-				that.editorLoaded=true;
+				_this.editorLoaded=true;
 			}
 	},
 	closeControls: function(){
@@ -158,6 +158,11 @@ var YoutubeLayer = VideoLayer.extend({
 		newAttr.y = this.dom.position().top/4.0;
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
 		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
+		//newAttr.h = newAttr.w / newAttr.aspect;
+		
+		console.log(this.model.id);
+		//$('#layer-preview-'+this.model.id).css({'width':newAttr.w + '%'});
+		
 		if(this.editorLoaded){
 			console.log('Volume: '+this.player._vol);
 			newAttr.in=this.player._start_time;

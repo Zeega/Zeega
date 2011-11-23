@@ -389,10 +389,11 @@ var TextLayer = ProtoLayer.extend({
 		var _this  = this;
 		
 		console.log('preload media text');
-		
+		console.log(this.attr);
 		var previewFontSize = this.attr.size/600 * window.innerWidth;
 		var previewWidth = this.attr.w/600 * window.innerWidth;
 		var previewHeight = this.attr.h/400 * window.innerHeight
+		var fontColor = 'rgba(' + this.attr.color.join(',') + ')';
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
@@ -402,6 +403,7 @@ var TextLayer = ProtoLayer.extend({
 			'left' : '-100%',
 			'width' : previewWidth,
 			'height' : previewHeight,
+			'color' : fontColor,
 			'font-size' : previewFontSize + 'px'
 		};
 		div.addClass('text-layer-container')
@@ -466,7 +468,7 @@ var TextLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
-		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
+		//$('#layer-preview-'+this.model.id).css('backgroundColor','rgba(' + this.attr.bgColor.join(',') + ')');
 		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
 		

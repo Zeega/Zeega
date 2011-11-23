@@ -108,8 +108,7 @@ function textArea()
 
 function makeColorPicker(args)
 {
-	console.log('colorrrrrrr');
-	console.log(args)
+
     //clean label of spaces
     var cleanLabel = args.label.replace(/\s/g, '_');
     var pickerDiv = $('<div/>').addClass('layer-colorPicker-div')
