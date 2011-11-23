@@ -224,8 +224,8 @@ var GeoLayer = ProtoLayer.extend({
 		//Pull static map image using google api
 		
 		if(this.attr.type=='map'){
-			var w=Math.floor($(window).width()*parseInt(this.attr.w)/100.0);
-			var h=Math.floor($(window).height()*parseInt(this.attr.h)/100.0);
+			var w = Math.floor($(window).width()*parseInt(this.attr.w)/100.0);
+			var h = Math.floor($(window).height()*parseInt(this.attr.h)/100.0);
 			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		}else{
 		

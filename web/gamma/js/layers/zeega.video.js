@@ -250,7 +250,6 @@ var VideoLayer = ProtoLayer.extend({
 
 		}
 		
-console.log(newAttr);
 		this.setAttributes(newAttr);
 		this.save();
 	},
