@@ -63,8 +63,10 @@ var VideoLayer = ProtoLayer.extend({
 		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
 		
 		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
+			console.log( this );
 			$('#layer-preview-'+that.model.id).css({
-				'height':$('#media_'+that.model.id).height(),
+				//'height':$('#media_'+that.model.id).width() / 1.33,
+				//'height':$('#media_'+that.model.id).height(),
 				'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+that.attr.item_id+'_s.jpg)'
 			});
 			that.updateAttr();

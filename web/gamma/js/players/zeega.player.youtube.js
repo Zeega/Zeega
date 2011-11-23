@@ -45,8 +45,8 @@ var ZeegaYoutube = Class.extend({
 		var width=Math.floor(parseInt($('#zeega-player').css('width'))*parseInt(w)/100.0);
 		var height=Math.floor(parseInt($('#zeega-player').css('height'))*parseInt(h)/100.0);
 		
-		width=600;
-		height=400;
+		width='100%';
+		height='100%';
 		
 		var params = { allowScriptAccess: "always", wmode: "opaque", disablekb: "1" };
 		var atts = { id: "youtube-player-"+id};
