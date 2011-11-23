@@ -7,6 +7,57 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    public function searchItems($query)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['page']);
+
+        if(isset($query['queryString']))
+        {
+            $qb->innerjoin('i.metadata', 'm')
+               ->where('i.title LIKE ?1')
+               ->orWhere('i.creator LIKE ?1')
+               ->orWhere('m.description LIKE ?1')
+               ->setParameter(1,'%' . $query['queryString'] . '%');
+        }
+        
+        if(isset($query['userId']))
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?2')
+			   ->setParameter(2,$query['userId']);
+		} 
+		
+		if(isset($query['collectionId']))
+      	{
+			 $qb->innerjoin('i.parent_items', 'c')
+                ->andWhere('c.id = ?3')
+                ->setParameter(3, $query['collectionId']);
+		}
+        
+        if(isset($query['contentType']))
+      	{
+      	    $content_type = strtoupper($query['contentType']);
+
+      	    if( $content_type == "AUDIO" ||
+      	        $content_type == "VIDEO" ||
+      	        $content_type == "IMAGE" )
+      	    {
+      	        $qb->andWhere('i.content_type = ?4')
+                   ->setParameter(4, $query['contentType']);
+      	    }
+		}
+        
+        $q = $qb->getQuery();         		   
+        return $q->getArrayResult();
+        //return $qb->getQuery()->getSQL();
+    }
     
     public function findItems($query, $offset,$limit)
     {

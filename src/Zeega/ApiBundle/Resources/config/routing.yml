@@ -1,0 +1,3 @@
+ZeegaApiBundle_search:
+    pattern:  /api/search
+    defaults: { _controller: ZeegaApiBundle:Search:search }
