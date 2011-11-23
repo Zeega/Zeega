@@ -43,15 +43,32 @@ class SearchController extends Controller
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
 				
         //  execute the query
-		$items =$this->getDoctrine()
-					 ->getRepository('ZeegaIngestBundle:Item')
-					 ->searchItems($query);								
+		$queryResults = $this->getDoctrine()
+					        ->getRepository('ZeegaIngestBundle:Item')
+					        ->searchItems($query);								
 
-		$results[] = array('items'=>$items,'count'=>sizeof($items));
+        // objects to return
+        $items = array();
+        $collections = array();
+
+        foreach ($queryResults as $res)
+        {
+            if (isset($res["content_type"]) and (strtoupper($res["content_type"]) == "COLLECTION")) 
+                array_push($collections, $res);
+            else
+                array_push($items, $res);
+        }
+        
+        $results[] = array( 'items'=>$items,'items_count'=>sizeof($items), 
+                            'collections'=>$collections, 'collections_count'=>sizeof($collections));
+
 		$response = new Response(json_encode($results));
 		$response->headers->set('Content-Type', 'application/json');
-        //return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
+        
         return $response;
+        
+        //return $qb->getQuery()->getSQL();
+        //return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
 		// IF ERROR return new Response(json_encode($results[0]));
 		//else return new Response("Error: Query is not correctly formatted2");
     }

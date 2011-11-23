@@ -14,7 +14,7 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i')
             ->from('ZeegaIngestBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
+            ->orderBy('i.id','ASC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['page']);
 
@@ -47,16 +47,16 @@ class ItemRepository extends EntityRepository
 
       	    if( $content_type == "AUDIO" ||
       	        $content_type == "VIDEO" ||
-      	        $content_type == "IMAGE" )
+      	        $content_type == "IMAGE" ||
+      	        $content_type == "COLLECTION" )
       	    {
       	        $qb->andWhere('i.content_type = ?4')
                    ->setParameter(4, $query['contentType']);
       	    }
 		}
         
-        $q = $qb->getQuery();         		   
-        return $q->getArrayResult();
-        //return $qb->getQuery()->getSQL();
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
     }
     
     public function findItems($query, $offset,$limit)
