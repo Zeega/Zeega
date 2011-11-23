@@ -34,8 +34,13 @@ class SearchController extends Controller
 		$query["returnMap"]     = $request->query->get('r_map');     //  bool
 		$query["returnTime"]    = $request->query->get('r_time');    //  bool
 		$query["returnItems"]   = $request->query->get('r_items');   //  bool
+		$query["returnCollections"]   = $request->query->get('r_collections');   //  bool
 
 		//  set defaults for missing parameters  
+		if(!isset($query['returnCollections']))   $query['returnCollections'] = 1;		
+		if(!isset($query['returnItems']))   $query['returnItems'] = 1;
+		if(!isset($query['returnTime']))    $query['returnTime'] = 0;
+		if(!isset($query['returnMap']))     $query['returnMap'] = 0;
 		if(!isset($query['page']))          $query['page'] = 0;
 		if(!isset($query['limit']))         $query['limit'] = 100;
 		if($query['limit'] > 100) 	        $query['limit'] = 100;
@@ -47,7 +52,7 @@ class SearchController extends Controller
 					        ->getRepository('ZeegaIngestBundle:Item')
 					        ->searchItems($query);								
 
-        // objects to return
+        // separate query results by type - this is O(n) and won't scale well for huge collections
         $items = array();
         $collections = array();
 
@@ -59,14 +64,30 @@ class SearchController extends Controller
                 array_push($items, $res);
         }
         
-        $results[] = array( 'items'=>$items,'items_count'=>sizeof($items), 
-                            'collections'=>$collections, 'collections_count'=>sizeof($collections));
-
+        // populate the results object
+        $results[] = array();
+        
+        if(!isset($query['returnCollections']) and $query['returnCollections'] == 1)
+        {
+            $results['collections'] = $collections;
+            $results['collections_count'] = sizeof($collections);
+        }
+        
+        if(!isset($query['returnItems']) and $query['returnItems'] == 1)
+        {
+            $results['items'] = $collections;
+            $results['items_count'] = sizeof($collections);
+        }
+        
+        // create and configure the response type
+        // TO-DO: multiple response types (xml, etc)
 		$response = new Response(json_encode($results));
 		$response->headers->set('Content-Type', 'application/json');
         
+        // return the results
         return $response;
         
+        //DEV HELPERS
         //return $qb->getQuery()->getSQL();
         //return $this->render('ZeegaApiBundle:Default:index.html.twig', array('results' => json_encode($results)));        
 		// IF ERROR return new Response(json_encode($results[0]));

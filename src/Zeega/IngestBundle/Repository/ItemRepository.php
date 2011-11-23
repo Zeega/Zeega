@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    //  api/search
     public function searchItems($query)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

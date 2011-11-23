@@ -1,3 +1,14 @@
-ZeegaApiBundle_search:
-    pattern:  /api/search
-    defaults: { _controller: ZeegaApiBundle:Search:search }
+global_search:
+    pattern: /api/search.{_format}
+    defaults: { _controller: ZeegaApiBundle:Search:search, _format: json}
+    requirements: { _format: (xml|json), _method: GET }
+
+collections_list:
+    pattern: /api/collections.{_format}
+    defaults: { _controller: ZeegaApiBundle:Collections:list, _format: json}
+    requirements: { _format: (xml|json), _method: GET }
+    
+collections_create:
+    pattern: /api/collections/
+    defaults: { _controller: ZeegaApiBundle:Collections:create}
+    requirements: { _method: POST }    
