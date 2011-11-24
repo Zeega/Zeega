@@ -13,9 +13,10 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         // search query
-        $qb->select('i')
+        $qb->select('i,m.thumb_url')
             ->from('ZeegaIngestBundle:Item', 'i')
-            ->orderBy('i.id','ASC')
+            ->leftJoin('i.metadata','m')
+            ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['page']);
 
@@ -60,10 +61,31 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
     
+    public function findIt($offset,$limit)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        return $qb->getQuery()->getArrayResult();         		   
+    }
+    
     public function findItems($query, $offset,$limit)
     {
         // $qb instanceof QueryBuilder
         $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.metadata', 'm')
+            ->where('i.title LIKE ?1')
+            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('m.description LIKE ?1')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        
         
         // search query
         $qb->select('i')

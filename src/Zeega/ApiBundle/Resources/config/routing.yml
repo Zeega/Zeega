@@ -12,3 +12,44 @@ collections_create:
     pattern: /api/collections/
     defaults: { _controller: ZeegaApiBundle:Collections:create}
     requirements: { _method: POST }    
+
+collections_update:
+    pattern: /api/collections/{collection_id}/{items}
+    defaults: { _controller: ZeegaApiBundle:Collections:update}
+    requirements: { _method: PUT }
+    
+collections_update:
+    pattern: /api/collections/{id}
+    defaults: { _controller: ZeegaApiBundle:Collections:show}
+    requirements: { _method: GET }
+    
+api_collections:
+    pattern:  /api/collectionz
+    defaults: { _controller: "ZeegaApiBundle:Item:index" }
+
+api_collections_show:
+    pattern:  /api/collectionz/{id}/show
+    defaults: { _controller: "ZeegaApiBundle:Item:show" }
+
+api_collections_new:
+    pattern:  /new
+    defaults: { _controller: "ZeegaApiBundle:Item:new" }
+
+api_collections_create:
+    pattern:  /create
+    defaults: { _controller: "ZeegaApiBundle:Item:create" }
+    requirements: { _method: post }
+
+api_collections_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "ZeegaApiBundle:Item:edit" }
+
+api_collections_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "ZeegaApiBundle:Item:update" }
+    requirements: { _method: post }
+
+api_collections_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "ZeegaApiBundle:Item:delete" }
+    requirements: { _method: post }

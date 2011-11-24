@@ -51,32 +51,43 @@ class SearchController extends Controller
 		$queryResults = $this->getDoctrine()
 					        ->getRepository('ZeegaIngestBundle:Item')
 					        ->searchItems($query);								
+		
+		$results[]=array('items'=>$queryResults,'count'=>sizeof($queryResults));
+/*		
+                        	$response = new Response(json_encode($results));
+                    		$response->headers->set('Content-Type', 'application/json');
 
+                            // return the results
+                            return $response;
+*/
         // separate query results by type - this is O(n) and won't scale well for huge collections
         $items = array();
         $collections = array();
 
         foreach ($queryResults as $res)
         {
-            if (isset($res["content_type"]) and (strtoupper($res["content_type"]) == "COLLECTION")) 
+            $res[0]["thumb_url"] = $res["thumb_url"];
+            $res = $res[0];
+            
+            if ((strtoupper($res["content_type"]) == "COLLECTION")) 
                 array_push($collections, $res);
             else
                 array_push($items, $res);
         }
         
         // populate the results object
-        $results[] = array();
+        $results = array();
         
-        if(!isset($query['returnCollections']) and $query['returnCollections'] == 1)
+        if($query['returnItems'] == 1)
+        {
+            $results['items'] = $items;
+            $results['items_count'] = sizeof($items);
+        }
+        
+        if($query['returnCollections'] == 1)
         {
             $results['collections'] = $collections;
             $results['collections_count'] = sizeof($collections);
-        }
-        
-        if(!isset($query['returnItems']) and $query['returnItems'] == 1)
-        {
-            $results['items'] = $collections;
-            $results['items_count'] = sizeof($collections);
         }
         
         // create and configure the response type
