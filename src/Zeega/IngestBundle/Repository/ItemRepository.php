@@ -22,8 +22,7 @@ class ItemRepository extends EntityRepository
 
         if(isset($query['queryString']))
         {
-            $qb->innerjoin('i.metadata', 'm')
-               ->where('i.title LIKE ?1')
+            $qb->where('i.title LIKE ?1')
                ->orWhere('i.creator LIKE ?1')
                ->orWhere('m.description LIKE ?1')
                ->setParameter(1,'%' . $query['queryString'] . '%');
