@@ -44,6 +44,7 @@ var ZeegaMP = Class.extend({
 		this._asset.addEventListener('durationchange', function () {that.durationChange();},false);
 		$('#'+this._wrapper_id).html(this._asset);
 		if(this._asset.duration>0) this.canPlay();
+		else console.log('yyyyyyyyyyy');
 		
 		console.log('xxxxxxxxxxxxxx');
 		console.log(this._asset);
