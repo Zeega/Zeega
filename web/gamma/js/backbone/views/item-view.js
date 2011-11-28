@@ -79,7 +79,7 @@ var ItemView = Backbone.View.extend({
 	},
 	
 	events: {
-		"click" : "previewItem"
+		//"click" : "previewItem"
 		//'dblclick' : "doubleClick",
 		
 	},

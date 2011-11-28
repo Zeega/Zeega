@@ -63,8 +63,10 @@ var VideoLayer = ProtoLayer.extend({
 		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
 		
 		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
+			console.log( this );
 			$('#layer-preview-'+that.model.id).css({
-				'height':$('#media_'+that.model.id).height(),
+				//'height':$('#media_'+that.model.id).width() / 1.33,
+				//'height':$('#media_'+that.model.id).height(),
 				'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+that.attr.item_id+'_s.jpg)'
 			});
 			that.updateAttr();
@@ -202,15 +204,15 @@ var VideoLayer = ProtoLayer.extend({
 		
 		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
 		//this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id);
-		console.log(this.dom);
-		console.log(this.player);
+		
+		//console.log(this.player);
 	},
 	
 	drawPublish : function(z)
 	{
 		console.log('video drawPublish');
 		
-		console.log(this.dom);
+	
 		
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});

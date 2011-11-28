@@ -87,6 +87,8 @@ var Player = {
 		//Zeega.clearCurrentNode();
 		
 		overlay.fadeIn();
+		
+		document.getElementById('zeega-player').webkitRequestFullScreen();
 	},
 	
 	/*
@@ -95,6 +97,8 @@ var Player = {
 	*/
 	close : function()
 	{
+		document.webkitCancelFullScreen();
+		
 		console.log('Zeega Player Close');
 		var _this = this;
 		
@@ -110,7 +114,8 @@ var Player = {
 		$('#zeega-player').fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
-			$(this).remove() 
+			//All video elements must be removed prior to removing the zeega player dom element
+			//$(this).remove() 
 		}); 
 		
 		if(this.zeega)
@@ -129,9 +134,12 @@ var Player = {
 	removeAllVideoElements : function()
 	{
 		_.each( $('video'), function(video){
+			console.log('REEEEMOVING VIDEO ELEMENTS!!!!!!!!!!!');
+			console.log($(video).attr('src'));
 			$(video).attr('src','');
 			$(video).remove();
 		});
+		$('#zeega-player').remove();
 	},
 	
 	/*
@@ -142,9 +150,13 @@ var Player = {
 	{
 		var _this = this;
 		$(window).bind( 'keydown', function(e){
+		    console.log('keydown:'+e.which);
 			switch(e.which)
 			{
 				case 27:
+					if(_this.zeega) _this.close(); //don't close if standalone player
+					break;
+				case 8:
 					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
@@ -161,6 +173,11 @@ var Player = {
 					break;
 			}
 		});
+		
+		
+		$('#zeega-player').keydown(function(event) {
+  		console.log(event.which+":keypress");
+   });
 		
 		
 		$('#citation').mouseleave(function(){
@@ -631,7 +648,7 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
 		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
 		return html;
 	},

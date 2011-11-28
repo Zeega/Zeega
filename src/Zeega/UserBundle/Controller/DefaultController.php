@@ -16,16 +16,16 @@ class DefaultController extends Controller
     	 // create the ROLE_ADMIN role
         $manager=$this->getDoctrine()->getEntityManager();
         $role = new Role();
-        $role->setName('ROLE_ADMIN');
+        $role->setName('ROLE_SUPER_ADMIN');
  
         $manager->persist($role);
  		 $manager->flush();
         // create a user
         $user = new User();
-        $user->setFirstName('John');
-        $user->setLastName('Doe');
-        $user->setEmail('john@example.com');
-        $user->setUsername('john');
+        $user->setFirstName('Site');
+        $user->setLastName('Admin');
+        $user->setEmail('dev@zeega.org');
+        $user->setUsername('admin');
         $user->setSalt(md5(time()));
  
         // encode and set the password for the user,
@@ -37,7 +37,7 @@ class DefaultController extends Controller
         $user->getUserRoles()->add($role);
  
         $manager->persist($user);
-         $manager->flush();
+        $manager->flush();
         
         return $this->render('ZeegaUserBundle:Default:index.html.twig', array('name' => $name));
     }
