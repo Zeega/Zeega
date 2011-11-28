@@ -13,8 +13,8 @@ use Zeega\IngestBundle\Entity\Item;
 
 class CollectionsController extends Controller
 {
-    //  GET api/collections - returns all collections
-    public function listAction()
+    //  "get_collections"    [GET] /collections
+    public function getCollectionsAction()
     {
         $query = array();
         
@@ -46,9 +46,9 @@ class CollectionsController extends Controller
         // return the results
         return $response;
     }    
-    
-    //  POST api/collections - creates a new collections
-    public function createAction()
+
+    // "new_collections"    [POST] /api/collections
+    public function postCollectionsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         
@@ -69,19 +69,43 @@ class CollectionsController extends Controller
         return new Response($item->getId());
     }
     
-    //  PUT api/collections - add items to a collection
-    public function updateAction($items)
+        
+    // "vote_user_comment"    [PUT] /users/{slug}/comments/{id}/vote
+    
+    public function putCollectionsItemsAction($project_id, $items_id)
     {
-        return new Response($item->getId());
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('ZeegaIngestBundle:Item')->find($project_id);
+
+        if (!$entity) 
+        {
+            throw $this->createNotFoundException('Unable to find Collection entity.');
+        }
+        
+        $items_list = explode(",", $items_id);
+        
+        // this is terrible...
+        foreach($items_list as $item)
+        {
+            $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+
+            if (!$child_entity) 
+            {
+                throw $this->createNotFoundException('Unable to find Item entity.');
+            }    
+            
+            $entity->addItem($child_entity);            
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
+
     }
     
-    /**
-     * Finds and displays a Item entity.
-     *
-     * @Route("/{id}/show", name="newitem_show")
-     * @Template()
-     */
-    public function showAction($id)
+    
+    public function getCollectionAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -91,11 +115,11 @@ class CollectionsController extends Controller
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
 
+        $results[] = array('items'=>$entity);
         $response = new Response(json_encode($results));
  		$response->headers->set('Content-Type', 'application/json');
         
         // return the results
         return $response;
     }   
-    
 }

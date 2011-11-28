@@ -5,19 +5,20 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
-			$.post('http://dev.zeega.org/filipe/web/app_dev.php/api/collections/', function(data) {
+			/*
+			$.post('http://localhost/zeega/web/app_dev.php/api/collections', function(data) {
 			  $('.result').html(data);
 			});
+			*/
 			
-			/*
 			$.ajax({
-			   url: 'http://localhost/zeega/web/app_dev.php/api/collections/1/2',
+			   url: 'http://localhost/zeega/web/app_dev.php/collections/8790/items/8,9,10',
 			   type: 'PUT',
 			   success: function( response ) {
 					$('.result').html(response);
 			   }
 			});
-			*/		
+					
 		});
 	</script>
 </head>
