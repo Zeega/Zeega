@@ -97,7 +97,8 @@ var Player = {
 	*/
 	close : function()
 	{
-		document.getElementById('zeega-player').webkitCancelFullScreen();
+		document.webkitCancelFullScreen();
+		
 		console.log('Zeega Player Close');
 		var _this = this;
 		
@@ -113,7 +114,8 @@ var Player = {
 		$('#zeega-player').fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
-			$(this).remove() 
+			//All video elements must be removed prior to removing the zeega player dom element
+			//$(this).remove() 
 		}); 
 		
 		if(this.zeega)
@@ -132,9 +134,12 @@ var Player = {
 	removeAllVideoElements : function()
 	{
 		_.each( $('video'), function(video){
+			console.log('REEEEMOVING VIDEO ELEMENTS!!!!!!!!!!!');
+			console.log($(video).attr('src'));
 			$(video).attr('src','');
 			$(video).remove();
 		});
+		$('#zeega-player').remove();
 	},
 	
 	/*
@@ -145,9 +150,13 @@ var Player = {
 	{
 		var _this = this;
 		$(window).bind( 'keydown', function(e){
+		    console.log('keydown:'+e.which);
 			switch(e.which)
 			{
 				case 27:
+					if(_this.zeega) _this.close(); //don't close if standalone player
+					break;
+				case 8:
 					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
@@ -164,6 +173,11 @@ var Player = {
 					break;
 			}
 		});
+		
+		
+		$('#zeega-player').keydown(function(event) {
+  		console.log(event.which+":keypress");
+   });
 		
 		
 		$('#citation').mouseleave(function(){

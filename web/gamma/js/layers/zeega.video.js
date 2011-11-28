@@ -204,15 +204,15 @@ var VideoLayer = ProtoLayer.extend({
 		
 		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
 		//this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id);
-		console.log(this.dom);
-		console.log(this.player);
+		
+		//console.log(this.player);
 	},
 	
 	drawPublish : function(z)
 	{
 		console.log('video drawPublish');
 		
-		console.log(this.dom);
+	
 		
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
