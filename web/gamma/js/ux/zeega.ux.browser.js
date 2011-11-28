@@ -41,11 +41,34 @@ function toggleFilterDrawer(){
 $(document).ready(function() {
 
 	$(".fancybox").fancybox({
-		openSpeed	: 'fast',
-		closeSpeed	: 'fast'
+		openEffect	: 'elastic',
+    	openEasing : 'easeOutBack',
+    	
+    	closeEffect	: 'elastic',
+		closeEasing : 'easeInBack',
+		
+    	helpers : {
+    		title : {
+    			type : 'inside'
+    		}
+    	},
+		/* This adds a custom element for styling the image caption 
+		
+		*/    
+    	beforeLoad : function() {
+    
+            var elementID = $(this.element).attr('id');
+           	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
+           	var thisModel = itemsCollection.get(elementID);
+
+           	var fancyView = new BrowserFancyBoxImageView({model:thisModel});
+           	fancyView.render(this);
+
+       
+        }
 	});
 	
-
+	
 	
 	
 

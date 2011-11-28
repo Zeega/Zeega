@@ -37,14 +37,29 @@ var BrowserSearch =  Backbone.Model.extend({
 		items.reset();
 		colls.reset();
 
-		console.log('returned ' + data[0].count + ' items');
-		
-		if (data[0]['items'] != null){
-			_.each(data[0]['items'], function(item){
+		if (data == null || data['items_count'] ==null){
+			console.log('No search items returned. Something is null man.');
+		} else {
+			console.log('returned ' + data['items_count'] + ' items');
+			console.log('returned ' + data['collections_count'] + ' collections');
+		}
+
+		//Assemble item data into BrowserItems
+		if (data['items'] != null){
+			_.each(data['items'], function(item){
 				var type = item['content_type'];
 				console.log('type is ' + type);
 				this.get("itemsCollection").add(new BrowserItem(item));
-			}, this)
+			}, this);
+		}
+		//Assemble collection data into BrowserCollections
+		if (data['collections'] != null){
+			_.each(data['collections'], function(collection){
+			
+				console.log('Adding collection');
+				this.get("collectionsCollection").add(new BrowserCollection(collection));
+			}, this);
+
 		}
 		
 		
