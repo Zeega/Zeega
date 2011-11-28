@@ -205,7 +205,7 @@ class ImportWidget
 		$metadata->setDescription((string)$mdata->description[0]);
 		$metadata->setDescription(str_replace('<br />','',$metadata->getDescription()));
 		$metadata->setThumbUrl(urldecode($misc->image));
-		$item->setCreator((string)$mdata->creator[0]);
+		if(isset($mdata->creator))$item->setCreator((string)$mdata->creator[0]);
 		
 	
 	
