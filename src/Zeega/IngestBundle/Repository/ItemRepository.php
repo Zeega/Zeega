@@ -7,21 +7,22 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    //  api/search
     public function searchItems($query)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         // search query
-        $qb->select('i')
+        $qb->select('i,m.thumb_url')
             ->from('ZeegaIngestBundle:Item', 'i')
+            ->leftJoin('i.metadata','m')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['page']);
 
         if(isset($query['queryString']))
         {
-            $qb->innerjoin('i.metadata', 'm')
-               ->where('i.title LIKE ?1')
+            $qb->where('i.title LIKE ?1')
                ->orWhere('i.creator LIKE ?1')
                ->orWhere('m.description LIKE ?1')
                ->setParameter(1,'%' . $query['queryString'] . '%');
@@ -47,22 +48,43 @@ class ItemRepository extends EntityRepository
 
       	    if( $content_type == "AUDIO" ||
       	        $content_type == "VIDEO" ||
-      	        $content_type == "IMAGE" )
+      	        $content_type == "IMAGE" ||
+      	        $content_type == "COLLECTION" )
       	    {
       	        $qb->andWhere('i.content_type = ?4')
                    ->setParameter(4, $query['contentType']);
       	    }
 		}
         
-        $q = $qb->getQuery();         		   
-        return $q->getArrayResult();
-        //return $qb->getQuery()->getSQL();
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
+    }
+    
+    public function findIt($offset,$limit)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        return $qb->getQuery()->getArrayResult();         		   
     }
     
     public function findItems($query, $offset,$limit)
     {
         // $qb instanceof QueryBuilder
         $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.metadata', 'm')
+            ->where('i.title LIKE ?1')
+            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('m.description LIKE ?1')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        
         
         // search query
         $qb->select('i')

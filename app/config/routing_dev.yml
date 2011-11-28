@@ -117,9 +117,7 @@ zeega_editor:
 web_profiler: 
     resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 
 
- 
 User:
 
     pattern:   /user/{name}
     defaults: { _controller: ZeegaUserBundle:Default:index }
-
