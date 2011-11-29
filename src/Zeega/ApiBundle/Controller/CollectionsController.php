@@ -120,14 +120,11 @@ class CollectionsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('ZeegaIngestBundle:Item')->find($id);
+        $queryResults = $this->getDoctrine()
+         					 ->getRepository('ZeegaIngestBundle:Item')
+         					 ->searchCollectionById($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Item entity.');
-        }
-
-        $results[] = array('items'=>$entity);
-        $response = new Response(json_encode($results));
+        $response = new Response(json_encode($queryResults));
  		$response->headers->set('Content-Type', 'application/json');
         
         // return the results
