@@ -69,8 +69,11 @@ class SearchController extends Controller
             $res[0]["thumb_url"] = $res["thumb_url"];
             $res = $res[0];
             
-            if ((strtoupper($res["content_type"]) == "COLLECTION")) 
+            if ((strtoupper($res["content_type"]) == "COLLECTION"))
+            { 
+                $res["item_count"] = rand(0, 15);
                 array_push($collections, $res);
+            }
             else
                 array_push($items, $res);
         }
