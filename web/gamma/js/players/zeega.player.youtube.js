@@ -89,7 +89,7 @@ var ZeegaYoutube = Class.extend({
 		
 		if(debug)console.log("player:updateCurrentTime");
 		
-		if(this.youtubePlayer.getCurrentTime()>this._stop_time||this.youtubePlayer.getCurrentTime()<this._start_time){
+		if(this.youtubePlayer.getCurrentTime()>this._stop_time+.5||this.youtubePlayer.getCurrentTime()<this._start_time-.5){
 			if(interval){clearInterval(interval);}
 			this.setCurrentTime(this._start_time);
 			
@@ -175,7 +175,7 @@ var ZeegaYoutube = Class.extend({
 		$('#player-'+this._id).find('#loadingMP').fadeOut('fast');
 		
 		
-		$('#player-'+this._id).find('#volume-slider').slider({
+		$('#player-'+this._id).find('#volume-slider').css({'margin':'10px'}).slider({
 				min : 0,
 				max : 100,
 				value : that._vol,
@@ -191,6 +191,7 @@ var ZeegaYoutube = Class.extend({
 					$('#player-'+that._id).trigger('updated');
 				}
 		});
+		
 		$('body').keydown(function(event) {
 			if(that.selectedArrow=='startMP'){
 				
@@ -379,6 +380,7 @@ var ZeegaYoutubePublish = Class.extend({
 		this._source="http://www.youtube.com/v/"+this._youtube_id;
 		this._start_time=parseFloat(mediaIn);
 		this._stop_time=parseFloat(mediaOut);
+		this._mediaVol=mediaVol;
 		this._vol=parseInt(mediaVol);
 		this._loaded=false;
 		this._canplay=false;
@@ -421,6 +423,8 @@ var ZeegaYoutubePublish = Class.extend({
 			console.log('setting vol');
 			this.youtubePlayer.pauseVideo();
 			this.youtubePlayer.setVolume(this._vol);
+			console.log('vol:'+this._vol);
+			console.log('mediavol:'+this.mediaVol);
 			this._canplay=1;
 			this._dur=this.youtubePlayer.getDuration();
 			if(this._stop_time==0) this._stop_time= this._dur;

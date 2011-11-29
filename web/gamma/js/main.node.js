@@ -20,7 +20,8 @@ var loadFiles = [
 	'order!layers/zeega.image',
 	'order!layers/zeega.geo',
 	'order!layers/zeega.text',
-	'order!layers/zeega.rdio',
+	'order!layers/zeega.youtube',
+	'order!layers/zeega.audio',
 	       
 
 	];

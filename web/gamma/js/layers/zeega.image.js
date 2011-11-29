@@ -114,6 +114,21 @@ var ImageLayer = ProtoLayer.extend({
 		this.addToWorkspace(this.dom);
 	},
 	
+	
+	drawThumb : function(){
+		
+		$('#preview-media').append($('<div>').css( {
+			'position' : 'absolute',
+			'top' : this.attr.y  +'%',
+			'left' : this.attr.x  +'%',
+			'width' : this.attr.w+'%',
+			'opacity' : this.attr.opacity
+		}).append($('<img>')
+			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
+			.css({'width':'100%'})));
+	
+	},
+	
 	preloadMedia : function(){
 		//make dom object
 		//maybe these should all be wrapped in divs?

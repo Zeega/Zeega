@@ -52,6 +52,30 @@ function makeLayerSlider(args)
 }
 
 
+
+function makeSlider(args)
+{
+	var sliderDiv = $('<div>').addClass('layer-slider-div')
+		.append( $("<h4>").html(args.label) )
+		.append( $('<div>').attr({
+			'id': args.label+'-slider',
+			'data-layer-id': args.layer_id
+		}).addClass('layer-slider'));
+		
+	sliderDiv.find('.layer-slider').slider({
+		min : args.min,
+		max : args.max,
+		value : args.value,
+		step : args.step,
+		slide : function(e, ui){
+			$('#layer-preview-'+args.layer_id ).trigger('slide');
+		}
+	});
+	
+	return sliderDiv;
+}
+
+
 function makeCSSLayerSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')

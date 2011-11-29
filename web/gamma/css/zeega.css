@@ -1095,7 +1095,8 @@ body
 
 .layer-slider-div
 {
-	margin:10px 0;
+	padding:5px;
+	margin:10px 10px 10px 10px;
 }
 
 .controls
@@ -1400,41 +1401,44 @@ margin-top: 4px;
 
 input[name=avStartMinutes] {
 
-
-
+font-weight: bold; 
+color: white;
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:right;
 }
 
 input[name=avStopMinutes] {
 
-
-
+font-weight: bold; 
+color: white;
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:right;
 }
 input[name=avStartSeconds] {
-
+font-weight: bold; 
+color: white;
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:left;
 }
 
 input[name=avStopSeconds] {
-
+font-weight: bold; 
+color: white;
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:left;
 }
 
 
 #durationWrapper{
+font-weight: bold; 
 position: absolute;
 margin-top: 4px;
 left:10px;

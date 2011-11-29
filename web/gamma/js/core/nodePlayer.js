@@ -43,8 +43,8 @@ var NodePlayer = {
 			eval( 'var layerClass = new '+ layer.type +'Layer();' );
 			layerClass.load( layer )
 			layer.layerClass = layerClass;
-			layer.layerClass.preloadMedia();
-			layer.layerClass.drawPublish();
+			layer.layerClass.drawThumb();
+			
 		})
 		
 		

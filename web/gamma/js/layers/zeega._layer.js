@@ -84,6 +84,11 @@ var ProtoLayer = Class.extend({
 		//draw layer contents in workspace - called on layer view display
 	},
 	
+	drawThumb : function(){
+	
+	
+	},
+	
 	updateZIndex : function(z)
 	{
 		this.dom.css({'z-index':z});

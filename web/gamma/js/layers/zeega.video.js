@@ -19,7 +19,7 @@ var VideoLayer = ProtoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity':1,
-		'aspect':1.33
+		'dimension':1.3
 	},
 						
 	drawControls : function(template)
@@ -31,7 +31,7 @@ var VideoLayer = ProtoLayer.extend({
 		var that  = this;
 		
 		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
-		template.find('#controls').append(div);
+		
 		
 		
 		this.editorLoaded=false;
@@ -47,31 +47,25 @@ var VideoLayer = ProtoLayer.extend({
 			css: 'opacity',
 			suffix:''
 		};
-		var widthArgs = {
+		var scaleArgs = {
 			min:0,
-			max:100,
+			max:200,
 			value:that.attr.w,
 			step:1,
 			layer_id:that.model.id,
-			label:'Width',
+			label:'Scale',
 			css: 'width',
 			suffix:'%'
 		};
 		
-		template.find('#controls').append( makeCSSLayerSlider(widthArgs) );
 		
-		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
+		template.find('#controls').append( makeSlider(scaleArgs) );
 		
-		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-			console.log( this );
-			$('#layer-preview-'+that.model.id).css({
-				//'height':$('#media_'+that.model.id).width() / 1.33,
-				//'height':$('#media_'+that.model.id).height(),
-				'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+that.attr.item_id+'_s.jpg)'
-			});
-			that.updateAttr();
-			
-		});
+		template.find('#controls').append( makeSlider(opacityArgs) );
+	
+		
+
+		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {that.updateAttr();});
 		
 		template.find('#controls')
 			.find('.layer-slider')
@@ -79,6 +73,9 @@ var VideoLayer = ProtoLayer.extend({
 				$('#layer-preview-'+that.model.id).css({'backgroundImage':'none'});
 			});
 		
+		
+		
+		template.find('#controls').append(div);
 		template.find('#controls').append( makeFullscreenButton());
 		
 		template.find('#controls').find('.fullscreen-submit')
@@ -99,7 +96,7 @@ var VideoLayer = ProtoLayer.extend({
 	{
 			var _this = this;
 			if(!this.editorLoaded){
-				
+				$('#layer-preview-'+this.model.id).css({'backgroundImage':'none'});
 				var html = this.getTemplate();
 				$('#player-'+this.model.id).html(html);
 				_this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
@@ -122,7 +119,7 @@ var VideoLayer = ProtoLayer.extend({
 		//make dom object
 		var container= $('<div>');
 		
-		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
+		var h = Math.floor(this.attr.w*1.5/this.attr.dimension);
 		var cssObj = {
 			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
@@ -154,11 +151,45 @@ var VideoLayer = ProtoLayer.extend({
 		});
 		
 		
+		container.bind('slide',function(){
+		
+				var height = Math.floor($('#layer-edit-'+that.model.id).find('#Scale-slider').slider('value')*1.5/that.attr.dimension);
+		
+				$(this).css({'opacity':$('#layer-edit-'+that.model.id).find('#Opacity-slider').slider('value'),
+						'width': $('#layer-edit-'+that.model.id).find('#Scale-slider').slider('value')+'%',
+						'height':height+'%'});
+				console.log('height: '+height);
+			
+			
+			});
+		
 		//$('#layer_'+this.model.id).append(img);
 		this.dom = container;
 		
 		//draw to the workspace
 		$('#workspace').append(this.dom);
+		
+		
+	},
+	
+	drawThumb : function()
+	{
+	
+		var h = Math.floor(this.attr.w*1.5/this.attr.dimension);
+		
+		
+		$('#preview-media').append($('<div>').css({
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+			'position' : 'absolute',
+			'top' : this.attr.y+"%",
+			'left' : this.attr.x+"%",
+			'z-index' : this.zIndex,
+			'width' : this.attr.w+"%",
+			'height' : h+"%",
+			'opacity' : this.attr.opacity
+			}));
+
 		
 		
 	},
@@ -172,10 +203,10 @@ var VideoLayer = ProtoLayer.extend({
 		var _this = this;
 		var container= $('<div>');
 		
-		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
-
+		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
+		var h = Math.floor(this.attr.w*ratio/this.attr.dimension);
 		var cssObj = {
-			//'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : "-200%",
@@ -203,9 +234,8 @@ var VideoLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		
 		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
-		//this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id);
 		
-		//console.log(this.player);
+		console.log(this.player);
 	},
 	
 	drawPublish : function(z)
@@ -237,7 +267,7 @@ var VideoLayer = ProtoLayer.extend({
 		newAttr.x = this.dom.position().left/6.0;
 		newAttr.y = this.dom.position().top/4.0;
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
-		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
+		newAttr.w = $('#layer-edit-'+this.model.id).find('#Scale-slider').slider('value');
 		if(this.editorLoaded)
 		{
 			console.log('Volume: '+this.player._vol);
@@ -264,14 +294,12 @@ var VideoLayer = ProtoLayer.extend({
 		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
-		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
 		html +='</div>';
 		html +='<div id="avStop"> ';
-		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
 		html +=	'</div>';
 		html +='</div>';
-		html +='<div id="avVolumeWrapper">';
-		html +='</div> ';
 		html +='<div class="avComponent"> ';
 		html +='	<div id="mediaPlayerMP"> ';
 		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
@@ -290,7 +318,7 @@ var VideoLayer = ProtoLayer.extend({
 		html +='</div> <!-- #avComponent --> ';
 		html +='<div id="clear"></div> ';
 		html +='<div id ="volumeMP">';
-		html +='<h4>Volume</h4>';
+		html +='<h4 style="margin:10px">Volume</h4>';
 		html +='<div id="volume-slider" ></div>';
 		html +='</div>';
 		return html;

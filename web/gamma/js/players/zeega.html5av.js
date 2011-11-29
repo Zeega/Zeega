@@ -44,11 +44,7 @@ var ZeegaMP = Class.extend({
 		this._asset.addEventListener('durationchange', function () {that.durationChange();},false);
 		$('#'+this._wrapper_id).html(this._asset);
 		if(this._asset.duration>0) this.canPlay();
-		else console.log('yyyyyyyyyyy');
 		
-		console.log('xxxxxxxxxxxxxx');
-		console.log(this._asset);
-		console.log($('#'+this._wrapper_id));
 		
 	},
 	
@@ -153,7 +149,7 @@ var ZeegaMP = Class.extend({
 		
 		var vol=Math.floor(this._vol*100);
 		
-		$('#player-'+this._id).find('#volume-slider').slider({
+		$('#player-'+this._id).find('#volume-slider').css({'margin':'10px'}).slider({
 				min : 0,
 				max : 100,
 				value : vol,

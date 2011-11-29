@@ -58,14 +58,12 @@ var Player = {
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
 		
+		this.dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
+		
 		//set the current node
-		if( nodeID )
-		{
-			this.currentNode = this.getNode( nodeID );
-		}else{
-			var nodeOrder = this.currentRoute.nodeOrder;
-			this.currentNode = this.getNode( nodeOrder[0] );
-		}
+		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
+		
+		this.currentNode = this.getNode( nodeID );
 		
 		//this.parseProject;
 		this.draw();
@@ -83,12 +81,13 @@ var Player = {
 		//add the player div
 		var overlay = $(this.getTemplate());
 		$('body').append(overlay);
+		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
 		
 		//Zeega.clearCurrentNode();
 		
 		overlay.fadeIn();
 		
-		document.getElementById('zeega-player').webkitRequestFullScreen();
+		//document.getElementById('zeega-player').webkitRequestFullScreen();
 	},
 	
 	/*
@@ -136,6 +135,10 @@ var Player = {
 		_.each( $('video'), function(video){
 			$(video).attr('src','""');
 			$(video).remove();
+		});
+		_.each( $('object'), function(object){
+		
+			$(object).remove();
 		});
 		$('#zeega-player').remove();
 	},
@@ -308,6 +311,8 @@ var Player = {
 
 			//determine the layers that need to be preloaded 
 			var node = this.getNode( nodeID );
+			console.log(nodeID);
+			console.log(node);
 			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
@@ -540,8 +545,9 @@ var Player = {
 	getNode : function( nodeID )
 	{
 		//returns the node object
-		var dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
-		var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
+		
+		
+		var nodeIndex = _.indexOf( this.dataNodeOrder, parseInt(nodeID));
 		var nodeObject = this.currentRoute.nodes[nodeIndex];
 		return nodeObject;
 	},
@@ -646,7 +652,7 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img  height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
 		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
 		return html;
 	},
