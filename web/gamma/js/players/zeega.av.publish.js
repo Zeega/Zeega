@@ -39,8 +39,8 @@ var ZeegaAV = Class.extend({
 				
 		var that=this;
 		this._loaded=true;
-		//this._asset.addEventListener('canplay',function(){that.canPlay();},false);
-		this._asset.addEventListener('progress',function(){that.checkProgress();},false);
+		if(this._start_time==0) this._asset.addEventListener('canplay',function(){that.canPlay();},false);
+		else this._asset.addEventListener('progress',function(){that.checkProgress();},false);
 		this._asset.addEventListener("ended", function() {that.ended();},false);
 		this._asset.addEventListener("timeupdate", function() {that.timeUpdate();},false);
 		this._asset.addEventListener('durationchange', function () {that.durationChange();},false);
@@ -69,7 +69,7 @@ var ZeegaAV = Class.extend({
 	
 		if(debug)console.log("player:canPlay"+ this._id);
 		
-		
+		this._canplay=1;
 		this._asset.currentTime=this._start_time;
 		this._asset.volume=this._vol;
 		console.log('The current starting time is now:'+this._asset.currentTime);

@@ -134,9 +134,7 @@ var Player = {
 	removeAllVideoElements : function()
 	{
 		_.each( $('video'), function(video){
-			console.log('REEEEMOVING VIDEO ELEMENTS!!!!!!!!!!!');
-			console.log($(video).attr('src'));
-			$(video).attr('src','');
+			$(video).attr('src','""');
 			$(video).remove();
 		});
 		$('#zeega-player').remove();
