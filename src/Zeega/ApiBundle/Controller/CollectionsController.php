@@ -13,6 +13,17 @@ use Zeega\IngestBundle\Entity\Item;
 
 class CollectionsController extends Controller
 {
+    private function populateQueryGlobalParameters($request, $query)
+    {
+        $query["page"]  = $request->query->get('page');      //  string
+		$query["limit"] = $request->query->get('limit');     //  string
+		
+		//  set defaults for missing parameters  
+		if(!isset($query['page']))          $query['page'] = 0;
+		if(!isset($query['limit']))         $query['limit'] = 100;
+		if($query['limit'] > 100) 	        $query['limit'] = 100;
+    }
+    
     //  "get_collections"    [GET] /collections
     public function getCollectionsAction()
     {
@@ -119,6 +130,36 @@ class CollectionsController extends Controller
         $response = new Response(json_encode($results));
  		$response->headers->set('Content-Type', 'application/json');
         
+        // return the results
+        return $response;
+    }
+    
+    public function getCollectionItemsAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $query = array();
+        $request = $this->getRequest();
+        
+        $query["collection_id"]  = $id;
+		$query["page"]  = $request->query->get('page');      //  string
+		$query["limit"] = $request->query->get('limit');     //  string
+		
+		//  set defaults for missing parameters  
+		if(!isset($query['page']))          $query['page'] = 0;
+		if(!isset($query['limit']))         $query['limit'] = 100;
+		if($query['limit'] > 100) 	        $query['limit'] = 100;
+
+        $queryResults = $this->getDoctrine()
+         					 ->getRepository('ZeegaIngestBundle:Item')
+         					 ->searchCollectionItems($query);								
+        
+        // populate the results object
+        $results[] = array('items'=>$queryResults, 'items_count'=>sizeof($queryResults));
+        
+  		$response = new Response(json_encode($results));
+  		$response->headers->set('Content-Type', 'application/json');
+
         // return the results
         return $response;
     }   

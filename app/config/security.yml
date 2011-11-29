@@ -15,6 +15,9 @@ security:
                 admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
+        api:
+            pattern: ^/api/
+            anonymous: ~
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false

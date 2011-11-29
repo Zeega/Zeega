@@ -60,6 +60,25 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
     
+    //  api/search
+    public function searchCollectionItems($query)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.parent_items', 'c')
+            ->andWhere('c.id = ?1')
+            ->setParameter(1, $query['collection_id'])
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+            ->setFirstResult($query['page']);
+        
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
+    }
+    
     public function findIt($offset,$limit)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
