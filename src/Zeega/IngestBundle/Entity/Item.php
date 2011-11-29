@@ -494,4 +494,294 @@ class Item
     {
         return $this->parent_items;
     }
+    /**
+     * @var integer $item_id
+     */
+    private $item_id;
+
+    /**
+     * @var string $item_title
+     */
+    private $item_title;
+
+    /**
+     * @var string $item_creator
+     */
+    private $item_creator;
+
+    /**
+     * @var clob $item_content
+     */
+    private $item_content;
+
+    /**
+     * @var clob $item_excerpt
+     */
+    private $item_excerpt;
+
+    /**
+     * @var string $item_attribution_uri
+     */
+    private $item_attribution_uri;
+
+    /**
+     * @var date $item_date_created
+     */
+    private $item_date_created;
+
+    /**
+     * @var date $item_date_modified
+     */
+    private $item_date_modified;
+
+    /**
+     * @var string $item_type
+     */
+    private $item_type;
+
+    /**
+     * @var string $item_thumbnail_url
+     */
+    private $item_thumbnail_url;
+
+    /**
+     * @var integer $item_child_items_count
+     */
+    private $item_child_items_count;
+
+    /**
+     * @var integer $item_parent
+     */
+    private $item_parent;
+
+
+    /**
+     * Get item_id
+     *
+     * @return integer 
+     */
+    public function getItemId()
+    {
+        return $this->item_id;
+    }
+
+    /**
+     * Set item_title
+     *
+     * @param string $itemTitle
+     */
+    public function setItemTitle($itemTitle)
+    {
+        $this->item_title = $itemTitle;
+    }
+
+    /**
+     * Get item_title
+     *
+     * @return string 
+     */
+    public function getItemTitle()
+    {
+        return $this->item_title;
+    }
+
+    /**
+     * Set item_creator
+     *
+     * @param string $itemCreator
+     */
+    public function setItemCreator($itemCreator)
+    {
+        $this->item_creator = $itemCreator;
+    }
+
+    /**
+     * Get item_creator
+     *
+     * @return string 
+     */
+    public function getItemCreator()
+    {
+        return $this->item_creator;
+    }
+
+    /**
+     * Set item_content
+     *
+     * @param clob $itemContent
+     */
+    public function setItemContent(\clob $itemContent)
+    {
+        $this->item_content = $itemContent;
+    }
+
+    /**
+     * Get item_content
+     *
+     * @return clob 
+     */
+    public function getItemContent()
+    {
+        return $this->item_content;
+    }
+
+    /**
+     * Set item_excerpt
+     *
+     * @param clob $itemExcerpt
+     */
+    public function setItemExcerpt(\clob $itemExcerpt)
+    {
+        $this->item_excerpt = $itemExcerpt;
+    }
+
+    /**
+     * Get item_excerpt
+     *
+     * @return clob 
+     */
+    public function getItemExcerpt()
+    {
+        return $this->item_excerpt;
+    }
+
+    /**
+     * Set item_attribution_uri
+     *
+     * @param string $itemAttributionUri
+     */
+    public function setItemAttributionUri($itemAttributionUri)
+    {
+        $this->item_attribution_uri = $itemAttributionUri;
+    }
+
+    /**
+     * Get item_attribution_uri
+     *
+     * @return string 
+     */
+    public function getItemAttributionUri()
+    {
+        return $this->item_attribution_uri;
+    }
+
+    /**
+     * Set item_date_created
+     *
+     * @param date $itemDateCreated
+     */
+    public function setItemDateCreated($itemDateCreated)
+    {
+        $this->item_date_created = $itemDateCreated;
+    }
+
+    /**
+     * Get item_date_created
+     *
+     * @return date 
+     */
+    public function getItemDateCreated()
+    {
+        return $this->item_date_created;
+    }
+
+    /**
+     * Set item_date_modified
+     *
+     * @param date $itemDateModified
+     */
+    public function setItemDateModified($itemDateModified)
+    {
+        $this->item_date_modified = $itemDateModified;
+    }
+
+    /**
+     * Get item_date_modified
+     *
+     * @return date 
+     */
+    public function getItemDateModified()
+    {
+        return $this->item_date_modified;
+    }
+
+    /**
+     * Set item_type
+     *
+     * @param string $itemType
+     */
+    public function setItemType($itemType)
+    {
+        $this->item_type = $itemType;
+    }
+
+    /**
+     * Get item_type
+     *
+     * @return string 
+     */
+    public function getItemType()
+    {
+        return $this->item_type;
+    }
+
+    /**
+     * Set item_thumbnail_url
+     *
+     * @param string $itemThumbnailUrl
+     */
+    public function setItemThumbnailUrl($itemThumbnailUrl)
+    {
+        $this->item_thumbnail_url = $itemThumbnailUrl;
+    }
+
+    /**
+     * Get item_thumbnail_url
+     *
+     * @return string 
+     */
+    public function getItemThumbnailUrl()
+    {
+        return $this->item_thumbnail_url;
+    }
+
+    /**
+     * Set item_child_items_count
+     *
+     * @param integer $itemChildItemsCount
+     */
+    public function setItemChildItemsCount($itemChildItemsCount)
+    {
+        $this->item_child_items_count = $itemChildItemsCount;
+    }
+
+    /**
+     * Get item_child_items_count
+     *
+     * @return integer 
+     */
+    public function getItemChildItemsCount()
+    {
+        return $this->item_child_items_count;
+    }
+
+    /**
+     * Set item_parent
+     *
+     * @param integer $itemParent
+     */
+    public function setItemParent($itemParent)
+    {
+        $this->item_parent = $itemParent;
+    }
+
+    /**
+     * Get item_parent
+     *
+     * @return integer 
+     */
+    public function getItemParent()
+    {
+        return $this->item_parent;
+    }
 }

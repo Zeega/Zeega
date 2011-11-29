@@ -1,6 +1,6 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
 Zeega\IngestBundle\Entity\Metadata:
- type: entity
+type: entity
  id:
   id:
    type: integer
