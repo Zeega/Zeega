@@ -1,34 +1,40 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
 Zeega\IngestBundle\Entity\Metadata:
-type: entity
- id:
-  id:
-   type: integer
-   generator: { strategy: AUTO }
- fields:
-  description:
-   type: string
-   length: 5000
-   nullable: true
-  alt_creator:
-   type: string
-   length: 100
-   nullable: true
-  thumb_url:
-   type: string
-   length: 100
-   nullable: true
-  license:
-   type: string
-   length: 50
-   nullable: true
-  tag_list:
-   type: string
-   length: 1000
-   nullable: true
-  attr:
-   type: array
-   nullable: true
-   
-  
-        
+    type: entity
+    oneToOne:
+        item:
+            targetEntity: Zeega\IngestBundle\Entity\Item
+            joinColumn:
+                name: item_id
+                referencedColumnName: item_id    
+    id:
+        metadata_id:
+            type: integer
+            generator: { strategy: AUTO }
+        item_id:
+            type: bigint
+    fields:
+        metadata_creator:
+            type: string
+            length: 50
+            nullable: true
+        metadata_date_created:
+            type: date
+            nullable: true
+        metadata_description:
+            type: string
+            length: 5000
+            nullable: true
+        metadata_text:
+            type: text
+            nullable: true
+        metadata_excerpt:
+            type: text
+            nullable: true            
+        metadata_license:
+            type: string
+            length: 50
+            nullable: true
+        metadata_attributes:
+            type: array
+            nullable: true

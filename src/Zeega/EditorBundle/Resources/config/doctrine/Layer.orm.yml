@@ -5,6 +5,9 @@ Zeega\EditorBundle\Entity\Layer:
    manyToOne:
     item:
      targetEntity: Zeega\IngestBundle\Entity\Item
+     joinColumn:
+         name: id
+         referencedColumnName: item_id         
    id:
     id:
      type: integer

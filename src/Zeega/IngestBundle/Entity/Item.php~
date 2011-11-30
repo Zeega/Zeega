@@ -784,4 +784,54 @@ class Item
     {
         return $this->item_parent;
     }
+    /**
+     * @var bigint $item_media_id
+     */
+    private $item_media_id;
+
+
+    /**
+     * Set item_media_id
+     *
+     * @param bigint $itemMediaId
+     */
+    public function setItemMediaId($itemMediaId)
+    {
+        $this->item_media_id = $itemMediaId;
+    }
+
+    /**
+     * Get item_media_id
+     *
+     * @return bigint 
+     */
+    public function getItemMediaId()
+    {
+        return $this->item_media_id;
+    }
+    /**
+     * @var bigint $item_metadata_id
+     */
+    private $item_metadata_id;
+
+
+    /**
+     * Set item_metadata_id
+     *
+     * @param bigint $itemMetadataId
+     */
+    public function setItemMetadataId($itemMetadataId)
+    {
+        $this->item_metadata_id = $itemMetadataId;
+    }
+
+    /**
+     * Get item_metadata_id
+     *
+     * @return bigint 
+     */
+    public function getItemMetadataId()
+    {
+        return $this->item_metadata_id;
+    }
 }

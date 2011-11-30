@@ -1,42 +1,40 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Media.orm.yml
 Zeega\IngestBundle\Entity\Media:
- type: entity
- id:
-  id:
-   type: integer
-   generator: { strategy: AUTO }
- fields:
-  file_format:
-   type: string
-   length: 15
-   nullable: true
-  bit_rate:
-   type: integer
-   size: 10
-   nullable: true
-  size:
-   type: integer
-   length: 15
-   nullable: true
-  duration:
-   type: integer
-   length: integer
-   nullable: true
-  width:
-   type: integer
-   length: 10
-   nullable: true
-  height:
-   type: integer
-   length: 10
-   nullable: true
-  colors:
-   type: integer
-   length: 10
-   nullable: true
-  length:
-   type: integer
-   length: 10
-   nullable: true
-  
+    type: entity
+    oneToOne:
+        item:
+            targetEntity: Zeega\IngestBundle\Entity\Item
+            joinColumn:
+                name: media_id
+                referencedColumnName: item_id    
+    id:
+        media_id:
+            type: integer
+            generator: { strategy: AUTO }
+        item_id:
+            type: bigint
+    fields:
+        media_format:
+            type: string
+            length: 15
+            nullable: true
+        media_bit_rate:
+            type: integer
+            size: 10
+            nullable: true
+        media_duration:
+            type: integer
+            length: integer
+            nullable: true
+        media_width:
+            type: integer
+            length: 10
+            nullable: true
+        media_height:
+            type: integer
+            length: 10
+            nullable: true
+        media_aspect_ratio:
+            type: integer
+            nullable: true
         
