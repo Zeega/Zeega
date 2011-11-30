@@ -60,7 +60,7 @@ class NodesController extends Controller
 			exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'node/'.$node_id.'/view /var/www/'.$this->container->getParameter('directory').'images/nodes',$output);
 			$url=explode(':/var/www/',$output[4]);
 			$node->setThumbUrl($this->container->getParameter('hostname') . $url[1].'#hahahah');
-			
+			//$node->setThumbUrl($request->request->get('thumb_url'));
 		}
 		
 		if($request->request->get('layers'))$node->setLayers($request->request->get('layers'));

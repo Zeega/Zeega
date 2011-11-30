@@ -315,10 +315,11 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
-							Zeega.updateAndSaveNodeLayer(node,savedLayer);
+							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
+							_this.currentNode.noteChange();
+							//node.updateThumb();
 
-							node.updateThumb();
 						}
 					});
 				//save the new layer then prepend the layer id into the node layers array
@@ -326,8 +327,8 @@ var Zeega = {
 				console.log('this is an old layer');
 				//prepend the layer id into the node layers array
 				this.updateAndSaveNodeLayer(node,layer);
-			
-				node.updateThumb();
+				Zeega.currentNode.noteChange();
+				//node.updateThumb();
 			}
 		}
 	},

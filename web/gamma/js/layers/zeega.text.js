@@ -337,6 +337,77 @@ var TextLayer = ProtoLayer.extend({
 	},
 
 
+	drawThumb : function()
+	{
+		//make dom object
+		//maybe these should all be wrapped in divs?
+		var div = $('<div />');
+		var cssObj = {
+			'position' : 'absolute',
+			'top' : this.attr.y+'%',
+			'left' : this.attr.x+'%',
+			'z-index' : this.zIndex,//layers.length - i,
+			'width' : this.attr.w,
+			'height' : this.attr.h,
+			'font-size' : this.attr.size + 'px'
+		};
+		div.addClass('text-layer-container')
+			.attr({
+				'id' : 'layer-preview-'+this.model.id,
+				'data-layer-id' : this.model.id,
+			})
+			.css(cssObj);
+
+		div.addClass('text-layer-chrome-visible');
+		
+		/*
+		if (this.attr.content == ''){
+		    div.addClass('text-layer-chrome-visible');
+		}
+		
+		*/
+
+		//need this to be accessable inside various functions
+		var _this  = this;
+		
+		
+		
+		
+		var mouseELmaster = function (event) {
+		    _this.toggleFrameVis();
+		}
+
+	
+		var content = $('<div />').css({'width' : '100%', 
+						'height' : '100%', 
+		                                'overflow' : 'auto',
+						'column-count' : this.attr.columns,
+						'-moz-column-count' : this.attr.columns,
+						'padding-top' : this.attr.padding + 'px',
+						'padding-left' : this.attr.padding + 'px',
+						'padding-right' : this.attr.padding + 'px',
+						'padding-bottom' : this.attr.padding + 'px',
+						'text-indent': this.attr.indent + 'px',
+					        'box-sizing' : 'border-box',
+						'-moz-box-sizing' : 'border-box',
+						'-webkit-box-sizing' : 'border-box'
+		                           })
+		                          .addClass('text-layer-content');
+		
+		content.html(_this.attr.content);
+
+		
+		div.append(content);
+		$('#preview-media').append(div);
+		//draw to the workspace
+		//$('#workspace').append(this.dom);
+		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
+		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
+
+	},
+
 	preload : function()
 	{
 		
@@ -346,8 +417,8 @@ var TextLayer = ProtoLayer.extend({
 		console.log('preload media text');
 		console.log(this.attr);
 		var previewFontSize = this.attr.size/600 * window.innerWidth;
-		var previewWidth = this.attr.w/600 * window.innerWidth;
-		var previewHeight = this.attr.h/400 * window.innerHeight
+		var previewWidth = parseInt(parseFloat(this.attr.w)/6.0)+2;
+		var previewHeight = parseInt(parseFloat(this.attr.h)/4.0)+6;
 		var fontColor = 'rgba(' + this.attr.color.join(',') + ')';
 		//make dom object
 		//maybe these should all be wrapped in divs?
@@ -356,8 +427,8 @@ var TextLayer = ProtoLayer.extend({
 			'position' : 'absolute',
 			'top' : '-100%',
 			'left' : '-100%',
-			'width' : previewWidth,
-			'height' : previewHeight,
+			'width' : previewWidth+'%',
+			'height' : previewHeight+'%',
 			'color' : fontColor,
 			'font-size' : previewFontSize + 'px'
 		};
@@ -405,17 +476,10 @@ var TextLayer = ProtoLayer.extend({
 						'padding-right' : this.attr.padding + 'px',
 						'padding-bottom' : this.attr.padding + 'px',
 						'text-indent': this.attr.indent + 'px',
-						'box-sizing' : 'border-box',
-						'-moz-box-sizing' : 'border-box',
-						'-webkit-box-sizing' : 'border-box'
 		                           })
 		                          .addClass('text-layer-content');
 
 		content.html( _this.attr.content );
-
-		content.bind('click mousedown', function(event) { event.stopPropagation()});
-
-		content.bind('blur change', function(){ _this.updateAttr() });
 
 		div.append(content);
 		this.dom = div;
@@ -430,12 +494,22 @@ var TextLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media')
 			.append(this.dom)
 			.trigger('ready',{'id':this.model.id});
+			
+		
+		
+		
 		
 		
 	},
 	
 	play : function( z )
 	{
+		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
+		$('#layer-preview-'+this.model.id).css('backgroundColor','rgba(' + this.attr.bgColor.join(',') + ')');
+		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
+		
+		
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
 	

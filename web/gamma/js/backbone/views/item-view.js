@@ -28,17 +28,27 @@ var ItemView = Backbone.View.extend({
 			.attr('width','25');
 		
 		//shorten title if necessary
-		if(	this.model.get('title').length > 45) var title=this.model.get('title').substr(0,45)+"...";
+		if(	this.model.get('title').length > 30) var title=this.model.get('title').substr(0,30)+"...";
 		else var title=this.model.get('title');
 		
+		if(	this.model.get('creator')&&this.model.get('creator').length > 30) var creator=this.model.get('creator').substr(0,30)+"...";
+		else var creator=this.model.get('creator');
+		
 		template.children(".item-title").html( title ).css({'font-size':'10px'});
-		template.children(".item-meta").html( this.model.get('creator') ).css({'font-size':'10px'});
+		template.children(".item-meta").html( creator ).css({'font-size':'10px'});
 		template.removeClass('hidden');
 
 		//copy the cloned item into the el
 		$(this.el).html(template);
 		$(this.el).addClass('database-asset');
+		$(this.el).hover(function(){$(this).find('.item-delete').show();},function(){$(this).find('.item-delete').hide();});
+		var that=this;
 		
+		$(this.el).find('.item-delete').click(function(){
+		that.model.destroy();
+		
+		
+		});
 		//drag drop functionality
 		$(this.el).draggable({
 			distance : 10,

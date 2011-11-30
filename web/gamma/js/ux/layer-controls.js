@@ -55,6 +55,30 @@ function makeLayerSlider(args)
 }
 
 
+
+function makeSlider(args)
+{
+	var sliderDiv = $('<div>').addClass('layer-slider-div')
+		.append( $("<h4>").html(args.label) )
+		.append( $('<div>').attr({
+			'id': args.label+'-slider',
+			'data-layer-id': args.layer_id
+		}).addClass('layer-slider'));
+		
+	sliderDiv.find('.layer-slider').slider({
+		min : args.min,
+		max : args.max,
+		value : args.value,
+		step : args.step,
+		slide : function(e, ui){
+			$('#layer-preview-'+args.layer_id ).trigger('slide');
+		}
+	});
+	
+	return sliderDiv;
+}
+
+
 function makeCSSLayerSlider(args)
 {
 	
@@ -106,11 +130,15 @@ function textArea()
 }
 
 
-function makeColorPicker(args)
+function makeColorPicker( args )
 {
 
+	var defaults = {
+		start : 255
+	};
+	
     //clean label of spaces
-    var cleanLabel = args.label.replace(/\s/g, '_');
+    var cleanLabel = args.label.replace(/\s/g, '-').toLowerCase();
     var pickerDiv = $('<div/>').addClass('layer-colorPicker-div')
 		.append($('<h4>').html(args.label))
 		.append($('<input />').attr({

@@ -3,6 +3,11 @@ var Item = Backbone.Model.extend({
 		title : 'Untitled'
 	},
 	
+	url: function(){
+		return Zeega.url_prefix+"items/"+ this.id;
+	
+	},
+	
 	initialize : function()
 	{
 	}

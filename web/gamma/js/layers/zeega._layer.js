@@ -79,6 +79,17 @@ var ProtoLayer = Class.extend({
 	
 	onAttributeUpdate : function()
 	{
+		
+	},
+	
+	//necessary?
+	drawThumb : function()
+	{
+		
+	},
+	
+	updateZIndex : function(z)
+	{
 
 	},
 
@@ -154,6 +165,29 @@ var ProtoLayer = Class.extend({
 			this.zIndex = model.zindex;
 		}
 
+	},
+	
+	//necessary?
+	lightLoad : function(model){
+			//make it possible to load objects and not models.
+			this.model = model;
+			this.attr = model.attr;
+		
+			var defaults = deepCopy(this.defaultAttributes );
+
+			this.attr = _.defaults(this.attr, defaults);
+			this.model.attr = this.attr;
+			this.title = this.attr.title;
+			this.type = model.type;
+			this.zIndex = model.zindex;
+	},
+	
+	
+	//Activate layer icon for display in workspace icon drawer
+	
+	setIcon : function()
+	{
+		this.icon = true;
 	},
 	
 	setZIndex : function(z)

@@ -22,7 +22,7 @@ var VideoLayer = ProtoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity':1,
-		'aspect':1.33
+		'dimension':1.3
 	},
 						
 	drawControls : function()
@@ -41,6 +41,7 @@ var VideoLayer = ProtoLayer.extend({
 		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
 		template.find('#controls').append(div);
 		*/
+
 		
 		this.editorLoaded = false;
 		
@@ -55,20 +56,22 @@ var VideoLayer = ProtoLayer.extend({
 			css: 'opacity',
 			suffix:''
 		};
-		var widthArgs = {
+		var scaleArgs = {
 			min:0,
-			max:100,
+			max:200,
 			value:_this.attr.w,
 			step:1,
 			layer_id:_this.model.id,
-			label:'width',
+			label:'scale',
 			css: 'width',
 			suffix:'%'
 		};
 		
-		controls.append( makeCSSLayerSlider(widthArgs) );
+		controls.append( makeSlider(scaleArgs) );
 		
-		controls.append( makeCSSLayerSlider(opacityArgs) );
+		controls.append( makeSlider(opacityArgs) );
+	
+		controls.find('.layer-slider').bind( "slidestop", function(event, ui) {_this.updateAttr();});
 		
 		controls.find('.layer-slider')
 			.bind( "slidestart", function(event, ui) {
@@ -98,8 +101,10 @@ var VideoLayer = ProtoLayer.extend({
 	
 	onControlsOpen: function()
 	{
-			var _this = this;
-			if(!this.editorLoaded){
+
+			if( !this.editorLoaded )
+			{
+				var _this = this;
 				
 				//is this necessary?
 				var html = $('<div>').addClass('clearfix')
@@ -107,12 +112,24 @@ var VideoLayer = ProtoLayer.extend({
 					.html(this.getTemplate());
 				$('#player-'+this.model.id).prepend(html);
 				_this.player = new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+
+ 
+
+/*
+// left over from merge
+
+				$('#layer-preview-'+this.model.id).css({'backgroundImage':'none'});
+				var html = this.getTemplate();
+				$('#player-'+this.model.id).html(html);
+				_this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+
+*/
 			
 				//player triggers 'update' event to persist changes
 				$('#player-'+_this.model.id).bind('updated',function(){
 					_this.onAttributeUpdate();
 				});
-				_this.editorLoaded=true;
+				_this.editorLoaded = true;
 			}
 	},
 	
@@ -128,7 +145,8 @@ var VideoLayer = ProtoLayer.extend({
 
 		var el = $('<div>');
 
-		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
+		var h = Math.floor(this.attr.w*1.5/this.attr.dimension);
+
 		var cssObj = {
 			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
@@ -155,9 +173,27 @@ var VideoLayer = ProtoLayer.extend({
 			}
 		});
 
+		el.bind('slide',function(){
+		
+				var height = Math.floor($('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')*1.5/_this.attr.dimension);
+		
+				$(this).css({'opacity':$('#layer-edit-'+_this.model.id).find('#Opacity-slider').slider('value'),
+						'width': $('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')+'%',
+						'height':height+'%'});
+				console.log('height: '+height);
+			
+			
+			});
+		
 		this.visualEditorElement = el;
-
 		return( el );
+	},
+	
+	drawThumb : function()
+	{
+		//Video Layers break headless browser
+		
+
 	},
 	
 	
@@ -169,10 +205,10 @@ var VideoLayer = ProtoLayer.extend({
 		var _this = this;
 		var container= $('<div>');
 		
-		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
-
+		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
+		var h = Math.floor(this.attr.w*ratio/this.attr.dimension);
 		var cssObj = {
-			//'backgroundImage':'url(http:/core.zeega.org/images/items/'+this.attr.item_id+'_s.jpg)',
+			
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : "-200%",
@@ -198,9 +234,8 @@ var VideoLayer = ProtoLayer.extend({
 		$('#zeega-player').find('#preview-media').append(this.dom);
 		
 		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
-		//this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id);
 		
-		//console.log(this.player);
+		console.log(this.player);
 	},
 	
 	play : function( z )
@@ -228,7 +263,8 @@ var VideoLayer = ProtoLayer.extend({
 		newAttr.x = Math.floor( this.visualEditorElement.position().left/6);
 		newAttr.y = Math.floor( this.visualEditorElement.position().top/4);
 		newAttr.opacity = Math.floor( this.layerControls.find('#opacity-slider').slider('value') * 100 )/100;
-		newAttr.w = Math.floor( this.layerControls.find('#width-slider').slider('value') );
+		newAttr.w = Math.floor( this.layerControls.find('#scale-slider').slider('value') );
+
 		if(this.editorLoaded)
 		{
 			newAttr.in=this.player._start_time;
@@ -251,14 +287,12 @@ var VideoLayer = ProtoLayer.extend({
 		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
-		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
 		html +='</div>';
 		html +='<div id="avStop"> ';
-		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
 		html +=	'</div>';
 		html +='</div>';
-		html +='<div id="avVolumeWrapper">';
-		html +='</div> ';
 		html +='<div class="avComponent"> ';
 		html +='	<div id="mediaPlayerMP"> ';
 		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
@@ -277,7 +311,7 @@ var VideoLayer = ProtoLayer.extend({
 		html +='</div> <!-- #avComponent --> ';
 		html +='<div id="clear"></div> ';
 		html +='<div id ="volumeMP">';
-		html +='<h4>Volume</h4>';
+		html +='<h4 style="margin:10px">Volume</h4>';
 		html +='<div id="volume-slider" ></div>';
 		html +='</div>';
 		return html;
