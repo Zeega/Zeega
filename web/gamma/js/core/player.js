@@ -107,7 +107,7 @@ var Player = {
 		
 		//turn off/pause all media first
 		_.each(this.layersOnStage, function(layerID){
-			_this.getLayer(layerID).layerClass.hidePublish();
+			_this.getLayer(layerID).layerClass.stash();
 		});
 		
 		
