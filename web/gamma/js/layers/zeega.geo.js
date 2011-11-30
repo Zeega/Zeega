@@ -205,9 +205,9 @@ var GeoLayer = ProtoLayer.extend({
 		
 		var img = $('<img>').css({'width':'100%'}).attr({'id':'layer-image-'+this.model.id});
 		
-		this.dom = div;
+		
 		div.append(img);
-		$('#workspace').append(this.dom);
+		$('#preview-media').append(div);
 		
 		//Pull static map image using google api
 		

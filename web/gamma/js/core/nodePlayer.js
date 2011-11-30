@@ -40,14 +40,38 @@ var NodePlayer = {
 	{
 		
 		_.each( data, function( layer ){
-			eval( 'var layerClass = new '+ layer.type +'Layer();' );
-			layerClass.load( layer )
-			layer.layerClass = layerClass;
-			layer.layerClass.drawThumb();
+			console.log(layer);
+			if(layer.type=='Geo'||layer.type=='Image'||layer.type=='Text'){
+				eval( 'var layerClass = new '+ layer.type +'Layer();' );
+				layerClass.lightLoad( layer )
+				layer.layerClass = layerClass;
+				layer.layerClass.drawThumb();
+			}
 			
-		})
+			// Loading video/youtube/audio layers breaks the headless browser for some reason
+			
+			else if (layer.type=='Youtube'||layer.type=='Video'){
+				if(!layer.attr.y) layer.attr.y=0;
+				if(!layer.attr.x) layer.attr.x=0;
+				if(!layer.attr.w) layer.attr.w=100;
+				if(!layer.attr.dimension) layer.attr.dimension=1.3;
+				var h = Math.floor(layer.attr.w*1.5/layer.attr.dimension);
+				$('#preview-media').append($('<div id="ggg">').css( {
+					'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+layer.attr.item_id+'_s.jpg)',
+					'backgroundSize': '100px 100px',
+					'position' : 'absolute',
+					'top' : layer.attr.y+"%",
+					'left' : layer.attr.x+"%",
+					'z-index' : layer.zIndex,
+					'width' : layer.attr.w+"%",
+					'height' : h+"%",
+					'opacity' : layer.attr.opacity
+				}));
+			
+			
+		}
 		
 		
+	});
 	}
-
 }

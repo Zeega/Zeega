@@ -358,9 +358,11 @@ $(document).ready(function() {
 		var expander = $(this).next('div');
 		if( expander.is(':visible'))
 		{
-			expander.hide('blind',{'direction':'vertical'})
+			expander.hide('blind',{'direction':'vertical'});
+			$(this).find('.expand-toggle').html('+');
 		}else{
-			expander.show('blind',{'direction':'vertical'})			
+			expander.show('blind',{'direction':'vertical'})	
+			$(this).find('.expand-toggle').html('–');
 		}
 	})
 	

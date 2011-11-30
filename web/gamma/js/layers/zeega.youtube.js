@@ -108,25 +108,7 @@ var YoutubeLayer = VideoLayer.extend({
 		
 	},
 	
-	drawThumb : function(){
-		var h = Math.floor(this.attr.w*1.5/this.attr.dimension);
-		
-		
-		$('#preview-media').append($('<div>').css({
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
-			'backgroundSize': '100px 100px',
-			'position' : 'absolute',
-			'top' : this.attr.y+"%",
-			'left' : this.attr.x+"%",
-			'z-index' : this.zIndex,
-			'width' : this.attr.w+"%",
-			'height' : h+"%",
-			'opacity' : this.attr.opacity
-			}));
-
-		
-		
-	},
+	
 	
 	
 	preloadMedia : function(){

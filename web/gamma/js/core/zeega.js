@@ -294,8 +294,8 @@ var Zeega = {
 							//Add to the collection
 							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
 							else Zeega.route.layers.add( savedLayer,{silent:true} );
-						
-							node.updateThumb();
+							Zeega.currentNode.noteChange();
+							//node.updateThumb();
 						}
 					});
 				//save the new layer then prepend the layer id into the node layers array
@@ -303,8 +303,8 @@ var Zeega = {
 				console.log('this is an old layer');
 				//prepend the layer id into the node layers array
 				this.updateAndSaveNodeLayer(node,layer);
-			
-				node.updateThumb();
+				Zeega.currentNode.noteChange();
+				//node.updateThumb();
 			}
 		}
 	},

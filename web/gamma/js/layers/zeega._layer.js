@@ -181,6 +181,20 @@ var ProtoLayer = Class.extend({
 
 	},
 	
+	lightLoad : function(model){
+			//make it possible to load objects and not models.
+			this.model = model;
+			this.attr = model.attr;
+		
+			var defaults = deepCopy(this.defaultAttributes );
+
+			this.attr = _.defaults(this.attr, defaults);
+			this.model.attr = this.attr;
+			this.title = this.attr.title;
+			this.type = model.type;
+			this.zIndex = model.zindex;
+	},
+	
 	
 	//Activate layer icon for display in workspace icon drawer
 	
