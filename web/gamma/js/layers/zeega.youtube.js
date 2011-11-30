@@ -21,7 +21,7 @@ var YoutubeLayer = VideoLayer.extend({
 							'dimension':1.33
 						},
 	
-	openControls: function(){
+	onControlsOpen: function(){
 			var _this = this;
 			if(!this.editorLoaded){
 				
@@ -37,16 +37,15 @@ var YoutubeLayer = VideoLayer.extend({
 				_this.editorLoaded=true;
 			}
 	},
-	closeControls: function(){
+	onControlsClose: function(){
 		
 	
 	},
-	drawPreview : function(){
-		//make dom object
+	
+	drawToVisualEditor : function(){
+		var _this  = this;
+		var el = $('<div>');
 
-
-		var container= $('<div>');
-		
 		var h=Math.floor(this.attr.w*1.5/this.attr.dimension);
 		var cssObj = {
 			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
@@ -59,23 +58,21 @@ var YoutubeLayer = VideoLayer.extend({
 			'height' : h+"%",
 			'opacity' : this.attr.opacity
 		};
-		console.log(cssObj);
 		
-		container.addClass('media editable draggable')
+		el.addClass('media editable draggable')
 			.attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id
 			})
 			.css(cssObj);
 		
-		var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr('id','layer-preview-wrapper-'+this.model.id)
+		var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr('id','layer-preview-wrapper-'+this.model.id);
 			
 			
 		//need this to be accessable inside the draggable function
 		var that  = this;
 		
-		container.draggable({
-			
+		el.draggable({
 			//when the image stops being dragged
 			stop : function(){
 				that.updateAttr();
@@ -83,7 +80,7 @@ var YoutubeLayer = VideoLayer.extend({
 		});
 		
 				
-		container.bind('slide',function(){
+		el.bind('slide',function(){
 		
 				var height = Math.floor($('#layer-edit-'+that.model.id).find('#Scale-slider').slider('value')*1.5/that.attr.dimension);
 		
@@ -95,23 +92,17 @@ var YoutubeLayer = VideoLayer.extend({
 			
 			});
 		
+
+		el.append(wrapper);
 		
-		//$('#layer_'+this.model.id).append(img);
-		this.dom = container;
-		
-		this.dom.append(wrapper);
-		
-		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		
+		this.visualEditorElement = el;
+		return( el );
 	},
 	
 	
 	
 	
-	preloadMedia : function(){
+	preload : function(){
 		
 		//make dom object
 		var that=this;
@@ -150,7 +141,7 @@ var YoutubeLayer = VideoLayer.extend({
 		
 	},
 	
-	drawPublish : function(z){
+	play : function(z){
 		//make dom object
 		this.dom.css({'z-index':z,'top':Math.floor(parseInt(this.attr.y))+'%','left':Math.floor(parseInt(this.attr.x))+'%'});
 		console.log('medidfsafdsfdasavol'+this.attr.volume);
@@ -158,14 +149,14 @@ var YoutubeLayer = VideoLayer.extend({
 		
 	},
 	
-	hidePublish :function()
+	stash :function()
 	{
 		
 		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();
 	},
 	
-	updateAttr: function(){
+	onAttributeUpdate: function(){
 	
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
