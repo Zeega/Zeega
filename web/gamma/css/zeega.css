@@ -1702,7 +1702,7 @@ div#workspace > div.text-layer-container {
 	      border:transparent solid 1px;
 	      border-top:transparent solid 10px;
 }
-div#workspace > div.text-layer-container.text-layer-chrome-visible {
+.text-layer-chrome-visible {
 	      border: dashed white 1px;
 	      border-top: gray 10px solid;
 }
