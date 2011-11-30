@@ -121,7 +121,7 @@ var TextLayer = ProtoLayer.extend({
 	    //var _this  = this;
 
 		var colorPickerArgs = {
-			layer_id : this.model.id,
+			id : this.model.id,
 			color : {
 				r : this.attr.color[0],
 				g : this.attr.color[1],

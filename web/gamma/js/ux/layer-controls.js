@@ -106,22 +106,33 @@ function textArea()
 }
 
 
-function makeColorPicker(args)
+function makeColorPicker( args )
 {
-
+	console.log(args)
     //clean label of spaces
-    var cleanLabel = args.label.replace(/\s/g, '_');
-    var pickerDiv = $('<div/>').addClass('layer-colorPicker-div')
-		.append($('<h4>').html(args.label))
-		.append($('<input />').attr({
+    var cleanLabel = args.label.replace(/\s/g, '-').toLowerCase();
+
+	var colorPicker = $('<div>');
+	var colorWrapper = $('<div>').addClass('color-window');
+	
+	var colorPreview = $('<div>').addClass('color-preview').
+		attr('id', cleanLabel+'-preview-'+args.id).
+		css('background-color', '#'+RGBToHex(args.color) );
+
+	var colorInput = $('<input type="hidden" />')
+		.attr({
 			id : cleanLabel+'-colorPicker-'+args.layer_id,
-			'data-layer-id' : args.layer_id,
-			readonly : 'readonly',
-			value : RGBToHex(args.color)
-		})
-		.addClass('layer-colorPicker'));
+			'data-layer-id' : args.id,
+			value : RGBToHex( args.color )
+		});
+
+	colorWrapper.append( colorPreview )
+		.append( colorInput );
 		
-	var picker = pickerDiv.find('.layer-colorPicker').ColorPicker({
+	colorPicker.append('<h4>'+args.label+'</h4>')
+		.append(colorWrapper);
+		
+	var picker = colorWrapper.ColorPicker({
 		color : args.color,
 		onShow : function(c)
 		{
@@ -130,16 +141,20 @@ function makeColorPicker(args)
 		
 	    onHide : function(c){
 			$(c).fadeOut();
-			args._this.updateAttr();
+			//args._this.updateAttr();
 	    },
 	
 		onChange : function(hsb, hex, rgb){
+			colorPreview.css( 'background-color', '#' + hex );
+			colorInput.val( hex );
+			/*
 			$('input#'+cleanLabel+'-colorPicker-'+args.layer_id).val(hex);
 			args.custom_handler(rgb, args.layer_id);
+			*/
 		}
 	});
 	
-    return pickerDiv;
+    return colorPicker;
 }
 
 //Shamelessly cribbed from ColorPicker <---yessss
