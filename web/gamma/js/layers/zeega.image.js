@@ -147,7 +147,7 @@ var ImageLayer = ProtoLayer.extend({
 		
 	},
 	
-	play : function()
+	play : function( z )
 	{
 		console.log('image player.play');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});

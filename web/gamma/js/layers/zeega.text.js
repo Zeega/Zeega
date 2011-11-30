@@ -434,9 +434,8 @@ var TextLayer = ProtoLayer.extend({
 		
 	},
 	
-	play : function()
+	play : function( z )
 	{
-		console.log('image player.play');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
 	
@@ -447,7 +446,6 @@ var TextLayer = ProtoLayer.extend({
 	
 	stash : function()
 	{
-		console.log('image player.stash');
 		this.dom.css({'top':"-100%",'left':"-100%"});
 	},
 	

@@ -30,7 +30,6 @@ var VideoLayer = ProtoLayer.extend({
 		var _this  = this;
 		var controls = $('<div>');
 		
-		console.log('drawing video controls');
 		
 		//need this to be accessable inside the draggable function
 		
@@ -162,7 +161,7 @@ var VideoLayer = ProtoLayer.extend({
 	},
 	
 	
-	preloadMedia : function()
+	preload : function()
 	{
 		console.log('video preloadMedia');
 		
@@ -192,8 +191,6 @@ var VideoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-		
-		
 		//$('#layer_'+this.model.id).append(img);
 		this.dom = container;
 		
@@ -206,21 +203,17 @@ var VideoLayer = ProtoLayer.extend({
 		//console.log(this.player);
 	},
 	
-	drawPublish : function(z)
+	play : function( z )
 	{
-		console.log('video drawPublish');
-		
-	
-		
+
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
 		
 	},
 	
-	hidePublish :function()
+	stash :function()
 	{
-		console.log('video hidePublish');
 		
 		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();
@@ -229,11 +222,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	onAttributeUpdate : function()
 	{
-		console.log('VIDEO Attribute update');
-		console.log(this.layerControls);
-		
-		
-		
+
 		var newAttr = {};
 		
 		newAttr.x = Math.floor( this.visualEditorElement.position().left/6);
@@ -242,11 +231,9 @@ var VideoLayer = ProtoLayer.extend({
 		newAttr.w = Math.floor( this.layerControls.find('#width-slider').slider('value') );
 		if(this.editorLoaded)
 		{
-			console.log('Volume: '+this.player._vol);
 			newAttr.in=this.player._start_time;
 			newAttr.out=this.player._stop_time;
 			newAttr.volume = Math.floor(this.player._vol*100.0);
-			
 
 		}
 		

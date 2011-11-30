@@ -91,7 +91,7 @@ var ProtoLayer = Class.extend({
 		
 	preload : function()
 	{
-		$('#zeega-player').trigger('ready',{'id':this.parent.model.id});
+		$('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
 	play : function()

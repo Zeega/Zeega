@@ -558,11 +558,13 @@ var Zeega = {
 	
 	exportProject : function( string )
 	{
+		console.log(this.route);
+		
 		var routes = [{
 			'id' : this.route.id,
 			'nodeOrder' : this.route.get('nodesOrder'),
 			'nodes' : this.route.nodes.toJSON(),
-			'layers' : this.route.layers.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
+			'layers' : this.route.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
 		}];
 		
 		var project = {
