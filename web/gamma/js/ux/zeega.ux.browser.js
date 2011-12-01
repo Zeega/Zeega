@@ -105,7 +105,7 @@ $(document).ready(function() {
 		if ($(this).text() == "My Media"){
 			ZeegaBrowser.search.set({user:-1});
 		}else {
-			$('#browser-no-results-message').hide();
+			
 			ZeegaBrowser.search.set({user:-2});
 		}
 		ZeegaBrowser.doSearch();

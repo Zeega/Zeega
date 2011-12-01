@@ -16,7 +16,7 @@ var BrowserSearch =  Backbone.Model.extend({
     	
     	//Parameters you can send the server
     	"user"					: 	-1, //if userID is -1 then it'll search in current user's stuff
-    	"q"						: 	null, //query string
+    	"q"						: 	"", //query string
     	"content"				: 	"all", //All/image/video/audio
     	"collection"			: 	null, //collection ID, only search within this collection
     	"page"					: 	1, //which page we are on

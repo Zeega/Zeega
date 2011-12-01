@@ -122,7 +122,7 @@
 	position:relative;
 
 }
-#browser-no-results-message{
+#browser-no-items-results-message,#browser-no-collections-results-message,#browser-no-results-my-media-message {
 	font-size:140%;
 	color:#CCC;
 	padding:20px;

@@ -53,6 +53,10 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 		//Empty items and collections from results drawer
 		$('#browser-results #browser-results-collections').empty();
 
+		//Hide any previous results messages
+		$('#browser-no-results-my-media-message').hide();
+		$('#browser-no-collections-results-message').hide();
+
 		_.each(this._views, function(collectionView){
 			// item draws itself
         	collectionView.render(); 
@@ -63,9 +67,12 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 		if (this.collection.length > 100){
 			$('#browser-show-more-results').show();
 		}
-		//If they are looking at "My Media" and there is nothing there, show this message
-		if (ZeegaBrowser.search.get("user") == -1 && this.collection.length == 0){
-			$('#browser-no-results-message').show();
+		//If they are loading "My Media" with no filters and there is nothing there, show this message
+		if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
+				&& ZeegaBrowser.search.get("content") == "all" && this.collection.length == 0){
+			$('#browser-no-results-my-media-message').show();
+		} else if (this.collection.length == 0){
+			$('#browser-no-collections-results-message').show();
 		}
 		//Update counts in UI
 		$('#browser-collection-count').text(this.collection.length + " collections");
@@ -148,7 +155,10 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		//Empty items and collections from results drawer
 		$('#browser-results #browser-results-items').empty();
 
-		
+		//Hide any previous results messages
+		$('#browser-no-results-my-media-message').hide();
+		$('#browser-no-items-results-message').hide();
+
 		for (var i=0; i<this._views.length; i++){
 			var itemView = this._views[i];
 			itemView.render();
@@ -160,9 +170,12 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			$('#browser-show-more-results').show();
 		}
 		
-		//If they are looking at "My Media" and there is nothing there, show this message
-		if (ZeegaBrowser.search.get("user") == -1 && this.collection.length == 0){
-			$('#browser-no-results-message').show();
+		//If they are loading "My Media" with no filters and there is nothing there, show this message
+		if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
+				&& ZeegaBrowser.search.get("content") == "all" && this.collection.length == 0){
+			$('#browser-no-results-my-media-message').show();
+		} else if (this.collection.length == 0){
+			$('#browser-no-items-results-message').show();
 		}
 
 		//Update counts in UI
