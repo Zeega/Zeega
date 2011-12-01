@@ -122,6 +122,12 @@
 	position:relative;
 
 }
+#browser-no-results-message{
+	font-size:140%;
+	color:#CCC;
+	padding:20px;
+	display:none;
+}
 #browser-toggle-items-vs-collections{
 	position: absolute;
 	right: 82px;

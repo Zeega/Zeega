@@ -38,23 +38,19 @@ function toggleFilterDrawer(){
 	}
 		
 }
+
 $(document).ready(function() {
 
+	//set up fancybox lightbox plugin
 	$(".fancybox").fancybox({
-		openEffect	: 'elastic',
-    	openEasing : 'easeOutBack',
-    	
-    	closeEffect	: 'elastic',
-		closeEasing : 'easeInBack',
 		
     	helpers : {
     		title : {
     			type : 'inside'
     		}
     	},
-		/* This adds a custom element for styling the image caption 
 		
-		*/    
+		/* This adds a custom element for styling the image caption */    
     	beforeLoad : function() {
     
             var elementID = $(this.element).attr('id');
@@ -68,7 +64,19 @@ $(document).ready(function() {
         }
 	});
 	
-	
+
+	$('#database-search-button, ').click(function(){
+		ZeegaBrowser.doSearch();
+	});
+	$( '#browser-form-search' ).bind('keypress', function(e){
+	   if ( e.keyCode == 13 ) {
+	     e.preventDefault();
+	     ZeegaBrowser.doSearch();
+	   }
+	 });
+	 $( '#database-search-filter' ).bind('change', function(e){
+	     ZeegaBrowser.doSearch();
+	 });
 	
 	
 
@@ -94,10 +102,13 @@ $(document).ready(function() {
 
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(){
-		search.allMediaVSMyMedia = $(this).text();
-		search.updateQuery();
-		console.log($(this).text());
-		searchView.render();
+		if ($(this).text() == "My Media"){
+			ZeegaBrowser.search.set({user:-1});
+		}else {
+			$('#browser-no-results-message').hide();
+			ZeegaBrowser.search.set({user:-2});
+		}
+		ZeegaBrowser.doSearch();
 	});
 
 });

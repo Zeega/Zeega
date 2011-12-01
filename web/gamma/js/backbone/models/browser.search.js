@@ -1,13 +1,23 @@
 var BrowserSearch =  Backbone.Model.extend({
 
 	
-	url : function(){return Zeega.url_prefix + "app_dev.php/api/search"},
+	url : function(){
+
+		var finalURL = Zeega.url_prefix + "app_dev.php/api/search?" 
+					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
+					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
+					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "");
+		console.log("Final URL is: " + finalURL);
+		return finalURL;
+
+	},
 
 	defaults: {
     	
     	//Parameters you can send the server
     	"user"					: 	-1, //if userID is -1 then it'll search in current user's stuff
     	"q"						: 	null, //query string
+    	"content"				: 	"all", //All/image/video/audio
     	"collection"			: 	null, //collection ID, only search within this collection
     	"page"					: 	1, //which page we are on
     	"limit"					:  	100, //how many results to send back
@@ -48,7 +58,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		if (data['items'] != null){
 			_.each(data['items'], function(item){
 				var type = item['content_type'];
-				console.log('type is ' + type);
+				
 				this.get("itemsCollection").add(new BrowserItem(item));
 			}, this);
 		}
@@ -56,7 +66,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		if (data['collections'] != null){
 			_.each(data['collections'], function(collection){
 			
-				console.log('Adding collection');
+				
 				this.get("collectionsCollection").add(new BrowserCollection(collection));
 			}, this);
 
@@ -67,26 +77,7 @@ var BrowserSearch =  Backbone.Model.extend({
 	
 	//updates query and then fetches results from DB
 	updateQuery: function(){
-		
 
-		/*//this is generating random data
-		var randomNum =Math.floor(Math.random()*21);
-		for (var i=0;i<randomNum;i++){
-			
-		
-			if (i%4 ==0)
-			{
-				var item = new BrowserItem();
-				var coll = this.get("itemsCollection");
-				coll.add(item);
-				
-			} else {
-				var item = new BrowserCollection();
-				var coll = this.get("collectionsCollection");
-				coll.add(item);
-			}
-			
-		}*/
 
 		//do something
 		this.fetch({

@@ -41,7 +41,13 @@ var ZeegaBrowser = {
 		//Hide results drawer's loading spinner
 		$('#browser-results .browser-loading').hide();
 
-	}
-
+	},
+	doSearch : function(){
+		this.search.set({
+							q: $('#database-search-text').val(), 
+							content:$('#database-search-filter').val()
+						});
+		this.search.updateQuery();
+	} 
 	
 }

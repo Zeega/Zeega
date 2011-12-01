@@ -7,6 +7,7 @@ var BrowserItemView = Backbone.View.extend({
 		//listens for changes to its model, re-rendering
 		this.model.bind('change', this.render, this);
     	this.model.bind('destroy', this.remove, this);
+    	
 		
 	},
 	
@@ -23,6 +24,7 @@ var BrowserItemView = Backbone.View.extend({
 		//'dblclick' : "doubleClick",
 		
 	},
+	
 	
 });
 var BrowserCollectionView = BrowserItemView.extend({
@@ -45,6 +47,8 @@ var BrowserCollectionView = BrowserItemView.extend({
 		template.find('.title').text(this.model.get('title'));
 
 		$('#browser-results-collections').append(template);
+
+		this.el = template;
 		return this;
 	},
 
@@ -70,6 +74,7 @@ var BrowserImageView = BrowserSingleItemView.extend({
 	},
 	render: function()
 	{
+
 		var template = $("#browser-results-image-template").clone();
 		template.addClass('browser-results-image');
 		template.removeAttr('id');
@@ -80,6 +85,7 @@ var BrowserImageView = BrowserSingleItemView.extend({
 		template.find('img').attr('title', this.model.get('title'));
 		template.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		$('#browser-results-items').append(template);
+		this.el = template;
 		return this;
 	},
 
@@ -103,7 +109,7 @@ var BrowserFancyBoxImageView = BrowserSingleItemView.extend({
 		template.find('.creator').text( this.model.get('creator'));
 		
 		obj.title = template.html();
-		
+		this.el = template;
 		return this;
 	},
 
@@ -120,6 +126,7 @@ var BrowserAudioView = BrowserSingleItemView.extend({
 		template.addClass('browser-results-image');
 		template.removeAttr('id');
 		$('#browser-results-items').append(template);
+		this.el = template;
 		return this;
 	},
 
@@ -136,6 +143,7 @@ var BrowserVideoView = BrowserSingleItemView.extend({
 		template.addClass('browser-results-image');
 		template.removeAttr('id');
 		$('#browser-results-items').append(template);
+		this.el = template;
 		return this;
 	},
 
