@@ -10,131 +10,97 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag
 {
     /**
-     * @var integer $item_id
+     * @var bigint $id
      */
-    private $item_id;
+    private $id;
 
     /**
-     * @var bigint $tag_id
+     * @var string $name
      */
-    private $tag_id;
+    private $name;
 
     /**
-     * @var date $tag_date_created
+     * @var date $date_created
      */
-    private $tag_date_created;
+    private $date_created;
 
     /**
-     * @var bigint $tag_user
-     */
-    private $tag_user;
-
-    /**
-     * @var text $tag_description
-     */
-    private $tag_description;
-
-    /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var bigint $user
      */
     private $user;
 
     /**
-     * @var Zeega\IngestBundle\Entity\ItemTags
+     * @var text $description
      */
-    private $items;
+    private $description;
 
-    public function __construct()
-    {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
-     * Get item_id
+     * Set id
      *
-     * @return integer 
+     * @param bigint $id
      */
-    public function getItemId()
+    public function setId($id)
     {
-        return $this->item_id;
+        $this->id = $id;
     }
 
     /**
-     * Get tag_id
+     * Get id
      *
      * @return bigint 
      */
-    public function getTagId()
+    public function getId()
     {
-        return $this->tag_id;
+        return $this->id;
     }
 
     /**
-     * Set tag_date_created
+     * Set name
      *
-     * @param date $tagDateCreated
+     * @param string $name
      */
-    public function setTagDateCreated($tagDateCreated)
+    public function setName($name)
     {
-        $this->tag_date_created = $tagDateCreated;
+        $this->name = $name;
     }
 
     /**
-     * Get tag_date_created
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set date_created
+     *
+     * @param date $dateCreated
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->date_created = $dateCreated;
+    }
+
+    /**
+     * Get date_created
      *
      * @return date 
      */
-    public function getTagDateCreated()
+    public function getDateCreated()
     {
-        return $this->tag_date_created;
-    }
-
-    /**
-     * Set tag_user
-     *
-     * @param bigint $tagUser
-     */
-    public function setTagUser($tagUser)
-    {
-        $this->tag_user = $tagUser;
-    }
-
-    /**
-     * Get tag_user
-     *
-     * @return bigint 
-     */
-    public function getTagUser()
-    {
-        return $this->tag_user;
-    }
-
-    /**
-     * Set tag_description
-     *
-     * @param text $tagDescription
-     */
-    public function setTagDescription($tagDescription)
-    {
-        $this->tag_description = $tagDescription;
-    }
-
-    /**
-     * Get tag_description
-     *
-     * @return text 
-     */
-    public function getTagDescription()
-    {
-        return $this->tag_description;
+        return $this->date_created;
     }
 
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param bigint $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser($user)
     {
         $this->user = $user;
     }
@@ -142,7 +108,7 @@ class Tag
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return bigint 
      */
     public function getUser()
     {
@@ -150,57 +116,22 @@ class Tag
     }
 
     /**
-     * Add items
+     * Set description
      *
-     * @param Zeega\IngestBundle\Entity\ItemTags $items
+     * @param text $description
      */
-    public function addItemTags(\Zeega\IngestBundle\Entity\ItemTags $items)
+    public function setDescription($description)
     {
-        $this->items[] = $items;
+        $this->description = $description;
     }
 
     /**
-     * Get items
+     * Get description
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return text 
      */
-    public function getItems()
+    public function getDescription()
     {
-        return $this->items;
-    }
-    /**
-     * @var string $tag_name
-     */
-    private $tag_name;
-
-
-    /**
-     * Set tag_id
-     *
-     * @param bigint $tagId
-     */
-    public function setTagId($tagId)
-    {
-        $this->tag_id = $tagId;
-    }
-
-    /**
-     * Set tag_name
-     *
-     * @param string $tagName
-     */
-    public function setTagName($tagName)
-    {
-        $this->tag_name = $tagName;
-    }
-
-    /**
-     * Get tag_name
-     *
-     * @return string 
-     */
-    public function getTagName()
-    {
-        return $this->tag_name;
+        return $this->description;
     }
 }

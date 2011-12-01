@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemTags
 {
     /**
-     * @var integer $item_id
+     * @var bigint $item_id
      */
     private $item_id;
 
@@ -25,9 +25,14 @@ class ItemTags
     private $tag_date_created;
 
     /**
-     * @var bigint $tag_user
+     * @var integer $tag_user
      */
     private $tag_user;
+
+    /**
+     * @var Zeega\UserBundle\Entity\User
+     */
+    private $user;
 
     /**
      * @var Zeega\IngestBundle\Entity\Item
@@ -43,7 +48,7 @@ class ItemTags
     /**
      * Get item_id
      *
-     * @return integer 
+     * @return bigint 
      */
     public function getItemId()
     {
@@ -83,7 +88,7 @@ class ItemTags
     /**
      * Set tag_user
      *
-     * @param bigint $tagUser
+     * @param integer $tagUser
      */
     public function setTagUser($tagUser)
     {
@@ -93,11 +98,31 @@ class ItemTags
     /**
      * Get tag_user
      *
-     * @return bigint 
+     * @return integer 
      */
     public function getTagUser()
     {
         return $this->tag_user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Zeega\UserBundle\Entity\User $user
+     */
+    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Zeega\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -138,30 +163,5 @@ class ItemTags
     public function getTag()
     {
         return $this->tag;
-    }
-    /**
-     * @var Zeega\UserBundle\Entity\User
-     */
-    private $user;
-
-
-    /**
-     * Set user
-     *
-     * @param Zeega\UserBundle\Entity\User $user
-     */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return Zeega\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

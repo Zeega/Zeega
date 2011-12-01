@@ -19,7 +19,7 @@ Zeega\IngestBundle\Entity\ItemTags:
             inversedBy: items
             joinColumn:
                 name: tag_id
-                referencedColumnName: tag_id
+                referencedColumnName: id
     id:
         item_id:
             type: bigint

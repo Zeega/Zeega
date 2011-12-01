@@ -47,6 +47,9 @@ Zeega\IngestBundle\Entity\Item:
             type: string
             length: 500
             nullable: true
+        text:
+            type: text
+            nullable: true
         uri:
             type: string
             length: 200
@@ -86,6 +89,10 @@ Zeega\IngestBundle\Entity\Item:
         media_date_created_end:
             type: date
             nullable: true        
+        media_creator:
+            type: string
+            length: 80
+            nullable: false
     _indexes:
         date_created_index:
             fields: [item_date_created]      

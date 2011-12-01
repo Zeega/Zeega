@@ -10,7 +10,7 @@ Zeega\EditorBundle\Entity\Layer:
          referencedColumnName: id         
    id:
     id:
-     type: integer
+     type: bigint
      generator: { strategy: AUTO }
    fields:
     item_uri:

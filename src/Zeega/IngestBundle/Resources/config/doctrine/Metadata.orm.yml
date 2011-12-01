@@ -16,17 +16,10 @@ Zeega\IngestBundle\Entity\Metadata:
             type: bigint
             unique: true
             nullable: false
-        creator:
-            type: string
-            length: 50
-            nullable: true
         archive:
             type: string
             length: 50
             nullable: false
-        text_content:
-            type: text
-            nullable: true
         license:
             type: string
             length: 50
@@ -37,4 +30,8 @@ Zeega\IngestBundle\Entity\Metadata:
             nullable: true
         attributes:
             type: array
+            nullable: true
+        location:
+            type: string
+            length: 100
             nullable: true

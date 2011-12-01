@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Metadata
 {
     /**
-     * @var integer $metadata_id
+     * @var bigint $id
      */
-    private $metadata_id;
+    private $id;
 
     /**
      * @var bigint $item_id
@@ -20,34 +20,29 @@ class Metadata
     private $item_id;
 
     /**
-     * @var string $metadata_creator
+     * @var string $archive
      */
-    private $metadata_creator;
+    private $archive;
 
     /**
-     * @var string $metadata_archive
+     * @var string $license
      */
-    private $metadata_archive;
+    private $license;
 
     /**
-     * @var string $metadata_description
+     * @var string $thumbnail_url
      */
-    private $metadata_description;
+    private $thumbnail_url;
 
     /**
-     * @var text $metadata_text
+     * @var array $attributes
      */
-    private $metadata_text;
+    private $attributes;
 
     /**
-     * @var string $metadata_license
+     * @var string $location
      */
-    private $metadata_license;
-
-    /**
-     * @var array $metadata_attributes
-     */
-    private $metadata_attributes;
+    private $location;
 
     /**
      * @var Zeega\IngestBundle\Entity\Item
@@ -56,13 +51,23 @@ class Metadata
 
 
     /**
-     * Get metadata_id
+     * Get id
      *
-     * @return integer 
+     * @return bigint 
      */
-    public function getMetadataId()
+    public function getId()
     {
-        return $this->metadata_id;
+        return $this->id;
+    }
+
+    /**
+     * Set item_id
+     *
+     * @param bigint $itemId
+     */
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
     }
 
     /**
@@ -76,123 +81,103 @@ class Metadata
     }
 
     /**
-     * Set metadata_creator
+     * Set archive
      *
-     * @param string $metadataCreator
+     * @param string $archive
      */
-    public function setMetadataCreator($metadataCreator)
+    public function setArchive($archive)
     {
-        $this->metadata_creator = $metadataCreator;
+        $this->archive = $archive;
     }
 
     /**
-     * Get metadata_creator
-     *
-     * @return string 
-     */
-    public function getMetadataCreator()
-    {
-        return $this->metadata_creator;
-    }
-
-    /**
-     * Set metadata_archive
-     *
-     * @param string $metadataArchive
-     */
-    public function setMetadataArchive($metadataArchive)
-    {
-        $this->metadata_archive = $metadataArchive;
-    }
-
-    /**
-     * Get metadata_archive
+     * Get archive
      *
      * @return string 
      */
-    public function getMetadataArchive()
+    public function getArchive()
     {
-        return $this->metadata_archive;
+        return $this->archive;
     }
 
     /**
-     * Set metadata_description
+     * Set license
      *
-     * @param string $metadataDescription
+     * @param string $license
      */
-    public function setMetadataDescription($metadataDescription)
+    public function setLicense($license)
     {
-        $this->metadata_description = $metadataDescription;
+        $this->license = $license;
     }
 
     /**
-     * Get metadata_description
-     *
-     * @return string 
-     */
-    public function getMetadataDescription()
-    {
-        return $this->metadata_description;
-    }
-
-    /**
-     * Set metadata_text
-     *
-     * @param text $metadataText
-     */
-    public function setMetadataText($metadataText)
-    {
-        $this->metadata_text = $metadataText;
-    }
-
-    /**
-     * Get metadata_text
-     *
-     * @return text 
-     */
-    public function getMetadataText()
-    {
-        return $this->metadata_text;
-    }
-
-    /**
-     * Set metadata_license
-     *
-     * @param string $metadataLicense
-     */
-    public function setMetadataLicense($metadataLicense)
-    {
-        $this->metadata_license = $metadataLicense;
-    }
-
-    /**
-     * Get metadata_license
+     * Get license
      *
      * @return string 
      */
-    public function getMetadataLicense()
+    public function getLicense()
     {
-        return $this->metadata_license;
+        return $this->license;
     }
 
     /**
-     * Set metadata_attributes
+     * Set thumbnail_url
      *
-     * @param array $metadataAttributes
+     * @param string $thumbnailUrl
      */
-    public function setMetadataAttributes($metadataAttributes)
+    public function setThumbnailUrl($thumbnailUrl)
     {
-        $this->metadata_attributes = $metadataAttributes;
+        $this->thumbnail_url = $thumbnailUrl;
     }
 
     /**
-     * Get metadata_attributes
+     * Get thumbnail_url
+     *
+     * @return string 
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail_url;
+    }
+
+    /**
+     * Set attributes
+     *
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Get attributes
      *
      * @return array 
      */
-    public function getMetadataAttributes()
+    public function getAttributes()
     {
-        return $this->metadata_attributes;
+        return $this->attributes;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**
