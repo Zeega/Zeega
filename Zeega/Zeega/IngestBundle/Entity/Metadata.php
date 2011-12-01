@@ -25,11 +25,6 @@ class Metadata
     private $metadata_creator;
 
     /**
-     * @var string $metadata_archive
-     */
-    private $metadata_archive;
-
-    /**
      * @var string $metadata_description
      */
     private $metadata_description;
@@ -38,6 +33,11 @@ class Metadata
      * @var text $metadata_text
      */
     private $metadata_text;
+
+    /**
+     * @var text $metadata_excerpt
+     */
+    private $metadata_excerpt;
 
     /**
      * @var string $metadata_license
@@ -96,26 +96,6 @@ class Metadata
     }
 
     /**
-     * Set metadata_archive
-     *
-     * @param string $metadataArchive
-     */
-    public function setMetadataArchive($metadataArchive)
-    {
-        $this->metadata_archive = $metadataArchive;
-    }
-
-    /**
-     * Get metadata_archive
-     *
-     * @return string 
-     */
-    public function getMetadataArchive()
-    {
-        return $this->metadata_archive;
-    }
-
-    /**
      * Set metadata_description
      *
      * @param string $metadataDescription
@@ -153,6 +133,26 @@ class Metadata
     public function getMetadataText()
     {
         return $this->metadata_text;
+    }
+
+    /**
+     * Set metadata_excerpt
+     *
+     * @param text $metadataExcerpt
+     */
+    public function setMetadataExcerpt($metadataExcerpt)
+    {
+        $this->metadata_excerpt = $metadataExcerpt;
+    }
+
+    /**
+     * Get metadata_excerpt
+     *
+     * @return text 
+     */
+    public function getMetadataExcerpt()
+    {
+        return $this->metadata_excerpt;
     }
 
     /**

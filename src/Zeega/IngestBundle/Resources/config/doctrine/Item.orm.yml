@@ -9,64 +9,83 @@ Zeega\IngestBundle\Entity\Item:
             joinTable:
                 name: Collection
                 joinColumns:
-                    item_id:
-                        referencedColumnName: item_id
+                    id:
+                        referencedColumnName: id
                 inverseJoinColumns:
                     child_item_id:
-                        referencedColumnName: item_id
+                        referencedColumnName: id
         parent_items:
             targetEntity: Item
             mappedBy: child_items
     oneToOne:
-        metadata:
-            targetEntity: Zeega\IngestBundle\Entity\Metadata
+        user:
+            targetEntity: Zeega\UserBundle\Entity\User
             joinColumn:
-                name: metadata_id
-                referencedColumnName: metadata_id    
-        media:
-            targetEntity: Zeega\IngestBundle\Entity\Media
+                name: user_id
+                referencedColumnName: id
+        
+    oneToMany:
+        tags:
+            targetEntity: ItemTags
+            mappedBy: item
             joinColumn:
-                name: media_id
-                referencedColumnName: media_id    
+                name: id
+                referencedColumnName: item_id            
     id:
-        item_id:
+        id:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        item_title:
+        title:
             type: string
             length: 1000
             nullable: true
-        item_creator:
-            type: string
-            length: 1000
+        user_id:
+            type: integer
             nullable: false
-        item_uri:
+        description:
+            type: string
+            length: 500
+            nullable: true
+        uri:
             type: string
             length: 200
-        item_attribution_uri:
+        attribution_uri:
             type: string
             length: 200
-        item_date_created:
+        date_created:
             type: date
             nullable: false
-        item_type:
+        type:
             type: string
             length: 20
             nullable: false
-        item_thumbnail_url:
+        source:
+            type: string
+            length: 20
+            nullable: false        
+        thumbnail_url:
             type: string
             length: 100
             nullable: true
-        item_media_id:
-            type: bigint
-            nullable: false
-        item_metadata_id:
-            type: bigint
-            nullable: false
-        item_child_items_count:
+        child_items_count:
             type: integer
+            nullable: false
+            default: 0
+        media_geo_latitude:
+            type: float
+            length: 10
             nullable: true
+        media_geo_longitude:
+            type: float
+            length: 10
+            nullable: true
+        media_date_created:
+            type: date
+            nullable: true
+        media_date_created_end:
+            type: date
+            nullable: true        
     _indexes:
         date_created_index:
             fields: [item_date_created]      

@@ -5,36 +5,38 @@ Zeega\IngestBundle\Entity\Media:
         item:
             targetEntity: Zeega\IngestBundle\Entity\Item
             joinColumn:
-                name: media_id
-                referencedColumnName: item_id    
+                name: item_id
+                referencedColumnName: id    
     id:
-        media_id:
-            type: integer
+        id:
+            type: bigint
             generator: { strategy: AUTO }
+    fields:
         item_id:
             type: bigint
-    fields:
-        media_format:
+            unique: true
+            nullable: false        
+        format:
             type: string
             length: 15
             nullable: true
-        media_bit_rate:
+        bit_rate:
             type: integer
             size: 10
             nullable: true
-        media_duration:
+        duration:
             type: integer
             length: integer
             nullable: true
-        media_width:
+        width:
             type: integer
             length: 10
             nullable: true
-        media_height:
+        height:
             type: integer
             length: 10
             nullable: true
-        media_aspect_ratio:
-            type: integer
+        aspect_ratio:
+            type: float
             nullable: true
         

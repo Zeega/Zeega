@@ -6,35 +6,35 @@ Zeega\IngestBundle\Entity\Metadata:
             targetEntity: Zeega\IngestBundle\Entity\Item
             joinColumn:
                 name: item_id
-                referencedColumnName: item_id    
+                referencedColumnName: id  
     id:
-        metadata_id:
-            type: integer
+        id:
+            type: bigint
             generator: { strategy: AUTO }
+    fields:
         item_id:
             type: bigint
-    fields:
-        metadata_creator:
+            unique: true
+            nullable: false
+        creator:
             type: string
             length: 50
             nullable: true
-        metadata_date_created:
-            type: date
-            nullable: true
-        metadata_description:
+        archive:
             type: string
-            length: 5000
-            nullable: true
-        metadata_text:
+            length: 50
+            nullable: false
+        text_content:
             type: text
             nullable: true
-        metadata_excerpt:
-            type: text
-            nullable: true            
-        metadata_license:
+        license:
             type: string
             length: 50
             nullable: true
-        metadata_attributes:
+        thumbnail_url:
+            type: string
+            length: 100
+            nullable: true
+        attributes:
             type: array
             nullable: true

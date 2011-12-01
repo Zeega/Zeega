@@ -168,39 +168,4 @@ class Tag
     {
         return $this->items;
     }
-    /**
-     * @var string $tag_name
-     */
-    private $tag_name;
-
-
-    /**
-     * Set tag_id
-     *
-     * @param bigint $tagId
-     */
-    public function setTagId($tagId)
-    {
-        $this->tag_id = $tagId;
-    }
-
-    /**
-     * Set tag_name
-     *
-     * @param string $tagName
-     */
-    public function setTagName($tagName)
-    {
-        $this->tag_name = $tagName;
-    }
-
-    /**
-     * Get tag_name
-     *
-     * @return string 
-     */
-    public function getTagName()
-    {
-        return $this->tag_name;
-    }
 }

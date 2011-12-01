@@ -7,7 +7,7 @@ Zeega\EditorBundle\Entity\Layer:
      targetEntity: Zeega\IngestBundle\Entity\Item
      joinColumn:
          name: id
-         referencedColumnName: item_id         
+         referencedColumnName: id         
    id:
     id:
      type: integer
