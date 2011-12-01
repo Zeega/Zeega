@@ -68,9 +68,6 @@ var NodeView = Backbone.View.extend({
 				
 				Zeega.addLayerToNode(that.model,newLayer);
 				
-				//flash the layers tab
-				$('#layers-tab').effect("highlight", {}, 3000);
-				
 			}
 		});
 

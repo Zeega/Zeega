@@ -1,13 +1,12 @@
 /************************
 
-	LAYERS.JS
+	_zeega._layer.js
 	
-	LAYERS PLUGIN
+	PROTO-LAYER
 	
-	Version 0.1
+	Version 2.0
 	
 *************************/
-
 
 
 
@@ -45,9 +44,6 @@
 ******************************************/
 
 
-
-
-
 /**	LAYER PARENT CLASS	**/
 
 var ProtoLayer = Class.extend({
@@ -55,94 +51,78 @@ var ProtoLayer = Class.extend({
 
 	/** EXTENDABLE LAYER FUNCTIONS **/
 	
+	init : function()
+	{
+
+	},
 	
-	
+
 	drawControls : function()
 	{
-		//draws the specific layer control items inside the sidebar
+
 	},
-	
-	openControls: function()
+
+	onControlsOpen : function()
 	{
-		//called when layer controls are expanded and editing template exposed
+
 	},
-	
-	closeControls: function()
+
+	onControlsClose : function()
 	{
-		//called when layer controls are minimized and editing template closes
+
 	},
-	
-	drawPreview : function()
-	{
-		//Load icon into icon drawer above workspace
-		
-		if(this.icon){
-			//Need to add icon drawer and set to empty on node unload
-			//$('#workspace-icon-drawer').append($('<img>').attr('src','css/layers/icons/zeega.'+this.type.'+.icon.png');
-		}
-	
-		//draw layer contents in workspace - called on layer view display
-	},
-	
-	updateZIndex : function(z)
-	{
-		this.dom.css({'z-index':z});
-	},
-	
-	drawPublish : function()
-	{
-		//draw layer contents in published node space
-	},
-	
-	hidePublish : function()
+
+	drawToVisualEditor : function()
 	{
 		
 	},
 	
-	preloadMedia : function()
+	onAttributeUpdate : function()
 	{
-		//preLoad layer contents
+
+	},
+
+	onExit : function()
+	{
+
+	},
+
+	////////// player
 		
+	preload : function()
+	{
 		$('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
-	updateAttr: function()
+	play : function()
 	{
-		//update local layer attributes
-	},
-
-	exit: function()
-	{
-		//called on exit during playback
-	},
-
-
-
-	/** 
-	
-		CORE LAYER FUNCTIONS 
-	
-		SHOULD NOT BE EXTENDED
-	
-	
-	**/
-
-
-
-
-	//init with a layer model
-	
-	interaction : false,
-	
-	init : function()
-	{
-		this.icon=false;
+		
 	},
 	
-	// Populate layer attributes from layer model attributes, using
-	// default values to fill in absent values
+	pause : function()
+	{
+		
+	},
 	
-	load : function(model)
+	stash : function()
+	{
+		
+	},
+	
+	playUnsupported : function()
+	{
+		
+	},
+	
+	onExit : function()
+	{
+
+	},
+	
+
+	// utlities
+		
+	load : function( model )
 	{
 		//test to see if it's a model or just a layer data object
 		if(model.attributes)
@@ -176,78 +156,52 @@ var ProtoLayer = Class.extend({
 
 	},
 	
-	
-	//Activate layer icon for display in workspace icon drawer
-	
-	setIcon : function()
+	setZIndex : function(z)
 	{
-		this.icon=true;
-	},
-	getModel : function()
-	{
-		return this.model
-	},
-	setModel : function(model)
-	{
-		this.model = model;
-		return this;
-	},
-	getTitle : function()
-	{
-		return this.model;
-	},
-	setTitle : function(title)
-	{
-		this.title = title;
-		return this;
-	},	
-	
-	//updates the layer order accordingly
-	updateZIndex : function(zIndex)
-	{
-		this.dom.css( 'z-index', zIndex );
+		this.visualEditorElement.css( 'z-index', z );
 	},
 	
-	updateLayerAttr : function(newAttr)
+	onStateChange : function()
 	{
-		this.model.set({ 'attr' : newAttr });
+		
 	},
-
-	updateLayerText : function(newText)
+	
+	onError : function()
+	{
+		
+	},
+	
+	setText : function( newText )
 	{
 		this.model.set({ 'text' : newText });
 	},
-
-	saveLayer : function()
+	
+	setAttributes : function( newAttr )
 	{
-		//kept separate from updateLayerAttr because there may be reasons to set but not save yet
+		
+		var attr = this.model.get('attr');
+		var n = _.extend( attr, newAttr );
+		
+		console.log(n)
+		
+		this.model.set( n );
+		
+	},
+	
+	save : function()
+	{
+		//kept separate from updateLayerAttr because there are reasons to set but not save yet
 		console.log('save()');
 		Zeega.currentNode.noteChange();
 		this.model.save(); //saves the current model
-	},
-
-	remove : function()
-	{
-		this.dom.remove();
-	},
-
-	addToWorkspace : function(dom)
-	{
-
-		var pDom = dom.clone();
-		//var wDom = obj.dom.clone();
-		//pDom.draggable({ stop : function(){ obj.updateAttr(); } });
-		//wDom.draggable({ stop : function(){ obj.updateAttr(); } });
-
-		$('#workspace').append(dom);
-
-		//add to node preview if open
-		if($('#workspace-preview-wrapper')) $('#workspace-preview').append(pDom);
 	}
-
-
-
-
+	
 
 });
+
+
+
+
+
+
 	

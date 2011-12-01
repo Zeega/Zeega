@@ -190,6 +190,11 @@ body
 	margin:0 auto;
 }
 
+#edit-drawer
+{
+	float:left;
+}
+
 #editor
 {
 	position:relative;
@@ -728,7 +733,7 @@ body
 	margin-left:10px;
 }
 
-#sortable-layers li
+#layers-list-visual li
 {
 	min-height:25px;
 	background:#555;
@@ -908,7 +913,7 @@ body
 	position:relative;
 }
 
-#workspace
+#visual-editor-workspace
 {
 	width:100%;
 	height:400px;
@@ -917,6 +922,11 @@ body
 	overflow:hidden;
 	position:relative;
 	margin-bottom:10px;
+}
+
+.workspace-item-hover
+{
+	outline:2px solid yellow;
 }
 
 .i-layer
@@ -1150,56 +1160,6 @@ td+td
 
 
 
-
-#branch-overlay
-{
-	z-index:100;
-	position:absolute;
-	height:100%;
-	width:100%;
-}
-
-.branch-drop-wrapper
-{
-	position:absolute;
-}
-
-
-.branch-drop
-{
-	height:50px;
-	width:50px;
-	background: white;
-	overflow:hidden;
-}
-
-.branch-drop:hover
-{
-	background: yellow;
-}
-
-#branch-top
-{
-	left:275px;
-	top:10px;
-}
-
-#branch-right
-{
-	left:540px;
-	top:175px;
-}
-#branch-bottom
-{
-	left:275px;
-	top:340px;
-}
-#branch-left
-{
-	left:10px;
-	top:175px;
-}
-
 .preview-nav
 {
 	z-index:1000;
@@ -1234,10 +1194,7 @@ td+td
 	-moz-transform: rotate(180deg);
 }
 
-#workspace.workspace-item-hover
-{
-	outline:2px solid yellow;
-}
+
 
 .node-item-hover>div
 {

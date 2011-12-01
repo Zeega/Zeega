@@ -88,7 +88,8 @@ var Player = {
 		
 		overlay.fadeIn();
 		
-		document.getElementById('zeega-player').webkitRequestFullScreen();
+		//disabled during dev work
+		//document.getElementById('zeega-player').webkitRequestFullScreen();
 	},
 	
 	/*
@@ -106,7 +107,7 @@ var Player = {
 		
 		//turn off/pause all media first
 		_.each(this.layersOnStage, function(layerID){
-			_this.getLayer(layerID).layerClass.hidePublish();
+			_this.getLayer(layerID).layerClass.stash();
 		});
 		
 		
@@ -346,7 +347,7 @@ var Player = {
 			//add the layer class to the layer class array
 			this.getLayer(layerID).layerClass = layerClass;
 			
-			layerClass.preloadMedia();
+			layerClass.preload();
 			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
@@ -406,7 +407,7 @@ var Player = {
 			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
-				_this.getLayer(layerID).layerClass.drawPublish(i);
+				_this.getLayer(layerID).layerClass.play(i);
 				_this.layersOnStage.push(layerID);
 			}else{
 				//update existing persistant layer with new z-index
@@ -445,7 +446,7 @@ var Player = {
 
 		_.each( layersToRemove, function( layerID ){
 			console.log('removing layer: '+layerID);
-			_this.getLayer(layerID).layerClass.hidePublish();
+			_this.getLayer(layerID).layerClass.stash();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		

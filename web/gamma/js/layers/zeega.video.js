@@ -7,6 +7,9 @@
 
 var VideoLayer = ProtoLayer.extend({
 	
+	layerType : 'VISUAL',
+	draggable : true,
+	
 	defaultAttributes : 
 	{
 		'title' : 'Video Layer',
@@ -22,106 +25,109 @@ var VideoLayer = ProtoLayer.extend({
 		'aspect':1.33
 	},
 						
-	drawControls : function(template)
+	drawControls : function()
 	{
+		var _this  = this;
+		var controls = $('<div>');
 		
-		console.log('drawing video controls');
 		
 		//need this to be accessable inside the draggable function
-		var that  = this;
 		
+		controls.addClass('timeLEF')
+			.addClass('layerEditingFrame')
+			.attr('id','player-'+this.model.id);
+		
+		/*
 		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
 		template.find('#controls').append(div);
+		*/
 		
-		
-		this.editorLoaded=false;
+		this.editorLoaded = false;
 		
 		
 		var opacityArgs = {
 			min:0,
 			max:1,
-			value:that.attr.opacity,
+			value:_this.attr.opacity,
 			step:0.01,
-			layer_id:that.model.id,
-			label:'Opacity',
+			layer_id:_this.model.id,
+			label:'opacity',
 			css: 'opacity',
 			suffix:''
 		};
 		var widthArgs = {
 			min:0,
 			max:100,
-			value:that.attr.w,
+			value:_this.attr.w,
 			step:1,
-			layer_id:that.model.id,
-			label:'Width',
+			layer_id:_this.model.id,
+			label:'width',
 			css: 'width',
 			suffix:'%'
 		};
 		
-		template.find('#controls').append( makeCSSLayerSlider(widthArgs) );
+		controls.append( makeCSSLayerSlider(widthArgs) );
 		
-		template.find('#controls').append( makeCSSLayerSlider(opacityArgs) );
+		controls.append( makeCSSLayerSlider(opacityArgs) );
 		
-		template.find('#controls').find('.layer-slider').bind( "slidestop", function(event, ui) {
-			console.log( this );
-			$('#layer-preview-'+that.model.id).css({
-				//'height':$('#media_'+that.model.id).width() / 1.33,
-				//'height':$('#media_'+that.model.id).height(),
-				'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+that.attr.item_id+'_s.jpg)'
+		controls.find('.layer-slider')
+			.bind( "slidestart", function(event, ui) {
+				$('#layer-preview-'+_this.model.id).css({
+					'height':$('#media_'+_this.model.id).height(),
+//					'backgroundImage':'url(' + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+_this.attr.item_id+'_s.jpg)'
+					'backgroundImage':'none'
+					});
 			});
-			that.updateAttr();
-			
+		controls.find('.layer-slider').bind( "slidestop", function(event, ui) {
+			_this.onAttributeUpdate();
 		});
 		
-		template.find('#controls')
-			.find('.layer-slider')
-			.bind( "slidestart", function(event, ui) {
-				$('#layer-preview-'+that.model.id).css({'backgroundImage':'none'});
-			});
+		controls.append( makeFullscreenButton() );
 		
-		template.find('#controls').append( makeFullscreenButton());
-		
-		template.find('#controls').find('.fullscreen-submit')
+		controls.find('.fullscreen-submit')
 			.click(function(){
-				$('#layer-preview-'+that.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-				$('#layer-edit-'+that.model.id).find('#Width-slider')
+				$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
+				$('#layer-edit-'+_this.model.id).find('#Width-slider')
 					.slider("option", "value", 100 );
-				that.updateAttr();
+				_this.onAttributeUpdate();
 			});
 		
-		//change icon on layer template
-		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
-		template.find('.asset-type-icon').addClass('ui-icon-video');
-		
+		this.layerControls = controls;
+		return controls;
 	},
 	
-	openControls: function()
+	onControlsOpen: function()
 	{
 			var _this = this;
 			if(!this.editorLoaded){
 				
-				var html = this.getTemplate();
-				$('#player-'+this.model.id).html(html);
-				_this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+				//is this necessary?
+				var html = $('<div>').addClass('clearfix')
+					.css('height','140px') //this should moved out
+					.html(this.getTemplate());
+				$('#player-'+this.model.id).prepend(html);
+				_this.player = new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
 			
 				//player triggers 'update' event to persist changes
 				$('#player-'+_this.model.id).bind('updated',function(){
-					_this.updateAttr();
+					_this.onAttributeUpdate();
 				});
 				_this.editorLoaded=true;
 			}
 	},
 	
-	closeControls: function()
+	onControlsClose: function()
 	{
 		if(this.player) this.player.pause();
 	},
 	
-	drawPreview : function()
+	
+	drawToVisualEditor : function()
 	{
-		//make dom object
-		var container= $('<div>');
-		
+		var _this  = this;
+
+		var el = $('<div>');
+
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
 			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
@@ -134,37 +140,28 @@ var VideoLayer = ProtoLayer.extend({
 			'height' : h+"%",
 			'opacity' : this.attr.opacity
 		};
-		
-		
-		container.addClass('media editable draggable')
+
+		el.addClass('media editable draggable')
 			.attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id
 			})
 			.css(cssObj);
-			
-		//need this to be accessable inside the draggable function
-		var that  = this;
-		
-		container.draggable({
+					
+		el.draggable({
 			//when the image stops being dragged
 			stop : function(){
-				that.updateAttr();
+				_this.onAttributeUpdate();
 			}
 		});
-		
-		
-		//$('#layer_'+this.model.id).append(img);
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		
+
+		this.visualEditorElement = el;
+
+		return( el );
 	},
 	
 	
-	preloadMedia : function()
+	preload : function()
 	{
 		console.log('video preloadMedia');
 		
@@ -194,8 +191,6 @@ var VideoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 			
-		
-		
 		//$('#layer_'+this.model.id).append(img);
 		this.dom = container;
 		
@@ -208,52 +203,44 @@ var VideoLayer = ProtoLayer.extend({
 		//console.log(this.player);
 	},
 	
-	drawPublish : function(z)
+	play : function( z )
 	{
-		console.log('video drawPublish');
-		
-	
-		
+
 		//make dom object
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 		this.player.play();
 		
 	},
 	
-	hidePublish :function()
+	stash :function()
 	{
-		console.log('video hidePublish');
 		
 		this.dom.css({'top':"-200%",'left':"-200%"});
 		this.player.pause();
 	},
 	
-	updateAttr: function()
-	{
 	
-		//get a copy of the old attributes into a variable
-		var newAttr = this.attr;
-		//set the new x/y coords into the attributes
-		newAttr.x = this.dom.position().left/6.0;
-		newAttr.y = this.dom.position().top/4.0;
-		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
-		newAttr.w = $('#layer-edit-'+this.model.id).find('#Width-slider').slider('value');
+	onAttributeUpdate : function()
+	{
+
+		var newAttr = {};
+		
+		newAttr.x = Math.floor( this.visualEditorElement.position().left/6);
+		newAttr.y = Math.floor( this.visualEditorElement.position().top/4);
+		newAttr.opacity = Math.floor( this.layerControls.find('#opacity-slider').slider('value') * 100 )/100;
+		newAttr.w = Math.floor( this.layerControls.find('#width-slider').slider('value') );
 		if(this.editorLoaded)
 		{
-			console.log('Volume: '+this.player._vol);
 			newAttr.in=this.player._start_time;
 			newAttr.out=this.player._stop_time;
 			newAttr.volume = Math.floor(this.player._vol*100.0);
-			
 
 		}
-		//set the attributes into the layer
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();
-	
-	
+		
+		this.setAttributes(newAttr);
+		this.save();
 	},
+
 	exit: function()
 	{
 		this.player.pause();

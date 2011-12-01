@@ -29,6 +29,7 @@ var Node = Backbone.Model.extend({
 		//kill any preexisting thumb updates
 		if(this.t) clearTimeout(this.t);
 		
+
 		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
 		this.set({ thumb_url : 0 });
 		
