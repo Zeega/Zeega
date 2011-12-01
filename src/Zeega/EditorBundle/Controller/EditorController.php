@@ -193,10 +193,6 @@ class EditorController extends Controller
 	else $super=false;			
 	if($playground){
 		
-		$admin=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
-					->checkAdmin($short,$user->getId());
-		
 		$admin=true;
 		$projects=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Project')
