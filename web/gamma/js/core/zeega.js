@@ -304,12 +304,7 @@ var Zeega = {
 	
 	addLayerToNode : function( node, layer )
 	{
-		console.log('ADDLAYERTONODE');
-		console.log(this);
-		console.log(node);
-		console.log(layer);
-		
-		
+
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{
@@ -327,6 +322,8 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
+							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
+							
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
 							_this.currentNode.noteChange();
