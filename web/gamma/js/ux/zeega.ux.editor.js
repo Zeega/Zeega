@@ -353,17 +353,37 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
-	
+
+//expands the Zeega editor panels	
 	$('.editor-title-bar-expander').click(function(){
+		
+		//get the current Node ID
+		var nodeID = Zeega.currentNode.id;
+		var domID = $(this).attr('id').split('-',1)[0];
+
+		var storage = localStorage.getObject( nodeID );
+		var panelStates = {};
+		if( _.isNull( storage ) ) storage = {};
+		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+		
 		var expander = $(this).next('div');
 		if( expander.is(':visible'))
 		{
+			//hide
+			eval( 'var state = {"'+ domID +'":true}');
+			_.extend( panelStates , state );
 			expander.hide('blind',{'direction':'vertical'});
 			$(this).find('.expand-toggle').html('+');
 		}else{
+			//show
+			eval( 'var state = {"'+ domID +'":false}');
+			_.extend( panelStates , state );
 			expander.show('blind',{'direction':'vertical'})	
 			$(this).find('.expand-toggle').html('–');
 		}
+		//set as property to read in on reload
+		_.extend( storage, {panelStates:panelStates} )
+		localStorage.setObject( nodeID , storage );
 	})
 	
 	

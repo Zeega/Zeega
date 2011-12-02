@@ -182,17 +182,29 @@ var Zeega = {
 		if(node) window.location.hash = '/node/'+ node.id; //change location hash
 		else window.location.hash = 'newNode';
 		//open/close visual editor
-		var el = $('#workspace');
-
-		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden')){
-			el.show('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('–');
-		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
-		{
-			el.hide('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('+');
-		}
 		
+		
+		//show/hide editor panels
+		// what should happen to panels which haven't been set?
+		//right now they inherit the last node's state
+		var storage = localStorage.getObject( this.currentNode.id );
+		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
+		{
+			//go through each saved state
+			_.each( storage.panelStates , function(closed, panel){
+				var dom = $( '#' +panel+ '-view-bar' );
+				var expander = $(dom).next('div');
+				if( closed && expander.is(':visible') )
+				{
+					expander.hide('blind',{'direction':'vertical'});
+					$(dom).find('.expand-toggle').html('+');
+				}else if( !closed && expander.is(':hidden') ){
+					expander.show('blind',{'direction':'vertical'});
+					$(dom).find('.expand-toggle').html('–');
+				}
+			})
+		}
+
 		
 		//update the auto advance tray
 		//make sure the attribute exists

@@ -42,6 +42,7 @@ var ImageLayer = ProtoLayer.extend({
 		var opacitySlider = makeUISlider( opacityArgs );
 		
 		var widthArgs = {
+			min : 1,
 			max : 200,
 			label : 'Width',
 			step : 1,
