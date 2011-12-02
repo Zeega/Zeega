@@ -9,8 +9,6 @@ var VisualLayerEditorView = Backbone.View.extend({
 	{
 		var _this = this;
 		
-		console.log(this);
-		
 		//remove this view when the model is removed
 		this.model.bind('remove',function(){ _this.remove() });
 				
@@ -84,9 +82,8 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 
 	},
 	
-	add : function ( layer ){
-		console.log(layer.id);
-		
+	add : function ( layer )
+	{
 		var layerView = new VisualLayerEditorView({ model : layer });
 		this._renderedViews.push( layerView );
 		$(this.el).append( layerView.render().el );
