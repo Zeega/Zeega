@@ -5,23 +5,22 @@
 
 var MyCollections = Backbone.Collection.extend({
 	model: BrowserCollection, 
+	
 
 	url : function(){return Zeega.url_prefix + "app_dev.php/api/search?user=-1&r_items=0"},
 	
 	
 	initialize : function()
 	{
-		//do something
+	
 		this.fetch({
-			
-
 			success : function()
 			{
-				console.log('got my collections query');
 				ZeegaBrowser.myCollectionsQueryDone();
 			}
 		});
 	},
+	
 	parse: function(data){
 
 		console.log('My Collections: returned ' + data['collections_count'] + ' collections');

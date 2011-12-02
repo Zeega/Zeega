@@ -52,16 +52,8 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 			//Update counts in UI
 			$('#browser-collection-count').text(this.collection.length + " collections");
 		} else {
-			//Show results drawer's loading spinner
-			$('#browser-results .browser-loading').show();
-			
-			//Empty items and collections from results drawer
-			$('#browser-results #browser-results-collections').empty();
 
-			//Hide any previous results messages
-			$('#browser-no-results-my-media-message').hide();
-			$('#browser-no-items-results-message').hide();
-			$('#browser-no-collections-results-message').hide();
+			
 
 			_.each(this._views, function(collectionView){
 				// item draws itself
@@ -85,8 +77,7 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 			//Update counts in UI
 			$('#browser-collection-count').text(this.collection.length + " collections");
 
-			//Hide results drawer's loading spinner
-			$('#browser-results .browser-loading').hide();
+			
 		}
 		return this;
 	},
@@ -157,25 +148,24 @@ var BrowserSearchItemsView = Backbone.View.extend({
     },
 	render: function()
 	{	
+
+		//If the items drawer isn't showing then only render the item count
 		if ($(this.el).css("display") == "none"){
 			//Update counts in UI
 			$('#browser-item-count').text(this.collection.length + " items");
 		} else {
-			//Show results drawer's loading spinner
-			$('#browser-results .browser-loading').show();
 			
-			//Empty items and collections from results drawer
-			$('#browser-results #browser-results-items').empty();
+			
+			
 
-			//Hide any previous results messages
-			$('#browser-no-results-my-media-message').hide();
-			$('#browser-no-items-results-message').hide();
-			$('#browser-no-collections-results-message').hide();
+			//Item renders itself and then this viewcollection appends it to its parent el
+			_.each(this._views, function(itemView){
+				// item draws itself
+	        	var addThis = itemView.render(); 
+	        	$(this.el).append(addThis.el);
 
-			for (var i=0; i<this._views.length; i++){
-				var itemView = this._views[i];
-				itemView.render();
-			}
+	        	
+			}, this);
 			
 			
 			//Show more results link (TODO: only if search yields more than 100 total items)
@@ -194,8 +184,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			//Update counts in UI
 			$('#browser-item-count').text(this.collection.length + " items");
 
-			//Hide results drawer's loading spinner
-			$('#browser-results .browser-loading').hide();
+			
 		}
 		return this;
 	},

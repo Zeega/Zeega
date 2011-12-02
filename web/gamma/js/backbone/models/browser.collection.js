@@ -2,14 +2,31 @@
 	Model for items of type='collection'
 */
 var BrowserCollection = Backbone.Model.extend({
+	
+	
+	url : function(){
+		if (this.isNew()){
+			return Zeega.url_prefix + 'app_dev.php/api/collections/'; 
+		}else {
+			return Zeega.url_prefix +'app_dev.php/api/collections/'+this.id;
+		}
+	},
 	defaults : {
 		title 	: 'Untitled',
-		type	: 'collection'
-		
+		type	: 'collection',
+		"newItemIDs" :[]
 	},
 	
 	initialize : function()
 	{
+	},
+	addNewItemID : function(newID){
+		var ids= this.get("newItemIDs");
+		ids.push(newID);
+	},
+	parse : function(data){
+		this.id = data;
+		this.set({"newItemIDs": []}); //reset the new item ids
 	}
 
 });

@@ -89,6 +89,7 @@ $(document).ready(function() {
 		$(this).closest('li').addClass('browser-selected-toggle');
 		$(this).siblings().removeClass('browser-selected-toggle');
 		$(this).siblings().addClass('browser-unselected-toggle');
+
 		return false;
 	});
 
@@ -102,6 +103,8 @@ $(document).ready(function() {
 
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(){
+		
+
 		if ($(this).text() == "My Media"){
 			ZeegaBrowser.search.set({user:-1});
 		}else {
@@ -111,4 +114,39 @@ $(document).ready(function() {
 		ZeegaBrowser.doSearch();
 	});
 
+	$('#browser-create-new-collection').droppable({
+			accept : '.browser-results-image',
+			hoverClass : 'browser-create-new-collection-hover',
+			tolerance : 'pointer',
+
+			//this happens when you drop an item onto a collection
+			drop : function( event, ui )
+			{
+				
+				ui.draggable.draggable('option','revert',false);
+				
+
+				$(this).effect("highlight", {}, 3000);
+
+				
+				var newGuy = new BrowserCollection();
+
+				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
+				
+				newGuy.save({ title:'New fake collection' + Math.floor(Math.random()*1000)}, 
+							{
+								success: function(model, response) { 
+									ZeegaBrowser.myCollectionsModel.add(model);
+									ZeegaBrowser.myCollectionsView.render();
+				 				},
+				 				error: function(model, response){
+				 					console.log("Error creating a new collection.");
+				 					console.log(response);
+				 				}
+				 			});
+				
+				
+				
+			}
+		});
 });

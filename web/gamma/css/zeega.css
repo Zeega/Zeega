@@ -8,6 +8,7 @@
 	top: 50px;
 }
 
+
 #browser-results{
 	
 	padding:0px 0 5px 0 !important;
@@ -41,6 +42,7 @@
 	border-bottom:none;
 	margin-bottom:-1px;
 }
+
 #browser-toggle-items-vs-collections ul{
 	list-style:none;
 }
@@ -83,14 +85,16 @@
 	border-radius: 0px 10px 10px 10px;
 	
 }
-.browser-my-collection{
-	float:left;
-	background-color:#999;
-	width:144px;
+#browser-my-collections-drawer{
+	list-style:none;
+	height:140px;
+	width:1400px;
+	overflow:hidden;
+	display:inline;
+}
+#browser-my-collections-drawer li{
+	padding:10px 0 10px 10px;
 	height:110px;
-	margin:10px;
-	color:#666;
-	font-size:90%;
 	
 }
 .browser-my-collection img{
@@ -98,7 +102,23 @@
 	padding-right:0;
 	
 }
+ .browser-my-collection p {
+ 	
+	width: 80%;
+	color:#EEE;
+	background: rgba(0, 0, 0, 0.2);
+	padding:3px 3px 3px 10px;
+	line-height: 12px;
 
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-radius: 0px 0px 10px 0px;
+	border-radius: 0px 0px 10px 0px;
+	white-space:normal;
+	
+}
 
 #browser-search-filter-toggle{
 	margin: 0;
@@ -136,7 +156,7 @@
 
 	
 }
-.browser-results-collection,.browser-results-image, #browser-show-more-results{
+.browser-results-image, #browser-show-more-results{
 
 	float: left;
 	margin: 0;
@@ -174,41 +194,29 @@
 	position:relative;
 	top:44px;
 }
- .browser-my-collection p {
- 	
-	width: 80%;
-	color:#EEE;
-	background: rgba(0, 0, 0, 0.2);
-	padding:3px 3px 3px 10px;
-	line-height: 12px;
 
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 10px;
-	-moz-border-radius-bottomleft: 0px;
-	-webkit-border-radius: 0px 0px 10px 0px;
-	border-radius: 0px 0px 10px 0px;
-	white-space:normal;
-	
-}
 #browser-create-new-collection{
 	background-color:#555;
 	width:164px;
-	height:130px;
+	padding:10px 0 10px 10px;
 	float:left;
 	-webkit-box-shadow: 3px 0px 2px 0px #333333;
 	-moz-box-shadow: 3px 0px 2px 0px #333333;
 	box-shadow: 3px 0px 2px 0px #333333; 
 
 }
+.browser-create-new-collection-hover{
+	background-color:#888 !important;
+}
 #browser-create-new-collection .browser-my-new-collection{
 	border:dashed 1px #666;
 	background: rgba(0, 0, 0, 0.2);
 	width:144px;
 	height:110px;
-	margin:10px;
+	
 
 }
+
 #browser-create-new-collection .browser-my-new-collection p{
 	
 	color:#EEE;
@@ -218,8 +226,12 @@
 	line-height: 16px;	
 	background-color:none;
 	font-size:80%;
-
+	
 	white-space:normal;
+}
+.browser-results-collection{
+	width:144px;
+	float:left;
 }
 .browser-results-collection p
 {

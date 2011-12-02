@@ -78,22 +78,11 @@ var BrowserSearch =  Backbone.Model.extend({
 	//updates query and then fetches results from DB
 	updateQuery: function(){
 
-
-		//do something
 		this.fetch({
-			data: 	{
-						/*
-						todo -- add this back in
-						user: this.get("user"),
-						q: this.get("q"),
-						collection: this.get("collection")*/
-
-					},
-
 			success : function()
 			{
 				console.log('successful query - good work everyone');
-				ZeegaBrowser.queryDone();
+				ZeegaBrowser.renderResults();
 			}
 		});
 	}
