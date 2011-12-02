@@ -9,10 +9,9 @@ var ZeegaBrowser = {
 	init : function()
 	{
 		//Load MyCollections
-		this.myCollectionsModel = new MyCollections({ 'id' : 23 });
+		this.myCollectionsModel = new MyCollections();
 		this.myCollectionsView = new MyCollectionsView({ model : this.myCollectionsModel });
 			
-		this.myCollectionsView.render();
 
 		//Hide the loading spinner for the myCollections drawer
 		$('#browser-my-collections .browser-loading').hide();
@@ -33,15 +32,19 @@ var ZeegaBrowser = {
 
 		
 	},
-	queryDone : function(){
-		//the views render
+	renderResults : function(){
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
+	},
+	queryDone : function(){
 		
-		//Hide results drawer's loading spinner
-		$('#browser-results .browser-loading').hide();
+		this.renderResults();
 
 	},
+	myCollectionsQueryDone : function(){
+		this.myCollectionsView.render();
+	},
+
 	doSearch : function(){
 		this.search.set({
 							q: $('#database-search-text').val(), 

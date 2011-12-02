@@ -80,8 +80,8 @@ $(document).ready(function() {
 	
 	
 
-	//For filters - testing visual stuff
-	$('.time, .space').click( toggleFilterDrawer);
+	//For filters - testing visual stuff - disabled
+	//$('.time, .space').click( toggleFilterDrawer);
 
 	//Set up toggling between My Media/All Media and Items/Collections
 	$('#browser-toggle-items-vs-collections li, #browser-toggle-all-media-vs-my-media li,').click(function(){
@@ -96,7 +96,7 @@ $(document).ready(function() {
 	$('#browser-toggle-items-vs-collections li').click(function(){
 		$('#browser-results-collections').toggle();
 		$('#browser-results-items').toggle();
-
+		ZeegaBrowser.renderResults();
 		return false;
 	});
 
@@ -105,7 +105,7 @@ $(document).ready(function() {
 		if ($(this).text() == "My Media"){
 			ZeegaBrowser.search.set({user:-1});
 		}else {
-			
+
 			ZeegaBrowser.search.set({user:-2});
 		}
 		ZeegaBrowser.doSearch();

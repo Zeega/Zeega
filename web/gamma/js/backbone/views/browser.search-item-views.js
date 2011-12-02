@@ -46,7 +46,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		template.find('.browser-item-count').text('NULL items');
 		template.find('.title').text(this.model.get('title'));
 
-		$('#browser-results-collections').append(template);
+		
 
 		this.el = template;
 		return this;
