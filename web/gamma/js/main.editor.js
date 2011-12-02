@@ -59,8 +59,13 @@ var loadFiles = [
 	'order!backbone/views/route-view',
 	'order!backbone/views/item-view',
 	'order!backbone/views/node-view',
-	'order!backbone/views/layer-view',
 	'order!backbone/views/project-view',
+	
+	//'order!backbone/views/layer-view',
+	'order!backbone/views/layer.view.visual',
+	'order!backbone/views/layer.view.visual.list',
+	'order!backbone/views/layer.view.visual.editor',
+	//'order!backbone/views/layer.view.interaction.list',
 	
 	//routes
 	'order!backbone/routes/routes',

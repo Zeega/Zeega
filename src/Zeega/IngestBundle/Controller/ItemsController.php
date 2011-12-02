@@ -157,7 +157,13 @@ class ItemsController extends Controller
     public function deleteItemAction($item_id)
     {
 
-    	//TODO -allow items to be updated in the editor
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find(8783);
+    	
+    	
+    	$em->remove($item);
+    	$em->flush();
+    	return new Response('SUCCESS',200);
     
     
     } // `delete_item`  [DELETE] /Items/{item_id}

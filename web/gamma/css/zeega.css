@@ -190,6 +190,11 @@ body
 	margin:0 auto;
 }
 
+#edit-drawer
+{
+	float:left;
+}
+
 #editor
 {
 	position:relative;
@@ -728,7 +733,7 @@ body
 	margin-left:10px;
 }
 
-#sortable-layers li
+#layers-list-visual li
 {
 	min-height:25px;
 	background:#555;
@@ -881,17 +886,26 @@ body
 
 /*******************************
 
-	BRANCHES TAB
+	Controls Toolbox
 	
 *******************************/
 
-#branch-info
+.color-window
 {
-	background:#555;
-	color:#ddd;
-	margin: 10px 0;
-	padding:10px;
-	min-height:50px;
+	position:relative;
+	height:36px;
+	width:36px;
+}
+
+.color-preview
+{
+	position:absolute;
+	top:4px;
+	left:4px;
+	height:28px;
+	width:28px;
+	
+	background:url('../images/color-select.png') center;
 }
 
 
@@ -908,7 +922,7 @@ body
 	position:relative;
 }
 
-#workspace
+#visual-editor-workspace
 {
 	width:100%;
 	height:400px;
@@ -917,6 +931,11 @@ body
 	overflow:hidden;
 	position:relative;
 	margin-bottom:10px;
+}
+
+.workspace-item-hover
+{
+	outline:2px solid yellow;
 }
 
 .i-layer
@@ -1095,7 +1114,8 @@ body
 
 .layer-slider-div
 {
-	margin:10px 0;
+	padding:5px;
+	margin:10px 10px 10px 10px;
 }
 
 .controls
@@ -1150,56 +1170,6 @@ td+td
 
 
 
-
-#branch-overlay
-{
-	z-index:100;
-	position:absolute;
-	height:100%;
-	width:100%;
-}
-
-.branch-drop-wrapper
-{
-	position:absolute;
-}
-
-
-.branch-drop
-{
-	height:50px;
-	width:50px;
-	background: white;
-	overflow:hidden;
-}
-
-.branch-drop:hover
-{
-	background: yellow;
-}
-
-#branch-top
-{
-	left:275px;
-	top:10px;
-}
-
-#branch-right
-{
-	left:540px;
-	top:175px;
-}
-#branch-bottom
-{
-	left:275px;
-	top:340px;
-}
-#branch-left
-{
-	left:10px;
-	top:175px;
-}
-
 .preview-nav
 {
 	z-index:1000;
@@ -1234,10 +1204,7 @@ td+td
 	-moz-transform: rotate(180deg);
 }
 
-#workspace.workspace-item-hover
-{
-	outline:2px solid yellow;
-}
+
 
 .node-item-hover>div
 {
@@ -1400,41 +1367,44 @@ margin-top: 4px;
 
 input[name=avStartMinutes] {
 
-
-
+font-weight: bold; 
+color: white;
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:right;
 }
 
 input[name=avStopMinutes] {
 
-
-
+font-weight: bold; 
+color: white;
 width:25px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:right;
 }
 input[name=avStartSeconds] {
-
+font-weight: bold; 
+color: white;
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:left;
 }
 
 input[name=avStopSeconds] {
-
+font-weight: bold; 
+color: white;
 width:35px;	
 border: none;
-background-color:#E6E6E6;
+background-color:transparent;
 text-align:left;
 }
 
 
 #durationWrapper{
+font-weight: bold; 
 position: absolute;
 margin-top: 4px;
 left:10px;
@@ -1741,7 +1711,7 @@ div#workspace > div.text-layer-container {
 	      border:transparent solid 1px;
 	      border-top:transparent solid 10px;
 }
-div#workspace > div.text-layer-container.text-layer-chrome-visible {
+.text-layer-chrome-visible {
 	      border: dashed white 1px;
 	      border-top: gray 10px solid;
 }

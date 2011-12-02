@@ -16,12 +16,12 @@ var loadFiles = [
 	'order!libraries/underscore',
 	
 	'order!layers/zeega._layer',
-	'order!layers/zeega.video',
 	'order!layers/zeega.image',
 	'order!layers/zeega.geo',
 	'order!layers/zeega.text',
-	'order!layers/zeega.rdio',
-	       
+	'order!layers/zeega.video',
+	'order!layers/zeega.youtube',
+	            
 
 	];
 

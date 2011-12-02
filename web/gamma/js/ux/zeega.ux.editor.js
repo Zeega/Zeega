@@ -299,7 +299,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$( "#sortable-layers" )
+	$( "#layers-list-visual" )
 		.sortable({
 		
 			//define a grip handle for sorting
@@ -358,9 +358,11 @@ $(document).ready(function() {
 		var expander = $(this).next('div');
 		if( expander.is(':visible'))
 		{
-			expander.hide('blind',{'direction':'vertical'})
+			expander.hide('blind',{'direction':'vertical'});
+			$(this).find('.expand-toggle').html('+');
 		}else{
-			expander.show('blind',{'direction':'vertical'})			
+			expander.show('blind',{'direction':'vertical'})	
+			$(this).find('.expand-toggle').html('–');
 		}
 	})
 	
@@ -369,7 +371,7 @@ $(document).ready(function() {
 	/*****  		CRITICAL		*******/
 	
 	//enable the workspace as a valid drop location for DB items
-	$('#workspace').droppable({
+	$('#visual-editor-workspace').droppable({
 			accept : '.database-asset',
 			hoverClass : 'workspace-item-hover',
 			tolerance : 'pointer',
@@ -392,10 +394,7 @@ $(document).ready(function() {
 					var layerToSave = new Layer(settings);
 
 					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
-					
-					//flash the layers tab
-					$('#layers-tab').effect("highlight", {}, 3000);
-					
+										
 					console.log('update node thumb for node: '+ Zeega.currentNode.id);
 				}
 		});

@@ -58,14 +58,12 @@ var Player = {
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
 		
+		this.dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
+		
 		//set the current node
-		if( nodeID )
-		{
-			this.currentNode = this.getNode( nodeID );
-		}else{
-			var nodeOrder = this.currentRoute.nodeOrder;
-			this.currentNode = this.getNode( nodeOrder[0] );
-		}
+		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
+		
+		this.currentNode = this.getNode( nodeID );
 		
 		//this.parseProject;
 		this.draw();
@@ -83,10 +81,14 @@ var Player = {
 		//add the player div
 		var overlay = $(this.getTemplate());
 		$('body').append(overlay);
+		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
 		
 		//Zeega.clearCurrentNode();
 		
 		overlay.fadeIn();
+		
+		//disabled during dev work
+		//document.getElementById('zeega-player').webkitRequestFullScreen();
 	},
 	
 	/*
@@ -95,6 +97,8 @@ var Player = {
 	*/
 	close : function()
 	{
+		document.webkitCancelFullScreen();
+		
 		console.log('Zeega Player Close');
 		var _this = this;
 		
@@ -102,7 +106,7 @@ var Player = {
 		
 		//turn off/pause all media first
 		_.each(this.layersOnStage, function(layerID){
-			_this.getLayer(layerID).layerClass.hidePublish();
+			_this.getLayer(layerID).layerClass.stash();
 		});
 		
 		
@@ -110,7 +114,8 @@ var Player = {
 		$('#zeega-player').fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
-			$(this).remove() 
+			//All video elements must be removed prior to removing the zeega player dom element
+			//$(this).remove() 
 		}); 
 		
 		if(this.zeega)
@@ -129,9 +134,14 @@ var Player = {
 	removeAllVideoElements : function()
 	{
 		_.each( $('video'), function(video){
-			$(video).attr('src','');
+			$(video).attr('src','""');
 			$(video).remove();
 		});
+		_.each( $('object'), function(object){
+		
+			$(object).remove();
+		});
+		$('#zeega-player').remove();
 	},
 	
 	/*
@@ -142,9 +152,13 @@ var Player = {
 	{
 		var _this = this;
 		$(window).bind( 'keydown', function(e){
+		    console.log('keydown:'+e.which);
 			switch(e.which)
 			{
 				case 27:
+					if(_this.zeega) _this.close(); //don't close if standalone player
+					break;
+				case 8:
 					if(_this.zeega) _this.close(); //don't close if standalone player
 					break;
 				case 37:
@@ -161,6 +175,11 @@ var Player = {
 					break;
 			}
 		});
+		
+		
+		$('#zeega-player').keydown(function(event) {
+  		console.log(event.which+":keypress");
+   });
 		
 		
 		$('#citation').mouseleave(function(){
@@ -293,6 +312,8 @@ var Player = {
 
 			//determine the layers that need to be preloaded 
 			var node = this.getNode( nodeID );
+			console.log(nodeID);
+			console.log(node);
 			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
@@ -331,7 +352,7 @@ var Player = {
 			//add the layer class to the layer class array
 			this.getLayer(layerID).layerClass = layerClass;
 			
-			layerClass.preloadMedia();
+			layerClass.preload();
 			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
@@ -391,7 +412,7 @@ var Player = {
 			if( _.include( layersToDraw, layerID ) )
 			{
 				//draw new layer to the preview window
-				_this.getLayer(layerID).layerClass.drawPublish(i);
+				_this.getLayer(layerID).layerClass.play(i);
 				_this.layersOnStage.push(layerID);
 			}else{
 				//update existing persistant layer with new z-index
@@ -430,7 +451,7 @@ var Player = {
 
 		_.each( layersToRemove, function( layerID ){
 			console.log('removing layer: '+layerID);
-			_this.getLayer(layerID).layerClass.hidePublish();
+			_this.getLayer(layerID).layerClass.stash();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
@@ -525,8 +546,9 @@ var Player = {
 	getNode : function( nodeID )
 	{
 		//returns the node object
-		var dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
-		var nodeIndex = _.indexOf( dataNodeOrder, nodeID)
+		
+		
+		var nodeIndex = _.indexOf( this.dataNodeOrder, parseInt(nodeID));
 		var nodeObject = this.currentRoute.nodes[nodeIndex];
 		return nodeObject;
 	},
@@ -631,7 +653,7 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img src='/joseph/web/gamma/images/mediaPlayerArrow_shadow.png' height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
+	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img  height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
 		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
 		return html;
 	},

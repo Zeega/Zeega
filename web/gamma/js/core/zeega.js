@@ -24,11 +24,7 @@ var Zeega = {
 	previewMode:false,
 	
 	maxNodesPerRoute : 0, // 0 = no limit
-	maxLayersPerNode : 5, // 0 = no limit
-	
-	//ready flags
-	nodesReady : false,
-	layersReady : false,
+	maxLayersPerNode : 0, // 0 = no limit
 	
 	url_prefix : "",
 	
@@ -40,7 +36,11 @@ var Zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
-		//test to see if the URL_PREFIX constant has been set and add it if it has
+
+		// makes sure that zeega only advances after both nodes and layers are loaded
+		//commented out??
+		this.zeegaReady = _.after(2,this.nodesAndLayersReady);
+
 		Zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
@@ -57,17 +57,17 @@ var Zeega = {
 		//make a new and empty route
 		
 		var newRoute = new Route();
-		var z=this;
+		var _this = this;
 		
 		newRoute.save({},{
 		
 			success: function(route,response){
-				z.route=route;
-				z.routeID= route.id;
-				z.routeView = new RouteView({ model : z.route });
-				z.routeView.render();
-				z.loadNodes();
-				z.loadLayers();
+				_this.route = route;
+				_this.routeID= route.id;
+				_this.routeView = new RouteView({ model : z.route });
+				_this.routeView.render();
+				_this.loadNodes();
+				_this.loadLayers();
 			
 				console.log('new route created with id: '+ route.id);
 			},
@@ -98,106 +98,81 @@ var Zeega = {
 	loadRoute : function(routeID)
 	{
 		
-		var z = this;
+		var _this = this;
 		this.routeID = routeID;
 		this.route = new Route({ 'id' : this.routeID });
 		this.route.fetch({
-			success: function(route){
-				console.log('route: ');
-				console.log(route);
-				z.loadNodes();
-				z.loadLayers();
-				z.loadProject();
+			success: function(route, response){
+				console.log(response);
+
+				_this.loadNodes();
+				_this.loadLayers();
+				_this.loadProject();
 				
-				if(!route.get('attr')) route.set({'attr':{}});
-				
+				//if(!route.get('attr')) route.set({'attr':{}});
 			}
 		});
+		
+
 	},
 	
 	loadNodes : function()
 	{
-		var z = this;
+		var _this = this;
 		//create a node collection inside the route model
 		this.route.nodes = new NodeCollection;
 		//get all existing nodes
 
 		this.route.nodes.fetch({
-			success : function(nodes){
-				
+			success : function(nodes,response){
 				//make a node view collection
-				z.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
+				_this.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
 				//render everything in the nodeViewCollection
-				z.route.nodeViewCollection.render();
+				_this.route.nodeViewCollection.render();
 				
-				z.nodesReady = true;
-				z.testIfReady();
-
+				_this.zeegaReady();
 			}
 		});
 	},
 	
 	loadLayers : function()
 	{
-		var z = this;
+		var _this = this;
 		//create a layer collection inside the route model
-		this.route.layers = new LayerCollection;
+		this.route.layerCollection = new LayerCollection;
 		//get all existing layers
-		
-		this.route.layers.fetch({
+		this.route.layerCollection.fetch({
+			
 			success : function(layers){
-				
-				//make a layer view collection
-				z.route.layerViewCollection = new LayerViewCollection({ collection : layers });
-				
-				z.layersReady = true;
-				z.testIfReady();
+				_this.route.layerCollection.parseLayers();
+				_this.zeegaReady();
 			}
 		});
 	},
 	
-	testIfReady : function()
+	nodesAndLayersReady : function()
 	{
-		if(this.layersReady && this.nodesReady)
+		this.currentNode = this.route.nodes.at(0);
+		
+		//if no nodes exist, create one
+		if( _.size(this.route.nodes) == 0 )
 		{
-			//if no nodes exist, create one
-			if( _.size(this.route.nodes) == 0 )
-			{
-				var newNode = new Node;
-				this.route.nodeViewCollection.add(newNode);
-				this.loadNode( newNode );
-			}else if(this.url_hash.node){
-				this.loadNode( this.route.nodes.get(this.url_hash.node) );
-			}else{
-				this.loadNode( this.route.nodes.at(0) );
-			}
-			
-			this.nodeSort();
+			var newNode = new Node;
+			this.route.nodeViewCollection.add(newNode);
+			this.loadNode( newNode );
+		}else if(this.url_hash.node){
+			this.loadNode( this.route.nodes.get(this.url_hash.node) );
+		}else{
+			this.loadNode( this.route.nodes.at(0) );
 		}
-	},
-	
-	clearCurrentNode : function ()
-	{
-		console.log('clearing current node');
-		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
 		
-		//clear out existing stuff in icon tray
-		$('.icon-tray').empty();
-
-		//clear the workspaces
-		$('#workspace').empty();
-		$('#interaction-workspace').empty();
-		//$('.workspace').empty();
+		this.nodeSort();
 		
-		
-		
-		Zeega.route.layerViewCollection._rendered = false;
-		Zeega.route.layerViewCollection._layerViews = [];
 	},
 	
 	loadNode : function( node )
 	{
+		var _this = this;
 		
 		this.clearCurrentNode();
 		
@@ -252,19 +227,34 @@ var Zeega = {
 			$('#advance-time').val(10);
 		}
 		
-		//add the node's layers
+		// add the node's layers // remove falsy values
 		var layerArray = _.compact( this.currentNode.get('layers'))
+		
 		_.each( layerArray , function(layerID){
-			Zeega.route.layerViewCollection.add( Zeega.route.layers.get(layerID) );
+			_this.addToLayerCollections( _this.currentNode, _this.route.layerCollection.get(layerID) ); //route.layers no longer exists
 		});
 		
-		console.log(layerArray);
 		
-		//draw the layers
-		Zeega.route.layerViewCollection.render();
+		//call render on the entire collection. it should have the logic to draw what's needed
+		Zeega.route.layerCollection.render( this.currentNode );
+		
 
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+	},
+	
+	clearCurrentNode : function ()
+	{
+		//remove a prexisiting node style
+		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		
+		//clear out existing stuff in icon trays
+		$('.icon-tray').empty();
+
+		//clear the workspaces
+		//$('#visual-editor-workspace').empty();
+		//$('#layers-list-interaction').empty();
+		
 	},
 	
 	addNode : function()
@@ -272,11 +262,47 @@ var Zeega = {
 		this.route.nodes.add(new Node);
 	},
 	
+	addToLayerCollections : function(node,layer)
+	{
+
+		//only add to the layers collection if it's not already there!
+		if( !this.route.layerCollection.get(layer.id) )
+		{
+			console.log('not in collection');
+			
+			//this.route.layerCollection.add( layer );
+			
+			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
+			if(node == this.currentNode)
+			{
+				console.log('layer should be added to the editor window')
+				this.route.layerCollection.add( layer );
+			}else{
+				console.log('layer should not be drawn')
+			//if it's not the current node, then be quiet about it
+				this.route.layerCollection.add( layer , {silent:true} );
+				//we still need to add it to the type collection though
+			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
+			}
+		}
+
+		//add it to the visual or interactive collections // only add if viewing current node
+		//if(node == this.currentNode) eval( 'this.route.'+ layer.layerClass.layerType +'LayerListViewCollection.add( layer)' );
+	},
+	
 	addLayerToNode : function( node, layer )
 	{
+		console.log('ADDLAYERTONODE');
+		console.log(this);
+		console.log(node);
+		console.log(layer);
+		
+		
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{
+			var _this = this;
+			
 			console.log('addLayerToNode');
 			//add URL to layer model
 			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
@@ -289,13 +315,11 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
-							Zeega.updateAndSaveNodeLayer(node,savedLayer);
-							
-							//Add to the collection
-							if(node == Zeega.currentNode) Zeega.route.layers.add( savedLayer );
-							else Zeega.route.layers.add( savedLayer,{silent:true} );
-						
-							node.updateThumb();
+							_this.updateAndSaveNodeLayer(node,savedLayer);
+							_this.addToLayerCollections(node, savedLayer);
+							_this.currentNode.noteChange();
+							//node.updateThumb();
+
 						}
 					});
 				//save the new layer then prepend the layer id into the node layers array
@@ -303,8 +327,8 @@ var Zeega = {
 				console.log('this is an old layer');
 				//prepend the layer id into the node layers array
 				this.updateAndSaveNodeLayer(node,layer);
-			
-				node.updateThumb();
+				Zeega.currentNode.noteChange();
+				//node.updateThumb();
 			}
 		}
 	},
@@ -328,19 +352,18 @@ var Zeega = {
 	removeLayerFromNode : function( node, layer )
 	{
 		//remove from node.layer and save it back
-		
-		
 		//remove icon from tray
 		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
 		
 	
-		
 		//test to see if the layer is a persisting layer and destroy it from all nodes if so
-		var attr = this.route.get('attr');
+		//var routeAttributes = this.route.get('attr');
 		
-		if(_.include(attr.persistLayers,layer.id))
+		if( _.include( this.route.get('attr').persistLayers , layer.id ) )
 		{
 			console.log('a persistent layer');
+			
+			
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
@@ -350,6 +373,8 @@ var Zeega = {
 				_node.save();
 				_node.updateThumb();
 			});
+			
+			
 		}else{
 			console.log('NOT a persistent layer');
 			
@@ -360,6 +385,7 @@ var Zeega = {
 			node.set({'layers':layerOrder});
 			node.save();
 			node.updateThumb();
+			
 		}
 		
 		this.destroyOrphans();
@@ -368,9 +394,11 @@ var Zeega = {
 	
 	destroyOrphans : function()
 	{
+		console.log('destroyOrphans');
 		_this = this;
 		// make a giant array of all the layer IDs in use by nodes
 		var layersInNodes = [];
+		
 		_.each( _.toArray(this.route.nodes), function(node){
 			layersInNodes = _.union(node.get('layers'), layersInNodes);
 		});
@@ -379,18 +407,21 @@ var Zeega = {
 		
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
-		_.each( _.toArray(this.route.layers), function(layer){
+		_.each( _.toArray(this.route.layerCollection), function(layer){
 			layersInRoute.push(layer.id);
 		});
+		
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
 		
 		if(orphanIDs)
 		{
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
-				var orphan = Zeega.route.layers.get(orphanID);
+				var orphan = Zeega.route.layerCollection.get(orphanID);
 				_this.removeLayerPersist(orphan);
-				Zeega.route.layers.remove(orphan)
+				
+				//remove from the layer collection
+				Zeega.route.layerCollection.remove(orphan)
 				orphan.destroy();
 				
 			})
@@ -511,7 +542,6 @@ var Zeega = {
 		var order = _.map( $('#node-drawer ul').sortable('toArray'), function(str){ return parseInt(str) });
 		this.route.set({'nodesOrder': order});
 		this.route.save();
-		console.log(order);
 	},
 	
 	previewRoute : function()
@@ -529,11 +559,13 @@ var Zeega = {
 	
 	exportProject : function( string )
 	{
+		console.log(this.route);
+		
 		var routes = [{
 			'id' : this.route.id,
 			'nodeOrder' : this.route.get('nodesOrder'),
 			'nodes' : this.route.nodes.toJSON(),
-			'layers' : this.route.layers.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
+			'layers' : this.route.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
 		}];
 		
 		var project = {

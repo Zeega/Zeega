@@ -32,11 +32,14 @@ function makeFullscreenButton(){
 function makeLayerSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')
-		.append( $("<h4>").html(args.label) )
-		.append( $('<div>').attr({
+		.append( $("<h4>")
+		.html(args.label) )
+		.append( $('<div>')
+		.attr({
 			'id': args.label+'-slider',
 			'data-layer-id': args.layer_id
-		}).addClass('layer-slider'));
+		})
+		.addClass('layer-slider'));
 		
 	sliderDiv.find('.layer-slider').slider({
 		min : args.min,
@@ -52,7 +55,8 @@ function makeLayerSlider(args)
 }
 
 
-function makeCSSLayerSlider(args)
+
+function makeSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')
 		.append( $("<h4>").html(args.label) )
@@ -67,9 +71,49 @@ function makeCSSLayerSlider(args)
 		value : args.value,
 		step : args.step,
 		slide : function(e, ui){
+			$('#layer-preview-'+args.layer_id ).trigger('slide');
+		}
+	});
+	
+	return sliderDiv;
+}
+
+
+function makeCSSLayerSlider(args)
+{
+	
+	var defaults = {
+		min : 0,
+		max : 100,
+		step : 1,
+	};
+	
+	args = _.defaults(args,defaults);
+	
+	var sliderDiv = $('<div>')
+		.addClass('layer-slider-div')
+		.append( $("<h4>")
+		.html(args.label) )
+		.append( $('<div>')
+		.attr({
+			'id': args.label+'-slider',
+			'data-layer-id': args.layer_id
+		})
+		.addClass('layer-slider'));
+		
+	sliderDiv.find('.layer-slider').slider({
+		min : args.min,
+		max : args.max,
+		value : args.value,
+		step : args.step,
+		slide : function(e, ui){
 			if(args.css!='none'){
 				$('#layer-preview-'+args.layer_id ).css( args.css, ui.value+args.suffix);
 			}
+		},
+		stop : function(e,ui)
+		{
+			console.log(args.layerClass)
 		}
 	});
 	
@@ -85,46 +129,140 @@ function textArea()
 	return template;
 }
 
-
-function makeColorPicker(args)
+function makeUISlider(args)
 {
-	console.log('colorrrrrrr');
-	console.log(args)
-    //clean label of spaces
-    var cleanLabel = args.label.replace(/\s/g, '_');
-    var pickerDiv = $('<div/>').addClass('layer-colorPicker-div')
-		.append($('<h4>').html(args.label))
-		.append($('<input />').attr({
-			id : cleanLabel+'-colorPicker-'+args.layer_id,
-			'data-layer-id' : args.layer_id,
-			readonly : 'readonly',
-			value : RGBToHex(args.color)
-		})
-		.addClass('layer-colorPicker'));
+	var defaults = {
+		min : 0,
+		max : 100,
+		step : 1,
+		value : 100
+	};
+	
+	args = _.defaults(args,defaults);
+	
+	var sliderWrapper = $('<div>').addClass('slider');
+	if( args.label ) sliderWrapper.append( $("<h4>").html( args.label) );
+	var slider = $('<div>').addClass('layer-slider');
 		
-	var picker = pickerDiv.find('.layer-colorPicker').ColorPicker({
+	slider.slider({
+		min : args.min,
+		max : args.max,
+		value : args.value,
+		step : args.step,
+		slide : function(e, ui)
+		{
+			if( args.input ) args.input.val( ui.value )
+			args.dom.trigger( 'updateColor' );
+		}
+	});
+	
+	sliderWrapper.append( slider );
+	
+	return sliderWrapper;
+}
+
+function makeColorPicker( args )
+{
+	defaults = {
+		color : {r:255,g:255,b:255,a:1},
+		opacity : true
+	};
+	
+	args = _.defaults(args,defaults);
+	
+	var dom = $(args.dom);
+	
+    //clean label of spaces
+    var cleanLabel = args.label.replace(/\s/g, '-').toLowerCase();
+
+	var colorPicker = $('<div>');
+	var colorWrapper = $('<div>').addClass('color-window')
+		.data('info', {id:args.id,property:args.property});
+
+	var colorPreview = $('<div>').addClass('color-preview')
+		.css('background-color', '#' + RGBToHex(args.color) );
+
+	var rInput = makeHiddenInput({label:'r',value:args.color.r});
+	var gInput = makeHiddenInput({label:'g',value:args.color.g});
+	var bInput = makeHiddenInput({label:'b',value:args.color.b});
+	var aInput = makeHiddenInput({label:'a',value:args.color.a});
+
+	//add change handlers to hidden inputs
+	$(rInput).change(function(){
+		console.log('this');
+	});
+
+	// maybe not every color picker needs opacity?
+	if( args.opacity )
+	{
+		var opacityArgs = {
+			min : 0,
+			max : 1,
+			label : 'Opacity',
+			value : args.color.a,
+			step : 0.01,
+			dom : args.dom,
+			input : aInput
+		};
+		var opacitySlider = makeUISlider( opacityArgs );
+	}
+	
+	colorWrapper.append( colorPreview )
+		.append( rInput )
+		.append( gInput )
+		.append( bInput )
+		.append( aInput );
+
+	colorPicker.append('<h4>'+args.label+'</h4>')
+		.append(colorWrapper);
+	if( args.opacity ) colorPicker.append(opacitySlider);
+	
+	/*****
+	EVENT
+	******/	
+	dom.bind( 'updateColor' , function(e){
+		var rgba = 'rgba('+rInput.val()+','+gInput.val()+','+bInput.val()+','+aInput.val()+')';
+		dom.css( args.property , rgba );
+	});
+
+	var picker = colorWrapper.ColorPicker({
 		color : args.color,
 		onShow : function(c)
 		{
 			$(c).fadeIn();
 		},
-		
+
 	    onHide : function(c){
 			$(c).fadeOut();
-			args._this.updateAttr();
+			args.update();
 	    },
-	
+
 		onChange : function(hsb, hex, rgb){
-			$('input#'+cleanLabel+'-colorPicker-'+args.layer_id).val(hex);
-			args.custom_handler(rgb, args.layer_id);
+			//update the preview box
+			colorPreview.css( 'background-color', '#' + hex );
+			//update the input
+			rInput.val( rgb.r );
+			gInput.val( rgb.g );
+			bInput.val( rgb.b );
+			//update the visual editor
+			dom.trigger( 'updateColor' );
 		}
 	});
-	
-    return pickerDiv;
+
+    return colorPicker;
+}
+
+function makeHiddenInput( options )
+{
+	var hiddenInput = $('<input type="hidden" />')
+		.attr( 'id' , options.label )
+		.val( options.value );		
+		return hiddenInput;
 }
 
 //Shamelessly cribbed from ColorPicker <---yessss
-function RGBToHex (rgb){
+function RGBToHex (rgb)
+{
     var hex = [
 	       parseInt(rgb.r).toString(16),
 	       parseInt(rgb.g).toString(16),

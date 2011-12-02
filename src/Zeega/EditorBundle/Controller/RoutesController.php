@@ -52,7 +52,8 @@ class RoutesController extends Controller
 		$output=$this->getDoctrine()
 			->getRepository('ZeegaEditorBundle:Node')
 			->findRouteById($route->getId());
-			return new Response(json_encode($output[0]));
+			
+		return new Response(json_encode($output[0]));
         
     } // `post_routes`   [POST] /routes
 
@@ -62,7 +63,18 @@ class RoutesController extends Controller
     	$routes=$this->getDoctrine()
         ->getRepository('ZeegaEditorBundle:Route')
         ->findRouteById($route_id);
-    	return new Response(json_encode($routes[0]));
+    	
+		//removes falsy values from the return
+		for($i = 0 ; $i < count($routes) ; $i++)
+		{
+			foreach($routes[0] as $key => $value)
+			{
+				if( is_null( $value )) unset($routes[$i][$key]);
+				
+			}
+		}
+		
+		return new Response(json_encode($routes[0]));
         
     
     } // `get_route`     [GET] /routes/{route_id}
