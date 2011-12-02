@@ -68,9 +68,6 @@ var ImageLayer = ProtoLayer.extend({
 		return this.layerControls;
 	},
 	
-		
-
-
 	drawToVisualEditor : function()
 	{
 		this.visualEditorElement.css({
@@ -85,12 +82,6 @@ var ImageLayer = ProtoLayer.extend({
 		this.visualEditorElement.append( img );
 			
 		return this.visualEditorElement;
-	
-	},
-	
-	onAttributeUpdate : function()
-	{
-
 	},
 
 	drawThumb : function(){
@@ -146,12 +137,7 @@ var ImageLayer = ProtoLayer.extend({
 		console.log('image player.play');
 		this.dom.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
-	
-	pause : function()
-	{
-		// not needed
-	},
-	
+
 	stash : function()
 	{
 		console.log('image player.stash');
