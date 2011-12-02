@@ -135,7 +135,9 @@ function makeUISlider(args)
 		min : 0,
 		max : 100,
 		step : 1,
-		value : 100
+		value : 100,
+		silent : true,
+		suffix : ''
 	};
 	
 	args = _.defaults(args,defaults);
@@ -152,7 +154,23 @@ function makeUISlider(args)
 		slide : function(e, ui)
 		{
 			if( args.input ) args.input.val( ui.value )
-			args.dom.trigger( 'updateColor' );
+			args.dom.trigger( 'update' , [{
+				property : {
+					property : args.property,
+					value : ui.value,
+					suffix : args.suffix,
+					}
+				},args.silent]);
+		},
+		stop : function(e,ui)
+		{
+			args.dom.trigger( 'update' , [{
+				property : {
+					property : args.property,
+					value : ui.value,
+					suffix : args.suffix
+					}
+			}]);
 		}
 	});
 	
@@ -187,16 +205,10 @@ function makeColorPicker( args )
 	var bInput = makeHiddenInput({label:'b',value:args.color.b});
 	var aInput = makeHiddenInput({label:'a',value:args.color.a});
 
-	//add change handlers to hidden inputs
-	$(rInput).change(function(){
-		console.log('this');
-	});
-
 	// maybe not every color picker needs opacity?
 	if( args.opacity )
 	{
 		var opacityArgs = {
-			min : 0,
 			max : 1,
 			label : 'Opacity',
 			value : args.color.a,
@@ -220,7 +232,7 @@ function makeColorPicker( args )
 	/*****
 	EVENT
 	******/	
-	dom.bind( 'updateColor' , function(e){
+	dom.bind( 'update' , function(e){
 		var rgba = 'rgba('+rInput.val()+','+gInput.val()+','+bInput.val()+','+aInput.val()+')';
 		dom.css( args.property , rgba );
 	});

@@ -18,10 +18,10 @@ var ImageLayer = ProtoLayer.extend({
 	defaultAttributes : {
 		'title' : 'Image Layer',
 		'url' : 'none',
-		'x' : 0,
-		'y' : 0,
-		'h' : 100,
-		'w' : 100,
+		'left' : 0,
+		'top' : 0,
+		'height' : 100,
+		'width' : 100,
 		'opacity':1,
 		'aspect':1.33
 	},
@@ -30,47 +30,42 @@ var ImageLayer = ProtoLayer.extend({
 	drawControls : function()
 	{
 		var _this = this;
-		var controls = $('<div>');
 		
 		var opacityArgs = {
-			max:1,
-			value : _this.model.get('attr').opacity,
+			max : 1,
+			label : 'Opacity',
 			step : 0.01,
-			layer_id : _this.model.id,
-			label : 'opacity',
-			css : 'opacity',
-			suffix : '',
-			layerClass : _this
+			property : 'opacity',
+			value : this.model.get('attr').opacity,
+			dom : this.layerControls,
 		};
+		var opacitySlider = makeUISlider( opacityArgs );
+		
 		var widthArgs = {
-			value : _this.model.get('attr').w,
-			layer_id : _this.model.id,
-			label : 'width',
-			css : 'width',
+			max : 200,
+			label : 'Width',
+			step : 1,
+			property : 'width',
 			suffix : '%',
-			layerClass : _this
+			value : this.model.get('attr').width,
+			dom : this.layerControls,
 		};
-
-		controls.append( makeCSSLayerSlider(widthArgs) );
-		controls.append( makeCSSLayerSlider(opacityArgs) );
+		var scaleSlider = makeUISlider( widthArgs );
 		
-		controls.find('.layer-slider').bind( "slidestop", function(event, ui) {
-			_this.onAttributeUpdate();
-		});
-		
-		controls.append( makeFullscreenButton() );
-		controls.find('.fullscreen-submit')
+		this.layerControls
+			.append( opacitySlider )
+			.append( scaleSlider )
+			.append( makeFullscreenButton() );
+			
+		this.layerControls.find('.fullscreen-submit')
 			.click(function(){
 				$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
 				$('#layer-edit-'+_this.model.id).find('#width-slider').slider("option", "value", 100 );
 				_this.onAttributeUpdate();
 			});
 			
-		
-		//set to layer controls
-		this.layerControls = controls;
-		return controls;
-		
+
+		return this.layerControls;
 	},
 	
 		
@@ -78,44 +73,33 @@ var ImageLayer = ProtoLayer.extend({
 
 	drawToVisualEditor : function()
 	{
-
-		var el = $('<div>');
-
+		this.visualEditorElement.css({
+			width : this.attr.width+'%',
+			opacity : this.attr.opacity
+		})
+		
 		var img = $('<img>')
-			.attr({'src': this.model.get('attr').url,'id':'layer-image-' + this.model.id})
+			.attr('src', this.model.get('attr').url)
 			.css({'width':'100%'});
 						
-		el.append(img);
-		
-		//add to dom
-		this.visualEditorElement = el;
-		
-		return( el );
+		this.visualEditorElement.append( img );
+			
+		return this.visualEditorElement;
 	
 	},
-
 	
 	onAttributeUpdate : function()
 	{
-		var _this = this;
-		var newAttr = {
-			x : Math.floor( _this.visualEditorElement.position().left/6),
-			y : Math.floor( _this.visualEditorElement.position().top/4),
-			opacity : Math.floor( _this.layerControls.find('#opacity-slider').slider('value') * 100 )/100,
-			w : Math.floor( _this.layerControls.find('#width-slider').slider('value') ),
-		};
-		
-		this.setAttributes(newAttr);
-		this.save();
-	},	
+
+	},
 
 	drawThumb : function(){
 		
 		$('#preview-media').append($('<div>').css( {
 			'position' : 'absolute',
-			'top' : this.attr.y  +'%',
-			'left' : this.attr.x  +'%',
-			'width' : this.attr.w+'%',
+			'top' : this.attr.top  +'%',
+			'left' : this.attr.left  +'%',
+			'width' : this.attr.width,
 			'opacity' : this.attr.opacity
 		}).append($('<img>')
 			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
@@ -160,7 +144,7 @@ var ImageLayer = ProtoLayer.extend({
 	play : function( z )
 	{
 		console.log('image player.play');
-		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+		this.dom.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
 	
 	pause : function()

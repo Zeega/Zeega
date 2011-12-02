@@ -2,6 +2,8 @@
 
 var VisualLayerEditorView = Backbone.View.extend({	
 	
+	tagName : 'div',
+	
 	//draws the controls
 	render : function(i)
 	{
@@ -13,18 +15,28 @@ var VisualLayerEditorView = Backbone.View.extend({
 		this.model.bind('remove',function(){ _this.remove() });
 				
 		//set the view element to whatever the layerclass returns for the visual editor
+		//$(this.el).append( this.model.layerClass.drawToVisualEditor() );
+		
 		this.el = this.model.layerClass.drawToVisualEditor();
 		
 		if(this.model.layerClass.draggable)
 		{
 			$(this.el).draggable({
 				stop : function(){
-					_this.model.layerClass.onAttributeUpdate();
+					var pos = $(this).position();
+					var left = Math.floor( pos.left * 100 / 6 )/100;
+					var top = Math.floor( pos.top * 100/ 4 )/100;
+					var settings = [{
+						left: {property:'left',value:left,suffix:'%'},
+						top: {property:'top',value:top,suffix:'%'}
+						}]
+
+					_this.model.layerClass.layerControls.trigger('update',settings);
 				}
 			});
 		}
 
-		this.el.addClass('media')
+		$(this.el).addClass('media')
 			.attr({
 				'id' : 'layer-preview-'+ _this.model.id,
 				'data-layer-id' : _this.model.id
@@ -33,13 +45,13 @@ var VisualLayerEditorView = Backbone.View.extend({
 			
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : _this.model.get('attr').y  +'%',
-			'left' : _this.model.get('attr').x  +'%',
+			'top' : _this.model.get('attr').top  +'%',
+			'left' : _this.model.get('attr').left  +'%',
 			'width' : _this.model.get('attr').w+'%',
 			'opacity' : _this.model.get('attr').opacity
 		};
 
-		this.el.css(cssObj);
+		$(this.el).css(cssObj);
 		
 		this.model.layerClass.setZIndex( i );
 		
@@ -73,6 +85,8 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 	},
 	
 	add : function ( layer ){
+		console.log(layer.id);
+		
 		var layerView = new VisualLayerEditorView({ model : layer });
 		this._renderedViews.push( layerView );
 		$(this.el).append( layerView.render().el );
