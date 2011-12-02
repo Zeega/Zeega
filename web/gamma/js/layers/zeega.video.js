@@ -142,7 +142,6 @@ var VideoLayer = ProtoLayer.extend({
 	drawToVisualEditor : function()
 	{
 		var _this  = this;
-
 		var el = $('<div>');
 
 		var h = Math.floor(this.attr.w*1.5/this.attr.dimension);

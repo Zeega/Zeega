@@ -19,10 +19,10 @@ var TextLayer = ProtoLayer.extend({
 		content: '',
 		x:0,
 		y:0,
-		h:100,
-		w:400,
+		h:'50%',
+		w:'25%',
 		color: Array(255,255,255,1),
-		bgColor: Array(200,200,0,0),
+		backgroundColor: Array(200,200,0,0),
 		size: 26,
 		columns: 1,
 		padding:5,
@@ -33,6 +33,12 @@ var TextLayer = ProtoLayer.extend({
 	{
 		var _this  = this;
 		var controls = $('<div>');
+
+		controls.bind('updateAttribute', function(e){
+			console.log('updating');
+			console.log(e);
+		})
+
 
 		var fontSizeArgs = {
 			min: 8,
@@ -45,6 +51,26 @@ var TextLayer = ProtoLayer.extend({
 			suffix: 'px'
 	    };
 	    controls.append( makeCSSLayerSlider(fontSizeArgs) );
+
+
+/*
+		var fontSizeArgs = {
+			min: 8,
+			max: 50,
+			value: this.attr.size,
+			id: this.model.id,
+			label: 'Font Size',
+			property: 'font-size',
+			suffix: 'px',
+			dom : controls;
+	    };
+		controls.append( makeUISlider( fontSizeArgs );
+
+		controls.bind('update', function(){
+			
+		})
+*/
+
 
 	    var paddingArgs = {
 			min: 0,
@@ -66,6 +92,9 @@ var TextLayer = ProtoLayer.extend({
 	    };
 	    controls.append( this.makeCustomSlider(paddingArgs) );
 
+
+
+
 		var indentArgs = {
 			min: 0,
 			max: 100,
@@ -82,108 +111,41 @@ var TextLayer = ProtoLayer.extend({
 		};
 		controls.append( this.makeCustomSlider(indentArgs));
 
-		var textOpacityArgs = {
-			min:0,
-			max:1,
-			value:this.attr.color[3],
-			step:0.01,
-			layer_id:this.model.id,
-			label:'Text Opacity',
-			custom_handler: function (e, ui, layer_id)
-			{
-				var content = $('#layer-preview-'+layer_id).children('.text-layer-content');
-				var currentColor = content[0].style.color.replace(/[rgba()\s]/g,'').split(',');
-				currentColor[3] = ui.value;
-				content[0].style.color = 'rgba('+currentColor.join(',')+')';
-			}   
-		};
-		controls.append( this.makeCustomSlider(textOpacityArgs) );
-
-		var bgOpacityArgs = {
-			min:0,
-			max:1,
-			value:this.attr.bgColor[3],
-			step:0.01,
-			layer_id:this.model.id,
-			label:'Background Opacity',
-			custom_handler: function (e, ui, layer_id)
-			{
-				var content = $('#layer-preview-'+layer_id);
-				var currentBgColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-				currentBgColor[3] = ui.value;
-				console.log(ui.value);
-				content[0].style.backgroundColor = 'rgba('+currentBgColor.join(',')+')';
-		    }   
-	    };
-	    controls.append( this.makeCustomSlider(bgOpacityArgs) );
-
-	    //need this to be accessable inside the various functions
-	    //var _this  = this;
-
 		var colorPickerArgs = {
-			layer_id : this.model.id,
+			label : 'Text Color',
+			update : function(){ _this.onAttributeUpdate() },
+			property : 'color',
+			id : this.model.id,
 			color : {
 				r : this.attr.color[0],
 				g : this.attr.color[1],
-				b : this.attr.color[2]
+				b : this.attr.color[2],
+				a : this.attr.color[3]
 			},
-			label : 'Text Color',
-			_this : this,
-			custom_handler : function(rgb, layer_id){
-			    var content = $('#layer-preview-'+layer_id).children('.text-layer-content');
-			    var currentColor = content[0].style.color.replace(/[rgba()\s]/g,'').split(',');
-			    if (currentColor.length == 3) currentColor[3] = 1;
-			    currentColor[0] = rgb.r;
-			    currentColor[1] = rgb.g;
-			    currentColor[2] = rgb.b;
-			    content[0].style.color = 'rgba('+currentColor.join(',')+')';
-			}
+			dom : this.visualEditorElement
 	    };
 	    controls.append( makeColorPicker(colorPickerArgs));
-
-		var bgColorPickerArgs = {
-			layer_id : this.model.id,
-			color : {
-				r : this.attr.bgColor[0],
-				g : this.attr.bgColor[1],
-				b : this.attr.bgColor[2]
-			},
-			label : 'Background Color',
-			_this : this,
-			custom_handler : function(rgb, layer_id)
-			{
-				var content = $('#layer-preview-'+layer_id);
-				var currentColor = content[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
-				if (currentColor.length == 3) currentColor[3] = 1;
-				currentColor[0] = rgb.r;
-				currentColor[1] = rgb.g;
-				currentColor[2] = rgb.b;
-				content[0].style.backgroundColor = 'rgba('+currentColor.join(',')+')';
-			}
-	    };
-	    controls.append( makeColorPicker(bgColorPickerArgs));
-
-	    var columnsArgs = {
-			min: 1,
-			max: 3,
-			value: this.attr.columns,
-			step: 1,
-			layer_id: this.model.id,
-			label: 'Number of Columns',
-			custom_handler: function (e, ui, layer_id)
-			{
-				console.log('Columns in handler: ' + ui.value);
-				$('#layer-preview-'+layer_id).children('.text-layer-content')[0].style.WebkitColumnCount = ui.value;
-				$('#layer-preview-'+layer_id).children('.text-layer-content')
-					.css({ 'column-count' : ui.value, '-moz-column-count' : ui.value});
-			}
-	    };
-	    controls.append( this.makeCustomSlider(columnsArgs));
 	
+		var bgColorPickerArgs = {
+			label : 'Background Color',
+			update : function(){ _this.onAttributeUpdate() },
+			property : 'backgroundColor',
+			id : this.model.id,
+			color : {
+				r : this.attr.backgroundColor[0],
+				g : this.attr.backgroundColor[1],
+				b : this.attr.backgroundColor[2],
+				a : this.attr.backgroundColor[3]
+			},
+			dom : this.visualEditorElement
+	    };
+	    controls.append( makeColorPicker( bgColorPickerArgs ) );
+
 	    controls.find('.layer-slider').bind( "slidestop", function(event, ui) {
-		    _this.updateAttr();
+		    _this.onAttributeUpdate();
 		});
 
+		this.layerControls = controls;
 		return(controls);
 	},
 
@@ -195,6 +157,13 @@ var TextLayer = ProtoLayer.extend({
 
 		el.addClass('text-layer-chrome-visible');
 
+console.log(this.attr.size);
+
+		el.css({
+			'height':this.attr.w,
+			'width':this.attr.h,
+			'font-size' : this.attr.size +'px'
+		})
 		/*
 		if (this.attr.content == ''){
 		    div.addClass('text-layer-chrome-visible');
@@ -234,7 +203,8 @@ var TextLayer = ProtoLayer.extend({
 			autoHide: true
 		});
 
-		var content = $('<div />').css({'width' : '100%', 
+		var content = $('<div />').css({
+						'width' : '100%', 
 						'height' : '100%', 
 						'overflow' : 'auto',
 						'column-count' : this.attr.columns,
@@ -258,22 +228,22 @@ var TextLayer = ProtoLayer.extend({
 		el.append( content );
 
 		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
-		el.children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
-		console.log(el[0]);
-		//$(el)[0].css('background', 'rgba(' + this.attr.bgColor.join(',') + ')' );
-		el[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
+		el.css( 'color', 'rgba(' + this.attr.color.join(',') + ')' );
+		
+		el[0].style.backgroundColor = 'rgba(' + this.attr.backgroundColor.join(',') + ')';
 		el.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		el.children('.text-layer-content').aloha();
 		
 /////				
 		//add to dom
-		_this.visualEditorElement = el;
+		this.visualEditorElement = el;
 		return( el );
 	
 	},
 	
 	onAttributeUpdate : function()
 	{
+		console.log('text onAttributeUpdate');
 		var _this = this;
 		
 		var newAttr = {};
@@ -283,8 +253,8 @@ var TextLayer = ProtoLayer.extend({
 		//set the new x/y coords into the attributes
 		newAttr.x = Math.floor( this.visualEditorElement.position().left/6);
 		newAttr.y = Math.floor( this.visualEditorElement.position().top/4);
-		newAttr.w = _this.visualEditorElement.css('width');
-		newAttr.h = _this.visualEditorElement.css('height');
+		newAttr.w = this.visualEditorElement.css('width');
+		newAttr.h = this.visualEditorElement.css('height');
 	
 
 		var contentPanel = _this.visualEditorElement.children('.text-layer-content');
@@ -308,15 +278,29 @@ var TextLayer = ProtoLayer.extend({
 		}
 		*/
 	
+		var colorPickers = this.layerControls.find('.color-window');
+		_.each( colorPickers, function( picker ){
+			var colorObj = [];
+			_.each( $(picker).children('input') , function(input){
+				colorObj.push( $(input).val() );
+//				eval( 'colorObj.' + $(input).attr('id') + '=' + $(input).val() );
+			});
+			eval( 'newAttr.' + $(picker).data().info.property + '= colorObj ');
+		})
+		
+		/*console.log(newAttr);
+	
 		// Note: These if statements protect (x,x,x,1) from conversion to plain rgb 
-		var newColor = contentPanel[0].style.color.replace(/[rgba()\s]/g,'').split(',');
+		var newColor = $(contentPanel[0]).css('color').replace(/[rgba()\s]/g,'').split(',');
 		if (newColor.length == 3) newColor[3] = 1;
 		newAttr.color = newColor;
 
-		var newBgColor = this.visualEditorElement[0].style.backgroundColor.replace(/[rgba()\s]/g,'').split(',');
+		var newBgColor = $(contentPanel[0]).css('background-color').replace(/[rgba()\s]/g,'').split(',');
 		if (newBgColor.length == 3) newBgColor[3] = 1;
 
 		newAttr.bgColor = newBgColor;
+		*/
+		
 		newAttr.size = contentPanel.css('font-size').replace(/px/, '');
 		newAttr.padding = contentPanel.css('padding-top').replace(/px/, '');
 		newAttr.indent = contentPanel.css('text-indent').replace(/px/, '');
@@ -339,6 +323,8 @@ var TextLayer = ProtoLayer.extend({
 
 	drawThumb : function()
 	{
+		var _this  = this;
+		
 		//make dom object
 		//maybe these should all be wrapped in divs?
 		var div = $('<div />');
@@ -367,13 +353,8 @@ var TextLayer = ProtoLayer.extend({
 		
 		*/
 
-		//need this to be accessable inside various functions
-		var _this  = this;
-		
-		
-		
-		
-		var mouseELmaster = function (event) {
+		var mouseELmaster = function (event)
+		{
 		    _this.toggleFrameVis();
 		}
 

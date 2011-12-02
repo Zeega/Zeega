@@ -886,17 +886,26 @@ body
 
 /*******************************
 
-	BRANCHES TAB
+	Controls Toolbox
 	
 *******************************/
 
-#branch-info
+.color-window
 {
-	background:#555;
-	color:#ddd;
-	margin: 10px 0;
-	padding:10px;
-	min-height:50px;
+	position:relative;
+	height:36px;
+	width:36px;
+}
+
+.color-preview
+{
+	position:absolute;
+	top:4px;
+	left:4px;
+	height:28px;
+	width:28px;
+	
+	background:url('../images/color-select.png') center;
 }
 
 
