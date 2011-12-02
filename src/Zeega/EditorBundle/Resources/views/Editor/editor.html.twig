@@ -116,8 +116,9 @@
 					
 					<div id='workspace-wrapper'>
 						<div id='visual-editor-wrapper' class='wrapper clearfix' title='Click to close or expand the Workspace' style='cursor:pointer'>
-							<div id='visual-editor-bar' class='clearfix'>
-								<div class='bar-title' onclick='toggleWorkspace(this);return false;'><a href="#" id='ve-toggle' >–</a>&nbsp;Workspace</div>
+							
+							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+								<div class='bar-title'><a href="#" id='iv-toggle' class='expand-toggle' >–</a>&nbsp;Visual Editor</div>
 								<div id='visual-icon-tray' class='icon-tray'></div>
 							</div>
 							
@@ -127,11 +128,11 @@
 						
 						<div id='interaction-editor-wrapper'>
 
-							<div id='interaction-editor-bar' class='clearfix' >
-								<div class='bar-title'>Interactions</div>
-								<div id='interaction-icon-tray' class='icon-tray'>ilayer</div>
+							<div id='interaction-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+								<div class='bar-title'><a href="#" id='iv-toggle' class='expand-toggle' >–</a>&nbsp;Interactions</div>
+								<div id='interaction-icon-tray' class='icon-tray'></div>
 							</div>
-
+							
 							<div id='layers-list-interaction' class='workspace'></div>
 				
 							

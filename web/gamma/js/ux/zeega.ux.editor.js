@@ -162,24 +162,6 @@ function addLayer(type)
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
 
-function toggleWorkspace(el)
-{
-	var attr = Zeega.currentNode.get('attr');
-	var w = $(el).closest('.wrapper').find('.workspace');
-	if(w.is(':hidden'))
-	{
-		w.show('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('–');
-		attr.editorHidden = false;
-	}else{
-		w.hide('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('+');
-		attr.editorHidden = true;
-	}
-	Zeega.currentNode.set({'attr':attr});
-	Zeega.currentNode.save();
-}
-
 function expandLayer(el)
 {
 	console.log('expanding layer');
