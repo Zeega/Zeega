@@ -90,9 +90,14 @@ class Item
     private $media_date_created_end;
 
     /**
-     * @var string $media_creator
+     * @var string $media_creator_username
      */
-    private $media_creator;
+    private $media_creator_username;
+
+    /**
+     * @var string $media_creator_realname
+     */
+    private $media_creator_realname;
 
     /**
      * @var Zeega\UserBundle\Entity\User
@@ -432,23 +437,43 @@ class Item
     }
 
     /**
-     * Set media_creator
+     * Set media_creator_username
      *
-     * @param string $mediaCreator
+     * @param string $mediaCreatorUsername
      */
-    public function setMediaCreator($mediaCreator)
+    public function setMediaCreatorUsername($mediaCreatorUsername)
     {
-        $this->media_creator = $mediaCreator;
+        $this->media_creator_username = $mediaCreatorUsername;
     }
 
     /**
-     * Get media_creator
+     * Get media_creator_username
      *
      * @return string 
      */
-    public function getMediaCreator()
+    public function getMediaCreatorUsername()
     {
-        return $this->media_creator;
+        return $this->media_creator_username;
+    }
+
+    /**
+     * Set media_creator_realname
+     *
+     * @param string $mediaCreatorRealname
+     */
+    public function setMediaCreatorRealname($mediaCreatorRealname)
+    {
+        $this->media_creator_realname = $mediaCreatorRealname;
+    }
+
+    /**
+     * Get media_creator_realname
+     *
+     * @return string 
+     */
+    public function getMediaCreatorRealname()
+    {
+        return $this->media_creator_realname;
     }
 
     /**

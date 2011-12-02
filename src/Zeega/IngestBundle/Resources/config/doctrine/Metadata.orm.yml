@@ -1,21 +1,11 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
 Zeega\IngestBundle\Entity\Metadata:
     type: entity
-    oneToOne:
-        item:
-            targetEntity: Zeega\IngestBundle\Entity\Item
-            joinColumn:
-                name: item_id
-                referencedColumnName: id  
     id:
         id:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        item_id:
-            type: bigint
-            unique: true
-            nullable: false
         archive:
             type: string
             length: 50

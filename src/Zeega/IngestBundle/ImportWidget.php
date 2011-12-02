@@ -352,7 +352,7 @@ class ImportWidget
 			$media = new Media();
 			$tags=array();
 			
-			$item->setAttributionUrl($info['urls']['url'][0]['_content']);
+			$item->setAttributionUri($info['urls']['url'][0]['_content']);
 			
 			if($info['tags']){
 				foreach($info['tags']['tag'] as $tag){
@@ -368,7 +368,7 @@ class ImportWidget
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
 			}	
 			
-			$metadata->setThumbUrl($sizes['Square']['source']);
+			$metadata->setThumbnailUrl($sizes['Square']['source']);
 			
 			$attr=array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
@@ -379,23 +379,23 @@ class ImportWidget
 			elseif(isset($sizes['Original'])) $itemSize='Original';
 			else $itemSize='Medium';
 			
-			if($info['dates']['taken']) $item->setDateCreatedStart(new DateTime($info['dates']['taken']));
+			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
 		
-			$metadata->setThumbUrl($sizes['Small']['source']);
-			$item->setItemUrl($sizes[$itemSize]['source']);
-			$item->setItemUri($sizes[$itemSize]['source']);
+			$metadata->setThumbnailUrl($sizes['Small']['source']);
+			$item->setUri($sizes[$itemSize]['source']);
+			$item->setUri($sizes[$itemSize]['source']);
 			$media->setWidth($sizes[$itemSize]['width']);
 			$media->setHeight($sizes[$itemSize]['height']);
 			
 			$attr['sizes']=$sizes;
-			$metadata->setDescription($info['description']);
+			$item->setDescription($info['description']);
 			
 			if($info['license'])$metadata->setLicense($license[$info['license']]);
 			else $metadata->setLicense('All Rights Reserved');
 		
-			if($info['owner']['username']) $item->setCreator($info['owner']['username']);
-			else $item->setCreator($info['owner']['realname']);
-			$metadata->setAltCreator($info['owner']['realname']);
+			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
+			else $item->setMediaCreatorUsername($info['owner']['realname']);
+			$item->setMediaCreatorRealname($info['owner']['realname']);
 			$attr['creator_nsid']=$info['owner']['nsid'];
 			$item->setTitle($info['title']);
 			
@@ -403,15 +403,15 @@ class ImportWidget
 			
 			if(array_key_exists ('location',$info)){
 				if($info['location']['latitude']){
-					$item->setGeoLat($info['location']['latitude']);
-					$item->setGeoLng($info['location']['longitude']);
+					$item->setMediaGeoLatitude($info['location']['latitude']);
+					$item->setMediaGeoLongitude($info['location']['longitude']);
 				}
 			}
 		
-			$item->setArchive('Flickr'); 
-			$item->setContentType('Image');
-			$item->setSourceType('Image');
-			$metadata->setAttr($attr);
+			$metadata->setArchive('Flickr'); 
+			$item->setType('Image');
+			$item->setSource('Image');
+			$metadata->setAttributes($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);
 			return $item;	

@@ -15,6 +15,11 @@ class Media
     private $id;
 
     /**
+     * @var bigint $item_id
+     */
+    private $item_id;
+
+    /**
      * @var string $format
      */
     private $format;
@@ -44,6 +49,11 @@ class Media
      */
     private $aspect_ratio;
 
+    /**
+     * @var Zeega\IngestBundle\Entity\Item
+     */
+    private $item;
+
 
     /**
      * Get id
@@ -53,6 +63,26 @@ class Media
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set item_id
+     *
+     * @param bigint $itemId
+     */
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
+    }
+
+    /**
+     * Get item_id
+     *
+     * @return bigint 
+     */
+    public function getItemId()
+    {
+        return $this->item_id;
     }
 
     /**
@@ -173,5 +203,25 @@ class Media
     public function getAspectRatio()
     {
         return $this->aspect_ratio;
+    }
+
+    /**
+     * Set item
+     *
+     * @param Zeega\IngestBundle\Entity\Item $item
+     */
+    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    {
+        $this->item = $item;
+    }
+
+    /**
+     * Get item
+     *
+     * @return Zeega\IngestBundle\Entity\Item 
+     */
+    public function getItem()
+    {
+        return $this->item;
     }
 }

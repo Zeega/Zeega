@@ -1,21 +1,11 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Media.orm.yml
 Zeega\IngestBundle\Entity\Media:
     type: entity
-    oneToOne:
-        item:
-            targetEntity: Zeega\IngestBundle\Entity\Item
-            joinColumn:
-                name: item_id
-                referencedColumnName: id    
     id:
         id:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        item_id:
-            type: bigint
-            unique: true
-            nullable: false        
         format:
             type: string
             length: 15

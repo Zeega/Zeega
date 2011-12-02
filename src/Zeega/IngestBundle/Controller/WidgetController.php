@@ -42,10 +42,13 @@ class WidgetController extends Controller
     							    ->findPlaygroundByUser($user->getId());
     			$playground=$playgrounds[0];
     		}
+    		//$today = date('Y-m-d h:i:s', strtotime(date('Y-m-d')));
 			$item->setPlayground($playground);
+			$item->setChildItemsCount(0);
+			//$item->setDateCreated($today);
 			
 			$em=$this->getDoctrine()->getEntityManager();
-			//$em->persist($item->getPlayground());
+			$em->persist($item->getPlayground());
 			$em->persist($item->getMetadata());
 			$em->persist($item->getMedia());
 			$em->flush();
@@ -60,14 +63,14 @@ class WidgetController extends Controller
 			
 			$thumbUrl=false;
 			$logger->err('getting thumb url');	
-			if($metadata->getThumbUrl()){
-				$thumbUrl=$metadata->getThumbUrl();
+			if($metadata->getThumbnailUrl()){
+				$thumbUrl=$metadata->getThumbnailUrl();
 				@$img=file_get_contents($thumbUrl);
 			}
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
+					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUri().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
 					$url=explode(':/var/www/',$output[4]);
 					$thumbUrl=$this->container->getParameter('hostname').$url[1];
 					@$img=file_get_contents($thumbUrl);
@@ -157,7 +160,7 @@ class WidgetController extends Controller
 				'playground'=>$playgrounds[0],
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
-				'content_type'=>$check['content_type'],
+				'content_type'=>$check['type'],
 				 'mycollection'=>$mycollection,
 			));
 		}
@@ -188,16 +191,16 @@ class WidgetController extends Controller
 				if($session->get('items'))$newItems=$session->get('items');			
 				
 				$widgetId=rand(0,100);
-				$item->setAttributionUrl($url."#".$user->getId());
+				$item->setAttributionUri($url."#".$user->getId());
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
 		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'title'=>$item->getTitle(),
-					'creator'=>$item->getCreator(),
+					'creator'=>$item->getMediaCreatorUsername(),
 					'widget_id'=>$widgetId,
-					'thumb_url'=>$metadata->getThumbUrl(),
+					'thumb_url'=>$metadata->getThumbnailUrl(),
 					'mycollection'=>$mycollection,
 				));
 			}

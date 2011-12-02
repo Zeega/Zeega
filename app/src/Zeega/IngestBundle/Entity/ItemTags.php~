@@ -5,12 +5,12 @@ namespace Zeega\IngestBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\IngestBundle\Entity\Tag
+ * Zeega\IngestBundle\Entity\ItemTags
  */
-class Tag
+class ItemTags
 {
     /**
-     * @var integer $item_id
+     * @var bigint $item_id
      */
     private $item_id;
 
@@ -25,14 +25,9 @@ class Tag
     private $tag_date_created;
 
     /**
-     * @var bigint $tag_user
+     * @var integer $tag_user
      */
     private $tag_user;
-
-    /**
-     * @var text $tag_description
-     */
-    private $tag_description;
 
     /**
      * @var Zeega\UserBundle\Entity\User
@@ -40,19 +35,20 @@ class Tag
     private $user;
 
     /**
-     * @var Zeega\IngestBundle\Entity\ItemTags
+     * @var Zeega\IngestBundle\Entity\Item
      */
-    private $items;
+    private $item;
 
-    public function __construct()
-    {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+    /**
+     * @var Zeega\IngestBundle\Entity\Tag
+     */
+    private $tag;
+
+
     /**
      * Get item_id
      *
-     * @return integer 
+     * @return bigint 
      */
     public function getItemId()
     {
@@ -92,7 +88,7 @@ class Tag
     /**
      * Set tag_user
      *
-     * @param bigint $tagUser
+     * @param integer $tagUser
      */
     public function setTagUser($tagUser)
     {
@@ -102,31 +98,11 @@ class Tag
     /**
      * Get tag_user
      *
-     * @return bigint 
+     * @return integer 
      */
     public function getTagUser()
     {
         return $this->tag_user;
-    }
-
-    /**
-     * Set tag_description
-     *
-     * @param text $tagDescription
-     */
-    public function setTagDescription($tagDescription)
-    {
-        $this->tag_description = $tagDescription;
-    }
-
-    /**
-     * Get tag_description
-     *
-     * @return text 
-     */
-    public function getTagDescription()
-    {
-        return $this->tag_description;
     }
 
     /**
@@ -150,22 +126,42 @@ class Tag
     }
 
     /**
-     * Add items
+     * Set item
      *
-     * @param Zeega\IngestBundle\Entity\ItemTags $items
+     * @param Zeega\IngestBundle\Entity\Item $item
      */
-    public function addItemTags(\Zeega\IngestBundle\Entity\ItemTags $items)
+    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
     {
-        $this->items[] = $items;
+        $this->item = $item;
     }
 
     /**
-     * Get items
+     * Get item
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Zeega\IngestBundle\Entity\Item 
      */
-    public function getItems()
+    public function getItem()
     {
-        return $this->items;
+        return $this->item;
+    }
+
+    /**
+     * Set tag
+     *
+     * @param Zeega\IngestBundle\Entity\Tag $tag
+     */
+    public function setTag(\Zeega\IngestBundle\Entity\Tag $tag)
+    {
+        $this->tag = $tag;
+    }
+
+    /**
+     * Get tag
+     *
+     * @return Zeega\IngestBundle\Entity\Tag 
+     */
+    public function getTag()
+    {
+        return $this->tag;
     }
 }

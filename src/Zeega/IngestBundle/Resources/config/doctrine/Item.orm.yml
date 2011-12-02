@@ -18,24 +18,43 @@ Zeega\IngestBundle\Entity\Item:
             targetEntity: Item
             mappedBy: child_items
     oneToOne:
-        user:
-            targetEntity: Zeega\UserBundle\Entity\User
+        media:
+            targetEntity: Media
+            inversedBy: item
+            onDelete: CASCADE
             joinColumn:
-                name: user_id
+                name: media_id
                 referencedColumnName: id
-        
+        metadata:
+            targetEntity: Metadata
+            inversedBy: item
+            onDelete: CASCADE
+            joinColumn:
+                name: metadata_id
+                referencedColumnName: id
     oneToMany:
         tags:
             targetEntity: ItemTags
             mappedBy: item
             joinColumn:
                 name: id
-                referencedColumnName: item_id            
+                referencedColumnName: item_id
+    manyToOne:
+        playground:
+            targetEntity: Zeega\EditorBundle\Entity\Playground
+        user:
+            targetEntity: Zeega\UserBundle\Entity\User
     id:
         id:
             type: bigint
             generator: { strategy: AUTO }
     fields:
+        media_id:
+            type: bigint
+            nullable: true
+        metadata_id:
+            type: bigint
+            nullable: true
         title:
             type: string
             length: 1000
@@ -58,7 +77,7 @@ Zeega\IngestBundle\Entity\Item:
             length: 200
         date_created:
             type: date
-            nullable: false
+            nullable: true
         type:
             type: string
             length: 20
@@ -74,7 +93,7 @@ Zeega\IngestBundle\Entity\Item:
         child_items_count:
             type: integer
             nullable: false
-            default: 0
+            default: default 0
         media_geo_latitude:
             type: float
             length: 10
@@ -89,7 +108,11 @@ Zeega\IngestBundle\Entity\Item:
         media_date_created_end:
             type: date
             nullable: true        
-        media_creator:
+        media_creator_username:
+            type: string
+            length: 80
+            nullable: false
+        media_creator_realname:
             type: string
             length: 80
             nullable: false

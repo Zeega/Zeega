@@ -237,9 +237,7 @@ class EditorController extends Controller
 	$playground=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
-	$admin=$this->getDoctrine()
-			->getRepository('ZeegaEditorBundle:Playground')
-			->checkAdmin($short,$user->getId());
+    $admin = false;
 	if($playground||$super){
 		
 			

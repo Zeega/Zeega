@@ -15,16 +15,6 @@ class Item
     private $id;
 
     /**
-     * @var bigint $media_id
-     */
-    private $media_id;
-
-    /**
-     * @var bigint $metadata_id
-     */
-    private $metadata_id;
-
-    /**
      * @var string $title
      */
     private $title;
@@ -110,29 +100,14 @@ class Item
     private $media_creator_realname;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Media
+     * @var Zeega\UserBundle\Entity\User
      */
-    private $media;
-
-    /**
-     * @var Zeega\IngestBundle\Entity\Metadata
-     */
-    private $metadata;
+    private $user;
 
     /**
      * @var Zeega\IngestBundle\Entity\ItemTags
      */
     private $tags;
-
-    /**
-     * @var Zeega\EditorBundle\Entity\Playground
-     */
-    private $playground;
-
-    /**
-     * @var Zeega\UserBundle\Entity\User
-     */
-    private $user;
 
     /**
      * @var Zeega\IngestBundle\Entity\Item
@@ -159,46 +134,6 @@ class Item
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set media_id
-     *
-     * @param bigint $mediaId
-     */
-    public function setMediaId($mediaId)
-    {
-        $this->media_id = $mediaId;
-    }
-
-    /**
-     * Get media_id
-     *
-     * @return bigint 
-     */
-    public function getMediaId()
-    {
-        return $this->media_id;
-    }
-
-    /**
-     * Set metadata_id
-     *
-     * @param bigint $metadataId
-     */
-    public function setMetadataId($metadataId)
-    {
-        $this->metadata_id = $metadataId;
-    }
-
-    /**
-     * Get metadata_id
-     *
-     * @return bigint 
-     */
-    public function getMetadataId()
-    {
-        return $this->metadata_id;
     }
 
     /**
@@ -542,43 +477,23 @@ class Item
     }
 
     /**
-     * Set media
+     * Set user
      *
-     * @param Zeega\IngestBundle\Entity\Media $media
+     * @param Zeega\UserBundle\Entity\User $user
      */
-    public function setMedia(\Zeega\IngestBundle\Entity\Media $media)
+    public function setUser(\Zeega\UserBundle\Entity\User $user)
     {
-        $this->media = $media;
+        $this->user = $user;
     }
 
     /**
-     * Get media
+     * Get user
      *
-     * @return Zeega\IngestBundle\Entity\Media 
+     * @return Zeega\UserBundle\Entity\User 
      */
-    public function getMedia()
+    public function getUser()
     {
-        return $this->media;
-    }
-
-    /**
-     * Set metadata
-     *
-     * @param Zeega\IngestBundle\Entity\Metadata $metadata
-     */
-    public function setMetadata(\Zeega\IngestBundle\Entity\Metadata $metadata)
-    {
-        $this->metadata = $metadata;
-    }
-
-    /**
-     * Get metadata
-     *
-     * @return Zeega\IngestBundle\Entity\Metadata 
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
+        return $this->user;
     }
 
     /**
@@ -599,46 +514,6 @@ class Item
     public function getTags()
     {
         return $this->tags;
-    }
-
-    /**
-     * Set playground
-     *
-     * @param Zeega\EditorBundle\Entity\Playground $playground
-     */
-    public function setPlayground(\Zeega\EditorBundle\Entity\Playground $playground)
-    {
-        $this->playground = $playground;
-    }
-
-    /**
-     * Get playground
-     *
-     * @return Zeega\EditorBundle\Entity\Playground 
-     */
-    public function getPlayground()
-    {
-        return $this->playground;
-    }
-
-    /**
-     * Set user
-     *
-     * @param Zeega\UserBundle\Entity\User $user
-     */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return Zeega\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

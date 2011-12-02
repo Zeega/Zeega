@@ -161,8 +161,8 @@ class ItemRepository extends EntityRepository
     {
         $query = $this->getEntityManager()
 				->createQuery(
-					'SELECT i.id,i.content_type,i.title FROM ZeegaIngestBundle:Item i
-					WHERE i.attribution_url = :url'
+					'SELECT i.id,i.type,i.title FROM ZeegaIngestBundle:Item i
+					WHERE i.attribution_uri = :url'
 				)->setParameter('url',$url);
 
 			try {
