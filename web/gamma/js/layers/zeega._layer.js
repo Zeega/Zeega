@@ -172,7 +172,8 @@ var ProtoLayer = Class.extend({
 			this.zIndex = model.zindex;
 		}
 		
-	
+		//I can draw the visual element once
+		this.visual();
 
 	},
 	
@@ -214,6 +215,7 @@ var ProtoLayer = Class.extend({
 	
 	drawControls : function()
 	{
+		// i need to redraw the controls every time.
 		this.layerControls.empty();
 		this.controls();
 		this.setListeners();
@@ -222,8 +224,8 @@ var ProtoLayer = Class.extend({
 	
 	drawToVisualEditor : function()
 	{
-		this.visualEditorElement.empty();
-		this.visual();
+		//this.visualEditorElement.empty();
+		//this.visual();
 		return this.visualEditorElement;
 	},
 	
