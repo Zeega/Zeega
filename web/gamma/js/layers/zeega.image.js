@@ -56,14 +56,7 @@ var ImageLayer = ProtoLayer.extend({
 		this.layerControls
 			.append( opacitySlider )
 			.append( scaleSlider )
-			.append( makeFullscreenButton() );
-			
-		this.layerControls.find('.fullscreen-submit')
-			.click(function(){
-				$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-				$('#layer-edit-'+_this.model.id).find('#width-slider').slider("option", "value", 100 );
-				_this.onAttributeUpdate();
-			});
+			.append( makeFullscreenButton( this.layerControls ) );
 	},
 	
 	visual : function()

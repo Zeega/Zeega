@@ -22,11 +22,6 @@
 
 
 
-function makeFullscreenButton(){
-
-	var button=$('<input>').attr({'class':'fullscreen-submit btn','type':'submit','value':'Fullscreen'});
-	return button;
-}
 
 
 function makeLayerSlider(args)
@@ -129,6 +124,34 @@ function textArea()
 	return template;
 }
 
+
+function makeFullscreenButton( dom )
+{
+	var button = $('<input>').attr({'class':'fullscreen-submit btn','type':'submit','value':'Fullscreen'});
+	
+	button.click(function(){
+			//set height width:100% ; top:0 ; left:0
+			dom.find('#width-slider').slider("option", "value", 100 );
+			dom.trigger( 'update' , [{
+				width : {
+					property : 'width',
+					value : 100,
+					suffix : '%'
+					},
+				top : {
+					property : 'top',
+					value : 0,
+					},
+				left : {
+					property : 'left',
+					value : 0,
+					}
+			}]);
+		});
+	
+	return button;
+}
+
 function makeUISlider(args)
 {
 	var defaults = {
@@ -144,7 +167,7 @@ function makeUISlider(args)
 	
 	var sliderWrapper = $('<div>').addClass('slider');
 	if( args.label ) sliderWrapper.append( $("<h4>").html( args.label) );
-	var slider = $('<div>').addClass('layer-slider');
+	var slider = $('<div>').addClass('layer-slider').attr('id',args.property+'-slider');
 		
 	slider.slider({
 		min : args.min,
