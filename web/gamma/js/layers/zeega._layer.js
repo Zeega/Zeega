@@ -55,10 +55,14 @@ var ProtoLayer = Class.extend({
 
 	},
 	
-
-	drawControls : function()
+	controls : function()
 	{
-
+		
+	},
+	
+	visual : function()
+	{
+		
 	},
 
 	onControlsOpen : function()
@@ -69,11 +73,6 @@ var ProtoLayer = Class.extend({
 	onControlsClose : function()
 	{
 
-	},
-
-	drawToVisualEditor : function()
-	{
-		
 	},
 	
 	onAttributeUpdate : function()
@@ -157,20 +156,7 @@ var ProtoLayer = Class.extend({
 			this.visualEditorElement = $('<div>');
 			this.layerControls = $('<div>');
 
-			///////set listener
-			this.layerControls.bind( 'update' , function( e , settings, silent ){
-
-				// look through each setting object
-				_.each( settings, function(setting){
-					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
-					else _this.visualEditorElement.css( setting.property, setting.value );
-				})
-				//if the update isn't silent, then update the model
-				if( !silent ) _this.updateAttribute( settings );
-				
-				
-			});
-			/////// end listener
+			
 			
 		}else{
 			//make it possible to load objects and not models.
@@ -185,6 +171,8 @@ var ProtoLayer = Class.extend({
 			this.type = model.type;
 			this.zIndex = model.zindex;
 		}
+		
+	
 
 	},
 	
@@ -203,8 +191,41 @@ var ProtoLayer = Class.extend({
 			this.zIndex = model.zindex;
 	},
 	
+	setListeners : function()
+	{
+		var _this = this;
+		///////set listener
+		this.layerControls.bind( 'update' , function( e , settings, silent ){
+
+			// look through each setting object
+			_.each( settings, function(setting){
+				if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+				else _this.visualEditorElement.css( setting.property, setting.value );
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+			
+			
+		});
+		/////// end listener
+	},
 	
 	//Activate layer icon for display in workspace icon drawer
+	
+	drawControls : function()
+	{
+		this.layerControls.empty();
+		this.controls();
+		this.setListeners();
+		return this.layerControls;
+	},
+	
+	drawToVisualEditor : function()
+	{
+		this.visualEditorElement.empty();
+		this.visual();
+		return this.visualEditorElement;
+	},
 	
 	setIcon : function()
 	{

@@ -27,7 +27,7 @@ var ImageLayer = ProtoLayer.extend({
 	},
 
 
-	drawControls : function()
+	controls : function()
 	{
 		var _this = this;
 		
@@ -64,12 +64,9 @@ var ImageLayer = ProtoLayer.extend({
 				$('#layer-edit-'+_this.model.id).find('#width-slider').slider("option", "value", 100 );
 				_this.onAttributeUpdate();
 			});
-			
-
-		return this.layerControls;
 	},
 	
-	drawToVisualEditor : function()
+	visual : function()
 	{
 		this.visualEditorElement.css({
 			width : this.attr.width+'%',
@@ -81,8 +78,6 @@ var ImageLayer = ProtoLayer.extend({
 			.css({'width':'100%'});
 						
 		this.visualEditorElement.append( img );
-			
-		return this.visualEditorElement;
 	},
 
 	drawThumb : function(){

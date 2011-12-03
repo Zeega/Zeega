@@ -164,6 +164,8 @@ function makeUISlider(args)
 		},
 		stop : function(e,ui)
 		{
+			console.log('slider STOP');
+			console.log(args.dom);
 			args.dom.trigger( 'update' , [{
 				property : {
 					property : args.property,
