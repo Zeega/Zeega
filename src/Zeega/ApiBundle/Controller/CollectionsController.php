@@ -62,16 +62,23 @@ class CollectionsController extends Controller
     public function postCollectionsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        
+        if($user == "anon.")
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
+        }
+            
         $item = new Item();
         
         $item->setTitle('My new collection');
-        $item->setContentType('Collection');
+        $item->setType('Collection');
+        $item->setSource('Collection');
         $item->setUser($user);
-        $item->setItemUrl('collectionurl');
-        $item->setItemUri('collectionurl');
-        $item->setAttributionUrl('zeega.org');
-        $item->setArchive('Collections');
+        $item->setUri('collectionurl');
+        $item->setAttributionUri('zeega.org');
+        $item->setChildItemsCount(0);
+        $item->setMediaCreatorUsername($user->getUsername());
+        $item->setMediaCreatorRealname($user->getDisplayName());
         
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
@@ -80,20 +87,51 @@ class CollectionsController extends Controller
         return new Response($item->getId());
     }
     
+    public function postCollectionsItemsAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user == "anon.")
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
+        }
         
-    // "vote_user_comment"    [PUT] /users/{slug}/comments/{id}/vote
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();        
+        $new_items = $request->request->get('new_items');
+        $new_items = explode(",", $new_items);
+        
+        $collection_item = new Item();
+        
+        foreach($new_items as $item)
+        {
+            $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+
+            if (!$child_entity) 
+            {
+                throw $this->createNotFoundException('Unable to find Item entity.');
+            }    
+            
+            $collection_item->addItem($child_entity);
+        }
+        $em->persist($collection_item);
+        $em->flush();
+        return new Response(json_encode($collection_item));
+    }
     
+    
+    // "vote_user_comment"    [PUT] /users/{slug}/comments/{id}/vote
     public function putCollectionsItemsAction($project_id, $items_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('ZeegaIngestBundle:Item')->find($project_id);
-
+        
         if (!$entity) 
         {
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
-        
+
         $items_list = explode(",", $items_id);
         
         // this is terrible...
@@ -106,15 +144,23 @@ class CollectionsController extends Controller
                 throw $this->createNotFoundException('Unable to find Item entity.');
             }    
             
-            $entity->addItem($child_entity);            
-        }
+            $entity->addItem($child_entity);
+        } 
         
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($entity);
-        $em->flush();
+        $items_list->setTitle('My new collection');
+        $items_list->setType('Collection');
+        $items_list->setSource('Collection');
+        $items_list->setUser($user);
+        $items_list->setUri('collectionurl');
+        $items_list->setAttributionUri('zeega.org');
+        $items_list->setChildItemsCount(0);
+        $items_list->setMediaCreatorUsername($user->getUsername());
+        $items_list->setMediaCreatorRealname($user->getDisplayName());
 
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($items_list);
+        $em->flush();
     }
-    
     
     public function getCollectionAction($id)
     {

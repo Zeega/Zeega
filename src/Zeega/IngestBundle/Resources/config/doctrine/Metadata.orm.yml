@@ -1,6 +1,10 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
 Zeega\IngestBundle\Entity\Metadata:
     type: entity
+    oneToOne:
+       item:
+         targetEntity: Item
+         mappedBy: metadata
     id:
         id:
             type: bigint
