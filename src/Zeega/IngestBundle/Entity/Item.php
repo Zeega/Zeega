@@ -26,7 +26,7 @@ class Item
 
     /**
      * @var string $item_url
-<<<<<<< HEAD
+
      */
     private $item_url;
 
@@ -38,19 +38,7 @@ class Item
     /**
      * @var string $attribution_url
      */
-=======
-     */
-    private $item_url;
 
-    /**
-     * @var string $item_uri
-     */
-    private $item_uri;
-
-    /**
-     * @var string $attribution_url
-     */
->>>>>>> 20d68c0ceb84e1f721a4b9876db18b77da99e633
     private $attribution_url;
 
     /**
