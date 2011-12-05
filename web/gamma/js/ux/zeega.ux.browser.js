@@ -50,7 +50,8 @@ $(document).ready(function() {
     		}
     	},
 		
-		/* This adds a custom element for styling the image caption */    
+		/* This adds a custom element for styling the image caption for
+		viewing a single IMAGE in the lightbox */    
     	beforeLoad : function() {
     
             var elementID = $(this.element).attr('id');
@@ -133,7 +134,7 @@ $(document).ready(function() {
 
 				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-				newGuy.save({ title:'New fake collection' + Math.floor(Math.random()*1000)}, 
+				newGuy.save({ title:'New fake collection ' + Math.floor(Math.random()*1000)}, 
 							{
 								success: function(model, response) { 
 									ZeegaBrowser.myCollectionsModel.add(model);

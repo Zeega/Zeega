@@ -92,11 +92,7 @@
 	overflow:hidden;
 	display:inline;
 }
-#browser-my-collections-drawer li{
-	padding:10px 0 10px 10px;
-	height:110px;
-	
-}
+
 .browser-my-collection img{
 	padding:3px;
 	padding-right:0;
@@ -156,7 +152,7 @@
 
 	
 }
-.browser-results-image, #browser-show-more-results{
+.browser-results-image,.browser-results-collection, #browser-show-more-results{
 
 	float: left;
 	margin: 0;

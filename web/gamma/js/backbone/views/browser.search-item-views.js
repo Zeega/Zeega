@@ -34,32 +34,15 @@ var BrowserCollectionView = BrowserItemView.extend({
 		var thisView = this;
 		$(this.el).droppable({
 			accept : '.browser-results-image',
-			hoverClass : 'node-item-hover',
+			hoverClass : 'browser-create-new-collection-hover',
 			tolerance : 'pointer',
 
 			//this happens when you drop an item onto a collection
 			drop : function( event, ui )
 			{
 				
-				//that.model.noteChange();
-				
 				ui.draggable.draggable('option','revert',false);
-				//make the new layer model
-				/*var settings = {
-					url: Zeega.url_prefix + 'nodes/'+ that.model.id +'/layers',
-					type: Zeega.draggedItem.get('content_type'),
-					zIndex: Zeega.currentNode.get('layers').length+1,
-					attr: {
-						'item_id' : Zeega.draggedItem.id,
-						'title' : Zeega.draggedItem.get('title'),
-						'url' : Zeega.draggedItem.get('item_url')
-					}
-				};
-				var newLayer = new Layer( settings );
 				
-				Zeega.addLayerToNode(that.model,newLayer);
-				*/
-				//flash the layers tab
 			
 				$(this).effect("highlight", {}, 3000);
 				$(this).find('.browser-item-count').text('Adding item...');
@@ -70,14 +53,15 @@ var BrowserCollectionView = BrowserItemView.extend({
 			
 				thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-				thisView.model.save({ title:'New fake collection' + Math.floor(Math.random()*1000)}, 
+				thisView.model.save({ }, 
 							{
 								success: function(model, response) { 
-									ZeegaBrowser.myCollectionsModel.add(model);
+							
+									//this should take care of incrementing item count?
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
-				 					console.log("Error creating a new collection.");
+				 					console.log("Error updating a collection with a new item.");
 				 					console.log(response);
 				 				}
 				 			});
@@ -91,7 +75,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		this.el.addClass('browser-results-collection');
 		this.el.removeAttr('id');
 
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '404.jpg' : this.model.get('thumb_url')));
+		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
 		this.el.find('img').attr('title', this.model.get('title'));
 
 		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
@@ -106,11 +90,8 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	
 	initialize : function() {
 		
-		
-	},
-	render: function()
-	{
 		var theModel = this.model;
+		this.el = $("#browser-results-image-template").clone();
 		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
@@ -144,33 +125,16 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			}
 			
 		});
-		return this;
-	},
-
-
-});
-var BrowserImageView = BrowserSingleItemView.extend({
-	
-	initialize : function() {
-		this.el = $("#browser-results-image-template").clone();
-		
 	},
 	render: function()
 	{
-
-		/*
-		This is like calling "super" - it calls the render method of the 
-		parent object - in this case BrowserSingleItemView - so we can put 
-		functionality for all item views in the parent class.
-		*/
-		BrowserSingleItemView.prototype.render.call(this);
-
-		//Then render individual element
+		
+		//render individual element
 		this.el.addClass('browser-results-image');
 		this.el.removeAttr('id');
 		this.el.find('a').attr('id', this.model.get('id'));
 		this.el.find('a').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '404.jpg' : this.model.get('thumb_url')));
+		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
 		this.el.find('a').attr('href', this.model.get('item_url'));
 		this.el.find('img').attr('title', this.model.get('title'));
 		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
@@ -178,7 +142,9 @@ var BrowserImageView = BrowserSingleItemView.extend({
 		return this;
 	},
 
+
 });
+
 // For displaying caption when viewing single image in FancyBox
 var BrowserFancyBoxImageView = BrowserSingleItemView.extend({
 	
@@ -203,37 +169,4 @@ var BrowserFancyBoxImageView = BrowserSingleItemView.extend({
 	},
 
 });
-var BrowserAudioView = BrowserSingleItemView.extend({
-	
-	initialize : function() {
-		this.el = $("#browser-results-image-template").clone();
-		
-	},
-	render: function()
-	{
-		
-		this.el.addClass('browser-results-image');
-		this.el.removeAttr('id');
-		$('#browser-results-items').append(this.el);
-		
-		return this;
-	},
 
-});
-var BrowserVideoView = BrowserSingleItemView.extend({
-	
-	initialize : function() {
-		this.el = $("#browser-results-image-template").clone();
-		
-	},
-	render: function()
-	{
-		
-		this.el.addClass('browser-results-image');
-		this.el.removeAttr('id');
-		$('#browser-results-items').append(this.el);
-		
-		return this;
-	},
-
-});

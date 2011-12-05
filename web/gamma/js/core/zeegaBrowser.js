@@ -43,6 +43,7 @@ var ZeegaBrowser = {
 		
 		//Empty items and collections from results drawer
 		$('#browser-results #browser-results-collections').empty();
+		$('#browser-results #browser-results-items').empty();
 		
 		//Show results drawer's loading spinner
 		$('#browser-results .browser-loading').show();

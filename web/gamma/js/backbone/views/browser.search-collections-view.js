@@ -1,7 +1,7 @@
 /*
 	- presents item results of a search
 	- items might be images, video or audio
-	- this is a collection of BrowserItemViews 
+	- this is a collection of BrowserSingleItemViews
 */
 var BrowserSearchCollectionsView = Backbone.View.extend({
 	el: $('#browser-results-collections'),
@@ -125,22 +125,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 	addItem: function(m)
     {
     	var type = m.get("type");
-    	var itemView = null;
-
-    	switch(type){    		
-
-    		case 'image':
-    		itemView = new BrowserImageView({ model: m });
-    		break;
-
-    		case 'audio':
-    		itemView = new BrowserAudioView({ model: m });
-    		break;
-
-    		case 'video':
-    		itemView = new BrowserVideoView({ model: m });
-    		break;
-    	}
+    	var itemView =  new BrowserSingleItemView({ model: m });
         
         // add the item view to this collection of views
         this._views.push(itemView);
