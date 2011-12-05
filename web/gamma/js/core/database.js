@@ -56,17 +56,15 @@ var Database = new function()
 					newItem.id = item.id;
 					newItem.set({
 						'title':item.title,
-						'item_url':item.item_url,
-						'geo_lng':item.geo_lng,
-						'geo_lat':item.geo_lat,
-						'depth':item.depth,
+						'item_url':item.uri,
+						'geo_lng':item.media_geo_longitude,
+						'geo_lat':item.media_geo_latitude,
 						'date_created_start':item.date_created_start,
 						'date_created_end':item.date_created_end,
-						'creator':item.creator,
-						'content_type':item.content_type,
-						'source_type':item.source_type,
-						'attribution_url':item.attribution_url,
-						'archive':item.archive
+						'creator':item.media_creator_username,
+						'content_type':item.type,
+						'source_type':item.source,
+						'attribution_url':item.attribution_uri,
 					});
 				
 					that.collection.add(newItem);

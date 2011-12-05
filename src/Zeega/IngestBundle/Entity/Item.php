@@ -4,6 +4,8 @@ namespace Zeega\IngestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use DateTime;
+
 /**
  * Zeega\IngestBundle\Entity\Item
  */
@@ -147,8 +149,10 @@ class Item
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->date_created = new DateTime(NULL);
+    	
     }
     
     /**

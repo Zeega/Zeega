@@ -81,6 +81,11 @@ ZeegaEditorBundle_project:
     defaults: { _controller:  ZeegaEditorBundle:Editor:project }
     
 
+ZeegaIngestBundle_import:
+    pattern: /import/{page}
+    defaults: { _controller:  ZeegaIngestBundle:Ingest:index }
+    
+
     
 ZeegaEditorBundle_faq:
     pattern: /faq

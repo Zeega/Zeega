@@ -17,7 +17,7 @@ use SimpleXMLElement;
 class WidgetController extends Controller
 {
     
-	  public function persistAction(){
+	public function persistAction(){
 	  	$logger = $this->get('logger');
 		$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
@@ -134,8 +134,7 @@ class WidgetController extends Controller
 
 	}
 	
-	public function urlAction()
-    {
+	public function urlAction(){
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
 		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
@@ -182,6 +181,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
 			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
 			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
+			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
 
 			//Store media item(s) to session and render widget
 
@@ -241,9 +241,8 @@ class WidgetController extends Controller
 			} 
     	}
 	}
-  	  
-    
-     public function thumbAction($query="Help"){
+  	
+    public function thumbAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');
@@ -254,7 +253,7 @@ class WidgetController extends Controller
    
     }
     
-     public function mediadataAction($query="Help"){
+    public function mediadataAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');

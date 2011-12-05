@@ -109,7 +109,7 @@ class ItemRepository extends EntityRepository
         $qb->select('i')
             ->from('ZeegaIngestBundle:Item', 'i')
             ->where('i.title LIKE ?1')
-            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('i.media_creator_username LIKE ?1')
             ->orWhere('i.description LIKE ?1')
             ->orderBy('i.id','DESC')
        		->setMaxResults($limit)
