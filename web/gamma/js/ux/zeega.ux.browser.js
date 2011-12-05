@@ -42,7 +42,12 @@ function toggleFilterDrawer(){
 $(document).ready(function() {
 
 	//set up fancybox lightbox plugin
-	$(".fancybox").fancybox({
+	$(".fancymedia").fancybox({
+		closeClick:false,
+		nextClick:false,
+		mouseWheel:false,
+		fitToView:true,
+		arrows:false,
 		
     	helpers : {
     		title : {
@@ -57,10 +62,21 @@ $(document).ready(function() {
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
+			var fancyView = null;
+           	if (thisModel.get("content_type") == "Image"){
+           		fancyView = new BrowserFancyBoxImageView({model:thisModel});
+           		fancyView.render(this);
+          	 	
 
-           	var fancyView = new BrowserFancyBoxImageView({model:thisModel});
-           	fancyView.render(this);
-
+           	}
+           	else if (thisModel.get("content_type") == "Video"){
+           		fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           		fancyView.render(this);
+           		
+           	}
+           	
+           	
+			
        
         }
 	});
