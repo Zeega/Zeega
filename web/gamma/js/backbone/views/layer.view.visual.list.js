@@ -5,6 +5,12 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	tagName : 'li',
 	
+	initialize : function()
+	{
+		this.model.bind( 'change:title', this.updateLayerTitle );
+		
+	},
+	
 	//draws the controls
 	render : function( )
 	{
@@ -57,6 +63,11 @@ var VisualLayerListView = Backbone.View.extend({
 		return this;
 	},
 	
+	updateLayerTitle : function()
+	{
+		//I can't access the this.el because the scope has changed to the model object :/
+		$( '#layer-edit-'+ this.id ).find('.layer-title').html( this.get('attr').title );
+	},
 	
 	
 	/***********************

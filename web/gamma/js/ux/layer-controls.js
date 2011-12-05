@@ -124,6 +124,257 @@ function textArea()
 	return template;
 }
 
+function makeGoogleMapTarget( layerID )
+{
+	var target = $('<div>').addClass('google-map-wrapper');
+	var map = $('<div>').addClass('map').attr({'id' : 'map-'+ layerID }).css( {'width' : "350px", 'height' : "233px"});
+	target.append( map );
+	return target;
+}
+
+function makeGoogleMap( args )
+{
+	var defaults = {
+		type : 'map',
+		streetView : true,
+		searchBar : true,
+		disableDoubleClickZoom : true,
+		
+		panControl: false,
+		zoomControl: true,
+		mapTypeControl: true,
+		scaleControl: false,
+		streetViewControl: true,
+		overviewMapControl: false
+	};
+	
+	_.defaults( args, defaults);
+
+	//make center lat lng
+	var center = new google.maps.LatLng( args.lat, args.lng);
+	
+	eval( 'var gMapType = google.maps.MapTypeId.'+ args.mapType.toUpperCase() );
+
+	var mapOptions = {
+		zoom : args.zoom,
+		center : center,
+		mapTypeId : gMapType,
+		disableDoubleClickZoom : args.disableDoubleClickZoom,
+		
+		panControl: args.panControl,
+		zoomControl: args.zoomControl,
+		mapTypeControl: args.mapTypeControl,
+		scaleControl: args.scaleControl,
+		streetViewControl: args.streetView,
+		overviewMapControl: args.overviewMapControl
+	};
+	var map = new google.maps.Map( args.controls.find( '.map' )[0], mapOptions);
+	var streetView = map.getStreetView();
+	
+	//if streetview
+	if( args.type == "streetview" )
+	{
+		var pov = {
+				'heading' : args.heading,
+				'pitch' : args.pitch,
+				'zoom' : args.streetZoom,
+				}
+		streetView.setPosition( center );
+		streetView.setPov( pov );
+		streetView.setVisible( true );
+	}
+	
+	google.maps.event.addListener( map , 'zoom_changed', function(){
+		args.controls.trigger( 'update' , [{
+			zoom : {
+				property : 'zoom',
+				value : map.getZoom(),
+				css : false
+			}
+		}]);
+		updateStaticMap( _.extend(args,{'zoom':map.getZoom()}) );
+	});
+	
+	google.maps.event.addListener( map, 'idle', function(){
+		var newCenter = map.getCenter();
+		
+		//save to the database
+		args.controls.trigger( 'update' , [{
+			lat : {
+				property : 'lat',
+				value : newCenter.lat(),
+				css : false
+			},
+			lng : {
+				property : 'lng',
+				value : newCenter.lng(),
+				css : false
+			}
+		}]);
+		
+		//update the visual editor element
+		updateStaticMap( _.extend(args,{'lat':newCenter.lat(),'lng':newCenter.lng()}) );
+	});
+	
+	google.maps.event.addListener(map, 'maptypeid_changed', function(){
+		args.controls.trigger( 'update' , [{
+			mapType : {
+				property : 'mapType',
+				value : '"'+ map.getMapTypeId() +'"',
+				css : false
+			}
+		}]);
+		updateStaticMap( _.extend(args,{'mapType': map.getMapTypeId()}) );
+	});
+	
+	//called when switching between streetview and map view
+	google.maps.event.addListener( streetView, 'visible_changed', function() {
+		if( streetView.getVisible() )
+		{
+			var center = streetView.getPosition();
+			
+			//when streetview is visible
+			args.controls.trigger( 'update' , [{
+				streetView : {
+					property : 'type',
+					value : '"streetview"',
+					css : false
+				},
+				lat : {
+					property : 'lat',
+					value : center.lat(),
+					css : false
+				},
+				lng : {
+					property : 'lng',
+					value : center.lng(),
+					css : false
+				},
+			}]);
+			updateStaticMap( _.extend(args,{'type':'streetview'}) );
+		}else{
+			//when streetview is hidden
+			args.controls.trigger( 'update' , [{
+				map : {
+					property : 'type',
+					value : '"map"',
+					css : false
+				}
+			}]);
+			updateStaticMap( _.extend(args,{'type':'map'}) );
+		}
+	});
+	
+	
+	//called when the streetview is panned
+	google.maps.event.addListener( streetView, 'pov_changed', function() {
+		delayedUpdate();
+	});
+	
+	// need this so we don't spam the servers
+	var delayedUpdate = _.debounce( function(){
+		var center = streetView.getPosition();
+		var pov = streetView.getPov();
+		
+		args.controls.trigger( 'update' , [{
+			heading : {
+				property : 'heading',
+				value : pov.heading,
+				css : false
+			},
+			lat : {
+				property : 'lat',
+				value : center.lat(),
+				css : false
+			},
+			lng : {
+				property : 'lng',
+				value : center.lng(),
+				css : false
+			},
+			pitch : {
+				property : 'pitch',
+				value : pov.pitch,
+				css : false
+			},
+			streetZoom : {
+				property : 'streetZoom',
+				value : Math.floor( pov.zoom ),
+				css : false
+			}			
+		}]);
+		
+		updateStaticMap( _.extend(args,{
+			'heading':pov.heading,
+			'pitch':pov.pitch,
+			'streetZoom':Math.floor( pov.zoom ),
+			'lat':center.lat(),
+			'lng':center.lng()
+		}) )
+	} , 1000);
+
+	//if the searchBar is active, then draw in the form and activate geocoder
+	if( args.searchBar )
+	{
+		var input = $('<input>').attr({ 'id' : 'map-search' , 'type' : 'text' });
+		var button = $('<input>').attr({ 'id' : 'map-submit' , 'type' : 'submit' });
+		args.controls.find('.google-map-wrapper').append(input).append(button);
+		
+		var geocoder = new google.maps.Geocoder();
+		
+		button.click(function(){
+			_this.geocoder.geocode( { 'address': $('#map-search-'+_this.model.id).val()}, function(results, status) {
+				doMapSearch();
+			});
+		});
+		
+		input.keypress(function(event){
+			if ( event.which == 13 )
+			{
+				doMapSearch();
+			}
+		});
+
+		var doMapSearch = function()
+		{
+			event.preventDefault();
+			geocoder.geocode( { 'address': input.val()}, function(results, status) {
+				if ( status == google.maps.GeocoderStatus.OK )
+				{
+					if( streetView.getVisible() ) streetView.setVisible( false );
+					var center = results[0].geometry.location;
+					map.setCenter( center );
+				}
+				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
+			});
+			
+			args.controls.trigger( 'update' , [{
+				title : {
+					property : 'title',
+					value : '"'+ input.val() +'"',
+					css : false
+				}
+			}]);
+			
+		}
+
+	} // end if searchbar
+
+}
+
+function updateStaticMap( args )
+{
+
+	var wPercent = 6 * parseInt( args.w );
+	var hPercent = 4 * parseInt( args.h );
+	
+	if(args.type == 'streetview')
+	{
+		args.visual.find('img').attr( 'src' , 'http://maps.googleapis.com/maps/api/streetview?size='+wPercent+'x'+hPercent+'&fov='+180 / Math.pow(2,args.streetZoom)+'&location='+ args.lat+','+args.lng+'&heading='+args.heading+'&pitch='+args.pitch+'&sensor=false');
+	}else{
+		args.visual.find('img').attr( 'src' , "http://maps.googleapis.com/maps/api/staticmap?center="+ args.lat +","+args.lng+"&zoom="+ args.zoom +"&size="+ wPercent +"x"+ hPercent +"&maptype="+ args.mapType +"&sensor=false");
+	}
+}
 
 function makeFullscreenButton( dom )
 {
@@ -160,7 +411,8 @@ function makeUISlider(args)
 		step : 1,
 		value : 100,
 		silent : true,
-		suffix : ''
+		suffix : '',
+		css : true
 	};
 	
 	args = _.defaults(args,defaults);
@@ -182,6 +434,7 @@ function makeUISlider(args)
 					property : args.property,
 					value : ui.value,
 					suffix : args.suffix,
+					css : args.css
 					}
 				},args.silent]);
 		},
@@ -191,7 +444,8 @@ function makeUISlider(args)
 				property : {
 					property : args.property,
 					value : ui.value,
-					suffix : args.suffix
+					suffix : args.suffix,
+					css : args.css
 					}
 			}]);
 		}
@@ -295,6 +549,8 @@ function makeHiddenInput( options )
 		return hiddenInput;
 }
 
+
+//do we need this?
 //Shamelessly cribbed from ColorPicker <---yessss
 function RGBToHex (rgb)
 {

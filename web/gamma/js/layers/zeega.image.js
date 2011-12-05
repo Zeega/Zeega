@@ -29,8 +29,6 @@ var ImageLayer = ProtoLayer.extend({
 
 	controls : function()
 	{
-		var _this = this;
-		
 		var opacityArgs = {
 			max : 1,
 			label : 'Opacity',

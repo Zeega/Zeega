@@ -172,6 +172,9 @@ var ProtoLayer = Class.extend({
 			this.zIndex = model.zindex;
 		}
 		
+		_.defaults( this.attr, this.defaultAttributes );
+		
+		
 		//I can draw the visual element once
 		this.visual();
 
@@ -197,15 +200,19 @@ var ProtoLayer = Class.extend({
 		var _this = this;
 		///////set listener
 		this.layerControls.bind( 'update' , function( e , settings, silent ){
-
+			//console.log('update called');
 			// look through each setting object
+						
 			_.each( settings, function(setting){
-				if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
-				else _this.visualEditorElement.css( setting.property, setting.value );
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
 			})
 			//if the update isn't silent, then update the model
 			if( !silent ) _this.updateAttribute( settings );
-			
 			
 		});
 		/////// end listener
@@ -266,9 +273,10 @@ var ProtoLayer = Class.extend({
 	{
 		var _this = this;
 		_.each( settings, function(setting){
+			//console.log( '_this.setAttributes({'+ setting.property +':'+ setting.value +'})' );
 			//eval used because setting {key:value} sets "key":<value> 
 			//there may be a better way to do this without an eval
-			eval( '_this.setAttributes({'+setting.property+':'+setting.value+'})');
+			eval( '_this.setAttributes({'+ setting.property +':'+ setting.value +'})');
 		})
 		
 		this.save();
