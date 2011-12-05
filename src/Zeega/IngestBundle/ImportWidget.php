@@ -88,14 +88,14 @@ class ImportWidget
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[3];
+				$id=$url;
 				$archive='SoundCloudSet';
 			}
 			else{
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[2];
+				$id=$url;
 				$archive='SoundCloud';
 			}
 		}
@@ -423,11 +423,24 @@ class ImportWidget
 
 }
 
-	public function parseSoundCloudSet($id){
+	public function parseSoundCloudSet($url){
 		
 		$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
+
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
 	
-		$originalUrl='http://api.soundcloud.com/playlists/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+		$soundcloud = '/soundcloud\.com%2Fplaylists%2F([0-9]*)/';
+		
+		if(preg_match($soundcloud, $file_contents, $matches)){	
+	
+		$originalUrl='http://api.soundcloud.com/playlists/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 		$ch = curl_init();
 		$timeout = 5; // set to zero for no timeout
 		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -491,16 +504,32 @@ class ImportWidget
 		$collection['creator'] = $item->getCreator();
 		$collection['items']=$items;
 		return $collection;
-		
+		}
+		else{
+			return false;
+		}
 	
 	}
 
-	public function parseSoundCloud($id){
+		public function parseSoundCloud($url){
 	
 	
 	$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
 
-	$originalUrl='http://api.soundcloud.com/tracks/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+	$originalUrl=$url;
+	$ch = curl_init();
+	$timeout = 5; // set to zero for no timeout
+	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$file_contents = curl_exec($ch);
+	curl_close($ch);
+
+	$soundcloud = '/soundcloud\.com%2Ftracks%2F([0-9]*)/';
+	
+	if(preg_match($soundcloud, $file_contents, $matches)){				
+
+	$originalUrl='http://api.soundcloud.com/tracks/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 	$ch = curl_init();
 	$timeout = 5; // set to zero for no timeout
 	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -547,9 +576,13 @@ class ImportWidget
 	$item->setMedia($media);
 	
 	return $item;
+	}
+	else{
+	
+	return false;
+	}
 
 }
-
 	public function parseBlipTv($id){	
 		
 		$originalUrl=$id.'?skin=json';
