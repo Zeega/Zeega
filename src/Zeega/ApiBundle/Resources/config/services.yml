@@ -1,0 +1,7 @@
+parameters:
+#    zeega_api.example.class: Zeega\ApiBundle\Example
+
+services:
+#    zeega_api.example:
+#        class: %zeega_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

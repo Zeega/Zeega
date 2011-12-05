@@ -1,14 +1,14 @@
 <?php
 
-// src/Zeega/IngestBundle/Entity/Item.php
-
 namespace Zeega\IngestBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zeega\IngestBundle\Entity\Item
+ */
 class Item
 {
- 
-    
-  
     /**
      * @var integer $id
      */
@@ -26,6 +26,7 @@ class Item
 
     /**
      * @var string $item_url
+<<<<<<< HEAD
      */
     private $item_url;
 
@@ -37,6 +38,19 @@ class Item
     /**
      * @var string $attribution_url
      */
+=======
+     */
+    private $item_url;
+
+    /**
+     * @var string $item_uri
+     */
+    private $item_uri;
+
+    /**
+     * @var string $attribution_url
+     */
+>>>>>>> 20d68c0ceb84e1f721a4b9876db18b77da99e633
     private $attribution_url;
 
     /**
@@ -66,6 +80,7 @@ class Item
 
     /**
      * @var string $content_type
+
      */
     private $content_type;
 
@@ -77,6 +92,7 @@ class Item
     /**
      * @var string $archive
      */
+
     private $archive;
 
     /**
@@ -102,17 +118,17 @@ class Item
     /**
      * @var Zeega\IngestBundle\Entity\Item
      */
-    private $items;
+    private $child_items;
 
     /**
      * @var Zeega\IngestBundle\Entity\Item
      */
-    private $parent_collections;
+    private $parent_items;
 
     public function __construct()
     {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->parent_collections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -466,32 +482,34 @@ class Item
     }
 
     /**
-     * Add items
+
+     * Add child_items
      *
-     * @param Zeega\IngestBundle\Entity\Item $items
+     * @param Zeega\IngestBundle\Entity\Item $childItems
      */
-    public function addItem(\Zeega\IngestBundle\Entity\Item $items)
+    public function addItem(\Zeega\IngestBundle\Entity\Item $childItems)
     {
-        $this->items[] = $items;
+        $this->child_items[] = $childItems;
     }
 
     /**
-     * Get items
+     * Get child_items
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getItems()
+    public function getChildItems()
     {
-        return $this->items;
+        return $this->child_items;
     }
 
     /**
-     * Get parent_collections
+     * Get parent_items
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getParentCollections()
+    public function getParentItems()
     {
-        return $this->parent_collections;
+        return $this->parent_items;
+
     }
 }

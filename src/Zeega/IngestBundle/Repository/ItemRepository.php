@@ -7,11 +7,117 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
+    //  api/search
+    public function searchItems($query)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i,m.thumb_url')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->leftJoin('i.metadata','m')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['page']);
+
+        if(isset($query['queryString']))
+        {
+            $qb->where('i.title LIKE ?1')
+               ->orWhere('i.creator LIKE ?1')
+               ->orWhere('m.description LIKE ?1')
+               ->setParameter(1,'%' . $query['queryString'] . '%');
+        }
+        
+        if(isset($query['userId']))
+      	{
+			$qb->innerJoin('i.user', 'u')
+			   ->andWhere('u.id = ?2')
+			   ->setParameter(2,$query['userId']);
+		} 
+		
+		if(isset($query['collectionId']))
+      	{
+			 $qb->innerjoin('i.parent_items', 'c')
+                ->andWhere('c.id = ?3')
+                ->setParameter(3, $query['collectionId']);
+		}
+        
+        if(isset($query['contentType']))
+      	{
+      	    $content_type = strtoupper($query['contentType']);
+
+      	    if( $content_type == "AUDIO" ||
+      	        $content_type == "VIDEO" ||
+      	        $content_type == "IMAGE" ||
+      	        $content_type == "COLLECTION" )
+      	    {
+      	        $qb->andWhere('i.content_type = ?4')
+                   ->setParameter(4, $query['contentType']);
+      	    }
+		}
+        
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
+    }
+    
+    //  api/search
+    public function searchCollectionItems($query)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.parent_items', 'c')
+            ->andWhere('c.id = ?1')
+            ->setParameter(1, $query['collection_id'])
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+            ->setFirstResult($query['page']);
+        
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
+    }
+    
+    //  api/collections/{col_id}
+    public function searchCollectionById($id)
+    {
+     	return $this->getEntityManager()
+				    ->createQueryBuilder()
+				    ->add('select', 'i')
+			        ->add('from', ' ZeegaIngestBundle:Item i')
+			        ->andwhere('i.id = :id')
+			        ->andwhere("i.content_type = 'Collection'")
+			        ->setParameter('id',$id)
+			        ->getQuery()
+			        ->getArrayResult();
+    }
+    
+    public function findIt($offset,$limit)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        return $qb->getQuery()->getArrayResult();         		   
+    }
     
     public function findItems($query, $offset,$limit)
     {
         // $qb instanceof QueryBuilder
         $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->innerjoin('i.metadata', 'm')
+            ->where('i.title LIKE ?1')
+            ->orWhere('i.creator LIKE ?1')
+            ->orWhere('m.description LIKE ?1')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($limit)
+       		->setFirstResult($offset);
+        
         
         // search query
         $qb->select('i')

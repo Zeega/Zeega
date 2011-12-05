@@ -1,6 +1,10 @@
 _configurator:
     resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
     prefix:   /_configurator
+
+api:
+    resource: "@ZeegaApiBundle/Resources/config/routing.yml"
+
 projects:
   type:     rest
   resource: Zeega\EditorBundle\Controller\ProjectsController
@@ -113,9 +117,7 @@ zeega_editor:
 web_profiler: 
     resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 
 
- 
 User:
 
     pattern:   /user/{name}
     defaults: { _controller: ZeegaUserBundle:Default:index }
-
