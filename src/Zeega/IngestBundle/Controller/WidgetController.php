@@ -67,10 +67,7 @@ class WidgetController extends Controller
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
-					$url=explode(':/var/www/',$output[4]);
-					$thumbUrl=$this->container->getParameter('hostname').$url[1];
-					@$img=file_get_contents($thumbUrl);
+					@$img=file_get_contents($item->getItemUrl());
 				}
 				elseif($item->getContentType()=='Audio'){
 					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
