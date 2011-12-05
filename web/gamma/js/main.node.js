@@ -21,6 +21,7 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
+	'order!layers/zeega.documentcloud',
 	            
 
 	];

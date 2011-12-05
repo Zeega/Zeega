@@ -41,7 +41,7 @@ var NodePlayer = {
 		
 		_.each( data, function( layer ){
 			console.log(layer);
-			if(layer.type=='Geo'||layer.type=='Image'||layer.type=='Text'){
+			if(layer.type=='Geo'||layer.type=='Image'||layer.type=='Text'||layer.type=='DocumentCloud'){
 				eval( 'var layerClass = new '+ layer.type +'Layer();' );
 				layerClass.lightLoad( layer )
 				layer.layerClass = layerClass;
