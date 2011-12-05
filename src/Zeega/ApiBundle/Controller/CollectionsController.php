@@ -30,7 +30,7 @@ class CollectionsController extends Controller
         if($user == "anon.")
         {
             $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaUserBundle:User')->find(1);
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
         }
         
         if (!$request_data) 
@@ -138,9 +138,8 @@ class CollectionsController extends Controller
         {
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
-        
-        $items_list = explode(",", $items_id);
-        
+        $items_list = $this->getRequest()->request->get('newItemIDS');
+
         // this is terrible...
         foreach($items_list as $item)
         {
@@ -157,7 +156,8 @@ class CollectionsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($entity);
         $em->flush();
-
+        
+        return new Response($entity->getId());
     }
     
      // creates a collection and adds items to it

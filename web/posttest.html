@@ -11,7 +11,8 @@
 				});
 			*/	
 			$.ajax({
-			   url: 'http://dev.zeega.org/filipe/web/app_dev.php/api/collections/8828/items/8,9,10',
+			   url: 'http://dev.zeega.org/filipe/web/app_dev.php/api/collections/8830/items',
+			   data: {newItemIDS : [3]},
 			   type: 'PUT',
 			   success: function( response ) {
 					$('.result').html(response);
