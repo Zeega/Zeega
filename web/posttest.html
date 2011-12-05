@@ -5,20 +5,28 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
-			/*
-			$.post('http://localhost/zeega/web/app_dev.php/api/collections', function(data) {
-			  $('.result').html(data);
-			});
-			*/
 			
-			$.ajax({
+			$.post('http://localhost/zeega/web/app_dev.php/api/collections/items', {newItemIDS : [1,2,3], title : "yo"}, 
+				function(data) {
+			  		$('.result').html(data);
+				});
+			
+			/*$.ajax({
 			   url: 'http://localhost/zeega/web/app_dev.php/collections/8786/items/8781,8780',
 			   type: 'PUT',
 			   success: function( response ) {
 					$('.result').html(response);
 			   }
 			});
-					
+			*/
+			$.ajax({
+						   url: 'http://localhost/zeega/web/app_dev.php/api/collections/3357/items',
+						   data: {newItemIDS : [3]},
+						   type: 'PUT',
+						   success: function( response ) {
+								$('.result').html(response);
+						   }
+						});		
 		});
 	</script>
 </head>
