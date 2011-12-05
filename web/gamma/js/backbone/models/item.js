@@ -1,6 +1,7 @@
 var Item = Backbone.Model.extend({
 	defaults : {
-		title : 'Untitled'
+		title : 'Untitled',
+		
 	},
 	
 	url: function(){
@@ -11,6 +12,7 @@ var Item = Backbone.Model.extend({
 	initialize : function()
 	{
 	}
+
 });
 
 var ItemCollection = Backbone.Collection.extend({
