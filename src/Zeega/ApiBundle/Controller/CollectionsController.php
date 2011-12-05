@@ -24,6 +24,51 @@ class CollectionsController extends Controller
 		if($query['limit'] > 100) 	        $query['limit'] = 100;
     }
     
+    private function populateCollectionWithRequestData($request_data)
+    {    
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user == "anon.")
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(1);
+        }
+        
+        if (!$request_data) 
+            throw $this->createNotFoundException('Collection object is not defined.');
+        
+        $title = $request_data->get('title');
+        $new_items = $request_data->get('newItemIDS');
+        
+        if (!isset($title)) 
+            throw $this->createNotFoundException('Collection title is not defined.');
+
+        $collection = new Item();
+        $collection->setContentType('Collection');
+        $collection->setArchive('Collection');
+        $collection->setItemUrl('http://zeega.org');
+        $collection->setItemUri('http://zeega.org');
+        $collection->setAttributionUrl("http://zeega.org");
+        $collection->setUser($user);
+        $collection->setTitle($title);
+        
+        if (isset($new_items))
+        {
+            foreach($new_items as $item)
+            {
+                $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+
+                if (!$child_entity) 
+                {
+                    throw $this->createNotFoundException('Unable to find Item entity.');
+                }    
+
+                $collection->addItem($child_entity);
+            }
+        }
+        
+        return $collection;
+    }
+    
     //  "get_collections"    [GET] /collections
     public function getCollectionsAction()
     {
@@ -83,7 +128,7 @@ class CollectionsController extends Controller
         
     // "vote_user_comment"    [PUT] /users/{slug}/comments/{id}/vote
     
-    public function putCollectionsItemsAction($project_id, $items_id)
+    public function putCollectionsItemsAction($project_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -115,6 +160,25 @@ class CollectionsController extends Controller
 
     }
     
+     // creates a collection and adds items to it
+    // "post_collections_items" [POST]   /api/collections/items.{_format}
+    public function postCollectionsItemsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request_data = $this->getRequest()->request;        
+        
+        $new_collection = $this->populateCollectionWithRequestData($request_data);
+        
+        if (!$new_collection) 
+        {
+            throw $this->createNotFoundException('Unable to create the collection.');
+        }
+        
+        $em->persist($new_collection);
+        $em->flush();
+        
+        return new Response(json_encode($new_collection->getId()));
+    }
     
     public function getCollectionAction($id)
     {
