@@ -61,6 +61,20 @@ class ImportWidget
 			$archive='archive.org';
 			$id='';
 		}
+		
+		
+		/**  DocumentCloud **************************************/
+		
+	
+		elseif(strstr($url,'documentcloud.org/documents')){
+			$archive='DocumentCloud';
+			$id='';
+			$url=str_replace( 'org/documents', 'org/api/documents',$url);
+			$url=str_replace( '.html', '.json',$url);
+			
+		}
+		
+		
 	
 	
 		/**  FLICKR   *****************************************/
@@ -511,7 +525,7 @@ class ImportWidget
 	
 	}
 
-		public function parseSoundCloud($url){
+	public function parseSoundCloud($url){
 	
 	
 	$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
@@ -583,6 +597,7 @@ class ImportWidget
 	}
 
 }
+	
 	public function parseBlipTv($id){	
 		
 		$originalUrl=$id.'?skin=json';
@@ -687,6 +702,50 @@ class ImportWidget
 
 
 }
+
+	public function parseDocumentCloud($url){	
+		
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
+		
+		$contents=json_decode($file_contents);
+		$document=$contents->document;
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		
+		$item->setCreator($document->source);
+		$item->setArchive('DocumentCloud');
+		$item->setContentType('Document');
+		$item->setSourceType('DocumentCloud');
+		$item->setTitle($document->title);
+		$item->setItemUri($document->id);
+		$item->setItemUrl('http://www.documentcloud.org/documents/'.$document->id.'.html');
+		
+		$metadata->setDescription($document->description);
+	
+	
+		$image=$document->resources->page->image;
+		$image=str_replace('{page}','1',$image);
+		$image=str_replace('{size}','small',$image);
+		
+	
+		$metadata->setThumbUrl($image);
+		$item->setMetadata($metadata);
+		$item->setMedia($media);
+		
+		
+		return $item;
+
+
+}
+
 
 	
 
