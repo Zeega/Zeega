@@ -96,7 +96,7 @@ class CollectionsController extends Controller
         if($user == "anon.")
         {
             $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(1);
         }
             
         $item = new Item();
