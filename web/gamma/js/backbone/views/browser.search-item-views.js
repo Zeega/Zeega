@@ -134,10 +134,10 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		this.el.removeAttr('id');
 		this.el.find('a').attr('id', this.model.get('id'));
 		this.el.find('a').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
-		this.el.find('a').attr('href', this.model.get('item_url'));
+		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('a').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
-		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		
 		return this;
 	},
@@ -159,9 +159,9 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 		
 		
 		this.el.removeAttr('id');
-		this.el.find('a').attr('href', this.model.get('attribution_url'));
+		this.el.find('a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('creator'));
+		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
 		obj.title = this.el.html();
 		
@@ -184,9 +184,9 @@ var BrowserFancyBoxVideoView = BrowserItemView.extend({
 		
 		this.el.removeAttr('id');
 		//this.el.find('.fancymedia').attr('src', '');
-		this.el.find('a').attr('href', this.model.get('attribution_url'));
+		this.el.find('a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('creator'));
+		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
 		var source  = $(obj.element).attr('href');
 
@@ -213,12 +213,12 @@ var BrowserFancyBoxAudioView = BrowserItemView.extend({
 		
 		this.el.removeAttr('id');
 		//this.el.find('.fancymedia').attr('src', '');
-		this.el.find('a').attr('href', this.model.get('attribution_url'));
+		this.el.find('a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('creator'));
+		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
 		var source  = $(obj.element).attr('href');
-		
+
 		obj.content = '<audio controls="true" src="'+source+'"></audio>'; 
 		obj.title = this.el.html();
 		

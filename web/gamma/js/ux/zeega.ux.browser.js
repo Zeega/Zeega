@@ -63,18 +63,18 @@ $(document).ready(function() {
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
 			var fancyView = null;
-           	if (thisModel.get("content_type") == "Image"){
+           	if (thisModel.get("type") == "Image"){
            		fancyView = new BrowserFancyBoxImageView({model:thisModel});
            		fancyView.render(this);
           	 	
 
            	}
-           	else if (thisModel.get("content_type") == "Video"){
+           	else if (thisModel.get("type") == "Video"){
            		fancyView = new BrowserFancyBoxVideoView({model:thisModel});
            		fancyView.render(this);
            		
            	}
-           	else if (thisModel.get("content_type") == "Audio"){
+           	else if (thisModel.get("type") == "Audio"){
            		fancyView = new BrowserFancyBoxAudioView({model:thisModel});
            		fancyView.render(this);
            		

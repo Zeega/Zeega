@@ -23,7 +23,7 @@ var BrowserCollection = Backbone.Model.extend({
 	addNewItemID : function(newID){
 		var ids= this.get("newItemIDS");
 		ids.push(newID);
-		this.set("newItemIDS",ids);
+		this.set({"newItemIDS":ids});
 	},
 	parse : function(data){
 		this.id = data;
