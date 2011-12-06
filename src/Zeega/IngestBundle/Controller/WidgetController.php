@@ -70,10 +70,7 @@ class WidgetController extends Controller
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUri().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
-					$url=explode(':/var/www/',$output[4]);
-					$thumbUrl=$this->container->getParameter('hostname').$url[1];
-					@$img=file_get_contents($thumbUrl);
+					@$img=file_get_contents($item->getUri());
 				}
 				elseif($item->getContentType()=='Audio'){
 					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
@@ -115,8 +112,9 @@ class WidgetController extends Controller
 				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
 				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
 			
-		
-		
+				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				$em->persist($item);
+				$em->flush();
 				$response=$this->getDoctrine()
 								->getRepository('ZeegaIngestBundle:Item')
 								->findItemById($item->getId());					

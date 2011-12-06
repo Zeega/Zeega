@@ -222,7 +222,7 @@ class ImportWidget
 		$media = new Media();
 		$attr=array();
 		
-		if(isset($mdata->subject)&&isset($mdata->subject[0]))($attr['tags']=str_replace("; ",",",(string)$mdata->subject[0]);
+		if(isset($mdata->subject)&&isset($mdata->subject[0])) $attr['tags']=str_replace("; ",",",(string)$mdata->subject[0]);
 	
 		if (isset($mdata->title)&&isset($mdata->title[0]))$item->setTitle((string)$mdata->title[0]);
 	
