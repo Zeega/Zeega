@@ -38,7 +38,8 @@ class CollectionsController extends Controller
  		$response->headers->set('Content-Type', 'application/json');
         
         // return the results
-        return $response;
+        //return $response;
+        return $this->render('ZeegaApiBundle:Collection:index.json.twig', array('name' => $response));
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
