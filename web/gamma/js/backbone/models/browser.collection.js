@@ -6,29 +6,29 @@ var BrowserCollection = Backbone.Model.extend({
 	
 	url : function(){
 		if (this.isNew()){
-			return Zeega.url_prefix + 'app_dev.php/api/collections/'; 
+			return Zeega.url_prefix + 'app_dev.php/api/collections/items'; 
 		}else {
-			return Zeega.url_prefix +'app_dev.php/api/collections/'+this.id;
+			return Zeega.url_prefix +'app_dev.php/api/collections/'+this.id+'/items';
 		}
 	},
 	defaults : {
 		"title" 	: 'Untitled',
 		"type"	: 'collection',
-		"newItemIDs" :[]
+		"newItemIDS" :[]
 	},
 	
 	initialize : function()
 	{
 	},
 	addNewItemID : function(newID){
-		var ids= this.get("newItemIDs");
+		var ids= this.get("newItemIDS");
 		ids.push(newID);
-		this.set("newItemIDs",ids);
+		this.set("newItemIDS",ids);
 	},
 	parse : function(data){
 		this.id = data;
 		this.set({"title":"Saved collection " + this.id});
-		this.set({"newItemIDs": []}); //reset the new item ids
+		this.set({"newItemIDS": []}); //reset the new item ids
 	}
 
 });

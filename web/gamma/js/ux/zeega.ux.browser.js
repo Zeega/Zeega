@@ -74,6 +74,11 @@ $(document).ready(function() {
            		fancyView.render(this);
            		
            	}
+           	else if (thisModel.get("content_type") == "Audio"){
+           		fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           		fancyView.render(this);
+           		
+           	}
            	
            	
 			

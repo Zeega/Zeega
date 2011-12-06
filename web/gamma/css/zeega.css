@@ -6,8 +6,8 @@
 #browser {
 	position: relative;
 	top: 50px;
-}
 
+}
 
 #browser-results{
 	
@@ -23,8 +23,13 @@
 	-webkit-box-shadow: inset 2px 2px 2px 2px #333;
 	-moz-box-shadow: inset 2px 2px 2px 2px #333;
 	box-shadow: inset 2px 2px 2px 2px #333;
+	
+}
 
-	min-height:200px;
+#browser-results-items{
+	min-height:200px !important;
+	max-height:350px !important;
+	overflow:auto !important;
 }
 #browser-my-collections-label p, #browser-toggle-all-media-vs-my-media li{
 	color:#FFF;

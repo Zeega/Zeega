@@ -173,7 +173,7 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 var BrowserFancyBoxVideoView = BrowserItemView.extend({
 	
 	initialize: function(){
-		this.el =$("#browser-fancybox-video-template").clone();
+		this.el =$("#browser-fancybox-caption-template").clone();
 	},
 	/* Pass in the element that the user clicked on from fancybox. Fancy box
 	uses the object's title as the caption so set that to the element in 
@@ -191,7 +191,35 @@ var BrowserFancyBoxVideoView = BrowserItemView.extend({
 		var source  = $(obj.element).attr('href');
 
 		//Right now video only seems to work with mp4s. Or, at least, does not work with divx and youtube vids.
-		obj.content = '<video controls="true" height="480px" width="640px"><source src="'+source+'"></video>'; 
+		obj.content = '<video controls="true" height="480px" width="640px" preload><source src="'+source+'"></video>'; 
+		obj.title = this.el.html();
+		
+		return this;
+	},
+
+});
+// For displaying caption when viewing AUDIO in FancyBox
+var BrowserFancyBoxAudioView = BrowserItemView.extend({
+	
+	initialize: function(){
+		this.el =$("#browser-fancybox-caption-template").clone();
+	},
+	/* Pass in the element that the user clicked on from fancybox. Fancy box
+	uses the object's title as the caption so set that to the element in 
+	the template */
+	render: function(obj)
+	{
+		
+		
+		this.el.removeAttr('id');
+		//this.el.find('.fancymedia').attr('src', '');
+		this.el.find('a').attr('href', this.model.get('attribution_url'));
+		this.el.find('.title').text( this.model.get('title'));
+		this.el.find('.creator').text( this.model.get('creator'));
+		
+		var source  = $(obj.element).attr('href');
+		
+		obj.content = '<audio controls="true" src="'+source+'"></audio>'; 
 		obj.title = this.el.html();
 		
 		return this;
