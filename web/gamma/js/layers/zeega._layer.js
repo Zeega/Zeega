@@ -174,7 +174,7 @@ var ProtoLayer = Class.extend({
 		
 		_.defaults( this.attr, this.defaultAttributes );
 		
-		console.log(this.attr);
+		this.editorLoaded = false;
 		
 		//I can draw the visual element once
 		this.visual();
