@@ -342,6 +342,25 @@
 #browser-results-collections{
 	display:none;
 }
+#fancybox-close-button{
+	
+	font-family:Helvetica, sans-serif;
+	font-size:11px;
+	letter-spacing:1px;
+	font-weight:bold;
+	padding:3px 7px 1px;
+	
+	display:inline;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float:right;
+	
+}
+#fancybox-close-button:hover{
+	
+	text-decoration:none;
+}
 // Settings
 
 

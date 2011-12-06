@@ -52,7 +52,6 @@ var loadFiles = [
 	//mvc
 	'order!backbone/models/item',
 	'order!backbone/models/browser.collection',
-	'order!backbone/models/browser.item',
 	'order!backbone/models/browser.myCollections',
 	'order!backbone/models/browser.search',
 

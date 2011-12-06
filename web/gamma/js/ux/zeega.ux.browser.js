@@ -48,6 +48,7 @@ $(document).ready(function() {
 		mouseWheel:false,
 		fitToView:true,
 		arrows:false,
+		closeBtn:false,
 		
     	helpers : {
     		title : {
@@ -79,10 +80,13 @@ $(document).ready(function() {
            		fancyView.render(this);
            		
            	}
-           	
-           	
-			
        
+        },
+        afterShow : function(){
+        	$('#fancybox-close-button').click(function(){
+				$.fancybox.close( );
+				
+			});
         }
 	});
 	

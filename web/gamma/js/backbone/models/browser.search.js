@@ -23,7 +23,7 @@ var BrowserSearch =  Backbone.Model.extend({
     	"limit"					:  	100, //how many results to send back
 
     	//Collections that hold search results
-    	"itemsCollection"		: 	new BrowserItemCollection(), //holds results of type =image, video or audio
+    	"itemsCollection"		: 	new ItemCollection(), //holds results of type =image, video or audio
     	"collectionsCollection" : 	new BrowserCollectionCollection(), //holds results of type='collection'
 
     	//Models that hold distributions of results
@@ -59,7 +59,7 @@ var BrowserSearch =  Backbone.Model.extend({
 			_.each(data['items'], function(item){
 				var type = item['content_type'];
 				
-				this.get("itemsCollection").add(new BrowserItem(item));
+				this.get("itemsCollection").add(new Item(item));
 			}, this);
 		}
 		//Assemble collection data into BrowserCollections

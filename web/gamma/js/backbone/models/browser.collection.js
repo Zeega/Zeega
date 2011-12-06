@@ -29,6 +29,7 @@ var BrowserCollection = Backbone.Model.extend({
 		this.id = data;
 		this.set({"title":"Saved collection " + this.id});
 		this.set({"newItemIDS": []}); //reset the new item ids
+		
 	}
 
 });

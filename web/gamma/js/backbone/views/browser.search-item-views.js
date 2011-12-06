@@ -159,7 +159,7 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 		
 		
 		this.el.removeAttr('id');
-		this.el.find('a').attr('href', this.model.get('attribution_uri'));
+		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
