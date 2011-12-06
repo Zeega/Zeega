@@ -3,7 +3,11 @@ namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+
 use Zeega\IngestBundle\Entity\Item;
+use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 
 class CollectionsController extends Controller
 {
@@ -38,8 +42,8 @@ class CollectionsController extends Controller
  		$response->headers->set('Content-Type', 'application/json');
         
         // return the results
-        //return $response;
-        return $this->render('ZeegaApiBundle:Collection:index.json.twig', array('name' => $response));
+        return $response;
+        //return $this->render('ZeegaApiBundle:Collection:index.json.twig', array('name' => $response));
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
@@ -90,7 +94,7 @@ class CollectionsController extends Controller
     }   
         
     // post_collections POST   /api/collections.{_format}
-    public function postCollectionsAction()
+    public function getCollectionzAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         if($user == "anon.")
@@ -114,8 +118,18 @@ class CollectionsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();
-
-        return new Response($item->getId());
+        
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),
+        array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($item, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+        //$json = $serializer->serialize($item, 'json');
+        //return new Response(json_encode($item));
+        
+        //return new Response($item->getId());
     }
     
     // post_collections_items   POST   /api/collections/items.{_format}
@@ -133,8 +147,6 @@ class CollectionsController extends Controller
         
         $em->persist($new_collection);
         $em->flush();
-        
-        return new Response(json_encode($new_collection));
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
