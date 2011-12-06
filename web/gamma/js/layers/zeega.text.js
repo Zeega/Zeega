@@ -19,11 +19,11 @@ var TextLayer = ProtoLayer.extend({
 		content: '',
 		x:0,
 		y:0,
-		h:'50%',
-		w:'25%',
+		height:'200',
+		width:'400',
 		color: {r:255,g:255,b:255,a:1},
 		backgroundColor: {r:200,g:200,b:0,a:0},
-		size: 26,
+		fontSize: 26,
 		columns: 1,
 		padding:5,
 		indent: 0
@@ -105,8 +105,7 @@ var TextLayer = ProtoLayer.extend({
 			.append( paddingSlider )
 			//.append( indentSlider )
 			.append( fontColor )
-			.append( bgColor )
-			.append( makeFullscreenButton( this.layerControls ) );
+			.append( bgColor );
 
 	},
 
@@ -118,14 +117,33 @@ var TextLayer = ProtoLayer.extend({
 
 		this.visualEditorElement.addClass('text-layer-chrome-visible');
 
+		var rgbaColor = 'rgba('+this.attr.color.r+','+this.attr.color.g+','+this.attr.color.b+','+this.attr.color.a+')';
+		var rgbaBGColor = 'rgba('+this.attr.backgroundColor.r+','+this.attr.backgroundColor.g+','+this.attr.backgroundColor.b+','+this.attr.backgroundColor.a+')';
 
 		this.visualEditorElement.css({
-			'opacity' : '100%',
-			'height':this.attr.w,
-			'width':this.attr.h,
-			'font-size' : this.attr.fontSize +'px'
+			'color' : rgbaColor,
+			'backgroundColor' : rgbaBGColor,
+			'height' : this.attr.height +'px',
+			'width' : this.attr.width +'px',
+			'font-size' : this.attr.fontSize +'px',
+			'padding' : this.attr.padding + 'px',
 		})
 		
+		var content = $('<div />')
+			.css({
+				'color' : 'inherit',
+				'width' : '100%', 
+				'height' : '100%', 
+				'overflow' : 'auto',
+				'column-count' : this.attr.columns,
+				'-moz-column-count' : this.attr.columns,
+				'text-indent': this.attr.indent + 'px',
+				'box-sizing' : 'border-box',
+				'-moz-box-sizing' : 'border-box',
+				'-webkit-box-sizing' : 'border-box'
+			})
+			.addClass('text-layer-content')
+			.html( _this.attr.content );
 
 		
 		/*
@@ -155,11 +173,26 @@ var TextLayer = ProtoLayer.extend({
 			    });
 		    });
 
-		   */ 
+		*/ 
 
 		this.visualEditorElement.resizable({
 			stop : function (){
-			    _this.onAttributeUpdate();
+				
+				console.log( $(this).width() +':'+ $(this).height());
+				
+			    _this.layerControls.trigger( 'update' , [{
+					height : {
+						property : 'height',
+						value : $(this).height(),
+						css : false
+					},
+					width : {
+						property : 'width',
+						value : $(this).width(),
+						css : false
+					}
+				}]);
+				
 			},
 			containment:'parent',
 			minHeight: 50,
@@ -167,34 +200,20 @@ var TextLayer = ProtoLayer.extend({
 			autoHide: true
 		});
 
-		var content = $('<div />')
-			.css({
-				'width' : '100%', 
-				'height' : '100%', 
-				'overflow' : 'auto',
-				'column-count' : this.attr.columns,
-				'-moz-column-count' : this.attr.columns,
-				'padding' : this.attr.padding + 'px',
-				'text-indent': this.attr.indent + 'px',
-				'box-sizing' : 'border-box',
-				'-moz-box-sizing' : 'border-box',
-				'-webkit-box-sizing' : 'border-box'
-			})
-			.addClass('text-layer-content')
-			.html( _this.attr.content );
-
+		
+		
 		content.bind('click mousedown', function(event) { event.stopPropagation() });
 		content.bind('blur change', function(){ 
 			var newContent = _this.visualEditorElement.find('.text-layer-content').html();
 			_this.layerControls.trigger( 'update' , [{
 				content : {
 					property : 'content',
-					value : '"'+ newContent +'"',
+					value : newContent,
 					css : false
 				},
 				title : {
 					property : 'title',
-					value : '"'+ newContent +'"',
+					value : newContent,
 					css : false
 				}
 			}]);
@@ -203,15 +222,7 @@ var TextLayer = ProtoLayer.extend({
 
 		this.visualEditorElement.append( content );
 
-
-		var rgbaColor = 'rgba('+this.attr.color.r+','+this.attr.color.g+','+this.attr.color.b+','+this.attr.color.a+')';
-		var rgbaBGColor = 'rgba('+this.attr.backgroundColor.r+','+this.attr.backgroundColor.g+','+this.attr.backgroundColor.b+','+this.attr.backgroundColor.a+')';
-
-		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
-		this.visualEditorElement.css( 'color', rgbaColor );
-		this.visualEditorElement.css( 'backgroundColor', rgbaBGColor );
-		this.visualEditorElement[0].style.backgroundColor = rgbaBGColor;
-		this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
+		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		this.visualEditorElement.children('.text-layer-content').aloha();
 		
 	},
@@ -234,8 +245,8 @@ var TextLayer = ProtoLayer.extend({
 			'top' : this.attr.y+'%',
 			'left' : this.attr.x+'%',
 			'z-index' : this.zIndex,//layers.length - i,
-			'width' : this.attr.w,
-			'height' : this.attr.h,
+			'width' : this.attr.width +'px',
+			'height' : this.attr.height +'px',
 			'font-size' : this.attr.size + 'px'
 		};
 		div.addClass('text-layer-container')
@@ -261,20 +272,20 @@ var TextLayer = ProtoLayer.extend({
 
 	
 		var content = $('<div />').css({'width' : '100%', 
-						'height' : '100%', 
-		                                'overflow' : 'auto',
-						'column-count' : this.attr.columns,
-						'-moz-column-count' : this.attr.columns,
-						'padding-top' : this.attr.padding + 'px',
-						'padding-left' : this.attr.padding + 'px',
-						'padding-right' : this.attr.padding + 'px',
-						'padding-bottom' : this.attr.padding + 'px',
-						'text-indent': this.attr.indent + 'px',
-					        'box-sizing' : 'border-box',
-						'-moz-box-sizing' : 'border-box',
-						'-webkit-box-sizing' : 'border-box'
-		                           })
-		                          .addClass('text-layer-content');
+			'height' : '100%', 
+			'overflow' : 'auto',
+			'column-count' : this.attr.columns,
+			'-moz-column-count' : this.attr.columns,
+			'padding-top' : this.attr.padding + 'px',
+			'padding-left' : this.attr.padding + 'px',
+			'padding-right' : this.attr.padding + 'px',
+			'padding-bottom' : this.attr.padding + 'px',
+			'text-indent': this.attr.indent + 'px',
+			'box-sizing' : 'border-box',
+			'-moz-box-sizing' : 'border-box',
+			'-webkit-box-sizing' : 'border-box'
+		})
+		.addClass('text-layer-content');
 		
 		content.html(_this.attr.content);
 
@@ -421,35 +432,5 @@ var TextLayer = ProtoLayer.extend({
 	    }
 	},  
 	
-	
-	/*
-	
-	// Necessary because slider functions in ux/layer-controls.js don't 
-	// provide a means of specifying the element to be acted upon.
-	// Really should be in layer-controls, or split up as multiple
-	// more specific functions in same.
-	makeCustomSlider : function (args)
-	{
-	    var sliderDiv = $('<div>').addClass('layer-slider-div')
-			.append( $("<h4>").html(args.label) )
-			.append( $('<div>').attr({
-				'id': args.label+'-slider',
-				'data-layer-id': args.layer_id
-				})
-			.addClass('layer-slider'));
-	   
-	    sliderDiv.find('.layer-slider').slider({
-		min : args.min,
-		max : args.max,
-		value : args.value,
-		step : args.step,
-		slide: function(e, ui)
-		{
-			args.custom_handler(e,ui,args.layer_id);
-		}
-	});
-	
-	return sliderDiv;
-	}
-	*/
+
 });
