@@ -174,6 +174,7 @@ var ProtoLayer = Class.extend({
 		
 		_.defaults( this.attr, this.defaultAttributes );
 		
+		console.log(this.attr);
 		
 		//I can draw the visual element once
 		this.visual();
@@ -213,8 +214,43 @@ var ProtoLayer = Class.extend({
 			})
 			//if the update isn't silent, then update the model
 			if( !silent ) _this.updateAttribute( settings );
-			
 		});
+		
+		
+		/*
+		this.layerControls.bind( 'updateCSS' , function( e , settings, silent ){
+			//console.log('update called');
+			// look through each setting object
+						
+			_.each( settings, function(setting){
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+		});
+		
+		this.layerControls.bind( 'updateModel' , function( e , settings, silent ){
+			//console.log('update called');
+			// look through each setting object
+						
+			_.each( settings, function(setting){
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+		});
+		*/
+		
 		/////// end listener
 	},
 	
@@ -273,10 +309,11 @@ var ProtoLayer = Class.extend({
 	{
 		var _this = this;
 		_.each( settings, function(setting){
-			//console.log( '_this.setAttributes({'+ setting.property +':'+ setting.value +'})' );
-			//eval used because setting {key:value} sets "key":<value> 
-			//there may be a better way to do this without an eval
-			eval( '_this.setAttributes({'+ setting.property +':'+ setting.value +'})');
+
+			var setObj = {};
+			setObj[ setting.property ] = setting.value
+			
+			_this.setAttributes( setObj );
 		})
 		
 		this.save();

@@ -381,24 +381,24 @@ function makeFullscreenButton( dom )
 	var button = $('<input>').attr({'class':'fullscreen-submit btn','type':'submit','value':'Fullscreen'});
 	
 	button.click(function(){
-			//set height width:100% ; top:0 ; left:0
-			dom.find('#width-slider').slider("option", "value", 100 );
-			dom.trigger( 'update' , [{
-				width : {
-					property : 'width',
-					value : 100,
-					suffix : '%'
-					},
-				top : {
-					property : 'top',
-					value : 0,
-					},
-				left : {
-					property : 'left',
-					value : 0,
-					}
-			}]);
-		});
+		//set height width:100% ; top:0 ; left:0
+		dom.find('#width-slider').slider("option", "value", 100 );
+		dom.trigger( 'update' , [{
+			width : {
+				property : 'width',
+				value : 100,
+				suffix : '%'
+				},
+			top : {
+				property : 'top',
+				value : 0,
+				},
+			left : {
+				property : 'left',
+				value : 0,
+				}
+		}]);
+	});
 	
 	return button;
 }
@@ -410,12 +410,12 @@ function makeUISlider(args)
 		max : 100,
 		step : 1,
 		value : 100,
-		silent : true,
+		silent : false,
 		suffix : '',
-		css : true
+		css : false
 	};
 	
-	args = _.defaults(args,defaults);
+	_.defaults(args,defaults);
 	
 	var sliderWrapper = $('<div>').addClass('slider');
 	if( args.label ) sliderWrapper.append( $("<h4>").html( args.label) );
@@ -436,7 +436,7 @@ function makeUISlider(args)
 					suffix : args.suffix,
 					css : args.css
 					}
-				},args.silent]);
+				},true]);
 		},
 		stop : function(e,ui)
 		{
@@ -447,7 +447,7 @@ function makeUISlider(args)
 					suffix : args.suffix,
 					css : args.css
 					}
-			}]);
+			}, args.silent]);
 		}
 	});
 	
@@ -463,10 +463,8 @@ function makeColorPicker( args )
 		opacity : true
 	};
 	
-	args = _.defaults(args,defaults);
-	
-	var dom = $(args.dom);
-	
+	_.defaults( args , defaults );
+
     //clean label of spaces
     var cleanLabel = args.label.replace(/\s/g, '-').toLowerCase();
 
@@ -488,10 +486,12 @@ function makeColorPicker( args )
 		var opacityArgs = {
 			max : 1,
 			label : 'Opacity',
-			value : args.color.a,
 			step : 0.01,
-			dom : args.dom,
-			input : aInput
+			property : 'alpha',
+			value : args.color.a,
+			dom : colorPicker,
+			input : aInput,
+			css : false,
 		};
 		var opacitySlider = makeUISlider( opacityArgs );
 	}
@@ -507,15 +507,41 @@ function makeColorPicker( args )
 	if( args.opacity ) colorPicker.append(opacitySlider);
 	
 	/*****
-	EVENT
+	EVENTS
 	******/	
-	dom.bind( 'update' , function(e){
-		var rgba = 'rgba('+rInput.val()+','+gInput.val()+','+bInput.val()+','+aInput.val()+')';
-		dom.css( args.property , rgba );
+	
+	colorPicker.bind( 'update', function(e, alpha, silent){
+		var rgbaString = 'rgba('+rInput.val()+','+gInput.val()+','+bInput.val()+','+aInput.val()+')';
+		args.target.css( args.property , rgbaString );
+		
+		//save if the last call
+		if( !silent )
+		{
+			var rgba = {
+				r : rInput.val(),
+				g : gInput.val(),
+				b : bInput.val(),
+				a : aInput.val()
+			};
+			
+			args.controls.trigger( 'update' , [{
+				color : {
+					property : args.property,
+					value : rgba,
+					css : false
+				}
+			}]);
+		}
+	});
+	
+	colorPicker.bind( 'updateColor', function(e){
+		var rgbaString = 'rgba('+rInput.val()+','+gInput.val()+','+bInput.val()+','+aInput.val()+')';
+		args.target.css( args.property , rgbaString );
 	});
 
 	var picker = colorWrapper.ColorPicker({
 		color : args.color,
+		
 		onShow : function(c)
 		{
 			$(c).fadeIn();
@@ -523,7 +549,22 @@ function makeColorPicker( args )
 
 	    onHide : function(c){
 			$(c).fadeOut();
-			args.update();
+			//args.update();
+			
+			var rgba = {
+				r : rInput.val(),
+				g : gInput.val(),
+				b : bInput.val(),
+				a : aInput.val()
+			};
+			
+			args.controls.trigger( 'update' , [{
+				color : {
+					property : args.property,
+					value : rgba,
+					css : false
+				}
+			}]);
 	    },
 
 		onChange : function(hsb, hex, rgb){
@@ -534,7 +575,7 @@ function makeColorPicker( args )
 			gInput.val( rgb.g );
 			bInput.val( rgb.b );
 			//update the visual editor
-			dom.trigger( 'updateColor' );
+			colorPicker.trigger('updateColor');
 		}
 	});
 
