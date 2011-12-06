@@ -16,6 +16,12 @@ class SearchController extends Controller
     public function searchAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
+        if($user == "anon.")
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
+        }
+        
 	    $request = $this->getRequest();
 	    
 		$query = array();
