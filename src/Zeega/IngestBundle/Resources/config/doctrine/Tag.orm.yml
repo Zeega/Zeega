@@ -1,0 +1,28 @@
+# src/Zeega/IngestBundle/Resources/config/doctrine/Tag.orm.yml
+Zeega\IngestBundle\Entity\Tag:
+    type: entity
+    oneToMany:
+        item:
+            targetEntity: ItemTags
+            mappedBy: tag
+            joinColumn:
+                name: id
+                referencedColumnName: tag_id
+    id:
+        id:
+            type: bigint
+    fields:
+        name:
+            type: string
+            size: 20
+            nullable: false
+        date_created:
+            type: date
+            nullable: false
+        user:
+            type: bigint
+            nullable: false
+        description:
+            type: text
+            nullable: true
+            

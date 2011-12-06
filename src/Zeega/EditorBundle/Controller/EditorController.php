@@ -36,15 +36,15 @@ class EditorController extends Controller
 				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
 				$user->setSalt(md5(time()));
 				$encoder = $factory->getEncoder($user);
-				$password = $encoder->encodePassword('dziga', $user->getSalt());
+				$password = $encoder->encodePassword('alphaZ', $user->getSalt());
 				$user->setUserRoles('ROLE_SUPER_ADMIN');
 				$user->setPassword($password);
-				$user->setEmail('james@zeega.org');
+				$user->setEmail('dev@zeega.org');
 				$em->persist($user);
 				$em->flush();
-				return new Response('Initial User added');
+				return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
 	}
- 	else return new Response('Users already exist');
+ 	else return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
  	        	
  	
  	}
@@ -193,10 +193,6 @@ class EditorController extends Controller
 	else $super=false;			
 	if($playground){
 		
-		$admin=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
-					->checkAdmin($short,$user->getId());
-		
 		$admin=true;
 		$projects=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Project')
@@ -241,9 +237,7 @@ class EditorController extends Controller
 	$playground=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
-	$admin=$this->getDoctrine()
-			->getRepository('ZeegaEditorBundle:Playground')
-			->checkAdmin($short,$user->getId());
+    $admin = false;
 	if($playground||$super){
 		
 			

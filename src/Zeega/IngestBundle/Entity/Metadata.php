@@ -1,59 +1,23 @@
 <?php
 
-// src/Zeega/IngestBundle/Entity/Media.php
-
 namespace Zeega\IngestBundle\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zeega\IngestBundle\Entity\Metadata
+ */
 class Metadata
 {
-
-	protected $description;
-   
     /**
-     * @var integer $id
+     * @var bigint $id
      */
     private $id;
 
-
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var string $archive
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-    /**
-     * @var string $alt_creator
-     */
-    private $alt_creator;
-
-    /**
-     * @var string $thumb_url
-     */
-    private $thumb_url;
+    private $archive;
 
     /**
      * @var string $license
@@ -61,54 +25,49 @@ class Metadata
     private $license;
 
     /**
-     * @var string $tag_list
+     * @var string $thumbnail_url
      */
-    private $tag_list;
+    private $thumbnail_url;
 
     /**
-     * @var array $attr
+     * @var array $attributes
      */
-    private $attr;
+    private $attributes;
+
+    /**
+     * @var string $location
+     */
+    private $location;
 
 
     /**
-     * Set alt_creator
+     * Get id
      *
-     * @param string $altCreator
+     * @return bigint 
      */
-    public function setAltCreator($altCreator)
+    public function getId()
     {
-        $this->alt_creator = $altCreator;
+        return $this->id;
     }
 
     /**
-     * Get alt_creator
+     * Set archive
+     *
+     * @param string $archive
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    }
+
+    /**
+     * Get archive
      *
      * @return string 
      */
-    public function getAltCreator()
+    public function getArchive()
     {
-        return $this->alt_creator;
-    }
-
-    /**
-     * Set thumb_url
-     *
-     * @param string $thumbUrl
-     */
-    public function setThumbUrl($thumbUrl)
-    {
-        $this->thumb_url = $thumbUrl;
-    }
-
-    /**
-     * Get thumb_url
-     *
-     * @return string 
-     */
-    public function getThumbUrl()
-    {
-        return $this->thumb_url;
+        return $this->archive;
     }
 
     /**
@@ -132,42 +91,87 @@ class Metadata
     }
 
     /**
-     * Set tag_list
+     * Set thumbnail_url
      *
-     * @param string $tagList
+     * @param string $thumbnailUrl
      */
-    public function setTagList($tagList)
+    public function setThumbnailUrl($thumbnailUrl)
     {
-        $this->tag_list = $tagList;
+        $this->thumbnail_url = $thumbnailUrl;
     }
 
     /**
-     * Get tag_list
+     * Get thumbnail_url
      *
      * @return string 
      */
-    public function getTagList()
+    public function getThumbnailUrl()
     {
-        return $this->tag_list;
+        return $this->thumbnail_url;
     }
 
     /**
-     * Set attr
+     * Set attributes
      *
-     * @param array $attr
+     * @param array $attributes
      */
-    public function setAttr($attr)
+    public function setAttributes($attributes)
     {
-        $this->attr = $attr;
+        $this->attributes = $attributes;
     }
 
     /**
-     * Get attr
+     * Get attributes
      *
      * @return array 
      */
-    public function getAttr()
+    public function getAttributes()
     {
-        return $this->attr;
+        return $this->attributes;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+    /**
+     * @var Zeega\IngestBundle\Entity\Item
+     */
+    private $item;
+
+
+    /**
+     * Set item
+     *
+     * @param Zeega\IngestBundle\Entity\Item $item
+     */
+    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    {
+        $this->item = $item;
+    }
+
+    /**
+     * Get item
+     *
+     * @return Zeega\IngestBundle\Entity\Item 
+     */
+    public function getItem()
+    {
+        return $this->item;
     }
 }

@@ -5,9 +5,12 @@ Zeega\EditorBundle\Entity\Layer:
    manyToOne:
     item:
      targetEntity: Zeega\IngestBundle\Entity\Item
+     joinColumn:
+         name: id
+         referencedColumnName: id         
    id:
     id:
-     type: integer
+     type: bigint
      generator: { strategy: AUTO }
    fields:
     item_uri:

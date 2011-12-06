@@ -6,17 +6,7 @@ Zeega\EditorBundle\Entity\Playground:
     users:
       targetEntity: Zeega\UserBundle\Entity\User
       joinTable:
-        name: users_playgrounds
-        joinColumns:
-          playground_id:
-            referencedColumnName: id
-        inverseJoinColumns:
-          user_id:
-            referencedColumnName: id
-    admins:
-      targetEntity: Zeega\UserBundle\Entity\User
-      joinTable:
-        name: admins_playgrounds
+        name: Users_Playgrounds
         joinColumns:
           playground_id:
             referencedColumnName: id

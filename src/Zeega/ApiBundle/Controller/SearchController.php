@@ -19,7 +19,7 @@ class SearchController extends Controller
         if($user == "anon.")
         {
             $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaUserBundle:User')->find(21);
+            $user = $em->getRepository('ZeegaUserBundle:User')->find(1);
         }
         
 	    $request = $this->getRequest();
@@ -72,10 +72,7 @@ class SearchController extends Controller
 
         foreach ($queryResults as $res)
         {
-            $res[0]["thumb_url"] = $res["thumb_url"];
-            $res = $res[0];
-            
-            if ((strtoupper($res["content_type"]) == "COLLECTION"))
+            if ((strtoupper($res["type"]) == "COLLECTION"))
             { 
                 $res["item_count"] = rand(0, 15);
                 array_push($collections, $res);

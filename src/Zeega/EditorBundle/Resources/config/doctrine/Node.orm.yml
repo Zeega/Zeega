@@ -3,8 +3,6 @@ Zeega\EditorBundle\Entity\Node:
    type: entity
    repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
    manyToOne:
-    user:
-     targetEntity: Zeega\UserBundle\Entity\User
     route:
      targetEntity: Route
      joinColumns:

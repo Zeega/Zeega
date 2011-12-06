@@ -1,35 +1,54 @@
 <?php
 
-// src/Zeega/IngestBundle/Entity/Media.php
-
 namespace Zeega\IngestBundle\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zeega\IngestBundle\Entity\Media
+ */
 class Media
 {
-
-	protected $uri;
-	
-	protected $width;
-	
-	protected $height;
-	
-	protected $format;
-	
-	protected $colors;
-	
-	protected $length;
-   
     /**
-     * @var integer $id
+     * @var bigint $id
      */
     private $id;
+
+    /**
+     * @var string $format
+     */
+    private $format;
+
+    /**
+     * @var integer $bit_rate
+     */
+    private $bit_rate;
+
+    /**
+     * @var integer $duration
+     */
+    private $duration;
+
+    /**
+     * @var integer $width
+     */
+    private $width;
+
+    /**
+     * @var integer $height
+     */
+    private $height;
+
+    /**
+     * @var float $aspect_ratio
+     */
+    private $aspect_ratio;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return bigint 
      */
     public function getId()
     {
@@ -37,23 +56,63 @@ class Media
     }
 
     /**
-     * Set uri
+     * Set format
      *
-     * @param string $uri
+     * @param string $format
      */
-    public function setUri($uri)
+    public function setFormat($format)
     {
-        $this->uri = $uri;
+        $this->format = $format;
     }
 
     /**
-     * Get uri
+     * Get format
      *
      * @return string 
      */
-    public function getUri()
+    public function getFormat()
     {
-        return $this->uri;
+        return $this->format;
+    }
+
+    /**
+     * Set bit_rate
+     *
+     * @param integer $bitRate
+     */
+    public function setBitRate($bitRate)
+    {
+        $this->bit_rate = $bitRate;
+    }
+
+    /**
+     * Get bit_rate
+     *
+     * @return integer 
+     */
+    public function getBitRate()
+    {
+        return $this->bit_rate;
+    }
+
+    /**
+     * Set duration
+     *
+     * @param integer $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    /**
+     * Get duration
+     *
+     * @return integer 
+     */
+    public function getDuration()
+    {
+        return $this->duration;
     }
 
     /**
@@ -97,162 +156,47 @@ class Media
     }
 
     /**
-     * Set format
+     * Set aspect_ratio
      *
-     * @param string $format
+     * @param float $aspectRatio
      */
-    public function setFormat($format)
+    public function setAspectRatio($aspectRatio)
     {
-        $this->format = $format;
+        $this->aspect_ratio = $aspectRatio;
     }
 
     /**
-     * Get format
+     * Get aspect_ratio
      *
-     * @return string 
+     * @return float 
      */
-    public function getFormat()
+    public function getAspectRatio()
     {
-        return $this->format;
+        return $this->aspect_ratio;
+    }
+    /**
+     * @var Zeega\IngestBundle\Entity\Item
+     */
+    private $item;
+
+
+    /**
+     * Set item
+     *
+     * @param Zeega\IngestBundle\Entity\Item $item
+     */
+    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    {
+        $this->item = $item;
     }
 
     /**
-     * Set colors
+     * Get item
      *
-     * @param integer $colors
+     * @return Zeega\IngestBundle\Entity\Item 
      */
-    public function setColors($colors)
+    public function getItem()
     {
-        $this->colors = $colors;
-    }
-
-    /**
-     * Get colors
-     *
-     * @return integer 
-     */
-    public function getColors()
-    {
-        return $this->colors;
-    }
-
-    /**
-     * Set length
-     *
-     * @param integer $length
-     */
-    public function setLength($length)
-    {
-        $this->length = $length;
-    }
-
-    /**
-     * Get length
-     *
-     * @return integer 
-     */
-    public function getLength()
-    {
-        return $this->length;
-    }
-    /**
-     * @var string $file_format
-     */
-    private $file_format;
-
-    /**
-     * @var integer $bit_rate
-     */
-    private $bit_rate;
-
-    /**
-     * @var integer $size
-     */
-    private $size;
-
-    /**
-     * @var integer $duration
-     */
-    private $duration;
-
-
-    /**
-     * Set file_format
-     *
-     * @param string $fileFormat
-     */
-    public function setFileFormat($fileFormat)
-    {
-        $this->file_format = $fileFormat;
-    }
-
-    /**
-     * Get file_format
-     *
-     * @return string 
-     */
-    public function getFileFormat()
-    {
-        return $this->file_format;
-    }
-
-    /**
-     * Set bit_rate
-     *
-     * @param integer $bitRate
-     */
-    public function setBitRate($bitRate)
-    {
-        $this->bit_rate = $bitRate;
-    }
-
-    /**
-     * Get bit_rate
-     *
-     * @return integer 
-     */
-    public function getBitRate()
-    {
-        return $this->bit_rate;
-    }
-
-    /**
-     * Set size
-     *
-     * @param integer $size
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
-
-    /**
-     * Get size
-     *
-     * @return integer 
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * Set duration
-     *
-     * @param integer $duration
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-    }
-
-    /**
-     * Get duration
-     *
-     * @return integer 
-     */
-    public function getDuration()
-    {
-        return $this->duration;
+        return $this->item;
     }
 }

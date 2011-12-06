@@ -1,15 +1,15 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Item.orm.yml
 Zeega\IngestBundle\Entity\Item:
-   type: entity
-   repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
-   manyToMany:
+    type: entity
+    repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
+    manyToMany:
         child_items: 
             targetEntity: Item
             inversedBy: parent_items
             joinTable:
-                name: collections
+                name: Collection
                 joinColumns:
-                    item_id:
+                    id:
                         referencedColumnName: id
                 inverseJoinColumns:
                     child_item_id:
@@ -17,77 +17,107 @@ Zeega\IngestBundle\Entity\Item:
         parent_items:
             targetEntity: Item
             mappedBy: child_items
-     
-   manyToOne:
-    playground:
-     targetEntity: Zeega\EditorBundle\Entity\Playground
-    user:
-     targetEntity: Zeega\UserBundle\Entity\User
-   oneToOne:
-    media:
-     targetEntity: Media
-     onDelete: CASCADE
-    metadata:
-     targetEntity: Metadata
-     onDelete: CASCADE
-   id:
+    oneToOne:
+        media:
+            targetEntity: Media
+            inversedBy: item
+            onDelete: CASCADE
+            joinColumn:
+                name: media_id
+                referencedColumnName: id
+        metadata:
+            targetEntity: Metadata
+            inversedBy: item
+            onDelete: CASCADE
+            joinColumn:
+                name: metadata_id
+                referencedColumnName: id
+    oneToMany:
+        tags:
+            targetEntity: ItemTags
+            mappedBy: item
+            joinColumn:
+                name: id
+                referencedColumnName: item_id
+    manyToOne:
+        playground:
+            targetEntity: Zeega\EditorBundle\Entity\Playground
+        user:
+            targetEntity: Zeega\UserBundle\Entity\User
     id:
-     type: integer
-     generator: { strategy: AUTO }
-   fields:
-    title:
-     type: string
-     length: 1000
-     nullable: true
-    creator:
-     type: string
-     length: 1000
-     nullable: true
-    item_url:
-     type: string
-     length: 200
-    item_uri:
-     type: string
-     length: 200
-    attribution_url:
-     type: string
-     length: 200
-    depth:
-     type: boolean
-     nullable: true
-    geo_lat:
-     type: float
-     length: 10
-     nullable: true
-    geo_lng: 
-     type: float
-     length: 10
-     nullable: true
-    date_created_start:
-     type: date
-     nullable: true
-    date_created_end:
-     type: date
-     nullable: true
-    content_type:
-     type: string
-     length: 100
-    source_type:
-     type: string
-     length: 100
-     nullable: true
-    archive:
-     type: string
-     length: 100
-   _indexes:
-    geo_index:
-     fields: [geo_lat, geo_lng]
-    lat_index:
-     fields: [geo_lat]
-    lng_index: 
-     fields: [geo_lng]
-    date_start_index:
-     fields: [date_created_start]
-    date_end_index:
-     fields: [date_created_end]
-      
+        id:
+            type: bigint
+            generator: { strategy: AUTO }
+    fields:
+        media_id:
+            type: bigint
+            nullable: true
+        metadata_id:
+            type: bigint
+            nullable: true
+        title:
+            type: string
+            length: 1000
+            nullable: true
+        user_id:
+            type: integer
+            nullable: false
+        description:
+            type: string
+            length: 500
+            nullable: true
+        text:
+            type: text
+            nullable: true
+        uri:
+            type: string
+            length: 200
+        attribution_uri:
+            type: string
+            length: 200
+        date_created:
+            type: date
+            nullable: true
+        type:
+            type: string
+            length: 20
+            nullable: false
+        source:
+            type: string
+            length: 20
+            nullable: false        
+        thumbnail_url:
+            type: string
+            length: 100
+            nullable: true
+        child_items_count:
+            type: integer
+            nullable: false
+            default: default 0
+        media_geo_latitude:
+            type: float
+            length: 10
+            nullable: true
+        media_geo_longitude:
+            type: float
+            length: 10
+            nullable: true
+        media_date_created:
+            type: date
+            nullable: true
+        media_date_created_end:
+            type: date
+            nullable: true        
+        media_creator_username:
+            type: string
+            length: 80
+            nullable: false
+        media_creator_realname:
+            type: string
+            length: 80
+            nullable: false
+    _indexes:
+        date_created_index:
+            fields: [item_date_created]      
+        item_type_index:
+            fields: [item_type]
