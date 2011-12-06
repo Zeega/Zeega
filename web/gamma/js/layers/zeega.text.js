@@ -31,7 +31,6 @@ var TextLayer = ProtoLayer.extend({
 
 	controls : function()
 	{
-		console.log( this.model.get('attr'));
 
 		//font size
 		var fontSizeArgs = {
@@ -175,6 +174,8 @@ var TextLayer = ProtoLayer.extend({
 
 		*/ 
 
+
+		// make the text resizable
 		this.visualEditorElement.resizable({
 			stop : function (){
 				
@@ -201,7 +202,7 @@ var TextLayer = ProtoLayer.extend({
 		});
 
 		
-		
+		// set the text content to save
 		content.bind('click mousedown', function(event) { event.stopPropagation() });
 		content.bind('blur change', function(){ 
 			var newContent = _this.visualEditorElement.find('.text-layer-content').html();
@@ -388,11 +389,7 @@ var TextLayer = ProtoLayer.extend({
 			.append(this.dom)
 			.trigger('ready',{'id':this.model.id});
 			
-		
-		
-		
-		
-		
+
 	},
 	
 	play : function( z )

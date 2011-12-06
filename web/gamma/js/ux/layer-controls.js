@@ -23,7 +23,7 @@
 
 
 
-
+/*
 function makeLayerSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')
@@ -48,9 +48,9 @@ function makeLayerSlider(args)
 	
 	return sliderDiv;
 }
+*/
 
-
-
+/*
 function makeSlider(args)
 {
 	var sliderDiv = $('<div>').addClass('layer-slider-div')
@@ -72,8 +72,8 @@ function makeSlider(args)
 	
 	return sliderDiv;
 }
-
-
+*/
+/*
 function makeCSSLayerSlider(args)
 {
 	
@@ -114,13 +114,12 @@ function makeCSSLayerSlider(args)
 	
 	return sliderDiv;
 }
-
+*/
 
 function textArea()
 {
 	var html = "<input type='textarea'>";
 
-	
 	return template;
 }
 
@@ -220,7 +219,7 @@ function makeGoogleMap( args )
 		args.controls.trigger( 'update' , [{
 			mapType : {
 				property : 'mapType',
-				value : '"'+ map.getMapTypeId() +'"',
+				value : map.getMapTypeId(),
 				css : false
 			}
 		}]);
@@ -234,10 +233,11 @@ function makeGoogleMap( args )
 			var center = streetView.getPosition();
 			
 			//when streetview is visible
-			args.controls.trigger( 'update' , [{
+			
+			var properties = {
 				streetView : {
 					property : 'type',
-					value : '"streetview"',
+					value : 'streetview',
 					css : false
 				},
 				lat : {
@@ -249,25 +249,30 @@ function makeGoogleMap( args )
 					property : 'lng',
 					value : center.lng(),
 					css : false
-				},
-			}]);
+				}
+			};
+			
+			args.controls.trigger( 'update' , [ properties ] );
 			updateStaticMap( _.extend(args,{'type':'streetview'}) );
 		}else{
 			//when streetview is hidden
-			args.controls.trigger( 'update' , [{
+			
+			var properties = {
 				map : {
 					property : 'type',
-					value : '"map"',
+					value : 'map',
 					css : false
 				}
-			}]);
+			};
+			
+			args.controls.trigger( 'update' , [ property ]);
 			updateStaticMap( _.extend(args,{'type':'map'}) );
 		}
 	});
 	
 	
 	//called when the streetview is panned
-	google.maps.event.addListener( streetView, 'pov_changed', function() {
+	google.maps.event.addListener( streetView, 'pov_changed', function(){
 		delayedUpdate();
 	});
 	
@@ -275,8 +280,7 @@ function makeGoogleMap( args )
 	var delayedUpdate = _.debounce( function(){
 		var center = streetView.getPosition();
 		var pov = streetView.getPov();
-		
-		args.controls.trigger( 'update' , [{
+		var properties = {
 			heading : {
 				property : 'heading',
 				value : pov.heading,
@@ -301,8 +305,9 @@ function makeGoogleMap( args )
 				property : 'streetZoom',
 				value : Math.floor( pov.zoom ),
 				css : false
-			}			
-		}]);
+			}
+		};
+		args.controls.trigger( 'update' , [ properties ] );
 		
 		updateStaticMap( _.extend(args,{
 			'heading':pov.heading,
@@ -348,13 +353,14 @@ function makeGoogleMap( args )
 				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
 			});
 			
-			args.controls.trigger( 'update' , [{
+			var properties = {
 				title : {
 					property : 'title',
 					value : '"'+ input.val() +'"',
 					css : false
 				}
-			}]);
+			};
+			args.controls.trigger( 'update' , [properties] );
 			
 		}
 
@@ -381,23 +387,34 @@ function makeFullscreenButton( dom )
 	var button = $('<input>').attr({'class':'fullscreen-submit btn','type':'submit','value':'Fullscreen'});
 	
 	button.click(function(){
-		//set height width:100% ; top:0 ; left:0
 		dom.find('#width-slider').slider("option", "value", 100 );
-		dom.trigger( 'update' , [{
+		
+		var properties = {
 			width : {
 				property : 'width',
 				value : 100,
-				suffix : '%'
-				},
+				suffix : '%',
+				css : true
+			},
+			height : {
+				property : 'height',
+				value : 100,
+				suffix : '%',
+				css : true
+			},
 			top : {
 				property : 'top',
 				value : 0,
-				},
+				css : true
+			},
 			left : {
 				property : 'left',
 				value : 0,
-				}
-		}]);
+				css : true
+			}
+		};
+		
+		dom.trigger( 'update' , [ properties , false ]);
 	});
 	
 	return button;
@@ -412,7 +429,10 @@ function makeUISlider(args)
 		value : 100,
 		silent : false,
 		suffix : '',
-		css : false
+		css : false,
+		
+		scaleWith : false,
+		scaleValue : false
 	};
 	
 	_.defaults(args,defaults);
@@ -428,26 +448,64 @@ function makeUISlider(args)
 		step : args.step,
 		slide : function(e, ui)
 		{
+			//sets the optional input field to the value
 			if( args.input ) args.input.val( ui.value )
-			args.dom.trigger( 'update' , [{
-				property : {
+			
+			//set the object to save.
+			var properties = {
+				propertyA : {
 					property : args.property,
 					value : ui.value,
 					suffix : args.suffix,
 					css : args.css
-					}
-				},true]);
+				}
+			};
+			// test to see if scale is set
+			if( args.scaleWith && args.scaleValue )
+			{
+				var scaled = ( ui.value * args.scaleValue ) / args.value;
+				properties.propertyB = {
+					property : args.scaleWith,
+					value : scaled,
+					suffix : args.suffix,
+					css : args.css
+				}
+			}
+			
+			args.dom.trigger( 'update' , [ properties , true ] );
 		},
 		stop : function(e,ui)
 		{
-			args.dom.trigger( 'update' , [{
-				property : {
+			//sets the optional input field to the value
+			if( args.input ) args.input.val( ui.value )
+			
+			console.log( args );
+			
+			//set the object to save.
+			var properties = {
+				propertyA : {
 					property : args.property,
 					value : ui.value,
 					suffix : args.suffix,
 					css : args.css
-					}
-			}, args.silent]);
+				}
+			};
+			// test to see if scale is set
+			if( args.scaleWith && args.scaleValue )
+			{
+				var scaled = ( ui.value * args.scaleValue ) / args.value;
+				properties.propertyB = {
+					property : args.scaleWith,
+					value : scaled,
+					suffix : args.suffix,
+					css : args.css
+				}
+			}
+			
+			console.log( properties );
+			
+			
+			args.dom.trigger( 'update' , [ properties , args.silent ] );
 		}
 	});
 	
