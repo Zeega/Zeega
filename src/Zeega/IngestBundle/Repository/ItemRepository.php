@@ -13,9 +13,8 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         // search query
-        $qb->select('i,m.thumb_url')
+        $qb->select('i')
             ->from('ZeegaIngestBundle:Item', 'i')
-            ->leftJoin('i.metadata','m')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['page']);
@@ -23,15 +22,14 @@ class ItemRepository extends EntityRepository
         if(isset($query['queryString']))
         {
             $qb->where('i.title LIKE ?1')
-               ->orWhere('i.creator LIKE ?1')
-               ->orWhere('m.description LIKE ?1')
+               ->orWhere('i.media_creator_username LIKE ?1')
+               ->orWhere('i.description LIKE ?1')
                ->setParameter(1,'%' . $query['queryString'] . '%');
         }
         
         if(isset($query['userId']))
       	{
-			$qb->innerJoin('i.user', 'u')
-			   ->andWhere('u.id = ?2')
+			$qb->andWhere('i.user_id = ?2')
 			   ->setParameter(2,$query['userId']);
 		} 
 		
@@ -51,7 +49,7 @@ class ItemRepository extends EntityRepository
       	        $content_type == "IMAGE" ||
       	        $content_type == "COLLECTION" )
       	    {
-      	        $qb->andWhere('i.content_type = ?4')
+      	        $qb->andWhere('i.type = ?4')
                    ->setParameter(4, $query['contentType']);
       	    }
 		}
@@ -87,7 +85,7 @@ class ItemRepository extends EntityRepository
 				    ->add('select', 'i')
 			        ->add('from', ' ZeegaIngestBundle:Item i')
 			        ->andwhere('i.id = :id')
-			        ->andwhere("i.content_type = 'Collection'")
+			        ->andwhere("i.type = 'Collection'")
 			        ->setParameter('id',$id)
 			        ->getQuery()
 			        ->getArrayResult();
@@ -110,22 +108,9 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')
             ->from('ZeegaIngestBundle:Item', 'i')
-            ->innerjoin('i.metadata', 'm')
             ->where('i.title LIKE ?1')
-            ->orWhere('i.creator LIKE ?1')
-            ->orWhere('m.description LIKE ?1')
-            ->orderBy('i.id','DESC')
-       		->setMaxResults($limit)
-       		->setFirstResult($offset);
-        
-        
-        // search query
-        $qb->select('i')
-            ->from('ZeegaIngestBundle:Item', 'i')
-            ->innerjoin('i.metadata', 'm')
-            ->where('i.title LIKE ?1')
-            ->orWhere('i.creator LIKE ?1')
-            ->orWhere('m.description LIKE ?1')
+            ->orWhere('i.media_creator_username LIKE ?1')
+            ->orWhere('i.description LIKE ?1')
             ->orderBy('i.id','DESC')
        		->setMaxResults($limit)
        		->setFirstResult($offset);
@@ -139,7 +124,7 @@ class ItemRepository extends EntityRepository
 		}
         elseif($query['contentType'] != 'all')
         {
-            $qb->andWhere('i.content_type = ?2')
+            $qb->andWhere('i.type = ?2')
                 ->setParameter(2, $query['contentType']);       
         }         
        	
@@ -161,8 +146,8 @@ class ItemRepository extends EntityRepository
     {
         $query = $this->getEntityManager()
 				->createQuery(
-					'SELECT i.id,i.content_type,i.title FROM ZeegaIngestBundle:Item i
-					WHERE i.attribution_url = :url'
+					'SELECT i.id,i.type,i.title FROM ZeegaIngestBundle:Item i
+					WHERE i.attribution_uri = :url'
 				)->setParameter('url',$url);
 
 			try {

@@ -28,6 +28,9 @@ security:
         node:
             pattern:  ^/node/
             anonymous: ~
+        init:
+            pattern:  ^/init
+            anonymous: ~
         nodes:
             pattern:  ^/nodes
             anonymous: ~

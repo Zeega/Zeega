@@ -4,15 +4,27 @@ namespace Zeega\IngestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use DateTime;
+
 /**
  * Zeega\IngestBundle\Entity\Item
  */
 class Item
 {
     /**
-     * @var integer $id
+     * @var bigint $id
      */
     private $id;
+
+    /**
+     * @var bigint $media_id
+     */
+    private $media_id;
+
+    /**
+     * @var bigint $metadata_id
+     */
+    private $metadata_id;
 
     /**
      * @var string $title
@@ -20,68 +32,84 @@ class Item
     private $title;
 
     /**
-     * @var string $creator
+     * @var integer $user_id
      */
-    private $creator;
+    private $user_id;
 
     /**
-     * @var string $item_url
-
+     * @var string $description
      */
-    private $item_url;
+    private $description;
 
     /**
-     * @var string $item_uri
+     * @var text $text
      */
-    private $item_uri;
+    private $text;
 
     /**
-     * @var string $attribution_url
+     * @var string $uri
      */
-
-    private $attribution_url;
+    private $uri;
 
     /**
-     * @var boolean $depth
+     * @var string $attribution_uri
      */
-    private $depth;
+    private $attribution_uri;
 
     /**
-     * @var float $geo_lat
+     * @var date $date_created
      */
-    private $geo_lat;
+    private $date_created;
 
     /**
-     * @var float $geo_lng
+     * @var string $type
      */
-    private $geo_lng;
+    private $type;
 
     /**
-     * @var date $date_created_start
+     * @var string $source
      */
-    private $date_created_start;
+    private $source;
 
     /**
-     * @var date $date_created_end
+     * @var string $thumbnail_url
      */
-    private $date_created_end;
+    private $thumbnail_url;
 
     /**
-     * @var string $content_type
-
+     * @var integer $child_items_count
      */
-    private $content_type;
+    private $child_items_count;
 
     /**
-     * @var string $source_type
+     * @var float $media_geo_latitude
      */
-    private $source_type;
+    private $media_geo_latitude;
 
     /**
-     * @var string $archive
+     * @var float $media_geo_longitude
      */
+    private $media_geo_longitude;
 
-    private $archive;
+    /**
+     * @var date $media_date_created
+     */
+    private $media_date_created;
+
+    /**
+     * @var date $media_date_created_end
+     */
+    private $media_date_created_end;
+
+    /**
+     * @var string $media_creator_username
+     */
+    private $media_creator_username;
+
+    /**
+     * @var string $media_creator_realname
+     */
+    private $media_creator_realname;
 
     /**
      * @var Zeega\IngestBundle\Entity\Media
@@ -92,6 +120,11 @@ class Item
      * @var Zeega\IngestBundle\Entity\Metadata
      */
     private $metadata;
+
+    /**
+     * @var Zeega\IngestBundle\Entity\ItemTags
+     */
+    private $tags;
 
     /**
      * @var Zeega\EditorBundle\Entity\Playground
@@ -115,18 +148,61 @@ class Item
 
     public function __construct()
     {
-        $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->date_created = new DateTime(NULL);
+    	
     }
     
     /**
      * Get id
      *
-     * @return integer 
+     * @return bigint 
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set media_id
+     *
+     * @param bigint $mediaId
+     */
+    public function setMediaId($mediaId)
+    {
+        $this->media_id = $mediaId;
+    }
+
+    /**
+     * Get media_id
+     *
+     * @return bigint 
+     */
+    public function getMediaId()
+    {
+        return $this->media_id;
+    }
+
+    /**
+     * Set metadata_id
+     *
+     * @param bigint $metadataId
+     */
+    public function setMetadataId($metadataId)
+    {
+        $this->metadata_id = $metadataId;
+    }
+
+    /**
+     * Get metadata_id
+     *
+     * @return bigint 
+     */
+    public function getMetadataId()
+    {
+        return $this->metadata_id;
     }
 
     /**
@@ -150,243 +226,323 @@ class Item
     }
 
     /**
-     * Set creator
+     * Set user_id
      *
-     * @param string $creator
+     * @param integer $userId
      */
-    public function setCreator($creator)
+    public function setUserId($userId)
     {
-        $this->creator = $creator;
+        $this->user_id = $userId;
     }
 
     /**
-     * Get creator
+     * Get user_id
      *
-     * @return string 
+     * @return integer 
      */
-    public function getCreator()
+    public function getUserId()
     {
-        return $this->creator;
+        return $this->user_id;
     }
 
     /**
-     * Set item_url
+     * Set description
      *
-     * @param string $itemUrl
+     * @param string $description
      */
-    public function setItemUrl($itemUrl)
+    public function setDescription($description)
     {
-        $this->item_url = $itemUrl;
+        $this->description = $description;
     }
 
     /**
-     * Get item_url
-     *
-     * @return string 
-     */
-    public function getItemUrl()
-    {
-        return $this->item_url;
-    }
-
-    /**
-     * Set item_uri
-     *
-     * @param string $itemUri
-     */
-    public function setItemUri($itemUri)
-    {
-        $this->item_uri = $itemUri;
-    }
-
-    /**
-     * Get item_uri
+     * Get description
      *
      * @return string 
      */
-    public function getItemUri()
+    public function getDescription()
     {
-        return $this->item_uri;
+        return $this->description;
     }
 
     /**
-     * Set attribution_url
+     * Set text
      *
-     * @param string $attributionUrl
+     * @param text $text
      */
-    public function setAttributionUrl($attributionUrl)
+    public function setText($text)
     {
-        $this->attribution_url = $attributionUrl;
+        $this->text = $text;
     }
 
     /**
-     * Get attribution_url
+     * Get text
+     *
+     * @return text 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set uri
+     *
+     * @param string $uri
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+    }
+
+    /**
+     * Get uri
      *
      * @return string 
      */
-    public function getAttributionUrl()
+    public function getUri()
     {
-        return $this->attribution_url;
+        return $this->uri;
     }
 
     /**
-     * Set depth
+     * Set attribution_uri
      *
-     * @param boolean $depth
+     * @param string $attributionUri
      */
-    public function setDepth($depth)
+    public function setAttributionUri($attributionUri)
     {
-        $this->depth = $depth;
+        $this->attribution_uri = $attributionUri;
     }
 
     /**
-     * Get depth
+     * Get attribution_uri
      *
-     * @return boolean 
+     * @return string 
      */
-    public function getDepth()
+    public function getAttributionUri()
     {
-        return $this->depth;
+        return $this->attribution_uri;
     }
 
     /**
-     * Set geo_lat
+     * Set date_created
      *
-     * @param float $geoLat
+     * @param date $dateCreated
      */
-    public function setGeoLat($geoLat)
+    public function setDateCreated($dateCreated)
     {
-        $this->geo_lat = $geoLat;
+        $this->date_created = $dateCreated;
     }
 
     /**
-     * Get geo_lat
-     *
-     * @return float 
-     */
-    public function getGeoLat()
-    {
-        return $this->geo_lat;
-    }
-
-    /**
-     * Set geo_lng
-     *
-     * @param float $geoLng
-     */
-    public function setGeoLng($geoLng)
-    {
-        $this->geo_lng = $geoLng;
-    }
-
-    /**
-     * Get geo_lng
-     *
-     * @return float 
-     */
-    public function getGeoLng()
-    {
-        return $this->geo_lng;
-    }
-
-    /**
-     * Set date_created_start
-     *
-     * @param date $dateCreatedStart
-     */
-    public function setDateCreatedStart($dateCreatedStart)
-    {
-        $this->date_created_start = $dateCreatedStart;
-    }
-
-    /**
-     * Get date_created_start
+     * Get date_created
      *
      * @return date 
      */
-    public function getDateCreatedStart()
+    public function getDateCreated()
     {
-        return $this->date_created_start;
+        return $this->date_created;
     }
 
     /**
-     * Set date_created_end
+     * Set type
      *
-     * @param date $dateCreatedEnd
+     * @param string $type
      */
-    public function setDateCreatedEnd($dateCreatedEnd)
+    public function setType($type)
     {
-        $this->date_created_end = $dateCreatedEnd;
+        $this->type = $type;
     }
 
     /**
-     * Get date_created_end
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set thumbnail_url
+     *
+     * @param string $thumbnailUrl
+     */
+    public function setThumbnailUrl($thumbnailUrl)
+    {
+        $this->thumbnail_url = $thumbnailUrl;
+    }
+
+    /**
+     * Get thumbnail_url
+     *
+     * @return string 
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail_url;
+    }
+
+    /**
+     * Set child_items_count
+     *
+     * @param integer $childItemsCount
+     */
+    public function setChildItemsCount($childItemsCount)
+    {
+        $this->child_items_count = $childItemsCount;
+    }
+
+    /**
+     * Get child_items_count
+     *
+     * @return integer 
+     */
+    public function getChildItemsCount()
+    {
+        return $this->child_items_count;
+    }
+
+    /**
+     * Set media_geo_latitude
+     *
+     * @param float $mediaGeoLatitude
+     */
+    public function setMediaGeoLatitude($mediaGeoLatitude)
+    {
+        $this->media_geo_latitude = $mediaGeoLatitude;
+    }
+
+    /**
+     * Get media_geo_latitude
+     *
+     * @return float 
+     */
+    public function getMediaGeoLatitude()
+    {
+        return $this->media_geo_latitude;
+    }
+
+    /**
+     * Set media_geo_longitude
+     *
+     * @param float $mediaGeoLongitude
+     */
+    public function setMediaGeoLongitude($mediaGeoLongitude)
+    {
+        $this->media_geo_longitude = $mediaGeoLongitude;
+    }
+
+    /**
+     * Get media_geo_longitude
+     *
+     * @return float 
+     */
+    public function getMediaGeoLongitude()
+    {
+        return $this->media_geo_longitude;
+    }
+
+    /**
+     * Set media_date_created
+     *
+     * @param date $mediaDateCreated
+     */
+    public function setMediaDateCreated($mediaDateCreated)
+    {
+        $this->media_date_created = $mediaDateCreated;
+    }
+
+    /**
+     * Get media_date_created
      *
      * @return date 
      */
-    public function getDateCreatedEnd()
+    public function getMediaDateCreated()
     {
-        return $this->date_created_end;
+        return $this->media_date_created;
     }
 
     /**
-     * Set content_type
+     * Set media_date_created_end
      *
-     * @param string $contentType
+     * @param date $mediaDateCreatedEnd
      */
-    public function setContentType($contentType)
+    public function setMediaDateCreatedEnd($mediaDateCreatedEnd)
     {
-        $this->content_type = $contentType;
+        $this->media_date_created_end = $mediaDateCreatedEnd;
     }
 
     /**
-     * Get content_type
+     * Get media_date_created_end
      *
-     * @return string 
+     * @return date 
      */
-    public function getContentType()
+    public function getMediaDateCreatedEnd()
     {
-        return $this->content_type;
+        return $this->media_date_created_end;
     }
 
     /**
-     * Set source_type
+     * Set media_creator_username
      *
-     * @param string $sourceType
+     * @param string $mediaCreatorUsername
      */
-    public function setSourceType($sourceType)
+    public function setMediaCreatorUsername($mediaCreatorUsername)
     {
-        $this->source_type = $sourceType;
+        $this->media_creator_username = $mediaCreatorUsername;
     }
 
     /**
-     * Get source_type
-     *
-     * @return string 
-     */
-    public function getSourceType()
-    {
-        return $this->source_type;
-    }
-
-    /**
-     * Set archive
-     *
-     * @param string $archive
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    }
-
-    /**
-     * Get archive
+     * Get media_creator_username
      *
      * @return string 
      */
-    public function getArchive()
+    public function getMediaCreatorUsername()
     {
-        return $this->archive;
+        return $this->media_creator_username;
+    }
+
+    /**
+     * Set media_creator_realname
+     *
+     * @param string $mediaCreatorRealname
+     */
+    public function setMediaCreatorRealname($mediaCreatorRealname)
+    {
+        $this->media_creator_realname = $mediaCreatorRealname;
+    }
+
+    /**
+     * Get media_creator_realname
+     *
+     * @return string 
+     */
+    public function getMediaCreatorRealname()
+    {
+        return $this->media_creator_realname;
     }
 
     /**
@@ -427,6 +583,26 @@ class Item
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /**
+     * Add tags
+     *
+     * @param Zeega\IngestBundle\Entity\ItemTags $tags
+     */
+    public function addItemTags(\Zeega\IngestBundle\Entity\ItemTags $tags)
+    {
+        $this->tags[] = $tags;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 
     /**
