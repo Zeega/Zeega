@@ -36,6 +36,7 @@ var ImageLayer = ProtoLayer.extend({
 			property : 'opacity',
 			value : this.model.get('attr').opacity,
 			dom : this.layerControls,
+			css : true
 		};
 		var opacitySlider = makeUISlider( opacityArgs );
 		
@@ -48,6 +49,7 @@ var ImageLayer = ProtoLayer.extend({
 			suffix : '%',
 			value : this.model.get('attr').width,
 			dom : this.layerControls,
+			css : true
 		};
 		var scaleSlider = makeUISlider( widthArgs );
 		

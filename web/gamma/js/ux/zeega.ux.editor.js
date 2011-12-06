@@ -191,10 +191,9 @@ function closeOpenCitationTabs()
 
 
 
-$(document).ready(function() {
+$(document).ready(function(){
 	
-	
-		$('#add-node').draggable({
+	$('#add-node').draggable({
 		axis:'x',
 		revert:true,
 
