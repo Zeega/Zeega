@@ -20,9 +20,6 @@ Zeega\IngestBundle\Entity\Tag:
         date_created:
             type: date
             nullable: false
-        user:
-            type: bigint
-            nullable: false
         description:
             type: text
             nullable: true

@@ -3,7 +3,7 @@
 namespace Zeega\IngestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use DateTime;
 /**
  * Zeega\IngestBundle\Entity\ItemTags
  */
@@ -38,6 +38,11 @@ class ItemTags
      * @var Zeega\IngestBundle\Entity\Tag
      */
     private $tag;
+	    public function __construct()
+    {
+ 
+        $this->tag_date_created = new DateTime(NULL);
+    }
 
 
     /**

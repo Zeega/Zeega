@@ -8,9 +8,12 @@ use Zeega\IngestBundle\Entity\Media;
 use Zeega\IngestBundle\Entity\Metadata;
 use Zeega\IngestBundle\Entity\Tag;
 use Zeega\IngestBundle\Entity\Item;
+use Zeega\IngestBundle\Entity\ItemTags;
+use Zeega\UserBundle\Entity\User;
 
 use Imagick;
 use DateTime;
+use SimpleXMLElement;
 
 
 class IngestController extends Controller
@@ -22,9 +25,14 @@ class IngestController extends Controller
 	public function indexAction($page)
 	
 	
+	
     {
+    
+    //Import tweets from XML File
+    		
+    		
     		$start=$page*100+1;
-			$originalUrl='http://dev.zeega.org/tweetoutput.php';
+			$originalUrl='http://dev.zeega.org/query_result.xml';
 			$ch = curl_init();
 			$timeout = 5; // set to zero for no timeout
 			curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -32,14 +40,14 @@ class IngestController extends Controller
 			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 			$file_contents = curl_exec($ch);
 			curl_close($ch);
-			//$contents=htmlspecialchars($file_contents, ENT_COMPAT, 'UTF-8');
-  			$tweets=json_decode($file_contents);
-  			print_r($tweets);
-  			for($i=0;$i<1;$i++){
-				$tweet=$tweets[0];
-				return new Response($file_contents);
+			$xml = new SimpleXMLElement($file_contents);
+  			$tweets=$xml->custom;
+  			
+  			foreach($tweets->row as $tweet){
+				
+				
 				$user = $this->get('security.context')->getToken()->getUser();
-				$request = $this->getRequest();
+			
 			
 				$em=$this->getDoctrine()->getEntityManager();
 				$em->getConnection()->setCharset('utf8');
@@ -55,81 +63,131 @@ class IngestController extends Controller
 				
 				$item->setChildItemsCount(0);
 				
-				$item->setAttributionUri('http://twitter.com/'.$tweet['username']);
+				$item->setAttributionUri('http://twitter.com/'.(string)$tweet->username);
 				$item->setType('Tweet');
-				$item->setUri($tweet['twitter_id']);
+				$item->setUri((string)$tweet->twitter_id);
 				$item->setUser($user);
 				$item->setPlayground($playground);
 	
-				$item->setTitle($tweet['username']);
+				$item->setTitle('none');
 				
-				$item->setMediaCreatorUsername($tweet['username']);
+				$item->setMediaCreatorUsername((string)$tweet->username);
 				$item->setMediaCreatorRealname('Unknown');
 				
-				if(!IS_NULL($tweet['t_lat']))$item->setMediaGeoLatitude($tweet['t_lat']);
-				if(!IS_NULL($tweet['t_lon']))$item->setMediaGeoLongitude($tweet['t_lon']);
+				if(!IS_NULL($tweet->t_lat))$item->setMediaGeoLatitude((float)$tweet->t_lat);
+				if(!IS_NULL($tweet->t_lon))$item->setMediaGeoLongitude((float)$tweet->t_lon);
 				
-				$dateCreated=new DateTime($tweet['time']);
+				$dateCreated=new DateTime($tweet->time);
 				$item->setMediaDateCreated($dateCreated);
 				
 				$item->setSource('Tweet');
-				//$item->setDescription($photo['Description']);
-				$item->setText($tweet['text']);
-				$em->persist($item);
-				$em->flush();
+				$item->setText((string)$tweet->text);
 				
 				
-				$media->setFormat('text');
-				
-				$metadata->setArchive('Twitter');
-				$metadata->setLocation($tweet['Location']);
-			
-				$metadata->setThumbnailUrl($tweet['profile_image_url']);		
-				@$img=file_get_contents($tweet['profile_image_url']);
-				$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
-				file_put_contents($name,$img);
-				$square = new Imagick($name);
-				$thumb = $square->clone();
-	
-				if($square->getImageWidth()>$square->getImageHeight()){
-					$thumb->thumbnailImage(144, 0);
-					$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
-					$h=$square->getImageHeight();		
-					$square->chopImage($x, 0, 0, 0);
-					$square->chopImage($x, 0, $h, 0);
-				} 
-				else{
-					$thumb->thumbnailImage(0, 144);
-					$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
-					$w=$square->getImageWidth();
-					$square->chopImage(0, $y, 0, 0);
-					$square->chopImage(0, $y, 0, $w);
+				$text=(string)$tweet->text;
+				$hashtag = '/\#([A-Za-z]*)/';
+		
+				if(preg_match_all($hashtag, $text, $matches)){
+					foreach($matches[1] as $match){
+						$candidateTag=strtolower($match);
+						$tag=NULL;
+						$tag=$this->getDoctrine()
+									->getRepository('ZeegaIngestBundle:Tag')
+									->findOneByName($candidateTag);
+						if(!is_object($tag)){
+							$tag=new Tag;
+							$tag->setName($candidateTag);
+							$tag->setUser($user);
+							$em->persist($tag);
+							
+							
+						
+						$itemTags= new ItemTags();
+					
+						$em->persist($item);
+						$em->persist($tag);
+						$em->flush();
+						
+						$itemTags->setTag($tag);
+						$itemTags->setUser($user);
+						$itemTags->setItem($item);
+						$itemTags->setItemId($item->getId());
+						$itemTags->setTagId($tag->getId());
+						//$itemTags->setTagDateCreated(new DateTime(NULL));
+						$item->addItemTags($itemTags);
+						
+						
+						$em->persist($itemTags);
+						$em->flush();
+						
+						}
+						
+					}
 				}
-			
-				$square->thumbnailImage(144,0);
-			
-				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
 				
-				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
-				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
-			
 				
-				$item->setMetadata($metadata);
-				$item->setMedia($media);
+				//User profile pics used for thumb
+				//Convert from min to regular image urls for higher res thumbs
+				@$img=file_get_contents(str_replace('_normal','',(string)$tweet->profile_image_url));
 				
-				$em->persist($item->getMetadata());
-				$em->persist($item->getMedia());
-				$em->flush();
-				$em->persist($item);
-				$em->flush();
+				if($img==FALSE){
+					return new Response(0);	
+				}
+				else{
+					
+					
+					
+					
+					
+					
+					$media->setFormat('text');
+					
+					$metadata->setArchive('Twitter');
+					$metadata->setLocation((string)$tweet->location);
+				
+					$metadata->setThumbnailUrl($tweet['profile_image_url']);		
+					
+					$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
+					file_put_contents($name,$img);
+					$square = new Imagick($name);
+					$thumb = $square->clone();
+		
+					if($square->getImageWidth()>$square->getImageHeight()){
+						$thumb->thumbnailImage(144, 0);
+						$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
+						$h=$square->getImageHeight();		
+						$square->chopImage($x, 0, 0, 0);
+						$square->chopImage($x, 0, $h, 0);
+					} 
+					else{
+						$thumb->thumbnailImage(0, 144);
+						$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
+						$w=$square->getImageWidth();
+						$square->chopImage(0, $y, 0, 0);
+						$square->chopImage(0, $y, 0, $w);
+					}
+				
+					$square->thumbnailImage(144,0);
+				
+					$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
+					
+					$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+					$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				
+					
+					$item->setMetadata($metadata);
+					$item->setMedia($media);
+					
+					$em->persist($item->getMetadata());
+					$em->persist($item->getMedia());
+					$em->persist($item);
+					$em->flush();
+				}
 			}
 			
 			
-			$res=$this->getDoctrine()
-								->getRepository('ZeegaIngestBundle:Item')
-								->find(1);					
-			$m=$res->getMetadata();
-			return new Response($m->getLocation());
+			
+			return new Response('success');
     
     }
 
