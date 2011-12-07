@@ -2,6 +2,8 @@
 Zeega\IngestBundle\Entity\Item:
     type: entity
     repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
+    lifecycleCallbacks:
+       prePersist: [ onPrePersist]
     manyToMany:
         child_items: 
             targetEntity: Item
