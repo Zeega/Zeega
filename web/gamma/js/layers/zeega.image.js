@@ -61,76 +61,65 @@ var ImageLayer = ProtoLayer.extend({
 	
 	visual : function()
 	{
-		this.visualEditorElement.css({
+		var cssObj = {
 			width : this.attr.width+'%',
 			opacity : this.attr.opacity
-		})
+		};
 		
 		var img = $('<img>')
 			.attr('src', this.model.get('attr').url)
 			.css({'width':'100%'});
 						
-		this.visualEditorElement.append( img );
+		this.visualEditorElement
+			.css( cssObj )
+			.append( img );
 	},
 
 	drawThumb : function(){
 		
-		$('#preview-media').append($('<div>').css( {
-			'position' : 'absolute',
-			'top' : this.attr.top  +'%',
-			'left' : this.attr.left  +'%',
-			'width' : this.attr.width,
-			'opacity' : this.attr.opacity
-		}).append($('<img>')
+		$('#preview-media').append($('<div>')
+			.css( {
+				'position' : 'absolute',
+				'top' : this.attr.top  +'%',
+				'left' : this.attr.left  +'%',
+				'width' : this.attr.width,
+				'opacity' : this.attr.opacity
+			})
+			.append($('<img>')
 			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
 			.css({'width':'100%'})));
 	
 	},
 	
-	preload : function(){
-		//make dom object
-		//maybe these should all be wrapped in divs?
-		var div = $('<div>');
+	preload : function( target ){
 
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : '-100%',
-			'left' : '-100%',
+			'top' : '-1000%',
+			'left' : '-1000%',
 			'z-index' : this.zIndex,
-			'width' : this.attr.w+'%',
+			'width' : this.attr.width +'%',
 			'opacity' : this.attr.opacity
 		};
 
-		div.css(cssObj);
+		var img = $('<img>')
+			.attr( 'src' , this.attr.url )
+			.css( 'width', '100%');
 
-		$(div).attr('data-layer',this.model.id);
+		this.display.css( cssObj )
+			.append( img );
 
-		var img=$('<img>')
-			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
-			.css({'width':'100%'});
-
-		this.dom = div;
-
-		//make dom
-		$(this.dom).append(img);
-		//add to dom
-
-		$('#zeega-player').find('#preview-media')
-			.append(this.dom)
-			.trigger('ready',{'id':this.model.id});
-		
+		target.trigger( 'ready' , { 'id' : this.model.id } );
 	},
 	
 	play : function( z )
 	{
-		console.log('image player.play');
-		this.dom.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
 
 	stash : function()
 	{
-		console.log('image player.stash');
-		this.dom.css({'top':"-100%",'left':"-100%"});
+		this.display.css({'top':"-1000%",'left':"-1000%"});
 	}
 	
 		

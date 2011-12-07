@@ -79,13 +79,13 @@ var Player = {
 	draw : function()
 	{
 		//add the player div
-		var overlay = $(this.getTemplate());
-		$('body').append(overlay);
+		this.displayWindow = $(this.getTemplate());
+		$('body').append( this.displayWindow );
 		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
 		
 		//Zeega.clearCurrentNode();
 		
-		overlay.fadeIn();
+		this.displayWindow.fadeIn();
 		
 		//disabled during dev work
 		//document.getElementById('zeega-player').webkitRequestFullScreen();
@@ -111,7 +111,7 @@ var Player = {
 		
 		
 		// remove the player div
-		$('#zeega-player').fadeOut( 450, function(){
+		this.displayWindow.fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
 			//All video elements must be removed prior to removing the zeega player dom element
@@ -347,12 +347,17 @@ var Player = {
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-			layerClass.load( layer );
+			layerClass.lightLoad( layer );
+			
+			//add the layer content to the displayWindow
+			this.displayWindow.append( layerClass.display );
+			
 			//call the preload function for the layer
 			//add the layer class to the layer class array
 			this.getLayer(layerID).layerClass = layerClass;
 			
-			layerClass.preload();
+			var target = this.displayWindow.find('#preview-media');
+			layerClass.preload( target );
 			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??

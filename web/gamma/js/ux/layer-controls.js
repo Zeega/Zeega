@@ -7,114 +7,6 @@
 	
 *************************/
 
-/**
-	args = {
-		min:n,
-		max:n,
-		value:n,
-		step:n,
-		layer_id:id,
-		label:txt,
-		css:property
-	}
-**/
-
-
-
-
-
-/*
-function makeLayerSlider(args)
-{
-	var sliderDiv = $('<div>').addClass('layer-slider-div')
-		.append( $("<h4>")
-		.html(args.label) )
-		.append( $('<div>')
-		.attr({
-			'id': args.label+'-slider',
-			'data-layer-id': args.layer_id
-		})
-		.addClass('layer-slider'));
-		
-	sliderDiv.find('.layer-slider').slider({
-		min : args.min,
-		max : args.max,
-		value : args.value,
-		step : args.step,
-		slide : function(e, ui){
-			$('#layer-preview-'+args.layer_id ).css( args.css, ui.value);
-		}
-	});
-	
-	return sliderDiv;
-}
-*/
-
-/*
-function makeSlider(args)
-{
-	var sliderDiv = $('<div>').addClass('layer-slider-div')
-		.append( $("<h4>").html(args.label) )
-		.append( $('<div>').attr({
-			'id': args.label+'-slider',
-			'data-layer-id': args.layer_id
-		}).addClass('layer-slider'));
-		
-	sliderDiv.find('.layer-slider').slider({
-		min : args.min,
-		max : args.max,
-		value : args.value,
-		step : args.step,
-		slide : function(e, ui){
-			$('#layer-preview-'+args.layer_id ).trigger('slide');
-		}
-	});
-	
-	return sliderDiv;
-}
-*/
-/*
-function makeCSSLayerSlider(args)
-{
-	
-	var defaults = {
-		min : 0,
-		max : 100,
-		step : 1,
-	};
-	
-	args = _.defaults(args,defaults);
-	
-	var sliderDiv = $('<div>')
-		.addClass('layer-slider-div')
-		.append( $("<h4>")
-		.html(args.label) )
-		.append( $('<div>')
-		.attr({
-			'id': args.label+'-slider',
-			'data-layer-id': args.layer_id
-		})
-		.addClass('layer-slider'));
-		
-	sliderDiv.find('.layer-slider').slider({
-		min : args.min,
-		max : args.max,
-		value : args.value,
-		step : args.step,
-		slide : function(e, ui){
-			if(args.css!='none'){
-				$('#layer-preview-'+args.layer_id ).css( args.css, ui.value+args.suffix);
-			}
-		},
-		stop : function(e,ui)
-		{
-			console.log(args.layerClass)
-		}
-	});
-	
-	return sliderDiv;
-}
-*/
 
 function textArea()
 {
@@ -265,7 +157,7 @@ function makeGoogleMap( args )
 				}
 			};
 			
-			args.controls.trigger( 'update' , [ property ]);
+			args.controls.trigger( 'update' , [ properties ]);
 			updateStaticMap( _.extend(args,{'type':'map'}) );
 		}
 	});
@@ -356,7 +248,7 @@ function makeGoogleMap( args )
 			var properties = {
 				title : {
 					property : 'title',
-					value : '"'+ input.val() +'"',
+					value : input.val(),
 					css : false
 				}
 			};
@@ -371,8 +263,11 @@ function makeGoogleMap( args )
 function updateStaticMap( args )
 {
 
-	var wPercent = 6 * parseInt( args.w );
-	var hPercent = 4 * parseInt( args.h );
+	console.log('UPDATE STATIC MAP')
+	console.log(args.width +':'+ args.height);
+	
+	var wPercent = 6 * parseInt( args.width );
+	var hPercent = 4 * parseInt( args.height );
 	
 	if(args.type == 'streetview')
 	{
@@ -432,7 +327,9 @@ function makeUISlider(args)
 		css : false,
 		
 		scaleWith : false,
-		scaleValue : false
+		scaleValue : false,
+		
+		callback : false
 	};
 	
 	_.defaults(args,defaults);
@@ -502,10 +399,12 @@ function makeUISlider(args)
 				}
 			}
 			
-			console.log( properties );
-			
-			
 			args.dom.trigger( 'update' , [ properties , args.silent ] );
+			
+			if( args.callback )
+			{
+				console.log( args.callback );
+			}
 		}
 	});
 	

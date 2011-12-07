@@ -142,8 +142,8 @@ var ProtoLayer = Class.extend({
 		
 			this.attr = model.get('attr');
 		
-			var defaults = deepCopy(this.defaultAttributes );
-			this.attr = _.defaults(this.attr, defaults);
+			var defaults = deepCopy( this.defaultAttributes );
+			this.attr = _.defaults( this.attr, defaults);
 		
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
@@ -182,18 +182,22 @@ var ProtoLayer = Class.extend({
 	},
 	
 	//necessary?
-	lightLoad : function(model){
-			//make it possible to load objects and not models.
-			this.model = model;
-			this.attr = model.attr;
-		
-			var defaults = deepCopy(this.defaultAttributes );
+	lightLoad : function(model)
+	{
+		//make it possible to load objects and not models.
+		this.model = model;
+		this.attr = model.attr;
+	
+		var defaults = deepCopy(this.defaultAttributes );
 
-			this.attr = _.defaults(this.attr, defaults);
-			this.model.attr = this.attr;
-			this.title = this.attr.title;
-			this.type = model.type;
-			this.zIndex = model.zindex;
+		this.attr = _.defaults(this.attr, defaults);
+		this.model.attr = this.attr;
+		this.title = this.attr.title;
+		this.type = model.type;
+		this.zIndex = model.zindex;
+		
+		this.display = $('<div>');
+		
 	},
 	
 	setListeners : function()
