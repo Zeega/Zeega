@@ -24,7 +24,7 @@ var VideoLayer = ProtoLayer.extend({
 		'opacity':1,
 		'dimension':1.3
 	},
-						
+	
 	controls : function()
 	{
 		var _this  = this;
@@ -160,83 +160,42 @@ var VideoLayer = ProtoLayer.extend({
 	
 	preload : function()
 	{
-		console.log('video preloadMedia');
-		
 		//make dom object
 		var _this = this;
-		var container= $('<div>');
 		
 		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
-		var h = Math.floor(this.attr.w*ratio/this.attr.dimension);
+		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
 		var cssObj = {
-			
-			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
-			'top' : "-200%",
-			'left' : "-200%",
+			'top' : "-1000%",
+			'left' : "-1000%",
 			'z-index' : this.zIndex,
-			'width' : this.attr.w+"%",
+			'width' : this.attr.width+"%",
 			'height' : h+"%",
 			'opacity' : this.attr.opacity
 		};
 		
-		
-		container.addClass('media editable draggable')
+		this.display
 			.attr({
 				'id' : 'layer-publish-'+this.model.id,
 				'data-layer-id' : this.model.id
 			})
 			.css(cssObj);
-			
-		//$('#layer_'+this.model.id).append(img);
-		this.dom = container;
 		
-		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
+		this.player=new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 		
-		this.player=new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
-		
-		console.log(this.player);
 	},
 	
 	play : function( z )
 	{
-
-		//make dom object
-		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 		this.player.play();
-		
 	},
 	
 	stash :function()
 	{
-		
-		this.dom.css({'top':"-200%",'left':"-200%"});
+		this.display.css({'top':"-1000%",'left':"-1000%"});
 		this.player.pause();
-	},
-	
-	
-	onAttributeUpdate : function()
-	{
-		/*
-		var newAttr = {};
-		
-		newAttr.x = Math.floor( this.visualEditorElement.position().left/6);
-		newAttr.y = Math.floor( this.visualEditorElement.position().top/4);
-		newAttr.opacity = Math.floor( this.layerControls.find('#opacity-slider').slider('value') * 100 )/100;
-		newAttr.w = Math.floor( this.layerControls.find('#scale-slider').slider('value') );
-
-		if(this.editorLoaded)
-		{
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
-
-		}
-		
-		this.setAttributes(newAttr);
-		this.save();
-		*/
 	},
 
 	exit: function()

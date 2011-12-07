@@ -221,8 +221,8 @@ var GeoLayer = ProtoLayer.extend({
 
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : this.attr.top+"%",
-			'left' : this.attr.left+"%",
+			'top' : '-1000%',
+			'left' : '-1000%',
 			'width' : this.attr.width+"%",
 			'height' : this.attr.height+"%",
 			'opacity' : this.attr.opacity
