@@ -236,6 +236,12 @@ $(document).ready(function(){
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
 	
+	$('#database-search-button').click(function(){
+		var discardCurrentResultSet = true;
+		Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+		return false;
+	});
+	
 	$('#database-search-filter').change(function(){
 	    return search(this,true);
 	});
