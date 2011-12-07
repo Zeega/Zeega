@@ -676,4 +676,15 @@ class Item
         return $this->parent_items;
 
     }
+
+    /**
+     * @ORM\prePersist
+     */
+    public function onPrePersist()
+    {
+        if($this->type == "Collection")
+        {
+            $this->setChildItemsCount($this->getChildItems()->count());
+        }
+    }
 }

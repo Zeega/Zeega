@@ -196,6 +196,23 @@ class CollectionsController extends Controller
        
     }
    
+   	// delete_collection    DELETE /api/collections/{collection_id}.{_format}
+    public function deleteCollectionAction($collection_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+     	
+     	if (!$collection) 
+        {
+            throw $this->createNotFoundException('Unable to find a Collection with the id ' . $collection_id);
+        }
+        
+    	$em->remove($collection);
+    	$em->flush();
+    	
+    	return new Response('SUCCESS',200);
+    }
+   
     // Private methods 
     
     private function populateCollectionWithRequestData($request_data)
