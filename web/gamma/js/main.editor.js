@@ -80,9 +80,10 @@ var loadFiles = [
 	'order!layers/zeega.youtube',
 	'order!layers/zeega.rdio',
 	'order!layers/zeega.twilio',
+	'order!layers/zeega.documentcloud',
 	
 	//players
-	'order!players/zeega.html5av',
+	
 	'order!players/zeega.av.publish',
 	'order!players/zeega.player.youtube',	
 	'order!players/zeega.rdio',

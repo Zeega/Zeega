@@ -63,7 +63,9 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	addToLayerTypeCollection : function(layer, render)
 	{
+		console.log('var layerClass = new '+ layer.get('type')+'Layer()' );
 		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
+		console.log(layerClass);
 		var type = layerClass.layerType.toLowerCase();
 		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
 		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );

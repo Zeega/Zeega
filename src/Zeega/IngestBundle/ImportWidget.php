@@ -61,6 +61,20 @@ class ImportWidget
 			$archive='archive.org';
 			$id='';
 		}
+		
+		
+		/**  DocumentCloud **************************************/
+		
+	
+		elseif(strstr($url,'documentcloud.org/documents')){
+			$archive='DocumentCloud';
+			$id='';
+			$url=str_replace( 'org/documents', 'org/api/documents',$url);
+			$url=str_replace( '.html', '.json',$url);
+			
+		}
+		
+		
 	
 	
 		/**  FLICKR   *****************************************/
@@ -88,14 +102,14 @@ class ImportWidget
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[3];
+				$id=$url;
 				$archive='SoundCloudSet';
 			}
 			else{
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[2];
+				$id=$url;
 				$archive='SoundCloud';
 			}
 		}
@@ -423,11 +437,24 @@ class ImportWidget
 
 }
 
-	public function parseSoundCloudSet($id){
+	public function parseSoundCloudSet($url){
 		
 		$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
+
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
 	
-		$originalUrl='http://api.soundcloud.com/playlists/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+		$soundcloud = '/soundcloud\.com%2Fplaylists%2F([0-9]*)/';
+		
+		if(preg_match($soundcloud, $file_contents, $matches)){	
+	
+		$originalUrl='http://api.soundcloud.com/playlists/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 		$ch = curl_init();
 		$timeout = 5; // set to zero for no timeout
 		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -491,16 +518,32 @@ class ImportWidget
 		$collection['creator'] = $item->getCreator();
 		$collection['items']=$items;
 		return $collection;
-		
+		}
+		else{
+			return false;
+		}
 	
 	}
 
-	public function parseSoundCloud($id){
+	public function parseSoundCloud($url){
 	
 	
 	$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
 
-	$originalUrl='http://api.soundcloud.com/tracks/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+	$originalUrl=$url;
+	$ch = curl_init();
+	$timeout = 5; // set to zero for no timeout
+	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$file_contents = curl_exec($ch);
+	curl_close($ch);
+
+	$soundcloud = '/soundcloud\.com%2Ftracks%2F([0-9]*)/';
+	
+	if(preg_match($soundcloud, $file_contents, $matches)){				
+
+	$originalUrl='http://api.soundcloud.com/tracks/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 	$ch = curl_init();
 	$timeout = 5; // set to zero for no timeout
 	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -547,9 +590,14 @@ class ImportWidget
 	$item->setMedia($media);
 	
 	return $item;
+	}
+	else{
+	
+	return false;
+	}
 
 }
-
+	
 	public function parseBlipTv($id){	
 		
 		$originalUrl=$id.'?skin=json';
@@ -654,6 +702,50 @@ class ImportWidget
 
 
 }
+
+	public function parseDocumentCloud($url){	
+		
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
+		
+		$contents=json_decode($file_contents);
+		$document=$contents->document;
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		
+		$item->setCreator($document->source);
+		$item->setArchive('DocumentCloud');
+		$item->setContentType('Document');
+		$item->setSourceType('DocumentCloud');
+		$item->setTitle($document->title);
+		$item->setItemUri($document->id);
+		$item->setItemUrl('http://www.documentcloud.org/documents/'.$document->id.'.html');
+		
+		$metadata->setDescription($document->description);
+	
+	
+		$image=$document->resources->page->image;
+		$image=str_replace('{page}','1',$image);
+		$image=str_replace('{size}','small',$image);
+		
+	
+		$metadata->setThumbUrl($image);
+		$item->setMetadata($metadata);
+		$item->setMedia($media);
+		
+		
+		return $item;
+
+
+}
+
 
 	
 

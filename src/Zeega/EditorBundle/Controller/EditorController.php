@@ -214,7 +214,7 @@ class EditorController extends Controller
 	  
 		'displayname' => $user->getDisplayName(),
 		'myprojects'   => $myprojects,
-		'projects'   => $projects,
+		'allprojects'   => $projects,
 		'playground'=>$playground,
 		'short'=>$short,
 		'adminMenu'=>$admin,
@@ -244,15 +244,20 @@ class EditorController extends Controller
 	$admin=$this->getDoctrine()
 			->getRepository('ZeegaEditorBundle:Playground')
 			->checkAdmin($short,$user->getId());
-	if($playground||$super){
+	$project=$this->getDoctrine()
+					->getRepository('ZeegaEditorBundle:Project')
+					->findOneById($id);
+	
+	$project_owners=$project->getUsers();
+	
+	$project_owner=$project_owners[0];
+	
+	if($user->getId()==$project_owner->getId()||$super){
 		
-			
+				
 			$routes=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Route')
 					->findRoutesByProject($id);
-			$project=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
-					->findOneById($id);
 			$route=$routes[0];
 			
 		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(

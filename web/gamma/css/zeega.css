@@ -484,9 +484,21 @@ body
 
 .node-overlay
 {
+
 	height:50px;
 	width:50px;
 	z-index:2;
+}
+
+.node-update-overlay
+{
+	display:none;
+	border: solid 2px yellow;
+	height:46px;
+	width:46px;
+	background-color: gray;
+	opacity: 0.6;
+
 }
 
 .node-background

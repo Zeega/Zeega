@@ -26,35 +26,35 @@ var Node = Backbone.Model.extend({
 		var _this = this;
 		console.log('updating thumbnail');
 		
-		//kill any preexisting thumb updates
+		//kill any pre-existing thumbnail updates
 		if(this.t) clearTimeout(this.t);
+	
+		//Trigger new node snapshot and persist url to database
 		
-
-		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
-		this.set({ thumb_url : 0 });
-		
-		this.save({},{
-		
-			success: function(node,response){
-		
-				$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
-				$('.node-thumb-'+_this.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
-				_this.set({thumb_url:response[0].thumb_url});
-				//turn off spinner
-				$('.node-thumb-'+_this.id).find('.node-overlay').spin(false);
+		$.post(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail',function(data){
+			
+			//Update thumbnail in route display
+			var thumb=$('<img>').attr('src',data).load(function(){
+			$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
+			
+				$('.node-thumb-'+_this.id).css('background-image','url("'+data+'")').fadeIn('fast',function(){
+					$('.node-thumb-'+_this.id).find('.node-update-overlay').fadeOut('slow');
+				});
+			});
 			});
 			
-		}});
-	
-	
-	
+			//Update local version of thumbnail url attribute
+			_this.set({thumb_url:data});	
+		});
 	},
 	
 	noteChange:function()
 	{
-		console.log('changed');
+		console.log('Node changed');
+		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
 		var _this = this;
-		//kill any preexisting thumb updates
+		
+		//kill any pre-existing thumb updates
 		if(_this.t) clearTimeout(this.t);
 		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
 		

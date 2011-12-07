@@ -41,7 +41,7 @@ var AudioLayer = ProtoLayer.extend({
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
 			
-			this.player = new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+			this.player = new ZeegaMP(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id);
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){

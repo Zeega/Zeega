@@ -67,10 +67,7 @@ class WidgetController extends Controller
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
-					$url=explode(':/var/www/',$output[4]);
-					$thumbUrl=$this->container->getParameter('hostname').$url[1];
-					@$img=file_get_contents($thumbUrl);
+					@$img=file_get_contents($item->getItemUrl());
 				}
 				elseif($item->getContentType()=='Audio'){
 					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
@@ -179,6 +176,8 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
 			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
 			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
+			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
+
 
 			//Store media item(s) to session and render widget
 
