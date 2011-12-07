@@ -155,9 +155,12 @@ var ZeegaMP = ZeegaAV.extend({
 	
 	onCanPlay:function(){
 		if(this.debug.event) console.log("html5 player ["+this._id+"] : event : canPlay : "+this._asset.buffered.end(0));
+		if( !this._canPlay)
+		{
 		this._canPlay=true;
 		this._asset.currentTime=this._begin;
 		this.loadControls();
+		}
 	},
 	
 	onTimeUpdate:function(){
@@ -342,10 +345,12 @@ var ZeegaMP = ZeegaAV.extend({
 		
 	playPause:function(){
 			if(debug)console.log("player:playPause");
+			console.log(this._asset.currentTime);
 			if(this._canPlay){
 				if(this._asset.paused) this._asset.play();
 				else this._asset.pause();
 			}
+			
 	}
 });
 

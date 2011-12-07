@@ -56,4 +56,3 @@ var VisualLayerViewCollection = Backbone.View.extend({
 
 
 
-

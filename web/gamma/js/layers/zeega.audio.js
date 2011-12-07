@@ -41,24 +41,24 @@ var AudioLayer = ProtoLayer.extend({
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
 			
-			this.player = new ZeegaMP(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id);
+			this.player = new ZeegaMP(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id , 'player-' +this.model.id);
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player._start_time,
+						value : _this.player.getBegin(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player._stop_time,
+						value : _this.player.getEnd(),
 						css : false
 					},
 					volume : {
 						property : 'volume',
-						value : Math.floor( _this.player._vol * 100.0 ),
+						value : _this.player.getVolume(),
 						css : false
 					}
 				};

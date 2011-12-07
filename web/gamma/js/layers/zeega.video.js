@@ -81,6 +81,7 @@ var VideoLayer = ProtoLayer.extend({
 	{
 		if( !this.editorLoaded )
 		{
+			console.log('OPEN CONTROLSSSSSS');
 			var _this = this;
 			
 			//is this necessary?
@@ -88,7 +89,7 @@ var VideoLayer = ProtoLayer.extend({
 				.css( 'height' , '140px' ) //this should moved out
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
-			this.player = new ZeegaMP( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id );
+			this.player = new ZeegaMP( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){
@@ -96,17 +97,17 @@ var VideoLayer = ProtoLayer.extend({
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player._start_time,
+						value : _this.player.getBegin(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player._stop_time,
+						value : _this.player.getEnd(),
 						css : false
 					},
 					volume : {
 						property : 'volume',
-						value : Math.floor( _this.player._vol * 100.0 ),
+						value : _this.player.getVolume(),
 						css : false
 					}
 				};

@@ -63,18 +63,21 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	addToLayerTypeCollection : function(layer, render)
 	{
-		console.log('var layerClass = new '+ layer.get('type')+'Layer()' );
 		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
-		console.log(layerClass);
 		var type = layerClass.layerType.toLowerCase();
-		eval( "if( !this.layerCollectionArray."+ type +" ) this.layerCollectionArray."+ type +" = new LayerTypeCollection");
-		eval( 'var layerTypeCollection = this.layerCollectionArray.' + type );
 		
- 		layerTypeCollection.type = type;
+		//restore without evals
+		if( _.isUndefined( this.layerCollectionArray[ type ]) )
+		{
+			this.layerCollectionArray[ type ] = new LayerTypeCollection;
+			this.layerCollectionArray[ type ].type = type
+			this.layerCollectionArray[ type ].initViewCollection();
+		}
+		this.layerCollectionArray[ type ].type = type
 
 		//pass as silent if it's not the current node being displayed
-		if(render) layerTypeCollection.add(layer);
-		else layerTypeCollection.add(layer, {silent:true} );
+		if(render) this.layerCollectionArray[ type ].add(layer);
+		else this.layerCollectionArray[ type ].add(layer, {silent:true} );
 		
 	},
 	
@@ -96,10 +99,9 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	
 	model : Layer,
 	
-	initialize : function()
+	initialize : function( options )
 	{
 		var _this = this;
-
 		//left off here. this whole fxn needs to get done
 		this.renderCollection = new LayerRenderCollection;
 		
@@ -137,6 +139,7 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	render : function( layers )
 	{
 		var _this = this;
+		
 		this.renderCollection.reset();
 		
 		_.each( layers, function( layerID ){
@@ -156,7 +159,3 @@ var LayerTypeCollection = Backbone.Collection.extend({
 var LayerRenderCollection = Backbone.Collection.extend({
 	model : Layer
 })
-
-
-
-
