@@ -32,6 +32,9 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	$('.projects').click(function(){$('.projects').css({'opacity':0.6, 'cursor':'pointer'});$(this).css({'opacity':1}); $('.projects-container').hide(); $('.'+$(this).attr('id')+'-container').show();console.log('#'+$(this).attr('id')+'-container');});
+	
 	$('#new-project').click(function(){
 		
 		$.ajax({

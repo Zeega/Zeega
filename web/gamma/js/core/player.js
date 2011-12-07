@@ -63,7 +63,7 @@ var Player = {
 		//set the current node
 		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
 		
-		this.currentNode = this.getNode( nodeID );
+		else this.currentNode = this.getNode( nodeID );
 		
 		//this.parseProject;
 		this.draw();
