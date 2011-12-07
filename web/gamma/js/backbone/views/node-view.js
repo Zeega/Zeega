@@ -167,7 +167,7 @@ var NodeViewCollection = Backbone.View.extend({
 		if (this._rendered) 
 		{
 			$(this.el).append(nv.render().el);
-			$(nv.render().el).find('.node-overlay').effect("highlight", {}, 3000);
+			//$(nv.render().el).find('.node-overlay').effect("highlight", {}, 3000);
 			
 			//call re-sort
 			Zeega.nodeSort()

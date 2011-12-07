@@ -8,10 +8,10 @@
 ************************************/
 
 
-var debug=true;
 
 
-var ZeegaMP = Class.extend({
+
+var ZeegaMPZ = Class.extend({
 
 	init: function(id,url,mediaIn,mediaOut,mediaVol,wrapperId){
 	

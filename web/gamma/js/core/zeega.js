@@ -318,7 +318,7 @@ var Zeega = {
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
 							_this.currentNode.noteChange();
-							//node.updateThumb();
+							
 
 						}
 					});

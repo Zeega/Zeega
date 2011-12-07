@@ -111,19 +111,8 @@ var VideoLayer = ProtoLayer.extend({
 					.css('height','140px') //this should moved out
 					.html(this.getTemplate());
 				$('#player-'+this.model.id).prepend(html);
-				_this.player = new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
+				_this.player = new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id,'player-'+this.model.id);
 
- 
-
-/*
-// left over from merge
-
-				$('#layer-preview-'+this.model.id).css({'backgroundImage':'none'});
-				var html = this.getTemplate();
-				$('#player-'+this.model.id).html(html);
-				_this.player=new ZeegaMP(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id);
-
-*/
 			
 				//player triggers 'update' event to persist changes
 				$('#player-'+_this.model.id).bind('updated',function(){
@@ -266,9 +255,9 @@ var VideoLayer = ProtoLayer.extend({
 
 		if(this.editorLoaded)
 		{
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
+			newAttr.in=this.player.getBegin();
+			newAttr.out=this.player.getEnd();
+			newAttr.volume = Math.floor(this.player.getVolume());
 
 		}
 		

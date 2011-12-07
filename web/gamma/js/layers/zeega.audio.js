@@ -7,8 +7,10 @@
 ************************************/
 
 var AudioLayer = ProtoLayer.extend({
+	layerType : 'INTERACTION',
+	
 	defaultAttributes : {
-							'title' : 'Video Layer',
+							'title' : 'Audio Layer',
 							'url' : 'none',
 							'in'  : 0,
 							'out' : 0,
@@ -40,7 +42,7 @@ var AudioLayer = ProtoLayer.extend({
 		if(!this.editorLoaded){
 			var html = this.getTemplate();
 			$('#player-'+this.model.id).html(html);
-			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id,'player-'+this.model.id);
 			
 			//player triggers 'update' event to persist changes
 			$('#player-'+that.model.id).bind('updated',function(){
@@ -115,9 +117,9 @@ var AudioLayer = ProtoLayer.extend({
 		var newAttr = this.attr;
 		
 		if(this.editorLoaded){
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
+			newAttr.in=this.player.getBegin();
+			newAttr.out=this.player.getEnd();
+			newAttr.volume = this.player.getVolume();
 		}
 		
 		//set the attributes into the layer

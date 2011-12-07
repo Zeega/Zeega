@@ -161,8 +161,8 @@ var YoutubeLayer = VideoLayer.extend({
 		//get a copy of the old attributes into a variable
 		var newAttr = this.attr;
 		//set the new x/y coords into the attributes
-		newAttr.x = this.dom.position().left/6.0;
-		newAttr.y = this.dom.position().top/4.0;
+		newAttr.x = this.visualEditorElement.position().left/6.0;
+		newAttr.y = this.visualEditorElement.position().top/4.0;
 		newAttr.opacity = $('#layer-edit-'+this.model.id).find('#Opacity-slider').slider('value');
 		newAttr.w = $('#layer-edit-'+this.model.id).find('#Scale-slider').slider('value');
 		
@@ -179,10 +179,8 @@ var YoutubeLayer = VideoLayer.extend({
 
 		}
 		//set the attributes into the layer
-		console.log(newAttr);
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();
+		this.setAttributes(newAttr);
+	
 	
 	
 	},
