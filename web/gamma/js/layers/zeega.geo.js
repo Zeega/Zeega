@@ -103,11 +103,6 @@ var GeoLayer = ProtoLayer.extend({
 
 	},
 
-	onControlsClose : function()
-	{
-
-	},
-	
 	visual : function()
 	{
 		var _this = this;
@@ -274,18 +269,11 @@ var GeoLayer = ProtoLayer.extend({
 		
 	play : function( z )
 	{
-		console.log('geo player.play');
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
-	
-	pause : function()
-	{
-		// not needed
-	},
-	
+
 	stash : function()
 	{
-		console.log('image player.stash');
 		this.display.css({'top':"-1000%",'left':"-1000%"});
 	},
 	

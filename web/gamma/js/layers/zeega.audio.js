@@ -73,49 +73,20 @@ var AudioLayer = ProtoLayer.extend({
 		if(this.player) this.player.pause();
 	},
 	
-	drawPreview : function()
-	{
-		//make dom object - css should move to css file!
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		//add icon into icon tray
-		$('#visual-icon-tray').append('audio');
-		
+	preload : function(){
+		this.display.attr({
+			'id' : 'layer-preview-'+this.model.id,
+			'data-layer-id' : this.model.id
+		});
+		this.player = new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 	},
 	
-	preloadMedia : function(){
-		//make dom object
-		var _this = this;
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
-		
-		this.player = new ZeegaAV(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-publish-'+_this.model.id,'zeega-player');
-				
-		
-	},
-	drawPublish : function()
+	play : function()
 	{
-		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
 	},
 	
-	hidePublish : function()
+	stash : function()
 	{
 		this.player.pause();
 	},
@@ -123,26 +94,6 @@ var AudioLayer = ProtoLayer.extend({
 	exit: function()
 	{
 		this.player.pause();
-	},
-	
-	updateAttr: function()
-	{
-	
-		//get a copy of the old attributes into a variable
-		var newAttr = this.attr;
-		
-		if(this.editorLoaded){
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
-		}
-		
-		//set the attributes into the layer
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();
-	
-	
 	},
 	
 	getTemplate : function()
