@@ -83,7 +83,7 @@ var loadFiles = [
 	'order!layers/zeega.documentcloud',
 	
 	//players
-	'order!players/zeega.html5av',
+	
 	'order!players/zeega.av.publish',
 	'order!players/zeega.player.youtube',	
 	'order!players/zeega.rdio',

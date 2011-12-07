@@ -24,7 +24,7 @@ var loadFiles = [
 	'order!layers/zeega.rdio',
 	'order!layers/zeega.youtube',
 	
-	'order!players/zeega.html5av',
+	
 	'order!players/zeega.av.publish',
 	'order!players/zeega.player.youtube',	
 	       
