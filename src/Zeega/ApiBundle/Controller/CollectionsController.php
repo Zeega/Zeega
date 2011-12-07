@@ -40,10 +40,7 @@ class CollectionsController extends Controller
 
  		$response = new Response(json_encode($results));
  		$response->headers->set('Content-Type', 'application/json');
-        
-        // return the results
         return $response;
-        //return $this->render('ZeegaApiBundle:Collection:index.json.twig', array('name' => $response));
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
@@ -94,7 +91,7 @@ class CollectionsController extends Controller
     }   
         
     // post_collections POST   /api/collections.{_format}
-    public function getCollectionzAction()
+    public function postCollectionsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         if($user == "anon.")
@@ -119,8 +116,7 @@ class CollectionsController extends Controller
         $em->persist($item);
         $em->flush();
         
-        $serializer = new Serializer(array(new ItemCustomNormalizer()),
-        array('json' => new JsonEncoder()));
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
         $json = $serializer->serialize($item, 'json');
         
         $response = new Response($json);
@@ -136,6 +132,7 @@ class CollectionsController extends Controller
     public function postCollectionsItemsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
         
         $new_collection = $this->populateCollectionWithRequestData($request_data);
@@ -147,6 +144,13 @@ class CollectionsController extends Controller
         
         $em->persist($new_collection);
         $em->flush();
+        
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($new_collection, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
@@ -179,7 +183,13 @@ class CollectionsController extends Controller
         $em->persist($entity);
         $em->flush();
         
-        return new Response($entity->getId());
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($entity, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+       
     }
    
     // Private methods 
@@ -199,13 +209,6 @@ class CollectionsController extends Controller
         $title = $request_data->get('title');
         $new_items = $request_data->get('newItemIDS');
         
-        $logger = $this->get('logger');
-        $logger->info("REQUEST DATA BELOW");
-        $logger->info(json_encode($this->getRequest()));
-            
-        if (!isset($title)) 
-            throw $this->createNotFoundException('Collection title is not defined.');
-
         $collection = new Item();
         $collection->setType('Collection');
         $collection->setSource('Collection');
@@ -219,8 +222,11 @@ class CollectionsController extends Controller
         
         if (isset($new_items))
         {
+            $collection->setChildItemsCount(count($new_items));
+            $first = True;
             foreach($new_items as $item)
             {
+                
                 $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
 
                 if (!$child_entity) 
@@ -229,6 +235,11 @@ class CollectionsController extends Controller
                 }    
 
                 $collection->addItem($child_entity);
+                if($first == True)
+                {
+                    $collection->setThumbnailUrl($child_entity->getThumbnailUrl());
+                    $first = False;
+                }
             }
         }
         
