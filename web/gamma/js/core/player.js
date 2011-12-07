@@ -350,7 +350,7 @@ var Player = {
 			layerClass.lightLoad( layer );
 			
 			//add the layer content to the displayWindow
-			this.displayWindow.append( layerClass.display );
+			this.displayWindow.find('#preview-media').append( layerClass.display );
 			
 			//call the preload function for the layer
 			//add the layer class to the layer class array

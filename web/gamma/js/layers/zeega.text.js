@@ -22,7 +22,7 @@ var TextLayer = ProtoLayer.extend({
 		height:'200',
 		width:'400',
 		color: {r:255,g:255,b:255,a:1},
-		backgroundColor: {r:200,g:200,b:0,a:0},
+		backgroundColor: {r:0,g:0,b:0,a:0.5},
 		fontSize: 26,
 		columns: 1,
 		padding:5,
@@ -228,12 +228,6 @@ var TextLayer = ProtoLayer.extend({
 		
 	},
 	
-	onAttributeUpdate : function()
-	{
-		
-	},
-
-
 	drawThumb : function()
 	{
 		var _this  = this;
@@ -302,115 +296,63 @@ var TextLayer = ProtoLayer.extend({
 
 	},
 
-	preload : function()
+	preload : function( target )
 	{
 		
 		//need this to be accessable inside various functions
 		var _this  = this;
 
-		console.log('preload media text');
-		console.log(this.attr);
-		var previewFontSize = this.attr.size/600 * window.innerWidth;
-		var previewWidth = parseInt(parseFloat(this.attr.w)/6.0)+2;
-		var previewHeight = parseInt(parseFloat(this.attr.h)/4.0)+6;
-		var fontColor = 'rgba(' + this.attr.color.join(',') + ')';
-		//make dom object
-		//maybe these should all be wrapped in divs?
-		var div = $('<div />');
+		var previewFontSize = this.attr.fontSize/600 * window.innerWidth;
+		var previewWidth = parseInt( parseFloat( this.attr.width ) / 6.0 ) + 2;
+		var previewHeight = parseInt( parseFloat( this.attr.height ) / 4.0 ) + 6;
+		
+		var rgbaColor = 'rgba('+this.attr.color.r+','+this.attr.color.g+','+this.attr.color.b+','+this.attr.color.a+')';
+		var rgbaBGColor = 'rgba('+this.attr.backgroundColor.r+','+this.attr.backgroundColor.g+','+this.attr.backgroundColor.b+','+this.attr.backgroundColor.a+')';
+
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : '-100%',
-			'left' : '-100%',
-			'width' : previewWidth+'%',
-			'height' : previewHeight+'%',
-			'color' : fontColor,
-			'font-size' : previewFontSize + 'px'
+			'color' : rgbaColor,
+			'backgroundColor' : rgbaBGColor,
+			'height' : previewHeight +'%',
+			'width' : previewWidth +'%',
+			'font-size' : previewFontSize +'px',
+			'padding' : this.attr.padding + 'px',
+			'top' : '-1000%',
+			'left' : '-1000%'
 		};
-		div.addClass('text-layer-container')
-			.attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id,
+		
+		var content = $('<div />')
+			.css({
+				'color' : 'inherit',
+				'width' : '100%', 
+				'height' : '100%', 
+				'overflow' : 'auto',
+				'column-count' : this.attr.columns,
+				'-moz-column-count' : this.attr.columns,
+				'text-indent': this.attr.indent + 'px',
+
 			})
-			.css(cssObj);
+			.addClass( 'text-layer-content' )
+			.html( this.attr.content );
 
-		/*
-		if (this.attr.content == ''){
-		    div.addClass('text-layer-chrome-visible');
-		}
+		this.display
+			.css( cssObj )
+			.append( content );
 
-		UNTIL RESOLVED CHROME ALWAYS VISIBLE
+		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 
-		*/
-
- 		div.addClass('text-layer-chrome-visible');
-
-		div.draggable({
-
-			//when the image stops being dragged
-			stop : function(){ _this.updateAttr() },
-			containment: 'parent'
-		});
-
-		div.resizable({
-			stop : function (){ _this.updateAttr() },
-			containment:'parent',
-			minHeight: 50,
-			minWidth: 50,
-			autoHide: true
-		});
-
-		var content = $('<div />').css({
-						'width' : '100%', 
-						'height' : '100%', 
-						'overflow' : 'auto',
-						'column-count' : this.attr.columns,
-						'-moz-column-count' : this.attr.columns,
-						'padding-top' : this.attr.padding + 'px',
-						'padding-left' : this.attr.padding + 'px',
-						'padding-right' : this.attr.padding + 'px',
-						'padding-bottom' : this.attr.padding + 'px',
-						'text-indent': this.attr.indent + 'px',
-		                           })
-		                          .addClass('text-layer-content');
-
-		content.html( _this.attr.content );
-
-		div.append(content);
-		this.dom = div;
-		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
-		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
-		//$('#layer-preview-'+this.model.id).css('backgroundColor','rgba(' + this.attr.bgColor.join(',') + ')');
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		$('#layer-preview-'+this.model.id).children('.text-layer-content').aloha();
-
-		$('#zeega-player').find('#preview-media')
-			.append(this.dom)
-			.trigger('ready',{'id':this.model.id});
-			
+		target.trigger( 'ready' , { 'id' : this.model.id } );
 
 	},
 	
 	play : function( z )
 	{
-		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
-		$('#layer-preview-'+this.model.id).css('backgroundColor','rgba(' + this.attr.bgColor.join(',') + ')');
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		
-		
-		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
-	},
-	
-	pause : function()
-	{
-		// not needed
+		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
 	
 	stash : function()
 	{
-		this.dom.css({'top':"-100%",'left':"-100%"});
+		this.display.css({'top':"-1000%",'left':"-1000%"});
 	},
 	
 
