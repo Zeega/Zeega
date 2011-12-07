@@ -1,13 +1,9 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/ItemTags.orm.yml
 Zeega\IngestBundle\Entity\ItemTags:
     type: entity
-    oneToOne:
+    manyToOne:
         user:
             targetEntity: Zeega\UserBundle\Entity\User
-            joinColumn:
-                name: tag_user
-                referencedColumnName: id    
-    manyToOne:
         item:
             targetEntity: Item
             inversedBy: tags
@@ -23,13 +19,9 @@ Zeega\IngestBundle\Entity\ItemTags:
     id:
         item_id:
             type: bigint
-            generator: { strategy: AUTO }
         tag_id:
             type: bigint
     fields:
         tag_date_created:
             type: date
-            nullable: false
-        tag_user:
-            type: integer
             nullable: false

@@ -45,16 +45,6 @@ class Tag
     }
     
     /**
-     * Set id
-     *
-     * @param bigint $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * Get id
      *
      * @return bigint 

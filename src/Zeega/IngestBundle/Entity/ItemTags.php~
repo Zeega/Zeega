@@ -25,11 +25,6 @@ class ItemTags
     private $tag_date_created;
 
     /**
-     * @var integer $tag_user
-     */
-    private $tag_user;
-
-    /**
      * @var Zeega\UserBundle\Entity\User
      */
     private $user;
@@ -46,6 +41,16 @@ class ItemTags
 
 
     /**
+     * Set item_id
+     *
+     * @param bigint $itemId
+     */
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
+    }
+
+    /**
      * Get item_id
      *
      * @return bigint 
@@ -53,6 +58,16 @@ class ItemTags
     public function getItemId()
     {
         return $this->item_id;
+    }
+
+    /**
+     * Set tag_id
+     *
+     * @param bigint $tagId
+     */
+    public function setTagId($tagId)
+    {
+        $this->tag_id = $tagId;
     }
 
     /**
@@ -83,26 +98,6 @@ class ItemTags
     public function getTagDateCreated()
     {
         return $this->tag_date_created;
-    }
-
-    /**
-     * Set tag_user
-     *
-     * @param integer $tagUser
-     */
-    public function setTagUser($tagUser)
-    {
-        $this->tag_user = $tagUser;
-    }
-
-    /**
-     * Get tag_user
-     *
-     * @return integer 
-     */
-    public function getTagUser()
-    {
-        return $this->tag_user;
     }
 
     /**
