@@ -165,13 +165,11 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		
 		this.collection.bind("add", function(layer) {
 			// should draw the layer if it's in the node
-			console.log('ADDDD')
 			_this.add(layer);
 		});
 		
 		this.collection.bind("remove", function(layer) {
 			// should draw the layer if it's in the node
-			console.log('remoooooove')
 			_this.remove(layer);
 		});
 

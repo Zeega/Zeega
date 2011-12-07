@@ -141,7 +141,6 @@ var LayerTypeCollection = Backbone.Collection.extend({
 		this.renderCollection.reset();
 		
 		_.each( layers, function( layerID ){
-			console.log(layerID);
 			var layerModel = _this.get(layerID);
 			if( !_.isUndefined( layerModel ) )
 			{
