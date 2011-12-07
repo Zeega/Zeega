@@ -103,7 +103,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		var _this = this;
 		
 		$(this.el).empty();
-		_.each( _this.renderedViews , function(view){
+		_.each( _this._renderedViews , function(view){
 			$(this.el).append(view.render().el);
 		});
 		

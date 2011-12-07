@@ -79,7 +79,8 @@ var VisualLayerListView = Backbone.View.extend({
 	events : {
 		'click .delete-layer'		: 'delete',
 		'click .layer-title'		: 'expand',
-		'change #persist'			: 'persist'
+		'change #persist'			: 'persist',
+		'click .copy-to-next'		: 'copyToNext'
 	},
 	
 	//delete this layer from the DB and view
@@ -111,7 +112,12 @@ var VisualLayerListView = Backbone.View.extend({
 	persist : function()
 	{
 		if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverNodes(this.model);
-		else Zeega.removeLayerPersist(this.model);
+		else Zeega.removeLayerPersist( this.model );
+	},
+	
+	copyToNext : function()
+	{
+		Zeega.copyLayerToNextNode( this.model)
 	},
 	
 	getTemplate : function()
@@ -135,6 +141,7 @@ var VisualLayerListView = Backbone.View.extend({
 		layerTemplate += 		'<form id="layer-persist">';
 		layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
 		layerTemplate += 		'</form>';
+		layerTemplate += 		'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
 		layerTemplate += 	'</div>';
 		layerTemplate += '</div>';
 		
@@ -149,36 +156,56 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 
 	el : $('#layers-list-visual'),
 	
-	initialize : function()
+	initialize : function( options )
 	{
 		var _this = this;
 		
 		//make arrays to store the views in
-		this._renderedViews =[];
+		//this._renderedViews =[];
 		
 		this.collection.bind("add", function(layer) {
 			// should draw the layer if it's in the node
+			console.log('ADDDD')
 			_this.add(layer);
+		});
+		
+		this.collection.bind("remove", function(layer) {
+			// should draw the layer if it's in the node
+			console.log('remoooooove')
+			_this.remove(layer);
 		});
 
 	},
 	
-	add : function ( layer ){
+	add : function ( layer )
+	{
 		var layerView = new VisualLayerListView({ model : layer });
-		this._renderedViews.push( layerView );
-		$(this.el).prepend( layerView.render().el );
+		//this._renderedViews.push( layerView );
+		this.el.prepend( layerView.render().el );
 		
 	},
+	
+	remove : function(layer)
+	{
+		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
+		this._layerViews = _(this._layerViews).without(viewToRemove);
+		
+		Zeega.currentNode.noteChange();
+	},
+	
 	
 	render : function()
 	{
 		var _this = this;
 		
-		$(this.el).empty();
-		_.each( _this.renderedViews , function(view){
+		//this._renderedViews = [];
+		this.el.empty();
+		
+		/*
+		_.each( _this._renderedViews , function(view){
 			$(this.el).append(view.render().el);
 		});
-		return this;
+		*/
 	}
 
 });

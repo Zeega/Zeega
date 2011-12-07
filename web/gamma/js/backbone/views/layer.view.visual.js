@@ -13,14 +13,14 @@ var VisualLayerViewCollection = Backbone.View.extend({
 		this.editorViewCollection = new VisualLayerEditorViewCollection({ collection : this.collection });
 		this.listViewCollection = new VisualLayerListViewCollection({ collection : this.collection });
 		
-		this.editorViewCollection.render();
-		this.listViewCollection.render();
+		//this.reset();
 		
 		this.collection.bind('reset', function(layer){ _this.reset() });
 	},
 	
 	reset : function()
 	{
+		console.log('VisualLayerViewCollection.reset()')
 		this.editorViewCollection.render();
 		this.listViewCollection.render();
 	},
@@ -53,6 +53,4 @@ var VisualLayerViewCollection = Backbone.View.extend({
 	}
 	
 });
-
-
 

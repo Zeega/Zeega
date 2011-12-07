@@ -48,8 +48,7 @@ var LayerCollection = Backbone.Collection.extend({
 		//load with models
 		_.each(this.models, function(layer){ _this.addToLayerTypeCollection(layer, true) });
 		
-		_.each( this.layerCollectionArray, function(collection){ collection.initViewCollection() });
-
+		//_.each( this.layerCollectionArray, function(collection){ collection.initViewCollection() });
 	},
 
 	
@@ -66,18 +65,18 @@ var LayerCollection = Backbone.Collection.extend({
 		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
 		var type = layerClass.layerType.toLowerCase();
 		
-		//restore without evals
 		if( _.isUndefined( this.layerCollectionArray[ type ]) )
 		{
 			this.layerCollectionArray[ type ] = new LayerTypeCollection;
 			this.layerCollectionArray[ type ].type = type
 			this.layerCollectionArray[ type ].initViewCollection();
 		}
+		
 		this.layerCollectionArray[ type ].type = type
-
+		
 		//pass as silent if it's not the current node being displayed
-		if(render) this.layerCollectionArray[ type ].add(layer);
-		else this.layerCollectionArray[ type ].add(layer, {silent:true} );
+		if( render ) this.layerCollectionArray[ type ].add(layer);
+		else this.layerCollectionArray[ type ].add( layer, { silent : true } );
 		
 	},
 	
@@ -86,10 +85,9 @@ var LayerCollection = Backbone.Collection.extend({
 		// should render the current node
 		
 		//cycle through each view collection
-		_.each( this.layerCollectionArray, function(layerCollection){
-			layerCollection.render( _.compact(node.get('layers')) );
+		_.each( this.layerCollectionArray, function(layerTypeCollection){
+			layerTypeCollection.render( _.compact(node.get('layers')) );
 		})
-
 	}
 	
 });
@@ -112,10 +110,9 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	
 	addToRenderCollection : function( layer )
 	{
-
 		var layerModel = this.get(layer.id);
 		if( !_.isUndefined( layerModel ) )
-		{
+		{	
 			//add it to the view collection
 			this.renderCollection.add( layerModel );
 		}
@@ -132,10 +129,11 @@ var LayerTypeCollection = Backbone.Collection.extend({
 	
 	remove : function( layer )
 	{
-		console.log('LayerTypeCollection REMOVE LAYER');
 		this.renderCollection.remove(layer);
 	},
 	
+	
+	//this is getting called twice???
 	render : function( layers )
 	{
 		var _this = this;
@@ -143,6 +141,7 @@ var LayerTypeCollection = Backbone.Collection.extend({
 		this.renderCollection.reset();
 		
 		_.each( layers, function( layerID ){
+			console.log(layerID);
 			var layerModel = _this.get(layerID);
 			if( !_.isUndefined( layerModel ) )
 			{
