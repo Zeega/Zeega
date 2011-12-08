@@ -14,7 +14,7 @@
 				<div id='route-publish'>
 					
 					<ul class='pill-buttons'>
-						<!--<li><a id='share' href='http://www.getjavascript.com' onclick='shareButton();return false;'>Share</a></li>-->
+						<li><a id='share-project' href='#'>Share</a></li>
 						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 						<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
 					</ul>
@@ -32,7 +32,7 @@
 					
 					
 						
-					<div id="sidebar" class='clearfix' >
+					<div id="sidebar" class='hidden clearfix' >
 					
 						
 						<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
@@ -199,15 +199,34 @@
 			</div>
 			<div class="modal-footer">
 				<span class='admin-submit'>
-				<br />
-				
+					<br />
 					<a href='#' id='close-modal' class='btn secondary'>close</a>
 				</span>
 			</div>
-			
-				
+		</div> <!-- modal -->
+		
+		<div id="share-project-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Share Your Project</h3>
 			</div>
-		<div >
+			<div class="modal-body clearfix">
+				<p>Copy and share this link</p>
+				<a href='{{hostname}}{{directory}}project//view' id='project-link' target='blank'>{{projecttitle}} {{hostname}}{{directory}}project//view</a>
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
+		
+		
+		
+		<div>
+			
+		
 
 		
 		

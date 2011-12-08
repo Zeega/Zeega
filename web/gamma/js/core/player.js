@@ -15,6 +15,8 @@ var Player = {
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
+	viewportRatio : 1.5,
+	
 	currentRoute : null,
 	currentNode : null,
 	
@@ -83,6 +85,26 @@ var Player = {
 		$('body').append( this.displayWindow );
 		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
 		
+		//get the current viewport resolution
+		var viewWidth = window.innerWidth;
+		var viewHeight = window.innerHeight;
+		
+		var cssObj = {};
+		if( viewWidth / viewHeight > this.viewportRatio )
+		{
+			cssObj.height = viewHeight +'px';
+			cssObj.width = viewHeight * this.viewportRatio +'px'
+		}else{
+			cssObj.height = viewWidth / this.viewportRatio +'px';
+			cssObj.width = viewWidth +'px'
+		}
+		
+		//constrain proportions in player
+		this.displayWindow.find('#preview-media').css( cssObj );
+		
+		//hide the editor underneath to prevent scrolling
+		$('#wrapper').hide();
+		
 		//Zeega.clearCurrentNode();
 		
 		this.displayWindow.fadeIn();
@@ -97,6 +119,9 @@ var Player = {
 	*/
 	close : function()
 	{
+		//unhide editor
+		$('#wrapper').show();
+		
 		document.webkitCancelFullScreen();
 		
 		console.log('Zeega Player Close');
@@ -115,7 +140,7 @@ var Player = {
 			_this.removeAllVideoElements();
 			_this.reset();
 			//All video elements must be removed prior to removing the zeega player dom element
-			//$(this).remove() 
+			$(this).remove(); 
 		}); 
 		
 		if(this.zeega)
@@ -176,6 +201,26 @@ var Player = {
 			}
 		});
 		
+		//resize player on window resize
+		window.onresize = function(event)
+		{
+			//resize ##zeega-player
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > _this.viewportRatio )
+			{
+				cssObj.height = viewHeight +'px';
+				cssObj.width = viewHeight * _this.viewportRatio +'px'
+			}else{
+				cssObj.height = viewWidth / _this.viewportRatio +'px';
+				cssObj.width = viewWidth +'px'
+			}
+
+			//constrain proportions in player
+			_this.displayWindow.find('#preview-media').css( cssObj );
+		}
 		
 		$('#zeega-player').keydown(function(event) {
   		console.log(event.which+":keypress");
@@ -658,8 +703,19 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img  height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
-		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
+		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
+		html += 		"<div id='preview-left' class='preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-right' class='preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img height='75' width='35' onclick='Player.goRight();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-media'></div>";
+		html += 		"<div id='citation'><ul class='clearfix'></ul></div>";
+		html += 	"</div></div>";
+		
 		return html;
 	},
 	

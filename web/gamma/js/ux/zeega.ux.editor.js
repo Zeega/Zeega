@@ -122,20 +122,11 @@ function search(triggerElement, discardCurrentResultSet)
 	return false;	
 }
 
-function shareButton()
-{
-	
-}
-
 function embedButton()
 {
-    //console.log(Zeega.helpers.getHost());
 	
 	var ex = Zeega.exportProject(true)
 	
-	console.log(ex);
-	
-		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -150,6 +141,19 @@ function embedButton()
 
 	return false;
 	
+}
+
+function shareButton()
+{	
+	$('#share-project-modal').modal('show');
+	
+	//$('#project-link').attr('href','')
+	
+	$('#share-project-modal').find('#close-modal').mouseup(function(){
+		$('#share-project-modal').modal('hide');
+	})
+
+	return false;
 }
 
 
@@ -231,7 +235,10 @@ $(document).ready(function(){
 		}
 	});
 	
-	
+	//share button
+	$('#share-project').click(function(){
+		shareButton();
+	});
 	
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
