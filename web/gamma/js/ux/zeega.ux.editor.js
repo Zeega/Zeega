@@ -134,8 +134,7 @@ function embedButton()
 		$('#export-json').select();
 	});
 	
-	$('#close-modal').mouseup(function(){
-		console.log('select all export');
+	$('#export').find('#close-modal').mouseup(function(){
 		$('#export').modal('hide');
 	})
 
