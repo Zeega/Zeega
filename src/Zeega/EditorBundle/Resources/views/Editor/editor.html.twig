@@ -34,12 +34,42 @@
 						
 					<div id="sidebar" class='clearfix' >
 					
+	
+						<div id='layer-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Layers' style='cursor:pointer'>
+							<div class='bar-title'><a href="#" id='lv-toggle' class='expand-toggle' >–</a>&nbsp;Layers</div>
+						</div>
+						
+						<div id='layers'>
+						
+							<div id='new-layer' class='clearfix'>
+								
+								<ul>
+
+									<li class='new-layer-icon' title='Click to add new Geo Layer' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+									<li class='new-layer-icon' title='Click to add new Text Layer' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+									<!-- 
+									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
+									-->
+								</ul>
+							</div>
+						
+							<ul id="layers-list-visual">
+								
+								<div class=​"alert-message warning">
+									<strong>No layers to display. Add some?</strong>
+								</div>
+								
+							</ul>
+
+						</div> <!-- layers -->
+						
+						
 						
 						<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
 							<div class='bar-title'><a href="#" id='iv-toggle' class='expand-toggle' >–</a>&nbsp;Items</div>
 						</div>
 							
-							<div id='database'>
+						<div id='database'>
 							<div id="db-nav-controls">
 					
 								<div id='database-search' class='clearfix'>
@@ -80,36 +110,7 @@
 							<div id='tab-database-slide-window'></div>
 						</div><!-- database -->
 						
-							
-						<div id='layer-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Layers' style='cursor:pointer'>
-							<div class='bar-title'><a href="#" id='lv-toggle' class='expand-toggle' >–</a>&nbsp;Layers</div>
-						</div>
 						
-						<div id='layers'>
-						
-								<div id='new-layer' class='clearfix'>
-								
-								<ul>
-
-									<li class='new-layer-icon' title='Click to add new Geo Layer' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
-									<li class='new-layer-icon' title='Click to add new Text Layer' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
-									<!-- 
-									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
-									-->
-
-								</div>
-						
-								<ul id="layers-list-visual">
-									
-									<div class=​"alert-message warning">
-										<strong>No layers to display. Add some?</strong>
-									</div>
-									
-								</ul>
-
-							</div>
-
-						</div> <!-- layers -->
 				
 					</div> <!-- sidebar -->
 					
