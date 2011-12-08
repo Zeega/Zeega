@@ -3,22 +3,12 @@
 namespace Zeega\IngestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use DateTime;
+
 /**
  * Zeega\IngestBundle\Entity\ItemTags
  */
 class ItemTags
 {
-    /**
-     * @var bigint $item_id
-     */
-    private $item_id;
-
-    /**
-     * @var bigint $tag_id
-     */
-    private $tag_id;
-
     /**
      * @var date $tag_date_created
      */
@@ -38,52 +28,7 @@ class ItemTags
      * @var Zeega\IngestBundle\Entity\Tag
      */
     private $tag;
-	    public function __construct()
-    {
- 
-        $this->tag_date_created = new DateTime(NULL);
-    }
 
-
-    /**
-     * Set item_id
-     *
-     * @param bigint $itemId
-     */
-    public function setItemId($itemId)
-    {
-        $this->item_id = $itemId;
-    }
-
-    /**
-     * Get item_id
-     *
-     * @return bigint 
-     */
-    public function getItemId()
-    {
-        return $this->item_id;
-    }
-
-    /**
-     * Set tag_id
-     *
-     * @param bigint $tagId
-     */
-    public function setTagId($tagId)
-    {
-        $this->tag_id = $tagId;
-    }
-
-    /**
-     * Get tag_id
-     *
-     * @return bigint 
-     */
-    public function getTagId()
-    {
-        return $this->tag_id;
-    }
 
     /**
      * Set tag_date_created

@@ -1,6 +1,7 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/ItemTags.orm.yml
 Zeega\IngestBundle\Entity\ItemTags:
     type: entity
+    repositoryClass: Zeega\IngestBundle\Repository\ItemTagsRepository
     manyToOne:
         user:
             targetEntity: Zeega\UserBundle\Entity\User
@@ -17,10 +18,10 @@ Zeega\IngestBundle\Entity\ItemTags:
                 name: tag_id
                 referencedColumnName: id
     id:
-        item_id:
-            type: bigint
-        tag_id:
-            type: bigint
+        item:
+            associationKey: true
+        tag:
+            associationKey: true
     fields:
         tag_date_created:
             type: date

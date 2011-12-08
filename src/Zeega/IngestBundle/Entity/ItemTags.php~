@@ -10,16 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemTags
 {
     /**
-     * @var bigint $item_id
-     */
-    private $item_id;
-
-    /**
-     * @var bigint $tag_id
-     */
-    private $tag_id;
-
-    /**
      * @var date $tag_date_created
      */
     private $tag_date_created;
@@ -39,46 +29,6 @@ class ItemTags
      */
     private $tag;
 
-
-    /**
-     * Set item_id
-     *
-     * @param bigint $itemId
-     */
-    public function setItemId($itemId)
-    {
-        $this->item_id = $itemId;
-    }
-
-    /**
-     * Get item_id
-     *
-     * @return bigint 
-     */
-    public function getItemId()
-    {
-        return $this->item_id;
-    }
-
-    /**
-     * Set tag_id
-     *
-     * @param bigint $tagId
-     */
-    public function setTagId($tagId)
-    {
-        $this->tag_id = $tagId;
-    }
-
-    /**
-     * Get tag_id
-     *
-     * @return bigint 
-     */
-    public function getTagId()
-    {
-        return $this->tag_id;
-    }
 
     /**
      * Set tag_date_created

@@ -32,7 +32,7 @@ class ItemsController extends Controller
     }   
     
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
-    public function getItemzTagsAction($itemId)
+    public function postItemTagsAction($itemId)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         if($user == "anon.")
@@ -62,7 +62,6 @@ class ItemsController extends Controller
                 $tag = new Tag();
                 $tag->setName($tagName);
                 $tag->setDateCreated(new \DateTime("now"));
-                $tag->setUser($user->getId());
                 $em->persist($tag);
                 $em->flush();
             }
@@ -100,8 +99,6 @@ class ItemsController extends Controller
         // this is terrible...
         foreach($items_list as $item)
         {
-            
-            
             $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
 
             if (!$child_entity) 

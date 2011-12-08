@@ -154,4 +154,14 @@ class Tag
     {
         return $this->item;
     }
+
+    /**
+     * Set id
+     *
+     * @param bigint $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 }
