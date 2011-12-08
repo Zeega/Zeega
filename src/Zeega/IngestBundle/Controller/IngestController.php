@@ -88,40 +88,42 @@ class IngestController extends Controller
 				$hashtag = '/\#([A-Za-z]*)/';
 		
 				if(preg_match_all($hashtag, $text, $matches)){
-					foreach($matches[1] as $match){
-						$candidateTag=strtolower($match);
-						$tag=NULL;
-						$tag=$this->getDoctrine()
-									->getRepository('ZeegaIngestBundle:Tag')
-									->findOneByName($candidateTag);
-						if(!is_object($tag)){
-							$tag=new Tag;
-							$tag->setName($candidateTag);
-							$tag->setUser($user);
-							$em->persist($tag);
-							
-							
-						
-						$itemTags= new ItemTags();
 					
-						$em->persist($item);
-						$em->persist($tag);
-						$em->flush();
+					foreach($matches[1] as $match){
 						
-						$itemTags->setTag($tag);
-						$itemTags->setUser($user);
-						$itemTags->setItem($item);
-						$itemTags->setItemId($item->getId());
-						$itemTags->setTagId($tag->getId());
-						//$itemTags->setTagDateCreated(new DateTime(NULL));
-						$item->addItemTags($itemTags);
+							$candidateTag=strtolower($match);
+							$tag=NULL;
+							$tag=$this->getDoctrine()
+										->getRepository('ZeegaIngestBundle:Tag')
+										->findOneByName($candidateTag);
+							if(!is_object($tag)){
+								$tag=new Tag;
+								$tag->setName($candidateTag);
+								$tag->setUser($user);
+								$em->persist($tag);
+								
+							}	
+							
+							$itemTags= new ItemTags();
 						
+							$em->persist($item);
+							
+							$em->flush();
+							
+							$itemTags->setTag($tag);
+							$itemTags->setUser($user);
+							$itemTags->setItem($item);
+							$itemTags->setItemId($item->getId());
+							$itemTags->setTagId($tag->getId());
+							//$itemTags->setTagDateCreated(new DateTime(NULL));
+							$item->addItemTags($itemTags);
+							
+							
+							$em->persist($itemTags);
+							$em->flush();
+							
 						
-						$em->persist($itemTags);
-						$em->flush();
-						
-						}
-						
+							
 					}
 				}
 				
