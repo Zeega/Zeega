@@ -316,7 +316,7 @@ var Zeega = {
 							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
-							_this.currentNode.noteChange();
+							node.noteChange();
 							
 						}
 					});
@@ -325,7 +325,7 @@ var Zeega = {
 				console.log('this is an old layer');
 				//prepend the layer id into the node layers array
 				this.updateAndSaveNodeLayer(node,layer);
-				Zeega.currentNode.noteChange();
+				node.noteChange();
 				//node.updateThumb();
 			}
 		}
