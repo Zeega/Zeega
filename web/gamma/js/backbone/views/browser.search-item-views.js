@@ -31,6 +31,8 @@ var BrowserCollectionView = BrowserItemView.extend({
 	
 	initialize : function() {
 		this.el = $("#browser-results-collection-template").clone();
+		this.el.removeAttr('id');
+
 		var thisView = this;
 		$(this.el).droppable({
 			accept : '.browser-results-image',
@@ -73,13 +75,13 @@ var BrowserCollectionView = BrowserItemView.extend({
 	{
 		
 		this.el.addClass('browser-results-collection');
-		this.el.removeAttr('id');
+		
 
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
+		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('img').attr('title', this.model.get('title'));
 
-		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		this.el.find('.browser-item-count').text('NULL items');
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
 		this.el.find('.title').text(this.model.get('title'));
 
 		return this;
