@@ -10,24 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemTags
 {
     /**
-     * @var bigint $item_id
-     */
-    private $item_id;
-
-    /**
-     * @var bigint $tag_id
-     */
-    private $tag_id;
-
-    /**
      * @var date $tag_date_created
      */
     private $tag_date_created;
-
-    /**
-     * @var integer $tag_user
-     */
-    private $tag_user;
 
     /**
      * @var Zeega\UserBundle\Entity\User
@@ -44,26 +29,6 @@ class ItemTags
      */
     private $tag;
 
-
-    /**
-     * Get item_id
-     *
-     * @return bigint 
-     */
-    public function getItemId()
-    {
-        return $this->item_id;
-    }
-
-    /**
-     * Get tag_id
-     *
-     * @return bigint 
-     */
-    public function getTagId()
-    {
-        return $this->tag_id;
-    }
 
     /**
      * Set tag_date_created
@@ -83,26 +48,6 @@ class ItemTags
     public function getTagDateCreated()
     {
         return $this->tag_date_created;
-    }
-
-    /**
-     * Set tag_user
-     *
-     * @param integer $tagUser
-     */
-    public function setTagUser($tagUser)
-    {
-        $this->tag_user = $tagUser;
-    }
-
-    /**
-     * Get tag_user
-     *
-     * @return integer 
-     */
-    public function getTagUser()
-    {
-        return $this->tag_user;
     }
 
     /**

@@ -65,4 +65,3 @@ services:
         class:        Zeega\IngestBundle\ItemLoader
     import_widget:
         class:      Zeega\IngestBundle\ImportWidget
-

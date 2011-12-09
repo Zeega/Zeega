@@ -3,7 +3,11 @@ namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+
 use Zeega\IngestBundle\Entity\Item;
+use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 
 class CollectionsController extends Controller
 {
@@ -36,10 +40,7 @@ class CollectionsController extends Controller
 
  		$response = new Response(json_encode($results));
  		$response->headers->set('Content-Type', 'application/json');
-        
-        // return the results
-        //return $response;
-        return $this->render('ZeegaApiBundle:Collection:index.json.twig', array('name' => $response));
+        return $response;
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
@@ -114,14 +115,24 @@ class CollectionsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();
-
-        return new Response($item->getId());
+        
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($item, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+        //$json = $serializer->serialize($item, 'json');
+        //return new Response(json_encode($item));
+        
+        //return new Response($item->getId());
     }
     
     // post_collections_items   POST   /api/collections/items.{_format}
     public function postCollectionsItemsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
         
         $new_collection = $this->populateCollectionWithRequestData($request_data);
@@ -134,7 +145,12 @@ class CollectionsController extends Controller
         $em->persist($new_collection);
         $em->flush();
         
-        return new Response(json_encode($new_collection));
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($new_collection, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
@@ -149,10 +165,14 @@ class CollectionsController extends Controller
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
         $items_list = $this->getRequest()->request->get('newItemIDS');
-
+        $logger = $this->get('logger');
+        $logger->info('We just got the logger');        
+        $logger->info(var_dump($this->getRequest()->request->get('newItemIDS')));
         // this is terrible...
         foreach($items_list as $item)
         {
+            
+            
             $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
 
             if (!$child_entity) 
@@ -167,7 +187,30 @@ class CollectionsController extends Controller
         $em->persist($entity);
         $em->flush();
         
-        return new Response($entity->getId());
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        $json = $serializer->serialize($entity, 'json');
+        
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+       
+    }
+   
+   	// delete_collection    DELETE /api/collections/{collection_id}.{_format}
+    public function deleteCollectionAction($collection_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+     	
+     	if (!$collection) 
+        {
+            throw $this->createNotFoundException('Unable to find a Collection with the id ' . $collection_id);
+        }
+        
+    	$em->remove($collection);
+    	$em->flush();
+    	
+    	return new Response('SUCCESS',200);
     }
    
     // Private methods 
@@ -187,13 +230,6 @@ class CollectionsController extends Controller
         $title = $request_data->get('title');
         $new_items = $request_data->get('newItemIDS');
         
-        $logger = $this->get('logger');
-        $logger->info("REQUEST DATA BELOW");
-        $logger->info(json_encode($this->getRequest()));
-            
-        if (!isset($title)) 
-            throw $this->createNotFoundException('Collection title is not defined.');
-
         $collection = new Item();
         $collection->setType('Collection');
         $collection->setSource('Collection');
@@ -207,8 +243,11 @@ class CollectionsController extends Controller
         
         if (isset($new_items))
         {
+            $collection->setChildItemsCount(count($new_items));
+            $first = True;
             foreach($new_items as $item)
             {
+                
                 $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
 
                 if (!$child_entity) 
@@ -217,6 +256,11 @@ class CollectionsController extends Controller
                 }    
 
                 $collection->addItem($child_entity);
+                if($first == True)
+                {
+                    $collection->setThumbnailUrl($child_entity->getThumbnailUrl());
+                    $first = False;
+                }
             }
         }
         

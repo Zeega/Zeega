@@ -3,7 +3,7 @@
 namespace Zeega\IngestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use DateTime;
 /**
  * Zeega\IngestBundle\Entity\Tag
  */
@@ -42,16 +42,7 @@ class Tag
     public function __construct()
     {
         $this->item = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Set id
-     *
-     * @param bigint $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        $this->date_created = new DateTime(NULL);
     }
 
     /**
@@ -162,5 +153,15 @@ class Tag
     public function getItem()
     {
         return $this->item;
+    }
+
+    /**
+     * Set id
+     *
+     * @param bigint $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 }

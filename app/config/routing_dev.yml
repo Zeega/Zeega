@@ -21,9 +21,9 @@ layers:
   type:     rest
   resource: Zeega\EditorBundle\Controller\LayersController
   
-items:
-  type:     rest
-  resource: Zeega\IngestBundle\Controller\ItemsController
+#items:
+#  type:     rest
+#  resource: Zeega\IngestBundle\Controller\ItemsController
   
 playgrounds:
   type:     rest

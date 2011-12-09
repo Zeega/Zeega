@@ -4,6 +4,16 @@ global_search:
     requirements: { _format: (xml|json), _method: GET }
     
 collections:
-  type:     rest
-  prefix:   api
-  resource: Zeega\ApiBundle\Controller\CollectionsController
+    type:     rest
+    prefix:   api
+    resource: Zeega\ApiBundle\Controller\CollectionsController
+
+items:
+    type:     rest
+    prefix:   api
+    resource: Zeega\ApiBundle\Controller\ItemsController 
+  
+tags:
+    type:     rest
+    prefix:   api
+    resource: Zeega\ApiBundle\Controller\TagsController
