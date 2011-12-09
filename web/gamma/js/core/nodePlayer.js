@@ -38,14 +38,14 @@ var NodePlayer = {
 	*/
 	drawNode : function( data )
 	{
-		
 		_.each( data, function( layer ){
 			console.log(layer);
 			if(layer.type=='Geo'||layer.type=='Image'||layer.type=='Text'||layer.type=='DocumentCloud'){
 				eval( 'var layerClass = new '+ layer.type +'Layer();' );
 				layerClass.lightLoad( layer )
 				layer.layerClass = layerClass;
-				layer.layerClass.drawThumb();
+
+				$('#zeega-player').append( layerClass.display );
 			}
 			
 			// Loading video/youtube/audio layers breaks the headless browser for some reason

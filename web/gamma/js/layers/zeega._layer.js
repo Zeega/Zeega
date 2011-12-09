@@ -183,7 +183,7 @@ var ProtoLayer = Class.extend({
 	},
 	
 	//necessary?
-	lightLoad : function(model)
+	lightLoad : function( model )
 	{
 		//make it possible to load objects and not models.
 		this.model = model;
@@ -197,7 +197,11 @@ var ProtoLayer = Class.extend({
 		this.type = model.type;
 		this.zIndex = model.zindex;
 		
-		this.display = $('<div>');
+		this.display = $('<div>').css({
+			'position' : 'absolute'
+		});
+		
+		this.thumb();
 		
 	},
 	
