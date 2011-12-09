@@ -34,8 +34,50 @@ var BrowserCollectionView = BrowserItemView.extend({
 		this.el.removeAttr('id');
 
 		var thisView = this;
+		
+		/*
+			Collections are both draggable and droppable. You can drag a collection into
+			another collection.
+
+			TODO: Add permissions to this so that you can only add collections to your own collections.
+		*/
+
+		$(this.el).draggable({
+			distance : 10,
+			cursor : 'crosshair',
+			appendTo : 'body',
+			cursorAt : { 
+				top : -5,
+				left : -5
+			},
+			opacity : .75,
+			//helper : 'clone',
+			helper : function(){
+				var drag = $(this).find('.browser-img-large')
+					.clone()
+					.css({
+						'overflow':'hidden',
+						'background':'white'
+					});
+				return drag;
+			},
+			
+			//init the dragged item variable
+			start : function(){
+				$(this).draggable('option','revert',true);
+				ZeegaBrowser.draggedItem = thisView.model;
+			},
+				
+			/**	stuff that happens when the user drags the item into a node **/	
+				
+			stop : function(){
+				ZeegaBrowser.draggedItem = null;
+			}
+			
+		});
+
 		$(this.el).droppable({
-			accept : '.browser-results-image',
+			accept : '.browser-results-image, .browser-results-collection',
 			hoverClass : 'browser-add-item-to-collection-hover',
 			tolerance : 'pointer',
 
