@@ -110,20 +110,22 @@ $(document).ready(function() {
 	//For filters - testing visual stuff - disabled
 	//$('.time, .space').click( toggleFilterDrawer);
 
-	//Set up toggling between My Media/All Media and Items/Collections
-	$('#browser-toggle-items-vs-collections li, #browser-toggle-all-media-vs-my-media li,').click(function(){
+	//Switches the results drawer between items and collections
+	$('#browser-toggle-items-vs-collections li').click(function(){
+
 		$(this).closest('li').removeClass('browser-unselected-toggle');
 		$(this).closest('li').addClass('browser-selected-toggle');
 		$(this).siblings().removeClass('browser-selected-toggle');
 		$(this).siblings().addClass('browser-unselected-toggle');
 
-		return false;
-	});
-
-	//Switches the results drawer between items and collections
-	$('#browser-toggle-items-vs-collections li').click(function(){
-		$('#browser-results-collections').toggle();
-		$('#browser-results-items').toggle();
+		
+		if ($(this).attr('id') == 'browser-collection-count'){
+			$('#browser-results-collections').show();
+			$('#browser-results-items').hide();
+		} else {
+			$('#browser-results-collections').hide();
+			$('#browser-results-items').show();
+		}
 		ZeegaBrowser.renderResults();
 		return false;
 	});
@@ -131,9 +133,14 @@ $(document).ready(function() {
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(){
 		
+		$(this).closest('li').removeClass('browser-unselected-toggle');
+		$(this).closest('li').addClass('browser-selected-toggle');
+		$(this).siblings().removeClass('browser-selected-toggle');
+		$(this).siblings().addClass('browser-unselected-toggle');
 
-		if ($(this).text() == "My Media"){
+		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
+
 		}else {
 
 			ZeegaBrowser.search.set({user:-2});
@@ -163,10 +170,12 @@ $(document).ready(function() {
 				newGuy.save({ title:'New collection ' + Math.floor(Math.random()*1000)}, 
 							{
 								success: function(model, response) { 
+									ZeegaBrowser.draggedItem = null;
 									ZeegaBrowser.myCollectionsModel.add(model, {at: 0});
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
+				 					ZeegaBrowser.draggedItem = null;
 				 					console.log("Error creating a new collection.");
 				 					console.log(response);
 				 				}

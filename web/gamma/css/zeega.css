@@ -208,7 +208,7 @@
 }
 #browser-collection-filter{
 	border:1px solid #ccc;
-	padding:4px;
+	padding:5px 4px 4px 4px;
 	color:#ccc;
 	margin-left:20px;
 	float:left;
@@ -223,11 +223,9 @@
 	margin-left:5px;
 	font-weight:bold;
 }
-#browser-remove-collection-filter:hover{
-	cursor:pointer;
-}
+
 #browser-collection-filter-title{
-	
+	margin-right:5px;
 }
 .browser-add-item-to-collection-hover{
 	background-color:#F15A29 !important;

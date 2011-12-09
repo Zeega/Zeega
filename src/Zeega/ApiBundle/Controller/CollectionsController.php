@@ -165,9 +165,7 @@ class CollectionsController extends Controller
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
         $items_list = $this->getRequest()->request->get('newItemIDS');
-        $logger = $this->get('logger');
-        $logger->info('We just got the logger');        
-        $logger->info(var_dump($this->getRequest()->request->get('newItemIDS')));
+        
         // this is terrible...
         foreach($items_list as $item)
         {

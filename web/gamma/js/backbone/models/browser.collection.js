@@ -14,11 +14,12 @@ var BrowserCollection = Backbone.Model.extend({
 	defaults : {
 		"title" 	: 'Untitled',
 		"type"	: 'collection',
-		"newItemIDS" :[]
+		
 	},
 	
 	initialize : function()
 	{
+		this.set({"newItemIDS": new Array()});
 	},
 	addNewItemID : function(newID){
 		var ids= this.get("newItemIDS");
@@ -27,8 +28,8 @@ var BrowserCollection = Backbone.Model.extend({
 	},
 	parse : function(data){
 		this.set(data);
-		
-		this.set({"newItemIDS": []}); //reset the new item ids
+		this.unset("newItemIDS", {"silent":"true"});
+		this.set({"newItemIDS": new Array()}); //reset the new item ids
 
 		var test = 'blah';
 		

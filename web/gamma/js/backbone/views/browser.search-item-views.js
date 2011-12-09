@@ -100,11 +100,12 @@ var BrowserCollectionView = BrowserItemView.extend({
 				thisView.model.save({ }, 
 							{
 								success: function(model, response) { 
-									ZeegaBrowser.draggedItem.id = null;
+									ZeegaBrowser.draggedItem = null;
 									//this should take care of incrementing item count?
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
+				 					ZeegaBrowser.draggedItem = null;
 				 					console.log("Error updating a collection with a new item.");
 				 					console.log(response);
 				 				}
