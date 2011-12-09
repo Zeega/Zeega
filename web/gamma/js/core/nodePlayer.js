@@ -43,9 +43,9 @@ var NodePlayer = {
 			if(layer.type=='Geo'||layer.type=='Image'||layer.type=='Text'||layer.type=='DocumentCloud'){
 				eval( 'var layerClass = new '+ layer.type +'Layer();' );
 				layerClass.lightLoad( layer )
-				layer.layerClass = layerClass;
+				//layer.layerClass = layerClass;
 
-				$('#zeega-player').append( layerClass.display );
+				$('#zeega-player').append( layerClass.thumbnail );
 			}
 			
 			// Loading video/youtube/audio layers breaks the headless browser for some reason
