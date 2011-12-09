@@ -167,7 +167,7 @@ a.white:hover
 	float:left;
 	height:18px;
 	width:18px;
-	background-image:url('../images/zicons-grey-18.png')
+	background-image:url('../images/zicons-grey-18.png');
 	background-repeat: no-repeat;
 }
 
@@ -181,7 +181,7 @@ a.white:hover
 .zicon-map-marker-04{background-position:-33px -114px}
 .zicon-map-marker-05{background-position: 0 -114px}
 
-.zicon-audio{background-position: -66 -341px}
+.zicon-audio{background-position: -66px -341px}
 .zicon-image{background-position: -98px -58px}
 .zicon-geo{background-position: 0 -114px}
 .zicon-text{background-position: 0 -142px}
@@ -534,10 +534,9 @@ body
 .node-update-overlay
 {
 	display:none;
-	border: solid 2px yellow;
-	height:46px;
-	width:46px;
-	background-color: gray;
+	background-image:url('../images/stripes.png');
+	height:100%;
+	width:100%;
 	opacity: 0.6;
 
 }
