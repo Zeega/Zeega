@@ -142,7 +142,7 @@ $(document).ready(function() {
 	});
 	
 	$('#browser-create-new-collection').droppable({
-			accept : '.browser-results-image',
+			accept : '.browser-results-image, .browser-results-collection',
 			hoverClass : 'browser-create-new-collection-hover',
 			tolerance : 'pointer',
 
