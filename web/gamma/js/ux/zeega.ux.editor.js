@@ -122,20 +122,11 @@ function search(triggerElement, discardCurrentResultSet)
 	return false;	
 }
 
-function shareButton()
-{
-	
-}
-
 function embedButton()
 {
-    //console.log(Zeega.helpers.getHost());
 	
 	var ex = Zeega.exportProject(true)
 	
-	console.log(ex);
-	
-		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -143,13 +134,25 @@ function embedButton()
 		$('#export-json').select();
 	});
 	
-	$('#close-modal').mouseup(function(){
-		console.log('select all export');
+	$('#export').find('#close-modal').mouseup(function(){
 		$('#export').modal('hide');
 	})
 
 	return false;
 	
+}
+
+function shareButton()
+{	
+	$('#share-project-modal').modal('show');
+	
+	//$('#project-link').attr('href','')
+	
+	$('#share-project-modal').find('#close-modal').mouseup(function(){
+		$('#share-project-modal').modal('hide');
+	})
+
+	return false;
 }
 
 
@@ -160,24 +163,6 @@ function addLayer(type)
 	var newLayer = new Layer({'type':type});
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
-}
-
-function toggleWorkspace(el)
-{
-	var attr = Zeega.currentNode.get('attr');
-	var w = $(el).closest('.wrapper').find('.workspace');
-	if(w.is(':hidden'))
-	{
-		w.show('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('–');
-		attr.editorHidden = false;
-	}else{
-		w.hide('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('+');
-		attr.editorHidden = true;
-	}
-	Zeega.currentNode.set({'attr':attr});
-	Zeega.currentNode.save();
 }
 
 function expandLayer(el)
@@ -209,10 +194,9 @@ function closeOpenCitationTabs()
 
 
 
-$(document).ready(function() {
+$(document).ready(function(){
 	
-	
-		$('#add-node').draggable({
+	$('#add-node').draggable({
 		axis:'x',
 		revert:true,
 
@@ -250,10 +234,19 @@ $(document).ready(function() {
 		}
 	});
 	
-	
+	//share button
+	$('#share-project').click(function(){
+		shareButton();
+	});
 	
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
+	
+	$('#database-search-button').click(function(){
+		var discardCurrentResultSet = true;
+		Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+		return false;
+	});
 	
 	$('#database-search-filter').change(function(){
 	    return search(this,true);
@@ -353,17 +346,37 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
-	
+
+//expands the Zeega editor panels	
 	$('.editor-title-bar-expander').click(function(){
+		
+		//get the current Node ID
+		var nodeID = Zeega.currentNode.id;
+		var domID = $(this).attr('id').split('-',1)[0];
+
+		var storage = localStorage.getObject( nodeID );
+		var panelStates = {};
+		if( _.isNull( storage ) ) storage = {};
+		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+		
 		var expander = $(this).next('div');
 		if( expander.is(':visible'))
 		{
+			//hide
+			eval( 'var state = {"'+ domID +'":true}');
+			_.extend( panelStates , state );
 			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expand-toggle').html('+');
+			$(this).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
 		}else{
+			//show
+			eval( 'var state = {"'+ domID +'":false}');
+			_.extend( panelStates , state );
 			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expand-toggle').html('–');
+			$(this).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
 		}
+		//set as property to read in on reload
+		_.extend( storage, {panelStates:panelStates} )
+		localStorage.setObject( nodeID , storage );
 	})
 	
 	

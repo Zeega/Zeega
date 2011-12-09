@@ -493,6 +493,47 @@ a.white:hover
 	text-decoration:underline;
 }
 
+/*****************************
+
+	SPRITES
+
+*****************************/
+
+.zicon
+{
+	display:block;
+	overflow:hidden;
+	float:left;
+	height:18px;
+	width:18px;
+	background-image:url('../images/zicons-grey-18.png');
+	background-repeat: no-repeat;
+}
+
+.zicon.orange{background-image:url('../images/zicons-orange-18.png')}
+.zicon.grey{background-image:url('../images/zicons-grey-18.png')}
+
+.zicon-map-marker-00{background-position:-162px -114px}
+.zicon-map-marker-01{background-position:-130px -114px}
+.zicon-map-marker-02{background-position:-97px -114px}
+.zicon-map-marker-03{background-position:-65px -114px}
+.zicon-map-marker-04{background-position:-33px -114px}
+.zicon-map-marker-05{background-position: 0 -114px}
+
+.zicon-audio{background-position: -66px -341px}
+.zicon-image{background-position: -98px -58px}
+.zicon-geo{background-position: 0 -114px}
+.zicon-text{background-position: 0 -142px}
+.zicon-shape{background-position: -65px -369px}
+.zicon-video{background-position: -34px -369px}
+.zicon-youtube{background-position: -34px -369px}
+.zicon-rdio{background-position: -66 -341px}
+.zicon-trash-closed{background-position: -130px -142px}
+.zicon-trash-open{background-position: -163px -143px}
+.zicon-advance{background-position: -130px -369px}
+.zicon-expand{background-position:-65px -199px}
+.zicon-collapse{background-position:-97px -199px}
+
 
 /*********************************************
 
@@ -823,9 +864,20 @@ body
 
 .node-overlay
 {
+
 	height:50px;
 	width:50px;
 	z-index:2;
+}
+
+.node-update-overlay
+{
+	display:none;
+	background-image:url('../images/stripes.png');
+	height:100%;
+	width:100%;
+	opacity: 0.6;
+
 }
 
 .node-background
@@ -859,6 +911,15 @@ body
 }
 */
 
+.bar-title
+{
+	float:left;
+}
+.icon-tray span+span
+{
+	margin-left:6px;
+}
+
 #sidebar
 {
 	width:394px;
@@ -878,6 +939,11 @@ body
 #tab-content>div
 {
 	width:100%;
+}
+
+#item-view-bar
+{
+	margin-top:10px;
 }
 
 /*******************************
@@ -1048,6 +1114,19 @@ body
 #export-json
 {
 	width:500px;
+}
+
+
+/*******************************
+
+	MODALS
+	
+*******************************/
+
+.modal
+{
+	postion:absolute;
+	top:375px;
 }
 
 /*******************************
@@ -1296,17 +1375,13 @@ body
 .editor-title-bar-expander
 {
 	-webkit-border-radius: 4px 4px 0 0;
-	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#444));
+	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
 	padding: 5px 10px;
 	color: #ddd;
-	border : 1px solid #555;
+	border : 1px solid #111;
 	margin-bottom:2px;
 }
 
-.bar-title
-{
-	float:left;
-}
 
 .icon-tray
 {
@@ -1327,19 +1402,25 @@ body
 	
 ******************************/
 
-
-
-#zeega-player
+#preview-wrapper
 {
 	width:100%;
 	height:100%;
-	background:#000;
+	background:#000000;
 	overflow:hidden;
 	position:absolute;
 	top:0;
 	left:0;
 	display:none;
 	z-index:10000;
+}
+
+#preview-media
+{
+
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto;
 }
 
 /*

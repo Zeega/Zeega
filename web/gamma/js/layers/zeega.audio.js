@@ -7,98 +7,87 @@
 ************************************/
 
 var AudioLayer = ProtoLayer.extend({
+	
+	layerType : 'VISUAL',
+	draggable : false,
+	thumbUpdate : false,
+	
 	defaultAttributes : {
-							'title' : 'Video Layer',
-							'url' : 'none',
-							'in'  : 0,
-							'out' : 0,
-							'volume' : 50,
-							
-						},
-						
-	drawControls : function(template)
+		'title' : 'Video Layer',
+		'url' : 'none',
+		'in'  : 0,
+		'out' : 0,
+		'volume' : 50,
+	},
+
+	controls : function()
 	{
-		
 		var div = $('<div>')
 			.addClass('timeLEF layerEditingFrame')
 			.attr('id','player-'+this.model.id);
-		template.find('#controls').append(div);
-		this.editorLoaded=false;
 		
-		
-		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
-		template.find('.asset-type-icon').addClass('ui-icon-volume-on');
-		
-
+		this.layerControls = div;
 	},
 	
-	openControls: function()
+	onControlsOpen: function()
 	{
-	console.log('Audio Controls Opened');
+		console.log('Audio Controls Opened');
 	
-	var that=this;
-		if(!this.editorLoaded){
-			var html = this.getTemplate();
-			$('#player-'+this.model.id).html(html);
-			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+		if( !this.editorLoaded )
+		{
+			var _this = this;
+
+			var html = $('<div>').addClass('clearfix')
+				.css( 'height' , '140px' ) //this should moved out
+				.html( this.getTemplate() );
+			this.layerControls.prepend( html );
 			
+			this.player = new ZeegaMP(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id , 'player-' +this.model.id);
+
 			//player triggers 'update' event to persist changes
-			$('#player-'+that.model.id).bind('updated',function(){
-				that.updateAttr();
+			this.layerControls.bind( 'updated' , function(){
+				var properties = {
+					inPoint : {
+						property : 'in',
+						value : _this.player.getBegin(),
+						css : false
+					},
+					outPoint : {
+						property : 'out',
+						value : _this.player.getEnd(),
+						css : false
+					},
+					volume : {
+						property : 'volume',
+						value : _this.player.getVolume(),
+						css : false
+					}
+				};
+				_this.layerControls.trigger( 'update' , [ properties ]);
 			});
-			that.editorLoaded=true;		
+			this.editorLoaded = true;
 		}
 	},
 	
-	closeControls: function()
+	onControlsClose: function()
 	{
-	
 		if(this.player) this.player.pause();
-		
 	},
 	
-	drawPreview : function(){
-		//make dom object - css should move to css file!
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		//add icon into icon tray
-		$('#visual-icon-tray').append('audio');
-		
+	preload : function(){
+		this.display.attr({
+			'id' : 'layer-preview-'+this.model.id,
+			'data-layer-id' : this.model.id
+		});
+		this.player = new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 	},
 	
-	preloadMedia : function(){
-		//make dom object
-		var that=this;
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
-		
-		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
-				
-		
-	},
-	drawPublish : function()
+	play : function()
 	{
-		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
 	},
 	
-	hidePublish : function()
+	stash : function()
 	{
 		this.player.pause();
 	},
@@ -106,26 +95,6 @@ var AudioLayer = ProtoLayer.extend({
 	exit: function()
 	{
 		this.player.pause();
-	},
-	
-	updateAttr: function()
-	{
-	
-		//get a copy of the old attributes into a variable
-		var newAttr = this.attr;
-		
-		if(this.editorLoaded){
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
-		}
-		
-		//set the attributes into the layer
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();
-	
-	
 	},
 	
 	getTemplate : function()

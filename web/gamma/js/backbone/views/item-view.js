@@ -10,7 +10,7 @@ var ItemView = Backbone.View.extend({
 		
 		var that = this;
 		//use template to clone the database items into
-		var template = $("#database-asset-template").clone();
+		var template = $( this.getTemplate() );
 		
 		//for some reason when I tried 'addClass()' the old class was persisting and 
 		//multiple classes were getting written. don't know why.
@@ -18,8 +18,7 @@ var ItemView = Backbone.View.extend({
 		//console.log(this);
 		
 		template.children('span')
-			.attr( 'class', 'float-left asset-type-icon ui-icon ')
-			.addClass( getItemIcon( this.model.get('content_type').toLowerCase() ) );
+			.addClass( 'zicon-' +this.model.get('content_type').toLowerCase() );
 			
 		template.children('img')
 			.addClass('item-thumb')
@@ -138,6 +137,18 @@ var ItemView = Backbone.View.extend({
 			.append(metaLink);
 		
 	},
+	
+	getTemplate : function()
+	{
+		html = '<div id="database-asset-template" class="hidden">';
+		html +=		'<span class="float-left zicon grey"></span>';
+		html +=		'<img/>';
+		html +=		'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>';
+		html +=		'<div class="item-title"></div>';
+		html +=		'<div class="item-meta"></div>';
+		html +=	'</div>';
+		return html;
+	}
 });
 
 var ItemViewCollection = Backbone.View.extend({

@@ -15,6 +15,8 @@ var Player = {
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
+	viewportRatio : 1.5,
+	
 	currentRoute : null,
 	currentNode : null,
 	
@@ -63,7 +65,7 @@ var Player = {
 		//set the current node
 		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
 		
-		this.currentNode = this.getNode( nodeID );
+		else this.currentNode = this.getNode( nodeID );
 		
 		//this.parseProject;
 		this.draw();
@@ -79,13 +81,33 @@ var Player = {
 	draw : function()
 	{
 		//add the player div
-		var overlay = $(this.getTemplate());
-		$('body').append(overlay);
+		this.displayWindow = $(this.getTemplate());
+		$('body').append( this.displayWindow );
 		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
+		
+		//get the current viewport resolution
+		var viewWidth = window.innerWidth;
+		var viewHeight = window.innerHeight;
+		
+		var cssObj = {};
+		if( viewWidth / viewHeight > this.viewportRatio )
+		{
+			cssObj.height = viewHeight +'px';
+			cssObj.width = viewHeight * this.viewportRatio +'px'
+		}else{
+			cssObj.height = viewWidth / this.viewportRatio +'px';
+			cssObj.width = viewWidth +'px'
+		}
+		
+		//constrain proportions in player
+		this.displayWindow.find('#preview-media').css( cssObj );
+		
+		//hide the editor underneath to prevent scrolling
+		$('#wrapper').hide();
 		
 		//Zeega.clearCurrentNode();
 		
-		overlay.fadeIn();
+		this.displayWindow.fadeIn();
 		
 		//disabled during dev work
 		//document.getElementById('zeega-player').webkitRequestFullScreen();
@@ -97,6 +119,9 @@ var Player = {
 	*/
 	close : function()
 	{
+		//unhide editor
+		$('#wrapper').show();
+		
 		document.webkitCancelFullScreen();
 		
 		console.log('Zeega Player Close');
@@ -111,11 +136,11 @@ var Player = {
 		
 		
 		// remove the player div
-		$('#zeega-player').fadeOut( 450, function(){
+		this.displayWindow.fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
 			//All video elements must be removed prior to removing the zeega player dom element
-			//$(this).remove() 
+			$(this).remove(); 
 		}); 
 		
 		if(this.zeega)
@@ -176,6 +201,26 @@ var Player = {
 			}
 		});
 		
+		//resize player on window resize
+		window.onresize = function(event)
+		{
+			//resize ##zeega-player
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > _this.viewportRatio )
+			{
+				cssObj.height = viewHeight +'px';
+				cssObj.width = viewHeight * _this.viewportRatio +'px'
+			}else{
+				cssObj.height = viewWidth / _this.viewportRatio +'px';
+				cssObj.width = viewWidth +'px'
+			}
+
+			//constrain proportions in player
+			_this.displayWindow.find('#preview-media').css( cssObj );
+		}
 		
 		$('#zeega-player').keydown(function(event) {
   		console.log(event.which+":keypress");
@@ -347,12 +392,17 @@ var Player = {
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-			layerClass.load( layer );
+			layerClass.lightLoad( layer );
+			
+			//add the layer content to the displayWindow
+			this.displayWindow.find('#preview-media').append( layerClass.display );
+			
 			//call the preload function for the layer
 			//add the layer class to the layer class array
 			this.getLayer(layerID).layerClass = layerClass;
 			
-			layerClass.preload();
+			var target = this.displayWindow.find('#preview-media');
+			layerClass.preload( target );
 			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
@@ -653,8 +703,19 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img  height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
-		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
+		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
+		html += 		"<div id='preview-left' class='preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-right' class='preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img height='75' width='35' onclick='Player.goRight();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-media'></div>";
+		html += 		"<div id='citation'><ul class='clearfix'></ul></div>";
+		html += 	"</div></div>";
+		
 		return html;
 	},
 	

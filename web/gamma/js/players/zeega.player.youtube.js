@@ -626,7 +626,7 @@ function videoLoadedYoutube(data){
 
 }
 function onYouTubePlayerReady(playerId) {
-	
+	console.log( 'YOUTUBE READY');
 	$('#layer-publish-'+playerId).trigger('ready');
 	$('#layer-preview-'+playerId).trigger('ready');
 }

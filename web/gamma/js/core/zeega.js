@@ -184,13 +184,25 @@ var Zeega = {
 		//open/close visual editor
 		var el = $('#workspace');
 
-		if( !this.currentNode.get('attr').editorHidden && el.is(':hidden')){
-			el.show('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('–');
-		}else if( this.currentNode.get('attr').editorHidden && el.is(':visible'))
+		//show/hide editor panels
+		// what should happen to panels which haven't been set?
+		//right now they inherit the last node's state
+		var storage = localStorage.getObject( this.currentNode.id );
+		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
 		{
-			el.hide('blind',{'direction':'vertical'});
-			$('#ve-toggle').html('+');
+			//go through each saved state
+			_.each( storage.panelStates , function(closed, panel){
+				var dom = $( '#' +panel+ '-view-bar' );
+				var expander = $(dom).next('div');
+				if( closed && expander.is(':visible') )
+				{
+					expander.hide('blind',{'direction':'vertical'});
+					$(dom).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
+				}else if( !closed && expander.is(':hidden') ){
+					expander.show('blind',{'direction':'vertical'});
+					$(dom).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
+				}
+			})
 		}
 		
 		
@@ -230,15 +242,9 @@ var Zeega = {
 		// add the node's layers // remove falsy values
 		var layerArray = _.compact( this.currentNode.get('layers'))
 		
-		_.each( layerArray , function(layerID){
-			_this.addToLayerCollections( _this.currentNode, _this.route.layerCollection.get(layerID) ); //route.layers no longer exists
-		});
-		
-		
 		//call render on the entire collection. it should have the logic to draw what's needed
 		Zeega.route.layerCollection.render( this.currentNode );
 		
-
 		//add a new current node style
 		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
 	},
@@ -279,31 +285,23 @@ var Zeega = {
 				this.route.layerCollection.add( layer );
 			}else{
 				console.log('layer should not be drawn')
-			//if it's not the current node, then be quiet about it
-				this.route.layerCollection.add( layer , {silent:true} );
+				//if it's not the current node, then be quiet about it
+				//this.route.layerCollection.add( layer , {silent:true} ); // do I need this??
 				//we still need to add it to the type collection though
 			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
 			}
 		}
 
-		//add it to the visual or interactive collections // only add if viewing current node
-		//if(node == this.currentNode) eval( 'this.route.'+ layer.layerClass.layerType +'LayerListViewCollection.add( layer)' );
 	},
 	
 	addLayerToNode : function( node, layer )
 	{
-		console.log('ADDLAYERTONODE');
-		console.log(this);
-		console.log(node);
-		console.log(layer);
-		
-		
+
 		//reject if there are too many layers inside the node
 		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
 		{
 			var _this = this;
 			
-			console.log('addLayerToNode');
 			//add URL to layer model
 			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
 		
@@ -315,11 +313,10 @@ var Zeega = {
 					{},
 					{
 						success : function(savedLayer, response){
+							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
-							_this.currentNode.noteChange();
-							//node.updateThumb();
-
+							if( savedLayer.layerClass.updateThumb ) node.noteChange() ;
 						}
 					});
 				//save the new layer then prepend the layer id into the node layers array
@@ -327,8 +324,7 @@ var Zeega = {
 				console.log('this is an old layer');
 				//prepend the layer id into the node layers array
 				this.updateAndSaveNodeLayer(node,layer);
-				Zeega.currentNode.noteChange();
-				//node.updateThumb();
+				if( savedLayer.layerClass.updateThumb ) node.noteChange() ;
 			}
 		}
 	},
@@ -590,8 +586,8 @@ var Zeega = {
 	
 	getRightNode : function()
 	{
-		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'),this.currentNode.id );
-		if(currentNodeIndex < _.size( this.route.nodes )-1 ) return this.route.nodes.at( currentNodeIndex+1 );
+		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'), this.currentNode.id );
+		if(currentNodeIndex < _.size( this.route.nodes )-1 ) return this.route.nodes.at( currentNodeIndex + 1 );
 		else return false;
 	},
 	

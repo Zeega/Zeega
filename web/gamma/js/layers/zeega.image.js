@@ -18,160 +18,108 @@ var ImageLayer = ProtoLayer.extend({
 	defaultAttributes : {
 		'title' : 'Image Layer',
 		'url' : 'none',
-		'x' : 0,
-		'y' : 0,
-		'h' : 100,
-		'w' : 100,
+		'left' : 0,
+		'top' : 0,
+		'height' : 100,
+		'width' : 100,
 		'opacity':1,
 		'aspect':1.33
 	},
 
 
-	drawControls : function()
+	controls : function()
 	{
-		var _this = this;
-		var controls = $('<div>');
-		
 		var opacityArgs = {
-			max:1,
-			value : _this.model.get('attr').opacity,
+			max : 1,
+			label : 'Opacity',
 			step : 0.01,
-			layer_id : _this.model.id,
-			label : 'opacity',
-			css : 'opacity',
-			suffix : '',
-			layerClass : _this
+			property : 'opacity',
+			value : this.model.get('attr').opacity,
+			dom : this.layerControls,
+			css : true
 		};
+		var opacitySlider = makeUISlider( opacityArgs );
+		
 		var widthArgs = {
-			value : _this.model.get('attr').w,
-			layer_id : _this.model.id,
-			label : 'width',
-			css : 'width',
+			min : 1,
+			max : 200,
+			label : 'Width',
+			step : 1,
+			property : 'width',
 			suffix : '%',
-			layerClass : _this
+			value : this.model.get('attr').width,
+			dom : this.layerControls,
+			css : true
 		};
-
-		controls.append( makeCSSLayerSlider(widthArgs) );
-		controls.append( makeCSSLayerSlider(opacityArgs) );
+		var scaleSlider = makeUISlider( widthArgs );
 		
-		controls.find('.layer-slider').bind( "slidestop", function(event, ui) {
-			_this.onAttributeUpdate();
-		});
-		
-		controls.append( makeFullscreenButton() );
-		controls.find('.fullscreen-submit')
-			.click(function(){
-				$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%'});
-				$('#layer-edit-'+_this.model.id).find('#width-slider').slider("option", "value", 100 );
-				_this.onAttributeUpdate();
-			});
-			
-		
-		//set to layer controls
-		this.layerControls = controls;
-		return controls;
-		
+		this.layerControls
+			.append( opacitySlider )
+			.append( scaleSlider )
+			.append( makeFullscreenButton( this.layerControls ) );
 	},
 	
-		
-
-
-	drawToVisualEditor : function()
+	visual : function()
 	{
-
-		var el = $('<div>');
-
+		var cssObj = {
+			width : this.attr.width+'%',
+			opacity : this.attr.opacity
+		};
+		
 		var img = $('<img>')
-			.attr({'src': this.model.get('attr').url,'id':'layer-image-' + this.model.id})
+			.attr('src', this.model.get('attr').url)
 			.css({'width':'100%'});
 						
-		el.append(img);
-		
-		//add to dom
-		this.visualEditorElement = el;
-		
-		return( el );
-	
+		this.visualEditorElement
+			.css( cssObj )
+			.append( img );
 	},
-
-	
-	onAttributeUpdate : function()
-	{
-		var _this = this;
-		var newAttr = {
-			x : Math.floor( _this.visualEditorElement.position().left/6),
-			y : Math.floor( _this.visualEditorElement.position().top/4),
-			opacity : Math.floor( _this.layerControls.find('#opacity-slider').slider('value') * 100 )/100,
-			w : Math.floor( _this.layerControls.find('#width-slider').slider('value') ),
-		};
-		
-		this.setAttributes(newAttr);
-		this.save();
-	},	
 
 	drawThumb : function(){
 		
-		$('#preview-media').append($('<div>').css( {
-			'position' : 'absolute',
-			'top' : this.attr.y  +'%',
-			'left' : this.attr.x  +'%',
-			'width' : this.attr.w+'%',
-			'opacity' : this.attr.opacity
-		}).append($('<img>')
+		$('#preview-media').append($('<div>')
+			.css( {
+				'position' : 'absolute',
+				'top' : this.attr.top  +'%',
+				'left' : this.attr.left  +'%',
+				'width' : this.attr.width,
+				'opacity' : this.attr.opacity
+			})
+			.append($('<img>')
 			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
 			.css({'width':'100%'})));
 	
 	},
 	
-	preload : function(){
-		//make dom object
-		//maybe these should all be wrapped in divs?
-		var div = $('<div>');
+	preload : function( target ){
 
 		var cssObj = {
 			'position' : 'absolute',
-			'top' : '-100%',
-			'left' : '-100%',
+			'top' : '-1000%',
+			'left' : '-1000%',
 			'z-index' : this.zIndex,
-			'width' : this.attr.w+'%',
+			'width' : this.attr.width +'%',
 			'opacity' : this.attr.opacity
 		};
 
-		div.css(cssObj);
+		var img = $('<img>')
+			.attr( 'src' , this.attr.url )
+			.css( 'width', '100%');
 
-		$(div).attr('data-layer',this.model.id);
+		this.display.css( cssObj )
+			.append( img );
 
-		var img=$('<img>')
-			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
-			.css({'width':'100%'});
-
-		this.dom = div;
-
-		//make dom
-		$(this.dom).append(img);
-		//add to dom
-
-		$('#zeega-player').find('#preview-media')
-			.append(this.dom)
-			.trigger('ready',{'id':this.model.id});
-		
+		target.trigger( 'ready' , { 'id' : this.model.id } );
 	},
 	
 	play : function( z )
 	{
-		console.log('image player.play');
-		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
+		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
-	
-	pause : function()
-	{
-		// not needed
-	},
-	
+
 	stash : function()
 	{
-		console.log('image player.stash');
-		this.dom.css({'top':"-100%",'left':"-100%"});
+		this.display.css({'top':"-1000%",'left':"-1000%"});
 	}
 	
 		

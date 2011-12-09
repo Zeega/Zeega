@@ -18,6 +18,18 @@ var Node = Backbone.Model.extend({
 	initialize : function() {
 		
 		if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
+		
+		//this is the function that only calls updateThumb once after n miliseconds
+		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
+		
+		//this.bind( 'change:layers', this.onLayerUpdate );
+	},
+	
+	noteChange:function()
+	{
+		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
+
+		this.updateNodeThumb();
 	},
 	
 	//update the node thumbnail
@@ -25,46 +37,19 @@ var Node = Backbone.Model.extend({
 	{
 		var _this = this;
 		console.log('updating thumbnail');
-		
-		//kill any preexisting thumb updates
-		if(this.t) clearTimeout(this.t);
-		
-
-		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
-		this.set({ thumb_url : 0 });
-		
-		this.save({},{
-		
-			success: function(node,response){
-		
-				$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
-				$('.node-thumb-'+_this.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
-				_this.set({thumb_url:response[0].thumb_url});
-				//turn off spinner
-				$('.node-thumb-'+_this.id).find('.node-overlay').spin(false);
+	
+		if( !this.updating )
+		{
+			this.updating = true; //prevent more thumb requests while this is working
+			//Trigger new node snapshot and persist url to database
+			$.post(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail',function(data){
+				//Update local version of thumbnail url attribute
+				_this.set({thumb_url:data});
+				_this.updating = false; //allow further thumb updates	
 			});
-			
-		}});
-	
-	
-	
+		}
 	},
 	
-	noteChange:function()
-	{
-		console.log('changed');
-		var _this = this;
-		//kill any preexisting thumb updates
-		if(_this.t) clearTimeout(this.t);
-		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
-		
-		_this.changed=true;
-	},
-	clearChange:function()
-	{
-		console.log('change cleared');
-		this.changed=false;
-	}
 
 });
 
