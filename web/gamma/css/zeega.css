@@ -88,15 +88,11 @@
 	-moz-border-radius-bottomleft: 10px;
 	-webkit-border-radius: 0px 10px 10px 10px !important;
 	border-radius: 0px 10px 10px 10px;
+	height:130px;
+	overflow:auto !important;
 	
 }
-#browser-my-collections-drawer{
-	list-style:none;
-	height:140px;
-	width:1400px;
-	overflow:hidden;
-	display:inline;
-}
+
 
 .browser-my-collection img{
 	padding:3px;
@@ -157,14 +153,18 @@
 
 	
 }
+#browser-my-collections-drawer{
+	margin:5px 0 0 10px;
+}
 .browser-results-image,.browser-results-collection, #browser-show-more-results{
 
 	float: left;
 	margin: 0;
 	/*border-radius: 3px;*/
-	margin:10px 0px 0px 10px;
+	/*margin:10px 0px 0px 10px;*/
+	padding:5px;
 	width:  144px;
-	height: 110px;/*94*/
+	height: 110px;
 	
 	
 }
@@ -206,8 +206,13 @@
 	box-shadow: 3px 0px 2px 0px #333333; 
 
 }
+.browser-add-item-to-collection-hover{
+	background-color:#F15A29 !important;
+
+}
 .browser-create-new-collection-hover{
 	background-color:#888 !important;
+
 }
 #browser-create-new-collection .browser-my-new-collection{
 	border:dashed 1px #666;
@@ -233,6 +238,7 @@
 .browser-results-collection{
 	width:144px;
 	float:left;
+
 }
 .browser-results-collection p
 {

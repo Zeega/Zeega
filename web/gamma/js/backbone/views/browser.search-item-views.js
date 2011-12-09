@@ -36,7 +36,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		var thisView = this;
 		$(this.el).droppable({
 			accept : '.browser-results-image',
-			hoverClass : 'browser-create-new-collection-hover',
+			hoverClass : 'browser-add-item-to-collection-hover',
 			tolerance : 'pointer',
 
 			//this happens when you drop an item onto a collection
@@ -49,7 +49,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				$(this).effect("highlight", {}, 3000);
 				$(this).find('.browser-item-count').text('Adding item...');
 				$(this).animate({ opacity: 0.75}, 1000, function() {
-					    $(this).find('.browser-item-count').text('20 items');
+					    
 					    $(this).css('opacity', '1');
 					  });
 			
@@ -58,7 +58,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				thisView.model.save({ }, 
 							{
 								success: function(model, response) { 
-							
+									ZeegaBrowser.draggedItem.id = null;
 									//this should take care of incrementing item count?
 									ZeegaBrowser.myCollectionsView.render();
 				 				},

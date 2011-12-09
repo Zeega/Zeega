@@ -155,10 +155,10 @@ $(document).ready(function() {
 
 				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-				newGuy.save({ title:'New fake collection ' + Math.floor(Math.random()*1000)}, 
+				newGuy.save({ title:'New collection ' + Math.floor(Math.random()*1000)}, 
 							{
 								success: function(model, response) { 
-									ZeegaBrowser.myCollectionsModel.add(model);
+									ZeegaBrowser.myCollectionsModel.add(model, {at: 0});
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
