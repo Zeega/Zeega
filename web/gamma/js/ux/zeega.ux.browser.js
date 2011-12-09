@@ -56,38 +56,34 @@ $(document).ready(function() {
     		}
     	},
 		
-		/* This adds a custom element for styling the image caption for
-		viewing a single IMAGE in the lightbox */    
+		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
     
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
 			var fancyView = null;
-           	if (thisModel.get("type") == "Image"){
-           		fancyView = new BrowserFancyBoxImageView({model:thisModel});
-           		fancyView.render(this);
-          	 	
 
-           	}
-           	else if (thisModel.get("type") == "Video"){
-           		fancyView = new BrowserFancyBoxVideoView({model:thisModel});
-           		fancyView.render(this);
-           		
-           	}
-           	else if (thisModel.get("type") == "Audio"){
-           		fancyView = new BrowserFancyBoxAudioView({model:thisModel});
-           		fancyView.render(this);
-           		
-           	}
-       
+			switch(thisModel.get("source")){
+				case 'Image':
+					fancyView = new BrowserFancyBoxImageView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Video':
+           			fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Audio':
+           			fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Youtube':
+           			fancyView = new BrowserFancyBoxYouTubeView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+			}
         },
-        afterShow : function(){
-        	$('#fancybox-close-button').click(function(){
-				$.fancybox.close( );
-				
-			});
-        }
+        
 	});
 	
 

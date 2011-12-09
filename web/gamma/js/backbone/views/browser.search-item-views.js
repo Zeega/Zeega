@@ -145,11 +145,13 @@ var BrowserSingleItemView = BrowserItemView.extend({
 
 });
 
-// For displaying caption when viewing single image in FancyBox
-var BrowserFancyBoxImageView = BrowserItemView.extend({
+// This is a parent class that takes care of image captions for ALL fancybox views
+
+var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	initialize: function(){
 		this.el =$("#browser-fancybox-caption-template").clone();
+		this.el.removeAttr('id');
 	},
 	/* Pass in the element that the user clicked on from fancybox. Fancy box
 	uses the object's title as the caption so set that to the element in 
@@ -157,8 +159,6 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 	render: function(obj)
 	{
 		
-		
-		this.el.removeAttr('id');
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
@@ -169,61 +169,99 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 	},
 
 });
-// For displaying caption when viewing VIDEO in FancyBox
-var BrowserFancyBoxVideoView = BrowserItemView.extend({
+// For displaying Images
+var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
-		this.el =$("#browser-fancybox-caption-template").clone();
+
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
 	},
-	/* Pass in the element that the user clicked on from fancybox. Fancy box
-	uses the object's title as the caption so set that to the element in 
-	the template */
+	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
 	{
 		
-		
-		this.el.removeAttr('id');
-		//this.el.find('.fancymedia').attr('src', '');
-		this.el.find('a').attr('href', this.model.get('attribution_uri'));
-		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('media_creator_username'));
-		
-		var source  = $(obj.element).attr('href');
-
-		//Right now video only seems to work with mp4s. Or, at least, does not work with divx and youtube vids.
-		obj.content = '<video controls="true" height="480px" width="640px" preload><source src="'+source+'"></video>'; 
-		obj.title = this.el.html();
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
 		return this;
 	},
 
 });
-// For displaying caption when viewing AUDIO in FancyBox
-var BrowserFancyBoxAudioView = BrowserItemView.extend({
+// For displaying HTML5 Video (not YouTube)
+var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
-		this.el =$("#browser-fancybox-caption-template").clone();
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-video-template").clone();
+		this.content.removeAttr('id');
+
 	},
-	/* Pass in the element that the user clicked on from fancybox. Fancy box
-	uses the object's title as the caption so set that to the element in 
-	the template */
+	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
 	{
 		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		this.el.removeAttr('id');
-		//this.el.find('.fancymedia').attr('src', '');
-		this.el.find('a').attr('href', this.model.get('attribution_uri'));
-		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('media_creator_username'));
-		
-		var source  = $(obj.element).attr('href');
+		var videoSrc  = $(obj.element).attr('href');
 
-		obj.content = '<audio controls="true" src="'+source+'"></audio>'; 
-		obj.title = this.el.html();
+		this.content.find('source').attr( 'src', videoSrc);
+
+		//Right now video only seems to work with mp4s. Or, at least, does not work with divx.
+		obj.content = this.content.html(); 
 		
 		return this;
 	},
 
 });
+// For displaying Audio
+var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
+	
+	initialize: function(){
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-audio-template").clone();
+		this.content.removeAttr('id');
+
+	},
+	/* Pass in the element that the user clicked on from fancybox.  */
+	render: function(obj)
+	{
+		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		var audioSrc  = $(obj.element).attr('href');
+
+		this.content.find('audio').attr('src', audioSrc);
+
+		obj.content = this.content.html(); 
+		
+		return this;
+	},
+
+});
+
+//For displaying YouTube
+var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
+	
+	initialize: function(){
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-youtube-template").clone();
+		this.content.removeAttr('id');
+
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		var youTubeSrc  = 'http://www.youtube.com/embed/' + $(obj.element).attr('href');
+
+		this.content.find('iframe').attr('src', youTubeSrc);
+
+		obj.content = this.content.html(); 
+		
+		return this;
+	},
+
+});
+
 
