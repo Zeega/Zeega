@@ -366,13 +366,13 @@ $(document).ready(function(){
 			eval( 'var state = {"'+ domID +'":true}');
 			_.extend( panelStates , state );
 			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expand-toggle').html('+');
+			$(this).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
 		}else{
 			//show
 			eval( 'var state = {"'+ domID +'":false}');
 			_.extend( panelStates , state );
 			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expand-toggle').html('–');
+			$(this).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
 		}
 		//set as property to read in on reload
 		_.extend( storage, {panelStates:panelStates} )

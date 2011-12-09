@@ -71,13 +71,15 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		this._renderedViews =[];
 		
 		this.collection.bind("add", function(layer) {
-			// should draw the layer if it's in the node
 			_this.add(layer);
 		});
 		
 		this.collection.bind("remove", function(layer) {
-			// should draw the layer if it's in the node
 			_this.remove(layer);
+		});
+		this.collection.bind("reset", function() {
+			// should draw the layer if it's in the node
+			_this.reset();
 		});
 
 	},
@@ -87,13 +89,19 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		var layerView = new VisualLayerEditorView({ model : layer });
 		this._renderedViews.push( layerView );
 		$(this.el).append( layerView.render().el );
+		
+		this.drawEditorIcons();
+		//console.log(this._renderedViews);
 	},
 	
 	remove : function(layer)
 	{
+		console.log('remove view')
 		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
-		this._layerViews = _(this._layerViews).without(viewToRemove);
+		//this._renderedViews = _(this._renderedViews).without(viewToRemove);
 		
+		
+		this._renderedViews = _.without( this._renderedViews, viewToRemove);
 		Zeega.currentNode.noteChange();
 	},
 	
@@ -101,13 +109,28 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 	render : function()
 	{
 		var _this = this;
-		
 		$(this.el).empty();
-		_.each( _this._renderedViews , function(view){
-			$(this.el).append(view.render().el);
-		});
 		
 		return this;
+	},
+	
+	reset : function()
+	{
+		this._renderedViews = [];
+	},
+	
+	drawEditorIcons : function()
+	{
+		$('#visualeditor-view-bar').find('.icon-tray').empty();
+		var types = [];
+		_.each( this._renderedViews , function(view){
+			types.push( view.model.get('type').toLowerCase() );
+		});
+		types = _.uniq( types );
+		_.each( types, function(type){
+			var icon = $('<span>').addClass('zicon grey zicon-' +type);
+			$('#visualeditor-view-bar').find('.icon-tray').append(icon)
+		});
 	}
 
 });

@@ -24,9 +24,6 @@ var VisualLayerListView = Backbone.View.extend({
 		var defaults = deepCopy(this.model.layerClass.defaultAttributes);
 		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
-		
-		//var layerOrder = _.compact( Zeega.currentNode.get('layers') );
-
 		//shorten title if necessary
 		var title;
 		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
@@ -57,6 +54,8 @@ var VisualLayerListView = Backbone.View.extend({
 		//set the id of the parent element
 		$(this.el).attr('id', 'layer-'+ this.model.id);
 		//add the controls to the layer
+		
+		$(this.el).find('.asset-type-icon').addClass('zicon-' +type.toLowerCase() );
 		
 		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
 				
@@ -125,7 +124,7 @@ var VisualLayerListView = Backbone.View.extend({
 		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
 		layerTemplate += 		'<div class="layer-uber-bar clearfix">';
 		layerTemplate += 			'<div class="layer-icon">';
-		layerTemplate += 				'<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>';
+		layerTemplate += 				'<span class="asset-type-icon orange zicon"></span>';
 		layerTemplate += 			'</div>';
 		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
 		layerTemplate += 		'<div class="layer-uber-controls">';

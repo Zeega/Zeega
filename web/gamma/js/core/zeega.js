@@ -197,10 +197,10 @@ var Zeega = {
 				if( closed && expander.is(':visible') )
 				{
 					expander.hide('blind',{'direction':'vertical'});
-					$(dom).find('.expand-toggle').html('+');
+					$(dom).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
 				}else if( !closed && expander.is(':hidden') ){
 					expander.show('blind',{'direction':'vertical'});
-					$(dom).find('.expand-toggle').html('–');
+					$(dom).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
 				}
 			})
 		}
@@ -241,14 +241,6 @@ var Zeega = {
 		
 		// add the node's layers // remove falsy values
 		var layerArray = _.compact( this.currentNode.get('layers'))
-		
-		
-		/*
-		//don't need this?
-		_.each( layerArray , function(layerID){
-			_this.addToLayerCollections( _this.currentNode, _this.route.layerCollection.get(layerID) ); 
-		});
-		*/
 		
 		//call render on the entire collection. it should have the logic to draw what's needed
 		Zeega.route.layerCollection.render( this.currentNode );
