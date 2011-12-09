@@ -42,7 +42,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 			TODO: Add permissions to this so that you can only add collections to your own collections.
 		*/
 
-		$(this.el).draggable({
+/*		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
 			appendTo : 'body',
@@ -70,12 +70,12 @@ var BrowserCollectionView = BrowserItemView.extend({
 				
 			/**	stuff that happens when the user drags the item into a node **/	
 				
-			stop : function(){
+/*			stop : function(){
 				ZeegaBrowser.draggedItem = null;
 			}
 			
 		});
-
+*/
 		$(this.el).droppable({
 			accept : '.browser-results-image, .browser-results-collection',
 			hoverClass : 'browser-add-item-to-collection-hover',
@@ -118,7 +118,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		
 		this.el.addClass('browser-results-collection');
 		
-
+		//this.el.attr('id', this.model.id);
 		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('img').attr('title', this.model.get('title'));
 
@@ -126,6 +126,13 @@ var BrowserCollectionView = BrowserItemView.extend({
 		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
 		this.el.find('.title').text(this.model.get('title'));
 
+		var modelID = this.model.id;
+		var modelTitle = this.model.get('title');
+		this.el.click(function(){
+			ZeegaBrowser.clickedCollectionTitle = modelTitle;
+			ZeegaBrowser.doCollectionSearch(modelID);
+			
+		});
 		return this;
 	},
 

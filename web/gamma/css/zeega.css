@@ -206,6 +206,29 @@
 	box-shadow: 3px 0px 2px 0px #333333; 
 
 }
+#browser-collection-filter{
+	border:1px solid #ccc;
+	padding:4px;
+	color:#ccc;
+	margin-left:20px;
+	float:left;
+	display:none;
+	-moz-border-radius: 6px;
+	-webkit-border-radius:6px;
+	border-radius: 6px;
+	letter-spacing:1px;
+}
+#browser-remove-collection-filter{
+	margin-right:20px;
+	margin-left:5px;
+	font-weight:bold;
+}
+#browser-remove-collection-filter:hover{
+	cursor:pointer;
+}
+#browser-collection-filter-title{
+	
+}
 .browser-add-item-to-collection-hover{
 	background-color:#F15A29 !important;
 

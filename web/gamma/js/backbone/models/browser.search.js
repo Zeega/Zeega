@@ -2,11 +2,12 @@ var BrowserSearch =  Backbone.Model.extend({
 
 	
 	url : function(){
-
+		
 		var finalURL = Zeega.url_prefix + "app_dev.php/api/search?" 
 					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
-					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "");
+					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
+					+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "");
 		console.log("Final URL is: " + finalURL);
 		return finalURL;
 

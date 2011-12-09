@@ -99,8 +99,13 @@ $(document).ready(function() {
 	 $( '#database-search-filter' ).bind('change', function(e){
 	     ZeegaBrowser.doSearch();
 	 });
-	
-	
+
+	$('#browser-remove-collection-filter').click(function(){
+		$('#browser-collection-filter').hide();
+		ZeegaBrowser.search.set({'collection':null});
+		ZeegaBrowser.doSearch();
+		return false;
+	});
 
 	//For filters - testing visual stuff - disabled
 	//$('.time, .space').click( toggleFilterDrawer);
@@ -135,7 +140,7 @@ $(document).ready(function() {
 		}
 		ZeegaBrowser.doSearch();
 	});
-
+	
 	$('#browser-create-new-collection').droppable({
 			accept : '.browser-results-image',
 			hoverClass : 'browser-create-new-collection-hover',
