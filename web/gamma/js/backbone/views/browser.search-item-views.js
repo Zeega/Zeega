@@ -42,7 +42,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 			TODO: Add permissions to this so that you can only add collections to your own collections.
 		*/
 
-/*		$(this.el).draggable({
+	$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
 			appendTo : 'body',
@@ -70,12 +70,12 @@ var BrowserCollectionView = BrowserItemView.extend({
 				
 			/**	stuff that happens when the user drags the item into a node **/	
 				
-/*			stop : function(){
+			stop : function(){
 				ZeegaBrowser.draggedItem = null;
 			}
 			
 		});
-*/
+
 		$(this.el).droppable({
 			accept : '.browser-results-image, .browser-results-collection',
 			hoverClass : 'browser-add-item-to-collection-hover',
