@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\IngestBundle\Entity\Item;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
+use Zeega\ApiBundle\Helpers\ResponseHelper;
 
 class CollectionsController extends Controller
 {
@@ -81,6 +82,7 @@ class CollectionsController extends Controller
          					 ->searchCollectionItems($query);								
         
         // populate the results object
+        
         $results[] = array('items'=>$queryResults, 'items_count'=>sizeof($queryResults));
         
   		$response = new Response(json_encode($results));
@@ -89,6 +91,23 @@ class CollectionsController extends Controller
         // return the results
         return $response;
     }   
+    
+    // get_item_tags GET    /api/collections/{collectionId}/tags.{_format}
+    public function getCollectionTagsAction($collectionId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemsByTagId($collectionId);
+
+        if (!$tags) 
+        {
+            throw $this->createNotFoundException('Unable to find the Tags for the collection with the id ' . $collectionId);
+        }
+        
+        //$tags = $item->getTags();
+        
+        return ResponseHelper::encodeAndGetJsonResponse($tags);
+    }
         
     // post_collections POST   /api/collections.{_format}
     public function postCollectionsAction()

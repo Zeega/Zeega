@@ -9,6 +9,14 @@ use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 
 class ResponseHelper
 {
+    static public function compressTwigAndGetJsonResponse($renderedTwig)
+    {
+        $renderedTwig = preg_replace('/\s+/', '',$renderedTwig);
+        $response = new Response($renderedTwig);
+     	$response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
     static public function getJsonResponse($entityArray)
     {
         $response = new Response(json_encode($entityArray));

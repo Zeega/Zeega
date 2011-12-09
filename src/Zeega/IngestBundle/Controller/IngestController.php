@@ -29,7 +29,7 @@ class IngestController extends Controller
     {
     
     //Import tweets from XML File
-    		
+    		$logger = $this->get('logger');
     		
     		$start=$page*100+1;
 			$originalUrl='http://dev.zeega.org/query_result.xml';
@@ -86,36 +86,45 @@ class IngestController extends Controller
 				
 				$text=(string)$tweet->text;
 				$hashtag = '/\#([A-Za-z]*)/';
-		
+		        
+		        $logger->info("HEY HEY");
+                $logger->info($text);
+                
 				if(preg_match_all($hashtag, $text, $matches)){
 					
 					foreach($matches[1] as $match){
 						
 							$candidateTag=strtolower($match);
-							$tag=NULL;
-							$tag=$this->getDoctrine()
-										->getRepository('ZeegaIngestBundle:Tag')
-										->findOneByName($candidateTag);
-							if(!is_object($tag)){
+							$tag = $this->getDoctrine()
+									    ->getRepository('ZeegaIngestBundle:Tag')
+									    ->findOneByName($candidateTag);
+							
+							if(!$tag)
+							{
 								$tag=new Tag;
 								$tag->setName($candidateTag);
+								$tag->setDateCreated(new \DateTime("now"));
 								$tag->setUser($user);
 								$em->persist($tag);
-								
 							}	
 							
-							$itemTags= new ItemTags();
-						
-							$em->persist($item);
+							$itemTags = $this->getDoctrine()
+									         ->getRepository('ZeegaIngestBundle:ItemTags')
+									         ->findOneBy(array('tag'=>$tag->getId(), 'item'=>$item->getId()));
 							
-							$em->flush();
+                            $em->persist($item);
+                            $em->flush();                                
+                            
+                 			if(!$itemTags)
+ 							{
+ 							    $itemTags= new ItemTags();
+     							$itemTags->setTag($tag);
+     							$itemTags->setUser($user);
+     							$itemTags->setItem($item);
+     							$itemTags->setTagDateCreated(new \DateTime("now"));
+
+ 							}		    
 							
-							$itemTags->setTag($tag);
-							$itemTags->setUser($user);
-							$itemTags->setItem($item);
-							$itemTags->setItemId($item->getId());
-							$itemTags->setTagId($tag->getId());
-							//$itemTags->setTagDateCreated(new DateTime(NULL));
 							$item->addItemTags($itemTags);
 							
 							
@@ -133,7 +142,7 @@ class IngestController extends Controller
 				@$img=file_get_contents(str_replace('_normal','',(string)$tweet->profile_image_url));
 				
 				if($img==FALSE){
-					return new Response(0);	
+					//return new Response(0);	
 				}
 				else{
 					

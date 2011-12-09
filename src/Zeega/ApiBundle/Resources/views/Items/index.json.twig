@@ -1,0 +1,17 @@
+{
+"tags":[
+		{% set len = tags|length - 1 -%}
+	
+		{% for i in 0..len %}
+		{
+			"tag_id" : "{{ tags[i].id }}",
+			"tag_name" : "{{ tags[i].name }}",
+			"tag_description" : "{{ tags[i].description }}"	
+		}
+		{% if i < len %}
+			,
+		{% endif %}
+		{% endfor %}
+	],
+"tag_count": {{ tags|length }}
+}

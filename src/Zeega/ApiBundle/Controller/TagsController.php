@@ -15,8 +15,9 @@ use Doctrine\ORM\Query\ResultSetMapping;
 class TagsController extends Controller
 {
     
-    public function getRelatedTagsSpecialAction()
+    public function getTagsComputeSimilarAction()
     {
+        // get this code out of here - use entity instead
         $conn = $this->get('database_connection');
         
         $itemsWithTagQuery = $conn->prepare('select distinct item_id from ItemTags where tag_id = ?');
@@ -33,9 +34,10 @@ class TagsController extends Controller
                 array_push($itemTags,$item["item_id"]);
             }
         
-            $relatedTags = $conn->executeQuery('select tag_id, count(tag_id) as tag_count from ItemTags where item_id in (?) group by tag_id', 
-                                                array($itemTags),
-                                                array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY));
+            $relatedTags = $conn->executeQuery('select tag_id, count(tag_id) as tag_count from ItemTags where item_id in (?) and tag_id <> ? group by tag_id', 
+                                                array($itemTags,$tag["tag_id"]),
+                                                array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY, 'integer'));
+            
             foreach($relatedTags as $relatedTag)
             {
                 $conn->insert('TagCorrelation', array('tag_id' => $tag["tag_id"], 
@@ -48,7 +50,7 @@ class TagsController extends Controller
     }
     
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
-    public function getTagRelatedAction($tagid)
+    public function getTagSimilarAction($tagid)
     {
         // get this code out of here - use entity instead
         $em = $this->getDoctrine()->getEntityManager();

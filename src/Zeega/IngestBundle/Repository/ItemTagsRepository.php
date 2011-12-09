@@ -7,21 +7,19 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemTagsRepository extends EntityRepository
 {
-    //  api/search
-    public function searchDistinctTags()
+    public function searchItemTags($tagId)
     {
-          $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
             // search query
-            $qb->select('i')
-                ->from('ZeegaIngestBundle:Item', 'i')
-                ->innerjoin('i.parent_items', 'c')
-                ->orderBy('i.id','DESC')
-         ;
-
+            $qb->select('t')
+               ->from('ZeegaIngestBundle:Tag', 't')
+               ->innerjoin('t.item', 'i')
+               ->where('i.item = ?1')
+               ->setParameter(1,$tagId);
+           
             // execute the query
             return $qb->getQuery()->getArrayResult();
     }
-
 }
 

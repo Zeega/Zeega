@@ -19,16 +19,11 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
 
-        if (!$item) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id ' . $itemId);
-        }
+        $tagsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('tags' => $tags));
         
-        $tags = $item->getTags();
-        
-        return ResponseHelper::encodeAndGetJsonResponse($tags);
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }   
     
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
