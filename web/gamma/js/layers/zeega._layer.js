@@ -49,6 +49,7 @@
 var ProtoLayer = Class.extend({
 
 	/** EXTENDABLE LAYER FUNCTIONS **/
+	thumbUpdate : true,
 	
 	init : function()
 	{

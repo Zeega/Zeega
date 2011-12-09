@@ -10,6 +10,7 @@ var AudioLayer = ProtoLayer.extend({
 	
 	layerType : 'VISUAL',
 	draggable : false,
+	thumbUpdate : false,
 	
 	defaultAttributes : {
 		'title' : 'Video Layer',

@@ -9,6 +9,16 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		this.model.bind( 'change:title', this.updateLayerTitle );
 		
+		this.model.bind( 'change:height', this.updateNodeThumb );
+		this.model.bind( 'change:width', this.updateNodeThumb );
+		this.model.bind( 'change:opacity', this.updateNodeThumb );
+		this.model.bind( 'change:color', this.updateNodeThumb );
+		
+	},
+	
+	updateNodeThumb : function()
+	{
+		Zeega.currentNode.noteChange();
 	},
 	
 	//draws the controls

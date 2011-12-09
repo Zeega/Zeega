@@ -18,6 +18,18 @@ var Node = Backbone.Model.extend({
 	initialize : function() {
 		
 		if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
+		
+		//this is the function that only calls updateThumb once after n miliseconds
+		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
+		
+		//this.bind( 'change:layers', this.onLayerUpdate );
+	},
+	
+	noteChange:function()
+	{
+		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
+
+		this.updateNodeThumb();
 	},
 	
 	//update the node thumbnail
@@ -25,46 +37,19 @@ var Node = Backbone.Model.extend({
 	{
 		var _this = this;
 		console.log('updating thumbnail');
-		
-		//kill any pre-existing thumbnail updates
-		if(this.t) clearTimeout(this.t);
 	
-		//Trigger new node snapshot and persist url to database
-		
-		$.post(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail',function(data){
-			
-			//Update thumbnail in route display
-			var thumb=$('<img>').attr('src',data).load(function(){
-			$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
-			
-				$('.node-thumb-'+_this.id).css('background-image','url("'+data+'")').fadeIn('fast',function(){
-					$('.node-thumb-'+_this.id).find('.node-update-overlay').fadeOut('slow');
-				});
+		if( !this.updating )
+		{
+			this.updating = true; //prevent more thumb requests while this is working
+			//Trigger new node snapshot and persist url to database
+			$.post(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail',function(data){
+				//Update local version of thumbnail url attribute
+				_this.set({thumb_url:data});
+				_this.updating = false; //allow further thumb updates	
 			});
-			});
-			
-			//Update local version of thumbnail url attribute
-			_this.set({thumb_url:data});	
-		});
+		}
 	},
 	
-	noteChange:function()
-	{
-		console.log('Node changed');
-		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
-		var _this = this;
-		
-		//kill any pre-existing thumb updates
-		if(_this.t) clearTimeout(this.t);
-		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
-		
-		_this.changed=true;
-	},
-	clearChange:function()
-	{
-		console.log('change cleared');
-		this.changed=false;
-	}
 
 });
 

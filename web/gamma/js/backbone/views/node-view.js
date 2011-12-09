@@ -1,5 +1,11 @@
 var NodeView = Backbone.View.extend({
+	
 	tagName: 'li',
+	
+	initialize : function()
+	{
+		this.model.bind( 'change:thumb_url', this.onNewThumb, this );
+	},
 	
 	render: function()
 	{
@@ -66,7 +72,7 @@ var NodeView = Backbone.View.extend({
 				};
 				var newLayer = new Layer( settings );
 				
-				Zeega.addLayerToNode(that.model,newLayer);
+				Zeega.addLayerToNode(that.model,newLayer, this);
 				
 			}
 		});
@@ -88,6 +94,19 @@ var NodeView = Backbone.View.extend({
 		);
 			
 		return this;
+	},
+	
+	onNewThumb : function()
+	{
+		var _this = this;
+		//Update thumbnail in route display
+		$(this.el).find('.node-background').fadeOut('fast',function(){
+			$(_this.el)
+				.css('background-image','url("'+ _this.model.get('thumb_url') +'")')
+				.fadeIn('fast');
+			$(_this.el).find('.node-update-overlay')
+				.fadeOut('slow');
+		});
 	}
 	
 });
