@@ -14,6 +14,33 @@ use Zeega\ApiBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    //  get_collections GET    /api/collections.{_format}
+    public function getItemsAction()
+    {
+        $query = array();
+        
+        $request = $this->getRequest();
+        //  api global parameters
+		$query["page"]  = $request->query->get('page');      //  string
+		$query["limit"] = $request->query->get('limit');     //  string
+		
+		//  collection specific parameters
+        $query['returnCollections'] = 1;
+        
+        //  set defaults for missing parameters  
+		if(!isset($query['page']))          $query['page'] = 0;
+		if(!isset($query['limit']))         $query['limit'] = 100;
+		if($query['limit'] > 100) 	        $query['limit'] = 100;
+        
+         //  execute the query
+ 		$queryResults = $this->getDoctrine()
+ 					        ->getRepository('ZeegaIngestBundle:Item')
+ 					        ->searchItems($query);								
+
+        $tagsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults));
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+    }
+    
     // get_item_tags GET    /api/items/{itemId}/tags.{_format}
     public function getItemTagsAction($itemId)
     {
@@ -21,7 +48,7 @@ class ItemsController extends Controller
 
         $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
 
-        $tagsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('tags' => $tags));
+        $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }   
@@ -88,9 +115,7 @@ class ItemsController extends Controller
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
         $items_list = $this->getRequest()->request->get('newItemIDS');
-        $logger = $this->get('logger');
-        $logger->info('We just got the logger');        
-        $logger->info(var_dump($this->getRequest()->request->get('newItemIDS')));
+
         // this is terrible...
         foreach($items_list as $item)
         {

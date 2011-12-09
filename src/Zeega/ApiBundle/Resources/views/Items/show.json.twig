@@ -1,0 +1,38 @@
+{
+"{% block listName %}items{% endblock %}":
+	{% if item is not null %}
+	{
+		"id" : "{{ item.id }}",
+		"media_id" : "{{ item.getMediaId() }}",
+		"metadata_id" : "{{ item.getMetadataId() }}",
+		"title" : "{{ item.title }}",
+		"description" : "{{ item.description }}",
+		"text" : "{{ item.text }}",
+		"uri" : "{{ item.uri }}",
+		"attribution_uri" : "{{ item.getAttributionUri() }}",
+		"date_created" : "{{ item.getDateCreated()|date("Y-m-d") }}",
+		"type" : "{{ item.type }}",
+		"source" : "{{ item.source }}",
+		"description" : "{{ item.description }}",
+		"thumbnail_url" : "{{ item.getThumbnailUrl() }}",
+		"child_items_count" : "{{ item.getChildItemsCount() }}",
+		"media_geo_latitude" : "{{ item.getMediaGeoLatitude() }}",
+		"media_geo_longitude" : "{{ item.getMediaGeoLongitude() }}",
+		{% if item.getMediaDateCreated() %}
+			"media_date_created" : "{{ item.getMediaDateCreated()|date("Y-m-d") }}",
+		{% else %}
+			"media_date_created" : "",
+		{% endif %}
+		{% if item.getMediaDateCreatedEnd() %}
+			"media_date_created_end" : "{{ item.getMediaDateCreatedEnd|date("Y-m-d") }}",
+		{% else %}
+			"media_date_created_end" : "",
+		{% endif %}
+		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
+		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}"
+	  }
+	{% else %}
+		{},
+	{% endif %},
+"{% block countName %}items_count{% endblock %}": 1
+}

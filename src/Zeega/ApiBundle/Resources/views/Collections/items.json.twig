@@ -1,4 +1,8 @@
 {% extends "ZeegaApiBundle:Items:index.json.twig" %}
 
+{% block header %}
+	"items_for_collection": {{collection_id}},
+{% endblock %}
+
 {% block listName %}collections{% endblock %}
 {% block countName %}collections_count{% endblock %}

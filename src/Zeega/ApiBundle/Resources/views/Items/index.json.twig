@@ -1,17 +1,53 @@
 {
-"tags":[
-		{% set len = tags|length - 1 -%}
+{% block header %}{% endblock %}
+"{% block listName %}items{% endblock %}":
+	{% if items|length > 0 %}
+		[
+			{% set len = items|length - 1 -%}
 	
-		{% for i in 0..len %}
-		{
-			"tag_id" : "{{ tags[i].id }}",
-			"tag_name" : "{{ tags[i].name }}",
-			"tag_description" : "{{ tags[i].description }}"	
-		}
-		{% if i < len %}
-			,
-		{% endif %}
-		{% endfor %}
-	],
-"tag_count": {{ tags|length }}
+			{% for i in 0..len %}
+			{
+				"id" : "{{ items[i].id }}",
+				"media_id" : "{{ items[i].media_id }}",
+				"metadata_id" : "{{ items[i].metadata_id }}",
+				"title" : "{{ items[i].title }}",
+				"description" : "{{ items[i].description }}",
+				"text" : "{{ items[i].text }}",
+				"uri" : "{{ items[i].uri }}",
+				"attribution_uri" : "{{ items[i].attribution_uri }}",
+				"date_created" : "{{ items[i].date_created|date("Y-m-d") }}",
+				"type" : "{{ items[i].type }}",
+				"source" : "{{ items[i].source }}",
+				"description" : "{{ items[i].description }}",
+				"thumbnail_url" : "{{ items[i].thumbnail_url }}",
+				"child_items_count" : "{{ items[i].child_items_count }}",
+				"media_geo_latitude" : "{{ items[i].media_geo_latitude }}",
+				"media_geo_longitude" : "{{ items[i].media_geo_longitude }}",
+				{% if items[i].media_date_created %}
+					"media_date_created" : "{{ items[i].media_date_created|date("Y-m-d") }}",
+				{% else %}
+					"media_date_created" : "",
+				{% endif %}
+				{% if items[i].media_date_created_end %}
+					"media_date_created_end" : "{{ items[i].media_date_created_end|date("Y-m-d") }}",
+				{% else %}
+					"media_date_created_end" : "",
+				{% endif %}
+				"media_creator_username" : "{{ items[i].media_creator_username }}",
+				"media_creator_realname" : "{{ items[i].media_creator_realname }}"
+			}
+			{% if i < len %}
+				,
+			{% endif %}
+			{% endfor %}
+		],
+	{% else %}
+		{},
+	{% endif %}	
+"{% block countName %}items_count{% endblock %}":
+	{% if items is defined %}
+		{{ items|length }}
+	{% else %}
+		0
+	{% endif %}	
 }

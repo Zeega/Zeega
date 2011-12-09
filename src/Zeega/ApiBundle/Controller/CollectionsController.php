@@ -37,11 +37,8 @@ class CollectionsController extends Controller
  					        ->searchItems($query);								
 
         // populate the results object
-        $results[] = array('collections'=>$queryResults, 'collections_count'=>sizeof($queryResults));
-
- 		$response = new Response(json_encode($results));
- 		$response->headers->set('Content-Type', 'application/json');
-        return $response;
+        $tagsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults));
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
@@ -52,12 +49,9 @@ class CollectionsController extends Controller
         $queryResults = $this->getDoctrine()
          					 ->getRepository('ZeegaIngestBundle:Item')
          					 ->searchCollectionById($id);
-
-        $response = new Response(json_encode($queryResults));
- 		$response->headers->set('Content-Type', 'application/json');
-        
-        // return the results
-        return $response;
+       
+        $tagsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults));
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
     // get_collection_items     GET   /api/collections/{id}/items.{_format}
@@ -82,14 +76,10 @@ class CollectionsController extends Controller
          					 ->searchCollectionItems($query);								
         
         // populate the results object
-        
-        $results[] = array('items'=>$queryResults, 'items_count'=>sizeof($queryResults));
-        
-  		$response = new Response(json_encode($results));
-  		$response->headers->set('Content-Type', 'application/json');
-
-        // return the results
-        return $response;
+        $tagsView = $this->renderView('ZeegaApiBundle:Collections:items.json.twig', 
+            array('items' => $queryResults, 'collection_id' => $id));
+            
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }   
     
     // get_item_tags GET    /api/collections/{collectionId}/tags.{_format}
@@ -97,7 +87,7 @@ class CollectionsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemsByTagId($collectionId);
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($collectionId);
 
         if (!$tags) 
         {
@@ -106,7 +96,10 @@ class CollectionsController extends Controller
         
         //$tags = $item->getTags();
         
-        return ResponseHelper::encodeAndGetJsonResponse($tags);
+        $tagsView = $this->renderView('ZeegaApiBundle:Collections:tags.json.twig', 
+            array('tags' => $tags, 'collection_id' => $collectionId));
+            
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
         
     // post_collections POST   /api/collections.{_format}
@@ -135,16 +128,8 @@ class CollectionsController extends Controller
         $em->persist($item);
         $em->flush();
         
-        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
-        $json = $serializer->serialize($item, 'json');
-        
-        $response = new Response($json);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-        //$json = $serializer->serialize($item, 'json');
-        //return new Response(json_encode($item));
-        
-        //return new Response($item->getId());
+        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $item));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
     
     // post_collections_items   POST   /api/collections/items.{_format}
@@ -163,13 +148,9 @@ class CollectionsController extends Controller
         
         $em->persist($new_collection);
         $em->flush();
-        
-        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
-        $json = $serializer->serialize($new_collection, 'json');
-        
-        $response = new Response($json);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+
+        $tagsView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $new_collection));
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
@@ -183,15 +164,12 @@ class CollectionsController extends Controller
         {
             throw $this->createNotFoundException('Unable to find Collection entity.');
         }
+        
         $items_list = $this->getRequest()->request->get('newItemIDS');
-        $logger = $this->get('logger');
-        $logger->info('We just got the logger');        
-        $logger->info(var_dump($this->getRequest()->request->get('newItemIDS')));
+
         // this is terrible...
         foreach($items_list as $item)
         {
-            
-            
             $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
 
             if (!$child_entity) 
@@ -201,18 +179,14 @@ class CollectionsController extends Controller
             
             $entity->addItem($child_entity);            
         }
+        $entity->setChildItemsCount($entity->getChildItemsCount() + count($items_list));
         
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($entity);
         $em->flush();
         
-        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
-        $json = $serializer->serialize($entity, 'json');
-        
-        $response = new Response($json);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-       
+        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
    
    	// delete_collection    DELETE /api/collections/{collection_id}.{_format}

@@ -14,41 +14,6 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class TagsController extends Controller
 {
-    
-    public function getTagsComputeSimilarAction()
-    {
-        // get this code out of here - use entity instead
-        $conn = $this->get('database_connection');
-        
-        $itemsWithTagQuery = $conn->prepare('select distinct item_id from ItemTags where tag_id = ?');
-        $relatedTagsQuery = $conn->prepare('select tag_id, count(tag_id) from ItemTags where item_id in (?) group by tag_id');
-                 
-        $tags = $conn->fetchAll('select distinct tag_id from ItemTags');
-        
-        foreach($tags as $tag)
-        {
-            $itemsWithTag = $conn->fetchAll('select distinct item_id from ItemTags where tag_id = ?', array($tag["tag_id"]));
-            $itemTags = array();
-            foreach($itemsWithTag as $item)
-            {
-                array_push($itemTags,$item["item_id"]);
-            }
-        
-            $relatedTags = $conn->executeQuery('select tag_id, count(tag_id) as tag_count from ItemTags where item_id in (?) and tag_id <> ? group by tag_id', 
-                                                array($itemTags,$tag["tag_id"]),
-                                                array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY, 'integer'));
-            
-            foreach($relatedTags as $relatedTag)
-            {
-                $conn->insert('TagCorrelation', array('tag_id' => $tag["tag_id"], 
-                    'tag_related_id' => $relatedTag["tag_id"], 'correlation_index' => $relatedTag["tag_count"]),
-                    array('Integer','Integer','Integer','Integer'));
-                
-                //return new Response(var_dump($tag));
-            }
-        }
-    }
-    
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
     public function getTagSimilarAction($tagid)
     {
@@ -64,8 +29,9 @@ class TagsController extends Controller
         {
             throw $this->createNotFoundException('Unable to find the Item with the id ' . $tagid);
         }
+        $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tagid));
         
-        return ResponseHelper::encodeAndGetJsonResponse($tags);
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
 
     //  get_collections GET    /api/collections.{_format}
@@ -75,7 +41,9 @@ class TagsController extends Controller
 
         $tags = $em->getRepository('ZeegaIngestBundle:Tag')->findAll();
         
-        return ResponseHelper::encodeAndGetJsonResponse($tags);
+        $tagsView = $this->renderView('ZeegaApiBundle:Tags:index.json.twig', array('tags' => $tags));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }    
 
     // get_collection GET    /api/collections/{id}.{_format}
@@ -85,12 +53,44 @@ class TagsController extends Controller
 
         $entity = $em->getRepository('ZeegaIngestBundle:Tag')->find($id);
 
-        if (!$entity) 
-        {
-            throw $this->createNotFoundException('Unable to find Tag entity.');
-        }
+        $tagView = $this->renderView('ZeegaApiBundle:Tags:show.json.twig', array('tag' => $entity));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($tagView);
+    }
 
-        return ResponseHelper::encodeAndGetJsonResponse($entity);
+    // TEMP - compute similar tags
+    public function getTagsComputeSimilarAction()
+    {
+         // get this code out of here - use entity instead
+         $conn = $this->get('database_connection');
+ 
+         $itemsWithTagQuery = $conn->prepare('select distinct item_id from ItemTags where tag_id = ?');
+         $relatedTagsQuery = $conn->prepare('select tag_id, count(tag_id) from ItemTags where item_id in (?) group by tag_id');
+          
+         $tags = $conn->fetchAll('select distinct tag_id from ItemTags');
+ 
+         foreach($tags as $tag)
+         {
+             $itemsWithTag = $conn->fetchAll('select distinct item_id from ItemTags where tag_id = ?', array($tag["tag_id"]));
+             $itemTags = array();
+             foreach($itemsWithTag as $item)
+             {
+                 array_push($itemTags,$item["item_id"]);
+             }
+ 
+             $relatedTags = $conn->executeQuery('select tag_id, count(tag_id) as tag_count from ItemTags where item_id in (?) and tag_id <> ? group by tag_id', 
+                                                 array($itemTags,$tag["tag_id"]),
+                                                 array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY, 'integer'));
+     
+             foreach($relatedTags as $relatedTag)
+             {
+                 $conn->insert('TagCorrelation', array('tag_id' => $tag["tag_id"], 
+                     'tag_related_id' => $relatedTag["tag_id"], 'correlation_index' => $relatedTag["tag_count"]),
+                     array('Integer','Integer','Integer','Integer'));
+         
+                 //return new Response(var_dump($tag));
+             }
+         }
     }
 
     // Private methods 
