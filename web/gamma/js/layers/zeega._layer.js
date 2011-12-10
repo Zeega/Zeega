@@ -147,9 +147,7 @@ var ProtoLayer = Class.extend({
 		
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
-		
 			this.type = model.get('type');
-		
 			this.zIndex = model.get('zindex');
 			
 			// have to set these inside here so they don't get shared!!!
