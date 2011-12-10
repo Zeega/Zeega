@@ -775,7 +775,7 @@ var Player = {
 		html+=				'<div class="citation-title"><%= title %></div>';
 		html+=				'<div class="citation-body">';
 		//html+=					'<div class="citation-thumb"><img src="<%= imgUrl %>"/></div>';
-		html+=					'<div class="citation-metadata"><a href="http://<%= trackback %>">Link to original</a></div>';
+		html+=					'<div class="citation-metadata"><a href="http://<%= trackback %>" target="blank">Link to original</a></div>';
 		html+=				'</div>';
 		html+=			'</div>';
 		html+=		'</li>';
