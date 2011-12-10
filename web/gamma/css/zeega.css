@@ -1586,16 +1586,15 @@ background-color: rgba(0,0,0,.8);
 }
 
 
-#loadingInsideMP {
-
-position: absolute;
-background-color: white;
-opacity: 1;
-width:0px;
-height: 10px;
-
-
-
+#loadingInsideMP
+{
+	position: absolute;
+	background-color: #666;
+	background-image: url('../images/stripes.png');
+	background-size:22px;
+	opacity: 1;
+	width:0px;
+	height: 10px;
 }
 
 #loadingStatusMP {

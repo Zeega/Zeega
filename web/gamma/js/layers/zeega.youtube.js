@@ -108,10 +108,10 @@ var YoutubeLayer = VideoLayer.extend({
 	
 	
 	
-	preload : function(){
+	preload : function()
+	{
 		
-		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
-		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
+		var h = Math.floor( this.attr.width  / this.attr.dimension );
 
 		var cssObj = {
 			'position' : 'absolute',
