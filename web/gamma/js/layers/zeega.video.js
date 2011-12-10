@@ -152,10 +152,14 @@ var VideoLayer = ProtoLayer.extend({
 			.css(cssObj);
 	},
 	
-	drawThumb : function()
+	thumb : function()
 	{
-		//Video Layers break headless browser
+		var cssObj = {
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+		};
 		
+		this.thumbnail.css( cssObj );
 	},
 	
 	

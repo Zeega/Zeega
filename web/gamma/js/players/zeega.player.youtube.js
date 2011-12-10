@@ -405,9 +405,14 @@ var ZeegaYoutubePublish = Class.extend({
 	
 		var params = { allowScriptAccess: "always", wmode: "opaque", disablekb: "1" };
 		var atts = { id: "youtube-player-"+id};
+/*
 		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+id, 
 						   "youtube-player-"+id, width, height, "8", null, null, params, atts);
-		
+*/
+
+		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+id, 
+				   "youtube-player-"+id, '100%', '100%', "8", null, null, params, atts);
+						
 		this._loaded=true;
 		
 		addGlobal(id,'stateChangePublish','layer-publish-'+id);

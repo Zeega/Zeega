@@ -147,9 +147,7 @@ var ProtoLayer = Class.extend({
 		
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
-		
 			this.type = model.get('type');
-		
 			this.zIndex = model.get('zindex');
 			
 			// have to set these inside here so they don't get shared!!!
@@ -200,6 +198,7 @@ var ProtoLayer = Class.extend({
 		var cssObj = {
 			position : 'absolute',
 			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
 			opacity : this.model.attr.opacity,
 			top : this.model.attr.top +'%',
 			left : this.model.attr.left +'%'
