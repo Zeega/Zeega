@@ -23,15 +23,16 @@ class ImportWidget
 	
 	
 	public function parseUrl($url){
-
+	
 		$urlSplit=explode('?',$url);
 		$urlClean=$urlSplit[0];
 		$fileFormat=strtolower(substr($urlClean,strlen($urlClean)-4));
 		$fileFormatLong=strtolower(substr($urlClean,strlen($urlClean)-5));
 		
 		$urlInfo['fileFormat']=$fileFormat;
-			
-			
+		$urlInfo['type']='item';		
+		$viawork = '/(olvwork[0-9]*)/';
+		$viagroup	= '/(olvgroup[0-9]*)/';
 		/**  ABSOLUTE URL ************************************/
 		
 		
@@ -62,6 +63,16 @@ class ImportWidget
 			$id='';
 		}
 		
+		
+			/**  HOLLIS **************************************/
+	
+		
+		elseif(preg_match($viagroup, $url, $matches)){
+			$archive='Hollis';
+			$id=$matches[1];
+			
+	
+		}
 		
 		/**  DocumentCloud **************************************/
 		
@@ -175,7 +186,7 @@ class ImportWidget
 			$id="";
 		}
 		
-		
+		$urlInfo['type']='item';
 		$urlInfo['id']=$id;
 		$urlInfo['archive']=$archive;
 		$urlInfo['url']=$url;
@@ -285,6 +296,102 @@ class ImportWidget
 		
 	}
 	
+	public function parseHollis($id){
+	
+			$originalUrl="http://webservices.lib.harvard.edu/rest/mods/via/".$id;
+			$ch = curl_init();
+			$timeout = 5; // set to zero for no timeout
+			curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$file_contents = curl_exec($ch);
+			curl_close($ch);
+			
+			$xml = new SimpleXMLElement($file_contents);
+	
+		$items=array();
+		
+		foreach($xml->location as $location){
+		if($location->url){
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		
+		
+		$item->setTitle((string) $xml->titleInfo->title);
+		$item->setItemUri($id);
+		
+		$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+		$item->setCreator((string)$xml->name->namePart);
+		$item->setContentType('Image');
+		$item->setSourceType('Image');
+		$item->setArchive('Hollis');
+		//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+		//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+		
+		$url=$this->getRedirectUrl((string)$location->url);
+		$metadata->setThumbUrl($url);
+		$item->setItemUrl($url);
+		$item->setMedia($media);
+		$item->setMetadata($metadata);
+		$items[]=$item;
+		}
+		}
+		$collection['title'] = (string) $xml->titleInfo->title;
+		$collection['creator'] = (string)$xml->name->namePart;
+		$collection['items']=$items;
+		return $collection;
+	}
+	
+	
+	public function parseHollisGroup($id){
+	
+			$originalUrl="http://webservices.lib.harvard.edu/rest/mods/via/".$id;
+			$ch = curl_init();
+			$timeout = 5; // set to zero for no timeout
+			curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$file_contents = curl_exec($ch);
+			curl_close($ch);
+			
+			$xml = new SimpleXMLElement($file_contents);
+		
+			$items=array();
+			foreach($xml->relatedItem as $relatedItem){
+				
+					if($relatedItem->location->url){
+						$item= new Item();
+						$metadata= new Metadata();
+						$media = new Media();
+						
+						
+						$item->setTitle((string) $relatedItem->titleInfo->title);
+						$item->setItemUri($id);
+						
+						$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+						$item->setCreator((string)$xml->name->namePart);
+						$item->setContentType('Image');
+						$item->setSourceType('Image');
+						$item->setArchive('Hollis');
+						//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+						
+						$url=$this->getRedirectUrl((string)$relatedItem->location->url);
+						$metadata->setThumbUrl($url);
+						$item->setItemUrl($url);
+						$item->setMedia($media);
+						$item->setMetadata($metadata);
+						$items[]=$item;
+					}
+			}	
+			$collection['title'] = count($items).(string) $xml->titleInfo->title;
+			$collection['creator'] = (string)$xml->name->namePart;
+			$collection['items']=$items;
+			return $collection;
+		
+	}
+	
 	
 	public function parseYoutube($id){
 	
@@ -314,7 +421,7 @@ class ImportWidget
 		$item->setTitle((string) $xml->title);
 		$item->setItemUri($id);
 		$item->setItemUrl($id);
-		$item->setAttributionUrl('http://www.youtube.com/watch?v='+$id);
+		$item->setAttributionUrl('http://www.youtube.com/watch?v='.$id);
 		$item->setCreator((string)$xml->author->name);
 		$item->setContentType('Video');
 		$item->setSourceType('Youtube');
@@ -746,7 +853,36 @@ class ImportWidget
 
 }
 
-
+	public function getRedirectUrl($url){
+	$redirect_url = null; 
+ 
+	$url_parts = @parse_url($url);
+	if (!$url_parts) return false;
+	if (!isset($url_parts['host'])) return false; //can't process relative URLs
+	if (!isset($url_parts['path'])) $url_parts['path'] = '/';
+ 
+	$sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int)$url_parts['port'] : 80), $errno, $errstr, 30);
+	if (!$sock) return false;
+ 
+	$request = "HEAD " . $url_parts['path'] . (isset($url_parts['query']) ? '?'.$url_parts['query'] : '') . " HTTP/1.1\r\n"; 
+	$request .= 'Host: ' . $url_parts['host'] . "\r\n"; 
+	$request .= "Connection: Close\r\n\r\n"; 
+	fwrite($sock, $request);
+	$response = '';
+	while(!feof($sock)) $response .= fread($sock, 8192);
+	fclose($sock);
+ 
+	if (preg_match('/^Location: (.+?)$/m', $response, $matches)){
+		if ( substr($matches[1], 0, 1) == "/" )
+			return $url_parts['scheme'] . "://" . $url_parts['host'] . trim($matches[1]);
+		else
+			return trim($matches[1]);
+ 
+	} else {
+		return false;
+	}
+ 
+}
 	
 
 

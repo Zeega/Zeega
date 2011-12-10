@@ -177,6 +177,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
 			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
 			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
+			elseif($urlInfo['archive']=='Hollis') 			$collection=$import->parseHollisGroup($urlInfo['id']);
 
 
 			//Store media item(s) to session and render widget
@@ -200,10 +201,11 @@ class WidgetController extends Controller
 					'mycollection'=>$mycollection,
 				));
 			}
-        	elseif(isset($collection)){
+        	elseif(isset($collection)&&$collection){
 				$thumbUrls=array();
 				$widgetIds=array();
-				if($session->get('items'))$newItems=$session->get('items');			
+				if($session->get('items'))$newItems=$session->get('items');	
+				$newItems=array();
 				foreach($collection['items'] as $item){
 					$widgetId=rand(0,1000);
 					$item->setAttributionUrl($url."#".$item->getId());
