@@ -23,7 +23,7 @@ class TagsController extends Controller
         $conn = $this->get('database_connection');
 
         $tags = $conn->fetchAll('select Tag.*,TagCorrelation.correlation_index from TagCorrelation inner join Tag on TagCorrelation.tag_related_id = Tag.id 
-                                 where Tagcorrelation.tag_id = ? order by correlation_index DESC',
+                                 where TagCorrelation.tag_id = ? order by correlation_index DESC',
                                  array($tagid));
         if (!$tags) 
         {
