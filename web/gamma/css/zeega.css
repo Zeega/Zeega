@@ -1096,7 +1096,7 @@ body
 
 #citation
 {
-	background:rgba(255,255,255,0.2);
+	background:rgba(0,0,0,0.4);
 	position:absolute;
 	bottom:0;
 	left:0;
@@ -1113,7 +1113,7 @@ body
 #citation ul li
 {
 	float:left;
-	background:white;
+	background:rgba(0,0,0,0.4);
 	margin:1px;
 	padding:2px;
 	height: 100%;
@@ -1124,20 +1124,15 @@ body
 	height:100%;
 	float:left;
 }
-.citation-icon
-{
-	height:10px;
-	width:10px;
-	background:black;
-	overflow:hidden;
-}
 
 
 .citation-title
 {
 	font-weight:bold;
 	clear:both;
-	margin-bottom:5px;
+	margin-bottom:6px;
+	margin-left:6px;
+	color:rgba(255,255,255, 0.75);
 }
 
 .citation-body
