@@ -33,6 +33,7 @@ class ImportWidget
 		$urlInfo['type']='item';		
 		$viawork = '/(olvwork[0-9]*)/';
 		$viagroup	= '/(olvgroup[0-9]*)/';
+		$viaHUAM='/(HUAM[0-9]*)/';
 		/**  ABSOLUTE URL ************************************/
 		
 		
@@ -68,7 +69,21 @@ class ImportWidget
 	
 		
 		elseif(preg_match($viagroup, $url, $matches)){
-			$archive='Hollis';
+			$archive='Hollis-Group';
+			$id=$matches[1];
+			
+	
+		}
+		
+			elseif(preg_match($viaHUAM, $url, $matches)){
+			$archive='Hollis-Work';
+			$id=$matches[1];
+			
+	
+		}
+		
+		elseif(preg_match($viawork, $url, $matches)){
+			$archive='Hollis-Work';
 			$id=$matches[1];
 			
 	
@@ -296,7 +311,7 @@ class ImportWidget
 		
 	}
 	
-	public function parseHollis($id){
+	public function parseHollisWork($id){
 	
 			$originalUrl="http://webservices.lib.harvard.edu/rest/mods/via/".$id;
 			$ch = curl_init();
@@ -312,30 +327,30 @@ class ImportWidget
 		$items=array();
 		
 		foreach($xml->location as $location){
-		if($location->url){
-		$item= new Item();
-		$metadata= new Metadata();
-		$media = new Media();
-		
-		
-		$item->setTitle((string) $xml->titleInfo->title);
-		$item->setItemUri($id);
-		
-		$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
-		$item->setCreator((string)$xml->name->namePart);
-		$item->setContentType('Image');
-		$item->setSourceType('Image');
-		$item->setArchive('Hollis');
-		//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
-		//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
-		
-		$url=$this->getRedirectUrl((string)$location->url);
-		$metadata->setThumbUrl($url);
-		$item->setItemUrl($url);
-		$item->setMedia($media);
-		$item->setMetadata($metadata);
-		$items[]=$item;
-		}
+			if($location->url){
+				$item= new Item();
+				$metadata= new Metadata();
+				$media = new Media();
+				
+				
+				$item->setTitle((string) $xml->titleInfo->title);
+				$item->setItemUri($id);
+				
+				$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+				$item->setCreator((string)$xml->name->namePart);
+				$item->setContentType('Image');
+				$item->setSourceType('Image');
+				$item->setArchive('Hollis');
+				//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+				//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+				
+				$url=$this->getRedirectUrl((string)$location->url);
+				$metadata->setThumbUrl($url.'?height=144&width=144');
+				$item->setItemUrl($url);
+				$item->setMedia($media);
+				$item->setMetadata($metadata);
+				$items[]=$item;
+			}
 		}
 		$collection['title'] = (string) $xml->titleInfo->title;
 		$collection['creator'] = (string)$xml->name->namePart;
@@ -378,7 +393,7 @@ class ImportWidget
 						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
 						
 						$url=$this->getRedirectUrl((string)$relatedItem->location->url);
-						$metadata->setThumbUrl($url);
+						$metadata->setThumbUrl($url.'?height=144&width=144');
 						$item->setItemUrl($url);
 						$item->setMedia($media);
 						$item->setMetadata($metadata);

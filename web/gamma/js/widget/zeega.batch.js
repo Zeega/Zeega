@@ -4,7 +4,7 @@ var widget = {
 	
 		$('#add-item').click(function(){
 			 $(this).fadeOut();
-			 for(var i=0;i<$('#import-item').data('count');i++){
+			 for(var i=1;i<=$('#import-item').data('count');i++){
 				 postdata={ widgetId:$("#import-item img:nth-child("+i+")").data('id') }
 				 $.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'widget/persist',postdata,function(data){
 				    $('#message').html('Media successfuly added to your Zeega Collection');
