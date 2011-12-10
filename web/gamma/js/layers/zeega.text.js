@@ -228,43 +228,18 @@ var TextLayer = ProtoLayer.extend({
 		
 	},
 	
-	drawThumb : function()
+	thumb : function()
 	{
-		var _this  = this;
-		
-		//make dom object
-		//maybe these should all be wrapped in divs?
-		var div = $('<div />');
+		var container = $('<div>');
 		var cssObj = {
-			'position' : 'absolute',
-			'top' : this.attr.y+'%',
-			'left' : this.attr.x+'%',
-			'z-index' : this.zIndex,//layers.length - i,
-			'width' : this.attr.width +'px',
-			'height' : this.attr.height +'px',
 			'font-size' : this.attr.size + 'px'
 		};
-		div.addClass('text-layer-container')
+		container.addClass('text-layer-container')
 			.attr({
 				'id' : 'layer-preview-'+this.model.id,
 				'data-layer-id' : this.model.id,
 			})
 			.css(cssObj);
-
-		div.addClass('text-layer-chrome-visible');
-		
-		/*
-		if (this.attr.content == ''){
-		    div.addClass('text-layer-chrome-visible');
-		}
-		
-		*/
-
-		var mouseELmaster = function (event)
-		{
-		    _this.toggleFrameVis();
-		}
-
 	
 		var content = $('<div />').css({'width' : '100%', 
 			'height' : '100%', 
@@ -282,18 +257,11 @@ var TextLayer = ProtoLayer.extend({
 		})
 		.addClass('text-layer-content');
 		
-		content.html(_this.attr.content);
+		content.html( this.attr.content );
 
 		
-		div.append(content);
-		$('#preview-media').append(div);
-		//draw to the workspace
-		//$('#workspace').append(this.dom);
-		//Color and bgColor must be set after adding to the DOM - before, jquery automatically changes rgba colors to rgb
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.color = 'rgba(' + this.attr.color.join(',') + ')';
-		$('#layer-preview-'+this.model.id)[0].style.backgroundColor = 'rgba(' + this.attr.bgColor.join(',') + ')';
-		$('#layer-preview-'+this.model.id).children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-
+		container.append(content);
+		this.thumbnail.append( container );
 	},
 
 	preload : function( target )

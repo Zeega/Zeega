@@ -154,64 +154,47 @@ var GeoLayer = ProtoLayer.extend({
 		
 	},
 	
-	drawThumb : function()
+	thumb : function()
 	{
 		var _this  = this;
-		console.log('drawing geo preview');
+
 		
-		//Create dom element
-		this.editorLoaded=false;
-		var div = $('<div>');
-		var cssObj = {
-			'position' : 'absolute',
-			'top' : this.attr.y+"%",
-			'left' : this.attr.x+"%",
-			'z-index' : this.zIndex,
-			'width' : this.attr.w+"%",
-			'height' : this.attr.h+"%",
-			'opacity' : this.attr.opacity
-		};
-		
-		div.css(cssObj);
 
 		//Create static map object and attach to workspace
 		
 		var img = $('<img>').css({'width':'100%'}).attr({'id':'layer-image-'+this.model.id});
 		
-		div.append(img);
-		$('#preview-media').append(div);
 		
 		//Pull static map image using google api
 		
-		if(this.attr.type=='map'){
-			var w=6*parseInt(this.attr.w);
-			var h=4*parseInt(this.attr.h);
-			$('#layer-image-'+this.model.id).attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
+		if( this.attr.type == 'map' )
+		{
+			var w = 6 * parseInt( this.attr.width );
+			var h = 4 * parseInt( this.attr.height );
+			img.attr('src',"http://maps.googleapis.com/maps/api/staticmap?center="+this.attr.lat+","+this.attr.lng+"&zoom="+this.attr.zoom+"&size="+w+"x"+h+"&maptype="+this.attr.mapType+"&sensor=false");
 		
-		}
-		else{
+		}else{
 		
 			var centerLatLng = new google.maps.LatLng(this.attr.lat, this.attr.lng);
 
 			var service=new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
 				_this.attr.panoId=data.location.pano;
-				var x=2;
-				var y=1;
+				var x = 2;
+				var y = 1;
 				if(_this.attr.pitch>25) y=0;
 				else if(_this.attr.pitch<-25) y=2;
 				x=(Math.floor((_this.attr.heading+360)/60))%6;
 				
-				var w = 6*parseInt(_this.attr.w);
-				var h = 4*parseInt(_this.attr.h);
+				var w = 6*parseInt(_this.attr.width);
+				var h = 4*parseInt(_this.attr.height);
 				
-				console.log('load moment');
-				console.log(_this);
-				$('#layer-image-'+_this.model.id).attr('src','http://maps.googleapis.com/maps/api/streetview?size='+w+'x'+h+'&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
+				img.attr('src','http://maps.googleapis.com/maps/api/streetview?size='+w+'x'+h+'&fov='+180 / Math.pow(2,_this.attr.streetZoom)+'&location='+_this.attr.lat+','+_this.attr.lng+'&heading='+_this.attr.heading+'&pitch='+_this.attr.pitch+'&sensor=false');
 			});
 		}
 		
 		
+		this.thumbnail.append(img);
 	},
 
 	preload : function( target )
@@ -246,7 +229,7 @@ var GeoLayer = ProtoLayer.extend({
 
 			var service = new google.maps.StreetViewService();
 			service.getPanoramaByLocation(centerLatLng,50,function(data,status){
-				_this.model.get('attr').panoId = data.location.pano;
+				_this.model.attr.panoId = data.location.pano;
 				var x = 2;
 				var y = 1;
 				if( _this.attr.pitch > 25 ) y=0;

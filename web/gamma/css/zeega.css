@@ -1249,17 +1249,14 @@ td+td
 }
 
 
-
-
 .preview-nav
 {
 	z-index:1000;
 }
 
-
 .preview-nav-arrow
 {
-	position:relative;
+	position:absolute;
 	top:50%;
 	padding:10px;
 	margin:10px;
@@ -1275,11 +1272,12 @@ td+td
 
 #preview-right
 {
-	float:right;
+	right:0;
 }
 
 #preview-left
 {
+	left:0;
 	float:left;
 	-webkit-transform: rotate(180deg);
 	-moz-transform: rotate(180deg);

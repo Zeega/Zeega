@@ -13,7 +13,8 @@ var VisualLayerListView = Backbone.View.extend({
 		this.model.bind( 'change:width', this.updateNodeThumb );
 		this.model.bind( 'change:opacity', this.updateNodeThumb );
 		this.model.bind( 'change:color', this.updateNodeThumb );
-		
+		this.model.bind( 'change:left', this.updateNodeThumb );
+		this.model.bind( 'change:top', this.updateNodeThumb );
 	},
 	
 	updateNodeThumb : function()
