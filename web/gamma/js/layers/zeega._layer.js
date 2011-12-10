@@ -200,6 +200,7 @@ var ProtoLayer = Class.extend({
 		var cssObj = {
 			position : 'absolute',
 			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
 			opacity : this.model.attr.opacity,
 			top : this.model.attr.top +'%',
 			left : this.model.attr.left +'%'

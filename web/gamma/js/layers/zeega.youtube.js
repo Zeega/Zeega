@@ -82,13 +82,7 @@ var YoutubeLayer = VideoLayer.extend({
 			.css(cssObj);
 		
 		var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr('id','layer-preview-wrapper-'+this.model.id);
-		
-		this.visualEditorElement.draggable({
-			//when the image stops being dragged
-			stop : function(){
-				_this.updateAttr();
-			}
-		});
+
 		
 				
 		this.visualEditorElement.bind( 'slide' , function(){
@@ -99,12 +93,20 @@ var YoutubeLayer = VideoLayer.extend({
 				'width' : $('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')+'%',
 				'height' : height+'%'
 			});
-			//console.log('height: '+height);
 		});
 		
 		this.visualEditorElement.append(wrapper);
 	},
 	
+	thumb : function()
+	{
+		var cssObj = {
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+		};
+		
+		this.thumbnail.css( cssObj );
+	},
 	
 	
 	
