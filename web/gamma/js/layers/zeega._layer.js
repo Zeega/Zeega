@@ -81,8 +81,7 @@ var ProtoLayer = Class.extend({
 		
 	},
 	
-	//necessary?
-	drawThumb : function()
+	thumb : function()
 	{
 		
 	},
@@ -148,9 +147,7 @@ var ProtoLayer = Class.extend({
 		
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
-		
 			this.type = model.get('type');
-		
 			this.zIndex = model.get('zindex');
 			
 			// have to set these inside here so they don't get shared!!!
@@ -183,7 +180,7 @@ var ProtoLayer = Class.extend({
 	},
 	
 	//necessary?
-	lightLoad : function(model)
+	lightLoad : function( model )
 	{
 		//make it possible to load objects and not models.
 		this.model = model;
@@ -197,8 +194,20 @@ var ProtoLayer = Class.extend({
 		this.type = model.type;
 		this.zIndex = model.zindex;
 		
-		this.display = $('<div>');
+		//set basic positioning
+		var cssObj = {
+			position : 'absolute',
+			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
+			opacity : this.model.attr.opacity,
+			top : this.model.attr.top +'%',
+			left : this.model.attr.left +'%'
+		};
 		
+		this.display = $('<div>');
+		this.thumbnail = $('<div>').css(cssObj);
+
+		this.thumb();
 	},
 	
 	setListeners : function()

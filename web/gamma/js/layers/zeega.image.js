@@ -75,20 +75,13 @@ var ImageLayer = ProtoLayer.extend({
 			.append( img );
 	},
 
-	drawThumb : function(){
-		
-		$('#preview-media').append($('<div>')
-			.css( {
-				'position' : 'absolute',
-				'top' : this.attr.top  +'%',
-				'left' : this.attr.left  +'%',
-				'width' : this.attr.width,
-				'opacity' : this.attr.opacity
-			})
-			.append($('<img>')
-			.attr({'src':this.attr.url,'id':'layer-image-'+this.model.id})
-			.css({'width':'100%'})));
-	
+	thumb : function()
+	{
+		var img = $('<img>')
+			.attr('src', this.model.attr.url)
+			.css({'width':'100%'});
+				
+		this.thumbnail.append( img );
 	},
 	
 	preload : function( target ){

@@ -22,7 +22,7 @@ var VideoLayer = ProtoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity':1,
-		'dimension':1.3
+		'dimension':1.5
 	},
 	
 	controls : function()
@@ -89,7 +89,7 @@ var VideoLayer = ProtoLayer.extend({
 				.css( 'height' , '140px' ) //this should moved out
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
-			this.player = new ZeegaMP( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
+			this.player = new ZeegaVideoEditor( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){
@@ -97,12 +97,12 @@ var VideoLayer = ProtoLayer.extend({
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player.getBegin(),
+						value : _this.player.getInPoint(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player.getEnd(),
+						value : _this.player.getOutPoint(),
 						css : false
 					},
 					volume : {
@@ -152,10 +152,14 @@ var VideoLayer = ProtoLayer.extend({
 			.css(cssObj);
 	},
 	
-	drawThumb : function()
+	thumb : function()
 	{
-		//Video Layers break headless browser
+		var cssObj = {
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+		};
 		
+		this.thumbnail.css( cssObj );
 	},
 	
 	
@@ -164,7 +168,7 @@ var VideoLayer = ProtoLayer.extend({
 		//make dom object
 		var _this = this;
 		
-		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
+		var ratio = 1.5;
 		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
 		var cssObj = {
 			'position' : 'absolute',
@@ -172,7 +176,7 @@ var VideoLayer = ProtoLayer.extend({
 			'left' : "-1000%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.width+"%",
-			'height' : h+"%",
+			'height' : this.attr.width+"%",
 			'opacity' : this.attr.opacity
 		};
 		
@@ -183,20 +187,25 @@ var VideoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 		
-		this.player=new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
+		this.player=new ZeegaVideoPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 		
 	},
 	
 	play : function( z )
 	{
-		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+			if(z>=0) this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 		this.player.play();
+	},
+	pause: function (){
+		this.player.pause();
 	},
 	
 	stash :function()
 	{
 		this.display.css({'top':"-1000%",'left':"-1000%"});
-		this.player.pause();
+		
+		this.player.setVolume(0);
+		//this.player.pause();
 	},
 
 	exit: function()
@@ -206,18 +215,19 @@ var VideoLayer = ProtoLayer.extend({
 	
 	getTemplate : function(){
 	
-		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
+		var 		html ='		<div id="loadingMP" ><p>Loading Media...</p></div>';
+		html+='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
-		html +='<span style="font-weight: bold;">In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><span id="avStartMinutes" >0</span>:<span id="avStartSeconds" >0</span>';
 		html +='</div>';
 		html +='<div id="avStop"> ';
-		html +='<span style="font-weight: bold;">Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><span id="avStopMinutes" >0</span>:<span id="avStopSeconds" >0</span>';
 		html +=	'</div>';
 		html +='</div>';
 		html +='<div class="avComponent"> ';
 		html +='	<div id="mediaPlayerMP"> ';
-		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
+
 		html +='		<div id="playMP" class="playButtonMP"> </div> ';
 		html +='		<div id="loadingOutsideMP"> ';
 		html +='			<div id="startBar"></div>';

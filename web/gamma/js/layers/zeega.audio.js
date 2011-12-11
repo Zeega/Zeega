@@ -42,19 +42,19 @@ var AudioLayer = ProtoLayer.extend({
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
 			
-			this.player = new ZeegaMP(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id , 'player-' +this.model.id);
+			this.player = new ZeegaVideoEditor(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id , 'player-' +this.model.id);
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player.getBegin(),
+						value : _this.player.getInPoint(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player.getEnd(),
+						value : _this.player.getOutPoint(),
 						css : false
 					},
 					volume : {
@@ -79,12 +79,17 @@ var AudioLayer = ProtoLayer.extend({
 			'id' : 'layer-preview-'+this.model.id,
 			'data-layer-id' : this.model.id
 		});
-		this.player = new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
+		this.player = new ZeegaVideoPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 	},
 	
 	play : function()
 	{
 		this.player.play();
+	},
+	
+	pause : function()
+	{
+		this.player.pause();
 	},
 	
 	stash : function()

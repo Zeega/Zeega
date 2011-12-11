@@ -31,23 +31,23 @@ var YoutubeLayer = VideoLayer.extend({
 			this.layerControls.prepend( html );
 			
 			//this.layerControls.prepend( this.getTemplate() );
-			this.player = new ZeegaYoutube(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,_this.attr.width,_this.attr.height);
+			this.player = new ZeegaYoutubeEditor(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,'layer-'+_this.model.id);
 		
 			this.layerControls.bind( 'updated' , function(){
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player._start_time,
+						value : _this.player.getInPoint(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player._stop_time,
+						value : _this.player.getOutPoint(),
 						css : false
 					},
 					volume : {
 						property : 'volume',
-						value : Math.floor( _this.player._vol * 100.0 ),
+						value : _this.player.getVolume(),
 						css : false
 					}
 				};
@@ -82,13 +82,7 @@ var YoutubeLayer = VideoLayer.extend({
 			.css(cssObj);
 		
 		var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr('id','layer-preview-wrapper-'+this.model.id);
-		
-		this.visualEditorElement.draggable({
-			//when the image stops being dragged
-			stop : function(){
-				_this.updateAttr();
-			}
-		});
+
 		
 				
 		this.visualEditorElement.bind( 'slide' , function(){
@@ -99,19 +93,27 @@ var YoutubeLayer = VideoLayer.extend({
 				'width' : $('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')+'%',
 				'height' : height+'%'
 			});
-			//console.log('height: '+height);
 		});
 		
 		this.visualEditorElement.append(wrapper);
 	},
 	
-	
-	
-	
-	preload : function(){
+	thumb : function()
+	{
+		var cssObj = {
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundSize': '100px 100px',
+		};
 		
-		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
-		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
+		this.thumbnail.css( cssObj );
+	},
+	
+	
+	
+	preload : function()
+	{
+		
+		var h = Math.floor( this.attr.width  / this.attr.dimension );
 
 		var cssObj = {
 			'position' : 'absolute',
@@ -119,7 +121,7 @@ var YoutubeLayer = VideoLayer.extend({
 			'left' : "-1000%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.width+"%",
-			'height' : h+"%",
+			'height' : this.attr.width+"%",
 			'opacity' : this.attr.opacity
 		};
 
@@ -135,15 +137,19 @@ var YoutubeLayer = VideoLayer.extend({
 			.css( cssObj )
 			.append( wrapper );
 		
-		this.player = new ZeegaYoutubePublish(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-wrapper-'+this.model.id,'zeega-player',this.attr.width, h);
+		this.player = new ZeegaYoutubePlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-wrapper-'+this.model.id,'zeega-player');
 	},
 	
 	play : function(z)
-	{
-		this.display.css({ 'z-index':z,'top': this.attr.top + '%','left':this.attr.left +'%'});
+	{	
+		
+		if(z>=0) this.display.css({ 'z-index':z,'top': this.attr.top + '%','left':this.attr.left +'%'});
 		this.player.play();
 	},
 	
+	pause: function (){
+		this.player.pause();
+	},
 	stash :function()
 	{
 		
