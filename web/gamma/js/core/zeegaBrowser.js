@@ -29,7 +29,11 @@ var ZeegaBrowser = {
 	renderResults : function(){
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
-		
+		if (this.search.get("collection") != null){
+			$('#browser-collection-filter-title').text(ZeegaBrowser.clickedCollectionTitle);
+			$('#browser-collection-filter').show();
+			
+		} 
 		//Hide results drawer's loading spinner
 		$('#browser-results .browser-loading').hide();
 	},
@@ -37,7 +41,23 @@ var ZeegaBrowser = {
 	myCollectionsQueryDone : function(){
 		this.myCollectionsView.render();
 	},
-
+	doCollectionSearch : function(collectionID){
+		
+		/* When user clicks on a collection default to items view
+		instead of collections view */
+		$('#browser-item-count').closest('li').removeClass('browser-unselected-toggle');
+		$('#browser-item-count').closest('li').addClass('browser-selected-toggle');
+		$('#browser-item-count').siblings().removeClass('browser-selected-toggle');
+		$('#browser-item-count').siblings().addClass('browser-unselected-toggle');
+		$('#browser-results-collections').hide();
+		$('#browser-results-items').show();
+		
+		/* For the moment - clear other filters like query & type */
+		$('#database-search-text').val('');
+		$('#database-search-filter').val('All');
+		this.search.set({'user':-2, 'collection':collectionID});
+		this.doSearch();
+	},
 	doSearch : function(){
 		
 		

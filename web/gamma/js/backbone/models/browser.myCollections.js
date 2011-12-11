@@ -38,5 +38,7 @@ var MyCollections = Backbone.Collection.extend({
 		
 	},
 });
-
+MyCollections.comparator = function(myCollection) {
+  return myCollection.get("date_created");
+};
 

@@ -48,6 +48,7 @@ $(document).ready(function() {
 		mouseWheel:false,
 		fitToView:true,
 		arrows:false,
+		closeBtn:false,
 		
     	helpers : {
     		title : {
@@ -55,30 +56,34 @@ $(document).ready(function() {
     		}
     	},
 		
-		/* This adds a custom element for styling the image caption for
-		viewing a single IMAGE in the lightbox */    
+		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
     
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
 			var fancyView = null;
-           	if (thisModel.get("content_type") == "Image"){
-           		fancyView = new BrowserFancyBoxImageView({model:thisModel});
-           		fancyView.render(this);
-          	 	
 
-           	}
-           	else if (thisModel.get("content_type") == "Video"){
-           		fancyView = new BrowserFancyBoxVideoView({model:thisModel});
-           		fancyView.render(this);
-           		
-           	}
-           	
-           	
-			
-       
-        }
+			switch(thisModel.get("source")){
+				case 'Image':
+					fancyView = new BrowserFancyBoxImageView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Video':
+           			fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Audio':
+           			fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Youtube':
+           			fancyView = new BrowserFancyBoxYouTubeView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+			}
+        },
+        
 	});
 	
 
@@ -94,26 +99,33 @@ $(document).ready(function() {
 	 $( '#database-search-filter' ).bind('change', function(e){
 	     ZeegaBrowser.doSearch();
 	 });
-	
-	
+
+	$('#browser-remove-collection-filter').click(function(){
+		$('#browser-collection-filter').hide();
+		ZeegaBrowser.search.set({'collection':null});
+		ZeegaBrowser.doSearch();
+		return false;
+	});
 
 	//For filters - testing visual stuff - disabled
 	//$('.time, .space').click( toggleFilterDrawer);
 
-	//Set up toggling between My Media/All Media and Items/Collections
-	$('#browser-toggle-items-vs-collections li, #browser-toggle-all-media-vs-my-media li,').click(function(){
+	//Switches the results drawer between items and collections
+	$('#browser-toggle-items-vs-collections li').click(function(){
+
 		$(this).closest('li').removeClass('browser-unselected-toggle');
 		$(this).closest('li').addClass('browser-selected-toggle');
 		$(this).siblings().removeClass('browser-selected-toggle');
 		$(this).siblings().addClass('browser-unselected-toggle');
 
-		return false;
-	});
-
-	//Switches the results drawer between items and collections
-	$('#browser-toggle-items-vs-collections li').click(function(){
-		$('#browser-results-collections').toggle();
-		$('#browser-results-items').toggle();
+		
+		if ($(this).attr('id') == 'browser-collection-count'){
+			$('#browser-results-collections').show();
+			$('#browser-results-items').hide();
+		} else {
+			$('#browser-results-collections').hide();
+			$('#browser-results-items').show();
+		}
 		ZeegaBrowser.renderResults();
 		return false;
 	});
@@ -121,18 +133,23 @@ $(document).ready(function() {
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(){
 		
+		$(this).closest('li').removeClass('browser-unselected-toggle');
+		$(this).closest('li').addClass('browser-selected-toggle');
+		$(this).siblings().removeClass('browser-selected-toggle');
+		$(this).siblings().addClass('browser-unselected-toggle');
 
-		if ($(this).text() == "My Media"){
+		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
+
 		}else {
 
 			ZeegaBrowser.search.set({user:-2});
 		}
 		ZeegaBrowser.doSearch();
 	});
-
+	
 	$('#browser-create-new-collection').droppable({
-			accept : '.browser-results-image',
+			accept : '.browser-results-image, .browser-results-collection',
 			hoverClass : 'browser-create-new-collection-hover',
 			tolerance : 'pointer',
 
@@ -150,13 +167,15 @@ $(document).ready(function() {
 
 				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-				newGuy.save({ title:'New fake collection ' + Math.floor(Math.random()*1000)}, 
+				newGuy.save({ title:'New collection ' + Math.floor(Math.random()*1000)}, 
 							{
 								success: function(model, response) { 
-									ZeegaBrowser.myCollectionsModel.add(model);
+									ZeegaBrowser.draggedItem = null;
+									ZeegaBrowser.myCollectionsModel.add(model, {at: 0});
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
+				 					ZeegaBrowser.draggedItem = null;
 				 					console.log("Error creating a new collection.");
 				 					console.log(response);
 				 				}

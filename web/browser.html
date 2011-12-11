@@ -84,7 +84,7 @@
 					</div>
 				</div>
 				<div id="browser-toggles">
-					<div id="browser-toggle-all-media-vs-my-media"><ul><li class="browser-selected-toggle">My Media</li> <li class="browser-unselected-toggle">All Media</li> </ul></div>
+					<div id="browser-toggle-all-media-vs-my-media"><ul><li id="browser-my-media" class="browser-selected-toggle">My Media</li> <li id="browser-all-media" class="browser-unselected-toggle">All Media</li> </ul></div>
 					
 					<div style="clear:both"></div>
 				</div>
@@ -108,13 +108,13 @@
 							<input id="database-search-button" class="" type="button" value="go" onclick="return false">
 						</div>
 					</form>
-				
+					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span></div>
 					
 					
 					<div style="clear:both;padding-bottom:4px;"></div>
 					
 				</div>
-
+				
 				<div id="browser-results">
 					
 					<div id="browser-results-wrapper">
@@ -139,6 +139,8 @@
 				 	
 				 	
 				</div>
+				
+				
 				<!-- END BROWSER BODY CODE HERE -->
 		   
 			<br><br><br>
@@ -151,6 +153,8 @@
 						</div>
 					
 				</div>
+
+				
 			 </div> <!-- #editor -->	
          </div> <!-- #wrapper -->
 
@@ -168,16 +172,27 @@
 				<a id="" class="fancymedia fancybox" rel="group" title="" href="http://memory.loc.gov/award/mhsdalad/310000/310043r.jpg"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/1823_s.jpg" alt="080120v" title="080120v"></a>
 			</div>
 			<div id="browser-fancybox-caption-template">
-				<p class="title">Here's the image title</p>
-				<p><strong>Creator:</strong> <span class="creator">Creator Name</span></p>
-				<p><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
+				
+				<p class="title">TITLE</p>
+				<p><strong>Creator:</strong> <span class="creator">CREATOR</span></p>
+				<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>
+				<p class="source"><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
+
 			</div>
 			<div id="browser-fancybox-video-template">
+				<video controls="true" height="480px" width="640px" preload><source src="SOURCE"></video>
 				
-				<p class="title">Here's the image title</p>
-				<p><strong>Creator:</strong> <span class="creator">Creator Name</span></p>
-				<p><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
 			</div>
+			<div id="browser-fancybox-youtube-template">
+				<iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/VIDEO_ID" frameborder="0">
+				</iframe>
+				
+			</div>
+			<div id="browser-fancybox-audio-template">
+				<audio controls="true" src="SOURCE"></audio>
+				
+			</div>
+		
          </div>
 
          <!-- /TEMPLATES -->

@@ -6,8 +6,8 @@
 #browser {
 	position: relative;
 	top: 50px;
-}
 
+}
 
 #browser-results{
 	
@@ -23,8 +23,13 @@
 	-webkit-box-shadow: inset 2px 2px 2px 2px #333;
 	-moz-box-shadow: inset 2px 2px 2px 2px #333;
 	box-shadow: inset 2px 2px 2px 2px #333;
+	
+}
 
-	min-height:200px;
+#browser-results-items{
+	min-height:200px !important;
+	max-height:350px !important;
+	overflow:auto !important;
 }
 #browser-my-collections-label p, #browser-toggle-all-media-vs-my-media li{
 	color:#FFF;
@@ -83,15 +88,11 @@
 	-moz-border-radius-bottomleft: 10px;
 	-webkit-border-radius: 0px 10px 10px 10px !important;
 	border-radius: 0px 10px 10px 10px;
+	height:130px;
+	overflow:auto !important;
 	
 }
-#browser-my-collections-drawer{
-	list-style:none;
-	height:140px;
-	width:1400px;
-	overflow:hidden;
-	display:inline;
-}
+
 
 .browser-my-collection img{
 	padding:3px;
@@ -152,14 +153,18 @@
 
 	
 }
+#browser-my-collections-drawer{
+	margin:5px 0 0 10px;
+}
 .browser-results-image,.browser-results-collection, #browser-show-more-results{
 
 	float: left;
 	margin: 0;
 	/*border-radius: 3px;*/
-	margin:10px 0px 0px 10px;
+	/*margin:10px 0px 0px 10px;*/
+	padding:5px;
 	width:  144px;
-	height: 110px;/*94*/
+	height: 110px;
 	
 	
 }
@@ -201,8 +206,34 @@
 	box-shadow: 3px 0px 2px 0px #333333; 
 
 }
+#browser-collection-filter{
+	border:1px solid #ccc;
+	padding:5px 4px 4px 4px;
+	color:#ccc;
+	margin-left:20px;
+	float:left;
+	display:none;
+	-moz-border-radius: 6px;
+	-webkit-border-radius:6px;
+	border-radius: 6px;
+	letter-spacing:1px;
+}
+#browser-remove-collection-filter{
+	margin-right:20px;
+	margin-left:5px;
+	font-weight:bold;
+}
+
+#browser-collection-filter-title{
+	margin-right:5px;
+}
+.browser-add-item-to-collection-hover{
+	background-color:#F15A29 !important;
+
+}
 .browser-create-new-collection-hover{
 	background-color:#888 !important;
+
 }
 #browser-create-new-collection .browser-my-new-collection{
 	border:dashed 1px #666;
@@ -228,6 +259,7 @@
 .browser-results-collection{
 	width:144px;
 	float:left;
+
 }
 .browser-results-collection p
 {
@@ -336,6 +368,25 @@
 
 #browser-results-collections{
 	display:none;
+}
+#fancybox-close-button{
+	
+	font-family:Helvetica, sans-serif;
+	font-size:11px;
+	letter-spacing:1px;
+	font-weight:bold;
+	padding:3px 7px 1px;
+	
+	display:inline;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float:right;
+	
+}
+#fancybox-close-button:hover{
+	
+	text-decoration:none;
 }
 // Settings
 

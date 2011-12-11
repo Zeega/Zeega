@@ -31,10 +31,54 @@ var BrowserCollectionView = BrowserItemView.extend({
 	
 	initialize : function() {
 		this.el = $("#browser-results-collection-template").clone();
+		this.el.removeAttr('id');
+
 		var thisView = this;
+		
+		/*
+			Collections are both draggable and droppable. You can drag a collection into
+			another collection.
+
+			TODO: Add permissions to this so that you can only add collections to your own collections.
+		*/
+
+	$(this.el).draggable({
+			distance : 10,
+			cursor : 'crosshair',
+			appendTo : 'body',
+			cursorAt : { 
+				top : -5,
+				left : -5
+			},
+			opacity : .75,
+			//helper : 'clone',
+			helper : function(){
+				var drag = $(this).find('.browser-img-large')
+					.clone()
+					.css({
+						'overflow':'hidden',
+						'background':'white'
+					});
+				return drag;
+			},
+			
+			//init the dragged item variable
+			start : function(){
+				$(this).draggable('option','revert',true);
+				ZeegaBrowser.draggedItem = thisView.model;
+			},
+				
+			/**	stuff that happens when the user drags the item into a node **/	
+				
+			stop : function(){
+				ZeegaBrowser.draggedItem = null;
+			}
+			
+		});
+
 		$(this.el).droppable({
-			accept : '.browser-results-image',
-			hoverClass : 'browser-create-new-collection-hover',
+			accept : '.browser-results-image, .browser-results-collection',
+			hoverClass : 'browser-add-item-to-collection-hover',
 			tolerance : 'pointer',
 
 			//this happens when you drop an item onto a collection
@@ -47,7 +91,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				$(this).effect("highlight", {}, 3000);
 				$(this).find('.browser-item-count').text('Adding item...');
 				$(this).animate({ opacity: 0.75}, 1000, function() {
-					    $(this).find('.browser-item-count').text('20 items');
+					    
 					    $(this).css('opacity', '1');
 					  });
 			
@@ -56,11 +100,12 @@ var BrowserCollectionView = BrowserItemView.extend({
 				thisView.model.save({ }, 
 							{
 								success: function(model, response) { 
-							
+									ZeegaBrowser.draggedItem = null;
 									//this should take care of incrementing item count?
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
+				 					ZeegaBrowser.draggedItem = null;
 				 					console.log("Error updating a collection with a new item.");
 				 					console.log(response);
 				 				}
@@ -73,15 +118,22 @@ var BrowserCollectionView = BrowserItemView.extend({
 	{
 		
 		this.el.addClass('browser-results-collection');
-		this.el.removeAttr('id');
-
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
+		
+		//this.el.attr('id', this.model.id);
+		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('img').attr('title', this.model.get('title'));
 
-		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		this.el.find('.browser-item-count').text('NULL items');
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
 		this.el.find('.title').text(this.model.get('title'));
 
+		var modelID = this.model.id;
+		var modelTitle = this.model.get('title');
+		this.el.click(function(){
+			ZeegaBrowser.clickedCollectionTitle = modelTitle;
+			ZeegaBrowser.doCollectionSearch(modelID);
+			
+		});
 		return this;
 	},
 
@@ -134,10 +186,10 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		this.el.removeAttr('id');
 		this.el.find('a').attr('id', this.model.get('id'));
 		this.el.find('a').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', (this.model.get('thumb_url') == null ? '' : this.model.get('thumb_url')));
-		this.el.find('a').attr('href', this.model.get('item_url'));
+		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('a').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
-		this.el.find('img').attr('alt', (this.model.get('thumb_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		
 		return this;
 	},
@@ -145,11 +197,13 @@ var BrowserSingleItemView = BrowserItemView.extend({
 
 });
 
-// For displaying caption when viewing single image in FancyBox
-var BrowserFancyBoxImageView = BrowserItemView.extend({
+// This is a parent class that takes care of image captions for ALL fancybox views
+
+var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	initialize: function(){
 		this.el =$("#browser-fancybox-caption-template").clone();
+		this.el.removeAttr('id');
 	},
 	/* Pass in the element that the user clicked on from fancybox. Fancy box
 	uses the object's title as the caption so set that to the element in 
@@ -157,11 +211,9 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 	render: function(obj)
 	{
 		
-		
-		this.el.removeAttr('id');
-		this.el.find('a').attr('href', this.model.get('attribution_url'));
+		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('creator'));
+		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
 		obj.title = this.el.html();
 		
@@ -169,33 +221,99 @@ var BrowserFancyBoxImageView = BrowserItemView.extend({
 	},
 
 });
-// For displaying caption when viewing VIDEO in FancyBox
-var BrowserFancyBoxVideoView = BrowserItemView.extend({
+// For displaying Images
+var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
-		this.el =$("#browser-fancybox-video-template").clone();
+
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
 	},
-	/* Pass in the element that the user clicked on from fancybox. Fancy box
-	uses the object's title as the caption so set that to the element in 
-	the template */
+	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
 	{
 		
-		
-		this.el.removeAttr('id');
-		//this.el.find('.fancymedia').attr('src', '');
-		this.el.find('a').attr('href', this.model.get('attribution_url'));
-		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('creator'));
-		
-		var source  = $(obj.element).attr('href');
-
-		//Right now video only seems to work with mp4s. Or, at least, does not work with divx and youtube vids.
-		obj.content = '<video controls="true" height="480px" width="640px"><source src="'+source+'"></video>'; 
-		obj.title = this.el.html();
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
 		return this;
 	},
 
 });
+// For displaying HTML5 Video (not YouTube)
+var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
+	
+	initialize: function(){
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-video-template").clone();
+		this.content.removeAttr('id');
+
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		var videoSrc  = $(obj.element).attr('href');
+
+		this.content.find('source').attr( 'src', videoSrc);
+
+		//Right now video only seems to work with mp4s. Or, at least, does not work with divx.
+		obj.content = this.content.html(); 
+		
+		return this;
+	},
+
+});
+// For displaying Audio
+var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
+	
+	initialize: function(){
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-audio-template").clone();
+		this.content.removeAttr('id');
+
+	},
+	/* Pass in the element that the user clicked on from fancybox.  */
+	render: function(obj)
+	{
+		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		var audioSrc  = $(obj.element).attr('href');
+
+		this.content.find('audio').attr('src', audioSrc);
+
+		obj.content = this.content.html(); 
+		
+		return this;
+	},
+
+});
+
+//For displaying YouTube
+var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
+	
+	initialize: function(){
+		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		this.content = $("#browser-fancybox-youtube-template").clone();
+		this.content.removeAttr('id');
+
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		var youTubeSrc  = 'http://www.youtube.com/embed/' + $(obj.element).attr('href');
+
+		this.content.find('iframe').attr('src', youTubeSrc);
+
+		obj.content = this.content.html(); 
+		
+		return this;
+	},
+
+});
+
 

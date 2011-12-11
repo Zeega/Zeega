@@ -2,11 +2,12 @@ var BrowserSearch =  Backbone.Model.extend({
 
 	
 	url : function(){
-
+		
 		var finalURL = Zeega.url_prefix + "app_dev.php/api/search?" 
 					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
-					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "");
+					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
+					+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "");
 		console.log("Final URL is: " + finalURL);
 		return finalURL;
 
@@ -23,7 +24,7 @@ var BrowserSearch =  Backbone.Model.extend({
     	"limit"					:  	100, //how many results to send back
 
     	//Collections that hold search results
-    	"itemsCollection"		: 	new BrowserItemCollection(), //holds results of type =image, video or audio
+    	"itemsCollection"		: 	new ItemCollection(), //holds results of type =image, video or audio
     	"collectionsCollection" : 	new BrowserCollectionCollection(), //holds results of type='collection'
 
     	//Models that hold distributions of results
@@ -59,7 +60,7 @@ var BrowserSearch =  Backbone.Model.extend({
 			_.each(data['items'], function(item){
 				var type = item['content_type'];
 				
-				this.get("itemsCollection").add(new BrowserItem(item));
+				this.get("itemsCollection").add(new Item(item));
 			}, this);
 		}
 		//Assemble collection data into BrowserCollections
