@@ -185,13 +185,23 @@ class EditorController extends Controller
 	$user = $this->get('security.context')->getToken()->getUser();
 	$session = $this->getRequest()->getSession();
 	
-	
-	$playground=$this->getDoctrine()
+	if($user->getUserRoles()=='ROLE_SUPER_USER'){
+		$super=true;
+		$playground=$this->getDoctrine()
+					->getRepository('ZeegaEditorBundle:Playground')
+					->findByShort($short);
+	 	
+	 }
+	else{
+		$super=false;			
+		$playground=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
-	if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
-	else $super=false;			
+	
+	}
 	if($playground){
+		
+		
 		
 		$admin=true;
 		$projects=$this->getDoctrine()
@@ -210,7 +220,7 @@ class EditorController extends Controller
 	  
 		'displayname' => $user->getDisplayName(),
 		'myprojects'   => $myprojects,
-		'projects'   => $projects,
+		'allprojects'   => $projects,
 		'playground'=>$playground,
 		'short'=>$short,
 		'adminMenu'=>$admin,
@@ -228,7 +238,6 @@ class EditorController extends Controller
 	
 	
 	}
-	
 	public function browserAction($short){
 	
 	$user = $this->get('security.context')->getToken()->getUser();
