@@ -7,7 +7,7 @@ var MyCollections = Backbone.Collection.extend({
 	model: BrowserCollection, 
 	
 
-	url : function(){return Zeega.url_prefix + "app_dev.php/api/search?user=-1&r_items=0"},
+	url : function(){return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?user=-1&r_items=0"},
 	
 	
 	initialize : function()

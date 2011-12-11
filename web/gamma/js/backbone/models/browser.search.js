@@ -3,7 +3,7 @@ var BrowserSearch =  Backbone.Model.extend({
 	
 	url : function(){
 		
-		var finalURL = Zeega.url_prefix + "app_dev.php/api/search?" 
+		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?" 
 					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")

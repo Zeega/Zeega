@@ -21,6 +21,8 @@ layers:
   type:     rest
   resource: Zeega\EditorBundle\Controller\LayersController
   
+
+  
 #items:
 #  type:     rest
 #  resource: Zeega\IngestBundle\Controller\ItemsController
@@ -75,6 +77,10 @@ ZeegaEditorBundle_admin:
 ZeegaEditorBundle_editor:
     pattern: /playground/{short}/project/{id}
     defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
+    
+ZeegaEditorBundle_browser:
+    pattern: /playground/{short}/browser
+    defaults: { _controller:  ZeegaEditorBundle:Editor:browser }
 
 ZeegaEditorBundle_project:
     pattern: /playground/{short}/project

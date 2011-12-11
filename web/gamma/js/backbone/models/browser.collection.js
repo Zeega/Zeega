@@ -6,9 +6,9 @@ var BrowserCollection = Backbone.Model.extend({
 	
 	url : function(){
 		if (this.isNew()){
-			return Zeega.url_prefix + 'app_dev.php/api/collections/items'; 
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/items"; 
 		}else {
-			return Zeega.url_prefix +'app_dev.php/api/collections/'+this.id+'/items';
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "app_dev.php/api/collections/"+this.id+"/items";
 		}
 	},
 	defaults : {

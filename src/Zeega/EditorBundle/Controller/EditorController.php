@@ -229,6 +229,43 @@ class EditorController extends Controller
 	
 	}
 	
+	public function browserAction($short){
+	
+	$user = $this->get('security.context')->getToken()->getUser();
+	if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+	else $super=false;
+	$playground=$this->getDoctrine()
+					->getRepository('ZeegaEditorBundle:Playground')
+					->findPlaygroundByShort($short,$user->getId());
+    $admin = false;
+	if($playground||$super){
+		
+			
+			
+		return $this->render('ZeegaEditorBundle:Editor:browser.html.twig', array(
+			// last displayname entered by the user
+			'displayname' => $user->getDisplayName(),
+			'title'   => $playground->getTitle(),
+			'short'=>$playground->getShort(),
+			'super'=>$super,
+			'adminMenu'=>$admin,
+			'projectsMenu'=>true,
+            'page'=>'editor',
+			
+		));
+	
+	
+	}
+	
+	else{
+	
+		return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+	
+	}
+	
+	
+	} 
+	
 	public function editorAction($short,$id){
 	
 	$user = $this->get('security.context')->getToken()->getUser();
