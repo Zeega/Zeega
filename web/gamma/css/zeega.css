@@ -156,7 +156,24 @@
 #browser-my-collections-drawer{
 	margin:5px 0 0 10px;
 }
-.browser-results-image,.browser-results-collection, #browser-show-more-results{
+.browser-results-image{
+
+	float: left;
+	margin: 0;
+	border-radius: 3px;
+	/*margin:10px 0px 0px 10px;*/
+	margin:5px;
+	padding: 5px;
+	width:  144px;
+	height: 110px;
+	text-align: center;
+	vertical-align:center;
+	background-color: rgba(0, 0, 0, .5);
+
+	
+	
+}
+.browser-results-collection, #browser-show-more-results{
 
 	float: left;
 	margin: 0;
@@ -165,9 +182,11 @@
 	padding:5px;
 	width:  144px;
 	height: 110px;
+
 	
 	
 }
+
 .browser-results-collection a, .browser-results-image a,{
 	
 	border:none;
@@ -304,6 +323,10 @@
 	
 	width:  144px;
 	height: 110px;
+	/*
+	max-width:  144px;
+	max-height: 110px;
+	*/
 
 }
 .browser-unselected-toggle{
@@ -590,6 +613,8 @@ a.white:hover
 .zicon-advance{background-position: -130px -369px}
 .zicon-expand{background-position:-65px -199px}
 .zicon-collapse{background-position:-97px -199px}
+.zicon-play{background-position:-34px -313px}
+.zicon-edit{background-position:-65px -313px}
 .zicon-item{margin-left: 2px;
 margin-top: 4px;}
 

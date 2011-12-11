@@ -97,11 +97,14 @@ var BrowserCollectionView = BrowserItemView.extend({
 			
 				thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
+		
 				thisView.model.save({ }, 
 							{
 								success: function(model, response) { 
+									console.log(response.collections.child_items_count);
 									ZeegaBrowser.draggedItem = null;
-									//this should take care of incrementing item count?
+									//Update items count
+									model.set({'child_items_count':response.collections.child_items_count }); 
 									ZeegaBrowser.myCollectionsView.render();
 				 				},
 				 				error: function(model, response){
@@ -120,11 +123,17 @@ var BrowserCollectionView = BrowserItemView.extend({
 		this.el.addClass('browser-results-collection');
 		
 		//this.el.attr('id', this.model.id);
+		
+		
+		
 		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('img').attr('title', this.model.get('title'));
 
 		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		
 		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
+		//this.el.find('.browser-item-count').text('232');
+		
 		this.el.find('.title').text(this.model.get('title'));
 
 		var modelID = this.model.id;
@@ -149,12 +158,12 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			cursor : 'crosshair',
 			appendTo : 'body',
 			cursorAt : { 
-				top : -5,
-				left : -5
+				top : 25,
+				left : 25
 			},
 			opacity : .75,
-			//helper : 'clone',
-			helper : function(){
+			helper : 'clone',
+			/*helper : function(){
 				var drag = $(this).find('.browser-img-large')
 					.clone()
 					.css({
@@ -162,7 +171,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 						'background':'white'
 					});
 				return drag;
-			},
+			},*/
 			
 			//init the dragged item variable
 			start : function(){
@@ -181,12 +190,16 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	render: function()
 	{
 		
+		var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
 		//render individual element
 		this.el.addClass('browser-results-image');
 		this.el.removeAttr('id');
 		this.el.find('a').attr('id', this.model.get('id'));
 		this.el.find('a').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('img').attr('src', thumbnail_url);
+		
+		console.log(this.el.find('img').attr('height'));
+		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('a').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
 		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));

@@ -206,6 +206,14 @@ class CollectionsController extends Controller
         
         $items_list = $this->getRequest()->request->get('newItemIDS');
 
+		//Screen item list for duplicates
+
+		$childItems=$entity->getChildItems();
+		foreach($childItems as $childItem){
+			$existing_items[]=$childItem->getId();
+		}
+		$items_list=array_diff($items_list,$existing_items);
+
         // this is terrible...
         foreach($items_list as $item)
         {

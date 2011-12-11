@@ -29,9 +29,18 @@ var ZeegaBrowser = {
 	renderResults : function(){
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
+		var _this=this;
 		if (this.search.get("collection") != null){
-			$('#browser-collection-filter-title').text(ZeegaBrowser.clickedCollectionTitle);
+			$('#browser-collection-filter-title').html(ZeegaBrowser.clickedCollectionTitle);
 			$('#browser-collection-filter').show();
+			$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+_this.search.get("collection")+'/view');}); 
+			$('#collection-to-editor-button').click(function(){
+					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
+					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
+								alert(data);
+								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
+						});
+			}); 
 			
 		} 
 		//Hide results drawer's loading spinner
