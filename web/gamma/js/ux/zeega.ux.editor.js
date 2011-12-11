@@ -401,7 +401,8 @@ $(document).ready(function(){
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
 							'url' : Zeega.draggedItem.get('item_url'),
-							'uri' : Zeega.draggedItem.get('item_url')
+							'uri' : Zeega.draggedItem.get('item_url'),
+							'attribution_url' : Zeega.draggedItem.get('attribution_url')
 						}
 					};
 					var layerToSave = new Layer(settings);

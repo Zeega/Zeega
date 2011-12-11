@@ -517,7 +517,7 @@ var Player = {
 		var fields = {
 			title : layer.attr.title,
 			type : layer.type.toLowerCase(),
-			trackback : layer.attr.url,
+			trackback : layer.attr.attribution_url,
 			//imgUrl : '../../../images/items/'+ layerID +'_s.jpg'
 		};
 		var listItem = $( template( fields ) );
@@ -799,7 +799,7 @@ var Player = {
 		html+=				'<div class="citation-title"><%= title %></div>';
 		html+=				'<div class="citation-body">';
 		//html+=					'<div class="citation-thumb"><img src="<%= imgUrl %>"/></div>';
-		html+=					'<div class="citation-metadata"><a href="http://<%= trackback %>" target="blank">Link to original</a></div>';
+		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
 		html+=				'</div>';
 		html+=			'</div>';
 		html+=		'</li>';
