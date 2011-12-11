@@ -31,7 +31,7 @@ var YoutubeLayer = VideoLayer.extend({
 			this.layerControls.prepend( html );
 			
 			//this.layerControls.prepend( this.getTemplate() );
-			this.player = new ZeegaYoutube(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,_this.attr.width,_this.attr.height);
+			this.player = new ZeegaYoutubeEditor(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,'layer-'+_this.model.id);
 		
 			this.layerControls.bind( 'updated' , function(){
 				var properties = {
@@ -137,7 +137,7 @@ var YoutubeLayer = VideoLayer.extend({
 			.css( cssObj )
 			.append( wrapper );
 		
-		this.player = new ZeegaYoutubePublish(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-wrapper-'+this.model.id,'zeega-player',this.attr.width, h);
+		this.player = new ZeegaYoutubePlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-wrapper-'+this.model.id,'zeega-player');
 	},
 	
 	play : function(z)

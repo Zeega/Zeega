@@ -78,16 +78,16 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
-	'order!layers/zeega.rdio',
-	'order!layers/zeega.twilio',
+	//'order!layers/zeega.rdio',
+	//'order!layers/zeega.twilio',
 	'order!layers/zeega.documentcloud',
 	
 	//players
 	
-	'order!players/zeega.av.publish',
+	'order!players/zeega.player.video',
 	'order!players/zeega.player.youtube',	
-	'order!players/zeega.rdio',
-	'order!players/zeega.rdio.token',
+	//'order!players/zeega.player.rdio',
+	//'order!players/zeega.player.rdio.token',
 	];
 
 require(loadFiles, function($) {

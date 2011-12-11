@@ -1406,16 +1406,13 @@ Media Player and Controls
 
 position: relative;
 border: 1px dotted #999;
-height: 145px;
-margin-top: 15px;
-margin-left: 3px;
-
+height: 135px;
 }
 
 #volumeMP {
 
 position: absolute;
-top: 50px;
+top: 80px;
 width: 100%;
 
 }
@@ -1439,40 +1436,46 @@ margin-top: 4px;
 }
 
 
-input[name=avStartMinutes] {
 
-font-weight: bold; 
+
+#avStartMinutes {
+
+font-weight: bold;
+padding-left: 10px;
+padding-right: 2px;
 color: white;
 width:25px;	
-border: none;
-background-color:transparent;
 text-align:right;
 }
 
-input[name=avStopMinutes] {
+#avStartSeconds {
 
-font-weight: bold; 
+font-weight: bold;
+padding-left: 2px;
+padding-right: 10px;
 color: white;
 width:25px;	
-border: none;
-background-color:transparent;
-text-align:right;
-}
-input[name=avStartSeconds] {
-font-weight: bold; 
-color: white;
-width:35px;	
-border: none;
-background-color:transparent;
 text-align:left;
 }
 
-input[name=avStopSeconds] {
-font-weight: bold; 
+
+#avStopMinutes {
+
+font-weight: bold;
+padding-left: 10px;
+padding-right: 2px;
 color: white;
-width:35px;	
-border: none;
-background-color:transparent;
+width:25px;	
+text-align:right;
+}
+
+#avStopSeconds {
+
+font-weight: bold;
+padding-left: 2px;
+padding-right: 10px;
+color: white;
+width:25px;	
 text-align:left;
 }
 
@@ -1517,12 +1520,11 @@ left: 65px;
 #mediaPlayerMP { 
 
 position: absolute;
-bottom: 0px;
+bottom: 60px;
 left: 0px;
 right: 0px;
 width: 100%;
 height: 40px;
-background-color: rgba(0,0,0,.2);
 padding: 0;
 margin: 0;
 z-index: 50;

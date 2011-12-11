@@ -25,7 +25,7 @@ var loadFiles = [
 	'order!layers/zeega.youtube',
 	
 	
-	'order!players/zeega.av.publish',
+	'order!players/zeega.player.video',
 	'order!players/zeega.player.youtube',	
 	       
 	'order!core/player'
