@@ -11,7 +11,7 @@
 var ZeegaYoutubePlayer = Class.extend({
 
 	debug : {
-			fun:false,
+			fun:true,
 			event:false,
 		},
 	
@@ -42,7 +42,6 @@ var ZeegaYoutubePlayer = Class.extend({
 		youtubeWrapper.setAttribute('id','youtube-player-'+id);
 		$('#'+this._wrapperId).append(youtubeWrapper);
 		$('#layer-publish-'+id).bind('ready',function(){ 
-		console.log('ready or not...');
 		_this.cueVideo(); });
 		
 
@@ -72,12 +71,11 @@ var ZeegaYoutubePlayer = Class.extend({
 	},
 	
 	onEvent: function(state){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : event : "+state);
+		if(this.debug.event||1==1) console.log("youtube player ["+this._id+"] : event : "+state);
 		if(state==1&&this._canPlay==0){
 			this._canPlay=true;
 			this._youtubePlayer.pauseVideo();
 			this._youtubePlayer.setVolume(this._volume);
-			console.log('ytvvol'+this._youtubePlayer.getVolume());
 			this._duration=this._youtubePlayer.getDuration();
 			if(this._outPoint==0) this._outPoint= this._duration;
 			$('#'+this._playerId).trigger('ready',{'id':this._id});

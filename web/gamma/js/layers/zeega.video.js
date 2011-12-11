@@ -22,7 +22,7 @@ var VideoLayer = ProtoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity':1,
-		'dimension':1.3
+		'dimension':1.5
 	},
 	
 	controls : function()
@@ -168,7 +168,7 @@ var VideoLayer = ProtoLayer.extend({
 		//make dom object
 		var _this = this;
 		
-		var ratio = parseFloat($('#zeega-player').css('width'))/parseFloat($('#zeega-player').css('height'));
+		var ratio = 1.5;
 		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
 		var cssObj = {
 			'position' : 'absolute',
@@ -176,7 +176,7 @@ var VideoLayer = ProtoLayer.extend({
 			'left' : "-1000%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.width+"%",
-			'height' : h+"%",
+			'height' : this.attr.width+"%",
 			'opacity' : this.attr.opacity
 		};
 		
@@ -193,14 +193,19 @@ var VideoLayer = ProtoLayer.extend({
 	
 	play : function( z )
 	{
-		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+			if(z>=0) this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 		this.player.play();
+	},
+	pause: function (){
+		this.player.pause();
 	},
 	
 	stash :function()
 	{
 		this.display.css({'top':"-1000%",'left':"-1000%"});
-		this.player.pause();
+		
+		this.player.setVolume(0);
+		//this.player.pause();
 	},
 
 	exit: function()

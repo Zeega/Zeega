@@ -121,7 +121,7 @@ var YoutubeLayer = VideoLayer.extend({
 			'left' : "-1000%",
 			'z-index' : this.zIndex,
 			'width' : this.attr.width+"%",
-			'height' : h+"%",
+			'height' : this.attr.width+"%",
 			'opacity' : this.attr.opacity
 		};
 
@@ -141,11 +141,15 @@ var YoutubeLayer = VideoLayer.extend({
 	},
 	
 	play : function(z)
-	{
-		this.display.css({ 'z-index':z,'top': this.attr.top + '%','left':this.attr.left +'%'});
+	{	
+		
+		if(z>=0) this.display.css({ 'z-index':z,'top': this.attr.top + '%','left':this.attr.left +'%'});
 		this.player.play();
 	},
 	
+	pause: function (){
+		this.player.pause();
+	},
 	stash :function()
 	{
 		

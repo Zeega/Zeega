@@ -87,6 +87,11 @@ var AudioLayer = ProtoLayer.extend({
 		this.player.play();
 	},
 	
+	pause : function()
+	{
+		this.player.pause();
+	},
+	
 	stash : function()
 	{
 		this.player.pause();

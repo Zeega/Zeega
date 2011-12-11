@@ -27,6 +27,7 @@ var Player = {
 	layersOnStage : [],
 	
 	overlaysHidden : false,
+	paused: false,
 	
 	/*
 		Method: init
@@ -199,6 +200,9 @@ var Player = {
 				case 40:
 					_this.goDown();
 					break;
+				case 32:
+					_this.playPause();
+					break;
 			}
 		});
 		
@@ -317,6 +321,7 @@ var Player = {
 			//if all the layers are loaded in a node
 			if( _.difference( layers, _this.loadedLayers ).length == 0 )
 			{
+			
 				//remove from nodes loading array
 				_this.loadingNodes = _.without( _this.loadingNodes , nodeID );
 				// add to nodes loaded array
@@ -482,7 +487,7 @@ var Player = {
 				_this.getLayer(layerID).layerClass.updateZIndex(i);
 			}
 		})
-		
+		this.paused=false;
 		this.showNavigation();
 	},
 	
@@ -677,7 +682,9 @@ var Player = {
 		
 		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
-		if( nextNodeID ) this.gotoNode( nextNodeID )
+
+		
+		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
 		else console.log('end of the line');
 	},
 	
@@ -692,8 +699,7 @@ var Player = {
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
-		
-		if( nextNodeID ) this.gotoNode( nextNodeID )
+		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
 		else console.log('end of the line');
 	},
 	
@@ -728,6 +734,24 @@ var Player = {
 		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
 		else return nodeOrder[ index - dist ]
 	},
+	
+	
+	playPause: function(){
+		var _this=this;
+		if(this.paused){
+			_.each(this.layersOnStage, function(layerID){
+				_this.getLayer(layerID).layerClass.play();
+			});
+			this.paused=false;
+		}
+		else {
+			_.each(this.layersOnStage, function(layerID){
+				_this.getLayer(layerID).layerClass.pause();
+			});
+			this.paused=true;
+		}
+	},
+	
 	
 	reset : function()
 	{
