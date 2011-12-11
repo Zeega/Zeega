@@ -11,8 +11,8 @@
 var ZeegaYoutubePlayer = Class.extend({
 
 	debug : {
-			fun:true,
-			event:true,
+			fun:false,
+			event:false,
 		},
 	
 	
@@ -154,10 +154,7 @@ var ZeegaYoutubePlayer = Class.extend({
 
 var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 
-	debug : {
-			fun:true,
-			event:true,
-		},
+
 	
 	
 	

@@ -187,7 +187,7 @@ var VideoLayer = ProtoLayer.extend({
 			})
 			.css(cssObj);
 		
-		this.player=new ZeegaAV(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
+		this.player=new ZeegaVideoPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 		
 	},
 	

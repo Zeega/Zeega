@@ -148,10 +148,7 @@ var ZeegaVideoPlayer = Class.extend({
 
 var ZeegaVideoEditor = ZeegaVideoPlayer.extend({
 	
-	debug : {
-		fun:false,
-		event:true
-	},
+
 	
 	onCanPlay:function(){
 		if(this.debug.event) console.log("html5 player ["+this._id+"] : event : canPlay : "+this._asset.buffered.end(0));
