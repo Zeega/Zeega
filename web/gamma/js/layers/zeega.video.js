@@ -89,7 +89,7 @@ var VideoLayer = ProtoLayer.extend({
 				.css( 'height' , '140px' ) //this should moved out
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
-			this.player = new ZeegaMP( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
+			this.player = new ZeegaVideoEditor( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
 
 			//player triggers 'update' event to persist changes
 			this.layerControls.bind( 'updated' , function(){

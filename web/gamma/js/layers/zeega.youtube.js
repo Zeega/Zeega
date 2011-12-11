@@ -37,17 +37,17 @@ var YoutubeLayer = VideoLayer.extend({
 				var properties = {
 					inPoint : {
 						property : 'in',
-						value : _this.player._start_time,
+						value : _this.player.getInPoint(),
 						css : false
 					},
 					outPoint : {
 						property : 'out',
-						value : _this.player._stop_time,
+						value : _this.player.getOutPoint(),
 						css : false
 					},
 					volume : {
 						property : 'volume',
-						value : Math.floor( _this.player._vol * 100.0 ),
+						value : _this.player.getVolume(),
 						css : false
 					}
 				};

@@ -139,7 +139,6 @@ var ZeegaYoutubePlayer = Class.extend({
 	
 	getVolume:function(volume){
 		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : getVolume");
-		
 		return this._volume;
 	},
 	
@@ -167,7 +166,6 @@ var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 		this._inPoint=parseFloat(inPoint);
 		this._outPoint=parseFloat(outPoint);
 		this._volume=parseInt(volume);
-		this._volume=50;
 		this._canPlay=0;
 		this._duration;
 		this._dragging;
@@ -282,9 +280,9 @@ var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 			start:function(){_this._dragging=true;}, 
 			stop:function(){			
 				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
-				
+				if(t>parseFloat(_this._outPoint)) t=Math.max(parseFloat(_this._inPoint),parseFloat(_this._outPoint)-5.0);
 				_this._dragging=false;
-			_this.setCurrentTime(t);
+				_this.setCurrentTime(t);
 			}
 		});
 		
@@ -316,7 +314,7 @@ var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 		$('#'+this._playerId).find('#volume-slider').css({'margin':'10px'}).slider({
 				min : 0,
 				max : 100,
-				value : Math.floor(this._volume*100),
+				value :this._volume,
 				step : 1,
 				slide: function(e,ui){
 					_this._youtubePlayer.setVolume(ui.value);

@@ -200,7 +200,15 @@ var ZeegaVideoEditor = ZeegaVideoPlayer.extend({
 		
 		this.setVolume(this._volume);
 		this.setInPoint(this._inPoint);
-		this.setOutPoint(this._outPoint);
+		m=getMinutes(this._outPoint);
+		s=getSeconds(this._outPoint);
+		
+		$('#'+this._playerId).find('#avStopMinutes').html(m);
+		$('#'+this._playerId).find('#avStopSeconds').html(s);
+		var left=parseFloat(this._outPoint)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		$('#'+this._playerId).find('#stopMP').css('left',left+"px");
+		var width=parseInt($('#'+this._playerId).find('#loadingOutsideMP').css('width'))-parseInt($('#'+this._playerId).find('#stopMP').css('left'));
+		$('#'+this._playerId).find('#stopBar').css('width',width+"px");
 	
 		var _this=this;
 		
@@ -211,6 +219,7 @@ var ZeegaVideoEditor = ZeegaVideoPlayer.extend({
 			start:function(){_this._dragging=true;}, 
 			stop:function(){			
 				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
+				if(t>parseFloat(_this._outPoint)) t=Math.max(_this._inPoint,parseFloat(_this._outPoint)-5.0);
 				_this.setCurrentTime(t);
 				_this._dragging=false;
 			}
@@ -235,8 +244,9 @@ var ZeegaVideoEditor = ZeegaVideoPlayer.extend({
 				_this.pause();
 				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
 				if(t<parseFloat(_this._inPoint)) t=Math.min(parseFloat(_this._duration),parseFloat(_this._inPoint)+10.0);
-				_this.setCurrentTime(_this._inPoint);
+				
 				_this.setOutPoint(t);
+				
 				$('#'+_this._playerId).trigger('updated',{'id':this._id});
 			}
 		});
@@ -318,7 +328,7 @@ var ZeegaVideoEditor = ZeegaVideoPlayer.extend({
 		$('#'+this._playerId).find('#stopMP').css('left',left+"px");
 		var width=parseInt($('#'+this._playerId).find('#loadingOutsideMP').css('width'))-parseInt($('#'+this._playerId).find('#stopMP').css('left'));
 		$('#'+this._playerId).find('#stopBar').css('width',width+"px");
-			this.setCurrentTime(Math.max(this._inPoint,this._outPoint-3));
+		this.setCurrentTime(Math.max(this._inPoint,this._outPoint-3));
 	},
 	
 	getInPoint: function(){
