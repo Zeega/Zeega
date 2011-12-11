@@ -23,7 +23,8 @@ var DocumentCloudLayer = ProtoLayer.extend({
 		'h' : 100,
 		'w' : 100,
 		'opacity':1,
-		'aspect':1.33
+		'aspect':1.33,
+		'citation':true,
 	},
 
 

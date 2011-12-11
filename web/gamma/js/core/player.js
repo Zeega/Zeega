@@ -58,6 +58,8 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		$('title').html(this.data.project.title);
+		
 		//set the current route
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
@@ -512,28 +514,30 @@ var Player = {
 	drawCitation : function( layerID )
 	{
 		var layer = this.getLayer( layerID )
-		var template = _.template( this.getCitationTemplate() );
-
-		var fields = {
-			title : layer.attr.title,
-			type : layer.type.toLowerCase(),
-			trackback : layer.attr.attribution_url,
-			//imgUrl : '../../../images/items/'+ layerID +'_s.jpg'
-		};
-		var listItem = $( template( fields ) );
-		
-		listItem.hover(function(){
-			$(this).find('.zicon').removeClass('grey').addClass('orange')
-		},function(){
-			$(this).find('.zicon').addClass('grey').removeClass('orange')
-		})
-		
-		listItem.find('.citation-tab').click(function(){
-			$('#citation').animate({ height : '100px' })
-			closeOpenCitationTabs();
-			$(this).closest('li').find('.citation-content').fadeIn();
-		})
-		$('#citation ul').append( listItem );
+		if(layer.attr.citation){
+			var template = _.template( this.getCitationTemplate() );
+	
+			var fields = {
+				title : layer.attr.title,
+				type : layer.type.toLowerCase(),
+				trackback : layer.attr.attribution_url,
+				imgUrl : layer.attr.thumbnail_url,
+			};
+			var listItem = $( template( fields ) );
+			
+			listItem.hover(function(){
+				$(this).find('.zicon').removeClass('grey').addClass('orange')
+			},function(){
+				$(this).find('.zicon').addClass('grey').removeClass('orange')
+			})
+			
+			listItem.find('.citation-tab').click(function(){
+				$('#citation').animate({ height : '100px' })
+				closeOpenCitationTabs();
+				$(this).closest('li').find('.citation-content').fadeIn();
+			})
+			$('#citation ul').append( listItem );
+		}
 	},
 	
 	
@@ -798,7 +802,7 @@ var Player = {
 		html+=			'<div class="citation-content hidden">';
 		html+=				'<div class="citation-title"><%= title %></div>';
 		html+=				'<div class="citation-body">';
-		//html+=					'<div class="citation-thumb"><img src="<%= imgUrl %>"/></div>';
+		html+=					'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
 		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
 		html+=				'</div>';
 		html+=			'</div>';

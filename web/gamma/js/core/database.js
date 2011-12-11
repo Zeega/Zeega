@@ -64,7 +64,8 @@ var Database = new function()
 						'creator':item.media_creator_username,
 						'content_type':item.type,
 						'source_type':item.source,
-						'attribution_url':item.attribution_uri,
+						'attribution_uri':item.attribution_uri,
+						'thumbnail_url':item.thumbnail_url,
 					});
 				
 					that.collection.add(newItem);

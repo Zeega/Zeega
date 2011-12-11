@@ -22,7 +22,8 @@ var VideoLayer = ProtoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity':1,
-		'dimension':1.5
+		'dimension':1.5,
+		'citation':true,
 	},
 	
 	controls : function()

@@ -105,6 +105,10 @@ ZeegaEditorBundle_project_publish:
     pattern: /project/{id}/view
     defaults: { _controller:  ZeegaEditorBundle:Publish:project }
 
+ZeegaEditorBundle_collection_publish:
+    pattern: /collection/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:collection }
+
 
 ZeegaEditorBundle_siteadmin:
     pattern: /siteadmin

@@ -175,7 +175,7 @@ class ItemRepository extends EntityRepository
      {
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
-			   ->add('select', 'i.id,i.title')
+			   ->add('select', 'i.id,i.title,i.thumbnail_url')
 			   ->add('from', ' ZeegaIngestBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')

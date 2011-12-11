@@ -33,6 +33,7 @@ class ImportWidget
 		$urlInfo['type']='item';		
 		$viawork = '/(olvwork[0-9]*)/';
 		$viagroup	= '/(olvgroup[0-9]*)/';
+		$viasite	= '/(olvsite[0-9]*)/';
 		$viaHUAM='/(HUAM[0-9]*)/';
 		/**  ABSOLUTE URL ************************************/
 		
@@ -83,6 +84,13 @@ class ImportWidget
 		}
 		
 		elseif(preg_match($viawork, $url, $matches)){
+			$archive='Hollis-Work';
+			$id=$matches[1];
+			
+	
+		}
+		
+		elseif(preg_match($viasite, $url, $matches)){
 			$archive='Hollis-Work';
 			$id=$matches[1];
 			
@@ -346,19 +354,20 @@ class ImportWidget
 				
 				
 				$item->setTitle((string) $xml->titleInfo->title);
-				$item->setItemUri($id);
 				
-				$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
-				$item->setCreator((string)$xml->name->namePart);
-				$item->setContentType('Image');
-				$item->setSourceType('Image');
-				$item->setArchive('Hollis');
+				
+				$item->setAttributionUri('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+				$item->setMediaCreatorUsername((string)$xml->name->namePart);
+				$item->setMediaCreatorRealname((string)$xml->name->namePart);
+				$item->setType('Image');
+				$item->setSource('Image');
+				$metadata->setArchive('Hollis');
 				//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 				//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
 				
 				$url=$this->getRedirectUrl((string)$location->url);
-				$metadata->setThumbUrl($url.'?height=144&width=144');
-				$item->setItemUrl($url);
+				$metadata->setThumbnailUrl($url.'?height=144&width=144');
+				$item->setUri($url);
 				$item->setMedia($media);
 				$item->setMetadata($metadata);
 				$items[]=$item;
@@ -394,19 +403,21 @@ class ImportWidget
 						
 						
 						$item->setTitle((string) $relatedItem->titleInfo->title);
-						$item->setItemUri($id);
 						
-						$item->setAttributionUrl('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
-						$item->setCreator((string)$xml->name->namePart);
-						$item->setContentType('Image');
-						$item->setSourceType('Image');
-						$item->setArchive('Hollis');
+						
+						$item->setAttributionUri('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+						$item->setMediaCreatorUsername((string)$xml->name->namePart);
+						$item->setMediaCreatorRealname((string)$xml->name->namePart);
+				
+						$item->setType('Image');
+						$item->setSource('Image');
+						$metadata->setArchive('Hollis');
 						//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
 						
 						$url=$this->getRedirectUrl((string)$relatedItem->location->url);
-						$metadata->setThumbUrl($url.'?height=144&width=144');
-						$item->setItemUrl($url);
+						$metadata->setThumbnailUrl($url.'?height=144&width=144');
+						$item->setUri($url);
 						$item->setMedia($media);
 						$item->setMetadata($metadata);
 						$items[]=$item;

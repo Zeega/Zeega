@@ -571,12 +571,18 @@ a.white:hover
 .zicon-map-marker-04{background-position:-33px -114px}
 .zicon-map-marker-05{background-position: 0 -114px}
 
-.zicon-audio{background-position: -66px -341px}
-.zicon-image{background-position: -98px -58px}
+.zicon-audio{background-position: -66px -341px;
+
+}
+.zicon-image{background-position: -98px -58px;
+
+}
 .zicon-geo{background-position: 0 -114px}
 .zicon-text{background-position: 0 -142px}
 .zicon-shape{background-position: -65px -369px}
-.zicon-video{background-position: -34px -369px}
+.zicon-video{background-position: -34px -369px;
+
+}
 .zicon-youtube{background-position: -34px -369px}
 .zicon-rdio{background-position: -66 -341px}
 .zicon-trash-closed{background-position: -130px -142px}
@@ -584,7 +590,8 @@ a.white:hover
 .zicon-advance{background-position: -130px -369px}
 .zicon-expand{background-position:-65px -199px}
 .zicon-collapse{background-position:-97px -199px}
-
+.zicon-item{margin-left: 2px;
+margin-top: 4px;}
 
 /*********************************************
 

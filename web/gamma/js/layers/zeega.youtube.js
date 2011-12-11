@@ -18,7 +18,8 @@ var YoutubeLayer = VideoLayer.extend({
 		'in'  : 0,
 		'out' : 0,
 		'opacity' : 1,
-		'dimension' : 1.33
+		'dimension' : 1.33,
+		'citation':true,
 	},
 	
 	onControlsOpen: function(){

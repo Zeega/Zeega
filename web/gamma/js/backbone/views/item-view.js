@@ -18,16 +18,17 @@ var ItemView = Backbone.View.extend({
 		//console.log(this);
 		
 		template.children('span')
-			.addClass( 'zicon-' +this.model.get('content_type').toLowerCase() );
+			.addClass( 'zicon-' +this.model.get('content_type').toLowerCase() )
+			.addClass( 'zicon-item');
 			
 		template.children('img')
 			.addClass('item-thumb')
-			.attr("src", sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "images/items/" + this.model.id+"_s.jpg")
+			.attr("src", this.model.get('thumbnail_url'))
 			.attr('height','25')
 			.attr('width','25');
 		
 		//shorten title if necessary
-		if(	this.model.get('title').length > 30) var title=this.model.get('title').substr(0,30)+"...";
+		if(	this.model.get('title').length > 25) var title=this.model.get('title').substr(0,20)+"...";
 		else var title=this.model.get('title');
 		
 		if(	this.model.get('creator')&&this.model.get('creator').length > 30) var creator=this.model.get('creator').substr(0,30)+"...";

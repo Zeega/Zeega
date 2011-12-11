@@ -1,7 +1,7 @@
 <?php
 
 namespace Zeega\ApiBundle\Controller;
-
+use Zeega\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 

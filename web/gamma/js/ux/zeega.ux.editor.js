@@ -402,7 +402,9 @@ $(document).ready(function(){
 							'title' : Zeega.draggedItem.get('title'),
 							'url' : Zeega.draggedItem.get('item_url'),
 							'uri' : Zeega.draggedItem.get('item_url'),
-							'attribution_url' : Zeega.draggedItem.get('attribution_url')
+							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
+							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
+							'citation':true,
 						}
 					};
 					var layerToSave = new Layer(settings);

@@ -23,7 +23,8 @@ var ImageLayer = ProtoLayer.extend({
 		'height' : 100,
 		'width' : 100,
 		'opacity':1,
-		'aspect':1.33
+		'aspect':1.33,
+		'citation':true,
 	},
 
 
@@ -94,15 +95,16 @@ var ImageLayer = ProtoLayer.extend({
 			'width' : this.attr.width +'%',
 			'opacity' : this.attr.opacity
 		};
-
+		var _this=this;
 		var img = $('<img>')
 			.attr( 'src' , this.attr.url )
 			.css( 'width', '100%');
+		img.load(function(){target.trigger('ready', { 'id' : _this.model.id } )});
 
 		this.display.css( cssObj )
 			.append( img );
-
-		target.trigger( 'ready' , { 'id' : this.model.id } );
+		
+		//target.trigger( 'ready' , { 'id' : this.model.id } );
 	},
 	
 	play : function( z )

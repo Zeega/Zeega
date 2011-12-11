@@ -210,9 +210,9 @@ class WidgetController extends Controller
 				if($session->get('items'))$newItems=$session->get('items');	
 				foreach($collection['items'] as $item){
 					$widgetId=rand(0,1000);
-					$item->setAttributionUrl($url."#".$item->getId());
+					$item->setAttributionUri($url."#".$item->getId());
 					$metadata=$item->getMetadata();
-					$thumbUrl=$metadata->getThumbUrl();
+					$thumbUrl=$metadata->getThumbnailUrl();
 					$thumbUrls[]=array('thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
 					$widgetIds[]=$widgetId;
 					$newItems[$widgetId]=$item;
