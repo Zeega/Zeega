@@ -255,6 +255,29 @@ class CollectionsController extends Controller
     	
     	return new Response('SUCCESS',200);
     }
+    
+    public function deleteCollectionItemAction($collection_id, $item_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	
+     	if (!$collection) 
+        {
+            throw $this->createNotFoundException("The collection $collection_id does not exist");
+        }
+        
+        if (!$item) 
+        {
+            throw $this->createNotFoundException("The item $item_id does not exist");
+        }
+        
+        $collection->getChildItems()->removeElement($item);
+        $em->flush();
+        
+        return new Response('SUCCESS',200);
+    }
+    
    
     // Private methods 
     
