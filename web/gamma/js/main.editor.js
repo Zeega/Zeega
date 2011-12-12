@@ -81,6 +81,7 @@ var loadFiles = [
 	//'order!layers/zeega.rdio',
 	//'order!layers/zeega.twilio',
 	'order!layers/zeega.documentcloud',
+	'order!layers/zeega.rectangle',
 	
 	//players
 	

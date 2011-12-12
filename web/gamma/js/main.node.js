@@ -22,7 +22,7 @@ var loadFiles = [
 	'order!layers/zeega.video',
 	'order!layers/zeega.youtube',
 	'order!layers/zeega.documentcloud',
-	            
+	'order!layers/zeega.rectangle',	            
 
 	];
 
