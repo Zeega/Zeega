@@ -15,6 +15,7 @@ function initUX(){
 	
 }
 
+/*
 function insertPager(items, page)
 {
 	//NEW PAGER
@@ -29,11 +30,7 @@ function insertPager(items, page)
 			onSelect: function(page){
 				Database.page = page;
 				$('#tab-database-slide-window').cycle(page-1);
-				/*
-					when we get up to within a threshold in the pages
-					then make another call to the database and make a new pager
-				*/
-				
+
 				console.log(Database.endOfItems);
 				
 				if(this.pages - page < 3 && !Database.endOfItems)
@@ -89,6 +86,7 @@ function insertPager(items, page)
 		}
 	});
 }
+*/
 
 function submitenter(inputfield,e)
 {
