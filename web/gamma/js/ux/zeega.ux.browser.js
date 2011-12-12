@@ -92,7 +92,6 @@ $(document).ready(function() {
 	$('#collection-to-editor-button').click(function(){
 					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
 					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
-								alert(data);
 								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
 						});
 			});
