@@ -800,9 +800,9 @@ var Player = {
 		html+=				'<span class="zicon grey zicon-<%= type %>"></span>';
 		html+=			'</div>';
 		html+=			'<div class="citation-content hidden">';
-		html+=				'<div class="citation-title"><%= title %></div>';
+		html+=				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
 		html+=				'<div class="citation-body">';
-		html+=					'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
+		html+=				'<div class="citation-title"><%= title %></div>';
 		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
 		html+=				'</div>';
 		html+=			'</div>';

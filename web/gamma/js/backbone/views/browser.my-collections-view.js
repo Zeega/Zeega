@@ -11,6 +11,7 @@ var MyCollectionsView = Backbone.View.extend({
 	addCollection : function(m){
 		var collectionView = new BrowserCollectionView({ model: m });
         this._views[m.id] = collectionView;
+       this.render();
 	},
 	
 	render: function()

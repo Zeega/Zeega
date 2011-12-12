@@ -12,7 +12,7 @@ var MyCollections = Backbone.Collection.extend({
 	
 	initialize : function()
 	{
-	
+		
 		this.fetch({
 			success : function()
 			{
@@ -37,6 +37,7 @@ var MyCollections = Backbone.Collection.extend({
 		
 		
 	},
+	
 });
 MyCollections.comparator = function(myCollection) {
   return myCollection.get("date_created");

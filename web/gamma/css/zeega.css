@@ -1550,34 +1550,47 @@ body
 
 .citation-title
 {
-	font-weight:bold;
 	clear:both;
-	margin-bottom:6px;
-	margin-left:6px;
+	margin-bottom:12px;
+	margin-right:6px;
 	color:rgba(255,255,255, 0.75);
+	height: 37px;
+	width: 100%;
+	text-align:justify;
+	overflow:hidden;
 }
 
 .citation-body
-{
-	float:left;
+{	
+	font-size:11px;
+	float:right;
+	width:168px;
+	margin-right:6px;
+	
 }
 .citation-thumb
 {
-	height:50px;
-	width:50px;
+	height:60px;
+	width:60px;
 	background:blue;
 	float:left;
+	margin-bottom:6px;
+	margin-left:6px;
 }
 .citation-content
 {			
+	margin-top:21px;
 	width:250px;
+	hieght:100px;
 	float:left;
 }
 .citation-metadata
 {
-	float:left;
-	width:190px;
-	padding:0 5px;
+	
+	
+	width: 100%;
+	text-align:left;
+	
 }
 #hide-citation
 {

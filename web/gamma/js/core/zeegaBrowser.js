@@ -1,6 +1,6 @@
 var ZeegaBrowser = {
 
-	myCollectionsModel : null,
+	myCollections : null,
 	myCollectionsView : null,
 	search : null, 
 	searchItemsView : null,
@@ -8,9 +8,9 @@ var ZeegaBrowser = {
 
 	init : function()
 	{
-		//Load MyCollections
-		this.myCollectionsModel = new MyCollections();
-		this.myCollectionsView = new MyCollectionsView({ collection : this.myCollectionsModel });
+		//Load MyCollections  (renamed from inconsistently named myCollectionsModel )
+		this.myCollections = new MyCollections();
+		this.myCollectionsView = new MyCollectionsView({ collection : this.myCollections });
 			
 
 		//Hide the loading spinner for the myCollections drawer
@@ -33,14 +33,7 @@ var ZeegaBrowser = {
 		if (this.search.get("collection") != null){
 			$('#browser-collection-filter-title').html(ZeegaBrowser.clickedCollectionTitle);
 			$('#browser-collection-filter').show();
-			$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+_this.search.get("collection")+'/view');}); 
-			$('#collection-to-editor-button').click(function(){
-					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
-					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
-								alert(data);
-								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
-						});
-			}); 
+			 
 			
 		} 
 		//Hide results drawer's loading spinner
