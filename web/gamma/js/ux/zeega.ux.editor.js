@@ -15,78 +15,7 @@ function initUX(){
 	
 }
 
-/*
-function insertPager(items, page)
-{
-	//NEW PAGER
-	$('#database-pager')
-		.empty()
-		.paging( items, {
-//			format: "<(qqq-) nncnn (-ppp)>",
-			format: "[<nncnn>",
-			perpage: 10,
-			lapping: 0,
-			page: page,
-			onSelect: function(page){
-				Database.page = page;
-				$('#tab-database-slide-window').cycle(page-1);
 
-				console.log(Database.endOfItems);
-				
-				if(this.pages - page < 3 && !Database.endOfItems)
-				{
-					//console.log('load more!');
-					// call the database and add more item divs
-					//Database.append();
-					return search(this,false);
-				}
-				
-			
-		},
-		
-		onFormat: function(type) {
-			switch (type) {
-			case 'block':
-				if (!this.active) return '<span class="disabled">' + this.value + '</span>';
-				else if (this.value != this.page) return '<a class="pager-page" href="#' + this.value + '">' + this.value + '</a>';
-				return '<span class="pager-page current">' + this.value + '</span>';
-			case 'next':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="next">Next</span></a>';
-				}
-				return '<span class="disabled next">Next</span>';
-			case 'prev':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="prev">Previous</a>';
-				}
-				return '<span class="disabled prev">Previous</span>';
-			case 'first':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="first">|<</a>';
-				}
-				return '<span class="disabled first">|<</span>';
-			
-			case 'last':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="last">>|</a> <span class="fill">'+ this.pages +' pages loaded</span>';
-				}
-				return '<span class="disabled last">>|</span> <span class="fill">'+ this.pages +' pages loaded</span>';
-			case 'fill':
-				if (this.active) {
-					return "<span class='fill'>...</span>";
-				}
-			case 'right':
-			case 'left':
-
-				if (!this.active) {
-					return "";
-				}
-				return '<a class="pager-page" href="#' + this.value + '">' + this.value + '</a>';
-			}
-		}
-	});
-}
-*/
 
 function submitenter(inputfield,e)
 {
@@ -273,7 +202,7 @@ $(document).ready(function(){
 	
 	//search bar focus stuff
 	$('#database-search-text').focus(function(){
-		$(this).css('color','#333');
+		$(this).css('color','#444');
 		$(this).val('');
 	});
 	

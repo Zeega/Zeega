@@ -68,50 +68,46 @@
 						
 						
 						
-						<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
-							<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Items</div>
-						</div>
+						<div id='database-tray' class='clearfix'>
 							
-						<div id='database'>
-							<div id="db-nav-controls">
-					
-								<div id='database-search' class='clearfix'>
-
-									<form action="" method="" id="form-search">
-										<div id='form-left'>
-											<select id='database-search-filter' class=''>
-											  <option value="all">All</option>
-											  <option value="image">Images</option>
-											  <option value="video">Video</option>
-											  <option value="audio">Audio</option>
-											  <option value="-" disabled ="true">---</option>
-											  <option value="mine">Mine</option>
-											</select>
-										
-										
-											<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' class='span6'/>
-										
-										</div>
-										<div id='form-right'>
-											<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
-											<input id='database-search-button' class='' type="button" value="go"/>
-										</div>
-									</form>
-
+							<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Items</div>
+								
+								<div id="searchbar">
+									<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search database'/>
+									<span id='search-filter' class='zicon zicon-search'></span>
 								</div>
-							</div><!-- db-nav-controls -->
-				
-							<div id='asset-preview'>
-								<a id='asset-preview-close' href='#'>x</a>
-								<div id='asset-preview-media'></div>
-								<div id='asset-preview-meta'>Title</div>
+							
 							</div>
+							
+							<div id='database'>
+								<div id="db-nav-controls">
+					
+									<a href='#' id='refresh-database'><span class='zicon orange zicon-refresh'></span></a>
+									<select id='database-search-filter' class=''>
+									  <option value="all">All Media</option>
+									  <option value="image">Images</option>
+									  <option value="video">Video</option>
+									  <option value="audio">Audio</option>
+									  <option value="-" disabled ="true">---</option>
+									  <option value="mine">My Media</option>
+									</select>
+									
+									<select id='database-collection-filter' class=''>
+									  <option value="all">Collections</option>
+									  <option value="image">Awesome</option>
+									  <option value="video">Incredible</option>
+									  <option value="audio">OMG</option>
+									  <option value="mine">Junk I found</option>
+									</select>
+
+								</div><!-- db-nav-controls -->
+							
+
+								<ul id='database-item-list'></ul>
+							</div><!-- database -->
 						
-							<a href='#' id='refresh-database'>refresh</a>
-						
-							<ul id='database-item-list'></ul>
-						</div><!-- database -->
-						
+						</div><!-- database-tray -->
 						
 				
 					</div> <!-- sidebar -->

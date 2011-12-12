@@ -615,8 +615,11 @@ a.white:hover
 .zicon-collapse{background-position:-97px -199px}
 .zicon-play{background-position:-34px -313px}
 .zicon-edit{background-position:-65px -313px}
-.zicon-item{margin-left: 2px;
-margin-top: 4px;}
+.zicon-refresh{background-position:-65px -256px}
+.zicon-search{background-position:-291px -284px}
+
+
+.zicon-item{margin-left: 2px;margin-top: 4px;}
 
 /*********************************************
 
@@ -1035,12 +1038,54 @@ body
 	
 *******************************/
 
+#item-view-bar div
+{
+	float:none;
+	margin-bottom:6px;
+}
+
+#searchbar
+{
+	background:#ccc;
+	-webkit-border-radius: 12px;
+	padding: 0 6px;
+}
+
+#searchbar input
+{
+	color:#666;
+	background:transparent;
+	border:none;
+	width:335px;
+	font-size:1.5em;
+}
+
+#search-filter
+{
+	float : right;
+	position :relative;
+	top : 2px;
+}
+
+#database-tray
+{
+	background:#111;
+}
+
+#database
+{
+	padding : 0 6px 6px 6px;
+}
 
 #database-item-list
 {
 	max-height : 300px;
 	overflow : hidden;
 	overflow-y : scroll;
+	width : 100%;
+	background : #ddd;
+	-webkit-border-radius: 6px;
+	-webkit-box-shadow : inset 5px 5px 5px #888;
 }
 
 #form-left
@@ -1056,21 +1101,6 @@ body
 	float:left;
 }
 
-#database-search-text
-{
-	background:transparent;
-	border:none;
-	width:275px;
-	font-size:1.5em;
-}
-
-#database-search-filter
-{
-	border: none;
-	height:23px;
-	vertical-align:top;
-}
-
 #database-search-button
 {
 	background: #DDD;
@@ -1084,8 +1114,6 @@ body
 	width: 42px;
 	font-size: 1em;
 }
-
-
 
 #db-nav-controls
 {
@@ -1111,27 +1139,22 @@ body
 
 .database-asset
 {
-	padding:0px;
-	margin-bottom:3px;
-	background:#555;
+	padding:0px 6px;
 	overflow:hidden;
-	width:100%;
-	border-radius: 2px;
-	border: 1px solid #555;
-	
+	border-bottom : 1px solid #888;
 }
 
 .item-title
 {
 	float:left;
-	color:#eee;
-	padding:6px;
+	color:#333;
+	padding:6px 0;
 }
 
 .database-asset img
 {
 	float:left;
-	margin: 0 2px;
+	margin: 0 6px;
 }
 
 .database-asset span
@@ -1143,7 +1166,7 @@ body
 .item-meta
 {
 	font-size:.8em;
-	color:#aaa;
+	color:#666;
 	float:right;
 	margin-right:5px;
 	margin-top: 5px;
