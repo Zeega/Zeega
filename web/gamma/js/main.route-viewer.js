@@ -23,6 +23,7 @@ var loadFiles = [
 	'order!layers/zeega.text',
 	'order!layers/zeega.rdio',
 	'order!layers/zeega.youtube',
+	'order!layers/zeega.rectangle',
 	
 	
 	'order!players/zeega.av.publish',
