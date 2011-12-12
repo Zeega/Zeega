@@ -26,7 +26,6 @@ var ZeegaYoutubePlayer = Class.extend({
 		this._inPoint=parseFloat(inPoint);
 		this._outPoint=parseFloat(outPoint);
 		this._volume=parseInt(volume);
-		this._volume=50;
 		this._canPlay=0;
 		this._duration;
 		this._dragging;
@@ -124,7 +123,7 @@ var ZeegaYoutubePlayer = Class.extend({
 	},
 	
 	setVolume:function(volume){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : setVolume");
+	if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : setVolume");
 		
 		if(isInt(volume)){
 			if(volume<=100&&volume>=0){
