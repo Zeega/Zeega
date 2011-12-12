@@ -537,7 +537,8 @@ class ImportWidget
 			
 			if(isset($sizes['Large']))$itemSize='Large';
 			elseif(isset($sizes['Original'])) $itemSize='Original';
-			else $itemSize='Medium';
+			elseif(isset($sizes['Medium'])) $itemSize='Medium';
+			else $itemSize='Small';
 			
 			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
 		
