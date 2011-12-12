@@ -1506,6 +1506,14 @@ body
 	margin: 0 auto;
 }
 
+#preview-logo
+{
+	opacity:0.5;
+	position:absolute;
+	padding:6px;
+	z-index:1000;
+}
+
 /*
 #workspace-preview-controls
 {
