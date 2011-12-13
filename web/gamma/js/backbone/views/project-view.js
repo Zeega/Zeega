@@ -8,6 +8,9 @@ var ProjectView = Backbone.View.extend({
 		//$('#route-title').empty();
 		//copy the cloned item into the el
 		
+		
+
+		
 		$(this.el).editable(
 			function(value,settings)
 			{
@@ -24,6 +27,10 @@ var ProjectView = Backbone.View.extend({
 			});
 		
 		$('#route-title').html(this.el);
+		
+		var regex = /Untitled/
+		if( regex.test( this.model.get('title')) ) $(this.el).trigger('click');
+		
 		return this;
 	}
 });
