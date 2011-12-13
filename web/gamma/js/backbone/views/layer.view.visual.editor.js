@@ -4,6 +4,12 @@ var VisualLayerEditorView = Backbone.View.extend({
 	
 	tagName : 'div',
 	
+	initialize : function()
+	{
+		this.model.bind( 'change:visibleineditor', this.showHide, this );
+		
+	},
+	
 	//draws the controls
 	render : function(i)
 	{
@@ -55,7 +61,14 @@ var VisualLayerEditorView = Backbone.View.extend({
 		
 		//return the view
 		return this;
+	},
+	
+	showHide : function()
+	{
+		if( this.model.get('visibleineditor') ) $(this.el).fadeIn('fast');
+		else $(this.el).fadeOut('fast');
 	}
+	
 });
 
 

@@ -90,7 +90,10 @@ var VisualLayerListView = Backbone.View.extend({
 		'click .delete-layer'		: 'delete',
 		'click .layer-title'		: 'expand',
 		'change #persist'			: 'persist',
-		'click .copy-to-next'		: 'copyToNext'
+		'click .copy-to-next'		: 'copyToNext',
+		'click .layer-icon'			: 'hideShow',
+		'mouseenter .layer-icon'			: 'onLayerIconEnter', 
+		'mouseleave .layer-icon'			: 'onLayerIconLeave', 
 	},
 	
 	//delete this layer from the DB and view
@@ -128,6 +131,27 @@ var VisualLayerListView = Backbone.View.extend({
 	copyToNext : function()
 	{
 		Zeega.copyLayerToNextNode( this.model)
+	},
+	
+	hideShow : function()
+	{
+		//set the visible in editor to the opposite of what it is currently
+		var visible = !this.model.get('visibleineditor');
+		this.model.set({'visibleineditor': visible });
+		
+		//change the color of the layer icon so it's apparent on/off
+		if( visible ) $(this.el).find('.zicon').addClass('orange');
+		else $(this.el).find('.zicon').removeClass('orange');
+	},
+	
+	onLayerIconEnter : function()
+	{
+		$(this.el).find('.zicon').addClass('zicon-visible')
+	},
+	
+	onLayerIconLeave : function()
+	{
+		$(this.el).find('.zicon').removeClass('zicon-visible')
 	},
 	
 	getTemplate : function()

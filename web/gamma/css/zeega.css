@@ -618,6 +618,7 @@ a.white:hover
 .zicon-refresh{background-position:-65px -256px}
 .zicon-search{background-position:-291px -284px}
 .zicon-close{background-position:-162px -284px}
+.zicon-visible{background-position:-97px -29px}
 
 
 
@@ -1371,7 +1372,7 @@ body
 .layer-content
 {
 	color: #aaa;
-	padding:20px;
+	padding:12px;
 	-webkit-box-shadow: inset 5px 5px 5px #222;
 	-webkit-border-radius: 6px;
 	border: 1px solid #666;
