@@ -35,7 +35,6 @@ var Node = Backbone.Model.extend({
 	updateThumb : function()
 	{
 		var _this = this;
-		console.log('updating thumbnail');
 	
 		if( !this.updating )
 		{
