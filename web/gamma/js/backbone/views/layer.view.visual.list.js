@@ -132,8 +132,8 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
-		layerTemplate += 		'<div class="layer-uber-bar clearfix">';
+//		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
+		var layerTemplate = 		'<div class="layer-uber-bar clearfix">';
 		layerTemplate += 			'<div class="layer-icon">';
 		layerTemplate += 				'<span class="asset-type-icon orange zicon"></span>';
 		layerTemplate += 			'</div>';
@@ -153,7 +153,7 @@ var VisualLayerListView = Backbone.View.extend({
 		layerTemplate += 		'</form>';
 		layerTemplate += 		'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
 		layerTemplate += 	'</div>';
-		layerTemplate += '</div>';
+//		layerTemplate += '</div>';
 		
 		return layerTemplate;
 	}
