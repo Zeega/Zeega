@@ -188,7 +188,7 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 	add : function ( layer )
 	{
 		var layerView = new VisualLayerListView({ model : layer });
-		if( this.el.find('.alert-message') ) this.el.empty();
+		if( this.el.find('.alert-message') ) this.el.find('.alert-message').remove(); //this.el.empty();
 		this.el.prepend( layerView.render().el );
 		
 	},

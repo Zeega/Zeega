@@ -19,7 +19,8 @@ var ProjectView = Backbone.View.extend({
 				indicator : 'Saving...',
 				tooltip   : 'Click to edit...',
 				indicator : '<img src="images/loading.gif">',
-				select : true
+				select : true,
+				onblur : 'submit'
 			});
 		
 		$('#route-title').html(this.el);
