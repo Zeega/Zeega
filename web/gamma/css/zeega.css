@@ -617,6 +617,8 @@ a.white:hover
 .zicon-edit{background-position:-65px -313px}
 .zicon-refresh{background-position:-65px -256px}
 .zicon-search{background-position:-291px -284px}
+.zicon-close{background-position:-162px -284px}
+
 
 
 .zicon-item{margin-left: 2px;margin-top: 4px;}
@@ -1539,18 +1541,18 @@ body
 	opacity:0.5;
 	position:absolute;
 	padding:6px;
-	z-index:1000;
 }
 
-/*
-#workspace-preview-controls
+.player-overlay
 {
-	z-index:1000;
-	position:absolute;
-	height:100%;
-	width:100%;
+	z-index : 1000;
 }
-*/
+
+#preview-close
+{
+	position:absolute;
+	right:0;
+}
 
 #citation
 {

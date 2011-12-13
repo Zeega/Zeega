@@ -408,20 +408,21 @@ var Zeega = {
 		_.each( _.toArray(this.route.layerCollection), function(layer){
 			layersInRoute.push(layer.id);
 		});
-		
+
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
 		
 		if(orphanIDs)
 		{
+
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
-				var orphan = Zeega.route.layerCollection.get(orphanID);
+				var orphan = _this.route.layerCollection.get(orphanID);
 				_this.removeLayerPersist(orphan);
-				
+			
 				//remove from the layer collection
-				Zeega.route.layerCollection.remove(orphan)
-				orphan.destroy();
+				_this.route.layerCollection.remove(orphan)
 				
+				orphan.destroy();
 			})
 		}else{
 			return false;
