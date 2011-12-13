@@ -671,7 +671,6 @@ body
 
 #route-title
 {
-	font-family: 'Georgia' georgia serif;
 }
 
 /*******************************
@@ -806,7 +805,7 @@ body
 #route-title
 {
 	float:left;
-	font-size:2em;
+	font-size:2.5em;
 }
 
 #route-title span form
@@ -1487,7 +1486,7 @@ body
 #interaction-editor-bar,
 .editor-title-bar-expander
 {
-	-webkit-border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 6px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
 	padding: 5px 10px;
 	color: #ddd;
