@@ -46,6 +46,14 @@ function search(triggerElement, discardCurrentResultSet)
     //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
     // this is not very elegant...
     Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+
+	//show the database drawer if it's hidden
+	if( $('#database').is(':hidden') )
+	{
+		$('#database').show('blind',{'direction':'vertical'});
+		$('#item-view-bar').find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
+	}
+	
 	return false;	
 }
 
@@ -94,14 +102,9 @@ function addLayer(type)
 
 function expandLayer(el)
 {
-	console.log('expanding layer');
 	var w = $(el).closest('.layer-wrapper').find('.layer-content');
-	if(w.is(':hidden'))
-	{
-		w.show('blind',{'direction':'vertical'});
-	}else{
-		w.hide('blind',{'direction':'vertical'});
-	}
+	if( w.is(':hidden') ) w.show('blind',{'direction':'vertical'});
+	else w.hide('blind',{'direction':'vertical'});
 }
 
 
@@ -206,6 +209,10 @@ $(document).ready(function(){
 		$(this).val('');
 	});
 	
+	$('#database-search-text').click(function(event){
+		event.stopPropagation();
+	});
+	
 	//hide layer content initially
 	$(".layer-list a:first").click(function(){
 		console.log('sortable layers');
@@ -238,21 +245,6 @@ $(document).ready(function(){
 			}
 		});
 	$( "#sortable-layers" ).disableSelection();
-	
-	
-	$('#asset-preview-close').click(function(){
-		//remove src of media
-		
-		if( $('#asset-preview').find('source') )
-		{
-			//remove source
-			$('source').attr('src','');
-			$('source').attr('type','');
-			$('video').remove();
-		}
-		$('#asset-preview').fadeOut();
-		
-	});
 	
 
 	$('#advance-controls input').change(function(){
