@@ -4,6 +4,7 @@ namespace Zeega\ApiBundle\Controller;
 use Zeega\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Zeega\ApiBundle\Helpers\ResponseHelper;
 
 class SearchController extends Controller
 {
@@ -34,8 +35,19 @@ class SearchController extends Controller
 		$query["userId"]        = $request->query->get('user');      //  int    
 		$query["queryString"]   = $request->query->get('q');         //  string
 		$query["contentType"]   = $request->query->get('content');   //  string
-		$query["collectionId"]  = $request->query->get('collection');//  string         
-
+		$query["collectionId"]  = $request->query->get('collection');//  string
+		$query["tags"]          = $request->query->get('tags');      //  string
+		$query["latestDate"]    = $request->query->get('dtend');   //  string         
+		$query["earliestDate"]  = $request->query->get('dtstart');     //  string
+		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
+		
+		if( isset($query["geo"]["north"]) && isset($query["geo"]["south"]) &&
+	        isset($query["geo"]["east"]) && isset($query["geo"]["west"]))
+	    {
+		    $query["geo"] = array("north" => $request->query->get('geo_n'),"south" => $request->query->get('geo_s'),
+		                          "east"  => $request->query->get('geo_e'),"west"  => $request->query->get('geo_w'));
+		}
+		
 		//  return types
 		$query["returnMap"]     = $request->query->get('r_map');     //  bool
 		$query["returnTime"]    = $request->query->get('r_time');    //  bool
@@ -43,63 +55,66 @@ class SearchController extends Controller
 		$query["returnCollections"]   = $request->query->get('r_collections');   //  bool
 
 		//  set defaults for missing parameters  
-		if(!isset($query['returnCollections']))   $query['returnCollections'] = 1;		
-		if(!isset($query['returnItems']))   $query['returnItems'] = 1;
-		if(!isset($query['returnTime']))    $query['returnTime'] = 0;
-		if(!isset($query['returnMap']))     $query['returnMap'] = 0;
-		if(!isset($query['page']))          $query['page'] = 0;
-		if(!isset($query['limit']))         $query['limit'] = 100;
-		if($query['limit'] > 100) 	        $query['limit'] = 100;
-	
+		if(!isset($query['returnCollections']))     $query['returnCollections'] = 1;		
+		if(!isset($query['returnItems']))           $query['returnItems'] = 1;
+		if(!isset($query['returnTime']))            $query['returnTime'] = 0;
+		if(!isset($query['returnMap']))             $query['returnMap'] = 0;
+		if(!isset($query['page']))                  $query['page'] = 0;
+		if(!isset($query['limit']))                 $query['limit'] = 100;
+		if($query['limit'] > 100) 	                $query['limit'] = 100;
+	    
+	    
+	    //  filter results for the logged user
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
-				
-        //  execute the query
-		$queryResults = $this->getDoctrine()
-					        ->getRepository('ZeegaIngestBundle:Item')
-					        ->searchItems($query);								
 		
-		$results[]=array('items'=>$queryResults,'count'=>sizeof($queryResults));
-/*		
-                        	$response = new Response(json_encode($results));
-                    		$response->headers->set('Content-Type', 'application/json');
-
-                            // return the results
-                            return $response;
-*/
-        // separate query results by type - this is O(n) and won't scale well for huge collections
-        $items = array();
-        $collections = array();
-
-        foreach ($queryResults as $res)
-        {
-            if ((strtoupper($res["type"]) == "COLLECTION"))
-            { 
-                $res["item_count"] = rand(0, 15);
-                array_push($collections, $res);
-            }
-            else
-                array_push($items, $res);
-        }
-        
-        // populate the results object
+		// prepare an array for the results
+		//$results[]=array('items'=>$queryResults,'count'=>sizeof($queryResults));
+		
         $results = array();
         
-        if($query['returnItems'] == 1)
-        {
-            $results['items'] = $items;
-            $results['items_count'] = sizeof($items);
-        }
-        
-        if($query['returnCollections'] == 1)
-        {
-            $results['collections'] = $collections;
-            $results['collections_count'] = sizeof($collections);
-        }
-        
-        // create and configure the response type
+		
+		// regular search - return items and/or collections
+		if($query['returnCollections'] || $query['returnItems'])
+		{
+		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItems($query);
+		    
+		    $items = array();
+            $collections = array();
+            
+            // separate items from collections - this is O(n) and won't scale well for huge collections
+		    foreach ($queryResults as $res)
+            {
+                if ((strtoupper($res["type"]) == "COLLECTION"))
+                    array_push($collections, $res);
+                else
+                    array_push($items, $res);
+            }
+            
+            // populate the results object
+            if($query['returnItems'] == 1)
+            {
+                $results['items'] = $items;
+                $results['items_count'] = sizeof($items);
+            }
+
+            if($query['returnCollections'] == 1)
+            {
+                $results['collections'] = $collections;
+                $results['collections_count'] = sizeof($collections);
+            }	
+	    }
+		
+		if($query['returnTime'])
+		{
+		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItemsByTimeDistribution($query);
+		    $results['time_distribution'] = $queryResults;
+		    $results['time_distribution_count'] = sizeof($queryResults);
+	    }
+		
+		// create and configure the response type
         // TO-DO: multiple response types (xml, etc)
-		$response = new Response(json_encode($results));
-		$response->headers->set('Content-Type', 'application/json');
+
+		$response = ResponseHelper::getJsonResponse($results);
         
         // return the results
         return $response;

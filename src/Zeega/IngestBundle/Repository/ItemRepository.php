@@ -7,18 +7,8 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemRepository extends EntityRepository
 {
-    //  api/search
-    public function searchItems($query)
+    private function buildSearchQuery($qb, $query)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        
-        // search query
-        $qb->select('i')
-            ->from('ZeegaIngestBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
-       		->setMaxResults($query['limit'])
-       		->setFirstResult($query['page']);
-
         if(isset($query['queryString']))
         {
             $qb->where('i.title LIKE ?1')
@@ -39,7 +29,7 @@ class ItemRepository extends EntityRepository
                 ->andWhere('c.id = ?3')
                 ->setParameter(3, $query['collectionId']);
 		}
-        
+		
         if(isset($query['contentType']))
       	{
       	    $content_type = strtoupper($query['contentType']);
@@ -53,10 +43,98 @@ class ItemRepository extends EntityRepository
                    ->setParameter(4, $query['contentType']);
       	    }
 		}
+		
+		if(isset($query['tags']))
+      	{
+			 $qb->innerjoin('i.tags', 'it')
+			    ->innerjoin('it.tag','t')
+                ->andWhere('t.name LIKE ?5')
+                ->setParameter(5, $query['tags']);
+		}
+		
+		if(isset($query['earliestDate']))
+      	{
+			 $qb->andWhere('i.media_date_created > ?6')
+			    ->setParameter(6, date("Y-m-d",strtotime($query['earliestDate']."-01-01")));
+		}
         
+        if(isset($query['latestDate']))
+      	{
+			 $qb->andWhere('i.media_date_created_end < ?7')
+			    ->setParameter(7, date("Y-m-d",strtotime($query['latestDate']."-12-30")));
+		}
+		
+		if(isset($query['latestDate']))
+      	{
+			 $qb->andWhere('i.media_date_created_end < ?7')
+			    ->setParameter(7, date("Y-m-d",strtotime($query['latestDate']."-12-30")));
+		}
+		
+		if(isset($query['geo']))
+      	{
+      	     $qb->andWhere($qb->expr()->between('i.media_geo_latitude', $query['geo']['south'], $query['geo']['north']))
+				->andWhere($qb->expr()->between('i.media_geo_longitude', $query['geo']['west'], $query['geo']['east']));
+		}
+		
+		return $qb;
+    }
+    
+    //  api/search
+    public function searchItems($query)
+    {    
+        $qb = $this->getEntityManager()->createQueryBuilder();
+    
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['page']);
+        
+        $qb = $this->buildSearchQuery($qb, $query);
+
         // execute the query
         return $qb->getQuery()->getArrayResult();
     }
+
+    //  api/search
+    public function searchItemsByTimeDistribution($query)
+    {
+        $results = array();
+  	    
+        if(isset($query['dateIntervals']) && $query["latestDate"] && $query["earliestDate"])
+      	{
+      	    $qb = $this->getEntityManager()->createQueryBuilder();
+            
+      	    $qb->select('COUNT(i.id)')
+                ->from('ZeegaIngestBundle:Item', 'i');
+
+      	    $searchQuery = $this->buildSearchQuery($qb, $query);
+            
+            
+      	    $dateIntervals = intval($query['dateIntervals']);
+      	    $startDate = intval($query['earliestDate']);
+      	    $endDate = intval($query['latestDate']);
+      	    
+      	    $intervalOffset = ($endDate - $startDate) / $dateIntervals;
+      	    
+      	    for ($i = 1; $i <= $dateIntervals; $i++) 
+      	    {
+                $currStartDate = intval($startDate + ($intervalOffset * $i));
+                $currEndDate = intval($startDate + ($intervalOffset * ($i+1)));
+                $searchQuery->setParameter(6, date("Y-m-d",strtotime("$currStartDate-01-01")));
+                $searchQuery->setParameter(7, date("Y-m-d",strtotime("$currEndDate-12-30")));
+                
+                $tmp = array();
+                $tmp["start_date"] = $currStartDate;
+                $tmp["end_date"] = $currEndDate;
+                $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
+                array_push($results, $tmp);
+            }
+		}
+		
+        return $results;
+    }    
     
     //  api/search
     public function searchCollectionItems($query)
