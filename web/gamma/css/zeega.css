@@ -1268,15 +1268,15 @@ body
 	min-height:25px;
 	background:#555;
 	margin:1px 0;
-	-webkit-border-radius: 2px;
+	padding: 6px;
+	-webkit-border-radius: 6px;
 	overflow:hidden;
 	
 }
 
 .layer-uber-bar div
 {
-	padding : 9px 0 7px;
-	height : 20px;
+	padding : 3px;
 }
 
 .layer-uber-bar input
@@ -1301,7 +1301,7 @@ body
 	color: #ddd;
 	font-size: .8em;
 	font-weight: bold;
-	width: 310px;
+	max-width: 250px;
 	overflow:hidden;
 	float:left;
 	cursor:pointer;
@@ -1318,10 +1318,8 @@ body
 
 .layer-drag-handle
 {
-	background:#777;
 	width:40px;
 	float: right;
-	background: -webkit-gradient(linear, left top, right top, from(#555), to(#777));
 	cursor:move;
 }
 
@@ -1368,8 +1366,12 @@ body
 
 .layer-content
 {
-	color: #ddd;
+	color: #aaa;
 	padding:20px;
+	-webkit-box-shadow: inset 5px 5px 5px #222;
+	-webkit-border-radius: 6px;
+	border: 1px solid #666;
+	background: #444;
 }
 
 #layer-persist
@@ -1645,6 +1647,7 @@ body
 .ui-slider .ui-slider-handle
 {
 	-webkit-border-radius: 2px;
+	-webkit-box-shadow: 3px 3px 3px #333;
 	height:15px;
 	width:5px;
 }
@@ -1659,6 +1662,7 @@ body
 .ui-slider-horizontal .ui-slider-handle
 {
 	top:-.5em;
+	margin-left: -0.2em;
 }
 
 .layer-slider-div
