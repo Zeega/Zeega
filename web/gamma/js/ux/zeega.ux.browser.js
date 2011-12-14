@@ -89,12 +89,13 @@ $(document).ready(function() {
 	
 	//Collection playback and editor connection
 	
-	$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+'/view');}); 
+	$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+'/view');return false;}); 
 	$('#collection-to-editor-button').click(function(){
 					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
 					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
 								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
 						});
+					return false;
 			});
 
 	$('#database-search-button, ').click(function(){
