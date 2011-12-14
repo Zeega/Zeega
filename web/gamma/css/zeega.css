@@ -1158,6 +1158,9 @@ body
 	float:left;
 	color:#333;
 	padding:6px 0;
+	width:126px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 .database-asset img
@@ -1179,6 +1182,9 @@ body
 	float:right;
 	margin-right:5px;
 	margin-top: 5px;
+	width:72px;
+	overflow:hidden;
+	white-space:nowrap;
 }
 
 #asset-preview
@@ -1306,10 +1312,11 @@ body
 {
 	color: #ddd;
 	font-weight: bold;
-	max-width: 250px;
+	width: 174px;
 	overflow:hidden;
 	float:left;
 	cursor:pointer;
+	white-space : nowrap;
 }
 .layer-uber-controls
 {

@@ -27,9 +27,13 @@ var ItemView = Backbone.View.extend({
 			.attr('height','25')
 			.attr('width','25');
 		
+		/*
 		//shorten title if necessary
 		if(	this.model.get('title').length > 25) var title=this.model.get('title').substr(0,20)+"...";
 		else var title=this.model.get('title');
+		*/
+		title=this.model.get('title')
+		
 		
 		if(	this.model.get('creator')&&this.model.get('creator').length > 30) var creator=this.model.get('creator').substr(0,30)+"...";
 		else var creator=this.model.get('creator');

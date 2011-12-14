@@ -36,13 +36,15 @@ var VisualLayerListView = Backbone.View.extend({
 		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		//shorten title if necessary
-		var title;
+		var title = this.model.get('attr').title;
+		/*
 		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
 		{
 			title = this.model.get('attr').title.substr(0,70)+"…";
 		}else{
 			title = this.model.get('attr').title;
 		}
+		*/
 		
 		var persist;
 		if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
