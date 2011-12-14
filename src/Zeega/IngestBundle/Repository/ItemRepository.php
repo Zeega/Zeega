@@ -63,7 +63,7 @@ class ItemRepository extends EntityRepository
         
         if(isset($query['latestDate']))
       	{
-			 $qb->andWhere('i.media_date_created_end < ?7')
+			 $qb->andWhere('i.media_date_created < ?7')
 			    ->setParameter(7, $query['latestDate']);
 		}
 		
