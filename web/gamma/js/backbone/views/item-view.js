@@ -5,54 +5,23 @@ var ItemView = Backbone.View.extend({
 	
 	initialize : function() {},
 	
-	render: function(i)
+	render: function()
 	{
+		var _this = this;
 		
-		var that = this;
+		var blanks = {
+			type : this.model.get('content_type').toLowerCase(),
+			title : this.model.get('title'),
+			creator : this.model.get('creator'),
+			thumbUrl : this.model.get('thumbnail_url')
+		};
 		//use template to clone the database items into
-		var template = $( this.getTemplate() );
+		var template = _.template( this.getTemplate() );
 		
-		//for some reason when I tried 'addClass()' the old class was persisting and 
-		//multiple classes were getting written. don't know why.
-		//this works.
-		//console.log(this);
-		
-		template.children('span')
-			.addClass( 'zicon-' +this.model.get('content_type').toLowerCase() )
-			.addClass( 'zicon-item');
-			
-		template.children('img')
-			.addClass('item-thumb')
-			.attr("src", this.model.get('thumbnail_url'))
-			.attr('height','25')
-			.attr('width','25');
-		
-		/*
-		//shorten title if necessary
-		if(	this.model.get('title').length > 25) var title=this.model.get('title').substr(0,20)+"...";
-		else var title=this.model.get('title');
-		*/
-		title=this.model.get('title')
-		
-		
-		if(	this.model.get('creator')&&this.model.get('creator').length > 30) var creator=this.model.get('creator').substr(0,30)+"...";
-		else var creator=this.model.get('creator');
-		
-		template.children(".item-title").html( title ).css({'font-size':'10px'});
-		template.children(".item-meta").html( creator ).css({'font-size':'10px'});
-		template.removeClass('hidden');
-
 		//copy the cloned item into the el
-		$(this.el).html(template);
-		$(this.el).addClass('database-asset');
-		$(this.el).hover(function(){$(this).find('.item-delete').show();},function(){$(this).find('.item-delete').hide();});
-		var that=this;
+		$(this.el).append( template( blanks ) );
+		$(this.el).addClass('database-asset').attr( 'id','item-'+this.model.id );
 		
-		$(this.el).find('.item-delete').click(function(){
-		that.model.destroy();
-		
-		
-		});
 		//drag drop functionality
 		$(this.el).draggable({
 			distance : 10,
@@ -65,7 +34,7 @@ var ItemView = Backbone.View.extend({
 			opacity : .75,
 			//helper : 'clone',
 			helper : function(){
-				var drag = $(this).find('.item-thumb')
+				var drag = $(this).find('.item-thumbnail')
 					.clone()
 					.css({
 						'height':'75px',
@@ -79,16 +48,17 @@ var ItemView = Backbone.View.extend({
 			//init the dragged item variable
 			start : function(){
 				$(this).draggable('option','revert',true);
-				Zeega.draggedItem = that.model;
+				Zeega.draggedItem = _this.model;
 			},
 				
-			/**	stuff that happens when the user drags the item into a node **/	
+			/**	stuff _this happens when the user drags the item into a node **/	
 				
 			stop : function(){
 				Zeega.draggedItem = null;
 			}
 			
 		});
+		
 		return this;
 	},
 	
@@ -100,7 +70,7 @@ var ItemView = Backbone.View.extend({
 	
 	//item events
 	previewItem: function(){
-		var that = this;
+		var _this = this;
 		
 		$('#asset-preview').fadeIn();
 		
@@ -108,20 +78,20 @@ var ItemView = Backbone.View.extend({
 
 		//uglyness this should be more like layers?
 		var media = null;
-		switch (that.model.get('content_type'))
+		switch (_this.model.get('content_type'))
 		{
 			case 'Image':
-				media = $('<img>').attr('src', that.model.get('item_url') );
+				media = $('<img>').attr('src', _this.model.get('item_url') );
 				break;
 			case 'Video':
 				media = $('<video>').attr('controls','controls');
-				var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
+				var src = $('<source>').attr('src',_this.model.get('item_url')).attr('type','video/mp4');
 				media.append(src);
 				//do stuff
 				break;
 			case 'Audio':
 				media = $('<video>').attr('controls','controls');
-				var src = $('<source>').attr('src',that.model.get('item_url')).attr('type','video/mp4');
+				var src = $('<source>').attr('src',_this.model.get('item_url')).attr('type','video/mp4');
 				media.append(src);
 				break;
 		}
@@ -130,9 +100,9 @@ var ItemView = Backbone.View.extend({
 		//this needs to test for the type of media and place the appropriate image/player etc in there
 		
 		
-		var metaTitle = $('<div>').addClass('meta-title').html(that.model.get('title'));
-		var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ that.model.get('creator'));
-		var l = $('<a>').attr('href',that.model.get('attribution_url')).attr('target','blank').html('View Source');
+		var metaTitle = $('<div>').addClass('meta-title').html(_this.model.get('title'));
+		var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ _this.model.get('creator'));
+		var l = $('<a>').attr('href',_this.model.get('attribution_url')).attr('target','blank').html('View Source');
 		var metaLink = $('<div>').addClass('meta-link').append(l);
 		
 		$('#asset-preview-meta')
@@ -145,13 +115,13 @@ var ItemView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		html = '<div id="database-asset-template" class="hidden">';
-		html +=		'<span class="float-left zicon grey"></span>';
-		html +=		'<img/>';
-		html +=		'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>';
-		html +=		'<div class="item-title"></div>';
-		html +=		'<div class="item-meta"></div>';
-		html +=	'</div>';
+		//html = '<div id="database-asset-template" class="hidden">';
+		var html =	'<span class="item-icon zicon zicon-<%= type %>"></span>';
+		html +=		'<img class="item-thumbnail" src="<%= thumbUrl %>" height="25" width="25"/>';
+		//html +=		'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>';
+		html +=		'<div class="item-title"><%= title %></div>';
+		html +=		'<div class="item-meta"><%= creator %></div>';
+		//html +=	'</div>';
 		return html;
 	}
 });
@@ -173,9 +143,9 @@ var ItemViewCollection = Backbone.View.extend({
 		//a database item is never 'new' right?
 		//it has to exist before it can be interacted with.
 		//database items are created in XM or other tools
-		var iv = new ItemView({ model : item });
-		this._itemViews.push(iv);
-		if(this._rendered) $(this.el).append(iv.render().el);
+		var itemView = new ItemView({ model : item });
+		this._itemViews.push(itemView);
+		if(this._rendered) $(this.el).append(itemView.render().el);
 		
 	},
 	
@@ -194,7 +164,7 @@ var ItemViewCollection = Backbone.View.extend({
 		var _this = this;
 		this.el.empty();
 		
-		//add EACH model's view to the that.el and render it
+		//add EACH model's view to the _this.el and render it
 		_.each(this._itemViews, function(item, i){
 			_this.el.append(item.render().el);
 		});

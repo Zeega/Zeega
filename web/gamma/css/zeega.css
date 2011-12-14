@@ -1159,6 +1159,8 @@ body
 	padding:0px 6px;
 	overflow:hidden;
 	border-bottom : 1px solid #888;
+	font-size : 10px;
+	cursor : move;
 }
 
 .item-title
@@ -1185,7 +1187,6 @@ body
 
 .item-meta
 {
-	font-size:.8em;
 	color:#666;
 	float:right;
 	margin-right:5px;
