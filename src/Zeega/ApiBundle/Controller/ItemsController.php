@@ -49,7 +49,14 @@ class ItemsController extends Controller
         $item = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
         $itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
         
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => $itemTags));
+        $tags = array();
+        foreach($itemTags as $tag)
+        {
+            array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
+        }
+        $tags = join(",",$tags);
+                
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => $tags));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }

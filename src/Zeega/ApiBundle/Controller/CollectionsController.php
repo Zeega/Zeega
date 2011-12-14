@@ -49,8 +49,15 @@ class CollectionsController extends Controller
         $collection = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
         $collectionTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
         
+        $tags = array();
+        foreach($collectionTags as $tag)
+        {
+            array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
+        }
+        $tags = join(",",$tags);
+        
         $collectionView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $collection, 
-            'tags' => $collectionTags));
+            'tags' => $tags));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($collectionView);
     }
