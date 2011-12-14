@@ -224,7 +224,7 @@ $(document).ready(function() {
 			     	var collectionID = ZeegaBrowser.search.get("collection");
 					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
 					
-					
+					collectionToUpdate.isUpdate = true;
 
 					//Save collection and hide form field on success
 					collectionToUpdate.save({ title:$('#browser-update-collection-title').val() }, 

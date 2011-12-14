@@ -7,8 +7,11 @@ var BrowserCollection = Backbone.Model.extend({
 	url : function(){
 		if (this.isNew()){
 			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/items"; 
+		}else if (this.isUpdate){
+		    this.isUpdate = false;
+		    return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id;
 		}else {
-			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "app_dev.php/api/collections/"+this.id+"/items";
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id+"/items";
 		}
 	},
 	defaults : {
