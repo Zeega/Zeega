@@ -98,6 +98,8 @@ var ZeegaBrowser = {
 		});
 	},
 	showCollectionFilter: function(){
+		$( '#browser-collection-filter-title-form' ).hide();
+		$('#browser-collection-filter-title').show();
 		$('#browser-collection-filter-title').html(ZeegaBrowser.clickedCollectionTitle);
 
 		$('#browser-collection-filter').show();

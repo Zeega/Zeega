@@ -142,12 +142,12 @@ $(document).ready(function() {
 	//makes call to server to load All Media vs. My Media
 	$('#browser-toggle-all-media-vs-my-media li').click(function(e){
 		
-		$(e).closest('li').removeClass('browser-unselected-toggle');
-		$(e).closest('li').addClass('browser-selected-toggle');
-		$(e).siblings().removeClass('browser-selected-toggle');
-		$(e).siblings().addClass('browser-unselected-toggle');
+		$(this).closest('li').removeClass('browser-unselected-toggle');
+		$(this).closest('li').addClass('browser-selected-toggle');
+		$(this).siblings().removeClass('browser-selected-toggle');
+		$(this).siblings().addClass('browser-unselected-toggle');
 
-		if ($(e).attr('id') == "browser-my-media"){
+		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
 
 		}else {
