@@ -35,7 +35,7 @@
 			{% set tags_len = tags|length - 1 -%}
 			
 			{% for i in 0..tags_len %}
-				{{ tags[i].getTag().getId() }}
+				{{ tags[i].getTag().getName() }}
 				{% if i < tags_len %}
 					,
 				{% endif %}
