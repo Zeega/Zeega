@@ -96,7 +96,8 @@ var VisualLayerListView = Backbone.View.extend({
 		'click .layer-icon'			: 'hideShow',
 		'mouseenter .layer-icon'			: 'onLayerIconEnter', 
 		'mouseleave .layer-icon'			: 'onLayerIconLeave', 
-	},
+		'mouseenter .delete-layer'			: 'onLayerTrashEnter', 
+		'mouseleave .delete-layer'			: 'onLayerTrashLeave',	},
 	
 	//delete this layer from the DB and view
 	delete : function()
@@ -142,18 +143,29 @@ var VisualLayerListView = Backbone.View.extend({
 		this.model.set({'visibleineditor': visible });
 		
 		//change the color of the layer icon so it's apparent on/off
-		if( visible ) $(this.el).find('.zicon').addClass('orange');
-		else $(this.el).find('.zicon').removeClass('orange');
+		if( visible ) $(this.el).find('.asset-type-icon').addClass('orange');
+		else $(this.el).find('.asset-type-icon').removeClass('orange');
 	},
 	
 	onLayerIconEnter : function()
 	{
-		$(this.el).find('.zicon').addClass('zicon-visible')
+		$(this.el).find('.asset-type-icon').addClass('zicon-visible')
 	},
 	
 	onLayerIconLeave : function()
 	{
-		$(this.el).find('.zicon').removeClass('zicon-visible')
+		$(this.el).find('.asset-type-icon').removeClass('zicon-visible')
+	},
+	
+	onLayerTrashEnter : function()
+	{
+		$(this.el).find('.delete-layer').addClass('orange zicon-trash-open')
+	},
+	
+	onLayerTrashLeave : function()
+	{
+		$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
+		
 	},
 	
 	getTemplate : function()
@@ -164,7 +176,7 @@ var VisualLayerListView = Backbone.View.extend({
 		layerTemplate += 			'</div>';
 		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
 		layerTemplate += 		'<div class="layer-uber-controls">';
-		layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
+		layerTemplate += 			'<span class="delete-layer zicon zicon-trash-closed"></span>';
 		layerTemplate += 		'</div>';
 		layerTemplate += 		'<div class="layer-drag-handle">';
 		layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
