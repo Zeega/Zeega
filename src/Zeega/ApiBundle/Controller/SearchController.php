@@ -41,13 +41,12 @@ class SearchController extends Controller
 		$query["tags"]          = $request->query->get('tags');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
 		
-		if( isset($query["geo"]["north"]) && isset($query["geo"]["south"]) &&
-	        isset($query["geo"]["east"]) && isset($query["geo"]["west"]))
-	    {
-		    $query["geo"] = array("north" => $request->query->get('geo_n'),"south" => $request->query->get('geo_s'),
-		                          "east"  => $request->query->get('geo_e'),"west"  => $request->query->get('geo_w'));
-		}
-        
+		$query["geo"] = array();
+		$query["geo"]["north"] = $request->query->get('geo_n');
+		$query["geo"]["south"] = $request->query->get('geo_s');
+		$query["geo"]["east"] = $request->query->get('geo_e');
+		$query["geo"]["west"] = $request->query->get('geo_w');
+		
         $earliestDate = $request->query->get('dtstart');
         $latestDate = $request->query->get('dtend');
         
@@ -78,6 +77,13 @@ class SearchController extends Controller
 		if(!isset($query['limit']))                 $query['limit'] = 100;
 		if($query['limit'] > 100) 	                $query['limit'] = 100;
 	    
+	    if( !isset($query["geo"]["north"]) || !isset($query["geo"]["south"]) ||
+	        !isset($query["geo"]["east"]) || !isset($query["geo"]["west"]))
+	    {
+		    $query["geo"] = null;
+		}
+        
+		
 	    
 	    //  filter results for the logged user
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
