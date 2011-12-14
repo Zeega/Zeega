@@ -48,6 +48,8 @@ var Database = new function()
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
 			{
+
+				
 				_.each(response.items, function(item){
 					
 					//make search items into bb models

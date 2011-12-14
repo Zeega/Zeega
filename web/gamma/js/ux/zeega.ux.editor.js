@@ -45,7 +45,11 @@ function search(triggerElement, discardCurrentResultSet)
     //var form = $(triggerElement).closest("form");
     //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
     // this is not very elegant...
-    Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+
+	var query = $("#database-search-text").val();
+	var defaultText = /search database/;
+	if( defaultText.test(query) ) query = '';
+    Database.search( query, $("#database-search-filter").val(), discardCurrentResultSet);
 
 	//show the database drawer if it's hidden
 	if( $('#database').is(':hidden') )
