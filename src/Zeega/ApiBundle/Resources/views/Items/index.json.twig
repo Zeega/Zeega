@@ -24,7 +24,7 @@
 				"media_geo_latitude" : "{{ items[i].media_geo_latitude }}",
 				"media_geo_longitude" : "{{ items[i].media_geo_longitude }}",
 				{% if items[i].media_date_created %}
-					"media_date_created" : "{{ items[i].media_date_created|date("Y-m-d") }}",
+					"media_date_created" : "{{ items[i].media_date_created|date("Y-m-d G:i:s") }}",
 				{% else %}
 					"media_date_created" : "",
 				{% endif %}

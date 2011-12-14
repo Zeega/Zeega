@@ -92,7 +92,7 @@ class SearchController extends Controller
 		if($query['returnCollections'] || $query['returnItems'])
 		{
 		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItems($query);
-		    
+
 		    $items = array();
             $collections = array();
             

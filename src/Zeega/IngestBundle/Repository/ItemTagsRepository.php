@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ItemTagsRepository extends EntityRepository
 {
-    public function searchItemTags($tagId)
+    public function searchItemTags($itemId)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -16,7 +16,7 @@ class ItemTagsRepository extends EntityRepository
                ->from('ZeegaIngestBundle:Tag', 't')
                ->innerjoin('t.item', 'i')
                ->where('i.item = ?1')
-               ->setParameter(1,$tagId);
+               ->setParameter(1,$itemId);
            
             // execute the query
             return $qb->getQuery()->getArrayResult();

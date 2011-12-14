@@ -45,13 +45,14 @@ class CollectionsController extends Controller
     public function getCollectionAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $queryResults = $this->getDoctrine()
-         					 ->getRepository('ZeegaIngestBundle:Item')
-         					 ->searchCollectionById($id);
-       
-        $tagsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults));
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+        
+        $collection = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
+        $collectionTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
+        
+        $collectionView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $collection, 
+            'tags' => $collectionTags));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($collectionView);
     }
     
     // get_collection_project GET    /api/collections/{id}/project.{_format}
@@ -142,6 +143,30 @@ class CollectionsController extends Controller
             array('tags' => $tags, 'collection_id' => $collectionId));
             
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+    }
+    
+    // get_item_tags GET    /api/items/{itemId}/tags.{_format}
+    public function getCollectionSimilarAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // get item tags
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        
+        $tagsId = array();
+        foreach($tags as $tag)
+        {
+            array_push($tagsId, $tag["id"]);
+        }
+        
+        $tagsId = join(",",$tagsId);
+        
+        // get items with the same tags
+        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        
+        // render results
+        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
         
     // post_collections POST   /api/collections.{_format}

@@ -14,7 +14,7 @@ use Zeega\ApiBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
-    //  get_collections GET    /api/collections.{_format}
+    //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
         $query = array();
@@ -41,6 +41,19 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
+    // get_collection GET    /api/item/{id}.{_format}
+    public function getItemAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $item = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
+        $itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
+        
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => $itemTags));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+    
     // get_item_tags GET    /api/items/{itemId}/tags.{_format}
     public function getItemTagsAction($itemId)
     {
@@ -51,18 +64,36 @@ class ItemsController extends Controller
         $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+    }
+    
+    // get_item_tags GET    /api/items/{itemId}/tags.{_format}
+    public function getItemSimilarAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // get item tags
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        
+        $tagsId = array();
+        foreach($tags as $tag)
+        {
+            array_push($tagsId, $tag["id"]);
+        }
+        
+        $tagsId = join(",",$tagsId);
+        
+        // get items with the same tags
+        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        
+        // render results
+        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
     
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
     public function postItemTagsAction($itemId)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user == "anon.")
-        {
-            $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaUserBundle:User')->find(1);
-        }
-        
         $em = $this->getDoctrine()->getEntityManager();
 
         $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);

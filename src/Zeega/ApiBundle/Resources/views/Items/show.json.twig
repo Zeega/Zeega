@@ -29,10 +29,23 @@
 			"media_date_created_end" : "",
 		{% endif %}
 		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
-		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}"
-	  }
+		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
+		"tags" : "
+		{% if tags|length > 0 %}
+			{% set tags_len = tags|length - 1 -%}
+			
+			{% for i in 0..tags_len %}
+				{{ tags[i].getTag().getId() }}
+				{% if i < tags_len %}
+					,
+				{% endif %}
+			{% endfor %}
+			
+		{% endif %}
+		"
+	}
 	{% else %}
-		{},
+		{}
 	{% endif %},
 "{% block countName %}items_count{% endblock %}": 1
 }

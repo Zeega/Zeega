@@ -51,7 +51,7 @@ class ItemRepository extends EntityRepository
       	{
 			 $qb->innerjoin('i.tags', 'it')
 			    ->innerjoin('it.tag','t')
-                ->andWhere('t.name LIKE ?5')
+                ->andWhere('t.id IN (?5)')
                 ->setParameter(5, $query['tags']);
 		}
 		
@@ -173,6 +173,24 @@ class ItemRepository extends EntityRepository
 			        ->getQuery()
 			        ->getArrayResult();
     }
+    
+    //  api/collections/{col_id}
+    public function searchItemsByTags($tags)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        // search query
+        $qb->select('i')
+           ->from('ZeegaIngestBundle:Item', 'i')
+           ->innerjoin('i.tags', 'it')
+		   ->innerjoin('it.tag','t')
+           ->andWhere('t.id IN (?5)')
+           ->setParameter(5, $tags);
+		
+		return $qb->getQuery()->getArrayResult();
+    }
+    
+    
     
     public function findIt($offset,$limit)
     {
