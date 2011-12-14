@@ -8,15 +8,9 @@ Zeega\IngestBundle\Entity\ItemTags:
         item:
             targetEntity: Item
             inversedBy: tags
-            joinColumn:
-                name: item_id
-                referencedColumnName: id
         tag:
             targetEntity: Tag
             inversedBy: items
-            joinColumn:
-                name: tag_id
-                referencedColumnName: id
     id:
         item:
             associationKey: true
