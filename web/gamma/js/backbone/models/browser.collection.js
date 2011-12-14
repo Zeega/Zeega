@@ -27,11 +27,12 @@ var BrowserCollection = Backbone.Model.extend({
 		
 	},
 	parse : function(data){
-		this.set(data);
+		
+		//reset the new item ids
 		this.unset("newItemIDS", {"silent":"true"});
-		this.set({"newItemIDS": new Array()}); //reset the new item ids
+		this.set({"newItemIDS": new Array()}); 
 
-		var test = 'blah';
+		return data['collections'];
 		
 	}
 

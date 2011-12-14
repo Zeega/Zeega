@@ -113,54 +113,6 @@ var ZeegaBrowser = {
     				$(collectionEl).fadeTo('fast', 1.0, function() {});
     			}
 		});
-		
-		$('#browser-collection-filter-title').click(function() {
-			$('#browser-collection-filter-title').hide();
-			$('#browser-collection-filter-title-form').show();
-			$('#browser-collection-filter-title-form').css("display", "inline");
-			$('#browser-update-collection-title').val(ZeegaBrowser.clickedCollectionTitle);
-			$('#browser-update-collection-title').focus();
-			
-			//When title input field loses focus then just cancel the save
-			$('#browser-update-collection-title').blur(function() {
-			  	$( '#browser-collection-filter-title-form' ).hide();
-				$('#browser-collection-filter-title').show();
-			});
-
-			//When user presses return, save collection with its new title
-			$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
-			   if ( e.keyCode == 13 ) {
-			     	e.preventDefault();
-			     	
-			     	//Look up collection model to update
-			     	var collectionID = ZeegaBrowser.search.get("collection");
-					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
-					
-					
-
-					//Save collection and hide form field on success
-					collectionToUpdate.save({ title:$('#browser-update-collection-title').val() }, 
-							{
-								success: function(model, response) { 
-									
-									$( '#browser-collection-filter-title-form' ).hide();
-									$('#browser-collection-filter-title').show();
-									//Update newGuy
-									/*model.set({id:response.collections.id});
-									model.set({thumbnail_url:response.collections.thumbnail_url});
-									model.set({child_items_count:response.collections.child_items_count});
-									ZeegaBrowser.myCollectionsView.collection.add(model, {at: 0});*/
-				 				},
-				 				error: function(model, response){
-				 					
-				 					console.log("Error updating collection title.");
-				 					console.log(response);
-				 				}
-				 			});
-			   }
-			 });
-			
-		});
 
 	}
 	

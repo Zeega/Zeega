@@ -202,4 +202,50 @@ $(document).ready(function() {
 				
 			}
 		});
+	$('#browser-collection-filter-title').click(function() {
+			$('#browser-collection-filter-title').hide();
+			$('#browser-collection-filter-title-form').show();
+			$('#browser-collection-filter-title-form').css("display", "inline");
+			$('#browser-update-collection-title').val(ZeegaBrowser.clickedCollectionTitle);
+			$('#browser-update-collection-title').focus();
+			
+			//When title input field loses focus then just cancel the save
+			$('#browser-update-collection-title').blur(function() {
+			  	$( '#browser-collection-filter-title-form' ).hide();
+				$('#browser-collection-filter-title').show();
+			});
+
+			//When user presses return, save collection with its new title
+			$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
+			   if ( e.keyCode == 13 ) {
+			     	e.preventDefault();
+			     	
+			     	//Look up collection model to update
+			     	var collectionID = ZeegaBrowser.search.get("collection");
+					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
+					
+					
+
+					//Save collection and hide form field on success
+					collectionToUpdate.save({ title:$('#browser-update-collection-title').val() }, 
+							{
+								success: function(model, response) { 
+									
+									
+									$( '#browser-collection-filter-title-form' ).hide();
+									$('#browser-collection-filter-title').text(model.get("title")).show();
+
+
+									
+				 				},
+				 				error: function(model, response){
+				 					
+				 					console.log("Error updating collection title.");
+				 					console.log(response);
+				 				}
+				 			});
+			   }
+			 });
+			
+		});
 });
