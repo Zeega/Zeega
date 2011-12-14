@@ -149,8 +149,13 @@ class ProjectsController extends Controller
 		$project->setPlayground($playground);
 		$project->addUsers($user);
 		$route->setProject($project);
+		
+		$route->setTitle('click here to change title');
+		$project->setTitle('click here to change title');
+		/*
 		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
 		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		*/
 		$em=$this->getDoctrine()->getEntityManager();
 		$em->persist($route);
 		$em->persist($project);

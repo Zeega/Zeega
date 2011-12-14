@@ -11,8 +11,7 @@
 var ZeegaYoutubePlayer = Class.extend({
 
 	debug : {
-			fun:true,
-			event:false,
+			fun:false,
 		},
 	
 	
@@ -20,6 +19,8 @@ var ZeegaYoutubePlayer = Class.extend({
 	init: function(id,youtubeId,inPoint,outPoint,volume,wrapperId,playerId){
 		if(this.debug.fun)console.log("youtube player ["+id+"] : function : init");
 	
+		var _this = this;
+			
 		this._id=id;
 		this._youtubeId=youtubeId;
 		this._source="http://www.youtube.com/v/"+this._youtubeId;
@@ -30,10 +31,11 @@ var ZeegaYoutubePlayer = Class.extend({
 		this._duration;
 		this._dragging;
 		this._wrapperId=wrapperId;
-		var _this=this;
 		this._youtubePlayer;
 		this._playerId=playerId;	
 		this._interval;
+		
+		console.log(this)
 		
 		//Create wrapper
 		
