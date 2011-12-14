@@ -4,21 +4,14 @@
 namespace Zeega\IngestBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use DateInterval;
+
+use DateTime;
 
 class ItemRepository extends EntityRepository
 {
-    //  api/search
-    public function searchItems($query)
+    private function buildSearchQuery($qb, $query)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        
-        // search query
-        $qb->select('i')
-            ->from('ZeegaIngestBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
-       		->setMaxResults($query['limit'])
-       		->setFirstResult($query['page']);
-
         if(isset($query['queryString']))
         {
             $qb->where('i.title LIKE ?1')
@@ -39,7 +32,7 @@ class ItemRepository extends EntityRepository
                 ->andWhere('c.id = ?3')
                 ->setParameter(3, $query['collectionId']);
 		}
-        
+		
         if(isset($query['contentType']))
       	{
       	    $content_type = strtoupper($query['contentType']);
@@ -53,10 +46,100 @@ class ItemRepository extends EntityRepository
                    ->setParameter(4, $query['contentType']);
       	    }
 		}
+		
+		if(isset($query['tags']))
+      	{
+			 $qb->innerjoin('i.tags', 'it')
+			    ->innerjoin('it.tag','t')
+                ->andWhere('t.id IN (?5)')
+                ->setParameter(5, $query['tags']);
+		}
+		
+		if(isset($query['earliestDate']))
+      	{
+			 $qb->andWhere('i.media_date_created > ?6')
+			    ->setParameter(6, $query['earliestDate']);
+		}
         
+        if(isset($query['latestDate']))
+      	{
+			 $qb->andWhere('i.media_date_created < ?7')
+			    ->setParameter(7, $query['latestDate']);
+		}
+		
+		if(isset($query['geo']))
+      	{
+      	     $qb->andWhere($qb->expr()->between('i.media_geo_latitude', $query['geo']['south'], $query['geo']['north']))
+				->andWhere($qb->expr()->between('i.media_geo_longitude', $query['geo']['west'], $query['geo']['east']));
+		}
+		
+		return $qb;
+    }
+    
+    //  api/search
+    public function searchItems($query)
+    {    
+        $qb = $this->getEntityManager()->createQueryBuilder();
+    
+        // search query
+        $qb->select('i')
+            ->from('ZeegaIngestBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['page']);
+        
+        $qb = $this->buildSearchQuery($qb, $query);
+
         // execute the query
         return $qb->getQuery()->getArrayResult();
     }
+
+    //  api/search
+    public function searchItemsByTimeDistribution($query)
+    {
+        $results = array();
+  	    
+        if(isset($query['dateIntervals']) && $query["latestDate"] && $query["earliestDate"])
+      	{
+      	    $qb = $this->getEntityManager()->createQueryBuilder();
+            
+      	    $qb->select('COUNT(i.id)')
+                ->from('ZeegaIngestBundle:Item', 'i');
+
+      	    $searchQuery = $this->buildSearchQuery($qb, $query);
+            
+            
+      	    $dateIntervals = intval($query['dateIntervals']);
+      	    $startDate = $query['earliestDate'];
+      	    $endDate = $query['latestDate'];
+      	    
+      	    // offset in seconds
+      	    $intervalOffset = ($endDate->getTimestamp() - $startDate->getTimestamp()) / $dateIntervals;
+      	    
+      	    for ($i = 0; $i <= $dateIntervals-1; $i++) 
+      	    {
+                $startDateOffset = $intervalOffset * $i;
+                $endDateOffset = $intervalOffset * ($i + 1);
+                
+                $currStartDate = new DateTime();
+                $currStartDate->setTimestamp($startDate->getTimestamp() + $startDateOffset);
+                
+                $currEndDate = new DateTime();
+                $currEndDate->setTimestamp($startDate->getTimestamp() + $endDateOffset);
+                
+                $searchQuery->setParameter(6, $currStartDate);
+                $searchQuery->setParameter(7, $currEndDate);
+                
+                $tmp = array();
+                $tmp["start_date"] = $currStartDate->getTimestamp();
+                $tmp["end_date"] = $currEndDate->getTimestamp();
+                $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
+                array_push($results, $tmp);
+            }
+		}
+		
+        return $results;
+    }    
     
     //  api/search
     public function searchCollectionItems($query)
@@ -90,6 +173,24 @@ class ItemRepository extends EntityRepository
 			        ->getQuery()
 			        ->getArrayResult();
     }
+    
+    //  api/collections/{col_id}
+    public function searchItemsByTags($tags)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        // search query
+        $qb->select('i')
+           ->from('ZeegaIngestBundle:Item', 'i')
+           ->innerjoin('i.tags', 'it')
+		   ->innerjoin('it.tag','t')
+           ->andWhere('t.id IN (?5)')
+           ->setParameter(5, $tags);
+		
+		return $qb->getQuery()->getArrayResult();
+    }
+    
+    
     
     public function findIt($offset,$limit)
     {

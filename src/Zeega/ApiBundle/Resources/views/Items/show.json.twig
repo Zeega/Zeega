@@ -29,10 +29,15 @@
 			"media_date_created_end" : "",
 		{% endif %}
 		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
-		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}"
-	  }
+		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
+		"tags" : " 
+			{% if tags is defined%}
+			{{ tags }}
+			{% endif %}
+		"
+	}
 	{% else %}
-		{},
+		{}
 	{% endif %},
 "{% block countName %}items_count{% endblock %}": 1
 }

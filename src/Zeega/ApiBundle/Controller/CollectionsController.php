@@ -45,18 +45,24 @@ class CollectionsController extends Controller
     public function getCollectionAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $queryResults = $this->getDoctrine()
-         					 ->getRepository('ZeegaIngestBundle:Item')
-         					 ->searchCollectionById($id);
-       
-        $tagsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults));
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+        
+        $collection = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
+        $collectionTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
+        
+        $tags = array();
+        foreach($collectionTags as $tag)
+        {
+            array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
+        }
+        $tags = join(",",$tags);
+        
+        $collectionView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $collection, 
+            'tags' => $tags));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($collectionView);
     }
     
-    
-    
-      // get_collection_project GET    /api/collections/{id}/project.{_format}
+    // get_collection_project GET    /api/collections/{id}/project.{_format}
     public function getCollectionProjectAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -97,9 +103,7 @@ class CollectionsController extends Controller
          
          
     }
-    
-    
-    
+
     // get_collection_items     GET   /api/collections/{id}/items.{_format}
     public function getCollectionItemsAction($id)
     {
@@ -146,6 +150,30 @@ class CollectionsController extends Controller
             array('tags' => $tags, 'collection_id' => $collectionId));
             
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+    }
+    
+    // get_item_tags GET    /api/items/{itemId}/tags.{_format}
+    public function getCollectionSimilarAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // get item tags
+        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        
+        $tagsId = array();
+        foreach($tags as $tag)
+        {
+            array_push($tagsId, $tag["id"]);
+        }
+        
+        $tagsId = join(",",$tagsId);
+        
+        // get items with the same tags
+        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        
+        // render results
+        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
         
     // post_collections POST   /api/collections.{_format}
@@ -238,6 +266,24 @@ class CollectionsController extends Controller
         $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
+
+    // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    public function putCollectionsAction($collection_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->getRequest();
+        $request_data = $this->getRequest()->request;        
+        
+        $collection = $this->populateCollectionWithRequestData($request_data, $em);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($collection);
+        $em->flush();
+        
+        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $collection));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+    }
    
    	// delete_collection    DELETE /api/collections/{collection_id}.{_format}
     public function deleteCollectionAction($collection_id)
@@ -255,33 +301,73 @@ class CollectionsController extends Controller
     	
     	return new Response('SUCCESS',200);
     }
+    
+    public function deleteCollectionItemAction($collection_id, $item_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	
+     	if (!$collection) 
+        {
+            throw $this->createNotFoundException("The collection $collection_id does not exist");
+        }
+        
+        if (!$item) 
+        {
+            throw $this->createNotFoundException("The item $item_id does not exist");
+        }
+        
+        $collection->getChildItems()->removeElement($item);
+        $em->flush();
+        
+        return new Response('SUCCESS',200);
+    }
    
     // Private methods 
     
     private function populateCollectionWithRequestData($request_data)
     {    
         $user = $this->get('security.context')->getToken()->getUser();
-       $em = $this->getDoctrine()->getEntityManager();
-
+        $em = $this->getDoctrine()->getEntityManager();
         
         if (!$request_data) 
             throw $this->createNotFoundException('Collection object is not defined.');
         
+        $collection_id = $request_data->get('id');
+        $description = $request_data->get('description');
+        $text = $request_data->get('text');
+        $attribution_url = $request_data->get('attribution_uri');
+        $thumbnail_url = $request_data->get('thumbnail_url');
         $title = $request_data->get('title');
         $new_items = $request_data->get('newItemIDS');
         
         $collection = new Item();
+        if(isset($collection_id))
+        {
+            $collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+            // if(!$collection) throw error - something went wrong
+        }
+
         $collection->setType('Collection');
         $collection->setSource('Collection');
         $collection->setUri('http://zeega.org');
-        $collection->setAttributionUri("http://zeega.org");
+        $collection->setDescription($description);
+        $collection->setText($text);
+        if(isset($attribution_url))
+            $collection->setAttributionUri($attribution_url);
+        else
+            $collection->setAttributionUri("http://zeega.org");
+            
+        $collection->setThumbnailUrl($thumbnail_url);
         $collection->setUser($user);
-        $collection->setChildItemsCount(0);
+        if(!isset($collection_id))
+            $collection->setChildItemsCount(0);
         $collection->setMediaCreatorUsername($user->getUsername());
         $collection->setMediaCreatorRealname($user->getDisplayName());
         $collection->setTitle($title);
         
-        if (isset($new_items))
+        if (isset($new_items) && !isset($collection_id))
         {
             $collection->setChildItemsCount(count($new_items));
             $first = True;

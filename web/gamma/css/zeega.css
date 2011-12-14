@@ -228,7 +228,7 @@
 #browser-collection-filter{
 	border:1px solid #ccc;
 	padding:5px 4px 4px 4px;
-	color:#ccc;
+	color:#fff;
 	margin-left:20px;
 	float:left;
 	display:none;
@@ -236,15 +236,29 @@
 	-webkit-border-radius:6px;
 	border-radius: 6px;
 	letter-spacing:1px;
+
 }
 #browser-remove-collection-filter{
-	margin-right:20px;
+	margin-right:5px;
 	margin-left:5px;
 	font-weight:bold;
 }
 
 #browser-collection-filter-title{
 	margin-right:5px;
+	font-size:16px;
+}
+#browser-collection-filter-title-form{
+	display:none;
+}
+#browser-update-collection-title
+{
+	background:transparent;
+	border:none;
+	
+	font-size:16px;
+	color:#fff;
+	letter-spacing:1px;
 }
 .browser-add-item-to-collection-hover{
 	background-color:#F15A29 !important;
@@ -410,6 +424,13 @@
 #fancybox-close-button:hover{
 	
 	text-decoration:none;
+}
+#collection-to-editor-button, #collection-player-button{
+	font-size:11px;
+	font-family:Helvetica, sans-serif;
+	
+	float:right;
+	
 }
 // Settings
 

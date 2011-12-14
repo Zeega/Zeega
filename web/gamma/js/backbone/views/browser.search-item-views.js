@@ -5,7 +5,7 @@ var BrowserItemView = Backbone.View.extend({
 	initialize : function() {
 		
 		//listens for changes to its model, re-rendering
-		this.model.bind('change', this.render, this);
+		//this.model.bind('change', this.render, this);
     	this.model.bind('destroy', this.remove, this);
     	
 		
@@ -30,16 +30,27 @@ var BrowserItemView = Backbone.View.extend({
 var BrowserCollectionView = BrowserItemView.extend({
 	
 	initialize : function() {
+
+		this.model.bind('change',  this.render, this);
+
 		this.el = $("#browser-results-collection-template").clone();
 		this.el.removeAttr('id');
 
 		var thisView = this;
+
+		var modelID = this.model.id;
+		var modelTitle = this.model.get('title');
+		this.el.click(function(){
+			ZeegaBrowser.clickedCollectionTitle = modelTitle;
+			ZeegaBrowser.doCollectionSearch(modelID);
+			
+		});
 		
 		/*
 			Collections are both draggable and droppable. You can drag a collection into
 			another collection.
 
-			TODO: Add permissions to this so that you can only add collections to your own collections.
+			TODO: Add permissions to this so that you can only add collections to your own collections??
 		*/
 
 	$(this.el).draggable({
@@ -135,14 +146,10 @@ var BrowserCollectionView = BrowserItemView.extend({
 		//this.el.find('.browser-item-count').text('232');
 		
 		this.el.find('.title').text(this.model.get('title'));
+		
+		
 
-		var modelID = this.model.id;
-		var modelTitle = this.model.get('title');
-		this.el.click(function(){
-			ZeegaBrowser.clickedCollectionTitle = modelTitle;
-			ZeegaBrowser.doCollectionSearch(modelID);
-			
-		});
+		
 		return this;
 	},
 

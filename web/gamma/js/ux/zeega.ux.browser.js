@@ -16,6 +16,7 @@ function initUX(){
 	
 
 }
+
 //Toggles filters on and off, temporary until we figure out exactly how this'll look
 function toggleFilterDrawer(){
 
@@ -88,12 +89,13 @@ $(document).ready(function() {
 	
 	//Collection playback and editor connection
 	
-	$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+'/view');}); 
+	$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+'/view');return false;}); 
 	$('#collection-to-editor-button').click(function(){
 					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
 					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
 								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
 						});
+					return false;
 			});
 
 	$('#database-search-button, ').click(function(){
@@ -109,9 +111,8 @@ $(document).ready(function() {
 	     ZeegaBrowser.doSearch();
 	 });
 
-	$('#browser-remove-collection-filter').click(function(){
-		$('#browser-collection-filter').hide();
-		ZeegaBrowser.search.set({'collection':null});
+	$('#browser-remove-collection-filter').click(function(e){
+		ZeegaBrowser.removeCollectionFilter();
 		ZeegaBrowser.doSearch();
 		return false;
 	});
@@ -140,7 +141,7 @@ $(document).ready(function() {
 	});
 
 	//makes call to server to load All Media vs. My Media
-	$('#browser-toggle-all-media-vs-my-media li').click(function(){
+	$('#browser-toggle-all-media-vs-my-media li').click(function(e){
 		
 		$(this).closest('li').removeClass('browser-unselected-toggle');
 		$(this).closest('li').addClass('browser-selected-toggle');
@@ -154,6 +155,10 @@ $(document).ready(function() {
 
 			ZeegaBrowser.search.set({user:-2});
 		}
+		
+		//Clear any collection filter on page
+		ZeegaBrowser.removeCollectionFilter();
+
 		ZeegaBrowser.doSearch();
 	});
 	
@@ -197,5 +202,51 @@ $(document).ready(function() {
 				
 				
 			}
+		});
+	$('#browser-collection-filter-title').click(function() {
+			$('#browser-collection-filter-title').hide();
+			$('#browser-collection-filter-title-form').show();
+			$('#browser-collection-filter-title-form').css("display", "inline");
+			$('#browser-update-collection-title').val(ZeegaBrowser.clickedCollectionTitle);
+			$('#browser-update-collection-title').focus();
+			
+			//When title input field loses focus then just cancel the save
+			$('#browser-update-collection-title').blur(function() {
+			  	$( '#browser-collection-filter-title-form' ).hide();
+				$('#browser-collection-filter-title').show();
+			});
+
+			//When user presses return, save collection with its new title
+			$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
+			   if ( e.keyCode == 13 ) {
+			     	e.preventDefault();
+			     	
+			     	//Look up collection model to update
+			     	var collectionID = ZeegaBrowser.search.get("collection");
+					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
+					
+					collectionToUpdate.isUpdate = true;
+
+					//Save collection and hide form field on success
+					collectionToUpdate.save({ title:$('#browser-update-collection-title').val() }, 
+							{
+								success: function(model, response) { 
+									
+									
+									$( '#browser-collection-filter-title-form' ).hide();
+									$('#browser-collection-filter-title').text(model.get("title")).show();
+
+
+									
+				 				},
+				 				error: function(model, response){
+				 					
+				 					console.log("Error updating collection title.");
+				 					console.log(response);
+				 				}
+				 			});
+			   }
+			 });
+			
 		});
 });
