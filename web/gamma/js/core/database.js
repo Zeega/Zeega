@@ -73,7 +73,6 @@ var Database = new function()
 				
 				//add to the view collection and add to the dom
 				that.viewCollection = new ItemViewCollection({ collection : that.collection });
-				insertPager( _.size(that.collection), that.page );
 				that.page++;
 			
 			}else{

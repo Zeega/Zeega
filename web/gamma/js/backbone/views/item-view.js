@@ -154,6 +154,8 @@ var ItemView = Backbone.View.extend({
 
 var ItemViewCollection = Backbone.View.extend({
 	
+	el : $('#database-item-list'),
+	
 	initialize : function(){
 		_(this).bindAll('add');
 		this._itemViews = [];
@@ -186,40 +188,13 @@ var ItemViewCollection = Backbone.View.extend({
 	render : function(){
 		
 		var _this = this;
-		$('#tab-database-slide-window').empty();
-		var temp = $('<div id="db-1" class="slider" />');
+		this.el.empty();
 		
 		//add EACH model's view to the that.el and render it
 		_.each(this._itemViews, function(item, i){
-
-			$(temp).append(item.render().el);
-			if( i % 10 == 9 )
-			{
-				_this._itemBundles.push(temp);
-				$('#tab-database-slide-window').append(temp);
-				//reset the temp
-				temp = $('<div class="slider" />').append($('<ul>'));
-			}else if(_this._itemViews.length-1 == i){
-				$('#tab-database-slide-window').append(temp);
-				Database.endOfItems = true;
-			}
+			_this.el.append(item.render().el);
 		});
 		
-		/*
-		if(this._itemViews.length < 100)
-		{
-			console.log('lesssssss')
-		}
-		*/
-		
-		// database window slider
-		$('#tab-database-slide-window').cycle({ 
-			fx : 'scrollHorz',
-			timeout: 0, 
-			speed:   300,
-			height: 310,
-			startingSlide: Database.page
-		});
 		this._rendered = true;
 		
 		return this;

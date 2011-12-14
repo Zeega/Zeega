@@ -2,7 +2,10 @@
 var Layer =  Backbone.Model.extend({
 	url : function(){ return Zeega.url_prefix + "layers/" + this.id },
 	
-	defaults :{ 'attr' : {} },
+	defaults : {
+		'attr' : {},
+		'visibleineditor' : true
+	},
 	
 	layerClass :{},
 	
@@ -38,7 +41,7 @@ var LayerCollection = Backbone.Collection.extend({
 		this.layerCollectionArray = {};
 		
 		this.bind("add", function(layer) { _this.addToLayerTypeCollection(layer,true) });
-		this.bind("remove", this.remove );
+		//this.bind("remove", this.remove );
 		
 	},
 	
@@ -54,11 +57,14 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	remove : function( layer )
 	{
+		this.models = _.without( this.models, layer );
 		_.each( this.layerCollectionArray, function(layerCollection){
 			//layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
 			layerCollection.remove( layer );
 		})
+		
 	},
+	
 	
 	addToLayerTypeCollection : function(layer, render)
 	{

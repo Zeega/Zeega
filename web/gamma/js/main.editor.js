@@ -41,12 +41,10 @@ var loadFiles = [
 	'order!jquery/plugins/spin',
 	'order!jquery/plugins/jeditable.min',
 	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
 	'order!jquery/plugins/colorpicker/js/colorpicker',
 	'order!jquery/plugins/jquerygetUrlParam',
 	'order!jquery/plugins/jqueryjson',
 	'order!jquery/plugins/jquerycookie',
-	'order!jquery/plugins/jquerytmpl',
 	'order!jquery/plugins/bootstrapmodal',
 	
 	
@@ -81,6 +79,7 @@ var loadFiles = [
 	//'order!layers/zeega.rdio',
 	//'order!layers/zeega.twilio',
 	'order!layers/zeega.documentcloud',
+	'order!layers/zeega.rectangle',
 	
 	//players
 	

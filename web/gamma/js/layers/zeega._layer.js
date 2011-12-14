@@ -150,8 +150,17 @@ var ProtoLayer = Class.extend({
 			this.type = model.get('type');
 			this.zIndex = model.get('zindex');
 			
+			var editorCSS = {
+				position : 'absolute',
+				width : this.model.get('attr').width+'%',
+				height : this.model.get('attr').height +"%",
+				opacity : this.model.get('attr').opacity,
+				top : this.model.get('attr').top +'%',
+				left : this.model.get('attr').left +'%'
+			};
+			
 			// have to set these inside here so they don't get shared!!!
-			this.visualEditorElement = $('<div>');
+			this.visualEditorElement = $('<div>').css( editorCSS );
 			this.layerControls = $('<div>');
 
 			
@@ -195,7 +204,7 @@ var ProtoLayer = Class.extend({
 		this.zIndex = model.zindex;
 		
 		//set basic positioning
-		var cssObj = {
+		var thumbCSS = {
 			position : 'absolute',
 			width : this.model.attr.width+'%',
 			height : this.model.attr.height +"%",
@@ -203,9 +212,17 @@ var ProtoLayer = Class.extend({
 			top : this.model.attr.top +'%',
 			left : this.model.attr.left +'%'
 		};
+		var displayCSS = {
+			position : 'absolute',
+			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
+			opacity : this.model.attr.opacity,
+			top : '-1000%',
+			left : '-1000%'
+		};
 		
-		this.display = $('<div>');
-		this.thumbnail = $('<div>').css(cssObj);
+		this.display = $('<div>').css(displayCSS);
+		this.thumbnail = $('<div>').css(thumbCSS);
 
 		this.thumb();
 	},
