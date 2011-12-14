@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 
+use DateTime;
+
 class SearchController extends Controller
 {
     public function indexAction($name)
@@ -37,8 +39,6 @@ class SearchController extends Controller
 		$query["contentType"]   = $request->query->get('content');   //  string
 		$query["collectionId"]  = $request->query->get('collection');//  string
 		$query["tags"]          = $request->query->get('tags');      //  string
-		$query["latestDate"]    = $request->query->get('dtend');   //  string         
-		$query["earliestDate"]  = $request->query->get('dtstart');     //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
 		
 		if( isset($query["geo"]["north"]) && isset($query["geo"]["south"]) &&
@@ -47,7 +47,22 @@ class SearchController extends Controller
 		    $query["geo"] = array("north" => $request->query->get('geo_n'),"south" => $request->query->get('geo_s'),
 		                          "east"  => $request->query->get('geo_e'),"west"  => $request->query->get('geo_w'));
 		}
-		
+        
+        $earliestDate = $request->query->get('dtstart');
+        $latestDate = $request->query->get('dtend');
+        
+        if(isset($earliestDate))
+        {
+            $query["earliestDate"] = new DateTime();
+            $query["earliestDate"]->setTimestamp($earliestDate);
+        }
+        
+        if(isset($latestDate))
+        {
+            $query["latestDate"] = new DateTime();
+            $query["latestDate"]->setTimestamp($latestDate);;
+        }
+    	
 		//  return types
 		$query["returnMap"]     = $request->query->get('r_map');     //  bool
 		$query["returnTime"]    = $request->query->get('r_time');    //  bool
@@ -109,6 +124,7 @@ class SearchController extends Controller
 		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItemsByTimeDistribution($query);
 		    $results['time_distribution'] = $queryResults;
 		    $results['time_distribution_count'] = sizeof($queryResults);
+		    //return new Response($queryResults);
 	    }
 		
 		// create and configure the response type

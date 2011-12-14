@@ -4,6 +4,9 @@
 namespace Zeega\IngestBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use DateInterval;
+
+use DateTime;
 
 class ItemRepository extends EntityRepository
 {
@@ -55,19 +58,13 @@ class ItemRepository extends EntityRepository
 		if(isset($query['earliestDate']))
       	{
 			 $qb->andWhere('i.media_date_created > ?6')
-			    ->setParameter(6, date("Y-m-d",strtotime($query['earliestDate']."-01-01")));
+			    ->setParameter(6, $query['earliestDate']);
 		}
         
         if(isset($query['latestDate']))
       	{
 			 $qb->andWhere('i.media_date_created_end < ?7')
-			    ->setParameter(7, date("Y-m-d",strtotime($query['latestDate']."-12-30")));
-		}
-		
-		if(isset($query['latestDate']))
-      	{
-			 $qb->andWhere('i.media_date_created_end < ?7')
-			    ->setParameter(7, date("Y-m-d",strtotime($query['latestDate']."-12-30")));
+			    ->setParameter(7, $query['latestDate']);
 		}
 		
 		if(isset($query['geo']))
@@ -113,21 +110,29 @@ class ItemRepository extends EntityRepository
             
             
       	    $dateIntervals = intval($query['dateIntervals']);
-      	    $startDate = intval($query['earliestDate']);
-      	    $endDate = intval($query['latestDate']);
+      	    $startDate = $query['earliestDate'];
+      	    $endDate = $query['latestDate'];
       	    
-      	    $intervalOffset = ($endDate - $startDate) / $dateIntervals;
+      	    // offset in seconds
+      	    $intervalOffset = ($endDate->getTimestamp() - $startDate->getTimestamp()) / $dateIntervals;
       	    
-      	    for ($i = 1; $i <= $dateIntervals; $i++) 
+      	    for ($i = 0; $i <= $dateIntervals-1; $i++) 
       	    {
-                $currStartDate = intval($startDate + ($intervalOffset * $i));
-                $currEndDate = intval($startDate + ($intervalOffset * ($i+1)));
-                $searchQuery->setParameter(6, date("Y-m-d",strtotime("$currStartDate-01-01")));
-                $searchQuery->setParameter(7, date("Y-m-d",strtotime("$currEndDate-12-30")));
+                $startDateOffset = $intervalOffset * $i;
+                $endDateOffset = $intervalOffset * ($i + 1);
+                
+                $currStartDate = new DateTime();
+                $currStartDate->setTimestamp($startDate->getTimestamp() + $startDateOffset);
+                
+                $currEndDate = new DateTime();
+                $currEndDate->setTimestamp($startDate->getTimestamp() + $endDateOffset);
+                
+                $searchQuery->setParameter(6, $currStartDate);
+                $searchQuery->setParameter(7, $currEndDate);
                 
                 $tmp = array();
-                $tmp["start_date"] = $currStartDate;
-                $tmp["end_date"] = $currEndDate;
+                $tmp["start_date"] = $currStartDate->getTimestamp();
+                $tmp["end_date"] = $currEndDate->getTimestamp();
                 $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
                 array_push($results, $tmp);
             }
