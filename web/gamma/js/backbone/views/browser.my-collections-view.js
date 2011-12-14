@@ -1,6 +1,6 @@
 
 var MyCollectionsView = Backbone.View.extend({
-	collection : MyCollections,
+	
 	el: $('#browser-my-collections-drawer'),
 	_views : [],
 	

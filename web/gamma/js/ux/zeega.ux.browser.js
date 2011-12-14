@@ -16,6 +16,7 @@ function initUX(){
 	
 
 }
+
 //Toggles filters on and off, temporary until we figure out exactly how this'll look
 function toggleFilterDrawer(){
 
@@ -109,9 +110,8 @@ $(document).ready(function() {
 	     ZeegaBrowser.doSearch();
 	 });
 
-	$('#browser-remove-collection-filter').click(function(){
-		$('#browser-collection-filter').hide();
-		ZeegaBrowser.search.set({'collection':null});
+	$('#browser-remove-collection-filter').click(function(e){
+		ZeegaBrowser.removeCollectionFilter();
 		ZeegaBrowser.doSearch();
 		return false;
 	});
@@ -140,20 +140,24 @@ $(document).ready(function() {
 	});
 
 	//makes call to server to load All Media vs. My Media
-	$('#browser-toggle-all-media-vs-my-media li').click(function(){
+	$('#browser-toggle-all-media-vs-my-media li').click(function(e){
 		
-		$(this).closest('li').removeClass('browser-unselected-toggle');
-		$(this).closest('li').addClass('browser-selected-toggle');
-		$(this).siblings().removeClass('browser-selected-toggle');
-		$(this).siblings().addClass('browser-unselected-toggle');
+		$(e).closest('li').removeClass('browser-unselected-toggle');
+		$(e).closest('li').addClass('browser-selected-toggle');
+		$(e).siblings().removeClass('browser-selected-toggle');
+		$(e).siblings().addClass('browser-unselected-toggle');
 
-		if ($(this).attr('id') == "browser-my-media"){
+		if ($(e).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
 
 		}else {
 
 			ZeegaBrowser.search.set({user:-2});
 		}
+		
+		//Clear any collection filter on page
+		ZeegaBrowser.removeCollectionFilter();
+
 		ZeegaBrowser.doSearch();
 	});
 	

@@ -49,7 +49,13 @@
 							<input id="database-search-button" class="" type="button" value="go" onclick="return false">
 						</div>
 					</form>
-					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span><span id='collection-player-button' style='float:right;cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-play"></span><span id='collection-to-editor-button' style='float:right; cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-edit "></span></div>
+					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form>
+
+					<!-- ICONS for sharing & adding to editor 
+					<span id='collection-player-button' style='float:right;cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-play"></span><span id='collection-to-editor-button' style='float:right; cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-edit "></span>
+					-->
+					<a id="collection-to-editor-button" href=".">open in editor</a><a id="collection-player-button" href=".">share link</a>
+					</div>
 					
 					
 					<div style="clear:both;padding-bottom:4px;"></div>

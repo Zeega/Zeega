@@ -13,12 +13,7 @@ var MyCollections = Backbone.Collection.extend({
 	initialize : function()
 	{
 		
-		this.fetch({
-			success : function()
-			{
-				ZeegaBrowser.myCollectionsQueryDone();
-			}
-		});
+		
 	},
 	
 	parse: function(data){
@@ -31,6 +26,8 @@ var MyCollections = Backbone.Collection.extend({
 			
 				
 				this.add(new BrowserCollection(coll));
+				console.log("Zeega browser has " + ZeegaBrowser.myCollections.length);
+				console.log("this thingie has " + this.length + " myCollection models");
 			}, this);
 
 		}
