@@ -91,7 +91,7 @@ class ImportWidget
 		}
 		
 		elseif(preg_match($viasite, $url, $matches)){
-			$archive='Hollis-Work';
+			$archive='Hollis-Group';
 			$id=$matches[1];
 			
 	
@@ -374,6 +374,8 @@ class ImportWidget
 			}
 		}
 		$collection['title'] = (string) $xml->titleInfo->title;
+		
+		
 		$collection['creator'] = (string)$xml->name->namePart;
 		$collection['items']=$items;
 		return $collection;
@@ -424,6 +426,8 @@ class ImportWidget
 					}
 			}	
 			$collection['title'] = count($items).(string) $xml->titleInfo->title;
+			
+			
 			$collection['creator'] = (string)$xml->name->namePart;
 			$collection['items']=$items;
 			return $collection;
@@ -586,7 +590,7 @@ class ImportWidget
 
 
 
-	public function parseSoundCloudSet($id){
+	public function parseSoundCloudSet($url){
 		
 		$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
 
@@ -662,7 +666,7 @@ class ImportWidget
 		}
 		
 		$collection['title'] = (string)$xmlSet->{'title'};
-		$collection['creator'] = $item->getCreator();
+		$collection['creator'] = $item->getMediaCreatorUsername();
 		$collection['items']=$items;
 		return $collection;
 		}
