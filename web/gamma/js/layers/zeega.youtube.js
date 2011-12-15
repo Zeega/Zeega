@@ -31,7 +31,15 @@ var YoutubeLayer = VideoLayer.extend({
 				.html( this.getTemplate() );
 			this.layerControls.prepend( html );
 			
+			var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr({'id':'layer-preview-wrapper-'+_this.model.id});
+
+			this.visualEditorElement.append(wrapper);
+			
 			//this.layerControls.prepend( this.getTemplate() );
+			
+			console.log(_this.model.id +':'+_this.attr.url+':'+_this.attr.in+':'+_this.attr.out+':'+_this.attr.volume+':'+'layer-preview-wrapper-'+_this.model.id+':'+'layer-'+_this.model.id);
+			
+			
 			this.player = new ZeegaYoutubeEditor(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,'layer-'+_this.model.id);
 		
 			this.layerControls.bind( 'updated' , function(){
@@ -57,11 +65,13 @@ var YoutubeLayer = VideoLayer.extend({
 			
 			_this.editorLoaded=true;
 		}
+		
+		
 	},
 	
 	visual : function(){
 		var _this  = this;
-
+	
 		var h = Math.floor( this.attr.w * 1.5 / this.attr.dimension );
 		var cssObj = {
 			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
@@ -75,28 +85,8 @@ var YoutubeLayer = VideoLayer.extend({
 			'opacity' : this.attr.opacity
 		};
 		
-		this.visualEditorElement.addClass('media editable draggable')
-			.attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-			})
-			.css(cssObj);
 		
-		var wrapper = $('<div>').css({'width':'100%','height':'100%'}).attr('id','layer-preview-wrapper-'+this.model.id);
-
-		
-				
-		this.visualEditorElement.bind( 'slide' , function(){
-			
-			var height = Math.floor($('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')*1.5/_this.attr.dimension);
-			$(this).css({
-				'opacity': $('#layer-edit-'+_this.model.id).find('#Opacity-slider').slider('value'),
-				'width' : $('#layer-edit-'+_this.model.id).find('#Scale-slider').slider('value')+'%',
-				'height' : height+'%'
-			});
-		});
-		
-		this.visualEditorElement.append(wrapper);
+		this.visualEditorElement.css(cssObj);
 	},
 	
 	thumb : function()

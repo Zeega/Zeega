@@ -13,28 +13,12 @@ var MyCollections = Backbone.Collection.extend({
 	initialize : function()
 	{
 		
-		this.fetch({
-			success : function()
-			{
-				ZeegaBrowser.myCollectionsQueryDone();
-			}
-		});
+		
 	},
 	
 	parse: function(data){
 
-		console.log('My Collections: returned ' + data['collections_count'] + ' collections');
-		
-		//Assemble collection data into BrowserCollections
-		if (data['collections'] != null){
-			_.each(data['collections'], function(coll){
-			
-				
-				this.add(new BrowserCollection(coll));
-			}, this);
-
-		}
-		
+		return data['collections'];
 		
 	},
 	

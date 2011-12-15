@@ -264,6 +264,11 @@ var Player = {
 				_this.showNavigation();
 			}
 		}
+		
+		this.displayWindow.find('#preview-close').click(function(){
+			_this.close();
+		})
+		
 	},
 	
 	fadeOutOverlays : function( _this )
@@ -778,6 +783,8 @@ var Player = {
 	getTemplate : function()
 	{
 		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
+		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='../../../gamma/images/z-logo-128.png'height='60px'/></a></div>";
+		html +=			"<div id='preview-close' class='player-overlay'><span class='zicon orange zicon-close' ></span></div>";
 		html += 		"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>";
 		html += 			"<div class='arrow-background'></div>";
 		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";

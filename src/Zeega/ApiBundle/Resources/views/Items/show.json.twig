@@ -30,7 +30,11 @@
 		{% endif %}
 		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
 		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
-		"tags" : "{{ tags }}"
+		"tags" : " 
+			{% if tags is defined%}
+			{{ tags }}
+			{% endif %}
+		"
 	}
 	{% else %}
 		{}

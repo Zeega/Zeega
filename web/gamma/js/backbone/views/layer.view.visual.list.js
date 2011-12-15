@@ -36,13 +36,15 @@ var VisualLayerListView = Backbone.View.extend({
 		if( !this.model.get('attr') ) this.model.set({ attr : defaults });
 		
 		//shorten title if necessary
-		var title;
+		var title = this.model.get('attr').title;
+		/*
 		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
 		{
 			title = this.model.get('attr').title.substr(0,70)+"…";
 		}else{
 			title = this.model.get('attr').title;
 		}
+		*/
 		
 		var persist;
 		if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
@@ -90,8 +92,12 @@ var VisualLayerListView = Backbone.View.extend({
 		'click .delete-layer'		: 'delete',
 		'click .layer-title'		: 'expand',
 		'change #persist'			: 'persist',
-		'click .copy-to-next'		: 'copyToNext'
-	},
+		'click .copy-to-next'		: 'copyToNext',
+		'click .layer-icon'			: 'hideShow',
+		'mouseenter .layer-icon'			: 'onLayerIconEnter', 
+		'mouseleave .layer-icon'			: 'onLayerIconLeave', 
+		'mouseenter .delete-layer'			: 'onLayerTrashEnter', 
+		'mouseleave .delete-layer'			: 'onLayerTrashLeave',	},
 	
 	//delete this layer from the DB and view
 	delete : function()
@@ -130,16 +136,47 @@ var VisualLayerListView = Backbone.View.extend({
 		Zeega.copyLayerToNextNode( this.model)
 	},
 	
+	hideShow : function()
+	{
+		//set the visible in editor to the opposite of what it is currently
+		var visible = !this.model.get('visibleineditor');
+		this.model.set({'visibleineditor': visible });
+		
+		//change the color of the layer icon so it's apparent on/off
+		if( visible ) $(this.el).find('.asset-type-icon').addClass('orange');
+		else $(this.el).find('.asset-type-icon').removeClass('orange');
+	},
+	
+	onLayerIconEnter : function()
+	{
+		$(this.el).find('.asset-type-icon').addClass('zicon-visible')
+	},
+	
+	onLayerIconLeave : function()
+	{
+		$(this.el).find('.asset-type-icon').removeClass('zicon-visible')
+	},
+	
+	onLayerTrashEnter : function()
+	{
+		$(this.el).find('.delete-layer').addClass('orange zicon-trash-open')
+	},
+	
+	onLayerTrashLeave : function()
+	{
+		$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
+		
+	},
+	
 	getTemplate : function()
 	{
-		var layerTemplate = '<div id="<%= id %>" class="layer-list clearfix">';
-		layerTemplate += 		'<div class="layer-uber-bar clearfix">';
+		var layerTemplate = 		'<div class="layer-uber-bar clearfix">';
 		layerTemplate += 			'<div class="layer-icon">';
 		layerTemplate += 				'<span class="asset-type-icon orange zicon"></span>';
 		layerTemplate += 			'</div>';
 		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
 		layerTemplate += 		'<div class="layer-uber-controls">';
-		layerTemplate += 			'<span class="delete-layer ui-icon ui-icon-trash"></span>';
+		layerTemplate += 			'<span class="delete-layer zicon zicon-trash-closed"></span>';
 		layerTemplate += 		'</div>';
 		layerTemplate += 		'<div class="layer-drag-handle">';
 		layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
@@ -153,7 +190,6 @@ var VisualLayerListView = Backbone.View.extend({
 		layerTemplate += 		'</form>';
 		layerTemplate += 		'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
 		layerTemplate += 	'</div>';
-		layerTemplate += '</div>';
 		
 		return layerTemplate;
 	}
@@ -188,7 +224,7 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 	add : function ( layer )
 	{
 		var layerView = new VisualLayerListView({ model : layer });
-		//this._renderedViews.push( layerView );
+		if( this.el.find('.alert-message') ) this.el.find('.alert-message').remove(); //this.el.empty();
 		this.el.prepend( layerView.render().el );
 		
 	},

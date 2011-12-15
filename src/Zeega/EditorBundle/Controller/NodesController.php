@@ -93,7 +93,7 @@ class NodesController extends Controller
         	$l=$this->getDoctrine()
         				->getRepository('ZeegaEditorBundle:Layer')
         				->findLayerById($layer_id);
-        	$layers[]=$l[0];
+        	if(count($l) > 0) $layers[]=$l[0];
         	}
     		return new Response(json_encode($layers));
     } 

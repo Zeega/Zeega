@@ -48,6 +48,8 @@ var Database = new function()
 			//make sure there's something in the results and give a friendly notice if not
 			if(response.items.length)
 			{
+
+				
 				_.each(response.items, function(item){
 					
 					//make search items into bb models
@@ -73,7 +75,6 @@ var Database = new function()
 				
 				//add to the view collection and add to the dom
 				that.viewCollection = new ItemViewCollection({ collection : that.collection });
-				insertPager( _.size(that.collection), that.page );
 				that.page++;
 			
 			}else{

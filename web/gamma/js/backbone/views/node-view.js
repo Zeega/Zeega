@@ -100,13 +100,21 @@ var NodeView = Backbone.View.extend({
 	{
 		var _this = this;
 		//Update thumbnail in route display
-		$(this.el).find('.node-background').fadeOut('fast',function(){
-			$(_this.el)
-				.css('background-image','url("'+ _this.model.get('thumb_url') +'")')
-				.fadeIn('fast');
-			$(_this.el).find('.node-update-overlay')
-				.fadeOut('slow');
-		});
+		if( $(this.el).is(':visible '))
+		{
+			$(this.el).find('.node-background').fadeOut('fast',function(){
+				$(_this.el)
+					.css('background-image','url("'+ _this.model.get('thumb_url') +'")')
+					.fadeIn('fast');
+				$(_this.el).find('.node-update-overlay')
+					.fadeOut('slow');
+			});
+		}else{
+			$(this.el).find('.node-background')
+				.css('background-image','url("'+ this.model.get('thumb_url') +'")');
+			$(this.el).find('.node-update-overlay')
+				.hide();
+		}
 	}
 	
 });

@@ -67,7 +67,7 @@ class PlaygroundsController extends Controller
     	$user = $this->get('security.context')->getToken()->getUser();
     	$request = $this->getRequest();
 		if($request->request->get('title'))$title=$request->request->get('title');
-		else $title='Untitled: '.date('l F j, Y h:i:s A');
+		else $title='click here to change title';
     	$playground=$this->getDoctrine()
         ->getRepository('ZeegaEditorBundle:Playground')
         ->find($playground_id);
