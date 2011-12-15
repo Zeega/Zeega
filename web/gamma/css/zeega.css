@@ -173,6 +173,27 @@
 	
 	
 }
+.browser-results-image-edit{
+		display:none;
+		background-color: rgba(0, 0, 0, .5);
+		position: relative;
+		top: -30px;
+		left: 0px;
+		z-index: 100;
+		border-top: 1px rgba(0, 0, 0, .8) solid;
+		height: 15px;
+		font-size: 11px;
+		font-family: Helvetica, sans-serif;
+		letter-spacing:1px;
+		padding:7px 5px;
+	
+}
+.browser-remove-from-collection{
+	float:right;
+}
+.browser-change-thumbnail{
+	float:left;
+}
 .browser-results-collection, #browser-show-more-results{
 
 	float: left;

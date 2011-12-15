@@ -193,6 +193,8 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			}
 			
 		});
+
+		
 	},
 	render: function()
 	{
@@ -201,13 +203,13 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		//render individual element
 		this.el.addClass('browser-results-image');
 		this.el.removeAttr('id');
-		this.el.find('a').attr('id', this.model.get('id'));
-		this.el.find('a').attr('title', this.model.get('title'));
+		this.el.find('a:first').attr('id', this.model.get('id'));
+		this.el.find('a:first').attr('title', this.model.get('title'));
 		this.el.find('img').attr('src', thumbnail_url);
 		
 		console.log(this.el.find('img').attr('height'));
 		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('a').attr('href', this.model.get('uri'));
+		this.el.find('a:first').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
 		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		
