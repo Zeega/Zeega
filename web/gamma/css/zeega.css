@@ -188,6 +188,13 @@
 		padding:7px 5px;
 	
 }
+.browser-results-image-edit a, #browser-collection-filter a{
+	text-decoration:none !important;
+}
+.browser-results-image-edit a:hover, #browser-collection-filter a:hover{
+	color:#fff;
+	text-decoration:none !important;
+}
 .browser-remove-from-collection{
 	float:right;
 }

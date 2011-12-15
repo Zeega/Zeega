@@ -149,6 +149,26 @@ var ZeegaBrowser = {
 			 			});
 			 	return false;
 			});
+
+			//Add functionality for removing item from collection 
+			$('.browser-remove-from-collection').click(function(e){
+
+				var theImageEl = $(this).closest(".browser-results-image");
+				var newThumbPath = theImageEl.find("img").attr("src");
+				theCollection.isUpdate = true;
+				theCollection.save({ thumbnail_url : newThumbPath }, 
+						{
+							success: function(model, response) { 
+								console.log("Saved new thumbnail for collection " + model.id);			
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating collection thumbnail.");
+			 					console.log(response);
+			 				}
+			 			});
+			 	return false;
+			});
 		}
 
 	}
