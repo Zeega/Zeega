@@ -256,16 +256,24 @@ class ImportWidget
 		$media = new Media();
 		$attr=array();
 		
-		if(isset($mdata->subject)&&isset($mdata->subject[0])) $attr['tags']=str_replace("; ",",",(string)$mdata->subject[0]);
-	
+		if(isset($mdata->subject)&&isset($mdata->subject[0])) $tags=str_replace("; ",",",(string)$mdata->subject[0]);
+		else $tags='';
 		if (isset($mdata->title)&&isset($mdata->title[0]))$item->setTitle((string)$mdata->title[0]);
 	
 		if(!$item->getTitle()){return false;}
 	
 		$item->setDescription((string)$mdata->description[0]);
-		$item->setDescription(str_replace('<br />','',$metadata->getDescription()));
-		$metadata->setThumbUrl(urldecode($misc->image));
-		if(isset($mdata->creator))$item->setMediaCreatorUsername((string)$mdata->creator[0]);
+		$item->setDescription(str_replace('<br />','',$item->getDescription()));
+		$metadata->setThumbnailUrl(urldecode($misc->image));
+		
+		if(isset($mdata->creator)){
+			$item->setMediaCreatorUsername((string)$mdata->creator[0]);
+			$item->setMediaCreatorRealname((string)$mdata->creator[0]);
+		}
+		else{
+			$item->setMediaCreatorUsername('Unknown');
+			$item->setMediaCreatorRealname('Unknown');
+		}
 		
 	
 	
@@ -287,7 +295,6 @@ class ImportWidget
 			$item->setType('Video');
 			$item->setSource('Video');
 			$item->setUri($newUrl.$fileKeys[$index]);
-			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
 		else if($type=='audio'){	
@@ -301,7 +308,6 @@ class ImportWidget
 			}
 			$item->setType('Audio');
 			$item->setSource('Audio');
-			$item->setUri($newUrl.$fileKeys[$index]);
 			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
@@ -317,13 +323,12 @@ class ImportWidget
 			$item->setType('Image');
 			$item->setSource('Image');
 			$item->setUri($newUrl.$fileKeys[$index]);
-			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
 		else return false;	
 		
 		$metadata->setArchive('archive.org');
-		$metadata->setAttr($attr);
+		$metadata->setAttributes(array('tags'=>$tags));
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
 		
