@@ -59,6 +59,8 @@ var VisualLayerEditorView = Backbone.View.extend({
 		
 		this.model.layerClass.setZIndex( i );
 		
+		this.model.layerClass.onDomPlacement();
+		
 		//return the view
 		return this;
 	},
