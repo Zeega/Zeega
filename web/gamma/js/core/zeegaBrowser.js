@@ -157,12 +157,41 @@ var ZeegaBrowser = {
 				var itemID = theImageEl.find('a:first').attr("id");
 				var theItem = ZeegaBrowser.searchItemsView.collection.get(itemID);
 				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+collectionID+"/items/"+itemID;
+				
+				//This item is currently the thumbnail cover for the collection
+				//gotta flag it to be changed once item is removed
+
+				if( theCollection.get("child_items_count") > 1 && theImageEl.find("img").attr("src").indexOf("items/"+itemID) != -1){
+					
+					var otherImageEl = theImageEl.next(".browser-results-image");
+					if (otherImageEl == null) {otherImageEl =theImageEl.previous(".browser-results-image"); }
+					var	newThumbnailURL = otherImageEl.find("img").attr("src");
+				}
+
+				//DESTROYYYYYYYY
 				theItem.destroy({	
 					 				url : deleteURL,
 									success: function(model, response) { 
 										var newCount = theCollection.get("child_items_count") - 1;
 										theCollection.set({child_items_count:newCount});
-										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
+										console.log("Removed item " + itemID + " from collection " + theCollection.id);	
+										
+										//Update thumbnail URL if the previous item served as the
+										//collection's thumbnail
+										if (newThumbnailURL != null){
+											theCollection.isUpdate = true;
+											theCollection.save({ thumbnail_url : newThumbnailURL }, 
+											{
+												success: function(model, response) { 
+													console.log("Saved new thumbnail for collection " + model.id);			
+								 				},
+								 				error: function(model, response){
+								 					
+								 					console.log("Error updating collection thumbnail.");
+								 					console.log(response);
+								 				}
+								 			});
+										}		
 					 				},
 					 				error: function(model, response){
 					 					
