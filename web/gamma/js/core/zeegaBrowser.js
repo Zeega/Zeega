@@ -157,7 +157,8 @@ var ZeegaBrowser = {
 				var itemID = theImageEl.find('a:first').attr("id");
 				var theItem = ZeegaBrowser.searchItemsView.collection.get(itemID);
 				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+collectionID+"/items/"+itemID;
-				theItem.destroy({	url : deleteURL,
+				theItem.destroy({	
+					 				url : deleteURL,
 									success: function(model, response) { 
 										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
 					 				},
@@ -165,6 +166,10 @@ var ZeegaBrowser = {
 					 					
 					 					console.log("Error removing item " + itemID + " from collection " + theCollection.id);		
 					 					console.log(response);
+
+					 					//faking behavior on success, this should actually be caused
+					 					//by destroy event firing properly
+					 					theImageEl.remove();	
 					 				}
 			 					});
 				

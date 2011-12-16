@@ -4,10 +4,7 @@ var BrowserItemView = Backbone.View.extend({
 	
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	this.model.bind('destroy', this.remove, this);
-    	
+		
 		
 	},
 	
@@ -158,6 +155,8 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	
 	initialize : function() {
 		
+		this.model.bind('destroy', this.remove, this);
+		
 		var theModel = this.model;
 		this.el = $("#browser-results-image-template").clone();
 		$(this.el).draggable({
@@ -195,6 +194,9 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		});
 
 		
+	},
+	remove : function() {
+		$(this.el).remove();
 	},
 	render: function()
 	{
