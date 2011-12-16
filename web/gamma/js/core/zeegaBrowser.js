@@ -156,8 +156,8 @@ var ZeegaBrowser = {
 				var theImageEl = $(this).closest(".browser-results-image");
 				var itemID = theImageEl.find('a:first').attr("id");
 				var theItem = ZeegaBrowser.searchItemsView.collection.get(itemID);
-
-				/*theItem.destroy({
+				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+collectionID+"/items/"+itemID;
+				theItem.destroy({	url : deleteURL,
 									success: function(model, response) { 
 										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
 					 				},
@@ -167,7 +167,7 @@ var ZeegaBrowser = {
 					 					console.log(response);
 					 				}
 			 					});
-				*/
+				
 			 	return false;
 			});
 		}
