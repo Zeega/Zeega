@@ -155,6 +155,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	
 	initialize : function() {
 		
+		//when item removes itself from collection this gets fired
 		this.model.bind('destroy', this.remove, this);
 		
 		var theModel = this.model;
@@ -184,8 +185,6 @@ var BrowserSingleItemView = BrowserItemView.extend({
 				$(this).draggable('option','revert',true);
 				ZeegaBrowser.draggedItem = theModel;
 			},
-				
-			/**	stuff that happens when the user drags the item into a node **/	
 				
 			stop : function(){
 				ZeegaBrowser.draggedItem = null;
