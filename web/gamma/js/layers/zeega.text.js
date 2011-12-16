@@ -107,8 +107,7 @@ var TextLayer = ProtoLayer.extend({
 			.append( bgColor );
 
 	},
-
-
+	
 	visual : function()
 	{
 
@@ -174,7 +173,20 @@ var TextLayer = ProtoLayer.extend({
 
 		*/ 
 
+		this.visualEditorElement.append( content );
 
+		
+	},
+	
+	onControlsOpen : function()
+	{
+		this.onDomPlacement();
+	},
+	
+	onDomPlacement : function()
+	{
+		var _this = this;
+		var content = this.visualEditorElement.find('.text-layer-content');
 		// make the text resizable
 		this.visualEditorElement.resizable({
 			stop : function (){
@@ -204,7 +216,8 @@ var TextLayer = ProtoLayer.extend({
 		
 		// set the text content to save
 		content.bind('click mousedown', function(event) { event.stopPropagation() });
-		content.bind('blur change', function(){ 
+		_this.visualEditorElement.find('.text-layer-content').bind('blur change', function(){ 
+			console.log('onblur')
 			var newContent = _this.visualEditorElement.find('.text-layer-content').html();
 			_this.layerControls.trigger( 'update' , [{
 				content : {
@@ -221,10 +234,10 @@ var TextLayer = ProtoLayer.extend({
 			
 		});
 
-		this.visualEditorElement.append( content );
-
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		this.visualEditorElement.children('.text-layer-content').aloha();
+
+		$(content).aloha();
+		
 		
 	},
 	
