@@ -42,7 +42,8 @@ var YoutubeLayer = VideoLayer.extend({
 			
 			this.player = new ZeegaYoutubeEditor(_this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-wrapper-'+_this.model.id,'layer-'+_this.model.id);
 		
-			this.layerControls.bind( 'updated' , function(){
+			$('#layer-'+_this.model.id).bind( 'updated' , function(){
+			
 				var properties = {
 					inPoint : {
 						property : 'in',
@@ -60,6 +61,30 @@ var YoutubeLayer = VideoLayer.extend({
 						css : false
 					}
 				};
+				console.log(properties);
+				_this.layerControls.trigger( 'update' , [ properties ]);
+			});
+			
+			this.layerControls.bind( 'updated' , function(){
+			
+				var properties = {
+					inPoint : {
+						property : 'in',
+						value : _this.player.getInPoint(),
+						css : false
+					},
+					outPoint : {
+						property : 'out',
+						value : _this.player.getOutPoint(),
+						css : false
+					},
+					volume : {
+						property : 'volume',
+						value : _this.player.getVolume(),
+						css : false
+					}
+				};
+				console.log(properties);
 				_this.layerControls.trigger( 'update' , [ properties ]);
 			});
 			

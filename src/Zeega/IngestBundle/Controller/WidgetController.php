@@ -208,12 +208,14 @@ class WidgetController extends Controller
 				$thumbUrls=array();
 				$widgetIds=array();
 				if($session->get('items'))$newItems=$session->get('items');	
+				$counter=1;
 				foreach($collection['items'] as $item){
 					$widgetId=rand(0,1000);
 					$item->setAttributionUri($url."#".$item->getId());
 					$metadata=$item->getMetadata();
 					$thumbUrl=$metadata->getThumbnailUrl();
-					$thumbUrls[]=array('thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
+					$thumbUrls[]=array('index'=>$counter,'thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
+					$counter++;
 					$widgetIds[]=$widgetId;
 					$newItems[$widgetId]=$item;
 				}
