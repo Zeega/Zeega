@@ -130,7 +130,7 @@ var ZeegaBrowser = {
 
 				}
 			);
-			//Add functionality for updating thumbnail 
+			//Functionality for updating thumbnail 
 			$('.browser-change-thumbnail').click(function(e){
 
 				var theImageEl = $(this).closest(".browser-results-image");
@@ -150,7 +150,7 @@ var ZeegaBrowser = {
 			 	return false;
 			});
 
-			//Add functionality for removing item from collection 
+			//Functionality for removing item from collection 
 			$('.browser-remove-from-collection').click(function(e){
 
 				var theImageEl = $(this).closest(".browser-results-image");
@@ -160,16 +160,14 @@ var ZeegaBrowser = {
 				theItem.destroy({	
 					 				url : deleteURL,
 									success: function(model, response) { 
+										var newCount = theCollection.get("child_items_count") - 1;
+										theCollection.set({child_items_count:newCount});
 										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
 					 				},
 					 				error: function(model, response){
 					 					
 					 					console.log("Error removing item " + itemID + " from collection " + theCollection.id);		
 					 					console.log(response);
-
-					 					//faking behavior on success, this should actually be caused
-					 					//by destroy event firing properly
-					 					theImageEl.remove();	
 					 				}
 			 					});
 				
