@@ -319,9 +319,12 @@ class CollectionsController extends Controller
         }
         
         $collection->getChildItems()->removeElement($item);
+        $collection->setChildItemsCount($collection->getChildItems()->count());
+
         $em->flush();
         
-        return new Response('SUCCESS',200);
+        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $collection));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);              
     }
    
     // Private methods 
