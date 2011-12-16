@@ -2305,10 +2305,8 @@ div#workspace > div.text-layer-container {
 	      border:transparent solid 1px;
 	      border-top:transparent solid 10px;
 }
-.text-layer-chrome-visible {
-	      border: dashed white 1px;
-	      border-top: gray 10px solid;
-}
+
+
 
 /***  PAGINATION  ***/
 

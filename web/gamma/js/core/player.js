@@ -54,6 +54,10 @@ var Player = {
 
 		this.removeAllVideoElements();
 		
+		//remove panel ghosts
+		$('.x-panel-ghost ').remove();
+		
+		
 		//if the data passed in is a string, then parse it into an object
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
