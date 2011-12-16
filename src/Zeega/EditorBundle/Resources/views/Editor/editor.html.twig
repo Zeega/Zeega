@@ -225,10 +225,22 @@
 {% endblock %}
 
 {% block scripts %}
+
+			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+			<script src="{{ asset('gamma/js/libraries/require.js') }}" data-main="{{ asset('gamma/js/main.editor.js') }}"></script>
+
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-			<script data-main="{{ asset('gamma/js/main.editor.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
 			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
 			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
+			
+			
+			<script src="{{ asset('gamma/js/libraries/aloha/aloha-nodeps.js') }}"></script>
+		
+			
+			
+			<script src="{{ asset('gamma/js/aloha-config.js') }}" language="javascript"></script>
+			
+			
 			
 			<!--
 			<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>

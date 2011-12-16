@@ -39,7 +39,8 @@ var NodePlayer = {
 	drawNode : function( data )
 	{
 		_.each( data, function( layer ){
-			eval( 'var layerClass = new '+ layer.type +'Layer();' );
+			if(layer.type=='Youtube'||layer.type=='Video') layerClass = new ImageLayer();
+			else eval( 'var layerClass = new '+ layer.type +'Layer();' );
 			layerClass.lightLoad( layer )
 
 			$('#zeega-player').append( layerClass.thumbnail );

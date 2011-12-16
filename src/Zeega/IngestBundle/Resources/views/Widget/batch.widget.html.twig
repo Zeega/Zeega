@@ -15,7 +15,14 @@
 			<div style="position:relative;  height: 200px; float:left;">
 		<div id="import-item" data-count="{{count}}" style='text-align:left; width:400px;'>
 			{% for thumb_url in thumb_urls %}
-				<img data-id="{{thumb_url.widgetId}}" style="border: solid 1px white; width:40px; height:40px; margin:2px" id="image" src="{{thumb_url.thumbUrl}}" class="scaled" />
+				{% if thumb_url.index < 6 %}
+			<img data-id="{{thumb_url.widgetId}}" style="border: solid 1px white; width:40px; height:40px; margin:2px" id="image" src="{{thumb_url.thumbUrl}}" class="scaled" />
+				{% elseif thumb_url.index >5 %}
+			<img data-id="{{thumb_url.widgetId}}" style="display:none; border: solid 1px white; width:40px; height:40px; margin:2px" id="image"  class="scaled" />
+			
+				{% endif %}
+			
+			
 			{%endfor%}
 		</div>
 	</div>

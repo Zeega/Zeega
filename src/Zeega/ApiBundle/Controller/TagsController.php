@@ -37,7 +37,7 @@ class TagsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getTagsAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getEntityManager();
 
         $tags = $em->getRepository('ZeegaIngestBundle:Tag')->findAll();
         
@@ -59,7 +59,7 @@ class TagsController extends Controller
     }
 
     // TEMP - compute similar tags
-    public function getTagsComputeSimilarAction()
+    public function getTagsComputeSimilartAction()
     {
          // get this code out of here - use entity instead
          $conn = $this->get('database_connection');
