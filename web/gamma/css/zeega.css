@@ -89,7 +89,7 @@
 	-webkit-border-radius: 0px 10px 10px 10px !important;
 	border-radius: 0px 10px 10px 10px;
 	height:130px;
-	overflow:auto !important;
+	overflow:hidden !important;
 	
 }
 
@@ -156,7 +156,7 @@
 #browser-my-collections-drawer{
 	margin:5px 0 0 10px;
 }
-.browser-results-image{
+.browser-results-image,.browser-results-collection{
 
 	float: left;
 	margin: 0;
@@ -203,15 +203,7 @@
 }
 .browser-results-collection, #browser-show-more-results{
 
-	float: left;
-	margin: 0;
-	/*border-radius: 3px;*/
-	/*margin:10px 0px 0px 10px;*/
-	padding:5px;
-	width:  144px;
-	height: 110px;
-
-	
+	text-align: left;
 	
 }
 

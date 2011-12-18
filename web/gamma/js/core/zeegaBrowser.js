@@ -17,7 +17,7 @@ var ZeegaBrowser = {
 			success : function()
 			{
 				console.log("FROM ZeegaBrowser.js - Zeega browser has " + ZeegaBrowser.myCollections.length);
-				
+				jQuery('#browser-my-collections-drawer').jcarousel();
 			}
 		});
 

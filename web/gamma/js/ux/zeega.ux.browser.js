@@ -42,6 +42,8 @@ function toggleFilterDrawer(){
 
 $(document).ready(function() {
 
+	
+
 	//set up fancybox lightbox plugin
 	$(".fancymedia").fancybox({
 		closeClick:false,

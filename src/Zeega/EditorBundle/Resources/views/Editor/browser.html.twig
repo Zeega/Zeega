@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<div class="browser-loading"><img src="{{asset('gamma/images/loading.gif')}}"></div>
-						<ul id="browser-my-collections-drawer"></ul>
+						<ul id="browser-my-collections-drawer" class="jcarousel-skin-zeega"></ul>
 					</div>
 				</div>
 				<div id="browser-toggles">
@@ -143,6 +143,7 @@
          </div>
 
          <!-- /TEMPLATES -->
+
          
 
 {% endblock %}
@@ -166,5 +167,9 @@
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.js')}}"></script>
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.pack.js')}}"></script>
+
+		<!-- JCarousel -->
+		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.min.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/jcarousel/skins/zeega/skin.css')}}" />
 			
 {% endblock %}
