@@ -1,6 +1,7 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Tag.orm.yml
 Zeega\IngestBundle\Entity\Tag:
     type: entity
+    repositoryClass: Zeega\IngestBundle\Repository\TagRepository
     oneToMany:
         item:
             targetEntity: ItemTags
