@@ -39,10 +39,6 @@ class TagsController extends Controller
 		
 		$tag = $em->getRepository('ZeegaIngestBundle:Tag')->find($tagid);
 		
-        if (!$tags) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id ' . $tagid);
-        }
         $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tag));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
