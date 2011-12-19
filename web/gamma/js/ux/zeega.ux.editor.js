@@ -98,8 +98,8 @@ function shareButton()
 
 function addLayer(type)
 {
-	//add new layer model
-	var newLayer = new Layer({'type':type});
+	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
+	var newLayer = new Layer({'type':type,'attr':{}});
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
