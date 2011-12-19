@@ -11,7 +11,9 @@
 var ZeegaYoutubePlayer = Class.extend({
 
 	debug : {
-			fun:false,
+			fun:true,
+			event:true,
+			time:false,
 		},
 	
 	
@@ -85,7 +87,7 @@ var ZeegaYoutubePlayer = Class.extend({
 	
 
 	onTimeUpdate:function(){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : event : onTimeUpdate");
+		if(this.debug.time) console.log("youtube player ["+this._id+"] : event : onTimeUpdate");
 		
 		if(this._youtubePlayer.getCurrentTime()>this._outPoint+1||this._youtubePlayer.getCurrentTime()<this._inPoint-2){
 			if(this._youtubePlayer.getCurrentTime()>this._outPoint+1)$('#'+this._playerId).trigger('ended',{'id':this._id});
@@ -108,14 +110,15 @@ var ZeegaYoutubePlayer = Class.extend({
 	onPause: function(){},
 	
 	pause:function(){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : pause");
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : pause");
+		
 	
 		if(this._interval){clearInterval(this._interval);}
 		if(this._canPlay) this._youtubePlayer.pauseVideo();
 	},
 	
 	play:function(){		
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : pause");
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : pause");
 		
 		if(this._interval) clearInterval(this._interval);
 		if(this._canPlay){
@@ -137,13 +140,13 @@ var ZeegaYoutubePlayer = Class.extend({
 	},
 	
 	getVolume:function(volume){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : getVolume");
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : getVolume");
 		return this._volume;
 	},
 	
 
 	exit:function(){
-		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : exit");
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : exit");
 		
 		this.pause();
 	}
