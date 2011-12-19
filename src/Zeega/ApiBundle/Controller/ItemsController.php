@@ -89,8 +89,13 @@ class ItemsController extends Controller
         
         $tagsId = join(",",$tagsId);
         
+		$query = array();
+		$query['page'] = 0;
+		$query['limit'] = 100;
+		$query['tags_id'] = $tagsId;
+		
         // get items with the same tags
-        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
         
         // render results
         $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        

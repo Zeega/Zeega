@@ -182,7 +182,8 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
 			elseif($urlInfo['archive']=='Hollis-Group') 			$collection=$import->parseHollisGroup($urlInfo['id']);
 			elseif($urlInfo['archive']=='Hollis-Work') 			$collection=$import->parseHollisWork($urlInfo['id']);
-
+			
+			elseif($urlInfo['YoutubeChannel']=='Youtube')	$collection=$import->parseYoutubeChannel($urlInfo['id']);
 			//Store media item(s) to session and render widget
 
 			if(isset($item)&&$item){
