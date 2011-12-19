@@ -14,9 +14,9 @@ Aloha.ready( function() {
 
 
 require.config({
-	baseUrl : 'http://dev.zeega.org/joseph/web/gamma/js/',
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/',
 	paths : {
-		'order' : 'http://dev.zeega.org/joseph/web/gamma/js/order'
+		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/order'
 	}
 })
 
