@@ -48,7 +48,10 @@
 								<ul>
 
 									<li class='new-layer-icon' title='Click to add new Geo Layer' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+									
 									<li class='new-layer-icon' title='Click to add new Text Layer' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+									
+									
 									<li class='new-layer-icon' title='Click to add new Rectangle Layer' ><a href="#"onclick='addLayer("Rectangle");return false;'><img src="{{ asset('gamma/images/rectangle-layer.png') }}" height=20 width=20 /></a></li>
 									<!-- 
 									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
@@ -59,7 +62,7 @@
 							<ul id="layers-list-visual">
 								
 								<div class="alert-message warning">
-									<strong>No layers to display. Add some?</strong>
+									<strong>Click icons above or drag items to the visual editor to create a layer.</strong>
 								</div>
 								
 							</ul>
@@ -229,10 +232,9 @@
 			<script data-main="{{ asset('gamma/js/main.editor.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
 			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
 			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
-			
-			<!--
+	
 			<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
 			<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
 			<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
-			-->
+			
 {% endblock %}

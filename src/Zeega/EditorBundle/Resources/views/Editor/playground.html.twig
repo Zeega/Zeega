@@ -8,12 +8,25 @@
  	<div class="item-title playground-title" data-id="{{playground.id}}"  data-short="{{playground.short}}" style="font-size: 24px; ">{{playground.title}}</div><br><br>
 	<div id="projects">
 			<br><br>
+			<div id='instructions' style='color:white; font-size:18px'></div>
+			<br><br>
+			
+			<div style='width:500px;'>
+			<div style='float:left; width:200px;'>
+			<div id="go-to-browser">
+					<ul class="pill-buttons">
+						<li><a  href="{{ path('ZeegaEditorBundle_browser', { 'short': short })}}">Browse & Create Collections</a></li>
+					</ul>
+			</div>
+			</div>
+			<div style ='float:right: width:200px; margin-left:50px;'>
 			<div id="project-create">
 					<ul class="pill-buttons">
 						<li><a id="new-project" href="#">Create New Project</a></li>
 					</ul>
 			</div>
-			
+			</div>
+			</div>
 			<div id="projects-lists">
 				<div id='my-projects' class="item-title projects" style="font-size: 16px; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px; opacity:0.6; cursor:pointer; ">All Projects</div><br><br>
 				<div id="my-projects-container" class="projects-container my-projects-container" style="padding-left:5px;">
