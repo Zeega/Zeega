@@ -8,18 +8,30 @@
 
 
 *********************************************/
+Aloha.ready( function() {
+	
+	//Aloha.jQuery('#tester').aloha();
+
+
+require.config({
+	baseUrl : 'http://dev.zeega.org/joseph/web/gamma/js/',
+	paths : {
+		'order' : 'http://dev.zeega.org/joseph/web/gamma/js/order'
+	}
+})
 
 var loadFiles = [
-	'jquery',
+	//'jquery',
 	
 	//css?
 	//'text!../css/all.css', //not quite
 	
 
-	
+
 	//libraries
 	'order!libraries/underscore',
 	'order!libraries/backbone',
+	
 	'order!libraries/spin',
 	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!jquery/ui/js/jquery-ui.min',
@@ -87,13 +99,16 @@ var loadFiles = [
 	'order!players/zeega.player.youtube',	
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
+	
 	];
 
-require(loadFiles, function($) {
-    
+require(loadFiles, function(jquery)
+{
+    console.log('ALL JS LOADED')
+
 	//once the files have been loaded do this
 	var route = $('#route-id').val();
-	//console.log(route);
+	console.log(route);
 	Zeega.init();
 	if(!route) Zeega.createRoute();
 	else Zeega.loadRoute(route);
@@ -106,4 +121,6 @@ require(loadFiles, function($) {
 	
 	initUX();
 	
+});
+
 });

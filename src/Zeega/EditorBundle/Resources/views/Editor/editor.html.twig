@@ -23,8 +23,8 @@
 				</div>
 			</div>
 
-
 			<a href="http://#"></a>
+
 
 				<div id="node-drawer">
 					<ul></ul>
@@ -88,12 +88,11 @@
 					
 									<a href='#' id='refresh-database'><span class='zicon orange zicon-refresh'></span></a>
 									<select id='database-search-filter' class=''>
-									  <option value="all">All Media</option>
+									  <option value="all">Media Types</option>
+									  <option value="all">All</option>
 									  <option value="image">Images</option>
 									  <option value="video">Video</option>
 									  <option value="audio">Audio</option>
-									  <option value="-" disabled ="true">---</option>
-									  <option value="mine">My Media</option>
 									</select>
 									
 									<select id='database-collection-filter' class=''>
@@ -228,13 +227,19 @@
 {% endblock %}
 
 {% block scripts %}
+
+
+			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+			
+			<script src="{{ asset('gamma/js/aloha-config.js') }}" language="javascript"></script>
+			<script src="{{ asset('gamma/js/libraries/aloha-rc9/lib/aloha.js') }}" data-aloha-plugins="common/format,common/highlighteditables"></script>
+
+			<script src="{{ asset('gamma/js/main.editor.js') }}"></script>
+		
+			
+			
+			
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-			<script data-main="{{ asset('gamma/js/main.editor.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
-	
-			<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
 			
 {% endblock %}

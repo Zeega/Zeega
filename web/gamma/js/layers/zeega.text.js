@@ -107,8 +107,7 @@ var TextLayer = ProtoLayer.extend({
 			.append( bgColor );
 
 	},
-
-
+	
 	visual : function()
 	{
 
@@ -144,37 +143,20 @@ var TextLayer = ProtoLayer.extend({
 			.addClass('text-layer-content')
 			.html( _this.attr.content );
 
+		this.visualEditorElement.append( content );
+
 		
-		/*
-		if (this.attr.content == ''){
-		    div.addClass('text-layer-chrome-visible');
-		}
-
-		*/
-		
-		var mouseELmaster = function (event) {
-		    _this.toggleFrameVis();
-		}
-
-		/* This bunch of stuff shows and hides the handle and outline, based on mouseover.
-		   It's only this complicated because the mouse isn't constrained within the workspace while dragging the layer */
-		//div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
-		/*
-
-		div.bind('mousedown', function(event){
-			div.unbind('mouseenter.tl_master mouseleave.tl_master');
-			$(document).one('mouseup.tl_temp', function (event){
-				div.bind('mouseenter.tl_master mouseleave.tl_master', mouseELmaster);
-				var div_pos = div.offset();
-				if (event.pageX <= div_pos.left || event.pageX >= div_pos.left + div.width() || event.pageY <= div_pos.top || event.pageY >= div_pos.top + div.height()){
-				    _this.toggleFrameVis();
-				}
-			    });
-		    });
-
-		*/ 
-
-
+	},
+	
+	onControlsOpen : function()
+	{
+	},
+	
+	onDomPlacement : function()
+	{
+		console.log('onDomPlacement')
+		var _this = this;
+		var content = this.visualEditorElement.find('.text-layer-content');
 		// make the text resizable
 		this.visualEditorElement.resizable({
 			stop : function (){
@@ -204,7 +186,8 @@ var TextLayer = ProtoLayer.extend({
 		
 		// set the text content to save
 		content.bind('click mousedown', function(event) { event.stopPropagation() });
-		content.bind('blur change', function(){ 
+		_this.visualEditorElement.find('.text-layer-content').bind('blur change', function(){ 
+			console.log('onblur')
 			var newContent = _this.visualEditorElement.find('.text-layer-content').html();
 			_this.layerControls.trigger( 'update' , [{
 				content : {
@@ -221,10 +204,10 @@ var TextLayer = ProtoLayer.extend({
 			
 		});
 
-		this.visualEditorElement.append( content );
-
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		this.visualEditorElement.children('.text-layer-content').aloha();
+		console.log('text layer alohad')
+		Aloha.jQuery(content).aloha();
+		
 		
 	},
 	

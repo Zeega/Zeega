@@ -128,7 +128,9 @@ function closeOpenCitationTabs()
 
 
 
-$(document).ready(function(){
+//$(document).ready(function(){
+	
+	console.log('UX READY');
 	
 	$('#add-node').draggable({
 		axis:'x',
@@ -352,4 +354,4 @@ $(document).ready(function(){
 		});
 
 
-});
+//});

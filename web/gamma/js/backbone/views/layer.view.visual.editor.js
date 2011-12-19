@@ -15,6 +15,7 @@ var VisualLayerEditorView = Backbone.View.extend({
 	{
 		var _this = this;
 		
+		this.model.set({visibleineditor:true});
 		//remove this view when the model is removed
 		this.model.bind('remove',function(){ _this.remove() });
 				
@@ -58,6 +59,8 @@ var VisualLayerEditorView = Backbone.View.extend({
 		$(this.el).css(cssObj);
 		
 		this.model.layerClass.setZIndex( i );
+		
+		this.model.layerClass.onDomPlacement();
 		
 		//return the view
 		return this;
