@@ -213,6 +213,13 @@ class ImportWidget
 			$id=$split[0];
 		}
 		
+		elseif(strstr($url,'youtube.com')&&strstr($url,'#p/c/')){
+			$archive='YoutubeChannel';
+			$split=explode('c/',$url);
+			$split=explode('&',$split[1]);
+			$id=$split[0];
+		}
+		
 		
 		 /** UNSUPPORTED **************************************/ 
 		
@@ -481,6 +488,60 @@ class ImportWidget
 		$item->setMetadata($metadata);
 		
 		return($item);
+	}
+	
+	public function parseYoutubeChannel($id)
+	{
+		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
+		
+		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$id?v=2&prettyprint=true	";
+		
+		// read feed into SimpleXML object
+		$xml = simplexml_load_file($feedURL);
+		
+		// get summary counts from opensearch: namespace
+	    //$counts = $sxml->children('http://a9.com/-/spec/opensearchrss/1.0/');
+	    //$total = $counts->totalResults;
+		
+		foreach ($xml->entry as $entry) 
+		{
+			// get nodes in media: namespace for media information
+			$media = $entry->children('http://search.yahoo.com/mrss/');
+			
+			$item= new Item();
+			$metadata= new Metadata();
+			$media = new Media();
+			
+			$item->setTitle((string) $xml->entry);
+
+			$item->setUri($id);
+			$item->setAttributionUri('http://www.youtube.com/watch?v='+$id);
+			$item->setMediaCreatorUsername((string)$entry->author->name);
+			$item->setMediaCreatorRealname('unknown');
+			$item->setType('Video');
+			$item->setSource('Youtube');
+			$metadata->setArchive('Youtube');
+			$item->setDescription((string)$media->group->description);
+			
+			$thumbnailAttrs = $media->group->thumbnail->attributes();
+
+			$metadata->setThumbnailUrl((string)$thumbnailAttrs['url']);
+			
+			$item->setMedia($media);
+			$item->setMetadata($metadata);
+
+			$metadata->setLicense($media->group->license);
+			$item->setMetadata($metadata);
+			$item->setMedia($media);
+
+			$items[]=$item;
+		}
+
+		$collection['title'] = (string)$xml->title;
+		$collection['creator'] = $item->getMediaCreatorUsername();
+		$collection['items']=$items;
+		
+		return($collection);
 	}
 	
 	public function parseAbsolute($urlInfo,$container){
