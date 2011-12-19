@@ -36,11 +36,14 @@ class TagsController extends Controller
 		$tags = $em->getRepository('ZeegaIngestBundle:TagCorrelation')->searchRelatedTags($query);
 		*/
 		//return new Response(json_encode($tags));
+		
+		$tag = $em->getRepository('ZeegaIngestBundle:Tag')->find($tagid);
+		
         if (!$tags) 
         {
             throw $this->createNotFoundException('Unable to find the Item with the id ' . $tagid);
         }
-        $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tagid));
+        $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tag));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }

@@ -185,7 +185,9 @@ class ItemRepository extends EntityRepository
            ->innerjoin('i.tags', 'it')
 		   ->innerjoin('it.tag','t')
            ->andWhere('t.id IN (?5)')
+		   ->andWhere('i.id <> (?6)')
            ->setParameter(5, $query["tags_id"])
+		   ->setParameter(6, $query["item_id"])
       	   ->setMaxResults($query['limit'])
       	   ->setFirstResult($query['page']);
 
