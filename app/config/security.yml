@@ -36,6 +36,12 @@ security:
         route:
             pattern:  ^/route/
             anonymous: ~
+        search:
+            pattern: ^/api/search
+            anonymous: ~
+        tags:
+            pattern: ^/api/tags
+            anonymous: ~
         routes:
             pattern:  ^/routes/
             anonymous: ~
