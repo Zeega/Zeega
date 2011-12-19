@@ -492,17 +492,16 @@ class ImportWidget
 		$item->setUri($urlInfo['itemUrl']);
 		$item->setTitle($urlInfo['title']);
 		$item->setMediaCreatorUsername('Unknown');
+		$item->setMediaCreatorRealname('Unknown');
 		$metadata=new Metadata();
 		$item->setDescription('None');
 		$metadata->setArchive($urlInfo['archive']);
-		$metadata->setAltCreator('');
-		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
-		$metadata->setAltCreator('');
+		if($urlInfo['contentType']=='Image') $metadata->setThumbnailUrl($urlInfo['itemUrl']);
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbnailUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbnailUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
 		
 		$media=new Media();
-		$media->setFileFormat($urlInfo['fileFormat']);
+		$media->setFormat($urlInfo['fileFormat']);
 		$item->setMedia($media);
 		$item->setMetadata($metadata);
 		return $item;

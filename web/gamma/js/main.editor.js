@@ -8,9 +8,17 @@
 
 
 *********************************************/
-console.log('require');
+Aloha.ready( function() {
+	
+	//Aloha.jQuery('#tester').aloha();
 
 
+require.config({
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/',
+	paths : {
+		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/order'
+	}
+})
 
 var loadFiles = [
 	//'jquery',
@@ -96,7 +104,8 @@ var loadFiles = [
 
 require(loadFiles, function(jquery)
 {
-    
+    console.log('ALL JS LOADED')
+
 	//once the files have been loaded do this
 	var route = $('#route-id').val();
 	console.log(route);
@@ -112,4 +121,6 @@ require(loadFiles, function(jquery)
 	
 	initUX();
 	
+});
+
 });

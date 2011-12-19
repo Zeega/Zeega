@@ -65,7 +65,12 @@ var ProtoLayer = Class.extend({
 	{
 		
 	},
-
+	
+	onDomPlacement : function()
+	{
+		
+	},
+	
 	onControlsOpen : function()
 	{
 

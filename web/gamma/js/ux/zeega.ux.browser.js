@@ -17,6 +17,23 @@ function initUX(){
 
 }
 
+
+function shareButton()
+{	
+	$('#share-collection-modal').find('.modal-body').html("<p>Share your collection: <b></b></p><a target='blank' href='"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+"/view'>"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+"/view</a>");
+				
+	$('#share-collection-modal').modal('show');
+	
+	//$('#project-link').attr('href','')
+	
+	$('#share-collection-modal').find('#close-modal').mouseup(function(){
+		$('#share-collection-modal').modal('hide');
+	})
+
+	return false;
+}
+
+
 //Toggles filters on and off, temporary until we figure out exactly how this'll look
 function toggleFilterDrawer(){
 
@@ -91,7 +108,19 @@ $(document).ready(function() {
 	
 	//Collection playback and editor connection
 	
-	$('#collection-player-button').click(function(){window.open(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+'/view');return false;}); 
+	$('#collection-player-button').click(function(){
+	
+	
+	shareButton();
+	
+	return false;
+	
+	
+	
+	}); 
+	
+	
+	
 	$('#collection-to-editor-button').click(function(){
 					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
 					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
@@ -178,7 +207,7 @@ $(document).ready(function() {
 
 				$(this).effect("highlight", {}, 3000);
 
-				
+				if(ZeegaBrowser.draggedItem.id){
 				var newGuy = new BrowserCollection();
 
 				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
@@ -202,7 +231,12 @@ $(document).ready(function() {
 				 			});
 				
 				
+				}
+				else{
+					console.log('Error: failure to recognize dragged item');
+					console.log(ZeegaBrowser);
 				
+				}
 			}
 		});
 	$('#browser-collection-filter-title').click(function() {

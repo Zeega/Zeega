@@ -23,8 +23,8 @@
 				</div>
 			</div>
 
-
 			<a href="http://#"></a>
+
 
 				<div id="node-drawer">
 					<ul></ul>
@@ -48,7 +48,10 @@
 								<ul>
 
 									<li class='new-layer-icon' title='Click to add new Geo Layer' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+									
 									<li class='new-layer-icon' title='Click to add new Text Layer' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+									
+									
 									<li class='new-layer-icon' title='Click to add new Rectangle Layer' ><a href="#"onclick='addLayer("Rectangle");return false;'><img src="{{ asset('gamma/images/rectangle-layer.png') }}" height=20 width=20 /></a></li>
 									<!-- 
 									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
@@ -59,7 +62,7 @@
 							<ul id="layers-list-visual">
 								
 								<div class="alert-message warning">
-									<strong>No layers to display. Add some?</strong>
+									<strong>Click icons above or drag items to the visual editor to create a layer.</strong>
 								</div>
 								
 							</ul>
@@ -85,12 +88,11 @@
 					
 									<a href='#' id='refresh-database'><span class='zicon orange zicon-refresh'></span></a>
 									<select id='database-search-filter' class=''>
-									  <option value="all">All Media</option>
+									  <option value="all">Media Types</option>
+									  <option value="all">All</option>
 									  <option value="image">Images</option>
 									  <option value="video">Video</option>
 									  <option value="audio">Audio</option>
-									  <option value="-" disabled ="true">---</option>
-									  <option value="mine">My Media</option>
 									</select>
 									
 									<select id='database-collection-filter' class=''>
@@ -211,40 +213,30 @@
 			</div>
 		</div> <!-- modal -->
 		
-		
-		
-		<div>
-			
-		
-
-		
-		
-		<div id="node-item-template" class=""><div class='node-overlay'><div class='node-update-overlay'></div></div><div class='node-background'></div><a href='#' class='delete-node hidden'>&times;</a></div>
-		
+		<div id="node-item-template" class="">
+			<div class='node-overlay'>
+				<div class='node-update-overlay'></div>
+			</div>
+			<div class='node-background'></div>
+			<a href='#' class='delete-node hidden'>&times;</a>
+		</div>
 	</div>
 {% endblock %}
 
 {% block scripts %}
 
-			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-			<script src="{{ asset('gamma/js/libraries/require.js') }}" data-main="{{ asset('gamma/js/main.editor.js') }}"></script>
 
-			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
+			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
 			
-			
-			<script src="{{ asset('gamma/js/libraries/aloha/aloha-nodeps.js') }}"></script>
+			<script src="{{ asset('gamma/js/aloha-config.js') }}" language="javascript"></script>
+			<script src="{{ asset('gamma/js/libraries/aloha-rc9/lib/aloha.js') }}" data-aloha-plugins="common/format,common/highlighteditables"></script>
+
+			<script src="{{ asset('gamma/js/main.editor.js') }}"></script>
 		
 			
 			
-			<script src="{{ asset('gamma/js/aloha-config.js') }}" language="javascript"></script>
 			
+			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 			
-			
-			<!--
-			<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
-			-->
 {% endblock %}

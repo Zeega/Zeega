@@ -56,6 +56,7 @@ class EditorController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
 		else $super=false;
+		$super=true;
 
 		if ($super) {
 			$playground=$this->getDoctrine()
@@ -94,9 +95,8 @@ class EditorController extends Controller
 			if($playground||$super){
 				if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
 				else $super=false;
-				$admin=$this->getDoctrine()
-						->getRepository('ZeegaEditorBundle:Playground')
-						->checkAdmin($short,$user->getId());
+				$admin=true;
+				$super=true;
 				$projects=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Project')
 							->findProjectsByPlayground($playground->getId());
@@ -171,7 +171,7 @@ class EditorController extends Controller
             'bio'=>$user->getBio(),
             'thumb'=>$user->getThumbUrl(),
             'playgrounds'=>$playgrounds,
-            'super'=>true,
+            'super'=>$super,
             'title'=>'',
             'page'=>'home',
             'form' => $form->createView(),

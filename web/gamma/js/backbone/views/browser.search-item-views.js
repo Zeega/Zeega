@@ -102,7 +102,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 					    
 					    $(this).css('opacity', '1');
 					  });
-			
+				if(ZeegaBrowser.draggedItem.id){
 				thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
 		
@@ -121,7 +121,12 @@ var BrowserCollectionView = BrowserItemView.extend({
 				 					console.log(response);
 				 				}
 				 			});
+				}
+				else{
+					console.log('Error: failure to recognize dragged item');
+					console.log(ZeegaBrowser);
 				
+				}
 			}
 		});
 	},
@@ -199,8 +204,8 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	},
 	render: function()
 	{
-		
-		var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
+		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
+		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
 		//render individual element
 		this.el.addClass('browser-results-image');
 		this.el.removeAttr('id');

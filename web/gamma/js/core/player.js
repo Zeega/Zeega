@@ -54,6 +54,10 @@ var Player = {
 
 		this.removeAllVideoElements();
 		
+		//remove panel ghosts
+		$('.x-panel-ghost ').remove();
+		
+		
 		//if the data passed in is a string, then parse it into an object
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
@@ -783,7 +787,7 @@ var Player = {
 	getTemplate : function()
 	{
 		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
-		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='../../../gamma/images/z-logo-128.png'height='60px'/></a></div>";
+		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
 		html +=			"<div id='preview-close' class='player-overlay'><span class='zicon orange zicon-close' ></span></div>";
 		html += 		"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>";
 		html += 			"<div class='arrow-background'></div>";

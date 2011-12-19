@@ -139,6 +139,21 @@
 				<audio controls="true" src="SOURCE"></audio>
 				
 			</div>
+			<div id="share-collection-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Share Your Collection</h3>
+			</div>
+			<div class="modal-body clearfix">
+				
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
 		
          </div>
 
@@ -148,15 +163,14 @@
 
 {% endblock %}
 
+
+
+
 {% block scripts %}
 				<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script data-main="{{ asset('gamma/js/main.browser.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
-		<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
-		<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
-		<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
-		<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
-		<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
+
 		
 		<!-- FANCYBOX -->
 		<!-- Optionaly include easing and/or mousewheel plugins -->
