@@ -93,6 +93,7 @@ class ItemsController extends Controller
 		$query['page'] = 0;
 		$query['limit'] = 100;
 		$query['tags_id'] = $tagsId;
+		$query['item_id'] = $itemId;
 		
         // get items with the same tags
         $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
