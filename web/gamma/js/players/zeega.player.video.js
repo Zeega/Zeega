@@ -13,7 +13,8 @@
 var ZeegaVideoPlayer = Class.extend({
 	debug : {
 		fun:false,
-		event:false
+		event:true,
+		time:false,
 	},
 	
 	init: function(id,src,inPoint,outPoint,volume,wrapperId,playerId){
@@ -81,7 +82,7 @@ var ZeegaVideoPlayer = Class.extend({
 	},
 	
 	onTimeUpdate:function(){
-		if(this.debug.event) console.log("html5 player ["+this._id+"] : event : timeUpdate : "+this._asset.currentTime);
+		if(this.debug.time) console.log("html5 player ["+this._id+"] : event : timeUpdate : "+this._asset.currentTime);
 		
 		//	Include a slight margin of error (+/- 0.1) due to the imprecision of video seek points
 		if(this._asset.currentTime > this._outPoint + .1){
@@ -100,9 +101,15 @@ var ZeegaVideoPlayer = Class.extend({
 		$('#'+this._playerId).trigger('ended',{'id':this._id});
 	},
 	
-	onPlay: function(){},
+	onPlay: function(){
+		if(this.debug.event) console.log("html5 player ["+this._id+"] : event : play");
 	
-	onPause: function(){},
+	},
+	
+	onPause: function(){
+		if(this.debug.event) console.log("html5 player ["+this._id+"] : event : pause");
+	
+	},
 	
 	pause: function(){
 		if(this.debug.fun) console.log("html5 player ["+this._id+"] : fun : pause");
