@@ -97,6 +97,23 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
     
+	// delete_collection    DELETE /api/items/{collection_id}.{_format}
+    public function deleteItemAction($item_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	
+     	if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find a Collection with the id ' . $item_id);
+        }
+        
+    	$em->remove($item);
+    	$em->flush();
+    	
+    	return new Response('SUCCESS',200);
+    }
+
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
     public function putItemsTagsAction($itemId)
     {
