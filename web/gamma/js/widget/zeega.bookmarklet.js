@@ -43,9 +43,10 @@ var bm = new bookmarklet({
         			'overflow':'hidden',
 			
         		}).attr('id','zeega-overlay');
-		
-        		var url=encodeURIComponent(window.location.href);
-				console.log("url " + url);
+				console.log(window.parent);
+        		this.url=encodeURIComponent(window.location.href);
+        		console.log(window.location.href);
+				console.log("url " + this.url);
         		$('body').append(overlay);
 		
         		var cover=$('<div>').css({
@@ -76,8 +77,8 @@ var bm = new bookmarklet({
 			
         		overlay.append(cover);
         		overlay.append(highlight);
-				console.log(localUrlPrefix + "/web/app_dev.php/widget?url="+url);
-        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/web/app_dev.php/widget?url="+url+"' />").animate({
+				console.log(localUrlPrefix + "/web/widget?url="+this.url);
+        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/web/widget?url="+this.url+"' />").animate({
         		        'width': 470 }, 500, function() {
         			        $('#zeega-cover').fadeOut('slow');
         		});
