@@ -14,10 +14,11 @@ var ZeegaBrowser = {
 		
 		//populate myCollections from server
 		this.myCollections.fetch({
-			success : function()
+			success : function(model, response)
 			{
 				console.log("FROM ZeegaBrowser.js - Zeega browser has " + ZeegaBrowser.myCollections.length);
-				jQuery('#browser-my-collections-drawer').jcarousel();
+				$('#browser-my-collections-drawer').jcarousel();
+				
 			}
 		});
 
@@ -164,7 +165,9 @@ var ZeegaBrowser = {
 				if( theCollection.get("child_items_count") > 1 && theImageEl.find("img").attr("src").indexOf("items/"+itemID) != -1){
 					
 					var otherImageEl = theImageEl.next(".browser-results-image");
-					if (otherImageEl == null) {otherImageEl =theImageEl.previous(".browser-results-image"); }
+					if (otherImageEl.length ==0) {
+						otherImageEl =theImageEl.prev(".browser-results-image"); 
+					}
 					var	newThumbnailURL = otherImageEl.find("img").attr("src");
 				}
 

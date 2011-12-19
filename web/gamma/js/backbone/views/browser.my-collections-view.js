@@ -14,6 +14,7 @@ var MyCollectionsView = Backbone.View.extend({
         this._views[m.id] = collectionView;
         var addThis = collectionView.render(); 
 	    $(this.el).prepend(addThis.el);
+	    $('#browser-my-collections-count').text("("+this.collection.length+")");
        
 	},
 	addCollections : function(){
@@ -49,6 +50,8 @@ var MyCollectionsView = Backbone.View.extend({
 			}, this);
 
 		
+		$('#browser-my-collections-count').text("("+this.collection.length+")");
+
 		return this;
 	},
 	

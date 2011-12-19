@@ -208,7 +208,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		this.el.find('a:first').attr('title', this.model.get('title'));
 		this.el.find('img').attr('src', thumbnail_url);
 		
-		console.log(this.el.find('img').attr('height'));
+		
 		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('a:first').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
