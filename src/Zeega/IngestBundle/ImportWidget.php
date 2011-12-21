@@ -213,11 +213,10 @@ class ImportWidget
 			$id=$split[0];
 		}
 		
-		elseif(strstr($url,'youtube.com')&&strstr($url,'#p/c/')){
+		elseif(strstr($url,'youtube.com')&&strstr($url,'#p/c')){
 			$archive='YoutubeChannel';
-			$split=explode('c/',$url);
-			$split=explode('&',$split[1]);
-			$id=$split[0];
+			$split=explode('#p/c/',$url);
+			$id=$split[1];
 		}
 		
 		
@@ -494,43 +493,82 @@ class ImportWidget
 	{
 		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
 		
-		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$id?v=2&prettyprint=true	";
+		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$id?v=2";
 		
 		// read feed into SimpleXML object
-		$xml = simplexml_load_file($feedURL);
+		$xml = simplexml_load_file($originalUrl);
 		
 		// get summary counts from opensearch: namespace
 	    //$counts = $sxml->children('http://a9.com/-/spec/opensearchrss/1.0/');
 	    //$total = $counts->totalResults;
-		
+		$items=array();
 		foreach ($xml->entry as $entry) 
 		{
 			// get nodes in media: namespace for media information
-			$media = $entry->children('http://search.yahoo.com/mrss/');
+			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
 			
 			$item= new Item();
 			$metadata= new Metadata();
 			$media = new Media();
 			
-			$item->setTitle((string) $xml->entry);
-
-			$item->setUri($id);
-			$item->setAttributionUri('http://www.youtube.com/watch?v='+$id);
-			$item->setMediaCreatorUsername((string)$entry->author->name);
-			$item->setMediaCreatorRealname('unknown');
+			$arr = explode('/',$entry->id);
+			$entryId = $arr[count($arr)-1];
+			
+			$attrs = $entryMedia->player->url->attributes();
+			$attributionUrl = $attrs['url'];
+			
+			$item->setUri($entryId);
+			$item->setTitle((string)$media->group->title);
+			$item->setDescription((string)$media->group->description);
+			$item->setAttributionUri($attributionUrl);
+			$item->setDateCreated(new \DateTime("now"));
 			$item->setType('Video');
 			$item->setSource('Youtube');
+			$item->setChildItemsCount(0);
+			
+			foreach($entry->children('http://www.georss.org/georss') as $geo)
+			{
+				foreach($gml->children('http://www.opengis.net/gml') as $position)
+				{
+					// Coordinates are separated by a space
+					$coordinates = explode(' ', (string)$geoPositionSubNode->pos);
+
+					$item->setMediaGeoLatitute((string)$coordinates[0]);
+					$item->setMediaGeoLongitude((string)$coordinates[1]);
+					break;
+				}
+			}
+		    			
+			$item->setMediaCreatorUsername((string)$entry->author->name);
+			$item->setMediaCreatorRealname('unknown');
+			
+			// read metadata from xml
+			$authorFeed = simplexml_load_file($video->authorURL);
+			$authorData = $authorFeed->children('http://gdata.youtube.com/schemas/2007');			
+			$title = $entryMedia->group->title;
+			
+			$attrs = $entryMedia->group->thumbnail->attributes();
+			$thumbnailUrl = (string)$attrs['url'];
+			
+			// write metadata
 			$metadata->setArchive('Youtube');
-			$item->setDescription((string)$media->group->description);
+			$metadata->setLicense((string)$entryMedia->group->license);
+			$metadata->setThumbnailUrl((string)$thumbnailUrl);
 			
-			$thumbnailAttrs = $media->group->thumbnail->attributes();
-
-			$metadata->setThumbnailUrl((string)$thumbnailAttrs['url']);
+			// read media from xml
+			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
+			$attrs = $yt->duration->attributes();
+			$duration = $attrs['seconds'];
 			
-			$item->setMedia($media);
-			$item->setMetadata($metadata);
-
-			$metadata->setLicense($media->group->license);
+			$attrs = $entryMedia->group->license->thumbnail[0].attributes();
+			$width = $attrs['width'];
+			$height = $attrs['height'];
+			
+			// write media information
+			$media->setDuration($duration);
+			$media->setWidth($width);
+			$media->setHeight($height);
+			
 			$item->setMetadata($metadata);
 			$item->setMedia($media);
 
@@ -538,7 +576,7 @@ class ImportWidget
 		}
 
 		$collection['title'] = (string)$xml->title;
-		$collection['creator'] = $item->getMediaCreatorUsername();
+		$collection['creator'] = 'mano';
 		$collection['items']=$items;
 		
 		return($collection);

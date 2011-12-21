@@ -43,7 +43,7 @@ var bm = new bookmarklet({
         			'overflow':'hidden',
 			
         		}).attr('id','zeega-overlay');
-		
+		        console.log(window);
         		var url=encodeURIComponent(window.location.href);
 				console.log("url " + url);
         		$('body').append(overlay);
