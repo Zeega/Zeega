@@ -45,6 +45,13 @@ function toggleFilterDrawer(){
 		$('#browser-right-sidebar').css('height', '350px');
 		$('#browser-toggle-items-vs-collections').css('right', '');
 		$('#browser-toggle-items-vs-collections').css('left', '297px');
+
+		$('.time').css('background-position', '-41px -41px');
+		$('#browser-time-filter').show();
+		$('select#valueAA, select#valueBB').selectToUISlider({
+			labels: 5
+		});
+		$('select#valueAA, select#valueBB').hide();
 	}
 	else{
 		$('#browser-right-sidebar').css('position', 'absolute');
@@ -55,11 +62,7 @@ function toggleFilterDrawer(){
 		$('#browser-toggle-items-vs-collections').css('left', '');
 	}
 
-	$('#browser-time-filter').show();
-	$('select#valueAA, select#valueBB').selectToUISlider({
-		labels: 5
-	});
-	$('select#valueAA, select#valueBB').hide();
+	
 		
 }
 

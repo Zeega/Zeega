@@ -382,7 +382,10 @@
 	cursor:default;
 }
 
-
+#browser-filter-icons{
+	float:left;
+	border-right:1px solid #666;
+}
 .browser-filter-icon {
 	
 	width:  40px;
@@ -394,10 +397,21 @@
 }
 
 .space {background-position: -82px 0px; }
+.space:hover {background-position: -82px -41px; }
 .time {background-position: -41px 0px; }
+.time:hover {background-position: -41px -41px; }
+
 #browser-time-filter{
 	display:none;
-	margin:0 48px;
+	margin: 20px 30px 0 20px;
+	float: right;
+	width: 420px;
+}
+#browser-time-filter p{
+	font: 1.5em Helvetica,sans-serif;
+	color: #EEE;
+	margin: 0 0 30px 0;
+	letter-spacing: 1px;
 }
 #browser-right-sidebar{
 	position:absolute;
