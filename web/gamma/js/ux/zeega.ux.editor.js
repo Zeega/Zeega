@@ -98,8 +98,8 @@ function shareButton()
 
 function addLayer(type)
 {
-	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
-	var newLayer = new Layer({'type':type,'attr':{}});
+	//add new layer model
+	var newLayer = new Layer({'type':type});
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
@@ -203,7 +203,11 @@ function closeOpenCitationTabs()
 		tolerance: 'pointer',
 		
 		stop : function(){
-			Zeega.route.set({'nodesOrder':$(this).sortable('toArray')});
+			var order = $(this).sortable('toArray');
+			//ensure the array is made of integers
+			order = _.map( order, function(num){ return parseInt( num ) })
+			
+			Zeega.route.set({'nodesOrder': order });
 			Zeega.route.save();
 			console.log($(this).sortable('toArray'));
 		}

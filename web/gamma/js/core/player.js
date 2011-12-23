@@ -43,6 +43,7 @@ var Player = {
 	init : function( data, routeID, nodeID )
 	{
 		console.log('Zeega Player Initialized');
+
 		var _this = this;
 				
 		//test to see if Zeega is installed
@@ -67,20 +68,17 @@ var Player = {
 		//set the current route
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
-		
-		this.dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
-		
+
 		//set the current node
-		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
-		
-		else this.currentNode = this.getNode( nodeID );
+		var currentNodeID;
+		if( !nodeID ) currentNodeID = this.this.currentRoute.nodeOrder[0];
+		else currentNodeID = nodeID;
 		
 		//this.parseProject;
 		this.draw();
 		this.setListeners();
 		
-		this.gotoNode( this.currentNode.id );
-		console.log('gotoNode: '+ this.currentNode.id)
+		this.gotoNode( currentNodeID );
 	},
 	
 	/*
@@ -397,12 +395,10 @@ var Player = {
 
 			//determine the layers that need to be preloaded 
 			var node = this.getNode( nodeID );
-			console.log(nodeID);
-			console.log(node);
+
 			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
-				console.log( layerID )
 				_this.preloadLayer(layerID);
 			});
 			
@@ -663,10 +659,7 @@ var Player = {
 	{
 		//returns the node object
 		
-		
-		var nodeIndex = _.indexOf( this.dataNodeOrder, parseInt(nodeID));
-		var nodeObject = this.currentRoute.nodes[nodeIndex];
-		return nodeObject;
+		return _.find( this.currentRoute.nodes, function(node){ return node.id == nodeID });
 	},
 	
 	getLayer : function( layerID )
@@ -678,9 +671,10 @@ var Player = {
 		return layerObject;
 	},
 	
-	gotoNode : function(nodeID)
+	gotoNode : function( nodeID )
 	{
-		this.currentNode = this.getNode(nodeID);
+
+		this.currentNode = this.getNode( nodeID );
 		this.preload();
 	},
 	
@@ -697,8 +691,6 @@ var Player = {
 		
 		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
-
-		
 		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
 		else console.log('end of the line');
 	},
@@ -711,6 +703,7 @@ var Player = {
 	goLeft : function()
 	{
 		console.log('goLeft');
+		
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
@@ -726,12 +719,13 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
+		
 		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
-		
+
 		//test if out of bounds
 		if( index + dist > nodeOrder.length || index + dist < 0 ) return false;
-		else return nodeOrder[index+dist]
+		else return nodeOrder[ index + dist ];
 	},
 	
 	getDown : function( nodeID, dist )
@@ -742,10 +736,11 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
+		console.log('getLeft');
 		var nodeOrder = this.currentRoute.nodeOrder;
+
 		var index = _.indexOf( nodeOrder, nodeID );
-		
-		//test if out of bounds
+
 		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
 		else return nodeOrder[ index - dist ]
 	},
