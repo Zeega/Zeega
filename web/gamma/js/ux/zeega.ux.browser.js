@@ -42,7 +42,7 @@ function toggleFilterDrawer(){
 		$('#browser-right-sidebar').css('position', 'relative');
 		$('#browser-right-sidebar').css('float', 'right');
 		$('#browser-right-sidebar').css('width', '530px');
-		$('#browser-right-sidebar').css('height', '400px');
+		$('#browser-right-sidebar').css('height', '350px');
 		$('#browser-toggle-items-vs-collections').css('right', '');
 		$('#browser-toggle-items-vs-collections').css('left', '297px');
 	}
@@ -54,6 +54,12 @@ function toggleFilterDrawer(){
 		$('#browser-toggle-items-vs-collections').css('right', '82px');
 		$('#browser-toggle-items-vs-collections').css('left', '');
 	}
+
+	$('#browser-time-filter').show();
+	$('select#valueAA, select#valueBB').selectToUISlider({
+		labels: 5
+	});
+	$('select#valueAA, select#valueBB').hide();
 		
 }
 
@@ -148,8 +154,8 @@ $(document).ready(function() {
 		return false;
 	});
 
-	//For filters - testing visual stuff - disabled
-	//$('.time, .space').click( toggleFilterDrawer);
+	//For filters - testing visual stuff 
+	$('.time').click( toggleFilterDrawer);
 
 	//Switches the results drawer between items and collections
 	$('#browser-toggle-items-vs-collections li').click(function(){

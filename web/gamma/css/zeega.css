@@ -11,7 +11,7 @@
 
 #browser-results{
 	
-	padding:0px 0 5px 0 !important;
+	padding:0 !important;
 	margin-top:-3px;
 	float:none;
 	-moz-border-radius-topleft: 0px;
@@ -26,7 +26,7 @@
 	
 }
 
-#browser-results-items{
+#browser-results-items, #browser-results-collections{
 	min-height:200px !important;
 	max-height:350px !important;
 	overflow:auto !important;
@@ -127,7 +127,7 @@
 	-moz-border-radius-bottomleft: 0px;
 	-webkit-border-radius: 0px 10px 0px 0px !important;
 	border-radius: 0px 10px 0px 0px;
-	width:100%;
+	
 	height:44px;
 }
 #browser-toggle-all-media-vs-my-media{
@@ -387,16 +387,18 @@
 	
 	width:  40px;
 	height: 40px;
-	z-index:100;
-	position:absolute;
+	margin: 4px 4px 8px 4px;
 
 	background-image:url('../images/filter-icons.png'); 
-	margin:-7px 0 0 7px;
+	
 }
 
-.space {background-position: -82px 0px; top:10px;}
-.time {background-position: -41px 0px; top:60px;}
-
+.space {background-position: -82px 0px; }
+.time {background-position: -41px 0px; }
+#browser-time-filter{
+	display:none;
+	margin:0 48px;
+}
 #browser-right-sidebar{
 	position:absolute;
 	background-color:#555;
@@ -404,12 +406,7 @@
 	right: 0;
 	width: 48px;
 	height: 100px;
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 0px;
-	-moz-border-radius-bottomleft: 10px;
-	-webkit-border-radius: 0px 0px 0px 10px;
-	border-radius: 0px 0px 0px 10px;
+	
 
 	-webkit-box-shadow:  2px 2px 2px 2px #333;
 	-moz-box-shadow:  2px 2px 2px 2px #333;
@@ -425,6 +422,7 @@
 
 #browser-results-collections{
 	display:none;
+
 }
 #fancybox-close-button{
 	
