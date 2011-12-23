@@ -80,6 +80,7 @@ var Player = {
 		this.setListeners();
 		
 		this.gotoNode( this.currentNode.id );
+		console.log('gotoNode: '+ this.currentNode.id)
 	},
 	
 	/*
@@ -401,6 +402,7 @@ var Player = {
 			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
+				console.log( layerID )
 				_this.preloadLayer(layerID);
 			});
 			
@@ -422,6 +424,7 @@ var Player = {
 		//if not loading or already loaded
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
+			
 			//put the layer id into the layers Loading array
 			this.loadingLayers.push( layerID );
 
@@ -431,6 +434,7 @@ var Player = {
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
+
 			layerClass.lightLoad( layer );
 			
 			//add the layer content to the displayWindow
@@ -442,7 +446,6 @@ var Player = {
 			
 			var target = this.displayWindow.find('#preview-media');
 			layerClass.preload( target );
-			
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
 			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
@@ -450,7 +453,6 @@ var Player = {
 				loadingLayer.append( 'loading: '+ layer.attr.title );
 			else loadingLayer.append( 'loaded: '+ layer.attr.title );
 			$('#layer-status ul').append(loadingLayer)
-			
 		}
 	},
 	
