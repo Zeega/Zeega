@@ -250,6 +250,7 @@ var Player = {
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
+			console.log('event: ended');
 			_this.advanceAfterMedia(data.id);
 			return false;
 		});
@@ -585,7 +586,7 @@ var Player = {
 		{
 			//after time in seconds
 			this.advanceAfterTimeElapsed(advanceValue)
-		}else if(advanceValue == 0){
+		}else if(advanceValue == 0 || _.isUndefined(advanceValue) ){
 			//after media
 			this.advanceOnPlayback = true;
 		}else{
@@ -612,6 +613,8 @@ var Player = {
 	// advance node after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
+		console.log('should advance')
+		console.log(this.advanceOnPlayback)
 		if(this.advanceOnPlayback) this.goRight();
 	},
 
