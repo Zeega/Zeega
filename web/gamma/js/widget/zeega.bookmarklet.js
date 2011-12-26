@@ -43,10 +43,10 @@ var bm = new bookmarklet({
         			'overflow':'hidden',
 			
         		}).attr('id','zeega-overlay');
-				console.log(window.parent);
+
         		this.url=encodeURIComponent(window.location.href);
-        		console.log(window.location.href);
-				console.log("url " + this.url);
+
+
         		$('body').append(overlay);
 		
         		var cover=$('<div>').css({

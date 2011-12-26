@@ -17,14 +17,14 @@ class ResponseHelper
         
         //array("\r", "\r\n", "\n")
         $response = new Response($renderedTwig);
-     	$response->headers->set('Content-Type', 'application/json');
+     	$response->headers->set('Content-Type', 'application/json; charset=UTF-8');
         return $response;
     }
     
     static public function getJsonResponse($entityArray)
     {
         $response = new Response(json_encode($entityArray));
-     	$response->headers->set('Content-Type', 'application/json');
+     	$response->headers->set('Content-Type', 'application/json; charset=UTF-8');
         // return the results
         return $response;
     }

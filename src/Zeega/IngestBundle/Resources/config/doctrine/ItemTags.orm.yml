@@ -18,5 +18,5 @@ Zeega\IngestBundle\Entity\ItemTags:
             associationKey: true
     fields:
         tag_date_created:
-            type: date
+            type: datetime
             nullable: false

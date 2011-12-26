@@ -1,6 +1,7 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Tag.orm.yml
 Zeega\IngestBundle\Entity\Tag:
     type: entity
+    repositoryClass: Zeega\IngestBundle\Repository\TagRepository
     oneToMany:
         item:
             targetEntity: ItemTags
@@ -18,7 +19,7 @@ Zeega\IngestBundle\Entity\Tag:
             size: 20
             nullable: false
         date_created:
-            type: date
+            type: datetime
             nullable: false
         description:
             type: text

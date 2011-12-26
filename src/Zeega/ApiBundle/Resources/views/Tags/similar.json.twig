@@ -1,5 +1,11 @@
 {% extends "ZeegaApiBundle:Tags:index.json.twig" %}
 
 {% block header %}
-	"tags_similar_to": {{similar}},
+	"tags_similar_to": 
+	{
+		"tag_id" : {{similar.getId()}},
+		"tag_name" : "{{similar.getName()}}",
+		"tag_description" : "{{similar.getDescription()}}",
+		"tag_date" : "{{similar.getDateCreated()|date("Y-m-d")}}"
+	},	
 {% endblock %}

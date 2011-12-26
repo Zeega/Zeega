@@ -114,6 +114,64 @@ var ZeegaBrowser = {
     			}
 		});
 
+		//On hover, expand item editing bar to update or remove item
+		//But only do this if user is looking at one of their own collections
+		var collectionID = this.search.get("collection");
+		var theCollection = this.myCollections.get(collectionID);
+		if( theCollection != null){
+			
+
+			$(".browser-results-image").hover( function(e) {
+				$(this).find('.browser-results-image-edit').show();
+				
+				}, 
+				function(e) {
+					$(this).find('.browser-results-image-edit').hide();
+
+				}
+			);
+			//Add functionality for updating thumbnail 
+			$('.browser-change-thumbnail').click(function(e){
+
+				var theImageEl = $(this).closest(".browser-results-image");
+				var newThumbPath = theImageEl.find("img").attr("src");
+				theCollection.isUpdate = true;
+				theCollection.save({ thumbnail_url : newThumbPath }, 
+						{
+							success: function(model, response) { 
+								console.log("Saved new thumbnail for collection " + model.id);			
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating collection thumbnail.");
+			 					console.log(response);
+			 				}
+			 			});
+			 	return false;
+			});
+
+			//Add functionality for removing item from collection 
+			$('.browser-remove-from-collection').click(function(e){
+
+				var theImageEl = $(this).closest(".browser-results-image");
+				var itemID = theImageEl.find('a:first').attr("id");
+				var theItem = ZeegaBrowser.searchItemsView.collection.get(itemID);
+
+				/*theItem.destroy({
+									success: function(model, response) { 
+										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
+					 				},
+					 				error: function(model, response){
+					 					
+					 					console.log("Error removing item " + itemID + " from collection " + theCollection.id);		
+					 					console.log(response);
+					 				}
+			 					});
+				*/
+			 	return false;
+			});
+		}
+
 	}
 	
 }
