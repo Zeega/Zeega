@@ -175,7 +175,7 @@ class ItemRepository extends EntityRepository
     }
     
     //  api/collections/{col_id}
-    public function searchItemsByTags($tags)
+    public function searchItemsByTags($query)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -185,8 +185,12 @@ class ItemRepository extends EntityRepository
            ->innerjoin('i.tags', 'it')
 		   ->innerjoin('it.tag','t')
            ->andWhere('t.id IN (?5)')
-           ->setParameter(5, $tags);
-		
+		   ->andWhere('i.id <> (?6)')
+           ->setParameter(5, $query["tags_id"])
+		   ->setParameter(6, $query["item_id"])
+      	   ->setMaxResults($query['limit'])
+      	   ->setFirstResult($query['page']);
+
 		return $qb->getQuery()->getArrayResult();
     }
     

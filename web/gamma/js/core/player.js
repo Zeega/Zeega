@@ -71,7 +71,7 @@ var Player = {
 
 		//set the current node
 		var currentNodeID;
-		if( !nodeID ) currentNodeID = this.this.currentRoute.nodeOrder[0];
+		if( !nodeID ) currentNodeID = this.currentRoute.nodeOrder[0];
 		else currentNodeID = nodeID;
 		
 		//this.parseProject;

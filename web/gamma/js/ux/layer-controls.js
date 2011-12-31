@@ -220,9 +220,9 @@ function makeGoogleMap( args )
 		var geocoder = new google.maps.Geocoder();
 		
 		button.click(function(){
-			_this.geocoder.geocode( { 'address': $('#map-search-'+_this.model.id).val()}, function(results, status) {
+			
 				doMapSearch();
-			});
+			
 		});
 		
 		input.keypress(function(event){

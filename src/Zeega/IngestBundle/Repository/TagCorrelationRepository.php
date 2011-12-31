@@ -3,6 +3,7 @@
 namespace Zeega\IngestBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * TagCorrelationRepository
@@ -13,14 +14,25 @@ use Doctrine\ORM\EntityRepository;
 class TagCorrelationRepository extends EntityRepository
 {
     //  api/search
-    public function searchRelatedTags($tagId)
+    public function searchRelatedTags($query)
     {
-          $conn = $this->get('database_connection');
-
-          $tags = $conn->fetchAll('select Tag.* from TagCorrelation 
-                                   inner join Tag on TagCorrelation.tag_id = Tag.id where tag_id = ? order by correlation_index DESC',
-                                   array(tagId));
-
-          return $tags;
+		$rsm = new ResultSetMapping;
+		$rsm->addEntityResult('ZeegaIngestBundle:Tag', 't');
+		$rsm->addFieldResult('t', 'id', 'id'); // ($alias, $columnName, $fieldName)
+		$rsm->addFieldResult('t', 'name', 'name'); // ($alias, $columnName, $fieldName)
+		$rsm->addFieldResult('t', 'date_created', 'date_created'); // // ($alias, $columnName, $fieldName)
+		$rsm->addFieldResult('t', 'description', 'description'); // // ($alias, $columnName, $fieldName)
+		//$rsm->addMetaResult('tc', 'correlation_index', 'correlation_index'); // // ($alias, $columnName, $fieldName)
+		
+		$sqlQuery = 'select Tag.*,TagCorrelation.correlation_index from TagCorrelation inner join Tag on TagCorrelation.tag_related_id = Tag.id 
+                     where TagCorrelation.tag_id = ? order by correlation_index DESC LIMIT ? OFFSET ?';
+		
+	 	$nativeQuery = $this->getEntityManager()->createNativeQuery($sqlQuery, $rsm);
+		$nativeQuery->setParameter(1, $query['tag_id']);
+		$nativeQuery->setParameter(2, $query['limit']);
+		$nativeQuery->setParameter(3, $query['offset']);
+		
+	    // execute the query
+	    return $nativeQuery->getArrayResult();
     }
 }
