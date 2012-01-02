@@ -203,7 +203,11 @@ function closeOpenCitationTabs()
 		tolerance: 'pointer',
 		
 		stop : function(){
-			Zeega.route.set({'nodesOrder':$(this).sortable('toArray')});
+			var order = $(this).sortable('toArray');
+			//ensure the array is made of integers
+			order = _.map( order, function(num){ return parseInt( num ) })
+			
+			Zeega.route.set({'nodesOrder': order });
 			Zeega.route.save();
 			console.log($(this).sortable('toArray'));
 		}

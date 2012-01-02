@@ -145,7 +145,7 @@ function makeGoogleMap( args )
 			};
 			
 			args.controls.trigger( 'update' , [ properties ] );
-			updateStaticMap( _.extend(args,{'type':'streetview'}) );
+			updateStaticMap( _.extend(args,{'type':'streetview','lat':properties.lat.value,'lng':properties.lng.value}) );
 		}else{
 			//when streetview is hidden
 			
@@ -220,9 +220,9 @@ function makeGoogleMap( args )
 		var geocoder = new google.maps.Geocoder();
 		
 		button.click(function(){
-			_this.geocoder.geocode( { 'address': $('#map-search-'+_this.model.id).val()}, function(results, status) {
+			
 				doMapSearch();
-			});
+			
 		});
 		
 		input.keypress(function(event){
@@ -264,6 +264,7 @@ function updateStaticMap( args )
 {
 
 	console.log('UPDATE STATIC MAP')
+	console.log(args);
 	console.log(args.width +':'+ args.height);
 	
 	var wPercent = 6 * parseInt( args.width );
@@ -271,6 +272,7 @@ function updateStaticMap( args )
 	
 	if(args.type == 'streetview')
 	{
+		console.log( 'http://maps.googleapis.com/maps/api/streetview?size='+wPercent+'x'+hPercent+'&fov='+180 / Math.pow(2,args.streetZoom)+'&location='+ args.lat+','+args.lng+'&heading='+args.heading+'&pitch='+args.pitch+'&sensor=false');
 		args.visual.find('img').attr( 'src' , 'http://maps.googleapis.com/maps/api/streetview?size='+wPercent+'x'+hPercent+'&fov='+180 / Math.pow(2,args.streetZoom)+'&location='+ args.lat+','+args.lng+'&heading='+args.heading+'&pitch='+args.pitch+'&sensor=false');
 	}else{
 		args.visual.find('img').attr( 'src' , "http://maps.googleapis.com/maps/api/staticmap?center="+ args.lat +","+args.lng+"&zoom="+ args.zoom +"&size="+ wPercent +"x"+ hPercent +"&maptype="+ args.mapType +"&sensor=false");

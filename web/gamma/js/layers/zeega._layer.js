@@ -196,6 +196,7 @@ var ProtoLayer = Class.extend({
 	//necessary?
 	lightLoad : function( model )
 	{
+
 		//make it possible to load objects and not models.
 		this.model = model;
 		this.attr = model.attr;

@@ -139,7 +139,6 @@ class WidgetController extends Controller
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
 		$logger = $this->get('logger');
-		
 		$em=$this->getDoctrine()->getEntityManager();
 		$playgrounds=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Playground')
@@ -166,11 +165,12 @@ class WidgetController extends Controller
 			$import = $this->get('import_widget');	
 			
 			//Parse url
-			
+			$logger->err($url);
 			$urlInfo=$import->parseUrl($url);
 			
 			
 			//Create item objects using API if applicable
+			$logger->err($urlInfo['archive']);
 			
 			if($urlInfo['archive']=='Flickr') 			  	$item=$import->parseFlickr($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloud') 	  	$item=$import->parseSoundCloud($urlInfo['id']);
@@ -183,7 +183,7 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='Hollis-Group') 			$collection=$import->parseHollisGroup($urlInfo['id']);
 			elseif($urlInfo['archive']=='Hollis-Work') 			$collection=$import->parseHollisWork($urlInfo['id']);
 			
-			elseif($urlInfo['YoutubeChannel']=='Youtube')	$collection=$import->parseYoutubeChannel($urlInfo['id']);
+			elseif($urlInfo['archive']=='YoutubeChannel')	$collection=$import->parseYoutubeChannel($urlInfo['id']);
 			//Store media item(s) to session and render widget
 
 			if(isset($item)&&$item){

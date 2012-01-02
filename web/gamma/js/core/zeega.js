@@ -560,9 +560,10 @@ var Zeega = {
 	{
 		console.log(this.route);
 		
+		var order = _.map( this.route.get('nodesOrder'), function(num){ return parseInt(num) });
 		var routes = [{
 			'id' : this.route.id,
-			'nodeOrder' : this.route.get('nodesOrder'),
+			'nodeOrder' : order,
 			'nodes' : this.route.nodes.toJSON(),
 			'layers' : this.route.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
 		}];
