@@ -37,15 +37,7 @@ class ItemRepository extends EntityRepository
       	{
       	    $content_type = strtoupper($query['contentType']);
 
-      	    if( $content_type == "AUDIO" ||
-      	        $content_type == "VIDEO" ||
-      	        $content_type == "IMAGE" ||
-				$content_type == "TWEET" ||
-      	        $content_type == "COLLECTION" )
-      	    {
-      	        $qb->andWhere('i.type = ?4')
-                   ->setParameter(4, $query['contentType']);
-      	    }
+      	  	$qb->andWhere('i.type = ?4')->setParameter(4, $query['contentType']);
 		}
 		
 		if(isset($query['tags']))
