@@ -40,6 +40,7 @@ class ItemRepository extends EntityRepository
       	    if( $content_type == "AUDIO" ||
       	        $content_type == "VIDEO" ||
       	        $content_type == "IMAGE" ||
+				$content_type == "TWEET" ||
       	        $content_type == "COLLECTION" )
       	    {
       	        $qb->andWhere('i.type = ?4')

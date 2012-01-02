@@ -4,7 +4,7 @@ var BrowserSearch =  Backbone.Model.extend({
 	url : function(){
 		
 		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?" 
-					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
+					+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
 					+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "");
