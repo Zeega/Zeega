@@ -246,7 +246,8 @@
 
 }
 #browser-collection-filter{
-	border:1px solid #ccc;
+	-webkit-box-shadow: inset 1px 1px 1px 1px #444;
+	background:#666;
 	padding:5px 4px 4px 4px;
 	color:#fff;
 	margin-left:20px;
@@ -256,7 +257,7 @@
 	-webkit-border-radius:6px;
 	border-radius: 6px;
 	letter-spacing:1px;
-
+	width:450px;
 }
 #browser-remove-collection-filter{
 	margin-right:5px;
@@ -383,8 +384,8 @@
 }
 
 #browser-filter-icons{
-	float:left;
-	border-right:1px solid #666;
+	float:right;
+	
 }
 .browser-filter-icon {
 	
@@ -403,15 +404,52 @@
 
 #browser-time-filter{
 	display:none;
-	margin: 20px 30px 0 20px;
-	float: right;
+	margin: 0px 0 0 10px;
+	float: left;
 	width: 420px;
+	padding: 20px;
+	-webkit-border-radius: 6px;
+	background: #666;
+	-webkit-box-shadow: inset 1px 1px 1px 1px #444;
 }
 #browser-time-filter p{
 	font: 1.5em Helvetica,sans-serif;
 	color: #EEE;
 	margin: 0 0 30px 0;
 	letter-spacing: 1px;
+}
+#browser-time-bins{
+	margin-top:40px;
+	font-size:10px;
+	border:1px solid #777;
+}
+#browser-time-bins a{
+	color:#EB8F00;
+}
+#browser-time-bins a:hover{
+	text-decoration:none;
+	color:#fff;
+
+
+}
+#browser-time-bins td:hover{
+	background:#999;
+	cursor:pointer;
+	
+}
+#browser-time-bins thead{
+	background:#999;
+}
+#browser-time-bins tbody{
+	font-size:12px;
+	color:#efefef;
+}
+#browser-time-bins td, #browser-time-bins th{
+	width:10%;
+	text-align:center;
+	padding:4px;
+	border-left:1px solid #777;
+	border-right:1px solid #777;
 }
 #browser-right-sidebar{
 	position:absolute;
