@@ -103,14 +103,27 @@ var DocumentCloudLayer = ProtoLayer.extend({
 
 		$(div).attr('data-layer',this.model.id);
 	
-		var img=$('<div>')
+		/* For use with generic document cloud documents
+		
+		var img=$('<iframe>')
+			.attr({'src':'https://www.documentcloud.org/documents/'+this.attr.url,'id':'layer-iframe-'+this.model.id})
+			.css({'width':'100%','height':'100%'});
+		*/
+		
+		//** For use with DocumentCloud Account: allows sidebar and text tab removal **//
+	
+		var document=$('<div>')
 			.attr({'id':'DV-viewer-'+this.model.id})
 			.addClass('DV-container')
 			.css({'width':'100%','height':'100%'});
+		
+		//** End DocumentCloud Account**//
+		
+		
 		this.dom = div;
 
 		//make dom
-		$(this.dom).append(img);
+		$(this.dom).append(document);
 		//add to dom
 
 		$('#zeega-player').find('#preview-media')
@@ -121,9 +134,10 @@ var DocumentCloudLayer = ProtoLayer.extend({
 	
 	play : function( z )
 	{
-	
+		//** For use with DocumentCloud Account: allows sidebar and text tab removal **//
 		DV.load('http://www.documentcloud.org/documents/'+this.attr.url+'.js', {sidebar: false,  text: false,   container: "#DV-viewer-"+this.model.id});
-	
+		//** End DocumentCloud Account**//
+		
 		console.log('iframe player.play');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
