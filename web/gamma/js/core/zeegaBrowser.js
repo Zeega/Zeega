@@ -31,13 +31,15 @@ var ZeegaBrowser = {
 		//attach items collection to items view and collections collection to collections view
 		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
-		
+		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection")});
+
 		this.search.updateQuery();
 		
 	},
 	renderResults : function(){
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
+		this.timeBinsView.render();
 		
 		if (this.search.get("collection") != null){
 			this.showCollectionFilter();
@@ -61,6 +63,19 @@ var ZeegaBrowser = {
 		$('#database-search-filter').val('All');
 		this.search.set({'user':-2, 'collection':collectionID});
 		this.doSearch();
+	},
+	doTimeBinsSearch : function(){
+		var startDate = new Date(0);
+		startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
+
+		var endDate = new Date(0);
+		endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
+
+		this.search.set({
+							dtstart: startDate.getTime()/1000.0, 
+							dtend: endDate.getTime()/1000.0
+						});
+		this.search.updateQuery();
 	},
 	doSearch : function(){
 		

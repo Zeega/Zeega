@@ -3,11 +3,18 @@ var BrowserSearch =  Backbone.Model.extend({
 	
 	url : function(){
 		
+		var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?" 
 					+ (this.get("q") != null ? "q=" + this.get("q") + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
-					+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "");
+					+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
+					+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
+					+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")
+					+ (isTimeSearch ? "dtintervals=" + this.get("dtintervals") + "&": "")
+					+ (isTimeSearch ? "r_collections=" + this.get("r_collections") + "&": "")
+					+ (isTimeSearch ? "r_items=" + this.get("r_items") + "&": "")
+					+ (isTimeSearch ? "r_time=" + this.get("r_time") + "&": "");
 		console.log("Final URL is: " + finalURL);
 		return finalURL;
 
@@ -23,12 +30,20 @@ var BrowserSearch =  Backbone.Model.extend({
     	"page"					: 	1, //which page we are on
     	"limit"					:  	100, //how many results to send back
 
+    	//Time filter parameters
+    	"dtstart"				: 0, //start date in seconds
+    	"dtend"					: 0, //end date in seconds
+    	"dtintervals"			: 5, //10 is really too many right now
+    	"r_collections"			: 0, //return collections?
+    	"r_items"				: 0, //return items?
+    	"r_time"				: 1, //return time bins?
+
     	//Collections that hold search results
     	"itemsCollection"		: 	new ItemCollection(), //holds results of type =image, video or audio
     	"collectionsCollection" : 	new BrowserCollectionCollection(), //holds results of type='collection'
 
     	//Models that hold distributions of results
-    	"timeBinsModel"			:   [], //BrowserTimeBinsModel
+    	"timeBinsCollection"			:   new BrowserTimeBinCollection(), //BrowserTimeBinsModel
     	"mapBinsModel"			: 	[] 	//BrowserMapBinsModel
   	}, 
 	
@@ -44,9 +59,16 @@ var BrowserSearch =  Backbone.Model.extend({
 
 		var items = this.get("itemsCollection");
 		var colls = this.get("collectionsCollection");
+		var timeBins = this.get("timeBinsCollection");
 
-		items.reset();
-		colls.reset();
+		//Only reset the items & collections if this is NOT a time bins search
+		if (data['time_distribution'] == null){
+			items.reset();
+			colls.reset();
+		} else {
+			timeBins.reset();
+			
+		}
 
 		if (data == null || data['items_count'] ==null){
 			console.log('No search items returned. Something is null man.');
@@ -72,7 +94,14 @@ var BrowserSearch =  Backbone.Model.extend({
 			}, this);
 
 		}
-		
+		//Assemble time bin data into TimeBinCollection
+		if (data['time_distribution'] != null){
+			_.each(data['time_distribution'], function(timeBin){
+			
+				
+				this.get("timeBinsCollection").add(new BrowserTimeBin(timeBin));
+			}, this);
+		}
 		
 	},
 	

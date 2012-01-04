@@ -52,6 +52,10 @@ function toggleFilterDrawer(){
 			labels: 5
 		});
 		$('select#valueAA, select#valueBB').hide();
+		$('a#handle_valueAA, a#handle_valueBB').click(function(){
+			//alert('hi ' + $('a#handle_valueAA').attr('aria-valuetext'));
+			ZeegaBrowser.doTimeBinsSearch();
+		});
 	}
 	else{
 		$('#browser-right-sidebar').css('position', 'absolute');
