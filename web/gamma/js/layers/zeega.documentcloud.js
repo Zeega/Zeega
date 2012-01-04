@@ -16,136 +16,72 @@ var DocumentCloudLayer = ProtoLayer.extend({
 	draggable : true,
 
 	defaultAttributes : {
-		'title' : 'DocumentCloud Layer',
+		'title' : 'Image Layer',
 		'url' : 'none',
-		'x' : 0,
-		'y' : 0,
-		'h' : 100,
-		'w' : 100,
+		'left' : 0,
+		'top' : 0,
+		'height' : 100,
+		'width' : 100,
 		'opacity':1,
 		'aspect':1.33,
 		'citation':true,
 	},
 
-
-	drawControls : function()
+	controls : function()
 	{
-		var _this = this;
-		var controls = $('<div>');
-		
 		var opacityArgs = {
-			max:1,
-			value : _this.model.get('attr').opacity,
+			max : 1,
+			label : 'Opacity',
 			step : 0.01,
-			layer_id : _this.model.id,
-			label : 'opacity',
-			css : 'opacity',
-			suffix : '',
-			layerClass : _this
+			property : 'opacity',
+			value : this.model.get('attr').opacity,
+			dom : this.layerControls,
+			css : true
 		};
+		var opacitySlider = makeUISlider( opacityArgs );
+		
 		var widthArgs = {
-			value : _this.model.get('attr').w,
-			layer_id : _this.model.id,
-			label : 'width',
-			css : 'width',
+			min : 1,
+			max : 200,
+			label : 'Width',
+			step : 1,
+			property : 'width',
 			suffix : '%',
-			layerClass : _this
+			value : this.model.get('attr').width,
+			dom : this.layerControls,
+			css : true
 		};
+		var scaleSlider = makeUISlider( widthArgs );
 		
-		var heightArgs = {
-			value : _this.model.get('attr').h,
-			layer_id : _this.model.id,
-			label : 'height',
-			css : 'height',
-			suffix : '%',
-			layerClass : _this
-		};
-
-		controls.append( makeCSSLayerSlider(widthArgs) );
-		controls.append( makeCSSLayerSlider(heightArgs) );
-		controls.append( makeCSSLayerSlider(opacityArgs) );
-		
-		controls.find('.layer-slider').bind( "slidestop", function(event, ui) {
-			_this.onAttributeUpdate();
-		});
-		
-		controls.append( makeFullscreenButton() );
-		controls.find('.fullscreen-submit')
-			.click(function(){
-				$('#layer-preview-'+_this.model.id ).css( {'top':'0px','left':'0px','width':'100%','height':'100%'});
-				$('#layer-edit-'+_this.model.id).find('#width-slider').slider("option", "value", 100 );
-				$('#layer-edit-'+_this.model.id).find('#height-slider').slider("option", "value", 100 );
-				_this.onAttributeUpdate();
-			});
-			
-		
-		//set to layer controls
-		this.layerControls = controls;
-		return controls;
-		
+		this.layerControls
+			.append( opacitySlider )
+			.append( scaleSlider )
+			.append( makeFullscreenButton( this.layerControls ) );
 	},
 	
-		
-
-
-	drawToVisualEditor : function()
+	visual : function()
 	{
-
-		var el = $('<div>').css({'height':'100%'});
-
-		var img = $('<div>')
-			.attr({'id':'layer-image-' + this.model.id})
-			.css({
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_t.jpg)',
-			'backgroundSize': '100% 100%',
-			'position' : 'absolute',
-			'top' : this.attr.y+"%",
-			'left' : this.attr.x+"%",
-			'z-index' : this.zIndex,
-			'width' : this.attr.w+"%",
-			'height' : this.attr.h+"%",
-			'opacity' : this.attr.opacity
-		});
-		
-	
-		el.append(img);
-		
-		//add to dom
-		this.visualEditorElement = el;
-		
-		return( el );
-	
-	},
-
-	
-	onAttributeUpdate : function()
-	{
-		var _this = this;
-		var newAttr = {
-			x : Math.floor( _this.visualEditorElement.position().left/6),
-			y : Math.floor( _this.visualEditorElement.position().top/4),
-			opacity : Math.floor( _this.layerControls.find('#opacity-slider').slider('value') * 100 )/100,
-			w : Math.floor( _this.layerControls.find('#width-slider').slider('value') ),
-			h : Math.floor( _this.layerControls.find('#height-slider').slider('value') ),
+		var cssObj = {
+			width : this.attr.width+'%',
+			opacity : this.attr.opacity
 		};
 		
-		this.setAttributes(newAttr);
-		this.save();
-	},	
+		var img = $('<img>')
+			.attr('src', this.attr.thumbnail_url)
+			.css({'width':'100%'});
+						
+		this.visualEditorElement
+			.css( cssObj )
+			.append( img );
+	},
 
-	drawThumb : function(){
-		
-		$('#preview-media').append($('<div>').css( {
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_t.jpg)',
-			'backgroundSize': '100% 100%',
-			'position' : 'absolute',
-			'top' : this.attr.y  +'%',
-			'left' : this.attr.x  +'%',
-			'width' : this.attr.w+ '%',
-			'height' : this.attr.h+ '%',
-			'opacity' : this.attr.opacity
-		}));
-	
+	thumb : function()
+	{
+		var img = $('<img>')
+			.attr('src', this.attr.thumbnail_url)
+			.css({'width':'100%'});
+
+		this.thumbnail.append( img );
 	},
 	
 	preload : function(){
@@ -166,11 +102,11 @@ var DocumentCloudLayer = ProtoLayer.extend({
 		div.css(cssObj);
 
 		$(div).attr('data-layer',this.model.id);
-
-		var img=$('<iframe>')
-			.attr({'src':this.attr.url,'id':'layer-iframe-'+this.model.id})
+	
+		var img=$('<div>')
+			.attr({'id':'DV-viewer-'+this.model.id})
+			.addClass('DV-container')
 			.css({'width':'100%','height':'100%'});
-
 		this.dom = div;
 
 		//make dom
@@ -185,14 +121,14 @@ var DocumentCloudLayer = ProtoLayer.extend({
 	
 	play : function( z )
 	{
+	
+		DV.load('http://www.documentcloud.org/documents/'+this.attr.url+'.js', {sidebar: false,  text: false,   container: "#DV-viewer-"+this.model.id});
+	
 		console.log('iframe player.play');
 		this.dom.css({'z-index':z,'top':this.attr.y+"%",'left':this.attr.x+"%"});
 	},
 	
-	pause : function()
-	{
-		// not needed
-	},
+
 	
 	stash : function()
 	{

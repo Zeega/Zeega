@@ -62,6 +62,7 @@ var loadFiles = [
 	'order!layers/zeega.image',
 	'order!layers/zeega.text',
 	'order!layers/zeega.video',
+	'order!layers/zeega.documentcloud',
 	
 	//players
 	'order!players/zeega.html5av'

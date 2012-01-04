@@ -489,8 +489,7 @@ class ImportWidget
 		return($item);
 	}
 	
-	public function parseYoutubeChannel($id)
-	{
+	public function parseYoutubeChannel($id){
 		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
 		
 		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$id?v=2";
@@ -973,8 +972,15 @@ class ImportWidget
 		$metadata= new Metadata();
 		$media = new Media();
 		
-		$item->setMediaCreatorUsername($document->source);
-		$item->setMediaCreatorRealname($document->source);
+		if($document->source){
+			$item->setMediaCreatorUsername($document->source);
+			$item->setMediaCreatorRealname($document->source);
+		}
+		else {
+			$item->setMediaCreatorUsername('Unknown');
+			$item->setMediaCreatorRealname('Unknown');
+		}
+		
 		$metadata->setArchive('DocumentCloud');
 		$item->setType('Document');
 		$item->setSource('DocumentCloud');
