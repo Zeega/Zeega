@@ -14,10 +14,10 @@ class ItemRepository extends EntityRepository
     {
         if(isset($query['queryString']))
         {
-            $qb->where('i.title LIKE ?1')
-               ->orWhere('i.media_creator_username LIKE ?1')
-               ->orWhere('i.description LIKE ?1')
-               ->setParameter(1,'%' . $query['queryString'] . '%');
+            $qb->where('i.title LIKE :query_string')
+               ->orWhere('i.media_creator_username LIKE :query_string')
+               ->orWhere('i.description LIKE :query_string')
+               ->setParameter('query_string','%' . $query['queryString'] . '%');
         }
         
         if(isset($query['userId']))
@@ -79,9 +79,11 @@ class ItemRepository extends EntityRepository
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb->select('COUNT(i)')
-	       ->from('ZeegaIngestBundle:Item', 'i')
-		   ->andWhere('i.type <> :count_filter')->setParameter('count_filter', 'Collection');
+	       ->from('ZeegaIngestBundle:Item', 'i');
+		   
 	    $qb = $this->buildSearchQuery($qb, $query);
+		$qb->andWhere('i.type <> :count_filter')->setParameter('count_filter', 'Collection');
+		
 		return $qb->getQuery()->getSingleScalarResult();
 	}
 	
@@ -89,9 +91,10 @@ class ItemRepository extends EntityRepository
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb->select('COUNT(i)')
-	       ->from('ZeegaIngestBundle:Item', 'i')
-		   ->andWhere('i.type = :count_filter')->setParameter('count_filter', 'Collection');
+	       ->from('ZeegaIngestBundle:Item', 'i');
+
 	    $qb = $this->buildSearchQuery($qb, $query);
+		$qb->andWhere('i.type = :count_filter')->setParameter('count_filter', 'Collection');
 		return $qb->getQuery()->getSingleScalarResult();	
 	}
 
