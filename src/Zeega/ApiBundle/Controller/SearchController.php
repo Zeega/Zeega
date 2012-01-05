@@ -115,12 +115,14 @@ class SearchController extends Controller
             if($query['returnItems'] == 1)
             {
                 $results['items'] = $items;
+				$results['returned_items_count'] = sizeof($items);
                 $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);
             }
 
             if($query['returnCollections'] == 1)
             {
                 $results['collections'] = $collections;
+				$results['returned_collections_count'] = sizeof($collections);
                 $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);
             }	
 	    }
