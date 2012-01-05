@@ -30,7 +30,7 @@ class TagCorrelationRepository extends EntityRepository
 	 	$nativeQuery = $this->getEntityManager()->createNativeQuery($sqlQuery, $rsm);
 		$nativeQuery->setParameter(1, $query['tag_id']);
 		$nativeQuery->setParameter(2, $query['limit']);
-		$nativeQuery->setParameter(3, $query['offset']);
+		$nativeQuery->setParameter(3, $query['limit'] * $query['offset']);
 		
 	    // execute the query
 	    return $nativeQuery->getArrayResult();

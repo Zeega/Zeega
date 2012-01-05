@@ -45,8 +45,8 @@
 		{},
 	{% endif %}	
 "{% block countName %}items_count{% endblock %}":
-	{% if items is defined %}
-		{{ items|length }}
+	{% if items_count is defined %}
+		{{ items_count }}
 	{% else %}
 		0
 	{% endif %}	

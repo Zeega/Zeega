@@ -16,7 +16,7 @@ class TagRepository extends EntityRepository
            ->from('ZeegaIngestBundle:Tag', 't')
            ->orderBy('t.date_created','DESC')
       	   ->setMaxResults($limit)
-      	   ->setFirstResult($offset);
+      	   ->setFirstResult($limit * $offset);
            
         // execute the query
         return $qb->getQuery()->getArrayResult();
