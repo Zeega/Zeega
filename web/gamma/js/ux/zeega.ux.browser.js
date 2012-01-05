@@ -49,13 +49,14 @@ function toggleFilterDrawer(){
 		$('.time').css('background-position', '-41px -41px');
 		$('#browser-time-filter').show();
 		$('select#valueAA, select#valueBB').selectToUISlider({
-			labels: 5
+			labels: 7
 		});
 		$('select#valueAA, select#valueBB').hide();
-		$('a#handle_valueAA, a#handle_valueBB').click(function(){
+		$('a#handle_valueAA, a#handle_valueBB').mouseup(function(){
 			//alert('hi ' + $('a#handle_valueAA').attr('aria-valuetext'));
-			ZeegaBrowser.doTimeBinsSearch();
+			ZeegaBrowser.doSearch();
 		});
+		ZeegaBrowser.doSearch();
 	}
 	else{
 		$('#browser-right-sidebar').css('position', 'absolute');

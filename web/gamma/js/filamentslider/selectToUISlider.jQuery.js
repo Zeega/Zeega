@@ -113,6 +113,15 @@ jQuery.fn.selectToUISlider = function(settings){
 		var thisIndex = jQuery(this).get(0).selectedIndex;
 		var thisHandle = jQuery('#handle_'+ jQuery(this).attr('id'));
 		var handleIndex = thisHandle.data('handleNum');
+
+	
+		var textval = thisIndex > 100 ? '20' + String(thisIndex).substring(1)  : '19' + thisIndex;
+		thisHandle
+			.attr('aria-valuetext', textval)
+			.attr('aria-valuenow', textval)
+			.find('.ui-slider-tooltip .ttContent')
+				.text( textval );
+
 		thisHandle.parents('.ui-slider:eq(0)').slider("values", handleIndex, thisIndex);
 	});
 	

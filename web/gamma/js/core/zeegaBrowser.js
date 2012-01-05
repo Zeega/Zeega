@@ -64,19 +64,7 @@ var ZeegaBrowser = {
 		this.search.set({'user':-2, 'collection':collectionID});
 		this.doSearch();
 	},
-	doTimeBinsSearch : function(){
-		var startDate = new Date(0);
-		startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
-
-		var endDate = new Date(0);
-		endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
-
-		this.search.set({
-							dtstart: startDate.getTime()/1000.0, 
-							dtend: endDate.getTime()/1000.0
-						});
-		this.search.updateQuery();
-	},
+	
 	doSearch : function(){
 		
 		
@@ -93,6 +81,20 @@ var ZeegaBrowser = {
 		$('#browser-no-items-results-message').hide();
 		$('#browser-no-collections-results-message').hide();
 
+		//TimeBins
+		if ($('#browser-time-bins').is(':visible')) {
+			
+			var startDate = new Date(0);
+			startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
+
+			var endDate = new Date(0);
+			endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
+
+			this.search.set({
+								dtstart: startDate.getTime()/1000.0, 
+								dtend: endDate.getTime()/1000.0
+							});
+		}
 		this.search.set({
 							q: $('#database-search-text').val(), 
 							content:$('#database-search-filter').val()

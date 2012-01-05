@@ -47,7 +47,8 @@ var loadFiles = [
 	'order!jquery/plugins/jquerytmpl',
 	'order!jquery/plugins/bootstrapmodal',
 	
-	
+	//custom
+	'order!filamentslider/selectToUISlider.jQuery',
 	
 	//mvc
 	'order!backbone/models/item',

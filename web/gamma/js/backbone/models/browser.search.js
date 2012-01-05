@@ -34,8 +34,8 @@ var BrowserSearch =  Backbone.Model.extend({
     	"dtstart"				: 0, //start date in seconds
     	"dtend"					: 0, //end date in seconds
     	"dtintervals"			: 5, //10 is really too many right now
-    	"r_collections"			: 0, //return collections?
-    	"r_items"				: 0, //return items?
+    	"r_collections"			: 1, //return collections?
+    	"r_items"				: 1, //return items?
     	"r_time"				: 1, //return time bins?
 
     	//Collections that hold search results
@@ -61,14 +61,10 @@ var BrowserSearch =  Backbone.Model.extend({
 		var colls = this.get("collectionsCollection");
 		var timeBins = this.get("timeBinsCollection");
 
-		//Only reset the items & collections if this is NOT a time bins search
-		if (data['time_distribution'] == null){
-			items.reset();
-			colls.reset();
-		} else {
-			timeBins.reset();
-			
-		}
+		items.reset();
+		colls.reset();
+		timeBins.reset();
+		
 
 		if (data == null || data['items_count'] ==null){
 			console.log('No search items returned. Something is null man.');
