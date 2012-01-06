@@ -101,8 +101,13 @@ var ZeegaBrowser = {
 								dtend: 0
 							});
 		}
-		this.search.set({
-							q: $('#database-search-text').val(), 
+		if ($('#database-search-text').val() != "search database"){
+			this.search.set({
+							q: $('#database-search-text').val()
+							
+						});
+		}
+		this.search.set({ 
 							content:$('#database-search-filter').val()
 						});
 		this.search.updateQuery();
