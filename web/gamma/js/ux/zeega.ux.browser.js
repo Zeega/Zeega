@@ -106,10 +106,10 @@ $(document).ready(function() {
 					return false;
 			});
 
-	$('#database-search-button, ').click(function(){
-		ZeegaBrowser.doSearch();
+	$( '#database-search-text' ).click(function(){
+			$(this).val('');
 	});
-	$( '#browser-form-search' ).bind('keypress', function(e){
+	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();
 	     ZeegaBrowser.doSearch();

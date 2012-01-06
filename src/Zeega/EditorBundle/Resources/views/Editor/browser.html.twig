@@ -30,25 +30,29 @@
 					<div style="clear:both"></div>
 				</div>
 				<div id="browser-search-filter-toggle">
-					<form action="" method="" id="browser-form-search">
-						<div id="form-left">
-							<select id="database-search-filter" class="">
-							  <option value="all">All</option>
-							  <option value="image">Images</option>
-							  <option value="video">Video</option>
-							  <option value="audio">Audio</option>
+					<div id="searchbar" class="browser-searchbar">
+						<input id="database-search-text" type="text" name="database-search" value="search database" style="color: rgb(68, 68, 68); ">
+						<span><select id="database-search-filter" class="">
+							  <option value="all">all media</option>
+							  <option value="image">images</option>
+							  <option value="video">video</option>
+							  <option value="audio">audio</option>
 							  
-							</select>
+							</select></span>
+					</div>
+					<!--<form action="" method="" id="browser-form-search">
+						<div id="form-left">
+							
 							
 							
 							<input id="database-search-text" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
 							
 						</div>
 						<div id="form-right">
-							<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
+							
 							<input id="database-search-button" class="" type="button" value="go" onclick="return false">
 						</div>
-					</form>
+					</form>-->
 					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form>
 
 					<!-- ICONS for sharing & adding to editor 

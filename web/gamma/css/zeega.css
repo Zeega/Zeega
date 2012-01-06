@@ -8,7 +8,23 @@
 	top: 50px;
 
 }
+.browser-searchbar{
+	width: 330px;
+	margin: 10px 0 0 10px;
+	float: left;
 
+}
+
+#database-search-filter{
+	border:none;
+	font-size:initial;
+	background:transparent;
+	-webkit-appearance: none;
+	font-variant:small-caps;
+	background-image:url('../images/separator.png');
+	padding-left:15px;
+	background-repeat:repeat-y;
+}
 #browser-results{
 	
 	padding:0 !important;
@@ -384,8 +400,10 @@
 }
 #browser-close-timeline, #browser-open-timeline{
 	
-	margin: 10px 0 0 30px;
-	float: left;
+	margin: 20px 0 0 30px;
+	position: relative;
+	left: 150px;
+	top:20px;
 }
 #browser-close-timeline{
 	display:none;
