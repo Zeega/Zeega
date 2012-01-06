@@ -34,38 +34,6 @@ function shareButton()
 }
 
 
-//Toggles filters on and off, temporary until we figure out exactly how this'll look
-function toggleFilterDrawer(){
-
-
-	if( $('#browser-right-sidebar').css('position') == 'absolute') {
-		$('#browser-right-sidebar').css('position', 'relative');
-		$('#browser-right-sidebar').css('float', 'right');
-		$('#browser-right-sidebar').css('width', '530px');
-		$('#browser-right-sidebar').css('height', '350px');
-		$('#browser-toggle-items-vs-collections').css('right', '');
-		$('#browser-toggle-items-vs-collections').css('left', '297px');
-
-		$('.time').css('background-position', '-41px -41px');
-		$('#browser-time-filter').show();
-		
-		
-		//Do initial search
-		ZeegaBrowser.doSearch();
-	}
-	else{
-		$('#browser-right-sidebar').css('position', 'absolute');
-		$('#browser-right-sidebar').css('float', 'none');
-		$('#browser-right-sidebar').css('width', '48px');
-		$('#browser-right-sidebar').css('height', '100px');
-		$('#browser-toggle-items-vs-collections').css('right', '82px');
-		$('#browser-toggle-items-vs-collections').css('left', '');
-	}
-
-	
-		
-}
-
 $(document).ready(function() {
 
 	
@@ -157,8 +125,29 @@ $(document).ready(function() {
 		return false;
 	});
 
-	//For filters - testing visual stuff 
-	$('.time').click( toggleFilterDrawer);
+	
+	$('#browser-open-timeline').click( function(){
+		$('#browser-right-sidebar').show();		
+		$(this).hide();
+		$('#browser-close-timeline').show();
+		$('#browser-toggle-items-vs-collections').css("right", "540px");
+		
+		//Do initial search
+		ZeegaBrowser.doSearch();
+		
+		return false;
+	});
+	$('#browser-close-timeline').click( function(){
+		$('#browser-right-sidebar').hide();		
+		$(this).hide();
+		$('#browser-open-timeline').show();
+		$('#browser-toggle-items-vs-collections').css("right", "0");
+
+		//Do search to reset
+		ZeegaBrowser.doSearch();
+
+		return false;
+	});
 
 	//Switches the results drawer between items and collections
 	$('#browser-toggle-items-vs-collections li').click(function(){

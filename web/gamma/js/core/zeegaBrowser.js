@@ -41,6 +41,7 @@ var ZeegaBrowser = {
 		this.searchCollectionsView.render();
 		this.timeBinsView.render();
 		
+		
 		if (this.search.get("collection") != null){
 			this.showCollectionFilter();
 		} 
@@ -93,6 +94,11 @@ var ZeegaBrowser = {
 			this.search.set({
 								dtstart: startDate.getTime()/1000.0, 
 								dtend: endDate.getTime()/1000.0
+							});
+		} else { //Reset start & end dates so that time filter gets cleared
+			this.search.set({
+								dtstart: 0, 
+								dtend: 0
 							});
 		}
 		this.search.set({

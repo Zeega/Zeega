@@ -56,8 +56,11 @@ var BrowserTimeBinsView = Backbone.View.extend({
 	
 	render: function()
 	{
-		$('#browser-time-filter-value').text(ZeegaBrowser.search.getFormattedStartDate() + " - " + ZeegaBrowser.search.getFormattedEndDate());
 		
+		//Update Timeline filter UI text
+		if (ZeegaBrowser.search.getFormattedStartDate() >0){
+			$('#browser-time-filter-value').text(ZeegaBrowser.search.getFormattedStartDate() + " - " + ZeegaBrowser.search.getFormattedEndDate());
+		}
 		//unbind previous click events from any of the results cells
 		$('.browser-time-bins-results').unbind();
 
@@ -127,33 +130,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 
 		}
 
-		/*for (var i=0;i<this.collection.length;i++){
-			var bin = this.collection.at(i);
-			$('.browser-time-bins-range:eq(' + i + ')').text(bin.get("formatted_start_date") +" - " + bin.get("formatted_end_date"));
-			$('.browser-time-bins-results:eq(' + i + ') a').text(bin.get("items_count"));
-
-			//unbind previous click events
-			$('.browser-time-bins-results:eq(' + i + ') a').unbind('click');
-
-			//attach new click events
-			$('.browser-time-bins-results:eq(' + i + ') a').click( function(e){
-				
-				$('select#valueAA :selected').removeAttr("selected");
-				$('select#valueBB :selected').removeAttr("selected");
-				
-				
-				$("select#valueAA option[value='" + bin.get('formatted_start_date') +"']").attr("selected", "true");
-				
-				$("select#valueBB option[value='" + bin.get('formatted_end_date') +"']").attr("selected", "true");
-
-				
-				$("select#valueAA").trigger('change');
-				$("select#valueBB").trigger('change');
-				
-				ZeegaBrowser.doSearch();
-				return false;
-			});
-		}*/
+		$(this.el).show();
 		
 		
 		//draw the search items

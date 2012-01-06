@@ -147,7 +147,7 @@
 }
 #browser-toggle-items-vs-collections{
 	position: absolute;
-	right: 82px;
+	right: 0px;
 	top: 0px;
 	z-index: 100;
 
@@ -191,7 +191,7 @@
 .browser-results-image-edit a, #browser-collection-filter a{
 	text-decoration:none !important;
 }
-.browser-results-image-edit a:hover, #browser-collection-filter a:hover{
+.browser-results-image-edit a:hover, #browser-collection-filter a:hover, #browser a:hover{
 	color:#fff;
 	text-decoration:none !important;
 }
@@ -382,32 +382,20 @@
 .browser-selected-toggle:hover{
 	cursor:default;
 }
-
-#browser-filter-icons{
-	float:right;
+#browser-close-timeline, #browser-open-timeline{
 	
-}
-.browser-filter-icon {
-	
-	width:  40px;
-	height: 40px;
-	margin: 4px 4px 8px 4px;
-
-	background-image:url('../images/filter-icons.png'); 
-	
-}
-
-.space {background-position: -82px 0px; }
-.space:hover {background-position: -82px -41px; }
-.time {background-position: -41px 0px; }
-.time:hover {background-position: -41px -41px; }
-
-#browser-time-filter{
-	display:none;
-	margin: 0px 0 0 10px;
+	margin: 10px 0 0 30px;
 	float: left;
-	width: 420px;
-	padding: 20px;
+}
+#browser-close-timeline{
+	display:none;
+}
+#browser-time-filter{
+	
+	margin: 0 15px;
+	display:none;
+	
+	padding: 20px 26px;
 	-webkit-border-radius: 6px;
 	background: #666;
 	-webkit-box-shadow: inset 1px 1px 1px 1px #444;
@@ -452,17 +440,17 @@
 	border-right:1px solid #777;
 }
 #browser-right-sidebar{
-	position:absolute;
+	position:relative;
+	
 	background-color:#555;
 	top: 0px;
-	right: 0;
-	width: 48px;
-	height: 100px;
-	
-
+	float:right;
+	width: 530px;
+	height: 350px;
 	-webkit-box-shadow:  2px 2px 2px 2px #333;
 	-moz-box-shadow:  2px 2px 2px 2px #333;
 	box-shadow:  2px 2px 2px 2px #333;
+	display:none;
 }
 #browser-form-search{
 	margin:10px;
