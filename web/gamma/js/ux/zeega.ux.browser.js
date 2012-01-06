@@ -48,14 +48,9 @@ function toggleFilterDrawer(){
 
 		$('.time').css('background-position', '-41px -41px');
 		$('#browser-time-filter').show();
-		$('select#valueAA, select#valueBB').selectToUISlider({
-			labels: 7
-		});
-		$('select#valueAA, select#valueBB').hide();
-		$('a#handle_valueAA, a#handle_valueBB').mouseup(function(){
-			//alert('hi ' + $('a#handle_valueAA').attr('aria-valuetext'));
-			ZeegaBrowser.doSearch();
-		});
+		
+		
+		//Do initial search
 		ZeegaBrowser.doSearch();
 	}
 	else{

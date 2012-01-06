@@ -1,21 +1,76 @@
 //updates the view of the Time filter on the search page
 var BrowserTimeBinsView = Backbone.View.extend({
-	el: $('#browser-time-bins'),
+	el: $('#browser-time-filter'),
 	
-	initialize : function() {},
+	defaults: {
+            startYear: '1900',
+            endYear: new Date().getFullYear(),
+            
+    },
+	initialize : function() {
+		
+		//this is setting the default values which typically don't work for Backbone views
+		this.options = _.extend(this.defaults, this.options);
+
+		//Get HTML from hidden template
+		var html = $("#browser-time-filter-template").html();
+		$(this.el).html(html);
+
+		//remove template from doc once it has been created 
+		//to avoid conflicting ids
+		$("#browser-time-filter-template").remove();
+		
+		//Add year options to the selects
+		var select1 = $(this.el).find('#valueAA');
+		var select2 = $(this.el).find('#valueBB');
+
+		for (var year=this.options.startYear; year<= this.options.endYear; year++){
+			$(select1)
+		          .append($('<option>', { year : year })
+		          .text(year)); 
+		    $(select2)
+		          .append($('<option>', { year : year })
+		          .text(year)); 
+		}
+
+		//select the right year for each box
+		$('select#valueAA').val(this.options.startYear);
+		$('select#valueBB').val(this.options.endYear);
+		
+
+		//call the filament slider plugin to make a slider from the 
+		//select boxes
+		$('select#valueAA, select#valueBB').selectToUISlider({
+			labels: 7
+		})
+
+		//bind slide change event so that triggers search
+		$('.ui-slider').bind('slidechange',function(){
+			ZeegaBrowser.doSearch();
+		});
+
+		//hide select boxes cuz they're redundant
+		$('select#valueAA, select#valueBB').hide();
+
+	},
 	
 	render: function()
 	{
+		$('#browser-time-filter-value').text(ZeegaBrowser.search.getFormattedStartDate() + " - " + ZeegaBrowser.search.getFormattedEndDate());
+		
+		//unbind previous click events from any of the results cells
+		$('.browser-time-bins-results').unbind();
+
 		for (var i =0;i<this.collection.length;i++){
 			var bin = this.collection.at(i);
 			var items_count = bin.get("items_count");
 
 			$('.browser-time-bins-range:eq(' + i + ')').text(bin.get("formatted_start_date") +" - " + bin.get("formatted_end_date"));
-			$('.browser-time-bins-results:eq(' + i + ')').text(items_count);
+			$('.browser-time-bins-results:eq(' + i + ')').text(items_count + (items_count > 0 ? " items" :  ""));
 
-			//unbind previous click events
-			$('.browser-time-bins-results:eq(' + i + ')').unbind('click');
+			
 
+			//Do some custom styling for bins which have results vs. bins that do not
 			if (items_count > 0) {
 				$('.browser-time-bins-results:eq(' + i + ')').css("color", "#EB8F00");
 				$('.browser-time-bins-results:eq(' + i + ')').hover(
@@ -31,6 +86,9 @@ var BrowserTimeBinsView = Backbone.View.extend({
 					);
 
 				//attach new click events
+				//Note the rather weird gymnastics to create a local scope for the bin
+				//variable so that it gets passed correctly to the event handler
+				//This is evidently called closure and it's a real pita
 				$('.browser-time-bins-results:eq(' + i + ')').click( function(myBin){
 					
 					
@@ -39,10 +97,10 @@ var BrowserTimeBinsView = Backbone.View.extend({
 						$('select#valueBB :selected').removeAttr("selected");
 						
 						
-						$("select#valueAA option[value='" + myBin.get('formatted_start_date') +"']").attr("selected", "true");
+						$("select#valueAA").val(myBin.get('formatted_start_date')); 
+						$("select#valueBB").val(myBin.get('formatted_end_date')); 
 						
-						$("select#valueBB option[value='" + myBin.get('formatted_end_date') +"']").attr("selected", "true");
-
+				
 						
 						$("select#valueAA").trigger('change');
 						$("select#valueBB").trigger('change');

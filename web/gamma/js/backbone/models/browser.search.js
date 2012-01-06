@@ -111,7 +111,24 @@ var BrowserSearch =  Backbone.Model.extend({
 				ZeegaBrowser.renderResults();
 			}
 		});
-	}
+	}, 
+
+	getFormattedStartDate: function(){
+		if (this.get("dtstart") == 0){
+			return 0;
+		} else {
+			var d = new Date(this.get("dtstart") * 1000);
+			return d.getFullYear();
+		}
+	},
+	getFormattedEndDate: function(){
+		if (this.get("dtend") == 0){
+			return 0;
+		} else {
+			var d = new Date(this.get("dtend") * 1000);
+			return d.getFullYear();
+		}
+	},
 
 });
 
