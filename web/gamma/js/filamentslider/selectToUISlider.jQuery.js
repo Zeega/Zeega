@@ -115,7 +115,7 @@ jQuery.fn.selectToUISlider = function(settings){
 		var handleIndex = thisHandle.data('handleNum');
 
 	
-		var textval = thisIndex > 100 ? '20' + String(thisIndex).substring(1)  : '19' + thisIndex;
+		var textval = thisIndex >= 100 ? '20' + String(thisIndex).substring(1)  : '19' + thisIndex;
 		thisHandle
 			.attr('aria-valuetext', textval)
 			.attr('aria-valuenow', textval)
