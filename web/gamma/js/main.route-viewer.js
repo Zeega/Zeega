@@ -24,6 +24,7 @@ var loadFiles = [
 	'order!layers/zeega.rdio',
 	'order!layers/zeega.youtube',
 	'order!layers/zeega.rectangle',
+	'order!layers/zeega.documentcloud',
 	
 	
 	'order!players/zeega.player.video',
