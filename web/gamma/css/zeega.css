@@ -9,7 +9,7 @@
 
 }
 .browser-searchbar{
-	width: 330px;
+	width: 340px;
 	margin: 10px 0 0 10px;
 	float: left;
 
@@ -438,10 +438,18 @@
 
 
 }
-#browser-time-bins td:hover{
+#browser-time-bins td{
+	background:#666;
+}
+#browser-time-bins td:hover, #browser-time-bins .selected{
 	background:#999;
 	cursor:pointer;
 	
+}
+#browser-time-bins .selected{
+	background:#999;
+	cursor:default !important;
+	color:#FFF !important;
 }
 #browser-time-bins thead{
 	background:#999;

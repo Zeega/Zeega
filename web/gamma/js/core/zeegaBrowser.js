@@ -84,17 +84,32 @@ var ZeegaBrowser = {
 
 		//TimeBins
 		if ($('#browser-time-bins').is(':visible')) {
+
+			//Check if user has selected a particular bin. if so then
+			//set search to NOT return more time bins
+			if(this.timeBinsView.collection.selectedStartDate != null && this.timeBinsView.collection.selectedEndDate != null){
+				this.search.set({
+									dtstart: this.timeBinsView.collection.selectedStartDate, 
+									dtend: this.timeBinsView.collection.selectedEndDate,
+									r_time: 0
+								});
+			} 
+			//Otherwise use date values from the slider control
+			else {
 			
-			var startDate = new Date(0);
-			startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
+				var startDate = new Date(0);
+				startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
 
-			var endDate = new Date(0);
-			endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
+				var endDate = new Date(0);
+				endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
 
-			this.search.set({
-								dtstart: startDate.getTime()/1000.0, 
-								dtend: endDate.getTime()/1000.0
-							});
+				this.search.set({
+									dtstart: startDate.getTime()/1000.0, 
+									dtend: endDate.getTime()/1000.0,
+									r_time: 1
+								});
+			}
+
 		} else { //Reset start & end dates so that time filter gets cleared
 			this.search.set({
 								dtstart: 0, 

@@ -46,6 +46,15 @@ var BrowserTimeBinsView = Backbone.View.extend({
 
 		//bind slide change event so that triggers search
 		$('.ui-slider').bind('slidechange',function(){
+
+			//Remove previously selected bins
+			$('.browser-time-bins-results').removeClass("selected");
+			$('.browser-time-bins-results').css("background-color", "#666");
+
+			//clear out any previously selected bin when user moves slider
+			ZeegaBrowser.timeBinsView.collection.selectedStartDate = null;
+			ZeegaBrowser.timeBinsView.collection.selectedEndDate = null;
+			
 			ZeegaBrowser.doSearch();
 		});
 
@@ -58,11 +67,10 @@ var BrowserTimeBinsView = Backbone.View.extend({
 	{
 		
 		//Update Timeline filter UI text
-		if (ZeegaBrowser.search.getFormattedStartDate() >0){
-			$('#browser-time-filter-value').text(ZeegaBrowser.search.getFormattedStartDate() + " - " + ZeegaBrowser.search.getFormattedEndDate());
-		}
-		//unbind previous click events from any of the results cells
-		$('.browser-time-bins-results').unbind();
+		
+		$('#browser-time-filter-value').text($('a#handle_valueAA').attr('aria-valuetext') + " - " + $('a#handle_valueBB').attr('aria-valuetext'));
+		
+		
 
 		for (var i =0;i<this.collection.length;i++){
 			var bin = this.collection.at(i);
@@ -72,6 +80,8 @@ var BrowserTimeBinsView = Backbone.View.extend({
 			$('.browser-time-bins-results:eq(' + i + ')').text(items_count + (items_count > 0 ? " items" :  ""));
 
 			
+			//unbind previous click events from any of the results cells
+			$('.browser-time-bins-results:eq(' + i + ')').unbind();
 
 			//Do some custom styling for bins which have results vs. bins that do not
 			if (items_count > 0) {
@@ -79,11 +89,11 @@ var BrowserTimeBinsView = Backbone.View.extend({
 				$('.browser-time-bins-results:eq(' + i + ')').hover(
 					
 						function () {
-						    $(this).css("background", "#999");
+						    $(this).css("background-color", "#999");
 						    $(this).css("cursor", "pointer");
 						  }, 
 						  function () {
-						    $(this).css("background", "transparent");
+						    $(this).css("background-color", "");
 						    $(this).css("cursor", "default");
 						  }
 					);
@@ -96,18 +106,34 @@ var BrowserTimeBinsView = Backbone.View.extend({
 					
 					
 					return function() {
-						$('select#valueAA :selected').removeAttr("selected");
-						$('select#valueBB :selected').removeAttr("selected");
-						
-						
-						$("select#valueAA").val(myBin.get('formatted_start_date')); 
-						$("select#valueBB").val(myBin.get('formatted_end_date')); 
-						
-				
-						
-						$("select#valueAA").trigger('change');
-						$("select#valueBB").trigger('change');
-						
+						/*
+
+						This is code for updating the timeline slider to the value selected in a bin
+						Not using this at moment
+
+							$('select#valueAA :selected').removeAttr("selected");
+							$('select#valueBB :selected').removeAttr("selected");
+							
+							
+							$("select#valueAA").val(myBin.get('formatted_start_date')); 
+							$("select#valueBB").val(myBin.get('formatted_end_date')); 
+							
+					
+							
+							$("select#valueAA").trigger('change');
+							$("select#valueBB").trigger('change');
+						*/
+						//Remove previously selected bins
+						$('.browser-time-bins-results').removeClass("selected");
+
+						//Add selected
+						$(this).addClass("selected");
+
+						//Set start & end dates on the collection so search knows what
+						//is the date range
+						ZeegaBrowser.timeBinsView.collection.selectedStartDate = myBin.get('start_date');
+						ZeegaBrowser.timeBinsView.collection.selectedEndDate = myBin.get('end_date');
+
 						ZeegaBrowser.doSearch();
 						return false;
 					}
@@ -117,7 +143,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 					$('.browser-time-bins-results:eq(' + i + ')').hover(
 					
 						function () {
-						    $(this).css("background", "transparent");
+						    $(this).css("background-color", "#666");
 						    $(this).css("cursor", "default");
 						  }, 
 						  function () {
