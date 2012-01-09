@@ -236,7 +236,7 @@ class ItemRepository extends EntityRepository
             ->orWhere('i.description LIKE ?1')
             ->orderBy('i.id','DESC')
        		->setMaxResults($limit)
-       		->setFirstResult($query['limit'] * $query['page']);
+       		->setFirstResult($query['limit'] * $query['offset']);
         
         // filter by type or by userId
         if($query['contentType'] == 'mine')
