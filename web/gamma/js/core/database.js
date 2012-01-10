@@ -16,12 +16,19 @@ var Database =
 		
 		this.itemCollection.fetch({
 			success: function( items ){
-				console.log('database success');
-				console.log(items)
-				
 				_this.itemViewCollection = new ItemViewCollection({ collection : _this.itemCollection });
+			}
+		});
+		
+		this.collectionCollection = new CollectionCollection;
+		this.collectionViewCollection;
+		
+		this.collectionCollection.fetch({
+			success: function( collections ){
+				console.log('collections loaded')
 				
-				
+				console.log(collections)
+				_this.collectionViewCollection = new CollectionViewCollection({ collection : _this.collectionCollection });
 			}
 		});
 	}

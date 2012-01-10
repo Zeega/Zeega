@@ -63,11 +63,13 @@ var loadFiles = [
 	//mvc
 	'order!backbone/models/route',
 	'order!backbone/models/item',
+	'order!backbone/models/editor.collection',
 	'order!backbone/models/node',
 	'order!backbone/models/layer',
 	'order!backbone/models/project',
 	'order!backbone/views/route-view',
 	'order!backbone/views/item-view',
+	'order!backbone/views/editor.collection-view',
 	'order!backbone/views/node-view',
 	'order!backbone/views/project-view',
 	

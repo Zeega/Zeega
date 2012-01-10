@@ -20,12 +20,15 @@ var ItemCollection = Backbone.Collection.extend({
 	
 	page : 0,
 	
-	url: function(){
+	url: function()
+	{
 		//http://dev.zeega.org/jda/web/api/search
 		return Zeega.url_prefix + "api/search?page="+ this.page;
 	},
 	
-	parse : function(response){
+	parse : function(response)
+	{
+		this.count = response.items_count;
 		return response.items;
 	}
 	
