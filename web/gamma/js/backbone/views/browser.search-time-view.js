@@ -68,7 +68,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 		
 		//Update Timeline filter UI text
 		
-		$('#browser-time-filter-value').text($('a#handle_valueAA').attr('aria-valuetext') + " - " + $('a#handle_valueBB').attr('aria-valuetext'));
+		$('#browser-time-filter-value').html($('a#handle_valueAA').attr('aria-valuetext') + " &ndash; " + $('a#handle_valueBB').attr('aria-valuetext'));
 		
 		
 
@@ -76,7 +76,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 			var bin = this.collection.at(i);
 			var items_count = bin.get("items_count");
 
-			$('.browser-time-bins-range:eq(' + i + ')').text(bin.get("formatted_start_date") +" - " + bin.get("formatted_end_date"));
+			$('.browser-time-bins-range:eq(' + i + ')').html(bin.get("formatted_start_date") +" &ndash; <br/>" + bin.get("formatted_end_date"));
 			$('.browser-time-bins-results:eq(' + i + ')').text(items_count + (items_count > 0 ? " items" :  ""));
 
 			

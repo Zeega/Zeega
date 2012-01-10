@@ -255,6 +255,8 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	initialize: function(){
 
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		//this.content = $("#browser-fancybox-image-template").clone();
+		//this.content.removeAttr('id');
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
@@ -262,6 +264,12 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
+		//var theImage = $(this.content).find("img");
+		//$(theImage).attr("src", $(obj.element).attr("href"));
+
+		//set object's content
+		//obj.content = this.content.html(); 
+
 		return this;
 	},
 

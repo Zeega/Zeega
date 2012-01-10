@@ -40,13 +40,19 @@ $(document).ready(function() {
 
 	//set up fancybox lightbox plugin
 	$(".fancymedia").fancybox({
+		openEffect : 'fade',
+    	closeEffect	: 'fade',
+    	openSpeed : 'fast',
+    	closeSpeed : 'fast',
+    	openEasing : 'none',
+    	closeEasing : 'none',
 		closeClick:false,
 		nextClick:false,
 		mouseWheel:false,
 		fitToView:true,
-		arrows:false,
+		arrows:true,
 		closeBtn:false,
-		
+		autoSize:true,
     	helpers : {
     		title : {
     			type : 'inside'
