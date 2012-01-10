@@ -4,8 +4,33 @@
    
    TO-DO: Move all dom manipulation actions to zeega.ux.editor
 */
-var Database = new function()
-{	
+var Database =
+{
+	
+	init : function()
+	{
+		console.log('database initialized')
+		var _this = this;
+		this.itemCollection = new ItemCollection;
+		this.itemViewCollection;
+		
+		this.itemCollection.fetch({
+			success: function( items ){
+				console.log('database success');
+				console.log(items)
+				
+				_this.itemViewCollection = new ItemViewCollection({ collection : _this.itemCollection });
+				
+				
+			}
+		});
+	}
+	
+	
+	
+	
+/*
+	
     var debug = true;
     var that = this;
 	this.page = 0;
@@ -89,92 +114,7 @@ var Database = new function()
 		});
 	};
 	
-	// PRIVATE
-	
-	var setQuery = function( query, contentType )
-	{
-	    console.log("database:setQuery " + query + "," + contentType);
-		// parse the query here. something that can be done later
-		var itemsToReturn = 100;
-		if(query == null) query = '';
 
-		that.postdata = {
-			//Array of query objects - results use OR operator over queries
-			//For now, disabled multiple queries
-			query:[ 
-				{
-						/**	contentType [OPTIONAL]				*/
-						/**	String 								*/
-						/**	'all','image','video','audio'		*/
-
-					contentType: contentType,
-
-						/**	tag [OPTIONAL]						*/
-						/**	String Array						*/
-						/**	AND operator over Array Elements	*/
-
-					queryString: query ,  
-
-						/**	geo [OPTIONAL]						*/
-						/**	Object		  						*/
-						/**	south,north,east,west 				*/
-
-					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(that.collection) }
-				},
-			],
-		};
-	};
-	
-	// deprecated
-	var setQueryOld = function( query, contentType )
-	{
-
-
-		// parse the query here. something that can be done later
-		var itemsToReturn = 100;
-		
-		this.postdata = {
-			//Array of query objects - results use OR operator over queries
-			//For now, disabled multiple queries
-			query:[ 
-				{
-						/**	contentType [OPTIONAL]				*/
-						/**	String 								*/
-						/**	'all','image','video','audio'		*/
-
-					contentType: contentType,
-
-						/**	tag [OPTIONAL]						*/
-						/**	String Array						*/
-						/**	AND operator over Array Elements	*/
-
-					tags: query ,  
-
-						/**	geo [OPTIONAL]						*/
-						/**	Object		  						*/
-						/**	south,north,east,west 				*/
-
-					//geo: {south:41,north:42.4,west:-99.2,east:-87.6},
-
-						/**	time [OPTIONAL]						*/
-						/**	Object								*/
-						/**	earliest,latest						*/
-
-					//time: {earliest: -218799493233,latest: 218799493233},
-
-						/**	output [REQUIRED]									*/
-						/**														*/
-						/**	type (String) 'geo','time','collection','item'		*/
-						/** 													*/
-						/** resolution 											*/
-						/** limit	 											*/
-						/** offset 												*/
-
-					output: {type:'item', resolution:1, limit:itemsToReturn, offset:_.size(this.collection) }
-				},
-			],
-		};
-	};
 	
 	var reset = function()
 	{
@@ -197,5 +137,9 @@ var Database = new function()
 		
 		$('#tab-database-slide-window').spin('small','white');
 	};
+	
+	*/
+	
+	
 };
 

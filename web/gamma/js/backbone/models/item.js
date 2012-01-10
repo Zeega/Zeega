@@ -5,8 +5,8 @@ var Item = Backbone.Model.extend({
 	},
 	
 	url: function(){
-		return Zeega.url_prefix+"items/"+ this.id;
-	
+		// http://dev.zeega.org/jda/web/api/items/703493
+		return Zeega.url_prefix + "api/items/"+ this.id;
 	},
 	
 	initialize : function()
@@ -18,10 +18,16 @@ var Item = Backbone.Model.extend({
 var ItemCollection = Backbone.Collection.extend({
 	model : Item,
 	
-	/*,
+	page : 0,
+	
 	url: function(){
-		return Zeega.url_prefix+"search/items/"+ this.offset +"/100";
+		//http://dev.zeega.org/jda/web/api/search
+		return Zeega.url_prefix + "api/search?page="+ this.page;
+	},
+	
+	parse : function(response){
+		return response.items;
 	}
-	*/
+	
 	
 });
