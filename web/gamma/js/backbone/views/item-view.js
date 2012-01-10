@@ -66,52 +66,12 @@ var ItemView = Backbone.View.extend({
 	events: {
 		//"click" : "previewItem"
 		//'dblclick' : "doubleClick",
-		
 	},
 	
 	//item events
-	previewItem: function(){
-		var _this = this;
-		
-		$('#asset-preview').fadeIn();
-		
-		$('#asset-preview-media').empty();
+	previewItem: function()
+	{
 
-		//uglyness this should be more like layers?
-		var media = null;
-		switch (_this.model.get('content_type'))
-		{
-			case 'Image':
-				media = $('<img>').attr('src', _this.model.get('item_url') );
-				break;
-			case 'Video':
-				media = $('<video>').attr('controls','controls');
-				var src = $('<source>').attr('src',_this.model.get('item_url')).attr('type','video/mp4');
-				media.append(src);
-				//do stuff
-				break;
-			case 'Audio':
-				media = $('<video>').attr('controls','controls');
-				var src = $('<source>').attr('src',_this.model.get('item_url')).attr('type','video/mp4');
-				media.append(src);
-				break;
-		}
-		$('#asset-preview-media').append(media);
-		
-		//this needs to test for the type of media and place the appropriate image/player etc in there
-		
-		
-		var metaTitle = $('<div>').addClass('meta-title').html(_this.model.get('title'));
-		var metaAuthor = $('<div>').addClass('meta-author').html('Author: '+ _this.model.get('creator'));
-		var l = $('<a>').attr('href',_this.model.get('attribution_url')).attr('target','blank').html('View Source');
-		var metaLink = $('<div>').addClass('meta-link').append(l);
-		
-		$('#asset-preview-meta')
-			.empty()
-			.append(metaTitle)
-			.append(metaAuthor)
-			.append(metaLink);
-		
 	},
 	
 	getTemplate : function()
@@ -131,7 +91,8 @@ var ItemViewCollection = Backbone.View.extend({
 	
 	el : $('#database-item-list'),
 	
-	initialize : function(){
+	initialize : function()
+	{
 		
 		console.log('itemViewCollection init')
 		
