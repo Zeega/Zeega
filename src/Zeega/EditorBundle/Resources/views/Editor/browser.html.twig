@@ -25,13 +25,26 @@
 					</div>
 				</div>
 				<div id="browser-toggles">
-					<div id="browser-toggle-all-media-vs-my-media"><ul><li id="browser-my-media" class="browser-selected-toggle">My Media</li> <li id="browser-all-media" class="browser-unselected-toggle">All Media</li> </ul></div>
+					<div id="browser-toggle-all-media-vs-my-media">
+						<ul>
+							<li id="browser-my-media" class="tab browser-selected-toggle">My Media</li>
+							<li id="browser-all-media" class="tab browser-unselected-toggle">All Media</li>
+							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form> <img id="browser-collection-filter-tab-edit-icon" src="{{asset('gamma/images/edit-icon.png')}}">
+								<ul id="browser-collection-filter-edit-menu">
+									<li id="browser-rename-collection">rename collection</li>
+									<li>delete collection</li>
+									<li id="collection-to-editor-button">open in editor</li>
+									<li id="collection-player-button">share link</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 					
 					<div style="clear:both"></div>
 				</div>
 				<div id="browser-search-filter-toggle">
 					<div id="searchbar" class="browser-searchbar">
-						<input id="database-search-text" type="text" name="database-search" value="search database" style="color: rgb(68, 68, 68); ">
+						<input id="database-search-text" type="text" name="database-search" value="search my media" style="color: rgb(68, 68, 68); ">
 						<span><select id="database-search-filter" class="">
 							  <option value="all">all formats</option>
 							  <option value="image">images</option>
@@ -40,28 +53,10 @@
 							  
 							</select></span>
 					</div>
-					<!--<form action="" method="" id="browser-form-search">
-						<div id="form-left">
-							
-							
-							
-							<input id="database-search-text" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
-							
-						</div>
-						<div id="form-right">
-							
-							<input id="database-search-button" class="" type="button" value="go" onclick="return false">
-						</div>
-					</form>-->
-					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form>
-
-					<!-- ICONS for sharing & adding to editor 
-					<span id='collection-player-button' style='float:right;cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-play"></span><span id='collection-to-editor-button' style='float:right; cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-edit "></span>
-					-->
-					<a id="collection-to-editor-button" href=".">open in editor</a><br/><a id="collection-player-button" href=".">share link</a>
-					</div>
 					
-					<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle">collections</span> | <span id="browser-item-count" class="browser-selected-toggle">items</span> </div>
+					
+					
+					<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>
 
 					<a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
 					<!-- <div style="clear:both;padding-bottom:4px;"></div>-->

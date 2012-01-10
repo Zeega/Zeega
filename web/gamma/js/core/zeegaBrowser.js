@@ -122,7 +122,7 @@ var ZeegaBrowser = {
 								dtend: 0
 							});
 		}
-		if ($('#database-search-text').val() != "search database"){
+		if ($('#database-search-text').val().indexOf("search ") < 0){
 			this.search.set({
 							q: $('#database-search-text').val()
 							
@@ -138,9 +138,13 @@ var ZeegaBrowser = {
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
 
-		$('#browser-collection-filter').hide();
+		//Hide collection tab
+		$('#browser-collection-filter-tab').hide();
+		
+		//Clear the search object
 		this.search.set({'collection':null});
-		$('#browser-search-filter-toggle').css("height", "44px");
+		
+		//Fade in the MyCollections that had been faded out for the filter
 		$('#browser-my-collections-drawer .browser-results-collection').each(
 			function(idx,collectionEl){
 				$(collectionEl).fadeTo('fast', 1.0, function() {});
@@ -148,12 +152,25 @@ var ZeegaBrowser = {
 		});
 	},
 	showCollectionFilter: function(){
+		
+		//hide form, show text
 		$( '#browser-collection-filter-title-form' ).hide();
-		$('#browser-collection-filter-title').show();
-		$('#browser-collection-filter-title').html(ZeegaBrowser.clickedCollectionTitle);
+		$('#browser-collection-filter-tab-text').show();
 
-		$('#browser-collection-filter').show();
-		$('#browser-search-filter-toggle').css("height", "64px");
+		//show the collection tab
+		$('#browser-collection-filter-tab-text').text(ZeegaBrowser.clickedCollectionTitle);
+		$('#browser-collection-filter-tab').show();
+		$('#database-search-text').val("search " + ZeegaBrowser.clickedCollectionTitle);
+
+		//select the right tab
+		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
+		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');
+		$('#browser-collection-filter-tab').addClass('browser-selected-toggle');
+
+		
+		
+
+		//Highlight the collection in the MyCollections drawer
 		$('#browser-my-collections-drawer .browser-results-collection').each(
 			function(idx,collectionEl){
 				
@@ -164,7 +181,8 @@ var ZeegaBrowser = {
     			}
 		});
 
-		//On hover, expand item editing bar to update or remove item
+		//When hovering on individual item --
+		// expand item editing bar to remove item OR make an item the cover image of the collection
 		//But only do this if user is looking at one of their own collections
 		var collectionID = this.search.get("collection");
 		var theCollection = this.myCollections.get(collectionID);

@@ -47,7 +47,8 @@
 	max-height:350px !important;
 	overflow:auto !important;
 }
-#browser-my-collections-label p, #browser-toggle-all-media-vs-my-media li{
+
+#browser-my-collections-label p, #browser-toggle-all-media-vs-my-media .tab{
 	color:#FFF;
 	background:#555;
 	padding:7px;
@@ -61,7 +62,6 @@
 	border-radius: 10px 10px 0px 0px;
 	border: 1px solid #555;
 	border-bottom:none;
-	margin-bottom:-1px;
 }
 #browser-toggle-items-vs-collections{
 	position: relative;
@@ -80,13 +80,42 @@
 
 	
 }
+#browser-collection-filter-tab{
+	position:relative;
+	top:0;
+	left:0;
+}
+#browser-collection-filter-tab img{
+	width: 15px;
+	height:15px;
+	margin: 0 0 -3px 0;
+	padding: 0 5px;
+}
+#browser-collection-filter-edit-menu{
+	position: absolute;
+	top: 22px;
+	left: 125px;
+	width: 130px;
+	-webkit-box-shadow: 2px 2px 2px 2px #333;
+	-moz-box-shadow: 2px 2px 2px 2px #333;
+	box-shadow: 2px 2px 2px 2px #333;
+	z-index:100;
+	display:none;
+}
+#browser-collection-filter-edit-menu li{
+	
+	padding: 3px 5px;
+	border-bottom: 1px solid #333;
+	background-color: rgba(255, 255, 255, 0.8);
+}
 .browser-unselected-toggle{
-	font-size: 13px;
+	
 	color:#F15A29 !important;
+	background-color: #444 !important;
 }
 .browser-selected-toggle {
 	color:#fff !important;
-	
+	background-color: #555 !important;
 }
 #browser-my-collections-wrapper{
 	margin-bottom:20px;
@@ -147,7 +176,7 @@
 }
 #browser-toggle-all-media-vs-my-media{
 	float:left;
-	width:150px;
+	
 }
 
 #browser-results-wrapper{
@@ -490,13 +519,7 @@
 	
 	text-decoration:none;
 }
-#collection-to-editor-button, #collection-player-button{
-	font-size:11px;
-	font-family:Helvetica, sans-serif;
-	
-	float:right;
-	
-}
+
 // Settings
 
 
