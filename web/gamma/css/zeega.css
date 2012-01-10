@@ -9,7 +9,7 @@
 
 }
 .browser-searchbar{
-	width: 340px;
+	width: 345px;
 	margin: 10px 0 0 10px;
 	float: left;
 
@@ -22,8 +22,9 @@
 	-webkit-appearance: none;
 	font-variant:small-caps;
 	background-image:url('../images/separator.png');
-	padding-left:15px;
+	padding-left:8px;
 	background-repeat:repeat-y;
+	width:105px;
 }
 #browser-results{
 	
@@ -249,8 +250,10 @@
 	border:none;
 	text-decoration:none;
 }
+
 .browser-results-collection a:hover, .browser-results-image a:hover{
 	border-bottom:2px solid #F15A29;
+
 }
 #browser-show-more-results{
 	border:1px solid #777;
@@ -318,8 +321,9 @@
 	color:#fff;
 	letter-spacing:1px;
 }
-.browser-add-item-to-collection-hover{
+.browser-add-item-to-collection-hover, .browser-results-collection:hover{
 	background-color:#F15A29 !important;
+	
 
 }
 .browser-create-new-collection-hover{

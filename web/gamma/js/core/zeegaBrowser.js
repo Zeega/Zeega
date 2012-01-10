@@ -141,6 +141,7 @@ var ZeegaBrowser = {
 		//Hide collection tab
 		$('#browser-collection-filter-tab').hide();
 		
+	
 		//Clear the search object
 		this.search.set({'collection':null});
 		
@@ -148,6 +149,7 @@ var ZeegaBrowser = {
 		$('#browser-my-collections-drawer .browser-results-collection').each(
 			function(idx,collectionEl){
 				$(collectionEl).fadeTo('fast', 1.0, function() {});
+				$(collectionEl).removeClass('browser-add-item-to-collection-hover');
     			
 		});
 	},
@@ -176,9 +178,14 @@ var ZeegaBrowser = {
 				
 				if(ZeegaBrowser.clickedCollectionTitle != $(collectionEl).find('.title').text()){
 					$(collectionEl).fadeTo('fast', 0.5, function() {});
-    			} else if ($(collectionEl).css("opacity") != "1.0"){
-    				$(collectionEl).fadeTo('fast', 1.0, function() {});
-    			}
+					$(collectionEl).removeClass('browser-add-item-to-collection-hover');
+    			} else {
+    				if ($(collectionEl).css("opacity") != "1.0"){
+    					$(collectionEl).fadeTo('fast', 1.0, function() {});
+    				}
+    				$(collectionEl).addClass('browser-add-item-to-collection-hover');
+
+	    		} 
 		});
 
 		//When hovering on individual item --

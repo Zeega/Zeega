@@ -95,32 +95,28 @@ var BrowserCollectionView = BrowserItemView.extend({
 				
 				ui.draggable.draggable('option','revert',false);
 				
-			
-				$(this).effect("highlight", {}, 3000);
+				$(this).find('img').attr("src", ZeegaBrowser.draggedItem.get("thumbnail_url"));
 				$(this).find('.browser-item-count').text('Adding item...');
-				$(this).animate({ opacity: 0.75}, 1000, function() {
-					    
-					    $(this).css('opacity', '1');
-					  });
-				if(ZeegaBrowser.draggedItem.id){
-				thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-		
-				thisView.model.save({ }, 
-							{
-								success: function(model, response) { 
-									console.log(response.collections.child_items_count);
-									ZeegaBrowser.draggedItem = null;
-									//Update items count
-									model.set({'child_items_count':response.collections.child_items_count }); 
-									ZeegaBrowser.myCollectionsView.render();
-				 				},
-				 				error: function(model, response){
-				 					ZeegaBrowser.draggedItem = null;
-				 					console.log("Error updating a collection with a new item.");
-				 					console.log(response);
-				 				}
-				 			});
+				if(ZeegaBrowser.draggedItem.id){
+					thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
+					
+			
+					thisView.model.save({ }, 
+								{
+									success: function(model, response) { 
+										console.log(response.collections.child_items_count);
+										ZeegaBrowser.draggedItem = null;
+										//Update items count
+										model.set({'child_items_count':response.collections.child_items_count }); 
+										ZeegaBrowser.myCollectionsView.render();
+					 				},
+					 				error: function(model, response){
+					 					ZeegaBrowser.draggedItem = null;
+					 					console.log("Error updating a collection with a new item.");
+					 					console.log(response);
+					 				}
+					 			});
 				}
 				else{
 					console.log('Error: failure to recognize dragged item');
