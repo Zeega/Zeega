@@ -136,7 +136,7 @@ $(document).ready(function() {
 		$('#browser-right-sidebar').show();		
 		$(this).hide();
 		$('#browser-close-timeline').show();
-		$('#browser-toggle-items-vs-collections').css("right", "540px");
+		
 		
 		//Do initial search
 		ZeegaBrowser.doSearch();
@@ -147,7 +147,7 @@ $(document).ready(function() {
 		$('#browser-right-sidebar').hide();		
 		$(this).hide();
 		$('#browser-open-timeline').show();
-		$('#browser-toggle-items-vs-collections').css("right", "0");
+		
 
 		//Do search to reset
 		ZeegaBrowser.doSearch();
@@ -156,10 +156,10 @@ $(document).ready(function() {
 	});
 
 	//Switches the results drawer between items and collections
-	$('#browser-toggle-items-vs-collections li').click(function(){
+	$('#browser-toggle-items-vs-collections span').click(function(){
 
-		$(this).closest('li').removeClass('browser-unselected-toggle');
-		$(this).closest('li').addClass('browser-selected-toggle');
+		$(this).closest('span').removeClass('browser-unselected-toggle');
+		$(this).closest('span').addClass('browser-selected-toggle');
 		$(this).siblings().removeClass('browser-selected-toggle');
 		$(this).siblings().addClass('browser-unselected-toggle');
 

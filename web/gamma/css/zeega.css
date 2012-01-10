@@ -63,32 +63,31 @@
 	border-bottom:none;
 	margin-bottom:-1px;
 }
-
+#browser-toggle-items-vs-collections{
+	position: relative;
+	left: 30px;
+	color: #CCC;
+	display: inline;
+	top: 20px;	
+}
 #browser-toggle-items-vs-collections ul{
 	list-style:none;
 }
 #browser-toggle-items-vs-collections li{
 	color:#FFF;
-	background:#444;
 	padding:7px;
 	display:inline-block;
 
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 10px;
-	-moz-border-radius-bottomleft: 10px;
-	-webkit-border-radius: 0px 0px 10px 10px;
-	border-radius: 0px 0px 10px 10px;
-	border: 1px solid #555;
-	border-top:none;
-	margin-left:5px;
-
-	-webkit-box-shadow:  2px 2px 2px 2px #333;
-	-moz-box-shadow:  2px 2px 2px 2px #333;
-	box-shadow:  2px 2px 2px 2px #333;
 	
 }
-
+.browser-unselected-toggle{
+	font-size: 13px;
+	color:#F15A29 !important;
+}
+.browser-selected-toggle {
+	color:#fff !important;
+	
+}
 #browser-my-collections-wrapper{
 	margin-bottom:20px;
 }
@@ -161,14 +160,7 @@
 	padding:20px;
 	display:none;
 }
-#browser-toggle-items-vs-collections{
-	position: absolute;
-	right: 0px;
-	top: 0px;
-	z-index: 100;
 
-	
-}
 #browser-my-collections-drawer{
 	margin:5px 0 0 10px;
 }
@@ -380,16 +372,7 @@
 	*/
 
 }
-.browser-unselected-toggle{
-	border-bottom:1px solid #555 !important;
-	background-color:#444 !important;
-	color:#F15A29 !important;
-}
-.browser-selected-toggle {
-	background-color:#555 !important;
-	color:#fff !important;
-	
-}
+
 .browser-unselected-toggle:hover{
 	background-color:#555 !important;
 	color:#fff !important;
@@ -400,10 +383,8 @@
 }
 #browser-close-timeline, #browser-open-timeline{
 	
-	margin: 20px 0 0 30px;
-	position: relative;
-	left: 110px;
-	top:20px;
+	margin: 22px 18px 0 30px;
+	float: right;
 }
 #browser-close-timeline{
 	display:none;
