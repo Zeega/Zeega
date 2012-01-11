@@ -135,10 +135,8 @@ function closeOpenCitationTabs()
 	$('#sidebar').fadeIn();
 	
 	$('#database-search-button').click(function(){
-		$('#database-search-filter').val('all');
-		$('#database-collection-filter').val('all');
 		
-		Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), $("#database-collection-filter").val());
+		Database.search( $("#database-search-text").val() );
 		return false;
 	});
 	
@@ -176,7 +174,7 @@ function closeOpenCitationTabs()
 		if (keycode == 13)
 		{
 
-			Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), $("#database-collection-filter").val());
+			Database.search( $("#database-search-text").val() );
 			console.log('pressed enter')
 		}else{
 			return true;

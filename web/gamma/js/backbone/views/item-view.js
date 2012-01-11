@@ -148,7 +148,7 @@ var ItemViewCollection = Backbone.View.extend({
 				_this.el.append( itemView.render().el )
 			});
 		}else{
-			_this.el.append( $('<li class="alert-message error">').html('No Results') );
+			_this.el.append( $('<li class="alert-message error" style="text-align:center">').html('No Results') );
 		}
 		this._rendered = true;
 		

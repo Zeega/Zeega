@@ -49,7 +49,7 @@ var Database =
 		this.itemCollection.fetch();
 	},
 	
-	search : function( query, contentType, collectionID )
+	search : function( query )
 	{
 		this.itemCollection.query = query;
 		this.itemCollection.fetch();
