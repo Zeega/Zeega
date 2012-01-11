@@ -15,7 +15,9 @@ var Layer =  Backbone.Model.extend({
 		this.layerClass.load(this);
 		
 		if(!this.get('attr')) this.set({'attr':{}}); //this should be covered by defaults
-
+		
+		console.log(this.get('attr'));
+		
 	},
 	
 	show : function()
