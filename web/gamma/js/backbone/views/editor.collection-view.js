@@ -5,7 +5,7 @@ var CollectionView = Backbone.View.extend({
 		
 	render: function()                 
 	{
-		$(this.el).attr( 'value', this.model.get('title') ).html( this.model.get('title') );
+		$(this.el).attr( 'value', this.model.id ).html( this.model.get('title') );
 		return this;
 	}
 	
@@ -39,6 +39,11 @@ var CollectionViewCollection = Backbone.View.extend({
 	{
 		var _this = this;
 		this.el.empty();
+		
+		//populate with default values
+		this.el.append( $('<option>').html('Collections') );
+		this.el.append( $('<option value="all">').html('All') );
+		this.el.append( $('<option>').html('  --  ') );
 		
 		//add EACH model's view to the _this.el and render it
 		_.each( this._collectionViews, function( collectionView ){

@@ -19,11 +19,25 @@ var ItemCollection = Backbone.Collection.extend({
 	model : Item,
 	
 	page : 0,
+	contentType : null,
+	collectionID : null,
+	query : null,
 	
 	url: function()
 	{
-		//http://dev.zeega.org/jda/web/api/search
-		return Zeega.url_prefix + "api/search?page="+ this.page;
+		var url = Zeega.url_prefix + "api/search?page="+ this.page;
+		if( !_.isNull(this.query) && this.query != "" ) url += '&q=' + this.query;
+		if( !_.isNull(this.contentType) ) url += '&content=' + this.contentType;
+		if( !_.isNull(this.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.collectionID;
+		return url;
+	},
+	
+	resetQuery : function()
+	{
+		this.page = 0;
+		this.contentType = null;
+		this.collecitonID = null;
+		this.query = null;
 	},
 	
 	parse : function(response)

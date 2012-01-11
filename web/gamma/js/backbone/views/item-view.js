@@ -1,7 +1,6 @@
 
 var ItemView = Backbone.View.extend({
 	tagName : 'li',
-	//className :'database-asset',
 	
 	initialize : function() {},
 	
@@ -94,20 +93,18 @@ var ItemViewCollection = Backbone.View.extend({
 	initialize : function()
 	{
 		
-		console.log('itemViewCollection init')
-		
 		_(this).bindAll('add');
 		this._itemViews = [];
 		this._itemBundles = [];
 		this.collection.each(this.add);
 		this.collection.bind('add',this.add)
+		this.collection.bind('reset',this.resetCollection, this)
 		this.render();
 	},
 	
 	add : function(item)
 	{
 		
-		console.log('item added')
 		//a database item is never 'new' right?
 		//it has to exist before it can be interacted with.
 		//database items are created in XM or other tools
@@ -115,6 +112,17 @@ var ItemViewCollection = Backbone.View.extend({
 		this._itemViews.push(itemView);
 		if(this._rendered) $(this.el).append(itemView.render().el);
 		
+	},
+	
+	resetCollection : function()
+	{
+		this._rendered = false;
+		this._itemViews = [];
+		this.el.empty();
+		
+		this.collection.each(this.add);
+		
+		this.render();
 	},
 	
 	append : function(items)
@@ -130,15 +138,18 @@ var ItemViewCollection = Backbone.View.extend({
 	
 	render : function()
 	{
-		console.log('viewCRender')
 		var _this = this;
 		this.el.empty();
 		
-		//add EACH model's view to the _this.el and render it
-		_.each( this._itemViews, function( itemView ){
-			_this.el.append( itemView.render().el )
-		});
-		
+		if( this._itemViews.length )
+		{
+			//add EACH model's view to the _this.el and render it
+			_.each( this._itemViews, function( itemView ){
+				_this.el.append( itemView.render().el )
+			});
+		}else{
+			_this.el.append( $('<li class="alert-message error">').html('No Results') );
+		}
 		this._rendered = true;
 		
 		return this;
