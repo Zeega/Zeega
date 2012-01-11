@@ -1256,6 +1256,11 @@ body
 	float:left;
 }
 
+#database-collection-filter
+{
+	width:168px;
+}
+
 #tab-database-slide-window
 {
 	width:100%;

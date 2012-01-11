@@ -112,7 +112,7 @@ function closeOpenCitationTabs()
 				var _this = this;
 				$('.ghost-node').remove();
 				_.times(temp-this.num, function(){
-					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					$('#node-drawer ul').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
@@ -313,10 +313,13 @@ function closeOpenCitationTabs()
 				{
 					
 					ui.draggable.draggable('option','revert',false);
+					
+					console.log(Zeega.draggedItem)
+					
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('type'),
+						type: Zeega.draggedItem.get('source'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
@@ -327,6 +330,8 @@ function closeOpenCitationTabs()
 							'citation':true,
 						}
 					};
+					
+					console.log(settings);
 					var layerToSave = new Layer(settings);
 
 					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
