@@ -56,6 +56,7 @@ function addLayer(type)
 {
 	//add new layer model
 	var newLayer = new Layer({'type':type});
+	console.log( newLayer.get('attr') )
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
@@ -310,16 +311,17 @@ function closeOpenCitationTabs()
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 				{
+					
 					ui.draggable.draggable('option','revert',false);
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source_type'),
+						type: Zeega.draggedItem.get('type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('item_url'),
-							'uri' : Zeega.draggedItem.get('item_url'),
+							'url' : Zeega.draggedItem.get('uri'),
+							'uri' : Zeega.draggedItem.get('uri'),
 							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
 							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
 							'citation':true,

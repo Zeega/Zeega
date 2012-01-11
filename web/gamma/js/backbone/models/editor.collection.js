@@ -1,17 +1,9 @@
 var Collection = Backbone.Model.extend({
-	defaults : {
-		title : 'Untitled'
-	},
 	
 	url: function()
 	{
 		return Zeega.url_prefix + "api/items/"+ this.id;
-	},
-	
-	initialize : function()
-	{
 	}
-
 });
 
 var CollectionCollection = Backbone.Collection.extend({

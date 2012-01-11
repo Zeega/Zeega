@@ -309,14 +309,15 @@ var Zeega = {
 			if( layer.isNew() )
 			{
 				console.log('this is a new layer');
+				console.log(layer)
 				layer.save(
 					{},
 					{
 						success : function(savedLayer, response){
+							console.log(response)
 							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
-							console.log(savedLayer.layerClass.thumbUpdate)
 							if( savedLayer.layerClass.thumbUpdate ) node.noteChange() ;
 						}
 					});

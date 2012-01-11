@@ -1,7 +1,6 @@
 
 var CollectionView = Backbone.View.extend({
 	tagName : 'option',
-	//className :'database-asset',
 		
 	render: function()                 
 	{
