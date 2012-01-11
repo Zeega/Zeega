@@ -14,6 +14,8 @@ var Database =
 		this.itemCollection = new ItemCollection;
 		this.itemViewCollection;
 		
+		// NEEDS TO BE BOOTSTRAPPED!!
+		
 		this.itemCollection.fetch({
 			success: function( items ){
 				console.log(items)
@@ -21,6 +23,9 @@ var Database =
 			}
 		});
 		
+		
+		//loads the collections dropdown
+		// NEEDS TO BE BOOTSTRAPPED!!
 		this.collectionCollection = new CollectionCollection;
 		this.collectionViewCollection;
 		
