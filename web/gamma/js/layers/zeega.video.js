@@ -83,6 +83,7 @@ var VideoLayer = ProtoLayer.extend({
 		if( !this.editorLoaded )
 		{
 			console.log('OPEN CONTROLSSSSSS');
+			console.log(this.model)
 			var _this = this;
 			
 			//is this necessary?

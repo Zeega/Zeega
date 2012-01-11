@@ -112,7 +112,7 @@ function closeOpenCitationTabs()
 				var _this = this;
 				$('.ghost-node').remove();
 				_.times(temp-this.num, function(){
-					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					$('#node-drawer ul').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
