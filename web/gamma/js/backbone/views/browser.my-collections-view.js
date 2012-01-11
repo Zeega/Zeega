@@ -7,7 +7,12 @@ var MyCollectionsView = Backbone.View.extend({
 	initialize : function() {
 		this.collection.bind('add',   this.addCollection, this);
 		this.collection.bind('reset',   this.addCollections, this);
+		this.collection.bind('remove',   this.refreshViews, this);
 		
+	},
+	refreshViews : function(m){
+		this._views = [];
+		this.addCollections();	
 	},
 	addCollection : function(m){
 		var collectionView = new BrowserCollectionView({ model: m });

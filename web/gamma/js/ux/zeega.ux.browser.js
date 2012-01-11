@@ -248,6 +248,29 @@ $(document).ready(function() {
 				}
 			}
 		});
+	$('#browser-delete-collection').click(function() {
+		var collectionID = ZeegaBrowser.search.get("collection");
+		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"
+						+ collectionID;
+		var theCollection = ZeegaBrowser.myCollections.get(collectionID);
+
+		//DESTROYYYYYYYY
+		theCollection.destroy({	
+			 				url : deleteURL,
+							success: function(model, response) { 
+								ZeegaBrowser.myCollections.remove(theCollection);
+								$('#browser-my-media').trigger('click');
+								console.log("Deleted collection " + collectionID);		
+			 				},
+			 				error: function(model, response){
+			 					ZeegaBrowser.myCollections.remove(theCollection);
+			 					$('#browser-my-media').trigger('click');
+			 					console.log("Error deleting collection " + collectionID);		
+			 					console.log(response);
+			 				}
+	 					});
+				
+	});
 	$('#browser-rename-collection').click(function() {
 			$('#browser-collection-filter-tab-text').hide();
 			$('#browser-collection-filter-title-form').show();
