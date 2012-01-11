@@ -309,8 +309,9 @@ class CollectionsController extends Controller
         
     	$em->remove($collection);
     	$em->flush();
-    	
-    	return new Response('SUCCESS',200);
+
+    	$itemView = $this->renderView('ZeegaApiBundle:Collections:delete.json.twig', array('item_id' => $collection_id, 'status' => "Success"));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
     }
     
     public function deleteCollectionItemAction($collection_id, $item_id)

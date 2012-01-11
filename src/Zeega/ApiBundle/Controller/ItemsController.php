@@ -121,7 +121,8 @@ class ItemsController extends Controller
     	$em->remove($item);
     	$em->flush();
     	
-    	return new Response('SUCCESS',200);
+        $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
     }
 
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}

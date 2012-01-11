@@ -83,7 +83,7 @@ class SearchController extends Controller
 		    $query["geo"] = null;
 		}
         
-		
+		if(isset($query["contentType"]) && strtoupper($query["contentType"]) == "ALL") $query["contentType"] = null;
 	    
 	    //  filter results for the logged user
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
