@@ -212,7 +212,7 @@ class WidgetController extends Controller
 				$counter=1;
 				foreach($collection['items'] as $item){
 					$widgetId=rand(0,1000);
-					$item->setAttributionUri($url."#".$item->getId());
+					#$item->setAttributionUri($url."#".$item->getId()); //uncommented breaks youtube group import
 					$metadata=$item->getMetadata();
 					$thumbUrl=$metadata->getThumbnailUrl();
 					$thumbUrls[]=array('index'=>$counter,'thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);

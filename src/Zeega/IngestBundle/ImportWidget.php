@@ -17,11 +17,6 @@ use SimpleXMLElement;
 		
 class ImportWidget
 {
-	
-	
-	
-	
-	
 	public function parseUrl($url){
 	
 		$urlSplit=explode('?',$url);
@@ -98,20 +93,6 @@ class ImportWidget
 		}
 		
 		/**  DocumentCloud **************************************/
-		
-	
-		elseif(strstr($url,'documentcloud.org/documents')){
-			$archive='DocumentCloud';
-			$id='';
-			$url=str_replace( 'org/documents', 'org/api/documents',$url);
-			$url=str_replace( '.html', '.json',$url);
-			
-		}
-		
-		
-	
-	
-			/**  DocumentCloud **************************************/
 		
 	
 		elseif(strstr($url,'documentcloud.org/documents')){
@@ -505,21 +486,23 @@ class ImportWidget
 		{
 			// get nodes in media: namespace for media information
 			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
+			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
 			
 			$item= new Item();
 			$metadata= new Metadata();
 			$media = new Media();
 			
-			$arr = explode('/',$entry->id);
+			$arr = explode(':',$entry->id);
 			$entryId = $arr[count($arr)-1];
 			
-			$attrs = $entryMedia->player->url->attributes();
+			$attrs = $entryMedia->group->player->attributes();
 			$attributionUrl = $attrs['url'];
 			
-			$item->setUri($entryId);
-			$item->setTitle((string)$media->group->title);
-			$item->setDescription((string)$media->group->description);
-			$item->setAttributionUri($attributionUrl);
+			$item->setUri((string)$yt->videoid);
+			$item->setTitle((string)$entryMedia->group->title);
+			//$item->setDescription((string)$entryMedia->group->description);
+			$item->setDescription((string)$entryMedia->group->keywords);
+			$item->setAttributionUri((string)$attributionUrl);
 			$item->setDateCreated(new \DateTime("now"));
 			$item->setType('Video');
 			$item->setSource('Youtube');
@@ -527,25 +510,21 @@ class ImportWidget
 			
 			foreach($entry->children('http://www.georss.org/georss') as $geo)
 			{
-				foreach($gml->children('http://www.opengis.net/gml') as $position)
+				foreach($geo->children('http://www.opengis.net/gml') as $position)
 				{
 					// Coordinates are separated by a space
-					$coordinates = explode(' ', (string)$geoPositionSubNode->pos);
+					$coordinates = explode(' ', (string)$position->pos);
 
-					$item->setMediaGeoLatitute((string)$coordinates[0]);
+					$item->setMediaGeoLatitude((string)$coordinates[0]);
 					$item->setMediaGeoLongitude((string)$coordinates[1]);
 					break;
 				}
 			}
 		    			
 			$item->setMediaCreatorUsername((string)$entry->author->name);
-			$item->setMediaCreatorRealname('unknown');
+			$item->setMediaCreatorRealname('Unknown');
 			
 			// read metadata from xml
-			$authorFeed = simplexml_load_file($video->authorURL);
-			$authorData = $authorFeed->children('http://gdata.youtube.com/schemas/2007');			
-			$title = $entryMedia->group->title;
-			
 			$attrs = $entryMedia->group->thumbnail->attributes();
 			$thumbnailUrl = (string)$attrs['url'];
 			
@@ -555,18 +534,11 @@ class ImportWidget
 			$metadata->setThumbnailUrl((string)$thumbnailUrl);
 			
 			// read media from xml
-			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
 			$attrs = $yt->duration->attributes();
 			$duration = $attrs['seconds'];
 			
-			$attrs = $entryMedia->group->license->thumbnail[0].attributes();
-			$width = $attrs['width'];
-			$height = $attrs['height'];
-			
 			// write media information
-			$media->setDuration($duration);
-			$media->setWidth($width);
-			$media->setHeight($height);
+			$media->setDuration((string)$duration);
 			
 			$item->setMetadata($metadata);
 			$item->setMedia($media);
