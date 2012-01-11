@@ -4,10 +4,7 @@ var BrowserItemView = Backbone.View.extend({
 	
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	this.model.bind('destroy', this.remove, this);
-    	
+		
 		
 	},
 	
@@ -98,32 +95,28 @@ var BrowserCollectionView = BrowserItemView.extend({
 				
 				ui.draggable.draggable('option','revert',false);
 				
-			
-				$(this).effect("highlight", {}, 3000);
+				$(this).find('img').attr("src", ZeegaBrowser.draggedItem.get("thumbnail_url"));
 				$(this).find('.browser-item-count').text('Adding item...');
-				$(this).animate({ opacity: 0.75}, 1000, function() {
-					    
-					    $(this).css('opacity', '1');
-					  });
-				if(ZeegaBrowser.draggedItem.id){
-				thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 				
-		
-				thisView.model.save({ }, 
-							{
-								success: function(model, response) { 
-									console.log(response.collections.child_items_count);
-									ZeegaBrowser.draggedItem = null;
-									//Update items count
-									model.set({'child_items_count':response.collections.child_items_count }); 
-									ZeegaBrowser.myCollectionsView.render();
-				 				},
-				 				error: function(model, response){
-				 					ZeegaBrowser.draggedItem = null;
-				 					console.log("Error updating a collection with a new item.");
-				 					console.log(response);
-				 				}
-				 			});
+				if(ZeegaBrowser.draggedItem.id){
+					thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
+					
+			
+					thisView.model.save({ }, 
+								{
+									success: function(model, response) { 
+										console.log(response.collections.child_items_count);
+										ZeegaBrowser.draggedItem = null;
+										//Update items count
+										model.set({'child_items_count':response.collections.child_items_count }); 
+										ZeegaBrowser.myCollectionsView.render();
+					 				},
+					 				error: function(model, response){
+					 					ZeegaBrowser.draggedItem = null;
+					 					console.log("Error updating a collection with a new item.");
+					 					console.log(response);
+					 				}
+					 			});
 				}
 				else{
 					console.log('Error: failure to recognize dragged item');
@@ -163,6 +156,9 @@ var BrowserSingleItemView = BrowserItemView.extend({
 	
 	initialize : function() {
 		
+		//when item removes itself from collection this gets fired
+		this.model.bind('destroy', this.remove, this);
+		
 		var theModel = this.model;
 		this.el = $("#browser-results-image-template").clone();
 		$(this.el).draggable({
@@ -191,8 +187,6 @@ var BrowserSingleItemView = BrowserItemView.extend({
 				ZeegaBrowser.draggedItem = theModel;
 			},
 				
-			/**	stuff that happens when the user drags the item into a node **/	
-				
 			stop : function(){
 				ZeegaBrowser.draggedItem = null;
 			}
@@ -200,6 +194,9 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		});
 
 		
+	},
+	remove : function() {
+		$(this.el).remove();
 	},
 	render: function()
 	{
@@ -212,7 +209,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		this.el.find('a:first').attr('title', this.model.get('title'));
 		this.el.find('img').attr('src', thumbnail_url);
 		
-		console.log(this.el.find('img').attr('height'));
+		
 		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
 		this.el.find('a:first').attr('href', this.model.get('uri'));
 		this.el.find('img').attr('title', this.model.get('title'));
@@ -254,6 +251,8 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	initialize: function(){
 
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		//this.content = $("#browser-fancybox-image-template").clone();
+		//this.content.removeAttr('id');
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
@@ -261,6 +260,12 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
+		//var theImage = $(this.content).find("img");
+		//$(theImage).attr("src", $(obj.element).attr("href"));
+
+		//set object's content
+		//obj.content = this.content.html(); 
+
 		return this;
 	},
 

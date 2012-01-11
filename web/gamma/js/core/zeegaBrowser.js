@@ -1,3 +1,9 @@
+//Adds a function to the javascript date object.
+//Didn't really know where to put this so I put it here...(Catherine)
+Date.prototype.getMonthAbbreviation = function() {
+   return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][this.getMonth()]; 
+}
+
 var ZeegaBrowser = {
 
 	myCollections : null,
@@ -14,9 +20,10 @@ var ZeegaBrowser = {
 		
 		//populate myCollections from server
 		this.myCollections.fetch({
-			success : function()
+			success : function(model, response)
 			{
 				console.log("FROM ZeegaBrowser.js - Zeega browser has " + ZeegaBrowser.myCollections.length);
+				$('#browser-my-collections-drawer').jcarousel();
 				
 			}
 		});
@@ -30,13 +37,16 @@ var ZeegaBrowser = {
 		//attach items collection to items view and collections collection to collections view
 		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
-		
+		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection")});
+
 		this.search.updateQuery();
 		
 	},
 	renderResults : function(){
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
+		this.timeBinsView.render();
+		
 		
 		if (this.search.get("collection") != null){
 			this.showCollectionFilter();
@@ -61,6 +71,7 @@ var ZeegaBrowser = {
 		this.search.set({'user':-2, 'collection':collectionID});
 		this.doSearch();
 	},
+	
 	doSearch : function(){
 		
 		
@@ -77,8 +88,47 @@ var ZeegaBrowser = {
 		$('#browser-no-items-results-message').hide();
 		$('#browser-no-collections-results-message').hide();
 
-		this.search.set({
-							q: $('#database-search-text').val(), 
+		//TimeBins
+		if ($('#browser-time-bins').is(':visible')) {
+
+			//Check if user has selected a particular bin. if so then
+			//set search to NOT return more time bins
+			if(this.timeBinsView.collection.selectedStartDate != null && this.timeBinsView.collection.selectedEndDate != null){
+				this.search.set({
+									dtstart: this.timeBinsView.collection.selectedStartDate, 
+									dtend: this.timeBinsView.collection.selectedEndDate,
+									r_time: 0
+								});
+			} 
+			//Otherwise use date values from the slider control
+			else {
+			
+				var startDate = new Date(0);
+				startDate.setFullYear( $('a#handle_valueAA').attr('aria-valuetext') );
+
+				var endDate = new Date(0);
+				endDate.setFullYear( $('a#handle_valueBB').attr('aria-valuetext') );
+
+				this.search.set({
+									dtstart: startDate.getTime()/1000.0, 
+									dtend: endDate.getTime()/1000.0,
+									r_time: 1
+								});
+			}
+
+		} else { //Reset start & end dates so that time filter gets cleared
+			this.search.set({
+								dtstart: 0, 
+								dtend: 0
+							});
+		}
+		if ($('#database-search-text').val().indexOf("search ") < 0){
+			this.search.set({
+							q: $('#database-search-text').val()
+							
+						});
+		}
+		this.search.set({ 
 							content:$('#database-search-filter').val()
 						});
 		this.search.updateQuery();
@@ -88,33 +138,58 @@ var ZeegaBrowser = {
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
 
-		$('#browser-collection-filter').hide();
+		//Hide collection tab
+		$('#browser-collection-filter-tab').hide();
+		
+	
+		//Clear the search object
 		this.search.set({'collection':null});
-		$('#browser-search-filter-toggle').css("height", "44px");
+		
+		//Fade in the MyCollections that had been faded out for the filter
 		$('#browser-my-collections-drawer .browser-results-collection').each(
 			function(idx,collectionEl){
 				$(collectionEl).fadeTo('fast', 1.0, function() {});
+				$(collectionEl).removeClass('browser-add-item-to-collection-hover');
     			
 		});
 	},
 	showCollectionFilter: function(){
+		
+		//hide form, show text
 		$( '#browser-collection-filter-title-form' ).hide();
-		$('#browser-collection-filter-title').show();
-		$('#browser-collection-filter-title').html(ZeegaBrowser.clickedCollectionTitle);
+		$('#browser-collection-filter-tab-text').show();
 
-		$('#browser-collection-filter').show();
-		$('#browser-search-filter-toggle').css("height", "64px");
+		//show the collection tab
+		$('#browser-collection-filter-tab-text').text(ZeegaBrowser.clickedCollectionTitle);
+		$('#browser-collection-filter-tab').show();
+		$('#database-search-text').val("search " + ZeegaBrowser.clickedCollectionTitle);
+
+		//select the right tab
+		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
+		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');
+		$('#browser-collection-filter-tab').addClass('browser-selected-toggle');
+
+		
+		
+
+		//Highlight the collection in the MyCollections drawer
 		$('#browser-my-collections-drawer .browser-results-collection').each(
 			function(idx,collectionEl){
 				
 				if(ZeegaBrowser.clickedCollectionTitle != $(collectionEl).find('.title').text()){
 					$(collectionEl).fadeTo('fast', 0.5, function() {});
-    			} else if ($(collectionEl).css("opacity") != "1.0"){
-    				$(collectionEl).fadeTo('fast', 1.0, function() {});
-    			}
+					$(collectionEl).removeClass('browser-add-item-to-collection-hover');
+    			} else {
+    				if ($(collectionEl).css("opacity") != "1.0"){
+    					$(collectionEl).fadeTo('fast', 1.0, function() {});
+    				}
+    				$(collectionEl).addClass('browser-add-item-to-collection-hover');
+
+	    		} 
 		});
 
-		//On hover, expand item editing bar to update or remove item
+		//When hovering on individual item --
+		// expand item editing bar to remove item OR make an item the cover image of the collection
 		//But only do this if user is looking at one of their own collections
 		var collectionID = this.search.get("collection");
 		var theCollection = this.myCollections.get(collectionID);
@@ -130,7 +205,7 @@ var ZeegaBrowser = {
 
 				}
 			);
-			//Add functionality for updating thumbnail 
+			//Functionality for updating thumbnail 
 			$('.browser-change-thumbnail').click(function(e){
 
 				var theImageEl = $(this).closest(".browser-results-image");
@@ -150,16 +225,50 @@ var ZeegaBrowser = {
 			 	return false;
 			});
 
-			//Add functionality for removing item from collection 
+			//Functionality for removing item from collection 
 			$('.browser-remove-from-collection').click(function(e){
 
 				var theImageEl = $(this).closest(".browser-results-image");
 				var itemID = theImageEl.find('a:first').attr("id");
 				var theItem = ZeegaBrowser.searchItemsView.collection.get(itemID);
+				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+collectionID+"/items/"+itemID;
+				
+				//This item is currently the thumbnail cover for the collection
+				//gotta flag it to be changed once item is removed
 
-				/*theItem.destroy({
+				if( theCollection.get("child_items_count") > 1 && theImageEl.find("img").attr("src").indexOf("items/"+itemID) != -1){
+					
+					var otherImageEl = theImageEl.next(".browser-results-image");
+					if (otherImageEl.length ==0) {
+						otherImageEl =theImageEl.prev(".browser-results-image"); 
+					}
+					var	newThumbnailURL = otherImageEl.find("img").attr("src");
+				}
+
+				//DESTROYYYYYYYY
+				theItem.destroy({	
+					 				url : deleteURL,
 									success: function(model, response) { 
-										console.log("Removed item " + itemID + " from collection " + theCollection.id);			
+										var newCount = theCollection.get("child_items_count") - 1;
+										theCollection.set({child_items_count:newCount});
+										console.log("Removed item " + itemID + " from collection " + theCollection.id);	
+										
+										//Update thumbnail URL if the previous item served as the
+										//collection's thumbnail
+										if (newThumbnailURL != null){
+											theCollection.isUpdate = true;
+											theCollection.save({ thumbnail_url : newThumbnailURL }, 
+											{
+												success: function(model, response) { 
+													console.log("Saved new thumbnail for collection " + model.id);			
+								 				},
+								 				error: function(model, response){
+								 					
+								 					console.log("Error updating collection thumbnail.");
+								 					console.log(response);
+								 				}
+								 			});
+										}		
 					 				},
 					 				error: function(model, response){
 					 					
@@ -167,7 +276,7 @@ var ZeegaBrowser = {
 					 					console.log(response);
 					 				}
 			 					});
-				*/
+				
 			 	return false;
 			});
 		}

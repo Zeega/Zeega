@@ -12,7 +12,7 @@
 
 				<div id="browser-my-collections-wrapper">
 					<div id="browser-my-collections-label">
-						<p>My Collections</p>
+						<p>My Collections <span id="browser-my-collections-count"></span></p>
 					</div>
 					<div id="browser-my-collections">
 						<div id="browser-create-new-collection">
@@ -21,44 +21,45 @@
 							</div>
 						</div>
 						<div class="browser-loading"><img src="{{asset('gamma/images/loading.gif')}}"></div>
-						<ul id="browser-my-collections-drawer"></ul>
+						<ul id="browser-my-collections-drawer" class="jcarousel-skin-zeega"></ul>
 					</div>
 				</div>
 				<div id="browser-toggles">
-					<div id="browser-toggle-all-media-vs-my-media"><ul><li id="browser-my-media" class="browser-selected-toggle">My Media</li> <li id="browser-all-media" class="browser-unselected-toggle">All Media</li> </ul></div>
+					<div id="browser-toggle-all-media-vs-my-media">
+						<ul>
+							<li id="browser-my-media" class="tab browser-selected-toggle">My Media</li>
+							<li id="browser-all-media" class="tab browser-unselected-toggle">All Media</li>
+							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form> <img id="browser-collection-filter-tab-edit-icon" src="{{asset('gamma/images/edit-icon.png')}}">
+								<ul id="browser-collection-filter-edit-menu">
+									<li id="browser-rename-collection">rename collection</li>
+									<li id="browser-delete-collection">delete collection</li>
+									<li id="collection-to-editor-button">open in editor</li>
+									<li id="collection-player-button">share link</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 					
 					<div style="clear:both"></div>
 				</div>
 				<div id="browser-search-filter-toggle">
-					<form action="" method="" id="browser-form-search">
-						<div id="form-left">
-							<select id="database-search-filter" class="">
-							  <option value="all">All</option>
-							  <option value="image">Images</option>
-							  <option value="video">Video</option>
-							  <option value="audio">Audio</option>
-							  <option value="tweet">Tweet</option>
-							</select>
-							
-							
-							<input id="database-search-text" type="text" name="database-search" class="span6" style="color: rgb(51, 51, 51); ">
-							
-						</div>
-						<div id="form-right">
-							<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
-							<input id="database-search-button" class="" type="button" value="go" onclick="return false">
-						</div>
-					</form>
-					<div id="browser-collection-filter"><a id="browser-remove-collection-filter" href=".">X</a> <span id="browser-collection-filter-title">Collection Title</span><form id="browser-collection-filter-title-form"><input id="browser-update-collection-title" type="text" value="Collection Title"/></form>
-
-					<!-- ICONS for sharing & adding to editor 
-					<span id='collection-player-button' style='float:right;cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-play"></span><span id='collection-to-editor-button' style='float:right; cursor:pointer; margin-left:5px;' class="float-left zicon grey zicon-edit "></span>
-					-->
-					<a id="collection-to-editor-button" href=".">open in editor</a><a id="collection-player-button" href=".">share link</a>
+					<div id="searchbar" class="browser-searchbar">
+						<input id="database-search-text" type="text" name="database-search" value="search my media" style="color: rgb(68, 68, 68); ">
+						<span><select id="database-search-filter" class="">
+							  <option value="all">all formats</option>
+							  <option value="image">images</option>
+							  <option value="video">video</option>
+							  <option value="audio">audio</option>
+							  
+							</select></span>
 					</div>
 					
 					
-					<div style="clear:both;padding-bottom:4px;"></div>
+					
+					<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>
+
+					<a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
+					<!-- <div style="clear:both;padding-bottom:4px;"></div>-->
 					
 				</div>
 				
@@ -66,10 +67,12 @@
 					
 					<div id="browser-results-wrapper">
 						<div id ="browser-right-sidebar">
-							<div class="browser-filter-icon time"></div>
-							<div class="browser-filter-icon space"></div>
+							
+							<div id="browser-time-filter">
+							
+							</div>
 						</div>
-						<div id="browser-toggle-items-vs-collections"><ul><li id="browser-collection-count" class="browser-unselected-toggle">collections</li><li id="browser-item-count" class="browser-selected-toggle">items</li> </ul> </div>
+						
 						
 						
 						<div class="browser-loading"><img src="{{asset('gamma/images/loading.gif')}}"></div>
@@ -105,6 +108,44 @@
 {% block extras %}
          <!-- TEMPLATES -->
          <div id='templates' class='hidden'>
+         	<div id="browser-time-filter-template">
+         		<form>
+				<p>Timeline <span id="browser-time-filter-value"></span></p>
+						
+					<select name="valueAA" id="valueAA"></select>
+			
+					<select name="valueBB" id="valueBB"></select>
+				
+				</form>
+				<table id="browser-time-bins">
+					
+					
+					<thead>
+						<tr>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							
+							
+							
+						</tr>
+						
+					</tbody>
+				</table>
+         	</div>
          	<div id="browser-my-collection-template">
 				<p>City Streets <br><span class="browser-item-count">12 items</span></p><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/4383_s.jpg" alt="1936 Pittsburgh Flood (Part II)" title="1936 Pittsburgh Flood (Part II)" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
 				<img class="large" src="http://mlhplayground.org/em/web/images/thumbs/1_s.jpg" alt="Bird Songs of North America -- 403 items" title="Bird Songs of North America -- 403 items" style="width: 25px; height: 25px; margin-top: 1px; margin-right: 1px; margin-bottom: 1px; margin-left: 1px; ">
@@ -125,6 +166,9 @@
 				<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>
 				<p class="source"><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
 
+			</div>
+			<div id="browser-fancybox-image-template">
+				<img src=""/>
 			</div>
 			<div id="browser-fancybox-video-template">
 				<video controls="true" height="480px" width="640px" preload><source src="SOURCE"></video>
@@ -158,6 +202,7 @@
          </div>
 
          <!-- /TEMPLATES -->
+
          
 
 {% endblock %}
@@ -180,5 +225,14 @@
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.js')}}"></script>
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.pack.js')}}"></script>
+
+		<!-- JCarousel -->
+		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.min.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/jcarousel/skins/zeega/skin.css')}}" />
+
+		<!-- Filament slider for timeline -->
+	
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/filamentslider/css/ui.slider.extras.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/filamentslider/css/jquery-ui-1.8.16.custom.css')}}" />
 			
 {% endblock %}
