@@ -138,6 +138,7 @@ var ProtoLayer = Class.extend({
 		
 	load : function( model )
 	{
+
 		//test to see if it's a model or just a layer data object
 		if(model.attributes)
 		{
@@ -145,11 +146,11 @@ var ProtoLayer = Class.extend({
 			
 			this.model = model;
 		
-			this.attr = model.get('attr');
+			this.attr = deepCopy( model.get('attr') );
 		
 			var defaults = deepCopy( this.defaultAttributes );
+			
 			this.attr = _.defaults( this.attr, defaults);
-		
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
 			this.type = model.get('type');
@@ -173,7 +174,7 @@ var ProtoLayer = Class.extend({
 		}else{
 			//make it possible to load objects and not models.
 			this.model = model;
-			this.attr = model.attr;
+			this.attr = deepCopy( model.attr );
 		
 			var defaults = deepCopy(this.defaultAttributes );
 
@@ -196,6 +197,7 @@ var ProtoLayer = Class.extend({
 	//necessary?
 	lightLoad : function( model )
 	{
+
 		//make it possible to load objects and not models.
 		this.model = model;
 		this.attr = model.attr;

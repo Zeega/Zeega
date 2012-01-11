@@ -309,14 +309,15 @@ var Zeega = {
 			if( layer.isNew() )
 			{
 				console.log('this is a new layer');
+				console.log(layer)
 				layer.save(
 					{},
 					{
 						success : function(savedLayer, response){
+							console.log(response)
 							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
 							_this.updateAndSaveNodeLayer(node,savedLayer);
 							_this.addToLayerCollections(node, savedLayer);
-							console.log(savedLayer.layerClass.thumbUpdate)
 							if( savedLayer.layerClass.thumbUpdate ) node.noteChange() ;
 						}
 					});
@@ -560,9 +561,10 @@ var Zeega = {
 	{
 		console.log(this.route);
 		
+		var order = _.map( this.route.get('nodesOrder'), function(num){ return parseInt(num) });
 		var routes = [{
 			'id' : this.route.id,
-			'nodeOrder' : this.route.get('nodesOrder'),
+			'nodeOrder' : order,
 			'nodes' : this.route.nodes.toJSON(),
 			'layers' : this.route.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
 		}];

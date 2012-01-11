@@ -79,7 +79,7 @@ Zeega\IngestBundle\Entity\Item:
             type: string
             length: 200
         date_created:
-            type: date
+            type: datetime
             nullable: true
         type:
             type: string
@@ -91,7 +91,7 @@ Zeega\IngestBundle\Entity\Item:
             nullable: false        
         thumbnail_url:
             type: string
-            length: 100
+            length: 500
             nullable: true
         child_items_count:
             type: integer
@@ -106,10 +106,10 @@ Zeega\IngestBundle\Entity\Item:
             length: 10
             nullable: true
         media_date_created:
-            type: date
+            type: datetime
             nullable: true
         media_date_created_end:
-            type: date
+            type: datetime
             nullable: true        
         media_creator_username:
             type: string

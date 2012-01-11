@@ -15,6 +15,15 @@ security:
                 admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
+        search:
+            pattern:  ^/api/search
+            anonymous: ~
+        tags:    
+            pattern: ^/api/tags
+            anonymous: ~
+        items:  
+            pattern: ^/api/items
+            anonymous: ~        
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -35,6 +44,12 @@ security:
             anonymous: ~
         route:
             pattern:  ^/route/
+            anonymous: ~
+        search:
+            pattern: ^/api/search
+            anonymous: ~
+        tags:
+            pattern: ^/api/tags
             anonymous: ~
         routes:
             pattern:  ^/routes/

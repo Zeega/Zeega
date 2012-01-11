@@ -17,8 +17,8 @@ var TextLayer = ProtoLayer.extend({
 		type:'text',
 		title:'Text Layer',
 		content: '',
-		x:0,
-		y:0,
+		left:0,
+		top:0,
 		height:'200',
 		width:'400',
 		color: {r:255,g:255,b:255,a:1},
@@ -154,7 +154,7 @@ var TextLayer = ProtoLayer.extend({
 	
 	onDomPlacement : function()
 	{
-		console.log('onDomPlacement')
+		//console.log('onDomPlacement')
 		var _this = this;
 		var content = this.visualEditorElement.find('.text-layer-content');
 		// make the text resizable
@@ -205,7 +205,7 @@ var TextLayer = ProtoLayer.extend({
 		});
 
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
-		console.log('text layer alohad')
+		//console.log('text layer alohad')
 		Aloha.jQuery(content).aloha();
 		
 		

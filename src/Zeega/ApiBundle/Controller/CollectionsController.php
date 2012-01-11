@@ -37,8 +37,10 @@ class CollectionsController extends Controller
  					        ->searchItems($query);								
 
         // populate the results object
-        $tagsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults));
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+        $resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);				
+        
+		$itemsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }    
     
     // get_collection GET    /api/collections/{id}.{_format}
@@ -126,10 +128,11 @@ class CollectionsController extends Controller
          					 ->searchCollectionItems($query);								
         
         // populate the results object
-        $tagsView = $this->renderView('ZeegaApiBundle:Collections:items.json.twig', 
-            array('items' => $queryResults, 'collection_id' => $id));
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+        
+        $itemsView = $this->renderView('ZeegaApiBundle:Collections:items.json.twig', array('items' => $queryResults, 'collection_id' => $id, 'items_count' => $resultsCount));
             
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
     
     // get_item_tags GET    /api/collections/{collectionId}/tags.{_format}
@@ -168,11 +171,19 @@ class CollectionsController extends Controller
         
         $tagsId = join(",",$tagsId);
         
+		$query['page'] = 0;
+		$query['limit'] = 100;
+		$query['tags'] = $tagsId;
+		$query['item_id'] = $itemId;
+		$query['not_item_id'] = $itemId;
+		
         // get items with the same tags
-        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        $queryResults = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
         
         // render results
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);
+        
+		$itemsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
         
@@ -298,8 +309,9 @@ class CollectionsController extends Controller
         
     	$em->remove($collection);
     	$em->flush();
-    	
-    	return new Response('SUCCESS',200);
+
+    	$itemView = $this->renderView('ZeegaApiBundle:Collections:delete.json.twig', array('item_id' => $collection_id, 'status' => "Success"));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
     }
     
     public function deleteCollectionItemAction($collection_id, $item_id)

@@ -21,15 +21,25 @@ class TagsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $conn = $this->get('database_connection');
-
+		
+		
         $tags = $conn->fetchAll('select Tag.*,TagCorrelation.correlation_index from TagCorrelation inner join Tag on TagCorrelation.tag_related_id = Tag.id 
-                                 where TagCorrelation.tag_id = ? order by correlation_index DESC',
+                                 where TagCorrelation.tag_id = ? order by correlation_index DESC LIMIT 20 OFFSET 0',
                                  array($tagid));
-        if (!$tags) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id ' . $tagid);
-        }
-        $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tagid));
+		
+		/*
+		$query = array();
+		$query['tag_id'] = $tagid;
+		$query['limit'] = 20;
+		$query['offset'] = 0;
+		
+		$tags = $em->getRepository('ZeegaIngestBundle:TagCorrelation')->searchRelatedTags($query);
+		*/
+		//return new Response(json_encode($tags));
+		
+		$tag = $em->getRepository('ZeegaIngestBundle:Tag')->find($tagid);
+		
+        $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tag));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
@@ -37,9 +47,9 @@ class TagsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getTagsAction()
     {
-            $em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getEntityManager();
 
-        $tags = $em->getRepository('ZeegaIngestBundle:Tag')->findAll();
+        $tags = $em->getRepository('ZeegaIngestBundle:Tag')->findPaginated(100,0);
         
         $tagsView = $this->renderView('ZeegaApiBundle:Tags:index.json.twig', array('tags' => $tags));
         
@@ -58,40 +68,6 @@ class TagsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($tagView);
     }
 
-    // TEMP - compute similar tags
-    public function getTagsComputeSimilartAction()
-    {
-         // get this code out of here - use entity instead
-         $conn = $this->get('database_connection');
- 
-         $itemsWithTagQuery = $conn->prepare('select distinct item_id from ItemTags where tag_id = ?');
-         $relatedTagsQuery = $conn->prepare('select tag_id, count(tag_id) from ItemTags where item_id in (?) group by tag_id');
-          
-         $tags = $conn->fetchAll('select distinct tag_id from ItemTags');
- 
-         foreach($tags as $tag)
-         {
-             $itemsWithTag = $conn->fetchAll('select distinct item_id from ItemTags where tag_id = ?', array($tag["tag_id"]));
-             $itemTags = array();
-             foreach($itemsWithTag as $item)
-             {
-                 array_push($itemTags,$item["item_id"]);
-             }
- 
-             $relatedTags = $conn->executeQuery('select tag_id, count(tag_id) as tag_count from ItemTags where item_id in (?) and tag_id <> ? group by tag_id', 
-                                                 array($itemTags,$tag["tag_id"]),
-                                                 array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY, 'integer'));
-     
-             foreach($relatedTags as $relatedTag)
-             {
-                 $conn->insert('TagCorrelation', array('tag_id' => $tag["tag_id"], 
-                     'tag_related_id' => $relatedTag["tag_id"], 'correlation_index' => $relatedTag["tag_count"]),
-                     array('Integer','Integer','Integer','Integer'));
-         
-                 //return new Response(var_dump($tag));
-             }
-         }
-    }
 
     // Private methods 
     private function populateCollectionWithRequestData($request_data)

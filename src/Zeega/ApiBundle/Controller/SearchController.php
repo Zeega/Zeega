@@ -37,7 +37,7 @@ class SearchController extends Controller
 		$query["userId"]        = $request->query->get('user');      //  int    
 		$query["queryString"]   = $request->query->get('q');         //  string
 		$query["contentType"]   = $request->query->get('content');   //  string
-		$query["collectionId"]  = $request->query->get('collection');//  string
+		$query["collection_id"]  = $request->query->get('collection');//  string
 		$query["tags"]          = $request->query->get('tags');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
 		
@@ -83,7 +83,7 @@ class SearchController extends Controller
 		    $query["geo"] = null;
 		}
         
-		
+		if(isset($query["contentType"]) && strtoupper($query["contentType"]) == "ALL") $query["contentType"] = null;
 	    
 	    //  filter results for the logged user
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
@@ -115,13 +115,15 @@ class SearchController extends Controller
             if($query['returnItems'] == 1)
             {
                 $results['items'] = $items;
-                $results['items_count'] = sizeof($items);
+				$results['returned_items_count'] = sizeof($items);
+                $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);
             }
 
             if($query['returnCollections'] == 1)
             {
                 $results['collections'] = $collections;
-                $results['collections_count'] = sizeof($collections);
+				$results['returned_collections_count'] = sizeof($collections);
+                $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);
             }	
 	    }
 		

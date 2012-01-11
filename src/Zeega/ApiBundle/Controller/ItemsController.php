@@ -36,9 +36,11 @@ class ItemsController extends Controller
  		$queryResults = $this->getDoctrine()
  					        ->getRepository('ZeegaIngestBundle:Item')
  					        ->searchItems($query);								
-
-        $tagsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults));
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
+		
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+        
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
     // get_collection GET    /api/item/{id}.{_format}
@@ -73,7 +75,7 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
-    // get_item_tags GET    /api/items/{itemId}/tags.{_format}
+    // get_item_tags GET    /api/items/{itemId}/similar.{_format}
     public function getItemSimilarAction($itemId)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -89,14 +91,40 @@ class ItemsController extends Controller
         
         $tagsId = join(",",$tagsId);
         
+		$query = array();
+		$query['page'] = 0;
+		$query['limit'] = 100;
+		$query['tags'] = $tagsId;
+		$query['item_id'] = $itemId;
+		$query['not_item_id'] = $itemId;
+		
         // get items with the same tags
-        $items = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($tagsId);
+        $queryResults = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
         
-        // render results
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));        
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+        
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
     
+	// delete_collection    DELETE /api/items/{collection_id}.{_format}
+    public function deleteItemAction($item_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	
+     	if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find a Collection with the id ' . $item_id);
+        }
+        
+    	$em->remove($item);
+    	$em->flush();
+    	
+        $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
+    }
+
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
     public function putItemsTagsAction($itemId)
     {
