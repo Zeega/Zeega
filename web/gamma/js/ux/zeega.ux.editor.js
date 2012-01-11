@@ -17,50 +17,6 @@ function initUX(){
 
 
 
-function submitenter(inputfield,e)
-{
-	var keycode;
-	
-	console.log('submitenter');
-	
-	if (window.event) keycode = window.event.keyCode;
-	else if (e) keycode = e.which;
-	else return true;
-
-	if (keycode == 13)
-	{
-	    return submitbutton(inputfield);
-	}else{
-		return true;
-	}
-}
-
-function submitbutton(button)
-{
-    return search(button,true);
-}
-
-function search(triggerElement, discardCurrentResultSet)
-{
-    //var form = $(triggerElement).closest("form");
-    //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
-    // this is not very elegant...
-
-	var query = $("#database-search-text").val();
-	var defaultText = /search database/;
-	if( defaultText.test(query) ) query = '';
-    Database.search( query, $("#database-search-filter").val(), discardCurrentResultSet);
-
-	//show the database drawer if it's hidden
-	if( $('#database').is(':hidden') )
-	{
-		$('#database').show('blind',{'direction':'vertical'});
-		$('#item-view-bar').find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
-	}
-	
-	return false;	
-}
-
 function embedButton()
 {
 	
@@ -100,6 +56,7 @@ function addLayer(type)
 {
 	//add new layer model
 	var newLayer = new Layer({'type':type});
+	console.log( newLayer.get('attr') )
 	//this can only happen to the current node
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
 }
@@ -179,24 +136,51 @@ function closeOpenCitationTabs()
 	$('#sidebar').fadeIn();
 	
 	$('#database-search-button').click(function(){
-		var discardCurrentResultSet = true;
-		Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
+		
+		Database.search( $("#database-search-text").val() );
 		return false;
 	});
 	
+	$('#database-collection-filter').change(function(){
+		$('#database-search-filter').val('all');
+		Database.filterByCollection( $(this).val() );
+	});
+	
 	$('#database-search-filter').change(function(){
-	    return search(this,true);
+		Database.filterByMediaType( $(this).val() );
 	});
 	
 	$('#refresh-database').click(function(){
-	    return search(this,true);
+	    Database.refresh();
 	});
 	
 	//detect when zeega comes back in focus and refresh the database
 	window.addEventListener('focus', function() {
-		search($('#refresh-database'),true)
+		Database.refresh();
+	    
 		console.log('infocus refresh database')
 	});
+	
+	
+	function submitenter(inputfield,e)
+	{
+		var keycode;
+
+		console.log('submitenter');
+
+		if (window.event) keycode = window.event.keyCode;
+		else if (e) keycode = e.which;
+		else return true;
+
+		if (keycode == 13)
+		{
+
+			Database.search( $("#database-search-text").val() );
+			console.log('pressed enter')
+		}else{
+			return true;
+		}
+	}
 	
 	//node tray sortable and sorting events
 	
@@ -327,16 +311,17 @@ function closeOpenCitationTabs()
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 				{
+					
 					ui.draggable.draggable('option','revert',false);
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source_type'),
+						type: Zeega.draggedItem.get('type'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('item_url'),
-							'uri' : Zeega.draggedItem.get('item_url'),
+							'url' : Zeega.draggedItem.get('uri'),
+							'uri' : Zeega.draggedItem.get('uri'),
 							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
 							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
 							'citation':true,
