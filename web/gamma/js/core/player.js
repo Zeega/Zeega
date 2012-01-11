@@ -421,7 +421,6 @@ var Player = {
 		//if not loading or already loaded
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
-			
 			//put the layer id into the layers Loading array
 			this.loadingLayers.push( layerID );
 
@@ -676,7 +675,6 @@ var Player = {
 	
 	gotoNode : function( nodeID )
 	{
-
 		this.currentNode = this.getNode( nodeID );
 		this.preload();
 	},

@@ -192,6 +192,12 @@ function closeOpenCitationTabs()
 	    return search(this,true);
 	});
 	
+	//detect when zeega comes back in focus and refresh the database
+	window.addEventListener('focus', function() {
+		search($('#refresh-database'),true)
+		console.log('infocus refresh database')
+	});
+	
 	//node tray sortable and sorting events
 	
 	$('#node-drawer').find('ul').sortable({  
