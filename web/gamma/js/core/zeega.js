@@ -179,7 +179,7 @@ var Zeega = {
 		//set global currentNode to the selected node
 		this.currentNode = node;
 
-		if(node) window.location.hash = '/node/'+ node.id; //change location hash
+		if(node) window.location.hash = '/editor/frame/'+ node.id; //change location hash
 		else window.location.hash = 'newNode';
 		//open/close visual editor
 		var el = $('#workspace');

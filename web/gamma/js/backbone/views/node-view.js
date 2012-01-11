@@ -9,7 +9,7 @@ var NodeView = Backbone.View.extend({
 	
 	render: function()
 	{
-		var that = this;
+		var _this = this;
 		var template = $("#node-item-template")
 			.clone()
 			.attr('id','node').addClass('node-thumb-'+this.model.id);
@@ -25,7 +25,7 @@ var NodeView = Backbone.View.extend({
 				
 		template.find('.node-overlay')
 			.click(function(){
-				Zeega.loadNode(that.model);
+				Zeega.loadNode(_this.model);
 				return false;
 			});
 
@@ -35,9 +35,9 @@ var NodeView = Backbone.View.extend({
 			.click(function(){
 				//if the current node is being deleted, load another node
 				//if the node being deleted is the only node, then just delete all the layers inside the node
-				Zeega.destroyNode(that);
+				Zeega.destroyNode(_this);
 				return false;
-				});
+			});
 		
 		//copy the cloned item into the el
 		$(this.el).html(template)
@@ -54,14 +54,14 @@ var NodeView = Backbone.View.extend({
 			drop : function( event, ui )
 			{
 				
-				//that.model.noteChange();
+				//_this.model.noteChange();
 				console.log(Zeega.draggedItem);
 				
 				ui.draggable.draggable('option','revert',false);
 				//make the new layer model
 				
 				var settings = {
-					url: Zeega.url_prefix + 'nodes/'+ that.model.id +'/layers',
+					url: Zeega.url_prefix + 'nodes/'+ _this.model.id +'/layers',
 					type: Zeega.draggedItem.get('source'),
 //					zIndex: Zeega.currentNode.get('layers').length+1,
 					attr: {
@@ -72,7 +72,7 @@ var NodeView = Backbone.View.extend({
 				};
 				var newLayer = new Layer( settings );
 				
-				Zeega.addLayerToNode(that.model,newLayer, this);
+				Zeega.addLayerToNode(_this.model,newLayer, this);
 				
 			}
 		});
@@ -204,13 +204,13 @@ var NodeViewCollection = Backbone.View.extend({
 	render : function()
 	{
 		this._rendered = true;
-		var that = this;
+		var _this = this;
 		
 		//clear out any old stuff inside this.el
 		$(this.el).empty();
-		//add EACH model's view to the that.el and render it
+		//add EACH model's view to the _this.el and render it
 		_(this._nodeViews).each(function(node){
-			$(that.el).append(node.render().el);
+			$(_this.el).append(node.render().el);
 		});
 		
 		console.log('renderNodes');

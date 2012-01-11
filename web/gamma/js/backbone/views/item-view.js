@@ -77,7 +77,7 @@ var ItemView = Backbone.View.extend({
 	{
 		//html = '<div id="database-asset-template" class="hidden">';
 		var html =	'<span class="item-icon zicon zicon-<%= type %>"></span>' +
-					'<img class="item-thumbnail" src="<%= thumbUrl %>" height="25" width="25"/>' +
+					'<img class="item-thumbnail" src="<%= thumbUrl %>" height="30" width="30"/>' +
 					//'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>' +
 					'<div class="item-title"><%= title %></div>' +
 					'<div class="item-meta"><%= creator %></div>';
