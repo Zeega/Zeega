@@ -16,6 +16,29 @@ function initUX(){
 }
 
 
+$('#workspace-ratio').change(function(){
+	var ratioID = parseInt( $(this).val() );
+	changeAspectRatio( ratioID )
+	Zeega.updateAspectRatio( ratioID );
+});
+
+function changeAspectRatio( ratioID )
+{
+	switch( ratioID )
+	{
+		case 1:
+			$('#visual-editor-workspace').css('width','704px')
+			break;
+		
+		case 2:
+			$('#visual-editor-workspace').css('width','625px')
+			break;
+			
+		default:
+			console.log('goDefault')
+	}
+}
+
 
 function embedButton()
 {

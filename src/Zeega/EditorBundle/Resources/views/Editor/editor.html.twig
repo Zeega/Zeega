@@ -13,6 +13,15 @@
 				<input id="project-id" type="hidden" value="{{projectid}}"/>
 				<div id='route-publish'>
 					
+					
+					<select name="ratio" id="workspace-ratio">
+						<option value="1">wide</option>
+						<option value="2">4:3</option>
+					</select>
+
+
+					
+					
 					<ul class='pill-buttons'>
 						<li><a id='share-project' href='#'>Share</a></li>
 						<!--
@@ -118,7 +127,9 @@
 								<div id='visual-icon-tray' class='icon-tray'></div>
 							</div>
 							
-							<div id="visual-editor-workspace" class='workspace clearfix'></div>
+							<div id='workspace-outer-wrapper' class='clearfix'>
+								<div id="visual-editor-workspace" class='workspace clearfix'></div>
+							</div>
 							
 						</div>
 						

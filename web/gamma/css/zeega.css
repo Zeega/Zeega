@@ -1530,14 +1530,22 @@ body
 	position:relative;
 }
 
-#visual-editor-workspace
+#workspace-outer-wrapper
 {
 	width:704px;
 	height:469px;
+	margin: 6px 0;
+	border: 1px dotted #444;
+}
+
+#visual-editor-workspace
+{
+	height:100%;
+	width:704px;
 	background:#000;
 	overflow:hidden;
 	position:relative;
-	margin: 6px 0;
+	margin:0 auto;
 }
 
 .workspace-item-hover
