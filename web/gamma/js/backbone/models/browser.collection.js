@@ -46,7 +46,7 @@ var BrowserCollection = Backbone.Model.extend({
 */
 var BrowserCollectionCollection = Backbone.Collection.extend({
 	model : BrowserCollection,
-	
+	totalCollectionsCount : 0,
 	/*,
 	url: function(){
 		return Zeega.url_prefix+"search/items/"+ this.offset +"/100";

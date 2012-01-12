@@ -6,6 +6,7 @@
 var BrowserSearchCollectionsView = Backbone.View.extend({
 	el: $('#browser-results-collections'),
 	_views : [],
+	
 
 	initialize : function() {
 		
@@ -18,9 +19,7 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 
       	//this.collecion.bind();
       	this.collection.bind('add',   this.addItem, this);
-      	this.collection.bind("add", function(collection) {
-  			//console.log("Added collection!");
-		});
+      	
 		this.collection.bind('reset', this.resetViews, this);
       	//this.model.updateQuery();
 
@@ -50,7 +49,7 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 		var displayVar = $(this.el).css('display');
 		if (displayVar == "none"){
 			//Update counts in UI
-			$('#browser-collection-count').text(this.collection.length + " collections");
+			$('#browser-collection-count').text(this.collection.totalCollectionsCount  + " collections");
 		} else {
 
 			
@@ -75,7 +74,7 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 				$('#browser-no-collections-results-message').show();
 			}
 			//Update counts in UI
-			$('#browser-collection-count').text(this.collection.length + " collections");
+			$('#browser-collection-count').text(this.collection.totalCollectionsCount  + " collections");
 
 			
 		}
@@ -137,7 +136,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		//If the items drawer isn't showing then only render the item count
 		if ($(this.el).css("display") == "none"){
 			//Update counts in UI
-			$('#browser-item-count').text(this.collection.length + " items");
+			$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 		} else {
 			
 			
@@ -167,7 +166,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			}
 
 			//Update counts in UI
-			$('#browser-item-count').text(this.collection.length + " items");
+			$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 
 			
 		}

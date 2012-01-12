@@ -22,6 +22,7 @@ var ItemCollection = Backbone.Collection.extend({
 	contentType : null,
 	collectionID : null,
 	query : null,
+	totalItemsCount : 0,
 	
 	url: function()
 	{

@@ -77,7 +77,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 			var items_count = bin.get("items_count");
 
 			$('.browser-time-bins-range:eq(' + i + ')').html(bin.get("formatted_start_date") +" &ndash; <br/>" + bin.get("formatted_end_date"));
-			$('.browser-time-bins-results:eq(' + i + ')').text(items_count + (items_count > 0 ? " items" :  ""));
+			$('.browser-time-bins-results:eq(' + i + ')').text(items_count + (items_count > 0 ? " results" :  ""));
 
 			
 			//unbind previous click events from any of the results cells

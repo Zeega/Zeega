@@ -75,6 +75,7 @@ var BrowserSearch =  Backbone.Model.extend({
 
 		//Assemble item data into BrowserItems
 		if (data['items'] != null){
+			this.get("itemsCollection").totalItemsCount = data['items_count'];
 			_.each(data['items'], function(item){
 				var type = item['content_type'];
 				
@@ -83,6 +84,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		}
 		//Assemble collection data into BrowserCollections
 		if (data['collections'] != null){
+			this.get("collectionsCollection").totalCollectionsCount = data['collections_count'];
 			_.each(data['collections'], function(collection){
 			
 				

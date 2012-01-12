@@ -263,8 +263,7 @@ $(document).ready(function() {
 								console.log("Deleted collection " + collectionID);		
 			 				},
 			 				error: function(model, response){
-			 					ZeegaBrowser.myCollections.remove(theCollection);
-			 					$('#browser-my-media').trigger('click');
+			 					
 			 					console.log("Error deleting collection " + collectionID);		
 			 					console.log(response);
 			 				}

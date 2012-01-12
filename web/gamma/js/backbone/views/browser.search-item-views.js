@@ -140,6 +140,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 
 		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		
+		
 		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
 		//this.el.find('.browser-item-count').text('232');
 		
