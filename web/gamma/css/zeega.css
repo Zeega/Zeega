@@ -864,20 +864,39 @@ body
 {
 	float:left;
 	font-size:2.5em;
+	width:700px;
+	position:absolute;
+	border:1px dotted #666;
 }
 
-#route-title span form
+#route-title:hover
 {
-	font-size:1em;
+	border:1px dotted #ddd;
 }
+
 
 #route-publish
 {
 	float:right;
 	height:40px;
 	font-size: 0.8em;
+	width : 300px;
 }
 
+#route-publish li{ float:right }
+#route-publish>ul>li+li{margin-right:6px;}
+#upper-select
+{
+	font-size:18px;
+	position:relative;
+	top:6px;
+}
+
+#upper-select select
+{
+	background:transparent;
+	color:#ccc;
+}
 
 /** ripped from twitter bootstrap **/
 .pill-buttons
