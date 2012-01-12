@@ -523,8 +523,44 @@
 	
 	text-decoration:none;
 }
+#browser-fancybox-media-container{
+	width:640px;
+	height:480px;
+	background-color:white;
 
-// Settings
+}
+#browser-fancybox-item{
+	width:100%;
+	min-height:380px;
+	background-color:gray;
+	text-align:center;
+	margin-bottom:5px;
+}
+#browser-fancybox-item img{
+	max-width:100%;
+	max-height:85%;
+	
+}
+#browser-fancybox-buttons{
+	
+	margin-top:10px;
+	font-variant:small-caps;
+	font-size: 16px;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+#browser-fancybox-more-button{
+	float:left;
+}
+#browser-fancybox-delete-button{
+	float:right;
+}
+
+/*override the default from the fancybox stylesheet*/
+.fancybox-outer {
+	background-color:#fff !important;
+}
+
 
 
 

@@ -44,20 +44,20 @@ $(document).ready(function() {
     	closeEffect	: 'fade',
     	openSpeed : 'fast',
     	closeSpeed : 'fast',
-    	openEasing : 'none',
-    	closeEasing : 'none',
 		closeClick:false,
 		nextClick:false,
 		mouseWheel:false,
-		fitToView:true,
-		arrows:true,
+		fitToView:false,
+		arrows:false,
 		closeBtn:false,
-		autoSize:true,
+		aspectRatio:true,
+		scroll:'none',
+		
     	helpers : {
-    		title : {
-    			type : 'inside'
-    		}
+    		title : false,
+    		buttons	: {}
     	},
+    	
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
@@ -293,9 +293,10 @@ $(document).ready(function() {
 					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
 					
 					collectionToUpdate.isUpdate = true;
+					var newTitle = $('#browser-update-collection-title').val();
 
 					//Save collection and hide form field on success
-					collectionToUpdate.save({ title:$('#browser-update-collection-title').val() }, 
+					collectionToUpdate.save({ title:newTitle }, 
 							{
 								success: function(model, response) { 
 									

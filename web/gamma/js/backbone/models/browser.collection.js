@@ -5,14 +5,18 @@ var BrowserCollection = Backbone.Model.extend({
 	
 	
 	url : function(){
+		var url = null;
 		if (this.isNew()){
-			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/items"; 
+			url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/items";
+
 		}else if (this.isUpdate){
 		    this.isUpdate = false;
-		    return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id;
+		    url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id;
 		}else {
-			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id+"/items";
+			url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id+"/items";
 		}
+		console.log("Final URL is " + url);
+		return url; 
 	},
 	defaults : {
 		"title" 	: 'Untitled',

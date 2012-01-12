@@ -159,6 +159,18 @@
 				<div class="browser-results-image-edit"><a class="browser-remove-from-collection" href=".">remove</a> <a class="browser-change-thumbnail" href=".">make cover</a>
 				</div>
 			</div>
+			<div id="browser-fancybox-media-container-template">
+				<div id="browser-fancybox-item"><img src=""></div>
+				<p class="title">TITLE</p>
+				<p><span class="creator">CREATOR</span> <span class="source"><a href="#" target="_blank">View Source</a></span></p>
+				
+				<div id="browser-fancybox-buttons" class="clearfix">
+					<p id="browser-fancybox-more-button"><a href=".">more</a></p><p id="browser-fancybox-delete-button"><a href=".">delete</a></p>
+				</div>
+				
+					<!--<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>-->
+				
+			</div>
 			<div id="browser-fancybox-caption-template">
 				
 				<p class="title">TITLE</p>
@@ -168,10 +180,10 @@
 
 			</div>
 			<div id="browser-fancybox-image-template">
-				<img src=""/>
+				<img src="" width="640px" height="480px"/>
 			</div>
 			<div id="browser-fancybox-video-template">
-				<video controls="true" height="480px" width="640px" preload><source src="SOURCE"></video>
+				<video controls="true"  width="640px" preload><source src="SOURCE"></video>
 				
 			</div>
 			<div id="browser-fancybox-youtube-template">
@@ -223,8 +235,11 @@
 
 		<!-- Add fancyBox -->
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
+		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
+
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.js')}}"></script>
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.fancybox.pack.js')}}"></script>
+		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.js')}}"></script>
 
 		<!-- JCarousel -->
 		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.min.js')}}"></script>

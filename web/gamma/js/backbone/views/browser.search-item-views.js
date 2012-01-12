@@ -227,8 +227,10 @@ var BrowserSingleItemView = BrowserItemView.extend({
 var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	initialize: function(){
-		this.el =$("#browser-fancybox-caption-template").clone();
-		this.el.removeAttr('id');
+		//this.el =$("#browser-fancybox-caption-template").clone();
+		//this.el.removeAttr('id');
+		this.el = $("#browser-fancybox-media-container-template").clone();
+		this.el.attr('id', 'browser-fancybox-media-container');
 	},
 	/* Pass in the element that the user clicked on from fancybox. Fancy box
 	uses the object's title as the caption so set that to the element in 
@@ -236,11 +238,13 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 	render: function(obj)
 	{
 		
+		var theImage = $(this.el).find("img");
+		$(theImage).attr("src", $(obj.element).attr("href"));
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
-		obj.title = this.el.html();
+		obj.content = this.el;
 		
 		return this;
 	},
@@ -252,20 +256,21 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	initialize: function(){
 
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		//this.content = $("#browser-fancybox-image-template").clone();
-		//this.content.removeAttr('id');
+		
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
 	render: function(obj)
 	{
 		
-		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		//var theImage = $(this.content).find("img");
-		//$(theImage).attr("src", $(obj.element).attr("href"));
-
+		//$(theImage).attr("height", $(window).height());
+		//$(theImage).attr("width", $(window).width()/2);
 		//set object's content
-		//obj.content = this.content.html(); 
+		//obj.content = this.content; 
+
+		
+
+		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 
 		return this;
 	},
