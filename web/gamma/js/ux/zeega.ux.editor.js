@@ -12,8 +12,16 @@
 function initUX(){
 
 	initHeaderUX();
-	
+
+	$('#visualeditor-view-bar').popover({
+		'delayIn' : 2000,
+		placement : 'below'
+	});
+		
 }
+
+
+
 
 
 $('#workspace-ratio').change(function(){

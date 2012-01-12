@@ -19,7 +19,13 @@ var ItemView = Backbone.View.extend({
 		var template = _.template( this.getTemplate() );
 		//copy the cloned item into the el
 		$(this.el).append( template( blanks ) );
-		$(this.el).addClass('database-asset').attr( 'id','item-'+this.model.id );
+		$(this.el)
+			.addClass('database-asset')
+			.attr({
+				'id':'item-'+this.model.id,
+				'data-original-title' : this.model.get('title'),
+				'data-content' : 'created by: ' + this.model.get('media_creator_username')
+			});
 		
 		//drag drop functionality
 		$(this.el).draggable({
@@ -58,6 +64,14 @@ var ItemView = Backbone.View.extend({
 			}
 			
 		});
+		
+		// rollover
+		
+		var args = {
+			
+		};
+		
+		$(this.el).popover( args );
 		
 		return this;
 	},
