@@ -54,7 +54,10 @@
 					<div id="sidebar" class='hidden clearfix' >
 					
 	
-						<div id='layer-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Layers' style='cursor:pointer'>
+						<div id='layer-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
+							data-original-title='Layers'
+							data-content='This is where your media layers Appear. You can reorder and change their properties.'
+						>
 							<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Layers</div>
 						</div>
 						
@@ -90,7 +93,10 @@
 						
 						<div id='database-tray' class='clearfix'>
 							
-							<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+							<div id='item-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
+								data-original-title='Items Database'
+								data-content='This is where you can search items from your collections.'
+							>
 								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Items</div>
 								
 								<div id="searchbar">
@@ -117,11 +123,14 @@
 									<select id='database-collection-filter' class=''>
 									  <option value="all">All Collections</option>
 									</select>
+									
+									<a href='#' id='list-view'>list</a>
+									<a href='#' id='grid-view'>grid</a>
 
 								</div><!-- db-nav-controls -->
 							
 
-								<ul id='database-item-list'></ul>
+								<ul id='database-item-list' class='list-view'></ul>
 							</div><!-- database -->
 						
 						</div><!-- database-tray -->
@@ -133,7 +142,7 @@
 					<div id='workspace-wrapper'>
 						<div id='visual-editor-wrapper' class='wrapper clearfix' style='cursor:pointer'>
 							
-							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander' style='cursor:pointer'
+							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
 								data-original-title='The Visual Editor Window'
 								data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'>
 								

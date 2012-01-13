@@ -20,7 +20,7 @@ var ItemView = Backbone.View.extend({
 		//copy the cloned item into the el
 		$(this.el).append( template( blanks ) );
 		$(this.el)
-			.addClass('database-asset')
+			.addClass('database-asset-list')
 			.attr({
 				'id':'item-'+this.model.id,
 				'data-original-title' : this.model.get('title'),
@@ -90,11 +90,11 @@ var ItemView = Backbone.View.extend({
 	getTemplate : function()
 	{
 		//html = '<div id="database-asset-template" class="hidden">';
-		var html =	'<span class="item-icon zicon zicon-<%= type %>"></span>' +
-					'<img class="item-thumbnail" src="<%= thumbUrl %>" height="30" width="30"/>' +
+		var html =	'<span class="item-icon show-in-list-view zicon zicon-<%= type %>"></span>' +
+					'<img class="item-thumbnail" src="<%= thumbUrl %>"/>' +
 					//'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>' +
-					'<div class="item-title"><%= title %></div>' +
-					'<div class="item-meta"><%= creator %></div>';
+					'<div class="item-title show-in-list-view"><%= title %></div>';
+					//'<div class="item-meta"><%= creator %></div>';
 					//'</div>';
 		return html;
 	}

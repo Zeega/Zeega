@@ -13,16 +13,25 @@ function initUX(){
 
 	initHeaderUX();
 
-	$('#visualeditor-view-bar').popover({
-		'delayIn' : 2000,
+
+//		POPOVERS		//
+	$('.rollover').popover({
+		'delayIn' : 1000,
 		placement : 'below'
 	});
 		
 }
 
 
+$('#list-view').click(function(){
+	console.log('goto list view');
+	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+})
 
-
+$('#grid-view').click(function(){
+	console.log('goto grid view');
+	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+})
 
 $('#workspace-ratio').change(function(){
 	var ratioID = parseInt( $(this).val() );
