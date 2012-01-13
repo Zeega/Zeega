@@ -92,6 +92,9 @@ var Zeega = {
 			success: function(project){
 				z.projectView = new ProjectView({ model : z.project });
 				z.projectView.render();
+				console.log('PROJECT')
+				console.log(project)
+				if( project.get('attr').ratio ) changeAspectRatio( project.get('attr').ratio )
 			}
 		});
 	},
@@ -179,7 +182,7 @@ var Zeega = {
 		//set global currentNode to the selected node
 		this.currentNode = node;
 
-		if(node) window.location.hash = '/node/'+ node.id; //change location hash
+		if(node) window.location.hash = '/editor/frame/'+ node.id; //change location hash
 		else window.location.hash = 'newNode';
 		//open/close visual editor
 		var el = $('#workspace');
@@ -609,6 +612,14 @@ var Zeega = {
 		console.log(node);
 		
 		if(node) this.loadNode(node)
+	},
+	
+	udpateAspectRatio : function( ratioID )
+	{
+		console.log('changeAspectRatio to: '+ ratioID)
+		console.log(this.project)
+		this.project.set({'attr':{'ratio':ratioID}});
+		this.project.save();
 	}
 	
 	

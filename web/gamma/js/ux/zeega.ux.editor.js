@@ -12,9 +12,49 @@
 function initUX(){
 
 	initHeaderUX();
-	
+
+
+//		POPOVERS		//
+	$('.rollover').popover({
+		'delayIn' : 1000,
+		placement : 'below'
+	});
+		
 }
 
+
+$('#list-view').click(function(){
+	console.log('goto list view');
+	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+})
+
+$('#grid-view').click(function(){
+	console.log('goto grid view');
+	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+})
+
+$('#workspace-ratio').change(function(){
+	var ratioID = parseInt( $(this).val() );
+	changeAspectRatio( ratioID )
+	Zeega.updateAspectRatio( ratioID );
+});
+
+function changeAspectRatio( ratioID )
+{
+	switch( ratioID )
+	{
+		case 1:
+			$('#visual-editor-workspace').css('width','704px')
+			break;
+		
+		case 2:
+			$('#visual-editor-workspace').css('width','625px')
+			break;
+			
+		default:
+			console.log('goDefault')
+	}
+}
 
 
 function embedButton()

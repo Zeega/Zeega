@@ -57,7 +57,7 @@ var loadFiles = [
 	'order!jquery/plugins/jquerygetUrlParam',
 	'order!jquery/plugins/jqueryjson',
 	'order!jquery/plugins/jquerycookie',
-	'order!jquery/plugins/bootstrapmodal',
+	'order!jquery/plugins/twitter-bootstrap',
 	
 	
 	//mvc

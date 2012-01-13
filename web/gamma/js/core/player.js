@@ -676,6 +676,10 @@ var Player = {
 	gotoNode : function( nodeID )
 	{
 		this.currentNode = this.getNode( nodeID );
+		
+		window.location.hash = '/player/frame/'+ nodeID; //change location hash
+		
+		
 		this.preload();
 	},
 	

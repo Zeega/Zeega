@@ -8,6 +8,7 @@ var RouteView = Backbone.View.extend({
 		//$('#route-title').empty();
 		//copy the cloned item into the el
 		
+		/*
 		$(this.el).editable(
 			function(value,settings)
 			{
@@ -18,8 +19,10 @@ var RouteView = Backbone.View.extend({
 			{
 				indicator : 'Saving...',
 				tooltip   : 'Click to edit...',
-				indicator : '<img src="images/loading.gif">'
+				indicator : '<img src="images/loading.gif">',
+				style : 'background:yellow'
 			});
+		*/
 		
 		//$('#route-title').html(this.el);
 		return this;
