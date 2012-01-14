@@ -275,51 +275,62 @@ class EditorController extends Controller
 	
 	} 
 	
-	public function editorAction($short,$id){
-	
-	$user = $this->get('security.context')->getToken()->getUser();
-	if($user->getUserRoles()=='ROLE_SUPER_ADMIN') $super=true;
-	else $super=false;
-	$playground=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
-					->findPlaygroundByShort($short,$user->getId());
-    $admin = false;
-	if($playground||$super){
+	public function editorAction($short,$id)
+	{	
+		$user = $this->get('security.context')->getToken()->getUser();
 		
+		$super = ($user->getUserRoles() == 'ROLE_SUPER_ADMIN');
 			
-			$routes=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Route')
-					->findRoutesByProject($id);
-			$project=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
-					->findOneById($id);
-			$route=$routes[0];
+		$playground=$this->getDoctrine()
+						 ->getRepository('ZeegaEditorBundle:Playground')
+						 ->findPlaygroundByShort($short,$user->getId());
+    	$admin = false;
+
+		if($playground||$super)
+		{
+			$routes = $this->getDoctrine()
+						   ->getRepository('ZeegaEditorBundle:Route')
+						   ->findRoutesByProject($id);
+						
+			$project = $this->getDoctrine()
+							->getRepository('ZeegaEditorBundle:Project')
+							->findOneById($id);
+
+			$route = $routes[0];
 			
-		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-			// last displayname entered by the user
-			'displayname' => $user->getDisplayName(),
-			'title'   => $playground->getTitle(),
-			'projecttitle'   => $project->getTitle(),
-			'projectid'   =>$project->getId(),
-			'route'=>$route,
-			'short'=>$playground->getShort(),
-			'super'=>$super,
-			'adminMenu'=>$admin,
-			'projectsMenu'=>true,
-            'page'=>'editor',
+			$params = array();
+			$session = $this->getRequest()->getSession();
+			$collection_id = $session->get("collection_id");
 			
-		));
-	
-	
-	}
-	
-	else{
-	
-		return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
-	
-	}
-	
-	
+			if(isset($collection_id))
+			{
+				$params['collection'] = $collection_id;
+				$session->remove("collection_id"); // reads and deletes from session
+			}
+			//return new Response(var_dump($params));
+			//return new Response($this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent());
+			
+			$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+			
+			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+				// last displayname entered by the user
+					'displayname' => $user->getDisplayName(),
+					'title'   => $playground->getTitle(),
+					'projecttitle'   => $project->getTitle(),
+					'projectid'   =>$project->getId(),
+					'route'=>$route,
+					'short'=>$playground->getShort(),
+					'super'=>$super,
+					'adminMenu'=>$admin,
+					'projectsMenu'=>true,
+            		'page'=>'editor',
+					'results' => $items
+				));
+		}	
+		else
+		{
+			return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+		}
 	} 
 	
 	public function projectAction($short){
