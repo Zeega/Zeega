@@ -30,8 +30,7 @@ var bm = new bookmarklet({
 	            if(srcUrlIdx == -1)
 	            	srcUrlIdx = script.src.indexOf("/gamma/");
 	            else
-	            	srcUrlIdx = srcUrlIdx + "/web";
-	            	
+	            	srcUrlIdx = srcUrlIdx + "/web";	            	
 	            var localUrlPrefix = script.src.substring(0,srcUrlIdx);
 				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
