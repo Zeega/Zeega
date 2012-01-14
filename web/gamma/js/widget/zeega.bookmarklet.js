@@ -27,8 +27,13 @@ var bm = new bookmarklet({
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
 	            var script = document.getElementById('zeegabm');
 	            var srcUrlIdx = script.src.indexOf("/web/");
+	            if(srcUrlIdx == -1)
+	            	srcUrlIdx = script.src.indexOf("/gamma/");
+	            else
+	            	srcUrlIdx = srcUrlIdx + "/web";
+	            	
 	            var localUrlPrefix = script.src.substring(0,srcUrlIdx);
-				console.log("local " + localUrlPrefix);
+				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
 			
         		var overlay=$('<div>').css({
@@ -77,8 +82,8 @@ var bm = new bookmarklet({
 			
         		overlay.append(cover);
         		overlay.append(highlight);
-				console.log(localUrlPrefix + "/web/widget?url="+this.url);
-        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/web/widget?url="+this.url+"' />").animate({
+				
+        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/widget?url="+this.url+"' />").animate({
         		        'width': 470 }, 500, function() {
         			        $('#zeega-cover').fadeOut('slow');
         		});
