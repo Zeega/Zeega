@@ -29,9 +29,11 @@ var bm = new bookmarklet({
 	            var srcUrlIdx = script.src.indexOf("/web/");
 	            if(srcUrlIdx == -1)
 	            	srcUrlIdx = script.src.indexOf("/gamma/");
-	            else
-	            	srcUrlIdx = srcUrlIdx + "/web";	            	
 	            var localUrlPrefix = script.src.substring(0,srcUrlIdx);
+		    
+                    if(srcUrlIdx != -1)
+			localUrlPrefix = localUrlPrefix + "/web";
+	
 				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
 			
