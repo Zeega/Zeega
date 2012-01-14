@@ -344,7 +344,7 @@ function closeOpenCitationTabs()
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset',
+			accept : '.database-asset-list',
 			hoverClass : 'workspace-item-hover',
 			tolerance : 'pointer',
 
