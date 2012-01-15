@@ -307,6 +307,10 @@ class EditorController extends Controller
 				$params['collection'] = $collection_id;
 				$session->remove("collection_id"); // reads and deletes from session
 			}
+			else
+			{
+				$collection_id = -1;
+			}
 			//return new Response(var_dump($params));
 			//return new Response($this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent());
 			
@@ -324,7 +328,8 @@ class EditorController extends Controller
 					'adminMenu'=>$admin,
 					'projectsMenu'=>true,
             		'page'=>'editor',
-					'results' => $items
+					'results' => $items,
+					'collection_id' => $collection_id
 				));
 		}	
 		else

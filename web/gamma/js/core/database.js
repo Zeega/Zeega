@@ -13,19 +13,24 @@ var Database =
 		this.itemCollection = new ItemCollection;
 		this.itemViewCollection;
 		
-		data = $('#database-results').val()
-		console.log(data);
-		this.itemCollection.reset(data);
-		this.itemViewCollection = new ItemViewCollection({ collection : this.itemCollection });
+		// BEGIN "HAMMERS ARE COOL-MODE"
+		var collection_id = $('#collection-id').val();
+		if(parseInt(collection_id) > -1)
+		{
+		    var url = Zeega.url_prefix + "api/search";
+		    this.itemCollection.url = Zeega.url_prefix + "api/search?collection=" + collection_id;
+		}
+		// END "HAMMERS ARE COOL-MODE"
+		
 		// NEEDS TO BE BOOTSTRAPPED!!
-		/*
+		
 		this.itemCollection.fetch({
 			success: function( items ){
 				console.log(items)
 				_this.itemViewCollection = new ItemViewCollection({ collection : _this.itemCollection });
 			}
 		});
-		*/
+		
 		
 		//loads the collections dropdown
 		// NEEDS TO BE BOOTSTRAPPED!!
