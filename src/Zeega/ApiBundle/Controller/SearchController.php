@@ -26,7 +26,7 @@ class SearchController extends Controller
         }
         
 	    $request = $this->getRequest();
-	    
+	    //return new Response(var_dump($request))''
 		$query = array();
 
 		//  api global parameters
