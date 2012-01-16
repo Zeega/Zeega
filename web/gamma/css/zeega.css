@@ -15,17 +15,7 @@
 
 }
 
-#database-search-filter{
-	border:none;
-	font-size:initial;
-	background:transparent;
-	-webkit-appearance: none;
-	font-variant:small-caps;
-	background-image:url('../images/separator.png');
-	padding-left:8px;
-	background-repeat:repeat-y;
-	width:105px;
-}
+
 #browser-results{
 	
 	padding:0 !important;
