@@ -120,9 +120,12 @@ class ItemRepository extends EntityRepository
     public function searchItemsByTimeDistribution($query)
     {
         $results = array();
-  	    
+
         if(isset($query['dateIntervals']) && $query["latestDate"] && $query["earliestDate"])
       	{
+	  	    $results["min_date"] = null;
+			$results["max_date"] = null;
+	
       	    $qb = $this->getEntityManager()->createQueryBuilder();
             
       	    $qb->select('COUNT(i.id)')
@@ -137,7 +140,9 @@ class ItemRepository extends EntityRepository
       	    
       	    // offset in seconds
       	    $intervalOffset = ($endDate->getTimestamp() - $startDate->getTimestamp()) / $dateIntervals;
-      	    
+      	    $max_date = null;
+			$min_date = null;
+
       	    for ($i = 0; $i <= $dateIntervals-1; $i++) 
       	    {
                 $startDateOffset = $intervalOffset * $i;
@@ -156,8 +161,19 @@ class ItemRepository extends EntityRepository
                 $tmp["start_date"] = $currStartDate->getTimestamp();
                 $tmp["end_date"] = $currEndDate->getTimestamp();
                 $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
+				
+				if((!isset($results["min_date"]) || $tmp["start_date"] < $results["min_date"]) && intval($tmp["items_count"]) > 0) 
+					$results["min_date"] = $tmp["start_date"];
+
+				if($tmp["items_count"] > 0) 
+					$max_date = $tmp["end_date"];
+					
                 array_push($results, $tmp);
             }
+			$results["max_date"] = $max_date;
+			
+			if(!isset($results["min_date"])) $results["min_date"] = -1;
+			if(!isset($results["max_date"])) $results["max_date"] = -1;
 		}
 		
         return $results;
