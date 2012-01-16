@@ -99,7 +99,7 @@ $(document).ready(function() {
 	
 	
 	$('#collection-to-editor-button').click(function(){
-					var postdata={title:ZeegaBrowser.clickedCollectionTitle};
+					var postdata={title:ZeegaBrowser.clickedCollectionTitle, collection_id:ZeegaBrowser.search.get("collection")};
 					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
 								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
 						});

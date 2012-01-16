@@ -15,3 +15,5 @@
 Libraries/
 .DS_Store*
 jda_data.*
+!.gitignore
+

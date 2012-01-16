@@ -10,7 +10,7 @@
 
 ************************************/
 
-var DocumentCloudLayer = ProtoLayer.extend({
+var WebsiteLayer = ProtoLayer.extend({
 	
 	layerType : 'VISUAL',
 	draggable : true,
@@ -84,8 +84,9 @@ var DocumentCloudLayer = ProtoLayer.extend({
 		this.thumbnail.append( img );
 	},
 	
+	
 	preload : function(target){
-		console.log('trying to preloaded doc cloud');
+		console.log('trying to preload iframe 1');
 		var cssObj = {
 			'position' : 'absolute',
 			'top' : '-1000%',
@@ -95,37 +96,19 @@ var DocumentCloudLayer = ProtoLayer.extend({
 			'opacity' : this.attr.opacity
 		};
 		
-		console.log('a trying to preloaded doc cloud');
-		
-		/* For use with generic document cloud documents
-		
-		var document=$('<iframe>')
-			.attr({'src':'https://www.documentcloud.org/documents/'+this.attr.url,'id':'layer-iframe-'+this.model.id})
+		var website=$('<iframe>')
+			.attr({'src':this.attr.url,'id':'layer-iframe-'+this.model.id})
 			.css({'width':'100%','height':'100%'});
-		*/
-		
-		//** For use with DocumentCloud Account: allows sidebar and text tab removal **//
-		var document=$('<div>')
-			.attr({'id':'DV-viewer-'+this.model.id})
-			.addClass('DV-container')
-			.css({'width':'100%','height':'100%'});
-
-		//** End DocumentCloud Account**//
-		
-		
-		this.display.css( cssObj )
-			.append( document );
+		console.log('trying to preload iframe 1.5');
+		this.display.css( cssObj ).append( website );
+		console.log('trying to preload iframe 2');
 		target.trigger( 'ready' , { 'id' : this.model.id } );
-		
+		console.log('trying to preload iframe 3');
 	},
-	
 	play : function( z )
 	{
-		//** For use with DocumentCloud Account: allows sidebar and text tab removal **//
-		DV.load('http://www.documentcloud.org/documents/'+this.attr.url+'.js', {sidebar: false,  pdf: false,  text: false,   container: "#DV-viewer-"+this.model.id});
-		//** End DocumentCloud Account**//
 		
-		console.log('iframe player.play'+this.attr.top);
+		console.log('iframe player.play');
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
 	},
 	

@@ -57,7 +57,7 @@ var loadFiles = [
 	'order!jquery/plugins/jquerygetUrlParam',
 	'order!jquery/plugins/jqueryjson',
 	'order!jquery/plugins/jquerycookie',
-	'order!jquery/plugins/bootstrapmodal',
+	'order!jquery/plugins/twitter-bootstrap',
 	
 	
 	//mvc
@@ -94,6 +94,7 @@ var loadFiles = [
 	//'order!layers/zeega.twilio',
 	'order!layers/zeega.documentcloud',
 	'order!layers/zeega.rectangle',
+	'order!layers/zeega.website',
 	
 	//players
 	

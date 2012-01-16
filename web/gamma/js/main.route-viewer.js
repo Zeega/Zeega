@@ -34,10 +34,11 @@ var loadFiles = [
 	];
 
 require(loadFiles, function($) {
-	var nodeId = window.location.hash.substr(1);
+	var nodeID = window.location.hash.substr(15);
+	console.log(nodeID)
 	//this url needs to change
 	
-	if(sessionStorage.getItem('projectId')>0) $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){ Player.init(data);});
-	else $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/collections/'+sessionStorage.getItem('collectionId')+'/project',function(data){ Player.init(data);});
+	if(sessionStorage.getItem('projectId')>0) $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){ Player.init(data,null,nodeID) });
+	else $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/collections/'+sessionStorage.getItem('collectionId')+'/project',function(data){ Player.init(data,null,nodeID) });
 	
 });

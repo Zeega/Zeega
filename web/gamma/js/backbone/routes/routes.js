@@ -4,13 +4,15 @@ var MyRouter = Backbone.Router.extend({
 	silent : true,
 	
 	routes : {
-		"/node/:nodeid" : "gotoNode",
-		"node/:nodeid/:layerid" : "gotoLayer"
+		"/editor/frame/:nodeid" : "gotoNodeInEditor",
+		"/player/frame/:nodeid" : "gotoNodeInPlayer",
+		
+		//"node/:nodeid/:layerid" : "gotoLayer"
 	},
 
 	// open/load the assigned node
-	gotoNode : function(nodeid) {
-
+	gotoNodeInEditor : function(nodeid)
+	{
 			if(Zeega && nodeid)
 			{
 				if(nodeid == 'undefined') Zeega.url_hash.node = '';
@@ -21,11 +23,11 @@ var MyRouter = Backbone.Router.extend({
 		
 	},
 
-	// open/load the assigned node and layer
-	// do we need this?
-	gotoLayer : function(nodeid,layerid) {
+	gotoNodeInPlayer : function(nodeid)
+	{
+		console.log('Player node changed')
 		
-	}
+	},
 	
 });
  

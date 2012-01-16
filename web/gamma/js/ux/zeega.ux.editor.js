@@ -12,9 +12,49 @@
 function initUX(){
 
 	initHeaderUX();
-	
+
+
+//		POPOVERS		//
+	$('.rollover').popover({
+		'delayIn' : 1000,
+		placement : 'below'
+	});
+		
 }
 
+
+$('#list-view').click(function(){
+	console.log('goto list view');
+	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+})
+
+$('#grid-view').click(function(){
+	console.log('goto grid view');
+	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+})
+
+$('#workspace-ratio').change(function(){
+	var ratioID = parseInt( $(this).val() );
+	changeAspectRatio( ratioID )
+	Zeega.updateAspectRatio( ratioID );
+});
+
+function changeAspectRatio( ratioID )
+{
+	switch( ratioID )
+	{
+		case 1:
+			$('#visual-editor-workspace').css('width','704px')
+			break;
+		
+		case 2:
+			$('#visual-editor-workspace').css('width','625px')
+			break;
+			
+		default:
+			console.log('goDefault')
+	}
+}
 
 
 function embedButton()
@@ -112,7 +152,7 @@ function closeOpenCitationTabs()
 				var _this = this;
 				$('.ghost-node').remove();
 				_.times(temp-this.num, function(){
-					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					$('#node-drawer ul').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
@@ -304,7 +344,7 @@ function closeOpenCitationTabs()
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset',
+			accept : '.database-asset-list',
 			hoverClass : 'workspace-item-hover',
 			tolerance : 'pointer',
 
@@ -313,10 +353,13 @@ function closeOpenCitationTabs()
 				{
 					
 					ui.draggable.draggable('option','revert',false);
+					
+					console.log(Zeega.draggedItem)
+					
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('type'),
+						type: Zeega.draggedItem.get('source'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
@@ -327,6 +370,8 @@ function closeOpenCitationTabs()
 							'citation':true,
 						}
 					};
+					
+					console.log(settings);
 					var layerToSave = new Layer(settings);
 
 					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );

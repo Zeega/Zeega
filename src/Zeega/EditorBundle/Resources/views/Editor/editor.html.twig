@@ -6,19 +6,36 @@
 {% block headerfix %} {% endblock %}
 {% block body %}
  
+			<input id="route-id" type="hidden" value="{{route.id}}"/>
+			<input id="project-id" type="hidden" value="{{projectid}}"/>
+		
 		
 			<div id="route-header" class='clearfix'>
 				<div id='route-title'>{{projecttitle}}</div>
-				<input id="route-id" type="hidden" value="{{route.id}}"/>
-				<input id="project-id" type="hidden" value="{{projectid}}"/>
 				<div id='route-publish'>
 					
-					<ul class='pill-buttons'>
-						<li><a id='share-project' href='#'>Share</a></li>
-						<!--
-						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
-						-->
-						<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
+					<ul>
+						
+						<li>
+							<ul class='pill-buttons'>
+								<li><a id='share-project' href='#'>Share</a></li>
+								<!--
+								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
+								-->
+								<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
+							</ul>
+						</li>
+						
+						<li>
+							<div id='upper-select'>
+							<select name="ratio" id="workspace-ratio">
+								<option value="1">wide</option>
+								<option value="2">4:3</option>
+							</select>
+							</div>
+						</li>
+						
+						
 					</ul>
 				</div>
 			</div>
@@ -37,7 +54,10 @@
 					<div id="sidebar" class='hidden clearfix' >
 					
 	
-						<div id='layer-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Layers' style='cursor:pointer'>
+						<div id='layer-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
+							data-original-title='Layers'
+							data-content='This is where your media layers Appear. You can reorder and change their properties.'
+						>
 							<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Layers</div>
 						</div>
 						
@@ -73,7 +93,10 @@
 						
 						<div id='database-tray' class='clearfix'>
 							
-							<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+							<div id='item-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
+								data-original-title='Items Database'
+								data-content='This is where you can search items from your collections.'
+							>
 								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Items</div>
 								
 								<div id="searchbar">
@@ -86,26 +109,28 @@
 							<div id='database'>
 								<div id="db-nav-controls">
 					
+									<!--
 									<a href='#' id='refresh-database'><span class='zicon orange zicon-refresh'></span></a>
+									-->
+									
 									<select id='database-search-filter' class=''>
-									  <option value="all">Media Types</option>
-									  <option value="all">All</option>
+									  <option value="all">All Formats</option>
 									  <option value="image">Images</option>
 									  <option value="video">Video</option>
 									  <option value="audio">Audio</option>
 									</select>
 									
 									<select id='database-collection-filter' class=''>
-									  <option value="all">Collections</option>
-									  <option value="image">Awesome</option>
-									  <option value="video">Incredible</option>
-									  <option value="audio">OMG</option>
-									  <option value="mine">Junk I found</option>
+									  <option value="all">All Collections</option>
 									</select>
+									
+									<a href='#' id='list-view'><span class='zicon orange zicon-list'></span></a>
+									<a href='#' id='grid-view'><span class='zicon orange zicon-grid'></span></a>
 
 								</div><!-- db-nav-controls -->
 							
-
+								<!-- <input id="database-results" type="hidden" value="results"/> -->
+								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
 								<ul id='database-item-list'></ul>
 							</div><!-- database -->
 						
@@ -116,14 +141,19 @@
 					
 					
 					<div id='workspace-wrapper'>
-						<div id='visual-editor-wrapper' class='wrapper clearfix' title='Click to close or expand the Workspace' style='cursor:pointer'>
+						<div id='visual-editor-wrapper' class='wrapper clearfix' style='cursor:pointer'>
 							
-							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
+							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
+								data-original-title='The Visual Editor Window'
+								data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'>
+								
 								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Visual Editor</div>
 								<div id='visual-icon-tray' class='icon-tray'></div>
 							</div>
 							
-							<div id="visual-editor-workspace" class='workspace clearfix'></div>
+							<div id='workspace-outer-wrapper' class='clearfix'>
+								<div id="visual-editor-workspace" class='workspace clearfix'></div>
+							</div>
 							
 						</div>
 						
