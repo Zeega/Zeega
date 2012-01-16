@@ -130,8 +130,9 @@ class SearchController extends Controller
 		if($query['returnTime'])
 		{
 		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItemsByTimeDistribution($query);
-		    $results['time_distribution'] = $queryResults;
-		    $results['time_distribution_count'] = sizeof($queryResults);
+		    $results['time_distribution'] = $queryResults["results"];
+		    $results['time_distribution_count'] = sizeof($queryResults["results"]);
+		    $results['time_distribution_info'] = array("min_date" => $queryResults["min_date"], "max_date" => $queryResults["max_date"]);
 		    //return new Response($queryResults);
 	    }
 		

@@ -55,6 +55,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 			ZeegaBrowser.timeBinsView.collection.selectedStartDate = null;
 			ZeegaBrowser.timeBinsView.collection.selectedEndDate = null;
 			
+			ZeegaBrowser.resetPageCount();
 			ZeegaBrowser.doSearch();
 		});
 
@@ -133,6 +134,9 @@ var BrowserTimeBinsView = Backbone.View.extend({
 						//is the date range
 						ZeegaBrowser.timeBinsView.collection.selectedStartDate = myBin.get('start_date');
 						ZeegaBrowser.timeBinsView.collection.selectedEndDate = myBin.get('end_date');
+
+						//reset any paging
+						ZeegaBrowser.resetPageCount();
 
 						ZeegaBrowser.doSearch();
 						return false;

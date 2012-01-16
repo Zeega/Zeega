@@ -120,6 +120,8 @@ class ItemRepository extends EntityRepository
     public function searchItemsByTimeDistribution($query)
     {
         $results = array();
+	$max_date = null;
+        $min_date = null;
   	    
         if(isset($query['dateIntervals']) && $query["latestDate"] && $query["earliestDate"])
       	{
@@ -137,7 +139,7 @@ class ItemRepository extends EntityRepository
       	    
       	    // offset in seconds
       	    $intervalOffset = ($endDate->getTimestamp() - $startDate->getTimestamp()) / $dateIntervals;
-      	    
+ 
       	    for ($i = 0; $i <= $dateIntervals-1; $i++) 
       	    {
                 $startDateOffset = $intervalOffset * $i;
@@ -156,11 +158,21 @@ class ItemRepository extends EntityRepository
                 $tmp["start_date"] = $currStartDate->getTimestamp();
                 $tmp["end_date"] = $currEndDate->getTimestamp();
                 $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
+
+	 	if((!isset($min_date) || $tmp["start_date"] < $min_date) && intval($tmp["items_count"]) > 0) 
+			$min_date = $tmp["start_date"];
+
+		if((!isset($max_date) || $tmp["max_date"] > $max_date) &&  $tmp["items_count"] > 0 ) 
+			$max_date = $tmp["end_date"];
+
                 array_push($results, $tmp);
             }
-		}
+			
+		if(!isset($min_date)) $results["min_date"] = -1;
+		if(!isset($max_date)) $results["max_date"] = -1;
+	}
 		
-        return $results;
+        return array("results" => $results, "min_date" => $min_date, "max_date" => $max_date);
     }    
     
     //  api/search

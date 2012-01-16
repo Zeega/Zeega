@@ -112,15 +112,18 @@ $(document).ready(function() {
 	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();
+	     ZeegaBrowser.resetPageCount();
 	     ZeegaBrowser.doSearch();
 	   }
 	 });
 	 $( '#database-search-filter' ).bind('change', function(e){
+	 	ZeegaBrowser.resetPageCount();
 	     ZeegaBrowser.doSearch();
 	 });
 
 	$('#browser-remove-collection-filter').click(function(e){
 		ZeegaBrowser.removeCollectionFilter();
+		ZeegaBrowser.resetPageCount();
 		ZeegaBrowser.doSearch();
 		return false;
 	});
@@ -132,7 +135,8 @@ $(document).ready(function() {
 		$('#browser-close-timeline').show();
 		
 		
-		//Do initial search
+		//Reset page count & Do initial search
+		ZeegaBrowser.resetPageCount();
 		ZeegaBrowser.doSearch();
 		
 		return false;
@@ -143,7 +147,8 @@ $(document).ready(function() {
 		$('#browser-open-timeline').show();
 		
 
-		//Do search to reset
+		//Do full search to reset
+		ZeegaBrowser.resetPageCount();
 		ZeegaBrowser.doSearch();
 
 		return false;
@@ -187,6 +192,9 @@ $(document).ready(function() {
 
 		//Clear any collection filter on page
 		ZeegaBrowser.removeCollectionFilter();
+
+		//reset page count
+		ZeegaBrowser.resetPageCount();
 
 		ZeegaBrowser.doSearch();
 	});
@@ -270,6 +278,7 @@ $(document).ready(function() {
 	 					});
 				
 	});
+	
 	$('#browser-rename-collection').click(function() {
 			$('#browser-collection-filter-tab-text').hide();
 			$('#browser-collection-filter-title-form').show();
@@ -277,45 +286,54 @@ $(document).ready(function() {
 			$('#browser-update-collection-title').val(ZeegaBrowser.clickedCollectionTitle);
 			$('#browser-update-collection-title').focus();
 			
-			//When title input field loses focus then just cancel the save
-			$('#browser-update-collection-title').blur(function() {
-			  	$( '#browser-collection-filter-title-form' ).hide();
-				$('#browser-collection-filter-tab-text').show();
-			});
-
-			//When user presses return, save collection with its new title
-			$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
-			   if ( e.keyCode == 13 ) {
-			     	e.preventDefault();
-			     	
-			     	//Look up collection model to update
-			     	var collectionID = ZeegaBrowser.search.get("collection");
-					var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
-					
-					collectionToUpdate.isUpdate = true;
-					var newTitle = $('#browser-update-collection-title').val();
-
-					//Save collection and hide form field on success
-					collectionToUpdate.save({ title:newTitle }, 
-							{
-								success: function(model, response) { 
-									
-									ZeegaBrowser.clickedCollectionTitle = model.get("title");
-									$( '#browser-collection-filter-title-form' ).hide();
-									$('#browser-collection-filter-tab-text').text(model.get("title")).show();
-									
-									$('#database-search-text').val("search " + model.get("title"));
-
-									
-				 				},
-				 				error: function(model, response){
-				 					
-				 					console.log("Error updating collection title.");
-				 					console.log(response);
-				 				}
-				 			});
-			   }
-			 });
+			
 			
 		});
+		
+	//This is for updating collection title
+	//When title input field loses focus then just cancel the save
+	$('#browser-update-collection-title').blur(function() {
+	  	$( '#browser-collection-filter-title-form' ).hide();
+		$('#browser-collection-filter-tab-text').show();
+	});
+
+	//This is for updating a collection title
+	//When user presses return, save collection with its new title
+	$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
+	   if ( e.keyCode == 13 ) {
+	     	e.preventDefault();
+	     	
+	     	//Look up collection model to update
+	     	var collectionID = ZeegaBrowser.search.get("collection");
+			var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
+			
+			collectionToUpdate.isUpdate = true;
+			var newTitle = $('#browser-update-collection-title').val();
+
+			//Save collection and hide form field on success
+			collectionToUpdate.save({ title:newTitle }, 
+					{
+						success: function(model, response) { 
+							
+							ZeegaBrowser.clickedCollectionTitle = model.get("title");
+							$( '#browser-collection-filter-title-form' ).hide();
+							$('#browser-collection-filter-tab-text').text(model.get("title")).show();
+							
+							$('#database-search-text').val("search " + model.get("title"));
+
+							
+		 				},
+		 				error: function(model, response){
+		 					
+		 					console.log("Error updating collection title.");
+		 					console.log(response);
+		 				}
+		 			});
+	   }
+	 });
+	 $('#browser-view-more-item-results, #browser-view-more-collection-results').click(function(){
+	 	ZeegaBrowser.search.set({page: ZeegaBrowser.search.get("page") + 1 });
+	 	ZeegaBrowser.doSearch();
+	 	return false;
+	 });
 });
