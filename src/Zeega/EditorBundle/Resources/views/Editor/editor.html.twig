@@ -129,9 +129,8 @@
 
 								</div><!-- db-nav-controls -->
 							
-								<!-- <input id="database-results" type="hidden" value="results"/> -->
 								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
-								<ul id='database-item-list'></ul>
+								<ul id='database-item-list' class='list-view'></ul>
 							</div><!-- database -->
 						
 						</div><!-- database-tray -->
@@ -263,10 +262,12 @@
 			<script src="{{ asset('gamma/js/libraries/aloha-rc9/lib/aloha.js') }}" data-aloha-plugins="common/format,common/highlighteditables"></script>
 
 			<script src="{{ asset('gamma/js/main.editor.js') }}"></script>
-		
-			
-			
-			
+
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+			
+			<script type="text/javascript" language="Javascript">
+				//bootstrapping data
+				var itemsJSON = "{{results|e('js')}}";
+			</script>
 			
 {% endblock %}
