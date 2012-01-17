@@ -50,13 +50,13 @@ class ItemRepository extends EntityRepository
 		
 		if(isset($query['earliestDate']))
       	{
-			 $qb->andWhere('i.media_date_created > ?6')
+			 $qb->andWhere('i.media_date_created >= ?6')
 			    ->setParameter(6, $query['earliestDate']);
 		}
         
         if(isset($query['latestDate']))
       	{
-			 $qb->andWhere('i.media_date_created < ?7')
+			 $qb->andWhere('i.media_date_created <= ?7')
 			    ->setParameter(7, $query['latestDate']);
 		}
 		
@@ -125,9 +125,6 @@ class ItemRepository extends EntityRepository
 
         if(isset($query['dateIntervals']) && $query["latestDate"] && $query["earliestDate"])
       	{
-	  	    $results["min_date"] = null;
-			$results["max_date"] = null;
-	
       	    $qb = $this->getEntityManager()->createQueryBuilder();
             
       	    $qb->select('COUNT(i.id)')
@@ -135,10 +132,33 @@ class ItemRepository extends EntityRepository
 
       	    $searchQuery = $this->buildSearchQuery($qb, $query);
             
-            
+			// get min and max dates
+			$qbMinMax = $this->getEntityManager()->createQueryBuilder();
+            $qbMinMax->select('MAX(i.media_date_created) as max_date,MIN(i.media_date_created) as min_date')
+                	 ->from('ZeegaIngestBundle:Item', 'i'); 
+			
+			$minMaxQuery = $this->buildSearchQuery($qbMinMax, $query);
+			$minMaxBounds = $minMaxQuery->getQuery()->getArrayResult();
+			$min_date = $minMaxBounds[0]["min_date"];
+			$max_date = $minMaxBounds[0]["max_date"];
+			
+			
+			if(!isset($min_date) || !isset($max_date))
+			{
+				// nothing to return; let's get out of here quickly with defaults for min and max date
+				return array("results" => $results, "min_date" => $query["earliestDate"]->getTimeStamp(), "max_date" => $query["latestDate"]->getTimeStamp());
+			}
+			else
+			{
+				// parse the dates and continue
+				$min_date = new DateTime($minMaxBounds[0]["min_date"]);
+				$max_date = new DateTime($minMaxBounds[0]["max_date"]);
+			}
+				
+			
       	    $dateIntervals = intval($query['dateIntervals']);
-      	    $startDate = $query['earliestDate'];
-      	    $endDate = $query['latestDate'];
+      	    $startDate = $min_date;
+      	    $endDate = $max_date;
       	    
       	    // offset in seconds
       	    $intervalOffset = ($endDate->getTimestamp() - $startDate->getTimestamp()) / $dateIntervals;
@@ -146,6 +166,7 @@ class ItemRepository extends EntityRepository
       	    for ($i = 0; $i <= $dateIntervals-1; $i++) 
       	    {
                 $startDateOffset = $intervalOffset * $i;
+				if($startDateOffset != 0) $startDateOffset = $startDateOffset + 1;
                 $endDateOffset = $intervalOffset * ($i + 1);
                 
                 $currStartDate = new DateTime();
@@ -162,20 +183,11 @@ class ItemRepository extends EntityRepository
                 $tmp["end_date"] = $currEndDate->getTimestamp();
                 $tmp["items_count"] = $searchQuery->getQuery()->getSingleScalarResult();
 
-			 	if((!isset($min_date) || $tmp["start_date"] < $min_date) && intval($tmp["items_count"]) > 0) 
-					$min_date = $tmp["start_date"];
-
-				if((!isset($max_date) || $tmp["max_date"] > $max_date) &&  $tmp["items_count"] > 0 ) 
-					$max_date = $tmp["end_date"];
-
-		                array_push($results, $tmp);
+		        array_push($results, $tmp);
 		  	}
-			
-			if(!isset($min_date)) $results["min_date"] = -1;
-			if(!isset($max_date)) $results["max_date"] = -1;
 		}
 		
-        return array("results" => $results, "min_date" => $min_date, "max_date" => $max_date);
+        return array("results" => $results, "min_date" => $min_date->getTimeStamp(), "max_date" => $max_date->getTimeStamp());
     }    
     
     //  api/search
