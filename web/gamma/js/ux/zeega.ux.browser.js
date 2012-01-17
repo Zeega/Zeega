@@ -278,8 +278,10 @@ $(document).ready(function() {
 	 					});
 				
 	});
-	
 	$('#browser-rename-collection').click(function() {
+		$('#browser-collection-filter-tab-text').trigger('click');
+	});
+	/*$('#browser-rename-collection').click(function() {
 			$('#browser-collection-filter-tab-text').hide();
 			$('#browser-collection-filter-title-form').show();
 			$('#browser-collection-filter-title-form').css("display", "inline");
@@ -330,7 +332,7 @@ $(document).ready(function() {
 		 				}
 		 			});
 	   }
-	 });
+	 });*/
 	 $('#browser-view-more-item-results, #browser-view-more-collection-results').click(function(){
 	 	ZeegaBrowser.search.set({page: ZeegaBrowser.search.get("page") + 1 });
 	 	ZeegaBrowser.doSearch();

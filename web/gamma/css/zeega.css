@@ -87,6 +87,11 @@
 }
 #browser-collection-filter-tab-text form{
 	display:inline;
+	background: transparent;
+	border: none;
+	font-size: 16px;
+	color: white;
+	letter-spacing: 1px;
 }
 #browser-collection-filter-tab{
 	position:relative;
@@ -317,10 +322,7 @@
 	margin-right:5px;
 	font-size:16px;
 }
-#browser-collection-filter-title-form{
-	display:none;
-}
-#browser-update-collection-title
+#browser-update-collection-title, .browser-form input
 {
 	background:transparent;
 	border:none;

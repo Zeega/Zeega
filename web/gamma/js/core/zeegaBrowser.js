@@ -201,9 +201,10 @@ var ZeegaBrowser = {
 				indicator : 'Saving...',
 				tooltip   : 'Click to edit...',
 				indicator : '<img src="images/loading.gif">',
-				select : true,
+				select : false,
 				onblur : 'submit',
-				width : $('#browser-collection-filter-tab-text').attr("width")
+				width : $('#browser-collection-filter-tab-text').attr("width") * 2,
+				cssclass : 'browser-form'
 		});
 
 		//hide form, show text
