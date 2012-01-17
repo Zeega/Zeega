@@ -30,11 +30,6 @@ layers:
 playgrounds:
   type:     rest
   resource: Zeega\EditorBundle\Controller\PlaygroundsController
-  
-ItemSearch:
-
-    pattern:   /search/items/{offset}/{limit}
-    defaults: { _controller: ZeegaSearchBundle:Search:items}
 
 _security_login:
     pattern:  /login
@@ -117,11 +112,6 @@ ZeegaEditorBundle_siteadmin:
 ZeegaEditorBundle_settings:
     pattern: /settings
     defaults: { _controller:  ZeegaEditorBundle:Editor:settings }
-
-ZeegaSearchBundle_search:
-    pattern: /search
-    defaults: { _controller:  ZeegaSearchBundle:Search:search }
-
 
 zeega_editor:
     resource: "@ZeegaEditorBundle/Resources/config/routing.yml"

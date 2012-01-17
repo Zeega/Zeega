@@ -85,6 +85,9 @@
 
 	
 }
+#browser-collection-filter-tab-text form{
+	display:inline;
+}
 #browser-collection-filter-tab{
 	position:relative;
 	top:0;
@@ -197,7 +200,7 @@
 
 #browser-my-collections-drawer{
 	margin:5px 0 0 10px;
-	min-width:700px;
+	
 }
 .browser-results-image,.browser-results-collection{
 
@@ -355,6 +358,26 @@
 	font-size:80%;
 	
 	white-space:normal;
+}
+#browser-view-more-item-results, #browser-view-more-collection-results{
+	float:left;
+	text-align: center;
+	border: 1px solid #777;
+	width: 144px;
+	height: 110px;
+	padding: 5px;
+	margin: 5px;
+
+	background: #555;
+	display:none;
+}
+.browser-load-more-results{
+	position:relative;
+	top:45px;
+}
+
+#browser-view-more-item-results:hover, #browser-view-more-collection-results:hover{
+	background:#777;
 }
 .browser-results-collection{
 	width:144px;

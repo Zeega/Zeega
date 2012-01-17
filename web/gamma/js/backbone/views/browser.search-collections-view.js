@@ -57,14 +57,14 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 			_.each(this._views, function(collectionView){
 				// item draws itself
 	        	var addThis = collectionView.render(); 
-	        	$(this.el).append(addThis.el);
-
+	        	
+	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-collection-results'));
 	        	
 			}, this);
 			
-			//Show more results link (TODO: only if search yields more than 100 total items)
-			if (this.collection.length > 100){
-				$('#browser-show-more-results').show();
+			//Show more results link if not all showing
+			if (this.collection.length < this.collection.totalCollectionsCount){
+				$('#browser-view-more-collection-results').show();
 			}
 			//If they are loading "My Media" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
@@ -146,16 +146,16 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			_.each(this._views, function(itemView){
 				// item draws itself
 	        	var addThis = itemView.render(); 
-	        	$(this.el).append(addThis.el);
+	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-item-results'));
 
 	        	
 			}, this);
 			
 			
-			//Show more results link (TODO: only if search yields more than 100 total items)
-			if (this.collection.length > 100){
-				$('#browser-show-more-results').show();
-			}
+			//Show more results link if not all showing
+			if (this.collection.length < this.collection.totalItemsCount){
+				$('#browser-view-more-item-results').show();
+			} 
 			
 			//If they are loading "My Media" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 

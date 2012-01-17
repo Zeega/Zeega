@@ -22,7 +22,6 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				console.log("FROM ZeegaBrowser.js - Zeega browser has " + ZeegaBrowser.myCollections.length);
 				$('#browser-my-collections-drawer').jcarousel();
 				
 			}
@@ -53,6 +52,11 @@ var ZeegaBrowser = {
 		} 
 		//Hide results drawer's loading spinner
 		$('#browser-results .browser-loading').hide();
+		
+	},
+	/* Resets the page count so that results are refreshed completely */
+	resetPageCount : function(){
+		this.search.set({page: 1});	
 	},
 	doCollectionSearch : function(collectionID){
 		
@@ -74,19 +78,25 @@ var ZeegaBrowser = {
 	
 	doSearch : function(){
 		
+		if (this.search.get("page") == 1) {
 		
-		//Empty items and collections from results drawer
-		$('#browser-results #browser-results-collections').empty();
-		$('#browser-results #browser-results-items').empty();
+			//Empty items and collections from results drawer
+			$('#browser-results #browser-results-collections .browser-results-collection').remove();
+			$('#browser-results #browser-results-items .browser-results-image').remove();		
+
+			//Show results drawer's loading spinner
+			$('#browser-results .browser-loading').show();
+
+		} 
 		
-		//Show results drawer's loading spinner
-		$('#browser-results .browser-loading').show();
-
-
 		//Hide any previous results messages
 		$('#browser-no-results-my-media-message').hide();
 		$('#browser-no-items-results-message').hide();
 		$('#browser-no-collections-results-message').hide();
+
+		//Hide "load more results" link
+		$('#browser-view-more-collection-results').hide();
+		$('#browser-view-more-item-results').hide();
 
 		//TimeBins
 		if ($('#browser-time-bins').is(':visible')) {
@@ -127,6 +137,11 @@ var ZeegaBrowser = {
 							q: $('#database-search-text').val()
 							
 						});
+		} else {
+			this.search.set({
+							q: null
+							
+						});
 		}
 		this.search.set({ 
 							content:$('#database-search-filter').val()
@@ -155,6 +170,42 @@ var ZeegaBrowser = {
 	},
 	showCollectionFilter: function(){
 		
+		$('#browser-collection-filter-tab-text').editable(
+			function(value,settings)
+			{
+				//Look up collection model to update
+		     	var collectionID = ZeegaBrowser.search.get("collection");
+				var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
+				
+				collectionToUpdate.isUpdate = true;
+				var newTitle = value;
+
+				//Save collection and hide form field on success
+				collectionToUpdate.save({ title:newTitle }, 
+						{
+							success: function(model, response) { 
+								
+								ZeegaBrowser.clickedCollectionTitle = model.get("title");
+								$('#database-search-text').val("search " + model.get("title"));
+						
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating collection title.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value!!
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : true,
+				onblur : 'submit',
+				width : $('#browser-collection-filter-tab-text').attr("width")
+		});
+
 		//hide form, show text
 		$( '#browser-collection-filter-title-form' ).hide();
 		$('#browser-collection-filter-tab-text').show();

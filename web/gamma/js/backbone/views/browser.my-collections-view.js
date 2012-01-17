@@ -56,7 +56,8 @@ var MyCollectionsView = Backbone.View.extend({
 
 		
 		$('#browser-my-collections-count').text("("+this.collection.length+")");
-
+		
+		
 		return this;
 	},
 	
