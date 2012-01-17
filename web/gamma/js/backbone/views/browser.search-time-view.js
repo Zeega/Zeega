@@ -5,20 +5,36 @@ var BrowserTimeBinsView = Backbone.View.extend({
 	defaults: {
             startYear: '1900',
             endYear: new Date().getFullYear(),
+            doReset: true
             
     },
+   
 	initialize : function() {
 		
 		//this is setting the default values which typically don't work for Backbone views
-		this.options = _.extend(this.defaults, this.options);
+		if (this.options.startYear == null || this.options.endYear == null){
+			this.options = _.extend(this.defaults, this.options);
+		}
+
+		/*if (this.options.startYearUTC != null){
+			this.options.startYear = (new Date(this.options.startYearUTC * 1000)).getFullYear();
+
+		}
+		if (this.options.endYearUTC != null){
+			this.options.endYear = (new Date(this.options.endYearUTC * 1000)).getFullYear();
+
+		}*/
 
 		//Get HTML from hidden template
 		var html = $("#browser-time-filter-template").html();
 		$(this.el).html(html);
+		
+		$(this.el).find('#valueAA-template').attr("id", "valueAA");
+		$(this.el).find('#valueBB-template').attr("id", "valueBB");
 
 		//remove template from doc once it has been created 
 		//to avoid conflicting ids
-		$("#browser-time-filter-template").remove();
+		//$("#browser-time-filter-template").remove();
 		
 		//Add year options to the selects
 		var select1 = $(this.el).find('#valueAA');
@@ -34,18 +50,19 @@ var BrowserTimeBinsView = Backbone.View.extend({
 		}
 
 		//select the right year for each box
-		$('select#valueAA').val(this.options.startYear);
-		$('select#valueBB').val(this.options.endYear);
+		select1.val(this.options.startYear);
+		select2.val(this.options.endYear);
 		
 
 		//call the filament slider plugin to make a slider from the 
-		//select boxes
+		//select boxes 
 		$('select#valueAA, select#valueBB').selectToUISlider({
 			labels: 7
 		})
 
 		//bind slide change event so that triggers search
 		$('.ui-slider').bind('slidechange',function(){
+			ZeegaBrowser.timeBinsView.options.doReset = false;
 
 			//Remove previously selected bins
 			$('.browser-time-bins-results').removeClass("selected");
@@ -60,18 +77,22 @@ var BrowserTimeBinsView = Backbone.View.extend({
 		});
 
 		//hide select boxes cuz they're redundant
-		$('select#valueAA, select#valueBB').hide();
+		$(this.el).find('select').hide();
 
 	},
 	
 	render: function()
 	{
-		
+		if (this.collection.min_date != null && this.collection.max_date != null && this.options.doReset == true){
+			var newStartYear = (new Date(this.collection.min_date * 1000)).getFullYear();
+			var newEndYear = (new Date(this.collection.max_date * 1000)).getFullYear();
+			//if (this.options.startYear != newStartYear || this.options.endYear != newEndYear){
+				this.resetRange(newStartYear, newEndYear);
+			//}
+		}
 		//Update Timeline filter UI text
-		
-		$('#browser-time-filter-value').html($('a#handle_valueAA').attr('aria-valuetext') + " &ndash; " + $('a#handle_valueBB').attr('aria-valuetext'));
-		
-		
+		$('.browser-time-filter-value').html($('a#handle_valueAA').attr('aria-valuetext') + " &ndash; " + $('a#handle_valueBB').attr('aria-valuetext'));
+
 
 		for (var i =0;i<this.collection.length;i++){
 			var bin = this.collection.at(i);
@@ -135,10 +156,18 @@ var BrowserTimeBinsView = Backbone.View.extend({
 						ZeegaBrowser.timeBinsView.collection.selectedStartDate = myBin.get('start_date');
 						ZeegaBrowser.timeBinsView.collection.selectedEndDate = myBin.get('end_date');
 
+						//User has selected bin - tell Timeline NOT to reset range
+						ZeegaBrowser.timeBinsView.options.doReset = false;
+						
 						//reset any paging
 						ZeegaBrowser.resetPageCount();
 
 						ZeegaBrowser.doSearch();
+
+						//now clear out any previously selected bin 
+						ZeegaBrowser.timeBinsView.collection.selectedStartDate = null;
+						ZeegaBrowser.timeBinsView.collection.selectedEndDate = null;
+						
 						return false;
 					}
 				}(bin) );
@@ -159,7 +188,7 @@ var BrowserTimeBinsView = Backbone.View.extend({
 
 
 		}
-
+		this.options.doReset = true;
 		$(this.el).show();
 		
 		
@@ -167,12 +196,12 @@ var BrowserTimeBinsView = Backbone.View.extend({
 		return this;
 	},
 	
-	events: {
-		//"click" : "previewItem"
-		//'dblclick' : "doubleClick",
-		
-	},
-	
-	
+	resetRange : function(start, end){
+    	this.options.startYear = start;
+    	this.options.endYear = end; 
+    	$('#browser-time-filter').empty();
+    	this.initialize();
+    	
+    },
 });
 

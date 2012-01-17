@@ -279,61 +279,13 @@ $(document).ready(function() {
 				
 	});
 	$('#browser-rename-collection').click(function() {
+		//using jeditable framework - pretend like user clicked on the title element
+		//see ZeegaBrowser.showCollectionFilter for definition of behavior
 		$('#browser-collection-filter-tab-text').trigger('click');
 	});
-	/*$('#browser-rename-collection').click(function() {
-			$('#browser-collection-filter-tab-text').hide();
-			$('#browser-collection-filter-title-form').show();
-			$('#browser-collection-filter-title-form').css("display", "inline");
-			$('#browser-update-collection-title').val(ZeegaBrowser.clickedCollectionTitle);
-			$('#browser-update-collection-title').focus();
-			
-			
-			
-		});
-		
-	//This is for updating collection title
-	//When title input field loses focus then just cancel the save
-	$('#browser-update-collection-title').blur(function() {
-	  	$( '#browser-collection-filter-title-form' ).hide();
-		$('#browser-collection-filter-tab-text').show();
-	});
-
-	//This is for updating a collection title
-	//When user presses return, save collection with its new title
-	$( '#browser-collection-filter-title-form' ).bind('keypress', function(e){
-	   if ( e.keyCode == 13 ) {
-	     	e.preventDefault();
-	     	
-	     	//Look up collection model to update
-	     	var collectionID = ZeegaBrowser.search.get("collection");
-			var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
-			
-			collectionToUpdate.isUpdate = true;
-			var newTitle = $('#browser-update-collection-title').val();
-
-			//Save collection and hide form field on success
-			collectionToUpdate.save({ title:newTitle }, 
-					{
-						success: function(model, response) { 
-							
-							ZeegaBrowser.clickedCollectionTitle = model.get("title");
-							$( '#browser-collection-filter-title-form' ).hide();
-							$('#browser-collection-filter-tab-text').text(model.get("title")).show();
-							
-							$('#database-search-text').val("search " + model.get("title"));
-
-							
-		 				},
-		 				error: function(model, response){
-		 					
-		 					console.log("Error updating collection title.");
-		 					console.log(response);
-		 				}
-		 			});
-	   }
-	 });*/
-	 $('#browser-view-more-item-results, #browser-view-more-collection-results').click(function(){
+	
+	//Load the next page of results into the results drawer
+	$('#browser-view-more-item-results, #browser-view-more-collection-results').click(function(){
 	 	ZeegaBrowser.search.set({page: ZeegaBrowser.search.get("page") + 1 });
 	 	ZeegaBrowser.doSearch();
 	 	return false;

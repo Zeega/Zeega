@@ -36,12 +36,12 @@ var ZeegaBrowser = {
 		//attach items collection to items view and collections collection to collections view
 		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
-		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection")});
-
+		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection") });
 		this.search.updateQuery();
 		
 	},
 	renderResults : function(){
+
 		this.searchItemsView.render();
 		this.searchCollectionsView.render();
 		this.timeBinsView.render();
@@ -99,7 +99,7 @@ var ZeegaBrowser = {
 		$('#browser-view-more-item-results').hide();
 
 		//TimeBins
-		if ($('#browser-time-bins').is(':visible')) {
+		if ($('#browser-time-filter').is(':visible')) {
 
 			//Check if user has selected a particular bin. if so then
 			//set search to NOT return more time bins

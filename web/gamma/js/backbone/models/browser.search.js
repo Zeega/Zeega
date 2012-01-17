@@ -45,7 +45,9 @@ var BrowserSearch =  Backbone.Model.extend({
 
     	//Models that hold distributions of results
     	"timeBinsCollection"			:   new BrowserTimeBinCollection(), //BrowserTimeBinsModel
-    	"mapBinsModel"			: 	[] 	//BrowserMapBinsModel, NOT IMPLEMENTED
+    	"mapBinsModel"			: 	[], 	//BrowserMapBinsModel, NOT IMPLEMENTED
+
+    	
   	}, 
 	
 	//initialize default search for all 'My Media'
@@ -105,6 +107,8 @@ var BrowserSearch =  Backbone.Model.extend({
 				
 				this.get("timeBinsCollection").add(new BrowserTimeBin(timeBin));
 			}, this);
+			this.get("timeBinsCollection").min_date = data['time_distribution_info']['min_date'];
+			this.get("timeBinsCollection").max_date = data['time_distribution_info']['max_date'];
 		}
 		
 	},
@@ -121,22 +125,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		});
 	}, 
 
-	getFormattedStartDate: function(){
-		if (this.get("dtstart") == 0){
-			return 0;
-		} else {
-			var d = new Date(this.get("dtstart") * 1000);
-			return d.getFullYear();
-		}
-	},
-	getFormattedEndDate: function(){
-		if (this.get("dtend") == 0){
-			return 0;
-		} else {
-			var d = new Date(this.get("dtend") * 1000);
-			return d.getFullYear();
-		}
-	},
+	
 
 });
 
