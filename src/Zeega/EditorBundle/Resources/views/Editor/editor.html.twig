@@ -54,11 +54,15 @@
 					<div id="sidebar" class='hidden clearfix' >
 					
 	
-						<div id='layer-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
-							data-original-title='Layers'
-							data-content='This is where your media layers Appear. You can reorder and change their properties.'
-						>
-							<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Layers</div>
+						<div id='layer-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer' >
+							<div class='bar-title'>
+								Edit Layers
+								<span class='info zicon zicon-info'
+									data-placement = "right"
+									data-original-title='Layers'
+									data-content='This is where your media layers Appear. You can reorder and change their properties.'
+								></span>
+							</div>
 						</div>
 						
 						<div id='layers'>
@@ -93,32 +97,45 @@
 						
 						<div id='database-tray' class='clearfix'>
 							
-							<div id='item-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
-								data-original-title='Items Database'
-								data-content='This is where you can search items from your collections.'
-							>
-								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Items</div>
+							<div id='item-view-bar' class='clearfix editor-title-bar-expander' style='cursor:pointer' >
+								<div class='bar-title'>
+									<!--<span class='expander zicon grey zicon-collapse'></span>-->
+									Add Media
+									<span class='info zicon zicon-info'
+										data-placement = "right"
+										data-original-title='Items Database'
+										data-content='This is where you can search items from your collections.'
+									></span>
+								</div>
 								
-								<div id="searchbar">
+								
+								<div id="searchbar" class='no-popover'>
+									
+									<ul id='search-filter'>
+										<li class='dropdown'>
+											<span class='zicon zicon-search filter-toggle'></span>
+											<ul class='dropdown-menu'>
+												<li class='menu-title'>Filter by Format</li>
+												<li class='divider'></li>
+												<li><a data-search-filter='all' href='#'>All</a></li>
+												<li><a data-search-filter='audio' href='#'>Audio</a></li>
+												<li><a data-search-filter='images' href='#'>Images</a></li>
+												<li><a data-search-filter='video' href='#'>Video</a></li>
+											</ul>
+										</li>
+									</ul>
+									
 									<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search database'/>
-									<span id='search-filter' class='zicon zicon-search'></span>
+									
+
+
+									
 								</div>
 							
 							</div>
 							
 							<div id='database'>
 								<div id="db-nav-controls">
-					
-									<!--
-									<a href='#' id='refresh-database'><span class='zicon orange zicon-refresh'></span></a>
-									-->
-									
-									<select id='database-search-filter' class=''>
-									  <option value="all">All Formats</option>
-									  <option value="image">Images</option>
-									  <option value="video">Video</option>
-									  <option value="audio">Audio</option>
-									</select>
 									
 									<select id='database-collection-filter' class=''>
 									  <option value="all">All Collections</option>
@@ -142,11 +159,16 @@
 					<div id='workspace-wrapper'>
 						<div id='visual-editor-wrapper' class='wrapper clearfix' style='cursor:pointer'>
 							
-							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer'
-								data-original-title='The Visual Editor Window'
-								data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'>
+							<div id='visualeditor-view-bar' class='clearfix editor-title-bar-expander rollover' style='cursor:pointer' >
 								
-								<div class='bar-title'><span class='expander zicon grey zicon-collapse'></span>&nbsp;Visual Editor</div>
+								<div class='bar-title'>
+									Edit Frame
+									<span class='info zicon zicon-info'
+										data-placement = "left"
+										data-original-title='The Visual Editor Window'
+										data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'
+									></span>
+								</div>
 								<div id='visual-icon-tray' class='icon-tray'></div>
 							</div>
 							
