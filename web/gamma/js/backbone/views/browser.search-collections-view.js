@@ -104,6 +104,8 @@ var BrowserSearchItemsView = Backbone.View.extend({
 
       	//this.collecion.bind();
       	this.collection.bind('add',   this.addItem, this);
+      	this.collection.bind('remove',   this.removeItem, this);
+      	
       	this.collection.bind("add", function(item) {
   			//console.log("Added item  " + item.get("content_type") + "!");
 		});
@@ -112,6 +114,9 @@ var BrowserSearchItemsView = Backbone.View.extend({
 
     	// _(this).bindAll('add');
         //this._itemViews.bind('add', this.add);
+	},
+	removeItem: function(){
+		$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 	},
 	resetViews: function(){
 		_.each(this._views, function(thisView){

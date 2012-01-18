@@ -24,6 +24,9 @@ var ItemCollection = Backbone.Collection.extend({
 	query : null,
 	totalItemsCount : 0,
 	
+	initialize:function(){
+		this.bind('remove',   this.decrementItemsCount, this);	
+	},
 	url: function()
 	{
 		var url = Zeega.url_prefix + "api/search?page="+ this.page;
@@ -32,7 +35,9 @@ var ItemCollection = Backbone.Collection.extend({
 		if( !_.isNull(this.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.collectionID;
 		return url;
 	},
-	
+	decrementItemsCount : function(){
+		this.totalItemsCount = this.totalItemsCount - 1;
+	},
 	resetQuery : function()
 	{
 		this.page = 0;

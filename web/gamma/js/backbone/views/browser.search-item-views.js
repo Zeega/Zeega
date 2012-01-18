@@ -290,27 +290,51 @@ var BrowserSingleItemView = BrowserItemView.extend({
 
 });
 
-// This is a parent class that takes care of image captions for ALL fancybox views
+
 
 var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	initialize: function(){
-		//this.el =$("#browser-fancybox-caption-template").clone();
-		//this.el.removeAttr('id');
-		this.el = $("#browser-fancybox-media-container-template").clone();
-		this.el.attr('id', 'browser-fancybox-media-container');
+		
+		this.el = $("#fancybox-media-container-template").clone();
+		this.el.attr('id', 'fancybox-media-container');
 	},
-	/* Pass in the element that the user clicked on from fancybox. Fancy box
-	uses the object's title as the caption so set that to the element in 
-	the template */
+	
 	render: function(obj)
 	{
-		
+		var objSrc = $(obj.element).attr("href");
 		var theImage = $(this.el).find("img");
-		$(theImage).attr("src", $(obj.element).attr("href"));
+		$(theImage).attr("src", objSrc);
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
+		
+		//DELETE button
+		var item = this.model;
+		this.el.find('.fancybox-delete-button').click(function(e){
+			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ item.id;
+			
+
+			//DESTROYYYYYYYY
+			item.destroy({	
+				 				url : deleteURL,
+								success: function(model, response) { 
+									console.log("Deleted item " + item.id);	
+									ZeegaBrowser.searchItemsView.collection.remove(item);
+
+									//close fancy box window
+									jQuery.fancybox.close();
+										
+				 				},
+				 				error: function(model, response){
+				 					
+				 					console.log("Error deleting item " + item.id);		
+				 					console.log(response);
+				 				}
+		 					});
+		 	e.preventDefault();
+		});
 		
 		obj.content = this.el;
 		

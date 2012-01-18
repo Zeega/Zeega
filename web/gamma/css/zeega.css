@@ -567,25 +567,25 @@
 	
 	text-decoration:none;
 }
-#browser-fancybox-media-container{
+#fancybox-media-container{
 	width:640px;
 	height:480px;
 	background-color:white;
 
 }
-#browser-fancybox-item{
+.fancybox-media-item{
 	width:100%;
 	min-height:380px;
 	background-color:gray;
 	text-align:center;
 	margin-bottom:5px;
 }
-#browser-fancybox-item img{
+.fancybox-media-item img{
 	max-width:100%;
 	max-height:85%;
 	
 }
-#browser-fancybox-buttons{
+.fancybox-buttons{
 	
 	margin-top:10px;
 	font-variant:small-caps;
@@ -593,10 +593,10 @@
 	font-weight: bold;
 	letter-spacing: 1px;
 }
-#browser-fancybox-more-button{
+.fancybox-more-button{
 	float:left;
 }
-#browser-fancybox-delete-button{
+.fancybox-delete-button{
 	float:right;
 }
 .corner-triangle-for-menu {
