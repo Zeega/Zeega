@@ -10,21 +10,8 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	//this.model.bind('destroy', this.remove, this);
-
-    	//this.model.bind('add',   this.addItem, this);
-      	//this.model.bind('all',   this.render, this);
-
-      	//this.collecion.bind();
       	this.collection.bind('add',   this.addItem, this);
-      	
 		this.collection.bind('reset', this.resetViews, this);
-      	//this.model.updateQuery();
-
-    	// _(this).bindAll('add');
-        //this._itemViews.bind('add', this.add);
 	},
 	resetViews: function(){
 		
@@ -95,25 +82,11 @@ var BrowserSearchItemsView = Backbone.View.extend({
 	_views : [],
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	//this.model.bind('destroy', this.remove, this);
-
-    	//this.model.bind('add',   this.addItem, this);
-      	//this.model.bind('all',   this.render, this);
-
-      	//this.collecion.bind();
+		
       	this.collection.bind('add',   this.addItem, this);
       	this.collection.bind('remove',   this.removeItem, this);
-      	
-      	this.collection.bind("add", function(item) {
-  			//console.log("Added item  " + item.get("content_type") + "!");
-		});
 		this.collection.bind('reset', this.resetViews, this);
-      	//this.model.updateQuery();
-
-    	// _(this).bindAll('add');
-        //this._itemViews.bind('add', this.add);
+      	
 	},
 	removeItem: function(){
 		$('#browser-item-count').text(this.collection.totalItemsCount  + " items");

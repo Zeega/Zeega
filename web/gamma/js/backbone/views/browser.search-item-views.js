@@ -302,9 +302,8 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	render: function(obj)
 	{
-		var objSrc = $(obj.element).attr("href");
-		var theImage = $(this.el).find("img");
-		$(theImage).attr("src", objSrc);
+		
+		
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
@@ -336,7 +335,7 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		 	e.preventDefault();
 		});
 		
-		obj.content = this.el;
+		
 		
 		return this;
 	},
@@ -354,16 +353,18 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	render: function(obj)
 	{
 		
-		
-		//$(theImage).attr("height", $(window).height());
-		//$(theImage).attr("width", $(window).width()/2);
-		//set object's content
-		//obj.content = this.content; 
-
-		
-
+		//Call parent class to do captioning and metadata
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		//Fill in image-specific stuff
+		var imageEl = $("#fancybox-image-template").clone();
+		$(imageEl).attr('id', 'fancybox-image');
+		var objSrc = $(obj.element).attr("href");
+		$(imageEl).find('img').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(imageEl.html());
 
+		//set fancybox content
+		obj.content = this.el;
 		return this;
 	},
 
@@ -373,8 +374,6 @@ var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-video-template").clone();
-		this.content.removeAttr('id');
 
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
@@ -382,13 +381,16 @@ var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
 	{
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
-		var videoSrc  = $(obj.element).attr('href');
 
-		this.content.find('source').attr( 'src', videoSrc);
+		//Fill in video-specific stuff
+		var videoEl = $("#fancybox-video-template").clone();
+		$(videoEl).attr('id', 'fancybox-video');
+		var objSrc = $(obj.element).attr("href");
+		$(videoEl).find('video').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(videoEl.html());
 
-		//Right now video only seems to work with mp4s. Or, at least, does not work with divx.
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},
@@ -399,8 +401,7 @@ var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-audio-template").clone();
-		this.content.removeAttr('id');
+		
 
 	},
 	/* Pass in the element that the user clicked on from fancybox.  */
@@ -409,11 +410,15 @@ var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		var audioSrc  = $(obj.element).attr('href');
+		//Fill in audio-specific stuff
+		var audioEl = $("#fancybox-audio-template").clone();
+		$(audioEl).attr('id', 'fancybox-audio');
+		var objSrc = $(obj.element).attr("href");
+		$(audioEl).find('audio').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(audioEl.html());
 
-		this.content.find('audio').attr('src', audioSrc);
-
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},
@@ -425,8 +430,6 @@ var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-youtube-template").clone();
-		this.content.removeAttr('id');
 
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
@@ -435,11 +438,16 @@ var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
+		
+		//Fill in youtube -specific stuff
+		var youTubeEl = $("#fancybox-youtube-template").clone();
+		$(youTubeEl).attr('id', 'fancybox-youtube');
 		var youTubeSrc  = 'http://www.youtube.com/embed/' + $(obj.element).attr('href');
+		$(youTubeEl).find('iframe').attr("src", youTubeSrc);
+		$(this.el).find('.fancybox-media-item').html(youTubeEl.html());
 
-		this.content.find('iframe').attr('src', youTubeSrc);
-
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},
