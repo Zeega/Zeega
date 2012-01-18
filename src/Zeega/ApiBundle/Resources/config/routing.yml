@@ -17,3 +17,8 @@ tags:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\TagsController
+    
+import:
+    type:     rest
+    prefix:   api
+    resource: Zeega\ApiBundle\Controller\ImportController

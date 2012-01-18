@@ -3,18 +3,22 @@
 namespace Zeega\IngestBundle\Parser;
 
 /**
- * Dumps assets to the filesystem.
+ * Abstract data parser
  *
- * @author Kris Wallsmith <kris@symfony.com>
  */
 abstract class ParserAbstract
 {
 	private $config;
 	
+	protected function persistItem($item)
+	{
+		
+	}
+	
 	/**
      * Sets the parser configuration in a dictionary.
      *
-     * @param String  $key  The config key.
+     * @param String $key  The config key.
      * @param String $value The config value.
      */
 	public function setConfig($key, $value)
@@ -36,7 +40,7 @@ abstract class ParserAbstract
 	{
 		if(!isset($config) || !array_key_exists($key, $config))
 		{
-			throw new OutOfRangeException("Invalid configuration key")
+			throw new OutOfRangeException("Invalid configuration key");
 		}
 		else
 		{
@@ -50,7 +54,7 @@ abstract class ParserAbstract
      * @param String  $url  The url to be parsed.
 	 * @return boolean|supported
      */
-	abstract protected function isUrlSupported($url);
+	abstract public function isUrlSupported($url);
 	
 	/**
      * Parses a single item from the $url and adds the associated media to the database.
@@ -58,7 +62,7 @@ abstract class ParserAbstract
      * @param String  $url  The url to be checked.
 	 * @return boolean|success
      */
-	abstract protected function parseSingle($url);
+	abstract public function parseSingleItem($url);
 	
 	/**
      * Parses the set of media from the $url and adds the associated media to the database.
@@ -66,5 +70,5 @@ abstract class ParserAbstract
      * @param String  $url  The url to be parsed.
 	 * @return boolean|success
      */	
-	abstract protected function parseSet($url);
+	abstract public function parseSet($url);
 }
