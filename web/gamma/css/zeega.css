@@ -104,6 +104,19 @@
 	margin: 0 0 -3px 0;
 	padding: 0 5px;
 }
+.browser-collection-edit-menu{
+	position: absolute;
+	top: 1px;
+	left: 23px;
+	width: 130px;
+	-webkit-box-shadow: 2px 2px 2px 2px #333;
+	-moz-box-shadow: 2px 2px 2px 2px #333;
+	box-shadow: 2px 2px 2px 2px #333;
+	z-index:100;
+	display:none;
+	color: #F15A29 !important;
+	background-color: #444 !important;
+}
 #browser-collection-filter-edit-menu{
 	position: absolute;
 	top: 22px;
@@ -115,7 +128,7 @@
 	z-index:100;
 	display:none;
 }
-#browser-collection-filter-edit-menu li{
+#browser-collection-filter-edit-menu li, .browser-collection-edit-menu li{
 	
 	padding: 3px 5px;
 	border-bottom: 1px solid #333;
@@ -239,10 +252,10 @@
 		padding:7px 5px;
 	
 }
-.browser-results-image-edit a, #browser-collection-filter a{
+.browser-results-image-edit a, #browser-collection-filter a, .browser-collection-edit-menu a{
 	text-decoration:none !important;
 }
-.browser-results-image-edit a:hover, #browser-collection-filter a:hover, #browser a:hover{
+.browser-results-image-edit a:hover, #browser-collection-filter a:hover, #browser a:hover, .browser-collection-edit-menu a:hover{
 	color:#fff;
 	text-decoration:none !important;
 }
@@ -384,6 +397,7 @@
 .browser-results-collection{
 	width:144px;
 	float:left;
+	position:relative;
 
 }
 .browser-results-collection p
@@ -584,6 +598,22 @@
 }
 #browser-fancybox-delete-button{
 	float:right;
+}
+.corner-triangle-for-menu {
+        width: 0;
+		height: 0;
+		border-left: 20px solid transparent;
+		
+		border-top: 20px solid #F15A29;
+		position: relative;
+		top: -130px;
+		left: 130px;
+		
+		opacity: 0.8;
+		z-index:100;
+}
+.corner-triangle-for-menu:hover{
+	text-decoration:none;
 }
 
 /*override the default from the fancybox stylesheet*/
