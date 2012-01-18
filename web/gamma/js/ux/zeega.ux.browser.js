@@ -37,6 +37,11 @@ $(document).ready(function() {
 		closeBtn:false,
 		aspectRatio:true,
 		scroll:'none',
+		keys: {
+				next: [ 34, 39, 40], //  page down, right arrow, down arrow
+				prev: [ 33, 37, 38], //  page up, left arrow, up arrow
+				close: [27] // escape key
+		},
 		
     	helpers : {
     		title : false,

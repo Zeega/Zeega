@@ -308,8 +308,40 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		
-		//DELETE button
 		var item = this.model;
+		
+		//EDIT TITLE
+		this.el.find('.title').editable(
+			function(value, settings)
+			{ 
+
+				var newTitle = value;
+
+				//Save collection and hide form field on success
+				item.save({ title:newTitle }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item title for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item title.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 320,
+				cssclass : 'fancybox-form'
+		});
+
+		//DELETE button
 		this.el.find('.fancybox-delete-button').click(function(e){
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
 						+ item.id;
@@ -320,7 +352,7 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 				 				url : deleteURL,
 								success: function(model, response) { 
 									console.log("Deleted item " + item.id);	
-									ZeegaBrowser.searchItemsView.collection.remove(item);
+									
 
 									//close fancy box window
 									jQuery.fancybox.close();

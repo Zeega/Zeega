@@ -571,7 +571,6 @@
 	width:640px;
 	height:480px;
 	background-color:white;
-
 }
 .fancybox-media-item{
 	width:100%;
@@ -579,13 +578,17 @@
 	background-color:gray;
 	text-align:center;
 	margin-bottom:5px;
+	border-radius:5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding-top:2px;
 }
 #fancybox-media-container .title{
 	font-size: 1.3em;
 	font-weight: bold;
 }
 .fancybox-media-item img{
-	max-width:100%;
+	max-width:99%;
 	max-height:85%;
 	
 }
@@ -605,6 +608,13 @@
 }
 .fancybox-delete-button{
 	float:right;
+}
+.fancybox-form input{
+	background:#efefef;
+	border:none;
+	
+	font-weight:bold;
+	letter-spacing:1px;
 }
 .corner-triangle-for-menu {
         width: 0;

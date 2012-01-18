@@ -84,7 +84,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		
 		
       	this.collection.bind('add',   this.addItem, this);
-      	this.collection.bind('remove',   this.removeItem, this);
+      	this.collection.bind('destroy',   this.removeItem, this);
 		this.collection.bind('reset', this.resetViews, this);
       	
 	},

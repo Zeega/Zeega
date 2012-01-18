@@ -25,7 +25,8 @@ var ItemCollection = Backbone.Collection.extend({
 	totalItemsCount : 0,
 	
 	initialize:function(){
-		this.bind('remove',   this.decrementItemsCount, this);	
+		
+		this.bind('destroy',   this.decrementItemsCount, this);	
 	},
 	url: function()
 	{
