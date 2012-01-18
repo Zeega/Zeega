@@ -15,17 +15,7 @@
 
 }
 
-#database-search-filter{
-	border:none;
-	font-size:initial;
-	background:transparent;
-	-webkit-appearance: none;
-	font-variant:small-caps;
-	background-image:url('../images/separator.png');
-	padding-left:8px;
-	background-repeat:repeat-y;
-	width:105px;
-}
+
 #browser-results{
 	
 	padding:0 !important;
@@ -800,7 +790,8 @@ a.white:hover
 .zicon-visible{background-position:-97px -29px}
 .zicon-list{background-position: -226px -369px}
 .zicon-grid{background-position: -192px -369px}
-
+.zicon-info{background-position:-259px -170px}
+.zicon-question{background-position:-291px -170px}
 
 .zicon-item{margin-left: 2px;margin-top: 4px;}
 
@@ -1027,6 +1018,7 @@ body
 {
 	background:transparent;
 	color:#ccc;
+	max-width:72px;
 }
 
 /** ripped from twitter bootstrap **/
@@ -1211,8 +1203,13 @@ body
 
 .bar-title
 {
+	font-size:18px;
 	float:left;
+	color:rgba(255,255,255,0.65);
+	width:100%;
 }
+
+.bar-title .info{ float:right }
 .icon-tray span+span
 {
 	margin-left:6px;
@@ -1263,6 +1260,7 @@ body
 	padding: 0 6px;
 	border-bottom: 1px solid #eee;
 	-webkit-box-shadow: inset 3px 3px 6px #999;
+	position:relative;
 }
 
 #searchbar input
@@ -1274,9 +1272,15 @@ body
 	font-size:1.5em;
 }
 
+.filter-toggle{ position:relative }
+
+#search-filter .dropdown-menu{ top:22px }
+
+.menu-title{ padding-left:15px }
+
 #search-filter
 {
-	float : right;
+	float : left;
 	position :relative;
 	top : 4px;
 }
@@ -1345,6 +1349,7 @@ body
 #database-collection-filter
 {
 	width:168px;
+	float:right;
 }
 
 #tab-database-slide-window

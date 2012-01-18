@@ -22,14 +22,11 @@ var Database =
 		}
 		// END "HAMMERS ARE COOL-MODE"
 		
-		// NEEDS TO BE BOOTSTRAPPED!!
+		var itemsBS = jQuery.parseJSON(itemsJSON);
 		
-		this.itemCollection.fetch({
-			success: function( items ){
-				console.log(items)
-				_this.itemViewCollection = new ItemViewCollection({ collection : _this.itemCollection });
-			}
-		});
+		this.itemCollection.reset( itemsBS.items );
+		this.itemCollection.count = parseInt(itemsBS.items_count);
+		this.itemViewCollection = new ItemViewCollection({ collection : this.itemCollection });
 		
 		
 		//loads the collections dropdown

@@ -15,8 +15,8 @@ function initUX(){
 
 
 //		POPOVERS		//
-	$('.rollover').popover({
-		'delayIn' : 1000,
+	$('.info').popover({
+		'delayIn' : 0,
 		placement : 'below'
 	});
 		
@@ -175,20 +175,38 @@ function closeOpenCitationTabs()
 	//fadeIn the sidebar
 	$('#sidebar').fadeIn();
 	
-	$('#database-search-button').click(function(){
+	
+	$('#search-filter .filter-toggle').click(function(){
+		var dd = $(this).parent('li');
+		if($(dd).hasClass('open')) dd.removeClass('open');
+		else $(dd).addClass('open');
+		event.stopPropagation();
+	});
+	
+	// filter database by type
+	$('#search-filter li a').click(function(){
+		Database.filterByMediaType( $(this).data('search-filter') );
+		clearMenus();
 		
-		Database.search( $("#database-search-text").val() );
 		return false;
 	});
+	
+	//clear menus on click
+	$('html').bind("click", clearMenus);
+	
+	function clearMenus()
+	{
+		var d = 'a.menu, .dropdown-toggle, .filter-toggle';
+		$(d).parent('li').removeClass('open');
+	}
+	
 	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
 		Database.filterByCollection( $(this).val() );
 	});
 	
-	$('#database-search-filter').change(function(){
-		Database.filterByMediaType( $(this).val() );
-	});
+
 	
 	$('#refresh-database').click(function(){
 	    Database.refresh();
@@ -308,7 +326,7 @@ function closeOpenCitationTabs()
 
 //expands the Zeega editor panels	
 	$('.editor-title-bar-expander').click(function(){
-		
+		console.log('expand/collapse')
 		//get the current Node ID
 		var nodeID = Zeega.currentNode.id;
 		var domID = $(this).attr('id').split('-',1)[0];
