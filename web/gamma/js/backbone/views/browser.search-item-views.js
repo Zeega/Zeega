@@ -146,69 +146,76 @@ var BrowserCollectionView = BrowserItemView.extend({
 		
 		this.el.find('.title').text(this.model.get('title'));
 
-		
-		var theElement = this.el;
 
-		this.el.find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
-			function(){
-				
-				//calculate position dynamically based on text position
-				//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
-				theElement.find('.browser-collection-edit-menu').show();
-				return false;
-			}, 
-			function(){
-				theElement.find('.browser-collection-edit-menu').hide();
-			}
-		);
-
+		//Only show collections drop down menu if user owns collection
 		var collectionID = this.model.id;
 		var collectionTitle = this.model.get("title");
-		
+		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
+		if (thisCollection == null){
+			this.el.find('.corner-triangle-for-menu').remove();
+		} else {
+			var theElement = this.el;
 
-		//SHARE LINK
-		this.el.find('.collection-player-button').click(function(){
-			ZeegaBrowser.showShareButton(collectionID);
-			return false;
-		}); 
-		//GO TO EDITOR LINK
-		this.el.find('.collection-to-editor-button').click(function(){
-			ZeegaBrowser.goToEditor(collectionID, collectionTitle);
-			return false;
-		});
-		//DELETE LINK
-		this.el.find('.browser-delete-collection').click(function(){
-			ZeegaBrowser.deleteCollection(collectionID);
-			return false;
-		});
-		//RENAME LINK
-		this.el.find('.title').editable(
-			function(value, settings)
-			{ 
+			this.el.find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
+				function(){
+					
+					//calculate position dynamically based on text position
+					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
+					theElement.find('.browser-collection-edit-menu').show();
+					return false;
+				}, 
+				function(){
+					theElement.find('.browser-collection-edit-menu').hide();
+				}
+			);
 
-				value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+			
+			
 
-			},
-			{
-				indicator : 'Saving...',
-				tooltip   : 'Click to edit...',
-				indicator : '<img src="images/loading.gif">',
-				select : true,
-				onblur : 'submit',
-				width : $(this).attr("width") * 2,
-				cssclass : 'browser-form'
-		}).click(function(e) {
-			theElement.find('.browser-collection-edit-menu').hide();
-			//stop from selecting the collection filter at the same click
-			e.stopPropagation();
-         	
-     	});
-		this.el.find('.browser-rename-collection').click(function(e) {
-			//using jeditable framework - pretend like user clicked on the title element
-			theElement.find('.title').trigger('click');
-			//stop from selecting the collection filter at the same click
-			e.stopPropagation();
-		});
+			//SHARE LINK
+			this.el.find('.collection-player-button').click(function(){
+				ZeegaBrowser.showShareButton(collectionID);
+				return false;
+			}); 
+			//GO TO EDITOR LINK
+			this.el.find('.collection-to-editor-button').click(function(){
+				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
+				return false;
+			});
+			//DELETE LINK
+			this.el.find('.browser-delete-collection').click(function(){
+				ZeegaBrowser.deleteCollection(collectionID);
+				return false;
+			});
+			//RENAME LINK
+			this.el.find('.title').editable(
+				function(value, settings)
+				{ 
+
+					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+
+				},
+				{
+					indicator : 'Saving...',
+					tooltip   : 'Click to edit...',
+					indicator : '<img src="images/loading.gif">',
+					select : true,
+					onblur : 'submit',
+					width : $(this).attr("width") * 2,
+					cssclass : 'browser-form'
+			}).click(function(e) {
+				theElement.find('.browser-collection-edit-menu').hide();
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+	         	
+	     	});
+			this.el.find('.browser-rename-collection').click(function(e) {
+				//using jeditable framework - pretend like user clicked on the title element
+				theElement.find('.title').trigger('click');
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+			});
+		}
 		
 		return this;
 	},
