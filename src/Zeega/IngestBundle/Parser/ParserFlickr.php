@@ -33,20 +33,7 @@ class ParserFlickr extends ParserAbstract
 		http://www.flickr.com/photos/{user-id}/sets/ - all photosets
 		http://www.flickr.com/photos/{user-id}/sets/{photoset-id} - single photoset
 		*/
-		/*
-		if(strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/')&&!strstr($url,'sets')){
-			$archive='Flickr';
-			if(strstr($url,'sets')) $split=explode('/sets/',$url);
-			else $split=explode('/photos/',$url);
-			$split=explode('/',$split[1]);
-			$id=$split[1];
-		}*/
 		return strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/');
-	}
-	
-	private function getItemId($url)
-	{
-		return 6168546468;
 	}
 	
 	/**
@@ -58,14 +45,95 @@ class ParserFlickr extends ParserAbstract
 	public function parseSingleItem($url)
 	{
 		$id = $this->getItemId($url);
+		return $this->parseItem($id);
+	}
+	
+	/**
+     * Parses the set of media from the $url and adds the associated media to the database.
+     *
+     * @param String  $url  The url to be parsed.
+	 * @return boolean|success
+     */	
+	public function parseSet($url)
+	{
+		$setId = $this->getItemId($url);
 		
 		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
-		$info = $f->photos_getInfo($id);
-		$size = $f->photos_getSizes($id);
-	
-		if(is_array($info)&&is_array($size))
+		$setPhotos = $f->photosets_getPhotos($setId);
+		$setInfo = $f->photosets_getInfo($setId);
+		
+		$photos = $setPhotos['photoset']['photo'];
+		
+		if($photos)
 		{
+			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
+			//return var_dump($ownerInfo);
+			$collection = new Item();
 			
+			$collection->setTitle($setInfo["title"]);
+			$collection->setDescription($setInfo["description"]);
+			$collection->setType('Collection');
+		    $collection->setSource('Flickr');
+		    $collection->setUri('http://zeega.org');
+			$collection->setAttributionUri($url);
+		    
+	        $collection->setChildItemsCount(0);
+	        
+			$collection->setMediaCreatorUsername($ownerInfo["path_alias"]);
+	        $collection->setMediaCreatorRealname($ownerInfo["username"]);
+			$collection->setMediaDateCreated(new \DateTime());
+	        
+			$thumbnailUrlIsSet = false;
+			
+			$collection->setChildItemsCount(count($photos));
+			
+			foreach($photos as $photo)
+			{
+				$item = $this->parseItem($photo['id']);
+				if(!$thumbnailUrlIsSet) 
+				{
+					$collection->setThumbnailUrl($item->getThumbnailUrl());
+					$thumbnailUrlIsSet = true;
+				}
+				$collection->addItem($item);
+			}
+			
+			return $collection;
+		}
+	}
+
+	/*  PRIVATE METHODS */
+
+	private function getItemId($url)
+	{
+		if(strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/'))
+		{
+			if(strstr($url,'sets'))
+			{
+				$split = explode('/sets/',$url);
+				$split = explode('/',$split[1]);
+				$id = $split[0];
+			}
+			else 
+			{
+				$split = explode('/photos/',$url);
+				$split = explode('/',$split[1]);
+				$id = $split[1];
+			}
+
+			return $id;
+		}
+		return -1;
+	}
+	
+	private function parseItem($itemId)
+	{
+		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
+		$info = $f->photos_getInfo($itemId);
+		$size = $f->photos_getSizes($itemId);
+	
+		if(is_array($info)&&is_array($size)) // why?
+		{
 			$item = new Item();
 			$metadata = new Metadata();
 			$media = new Media();
@@ -92,8 +160,9 @@ class ParserFlickr extends ParserAbstract
 			}	
 			
 			$metadata->setThumbnailUrl($sizes['Square']['source']);
+			//$metadata->setThumbnailUrl($sizes['Small']['source']);
 			
-			$attr=array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
+			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
 
 			if(isset($sizes['Large']))$itemSize='Large';
@@ -102,9 +171,7 @@ class ParserFlickr extends ParserAbstract
 			else $itemSize='Small';
 			
 			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
-		
-			$metadata->setThumbnailUrl($sizes['Small']['source']);
-			$item->setUri($sizes[$itemSize]['source']);
+			
 			$item->setUri($sizes[$itemSize]['source']);
 			$item->setChildItemsCount(0);
 			$media->setWidth($sizes[$itemSize]['width']);
@@ -113,7 +180,7 @@ class ParserFlickr extends ParserAbstract
 			$attr['sizes']=$sizes;
 			$item->setDescription($info['description']);
 			
-			if($info['license'])$metadata->setLicense($license[$info['license']]);
+			if($info['license'])$metadata->setLicense(self::$license[$info['license']]);
 			else $metadata->setLicense('All Rights Reserved');
 		
 			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
@@ -135,24 +202,11 @@ class ParserFlickr extends ParserAbstract
 			$metadata->setAttributes($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);
-			//parent::persistItem($item);
+
 			return $item;	
 		}
 		else{
 			return false;
 		}
-		
 	}
-	
-	/**
-     * Parses the set of media from the $url and adds the associated media to the database.
-     *
-     * @param String  $url  The url to be parsed.
-	 * @return boolean|success
-     */	
-	public function parseSet($url)
-	{
-		
-	}
-	
 }
