@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+       	<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {% block title %}
+        {% endblock %}
+         <link href="{{ asset('jda/css/bootstrap.css')}}" rel="stylesheet" type="text/css">
+			<link href="{{ asset('jda/css/home.css')}}" rel="stylesheet" type="text/css">
+			<link href="{{ asset('jda/css/style.css')}}" rel="stylesheet" type="text/css">
+         
+         {% block stylesheets %}
+	
+			
+			
+		{% endblock %}
+		
+		
+		<script> 
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+		</script>
+		
+		
+		{% block scripts %}
+		{% endblock %}
+		
+		
+		
+    </head>
+    
+  <body>
+
+		{% block header %}
+		
+			<div id="header-bar"><div id="header-english">
+
+		<header class="clearfix"> 
+		{% if locale == 'jp' %}
+			<a href="{{path('home', { '_locale': locale })}}"><img id="logo" class="home-english" src="{{ asset('jda/images/logo-jp.png')}}"></a>
+		{% else %}
+			<a href="{{path('home', { '_locale': locale })}}"><img id="logo" class="home-english" src="{{ asset('jda/images/logo.png')}}"></a>
+		{% endif %}
+		<div id="user-bar">
+			<ul id="header-menu" class="unstyled">
+				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">about</a></li>
+				<li><a href="#">login</a></li>
+				<li>/</li>
+				<li><a href="#">register</a></li>
+				
+				{% if locale == 'jp' %}
+					<li><img src="{{ asset('jda/images/jp.png')}}"class="language language-active" id="language-japanese"></li>
+					<li>
+					{% if page == 'home' %}
+			<a href="{{path('home', { '_locale': 'en' })}}">
+			{% elseif page == 'about' %}
+			<a href="{{path('about', { '_locale': 'en' })}}">
+			{% endif %}
+				<img src="{{ asset('jda/images/gb.png')}}" class="language" id="language-english"></a></li>
+				{% else %}
+					<li>{% if page == 'home' %}
+			<a href="{{path('home', { '_locale': 'jp' })}}">
+			{% elseif page == 'about' %}
+			<a href="{{path('about', { '_locale': 'jp' })}}">
+			{% endif %}
+			<img src="{{ asset('jda/images/jp.png')}}"class="language" id="language-japanese"></a></li>
+					<li><img src="{{ asset('jda/images/gb.png')}}" class="language language-active" id="language-english"></li>
+				{% endif %}
+				
+				
+			</ul>
+		</div>
+
+			</header>
+		</div></div>
+
+		
+  		{% endblock %}
+				
+		{% block content %}
+		{% endblock %}
+		   
+		{% block footer %}
+		{% endblock %}
+
+
+  
+		
+		
+         
+    </body>
+</html>

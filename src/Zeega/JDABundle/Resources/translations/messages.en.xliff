@@ -1,0 +1,47 @@
+﻿<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>jda.home.featured</source>
+                <target>Featured Collections</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>jda.home.about.intro</source>
+                <target>The Digital Archive of Japan's 2011 Disasters</target>
+            </trans-unit>
+             <trans-unit id="3">
+                <source>jda.home.about</source>
+                <target>is an evolving, collaborative space for citizens, researchers and policy makers, and a site of shared memory for those most directly affected by these events.</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>jda.home.archive</source>
+                <target>In the Archive</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>jda.home.tags</source>
+                <target>Frequent Tags</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>jda.home.title</source>
+                <target> Digital Archive of Japan's 2011 Disasters</target>
+            </trans-unit> 
+            <trans-unit id="7">
+                <source>jda.home.more</source>
+                <target>more</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>jda.home.add</source>
+                <target>add to the archive</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>jda.home.search</source>
+                <target>search the archive</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>jda.home.logo</source>
+                <target>logo</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

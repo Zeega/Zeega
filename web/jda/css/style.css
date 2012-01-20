@@ -1,0 +1,369 @@
+@CHARSET "ISO-8859-1";
+
+.row {
+	display: table-row;
+}
+
+.cell {
+	display: table-cell;
+}
+
+a:focus {
+	outline: 0px;
+}
+
+a {
+	color: #77f;
+	text-decoration: none;
+}
+
+.carousel {
+	float: left;
+	width: 100%;
+	overflow: hidden;
+}
+
+.thumb-tiny {
+	height: 35px;
+	width: 60px;
+	background: #aaa;
+}
+
+
+.body-text {
+	text-align: left;
+	font-size: 13px;
+	line-height: 19px;
+	font-size: 13px;
+}
+
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+
+p {
+	margin: 0px;
+	padding: 0px;
+}
+
+td {
+	border: 0px;
+	padding: 0px;
+}
+
+input {
+	border: 1px solid #707070;
+	
+}
+
+.button {
+	background-color: #F4F4F4;
+	text-align: center;
+	text-justify: inter-cluster;
+	font-weight: normal;
+	cursor: pointer;
+	border-radius: 3px;
+	border: 1px solid #707070;
+}
+
+.button:hover {
+	background-color: #fdfdfd;
+	color: black;
+}
+
+#content {
+	margin: 3px;
+}
+
+a:link,
+a:visited
+{
+	color:red;
+}
+
+.btn a {color: white;}
+
+p
+{
+	text-align: justify;
+	text-justify: newspaper
+	font-size:1.15em
+}
+
+.span05
+{
+	width:18px;
+}
+
+.span05l
+{
+	width:582px;
+}
+
+.hero-unit
+{
+	padding:24px;
+}
+
+.hidden
+{
+	display:none;
+}
+
+.white
+{
+	color:rgba(255,255,255,0.95);
+}
+.divider
+{
+	font-size: 5em;
+	position: relative;
+	top: 17px;
+	margin-left: 32px;
+	color:rgba(255,255,255,0.5);
+	
+}
+
+.container
+{
+	margin-top:12px;
+}
+
+header
+{
+	height:50px;
+}
+
+#logo
+{
+	float:left;
+	height:50px;
+}
+
+#user-bar
+{
+	float:right;
+}
+
+#user-bar a+a
+{
+	margin-left:12px;
+}
+
+#banner-index,
+#banner-about
+{
+	position:relative;
+	background-image:url('../images/main-image.jpg');
+	margin:12px 0;
+	overflow:hidden;
+}
+
+#banner-about{ height:50px }
+#banner-index{ height:350px }
+
+#intro-bar
+{
+	box-shadow:0 -12px 12px rgba(255,255,255,0.3);
+	background:rgba(0,0,0,0.5);
+	padding:24px;
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:892px;
+	border-radius:0 0 6px 6px;
+}
+
+#teaser-text
+{
+	width:250px;
+	background:rgba(255,255,255,0.90);
+	padding:12px;
+	float:right;
+	box-shadow:6px 6px 6px rgba(0,0,0,0.25);
+	border-radius:6px;
+	text-shadow: white 2px 2px 0px;
+}
+
+#interact
+{
+	padding-bottom:18px;
+}
+
+#go-button
+{
+	height:55px;
+	float:left;
+	font-size:2em;
+	margin-left:12px;
+}
+
+#add-button
+{
+	float:right;
+	height:55px;
+	width:273px;
+	font-size:2em;
+}
+
+#search-bar input
+{
+	width:450px;
+	float:left;
+	font-size:2em;
+	font-weight:bold;
+	height:44px;
+	background:white url('../images/search.png') left center no-repeat;
+	padding-left:42px;
+}
+
+#search-bar h5
+{
+	line-height:18px;
+	color:rgba(255,255,255,0.85);
+}
+
+#archive-stats
+{
+	margin-top:12px;
+	clear:both;
+	color:#eee;
+}
+
+
+footer
+{
+	position:absolute;
+	left:0;
+	width:100%;
+	background:#ddd;
+	box-shadow:inset 0px 6px 6px #aaa;
+}
+
+.footer-nav li
+{
+	display:block;
+	float:left;
+}
+
+.footer-nav li+li
+{
+	margin-left:12px;
+}
+
+#partner-logos img
+{
+	max-width:116px;
+	max-height:50px;
+	display:block;
+	margin:0 auto;
+}
+
+#partner-logos,
+#partner-logos li
+{
+	padding:0;
+	margin:0;
+}
+
+#partner-logos li
+{
+	float:left;
+	list-style:none;
+	padding:20px;
+	height:50px;
+	width:116px;
+}
+
+.language
+{
+	height:15px;
+	opacity:0.75;
+	padding-bottom:2px;
+}
+
+.language:hover
+{
+	border-bottom:3px solid yellow;
+	opacity:1;
+	
+}
+
+.language-active
+{
+	opacity:1;
+	border-bottom:3px solid red;
+	cursor : 
+}
+
+.language:not(.language-active){
+	cursor : pointer;
+}
+
+#header-menu li
+{
+	float:left; 
+	display:block; 
+	position:relative;
+	margin:0 1px;
+}
+
+#header-menu>li + li
+{
+	margin-left:12px;
+}
+
+#header-menu li a
+{
+	display:block; 
+}
+
+#header-menu ul
+{
+	position:absolute; 
+	left:0; 
+	display:none; 
+	margin:0 0 0 -1px; 
+	padding:0; 
+	list-style:none;
+}
+
+#header-menu ul li {
+	width:100px; 
+	float:left; 
+	border-top:1px solid #fff;
+}
+
+#header-menu ul a {
+	display:block;  
+	text-align:left;
+}
+
+.partnerimg {
+
+opacity: .5;
+
+}
+
+.partnerimg:hover {
+
+opacity: 1;
+
+}
+
+.divider
+{
+	height:50px;
+	position:relative;
+	left:-10px;
+	top:0;
+}

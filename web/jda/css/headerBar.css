@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+
+#header {
+	height: 40px;
+	width: 100%;
+	background: #F4F4F4;
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+
+#header-logo {
+	padding-top: 5px;
+	left: 13px;
+}
+
+#home-button {
+	width: 270px;
+	padding-left: 3px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+#register-bottom-text {
+	position : absolute;
+	top : 20px;
+	font-size: 15px;
+	width: 110px;
+	letter-spacing: 5px;
+}
+
+#header-bar-spacer {
+	border-radius: 0px;
+	border: 1px solid #707070;
+	border-right: 0px;
+}
+
+#language-button {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border: 1px solid #707070;
+	width: 130px;
+}
+
+#language-top-text {
+	position : absolute;
+	top : 3px;
+	font-size: 12px;
+	width: 110px;
+	letter-spacing: 2px;
+}
+
+#language-bottom-text {
+	position : absolute;
+	top : 20px;
+	font-size: 15px;
+	width: 110px;
+	letter-spacing: 3px;
+}
+
+#header img {
+	margin-top : 4px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+#header-table {
+	display: table;
+	width: 100%;
+}
+
+#header-bar {
+	margin-top : 12px;
+}
+

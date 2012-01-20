@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+
+.black-18 {
+	color: #000;
+	font-size: 18px;
+}
+
+.gray-18 {
+	color: #777;
+	font-size: 18px;
+}
+
+.blue-18 {
+	color: #77f;
+	font-size: 18px;
+}
+
+.white-18 {
+	color: #fff;
+	font-size: 18px;
+}
+
+.black-15 {
+	color: #000;
+	font-size: 15px;
+}
+
+.black-13 {
+	color: #000;
+	font-size: 13px;
+}
+
+.gray-15 {
+	color: #777;
+	font-size: 15px;
+}
+
+.blue-15 {
+	color: #77f;
+	font-size: 15px;
+}
+
+.white-15 {
+	color: #fff;
+	font-size: 15px;
+}
+
+.black-12 {
+	color: #000;
+	font-size: 12px;
+}
+
+.gray-12 {
+	color: #777;
+	font-size: 12px;
+}
+
+.blue-12 {
+	color: #77f;
+	font-size: 12px;
+}
+
+.white-12 {
+	color: #fff;
+	font-size: 12px;
+}
+

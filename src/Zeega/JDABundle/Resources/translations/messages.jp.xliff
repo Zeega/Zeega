@@ -1,0 +1,47 @@
+﻿<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>jda.home.featured</source>
+                <target>印象的なコレクション</target>
+            </trans-unit>
+             <trans-unit id="2">
+                <source>jda.home.about.intro</source>
+                <target></target>
+            </trans-unit>
+             <trans-unit id="3">
+                <source>jda.home.about</source>
+                <target>2011年東日本大震災デジタルアーカイブは、皆様お一人おひとり、研究者、そして政策に携わる方が対話し、つながるための参加型空間であり、この震災によって大きな影響を受けた皆様にとって大切な記憶を共有する場所となることを願っています。</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>jda.home.archive</source>
+                <target>アーカイブの内容</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>jda.home.tags</source>
+                <target>タグ</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>jda.home.title</source>
+                <target> Digital Archive of Japan's 2011 Disasters</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>jda.home.more</source>
+                <target>且</target>
+            </trans-unit> 
+            <trans-unit id="8">
+                <source>jda.home.add</source>
+                <target>投稿する</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>jda.home.search</source>
+                <target>アーカイブを検索する</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>jda.home.logo</source>
+                <target>logo-jp</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

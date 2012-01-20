@@ -1,0 +1,85 @@
+@CHARSET "UTF-8";
+
+#personal-collections-tray {
+	width: 230px;
+	display: table;
+	border-collapse: collapse;
+	position: fixed;
+	top: 0px;
+	right: -230px;
+	height: 100%;
+	z-index : 1000;
+}
+
+#personal-collections-tab-cell{
+	vertical-align:top;
+}
+#personal-collections-tab-container {
+	display: inline-block;
+}
+
+#personal-collections-tab-table {
+	display: table;
+	margin: 0px;
+	width: 30px;
+	height: 100%;
+}
+
+#personal-collections-tab-top {
+	height: 50px;
+	width: 30px;
+}
+
+#personal-collections-tab-top-img {
+	background-image: url("../images/personal_collections_tab_top.png");
+	height: 50px;
+	width: 30px;
+}
+
+#personal-collections-tab-bit-cell {
+	background-image: url("../images/personal_collections_tab_bit.png");
+	background-repeat: repeat-y;
+	height: 100%;
+}
+
+#personal-collections-tab-bit {
+	height: 100%;
+	width: 30px;
+}
+
+#personal-collections-tab-bit-img {
+	height: 100%;
+	width: 30px;
+}
+
+#personal-collections-tab-bottom {
+	height: 275px;
+	width: 30px;
+}
+
+#personal-collections-tab-bottom-img {
+	height: 275px;
+	width: 30px;
+	background-image: url("../images/personal_collections_tab.png");
+	cursor: pointer;
+}
+
+#personal-collections-area-container {
+	height: 100%;
+	width: 200px;
+	padding-top: 44px;
+	padding-bottom: 18px;
+}
+
+#personal-collections-area {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	background: #404040;
+}
+
+#personal-collections-list {
+	height: 100%;
+	width: 100%;
+	padding: 0px;
+}

@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+.img-144{
+	max-height: 144px;
+	max-width: 144px;
+}
+
+.img-72{
+	height: 72px;
+	width: 72px;
+}
+
+.img-48{
+	height: 48px;
+	width: 48x;
+}

@@ -1,0 +1,15 @@
+search:
+    pattern:   /{_locale}/search/{query}
+    defaults:  { _controller: ZeegaJDABundle:Search:index, _locale: en }
+    requirements:
+        _locale: en|jp
+home:
+    pattern:   /{_locale}/home
+    defaults:  { _controller: ZeegaJDABundle:Home:index, _locale: en }
+    requirements:
+        _locale: en|jp
+about:
+    pattern:   /{_locale}/about
+    defaults:  { _controller: ZeegaJDABundle:About:index, _locale: en }
+    requirements:
+        _locale: en|jp

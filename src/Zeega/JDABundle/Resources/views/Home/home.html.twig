@@ -1,0 +1,147 @@
+{# src/Zeega/JDABundle/Resources/views/Home/home.html.twig #}
+
+{% extends 'ZeegaJDABundle::base.html.twig' %}
+
+{% block title %}<title>{% trans %}jda.home.title{% endtrans %}</title>{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript" src="{{ asset('jda/js/libraries/jquery/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('jda/js/ux/jda.ux.home.js')}}"></script>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div id="content"><div id="home-content-english">
+		<div class="narrow-container">
+
+			<div id="banner-index" class="hero-unit">
+				<div id="teaser-text">
+					<p class="en">
+						<strong>{% trans %}jda.home.about.intro{% endtrans %}</strong> {% trans %}jda.home.about{% endtrans %} <a href="{{path('about', { '_locale': locale })}}" class="about-english">{% trans %}jda.home.more{% endtrans %}
+							&gt;</a>
+					</p>
+				</div>
+
+				<div id="intro-bar" class="en">
+					<div id="search-bar">
+						<form action="#" method="POST" id="search-form">
+						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
+						<button id="go-button" class="btn info large">go</button>
+						</form>
+						<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
+						<button id="add-button" class="btn success large">
+							<a href="http://jdarchive.org/contribute/?la=en" target="_blank">{% trans %}jda.home.add{% endtrans %}</a>
+						</button>
+					</div>
+				</div>
+			</div>
+
+
+			<div id="content-row" class="rowx">
+
+				<div id="left-col" class="span-two-thirds">
+
+					<div id="collections-teaser" class="rowx">
+						<div class="span-two-thirds">
+							<h3>{% trans %}jda.home.featured{% endtrans %}</h3>
+							<ul class="media-grid">
+								<li><a href="#"><img class="thumbnail" src="{{ asset('jda/images/thumb3.jpg')}}"width="180"></a></li>
+								<li><a href="http://dev.zeega.org/japan/web/project/26/view"><img class="thumbnail" src="{{ asset('jda/images/thumb.jpg')}}"width="180"></a></li>
+								<li><a href="#"><img class="thumbnail" src="{{ asset('jda/images/thumb2.jpg')}}" width="180"></a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- #collections-teaser -->
+				</div>
+				<!-- #left-col span-two-thirds -->
+
+
+				<div id="right-col" class="span-one-third">
+
+					<h3>{% trans %}jda.home.archive{% endtrans %}</h3>
+					<strong> <small><a href="#">300,048
+								Tweets</a> / <a href="#">8,129 Posts</a> / <a href="#">32,972
+								Images</a> / <a href="#">100 Videos</a> / <a href="#">48
+								Testimonials</a></small>
+					</strong>
+
+					<h3>{% trans %}jda.home.tags{% endtrans %}</h3>
+
+					<strong> <small><a href="#">earthquake</a>
+							/ <a href="#">radiation</a> / <a href="#">tsunami</a>
+							/ <a href="#">recovery</a> / <a href="#">schools</a>
+							/ <a href="#">children</a> / <a href="#">fishing</a>
+							/ <a href="#">housing</a> / <a href="#">Sendai</a> </small>
+					</strong>
+
+				</div>
+				<!-- right-col -->
+
+			</div>
+			<!-- #content-row -->
+
+
+			<footer>
+			<div class="narrow-container">
+
+
+				<!--<div class='rowx'>
+
+					<div class="footer-nav span16">
+						<ul class='unstyled'>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">About</a></li>
+							<li><a href="#">FAQ</a></li>
+							<li><a href="#">Contact</a></li>
+
+						</ul>
+					</div>
+				</div>
+				<div class='rowx'>-->
+				<div class="span16">
+
+					<h3>Partners</h3>
+<ul id="partner-logos" class="">
+					
+						<li><a href="http://warp.ndl.go.jp/WARP_disaster.html" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/nationalDietLibrary.png')}}"></a></li>
+						<li><a href="http://www.fas.harvard.edu/~rijs/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/reischauer.png')}}"></a></li>
+						<li><a href="http://311archives.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/all311.png')}}"></a></li>
+						<li><a href="http://www.dcrc.tohoku.ac.jp/archive/index.html/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/tohoku311.png')}}"></a></li>						
+						<li><a href="http://311map.com/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/311Map.png')}}"></a></li>
+						<li><a href="http://recorder311.smt.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/logo_cr.png')}}"></a></li>
+						<li><a href="http://savemlak.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/saveMLAK.png')}}"></a></li>
+						<li><a href="http://recorder311.smt.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/sendaiMedia.png')}}"></a></li>
+						
+						
+						<li><a href="http://www.yahoo.co.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/YahooJapan.gif')}}"></a></li>
+						
+						
+						<li><a href="http://zeega.org" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/zeega.png')}}"></a></li>
+						<li><a href="http://metalab.harvard.edu" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/mlh.gif')}}"></a></li>
+						
+						
+						
+						<li><a href="http://www.archive-it.org/collections/2438" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/archiveIT.png')}}"></a></li>
+						<li><a href="http://worldmap.harvard.edu/japanmap/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/CGA.png')}}"></a></li>
+						<li><a href="http://archive.org" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/InternetArchive.png')}}"></a></li>
+						<li><a href="http://www.loc.gov/index.html" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/LibraryOfCongress.png')}}"></a></li>
+					</ul>
+				</div>
+
+				<div class="rowx">
+					<div class="span16 partnerimg" style="text-align: center;">
+						Site powered by <a href="http://www.zeega.org" target="_blank">Zeega.org</a><br> <br>
+					</div>
+				</div>
+
+			</div>
+		</footer></div>
+		
+	</div></div>
+
+
+{% endblock %}	

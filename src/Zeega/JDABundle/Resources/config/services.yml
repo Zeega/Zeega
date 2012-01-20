@@ -1,0 +1,7 @@
+parameters:
+#    zeega_jda.example.class: Zeega\JDABundle\Example
+
+services:
+#    zeega_jda.example:
+#        class: %zeega_jda.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

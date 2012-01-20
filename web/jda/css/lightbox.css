@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+
+.lightbox-preview{
+	overflow : scroll;
+	display : block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100%;
+	max-height: 100%;
+	cursor: pointer;
+	background-color: #333;
+}
+
+.lightbox-text-preview{
+	color: #fff;
+	margin : 20px;
+}
+
+.lightbox-infobar {
+	height: 100px;
+	background: #000;
+	margin: 0px;
+}
+
+.lightbox-hider {
+	display: none;
+}
+
+.lightbox-img-preview{
+	display : block;
+	margin : auto;
+	cursor : pointer;
+}
+
+.lightbox-video-preview{
+	display : block;
+	margin : auto;
+}
+
+.lightbox-title{
+	cursor : pointer;
+}
+
+.lightbox-website-preveiw{
+	background : #fff;
+}

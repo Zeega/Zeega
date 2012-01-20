@@ -18,6 +18,8 @@ function initUX(){
 
 $(document).ready(function() {
 	
+	
+	$('#go-button').click(function(){$('#search-form').trigger('submit');});
 
 	$('#new-user').click(function(){$(this).fadeOut('fast'); $('#user-add').fadeIn('fast');});
 
