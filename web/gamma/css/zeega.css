@@ -587,6 +587,11 @@
 	font-size: 1.3em;
 	font-weight: bold;
 }
+.fancybox-media-item-more{
+	width:50%;
+	min-height:200px;
+	float:left;
+}
 .fancybox-media-item img{
 	max-width:99%;
 	max-height:85%;
@@ -603,8 +608,15 @@
 	font-weight: bold;
 	letter-spacing: 1px;
 }
-.fancybox-more-button{
+.fancybox-buttons a:visited{
+	text-decoration:none;
+	color:#F15A29;
+}
+.fancybox-more-button, .fancybox-less-button{
 	float:left;
+}
+.fancybox-less-button{
+	display:none;
 }
 .fancybox-delete-button{
 	float:right;

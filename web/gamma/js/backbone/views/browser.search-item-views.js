@@ -307,18 +307,16 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
+		this.el.find('.description').text( this.model.get('description'));
+		this.el.find('.tags').text( 'tags would go here');
 		
 		var item = this.model;
-		
+		var theElement = this.el;
 		//EDIT TITLE
 		this.el.find('.title').editable(
 			function(value, settings)
 			{ 
-
-				var newTitle = value;
-
-				//Save collection and hide form field on success
-				item.save({ title:newTitle }, 
+				item.save({ title:value }, 
 						{
 							success: function(model, response) { 
 								console.log("Updated item title for item " + item.id);
@@ -340,7 +338,76 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 				width : 320,
 				cssclass : 'fancybox-form'
 		});
+		//EDIT DESCRIPTION
+		this.el.find('.description').editable(
+			function(value, settings)
+			{ 
+				item.save({ description:value }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item description for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item description.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit description...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 320,
+				cssclass : 'fancybox-form'
+		});
+		//EDIT CREATOR
+		this.el.find('.creator').editable(
+			function(value, settings)
+			{ 
+				item.save({ "media_creator_username":value }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item creator for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item creator.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 200,
+				cssclass : 'fancybox-form'
+		});
+		//MORE button
+		this.el.find('.fancybox-more-button').click(function(e){
+			
+			if ($(this).find('a').text() == "more"){
+				$(this).find('a').text("less");
+				theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
+				theElement.find('.description').show();
+				theElement.find('.tags').show();
+				e.preventDefault();
+			} else {
+				$(this).find('a').text("more");
+				theElement.find('.description').hide();
+				theElement.find('.tags').hide();
+				theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
+				e.preventDefault();
+			}
 
+		});
 		//DELETE button
 		this.el.find('.fancybox-delete-button').click(function(e){
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
