@@ -102,6 +102,24 @@ class ParserFlickr extends ParserAbstract
 		}
 	}
 
+	public function getItemThumbnail($url)
+	{
+		$itemId = $this->getItemId($url);
+		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
+		$size = $f->photos_getSizes($itemId);
+		foreach ($size as $s)
+		{
+			$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
+		}
+		return $sizes['Square']['source'];
+		//return var_dump($sizes);
+	}
+	
+	public function getSetThumbnail($url)
+	{
+		
+	}
+
 	/*  PRIVATE METHODS */
 
 	private function getItemId($url)
@@ -131,7 +149,7 @@ class ParserFlickr extends ParserAbstract
 		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
 		$info = $f->photos_getInfo($itemId);
 		$size = $f->photos_getSizes($itemId);
-	
+		
 		if(is_array($info)&&is_array($size)) // why?
 		{
 			$item = new Item();
@@ -158,8 +176,8 @@ class ParserFlickr extends ParserAbstract
 			{
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
 			}	
-			
-			$metadata->setThumbnailUrl($sizes['Square']['source']);
+			//return $sizes;
+			$item->setThumbnailUrl($sizes['Square']['source']);
 			//$metadata->setThumbnailUrl($sizes['Small']['source']);
 			
 			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);

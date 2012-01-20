@@ -60,7 +60,7 @@ init:
 
 widget:
     pattern: /widget/
-    defaults: { _controller:  ZeegaIngestBundle:Widget:url }
+    defaults: { _controller:  ZeegaIngestBundle:Widget:open }
     
 ZeegaEditorBundle_home:
     pattern: /

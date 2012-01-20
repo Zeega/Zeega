@@ -21,6 +21,28 @@ class ImportController extends Controller
 		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\ParserFlickr", "IsSet" => true),
 		);
 	
+	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
+    public function getImportCheckAction()
+    {
+		$url = $this->getRequest()->query->get('url');
+		$results = array("is_valid"=>false, "is_set"=>false);
+		
+		foreach ($this->supportedServices as $parserRegex => $parserInfo)
+		{
+			if (preg_match($parserRegex, $url)) 
+			{
+				$parserClass = $parserInfo["ParserClass"];
+				$isSet = $parserInfo["IsSet"];
+				
+				$parserMethod = new ReflectionMethod($parserClass, 'getItemThumbnail'); // reflection is slow, but it's probably ok here
+				$thumbnail = $parserMethod->invokeArgs(new $parserClass, array($url));
+				
+				$results = array("is_valid"=>true, "is_set"=>$isSet, "thumbnail" =>$thumbnail);
+			}
+		}
+
+		return ResponseHelper::getJsonResponse($results);
+    }
 		
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
     public function getImportAction()
@@ -59,6 +81,7 @@ class ImportController extends Controller
 					
 					$em->persist($collection);
 					$em->flush();
+					return new Response("we're good to go");
 				}
 				else
 				{
@@ -74,6 +97,8 @@ class ImportController extends Controller
 					$em->flush();
 					$em->persist($item);
 					$em->flush();
+					$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => array()));
+			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 				}
 			} 
 		}
