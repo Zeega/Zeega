@@ -187,9 +187,14 @@ class ItemsController extends Controller
 		$title = $request_data->get('title');
 		$description = $request_data->get('description');
         $tags = $request_data->get('tags');
+		$tags = $request_data->get('tags');
+		$creator_username = $request_data->get('media_creator_username');
+		$creator_realname = $request_data->get('media_creator_realname');
         
 		if(isset($title)) $item->setTitle($title);
 		if(isset($description)) $item->setDescription($description);
+		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
+		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
 		
 		if(isset($tags))
 		{
