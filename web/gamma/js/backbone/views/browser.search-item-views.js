@@ -298,8 +298,29 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		
 		this.el = $("#fancybox-media-container-template").clone();
 		this.el.attr('id', 'fancybox-media-container');
+
+		//Load the item's tags so we can display and edit them
+		this.model.loadTags();
+		
 	},
-	
+	moreView : function(theButton, theElement){
+		Zeega.moreFancy = true;
+
+		$(theButton).find('a').text("less");
+		theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
+		theElement.addClass("fancybox-media-container-more");
+		theElement.find('.description').show();
+		theElement.find('.tags').show();
+	},
+	lessView : function(theButton, theElement){
+		Zeega.moreFancy = false;
+
+		$(theButton).find('a').text("more");
+		theElement.find('.description').hide();
+		theElement.find('.tags').hide();
+		theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
+		theElement.removeClass("fancybox-media-container-more");
+	},
 	render: function(obj)
 	{
 		
@@ -308,10 +329,19 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		this.el.find('.description').text( this.model.get('description'));
-		this.el.find('.tags').text( 'tags would go here');
+		//this.el.find('.tags').text( 'Dummy tag, Another fake tag, tag tag, false longer tag');
 		
+		//Fancybox will remember if user was in MORE or LESS view
+		if (Zeega.moreFancy){
+			this.moreView($(this).find('a'), this.el);
+		} else {
+			this.lessView($(this).find('a'), this.el);
+		}
+
+
 		var item = this.model;
 		var theElement = this.el;
+		var view = this;
 		//EDIT TITLE
 		this.el.find('.title').editable(
 			function(value, settings)
@@ -345,6 +375,7 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 				item.save({ description:value }, 
 						{
 							success: function(model, response) { 
+								theElement.find('.description').text(item.get("description"));
 								console.log("Updated item description for item " + item.id);
 			 				},
 			 				error: function(model, response){
@@ -356,12 +387,13 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 				return value; //must return the value
 			},
 			{
+				type 	: 'textarea',
 				indicator : 'Saving...',
 				tooltip   : 'Click to edit description...',
 				indicator : '<img src="images/loading.gif">',
 				select : false,
 				onblur : 'submit',
-				width : 320,
+				width : 250,
 				cssclass : 'fancybox-form'
 		});
 		//EDIT CREATOR
@@ -394,16 +426,10 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		this.el.find('.fancybox-more-button').click(function(e){
 			
 			if ($(this).find('a').text() == "more"){
-				$(this).find('a').text("less");
-				theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
-				theElement.find('.description').show();
-				theElement.find('.tags').show();
+				view.moreView(this, theElement);
 				e.preventDefault();
 			} else {
-				$(this).find('a').text("more");
-				theElement.find('.description').hide();
-				theElement.find('.tags').hide();
-				theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
+				view.lessView(this, theElement);
 				e.preventDefault();
 			}
 

@@ -1,7 +1,7 @@
 var Item = Backbone.Model.extend({
 	defaults : {
 		title : 'Untitled',
-		
+		tags : new TagCollection(),
 	},
 	
 	url: function(){
@@ -11,7 +11,12 @@ var Item = Backbone.Model.extend({
 	
 	initialize : function()
 	{
-	}
+	},
+
+	loadTags : function(){
+		this.get("tags").reset({silent:true});
+		this.get("tags").fetch( {url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id  +"/tags"});
+	},
 
 });
 
