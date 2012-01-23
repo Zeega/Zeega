@@ -62,6 +62,7 @@ var loadFiles = [
 	
 	//mvc
 	'order!backbone/models/route',
+    'order!backbone/models/tag',
 	'order!backbone/models/item',
 	'order!backbone/models/editor.collection',
 	'order!backbone/models/node',
