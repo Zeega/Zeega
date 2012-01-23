@@ -148,7 +148,45 @@ var ZeegaBrowser = {
 						});
 		this.search.updateQuery();
 	}, 
-	
+	showShareButton : function(collectionID){	
+		$('#share-collection-modal').find('.modal-body').html("<p>Share your collection: <b></b></p><a target='blank' href='"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+collectionID+"/view'>"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+collectionID+"/view</a>");
+					
+		$('#share-collection-modal').modal('show');
+		
+		$('#share-collection-modal').find('#close-modal').mouseup(function(){
+			$('#share-collection-modal').modal('hide');
+		})
+
+		return false;
+	},
+	goToEditor : function(collectionID, collectionTitle){
+		var postdata={title:collectionTitle, collection_id:collectionID};
+		$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
+					window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
+			});	
+		return false;
+	},
+	deleteCollection : function(collectionID){
+		
+		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"
+						+ collectionID;
+		var theCollection = ZeegaBrowser.myCollections.get(collectionID);
+
+		//DESTROYYYYYYYY
+		theCollection.destroy({	
+			 				url : deleteURL,
+							success: function(model, response) { 
+								ZeegaBrowser.myCollections.remove(theCollection);
+								$('#browser-my-media').trigger('click');
+								console.log("Deleted collection " + collectionID);		
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error deleting collection " + collectionID);		
+			 					console.log(response);
+			 				}
+	 					});
+	},
 	//remove collection filter from view to the user
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
@@ -168,34 +206,40 @@ var ZeegaBrowser = {
     			
 		});
 	},
+	editCollectionTitle : function(value, settings, collectionID){
+		//Look up collection model to update
+		var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
+		
+		collectionToUpdate.isUpdate = true;
+		var newTitle = value;
+
+		//Save collection and hide form field on success
+		collectionToUpdate.save({ title:newTitle }, 
+				{
+					success: function(model, response) { 
+						
+						//update collection title in UI if this collection is
+						//the current collection filter
+						if(model.id == ZeegaBrowser.search.get("collection")){
+							ZeegaBrowser.clickedCollectionTitle = model.get("title");
+							$('#database-search-text').val("search " + model.get("title"));
+						}
+				
+	 				},
+	 				error: function(model, response){
+	 					
+	 					console.log("Error updating collection title.");
+	 					console.log(response);
+	 				}
+	 			});
+		return value; //must return the value!!
+	},
 	showCollectionFilter: function(){
 		
 		$('#browser-collection-filter-tab-text').editable(
-			function(value,settings)
-			{
-				//Look up collection model to update
-		     	var collectionID = ZeegaBrowser.search.get("collection");
-				var collectionToUpdate = ZeegaBrowser.myCollections.get(collectionID);
-				
-				collectionToUpdate.isUpdate = true;
-				var newTitle = value;
-
-				//Save collection and hide form field on success
-				collectionToUpdate.save({ title:newTitle }, 
-						{
-							success: function(model, response) { 
-								
-								ZeegaBrowser.clickedCollectionTitle = model.get("title");
-								$('#database-search-text').val("search " + model.get("title"));
-						
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error updating collection title.");
-			 					console.log(response);
-			 				}
-			 			});
-				return value; //must return the value!!
+			function(value, settings)
+			{ 
+				return ZeegaBrowser.editCollectionTitle(value, settings, ZeegaBrowser.search.get("collection"));
 			},
 			{
 				indicator : 'Saving...',

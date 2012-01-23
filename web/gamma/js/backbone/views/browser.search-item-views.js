@@ -135,19 +135,87 @@ var BrowserCollectionView = BrowserItemView.extend({
 		
 		
 		
-		this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('img').attr('title', this.model.get('title'));
+		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
 
-		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		
 		
 		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
 		//this.el.find('.browser-item-count').text('232');
 		
 		this.el.find('.title').text(this.model.get('title'));
-		
-		
 
+
+		//Only show collections drop down menu if user owns collection
+		var collectionID = this.model.id;
+		var collectionTitle = this.model.get("title");
+		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
+		if (thisCollection == null){
+			this.el.find('.corner-triangle-for-menu').remove();
+		} else {
+			var theElement = this.el;
+
+			this.el.find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
+				function(){
+					
+					//calculate position dynamically based on text position
+					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
+					theElement.find('.browser-collection-edit-menu').show();
+					return false;
+				}, 
+				function(){
+					theElement.find('.browser-collection-edit-menu').hide();
+				}
+			);
+
+			
+			
+
+			//SHARE LINK
+			this.el.find('.collection-player-button').click(function(){
+				ZeegaBrowser.showShareButton(collectionID);
+				return false;
+			}); 
+			//GO TO EDITOR LINK
+			this.el.find('.collection-to-editor-button').click(function(){
+				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
+				return false;
+			});
+			//DELETE LINK
+			this.el.find('.browser-delete-collection').click(function(){
+				ZeegaBrowser.deleteCollection(collectionID);
+				return false;
+			});
+			//RENAME LINK
+			this.el.find('.title').editable(
+				function(value, settings)
+				{ 
+
+					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+
+				},
+				{
+					indicator : 'Saving...',
+					tooltip   : 'Click to edit...',
+					indicator : '<img src="images/loading.gif">',
+					select : true,
+					onblur : 'submit',
+					width : $(this).attr("width") * 2,
+					cssclass : 'browser-form'
+			}).click(function(e) {
+				theElement.find('.browser-collection-edit-menu').hide();
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+	         	
+	     	});
+			this.el.find('.browser-rename-collection').click(function(e) {
+				//using jeditable framework - pretend like user clicked on the title element
+				theElement.find('.title').trigger('click');
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+			});
+		}
 		
 		return this;
 	},
@@ -222,29 +290,177 @@ var BrowserSingleItemView = BrowserItemView.extend({
 
 });
 
-// This is a parent class that takes care of image captions for ALL fancybox views
+
 
 var BrowserFancyBoxView = BrowserItemView.extend({
 	
 	initialize: function(){
-		//this.el =$("#browser-fancybox-caption-template").clone();
-		//this.el.removeAttr('id');
-		this.el = $("#browser-fancybox-media-container-template").clone();
-		this.el.attr('id', 'browser-fancybox-media-container');
+		
+		this.el = $("#fancybox-media-container-template").clone();
+		this.el.attr('id', 'fancybox-media-container');
+
+		//Load the item's tags so we can display and edit them
+		this.model.loadTags();
+		
 	},
-	/* Pass in the element that the user clicked on from fancybox. Fancy box
-	uses the object's title as the caption so set that to the element in 
-	the template */
+	moreView : function(theButton, theElement){
+		Zeega.moreFancy = true;
+
+		$(theButton).find('a').text("less");
+		theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
+		theElement.addClass("fancybox-media-container-more");
+		theElement.find('.description').show();
+		theElement.find('.tags').show();
+	},
+	lessView : function(theButton, theElement){
+		Zeega.moreFancy = false;
+
+		$(theButton).find('a').text("more");
+		theElement.find('.description').hide();
+		theElement.find('.tags').hide();
+		theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
+		theElement.removeClass("fancybox-media-container-more");
+	},
 	render: function(obj)
 	{
 		
-		var theImage = $(this.el).find("img");
-		$(theImage).attr("src", $(obj.element).attr("href"));
+		
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
+		this.el.find('.description').text( this.model.get('description'));
+		//this.el.find('.tags').text( 'Dummy tag, Another fake tag, tag tag, false longer tag');
 		
-		obj.content = this.el;
+		//Fancybox will remember if user was in MORE or LESS view
+		if (Zeega.moreFancy){
+			this.moreView($(this).find('a'), this.el);
+		} else {
+			this.lessView($(this).find('a'), this.el);
+		}
+
+
+		var item = this.model;
+		var theElement = this.el;
+		var view = this;
+		//EDIT TITLE
+		this.el.find('.title').editable(
+			function(value, settings)
+			{ 
+				item.save({ title:value }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item title for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item title.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 320,
+				cssclass : 'fancybox-form'
+		});
+		//EDIT DESCRIPTION
+		this.el.find('.description').editable(
+			function(value, settings)
+			{ 
+				item.save({ description:value }, 
+						{
+							success: function(model, response) { 
+								theElement.find('.description').text(item.get("description"));
+								console.log("Updated item description for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item description.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				type 	: 'textarea',
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit description...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 250,
+				cssclass : 'fancybox-form'
+		});
+		//EDIT CREATOR
+		this.el.find('.creator').editable(
+			function(value, settings)
+			{ 
+				item.save({ "media_creator_username":value }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item creator for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item creator.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 200,
+				cssclass : 'fancybox-form'
+		});
+		//MORE button
+		this.el.find('.fancybox-more-button').click(function(e){
+			
+			if ($(this).find('a').text() == "more"){
+				view.moreView(this, theElement);
+				e.preventDefault();
+			} else {
+				view.lessView(this, theElement);
+				e.preventDefault();
+			}
+
+		});
+		//DELETE button
+		this.el.find('.fancybox-delete-button').click(function(e){
+			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ item.id;
+			
+
+			//DESTROYYYYYYYY
+			item.destroy({	
+				 				url : deleteURL,
+								success: function(model, response) { 
+									console.log("Deleted item " + item.id);	
+									
+
+									//close fancy box window
+									jQuery.fancybox.close();
+										
+				 				},
+				 				error: function(model, response){
+				 					
+				 					console.log("Error deleting item " + item.id);		
+				 					console.log(response);
+				 				}
+		 					});
+		 	e.preventDefault();
+		});
+		
+		
 		
 		return this;
 	},
@@ -262,16 +478,18 @@ var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
 	render: function(obj)
 	{
 		
-		
-		//$(theImage).attr("height", $(window).height());
-		//$(theImage).attr("width", $(window).width()/2);
-		//set object's content
-		//obj.content = this.content; 
-
-		
-
+		//Call parent class to do captioning and metadata
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		//Fill in image-specific stuff
+		var imageEl = $("#fancybox-image-template").clone();
+		$(imageEl).attr('id', 'fancybox-image');
+		var objSrc = $(obj.element).attr("href");
+		$(imageEl).find('img').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(imageEl.html());
 
+		//set fancybox content
+		obj.content = this.el;
 		return this;
 	},
 
@@ -281,8 +499,6 @@ var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-video-template").clone();
-		this.content.removeAttr('id');
 
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
@@ -290,13 +506,16 @@ var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
 	{
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
-		var videoSrc  = $(obj.element).attr('href');
 
-		this.content.find('source').attr( 'src', videoSrc);
+		//Fill in video-specific stuff
+		var videoEl = $("#fancybox-video-template").clone();
+		$(videoEl).attr('id', 'fancybox-video');
+		var objSrc = $(obj.element).attr("href");
+		$(videoEl).find('video').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(videoEl.html());
 
-		//Right now video only seems to work with mp4s. Or, at least, does not work with divx.
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},
@@ -307,8 +526,7 @@ var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-audio-template").clone();
-		this.content.removeAttr('id');
+		
 
 	},
 	/* Pass in the element that the user clicked on from fancybox.  */
@@ -317,11 +535,15 @@ var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		var audioSrc  = $(obj.element).attr('href');
+		//Fill in audio-specific stuff
+		var audioEl = $("#fancybox-audio-template").clone();
+		$(audioEl).attr('id', 'fancybox-audio');
+		var objSrc = $(obj.element).attr("href");
+		$(audioEl).find('audio').attr("src", objSrc);
+		$(this.el).find('.fancybox-media-item').html(audioEl.html());
 
-		this.content.find('audio').attr('src', audioSrc);
-
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},
@@ -333,8 +555,6 @@ var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
 	
 	initialize: function(){
 		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		this.content = $("#browser-fancybox-youtube-template").clone();
-		this.content.removeAttr('id');
 
 	},
 	/* Pass in the element that the user clicked on from fancybox. */
@@ -343,11 +563,16 @@ var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
 		
 		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
+		
+		//Fill in youtube -specific stuff
+		var youTubeEl = $("#fancybox-youtube-template").clone();
+		$(youTubeEl).attr('id', 'fancybox-youtube');
 		var youTubeSrc  = 'http://www.youtube.com/embed/' + $(obj.element).attr('href');
+		$(youTubeEl).find('iframe').attr("src", youTubeSrc);
+		$(this.el).find('.fancybox-media-item').html(youTubeEl.html());
 
-		this.content.find('iframe').attr('src', youTubeSrc);
-
-		obj.content = this.content.html(); 
+		//set fancybox content
+		obj.content = this.el;
 		
 		return this;
 	},

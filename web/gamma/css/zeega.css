@@ -94,6 +94,19 @@
 	margin: 0 0 -3px 0;
 	padding: 0 5px;
 }
+.browser-collection-edit-menu{
+	position: absolute;
+	top: 1px;
+	left: 23px;
+	width: 130px;
+	-webkit-box-shadow: 2px 2px 2px 2px #333;
+	-moz-box-shadow: 2px 2px 2px 2px #333;
+	box-shadow: 2px 2px 2px 2px #333;
+	z-index:100;
+	display:none;
+	color: #F15A29 !important;
+	background-color: #444 !important;
+}
 #browser-collection-filter-edit-menu{
 	position: absolute;
 	top: 22px;
@@ -105,7 +118,7 @@
 	z-index:100;
 	display:none;
 }
-#browser-collection-filter-edit-menu li{
+#browser-collection-filter-edit-menu li, .browser-collection-edit-menu li{
 	
 	padding: 3px 5px;
 	border-bottom: 1px solid #333;
@@ -229,10 +242,10 @@
 		padding:7px 5px;
 	
 }
-.browser-results-image-edit a, #browser-collection-filter a{
+.browser-results-image-edit a, #browser-collection-filter a, .browser-collection-edit-menu a{
 	text-decoration:none !important;
 }
-.browser-results-image-edit a:hover, #browser-collection-filter a:hover, #browser a:hover{
+.browser-results-image-edit a:hover, #browser-collection-filter a:hover, #browser a:hover, .browser-collection-edit-menu a:hover{
 	color:#fff;
 	text-decoration:none !important;
 }
@@ -374,6 +387,7 @@
 .browser-results-collection{
 	width:144px;
 	float:left;
+	position:relative;
 
 }
 .browser-results-collection p
@@ -543,37 +557,110 @@
 	
 	text-decoration:none;
 }
-#browser-fancybox-media-container{
+#fancybox-media-container{
 	width:640px;
 	height:480px;
 	background-color:white;
-
+	text-align:center;
+	
 }
-#browser-fancybox-item{
-	width:100%;
+.fancybox-media-item{
+	width:630px;
 	min-height:380px;
 	background-color:gray;
 	text-align:center;
 	margin-bottom:5px;
+	border-radius:5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding:7px 5px 5px 5px;
 }
-#browser-fancybox-item img{
-	max-width:100%;
+#fancybox-media-container .title{
+	font-size: 1.4em;
+	font-weight: bold;
+}
+#fancybox-media-container .source{
+	margin-left:30px;	
+}
+#fancybox-media-container .description, #fancybox-media-container .tags{
+	color:#777;
+	font-size: 12px;
+}
+#fancybox-media-container .description{
+	margin: 30px 10px;
+	line-height: 18px;
+	text-align: justify;
+	height: 335px;
+	
+}
+#fancybox-media-container .tags{
+	text-align: left;
+	width: 50%;
+}
+.fancybox-media-item-more{
+	width:50%;
+	min-height:200px;
+	float:left;
+	margin-right: 20px;
+}
+.fancybox-media-container-more p{
+	text-align:left;
+}
+.fancybox-media-item img{
+	max-width:99%;
 	max-height:85%;
 	
 }
-#browser-fancybox-buttons{
+.fancybox-media-item audio{
+	margin:170px;
+}
+.fancybox-inner{
+	overflow: hidden !important;
+}
+.fancybox-buttons{
 	
 	margin-top:10px;
 	font-variant:small-caps;
 	font-size: 16px;
 	font-weight: bold;
 	letter-spacing: 1px;
+	
 }
-#browser-fancybox-more-button{
+.fancybox-buttons a:visited{
+	text-decoration:none;
+	color:#F15A29;
+}
+.fancybox-more-button, .fancybox-less-button{
 	float:left;
 }
-#browser-fancybox-delete-button{
+.fancybox-less-button{
+	display:none;
+}
+.fancybox-delete-button{
 	float:right;
+}
+.fancybox-form input{
+	background:#efefef;
+	border:none;
+	
+	font-weight:bold;
+	letter-spacing:1px;
+}
+.corner-triangle-for-menu {
+        width: 0;
+		height: 0;
+		border-left: 20px solid transparent;
+		
+		border-top: 20px solid #F15A29;
+		position: relative;
+		top: -130px;
+		left: 130px;
+		
+		opacity: 0.8;
+		z-index:100;
+}
+.corner-triangle-for-menu:hover{
+	text-decoration:none;
 }
 
 /*override the default from the fancybox stylesheet*/

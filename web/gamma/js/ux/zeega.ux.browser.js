@@ -18,21 +18,6 @@ function initUX(){
 }
 
 
-function shareButton()
-{	
-	$('#share-collection-modal').find('.modal-body').html("<p>Share your collection: <b></b></p><a target='blank' href='"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+"/view'>"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+ZeegaBrowser.search.get("collection")+"/view</a>");
-				
-	$('#share-collection-modal').modal('show');
-	
-	//$('#project-link').attr('href','')
-	
-	$('#share-collection-modal').find('#close-modal').mouseup(function(){
-		$('#share-collection-modal').modal('hide');
-	})
-
-	return false;
-}
-
 
 $(document).ready(function() {
 
@@ -52,6 +37,11 @@ $(document).ready(function() {
 		closeBtn:false,
 		aspectRatio:true,
 		scroll:'none',
+		keys: {
+				next: [ 34, 39, 40], //  page down, right arrow, down arrow
+				prev: [ 33, 37, 38], //  page up, left arrow, up arrow
+				close: [27] // escape key
+		},
 		
     	helpers : {
     		title : false,
@@ -91,20 +81,15 @@ $(document).ready(function() {
 	
 	//Collection playback and editor connection
 	$('#collection-player-button').click(function(){
-		shareButton();
+		ZeegaBrowser.showShareButton(ZeegaBrowser.search.get("collection"));
 		return false;
 	
 	}); 
-	
-	
-	
+
 	$('#collection-to-editor-button').click(function(){
-					var postdata={title:ZeegaBrowser.clickedCollectionTitle, collection_id:ZeegaBrowser.search.get("collection")};
-					$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
-								window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
-						});
-					return false;
-			});
+		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
+		return false;
+	});
 
 	$( '#database-search-text' ).click(function(){
 			$(this).val('');
@@ -209,6 +194,8 @@ $(document).ready(function() {
 			$('#browser-collection-filter-edit-menu').hide();
 		}
 	);
+	
+	
 
 	$('#browser-create-new-collection').droppable({
 			accept : '.browser-results-image, .browser-results-collection',
@@ -257,26 +244,8 @@ $(document).ready(function() {
 			}
 		});
 	$('#browser-delete-collection').click(function() {
-		var collectionID = ZeegaBrowser.search.get("collection");
-		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"
-						+ collectionID;
-		var theCollection = ZeegaBrowser.myCollections.get(collectionID);
-
-		//DESTROYYYYYYYY
-		theCollection.destroy({	
-			 				url : deleteURL,
-							success: function(model, response) { 
-								ZeegaBrowser.myCollections.remove(theCollection);
-								$('#browser-my-media').trigger('click');
-								console.log("Deleted collection " + collectionID);		
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error deleting collection " + collectionID);		
-			 					console.log(response);
-			 				}
-	 					});
-				
+		ZeegaBrowser.deleteCollection(ZeegaBrowser.search.get("collection"));
+		return false;
 	});
 	$('#browser-rename-collection').click(function() {
 		//using jeditable framework - pretend like user clicked on the title element

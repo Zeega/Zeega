@@ -67,7 +67,6 @@ Zeega\IngestBundle\Entity\Item:
             nullable: false
         description:
             type: string
-            length: 500
             nullable: true
         text:
             type: text
