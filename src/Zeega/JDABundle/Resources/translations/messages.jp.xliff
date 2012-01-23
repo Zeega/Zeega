@@ -42,6 +42,50 @@
                 <source>jda.home.logo</source>
                 <target>logo-jp</target>
             </trans-unit>
+            <trans-unit id="11">
+                <source>jda.about.mission</source>
+                <target>2011年東日本大震災デジタルアーカイブには3つの使命があります</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>jda.about.one</source>
+                <target>2011年3月11日の震災とその後の出来事に関するデジタル情報を整理、保存し、できる限り多くの方にとって活用可能な状態にすること。</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>jda.about.two</source>
+                <target>皆様お一人おひとりが、そして研究者や政策に携わる方が、情報を共有し、協力し合い、対話することができる公共空間を提供すること。</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>jda.about.three</source>
+                <target>震災から大きな被害を受けた方や、今後を強く憂慮している方が、記憶や思いを共有できる場となること。</target>
+            </trans-unit>
+             <trans-unit id="15">
+                <source>jda.about.participate</source>
+                <target>参加型アーカイブ</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>jda.about.connect</source>
+                <target>つながり</target>
+            </trans-unit>	
+            <trans-unit id="17">
+                <source>jda.about.connectbody</source>
+                <target>このアーカイブが目指すのは、収蔵された情報同士の、そしてユーザ同士の新たなつながりを促進することです。ユーザがデジタルアーカイブ内の収蔵情報やコレクションの間を行き来するとき、他のアーキビストたちの拡大し続けるネットワークに出会うことでしょう。それは、位置情報や説明がタグ付けされた何千枚の写真をアーカイブに提供した大きな団体である場合もあれば、自分の家族の経験を綴ったユーザや、そして救援活動に携わる公共・民間団体の関係を研究する歴史家であるかもしれません</target>
+            </trans-unit>
+                    <trans-unit id="18">
+                <source>jda.about.participateone</source>
+                <target>デジタル情報を閲覧し、説明を加え、可視化する</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>jda.about.participatetwo</source>
+                <target>自分だけのコレクションをつくり、他のユーザに公開する</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>jda.about.participatethree</source>
+                <target>テキストや写真、動画、リンクなどをアーカイブする</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>jda.about.participatefour</source>
+                <target>震災に関する皆様の「物語」を共有する</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -1,4 +1,4 @@
-{# src/Zeega/JDABundle/Resources/views/Home/home.html.twig #}
+{# src/Zeega/JDABundle/Resources/views/About/about.html.twig #}
 
 {% extends 'ZeegaJDABundle::base.html.twig' %}
 
@@ -12,7 +12,7 @@
 {% block content %}
 <div id="content"><div id="about-content-english">
 		<div class="narrow-container">
-			<div id="banner-about" class="hero-unit">
+			<div class="hero-unit">
 				<div id="search-bar">
 						<form method="post" id="search-form">
 						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
@@ -20,7 +20,7 @@
 						</form>
 						<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
 						<button id="add-button" class="btn success large">
-							<a href="http://jdarchive.org/contribute/?la=en" target="_blank">add to the archive</a>
+							<a href="http://jdarchive.org/contribute/?la=en" target="_blank">{% trans %}jda.home.add{% endtrans %}</a>
 						</button>
 					</div>
 			</div>
@@ -31,8 +31,7 @@
 				<div id="left-col" class="span-two-thirds">
 					<div span="rowx">
 
-						<h3>The Digital Archive of Japan's 2011
-							Disasters' core missions</h3>
+						<h3>{% trans %}jda.about.mission{% endtrans %}</h3>
 					</div>
 					<div id="core-missions" class="rowx">
 
@@ -42,9 +41,7 @@
 									<h1>1</h1>
 								</div>
 								<div class="span05l">
-									<p>to index, preserve and make widely
-										accessible the digital records of the events of
-										March 2011 and their aftermath</p>
+									<p>{% trans %}jda.about.one{% endtrans %}</p>
 								</div>
 							</div>
 						</div>
@@ -55,9 +52,7 @@
 									<h1>2</h1>
 								</div>
 								<div class="span05l">
-									<p>to provide a public space of information
-										sharing, collaboration and conversation for
-										citizens, researchers and policy makers</p>
+									<p>{% trans %}jda.about.two{% endtrans %}</p>
 								</div>
 							</div>
 						</div>
@@ -68,9 +63,7 @@
 									<h1>3</h1>
 								</div>
 								<div class="span05l">
-									<p>to serve as a site of shared memory for
-										those most affected by these events and most
-										concerned about their consequences</p>
+									<p>{% trans %}jda.about.three{% endtrans %}</p>
 								</div>
 							</div>
 						</div>
@@ -80,16 +73,13 @@
 					</div>
 				</div>
 				<div id="right-col" class="span-one-third">
-
-					<h3>Participate</h3>
-
+					<h3>{% trans %}jda.about.participate{% endtrans %}</h3>
+					
 					<ul>
-						<li>Browse, annotate and visualize digital
-							records</li>
-						<li>Build and share collections</li>
-						<li>Contribute reports, photos, videos, links,
-							etc.</li>
-						<li>Create and share narratives</li>
+						<li>{% trans %}jda.about.participateone{% endtrans %}</li>
+						<li>{% trans %}jda.about.participatetwo{% endtrans %}</li>
+						<li>{% trans %}jda.about.participatethree{% endtrans %}</li>
+						<li>{% trans %}jda.about.participatefour{% endtrans %}</li>
 					</ul>
 
 					<strong> <small><a href="#">300,048
@@ -98,19 +88,10 @@
 								Testimonials</a></small>
 					</strong>
 
-					<h3>Connect &amp; Explore</h3>
-					<p>The archive aims to foster new connections, both
-						between items and among users. &nbsp;As users move from
-						item to item and collection to collection they
-						encounter an ever-expanding network of fellow
-						archivists, from the major organization that submits
-						thousands of location- and direction-tagged
-						photographs to the fellow citizen who submits her
-						family’s contribute to the historian who seeks to
-						understand the interaction of public and private
-						actors in the relief effort.</p>
+					<h3>{% trans %}jda.about.connect{% endtrans %}</h3>
+					<p>{% trans %}jda.about.connectbody{% endtrans %}</p>
 
-					<h4>Frequent Tags</h4>
+					<h4>{% trans %}jda.home.tags{% endtrans %}</h4>
 					<strong> <small><a href="#">earthquake</a>
 							/ <a href="#">radiation</a> / <a href="#">tsunami</a>
 							/ <a href="#">recovery</a> / <a href="#">schools</a>

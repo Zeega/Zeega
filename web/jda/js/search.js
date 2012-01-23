@@ -7,9 +7,9 @@ var originInterface = "list";
 var globalSearchResults;
 
 function search(filters, callback) {
-	
+	window.location.hash='';
 	//spinner
-	$("#header-bar").spin('small'); // Produces default Spinner using the text color of #el.	
+	$("#content-row").spin('small'); // Produces default Spinner using the text color of #el.	
 	
 	// TODO this will only deal with one text filter
 	var url = apiUrl + "search";
@@ -22,9 +22,12 @@ function search(filters, callback) {
 		filter = filters.at(i);
 		switch (filter.get("type")) {
 		case "text":
+			window.location.hash+='text='+encodeURIComponent(filter.get("string"))+'&';
+			console.log('adding filter');
 			url += "q=" + encodeURIComponent(filter.get("string"));
 			break;
 		case "tag":
+			window.location.hash+='tag='+encodeURIComponent(filter.get("tags"))+'&';
 			url += "tags=";
 			tagTexts = filter.get("tags");
 			for ( var j = 0; j < tagTexts.length; j++) {
@@ -41,7 +44,7 @@ function search(filters, callback) {
 	$.getJSON(url, function(data) {
 		globalSearchResults = new ItemCollection(data);
 		callback(new ItemCollection(data));
-		$("#header-bar").spin(false)
+		$("#content-row").spin(false)
 	});
 }
 
@@ -62,23 +65,10 @@ function homeSearch(searchString) {
 // go into discovery interface
 function enterDiscovery(searchResults, filters, interface, options) {
 	originInterface = interface;
-	$('#personal-collections-tray').animate({
-		'right' : -200
-	}, 500);
-	$('#content').load('HTML/discovery.html #discovery-content-container', function() {
+	
+		
+	
 		updateFilters(searchResults);
-		$("#discovery-search-submit").click(function() {
-			homeSearch($('#discovery-search-text-field').val());
-			return false;
-		});
-		$("#discovery-search-text-field").keydown(function(e) {
-			// Bind searching to search field
-			if (e.which == 13) {
-				homeSearch($('#discovery-search-text-field').val());
-				return false;
-			}
-		});
-
 		var currentTab = "";
 
 		switch (interface) {
@@ -99,9 +89,7 @@ function enterDiscovery(searchResults, filters, interface, options) {
 		}
 		$('#discovery-interface-content').html(discoveryView.el);
 
-		$('#discovery-interface').width($(window.document).width() - 500);
-		$('#discovery-interface-content').width($(window.document).width() - 250);
-		$('#discovery-interface-content').height($(window.document).height() - 130);
+
 		// Set the current tab to 'list'
 		$(".discovery-tab").removeClass("discovery-active-tab");
 		currentTab.addClass("discovery-active-tab");
@@ -151,10 +139,13 @@ function enterDiscovery(searchResults, filters, interface, options) {
 				originInterface = "tags";
 			}
 		});
-	});
+	
 };
 
 function updateFilters(searchResult) {
+
+	//Need to update hash
+
 	$("#discovery-sidebar-filters").empty();
 
 	count = $("<h3></h3>");

@@ -41,87 +41,150 @@
 <div id="content"><div id="home-content-english">
 		<div class="narrow-container">
 
-			<div id="banner-about" class="hero-unit">
-				<div id="search-bar">
-						<form method="post" id="search-form">
-						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
-						<button id="go-button" class="btn info large">go</button>
-						</form>
-						<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
-						<button id="add-button" class="btn success large">
-							<a href="http://jdarchive.org/contribute/?la=en" target="_blank">add to the archive</a>
-						</button>
-					</div>
-			</div>
+			
 
 
 
 			<div id="content-row" class="rowx" style="height:800px;">
-
 			
-				
+			
+					<div id="discovery-content-container">
+		
+		
+		
+		<!--
+		
+		<div id="discovery-sidebar">
+			<div id="discovery-sidebar-search">
+					<input id="discovery-sidebar-spacer"></input> <input
+						type="text" name="search-string"
+						id="discovery-search-text-field"></input> <input
+						type="submit" id="discovery-search-submit"
+						class="btn info submit" value="Search"
+						></input>
+			</div>
+			<div id="discovery-sidebar-filters"></div>
+		</div>
+		
+		-->
+		<div id="discovery-interface">
+			
+			
+			<div  class="hero-unit">
+				<div id="search-bar">
+						<form method="post" id="search-form">
+						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
+						</form>
+						<div id="discovery-tabs">
+				<div id="discovery-tabs-table">
+					<div class="row">
+						<div id="discovery-tab-buffer-left" class='cell'>&nbsp;</div>
+						<div class='discovery-tab cell' id="list-tab">
+							<p class="body">LIST</p>
+						</div>
+						<div class='discovery-tab cell' id="event-tab">
+							<p class="body">EVENT</p>
+						</div>
+						<div class='discovery-tab cell' id="tags-tab">
+							<p class="body">TAGS</p>
+						</div>
+						<div id="discovery-tab-buffer-right" class='cell'>&nbsp;</div>
+					</div>
+				</div>
+			</div>
+					</div>
+			</div>
+			<div style="clear:both;"></div>
+			
+			
+			
+			<div id="discovery-interface-content"></div>
+		</div>
+	</div>
 
 			</div>
 			<!-- #content-row -->
 
 
-			<footer>
-			<div class="narrow-container">
-
-
-				<!--<div class='rowx'>
-
-					<div class="footer-nav span16">
-						<ul class='unstyled'>
-							<li><a href="#">Home</a></li>
-							<li><a href="#">About</a></li>
-							<li><a href="#">FAQ</a></li>
-							<li><a href="#">Contact</a></li>
-
-						</ul>
-					</div>
-				</div>
-				<div class='rowx'>-->
-				<div class="span16">
-
-					<h3>Partners</h3>
-<ul id="partner-logos" class="">
-					
-						<li><a href="http://warp.ndl.go.jp/WARP_disaster.html" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/nationalDietLibrary.png')}}"></a></li>
-						<li><a href="http://www.fas.harvard.edu/~rijs/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/reischauer.png')}}"></a></li>
-						<li><a href="http://311archives.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/all311.png')}}"></a></li>
-						<li><a href="http://www.dcrc.tohoku.ac.jp/archive/index.html/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/tohoku311.png')}}"></a></li>						
-						<li><a href="http://311map.com/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/311Map.png')}}"></a></li>
-						<li><a href="http://recorder311.smt.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/logo_cr.png')}}"></a></li>
-						<li><a href="http://savemlak.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/saveMLAK.png')}}"></a></li>
-						<li><a href="http://recorder311.smt.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/sendaiMedia.png')}}"></a></li>
-						
-						
-						<li><a href="http://www.yahoo.co.jp/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/YahooJapan.gif')}}"></a></li>
-						
-						
-						<li><a href="http://zeega.org" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/zeega.png')}}"></a></li>
-						<li><a href="http://metalab.harvard.edu" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/mlh.gif')}}"></a></li>
-						
-						
-						
-						<li><a href="http://www.archive-it.org/collections/2438" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/archiveIT.png')}}"></a></li>
-						<li><a href="http://worldmap.harvard.edu/japanmap/" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/CGA.png')}}"></a></li>
-						<li><a href="http://archive.org" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/InternetArchive.png')}}"></a></li>
-						<li><a href="http://www.loc.gov/index.html" target="_blank"><img class="thumbnail partnerimg" src="{{ asset('jda/images/partner-logos/LibraryOfCongress.png')}}"></a></li>
-					</ul>
-				</div>
-
-				<div class="rowx">
-					<div class="span16 partnerimg" style="text-align: center;">
-						Site powered by <a href="http://www.zeega.org" target="_blank">Zeega.org</a><br> <br>
-					</div>
-				</div>
-
-			</div>
-		</footer></div>
+	</div>
 		
 	</div></div>
 
+
+<!-- Templates -->
+<script type="text/template" id="list-item-template">
+<div>
+	<div class="discovery-list-thumb-container">
+		<img class="img-144 discovery-list-thumb" src = "<%= thumbnail_url ? thumbnail_url : "{{ asset('jda/images/blank-144x144.jpg')}}" %>">
+	</a></div>
+	<div class='discovery-list-info-area'>
+		<%= date_created ? "<div class='item-meta'>" + stringToFormatted(date_created['date']) + "</div>" : "" %>
+
+		<p>
+			<span class="black-18 discovery-list-title"><%=title%></span>
+		</p>
+		<p>
+			<%= media_creator_username ? "<span class='gray-18'>From: </span>
+			  <span class='black-18'>" + media_creator_realname + "</span> " : "" %>
+		</p>
+		
+	</div>
+	<div class="lightbox-hider">
+	</div>
+</div>
+</script>
+
+<script type="text/template" id="compact-list-item-template">
+<div>
+	<div class="discovery-compact-list-thumb-container">
+		<img class="img-72" src = "<%= thumbnail_url ? thumbnail_url : "{{ asset('jda/images/blank-72x72.jpg')}}" %>">
+	</div>
+	<div class='discovery-list-info-area' >
+		<p  class="black-12"><%=title%></p>
+		<%= media_creator_realname ? "<p><span class='gray-12'>From: </span>
+			<span class='black-12'>" + media_creator_realname + "</span></p> " : "" %> 
+		<%= date_created ? "<p class='blue-12'>" + stringToFormatted(date_created['date']) + "</p>" : "" %>
+	</div>
+	<div class="lightbox-hider">
+	</div>
+</div>
+</script>
+
+<script type="text/template" id="lightbox-item-template">
+<div>
+	<div class='lightbox-preview'></div>
+	<div class='lightbox-infobar'>
+		<%= title ? "<p class='white-18 lightbox-title'>" + title + "</p>" : "" %>
+		<%= media_creator_username ? "<p><span class='white-15'>from</span>
+			<span class='white-15'>" + media_creator_username + "</span></p> " : "" %> 
+		<%= date_created ? "<p class='blue-15'>" + stringToFormatted(date_created['date']) + "</p>" : "" %>
+	</div>
+</div>
+</script>
+
+<script type="text/template" id="page-item-template">
+<div class="page-container">
+	<div class='page-preview-area'>
+		<p class="page-back-to-results"> < Back to results</p>
+		<div class="page-preview"></div>
+		<p class="black-15">Description:</p>
+		<p class="black-12"><%=description%></p>
+	</div>
+	<div class='page-metadata-area'>
+		<div class='page-metadata-scroll'>
+			<p class="blue-18 page-title"><%=title%></p>
+			<%= media_creator_username ? "<p><span class='gray-15'>From: </span>
+				<span class='black-15'>" + media_creator_username + "</span></p> " : "" %>
+			<%= media_creator_username ? "<p><span class='gray-15'>Date: </span>
+				<span class='black-15'>" + stringToFormatted(date_created['date']) + "</span></p> " : "" %>
+			<p class='gray-15'>Tags:</p>
+			<p class='black-15 page-tag-text'></p>
+			<p class='black-12'>add tag : <input type="text" id="add-tag" class='metadata-new-tag-input'/></p>
+		</div>
+	</div>
+	<div class="page-related-area">
+	</div>
+</div>
+</script>
 
 {% endblock %}	

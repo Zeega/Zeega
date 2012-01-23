@@ -54,14 +54,14 @@ security:
         routes:
             pattern:  ^/routes/
             anonymous: ~
-        secured_area:
-            pattern:    ^/
-            form_login:
-                check_path: /login_check
-                login_path: /login
-            logout:
-                path:   /logout
-                target: /login
+        #secured_area:
+           # pattern:    ^/
+           # form_login:
+           #     check_path: /login_check
+           #     login_path: /login
+          #  logout:
+          #      path:   /logout
+          #      target: /login
             #anonymous: ~
             #http_basic:
             #    realm: "Secured Demo Area"

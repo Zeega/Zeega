@@ -47,6 +47,7 @@ var loadFiles = [
 	//custom
 	
 	'order!ux/utils',
+	'order!ux/jda.ux.search',
 
 
 		
@@ -59,7 +60,30 @@ var loadFiles = [
 
 require(loadFiles, function(jquery)
 {
-    console.log('ALL JS LOADED')
+
+	
+	var hashfilters = window.location.hash.substr(1).split('&');
+	if(hashfilters.length>0){
+		var filters = new FilterCollection(new Array());
+		console.log(hashfilters);
+		for ( var i = 0; i < hashfilters.length; i++) {
+			var filter = hashfilters[i].split('=');
+			if(filter[0]=='text'){
+				var newFilter = new Filter({
+					type : "text",
+					string : filter[1]
+				});
+				$('#search-form').find('input').attr('value',filter[1]);
+				filters.add(newFilter);
+			}
+		}
+	}	
+	if(filters.length>0){
+		searchItems = search(filters, function(searchResult) {
+			enterDiscovery(searchResult.at(0), filters, "list", {});
+		});
+	}
+	else homeSearch('');
 	
 });
 

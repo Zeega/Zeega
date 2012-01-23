@@ -112,6 +112,7 @@ p
 .hero-unit
 {
 	padding:24px;
+	padding-bottom:48px;
 }
 
 .hidden

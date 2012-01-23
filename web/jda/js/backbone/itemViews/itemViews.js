@@ -40,23 +40,6 @@ var viewLookup = function(item, viewType) {
 
 var ItemView = Backbone.View.extend({});
 
-// Load the templates from the html file
-// This is done asynchronously to that the templates are ready for the views
-$.ajaxSetup({
-	async : false
-});
-var templateUrl=sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+"jda/templates/templates.html";
-
-console.log(templateUrl);
-scripts = $("<div>").load(templateUrl, {
-	async : false
-});
-$.ajaxSetup({
-	async : true
-});
-
-// Add the templates to the head of the HTML document.
-$('head').append($(scripts).html());
 
 //
 //

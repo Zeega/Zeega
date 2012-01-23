@@ -8,16 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController extends Controller
 {
     
-    public function indexAction()
+    public function indexAction($query=NULL)
     {
     
     	$locale=$this->get('session')->getLocale();
     	$request = $this->getRequest();
-	 	$t=$request->request->get('search-text');
+	 	$query=$request->query->get('query');
     	return $this->render('ZeegaJDABundle:Search:search.html.twig', array(
 					// last displayname entered by the user
 					'locale' => $locale,
-					'page'=> 'home',
+					'page'=> 'search',
+					'query'=>$query
 					
 				));
     }

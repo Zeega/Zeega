@@ -57,6 +57,8 @@
 			<a href="{{path('home', { '_locale': 'en' })}}">
 			{% elseif page == 'about' %}
 			<a href="{{path('about', { '_locale': 'en' })}}">
+			{% else %}
+			<a>
 			{% endif %}
 				<img src="{{ asset('jda/images/gb.png')}}" class="language" id="language-english"></a></li>
 				{% else %}
@@ -64,6 +66,8 @@
 			<a href="{{path('home', { '_locale': 'jp' })}}">
 			{% elseif page == 'about' %}
 			<a href="{{path('about', { '_locale': 'jp' })}}">
+			{% else %}
+			<a>
 			{% endif %}
 			<img src="{{ asset('jda/images/jp.png')}}"class="language" id="language-japanese"></a></li>
 					<li><img src="{{ asset('jda/images/gb.png')}}" class="language language-active" id="language-english"></li>

@@ -1,5 +1,5 @@
 search:
-    pattern:   /{_locale}/search/{query}
+    pattern:   /{_locale}/search
     defaults:  { _controller: ZeegaJDABundle:Search:index, _locale: en }
     requirements:
         _locale: en|jp

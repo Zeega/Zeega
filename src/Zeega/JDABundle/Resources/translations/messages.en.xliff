@@ -42,6 +42,50 @@
                 <source>jda.home.logo</source>
                 <target>logo</target>
             </trans-unit>
+            <trans-unit id="11">
+                <source>jda.about.mission</source>
+                <target>The Digital Archive of Japan's 2011 Disasters' core missions</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>jda.about.one</source>
+                <target>to index, preserve and make widely accessible the digital records of the events of March 2011 and their aftermath</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>jda.about.two</source>
+                <target>to provide a public space of information sharing, collaboration and conversation for citizens, researchers and policy makers</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>jda.about.three</source>
+                <target>to serve as a site of shared memory for those most affected by these events and most concerned about their consequences</target>
+            </trans-unit>
+             <trans-unit id="15">
+                <source>jda.about.participate</source>
+                <target>Participate</target>
+            </trans-unit>	
+             <trans-unit id="16">
+                <source>jda.about.connect</source>
+                <target>Connect &amp; Explore</target>
+            </trans-unit>
+             <trans-unit id="17">
+                <source>jda.about.connectbody</source>
+                <target>The archive aims to foster new connections, both between items and among users.  As users move from item to item and collection to collection they encounter an ever-expanding network of fellow archivists, from the major organization that submits thousands of location- and direction-tagged photographs to the fellow citizen who submits her family's contribute to the historian who seeks to understand the interaction of public and private actors in the relief effort.</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>jda.about.participateone</source>
+                <target>Browse, annotate and visualize digital records</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>jda.about.participatetwo</source>
+                <target>Build and share collections</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>jda.about.participatethree</source>
+                <target>Contribute reports, photos, videos, links, etc.</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>jda.about.participatefour</source>
+                <target>Create and share narratives</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
