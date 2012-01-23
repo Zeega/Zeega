@@ -325,35 +325,34 @@ function closeOpenCitationTabs()
 	
 
 //expands the Zeega editor panels	
-	$('.editor-title-bar-expander').click(function(){
-		console.log('expand/collapse')
-		//get the current Node ID
-		var nodeID = Zeega.currentNode.id;
-		var domID = $(this).attr('id').split('-',1)[0];
+	$('.expandable .panel-head').click(function(){
 
-		var storage = localStorage.getObject( nodeID );
-		var panelStates = {};
-		if( _.isNull( storage ) ) storage = {};
-		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+//removed the ability to store the panel states for now
+		//get the current Node ID
+		//var nodeID = Zeega.currentNode.id;
+		//var domID = $(this).attr('id').split('-',1)[0];
+
+		//var storage = localStorage.getObject( nodeID );
+		//var panelStates = {};
+		//if( _.isNull( storage ) ) storage = {};
+		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
 		
-		var expander = $(this).next('div');
-		if( expander.is(':visible'))
+		var content = $(this).next('div');
+		if( content.is(':visible'))
 		{
 			//hide
-			eval( 'var state = {"'+ domID +'":true}');
-			_.extend( panelStates , state );
-			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":true}');
+			//_.extend( panelStates , state );
+			content.hide('blind',{'direction':'vertical'});
 		}else{
 			//show
-			eval( 'var state = {"'+ domID +'":false}');
-			_.extend( panelStates , state );
-			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":false}');
+			//_.extend( panelStates , state );
+			content.show('blind',{'direction':'vertical'})	
 		}
 		//set as property to read in on reload
-		_.extend( storage, {panelStates:panelStates} )
-		localStorage.setObject( nodeID , storage );
+		//_.extend( storage, {panelStates:panelStates} )
+		//localStorage.setObject( nodeID , storage );
 	})
 	
 	
