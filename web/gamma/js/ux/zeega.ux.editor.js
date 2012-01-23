@@ -172,10 +172,6 @@ function closeOpenCitationTabs()
 		shareButton();
 	});
 	
-	//fadeIn the sidebar
-	$('#sidebar').fadeIn();
-	
-	
 	$('#search-filter .filter-toggle').click(function(){
 		var dd = $(this).parent('li');
 		if($(dd).hasClass('open')) dd.removeClass('open');
