@@ -25,11 +25,15 @@ function initUX(){
 
 $('#list-view').click(function(){
 	console.log('goto list view');
+	$('#grid-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').addClass('list-view').removeClass('grid-view');
 })
 
 $('#grid-view').click(function(){
 	console.log('goto grid view');
+	$('#list-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').removeClass('list-view').addClass('grid-view');
 })
 
