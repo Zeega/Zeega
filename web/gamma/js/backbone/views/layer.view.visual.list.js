@@ -170,28 +170,30 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		var layerTemplate = 		'<div class="layer-uber-bar clearfix">';
-		layerTemplate += 			'<div class="layer-icon">';
-		layerTemplate += 				'<span class="asset-type-icon orange zicon"></span>';
-		layerTemplate += 			'</div>';
-		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
-		layerTemplate += 		'<div class="layer-uber-controls">';
-		layerTemplate += 			'<span class="delete-layer zicon zicon-trash-closed"></span>';
-		layerTemplate += 		'</div>';
-		layerTemplate += 		'<div class="layer-drag-handle">';
-		layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
-		layerTemplate += 		'</div>';
-		layerTemplate += 	'</div>';
-		layerTemplate += 	'<div class="hidden layer-content clearfix">';
-		layerTemplate += 		'<div id="controls"></div>';
-		layerTemplate += 		'<br />';
-		layerTemplate += 		'<form id="layer-persist">';
-		layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
-		layerTemplate += 		'</form>';
-		layerTemplate += 		'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
-		layerTemplate += 	'</div>';
+		var html =
 		
-		return layerTemplate;
+		'<div class="layer-uber-bar clearfix">'+
+			'<div class="layer-icon">'+
+				'<span class="asset-type-icon orange zicon"></span>'+
+			'</div>'+
+			'<div class="layer-title"><%= layerName %></div>'+
+			'<div class="layer-uber-controls">'+
+				'<span class="delete-layer zicon zicon-trash-closed"></span>'+
+			'</div>'+
+			'<div class="layer-drag-handle">'+
+				'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>'+
+			'</div>'+
+		'</div>'+
+		'<div class="layer-content inset-tray dark">'+
+			'<div id="controls"></div>'+
+			'<br />'+
+//			'<form id="layer-persist">'+
+				'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
+//			'</form>'+
+			'<a href="#" class="copy-to-next btn small">Copy to next node</a>'+
+		'</div>';
+		
+		return html;
 	}
 	
 	

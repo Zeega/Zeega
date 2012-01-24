@@ -912,24 +912,6 @@ body
 	border:none;
 }
 
-
-.inset-tray
-{
-	background:#ddd;
-	-webkit-box-shadow: inset 5px 5px 5px #888;
-	-webkit-border-radius: 6px;
-	border:1px solid #999;
-	padding:6px;
-}
-.inset-tray.dark
-{
-	color:white;
-	background:#444;
-	-webkit-box-shadow: inset 5px 5px 5px #222;
-	-webkit-border-radius: 6px;
-	border:1px solid #666;
-	padding:6px;
-}
 .inset-tray h1,.inset-tray h2,.inset-tray h3,.inset-tray h4{ color:inherit }
 
 .panel-content input,.panel-content label { float:none }
@@ -952,6 +934,41 @@ body
 { zoom: 1; }
 
 
+/*******************************
+
+	TRAYS
+	
+*******************************/
+.inset-tray
+{
+	padding:6px;
+	border:1px solid ;
+	-webkit-border-radius: 6px;
+}
+.inset-tray
+{
+	background:#ddd;
+	-webkit-box-shadow: inset 5px 5px 5px #888;
+	border-color:#999;
+}
+.inset-tray.dark
+{
+	color:#ddd;
+	background:#444;
+	-webkit-box-shadow: inset 5px 5px 5px #222;
+	border-color:#666;
+}
+.inset-tray.dark label{ color:inherit }
+
+/*	tray clearfixes	*/
+.inset-tray:before,
+.inset-tray:after
+{ content: "\0020"; display: block; height: 0; overflow: hidden; }
+.inset-tray:after
+{ clear: both; }
+.inset-tray
+{ zoom: 1; }
+
 
 /*******************************
 
@@ -959,15 +976,6 @@ body
 	
 *******************************/
 
-.layer-content
-{
-	color: #aaa;
-	padding:12px;
-	-webkit-box-shadow: inset 5px 5px 5px #222;
-	-webkit-border-radius: 6px;
-	border: 1px solid #666;
-	background: #444;
-}
 
 #item-view-bar div
 {
