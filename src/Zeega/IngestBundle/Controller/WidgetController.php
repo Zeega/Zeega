@@ -135,10 +135,14 @@ class WidgetController extends Controller
 	*/
 	public function persistAction()
 	{
+		$session = $this->getRequest()->getSession();
+		//return new Response($session->get('widget_url'));
 		if($session->get('widget_url'))
 		{
 			$url = $session->get('widget_url');
-			return $this->forward('ZeegaApiBundle:Import:getImportCheck', array(), array("url" => $url))->getContent();
+			$this->forward('ZeegaApiBundle:Import:getImportPersist', array(), array("url" => $url));
+			//return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
+			return new Response("http://farm6.staticflickr.com/5219/5507904128_16b760bf84_s.jpg");
 		}
 	}
 	
@@ -338,14 +342,14 @@ class WidgetController extends Controller
 	}
   	
     public function thumbAction($query="Help"){
-    	 
+    	 /*
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');
     
     	 $loader->loadTagThumbs($doc);
     	 
     	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
-   
+   		*/
     }
     
     public function mediadataAction($query="Help"){
