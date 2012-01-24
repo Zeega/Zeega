@@ -867,6 +867,14 @@ body
 	margin-bottom:12px;
 }
 
+.panel.flat .panel-head
+{
+	-webkit-border-radius: 6px;
+	background: #222;
+	padding: 6px;
+	border : 1px solid #444;
+}
+
 .panel-head .icon-tray{ float:left }
 .panel-head .info{ float:right }
 
