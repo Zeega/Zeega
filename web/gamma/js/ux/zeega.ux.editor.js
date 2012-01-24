@@ -28,6 +28,7 @@ $('#list-view').click(function(){
 	$('#grid-view .zicon').removeClass('orange');
 	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+	return false;
 })
 
 $('#grid-view').click(function(){
@@ -35,23 +36,28 @@ $('#grid-view').click(function(){
 	$('#list-view .zicon').removeClass('orange');
 	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+	return false;
 })
 
-$('#workspace-ratio').change(function(){
-	var ratioID = parseInt( $(this).val() );
-	changeAspectRatio( ratioID )
-	Zeega.updateAspectRatio( ratioID );
-});
+
+$('#project-settings').click(function(){
+	projectSettings();
+})
+
+$('#ratio-list a').click(function(){
+	changeAspectRatio( $(this).data('ratio-id') );
+	return false;
+})
 
 function changeAspectRatio( ratioID )
 {
 	switch( ratioID )
 	{
-		case 1:
+		case 0:
 			$('#visual-editor-workspace').css('width','704px')
 			break;
 		
-		case 2:
+		case 1:
 			$('#visual-editor-workspace').css('width','625px')
 			break;
 			
@@ -60,6 +66,16 @@ function changeAspectRatio( ratioID )
 	}
 }
 
+
+function projectSettings()
+{
+	//$('#project-settings-modal').modal({ backdrop:true });
+	$('#project-settings-modal').modal('show');
+	$('#project-settings-modal').find('#close-modal').click(function(){
+		$('#project-settings-modal').modal('hide');
+	})
+	return false;
+}
 
 function embedButton()
 {

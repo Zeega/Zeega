@@ -26,15 +26,7 @@
 							</ul>
 						</li>
 						
-						<li>
-							<div id='upper-select'>
-							<select name="ratio" id="workspace-ratio">
-								<option value="1">wide</option>
-								<option value="2">4:3</option>
-							</select>
-							</div>
-						</li>
-						
+						<li><span id='project-settings' class='zicon zicon-settings'></span></li>
 						
 					</ul>
 				</div>
@@ -219,6 +211,27 @@
 			<div class="modal-body clearfix">
 				<textarea id='export-json' rows="2" cols="20" readonly></textarea>
 				<p>Copy and Paste the JSON into a text editor of your choice</p>
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
+		
+		<div id="project-settings-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Project Settings</h3>
+			</div>
+			<div class="modal-body clearfix">
+				
+				<h3 class="">Screen Ratio</h3>
+				<ul id='ratio-list' class='unstyled'>
+					<li><a href="#" data-ratio-id='0'>iPhone (3:2)</a></li>
+					<li><a href="#" data-ratio-id='1'>iPad (4:3)</a></li>
+				</ul>
 			</div>
 			<div class="modal-footer">
 				<span class='admin-submit'>

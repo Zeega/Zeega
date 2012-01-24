@@ -761,6 +761,7 @@ a.white:hover
 .zicon-info{background-position:-259px -170px}
 .zicon-question{background-position:-291px -170px}
 .zicon-item{margin-left: 2px;margin-top: 4px;}
+.zicon-settings{background-position:-291px -312px}
 
 /*********************************************
 
@@ -971,7 +972,7 @@ body
 
 /*******************************
 
-	LAYERS
+	LAYERS -- these could be panels?  .panel.tray.raised.light ??
 	
 *******************************/
 
