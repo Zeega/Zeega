@@ -62,19 +62,19 @@ $(document).ready(function() {
 
 			switch(thisModel.get("source")){
 				case 'Image':
-					fancyView = new BrowserFancyBoxImageView({model:thisModel});
+					fancyView = new FancyBoxImageView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Video':
-           			fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           			fancyView = new FancyBoxVideoView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Audio':
-           			fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           			fancyView = new FancyBoxAudioView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Youtube':
-           			fancyView = new BrowserFancyBoxYouTubeView({model:thisModel});
+           			fancyView = new FancyBoxYouTubeView({model:thisModel});
            			fancyView.render(this);
            			break;
 			}

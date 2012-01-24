@@ -94,3 +94,14 @@
 .fancybox-editable{
 	border: 1px dotted #CCC;
 }
+.fancybox-remove-tag{
+	display:none;
+	margin-right: 3px;
+	border: 1px solid;
+	padding: 0 2px;
+	font-size: 10px;
+}
+.fancybox-remove-tag:hover{
+	background-color:#ccc;
+	text-decoration:none;
+}
