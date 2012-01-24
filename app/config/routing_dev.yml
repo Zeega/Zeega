@@ -21,6 +21,9 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
+_security_logout:
+    pattern:  /logout    
+
 api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
 
@@ -120,6 +123,9 @@ ZeegaEditorBundle_settings:
 
 zeega_editor:
     resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
+
+zeega_editor:
+    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"    
     
 web_profiler: 
     resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 

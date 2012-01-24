@@ -1,82 +1,81 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<title>{% block title %}Zeega Alpha{% endblock %}</title>
+{% extends 'ZeegaUserBundle::layout.html.twig' %}
 
-<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+{% block head %}
+	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
 
-<style type="text/css">
+	<style type="text/css">
 
-body {margin: 0px; padding: 0px; background-color: red; font-family: Helvetica, Sans Serif; color: white; }
+	body {margin: 0px; padding: 0px; background-color: red; font-family: Helvetica, Sans Serif; color: white; }
 
-#main {margin: 0 auto; width: 400px; text-align: center; margin-top: 40px;} 
+	#main {margin: 0 auto; width: 400px; text-align: center; margin-top: 40px;} 
 
-div.box {
-background: transparent;
-position:relative;
-top:20px;
-float: left;
-text-align: center;	
-}
+	div.box {
+		background: transparent;
+		position:relative;
+		top:20px;
+		float: left;
+		text-align: center;	
+	}
 
-div.box .input_text {
-padding:10px 10px;
-width:375px;
-background:#870000;
-border-bottom: 1px double #870000;
-border-top: 1px double #870000;
-border-left:1px double #870000;
-border-right:1px double #870000;
-color: white;
-font-size: 18px;
-}
+	div.box .input_text {
+	padding:10px 10px;
+	width:375px;
+	background:#870000;
+	border-bottom: 1px double #870000;
+	border-top: 1px double #870000;
+	border-left:1px double #870000;
+	border-right:1px double #870000;
+	color: white;
+	font-size: 18px;
+	}
 
-div.box .button
-{
-margin:0 0 10px 0;
-padding:4px 7px;
-background:#870000;
-border:0px;
-position: relative;
-float: left;
-width:100px;
-color: red;
+	div.box .button
+	{
+	margin:0 0 10px 0;
+	padding:4px 7px;
+	background:#870000;
+	border:0px;
+	position: relative;
+	float: left;
+	width:100px;
+	color: red;
 
-}
+	}
 
-div.box .button:hover
-{
+	div.box .button:hover
+	{
 
-cursor: pointer;
-color: white;
+	cursor: pointer;
+	color: white;
 
-}
+	}
 
-label {
+	label {
 
-display: block;
-font-variant: small-caps;
-margin-top: 10px;
-font-weight: bold;
-text-align: left;
-font-size: 14px;
+	display: block;
+	font-variant: small-caps;
+	margin-top: 10px;
+	font-weight: bold;
+	text-align: left;
+	font-size: 14px;
 
-}
+	}
 
-input:-webkit-autofill {
+	input:-webkit-autofill {
 
-background:#870000 !important;
+	background:#870000 !important;
 
-}
+	}
 
 </style>
 
-<body>
+{% endblock head%}
 
+
+    {% block fos_user_content %}
 	<div id="main">
 		<img src="{{asset('gamma/images/zeegaAlpha.png')}}" /><br>
 		<span style="font-size: 14px; color: white; opacity: .6; text-align: right; display: block;">alpha</span>
-	
-    {% block content %}
 
 
     {% if error %}
@@ -84,28 +83,23 @@ background:#870000 !important;
     {% endif %}
     
     
-    <form action="{{ path('_security_check') }}" method="POST">
-          <div class="box">
-          
-        		<label>Username</label>
-            	<input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" /><br>
+	<form action="{{ path("fos_user_security_check") }}" method="post">
+		<div class="box">
+	    	<label for="username">{{ 'Username'|trans({}, 'FOSUserBundle') }}</label>
+		    <input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" />
 
-            	<label>Password</label>
-            	<input type="password" id="password" name="_password" class="input_text" /><br><br>
-  
-         		<input type="submit" name="login" value="submit" class="button" />
-				<br><br>
-            
-            
-         </div>
- 
-        
-
-    </form>
+		    <label for="password">{{ 'Password'|trans({}, 'FOSUserBundle') }}</label>
+		    <input type="password" id="password" name="_password" class="input_text" />
+			<!--
+		    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+		    <label for="remember_me">{{ 'Remember me'|trans({}, 'FOSUserBundle') }}</label>
+			-->	
+			<br><br>
+	    	<input type="submit" id="_submit" name="_submit" value="{{ 'submit'|trans({}, 'FOSUserBundle') }}" class="button"/>
+			<br><br>
+		</div>
+	</form>
+</div> <!--#main-->
     
-{% endblock %}
+	{% endblock fos_user_content %}
 
-    </div> <!--#main-->
-
-</body>
-</html>

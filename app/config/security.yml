@@ -55,15 +55,15 @@ security:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle
-                csrf_provider: form.csrf_provider
+                #csrf_provider: form.csrf_provider
             logout:
                 path:   /logout
                 target: /login
             anonymous: true
+            
             #anonymous: ~
             #http_basic:
             #    realm: "Secured Demo Area"
-
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
