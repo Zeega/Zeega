@@ -16,7 +16,7 @@ use SimpleXMLElement;
 
 class WidgetController extends Controller
 {
-    
+    /*
 	public function persistAction(){
 	  	$logger = $this->get('logger');
 		$request=$this->getRequest();
@@ -58,7 +58,7 @@ class WidgetController extends Controller
     		$metadata=$item->getMetadata();
     		$media=$item->getMedia();
     		
-			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
+			//
 			
 			
 			$thumbUrl=false;
@@ -132,6 +132,16 @@ class WidgetController extends Controller
 
 	}
 	
+	*/
+	public function persistAction()
+	{
+		if($session->get('widget_url'))
+		{
+			$url = $session->get('widget_url');
+			return $this->forward('ZeegaApiBundle:Import:getImportCheck', array(), array("url" => $url))->getContent();
+		}
+	}
+	
 	public function openAction()
 	{
 		$em = $this->getDoctrine()->getEntityManager();
@@ -167,135 +177,52 @@ class WidgetController extends Controller
 		}
 		else
 		{
+			$session->set('widget_url',$itemUrl);
 			// new item - check if it is supported
-			$parserResponse = $this->forward('ZeegaApiBundle:Import:getImport', array(), array("url" => $itemUrl));
-			//return new Response(var_dump($parserResponse));
+			$parserResponse = $this->forward('ZeegaApiBundle:Import:getImportCheck', array(), array("url" => $itemUrl))->getContent();
 			$parserResponse = json_decode($parserResponse,true);
-			
-			if(!isset($parserResponse))
+		
+			if(isset($parserResponse))
 			{
-				// something went wrong - show error page
-				//return new Response(var_dump($parserResponse["is_valid"]));
-				
-			}
-			else
-			{
-				$isUrlValid = $parserResponse["is_valid"];
-				$isUrlCollection = $parserResponse["is_set"];
-				$thumbnailUrl = $parserResponse["thumbnail"];
+				$isUrlValid = $parserResponse["result"]["is_url_valid"];
+				$isUrlCollection = $parserResponse["result"]["is_url_collection"];
+				$items = $parserResponse["items"];
 				
 				if($isUrlValid)
 				{
-					
 					if($isUrlCollection)
 					{
+						return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
+							'displayname' => $user->getDisplayname(),
+							'title'=>$items['title'],
+							'creator'=>$items["media_creator_username"],
+							'widget_id'=>$widgetId,
+							'thumb_url'=>$items["thumbnail_url"],
+							'mycollection'=>$mycollection,
+							'count'=>count($items["child_items_count"]),
+						));
 						
 					}
 					else
 					{
 						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
+							'title'=>$items["title"],
+							'creator' => $items["media_creator_username"],
+							'displayname' => $items["media_creator_realname"],
 							'widget_id'=>$widgetId,
-							'thumb_url'=>$thumbnailUrl,
+							'thumb_url'=>$items["thumbnail_url"],
 							'mycollection'=>$mycollection,
 						));
-				    	
-						//return new Response(var_dump($parserResponse["is_valid"]));
 					}
 				}
 				else
 				{
-					// the url is not supported - render error page
-					return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
-		            	'displayname' => $user->getDisplayname(),
-						'header'=>'Oops! This is a header.',
-						'message'=>'SORRY! This media is not supported. This is a message',
-						'urlmessage'=>'Why are some media types not supported? This is a url',
-						'url'=>json_encode("http://zeega.org"),
-						'mycollection'=>$mycollection,
-						));
 				}
 			}
-			
-			return new Response($a);
-			//Parse url
-			
-			
-			//Create item objects using API if applicable
-			$logger->err($urlInfo['archive']);
-			
-			if($urlInfo['archive']=='Flickr') 			  	$item=$import->parseFlickr($urlInfo['id']);
-			elseif($urlInfo['archive']=='SoundCloud') 	  	$item=$import->parseSoundCloud($urlInfo['id']);
-			elseif($urlInfo['archive']=='blip.tv') 	  		$item=$import->parseBlipTv($urlInfo['id']);
-			elseif($urlInfo['archive']=='SoundCloudSet') 	$collection=$import->parseSoundCloudSet($urlInfo['id']);
-			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
-			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
-			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
-			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
-			elseif($urlInfo['archive']=='Hollis-Group') 			$collection=$import->parseHollisGroup($urlInfo['id']);
-			elseif($urlInfo['archive']=='Hollis-Work') 			$collection=$import->parseHollisWork($urlInfo['id']);
-			
-			elseif($urlInfo['archive']=='YoutubeChannel')	$collection=$import->parseYoutubeChannel($urlInfo['id']);
-			//Store media item(s) to session and render widget
 
-			if(isset($item)&&$item){
-		
-				
-				if($session->get('items'))$newItems=$session->get('items');			
-				
-				$widgetId=rand(0,100);
-				$item->setAttributionUri($url."#".$user->getId());
-				$newItems[$widgetId]=$item;
-				$metadata=$item->getMetadata();
-    			$session->set('items',$newItems);
-		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-					'displayname' => $user->getDisplayname(),
-					'title'=>$item->getTitle(),
-					'creator'=>$item->getMediaCreatorUsername(),
-					'widget_id'=>$widgetId,
-					'thumb_url'=>$metadata->getThumbnailUrl(),
-					'mycollection'=>$mycollection,
-				));
-			}
-        	elseif(isset($collection)&&$collection){
-				$thumbUrls=array();
-				$widgetIds=array();
-				if($session->get('items'))$newItems=$session->get('items');	
-				$counter=1;
-				foreach($collection['items'] as $item){
-					$widgetId=rand(0,1000);
-					#$item->setAttributionUri($url."#".$item->getId()); //uncommented breaks youtube group import
-					$metadata=$item->getMetadata();
-					$thumbUrl=$metadata->getThumbnailUrl();
-					$thumbUrls[]=array('index'=>$counter,'thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
-					$counter++;
-					$widgetIds[]=$widgetId;
-					$newItems[$widgetId]=$item;
-				}
-				$session->set('items',$newItems);
-
-				return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
-					'displayname' => $user->getDisplayname(),
-					'title'=>$collection['title'],
-					'creator'=>$collection['creator'],
-					'widget_ids'=>$widgetIds,
-					'thumb_urls'=>$thumbUrls,
-					'mycollection'=>$mycollection,
-					'count'=>count($thumbUrls),
-				));
-		
-			}
-			else{
-				return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
-            		'displayname' => $user->getDisplayname(),
-					'message'=>'Unable to process the media at this URL:',
-					'url'=>json_encode($widgetId),
-					'title'=>'temp title',
-					'mycollection'=>$mycollection,
-					));
-			} 
     	}
 	}	
+	
 	public function urlAction()
 	{
     	$request=$this->getRequest();

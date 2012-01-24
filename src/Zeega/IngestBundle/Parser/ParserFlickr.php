@@ -45,8 +45,52 @@ class ParserFlickr extends ParserAbstract
 	public function parseSingleItem($url)
 	{
 		$id = $this->getItemId($url);
-		return $this->parseItem($id);
+		$item = $this->parseItem($id);
+		return parent::returnResponse($item, true);
 	}
+	
+	/**
+     * Parses a single item from the $url and adds the associated media to the database.
+     *
+     * @param String  $url  The url to be checked.
+	 * @return boolean|success
+     */
+	public function getSetInfo($url)
+	{
+		$setId = $this->getItemId($url);
+
+		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
+		$setInfo = $f->photosets_getInfo($setId);
+
+		$collection = new Item();
+		$ownerInfo = $f->people_getInfo($setInfo["owner"]);
+
+		$collection->setTitle($setInfo["title"]);
+		$collection->setDescription($setInfo["description"]);
+		$collection->setType('Collection');
+	    $collection->setSource('Flickr');
+	    $collection->setUri('http://zeega.org');
+		$collection->setAttributionUri($url);
+
+        $collection->setChildItemsCount($setInfo["count_photos"]);
+
+		$collection->setMediaCreatorUsername($ownerInfo["path_alias"]);
+        $collection->setMediaCreatorRealname($ownerInfo["username"]);
+		$collection->setMediaDateCreated(new \DateTime());
+		
+		if(isset($setInfo["primary"]))
+		{
+			$size = $f->photos_getSizes($setInfo["primary"]);
+			foreach ($size as $s)
+			{
+				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
+			}	
+		}
+		$collection->setThumbnailUrl($sizes['Square']['source']);
+		
+		return parent::returnResponse($collection, true);
+	}
+	
 	
 	/**
      * Parses the set of media from the $url and adds the associated media to the database.
@@ -63,12 +107,12 @@ class ParserFlickr extends ParserAbstract
 		$setInfo = $f->photosets_getInfo($setId);
 		
 		$photos = $setPhotos['photoset']['photo'];
-		
+
+		$collection = new Item();
+
 		if($photos)
 		{
 			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
-			//return var_dump($ownerInfo);
-			$collection = new Item();
 			
 			$collection->setTitle($setInfo["title"]);
 			$collection->setDescription($setInfo["description"]);
@@ -90,7 +134,7 @@ class ParserFlickr extends ParserAbstract
 			foreach($photos as $photo)
 			{
 				$item = $this->parseItem($photo['id']);
-				if(!$thumbnailUrlIsSet) 
+				if(!$thumbnailUrlIsSet)
 				{
 					$collection->setThumbnailUrl($item->getThumbnailUrl());
 					$thumbnailUrlIsSet = true;
@@ -98,26 +142,9 @@ class ParserFlickr extends ParserAbstract
 				$collection->addItem($item);
 			}
 			
-			return $collection;
+			return parent::returnResponse($collection, true);
 		}
-	}
-
-	public function getItemThumbnail($url)
-	{
-		$itemId = $this->getItemId($url);
-		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
-		$size = $f->photos_getSizes($itemId);
-		foreach ($size as $s)
-		{
-			$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
-		}
-		return $sizes['Square']['source'];
-		//return var_dump($sizes);
-	}
-	
-	public function getSetThumbnail($url)
-	{
-		
+		return parent::returnResponse($collection, false);
 	}
 
 	/*  PRIVATE METHODS */

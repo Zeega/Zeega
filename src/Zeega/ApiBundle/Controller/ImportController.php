@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\IngestBundle\Entity\ItemTags;
+use Zeega\IngestBundle\Entity\Item;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\IngestBundle\Repository\ItemTagsRepository;
@@ -34,18 +35,40 @@ class ImportController extends Controller
 				$parserClass = $parserInfo["ParserClass"];
 				$isSet = $parserInfo["IsSet"];
 				
-				$parserMethod = new ReflectionMethod($parserClass, 'getItemThumbnail'); // reflection is slow, but it's probably ok here
-				$thumbnail = $parserMethod->invokeArgs(new $parserClass, array($url));
+				$parserMethod = new ReflectionMethod($parserClass, 'isUrlSupported'); // reflection is slow, but it's probably ok here
+				$isValid = $parserMethod->invokeArgs(new $parserClass, array($url));
 				
-				$results = array("is_valid"=>true, "is_set"=>$isSet, "thumbnail" =>$thumbnail);
+				$results = array("is_valid"=>$isValid, "is_set"=>$isSet);
+				
+				if($isValid)
+				{
+					if($isSet)
+					{
+						$parserMethod = new ReflectionMethod($parserClass, 'getSetInfo'); // reflection is slow, but it's probably ok here
+					}
+					else
+					{
+						$parserMethod = new ReflectionMethod($parserClass, 'parseSingleItem');
+					}
+					
+					$isSet = ($isSet) ? 'true' : 'false'; // twig wasn't rendering 'false' for some reason
+					$isValid = ($isValid) ? 'true' : 'false';
+					
+					$response = $parserMethod->invokeArgs(new $parserClass, array($url));
+					$item = $response["items"];
+				
+					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => $isSet, 'is_valid' => $isValid));
+			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+				}
 			}
 		}
 
-		return ResponseHelper::getJsonResponse($results);
+		$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => null, 'is_collection' => 0, 'is_valid' => 0));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 		
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
-    public function getImportAction()
+    public function getImportPersistAction()
     {
 		$url = $this->getRequest()->query->get('url');
 
@@ -62,7 +85,8 @@ class ImportController extends Controller
 				if($isSet)
 				{
 					$parserMethod = new ReflectionMethod($parserClass, 'parseSet'); // reflection is slow, but it's probably ok here
-					$collection = $parserMethod->invokeArgs(new $parserClass, array($url));
+					$response = $parserMethod->invokeArgs(new $parserClass, array($url));
+					$collection = $response["items"];
 					
 					$collection->setUser($user);
 					$collectionItems = $collection->getChildItems();
@@ -79,15 +103,18 @@ class ImportController extends Controller
 					
 					$collection->setUser($user);
 					
-					$em->persist($collection);
-					$em->flush();
-					return new Response("we're good to go");
+					//$em->persist($collection);
+					//$em->flush();
+					//return new Response("we're good to go");
+					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true));
+			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 				}
 				else
 				{
 					$parserMethod = new ReflectionMethod($parserClass, 'parseSingleItem');
-					$item = $parserMethod->invokeArgs(new $parserClass, array($url));
-
+					$response = $parserMethod->invokeArgs(new $parserClass, array($url));
+					$item = $response["items"];
+					
 					$user = $this->get('security.context')->getToken()->getUser();
 		    		$item->setUser($user);
 
@@ -97,10 +124,14 @@ class ImportController extends Controller
 					$em->flush();
 					$em->persist($item);
 					$em->flush();
-					$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => array()));
+					
+					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => true, 'is_valid' => true));
 			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 				}
 			} 
 		}
+		
+		$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => null, 'is_collection' => 0, 'is_valid' => 0));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);		
     }
 }

@@ -1,4 +1,5 @@
 {
+{% block header %}{% endblock %}	
 "{% block listName %}items{% endblock %}":
 	{% if item is not null %}
 	{
@@ -38,5 +39,10 @@
 	{% else %}
 		{}
 	{% endif %},
-"{% block countName %}items_count{% endblock %}": 1
+"{% block countName %}items_count{% endblock %}": 
+	{% if item is not null %}
+		1
+	{% else %}
+		0
+	{% endif %}
 }

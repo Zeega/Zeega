@@ -30,6 +30,11 @@ abstract class ParserAbstract
 		$config[$key] = $value;
 	}
 	
+	public function returnResponse($object, $success)
+	{
+		return array("success" => $success, "items" => $object);
+	}
+	
 	/**
      * Returns the configuration value associated with $key
      *
