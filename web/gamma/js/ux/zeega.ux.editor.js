@@ -112,6 +112,11 @@ function shareButton()
 
 
 
+$('#new-layer-list a').click(function(){
+	addLayer( $(this).data('type') );
+	return false;
+})
+
 function addLayer(type)
 {
 	//add new layer model
