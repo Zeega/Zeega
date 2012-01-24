@@ -84,3 +84,6 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: secured_area
     user_class: Zeega\UserBundle\Entity\User
+    registration:
+        form:
+            type: zeega_user_registration
