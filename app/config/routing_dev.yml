@@ -2,6 +2,25 @@ _configurator:
     resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
     prefix:   /_configurator
 
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+
 api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
 
@@ -30,20 +49,6 @@ layers:
 playgrounds:
   type:     rest
   resource: Zeega\EditorBundle\Controller\PlaygroundsController
-
-_security_login:
-    pattern:  /login
-    defaults: { _controller:  ZeegaUserBundle:Security:login }
-
-testing:
-    pattern:  /logintest
-    defaults: { _controller:  ZeegaUserBundle:Security:create }
-
-_security_check:
-    pattern:  /login_check
-
-_security_logout:
-    pattern:  /logout
 
 persist:
     pattern: /widget/persist
@@ -116,13 +121,6 @@ ZeegaEditorBundle_settings:
 zeega_editor:
     resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
     
-zeega_editor:
-    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"
-
 web_profiler: 
     resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 
 
-User:
-
-    pattern:   /user/{name}
-    defaults: { _controller: ZeegaUserBundle:Default:index }

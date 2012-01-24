@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new Zeega\ApiBundle\ZeegaApiBundle(),
+			new FOS\UserBundle\FOSUserBundle(),
         );
 
 
