@@ -969,6 +969,56 @@ body
 .inset-tray
 { zoom: 1; }
 
+/*******************************
+
+	LAYERS
+	
+*******************************/
+
+#layers-list-visual li
+{
+	min-height:25px;
+	background:#555;
+	margin:1px 0;
+	padding: 6px;
+	-webkit-border-radius: 6px;
+	overflow:hidden;
+	-webkit-box-shadow : inset 3px 3px 3px #666;
+}
+
+.layer-icon
+{
+	width:25px;
+	float:left;
+}
+
+.layer-title
+{
+	color: #ddd;
+	font-weight: bold;
+	width: 174px;
+	overflow:hidden;
+	float:left;
+	cursor:pointer;
+	white-space : nowrap;
+	text-shadow : 0 1px 1px rgba(25, 25, 25, 0.75);
+}
+
+.layer-drag-handle
+{
+	width:40px;
+	float: right;
+	cursor:move;
+}
+
+.copy-to-next
+{
+	float:right;
+	clear:both;
+}
+
+.layer-uber-bar div { padding : 3px }
+.layer-uber-controls, .layer-drag-handle span { float:left }
 
 /*******************************
 
@@ -1518,94 +1568,7 @@ body
 	top:375px;
 }
 
-/*******************************
 
-	LAYERS TAB
-	
-*******************************/
-
-#new-layer
-{
-	padding:10px 0;
-	font-size:0.8em;
-}
-
-.new-layer-icon
-{
-	float:left;
-}
-
-.new-layer-icon+.new-layer-icon
-{
-	margin-left:10px;
-}
-
-#layers-list-visual li
-{
-	min-height:25px;
-	background:#555;
-	margin:1px 0;
-	padding: 6px;
-	-webkit-border-radius: 6px;
-	overflow:hidden;
-	-webkit-box-shadow : inset 3px 3px 3px #666;
-}
-
-.layer-uber-bar div
-{
-	padding : 3px;
-}
-
-.layer-uber-bar input
-{
-	height:25px;
-}
-
-.layer-icon
-{
-	width:25px;
-	float:left;
-}
-
-.layer-icon span
-{
-	margin-left: 4px;
-}
-
-
-.layer-title
-{
-	color: #ddd;
-	font-weight: bold;
-	width: 174px;
-	overflow:hidden;
-	float:left;
-	cursor:pointer;
-	white-space : nowrap;
-	text-shadow : 0 1px 1px rgba(25, 25, 25, 0.75);
-}
-.layer-uber-controls
-{
-	float:left;
-}
-
-.layer-uber-controls span
-{
-	float:left;
-}
-
-.layer-drag-handle
-{
-	width:40px;
-	float: right;
-	cursor:move;
-}
-
-.layer-drag-handle span
-{
-	float:right;
-	margin-right:8px;
-}
 
 .arrow
 {
@@ -1642,16 +1605,7 @@ body
 }
 
 
-#layer-persist
-{
-	float:right;
-}
 
-.copy-to-next
-{
-	float:right;
-	clear:both;
-}
 
 
 
