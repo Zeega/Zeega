@@ -866,13 +866,18 @@ body
 	clear:both;
 	margin-bottom:12px;
 }
-
+.panel .panel-head
+{
+	background: none;
+	padding: 6px;
+	border : none;
+}
 .panel.flat .panel-head
 {
 	-webkit-border-radius: 6px;
 	background: #222;
 	padding: 6px;
-	border : 1px solid #444;
+	border : 1px solid #111;
 }
 
 .panel-head .icon-tray{ float:left }
