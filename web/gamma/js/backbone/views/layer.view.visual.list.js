@@ -53,12 +53,18 @@ var VisualLayerListView = Backbone.View.extend({
 		}else{
 			persist = '';
 		}
+		
+		var showLink = '';
+		if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
+			showLink = 'hidden';
 
 		//set values to be filled into template
 		var values = {
 			id : 'layer-edit-'+this.model.id,
 			layerName : title,
-			persist : persist
+			persist : persist,
+			show_link : showLink,
+			link_to : this.model.get('attr').link_to
 		}
 		//make template
 		var tmpl = _.template( this.getTemplate() );
@@ -94,10 +100,13 @@ var VisualLayerListView = Backbone.View.extend({
 		'change #persist'			: 'persist',
 		'click .copy-to-next'		: 'copyToNext',
 		'click .layer-icon'			: 'hideShow',
-		'mouseenter .layer-icon'			: 'onLayerIconEnter', 
-		'mouseleave .layer-icon'			: 'onLayerIconLeave', 
-		'mouseenter .delete-layer'			: 'onLayerTrashEnter', 
-		'mouseleave .delete-layer'			: 'onLayerTrashLeave',	},
+		'mouseenter .layer-icon'	: 'onLayerIconEnter', 
+		'mouseleave .layer-icon'	: 'onLayerIconLeave', 
+		'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
+		'mouseleave .delete-layer'	: 'onLayerTrashLeave',
+		'click .layer-link'			: "layerLink",
+		'click .clear-link'			: 'clearLayerLink'
+	},
 	
 	//delete this layer from the DB and view
 	delete : function()
@@ -168,6 +177,54 @@ var VisualLayerListView = Backbone.View.extend({
 		
 	},
 	
+	layerLink : function()
+	{
+		var _this = this;
+		$(this.el).find('.layer-link-box').show();
+		$(this.el).find('.layer-link-box input').keypress(function(e){
+			if(e.which == 13)
+			{
+				// do some validation here?
+				var properties = {
+					link : {
+						property : 'link_to',
+						value : $(this).val(),
+						css : false
+					}
+				};
+				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+				
+				$(this).blur();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+		});
+		//activate listeners?
+		
+		return false;
+	},
+	
+	clearLayerLink : function()
+	{
+		
+		$(this.el).find('.layer-link-box input').val('');
+		
+		var properties = {
+			link : {
+				property : 'link_to',
+				value : '',
+				css : false
+			}
+		};
+		this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+		
+		return false;
+	},
+	
 	getTemplate : function()
 	{
 		var html =
@@ -190,8 +247,18 @@ var VisualLayerListView = Backbone.View.extend({
 //			'<form id="layer-persist">'+
 				'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
 //			'</form>'+
-			'<a href="#" class="copy-to-next btn small">Copy to next node</a>'+
-		'</div>';
+			'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
+			
+		if( this.model.layerClass.linkable )
+		{
+
+			html +=	'<a href="#" class="layer-link">link</a>';
+			html += '<div class="layer-link-box <%= show_link %>">';
+			html +=		'<input class="span4" type="text" placeholder="http://www.example.com" value="<%= link_to %>">';
+			html +=		'<a href="#" class="clear-link"><span class="zicon zicon-close orange"></span></a>';
+			html += '</div>';
+		}
+		html += '</div>';
 		
 		return html;
 	}
