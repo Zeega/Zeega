@@ -77,7 +77,9 @@ var VisualLayerListView = Backbone.View.extend({
 		$(this.el).find('.asset-type-icon').addClass('zicon-' +type.toLowerCase() );
 		
 		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
-				
+		
+		this.setListeners();
+		
 		return this;
 	},
 	
@@ -85,6 +87,39 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		//I can't access the this.el because the scope has changed to the model object :/
 		$( '#layer-'+ this.id ).find('.layer-title').html( this.get('attr').title );
+	},
+	
+	setListeners : function()
+	{
+		//twipsies
+		$(this.el).find('.layer-link').twipsy({
+			placement : 'right'
+		})
+		
+		//finish entering  link info
+		$(this.el).find('.layer-link-box input').keypress(function(e){
+			if(e.which == 13)
+			{
+				// do some validation here?
+				var properties = {
+					link : {
+						property : 'link_to',
+						value : $(this).val(),
+						css : false
+					}
+				};
+				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+				
+				$(this).blur();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+		});
+		
 	},
 	
 	
@@ -181,30 +216,7 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		var _this = this;
 		$(this.el).find('.layer-link-box').show();
-		$(this.el).find('.layer-link-box input').keypress(function(e){
-			if(e.which == 13)
-			{
-				// do some validation here?
-				var properties = {
-					link : {
-						property : 'link_to',
-						value : $(this).val(),
-						css : false
-					}
-				};
-				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
 				
-				$(this).blur();
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-			
-		});
-		//activate listeners?
-		
 		return false;
 	},
 	
@@ -241,23 +253,25 @@ var VisualLayerListView = Backbone.View.extend({
 				'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>'+
 			'</div>'+
 		'</div>'+
-		'<div class="layer-content inset-tray dark">'+
-			'<div id="controls"></div>'+
-			'<br />'+
-//			'<form id="layer-persist">'+
-				'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
-//			'</form>'+
-			'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
+		'<div class="layer-content inset-tray dark hidden">'+
+			'<div id="controls" class="clearfix"></div>'+
+			//'<br />'+
+			'<div class="standard-layer-controls clearfix">'+
+				'<div>'+
+					'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
+				'</div>'+
+				'<div><a href="#" class="copy-to-next btn">Copy to next node</a></div>';
 			
 		if( this.model.layerClass.linkable )
 		{
 
-			html +=	'<a href="#" class="layer-link">link</a>';
+			html +=	'<div><a href="#" class="layer-link" title="click here to set this layer as a link" style="float:left"><span class="zicon zicon-link orange"></span></a></div>';
 			html += '<div class="layer-link-box <%= show_link %>">';
-			html +=		'<input class="span4" type="text" placeholder="http://www.example.com" value="<%= link_to %>">';
+			html +=		'<div class="input-prepend"><span class="add-on">http://</span><input class="span4" name="prependedInput" type="text" placeholder="http://www.example.com" value="<%= link_to %>">';
 			html +=		'<a href="#" class="clear-link"><span class="zicon zicon-close orange"></span></a>';
-			html += '</div>';
+			html += '</div></div>';
 		}
+		html += 	'</div>'; //standard layer controls
 		html += '</div>';
 		
 		return html;

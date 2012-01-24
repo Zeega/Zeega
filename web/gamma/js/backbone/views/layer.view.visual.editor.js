@@ -142,10 +142,11 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		_.each( this._renderedViews , function(view){
 			types.push( view.model.get('type').toLowerCase() );
 		});
-		types = _.uniq( types );
+		//types = _.uniq( types );
 		_.each( types, function(type){
 			var icon = $('<span>').addClass('zicon grey zicon-' +type);
-			$('#visualeditor-view-bar').find('.icon-tray').append(icon)
+			var li = $('<li>').append(icon);
+			$('#visualeditor-view-bar').find('.icon-tray').append(li)
 		});
 	}
 

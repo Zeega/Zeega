@@ -721,7 +721,6 @@ a.white:hover
 {
 	display:block;
 	overflow:hidden;
-	float:left;
 	height:18px;
 	width:18px;
 	background-image:url('../images/zicons-grey-18.png');
@@ -762,6 +761,7 @@ a.white:hover
 .zicon-question{background-position:-291px -170px}
 .zicon-item{margin-left: 2px;margin-top: 4px;}
 .zicon-settings{background-position:-291px -312px}
+.zicon-link{background-position:-32px 0}
 
 /*********************************************
 
@@ -1014,9 +1014,13 @@ body
 
 .copy-to-next
 {
-	float:right;
 	clear:both;
 }
+
+.input-prepend { padding-left:23px }
+.standard-layer-controls>div{ margin-top:6px }
+.layer-link-box input { width:170px }
+.layer-link-box .zicon { float:right; }
 
 .layer-uber-bar div { padding : 3px }
 .layer-uber-controls, .layer-drag-handle span { float:left }
@@ -1156,6 +1160,7 @@ body
 .list-view .show-in-list-view
 {
 	display : block;
+	float:left;
 }
 
 .grid-view li
@@ -1942,12 +1947,14 @@ td+td
 }
 
 
-.fullscreen-submit {
-
-float: left;
-margin-top: 10px;
-
+.fullscreen-submit
+{
+	float: left;
+	margin-top: 10px;
+	width:100%;
 }
+
+#controls input { width:100% }
 
 
 .float-left
