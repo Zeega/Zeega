@@ -71,35 +71,32 @@
 
 {% endblock head%}
 
-
-    {% block fos_user_content %}
+{% block fos_user_content %}
 	<div id="main">
 		<img src="{{asset('gamma/images/zeegaAlpha.png')}}" /><br>
 		<span style="font-size: 14px; color: white; opacity: .6; text-align: right; display: block;">alpha</span>
 
+    	{% if error %}
+	        <div class="error">{{ error.message }}</div>
+	    {% endif %}
+    
+		<form action="{{ path("fos_user_security_check") }}" method="post">
+			<div class="box">
+		    	<label for="username">{{ 'Username'|trans({}, 'FOSUserBundle') }}</label>
+			    <input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" />
 
-    {% if error %}
-        <div class="error">{{ error.message }}</div>
-    {% endif %}
-    
-    
-	<form action="{{ path("fos_user_security_check") }}" method="post">
-		<div class="box">
-	    	<label for="username">{{ 'Username'|trans({}, 'FOSUserBundle') }}</label>
-		    <input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" />
+			    <label for="password">{{ 'Password'|trans({}, 'FOSUserBundle') }}</label>
+			    <input type="password" id="password" name="_password" class="input_text" />
+				<!--
+			    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+			    <label for="remember_me">{{ 'Remember me'|trans({}, 'FOSUserBundle') }}</label>
+				-->	
+				<br><br>
+		    	<input type="submit" id="_submit" name="_submit" value="{{ 'submit'|trans({}, 'FOSUserBundle') }}" class="button"/>
+				<br><br>
+			</div>
+		</form>
+	</div> <!--#main-->
 
-		    <label for="password">{{ 'Password'|trans({}, 'FOSUserBundle') }}</label>
-		    <input type="password" id="password" name="_password" class="input_text" />
-			<!--
-		    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-		    <label for="remember_me">{{ 'Remember me'|trans({}, 'FOSUserBundle') }}</label>
-			-->	
-			<br><br>
-	    	<input type="submit" id="_submit" name="_submit" value="{{ 'submit'|trans({}, 'FOSUserBundle') }}" class="button"/>
-			<br><br>
-		</div>
-	</form>
-</div> <!--#main-->
-    
-	{% endblock fos_user_content %}
+{% endblock fos_user_content %}
 
