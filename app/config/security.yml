@@ -15,15 +15,6 @@ security:
                 admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
-        search:
-            pattern:  ^/api/search
-            anonymous: ~
-        tags:    
-            pattern: ^/api/tags
-            anonymous: ~
-        items:  
-            pattern: ^/api/items
-            anonymous: ~        
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -42,12 +33,6 @@ security:
         route:
             pattern:  ^/route/
             anonymous: ~
-        search:
-            pattern: ^/api/search
-            anonymous: ~
-        tags:
-            pattern: ^/api/tags
-            anonymous: ~
         routes:
             pattern:  ^/routes/
             anonymous: ~
@@ -60,9 +45,10 @@ security:
                 path:   /logout
                 target: /login
             anonymous: ~
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+        search:
+            pattern: ^/api/search
+            anonymous: ~
+
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
@@ -70,4 +56,8 @@ security:
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
+        
