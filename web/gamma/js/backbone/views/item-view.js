@@ -68,7 +68,7 @@ var ItemView = Backbone.View.extend({
 		// rollover
 		
 		var args = {
-			
+			delayIn : 1500
 		};
 		
 		$(this.el).popover( args );
@@ -89,13 +89,10 @@ var ItemView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		//html = '<div id="database-asset-template" class="hidden">';
 		var html =	'<span class="item-icon show-in-list-view zicon zicon-<%= type %>"></span>' +
 					'<img class="item-thumbnail" src="<%= thumbUrl %>"/>' +
-					//'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>' +
 					'<div class="item-title show-in-list-view"><%= title %></div>';
-					//'<div class="item-meta"><%= creator %></div>';
-					//'</div>';
+
 		return html;
 	}
 });
