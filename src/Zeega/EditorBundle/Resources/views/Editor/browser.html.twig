@@ -164,10 +164,10 @@
 			<div id="fancybox-media-container-template">
 				<div class="fancybox-media-item"></div>
 				
-				<p class="title">TITLE</p>
-				<p><span class="creator">CREATOR</span> <span class="source"><a href="#" target="_blank">View Source</a></span></p>
-				<p class="description" style="display:none;">description</p>
-				<p class="tags" style="display:none;"><a href=".">Dummy tag</a>, <a href=".">Another fake tag</a>, <a href=".">tag tag</a>, <a href=".">false longer tag</a></p>
+				<p class="title fancybox-editable">TITLE</p>
+				<p><span class="creator fancybox-editable">CREATOR</span> <span class="source"><a href="#" target="_blank">View Source</a></span></p>
+				<p class="description fancybox-editable" style="display:none;">description</p>
+				<p class="tags fancybox-editable" style="display:none;"><a href=".">Dummy tag</a>, <a href=".">Another fake tag</a>, <a href=".">tag tag</a>, <a href=".">false longer tag</a></p>
 				<div class="fancybox-buttons" class="clearfix">
 					<p class="fancybox-more-button"><a href=".">more</a></p><p class="fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>
 				</div>
@@ -175,14 +175,7 @@
 					<!--<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>-->
 				
 			</div>
-			<div id="browser-fancybox-caption-template">
-				
-				<p class="title">TITLE</p>
-				<p><strong>Creator:</strong> <span class="creator">CREATOR</span></p>
-				<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>
-				<p class="source"><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
-
-			</div>
+			
 			<div id="fancybox-image-template">
 				<img src=""/>
 			</div>
@@ -238,6 +231,7 @@
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.mousewheel-3.0.6.pack.js')}}"></script>
 
 		<!-- Add fancyBox -->
+		<link rel="stylesheet" href="{{ asset('gamma/css/zeega.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
 

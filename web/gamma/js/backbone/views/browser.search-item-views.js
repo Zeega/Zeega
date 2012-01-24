@@ -303,19 +303,21 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 		this.model.loadTags();
 		
 	},
-	moreView : function(theButton, theElement){
-		Zeega.moreFancy = true;
+	moreView : function(theElement){
+		sessionStorage.setItem('moreFancy', true);
 
-		$(theButton).find('a').text("less");
+		theElement.find('.fancybox-more-button').hide();
+		theElement.find('.fancybox-less-button').show();
 		theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
 		theElement.addClass("fancybox-media-container-more");
 		theElement.find('.description').show();
 		theElement.find('.tags').show();
 	},
-	lessView : function(theButton, theElement){
-		Zeega.moreFancy = false;
+	lessView : function( theElement){
+		sessionStorage.setItem('moreFancy', false);
 
-		$(theButton).find('a').text("more");
+		theElement.find('.fancybox-more-button').show();
+		theElement.find('.fancybox-less-button').hide();
 		theElement.find('.description').hide();
 		theElement.find('.tags').hide();
 		theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
@@ -323,25 +325,38 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 	},
 	render: function(obj)
 	{
-		
-		
 		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
 		this.el.find('.title').text( this.model.get('title'));
 		this.el.find('.creator').text( this.model.get('media_creator_username'));
 		this.el.find('.description').text( this.model.get('description'));
-		//this.el.find('.tags').text( 'Dummy tag, Another fake tag, tag tag, false longer tag');
+		
 		
 		//Fancybox will remember if user was in MORE or LESS view
-		if (Zeega.moreFancy){
-			this.moreView($(this).find('a'), this.el);
+		if (sessionStorage.getItem('moreFancy') == "true"){
+			this.moreView(this.el);
 		} else {
-			this.lessView($(this).find('a'), this.el);
+			this.lessView(this.el);
 		}
 
 
 		var item = this.model;
 		var theElement = this.el;
 		var view = this;
+		
+		//MORE/LESS buttons
+		this.el.find('.fancybox-more-button, .fancybox-less-button').click(function(e){
+			
+			//Fancybox will remember if user was in MORE or LESS view
+			var fancyVar = sessionStorage.getItem('moreFancy');
+			if (sessionStorage.getItem('moreFancy') == "true"){
+				view.lessView(theElement);
+				e.preventDefault();
+			} else {
+				view.moreView(theElement);
+				e.preventDefault();
+			}
+
+		});
 		//EDIT TITLE
 		this.el.find('.title').editable(
 			function(value, settings)
@@ -422,18 +437,7 @@ var BrowserFancyBoxView = BrowserItemView.extend({
 				width : 200,
 				cssclass : 'fancybox-form'
 		});
-		//MORE button
-		this.el.find('.fancybox-more-button').click(function(e){
-			
-			if ($(this).find('a').text() == "more"){
-				view.moreView(this, theElement);
-				e.preventDefault();
-			} else {
-				view.lessView(this, theElement);
-				e.preventDefault();
-			}
-
-		});
+		
 		//DELETE button
 		this.el.find('.fancybox-delete-button').click(function(e){
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"

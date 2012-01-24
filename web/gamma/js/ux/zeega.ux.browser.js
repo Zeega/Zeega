@@ -47,7 +47,10 @@ $(document).ready(function() {
     		title : false,
     		buttons	: {}
     	},
-    	
+    	beforeClose : function() {
+    			//reset fancybox MORE/LESS view
+    			sessionStorage.setItem('moreFancy', false);
+    	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
