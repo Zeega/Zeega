@@ -1,6 +1,5 @@
 # src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
 Zeega\UserBundle\Entity\User:
-   tableName: zeega_user
    type: entity
    id:
     id:
