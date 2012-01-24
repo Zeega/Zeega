@@ -828,8 +828,6 @@ body
 
 	LIST STYLES
 	
-	
-	
 *******************************/
 
 .horizontal-list li{ float:left }
@@ -877,7 +875,7 @@ body
 	color:rgba(255,255,255,0.65);
 	font-size:18px;
 }
-.panel-head+div,.panel-head div+div { margin-top:6px }
+.panel-head+div,.panel-head div+div { margin:6px 0 }
 .panel-head li{color:rgba(255,255,255,0.65)}
 .panel.raised .panel-head
 {
@@ -891,16 +889,18 @@ body
 {
 	-webkit-border-radius: 6px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#333), to(#111));
-	padding: 6px 6px 12px;
+	padding: 6px;
 	border : 1px solid #111;
 }
 .panel.raised.tray .panel-head
 {
-	padding: 0 0 6px;
+	padding: 0;
 	background:none;
 	border:none;
 }
-.tray .panel-content
+
+
+.inset-tray
 {
 	background:#ddd;
 	-webkit-box-shadow: inset 5px 5px 5px #888;
@@ -908,6 +908,16 @@ body
 	border:1px solid #999;
 	padding:6px;
 }
+.inset-tray.dark
+{
+	color:white;
+	background:#444;
+	-webkit-box-shadow: inset 5px 5px 5px #222;
+	-webkit-border-radius: 6px;
+	border:1px solid #666;
+	padding:6px;
+}
+.inset-tray h1,.inset-tray h2,.inset-tray h3,.inset-tray h4{ color:inherit }
 
 .panel-content input,.panel-content label { float:none }
 

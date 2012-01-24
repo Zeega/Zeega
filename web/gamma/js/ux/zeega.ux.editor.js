@@ -228,8 +228,12 @@ function closeOpenCitationTabs()
 
 		if (keycode == 13)
 		{
-
 			Database.search( $("#database-search-text").val() );
+			//open database tray if closed
+			if( $('#database-panel .panel-content').is(':hidden') )
+				$('#database-panel .panel-content').show('blind',{'direction':'vertical'});
+			
+			
 			console.log('pressed enter')
 		}else{
 			return true;
