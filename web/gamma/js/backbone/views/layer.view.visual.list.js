@@ -96,29 +96,7 @@ var VisualLayerListView = Backbone.View.extend({
 			placement : 'right'
 		})
 		
-		//finish entering  link info
-		$(this.el).find('.layer-link-box input').keypress(function(e){
-			if(e.which == 13)
-			{
-				// do some validation here?
-				var properties = {
-					link : {
-						property : 'link_to',
-						value : $(this).val(),
-						css : false
-					}
-				};
-				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-				
-				$(this).blur();
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-			
-		});
+		
 		
 	},
 	
@@ -216,7 +194,31 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		var _this = this;
 		$(this.el).find('.layer-link-box').show();
+		
+		//finish entering  link info
+		$(this.el).find('.layer-link-box input').keypress(function(e){
+			if(e.which == 13)
+			{
+				// do some validation here?
+				var properties = {
+					link : {
+						property : 'link_to',
+						value : $(this).val(),
+						css : false
+					}
+				};
+				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
 				
+				$(this).blur();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+		});
+		
 		return false;
 	},
 	

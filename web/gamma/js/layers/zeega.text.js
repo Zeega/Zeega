@@ -12,6 +12,7 @@ var TextLayer = ProtoLayer.extend({
 
 	layerType : 'VISUAL',
 	draggable : true,
+	linkable : true,
 
 	defaultAttributes: {
 		type:'text',

@@ -249,13 +249,13 @@ var Zeega = {
 		Zeega.route.layerCollection.render( this.currentNode );
 		
 		//add a new current node style
-		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+		$('#frame-thumb-'+this.currentNode.id).addClass('active-frame');
 	},
 	
 	clearCurrentNode : function ()
 	{
 		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		if(this.currentNode) $('#frame-thumb-'+this.currentNode.id).removeClass('active-frame');
 		
 		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();

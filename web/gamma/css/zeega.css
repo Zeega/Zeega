@@ -831,8 +831,8 @@ body
 	
 *******************************/
 
-.horizontal-list li{ float:left }
-.horizontal-list li+li{ padding-left:6px }
+.horizontal-list>li{ float:left }
+.horizontal-list>li+li{ margin-left:6px }
 .expandable{ cursor:pointer }
 
 
@@ -842,6 +842,30 @@ body
 .clearfix { zoom: 1; }
 */
 
+
+/********************************
+
+	DROPDOWN MENUS
+
+**********************************/
+
+.menu-toggle
+{
+	position:relative;
+}
+.menu-items
+{
+	display:none;
+	background:white;
+	position:absolute;
+	padding:6px;
+	border-radius:6px;
+	box-shadow:6px 6px 6px rgba(0,0,0,0.5);
+}
+.menu-items.open
+{
+	display:inline;
+}
 
 /*******************************
 
@@ -1024,6 +1048,101 @@ body
 
 .layer-uber-bar div { padding : 3px }
 .layer-uber-controls, .layer-drag-handle span { float:left }
+
+
+
+
+/******************************
+
+	FRAMES
+	
+*******************************/
+
+.active-frame { border-bottom: solid red 5px }
+
+.frame-thumb
+{
+	height:50px;
+	width:50px;
+	background:#ccc;
+	cursor:move;
+	-webkit-box-shadow : 3px 3px 6px #333;
+	
+}
+
+#frame-list
+{
+	margin-left: -5px;
+	height: 50px;
+	display:inline;
+}
+#frame-list>li+li { margin-left : 12px }
+
+
+#add-node
+{
+	float:left;
+	padding:10px 17px;
+	
+}
+
+#frame-drawer, #browser-my-collections, #browser-results
+{
+	white-space:nowrap;
+	background:#eee;
+	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
+	-webkit-border-radius: 6px;
+	-webkit-box-shadow : inset 3px 3px 6px #222;
+	
+	margin-bottom:6px;
+	padding:12px;
+	overflow:hidden;
+}
+
+
+
+
+#node a
+{
+	background:yellow;
+	float: right;
+	text-decoration: none;
+	text-align: center;
+	-webkit-border-radius: 0 0 4px 0;
+}
+
+
+
+
+.frame-overlay
+{
+
+	height:50px;
+	width:50px;
+	z-index:2;
+}
+
+.frame-update-overlay
+{
+	display:none;
+	background-image:url('../images/stripes.png');
+	height:100%;
+	width:100%;
+	opacity: 0.6;
+
+}
+
+.frame-background
+{
+	background:#000;
+}
+
+.delete-node,
+.frame-overlay
+{
+	position:absolute;
+	float:right;
+}
 
 /*******************************
 
@@ -1457,97 +1576,7 @@ body
 /** end ripped from twitter bootstrap **/
 
 
-/*******************************
 
-	NODE DRAWER
-	
-*******************************/
-
-#add-node
-{
-	float:left;
-	padding:10px 17px;
-}
-
-#node-drawer, #browser-my-collections, #browser-results
-{
-	white-space:nowrap;
-	background:#eee;
-	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
-	-webkit-border-radius: 6px;
-	-webkit-box-shadow : inset 3px 3px 6px #222;
-	
-	margin-bottom:6px;
-	padding:12px;
-	overflow:hidden;
-}
-
-#node-drawer ul {
-	margin-left: -5px;
-	height: 50px;
-	display:inline;
-}
-
-#node
-{
-	height:100%;
-	width:100%;
-	cursor:move;
-	-webkit-box-shadow : 3px 3px 6px #333;
-}
-
-#node a
-{
-	background:yellow;
-	float: right;
-	text-decoration: none;
-	text-align: center;
-	-webkit-border-radius: 0 0 4px 0;
-}
-
-.node-thumb
-{
-	height:50px;
-	width:50px;
-	background:#ccc;
-	float:left;
-}
-
-.node-thumb+.node-thumb
-{
-	margin-left : 12px;
-}
-
-
-.node-overlay
-{
-
-	height:50px;
-	width:50px;
-	z-index:2;
-}
-
-.node-update-overlay
-{
-	display:none;
-	background-image:url('../images/stripes.png');
-	height:100%;
-	width:100%;
-	opacity: 0.6;
-
-}
-
-.node-background
-{
-	background:#000;
-}
-
-.delete-node,
-.node-overlay
-{
-	position:absolute;
-	float:right;
-}
 
 
 /*******************************
@@ -2023,12 +2052,6 @@ FAKE STUFF
 	width : 150px;
 }
 
-.node-selected
-{
-
-border-bottom: solid red 5px;
-
-}
 	
 
 

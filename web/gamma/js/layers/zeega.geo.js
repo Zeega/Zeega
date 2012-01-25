@@ -22,6 +22,7 @@ var GeoLayer = ProtoLayer.extend({
 
 	layerType : 'visual',
 	draggable : true,
+	linkable : true,
 
 	defaultAttributes: {
 		type : 'map',

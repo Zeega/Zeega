@@ -1,7 +1,5 @@
 var NodeView = Backbone.View.extend({
-	
-	tagName: 'li',
-	
+		
 	initialize : function()
 	{
 		this.model.bind( 'change:thumb_url', this.onNewThumb, this );
@@ -10,52 +8,24 @@ var NodeView = Backbone.View.extend({
 	render: function()
 	{
 		var _this = this;
-		var template = $("#node-item-template")
-			.clone()
-			.attr('id','node').addClass('node-thumb-'+this.model.id);
-		template
-			//.css('background-image','url("'+Zeega.url_prefix+'../'+this.model.get('thumb_url')+'")')
-			.find('.node-background')
-			.css({
-				'background-image':'url("'+this.model.get('thumb_url')+'")',
-				'height' : '50px',
-				'width' : '50px',
-				'position' : 'absolute'
-				});
-				
-		template.find('.node-overlay')
-			.click(function(){
-				Zeega.loadNode(_this.model);
-				return false;
-			});
-
-		// node delete function
-		template.find('.delete-node')
-			.css('z-index',100)
-			.click(function(){
-				//if the current node is being deleted, load another node
-				//if the node being deleted is the only node, then just delete all the layers inside the node
-				Zeega.destroyNode(_this);
-				return false;
-			});
+	
+		var blanks = {
+			nodeID : this.model.id,
+			thumbURL : this.model.get('thumb_url')
+		}
+		var template = _.template( this.getTemplate() );
 		
-		//copy the cloned item into the el
-		$(this.el).html(template)
-			.addClass('node-thumb')
-			.attr('id',this.model.id);
+		this.el = $( template(blanks) );
 
 		//node droppable stuff
 		$(this.el).droppable({
 			accept : '.database-asset-list',
-			hoverClass : 'node-item-hover',
+			hoverClass : 'frame-item-hover',
 			tolerance : 'pointer',
 
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 			{
-				
-				//_this.model.noteChange();
-				console.log(Zeega.draggedItem);
 				
 				ui.draggable.draggable('option','revert',false);
 				//make the new layer model
@@ -77,6 +47,14 @@ var NodeView = Backbone.View.extend({
 			}
 		});
 
+
+		$(this.el).click(function(){
+			_this.goToNode();
+		})
+		
+		$(this.el).find('.menu-toggle').click(function(){
+			_this.openDropdown();
+		})
 		
 		//enable the hover when dragging DB items	
 		$(this.el).hover(
@@ -94,6 +72,33 @@ var NodeView = Backbone.View.extend({
 		);
 			
 		return this;
+	},
+	
+	events : {
+		'click .menu-toggle'		: 'openDropdown'
+	},
+	
+	openDropdown : function()
+	{
+		if( $(this.el).find('.menu-items').is(':hidden') )
+		{
+			$(this.el).find('.zicon-edit').addClass('zicon-close orange');
+			$(this.el).find('.menu-items').addClass('open');
+		}
+		else
+		{
+			$(this.el).find('.zicon-edit').removeClass('zicon-close orange');
+			$(this.el).find('.menu-items').removeClass('open');
+		}
+
+		event.stopPropagation();
+	},
+	
+	goToNode : function()
+	{
+		console.log('goto node')
+		Zeega.loadNode(this.model);
+		return false;
 	},
 	
 	onNewThumb : function()
@@ -115,6 +120,25 @@ var NodeView = Backbone.View.extend({
 			$(this.el).find('.node-update-overlay')
 				.hide();
 		}
+	},
+	
+	getTemplate : function()
+	{
+		var html = 
+			
+			
+			"<li id='frame-thumb-<%= nodeID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
+				"<div class='frame-update-overlay'></div>"+
+				"<div class='frame-menu'>"+
+					"<a href='#' class='menu-toggle'><span class='zicon zicon-edit'></span></a>"+
+					"<ul class='unstyled menu-items'>"+
+						"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
+						"<li><a href='#' data-action='delete'>Delete Frame</a></li>"+
+					"</ul>"+
+				"</div>"+
+			"</li>";
+
+		return html;
 	}
 	
 });
@@ -122,7 +146,7 @@ var NodeView = Backbone.View.extend({
 
 var NodeViewCollection = Backbone.View.extend({
 	//set the location where the nodes are to be drawn
-	el : $('#node-drawer ul'),
+	el : $('#frame-list'),
 	
 	initialize : function()
 	{

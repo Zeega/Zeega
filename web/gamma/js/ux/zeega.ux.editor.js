@@ -267,7 +267,7 @@ function closeOpenCitationTabs()
 	
 	//node tray sortable and sorting events
 	
-	$('#node-drawer').find('ul').sortable({  
+	$('#frame-list').sortable({  
 		axis : 'x',
 		forceHelperSize : true,
 		placeholder: "node-thumb ui-state-highlight",
@@ -277,8 +277,9 @@ function closeOpenCitationTabs()
 		
 		stop : function(){
 			var order = $(this).sortable('toArray');
+			
 			//ensure the array is made of integers
-			order = _.map( order, function(num){ return parseInt( num ) })
+			order = _.map( order, function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
 			
 			Zeega.route.set({'nodesOrder': order });
 			Zeega.route.save();
