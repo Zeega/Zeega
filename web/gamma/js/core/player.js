@@ -338,8 +338,11 @@ var Player = {
 			//updated the loading bar
 			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
+			console.log('UPDATE!')
+			console.log( layers )
+				
 			//if all the layers are loaded in a node
-			if( _.difference( layers, _this.loadedLayers ).length == 0 )
+			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
 			{
 			
 				//remove from nodes loading array
