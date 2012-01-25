@@ -13,9 +13,14 @@ var Item = Backbone.Model.extend({
 	{
 	},
 
-	loadTags : function(){
+	loadTags : function(successFunction, errorFunction){
 		this.get("tags").reset({silent:true});
-		this.get("tags").fetch( {url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id  +"/tags"});
+		this.get("tags").fetch({ 
+			url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id  +"/tags",
+			success:successFunction,
+			error:errorFunction,
+
+		});
 	},
 
 });

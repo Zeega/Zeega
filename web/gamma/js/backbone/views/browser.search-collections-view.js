@@ -40,14 +40,12 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 		} else {
 
 			
-
-			_.each(this._views, function(collectionView){
-				// item draws itself
-	        	var addThis = collectionView.render(); 
-	        	
-	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-collection-results'));
-	        	
-			}, this);
+			for (var i=0;i<this._views.length;i++){
+				var collectionView = this._views[i];
+				var addThis = collectionView.render(); 
+	        	var moreResultsElement = $(this.el).find('#browser-view-more-collection-results');
+	        	$(addThis.el).insertBefore(moreResultsElement);
+			}
 			
 			//Show more results link if not all showing
 			if (this.collection.length < this.collection.totalCollectionsCount){
@@ -124,7 +122,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			_.each(this._views, function(itemView){
 				// item draws itself
 	        	var addThis = itemView.render(); 
-	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-item-results'));
+	        	$(addThis.el).insertBefore($(this.el).find('#browser-view-more-item-results'));
 
 	        	
 			}, this);
