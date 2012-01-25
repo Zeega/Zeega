@@ -369,7 +369,7 @@ var Zeega = {
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
-				layerOrder = _.without(layerOrder,layer.id);
+				layerOrder = _.without(layerOrder, parseInt(layer.id) );
 				if(layerOrder.length == 0) layerOrder = [false];
 				_node.set({'layers':layerOrder});
 				_node.save();
@@ -381,7 +381,7 @@ var Zeega = {
 			console.log('NOT a persistent layer');
 			
 			var layerOrder = node.get('layers');
-			layerOrder = _.without(layerOrder,layer.id);
+			layerOrder = _.without(layerOrder, parseInt(layer.id) );
 			//set array to false if empty  //weirdness
 			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
 			node.set({'layers':layerOrder});
@@ -407,13 +407,18 @@ var Zeega = {
 		
 		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
 		
+console.log(layersInNodes)
+		
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
 		_.each( _.toArray(this.route.layerCollection), function(layer){
-			layersInRoute.push(layer.id);
+			layersInRoute.push( parseInt(layer.id) );
 		});
+		
+console.log(layersInRoute)
 
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
+console.log(orphanIDs)		
 		
 		if(orphanIDs)
 		{

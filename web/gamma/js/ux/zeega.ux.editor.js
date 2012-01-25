@@ -282,7 +282,7 @@ function closeOpenCitationTabs()
 			
 			Zeega.route.set({'nodesOrder': order });
 			Zeega.route.save();
-			console.log($(this).sortable('toArray'));
+			console.log(order);
 		}
 	});
 	

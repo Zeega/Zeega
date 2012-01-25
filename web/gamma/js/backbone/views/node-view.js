@@ -46,7 +46,7 @@ var NodeView = Backbone.View.extend({
 
 		//node droppable stuff
 		$(this.el).droppable({
-			accept : '.database-asset',
+			accept : '.database-asset-list',
 			hoverClass : 'node-item-hover',
 			tolerance : 'pointer',
 
