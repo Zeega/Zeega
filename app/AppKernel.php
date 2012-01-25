@@ -18,12 +18,12 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this),
-			new Zeega\SearchBundle\ZeegaSearchBundle(),
             new Zeega\IngestBundle\ZeegaIngestBundle(),
             new Zeega\UserBundle\ZeegaUserBundle(),
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new Zeega\ApiBundle\ZeegaApiBundle(),
+			new FOS\UserBundle\FOSUserBundle(),
         );
 
 

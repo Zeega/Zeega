@@ -253,7 +253,8 @@ class CollectionsController extends Controller
 		foreach($childItems as $childItem){
 			$existing_items[]=$childItem->getId();
 		}
-		$items_list=array_diff($items_list,$existing_items);
+		if(isset($existing_items))
+			$items_list=array_diff($items_list,$existing_items);
 
         // this is terrible...
         foreach($items_list as $item)

@@ -51,6 +51,7 @@ var loadFiles = [
 	'order!filamentslider/selectToUISlider.jQuery',
 	
 	//mvc
+	'order!backbone/models/tag',
 	'order!backbone/models/item',
 	'order!backbone/models/browser.collection',
 	'order!backbone/models/browser.myCollections',

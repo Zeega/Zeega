@@ -10,21 +10,8 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	//this.model.bind('destroy', this.remove, this);
-
-    	//this.model.bind('add',   this.addItem, this);
-      	//this.model.bind('all',   this.render, this);
-
-      	//this.collecion.bind();
       	this.collection.bind('add',   this.addItem, this);
-      	
 		this.collection.bind('reset', this.resetViews, this);
-      	//this.model.updateQuery();
-
-    	// _(this).bindAll('add');
-        //this._itemViews.bind('add', this.add);
 	},
 	resetViews: function(){
 		
@@ -57,14 +44,14 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 			_.each(this._views, function(collectionView){
 				// item draws itself
 	        	var addThis = collectionView.render(); 
-	        	$(this.el).append(addThis.el);
-
+	        	
+	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-collection-results'));
 	        	
 			}, this);
 			
-			//Show more results link (TODO: only if search yields more than 100 total items)
-			if (this.collection.length > 100){
-				$('#browser-show-more-results').show();
+			//Show more results link if not all showing
+			if (this.collection.length < this.collection.totalCollectionsCount){
+				$('#browser-view-more-collection-results').show();
 			}
 			//If they are loading "My Media" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
@@ -95,23 +82,14 @@ var BrowserSearchItemsView = Backbone.View.extend({
 	_views : [],
 	initialize : function() {
 		
-		//listens for changes to its model, re-rendering
-		//this.model.bind('change', this.render, this);
-    	//this.model.bind('destroy', this.remove, this);
-
-    	//this.model.bind('add',   this.addItem, this);
-      	//this.model.bind('all',   this.render, this);
-
-      	//this.collecion.bind();
+		
       	this.collection.bind('add',   this.addItem, this);
-      	this.collection.bind("add", function(item) {
-  			//console.log("Added item  " + item.get("content_type") + "!");
-		});
+      	this.collection.bind('destroy',   this.removeItem, this);
 		this.collection.bind('reset', this.resetViews, this);
-      	//this.model.updateQuery();
-
-    	// _(this).bindAll('add');
-        //this._itemViews.bind('add', this.add);
+      	
+	},
+	removeItem: function(){
+		$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 	},
 	resetViews: function(){
 		_.each(this._views, function(thisView){
@@ -146,16 +124,16 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			_.each(this._views, function(itemView){
 				// item draws itself
 	        	var addThis = itemView.render(); 
-	        	$(this.el).append(addThis.el);
+	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-item-results'));
 
 	        	
 			}, this);
 			
 			
-			//Show more results link (TODO: only if search yields more than 100 total items)
-			if (this.collection.length > 100){
-				$('#browser-show-more-results').show();
-			}
+			//Show more results link if not all showing
+			if (this.collection.length < this.collection.totalItemsCount){
+				$('#browser-view-more-item-results').show();
+			} 
 			
 			//If they are loading "My Media" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 

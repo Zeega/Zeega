@@ -5,6 +5,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		
 		var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?" 
+					+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
 					+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 					+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
@@ -44,7 +45,9 @@ var BrowserSearch =  Backbone.Model.extend({
 
     	//Models that hold distributions of results
     	"timeBinsCollection"			:   new BrowserTimeBinCollection(), //BrowserTimeBinsModel
-    	"mapBinsModel"			: 	[] 	//BrowserMapBinsModel
+    	"mapBinsModel"			: 	[], 	//BrowserMapBinsModel, NOT IMPLEMENTED
+
+    	
   	}, 
 	
 	//initialize default search for all 'My Media'
@@ -61,16 +64,21 @@ var BrowserSearch =  Backbone.Model.extend({
 		var colls = this.get("collectionsCollection");
 		var timeBins = this.get("timeBinsCollection");
 
-		items.reset();
-		colls.reset();
-		timeBins.reset();
+		//Only reset items and collections if we are on page 1
+		//Otherwise we want to add to the results because the user has loaded more results
+		if (this.get("page") == 1){
+			items.reset();
+			colls.reset();
+			
+		}
+		timeBins.reset();	
 		
 
 		if (data == null || data['items_count'] ==null){
 			console.log('No search items returned. Something is null man.');
 		} else {
-			console.log('returned ' + data['items_count'] + ' items');
-			console.log('returned ' + data['collections_count'] + ' collections');
+			console.log('returned ' + data['returned_items_count'] + ' out of ' + data['items_count'] + ' total items');
+			console.log('returned ' + data['returned_collections_count'] + ' out of ' + data['collections_count'] +' total collections');
 		}
 
 		//Assemble item data into BrowserItems
@@ -99,6 +107,8 @@ var BrowserSearch =  Backbone.Model.extend({
 				
 				this.get("timeBinsCollection").add(new BrowserTimeBin(timeBin));
 			}, this);
+			this.get("timeBinsCollection").min_date = data['time_distribution_info']['min_date'];
+			this.get("timeBinsCollection").max_date = data['time_distribution_info']['max_date'];
 		}
 		
 	},
@@ -115,22 +125,7 @@ var BrowserSearch =  Backbone.Model.extend({
 		});
 	}, 
 
-	getFormattedStartDate: function(){
-		if (this.get("dtstart") == 0){
-			return 0;
-		} else {
-			var d = new Date(this.get("dtstart") * 1000);
-			return d.getFullYear();
-		}
-	},
-	getFormattedEndDate: function(){
-		if (this.get("dtend") == 0){
-			return 0;
-		} else {
-			var d = new Date(this.get("dtend") * 1000);
-			return d.getFullYear();
-		}
-	},
+	
 
 });
 

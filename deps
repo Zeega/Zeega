@@ -65,3 +65,6 @@
 [JMSSerializerBundle]
     git=git://github.com/schmittjoh/JMSSerializerBundle.git
     target=bundles/JMS/SerializerBundle
+[FOSUserBundle]
+	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
+	target=bundles/FOS/UserBundle

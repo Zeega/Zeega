@@ -106,7 +106,7 @@ var ItemViewCollection = Backbone.View.extend({
 	
 	initialize : function()
 	{
-		
+		console.log('itemViewCollection init')
 		_(this).bindAll('add');
 		this._itemViews = [];
 		this._itemBundles = [];
