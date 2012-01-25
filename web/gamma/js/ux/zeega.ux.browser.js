@@ -171,10 +171,10 @@ $(document).ready(function() {
 	
 		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
-			$('#database-search-text').val("search my media");
+			$('#database-search-text').val("search my stuff");
 
 		}else if ($(this).attr('id') == "browser-all-media"){
-			$('#database-search-text').val("search all media");
+			$('#database-search-text').val("search everything");
 			ZeegaBrowser.search.set({user:-2});
 		} 
 
