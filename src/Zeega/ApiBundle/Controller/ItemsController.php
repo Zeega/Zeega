@@ -126,7 +126,7 @@ class ItemsController extends Controller
     }
 
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
-    public function putItemsTagsAction($itemId)
+    public function postItemsTagsAction($itemId)
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
@@ -138,8 +138,8 @@ class ItemsController extends Controller
             throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
         }
         
-        $tags_list = $this->getRequest()->request->get('newTags');
-        //$tags_list = array('bananas');
+        $tags_list = $this->getRequest()->request->get('tags');
+        $tags_list = explode(',', $tags_list); 
         
         foreach($tags_list as $tagName)
         {
@@ -153,14 +153,11 @@ class ItemsController extends Controller
                 $em->persist($tag);
                 $em->flush();
             }
-            
-            $item_tag = new ItemTags;
-            $item_tag->setItemId($item->getId());
-            $item_tag->setTagId($tag->getId());
-            $item_tag->setTag($tag);
-            $item_tag->setItem($item);
-            $item_tag->setUser($user);
-            $item_tag->setTagDateCreated(new \DateTime("now"));
+           	$item_tag = new ItemTags;
+			$item_tag->setItem($item);
+			$item_tag->setTag($tag);
+			$item_tag->setTagDateCreated(new \DateTime("now"));
+		 	$item_tag->setTagDateCreated(new \DateTime("now"));
 
             $em->persist($item_tag);
             $em->flush();
@@ -169,6 +166,36 @@ class ItemsController extends Controller
         return ResponseHelper::encodeAndGetJsonResponse($item);
     }
     
+	// post_items_tags  POST   /api/items/{itemId}/tags.{_format}
+    public function deleteItemTagsAction($itemId)
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+		$em = $this->getDoctrine()->getEntityManager();
+
+		$item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+
+		if (!$item) 
+		{
+			throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
+		}
+
+		$tags_list = $this->getRequest()->request->get('tags');
+		//$tags_list = array('bananas');
+		
+		$tags_list = explode(',', $tags_list); 
+		foreach($tags_list as $tagId)
+		{
+			$tag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findOneByTag($tagId);
+			if(isset($tag))
+			{
+				$em->remove($tag);
+				$em->flush();
+			}
+		}
+
+		return ResponseHelper::encodeAndGetJsonResponse($item);
+    }
+
 	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putItemsAction($item_id)
     {
