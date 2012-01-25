@@ -338,13 +338,13 @@ var Zeega = {
 	updateAndSaveNodeLayer : function(node, layer)
 	{
 		console.log('updateAndSaveNodeLayer');
-		var layerOrder = [layer.id];
+		var layerOrder = [parseInt(layer.id)];
 		if( node.get('layers') )
 		{
 			//if the layer array already exists eliminate false values if they exist
 			layerOrder = _.compact( node.get('layers') );
 			//add the layer id to the layer order array
-			layerOrder.push( layer.id );
+			layerOrder.push( parseInt( layer.id ) );
 		}
 		//set the layerOrder array inside the node
 		node.set({'layers':layerOrder});
