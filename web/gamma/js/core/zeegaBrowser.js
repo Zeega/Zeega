@@ -192,7 +192,7 @@ var ZeegaBrowser = {
 	removeCollectionFilter : function(){
 
 		//remove open in editor link
-		$('#browser-open-in-editor').show();
+		$('#browser-open-in-editor').hide();
 
 		//Hide collection tab
 		$('#browser-collection-filter-tab').hide();
