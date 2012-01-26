@@ -42,6 +42,9 @@
 
 	
 }
+#fancybox-media-container .tag-container{
+	float:left;
+}
 #fancybox-media-container .tags{
 	text-align: left;
 	
@@ -125,7 +128,7 @@
 	font-size: 16px;
 	font-weight: bold;
 	letter-spacing: 1px;
-	
+	clear:both;
 }
 
 .fancybox-more-button, .fancybox-less-button{

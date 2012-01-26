@@ -1,6 +1,10 @@
 var Tag =  Backbone.Model.extend({
 
-	url : function(){ },
+	url : function(){ 
+		return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("itemID") + "/tags/";
+	},
+
 	
 	defaults :{},
 	
@@ -15,6 +19,7 @@ var TagCollection = Backbone.Collection.extend({
 	initialize: function(){},
 	parse : function(response)
 	{
+		this.options.itemID = response.tags_for_item;
 		return response.tags;
 	},
 	

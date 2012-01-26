@@ -68,7 +68,11 @@ var FancyBoxView = Backbone.View.extend({
 		
 		this.model.loadTags(
 			function () {
-				view.tagViews = new TagCollectionView({collection:view.model.get("tags"), el:$(view).find('.tags').get(0)});
+				view.tagViews = new TagCollectionView({
+										collection:view.model.get("tags"), 
+										el : $(theElement).find('.tags').get(0),
+										itemID : view.model.id
+									});
 				view.tagViews.render();
 			}, 
 			function(){

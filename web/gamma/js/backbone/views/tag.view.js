@@ -9,7 +9,6 @@ var TagView = Backbone.View.extend({
 	render: function(){
 		$(this.el).attr("class", "tag-container");
 		var blanks = {
-			tagID : this.model.id,
 			tagName : this.model.get('tag_name'),
 			
 		};
@@ -41,39 +40,44 @@ var TagView = Backbone.View.extend({
 				$(this).next().removeClass('tag-hover-class');
 			}
 		);
-		$(this.el).find('.fancybox-remove-tag').click(function(){
+		var view = this;
+		$(this.el).find('.fancybox-remove-tag').click(function(e){
 
 			//TODO Create a view for the tags
-			var tagID = $(this).attr("id");
-			var tag = theModel.get("tags").get( tagID );
+			
+			var tag = view.model;
+			var tagID = tag.get("tag_id");
+			var itemID = view.model.itemID;
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ theModel.id + "/tags/"+tag.id;
+						+ itemID + "/tags/"+tagID;
 			
 			//DESTROYYYYYYYY
 			tag.destroy({	
 			 				url : deleteURL,
 							success: function(model, response) { 
 								
-								console.log("Deleted tag " + tag.id);		
+								console.log("Deleted tag " + tagID + " from item " + itemID);		
 			 				},
 			 				error: function(model, response){
 			 					
-			 					console.log("Error deleting tag " + tag.id);		
+			 					console.log("Error deleting tag " + tagID + " from item " + itemID);		
 			 					console.log(response);
 			 				}
 	 					});
+	 		e.preventDefault();
 		});
 		return this;
 		
 	},
 	getTemplate : function(){
-		var html = '<a class="fancybox-remove-tag" id="<%=tagID%>" href=".">x</a><a class="tag" href="."><%=tagName%></a>'
+		var html = '<a class="fancybox-remove-tag" href=".">x</a><a class="tag" href="."><%=tagName%></a>'
 		return html;
 	}
 });
 var TagCollectionView = Backbone.View.extend({
 	tagName:'div',
 	_views : [],
+
 	initialize : function() {
 		
 		
@@ -96,14 +100,16 @@ var TagCollectionView = Backbone.View.extend({
 		});
 		this._views = [];
 	},
-	addItem: function(m)
+	addItem: function(m, rerender)
     {
     	
-    	var tagView =  new TagView({ model: m });
+    	var tagView =  new TagView({ model: m, itemID : this.options.itemID });
         
         // add the item view to this collection of views
         this._views.push(tagView);
-
+        if(rerender){
+        	this.render();
+        }
     },
     render: function()
     {
@@ -111,6 +117,7 @@ var TagCollectionView = Backbone.View.extend({
 		var template = _.template( this.getTemplate() );
 		
 		//copy the cloned item into the el
+		$(this.el).empty();
 		$(this.el).append( template() );
 
     	//tag renders itself and then this viewcollection appends it to its parent el
@@ -124,26 +131,28 @@ var TagCollectionView = Backbone.View.extend({
         	
 		}, this);
 
-		var item = this.model;
+		
 		var theElement = this.el;
 		var view = this;
-		
+		var itemID = this.collection.itemID;
 		//ADD TAG
 		$(this.el).find('.newtag').editable(
 			function(value, settings)
 			{ 
-				//view.renderTags();
-				/*item.save({ title:value }, 
-						{
+				var newTag = new Tag({tag_name:value});
+				
+				newTag.save({
+							
 							success: function(model, response) { 
-								console.log("Updated item title for item " + item.id);
+								view.addItem(model, true);
+								console.log("Added tag " + model.id);
 			 				},
 			 				error: function(model, response){
 			 					
-			 					console.log("Error updating item title.");
+			 					console.log("Error adding tag.");
 			 					console.log(response);
 			 				}
-			 			});*/
+			 			});
 				return value; //must return the value
 			},
 			{
@@ -164,7 +173,7 @@ var TagCollectionView = Backbone.View.extend({
     	return this;
     },
     getTemplate:function(){
-    	var html = '<a href="." class="fancybox-remove-tag">x</a><a href="." class="newtag">'+ 'New tag 1, New tag 2</a></p>(<a href="." class="addtags fancybox-editable">add tag</a>)';
+    	var html = '<div class="tag-container"><a href="." class="fancybox-remove-tag">x</a><a href="." class="newtag">'+ 'New tag 1, New tag 2</a></p>(<a href="." class="addtags fancybox-editable">add tag</a>)</div>';
     	return html;
     }
 });
