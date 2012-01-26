@@ -25,13 +25,10 @@ var NodeView = Backbone.View.extend({
 
 			over : function(event, ui)
 			{
-				console.log('hover')
 				$('#frame-drawer').addClass('hover');
 			},
 			out : function(event, ui)
 			{
-				console.log('outtt')
-				
 				$('#frame-drawer').removeClass('hover');
 			},
 
@@ -237,6 +234,9 @@ var NodeViewCollection = Backbone.View.extend({
 						
 						savedNode.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
+						
+						
+						
 						
 						if(node.dupe) 
 						{

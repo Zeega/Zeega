@@ -1,6 +1,6 @@
 var Node = Backbone.Model.extend({
 	
-	/*
+	
 	defaults : {
 		
 		"name" : "Untitled",
@@ -9,7 +9,7 @@ var Node = Backbone.Model.extend({
 		}
 		
 	},
-	*/
+	
 	
 	/*
 	url : function(){
@@ -20,7 +20,7 @@ var Node = Backbone.Model.extend({
 	
 	initialize : function() {
 		
-		//if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
+		if(!this.get('attr')) this.set({'attr':{ 'advance':0 }})
 		
 		//this is the function that only calls updateThumb once after n miliseconds
 		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
