@@ -8,27 +8,33 @@
 
 {% block body %}
 
-
 	<div id="widget-wrapper" data-id="{{widget_id}}" style="margin-top:20px; color: white; font-size:14px;"> 
 		<div id="import-media" style="margin-bottom: 5px;">
-				<div id="import-item" style="position:relative; float:left;"><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="{{thumb_url}}" class="scaled" /></div>
-			<div style="position:relative; width:250px; float:right;">
-				<h>Title: {{title}}</h><br>
-				<h>Author: {{creator}}</h><br><br><br><br><br><br>
+			<!--
+			<div id="import-item" style="position:relative; float:left;">
 			</div>
-			<div style="clear:both;"></div>
-		</div><!--#import-media-->
-
-		 <div id="item-add" style="float: left;">
+			-->
+			<div id="item-add" style="position:relative; width:250px; float:right;">
 				<ul class="pill-buttons-widget">
 					<li><a id="add-item" href="#">Add to Zeega Collection</a></li><br>
 				</ul>
+			</div>
+			
+			<div style="clear:both;"></div>
+		</div><!--#import-media-->
+		
+		<div style="float: left;">
 		</div>
+		<div style="clear:both;"></div>
+		More
 		<div id='message' style="color: red;"></div>
 	</div><!--#widget-wrapper-->
 {% endblock %}		
-	
-
+ 
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
-{% endblock %}	
+	<script data-main="{{ asset('gamma/js/main.widget.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+	<script type="text/javascript" language="Javascript">
+		//bootstrapping data
+		var itemJSON = "{{item|e('js')}}";
+	</script>	
+{% endblock %}

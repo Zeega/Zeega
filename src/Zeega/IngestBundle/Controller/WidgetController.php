@@ -210,11 +210,9 @@ class WidgetController extends Controller
 					else
 					{
 						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-							'title'=>$items["title"],
-							'creator' => $items["media_creator_username"],
-							'displayname' => $items["media_creator_realname"],
+							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
-							'thumb_url'=>$items["thumbnail_url"],
+							'item'=>json_encode($items), 
 							'mycollection'=>$mycollection,
 						));
 					}
