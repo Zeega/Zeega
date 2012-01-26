@@ -30,12 +30,6 @@ security:
         layers:
             pattern:  ^/layers/
             anonymous: ~
-        route:
-            pattern:  ^/route/
-            anonymous: ~
-        routes:
-            pattern:  ^/routes/
-            anonymous: ~
         secured_area:
             pattern:    ^/
             form_login:
@@ -60,4 +54,5 @@ security:
         - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
+        - { path: ^/routes, role: role: IS_AUTHENTICATED_ANONYMOUSLY }
         
