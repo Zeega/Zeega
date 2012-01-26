@@ -1064,16 +1064,23 @@ body
 	
 *******************************/
 
-.active-frame { border-bottom: solid red 5px }
-
 .frame-thumb
 {
 	height:50px;
 	width:50px;
 	background:#ccc;
 	cursor:move;
-	-webkit-box-shadow : 3px 3px 6px #333;
+	box-shadow : 0 0 12px #333;
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25 linear;
+}
+.frame-thumb.active-frame
+{
+	box-shadow: 0 0 12px yellow;
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25 linear;
 	
+	/* border-bottom: solid red 5px */
 }
 
 #frame-list
@@ -1097,17 +1104,23 @@ body
 	white-space:nowrap;
 	background:#eee;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
-	-webkit-border-radius: 6px;
+	border-radius: 6px;
 	
-	/*
-	-webkit-box-shadow : inset 3px 3px 6px #222;
-	*/
+	box-shadow : none;
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25s linear;
+	
 	
 	margin-bottom:6px;
 	padding:12px;
 	overflow:hidden;
 }
-#frame-drawer.hover{ -webkit-box-shadow : inset 0 0 12px rgba(136,182,49,0.9); }
+#frame-drawer.hover
+{ 
+	box-shadow : inset 0 0 12px rgba(136,182,49,0.9);
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25s linear;
+}
 
 
 
