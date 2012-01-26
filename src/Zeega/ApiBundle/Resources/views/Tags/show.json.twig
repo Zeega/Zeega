@@ -3,7 +3,7 @@
 	[
 	{% if tag is not null %}
 	{
-		"tag_id" : "{{ tag.id }}",
+		"id" : "{{ tag.id }}",
 		"tag_name" : "{{ tag.name }}",
 		"tag_description" : "{{ tag.description }}",
 		"tag_date" : "{{ tag.dateCreated|date("Y/m/d") }}"		

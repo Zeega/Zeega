@@ -6,10 +6,6 @@ Zeega\UserBundle\Entity\User:
      type: integer
      generator: { strategy: AUTO }
    fields:
-    username:
-     type: string
-     length: 255
-     unique: true
     display_name:
      type: string
      length: 255
@@ -21,19 +17,6 @@ Zeega\UserBundle\Entity\User:
      type: string
      length: 255
      nullable: true
-    password:
-     type: string
-     length: 255
-    email:
-     type: string
-     length: 255
-     unique: true
-    salt:
-     type: string
-     length: 255
     created_at:
      type: datetime
      nullable: true
-    user_roles:
-     type: text
-     nullable: false
