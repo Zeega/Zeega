@@ -7,7 +7,7 @@
 	
 			{% for i in 0..len %}
 			{
-				"tag_id" : "{{ tags[i].id }}",
+				"id" : "{{ tags[i].id }}",
 				"tag_name" : "{{ tags[i].name }}",
 				"tag_description" : "{{ tags[i].description }}"
 				{% if tags[i].date_created is defined %}
@@ -18,6 +18,9 @@
 				{% endif %}
 				{% if tags[i].correlation_index is defined %}
 					,"tag_similarity" : "{{ tags[i].correlation_index }}"
+				{% endif %}
+				{% if item_id is defined %}
+					,"item_id" : "{{ item_id }}"
 				{% endif %}
 			}
 			{% if i < len %}
