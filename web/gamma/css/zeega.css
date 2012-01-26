@@ -1073,6 +1073,7 @@ body
 	box-shadow : 0 0 12px #333;
 	-webkit-transition: box-shadow .25s linear;
 	transition: color .25 linear;
+	border-radius:3px;
 }
 .frame-thumb.active-frame
 {
@@ -1081,6 +1082,13 @@ body
 	transition: color .25 linear;
 	
 	/* border-bottom: solid red 5px */
+}
+
+.frame-thumb.frame-item-hover
+{
+	box-shadow : 0 0 12px white;
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25s linear;
 }
 
 #frame-list
@@ -1972,12 +1980,6 @@ td+td
 	-moz-transform: rotate(180deg);
 }
 
-
-
-.node-item-hover>div
-{
-	border-bottom: 5px solid yellow;
-}
 
 
 #tab-layers,
