@@ -205,39 +205,41 @@ var NodeViewCollection = Backbone.View.extend({
 	{
 		var _this = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
-		
+				
 		
 		_(Zeega.route.nodes).push(node);
 		
+		console.log(node)
 		
 		//save node if the layer is new!
 		if( node.isNew() )
 		{
-			console.log( Zeega.route.nodes )
-			
-
-
 			
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
-			if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
+			//if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
+			
+
 			node.save(
-				{thumb_url:''},
+				{},
 				{
-					success : function()
+					success : function( savedNode )
 					{
-						node.url = Zeega.url_prefix+'nodes/'+ node.id;
+						
+						savedNode.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
 						
 						if(node.dupe) 
 						{
-							console.log('dupe node')
-							_this.pushView(new NodeView({ model : node }), node.frameIndex );
+							console.log('dupe node id: '+savedNode.id+'. insert at: '+ node.frameIndex)
+							console.log(savedNode);
+							
+							_this.insertView(new NodeView({ model : node }), node.frameIndex );
 							
 						}
 						else
 						{
-							
-							_this.pushView(new NodeView({ model : node }));
+							console.log('BLANK NODE')
+							_this.insertView(new NodeView({ model : node }));
 						
 							//add persisting layers to new nodes
 							var persistLayers = Zeega.route.get('attr').persistLayers;
@@ -257,6 +259,8 @@ var NodeViewCollection = Backbone.View.extend({
 				
 			);
 			
+			
+			
 				
 		}else{
 			this.insertView(new NodeView({ model : node }));
@@ -266,6 +270,8 @@ var NodeViewCollection = Backbone.View.extend({
 	
 	insertView : function( view, index )
 	{
+		
+		console.log('insertView index: '+ index )
 		//	push the nodeView to the collection
 		//should be placed after the current node
 		this._nodeViews.push(view);
@@ -273,8 +279,9 @@ var NodeViewCollection = Backbone.View.extend({
 		//	append to the rendered view
 		if (this._rendered) 
 		{
-			if( index ) $(this.el).find('li:eq('+index+')').after(view.render().el);
-			else $(this.el).append(view.render().el);
+			console.log( $(this.el).children('li:eq('+index+')') );
+			if( _.isUndefined(index) ) $(this.el).append(view.render().el);
+			else $(this.el).children('li:eq('+index+')').after(view.render().el);
 			
 			//call re-sort
 			Zeega.nodeSort()

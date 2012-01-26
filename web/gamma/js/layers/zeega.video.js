@@ -9,6 +9,7 @@ var VideoLayer = ProtoLayer.extend({
 	
 	layerType : 'VISUAL',
 	draggable : true,
+	linkable : true,
 	
 	defaultAttributes : 
 	{

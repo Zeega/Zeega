@@ -542,26 +542,30 @@ var Zeega = {
 	duplicateFrame : function( view )
 	{
 		console.log('dupe frame');
-		console.log(this.route)
-		console.log(view.model)
-		var dupeModel = view.model.clone(); //clone the model
-		dupeModel.id = undefined; //trick into thinking it's new
+		console.log( view.model )
+		var clonedAttributes = deepCopy( view.model.toJSON() );
+		delete clonedAttributes.id;
 		
+		var dupeModel = new Node();
+		//$.parseJSON( JSON.stringify(clonedAttributes) )
+		dupeModel.set( clonedAttributes );
 		dupeModel.dupe = true;
 		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
-		console.log(dupeModel.frameIndex );
+
+console.log(dupeModel)
+
+		this.route.nodes.add( dupeModel );
 		
-//		this.route.nodes.add( dupeModel );
-		
-		
-	
 	},
 		
 	nodeSort : function()
 	{
 		//turn the string IDs into integers to compare with model IDs
-		var order = _.map( $('#node-drawer ul').sortable('toArray'), function(str){ return parseInt(str) });
+		var order = _.map( $('#frame-list').sortable('toArray'), function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
+		
+		//var order = _.map( $('#frame-list').sortable('toArray'), function(str){ return parseInt(str) });
 		this.route.set({'nodesOrder': order});
+		console.log(this.route.get('nodesOrder'))
 		this.route.save();
 	},
 	
