@@ -140,7 +140,6 @@ var NodeView = Backbone.View.extend({
 	
 	goToNode : function()
 	{
-		console.log('goto node')
 		Zeega.loadNode(this.model);
 		return false;
 	},
@@ -237,10 +236,16 @@ var NodeViewCollection = Backbone.View.extend({
 						
 						if(node.dupe) 
 						{
-							console.log('dupe node id: '+savedNode.id+'. insert at: '+ node.frameIndex)
-							console.log(savedNode);
-							
 							_this.insertView(new NodeView({ model : node }), node.frameIndex );
+							
+							//clone layers and place them into the layer array
+							_.each( savedNode.oldLayerIDs , function(layerID, i){
+								var dupeLayer = Zeega.route.layerCollection.get(layerID).clone();
+								dupeLayer.id = savedNode.get('layers')[i];
+								dupeLayer.set({id:savedNode.get('layers')[i]});
+							
+								Zeega.addToLayerCollections( savedNode, dupeLayer );
+							})
 							
 						}
 						else
@@ -278,7 +283,6 @@ var NodeViewCollection = Backbone.View.extend({
 	insertView : function( view, index )
 	{
 		
-		console.log('insertView index: '+ index )
 		//	push the nodeView to the collection
 		//should be placed after the current node
 		this._nodeViews.push(view);
@@ -286,7 +290,6 @@ var NodeViewCollection = Backbone.View.extend({
 		//	append to the rendered view
 		if (this._rendered) 
 		{
-			console.log( $(this.el).children('li:eq('+index+')') );
 			if( _.isUndefined(index) ) $(this.el).append(view.render().el);
 			else $(this.el).children('li:eq('+index+')').after(view.render().el);
 			

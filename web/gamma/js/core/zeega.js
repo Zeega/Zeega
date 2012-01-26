@@ -177,8 +177,6 @@ var Zeega = {
 	{
 		var _this = this;
 		
-		console.log(node)
-		
 		this.clearCurrentNode();
 		
 		//set global currentNode to the selected node
@@ -549,6 +547,8 @@ var Zeega = {
 	duplicateFrame : function( view )
 	{
 		var dupeModel = new Node({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
+		dupeModel.oldLayerIDs = view.model.get('layers');
+		
 		dupeModel.dupe = true;
 		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
 		this.route.nodes.add( dupeModel );
