@@ -48,6 +48,13 @@ var NodeView = Backbone.View.extend({
 		});
 
 
+		$(this.el).hover(function(){
+			$(_this.el).find('.frame-menu').show();
+		},function(){
+			$(_this.el).find('.menu-items').removeClass('open');
+			$(_this.el).find('.frame-menu').hide();
+		})
+
 		$(this.el).click(function(){
 			_this.goToNode();
 		})
@@ -56,38 +63,66 @@ var NodeView = Backbone.View.extend({
 			_this.openDropdown();
 		})
 		
+		$(this.el).find('.menu-items a').click(function(){
+
+			event.stopPropagation();
+			
+			switch($(this).data('action'))
+			{
+				case 'delete':
+					Zeega.destroyNode(_this);
+					break 
+				
+				case 'duplicate':
+					Zeega.duplicateFrame(_this);
+					break;
+					
+				default:
+					console.log('not recognized')
+			}
+			
+			$(_this.el).find('.menu-items').removeClass('open');
+			
+		})
+		
 		//enable the hover when dragging DB items	
 		$(this.el).hover(
 			//mouseover
 			function()
 			{
 				//only highlight the node if something is being dragged into it
-				if( Zeega.draggedItem == null ) $(this).find('.delete-node').show();
+				if( Zeega.draggedItem == null ) $(this).find('.menu-toggle').show();
 			},
 			//mouseout
 			function()
 			{
-				$(this).find('.delete-node').hide();
+				$(this).find('.menu-toggle').hide();
 			}
+			
 		);
 			
 		return this;
 	},
 	
 	events : {
-		'click .menu-toggle'		: 'openDropdown'
+		'mouseover'		: 'showGear'
+	},
+	
+	showGear : function()
+	{
+		console.log('hover')
 	},
 	
 	openDropdown : function()
 	{
 		if( $(this.el).find('.menu-items').is(':hidden') )
 		{
-			$(this.el).find('.zicon-edit').addClass('zicon-close orange');
+			$(this.el).find('.zicon-edit').addClass('zicon-close');
 			$(this.el).find('.menu-items').addClass('open');
 		}
 		else
 		{
-			$(this.el).find('.zicon-edit').removeClass('zicon-close orange');
+			$(this.el).find('.zicon-edit').removeClass('zicon-close');
 			$(this.el).find('.menu-items').removeClass('open');
 		}
 
@@ -129,8 +164,8 @@ var NodeView = Backbone.View.extend({
 			
 			"<li id='frame-thumb-<%= nodeID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 				"<div class='frame-update-overlay'></div>"+
-				"<div class='frame-menu'>"+
-					"<a href='#' class='menu-toggle'><span class='zicon zicon-edit'></span></a>"+
+				"<div class='frame-menu hidden'>"+
+					"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
 					"<ul class='unstyled menu-items'>"+
 						"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
 						"<li><a href='#' data-action='delete'>Delete Frame</a></li>"+
@@ -168,13 +203,21 @@ var NodeViewCollection = Backbone.View.extend({
 	
 	add : function(node)
 	{
-		var z = this;
+		var _this = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
+		
+		
+		_(Zeega.route.nodes).push(node);
+		
 		
 		//save node if the layer is new!
 		if( node.isNew() )
 		{
-			_(Zeega.route.nodes).push(node);
+			console.log( Zeega.route.nodes )
+			
+
+
+			
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
 			if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
 			node.save(
@@ -182,43 +225,56 @@ var NodeViewCollection = Backbone.View.extend({
 				{
 					success : function()
 					{
-
-						
 						node.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
-						z.pushView(new NodeView({ model : node }));
 						
-						//add persisting layers to new nodes
-						var persistLayers = Zeega.route.get('attr').persistLayers;
-						_.each(persistLayers,function(layerID){
-							Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
-						});
-						//add a new current node style
-						$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
+						if(node.dupe) 
+						{
+							console.log('dupe node')
+							_this.pushView(new NodeView({ model : node }), node.frameIndex );
+							
+						}
+						else
+						{
+							
+							_this.pushView(new NodeView({ model : node }));
 						
-						//go to the new node
-						Zeega.loadNode(node);
+							//add persisting layers to new nodes
+							var persistLayers = Zeega.route.get('attr').persistLayers;
+							_.each(persistLayers,function(layerID){
+								Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
+							});
+							//add a new current node style
+							$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
+						
+							//go to the new node
+							Zeega.loadNode(node);
+						}
+						
+						
 					}
 				}
 				
-				);
+			);
+			
+				
 		}else{
-			this.pushView(new NodeView({ model : node }));
+			this.insertView(new NodeView({ model : node }));
 		}
 		
 	},
 	
-	pushView : function( nv )
+	insertView : function( view, index )
 	{
 		//	push the nodeView to the collection
 		//should be placed after the current node
-		this._nodeViews.push(nv);
+		this._nodeViews.push(view);
 		//	if already rendered
 		//	append to the rendered view
 		if (this._rendered) 
 		{
-			$(this.el).append(nv.render().el);
-			//$(nv.render().el).find('.node-overlay').effect("highlight", {}, 3000);
+			if( index ) $(this.el).find('li:eq('+index+')').after(view.render().el);
+			else $(this.el).append(view.render().el);
 			
 			//call re-sort
 			Zeega.nodeSort()

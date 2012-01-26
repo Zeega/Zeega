@@ -406,19 +406,14 @@ var Zeega = {
 		});
 		
 		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
-		
-console.log(layersInNodes)
-		
+				
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
 		_.each( _.toArray(this.route.layerCollection), function(layer){
 			layersInRoute.push( parseInt(layer.id) );
 		});
-		
-console.log(layersInRoute)
 
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
-console.log(orphanIDs)		
 		
 		if(orphanIDs)
 		{
@@ -542,6 +537,24 @@ console.log(orphanIDs)
 			this.destroyOrphans();
 			
 		}
+	},
+	
+	duplicateFrame : function( view )
+	{
+		console.log('dupe frame');
+		console.log(this.route)
+		console.log(view.model)
+		var dupeModel = view.model.clone(); //clone the model
+		dupeModel.id = undefined; //trick into thinking it's new
+		
+		dupeModel.dupe = true;
+		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
+		console.log(dupeModel.frameIndex );
+		
+//		this.route.nodes.add( dupeModel );
+		
+		
+	
 	},
 		
 	nodeSort : function()
