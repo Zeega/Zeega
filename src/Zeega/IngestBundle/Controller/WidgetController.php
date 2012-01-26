@@ -16,7 +16,7 @@ use SimpleXMLElement;
 
 class WidgetController extends Controller
 {
-    /*
+    
 	public function persistAction(){
 	  	$logger = $this->get('logger');
 		$request=$this->getRequest();
@@ -58,7 +58,7 @@ class WidgetController extends Controller
     		$metadata=$item->getMetadata();
     		$media=$item->getMedia();
     		
-			//
+			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
 			
 			
 			$thumbUrl=false;
@@ -132,103 +132,7 @@ class WidgetController extends Controller
 
 	}
 	
-	*/
-	public function persistAction()
-	{
-		$session = $this->getRequest()->getSession();
-		//return new Response($session->get('widget_url'));
-		if($session->get('widget_url'))
-		{
-			$url = $session->get('widget_url');
-			$this->forward('ZeegaApiBundle:Import:getImportPersist', array(), array("url" => $url));
-			//return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
-			return new Response("http://farm6.staticflickr.com/5219/5507904128_16b760bf84_s.jpg");
-		}
-	}
-	
-	public function openAction()
-	{
-		$em = $this->getDoctrine()->getEntityManager();
-    	$request = $this->getRequest();
-		$session = $request->getSession();
-    	
-		// get logged user
-		$user = $this->get('security.context')->getToken()->getUser();
-		
-		// get user items and playgrounds
-		$mycollection = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
-		$playgrounds = $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')->findPlaygroundsByUser($user->getId());
-		
-		$widgetId = $request->query->get('widget-id');
-		$itemUrl = $request->query->get('url');
-		
-		// check if the item exists on the database	
-		$item = $this->getDoctrine()
-					 ->getRepository('ZeegaIngestBundle:Item')
-					 ->findItemByAttributionUrl($itemUrl);
-		
-		if($item)
-		{
-			// item was imported before
-			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
-				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0],
-				'title'=>$check['title'],
-				'item_id'=>$check['id'],
-				'content_type'=>$check['type'],
-				'mycollection'=>$mycollection,
-			));
-		}
-		else
-		{
-			$session->set('widget_url',$itemUrl);
-			// new item - check if it is supported
-			$parserResponse = $this->forward('ZeegaApiBundle:Import:getImportCheck', array(), array("url" => $itemUrl))->getContent();
-			$parserResponse = json_decode($parserResponse,true);
-		
-			if(isset($parserResponse))
-			{
-				$isUrlValid = $parserResponse["result"]["is_url_valid"];
-				$isUrlCollection = $parserResponse["result"]["is_url_collection"];
-				$items = $parserResponse["items"];
-				
-				if($isUrlValid)
-				{
-					if($isUrlCollection)
-					{
-						return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
-							'title'=>$items['title'],
-							'creator'=>$items["media_creator_username"],
-							'widget_id'=>$widgetId,
-							'thumb_url'=>$items["thumbnail_url"],
-							'mycollection'=>$mycollection,
-							'count'=>count($items["child_items_count"]),
-						));
-						
-					}
-					else
-					{
-						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-							'title'=>$items["title"],
-							'creator' => $items["media_creator_username"],
-							'displayname' => $items["media_creator_realname"],
-							'widget_id'=>$widgetId,
-							'thumb_url'=>$items["thumbnail_url"],
-							'mycollection'=>$mycollection,
-						));
-					}
-				}
-				else
-				{
-				}
-			}
-
-    	}
-	}	
-	
-	public function urlAction()
-	{
+	public function urlAction(){
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
 		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
@@ -342,14 +246,14 @@ class WidgetController extends Controller
 	}
   	
     public function thumbAction($query="Help"){
-    	 /*
+    	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');
     
     	 $loader->loadTagThumbs($doc);
     	 
     	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
-   		*/
+   
     }
     
     public function mediadataAction($query="Help"){

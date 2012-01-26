@@ -8,28 +8,37 @@
 
 {% block body %}
 
-
-	<div id="widget-wrapper" data-id="{{widget_id}}" style="margin-top:20px; color: white; font-size:14px;"> 
-		<div id="import-media" style="margin-bottom: 5px;">
-				<div id="import-item" style="position:relative; float:left;"><img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src="{{thumb_url}}" class="scaled" /></div>
-			<div style="position:relative; width:250px; float:right;">
-				<h>Title: {{title}}</h><br>
-				<h>Author: {{creator}}</h><br><br><br><br><br><br>
-				<h>Items: {{count}}</h><br><br><br><br><br><br>
-			</div>
-			<div style="clear:both;"></div>
-		</div><!--#import-media-->
-
-		 <div id="item-add" style="float: left;">
-				<ul class="pill-buttons-widget">
-					<li><a id="add-item" href="#">Add to Zeega Collection</a></li><br>
-				</ul>
+	
+	<div id="widget-wrapper"  data-id="{% for widget_id in widget_ids %}{{widget_ids}}{%endfor%}" style="margin-top:20px; color: white; font-size:14px;"> 
+		<h>Import Media: {{title}}</h>
+		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
+			<div style="position:relative;  height: 200px; float:left;">
+		<div id="import-item" data-count="{{count}}" style='text-align:left; width:400px;'>
+			{% for thumb_url in thumb_urls %}
+				{% if thumb_url.index < 6 %}
+			<img data-id="{{thumb_url.widgetId}}" style="border: solid 1px white; width:40px; height:40px; margin:2px" id="image" src="{{thumb_url.thumbUrl}}" class="scaled" />
+				{% elseif thumb_url.index >5 %}
+			<img data-id="{{thumb_url.widgetId}}" style="display:none; border: solid 1px white; width:40px; height:40px; margin:2px" id="image"  class="scaled" />
+			
+				{% endif %}
+			
+			
+			{%endfor%}
 		</div>
-		<div id='message' style="color: red;"></div>
-	</div><!--#widget-wrapper-->
+	</div>
+
+		
+			<div id="item-add" style="clear:both" >
+					<ul class="pill-buttons-widget">
+						<li><a id="add-item" href="#">Add to Zeega Collection</a></li><br>
+					</ul>
+			</div>
+
+		</div>	
+	</div>
 {% endblock %}		
 	
 
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
-{% endblock %}
+     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.batch.js')}}"></script>  
+{% endblock %}	
