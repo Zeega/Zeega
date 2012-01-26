@@ -74,7 +74,18 @@ class ItemRepository extends EntityRepository
 		
 		return $qb;
     }
-    	
+    
+	public function getTotalItemsAndCollections($query)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb->select('COUNT(i)')
+	       ->from('ZeegaIngestBundle:Item', 'i');
+		   
+	    $qb = $this->buildSearchQuery($qb, $query);
+		
+		return $qb->getQuery()->getSingleScalarResult();
+	}
+	
 	public function getTotalItems($query)
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
