@@ -100,10 +100,9 @@
 								
 								<div id="searchbar">
 									
-									<ul id='search-filter' class='unstyled'>
-										<li class='dropdown'>
-											<span class='zicon zicon-search filter-toggle'></span>
-											<ul class='unstyled dropdown-menu'>
+									<div id='search-filter'>
+											<a class='menu-toggle' href='#'><span class='zicon zicon-searchdropdown'></span></a>
+											<ul class='unstyled menu-items'>
 												<li class='menu-title'>Filter by Format</li>
 												<li class='divider'></li>
 												<li><a data-search-filter='all' href='#'>All</a></li>
@@ -111,8 +110,7 @@
 												<li><a data-search-filter='images' href='#'>Images</a></li>
 												<li><a data-search-filter='video' href='#'>Video</a></li>
 											</ul>
-										</li>
-									</ul>
+									</div>
 									
 									<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' value='search database'/>
 									

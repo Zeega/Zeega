@@ -197,10 +197,13 @@ function closeOpenCitationTabs()
 		shareButton();
 	});
 	
-	$('#search-filter .filter-toggle').click(function(){
-		var dd = $(this).parent('li');
-		if($(dd).hasClass('open')) dd.removeClass('open');
-		else $(dd).addClass('open');
+	$('.menu-toggle').click(function(){
+		
+		var menu = $(this).next();
+		
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
 		event.stopPropagation();
 	});
 	
@@ -217,8 +220,7 @@ function closeOpenCitationTabs()
 	
 	function clearMenus()
 	{
-		var d = 'a.menu, .dropdown-toggle, .filter-toggle';
-		$(d).parent('li').removeClass('open');
+		$('.menu-items').removeClass('open');
 	}
 	
 	

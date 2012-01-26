@@ -81,7 +81,7 @@ var NodeView = Backbone.View.extend({
 					console.log('not recognized')
 			}
 			
-			$(_this.el).find('.menu-items').removeClass('open');
+			//$(_this.el).find('.menu-items').removeClass('open');
 			
 		})
 		
