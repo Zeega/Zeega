@@ -235,9 +235,6 @@ var NodeViewCollection = Backbone.View.extend({
 						savedNode.url = Zeega.url_prefix+'nodes/'+ node.id;
 						//must do this after success to capture the new id!!
 						
-						
-						
-						
 						if(node.dupe) 
 						{
 							console.log('dupe node id: '+savedNode.id+'. insert at: '+ node.frameIndex)

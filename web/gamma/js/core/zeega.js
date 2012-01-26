@@ -175,8 +175,9 @@ var Zeega = {
 	
 	loadNode : function( node )
 	{
-		console.log('LOAD NODE')
 		var _this = this;
+		
+		console.log(node)
 		
 		this.clearCurrentNode();
 		
@@ -188,13 +189,12 @@ var Zeega = {
 		//open/close visual editor
 		var el = $('#workspace');
 
-console.log(this.currentNode);
 
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
 		//right now they inherit the last node's state
 		
-		/*
+		
 		var storage = localStorage.getObject( this.currentNode.id );
 		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
 		{
@@ -212,12 +212,14 @@ console.log(this.currentNode);
 				}
 			})
 		}
-		*/
+		
 		
 		//update the auto advance tray
 		//make sure the attribute exists
-		var adv = this.currentNode.get('attr').advance;
-		if(adv)
+		var adv = false;
+		if( !_.isNull(this.currentNode.get('attr')) && !_.isNull( this.currentNode.get('attr').advance ) )
+			adv = this.currentNode.get('attr').advance;
+		if( adv != false )
 		{
 			if(adv > 0)
 			{
@@ -246,18 +248,14 @@ console.log(this.currentNode);
 			$('#advance-controls').find('#playback').attr('checked', true);
 			$('#advance-time').val(10);
 		}
-		console.log(this.currentNode);
 		
 		// add the node's layers // remove falsy values
 		var layerArray = _.compact( this.currentNode.get('layers'));
-		console.log(this.currentNode);
 		
 		//call render on the entire collection. it should have the logic to draw what's needed
 		Zeega.route.layerCollection.render( this.currentNode );
 		
 		//add a new current node style
-		console.log('ACTIVE_FRAME')
-		console.log( $('#frame-thumb-'+this.currentNode.id) );
 		$('#frame-thumb-'+this.currentNode.id).addClass('active-frame');
 	},
 	
@@ -550,16 +548,10 @@ console.log(this.currentNode);
 	
 	duplicateFrame : function( view )
 	{
-		
-		
 		var dupeModel = new Node({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
-
+		dupeModel.dupe = true;
 		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
-
-console.log(dupeModel)
-
 		this.route.nodes.add( dupeModel );
-		
 	},
 		
 	nodeSort : function()

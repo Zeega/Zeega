@@ -1131,49 +1131,18 @@ body
 }
 
 
-
-
-#node a
-{
-	background:yellow;
-	float: right;
-	text-decoration: none;
-	text-align: center;
-	-webkit-border-radius: 0 0 4px 0;
-}
-
-
-
-
-.frame-overlay
-{
-
-	height:50px;
-	width:50px;
-	z-index:2;
-}
-
 .frame-update-overlay
 {
 	display:none;
 	background-image:url('../images/stripes.png');
-	height:100%;
-	width:100%;
+	height:50px;
+	width:50px;
 	opacity: 0.6;
-
-}
-
-.frame-background
-{
-	background:#000;
-}
-
-.delete-node,
-.frame-overlay
-{
 	position:absolute;
-	float:right;
 }
+
+
+
 
 /*******************************
 
