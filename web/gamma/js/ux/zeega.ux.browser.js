@@ -90,7 +90,7 @@ $(document).ready(function() {
 	
 	}); 
 
-	$('#collection-to-editor-button').click(function(){
+	$('#collection-to-editor-button, #browser-open-in-editor').click(function(){
 		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
 		return false;
 	});

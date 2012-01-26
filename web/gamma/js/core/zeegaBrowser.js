@@ -191,6 +191,9 @@ var ZeegaBrowser = {
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
 
+		//remove open in editor link
+		$('#browser-open-in-editor').show();
+
 		//Hide collection tab
 		$('#browser-collection-filter-tab').hide();
 		
@@ -236,6 +239,8 @@ var ZeegaBrowser = {
 	},
 	showCollectionFilter: function(){
 		
+		$('#browser-open-in-editor').show();
+
 		$('#browser-collection-filter-tab-text').editable(
 			function(value, settings)
 			{ 

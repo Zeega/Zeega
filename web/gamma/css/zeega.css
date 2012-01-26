@@ -447,12 +447,12 @@
 .browser-selected-toggle:hover{
 	cursor:default;
 }
-#browser-close-timeline, #browser-open-timeline{
+#browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{
 	
 	margin: 22px 18px 0 30px;
 	float: right;
 }
-#browser-close-timeline, #browser-open-timeline{
+#browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{
 	display:none;
 }
 #browser-time-filter{
