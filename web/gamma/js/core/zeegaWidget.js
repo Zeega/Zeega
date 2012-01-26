@@ -20,10 +20,11 @@ var ZeegaWidget = {
 		var itemsBS = jQuery.parseJSON(itemJSON);
 		console.log(itemsBS);
 		
-		this.item.set( itemsBS.items );
+		this.item.set( itemsBS);
+		//this.item.set({title: "yo"});
 		console.log(this.item);
-		//this.itemViewCollection = new BookmarkletItemView({ collection : this.item });
+		this.itemViewCollection = new BookmarkletItemView({ model : this.item });
 		
-
+		this.itemViewCollection.render(this);
 	},
 }

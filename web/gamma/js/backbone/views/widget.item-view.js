@@ -4,13 +4,135 @@ var BookmarkletItemView = Backbone.View.extend({
     
 	initialize: function()
 	{
+		console.log("yo yo");
     	//Load the item's tags so we can display and edit them
     	//this.model.loadTags();
     },
 	render: function()
 	{
-	    console.log("u");
+		this.el.find('.title').text( this.model.get('title'));
+		this.el.find('.description').text( this.model.get('description'));
+		console.log(this.el.find('.item-image'));
+		this.el.find('.item-image').attr("src", this.model.get('thumbnail_url'));
+		console.log(this.el.find('.item-image'));
+		
+		//this.el.find('.tags').text( 'Dummy tag, Another fake tag, tag tag, false longer tag');
+		
+		var item = this.model;
+		var theElement = this.el;
+		var view = this;
+		//EDIT TITLE
+		this.el.find('.title').editable(
+			function(value, settings)
+			{ 
+				item.save({ title:value }, 
+				{
+					success: function(model, response) 
+					{ 
+						console.log("Updated item title for item " + item.id);
+					},
+					error: function(model, response)
+					{
+						console.log("Error updating item title.");
+						console.log(response);
+					}
+				});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 320,
+				cssclass : 'fancybox-form'
+		});
+		//EDIT DESCRIPTION
+		this.el.find('.description').editable(
+			function(value, settings)
+			{ 
+				return value; //must return the value
+			},
+			{
+				type 	: 'textarea',
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit description...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 250,
+				cssclass : 'fancybox-form'
+		});
+		//EDIT CREATOR
+		this.el.find('.creator').editable(
+			function(value, settings)
+			{ 
+				item.save({ "media_creator_username":value }, 
+						{
+							success: function(model, response) { 
+								console.log("Updated item creator for item " + item.id);
+			 				},
+			 				error: function(model, response){
+			 					
+			 					console.log("Error updating item creator.");
+			 					console.log(response);
+			 				}
+			 			});
+				return value; //must return the value
+			},
+			{
+				indicator : 'Saving...',
+				tooltip   : 'Click to edit...',
+				indicator : '<img src="images/loading.gif">',
+				select : false,
+				onblur : 'submit',
+				width : 200,
+				cssclass : 'fancybox-form'
+		});
+		/*
+		//MORE button
+		this.el.find('.fancybox-more-button').click(function(e){
+			
+			if ($(this).find('a').text() == "more"){
+				view.moreView(this, theElement);
+				e.preventDefault();
+			} else {
+				view.lessView(this, theElement);
+				e.preventDefault();
+			}
+
+		});
+		//DELETE button
+		this.el.find('.fancybox-delete-button').click(function(e){
+			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ item.id;
+			
+
+			//DESTROYYYYYYYY
+			item.destroy({	
+				 				url : deleteURL,
+								success: function(model, response) { 
+									console.log("Deleted item " + item.id);	
+									
+
+									//close fancy box window
+									jQuery.fancybox.close();
+										
+				 				},
+				 				error: function(model, response){
+				 					
+				 					console.log("Error deleting item " + item.id);		
+				 					console.log(response);
+				 				}
+		 					});
+		 	e.preventDefault();
+		});
+		*/
+		
+		
 		return this;
+
 	},
 	events: {
 		//"click" : "previewItem"
