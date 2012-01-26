@@ -142,25 +142,23 @@ var NodeView = Backbone.View.extend({
 		//Update thumbnail in route display
 		if( $(this.el).is(':visible '))
 		{
-			$(this.el).find('.node-background').fadeOut('fast',function(){
-				$(_this.el)
+			$(this.el).fadeOut('fast',function(){
+				$(this)
 					.css('background-image','url("'+ _this.model.get('thumb_url') +'")')
 					.fadeIn('fast');
-				$(_this.el).find('.node-update-overlay')
-					.fadeOut('slow');
+				$(this).find('.frame-update-overlay').hide();
 			});
-		}else{
-			$(this.el).find('.node-background')
-				.css('background-image','url("'+ this.model.get('thumb_url') +'")');
-			$(this.el).find('.node-update-overlay')
-				.hide();
+		}
+		else
+		{
+			$(this.el).css('background-image','url("'+ this.model.get('thumb_url') +'")');
+			$(this.el).find('.frame-update-overlay').hide();
 		}
 	},
 	
 	getTemplate : function()
 	{
 		var html = 
-			
 			
 			"<li id='frame-thumb-<%= nodeID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 				"<div class='frame-update-overlay'></div>"+

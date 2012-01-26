@@ -30,7 +30,7 @@ var Node = Backbone.Model.extend({
 	
 	noteChange:function()
 	{
-		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
+		$('#frame-thumb-'+this.id).find('.frame-update-overlay').fadeIn('fast');
 		this.updateNodeThumb();
 	},
 	
