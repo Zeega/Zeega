@@ -21,7 +21,8 @@ function initUX(){
 
 $(document).ready(function() {
 
-	
+	//Sets variable for Fancybox "more" view to false each time the page is reloaded
+	sessionStorage.setItem('moreFancy', false);
 
 	//set up fancybox lightbox plugin
 	$(".fancymedia").fancybox({

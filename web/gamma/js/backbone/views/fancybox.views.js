@@ -2,29 +2,7 @@ var FancyBoxView = Backbone.View.extend({
 	tagName:'div',
 	initialize: function(){
 		
-		$(this.el).attr("id", "fancybox-media-container");
-		var blanks = {
-			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title'),
-			description : this.model.get('description'),
-			creator : this.model.get('media_creator_username'),
-		};
 		
-		//use template to clone the database items into
-		var template = _.template( this.getTemplate() );
-		
-		//copy the cloned item into the el
-		$(this.el).append( template( blanks ) );
-
-		//Load the item's tags so we can display and edit them
-		var theModel = this.model;
-		var theElement = this.el;
-		this.model.loadTags(
-			this.renderTags(), 
-			function(){
-				console.log("Error loading tags for item " + theModel.id);
-			
-		});
 
 		
 	},
@@ -50,39 +28,53 @@ var FancyBoxView = Backbone.View.extend({
 		$(theElement).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
 		$(theElement).removeClass("fancybox-media-container-more");
 	},
-	renderTags : function(){
+	/*renderTags : function(){
 		
 		var tags = this.model.get("tags");
+		var theElement = this.el;
+		var theModel = this.model;
 		for(var i=0;i<tags.length;i++){
 			var tag = tags.at(i);
-			var html = '<a class="fancybox-remove-tag" href=".">x</a><a class="tag" href=".">'+tag.get("tag_name")+'</a>';
-			$(this.el).find('.tags').prepend(html);
+			if (tag.get("tag_name") != null){
+				var html = '<a class="fancybox-remove-tag" id="'+ tag.id + '" href=".">x</a><a class="tag" href=".">'+tag.get("tag_name")+'</a>';
+				$(theElement).find('.tags').prepend(html);
+			}
 		}
-		//Show Tag Delete X's on Hover
-		$(this.el).find('.tag').hover(
-			function(){
-				$(this).prev().show();
-				$(this).addClass('tag-hover-class');
-			},
-			function(){
-				$(this).prev().hide();
-				$(this).removeClass('tag-hover-class');
-			}
-		);
-		$(this.el).find('.fancybox-remove-tag').hover(
-			function(){
-				$(this).show();
-				$(this).next().addClass('tag-hover-class');
-			},
-			function(){
-				$(this).hide();
-				$(this).next().removeClass('tag-hover-class');
-			}
-		);
+		
 			
-	},
+	},*/
 	render: function(obj)
 	{
+
+		$(this.el).attr("id", "fancybox-media-container");
+		var blanks = {
+			sourceLink : this.model.get('attribution_uri'),
+			title : this.model.get('title'),
+			description : this.model.get('description'),
+			creator : this.model.get('media_creator_username'),
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getTemplate() );
+		
+		//copy the cloned item into the el
+		$(this.el).append( template( blanks ) );
+
+		//Load the item's tags (asynchronously) so we can display and edit them
+		var item = this.model;
+		var theElement = this.el;
+		var view = this;
+		
+		
+		this.model.loadTags(
+			function () {
+				view.tagViews = new TagCollectionView({collection:view.model.get("tags"), el:$(view).find('.tags').get(0)});
+				view.tagViews.render();
+			}, 
+			function(){
+				console.log("Error loading tags for item " + theModel.id);
+			
+		});
 		
 		/*
 		THESE ARE SET UP IN INIT FUNCTION BC of tag loading - do we need to redo them here? Comment out for now.
@@ -91,6 +83,7 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find('.creator').text( this.model.get('media_creator_username'));
 		$(this.el).find('.description').text( this.model.get('description'));
 		*/
+
 		//Fancybox will remember if user was in MORE or LESS view
 		if (sessionStorage.getItem('moreFancy') == "true"){
 			this.moreView(this.el);
@@ -99,45 +92,7 @@ var FancyBoxView = Backbone.View.extend({
 		}
 
 
-		var item = this.model;
-		var theElement = this.el;
-		var view = this;
 		
-		//ADD TAG
-		$(this.el).find('.newtag').editable(
-			function(value, settings)
-			{ 
-				$(this).addClass('tag');
-				$(this).removeClass('newtag');
-				$(this).unbind("editable");
-				/*item.save({ title:value }, 
-						{
-							success: function(model, response) { 
-								console.log("Updated item title for item " + item.id);
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error updating item title.");
-			 					console.log(response);
-			 				}
-			 			});*/
-				return value; //must return the value
-			},
-			{
-				indicator : 'Saving...',
-				tooltip   : 'Click to add a tag.',
-				indicator : '<img src="images/loading.gif">',
-				select : true,
-				onblur : 'submit',
-				width : 200,
-				cssclass : 'fancybox-form'
-		});
-		$(this.el).find('.addtags').click(function(e){
-			$(theElement).find('.newtag').show();
-			$(theElement).find('.newtag').trigger('click');
-			
-			e.preventDefault();
-		});
 		//MORE/LESS buttons
 		$(this.el).find('.fancybox-more-button, .fancybox-less-button').click(function(e){
 			
@@ -270,7 +225,7 @@ var FancyBoxView = Backbone.View.extend({
 					'<p class="title fancybox-editable"><%= title %></p>'+
 					'<p><span class="creator fancybox-editable"><%= title %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank">View Source</a></span></p>'+
 					'<p class="description fancybox-editable"><%= description %></p>'+
-					'<p class="tags"><a href="." class="fancybox-remove-tag">x</a><a href="." class="newtag">New tag 1, New tag 2</a></p>(<a href="." class="addtags fancybox-editable">add tag</a>)'+
+					'<div class="tags"></div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
 						'<p class="fancybox-more-button"><a href=".">more</a></p><p class="fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>'+
 					'</div>';

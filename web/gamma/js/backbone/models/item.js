@@ -1,7 +1,9 @@
 var Item = Backbone.Model.extend({
+	
 	defaults : {
 		title : 'Untitled',
 		tags : new TagCollection(),
+		
 	},
 	
 	url: function(){
@@ -11,6 +13,7 @@ var Item = Backbone.Model.extend({
 	
 	initialize : function()
 	{
+		this.itemTags = new TagCollection();
 	},
 
 	loadTags : function(successFunction, errorFunction){
