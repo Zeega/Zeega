@@ -23,6 +23,18 @@ var NodeView = Backbone.View.extend({
 			hoverClass : 'frame-item-hover',
 			tolerance : 'pointer',
 
+			over : function(event, ui)
+			{
+				console.log('hover')
+				$('#frame-drawer').addClass('hover');
+			},
+			out : function(event, ui)
+			{
+				console.log('outtt')
+				
+				$('#frame-drawer').removeClass('hover');
+			},
+
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 			{

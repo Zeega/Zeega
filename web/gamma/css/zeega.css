@@ -1107,8 +1107,7 @@ body
 	padding:12px;
 	overflow:hidden;
 }
-
-#frame-drawer.hover{ -webkit-box-shadow : inset 0 0 18px red; }
+#frame-drawer.hover{ -webkit-box-shadow : inset 0 0 12px rgba(136,182,49,0.9); }
 
 
 
