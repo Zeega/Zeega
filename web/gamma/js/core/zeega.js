@@ -656,45 +656,38 @@ var Zeega = {
 				offset:'-250',
 				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
-			$('#database-item-list').popover({
+			$('#database-panel').popover({
 				trigger: manual,
 				html:true,
-				placement:'above',
+				placement:'right',
 				//offset:'-250',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#new-layer-tray').popover({
 				trigger: manual,
 				html:true,
 				placement:'above',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#layer-panel').popover({
 				trigger: manual,
 				html:true,
 				placement:'above',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#frame-drawer').popover({
 				trigger: manual,
 				html:true,
 				placement:'below',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#preview').popover({
 				trigger: manual,
 				html:true,
 				placement:'below',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
 			});
-			$('#route-title').popover({
-				trigger: manual,
-				html:true,
-				placement:'below',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">finish</a></div></div>'
-			});
-		
-		
+
 			this.displayStartHelp();
 		}
 	},
@@ -704,12 +697,11 @@ var Zeega = {
 		var _this = this;
 		var helpOrderArray = [
 			'visual-editor-workspace',
-			'database-item-list',
+			'database-panel',
 			'new-layer-tray',
 			'layer-panel',
 			'frame-drawer',
-			'preview',
-			'route-title'
+			'preview'
 		];
 		
 	
@@ -738,12 +730,11 @@ var Zeega = {
 		console.log('turn off help windows')
 		var helpOrderArray = [
 			'visual-editor-workspace',
-			'database-item-list',
+			'database-panel',
 			'new-layer-tray',
 			'layer-panel',
 			'frame-drawer',
-			'preview',
-			'route-title'
+			'preview'
 		];
 		localStorage.help = false;
 

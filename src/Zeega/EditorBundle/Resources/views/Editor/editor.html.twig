@@ -11,10 +11,7 @@
 		
 		
 			<div id="route-header" class='clearfix'>
-				<div id='route-title'
-					title='Name your Project!'
-					data-content='Don’t forget to name your project and have fun!'
-				>{{projecttitle}}</div>
+				<div id='route-title'>{{projecttitle}}</div>
 				<div id='route-publish'>
 					
 					<ul class='unstyled'>
@@ -26,8 +23,8 @@
 								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 								-->
 								<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'
-									title='Preview'
-									data-content='As you work, you can see your progress in the viewer by selecting to preview it here. And once you’re complete, you can select share to create a unique url for your project.'
+									title='Preview Anytime'
+									data-content='Once you’re complete, you can select share to create a unique url for your project.'
 								>Preview</a>
 								</li>
 								<li><a id='get-help' href='#'>?</a></li>
@@ -45,24 +42,21 @@
 
 
 				<div id="frame-drawer"
-					title='Frames'
-					data-content='You can also add more frames to your project. As your projects grow, you can select any frame to continue editing the layers.'
+					title='Add More Frames!'
+					data-content='As your projects grow, you can select any frame to go back to editing the layers'
 				>
 					<ul id='frame-list' class='unstyled horizontal-list'></ul>
 					<div id="add-node" title='Click to add a new Node or Drag to add several Nodes'><a href="#" onClick="Zeega.addNode();return false;"><img src="{{ asset('gamma/images/addnode.png') }}" height="25" width="25"/></a></div>
 				</div>
 				<div id="edit-drawer" class='clearfix'>
 					
-					
-					
-					
-						
 					<div id="sidebar" class='clearfix' >
 					
 						<div class="panel flat">
 							<div id='new-layer-tray' class='panel-head'
-								title='Layer Types'
-								data-content='You can also add a map, text or color layer.'
+								title='Add Maps, text and color layers!'
+								data-content=''
+								
 							>
 								<ul id='new-layer-list' class='unstyled horizontal-list'>
 									<li>Add</li>
@@ -103,7 +97,10 @@
 						
 
 						
-						<div id='database-panel' class='panel tray expandable raised'>
+						<div id='database-panel' class='panel tray expandable raised'
+							title='Find Media'
+							data-content='Search your collections and filter for images, videos or sounds.'
+						>
 							
 							<div class='panel-head'>
 								<div>
@@ -150,10 +147,7 @@
 								</div><!-- db-nav-controls -->
 							
 								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
-								<ul id='database-item-list' class='unstyled list-view inset-tray'
-									title='Media Layers'
-									data-content='To find media you can search your collections and filter for images videos or sounds.'
-								></ul>
+								<ul id='database-item-list' class='unstyled list-view inset-tray'></ul>
 							</div><!-- database -->
 						
 						</div><!-- #database-panel -->
@@ -205,8 +199,8 @@
 							
 							<div id='workspace-outer-wrapper' class='clearfix'>
 								<div id="visual-editor-workspace" class='workspace clearfix'
-									title='To Get Started'
-									data-content='Begin dragging media from the media search onto this frame.'
+									title='Create a Project!'
+									data-content='All projects consists of frames. You can add layers to frames by dragging media to this area.'
 								></div>
 							</div>
 							
