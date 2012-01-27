@@ -29,8 +29,13 @@ var VisualLayerEditorView = Backbone.View.extend({
 			$(this.el).draggable({
 				stop : function(){
 					var pos = $(this).position();
-					var left = Math.floor( pos.left * 100 / 6 )/100;
-					var top = Math.floor( pos.top * 100/ 4 )/100;
+
+					var parentWidth = $(this).parent().css('width').replace(/px/,'');
+					var parentHeight = $(this).parent().css('height').replace(/px/,'');
+					
+					var left = ( pos.left / parentWidth ) * 100;
+					var top = ( pos.top / parentHeight ) * 100;
+					
 					var settings = [{
 						left: {property:'left',value:left,suffix:'%'},
 						top: {property:'top',value:top,suffix:'%'}
