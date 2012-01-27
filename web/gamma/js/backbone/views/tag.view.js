@@ -2,11 +2,7 @@ var TagView = Backbone.View.extend({
 	tagName:'div',
 	initialize: function(){
 		
-		
-
-		
-	},
-	render: function(){
+		$(this.el).empty();
 		$(this.el).attr("class", "tag-container");
 		var blanks = {
 			tagName : this.model.get('tag_name'),
@@ -48,12 +44,11 @@ var TagView = Backbone.View.extend({
 			var tag = view.model;
 			var tagID = tag.id;
 			var itemID = view.model.get("item_id");
-			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ itemID + "/tags/"+tagID;
+			
 			
 			//DESTROYYYYYYYY
 			tag.destroy({	
-			 				url : deleteURL,
+			 				
 							success: function(model, response) { 
 								
 								console.log("Deleted tag " + tagID + " from item " + itemID);		
@@ -66,6 +61,11 @@ var TagView = Backbone.View.extend({
 	 					});
 	 		e.preventDefault();
 		});
+
+		
+	},
+	render: function(){
+
 		return this;
 		
 	},
