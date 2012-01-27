@@ -1,3 +1,10 @@
+/*		temp fix		*/
+		
+ul,li
+{
+	list-style:none;
+}
+
 /******************************************
 
 	ZEEGA BROWSER
