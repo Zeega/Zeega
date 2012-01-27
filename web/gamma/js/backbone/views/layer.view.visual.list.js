@@ -37,14 +37,6 @@ var VisualLayerListView = Backbone.View.extend({
 		
 		//shorten title if necessary
 		var title = this.model.get('attr').title;
-		/*
-		if(this.model.get('attr').title != null && this.model.get('attr').title.length > 70)
-		{
-			title = this.model.get('attr').title.substr(0,70)+"…";
-		}else{
-			title = this.model.get('attr').title;
-		}
-		*/
 		
 		var persist;
 		if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
@@ -61,8 +53,7 @@ var VisualLayerListView = Backbone.View.extend({
 		var linkURL = '';
 		if(showLink == '')
 		{
-			var linkURL = this.model.get('attr').link_to;
-			linkURL = linkURL.replace(/http:\/\//g, '' );
+			linkURL = this.model.get('attr').link_to;
 		}
 		//set values to be filled into template
 		var values = {
@@ -198,17 +189,38 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	layerLink : function()
 	{
+		console.log('open linker')
 		var _this = this;
 		$(this.el).find('.layer-link-box').show();
+		
+		/*
+		$(this.el).find('.layer-link-box input').blur(function(){
+			var url = $(this).val();
+			url = url.replace(/http:\/\//g, '' );
+
+			var properties = {
+				link : {
+					property : 'link_to',
+					value : url,
+					css : false
+				}
+			};
+			_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+			
+			$(this).blur();
+			return false;
+		})
+		*/
 		
 		//finish entering  link info
 		$(this.el).find('.layer-link-box input').keypress(function(e){
 			if(e.which == 13)
 			{
+				
+				console.log('inside')
 				// do some validation here?
 				var url = $(this).val();
-				url = 'http://' + url.replace(/http:\/\//g, '' );
-				//url = url;
+				url = url.replace(/http:\/\//g, '' );
 
 				var properties = {
 					link : {

@@ -50,7 +50,7 @@ var Player = {
 		if( window.Zeega )
 		{
 			this.zeega = true;
-			Zeega.previewMode = false;
+			//Zeega.previewMode = false;
 		}
 
 		this.removeAllVideoElements();

@@ -6,15 +6,16 @@ var MyRouter = Backbone.Router.extend({
 	routes : {
 		"/editor/frame/:nodeid" : "gotoNodeInEditor",
 		"/player/frame/:nodeid" : "gotoNodeInPlayer",
-		
-		//"node/:nodeid/:layerid" : "gotoLayer"
 	},
 
 	// open/load the assigned node
 	gotoNodeInEditor : function(nodeid)
 	{
 		//close the player if it's open
-		if( Zeega.previewMode == true ) Player.close();
+		if( Zeega.previewMode == true )
+		{
+			Player.close();
+		}
 		
 		if(Zeega && nodeid)
 		{

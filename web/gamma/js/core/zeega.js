@@ -571,14 +571,10 @@ var Zeega = {
 	
 	previewRoute : function()
 	{
-		console.log('PREVIEWING');
 		this.previewMode = true;
 		//remove branch viewer if present
-		
-		
-		// init( project JSON data , route index , starting node )
+
 		Player.init( this.exportProject(), this.route.id, this.currentNode.id );
-		//Player.currentNodeID = this.currentNode.id;
 	
 	},
 	
