@@ -1738,42 +1738,6 @@ body
 
 
 
-.arrow
-{
-	width: 0;
-	height: 0;
-	display: inline-block;
-	text-indent: -99999px;
-	vertical-align: top;
-	filter: alpha(opacity=50);
-	-khtml-opacity: 0.5;
-	-moz-opacity: 0.5;
-	opacity: 0.5;
-	
-	border-bottom: 4px solid transparent;
-	border-top: 4px solid transparent;
-	border-left: 4px solid #ddd;
-}
-
-.arrow-up
-{
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-}
-.arrow-right
-{
-	-webkit-transform: rotate(0deg);
-	-moz-transform: rotate(0deg);
-}
-
-.arrow-left
-{
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-}
-
-
-
 
 
 
