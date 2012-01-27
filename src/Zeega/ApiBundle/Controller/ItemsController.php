@@ -153,6 +153,19 @@ class ItemsController extends Controller
                 $em->persist($tag);
                 $em->flush();
             }
+            
+            // can't get EAGER loading for the item tags - this is a workaround
+			$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+	        foreach($itemTags as $itemTag)
+        	{
+        		
+            	if($tag->getId() == $itemTag["id"])
+            	{
+            	return ResponseHelper::encodeAndGetJsonResponse($itemTag["id"]);
+ 		           	return ResponseHelper::encodeAndGetJsonResponse($itemTag);
+            	}
+        	}
+        
            	$item_tag = new ItemTags;
 			$item_tag->setItem($item);
 			$item_tag->setTag($tag);
