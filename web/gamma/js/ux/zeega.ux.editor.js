@@ -282,6 +282,7 @@ function closeOpenCitationTabs()
 		forcePlaceholderSize:true,
 		forceHelperSize:true,
 		tolerance: 'pointer',
+		distance: 10,
 		
 		stop : function(){
 			var order = $(this).sortable('toArray');
