@@ -13,11 +13,8 @@ var MyRouter = Backbone.Router.extend({
 	// open/load the assigned node
 	gotoNodeInEditor : function(nodeid)
 	{
-		if( Zeega.previewMode = true )
-		{
-			Player.close();
-		}
-		
+		//close the player if it's open
+		if( Zeega.previewMode = true ) Player.close();
 		
 		if(Zeega && nodeid)
 		{
@@ -31,7 +28,7 @@ var MyRouter = Backbone.Router.extend({
 
 	gotoNodeInPlayer : function(nodeid)
 	{
-		console.log('Player node changed')
+		//go to the frame designated
 		Player.gotoNode( nodeid );
 	},
 	
