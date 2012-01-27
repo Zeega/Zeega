@@ -1606,11 +1606,13 @@ body
 	width:700px;
 	position:absolute;
 	border:1px dotted #666;
+	-webkit-transition: border .25s linear;
 }
 
 #route-title:hover
 {
 	border:1px dotted #ddd;
+	-webkit-transition: border .25s linear;
 }
 
 
