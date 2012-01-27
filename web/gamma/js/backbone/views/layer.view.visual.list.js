@@ -58,13 +58,19 @@ var VisualLayerListView = Backbone.View.extend({
 		if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
 			showLink = 'hidden';
 
+		var linkURL = '';
+		if(showLink == '')
+		{
+			var linkURL = this.model.get('attr').link_to;
+			linkURL = linkURL.replace(/http:\/\//g, '' );
+		}
 		//set values to be filled into template
 		var values = {
 			id : 'layer-edit-'+this.model.id,
 			layerName : title,
 			persist : persist,
 			show_link : showLink,
-			link_to : this.model.get('attr').link_to
+			link_to : linkURL
 		}
 		//make template
 		var tmpl = _.template( this.getTemplate() );
@@ -200,10 +206,14 @@ var VisualLayerListView = Backbone.View.extend({
 			if(e.which == 13)
 			{
 				// do some validation here?
+				var url = $(this).val();
+				url = 'http://' + url.replace(/http:\/\//g, '' );
+				//url = url;
+
 				var properties = {
 					link : {
 						property : 'link_to',
-						value : $(this).val(),
+						value : url,
 						css : false
 					}
 				};
@@ -269,7 +279,7 @@ var VisualLayerListView = Backbone.View.extend({
 
 			html +=	'<div><a href="#" class="layer-link" title="click here to set this layer as a link" style="float:left"><span class="zicon zicon-link orange"></span></a></div>';
 			html += '<div class="layer-link-box <%= show_link %>">';
-			html +=		'<div class="input-prepend"><span class="add-on">http://</span><input class="span4" name="prependedInput" type="text" placeholder="http://www.example.com" value="<%= link_to %>">';
+			html +=		'<div class="input-prepend"><span class="add-on">http://</span><input class="span4" name="prependedInput" type="text" placeholder="www.example.com" value="<%= link_to %>">';
 			html +=		'<a href="#" class="clear-link"><span class="zicon zicon-close orange"></span></a>';
 			html += '</div></div>';
 		}
