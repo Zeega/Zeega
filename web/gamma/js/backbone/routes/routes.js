@@ -14,7 +14,7 @@ var MyRouter = Backbone.Router.extend({
 	gotoNodeInEditor : function(nodeid)
 	{
 		//close the player if it's open
-		if( Zeega.previewMode = true ) Player.close();
+		if( Zeega.previewMode == true ) Player.close();
 		
 		if(Zeega && nodeid)
 		{
