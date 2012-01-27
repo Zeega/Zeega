@@ -197,6 +197,12 @@ function closeOpenCitationTabs()
 		shareButton();
 	});
 	
+	$('#get-help').click(function(){
+		localStorage.help = true;
+		Zeega.initStartHelp();
+	})
+	
+	
 	$('.menu-toggle').click(function(){
 		
 		var menu = $(this).next();

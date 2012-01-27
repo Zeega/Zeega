@@ -827,6 +827,23 @@ body
 	top:30px;
 }
 
+/*******************************
+
+	HELP STYLES
+	
+*******************************/
+
+.help-controls
+{
+	padding:3px;
+	float:right;
+}
+.help-controls .btn
+{
+	margin-left:12px;
+}
+
+.popover .inner.help{box-shadow:0 0 12px orange;}
 
 
 
