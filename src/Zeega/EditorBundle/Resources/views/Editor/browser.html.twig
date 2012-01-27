@@ -28,8 +28,8 @@
 					<div id="browser-toggle-all-media-vs-my-media">
 						<ul>
 							
-							<li id="browser-all-media" class="tab browser-unselected-toggle">Everything</li>
-							<li id="browser-my-media" class="tab browser-selected-toggle">My Stuff</li>
+							<li id="browser-all-media" class="tab browser-unselected-toggle">All Media</li>
+							<li id="browser-my-media" class="tab browser-selected-toggle">My Media</li>
 							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span><img id="browser-collection-filter-tab-edit-icon" src="{{asset('gamma/images/edit-icon.png')}}">
 								<ul id="browser-collection-filter-edit-menu">
 									<li id="browser-rename-collection">rename collection</li>
@@ -45,7 +45,7 @@
 				</div>
 				<div id="browser-search-filter-toggle">
 					<div id="searchbar" class="browser-searchbar">
-						<input id="database-search-text" type="text" name="database-search" value="search my stuff" style="color: rgb(68, 68, 68); ">
+						<input id="database-search-text" type="text" name="database-search" value="search my media" style="color: rgb(68, 68, 68); ">
 						<span><select id="database-search-filter" class="" style='width:98px'>
 							  <option value="all">all formats</option>
 							  <option value="image">images</option>
@@ -57,9 +57,9 @@
 					
 					
 					
-					<!--<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>-->
+					<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>
 
-					<a href="." id="browser-open-in-editor">open in editor</a><a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
+					<a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
 					<!-- <div style="clear:both;padding-bottom:4px;"></div>-->
 					
 				</div>
@@ -148,7 +148,50 @@
 					</tbody>
 				</table>
          	</div>
+         	
+			<li id="browser-results-collection-template" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Images Of America: Lantern Slide Collection</span><br><span class="browser-item-count">2924 items</span></p></a><a href="." class="corner-triangle-for-menu"></a><ul class="browser-collection-edit-menu">
+									<li class="browser-rename-collection browser-unselected-toggle">rename collection</li>
+									<li class="browser-delete-collection browser-unselected-toggle">delete collection</li>
+									<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>
+									<li class="collection-player-button browser-unselected-toggle">share link</li>
+								</ul></li>
 
+			<div id="browser-results-image-template">
+				<a id="" class="fancymedia fancybox.image" rel="group" title="" href="http://memory.loc.gov/award/mhsdalad/310000/310043r.jpg"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/1823_s.jpg" alt="080120v" title="080120v"></a>
+				<div class="browser-results-image-edit"><a class="browser-remove-from-collection" href=".">remove</a> <a class="browser-change-thumbnail" href=".">make cover</a>
+				</div>
+			</div>
+			<div id="fancybox-media-container-template">
+				<div class="fancybox-media-item"></div>
+				
+				<p class="title fancybox-editable">TITLE</p>
+				<p><span class="creator fancybox-editable">CREATOR</span> <span class="source"><a href="#" target="_blank">View Source</a></span></p>
+				<p class="description fancybox-editable" style="display:none;">description</p>
+				<p class="tags fancybox-editable" style="display:none;"><a class="fancybox-remove-tag" href=".">x</a><a href=".">Dummy tag</a>, <a class="fancybox-remove-tag" href=".">x</a><a href=".">Another fake tag</a>, <a class="fancybox-remove-tag" href=".">x</a><a href=".">tag tag</a>, <a class="fancybox-remove-tag" href=".">x</a><a href=".">false longer tag</a></p>
+				<div class="fancybox-buttons" class="clearfix">
+					<p class="fancybox-more-button"><a href=".">more</a></p><p class="fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>
+				</div>
+				
+					<!--<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>-->
+				
+			</div>
+			
+			<div id="fancybox-image-template">
+				<img src=""/>
+			</div>
+			<div id="fancybox-video-template">
+				<video controls="true"  width="640px" preload><source src="SOURCE"></video>
+				
+			</div>
+			<div id="fancybox-youtube-template">
+				<iframe class="youtube-player" type="text/html" width="626" height="385" src="" frameborder="0">
+				</iframe>
+				
+			</div>
+			<div id="fancybox-audio-template">
+				<audio width="626px" controls="true" src="SOURCE"></audio>
+				
+			</div>
 			<div id="share-collection-modal" class='modal hidden' >
 			<div class="modal-header">
 				<a href='#' class='close'>x</a>

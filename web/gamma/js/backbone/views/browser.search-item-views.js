@@ -25,119 +25,20 @@ var BrowserItemView = Backbone.View.extend({
 	
 });
 var BrowserCollectionView = BrowserItemView.extend({
-	tagName:"li",
-
+	
 	initialize : function() {
 
 		this.model.bind('change',  this.render, this);
 
-
-	},
-	render: function()
-	{
-		var blanks = {
-			src : this.model.get('thumbnail_url'),
-			title : this.model.get('title'),
-			count : this.model.get('child_items_count'),
-			
-		};
-		
-		//use template to clone the database items into
-		var template = _.template( this.getTemplate() );
-		
-		//copy the cloned item into the el
-		$(this.el).append( template( blanks ) );
-		$(this.el).addClass('browser-results-collection');
-		/* OLD
-		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
-
-		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		
-		
-		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
-		//this.el.find('.browser-item-count').text('232');
-		
-		this.el.find('.title').text(this.model.get('title'));
-		*/
-
-		//Only show collections drop down menu if user owns collection
-		var collectionID = this.model.id;
-		var collectionTitle = this.model.get("title");
-		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
-		if (thisCollection == null){
-			$(this.el).find('.corner-triangle-for-menu').remove();
-		} else {
-			var theElement = this.el;
-
-			$(this.el).find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
-				function(){
-					
-					//calculate position dynamically based on text position
-					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
-					$(theElement).find('.browser-collection-edit-menu').show();
-					return false;
-				}, 
-				function(){
-					$(theElement).find('.browser-collection-edit-menu').hide();
-				}
-			);
-
-			
-			
-
-			//SHARE LINK
-			$(this.el).find('.collection-player-button').click(function(){
-				ZeegaBrowser.showShareButton(collectionID);
-				return false;
-			}); 
-			//GO TO EDITOR LINK
-			$(this.el).find('.collection-to-editor-button').click(function(){
-				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
-				return false;
-			});
-			//DELETE LINK
-			$(this.el).find('.browser-delete-collection').click(function(){
-				ZeegaBrowser.deleteCollection(collectionID);
-				return false;
-			});
-			//RENAME LINK
-			$(this.el).find('.title').editable(
-				function(value, settings)
-				{ 
-
-					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
-
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : true,
-					onblur : 'submit',
-					width : $(this).attr("width") * 2,
-					cssclass : 'browser-form'
-			}).click(function(e) {
-				theElement.find('.browser-collection-edit-menu').hide();
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-	         	
-	     	});
-			$(this.el).find('.browser-rename-collection').click(function(e) {
-				//using jeditable framework - pretend like user clicked on the title element
-				theElement.find('.title').trigger('click');
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-			});
-		}
+		this.el = $("#browser-results-collection-template").clone();
+		this.el.removeAttr('id');
 
 		var thisView = this;
 
 		var modelID = this.model.id;
 		var modelTitle = this.model.get('title');
-		$(this.el).click(function(){
+		this.el.click(function(){
 			ZeegaBrowser.clickedCollectionTitle = modelTitle;
-			ZeegaBrowser.clickedCollectionID = modelID;
 			ZeegaBrowser.doCollectionSearch(modelID);
 			
 		});
@@ -149,7 +50,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 			TODO: Add permissions to this so that you can only add collections to your own collections??
 		*/
 
-		$(this.el).draggable({
+	$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
 			appendTo : 'body',
@@ -224,77 +125,111 @@ var BrowserCollectionView = BrowserItemView.extend({
 				}
 			}
 		});
-		
-		return this;
 	},
-	getTemplate : function()
+	render: function()
 	{
 		
-		var html =	
-					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
-					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
-					'<a href="." class="corner-triangle-for-menu"></a><ul class="browser-collection-edit-menu">'+
-					'<li class="browser-rename-collection browser-unselected-toggle">rename collection</li>'+
-					'<li class="browser-delete-collection browser-unselected-toggle">delete collection</li>'+
-					'<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>'+
-					'<li class="collection-player-button browser-unselected-toggle">share link</li>'+
-					'</ul>';
-								
-		return html;
+		this.el.addClass('browser-results-collection');
+		
+		//this.el.attr('id', this.model.id);
+		
+		
+		
+		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
+
+		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		
+		
+		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
+		//this.el.find('.browser-item-count').text('232');
+		
+		this.el.find('.title').text(this.model.get('title'));
+
+
+		//Only show collections drop down menu if user owns collection
+		var collectionID = this.model.id;
+		var collectionTitle = this.model.get("title");
+		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
+		if (thisCollection == null){
+			this.el.find('.corner-triangle-for-menu').remove();
+		} else {
+			var theElement = this.el;
+
+			this.el.find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
+				function(){
+					
+					//calculate position dynamically based on text position
+					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
+					theElement.find('.browser-collection-edit-menu').show();
+					return false;
+				}, 
+				function(){
+					theElement.find('.browser-collection-edit-menu').hide();
+				}
+			);
+
+			
+			
+
+			//SHARE LINK
+			this.el.find('.collection-player-button').click(function(){
+				ZeegaBrowser.showShareButton(collectionID);
+				return false;
+			}); 
+			//GO TO EDITOR LINK
+			this.el.find('.collection-to-editor-button').click(function(){
+				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
+				return false;
+			});
+			//DELETE LINK
+			this.el.find('.browser-delete-collection').click(function(){
+				ZeegaBrowser.deleteCollection(collectionID);
+				return false;
+			});
+			//RENAME LINK
+			this.el.find('.title').editable(
+				function(value, settings)
+				{ 
+
+					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+
+				},
+				{
+					indicator : 'Saving...',
+					tooltip   : 'Click to edit...',
+					indicator : '<img src="images/loading.gif">',
+					select : true,
+					onblur : 'submit',
+					width : $(this).attr("width") * 2,
+					cssclass : 'browser-form'
+			}).click(function(e) {
+				theElement.find('.browser-collection-edit-menu').hide();
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+	         	
+	     	});
+			this.el.find('.browser-rename-collection').click(function(e) {
+				//using jeditable framework - pretend like user clicked on the title element
+				theElement.find('.title').trigger('click');
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+			});
+		}
+		
+		return this;
 	},
 
 });
 var BrowserSingleItemView = BrowserItemView.extend({
-	tagName:'li',
+	
 	initialize : function() {
 		
 		//when item removes itself from collection this gets fired
 		this.model.bind('destroy', this.remove, this);
 		
 		var theModel = this.model;
-		
-
-		
-	},
-	remove : function() {
-		$(this.el).remove();
-	},
-	render: function()
-	{
-		var blanks = {
-			src : this.model.get('thumbnail_url'),
-			title : this.model.get('title'),
-			link : this.model.get('uri'),
-			id 	: this.model.get('id'),
-		};
-		
-		//use template to clone the database items into
-		var template = _.template( this.getTemplate() );
-		
-		//copy the cloned item into the el
-		$(this.el).append( template( blanks ) );
-		$(this.el).addClass('browser-results-image');
-
-		/*
-		OLD - WHAT WAS THIS FOR? Can't remember so commenting it out
-		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
-		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
-		*/
-		
-		/*OLD WAY//render individual element
-		this.el.addClass('browser-results-image');
-		this.el.removeAttr('id');
-		this.el.find('a:first').attr('id', this.model.get('id'));
-		this.el.find('a:first').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', thumbnail_url);
-		
-		
-		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('a:first').attr('href', this.model.get('uri'));
-		this.el.find('img').attr('title', this.model.get('title'));
-		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		*/
-
+		this.el = $("#browser-results-image-template").clone();
 		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
@@ -305,6 +240,15 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			},
 			opacity : .75,
 			helper : 'clone',
+			/*helper : function(){
+				var drag = $(this).find('.browser-img-large')
+					.clone()
+					.css({
+						'overflow':'hidden',
+						'background':'white'
+					});
+				return drag;
+			},*/
 			
 			//init the dragged item variable
 			start : function(){
@@ -317,18 +261,32 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			}
 			
 		});
+
+		
+	},
+	remove : function() {
+		$(this.el).remove();
+	},
+	render: function()
+	{
+		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
+		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
+		//render individual element
+		this.el.addClass('browser-results-image');
+		this.el.removeAttr('id');
+		this.el.find('a:first').attr('id', this.model.get('id'));
+		this.el.find('a:first').attr('title', this.model.get('title'));
+		this.el.find('img').attr('src', thumbnail_url);
+		
+		
+		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('a:first').attr('href', this.model.get('uri'));
+		this.el.find('img').attr('title', this.model.get('title'));
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		
 		return this;
 	},
-	getTemplate : function()
-	{
-		
-		var html =	'<a id="<%= id %>" class="fancymedia fancybox.image" rel="group" title="<%= title %>" href="<%= link %>">'+
-					'<img class="browser-img-large" src="<%= src %>" alt="<%= title %>" title="<%= title %>"></a>'+
-					'<div class="browser-results-image-edit"><a class="browser-remove-from-collection" href=".">remove</a> <a class="browser-change-thumbnail" href=".">make cover</a>'+
-					'</div>';
-								
-		return html;
-	},
+
 
 });
 
