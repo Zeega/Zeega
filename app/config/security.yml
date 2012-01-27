@@ -53,6 +53,8 @@ security:
         - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/nodes, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/node, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
-        - { path: ^/routes, role: role: IS_AUTHENTICATED_ANONYMOUSLY }
-        

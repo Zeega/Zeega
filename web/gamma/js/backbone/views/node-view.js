@@ -51,6 +51,8 @@ var NodeView = Backbone.View.extend({
 				};
 				var newLayer = new Layer( settings );
 				
+				$('#frame-drawer').removeClass('hover');
+				
 				Zeega.addLayerToNode(_this.model,newLayer, this);
 				
 			}
