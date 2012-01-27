@@ -46,8 +46,8 @@ var TagView = Backbone.View.extend({
 			//TODO Create a view for the tags
 			
 			var tag = view.model;
-			var tagID = tag.get("tag_id");
-			var itemID = view.model.itemID;
+			var tagID = tag.id;
+			var itemID = view.model.get("item_id");
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
 						+ itemID + "/tags/"+tagID;
 			
@@ -103,7 +103,7 @@ var TagCollectionView = Backbone.View.extend({
 	addItem: function(m, rerender)
     {
     	
-    	var tagView =  new TagView({ model: m, itemID : this.options.itemID });
+    	var tagView =  new TagView({ model: m });
         
         // add the item view to this collection of views
         this._views.push(tagView);
@@ -134,12 +134,12 @@ var TagCollectionView = Backbone.View.extend({
 		
 		var theElement = this.el;
 		var view = this;
-		var itemID = this.collection.itemID;
+		
 		//ADD TAG
 		$(this.el).find('.newtag').editable(
 			function(value, settings)
 			{ 
-				var newTag = new Tag({tag_name:value});
+				var newTag = new Tag({tag_name:value, item_id:view.collection.item_id});
 				
 				newTag.save({
 							

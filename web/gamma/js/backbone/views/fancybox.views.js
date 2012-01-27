@@ -61,7 +61,7 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).append( template( blanks ) );
 
 		//Load the item's tags (asynchronously) so we can display and edit them
-		var item = this.model;
+		//var item = this.model;
 		var theElement = this.el;
 		var view = this;
 		
@@ -71,7 +71,7 @@ var FancyBoxView = Backbone.View.extend({
 				view.tagViews = new TagCollectionView({
 										collection:view.model.get("tags"), 
 										el : $(theElement).find('.tags').get(0),
-										itemID : view.model.id
+										
 									});
 				view.tagViews.render();
 			}, 

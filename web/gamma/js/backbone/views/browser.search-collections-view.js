@@ -100,7 +100,12 @@ var BrowserSearchItemsView = Backbone.View.extend({
 	addItem: function(m)
     {
     	var type = m.get("type");
-    	var itemView =  new BrowserSingleItemView({ model: m });
+    	var itemView;
+    	if (type == "Collection"){
+    		itemView = new BrowserCollectionView({ model: m });
+    	} else {
+    	 	itemView =  new BrowserSingleItemView({ model: m });
+    	}
         
         // add the item view to this collection of views
         this._views.push(itemView);

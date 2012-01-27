@@ -34,7 +34,7 @@ var ZeegaBrowser = {
 		this.search = new BrowserSearch();
 		
 		//attach items collection to items view and collections collection to collections view
-		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
+		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection") });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
 		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection") });
 		this.search.updateQuery();

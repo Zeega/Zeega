@@ -35,9 +35,12 @@ var BrowserSearch =  Backbone.Model.extend({
     	"dtstart"				: 0, //start date in seconds
     	"dtend"					: 0, //end date in seconds
     	"dtintervals"			: 5, //10 is really too many right now
-    	"r_collections"			: 1, //return collections?
-    	"r_items"				: 1, //return items?
-    	"r_time"				: 1, //return time bins?
+    	
+    	//What do you want back?
+    	"r_collections"			: 0, //return collections?
+    	"r_items_and_collections" : 1, //return items and collections, mixed?
+    	"r_items"				: 0, //return items?
+    	"r_time"				: 0, //return time bins?
 
     	//Collections that hold search results
     	"itemsCollection"		: 	new ItemCollection(), //holds results of type =image, video or audio
@@ -82,6 +85,20 @@ var BrowserSearch =  Backbone.Model.extend({
 		}
 
 		//Assemble item data into BrowserItems
+		if (data['items_and_collections'] != null){
+			this.get("itemsCollection").totalItemsCount = data['items_and_collections_count'];
+			_.each(data['items_and_collections'], function(item){
+				var type = item['type'];
+				if (type == "Collection"){
+					this.get("itemsCollection").add(new BrowserCollection(item));
+				}else {
+					this.get("itemsCollection").add(new Item(item));
+				}
+			}, this);
+		}
+
+		//	Assemble item data into BrowserItems
+		/* THIS IS FOR WHEN ITEMS AND COLLECTIONS COME BACK SEPARATELY WHICH IS NOT THE CASE RIGHT NOW
 		if (data['items'] != null){
 			this.get("itemsCollection").totalItemsCount = data['items_count'];
 			_.each(data['items'], function(item){
@@ -99,7 +116,7 @@ var BrowserSearch =  Backbone.Model.extend({
 				this.get("collectionsCollection").add(new BrowserCollection(collection));
 			}, this);
 
-		}
+		}*/
 		//Assemble time bin data into TimeBinCollection
 		if (data['time_distribution'] != null){
 			_.each(data['time_distribution'], function(timeBin){
