@@ -137,6 +137,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		var modelTitle = this.model.get('title');
 		$(this.el).click(function(){
 			ZeegaBrowser.clickedCollectionTitle = modelTitle;
+			ZeegaBrowser.clickedCollectionID = modelID;
 			ZeegaBrowser.doCollectionSearch(modelID);
 			
 		});
@@ -244,7 +245,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 
 });
 var BrowserSingleItemView = BrowserItemView.extend({
-	tagName:'div',
+	tagName:'li',
 	initialize : function() {
 		
 		//when item removes itself from collection this gets fired

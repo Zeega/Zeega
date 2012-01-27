@@ -119,10 +119,6 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			//Update counts in UI
 			$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 		} else {
-			
-			
-			
-
 			//Item renders itself and then this viewcollection appends it to its parent el
 			_.each(this._views, function(itemView){
 				// item draws itself
@@ -138,7 +134,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 				$('#browser-view-more-item-results').show();
 			} 
 			
-			//If they are loading "My Media" with no filters and there is nothing there, show this message
+			//If they are loading "Everything" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
 					&& ZeegaBrowser.search.get("content") == "all" && this.collection.length == 0){
 				$('#browser-no-results-my-media-message').show();
@@ -153,13 +149,5 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		}
 		return this;
 	},
-	
-	events: {
-		//"click" : "previewItem"
-		//'dblclick' : "doubleClick",
-		
-	},
-	
-	
 });
 

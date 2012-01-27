@@ -38,7 +38,7 @@ var BrowserSearch =  Backbone.Model.extend({
     	
     	//What do you want back?
     	"r_collections"			: 0, //return collections?
-    	"r_items_and_collections" : 1, //return items and collections, mixed?
+    	"r_itemswithcollections" : 1, //return items and collections, mixed?
     	"r_items"				: 0, //return items?
     	"r_time"				: 0, //return time bins?
 
@@ -80,11 +80,12 @@ var BrowserSearch =  Backbone.Model.extend({
 		if (data == null || data['items_count'] ==null){
 			console.log('No search items returned. Something is null man.');
 		} else {
+			console.log('returned ' + data['returned_items_and_collections_count'] + ' out of ' + data['items_and_collections_count'] + ' total items and collections');
 			console.log('returned ' + data['returned_items_count'] + ' out of ' + data['items_count'] + ' total items');
 			console.log('returned ' + data['returned_collections_count'] + ' out of ' + data['collections_count'] +' total collections');
 		}
 
-		//Assemble item data into BrowserItems
+		//Assemble item and collection data into objects
 		if (data['items_and_collections'] != null){
 			this.get("itemsCollection").totalItemsCount = data['items_and_collections_count'];
 			_.each(data['items_and_collections'], function(item){

@@ -110,13 +110,6 @@ $(document).ready(function() {
 	     ZeegaBrowser.doSearch();
 	 });
 
-	$('#browser-remove-collection-filter').click(function(e){
-		ZeegaBrowser.removeCollectionFilter();
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
-		return false;
-	});
-
 	
 	$('#browser-open-timeline').click( function(){
 		$('#browser-right-sidebar').show();		
@@ -252,9 +245,10 @@ $(document).ready(function() {
 		return false;
 	});
 	$('#browser-rename-collection').click(function() {
+		alert('implement in modal window');//Commenting out
 		//using jeditable framework - pretend like user clicked on the title element
 		//see ZeegaBrowser.showCollectionFilter for definition of behavior
-		$('#browser-collection-filter-tab-text').trigger('click');
+		//$('#browser-collection-filter-tab-text').trigger('click');
 	});
 	
 	//Load the next page of results into the results drawer
