@@ -17,9 +17,12 @@ function textArea()
 
 function makeGoogleMapTarget( layerID )
 {
-	var target = $('<div>').addClass('google-map-wrapper');
-	var map = $('<div>').addClass('map').attr({'id' : 'map-'+ layerID }).css( {'width' : "350px", 'height' : "233px"});
-	target.append( map );
+	var html =
+		'<div class="google-map-wrapper layer-control">'+
+			'<div id="map-'+ layerID +'" class="map"></div>'+
+		'</div>';
+	var target = $(html);
+
 	return target;
 }
 
@@ -213,8 +216,8 @@ function makeGoogleMap( args )
 	//if the searchBar is active, then draw in the form and activate geocoder
 	if( args.searchBar )
 	{
-		var input = $('<input>').attr({ 'id' : 'map-search' , 'type' : 'text' });
-		var button = $('<input>').attr({ 'id' : 'map-submit' , 'type' : 'submit' });
+		var input = $('<input id="map-search" type="text" placeholder="search for a place">').css('width','258px');
+		var button = $('<input id="map-submit" class="btn primary" type="Submit" value="search maps">');
 		args.controls.find('.google-map-wrapper').append(input).append(button);
 		
 		var geocoder = new google.maps.Geocoder();
