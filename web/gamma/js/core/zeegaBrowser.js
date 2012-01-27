@@ -34,7 +34,7 @@ var ZeegaBrowser = {
 		this.search = new BrowserSearch();
 		
 		//attach items collection to items view and collections collection to collections view
-		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
+		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection") });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
 		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection") });
 		this.search.updateQuery();
@@ -81,8 +81,7 @@ var ZeegaBrowser = {
 		if (this.search.get("page") == 1) {
 		
 			//Empty items and collections from results drawer
-			$('#browser-results #browser-results-collections .browser-results-collection').remove();
-			$('#browser-results #browser-results-items .browser-results-image').remove();		
+			$('#browser-results #browser-results-items .browser-results-image, #browser-results #browser-results-items .browser-results-collection').remove();		
 
 			//Show results drawer's loading spinner
 			$('#browser-results .browser-loading').show();
@@ -191,8 +190,11 @@ var ZeegaBrowser = {
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
 
+		//remove open in editor link
+		$('#browser-open-in-editor').hide();
+
 		//Hide collection tab
-		$('#browser-collection-filter-tab').hide();
+		$('#browser-collection-filter-tab').removeClass('.browser-selected-toggle');
 		
 	
 		//Clear the search object
@@ -222,6 +224,7 @@ var ZeegaBrowser = {
 						//the current collection filter
 						if(model.id == ZeegaBrowser.search.get("collection")){
 							ZeegaBrowser.clickedCollectionTitle = model.get("title");
+							ZeegaBrowser.clickedCollectionID = model.id;
 							$('#database-search-text').val("search " + model.get("title"));
 						}
 				
@@ -236,6 +239,10 @@ var ZeegaBrowser = {
 	},
 	showCollectionFilter: function(){
 		
+		$('#browser-open-in-editor').show();
+
+		/* Commenting out because we don't want to edit title here
+		TODO: Remove this
 		$('#browser-collection-filter-tab-text').editable(
 			function(value, settings)
 			{ 
@@ -249,7 +256,7 @@ var ZeegaBrowser = {
 				onblur : 'submit',
 				width : $('#browser-collection-filter-tab-text').attr("width") * 2,
 				cssclass : 'browser-form'
-		});
+		});*/
 
 		//hide form, show text
 		$( '#browser-collection-filter-title-form' ).hide();
@@ -260,6 +267,12 @@ var ZeegaBrowser = {
 		$('#browser-collection-filter-tab').show();
 		$('#database-search-text').val("search " + ZeegaBrowser.clickedCollectionTitle);
 
+		//click event
+		$('#browser-collection-filter-tab').click(function(){
+			
+			ZeegaBrowser.doCollectionSearch(ZeegaBrowser.clickedCollectionID);
+			ZeegaBrowser.showCollectionFilter();
+		});
 		//select the right tab
 		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
 		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');

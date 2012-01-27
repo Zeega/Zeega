@@ -21,7 +21,8 @@ function initUX(){
 
 $(document).ready(function() {
 
-	
+	//Sets variable for Fancybox "more" view to false each time the page is reloaded
+	sessionStorage.setItem('moreFancy', false);
 
 	//set up fancybox lightbox plugin
 	$(".fancymedia").fancybox({
@@ -47,7 +48,10 @@ $(document).ready(function() {
     		title : false,
     		buttons	: {}
     	},
-    	
+    	beforeClose : function() {
+    			//reset fancybox MORE/LESS view
+    			sessionStorage.setItem('moreFancy', false);
+    	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
@@ -59,19 +63,19 @@ $(document).ready(function() {
 
 			switch(thisModel.get("source")){
 				case 'Image':
-					fancyView = new BrowserFancyBoxImageView({model:thisModel});
+					fancyView = new FancyBoxImageView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Video':
-           			fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           			fancyView = new FancyBoxVideoView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Audio':
-           			fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           			fancyView = new FancyBoxAudioView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Youtube':
-           			fancyView = new BrowserFancyBoxYouTubeView({model:thisModel});
+           			fancyView = new FancyBoxYouTubeView({model:thisModel});
            			fancyView.render(this);
            			break;
 			}
@@ -86,7 +90,7 @@ $(document).ready(function() {
 	
 	}); 
 
-	$('#collection-to-editor-button').click(function(){
+	$('#collection-to-editor-button, #browser-open-in-editor').click(function(){
 		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
 		return false;
 	});
@@ -105,13 +109,6 @@ $(document).ready(function() {
 	 	ZeegaBrowser.resetPageCount();
 	     ZeegaBrowser.doSearch();
 	 });
-
-	$('#browser-remove-collection-filter').click(function(e){
-		ZeegaBrowser.removeCollectionFilter();
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
-		return false;
-	});
 
 	
 	$('#browser-open-timeline').click( function(){
@@ -168,10 +165,10 @@ $(document).ready(function() {
 	
 		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
-			$('#database-search-text').val("search my media");
+			$('#database-search-text').val("search my stuff");
 
 		}else if ($(this).attr('id') == "browser-all-media"){
-			$('#database-search-text').val("search all media");
+			$('#database-search-text').val("search everything");
 			ZeegaBrowser.search.set({user:-2});
 		} 
 
@@ -248,9 +245,10 @@ $(document).ready(function() {
 		return false;
 	});
 	$('#browser-rename-collection').click(function() {
+		alert('implement in modal window');//Commenting out
 		//using jeditable framework - pretend like user clicked on the title element
 		//see ZeegaBrowser.showCollectionFilter for definition of behavior
-		$('#browser-collection-filter-tab-text').trigger('click');
+		//$('#browser-collection-filter-tab-text').trigger('click');
 	});
 	
 	//Load the next page of results into the results drawer

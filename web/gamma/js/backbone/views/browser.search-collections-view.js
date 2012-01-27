@@ -40,14 +40,12 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 		} else {
 
 			
-
-			_.each(this._views, function(collectionView){
-				// item draws itself
-	        	var addThis = collectionView.render(); 
-	        	
-	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-collection-results'));
-	        	
-			}, this);
+			for (var i=0;i<this._views.length;i++){
+				var collectionView = this._views[i];
+				var addThis = collectionView.render(); 
+	        	var moreResultsElement = $(this.el).find('#browser-view-more-collection-results');
+	        	$(addThis.el).insertBefore(moreResultsElement);
+			}
 			
 			//Show more results link if not all showing
 			if (this.collection.length < this.collection.totalCollectionsCount){
@@ -102,7 +100,12 @@ var BrowserSearchItemsView = Backbone.View.extend({
 	addItem: function(m)
     {
     	var type = m.get("type");
-    	var itemView =  new BrowserSingleItemView({ model: m });
+    	var itemView;
+    	if (type == "Collection"){
+    		itemView = new BrowserCollectionView({ model: m });
+    	} else {
+    	 	itemView =  new BrowserSingleItemView({ model: m });
+    	}
         
         // add the item view to this collection of views
         this._views.push(itemView);
@@ -116,15 +119,11 @@ var BrowserSearchItemsView = Backbone.View.extend({
 			//Update counts in UI
 			$('#browser-item-count').text(this.collection.totalItemsCount  + " items");
 		} else {
-			
-			
-			
-
 			//Item renders itself and then this viewcollection appends it to its parent el
 			_.each(this._views, function(itemView){
 				// item draws itself
 	        	var addThis = itemView.render(); 
-	        	addThis.el.insertBefore($(this.el).find('#browser-view-more-item-results'));
+	        	$(addThis.el).insertBefore($(this.el).find('#browser-view-more-item-results'));
 
 	        	
 			}, this);
@@ -135,7 +134,7 @@ var BrowserSearchItemsView = Backbone.View.extend({
 				$('#browser-view-more-item-results').show();
 			} 
 			
-			//If they are loading "My Media" with no filters and there is nothing there, show this message
+			//If they are loading "Everything" with no filters and there is nothing there, show this message
 			if (	ZeegaBrowser.search.get("user") == -1 && ZeegaBrowser.search.get("q") =="" 
 					&& ZeegaBrowser.search.get("content") == "all" && this.collection.length == 0){
 				$('#browser-no-results-my-media-message').show();
@@ -150,13 +149,5 @@ var BrowserSearchItemsView = Backbone.View.extend({
 		}
 		return this;
 	},
-	
-	events: {
-		//"click" : "previewItem"
-		//'dblclick' : "doubleClick",
-		
-	},
-	
-	
 });
 

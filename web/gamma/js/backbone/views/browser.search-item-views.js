@@ -25,20 +25,119 @@ var BrowserItemView = Backbone.View.extend({
 	
 });
 var BrowserCollectionView = BrowserItemView.extend({
-	
+	tagName:"li",
+
 	initialize : function() {
 
 		this.model.bind('change',  this.render, this);
 
-		this.el = $("#browser-results-collection-template").clone();
-		this.el.removeAttr('id');
+
+	},
+	render: function()
+	{
+		var blanks = {
+			src : this.model.get('thumbnail_url'),
+			title : this.model.get('title'),
+			count : this.model.get('child_items_count'),
+			
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getTemplate() );
+		
+		//copy the cloned item into the el
+		$(this.el).append( template( blanks ) );
+		$(this.el).addClass('browser-results-collection');
+		/* OLD
+		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
+
+		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		
+		
+		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
+		//this.el.find('.browser-item-count').text('232');
+		
+		this.el.find('.title').text(this.model.get('title'));
+		*/
+
+		//Only show collections drop down menu if user owns collection
+		var collectionID = this.model.id;
+		var collectionTitle = this.model.get("title");
+		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
+		if (thisCollection == null){
+			$(this.el).find('.corner-triangle-for-menu').remove();
+		} else {
+			var theElement = this.el;
+
+			$(this.el).find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
+				function(){
+					
+					//calculate position dynamically based on text position
+					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
+					$(theElement).find('.browser-collection-edit-menu').show();
+					return false;
+				}, 
+				function(){
+					$(theElement).find('.browser-collection-edit-menu').hide();
+				}
+			);
+
+			
+			
+
+			//SHARE LINK
+			$(this.el).find('.collection-player-button').click(function(){
+				ZeegaBrowser.showShareButton(collectionID);
+				return false;
+			}); 
+			//GO TO EDITOR LINK
+			$(this.el).find('.collection-to-editor-button').click(function(){
+				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
+				return false;
+			});
+			//DELETE LINK
+			$(this.el).find('.browser-delete-collection').click(function(){
+				ZeegaBrowser.deleteCollection(collectionID);
+				return false;
+			});
+			//RENAME LINK
+			$(this.el).find('.title').editable(
+				function(value, settings)
+				{ 
+
+					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+
+				},
+				{
+					indicator : 'Saving...',
+					tooltip   : 'Click to edit...',
+					indicator : '<img src="images/loading.gif">',
+					select : true,
+					onblur : 'submit',
+					width : $(this).attr("width") * 2,
+					cssclass : 'browser-form'
+			}).click(function(e) {
+				theElement.find('.browser-collection-edit-menu').hide();
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+	         	
+	     	});
+			$(this.el).find('.browser-rename-collection').click(function(e) {
+				//using jeditable framework - pretend like user clicked on the title element
+				theElement.find('.title').trigger('click');
+				//stop from selecting the collection filter at the same click
+				e.stopPropagation();
+			});
+		}
 
 		var thisView = this;
 
 		var modelID = this.model.id;
 		var modelTitle = this.model.get('title');
-		this.el.click(function(){
+		$(this.el).click(function(){
 			ZeegaBrowser.clickedCollectionTitle = modelTitle;
+			ZeegaBrowser.clickedCollectionID = modelID;
 			ZeegaBrowser.doCollectionSearch(modelID);
 			
 		});
@@ -50,7 +149,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 			TODO: Add permissions to this so that you can only add collections to your own collections??
 		*/
 
-	$(this.el).draggable({
+		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
 			appendTo : 'body',
@@ -125,111 +224,77 @@ var BrowserCollectionView = BrowserItemView.extend({
 				}
 			}
 		});
-	},
-	render: function()
-	{
-		
-		this.el.addClass('browser-results-collection');
-		
-		//this.el.attr('id', this.model.id);
-		
-		
-		
-		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
-
-		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		
-		
-		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
-		//this.el.find('.browser-item-count').text('232');
-		
-		this.el.find('.title').text(this.model.get('title'));
-
-
-		//Only show collections drop down menu if user owns collection
-		var collectionID = this.model.id;
-		var collectionTitle = this.model.get("title");
-		var thisCollection =ZeegaBrowser.myCollections.get(collectionID);
-		if (thisCollection == null){
-			this.el.find('.corner-triangle-for-menu').remove();
-		} else {
-			var theElement = this.el;
-
-			this.el.find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
-				function(){
-					
-					//calculate position dynamically based on text position
-					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
-					theElement.find('.browser-collection-edit-menu').show();
-					return false;
-				}, 
-				function(){
-					theElement.find('.browser-collection-edit-menu').hide();
-				}
-			);
-
-			
-			
-
-			//SHARE LINK
-			this.el.find('.collection-player-button').click(function(){
-				ZeegaBrowser.showShareButton(collectionID);
-				return false;
-			}); 
-			//GO TO EDITOR LINK
-			this.el.find('.collection-to-editor-button').click(function(){
-				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
-				return false;
-			});
-			//DELETE LINK
-			this.el.find('.browser-delete-collection').click(function(){
-				ZeegaBrowser.deleteCollection(collectionID);
-				return false;
-			});
-			//RENAME LINK
-			this.el.find('.title').editable(
-				function(value, settings)
-				{ 
-
-					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
-
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : true,
-					onblur : 'submit',
-					width : $(this).attr("width") * 2,
-					cssclass : 'browser-form'
-			}).click(function(e) {
-				theElement.find('.browser-collection-edit-menu').hide();
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-	         	
-	     	});
-			this.el.find('.browser-rename-collection').click(function(e) {
-				//using jeditable framework - pretend like user clicked on the title element
-				theElement.find('.title').trigger('click');
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-			});
-		}
 		
 		return this;
+	},
+	getTemplate : function()
+	{
+		
+		var html =	
+					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
+					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
+					'<a href="." class="corner-triangle-for-menu"></a><ul class="browser-collection-edit-menu">'+
+					'<li class="browser-rename-collection browser-unselected-toggle">rename collection</li>'+
+					'<li class="browser-delete-collection browser-unselected-toggle">delete collection</li>'+
+					'<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>'+
+					'<li class="collection-player-button browser-unselected-toggle">share link</li>'+
+					'</ul>';
+								
+		return html;
 	},
 
 });
 var BrowserSingleItemView = BrowserItemView.extend({
-	
+	tagName:'li',
 	initialize : function() {
 		
 		//when item removes itself from collection this gets fired
 		this.model.bind('destroy', this.remove, this);
 		
 		var theModel = this.model;
-		this.el = $("#browser-results-image-template").clone();
+		
+
+		
+	},
+	remove : function() {
+		$(this.el).remove();
+	},
+	render: function()
+	{
+		var blanks = {
+			src : this.model.get('thumbnail_url'),
+			title : this.model.get('title'),
+			link : this.model.get('uri'),
+			id 	: this.model.get('id'),
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getTemplate() );
+		
+		//copy the cloned item into the el
+		$(this.el).append( template( blanks ) );
+		$(this.el).addClass('browser-results-image');
+
+		/*
+		OLD - WHAT WAS THIS FOR? Can't remember so commenting it out
+		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
+		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
+		*/
+		
+		/*OLD WAY//render individual element
+		this.el.addClass('browser-results-image');
+		this.el.removeAttr('id');
+		this.el.find('a:first').attr('id', this.model.get('id'));
+		this.el.find('a:first').attr('title', this.model.get('title'));
+		this.el.find('img').attr('src', thumbnail_url);
+		
+		
+		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
+		this.el.find('a:first').attr('href', this.model.get('uri'));
+		this.el.find('img').attr('title', this.model.get('title'));
+		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
+		*/
+
 		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
@@ -240,15 +305,6 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			},
 			opacity : .75,
 			helper : 'clone',
-			/*helper : function(){
-				var drag = $(this).find('.browser-img-large')
-					.clone()
-					.css({
-						'overflow':'hidden',
-						'background':'white'
-					});
-				return drag;
-			},*/
 			
 			//init the dragged item variable
 			start : function(){
@@ -261,322 +317,23 @@ var BrowserSingleItemView = BrowserItemView.extend({
 			}
 			
 		});
-
-		
-	},
-	remove : function() {
-		$(this.el).remove();
-	},
-	render: function()
-	{
-		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
-		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
-		//render individual element
-		this.el.addClass('browser-results-image');
-		this.el.removeAttr('id');
-		this.el.find('a:first').attr('id', this.model.get('id'));
-		this.el.find('a:first').attr('title', this.model.get('title'));
-		this.el.find('img').attr('src', thumbnail_url);
-		
-		
-		//this.el.find('img').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('a:first').attr('href', this.model.get('uri'));
-		this.el.find('img').attr('title', this.model.get('title'));
-		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		
 		return this;
 	},
-
+	getTemplate : function()
+	{
+		
+		var html =	'<a id="<%= id %>" class="fancymedia fancybox.image" rel="group" title="<%= title %>" href="<%= link %>">'+
+					'<img class="browser-img-large" src="<%= src %>" alt="<%= title %>" title="<%= title %>"></a>'+
+					'<div class="browser-results-image-edit"><a class="browser-remove-from-collection" href=".">remove</a> <a class="browser-change-thumbnail" href=".">make cover</a>'+
+					'</div>';
+								
+		return html;
+	},
 
 });
 
 
 
-var BrowserFancyBoxView = BrowserItemView.extend({
-	
-	initialize: function(){
-		
-		this.el = $("#fancybox-media-container-template").clone();
-		this.el.attr('id', 'fancybox-media-container');
 
-		//Load the item's tags so we can display and edit them
-		this.model.loadTags();
-		
-	},
-	moreView : function(theButton, theElement){
-		Zeega.moreFancy = true;
-
-		$(theButton).find('a').text("less");
-		theElement.find(".fancybox-media-item").addClass("fancybox-media-item-more");
-		theElement.addClass("fancybox-media-container-more");
-		theElement.find('.description').show();
-		theElement.find('.tags').show();
-	},
-	lessView : function(theButton, theElement){
-		Zeega.moreFancy = false;
-
-		$(theButton).find('a').text("more");
-		theElement.find('.description').hide();
-		theElement.find('.tags').hide();
-		theElement.find(".fancybox-media-item").removeClass("fancybox-media-item-more");
-		theElement.removeClass("fancybox-media-container-more");
-	},
-	render: function(obj)
-	{
-		
-		
-		this.el.find('.source a').attr('href', this.model.get('attribution_uri'));
-		this.el.find('.title').text( this.model.get('title'));
-		this.el.find('.creator').text( this.model.get('media_creator_username'));
-		this.el.find('.description').text( this.model.get('description'));
-		//this.el.find('.tags').text( 'Dummy tag, Another fake tag, tag tag, false longer tag');
-		
-		//Fancybox will remember if user was in MORE or LESS view
-		if (Zeega.moreFancy){
-			this.moreView($(this).find('a'), this.el);
-		} else {
-			this.lessView($(this).find('a'), this.el);
-		}
-
-
-		var item = this.model;
-		var theElement = this.el;
-		var view = this;
-		//EDIT TITLE
-		this.el.find('.title').editable(
-			function(value, settings)
-			{ 
-				item.save({ title:value }, 
-						{
-							success: function(model, response) { 
-								console.log("Updated item title for item " + item.id);
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error updating item title.");
-			 					console.log(response);
-			 				}
-			 			});
-				return value; //must return the value
-			},
-			{
-				indicator : 'Saving...',
-				tooltip   : 'Click to edit...',
-				indicator : '<img src="images/loading.gif">',
-				select : false,
-				onblur : 'submit',
-				width : 320,
-				cssclass : 'fancybox-form'
-		});
-		//EDIT DESCRIPTION
-		this.el.find('.description').editable(
-			function(value, settings)
-			{ 
-				item.save({ description:value }, 
-						{
-							success: function(model, response) { 
-								theElement.find('.description').text(item.get("description"));
-								console.log("Updated item description for item " + item.id);
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error updating item description.");
-			 					console.log(response);
-			 				}
-			 			});
-				return value; //must return the value
-			},
-			{
-				type 	: 'textarea',
-				indicator : 'Saving...',
-				tooltip   : 'Click to edit description...',
-				indicator : '<img src="images/loading.gif">',
-				select : false,
-				onblur : 'submit',
-				width : 250,
-				cssclass : 'fancybox-form'
-		});
-		//EDIT CREATOR
-		this.el.find('.creator').editable(
-			function(value, settings)
-			{ 
-				item.save({ "media_creator_username":value }, 
-						{
-							success: function(model, response) { 
-								console.log("Updated item creator for item " + item.id);
-			 				},
-			 				error: function(model, response){
-			 					
-			 					console.log("Error updating item creator.");
-			 					console.log(response);
-			 				}
-			 			});
-				return value; //must return the value
-			},
-			{
-				indicator : 'Saving...',
-				tooltip   : 'Click to edit...',
-				indicator : '<img src="images/loading.gif">',
-				select : false,
-				onblur : 'submit',
-				width : 200,
-				cssclass : 'fancybox-form'
-		});
-		//MORE button
-		this.el.find('.fancybox-more-button').click(function(e){
-			
-			if ($(this).find('a').text() == "more"){
-				view.moreView(this, theElement);
-				e.preventDefault();
-			} else {
-				view.lessView(this, theElement);
-				e.preventDefault();
-			}
-
-		});
-		//DELETE button
-		this.el.find('.fancybox-delete-button').click(function(e){
-			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ item.id;
-			
-
-			//DESTROYYYYYYYY
-			item.destroy({	
-				 				url : deleteURL,
-								success: function(model, response) { 
-									console.log("Deleted item " + item.id);	
-									
-
-									//close fancy box window
-									jQuery.fancybox.close();
-										
-				 				},
-				 				error: function(model, response){
-				 					
-				 					console.log("Error deleting item " + item.id);		
-				 					console.log(response);
-				 				}
-		 					});
-		 	e.preventDefault();
-		});
-		
-		
-		
-		return this;
-	},
-
-});
-// For displaying Images
-var BrowserFancyBoxImageView = BrowserFancyBoxView.extend({
-	
-	initialize: function(){
-
-		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		
-	},
-	/* Pass in the element that the user clicked on from fancybox. */
-	render: function(obj)
-	{
-		
-		//Call parent class to do captioning and metadata
-		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
-		//Fill in image-specific stuff
-		var imageEl = $("#fancybox-image-template").clone();
-		$(imageEl).attr('id', 'fancybox-image');
-		var objSrc = $(obj.element).attr("href");
-		$(imageEl).find('img').attr("src", objSrc);
-		$(this.el).find('.fancybox-media-item').html(imageEl.html());
-
-		//set fancybox content
-		obj.content = this.el;
-		return this;
-	},
-
-});
-// For displaying HTML5 Video (not YouTube)
-var BrowserFancyBoxVideoView = BrowserFancyBoxView.extend({
-	
-	initialize: function(){
-		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-
-	},
-	/* Pass in the element that the user clicked on from fancybox. */
-	render: function(obj)
-	{
-		
-		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-
-		//Fill in video-specific stuff
-		var videoEl = $("#fancybox-video-template").clone();
-		$(videoEl).attr('id', 'fancybox-video');
-		var objSrc = $(obj.element).attr("href");
-		$(videoEl).find('video').attr("src", objSrc);
-		$(this.el).find('.fancybox-media-item').html(videoEl.html());
-
-		//set fancybox content
-		obj.content = this.el;
-		
-		return this;
-	},
-
-});
-// For displaying Audio
-var BrowserFancyBoxAudioView = BrowserFancyBoxView.extend({
-	
-	initialize: function(){
-		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-		
-
-	},
-	/* Pass in the element that the user clicked on from fancybox.  */
-	render: function(obj)
-	{
-		
-		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
-		//Fill in audio-specific stuff
-		var audioEl = $("#fancybox-audio-template").clone();
-		$(audioEl).attr('id', 'fancybox-audio');
-		var objSrc = $(obj.element).attr("href");
-		$(audioEl).find('audio').attr("src", objSrc);
-		$(this.el).find('.fancybox-media-item').html(audioEl.html());
-
-		//set fancybox content
-		obj.content = this.el;
-		
-		return this;
-	},
-
-});
-
-//For displaying YouTube
-var BrowserFancyBoxYouTubeView = BrowserFancyBoxView.extend({
-	
-	initialize: function(){
-		BrowserFancyBoxView.prototype.initialize.call(this); //This is like calling super()
-
-	},
-	/* Pass in the element that the user clicked on from fancybox. */
-	render: function(obj)
-	{
-		
-		BrowserFancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
-		
-		//Fill in youtube -specific stuff
-		var youTubeEl = $("#fancybox-youtube-template").clone();
-		$(youTubeEl).attr('id', 'fancybox-youtube');
-		var youTubeSrc  = 'http://www.youtube.com/embed/' + $(obj.element).attr('href');
-		$(youTubeEl).find('iframe').attr("src", youTubeSrc);
-		$(this.el).find('.fancybox-media-item').html(youTubeEl.html());
-
-		//set fancybox content
-		obj.content = this.el;
-		
-		return this;
-	},
-
-});
 
 

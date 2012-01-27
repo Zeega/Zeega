@@ -1,21 +1,59 @@
 var Tag =  Backbone.Model.extend({
 
-	url : function(){ },
+	url : function(){ 
+		var url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("item_id") + "/tags";
+		console.log("Final url for getting tags is: " + url);
+		return url;
+	},
+
 	
 	defaults :{},
 	
 	initialize: function(){},
 	
+	methodUrl: function(method){
+		if (method == 'create'){
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("item_id") + "/tags?tags="+this.get("tag_name");
+		}
+		else if (method == 'delete'){
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("item_id") + "/tags?tags="+this.id;
+		}
+		else if (method == 'get'){
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("item_id") + "/tags";
+		}
+		else{
+			return false;
+		}
+    	
+  	},
+
+  	sync: function(method, model, options) {
+	    if (model.methodUrl(method)) {
+	      options = options || {};
+	      options.url = model.methodUrl(method.toLowerCase());
+	      console.log("Final URL for updating tag is " + options.url);
+
+	    }
+	    Backbone.sync(method, model, options);
+  	}
 
 });
 var TagCollection = Backbone.Collection.extend({
 	model : Tag,
-	url : function(){ },
+	url : function(){ 
+		return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.item_id + "/tags";
+	},
 	
 	initialize: function(){},
 	parse : function(response)
 	{
-		return response.tags;
+		this.item_id = response.tags_for_item;
+		return  response.tags;
 	},
 	
 		

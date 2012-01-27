@@ -1,7 +1,9 @@
 var Item = Backbone.Model.extend({
+	
 	defaults : {
 		title : 'Untitled',
 		tags : new TagCollection(),
+		
 	},
 	
 	url: function(){
@@ -11,17 +13,23 @@ var Item = Backbone.Model.extend({
 	
 	initialize : function()
 	{
+		this.itemTags = new TagCollection();
 	},
 
-	loadTags : function(){
+	loadTags : function(successFunction, errorFunction){
 		this.get("tags").reset({silent:true});
-		this.get("tags").fetch( {url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id  +"/tags"});
+		this.get("tags").item_id = this.id;
+		this.get("tags").fetch({ 
+			success:successFunction,
+			error:errorFunction,
+
+		});
 	},
 
 });
 
 var ItemCollection = Backbone.Collection.extend({
-	model : Item,
+	model : Item, 
 	
 	page : 0,
 	contentType : null,
@@ -54,8 +62,8 @@ var ItemCollection = Backbone.Collection.extend({
 	
 	parse : function(response)
 	{
-		this.count = response.items_count;
-		return response.items;
+		this.count = response.items_and_collections_count;
+		return response.items_and_collections;
 	}
 	
 	

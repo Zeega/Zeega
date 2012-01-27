@@ -64,6 +64,9 @@ var loadFiles = [
 	'order!backbone/views/browser.search-item-views',
 	'order!backbone/views/browser.search-map-view',
 	'order!backbone/views/browser.search-time-view',
+	'order!backbone/views/tag.view',
+	'order!backbone/views/fancybox.views',
+
 	
 
 	];
