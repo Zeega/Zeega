@@ -54,12 +54,19 @@ var ItemView = Backbone.View.extend({
 			//init the dragged item variable
 			start : function(){
 				$(this).draggable('option','revert',true);
+				
+				$('#visual-editor-workspace').addClass('target-focus');
+				$('#frame-drawer').addClass('target-focus');
+				
 				Zeega.draggedItem = _this.model;
 			},
 				
 			/**	stuff _this happens when the user drags the item into a node **/	
 				
 			stop : function(){
+				$('#visual-editor-workspace').removeClass('target-focus');
+				$('#frame-drawer').removeClass('target-focus');
+				
 				Zeega.draggedItem = null;
 			}
 			

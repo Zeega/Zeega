@@ -1233,7 +1233,6 @@ body
 {
 	float:left;
 	padding:10px 17px;
-	
 }
 
 #frame-drawer, #browser-my-collections, #browser-results
@@ -1252,9 +1251,23 @@ body
 	padding:12px;
 	overflow:hidden;
 }
+
+#frame-drawer.target-focus
+{
+	box-shadow : inset 0 0 12px rgba(255,255,255,0.5);
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25s linear;
+}
 #frame-drawer.hover
 { 
 	box-shadow : inset 0 0 12px rgba(136,182,49,0.9);
+	-webkit-transition: box-shadow .25s linear;
+	transition: color .25s linear;
+}
+
+#visual-editor-workspace.target-focus
+{
+	box-shadow : 0 0 12px rgba(255,255,255,0.75);
 	-webkit-transition: box-shadow .25s linear;
 	transition: color .25s linear;
 }
