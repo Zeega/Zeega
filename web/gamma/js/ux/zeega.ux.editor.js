@@ -25,29 +25,39 @@ function initUX(){
 
 $('#list-view').click(function(){
 	console.log('goto list view');
+	$('#grid-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+	return false;
 })
 
 $('#grid-view').click(function(){
 	console.log('goto grid view');
+	$('#list-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+	return false;
 })
 
-$('#workspace-ratio').change(function(){
-	var ratioID = parseInt( $(this).val() );
-	changeAspectRatio( ratioID )
-	Zeega.updateAspectRatio( ratioID );
-});
+
+$('#project-settings').click(function(){
+	projectSettings();
+})
+
+$('#ratio-list a').click(function(){
+	changeAspectRatio( $(this).data('ratio-id') );
+	return false;
+})
 
 function changeAspectRatio( ratioID )
 {
 	switch( ratioID )
 	{
-		case 1:
+		case 0:
 			$('#visual-editor-workspace').css('width','704px')
 			break;
 		
-		case 2:
+		case 1:
 			$('#visual-editor-workspace').css('width','625px')
 			break;
 			
@@ -56,6 +66,16 @@ function changeAspectRatio( ratioID )
 	}
 }
 
+
+function projectSettings()
+{
+	//$('#project-settings-modal').modal({ backdrop:true });
+	$('#project-settings-modal').modal('show');
+	$('#project-settings-modal').find('#close-modal').click(function(){
+		$('#project-settings-modal').modal('hide');
+	})
+	return false;
+}
 
 function embedButton()
 {
@@ -91,6 +111,11 @@ function shareButton()
 }
 
 
+
+$('#new-layer-list a').click(function(){
+	addLayer( $(this).data('type') );
+	return false;
+})
 
 function addLayer(type)
 {
@@ -172,14 +197,19 @@ function closeOpenCitationTabs()
 		shareButton();
 	});
 	
-	//fadeIn the sidebar
-	$('#sidebar').fadeIn();
+	$('#get-help').click(function(){
+		localStorage.help = true;
+		Zeega.initStartHelp();
+	})
 	
 	
-	$('#search-filter .filter-toggle').click(function(){
-		var dd = $(this).parent('li');
-		if($(dd).hasClass('open')) dd.removeClass('open');
-		else $(dd).addClass('open');
+	$('.menu-toggle').click(function(){
+		
+		var menu = $(this).next();
+		
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
 		event.stopPropagation();
 	});
 	
@@ -196,8 +226,7 @@ function closeOpenCitationTabs()
 	
 	function clearMenus()
 	{
-		var d = 'a.menu, .dropdown-toggle, .filter-toggle';
-		$(d).parent('li').removeClass('open');
+		$('.menu-items').removeClass('open');
 	}
 	
 	
@@ -232,8 +261,12 @@ function closeOpenCitationTabs()
 
 		if (keycode == 13)
 		{
-
 			Database.search( $("#database-search-text").val() );
+			//open database tray if closed
+			if( $('#database-panel .panel-content').is(':hidden') )
+				$('#database-panel .panel-content').show('blind',{'direction':'vertical'});
+			
+			
 			console.log('pressed enter')
 		}else{
 			return true;
@@ -242,7 +275,7 @@ function closeOpenCitationTabs()
 	
 	//node tray sortable and sorting events
 	
-	$('#node-drawer').find('ul').sortable({  
+	$('#frame-list').sortable({  
 		axis : 'x',
 		forceHelperSize : true,
 		placeholder: "node-thumb ui-state-highlight",
@@ -252,12 +285,17 @@ function closeOpenCitationTabs()
 		
 		stop : function(){
 			var order = $(this).sortable('toArray');
+			
 			//ensure the array is made of integers
-			order = _.map( order, function(num){ return parseInt( num ) })
+			Zeega.nodeSort();
+			
+			/*
+			order = _.map( order, function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
 			
 			Zeega.route.set({'nodesOrder': order });
 			Zeega.route.save();
-			console.log($(this).sortable('toArray'));
+			console.log(order);
+			*/
 		}
 	});
 	
@@ -325,35 +363,34 @@ function closeOpenCitationTabs()
 	
 
 //expands the Zeega editor panels	
-	$('.editor-title-bar-expander').click(function(){
-		console.log('expand/collapse')
-		//get the current Node ID
-		var nodeID = Zeega.currentNode.id;
-		var domID = $(this).attr('id').split('-',1)[0];
+	$('.expandable .panel-head').click(function(){
 
-		var storage = localStorage.getObject( nodeID );
-		var panelStates = {};
-		if( _.isNull( storage ) ) storage = {};
-		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+//removed the ability to store the panel states for now
+		//get the current Node ID
+		//var nodeID = Zeega.currentNode.id;
+		//var domID = $(this).attr('id').split('-',1)[0];
+
+		//var storage = localStorage.getObject( nodeID );
+		//var panelStates = {};
+		//if( _.isNull( storage ) ) storage = {};
+		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
 		
-		var expander = $(this).next('div');
-		if( expander.is(':visible'))
+		var content = $(this).next('div');
+		if( content.is(':visible'))
 		{
 			//hide
-			eval( 'var state = {"'+ domID +'":true}');
-			_.extend( panelStates , state );
-			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":true}');
+			//_.extend( panelStates , state );
+			content.hide('blind',{'direction':'vertical'});
 		}else{
 			//show
-			eval( 'var state = {"'+ domID +'":false}');
-			_.extend( panelStates , state );
-			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":false}');
+			//_.extend( panelStates , state );
+			content.show('blind',{'direction':'vertical'})	
 		}
 		//set as property to read in on reload
-		_.extend( storage, {panelStates:panelStates} )
-		localStorage.setObject( nodeID , storage );
+		//_.extend( storage, {panelStates:panelStates} )
+		//localStorage.setObject( nodeID , storage );
 	})
 	
 	

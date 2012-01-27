@@ -6,7 +6,7 @@
 ************************************/
 
 var YoutubeLayer = VideoLayer.extend({
-	
+		
 	defaultAttributes : {
 		'title' : 'Video Layer',
 		'url' : 'none',

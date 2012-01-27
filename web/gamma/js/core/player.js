@@ -69,6 +69,15 @@ var Player = {
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
 
+
+		//turn the node layer array into an array of string numbers
+		_.each(this.data.project.routes,function(route){
+			_.each(route.nodes, function(node){
+				node.layers = _.map(node.layers,function(num){ return String(num) });
+			})
+		})
+
+
 		//set the current node
 		var currentNodeID;
 		if( !nodeID ) currentNodeID = this.currentRoute.nodeOrder[0];
@@ -329,8 +338,11 @@ var Player = {
 			//updated the loading bar
 			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
+			console.log('UPDATE!')
+			console.log( layers )
+				
 			//if all the layers are loaded in a node
-			if( _.difference( layers, _this.loadedLayers ).length == 0 )
+			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
 			{
 			
 				//remove from nodes loading array

@@ -231,6 +231,22 @@ var ProtoLayer = Class.extend({
 		this.display = $('<div>').css(displayCSS);
 		this.thumbnail = $('<div>').css(thumbCSS);
 
+		console.log(this.attr);
+
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			
+			$(this.display).addClass('linked-layer').css('cursor','pointer');
+			$(this.display).click(function(){
+				
+				console.log('link to: '+ _this.attr.link_to )
+				document.location.href = _this.attr.link_to;
+			})
+		}
+
+
+
 		this.thumb();
 	},
 	

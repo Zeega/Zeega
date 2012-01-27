@@ -23,6 +23,8 @@ var Zeega = {
 	
 	previewMode:false,
 	
+	helpCounter: 0,
+	
 	maxNodesPerRoute : 0, // 0 = no limit
 	maxLayersPerNode : 0, // 0 = no limit
 	
@@ -40,6 +42,8 @@ var Zeega = {
 		// makes sure that zeega only advances after both nodes and layers are loaded
 		//commented out??
 		this.zeegaReady = _.after(2,this.nodesAndLayersReady);
+
+		this.initStartHelp();
 
 		Zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
@@ -187,9 +191,12 @@ var Zeega = {
 		//open/close visual editor
 		var el = $('#workspace');
 
+
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
 		//right now they inherit the last node's state
+		
+		
 		var storage = localStorage.getObject( this.currentNode.id );
 		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
 		{
@@ -211,8 +218,10 @@ var Zeega = {
 		
 		//update the auto advance tray
 		//make sure the attribute exists
-		var adv = this.currentNode.get('attr').advance;
-		if(adv)
+		var adv = false;
+		if( !_.isNull(this.currentNode.get('attr')) && !_.isNull( this.currentNode.get('attr').advance ) )
+			adv = this.currentNode.get('attr').advance;
+		if( adv != false )
 		{
 			if(adv > 0)
 			{
@@ -243,19 +252,19 @@ var Zeega = {
 		}
 		
 		// add the node's layers // remove falsy values
-		var layerArray = _.compact( this.currentNode.get('layers'))
+		var layerArray = _.compact( this.currentNode.get('layers'));
 		
 		//call render on the entire collection. it should have the logic to draw what's needed
 		Zeega.route.layerCollection.render( this.currentNode );
 		
 		//add a new current node style
-		$('.node-thumb-'+this.currentNode.id).addClass('node-selected');
+		$('#frame-thumb-'+this.currentNode.id).addClass('active-frame');
 	},
 	
 	clearCurrentNode : function ()
 	{
 		//remove a prexisiting node style
-		if(this.currentNode) $('.node-thumb-'+this.currentNode.id).removeClass('node-selected');
+		if(this.currentNode) $('#frame-thumb-'+this.currentNode.id).removeClass('active-frame');
 		
 		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();
@@ -338,13 +347,13 @@ var Zeega = {
 	updateAndSaveNodeLayer : function(node, layer)
 	{
 		console.log('updateAndSaveNodeLayer');
-		var layerOrder = [layer.id];
+		var layerOrder = [parseInt(layer.id)];
 		if( node.get('layers') )
 		{
 			//if the layer array already exists eliminate false values if they exist
 			layerOrder = _.compact( node.get('layers') );
 			//add the layer id to the layer order array
-			layerOrder.push( layer.id );
+			layerOrder.push( parseInt( layer.id ) );
 		}
 		//set the layerOrder array inside the node
 		node.set({'layers':layerOrder});
@@ -369,7 +378,7 @@ var Zeega = {
 			this.removeLayerPersist(layer)
 			_.each( _.toArray(this.route.nodes), function(_node){
 				var layerOrder = _node.get('layers');
-				layerOrder = _.without(layerOrder,layer.id);
+				layerOrder = _.without(layerOrder, parseInt(layer.id) );
 				if(layerOrder.length == 0) layerOrder = [false];
 				_node.set({'layers':layerOrder});
 				_node.save();
@@ -381,7 +390,7 @@ var Zeega = {
 			console.log('NOT a persistent layer');
 			
 			var layerOrder = node.get('layers');
-			layerOrder = _.without(layerOrder,layer.id);
+			layerOrder = _.without(layerOrder, parseInt(layer.id) );
 			//set array to false if empty  //weirdness
 			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
 			node.set({'layers':layerOrder});
@@ -406,11 +415,11 @@ var Zeega = {
 		});
 		
 		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
-		
+				
 		// make a giant array of all the layer IDs saved in the route
 		var layersInRoute = [];
 		_.each( _.toArray(this.route.layerCollection), function(layer){
-			layersInRoute.push(layer.id);
+			layersInRoute.push( parseInt(layer.id) );
 		});
 
 		var orphanIDs = _.difference(layersInRoute, layersInNodes);
@@ -538,12 +547,25 @@ var Zeega = {
 			
 		}
 	},
+	
+	duplicateFrame : function( view )
+	{
+		var dupeModel = new Node({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
+		dupeModel.oldLayerIDs = view.model.get('layers');
+		
+		dupeModel.dupe = true;
+		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
+		this.route.nodes.add( dupeModel );
+	},
 		
 	nodeSort : function()
 	{
 		//turn the string IDs into integers to compare with model IDs
-		var order = _.map( $('#node-drawer ul').sortable('toArray'), function(str){ return parseInt(str) });
+		var order = _.map( $('#frame-list').sortable('toArray'), function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
+		
+		//var order = _.map( $('#frame-list').sortable('toArray'), function(str){ return parseInt(str) });
 		this.route.set({'nodesOrder': order});
+		console.log(this.route.get('nodesOrder'))
 		this.route.save();
 	},
 	
@@ -620,7 +642,120 @@ var Zeega = {
 		console.log(this.project)
 		this.project.set({'attr':{'ratio':ratioID}});
 		this.project.save();
+	},
+	
+	initStartHelp : function()
+	{
+		if(localStorage.help != 'false' && this.helpCounter == 0)
+		{
+			//init the popovers
+			$('#visual-editor-workspace').popover({
+				trigger: manual,
+				html:true,
+				placement:'above',
+				offset:'-250',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#database-item-list').popover({
+				trigger: manual,
+				html:true,
+				placement:'above',
+				//offset:'-250',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#new-layer-tray').popover({
+				trigger: manual,
+				html:true,
+				placement:'above',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#layer-panel').popover({
+				trigger: manual,
+				html:true,
+				placement:'above',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#frame-drawer').popover({
+				trigger: manual,
+				html:true,
+				placement:'below',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#preview').popover({
+				trigger: manual,
+				html:true,
+				placement:'below',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+			});
+			$('#route-title').popover({
+				trigger: manual,
+				html:true,
+				placement:'below',
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">finish</a></div></div>'
+			});
+		
+		
+			this.displayStartHelp();
+		}
+	},
+	
+	displayStartHelp : function()
+	{
+		var _this = this;
+		var helpOrderArray = [
+			'visual-editor-workspace',
+			'database-item-list',
+			'new-layer-tray',
+			'layer-panel',
+			'frame-drawer',
+			'preview',
+			'route-title'
+		];
+		
+	
+		if(_this.helpCounter > 0 )
+		{
+			$('#'+helpOrderArray[_this.helpCounter-1]).popover('hide');
+			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
+		}
+		if(_this.helpCounter >= helpOrderArray.length )
+		{
+			console.log('end of line')
+			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
+			this.turnOffHelp();
+			return false;
+		}
+			
+		$('#'+helpOrderArray[_this.helpCounter]).popover('show');
+		$('#'+helpOrderArray[_this.helpCounter]).css('box-shadow', '0 0 18px orange');
+	
+		this.helpCounter++;
+		
+	},
+	
+	turnOffHelp : function()
+	{
+		console.log('turn off help windows')
+		var helpOrderArray = [
+			'visual-editor-workspace',
+			'database-item-list',
+			'new-layer-tray',
+			'layer-panel',
+			'frame-drawer',
+			'preview',
+			'route-title'
+		];
+		localStorage.help = false;
+
+console.log( helpOrderArray[this.helpCounter-1] )
+
+			$('#'+helpOrderArray[this.helpCounter-1]).popover('hide');
+			$('#'+helpOrderArray[this.helpCounter-1]).css('box-shadow', '');
+			this.helpCounter = 0;
+		
 	}
+	
+	
 	
 	
 };

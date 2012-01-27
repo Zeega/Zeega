@@ -53,12 +53,18 @@ var VisualLayerListView = Backbone.View.extend({
 		}else{
 			persist = '';
 		}
+		
+		var showLink = '';
+		if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
+			showLink = 'hidden';
 
 		//set values to be filled into template
 		var values = {
 			id : 'layer-edit-'+this.model.id,
 			layerName : title,
-			persist : persist
+			persist : persist,
+			show_link : showLink,
+			link_to : this.model.get('attr').link_to
 		}
 		//make template
 		var tmpl = _.template( this.getTemplate() );
@@ -71,7 +77,9 @@ var VisualLayerListView = Backbone.View.extend({
 		$(this.el).find('.asset-type-icon').addClass('zicon-' +type.toLowerCase() );
 		
 		$(this.el).find('#controls').append( this.model.layerClass.drawControls() );
-				
+		
+		this.setListeners();
+		
 		return this;
 	},
 	
@@ -79,6 +87,17 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		//I can't access the this.el because the scope has changed to the model object :/
 		$( '#layer-'+ this.id ).find('.layer-title').html( this.get('attr').title );
+	},
+	
+	setListeners : function()
+	{
+		//twipsies
+		$(this.el).find('.layer-link').twipsy({
+			placement : 'right'
+		})
+		
+		
+		
 	},
 	
 	
@@ -94,10 +113,13 @@ var VisualLayerListView = Backbone.View.extend({
 		'change #persist'			: 'persist',
 		'click .copy-to-next'		: 'copyToNext',
 		'click .layer-icon'			: 'hideShow',
-		'mouseenter .layer-icon'			: 'onLayerIconEnter', 
-		'mouseleave .layer-icon'			: 'onLayerIconLeave', 
-		'mouseenter .delete-layer'			: 'onLayerTrashEnter', 
-		'mouseleave .delete-layer'			: 'onLayerTrashLeave',	},
+		'mouseenter .layer-icon'	: 'onLayerIconEnter', 
+		'mouseleave .layer-icon'	: 'onLayerIconLeave', 
+		'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
+		'mouseleave .delete-layer'	: 'onLayerTrashLeave',
+		'click .layer-link'			: "layerLink",
+		'click .clear-link'			: 'clearLayerLink'
+	},
 	
 	//delete this layer from the DB and view
 	delete : function()
@@ -168,30 +190,93 @@ var VisualLayerListView = Backbone.View.extend({
 		
 	},
 	
+	layerLink : function()
+	{
+		var _this = this;
+		$(this.el).find('.layer-link-box').show();
+		
+		//finish entering  link info
+		$(this.el).find('.layer-link-box input').keypress(function(e){
+			if(e.which == 13)
+			{
+				// do some validation here?
+				var properties = {
+					link : {
+						property : 'link_to',
+						value : $(this).val(),
+						css : false
+					}
+				};
+				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+				
+				$(this).blur();
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+			
+		});
+		
+		return false;
+	},
+	
+	clearLayerLink : function()
+	{
+		
+		$(this.el).find('.layer-link-box input').val('');
+		
+		var properties = {
+			link : {
+				property : 'link_to',
+				value : '',
+				css : false
+			}
+		};
+		this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
+		
+		return false;
+	},
+	
 	getTemplate : function()
 	{
-		var layerTemplate = 		'<div class="layer-uber-bar clearfix">';
-		layerTemplate += 			'<div class="layer-icon">';
-		layerTemplate += 				'<span class="asset-type-icon orange zicon"></span>';
-		layerTemplate += 			'</div>';
-		layerTemplate += 		'<div class="layer-title"><%= layerName %></div>';
-		layerTemplate += 		'<div class="layer-uber-controls">';
-		layerTemplate += 			'<span class="delete-layer zicon zicon-trash-closed"></span>';
-		layerTemplate += 		'</div>';
-		layerTemplate += 		'<div class="layer-drag-handle">';
-		layerTemplate += 			'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>';
-		layerTemplate += 		'</div>';
-		layerTemplate += 	'</div>';
-		layerTemplate += 	'<div class="hidden layer-content clearfix">';
-		layerTemplate += 		'<div id="controls"></div>';
-		layerTemplate += 		'<br />';
-		layerTemplate += 		'<form id="layer-persist">';
-		layerTemplate += 			'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>';
-		layerTemplate += 		'</form>';
-		layerTemplate += 		'<a href="#" class="copy-to-next btn small">Copy to next node</a>';
-		layerTemplate += 	'</div>';
+		var html =
 		
-		return layerTemplate;
+		'<div class="layer-uber-bar clearfix">'+
+			'<div class="layer-icon">'+
+				'<span class="asset-type-icon orange zicon"></span>'+
+			'</div>'+
+			'<div class="layer-title"><%= layerName %></div>'+
+			'<div class="layer-uber-controls">'+
+				'<span class="delete-layer zicon zicon-trash-closed"></span>'+
+			'</div>'+
+			'<div class="layer-drag-handle">'+
+				'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>'+
+			'</div>'+
+		'</div>'+
+		'<div class="layer-content inset-tray dark hidden">'+
+			'<div id="controls" class="clearfix"></div>'+
+			//'<br />'+
+			'<div class="standard-layer-controls clearfix">'+
+				'<div>'+
+					'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
+				'</div>'+
+				'<div><a href="#" class="copy-to-next btn">Copy to next node</a></div>';
+			
+		if( this.model.layerClass.linkable )
+		{
+
+			html +=	'<div><a href="#" class="layer-link" title="click here to set this layer as a link" style="float:left"><span class="zicon zicon-link orange"></span></a></div>';
+			html += '<div class="layer-link-box <%= show_link %>">';
+			html +=		'<div class="input-prepend"><span class="add-on">http://</span><input class="span4" name="prependedInput" type="text" placeholder="http://www.example.com" value="<%= link_to %>">';
+			html +=		'<a href="#" class="clear-link"><span class="zicon zicon-close orange"></span></a>';
+			html += '</div></div>';
+		}
+		html += 	'</div>'; //standard layer controls
+		html += '</div>';
+		
+		return html;
 	}
 	
 	

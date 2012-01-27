@@ -1,12 +1,15 @@
 var Node = Backbone.Model.extend({
 	
+	
 	defaults : {
+		
 		"name" : "Untitled",
 		"attr" : {
-			"advance": 0,
-			"editorHidden":false
+			"advance": 0
 		}
+		
 	},
+	
 	
 	/*
 	url : function(){
@@ -17,7 +20,7 @@ var Node = Backbone.Model.extend({
 	
 	initialize : function() {
 		
-		if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
+		if(!this.get('attr')) this.set({'attr':{ 'advance':0 }})
 		
 		//this is the function that only calls updateThumb once after n miliseconds
 		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
@@ -27,7 +30,7 @@ var Node = Backbone.Model.extend({
 	
 	noteChange:function()
 	{
-		$('.node-thumb-'+this.id).find('.node-update-overlay').fadeIn('fast');
+		$('#frame-thumb-'+this.id).find('.frame-update-overlay').fadeIn('fast');
 		this.updateNodeThumb();
 	},
 	

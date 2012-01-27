@@ -14,6 +14,7 @@ var ImageLayer = ProtoLayer.extend({
 	
 	layerType : 'VISUAL',
 	draggable : true,
+	linkable : true,
 
 	defaultAttributes : {
 		'title' : 'Image Layer',
