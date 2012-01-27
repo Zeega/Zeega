@@ -35,6 +35,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 	},
 	render: function()
 	{
+		$(this.el).empty();
 		var blanks = {
 			src : this.model.get('thumbnail_url'),
 			title : this.model.get('title'),
@@ -251,7 +252,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		//when item removes itself from collection this gets fired
 		this.model.bind('destroy', this.remove, this);
 		
-		var theModel = this.model;
+		
 		
 
 		
@@ -294,7 +295,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		this.el.find('img').attr('title', this.model.get('title'));
 		this.el.find('img').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
 		*/
-
+		var theModel = this.model;
 		$(this.el).draggable({
 			distance : 10,
 			cursor : 'crosshair',
