@@ -289,14 +289,7 @@ function closeOpenCitationTabs()
 			
 			//ensure the array is made of integers
 			Zeega.nodeSort();
-			
-			/*
-			order = _.map( order, function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
-			
-			Zeega.route.set({'nodesOrder': order });
-			Zeega.route.save();
-			console.log(order);
-			*/
+
 		}
 	});
 	

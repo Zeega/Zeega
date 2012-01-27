@@ -13,20 +13,26 @@ var MyRouter = Backbone.Router.extend({
 	// open/load the assigned node
 	gotoNodeInEditor : function(nodeid)
 	{
-			if(Zeega && nodeid)
-			{
-				if(nodeid == 'undefined') Zeega.url_hash.node = '';
-				else Zeega.url_hash.node = nodeid;
-			}
-			//check to see if the node is already loaded, or if it should move to that node
-			if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+		if( Zeega.previewMode = true )
+		{
+			Player.close();
+		}
 		
+		
+		if(Zeega && nodeid)
+		{
+			if(nodeid == 'undefined') Zeega.url_hash.node = '';
+			else Zeega.url_hash.node = nodeid;
+		}
+		//check to see if the node is already loaded, or if it should move to that node
+		if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+	
 	},
 
 	gotoNodeInPlayer : function(nodeid)
 	{
 		console.log('Player node changed')
-		
+		Player.gotoNode( nodeid );
 	},
 	
 });
