@@ -13,14 +13,13 @@ var Database =
 		this.itemCollection = new ItemCollection;
 		this.itemViewCollection;
 		
-		// BEGIN "HAMMERS ARE COOL-MODE"
 		var collection_id = $('#collection-id').val();
 		if(parseInt(collection_id) > -1)
 		{
-		    var url = Zeega.url_prefix + "api/search";
-		    this.itemCollection.url = Zeega.url_prefix + "api/search?collection=" + collection_id;
+			console.log('collection in view: '+ collection_id)
+			this.itemCollection.collectionID = collection_id;
+			$('#database-collection-filter').val(collection_id);
 		}
-		// END "HAMMERS ARE COOL-MODE"
 		
 		var itemsBS = jQuery.parseJSON(itemsJSON);
 		
