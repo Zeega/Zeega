@@ -38,18 +38,26 @@
 	margin: 30px 10px;
 	line-height: 18px;
 	text-align: justify;
-	height: 335px;
+	height: 135px;
 
 	
 }
 #fancybox-media-container .tag-container{
-	float:left;
+	float:right;
+	min-width:50px;
 }
 #fancybox-media-container .tags{
 	text-align: left;
 	
 	float:left;
 }
+
+#fancybox-media-container .map{
+	text-align: right;
+	display:none;
+	float:right;
+}
+
 #fancybox-media-container .tags a{
 	color:gray;
 	font-size:11px;

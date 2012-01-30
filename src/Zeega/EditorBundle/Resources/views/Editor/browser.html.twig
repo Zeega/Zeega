@@ -180,7 +180,17 @@
 				<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script data-main="{{ asset('gamma/js/main.browser.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
-
+		<!-- Leaflet CSS --> 
+		<link rel="stylesheet" href="{{ asset('gamma/js/libraries/leaflet/leaflet.css')}}" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('gamma/libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
+		
+		
+		<script src="{{ asset('gamma/js/libraries/jquery.tagsinput.min.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/libraries/jquery.tagsinput.css')}}" />
+		
+		
+		<!-- Leaflet JavaScript -->
+		<script src="{{ asset('gamma/js/libraries/leaflet/leaflet.js')}}"></script>
 		
 		<!-- FANCYBOX -->
 		<!-- Optionaly include easing and/or mousewheel plugins -->

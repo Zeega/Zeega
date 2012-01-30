@@ -1,3 +1,46 @@
+
+/******************************************
+
+	MAP VIEW
+	
+*******************************************/
+.edit-geo-location{
+	cursor:pointer;
+}
+
+.locator-search-bar{
+	display:none;
+}
+
+.locator-map{
+
+	width:250px;
+	height:150px;
+	
+}
+
+
+
+.item-lat-lng{
+	display:none;
+
+}
+
+.item-latitude, .item-longitude{
+
+width: 40px;
+padding: 3px;
+overflow:hidden;
+
+}
+
+/******************************************
+
+	END MAP VIEW 
+	
+*******************************************/
+
+
 /*		temp fix		*/
 		
 ul,li

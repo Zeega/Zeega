@@ -1,52 +1,47 @@
 var FancyBoxView = Backbone.View.extend({
 	tagName:'div',
+	tagId:'fancybox-media-container',
 	initialize: function(){
-		
-		
-
-		
 	},
-	moreView : function(theElement){
+	
+	events : {
+		
+		'click .fancybox-more-button' : 'more',
+		'click .fancybox-less-button' : 'less',
+
+	},
+	more : function(){
+		var _this=this;
 		sessionStorage.setItem('moreFancy', true);
-
-		$(theElement).find('.fancybox-more-button').hide();
-		$(theElement).find('.fancybox-less-button').show();
-		$(theElement).find(".fancybox-media-item").addClass("fancybox-media-item-more");
-		$(theElement).addClass("fancybox-media-container-more");
-		$(theElement).find('.description').show();
-		$(theElement).find('.tags').show();
-		$(theElement).find('.addtags').show();
-	},
-	lessView : function( theElement){
-		sessionStorage.setItem('moreFancy', false);
-
-		$(theElement).find('.fancybox-more-button').show();
-		$(theElement).find('.fancybox-less-button').hide();
-		$(theElement).find('.description').hide();
-		$(theElement).find('.tags').hide();
-		$(theElement).find('.addtags').hide();
-		$(theElement).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
-		$(theElement).removeClass("fancybox-media-container-more");
-	},
-	/*renderTags : function(){
-		
-		var tags = this.model.get("tags");
-		var theElement = this.el;
-		var theModel = this.model;
-		for(var i=0;i<tags.length;i++){
-			var tag = tags.at(i);
-			if (tag.get("tag_name") != null){
-				var html = '<a class="fancybox-remove-tag" id="'+ tag.id + '" href=".">x</a><a class="tag" href=".">'+tag.get("tag_name")+'</a>';
-				$(theElement).find('.tags').prepend(html);
-			}
-		}
-		
+		console.log('MORE IS BEING CALLED');
+		$(this.el).find('.less').hide();
+		$(this.el).find('.more').fadeIn('fast',function(){
+			if(_this.locatorMapView.geoLocated)_this.locatorMapView.addMap();
 			
-	},*/
+			
+		});
+		
+		
+		
+		
+		$(this.el).find(".fancybox-media-item").addClass("fancybox-media-item-more");
+		$(this.el).addClass("fancybox-media-container-more");	
+		
+		
+		return false;
+	},
+	less : function( ){
+		sessionStorage.setItem('moreFancy', false);
+		$(this.el).find('.more').hide();
+		$(this.el).find('.less').show();
+		$(this.el).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
+		$(this.el).removeClass("fancybox-media-container-more");	
+		return false;
+	},
 	render: function(obj)
 	{
 
-		$(this.el).attr("id", "fancybox-media-container");
+		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
 			title : this.model.get('title'),
@@ -54,71 +49,54 @@ var FancyBoxView = Backbone.View.extend({
 			creator : this.model.get('media_creator_username'),
 		};
 		
+		if(this.model.get('attribution_uri').indexOf('flickr')>-1) blanks.sourceText = 'View on Flickr';
+		else 	if(this.model.get('attribution_uri').indexOf('youtube')>-1) blanks.sourceText = 'View on Youtube';
+		else 	if(this.model.get('attribution_uri').indexOf('soundcloud')>-1) blanks.sourceText = 'Listen on Soundcloud';
+		else blanks.sourceText ='View Source';
+	
+		
+		
 		//use template to clone the database items into
 		var template = _.template( this.getTemplate() );
 		
 		//copy the cloned item into the el
 		$(this.el).append( template( blanks ) );
-
-		//Load the item's tags (asynchronously) so we can display and edit them
-		//var item = this.model;
-		var theElement = this.el;
-		var view = this;
 		
+		// Add map view
+		this.locatorMapView= new LocatorMapView({model:this.model});
+		$(this.el).find('.geo').append(this.locatorMapView.render());
 		
-		this.model.loadTags(
-			function () {
-				view.tagViews = new TagCollectionView({
-										collection:view.model.get("tags"), 
-										el : $(theElement).find('.tags').get(0),
-										
-									});
-				view.tagViews.render();
-			}, 
-			function(){
-				console.log("Error loading tags for item " + theModel.id);
-			
-		});
-		
-		/*
-		THESE ARE SET UP IN INIT FUNCTION BC of tag loading - do we need to redo them here? Comment out for now.
-		$(this.el).find('.source a').attr('href', this.model.get('attribution_uri'));
-		$(this.el).find('.title').text( this.model.get('title'));
-		$(this.el).find('.creator').text( this.model.get('media_creator_username'));
-		$(this.el).find('.description').text( this.model.get('description'));
-		*/
-
+		//Add tag view
+		this.tagView = new ItemTagView({model:this.model});
+		$(this.el).find('.tags').empty().append(this.tagView.render());
+		this.tagView.loadTags();
+	
 		//Fancybox will remember if user was in MORE or LESS view
 		if (sessionStorage.getItem('moreFancy') == "true"){
-			this.moreView(this.el);
+			this.more(this.el);
 		} else {
-			this.lessView(this.el);
+			this.less(this.el);
 		}
+		
+	
+		
+
+	
+		var _this=this;
+		
+	
+	
 
 
 		
-		//MORE/LESS buttons
-		$(this.el).find('.fancybox-more-button, .fancybox-less-button').click(function(e){
-			
-			//Fancybox will remember if user was in MORE or LESS view
-			var fancyVar = sessionStorage.getItem('moreFancy');
-			if (sessionStorage.getItem('moreFancy') == "true"){
-				view.lessView(theElement);
-				e.preventDefault();
-			} else {
-				view.moreView(theElement);
-				e.preventDefault();
-			}
-
-		});
 		//EDIT TITLE
 		$(this.el).find('.title').editable(
 			function(value, settings)
 			{ 
-				item.save({ title:value }, 
+				_this.model.save({ title:value }, 
 						{
 							success: function(model, response) { 
-								console.log("Updated item title for item " + item.id);
+								console.log("Updated item title for item " + model.id);
 			 				},
 			 				error: function(model, response){
 			 					
@@ -141,11 +119,11 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find('.description').editable(
 			function(value, settings)
 			{ 
-				item.save({ description:value }, 
+				_this.model.save({ description:value }, 
 						{
 							success: function(model, response) { 
-								theElement.find('.description').text(item.get("description"));
-								console.log("Updated item description for item " + item.id);
+								theElement.find('.description').text(_this.model.get("description"));
+								console.log("Updated item description for item " + _this.model.id);
 			 				},
 			 				error: function(model, response){
 			 					
@@ -169,10 +147,10 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find('.creator').editable(
 			function(value, settings)
 			{ 
-				item.save({ "media_creator_username":value }, 
+				_this.model.save({ "media_creator_username":value }, 
 						{
 							success: function(model, response) { 
-								console.log("Updated item creator for item " + item.id);
+								console.log("Updated item creator for item " + _this.model.id);
 			 				},
 			 				error: function(model, response){
 			 					
@@ -195,14 +173,14 @@ var FancyBoxView = Backbone.View.extend({
 		//DELETE button
 		$(this.el).find('.fancybox-delete-button').click(function(e){
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ item.id;
+						+ _this.model.id;
 			
 
 			//DESTROYYYYYYYY
-			item.destroy({	
+			_this.model.destroy({	
 				 				url : deleteURL,
 								success: function(model, response) { 
-									console.log("Deleted item " + item.id);	
+									console.log("Deleted item " + _this.model.id);	
 									
 
 									//close fancy box window
@@ -211,7 +189,7 @@ var FancyBoxView = Backbone.View.extend({
 				 				},
 				 				error: function(model, response){
 				 					
-				 					console.log("Error deleting item " + item.id);		
+				 					console.log("Error deleting item " + _this.model.id);		
 				 					console.log(response);
 				 				}
 		 					});
@@ -225,13 +203,14 @@ var FancyBoxView = Backbone.View.extend({
 	getTemplate : function()
 	{
 		
-		var html =	'<div class="fancybox-media-item"></div>'+
-					'<p class="title fancybox-editable"><%= title %></p>'+
-					'<p><span class="creator fancybox-editable"><%= title %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank">View Source</a></span></p>'+
-					'<p class="description fancybox-editable"><%= description %></p>'+
-					'<div class="tags"></div>'+
+		var html =	'<div class="fancybox-media-item media-item"></div>'+
+					'<p class="fancybox-editable title"><%= title %></p>'+
+					'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+
+					'<p class="more description fancybox-editable"><%= description %></p>'+
+					'<div class="more geo"></div>'+
+					'<div class="more tags"></div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
-						'<p class="fancybox-more-button"><a href=".">more</a></p><p class="fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>'+
+						'<p class="less fancybox-more-button"><a href=".">more</a></p><p class="more fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>'+
 					'</div>';
 								
 		return html;
@@ -249,12 +228,17 @@ var FancyBoxImageView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		console.log('this model id is'+this.model.id);
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
+	
+		
+		console.log(this.model);
 		//Fill in image-specific stuff
 		var blanks = {
-			src : $(obj.element).attr("href"),
+			src : this.model.get('uri'),
 			title : this.model.get('title'),
 		};
 		
@@ -268,6 +252,10 @@ var FancyBoxImageView = FancyBoxView.extend({
 
 		//set fancybox content
 		obj.content = $(this.el);
+		
+		
+
+		
 		return this;
 	},
 	getMediaTemplate : function()
@@ -292,11 +280,14 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-
+		
 		//Fill in media-specific stuff
 		var blanks = {
-			src : $(obj.element).attr("href"),
+					src : this.model.get('uri'),
 		};
 		
 		//use template to clone the database items into
@@ -306,6 +297,10 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		var mediaHTML =  template( blanks ) ;
 
 		$(this.el).find('.fancybox-media-item').html(mediaHTML);
+
+
+		
+
 
 		//set fancybox content
 		obj.content = $(this.el);
@@ -335,11 +330,16 @@ var FancyBoxAudioView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+
 		
 		//Fill in media-specific stuff
 		var blanks = {
-			src : $(obj.element).attr("href"),
+					src : this.model.get('uri'),
 		};
 		
 		//use template to clone the database items into
@@ -378,7 +378,13 @@ var FancyBoxYouTubeView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+	
+		
 		
 		//Fill in media-specific stuff
 		var blanks = {
@@ -401,8 +407,8 @@ var FancyBoxYouTubeView = FancyBoxView.extend({
 	getMediaTemplate : function()
 	{
 		
-		var html =	'<div id="fancybox-youtube">'+
-					'<iframe class="youtube-player" type="text/html" width="626" height="385" src="<%=src%>" frameborder="0">'+
+		var html =	'<div id="fancybox-youtube media-item">'+
+					'<iframe class="youtube-player" type="text/html" width="100%" height="335" src="<%=src%>" frameborder="0">'+
 					'</iframe></div>';
 								
 		return html;

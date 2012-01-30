@@ -2,7 +2,7 @@ var Item = Backbone.Model.extend({
 	
 	defaults : {
 		title : 'Untitled',
-		tags : new TagCollection(),
+		
 		
 	},
 	
@@ -13,13 +13,13 @@ var Item = Backbone.Model.extend({
 	
 	initialize : function()
 	{
-		this.itemTags = new TagCollection();
+		this.tags=new TagCollection();
 	},
 
 	loadTags : function(successFunction, errorFunction){
-		this.get("tags").reset({silent:true});
-		this.get("tags").item_id = this.id;
-		this.get("tags").fetch({ 
+		this.tags.reset({silent:true});
+		this.tags.item_id=this.id;
+		this.tags.fetch({ 
 			success:successFunction,
 			error:errorFunction,
 		});

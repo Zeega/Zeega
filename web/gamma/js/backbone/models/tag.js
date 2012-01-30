@@ -2,7 +2,7 @@ var Tag =  Backbone.Model.extend({
 
 	url : function(){ 
 		var url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ this.get("item_id") + "/tags";
+						+ this.get("item_id") + "/tags/"+this.get("tag_name");
 		console.log("Final url for getting tags is: " + url);
 		return url;
 	},
@@ -15,11 +15,11 @@ var Tag =  Backbone.Model.extend({
 	methodUrl: function(method){
 		if (method == 'create'){
 			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ this.get("item_id") + "/tags?tags="+this.get("tag_name");
+						+ this.get("item_id") + "/tags/"+this.get("tag_name");
 		}
-		else if (method == 'delete'){
-			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-						+ this.get("item_id") + "/tags?tags="+this.id;
+		else if (method == 'destroy'){
+				return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+						+ this.get("item_id") + "/tags/"+this.get("tag_name");
 		}
 		else if (method == 'get'){
 			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
