@@ -14,12 +14,9 @@ var Database =
 		this.itemViewCollection;
 		
 		var collection_id = $('#collection-id').val();
-		if(parseInt(collection_id) > -1)
-		{
-			console.log('collection in view: '+ collection_id)
+		if(parseInt(collection_id) > -1) 
 			this.itemCollection.collectionID = collection_id;
-			$('#database-collection-filter').val(collection_id);
-		}
+		
 		
 		var itemsBS = jQuery.parseJSON(itemsJSON);
 		
