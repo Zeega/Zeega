@@ -76,14 +76,6 @@ var ImageLayer = ProtoLayer.extend({
 			.append( img );
 	},
 
-	thumb : function()
-	{
-		var img = $('<img>')
-			.attr('src', this.attr.url)
-			.css({'width':'100%'});
-
-		this.thumbnail.append( img );
-	},
 	
 	preload : function( target )
 	{

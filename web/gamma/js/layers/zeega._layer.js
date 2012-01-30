@@ -88,7 +88,11 @@ var ProtoLayer = Class.extend({
 	
 	thumb : function()
 	{
-		
+		var img = $('<img>')
+			.attr('src', this.attr.thumbnail_url)
+			.css({'width':'100%'});
+
+		this.thumbnail.append( img );
 	},
 	
 	updateZIndex : function(z)
