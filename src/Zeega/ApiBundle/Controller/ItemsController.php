@@ -232,27 +232,31 @@ class ItemsController extends Controller
     }
     
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
-    public function deleteItemTagsAction($itemId,$tagName)
-    {
-    	$user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
-        //$tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
-        
-        
-        $itemTag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItemTagName($itemId,$tagName);
-		
-		
-		if($itemTag){
-				//$itemTag->setUser($user);
-				$em->remove($itemTag);
-				$em->flush();
-            }
-        
-        
-        return new Response('success');
-    }
-    
-    
+   
+    public function deleteItemTagsAction($itemId, $tagName)
+   {
+       $user = $this->get('security.context')->getToken()->getUser();
+               $em = $this->getDoctrine()->getEntityManager();
+
+               $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+				   $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+				   
+				   
+               if (!$item)
+               {
+                       throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
+               }
+
+               $tag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
+
+               if(isset($tag))
+               {
+                       $em->remove($tag);
+                       $em->flush();
+               }
+
+               return ResponseHelper::encodeAndGetJsonResponse($item);
+   }
     /**
 	// post_items_tags  DELETE   /api/items/{itemId}/tags/{tag_name}.{_format}
     public function deleteItemTagsAction($itemId,$tag_name)

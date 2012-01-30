@@ -11,21 +11,30 @@ var FancyBoxView = Backbone.View.extend({
 
 	},
 	more : function(){
-		
+		var _this=this;
 		sessionStorage.setItem('moreFancy', true);
+		console.log('MORE IS BEING CALLED');
 		$(this.el).find('.less').hide();
-		$(this.el).find('.more').show();
-		$(this.el).find(".media-item").addClass("fancybox-media-item-more");
+		$(this.el).find('.more').fadeIn('fast',function(){
+			if(_this.locatorMapView.geoLocated)_this.locatorMapView.addMap();
+			
+			
+		});
+		
+		
+		
+		
+		$(this.el).find(".fancybox-media-item").addClass("fancybox-media-item-more");
 		$(this.el).addClass("fancybox-media-container-more");	
-		if(this.locatorMapView.geoLocated)this.locatorMapView.addMap();
-		if(!this.tagView.loaded) this.tagView.loadTags();
+		
+		
 		return false;
 	},
 	less : function( ){
 		sessionStorage.setItem('moreFancy', false);
 		$(this.el).find('.more').hide();
 		$(this.el).find('.less').show();
-		$(this.el).find(".media-item").removeClass("fancybox-media-item-more");
+		$(this.el).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
 		$(this.el).removeClass("fancybox-media-container-more");	
 		return false;
 	},
@@ -59,7 +68,17 @@ var FancyBoxView = Backbone.View.extend({
 		
 		//Add tag view
 		this.tagView = new ItemTagView({model:this.model});
-		$(this.el).find('.tags').append(this.tagView.render());
+		$(this.el).find('.tags').empty().append(this.tagView.render());
+		this.tagView.loadTags();
+	
+		//Fancybox will remember if user was in MORE or LESS view
+		if (sessionStorage.getItem('moreFancy') == "true"){
+			this.more(this.el);
+		} else {
+			this.less(this.el);
+		}
+		
+	
 		
 
 	
@@ -69,12 +88,7 @@ var FancyBoxView = Backbone.View.extend({
 	
 
 
-		//Fancybox will remember if user was in MORE or LESS view
-		if (sessionStorage.getItem('moreFancy') == "true"){
-			this.more(this.el);
-		} else {
-			this.less(this.el);
-		}
+		
 		//EDIT TITLE
 		$(this.el).find('.title').editable(
 			function(value, settings)
@@ -215,8 +229,12 @@ var FancyBoxImageView = FancyBoxView.extend({
 	{
 		
 		sessionStorage.setItem('currentItemId', this.model.id);
+		console.log('this model id is'+this.model.id);
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+	
+		
 		console.log(this.model);
 		//Fill in image-specific stuff
 		var blanks = {
@@ -234,6 +252,10 @@ var FancyBoxImageView = FancyBoxView.extend({
 
 		//set fancybox content
 		obj.content = $(this.el);
+		
+		
+
+		
 		return this;
 	},
 	getMediaTemplate : function()
@@ -258,8 +280,11 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-
+		
 		//Fill in media-specific stuff
 		var blanks = {
 					src : this.model.get('uri'),
@@ -305,7 +330,12 @@ var FancyBoxAudioView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+
 		
 		//Fill in media-specific stuff
 		var blanks = {
@@ -348,7 +378,13 @@ var FancyBoxYouTubeView = FancyBoxView.extend({
 	render: function(obj)
 	{
 		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+	
+		
 		
 		//Fill in media-specific stuff
 		var blanks = {

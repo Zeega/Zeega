@@ -397,7 +397,7 @@ var Player = {
 	preloadNode : function( nodeID )
 	{
 		//if not loading or already loaded
-		if( !_.include( this.loadedNodes , nodeID ) || !_.include( this.loadingNodes , nodeID ) )
+		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
 		{
 			_this = this;
 
