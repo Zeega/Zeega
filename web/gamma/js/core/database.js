@@ -35,7 +35,8 @@ var Database =
 		this.collectionViewCollection;
 		
 		this.collectionCollection.fetch({
-			success: function( collections, response ){
+			success: function( collections, response )
+			{
 				_this.collectionViewCollection = new CollectionViewCollection({ collection : _this.collectionCollection });
 			}
 		});
