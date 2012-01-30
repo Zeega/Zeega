@@ -22,7 +22,6 @@ var Item = Backbone.Model.extend({
 		this.get("tags").fetch({ 
 			success:successFunction,
 			error:errorFunction,
-
 		});
 	},
 

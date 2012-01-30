@@ -299,7 +299,9 @@
 			
 			<script type="text/javascript" language="Javascript">
 				//bootstrapping data
-				var itemsJSON = "{{results|e('js')}}";
+				var itemsJSON = "{{ results|e('js') }}";
+				//console.log('collection id= '+ {{collection_id}})
+				
 			</script>
 			
 {% endblock %}

@@ -11,7 +11,7 @@ var CollectionCollection = Backbone.Collection.extend({
 	
 	url: function()
 	{
-		return Zeega.url_prefix + "api/search?user=-1&r_items=0";
+		return Zeega.url_prefix + "api/search?user=-1&r_items=0&r_collections=1&tr_itemswithcollections=0";
 	},
 	
 	parse : function(response)
