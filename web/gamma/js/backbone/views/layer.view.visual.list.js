@@ -274,7 +274,7 @@ var VisualLayerListView = Backbone.View.extend({
 				'<span class="delete-layer zicon zicon-trash-closed"></span>'+
 			'</div>'+
 			'<div class="layer-drag-handle">'+
-				'<span class="ui-icon ui-icon-grip-solid-horizontal"></span>'+
+				'<span class="zicon zicon-vert-drag"></span>'+
 			'</div>'+
 		'</div>'+
 		'<div class="layer-content inset-tray dark hidden">'+
