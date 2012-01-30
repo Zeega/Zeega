@@ -68,7 +68,7 @@ class ImportController extends Controller
     }
 		
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
-    public function getImportPersistAction()
+    public function putImportPersistAction($item)
     {
 		$url = $this->getRequest()->query->get('url');
 

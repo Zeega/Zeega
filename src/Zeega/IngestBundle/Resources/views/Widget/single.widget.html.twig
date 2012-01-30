@@ -10,28 +10,36 @@
 
 	<div id="widget-wrapper" data-id="{{widget_id}}"> 
 		<div id="media-item" >
-			<div id="item-add" style="position:relative; width:250px; float:right;">
-				<ul class="pill-buttons-widget">
-					<li><a id="add-item" href="#">Add to Zeega Collection</a></li><br>
-				</ul>
-			</div>
 			<div id="import-item" style="position:relative; float:left;">
 				
 			</div>
-			<div style="clear:both;"></div>
 		</div><!--#import-media-->
 		
-		<div style="float: left;">
-		</div>
-		<div style="clear:both;"></div>
+
 		<div id="item-view">
+			<!--
 			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="http://farm3.staticflickr.com/2037/2163470598_fb7571cdab_s.jpg" class="item-image" />
-			<p class="title">TITLE</p>
-			<p><span class="creator" style="border:solid black 1px;">CREATOR</span> <span class="source"></p>
-			<p class="description">description</p>
-			<p class="tags" ><a href=".">Dummy tag</a>, <a href=".">Another fake tag</a>, <a href=".">tag tag</a>, <a href=".">false longer tag</a></p>
+			<div id="item-add" style="position:relative; width:250px; float:right;">
+				<ul class="pill-buttons-widget">
+					<li><a id="add-item" href="#">Add to My Media</a></li><br>
+				</ul>
+			</div>
+			<div style="clear:both;"></div>
+			<input type="text" class="widget-textbox" id="widget-title"/>
+			<input type="text" class="widget-textbox" id="widget-creator"/>
+			<textarea rows="10" cols="30" class="widget-textbox" id="widget-description"></textarea>
+			-->
+			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="http://farm3.staticflickr.com/2037/2163470598_fb7571cdab_s.jpg" class="item-image" />
+			<div id="item-add" style="position:relative; width:250px; float:right;">
+				<ul class="pill-buttons-widget">
+					<li><a id="add-item" href="#">Add to My Media</a></li><br>
+				</ul>
+			</div>
+			<div style="clear:both;">&nbsp;</div>
+			<span id="widget-title">&nbsp;</span></br>
+			<span id="widget-creator">&nbsp;</span></br>
+			<p id="widget-description" class="widget-textbox">description</p>
 		</div>
-		More
 		<div id='message' style="color: red;"></div>
 	</div><!--#widget-wrapper-->
 {% endblock %}		

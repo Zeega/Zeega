@@ -10,3 +10,33 @@
     margin-bottom: 5px;
 }
 
+.widget-textbox
+{
+	background-color: #333333;
+	/*border: 1px #dddddd solid; */
+	color: #dddddd;
+	font-size: 10pt;
+	display: block;
+	margin-top: 5px;
+	word-wrap: break-word;
+	overflow: auto;
+}
+
+
+#widget-title
+{
+	width: 90%;
+}
+
+#widget-creator
+{
+	
+	
+}
+
+
+#widget-description
+{
+	width: 400px;
+	height: 300px;
+}

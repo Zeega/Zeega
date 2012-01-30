@@ -9,6 +9,7 @@
 
 function initUX()
 {
+    /*
     $('#add-item').click(function(){
     	 $(this).fadeOut();
     	 postdata={ widgetId:$('#widget-wrapper').data('id') }
@@ -25,6 +26,7 @@ function initUX()
 
     	return false;
     });
+    */
 }
 
 
