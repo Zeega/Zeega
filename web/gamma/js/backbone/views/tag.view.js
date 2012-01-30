@@ -1,5 +1,96 @@
+
+
+
+
+
+var ItemTagView = Backbone.View.extend({
+	
+	tagName:'div',
+	
+	initialize: function(){
+		this.loaded=false;
+	},
+	
+
+	render:function(){
+	
+		//use template to clone the database items into
+		var template = _.template( this.getTemplate() );
+		
+		//copy the cloned item into the el
+		$(this.el).empty();
+		$(this.el).append( template() );
+		return this.el;
+	},
+	
+	ignore:function(){
+		
+		console.log('failed to load tags');
+	
+	},
+	loadTags:function(){
+		this.loaded=true;
+		var _this=this;
+		this.model.tags.reset({silent:true});
+		this.model.tags.item_id=this.model.id;
+		this.model.tags.fetch({ 
+			success:_this.displayTags,
+			error:_this.ignore,
+
+		});
+		$('#tag-container').tagsInput({
+		   'interactive':true,
+		   'defaultText':'add a tag',
+		   'onAddTag':_this.addTag,
+		   'onRemoveTag':_this.deleteTag,
+		   'removeWithBackspace' : false,
+		   'minChars' : 1,
+		   'maxChars' : 0,
+		   'placeholderColor' : '#C0C0C0'
+		});
+	},
+	displayTags:function(tags,_this){
+		
+		
+		var taglist="";
+	
+		_.each(_.toArray(tags), function(tag){
+			taglist=tag.get('tag_name')+","+taglist;	
+		});
+		console.log(taglist);
+		
+		$('#tag-container').importTags(taglist);
+	
+	},
+	addTag:function(name){
+
+		console.log('addingatag');
+		/* TODO fix this reference */
+		
+		var tag = new Tag({item_id:sessionStorage.getItem('currentItemId'),tag_name:name});
+		tag.save();
+		
+	},
+	deleteTag:function(name){
+		console.log('removingatag');
+		var tag = new Tag({item_id:sessionStorage.getItem('currentItemId'),tag_name:name});
+		tag.id=1;
+		tag.destroy();
+		
+	},
+	    getTemplate:function(){
+    	var html = '<div id="tag-container" class="tag-container"></div>';
+    	return html;
+    }
+});
+
+
+
+
+
 var TagView = Backbone.View.extend({
 	tagName:'div',
+	
 	initialize: function(){
 		
 		$(this.el).empty();
@@ -74,6 +165,8 @@ var TagView = Backbone.View.extend({
 		return html;
 	}
 });
+
+
 var TagCollectionView = Backbone.View.extend({
 	tagName:'div',
 	_views : [],
