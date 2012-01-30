@@ -44,8 +44,7 @@ var ZeegaYoutubePlayer = Class.extend({
 		var youtubeWrapper=document.createElement('div');
 		youtubeWrapper.setAttribute('id','youtube-player-'+id);
 		$('#'+this._wrapperId).append(youtubeWrapper);
-		$('#layer-publish-'+id).bind('ready',function(){ 
-		_this.cueVideo(); });
+		$('#layer-publish-'+id).bind('container-ready',function(){ _this.cueVideo(); });
 		
 
 		//Initialize swfobject
@@ -182,7 +181,7 @@ var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 		var youtubeWrapper=document.createElement('div');
 		youtubeWrapper.setAttribute('id','youtube-player-'+id);
 		$('#'+this._wrapperId).append(youtubeWrapper);
-		$('#layer-preview-'+id).bind('ready',function(){ _this.cueVideo(); });
+		$('#layer-preview-'+id).bind('container-ready',function(){ _this.cueVideo(); });
 		
 
 		//Initialize swfobject
@@ -482,7 +481,7 @@ var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
 
 function onYouTubePlayerReady(playerId) {
 	console.log( 'Youtube Container Ready:'+playerId);
-	$('#layer-publish-'+playerId).trigger('ready');
-	$('#layer-preview-'+playerId).trigger('ready');
+	$('#layer-publish-'+playerId).trigger('container-ready');
+	$('#layer-preview-'+playerId).trigger('container-ready');
 }
 

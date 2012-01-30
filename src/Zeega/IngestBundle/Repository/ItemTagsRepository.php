@@ -21,5 +21,9 @@ class ItemTagsRepository extends EntityRepository
             // execute the query
             return $qb->getQuery()->getArrayResult();
     }
+    
+
+    
+    
 }
 

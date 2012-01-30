@@ -107,7 +107,7 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
     
-	// delete_collection    DELETE /api/items/{collection_id}.{_format}
+	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
@@ -125,6 +125,7 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
     }
 
+	/*
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
     public function postItemsTagsAction($itemId)
     {
@@ -178,9 +179,87 @@ class ItemsController extends Controller
         
         return ResponseHelper::encodeAndGetJsonResponse($item);
     }
+    */
+      // post_items_tags  POST   /api/items/{itemId}/tags/{tag_name}.{_format}
+    public function postItemsTagsAction($itemId,$tagName)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+		if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
+        }
+        
+        
+        
+      
+            $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+            
+            if (!$tag) 
+            {
+                $tag = new Tag();
+                $tag->setName($tagName);
+                $tag->setDateCreated(new \DateTime("now"));
+                $em->persist($tag);
+                $em->flush();
+            }
+            
+            // can't get EAGER loading for the item tags - this is a workaround
+			$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+	        foreach($itemTags as $itemTag)
+        	{
+        		
+            	if($tag->getId() == $itemTag["id"])
+            	{
+            	return ResponseHelper::encodeAndGetJsonResponse($itemTag["id"]);
+ 		           	return ResponseHelper::encodeAndGetJsonResponse($itemTag);
+            	}
+        	}
+        
+           	$item_tag = new ItemTags;
+			$item_tag->setItem($item);
+			$item_tag->setTag($tag);
+			$item_tag->setTagDateCreated(new \DateTime("now"));
+		 	$item_tag->setTagDateCreated(new \DateTime("now"));
+
+            $em->persist($item_tag);
+            $em->flush();
+        
+        
+        return ResponseHelper::encodeAndGetJsonResponse($item);
+    }
     
-	// post_items_tags  POST   /api/items/{itemId}/tags.{_format}
-    public function deleteItemTagsAction($itemId)
+    // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
+   
+    public function deleteItemTagsAction($itemId, $tagName)
+   {
+       $user = $this->get('security.context')->getToken()->getUser();
+               $em = $this->getDoctrine()->getEntityManager();
+
+               $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+				   $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+				   
+				   
+               if (!$item)
+               {
+                       throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
+               }
+
+               $tag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
+
+               if(isset($tag))
+               {
+                       $em->remove($tag);
+                       $em->flush();
+               }
+
+               return ResponseHelper::encodeAndGetJsonResponse($item);
+   }
+    /**
+	// post_items_tags  DELETE   /api/items/{itemId}/tags/{tag_name}.{_format}
+    public function deleteItemTagsAction($itemId,$tag_name)
     {
     	$user = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
@@ -208,8 +287,49 @@ class ItemsController extends Controller
 
 		return ResponseHelper::encodeAndGetJsonResponse($item);
     }
-
+**/
 	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    public function putItemsAction($item_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->getRequest();
+        $request_data = $this->getRequest()->request;        
+        
+		$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+
+        if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find the Item with the id ' + $item_id);
+        }
+
+		$title = $request_data->get('title');
+		$description = $request_data->get('description');
+        $tags = $request_data->get('tags');
+		$tags = $request_data->get('tags');
+		$creator_username = $request_data->get('media_creator_username');
+		$creator_realname = $request_data->get('media_creator_realname');
+		$media_geo_latitude = $request_data->get('media_geo_latitude');
+		$media_geo_longitude = $request_data->get('media_geo_longitude');
+        
+		if(isset($title)) $item->setTitle($title);
+		if(isset($description)) $item->setDescription($description);
+		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
+		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
+		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
+		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($item);
+        $em->flush();
+        
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+    }
+    
+    // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    
+    /**
     public function putItemsAction($item_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -268,7 +388,7 @@ class ItemsController extends Controller
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
-
+	**/
     // Private methods 
     
     private function populateItemWithRequestData($request_data)
