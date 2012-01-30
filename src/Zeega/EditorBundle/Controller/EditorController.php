@@ -256,6 +256,7 @@ class EditorController extends Controller
 			'displayname' => $user->getDisplayName(),
 			'title'   => $playground->getTitle(),
 			'short'=>$playground->getShort(),
+			'playground' => $playground,
 			'super'=>$super,
 			'adminMenu'=>$admin,
 			'projectsMenu'=>true,
