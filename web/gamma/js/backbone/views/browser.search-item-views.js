@@ -49,18 +49,6 @@ var BrowserCollectionView = BrowserItemView.extend({
 		//copy the cloned item into the el
 		$(this.el).append( template( blanks ) );
 		$(this.el).addClass('browser-results-collection');
-		/* OLD
-		this.el.find('img.browser-img-large').attr('src', (this.model.get('thumbnail_url') == null ? '' : this.model.get('thumbnail_url')));
-		this.el.find('img.browser-img-large').attr('title', this.model.get('title'));
-
-		this.el.find('img.browser-img-large').attr('alt', (this.model.get('thumbnail_url') == null ? this.model.get('title').substring(0,17) + '...' : this.model.get('title')));
-		
-		
-		this.el.find('.browser-item-count').text(this.model.get('child_items_count') + ' items');
-		//this.el.find('.browser-item-count').text('232');
-		
-		this.el.find('.title').text(this.model.get('title'));
-		*/
 
 		//Only show collections drop down menu if user owns collection
 		var collectionID = this.model.id;

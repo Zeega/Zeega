@@ -23,6 +23,8 @@ var MyCollectionsView = Backbone.View.extend({
        
 	},
 	addCollections : function(){
+		$(this.el).empty();
+
 		var mainColl = this.collection;
 
 		for (var i=0; i<this.collection.length; i++){
@@ -30,13 +32,6 @@ var MyCollectionsView = Backbone.View.extend({
 			var collectionView = new BrowserCollectionView({ model: myBrowserCollection });
 	        this._views[myBrowserCollection.id] = collectionView;
 		}
-		/*_.each(mainColl, function(myBrowserCollection){
-				// item draws itself
-				console.log('why dont i get here????');
-				var collectionView = new BrowserCollectionView({ model: myBrowserCollection });
-	        	this._views[myBrowserCollection.id] = collectionView;
-	        	
-			}, this);*/
 		
        this.render();
 	},
