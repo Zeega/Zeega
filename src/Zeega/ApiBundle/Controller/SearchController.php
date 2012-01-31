@@ -39,6 +39,7 @@ class SearchController extends Controller
 		$query["contentType"]   = $request->query->get('content');   //  string
 		$query["collection_id"]  = $request->query->get('collection');//  string
 		$query["tags"]          = $request->query->get('tags');      //  string
+		$query["tagsName"]   = $request->query->get('tags_name');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
 		
 		$query["geo"] = array();
@@ -87,7 +88,12 @@ class SearchController extends Controller
 		}
         
 		if(isset($query["contentType"]) && strtoupper($query["contentType"]) == "ALL") $query["contentType"] = null;
-	    
+	   
+	   	if(isset($query["tagsName"]))
+	   	{
+	   		$query["tagsName"] = explode(",", $query["tagsName"]);
+	   	}
+	   
 	    //  filter results for the logged user
 		if(isset($query['userId']) && $query['userId'] == -1) $query['userId'] = $user->getId();
 		
