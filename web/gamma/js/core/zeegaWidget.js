@@ -22,7 +22,7 @@ var ZeegaWidget = {
 		this.item.set( itemsBS);
 		
 	    var collection = jQuery.parseJSON(itemCollectionJSON);
-		
+	    
 		this.itemCollection.reset( collection.items );
 		this.itemCollection.count = parseInt(collection.items_count);
 		this.itemViewCollection = new BrowserItemViewCollection({ collection : this.itemCollection });

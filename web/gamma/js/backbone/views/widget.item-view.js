@@ -32,7 +32,26 @@ var BookmarkletItemView = Backbone.View.extend({
 		
 		// move to events (didn't work for me)
 		this.el.find('#add-item').click(function(){
-		    item = ZeegaWidget.itemCollection.create(view.model.get('title'));
+			item.set({id : null});
+			item.save({ }, 
+			{
+				success: function(model, response) { 
+			        $('#add-item').fadeOut();
+			 	    $('#message').html('Media successfuly added to your Zeega Collection');
+			 	    ZeegaWidget.itemCollection.add(item);
+			 	},
+			 	error: function(model, response){
+        		    $('#message').html('Unable to add Media to your Zeega Collection');
+			 	}
+			});
+			
+			//item.collection = ZeegaWidget.itemCollection;
+			//item.save();
+			//view.model.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/import/persist";
+			//ZeegaWidget.itemCollection.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/import/persist";
+			//console.log(ZeegaWidget.itemCollection.url);
+			//console.log(view.model);
+		    //item = ZeegaWidget.itemCollection.create(view.model);
 		    /*
 			$(this).fadeOut();
 			console.log(item.url);

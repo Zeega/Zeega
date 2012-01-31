@@ -16,124 +16,7 @@ use SimpleXMLElement;
 
 class WidgetController extends Controller
 {
-    /*
-	public function persistAction(){
-	  	$logger = $this->get('logger');
-		$request=$this->getRequest();
-    	$user = $this->get('security.context')->getToken()->getUser();
-		$session = $request->getSession();
-		$widgetId=$request->request->get('widgetId');
-		$em=$this->getDoctrine()->getEntityManager();
-		
-		if($widgetId) {
-    		$items=$session->get('items');
-    		$item=$items[$widgetId];
-    		
-    		$user = $this->get('security.context')->getToken()->getUser();
-    		
-    		$item->setUser($user);
-    		
-    		if($session->get('Playground')) 
-    		    $playground=$session->get('Playground');
-    		else 
-    		{
-    			$playgrounds = $this->getDoctrine()
-    					            ->getRepository('ZeegaEditorBundle:Playground')
-    							    ->findPlaygroundByUser($user->getId());
-    			$playground=$playgrounds[0];
-    		}
-    		//$today = date('Y-m-d h:i:s', strtotime(date('Y-m-d')));
-			$item->setPlayground($playground);
-			$item->setChildItemsCount(0);
-			//$item->setDateCreated($today);
-			
-			$em=$this->getDoctrine()->getEntityManager();
-			$em->persist($item->getPlayground());
-			$em->persist($item->getMetadata());
-			$em->persist($item->getMedia());
-			$em->flush();
-			$em->persist($item);
-			$em->flush();
-    		
-    		$metadata=$item->getMetadata();
-    		$media=$item->getMedia();
-    		
-			//
-			
-			
-			$thumbUrl=false;
-			$logger->err('getting thumb url');	
-			if($metadata->getThumbnailUrl()){
-				$thumbUrl=$metadata->getThumbnailUrl();
-				@$img=file_get_contents($thumbUrl);
-			}
-			
-			if(!$thumbUrl||$img==FALSE){
-				if($item->getContentType()=='Image'){
-					@$img=file_get_contents($item->getUri());
-				}
-				elseif($item->getContentType()=='Audio'){
-					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
-				
-				}
-				elseif($item->getContentType()=='Video'){
-					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/video.jpg');
-				
-				}
-			}
-		
-		
-			if($img==FALSE){
-				return new Response(0);	
-			}
-			else{		
-				$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
-				file_put_contents($name,$img);
-				$square = new Imagick($name);
-				$thumb = $square->clone();
-
-				if($square->getImageWidth()>$square->getImageHeight()){
-					$thumb->thumbnailImage(144, 0);
-					$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
-					$h=$square->getImageHeight();		
-					$square->chopImage($x, 0, 0, 0);
-					$square->chopImage($x, 0, $h, 0);
-				} 
-				else{
-					$thumb->thumbnailImage(0, 144);
-					$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
-					$w=$square->getImageWidth();
-					$square->chopImage(0, $y, 0, 0);
-					$square->chopImage(0, $y, 0, $w);
-				}
-				$logger->err("writing image");
-				$square->thumbnailImage(144,0);
-			
-				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
-			
-				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
-				$em->persist($item);
-				$em->flush();
-				$response=$this->getDoctrine()
-								->getRepository('ZeegaIngestBundle:Item')
-								->findItemById($item->getId());					
-				return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
-    		  
-	  	}
-	  
-	  
-	  }
-	  else
-	  {
-				return new Response(0);	
-
-			}
-
-	}
-	
-	*/
-	public function persistAction()
+   	public function persistAction()
 	{
 		$session = $this->getRequest()->getSession();
 		//return new Response($session->get('widget_url'));
@@ -173,9 +56,9 @@ class WidgetController extends Controller
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
 				'playground'=>$playgrounds[0],
-				'title'=>$check['title'],
-				'item_id'=>$check['id'],
-				'content_type'=>$check['type'],
+				'title'=>$item['title'],
+				'item_id'=>$item['id'],
+				'content_type'=>$item['type'],
 				'mycollection'=>$mycollection,
 			));
 		}
@@ -194,7 +77,7 @@ class WidgetController extends Controller
 				
 				if($isUrlValid)
 				{
-					$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array())->getContent();
+					$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
 					if($isUrlCollection)
 					{
 						return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(

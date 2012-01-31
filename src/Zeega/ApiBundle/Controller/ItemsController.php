@@ -125,6 +125,34 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
     }
 
+	// post_collections POST   /api/collections.{_format}
+    public function postItemsAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+    	
+		$attributionUri = $this->getRequest()->request->get('attribution_uri');
+
+	    $item = new Item();
+       
+        $item->setTitle($this->getRequest()->request->get('title'));
+		$item->setDescription($this->getRequest()->request->get('description'));
+        $item->setType($this->getRequest()->request->get('type'));
+        $item->setSource($this->getRequest()->request->get('source'));
+        $item->setUser($user);
+        $item->setUri($this->getRequest()->request->get('uri'));
+        $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+        $item->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
+        $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+        $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+       
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($item);
+        $em->flush();
+
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+	
     // post_items_tags  POST   /api/items/{itemId}/tags.{_format}
     public function postItemsTagsAction($itemId)
     {
