@@ -13,7 +13,6 @@
 .fancybox-media-item{
 	width:630px;
 	min-height:380px;
-	background-color:gray;
 	text-align:center;
 	margin-bottom:5px;
 	border-radius:5px;
@@ -67,6 +66,7 @@
 	height:auto !important;
 	width:auto !important;
 	padding-left:0;
+
 }
 #fancybox-media-container .map{
 	text-align: right;
@@ -99,6 +99,7 @@
 .tagsinput input{
 	padding:2px !important;
 	font-size:11px !important;
+	color:#F15A29 !important;
 }
 #fancybox-media-container .tag-hover-class{
 	border-left:none;
@@ -138,22 +139,28 @@
 	float:left;
 	margin-right: 20px;
 }
-.fancybox-media-item-more audio, .fancybox-media-item-more iframe{
+
+ .fancybox-media-item-more iframe{
 	width:100% !important;
 	margin:0 !important;
-
+	height:200px !important;
 }
-
+.fancybox-media-item-more audio{
+	width:90% !important;
+	margin:0 !important;
+}
 .fancybox-media-container-more p{
 	text-align:left;
 }
 .fancybox-media-item img{
 	max-width:99%;
 	max-height:85%;
-	
+	border:1px solid gray;
 }
 .fancybox-media-item audio{
 	margin:170px;
+	border: 10px solid #CCC;
+	-webkit-border-radius: 6px;
 }
 .fancybox-inner{
 	overflow: hidden !important;

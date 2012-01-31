@@ -12,6 +12,11 @@ var ZeegaBrowser = {
 	searchItemsView : null,
 	searchCollectionsView : null,
 
+	mycarousel_initCallback : function (carousel, state) {
+	    if (state == 'init')
+	        ZeegaBrowser.carousel = carousel;
+	        
+	},
 	init : function()
 	{
 		//Load MyCollections  (renamed from inconsistently named myCollectionsModel )
@@ -22,7 +27,7 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				$('#browser-my-collections-drawer').jcarousel();
+				$('#browser-my-collections-drawer').jcarousel({ initCallback:   ZeegaBrowser.mycarousel_initCallback, visible:5,});
 				
 			}
 		});

@@ -13,7 +13,6 @@ var FancyBoxView = Backbone.View.extend({
 	more : function(){
 		var _this=this;
 		sessionStorage.setItem('moreFancy', true);
-		console.log('MORE IS BEING CALLED');
 		$(this.el).find('.less').hide();
 		$(this.el).find('.more').fadeIn('fast',function(){
 			if(_this.locatorMapView.geoLocated)_this.locatorMapView.addMap();
