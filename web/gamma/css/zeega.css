@@ -6,24 +6,36 @@
 *******************************************/
 .edit-geo-location{
 	cursor:pointer;
+	float: left;
+	font-size: 11px;
+	margin-right: 5px;
 }
 
 .locator-search-bar{
 	display:none;
 }
-
+.locator-search-bar input{
+	font-size:11px;
+	height:auto;
+	width:243px;
+} 
 .locator-map{
 
 	width:250px;
 	height:150px;
-	
+	display:none;
+	border: 1px solid #CCC;
+	margin-bottom:5px;
 }
-
-
+.map-title{
+font-size: 1em;
+font-weight: bold;
+}
 
 .item-lat-lng{
 	display:none;
-
+	color: #888;
+	font-size: 10px;
 }
 
 .item-latitude, .item-longitude{
