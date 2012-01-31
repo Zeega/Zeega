@@ -208,7 +208,7 @@ var VideoLayer = ProtoLayer.extend({
 		this.display.css({'top':"-1000%",'left':"-1000%"});
 		
 		this.player.setVolume(0);
-		//this.player.pause();
+		this.player.pause();
 	},
 
 	exit: function()
