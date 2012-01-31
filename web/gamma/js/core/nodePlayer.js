@@ -39,7 +39,7 @@ var NodePlayer = {
 	drawNode : function( data )
 	{
 		_.each( data, function( layer ){
-			if(layer.type=='Youtube'||layer.type=='Video') layerClass = new ImageLayer();
+			if(layer.type=='Youtube'||layer.type=='Video' || layer.type == 'image') layerClass = new ImageLayer();
 			else eval( 'var layerClass = new '+ layer.type +'Layer();' );
 			layerClass.lightLoad( layer )
 

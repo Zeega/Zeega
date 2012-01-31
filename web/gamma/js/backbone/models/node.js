@@ -43,11 +43,23 @@ var Node = Backbone.Model.extend({
 		{
 			this.updating = true; //prevent more thumb requests while this is working
 			//Trigger new node snapshot and persist url to database
-			$.post(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail',function(data){
-				//Update local version of thumbnail url attribute
-				_this.set({thumb_url:data});
-				_this.updating = false; //allow further thumb updates	
-			});
+			
+			var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/gamma/js/helpers/thumbworker.js');
+			
+			worker.addEventListener('message', function(e) {
+				console.log(e)
+				if(e.data)
+				{
+					_this.set({thumb_url:e.data});
+				}else{
+					_this.trigger('thumbUpdateFail');
+				}
+				_this.updating = false; //allow further thumb updates
+				this.terminate();
+			}, false);
+			
+			worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+			
 		}
 	},
 	

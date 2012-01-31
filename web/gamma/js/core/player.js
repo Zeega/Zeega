@@ -352,6 +352,7 @@ var Player = {
 				
 				if( _this.currentNode.id == nodeID)
 				{
+					console.log('drawCurrentNode: '+ nodeID)
 					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
 				}
@@ -400,7 +401,7 @@ var Player = {
 		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
 		{
 			_this = this;
-
+			
 			if(nodeID == this.currentNode.id) this.loadingBar.draw();
 
 			//put node id into the nodesLoading Array
@@ -415,7 +416,9 @@ var Player = {
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNode.id ){
+		}else if( nodeID == this.currentNode.id && _.include( this.loadedNodes , nodeID ) ){
+			
+
 			this.drawNode( nodeID );
 		}
 	},

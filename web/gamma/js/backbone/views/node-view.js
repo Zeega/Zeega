@@ -9,6 +9,8 @@ var NodeView = Backbone.View.extend({
 	{
 		var _this = this;
 	
+		this.model.bind('thumbUpdateFail',function(){ console.log('thumb fail');$(_this.el).find('.frame-update-overlay').hide() });
+	
 		var blanks = {
 			nodeID : this.model.id,
 			thumbURL : this.model.get('thumb_url')
@@ -118,6 +120,8 @@ var NodeView = Backbone.View.extend({
 	events : {
 		'mouseover'		: 'showGear'
 	},
+	
+
 	
 	showGear : function()
 	{
