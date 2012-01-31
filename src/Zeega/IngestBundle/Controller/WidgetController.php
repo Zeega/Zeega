@@ -194,6 +194,7 @@ class WidgetController extends Controller
 				
 				if($isUrlValid)
 				{
+					$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array())->getContent();
 					if($isUrlCollection)
 					{
 						return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(

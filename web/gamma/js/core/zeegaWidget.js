@@ -15,12 +15,18 @@ var ZeegaWidget = {
 	init : function()
 	{
 		this.item = new Item;
+		this.itemCollection = new ItemCollection;
 		this.itemViewCollection;
 		
 		var itemsBS = jQuery.parseJSON(itemJSON);
-		console.log(itemsBS);
-		
 		this.item.set( itemsBS);
+		
+	    var collection = jQuery.parseJSON(itemCollectionJSON);
+		
+		this.itemCollection.reset( collection.items );
+		this.itemCollection.count = parseInt(collection.items_count);
+		this.itemViewCollection = new BrowserItemViewCollection({ collection : this.itemCollection });
+        
 		//this.item.set({title: "yo"});
 		console.log(this.item);
 		this.itemViewCollection = new BookmarkletItemView({ model : this.item });

@@ -42,6 +42,7 @@ var loadFiles = [
 	//mvc
 	'order!backbone/models/tag',
 	'order!backbone/models/item',
+	'order!backbone/views/item-view',
 
 	'order!backbone/views/widget.item-view',
 ];
