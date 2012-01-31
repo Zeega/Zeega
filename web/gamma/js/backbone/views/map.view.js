@@ -42,6 +42,7 @@ var LocatorMapView = Backbone.View.extend({
 	addMap:function()
 	{
 		$(this.el).find('.item-lat-lng').fadeIn();
+		$(this.el).find('.locator-map').fadeIn();
 		this.mapRendered=true;
 		var div = $(this.el).find('.locator-map').get(0);
 
@@ -109,9 +110,9 @@ var LocatorMapView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		var html =	'<span class="edit edit-geo-location"><a>Edit item location</a></span>'+
-			'<div class="locator-search-bar"><input class="locator-search-input" type="text" value="Search a Location"  ></div>'+
-			'<div class="item-lat-lng"><span class="item-latitude"><%= latitude %></span><span class="item-longitude"><%= longitude %></span></div><div class="locator-map"></div>';
+		var html =	'<p class="map-title">Map</p><div class="locator-map"></div><span class="edit edit-geo-location"><a>Edit item location</a></span>'+
+			'<div class="item-lat-lng"><span class="item-latitude"><%= latitude %></span><span class="item-longitude"><%= longitude %></span></div>'+
+			'<div class="locator-search-bar"><input class="locator-search-input" type="text" value="Search a Location"  ></div>';
 		return html;
 	}
 
