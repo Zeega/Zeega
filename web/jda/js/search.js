@@ -10,7 +10,18 @@ function search(filters, callback) {
 	window.location.hash='';
 	//spinner
 	$("#content-row").spin('small'); // Produces default Spinner using the text color of #el.	
-	
+
+/*
+console.log(jda.module('items').Collection())
+
+
+var c = jda.module('items').Collection();
+c.fetch({
+	success : function(model, response){ console.log( response ) }
+});
+*/
+
+/*	
 	// TODO this will only deal with one text filter
 	var url = apiUrl + "search";
 	for ( var i = 0; i < filters.length; i++) {
@@ -39,13 +50,19 @@ function search(filters, callback) {
 			break;
 		}
 	}
+*/
 //	 console.log("searching: " + url);
-
+/*
 	$.getJSON(url, function(data) {
 		globalSearchResults = new ItemCollection(data);
 		callback(new ItemCollection(data));
 		$("#content-row").spin(false)
 	});
+*/
+
+
+
+
 }
 
 function homeSearch(searchString) {

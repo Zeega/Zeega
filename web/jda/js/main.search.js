@@ -29,6 +29,10 @@ var loadFiles = [
 
 
 	//mvc
+	'order!app/jda_zeega',
+	'order!app/modules/items',
+	'order!app/index',
+	
 	
 	'order!backbone/discoveryViews',
 	'order!backbone/eventViews',
