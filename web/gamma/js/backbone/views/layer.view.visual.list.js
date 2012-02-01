@@ -282,7 +282,7 @@ var VisualLayerListView = Backbone.View.extend({
 			//'<br />'+
 			'<div class="standard-layer-controls clearfix">'+
 				'<div>'+
-					'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
+					'<label for="persist" class="checkbox"><input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> />Persist layer to sequence</label>'+
 				'</div>'+
 				'<div><a href="#" class="copy-to-next btn">Continue on next frame</a></div>';
 			

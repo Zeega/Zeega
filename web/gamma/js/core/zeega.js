@@ -222,7 +222,6 @@ var Zeega = {
 		if( !_.isNull(this.currentNode.get('attr')) && !_.isNull( this.currentNode.get('attr').advance ) )
 			adv = this.currentNode.get('attr').advance;
 			
-		console.log('draw node: '+ adv);
 		var advanceControls = $('#advance-controls');
 
 		if(adv > 0)

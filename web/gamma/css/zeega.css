@@ -1148,7 +1148,7 @@ body
 .layer-uber-bar div { padding : 3px }
 .layer-uber-controls, .layer-drag-handle span { float:left }
 
-
+.standard-layer-controls label {width:100%;}
 
 
 /******************************

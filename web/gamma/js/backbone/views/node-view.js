@@ -244,14 +244,13 @@ var NodeViewCollection = Backbone.View.extend({
 						
 							//add persisting layers to new nodes
 							var persistLayers = Zeega.route.get('attr').persistLayers;
-							_.each(persistLayers,function(layerID){
-								Zeega.addLayerToNode( node, Zeega.route.layers.get(layerID) );
+							_.each( persistLayers, function(layerID){
+								Zeega.addLayerToNode( savedNode, Zeega.route.layerCollection.get(layerID) );
 							});
 							//add a new current node style
 							$('.node-thumb-'+Zeega.currentNode.id).addClass('node-selected');
-						
 							//go to the new node
-							Zeega.loadNode(node);
+							Zeega.loadNode(savedNode);
 						}
 						
 						
