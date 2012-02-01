@@ -1833,7 +1833,8 @@ body
 #preview-close
 {
 	position:absolute;
-	right:0;
+	right:12px;
+	top:12px;
 }
 
 #citation
