@@ -82,7 +82,7 @@ ul,li
 
 
 #browser-results{
-	
+	border:1px solid #555;
 	padding:0 !important;
 	margin-top:-3px;
 	float:none;
@@ -92,9 +92,9 @@ ul,li
 	-moz-border-radius-bottomleft: 10px;
 	-webkit-border-radius: 0px 0px 10px 10px !important;
 	border-radius: 0px 0px 10px 10px;
-	-webkit-box-shadow: inset 2px 2px 2px 2px #333;
-	-moz-box-shadow: inset 2px 2px 2px 2px #333;
-	box-shadow: inset 2px 2px 2px 2px #333;
+	-webkit-box-shadow: inset 2px 2px 2px 2px #333 !important;
+	-moz-box-shadow: inset 2px 2px 2px 2px #333 !important;
+	box-shadow: inset 2px 2px 2px 2px #333 !important;
 	
 }
 
@@ -102,6 +102,7 @@ ul,li
 	min-height:200px !important;
 	max-height:350px !important;
 	overflow:auto !important;
+	margin:5px;
 }
 #browser-my-collections-label p{
 	color:#FFF;
@@ -265,7 +266,9 @@ ul,li
 	float:left;
 	
 }
-
+#browser-toggle-all-media-vs-my-media ul{
+	margin-left:0;
+}
 #browser-results-wrapper{
 	position:relative;
 
@@ -288,7 +291,7 @@ ul,li
 	margin: 0;
 	border-radius: 3px;
 	/*margin:10px 0px 0px 10px;*/
-	margin:5px;
+	margin:4px;
 	padding: 5px;
 	width:  144px;
 	height: 110px;

@@ -147,9 +147,7 @@ var ZeegaBrowser = {
 							
 						});
 		}
-		this.search.set({ 
-							content:$('#database-search-filter').val()
-						});
+		
 		this.search.updateQuery();
 	}, 
 	showShareButton : function(collectionID){	

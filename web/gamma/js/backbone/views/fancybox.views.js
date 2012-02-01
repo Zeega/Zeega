@@ -217,7 +217,7 @@ var FancyBoxView = Backbone.View.extend({
 						
 					'</div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
-						'<p class="less fancybox-more-button"><a href=".">more</a></p><p class="more fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>'+
+						'<p class="less fancybox-more-button"><a href=".">view more</a></p><p class="more fancybox-less-button"><a href=".">view less</a></p><p class="fancybox-delete-button more"><a href=".">delete</a></p>'+
 					'</div>';
 								
 		return html;
