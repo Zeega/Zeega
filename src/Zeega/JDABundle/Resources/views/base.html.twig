@@ -45,35 +45,45 @@
 		{% endif %}
 		<div id="user-bar">
 			<ul id="header-menu" class="unstyled">
-				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">about</a></li>
+
+				
+				{% if locale == 'jp' %}
+					<li>Japanese</li>
+					<li>
+						{% if page == 'home' %}
+							<a href="{{path('home', { '_locale': 'en' })}}">
+						{% elseif page == 'about' %}
+							<a href="{{path('about', { '_locale': 'en' })}}">
+						{% else %}
+							<a>
+						{% endif %}
+						English</a>
+					</li>
+				{% else %}
+					<li>
+						{% if page == 'home' %}
+							<a href="{{path('home', { '_locale': 'jp' })}}">
+						{% elseif page == 'about' %}
+							<a href="{{path('about', { '_locale': 'jp' })}}">
+						{% else %}
+							<a>
+						{% endif %}
+						Japanese</a>
+					</li>
+					<li>English</li>
+				{% endif %}
+				
+				<li>/</li>
+				
+				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">About</a></li>
+				<li><a href="#">Feedback</a></li>
+				
+				<li><a href='#' class='btn success small'>Add to the Archive</a></li>
+				<!--
 				<li><a href="#">login</a></li>
 				<li>/</li>
 				<li><a href="#">register</a></li>
-				
-				{% if locale == 'jp' %}
-					<li><img src="{{ asset('jda/images/jp.png')}}"class="language language-active" id="language-japanese"></li>
-					<li>
-					{% if page == 'home' %}
-			<a href="{{path('home', { '_locale': 'en' })}}">
-			{% elseif page == 'about' %}
-			<a href="{{path('about', { '_locale': 'en' })}}">
-			{% else %}
-			<a>
-			{% endif %}
-				<img src="{{ asset('jda/images/gb.png')}}" class="language" id="language-english"></a></li>
-				{% else %}
-					<li>{% if page == 'home' %}
-			<a href="{{path('home', { '_locale': 'jp' })}}">
-			{% elseif page == 'about' %}
-			<a href="{{path('about', { '_locale': 'jp' })}}">
-			{% else %}
-			<a>
-			{% endif %}
-			<img src="{{ asset('jda/images/jp.png')}}"class="language" id="language-japanese"></a></li>
-					<li><img src="{{ asset('jda/images/gb.png')}}" class="language language-active" id="language-english"></li>
-				{% endif %}
-				
-				
+				-->
 			</ul>
 		</div>
 

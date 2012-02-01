@@ -28,14 +28,23 @@
 
 				<div id="intro-bar" class="en">
 					<div id="search-bar">
-						<form action="#" method="POST" id="search-form">
-						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
-						<button id="go-button" class="btn info large">go</button>
-						</form>
-						<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
-						<button id="add-button" class="btn success large">
-							<a href="http://jdarchive.org/contribute/?la=en" target="_blank">{% trans %}jda.home.add{% endtrans %}</a>
-						</button>
+						
+						<div class='left-col'>
+							<form action="#" method="POST" id="search-form">
+							<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}">
+							</form>
+							<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
+						</div>
+						
+						<div class='right-col'>
+							<h3>{% trans %}jda.home.archive{% endtrans %}</h3>
+							<strong> <small><a href="#">300,048
+										Tweets</a> / <a href="#">8,129 Posts</a> / <a href="#">32,972
+										Images</a> / <a href="#">100 Videos</a> / <a href="#">48
+										Testimonials</a></small>
+							</strong>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -62,12 +71,7 @@
 
 				<div id="right-col" class="span-one-third">
 
-					<h3>{% trans %}jda.home.archive{% endtrans %}</h3>
-					<strong> <small><a href="#">300,048
-								Tweets</a> / <a href="#">8,129 Posts</a> / <a href="#">32,972
-								Images</a> / <a href="#">100 Videos</a> / <a href="#">48
-								Testimonials</a></small>
-					</strong>
+					
 
 					<h3>{% trans %}jda.home.tags{% endtrans %}</h3>
 

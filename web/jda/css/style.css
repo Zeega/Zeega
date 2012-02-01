@@ -184,6 +184,11 @@ header
 	border-radius:0 0 6px 6px;
 }
 
+#intro-bar .left-col{float:left;width:600px}
+#intro-bar .right-col{float:right;width:280px;position:relative;top:-10px;}
+
+#intro-bar h3{color:white;}
+
 #teaser-text
 {
 	width:250px;
@@ -218,13 +223,19 @@ header
 
 #search-bar input
 {
-	width:450px;
+	width:512px;
 	float:left;
 	font-size:2em;
 	font-weight:bold;
 	height:44px;
 	background:white url('../images/search.png') left center no-repeat;
 	padding-left:42px;
+}
+
+::-webkit-input-placeholder
+{
+	position:relative;
+	top:6px;
 }
 
 #search-bar h5
