@@ -284,7 +284,7 @@ var VisualLayerListView = Backbone.View.extend({
 				'<div>'+
 					'<input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> /> <label for="persist">Persist layer to route</label>'+
 				'</div>'+
-				'<div><a href="#" class="copy-to-next btn">Copy to next node</a></div>';
+				'<div><a href="#" class="copy-to-next btn">Continue on next frame</a></div>';
 			
 		if( this.model.layerClass.linkable )
 		{
