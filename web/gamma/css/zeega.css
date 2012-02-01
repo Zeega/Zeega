@@ -4,6 +4,9 @@
 	MAP VIEW
 	
 *******************************************/
+.geo{
+	display: table;
+}
 .edit-geo-location{
 	cursor:pointer;
 	float: left;

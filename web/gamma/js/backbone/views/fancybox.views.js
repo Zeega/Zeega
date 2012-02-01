@@ -22,7 +22,8 @@ var FancyBoxView = Backbone.View.extend({
 		
 		
 		
-		
+		$(this.el).find(".fancybox-media-wrapper").addClass("fancybox-media-wrapper-more");
+		$(this.el).find(".fancybox-left-column").addClass("fancybox-left-column-more");
 		$(this.el).find(".fancybox-media-item").addClass("fancybox-media-item-more");
 		$(this.el).addClass("fancybox-media-container-more");	
 		
@@ -33,6 +34,8 @@ var FancyBoxView = Backbone.View.extend({
 		sessionStorage.setItem('moreFancy', false);
 		$(this.el).find('.more').hide();
 		$(this.el).find('.less').show();
+		$(this.el).find(".fancybox-media-wrapper").removeClass("fancybox-media-wrapper-more");
+		$(this.el).find(".fancybox-left-column").removeClass("fancybox-left-column-more");
 		$(this.el).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
 		$(this.el).removeClass("fancybox-media-container-more");	
 		return false;
@@ -202,12 +205,17 @@ var FancyBoxView = Backbone.View.extend({
 	getTemplate : function()
 	{
 		
-		var html =	'<div class="fancybox-media-item media-item"></div>'+
-					'<p class="fancybox-editable title"><%= title %></p>'+
-					'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+
-					'<p class="more description-title">Description</p><p class="more description fancybox-editable"><%= description %></p>'+
-					'<div class="more geo"></div>'+
-					'<div class="more tags"></div>'+
+		var html =	'<div class="fancybox-media-wrapper">'+
+						'<div class="fancybox-left-column">' +
+							'<div class="fancybox-media-item media-item"></div>'+
+							'<p class="more subheader" style="clear:both">Tags</p><div class="more tags"></div>'+
+						'</div>'+
+						'<p class="fancybox-editable title"><%= title %></p>'+
+						'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+
+						'<p class="more subheader">Description</p><p class="more description fancybox-editable"><%= description %></p>'+
+						'<div class="more geo"></div>'+
+						
+					'</div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
 						'<p class="less fancybox-more-button"><a href=".">more</a></p><p class="more fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>'+
 					'</div>';
