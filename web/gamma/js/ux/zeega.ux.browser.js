@@ -21,6 +21,38 @@ function initUX(){
 
 $(document).ready(function() {
 
+
+	// menu stuff
+	$('.menu-toggle').click(function(){
+		console.log('menu clikc')
+		var menu = $(this).next();
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
+		event.stopPropagation();
+	});
+	//clear menus on click
+	$('html').bind("click", clearMenus);
+	
+	function clearMenus()
+	{
+		$('.menu-items').removeClass('open');
+	}
+
+	// filter database by type
+	$('#search-filter li a').click(function(){
+		
+		//
+		// call your filtered search method here
+		// this is what I call in the editor:
+		// Database.filterByMediaType( $(this).data('search-filter') );
+		//
+		
+		clearMenus();
+		return false;
+	});
+
+
 	//Sets variable for Fancybox "more" view to false each time the page is reloaded
 	sessionStorage.setItem('moreFancy', false);
 
@@ -95,9 +127,6 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$( '#database-search-text' ).click(function(){
-			$(this).val('');
-	});
 	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();

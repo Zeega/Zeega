@@ -58,6 +58,8 @@ var Database =
 	
 	search : function( query )
 	{
+		
+		
 		this.itemCollection.query = query;
 		this.itemCollection.fetch();
 		

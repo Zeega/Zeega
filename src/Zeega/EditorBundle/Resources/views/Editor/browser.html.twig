@@ -43,7 +43,30 @@
 					
 					<div style="clear:both"></div>
 				</div>
+				
+				
 				<div id="browser-search-filter-toggle">
+					
+					
+					<div id="searchbar">
+						
+						<div id='search-filter'>
+								<a class='menu-toggle' href='#'><span class='zicon zicon-searchdropdown'></span></a>
+								<ul class='unstyled menu-items'>
+									<li class='menu-title'>Filter by Format</li>
+									<li class='divider'></li>
+									<li><a data-search-filter='all' href='#'>All</a></li>
+									<li><a data-search-filter='audio' href='#'>Audio</a></li>
+									<li><a data-search-filter='image' href='#'>Images</a></li>
+									<li><a data-search-filter='video' href='#'>Video</a></li>
+								</ul>
+						</div>
+						
+						<input id='database-search-text' type='text' name='database-search' placeholder='search database'/>
+						
+					</div><!-- searchbar -->
+					
+					<!--
 					<div id="searchbar" class="browser-searchbar">
 						<input id="database-search-text" type="text" name="database-search" value="search my stuff" style="color: rgb(68, 68, 68); ">
 						<span><select id="database-search-filter" class="" style='width:98px'>
@@ -54,7 +77,7 @@
 							  
 							</select></span>
 					</div>
-					
+					-->
 					
 					
 					<!--<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>-->
@@ -110,6 +133,35 @@
 {% block extras %}
          <!-- TEMPLATES -->
          <div id='templates' class='hidden'>
+	
+			<div id="collection-settings-modal" class='modal hidden' >
+				<div class="modal-header">
+					<a href='#' class='close'>x</a>
+					<h3>Settings for [collection name]</h3>
+				</div>
+				<div class="modal-body clearfix">
+					
+					since the same modal template will be used for each collection,
+					you'll have to use jquery to insert them into the template on demand
+					
+					[change collection input]
+					[delete layer]
+					
+				</div>
+				<div class="modal-footer">
+					<span class='admin-submit'>
+						<br />
+						<a href='#' class='close'>cancel</a>
+						<a href='#' id='save-collection' class='btn success'>save</a>
+					</span>
+				</div>
+			</div> <!-- modal -->
+	
+	
+	
+	
+	
+	
          	<div id="browser-time-filter-template">
          		<form>
 				<p>Timeline <span class="browser-time-filter-value"></span></p>
