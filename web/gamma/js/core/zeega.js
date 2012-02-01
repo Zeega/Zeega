@@ -344,6 +344,26 @@ var Zeega = {
 		}
 	},
 	
+	//frame arg is optional. Defaults to currentNode if not set.
+	createLayerFromItem : function( item, frame )
+	{
+		if( _.isUndefined(frame)) frame = this.currentNode;
+		var newLayer = new Layer({
+			type: Zeega.draggedItem.get('source'),
+			attr: {
+				'item_id' : item.id,
+				'title' : item.get('title'),
+				'url' : item.get('uri'),
+				'uri' : item.get('uri'),
+				'thumbnail_url' : item.get('thumbnail_url'),
+				'attribution_url' : item.get('attribution_uri'),
+				'citation':true,
+			}
+		});
+
+		this.addLayerToNode( frame, newLayer );
+	},
+	
 	updateAndSaveNodeLayer : function(node, layer)
 	{
 		console.log('updateAndSaveNodeLayer');

@@ -400,32 +400,8 @@ function closeOpenCitationTabs()
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 				{
-					
 					ui.draggable.draggable('option','revert',false);
-					
-					console.log(Zeega.draggedItem)
-					
-					//make the new layer model
-					var settings = {
-						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source'),
-						attr: {
-							'item_id' : Zeega.draggedItem.id,
-							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('uri'),
-							'uri' : Zeega.draggedItem.get('uri'),
-							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
-							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
-							'citation':true,
-						}
-					};
-					
-					console.log(settings);
-					var layerToSave = new Layer(settings);
-
-					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
-										
-					console.log('update node thumb for node: '+ Zeega.currentNode.id);
+					Zeega.createLayerFromItem( Zeega.draggedItem );
 				}
 		});
 		

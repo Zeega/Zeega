@@ -37,26 +37,9 @@ var NodeView = Backbone.View.extend({
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 			{
-				
-				ui.draggable.draggable('option','revert',false);
-				//make the new layer model
-				
-				var settings = {
-					url: Zeega.url_prefix + 'nodes/'+ _this.model.id +'/layers',
-					type: Zeega.draggedItem.get('source'),
-//					zIndex: Zeega.currentNode.get('layers').length+1,
-					attr: {
-						'item_id' : Zeega.draggedItem.id,
-						'title' : Zeega.draggedItem.get('title'),
-						'url' : Zeega.draggedItem.get('uri'),
-					}
-				};
-				var newLayer = new Layer( settings );
-				
 				$('#frame-drawer').removeClass('hover');
-				
-				Zeega.addLayerToNode(_this.model,newLayer, this);
-				
+				ui.draggable.draggable('option','revert',false);
+				Zeega.createLayerFromItem( Zeega.draggedItem, _this.model );
 			}
 		});
 
