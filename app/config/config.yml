@@ -43,12 +43,26 @@ doctrine:
         dbname:   %database_name%
         user:     %database_user%
         password: %database_password%
-        charset:  UTF8
+        charset:  utf8
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
 
+# fos rest configuration
+fos_rest:
+    view:
+        formats:
+            json: true
+            rss: false
+            xml: false
+        templating_formats:
+            html: true
+        force_redirects:
+            html: true
+        failed_validation: HTTP_BAD_REQUEST
+        default_engine: twig
+        
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
@@ -66,3 +80,10 @@ services:
     import_widget:
         class:      Zeega\IngestBundle\ImportWidget
 
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: secured_area
+    user_class: Zeega\UserBundle\Entity\User
+    registration:
+        form:
+            type: zeega_user_registration

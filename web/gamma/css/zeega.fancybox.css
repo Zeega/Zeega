@@ -1,0 +1,195 @@
+
+#fancybox-media-container{
+	width:640px;
+	height:480px;
+	background-color:white;
+	text-align:left;
+	
+}
+#fancybox-media-container a:hover, #fancybox-media-container a:visited{
+	text-decoration:none;
+	color:#F15A29;
+}
+.fancybox-media-item{
+	width:630px;
+	min-height:380px;
+	background-color:gray;
+	text-align:center;
+	margin-bottom:5px;
+	border-radius:5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding:7px 5px 5px 5px;
+}
+#fancybox-media-container .title{
+	font-size: 1.4em;
+	font-weight: bold;
+	display:inline;
+}
+#fancybox-media-container .source{
+	margin-left:30px;	
+}
+#fancybox-media-container .description-title{
+	font-size:1em;
+	font-weight:bold;
+	margin-top:20px;
+}
+#fancybox-media-container .description, #fancybox-media-container .tags{
+	color:#777;
+	font-size: 12px;
+	margin-top:10px;
+}
+#fancybox-media-container .description{
+	margin: 0 0 20px 0;
+	line-height: 18px;
+	text-align: justify;
+	
+	
+	/*height: 135px;*/
+
+	
+}
+#fancybox-media-container .tag-container{
+	float:right;
+	min-width:50px;
+}
+#fancybox-media-container .tags{
+	text-align: left;
+	
+	clear:both;
+}
+#fancybox-media-container .tags-title{
+	font-size:1.1em;
+	font-weight:bold;
+}
+#fancybox-media-container .tags .tagsinput{
+	border:none !important;
+	height:auto !important;
+	width:auto !important;
+	padding-left:0;
+}
+#fancybox-media-container .map{
+	text-align: right;
+	display:none;
+	float:right;
+}
+
+#fancybox-media-container .tags a{
+	color:gray;
+	font-size:11px;
+}
+#fancybox-media-container .newtag{
+	display:none;
+}
+#fancybox-media-container .tag, #fancybox-media-container .fancybox-remove-tag{
+	border: 1px solid #CCC;
+	background: #EFEFEF;
+	margin: 0;
+	padding: 2px 5px;
+}
+#fancybox-media-container .tag{
+	
+	margin-right:4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius:4px;
+	border-radius: 4px;
+	color: #777;
+	font-size: 11px;
+}
+.tagsinput input{
+	padding:2px !important;
+	font-size:11px !important;
+}
+#fancybox-media-container .tag-hover-class{
+	border-left:none;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-radius: 0px 4px 4px 0px;
+	border-radius: 0px 4px 4px 0px;
+}
+.fancybox-remove-tag{
+	display:none;
+	margin:0;
+	border-right:none;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 4px;
+	-webkit-border-radius: 4px 0px 0px 4px;
+	border-radius: 4px 0px 0px 4px;
+}
+.fancybox-remove-tag:hover{
+	background-color:#666;
+	
+}
+
+#fancybox-media-container .addtags{
+	text-align: left;
+	font-size:11px;
+	display: inline;
+	
+}
+.fancybox-media-item-more{
+	width:40%;
+	min-height:200px;
+	height:395px;
+	float:left;
+	margin-right: 20px;
+}
+.fancybox-media-item-more audio, .fancybox-media-item-more iframe{
+	width:100% !important;
+	margin:0 !important;
+
+}
+
+.fancybox-media-container-more p{
+	text-align:left;
+}
+.fancybox-media-item img{
+	max-width:99%;
+	max-height:85%;
+	
+}
+.fancybox-media-item audio{
+	margin:170px;
+}
+.fancybox-inner{
+	overflow: hidden !important;
+}
+.fancybox-buttons{
+	
+	margin-top:10px;
+	font-variant:small-caps;
+	font-size: 16px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	clear:both;
+}
+
+.fancybox-more-button, .fancybox-less-button{
+	float:left;
+}
+
+.fancybox-delete-button{
+	float:right;
+}
+.fancybox-form{
+	display: inherit;
+}
+.fancybox-form input{
+	background:inherit;
+	border:none;
+	font-size:inherit;
+	font-weight:inherit;
+	display: inherit;
+
+}
+/*override the default from the fancybox stylesheet*/
+.fancybox-outer {
+	background-color:#fff !important;
+}
+.fancybox-editable{
+	
+}

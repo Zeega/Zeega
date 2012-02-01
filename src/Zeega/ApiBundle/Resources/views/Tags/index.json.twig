@@ -1,0 +1,40 @@
+{
+{% block header %}{% endblock %}
+"tags":
+	{% if tags|length > 0 %}
+		[
+			{% set len = tags|length - 1 -%}
+	
+			{% for i in 0..len %}
+			{
+				"id" : "{{ tags[i].id }}",
+				"tag_name" : "{{ tags[i].name }}",
+				"tag_description" : "{{ tags[i].description }}"
+				{% if tags[i].date_created is defined %}
+					,"tag_date" : "{{ tags[i].date_created|date("Y-m-d") }}"
+				{% endif %}
+				{% if tags[i].dateCreated is defined %}
+					,"tag_date" : "{{ tags[i].dateCreated|date("Y-m-d") }}"
+				{% endif %}
+				{% if tags[i].correlation_index is defined %}
+					,"tag_similarity" : "{{ tags[i].correlation_index }}"
+				{% endif %}
+				{% if item_id is defined %}
+					,"item_id" : "{{ item_id }}"
+				{% endif %}
+			}
+			{% if i < len %}
+				,
+			{% endif %}
+			{% endfor %}
+		],
+	{% else %}
+		{},
+	{% endif %}	
+"tags_count": 
+	{% if tags is defined %}
+		{{ tags|length }}
+	{% else %}
+		0
+	{% endif %}	
+}

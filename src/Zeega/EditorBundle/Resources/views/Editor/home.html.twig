@@ -16,11 +16,11 @@
 </div>
 <div style="clear:both;"></div>
 <br><br>
-			{% if is_granted('ROLE_SUPER_USER') %}
+			{% if super %}
 
 				<div id='add-playground'>
 					<ul class="pill-buttons">
-						<li><a  href="#">Create New Playground</a></li>
+						<li><a  href="#">Create New Site</a></li>
 					</ul>
 				</div>
 				
@@ -28,7 +28,7 @@
 			
 			
 			<div id="playgrounds-list">
-				<div class="item-title" style="font-size: 16px; ">My Playgrounds</div><br><br>
+				<div class="item-title" style="font-size: 16px; ">My Sites</div><br><br>
 				<div id="my-projects" style="padding-left:5px;">
 					{% for playground in playgrounds %}
 						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}" class="white">{{playground.title}}</a><span class="timeStamp"></span></li> 

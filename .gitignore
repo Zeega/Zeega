@@ -13,3 +13,7 @@
 /web/gamma/js/widget/zeega.bookmarklet.js
 /web/gamma/js/players/zeega.rdio.token.js
 Libraries/
+.DS_Store*
+jda_data.*
+!.gitignore
+

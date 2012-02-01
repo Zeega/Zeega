@@ -19,25 +19,7 @@ class ProjectsController extends Controller
 	 // `post_project`   [POST] /projects
     public function postProjectAction()
     {
-    	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Playground')
-        ->find($playground_id);
-		$project= new Project();
-		$route = new Route();
-		$node = new Node();
-		$node->setRoute($route);
-		$project->setPlayground($playground);
-		$project->addUsers($user);
-		$route->setProject($project);
-		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($route);
-		$em->persist($project);
-		$em->persist($node);
-		$em->flush();
-		$id=$project->getId();
-		return new Response(json_encode(78));
+
         
     }
 
@@ -167,8 +149,13 @@ class ProjectsController extends Controller
 		$project->setPlayground($playground);
 		$project->addUsers($user);
 		$route->setProject($project);
+		
+		$route->setTitle('click here to change title');
+		$project->setTitle('click here to change title');
+		/*
 		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
 		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		*/
 		$em=$this->getDoctrine()->getEntityManager();
 		$em->persist($route);
 		$em->persist($project);

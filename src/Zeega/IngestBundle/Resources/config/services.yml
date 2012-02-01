@@ -1,7 +1,7 @@
 parameters:
-#    zeega_ingest.example.class: Zeega\IngestBundle\Example
+    abstract_parser.class: Zeega\IngestBundle\Parser\ParserFlickr
 
 services:
-#    zeega_ingest.example:
-#        class: %zeega_ingest.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    abstract_parser:
+        class: %abstract_parser.class%
+        arguments: [@doctrine.orm.entity_manager]

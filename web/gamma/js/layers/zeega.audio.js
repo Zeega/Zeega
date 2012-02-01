@@ -7,98 +7,92 @@
 ************************************/
 
 var AudioLayer = ProtoLayer.extend({
+	
+	layerType : 'VISUAL',
+	draggable : false,
+	thumbUpdate : false,
+	
 	defaultAttributes : {
-							'title' : 'Video Layer',
-							'url' : 'none',
-							'in'  : 0,
-							'out' : 0,
-							'volume' : 50,
-							
-						},
-						
-	drawControls : function(template)
+		'title' : 'Video Layer',
+		'url' : 'none',
+		'in'  : 0,
+		'out' : 0,
+		'volume' : 50,
+	},
+
+	controls : function()
 	{
-		
 		var div = $('<div>')
 			.addClass('timeLEF layerEditingFrame')
 			.attr('id','player-'+this.model.id);
-		template.find('#controls').append(div);
-		this.editorLoaded=false;
 		
-		
-		template.find('.asset-type-icon').removeClass('ui-icon-pin-w');
-		template.find('.asset-type-icon').addClass('ui-icon-volume-on');
-		
-
+		this.layerControls = div;
 	},
 	
-	openControls: function()
+	onControlsOpen: function()
 	{
-	console.log('Audio Controls Opened');
+		console.log('Audio Controls Opened');
 	
-	var that=this;
-		if(!this.editorLoaded){
-			var html = this.getTemplate();
-			$('#player-'+this.model.id).html(html);
-			that.player=new ZeegaMP(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-preview-'+that.model.id);
+		if( !this.editorLoaded )
+		{
+			var _this = this;
+
+			var html = $('<div>').addClass('clearfix')
+				.css( 'height' , '140px' ) //this should moved out
+				.html( this.getTemplate() );
+			this.layerControls.prepend( html );
 			
+			this.player = new ZeegaVideoEditor(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-preview-'+this.model.id , 'player-' +this.model.id);
+
 			//player triggers 'update' event to persist changes
-			$('#player-'+that.model.id).bind('updated',function(){
-				that.updateAttr();
+			this.layerControls.bind( 'updated' , function(){
+				var properties = {
+					inPoint : {
+						property : 'in',
+						value : _this.player.getInPoint(),
+						css : false
+					},
+					outPoint : {
+						property : 'out',
+						value : _this.player.getOutPoint(),
+						css : false
+					},
+					volume : {
+						property : 'volume',
+						value : _this.player.getVolume(),
+						css : false
+					}
+				};
+				_this.layerControls.trigger( 'update' , [ properties ]);
 			});
-			that.editorLoaded=true;		
+			this.editorLoaded = true;
 		}
 	},
 	
-	closeControls: function()
+	onControlsClose: function()
 	{
-	
 		if(this.player) this.player.pause();
-		
 	},
 	
-	drawPreview : function(){
-		//make dom object - css should move to css file!
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#workspace').append(this.dom);
-		
-		//add icon into icon tray
-		$('#visual-icon-tray').append('audio');
-		
+	preload : function(){
+		this.display.attr({
+			'id' : 'layer-preview-'+this.model.id,
+			'data-layer-id' : this.model.id
+		});
+		this.player = new ZeegaVideoPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
 	},
 	
-	preloadMedia : function(){
-		//make dom object
-		var that=this;
-		var container= $('<div>').attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-				});
-				
-		this.dom = container;
-		
-		//draw to the workspace
-		$('#zeega-player').find('#preview-media').append(this.dom);
-		
-		this.player=new ZeegaAV(that.model.id,that.attr.url,that.attr.in,that.attr.out,that.attr.volume,'layer-publish-'+that.model.id,'zeega-player');
-				
-		
-	},
-	drawPublish : function()
+	play : function()
 	{
-		//make dom object
-		this.dom.css({'top':this.attr.y+"%",'left':this.attr.x});
 		this.player.play();
 	},
 	
-	hidePublish : function()
+	pause : function()
+	{
+		this.player.pause();
+	},
+	
+	stash : function()
 	{
 		this.player.pause();
 	},
@@ -108,43 +102,21 @@ var AudioLayer = ProtoLayer.extend({
 		this.player.pause();
 	},
 	
-	updateAttr: function()
-	{
+		getTemplate : function(){
 	
-		//get a copy of the old attributes into a variable
-		var newAttr = this.attr;
-		
-		if(this.editorLoaded){
-			newAttr.in=this.player._start_time;
-			newAttr.out=this.player._stop_time;
-			newAttr.volume = Math.floor(this.player._vol*100.0);
-		}
-		
-		//set the attributes into the layer
-		this.updateLayerAttr(newAttr);
-		//save the layer back to the database
-		this.saveLayer();
-	
-	
-	},
-	
-	getTemplate : function()
-	{
-	
-		var html ='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
+		var 		html ='		<div id="loadingMP" ><p>Loading Media...</p></div>';
+		html+='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
 		html +='<div id="avControls"> ';
 		html +='<div id="avStart"> ';
-		html +='<span>In:</span><input disabled="true"  name="avStartMinutes" class="mediaInput mediaInputMinutes" id="avStartMinutes" value="0" type="text">:<input  disabled="true"  name="avStartSeconds" class="mediaInput mediaInputSeconds" id="avStartSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><span id="avStartMinutes" >0</span>:<span id="avStartSeconds" >0</span>';
 		html +='</div>';
 		html +='<div id="avStop"> ';
-		html +='<span>Out:</span> <input name="avStopMinutes" class="mediaInput" disabled="true" id="avStopMinutes" value="0" type="text">:<input  disabled="true"  class="mediaInput" name="avStopSeconds" id="avStopSeconds" value="00.0" type="text">';
+		html +='<span style="font-weight: bold;">In:</span><span id="avStopMinutes" >0</span>:<span id="avStopSeconds" >0</span>';
 		html +=	'</div>';
 		html +='</div>';
-		html +='<div id="avVolumeWrapper">';
-		html +='</div> ';
 		html +='<div class="avComponent"> ';
 		html +='	<div id="mediaPlayerMP"> ';
-		html +='		<div id="loadingMP" ><p>Loading Media...</p></div>';
+
 		html +='		<div id="playMP" class="playButtonMP"> </div> ';
 		html +='		<div id="loadingOutsideMP"> ';
 		html +='			<div id="startBar"></div>';
@@ -160,7 +132,7 @@ var AudioLayer = ProtoLayer.extend({
 		html +='</div> <!-- #avComponent --> ';
 		html +='<div id="clear"></div> ';
 		html +='<div id ="volumeMP">';
-		html +='<h4>Volume</h4>';
+		html +='<h4 style="margin:10px">Volume</h4>';
 		html +='<div id="volume-slider" ></div>';
 		html +='</div>';
 		return html;

@@ -27,8 +27,14 @@ var bm = new bookmarklet({
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
 	            var script = document.getElementById('zeegabm');
 	            var srcUrlIdx = script.src.indexOf("/web/");
+	            if(srcUrlIdx == -1)
+	            	srcUrlIdx = script.src.indexOf("/gamma/");
 	            var localUrlPrefix = script.src.substring(0,srcUrlIdx);
-				console.log("local " + localUrlPrefix);
+		    
+                    if(srcUrlIdx != -1)
+			localUrlPrefix = localUrlPrefix + "/web";
+	
+				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
 			
         		var overlay=$('<div>').css({
@@ -43,9 +49,10 @@ var bm = new bookmarklet({
         			'overflow':'hidden',
 			
         		}).attr('id','zeega-overlay');
-		
-        		var url=encodeURIComponent(window.location.href);
-				console.log("url " + url);
+
+        		this.url=encodeURIComponent(window.location.href);
+
+
         		$('body').append(overlay);
 		
         		var cover=$('<div>').css({
@@ -76,8 +83,8 @@ var bm = new bookmarklet({
 			
         		overlay.append(cover);
         		overlay.append(highlight);
-				console.log(localUrlPrefix + "/web/app_dev.php/widget?url="+url);
-        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/web/app_dev.php/widget?url="+url+"' />").animate({
+				
+        		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/widget?url="+this.url+"' />").animate({
         		        'width': 470 }, 500, function() {
         			        $('#zeega-cover').fadeOut('slow');
         		});

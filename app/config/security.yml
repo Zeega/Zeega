@@ -1,14 +1,14 @@
 security:
     encoders:
-        Zeega\UserBundle\Entity\User: sha512
-
+        FOS\UserBundle\Model\UserInterface: sha512
+        
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        main:
-            entity: { class: Zeega\UserBundle\Entity\User, property: username }
+        fos_userbundle:
+            id: fos_user.user_manager
         in_memory:
             users:
                 user:  { password: userpass, roles: [ 'ROLE_USER' ] }
@@ -18,12 +18,11 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        login:
-            pattern:  ^/login$
-            anonymous: ~
         node:
             pattern:  ^/node/
+            anonymous: ~
+        init:
+            pattern:  ^/init
             anonymous: ~
         nodes:
             pattern:  ^/nodes
@@ -31,24 +30,31 @@ security:
         layers:
             pattern:  ^/layers/
             anonymous: ~
-        route:
-            pattern:  ^/route/
-            anonymous: ~
-        routes:
-            pattern:  ^/routes/
-            anonymous: ~
         secured_area:
             pattern:    ^/
             form_login:
-                check_path: /login_check
-                login_path: /login
+                provider: fos_userbundle
+                #csrf_provider: form.csrf_provider
             logout:
                 path:   /logout
                 target: /login
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+            anonymous: ~
+        search:
+            pattern: ^/api/search
+            anonymous: ~
 
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: ROLE_ADMIN }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/nodes, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/node, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: ROLE_USER }

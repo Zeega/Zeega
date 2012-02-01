@@ -19,8 +19,11 @@
 			<link rel="stylesheet" href="{{ asset('gamma/css/bootstrap.css')}}"  type="text/css" media="screen">
 			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
 			
+			
+			
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" />
 			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/plugins/colorpicker/css/colorpicker.css')}}" />
+			<link rel="stylesheet" href="{{ asset('gamma/js/libraries/aloha-rc9/css/aloha.css') }}" type="text/css" media="screen" />
 		{% endblock %}
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
@@ -46,20 +49,12 @@
 							{% if title %}
 							<li>>></li>
 								<li class='drop-down clearfix '>
-									{% if projectsMenu %}
 									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
 									<ul class='drop-down-menu'>
 											{% if adminMenu and is_granted('ROLE_SUPER_USER') %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
 											<li><a href="{{path('ZeegaEditorBundle_playground', { 'short': short })}}" class="dark">Projects</a></li>
+											<li><a href="{{path('ZeegaEditorBundle_browser', { 'short': short })}}" class="dark">Collections</a></li>
 									</ul>
-									{% elseif adminMenu and is_granted('ROLE_SUPER_USER')%}
-									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
-									<ul class='drop-down-menu'>
-											<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}">Admin</a></li>
-									</ul>
-									{% else %}
-									<a  href="#" class="dark">  {{title}} </a>
-									{% endif %}
 									
 									
 								</li>

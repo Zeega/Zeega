@@ -8,14 +8,28 @@
  	<div class="item-title playground-title" data-id="{{playground.id}}"  data-short="{{playground.short}}" style="font-size: 24px; ">{{playground.title}}</div><br><br>
 	<div id="projects">
 			<br><br>
+			<div id='instructions' style='color:white; font-size:18px'></div>
+			<br><br>
+			
+			<div style='width:500px;'>
+			<div style='float:left; width:200px;'>
+			<div id="go-to-browser">
+					<ul class="pill-buttons">
+						<li><a  href="{{ path('ZeegaEditorBundle_browser', { 'short': short })}}">Browse & Create Collections</a></li>
+					</ul>
+			</div>
+			</div>
+			<div style ='float:right: width:200px; margin-left:50px;'>
 			<div id="project-create">
 					<ul class="pill-buttons">
 						<li><a id="new-project" href="#">Create New Project</a></li>
 					</ul>
 			</div>
+			</div>
+			</div>
 			<div id="projects-lists">
-				<div class="item-title" style="font-size: 16px; ">My Projects</div><br><br>
-				<div id="my-projects" style="padding-left:5px;">
+				<div id='my-projects' class="item-title projects" style="font-size: 16px; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px; opacity:0.6; cursor:pointer; ">All Projects</div><br><br>
+				<div id="my-projects-container" class="projects-container my-projects-container" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
 							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
@@ -25,13 +39,14 @@
 
 
 				<!--<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{playground.title}}</div> <br><br>
-				<div id="all-projects" style="padding-left:5px;">
+				-->
+				<div id="all-projects-container" class="projects-container all-projects-container" style="padding-left:5px; display:none;">
 					<ul>
-						{% for project in myprojects %}
-							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding-top: 8px;"><a>{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
+						{% for project in allprojects %}
+							<li class='project-{{project.id}}'  style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a target="_blank" href="{{hostname}}{{directory}}project/{{project.id}}/view">{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
-				</div>-->
+				</div>
 			</div> <!--#projects-list-->
 			
 </div>	<!--#projects-->

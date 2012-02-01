@@ -3,631 +3,485 @@
 	ZEEGA Youtube PLAYER CLASS
 	
 	TODO:
-		Clean up a bit (remove numeric input?)
+		
 
 ************************************/
 
 
-var debug=true;
+var ZeegaYoutubePlayer = Class.extend({
 
-var interval;
-
-var ZeegaYoutube = Class.extend({
-
-
+	debug : {
+			fun:true,
+			event:true,
+			time:false,
+		},
 	
-
-	init: function(id,youtubeId,mediaIn,mediaOut,mediaVol,wrapperId,w,h){
-		console.log('init youtube layer');
-		if(debug)console.log("player:init");
+	
+	
+	init: function(id,youtubeId,inPoint,outPoint,volume,wrapperId,playerId){
+		if(this.debug.fun)console.log("youtube player ["+id+"] : function : init");
+	
+		var _this = this;
+			
 		this._id=id;
-		this._youtube_id=youtubeId;
-		this._source="http://www.youtube.com/v/"+this._youtube_id;
-		this._start_time=parseFloat(mediaIn);
-		this._stop_time=parseFloat(mediaOut);
-		this._vol=parseInt(mediaVol);
-		this._loaded=false;
-		this._canplay=false;
-		this._dur;
+		this._youtubeId=youtubeId;
+		this._source="http://www.youtube.com/v/"+this._youtubeId;
+		this._inPoint=parseFloat(inPoint);
+		this._outPoint=parseFloat(outPoint);
+		this._volume=parseInt(volume);
+		this._canPlay=0;
+		this._duration;
 		this._dragging;
-		this._wrapper_id=wrapperId;
-		var that=this;
-		this._can_play=0;
-		this.youtubePlayer;
+		this._wrapperId=wrapperId;
+		this._youtubePlayer;
+		this._playerId=playerId;	
+		this._interval;
+		
+		console.log(this)
+		
+		//Create wrapper
+		
 		var youtubeWrapper=document.createElement('div');
 		youtubeWrapper.setAttribute('id','youtube-player-'+id);
-		$('#'+this._wrapper_id).append(youtubeWrapper);
-		$('#layer-preview-'+id).bind('ready',function(){
-			that.cueVideo();
+		$('#'+this._wrapperId).append(youtubeWrapper);
+		$('#layer-publish-'+id).bind('container-ready',function(){ _this.cueVideo(); });
 		
-		});
 
-		var width=Math.floor(parseInt($('#zeega-player').css('width'))*parseInt(w)/100.0);
-		var height=Math.floor(parseInt($('#zeega-player').css('height'))*parseInt(h)/100.0);
-		
-		width='100%';
-		height='100%';
-		
+		//Initialize swfobject
 		var params = { allowScriptAccess: "always", wmode: "opaque", disablekb: "1" };
 		var atts = { id: "youtube-player-"+id};
 		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+id, 
-						   "youtube-player-"+id, width, height, "8", null, null, params, atts);
+				   "youtube-player-"+id, '100%', '100%', "8", null, null, params, atts);
+						
+	
+		//Add global listeners
 		
-		this._loaded=true;
+		addGlobal(id,'stateChangePublish','layer-publish-'+id);
+		$('#layer-publish-'+id).bind('stateChangePublish',function(event,data){_this.onEvent(data);});
+		addGlobal(id,'timeUpdatePublish','layer-publish-'+id);
+		$('#layer-publish-'+id).bind('timeUpdatePublish',function(event,data){_this.onTimeUpdate(data);});
 		
-		
-		addGlobal(id,'timeUpdate','layer-preview-'+id);
-		$('#layer-preview-'+id).bind('timeUpdate',function(event,data){console.log('timeupdate');that.timeUpdate(data);});
-		addGlobal(id,'stateChange','layer-preview-'+id);
-		$('#layer-preview-'+id).bind('stateChange',function(event,data){that.event(data);});
 	},
-	
-	event: function(state){
-	console.log(state);
-		if(state==1&&this._canplay==0){			
-			this.youtubePlayer.pauseVideo();
-			this.youtubePlayer.setVolume(this._vol);
-			this._canplay=1;
-			this._dur=this.youtubePlayer.getDuration();
-			if(this._stop_time==0) this._stop_time= this._dur;
-			this.setup();
-		}
-	
-	},
-	
 	cueVideo: function(){
-		this.youtubePlayer = document.getElementById("youtube-player-"+this._id);
-		this.youtubePlayer.mute();
-		this.youtubePlayer.addEventListener("onStateChange", "LayerGlobals["+this._id+"].stateChange",true);
-		//$('#youtube-player-'+id).bind('stateChange',function(event,data){that.youtubeEvent(data);});
-		this.youtubePlayer.loadVideoById(this._youtube_id,parseFloat(this._start_time));
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun: cueVideo");
+		
+		this._youtubePlayer = document.getElementById("youtube-player-"+this._id);
+		this._youtubePlayer.mute();
+		this._youtubePlayer.addEventListener("onStateChange", "LayerGlobals["+this._id+"].stateChangePublish",false);
+		this._youtubePlayer.loadVideoById(this._youtubeId,parseFloat(this._inPoint));
+		
+	},
+	
+	onEvent: function(state){
+		if(this.debug.event||1==1) console.log("youtube player ["+this._id+"] : event : "+state);
+		if(state==1&&this._canPlay==0){
+			this._canPlay=true;
+			this._youtubePlayer.pauseVideo();
+			this._youtubePlayer.setVolume(this._volume);
+			this._duration=this._youtubePlayer.getDuration();
+			if(this._outPoint==0) this._outPoint= this._duration;
+			$('#'+this._playerId).trigger('ready',{'id':this._id});
+		}
+	},
+	
 
+	onTimeUpdate:function(){
+		if(this.debug.time) console.log("youtube player ["+this._id+"] : event : onTimeUpdate");
+		
+		if(this._youtubePlayer.getCurrentTime()>this._outPoint+1||this._youtubePlayer.getCurrentTime()<this._inPoint-2){
+			if(this._youtubePlayer.getCurrentTime()>this._outPoint+1)$('#'+this._playerId).trigger('ended',{'id':this._id});
+			if(this._interval) clearInterval(this._interval);
+			this._youtubePlayer.seekTo(this._inPoint);
+			this.pause();	
+		}
 	},
 	
-	
-	timeUpdate:function(){
+	onEnded: function(){
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : event : onEnded");
 		
-		if(debug)console.log("player:updateCurrentTime");
-		
-		if(this.youtubePlayer.getCurrentTime()>this._stop_time+.5||this.youtubePlayer.getCurrentTime()<this._start_time-.5){
-			if(interval){clearInterval(interval);}
-			this.setCurrentTime(this._start_time);
-			
-		}
-		var displayTime=convertTime(this.youtubePlayer.getCurrentTime());
-		$('#player-'+this._id).find('#currentTime').html(displayTime);
-		
-		var currentLoc=parseFloat(this.youtubePlayer.getCurrentTime())*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(this._dur);
-		
-		if(!this._dragging){
-			$('#player-'+this._id).find('#currentMP').css('left',currentLoc+"px");
-			$('#player-'+this._id).find('#loadingInsideMP').css('width',currentLoc+"px");
-		}
-		
-		
-	},
-	
-	ended: function(){
-		if(debug)console.log("player:ended");
+		$('#'+this._playerId).trigger('ended',{'id':this._id});
+		this._youtubePlayer.seekTo(this._inPoint);
 		this.pause();
-		$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
-		this.timeUpdate(this._start_time);
 	},
 	
-	setup:function(){
+	onPlay: function(){},
+	
+	onPause: function(){},
+	
+	pause:function(){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : pause");
 		
-		if(debug)console.log("player:setup");
-		var that=this;
+	
+		if(this._interval){clearInterval(this._interval);}
+		if(this._canPlay) this._youtubePlayer.pauseVideo();
+	},
+	
+	play:function(){		
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : pause");
 		
-		//this.initiateAsset();
+		if(this._interval) clearInterval(this._interval);
+		if(this._canPlay){
+			this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
+			this._youtubePlayer.playVideo();
+		}
+	},
+	
+	setVolume:function(volume){
+	if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : setVolume");
 		
-		$('#layerDuration').html(convertTime(this._dur));
-		this.informGraphicInput(this._dur,this._start_time,this._stop_time,this._vol);
-		this.informNumericInput(this._start_time,this._stop_time);
-		$('#player-'+this._id).find('#playMP').click(function(){that.playPause();});
+		if(isInt(volume)){
+			if(volume<=100&&volume>=0){
+				this._volume=volume;
+				this._youtubePlayer.setVolume(this._volume);
+			}
+		}
+	
+	},
+	
+	getVolume:function(volume){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : getVolume");
+		return this._volume;
+	},
+	
+
+	exit:function(){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : exit");
 		
-		$('#player-'+this._id).find('#currentMP').draggable({axis: 'x',containment: 'parent',start:function(){that._dragging=true;}, stop:function(){			
-			var t=parseFloat($(this).css('left'))*parseFloat(that._dur)/parseFloat($('#player-'+that._id).find('#loadingOutsideMP').css('width')); 
-			that.setCurrentTime(t);
-			that._dragging=false;
-		}});
-		$('#player-'+this._id).find('#volumeMP').click(function(){
-			that.timeUpdate();
-		});
+		this.pause();
+	}
+});
+
+
+var ZeegaYoutubeEditor = ZeegaYoutubePlayer.extend({
+
+
+	
+	
+	
+	init: function(id,youtubeId,inPoint,outPoint,volume,wrapperId,playerId){
+		if(this.debug.fun)console.log("youtube player ["+id+"] : function : init");
+	
+		this._id=id;
+		this._youtubeId=youtubeId;
+		this._source="http://www.youtube.com/v/"+this._youtubeId;
+		this._inPoint=parseFloat(inPoint);
+		this._outPoint=parseFloat(outPoint);
+		this._volume=parseInt(volume);
+		this._canPlay=0;
+		this._duration;
+		this._dragging;
+		this._wrapperId=wrapperId;
+		var _this=this;
+		this._youtubePlayer;
+		this._playerId=playerId;	
+		this._interval;
 		
-		$('#player-'+this._id).find('#startMP').draggable({axis: 'x',containment: 'parent',stop:function(){
-			
-			var t=parseFloat($(this).css('left'))*parseFloat(that._dur)/parseFloat($('#player-'+that._id).find('#loadingOutsideMP').css('width')); 
-			if(t>parseFloat(that._stop_time)) t=Math.max(0,parseFloat(that._stop_time)-10.0);
-			
-			that.informGraphicInput(that._dur,t,-1,-1);
-			that.informNumericInput(t,-1);
-			that.updateAsset(t,-1);
-			that.setCurrentTime(t);
-			
+		//Create wrapper
 		
-		}});
+		var youtubeWrapper=document.createElement('div');
+		youtubeWrapper.setAttribute('id','youtube-player-'+id);
+		$('#'+this._wrapperId).append(youtubeWrapper);
+		$('#layer-preview-'+id).bind('container-ready',function(){ _this.cueVideo(); });
 		
-		$('#player-'+this._id).find('#stopMP').draggable({axis: 'x',containment: 'parent',
-			stop:function(){
-				var t=parseFloat($(this).css('left'))*parseFloat(that._dur)/parseFloat($('#player-'+that._id).find('#loadingOutsideMP').css('width')); 
-				if(t<parseFloat(that._start_time)){
-					t=Math.min(parseFloat(that._dur),parseFloat(that._start_time)+10.0);
-					console.log(t+" "+	that._start_time);
-				}
-				that.informGraphicInput(that._dur,-1,t,-1);
-				that.informNumericInput(-1,t);
-				that.updateAsset(-1,t);
-				if(that.youtubePlayer.getCurrentTime()>t) that.setCurrentTime(that._start_time);
-				
+
+		//Initialize swfobject
+		var params = { allowScriptAccess: "always", wmode: "opaque", disablekb: "1" };
+		var atts = { id: "youtube-player-"+id};
+		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+id, 
+				   "youtube-player-"+id, '100%', '100%', "8", null, null, params, atts);
+						
+	
+		//Add global listeners
+		
+		addGlobal(id,'stateChangePublish','layer-preview-'+id);
+		$('#layer-preview-'+id).bind('stateChangePublish',function(event,data){_this.onEvent(data);});
+		addGlobal(id,'timeUpdatePublish','layer-preview-'+id);
+		$('#layer-preview-'+id).bind('timeUpdatePublish',function(event,data){_this.onTimeUpdate(data);});
+		
+	},
+
+	onEvent: function(state){
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : event : "+state);
+		
+		if(state==1&&this._canPlay==0){
+			this._canPlay=true;
+			this._youtubePlayer.pauseVideo();
+			this._duration=this._youtubePlayer.getDuration();
+			if(this._outPoint==0) this._outPoint= this._duration;
+			this.loadControls();
+		}
+		else if(state==1) 	this.onPlay();
+		if(state==2) this.onPause();
+	
+		
+	},
+	
+
+	onTimeUpdate:function(){
+		//if(this.debug.event) console.log("youtube player ["+this._id+"] : event : onTimeUpdate");
+		
+		if(this._youtubePlayer.getCurrentTime()>this._outPoint+1||this._youtubePlayer.getCurrentTime()<this._inPoint-2){
+			if(this._youtubePlayer.getCurrentTime()>this._outPoint+1)$('#'+this._playerId).trigger('ended',{'id':this._id});
+			if(this._interval) clearInterval(this._interval);
+			this._youtubePlayer.seekTo(this._inPoint);
+			this.pause();	
+		}
+		
+		var currentTime=this._youtubePlayer.getCurrentTime();
+		var displayTime=convertTime(currentTime);
+		$('#'+this._playerId).find('#currentTime').html(displayTime);
+		
+		var currentLoc=parseFloat(currentTime)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		if(!this._dragging){
+			$('#'+this._playerId).find('#currentMP').css('left',currentLoc+"px");
+			$('#'+this._playerId).find('#loadingInsideMP').css('width',currentLoc+"px");
+		}
+		
+		
+	},
+	
+	loadControls:function(){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : loadControls");
+		
+		this._dragging=false;
+		
+		this.setVolume(this._volume);
+		
+		
+		//Don't need to call set in point as loaded player at in point
+		var m=getMinutes(this._inPoint);
+		var s=getSeconds(this._inPoint);
+		
+		$('#'+this._playerId).find('#avStartMinutes').html(m);
+		$('#'+this._playerId).find('#avStartSeconds').html(s);
+		
+		var left=parseFloat(this._inPoint)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		$('#'+this._playerId).find('#startMP').css('left',left+"px");
+		$('#'+this._playerId).find('#startBar').css('width',left+"px");
+		
+			var currentTime=this._youtubePlayer.getCurrentTime();
+		var displayTime=convertTime(currentTime);
+		$('#'+this._playerId).find('#currentTime').html(displayTime);
+		
+		var currentLoc=parseFloat(currentTime)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		if(!this._dragging){
+			$('#'+this._playerId).find('#currentMP').css('left',currentLoc+"px");
+			$('#'+this._playerId).find('#loadingInsideMP').css('width',currentLoc+"px");
+		}
+		
+		
+		this.setOutPoint(this._outPoint);
+		
+		var _this=this;
+		
+		$('#'+this._playerId).find('#playMP').click(function(){_this.playPause();});
+		
+		$('#'+this._playerId).find('#currentMP').draggable({
+			axis: 'x',containment: 'parent',
+			start:function(){_this._dragging=true;}, 
+			stop:function(){			
+				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
+				if(t>parseFloat(_this._outPoint)) t=Math.max(parseFloat(_this._inPoint),parseFloat(_this._outPoint)-5.0);
+				_this._dragging=false;
+				_this.setCurrentTime(t);
 			}
 		});
 		
+		$('#'+this._playerId).find('#startMP').draggable({
+			axis: 'x',
+			containment: 'parent',
+			stop:function(){
+				_this.pause();
+				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
+				if(t>parseFloat(_this._outPoint)) t=Math.max(0,parseFloat(_this._outPoint)-10.0);
+				_this.setInPoint(t);
+				$('#'+_this._playerId).trigger('updated',{'id':this._id});
+			}
+		});
 		
-	
+		$('#'+this._playerId).find('#stopMP').draggable({
+			axis: 'x',
+			containment: 'parent',
+			stop:function(){
+				_this.pause();
+				var t=parseFloat($(this).css('left'))*parseFloat(_this._duration)/parseFloat($('#player-'+_this._id).find('#loadingOutsideMP').css('width')); 
+				if(t<parseFloat(_this._inPoint)) t=Math.min(parseFloat(_this._duration),parseFloat(_this._inPoint)+10.0);
+				_this.setCurrentTime(_this._inPoint);
+				_this.setOutPoint(t);
+				$('#'+_this._playerId).trigger('updated',{'id':this._id});
+			}
+		});
 		
-		$('#player-'+this._id).find('#stopMP').draggable('option','disabled',false);
-		$('#player-'+this._id).find('#startMP').draggable('option','disabled',false);
-		$('#player-'+this._id).find('#currentMP').draggable('option','disabled',false);
-		
-		
-		this.setCurrentTime(this._start_time);
-		$('#player-'+this._id).find('#loadingMP').fadeOut('fast');
-		
-		
-		$('#player-'+this._id).find('#volume-slider').css({'margin':'10px'}).slider({
+		$('#'+this._playerId).find('#volume-slider').css({'margin':'10px'}).slider({
 				min : 0,
 				max : 100,
-				value : that._vol,
+				value :this._volume,
 				step : 1,
 				slide: function(e,ui){
-					that._vol=ui.value;
-					that.youtubePlayer.setVolume(that._vol);
+					_this._youtubePlayer.setVolume(ui.value);
 				},
 				stop : function(e, ui){
-				
-					that._vol=ui.value;
-					that.youtubePlayer.setVolume(that._vol);
-					$('#player-'+that._id).trigger('updated');
+					_this._volume=ui.value;
+					$('#player-'+_this._id).trigger('updated');
 				}
 		});
+		
+		$('#'+this._playerId).find('#stopMP').draggable('option','disabled',false);
+		$('#'+this._playerId).find('#startMP').draggable('option','disabled',false);
+		$('#'+this._playerId).find('#currentMP').draggable('option','disabled',false);
+		
 		
 		$('body').keydown(function(event) {
-			if(that.selectedArrow=='startMP'){
-				
-			
-				if(event.keyCode==37&&that._start_time>0.1){
-				
-				that._start_time=that._start_time-0.1;
-				
-				
-				}
-				else if(event.keyCode==39&&that._stop_time-that._start_time>0.1) {
-				
-				that._start_time=that._start_time+0.1;
-				
-				}
-		
-				
-				that.informNumericInput(that._start_time,that._stop_time);
-				that.setCurrentTime(that._start_time);
+			if(_this.selectedArrow=='startMP'){
+				if(event.keyCode==37&&_this._inPoint>0.1) _this._inPoint=_this._inPoint-0.1;
+				else if(event.keyCode==39&&_this._outPoint-_this._inPoint>0.1)	_this._inPoint=_this._inPoint+0.1;
+				_this.setInPoint(_this._inPoint);
 			}
-			else if(that.selectedArrow=='stopMP'){
-				
-			
-				if(event.keyCode==37&&that._stop_time-that._start_time>0.1){
-				
-				that._stop_time=that._stop_time-0.1;
-				
-				
-				}
-				else if(event.keyCode==39&&that._dur-that._stop_time>0.1) {
-				
-				that._stop_time=that._stop_time+0.1;
-				}
-				
-				that.informNumericInput(that._start_time,that._stop_time);
-				that.setCurrentTime(that._stop_time-.01);
+			else if(_this.selectedArrow=='stopMP'){
+				if(event.keyCode==37&&_this._outPoint-_this._inPoint>0.1) _this._outPoint=_this._outPoint-0.1;
+				else if(event.keyCode==39&&_this._dur-_this._outPoint>0.1) _this._outPoint=_this._outPoint+0.1;
+				_this.setOutPoint(_this._outPoint);
+			}
+			if(event.keyCode==27){
+				$('.arrow-down').parent().find('.bar').hide();
+				_this.selectedArrow=='none';
 			}
 		});
+		
 		
 		$('.arrow-down').dblclick(function(){
 			$('.arrow-down').parent().find('.bar').hide();
-			that.selectedArrow=$(this).parent().attr('id');
+			_this.selectedArrow=$(this).parent().attr('id');
 			$(this).parent().find('.bar').show();
 		});
 		
-	},
-	
-	informGraphicInput:function(duration,startTime,stopTime,volume){
-	
-	if(debug)console.log("player:informGraphicInput");
-	
-	if(startTime!=-1){
-		var leftStart=parseFloat(startTime)*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(duration);
-		$('#player-'+this._id).find('#startMP').css('left',leftStart+"px");
-		$('#player-'+this._id).find('#startBar').css('width',leftStart+"px");
-
+		$('#'+this._playerId).find('#loadingMP').fadeOut('fast');
 		
-	}	
-	if(stopTime!=-1){
-		var leftStop=parseFloat(stopTime)*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(duration);
-		$('#player-'+this._id).find('#stopMP').css('left',leftStop+"px");
-		var r=parseInt($('#player-'+this._id).find('#loadingOutsideMP').css('width'))-parseInt($('#player-'+this._id).find('#stopMP').css('left'));
-		$('#player-'+this._id).find('#stopBar').css('width',r+"px");
-	}	
-	
-	
 	},
 	
-	informNumericInput:function(startTime,stopTime){
-			
-			
-			if(debug)console.log("player:informNumericInput:"+startTime);
-			if(startTime!=-1){
-				var m=getMinutes(startTime);
-				var s=getSeconds(startTime);
-				
-				$('#player-'+this._id).find('#avStartMinutes').attr('value',m);
-				$('#player-'+this._id).find('#avStartSeconds').attr('value',s);
-			}
-			if(stopTime!=-1){
-				m=getMinutes(stopTime);
-				s=getSeconds(stopTime);
-				
-				$('#player-'+this._id).find('#avStopMinutes').attr('value',m);
-				$('#player-'+this._id).find('#avStopSeconds').attr('value',s);
-			}
-			
-			
-			
-	
+	onPlay: function(){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : event : onPlay");
+		$('#'+this._playerId).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
+		
 	},
 	
-	setVolume:function(volume){
-		if(isInt(volume)){
-			if(volume<=100&&volume>=0){
-				this._vol=volume;
-				this.youtubePlayer.setVolume(this._vol);
-			}
+	onPause: function(){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : event : onPause");
+		
+		$('#'+this._playerId).find('#playMP').addClass('playButtonMP').removeClass('pauseButtonMP');	
+	},
+	
+	pause:function(){
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : pause");
+	
+		if(this._interval){clearInterval(this._interval);}
+		if(this._canPlay) this._youtubePlayer.pauseVideo();
+	},
+	
+	play:function(){		
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : play");
+		
+		if(this._interval) clearInterval(this._interval);
+		if(this._canPlay){
+			this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
+			this._youtubePlayer.playVideo();
 		}
-	
 	},
 	
-	
-	updateAsset:function(startTime,stopTime){
-	
-		if(debug)console.log("player:updateAsset");
+	setInPoint: function(inPoint){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : setInPoint");
 		
-		if(startTime!=-1) this._start_time=startTime;
-		if(stopTime!=-1) this._stop_time=stopTime;
+		this._inPoint=inPoint;
+		var m=getMinutes(inPoint);
+		var s=getSeconds(inPoint);
+		
+		$('#'+this._playerId).find('#avStartMinutes').html(m);
+		$('#'+this._playerId).find('#avStartSeconds').html(s);
+		
+		var left=parseFloat(inPoint)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		$('#'+this._playerId).find('#startMP').css('left',left+"px");
+		$('#'+this._playerId).find('#startBar').css('width',left+"px");
+		
+		this.setCurrentTime(this._inPoint);
+	},
+	
+	setOutPoint:function(outPoint){
+		if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : setOutPoint : "+outPoint);
 
-		$('#player-'+this._id).trigger('updated');
-			
+		this._outPoint=outPoint;
+		m=getMinutes(outPoint);
+		s=getSeconds(outPoint);
 		
-	
-	},
-	
-	
-	initiateAsset:function(){
-		if(debug)console.log("player:initiateAsset");
-		this.youtubePlayer.seekTo(this._start_time);
-		$('#player-'+this._id).find('#startMP').css('left',this._start_time*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/this._dur);
-		$('#player-'+this._id).find('#currentMP').css('left',this._start_time*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/this._dur);
+		$('#'+this._playerId).find('#avStopMinutes').html(m);
+		$('#'+this._playerId).find('#avStopSeconds').html(s);
+		var left=parseFloat(outPoint)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+		$('#'+this._playerId).find('#stopMP').css('left',left+"px");
+		var width=parseInt($('#'+this._playerId).find('#loadingOutsideMP').css('width'))-parseInt($('#'+this._playerId).find('#stopMP').css('left'));
+		$('#'+this._playerId).find('#stopBar').css('width',width+"px");
+		
+		//this.setCurrentTime(Math.max(this._inPoint,this._outPoint-3));
 		
 	},
 	
 	setCurrentTime:function(currentTime){
-			if(this._interval){clearInterval(interval);}
-			if(debug)console.log("player:setCurrentTime");
-			this.youtubePlayer.pauseVideo();
+			if(this.debug.fun) console.log("youtube player ["+this._id+"] : fun : setCurrentTime");
+
+			if(this._interval) clearInterval(this._interval);
+			this._youtubePlayer.pauseVideo();
 			
-			this.youtubePlayer.seekTo(currentTime);
-			this.timeUpdate();
+			if(currentTime<this._inPoint) currentTime=this._inPoint;
+			else if(currentTime>this._outPoint) currentTime=Math.max(0,this._outPoint-5);
+			
+			var displayTime=convertTime(currentTime);
+			$('#'+this._playerId).find('#currentTime').html(displayTime);
+		
+			var currentLoc=parseFloat(currentTime)*parseFloat($('#'+this._playerId).find('#loadingOutsideMP').css('width'))/parseFloat(this._duration);
+			if(!this._dragging){
+				$('#'+this._playerId).find('#currentMP').css('left',currentLoc+"px");
+				$('#'+this._playerId).find('#loadingInsideMP').css('width',currentLoc+"px");
+			}
+			
+			this._youtubePlayer.seekTo(currentTime);
+		
 	},
 	
+	getInPoint: function(){
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : getInPointning");
+
+		return this._inPoint;
+	},
+	
+	getOutPoint: function(){
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : getOutPoint");
+
+		return this._outPoint;
+	},
+
 	exit:function(){
-			if(debug)console.log("player:exit");
-			$('#player-'+this._id).find('.mediaInput').unbind();
-			this.pause();
-			
-			//$('#player-'+this._id).find('#stopMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#startMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#currentMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#avVolumeSlider').slider("option","disabled",true);
-			
-			$('#player-'+this._id).find('#loadingMP').show();
-	},
+		if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : exit");
 		
-	pause:function(){
-			if(this._interval){clearInterval(this._interval);}
-			if(debug)console.log("player:pause");
-			if(this._canplay){
-				this.youtubePlayer.pauseVideo();
-				 $('#player-'+this._id).find('#playMP').addClass('playButtonMP').removeClass('pauseButtonMP');
-			}
-			
-			
-	},
-	playPause:function(){
-		if(this._interval){clearInterval(this._interval);}
-		if(debug)console.log("player:playPause");
-		if(this.youtubePlayer){
-			if(this.youtubePlayer.getPlayerState()==1){
-				this.youtubePlayer.pauseVideo();
-				
-				$('#player-'+this._id).find('#playMP').addClass('playButtonMP').removeClass('pauseButtonMP');
-			}
-			else{
-				this.youtubePlayer.playVideo();
-				this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdate();",250);
-				$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
-			}
-		}
-	}
-});
-
-var ZeegaYoutubePublish = Class.extend({
-
-
-	
-
-	init: function(id,youtubeId,mediaIn,mediaOut,mediaVol,wrapperId,playerId,w,h){
-		console.log('init youtube layer');
-		if(debug)console.log("player:init");
-		this._id=id;
-		this._youtube_id=youtubeId;
-		this._source="http://www.youtube.com/v/"+this._youtube_id;
-		this._start_time=parseFloat(mediaIn);
-		this._stop_time=parseFloat(mediaOut);
-		this._mediaVol=mediaVol;
-		this._vol=parseInt(mediaVol);
-		this._loaded=false;
-		this._canplay=false;
-		this._dur;
-		this._wrapper_id=wrapperId;
-		var that=this;
-		this._can_play=0;
-		this._player_id=playerId;
-		this.youtubePlayer;
-		this._interval;
-		var youtubeWrapper=document.createElement('div');
-		youtubeWrapper.setAttribute('id','youtube-player-'+id);
-		$('#'+this._wrapper_id).append(youtubeWrapper);
-		$('#layer-publish-'+id).bind('ready',function(){
-			that.cueVideo();
-		
-		});
-		this._dragging
-		var width=Math.floor(parseInt($('#zeega-player').css('width'))*parseInt(w)/100.0);
-		var height=Math.floor(parseInt($('#zeega-player').css('height'))*parseInt(h)/100.0);
-		console.log("w:"+width+",h:"+height);
-	
-		var params = { allowScriptAccess: "always", wmode: "opaque", disablekb: "1" };
-		var atts = { id: "youtube-player-"+id};
-		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+id, 
-						   "youtube-player-"+id, width, height, "8", null, null, params, atts);
-		
-		this._loaded=true;
-		
-		addGlobal(id,'stateChangePublish','layer-publish-'+id);
-		$('#layer-publish-'+id).bind('stateChangePublish',function(event,data){that.event(data);});
-		addGlobal(id,'timeUpdatePublish','layer-publish-'+id);
-		$('#layer-publish-'+id).bind('timeUpdatePublish',function(event,data){that.timeUpdate(data);});
-		
-	},
-	
-	event: function(state){
-	console.log(state);
-		if(state==1&&this._canplay==0){
-			console.log('setting vol');
-			this.youtubePlayer.pauseVideo();
-			this.youtubePlayer.setVolume(this._vol);
-			console.log('vol:'+this._vol);
-			console.log('mediavol:'+this.mediaVol);
-			this._canplay=1;
-			this._dur=this.youtubePlayer.getDuration();
-			if(this._stop_time==0) this._stop_time= this._dur;
-			$('#'+this._player_id).trigger('ready',{'id':this._id});
-		}
-	},
-	
-	cueVideo: function(){
-		this.youtubePlayer = document.getElementById("youtube-player-"+this._id);
-		this.youtubePlayer.mute();
-		this.youtubePlayer.addEventListener("onStateChange", "LayerGlobals["+this._id+"].stateChangePublish",false);
-		this.youtubePlayer.loadVideoById(this._youtube_id,parseFloat(this._start_time));
-		
-	},
-	
-	
-	timeUpdate:function(){
-		
-	
-		
-		if(debug)console.log("player:updateCurrentTime");
-		
-		if(this.youtubePlayer.getCurrentTime()>this._stop_time+2||this.youtubePlayer.getCurrentTime()<this._start_time-2){
-			if(interval){clearInterval(interval);}
-			$('#'+this._player_id).trigger('ended',{'id':this._id});
-			
-			this.youtubePlayer.seekTo(this._start_time);
-			this.pause();	
-			$('#'+this._player_id).trigger('ended',{'id':this._id});
-			
-			console.log('youtube ended');
-		}
-		
-		var displayTime=convertTime(this.youtubePlayer.getCurrentTime());
-		$('#player-'+this._id).find('#currentTime').html(displayTime);
-		
-		var currentLoc=parseFloat(this.youtubePlayer.getCurrentTime())*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(this._dur);
-		
-		if(!this._dragging){
-			$('#player-'+this._id).find('#currentMP').css('left',currentLoc+"px");
-			$('#player-'+this._id).find('#loadingInsideMP').css('width',currentLoc+"px");
-		}
-		
-		
-	},
-	
-	ended: function(){
-		if(debug)console.log("player:ended");
 		this.pause();
-		$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
-		this.timeUpdate(this._start_time);
+		$('#'+this._playerId).find('.mediaInput').unbind();
+		$('#'+this._playerId).find('#loadingMP').show();
 	},
 	
-
-	
-	informGraphicInput:function(duration,startTime,stopTime,volume){
-	
-	if(debug)console.log("player:informGraphicInput");
-	
-	if(startTime!=-1){
-		var leftStart=parseFloat(startTime)*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(duration);
-		$('#player-'+this._id).find('#startMP').css('left',leftStart+"px");
-		$('#player-'+this._id).find('#startBar').css('width',leftStart+"px");
-
-		
-	}	
-	if(stopTime!=-1){
-		var leftStop=parseFloat(stopTime)*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/parseFloat(duration);
-		$('#player-'+this._id).find('#stopMP').css('left',leftStop+"px");
-		var r=parseInt($('#player-'+this._id).find('#loadingOutsideMP').css('width'))-parseInt($('#player-'+this._id).find('#stopMP').css('left'));
-		$('#player-'+this._id).find('#stopBar').css('width',r+"px");
-	}	
-	
-	
-	},
-	
-	informNumericInput:function(startTime,stopTime){
-			
-			
-			if(debug)console.log("player:informNumericInput:"+startTime);
-			if(startTime!=-1){
-				var m=getMinutes(startTime);
-				var s=getSeconds(startTime);
-				
-				$('#player-'+this._id).find('#avStartMinutes').attr('value',m);
-				$('#player-'+this._id).find('#avStartSeconds').attr('value',s);
-			}
-			if(stopTime!=-1){
-				m=getMinutes(stopTime);
-				s=getSeconds(stopTime);
-				
-				$('#player-'+this._id).find('#avStopMinutes').attr('value',m);
-				$('#player-'+this._id).find('#avStopSeconds').attr('value',s);
-			}
-			
-			
-			
-	
-	},
-	
-	setVolume:function(volume){
-		if(isInt(volume)){
-			if(volume<=100&&volume>=0){
-				this._vol=volume;
-				this.youtubePlayer.setVolume(this._vol);
-			}
-		}
-	
-	},
-	
-	
-	updateAsset:function(startTime,stopTime){
-	
-		if(debug)console.log("player:updateAsset");
-		
-		if(startTime!=-1) this._start_time=startTime;
-		if(stopTime!=-1) this._stop_time=stopTime;
-
-		$('#player-'+this._id).trigger('updated');
-			
-		
-	
-	},
-	
-	
-	initiateAsset:function(){
-		if(debug)console.log("player:initiateAsset");
-		this.youtubePlayer.seekTo(this._start_time);
-		$('#player-'+this._id).find('#startMP').css('left',this._start_time*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/this._dur);
-		$('#player-'+this._id).find('#currentMP').css('left',this._start_time*parseFloat($('#player-'+this._id).find('#loadingOutsideMP').css('width'))/this._dur);
-		
-	},
-	
-	setCurrentTime:function(currentTime){
-			if(debug)console.log("player:setCurrentTime");
-			this.youtubePlayer.pauseVideo();
-			this.youtubePlayer.seekTo(this._start_time);
-			this.timeUpdate();
-	},
-	
-	exit:function(){
-			if(debug)console.log("player:exit");
-			$('#player-'+this._id).find('.mediaInput').unbind();
-			this.pause();
-			
-			//$('#player-'+this._id).find('#stopMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#startMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#currentMP').draggable('option','disabled',true);
-			//$('#player-'+this._id).find('#avVolumeSlider').slider("option","disabled",true);
-			
-			$('#player-'+this._id).find('#loadingMP').show();
-	},
-		
-	pause:function(){
-			if(this._interval){clearInterval(this._interval);}
-			if(debug)console.log("player:pause");
-			if(this._canplay){
-				this.youtubePlayer.pauseVideo();
-				 $('#player-'+this._id).find('#playMP').addClass('playButtonMP').removeClass('pauseButtonMP');
-			}
-			
-			
-	},
-	
-	play:function(){
-	if(this._interval){clearInterval(this._interval);}
-			if(debug)console.log("youtube player:play");
-			if(this._canplay){
-				
-				this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
-				this.youtubePlayer.playVideo();
-			}
-			
-			
-	},
 	playPause:function(){
-		if(this._interval){clearInterval(this._interval);}
-		if(debug)console.log("youtube player:playPause");
-		if(this.youtubePlayer){
-			if(this.youtubePlayer.getPlayerState()==1){
-				this.youtubePlayer.pauseVideo();
-				$('#player-'+this._id).find('#playMP').addClass('playButtonMP').removeClass('pauseButtonMP');
+				if(this.debug.event) console.log("youtube player ["+this._id+"] : fun : playPause");
+			
+			if(this._canPlay){
+				if(this._youtubePlayer.getPlayerState()==2) this.play();
+				else if(this._youtubePlayer.getPlayerState()==1)	this.pause();				
 			}
-			else{
-				this.youtubePlayer.playVideo();
-				
-				 this._interval=setInterval("LayerGlobals['"+this._id+"'].timeUpdatePublish();",250);
-				$('#player-'+this._id).find('#playMP').addClass('pauseButtonMP').removeClass('playButtonMP');
-			}
-		}
+			
 	}
 });
 
-//Utilities
 
-function videoLoadedYoutube(data){
+//Global event listener
 
-	console.log(data);
-
-}
 function onYouTubePlayerReady(playerId) {
-	
-	$('#layer-publish-'+playerId).trigger('ready');
-	$('#layer-preview-'+playerId).trigger('ready');
+	console.log( 'Youtube Container Ready:'+playerId);
+	$('#layer-publish-'+playerId).trigger('container-ready');
+	$('#layer-preview-'+playerId).trigger('container-ready');
 }
 

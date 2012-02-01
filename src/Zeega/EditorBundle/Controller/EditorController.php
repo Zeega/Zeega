@@ -36,15 +36,15 @@ class EditorController extends Controller
 				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
 				$user->setSalt(md5(time()));
 				$encoder = $factory->getEncoder($user);
-				$password = $encoder->encodePassword('dziga', $user->getSalt());
+				$password = $encoder->encodePassword('alphaZ', $user->getSalt());
 				$user->setUserRoles('ROLE_SUPER_ADMIN');
 				$user->setPassword($password);
-				$user->setEmail('james@zeega.org');
+				$user->setEmail('dev@zeega.org');
 				$em->persist($user);
 				$em->flush();
-				return new Response('Initial User added');
+				return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
 	}
- 	else return new Response('Users already exist');
+ 	else return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
  	        	
  	
  	}
@@ -54,8 +54,9 @@ class EditorController extends Controller
 			
     	$message='';
 		$user = $this->get('security.context')->getToken()->getUser();
-		if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+		if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 		else $super=false;
+		$super=true;
 
 		if ($super) {
 			$playground=$this->getDoctrine()
@@ -92,11 +93,10 @@ class EditorController extends Controller
 			
 							
 			if($playground||$super){
-				if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+				if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 				else $super=false;
-				$admin=$this->getDoctrine()
-						->getRepository('ZeegaEditorBundle:Playground')
-						->checkAdmin($short,$user->getId());
+				$admin=true;
+				$super=true;
 				$projects=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Project')
 							->findProjectsByPlayground($playground->getId());
@@ -110,7 +110,7 @@ class EditorController extends Controller
 				return $this->render('ZeegaEditorBundle:Editor:playground.admin.html.twig', array(
 					// last displayname entered by the user
 					'displayname' => $user->getdisplayname(),
-					'userrole' => $user->getUserRoles(),
+					'userrole' => $user->getRoles(),
 					'playground'=>$playground,
 					'title'=>$playground->getTitle(),
 					'short'=>$short,
@@ -159,7 +159,7 @@ class EditorController extends Controller
   		
   		
  
-  			if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+  			if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
     		else $super=false;
   			$playgrounds=$this->getDoctrine()
 						->getRepository('ZeegaEditorBundle:Playground')
@@ -167,11 +167,11 @@ class EditorController extends Controller
     		return $this->render('ZeegaEditorBundle:Editor:home.html.twig', array(
             // last displayname entered by the user
             'displayname' => $user->getDisplayName(),
-            'userrole' => $user->getUserRoles(),
+            'userrole' => $user->getRoles(),
             'bio'=>$user->getBio(),
             'thumb'=>$user->getThumbUrl(),
             'playgrounds'=>$playgrounds,
-            'super'=>true,
+            'super'=>$super,
             'title'=>'',
             'page'=>'home',
             'form' => $form->createView(),
@@ -185,17 +185,23 @@ class EditorController extends Controller
 	$user = $this->get('security.context')->getToken()->getUser();
 	$session = $this->getRequest()->getSession();
 	
-	
-	$playground=$this->getDoctrine()
+	if($user->getRoles()=='ROLE_SUPER_ADMIN'){
+		$super=true;
+		$playground=$this->getDoctrine()
+					->getRepository('ZeegaEditorBundle:Playground')
+					->findByShort($short);
+	 	
+	 }
+	else{
+		$super=false;			
+		$playground=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
-	if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
-	else $super=false;			
+	
+	}
 	if($playground){
 		
-		$admin=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
-					->checkAdmin($short,$user->getId());
+		
 		
 		$admin=true;
 		$projects=$this->getDoctrine()
@@ -214,7 +220,7 @@ class EditorController extends Controller
 	  
 		'displayname' => $user->getDisplayName(),
 		'myprojects'   => $myprojects,
-		'projects'   => $projects,
+		'allprojects'   => $projects,
 		'playground'=>$playground,
 		'short'=>$short,
 		'adminMenu'=>$admin,
@@ -232,37 +238,25 @@ class EditorController extends Controller
 	
 	
 	}
-	
-	public function editorAction($short,$id){
+	public function browserAction($short){
 	
 	$user = $this->get('security.context')->getToken()->getUser();
-	if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+	if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 	else $super=false;
 	$playground=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
-	$admin=$this->getDoctrine()
-			->getRepository('ZeegaEditorBundle:Playground')
-			->checkAdmin($short,$user->getId());
+    $admin = false;
 	if($playground||$super){
 		
 			
-			$routes=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Route')
-					->findRoutesByProject($id);
-			$project=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
-					->findOneById($id);
-			$route=$routes[0];
 			
-		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+		return $this->render('ZeegaEditorBundle:Editor:browser.html.twig', array(
 			// last displayname entered by the user
 			'displayname' => $user->getDisplayName(),
 			'title'   => $playground->getTitle(),
-			'projecttitle'   => $project->getTitle(),
-			'projectid'   =>$project->getId(),
-			'route'=>$route,
 			'short'=>$playground->getShort(),
+			'playground' => $playground,
 			'super'=>$super,
 			'adminMenu'=>$admin,
 			'projectsMenu'=>true,
@@ -282,9 +276,72 @@ class EditorController extends Controller
 	
 	} 
 	
+	public function editorAction($short,$id)
+	{	
+		$user = $this->get('security.context')->getToken()->getUser();
+		
+		$super = ($user->getRoles() == 'ROLE_SUPER_ADMIN');
+			
+		$playground=$this->getDoctrine()
+						 ->getRepository('ZeegaEditorBundle:Playground')
+						 ->findPlaygroundByShort($short,$user->getId());
+    	$admin = false;
+
+		if($playground||$super)
+		{
+			$routes = $this->getDoctrine()
+						   ->getRepository('ZeegaEditorBundle:Route')
+						   ->findRoutesByProject($id);
+						
+			$project = $this->getDoctrine()
+							->getRepository('ZeegaEditorBundle:Project')
+							->findOneById($id);
+
+			$route = $routes[0];
+			
+			$params = array();
+			$session = $this->getRequest()->getSession();
+			$collection_id = $session->get("collection_id");
+			
+			if(isset($collection_id))
+			{
+				$params['collection'] = $collection_id;
+				$session->remove("collection_id"); // reads and deletes from session
+			}
+			else
+			{
+				$collection_id = -1;
+			}
+			//return new Response(var_dump($params));
+			//return new Response($this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent());
+			
+			$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+			
+			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+				// last displayname entered by the user
+					'displayname' => $user->getDisplayName(),
+					'title'   => $playground->getTitle(),
+					'projecttitle'   => $project->getTitle(),
+					'projectid'   =>$project->getId(),
+					'route'=>$route,
+					'short'=>$playground->getShort(),
+					'super'=>$super,
+					'adminMenu'=>$admin,
+					'projectsMenu'=>true,
+            		'page'=>'editor',
+					'results' => $items,
+					'collection_id' => $collection_id
+				));
+		}	
+		else
+		{
+			return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+		}
+	} 
+	
 	public function projectAction($short){
 		$user = $this->get('security.context')->getToken()->getUser();
-		if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+		if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 		else $super=false;
 		$playground=$this->getDoctrine()
 						->getRepository('ZeegaEditorBundle:Playground')
@@ -329,7 +386,7 @@ class EditorController extends Controller
 	
 	public function faqAction(){
 		$user = $this->get('security.context')->getToken()->getUser();
-		if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+		if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 		else $super=false;
 		return $this->render('ZeegaEditorBundle:Editor:faq.html.twig', array(
 		'displayname' => $user->getDisplayName(),
@@ -353,13 +410,13 @@ class EditorController extends Controller
 				$newUser = new User();
 				$form = $this->createForm(new PasswordType(), $newUser);    
 				$request = $this->getRequest();
-				if($user->getUserRoles()=='ROLE_SUPER_USER') $super=true;
+				if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 				else $super=false;
 				return $this->render('ZeegaEditorBundle:Editor:settings.html.twig', array(
 				// last displayname entered by the user
 				'email' => $user->getEmail(),
 				'displayname' => $user->getDisplayName(),
-				'userrole' => $user->getUserRoles(),
+				'userrole' => $user->getRoles(),
 				'bio'=>$user->getBio(),
 				'thumb'=>$user->getThumbUrl(),
 				'super'=>$super,

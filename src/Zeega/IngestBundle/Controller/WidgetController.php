@@ -17,7 +17,7 @@ use SimpleXMLElement;
 class WidgetController extends Controller
 {
     
-	  public function persistAction(){
+	public function persistAction(){
 	  	$logger = $this->get('logger');
 		$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
@@ -42,10 +42,13 @@ class WidgetController extends Controller
     							    ->findPlaygroundByUser($user->getId());
     			$playground=$playgrounds[0];
     		}
+    		//$today = date('Y-m-d h:i:s', strtotime(date('Y-m-d')));
 			$item->setPlayground($playground);
+			$item->setChildItemsCount(0);
+			//$item->setDateCreated($today);
 			
 			$em=$this->getDoctrine()->getEntityManager();
-			//$em->persist($item->getPlayground());
+			$em->persist($item->getPlayground());
 			$em->persist($item->getMetadata());
 			$em->persist($item->getMedia());
 			$em->flush();
@@ -60,17 +63,14 @@ class WidgetController extends Controller
 			
 			$thumbUrl=false;
 			$logger->err('getting thumb url');	
-			if($metadata->getThumbUrl()){
-				$thumbUrl=$metadata->getThumbUrl();
+			if($metadata->getThumbnailUrl()){
+				$thumbUrl=$metadata->getThumbnailUrl();
 				@$img=file_get_contents($thumbUrl);
 			}
 			
 			if(!$thumbUrl||$img==FALSE){
 				if($item->getContentType()=='Image'){
-					exec('/opt/webcapture/webpage_capture -t 50x50 -crop '.$item->getAttributionUrl().' /var/www/'.$this->container->getParameter('directory').'images/items',$output);
-					$url=explode(':/var/www/',$output[4]);
-					$thumbUrl=$this->container->getParameter('hostname').$url[1];
-					@$img=file_get_contents($thumbUrl);
+					@$img=file_get_contents($item->getUri());
 				}
 				elseif($item->getContentType()=='Audio'){
 					@$img=file_get_contents($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'/templates/audio.jpg');
@@ -112,8 +112,9 @@ class WidgetController extends Controller
 				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
 				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
 			
-		
-		
+				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				$em->persist($item);
+				$em->flush();
 				$response=$this->getDoctrine()
 								->getRepository('ZeegaIngestBundle:Item')
 								->findItemById($item->getId());					
@@ -131,15 +132,13 @@ class WidgetController extends Controller
 
 	}
 	
-	public function urlAction()
-    {
+	public function urlAction(){
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
 		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
 		$logger = $this->get('logger');
-		
 		$em=$this->getDoctrine()->getEntityManager();
 		$playgrounds=$this->getDoctrine()
 							->getRepository('ZeegaEditorBundle:Playground')
@@ -157,7 +156,7 @@ class WidgetController extends Controller
 				'playground'=>$playgrounds[0],
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
-				'content_type'=>$check['content_type'],
+				'content_type'=>$check['type'],
 				 'mycollection'=>$mycollection,
 			));
 		}
@@ -166,11 +165,12 @@ class WidgetController extends Controller
 			$import = $this->get('import_widget');	
 			
 			//Parse url
-			
+			$logger->err($url);
 			$urlInfo=$import->parseUrl($url);
 			
 			
 			//Create item objects using API if applicable
+			$logger->err($urlInfo['archive']);
 			
 			if($urlInfo['archive']=='Flickr') 			  	$item=$import->parseFlickr($urlInfo['id']);
 			elseif($urlInfo['archive']=='SoundCloud') 	  	$item=$import->parseSoundCloud($urlInfo['id']);
@@ -179,7 +179,11 @@ class WidgetController extends Controller
 			elseif($urlInfo['archive']=='Youtube')	  		$item=$import->parseYoutube($urlInfo['id']);
 			elseif($urlInfo['archive']=='Absolute')	  		$item=$import->parseAbsolute($urlInfo,$this->container);
 			elseif($urlInfo['archive']=='archive.org')	  	$item=$import->parseArchiveDotOrg($urlInfo);
-
+			elseif($urlInfo['archive']=='DocumentCloud')	$item=$import->parseDocumentCloud($urlInfo['url']);
+			elseif($urlInfo['archive']=='Hollis-Group') 			$collection=$import->parseHollisGroup($urlInfo['id']);
+			elseif($urlInfo['archive']=='Hollis-Work') 			$collection=$import->parseHollisWork($urlInfo['id']);
+			
+			elseif($urlInfo['archive']=='YoutubeChannel')	$collection=$import->parseYoutubeChannel($urlInfo['id']);
 			//Store media item(s) to session and render widget
 
 			if(isset($item)&&$item){
@@ -188,29 +192,31 @@ class WidgetController extends Controller
 				if($session->get('items'))$newItems=$session->get('items');			
 				
 				$widgetId=rand(0,100);
-				$item->setAttributionUrl($url."#".$user->getId());
+				$item->setAttributionUri($url."#".$user->getId());
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
 		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'title'=>$item->getTitle(),
-					'creator'=>$item->getCreator(),
+					'creator'=>$item->getMediaCreatorUsername(),
 					'widget_id'=>$widgetId,
-					'thumb_url'=>$metadata->getThumbUrl(),
+					'thumb_url'=>$metadata->getThumbnailUrl(),
 					'mycollection'=>$mycollection,
 				));
 			}
-        	elseif(isset($collection)){
+        	elseif(isset($collection)&&$collection){
 				$thumbUrls=array();
 				$widgetIds=array();
-				if($session->get('items'))$newItems=$session->get('items');			
+				if($session->get('items'))$newItems=$session->get('items');	
+				$counter=1;
 				foreach($collection['items'] as $item){
 					$widgetId=rand(0,1000);
-					$item->setAttributionUrl($url."#".$item->getId());
+					#$item->setAttributionUri($url."#".$item->getId()); //uncommented breaks youtube group import
 					$metadata=$item->getMetadata();
-					$thumbUrl=$metadata->getThumbUrl();
-					$thumbUrls[]=array('thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
+					$thumbUrl=$metadata->getThumbnailUrl();
+					$thumbUrls[]=array('index'=>$counter,'thumbUrl'=>$thumbUrl,'widgetId'=>$widgetId);
+					$counter++;
 					$widgetIds[]=$widgetId;
 					$newItems[$widgetId]=$item;
 				}
@@ -238,9 +244,8 @@ class WidgetController extends Controller
 			} 
     	}
 	}
-  	  
-    
-     public function thumbAction($query="Help"){
+  	
+    public function thumbAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');
@@ -251,7 +256,7 @@ class WidgetController extends Controller
    
     }
     
-     public function mediadataAction($query="Help"){
+    public function mediadataAction($query="Help"){
     	 
     	 $doc= $this->getDoctrine();
     	 $loader = $this->get('item_loader');

@@ -17,21 +17,19 @@ use SimpleXMLElement;
 		
 class ImportWidget
 {
-	
-	
-	
-	
-	
 	public function parseUrl($url){
-
+	
 		$urlSplit=explode('?',$url);
 		$urlClean=$urlSplit[0];
 		$fileFormat=strtolower(substr($urlClean,strlen($urlClean)-4));
 		$fileFormatLong=strtolower(substr($urlClean,strlen($urlClean)-5));
 		
 		$urlInfo['fileFormat']=$fileFormat;
-			
-			
+		$urlInfo['type']='item';		
+		$viawork = '/(olvwork[0-9]*)/';
+		$viagroup	= '/(olvgroup[0-9]*)/';
+		$viasite	= '/(olvsite[0-9]*)/';
+		$viaHUAM='/(HUAM[0-9]*)/';
 		/**  ABSOLUTE URL ************************************/
 		
 		
@@ -61,7 +59,50 @@ class ImportWidget
 			$archive='archive.org';
 			$id='';
 		}
+		
+		
+			/**  HOLLIS **************************************/
 	
+		
+		elseif(preg_match($viagroup, $url, $matches)){
+			$archive='Hollis-Group';
+			$id=$matches[1];
+			
+	
+		}
+		
+			elseif(preg_match($viaHUAM, $url, $matches)){
+			$archive='Hollis-Work';
+			$id=$matches[1];
+			
+	
+		}
+		
+		elseif(preg_match($viawork, $url, $matches)){
+			$archive='Hollis-Work';
+			$id=$matches[1];
+			
+	
+		}
+		
+		elseif(preg_match($viasite, $url, $matches)){
+			$archive='Hollis-Group';
+			$id=$matches[1];
+			
+	
+		}
+		
+		/**  DocumentCloud **************************************/
+		
+	
+		elseif(strstr($url,'documentcloud.org/documents')){
+			$archive='DocumentCloud';
+			$id='';
+			$url=str_replace( 'org/documents', 'org/api/documents',$url);
+			$url=str_replace( '.html', '.json',$url);
+			
+		}
+		
 	
 		/**  FLICKR   *****************************************/
 		
@@ -88,14 +129,14 @@ class ImportWidget
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[3];
+				$id=$url;
 				$archive='SoundCloudSet';
 			}
 			else{
 				$url=substr($url,7);
 				$split=explode('/',$url);
 				$user=$split[1];
-				$id=$split[2];
+				$id=$url;
 				$archive='SoundCloud';
 			}
 		}
@@ -153,6 +194,12 @@ class ImportWidget
 			$id=$split[0];
 		}
 		
+		elseif(strstr($url,'youtube.com')&&strstr($url,'#p/c')){
+			$archive='YoutubeChannel';
+			$split=explode('#p/c/',$url);
+			$id=$split[1];
+		}
+		
 		
 		 /** UNSUPPORTED **************************************/ 
 		
@@ -161,7 +208,7 @@ class ImportWidget
 			$id="";
 		}
 		
-		
+		$urlInfo['type']='item';
 		$urlInfo['id']=$id;
 		$urlInfo['archive']=$archive;
 		$urlInfo['url']=$url;
@@ -196,16 +243,24 @@ class ImportWidget
 		$media = new Media();
 		$attr=array();
 		
-		$attr['tags']=str_replace("; ",",",(string)$mdata->subject[0]);
-	
-		$item->setTitle((string)$mdata->title[0]);
+		if(isset($mdata->subject)&&isset($mdata->subject[0])) $tags=str_replace("; ",",",(string)$mdata->subject[0]);
+		else $tags='';
+		if (isset($mdata->title)&&isset($mdata->title[0]))$item->setTitle((string)$mdata->title[0]);
 	
 		if(!$item->getTitle()){return false;}
 	
-		$metadata->setDescription((string)$mdata->description[0]);
-		$metadata->setDescription(str_replace('<br />','',$metadata->getDescription()));
-		$metadata->setThumbUrl(urldecode($misc->image));
-		if(isset($mdata->creator))$item->setCreator((string)$mdata->creator[0]);
+		$item->setDescription((string)$mdata->description[0]);
+		$item->setDescription(str_replace('<br />','',$item->getDescription()));
+		$metadata->setThumbnailUrl(urldecode($misc->image));
+		
+		if(isset($mdata->creator)){
+			$item->setMediaCreatorUsername((string)$mdata->creator[0]);
+			$item->setMediaCreatorRealname((string)$mdata->creator[0]);
+		}
+		else{
+			$item->setMediaCreatorUsername('Unknown');
+			$item->setMediaCreatorRealname('Unknown');
+		}
 		
 	
 	
@@ -224,10 +279,9 @@ class ImportWidget
 				
 				}
 			}
-			$item->setContentType('Video');
-			$item->setSourceType('Video');
-			$item->setItemUrl($newUrl.$fileKeys[$index]);
-			$item->setItemUri($newUrl.$fileKeys[$index]);
+			$item->setType('Video');
+			$item->setSource('Video');
+			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
 		else if($type=='audio'){	
@@ -239,10 +293,9 @@ class ImportWidget
 				
 				}
 			}
-			$item->setContentType('Audio');
-			$item->setSourceType('Audio');
-			$item->setItemUrl($newUrl.$fileKeys[$index]);
-			$item->setItemUri($newUrl.$fileKeys[$index]);
+			$item->setType('Audio');
+			$item->setSource('Audio');
+			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
 		else if($type=='image'){	
@@ -254,20 +307,122 @@ class ImportWidget
 				
 				}
 			}
-			$item->setContentType('Image');
-			$item->setSourceType('Image');
-			$item->setItemUrl($newUrl.$fileKeys[$index]);
-			$item->setItemUri($newUrl.$fileKeys[$index]);
+			$item->setType('Image');
+			$item->setSource('Image');
+			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
 		else return false;	
 		
-		$item->setArchive('archive.org');
-		$metadata->setAttr($attr);
+		$metadata->setArchive('archive.org');
+		$metadata->setAttributes(array('tags'=>$tags));
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
 		
 		return $item;
+		
+	}
+	
+	public function parseHollisWork($id){
+	
+			$originalUrl="http://webservices.lib.harvard.edu/rest/mods/via/".$id;
+			$ch = curl_init();
+			$timeout = 5; // set to zero for no timeout
+			curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$file_contents = curl_exec($ch);
+			curl_close($ch);
+			
+			$xml = new SimpleXMLElement($file_contents);
+	
+		$items=array();
+		
+		foreach($xml->location as $location){
+			if($location->url){
+				$item= new Item();
+				$metadata= new Metadata();
+				$media = new Media();
+				
+				
+				$item->setTitle((string) $xml->titleInfo->title);
+				
+				
+				$item->setAttributionUri('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+				$item->setMediaCreatorUsername((string)$xml->name->namePart);
+				$item->setMediaCreatorRealname((string)$xml->name->namePart);
+				$item->setType('Image');
+				$item->setSource('Image');
+				$metadata->setArchive('Hollis');
+				//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+				//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+				
+				$url=$this->getRedirectUrl((string)$location->url);
+				$metadata->setThumbnailUrl($url.'?height=144&width=144');
+				$item->setUri($url);
+				$item->setMedia($media);
+				$item->setMetadata($metadata);
+				$items[]=$item;
+			}
+		}
+		$collection['title'] = (string) $xml->titleInfo->title;
+		
+		
+		$collection['creator'] = (string)$xml->name->namePart;
+		$collection['items']=$items;
+		return $collection;
+	}
+	
+	
+	public function parseHollisGroup($id){
+	
+			$originalUrl="http://webservices.lib.harvard.edu/rest/mods/via/".$id;
+			$ch = curl_init();
+			$timeout = 5; // set to zero for no timeout
+			curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			$file_contents = curl_exec($ch);
+			curl_close($ch);
+			
+			$xml = new SimpleXMLElement($file_contents);
+		
+			$items=array();
+			foreach($xml->relatedItem as $relatedItem){
+				
+					if($relatedItem->location->url){
+						$item= new Item();
+						$metadata= new Metadata();
+						$media = new Media();
+						
+						
+						$item->setTitle((string) $relatedItem->titleInfo->title);
+						
+						
+						$item->setAttributionUri('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
+						$item->setMediaCreatorUsername((string)$xml->name->namePart);
+						$item->setMediaCreatorRealname((string)$xml->name->namePart);
+				
+						$item->setType('Image');
+						$item->setSource('Image');
+						$metadata->setArchive('Hollis');
+						//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
+						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
+						
+						$url=$this->getRedirectUrl((string)$relatedItem->location->url);
+						$metadata->setThumbnailUrl($url.'?height=144&width=144');
+						$item->setUri($url);
+						$item->setMedia($media);
+						$item->setMetadata($metadata);
+						$items[]=$item;
+					}
+			}	
+			$collection['title'] = count($items).(string) $xml->titleInfo->title;
+			
+			
+			$collection['creator'] = (string)$xml->name->namePart;
+			$collection['items']=$items;
+			return $collection;
 		
 	}
 	
@@ -298,42 +453,125 @@ class ImportWidget
 		
 		
 		$item->setTitle((string) $xml->title);
-		$item->setItemUri($id);
-		$item->setItemUrl($id);
-		$item->setAttributionUrl('http://www.youtube.com/watch?v='+$id);
-		$item->setCreator((string)$xml->author->name);
-		$item->setContentType('Video');
-		$item->setSourceType('Youtube');
-		$item->setArchive('Youtube');
-		$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
-		$metadata->setDescription((string)$xml->mediagroup->mediadescription);
-		$metadata->setThumbUrl((string)$xml->mediagroup->mediathumbnail['url']);
+
+		$item->setUri($id);
+		$item->setAttributionUri('http://www.youtube.com/watch?v='+$id);
+		$item->setMediaCreatorUsername((string)$xml->author->name);
+		$item->setMediaCreatorRealname('unknown');
+		$item->setType('Video');
+		$item->setSource('Youtube');
+		$metadata->setArchive('Youtube');
+		$item->setDescription((string)$xml->mediagroup->mediadescription);
+		$metadata->setThumbnailUrl((string)$xml->mediagroup->mediathumbnail['url']);
+
 		$item->setMedia($media);
 		$item->setMetadata($metadata);
 		
 		return($item);
 	}
 	
+	public function parseYoutubeChannel($id){
+		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
+		
+		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$id?v=2";
+		
+		// read feed into SimpleXML object
+		$xml = simplexml_load_file($originalUrl);
+		
+		// get summary counts from opensearch: namespace
+	    //$counts = $sxml->children('http://a9.com/-/spec/opensearchrss/1.0/');
+	    //$total = $counts->totalResults;
+		$items=array();
+		foreach ($xml->entry as $entry) 
+		{
+			// get nodes in media: namespace for media information
+			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
+			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
+			
+			$item= new Item();
+			$metadata= new Metadata();
+			$media = new Media();
+			
+			$arr = explode(':',$entry->id);
+			$entryId = $arr[count($arr)-1];
+			
+			$attrs = $entryMedia->group->player->attributes();
+			$attributionUrl = $attrs['url'];
+			
+			$item->setUri((string)$yt->videoid);
+			$item->setTitle((string)$entryMedia->group->title);
+			//$item->setDescription((string)$entryMedia->group->description);
+			$item->setDescription((string)$entryMedia->group->keywords);
+			$item->setAttributionUri((string)$attributionUrl);
+			$item->setDateCreated(new \DateTime("now"));
+			$item->setType('Video');
+			$item->setSource('Youtube');
+			$item->setChildItemsCount(0);
+			
+			foreach($entry->children('http://www.georss.org/georss') as $geo)
+			{
+				foreach($geo->children('http://www.opengis.net/gml') as $position)
+				{
+					// Coordinates are separated by a space
+					$coordinates = explode(' ', (string)$position->pos);
+
+					$item->setMediaGeoLatitude((string)$coordinates[0]);
+					$item->setMediaGeoLongitude((string)$coordinates[1]);
+					break;
+				}
+			}
+		    			
+			$item->setMediaCreatorUsername((string)$entry->author->name);
+			$item->setMediaCreatorRealname('Unknown');
+			
+			// read metadata from xml
+			$attrs = $entryMedia->group->thumbnail->attributes();
+			$thumbnailUrl = (string)$attrs['url'];
+			
+			// write metadata
+			$metadata->setArchive('Youtube');
+			$metadata->setLicense((string)$entryMedia->group->license);
+			$metadata->setThumbnailUrl((string)$thumbnailUrl);
+			
+			// read media from xml
+			$attrs = $yt->duration->attributes();
+			$duration = $attrs['seconds'];
+			
+			// write media information
+			$media->setDuration((string)$duration);
+			
+			$item->setMetadata($metadata);
+			$item->setMedia($media);
+
+			$items[]=$item;
+		}
+
+		$collection['title'] = (string)$xml->title;
+		$collection['creator'] = 'mano';
+		$collection['items']=$items;
+		
+		return($collection);
+	}
+	
 	public function parseAbsolute($urlInfo,$container){
 	
 		$item=new Item();
-		$item->setContentType($urlInfo['contentType']);
-		$item->setSourceType($urlInfo['contentType']);
-		$item->setItemUrl($urlInfo['itemUrl']);
-		$item->setItemUri($urlInfo['itemUrl']);
+		$item->setType($urlInfo['contentType']);
+		$item->setSource($urlInfo['contentType']);
+		$item->setUri($urlInfo['itemUrl']);
+		$item->setUri($urlInfo['itemUrl']);
 		$item->setTitle($urlInfo['title']);
-		$item->setCreator('Unknown');
+		$item->setMediaCreatorUsername('Unknown');
+		$item->setMediaCreatorRealname('Unknown');
 		$metadata=new Metadata();
-		$metadata->setDescription('None');
-		$item->setArchive($urlInfo['archive']);
-		$metadata->setAltCreator('');
-		if($urlInfo['contentType']=='Image') $metadata->setThumbUrl($urlInfo['itemUrl']);
-		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
-		elseif($urlInfo['contentType']=='Video') $metadata->setThumbUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
-		$metadata->setAltCreator('');
-		$metadata->setTagList('');
+		$item->setDescription('None');
+		$metadata->setArchive($urlInfo['archive']);
+		if($urlInfo['contentType']=='Image') $metadata->setThumbnailUrl($urlInfo['itemUrl']);
+		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbnailUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
+		elseif($urlInfo['contentType']=='Video') $metadata->setThumbnailUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
+		
 		$media=new Media();
-		$media->setFileFormat($urlInfo['fileFormat']);
+		$media->setFormat($urlInfo['fileFormat']);
 		$item->setMedia($media);
 		$item->setMetadata($metadata);
 		return $item;
@@ -352,7 +590,7 @@ class ImportWidget
 			$media = new Media();
 			$tags=array();
 			
-			$item->setAttributionUrl($info['urls']['url'][0]['_content']);
+			$item->setAttributionUri($info['urls']['url'][0]['_content']);
 			
 			if($info['tags']){
 				foreach($info['tags']['tag'] as $tag){
@@ -368,7 +606,7 @@ class ImportWidget
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
 			}	
 			
-			$metadata->setThumbUrl($sizes['Square']['source']);
+			$metadata->setThumbnailUrl($sizes['Square']['source']);
 			
 			$attr=array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
@@ -377,25 +615,26 @@ class ImportWidget
 			
 			if(isset($sizes['Large']))$itemSize='Large';
 			elseif(isset($sizes['Original'])) $itemSize='Original';
-			else $itemSize='Medium';
+			elseif(isset($sizes['Medium'])) $itemSize='Medium';
+			else $itemSize='Small';
 			
-			if($info['dates']['taken']) $item->setDateCreatedStart(new DateTime($info['dates']['taken']));
+			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
 		
-			$metadata->setThumbUrl($sizes['Small']['source']);
-			$item->setItemUrl($sizes[$itemSize]['source']);
-			$item->setItemUri($sizes[$itemSize]['source']);
+			$metadata->setThumbnailUrl($sizes['Small']['source']);
+			$item->setUri($sizes[$itemSize]['source']);
+			$item->setUri($sizes[$itemSize]['source']);
 			$media->setWidth($sizes[$itemSize]['width']);
 			$media->setHeight($sizes[$itemSize]['height']);
 			
 			$attr['sizes']=$sizes;
-			$metadata->setDescription($info['description']);
+			$item->setDescription($info['description']);
 			
 			if($info['license'])$metadata->setLicense($license[$info['license']]);
 			else $metadata->setLicense('All Rights Reserved');
 		
-			if($info['owner']['username']) $item->setCreator($info['owner']['username']);
-			else $item->setCreator($info['owner']['realname']);
-			$metadata->setAltCreator($info['owner']['realname']);
+			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
+			else $item->setMediaCreatorUsername($info['owner']['realname']);
+			$item->setMediaCreatorRealname($info['owner']['realname']);
 			$attr['creator_nsid']=$info['owner']['nsid'];
 			$item->setTitle($info['title']);
 			
@@ -403,15 +642,15 @@ class ImportWidget
 			
 			if(array_key_exists ('location',$info)){
 				if($info['location']['latitude']){
-					$item->setGeoLat($info['location']['latitude']);
-					$item->setGeoLng($info['location']['longitude']);
+					$item->setMediaGeoLatitude($info['location']['latitude']);
+					$item->setMediaGeoLongitude($info['location']['longitude']);
 				}
 			}
 		
-			$item->setArchive('Flickr'); 
-			$item->setContentType('Image');
-			$item->setSourceType('Image');
-			$metadata->setAttr($attr);
+			$metadata->setArchive('Flickr'); 
+			$item->setType('Image');
+			$item->setSource('Image');
+			$metadata->setAttributes($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);
 			return $item;	
@@ -423,11 +662,26 @@ class ImportWidget
 
 }
 
-	public function parseSoundCloudSet($id){
+
+
+	public function parseSoundCloudSet($url){
 		
 		$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
+
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
 	
-		$originalUrl='http://api.soundcloud.com/playlists/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+		$soundcloud = '/soundcloud\.com%2Fplaylists%2F([0-9]*)/';
+		
+		if(preg_match($soundcloud, $file_contents, $matches)){	
+	
+		$originalUrl='http://api.soundcloud.com/playlists/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 		$ch = curl_init();
 		$timeout = 5; // set to zero for no timeout
 		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -449,35 +703,33 @@ class ImportWidget
 			$item= new Item();
 			$metadata= new Metadata();
 			$media = new Media();
-			$attr=array();
-			$attr['tags']=(string)$xml->{'tag-list'};
-			$metadata->setThumbUrl((string)$xml->{'waveform-url'});
+		
+			$metadata->setThumbnailUrl((string)$xml->{'waveform-url'});
 			
 			$item->setTitle((string)$xml->{'permalink'});
 			
 			if(!$item->getTitle()){return false;}
 			
-			$metadata->setDescription((string)$xml->{'description'});
-			$metadata->setDescription(str_replace('<br />','',$metadata->getDescription()));
+			$item->setDescription((string)$xml->{'description'});
+			$item->setDescription(str_replace('<br />','',$item->getDescription()));
 			
-			$item->setCreator((string)$xml->{'user'}->{'username'});
-			$metadata->setAltCreator((string)$xml->{'user'}->{'username'});
-			$item->setContentType('Audio');
-			$item->setSourceType('Audio');
-			$item->setArchive('SoundCloud');
-			$item->setItemUrl((string)$xml->{'stream-url'});
-			$item->setItemUri((string)$xml->{'stream-url'});
-			//$item->setDateCreatedStart((string)$xml->{'created-at'});
+			$item->setMediaCreatorUsername((string)$xml->{'user'}->{'username'});
+			$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
+			$item->setType('Audio');
+			$item->setSource('Audio');
+			$metadata->setArchive('SoundCloud');
+			$item->setUri((string)$xml->{'stream-url'});
+			$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
 			$duration=(string)$xml->{'duraton'};
 			$media->setDuration(floor($duration/1000));
-			if(!strpos($item->getItemUrl(),'stream')){
+			if(!strpos($item->getUri(),'stream')){
 				return fail;
 			}
 			else{
-				$url=$item->getItemUrl();
-				$item->setItemUrl($url.'?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY);
+				$url=$item->getUri();
+				$item->setUri($url.'?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY);
 			}
-			$metadata->setAttr($attr);
+		
 			$metadata->setLicense((string)$xml->{'license'});
 			$item->setMetadata($metadata);
 			$item->setMedia($media);
@@ -488,19 +740,35 @@ class ImportWidget
 		}
 		
 		$collection['title'] = (string)$xmlSet->{'title'};
-		$collection['creator'] = $item->getCreator();
+		$collection['creator'] = $item->getMediaCreatorUsername();
 		$collection['items']=$items;
 		return $collection;
-		
+		}
+		else{
+			return false;
+		}
 	
 	}
 
-	public function parseSoundCloud($id){
+	public function parseSoundCloud($url){
 	
 	
 	$SOUNDCLOUD_CONSUMER_KEY='lyCI2ejeGofrnVyfMI18VQ';
 
-	$originalUrl='http://api.soundcloud.com/tracks/'.$id.'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
+	$originalUrl=$url;
+	$ch = curl_init();
+	$timeout = 5; // set to zero for no timeout
+	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$file_contents = curl_exec($ch);
+	curl_close($ch);
+
+	$soundcloud = '/soundcloud\.com%2Ftracks%2F([0-9]*)/';
+	
+	if(preg_match($soundcloud, $file_contents, $matches)){				
+
+	$originalUrl='http://api.soundcloud.com/tracks/'.$matches[1].'.xml?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY;
 	$ch = curl_init();
 	$timeout = 5; // set to zero for no timeout
 	curl_setopt ($ch, CURLOPT_URL, $originalUrl);
@@ -515,41 +783,45 @@ class ImportWidget
 	$media = new Media();
 	$attr=array();
 	$attr['tags']=(string)$xml->{'tag-list'};
-	$metadata->setThumbUrl((string)$xml->{'waveform-url'});
+	$metadata->setThumbnailUrl((string)$xml->{'waveform-url'});
 	
 	$item->setTitle((string)$xml->{'permalink'});
 	
 	if(!$item->getTitle()){return false;}
 	
-	$metadata->setDescription((string)$xml->{'description'});
-	$metadata->setDescription(str_replace('<br />','',$metadata->getDescription()));
+	$item->setDescription((string)$xml->{'description'});
+	$item->setDescription(str_replace('<br />','',$item->getDescription()));
 	
-	$item->setCreator((string)$xml->{'user'}->{'username'});
-	$metadata->setAltCreator((string)$xml->{'user'}->{'username'});
-	$item->setContentType('Audio');
-	$item->setSourceType('Audio');
-	$item->setArchive('SoundCloud');
-	$item->setItemUrl((string)$xml->{'stream-url'});
-	$item->setItemUri((string)$xml->{'stream-url'});
-	$item->setDateCreatedStart(new DateTime((string)$xml->{'created-at'}));
+	$item->setMediaCreatorUsername((string)$xml->{'user'}->{'username'});
+	$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
+	$item->setType('Audio');
+	$item->setSource('Audio');
+	$metadata->setArchive('SoundCloud');
+	$item->setUri((string)$xml->{'stream-url'});
+	$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
 	$duration=(string)$xml->{'duraton'};
 	$media->setDuration(floor($duration/1000));
-	if(!strpos($item->getItemUrl(),'stream')){
+	if(!strpos($item->getUri(),'stream')){
 		return false;
 	}
 	else{
-		$url=$item->getItemUrl();
-		$item->setItemUrl($url.'?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY);
+		$uri=$item->getUri();
+		$item->setUri($uri.'?consumer_key='.$SOUNDCLOUD_CONSUMER_KEY);
 	}
-	$metadata->setAttr($attr);
+	
 	$metadata->setLicense((string)$xml->{'license'});
 	$item->setMetadata($metadata);
 	$item->setMedia($media);
 	
 	return $item;
+	}
+	else{
+	
+	return false;
+	}
 
 }
-
+	
 	public function parseBlipTv($id){	
 		
 		$originalUrl=$id.'?skin=json';
@@ -587,14 +859,14 @@ class ImportWidget
 		
 		$info=$xml->{'payload'}->{'asset'};
 		
-		$item->setCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
+		$item->setMediaCreatorUsername((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$metadata->setAltCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
-		$item->setArchive('blip.tv');
-		$item->setContentType('Video');
-		$item->setSourceType('Video');
+		$metadata->setArchive('blip.tv');
+		$item->setType('Video');
+		$item->setSource('Video');
 		$item->setTitle((string)$info->{'title'});
 		$description=(string)$info->{'description'};
-		$metadata->setDescription(str_replace('<br />','',$description));
+		$item->setDescription(str_replace('<br />','',$description));
 		
 		
 		$tags='';
@@ -616,8 +888,8 @@ class ImportWidget
 					$att=$blipmedia->{'link'}->attributes();
 					if(strstr($att['type'],'m4v')&&$blipmedia->{'role'}=='Blip SD'){
 						{
-						$item->setItemUrl((string)$att['href']); $mediaFound=1;
-						$item->setItemUri((string)$att['href']); $mediaFound=1;
+						$item->setUri((string)$att['href']); $mediaFound=1;
+						$item->setUri((string)$att['href']); $mediaFound=1;
 						$media->setWidth((int)$blipmedia->{'width'});
 						$media->setHeight((int)$blipmedia->{'height'});
 						$media->setDuration((int)$blipmedia->{'duration'});
@@ -629,7 +901,7 @@ class ImportWidget
 			if(!$mediaFound){
 				foreach($info->{'mediaList'}->{'media'}	as $blipmedia){
 					$att=$blipmedia->{'link'}->attributes();
-					if(strstr($att['type'],'mp4')) $item->setItemUrl((string)$att['href']); $mediaFound=1;
+					if(strstr($att['type'],'mp4')) $item->setUri((string)$att['href']); $mediaFound=1;
 					$media->setWidth((int)$blipmedia->{'width'});
 						$media->setHeight((int)$blipmedia->{'height'});
 						$media->setDuration((int)$blipmedia->{'duration'});
@@ -655,9 +927,88 @@ class ImportWidget
 
 }
 
+	public function parseDocumentCloud($url){	
+		
+		$originalUrl=$url;
+		$ch = curl_init();
+		$timeout = 5; // set to zero for no timeout
+		curl_setopt ($ch, CURLOPT_URL, $originalUrl);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$file_contents = curl_exec($ch);
+		curl_close($ch);
+		
+		$contents=json_decode($file_contents);
+		$document=$contents->document;
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+		
+		if($document->source){
+			$item->setMediaCreatorUsername($document->source);
+			$item->setMediaCreatorRealname($document->source);
+		}
+		else {
+			$item->setMediaCreatorUsername('Unknown');
+			$item->setMediaCreatorRealname('Unknown');
+		}
+		
+		$metadata->setArchive('DocumentCloud');
+		$item->setType('Document');
+		$item->setSource('DocumentCloud');
+		$item->setTitle($document->title);
+		$item->setUri($document->id);
+		
+		$item->setDescription($document->description);
 	
+	
+		$image=$document->resources->page->image;
+		$image=str_replace('{page}','1',$image);
+		$image=str_replace('{size}','small',$image);
+		
+	
+		$metadata->setThumbnailUrl($image);
+		$item->setMetadata($metadata);
+		$item->setMedia($media);
+		
+		
+		return $item;
 
 
+}
+
+
+	public function getRedirectUrl($url){
+	$redirect_url = null; 
+ 
+	$url_parts = @parse_url($url);
+	if (!$url_parts) return false;
+	if (!isset($url_parts['host'])) return false; //can't process relative URLs
+	if (!isset($url_parts['path'])) $url_parts['path'] = '/';
+ 
+	$sock = fsockopen($url_parts['host'], (isset($url_parts['port']) ? (int)$url_parts['port'] : 80), $errno, $errstr, 30);
+	if (!$sock) return false;
+ 
+	$request = "HEAD " . $url_parts['path'] . (isset($url_parts['query']) ? '?'.$url_parts['query'] : '') . " HTTP/1.1\r\n"; 
+	$request .= 'Host: ' . $url_parts['host'] . "\r\n"; 
+	$request .= "Connection: Close\r\n\r\n"; 
+	fwrite($sock, $request);
+	$response = '';
+	while(!feof($sock)) $response .= fread($sock, 8192);
+	fclose($sock);
+ 
+	if (preg_match('/^Location: (.+?)$/m', $response, $matches)){
+		if ( substr($matches[1], 0, 1) == "/" )
+			return $url_parts['scheme'] . "://" . $url_parts['host'] . trim($matches[1]);
+		else
+			return trim($matches[1]);
+ 
+	} else {
+		return false;
+	}
+ 
+}
+	
 
 
 

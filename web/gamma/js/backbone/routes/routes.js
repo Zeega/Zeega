@@ -4,28 +4,34 @@ var MyRouter = Backbone.Router.extend({
 	silent : true,
 	
 	routes : {
-		"/node/:nodeid" : "gotoNode",
-		"node/:nodeid/:layerid" : "gotoLayer"
+		"/editor/frame/:nodeid" : "gotoNodeInEditor",
+		"/player/frame/:nodeid" : "gotoNodeInPlayer",
 	},
 
 	// open/load the assigned node
-	gotoNode : function(nodeid) {
-
-			if(Zeega && nodeid)
-			{
-				if(nodeid == 'undefined') Zeega.url_hash.node = '';
-				else Zeega.url_hash.node = nodeid;
-			}
-			//check to see if the node is already loaded, or if it should move to that node
-			if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+	gotoNodeInEditor : function(nodeid)
+	{
+		//close the player if it's open
+		if( Zeega.previewMode == true )
+		{
+			Player.close();
+		}
 		
+		if(Zeega && nodeid)
+		{
+			if(nodeid == 'undefined') Zeega.url_hash.node = '';
+			else Zeega.url_hash.node = nodeid;
+		}
+		//check to see if the node is already loaded, or if it should move to that node
+		if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+	
 	},
 
-	// open/load the assigned node and layer
-	// do we need this?
-	gotoLayer : function(nodeid,layerid) {
-		
-	}
+	gotoNodeInPlayer : function(nodeid)
+	{
+		//go to the frame designated
+		Player.gotoNode( nodeid );
+	},
 	
 });
  

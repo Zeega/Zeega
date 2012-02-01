@@ -12,130 +12,76 @@
 function initUX(){
 
 	initHeaderUX();
-	
-}
 
-function insertPager(items, page)
-{
-	//NEW PAGER
-	$('#database-pager')
-		.empty()
-		.paging( items, {
-//			format: "<(qqq-) nncnn (-ppp)>",
-			format: "[<nncnn>",
-			perpage: 10,
-			lapping: 0,
-			page: page,
-			onSelect: function(page){
-				Database.page = page;
-				$('#tab-database-slide-window').cycle(page-1);
-				/*
-					when we get up to within a threshold in the pages
-					then make another call to the database and make a new pager
-				*/
-				
-				console.log(Database.endOfItems);
-				
-				if(this.pages - page < 3 && !Database.endOfItems)
-				{
-					//console.log('load more!');
-					// call the database and add more item divs
-					//Database.append();
-					return search(this,false);
-				}
-				
-			
-		},
-		
-		onFormat: function(type) {
-			switch (type) {
-			case 'block':
-				if (!this.active) return '<span class="disabled">' + this.value + '</span>';
-				else if (this.value != this.page) return '<a class="pager-page" href="#' + this.value + '">' + this.value + '</a>';
-				return '<span class="pager-page current">' + this.value + '</span>';
-			case 'next':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="next">Next</span></a>';
-				}
-				return '<span class="disabled next">Next</span>';
-			case 'prev':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="prev">Previous</a>';
-				}
-				return '<span class="disabled prev">Previous</span>';
-			case 'first':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="first">|<</a>';
-				}
-				return '<span class="disabled first">|<</span>';
-			
-			case 'last':
-				if (this.active) {
-					return '<a href="#' + this.value + '" class="last">>|</a> <span class="fill">'+ this.pages +' pages loaded</span>';
-				}
-				return '<span class="disabled last">>|</span> <span class="fill">'+ this.pages +' pages loaded</span>';
-			case 'fill':
-				if (this.active) {
-					return "<span class='fill'>...</span>";
-				}
-			case 'right':
-			case 'left':
 
-				if (!this.active) {
-					return "";
-				}
-				return '<a class="pager-page" href="#' + this.value + '">' + this.value + '</a>';
-			}
-		}
+//		POPOVERS		//
+	$('.info').popover({
+		'delayIn' : 0,
+		placement : 'below'
 	});
+		
 }
 
-function submitenter(inputfield,e)
-{
-	var keycode;
-	
-	console.log('submitenter');
-	
-	if (window.event) keycode = window.event.keyCode;
-	else if (e) keycode = e.which;
-	else return true;
 
-	if (keycode == 13)
+$('#list-view').click(function(){
+	console.log('goto list view');
+	$('#grid-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
+	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+	return false;
+})
+
+$('#grid-view').click(function(){
+	console.log('goto grid view');
+	$('#list-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
+	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+	return false;
+})
+
+
+$('#project-settings').click(function(){
+	projectSettings();
+})
+
+$('#ratio-list a').click(function(){
+	changeAspectRatio( $(this).data('ratio-id') );
+	return false;
+})
+
+function changeAspectRatio( ratioID )
+{
+	switch( ratioID )
 	{
-	    return submitbutton(inputfield);
-	}else{
-		return true;
+		case 0:
+			$('#visual-editor-workspace').css('width','704px')
+			break;
+		
+		case 1:
+			$('#visual-editor-workspace').css('width','625px')
+			break;
+			
+		default:
+			console.log('goDefault')
 	}
 }
 
-function submitbutton(button)
-{
-    return search(button,true);
-}
 
-function search(triggerElement, discardCurrentResultSet)
+function projectSettings()
 {
-    //var form = $(triggerElement).closest("form");
-    //Database.search( form.find("#database-search-text").val(), form.find("#database-search-filter").val(), discardCurrentResultSet);
-    // this is not very elegant...
-    Database.search( $("#database-search-text").val(), $("#database-search-filter").val(), discardCurrentResultSet);
-	return false;	
-}
-
-function shareButton()
-{
-	
+	//$('#project-settings-modal').modal({ backdrop:true });
+	$('#project-settings-modal').modal('show');
+	$('#project-settings-modal').find('#close-modal').click(function(){
+		$('#project-settings-modal').modal('hide');
+	})
+	return false;
 }
 
 function embedButton()
 {
-    //console.log(Zeega.helpers.getHost());
 	
 	var ex = Zeega.exportProject(true)
 	
-	console.log(ex);
-	
-		
 	$('#export').modal('show');
 	$('#export-json').val(ex);
 	
@@ -143,8 +89,7 @@ function embedButton()
 		$('#export-json').select();
 	});
 	
-	$('#close-modal').mouseup(function(){
-		console.log('select all export');
+	$('#export').find('#close-modal').mouseup(function(){
 		$('#export').modal('hide');
 	})
 
@@ -152,44 +97,40 @@ function embedButton()
 	
 }
 
+function shareButton()
+{	
+	$('#share-project-modal').modal('show');
+	
+	//$('#project-link').attr('href','')
+	
+	$('#share-project-modal').find('#close-modal').mouseup(function(){
+		$('#share-project-modal').modal('hide');
+	})
 
+	return false;
+}
+
+
+
+$('#new-layer-list a').click(function(){
+	addLayer( $(this).data('type') );
+	return false;
+})
 
 function addLayer(type)
 {
 	//add new layer model
-	var newLayer = new Layer({'type':type});
-	//this can only happen to the current node
+	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
+ 	 
+    var newLayer = new Layer({'type':type,'attr':{}});
 	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
-}
-
-function toggleWorkspace(el)
-{
-	var attr = Zeega.currentNode.get('attr');
-	var w = $(el).closest('.wrapper').find('.workspace');
-	if(w.is(':hidden'))
-	{
-		w.show('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('–');
-		attr.editorHidden = false;
-	}else{
-		w.hide('blind',{'direction':'vertical'});
-		$('#ve-toggle').html('+');
-		attr.editorHidden = true;
-	}
-	Zeega.currentNode.set({'attr':attr});
-	Zeega.currentNode.save();
 }
 
 function expandLayer(el)
 {
-	console.log('expanding layer');
 	var w = $(el).closest('.layer-wrapper').find('.layer-content');
-	if(w.is(':hidden'))
-	{
-		w.show('blind',{'direction':'vertical'});
-	}else{
-		w.hide('blind',{'direction':'vertical'});
-	}
+	if( w.is(':hidden') ) w.show('blind',{'direction':'vertical'});
+	else w.hide('blind',{'direction':'vertical'});
 }
 
 
@@ -209,10 +150,11 @@ function closeOpenCitationTabs()
 
 
 
-$(document).ready(function() {
+//$(document).ready(function(){
 	
+	console.log('UX READY');
 	
-		$('#add-node').draggable({
+	$('#add-node').draggable({
 		axis:'x',
 		revert:true,
 
@@ -235,7 +177,7 @@ $(document).ready(function() {
 				var _this = this;
 				$('.ghost-node').remove();
 				_.times(temp-this.num, function(){
-					$('.ui-sortable').append( $('<li class="node-thumb ghost-node">') );
+					$('#node-drawer ul').append( $('<li class="node-thumb ghost-node">') );
 					
 				})
 			}
@@ -250,40 +192,115 @@ $(document).ready(function() {
 		}
 	});
 	
-	
-	
-	//fadeIn the sidebar
-	$('#sidebar').fadeIn();
-	
-	$('#database-search-filter').change(function(){
-	    return search(this,true);
+	//share button
+	$('#share-project').click(function(){
+		shareButton();
 	});
+	
+	$('#get-help').click(function(){
+		localStorage.help = true;
+		Zeega.initStartHelp();
+	})
+	
+	
+	$('.menu-toggle').click(function(){
+		
+		var menu = $(this).next();
+		
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
+		event.stopPropagation();
+	});
+	
+	// filter database by type
+	$('#search-filter li a').click(function(){
+		Database.filterByMediaType( $(this).data('search-filter') );
+		clearMenus();
+		
+		return false;
+	});
+	
+	//clear menus on click
+	$('html').bind("click", clearMenus);
+	
+	function clearMenus()
+	{
+		$('.menu-items').removeClass('open');
+	}
+	
+	
+	$('#database-collection-filter').change(function(){
+		$('#database-search-filter').val('all');
+		Database.filterByCollection( $(this).val() );
+	});
+	
+
 	
 	$('#refresh-database').click(function(){
-	    return search(this,true);
+	    Database.refresh();
 	});
+	
+	//detect when zeega comes back in focus and refresh the database
+	window.addEventListener('focus', function() {
+		Database.refresh();
+	    
+		console.log('infocus refresh database')
+	});
+	
+	
+	function submitenter(inputfield,e)
+	{
+		var keycode;
+
+		console.log('submitenter');
+
+		if (window.event) keycode = window.event.keyCode;
+		else if (e) keycode = e.which;
+		else return true;
+
+		if (keycode == 13)
+		{
+			Database.search( $("#database-search-text").val() );
+			//open database tray if closed
+			if( $('#database-panel .panel-content').is(':hidden') )
+				$('#database-panel .panel-content').show('blind',{'direction':'vertical'});
+			
+			
+			console.log('pressed enter')
+		}else{
+			return true;
+		}
+	}
 	
 	//node tray sortable and sorting events
 	
-	$('#node-drawer').find('ul').sortable({  
+	$('#frame-list').sortable({  
 		axis : 'x',
 		forceHelperSize : true,
 		placeholder: "node-thumb ui-state-highlight",
 		forcePlaceholderSize:true,
 		forceHelperSize:true,
 		tolerance: 'pointer',
+		distance: 10,
 		
 		stop : function(){
-			Zeega.route.set({'nodesOrder':$(this).sortable('toArray')});
-			Zeega.route.save();
-			console.log($(this).sortable('toArray'));
+			var order = $(this).sortable('toArray');
+			
+			//ensure the array is made of integers
+			Zeega.nodeSort();
+
 		}
 	});
 	
 	//search bar focus stuff
 	$('#database-search-text').focus(function(){
-		$(this).css('color','#333');
+		$(this).css('color','#444');
 		$(this).val('');
+	});
+	
+	$('#database-search-text').click(function(event){
+		event.stopPropagation();
 	});
 	
 	//hide layer content initially
@@ -319,21 +336,6 @@ $(document).ready(function() {
 		});
 	$( "#sortable-layers" ).disableSelection();
 	
-	
-	$('#asset-preview-close').click(function(){
-		//remove src of media
-		
-		if( $('#asset-preview').find('source') )
-		{
-			//remove source
-			$('source').attr('src','');
-			$('source').attr('type','');
-			$('video').remove();
-		}
-		$('#asset-preview').fadeOut();
-		
-	});
-	
 
 	$('#advance-controls input').change(function(){
 		var attr = Zeega.currentNode.get('attr');
@@ -353,17 +355,36 @@ $(document).ready(function() {
 		Zeega.currentNode.save();
 	});
 	
-	
-	$('.editor-title-bar-expander').click(function(){
-		var expander = $(this).next('div');
-		if( expander.is(':visible'))
+
+//expands the Zeega editor panels	
+	$('.expandable .panel-head').click(function(){
+
+//removed the ability to store the panel states for now
+		//get the current Node ID
+		//var nodeID = Zeega.currentNode.id;
+		//var domID = $(this).attr('id').split('-',1)[0];
+
+		//var storage = localStorage.getObject( nodeID );
+		//var panelStates = {};
+		//if( _.isNull( storage ) ) storage = {};
+		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+		
+		var content = $(this).next('div');
+		if( content.is(':visible'))
 		{
-			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expand-toggle').html('+');
+			//hide
+			//eval( 'var state = {"'+ domID +'":true}');
+			//_.extend( panelStates , state );
+			content.hide('blind',{'direction':'vertical'});
 		}else{
-			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expand-toggle').html('–');
+			//show
+			//eval( 'var state = {"'+ domID +'":false}');
+			//_.extend( panelStates , state );
+			content.show('blind',{'direction':'vertical'})	
 		}
+		//set as property to read in on reload
+		//_.extend( storage, {panelStates:panelStates} )
+		//localStorage.setObject( nodeID , storage );
 	})
 	
 	
@@ -372,25 +393,34 @@ $(document).ready(function() {
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset',
+			accept : '.database-asset-list',
 			hoverClass : 'workspace-item-hover',
 			tolerance : 'pointer',
 
 			//this happens when you drop a database item onto a node
 			drop : function( event, ui )
 				{
+					
 					ui.draggable.draggable('option','revert',false);
+					
+					console.log(Zeega.draggedItem)
+					
 					//make the new layer model
 					var settings = {
 						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source_type'),
+						type: Zeega.draggedItem.get('source'),
 						attr: {
 							'item_id' : Zeega.draggedItem.id,
 							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('item_url'),
-							'uri' : Zeega.draggedItem.get('item_url')
+							'url' : Zeega.draggedItem.get('uri'),
+							'uri' : Zeega.draggedItem.get('uri'),
+							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
+							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
+							'citation':true,
 						}
 					};
+					
+					console.log(settings);
 					var layerToSave = new Layer(settings);
 
 					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
@@ -413,4 +443,4 @@ $(document).ready(function() {
 		});
 
 
-});
+//});

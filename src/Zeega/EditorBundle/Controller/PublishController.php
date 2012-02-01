@@ -14,6 +14,7 @@ class PublishController extends Controller
 {
     
     public function nodeAction($id){
+    
      	return $this->render('ZeegaEditorBundle:Editor:node.html.twig', array(
 					'nodeId'=>$id,
 				));
@@ -22,6 +23,17 @@ class PublishController extends Controller
      public function projectAction($id){
      	return $this->render('ZeegaEditorBundle:Editor:player.html.twig', array(
      		'projectId'=>$id,
+     		'collectionId'=>0,
+     	
+     	));
+     
+     }
+     
+     
+      public function collectionAction($id){
+     	return $this->render('ZeegaEditorBundle:Editor:player.html.twig', array(
+     		'projectId'=>0,
+     		'collectionId'=>$id,
      	
      	));
      

@@ -7,7 +7,7 @@ Zeega\EditorBundle\Entity\Layer:
      targetEntity: Zeega\IngestBundle\Entity\Item
    id:
     id:
-     type: integer
+     type: bigint
      generator: { strategy: AUTO }
    fields:
     item_uri:

@@ -65,6 +65,16 @@ class PlaygroundsController extends Controller
     public function postPlaygroundProjectAction($playground_id)
     {
     	$user = $this->get('security.context')->getToken()->getUser();
+    	$request = $this->getRequest();
+		
+		if($request->request->get('title'))$title=$request->request->get('title');
+		if($request->request->get('collection_id'))
+		{
+			$session = $this->getRequest()->getSession();
+			$session->set("collection_id", $request->request->get('collection_id'));
+		} 
+		
+		else $title='click here to change title';
     	$playground=$this->getDoctrine()
         ->getRepository('ZeegaEditorBundle:Playground')
         ->find($playground_id);
@@ -75,8 +85,8 @@ class PlaygroundsController extends Controller
 		$project->setPlayground($playground);
 		$project->addUsers($user);
 		$route->setProject($project);
-		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		$route->setTitle($title);
+		$project->setTitle($title);
 		$em=$this->getDoctrine()->getEntityManager();
 		$em->persist($route);
 		$em->persist($project);
@@ -84,7 +94,9 @@ class PlaygroundsController extends Controller
 		$em->flush();
 		return new Response($project->getId());
     }
-/*
+    
+        
+    /*
 
 	// `put_playground`     [PUT] /playgrounds/{playground_id}
     public function putPlaygroundAction($playground_id)

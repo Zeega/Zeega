@@ -1,12 +1,15 @@
 var Node = Backbone.Model.extend({
 	
+	
 	defaults : {
+		
 		"name" : "Untitled",
 		"attr" : {
-			"advance": 0,
-			"editorHidden":false
+			"advance": 0
 		}
+		
 	},
+	
 	
 	/*
 	url : function(){
@@ -17,54 +20,49 @@ var Node = Backbone.Model.extend({
 	
 	initialize : function() {
 		
-		if(!this.get('attr')) this.set({'attr':{'advance':0,'editorHidden':false}})
+		if(!this.get('attr')) this.set({'attr':{ 'advance':0 }})
+		
+		//this is the function that only calls updateThumb once after n miliseconds
+		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
+		
+		//this.bind( 'change:layers', this.onLayerUpdate );
+	},
+	
+	noteChange:function()
+	{
+		$('#frame-thumb-'+this.id).find('.frame-update-overlay').fadeIn('fast');
+		this.updateNodeThumb();
 	},
 	
 	//update the node thumbnail
 	updateThumb : function()
 	{
 		var _this = this;
-		console.log('updating thumbnail');
-		
-		//kill any preexisting thumb updates
-		if(this.t) clearTimeout(this.t);
-		
-
-		$('.node-thumb-'+this.id).find('.node-overlay').spin('tiny','white');
-		this.set({ thumb_url : 0 });
-		
-		this.save({},{
-		
-			success: function(node,response){
-		
-				$('.node-thumb-'+_this.id).find('.node-background').fadeOut('fast',function(){
-				$('.node-thumb-'+_this.id).css('background-image','url("'+response[0].thumb_url+'")').fadeIn('slow');
-				_this.set({thumb_url:response[0].thumb_url});
-				//turn off spinner
-				$('.node-thumb-'+_this.id).find('.node-overlay').spin(false);
-			});
+	
+		if( !this.updating )
+		{
+			this.updating = true; //prevent more thumb requests while this is working
+			//Trigger new node snapshot and persist url to database
 			
-		}});
-	
-	
-	
+			var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/gamma/js/helpers/thumbworker.js');
+			
+			worker.addEventListener('message', function(e) {
+				console.log(e)
+				if(e.data)
+				{
+					_this.set({thumb_url:e.data});
+				}else{
+					_this.trigger('thumbUpdateFail');
+				}
+				_this.updating = false; //allow further thumb updates
+				this.terminate();
+			}, false);
+			
+			worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+			
+		}
 	},
 	
-	noteChange:function()
-	{
-		console.log('changed');
-		var _this = this;
-		//kill any preexisting thumb updates
-		if(_this.t) clearTimeout(this.t);
-		_this.t = setTimeout(function(){ _this.updateThumb()}, 5000)
-		
-		_this.changed=true;
-	},
-	clearChange:function()
-	{
-		console.log('change cleared');
-		this.changed=false;
-	}
 
 });
 

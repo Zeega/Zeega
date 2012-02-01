@@ -15,6 +15,8 @@ var Player = {
 	lookahead : 2, // number of nodes to preload ahead/behind
 	isFirstNode : true,
 	
+	viewportRatio : 1.5,
+	
 	currentRoute : null,
 	currentNode : null,
 	
@@ -24,6 +26,8 @@ var Player = {
 	loadedLayers : [],
 	layersOnStage : [],
 	
+	overlaysHidden : false,
+	paused: false,
 	
 	/*
 		Method: init
@@ -39,37 +43,51 @@ var Player = {
 	init : function( data, routeID, nodeID )
 	{
 		console.log('Zeega Player Initialized');
+
 		var _this = this;
 				
 		//test to see if Zeega is installed
 		if( window.Zeega )
 		{
 			this.zeega = true;
-			Zeega.previewMode = false;
+			//Zeega.previewMode = false;
 		}
 
 		this.removeAllVideoElements();
+		
+		//remove panel ghosts
+		$('.x-panel-ghost ').remove();
+		
 		
 		//if the data passed in is a string, then parse it into an object
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		$('title').html(this.data.project.title);
+		
 		//set the current route
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
-		
-		this.dataNodeOrder = _.pluck( this.currentRoute.nodes, 'id' );
-		
+
+
+		//turn the node layer array into an array of string numbers
+		_.each(this.data.project.routes,function(route){
+			_.each(route.nodes, function(node){
+				node.layers = _.map(node.layers,function(num){ return String(num) });
+			})
+		})
+
+
 		//set the current node
-		if( !nodeID ) this.currentNode = this.getNode( this.currentRoute.nodeOrder[0] );
-		
-		this.currentNode = this.getNode( nodeID );
+		var currentNodeID;
+		if( !nodeID ) currentNodeID = this.currentRoute.nodeOrder[0];
+		else currentNodeID = nodeID;
 		
 		//this.parseProject;
 		this.draw();
 		this.setListeners();
 		
-		this.gotoNode( this.currentNode.id );
+		this.gotoNode( currentNodeID );
 	},
 	
 	/*
@@ -79,13 +97,33 @@ var Player = {
 	draw : function()
 	{
 		//add the player div
-		var overlay = $(this.getTemplate());
-		$('body').append(overlay);
+		this.displayWindow = $(this.getTemplate());
+		$('body').append( this.displayWindow );
 		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
+		
+		//get the current viewport resolution
+		var viewWidth = window.innerWidth;
+		var viewHeight = window.innerHeight;
+		
+		var cssObj = {};
+		if( viewWidth / viewHeight > this.viewportRatio )
+		{
+			cssObj.height = viewHeight +'px';
+			cssObj.width = viewHeight * this.viewportRatio +'px'
+		}else{
+			cssObj.height = viewWidth / this.viewportRatio +'px';
+			cssObj.width = viewWidth +'px'
+		}
+		
+		//constrain proportions in player
+		this.displayWindow.find('#preview-media').css( cssObj );
+		
+		//hide the editor underneath to prevent scrolling
+		$('#wrapper').hide();
 		
 		//Zeega.clearCurrentNode();
 		
-		overlay.fadeIn();
+		this.displayWindow.fadeIn();
 		
 		//disabled during dev work
 		//document.getElementById('zeega-player').webkitRequestFullScreen();
@@ -97,6 +135,9 @@ var Player = {
 	*/
 	close : function()
 	{
+		//unhide editor
+		$('#wrapper').show();
+		
 		document.webkitCancelFullScreen();
 		
 		console.log('Zeega Player Close');
@@ -111,11 +152,11 @@ var Player = {
 		
 		
 		// remove the player div
-		$('#zeega-player').fadeOut( 450, function(){
+		this.displayWindow.fadeOut( 450, function(){
 			_this.removeAllVideoElements();
 			_this.reset();
 			//All video elements must be removed prior to removing the zeega player dom element
-			//$(this).remove() 
+			$(this).remove(); 
 		}); 
 		
 		if(this.zeega)
@@ -173,17 +214,40 @@ var Player = {
 				case 40:
 					_this.goDown();
 					break;
+				case 32:
+					_this.playPause();
+					break;
 			}
 		});
 		
+		//resize player on window resize
+		window.onresize = function(event)
+		{
+			//resize ##zeega-player
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > _this.viewportRatio )
+			{
+				cssObj.height = viewHeight +'px';
+				cssObj.width = viewHeight * _this.viewportRatio +'px'
+			}else{
+				cssObj.height = viewWidth / _this.viewportRatio +'px';
+				cssObj.width = viewWidth +'px'
+			}
+
+			//constrain proportions in player
+			_this.displayWindow.find('#preview-media').css( cssObj );
+		}
 		
 		$('#zeega-player').keydown(function(event) {
-  		console.log(event.which+":keypress");
-   });
+			console.log(event.which+":keypress");
+		});
 		
 		
 		$('#citation').mouseleave(function(){
-			closeCitationBar();
+			_.delay( closeCitationBar, 500 );
 		})
 		
 		
@@ -195,9 +259,36 @@ var Player = {
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
+			console.log('event: ended');
 			_this.advanceAfterMedia(data.id);
 			return false;
 		});
+		
+		var fadeOutOverlays = _.debounce(this.fadeOutOverlays,5000);
+		//hide all controls and citation
+		onmousemove = function()
+		{
+			if( !_this.overlaysHidden )
+			{
+				fadeOutOverlays( _this );
+			}else{
+				_this.overlaysHidden = false;
+				$('.player-overlay').fadeIn('slow');
+				_this.showNavigation();
+			}
+		}
+		
+		this.displayWindow.find('#preview-close').click(function(){
+			_this.close();
+		})
+		
+	},
+	
+	fadeOutOverlays : function( _this )
+	{
+		_this.overlaysHidden = true;
+		$('.player-overlay').fadeOut('slow');
+		$('.preview-nav').fadeOut('slow');
 	},
 	
 	/*
@@ -207,6 +298,7 @@ var Player = {
 	unsetListeners : function()
 	{
 		$(window).unbind( 'keydown' ); //remove keylistener
+		onmousemove = null;
 	},
 	
 	/*
@@ -246,9 +338,13 @@ var Player = {
 			//updated the loading bar
 			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
+			console.log('UPDATE!')
+			console.log( layers )
+				
 			//if all the layers are loaded in a node
-			if( _.difference( layers, _this.loadedLayers ).length == 0 )
+			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
 			{
+			
 				//remove from nodes loading array
 				_this.loadingNodes = _.without( _this.loadingNodes , nodeID );
 				// add to nodes loaded array
@@ -256,6 +352,7 @@ var Player = {
 				
 				if( _this.currentNode.id == nodeID)
 				{
+					console.log('drawCurrentNode: '+ nodeID)
 					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
 				}
@@ -304,7 +401,7 @@ var Player = {
 		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
 		{
 			_this = this;
-
+			
 			if(nodeID == this.currentNode.id) this.loadingBar.draw();
 
 			//put node id into the nodesLoading Array
@@ -312,15 +409,16 @@ var Player = {
 
 			//determine the layers that need to be preloaded 
 			var node = this.getNode( nodeID );
-			console.log(nodeID);
-			console.log(node);
+
 			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNode.id ){
+		}else if( nodeID == this.currentNode.id && _.include( this.loadedNodes , nodeID ) ){
+			
+
 			this.drawNode( nodeID );
 		}
 	},
@@ -347,13 +445,18 @@ var Player = {
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-			layerClass.load( layer );
+
+			layerClass.lightLoad( layer );
+			
+			//add the layer content to the displayWindow
+			this.displayWindow.find('#preview-media').append( layerClass.display );
+			
 			//call the preload function for the layer
 			//add the layer class to the layer class array
 			this.getLayer(layerID).layerClass = layerClass;
 			
-			layerClass.preload();
-			
+			var target = this.displayWindow.find('#preview-media');
+			layerClass.preload( target );
 			//add layer info to layer-status update bar
 			//move this to the loading bar??
 			var loadingLayer = $('<li id="layer-loading-'+layerID+'">')
@@ -361,7 +464,6 @@ var Player = {
 				loadingLayer.append( 'loading: '+ layer.attr.title );
 			else loadingLayer.append( 'loaded: '+ layer.attr.title );
 			$('#layer-status ul').append(loadingLayer)
-			
 		}
 	},
 	
@@ -394,20 +496,10 @@ var Player = {
 		//draw each layer but not layers already drawn
 		var layersToDraw = _.difference(targetNode.layers, this.layersOnStage );
 		
-		var temp = _.template( this.getCitationTemplate() );
 		_.each( targetNode.layers, function(layerID, i){
 			
-			/////excise this stuff
 			//add layer to the citation bar
-			var listItem = $(temp({title: _this.getLayer( layerID ).attr.title }));
-			listItem.find('.citation-tab').click(function(){
-				$('#citation').animate({ height : '100px' })
-				closeOpenCitationTabs();
-				$(this).closest('li').find('.citation-content').fadeIn();
-			})
-			$('#citation ul').append( listItem );
-
-			//^^^^^^^excise this stuff
+			_this.drawCitation( layerID );
 
 			if( _.include( layersToDraw, layerID ) )
 			{
@@ -419,7 +511,12 @@ var Player = {
 				_this.getLayer(layerID).layerClass.updateZIndex(i);
 			}
 		})
-		
+		this.paused=false;
+		this.showNavigation();
+	},
+	
+	showNavigation : function()
+	{
 		//check to see if the current node is first or last and remove the correct arrow
 		var nodeOrder = this.currentRoute.nodeOrder;
 		//if there's only one node. show no arrows
@@ -427,7 +524,7 @@ var Player = {
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
-		}else{
+		}else if( !_this.overlaysHidden ){
 			if( !this.getLeft( this.currentNode.id, 1 ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
@@ -435,6 +532,36 @@ var Player = {
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 		}
 	},
+	
+	drawCitation : function( layerID )
+	{
+		var layer = this.getLayer( layerID )
+		if(layer.attr.citation){
+			var template = _.template( this.getCitationTemplate() );
+	
+			var fields = {
+				title : layer.attr.title,
+				type : layer.type.toLowerCase(),
+				trackback : layer.attr.attribution_url,
+				imgUrl : layer.attr.thumbnail_url,
+			};
+			var listItem = $( template( fields ) );
+			
+			listItem.hover(function(){
+				$(this).find('.zicon').removeClass('grey').addClass('orange')
+			},function(){
+				$(this).find('.zicon').addClass('grey').removeClass('orange')
+			})
+			
+			listItem.find('.citation-tab').click(function(){
+				$('#citation').animate({ height : '100px' })
+				closeOpenCitationTabs();
+				$(this).closest('li').find('.citation-content').fadeIn();
+			})
+			$('#citation ul').append( listItem );
+		}
+	},
+	
 	
 	/*
 		Method: cleanupLayers
@@ -473,7 +600,7 @@ var Player = {
 		{
 			//after time in seconds
 			this.advanceAfterTimeElapsed(advanceValue)
-		}else if(advanceValue == 0){
+		}else if(advanceValue == 0 || _.isUndefined(advanceValue) ){
 			//after media
 			this.advanceOnPlayback = true;
 		}else{
@@ -500,6 +627,8 @@ var Player = {
 	// advance node after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
+		console.log('should advance')
+		console.log(this.advanceOnPlayback)
 		if(this.advanceOnPlayback) this.goRight();
 	},
 
@@ -547,10 +676,7 @@ var Player = {
 	{
 		//returns the node object
 		
-		
-		var nodeIndex = _.indexOf( this.dataNodeOrder, parseInt(nodeID));
-		var nodeObject = this.currentRoute.nodes[nodeIndex];
-		return nodeObject;
+		return _.find( this.currentRoute.nodes, function(node){ return node.id == nodeID });
 	},
 	
 	getLayer : function( layerID )
@@ -562,9 +688,13 @@ var Player = {
 		return layerObject;
 	},
 	
-	gotoNode : function(nodeID)
+	gotoNode : function( nodeID )
 	{
-		this.currentNode = this.getNode(nodeID);
+		this.currentNode = this.getNode( nodeID );
+		
+		window.location.hash = '/player/frame/'+ nodeID; //change location hash
+		
+		
 		this.preload();
 	},
 	
@@ -581,7 +711,7 @@ var Player = {
 		
 		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
-		if( nextNodeID ) this.gotoNode( nextNodeID )
+		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
 		else console.log('end of the line');
 	},
 	
@@ -593,11 +723,11 @@ var Player = {
 	goLeft : function()
 	{
 		console.log('goLeft');
+		
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
-		
-		if( nextNodeID ) this.gotoNode( nextNodeID )
+		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
 		else console.log('end of the line');
 	},
 	
@@ -609,12 +739,13 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
+		
 		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
-		
+
 		//test if out of bounds
 		if( index + dist > nodeOrder.length || index + dist < 0 ) return false;
-		else return nodeOrder[index+dist]
+		else return nodeOrder[ index + dist ];
 	},
 	
 	getDown : function( nodeID, dist )
@@ -625,13 +756,32 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
+		console.log('getLeft');
 		var nodeOrder = this.currentRoute.nodeOrder;
+
 		var index = _.indexOf( nodeOrder, nodeID );
-		
-		//test if out of bounds
+
 		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
 		else return nodeOrder[ index - dist ]
 	},
+	
+	
+	playPause: function(){
+		var _this=this;
+		if(this.paused){
+			_.each(this.layersOnStage, function(layerID){
+				_this.getLayer(layerID).layerClass.play();
+			});
+			this.paused=false;
+		}
+		else {
+			_.each(this.layersOnStage, function(layerID){
+				_this.getLayer(layerID).layerClass.pause();
+			});
+			this.paused=true;
+		}
+	},
+	
 	
 	reset : function()
 	{
@@ -653,14 +803,38 @@ var Player = {
 	
 	getTemplate : function()
 	{
-	 	html = "<div id='zeega-player'><div id='preview-left' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img  height='75' width='35' onclick='Player.goLeft();return false'></div><div id='preview-right' class='preview-nav-arrow preview-nav'><div class='arrow-background'></div><img height='75' width='35' onclick='Player.goRight();return false'></div><div id='preview-media'></div><div id='citation'><ul class='clearfix'></ul></div></div>";
-		//html += "<div id='citation'><ul class='clearfix'></ul></div>"
+		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
+		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
+		html +=			"<div id='preview-close' class='player-overlay'><span class='zicon orange zicon-close' ></span></div>";
+		html += 		"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>";
+		html += 			"<div class='arrow-background'></div>";
+		html += 			"<img height='75' width='35' onclick='Player.goRight();return false'>";
+		html += 		"</div>";
+		html += 		"<div id='preview-media'></div>";
+		html += 		"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
+		html += 	"</div></div>";
+		
 		return html;
 	},
 	
 	getCitationTemplate : function()
 	{
-		html = '<li class="clearfix"><div class="citation-tab"><div class="citation-icon"></div></div><div class="citation-content hidden"><div class="citation-title"><%= title %></div><div class="citation-body"><div class="citation-thumb"><img/></div><div class="citation-metadata">This is citation content</div></div></div></li>';
+		var html =	'<li class="clearfix">';
+		html+=			'<div class="citation-tab">';
+		html+=				'<span class="zicon grey zicon-<%= type %>"></span>';
+		html+=			'</div>';
+		html+=			'<div class="citation-content hidden">';
+		html+=				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
+		html+=				'<div class="citation-body">';
+		html+=				'<div class="citation-title"><%= title %></div>';
+		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
+		html+=				'</div>';
+		html+=			'</div>';
+		html+=		'</li>';
 		return html;
 	}
 

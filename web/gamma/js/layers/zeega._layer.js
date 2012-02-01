@@ -48,20 +48,29 @@
 
 var ProtoLayer = Class.extend({
 
-
 	/** EXTENDABLE LAYER FUNCTIONS **/
+	thumbUpdate : true,
 	
 	init : function()
 	{
 
 	},
 	
-
-	drawControls : function()
+	controls : function()
 	{
-
+		
 	},
-
+	
+	visual : function()
+	{
+		
+	},
+	
+	onDomPlacement : function()
+	{
+		
+	},
+	
 	onControlsOpen : function()
 	{
 
@@ -71,21 +80,19 @@ var ProtoLayer = Class.extend({
 	{
 
 	},
-
-	drawToVisualEditor : function()
-	{
-		
-	},
 	
 	onAttributeUpdate : function()
 	{
 		
 	},
 	
-	//necessary?
-	drawThumb : function()
+	thumb : function()
 	{
-		
+		var img = $('<img>')
+			.attr('src', this.attr.thumbnail_url)
+			.css({'width':'100%'});
+
+		this.thumbnail.append( img );
 	},
 	
 	updateZIndex : function(z)
@@ -135,26 +142,43 @@ var ProtoLayer = Class.extend({
 		
 	load : function( model )
 	{
+
 		//test to see if it's a model or just a layer data object
 		if(model.attributes)
 		{
+			var _this = this;
+			
 			this.model = model;
 		
-			this.attr = model.get('attr');
+			this.attr = deepCopy( model.get('attr') );
 		
-			var defaults = deepCopy(this.defaultAttributes );
-			this.attr = _.defaults(this.attr, defaults);
-		
+			var defaults = deepCopy( this.defaultAttributes );
+			
+			this.attr = _.defaults( this.attr, defaults);
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
-		
 			this.type = model.get('type');
-		
 			this.zIndex = model.get('zindex');
+			
+			var editorCSS = {
+				position : 'absolute',
+				width : this.model.get('attr').width+'%',
+				height : this.model.get('attr').height +"%",
+				opacity : this.model.get('attr').opacity,
+				top : this.model.get('attr').top +'%',
+				left : this.model.get('attr').left +'%'
+			};
+			
+			// have to set these inside here so they don't get shared!!!
+			this.visualEditorElement = $('<div>').css( editorCSS );
+			this.layerControls = $('<div>');
+
+			
+			
 		}else{
 			//make it possible to load objects and not models.
 			this.model = model;
-			this.attr = model.attr;
+			this.attr = deepCopy( model.attr );
 		
 			var defaults = deepCopy(this.defaultAttributes );
 
@@ -164,26 +188,146 @@ var ProtoLayer = Class.extend({
 			this.type = model.type;
 			this.zIndex = model.zindex;
 		}
+		
+		_.defaults( this.attr, this.defaultAttributes );
+		
+		this.editorLoaded = false;
+		
+		//I can draw the visual element once
+		this.visual();
 
 	},
 	
 	//necessary?
-	lightLoad : function(model){
-			//make it possible to load objects and not models.
-			this.model = model;
-			this.attr = model.attr;
-		
-			var defaults = deepCopy(this.defaultAttributes );
+	lightLoad : function( model )
+	{
 
-			this.attr = _.defaults(this.attr, defaults);
-			this.model.attr = this.attr;
-			this.title = this.attr.title;
-			this.type = model.type;
-			this.zIndex = model.zindex;
+		//make it possible to load objects and not models.
+		this.model = model;
+		this.attr = model.attr;
+	
+		var defaults = deepCopy(this.defaultAttributes );
+
+		this.attr = _.defaults(this.attr, defaults);
+		this.model.attr = this.attr;
+		this.title = this.attr.title;
+		this.type = model.type;
+		this.zIndex = model.zindex;
+		
+		//set basic positioning
+		var thumbCSS = {
+			position : 'absolute',
+			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
+			opacity : this.model.attr.opacity,
+			top : this.model.attr.top +'%',
+			left : this.model.attr.left +'%'
+		};
+		var displayCSS = {
+			position : 'absolute',
+			width : this.model.attr.width+'%',
+			height : this.model.attr.height +"%",
+			opacity : this.model.attr.opacity,
+			top : '-1000%',
+			left : '-1000%'
+		};
+		
+		this.display = $('<div>').css(displayCSS);
+		this.thumbnail = $('<div>').css(thumbCSS);
+
+		console.log(this.attr);
+
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			
+			$(this.display).addClass('linked-layer').css('cursor','pointer');
+			$(this.display).click(function(){
+				console.log( 'http://'+ _this.attr.link_to );
+				document.location.href = 'http://'+ _this.attr.link_to;
+			})
+		}
+
+
+
+		this.thumb();
 	},
 	
+	setListeners : function()
+	{
+		var _this = this;
+		///////set listener
+		this.layerControls.bind( 'update' , function( e , settings, silent ){
+			//console.log('update called');
+			// look through each setting object
+						
+			_.each( settings, function(setting){
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+		});
+		
+		
+		/*
+		this.layerControls.bind( 'updateCSS' , function( e , settings, silent ){
+			//console.log('update called');
+			// look through each setting object
+						
+			_.each( settings, function(setting){
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+		});
+		
+		this.layerControls.bind( 'updateModel' , function( e , settings, silent ){
+			//console.log('update called');
+			// look through each setting object
+						
+			_.each( settings, function(setting){
+				if( setting.css )
+				{
+					//console.log('settingCSS');
+					if( setting.suffix ) _this.visualEditorElement.css( setting.property, setting.value + setting.suffix );
+					else _this.visualEditorElement.css( setting.property, setting.value );
+				}
+			})
+			//if the update isn't silent, then update the model
+			if( !silent ) _this.updateAttribute( settings );
+		});
+		*/
+		
+		/////// end listener
+	},
 	
 	//Activate layer icon for display in workspace icon drawer
+	
+	drawControls : function()
+	{
+		// i need to redraw the controls every time.
+		this.layerControls.empty();
+		this.controls();
+		this.setListeners();
+		return this.layerControls;
+	},
+	
+	drawToVisualEditor : function()
+	{
+		//this.visualEditorElement.empty();
+		//this.visual();
+		return this.visualEditorElement;
+	},
 	
 	setIcon : function()
 	{
@@ -212,21 +356,31 @@ var ProtoLayer = Class.extend({
 	
 	setAttributes : function( newAttr )
 	{
+		//need to extend beacuse attr is an object that has to be set all at once
+		_.extend( this.model.get('attr'), newAttr );
+		this.model.set( newAttr );
+	},
+	
+	//this should be the new way to update stuff!!!
+	updateAttribute : function( settings )
+	{
+		var _this = this;
+		_.each( settings, function(setting){
+
+			var setObj = {};
+			setObj[ setting.property ] = setting.value
+			
+			_this.setAttributes( setObj );
+		})
 		
-		var attr = this.model.get('attr');
-		var n = _.extend( attr, newAttr );
-		
-		console.log(n)
-		
-		this.model.set( n );
-		
+		this.save();
 	},
 	
 	save : function()
 	{
 		//kept separate from updateLayerAttr because there are reasons to set but not save yet
 		console.log('save()');
-		Zeega.currentNode.noteChange();
+		//Zeega.currentNode.noteChange(); //stops thumbnail generation for now
 		this.model.save(); //saves the current model
 	}
 	

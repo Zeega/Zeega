@@ -6,165 +6,206 @@
 {% block headerfix %} {% endblock %}
 {% block body %}
  
+			<input id="route-id" type="hidden" value="{{route.id}}"/>
+			<input id="project-id" type="hidden" value="{{projectid}}"/>
+		
 		
 			<div id="route-header" class='clearfix'>
 				<div id='route-title'>{{projecttitle}}</div>
-				<input id="route-id" type="hidden" value="{{route.id}}"/>
-				<input id="project-id" type="hidden" value="{{projectid}}"/>
 				<div id='route-publish'>
 					
-					<ul class='pill-buttons'>
-						<!--<li><a id='share' href='http://www.getjavascript.com' onclick='shareButton();return false;'>Share</a></li>-->
-						<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
-						<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'>Preview</a></li>
+					<ul class='unstyled'>
+						
+						<li>
+							<ul class='pill-buttons'>
+								<li><a id='share-project' href='#'>Share</a></li>
+								<!--
+								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
+								-->
+								<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'
+									title='Preview Anytime'
+									data-content='Once you’re complete, you can select share to create a unique url for your project.'
+								>Preview</a>
+								</li>
+								<li><a id='get-help' href='#'>?</a></li>
+								
+							</ul>
+						</li>
+						
+						<li><span id='project-settings' class='zicon zicon-settings'></span></li>
+						
 					</ul>
 				</div>
 			</div>
 
-
 			<a href="http://#"></a>
 
-				<div id="node-drawer">
-					<ul></ul>
-					<div id="add-node" title='Click to add a new Node or Drag to add several Nodes'><a href="#" onClick="Zeega.addNode();return false;"><img src="{{ asset('gamma/images/addnode.png') }}" height="25" width="25" style="background-color:#555; 	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));"/></a></div>
+
+				<div id="frame-drawer"
+					title='Add More Frames!'
+					data-content='As your projects grow, you can select any frame to go back to editing the layers'
+				>
+					<ul id='frame-list' class='unstyled horizontal-list'></ul>
+					<div id="add-node" title='Click to add a new Node or Drag to add several Nodes'><a href="#" onClick="Zeega.addNode();return false;"><img src="{{ asset('gamma/images/addnode.png') }}" height="25" width="25"/></a></div>
 				</div>
 				<div id="edit-drawer" class='clearfix'>
 					
-					
-						
 					<div id="sidebar" class='clearfix' >
 					
-						
-						<div id='item-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Items' style='cursor:pointer'>
-							<div class='bar-title'><a href="#" id='iv-toggle' class='expand-toggle' >–</a>&nbsp;Items</div>
-						</div>
-							
-							<div id='database'>
-							<div id="db-nav-controls">
-					
-								<div id='database-search' class='clearfix'>
-
-									<form action="" method="" id="form-search">
-										<div id='form-left'>
-											<select id='database-search-filter' class=''>
-											  <option value="all">All</option>
-											  <option value="image">Images</option>
-											  <option value="video">Video</option>
-											  <option value="audio">Audio</option>
-											  <option value="-" disabled ="true">---</option>
-											  <option value="mine">Mine</option>
-											</select>
-										
-										
-											<input id='database-search-text' onKeyPress="return submitenter(this,event)" type='text' name='database-search' class='span6'/>
-										
-										</div>
-										<div id='form-right'>
-											<!--<input id='database-search-button' class='' type="button" value="go" onclick =' return submitbutton(this)'/>-->
-											<input id='database-search-button' class='' type="button" value="go" onclick ='return false' style="cursor:progress"/>
-										</div>
-									</form>
-
-								</div>
-							</div><!-- db-nav-controls -->
-				
-							<div id='asset-preview'>
-								<a id='asset-preview-close' href='#'>x</a>
-								<div id='asset-preview-media'></div>
-								<div id='asset-preview-meta'>Title</div>
-							</div>
-						
-							<a href='#' id='refresh-database'>refresh</a>
-							<span id="database-pager"></span>
-						
-							<div id='tab-database-slide-window'></div>
-						</div><!-- database -->
-						
-							
-						<div id='layer-view-bar' class='clearfix editor-title-bar-expander' title='Click to close or expand the Layers' style='cursor:pointer'>
-							<div class='bar-title'><a href="#" id='lv-toggle' class='expand-toggle' >–</a>&nbsp;Layers</div>
-						</div>
-						
-						<div id='layers'>
-						
-								<div id='new-layer' class='clearfix'>
+						<div class="panel flat">
+							<div id='new-layer-tray' class='panel-head'
+								title='Add Maps, text and color layers!'
+								data-content=''
 								
-								<ul>
+							>
+								<ul id='new-layer-list' class='unstyled horizontal-list'>
+									<li>Add</li>
+									<li title='Click to add new Geo Layer' ><a href="#" data-type='Geo'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
+									<li title='Click to add new Text Layer' ><a href="#"data-type='Text'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
+									<li title='Click to add new Rectangle Layer' ><a href="#"data-type='Rectangle'><img src="{{ asset('gamma/images/rectangle-layer.png') }}" height=20 width=20 /></a></li>
+								</ul>
+							</div>
+						</div>
+					
+					
+						<div id='layer-panel' class='panel flat'
+							title='Edit Your Layers'
+							data-content="Once you've added layers, you can edit scale, opacity and more."
+						>
+							<div class='panel-head title'>
+								Edit Layers
+								<span class='info zicon zicon-info'
+									data-placement = "right"
+									data-original-title='Layers'
+									data-content='This is where your media layers Appear. You can reorder and change their properties.'
+								></span>
+							</div>
+							
+							<div id='layers'>
 
-									<li class='new-layer-icon' title='Click to add new Geo Layer' ><a href="#" onclick='addLayer("Geo");return false;'><img src="{{ asset('gamma/images/geo_layer.png') }}" height=20 width=20 /></a></li>
-									<li class='new-layer-icon' title='Click to add new Text Layer' ><a href="#"onclick='addLayer("Text");return false;'><img src="{{ asset('gamma/images/text_layer.png') }}" height=20 width=20 /></a></li>
-									<!-- 
-									<li class='new-layer-icon' ><a href="#"onclick='addLayer("Twilio");return false;'><img src="{{ asset('gamma/images/twilio_layer.png') }}" height=20 width=20 /></a></li>
-									-->
+								<ul id="layers-list-visual" class='unstyled'>
 
-								</div>
-						
-								<ul id="layers-list-visual">
-									
-									<div class=​"alert-message warning">
-										<strong>No layers to display. Add some?</strong>
+									<div class="alert-message warning">
+										<strong>Click icons above or drag items to the visual editor to create a layer.</strong>
 									</div>
-									
+
 								</ul>
 
+							</div> <!-- layers -->
+							
+						</div><!-- #layer-panel -->
+						
+
+						
+						<div id='database-panel' class='panel tray expandable raised'
+							title='Find Media'
+							data-content='Search your collections and filter for images, videos or sounds.'
+						>
+							
+							<div class='panel-head'>
+								<div>
+									Add Media
+									<span class='info zicon zicon-info'
+										data-placement = "right"
+										data-original-title='Items Database'
+										data-content='This is where you can search items from your collections.'
+									></span>
+								</div>
+								
+								
+								<div id="searchbar">
+									
+									<div id='search-filter'>
+											<a class='menu-toggle' href='#'><span class='zicon zicon-searchdropdown'></span></a>
+											<ul class='unstyled menu-items'>
+												<li class='menu-title'>Filter by Format</li>
+												<li class='divider'></li>
+												<li><a data-search-filter='all' href='#'>All</a></li>
+												<li><a data-search-filter='audio' href='#'>Audio</a></li>
+												<li><a data-search-filter='image' href='#'>Images</a></li>
+												<li><a data-search-filter='video' href='#'>Video</a></li>
+											</ul>
+									</div>
+									
+									<input id='database-search-text' type='text' name='database-search' placeholder='search database'/>
+									
+								</div><!-- searchbar -->
+
+							</div>
+							
+							<div class='panel-content'>
+								<div id="db-nav-controls">
+									
+									<select id='database-collection-filter' class=''>
+									  <option value="all">All Collections</option>
+									</select>
+									
+									<a href='#' id='list-view'><span class='zicon orange zicon-list'></span></a>
+									<a href='#' id='grid-view'><span class='zicon zicon-grid'></span></a>
+
+								</div><!-- db-nav-controls -->
+							
+								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
+								<ul id='database-item-list' class='unstyled list-view inset-tray'></ul>
+							</div><!-- database -->
+						
+						</div><!-- #database-panel -->
+						
+						<div id='transition-panel' class='panel tray expandable raised'>
+
+							<div class='panel-head'>
+								Edit Transitions
+								<span class='info zicon zicon-info'
+									data-placement = "right"
+									data-original-title='Transitions'
+									data-content='This is where you edit the way this frame transitions to the next frame.'
+								></span>
 							</div>
 
-						</div> <!-- layers -->
-				
+							<div class="panel-content inset-tray hidden">
+								
+								<ul class='unstyled'>
+									<li><input type="radio" value='0' id="playback" name="radio" checked="true" /><label for="playback"> After playback</label></li>
+									<li><input type="radio" value ='-1' id="manual" name="radio" /><label for="manual"> Manually</label></li>
+									<li><input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label></li>
+								</ul>
+							</div><!-- panel-content -->
+							
+						</div><!-- #transition-panel -->
+						
+						
+
+						</div>
+						
+						
+
 					</div> <!-- sidebar -->
 					
 					
 					<div id='workspace-wrapper'>
-						<div id='visual-editor-wrapper' class='wrapper clearfix' title='Click to close or expand the Workspace' style='cursor:pointer'>
-							<div id='visual-editor-bar' class='clearfix'>
-								<div class='bar-title' onclick='toggleWorkspace(this);return false;'><a href="#" id='ve-toggle' >–</a>&nbsp;Workspace</div>
-								<div id='visual-icon-tray' class='icon-tray'></div>
+						
+						<div id='visual-editor-wrapper' class='wrapper panel'>
+							
+							<div id='visualeditor-view-bar' class='panel-head'>
+
+								<ul id='visual-icon-tray' class='unstyled horizontal-list icon-tray'></ul>
+								<span class='info zicon zicon-info'
+									data-placement = "left"
+									data-original-title='The Visual Editor Window'
+									data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'
+								></span>
 							</div>
 							
-							<div id="visual-editor-workspace" class='workspace clearfix'></div>
+							<div id='workspace-outer-wrapper' class='clearfix'>
+								<div id="visual-editor-workspace" class='workspace clearfix'
+									title='Create a Project!'
+									data-content='All projects consists of frames. You can add layers to frames by dragging media to this area.'
+								></div>
+							</div>
 							
 						</div>
 						
-						<div id='interaction-editor-wrapper'>
-
-							<div id='interaction-editor-bar' class='clearfix' >
-								<div class='bar-title'>Interactions</div>
-								<div id='interaction-icon-tray' class='icon-tray'>ilayer</div>
-							</div>
-
-							<div id='layers-list-interaction' class='workspace'></div>
-				
-							
-							<div id="node-advance" class="i-layer layer-wrapper">
-								<div class='i-layer-uber-bar clearfix' onclick="expandLayer(this);return false;">
-									<div class='layer-icon'>
-										<span class="asset-type-icon ui-icon ui-icon-pin-w"></span>
-									</div>
-									<div class='i-layer-title'></span>Advance</div>
-								</div>
-								<div class='layer-content clearfix'>
-									<div id='controls'>
-										<div id='advance-controls'>
-											<input type="radio" value='0' id="playback" name="radio" checked="true" /><label for="playback"> After playback</label>
-											<input type="radio" value ='-1' id="manual" name="radio" /><label for="manual"> Manually</label>
-											<input type="radio" value='10' id="time" name="radio" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label>
-										</div>
-										<div id='node-advance-random'>
-										<!--
-											<input type="radio" value='right' id="right" name="radio" checked="true" /><label for="playback"> After playback</label>
-											<input type="radio" value='left' id="left" name="radio" /><label for="playback"> After playback</label>
-											<input type="radio" value='random' id="random" name="radio" /><label for="playback"> After playback</label>
-										-->
-											<input type='checkbox' value='random' id='random'><label for='random'> Randomize next node</label>
-										
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							
-							
-						</div>
+						
 					</div>
 				</div>
 
@@ -177,16 +218,6 @@
 {% block extras %}
 	<div id='templates' class='hidden'>
 		
-		<div id="database-asset-template" class="hidden">
-			
-			<span class="float-left asset-type-icon ui-icon"></span>
-			<img/>
-			<div class='item-delete' style='color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none'></div>
-			<div class="item-title"></div>
-			<div class="item-meta"></div>
-		</div>
-
-
 		<div id="export" class='modal hidden' >
 			<div class="modal-header">
 				<a href='#' class='close'>x</a>
@@ -198,30 +229,78 @@
 			</div>
 			<div class="modal-footer">
 				<span class='admin-submit'>
-				<br />
-				
+					<br />
 					<a href='#' id='close-modal' class='btn secondary'>close</a>
 				</span>
 			</div>
-			
-				
+		</div> <!-- modal -->
+		
+		<div id="project-settings-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Project Settings</h3>
 			</div>
-		<div >
-
+			<div class="modal-body clearfix">
+				
+				<h3 class="">Screen Ratio</h3>
+				<ul id='ratio-list' class='unstyled'>
+					<li><a href="#" data-ratio-id='0'>3:2</a></li>
+					<li><a href="#" data-ratio-id='1'>4:3</a></li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
 		
+		<div id="share-project-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Share Your Project</h3>
+			</div>
+			<div class="modal-body clearfix">
+				<p>Share your project: <b>{{projecttitle}}</b></p>
+				<a href='{{hostname}}{{directory}}project/{{route.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{route.id}}/view</a>
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
 		
-		<div id="node-item-template" class=""><div class='node-overlay'></div><div class='node-background'></div><a href='#' class='delete-node hidden'>&times;</a></div>
-		
+		<div id="node-item-template" class="">
+			<div class='node-overlay'>
+				<div class='node-update-overlay'></div>
+			</div>
+			<div class='node-background'></div>
+			<a href='#' class='delete-node hidden'>&times;</a>
+		</div>
 	</div>
 {% endblock %}
 
 {% block scripts %}
+
+
+			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+				<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
+			
+			<script src="{{ asset('gamma/js/aloha-config.js') }}" language="javascript"></script>
+			<script src="{{ asset('gamma/js/libraries/aloha-rc9/lib/aloha.js') }}" data-aloha-plugins="common/format,common/highlighteditables"></script>
+
+			<script src="{{ asset('gamma/js/main.editor.js') }}"></script>
+
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-			<script data-main="{{ asset('gamma/js/main.editor.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/adapter/jquery/ext-jquery-adapter-debug.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/ext-3.2.1/ext-all.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha/aloha-nodeps.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
-			<script src="http://core.zeega.org/Libraries/js/aloha-config.js"></script>
+			
+			<script type="text/javascript" language="Javascript">
+				//bootstrapping data
+				var itemsJSON = "{{ results|e('js') }}";
+				//console.log('collection id= '+ {{collection_id}})
+				
+			</script>
 			
 {% endblock %}

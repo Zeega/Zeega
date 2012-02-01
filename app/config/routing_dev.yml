@@ -1,6 +1,36 @@
+_assetic:
+  type:     assetic  
+  resource: .
+  
 _configurator:
     resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
     prefix:   /_configurator
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+
+_security_logout:
+    pattern:  /logout    
+
+api:
+    resource: "@ZeegaApiBundle/Resources/config/routing.yml"
+
 projects:
   type:     rest
   resource: Zeega\EditorBundle\Controller\ProjectsController
@@ -16,33 +46,16 @@ nodes:
 layers:
   type:     rest
   resource: Zeega\EditorBundle\Controller\LayersController
+ 
+
   
-items:
-  type:     rest
-  resource: Zeega\IngestBundle\Controller\ItemsController
+#items:
+#  type:     rest
+#  resource: Zeega\IngestBundle\Controller\ItemsController
   
 playgrounds:
   type:     rest
   resource: Zeega\EditorBundle\Controller\PlaygroundsController
-  
-ItemSearch:
-
-    pattern:   /search/items/{offset}/{limit}
-    defaults: { _controller: ZeegaSearchBundle:Search:items}
-
-_security_login:
-    pattern:  /login
-    defaults: { _controller:  ZeegaUserBundle:Security:login }
-
-testing:
-    pattern:  /logintest
-    defaults: { _controller:  ZeegaUserBundle:Security:create }
-
-_security_check:
-    pattern:  /login_check
-
-_security_logout:
-    pattern:  /logout
 
 persist:
     pattern: /widget/persist
@@ -71,10 +84,19 @@ ZeegaEditorBundle_admin:
 ZeegaEditorBundle_editor:
     pattern: /playground/{short}/project/{id}
     defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
+    
+ZeegaEditorBundle_browser:
+    pattern: /playground/{short}/browser
+    defaults: { _controller:  ZeegaEditorBundle:Editor:browser }
 
 ZeegaEditorBundle_project:
     pattern: /playground/{short}/project
     defaults: { _controller:  ZeegaEditorBundle:Editor:project }
+    
+
+ZeegaIngestBundle_import:
+    pattern: /import/{page}
+    defaults: { _controller:  ZeegaIngestBundle:Ingest:index }
     
 
     
@@ -90,6 +112,10 @@ ZeegaEditorBundle_project_publish:
     pattern: /project/{id}/view
     defaults: { _controller:  ZeegaEditorBundle:Publish:project }
 
+ZeegaEditorBundle_collection_publish:
+    pattern: /collection/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:collection }
+
 
 ZeegaEditorBundle_siteadmin:
     pattern: /siteadmin
@@ -99,23 +125,12 @@ ZeegaEditorBundle_settings:
     pattern: /settings
     defaults: { _controller:  ZeegaEditorBundle:Editor:settings }
 
-ZeegaSearchBundle_search:
-    pattern: /search
-    defaults: { _controller:  ZeegaSearchBundle:Search:search }
-
-
 zeega_editor:
     resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
-    
-zeega_editor:
-    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"
 
+zeega_editor:
+    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"    
+    
 web_profiler: 
     resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 
-
- 
-User:
-
-    pattern:   /user/{name}
-    defaults: { _controller: ZeegaUserBundle:Default:index }
 
