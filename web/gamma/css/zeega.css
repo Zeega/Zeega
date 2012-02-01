@@ -801,6 +801,7 @@ a.white:hover
 
 .zicon.orange{background-image:url('../images/zicons-orange-18.png')}
 .zicon.grey{background-image:url('../images/zicons-grey-18.png')}
+.zicon.darkgrey{background-image:url('../images/zicons-darkgrey-18.png')}
 
 .zicon-map-marker-00{background-position:-162px -114px}
 .zicon-map-marker-01{background-position:-130px -114px}
@@ -834,7 +835,7 @@ a.white:hover
 .zicon-settings{background-position:-291px -312px}
 .zicon-link{background-position:-32px 0}
 .zicon-gear{background-position:-259px -312px}
-.zicon-searchdropdown{background-position: -259px -369px;width: 27px;}
+.zicon-searchdropdown{background-image:url('../images/zicons-darkgrey-18.png');background-position: -259px -369px;width: 27px;}
 .zicon-vert-drag{background-position:-65px -1px}
 
 
@@ -1302,12 +1303,12 @@ body
 
 #database-item-list
 {
-	height : 300px;
+	height : 275px;
 	overflow : hidden;
 	overflow-y : scroll;
 	background : #ddd;
-	-webkit-border-radius: 6px;
-	-webkit-box-shadow : inset 5px 5px 5px #888;
+	border-radius: 6px;
+	box-shadow : inset 5px 5px 5px #888;
 	border : 1px solid #999;
 }
 
