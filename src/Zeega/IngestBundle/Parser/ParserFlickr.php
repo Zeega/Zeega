@@ -146,6 +146,53 @@ class ParserFlickr extends ParserAbstract
 		}
 		return parent::returnResponse($collection, false);
 	}
+	
+	public function parseSetItems($url, $collection)
+	{
+		$setId = $this->getItemId($url);
+		
+		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
+		$setPhotos = $f->photosets_getPhotos($setId);
+		$setInfo = $f->photosets_getInfo($setId);
+		
+		$photos = $setPhotos['photoset']['photo'];
+
+		if($photos)
+		{
+			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
+			
+			$collection->setTitle($setInfo["title"]);
+			$collection->setDescription($setInfo["description"]);
+			$collection->setType('Collection');
+		    $collection->setSource('Flickr');
+		    $collection->setUri('http://zeega.org');
+			$collection->setAttributionUri($url);
+		    
+	        $collection->setChildItemsCount(0);
+	        
+			$collection->setMediaCreatorUsername($ownerInfo["path_alias"]);
+	        $collection->setMediaCreatorRealname($ownerInfo["username"]);
+			$collection->setMediaDateCreated(new \DateTime());
+	        
+			$thumbnailUrlIsSet = false;
+			
+			$collection->setChildItemsCount(count($photos));
+			
+			foreach($photos as $photo)
+			{
+				$item = $this->parseItem($photo['id']);
+				if(!$thumbnailUrlIsSet)
+				{
+					$collection->setThumbnailUrl($item->getThumbnailUrl());
+					$thumbnailUrlIsSet = true;
+				}
+				$collection->addItem($item);
+			}
+			
+			return parent::returnResponse($collection, true);
+		}
+		return parent::returnResponse($collection, false);
+	}
 
 	/*  PRIVATE METHODS */
 
@@ -205,7 +252,7 @@ class ParserFlickr extends ParserAbstract
 			}	
 			//return $sizes;
 			$item->setThumbnailUrl($sizes['Square']['source']);
-			//$metadata->setThumbnailUrl($sizes['Small']['source']);
+			$metadata->setThumbnailUrl($sizes['Small']['source']);
 			
 			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];

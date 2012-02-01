@@ -141,10 +141,11 @@ class ItemsController extends Controller
         $item->setUser($user);
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
         $item->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
         $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
-       
+        
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();

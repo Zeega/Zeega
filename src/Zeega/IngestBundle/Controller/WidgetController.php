@@ -18,15 +18,14 @@ class WidgetController extends Controller
 {
    	public function persistAction()
 	{
-		$session = $this->getRequest()->getSession();
+		//$session = $this->getRequest()->getSession();
 		//return new Response($session->get('widget_url'));
-		if($session->get('widget_url'))
-		{
-			$url = $session->get('widget_url');
-			$this->forward('ZeegaApiBundle:Import:getImportPersist', array(), array("url" => $url));
-			//return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
-			return new Response("http://farm6.staticflickr.com/5219/5507904128_16b760bf84_s.jpg");
-		}
+		//if($session->get('widget_url'))
+		//{
+		//$url = $session->get('widget_url');
+		return $this->forward('ZeegaApiBundle:Import:postParserPersist', array(), array());
+		//return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
+		return new Response("http://farm6.staticflickr.com/5219/5507904128_16b760bf84_s.jpg");
 	}
 	
 	public function openAction()
@@ -66,7 +65,7 @@ class WidgetController extends Controller
 		{
 			$session->set('widget_url',$itemUrl);
 			// new item - check if it is supported
-			$parserResponse = $this->forward('ZeegaApiBundle:Import:getImportCheck', array(), array("url" => $itemUrl))->getContent();
+			$parserResponse = $this->forward('ZeegaApiBundle:Import:getParserValidate', array(), array("url" => $itemUrl))->getContent();
 			$parserResponse = json_decode($parserResponse,true);
 		
 			if(isset($parserResponse))
@@ -77,19 +76,18 @@ class WidgetController extends Controller
 				
 				if($isUrlValid)
 				{
+					
+					
 					$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
 					if($isUrlCollection)
 					{
-						return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
+						//return new Response(var_dump($parserResponse));
+						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
-							'title'=>$items['title'],
-							'creator'=>$items["media_creator_username"],
 							'widget_id'=>$widgetId,
-							'thumb_url'=>$items["thumbnail_url"],
+							'item'=>json_encode($items), 
 							'mycollection'=>$mycollection,
-							'count'=>count($items["child_items_count"]),
-						));
-						
+						));						
 					}
 					else
 					{

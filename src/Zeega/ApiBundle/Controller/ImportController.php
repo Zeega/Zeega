@@ -23,7 +23,7 @@ class ImportController extends Controller
 		);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
-    public function getImportCheckAction()
+    public function getParserValidateAction()
     {
 		$url = $this->getRequest()->query->get('url');
 		$results = array("is_valid"=>false, "is_set"=>false);
@@ -68,10 +68,10 @@ class ImportController extends Controller
     }
 		
     // get_tag_related   GET    /api/tags/{tagid}/related.{_format}
-    public function putImportPersistAction($item)
+    public function postParserPersistAction()
     {
-		$url = $this->getRequest()->query->get('url');
-
+		$url = $this->getRequest()->request->get('attribution_uri');
+		//return new Response($url);
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url)) 
@@ -84,8 +84,22 @@ class ImportController extends Controller
 
 				if($isSet)
 				{
-					$parserMethod = new ReflectionMethod($parserClass, 'parseSet'); // reflection is slow, but it's probably ok here
-					$response = $parserMethod->invokeArgs(new $parserClass, array($url));
+					$collection = new Item();
+
+				    $collection->setTitle($this->getRequest()->request->get('title'));
+					$collection->setDescription($this->getRequest()->request->get('description'));
+			        $collection->setType($this->getRequest()->request->get('type'));
+			        $collection->setSource($this->getRequest()->request->get('source'));
+			        $collection->setUser($user);
+			        $collection->setUri($this->getRequest()->request->get('uri'));
+			        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+					$collection->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+			        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
+			        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+			        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+					
+					$parserMethod = new ReflectionMethod($parserClass, 'parseSetItems'); // reflection is slow, but it's probably ok here
+					$response = $parserMethod->invokeArgs(new $parserClass, array($url,$collection));
 					$collection = $response["items"];
 					
 					$collection->setUser($user);
@@ -103,30 +117,15 @@ class ImportController extends Controller
 					
 					$collection->setUser($user);
 					
-					//$em->persist($collection);
-					//$em->flush();
+					$em->persist($collection);
+					$em->flush();
 					//return new Response("we're good to go");
 					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true));
 			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 				}
 				else
 				{
-					$parserMethod = new ReflectionMethod($parserClass, 'parseSingleItem');
-					$response = $parserMethod->invokeArgs(new $parserClass, array($url));
-					$item = $response["items"];
-					
-					$user = $this->get('security.context')->getToken()->getUser();
-		    		$item->setUser($user);
-
-					$em = $this->getDoctrine()->getEntityManager();
-					$em->persist($item->getMetadata());
-					$em->persist($item->getMedia());
-					$em->flush();
-					$em->persist($item);
-					$em->flush();
-					
-					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => true, 'is_valid' => true));
-			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+					return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
 				}
 			} 
 		}
