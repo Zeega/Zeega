@@ -485,6 +485,9 @@ var Player = {
 
 		//set timeout for auto advance
 		var advanceValue = targetNode.attr.advance;
+		
+		console.log(targetNode)
+		
 		this.setAdvance( advanceValue );
 		
 		/////

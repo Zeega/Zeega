@@ -338,15 +338,19 @@ function closeOpenCitationTabs()
 	
 
 	$('#advance-controls input').change(function(){
+		
 		var attr = Zeega.currentNode.get('attr');
 		if(attr) attr.advance = $(this).val();
 		else attr = {'advance':$(this).val()}
+		console.log( attr )
 		
 		Zeega.currentNode.set({'attr':attr});
+		
 		Zeega.currentNode.save();
 	});
 	
 	$('#node-advance-random input').change(function(){
+		
 		var attr = Zeega.currentNode.get('attr');
 		if( $(this).is(':checked') ) attr.advanceRandom = true;
 		else attr.advanceRandom = false;
@@ -393,30 +397,30 @@ function closeOpenCitationTabs()
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset-list',
-			hoverClass : 'workspace-item-hover',
-			tolerance : 'pointer',
+		accept : '.database-asset-list',
+		hoverClass : 'workspace-item-hover',
+		tolerance : 'pointer',
 
-			//this happens when you drop a database item onto a node
-			drop : function( event, ui )
-				{
-					ui.draggable.draggable('option','revert',false);
-					Zeega.createLayerFromItem( Zeega.draggedItem );
-				}
-		});
+		//this happens when you drop a database item onto a node
+		drop : function( event, ui )
+			{
+				ui.draggable.draggable('option','revert',false);
+				Zeega.createLayerFromItem( Zeega.draggedItem );
+			}
+	});
 		
-		// FAKE STUFF
-		$('#css-change').toggle(function(){
-			$('body').css('background','#fff');
-			$('#route-header').css('color','#444');
-			$('#node-drawer').css('background','#fff');
-			$('.database-asset').css('background','#fff');
-		},function(){
-			$('body').css('background','');
-			$('#route-header').css('color','');
-			$('#node-drawer').css('background','');
-			$('.database-asset').css('background','');
-		});
+	// FAKE STUFF
+	$('#css-change').toggle(function(){
+		$('body').css('background','#fff');
+		$('#route-header').css('color','#444');
+		$('#node-drawer').css('background','#fff');
+		$('.database-asset').css('background','#fff');
+	},function(){
+		$('body').css('background','');
+		$('#route-header').css('color','');
+		$('#node-drawer').css('background','');
+		$('.database-asset').css('background','');
+	});
 
 
 //});
