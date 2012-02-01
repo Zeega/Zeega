@@ -121,8 +121,11 @@ var VisualLayerListView = Backbone.View.extend({
 	//delete this layer from the DB and view
 	delete : function()
 	{
-		this.remove();
-		Zeega.removeLayerFromNode( Zeega.currentNode, this.model );
+		if( confirm('Delete Layer?') )
+		{
+			this.remove();
+			Zeega.removeLayerFromNode( Zeega.currentNode, this.model );
+		}
 	},
 	
 	//	open/close and expanding layer items
