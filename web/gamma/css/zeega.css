@@ -951,6 +951,9 @@ body
 #search-filter { float :left }
 #search-filter .zicon-searchdropdown { position:relative;top:4px;}
 
+/*		quirks for browser		*/
+.collections-menu{position:absolute;top:0;right:0;}
+.collections-menu .menu-items{ top: 10px;right:0;}
 /*******************************
 
 	panels

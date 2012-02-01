@@ -133,6 +133,35 @@
 {% block extras %}
          <!-- TEMPLATES -->
          <div id='templates' class='hidden'>
+	
+			<div id="collection-settings-modal" class='modal hidden' >
+				<div class="modal-header">
+					<a href='#' class='close'>x</a>
+					<h3>Settings for [collection name]</h3>
+				</div>
+				<div class="modal-body clearfix">
+					
+					since the same modal template will be used for each collection,
+					you'll have to use jquery to insert them into the template on demand
+					
+					[change collection input]
+					[delete layer]
+					
+				</div>
+				<div class="modal-footer">
+					<span class='admin-submit'>
+						<br />
+						<a href='#' class='close'>cancel</a>
+						<a href='#' id='save-collection' class='btn success'>save</a>
+					</span>
+				</div>
+			</div> <!-- modal -->
+	
+	
+	
+	
+	
+	
          	<div id="browser-time-filter-template">
          		<form>
 				<p>Timeline <span class="browser-time-filter-value"></span></p>
