@@ -103,7 +103,8 @@ class SearchController extends Controller
 	   
 	   	if(isset($query["tagsName"]))
 	   	{
-	   		$query["tagsName"] = explode(",", $query["tagsName"]);
+	   	
+			$query["tagsName"] = array_map('trim',explode(",",$query["tagsName"] ));
 	   	}
 	   
 	    //  filter results for the logged user
