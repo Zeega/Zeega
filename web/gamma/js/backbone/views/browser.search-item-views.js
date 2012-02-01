@@ -71,6 +71,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		} else {
 			var theElement = this.el;
 
+/*
 			$(this.el).find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
 				function(){
 					
@@ -83,9 +84,31 @@ var BrowserCollectionView = BrowserItemView.extend({
 					$(theElement).find('.browser-collection-edit-menu').hide();
 				}
 			);
-
+*/
 			
-			
+			$(this.el).find('.menu-items li a').click(function(){
+				console.log($(this).data('action'));
+				
+				switch( $(this).data('action') )
+				{
+					case 'settings':
+						console.log('settings modal popup')
+						$('#collection-settings-modal').modal('show');
+						
+						$('#collection-settings-modal').find('#close-modal').click(function(){
+							$('#project-settings-modal').modal('hide');
+						})
+						
+						break;
+					case 'open-in-editor' :
+						ZeegaBrowser.goToEditor(collectionID, collectionTitle);
+						break
+				}
+				
+				
+				event.stopPropagation();
+				
+			});
 
 			//SHARE LINK
 			$(this.el).find('.collection-player-button').click(function(){
@@ -228,9 +251,24 @@ var BrowserCollectionView = BrowserItemView.extend({
 		
 		return this;
 	},
+	
+	events : {
+		'hover .collections-menu': 'openMenu',
+	},
+	
+	openMenu : function()
+	{
+		var menu = $(this.el).find('.menu-toggle').next();
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+
+	},
+
+	
 	getTemplate : function()
 	{
 		
+		/*
 		var html =	
 					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
 					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
@@ -240,6 +278,17 @@ var BrowserCollectionView = BrowserItemView.extend({
 					'<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>'+
 					'<li class="collection-player-button browser-unselected-toggle">share link</li>'+
 					'</ul>';
+		*/
+		
+		var html =	
+					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
+					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
+					'<div class="collections-menu"><a href="#" class="menu-toggle"><span class="zicon zicon-gear orange"></span></a><ul class="menu-items">'+
+					'<li><a href="#" data-action="settings">settings</a></li>'+
+					//'<li>delete collection</li>'+
+					'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+
+					//'<li>share link</li>'+
+					'</ul></div>';
 								
 		return html;
 	},
