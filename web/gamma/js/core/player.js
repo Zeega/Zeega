@@ -539,11 +539,16 @@ var Player = {
 		if(layer.attr.citation){
 			var template = _.template( this.getCitationTemplate() );
 	
+			var title = '';
+			var imgURL = ''; //add a default thumb?
+			if( layer.attr.title ) title = layer.attr.title;
+			if( layer.attr.thumbnail_url ) imgURL = layer.attr.thumbnail_url;
+	
 			var fields = {
-				title : layer.attr.title,
+				title : title,
 				type : layer.type.toLowerCase(),
 				trackback : layer.attr.attribution_url,
-				imgUrl : layer.attr.thumbnail_url,
+				imgUrl : imgURL,
 			};
 			var listItem = $( template( fields ) );
 			
