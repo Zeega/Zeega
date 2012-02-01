@@ -1190,7 +1190,9 @@ body
 	height: 50px;
 	display:inline;
 }
-#frame-list>li+li { margin-left : 12px }
+#frame-list>li{ margin-left : 12px  }
+#frame-list>li:nth-child(16n+1){ margin-left : 0  }
+#frame-list li {margin-bottom:12px;}
 
 
 #add-node
@@ -1212,7 +1214,7 @@ body
 	
 	
 	margin-bottom:6px;
-	padding:12px;
+	padding:12px 12px 0 12px;
 	overflow:hidden;
 }
 
