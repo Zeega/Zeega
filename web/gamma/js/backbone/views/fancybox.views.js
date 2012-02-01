@@ -1,6 +1,6 @@
 var FancyBoxView = Backbone.View.extend({
 	tagName:'div',
-	tagId:'fancybox-media-container',
+	id:'fancybox-media-container',
 	initialize: function(){
 	},
 	
@@ -206,7 +206,7 @@ var FancyBoxView = Backbone.View.extend({
 		var html =	'<div class="fancybox-media-item media-item"></div>'+
 					'<p class="fancybox-editable title"><%= title %></p>'+
 					'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+
-					'<p class="more description fancybox-editable"><%= description %></p>'+
+					'<p class="more description-title">Description</p><p class="more description fancybox-editable"><%= description %></p>'+
 					'<div class="more geo"></div>'+
 					'<div class="more tags"></div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
@@ -261,9 +261,9 @@ var FancyBoxImageView = FancyBoxView.extend({
 	getMediaTemplate : function()
 	{
 		
-		var html =	'<div id="fancybox-image">'+
+		var html =	''+
 						'<img src="<%=src%>" title="<%=title%>" alt="<%=title%>"/>'+
-					'</div>';
+					'';
 								
 		return html;
 	},
