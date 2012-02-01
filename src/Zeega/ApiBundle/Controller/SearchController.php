@@ -42,6 +42,18 @@ class SearchController extends Controller
 		$query["tagsName"]   = $request->query->get('tags_name');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
 		
+		
+		//Match tag type searches
+		
+		if(preg_match('/tag\:(.*)/', $query["queryString"] , $matches)){
+			$query["queryString"] =NULL;
+			$query["tagsName"]=$matches[1];
+		}
+		
+	
+		
+		
+		
 		$query["geo"] = array();
 		$query["geo"]["north"] = $request->query->get('geo_n');
 		$query["geo"]["south"] = $request->query->get('geo_s');
