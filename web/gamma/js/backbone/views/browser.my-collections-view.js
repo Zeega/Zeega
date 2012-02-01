@@ -18,8 +18,9 @@ var MyCollectionsView = Backbone.View.extend({
 		var collectionView = new BrowserCollectionView({ model: m });
         this._views[m.id] = collectionView;
         var addThis = collectionView.render(); 
+        //$(this.el).prepend(addThis.el)
         var noThis = ZeegaBrowser.carousel.add(0, addThis.el);
-	    //$(this.el).prepend(noThis.el);
+	    //;
 	    /*console.log($('.jcarousel-list-horizontal').css("width"));
 	    $('.jcarousel-list-horizontal').css("width", "+=144");
 	     console.log($('.jcarousel-list-horizontal').css("width"));*/

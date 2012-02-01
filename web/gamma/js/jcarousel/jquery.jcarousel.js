@@ -395,6 +395,7 @@
                     if (j <= 0 || c.length) {
                         if (j <= 0) {
                             this.list.prepend(e);
+                            this.options.size++;
                         } else {
                             c.after(e);
                         }
@@ -411,7 +412,7 @@
             } else {
                 e.empty().append(s);
             }
-
+            
             this.format(e.removeClass(this.className('jcarousel-item-placeholder')), i);
 
             var di = this.options.visible !== null ? Math.ceil(this.clipping() / this.options.visible) : null;
