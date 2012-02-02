@@ -25,7 +25,8 @@ class ItemsController extends Controller
 		$query["limit"] = $request->query->get('limit');     //  string
 		
 		//  collection specific parameters
-        $query['returnCollections'] = 1;
+        $query['returnCollections'] = 0;
+		$query['notContentType'] = "Collection";
         
         //  set defaults for missing parameters  
 		if(!isset($query['page']))          $query['page'] = 0;
