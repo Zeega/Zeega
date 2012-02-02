@@ -5,11 +5,11 @@
 {% block title %}Zeega Alpha{% endblock %}
 
 {% block body %}
- 	<div class="item-title playground-title" data-id="{{playground.id}}"  data-short="{{playground.short}}" style="font-size: 24px; ">{{playground.title}}</div><br><br>
 	<div id="projects">
 			<br>
-			<div id="welcome" style="font-size: 24px; color: #65cafc;">Welcome to Zeega, {{displayname}}!</div>
-			
+			<div id="welcome" style="font-size: 24px; color: #65cafc; float: left; ">Welcome to Zeega, {{displayname}}!</div>
+			<div class="clear" style="clear: both;"></div>
+
 			<div id="intro-actions" style="margin-top:35px;">
 				<div id="surf-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px;">
 				Surf the Web<br>
@@ -21,7 +21,7 @@
 				</div>
 				<div id="surf-image" style="float: left; margin-left: 20px;"><img src="{{ asset('gamma/images/surf-graphic.png') }}" /></div>
 				
-				<div id="collect-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 30px;">
+				<div id="collect-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 60px;">
 				Collect & Curate<br>
 				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Organize your media into collections and annotate metadata.</span>
 				<br><br><br>
@@ -31,7 +31,7 @@
 				</div>
 				<div id="collect-image" style="float: left; margin-left: 20px;"><img src="{{ asset('gamma/images/collect-graphic.png') }}" /></div>
 				
-				<div id="edit-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 30px;">
+				<div id="edit-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 60px;">
 				Edit & Mash Up<br>
 				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Use media collected to create your own interactive project.</span>
 				<br><br><br>
@@ -48,9 +48,9 @@
 			
 			
 			
-			<div id="projects-lists">
-				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; ">All Projects</div><br><br>
-				<div id="my-projects-container" class="projects-container my-projects-container" style="padding-left:5px;">
+			<div id="projects-lists" style="margin-top: 50px;">
+				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; margin-left: 15px;">All Projects</div><br><br>
+				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
 							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
@@ -61,7 +61,7 @@
 
 				<!--<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{playground.title}}</div> <br><br>
 				-->
-				<div id="all-projects-container" class="projects-container all-projects-container" style="padding-left:5px; display:none;">
+				<div id="all-projects-container" class="projects-container all-projects-container" style="padding-left:5px; display:none; margin-left:-32px;">
 					<ul>
 						{% for project in allprojects %}
 							<li class='project-{{project.id}}'  style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a target="_blank" href="{{hostname}}{{directory}}project/{{project.id}}/view">{{project.title}}</a> <span class="timeStamp"> </li><div style="clear: both;"></div>
@@ -70,7 +70,7 @@
 				</div>
 			</div> <!--#projects-list-->
 			
-</div>	<!--#projects-->
+</div><br>	<!--#projects-->
 
 {% endblock %}	
 {% block scripts %}
