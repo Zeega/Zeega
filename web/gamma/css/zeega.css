@@ -256,7 +256,7 @@ ul,li
 	-webkit-border-radius: 0px 10px 0px 0px !important;
 	border-radius: 0px 10px 0px 0px;
 	
-	height:44px;
+	height:30px;
 }
 
 #browser-search-filter-toggle #searchbar{float:left;}
@@ -408,6 +408,17 @@ ul,li
 	color:#fff;
 	
 }
+.modal-form input
+{
+	background:transparent;
+	border:none;
+	float:left;
+	height:50px;
+}
+.collection-modal-title{
+	font-size:1.5em;
+}
+
 .browser-add-item-to-collection-hover, .browser-results-collection:hover{
 	background-color:#F15A29 !important;
 	
@@ -524,7 +535,7 @@ ul,li
 }
 #browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{
 	
-	margin: 22px 18px 0 30px;
+	margin: 18px 18px 0 30px;
 	float: right;
 }
 #browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{

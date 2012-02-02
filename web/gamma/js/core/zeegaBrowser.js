@@ -178,7 +178,7 @@ var ZeegaBrowser = {
 		theCollection.destroy({	
 			 				url : deleteURL,
 							success: function(model, response) { 
-								ZeegaBrowser.myCollections.remove(theCollection);
+								
 								$('#browser-my-media').trigger('click');
 								console.log("Deleted collection " + collectionID);		
 			 				},
@@ -230,6 +230,12 @@ var ZeegaBrowser = {
 							ZeegaBrowser.clickedCollectionID = model.id;
 							$('#database-search-text').val("search " + model.get("title"));
 						}
+						//Update title in itemsview if it's there
+						var otherModel = ZeegaBrowser.searchItemsView.collection.get(model.id);
+						if(otherModel!=null) {
+							otherModel.set({"title":model.get("title")});
+						}
+						
 				
 	 				},
 	 				error: function(model, response){

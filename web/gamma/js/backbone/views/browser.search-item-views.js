@@ -46,7 +46,6 @@ var BrowserCollectionView = BrowserItemView.extend({
 		//use template to clone the database items into
 		var template = _.template( this.getTemplate() );
 		
-		//copy the cloned item into the el
 		$(this.el).append( template( blanks ) );
 		$(this.el).addClass('browser-results-collection');
 
@@ -58,7 +57,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 			$(this.el).find('.corner-triangle-for-menu').remove();
 		} else {
 			var theElement = this.el;
-
+			var theModel = this.model;
 /*
 			$(this.el).find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
 				function(){
@@ -75,17 +74,56 @@ var BrowserCollectionView = BrowserItemView.extend({
 */
 			
 			$(this.el).find('.menu-items li a').click(function(){
-				console.log($(this).data('action'));
+				
 				
 				switch( $(this).data('action') )
 				{
 					case 'settings':
-						console.log('settings modal popup')
-						$('#collection-settings-modal').modal('show');
+						
+						
+						$('#collection-settings-modal').find('.collection-modal-title').text(theModel.get('title') + theModel.id);
+						
 						
 						$('#collection-settings-modal').find('#close-modal').click(function(){
-							$('#project-settings-modal').modal('hide');
-						})
+							
+							$('#collection-settings-modal').modal('hide');
+						});
+						$('#collection-settings-modal').find('#collection-modal-delete').click(function(){
+							//need to unbind or else previous events are still attached and data gets messed up
+							$(this).unbind();
+							
+							ZeegaBrowser.deleteCollection(theModel.id);
+							$('#collection-settings-modal').modal('hide');
+							return false;
+						});
+						$('#collection-settings-modal').find('.collection-modal-title').editable(
+							function(value, settings)
+							{ 
+
+								return ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
+
+							},
+							{
+								indicator : 'Saving...',
+								tooltip   : 'Click to edit...',
+								indicator : '<img src="images/loading.gif">',
+								select : true,
+								onblur : 'submit',
+								width: '200px',
+								cssclass : 'modal-form'
+						}).click(function(e) {
+							
+							e.stopPropagation();
+				         	
+				     	});
+						$('#collection-settings-modal').find('#collection-modal-rename-link').click(function(e) {
+							$(this).unbind();
+							//using jeditable framework - pretend like user clicked on the title element
+							$('#collection-settings-modal').find('.collection-modal-title').trigger('click');
+							//stop from selecting the collection filter at the same click
+							e.stopPropagation();
+						});
+						$('#collection-settings-modal').modal('show');
 						
 						break;
 					case 'open-in-editor' :
@@ -97,7 +135,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				event.stopPropagation();
 				
 			});
-
+			/*
 			//SHARE LINK
 			$(this.el).find('.collection-player-button').click(function(){
 				ZeegaBrowser.showShareButton(collectionID);
@@ -141,6 +179,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				//stop from selecting the collection filter at the same click
 				e.stopPropagation();
 			});
+			*/
 		}
 
 		var thisView = this;
