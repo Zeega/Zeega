@@ -347,6 +347,7 @@ function closeOpenCitationTabs()
 	});
 	
 	$('#node-advance-random input').change(function(){
+		
 		var attr = Zeega.currentNode.get('attr');
 		if( $(this).is(':checked') ) attr.advanceRandom = true;
 		else attr.advanceRandom = false;
@@ -393,54 +394,30 @@ function closeOpenCitationTabs()
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset-list',
-			hoverClass : 'workspace-item-hover',
-			tolerance : 'pointer',
+		accept : '.database-asset-list',
+		hoverClass : 'workspace-item-hover',
+		tolerance : 'pointer',
 
-			//this happens when you drop a database item onto a node
-			drop : function( event, ui )
-				{
-					
-					ui.draggable.draggable('option','revert',false);
-					
-					console.log(Zeega.draggedItem)
-					
-					//make the new layer model
-					var settings = {
-						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source'),
-						attr: {
-							'item_id' : Zeega.draggedItem.id,
-							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('uri'),
-							'uri' : Zeega.draggedItem.get('uri'),
-							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
-							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
-							'citation':true,
-						}
-					};
-					
-					console.log(settings);
-					var layerToSave = new Layer(settings);
-
-					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
-										
-					console.log('update node thumb for node: '+ Zeega.currentNode.id);
-				}
-		});
+		//this happens when you drop a database item onto a node
+		drop : function( event, ui )
+			{
+				ui.draggable.draggable('option','revert',false);
+				Zeega.createLayerFromItem( Zeega.draggedItem );
+			}
+	});
 		
-		// FAKE STUFF
-		$('#css-change').toggle(function(){
-			$('body').css('background','#fff');
-			$('#route-header').css('color','#444');
-			$('#node-drawer').css('background','#fff');
-			$('.database-asset').css('background','#fff');
-		},function(){
-			$('body').css('background','');
-			$('#route-header').css('color','');
-			$('#node-drawer').css('background','');
-			$('.database-asset').css('background','');
-		});
+	// FAKE STUFF
+	$('#css-change').toggle(function(){
+		$('body').css('background','#fff');
+		$('#route-header').css('color','#444');
+		$('#node-drawer').css('background','#fff');
+		$('.database-asset').css('background','#fff');
+	},function(){
+		$('body').css('background','');
+		$('#route-header').css('color','');
+		$('#node-drawer').css('background','');
+		$('.database-asset').css('background','');
+	});
 
 
 //});
