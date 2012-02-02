@@ -18,14 +18,7 @@ class WidgetController extends Controller
 {
    	public function persistAction()
 	{
-		//$session = $this->getRequest()->getSession();
-		//return new Response($session->get('widget_url'));
-		//if($session->get('widget_url'))
-		//{
-		//$url = $session->get('widget_url');
-		return $this->forward('ZeegaApiBundle:Import:postParserPersist', array(), array());
-		//return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
-		return new Response("http://farm6.staticflickr.com/5219/5507904128_16b760bf84_s.jpg");
+		return $this->forward('ZeegaApiBundle:Parser:postParserPersist', array(), array());
 	}
 	
 	public function openAction()
@@ -49,9 +42,12 @@ class WidgetController extends Controller
 					 ->getRepository('ZeegaIngestBundle:Item')
 					 ->findItemByAttributionUrl($itemUrl);
 		
+		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
+		
 		if($item)
 		{
 			// item was imported before
+			/*
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
 				'playground'=>$playgrounds[0],
@@ -60,14 +56,22 @@ class WidgetController extends Controller
 				'content_type'=>$item['type'],
 				'mycollection'=>$mycollection,
 			));
+			*/
+			return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
+				'displayname' => $user->getDisplayname(),
+				'widget_id'=>$widgetId,
+				'item'=>json_encode($item), 
+				'mycollection'=>$mycollection,
+			));
 		}
 		else
 		{
 			$session->set('widget_url',$itemUrl);
 			// new item - check if it is supported
-			$parserResponse = $this->forward('ZeegaApiBundle:Import:getParserValidate', array(), array("url" => $itemUrl))->getContent();
+			$parserResponse = $this->forward('ZeegaApiBundle:Parser:getParserValidate', array(), array("url" => $itemUrl))->getContent();
+			//return new Response($parserResponse);
 			$parserResponse = json_decode($parserResponse,true);
-		
+			//return new Response($parserResponse);
 			if(isset($parserResponse))
 			{
 				$isUrlValid = $parserResponse["result"]["is_url_valid"];

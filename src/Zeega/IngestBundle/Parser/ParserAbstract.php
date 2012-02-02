@@ -67,7 +67,7 @@ abstract class ParserAbstract
      * @param String  $url  The url to be checked.
 	 * @return boolean|success
      */
-	abstract public function parseSingleItem($url);
+	abstract public function parseSingleItem($url,$itemId);
 	
 	/**
      * Parses the set of media from the $url and adds the associated media to the database.
@@ -75,5 +75,5 @@ abstract class ParserAbstract
      * @param String  $url  The url to be parsed.
 	 * @return boolean|success
      */	
-	abstract public function parseSet($url);
+	abstract public function parseSet($url, $setId);
 }

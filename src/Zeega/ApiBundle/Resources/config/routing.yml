@@ -18,7 +18,7 @@ tags:
     prefix:   api
     resource: Zeega\ApiBundle\Controller\TagsController
     
-import:
+parser:
     type:     rest
     prefix:   api
-    resource: Zeega\ApiBundle\Controller\ImportController
+    resource: Zeega\ApiBundle\Controller\ParserController
