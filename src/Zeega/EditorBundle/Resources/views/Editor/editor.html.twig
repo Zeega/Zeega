@@ -83,19 +83,37 @@
 							
 							<div id='layers'>
 
-								<ul id="layers-list-visual" class='unstyled'>
-
-									<div class="alert-message warning">
-										<strong>Click icons above or drag items to the visual editor to create a layer.</strong>
-									</div>
-
-								</ul>
+								<ul id="layers-list-visual" class='unstyled'></ul>
 
 							</div> <!-- layers -->
 							
 						</div><!-- #layer-panel -->
 						
 
+
+						<div id='transition-panel' class='panel tray expandable raised'>
+
+							<div class='panel-head'>
+								Edit Transitions
+								<span class='info zicon zicon-info'
+									data-placement = "right"
+									data-original-title='Transitions'
+									data-content='This is where you edit the way this frame transitions to the next frame.'
+								></span>
+							</div>
+
+							<div class="panel-content inset-tray hidden">
+								
+								<ul id='advance-controls' class='unstyled'>
+									<li><input type="radio" value='0' id="playback" name="advance"  /><label for="playback"> After playback</label></li>
+									<li><input type="radio" value ='-1' id="manual" name="advance" /><label for="manual"> Manually</label></li>
+									<li><input type="radio" value='10' id="time" name="advance" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label></li>
+								</ul>
+							</div><!-- panel-content -->
+							
+						</div><!-- #transition-panel -->
+						
+						
 						
 						<div id='database-panel' class='panel tray expandable raised'
 							title='Find Media'
@@ -151,27 +169,7 @@
 						
 						</div><!-- #database-panel -->
 						
-						<div id='transition-panel' class='panel tray expandable raised'>
-
-							<div class='panel-head'>
-								Edit Transitions
-								<span class='info zicon zicon-info'
-									data-placement = "right"
-									data-original-title='Transitions'
-									data-content='This is where you edit the way this frame transitions to the next frame.'
-								></span>
-							</div>
-
-							<div class="panel-content inset-tray hidden">
-								
-								<ul id='advance-controls' class='unstyled'>
-									<li><input type="radio" value='0' id="playback" name="advance"  /><label for="playback"> After playback</label></li>
-									<li><input type="radio" value ='-1' id="manual" name="advance" /><label for="manual"> Manually</label></li>
-									<li><input type="radio" value='10' id="time" name="advance" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label></li>
-								</ul>
-							</div><!-- panel-content -->
-							
-						</div><!-- #transition-panel -->
+						
 						
 						
 

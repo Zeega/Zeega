@@ -861,7 +861,7 @@ a.white:hover
   src: local('Montserrat Regular'), local('Montserrat-Regular'), url('http://themes.googleusercontent.com/font?kit=zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0') format('woff');
 }
 
-#route-title { font-family: 'Montserrat', sans-serif }
+#route-title, #route-title input  { font-family: 'Montserrat', sans-serif }
 
 /*******************************
 
