@@ -33,6 +33,13 @@ class ItemRepository extends EntityRepository
                 ->setParameter(3, $query['collection_id']);
 		}
 		
+		if(isset($query['notContentType']))
+      	{
+      	    $content_type = strtoupper($query['notContentType']);
+
+      	  	$qb->andWhere('i.type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
+		}
+		
         if(isset($query['contentType']))
       	{
       	    $content_type = strtoupper($query['contentType']);
