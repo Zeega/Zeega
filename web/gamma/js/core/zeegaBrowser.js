@@ -27,8 +27,7 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				$('#browser-my-collections-drawer').jcarousel({ initCallback:   ZeegaBrowser.mycarousel_initCallback, visible:5,});
-				
+				 
 			}
 		});
 
