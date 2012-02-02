@@ -12,11 +12,11 @@
 }
 .fancybox-media-wrapper{
 	height:469px;
-	overflow: auto;
 	text-align:center;
 }
 .fancybox-media-wrapper-more{
 	text-align:left;
+	overflow: auto;
 }
 .fancybox-media-item{
 	width:630px;
@@ -160,10 +160,14 @@
 
 }
 
- .fancybox-media-item-more iframe{
+ .fancybox-media-item-more iframe,  .fancybox-media-item-more video{
 	width:100% !important;
 	margin:0 !important;
 	height:200px !important;
+}
+.fancybox-media-item video{
+	border: 1px solid #000;
+	background-color:black;
 }
 .fancybox-media-item-more audio{
 	width:90% !important;
@@ -198,8 +202,19 @@
 	float:left;
 }
 
-.fancybox-delete-button{
+.fancybox-delete-button,.fancybox-confirm-delete-button{
 	float:right;
+}
+.fancybox-confirm-delete-button{
+	display:none;
+	font-variant:normal;
+	font-size:14px;
+	letter-spacing:0;
+	font-weight:bold;
+	
+}
+.no-do-not-delete, .yes-confirm-delete{
+	margin-left:10px;
 }
 .fancybox-form{
 	display: inherit;
