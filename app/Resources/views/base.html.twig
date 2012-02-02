@@ -45,20 +45,24 @@
 					<div id="header-title">
 						<ul>
 						
-							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"> Zeega Alpha </a></li>
-							{% if title %}
-							<li>>></li>
-								<li class='drop-down clearfix '>
-									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
+							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -3px;"/></a></li>
+						
+							<li class='drop-down clearfix' style="margin-left: 45px;">
+									<a  class='drop-down-toggle' href="#" class="dark">Collections</a>
 									<ul class='drop-down-menu'>
-											{% if adminMenu and is_granted('ROLE_SUPER_USER') %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
-											<li><a href="{{path('ZeegaEditorBundle_playground', { 'short': short })}}" class="dark">Projects</a></li>
-											<li><a href="{{path('ZeegaEditorBundle_browser', { 'short': short })}}" class="dark">Collections</a></li>
+										<li></li>
 									</ul>
-									
-									
-								</li>
-							{% endif %}
+							</li>
+							
+							<li class='drop-down clearfix' style="margin-left: 20px;">
+									<a  class='drop-down-toggle' href="#" class="dark">Projects</a>
+									<ul class='drop-down-menu'>
+										<li></li>
+									</ul>
+							</li>
+							
+							<li class='item add-media' style="margin-left: 20px;"><a href="#">Add Media</a></li>							
+
 						</ul>
 						
 						
@@ -70,7 +74,6 @@
 		
 						<ul>
 							<li class='item'><a href="{{ path('ZeegaEditorBundle_faq')}}">FAQ</a></li>
-							<li class='item add-media' ><a href="#">Add Media</a></li>							
 							<li class='drop-down clearfix item'>
 								Logged in as <a href='#' class='drop-down-toggle'>{{displayname}}</a>
 								<ul class='drop-down-menu'>	
