@@ -12,9 +12,10 @@ class ResponseHelper
     static public function compressTwigAndGetJsonResponse($renderedTwig)
     {
         //$renderedTwig = preg_replace('/\s+/','',$renderedTwig);
+		
         $renderedTwig = preg_replace(array('/\s{2,}/','/\n/','/\p{Zl}/'), '',$renderedTwig);
         $renderedTwig = preg_replace(array('/\s:\s/'), ':',$renderedTwig);
-        $renderedTwig = preg_replace('/\s+/', '', $renderedTwig);
+        //$renderedTwig = preg_replace('/\s+/', '', $renderedTwig);
         
         //array("\r", "\r\n", "\n")
         $response = new Response($renderedTwig);
