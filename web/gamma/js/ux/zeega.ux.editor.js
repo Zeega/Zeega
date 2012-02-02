@@ -248,30 +248,23 @@ function closeOpenCitationTabs()
 		console.log('infocus refresh database')
 	});
 	
-	
-	function submitenter(inputfield,e)
-	{
-		var keycode;
-
-		console.log('submitenter');
-
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		else return true;
+	$('#database-search-text').keypress(function(e){
+		var keycode = e.which;
 
 		if (keycode == 13)
 		{
 			Database.search( $("#database-search-text").val() );
+			
 			//open database tray if closed
 			if( $('#database-panel .panel-content').is(':hidden') )
 				$('#database-panel .panel-content').show('blind',{'direction':'vertical'});
-			
-			
-			console.log('pressed enter')
+
 		}else{
 			return true;
 		}
-	}
+	});
+	
+	
 	
 	//node tray sortable and sorting events
 	
@@ -293,11 +286,6 @@ function closeOpenCitationTabs()
 		}
 	});
 	
-	//search bar focus stuff
-	$('#database-search-text').focus(function(){
-		$(this).css('color','#444');
-		$(this).val('');
-	});
 	
 	$('#database-search-text').click(function(event){
 		event.stopPropagation();
