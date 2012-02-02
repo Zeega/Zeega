@@ -65,19 +65,9 @@ var ZeegaBrowser = {
 	},
 	doCollectionSearch : function(collectionID){
 		
-		/* When user clicks on a collection default to items view
-		instead of collections view */
-		$('#browser-item-count').closest('li').removeClass('browser-unselected-toggle');
-		$('#browser-item-count').closest('li').addClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().removeClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().addClass('browser-unselected-toggle');
-		$('#browser-results-collections').hide();
-		$('#browser-results-items').show();
-		
 		/* For the moment - clear other filters like query & type */
 		$('#database-search-text').val('');
-		$('#database-search-filter').val('All');
-		this.search.set({'user':-2, 'collection':collectionID});
+		this.search.set({'user':-2, 'collection':collectionID, content:'all'});
 		this.doSearch();
 	},
 	
