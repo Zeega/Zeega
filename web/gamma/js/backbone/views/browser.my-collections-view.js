@@ -67,6 +67,8 @@ var MyCollectionsView = Backbone.View.extend({
 			}, this);
 		
 		$('#browser-my-collections-count').text("("+this.collection.length+")");
+
+		//launch jcarousel if hasn't been launched yet
 		if (ZeegaBrowser.carousel ==null){
 			$(this.el).jcarousel({ initCallback:   ZeegaBrowser.mycarousel_initCallback});
 		}
