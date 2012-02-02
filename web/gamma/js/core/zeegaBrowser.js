@@ -168,7 +168,11 @@ var ZeegaBrowser = {
 		theCollection.destroy({	
 			 				url : deleteURL,
 							success: function(model, response) { 
-								
+								//Current tab is this collection they are deleting
+								if (ZeegaBrowser.clickedCollectionID == model.id){
+									ZeegaBrowser.removeCollectionFilter();
+									$('#browser-collection-filter-tab').hide();
+								}
 								$('#browser-my-media').trigger('click');
 								console.log("Deleted collection " + collectionID);		
 			 				},
