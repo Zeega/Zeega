@@ -10,10 +10,17 @@
 	text-decoration:none;
 	color:#F15A29;
 }
+.fancybox-media-wrapper{
+	height:469px;
+	overflow: auto;
+	text-align:center;
+}
+.fancybox-media-wrapper-more{
+	text-align:left;
+}
 .fancybox-media-item{
 	width:630px;
-	min-height:380px;
-	background-color:gray;
+	
 	text-align:center;
 	margin-bottom:5px;
 	border-radius:5px;
@@ -29,7 +36,7 @@
 #fancybox-media-container .source{
 	margin-left:30px;	
 }
-#fancybox-media-container .description-title{
+#fancybox-media-container .subheader{
 	font-size:1em;
 	font-weight:bold;
 	margin-top:20px;
@@ -37,7 +44,7 @@
 #fancybox-media-container .description, #fancybox-media-container .tags{
 	color:#777;
 	font-size: 12px;
-	margin-top:10px;
+	
 }
 #fancybox-media-container .description{
 	margin: 0 0 20px 0;
@@ -67,6 +74,7 @@
 	height:auto !important;
 	width:auto !important;
 	padding-left:0;
+
 }
 #fancybox-media-container .map{
 	text-align: right;
@@ -90,6 +98,7 @@
 #fancybox-media-container .tag{
 	
 	margin-right:4px;
+	margin-top:4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius:4px;
 	border-radius: 4px;
@@ -99,6 +108,7 @@
 .tagsinput input{
 	padding:2px !important;
 	font-size:11px !important;
+	color:#F15A29 !important;
 }
 #fancybox-media-container .tag-hover-class{
 	border-left:none;
@@ -131,29 +141,45 @@
 	display: inline;
 	
 }
-.fancybox-media-item-more{
-	width:40%;
-	min-height:200px;
-	height:395px;
+.fancybox-left-column{
 	float:left;
 	margin-right: 20px;
+	text-align:left;
+	padding:0;
+	
 }
-.fancybox-media-item-more audio, .fancybox-media-item-more iframe{
+.fancybox-left-column-more{
+	width:275px;
+}
+.fancybox-media-item-more{
+	width:100%;
+	min-height:200px;
+	text-align: left;
+	padding: 0;
+	/*height:395px;*/
+
+}
+
+ .fancybox-media-item-more iframe{
 	width:100% !important;
 	margin:0 !important;
-
+	height:200px !important;
 }
-
+.fancybox-media-item-more audio{
+	width:90% !important;
+	margin:0 !important;
+}
 .fancybox-media-container-more p{
 	text-align:left;
 }
 .fancybox-media-item img{
 	max-width:99%;
 	max-height:85%;
-	
 }
 .fancybox-media-item audio{
 	margin:170px;
+	border: 10px solid #CCC;
+	-webkit-border-radius: 6px;
 }
 .fancybox-inner{
 	overflow: hidden !important;

@@ -4,6 +4,9 @@
 	MAP VIEW
 	
 *******************************************/
+.geo{
+	display: table;
+}
 .edit-geo-location{
 	cursor:pointer;
 	float: left;
@@ -79,7 +82,7 @@ ul,li
 
 
 #browser-results{
-	
+	border:1px solid #555;
 	padding:0 !important;
 	margin-top:-3px;
 	float:none;
@@ -89,9 +92,9 @@ ul,li
 	-moz-border-radius-bottomleft: 10px;
 	-webkit-border-radius: 0px 0px 10px 10px !important;
 	border-radius: 0px 0px 10px 10px;
-	-webkit-box-shadow: inset 2px 2px 2px 2px #333;
-	-moz-box-shadow: inset 2px 2px 2px 2px #333;
-	box-shadow: inset 2px 2px 2px 2px #333;
+	-webkit-box-shadow: inset 2px 2px 2px 2px #333 !important;
+	-moz-box-shadow: inset 2px 2px 2px 2px #333 !important;
+	box-shadow: inset 2px 2px 2px 2px #333 !important;
 	
 }
 
@@ -99,6 +102,7 @@ ul,li
 	min-height:200px !important;
 	max-height:350px !important;
 	overflow:auto !important;
+	margin:5px;
 }
 #browser-my-collections-label p{
 	color:#FFF;
@@ -252,7 +256,7 @@ ul,li
 	-webkit-border-radius: 0px 10px 0px 0px !important;
 	border-radius: 0px 10px 0px 0px;
 	
-	height:44px;
+	height:30px;
 }
 
 #browser-search-filter-toggle #searchbar{float:left;}
@@ -262,7 +266,9 @@ ul,li
 	float:left;
 	
 }
-
+#browser-toggle-all-media-vs-my-media ul{
+	margin-left:0;
+}
 #browser-results-wrapper{
 	position:relative;
 
@@ -277,6 +283,7 @@ ul,li
 #browser-my-collections-drawer{
 	margin:5px 0 0 10px;
 	
+	
 }
 .browser-results-image,.browser-results-collection{
 
@@ -284,7 +291,7 @@ ul,li
 	margin: 0;
 	border-radius: 3px;
 	/*margin:10px 0px 0px 10px;*/
-	margin:5px;
+	margin:4px;
 	padding: 5px;
 	width:  144px;
 	height: 110px;
@@ -401,6 +408,17 @@ ul,li
 	color:#fff;
 	
 }
+.modal-form input
+{
+	background:transparent;
+	border:none;
+	float:left;
+	height:50px;
+}
+.collection-modal-title{
+	font-size:1.5em;
+}
+
 .browser-add-item-to-collection-hover, .browser-results-collection:hover{
 	background-color:#F15A29 !important;
 	
@@ -517,7 +535,7 @@ ul,li
 }
 #browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{
 	
-	margin: 22px 18px 0 30px;
+	margin: 18px 18px 0 30px;
 	float: right;
 }
 #browser-close-timeline, #browser-open-timeline, #browser-open-in-editor{

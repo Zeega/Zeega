@@ -11,6 +11,7 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
 	initialize : function() {
 		
       	this.collection.bind('add',   this.addItem, this);
+      	this.collection.bind('remove',   this.removeItem, this);
 		this.collection.bind('reset', this.resetViews, this);
 	},
 	resetViews: function(){
@@ -30,6 +31,17 @@ var BrowserSearchCollectionsView = Backbone.View.extend({
         // add the item view to the set of views
         this._views.push(collectionView);
 
+    },
+    removeItem: function(m)
+    {
+    	/*for (var i=0;i<this._views.length;i++){
+    		var thisView = this._views[i];
+    		if (thisView.model == m) {
+	    		thisView.remove(); 
+    			this._views.splice(i,1);
+    	}
+    	*/
+    	
     },
 	render: function()
 	{	

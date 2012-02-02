@@ -12,6 +12,11 @@ var ZeegaBrowser = {
 	searchItemsView : null,
 	searchCollectionsView : null,
 
+	mycarousel_initCallback : function (carousel, state) {
+	    if (state == 'init')
+	        ZeegaBrowser.carousel = carousel;
+	        
+	},
 	init : function()
 	{
 		//Load MyCollections  (renamed from inconsistently named myCollectionsModel )
@@ -22,7 +27,7 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				$('#browser-my-collections-drawer').jcarousel();
+				$('#browser-my-collections-drawer').jcarousel({ initCallback:   ZeegaBrowser.mycarousel_initCallback, visible:5,});
 				
 			}
 		});
@@ -60,19 +65,9 @@ var ZeegaBrowser = {
 	},
 	doCollectionSearch : function(collectionID){
 		
-		/* When user clicks on a collection default to items view
-		instead of collections view */
-		$('#browser-item-count').closest('li').removeClass('browser-unselected-toggle');
-		$('#browser-item-count').closest('li').addClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().removeClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().addClass('browser-unselected-toggle');
-		$('#browser-results-collections').hide();
-		$('#browser-results-items').show();
-		
 		/* For the moment - clear other filters like query & type */
 		$('#database-search-text').val('');
-		$('#database-search-filter').val('All');
-		this.search.set({'user':-2, 'collection':collectionID});
+		this.search.set({'user':-2, 'collection':collectionID, content:'all'});
 		this.doSearch();
 	},
 	
@@ -142,9 +137,7 @@ var ZeegaBrowser = {
 							
 						});
 		}
-		this.search.set({ 
-							content:$('#database-search-filter').val()
-						});
+		
 		this.search.updateQuery();
 	}, 
 	showShareButton : function(collectionID){	
@@ -175,7 +168,7 @@ var ZeegaBrowser = {
 		theCollection.destroy({	
 			 				url : deleteURL,
 							success: function(model, response) { 
-								ZeegaBrowser.myCollections.remove(theCollection);
+								
 								$('#browser-my-media').trigger('click');
 								console.log("Deleted collection " + collectionID);		
 			 				},
@@ -227,6 +220,12 @@ var ZeegaBrowser = {
 							ZeegaBrowser.clickedCollectionID = model.id;
 							$('#database-search-text').val("search " + model.get("title"));
 						}
+						//Update title in itemsview if it's there
+						var otherModel = ZeegaBrowser.searchItemsView.collection.get(model.id);
+						if(otherModel!=null) {
+							otherModel.set({"title":model.get("title")});
+						}
+						
 				
 	 				},
 	 				error: function(model, response){

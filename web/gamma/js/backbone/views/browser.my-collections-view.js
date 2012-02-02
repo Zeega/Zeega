@@ -18,11 +18,19 @@ var MyCollectionsView = Backbone.View.extend({
 		var collectionView = new BrowserCollectionView({ model: m });
         this._views[m.id] = collectionView;
         var addThis = collectionView.render(); 
-	    $(this.el).prepend(addThis.el);
+        //$(this.el).prepend(addThis.el)
+        var noThis = ZeegaBrowser.carousel.add(0, addThis.el);
+	    //;
+	    /*console.log($('.jcarousel-list-horizontal').css("width"));
+	    $('.jcarousel-list-horizontal').css("width", "+=144");
+	     console.log($('.jcarousel-list-horizontal').css("width"));*/
 	    $('#browser-my-collections-count').text("("+this.collection.length+")");
+
        
 	},
 	addCollections : function(){
+		$(this.el).empty();
+
 		var mainColl = this.collection;
 
 		for (var i=0; i<this.collection.length; i++){
@@ -30,13 +38,6 @@ var MyCollectionsView = Backbone.View.extend({
 			var collectionView = new BrowserCollectionView({ model: myBrowserCollection });
 	        this._views[myBrowserCollection.id] = collectionView;
 		}
-		/*_.each(mainColl, function(myBrowserCollection){
-				// item draws itself
-				console.log('why dont i get here????');
-				var collectionView = new BrowserCollectionView({ model: myBrowserCollection });
-	        	this._views[myBrowserCollection.id] = collectionView;
-	        	
-			}, this);*/
 		
        this.render();
 	},
