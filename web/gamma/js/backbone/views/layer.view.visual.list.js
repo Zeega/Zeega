@@ -99,18 +99,14 @@ var VisualLayerListView = Backbone.View.extend({
 			.keypress(function(e){
 				if(e.which == 13)
 				{
-					_this.saveLink( $(this).val() );
 					$(this).blur();
 					return false;
 				}
-				else
-				{
-					return true;
-				}
+				else return true;
 			})
 			.blur(function(){
+				$(this).effect('highlight',{},3000);
 				_this.saveLink( $(this).val() );
-				return false;
 			})
 	},
 	
@@ -126,8 +122,6 @@ var VisualLayerListView = Backbone.View.extend({
 				css : false
 			}
 		};
-		
-		console.log(url)
 		this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
 	},
 	
