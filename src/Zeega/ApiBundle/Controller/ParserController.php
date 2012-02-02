@@ -32,7 +32,7 @@ class ParserController extends Controller
 		$url = $this->getRequest()->query->get('url');
 		$results = array("is_valid"=>false, "is_set"=>false);
 		$matches = array();
-		
+		//return new Response(var_dump($url));
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -45,7 +45,7 @@ class ParserController extends Controller
 					
 					$parserMethod = new ReflectionMethod($parserClass, 'isUrlSupported'); // reflection is slow, but it's probably ok here
 					$isValid = $parserMethod->invokeArgs(new $parserClass, array($url));
-					//return new Response(var_dump($isValid));
+					
 				
 					$results = array("is_valid"=>$isValid, "is_set"=>$isSet);
 					
@@ -82,7 +82,7 @@ class ParserController extends Controller
     public function postParserPersistAction()
     {
 		$url = $this->getRequest()->request->get('attribution_uri');
-		return new Response(var_dump($this->getRequest()->request));
+		//return new Response(var_dump($url));
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url)) 
@@ -136,7 +136,7 @@ class ParserController extends Controller
 				}
 				else
 				{
-					return new Response("yo");
+					//return new Response("yo");
 					return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
 				}
 			} 

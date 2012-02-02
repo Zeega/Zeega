@@ -224,28 +224,4 @@ class WidgetController extends Controller
 			} 
     	}
 	}
-  	
-    public function thumbAction($query="Help"){
-    	 /*
-    	 $doc= $this->getDoctrine();
-    	 $loader = $this->get('item_loader');
-    
-    	 $loader->loadTagThumbs($doc);
-    	 
-    	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
-   		*/
-    }
-    
-    public function mediadataAction($query="Help"){
-    	 
-    	 $doc= $this->getDoctrine();
-    	 $loader = $this->get('item_loader');
-    
-    	 $loader->loadMediaData($doc);
-    	 
-    	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
-   
-    }
-    
-    
 }

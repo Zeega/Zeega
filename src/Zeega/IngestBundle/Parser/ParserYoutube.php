@@ -42,6 +42,73 @@ class ParserYoutube extends ParserAbstract
      */
 	public function parseSingleItem($url,$itemId)
 	{
+		$originalUrl = 'http://gdata.youtube.com/feeds/api/videos/'.$itemId;
+
+		// read feed into SimpleXML object
+		$entry = simplexml_load_file($originalUrl);
+		
+		$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
+		$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
+
+		$item= new Item();
+		$metadata= new Metadata();
+		$media = new Media();
+
+		$arr = explode(':',$entry->id);
+		$entryId = $arr[count($arr)-1];
+
+		$attrs = $entryMedia->group->player->attributes();
+		$attributionUrl = $attrs['url'];
+
+		$item->setUri((string)$yt->videoid);
+		$item->setTitle((string)$entryMedia->group->title);
+		//$item->setDescription((string)$entryMedia->group->description);
+		$item->setDescription((string)$entryMedia->group->keywords);
+		$item->setAttributionUri((string)$attributionUrl);
+		$item->setDateCreated(new \DateTime("now"));
+		$item->setType('Video');
+		$item->setSource('Youtube');
+		$item->setChildItemsCount(0);
+
+		foreach($entry->children('http://www.georss.org/georss') as $geo)
+		{
+			foreach($geo->children('http://www.opengis.net/gml') as $position)
+			{
+				// Coordinates are separated by a space
+				$coordinates = explode(' ', (string)$position->pos);
+
+				$item->setMediaGeoLatitude((string)$coordinates[0]);
+				$item->setMediaGeoLongitude((string)$coordinates[1]);
+				break;
+			}
+		}
+
+		$item->setMediaCreatorUsername((string)$entry->author->name);
+		$item->setMediaCreatorRealname('Unknown');
+
+		// read metadata from xml
+		$attrs = $entryMedia->group->thumbnail->attributes();
+		$thumbnailUrl = (string)$attrs['url'];
+
+		// write metadata
+		$metadata->setArchive('Youtube');
+		$metadata->setLicense((string)$entryMedia->group->license);
+		$metadata->setThumbnailUrl((string)$thumbnailUrl);
+		
+		$item->setThumbnailUrl((string)$thumbnailUrl);
+		
+		// read media from xml
+		$attrs = $yt->duration->attributes();
+		$duration = $attrs['seconds'];
+
+		// write media information
+		$media->setDuration((string)$duration);
+
+		$item->setMetadata($metadata);
+		$item->setMedia($media);
+		
+		return parent::returnResponse($item, true);
+		/*
 		$originalUrl='http://gdata.youtube.com/feeds/api/videos/'.$itemId;
 		$ch = curl_init();
 		$timeout = 5; // set to zero for no timeout
@@ -64,9 +131,8 @@ class ParserYoutube extends ParserAbstract
 		$metadata= new Metadata();
 		$media = new Media();
 
-
 		$item->setTitle((string) $xml->title);
-
+		
 		$item->setUri($itemId);
 		$item->setAttributionUri("http://www.youtube.com/watch?v=$itemId");
 		$item->setMediaCreatorUsername((string)$xml->author->name);
@@ -81,6 +147,7 @@ class ParserYoutube extends ParserAbstract
 		$item->setMetadata($metadata);
 
 		return parent::returnResponse($item, true);
+		*/
 	}
 	
 	/**
@@ -89,10 +156,8 @@ class ParserYoutube extends ParserAbstract
      * @param String  $url  The url to be checked.
 	 * @return boolean|success
      */
-	public function getSetInfo($url)
+	public function getSetInfo($url, $setId)
 	{
-		$setId = $this->getItemId($url);
-
 		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
 		$setInfo = $f->photosets_getInfo($setId);
 
@@ -255,113 +320,5 @@ class ParserYoutube extends ParserAbstract
 		}
 
 		return parent::returnResponse($collection, true);
-	}
-
-	/*  PRIVATE METHODS */
-
-	private function getItemId($url)
-	{
-		if(strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/'))
-		{
-			if(strstr($url,'sets'))
-			{
-				$split = explode('/sets/',$url);
-				$split = explode('/',$split[1]);
-				$id = $split[0];
-			}
-			else 
-			{
-				$split = explode('/photos/',$url);
-				$split = explode('/',$split[1]);
-				$id = $split[1];
-			}
-
-			return $id;
-		}
-		return -1;
-	}
-	
-	private function parseItem($itemId)
-	{
-		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
-		$info = $f->photos_getInfo($itemId);
-		$size = $f->photos_getSizes($itemId);
-		
-		if(is_array($info)&&is_array($size)) // why?
-		{
-			$item = new Item();
-			$metadata = new Metadata();
-			$media = new Media();
-			$tags = array();
-			
-			$item->setAttributionUri($info['urls']['url'][0]['_content']);
-			
-			if($info['tags'])
-			{
-				foreach($info['tags']['tag'] as $tag)
-				{
-					array_push($tags, ucwords(strtolower($tag['raw'])));
-				}
-				$attr['tags']=$tags;
-			}
-			else
-			{
-				$attr['tags']='';
-			}
-			
-			foreach ($size as $s)
-			{
-				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
-			}	
-			//return $sizes;
-			$item->setThumbnailUrl($sizes['Square']['source']);
-			$metadata->setThumbnailUrl($sizes['Small']['source']);
-			
-			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
-			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
-
-			if(isset($sizes['Large']))$itemSize='Large';
-			elseif(isset($sizes['Original'])) $itemSize='Original';
-			elseif(isset($sizes['Medium'])) $itemSize='Medium';
-			else $itemSize='Small';
-			
-			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
-			
-			$item->setUri($sizes[$itemSize]['source']);
-			$item->setChildItemsCount(0);
-			$media->setWidth($sizes[$itemSize]['width']);
-			$media->setHeight($sizes[$itemSize]['height']);
-			
-			$attr['sizes']=$sizes;
-			$item->setDescription($info['description']);
-			
-			if($info['license'])$metadata->setLicense(self::$license[$info['license']]);
-			else $metadata->setLicense('All Rights Reserved');
-		
-			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
-			else $item->setMediaCreatorUsername($info['owner']['realname']);
-			$item->setMediaCreatorRealname($info['owner']['realname']);
-			$attr['creator_nsid']=$info['owner']['nsid'];
-			$item->setTitle($info['title']);
-			
-			if(array_key_exists ('location',$info)){
-				if($info['location']['latitude']){
-					$item->setMediaGeoLatitude($info['location']['latitude']);
-					$item->setMediaGeoLongitude($info['location']['longitude']);
-				}
-			}
-		
-			$metadata->setArchive('Flickr'); 
-			$item->setType('Image');
-			$item->setSource('Image');
-			$metadata->setAttributes($attr);
-			$item->setMedia($media);
-			$item->setMetadata($metadata);
-
-			return $item;	
-		}
-		else{
-			return false;
-		}
 	}
 }
