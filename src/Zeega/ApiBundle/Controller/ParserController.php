@@ -83,61 +83,66 @@ class ParserController extends Controller
     {
 		$url = $this->getRequest()->request->get('attribution_uri');
 		//return new Response(var_dump($url));
+		$matches = array();
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
-			if (preg_match($parserRegex, $url)) 
+			if (preg_match($parserRegex, $url, $matches)) 
 			{
-				$user = $this->get('security.context')->getToken()->getUser();
-				$em = $this->getDoctrine()->getEntityManager();
+				if(count($matches) > 1)
+				{
+					$setId = $matches[1];
+					$user = $this->get('security.context')->getToken()->getUser();
+					$em = $this->getDoctrine()->getEntityManager();
 				
-				$parserClass = $parserInfo["ParserClass"];
-				$isSet = $parserInfo["IsSet"];
+					$parserClass = $parserInfo["ParserClass"];
+					$isSet = $parserInfo["IsSet"];
 
-				if($isSet)
-				{
-					$collection = new Item();
+					if($isSet)
+					{
+						$collection = new Item();
 
-				    $collection->setTitle($this->getRequest()->request->get('title'));
-					$collection->setDescription($this->getRequest()->request->get('description'));
-			        $collection->setType($this->getRequest()->request->get('type'));
-			        $collection->setSource($this->getRequest()->request->get('source'));
-			        $collection->setUser($user);
-			        $collection->setUri($this->getRequest()->request->get('uri'));
-			        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
-					$collection->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
-			        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
-			        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
-			        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+					    $collection->setTitle($this->getRequest()->request->get('title'));
+						$collection->setDescription($this->getRequest()->request->get('description'));
+				        $collection->setType($this->getRequest()->request->get('type'));
+				        $collection->setSource($this->getRequest()->request->get('source'));
+				        $collection->setUser($user);
+				        $collection->setUri($this->getRequest()->request->get('uri'));
+				        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+						$collection->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+				        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
+				        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+				        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
 					
-					$parserMethod = new ReflectionMethod($parserClass, 'parseSetItems'); // reflection is slow, but it's probably ok here
-					$response = $parserMethod->invokeArgs(new $parserClass, array($url,$collection));
-					$collection = $response["items"];
+						$parserMethod = new ReflectionMethod($parserClass, 'parseSetItems'); // reflection is slow, but it's probably ok here
+						$response = $parserMethod->invokeArgs(new $parserClass, array($setId,$collection));
+						$collection = $response["items"];
 					
-					$collection->setUser($user);
-					$collectionItems = $collection->getChildItems();
+						$collection->setUser($user);
+						$collectionItems = $collection->getChildItems();
 					
-					foreach($collectionItems as $item)
-			        {
-						$item->setUser($user);
-						$em->persist($item->getMetadata());
-						$em->persist($item->getMedia());
+						foreach($collectionItems as $item)
+				        {
+							$item->setUser($user);
+							$em->persist($item->getMetadata());
+							$em->persist($item->getMedia());
+							$em->flush();
+							$em->persist($item);
+							$em->flush();
+						}
+					
+						$collection->setUser($user);
+					
+						$em->persist($collection);
 						$em->flush();
-						$em->persist($item);
-						$em->flush();
+						//return new Response("we're good to go");
+						$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true));
+				        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 					}
-					
-					$collection->setUser($user);
-					
-					$em->persist($collection);
-					$em->flush();
-					//return new Response("we're good to go");
-					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true));
-			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
-				}
-				else
-				{
-					//return new Response("yo");
-					return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
+					else
+					{
+						//return new Response("yo");
+						return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
+					}
 				}
 			} 
 		}
