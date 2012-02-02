@@ -58,14 +58,17 @@ class WidgetController extends Controller
 			$session->set('widget_url',$itemUrl);
 			// new item - check if it is supported
 			$parserResponse = $this->forward('ZeegaApiBundle:Parser:getParserValidate', array(), array("url" => $itemUrl))->getContent();
+			//return new Response($parserResponse);
 			$parserResponse = json_decode($parserResponse,true);
 
 			if(isset($parserResponse))
 			{
+				
 				$isUrlValid = $parserResponse["result"]["is_url_valid"];
 				$isUrlCollection = $parserResponse["result"]["is_url_collection"];
+				$message = $parserResponse["result"]["message"];
 				$items = $parserResponse["items"];
-				$message = $parserResponse["message"];
+				
 				
 				if($isUrlValid)
 				{
@@ -92,7 +95,14 @@ class WidgetController extends Controller
 				}
 				else
 				{
-					
+					return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
+						'displayname' => $user->getDisplayname(),
+						'widget_id'=>$widgetId,
+						'item'=>json_encode($items), 
+						'mycollection'=>$mycollection,
+						'urlmessage' => $message,
+						'url'=> $itemUrl,
+					));
 				}
 			}
 

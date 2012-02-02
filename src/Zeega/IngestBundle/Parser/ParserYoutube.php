@@ -17,24 +17,6 @@ use SimpleXMLElement;
 class ParserYoutube extends ParserAbstract
 {
 	/**
-     * Returns true if the $url is supported by the parser.
-     *
-     * @param String  $url  The url to be parsed.
-	 * @return boolean|supported
-     */
-	public function isUrlSupported($url)
-	{
-		/* Info fROM: http://www.flickr.com/services/api/misc.urls.html
-		http://www.flickr.com/photos/{user-id}/ - photostream
-		http://www.flickr.com/photos/{user-id}/{photo-id} - individual photo
-		http://www.flickr.com/photos/{user-id}/sets/ - all photosets
-		http://www.flickr.com/photos/{user-id}/sets/{photoset-id} - single photoset
-		*/
-		/// return strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/');
-		return true;
-	}
-	
-	/**
      * Parses a single item from the $url and adds the associated media to the database.
      *
      * @param String  $url  The url to be checked.
@@ -104,10 +86,23 @@ class ParserYoutube extends ParserAbstract
 		// write media information
 		$media->setDuration((string)$duration);
 
+		
+		// access control
+		$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
+		$embed = (isset($yt->accessContro)) ? 'true' : 'false';
+		
+		
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
-		
-		return parent::returnResponse($item, true);
+		if(isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
+		{
+			return parent::returnResponse($item, false,"This video is not embeddable and cannot be added to Zeega.");
+		}
+		else
+		{
+			return parent::returnResponse($item, true);
+		}
+
 		/*
 		$originalUrl='http://gdata.youtube.com/feeds/api/videos/'.$itemId;
 		$ch = curl_init();
@@ -274,7 +269,7 @@ class ParserYoutube extends ParserAbstract
 			$item->setUri((string)$yt->videoid);
 			$item->setTitle((string)$entryMedia->group->title);
 			//$item->setDescription((string)$entryMedia->group->description);
-			$item->setDescription((string)$entryMedia->group->keywords);
+			$item->setDescription((string)$entryMedia->group->description);
 			$item->setAttributionUri((string)$attributionUrl);
 			$item->setDateCreated(new \DateTime("now"));
 			$item->setType('Video');
@@ -309,16 +304,20 @@ class ParserYoutube extends ParserAbstract
 			// read media from xml
 			$attrs = $yt->duration->attributes();
 			$duration = $attrs['seconds'];
-
+			
 			// write media information
 			$media->setDuration((string)$duration);
-
+			
+			// access control
+			$attrs = $yt->accessControl->attributes();
+			$duration = $attrs['seconds'];
+			
 			$item->setMetadata($metadata);
 			$item->setMedia($media);
 
 			$collection->addItem($item);;
 		}
 
-		return parent::returnResponse($collection, true);
+		return parent::returnResponse($collection, true, var_dump);
 	}
 }

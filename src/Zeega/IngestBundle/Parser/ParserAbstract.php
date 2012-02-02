@@ -30,9 +30,9 @@ abstract class ParserAbstract
 		$config[$key] = $value;
 	}
 	
-	public function returnResponse($object, $success)
+	public function returnResponse($object, $success, $message = "")
 	{
-		return array("success" => $success, "items" => $object);
+		return array("success" => $success, "items" => $object, "message" => $message);
 	}
 	
 	/**
@@ -52,14 +52,6 @@ abstract class ParserAbstract
 			return $config["key"];
 		}
 	}
-	
-	/**
-     * Returns true if the $url is supported by the parser.
-     *
-     * @param String  $url  The url to be parsed.
-	 * @return boolean|supported
-     */
-	abstract public function isUrlSupported($url);
 	
 	/**
      * Parses a single item from the $url and adds the associated media to the database.

@@ -7,30 +7,27 @@
 {% block title %}Zeega Alpha{% endblock %}
 
 {% block body %}
-
-
-	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
-		<h1>{{header}}</h1>
-		<h>{{message}}</h>
-		</br>
-		<a href="{{url}}">{{urlmessage}}</a>
-		<div style="width:100%; margin-top:35px; margin-right:25px;">
-		
-			<div style="position:relative; width:200px; height: 200px; float:left;">
-				
-				<!--
-				<div id="import-item" style='text-align:center; vertical-align:center;'><div style="border: dotted 1px white; width:150px; height:150px; border-radius: 5px;"  >
-					<div style="font-size: 48px; font-weight: bold; margin-top: 25px; color: red;">+</div><br>
-					<div style="color: red;">Drag media here</div>
-				</div>
-				-->
+	
+	<div id="widget-wrapper" data-id="{{widget_id}}"> 
+		<div id="item-view">
+			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="http://farm3.staticflickr.com/2037/2163470598_fb7571cdab_s.jpg" class="item-image" />
+			<div style="clear:both;">&nbsp;</div>
+			<span id="widget-title">&nbsp;</span></br>
+			<span id="widget-creator">&nbsp;</span></br>
+			<div id="description" style="display:none; height:400px;">
+				<p id="widget-description" class="widget-textbox" >description</p>
 			</div>
-		</div>	
-	</div>
+		</div>
+		<div id='message' style="color: red;">{{urlmessage}}</div>
+	</div><!--#widget-wrapper-->
 	
+{% endblock %}
 	
-
-{% endblock %}	
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/drag.js')}}"></script>  
+	<script data-main="{{ asset('gamma/js/main.widget.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+	<script type="text/javascript" language="Javascript">
+		//bootstrapping data
+		var itemJSON = "{{item|e('js')}}";
+		var itemCollectionJSON = "{{mycollection|e('js')}}";
+	</script>	
 {% endblock %}

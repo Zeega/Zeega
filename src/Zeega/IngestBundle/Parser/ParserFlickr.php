@@ -20,24 +20,7 @@ class ParserFlickr extends ParserAbstract
 			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
 	
 	/**
-     * Returns true if the $url is supported by the parser.
-     *
-     * @param String  $url  The url to be parsed.
-	 * @return boolean|supported
-     */
-	public function isUrlSupported($url)
-	{
-		/* Info fROM: http://www.flickr.com/services/api/misc.urls.html
-		http://www.flickr.com/photos/{user-id}/ - photostream
-		http://www.flickr.com/photos/{user-id}/{photo-id} - individual photo
-		http://www.flickr.com/photos/{user-id}/sets/ - all photosets
-		http://www.flickr.com/photos/{user-id}/sets/{photoset-id} - single photoset
-		*/
-		return strstr($url,'flickr.com')&&strstr($url,'/photos/')&&!strstr($url,'/sizes/');
-	}
-	
-	/**
-     * Parses a single item from the $url and adds the associated media to the database.
+     * Parses a single item from the $url.
      *
      * @param String  $url  The url to be checked.
 	 * @return boolean|success
@@ -243,6 +226,4 @@ class ParserFlickr extends ParserAbstract
 		}
 		return parent::returnResponse($collection, false);
 	}
-
-	/*  PRIVATE METHODS */
 }
