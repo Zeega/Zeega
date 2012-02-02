@@ -318,7 +318,7 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	{
 		
 		var html =	'<div id="fancybox-video">'+
-						'<video controls="true"  width="640px" preload><source src="<%=src%>"></video>'+
+						'<video controls="true"  width="90%" preload><source src="<%=src%>"></video>'+
 					'</div';
 								
 		return html;

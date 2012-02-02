@@ -160,10 +160,14 @@
 
 }
 
- .fancybox-media-item-more iframe{
+ .fancybox-media-item-more iframe,  .fancybox-media-item-more video{
 	width:100% !important;
 	margin:0 !important;
 	height:200px !important;
+}
+.fancybox-media-item video{
+	border: 1px solid #000;
+	background-color:black;
 }
 .fancybox-media-item-more audio{
 	width:90% !important;

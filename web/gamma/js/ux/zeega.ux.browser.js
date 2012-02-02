@@ -88,8 +88,8 @@ $(document).ready(function() {
     		buttons	: {}
     	},
     	beforeClose : function() {
-    			//reset fancybox MORE/LESS view
-    			//sessionStorage.setItem('moreFancy', false);
+    			//set video src to null to prevent browser bug
+    			$('video').attr("src", null);
 
     	},
 		
