@@ -201,11 +201,7 @@ var NodeViewCollection = Backbone.View.extend({
 		var _this = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
 		
-		console.log(adding to node collection)
-		
 		_(Zeega.route.nodes).push(node);
-		
-		console.log(node)
 		
 		//save node if the layer is new!
 		if( node.isNew() )
@@ -214,7 +210,6 @@ var NodeViewCollection = Backbone.View.extend({
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
 			//if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
 			
-
 			node.save(
 				{},
 				{
@@ -231,8 +226,8 @@ var NodeViewCollection = Backbone.View.extend({
 							//clone layers and place them into the layer array
 							_.each( savedNode.oldLayerIDs , function(layerID, i){
 								var dupeLayer = Zeega.route.layerCollection.get(layerID).clone();
-								dupeLayer.id = savedNode.get('layers')[i];
-								dupeLayer.set({id:savedNode.get('layers')[i]});
+								dupeLayer.id = savedNode.get('layers')[i] +''; //make into string
+								dupeLayer.set({id:savedNode.get('layers')[i] + '' }); //make into string
 							
 								Zeega.addToLayerCollections( savedNode, dupeLayer );
 							})

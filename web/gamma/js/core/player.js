@@ -435,6 +435,10 @@ var Player = {
 	*/
 	preloadLayer : function( layerID )
 	{
+		console.log('layerID:')
+		console.log(layerID);
+		layerID = ""+layerID;
+		
 		//if not loading or already loaded
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
