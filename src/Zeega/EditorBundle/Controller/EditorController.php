@@ -109,6 +109,7 @@ class EditorController extends Controller
 				
 				return $this->render('ZeegaEditorBundle:Editor:playground.admin.html.twig', array(
 					// last displayname entered by the user
+					'user_id' => $user->getId(),
 					'displayname' => $user->getdisplayname(),
 					'userrole' => $user->getRoles(),
 					'playground'=>$playground,
@@ -211,7 +212,7 @@ class EditorController extends Controller
 					->getRepository('ZeegaEditorBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 	return $this->render('ZeegaEditorBundle:Editor:playground.html.twig', array(
-	  
+	  	'user_id' => $user->getId(),
 		'displayname' => $user->getDisplayName(),
 		'myprojects'   => $myprojects,
 		'allprojects'   => $projects,
@@ -254,6 +255,7 @@ class EditorController extends Controller
 		return $this->render('ZeegaEditorBundle:Editor:browser.html.twig', array(
 			// last displayname entered by the user
 			'displayname' => $user->getDisplayName(),
+			'user_id' => $user->getId(),
 			'title'   => $playground->getTitle(),
 			'short'=>$playground->getShort(),
 			'playground' => $playground,			
@@ -328,6 +330,7 @@ class EditorController extends Controller
 				// last displayname entered by the user
 					'displayname' => $user->getDisplayName(),
 					'title'   => $playground->getTitle(),
+					'user_id' => $user->getId(),
 					'projecttitle'   => $project->getTitle(),
 					'projectid'   =>$project->getId(),
 					'route'=>$route,
@@ -407,6 +410,7 @@ class EditorController extends Controller
 		return $this->render('ZeegaEditorBundle:Editor:faq.html.twig', array(
 		'displayname' => $user->getDisplayName(),
 		'title'=>'',
+		'user_id' => $user->getId(),
 		'super' => $super,
 		'page'=>'faq',
 		'myprojects'=>false,
@@ -419,7 +423,7 @@ class EditorController extends Controller
 	
 	public function siteadminAction(){
 		return $this->render('ZeegaEditorBundle:Editor:siteadmin.html.twig',array(
-			
+			'user_id' => $user->getId(),
             'page'=>'home',
             ));
 	} 
@@ -438,6 +442,7 @@ class EditorController extends Controller
 				return $this->render('ZeegaEditorBundle:Editor:settings.html.twig', array(
 				// last displayname entered by the user
 				'email' => $user->getEmail(),
+				'user_id' => $user->getId(),
 				'displayname' => $user->getDisplayName(),
 				'userrole' => $user->getRoles(),
 				'bio'=>$user->getBio(),
