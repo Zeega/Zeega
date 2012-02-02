@@ -12,11 +12,11 @@
 }
 .fancybox-media-wrapper{
 	height:469px;
-	overflow: auto;
 	text-align:center;
 }
 .fancybox-media-wrapper-more{
 	text-align:left;
+	overflow: auto;
 }
 .fancybox-media-item{
 	width:630px;
