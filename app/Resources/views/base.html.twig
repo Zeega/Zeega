@@ -91,7 +91,7 @@
 					<div id="header-title" style="margin-left: -30px;">
 						<ul>
 						
-							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -3px;"/></a></li>
+							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
 							{% if playground %}
 							<li class='drop-down clearfix' >
 									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaEditorBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
@@ -114,6 +114,11 @@
 							<li class='drop-down clearfix' >
 									<a  class='drop-down-toggle' href="#" class="dark">Projects</a>
 									<ul class='drop-down-menu' style="width:200px;">
+									
+												<li><a id="new-project" href="#" style="font-size: 12px;">Create New Project</a></li><br>
+												
+												<hr>
+
 									
 										{% for project in myprojects %}
 												<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="dark">{{project.title}}</a></li><br>
