@@ -245,9 +245,13 @@ var BrowserCollectionView = BrowserItemView.extend({
 				
 				ui.draggable.draggable('option','revert',false);
 				
-				$(this).find('img').attr("src", ZeegaBrowser.draggedItem.get("thumbnail_url"));
-				$(this).find('.browser-item-count').text('Adding item...');
+				var theElement = this;
+				var oldThumbnail = $(theElement).find('img').attr("src");
+				var oldCount = thisView.model.get('child_items_count');
 				
+				$(theElement).find('img').attr("src", ZeegaBrowser.draggedItem.get("thumbnail_url")).hide().fadeIn('slow');
+				$(theElement).find('.browser-item-count').text('Adding item...');
+
 				if(ZeegaBrowser.draggedItem.id){
 					thisView.model.addNewItemID(ZeegaBrowser.draggedItem.id);
 					
@@ -255,11 +259,14 @@ var BrowserCollectionView = BrowserItemView.extend({
 					thisView.model.save({ }, 
 								{
 									success: function(model, response) { 
-										console.log(response.collections.child_items_count);
+										$(theElement).find('img').attr("src", oldThumbnail).hide().fadeIn('slow');
+										
+										//Alert user they added an item that's already in the collection
+										if (oldCount == model.get('child_items_count')){
+											$(theElement).find('.duplicate-item').show().fadeOut(3000);
+										}
 										ZeegaBrowser.draggedItem = null;
-										//Update items count
-										model.set({'child_items_count':response.collections.child_items_count }); 
-										ZeegaBrowser.myCollectionsView.render();
+					
 					 				},
 					 				error: function(model, response){
 					 					ZeegaBrowser.draggedItem = null;
@@ -309,7 +316,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 		
 		var html =	
 					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
-					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
+					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span><br/><span class="duplicate-item">Duplicate item</span></p></a>'+
 					'<div class="collections-menu"><a href="#" class="menu-toggle"><span class="zicon zicon-gear orange"></span></a><ul class="menu-items">'+
 					'<li><a href="#" data-action="settings">settings</a></li>'+
 					//'<li>delete collection</li>'+

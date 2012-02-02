@@ -172,8 +172,13 @@ var FancyBoxView = Backbone.View.extend({
 				cssclass : 'fancybox-form'
 		});
 		
-		//DELETE button
-		$(this.el).find('.fancybox-delete-button').click(function(e){
+		$(this.el).find('.no-do-not-delete').click(function(e){
+			$('.fancybox-delete-button').show();
+			$('.fancybox-confirm-delete-button').hide();
+			e.preventDefault();
+		});
+		$(this.el).find('.yes-confirm-delete').click(function(e){
+			
 			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
 						+ _this.model.id;
 			
@@ -195,6 +200,13 @@ var FancyBoxView = Backbone.View.extend({
 				 					console.log(response);
 				 				}
 		 					});
+			e.preventDefault();
+		});
+		//DELETE button
+		$(this.el).find('.fancybox-delete-button').click(function(e){
+			$(this).hide();
+			$('.fancybox-confirm-delete-button').show();
+			
 		 	e.preventDefault();
 		});
 		
@@ -217,7 +229,11 @@ var FancyBoxView = Backbone.View.extend({
 						
 					'</div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
-						'<p class="less fancybox-more-button"><a href=".">view more</a></p><p class="more fancybox-less-button"><a href=".">view less</a></p><p class="fancybox-delete-button more"><a href=".">delete</a></p>'+
+						'<p class="less fancybox-more-button"><a href=".">view more</a></p><p class="more fancybox-less-button"><a href=".">view less</a></p>'+
+						'<p class="fancybox-delete-button more"><a href=".">delete</a></p>'+
+						'<p class="fancybox-confirm-delete-button">are you totally sure you want to delete this? '+
+						'<a href="." class="yes-confirm-delete">yes</a> <a class="no-do-not-delete" href=".">no</a></p>'+
+						
 					'</div>';
 								
 		return html;
@@ -318,7 +334,7 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	{
 		
 		var html =	'<div id="fancybox-video">'+
-						'<video controls="true"  width="640px" preload><source src="<%=src%>"></video>'+
+						'<video controls="true"  width="90%" preload><source src="<%=src%>"></video>'+
 					'</div';
 								
 		return html;

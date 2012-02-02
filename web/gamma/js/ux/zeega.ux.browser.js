@@ -52,6 +52,13 @@ $(document).ready(function() {
 		return false;
 	});
 
+	//Click event for collection filter
+	$('#browser-collection-filter-tab').click(function(){
+		
+		ZeegaBrowser.doCollectionSearch(ZeegaBrowser.clickedCollectionID);
+		ZeegaBrowser.showCollectionFilter();
+		return false;
+	});
 
 	//Sets variable for Fancybox "more" view to false each time the page is reloaded
 	sessionStorage.setItem('moreFancy', false);
@@ -81,8 +88,8 @@ $(document).ready(function() {
     		buttons	: {}
     	},
     	beforeClose : function() {
-    			//reset fancybox MORE/LESS view
-    			//sessionStorage.setItem('moreFancy', false);
+    			//set video src to null to prevent browser bug
+    			$('video').attr("src", null);
 
     	},
 		
