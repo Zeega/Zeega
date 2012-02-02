@@ -42,11 +42,11 @@ $(document).ready(function() {
 	// filter database by type
 	$('#search-filter li a').click(function(){
 		
-		//
-		// call your filtered search method here
-		// this is what I call in the editor:
-		// Database.filterByMediaType( $(this).data('search-filter') );
-		//
+		ZeegaBrowser.search.set({ 
+							content:$(this).data('search-filter')
+						});
+		ZeegaBrowser.resetPageCount();
+		ZeegaBrowser.doSearch();
 		
 		clearMenus();
 		return false;
@@ -82,7 +82,8 @@ $(document).ready(function() {
     	},
     	beforeClose : function() {
     			//reset fancybox MORE/LESS view
-    			sessionStorage.setItem('moreFancy', false);
+    			//sessionStorage.setItem('moreFancy', false);
+
     	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
@@ -126,7 +127,11 @@ $(document).ready(function() {
 		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
 		return false;
 	});
-
+	$( '#database-search-text' ).bind('focus', function(e){
+	   
+	     $(this).val('');
+	   
+	 });
 	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();

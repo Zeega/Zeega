@@ -485,6 +485,9 @@ var Player = {
 
 		//set timeout for auto advance
 		var advanceValue = targetNode.attr.advance;
+		
+		console.log(targetNode)
+		
 		this.setAdvance( advanceValue );
 		
 		/////
@@ -539,11 +542,16 @@ var Player = {
 		if(layer.attr.citation){
 			var template = _.template( this.getCitationTemplate() );
 	
+			var title = '';
+			var imgURL = ''; //add a default thumb?
+			if( layer.attr.title ) title = layer.attr.title;
+			if( layer.attr.thumbnail_url ) imgURL = layer.attr.thumbnail_url;
+	
 			var fields = {
-				title : layer.attr.title,
+				title : title,
 				type : layer.type.toLowerCase(),
 				trackback : layer.attr.attribution_url,
-				imgUrl : layer.attr.thumbnail_url,
+				imgUrl : imgURL,
 			};
 			var listItem = $( template( fields ) );
 			
@@ -803,38 +811,50 @@ var Player = {
 	
 	getTemplate : function()
 	{
-		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
-		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
-		html +=			"<div id='preview-close' class='player-overlay'><span class='zicon orange zicon-close' ></span></div>";
-		html += 		"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>";
-		html += 			"<div class='arrow-background'></div>";
-		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";
-		html += 		"</div>";
-		html += 		"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>";
-		html += 			"<div class='arrow-background'></div>";
-		html += 			"<img height='75' width='35' onclick='Player.goRight();return false'>";
-		html += 		"</div>";
-		html += 		"<div id='preview-media'></div>";
-		html += 		"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
-		html += 	"</div></div>";
+		html =
+		
+		"<div id='preview-wrapper'><div id='zeega-player'>"+
+			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
+		
+		
+		if(this.zeega) html +=
+			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
+		
+		
+		html +=
+		
+			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
+				"<div class='arrow-background'></div>"+
+					"<img  height='75' width='35' onclick='Player.goLeft();return false'>"+
+				"</div>"+
+				"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>"+
+					"<div class='arrow-background'></div>"+
+					"<img height='75' width='35' onclick='Player.goRight();return false'>"+
+				"</div>"+
+				"<div id='preview-media'></div>"+
+				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>"+
+			"</div>"+
+		"</div>";
 		
 		return html;
 	},
 	
 	getCitationTemplate : function()
 	{
-		var html =	'<li class="clearfix">';
-		html+=			'<div class="citation-tab">';
-		html+=				'<span class="zicon grey zicon-<%= type %>"></span>';
-		html+=			'</div>';
-		html+=			'<div class="citation-content hidden">';
-		html+=				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
-		html+=				'<div class="citation-body">';
-		html+=				'<div class="citation-title"><%= title %></div>';
-		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
-		html+=				'</div>';
-		html+=			'</div>';
-		html+=		'</li>';
+		var html =
+		
+		'<li class="clearfix">'+
+			'<div class="citation-tab">'+
+				'<span class="zicon grey zicon-<%= type %>"></span>'+
+			'</div>'+
+			'<div class="citation-content hidden">'+
+				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>'+
+				'<div class="citation-body">'+
+					'<div class="citation-title"><%= title %></div>'+
+					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>'+
+				'</div>'+
+			'</div>'+
+		'</li>';
 		return html;
 	}
 

@@ -30,13 +30,7 @@
 							
 							<li id="browser-all-media" class="tab browser-unselected-toggle">Everything</li>
 							<li id="browser-my-media" class="tab browser-selected-toggle">My Stuff</li>
-							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span><img id="browser-collection-filter-tab-edit-icon" src="{{asset('gamma/images/edit-icon.png')}}">
-								<ul id="browser-collection-filter-edit-menu">
-									<li id="browser-rename-collection">rename collection</li>
-									<li id="browser-delete-collection">delete collection</li>
-									<li id="collection-to-editor-button">open in editor</li>
-									<li id="collection-player-button">share link</li>
-								</ul>
+							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span>
 							</li>
 						</ul>
 					</div>
@@ -62,7 +56,7 @@
 								</ul>
 						</div>
 						
-						<input id='database-search-text' type='text' name='database-search' placeholder='search database'/>
+						<input id='database-search-text' type='text' name='database-search' placeholder='search my stuff'/>
 						
 					</div><!-- searchbar -->
 					
@@ -137,22 +131,19 @@
 			<div id="collection-settings-modal" class='modal hidden' >
 				<div class="modal-header">
 					<a href='#' class='close'>x</a>
-					<h3>Settings for [collection name]</h3>
+					<h3><span class="collection-modal-title"></span> <a id="collection-modal-rename-link" class="modal-button">[rename collection]</a></h3>
 				</div>
 				<div class="modal-body clearfix">
 					
-					since the same modal template will be used for each collection,
-					you'll have to use jquery to insert them into the template on demand
-					
-					[change collection input]
-					[delete layer]
+					Link to share: http://link/to/share/here/?
 					
 				</div>
 				<div class="modal-footer">
 					<span class='admin-submit'>
 						<br />
-						<a href='#' class='close'>cancel</a>
-						<a href='#' id='save-collection' class='btn success'>save</a>
+						<a href='#' class="modal-button" id='collection-modal-delete'>[delete collection]</a>
+						<a href='#' class='close'>close</a>
+						<!--<a href='#' id='save-collection' class='btn success'>save</a>-->
 					</span>
 				</div>
 			</div> <!-- modal -->
@@ -259,7 +250,7 @@
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.js')}}"></script>
 
 		<!-- JCarousel -->
-		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.min.js')}}"></script>
+		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.js')}}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/jcarousel/skins/zeega/skin.css')}}" />
 
 		<!-- Filament slider for timeline -->

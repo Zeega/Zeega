@@ -24,9 +24,10 @@ var Node = Backbone.Model.extend({
 		
 		//this is the function that only calls updateThumb once after n miliseconds
 		this.updateNodeThumb = _.debounce( this.updateThumb, 2000 );
-		
+
 		//this.bind( 'change:layers', this.onLayerUpdate );
 	},
+	
 	
 	noteChange:function()
 	{
