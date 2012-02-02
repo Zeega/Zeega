@@ -266,12 +266,7 @@ var ZeegaBrowser = {
 		$('#browser-collection-filter-tab').show();
 		$('#database-search-text').val("search " + ZeegaBrowser.clickedCollectionTitle);
 
-		//click event
-		$('#browser-collection-filter-tab').click(function(){
-			
-			ZeegaBrowser.doCollectionSearch(ZeegaBrowser.clickedCollectionID);
-			ZeegaBrowser.showCollectionFilter();
-		});
+		
 		//select the right tab
 		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
 		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');
