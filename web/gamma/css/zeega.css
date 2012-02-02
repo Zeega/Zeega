@@ -499,8 +499,13 @@ ul,li
 
 }
 
-.browser-item-count{
+.browser-item-count, .duplicate-item{
 	font-size:9px;
+}
+.duplicate-item{
+	display:none;
+	color:#F15A29;
+	font-weight:bold;
 }
 .browser-img-small{
 	
