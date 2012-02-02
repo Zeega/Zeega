@@ -297,6 +297,7 @@ var Zeega = {
 				//if it's not the current node, then be quiet about it
 				//this.route.layerCollection.add( layer , {silent:true} ); // do I need this??
 				//we still need to add it to the type collection though
+				this.route.layerCollection.add( layer, {silent:true} );
 			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
 			}
 		}

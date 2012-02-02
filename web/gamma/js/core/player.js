@@ -63,6 +63,8 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		console.log(this)
+		
 		$('title').html(this.data.project.title);
 		
 		//set the current route

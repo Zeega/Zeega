@@ -200,7 +200,8 @@ var NodeViewCollection = Backbone.View.extend({
 	{
 		var _this = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
-				
+		
+		console.log(adding to node collection)
 		
 		_(Zeega.route.nodes).push(node);
 		
