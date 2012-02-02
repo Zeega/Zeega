@@ -221,33 +221,30 @@ var Zeega = {
 		var adv = false;
 		if( !_.isNull(this.currentNode.get('attr')) && !_.isNull( this.currentNode.get('attr').advance ) )
 			adv = this.currentNode.get('attr').advance;
-		if( adv != false )
+			
+		var advanceControls = $('#advance-controls');
+
+		if(adv > 0)
 		{
-			if(adv > 0)
-			{
-				//after time in seconds
-				$('#advance-controls').find('#time').attr('checked','true');
-				$('#advance-controls').find('#manual').removeAttr('checked');
-				$('#advance-controls').find('#playback').removeAttr('checked');
-				$('#advance-time').val(adv);
-			}else if(adv == 0){
-				//after media
-				$('#advance-controls').find('#time').removeAttr('checked');
-				$('#advance-controls').find('#manual').removeAttr('checked');
-				$('#advance-controls').find('#playback').attr('checked','true');
-				$('#advance-time').val(10);
-			}else{
-				//manual
-				$('#advance-controls').find('#time').removeAttr('checked');
-				$('#advance-controls').find('#manual').attr('checked','true');
-				$('#advance-controls').find('#playback').removeAttr('checked');
-				$('#advance-time').val(10);
-			}
+			//after time in seconds
+			advanceControls.find('input[id="time"]').prop('checked', true );
+			advanceControls.find('input[id="manual"]').prop('checked', false );
+			advanceControls.find('input[id="playback"]').prop('checked', false );
+			$('#advance-time').val(adv);
+		}else if( adv == -1 ){
+			//manual
+
+			advanceControls.find('input[id="time"]').prop('checked', false );
+			advanceControls.find('input[id="manual"]').prop('checked', true );
+			advanceControls.find('input[id="playback"]').prop('checked', false );
+
+			$('#advance-time').val(10);
+		
 		//if the attr doesn't exist, then give it default values
-		}else{
-			$('#advance-controls').find('#time').removeAttr('checked');
-			$('#advance-controls').find('#manual').removeAttr('checked');
-			$('#advance-controls').find('#playback').attr('checked', true);
+		}else if( !adv ){
+			advanceControls.find('input[id="time"]').prop('checked', false );
+			advanceControls.find('input[id="manual"]').prop('checked', false );
+			advanceControls.find('input[id="playback"]').prop('checked', true );
 			$('#advance-time').val(10);
 		}
 		
@@ -342,6 +339,26 @@ var Zeega = {
 				if( layer.layerClass.thumbUpdate ) node.noteChange() ;
 			}
 		}
+	},
+	
+	//frame arg is optional. Defaults to currentNode if not set.
+	createLayerFromItem : function( item, frame )
+	{
+		if( _.isUndefined(frame)) frame = this.currentNode;
+		var newLayer = new Layer({
+			type: Zeega.draggedItem.get('source'),
+			attr: {
+				'item_id' : item.id,
+				'title' : item.get('title'),
+				'url' : item.get('uri'),
+				'uri' : item.get('uri'),
+				'thumbnail_url' : item.get('thumbnail_url'),
+				'attribution_url' : item.get('attribution_uri'),
+				'citation':true,
+			}
+		});
+
+		this.addLayerToNode( frame, newLayer );
 	},
 	
 	updateAndSaveNodeLayer : function(node, layer)

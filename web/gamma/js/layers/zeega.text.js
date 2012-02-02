@@ -254,7 +254,8 @@ var TextLayer = ProtoLayer.extend({
 		//need this to be accessable inside various functions
 		var _this  = this;
 
-		var previewFontSize = this.attr.fontSize/600 * window.innerWidth;
+		var workspaceWidth = 704; // this should be editable depending on the workspace ratio
+		var previewFontSize = this.attr.fontSize / workspaceWidth  * window.innerWidth;
 		var previewWidth = parseInt( parseFloat( this.attr.width ) / 6.0 ) + 2;
 		var previewHeight = parseInt( parseFloat( this.attr.height ) / 4.0 ) + 6;
 		
