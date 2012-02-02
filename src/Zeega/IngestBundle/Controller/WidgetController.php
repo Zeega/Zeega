@@ -40,27 +40,16 @@ class WidgetController extends Controller
 		// check if the item exists on the database	
 		$item = $this->getDoctrine()
 					 ->getRepository('ZeegaIngestBundle:Item')
-					 ->findItemByAttributionUrl($itemUrl);
+					 ->findOneBy(array("attribution_uri" => $itemUrl));
 		
 		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
 		
 		if($item)
 		{
 			// item was imported before
-			/*
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0],
-				'title'=>$item['title'],
-				'item_id'=>$item['id'],
-				'content_type'=>$item['type'],
-				'mycollection'=>$mycollection,
-			));
-			*/
-			return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
-				'displayname' => $user->getDisplayname(),
-				'widget_id'=>$widgetId,
-				'item'=>json_encode($item), 
+				'item' => $item,
 				'mycollection'=>$mycollection,
 			));
 		}
@@ -69,19 +58,17 @@ class WidgetController extends Controller
 			$session->set('widget_url',$itemUrl);
 			// new item - check if it is supported
 			$parserResponse = $this->forward('ZeegaApiBundle:Parser:getParserValidate', array(), array("url" => $itemUrl))->getContent();
-			//return new Response($parserResponse);
 			$parserResponse = json_decode($parserResponse,true);
-			//return new Response($parserResponse);
+
 			if(isset($parserResponse))
 			{
 				$isUrlValid = $parserResponse["result"]["is_url_valid"];
 				$isUrlCollection = $parserResponse["result"]["is_url_collection"];
 				$items = $parserResponse["items"];
+				$message = $parserResponse["message"];
 				
 				if($isUrlValid)
 				{
-					
-					
 					$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
 					if($isUrlCollection)
 					{
@@ -105,6 +92,7 @@ class WidgetController extends Controller
 				}
 				else
 				{
+					
 				}
 			}
 

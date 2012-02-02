@@ -291,7 +291,7 @@ class ItemRepository extends EntityRepository
         
         return $q->getArrayResult();
     }
-    
+    /*
       public function findItemByAttributionUrl($url)
     {
         $query = $this->getEntityManager()
@@ -306,7 +306,7 @@ class ItemRepository extends EntityRepository
 				return null;
 			}  
     }
-     
+     */
      
           
      public function findItemById($id)

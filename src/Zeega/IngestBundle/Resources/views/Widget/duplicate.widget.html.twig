@@ -1,30 +1,34 @@
-
-
 {# src/Zeega/IngestBundle/Resources/views/Widget/duplicate.widget.html.twig #}
 
 {% extends '::widget.base.html.twig' %}
 
-{% block title %}Zeega Alpha {% endblock %}
+{% block title %}Zeega Alpha{% endblock %}
 
 {% block body %}
 
 
 	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
-		<h>This {{content_type}} has already been uploaded to the {{playground.title}} playground.</h><br><br>
-		
-		<div id="import-item" style="position:relative; float:left;">
-			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="image" src= "{{hostname}}{{directory}}images/items/{{item_id}}_t.jpg" class="scaled" ><br><br>
+		<h>This {{item.getType()}} has already been added to Zeega.</h><br><br>
+		<div id="item-view">
+			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="{{item.getThumbnailUrl}}" class="item-image" />
+			<div style="clear:both;">&nbsp;</div>
+			<span id="widget-title">&nbsp;</span></br>
+			<span id="widget-creator">&nbsp;</span></br>
+			<div id="description" style="display:none; height:400px;">
+				<p id="widget-description" class="widget-textbox" >description</p>
+			</div>
 		</div>
-		
 	</div>
-	
-	
-
 
 {% endblock %}	
 
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('gamma/js/widget/zeega.widget.js')}}"></script>  
+	<script data-main="{{ asset('gamma/js/main.widget.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+	<script type="text/javascript" language="Javascript">
+		//bootstrapping data
+		var itemJSON = {};
+		var itemCollectionJSON = "{{mycollection|e('js')}}";
+	</script>	
 {% endblock %}
 
 
