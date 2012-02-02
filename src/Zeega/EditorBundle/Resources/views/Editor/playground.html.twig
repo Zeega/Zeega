@@ -46,55 +46,10 @@
 			<div class="clear" style="clear: both;"></div>
 			</div><!--#intro-actions-->
 			
-			<div id='add-media-new' style='width: 910px; height: 205px; padding: 30px; position:absolute; z-index:100000; top:280px; background-color: white;'>  
 			
-			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
-
-			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
-						
-				<div id="book-one" style="float: left;">
-					<img src="{{ asset('gamma/images/chrome-logo.gif') }}" style="margin-left: 25px;"/>
-					<br>
-					<br>
-					Access Zeega from the<br>
-					<a href="http://google.com/chrome" target="_blank">latest Chrome browser</a>
-				</div>
-				
-				<div id="book-two" style="float: left; margin-left: 20px;">
-					<img src="{{ asset('gamma/images/view-bookmarks.gif') }}" style="margin-left: 25px; margin-top: 25px;"/>
-					<br><br><br>
-					<span style="display: block; margin-left: 55px; margin-top: 2px;">
-						Under the view menu, select<br>
-						"Always show Bookmarks Bar"
-					</span>
-				</div>
-				
-				<div id="book-three" style="float: left; margin-left: 20px;">
-					<a href="javascript:(function()%7Bvar%20head=document.getElementsByTagName('body')%5B0%5D,script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='http://dev.zeega.org/kanarinka/web/gamma/js/widget/zeega.bookmarklet.js?'%20+%20Math.floor(Math.random()*99999);head.appendChild(script);%7D)();%20void%200"><img src="{{ asset('gamma/images/drag-zeega.gif') }}" style="margin-left: 25px; margin-top: 0px;" alt="Add to Zeega"/></a>
-					<br>
-					<span style="display: block; margin-left: 7px; margin-top: 10px;">
-						Drag this icon to the<br>
-						Bookmark Bar within<br>
-						the browser
-					</span>
-
-				</div>
-				
-				<div id="book-four" style="float: left; margin-left: 30px;">
-					<img src="{{ asset('gamma/images/bookmark-confirm.gif') }}" style="margin-left: 25px; margin-top: 13px;"/>
-					<br>
-					<span style="display: block; margin-left: 7px; margin-top: 10px;">
-						"Add to Zeega" will now appear in your Bookmarks<br> Bar. As you find media across the web, click this<br> to open the bookmarklet plugin.
-					</span>
-
-				</div>
-				
-			<div class="clear" style="clear: both;"></div>
-			</div><!--#add-media-->
-
 			
 			<div id="projects-lists">
-				<div id='my-projects' class="item-title projects" style="font-size: 16px; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px; opacity:0.6; cursor:pointer; ">All Projects</div><br><br>
+				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; ">All Projects</div><br><br>
 				<div id="my-projects-container" class="projects-container my-projects-container" style="padding-left:5px;">
 					<ul>
 						{% for project in myprojects %}
