@@ -33,7 +33,53 @@
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
   
-  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'> </div>
+ <div id='add-media' style='width: 910px; height: 205px; padding: 30px; position:absolute; z-index:100000; top:80px; background-color: white; display:none;'>  
+			
+			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
+
+			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
+						
+				<div id="book-one" style="float: left;">
+					<img src="{{ asset('gamma/images/chrome-logo.gif') }}" style="margin-left: 25px;"/>
+					<br>
+					<br>
+					Access Zeega from the<br>
+					<a href="http://google.com/chrome" target="_blank">latest Chrome browser</a>
+				</div>
+				
+				<div id="book-two" style="float: left; margin-left: 20px;">
+					<img src="{{ asset('gamma/images/view-bookmarks.gif') }}" style="margin-left: 25px; margin-top: 25px;"/>
+					<br><br><br>
+					<span style="display: block; margin-left: 55px; margin-top: 2px;">
+						Under the view menu, select<br>
+						"Always show Bookmarks Bar"
+					</span>
+				</div>
+				
+				<div id="book-three" style="float: left; margin-left: 20px;">
+					<a href="javascript:(function()%7Bvar%20head=document.getElementsByTagName('body')%5B0%5D,script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='http://dev.zeega.org/kanarinka/web/gamma/js/widget/zeega.bookmarklet.js?'%20+%20Math.floor(Math.random()*99999);head.appendChild(script);%7D)();%20void%200"><img src="{{ asset('gamma/images/drag-zeega.gif') }}" style="margin-left: 25px; margin-top: 0px;" alt="Add to Zeega"/></a>
+					<br>
+					<span style="display: block; margin-left: 7px; margin-top: 10px;">
+						Drag this icon to the<br>
+						Bookmark Bar within<br>
+						the browser
+					</span>
+
+				</div>
+				
+				<div id="book-four" style="float: left; margin-left: 30px;">
+					<img src="{{ asset('gamma/images/bookmark-confirm.gif') }}" style="margin-left: 25px; margin-top: 13px;"/>
+					<br>
+					<span style="display: block; margin-left: 7px; margin-top: 10px;">
+						"Add to Zeega" will now appear in your Bookmarks<br> Bar. As you find media across the web, click this<br> to open the bookmarklet plugin.
+					</span>
+
+				</div>
+				
+			<div class="clear" style="clear: both;"></div>
+			</div><!--#add-media-->
+ 	
+    	
     	{% block header %}
     	<div id='header-bg'></div>
     	<div id="wrapper" >
@@ -45,20 +91,42 @@
 					<div id="header-title">
 						<ul>
 						
-							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"> Zeega Alpha </a></li>
-							{% if title %}
-							<li>>></li>
-								<li class='drop-down clearfix '>
-									<a  class='drop-down-toggle' href="#" class="dark">  {{title}} </a>
+							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -3px;"/></a></li>
+							{% if playground %}
+							<li class='drop-down clearfix' >
+									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaEditorBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
+									{% if num_playgrounds > 1 %} 
 									<ul class='drop-down-menu'>
-											{% if adminMenu and is_granted('ROLE_SUPER_USER') %}<li><a href="{{ path('ZeegaEditorBundle_admin',{'short':short})}}" class="dark">Admin</a></li>{% endif %}
-											<li><a href="{{path('ZeegaEditorBundle_playground', { 'short': short })}}" class="dark">Projects</a></li>
-											<li><a href="{{path('ZeegaEditorBundle_browser', { 'short': short })}}" class="dark">Collections</a></li>
+									
+										{% for p in playgrounds %}
+												<li><a  href="{{ path('ZeegaEditorBundle_playground', {'short': p.short }) }}" class="dark">  {{p.title}} </a></li>
+										{% endfor %}
 									</ul>
+									{% endif %} 
+							</li>
+							
+							
+							<li class=' clearfix' style="margin-left: 20px;">
+									<a   href="{{ path('ZeegaEditorBundle_browser', {'short': playground.short }) }}" class="dark">Collections</a>
+	
+							</li>
+							<li>|</li>
+							<li class='drop-down clearfix' >
+									<a  class='drop-down-toggle' href="#" class="dark">Projects</a>
+									<ul class='drop-down-menu'>
 									
-									
-								</li>
-							{% endif %}
+										{% for project in myprojects %}
+												<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="dark">{{project.title}}</a></li>
+										{% endfor %}
+									</ul>
+							</li>
+							<li>|</li>
+							
+							<li class='item add-media' ><a href="#">Add Media</a></li>							
+							{% else %} 
+							<li class='item add-media' style="margin-left: 45px;" ><a href="#">Add Media</a></li>
+							{% endif %} 
+							
 						</ul>
 						
 						
@@ -70,7 +138,6 @@
 		
 						<ul>
 							<li class='item'><a href="{{ path('ZeegaEditorBundle_faq')}}">FAQ</a></li>
-							<li class='item add-media' ><a href="#">Add Media</a></li>							
 							<li class='drop-down clearfix item'>
 								Logged in as <a href='#' class='drop-down-toggle'>{{displayname}}</a>
 								<ul class='drop-down-menu'>	
