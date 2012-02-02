@@ -63,6 +63,8 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		console.log(this)
+		
 		$('title').html(this.data.project.title);
 		
 		//set the current route
@@ -433,6 +435,10 @@ var Player = {
 	*/
 	preloadLayer : function( layerID )
 	{
+		console.log('layerID:')
+		console.log(layerID);
+		layerID = ""+layerID;
+		
 		//if not loading or already loaded
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
