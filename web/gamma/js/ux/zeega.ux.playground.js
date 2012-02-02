@@ -40,19 +40,4 @@ $(document).ready(function() {
 		$('.'+$(this).attr('id')+'-container').show();
 		console.log('#'+$(this).attr('id')+'-container');
 	});
-	
-	$('.new-project').click(function(){
-		$.ajax({
-				url:  sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',
-				type: 'POST',
-				success: function(data){
-				console.log(data);
-				window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
-			}
-		});
-		
-	});
-	
-
-
 });
