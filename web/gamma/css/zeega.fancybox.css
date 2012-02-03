@@ -201,7 +201,9 @@
 .fancybox-more-button, .fancybox-less-button{
 	float:left;
 }
-
+.fancybox-delete-button{
+	
+}
 .fancybox-delete-button,.fancybox-confirm-delete-button{
 	float:right;
 }

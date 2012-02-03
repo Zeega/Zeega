@@ -27,6 +27,14 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find(".fancybox-media-item").addClass("fancybox-media-item-more");
 		$(this.el).addClass("fancybox-media-container-more");	
 		
+		//Show delete button in More view if user added this item
+		console.log(sessionStorage.getItem("userid") + ' is session nid');
+		console.log(this.model.get("user_id") + ' is mode; nid');
+		if(sessionStorage.getItem("userid") == this.model.get("user_id")){
+			$(this.el).find('.fancybox-delete-button').show();
+		} else{
+			$(this.el).find('.fancybox-delete-button').hide();
+		}
 		
 		return false;
 	},
@@ -56,7 +64,6 @@ var FancyBoxView = Backbone.View.extend({
 		else 	if(this.model.get('attribution_uri').indexOf('soundcloud')>-1) blanks.sourceText = 'Listen on Soundcloud';
 		else blanks.sourceText ='View Source';
 	
-		
 		
 		//use template to clone the database items into
 		var template = _.template( this.getTemplate() );
@@ -230,7 +237,7 @@ var FancyBoxView = Backbone.View.extend({
 					'</div>'+
 					'<div class="fancybox-buttons" class="clearfix">'+
 						'<p class="less fancybox-more-button"><a href=".">view more</a></p><p class="more fancybox-less-button"><a href=".">view less</a></p>'+
-						'<p class="fancybox-delete-button more"><a href=".">delete</a></p>'+
+						'<p class="fancybox-delete-button more" style="display:none"><a href=".">delete</a></p>'+
 						'<p class="fancybox-confirm-delete-button">are you totally sure you want to delete this? '+
 						'<a href="." class="yes-confirm-delete">yes</a> <a class="no-do-not-delete" href=".">no</a></p>'+
 						
