@@ -225,13 +225,19 @@ var NodeViewCollection = Backbone.View.extend({
 							
 							//clone layers and place them into the layer array
 							_.each( savedNode.oldLayerIDs , function(layerID, i){
-								var dupeLayer = Zeega.route.layerCollection.get(layerID).clone();
-								dupeLayer.id = savedNode.get('layers')[i] +''; //make into string
-								dupeLayer.set({id:savedNode.get('layers')[i] + '' }); //make into string
+
+								var dupeAttr = JSON.stringify(Zeega.route.layerCollection.get(layerID));
+								dupeAttr = $.parseJSON(dupeAttr);;
+								
+								var newLayer = new Layer(dupeAttr);
+								
+								newLayer.id = savedNode.get('layers')[i] +''; //make into string
+								newLayer.set({id:savedNode.get('layers')[i] + '' }); //make into string
 							
-								Zeega.addToLayerCollections( savedNode, dupeLayer );
+								Zeega.addToLayerCollections( savedNode, newLayer );
 								
 								Zeega.loadNode(savedNode);
+								
 							})
 							
 						}
