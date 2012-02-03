@@ -49,6 +49,8 @@ var loadFiles = [
 	
 	//custom
 	'order!filamentslider/selectToUISlider.jQuery',
+	'order!jcarousel/jquery.jcarousel',
+	'order!jcarousel/jcarousel.zeega',
 	
 	//mvc
 	'order!backbone/models/tag',

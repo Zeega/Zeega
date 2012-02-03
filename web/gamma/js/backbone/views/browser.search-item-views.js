@@ -81,7 +81,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 					case 'settings':
 						
 						
-						$('#collection-settings-modal').find('.collection-modal-title').text(theModel.get('title') + theModel.id);
+						$('#collection-settings-modal').find('.collection-modal-title').text(theModel.get('title'));
 						
 						
 						$('#collection-settings-modal').find('#close-modal').click(function(){

@@ -88,13 +88,41 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	setListeners : function()
 	{
+		var _this = this;
 		//twipsies
 		$(this.el).find('.layer-link').twipsy({
 			placement : 'right'
 		})
-		
-		
-		
+
+		//finish entering  link info
+		$(this.el).find('.layer-link-box input')
+			.keypress(function(e){
+				if(e.which == 13)
+				{
+					$(this).blur();
+					return false;
+				}
+				else return true;
+			})
+			.blur(function(){
+				$(this).effect('highlight',{},3000);
+				_this.saveLink( $(this).val() );
+			})
+	},
+	
+	saveLink : function( url )
+	{
+		// do some validation here?
+		url = url.replace(/http:\/\//g, '' );
+
+		var properties = {
+			link : {
+				property : 'link_to',
+				value : url,
+				css : false
+			}
+		};
+		this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
 	},
 	
 	
@@ -192,58 +220,7 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	layerLink : function()
 	{
-		console.log('open linker')
-		var _this = this;
 		$(this.el).find('.layer-link-box').show();
-		
-		/*
-		$(this.el).find('.layer-link-box input').blur(function(){
-			var url = $(this).val();
-			url = url.replace(/http:\/\//g, '' );
-
-			var properties = {
-				link : {
-					property : 'link_to',
-					value : url,
-					css : false
-				}
-			};
-			_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-			
-			$(this).blur();
-			return false;
-		})
-		*/
-		
-		//finish entering  link info
-		$(this.el).find('.layer-link-box input').keypress(function(e){
-			if(e.which == 13)
-			{
-				
-				console.log('inside')
-				// do some validation here?
-				var url = $(this).val();
-				url = url.replace(/http:\/\//g, '' );
-
-				var properties = {
-					link : {
-						property : 'link_to',
-						value : url,
-						css : false
-					}
-				};
-				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-				
-				$(this).blur();
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-			
-		});
-		
 		return false;
 	},
 	

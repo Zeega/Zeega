@@ -924,6 +924,12 @@ body
 	top:30px;
 }
 
+#route-title input
+{
+	height:1em;
+	width:690px;
+}
+
 /*******************************
 
 	HELP STYLES
