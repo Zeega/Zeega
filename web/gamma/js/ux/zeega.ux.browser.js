@@ -77,6 +77,17 @@ $(document).ready(function() {
 		closeBtn:false,
 		aspectRatio:true,
 		scroll:'none',
+				// Changing next gallery item
+			nextEffect: 'none', // 'elastic', 'fade' or 'none'
+			nextSpeed: 700,
+			nextEasing: 'none',
+			nextMethod: 'changeIn',
+
+			// Changing previous gallery item
+			prevEffect: 'none', // 'elastic', 'fade' or 'none'
+			prevSpeed: 700,
+			prevEasing: 'none',
+			prevMethod: 'changeOut',
 		keys: {
 				next: [ 34, 39, 40], //  page down, right arrow, down arrow
 				prev: [ 33, 37, 38], //  page up, left arrow, up arrow
@@ -84,18 +95,18 @@ $(document).ready(function() {
 		},
 		
     	helpers : {
-    		title : false,
-    		buttons	: {}
+    		title : false
     	},
     	beforeClose : function() {
     			//set video src to null to prevent browser bug
+    			
     			$('video').attr("src", null);
-
+				
     	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
-    
+    		
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
