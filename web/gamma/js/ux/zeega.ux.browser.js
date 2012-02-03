@@ -298,4 +298,17 @@ $(document).ready(function() {
 	 	ZeegaBrowser.doSearch();
 	 	return false;
 	 });
+	 
+	 
+	 
+	 
+	
+	 window.addEventListener('focus', function() {
+		ZeegaBrowser.refresh();
+	    
+		console.log('infocus refresh database')
+	});
+	
+	
+	
 });
