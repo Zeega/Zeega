@@ -518,6 +518,14 @@ var Player = {
 		})
 		this.paused=false;
 		this.showNavigation();
+		
+		
+		/*
+		Animation for linked layer...
+		$('.linked-layer').hover(function(){console.log('hovering');$(this).append().css({'margin':'10px'});},
+				function(){$(this).children().css({'margin':'0px'});});
+				
+		*/
 	},
 	
 	showNavigation : function()
