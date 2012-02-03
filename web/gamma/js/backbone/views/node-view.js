@@ -230,6 +230,8 @@ var NodeViewCollection = Backbone.View.extend({
 								dupeLayer.set({id:savedNode.get('layers')[i] + '' }); //make into string
 							
 								Zeega.addToLayerCollections( savedNode, dupeLayer );
+								
+								Zeega.loadNode(savedNode);
 							})
 							
 						}
