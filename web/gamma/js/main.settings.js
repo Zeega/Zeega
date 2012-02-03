@@ -34,7 +34,6 @@ var loadFiles = [
 	'order!jquery/plugins/jqueryjson',
 	'order!jquery/plugins/jquerycookie',
 	'order!jquery/plugins/jquerytmpl',
-	'order!jquery/plugins/bootstrapmodal',
 	
 	//mvc
 
