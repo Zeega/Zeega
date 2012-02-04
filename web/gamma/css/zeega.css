@@ -659,20 +659,17 @@ ul,li
 		
 		border-top: 20px solid #F15A29;
 		position: relative;
-		top: -130px;
-		left: 130px;
+		top: -83px;
+		left: -14px;
 		
 		opacity: 0.8;
 		z-index:100;
 }
 .corner-triangle-for-menu:hover{
-	text-decoration:none;
+	text-decoration:none !important;
+	border-bottom:0 !important;
+		
 }
-
-
-
-
-
 
 
 #user-add {
@@ -1013,7 +1010,7 @@ body
 /*		quirks for browser		*/
 .collections-menu{position:absolute;top:0;right:0;}
 .collections-menu .menu-items{ top: 0;right:0;}
-.collections-menu .menu-items a:hover{
+.browser-results-collection .menu-items a:hover{
 	color:#666 !important;
 }
 /*******************************

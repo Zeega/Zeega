@@ -58,20 +58,6 @@ var BrowserCollectionView = BrowserItemView.extend({
 		} else {
 			var theElement = this.el;
 			var theModel = this.model;
-/*
-			$(this.el).find('.corner-triangle-for-menu, .browser-collection-edit-menu').hover(
-				function(){
-					
-					//calculate position dynamically based on text position
-					//theElement.find('.browser-collection-edit-menu').css("left", $(this).width() + 15);
-					$(theElement).find('.browser-collection-edit-menu').show();
-					return false;
-				}, 
-				function(){
-					$(theElement).find('.browser-collection-edit-menu').hide();
-				}
-			);
-*/
 			
 			$(this.el).find('.menu-items li a').click(function(){
 				
@@ -136,51 +122,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				event.stopPropagation();
 				
 			});
-			/*
-			//SHARE LINK
-			$(this.el).find('.collection-player-button').click(function(){
-				ZeegaBrowser.showShareButton(collectionID);
-				return false;
-			}); 
-			//GO TO EDITOR LINK
-			$(this.el).find('.collection-to-editor-button').click(function(){
-				ZeegaBrowser.goToEditor(collectionID, collectionTitle);
-				return false;
-			});
-			//DELETE LINK
-			$(this.el).find('.browser-delete-collection').click(function(){
-				ZeegaBrowser.deleteCollection(collectionID);
-				return false;
-			});
-			//RENAME LINK
-			$(this.el).find('.title').editable(
-				function(value, settings)
-				{ 
 
-					value = ZeegaBrowser.editCollectionTitle(value, settings, collectionID);
-
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : true,
-					onblur : 'submit',
-					width : $(this).attr("width") * 2,
-					cssclass : 'browser-form'
-			}).click(function(e) {
-				theElement.find('.browser-collection-edit-menu').hide();
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-	         	
-	     	});
-			$(this.el).find('.browser-rename-collection').click(function(e) {
-				//using jeditable framework - pretend like user clicked on the title element
-				theElement.find('.title').trigger('click');
-				//stop from selecting the collection filter at the same click
-				e.stopPropagation();
-			});
-			*/
 		}
 
 		var thisView = this;
@@ -288,42 +230,42 @@ var BrowserCollectionView = BrowserItemView.extend({
 	},
 	
 	events : {
-		'hover .collections-menu': 'openMenu',
+		
+		"mouseenter .corner-triangle-for-menu, .menu-items"   : "openMenu",
+  		"mouseleave .corner-triangle-for-menu, .menu-items"   : "closeMenu"
 	},
 	
 	openMenu : function()
 	{
-		var menu = $(this.el).find('.menu-toggle').next();
+		/*var menu = $(this.el).find('.menu-toggle').next();
 		if( menu.hasClass('open') ) menu.removeClass('open');
 		else menu.addClass('open');
-
+		*/
+		var menu = $(this.el).find('.menu-items');
+		$(menu).css("top", "-119px");
+		$(menu).css("left", "5px");
+		$(menu).css("position", "relative");
+		
+		$(this.el).find('.menu-items').show();
+	},
+	closeMenu : function()
+	{
+		
+		$(this.el).find('.menu-items').hide();
 	},
 
 	
 	getTemplate : function()
 	{
 		
-		/*
-		var html =	
-					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
-					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span></p></a>'+
-					'<a href="." class="corner-triangle-for-menu"></a><ul class="browser-collection-edit-menu">'+
-					'<li class="browser-rename-collection browser-unselected-toggle">rename collection</li>'+
-					'<li class="browser-delete-collection browser-unselected-toggle">delete collection</li>'+
-					'<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>'+
-					'<li class="collection-player-button browser-unselected-toggle">share link</li>'+
-					'</ul>';
-		*/
 		
 		var html =	
-					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
-					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span><br/><span class="duplicate-item">Duplicate item</span></p></a>'+
-					'<div class="collections-menu"><a href="#" class="menu-toggle"><span class="zicon zicon-gear orange"></span></a><ul class="menu-items">'+
+					'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items"></a>'+
+					'<a href="#" class="corner-triangle-for-menu"><!--<span class="zicon zicon-gear orange"></span>--></a><ul class="menu-items">'+
 					'<li><a href="#" data-action="settings">settings</a></li>'+
-					//'<li>delete collection</li>'+
 					'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+
-					//'<li>share link</li>'+
-					'</ul></div>';
+					'</ul>'+
+					'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span><br/><span class="duplicate-item">Duplicate item</span></p>';
 								
 		return html;
 	},
