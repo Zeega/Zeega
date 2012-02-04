@@ -14,6 +14,8 @@ class RegistrationFormType extends BaseType
         // add your custom field
         $builder->add('bio');
 		$builder->add('thumb_url');
+		$builder->add('roles');
+		$builder->add('playground', 'Zeega\EditorBundle\Entity\Playground');
     }
 
     public function gePlayground()

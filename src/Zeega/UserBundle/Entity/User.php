@@ -135,4 +135,29 @@ class User extends BaseUser
     {
         return $this->created_at;
     }
+    /**
+     * @var Zeega\EditorBundle\Entity\Playground
+     */
+    private $playgrounds;
+
+
+    /**
+     * Add playgrounds
+     *
+     * @param Zeega\EditorBundle\Entity\Playground $playgrounds
+     */
+    public function addPlayground(\Zeega\EditorBundle\Entity\Playground $playgrounds)
+    {
+        $this->playgrounds[] = $playgrounds;
+    }
+
+    /**
+     * Get playgrounds
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaygrounds()
+    {
+        return $this->playgrounds;
+    }
 }

@@ -1,0 +1,21 @@
+{% form_theme form theme %}
+
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+			Roles:
+			<select>
+				{% for role in roles %}
+					<option value="{{role}}">{{role}}</option>
+				{% endfor %}
+			</select>
+			Playground:
+			<select>
+				{% for playground in playgrounds %}
+					<option value="{{playground.getId()}}">{{playground.getShort()}}</option>
+				{% endfor %}
+				
+			</select>
+    </div>
+</form>
