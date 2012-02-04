@@ -96,6 +96,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 							$('#collection-settings-modal').modal('hide');
 							return false;
 						});
+						
 						$('#collection-settings-modal').find('.collection-modal-title').editable(
 							function(value, settings)
 							{ 
@@ -109,7 +110,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 								indicator : '<img src="images/loading.gif">',
 								select : true,
 								onblur : 'submit',
-								width: '200px',
+								width: '250px',
 								cssclass : 'modal-form'
 						}).click(function(e) {
 							

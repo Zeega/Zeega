@@ -24,7 +24,6 @@ $(document).ready(function() {
 
 	// menu stuff
 	$('.menu-toggle').click(function(){
-		console.log('menu clikc')
 		var menu = $(this).next();
 		if( menu.hasClass('open') ) menu.removeClass('open');
 		else menu.addClass('open');

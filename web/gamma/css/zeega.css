@@ -412,13 +412,36 @@ ul,li
 {
 	background:transparent;
 	border:none;
-	float:left;
-	height:50px;
+	
+}
+.modal-header h3{
+	padding-top:5px;
+	height:44px;
+}
+.modal-header .close{
+	opacity:1.0;
+}
+.modal-header .close:hover{
+	color:#404040;
 }
 .collection-modal-title{
 	font-size:1.5em;
 }
-
+.modal-button{
+	font-size: 0.9em;
+	font-weight: normal;
+	border: 1px solid #BBB;
+	padding: 5px;
+	background-color: #DDD;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+.modal-button:hover{
+	color:#777;
+	text-decoration:none;
+	cursor: pointer;
+}
 .browser-add-item-to-collection-hover, .browser-results-collection:hover{
 	background-color:#F15A29 !important;
 	
@@ -989,7 +1012,10 @@ body
 
 /*		quirks for browser		*/
 .collections-menu{position:absolute;top:0;right:0;}
-.collections-menu .menu-items{ top: 10px;right:0;}
+.collections-menu .menu-items{ top: 0;right:0;}
+.collections-menu .menu-items a:hover{
+	color:#666 !important;
+}
 /*******************************
 
 	panels
