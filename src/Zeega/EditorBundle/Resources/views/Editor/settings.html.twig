@@ -12,6 +12,7 @@
 <div style="clear:both;"></div>
 <div class="item-title user-editable" style="font-size: 14px; ">{{email}}</div><br><br>
 <div style="clear:both;"></div>
+
  <br><br>
 <div id="user-info" style="color:white">
 	<div id="user-thumb" style="width:100px; float:left; border: 2px solid white;" ><img width="96px" height="96px" src="{{thumb}}" /></div>
@@ -21,10 +22,8 @@
 
 <div id="password-change" style="display:none;">		
 				<form  class='admin-form' action="" method="post" {{ form_enctype(form) }}>
+					{% include "FOSUserBundle:ChangePassword:changePassword_content.html.twig" %}
 					{{ form_widget(form) }}
-				
-					<input id='password-change-cancel' type="submit" value="Cancel" />
-					<input type="submit" value="Enter" />
 				</form>
 </div>
 
