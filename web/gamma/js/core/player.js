@@ -166,7 +166,7 @@ var Player = {
 			//turn off previewMode
 			Zeega.previewMode = false;
 			//go to the node last viewed in the player
-			Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
+			//Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
 		}
 	},
 	
