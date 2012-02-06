@@ -208,7 +208,25 @@ var TextLayer = ProtoLayer.extend({
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		//console.log('text layer alohad')
 		Aloha.jQuery(content).aloha();
-		
+		//window.Aloha.unregisterEditable( Aloha.jQuery(content) );
+		//console.log( window.Aloha )
+		/*
+		Aloha.jQuery(content).obj.focus();
+		Aloha.jQuery(content).obj.activate();
+		window.Aloha.Selection.updateSelection();
+		*/
+		/*
+		_.each(window.Aloha.editables,function(a){
+			if( a.obj.context.innerText == '' )
+			{
+				console.log(a)
+				a.obj.focus(); 
+				a.activate(); 
+				window.Aloha.Selection.updateSelection();
+			}
+
+		})
+		*/
 		
 	},
 	
@@ -301,6 +319,14 @@ var TextLayer = ProtoLayer.extend({
 	play : function( z )
 	{
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+		
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			_this.display.addClass('link-blink')
+			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  )
+			
+		}
 	},
 	
 	stash : function()

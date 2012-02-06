@@ -68,3 +68,9 @@
 [FOSUserBundle]
 	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
 	target=bundles/FOS/UserBundle
+[WebProfilerExtraBundle]
+	git=http://github.com/Elao/WebProfilerExtraBundle.git
+	target=bundles/Elao/WebProfilerExtraBundle
+[ProfilerLiveBundle]
+    git=git://github.com/dsyph3r/ProfilerLiveBundle.git
+    target=/bundles/Profiler/LiveBundle
