@@ -11,6 +11,9 @@
 var loadFiles = [
 	'jquery',
 	
+	'order!jquery/ui/js/jquery-ui-1.8.17',
+	
+	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	'order!libraries/underscore',

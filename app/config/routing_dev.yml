@@ -1,145 +1,18 @@
 _assetic:
-  type:     assetic  
-  resource: .
-  
+    resource: .
+    type:     assetic
+
+_wdt:
+    resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
+    prefix:   /_wdt
+
+_profiler:
+    resource: "@WebProfilerBundle/Resources/config/routing/profiler.xml"
+    prefix:   /_profiler
+
 _configurator:
     resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
     prefix:   /_configurator
 
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-
-fos_user_profile:
-    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix: /profile
-
-fos_user_register:
-    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /register
-
-fos_user_resetting:
-    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
-    prefix: /resetting
-
-fos_user_change_password:
-    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /profile
-
-_security_logout:
-    pattern:  /logout    
-
-api:
-    resource: "@ZeegaApiBundle/Resources/config/routing.yml"
-
-projects:
-  type:     rest
-  resource: Zeega\EditorBundle\Controller\ProjectsController
-
-routes:
-  type:     rest
-  resource: Zeega\EditorBundle\Controller\RoutesController
-
-nodes:
-  type:     rest
-  resource: Zeega\EditorBundle\Controller\NodesController
-
-layers:
-  type:     rest
-  resource: Zeega\EditorBundle\Controller\LayersController
- 
-
-  
-#items:
-#  type:     rest
-#  resource: Zeega\IngestBundle\Controller\ItemsController
-  
-playgrounds:
-  type:     rest
-  resource: Zeega\EditorBundle\Controller\PlaygroundsController
-
-persist:
-    pattern: /widget/persist
-    defaults: { _controller:  ZeegaIngestBundle:Widget:persist }
-
-init:
-    pattern: /init
-    defaults: { _controller:  ZeegaEditorBundle:Editor:init }
-
-widget:
-    pattern: /widget/
-    defaults: { _controller:  ZeegaIngestBundle:Widget:url }
-    
-ZeegaEditorBundle_home:
-    pattern: /
-    defaults: { _controller:  ZeegaEditorBundle:Editor:home }
-
-ZeegaEditorBundle_playground:
-    pattern: /playground/{short}
-    defaults: { _controller:  ZeegaEditorBundle:Editor:playground }
-    
-ZeegaEditorBundle_admin:
-    pattern: /playground/{short}/admin
-    defaults: { _controller:  ZeegaEditorBundle:Editor:admin }
-
-ZeegaEditorBundle_editor:
-    pattern: /playground/{short}/project/{id}
-    defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
-    
-ZeegaEditorBundle_browser:
-    pattern: /playground/{short}/browser
-    defaults: { _controller:  ZeegaEditorBundle:Editor:browser }
-
-ZeegaEditorBundle_project:
-    pattern: /playground/{short}/project
-    defaults: { _controller:  ZeegaEditorBundle:Editor:project }
-    
-
-ZeegaIngestBundle_import:
-    pattern: /import/{page}
-    defaults: { _controller:  ZeegaIngestBundle:Ingest:index }
-    
-
-    
-ZeegaEditorBundle_faq:
-    pattern: /faq
-    defaults: { _controller:  ZeegaEditorBundle:Editor:faq }
-
-ZeegaEditorBundle_node_publish:
-    pattern: /node/{id}/view
-    defaults: { _controller:  ZeegaEditorBundle:Publish:node }
-
-ZeegaEditorBundle_project_publish:
-    pattern: /project/{id}/view
-    defaults: { _controller:  ZeegaEditorBundle:Publish:project }
-
-ZeegaEditorBundle_collection_publish:
-    pattern: /collection/{id}/view
-    defaults: { _controller:  ZeegaEditorBundle:Publish:collection }
-
-
-ZeegaEditorBundle_siteadmin:
-    pattern: /siteadmin
-    defaults: { _controller:  ZeegaEditorBundle:Editor:siteadmin }
-
-ZeegaEditorBundle_settings:
-    pattern: /settings
-    defaults: { _controller:  ZeegaEditorBundle:Editor:settings }
-
-zeega_editor:
-    resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
-
-zeega_editor:
-    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"    
-    
-web_profiler: 
-    resource: @WebProfilerBundle/Resources/config/routing/wdt.xml 
-
-admin:
-    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
-    prefix: /admin
-    
-_sonata_admin:
-    resource: .
-    type: sonata_admin
-    prefix: /admin
-
+_main:
+    resource: routing.yml

@@ -176,4 +176,29 @@ class Project
     {
         $this->users[] = $users;
     }
+    /**
+     * @var array $attr
+     */
+    private $attr;
+
+
+    /**
+     * Set attr
+     *
+     * @param array $attr
+     */
+    public function setAttr($attr)
+    {
+        $this->attr = $attr;
+    }
+
+    /**
+     * Get attr
+     *
+     * @return array 
+     */
+    public function getAttr()
+    {
+        return $this->attr;
+    }
 }

@@ -269,7 +269,8 @@ function closeOpenCitationTabs()
 	//node tray sortable and sorting events
 	
 	$('#frame-list').sortable({  
-		axis : 'x',
+		//axis : 'x',
+		containment: '#frame-drawer',
 		forceHelperSize : true,
 		placeholder: "node-thumb ui-state-highlight",
 		forcePlaceholderSize:true,

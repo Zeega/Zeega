@@ -68,6 +68,7 @@
 [FOSUserBundle]
 	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
 	target=bundles/FOS/UserBundle
+
 [SonataAdminBundle]
     git=http://github.com/sonata-project/SonataAdminBundle.git
     target=/bundles/Sonata/AdminBundle
@@ -87,9 +88,10 @@
 [SonataDoctrineORMAdminBundle]
     git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
     target=/bundles/Sonata/DoctrineORMAdminBundle
-
-# optional bundle
-[EntityAudit]
-    git=git://github.com/simplethings/EntityAudit.git
-    target=/bundles/SimpleThings/EntityAudit
 	
+[WebProfilerExtraBundle]
+	git=http://github.com/Elao/WebProfilerExtraBundle.git
+	target=bundles/Elao/WebProfilerExtraBundle
+[ProfilerLiveBundle]
+    git=git://github.com/dsyph3r/ProfilerLiveBundle.git
+    target=/bundles/Profiler/LiveBundle

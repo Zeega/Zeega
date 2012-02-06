@@ -12,9 +12,17 @@ class UserAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
+		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin');
         $formMapper
             ->add('username')
-            ->add('enabled', null, array('required' => false))
+			->add('display_name')
+			->add('bio')
+			->add('thumb_url')
+			->add('password','password')
+			->add('email')
+			->add('email')
+			->add('playgrounds', 'entity', array('class' => 'Zeega\EditorBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'))
+			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
     }
 
@@ -22,6 +30,7 @@ class UserAdmin extends Admin
     {
         $datagridMapper
             ->add('username')
+
         ;
     }
 
@@ -29,7 +38,8 @@ class UserAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('username')
-            ->add('enabled')
+			->add('display_name')
+			->add('email')
         ;
     }
 

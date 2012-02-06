@@ -96,7 +96,7 @@
 						
 							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
 							{% if playground %}
-							<li class='drop-down clearfix' >
+							<li class='{% if num_playgrounds > 1 %} drop-down{% endif %} clearfix' >
 									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaEditorBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
 									{% if num_playgrounds > 1 %} 
 									<ul class='drop-down-menu'>

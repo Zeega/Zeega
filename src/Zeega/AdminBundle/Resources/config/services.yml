@@ -4,9 +4,15 @@ parameters:
 services:
     zeega.admin.user:
         class: Zeega\AdminBundle\AdminEntity\UserAdmin
-        arguments: [null, Zeega\UserBundle\Entity\User, ZeegaUserBundle:UserAdmin]
+        arguments: [null, Zeega\UserBundle\Entity\User, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, alias: zeega_user_registration, manager_type: orm, group: ZeegaAdmin, label: AdminUsers}
+            - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
+    zeega.admin.playground:
+        class: Zeega\AdminBundle\AdminEntity\PlaygroundAdmin
+        arguments: [null, Zeega\EditorBundle\Entity\Playground, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, alias: zeega_admin_playground, manager_type: orm, group: General, label: Playgrounds}
+
 #    zeega_user.example:
 #        class: %zeega_user.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
