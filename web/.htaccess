@@ -3,3 +3,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
+
