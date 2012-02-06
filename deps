@@ -68,6 +68,27 @@
 [FOSUserBundle]
 	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
 	target=bundles/FOS/UserBundle
+
+[SonataAdminBundle]
+    git=http://github.com/sonata-project/SonataAdminBundle.git
+    target=/bundles/Sonata/AdminBundle
+
+[SonatajQueryBundle]
+    git=http://github.com/sonata-project/SonatajQueryBundle.git
+    target=/bundles/Sonata/jQueryBundle
+
+[KnpMenuBundle]
+    git=http://github.com/KnpLabs/KnpMenuBundle.git
+    target=/bundles/Knp/Bundle/MenuBundle
+
+[KnpMenu]
+    git=http://github.com/KnpLabs/KnpMenu.git
+    target=/knp/menu
+
+[SonataDoctrineORMAdminBundle]
+    git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
+    target=/bundles/Sonata/DoctrineORMAdminBundle
+	
 [WebProfilerExtraBundle]
 	git=http://github.com/Elao/WebProfilerExtraBundle.git
 	target=bundles/Elao/WebProfilerExtraBundle

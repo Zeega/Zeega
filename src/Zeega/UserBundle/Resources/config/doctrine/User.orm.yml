@@ -8,8 +8,9 @@ Zeega\UserBundle\Entity\User:
    manyToMany:
       playgrounds:
         targetEntity: Zeega\EditorBundle\Entity\Playground
+        inversedBy: users
         joinTable:
-          name: Users_Playgrounds
+          name: users_playgrounds
           inverseJoinColumns:
             playground_id:
               referencedColumnName: id

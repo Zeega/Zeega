@@ -160,17 +160,25 @@ var VisualLayerListView = Backbone.View.extend({
 	expand :function()
 	{
 		var _this = this;
-		if( $(this.el).find('.layer-content').is(':visible') )
+		console.log('expander clicked')
+		console.log( $(this.el).find('.layer-content').is(':hidden') )
+		
+		if( $(this.el).find('.layer-content').is(':hidden') )
 		{
-			//hide layer controls
-			$(this.el).find('.layer-content').hide('blind',{'direction':'vertical'});
-			this.model.layerClass.onControlsClose();
-			return false;
-		}else{
 			//show layer controls
-			$(this.el).find('.layer-content').show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.onControlsOpen() });
-			return false;
+			console.log('controls open')
+			$(this.el).find('.layer-content')
+				.show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.onControlsOpen(); $(this).removeClass('closed'); });
 		}
+		else
+		{
+			console.log('controls close')
+			//hide layer controls
+			$(this.el).find('.layer-content')
+				.hide('blind',{'direction':'vertical'},function(){ $(this).addClass('closed') });
+			this.model.layerClass.onControlsClose();
+		}
+		return false;
 		
 	},
 	
@@ -257,7 +265,7 @@ var VisualLayerListView = Backbone.View.extend({
 				'<span class="zicon zicon-vert-drag"></span>'+
 			'</div>'+
 		'</div>'+
-		'<div class="layer-content inset-tray dark hidden">'+
+		'<div class="layer-content inset-tray dark tray closed">'+
 			'<div id="controls" class="clearfix"></div>'+
 			//'<br />'+
 			'<div class="standard-layer-controls clearfix">'+
