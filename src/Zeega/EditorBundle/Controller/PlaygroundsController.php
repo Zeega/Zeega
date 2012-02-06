@@ -74,7 +74,7 @@ class PlaygroundsController extends Controller
 			$session->set("collection_id", $request->request->get('collection_id'));
 		} 
 		
-		else $title='click here to change title';
+		else $title='Untitled Project';
     	$playground=$this->getDoctrine()
         ->getRepository('ZeegaEditorBundle:Playground')
         ->find($playground_id);

@@ -150,8 +150,8 @@ class ProjectsController extends Controller
 		$project->addUsers($user);
 		$route->setProject($project);
 		
-		$route->setTitle('click here to change title');
-		$project->setTitle('click here to change title');
+		$route->setTitle('Untitled Project '.$project_id);
+		$project->setTitle('Untitled Project '.$project_id);
 		/*
 		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
 		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
