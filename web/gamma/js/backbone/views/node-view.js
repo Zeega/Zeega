@@ -66,7 +66,7 @@ var NodeView = Backbone.View.extend({
 			switch($(this).data('action'))
 			{
 				case 'delete':
-					Zeega.destroyNode(_this);
+					if(confirm('Delete Frame?')) Zeega.destroyNode(_this);
 					break 
 				
 				case 'duplicate':
@@ -227,12 +227,12 @@ var NodeViewCollection = Backbone.View.extend({
 							_.each( savedNode.oldLayerIDs , function(layerID, i){
 
 								var dupeAttr = JSON.stringify(Zeega.route.layerCollection.get(layerID));
-								dupeAttr = $.parseJSON(dupeAttr);;
+								dupeAttr = $.parseJSON(dupeAttr);
 								
 								var newLayer = new Layer(dupeAttr);
 								
-								newLayer.id = savedNode.get('layers')[i] +''; //make into string
-								newLayer.set({id:savedNode.get('layers')[i] + '' }); //make into string
+								newLayer.id = String( savedNode.get('layers')[i] ); //make into string
+								newLayer.set({ id: String( savedNode.get('layers')[i] ) }); //make into string
 							
 								Zeega.addToLayerCollections( savedNode, newLayer );
 								

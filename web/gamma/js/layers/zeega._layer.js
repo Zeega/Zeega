@@ -201,7 +201,7 @@ var ProtoLayer = Class.extend({
 	//necessary?
 	lightLoad : function( model )
 	{
-
+		var _this = this;
 		//make it possible to load objects and not models.
 		this.model = model;
 		this.attr = model.attr;
@@ -226,13 +226,22 @@ var ProtoLayer = Class.extend({
 		var displayCSS = {
 			position : 'absolute',
 			width : this.model.attr.width+'%',
-			height : this.model.attr.height +"%",
-			opacity : this.model.attr.opacity,
+			height : 'auto',
 			top : '-1000%',
 			left : '-1000%'
 		};
+		var innerDisplayCSS = {
+			position : 'relative',
+			width:'100%',
+			//height : this.model.attr.height +"%",
+			opacity : this.model.attr.opacity,
+		};
 		
 		this.display = $('<div>').css(displayCSS);
+		this.display.append( $('<div>').css(innerDisplayCSS) );
+		this.innerDisplay = this.display.children()[0];
+		
+		console.log(this.display)
 		this.thumbnail = $('<div>').css(thumbCSS);
 
 		console.log(this.attr);
@@ -241,14 +250,18 @@ var ProtoLayer = Class.extend({
 		{
 			var _this = this;
 			
-			$(this.display).addClass('linked-layer').css('cursor','pointer');
+			$(this.display).addClass('linked-layer');
 			$(this.display).click(function(){
 				console.log( 'http://'+ _this.attr.link_to );
 				document.location.href = 'http://'+ _this.attr.link_to;
-			})
+			});
+			
+			$(this.display).hover(function(){
+				$(this).addClass('link-layer-hover')
+			},function(){
+				$(this).removeClass('link-layer-hover')
+			});
 		}
-
-
 
 		this.thumb();
 	},
