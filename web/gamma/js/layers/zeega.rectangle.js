@@ -97,10 +97,11 @@ var RectangleLayer = ProtoLayer.extend({
 	preload : function( target )
 	{
 		var cssObj = {
-			backgroundColor : this.getRGBAColor( this.attr.backgroundColor )
+			backgroundColor : this.getRGBAColor( this.attr.backgroundColor ),
+			height : '100%'
 		};
-
-		this.display.css( cssObj );
+		$(this.display).css('height',this.attr.height +'%')
+		$(this.innerDisplay).css( cssObj );
 
 		target.trigger( 'ready' , { 'id' : this.model.id } );
 	},
@@ -108,6 +109,13 @@ var RectangleLayer = ProtoLayer.extend({
 	play : function( z )
 	{
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+		
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			_this.display.addClass('link-blink')
+			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  );
+		}
 	},
 
 	stash : function()
