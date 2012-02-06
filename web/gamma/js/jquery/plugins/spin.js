@@ -15,7 +15,8 @@ $("#el").spin(false); // Kills the spinner.
 		var presets = {
 			"tiny": { lines: 9, length: 3, width: 2, radius: 4 },
 			"small": { lines: 8, length: 4, width: 3, radius: 5 },
-			"large": { lines: 10, length: 8, width: 4, radius: 8 }
+			"large": { lines: 10, length: 8, width: 4, radius: 8 },
+			"slow": { lines: 6, length: 3, width: 2, radius: 4, speed: 0.5 },
 		};
 		if (Spinner) {
 			return this.each(function() {
