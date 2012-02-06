@@ -70,6 +70,7 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
+    encryption: %mailer_encryption%    
 
 jms_security_extra:
     secure_controllers:  true
@@ -85,6 +86,12 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: secured_area
     user_class: Zeega\UserBundle\Entity\User
+    from_email:
+        address: noreply@zeega.org
+        sender_name: Zeega
     registration:
         form:
             type: zeega_user_registration
+    resetting:
+        email:
+            template: ZeegaUserBundle:Email:resetting.email.twig
