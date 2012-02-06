@@ -355,18 +355,18 @@ var Player = {
 				if( _this.currentNode.id == nodeID)
 				{
 					console.log('drawCurrentNode: '+ nodeID)
-					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
+					_this.drawNode( nodeID ); 
 				}
 				else if( nodeID == _this.getRight() )
 				{
 					console.log('turn off right spinner')
-					$('#preview-right').spin(false)
+					if( $('#preview-right').spin() ) $('#preview-right').spin(false)
 				}
 				else if( nodeID == _this.getLeft() )
 				{
 					console.log('turn off left spinner')
-					$('#preview-left').spin(false)
+					if( $('#preview-left').spin() ) $('#preview-left').spin(false)
 				}
 				
 			}
