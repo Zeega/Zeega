@@ -48,6 +48,7 @@ security:
         #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: ROLE_ADMIN }
+        - { path: ^/register/confirmed, role: ROLE_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }

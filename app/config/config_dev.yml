@@ -6,18 +6,22 @@ framework:
     profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: false
+    toolbar: true
     intercept_redirects: false
-
+    verbose: true
+    
+web_profiler_extra:
+    routing:    true
+    container:  true
+    assetic:    true
+    twig:       true
+    
 monolog:
     handlers:
         main:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: info
-        firephp:
-            type:  firephp
-            level: info
+            level: debug
 
 assetic:
     use_controller: true
