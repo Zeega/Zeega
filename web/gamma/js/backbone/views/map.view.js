@@ -89,7 +89,8 @@ var LocatorMapView = Backbone.View.extend({
 		if(e.keyCode==13){
 			$(this.el).find('.locator-search-input').blur();
 			var that=this;
-			this.geocoder.geocode( { 'address': $(that.el).find('.locator-search-input').val()}, function(results, status) {
+			var placeText = $(that.el).find('.locator-search-input').val();
+			this.geocoder.geocode( { 'address': placeText}, function(results, status) {
 				
 				if (status == google.maps.GeocoderStatus.OK) {
 					
@@ -97,7 +98,14 @@ var LocatorMapView = Backbone.View.extend({
 					if(that.mapRendered) that.updateMap();
 					else that.addMap();
 					that.model.set({'media_geo_latitude':that.latlng.lat,'media_geo_longitude':that.latlng.lng,});
-					that.model.save();
+					that.model.save({},{success: function(){
+						$(that.el).find('.locator-search-bar').fadeOut('fast',
+								function(){
+									$(that.el).find('.edit-geo-location a').text('Edit item location (' + placeText + ")");
+									$(that.el).find('.edit-geo-location').fadeIn();
+
+								});
+					}});
 				}
 				else console.log("Geocoder failed at address look for "+$(that.el).find('.locator-search-input').val()+": " + status);
 			});
