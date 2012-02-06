@@ -6,9 +6,16 @@ framework:
     profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: false
+    toolbar: true
     intercept_redirects: false
-
+    verbose: true
+    
+web_profiler_extra:
+    routing:    true
+    container:  true
+    assetic:    true
+    twig:       true
+    
 monolog:
     handlers:
         main:
