@@ -452,6 +452,7 @@
 
             this.list.css(this.wh, $jc.intval(this.list.css(this.wh)) - d + 'px');
         },
+        
 
         /**
          * Moves the carousel forwards.

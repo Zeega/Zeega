@@ -17,7 +17,7 @@ var RectangleLayer = ProtoLayer.extend({
 	linkable : true,
 
 	defaultAttributes : {
-		'title' : 'Rectangle Layer',
+		'title' : 'Color Layer',
 		'url' : 'none',
 		backgroundColor: {r:255,g:0,b:255,a:0.8},
 		'left' : 0,

@@ -27,8 +27,7 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				$('#browser-my-collections-drawer').jcarousel({ initCallback:   ZeegaBrowser.mycarousel_initCallback, visible:5,});
-				
+				 
 			}
 		});
 
@@ -59,10 +58,18 @@ var ZeegaBrowser = {
 		$('#browser-results .browser-loading').hide();
 		
 	},
+	
+		refresh : function()
+	{
+		this.search.updateQuery();
+	},
+	
+	
 	/* Resets the page count so that results are refreshed completely */
 	resetPageCount : function(){
 		this.search.set({page: 1});	
 	},
+	
 	doCollectionSearch : function(collectionID){
 		
 		/* For the moment - clear other filters like query & type */

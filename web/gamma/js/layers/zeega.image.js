@@ -44,7 +44,7 @@ var ImageLayer = ProtoLayer.extend({
 		var widthArgs = {
 			min : 1,
 			max : 200,
-			label : 'Width',
+			label : 'Scale',
 			step : 1,
 			property : 'width',
 			suffix : '%',
@@ -55,8 +55,8 @@ var ImageLayer = ProtoLayer.extend({
 		var scaleSlider = makeUISlider( widthArgs );
 		
 		this.layerControls
-			.append( opacitySlider )
 			.append( scaleSlider )
+			.append( opacitySlider )
 			.append( makeFullscreenButton( this.layerControls ) );
 	},
 	
