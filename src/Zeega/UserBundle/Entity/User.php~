@@ -33,12 +33,12 @@ class User extends BaseUser
     /**
      * @var text $bio
      */
-    protected $bio;
+    protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
 
     /**
      * @var string $thumb_url
      */
-    protected $thumb_url;
+    protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
 
     /**
      * @var datetime $created_at
@@ -134,5 +134,30 @@ class User extends BaseUser
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+    /**
+     * @var Zeega\EditorBundle\Entity\Playground
+     */
+    private $playgrounds;
+
+
+    /**
+     * Add playgrounds
+     *
+     * @param Zeega\EditorBundle\Entity\Playground $playgrounds
+     */
+    public function addPlayground(\Zeega\EditorBundle\Entity\Playground $playgrounds)
+    {
+        $this->playgrounds[] = $playgrounds;
+    }
+
+    /**
+     * Get playgrounds
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaygrounds()
+    {
+        return $this->playgrounds;
     }
 }

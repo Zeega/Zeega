@@ -5,14 +5,7 @@ Zeega\EditorBundle\Entity\Playground:
    manyToMany:
     users:
       targetEntity: Zeega\UserBundle\Entity\User
-      joinTable:
-        name: Users_Playgrounds
-        joinColumns:
-          playground_id:
-            referencedColumnName: id
-        inverseJoinColumns:
-          user_id:
-            referencedColumnName: id
+      mappedBy: playgrounds
    id:
     id:
      type: integer
