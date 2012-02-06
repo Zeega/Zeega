@@ -134,7 +134,9 @@
 							{% else %} 
 							<li class='item add-media' style="margin-left: 45px;" ><a href="#">Add Media</a></li>
 							{% endif %} 
-							
+							{% if is_granted('ROLE_ADMIN') %}
+								<li><a href="{{ path('fos_user_registration_register') }}" class="dark">Register User</a></li><br>
+							{% endif %}
 						</ul>
 						
 						

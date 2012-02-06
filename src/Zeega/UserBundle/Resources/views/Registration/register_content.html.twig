@@ -1,21 +1,56 @@
-{% form_theme form theme %}
+{% extends '::base.html.twig' %}
+
+{% block head %}
+	<style type="text/css">	
+	.fos_user_registration_register label {
+		display: block;
+		color: white;
+		font-variant: small-caps;
+		margin-top: 10px;
+		font-weight: bold;
+		text-align: left;
+		font-size: 14px;
+
+	}
+	.fos_user_registration_register ul li
+	{
+		color: red;
+		margin-left: 100px;
+	}
+	#password-change
+	{
+		clear;
+	}
+	#password-change-button
+	{
+		margin-left:0;
+	}
+	.fos_user_success
+	{
+		color: red;
+	}
+	</style>
+{% endblock head %}
+
+{% block body %}
+<br/>
+<div style="font-size: 16px; color: red;">Create new user</div>
+
+<br/>
+{% for key, message in app.session.getFlashes() %}
+<div class="{{ key }}">
+    {{ message|trans({}, 'FOSUserBundle') }}
+</div>
+{% endfor %}
 
 <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
     {{ form_widget(form) }}
     <div>
         <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
-			Roles:
-			<select>
-				{% for role in roles %}
-					<option value="{{role}}">{{role}}</option>
-				{% endfor %}
-			</select>
-			Playground:
-			<select>
-				{% for playground in playgrounds %}
-					<option value="{{playground.getId()}}">{{playground.getShort()}}</option>
-				{% endfor %}
-				
-			</select>
     </div>
 </form>
+{% endblock %}	
+
+{% block scripts %}
+	<script data-main="{{ asset('gamma/js/main.settings.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+{% endblock %}
