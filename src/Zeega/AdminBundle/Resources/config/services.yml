@@ -1,0 +1,12 @@
+parameters:
+#    zeega_user.example.class: Zeega\UserBundle\Example
+
+services:
+    zeega.admin.user:
+        class: Zeega\AdminBundle\AdminEntity\UserAdmin
+        arguments: [null, Zeega\UserBundle\Entity\User, ZeegaUserBundle:UserAdmin]
+        tags:
+            - { name: sonata.admin, alias: zeega_user_registration, manager_type: orm, group: ZeegaAdmin, label: AdminUsers}
+#    zeega_user.example:
+#        class: %zeega_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
