@@ -138,7 +138,7 @@ class User extends BaseUser
     /**
      * @var Zeega\EditorBundle\Entity\Playground
      */
-    private $playgrounds;
+    public $playgrounds;
 
 
     /**
