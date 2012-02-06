@@ -87,7 +87,7 @@ class WidgetController extends Controller
 				return new Response(0);	
 			}
 			else{		
-				$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
+				$name=tempnam($this->container->getParameter('path').'images/tmp/','image'.$item->getId());
 				file_put_contents($name,$img);
 				$square = new Imagick($name);
 				$thumb = $square->clone();
@@ -109,8 +109,8 @@ class WidgetController extends Controller
 				$logger->err("writing image");
 				$square->thumbnailImage(144,0);
 			
-				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				$thumb->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_s.jpg');
 			
 				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
 				$em->persist($item);

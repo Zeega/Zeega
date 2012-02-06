@@ -1146,6 +1146,13 @@ body
 .inset-tray
 { zoom: 1; }
 
+
+.tray.closed
+{
+	display:none;
+}
+
+
 /*******************************
 
 	LAYERS -- these could be panels?  .panel.tray.raised.light ??
