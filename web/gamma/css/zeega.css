@@ -663,7 +663,7 @@ ul,li
 		left: -14px;
 		
 		opacity: 0.8;
-		z-index:100;
+		z-index:80;
 }
 .corner-triangle-for-menu:hover{
 	text-decoration:none !important;
