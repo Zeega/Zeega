@@ -358,6 +358,16 @@ var Player = {
 					_this.drawNode( nodeID ); 
 					_this.loadingBar.remove();
 				}
+				else if( nodeID == _this.getRight() )
+				{
+					console.log('turn off right spinner')
+					$('#preview-right').spin(false)
+				}
+				else if( nodeID == _this.getLeft() )
+				{
+					console.log('turn off left spinner')
+					$('#preview-left').spin(false)
+				}
 				
 			}
 		})
@@ -519,13 +529,6 @@ var Player = {
 		this.paused=false;
 		this.showNavigation();
 		
-		
-		/*
-		Animation for linked layer...
-		$('.linked-layer').hover(function(){console.log('hovering');$(this).append().css({'margin':'10px'});},
-				function(){$(this).children().css({'margin':'0px'});});
-				
-		*/
 	},
 	
 	showNavigation : function()
@@ -537,12 +540,24 @@ var Player = {
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
-		}else if( !_this.overlaysHidden ){
-			if( !this.getLeft( this.currentNode.id, 1 ) ) $('#preview-left').fadeOut();
+		}
+		else if( !_this.overlaysHidden )
+		{
+			if( !this.getLeft( this.currentNode.id ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( !this.getRight( this.currentNode.id, 1 ) ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentNode.id ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
+			
+			//dude is still loading!
+			if( !this.isFrameLoaded( this.getRight() ) ) 
+				$('#preview-right').spin('slow','white');
+			else $('#preview-right').spin(false);
+			
+			if( !this.isFrameLoaded( this.getLeft() ) ) 
+				$('#preview-left').spin('slow','white');
+			else $('#preview-left').spin(false);
+			
 		}
 	},
 	
@@ -729,7 +744,11 @@ var Player = {
 		
 		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
-		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
+		if( nextNodeID )
+		{
+			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			else console.log('still loading…')
+		}
 		else console.log('end of the line');
 	},
 	
@@ -745,7 +764,11 @@ var Player = {
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
-		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
+		if( nextNodeID )
+		{
+			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			else console.log('still loading…')
+		} 
 		else console.log('end of the line');
 	},
 	
@@ -757,6 +780,8 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
+		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(dist) ) dist = 1;
 		
 		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
@@ -774,11 +799,10 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
-		console.log('getLeft');
+		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(dist) ) dist = 1;
 		var nodeOrder = this.currentRoute.nodeOrder;
-
 		var index = _.indexOf( nodeOrder, nodeID );
-
 		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
 		else return nodeOrder[ index - dist ]
 	},
@@ -800,6 +824,7 @@ var Player = {
 		}
 	},
 	
+	isFrameLoaded : function( frameID ){ return _.include( this.loadedNodes, frameID ) },
 	
 	reset : function()
 	{
