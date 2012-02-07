@@ -18,7 +18,6 @@ class UserAdmin extends Admin
 			->add('display_name')
 			->add('bio')
 			->add('thumb_url')
-			->add('password','password')
 			->add('email')
 			->add('email')
 			->add('playgrounds', 'entity', array('class' => 'Zeega\EditorBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'))
