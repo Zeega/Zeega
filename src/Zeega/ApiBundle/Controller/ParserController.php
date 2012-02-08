@@ -45,11 +45,11 @@ class ParserController extends Controller
 					
 					if($isSet)
 					{
-						$parserMethod = new ReflectionMethod($parserClass, 'getSetInfo'); // reflection is slow, but it's probably ok here
+						$parserMethod = new ReflectionMethod($parserClass, 'getSet'); // reflection is slow, but it's probably ok here
 					}
 					else
 					{
-						$parserMethod = new ReflectionMethod($parserClass, 'parseSingleItem');
+						$parserMethod = new ReflectionMethod($parserClass, 'getItem');
 					}
 					
 					$response = $parserMethod->invokeArgs(new $parserClass, array($url,$itemId));
@@ -111,8 +111,8 @@ class ParserController extends Controller
 				        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
 				        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
 					
-						$parserMethod = new ReflectionMethod($parserClass, 'parseSetItems'); // reflection is slow, but it's probably ok here
-						$response = $parserMethod->invokeArgs(new $parserClass, array($setId,$collection));
+						$parserMethod = new ReflectionMethod($parserClass, 'getSetItems'); // reflection is slow, but it's probably ok here
+						$response = $parserMethod->invokeArgs(new $parserClass, array($setId, $collection));
 						$collection = $response["items"];
 					
 						$collection->setUser($user);
@@ -132,13 +132,14 @@ class ParserController extends Controller
 					
 						$em->persist($collection);
 						$em->flush();
-						//return new Response("we're good to go");
+
+						if(!isset($message)) $message = "";
+						
 						$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true, 'message' => $message));
 				        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 					}
 					else
 					{
-						//return new Response("yo");
 						return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
 					}
 				}

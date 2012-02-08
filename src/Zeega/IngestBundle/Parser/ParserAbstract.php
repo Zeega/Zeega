@@ -10,18 +10,13 @@ abstract class ParserAbstract
 {
 	private $config;
 	
-	protected function persistItem($item)
-	{
-		
-	}
-	
 	/**
      * Sets the parser configuration in a dictionary.
      *
      * @param String $key  The config key.
      * @param String $value The config value.
      */
-	public function setConfig($key, $value)
+	protected function setConfig($key, $value)
 	{
 		if(!isset($config))
 		{
@@ -30,7 +25,7 @@ abstract class ParserAbstract
 		$config[$key] = $value;
 	}
 	
-	public function returnResponse($object, $success, $message = "")
+	protected function returnResponse($object, $success, $message = "")
 	{
 		return array("success" => $success, "items" => $object, "message" => $message);
 	}
@@ -41,7 +36,7 @@ abstract class ParserAbstract
      * @param String  $key  The config key.
 	 * @return String|config
      */
-	public function getConfig($key)
+	protected function getConfig($key)
 	{
 		if(!isset($config) || !array_key_exists($key, $config))
 		{
@@ -52,20 +47,13 @@ abstract class ParserAbstract
 			return $config["key"];
 		}
 	}
+}
+
+abstract class ParserItemAbstract extends ParserAbstract
+{
 	
-	/**
-     * Parses a single item from the $url and adds the associated media to the database.
-     *
-     * @param String  $url  The url to be checked.
-	 * @return boolean|success
-     */
-	abstract public function parseSingleItem($url,$itemId);
-	
-	/**
-     * Parses the set of media from the $url and adds the associated media to the database.
-     *
-     * @param String  $url  The url to be parsed.
-	 * @return boolean|success
-     */	
-	abstract public function parseSet($url, $setId);
+}
+
+abstract class ParserCollectionAbstract extends ParserAbstract
+{
 }
