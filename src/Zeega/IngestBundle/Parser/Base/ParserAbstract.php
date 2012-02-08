@@ -1,9 +1,9 @@
 <?php
 
-namespace Zeega\IngestBundle\Parser;
+namespace Zeega\IngestBundle\Parser\Base;
 
 /**
- * Abstract data parser
+ * Generic abstract data parser
  *
  */
 abstract class ParserAbstract
@@ -25,11 +25,6 @@ abstract class ParserAbstract
 		$config[$key] = $value;
 	}
 	
-	protected function returnResponse($object, $success, $message = "")
-	{
-		return array("success" => $success, "items" => $object, "message" => $message);
-	}
-	
 	/**
      * Returns the configuration value associated with $key
      *
@@ -47,13 +42,17 @@ abstract class ParserAbstract
 			return $config["key"];
 		}
 	}
-}
 
-abstract class ParserItemAbstract extends ParserAbstract
-{
-	
-}
-
-abstract class ParserCollectionAbstract extends ParserAbstract
-{
+	/**
+     * Normalizes the parser response
+     *
+     * @param String  $object  Item or collection
+     * @param Boolean  $success  Result status
+	 * @param String  $message  Parser message
+	 * @return Array|response
+     */
+	protected function returnResponse($object, $success, $message = "")
+	{
+		return array("success" => $success, "items" => $object, "message" => $message);
+	}
 }

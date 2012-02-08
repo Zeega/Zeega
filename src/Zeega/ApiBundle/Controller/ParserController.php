@@ -19,11 +19,11 @@ class ParserController extends Controller
 {
 	private $supportedServices = array( 
 		// flickr
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\ParserFlickr", "IsSet" => false),
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\ParserFlickr", "IsSet" => true),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
 		// youtube
-		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\IngestBundle\Parser\ParserYoutube", "IsSet" => false),
-		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\IngestBundle\Parser\ParserYoutube", "IsSet" => true),
+		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\IngestBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
+		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\IngestBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
@@ -45,7 +45,7 @@ class ParserController extends Controller
 					
 					if($isSet)
 					{
-						$parserMethod = new ReflectionMethod($parserClass, 'getSet'); // reflection is slow, but it's probably ok here
+						$parserMethod = new ReflectionMethod($parserClass, 'getInfo'); // reflection is slow, but it's probably ok here
 					}
 					else
 					{
@@ -53,7 +53,7 @@ class ParserController extends Controller
 					}
 					
 					$response = $parserMethod->invokeArgs(new $parserClass, array($url,$itemId));
-					
+					//return new Response(var_dump($respo));
 					if(isset($response))
 					{
 						$success = $response["success"] ? 'true' : 'false'; // twig wasn't rendering 'false' for some reason
@@ -82,6 +82,8 @@ class ParserController extends Controller
 		$url = $this->getRequest()->request->get('attribution_uri');
 		//return new Response(var_dump($url));
 		$matches = array();
+		$message = "";
+		
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -111,8 +113,8 @@ class ParserController extends Controller
 				        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
 				        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
 					
-						$parserMethod = new ReflectionMethod($parserClass, 'getSetItems'); // reflection is slow, but it's probably ok here
-						$response = $parserMethod->invokeArgs(new $parserClass, array($setId, $collection));
+						$parserMethod = new ReflectionMethod($parserClass, 'getCollection'); // reflection is slow, but it's probably ok here
+						$response = $parserMethod->invokeArgs(new $parserClass, array($url, $setId, $collection));
 						$collection = $response["items"];
 					
 						$collection->setUser($user);
@@ -129,12 +131,12 @@ class ParserController extends Controller
 						}
 					
 						$collection->setUser($user);
-					
+						
+						$message = isset($response["message"]) ? $response["message"] : " ";
+						
 						$em->persist($collection);
 						$em->flush();
 
-						if(!isset($message)) $message = "";
-						
 						$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true, 'message' => $message));
 				        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
 					}
