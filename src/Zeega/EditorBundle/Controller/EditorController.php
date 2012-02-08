@@ -279,13 +279,14 @@ class EditorController extends Controller
 
 			$route = $routes[0];
 			
-			$params = array();
+			$params = array('playground'=>$playground->getId());
 			$session = $this->getRequest()->getSession();
 			$collection_id = $session->get("collection_id");
 			
 			if(isset($collection_id))
 			{
 				$params['collection'] = $collection_id;
+				
 				$session->remove("collection_id"); // reads and deletes from session
 			}
 			else
