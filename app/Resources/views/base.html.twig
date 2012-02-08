@@ -31,7 +31,9 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
+			{% if playground is defined %}
 			sessionStorage.setItem('playgroundid','{{playground.id}}');
+			{% endif %}
 		</script>
 		
     </head>
@@ -96,7 +98,7 @@
 						<ul>
 						
 							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
-							{% if playground %}
+							{% if playground is defined %}
 							<li class='{% if num_playgrounds > 1 %} drop-down{% endif %} clearfix' >
 									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaEditorBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
 									{% if num_playgrounds > 1 %} 
@@ -123,10 +125,11 @@
 												
 												<hr>
 
-									
+										{% if myprojects is defined %}
 										{% for project in myprojects %}
 												<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="dark">{{project.title}}</a></li><br>
 										{% endfor %}
+										{% endif %}
 									</ul>
 							</li>
 							<li>|</li>
