@@ -1,7 +1,9 @@
 Zeega
 =============
 
-VERSION 0.1 [THIS IS NOT YET A FUNCTIONAL PROTOTYPE]
+VERSION 0.5 [THIS IS A FUNCTIONAL PROTOTYPE]
+
+This is the code being used at alpha.zeega.org.
 
 Overview
 -------------
