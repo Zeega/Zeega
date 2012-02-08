@@ -50,7 +50,7 @@ var Player = {
 		if( window.Zeega )
 		{
 			this.zeega = true;
-			Zeega.previewMode = false;
+			//Zeega.previewMode = false;
 		}
 
 		this.removeAllVideoElements();
@@ -63,11 +63,22 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
+		console.log(this)
+		
 		$('title').html(this.data.project.title);
 		
 		//set the current route
 		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
 		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
+
+
+		//turn the node layer array into an array of string numbers
+		_.each(this.data.project.routes,function(route){
+			_.each(route.nodes, function(node){
+				node.layers = _.map(node.layers,function(num){ return String(num) });
+			})
+		})
+
 
 		//set the current node
 		var currentNodeID;
@@ -155,7 +166,7 @@ var Player = {
 			//turn off previewMode
 			Zeega.previewMode = false;
 			//go to the node last viewed in the player
-			Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
+			//Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
 		}
 	},
 	
@@ -329,8 +340,11 @@ var Player = {
 			//updated the loading bar
 			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
 			
+			console.log('UPDATE!')
+			console.log( layers )
+				
 			//if all the layers are loaded in a node
-			if( _.difference( layers, _this.loadedLayers ).length == 0 )
+			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
 			{
 			
 				//remove from nodes loading array
@@ -340,8 +354,19 @@ var Player = {
 				
 				if( _this.currentNode.id == nodeID)
 				{
-					_this.drawNode( nodeID ); 
+					console.log('drawCurrentNode: '+ nodeID)
 					_this.loadingBar.remove();
+					_this.drawNode( nodeID ); 
+				}
+				else if( nodeID == _this.getRight() )
+				{
+					console.log('turn off right spinner')
+					if( $('#preview-right').spin() ) $('#preview-right').spin(false)
+				}
+				else if( nodeID == _this.getLeft() )
+				{
+					console.log('turn off left spinner')
+					if( $('#preview-left').spin() ) $('#preview-left').spin(false)
 				}
 				
 			}
@@ -388,7 +413,7 @@ var Player = {
 		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
 		{
 			_this = this;
-
+			
 			if(nodeID == this.currentNode.id) this.loadingBar.draw();
 
 			//put node id into the nodesLoading Array
@@ -403,7 +428,9 @@ var Player = {
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNode.id ){
+		}else if( nodeID == this.currentNode.id && _.include( this.loadedNodes , nodeID ) ){
+			
+
 			this.drawNode( nodeID );
 		}
 	},
@@ -470,6 +497,9 @@ var Player = {
 
 		//set timeout for auto advance
 		var advanceValue = targetNode.attr.advance;
+		
+		console.log(targetNode)
+		
 		this.setAdvance( advanceValue );
 		
 		/////
@@ -498,6 +528,7 @@ var Player = {
 		})
 		this.paused=false;
 		this.showNavigation();
+		
 	},
 	
 	showNavigation : function()
@@ -509,12 +540,24 @@ var Player = {
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
-		}else if( !_this.overlaysHidden ){
-			if( !this.getLeft( this.currentNode.id, 1 ) ) $('#preview-left').fadeOut();
+		}
+		else if( !_this.overlaysHidden )
+		{
+			if( !this.getLeft( this.currentNode.id ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( !this.getRight( this.currentNode.id, 1 ) ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentNode.id ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
+			
+			//dude is still loading!
+			if( !this.isFrameLoaded( this.getRight() ) ) 
+				$('#preview-right').spin('slow','white');
+			else $('#preview-right').spin(false);
+			
+			if( !this.isFrameLoaded( this.getLeft() ) ) 
+				$('#preview-left').spin('slow','white');
+			else $('#preview-left').spin(false);
+			
 		}
 	},
 	
@@ -524,11 +567,16 @@ var Player = {
 		if(layer.attr.citation){
 			var template = _.template( this.getCitationTemplate() );
 	
+			var title = '';
+			var imgURL = ''; //add a default thumb?
+			if( layer.attr.title ) title = layer.attr.title;
+			if( layer.attr.thumbnail_url ) imgURL = layer.attr.thumbnail_url;
+	
 			var fields = {
-				title : layer.attr.title,
+				title : title,
 				type : layer.type.toLowerCase(),
 				trackback : layer.attr.attribution_url,
-				imgUrl : layer.attr.thumbnail_url,
+				imgUrl : imgURL,
 			};
 			var listItem = $( template( fields ) );
 			
@@ -696,7 +744,11 @@ var Player = {
 		
 		var nextNodeID = this.getRight( this.currentNode.id, 1 );
 		
-		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
+		if( nextNodeID )
+		{
+			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			else console.log('still loading…')
+		}
 		else console.log('end of the line');
 	},
 	
@@ -712,7 +764,11 @@ var Player = {
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
-		if( nextNodeID&&_.include(this.loadedNodes, nextNodeID)  ) this.gotoNode( nextNodeID );
+		if( nextNodeID )
+		{
+			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			else console.log('still loading…')
+		} 
 		else console.log('end of the line');
 	},
 	
@@ -724,6 +780,8 @@ var Player = {
 	
 	getRight : function( nodeID, dist )
 	{
+		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(dist) ) dist = 1;
 		
 		var nodeOrder = this.currentRoute.nodeOrder;
 		var index = _.indexOf( nodeOrder, nodeID );
@@ -741,11 +799,10 @@ var Player = {
 	
 	getLeft : function( nodeID, dist )
 	{
-		console.log('getLeft');
+		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(dist) ) dist = 1;
 		var nodeOrder = this.currentRoute.nodeOrder;
-
 		var index = _.indexOf( nodeOrder, nodeID );
-
 		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
 		else return nodeOrder[ index - dist ]
 	},
@@ -767,6 +824,7 @@ var Player = {
 		}
 	},
 	
+	isFrameLoaded : function( frameID ){ return _.include( this.loadedNodes, frameID ) },
 	
 	reset : function()
 	{
@@ -788,38 +846,50 @@ var Player = {
 	
 	getTemplate : function()
 	{
-		html =	 	"<div id='preview-wrapper'><div id='zeega-player'>";
-		html +=			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
-		html +=			"<div id='preview-close' class='player-overlay'><span class='zicon orange zicon-close' ></span></div>";
-		html += 		"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>";
-		html += 			"<div class='arrow-background'></div>";
-		html += 			"<img  height='75' width='35' onclick='Player.goLeft();return false'>";
-		html += 		"</div>";
-		html += 		"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>";
-		html += 			"<div class='arrow-background'></div>";
-		html += 			"<img height='75' width='35' onclick='Player.goRight();return false'>";
-		html += 		"</div>";
-		html += 		"<div id='preview-media'></div>";
-		html += 		"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
-		html += 	"</div></div>";
+		html =
+		
+		"<div id='preview-wrapper'><div id='zeega-player'>"+
+			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
+		
+		
+		if(this.zeega) html +=
+			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
+		
+		
+		html +=
+		
+			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
+				"<div class='arrow-background'></div>"+
+					"<img  height='75' width='35' onclick='Player.goLeft();return false'>"+
+				"</div>"+
+				"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>"+
+					"<div class='arrow-background'></div>"+
+					"<img height='75' width='35' onclick='Player.goRight();return false'>"+
+				"</div>"+
+				"<div id='preview-media'></div>"+
+				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>"+
+			"</div>"+
+		"</div>";
 		
 		return html;
 	},
 	
 	getCitationTemplate : function()
 	{
-		var html =	'<li class="clearfix">';
-		html+=			'<div class="citation-tab">';
-		html+=				'<span class="zicon grey zicon-<%= type %>"></span>';
-		html+=			'</div>';
-		html+=			'<div class="citation-content hidden">';
-		html+=				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>';
-		html+=				'<div class="citation-body">';
-		html+=				'<div class="citation-title"><%= title %></div>';
-		html+=					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>';
-		html+=				'</div>';
-		html+=			'</div>';
-		html+=		'</li>';
+		var html =
+		
+		'<li class="clearfix">'+
+			'<div class="citation-tab">'+
+				'<span class="zicon grey zicon-<%= type %>"></span>'+
+			'</div>'+
+			'<div class="citation-content hidden">'+
+				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>'+
+				'<div class="citation-body">'+
+					'<div class="citation-title"><%= title %></div>'+
+					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>'+
+				'</div>'+
+			'</div>'+
+		'</li>';
 		return html;
 	}
 

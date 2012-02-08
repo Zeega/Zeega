@@ -29,8 +29,13 @@ var VisualLayerEditorView = Backbone.View.extend({
 			$(this.el).draggable({
 				stop : function(){
 					var pos = $(this).position();
-					var left = Math.floor( pos.left * 100 / 6 )/100;
-					var top = Math.floor( pos.top * 100/ 4 )/100;
+
+					var parentWidth = $(this).parent().css('width').replace(/px/,'');
+					var parentHeight = $(this).parent().css('height').replace(/px/,'');
+					
+					var left = ( pos.left / parentWidth ) * 100;
+					var top = ( pos.top / parentHeight ) * 100;
+					
 					var settings = [{
 						left: {property:'left',value:left,suffix:'%'},
 						top: {property:'top',value:top,suffix:'%'}
@@ -142,10 +147,11 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		_.each( this._renderedViews , function(view){
 			types.push( view.model.get('type').toLowerCase() );
 		});
-		types = _.uniq( types );
+		//types = _.uniq( types );
 		_.each( types, function(type){
 			var icon = $('<span>').addClass('zicon grey zicon-' +type);
-			$('#visualeditor-view-bar').find('.icon-tray').append(icon)
+			var li = $('<li>').append(icon);
+			$('#visualeditor-view-bar').find('.icon-tray').append(li)
 		});
 	}
 

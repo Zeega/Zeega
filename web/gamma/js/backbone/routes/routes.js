@@ -6,27 +6,31 @@ var MyRouter = Backbone.Router.extend({
 	routes : {
 		"/editor/frame/:nodeid" : "gotoNodeInEditor",
 		"/player/frame/:nodeid" : "gotoNodeInPlayer",
-		
-		//"node/:nodeid/:layerid" : "gotoLayer"
 	},
 
 	// open/load the assigned node
 	gotoNodeInEditor : function(nodeid)
 	{
-			if(Zeega && nodeid)
-			{
-				if(nodeid == 'undefined') Zeega.url_hash.node = '';
-				else Zeega.url_hash.node = nodeid;
-			}
-			//check to see if the node is already loaded, or if it should move to that node
-			if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+		//close the player if it's open
+		if( Zeega.previewMode == true )
+		{
+			Player.close();
+		}
 		
+		if(Zeega && nodeid)
+		{
+			if(nodeid == 'undefined') Zeega.url_hash.node = '';
+			else Zeega.url_hash.node = nodeid;
+		}
+		//check to see if the node is already loaded, or if it should move to that node
+		if(Zeega.route.nodes && Zeega.currentNode.id != nodeid) Zeega.loadNode( Zeega.route.nodes.get(nodeid) );
+	
 	},
 
 	gotoNodeInPlayer : function(nodeid)
 	{
-		console.log('Player node changed')
-		
+		//go to the frame designated
+		Player.gotoNode( nodeid );
 	},
 	
 });

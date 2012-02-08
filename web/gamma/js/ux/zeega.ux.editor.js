@@ -25,29 +25,39 @@ function initUX(){
 
 $('#list-view').click(function(){
 	console.log('goto list view');
+	$('#grid-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').addClass('list-view').removeClass('grid-view');
+	return false;
 })
 
 $('#grid-view').click(function(){
 	console.log('goto grid view');
+	$('#list-view .zicon').removeClass('orange');
+	$(this).find('.zicon').addClass('orange');
 	$('#database-item-list').removeClass('list-view').addClass('grid-view');
+	return false;
 })
 
-$('#workspace-ratio').change(function(){
-	var ratioID = parseInt( $(this).val() );
-	changeAspectRatio( ratioID )
-	Zeega.updateAspectRatio( ratioID );
-});
+
+$('#project-settings').click(function(){
+	projectSettings();
+})
+
+$('#ratio-list a').click(function(){
+	changeAspectRatio( $(this).data('ratio-id') );
+	return false;
+})
 
 function changeAspectRatio( ratioID )
 {
 	switch( ratioID )
 	{
-		case 1:
+		case 0:
 			$('#visual-editor-workspace').css('width','704px')
 			break;
 		
-		case 2:
+		case 1:
 			$('#visual-editor-workspace').css('width','625px')
 			break;
 			
@@ -56,6 +66,16 @@ function changeAspectRatio( ratioID )
 	}
 }
 
+
+function projectSettings()
+{
+	//$('#project-settings-modal').modal({ backdrop:true });
+	$('#project-settings-modal').modal('show');
+	$('#project-settings-modal').find('#close-modal').click(function(){
+		$('#project-settings-modal').modal('hide');
+	})
+	return false;
+}
 
 function embedButton()
 {
@@ -91,6 +111,11 @@ function shareButton()
 }
 
 
+
+$('#new-layer-list a').click(function(){
+	addLayer( $(this).data('type') );
+	return false;
+})
 
 function addLayer(type)
 {
@@ -172,14 +197,19 @@ function closeOpenCitationTabs()
 		shareButton();
 	});
 	
-	//fadeIn the sidebar
-	$('#sidebar').fadeIn();
+	$('#get-help').click(function(){
+		localStorage.help = true;
+		Zeega.initStartHelp();
+	})
 	
 	
-	$('#search-filter .filter-toggle').click(function(){
-		var dd = $(this).parent('li');
-		if($(dd).hasClass('open')) dd.removeClass('open');
-		else $(dd).addClass('open');
+	$('.menu-toggle').click(function(){
+		
+		var menu = $(this).next();
+		
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
 		event.stopPropagation();
 	});
 	
@@ -196,8 +226,7 @@ function closeOpenCitationTabs()
 	
 	function clearMenus()
 	{
-		var d = 'a.menu, .dropdown-toggle, .filter-toggle';
-		$(d).parent('li').removeClass('open');
+		$('.menu-items').removeClass('open');
 	}
 	
 	
@@ -219,53 +248,45 @@ function closeOpenCitationTabs()
 		console.log('infocus refresh database')
 	});
 	
-	
-	function submitenter(inputfield,e)
-	{
-		var keycode;
-
-		console.log('submitenter');
-
-		if (window.event) keycode = window.event.keyCode;
-		else if (e) keycode = e.which;
-		else return true;
+	$('#database-search-text').keypress(function(e){
+		var keycode = e.which;
 
 		if (keycode == 13)
 		{
-
 			Database.search( $("#database-search-text").val() );
-			console.log('pressed enter')
+			
+			//open database tray if closed
+			if( $('#database-panel .panel-content').is(':hidden') )
+				$('#database-panel .panel-content').show('blind',{'direction':'vertical'});
+
 		}else{
 			return true;
 		}
-	}
+	});
+	
+	
 	
 	//node tray sortable and sorting events
 	
-	$('#node-drawer').find('ul').sortable({  
-		axis : 'x',
+	$('#frame-list').sortable({  
+		//axis : 'x',
+		containment: '#frame-drawer',
 		forceHelperSize : true,
 		placeholder: "node-thumb ui-state-highlight",
 		forcePlaceholderSize:true,
 		forceHelperSize:true,
 		tolerance: 'pointer',
+		distance: 10,
 		
 		stop : function(){
 			var order = $(this).sortable('toArray');
-			//ensure the array is made of integers
-			order = _.map( order, function(num){ return parseInt( num ) })
 			
-			Zeega.route.set({'nodesOrder': order });
-			Zeega.route.save();
-			console.log($(this).sortable('toArray'));
+			//ensure the array is made of integers
+			Zeega.nodeSort();
+
 		}
 	});
 	
-	//search bar focus stuff
-	$('#database-search-text').focus(function(){
-		$(this).css('color','#444');
-		$(this).val('');
-	});
 	
 	$('#database-search-text').click(function(event){
 		event.stopPropagation();
@@ -315,6 +336,7 @@ function closeOpenCitationTabs()
 	});
 	
 	$('#node-advance-random input').change(function(){
+		
 		var attr = Zeega.currentNode.get('attr');
 		if( $(this).is(':checked') ) attr.advanceRandom = true;
 		else attr.advanceRandom = false;
@@ -325,35 +347,34 @@ function closeOpenCitationTabs()
 	
 
 //expands the Zeega editor panels	
-	$('.editor-title-bar-expander').click(function(){
-		console.log('expand/collapse')
-		//get the current Node ID
-		var nodeID = Zeega.currentNode.id;
-		var domID = $(this).attr('id').split('-',1)[0];
+	$('.expandable .panel-head').click(function(){
 
-		var storage = localStorage.getObject( nodeID );
-		var panelStates = {};
-		if( _.isNull( storage ) ) storage = {};
-		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
+//removed the ability to store the panel states for now
+		//get the current Node ID
+		//var nodeID = Zeega.currentNode.id;
+		//var domID = $(this).attr('id').split('-',1)[0];
+
+		//var storage = localStorage.getObject( nodeID );
+		//var panelStates = {};
+		//if( _.isNull( storage ) ) storage = {};
+		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
 		
-		var expander = $(this).next('div');
-		if( expander.is(':visible'))
+		var content = $(this).next('div');
+		if( content.is(':visible'))
 		{
 			//hide
-			eval( 'var state = {"'+ domID +'":true}');
-			_.extend( panelStates , state );
-			expander.hide('blind',{'direction':'vertical'});
-			$(this).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":true}');
+			//_.extend( panelStates , state );
+			content.hide('blind',{'direction':'vertical'});
 		}else{
 			//show
-			eval( 'var state = {"'+ domID +'":false}');
-			_.extend( panelStates , state );
-			expander.show('blind',{'direction':'vertical'})	
-			$(this).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
+			//eval( 'var state = {"'+ domID +'":false}');
+			//_.extend( panelStates , state );
+			content.show('blind',{'direction':'vertical'})	
 		}
 		//set as property to read in on reload
-		_.extend( storage, {panelStates:panelStates} )
-		localStorage.setObject( nodeID , storage );
+		//_.extend( storage, {panelStates:panelStates} )
+		//localStorage.setObject( nodeID , storage );
 	})
 	
 	
@@ -362,54 +383,30 @@ function closeOpenCitationTabs()
 	
 	//enable the workspace as a valid drop location for DB items
 	$('#visual-editor-workspace').droppable({
-			accept : '.database-asset-list',
-			hoverClass : 'workspace-item-hover',
-			tolerance : 'pointer',
+		accept : '.database-asset-list',
+		hoverClass : 'workspace-item-hover',
+		tolerance : 'pointer',
 
-			//this happens when you drop a database item onto a node
-			drop : function( event, ui )
-				{
-					
-					ui.draggable.draggable('option','revert',false);
-					
-					console.log(Zeega.draggedItem)
-					
-					//make the new layer model
-					var settings = {
-						//url: Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers',
-						type: Zeega.draggedItem.get('source'),
-						attr: {
-							'item_id' : Zeega.draggedItem.id,
-							'title' : Zeega.draggedItem.get('title'),
-							'url' : Zeega.draggedItem.get('uri'),
-							'uri' : Zeega.draggedItem.get('uri'),
-							'thumbnail_url' : Zeega.draggedItem.get('thumbnail_url'),
-							'attribution_url' : Zeega.draggedItem.get('attribution_uri'),
-							'citation':true,
-						}
-					};
-					
-					console.log(settings);
-					var layerToSave = new Layer(settings);
-
-					Zeega.addLayerToNode( Zeega.currentNode, layerToSave );
-										
-					console.log('update node thumb for node: '+ Zeega.currentNode.id);
-				}
-		});
+		//this happens when you drop a database item onto a node
+		drop : function( event, ui )
+			{
+				ui.draggable.draggable('option','revert',false);
+				Zeega.createLayerFromItem( Zeega.draggedItem );
+			}
+	});
 		
-		// FAKE STUFF
-		$('#css-change').toggle(function(){
-			$('body').css('background','#fff');
-			$('#route-header').css('color','#444');
-			$('#node-drawer').css('background','#fff');
-			$('.database-asset').css('background','#fff');
-		},function(){
-			$('body').css('background','');
-			$('#route-header').css('color','');
-			$('#node-drawer').css('background','');
-			$('.database-asset').css('background','');
-		});
+	// FAKE STUFF
+	$('#css-change').toggle(function(){
+		$('body').css('background','#fff');
+		$('#route-header').css('color','#444');
+		$('#node-drawer').css('background','#fff');
+		$('.database-asset').css('background','#fff');
+	},function(){
+		$('body').css('background','');
+		$('#route-header').css('color','');
+		$('#node-drawer').css('background','');
+		$('.database-asset').css('background','');
+	});
 
 
 //});

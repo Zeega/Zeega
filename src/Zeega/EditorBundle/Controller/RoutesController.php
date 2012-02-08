@@ -138,61 +138,77 @@ class RoutesController extends Controller
     } // `get_route_nodes`    [GET] /routes/{route_id}/Nodes
 
 
-    public function postRouteNodesAction($route_id)
+  
+	public function postRouteNodesAction($route_id)
     {
     	
-		
-		
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
 		
+    	if($request->request->get('duplicate_id')){
     	
-		$node= new Node();
-		$node->setRoute($route);
-		if($request->request->get('thumb_url')){
-		$node->setThumbUrl($request->request->get('thumb_url'));
-		
-		}
-		
-		if($request->request->get('attr')){
-		$node->setAttr($request->request->get('attr'));
-		
-		}
-		if($request->request->get('link_right')){
-        $linkRight=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findById($request->request->get('link_right'));
-    	$node->setLinkRight($linkRight);
+    		$original_node =$this->getDoctrine()
+        				->getRepository('ZeegaEditorBundle:Node')
+        				->find($request->request->get('duplicate_id'));
     	
-    	}
-    	if($request->request->get('link_left')){
-    	$linkLeft=$this->getDoctrine()
-        		->getRepository('ZeegaEditorBundle:Node')
-        		->findById($request->request->get('link_left'));
+			$node= new Node();
+			$node->setRoute($route);
+			if($request->request->get('thumb_url')) $node->setThumbUrl($request->request->get('thumb_url'));	
+			if($original_node->getAttr()) $node->setAttr($original_node->getAttr());
 
-    	
-    	$node->setLinkLeft($linkLeft);
-    	}
-    	
-    	
-		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($node);
-		$em->flush();
-		$output=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Node')
-        ->findNodeById($node->getId());
-        
-    	return new Response(json_encode($output[0]));
-   
+			$original_layers=$original_node->getLayers();
+			if($original_layers){
+				
+        		foreach($original_layers as $original_layer_id){
+        				$layer= new Layer();
+    					$route->addLayers($layer);
+    					
+        				$original_layer=$this->getDoctrine()
+        					->getRepository('ZeegaEditorBundle:Layer')
+        					->find($original_layer_id);
+        				
+						if($original_layer->getItem()) $layer->setItem($original_layer->getItem());
+						if($original_layer->getItemUri()) $layer->setUri($original_layer->getUri());
+						if($original_layer->getType()) $layer->setType($original_layer->getType());
+						if($original_layer->getText()) $layer->setText($original_layer->getText());
+						if($original_layer->getAttr()) $layer->setAttr($original_layer->getAttr());
+						
+						$em->persist($layer);
+						$em->flush();
+        				$node_layers[]=$layer->getId();	
+        		}
+        		$node->setLayers($node_layers);
+			}
+			$em->persist($route);
+			$em->persist($node);
+			$em->flush();
+			$output=$this->getDoctrine()
+			->getRepository('ZeegaEditorBundle:Node')
+			->findNodeById($node->getId());
+			return new Response(json_encode($output[0]));
+		}
+		else{
+			$node= new Node();
+			$node->setRoute($route);
+			if($request->request->get('thumb_url'))$node->setThumbUrl($request->request->get('thumb_url'));
+			if($request->request->get('attr')) $node->setAttr($request->request->get('attr'));
 
+			$em=$this->getDoctrine()->getEntityManager();
+			$em->persist($node);
+			$em->flush();
+			$output=$this->getDoctrine()
+				->getRepository('ZeegaEditorBundle:Node')
+				->findNodeById($node->getId());
+			return new Response(json_encode($output[0]));
+		}
     
     
     } // `post_route_nodes`   [POST] /routes/{route_id}/nodes
 
 
 
-/** `get_route_layers`    [GET] /routes/{route_id}/layers */
+	/** `get_route_layers`    [GET] /routes/{route_id}/layers */
 
     public function getRouteLayersAction($route_id)
     {
@@ -244,8 +260,6 @@ class RoutesController extends Controller
     	
     	if($request->request->get('text')) $layer->setText($request->request->get('text'));
     	
-    	if($request->request->get('zIndex')) $layer->setZIndex($request->request->get('zIndex'));
-
 		if($request->request->get('attr')) $layer->setAttr($request->request->get('attr'));
     	
     	

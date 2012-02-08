@@ -12,6 +12,7 @@ var TextLayer = ProtoLayer.extend({
 
 	layerType : 'VISUAL',
 	draggable : true,
+	linkable : true,
 
 	defaultAttributes: {
 		type:'text',
@@ -207,7 +208,25 @@ var TextLayer = ProtoLayer.extend({
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		//console.log('text layer alohad')
 		Aloha.jQuery(content).aloha();
-		
+		//window.Aloha.unregisterEditable( Aloha.jQuery(content) );
+		//console.log( window.Aloha )
+		/*
+		Aloha.jQuery(content).obj.focus();
+		Aloha.jQuery(content).obj.activate();
+		window.Aloha.Selection.updateSelection();
+		*/
+		/*
+		_.each(window.Aloha.editables,function(a){
+			if( a.obj.context.innerText == '' )
+			{
+				console.log(a)
+				a.obj.focus(); 
+				a.activate(); 
+				window.Aloha.Selection.updateSelection();
+			}
+
+		})
+		*/
 		
 	},
 	
@@ -253,7 +272,8 @@ var TextLayer = ProtoLayer.extend({
 		//need this to be accessable inside various functions
 		var _this  = this;
 
-		var previewFontSize = this.attr.fontSize/600 * window.innerWidth;
+		var workspaceWidth = 704; // this should be editable depending on the workspace ratio
+		var previewFontSize = this.attr.fontSize / workspaceWidth  * window.innerWidth;
 		var previewWidth = parseInt( parseFloat( this.attr.width ) / 6.0 ) + 2;
 		var previewHeight = parseInt( parseFloat( this.attr.height ) / 4.0 ) + 6;
 		
@@ -299,6 +319,14 @@ var TextLayer = ProtoLayer.extend({
 	play : function( z )
 	{
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+		
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			_this.display.addClass('link-blink')
+			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  )
+			
+		}
 	},
 	
 	stash : function()

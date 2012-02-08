@@ -10,7 +10,9 @@
 	<meta name="author" content="">
 	<link rel="stylesheet" href="{{ asset('gamma/css/zeega.css')}}">
 	<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
-	<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="libraries/swfobject" src="/jda/web/gamma/js/libraries/swfobject.js"></script>
+
+	<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="libraries/swfobject" src="{{ asset('gamma/js/libraries/swfobject.js') }}"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<script> 
 		sessionStorage.setItem('directory', '{{directory}}');
 		sessionStorage.setItem('hostname','{{hostname}}');

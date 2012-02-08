@@ -13,14 +13,10 @@ var Database =
 		this.itemCollection = new ItemCollection;
 		this.itemViewCollection;
 		
-		// BEGIN "HAMMERS ARE COOL-MODE"
 		var collection_id = $('#collection-id').val();
-		if(parseInt(collection_id) > -1)
-		{
-		    var url = Zeega.url_prefix + "api/search";
-		    this.itemCollection.url = Zeega.url_prefix + "api/search?collection=" + collection_id;
-		}
-		// END "HAMMERS ARE COOL-MODE"
+		if(parseInt(collection_id) > -1) 
+			this.itemCollection.collectionID = collection_id;
+		
 		
 		var itemsBS = jQuery.parseJSON(itemsJSON);
 		
@@ -35,7 +31,8 @@ var Database =
 		this.collectionViewCollection;
 		
 		this.collectionCollection.fetch({
-			success: function( collections ){
+			success: function( collections, response )
+			{
 				_this.collectionViewCollection = new CollectionViewCollection({ collection : _this.collectionCollection });
 			}
 		});
@@ -61,6 +58,8 @@ var Database =
 	
 	search : function( query )
 	{
+		
+		console.log('search: '+ query)
 		this.itemCollection.query = query;
 		this.itemCollection.fetch();
 		

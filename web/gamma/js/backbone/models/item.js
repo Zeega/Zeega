@@ -1,7 +1,9 @@
 var Item = Backbone.Model.extend({
+	
 	defaults : {
 		title : 'Untitled',
-		tags : new TagCollection(),
+		
+		
 	},
 	
 	url: function(){
@@ -11,17 +13,22 @@ var Item = Backbone.Model.extend({
 	
 	initialize : function()
 	{
+		this.tags=new TagCollection();
 	},
 
-	loadTags : function(){
-		this.get("tags").reset({silent:true});
-		this.get("tags").fetch( {url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id  +"/tags"});
+	loadTags : function(successFunction, errorFunction){
+		this.tags.reset({silent:true});
+		this.tags.item_id=this.id;
+		this.tags.fetch({ 
+			success:successFunction,
+			error:errorFunction,
+		});
 	},
 
 });
 
 var ItemCollection = Backbone.Collection.extend({
-	model : Item,
+	model : Item, 
 	
 	page : 0,
 	contentType : null,
@@ -35,7 +42,7 @@ var ItemCollection = Backbone.Collection.extend({
 	},
 	url: function()
 	{
-		var url = Zeega.url_prefix + "api/search?page="+ this.page;
+		var url = Zeega.url_prefix + "api/search?playground="+sessionStorage.getItem('playgroundid')+"&page="+ this.page;
 		if( !_.isNull(this.query) && this.query != "" ) url += '&q=' + this.query;
 		if( !_.isNull(this.contentType) ) url += '&content=' + this.contentType;
 		if( !_.isNull(this.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.collectionID;

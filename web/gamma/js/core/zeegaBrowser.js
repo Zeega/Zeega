@@ -12,6 +12,11 @@ var ZeegaBrowser = {
 	searchItemsView : null,
 	searchCollectionsView : null,
 
+	mycarousel_initCallback : function (carousel, state) {
+	    if (state == 'init')
+	        ZeegaBrowser.carousel = carousel;
+	        
+	},
 	init : function()
 	{
 		//Load MyCollections  (renamed from inconsistently named myCollectionsModel )
@@ -22,8 +27,7 @@ var ZeegaBrowser = {
 		this.myCollections.fetch({
 			success : function(model, response)
 			{
-				$('#browser-my-collections-drawer').jcarousel();
-				
+				 
 			}
 		});
 
@@ -34,7 +38,7 @@ var ZeegaBrowser = {
 		this.search = new BrowserSearch();
 		
 		//attach items collection to items view and collections collection to collections view
-		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection"), id : '54' });
+		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection") });
 		this.searchCollectionsView = new BrowserSearchCollectionsView({collection: this.search.get("collectionsCollection")});
 		this.timeBinsView = new BrowserTimeBinsView({collection: this.search.get("timeBinsCollection") });
 		this.search.updateQuery();
@@ -54,25 +58,23 @@ var ZeegaBrowser = {
 		$('#browser-results .browser-loading').hide();
 		
 	},
+	
+		refresh : function()
+	{
+		this.search.updateQuery();
+	},
+	
+	
 	/* Resets the page count so that results are refreshed completely */
 	resetPageCount : function(){
 		this.search.set({page: 1});	
 	},
+	
 	doCollectionSearch : function(collectionID){
-		
-		/* When user clicks on a collection default to items view
-		instead of collections view */
-		$('#browser-item-count').closest('li').removeClass('browser-unselected-toggle');
-		$('#browser-item-count').closest('li').addClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().removeClass('browser-selected-toggle');
-		$('#browser-item-count').siblings().addClass('browser-unselected-toggle');
-		$('#browser-results-collections').hide();
-		$('#browser-results-items').show();
 		
 		/* For the moment - clear other filters like query & type */
 		$('#database-search-text').val('');
-		$('#database-search-filter').val('All');
-		this.search.set({'user':-2, 'collection':collectionID});
+		this.search.set({'user':-2, 'collection':collectionID, content:'all'});
 		this.doSearch();
 	},
 	
@@ -81,8 +83,7 @@ var ZeegaBrowser = {
 		if (this.search.get("page") == 1) {
 		
 			//Empty items and collections from results drawer
-			$('#browser-results #browser-results-collections .browser-results-collection').remove();
-			$('#browser-results #browser-results-items .browser-results-image').remove();		
+			$('#browser-results #browser-results-items .browser-results-image, #browser-results #browser-results-items .browser-results-collection').remove();		
 
 			//Show results drawer's loading spinner
 			$('#browser-results .browser-loading').show();
@@ -143,9 +144,7 @@ var ZeegaBrowser = {
 							
 						});
 		}
-		this.search.set({ 
-							content:$('#database-search-filter').val()
-						});
+		
 		this.search.updateQuery();
 	}, 
 	showShareButton : function(collectionID){	
@@ -176,7 +175,11 @@ var ZeegaBrowser = {
 		theCollection.destroy({	
 			 				url : deleteURL,
 							success: function(model, response) { 
-								ZeegaBrowser.myCollections.remove(theCollection);
+								//Current tab is this collection they are deleting
+								if (ZeegaBrowser.clickedCollectionID == model.id){
+									ZeegaBrowser.removeCollectionFilter();
+									$('#browser-collection-filter-tab').hide();
+								}
 								$('#browser-my-media').trigger('click');
 								console.log("Deleted collection " + collectionID);		
 			 				},
@@ -191,8 +194,11 @@ var ZeegaBrowser = {
 	//Does NOT perform search, just updating UI
 	removeCollectionFilter : function(){
 
+		//remove open in editor link
+		$('#browser-open-in-editor').hide();
+
 		//Hide collection tab
-		$('#browser-collection-filter-tab').hide();
+		$('#browser-collection-filter-tab').removeClass('.browser-selected-toggle');
 		
 	
 		//Clear the search object
@@ -222,8 +228,15 @@ var ZeegaBrowser = {
 						//the current collection filter
 						if(model.id == ZeegaBrowser.search.get("collection")){
 							ZeegaBrowser.clickedCollectionTitle = model.get("title");
+							ZeegaBrowser.clickedCollectionID = model.id;
 							$('#database-search-text').val("search " + model.get("title"));
 						}
+						//Update title in itemsview if it's there
+						var otherModel = ZeegaBrowser.searchItemsView.collection.get(model.id);
+						if(otherModel!=null) {
+							otherModel.set({"title":model.get("title")});
+						}
+						
 				
 	 				},
 	 				error: function(model, response){
@@ -236,6 +249,10 @@ var ZeegaBrowser = {
 	},
 	showCollectionFilter: function(){
 		
+		$('#browser-open-in-editor').show();
+
+		/* Commenting out because we don't want to edit title here
+		TODO: Remove this
 		$('#browser-collection-filter-tab-text').editable(
 			function(value, settings)
 			{ 
@@ -249,7 +266,7 @@ var ZeegaBrowser = {
 				onblur : 'submit',
 				width : $('#browser-collection-filter-tab-text').attr("width") * 2,
 				cssclass : 'browser-form'
-		});
+		});*/
 
 		//hide form, show text
 		$( '#browser-collection-filter-title-form' ).hide();
@@ -260,6 +277,7 @@ var ZeegaBrowser = {
 		$('#browser-collection-filter-tab').show();
 		$('#database-search-text').val("search " + ZeegaBrowser.clickedCollectionTitle);
 
+		
 		//select the right tab
 		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
 		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');

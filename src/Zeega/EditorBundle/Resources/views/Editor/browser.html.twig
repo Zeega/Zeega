@@ -28,24 +28,41 @@
 					<div id="browser-toggle-all-media-vs-my-media">
 						<ul>
 							
-							<li id="browser-all-media" class="tab browser-unselected-toggle">All Media</li>
-							<li id="browser-my-media" class="tab browser-selected-toggle">My Media</li>
-							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span><img id="browser-collection-filter-tab-edit-icon" src="{{asset('gamma/images/edit-icon.png')}}">
-								<ul id="browser-collection-filter-edit-menu">
-									<li id="browser-rename-collection">rename collection</li>
-									<li id="browser-delete-collection">delete collection</li>
-									<li id="collection-to-editor-button">open in editor</li>
-									<li id="collection-player-button">share link</li>
-								</ul>
+							<li id="browser-all-media" class="tab browser-unselected-toggle">Everything</li>
+							<li id="browser-my-media" class="tab browser-selected-toggle">My Stuff</li>
+							<li id="browser-collection-filter-tab" class="tab browser-unselected-toggle" style="display:none"><span id="browser-collection-filter-tab-text">A Collection</span>
 							</li>
 						</ul>
 					</div>
 					
 					<div style="clear:both"></div>
 				</div>
+				
+				
 				<div id="browser-search-filter-toggle">
+					
+					
+					<div id="searchbar">
+						
+						<div id='search-filter'>
+								<a class='menu-toggle' href='#'><span class='zicon zicon-searchdropdown'></span></a>
+								<ul class='unstyled menu-items'>
+									<li class='menu-title'>Filter by Format</li>
+									<li class='divider'></li>
+									<li><a data-search-filter='all' href='#'>All</a></li>
+									<li><a data-search-filter='audio' href='#'>Audio</a></li>
+									<li><a data-search-filter='image' href='#'>Images</a></li>
+									<li><a data-search-filter='video' href='#'>Video</a></li>
+								</ul>
+						</div>
+						
+						<input id='database-search-text' type='text' name='database-search' placeholder='search my stuff'/>
+						
+					</div><!-- searchbar -->
+					
+					<!--
 					<div id="searchbar" class="browser-searchbar">
-						<input id="database-search-text" type="text" name="database-search" value="search my media" style="color: rgb(68, 68, 68); ">
+						<input id="database-search-text" type="text" name="database-search" value="search my stuff" style="color: rgb(68, 68, 68); ">
 						<span><select id="database-search-filter" class="" style='width:98px'>
 							  <option value="all">all formats</option>
 							  <option value="image">images</option>
@@ -54,12 +71,12 @@
 							  
 							</select></span>
 					</div>
+					-->
 					
 					
-					
-					<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>
+					<!--<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>-->
 
-					<a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
+					<a href="." id="browser-open-in-editor">open in editor</a><a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a>
 					<!-- <div style="clear:both;padding-bottom:4px;"></div>-->
 					
 				</div>
@@ -77,7 +94,7 @@
 						
 						
 						<div class="browser-loading"><img src="{{asset('gamma/images/loading.gif')}}"></div>
-						<div id="browser-no-results-my-media-message">You don't currently have any media. Want to <a href="#">add some</a>?</div>
+						<div id="browser-no-results-my-media-message">You don't currently have any media. Want to <a class='add-media' href="#">add some</a>?</div>
 						<div id="browser-no-items-results-message">Sorry, no items found.</div>
 						<div id="browser-no-collections-results-message">Sorry, no collections found.</div>
 						<ul id="browser-results-items">
@@ -110,6 +127,29 @@
 {% block extras %}
          <!-- TEMPLATES -->
          <div id='templates' class='hidden'>
+	
+			<div id="collection-settings-modal" class='modal hidden' >
+				<div class="modal-header">
+					<a href='#' class='close'>x</a>
+					<h3><span class="collection-modal-title"></span> </h3>
+				</div>
+				<!--<div class="modal-body clearfix"></div>-->
+				<div class="modal-footer">
+					<span class='admin-submit'>
+						
+						<a id="collection-modal-rename-link" class="modal-button">rename collection</a>
+						<a href='#' class="modal-button" id='collection-modal-delete'>delete collection</a>
+						<!--<a href='#' class='close'>close</a>-->
+						<!--<a href='#' id='save-collection' class='btn success'>save</a>-->
+					</span>
+				</div>
+			</div> <!-- modal -->
+	
+	
+	
+	
+	
+	
          	<div id="browser-time-filter-template">
          		<form>
 				<p>Timeline <span class="browser-time-filter-value"></span></p>
@@ -148,57 +188,7 @@
 					</tbody>
 				</table>
          	</div>
-         	
-			<li id="browser-results-collection-template" style=""><a href="#"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/808_s.jpg" alt="Images Of America: Lantern Slide Collection -- 2924 items" title="Images Of America: Lantern Slide Collection -- 2924 items"><p><span class="title">Images Of America: Lantern Slide Collection</span><br><span class="browser-item-count">2924 items</span></p></a><a href="." class="corner-triangle-for-menu"></a><ul class="browser-collection-edit-menu">
-									<li class="browser-rename-collection browser-unselected-toggle">rename collection</li>
-									<li class="browser-delete-collection browser-unselected-toggle">delete collection</li>
-									<li class="collection-to-editor-button browser-unselected-toggle">open in editor</li>
-									<li class="collection-player-button browser-unselected-toggle">share link</li>
-								</ul></li>
 
-			<div id="browser-results-image-template">
-				<a id="" class="fancymedia fancybox.image" rel="group" title="" href="http://memory.loc.gov/award/mhsdalad/310000/310043r.jpg"><img class="browser-img-large" src="http://mlhplayground.org/em/web/images/thumbs/1823_s.jpg" alt="080120v" title="080120v"></a>
-				<div class="browser-results-image-edit"><a class="browser-remove-from-collection" href=".">remove</a> <a class="browser-change-thumbnail" href=".">make cover</a>
-				</div>
-			</div>
-			<div id="fancybox-media-container-template">
-				<div class="fancybox-media-item"></div>
-				
-				<p class="title">TITLE</p>
-				<p><span class="creator">CREATOR</span> <span class="source"><a href="#" target="_blank">View Source</a></span></p>
-				<p class="description" style="display:none;">description</p>
-				<p class="tags" style="display:none;"><a href=".">Dummy tag</a>, <a href=".">Another fake tag</a>, <a href=".">tag tag</a>, <a href=".">false longer tag</a></p>
-				<div class="fancybox-buttons" class="clearfix">
-					<p class="fancybox-more-button"><a href=".">more</a></p><p class="fancybox-less-button"><a href=".">less</a></p><p class="fancybox-delete-button"><a href=".">delete</a></p>
-				</div>
-				
-					<!--<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>-->
-				
-			</div>
-			<div id="browser-fancybox-caption-template">
-				
-				<p class="title">TITLE</p>
-				<p><strong>Creator:</strong> <span class="creator">CREATOR</span></p>
-				<a id="fancybox-close-button" href="." onClick="parent.jQuery.fancybox.close();return false;">CLOSE &nbsp;&nbsp;X</a>
-				<p class="source"><strong>Source:</strong> <a href="#" target="_blank">link</a></p>
-
-			</div>
-			<div id="fancybox-image-template">
-				<img src=""/>
-			</div>
-			<div id="fancybox-video-template">
-				<video controls="true"  width="640px" preload><source src="SOURCE"></video>
-				
-			</div>
-			<div id="fancybox-youtube-template">
-				<iframe class="youtube-player" type="text/html" width="626" height="385" src="" frameborder="0">
-				</iframe>
-				
-			</div>
-			<div id="fancybox-audio-template">
-				<audio width="626px" controls="true" src="SOURCE"></audio>
-				
-			</div>
 			<div id="share-collection-modal" class='modal hidden' >
 			<div class="modal-header">
 				<a href='#' class='close'>x</a>
@@ -230,7 +220,17 @@
 				<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script data-main="{{ asset('gamma/js/main.browser.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
-
+		<!-- Leaflet CSS --> 
+		<link rel="stylesheet" href="{{ asset('gamma/js/libraries/leaflet/leaflet.css')}}" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('gamma/libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
+		
+		
+		<script src="{{ asset('gamma/js/libraries/jquery.tagsinput.min.js')}}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/libraries/jquery.tagsinput.css')}}" />
+		
+		
+		<!-- Leaflet JavaScript -->
+		<script src="{{ asset('gamma/js/libraries/leaflet/leaflet.js')}}"></script>
 		
 		<!-- FANCYBOX -->
 		<!-- Optionaly include easing and/or mousewheel plugins -->
@@ -238,6 +238,7 @@
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/jquery.mousewheel-3.0.6.pack.js')}}"></script>
 
 		<!-- Add fancyBox -->
+		<link rel="stylesheet" href="{{ asset('gamma/css/zeega.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
 
@@ -246,12 +247,17 @@
 		<script type="text/javascript" src="{{ asset('gamma/js/fancybox/helpers/jquery.fancybox-buttons.js')}}"></script>
 
 		<!-- JCarousel -->
-		<script type="text/javascript" src="{{ asset('gamma/js/jcarousel/jquery.jcarousel.min.js')}}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/jcarousel/skins/zeega/skin.css')}}" />
 
 		<!-- Filament slider for timeline -->
 	
 		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/filamentslider/css/ui.slider.extras.css')}}" />
 		<link rel="stylesheet" type="text/css" href="{{ asset('gamma/js/filamentslider/css/jquery-ui-1.8.16.custom.css')}}" />
+			
+			
+		<script>
+		sessionStorage.setItem('playgroundId','{{playground.id}}')
+		sessionStorage.setItem('playgroundShort','{{playground.short}}')
+		</script>	
 			
 {% endblock %}

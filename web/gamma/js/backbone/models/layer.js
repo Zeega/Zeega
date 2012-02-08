@@ -16,13 +16,17 @@ var Layer =  Backbone.Model.extend({
 		
 		if(!this.get('attr')) this.set({'attr':{}}); //this should be covered by defaults
 		
-		console.log(this.get('attr'));
-		
 	},
 	
 	show : function()
 	{
 		console.log('layer: '+this.id+ " showing")
+	},
+	
+	validate : function(attrs)
+	{
+		//remove formatting from titles (esp important for text layer!)
+		if(attrs.title) attrs.title = attrs.title.replace(/(<([^>]+)>)/ig, "");
 	}
 	
 

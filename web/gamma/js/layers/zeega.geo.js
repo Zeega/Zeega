@@ -22,6 +22,7 @@ var GeoLayer = ProtoLayer.extend({
 
 	layerType : 'visual',
 	draggable : true,
+	linkable : true,
 
 	defaultAttributes: {
 		type : 'map',
@@ -90,15 +91,18 @@ var GeoLayer = ProtoLayer.extend({
 
 	onControlsOpen : function()
 	{
-		var mapSettings = {
-			searchBar : true,
-			
-			controls : this.layerControls,
-			visual : this.visualEditorElement,
-			id : this.model.id
-		};
+		if( !this.editorLoaded )
+		{
+			var mapSettings = 
+			{
+				searchBar : true,
+				controls : this.layerControls,
+				visual : this.visualEditorElement,
+				id : this.model.id
+			};
 		
-		this.layerControls.find('.google-map-wrapper').append( makeGoogleMap( _.extend( mapSettings , this.attr ) ) );
+			this.layerControls.find('.google-map-wrapper').append( makeGoogleMap( _.extend( mapSettings , this.attr ) ) );
+		}
 		this.editorLoaded = true;
 
 	},

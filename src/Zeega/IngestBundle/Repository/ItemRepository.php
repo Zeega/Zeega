@@ -24,13 +24,26 @@ class ItemRepository extends EntityRepository
       	{
 			$qb->andWhere('i.user_id = ?2')
 			   ->setParameter(2,$query['userId']);
-		} 
+		}
+		
+		if(isset($query['playgroundId']))
+      	{
+			$qb->andWhere('i.playground_id = :playground')
+			   ->setParameter('playground',$query['playgroundId']);
+		}
 		
 		if(isset($query['collection_id']))
       	{
 			 $qb->innerjoin('i.parent_items', 'c')
                 ->andWhere('c.id = ?3')
                 ->setParameter(3, $query['collection_id']);
+		}
+		
+		if(isset($query['notContentType']))
+      	{
+      	    $content_type = strtoupper($query['notContentType']);
+
+      	  	$qb->andWhere('i.type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
 		}
 		
         if(isset($query['contentType']))
@@ -46,6 +59,17 @@ class ItemRepository extends EntityRepository
 			    ->innerjoin('it.tag','t')
                 ->andWhere('t.id IN (?5)')
                 ->setParameter(5, $query['tags']);
+		}
+		
+		if(isset($query['tagsName']))
+      	{
+			 $qb->groupBy('i.id');      	
+			 $qb->innerjoin('i.tags', 'it')
+			    ->innerjoin('it.tag','t')
+                ->andWhere('t.name IN (:tags_name)')
+                ->having('COUNT(DISTINCT t.id) = :tags_name_count')
+                ->setParameter('tags_name', $query['tagsName'])
+                ->setParameter('tags_name_count', count($query['tagsName']));
 		}
 		
 		if(isset($query['earliestDate']))
@@ -74,17 +98,34 @@ class ItemRepository extends EntityRepository
 		
 		return $qb;
     }
-    	
+    
+	public function getTotalItemsAndCollections($query)
+	{
+		
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb->select('COUNT(distinct i)')
+	       ->from('ZeegaIngestBundle:Item', 'i');
+		   
+	    $qb = $this->buildSearchQuery($qb, $query);
+		
+		return array_sum($qb->getQuery()->getArrayResult());
+		
+		//return 0;
+	}
+	
 	public function getTotalItems($query)
 	{
+		
 		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('COUNT(i)')
+		$qb->select('COUNT(distinct i)')
 	       ->from('ZeegaIngestBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.type <> :count_filter')->setParameter('count_filter', 'Collection');
 		
-		return $qb->getQuery()->getSingleScalarResult();
+		return array_sum($qb->getQuery()->getArrayResult());
+		
+		//return 0;
 	}
 	
 	public function getTotalCollections($query)
@@ -95,7 +136,7 @@ class ItemRepository extends EntityRepository
 
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.type = :count_filter')->setParameter('count_filter', 'Collection');
-		return $qb->getQuery()->getSingleScalarResult();	
+		return array_sum($qb->getQuery()->getArrayResult());
 	}
 
     //  api/search
@@ -104,7 +145,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
     
         // search query
-        $qb->select('i')
+        $qb->select('distinct i')
             ->from('ZeegaIngestBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
@@ -330,6 +371,22 @@ class ItemRepository extends EntityRepository
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
+			    ->orderBy('i.id','DESC')
+			   ->getQuery()
+			   ->setMaxResults(15)
+			   ->getArrayResult();
+     }
+     
+     public function findUserItemsByPlayground($id,$pid)
+     {
+     	return $this->getEntityManager()
+			   ->createQueryBuilder()
+			   ->add('select', 'i.id,i.title,i.thumbnail_url')
+			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->innerJoin('i.user', 'u')
+			   ->andwhere('u.id = :id')
+			   ->andwhere('i.playground_id = :pid')
+			   ->setParameters(array('id'=>$id,'pid'=>$pid))
 			    ->orderBy('i.id','DESC')
 			   ->getQuery()
 			   ->setMaxResults(15)

@@ -687,4 +687,29 @@ class Item
             $this->setChildItemsCount($this->getChildItems()->count());
         }
     }
+    /**
+     * @var integer $playground_id
+     */
+    private $playground_id;
+
+
+    /**
+     * Set playground_id
+     *
+     * @param integer $playgroundId
+     */
+    public function setPlaygroundId($playgroundId)
+    {
+        $this->playground_id = $playgroundId;
+    }
+
+    /**
+     * Get playground_id
+     *
+     * @return integer 
+     */
+    public function getPlaygroundId()
+    {
+        return $this->playground_id;
+    }
 }

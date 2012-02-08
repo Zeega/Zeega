@@ -54,12 +54,19 @@ var ItemView = Backbone.View.extend({
 			//init the dragged item variable
 			start : function(){
 				$(this).draggable('option','revert',true);
+				
+				$('#visual-editor-workspace').addClass('target-focus');
+				$('#frame-drawer').addClass('target-focus');
+				
 				Zeega.draggedItem = _this.model;
 			},
 				
 			/**	stuff _this happens when the user drags the item into a node **/	
 				
 			stop : function(){
+				$('#visual-editor-workspace').removeClass('target-focus');
+				$('#frame-drawer').removeClass('target-focus');
+				
 				Zeega.draggedItem = null;
 			}
 			
@@ -68,7 +75,7 @@ var ItemView = Backbone.View.extend({
 		// rollover
 		
 		var args = {
-			
+			delayIn : 1500
 		};
 		
 		$(this.el).popover( args );
@@ -89,13 +96,10 @@ var ItemView = Backbone.View.extend({
 	
 	getTemplate : function()
 	{
-		//html = '<div id="database-asset-template" class="hidden">';
 		var html =	'<span class="item-icon show-in-list-view zicon zicon-<%= type %>"></span>' +
 					'<img class="item-thumbnail" src="<%= thumbUrl %>"/>' +
-					//'<div class="item-delete" style="color:red; position:absolute; z-index:10; right:5px; font-weight:bold; display:none"></div>' +
 					'<div class="item-title show-in-list-view"><%= title %></div>';
-					//'<div class="item-meta"><%= creator %></div>';
-					//'</div>';
+
 		return html;
 	}
 });
@@ -170,3 +174,5 @@ var ItemViewCollection = Backbone.View.extend({
 	}
 	
 });
+
+

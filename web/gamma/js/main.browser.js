@@ -49,6 +49,8 @@ var loadFiles = [
 	
 	//custom
 	'order!filamentslider/selectToUISlider.jQuery',
+	'order!jcarousel/jquery.jcarousel',
+	'order!jcarousel/jcarousel.zeega',
 	
 	//mvc
 	'order!backbone/models/tag',
@@ -64,6 +66,10 @@ var loadFiles = [
 	'order!backbone/views/browser.search-item-views',
 	'order!backbone/views/browser.search-map-view',
 	'order!backbone/views/browser.search-time-view',
+	'order!backbone/views/tag.view',
+	'order!backbone/views/fancybox.views',
+		'order!backbone/views/map.view',
+
 	
 
 	];

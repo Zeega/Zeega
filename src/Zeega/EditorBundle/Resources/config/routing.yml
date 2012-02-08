@@ -1,21 +1,70 @@
+  
+    
+projects:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\ProjectsController
+
+routes:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\RoutesController
+
+nodes:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\NodesController
+
+layers:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\LayersController
+
+playgrounds:
+  type:     rest
+  resource: Zeega\EditorBundle\Controller\PlaygroundsController
+  
+ZeegaEditorBundle_home:
+    pattern: /
+    defaults: { _controller:  ZeegaEditorBundle:Editor:home }
+
 ZeegaEditorBundle_playground:
     pattern: /playground/{short}
-    defaults: { _controller:  ZeegaEditorBundle:Editor:index }
+    defaults: { _controller:  ZeegaEditorBundle:Editor:playground }
+    
+ZeegaEditorBundle_admin:
+    pattern: /playground/{short}/admin
+    defaults: { _controller:  ZeegaEditorBundle:Editor:admin }
 
 ZeegaEditorBundle_editor:
-    pattern: /playground/{short}/route/{route}
+    pattern: /playground/{short}/project/{id}
     defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
+    
+ZeegaEditorBundle_browser:
+    pattern: /playground/{short}/browser
+    defaults: { _controller:  ZeegaEditorBundle:Editor:browser }
 
+ZeegaEditorBundle_project:
+    pattern: /playground/{short}/project
+    defaults: { _controller:  ZeegaEditorBundle:Editor:project }
+    
 ZeegaEditorBundle_faq:
     pattern: /faq
     defaults: { _controller:  ZeegaEditorBundle:Editor:faq }
 
+ZeegaEditorBundle_node_publish:
+    pattern: /node/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:node }
 
-ZeegaEditorBundle_admin:
-    pattern: /admin
-    defaults: { _controller:  ZeegaEditorBundle:Editor:admin }
+ZeegaEditorBundle_project_publish:
+    pattern: /project/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:project }
 
-ZeegaEditorBundle_account:
-    pattern: /account
-    defaults: { _controller:  ZeegaEditorBundle:Editor:account }
+ZeegaEditorBundle_collection_publish:
+    pattern: /collection/{id}/view
+    defaults: { _controller:  ZeegaEditorBundle:Publish:collection }
 
+
+ZeegaEditorBundle_siteadmin:
+    pattern: /siteadmin
+    defaults: { _controller:  ZeegaEditorBundle:Editor:siteadmin }
+
+ZeegaEditorBundle_settings:
+    pattern: /settings
+    defaults: { _controller:  ZeegaEditorBundle:Editor:settings }

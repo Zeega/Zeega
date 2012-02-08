@@ -48,6 +48,10 @@ var CollectionViewCollection = Backbone.View.extend({
 			_this.el.append( collectionView.render().el )
 		});
 		
+		var collection_id = $('#collection-id').val();
+		if(parseInt(collection_id) > -1) 
+			$('#database-collection-filter').val(collection_id);
+		
 		this._rendered = true;
 		
 		return this;

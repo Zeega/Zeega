@@ -34,5 +34,7 @@ Zeega\EditorBundle\Entity\Project:
     created_at:
      type: datetime
      nullable: true
-
+    attr:
+     type: array
+     nullable: true
  

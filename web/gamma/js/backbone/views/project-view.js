@@ -24,7 +24,8 @@ var ProjectView = Backbone.View.extend({
 				indicator : '<img src="images/loading.gif">',
 				select : true,
 				onblur : 'submit',
-				width : 700
+				width : 700,
+				maxlength : 40
 			});
 		
 		$('#route-title').html(this.el);

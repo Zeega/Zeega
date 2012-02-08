@@ -21,7 +21,46 @@ function initUX(){
 
 $(document).ready(function() {
 
+
+	// menu stuff
+	$('.menu-toggle').click(function(){
+		var menu = $(this).next();
+		if( menu.hasClass('open') ) menu.removeClass('open');
+		else menu.addClass('open');
+		
+		event.stopPropagation();
+	});
+	//clear menus on click
+	$('html').bind("click", clearMenus);
 	
+	function clearMenus()
+	{
+		$('.menu-items').removeClass('open');
+	}
+
+	// filter database by type
+	$('#search-filter li a').click(function(){
+		
+		ZeegaBrowser.search.set({ 
+							content:$(this).data('search-filter')
+						});
+		ZeegaBrowser.resetPageCount();
+		ZeegaBrowser.doSearch();
+		
+		clearMenus();
+		return false;
+	});
+
+	//Click event for collection filter
+	$('#browser-collection-filter-tab').click(function(){
+		
+		ZeegaBrowser.doCollectionSearch(ZeegaBrowser.clickedCollectionID);
+		ZeegaBrowser.showCollectionFilter();
+		return false;
+	});
+
+	//Sets variable for Fancybox "more" view to false each time the page is reloaded
+	sessionStorage.setItem('moreFancy', false);
 
 	//set up fancybox lightbox plugin
 	$(".fancymedia").fancybox({
@@ -37,6 +76,17 @@ $(document).ready(function() {
 		closeBtn:false,
 		aspectRatio:true,
 		scroll:'none',
+				// Changing next gallery item
+			nextEffect: 'none', // 'elastic', 'fade' or 'none'
+			nextSpeed: 700,
+			nextEasing: 'none',
+			nextMethod: 'changeIn',
+
+			// Changing previous gallery item
+			prevEffect: 'none', // 'elastic', 'fade' or 'none'
+			prevSpeed: 700,
+			prevEasing: 'none',
+			prevMethod: 'changeOut',
 		keys: {
 				next: [ 34, 39, 40], //  page down, right arrow, down arrow
 				prev: [ 33, 37, 38], //  page up, left arrow, up arrow
@@ -44,14 +94,18 @@ $(document).ready(function() {
 		},
 		
     	helpers : {
-    		title : false,
-    		buttons	: {}
+    		title : false
     	},
-    	
+    	beforeClose : function() {
+    			//set video src to null to prevent browser bug
+    			
+    			$('video').attr("src", null);
+				
+    	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
-    
+    		
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);
@@ -59,19 +113,19 @@ $(document).ready(function() {
 
 			switch(thisModel.get("source")){
 				case 'Image':
-					fancyView = new BrowserFancyBoxImageView({model:thisModel});
+					fancyView = new FancyBoxImageView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Video':
-           			fancyView = new BrowserFancyBoxVideoView({model:thisModel});
+           			fancyView = new FancyBoxVideoView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Audio':
-           			fancyView = new BrowserFancyBoxAudioView({model:thisModel});
+           			fancyView = new FancyBoxAudioView({model:thisModel});
            			fancyView.render(this);
            			break;
            		case 'Youtube':
-           			fancyView = new BrowserFancyBoxYouTubeView({model:thisModel});
+           			fancyView = new FancyBoxYouTubeView({model:thisModel});
            			fancyView.render(this);
            			break;
 			}
@@ -86,14 +140,15 @@ $(document).ready(function() {
 	
 	}); 
 
-	$('#collection-to-editor-button').click(function(){
+	$('#collection-to-editor-button, #browser-open-in-editor').click(function(){
 		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
 		return false;
 	});
-
-	$( '#database-search-text' ).click(function(){
-			$(this).val('');
-	});
+	$( '#database-search-text' ).bind('focus', function(e){
+	   
+	     $(this).val('');
+	   
+	 });
 	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();
@@ -105,13 +160,6 @@ $(document).ready(function() {
 	 	ZeegaBrowser.resetPageCount();
 	     ZeegaBrowser.doSearch();
 	 });
-
-	$('#browser-remove-collection-filter').click(function(e){
-		ZeegaBrowser.removeCollectionFilter();
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
-		return false;
-	});
 
 	
 	$('#browser-open-timeline').click( function(){
@@ -168,10 +216,10 @@ $(document).ready(function() {
 	
 		if ($(this).attr('id') == "browser-my-media"){
 			ZeegaBrowser.search.set({user:-1});
-			$('#database-search-text').val("search my media");
+			$('#database-search-text').val("search my stuff");
 
 		}else if ($(this).attr('id') == "browser-all-media"){
-			$('#database-search-text').val("search all media");
+			$('#database-search-text').val("search everything");
 			ZeegaBrowser.search.set({user:-2});
 		} 
 
@@ -248,9 +296,10 @@ $(document).ready(function() {
 		return false;
 	});
 	$('#browser-rename-collection').click(function() {
+		alert('implement in modal window');//Commenting out
 		//using jeditable framework - pretend like user clicked on the title element
 		//see ZeegaBrowser.showCollectionFilter for definition of behavior
-		$('#browser-collection-filter-tab-text').trigger('click');
+		//$('#browser-collection-filter-tab-text').trigger('click');
 	});
 	
 	//Load the next page of results into the results drawer
@@ -259,4 +308,17 @@ $(document).ready(function() {
 	 	ZeegaBrowser.doSearch();
 	 	return false;
 	 });
+	 
+	 
+	 
+	 
+	
+	 window.addEventListener('focus', function() {
+		ZeegaBrowser.refresh();
+	    
+		console.log('infocus refresh database')
+	});
+	
+	
+	
 });

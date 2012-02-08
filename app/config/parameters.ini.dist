@@ -19,6 +19,5 @@
 
 	    
     hostname          = http://alpha.zeega.org/
-    directory = test/web/
-    
-    thumbnails_uri    = http://alpha.zeega.org/test/images
+    directory         = test/web/
+    path			  = /var/www/web/
