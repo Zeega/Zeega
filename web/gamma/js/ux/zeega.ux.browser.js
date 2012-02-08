@@ -117,6 +117,10 @@ $(document).ready(function() {
            			fancyView = new FancyBoxYouTubeView({model:thisModel});
            			fancyView.render(this);
            			break;
+           		case 'Tweet':
+           			fancyView = new FancyBoxTweetView({model:thisModel});
+           			fancyView.render(this);
+           			break;
 			}
         },
         
