@@ -511,3 +511,57 @@ var FancyBoxTweetView = FancyBoxView.extend({
 	},
 
 });
+// For displaying Documents
+var FancyBoxDocCloudView = FancyBoxView.extend({
+	
+	initialize: function(){
+
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		
+	},
+	
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+
+		//Fill in tweet-specific stuff
+		var blanks = {
+			
+			
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getMediaTemplate() );
+		
+		//copy the cloned item into the el
+		var docHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(docHTML);
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		
+
+		
+		return this;
+	},
+	getMediaTemplate : function()
+	{
+		
+		var html =	'<div id="fancybox-document-cloud" class="DV-container"></div>'+
+					'<script>'+
+					"DV.load('http://www.documentcloud.org/documents/210787-reducing-the-risks-2011-06-07.js', {"+
+					'sidebar: false, '+
+					'container: "#fancybox-document-cloud"'+
+					'      });'+
+					'</script>';
+								
+		return html;
+	},
+
+});

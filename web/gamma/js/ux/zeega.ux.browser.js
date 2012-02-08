@@ -121,6 +121,10 @@ $(document).ready(function() {
            			fancyView = new FancyBoxTweetView({model:thisModel});
            			fancyView.render(this);
            			break;
+           		case 'DocumentCloud':
+           			fancyView = new FancyBoxDocCloudView({model:thisModel});
+           			fancyView.render(this);
+           			break;
 			}
         },
         

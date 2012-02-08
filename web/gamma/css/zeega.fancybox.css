@@ -177,6 +177,10 @@
 	font-size:2.0em;
 	height:auto;
 }
+
+.fancybox-media-item-more #fancybox-document-cloud{
+	width:275px !important;
+}
 .fancybox-media-container-more p{
 	text-align:left;
 }
@@ -250,4 +254,8 @@
 	font-family: Palatino, serif;
 	word-break: break-all;
 
+}
+#fancybox-document-cloud{
+width:620px;
+height:400px;
 }
