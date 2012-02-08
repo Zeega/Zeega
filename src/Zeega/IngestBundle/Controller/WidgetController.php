@@ -33,8 +33,9 @@ class WidgetController extends Controller
     		
     		$item->setUser($user);
     		
-    		if($session->get('Playground')) 
-    		    $playground=$session->get('Playground');
+    		if($session->get('playgroundid')) 
+    			$playground = $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    							    ->find($session->get('playgroundid'));
     		else 
     		{
     			$playgrounds = $this->getDoctrine()
@@ -135,15 +136,28 @@ class WidgetController extends Controller
 	public function urlAction(){
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
-		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
+		
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
 		$logger = $this->get('logger');
 		$em=$this->getDoctrine()->getEntityManager();
-		$playgrounds=$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Playground')
-							->findPlaygroundsByUser($user->getId());
-							
+		
+		if($session->get('playgroundid')) 
+    		$playground = 	$this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    							    ->find($session->get('playgroundid'));
+    	else 
+		{
+			$playgrounds = $this->getDoctrine()
+								->getRepository('ZeegaEditorBundle:Playground')
+								->findPlaygroundByUser($user->getId());
+			$playground=$playgrounds[0];
+		}
+		
+		
+	
+		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItemsByPlayground($user->getId(),$playground->getId());
+		
+		
 		$url=$request->query->get('url');
 			
 		$check=$this->getDoctrine()
@@ -153,11 +167,11 @@ class WidgetController extends Controller
 		if($check){
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0],
+				'playground'=>$playground,
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
 				'content_type'=>$check['type'],
-				 'mycollection'=>$mycollection,
+				'mycollection'=>$mycollection,
 			));
 		}
 		else{
@@ -203,6 +217,7 @@ class WidgetController extends Controller
 					'widget_id'=>$widgetId,
 					'thumb_url'=>$metadata->getThumbnailUrl(),
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 				));
 			}
         	elseif(isset($collection)&&$collection){
@@ -229,6 +244,7 @@ class WidgetController extends Controller
 					'widget_ids'=>$widgetIds,
 					'thumb_urls'=>$thumbUrls,
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 					'count'=>count($thumbUrls),
 				));
 		
@@ -240,6 +256,7 @@ class WidgetController extends Controller
 					'url'=>json_encode($widgetId),
 					'title'=>'temp title',
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 					));
 			} 
     	}

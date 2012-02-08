@@ -377,6 +377,22 @@ class ItemRepository extends EntityRepository
 			   ->getArrayResult();
      }
      
+     public function findUserItemsByPlayground($id,$pid)
+     {
+     	return $this->getEntityManager()
+			   ->createQueryBuilder()
+			   ->add('select', 'i.id,i.title,i.thumbnail_url')
+			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->innerJoin('i.user', 'u')
+			   ->andwhere('u.id = :id')
+			   ->andwhere('i.playground_id = :pid')
+			   ->setParameters(array('id'=>$id,'pid'=>$pid))
+			    ->orderBy('i.id','DESC')
+			   ->getQuery()
+			   ->setMaxResults(15)
+			   ->getArrayResult();
+     }
+     
      
      public function findItemsGeoTime($request)
    		{

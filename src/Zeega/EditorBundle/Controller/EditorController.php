@@ -169,6 +169,9 @@ class EditorController extends Controller
 		
 		
 		
+		$session = $this->getRequest()->getSession();
+		$session->set('playgroundid',$playground->getId());
+		
 		$admin=true;
 		$projects=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Project')
