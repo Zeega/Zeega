@@ -24,7 +24,13 @@ class ItemRepository extends EntityRepository
       	{
 			$qb->andWhere('i.user_id = ?2')
 			   ->setParameter(2,$query['userId']);
-		} 
+		}
+		
+		if(isset($query['playgroundId']))
+      	{
+			$qb->andWhere('i.playground_id = :playground')
+			   ->setParameter('playground',$query['playgroundId']);
+		}
 		
 		if(isset($query['collection_id']))
       	{
