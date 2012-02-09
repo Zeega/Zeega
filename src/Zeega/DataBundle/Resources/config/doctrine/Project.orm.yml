@@ -17,8 +17,8 @@ Zeega\DataBundle\Entity\Project:
        user_id:
         referencedColumnName: id
    manyToOne:
-    playground:
-     targetEntity: Playground
+    site:
+     targetEntity: Site
    id:
     id:
      type: integer

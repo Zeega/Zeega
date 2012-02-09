@@ -22,6 +22,8 @@ $loader->registerNamespaces(array(
 	'Knp\Menu'   => __DIR__.'/../vendor/knp/menu/src',
     'Elao'             => __DIR__.'/../vendor/bundles',
     'Profiler'         => __DIR__.'/../vendor/bundles',
+ 	'Doctrine\\DBAL\\Migrations' => __DIR__.'/../vendor/doctrine-migrations/lib',
+    'Doctrine\\DBAL'             => __DIR__.'/../vendor/doctrine-dbal/lib',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',

@@ -66,9 +66,11 @@
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
     target=bundles/FOS/RestBundle
     version=origin/2.0
+
 [JMSSerializerBundle]
     git=git://github.com/schmittjoh/JMSSerializerBundle.git
     target=bundles/JMS/SerializerBundle
+
 [FOSUserBundle]
 	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
 	target=bundles/FOS/UserBundle
@@ -99,3 +101,10 @@
 [ProfilerLiveBundle]
     git=git://github.com/dsyph3r/ProfilerLiveBundle.git
     target=/bundles/Profiler/LiveBundle
+
+[doctrine-migrations]
+    git=http://github.com/doctrine/migrations.git
+
+[DoctrineMigrationsBundle]
+    git=http://github.com/symfony/DoctrineMigrationsBundle.git
+    target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle

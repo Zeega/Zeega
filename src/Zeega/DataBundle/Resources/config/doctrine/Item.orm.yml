@@ -43,8 +43,8 @@ Zeega\DataBundle\Entity\Item:
                 name: id
                 referencedColumnName: item_id
     manyToOne:
-        playground:
-            targetEntity: Zeega\DataBundle\Entity\Playground
+        site:
+            targetEntity: Zeega\DataBundle\Entity\Site
         user:
             targetEntity: Zeega\DataBundle\Entity\User
     id:
@@ -58,7 +58,7 @@ Zeega\DataBundle\Entity\Item:
         metadata_id:
             type: bigint
             nullable: true
-        playground_id:
+        sequence_id:
             type: integer
             nullable: true            
         title:

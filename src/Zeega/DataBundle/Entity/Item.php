@@ -712,4 +712,54 @@ class Item
     {
         return $this->playground_id;
     }
+    /**
+     * @var integer $sequence_id
+     */
+    private $sequence_id;
+
+    /**
+     * @var Zeega\DataBundle\Entity\Site
+     */
+    private $site;
+
+
+    /**
+     * Set sequence_id
+     *
+     * @param integer $sequenceId
+     */
+    public function setSequenceId($sequenceId)
+    {
+        $this->sequence_id = $sequenceId;
+    }
+
+    /**
+     * Get sequence_id
+     *
+     * @return integer 
+     */
+    public function getSequenceId()
+    {
+        return $this->sequence_id;
+    }
+
+    /**
+     * Set site
+     *
+     * @param Zeega\DataBundle\Entity\Site $site
+     */
+    public function setSite(\Zeega\DataBundle\Entity\Site $site)
+    {
+        $this->site = $site;
+    }
+
+    /**
+     * Get site
+     *
+     * @return Zeega\DataBundle\Entity\Site 
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
 }

@@ -6,13 +6,13 @@ Zeega\DataBundle\Entity\User:
            type: integer
            generator: { strategy: AUTO }
    manyToMany:
-      playgrounds:
-        targetEntity: Zeega\DataBundle\Entity\Playground
+      sites:
+        targetEntity: Zeega\DataBundle\Entity\Site
         inversedBy: users
         joinTable:
-          name: users_playgrounds
+          name: users_sites
           inverseJoinColumns:
-            playground_id:
+            site_id:
               referencedColumnName: id
           joinColumns:
             user_id:
