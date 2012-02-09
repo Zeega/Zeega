@@ -688,7 +688,7 @@ ul,li
 {
 }
 
-#playground-add {
+#site-add {
 	display: none;
 	position: absolute;
 	z-index:1000;
@@ -904,7 +904,7 @@ a.white:hover
   src: local('Montserrat Regular'), local('Montserrat-Regular'), url('http://themes.googleusercontent.com/font?kit=zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0') format('woff');
 }
 
-#route-title, #route-title input  { font-family: 'Montserrat', sans-serif }
+#sequence-title, #sequence-title input  { font-family: 'Montserrat', sans-serif }
 
 /*******************************
 
@@ -944,7 +944,7 @@ body
 	top:30px;
 }
 
-#route-title input
+#sequence-title input
 {
 	height:1em;
 	width:690px;
@@ -1255,7 +1255,7 @@ body
 #frame-list li {margin-bottom:12px;}
 
 
-#add-node
+#add-frame
 {
 	float:left;
 	padding:10px 17px;
@@ -1656,14 +1656,14 @@ body
 	
 *******************************/
 
-#route-header
+#sequence-header
 {
 	color:#eee;
 	margin : 10px 0;
 	width:100%;
 }
 
-#route-title
+#sequence-title
 {
 	float:left;
 	font-size:2.5em;
@@ -1673,14 +1673,14 @@ body
 	-webkit-transition: border .25s linear;
 }
 
-#route-title:hover
+#sequence-title:hover
 {
 	border:1px dotted #ddd;
 	-webkit-transition: border .25s linear;
 }
 
 
-#route-publish
+#sequence-publish
 {
 	float:right;
 	height:40px;
@@ -1688,8 +1688,8 @@ body
 	width : 300px;
 }
 
-#route-publish li{ float:right }
-#route-publish>ul>li+li{margin-right:6px;}
+#sequence-publish li{ float:right }
+#sequence-publish>ul>li+li{margin-right:6px;}
 #upper-select
 {
 	font-size:18px;
@@ -1869,7 +1869,7 @@ body
 
 
 
-#node-advance
+#frame-advance
 {
 	-webkit-border-radius: 0 0 4px 4px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#555));	
@@ -2154,7 +2154,7 @@ td+td
 
 
 
-#node-drawer ul li:hover
+#frame-drawer ul li:hover
 {
 }
 
@@ -2187,7 +2187,7 @@ td+td
 	margin-left: 10px;
 }
 
-.ghost-node
+.ghost-frame
 {
 }
 
@@ -2694,11 +2694,11 @@ float: left;
 
 /* --------------------------------------------------------------
 
-   Node Publishing Buttons (ported from old Zeega by jms)
+   Frame Publishing Buttons (ported from old Zeega by jms)
 
 -------------------------------------------------------------- */
 
-#nodePublishing {
+#framePublishing {
 
 float: right;
 

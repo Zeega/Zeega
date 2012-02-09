@@ -116,7 +116,7 @@ width: 800px;
 	display:none;
 }
 
-#node-drawer
+#frame-drawer
 {
 	background:#eee;
 	margin-bottom:10px;
@@ -124,13 +124,13 @@ width: 800px;
 	overflow:hidden;
 }
 
-#node
+#frame
 {
 	height:100%;
 	width:100%;
 }
 
-#node a
+#frame a
 {
 	background:yellow;
 	float: right;
@@ -238,7 +238,7 @@ float: left;
 	background:#ddd;
 }
 
-#node-drawer ul li:hover
+#frame-drawer ul li:hover
 {
 }
 
@@ -256,7 +256,7 @@ FAKE STUFF
 
 */
 
-.node-thumb
+.frame-thumb
 {
 	height:50px;
 	width:50px;
@@ -321,7 +321,7 @@ FAKE STUFF
 	margin-right:2px;
 }
 
-.node-selected
+.frame-selected
 {
 
 border-bottom: solid red 5px;
@@ -744,11 +744,11 @@ float: left;
 
 /* --------------------------------------------------------------
 
-   Node Publishing Buttons (ported from old Zeega by jms)
+   Frame Publishing Buttons (ported from old Zeega by jms)
 
 -------------------------------------------------------------- */
 
-#nodePublishing {
+#framePublishing {
 
 float: right;
 
