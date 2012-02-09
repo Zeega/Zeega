@@ -1,7 +1,7 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Playground.orm.yml
 Zeega\DataBundle\Entity\Playground:
    type: entity
-   repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
+   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
    manyToMany:
     users:
       targetEntity: Zeega\DataBundle\Entity\User

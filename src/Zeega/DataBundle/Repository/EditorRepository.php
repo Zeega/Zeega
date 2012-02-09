@@ -17,7 +17,7 @@ class EditorRepository extends EntityRepository
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'r')
-			   ->add('from', ' ZeegaEditorBundle:Route r')
+			   ->add('from', ' ZeegaDataBundle:Route r')
 			   ->join('r.project','p')
 			   ->add('where', 'p.id = :id')
 			   ->setParameter('id',$id)
@@ -29,7 +29,7 @@ class EditorRepository extends EntityRepository
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   ->add('from', ' ZeegaEditorBundle:Project p')
+			   ->add('from', ' ZeegaDataBundle:Project p')
 			   ->add('where', 'p.id = :id')
 			   ->setParameter('id',$id)
 			   ->getQuery()->getArrayResult();
@@ -39,7 +39,7 @@ class EditorRepository extends EntityRepository
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaEditorBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Playground s')
 			   ->join('s.users','u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
@@ -51,7 +51,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaEditorBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Playground s')
 			   ->join('s.users','u')
 			   ->add('where', 's.short = :short')
 			   ->andwhere('u.id = :id')
@@ -72,7 +72,7 @@ class EditorRepository extends EntityRepository
      	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   ->add('from', ' ZeegaEditorBundle:Playground p')
+			   ->add('from', ' ZeegaDataBundle:Playground p')
 			   ->join('p.users','u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
@@ -89,7 +89,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaEditorBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Playground s')
 			   ->join('s.admins','u')
 			   ->add('where', 's.short = :short')
 			   ->andwhere('u.id = :id')
@@ -110,7 +110,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   ->add('from', ' ZeegaEditorBundle:Project p')
+			   ->add('from', ' ZeegaDataBundle:Project p')
 			   ->innerJoin('p.playground', 'g')
 			   ->add('where', 'g.id = :id')
 			   ->setParameter('id',$id)
@@ -129,7 +129,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's,u')
-			   ->add('from', ' ZeegaEditorBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Playground s')
 			   ->innerJoin('s.users', 'u')
 			   ->add('where', 's.id = :id')
 			   ->setParameter('id',$id)
@@ -151,7 +151,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   	->add('from', 'ZeegaEditorBundle:Project p')
+			   	->add('from', 'ZeegaDataBundle:Project p')
 			   ->innerJoin('p.playground', 's')
 			   ->join('p.users', 'u')
 			   ->add('where', 'u.id = :userId')
@@ -172,7 +172,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaEditorBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Playground s')
 			   ->add('where', 's.short = :short')
 			   ->setParameter('short',$short)
 				->getQuery();
@@ -191,7 +191,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   ->add('from', ' ZeegaEditorBundle:Project p')
+			   ->add('from', ' ZeegaDataBundle:Project p')
 			   ->innerJoin('p.playground', 'g')
 			   ->add('where', 'g.id = :id')
 			   ->setParameter('id',$id)
@@ -213,7 +213,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   	->add('from', 'ZeegaEditorBundle:Project p')
+			   	->add('from', 'ZeegaDataBundle:Project p')
 			   ->innerJoin('p.playground', 's')
 			   ->join('p.user', 'u')
 			   ->add('where', 'u.id = :userId')
@@ -231,7 +231,7 @@ class EditorRepository extends EntityRepository
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT r FROM ZeegaEditorBundle:Route r
+            ->createQuery('SELECT r FROM ZeegaDataBundle:Route r
             				WHERE r.id = :id')
      		->setParameter('id',$id)
      		->getArrayResult();
@@ -244,7 +244,7 @@ class EditorRepository extends EntityRepository
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT r FROM ZeegaEditorBundle:Route r
+            ->createQuery('SELECT r FROM ZeegaDataBundle:Route r
             				WHERE r.id = :id')
      		->setParameter('id',$id)
      		->getResult();
@@ -255,7 +255,7 @@ class EditorRepository extends EntityRepository
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT n FROM ZeegaEditorBundle:Node n
+            ->createQuery('SELECT n FROM ZeegaDataBundle:Node n
             				WHERE n.id = :id')
      		->setParameter('id',$id)
      		->getArrayResult();
@@ -267,7 +267,7 @@ class EditorRepository extends EntityRepository
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT l FROM ZeegaEditorBundle:Layer l
+            ->createQuery('SELECT l FROM ZeegaDataBundle:Layer l
             				WHERE l.id = :id')
      		->setParameter('id',$id)
      		->getArrayResult();
@@ -285,7 +285,7 @@ class EditorRepository extends EntityRepository
         	return $this->getEntityManager()
             ->createQueryBuilder()
             ->add('select', 'n')
-            ->add('from', 'ZeegaEditorBundle:Node n')
+            ->add('from', 'ZeegaDataBundle:Node n')
             ->add('where', 'n.route = :id')
      		->setParameter('id',$id)
      		->orderBy('n.route_index','ASC')

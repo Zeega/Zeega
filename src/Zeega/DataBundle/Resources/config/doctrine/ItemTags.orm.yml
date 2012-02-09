@@ -1,7 +1,7 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/ItemTags.orm.yml
 Zeega\DataBundle\Entity\ItemTags:
     type: entity
-    repositoryClass: Zeega\IngestBundle\Repository\ItemTagsRepository
+    repositoryClass: Zeega\DataBundle\Repository\ItemTagsRepository
     manyToOne:
         user:
             targetEntity: Zeega\DataBundle\Entity\User

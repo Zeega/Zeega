@@ -104,7 +104,7 @@ class ItemRepository extends EntityRepository
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb->select('COUNT(distinct i)')
-	       ->from('ZeegaIngestBundle:Item', 'i');
+	       ->from('ZeegaDataBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		
@@ -118,7 +118,7 @@ class ItemRepository extends EntityRepository
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb->select('COUNT(distinct i)')
-	       ->from('ZeegaIngestBundle:Item', 'i');
+	       ->from('ZeegaDataBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.type <> :count_filter')->setParameter('count_filter', 'Collection');
@@ -132,7 +132,7 @@ class ItemRepository extends EntityRepository
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb->select('COUNT(i)')
-	       ->from('ZeegaIngestBundle:Item', 'i');
+	       ->from('ZeegaDataBundle:Item', 'i');
 
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.type = :count_filter')->setParameter('count_filter', 'Collection');
@@ -146,7 +146,7 @@ class ItemRepository extends EntityRepository
     
         // search query
         $qb->select('distinct i')
-            ->from('ZeegaIngestBundle:Item', 'i')
+            ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
@@ -169,14 +169,14 @@ class ItemRepository extends EntityRepository
       	    $qb = $this->getEntityManager()->createQueryBuilder();
             
       	    $qb->select('COUNT(i.id)')
-                ->from('ZeegaIngestBundle:Item', 'i');
+                ->from('ZeegaDataBundle:Item', 'i');
 
       	    $searchQuery = $this->buildSearchQuery($qb, $query);
             
 			// get min and max dates
 			$qbMinMax = $this->getEntityManager()->createQueryBuilder();
             $qbMinMax->select('MAX(i.media_date_created) as max_date,MIN(i.media_date_created) as min_date')
-                	 ->from('ZeegaIngestBundle:Item', 'i'); 
+                	 ->from('ZeegaDataBundle:Item', 'i'); 
 			
 			$minMaxQuery = $this->buildSearchQuery($qbMinMax, $query);
 			$minMaxBounds = $minMaxQuery->getQuery()->getArrayResult();
@@ -238,7 +238,7 @@ class ItemRepository extends EntityRepository
         
         // search query
 		$qb->select('i')
-	       ->from('ZeegaIngestBundle:Item', 'i')
+	       ->from('ZeegaDataBundle:Item', 'i')
            ->orderBy('i.id','DESC')
        	   ->setMaxResults($query['limit'])
        	   ->setFirstResult($query['limit'] * $query['page']);
@@ -255,7 +255,7 @@ class ItemRepository extends EntityRepository
      	return $this->getEntityManager()
 				    ->createQueryBuilder()
 				    ->add('select', 'i')
-			        ->add('from', ' ZeegaIngestBundle:Item i')
+			        ->add('from', ' ZeegaDataBundle:Item i')
 			        ->andwhere('i.id = :id')
 			        ->andwhere("i.type = 'Collection'")
 			        ->setParameter('id',$id)
@@ -270,7 +270,7 @@ class ItemRepository extends EntityRepository
 		
 		// search query
 		$qb->select('i')
-		   ->from('ZeegaIngestBundle:Item', 'i')
+		   ->from('ZeegaDataBundle:Item', 'i')
 	       ->orderBy('i.id','DESC')
 	       ->setMaxResults($query['limit'])
 	       ->setFirstResult($query['limit'] * $query['page']);
@@ -286,7 +286,7 @@ class ItemRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')
-            ->from('ZeegaIngestBundle:Item', 'i')
+            ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($limit)
        		->setFirstResult($query['limit'] * $query['page']);
@@ -298,7 +298,7 @@ class ItemRepository extends EntityRepository
         // $qb instanceof QueryBuilder
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('i')
-            ->from('ZeegaIngestBundle:Item', 'i')
+            ->from('ZeegaDataBundle:Item', 'i')
             ->where('i.title LIKE ?1')
             ->orWhere('i.media_creator_username LIKE ?1')
             ->orWhere('i.description LIKE ?1')
@@ -337,7 +337,7 @@ class ItemRepository extends EntityRepository
     {
         $query = $this->getEntityManager()
 				->createQuery(
-					'SELECT i.id,i.type,i.title FROM ZeegaIngestBundle:Item i
+					'SELECT i.id,i.type,i.title FROM ZeegaDataBundle:Item i
 					WHERE i.attribution_uri = :url'
 				)->setParameter('url',$url);
 
@@ -355,7 +355,7 @@ class ItemRepository extends EntityRepository
      	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'i')
-			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->andwhere('i.id = :id')
 			   ->setParameter('id',$id)
 			   ->getQuery()
@@ -367,7 +367,7 @@ class ItemRepository extends EntityRepository
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
 			   ->add('select', 'i.id,i.title,i.thumbnail_url')
-			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
@@ -382,7 +382,7 @@ class ItemRepository extends EntityRepository
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
 			   ->add('select', 'i.id,i.title,i.thumbnail_url')
-			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->andwhere('i.playground_id = :pid')
@@ -403,7 +403,7 @@ class ItemRepository extends EntityRepository
 			
 			$query=$qb
 					->select('Count(i)')
-			   		->from('ZeegaIngestBundle:Item', 'i');
+			   		->from('ZeegaDataBundle:Item', 'i');
 			   
 			if($request['contentType']=='all'){
 				$query->add('where', 'i.content_type != :tag')
@@ -422,7 +422,7 @@ class ItemRepository extends EntityRepository
 					$qbs[$i]=$this->getEntityManager()
 								->createQueryBuilder()
 								->select('j'.$i.'.id')
-								->from('ZeegaIngestBundle:Item', 'j'.$i)
+								->from('ZeegaDataBundle:Item', 'j'.$i)
 								->innerJoin('j'.$i.'.parent_collections', 'c'.$i)
 								->add('where', 'j'.$i.'.id = i.id')
 								->andWhere('c'.$i.'.title = ?'.$i);
@@ -471,7 +471,7 @@ class ItemRepository extends EntityRepository
 			
 			$query=$qb
 					->select('i')
-			   		->from('ZeegaIngestBundle:Item', 'i');
+			   		->from('ZeegaDataBundle:Item', 'i');
 			   
 			if($request['contentType']=='all'){
 				$query->add('where', 'i.content_type != :tag')
@@ -496,7 +496,7 @@ class ItemRepository extends EntityRepository
 					$qbs[$i]=$this->getEntityManager()
 								->createQueryBuilder()
 								->select('j'.$i.'.id')
-								->from('ZeegaIngestBundle:Item', 'j'.$i)
+								->from('ZeegaDataBundle:Item', 'j'.$i)
 								->innerJoin('j'.$i.'.parent_collections', 'c'.$i)
 								->add('where', 'j'.$i.'.id = i.id')
 								->andWhere('c'.$i.'.title = ?'.$i);
@@ -546,7 +546,7 @@ class ItemRepository extends EntityRepository
 			
 			$query=$qb
 					->select('i')
-			   		->from('ZeegaIngestBundle:Item', 'i');
+			   		->from('ZeegaDataBundle:Item', 'i');
 			   
 			if($request['contentType']=='all'){
 				$query->add('where', 'i.content_type != :tag')
@@ -565,7 +565,7 @@ class ItemRepository extends EntityRepository
 					$qbs[$i]=$this->getEntityManager()
 								->createQueryBuilder()
 								->select('j'.$i.'.id')
-								->from('ZeegaIngestBundle:Item', 'j'.$i)
+								->from('ZeegaDataBundle:Item', 'j'.$i)
 								->innerJoin('j'.$i.'.parent_collections', 'c'.$i)
 								->add('where', 'j'.$i.'.id = i.id')
 								->andWhere('c'.$i.'.title = ?'.$i);
@@ -616,7 +616,7 @@ class ItemRepository extends EntityRepository
 				if(!IS_NULL($request['geo'])){
 					$query=$qb
 						->select('DISTINCT c.id,c.title')
-						->from('ZeegaIngestBundle:Item', 'i')
+						->from('ZeegaDataBundle:Item', 'i')
 						->innerJoin('i.parent_collections', 'c')
 						->andWhere($qb->expr()->between('i.geo_lat', $request['geo']['south'],$request['geo']['north']))
 						->andWhere($qb->expr()->between('i.geo_lng', $request['geo']['west'],$request['geo']['east']))
@@ -627,7 +627,7 @@ class ItemRepository extends EntityRepository
 				else{
 					$query=$qb
 						->select('DISTINCT c.id,c.title')
-						->from('ZeegaIngestBundle:Item', 'i')
+						->from('ZeegaDataBundle:Item', 'i')
 						->innerJoin('i.parent_collections', 'c')
 						->andWhere('i.date_created_start >= :earliest')
 						->andWhere('i.date_created_start< :latest')
@@ -638,7 +638,7 @@ class ItemRepository extends EntityRepository
 						
 				$query=$qb
 						->select('DISTINCT c.id,c.title')
-						->from('ZeegaIngestBundle:Item', 'i')
+						->from('ZeegaDataBundle:Item', 'i')
 						->innerJoin('i.parent_collections', 'c')
 						->andWhere($qb->expr()->between('i.geo_lat', $request['geo']['south'],$request['geo']['north']))
 						->andWhere($qb->expr()->between('i.geo_lng', $request['geo']['west'],$request['geo']['east']));
@@ -646,7 +646,7 @@ class ItemRepository extends EntityRepository
 			else{
 				$query=$qb
 						->select('DISTINCT c.id,c.title')
-						->from('ZeegaIngestBundle:Item', 'i')
+						->from('ZeegaDataBundle:Item', 'i')
 						->innerJoin('i.parent_collections', 'c');
 			}
 			if(!IS_NULL($request['limit']))$query->setMaxResults($request['limit']);
@@ -667,7 +667,7 @@ class ItemRepository extends EntityRepository
 			return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'i')
-			   ->add('from', 'ZeegaIngestBundle:Item i')
+			   ->add('from', 'ZeegaDataBundle:Item i')
 			   ->add('where', 'i.content_type != :tag')
 			   ->setParameter('tag','Tag')
 			   ->orderBy('i.id','DESC')

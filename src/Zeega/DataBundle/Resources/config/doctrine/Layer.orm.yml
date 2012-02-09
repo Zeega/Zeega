@@ -1,7 +1,7 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Layer.orm.yml
 Zeega\DataBundle\Entity\Layer:
    type: entity
-   repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
+   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
    manyToOne:
     item:
      targetEntity: Zeega\DataBundle\Entity\Item

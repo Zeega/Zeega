@@ -1,7 +1,7 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Item.orm.yml
 Zeega\DataBundle\Entity\Item:
     type: entity
-    repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
+    repositoryClass: Zeega\DataBundle\Repository\ItemRepository
     lifecycleCallbacks:
        prePersist: [onPrePersist]
     manyToMany:
