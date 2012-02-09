@@ -105,6 +105,9 @@ $(document).ready(function() {
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
+    
+    		$('#fancybox-document-cloud').remove();
+
     		
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
@@ -126,6 +129,14 @@ $(document).ready(function() {
            			break;
            		case 'Youtube':
            			fancyView = new FancyBoxYouTubeView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'Tweet':
+           			fancyView = new FancyBoxTweetView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'DocumentCloud':
+           			fancyView = new FancyBoxDocCloudView({model:thisModel});
            			fancyView.render(this);
            			break;
 			}

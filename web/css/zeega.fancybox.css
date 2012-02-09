@@ -173,6 +173,12 @@
 	width:90% !important;
 	margin:0 !important;
 }
+.fancybox-media-item-more .fancybox-tweet{
+	font-size:2.0em;
+	height:auto;
+}
+
+
 .fancybox-media-container-more p{
 	text-align:left;
 }
@@ -235,4 +241,18 @@
 }
 .fancybox-editable{
 	
+}
+.fancybox-tweet{
+	font-size: 3.3em;
+	line-height: 1.3em;
+	color: #3289CB;
+	text-align: left;
+	font-weight: bold;
+	height: 420px;
+	font-family: Palatino, serif;
+	
+
+}
+#fancybox-document-cloud{
+
 }

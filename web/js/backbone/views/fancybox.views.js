@@ -54,7 +54,7 @@ var FancyBoxView = Backbone.View.extend({
 		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title'),
+			title : this.model.get('title') == "none" ? this.model.get('source') : this.model.get('title'),
 			description : this.model.get('description'),
 			creator : this.model.get('media_creator_username'),
 		};
@@ -443,5 +443,153 @@ var FancyBoxYouTubeView = FancyBoxView.extend({
 								
 		return html;
 	},
+
+});
+// For displaying Tweets
+var FancyBoxTweetView = FancyBoxView.extend({
+	
+	initialize: function(){
+
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		
+	},
+	/* Turns tweet text into proper links */
+	linkifyTweet : function(tweet){
+
+		//linkify urls
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    	tweet = tweet.replace(exp,"<a href='$1' target='_blank'>$1</a>"); 
+
+    	//linkify users
+    	 tweet = tweet.replace(/(^|)@(\w+)/gi, function (s) {
+        	return '<a target="_blank" href="http://twitter.com/' + s + '">' + s + '</a>';
+    	});
+
+    	//linkify tags
+    	tweet = tweet.replace(/(^|)#(\w+)/gi, function (s) {
+        	return '<a target="_blank" href="http://search.twitter.com/search?q=' + s.replace(/#/,'%23') + '">' + s + '</a>';
+     	});
+
+    	return tweet;
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		var tweet = this.model.get('text');
+
+		//Fill in tweet-specific stuff
+		var blanks = {
+			tweet : this.linkifyTweet(tweet),
+			
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getMediaTemplate() );
+		
+		//copy the cloned item into the el
+		var tweetHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(tweetHTML);
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		
+
+		
+		return this;
+	},
+	getMediaTemplate : function()
+	{
+		
+		var html =	'<p class="fancybox-tweet"><%= tweet %></p>';
+								
+		return html;
+	},
+
+});
+// For displaying Documents
+var FancyBoxDocCloudView = FancyBoxView.extend({
+	
+	events : {
+		
+		'click .fancybox-more-button' : 'more',
+		'click .fancybox-less-button' : 'less',
+
+	},
+	more : function(){
+
+		//call parent MORE method to lay out metadata
+		FancyBoxView.prototype.more.call(this);
+
+		this.fillInTemplate(this.getMediaTemplate(275, 375));
+
+		return false;
+	},
+	less : function(){
+
+		//call parent LESS method to lay out metadata
+		FancyBoxView.prototype.less.call(this);
+
+		this.fillInTemplate(this.getMediaTemplate(630,400));
+
+		return false;
+	},
+	initialize: function(){
+
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		
+	},
+	fillInTemplate : function(template){
+		//use template to clone the database items into
+		var template = _.template( template );
+		
+		//Fill in info
+		var blanks = {
+			
+			uri : this.model.get('uri'),
+		};
+		//copy the cloned item into the el
+		var docHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(docHTML);
+	},
+	
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+
+		/* Because the document viewer needs to be reloaded for MORE and LESS views
+		this will be handled by the MORE and LESS methods in this class which call the parent
+		FancyBoxView class to handle the metadata and stuff.
+
+		So if you need to change how this renders change it in the MORE or LESS or FILLINTEMPLATE functions
+		 of this class.
+		*/
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		return this;
+	},
+	getMediaTemplate : function(width, height){
+		var html =	'<div id="fancybox-document-cloud" class="DV-container"></div>'+
+					'<script>'+
+					"DV.load('http://www.documentcloud.org/documents/<%= uri %>.js', {"+
+					'sidebar: false, width:'+width+',height:'+height+','+
+					'container: "#fancybox-document-cloud"'+
+					'      });'+
+					'</script>';
+								
+		return html;
+	}
+	
 
 });
