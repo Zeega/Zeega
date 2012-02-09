@@ -7,7 +7,7 @@ var MyCollections = Backbone.Collection.extend({
 	model: BrowserCollection, 
 	
 
-	url : function(){return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?playground="+sessionStorage.getItem('playgroundid')+"&user=-1&r_items=0&r_collections=1&r_itemswithcollections=0"},
+	url : function(){return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?user=-1&r_items=0&r_collections=1&r_itemswithcollections=0"},
 	
 	
 	initialize : function()

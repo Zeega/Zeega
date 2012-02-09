@@ -390,9 +390,7 @@ class EditorController extends Controller
 		'user_id' => $user->getId(),
 		'super' => $super,
 		'page'=>'faq',
-		'myprojects'=>false,
-		'playground' => false,					
-		'playgrounds'=>false,
+
 		'num_playgrounds'=>count($playgrounds),
 		
 		));
@@ -428,9 +426,7 @@ class EditorController extends Controller
 				'title'=>'',
 				'page'=>'home',
 				'form'=>$form->createView(),
-				'myprojects'=>false,
-				'playground' => false,					
-				'playgrounds'=>false,
+			
 
 			));
     	}

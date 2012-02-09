@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Zeega\IngestBundle\Entity\Media;
 use Zeega\IngestBundle\Entity\Metadata;
 use Zeega\IngestBundle\Entity\Tag;
+use Zeega\IngestBundle\Entity\ItemTags;
 use Zeega\IngestBundle\Entity\Item;
 use Zeega\EditorBundle\Entity\Playground;
 use Zeega\UserBundle\Entity\User;
@@ -59,6 +60,41 @@ class WidgetController extends Controller
     		$metadata=$item->getMetadata();
     		$media=$item->getMedia();
     		
+    		
+    		
+			$attr=$metadata->getAttributes();
+			if($attr&&isset($attr['tags'])) $tags=$attr['tags'];
+			else $tags=false;
+			
+		 if($tags&&count($tags)>0){
+		 	foreach($tags as $tagName){
+				$tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+				
+				if (!$tag) 
+				{
+					$tag = new Tag();
+					$tag->setName($tagName);
+					$tag->setDateCreated(new \DateTime("now"));
+					$em->persist($tag);
+					$em->flush();
+				}
+				
+				// can't get EAGER loading for the item tags - this is a workaround
+				$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($item->getId());
+			
+				$item_tag = new ItemTags;
+				$item_tag->setItem($item);
+				$item_tag->setTag($tag);
+				$item_tag->setTagDateCreated(new \DateTime("now"));
+				$item_tag->setTagDateCreated(new \DateTime("now"));
+	
+				$em->persist($item_tag);
+				$em->flush();
+			}
+		 }
+			
+			
+			
 			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
 			
 			
