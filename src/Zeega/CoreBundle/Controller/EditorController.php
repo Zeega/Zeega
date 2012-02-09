@@ -1,6 +1,6 @@
 <?php
 //test
-namespace Zeega\EditorBundle\Controller;
+namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Zeega\DataBundle\Entity\Item;
@@ -9,9 +9,9 @@ use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Playground;
 use Zeega\DataBundle\Entity\Node;
 use Zeega\DataBundle\Entity\User;
-use Zeega\EditorBundle\Form\Type\UserType;
-use Zeega\EditorBundle\Form\Type\PlaygroundType;
-use Zeega\EditorBundle\Form\Type\PasswordType;
+use Zeega\CoreBundle\Form\Type\UserType;
+use Zeega\CoreBundle\Form\Type\PlaygroundType;
+use Zeega\CoreBundle\Form\Type\PasswordType;
 
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
@@ -80,7 +80,7 @@ class EditorController extends Controller
 				$form = $this->createForm(new UserType(), $newUser);    
 				$request = $this->getRequest();
 				
-				return $this->render('ZeegaEditorBundle:Editor:playground.admin.html.twig', array(
+				return $this->render('ZeegaCoreBundle:Editor:playground.admin.html.twig', array(
 					// last displayname entered by the user
 					'user_id' => $user->getId(),
 					'displayname' => $user->getdisplayname(),
@@ -99,11 +99,11 @@ class EditorController extends Controller
 				));
 			}
 			
-			else return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+			else return $this->render('ZeegaCoreBundle:Editor:error.html.twig');
     	}
     	else
     	{
-    		return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+    		return $this->render('ZeegaCoreBundle:Editor:error.html.twig');
     	}
    	}
 
@@ -140,9 +140,9 @@ class EditorController extends Controller
 					->findPlaygroundsByUser($user->getId());
 		
 		$playground=$playgrounds[0];
-		$url=$this->generateUrl('ZeegaEditorBundle_playground',array('short'=>$playground['short']),true);
+		$url=$this->generateUrl('ZeegaCoreBundle_playground',array('short'=>$playground['short']),true);
 		
-		return $this->redirect($this->generateUrl('ZeegaEditorBundle_playground',array('short'=>$playground['short']),true),302);
+		return $this->redirect($this->generateUrl('ZeegaCoreBundle_playground',array('short'=>$playground['short']),true),302);
     		
     }
 
@@ -187,7 +187,7 @@ class EditorController extends Controller
 		$playgrounds=$this->getDoctrine()
 					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
-	return $this->render('ZeegaEditorBundle:Editor:playground.html.twig', array(
+	return $this->render('ZeegaCoreBundle:Editor:playground.html.twig', array(
 	  	'user_id' => $user->getId(),
 		'displayname' => $user->getDisplayName(),
 		'myprojects'   => $myprojects,
@@ -206,8 +206,8 @@ class EditorController extends Controller
 	
 	}
 	
-	//else return $this->forward('ZeegaEditorBundle:Editor:home');
-	else return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
+	//else return $this->forward('ZeegaCoreBundle:Editor:home');
+	else return $this->redirect($this->generateUrl('ZeegaCoreBundle_home'), 301);
 	
 	
 	}
@@ -228,7 +228,7 @@ class EditorController extends Controller
 		
 			
 			
-		return $this->render('ZeegaEditorBundle:Editor:browser.html.twig', array(
+		return $this->render('ZeegaCoreBundle:Editor:browser.html.twig', array(
 			// last displayname entered by the user
 			'displayname' => $user->getDisplayName(),
 			'user_id' => $user->getId(),
@@ -252,7 +252,7 @@ class EditorController extends Controller
 	
 	else{
 	
-		return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+		return $this->render('ZeegaCoreBundle:Editor:error.html.twig');
 	
 	}
 	
@@ -303,7 +303,7 @@ class EditorController extends Controller
 			$playgrounds=$this->getDoctrine()
 					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
-			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+			return $this->render('ZeegaCoreBundle:Editor:editor.html.twig', array(
 				// last displayname entered by the user
 					'displayname' => $user->getDisplayName(),
 					'title'   => $playground->getTitle(),
@@ -328,7 +328,7 @@ class EditorController extends Controller
 		}	
 		else
 		{
-			return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+			return $this->render('ZeegaCoreBundle:Editor:error.html.twig');
 		}
 	} 
 	
@@ -357,7 +357,7 @@ class EditorController extends Controller
 				$em->persist($project);
 				$em->persist($node);
 				$em->flush();
-				$response= $this->forward('ZeegaEditorBundle:Editor:editor', array(
+				$response= $this->forward('ZeegaCoreBundle:Editor:editor', array(
 						'id'  => $project->getId(),
 						'short' =>  $short,
 						'admin' => $admin,
@@ -370,7 +370,7 @@ class EditorController extends Controller
 		
 		else{
 		
-			return $this->render('ZeegaEditorBundle:Editor:error.html.twig');
+			return $this->render('ZeegaCoreBundle:Editor:error.html.twig');
 		
 		}
 	
@@ -384,7 +384,7 @@ class EditorController extends Controller
 		$playgrounds=$this->getDoctrine()
 					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
-		return $this->render('ZeegaEditorBundle:Editor:faq.html.twig', array(
+		return $this->render('ZeegaCoreBundle:Editor:faq.html.twig', array(
 		'displayname' => $user->getDisplayName(),
 		'title'=>'',
 		'user_id' => $user->getId(),
@@ -399,7 +399,7 @@ class EditorController extends Controller
 	} 
 	
 	public function siteadminAction(){
-		return $this->render('ZeegaEditorBundle:Editor:siteadmin.html.twig',array(
+		return $this->render('ZeegaCoreBundle:Editor:siteadmin.html.twig',array(
 			'user_id' => $user->getId(),
             'page'=>'home',
             ));
@@ -416,7 +416,7 @@ class EditorController extends Controller
 				$request = $this->getRequest();
 				if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 				else $super=false;
-				return $this->render('ZeegaEditorBundle:Editor:settings.html.twig', array(
+				return $this->render('ZeegaCoreBundle:Editor:settings.html.twig', array(
 				// last displayname entered by the user
 				'email' => $user->getEmail(),
 				'user_id' => $user->getId(),
@@ -434,6 +434,6 @@ class EditorController extends Controller
 
 			));
     	}
-    	else  $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
+    	else  $this->redirect($this->generateUrl('ZeegaCoreBundle_home'), 301);
     }
 }

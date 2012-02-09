@@ -10,20 +10,20 @@ use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
-use Zeega\IngestBundle\Repository\ItemTagsRepository;
+use Zeega\DataBundle\Repository\ItemTagsRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Zeega\IngestBundle\Parser\ParserFlickr;
+use Zeega\CoreBundle\Parser\ParserFlickr;
 use \ReflectionMethod;
 
 class ParserController extends Controller
 {
 	private $supportedServices = array( 
 		// flickr
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\IngestBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
 		// youtube
-		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\IngestBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
-		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\IngestBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
+		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
+		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}

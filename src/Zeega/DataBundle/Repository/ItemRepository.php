@@ -1,6 +1,6 @@
 <?php
 
-// src/Zeega/IngestBundle/Repository/ItemRepository.php
+// src/Zeega/\CoreBundle\/Repository/ItemRepository.php
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;

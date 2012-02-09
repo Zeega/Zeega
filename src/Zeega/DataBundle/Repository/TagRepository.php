@@ -1,6 +1,6 @@
 <?php
 
-// src/Zeega/IngestBundle/Repository/TagRepository.php
+// src/Zeega/\CoreBundle\/Repository/TagRepository.php
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -13,7 +13,7 @@ class TagRepository extends EntityRepository
 
         // search query
         $qb->select('t')
-           ->from('ZeegaIngestBundle:Tag', 't')
+           ->from('Zeega\CoreBundle\:Tag', 't')
            ->orderBy('t.date_created','DESC')
       	   ->setMaxResults($limit)
       	   ->setFirstResult($limit * $offset);

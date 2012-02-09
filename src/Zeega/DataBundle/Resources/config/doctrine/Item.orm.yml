@@ -1,4 +1,4 @@
-# src/Zeega/IngestBundle/Resources/config/doctrine/Item.orm.yml
+# src/Zeega/\CoreBundle\/Resources/config/doctrine/Item.orm.yml
 Zeega\DataBundle\Entity\Item:
     type: entity
     repositoryClass: Zeega\DataBundle\Repository\ItemRepository

@@ -6,8 +6,3 @@ widget:
     pattern: /widget/
     defaults: { _controller:  ZeegaCoreBundle:Widget:open }
     
-
-ZeegaIngestBundle_import:
-    pattern: /import/{page}
-    defaults: { _controller:  ZeegaCoreBundle:Ingest:index }
-    

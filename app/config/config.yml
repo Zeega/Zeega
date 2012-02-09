@@ -76,12 +76,6 @@ jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
 
-services:
-    item_loader:
-        class:        Zeega\IngestBundle\ItemLoader
-    import_widget:
-        class:      Zeega\IngestBundle\ImportWidget
-
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: secured_area

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\IngestBundle\Parser\Base;
+namespace Zeega\CoreBundle\Parser\Base;
 
 /**
  * Item abstract data parser

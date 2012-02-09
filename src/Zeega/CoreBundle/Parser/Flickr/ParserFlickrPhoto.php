@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\IngestBundle\Parser\Flickr;
+namespace Zeega\CoreBundle\Parser\Flickr;
 
-use Zeega\IngestBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
 use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;

@@ -13,7 +13,7 @@
 			<div id="intro-actions" style="margin-top:35px;">
 				<div id="surf-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px;">
 				Surf & Collect<br>
-				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Add images, videos, sounds and more from <a href="{{ path('ZeegaEditorBundle_faq')}}">these websites</a> to Zeega with our bookmarklet plugin.</span>
+				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Add images, videos, sounds and more from <a href="{{ path('ZeegaCoreBundle_faq')}}">these websites</a> to Zeega with our bookmarklet plugin.</span>
 				<br><br>
 				<ul class="pill-buttons">
 					<li class='item add-media' ><a href="#" style="font-size: 12px;">Add Zeega Bookmarklet</a></li>							
@@ -26,7 +26,7 @@
 				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Organize and annotate your media in collections.</span>
 				<br><br><br>
 				<ul class="pill-buttons">
-					<li><a  href="{{ path('ZeegaEditorBundle_browser', { 'short': short })}}" style="font-size: 12px;">Browse & Create Collections</a></li>
+					<li><a  href="{{ path('ZeegaCoreBundle_browser', { 'short': short })}}" style="font-size: 12px;">Browse & Create Collections</a></li>
 				</ul>
 				</div>
 				<div id="collect-image" style="float: left; margin-left: 20px;"><img src="{{ asset('images/collect-graphic.gif') }}" /></div>
@@ -53,7 +53,7 @@
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>

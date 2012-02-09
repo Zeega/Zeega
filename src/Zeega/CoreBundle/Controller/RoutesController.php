@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\EditorBundle\Controller;
+namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;

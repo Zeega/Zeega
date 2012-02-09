@@ -1,4 +1,4 @@
-# src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
+# src/Zeega/\CoreBundle\/Resources/config/doctrine/Metadata.orm.yml
 Zeega\DataBundle\Entity\Metadata:
     type: entity
     oneToOne:

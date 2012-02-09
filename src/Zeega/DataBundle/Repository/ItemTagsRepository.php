@@ -1,6 +1,6 @@
 <?php
 
-// src/Zeega/IngestBundle/Repository/ItemTagsRepository.php
+// src/Zeega/\CoreBundle\/Repository/ItemTagsRepository.php
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -13,7 +13,7 @@ class ItemTagsRepository extends EntityRepository
 
             // search query
             $qb->select('t')
-               ->from('ZeegaIngestBundle:Tag', 't')
+               ->from('Zeega\CoreBundle\:Tag', 't')
                ->innerjoin('t.item', 'i')
                ->where('i.item = ?1')
                ->setParameter(1,$itemId);

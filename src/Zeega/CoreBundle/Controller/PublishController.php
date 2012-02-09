@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\EditorBundle\Controller;
+namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +15,13 @@ class PublishController extends Controller
     
     public function nodeAction($id){
     
-     	return $this->render('ZeegaEditorBundle:Editor:node.html.twig', array(
+     	return $this->render('ZeegaCoreBundle:Editor:node.html.twig', array(
 					'nodeId'=>$id,
 				));
      }
      
      public function projectAction($id){
-     	return $this->render('ZeegaEditorBundle:Editor:player.html.twig', array(
+     	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
      		'projectId'=>$id,
      		'collectionId'=>0,
      	
@@ -31,7 +31,7 @@ class PublishController extends Controller
      
      
       public function collectionAction($id){
-     	return $this->render('ZeegaEditorBundle:Editor:player.html.twig', array(
+     	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
      		'projectId'=>0,
      		'collectionId'=>$id,
      	

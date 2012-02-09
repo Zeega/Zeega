@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
-use Zeega\IngestBundle\Repository\ItemTagsRepository;
+use Zeega\DataBundle\Repository\ItemTagsRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 class TagsController extends Controller

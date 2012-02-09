@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\IngestBundle\Controller;
+namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ class WidgetController extends Controller
 		if($item)
 		{
 			// item was imported before
-			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
+			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
 				'item' => $item,
 				'mycollection'=>$mycollection,
@@ -76,7 +76,7 @@ class WidgetController extends Controller
 					if($isUrlCollection)
 					{
 						//return new Response(var_dump($parserResponse));
-						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
+						return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
 							'item'=>json_encode($items), 
@@ -85,7 +85,7 @@ class WidgetController extends Controller
 					}
 					else
 					{
-						return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
+						return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
 							'item'=>json_encode($items), 
@@ -95,7 +95,7 @@ class WidgetController extends Controller
 				}
 				else
 				{
-					return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
+					return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
 						'widget_id'=>$widgetId,
 						'item'=>json_encode($items), 
@@ -258,7 +258,7 @@ class WidgetController extends Controller
 					->findItemByAttributionUrl($url);
 	
 		if($check){
-			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
+			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
 				'playground'=>$playground,
 				'title'=>$check['title'],
@@ -303,7 +303,7 @@ class WidgetController extends Controller
 				$newItems[$widgetId]=$item;
 				$metadata=$item->getMetadata();
     			$session->set('items',$newItems);
-		    	return $this->render('ZeegaIngestBundle:Widget:single.widget.html.twig', array(
+		    	return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'title'=>$item->getTitle(),
 					'creator'=>$item->getMediaCreatorUsername(),
@@ -330,7 +330,7 @@ class WidgetController extends Controller
 				}
 				$session->set('items',$newItems);
 
-				return $this->render('ZeegaIngestBundle:Widget:batch.widget.html.twig', array(
+				return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'title'=>$collection['title'],
 					'creator'=>$collection['creator'],
@@ -343,7 +343,7 @@ class WidgetController extends Controller
 		
 			}
 			else{
-				return $this->render('ZeegaIngestBundle:Widget:fail.widget.html.twig', array(
+				return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
             		'displayname' => $user->getDisplayname(),
 					'message'=>'Unable to process the media at this URL:',
 					'url'=>json_encode($widgetId),
@@ -362,7 +362,7 @@ class WidgetController extends Controller
     
     	 $loader->loadTagThumbs($doc);
     	 
-    	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
+    	 return $this->render('ZeegaCoreBundle:Default:index.html.twig', array('name' => $query));
    
     }
     
@@ -373,7 +373,7 @@ class WidgetController extends Controller
     
     	 $loader->loadMediaData($doc);
     	 
-    	 return $this->render('ZeegaIngestBundle:Default:index.html.twig', array('name' => $query));
+    	 return $this->render('ZeegaCoreBundle:Default:index.html.twig', array('name' => $query));
    
     }
 }

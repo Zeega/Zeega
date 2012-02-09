@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\IngestBundle\Parser\Youtube;
+namespace Zeega\CoreBundle\Parser\Youtube;
 
-use Zeega\IngestBundle\Parser\Base\ParserCollectionAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
 use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;

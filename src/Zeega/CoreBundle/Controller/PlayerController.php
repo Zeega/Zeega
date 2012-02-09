@@ -1,6 +1,6 @@
 <?php
 //test
-namespace Zeega\EditorBundle\Controller;
+namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Zeega\DataBundle\Entity\Item;
@@ -9,9 +9,9 @@ use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Playground;
 use Zeega\DataBundle\Entity\Node;
 use Zeega\DataBundle\Entity\User;
-use Zeega\EditorBundle\Form\Type\UserType;
-use Zeega\EditorBundle\Form\Type\PlaygroundType;
-use Zeega\EditorBundle\Form\Type\PasswordType;
+use Zeega\CoreBundle\Form\Type\UserType;
+use Zeega\CoreBundle\Form\Type\PlaygroundType;
+use Zeega\CoreBundle\Form\Type\PasswordType;
 
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
@@ -24,7 +24,7 @@ class PlayerController extends Controller
  	public function playAction ($routeId){
  	
  	
- 	return $this->render('ZeegaEditorBundle:Editor:player.html.twig', array(
+ 	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
 					routeId:$routeId,
 					
 				));

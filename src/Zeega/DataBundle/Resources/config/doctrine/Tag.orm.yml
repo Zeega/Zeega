@@ -1,4 +1,4 @@
-# src/Zeega/IngestBundle/Resources/config/doctrine/Tag.orm.yml
+# src/Zeega/\CoreBundle\/Resources/config/doctrine/Tag.orm.yml
 Zeega\DataBundle\Entity\Tag:
     type: entity
     repositoryClass: Zeega\DataBundle\Repository\TagRepository

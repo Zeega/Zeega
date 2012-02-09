@@ -1,4 +1,4 @@
-# src/Zeega/IngestBundle/Resources/config/doctrine/TagCorrelation.orm.yml
+# src/Zeega/\CoreBundle\/Resources/config/doctrine/TagCorrelation.orm.yml
 Zeega\DataBundle\Entity\TagCorrelation:
     type: entity
     repositoryClass: Zeega\DataBundle\Repository\TagCorrelationRepository

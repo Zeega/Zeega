@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\IngestBundle;
+namespace Zeega\\CoreBundle\;
 
 use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;

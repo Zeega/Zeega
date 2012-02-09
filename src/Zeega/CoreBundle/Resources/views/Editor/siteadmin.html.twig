@@ -20,7 +20,7 @@
 				<div class="item-title" style="font-size: 16px; ">My Sites</div><br><br>
 				<div id="my-projects" style="padding-left:20px;">
 					{% for playground in playgrounds %}
-						<a href="{{ path('ZeegaEditorBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a> <span class="timeStamp"></span><br>
+						<a href="{{ path('ZeegaCoreBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a> <span class="timeStamp"></span><br>
 					{% endfor %}
 				</div>
 			</div> <!--#playgrounds-list-->

@@ -17,7 +17,7 @@ class TagCorrelationRepository extends EntityRepository
     public function searchRelatedTags($query)
     {
 		$rsm = new ResultSetMapping;
-		$rsm->addEntityResult('ZeegaIngestBundle:Tag', 't');
+		$rsm->addEntityResult('Zeega\CoreBundle\:Tag', 't');
 		$rsm->addFieldResult('t', 'id', 'id'); // ($alias, $columnName, $fieldName)
 		$rsm->addFieldResult('t', 'name', 'name'); // ($alias, $columnName, $fieldName)
 		$rsm->addFieldResult('t', 'date_created', 'date_created'); // // ($alias, $columnName, $fieldName)
