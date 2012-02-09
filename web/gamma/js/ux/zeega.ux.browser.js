@@ -95,6 +95,8 @@ $(document).ready(function() {
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
     
+    		$('#fancybox-document-cloud').remove();
+    		
             var elementID = $(this.element).attr('id');
            	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
            	var thisModel = itemsCollection.get(elementID);

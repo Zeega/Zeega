@@ -514,10 +514,48 @@ var FancyBoxTweetView = FancyBoxView.extend({
 // For displaying Documents
 var FancyBoxDocCloudView = FancyBoxView.extend({
 	
+	events : {
+		
+		'click .fancybox-more-button' : 'more',
+		'click .fancybox-less-button' : 'less',
+
+	},
+	more : function(){
+
+		//call parent MORE method to lay out metadata
+		FancyBoxView.prototype.more.call(this);
+
+		this.fillInTemplate(this.getMediaTemplate(275, 375));
+
+		return false;
+	},
+	less : function(){
+
+		//call parent LESS method to lay out metadata
+		FancyBoxView.prototype.less.call(this);
+
+		this.fillInTemplate(this.getMediaTemplate(630,400));
+
+		return false;
+	},
 	initialize: function(){
 
 		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
 		
+	},
+	fillInTemplate : function(template){
+		//use template to clone the database items into
+		var template = _.template( template );
+		
+		//Fill in info
+		var blanks = {
+			
+			uri : this.model.get('uri'),
+		};
+		//copy the cloned item into the el
+		var docHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(docHTML);
 	},
 	
 	/* Pass in the element that the user clicked on from fancybox. */
@@ -528,40 +566,30 @@ var FancyBoxDocCloudView = FancyBoxView.extend({
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
 
-		//Fill in tweet-specific stuff
-		var blanks = {
-			
-			
-		};
-		
-		//use template to clone the database items into
-		var template = _.template( this.getMediaTemplate() );
-		
-		//copy the cloned item into the el
-		var docHTML =  template( blanks ) ;
+		/* Because the document viewer needs to be reloaded for MORE and LESS views
+		this will be handled by the MORE and LESS methods in this class which call the parent
+		FancyBoxView class to handle the metadata and stuff.
 
-		$(this.el).find('.fancybox-media-item').html(docHTML);
+		So if you need to change how this renders change it in the MORE or LESS or FILLINTEMPLATE functions
+		 of this class.
+		*/
 
 		//set fancybox content
 		obj.content = $(this.el);
 		
-		
-
-		
 		return this;
 	},
-	getMediaTemplate : function()
-	{
-		
+	getMediaTemplate : function(width, height){
 		var html =	'<div id="fancybox-document-cloud" class="DV-container"></div>'+
 					'<script>'+
-					"DV.load('http://www.documentcloud.org/documents/210787-reducing-the-risks-2011-06-07.js', {"+
-					'sidebar: false, '+
+					"DV.load('http://www.documentcloud.org/documents/<%= uri %>.js', {"+
+					'sidebar: false, width:'+width+',height:'+height+','+
 					'container: "#fancybox-document-cloud"'+
 					'      });'+
 					'</script>';
 								
 		return html;
-	},
+	}
+	
 
 });
