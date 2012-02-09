@@ -18,7 +18,7 @@
 	
 	
 	
-	Layers provide modular node-level features
+	Layers provide modular frame-level features
 	for the Zeega editor/publisher.
 	
 	Location/Naming protocol:
@@ -35,7 +35,7 @@
 	
 		>>Implement icons in workspace
 		>>Develop structure for allowing input on Create New
-		>>Develop structure for publishing node
+		>>Develop structure for publishing frame
 	
 	
 
@@ -393,7 +393,7 @@ var ProtoLayer = Class.extend({
 	{
 		//kept separate from updateLayerAttr because there are reasons to set but not save yet
 		console.log('save()');
-		//Zeega.currentNode.noteChange(); //stops thumbnail generation for now
+		//Zeega.currentFrame.noteChange(); //stops thumbnail generation for now
 		this.model.save(); //saves the current model
 	}
 	

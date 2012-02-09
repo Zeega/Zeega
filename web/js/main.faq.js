@@ -34,7 +34,7 @@ var loadFiles = [
 	//mvc
 
 	
-	//routes
+	//sequences
 
 	
 	//layers

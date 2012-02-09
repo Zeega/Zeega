@@ -160,8 +160,8 @@ var ZeegaBrowser = {
 	},
 	goToEditor : function(collectionID, collectionTitle){
 		var postdata={title:collectionTitle, collection_id:collectionID};
-		$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',postdata, function(data){
-					window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
+		$.post(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'sites/'+ sessionStorage.getItem('siteId') +'/project',postdata, function(data){
+					window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'site/'+  sessionStorage.getItem('siteShort') +'/project/'+data;
 			});	
 		return false;
 	},

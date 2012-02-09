@@ -1,11 +1,11 @@
-var RouteView = Backbone.View.extend({
+var SequenceView = Backbone.View.extend({
 	tagName: 'span',
 	
 	render: function()
 	{
 		var that = this;
 		$(this.el).html(this.model.get('title'));
-		//$('#route-title').empty();
+		//$('#sequence-title').empty();
 		//copy the cloned item into the el
 		
 		/*
@@ -24,7 +24,7 @@ var RouteView = Backbone.View.extend({
 			});
 		*/
 		
-		//$('#route-title').html(this.el);
+		//$('#sequence-title').html(this.el);
 		return this;
 	}
 });

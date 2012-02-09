@@ -18,30 +18,30 @@
 
 var Zeega = {
 	
-	routeID : 1,
-	currentNode : null,
+	sequenceID : 1,
+	currentFrame : null,
 	
 	previewMode:false,
 	
 	helpCounter: 0,
 	
-	maxNodesPerRoute : 0, // 0 = no limit
-	maxLayersPerNode : 0, // 0 = no limit
+	maxFramesPerSequence : 0, // 0 = no limit
+	maxLayersPerFrame : 0, // 0 = no limit
 	
 	url_prefix : "",
 	
 	url_hash : {
-		'route' : null,
-		'node' : null
+		'sequence' : null,
+		'frame' : null
 	},
 	
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
 
-		// makes sure that zeega only advances after both nodes and layers are loaded
+		// makes sure that zeega only advances after both frames and layers are loaded
 		//commented out??
-		this.zeegaReady = _.after(2,this.nodesAndLayersReady);
+		this.zeegaReady = _.after(2,this.framesAndLayersReady);
 
 		this.initStartHelp();
 
@@ -49,31 +49,31 @@ var Zeega = {
 	},
 	
 	
-	//set the route without loading it
+	//set the sequence without loading it
 	//do we need this?
-	setRoute : function(routeID)
+	setSequence : function(sequenceID)
 	{
-		this.routeID = routeID;
+		this.sequenceID = sequenceID;
 	},
 	
-	createRoute : function()
+	createSequence : function()
 	{
-		//make a new and empty route
+		//make a new and empty sequence
 		
-		var newRoute = new Route();
+		var newSequence = new Sequence();
 		var _this = this;
 		
-		newRoute.save({},{
+		newSequence.save({},{
 		
-			success: function(route,response){
-				_this.route = route;
-				_this.routeID= route.id;
-				_this.routeView = new RouteView({ model : z.route });
-				_this.routeView.render();
+			success: function(sequence,response){
+				_this.sequence = sequence;
+				_this.sequenceID= sequence.id;
+				_this.sequenceView = new SequenceView({ model : z.sequence });
+				_this.sequenceView.render();
 				_this.loadFrames();
 				_this.loadLayers();
 			
-				console.log('new route created with id: '+ route.id);
+				console.log('new sequence created with id: '+ sequence.id);
 			},
 			error: function(){
 				console.log('error');
@@ -84,7 +84,7 @@ var Zeega = {
 		
 	},
 	
-	//set and load a new route
+	//set and load a new sequence
 	//this is the first function called when loading the editor in dev
 	loadProject : function()
 	{
@@ -100,14 +100,14 @@ var Zeega = {
 			}
 		});
 	},
-	loadRoute : function(routeID)
+	loadSequence : function(sequenceID)
 	{
 		
 		var _this = this;
-		this.routeID = routeID;
-		this.route = new Route({ 'id' : this.routeID });
-		this.route.fetch({
-			success: function(route, response)
+		this.sequenceID = sequenceID;
+		this.sequence = new Sequence({ 'id' : this.sequenceID });
+		this.sequence.fetch({
+			success: function(sequence, response)
 			{
 				_this.loadFrames();
 				_this.loadLayers();
@@ -121,19 +121,19 @@ var Zeega = {
 	loadFrames : function()
 	{
 		var _this = this;
-		//create a node collection inside the route model
-		this.route.nodes = new NodeCollection;
-		//get all existing nodes
+		//create a frame collection inside the sequence model
+		this.sequence.frames = new FrameCollection;
+		//get all existing frames
 
-		this.route.nodes.fetch({
+		this.sequence.frames.fetch({
 			success : function(frames,response)
 			{
 				console.log('frames')
 				console.log(frames)
-				//make a node view collection
-				_this.route.nodeViewCollection = new NodeViewCollection({ collection : frames });
-				//render everything in the nodeViewCollection
-				_this.route.nodeViewCollection.render();
+				//make a frame view collection
+				_this.sequence.frameViewCollection = new FrameViewCollection({ collection : frames });
+				//render everything in the frameViewCollection
+				_this.sequence.frameViewCollection.render();
 				_this.zeegaReady();
 			}
 		});
@@ -142,64 +142,64 @@ var Zeega = {
 	loadLayers : function()
 	{
 		var _this = this;
-		//create a layer collection inside the route model
-		this.route.layerCollection = new LayerCollection;
+		//create a layer collection inside the sequence model
+		this.sequence.layerCollection = new LayerCollection;
 		//get all existing layers
-		this.route.layerCollection.fetch({
+		this.sequence.layerCollection.fetch({
 			
 			success : function(layers)
 			{
 				console.log('layers')
 				console.log(layers)
-				_this.route.layerCollection.parseLayers();
+				_this.sequence.layerCollection.parseLayers();
 				_this.zeegaReady();
 			}
 		});
 	},
 	
-	nodesAndLayersReady : function()
+	framesAndLayersReady : function()
 	{
-		this.currentNode = this.route.nodes.at(0);
+		this.currentFrame = this.sequence.frames.at(0);
 		console.log('ready')
 		console.log(this)
-		//if no nodes exist, create one
-		if( _.size(this.route.nodes) == 0 )
+		//if no frames exist, create one
+		if( _.size(this.sequence.frames) == 0 )
 		{
 			console.log('no frames. MAKE ONE!')
-			var newNode = new Node;
-			this.route.nodeViewCollection.add(newNode);
-			this.loadNode( newNode );
-		}else if(this.url_hash.node){
-			this.loadNode( this.route.nodes.get(this.url_hash.node) );
+			var newFrame = new Frame;
+			this.sequence.frameViewCollection.add(newFrame);
+			this.loadFrame( newFrame );
+		}else if(this.url_hash.frame){
+			this.loadFrame( this.sequence.frames.get(this.url_hash.frame) );
 		}else{
-			this.loadNode( this.route.nodes.at(0) );
+			this.loadFrame( this.sequence.frames.at(0) );
 		}
 		
-		this.nodeSort();
+		this.frameSort();
 		
 	},
 	
-	loadNode : function( node )
+	loadFrame : function( frame )
 	{
 		var _this = this;
 		
-		this.clearCurrentNode();
+		this.clearCurrentFrame();
 		
-		//set global currentNode to the selected node
-		this.currentNode = node;
+		//set global currentFrame to the selected frame
+		this.currentFrame = frame;
 
-		if(node) window.location.hash = '/editor/frame/'+ node.id; //change location hash
-		else window.location.hash = 'newNode';
+		if(frame) window.location.hash = '/editor/frame/'+ frame.id; //change location hash
+		else window.location.hash = 'newFrame';
 		//open/close visual editor
 		var el = $('#workspace');
 
 
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
-		//right now they inherit the last node's state
+		//right now they inherit the last frame's state
 		
 		
-		var storage = localStorage.getObject( this.currentNode.id );
+		var storage = localStorage.getObject( this.currentFrame.id );
 		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
 		{
 			//go through each saved state
@@ -221,8 +221,8 @@ var Zeega = {
 		//update the auto advance tray
 		//make sure the attribute exists
 		var adv = false;
-		if( !_.isNull(this.currentNode.get('attr')) && !_.isNull( this.currentNode.get('attr').advance ) )
-			adv = this.currentNode.get('attr').advance;
+		if( !_.isNull(this.currentFrame.get('attr')) && !_.isNull( this.currentFrame.get('attr').advance ) )
+			adv = this.currentFrame.get('attr').advance;
 			
 		var advanceControls = $('#advance-controls');
 
@@ -250,20 +250,20 @@ var Zeega = {
 			$('#advance-time').val(10);
 		}
 		
-		// add the node's layers // remove falsy values
-		var layerArray = _.compact( this.currentNode.get('layers'));
+		// add the frame's layers // remove falsy values
+		var layerArray = _.compact( this.currentFrame.get('layers'));
 		
 		//call render on the entire collection. it should have the logic to draw what's needed
-		Zeega.route.layerCollection.render( this.currentNode );
+		Zeega.sequence.layerCollection.render( this.currentFrame );
 		
-		//add a new current node style
-		$('#frame-thumb-'+this.currentNode.id).addClass('active-frame');
+		//add a new current frame style
+		$('#frame-thumb-'+this.currentFrame.id).addClass('active-frame');
 	},
 	
-	clearCurrentNode : function ()
+	clearCurrentFrame : function ()
 	{
-		//remove a prexisiting node style
-		if(this.currentNode) $('#frame-thumb-'+this.currentNode.id).removeClass('active-frame');
+		//remove a prexisiting frame style
+		if(this.currentFrame) $('#frame-thumb-'+this.currentFrame.id).removeClass('active-frame');
 		
 		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();
@@ -274,48 +274,48 @@ var Zeega = {
 		
 	},
 	
-	addNode : function()
+	addFrame : function()
 	{
-		this.route.nodes.add(new Node);
+		this.sequence.frames.add(new Frame);
 	},
 	
-	addToLayerCollections : function(node,layer)
+	addToLayerCollections : function(frame,layer)
 	{
 
 		//only add to the layers collection if it's not already there!
-		if( !this.route.layerCollection.get(layer.id) )
+		if( !this.sequence.layerCollection.get(layer.id) )
 		{
 			console.log('not in collection');
 			
-			//this.route.layerCollection.add( layer );
+			//this.sequence.layerCollection.add( layer );
 			
 			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
-			if(node == this.currentNode)
+			if(frame == this.currentFrame)
 			{
 				console.log('layer should be added to the editor window')
-				this.route.layerCollection.add( layer );
+				this.sequence.layerCollection.add( layer );
 			}else{
 				console.log('layer should not be drawn')
-				//if it's not the current node, then be quiet about it
-				//this.route.layerCollection.add( layer , {silent:true} ); // do I need this??
+				//if it's not the current frame, then be quiet about it
+				//this.sequence.layerCollection.add( layer , {silent:true} ); // do I need this??
 				//we still need to add it to the type collection though
-				this.route.layerCollection.add( layer, {silent:true} );
-			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
+				this.sequence.layerCollection.add( layer, {silent:true} );
+			 	this.sequence.layerCollection.addToLayerTypeCollection( layer, false );
 			}
 		}
 
 	},
 	
-	addLayerToNode : function( node, layer )
+	addLayerToFrame : function( frame, layer )
 	{
 
-		//reject if there are too many layers inside the node
-		if( !node.get('layers') || node.get('layers').length < this.maxLayersPerNode || this.maxLayersPerNode == 0)
+		//reject if there are too many layers inside the frame
+		if( !frame.get('layers') || frame.get('layers').length < this.maxLayersPerFrame || this.maxLayersPerFrame == 0)
 		{
 			var _this = this;
 			
 			//add URL to layer model
-			layer.url = Zeega.url_prefix + 'routes/'+ Zeega.routeID +'/layers';
+			layer.url = Zeega.url_prefix + 'sequences/'+ Zeega.sequenceID +'/layers';
 		
 			//check to see if the layer is saved or not. save if ndeeded
 			if( layer.isNew() )
@@ -328,26 +328,26 @@ var Zeega = {
 						success : function(savedLayer, response){
 							console.log(response)
 							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
-							_this.updateAndSaveNodeLayer(node,savedLayer);
-							_this.addToLayerCollections(node, savedLayer);
-							if( savedLayer.layerClass.thumbUpdate ) node.noteChange() ;
+							_this.updateAndSaveFrameLayer(frame,savedLayer);
+							_this.addToLayerCollections(frame, savedLayer);
+							if( savedLayer.layerClass.thumbUpdate ) frame.noteChange() ;
 						}
 					});
-				//save the new layer then prepend the layer id into the node layers array
+				//save the new layer then prepend the layer id into the frame layers array
 			}else{
 				console.log('this is an old layer');
-				//prepend the layer id into the node layers array
-				this.updateAndSaveNodeLayer(node,layer);
+				//prepend the layer id into the frame layers array
+				this.updateAndSaveFrameLayer(frame,layer);
 				console.log(layer.layerClass.thumbUpdate)
-				if( layer.layerClass.thumbUpdate ) node.noteChange() ;
+				if( layer.layerClass.thumbUpdate ) frame.noteChange() ;
 			}
 		}
 	},
 	
-	//frame arg is optional. Defaults to currentNode if not set.
+	//frame arg is optional. Defaults to currentFrame if not set.
 	createLayerFromItem : function( item, frame )
 	{
-		if( _.isUndefined(frame)) frame = this.currentNode;
+		if( _.isUndefined(frame)) frame = this.currentFrame;
 		var newLayer = new Layer({
 			type: Zeega.draggedItem.get('source'),
 			attr: {
@@ -361,61 +361,61 @@ var Zeega = {
 			}
 		});
 
-		this.addLayerToNode( frame, newLayer );
+		this.addLayerToFrame( frame, newLayer );
 	},
 	
-	updateAndSaveNodeLayer : function(node, layer)
+	updateAndSaveFrameLayer : function(frame, layer)
 	{
-		console.log('updateAndSaveNodeLayer');
+		console.log('updateAndSaveFrameLayer');
 		var layerOrder = [parseInt(layer.id)];
-		if( node.get('layers') )
+		if( frame.get('layers') )
 		{
 			//if the layer array already exists eliminate false values if they exist
-			layerOrder = _.compact( node.get('layers') );
+			layerOrder = _.compact( frame.get('layers') );
 			//add the layer id to the layer order array
 			layerOrder.push( parseInt( layer.id ) );
 		}
-		//set the layerOrder array inside the node
-		node.set({'layers':layerOrder});
-		node.save();
+		//set the layerOrder array inside the frame
+		frame.set({'layers':layerOrder});
+		frame.save();
 	},
 	
-	removeLayerFromNode : function( node, layer )
+	removeLayerFromFrame : function( frame, layer )
 	{
-		//remove from node.layer and save it back
+		//remove from frame.layer and save it back
 		//remove icon from tray
 		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
 		
 	
-		//test to see if the layer is a persisting layer and destroy it from all nodes if so
-		//var routeAttributes = this.route.get('attr');
+		//test to see if the layer is a persisting layer and destroy it from all frames if so
+		//var sequenceAttributes = this.sequence.get('attr');
 		
-		if( _.include( this.route.get('attr').persistLayers , layer.id ) )
+		if( _.include( this.sequence.get('attr').persistLayers , layer.id ) )
 		{
 			console.log('a persistent layer');
 			
 			
 			this.removeLayerPersist(layer)
-			_.each( _.toArray(this.route.nodes), function(_node){
-				var layerOrder = _node.get('layers');
+			_.each( _.toArray(this.sequence.frames), function(_frame){
+				var layerOrder = _frame.get('layers');
 				layerOrder = _.without(layerOrder, parseInt(layer.id) );
 				if(layerOrder.length == 0) layerOrder = [false];
-				_node.set({'layers':layerOrder});
-				_node.save();
-				_node.updateThumb();
+				_frame.set({'layers':layerOrder});
+				_frame.save();
+				_frame.updateThumb();
 			});
 			
 			
 		}else{
 			console.log('NOT a persistent layer');
 			
-			var layerOrder = node.get('layers');
+			var layerOrder = frame.get('layers');
 			layerOrder = _.without(layerOrder, parseInt(layer.id) );
 			//set array to false if empty  //weirdness
 			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
-			node.set({'layers':layerOrder});
-			node.save();
-			node.updateThumb();
+			frame.set({'layers':layerOrder});
+			frame.save();
+			frame.updateThumb();
 			
 		}
 		
@@ -427,33 +427,33 @@ var Zeega = {
 	{
 		console.log('destroyOrphans');
 		_this = this;
-		// make a giant array of all the layer IDs in use by nodes
-		var layersInNodes = [];
+		// make a giant array of all the layer IDs in use by frames
+		var layersInFrames = [];
 		
-		_.each( _.toArray(this.route.nodes), function(node){
-			layersInNodes = _.union(node.get('layers'), layersInNodes);
+		_.each( _.toArray(this.sequence.frames), function(frame){
+			layersInFrames = _.union(frame.get('layers'), layersInFrames);
 		});
 		
-		layersInNodes = _.compact(layersInNodes); //remove falsy values needed to save 'empty' arrays
+		layersInFrames = _.compact(layersInFrames); //remove falsy values needed to save 'empty' arrays
 				
-		// make a giant array of all the layer IDs saved in the route
-		var layersInRoute = [];
-		_.each( _.toArray(this.route.layerCollection), function(layer){
-			layersInRoute.push( parseInt(layer.id) );
+		// make a giant array of all the layer IDs saved in the sequence
+		var layersInSequence = [];
+		_.each( _.toArray(this.sequence.layerCollection), function(layer){
+			layersInSequence.push( parseInt(layer.id) );
 		});
 
-		var orphanIDs = _.difference(layersInRoute, layersInNodes);
+		var orphanIDs = _.difference(layersInSequence, layersInFrames);
 		
 		if(orphanIDs)
 		{
 
 			_.each(orphanIDs, function(orphanID){
 				//removes and destroys the orphan
-				var orphan = _this.route.layerCollection.get(orphanID);
+				var orphan = _this.sequence.layerCollection.get(orphanID);
 				_this.removeLayerPersist(orphan);
 			
 				//remove from the layer collection
-				_this.route.layerCollection.remove(orphan)
+				_this.sequence.layerCollection.remove(orphan)
 				
 				orphan.destroy();
 			})
@@ -464,31 +464,31 @@ var Zeega = {
 		
 	},
 	
-	copyLayerToNextNode : function(layer)
+	copyLayerToNextFrame : function(layer)
 	{
 		console.log('copy to next layer');
-		var nextNode = this.getRightNode();
-		if (nextNode) this.addLayerToNode(nextNode,layer);
+		var nextFrame = this.getRightFrame();
+		if (nextFrame) this.addLayerToFrame(nextFrame,layer);
 	},
 	
-	persistLayerOverNodes : function(layer)
+	persistLayerOverFrames : function(layer)
 	{
 		console.log('peristing');
-		//function(layer,[nodes])
-		//eventually you should pass in an array of node IDs and only add to those nodes
-		//for now we persist to all nodes EXCEPT the currentNode
+		//function(layer,[frames])
+		//eventually you should pass in an array of frame IDs and only add to those frames
+		//for now we persist to all frames EXCEPT the currentFrame
 
-		_.each( _.toArray(this.route.nodes), function(node){
-			if(node != Zeega.currentNode)
+		_.each( _.toArray(this.sequence.frames), function(frame){
+			if(frame != Zeega.currentFrame)
 			{
-				//test to see if it exists in any of the target nodes. If so, DO NOT add
-				var layerArray = _.toArray( node.get('layers') );
-				if( ! _.include(layerArray,layer.id) ) Zeega.addLayerToNode(node, layer);
+				//test to see if it exists in any of the target frames. If so, DO NOT add
+				var layerArray = _.toArray( frame.get('layers') );
+				if( ! _.include(layerArray,layer.id) ) Zeega.addLayerToFrame(frame, layer);
 			}
 		});
 		
-		//add to the route persistLayers array
-		var attr = this.route.get('attr');
+		//add to the sequence persistLayers array
+		var attr = this.sequence.get('attr');
 		
 		//if the array exists and the layer isn't already inside it
 		if( attr.persistLayers && !_.include( _.toArray(attr.persistLayers),layer.id) )
@@ -496,15 +496,15 @@ var Zeega = {
 			attr.persistLayers.push(layer.id);
 			attr.persistLayers = _.uniq(attr.persistLayers);
 			console.log('new layer persisting')
-			this.route.set({'attr': attr});
-			this.route.save();
+			this.sequence.set({'attr': attr});
+			this.sequence.save();
 			
 		//if the array doesn't exist
 		}else{
 			
 			attr.persistLayers = [layer.id];
-			this.route.set({'attr':attr});
-			this.route.save();
+			this.sequence.set({'attr':attr});
+			this.sequence.save();
 		}
 		
 	},
@@ -512,13 +512,13 @@ var Zeega = {
 	removeLayerPersist : function(layer)
 	{
 		console.log('remove persistance!');
-		//removes layers from the route layerPersist array
-		//does not affect existing layers or nodes
-		//future nodes will not have the persisting layers
-		var attr = this.route.get('attr');
+		//removes layers from the sequence layerPersist array
+		//does not affect existing layers or frames
+		//future frames will not have the persisting layers
+		var attr = this.sequence.get('attr');
 		attr.persistLayers = _.without( attr.persistLayers, layer.id );
-		this.route.set({'attr':attr});
-		this.route.save();
+		this.sequence.set({'attr':attr});
+		this.sequence.save();
 		
 		
 	},
@@ -532,20 +532,20 @@ var Zeega = {
 		console.log(layerIDs)
 
 		//update the layerOrder array 
-		this.currentNode.set({'layers':layerIDs})
-		this.currentNode.save();
+		this.currentFrame.set({'layers':layerIDs})
+		this.currentFrame.save();
 
-		//update node thumb
-		this.currentNode.updateThumb();
+		//update frame thumb
+		this.currentFrame.updateThumb();
 
 	},
 	
-	destroyNode : function( view )
+	destroyFrame : function( view )
 	{
 		
 		view.model.destroy();
 		view.remove();
-		this.loadLeftNode();
+		this.loadLeftFrame();
 		
 		//remove from Sequence Order
 		this.removeFromSequence( view.model );
@@ -553,12 +553,12 @@ var Zeega = {
 		//if the sequence is empty(false), then make a new frame
 		if( this.getSequenceOrder()[0] === false )
 		{
-			var newNode = new Node;
-			Zeega.route.nodeViewCollection.add(newNode);
-			Zeega.loadNode( newNode );
+			var newFrame = new Frame;
+			Zeega.sequence.frameViewCollection.add(newFrame);
+			Zeega.loadFrame( newFrame );
 		}
 		
-		this.nodeSort();
+		this.frameSort();
 		this.destroyOrphans();
 	},
 	
@@ -570,10 +570,10 @@ var Zeega = {
 		else if( _.isNumber( frame.id ) ) frameId = frame.id;	//assumes it must be a model
 		else return false;
 
-		return _.indexOf( this.route.get('nodesOrder') , frameId );
+		return _.indexOf( this.sequence.get('framesOrder') , frameId );
 	},
 	
-	getSequenceOrder : function(){ return this.route.get('nodesOrder') },
+	getSequenceOrder : function(){ return this.sequence.get('framesOrder') },
 	
 	removeFromSequence : function( frame )
 	{
@@ -587,9 +587,9 @@ var Zeega = {
 			else if( _.isNumber( frame.id ) ) frameId = frame.id;
 			else return false;
 			
-			var newOrder = _.without( this.route.get('nodesOrder') , frameId );
+			var newOrder = _.without( this.sequence.get('framesOrder') , frameId );
 			if( _.size(newOrder) == 0 ) newOrder.push(false);
-			this.route.set({ nodesOrder:newOrder });
+			this.sequence.set({ framesOrder:newOrder });
 			return frameId;
 		}
 		
@@ -598,31 +598,31 @@ var Zeega = {
 	
 	duplicateFrame : function( view )
 	{
-		var dupeModel = new Node({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
+		var dupeModel = new Frame({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
 		dupeModel.oldLayerIDs = view.model.get('layers');
 		
 		dupeModel.dupe = true;
-		dupeModel.frameIndex = _.indexOf( this.route.get('nodesOrder'), view.model.id );
-		this.route.nodes.add( dupeModel );
+		dupeModel.frameIndex = _.indexOf( this.sequence.get('framesOrder'), view.model.id );
+		this.sequence.frames.add( dupeModel );
 	},
 		
-	nodeSort : function()
+	frameSort : function()
 	{
 		//turn the string IDs into integers to compare with model IDs
 		var order = _.map( $('#frame-list').sortable('toArray'), function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
 		
 		//var order = _.map( $('#frame-list').sortable('toArray'), function(str){ return parseInt(str) });
-		this.route.set({'nodesOrder': order});
-		console.log(this.route.get('nodesOrder'))
-		this.route.save();
+		this.sequence.set({'framesOrder': order});
+		console.log(this.sequence.get('framesOrder'))
+		this.sequence.save();
 	},
 	
-	previewRoute : function()
+	previewSequence : function()
 	{
 		this.previewMode = true;
 		//remove branch viewer if present
 
-		Player.init( this.exportProject(), this.route.id, this.currentNode.id );
+		Player.init( this.exportProject(), this.sequence.id, this.currentFrame.id );
 	
 	},
 	
@@ -630,18 +630,18 @@ var Zeega = {
 	{
 		console.log('export');
 		
-		var order = _.map( this.route.get('nodesOrder'), function(num){ return parseInt(num) });
-		var routes = [{
-			'id' : this.route.id,
-			'nodeOrder' : order,
-			'nodes' : this.route.nodes.toJSON(),
-			'layers' : this.route.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.route.layers) )
+		var order = _.map( this.sequence.get('framesOrder'), function(num){ return parseInt(num) });
+		var sequences = [{
+			'id' : this.sequence.id,
+			'frameOrder' : order,
+			'frames' : this.sequence.frames.toJSON(),
+			'layers' : this.sequence.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.sequence.layers) )
 		}];
 		
 		var project = {
 			'id' : this.project.id,
 			'title' : this.project.get('title'),
-			'routes' : routes
+			'sequences' : sequences
 		};
 		
 		var exportObject = { 'project' : project };
@@ -652,34 +652,34 @@ var Zeega = {
 		else return exportObject;
 	},	
 	
-	getLeftNode : function()
+	getLeftFrame : function()
 	{
-		var nodeOrder = this.route.get('nodesOrder');
-		var currentNodeIndex = _.indexOf( nodeOrder,this.currentNode.id );
-		if( currentNodeIndex ) return this.route.nodes.get( nodeOrder[ currentNodeIndex-1 ] );
-		else return this.route.nodes.get( nodeOrder[1] );
+		var frameOrder = this.sequence.get('framesOrder');
+		var currentFrameIndex = _.indexOf( frameOrder,this.currentFrame.id );
+		if( currentFrameIndex ) return this.sequence.frames.get( frameOrder[ currentFrameIndex-1 ] );
+		else return this.sequence.frames.get( frameOrder[1] );
 	},
 	
-	getRightNode : function()
+	getRightFrame : function()
 	{
-		var currentNodeIndex = _.indexOf( this.route.get('nodesOrder'), this.currentNode.id );
-		if(currentNodeIndex < _.size( this.route.nodes )-1 ) return this.route.nodes.at( currentNodeIndex + 1 );
+		var currentFrameIndex = _.indexOf( this.sequence.get('framesOrder'), this.currentFrame.id );
+		if(currentFrameIndex < _.size( this.sequence.frames )-1 ) return this.sequence.frames.at( currentFrameIndex + 1 );
 		else return false;
 	},
 	
-	loadLeftNode : function()
+	loadLeftFrame : function()
 	{
-		console.log('loading left node')
-		var node = this.getLeftNode();
-		if(node) this.loadNode(node)
+		console.log('loading left frame')
+		var frame = this.getLeftFrame();
+		if(frame) this.loadFrame(frame)
 	},
 	
-	loadRightNode : function()
+	loadRightFrame : function()
 	{
-		var node = this.getRightNode();
-		console.log(node);
+		var frame = this.getRightFrame();
+		console.log(frame);
 		
-		if(node) this.loadNode(node)
+		if(frame) this.loadFrame(frame)
 	},
 	
 	udpateAspectRatio : function( ratioID )

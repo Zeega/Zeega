@@ -5,7 +5,7 @@ var ProjectView = Backbone.View.extend({
 	{
 		var that = this;
 		$(this.el).html(this.model.get('title'));
-		//$('#route-title').empty();
+		//$('#sequence-title').empty();
 		//copy the cloned item into the el
 		
 		
@@ -28,7 +28,7 @@ var ProjectView = Backbone.View.extend({
 				maxlength : 40
 			});
 		
-		$('#route-title').html(this.el);
+		$('#sequence-title').html(this.el);
 		
 		var regex = /Untitled/
 		if( regex.test( this.model.get('title')) ) $(this.el).trigger('click');

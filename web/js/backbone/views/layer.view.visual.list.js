@@ -9,17 +9,17 @@ var VisualLayerListView = Backbone.View.extend({
 	{
 		this.model.bind( 'change:title', this.updateLayerTitle );
 		
-		this.model.bind( 'change:height', this.updateNodeThumb );
-		this.model.bind( 'change:width', this.updateNodeThumb );
-		this.model.bind( 'change:opacity', this.updateNodeThumb );
-		this.model.bind( 'change:color', this.updateNodeThumb );
-		this.model.bind( 'change:left', this.updateNodeThumb );
-		this.model.bind( 'change:top', this.updateNodeThumb );
+		this.model.bind( 'change:height', this.updateFrameThumb );
+		this.model.bind( 'change:width', this.updateFrameThumb );
+		this.model.bind( 'change:opacity', this.updateFrameThumb );
+		this.model.bind( 'change:color', this.updateFrameThumb );
+		this.model.bind( 'change:left', this.updateFrameThumb );
+		this.model.bind( 'change:top', this.updateFrameThumb );
 	},
 	
-	updateNodeThumb : function()
+	updateFrameThumb : function()
 	{
-		Zeega.currentNode.noteChange();
+		Zeega.currentFrame.noteChange();
 	},
 	
 	//draws the controls
@@ -39,7 +39,7 @@ var VisualLayerListView = Backbone.View.extend({
 		var title = this.model.get('attr').title;
 		
 		var persist;
-		if( Zeega.route.get('attr') && Zeega.route.get('attr').persistLayers && _.include( Zeega.route.get('attr').persistLayers , _this.model.id ) )
+		if( Zeega.sequence.get('attr') && Zeega.sequence.get('attr').persistLayers && _.include( Zeega.sequence.get('attr').persistLayers , _this.model.id ) )
 		{
 			persist = 'checked';
 		}else{
@@ -152,7 +152,7 @@ var VisualLayerListView = Backbone.View.extend({
 		if( confirm('Delete Layer?') )
 		{
 			this.remove();
-			Zeega.removeLayerFromNode( Zeega.currentNode, this.model );
+			Zeega.removeLayerFromFrame( Zeega.currentFrame, this.model );
 		}
 	},
 	
@@ -185,13 +185,13 @@ var VisualLayerListView = Backbone.View.extend({
 	//set persistance action
 	persist : function()
 	{
-		if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverNodes(this.model);
+		if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverFrames(this.model);
 		else Zeega.removeLayerPersist( this.model );
 	},
 	
 	copyToNext : function()
 	{
-		Zeega.copyLayerToNextNode( this.model)
+		Zeega.copyLayerToNextFrame( this.model)
 	},
 	
 	hideShow : function()
@@ -305,12 +305,12 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		//this._renderedViews =[];
 		
 		this.collection.bind("add", function(layer) {
-			// should draw the layer if it's in the node
+			// should draw the layer if it's in the frame
 			_this.add(layer);
 		});
 		
 		this.collection.bind("remove", function(layer) {
-			// should draw the layer if it's in the node
+			// should draw the layer if it's in the frame
 			_this.remove(layer);
 		});
 
@@ -329,7 +329,7 @@ var VisualLayerListViewCollection = Backbone.View.extend({
 		var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
 		this._layerViews = _(this._layerViews).without(viewToRemove);
 		
-		Zeega.currentNode.noteChange();
+		Zeega.currentFrame.noteChange();
 	},
 	
 	

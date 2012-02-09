@@ -42,7 +42,7 @@ var ItemCollection = Backbone.Collection.extend({
 	},
 	url: function()
 	{
-		var url = Zeega.url_prefix + "api/search?playground="+sessionStorage.getItem('playgroundid')+"&page="+ this.page;
+		var url = Zeega.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page;
 		if( !_.isNull(this.query) && this.query != "" ) url += '&q=' + this.query;
 		if( !_.isNull(this.contentType) ) url += '&content=' + this.contentType;
 		if( !_.isNull(this.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.collectionID;

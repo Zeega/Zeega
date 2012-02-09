@@ -24,7 +24,7 @@ var loadFiles = [
 	
 	//custom
 	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.playground',
+	'order!ux/zeega.ux.site',
 
 	
 	//plugins
@@ -36,7 +36,7 @@ var loadFiles = [
 	//mvc
 
 	
-	//routes
+	//sequences
 
 	
 	//layers

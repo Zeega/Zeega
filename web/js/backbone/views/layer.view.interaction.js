@@ -58,7 +58,7 @@ var InteractionLayerListViewCollection = Backbone.View.extend({
 		//var viewToRemove = this; // _(this._layerViews.select(function(lv){return lv.model === model;}))[0];
 		this._layerViews = _(this._layerViews).without(this);
 		
-		Zeega.currentNode.noteChange();
+		Zeega.currentFrame.noteChange();
 		
 	},
 	
@@ -93,7 +93,7 @@ iLayerTemplate +=			"<div class='hidden layer-content clearfix'>";
 iLayerTemplate +=				"<div id='controls' class='twilio-controls controls'>";
 iLayerTemplate +=				"<br />";
 iLayerTemplate +=				"<form id='layer-persist'>";
-iLayerTemplate +=					"<input id='persist' type='checkbox' name='vehicle' value='persist' /> <label for='persist'>Persist layer to route</label>";
+iLayerTemplate +=					"<input id='persist' type='checkbox' name='vehicle' value='persist' /> <label for='persist'>Persist layer to sequence</label>";
 iLayerTemplate +=				"</form>";
 iLayerTemplate +=			"</div>";
 iLayerTemplate +=		"</div>";

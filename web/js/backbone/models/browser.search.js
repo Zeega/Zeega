@@ -4,7 +4,7 @@ var BrowserSearch =  Backbone.Model.extend({
 	url : function(){
 		
 		var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
-		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?playground="+sessionStorage.getItem('playgroundid')+"&" 
+		var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
 					+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
 					+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 					+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")

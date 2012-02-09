@@ -6,22 +6,22 @@
 
 
 	ideas:
-	master list of layers/nodes - loading/loaded to check against
+	master list of layers/frames - loading/loaded to check against
 
 ---------------------------------------------*/
 
 var Player = {
 	
-	lookahead : 2, // number of nodes to preload ahead/behind
-	isFirstNode : true,
+	lookahead : 2, // number of frames to preload ahead/behind
+	isFirstFrame : true,
 	
 	viewportRatio : 1.5,
 	
-	currentRoute : null,
-	currentNode : null,
+	currentSequence : null,
+	currentFrame : null,
 	
-	loadingNodes : [],
-	loadedNodes : [],
+	loadingFrames : [],
+	loadedFrames : [],
 	loadingLayers : [],
 	loadedLayers : [],
 	layersOnStage : [],
@@ -36,11 +36,11 @@ var Player = {
 		Parameters:
 			
 			data - A Zeega data object in JSON.
-			route - The route index of the starting node.
-			nodeID - The id of the starting node.
+			sequence - The sequence index of the starting frame.
+			frameID - The id of the starting frame.
 	
 	*/
-	init : function( data, routeID, nodeID )
+	init : function( data, sequenceID, frameID )
 	{
 		console.log('Zeega Player Initialized');
 
@@ -67,29 +67,29 @@ var Player = {
 		
 		$('title').html(this.data.project.title);
 		
-		//set the current route
-		if( routeID ) this.currentRoute = this.getRoute( routeID ); // if set, it should keep the route id
-		else this.currentRoute = this.data.project.routes[0]; // default to first route if unset
+		//set the current sequence
+		if( sequenceID ) this.currentSequence = this.getSequence( sequenceID ); // if set, it should keep the sequence id
+		else this.currentSequence = this.data.project.sequences[0]; // default to first sequence if unset
 
 
-		//turn the node layer array into an array of string numbers
-		_.each(this.data.project.routes,function(route){
-			_.each(route.nodes, function(node){
-				node.layers = _.map(node.layers,function(num){ return String(num) });
+		//turn the frame layer array into an array of string numbers
+		_.each(this.data.project.sequences,function(sequence){
+			_.each(sequence.frames, function(frame){
+				frame.layers = _.map(frame.layers,function(num){ return String(num) });
 			})
 		})
 
 
-		//set the current node
-		var currentNodeID;
-		if( !nodeID ) currentNodeID = this.currentRoute.nodeOrder[0];
-		else currentNodeID = nodeID;
+		//set the current frame
+		var currentFrameID;
+		if( !frameID ) currentFrameID = this.currentSequence.frameOrder[0];
+		else currentFrameID = frameID;
 		
 		//this.parseProject;
 		this.draw();
 		this.setListeners();
 		
-		this.gotoNode( currentNodeID );
+		this.gotoFrame( currentFrameID );
 	},
 	
 	/*
@@ -123,7 +123,7 @@ var Player = {
 		//hide the editor underneath to prevent scrolling
 		$('#wrapper').hide();
 		
-		//Zeega.clearCurrentNode();
+		//Zeega.clearCurrentFrame();
 		
 		this.displayWindow.fadeIn();
 		
@@ -165,8 +165,8 @@ var Player = {
 		{
 			//turn off previewMode
 			Zeega.previewMode = false;
-			//go to the node last viewed in the player
-			//Zeega.loadNode( Zeega.route.nodes.get( this.currentNode.id ) );
+			//go to the frame last viewed in the player
+			//Zeega.loadFrame( Zeega.sequence.frames.get( this.currentFrame.id ) );
 		}
 	},
 	
@@ -322,48 +322,48 @@ var Player = {
 		
 		$('#layer-loading-'+layerID).html( 'loaded: '+ layer.attr.title );
 
-		this.updateNodeStatus();
+		this.updateFrameStatus();
 	},
 	
 	/*
-		Method: updateNodeStatus
-		Checks nodes to see if all their layers are loaded. If their layers are loaded, then the node id is added to the loadedNodes array.
+		Method: updateFrameStatus
+		Checks frames to see if all their layers are loaded. If their layers are loaded, then the frame id is added to the loadedFrames array.
 	*/
-	updateNodeStatus : function()
+	updateFrameStatus : function()
 	{
 		_this = this;
-		//loop through each node that is loading
-		_.each( this.loadingNodes, function( nodeID ){
-			var node = _this.getNode( nodeID ); 
-			var layers = node.layers;
+		//loop through each frame that is loading
+		_.each( this.loadingFrames, function( frameID ){
+			var frame = _this.getFrame( frameID ); 
+			var layers = frame.layers;
 			
 			//updated the loading bar
-			if( _this.currentNode.id == nodeID ) _this.loadingBar.update();
+			if( _this.currentFrame.id == frameID ) _this.loadingBar.update();
 			
 			console.log('UPDATE!')
 			console.log( layers )
 				
-			//if all the layers are loaded in a node
+			//if all the layers are loaded in a frame
 			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
 			{
 			
-				//remove from nodes loading array
-				_this.loadingNodes = _.without( _this.loadingNodes , nodeID );
-				// add to nodes loaded array
-				_this.loadedNodes.push(nodeID);
+				//remove from frames loading array
+				_this.loadingFrames = _.without( _this.loadingFrames , frameID );
+				// add to frames loaded array
+				_this.loadedFrames.push(frameID);
 				
-				if( _this.currentNode.id == nodeID)
+				if( _this.currentFrame.id == frameID)
 				{
-					console.log('drawCurrentNode: '+ nodeID)
+					console.log('drawCurrentFrame: '+ frameID)
 					_this.loadingBar.remove();
-					_this.drawNode( nodeID ); 
+					_this.drawFrame( frameID ); 
 				}
-				else if( nodeID == _this.getRight() )
+				else if( frameID == _this.getRight() )
 				{
 					console.log('turn off right spinner')
 					if( $('#preview-right').spin() ) $('#preview-right').spin(false)
 				}
-				else if( nodeID == _this.getLeft() )
+				else if( frameID == _this.getLeft() )
 				{
 					console.log('turn off left spinner')
 					if( $('#preview-left').spin() ) $('#preview-left').spin(false)
@@ -375,63 +375,63 @@ var Player = {
 	
 	/*
 		Method: preload
-		Tries to preload nodes starting with the current node +/- the lookahead amount. The pattern is 0,1,-1,2,-2,…
+		Tries to preload frames starting with the current frame +/- the lookahead amount. The pattern is 0,1,-1,2,-2,…
 	*/
 	preload : function()
 	{
-		//find the node you're coming from and where it is in the order
-		var nodeOrder = this.currentRoute.nodeOrder;
-		var index = _.indexOf( nodeOrder, this.currentNode.id );
+		//find the frame you're coming from and where it is in the order
+		var frameOrder = this.currentSequence.frameOrder;
+		var index = _.indexOf( frameOrder, this.currentFrame.id );
 
-		//see if node's layers are preloaded // starting with the currentNode
-		//look ahead 2 and behind 2 // include current node also
+		//see if frame's layers are preloaded // starting with the currentFrame
+		//look ahead 2 and behind 2 // include current frame also
 		
 		for (var i = 0  ; i < this.lookahead * 2 + 1 ; i++ )
 		{
-			//the offset spirals outward to load nearest nodes first
+			//the offset spirals outward to load nearest frames first
 			var offset = Math.ceil(i/2) * (-1+(2*(i%2)));
 			var tryIndex = index + offset;
-			if(tryIndex >= 0 && tryIndex < nodeOrder.length)
+			if(tryIndex >= 0 && tryIndex < frameOrder.length)
 			{
-				var nodeID = nodeOrder[tryIndex];
-				this.preloadNode(nodeID);
+				var frameID = frameOrder[tryIndex];
+				this.preloadFrame(frameID);
 			}	
 		}
 	},
 	
 	/*
-		Method: preloadNode
-		Tries to preload a node by preloading all it's layers. It first checks to see if the node has already been completely loaded.
+		Method: preloadFrame
+		Tries to preload a frame by preloading all it's layers. It first checks to see if the frame has already been completely loaded.
 		
 		Parameters:
 		
-			nodeID - the id of the node being preloaded/checked
+			frameID - the id of the frame being preloaded/checked
 	*/
-	preloadNode : function( nodeID )
+	preloadFrame : function( frameID )
 	{
 		//if not loading or already loaded
-		if( !_.include( this.loadedNodes , nodeID ) && !_.include( this.loadingNodes , nodeID ) )
+		if( !_.include( this.loadedFrames , frameID ) && !_.include( this.loadingFrames , frameID ) )
 		{
 			_this = this;
 			
-			if(nodeID == this.currentNode.id) this.loadingBar.draw();
+			if(frameID == this.currentFrame.id) this.loadingBar.draw();
 
-			//put node id into the nodesLoading Array
-			this.loadingNodes.push( nodeID );
+			//put frame id into the framesLoading Array
+			this.loadingFrames.push( frameID );
 
 			//determine the layers that need to be preloaded 
-			var node = this.getNode( nodeID );
+			var frame = this.getFrame( frameID );
 
-			var layersToPreload = _.difference( _.compact( node.layers ), this.layersOnStage );
+			var layersToPreload = _.difference( _.compact( frame.layers ), this.layersOnStage );
 
 			_.each( _.compact(layersToPreload),function(layerID){
 				_this.preloadLayer(layerID);
 			});
 			
-		}else if( nodeID == this.currentNode.id && _.include( this.loadedNodes , nodeID ) ){
+		}else if( frameID == this.currentFrame.id && _.include( this.loadedFrames , frameID ) ){
 			
 
-			this.drawNode( nodeID );
+			this.drawFrame( frameID );
 		}
 	},
 	
@@ -480,25 +480,25 @@ var Player = {
 	},
 	
 	/*
-		Method: drawNode
-		Places a completely preloaded node into view. Also manages the state of the navigation arrows.
+		Method: drawFrame
+		Places a completely preloaded frame into view. Also manages the state of the navigation arrows.
 		
 		Parameters:
 			
-			nodeID - The id of the node to be drawn.
+			frameID - The id of the frame to be drawn.
 	*/
-	drawNode : function( nodeID )
+	drawFrame : function( frameID )
 	{
 		_this = this;
 		
-		var targetNode = this.getNode( nodeID );
+		var targetFrame = this.getFrame( frameID );
 
 		this.cleanupLayers();
 
 		//set timeout for auto advance
-		var advanceValue = targetNode.attr.advance;
+		var advanceValue = targetFrame.attr.advance;
 		
-		console.log(targetNode)
+		console.log(targetFrame)
 		
 		this.setAdvance( advanceValue );
 		
@@ -509,9 +509,9 @@ var Player = {
 		
 		//////
 		//draw each layer but not layers already drawn
-		var layersToDraw = _.difference(targetNode.layers, this.layersOnStage );
+		var layersToDraw = _.difference(targetFrame.layers, this.layersOnStage );
 		
-		_.each( targetNode.layers, function(layerID, i){
+		_.each( targetFrame.layers, function(layerID, i){
 			
 			//add layer to the citation bar
 			_this.drawCitation( layerID );
@@ -533,20 +533,20 @@ var Player = {
 	
 	showNavigation : function()
 	{
-		//check to see if the current node is first or last and remove the correct arrow
-		var nodeOrder = this.currentRoute.nodeOrder;
-		//if there's only one node. show no arrows
-		if( nodeOrder.length == 1)
+		//check to see if the current frame is first or last and remove the correct arrow
+		var frameOrder = this.currentSequence.frameOrder;
+		//if there's only one frame. show no arrows
+		if( frameOrder.length == 1)
 		{
 			$('#preview-left').hide();
 			$('#preview-right').hide();
 		}
 		else if( !_this.overlaysHidden )
 		{
-			if( !this.getLeft( this.currentNode.id ) ) $('#preview-left').fadeOut();
+			if( !this.getLeft( this.currentFrame.id ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
 
-	 		if( !this.getRight( this.currentNode.id ) ) $('#preview-right').fadeOut();
+	 		if( !this.getRight( this.currentFrame.id ) ) $('#preview-right').fadeOut();
 			else if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn();
 			
 			//dude is still loading!
@@ -605,9 +605,9 @@ var Player = {
 		// find the uncommon layers and call hidePublish on them
 		_this = this;
 		
-		var nextNode = this.getNode( this.currentNode.id );
+		var nextFrame = this.getFrame( this.currentFrame.id );
 		
-		var layersToRemove = _.difference( this.layersOnStage, nextNode.layers );
+		var layersToRemove = _.difference( this.layersOnStage, nextFrame.layers );
 
 		_.each( layersToRemove, function( layerID ){
 			console.log('removing layer: '+layerID);
@@ -657,7 +657,7 @@ var Player = {
 		this.timeout = setTimeout(function(){ _this.goRight() }, seconds*1000);
 	},
 	
-	// advance node after the media inside it have finished playing
+	// advance frame after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
 		console.log('should advance')
@@ -672,7 +672,7 @@ var Player = {
 		
 		draw : function()
 		{
-			if(Player.currentRoute.layers.length)
+			if(Player.currentSequence.layers.length)
 			{
 				var container = $('<div id="loading-container">')
 					.append($('<div id="progress-bar">'))
@@ -684,7 +684,7 @@ var Player = {
 		{
 			this.count++;
 			
-			var p = this.count / Player.currentRoute.layers.length *100;
+			var p = this.count / Player.currentSequence.layers.length *100;
 			
 			$('#progress-bar').css('width',p+'%');
 			
@@ -696,36 +696,36 @@ var Player = {
 		
 	},
 		
-	getRoute : function( routeID )
+	getSequence : function( sequenceID )
 	{
-		//returns the node object
-		var dataRouteOrder = _.pluck( this.data.project.routes, 'id' );
-		var routeIndex = _.indexOf( dataRouteOrder, routeID)
-		var routeObject = this.data.project.routes[routeIndex];
-		return routeObject;
+		//returns the frame object
+		var dataSequenceOrder = _.pluck( this.data.project.sequences, 'id' );
+		var sequenceIndex = _.indexOf( dataSequenceOrder, sequenceID)
+		var sequenceObject = this.data.project.sequences[sequenceIndex];
+		return sequenceObject;
 	},
 	
-	getNode : function( nodeID )
+	getFrame : function( frameID )
 	{
-		//returns the node object
+		//returns the frame object
 		
-		return _.find( this.currentRoute.nodes, function(node){ return node.id == nodeID });
+		return _.find( this.currentSequence.frames, function(frame){ return frame.id == frameID });
 	},
 	
 	getLayer : function( layerID )
 	{
 		//returns the layer object
-		var dataLayerOrder = _.pluck( this.currentRoute.layers, 'id' );
+		var dataLayerOrder = _.pluck( this.currentSequence.layers, 'id' );
 		var layerIndex = _.indexOf( dataLayerOrder, layerID)
-		var layerObject = this.currentRoute.layers[layerIndex];
+		var layerObject = this.currentSequence.layers[layerIndex];
 		return layerObject;
 	},
 	
-	gotoNode : function( nodeID )
+	gotoFrame : function( frameID )
 	{
-		this.currentNode = this.getNode( nodeID );
+		this.currentFrame = this.getFrame( frameID );
 		
-		window.location.hash = '/player/frame/'+ nodeID; //change location hash
+		window.location.hash = '/player/frame/'+ frameID; //change location hash
 		
 		
 		this.preload();
@@ -742,11 +742,11 @@ var Player = {
 
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getRight( this.currentNode.id, 1 );
+		var nextFrameID = this.getRight( this.currentFrame.id, 1 );
 		
-		if( nextNodeID )
+		if( nextFrameID )
 		{
-			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			if( this.isFrameLoaded( nextFrameID ) ) this.gotoFrame( nextFrameID );
 			else console.log('still loading…')
 		}
 		else console.log('end of the line');
@@ -763,48 +763,48 @@ var Player = {
 		
 		if(this.timeout) clearTimeout(this.timeout);
 		
-		var nextNodeID = this.getLeft( this.currentNode.id, 1 );
-		if( nextNodeID )
+		var nextFrameID = this.getLeft( this.currentFrame.id, 1 );
+		if( nextFrameID )
 		{
-			if( this.isFrameLoaded( nextNodeID ) ) this.gotoNode( nextNodeID );
+			if( this.isFrameLoaded( nextFrameID ) ) this.gotoFrame( nextFrameID );
 			else console.log('still loading…')
 		} 
 		else console.log('end of the line');
 	},
 	
-	//returns the id of the node in any direction n nodes ahead
-	getUp : function( nodeID, dist )
+	//returns the id of the frame in any direction n frames ahead
+	getUp : function( frameID, dist )
 	{
 		
 	},
 	
-	getRight : function( nodeID, dist )
+	getRight : function( frameID, dist )
 	{
-		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(frameID) ) frameID = this.currentFrame.id;
 		if( _.isUndefined(dist) ) dist = 1;
 		
-		var nodeOrder = this.currentRoute.nodeOrder;
-		var index = _.indexOf( nodeOrder, nodeID );
+		var frameOrder = this.currentSequence.frameOrder;
+		var index = _.indexOf( frameOrder, frameID );
 
 		//test if out of bounds
-		if( index + dist > nodeOrder.length || index + dist < 0 ) return false;
-		else return nodeOrder[ index + dist ];
+		if( index + dist > frameOrder.length || index + dist < 0 ) return false;
+		else return frameOrder[ index + dist ];
 	},
 	
-	getDown : function( nodeID, dist )
+	getDown : function( frameID, dist )
 	{
 		
 	},
 
 	
-	getLeft : function( nodeID, dist )
+	getLeft : function( frameID, dist )
 	{
-		if( _.isUndefined(nodeID) ) nodeID = this.currentNode.id;
+		if( _.isUndefined(frameID) ) frameID = this.currentFrame.id;
 		if( _.isUndefined(dist) ) dist = 1;
-		var nodeOrder = this.currentRoute.nodeOrder;
-		var index = _.indexOf( nodeOrder, nodeID );
-		if( index - dist > nodeOrder.length || index - dist < 0 ) return false;
-		else return nodeOrder[ index - dist ]
+		var frameOrder = this.currentSequence.frameOrder;
+		var index = _.indexOf( frameOrder, frameID );
+		if( index - dist > frameOrder.length || index - dist < 0 ) return false;
+		else return frameOrder[ index - dist ]
 	},
 	
 	
@@ -824,19 +824,19 @@ var Player = {
 		}
 	},
 	
-	isFrameLoaded : function( frameID ){ return _.include( this.loadedNodes, frameID ) },
+	isFrameLoaded : function( frameID ){ return _.include( this.loadedFrames, frameID ) },
 	
 	reset : function()
 	{
 		
-		currentRoute = null;
-		currentNode = null;
+		currentSequence = null;
+		currentFrame = null;
 		this.data = null,
 		
-		this.isFirstNode = true;
+		this.isFirstFrame = true;
 
-		this.loadingNodes = [];
-		this.loadedNodes = [];
+		this.loadingFrames = [];
+		this.loadedFrames = [];
 		this.loadingLayers = [];
 		this.loadedLayers = [];
 		this.layersOnStage = [];

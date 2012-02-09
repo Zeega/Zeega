@@ -24,12 +24,12 @@ function initHeaderUX(){
 	
 	$('#css-change').toggle(function(){
 		$('body').css('background','#fff');
-		$('#route-header').css('color','#444')
+		$('#sequence-header').css('color','#444')
 		$(this).find('a').html('Desktop');
 		$('.item-title').css('color','black');
 	},function(){
 		$('body').css('background','');
-		$('#route-header').css('color','')
+		$('#sequence-header').css('color','')
 		$(this).find('a').html('Presentation');
 		$('.item-title').css('color','white');
 	});
@@ -47,11 +47,11 @@ function initHeaderUX(){
 	
 	$('.new-project').click(function(){
 		$.ajax({
-				url:  sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'playgrounds/'+ sessionStorage.getItem('playgroundId') +'/project',
+				url:  sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'sites/'+ sessionStorage.getItem('siteId') +'/project',
 				type: 'POST',
 				success: function(data){
 				console.log(data);
-				window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'playground/'+  sessionStorage.getItem('playgroundShort') +'/project/'+data;
+				window.location= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  +'site/'+  sessionStorage.getItem('siteShort') +'/project/'+data;
 			}
 		});
 		

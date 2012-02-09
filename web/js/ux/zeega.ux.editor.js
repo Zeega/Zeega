@@ -123,7 +123,7 @@ function addLayer(type)
 	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
  	 
     var newLayer = new Layer({'type':type,'attr':{}});
-	Zeega.addLayerToNode( Zeega.currentNode, newLayer );
+	Zeega.addLayerToFrame( Zeega.currentFrame, newLayer );
 }
 
 function expandLayer(el)
@@ -154,7 +154,7 @@ function closeOpenCitationTabs()
 	
 	console.log('UX READY');
 	
-	$('#add-node').draggable({
+	$('#add-frame').draggable({
 		axis:'x',
 		revert:true,
 
@@ -175,9 +175,9 @@ function closeOpenCitationTabs()
 			if(this.num != temp)
 			{
 				var _this = this;
-				$('.ghost-node').remove();
+				$('.ghost-frame').remove();
 				_.times(temp-this.num, function(){
-					$('#node-drawer ul').append( $('<li class="node-thumb ghost-node">') );
+					$('#frame-drawer ul').append( $('<li class="frame-thumb ghost-frame">') );
 					
 				})
 			}
@@ -187,8 +187,8 @@ function closeOpenCitationTabs()
 		
 		stop : function(e,ui)
 		{
-			$('.ghost-node').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addNode() });
+			$('.ghost-frame').remove();
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addFrame() });
 		}
 	});
 	
@@ -266,13 +266,13 @@ function closeOpenCitationTabs()
 	
 	
 	
-	//node tray sortable and sorting events
+	//frame tray sortable and sorting events
 	
 	$('#frame-list').sortable({  
 		//axis : 'x',
 		containment: '#frame-drawer',
 		forceHelperSize : true,
-		placeholder: "node-thumb ui-state-highlight",
+		placeholder: "frame-thumb ui-state-highlight",
 		forcePlaceholderSize:true,
 		forceHelperSize:true,
 		tolerance: 'pointer',
@@ -282,7 +282,7 @@ function closeOpenCitationTabs()
 			var order = $(this).sortable('toArray');
 			
 			//ensure the array is made of integers
-			Zeega.nodeSort();
+			Zeega.frameSort();
 
 		}
 	});
@@ -327,22 +327,22 @@ function closeOpenCitationTabs()
 	
 
 	$('#advance-controls input').change(function(){
-		var attr = Zeega.currentNode.get('attr');
+		var attr = Zeega.currentFrame.get('attr');
 		if(attr) attr.advance = $(this).val();
 		else attr = {'advance':$(this).val()}
 		
-		Zeega.currentNode.set({'attr':attr});
-		Zeega.currentNode.save();
+		Zeega.currentFrame.set({'attr':attr});
+		Zeega.currentFrame.save();
 	});
 	
-	$('#node-advance-random input').change(function(){
+	$('#frame-advance-random input').change(function(){
 		
-		var attr = Zeega.currentNode.get('attr');
+		var attr = Zeega.currentFrame.get('attr');
 		if( $(this).is(':checked') ) attr.advanceRandom = true;
 		else attr.advanceRandom = false;
 		
-		Zeega.currentNode.set({'attr':attr});
-		Zeega.currentNode.save();
+		Zeega.currentFrame.set({'attr':attr});
+		Zeega.currentFrame.save();
 	});
 	
 
@@ -350,11 +350,11 @@ function closeOpenCitationTabs()
 	$('.expandable .panel-head').click(function(){
 
 //removed the ability to store the panel states for now
-		//get the current Node ID
-		//var nodeID = Zeega.currentNode.id;
+		//get the current Frame ID
+		//var frameID = Zeega.currentFrame.id;
 		//var domID = $(this).attr('id').split('-',1)[0];
 
-		//var storage = localStorage.getObject( nodeID );
+		//var storage = localStorage.getObject( frameID );
 		//var panelStates = {};
 		//if( _.isNull( storage ) ) storage = {};
 		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
@@ -374,7 +374,7 @@ function closeOpenCitationTabs()
 		}
 		//set as property to read in on reload
 		//_.extend( storage, {panelStates:panelStates} )
-		//localStorage.setObject( nodeID , storage );
+		//localStorage.setObject( frameID , storage );
 	})
 	
 	
@@ -387,7 +387,7 @@ function closeOpenCitationTabs()
 		hoverClass : 'workspace-item-hover',
 		tolerance : 'pointer',
 
-		//this happens when you drop a database item onto a node
+		//this happens when you drop a database item onto a frame
 		drop : function( event, ui )
 			{
 				ui.draggable.draggable('option','revert',false);
@@ -398,13 +398,13 @@ function closeOpenCitationTabs()
 	// FAKE STUFF
 	$('#css-change').toggle(function(){
 		$('body').css('background','#fff');
-		$('#route-header').css('color','#444');
-		$('#node-drawer').css('background','#fff');
+		$('#sequence-header').css('color','#444');
+		$('#frame-drawer').css('background','#fff');
 		$('.database-asset').css('background','#fff');
 	},function(){
 		$('body').css('background','');
-		$('#route-header').css('color','');
-		$('#node-drawer').css('background','');
+		$('#sequence-header').css('color','');
+		$('#frame-drawer').css('background','');
 		$('.database-asset').css('background','');
 	});
 

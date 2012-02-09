@@ -99,7 +99,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 			_this.remove(layer);
 		});
 		this.collection.bind("reset", function() {
-			// should draw the layer if it's in the node
+			// should draw the layer if it's in the frame
 			_this.reset();
 		});
 
@@ -123,7 +123,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		
 		
 		this._renderedViews = _.without( this._renderedViews, viewToRemove);
-		Zeega.currentNode.noteChange();
+		Zeega.currentFrame.noteChange();
 	},
 	
 	

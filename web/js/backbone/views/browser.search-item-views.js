@@ -169,7 +169,7 @@ var BrowserCollectionView = BrowserItemView.extend({
 				ZeegaBrowser.draggedItem = thisView.model;
 			},
 				
-			/**	stuff that happens when the user drags the item into a node **/	
+			/**	stuff that happens when the user drags the item into a frame **/	
 				
 			stop : function(){
 				ZeegaBrowser.draggedItem = null;

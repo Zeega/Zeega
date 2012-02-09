@@ -42,18 +42,18 @@ var loadFiles = [
 	
 	//mvc
 	'order!backbone/models/project',
-	'order!backbone/models/route',
+	'order!backbone/models/sequence',
 	'order!backbone/models/item',
-	'order!backbone/models/node',
+	'order!backbone/models/frame',
 	'order!backbone/models/layer',
 	'order!backbone/views/project-view',
-	'order!backbone/views/route-view',
+	'order!backbone/views/sequence-view',
 	'order!backbone/views/item-view',
-	'order!backbone/views/node-view',
+	'order!backbone/views/frame-view',
 	'order!backbone/views/layer-view',
 	
-	//routes
-	'order!backbone/routes/routes',
+	//sequences
+	'order!backbone/sequences/sequences',
 	
 	//layers
 	'order!layers/zeega._layer',
@@ -73,10 +73,10 @@ require(loadFiles, function($) {
     
 	Zeega.init();
 	//once the files have been loaded do this
-	var route = 5;
-	//console.log(route);
-	if(!route) Zeega.createRoute();
-	else Zeega.loadRoute(route);
+	var sequence = 5;
+	//console.log(sequence);
+	if(!sequence) Zeega.createSequence();
+	else Zeega.loadSequence(sequence);
 	
 	Database.init();
 	

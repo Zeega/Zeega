@@ -10,7 +10,7 @@
 
 var loadFiles = [
 	'jquery',
-	'order!core/nodePlayer',
+	'order!core/framePlayer',
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	'order!libraries/underscore',
@@ -27,11 +27,11 @@ var loadFiles = [
 	];
 
 require(loadFiles, function($) {
-	var nodeId = sessionStorage.getItem('nodeId');
+	var frameId = sessionStorage.getItem('frameId');
 
 	//this url needs to change
-	$.getJSON(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'nodes/'+nodeId+'/layers',function(data){
-		NodePlayer.init( data );
+	$.getJSON(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'frames/'+frameId+'/layers',function(data){
+		FramePlayer.init( data );
 
 	});
 });

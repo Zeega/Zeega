@@ -1,13 +1,13 @@
 /*---------------------------------------------
 
 
-	Object: NodePlayer
+	Object: FramePlayer
 	The Zeega project web player. Part of Core.
 
 
 ---------------------------------------------*/
 
-var NodePlayer = {
+var FramePlayer = {
 	
 	/*
 		Method: init
@@ -16,27 +16,27 @@ var NodePlayer = {
 		Parameters:
 			
 			data - A Zeega data object in JSON.
-			route - The route index of the starting node.
-			nodeID - The id of the starting node.
+			sequence - The sequence index of the starting frame.
+			frameID - The id of the starting frame.
 	
 	*/
 	init : function( data )
 	{
 
 		//this.parseProject;
-		this.drawNode(data);
+		this.drawFrame(data);
 
 	},
 	
 	/*
-		Method: drawNode
-		Places a completely preloaded node into view. Also manages the state of the navigation arrows.
+		Method: drawFrame
+		Places a completely preloaded frame into view. Also manages the state of the navigation arrows.
 		
 		Parameters:
 			
-			nodeID - The id of the node to be drawn.
+			frameID - The id of the frame to be drawn.
 	*/
-	drawNode : function( data )
+	drawFrame : function( data )
 	{
 		_.each( data, function( layer ){
 			if(layer.type=='Youtube'||layer.type=='Video' || layer.type == 'image') layerClass = new ImageLayer();

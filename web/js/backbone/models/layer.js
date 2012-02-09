@@ -37,7 +37,7 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	model : Layer,
 
-	url : function(){ return Zeega.url_prefix+"routes/"+ Zeega.route.id +"/layers" },
+	url : function(){ return Zeega.url_prefix+"sequences/"+ Zeega.sequence.id +"/layers" },
 	
 	initialize :function()
 	{
@@ -65,7 +65,7 @@ var LayerCollection = Backbone.Collection.extend({
 	{
 		this.models = _.without( this.models, layer );
 		_.each( this.layerCollectionArray, function(layerCollection){
-			//layerCollection.viewCollection.render( _.compact(node.get('layers')) ) ;
+			//layerCollection.viewCollection.render( _.compact(frame.get('layers')) ) ;
 			layerCollection.remove( layer );
 		})
 		
@@ -86,19 +86,19 @@ var LayerCollection = Backbone.Collection.extend({
 		
 		this.layerCollectionArray[ type ].type = type
 		
-		//pass as silent if it's not the current node being displayed
+		//pass as silent if it's not the current frame being displayed
 		if( render ) this.layerCollectionArray[ type ].add(layer);
 		else this.layerCollectionArray[ type ].add( layer, { silent : true } );
 		
 	},
 	
-	render : function( node )
+	render : function( frame )
 	{
-		// should render the current node
+		// should render the current frame
 		
 		//cycle through each view collection
 		_.each( this.layerCollectionArray, function(layerTypeCollection){
-			layerTypeCollection.render( _.compact(node.get('layers')) );
+			layerTypeCollection.render( _.compact(frame.get('layers')) );
 		})
 	}
 	

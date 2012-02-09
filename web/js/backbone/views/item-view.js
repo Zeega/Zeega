@@ -61,7 +61,7 @@ var ItemView = Backbone.View.extend({
 				Zeega.draggedItem = _this.model;
 			},
 				
-			/**	stuff _this happens when the user drags the item into a node **/	
+			/**	stuff _this happens when the user drags the item into a frame **/	
 				
 			stop : function(){
 				$('#visual-editor-workspace').removeClass('target-focus');

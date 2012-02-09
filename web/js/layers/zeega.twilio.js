@@ -32,7 +32,7 @@ var TwilioLayer = ProtoLayer.extend({
 			//remove the layer controls
 			controls.remove();
 			//remove the workspace preview
-			Zeega.removeLayerFromNode( Zeega.currentNode, _this.model );
+			Zeega.removeLayerFromFrame( Zeega.currentFrame, _this.model );
 			return false;
 		});
 		
@@ -82,7 +82,7 @@ var TwilioLayer = ProtoLayer.extend({
 				hoverClass : 'interactive-drop-hover',
 				tolerance : 'pointer',
 
-				//this happens when you drop a database item onto a node
+				//this happens when you drop a database item onto a frame
 				drop : function( event, ui )
 					{
 						console.log(Zeega.draggedItem);

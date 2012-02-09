@@ -31,10 +31,10 @@ $(document).ready(function() {
 	});
 	/*
 	$('.user-remove').click(function(){if(confirm('Remove User?')){
-		$(this).parent().fadeOut(); var user =$(this).data('user'); var playground=$(this).data('playground');
+		$(this).parent().fadeOut(); var user =$(this).data('user'); var site=$(this).data('site');
 	
 		$.ajax({
-				url: window.URL_PREFIX+'playgrounds/'+playground+'/users/'+user,
+				url: window.URL_PREFIX+'sites/'+site+'/users/'+user,
 				type: 'DELETE',
 				success: function(){
 				console.log('done');
