@@ -1,7 +1,0 @@
-parameters:
-    abstract_parser.class: Zeega\IngestBundle\Parser\ParserFlickr
-
-services:
-    abstract_parser:
-        class: %abstract_parser.class%
-        arguments: [@doctrine.orm.entity_manager]

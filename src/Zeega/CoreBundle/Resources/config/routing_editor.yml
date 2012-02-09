@@ -1,0 +1,67 @@
+projects:
+  type:     rest
+  resource: Zeega\CoreBundle\Controller\ProjectsController
+
+routes:
+  type:     rest
+  resource: Zeega\CoreBundle\Controller\RoutesController
+
+nodes:
+  type:     rest
+  resource: Zeega\CoreBundle\Controller\NodesController
+
+layers:
+  type:     rest
+  resource: Zeega\CoreBundle\Controller\LayersController
+
+playgrounds:
+  type:     rest
+  resource: Zeega\CoreBundle\Controller\PlaygroundsController
+  
+ZeegaCoreBundle_home:
+    pattern: /
+    defaults: { _controller:  ZeegaCoreBundle:Editor:home }
+
+ZeegaCoreBundle_playground:
+    pattern: /playground/{short}
+    defaults: { _controller:  ZeegaCoreBundle:Editor:playground }
+    
+ZeegaCoreBundle_admin:
+    pattern: /playground/{short}/admin
+    defaults: { _controller:  ZeegaCoreBundle:Editor:admin }
+
+ZeegaCoreBundle_editor:
+    pattern: /playground/{short}/project/{id}
+    defaults: { _controller:  ZeegaCoreBundle:Editor:editor }
+    
+ZeegaCoreBundle_browser:
+    pattern: /playground/{short}/browser
+    defaults: { _controller:  ZeegaCoreBundle:Editor:browser }
+
+ZeegaCoreBundle_project:
+    pattern: /playground/{short}/project
+    defaults: { _controller:  ZeegaCoreBundle:Editor:project }
+    
+ZeegaCoreBundle_faq:
+    pattern: /faq
+    defaults: { _controller:  ZeegaCoreBundle:Editor:faq }
+
+ZeegaCoreBundle_node_publish:
+    pattern: /node/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:node }
+
+ZeegaCoreBundle_project_publish:
+    pattern: /project/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
+
+ZeegaCoreBundle_collection_publish:
+    pattern: /collection/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
+
+ZeegaCoreBundle_siteadmin:
+    pattern: /siteadmin
+    defaults: { _controller:  ZeegaCoreBundle:Editor:siteadmin }
+
+ZeegaCoreBundle_settings:
+    pattern: /settings
+    defaults: { _controller:  ZeegaCoreBundle:Editor:settings }

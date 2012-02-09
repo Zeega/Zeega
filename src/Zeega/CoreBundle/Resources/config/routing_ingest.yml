@@ -1,0 +1,13 @@
+persist:
+    pattern: /widget/persist
+    defaults: { _controller:  ZeegaCoreBundle:Widget:persist }
+
+widget:
+    pattern: /widget/
+    defaults: { _controller:  ZeegaCoreBundle:Widget:open }
+    
+
+ZeegaIngestBundle_import:
+    pattern: /import/{page}
+    defaults: { _controller:  ZeegaCoreBundle:Ingest:index }
+    

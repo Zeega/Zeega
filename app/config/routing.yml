@@ -42,10 +42,10 @@ api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
 
 editor:
-    resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
+    resource: "@ZeegaCoreBundle/Resources/config/routing_editor.yml"
     
 ingest:
-    resource: "@ZeegaIngestBundle/Resources/config/routing.yml"
+    resource: "@ZeegaCoreBundle/Resources/config/routing_ingest.yml"
 
 admin:
     resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
