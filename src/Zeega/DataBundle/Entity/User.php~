@@ -160,4 +160,29 @@ class User extends BaseUser
     {
         return $this->playgrounds;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Site
+     */
+    private $sites;
+
+
+    /**
+     * Add sites
+     *
+     * @param Zeega\DataBundle\Entity\Site $sites
+     */
+    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
+    {
+        $this->sites[] = $sites;
+    }
+
+    /**
+     * Get sites
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSites()
+    {
+        return $this->sites;
+    }
 }

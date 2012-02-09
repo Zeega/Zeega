@@ -762,4 +762,104 @@ class Item
     {
         return $this->site;
     }
+    /**
+     * @var integer $site_id
+     */
+    private $site_id;
+
+
+    /**
+     * Set site_id
+     *
+     * @param integer $siteId
+     */
+    public function setSiteId($siteId)
+    {
+        $this->site_id = $siteId;
+    }
+
+    /**
+     * Get site_id
+     *
+     * @return integer 
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+    /**
+     * @var string $archive
+     */
+    private $archive;
+
+    /**
+     * @var string $media_type
+     */
+    private $media_type;
+
+    /**
+     * @var string $layer_type
+     */
+    private $layer_type;
+
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
+     * Set media_type
+     *
+     * @param string $mediaType
+     */
+    public function setMediaType($mediaType)
+    {
+        $this->media_type = $mediaType;
+    }
+
+    /**
+     * Get media_type
+     *
+     * @return string 
+     */
+    public function getMediaType()
+    {
+        return $this->media_type;
+    }
+
+    /**
+     * Set layer_type
+     *
+     * @param string $layerType
+     */
+    public function setLayerType($layerType)
+    {
+        $this->layer_type = $layerType;
+    }
+
+    /**
+     * Get layer_type
+     *
+     * @return string 
+     */
+    public function getLayerType()
+    {
+        return $this->layer_type;
+    }
 }

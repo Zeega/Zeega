@@ -201,4 +201,29 @@ class Project
     {
         return $this->attr;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Site
+     */
+    private $site;
+
+
+    /**
+     * Set site
+     *
+     * @param Zeega\DataBundle\Entity\Site $site
+     */
+    public function setSite(\Zeega\DataBundle\Entity\Site $site)
+    {
+        $this->site = $site;
+    }
+
+    /**
+     * Get site
+     *
+     * @return Zeega\DataBundle\Entity\Site 
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
 }

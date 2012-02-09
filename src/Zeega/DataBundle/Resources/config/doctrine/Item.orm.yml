@@ -58,7 +58,7 @@ Zeega\DataBundle\Entity\Item:
         metadata_id:
             type: bigint
             nullable: true
-        sequence_id:
+        site_id:
             type: integer
             nullable: true            
         title:
@@ -77,17 +77,21 @@ Zeega\DataBundle\Entity\Item:
         uri:
             type: string
             length: 200
+        archive:
+            type: string
+            length: 50
+            nullable: false
         attribution_uri:
             type: string
             length: 200
         date_created:
             type: datetime
             nullable: true
-        type:
+        media_type:
             type: string
             length: 20
             nullable: false
-        source:
+        layer_type:
             type: string
             length: 20
             nullable: false        
