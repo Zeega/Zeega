@@ -13,7 +13,7 @@
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
 Libraries/
-.DS_Store*
+.DS_Store
 jda_data.*
 !.gitignore
 
