@@ -84,6 +84,6 @@ class LayersController extends Controller
         ->getRepository('ZeegaDataBundle:Layer')
         ->findItemByLayerId($layer_id)));
     
-    } // `get_node_layers`    [GET] /layers/{layer_id}/item
+    } // `get_frame_layers`    [GET] /layers/{layer_id}/item
 
 }

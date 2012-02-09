@@ -16,11 +16,11 @@ class RegistrationFormType extends BaseType
         $builder->add('display_name');
 		$builder->add('bio');
 		$builder->add('thumb_url');
-		$builder->add('playgrounds', 'entity', array('class' => 'Zeega\DataBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'));
+		$builder->add('sites', 'entity', array('class' => 'Zeega\DataBundle\Entity\Site', 'multiple' => true, 'property' => 'short'));
 		$builder->add('roles', 'choice', array('choices' => $roles,'multiple' => true));
     }
 
-    public function gePlayground()
+    public function geSite()
     {
         return 'zeega_user_registration';
     }

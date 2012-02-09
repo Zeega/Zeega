@@ -127,9 +127,9 @@ class Item
     private $tags;
 
     /**
-     * @var Zeega\DataBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Site
      */
-    private $playground;
+    private $site;
 
     /**
      * @var Zeega\DataBundle\Entity\User
@@ -606,23 +606,23 @@ class Item
     }
 
     /**
-     * Set playground
+     * Set site
      *
-     * @param Zeega\DataBundle\Entity\Playground $playground
+     * @param Zeega\DataBundle\Entity\Site $site
      */
-    public function setPlayground(\Zeega\DataBundle\Entity\Playground $playground)
+    public function setSite(\Zeega\DataBundle\Entity\Site $site)
     {
-        $this->playground = $playground;
+        $this->site = $site;
     }
 
     /**
-     * Get playground
+     * Get site
      *
-     * @return Zeega\DataBundle\Entity\Playground 
+     * @return Zeega\DataBundle\Entity\Site 
      */
-    public function getPlayground()
+    public function getSite()
     {
-        return $this->playground;
+        return $this->site;
     }
 
     /**
@@ -688,29 +688,29 @@ class Item
         }
     }
     /**
-     * @var integer $playground_id
+     * @var integer $site_id
      */
-    private $playground_id;
+    private $site_id;
 
 
     /**
-     * Set playground_id
+     * Set site_id
      *
-     * @param integer $playgroundId
+     * @param integer $siteId
      */
-    public function setPlaygroundId($playgroundId)
+    public function setSiteId($siteId)
     {
-        $this->playground_id = $playgroundId;
+        $this->site_id = $siteId;
     }
 
     /**
-     * Get playground_id
+     * Get site_id
      *
      * @return integer 
      */
-    public function getPlaygroundId()
+    public function getSiteId()
     {
-        return $this->playground_id;
+        return $this->site_id;
     }
     /**
      * @var integer $sequence_id

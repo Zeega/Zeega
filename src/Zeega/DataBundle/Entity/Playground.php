@@ -5,13 +5,13 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Playground
+ * Zeega\DataBundle\Entity\Site
  */
-class Playground
+class Site
 {
 	 
   	   /**
-     * Constructs a new instance of Playground
+     * Constructs a new instance of Site
      */
     public function __construct()
     {

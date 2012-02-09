@@ -6,13 +6,13 @@
 {% block headerfix %} {% endblock %}
 {% block body %}
  
-			<input id="route-id" type="hidden" value="{{route.id}}"/>
+			<input id="sequence-id" type="hidden" value="{{sequence.id}}"/>
 			<input id="project-id" type="hidden" value="{{projectid}}"/>
 		
 		
-			<div id="route-header" class='clearfix'>
-				<div id='route-title'>{{projecttitle}}</div>
-				<div id='route-publish'>
+			<div id="sequence-header" class='clearfix'>
+				<div id='sequence-title'>{{projecttitle}}</div>
+				<div id='sequence-publish'>
 					
 					<ul class='unstyled'>
 						
@@ -22,7 +22,7 @@
 								<!--
 								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 								-->
-								<li><a id='preview' href='#' onclick='Zeega.previewRoute();return false;'
+								<li><a id='preview' href='#' onclick='Zeega.previewSequence();return false;'
 									title='Preview Anytime'
 									data-content='Once you’re complete, you can select share to create a unique url for your project.'
 								>Preview</a>
@@ -46,7 +46,7 @@
 					data-content='As your projects grow, you can select any frame to go back to editing the layers'
 				>
 					<ul id='frame-list' class='unstyled horizontal-list'></ul>
-					<div id="add-node" title='Click to add a new Node or Drag to add several Nodes'><a href="#" onClick="Zeega.addNode();return false;"><img src="{{ asset('images/addnode.png') }}" height="25" width="25"/></a></div>
+					<div id="add-frame" title='Click to add a new Frame or Drag to add several Frames'><a href="#" onClick="Zeega.addFrame();return false;"><img src="{{ asset('images/addframe.png') }}" height="25" width="25"/></a></div>
 				</div>
 				<div id="edit-drawer" class='clearfix'>
 					
@@ -261,7 +261,7 @@
 			</div>
 			<div class="modal-body clearfix">
 				<p>Share your project: <b>{{projecttitle}}</b></p>
-				<a href='{{hostname}}{{directory}}project/{{route.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{route.id}}/view</a>
+				<a href='{{hostname}}{{directory}}project/{{sequence.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{sequence.id}}/view</a>
 			</div>
 			<div class="modal-footer">
 				<span class='admin-submit'>
@@ -271,12 +271,12 @@
 			</div>
 		</div> <!-- modal -->
 		
-		<div id="node-item-template" class="">
-			<div class='node-overlay'>
-				<div class='node-update-overlay'></div>
+		<div id="frame-item-template" class="">
+			<div class='frame-overlay'>
+				<div class='frame-update-overlay'></div>
 			</div>
-			<div class='node-background'></div>
-			<a href='#' class='delete-node hidden'>&times;</a>
+			<div class='frame-background'></div>
+			<a href='#' class='delete-frame hidden'>&times;</a>
 		</div>
 	</div>
 {% endblock %}

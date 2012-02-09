@@ -38,7 +38,7 @@ class User extends BaseUser
     /**
      * @var string $thumb_url
      */
-    protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
+    protected $thumb_url = "http://mlhsite.org/gamma-james/images/vertov.jpeg";
 
     /**
      * @var datetime $created_at
@@ -136,29 +136,29 @@ class User extends BaseUser
         return $this->created_at;
     }
     /**
-     * @var Zeega\DataBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Site
      */
-    public $playgrounds;
+    public $sites;
 
 
     /**
-     * Add playgrounds
+     * Add sites
      *
-     * @param Zeega\DataBundle\Entity\Playground $playgrounds
+     * @param Zeega\DataBundle\Entity\Site $sites
      */
-    public function addPlayground(\Zeega\DataBundle\Entity\Playground $playgrounds)
+    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
     {
-        $this->playgrounds[] = $playgrounds;
+        $this->sites[] = $sites;
     }
 
     /**
-     * Get playgrounds
+     * Get sites
      *
      * @return Doctrine\Common\Collections\Collection 
      */
-    public function getPlaygrounds()
+    public function getSites()
     {
-        return $this->playgrounds;
+        return $this->sites;
     }
     /**
      * @var Zeega\DataBundle\Entity\Site

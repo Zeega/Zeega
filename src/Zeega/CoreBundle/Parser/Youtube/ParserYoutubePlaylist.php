@@ -54,7 +54,7 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 
 		foreach ($xml->entry as $entry) 
 		{
-			// get nodes in media: namespace for media information
+			// get frames in media: namespace for media information
 			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
 			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
 

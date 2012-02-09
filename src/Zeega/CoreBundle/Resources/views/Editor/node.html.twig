@@ -3,7 +3,7 @@
 
 	<head>
 
-		<title>Node Viewer</title>
+		<title>Frame Viewer</title>
 		<meta name="robots" content="noindex,follow">
 		<link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
 		<meta name="robots" content="noindex,follow">
@@ -13,7 +13,7 @@
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
-			sessionStorage.setItem('nodeId','{{nodeId}}');
+			sessionStorage.setItem('frameId','{{frameId}}');
 		</script>
 		
 		
@@ -26,7 +26,7 @@
 			}
 		</style>
 
-		<script data-main="{{ asset('js/main.node.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
+		<script data-main="{{ asset('js/main.frame.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 			
 	</head>

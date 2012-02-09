@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Entity\Project;
-use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Site;
 
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -59,29 +59,29 @@ class SecurityController extends Controller
 		$userTwo->setLastName('Bond');
 		$userTwo->setPassword($password);
 		
-		$playground= new Playground();
-		$playground->setTitle('Group One');
+		$site= new Site();
+		$site->setTitle('Group One');
 		
-		$playgroundTwo= new Playground();
-		$playgroundTwo->setTitle('Group Two');
+		$siteTwo= new Site();
+		$siteTwo->setTitle('Group Two');
 		
 		$project = new Project();
 		$project->setTitle('Project One');
-		$project->setPlayground($playground);
+		$project->setSite($site);
 		
 		
 		$projectTwo = new Project();
 		$projectTwo->setTitle('Project Two');
-		$projectTwo->setPlayground($playground);
+		$projectTwo->setSite($site);
 		
 		$projectThree = new Project();
 		$projectThree->setTitle('Project Three');
-		$projectThree->setPlayground($playgroundTwo);
+		$projectThree->setSite($siteTwo);
 		
 		
 		$projectFour = new Project();
 		$projectFour->setTitle('Project One');
-		$projectFour->setPlayground($playgroundTwo);
+		$projectFour->setSite($siteTwo);
 		
 		
 		
@@ -91,8 +91,8 @@ class SecurityController extends Controller
     	$em->persist($user);
     	$em->persist($userTwo);
     	
-    	$em->persist($playground);
-    	$em->persist($playgroundTwo);
+    	$em->persist($site);
+    	$em->persist($siteTwo);
     	
     	
     	
@@ -101,9 +101,9 @@ class SecurityController extends Controller
     	$em->persist($projectThree);
     	$em->persist($projectFour);
     	
-    	$user->addPlayground($playground);
-    	$user->addPlayground($playgroundTwo);
-    	$userTwo->addPlayground($playgroundTwo);
+    	$user->addSite($site);
+    	$user->addSite($siteTwo);
+    	$userTwo->addSite($siteTwo);
     	
     	
     	

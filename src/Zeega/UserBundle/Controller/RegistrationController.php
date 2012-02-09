@@ -40,9 +40,9 @@ class RegistrationController extends Controller
 			
             if ($confirmationEnabled) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
-                $route = 'fos_user_registration_check_email';
+                $sequence = 'fos_user_registration_check_email';
             } else {
-                $route = 'fos_user_registration_confirmed';
+                $sequence = 'fos_user_registration_confirmed';
             }
 
             $this->setFlash('fos_user_success', 'registration.flash.user_created');
@@ -61,8 +61,8 @@ class RegistrationController extends Controller
 			'page'=>'home',
 			'projectsMenu'=>true,
 			'myprojects'=>false,
-			'playground' => false,					
-			'playgrounds'=>false,
+			'site' => false,					
+			'sites'=>false,
         ));
     }
 
@@ -102,7 +102,7 @@ class RegistrationController extends Controller
         $this->container->get('fos_user.user_manager')->updateUser($user);
         $this->authenticateUser($user);
 
-        return new RedirectResponse($this->container->get('router')->generate('fos_user_registration_confirmed'));
+        return new RedirectResponse($this->container->get('sequencer')->generate('fos_user_registration_confirmed'));
     }
 
     /**

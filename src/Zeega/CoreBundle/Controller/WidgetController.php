@@ -8,7 +8,7 @@ use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Metadata;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Imagick;
 use DateTime;
@@ -30,9 +30,9 @@ class WidgetController extends Controller
 		// get logged user
 		$user = $this->get('security.context')->getToken()->getUser();
 		
-		// get user items and playgrounds
+		// get user items and sites
 		$mycollection = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItems($user->getId());
-		$playgrounds = $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')->findPlaygroundsByUser($user->getId());
+		$sites = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSitesByUser($user->getId());
 		
 		$widgetId = $request->query->get('widget-id');
 		$itemUrl = $request->query->get('url');
@@ -126,23 +126,23 @@ class WidgetController extends Controller
     		
     		$item->setUser($user);
     		
-    		if($session->get('playgroundid')) 
-    			$playground = $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')
-    							    ->find($session->get('playgroundid'));
+    		if($session->get('siteid')) 
+    			$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')
+    							    ->find($session->get('siteid'));
     		else 
     		{
-    			$playgrounds = $this->getDoctrine()
-    					            ->getRepository('ZeegaDataBundle:Playground')
-    							    ->findPlaygroundByUser($user->getId());
-    			$playground=$playgrounds[0];
+    			$sites = $this->getDoctrine()
+    					            ->getRepository('ZeegaDataBundle:Site')
+    							    ->findSiteByUser($user->getId());
+    			$site=$sites[0];
     		}
     		//$today = date('Y-m-d h:i:s', strtotime(date('Y-m-d')));
-			$item->setPlayground($playground);
+			$item->setSite($site);
 			$item->setChildItemsCount(0);
 			//$item->setDateCreated($today);
 			
 			$em=$this->getDoctrine()->getEntityManager();
-			$em->persist($item->getPlayground());
+			$em->persist($item->getSite());
 			$em->persist($item->getMetadata());
 			$em->persist($item->getMedia());
 			$em->flush();
@@ -235,20 +235,20 @@ class WidgetController extends Controller
 		$logger = $this->get('logger');
 		$em=$this->getDoctrine()->getEntityManager();
 		
-		if($session->get('playgroundid')) 
-    		$playground = 	$this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')
-    							    ->find($session->get('playgroundid'));
+		if($session->get('siteid')) 
+    		$site = 	$this->getDoctrine()->getRepository('ZeegaDataBundle:Site')
+    							    ->find($session->get('siteid'));
     	else 
 		{
-			$playgrounds = $this->getDoctrine()
-								->getRepository('ZeegaDataBundle:Playground')
-								->findPlaygroundByUser($user->getId());
-			$playground=$playgrounds[0];
+			$sites = $this->getDoctrine()
+								->getRepository('ZeegaDataBundle:Site')
+								->findSiteByUser($user->getId());
+			$site=$sites[0];
 		}
 		
 		
 	
-		$mycollection=$this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItemsByPlayground($user->getId(),$playground->getId());
+		$mycollection=$this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItemsBySite($user->getId(),$site->getId());
 		
 		
 		$url=$request->query->get('url');
@@ -260,7 +260,7 @@ class WidgetController extends Controller
 		if($check){
 			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playground,
+				'site'=>$site,
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
 				'content_type'=>$check['type'],
@@ -310,7 +310,7 @@ class WidgetController extends Controller
 					'widget_id'=>$widgetId,
 					'thumb_url'=>$metadata->getThumbnailUrl(),
 					'mycollection'=>$mycollection,
-					'playground'=>$playground,
+					'site'=>$site,
 				));
 			}
         	elseif(isset($collection)&&$collection){
@@ -337,7 +337,7 @@ class WidgetController extends Controller
 					'widget_ids'=>$widgetIds,
 					'thumb_urls'=>$thumbUrls,
 					'mycollection'=>$mycollection,
-					'playground'=>$playground,
+					'site'=>$site,
 					'count'=>count($thumbUrls),
 				));
 		
@@ -349,7 +349,7 @@ class WidgetController extends Controller
 					'url'=>json_encode($widgetId),
 					'title'=>'temp title',
 					'mycollection'=>$mycollection,
-					'playground'=>$playground,
+					'site'=>$site,
 					));
 			} 
     	}

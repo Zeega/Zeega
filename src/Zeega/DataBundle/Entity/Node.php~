@@ -1,10 +1,10 @@
 <?php
 
-// src/Zeega/DataBundle/Entity/Node.php
+// src/Zeega/DataBundle/Entity/Frame.php
 
 namespace Zeega\DataBundle\Entity;
 
-class Node
+class Frame
 {
  
  
@@ -15,7 +15,7 @@ class Node
     {
         $this->created_at = new \DateTime();
     
-        $this->thumb_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
+        $this->thumb_url = "http://mlhsite.org/gamma-james/images/thumb.png";
     }
 
     /**
@@ -24,9 +24,9 @@ class Node
     private $id;
 
     /**
-     * @var integer $route_index
+     * @var integer $sequence_index
      */
-    private $route_index;
+    private $sequence_index;
 
     /**
      * @var array $attr
@@ -44,27 +44,27 @@ class Node
     private $user;
 
     /**
-     * @var Zeega\DataBundle\Entity\Route
+     * @var Zeega\DataBundle\Entity\Sequence
      */
-    private $route;
+    private $sequence;
 
     /**
-     * @var Zeega\DataBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Frame
      */
     private $link_up;
 
     /**
-     * @var Zeega\DataBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Frame
      */
     private $link_down;
 
     /**
-     * @var Zeega\DataBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Frame
      */
     private $link_left;
 
     /**
-     * @var Zeega\DataBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Frame
      */
     private $link_right;
 
@@ -86,23 +86,23 @@ class Node
     }
 
     /**
-     * Set route_index
+     * Set sequence_index
      *
-     * @param integer $routeIndex
+     * @param integer $sequenceIndex
      */
-    public function setRouteIndex($routeIndex)
+    public function setSequenceIndex($sequenceIndex)
     {
-        $this->route_index = $routeIndex;
+        $this->sequence_index = $sequenceIndex;
     }
 
     /**
-     * Get route_index
+     * Get sequence_index
      *
      * @return integer 
      */
-    public function getRouteIndex()
+    public function getSequenceIndex()
     {
-        return $this->route_index;
+        return $this->sequence_index;
     }
 
     /**
@@ -166,31 +166,31 @@ class Node
     }
 
     /**
-     * Set route
+     * Set sequence
      *
-     * @param Zeega\DataBundle\Entity\Route $route
+     * @param Zeega\DataBundle\Entity\Sequence $sequence
      */
-    public function setRoute(\Zeega\DataBundle\Entity\Route $route)
+    public function setSequence(\Zeega\DataBundle\Entity\Sequence $sequence)
     {
-        $this->route = $route;
+        $this->sequence = $sequence;
     }
 
     /**
-     * Get route
+     * Get sequence
      *
-     * @return Zeega\DataBundle\Entity\Route 
+     * @return Zeega\DataBundle\Entity\Sequence 
      */
-    public function getRoute()
+    public function getSequence()
     {
-        return $this->route;
+        return $this->sequence;
     }
 
     /**
      * Set link_up
      *
-     * @param Zeega\DataBundle\Entity\Node $linkUp
+     * @param Zeega\DataBundle\Entity\Frame $linkUp
      */
-    public function setLinkUp(\Zeega\DataBundle\Entity\Node $linkUp)
+    public function setLinkUp(\Zeega\DataBundle\Entity\Frame $linkUp)
     {
         $this->link_up = $linkUp;
     }
@@ -198,7 +198,7 @@ class Node
     /**
      * Get link_up
      *
-     * @return Zeega\DataBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Frame 
      */
     public function getLinkUp()
     {
@@ -208,9 +208,9 @@ class Node
     /**
      * Set link_down
      *
-     * @param Zeega\DataBundle\Entity\Node $linkDown
+     * @param Zeega\DataBundle\Entity\Frame $linkDown
      */
-    public function setLinkDown(\Zeega\DataBundle\Entity\Node $linkDown)
+    public function setLinkDown(\Zeega\DataBundle\Entity\Frame $linkDown)
     {
         $this->link_down = $linkDown;
     }
@@ -218,7 +218,7 @@ class Node
     /**
      * Get link_down
      *
-     * @return Zeega\DataBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Frame 
      */
     public function getLinkDown()
     {
@@ -228,9 +228,9 @@ class Node
     /**
      * Set link_left
      *
-     * @param Zeega\DataBundle\Entity\Node $linkLeft
+     * @param Zeega\DataBundle\Entity\Frame $linkLeft
      */
-    public function setLinkLeft(\Zeega\DataBundle\Entity\Node $linkLeft)
+    public function setLinkLeft(\Zeega\DataBundle\Entity\Frame $linkLeft)
     {
         $this->link_left = $linkLeft;
     }
@@ -238,7 +238,7 @@ class Node
     /**
      * Get link_left
      *
-     * @return Zeega\DataBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Frame 
      */
     public function getLinkLeft()
     {
@@ -248,9 +248,9 @@ class Node
     /**
      * Set link_right
      *
-     * @param Zeega\DataBundle\Entity\Node $linkRight
+     * @param Zeega\DataBundle\Entity\Frame $linkRight
      */
-    public function setLinkRight(\Zeega\DataBundle\Entity\Node $linkRight)
+    public function setLinkRight(\Zeega\DataBundle\Entity\Frame $linkRight)
     {
         $this->link_right = $linkRight;
     }
@@ -258,7 +258,7 @@ class Node
     /**
      * Get link_right
      *
-     * @return Zeega\DataBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Frame 
      */
     public function getLinkRight()
     {

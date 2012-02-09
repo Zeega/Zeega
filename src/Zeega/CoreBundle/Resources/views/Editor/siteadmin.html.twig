@@ -16,14 +16,14 @@
 <div style="clear:both;"></div>
 
 			<br><br>
-			<div id="playgrounds-list">
+			<div id="sites-list">
 				<div class="item-title" style="font-size: 16px; ">My Sites</div><br><br>
 				<div id="my-projects" style="padding-left:20px;">
-					{% for playground in playgrounds %}
-						<a href="{{ path('ZeegaCoreBundle_playground', { 'short': playground.short }) }}">{{playground.title}}</a> <span class="timeStamp"></span><br>
+					{% for site in sites %}
+						<a href="{{ path('ZeegaCoreBundle_site', { 'short': site.short }) }}">{{site.title}}</a> <span class="timeStamp"></span><br>
 					{% endfor %}
 				</div>
-			</div> <!--#playgrounds-list-->
+			</div> <!--#sites-list-->
 
 <div id="usersWrapper"> 
 	<div id="changePassWrapper" style="display:none"> 
@@ -55,9 +55,9 @@
 					</ul>
 			</div>
 
-			<div id="create-playground">
+			<div id="create-site">
 					<ul class="pill-buttons">
-						<li><a id="new-playground" href="#">Create New Playground</a></li>
+						<li><a id="new-site" href="#">Create New Site</a></li>
 					</ul>
 			</div>
 <br><br>

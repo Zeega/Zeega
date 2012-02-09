@@ -5,88 +5,88 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 
 
-class NodesController extends Controller
+class FramesController extends Controller
 {
     
    
     
-     public function getNodesAction()
+     public function getFramesAction()
     {
     
 
     
-    } // `get_nodes`    [GET] /nodes
+    } // `get_frames`    [GET] /frames
 
 
 
-    public function postNodesAction()
+    public function postFramesAction()
     {
     
     
     	
         
-    } // `post_nodes`   [POST] /nodes
+    } // `post_frames`   [POST] /frames
 
  
-    public function getNodeAction($node_id)
+    public function getFrameAction($frame_id)
     {
     
     	return new Response(json_encode($this->getDoctrine()
-        		->getRepository('ZeegaDataBundle:Node')
-        		->findNodeById($node_id)));
+        		->getRepository('ZeegaDataBundle:Frame')
+        		->findFrameById($frame_id)));
         
     
-    } // `get_node`     [GET] /nodes/{node_id}
+    } // `get_frame`     [GET] /frames/{frame_id}
 
 
 
-    public function putNodeAction($node_id)
+    public function putFrameAction($frame_id)
     {
     	$em=$this->getDoctrine()->getEntityManager();
     	$request = $this->getRequest();
-    	$node=$em->getRepository('ZeegaDataBundle:Node')->find($node_id);
+    	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
     	
-		if($request->request->get('thumb_url')) $node->setThumbUrl($request->request->get('thumb_url'));
-		if($request->request->get('layers')) $node->setLayers($request->request->get('layers'));
-		if($request->request->get('attr')) $node->setAttr($request->request->get('attr'));
+		if($request->request->get('thumb_url')) $frame->setThumbUrl($request->request->get('thumb_url'));
+		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
+		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 		
-		$em->persist($node);
+		$em->persist($frame);
 		$em->flush();
 		
-    	return new Response(json_encode($em->getRepository('ZeegaDataBundle:Node')->findNodeById($node_id)));		
+    	return new Response(json_encode($em->getRepository('ZeegaDataBundle:Frame')->findFrameById($frame_id)));		
         
-    } // `put_node`     [PUT] /nodes/{node_id}
+    } // `put_frame`     [PUT] /frames/{frame_id}
 
 
 
 
-	/** `delete_node`  [DELETE] /nodes/{node_id}  */
+	/** `delete_frame`  [DELETE] /frames/{frame_id}  */
 
-    public function deleteNodeAction($node_id){
+    public function deleteFrameAction($frame_id){
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$node= $em->getRepository('ZeegaDataBundle:Node')->find($node_id);
+     	$frame= $em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
      	
-    	$em->remove($node);
+    	$em->remove($frame);
     	$em->flush();
     	return new Response('SUCCESS',200);
     } 
 
 	
 
-	 public function getNodeLayersAction($node_id)
+	 public function getFrameLayersAction($frame_id)
     {
     		
-    		$node=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
-        				->find($node_id);
+    		$frame=$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Frame')
+        				->find($frame_id);
         	
-        	$layerList=$node->getLayers();
+        	$layerList=$frame->getLayers();
         	
         	foreach($layerList as $layer_id){
         	
@@ -99,14 +99,14 @@ class NodesController extends Controller
     } 
     
     
-     public function postNodeThumbnailAction($node_id)
+     public function postFrameThumbnailAction($frame_id)
     {
     	$em=$this->getDoctrine()->getEntityManager();
-    	$node=$em->getRepository('ZeegaDataBundle:Node')->find($node_id);
-		exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'node/'.$node_id.'/view '.$this->container->getParameter('path').'images/nodes',$output);
+    	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
+		exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'frame/'.$frame_id.'/view '.$this->container->getParameter('path').'images/frames',$output);
 		$url=explode(':/var/www/',$output[4]);
-		$node->setThumbUrl($this->container->getParameter('hostname') . $url[1]);
-		$em->persist($node);
+		$frame->setThumbUrl($this->container->getParameter('hostname') . $url[1]);
+		$em->persist($frame);
 		$em->flush();
 		
     	return new Response($this->container->getParameter('hostname') . $url[1]);		

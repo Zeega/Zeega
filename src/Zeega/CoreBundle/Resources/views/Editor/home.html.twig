@@ -18,7 +18,7 @@
 <br><br>
 			{% if super %}
 
-				<div id='add-playground'>
+				<div id='add-site'>
 					<ul class="pill-buttons">
 						<li><a  href="#">Create New Site</a></li>
 					</ul>
@@ -27,14 +27,14 @@
 			{% endif %}
 			
 			
-			<div id="playgrounds-list">
+			<div id="sites-list">
 				<div class="item-title" style="font-size: 16px; ">My Sites</div><br><br>
 				<div id="my-projects" style="padding-left:5px;">
-					{% for playground in playgrounds %}
-						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_playground', { 'short': playground.short }) }}" class="white">{{playground.title}}</a><span class="timeStamp"></span></li> 
+					{% for site in sites %}
+						<li style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_site', { 'short': site.short }) }}" class="white">{{site.title}}</a><span class="timeStamp"></span></li> 
 					{% endfor %}
 				</div>
-			</div> <!--#playgrounds-list-->
+			</div> <!--#sites-list-->
 
 
 
@@ -46,11 +46,11 @@
 {% endblock %}		
 
 	{% block extras %}
-		<div id="playground-add" style='display:none;'>		
+		<div id="site-add" style='display:none;'>		
 				<form class='admin-form' action="" method="post" {{ form_enctype(form) }}>
 					{{ form_widget(form) }}
 					<span class='admin-submit'>
-					<input type="submit" value="Cancel" id="playground-add-cancel" />
+					<input type="submit" value="Cancel" id="site-add-cancel" />
 					<input type="submit" />
 					</span>
 				</form>

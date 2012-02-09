@@ -35,7 +35,7 @@ class SearchController extends Controller
         		
 		//  search specific parameters
 		$query["userId"]        = $request->query->get('user');      //  int
-		$query["playgroundId"]  = $request->query->get('playground'); //  int
+		$query["siteId"]  = $request->query->get('site'); //  int
 		$query["queryString"]   = $request->query->get('q');         //  string
 		$query["contentType"]   = $request->query->get('content');   //  string
 		$query["collection_id"]  = $request->query->get('collection');//  string

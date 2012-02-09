@@ -5,27 +5,27 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
-use Zeega\DataBundle\Entity\Route;
-use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Sequence;
+use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\User;
 
-class PlaygroundsController extends Controller
+class SitesController extends Controller
 {
     
      
-	 // `post_playground`   [POST] /playgrounds
-    public function postPlaygroundAction()
+	 // `post_site`   [POST] /sites
+    public function postSiteAction()
     {
     	if($request->request->get('title')){
     	
-    		$playground= new Playground();
-    		$playground->setTitle($request->request->get('title'));
+    		$site= new Site();
+    		$site->setTitle($request->request->get('title'));
     		$em=$this->getDoctrine()->getEntityManager();
-			$em->persist($playground);
-			return new Response(json_encode($playground));
+			$em->persist($site);
+			return new Response(json_encode($site));
     	}
     	else{
     	
@@ -33,36 +33,36 @@ class PlaygroundsController extends Controller
     	}
     }
 
-	// `get_playground`     [GET] /playgrounds/{playground_id}
-    public function getPlaygroundAction($playground_id)
+	// `get_site`     [GET] /sites/{site_id}
+    public function getSiteAction($site_id)
     {
-    	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Playground')
-        ->findPlaygroundById($playground_id);
-    	return new Response(json_encode($playground[0]));
+    	$site=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Site')
+        ->findSiteById($site_id);
+    	return new Response(json_encode($site[0]));
         
     
     } 
     
-    public function deletePlaygroundUserAction($playground_id,$user_id){
+    public function deleteSiteUserAction($site_id,$user_id){
     
     	
-    	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Playground')
-        ->find($playground_id);
+    	$site=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Site')
+        ->find($site_id);
         $user=$this->getDoctrine()
         ->getRepository('ZeegaUserBundle:User')
         ->find($user_id);
-        $playground->removeUsers($user);
+        $site->removeUsers($user);
         $em=$this->getDoctrine()->getEntityManager();
-		$em->persist($playground);
+		$em->persist($site);
     	return new Response('Success');
     
     }
     
     
-     // `post_playground`   [POST] playground/{playground_id}/project
-    public function postPlaygroundProjectAction($playground_id)
+     // `post_site`   [POST] site/{site_id}/project
+    public function postSiteProjectAction($site_id)
     {
     	$user = $this->get('security.context')->getToken()->getUser();
     	$request = $this->getRequest();
@@ -75,22 +75,22 @@ class PlaygroundsController extends Controller
 		} 
 		
 		else $title='Untitled Project';
-    	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Playground')
-        ->find($playground_id);
+    	$site=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Site')
+        ->find($site_id);
     	$project= new Project();
-		$route = new Route();
-		$node = new Node();
-		$node->setRoute($route);
-		$project->setPlayground($playground);
+		$sequence = new Sequence();
+		$frame = new Frame();
+		$frame->setSequence($sequence);
+		$project->setSite($site);
 		$project->addUsers($user);
-		$route->setProject($project);
-		$route->setTitle($title);
+		$sequence->setProject($project);
+		$sequence->setTitle($title);
 		$project->setTitle($title);
 		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($route);
+		$em->persist($sequence);
 		$em->persist($project);
-		$em->persist($node);
+		$em->persist($frame);
 		$em->flush();
 		return new Response($project->getId());
     }
@@ -98,39 +98,39 @@ class PlaygroundsController extends Controller
         
     /*
 
-	// `put_playground`     [PUT] /playgrounds/{playground_id}
-    public function putPlaygroundAction($playground_id)
+	// `put_site`     [PUT] /sites/{site_id}
+    public function putSiteAction($site_id)
     {
     	$request = $this->getRequest();
       	$em =$this->getDoctrine()->getEntityManager();
-     	$playground= $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')->findOneById($playground_id);
-    	if($request->request->get('title'))$playground->setTitle($request->request->get('title'));
+     	$site= $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneById($site_id);
+    	if($request->request->get('title'))$site->setTitle($request->request->get('title'));
 		$em->flush();
     	return new Response('SUCCESS',200);
     } 
 
 
-	// `delete_playground`  [DELETE] /playgrounds/{playground_id}
-    public function deletePlaygroundAction($playground_id)
+	// `delete_site`  [DELETE] /sites/{site_id}
+    public function deleteSiteAction($site_id)
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$playground= $em->getRepository('ZeegaDataBundle:Playground')->find($playground_id);
+     	$site= $em->getRepository('ZeegaDataBundle:Site')->find($site_id);
     
-    	$em->remove($playground);
+    	$em->remove($site);
     	$em->flush();
     	return new Response('SUCCESS',200);
     
     
     } 
 
-	// `get_playground_routes`    [GET] /playgrounds/{playground_id}/routes
-    public function getPlaygroundRoutesAction($playground_id)
+	// `get_site_sequences`    [GET] /sites/{site_id}/sequences
+    public function getSiteSequencesAction($site_id)
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
-        				->findRoutesByPlaygroundId($playground_id)));
+        				->getRepository('ZeegaDataBundle:Frame')
+        				->findSequencesBySiteId($site_id)));
     
     } 
 

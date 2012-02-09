@@ -52,9 +52,9 @@ class Layer
     private $above;
 
     /**
-     * @var Zeega\DataBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Frame
      */
-    private $node;
+    private $frame;
 
 
     /**
@@ -208,23 +208,23 @@ class Layer
     }
 
     /**
-     * Set node
+     * Set frame
      *
-     * @param Zeega\DataBundle\Entity\Node $node
+     * @param Zeega\DataBundle\Entity\Frame $frame
      */
-    public function setNode(\Zeega\DataBundle\Entity\Node $node)
+    public function setFrame(\Zeega\DataBundle\Entity\Frame $frame)
     {
-        $this->node = $node;
+        $this->frame = $frame;
     }
 
     /**
-     * Get node
+     * Get frame
      *
-     * @return Zeega\DataBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Frame 
      */
-    public function getNode()
+    public function getFrame()
     {
-        return $this->node;
+        return $this->frame;
     }
     /**
      * @var array $attr

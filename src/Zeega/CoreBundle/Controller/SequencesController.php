@@ -5,37 +5,37 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
-use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\User;
 
-class RoutesController extends Controller
+class SequencesController extends Controller
 {
     
-      public function getRoutesAction()
+      public function getSequencesAction()
     {
 
     /*
-    	$route= new Route();
+    	$sequence= new Sequence();
     	
     	
-    	$route->setTitle('Untitled');
+    	$sequence->setTitle('Untitled');
 		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($route);
+		$em->persist($sequence);
 		$em->flush();
     	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Route')
-        ->findRouteById($route->getId())));
+        ->getRepository('ZeegaDataBundle:Sequence')
+        ->findSequenceById($sequence->getId())));
        */
     
     
     
-    } // `get_routes`    [GET] /routes
+    } // `get_sequences`    [GET] /sequences
 
 
 
-    public function postRoutesAction()
+    public function postSequencesAction()
     {
     
     	$em=$this->getDoctrine()->getEntityManager();
@@ -43,67 +43,67 @@ class RoutesController extends Controller
 
 
 		//$title=$request->request->get('title');
-		$route= new Route();
+		$sequence= new Sequence();
 		$request = $this->getRequest();
-    	if($request->request->get('title')) $route->setTitle($request->request->get('title'));
-    	else $route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-    	$em->persist($route);
+    	if($request->request->get('title')) $sequence->setTitle($request->request->get('title'));
+    	else $sequence->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+    	$em->persist($sequence);
     	$em->flush();
 		$output=$this->getDoctrine()
-			->getRepository('ZeegaDataBundle:Node')
-			->findRouteById($route->getId());
+			->getRepository('ZeegaDataBundle:Frame')
+			->findSequenceById($sequence->getId());
 			
 		return new Response(json_encode($output[0]));
         
-    } // `post_routes`   [POST] /routes
+    } // `post_sequences`   [POST] /sequences
 
 
-    public function getRouteAction($route_id)
+    public function getSequenceAction($sequence_id)
     {
-    	$routes=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Route')
-        ->findRouteById($route_id);
+    	$sequences=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Sequence')
+        ->findSequenceById($sequence_id);
     	
 		//removes falsy values from the return
-		for($i = 0 ; $i < count($routes) ; $i++)
+		for($i = 0 ; $i < count($sequences) ; $i++)
 		{
-			foreach($routes[0] as $key => $value)
+			foreach($sequences[0] as $key => $value)
 			{
-				if( is_null( $value )) unset($routes[$i][$key]);
+				if( is_null( $value )) unset($sequences[$i][$key]);
 				
 			}
 		}
 		
-		return new Response(json_encode($routes[0]));
+		return new Response(json_encode($sequences[0]));
         
     
-    } // `get_route`     [GET] /routes/{route_id}
+    } // `get_sequence`     [GET] /sequences/{sequence_id}
 
 
 
-    public function putRouteAction($route_id)
+    public function putSequenceAction($sequence_id)
     {
     	$request = $this->getRequest();
       	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
-    	if($request->request->get('title'))$route->setTitle($request->request->get('title'));
-    	if($request->request->get('attr'))$route->setAttr($request->request->get('attr'));
+     	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
+    	if($request->request->get('title'))$sequence->setTitle($request->request->get('title'));
+    	if($request->request->get('attr'))$sequence->setAttr($request->request->get('attr'));
 		$em->flush();
 		
-		if($request->request->get('nodesOrder')){
+		if($request->request->get('framesOrder')){
 
-		$nodes=$request->request->get('nodesOrder');
+		$frames=$request->request->get('framesOrder');
 
 		$i=0;
-		$s=count($nodes);
-		foreach($nodes as $nodeId){
+		$s=count($frames);
+		foreach($frames as $frameId){
 			
-			$node=$em->getRepository('ZeegaDataBundle:Node')
-        		->find($nodeId);
+			$frame=$em->getRepository('ZeegaDataBundle:Frame')
+        		->find($frameId);
         		
         		
-        	$node->setRouteIndex($i);
-        	$em->persist($node);
+        	$frame->setSequenceIndex($i);
+        	$em->persist($frame);
 			$i++;
 		}
 		
@@ -112,57 +112,57 @@ class RoutesController extends Controller
 		}
 		
     	return new Response('SUCCESS',200);
-    } // `put_route`     [PUT] /routes/{route_id}
+    } // `put_sequence`     [PUT] /sequences/{sequence_id}
 
 
 
-    public function deleteRouteAction($route_id)
+    public function deleteSequenceAction($sequence_id)
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
-    	$em->remove($route);
+     	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
+    	$em->remove($sequence);
     	$em->flush();
     	return new Response('SUCCESS',200);
     
     
-    } // `delete_route`  [DELETE] /routes/{route_id}
+    } // `delete_sequence`  [DELETE] /sequences/{sequence_id}
 
-    public function getRouteNodesAction($route_id)
+    public function getSequenceFramesAction($sequence_id)
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
-        				->findNodesByRouteId($route_id)));
+        				->getRepository('ZeegaDataBundle:Frame')
+        				->findFramesBySequenceId($sequence_id)));
     
-    } // `get_route_nodes`    [GET] /routes/{route_id}/Nodes
+    } // `get_sequence_frames`    [GET] /sequences/{sequence_id}/Frames
 
 
   
-	public function postRouteNodesAction($route_id)
+	public function postSequenceFramesAction($sequence_id)
     {
     	
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
-		$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
+		$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
 		
     	if($request->request->get('duplicate_id')){
     	
-    		$original_node =$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
+    		$original_frame =$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Frame')
         				->find($request->request->get('duplicate_id'));
     	
-			$node= new Node();
-			$node->setRoute($route);
-			if($request->request->get('thumb_url')) $node->setThumbUrl($request->request->get('thumb_url'));	
-			if($original_node->getAttr()) $node->setAttr($original_node->getAttr());
+			$frame= new Frame();
+			$frame->setSequence($sequence);
+			if($request->request->get('thumb_url')) $frame->setThumbUrl($request->request->get('thumb_url'));	
+			if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
 
-			$original_layers=$original_node->getLayers();
+			$original_layers=$original_frame->getLayers();
 			if($original_layers){
 				
         		foreach($original_layers as $original_layer_id){
         				$layer= new Layer();
-    					$route->addLayers($layer);
+    					$sequence->addLayers($layer);
     					
         				$original_layer=$this->getDoctrine()
         					->getRepository('ZeegaDataBundle:Layer')
@@ -176,50 +176,50 @@ class RoutesController extends Controller
 						
 						$em->persist($layer);
 						$em->flush();
-        				$node_layers[]=$layer->getId();	
+        				$frame_layers[]=$layer->getId();	
         		}
-        		$node->setLayers($node_layers);
+        		$frame->setLayers($frame_layers);
 			}
-			$em->persist($route);
-			$em->persist($node);
+			$em->persist($sequence);
+			$em->persist($frame);
 			$em->flush();
 			$output=$this->getDoctrine()
-			->getRepository('ZeegaDataBundle:Node')
-			->findNodeById($node->getId());
+			->getRepository('ZeegaDataBundle:Frame')
+			->findFrameById($frame->getId());
 			return new Response(json_encode($output[0]));
 		}
 		else{
-			$node= new Node();
-			$node->setRoute($route);
-			if($request->request->get('thumb_url'))$node->setThumbUrl($request->request->get('thumb_url'));
-			if($request->request->get('attr')) $node->setAttr($request->request->get('attr'));
+			$frame= new Frame();
+			$frame->setSequence($sequence);
+			if($request->request->get('thumb_url'))$frame->setThumbUrl($request->request->get('thumb_url'));
+			if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 
 			$em=$this->getDoctrine()->getEntityManager();
-			$em->persist($node);
+			$em->persist($frame);
 			$em->flush();
 			$output=$this->getDoctrine()
-				->getRepository('ZeegaDataBundle:Node')
-				->findNodeById($node->getId());
+				->getRepository('ZeegaDataBundle:Frame')
+				->findFrameById($frame->getId());
 			return new Response(json_encode($output[0]));
 		}
     
     
-    } // `post_route_nodes`   [POST] /routes/{route_id}/nodes
+    } // `post_sequence_frames`   [POST] /sequences/{sequence_id}/frames
 
 
 
-	/** `get_route_layers`    [GET] /routes/{route_id}/layers */
+	/** `get_sequence_layers`    [GET] /sequences/{sequence_id}/layers */
 
-    public function getRouteLayersAction($route_id)
+    public function getSequenceLayersAction($sequence_id)
     {
     	$output=array();
-    	$route=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Route')
-        				->find($route_id);
+    	$sequence=$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Sequence')
+        				->find($sequence_id);
         				
-        if($route){
+        if($sequence){
         
-        	$layers=$route->getLayers()->toArray();
+        	$layers=$sequence->getLayers()->toArray();
         	foreach($layers as $layer){
         	
         	$l=$this->getDoctrine()
@@ -233,16 +233,16 @@ class RoutesController extends Controller
 		return new Response(json_encode($output));
 	}
 
-	  public function postRouteLayersAction($route_id)
+	  public function postSequenceLayersAction($sequence_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
+     	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
     	
     	$layer= new Layer();
     	
 		$request = $this->getRequest();
     	
-    	$route->addLayers($layer);
+    	$sequence->addLayers($layer);
     	
     	
     	
@@ -264,7 +264,7 @@ class RoutesController extends Controller
     	
     	
 		$em->persist($layer);
-		$em->persist($route);
+		$em->persist($sequence);
 		$em->flush();
     	$output=$this->getDoctrine()
         ->getRepository('ZeegaDataBundle:Layer')
@@ -275,7 +275,7 @@ class RoutesController extends Controller
     
     
     
-    } // `post_route_layers`   [POST] /routes/{route_id}/layers
+    } // `post_sequence_layers`   [POST] /sequences/{sequence_id}/layers
 
 	
 	

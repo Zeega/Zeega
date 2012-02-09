@@ -86,20 +86,20 @@ class CollectionsController extends Controller
          					 ->searchCollectionItems($query);
          
          $i=1;
-          	$nodeOrder=array();
-         $nodes=array();
+          	$frameOrder=array();
+         $frames=array();
          $layers=array();
          foreach($queryResults as $item){
          	if($item['type']=='Audio'||$item['type']=='Video'||$item['type']=='Image'){
 				$i++;
 				
-				$nodeOrder[]=$i;
-				$nodes[]=array( "id"=>$i,"route_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$frameOrder[]=$i;
+				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
 				$layers[]=array("id"=>$i,"type"=>$item['source'],"text"=>null,"zindex"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri'],"left"=>0,"top"=>0,"height"=>100,"width"=>100,"opacity"=>1,"aspect"=>1.33,"volume"=>50,"in"=>0,"out"=>0));
          	}
          }
          
-         $project=array	("id"=>1,"title"=>"Collection","routes"=>array(array('id'=>1,'nodeOrder'=>$nodeOrder,"title"=>'none', 'nodes'=>$nodes,'layers'=>$layers,'attr'=>array("persistLayers"=>array()))));
+         $project=array	("id"=>1,"title"=>"Collection","sequences"=>array(array('id'=>1,'frameOrder'=>$frameOrder,"title"=>'none', 'frames'=>$frames,'layers'=>$layers,'attr'=>array("persistLayers"=>array()))));
          return new Response(json_encode(array('project'=>$project)));
          
          

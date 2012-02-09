@@ -5,11 +5,11 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
-use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
-use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 
 class ProjectsController extends Controller
@@ -28,7 +28,7 @@ class ProjectsController extends Controller
     {
     
     	$project=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Route')
+        ->getRepository('ZeegaDataBundle:Sequence')
         ->findProjectById($project_id);
     	return new Response(json_encode($project[0]));
         
@@ -55,12 +55,12 @@ class ProjectsController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
      	$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
      	/*
-     	$routes=$em->getRepository('ZeegaDataBundle:Route')
-        				->findRoutesByProject($project_id);
-     	foreach($routes as $route){
+     	$sequences=$em->getRepository('ZeegaDataBundle:Sequence')
+        				->findSequencesByProject($project_id);
+     	foreach($sequences as $sequence){
      	
-     		$r=$em->getRepository('ZeegaDataBundle:Route')
-        				->find($route['id']);
+     		$r=$em->getRepository('ZeegaDataBundle:Sequence')
+        				->find($sequence['id']);
      		$em->remove($r);
      	
      	}
@@ -72,51 +72,51 @@ class ProjectsController extends Controller
     
     } 
 
-	// `get_project_routes`    [GET] /projects/{project_id}/routes
-    public function getProjectRoutesAction($project_id)
+	// `get_project_sequences`    [GET] /projects/{project_id}/sequences
+    public function getProjectSequencesAction($project_id)
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Route')
-        				->findRoutesByProjectId($project_id)));
+        				->getRepository('ZeegaDataBundle:Sequence')
+        				->findSequencesByProjectId($project_id)));
     
     } 
     
     
-    	// `get_project_routes`    [GET] /projects/{project_id}/all
+    	// `get_project_sequences`    [GET] /projects/{project_id}/all
     public function getProjectAllAction($project_id)
     {
     		
     		$projects=$this->getDoctrine()
-        			->getRepository('ZeegaDataBundle:Route')
+        			->getRepository('ZeegaDataBundle:Sequence')
         			->findProjectById($project_id);
     	
     		$project=$projects[0];
     
-    		$routes=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
-        				->findRoutesByProject($project_id);
+    		$sequences=$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Frame')
+        				->findSequencesByProject($project_id);
         				
-        	for($i=0;$i<sizeof($routes);$i++){
-        		$routes[$i]['nodes']=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Node')
-        				->findNodesByRouteId($routes[$i]['id']);
+        	for($i=0;$i<sizeof($sequences);$i++){
+        		$sequences[$i]['frames']=$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Frame')
+        				->findFramesBySequenceId($sequences[$i]['id']);
         	
         		$order=array();
-			foreach($routes[$i]['nodes'] as $node){
+			foreach($sequences[$i]['frames'] as $frame){
 			
-				$order[]=$node['id'];
+				$order[]=$frame['id'];
 			
 			
 			}
-			$routes[$i]['nodeOrder']=$order;
+			$sequences[$i]['frameOrder']=$order;
 			
         		$output=array();
-    			$route=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Route')
-        				->find($routes[$i]['id']);
+    			$sequence=$this->getDoctrine()
+        				->getRepository('ZeegaDataBundle:Sequence')
+        				->find($sequences[$i]['id']);
         				
-        		$layers=$route->getLayers()->toArray();
+        		$layers=$sequence->getLayers()->toArray();
         			foreach($layers as $layer){
         				$l=$this->getDoctrine()
         					->getRepository('ZeegaDataBundle:Layer')
@@ -124,18 +124,18 @@ class ProjectsController extends Controller
         				$output[]=$l[0];
         		}
         		
-        		$routes[$i]['layers']=$output;
+        		$sequences[$i]['layers']=$output;
 	        }
-        	$project['routes']=$routes;
+        	$project['sequences']=$sequences;
         	
 			return new Response(json_encode(array('project'=>$project)));
     
     } 
     
 
-	 // `post_project_routes`   [POST] /routes/{project_id}/nodes
+	 // `post_project_sequences`   [POST] /sequences/{project_id}/frames
 
-    public function postProjectRoutesAction($project_id)
+    public function postProjectSequencesAction($project_id)
     {
     	
 		
@@ -143,23 +143,23 @@ class ProjectsController extends Controller
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
-		$route = new Route();
-		$node = new Node();
-		$node->setRoute($route);
-		$project->setPlayground($playground);
+		$sequence = new Sequence();
+		$frame = new Frame();
+		$frame->setSequence($sequence);
+		$project->setSite($site);
 		$project->addUsers($user);
-		$route->setProject($project);
+		$sequence->setProject($project);
 		
-		$route->setTitle('Untitled Project '.$project_id);
+		$sequence->setTitle('Untitled Project '.$project_id);
 		$project->setTitle('Untitled Project '.$project_id);
 		/*
-		$route->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
+		$sequence->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
 		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
 		*/
 		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($route);
+		$em->persist($sequence);
 		$em->persist($project);
-		$em->persist($node);
+		$em->persist($frame);
 		$em->flush();
     	return new Response("Success");
    

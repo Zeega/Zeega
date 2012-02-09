@@ -53,13 +53,13 @@
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>
 
 
-				<!--<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{playground.title}}</div> <br><br>
+				<!--<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{site.title}}</div> <br><br>
 				-->
 				<div id="all-projects-container" class="projects-container all-projects-container" style="padding-left:5px; display:none; margin-left:-32px;">
 					<ul>
@@ -74,9 +74,9 @@
 
 {% endblock %}	
 {% block scripts %}
-      <script data-main="{{ asset('js/main.playground.js') }}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
+      <script data-main="{{ asset('js/main.site.js') }}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
       <script> 
-			sessionStorage.setItem('playgroundShort', '{{playground.short}}');
-			sessionStorage.setItem('playgroundId','{{playground.id}}');
+			sessionStorage.setItem('siteShort', '{{site.short}}');
+			sessionStorage.setItem('siteId','{{site.id}}');
 		</script>
 {% endblock %}

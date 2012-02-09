@@ -1,10 +1,10 @@
 <?php
 
-// src/Zeega/DataBundle/Entity/Route.php
+// src/Zeega/DataBundle/Entity/Sequence.php
 
 namespace Zeega\DataBundle\Entity;
 
-class Route
+class Sequence
 {
  
  

@@ -92,23 +92,23 @@ class Project
 
 
     /**
-     * Set playground
+     * Set site
      *
-     * @param Zeega\DataBundle\Entity\Playground $playground
+     * @param Zeega\DataBundle\Entity\Site $site
      */
-    public function setPlayground(\Zeega\DataBundle\Entity\Playground $playground)
+    public function setSite(\Zeega\DataBundle\Entity\Site $site)
     {
-        $this->playground = $playground;
+        $this->site = $site;
     }
 
     /**
-     * Get playground
+     * Get site
      *
-     * @return Zeega\DataBundle\Entity\Playground 
+     * @return Zeega\DataBundle\Entity\Site 
      */
-    public function getPlayground()
+    public function getSite()
     {
-        return $this->playground;
+        return $this->site;
     }
     /**
      * @var boolean $published
@@ -161,9 +161,9 @@ class Project
         return $this->users;
     }
     /**
-     * @var Zeega\DataBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Site
      */
-    private $playground;
+    private $site;
 
 
 

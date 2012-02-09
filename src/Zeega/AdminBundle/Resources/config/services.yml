@@ -7,11 +7,11 @@ services:
         arguments: [null, Zeega\DataBundle\Entity\User, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
-    zeega.admin.playground:
-        class: Zeega\AdminBundle\AdminEntity\PlaygroundAdmin
-        arguments: [null, Zeega\DataBundle\Entity\Playground, SonataAdminBundle:CRUD]
+    zeega.admin.site:
+        class: Zeega\AdminBundle\AdminEntity\SiteAdmin
+        arguments: [null, Zeega\DataBundle\Entity\Site, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, alias: zeega_admin_playground, manager_type: orm, group: General, label: Playgrounds}
+            - { name: sonata.admin, alias: zeega_admin_site, manager_type: orm, group: General, label: Sites}
 
 #    zeega_user.example:
 #        class: %zeega_user.example.class%

@@ -13,11 +13,11 @@ class EditorRepository extends EntityRepository
 {
 
 
-	 public function findRoutesByProject($id){
+	 public function findSequencesByProject($id){
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'r')
-			   ->add('from', ' ZeegaDataBundle:Route r')
+			   ->add('from', ' ZeegaDataBundle:Sequence r')
 			   ->join('r.project','p')
 			   ->add('where', 'p.id = :id')
 			   ->setParameter('id',$id)
@@ -35,23 +35,23 @@ class EditorRepository extends EntityRepository
 			   ->getQuery()->getArrayResult();
    	 }
    	 
-	 public function findPlaygroundsByUser($id){
+	 public function findSitesByUser($id){
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Site s')
 			   ->join('s.users','u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
 			   ->getQuery()->getArrayResult();
    	 
    	 }
-     public function findPlaygroundByShort($short,$id)
+     public function findSiteByShort($short,$id)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Site s')
 			   ->join('s.users','u')
 			   ->add('where', 's.short = :short')
 			   ->andwhere('u.id = :id')
@@ -67,12 +67,12 @@ class EditorRepository extends EntityRepository
      }
      
      
-          public function findPlaygroundByUser($id)
+          public function findSiteByUser($id)
      {
      	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
-			   ->add('from', ' ZeegaDataBundle:Playground p')
+			   ->add('from', ' ZeegaDataBundle:Site p')
 			   ->join('p.users','u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
@@ -89,7 +89,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Site s')
 			   ->join('s.admins','u')
 			   ->add('where', 's.short = :short')
 			   ->andwhere('u.id = :id')
@@ -105,13 +105,13 @@ class EditorRepository extends EntityRepository
      }
    
    
-   	public function findProjectsByPlayground($id)
+   	public function findProjectsBySite($id)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
 			   ->add('from', ' ZeegaDataBundle:Project p')
-			   ->innerJoin('p.playground', 'g')
+			   ->innerJoin('p.site', 'g')
 			   ->add('where', 'g.id = :id')
 			   ->setParameter('id',$id)
 			   ->orderBy('p.id','DESC')
@@ -124,12 +124,12 @@ class EditorRepository extends EntityRepository
      
      
      
-      	public function findUsersByPlayground($id)
+      	public function findUsersBySite($id)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's,u')
-			   ->add('from', ' ZeegaDataBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Site s')
 			   ->innerJoin('s.users', 'u')
 			   ->add('where', 's.id = :id')
 			   ->setParameter('id',$id)
@@ -146,17 +146,17 @@ class EditorRepository extends EntityRepository
      
    
      
-      public function findProjectsByPlaygroundAndUser($playgroundId,$userId)
+      public function findProjectsBySiteAndUser($siteId,$userId)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
 			   	->add('from', 'ZeegaDataBundle:Project p')
-			   ->innerJoin('p.playground', 's')
+			   ->innerJoin('p.site', 's')
 			   ->join('p.users', 'u')
 			   ->add('where', 'u.id = :userId')
-			   ->andWhere('s.id = :playgroundId')
-			   ->setParameters(array('playgroundId'=>$playgroundId,'userId'=>$userId))
+			   ->andWhere('s.id = :siteId')
+			   ->setParameters(array('siteId'=>$siteId,'userId'=>$userId))
 				 ->orderBy('p.id','DESC')
 				 ->getQuery();
 
@@ -172,7 +172,7 @@ class EditorRepository extends EntityRepository
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Playground s')
+			   ->add('from', ' ZeegaDataBundle:Site s')
 			   ->add('where', 's.short = :short')
 			   ->setParameter('short',$short)
 				->getQuery();
@@ -186,13 +186,13 @@ class EditorRepository extends EntityRepository
      }
    
    
-   	public function findByPlayground($id)
+   	public function findBySite($id)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
 			   ->add('from', ' ZeegaDataBundle:Project p')
-			   ->innerJoin('p.playground', 'g')
+			   ->innerJoin('p.site', 'g')
 			   ->add('where', 'g.id = :id')
 			   ->setParameter('id',$id)
 				->getQuery();
@@ -208,17 +208,17 @@ class EditorRepository extends EntityRepository
      
    
      
-      public function findByPlaygroundAndUser($playgroundId,$userId)
+      public function findBySiteAndUser($siteId,$userId)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 'p')
 			   	->add('from', 'ZeegaDataBundle:Project p')
-			   ->innerJoin('p.playground', 's')
+			   ->innerJoin('p.site', 's')
 			   ->join('p.user', 'u')
 			   ->add('where', 'u.id = :userId')
-			   ->andWhere('s.id = :playgroundId')
-			   ->setParameters(array('playgroundId'=>$playgroundId,'userId'=>$userId))
+			   ->andWhere('s.id = :siteId')
+			   ->setParameters(array('siteId'=>$siteId,'userId'=>$userId))
 				->getQuery();
 
 		
@@ -226,12 +226,12 @@ class EditorRepository extends EntityRepository
 			
      }
      
-      public function findRouteById($id)
+      public function findSequenceById($id)
     {
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT r FROM ZeegaDataBundle:Route r
+            ->createQuery('SELECT r FROM ZeegaDataBundle:Sequence r
             				WHERE r.id = :id')
      		->setParameter('id',$id)
      		->getArrayResult();
@@ -239,23 +239,23 @@ class EditorRepository extends EntityRepository
      
      
      
-       public function findRoute($id)
+       public function findSequence($id)
     {
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT r FROM ZeegaDataBundle:Route r
+            ->createQuery('SELECT r FROM ZeegaDataBundle:Sequence r
             				WHERE r.id = :id')
      		->setParameter('id',$id)
      		->getResult();
      }
      
-      public function findNodeById($id)
+      public function findFrameById($id)
     {
      
         
         	return $this->getEntityManager()
-            ->createQuery('SELECT n FROM ZeegaDataBundle:Node n
+            ->createQuery('SELECT n FROM ZeegaDataBundle:Frame n
             				WHERE n.id = :id')
      		->setParameter('id',$id)
      		->getArrayResult();
@@ -278,17 +278,17 @@ class EditorRepository extends EntityRepository
      
      
      
-      public function findNodesByRouteId($id)
+      public function findFramesBySequenceId($id)
     {
      
         
         	return $this->getEntityManager()
             ->createQueryBuilder()
             ->add('select', 'n')
-            ->add('from', 'ZeegaDataBundle:Node n')
-            ->add('where', 'n.route = :id')
+            ->add('from', 'ZeegaDataBundle:Frame n')
+            ->add('where', 'n.sequence = :id')
      		->setParameter('id',$id)
-     		->orderBy('n.route_index','ASC')
+     		->orderBy('n.sequence_index','ASC')
      		->getQuery()
      		->getArrayResult();
      }

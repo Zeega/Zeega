@@ -26,10 +26,10 @@ class ItemRepository extends EntityRepository
 			   ->setParameter(2,$query['userId']);
 		}
 		
-		if(isset($query['playgroundId']))
+		if(isset($query['siteId']))
       	{
-			$qb->andWhere('i.playground_id = :playground')
-			   ->setParameter('playground',$query['playgroundId']);
+			$qb->andWhere('i.site_id = :site')
+			   ->setParameter('site',$query['siteId']);
 		}
 		
 		if(isset($query['collection_id']))
@@ -319,10 +319,10 @@ class ItemRepository extends EntityRepository
                 ->setParameter(2, $query['contentType']);       
         }         
        	
-       	if(is_array($query['userPlaygrounds']) && sizeof($query['userPlaygrounds']) > 0)
+       	if(is_array($query['userSites']) && sizeof($query['userSites']) > 0)
        	{
-       	    $qb->andWhere('i.playground = ?4')
-                ->setParameter(4, $query['userPlaygrounds'][0]['id']);       
+       	    $qb->andWhere('i.site = ?4')
+                ->setParameter(4, $query['userSites'][0]['id']);       
        	}
        	
        	// get query and add parameter - for some reason set parameter in this
@@ -377,7 +377,7 @@ class ItemRepository extends EntityRepository
 			   ->getArrayResult();
      }
      
-     public function findUserItemsByPlayground($id,$pid)
+     public function findUserItemsBySite($id,$pid)
      {
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
@@ -385,7 +385,7 @@ class ItemRepository extends EntityRepository
 			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
-			   ->andwhere('i.playground_id = :pid')
+			   ->andwhere('i.site_id = :pid')
 			   ->setParameters(array('id'=>$id,'pid'=>$pid))
 			    ->orderBy('i.id','DESC')
 			   ->getQuery()

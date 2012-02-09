@@ -56,8 +56,8 @@ class ChangePasswordController extends Controller
 				'page'=>'home',
 				'projectsMenu'=>true,
 				'myprojects'=>false,
-				'playground' => false,					
-				'playgrounds'=>false,
+				'site' => false,					
+				'sites'=>false,
 )
         );
     }
@@ -71,7 +71,7 @@ class ChangePasswordController extends Controller
      */
     protected function getRedirectionUrl(UserInterface $user)
     {
-        return $this->container->get('router')->generate('fos_user_profile_show');
+        return $this->container->get('sequencer')->generate('fos_user_profile_show');
     }
 
     protected function setFlash($action, $value)

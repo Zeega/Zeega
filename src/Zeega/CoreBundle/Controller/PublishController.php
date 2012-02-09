@@ -5,7 +5,7 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 
@@ -13,10 +13,10 @@ use Zeega\DataBundle\Entity\User;
 class PublishController extends Controller
 {
     
-    public function nodeAction($id){
+    public function frameAction($id){
     
-     	return $this->render('ZeegaCoreBundle:Editor:node.html.twig', array(
-					'nodeId'=>$id,
+     	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
+					'frameId'=>$id,
 				));
      }
      
