@@ -33,7 +33,7 @@ var RdioLayer = ProtoLayer.extend({
 		if(!this.editorLoaded)
 		{
 		    currPathName = window.location.pathname.split('/',2)[1];
-		    templateUrl = window.location.protocol + '//' + window.location.hostname + '/' + currPathName + '/web/gamma/js/templates/zeega.av.html';
+		    templateUrl = window.location.protocol + '//' + window.location.hostname + '/' + currPathName + '/web/js/templates/zeega.av.html';
 
 			$('#player-'+this.model.id).load(templateUrl,function()
 			{

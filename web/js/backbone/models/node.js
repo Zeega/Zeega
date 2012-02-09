@@ -45,7 +45,7 @@ var Node = Backbone.Model.extend({
 			this.updating = true; //prevent more thumb requests while this is working
 			//Trigger new node snapshot and persist url to database
 			
-			var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/gamma/js/helpers/thumbworker.js');
+			var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			
 			worker.addEventListener('message', function(e) {
 				console.log(e)

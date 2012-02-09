@@ -12,10 +12,10 @@
 			<meta name="description" content="">
 			<meta name="keywords" content="">
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
-			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.css')}}" /> 
-			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('gamma/css/zeega.widget.css')}}" /> 
-			<link rel="icon" type="image/png" href="{{asset('gamma/images/zeega.ico')}}"> 
+			<link rel="stylesheet" href="{{ asset('js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.css')}}" /> 
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.widget.css')}}" /> 
+			<link rel="icon" type="image/png" href="{{asset('images/zeega.ico')}}"> 
 		{% endblock %}
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
@@ -25,7 +25,7 @@
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
   
-  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='{{hostname}}/web/gamma/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
+  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='{{hostname}}/web/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
   
    	{% block header %}
    		<div id='header-bg'></div>
@@ -53,7 +53,7 @@
 						<ul>
 						
 							
-								<li><a class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png')}}" style="margin-top: -4px; margin-left:-20px;"></a></li>
+								<li><a class="dark"><img src="{{ asset('images/zeega-logo-header.png')}}" style="margin-top: -4px; margin-left:-20px;"></a></li>
 								<li class='drop-down clearfix '>
 									
 									<a   href="#"> {playground.title}</a>
@@ -118,7 +118,7 @@
          
     {% block scripts %}
 		<!-- SCRIPTS -->
-		<script data-main="{{ asset('gamma/js/main.widget.js')}}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+		<script data-main="{{ asset('js/main.widget.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
 	{% endblock %}
 
     </body>

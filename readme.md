@@ -10,5 +10,5 @@ Zeega is an open-source HTML5 platform for creating interactive documentaries an
 
 For Developers
 -------------
-You can follow the project's bugs and activity [here](https://github.com/metalabharvard/gamma/issues).
+You can follow the project's bugs and activity [here](https://github.com/metalabharvard/issues).
 

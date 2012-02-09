@@ -14,9 +14,9 @@ Aloha.ready( function() {
 
 
 require.config({
-	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/',
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
 	paths : {
-		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/js/order'
+		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/order'
 	}
 })
 

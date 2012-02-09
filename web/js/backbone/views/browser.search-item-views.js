@@ -305,7 +305,7 @@ var BrowserSingleItemView = BrowserItemView.extend({
 		/*
 		OLD - WHAT WAS THIS FOR? Can't remember so commenting it out
 		if(this.model.get('thumbnail_url')) var thumbnail_url=this.model.get('thumbnail_url').replace('s.jpg','t.jpg');
-		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/thumb.png';
+		else var thumbnail_url=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/thumb.png';
 		*/
 		
 		/*OLD WAY//render individual element

@@ -101,7 +101,7 @@ var Player = {
 		//add the player div
 		this.displayWindow = $(this.getTemplate());
 		$('body').append( this.displayWindow );
-		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'gamma/images/mediaPlayerArrow_shadow.png');
+		$('.preview-nav-arrow').find('img').attr('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png');
 		
 		//get the current viewport resolution
 		var viewWidth = window.innerWidth;
@@ -849,7 +849,7 @@ var Player = {
 		html =
 		
 		"<div id='preview-wrapper'><div id='zeega-player'>"+
-			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"gamma/images/z-logo-128.png'height='60px'/></a></div>";
+			"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
 		
 		
 		if(this.zeega) html +=

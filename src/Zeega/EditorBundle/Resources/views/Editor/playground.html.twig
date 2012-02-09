@@ -19,7 +19,7 @@
 					<li class='item add-media' ><a href="#" style="font-size: 12px;">Add Zeega Bookmarklet</a></li>							
 				</ul>
 				</div>
-				<div id="surf-image" style="float: left; margin-left: 20px;"><img src="{{ asset('gamma/images/surf-graphic.gif') }}" /></div>
+				<div id="surf-image" style="float: left; margin-left: 20px;"><img src="{{ asset('images/surf-graphic.gif') }}" /></div>
 				
 				<div id="collect-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 45px;">
 				Curate & Annotate<br>
@@ -29,7 +29,7 @@
 					<li><a  href="{{ path('ZeegaEditorBundle_browser', { 'short': short })}}" style="font-size: 12px;">Browse & Create Collections</a></li>
 				</ul>
 				</div>
-				<div id="collect-image" style="float: left; margin-left: 20px;"><img src="{{ asset('gamma/images/collect-graphic.gif') }}" /></div>
+				<div id="collect-image" style="float: left; margin-left: 20px;"><img src="{{ asset('images/collect-graphic.gif') }}" /></div>
 				
 				<div id="edit-text" style="font-size: 18px; color: #65cafc; float: left; width: 200px; margin-left: 45px;">
 				Edit & Publish<br>
@@ -39,7 +39,7 @@
 					<li><a class="new-project" href="#" style="font-size: 12px;">Create New Project</a></li>
 				</ul>
 				</div>
-				<div id="edit-image" style="float: left; margin-left: 0px;"><img src="{{ asset('gamma/images/edit-graphic.gif') }}" /></div>
+				<div id="edit-image" style="float: left; margin-left: 0px;"><img src="{{ asset('images/edit-graphic.gif') }}" /></div>
 
 
 			
@@ -74,7 +74,7 @@
 
 {% endblock %}	
 {% block scripts %}
-      <script data-main="{{ asset('gamma/js/main.playground.js') }}" src="{{ asset('gamma/js/libraries/require-jquery.js')}}"></script>
+      <script data-main="{{ asset('js/main.playground.js') }}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
       <script> 
 			sessionStorage.setItem('playgroundShort', '{{playground.short}}');
 			sessionStorage.setItem('playgroundId','{{playground.id}}');

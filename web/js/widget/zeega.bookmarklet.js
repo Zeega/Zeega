@@ -28,7 +28,7 @@ var bm = new bookmarklet({
 	            var script = document.getElementById('zeegabm');
 	            var srcUrlIdx = script.src.indexOf("/web/");
 	            if(srcUrlIdx == -1){
-	            	srcUrlIdx = script.src.indexOf("/gamma/");
+	            	srcUrlIdx = script.src.indexOf("/");
 	            	var localUrlPrefix = script.src.substring(0,srcUrlIdx);
 	            }
 	            else{
