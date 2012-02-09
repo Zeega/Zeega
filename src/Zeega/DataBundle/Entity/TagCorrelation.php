@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\IngestBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\IngestBundle\Entity\TagCorrelation
+ * Zeega\DataBundle\Entity\TagCorrelation
  */
 class TagCorrelation
 {
@@ -15,12 +15,12 @@ class TagCorrelation
     private $correlation_index;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Tag
+     * @var Zeega\DataBundle\Entity\Tag
      */
     private $tag;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Tag
+     * @var Zeega\DataBundle\Entity\Tag
      */
     private $tag_related;
 
@@ -48,9 +48,9 @@ class TagCorrelation
     /**
      * Set tag
      *
-     * @param Zeega\IngestBundle\Entity\Tag $tag
+     * @param Zeega\DataBundle\Entity\Tag $tag
      */
-    public function setTag(\Zeega\IngestBundle\Entity\Tag $tag)
+    public function setTag(\Zeega\DataBundle\Entity\Tag $tag)
     {
         $this->tag = $tag;
     }
@@ -58,7 +58,7 @@ class TagCorrelation
     /**
      * Get tag
      *
-     * @return Zeega\IngestBundle\Entity\Tag 
+     * @return Zeega\DataBundle\Entity\Tag 
      */
     public function getTag()
     {
@@ -68,9 +68,9 @@ class TagCorrelation
     /**
      * Set tag_related
      *
-     * @param Zeega\IngestBundle\Entity\Tag $tagRelated
+     * @param Zeega\DataBundle\Entity\Tag $tagRelated
      */
-    public function setTagRelated(\Zeega\IngestBundle\Entity\Tag $tagRelated)
+    public function setTagRelated(\Zeega\DataBundle\Entity\Tag $tagRelated)
     {
         $this->tag_related = $tagRelated;
     }
@@ -78,7 +78,7 @@ class TagCorrelation
     /**
      * Get tag_related
      *
-     * @return Zeega\IngestBundle\Entity\Tag 
+     * @return Zeega\DataBundle\Entity\Tag 
      */
     public function getTagRelated()
     {

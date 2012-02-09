@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\IngestBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\IngestBundle\Entity\Tag
+ * Zeega\DataBundle\Entity\Tag
  */
 class Tag
 {
@@ -35,7 +35,7 @@ class Tag
     private $description;
 
     /**
-     * @var Zeega\IngestBundle\Entity\ItemTags
+     * @var Zeega\DataBundle\Entity\ItemTags
      */
     private $item;
 
@@ -137,9 +137,9 @@ class Tag
     /**
      * Add item
      *
-     * @param Zeega\IngestBundle\Entity\ItemTags $item
+     * @param Zeega\DataBundle\Entity\ItemTags $item
      */
-    public function addItemTags(\Zeega\IngestBundle\Entity\ItemTags $item)
+    public function addItemTags(\Zeega\DataBundle\Entity\ItemTags $item)
     {
         $this->item[] = $item;
     }

@@ -1,10 +1,10 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Layer.orm.yml
-Zeega\EditorBundle\Entity\Layer:
+Zeega\DataBundle\Entity\Layer:
    type: entity
    repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
    manyToOne:
     item:
-     targetEntity: Zeega\IngestBundle\Entity\Item
+     targetEntity: Zeega\DataBundle\Entity\Item
    id:
     id:
      type: bigint

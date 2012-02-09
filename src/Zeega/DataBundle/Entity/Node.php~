@@ -1,8 +1,8 @@
 <?php
 
-// src/Zeega/EditorBundle/Entity/Node.php
+// src/Zeega/DataBundle/Entity/Node.php
 
-namespace Zeega\EditorBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 class Node
 {
@@ -39,37 +39,37 @@ class Node
     private $thumb_url;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $user;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Route
+     * @var Zeega\DataBundle\Entity\Route
      */
     private $route;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Node
      */
     private $link_up;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Node
      */
     private $link_down;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Node
      */
     private $link_left;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Node
      */
     private $link_right;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Layer
+     * @var Zeega\DataBundle\Entity\Layer
      */
     private $layers;
 
@@ -148,9 +148,9 @@ class Node
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param Zeega\DataBundle\Entity\User $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser(\Zeega\DataBundle\Entity\User $user)
     {
         $this->user = $user;
     }
@@ -158,7 +158,7 @@ class Node
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
@@ -168,9 +168,9 @@ class Node
     /**
      * Set route
      *
-     * @param Zeega\EditorBundle\Entity\Route $route
+     * @param Zeega\DataBundle\Entity\Route $route
      */
-    public function setRoute(\Zeega\EditorBundle\Entity\Route $route)
+    public function setRoute(\Zeega\DataBundle\Entity\Route $route)
     {
         $this->route = $route;
     }
@@ -178,7 +178,7 @@ class Node
     /**
      * Get route
      *
-     * @return Zeega\EditorBundle\Entity\Route 
+     * @return Zeega\DataBundle\Entity\Route 
      */
     public function getRoute()
     {
@@ -188,9 +188,9 @@ class Node
     /**
      * Set link_up
      *
-     * @param Zeega\EditorBundle\Entity\Node $linkUp
+     * @param Zeega\DataBundle\Entity\Node $linkUp
      */
-    public function setLinkUp(\Zeega\EditorBundle\Entity\Node $linkUp)
+    public function setLinkUp(\Zeega\DataBundle\Entity\Node $linkUp)
     {
         $this->link_up = $linkUp;
     }
@@ -198,7 +198,7 @@ class Node
     /**
      * Get link_up
      *
-     * @return Zeega\EditorBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Node 
      */
     public function getLinkUp()
     {
@@ -208,9 +208,9 @@ class Node
     /**
      * Set link_down
      *
-     * @param Zeega\EditorBundle\Entity\Node $linkDown
+     * @param Zeega\DataBundle\Entity\Node $linkDown
      */
-    public function setLinkDown(\Zeega\EditorBundle\Entity\Node $linkDown)
+    public function setLinkDown(\Zeega\DataBundle\Entity\Node $linkDown)
     {
         $this->link_down = $linkDown;
     }
@@ -218,7 +218,7 @@ class Node
     /**
      * Get link_down
      *
-     * @return Zeega\EditorBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Node 
      */
     public function getLinkDown()
     {
@@ -228,9 +228,9 @@ class Node
     /**
      * Set link_left
      *
-     * @param Zeega\EditorBundle\Entity\Node $linkLeft
+     * @param Zeega\DataBundle\Entity\Node $linkLeft
      */
-    public function setLinkLeft(\Zeega\EditorBundle\Entity\Node $linkLeft)
+    public function setLinkLeft(\Zeega\DataBundle\Entity\Node $linkLeft)
     {
         $this->link_left = $linkLeft;
     }
@@ -238,7 +238,7 @@ class Node
     /**
      * Get link_left
      *
-     * @return Zeega\EditorBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Node 
      */
     public function getLinkLeft()
     {
@@ -248,9 +248,9 @@ class Node
     /**
      * Set link_right
      *
-     * @param Zeega\EditorBundle\Entity\Node $linkRight
+     * @param Zeega\DataBundle\Entity\Node $linkRight
      */
-    public function setLinkRight(\Zeega\EditorBundle\Entity\Node $linkRight)
+    public function setLinkRight(\Zeega\DataBundle\Entity\Node $linkRight)
     {
         $this->link_right = $linkRight;
     }
@@ -258,7 +258,7 @@ class Node
     /**
      * Get link_right
      *
-     * @return Zeega\EditorBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Node 
      */
     public function getLinkRight()
     {
@@ -268,9 +268,9 @@ class Node
     /**
      * Add layers
      *
-     * @param Zeega\EditorBundle\Entity\Layer $layers
+     * @param Zeega\DataBundle\Entity\Layer $layers
      */
-    public function addLayers(\Zeega\EditorBundle\Entity\Layer $layers)
+    public function addLayers(\Zeega\DataBundle\Entity\Layer $layers)
     {
         $this->layers[] = $layers;
     }

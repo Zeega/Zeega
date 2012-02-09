@@ -2,10 +2,10 @@
 
 namespace Zeega\IngestBundle;
 
-use Zeega\IngestBundle\Entity\Media;
-use Zeega\IngestBundle\Entity\Tag;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\IngestBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\Media;
+use Zeega\DataBundle\Entity\Tag;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Metadata;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Imagick;

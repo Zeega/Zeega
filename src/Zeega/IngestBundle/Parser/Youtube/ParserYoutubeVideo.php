@@ -3,10 +3,10 @@
 namespace Zeega\IngestBundle\Parser\Youtube;
 
 use Zeega\IngestBundle\Parser\Base\ParserItemAbstract;
-use Zeega\IngestBundle\Entity\Media;
-use Zeega\IngestBundle\Entity\Tag;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\IngestBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\Media;
+use Zeega\DataBundle\Entity\Tag;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 use SimpleXMLElement;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\EditorBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\EditorBundle\Entity\Playground
+ * Zeega\DataBundle\Entity\Playground
  */
 class Playground
 {
@@ -45,12 +45,12 @@ class Playground
     private $created_at;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $users;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $admins;
     
@@ -158,9 +158,9 @@ class Playground
     /**
      * Add users
      *
-     * @param Zeega\UserBundle\Entity\User $users
+     * @param Zeega\DataBundle\Entity\User $users
      */
-    public function addUser(\Zeega\UserBundle\Entity\User $users)
+    public function addUser(\Zeega\DataBundle\Entity\User $users)
     {
         $this->users[] = $users;
     }

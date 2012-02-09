@@ -1,11 +1,11 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Project.orm.yml
-Zeega\EditorBundle\Entity\Project:
+Zeega\DataBundle\Entity\Project:
    type: entity
    cascade: remove
    repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
    manyToMany:
     users:
-     targetEntity: Zeega\UserBundle\Entity\User
+     targetEntity: Zeega\DataBundle\Entity\User
      inversedBy:
       name: projects
      joinTable:

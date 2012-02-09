@@ -1,8 +1,8 @@
 <?php
 
-// src/Zeega/EditorBundle/Entity/Project.php
+// src/Zeega/DataBundle/Entity/Project.php
 
-namespace Zeega\EditorBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 class Project
 {
@@ -94,9 +94,9 @@ class Project
     /**
      * Set playground
      *
-     * @param Zeega\EditorBundle\Entity\Playground $playground
+     * @param Zeega\DataBundle\Entity\Playground $playground
      */
-    public function setPlayground(\Zeega\EditorBundle\Entity\Playground $playground)
+    public function setPlayground(\Zeega\DataBundle\Entity\Playground $playground)
     {
         $this->playground = $playground;
     }
@@ -104,7 +104,7 @@ class Project
     /**
      * Get playground
      *
-     * @return Zeega\EditorBundle\Entity\Playground 
+     * @return Zeega\DataBundle\Entity\Playground 
      */
     public function getPlayground()
     {
@@ -136,7 +136,7 @@ class Project
         return $this->published;
     }
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $users;
 
@@ -144,9 +144,9 @@ class Project
     /**
      * Add users
      *
-     * @param Zeega\UserBundle\Entity\User $users
+     * @param Zeega\DataBundle\Entity\User $users
      */
-    public function addUsers(\Zeega\UserBundle\Entity\User $users)
+    public function addUsers(\Zeega\DataBundle\Entity\User $users)
     {
         $this->users[] = $users;
     }
@@ -161,7 +161,7 @@ class Project
         return $this->users;
     }
     /**
-     * @var Zeega\EditorBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Playground
      */
     private $playground;
 
@@ -170,9 +170,9 @@ class Project
     /**
      * Add users
      *
-     * @param Zeega\UserBundle\Entity\User $users
+     * @param Zeega\DataBundle\Entity\User $users
      */
-    public function addUser(\Zeega\UserBundle\Entity\User $users)
+    public function addUser(\Zeega\DataBundle\Entity\User $users)
     {
         $this->users[] = $users;
     }

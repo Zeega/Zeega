@@ -4,9 +4,9 @@ namespace Zeega\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
-use Zeega\UserBundle\Entity\User;
-use Zeega\EditorBundle\Entity\Project;
-use Zeega\EditorBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\User;
+use Zeega\DataBundle\Entity\Project;
+use Zeega\DataBundle\Entity\Playground;
 
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 

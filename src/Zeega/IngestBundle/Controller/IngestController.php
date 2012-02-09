@@ -4,12 +4,12 @@ namespace Zeega\IngestBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Zeega\IngestBundle\Entity\Media;
-use Zeega\IngestBundle\Entity\Metadata;
-use Zeega\IngestBundle\Entity\Tag;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\IngestBundle\Entity\ItemTags;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Media;
+use Zeega\DataBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\Tag;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
+use Zeega\DataBundle\Entity\User;
 
 use Imagick;
 use DateTime;
@@ -52,7 +52,7 @@ class IngestController extends Controller
 				$em=$this->getDoctrine()->getEntityManager();
 				$em->getConnection()->setCharset('utf8');
 				$playgrounds=$this->getDoctrine()
-								->getRepository('ZeegaEditorBundle:Playground')
+								->getRepository('ZeegaDataBundle:Playground')
 								->findPlaygroundByUser($user->getId());
 									$playground=$playgrounds[0];
 						
@@ -96,7 +96,7 @@ class IngestController extends Controller
 						
 							$candidateTag=strtolower($match);
 							$tag = $this->getDoctrine()
-									    ->getRepository('ZeegaIngestBundle:Tag')
+									    ->getRepository('ZeegaDataBundle:Tag')
 									    ->findOneByName($candidateTag);
 							
 							if(!$tag)
@@ -109,7 +109,7 @@ class IngestController extends Controller
 							}	
 							
 							$itemTags = $this->getDoctrine()
-									         ->getRepository('ZeegaIngestBundle:ItemTags')
+									         ->getRepository('ZeegaDataBundle:ItemTags')
 									         ->findOneBy(array('tag'=>$tag->getId(), 'item'=>$item->getId()));
 							
                             $em->persist($item);
@@ -228,7 +228,7 @@ class IngestController extends Controller
 				$em=$this->getDoctrine()->getEntityManager();
 				$em->getConnection()->setCharset('utf8');
 				$playgrounds=$this->getDoctrine()
-								->getRepository('ZeegaEditorBundle:Playground')
+								->getRepository('ZeegaDataBundle:Playground')
 								->findPlaygroundByUser($user->getId());
 									$playground=$playgrounds[0];
 						
@@ -314,7 +314,7 @@ class IngestController extends Controller
 			
 			
 			$res=$this->getDoctrine()
-								->getRepository('ZeegaIngestBundle:Item')
+								->getRepository('ZeegaDataBundle:Item')
 								->find(1);					
 			$m=$res->getMetadata();
 			return new Response($m->getLocation());

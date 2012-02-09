@@ -16,7 +16,7 @@ class RegistrationFormType extends BaseType
         $builder->add('display_name');
 		$builder->add('bio');
 		$builder->add('thumb_url');
-		$builder->add('playgrounds', 'entity', array('class' => 'Zeega\EditorBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'));
+		$builder->add('playgrounds', 'entity', array('class' => 'Zeega\DataBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'));
 		$builder->add('roles', 'choice', array('choices' => $roles,'multiple' => true));
     }
 

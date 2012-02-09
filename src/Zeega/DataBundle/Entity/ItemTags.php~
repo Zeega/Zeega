@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\IngestBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\IngestBundle\Entity\ItemTags
+ * Zeega\DataBundle\Entity\ItemTags
  */
 class ItemTags
 {
@@ -15,17 +15,17 @@ class ItemTags
     private $tag_date_created;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $user;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\DataBundle\Entity\Item
      */
     private $item;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Tag
+     * @var Zeega\DataBundle\Entity\Tag
      */
     private $tag;
 
@@ -53,9 +53,9 @@ class ItemTags
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param Zeega\DataBundle\Entity\User $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser(\Zeega\DataBundle\Entity\User $user)
     {
         $this->user = $user;
     }
@@ -63,7 +63,7 @@ class ItemTags
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
@@ -73,9 +73,9 @@ class ItemTags
     /**
      * Set item
      *
-     * @param Zeega\IngestBundle\Entity\Item $item
+     * @param Zeega\DataBundle\Entity\Item $item
      */
-    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    public function setItem(\Zeega\DataBundle\Entity\Item $item)
     {
         $this->item = $item;
     }
@@ -83,7 +83,7 @@ class ItemTags
     /**
      * Get item
      *
-     * @return Zeega\IngestBundle\Entity\Item 
+     * @return Zeega\DataBundle\Entity\Item 
      */
     public function getItem()
     {
@@ -93,9 +93,9 @@ class ItemTags
     /**
      * Set tag
      *
-     * @param Zeega\IngestBundle\Entity\Tag $tag
+     * @param Zeega\DataBundle\Entity\Tag $tag
      */
-    public function setTag(\Zeega\IngestBundle\Entity\Tag $tag)
+    public function setTag(\Zeega\DataBundle\Entity\Tag $tag)
     {
         $this->tag = $tag;
     }
@@ -103,7 +103,7 @@ class ItemTags
     /**
      * Get tag
      *
-     * @return Zeega\IngestBundle\Entity\Tag 
+     * @return Zeega\DataBundle\Entity\Tag 
      */
     public function getTag()
     {

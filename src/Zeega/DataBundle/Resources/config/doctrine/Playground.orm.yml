@@ -1,10 +1,10 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Playground.orm.yml
-Zeega\EditorBundle\Entity\Playground:
+Zeega\DataBundle\Entity\Playground:
    type: entity
    repositoryClass: Zeega\EditorBundle\Repository\EditorRepository
    manyToMany:
     users:
-      targetEntity: Zeega\UserBundle\Entity\User
+      targetEntity: Zeega\DataBundle\Entity\User
       mappedBy: playgrounds
    id:
     id:

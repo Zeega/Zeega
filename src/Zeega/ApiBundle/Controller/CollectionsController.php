@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use Zeega\IngestBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Item;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 
@@ -33,11 +33,11 @@ class CollectionsController extends Controller
         
          //  execute the query
  		$queryResults = $this->getDoctrine()
- 					        ->getRepository('ZeegaIngestBundle:Item')
+ 					        ->getRepository('ZeegaDataBundle:Item')
  					        ->searchItems($query);								
 
         // populate the results object
-        $resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);				
+        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);				
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
@@ -48,8 +48,8 @@ class CollectionsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $collection = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
-        $collectionTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
+        $collection = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        $collectionTags = $em->getRepository('ZeegaDataBundle:ItemTags')->findByItem($id);
         
         $tags = array();
         foreach($collectionTags as $tag)
@@ -82,7 +82,7 @@ class CollectionsController extends Controller
 		if($query['limit'] > 100) 	        $query['limit'] = 100;
 
         $queryResults = $this->getDoctrine()
-         					 ->getRepository('ZeegaIngestBundle:Item')
+         					 ->getRepository('ZeegaDataBundle:Item')
          					 ->searchCollectionItems($query);
          
          $i=1;
@@ -124,11 +124,11 @@ class CollectionsController extends Controller
 		if($query['limit'] > 100) 	        $query['limit'] = 100;
 
         $queryResults = $this->getDoctrine()
-         					 ->getRepository('ZeegaIngestBundle:Item')
+         					 ->getRepository('ZeegaDataBundle:Item')
          					 ->searchCollectionItems($query);								
         
         // populate the results object
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
         
         $itemsView = $this->renderView('ZeegaApiBundle:Collections:items.json.twig', array('items' => $queryResults, 'collection_id' => $id, 'items_count' => $resultsCount));
             
@@ -140,7 +140,7 @@ class CollectionsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($collectionId);
+        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($collectionId);
 
         if (!$tags) 
         {
@@ -161,7 +161,7 @@ class CollectionsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         // get item tags
-        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
         
         $tagsId = array();
         foreach($tags as $tag)
@@ -178,10 +178,10 @@ class CollectionsController extends Controller
 		$query['not_item_id'] = $itemId;
 		
         // get items with the same tags
-        $queryResults = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
+        $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchItemsByTags($query);
         
         // render results
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
@@ -238,7 +238,7 @@ class CollectionsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('ZeegaIngestBundle:Item')->find($project_id);
+        $entity = $em->getRepository('ZeegaDataBundle:Item')->find($project_id);
 
         if (!$entity) 
         {
@@ -259,7 +259,7 @@ class CollectionsController extends Controller
         // this is terrible...
         foreach($items_list as $item)
         {
-            $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+            $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
 
             if (!$child_entity) 
             {
@@ -301,7 +301,7 @@ class CollectionsController extends Controller
     public function deleteCollectionAction($collection_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+     	$collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
      	
      	if (!$collection) 
         {
@@ -318,8 +318,8 @@ class CollectionsController extends Controller
     public function deleteCollectionItemAction($collection_id, $item_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
-     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	$collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
+     	$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
      	
      	if (!$collection) 
         {
@@ -361,7 +361,7 @@ class CollectionsController extends Controller
         $collection = new Item();
         if(isset($collection_id))
         {
-            $collection = $em->getRepository('ZeegaIngestBundle:Item')->find($collection_id);
+            $collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
             // if(!$collection) throw error - something went wrong
         }
 
@@ -390,7 +390,7 @@ class CollectionsController extends Controller
             foreach($new_items as $item)
             {
                 
-                $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+                $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
 
                 if (!$child_entity) 
                 {

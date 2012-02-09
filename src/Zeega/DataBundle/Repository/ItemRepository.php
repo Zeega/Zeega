@@ -1,7 +1,7 @@
 <?php
 
 // src/Zeega/IngestBundle/Repository/ItemRepository.php
-namespace Zeega\IngestBundle\Repository;
+namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use DateInterval;

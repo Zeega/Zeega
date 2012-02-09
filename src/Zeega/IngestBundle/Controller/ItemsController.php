@@ -3,13 +3,13 @@
 namespace Zeega\IngestBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\IngestBundle\Entity\Media;
-use Zeega\IngestBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Media;
+use Zeega\DataBundle\Entity\Metadata;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\UserBundle\Entity\User;
-use Zeega\EditorBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\User;
+use Zeega\DataBundle\Entity\Playground;
 use Imagick;
 use DateTime;
 
@@ -35,7 +35,7 @@ class ItemsController extends Controller
 			if($session->get('Playground')) $playground=$session->get('Playground');
 			else {
 				$playgrounds=$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Playground')
+							->getRepository('ZeegaDataBundle:Playground')
 							->findPlaygroundByUser($user->getId());
 				$playground=$playgrounds[0];
 			}		
@@ -134,7 +134,7 @@ class ItemsController extends Controller
 			$em->flush();
 			
 			$response=$this->getDoctrine()
-								->getRepository('ZeegaIngestBundle:Item')
+								->getRepository('ZeegaDataBundle:Item')
 								->findItemById($item->getId());					
 			return new Response(json_encode($response[0]['id']));
 	}
@@ -147,7 +147,7 @@ class ItemsController extends Controller
     	//TODO: Include Join with media/metadata
     	
     	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaIngestBundle:Item')
+        ->getRepository('ZeegaDataBundle:Item')
         ->findItemById($item_id)));
     
     } // `get_item`     [GET] /Items/{item_id}
@@ -168,7 +168,7 @@ class ItemsController extends Controller
     {
 
     	$em = $this->getDoctrine()->getEntityManager();
-     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find(8783);
+     	$item = $em->getRepository('ZeegaDataBundle:Item')->find(8783);
     	
     	
     	$em->remove($item);

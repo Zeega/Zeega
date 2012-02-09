@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\IngestBundle\Entity\Tag;
-use Zeega\IngestBundle\Entity\ItemTags;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Tag;
+use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 
@@ -35,10 +35,10 @@ class ItemsController extends Controller
         
          //  execute the query
  		$queryResults = $this->getDoctrine()
- 					        ->getRepository('ZeegaIngestBundle:Item')
+ 					        ->getRepository('ZeegaDataBundle:Item')
  					        ->searchItems($query);								
 		
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
@@ -49,8 +49,8 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $item = $em->getRepository('ZeegaIngestBundle:Item')->findOneById($id);
-        $itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($id);
+        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        $itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->findByItem($id);
         
         $tags = array();
         foreach($itemTags as $tag)
@@ -69,7 +69,7 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
 
         $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
         
@@ -82,7 +82,7 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         // get item tags
-        $tags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
         
         $tagsId = array();
         foreach($tags as $tag)
@@ -100,9 +100,9 @@ class ItemsController extends Controller
 		$query['not_item_id'] = $itemId;
 		
         // get items with the same tags
-        $queryResults = $em->getRepository('ZeegaIngestBundle:Item')->searchItemsByTags($query);
+        $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchItemsByTags($query);
         
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);				
+		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
@@ -112,7 +112,7 @@ class ItemsController extends Controller
     public function deleteItemAction($item_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+     	$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
      	
      	if (!$item) 
         {
@@ -163,7 +163,7 @@ class ItemsController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
 
-        $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 
         if (!$item) 
         {
@@ -175,7 +175,7 @@ class ItemsController extends Controller
         
         foreach($tags_list as $tagName)
         {
-            $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+            $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
             
             if (!$tag) 
             {
@@ -187,7 +187,7 @@ class ItemsController extends Controller
             }
             
             // can't get EAGER loading for the item tags - this is a workaround
-			$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+			$itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
 	        foreach($itemTags as $itemTag)
         	{
         		
@@ -218,7 +218,7 @@ class ItemsController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
 
-        $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 		if (!$item) 
         {
             throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
@@ -227,7 +227,7 @@ class ItemsController extends Controller
         
         
       
-            $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+            $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
             
             if (!$tag) 
             {
@@ -239,7 +239,7 @@ class ItemsController extends Controller
             }
             
             // can't get EAGER loading for the item tags - this is a workaround
-			$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($itemId);
+			$itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
 	        foreach($itemTags as $itemTag)
         	{
         		
@@ -270,8 +270,8 @@ class ItemsController extends Controller
        $user = $this->get('security.context')->getToken()->getUser();
                $em = $this->getDoctrine()->getEntityManager();
 
-               $item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
-				   $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+               $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+				   $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
 				   
 				   
                if (!$item)
@@ -279,7 +279,7 @@ class ItemsController extends Controller
                        throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
                }
 
-               $tag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
+               $tag = $em->getRepository('ZeegaDataBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
 
                if(isset($tag))
                {
@@ -296,7 +296,7 @@ class ItemsController extends Controller
     	$user = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
 
-		$item = $em->getRepository('ZeegaIngestBundle:Item')->find($itemId);
+		$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 
 		if (!$item) 
 		{
@@ -309,7 +309,7 @@ class ItemsController extends Controller
 		$tags_list = explode(',', $tags_list); 
 		foreach($tags_list as $tagId)
 		{
-			$tag = $em->getRepository('ZeegaIngestBundle:ItemTags')->findOneByTag($tagId);
+			$tag = $em->getRepository('ZeegaDataBundle:ItemTags')->findOneByTag($tagId);
 			if(isset($tag))
 			{
 				$em->remove($tag);
@@ -328,7 +328,7 @@ class ItemsController extends Controller
         $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
         
-		$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+		$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
 
         if (!$item) 
         {
@@ -369,7 +369,7 @@ class ItemsController extends Controller
         $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
         
-		$item = $em->getRepository('ZeegaIngestBundle:Item')->find($item_id);
+		$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
 
         if (!$item) 
         {
@@ -393,7 +393,7 @@ class ItemsController extends Controller
 			$tags_list = explode(',', $tags); 
 			foreach($tags_list as $tagName)
 	        {
-	            $tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+	            $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
             
 	            if (!$tag) 
 	            {
@@ -452,7 +452,7 @@ class ItemsController extends Controller
             foreach($new_items as $item)
             {
                 
-                $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+                $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
 
                 if (!$child_entity) 
                 {

@@ -1,8 +1,8 @@
 <?php
 
-// src/Zeega/EditorBundle/Entity/Layer.php
+// src/Zeega/DataBundle/Entity/Layer.php
 
-namespace Zeega\EditorBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 class Layer
 {
@@ -32,27 +32,27 @@ class Layer
     
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $user;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\DataBundle\Entity\Item
      */
     private $item;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Layer
+     * @var Zeega\DataBundle\Entity\Layer
      */
     private $below;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Layer
+     * @var Zeega\DataBundle\Entity\Layer
      */
     private $above;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Node
+     * @var Zeega\DataBundle\Entity\Node
      */
     private $node;
 
@@ -130,9 +130,9 @@ class Layer
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param Zeega\DataBundle\Entity\User $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser(\Zeega\DataBundle\Entity\User $user)
     {
         $this->user = $user;
     }
@@ -140,7 +140,7 @@ class Layer
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
@@ -150,9 +150,9 @@ class Layer
     /**
      * Set item
      *
-     * @param Zeega\IngestBundle\Entity\Item $item
+     * @param Zeega\DataBundle\Entity\Item $item
      */
-    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    public function setItem(\Zeega\DataBundle\Entity\Item $item)
     {
         $this->item = $item;
     }
@@ -160,7 +160,7 @@ class Layer
     /**
      * Get item
      *
-     * @return Zeega\IngestBundle\Entity\Item 
+     * @return Zeega\DataBundle\Entity\Item 
      */
     public function getItem()
     {
@@ -170,9 +170,9 @@ class Layer
     /**
      * Set below
      *
-     * @param Zeega\EditorBundle\Entity\Layer $below
+     * @param Zeega\DataBundle\Entity\Layer $below
      */
-    public function setBelow(\Zeega\EditorBundle\Entity\Layer $below)
+    public function setBelow(\Zeega\DataBundle\Entity\Layer $below)
     {
         $this->below = $below;
     }
@@ -180,7 +180,7 @@ class Layer
     /**
      * Get below
      *
-     * @return Zeega\EditorBundle\Entity\Layer 
+     * @return Zeega\DataBundle\Entity\Layer 
      */
     public function getBelow()
     {
@@ -190,9 +190,9 @@ class Layer
     /**
      * Set above
      *
-     * @param Zeega\EditorBundle\Entity\Layer $above
+     * @param Zeega\DataBundle\Entity\Layer $above
      */
-    public function setAbove(\Zeega\EditorBundle\Entity\Layer $above)
+    public function setAbove(\Zeega\DataBundle\Entity\Layer $above)
     {
         $this->above = $above;
     }
@@ -200,7 +200,7 @@ class Layer
     /**
      * Get above
      *
-     * @return Zeega\EditorBundle\Entity\Layer 
+     * @return Zeega\DataBundle\Entity\Layer 
      */
     public function getAbove()
     {
@@ -210,9 +210,9 @@ class Layer
     /**
      * Set node
      *
-     * @param Zeega\EditorBundle\Entity\Node $node
+     * @param Zeega\DataBundle\Entity\Node $node
      */
-    public function setNode(\Zeega\EditorBundle\Entity\Node $node)
+    public function setNode(\Zeega\DataBundle\Entity\Node $node)
     {
         $this->node = $node;
     }
@@ -220,7 +220,7 @@ class Layer
     /**
      * Get node
      *
-     * @return Zeega\EditorBundle\Entity\Node 
+     * @return Zeega\DataBundle\Entity\Node 
      */
     public function getNode()
     {

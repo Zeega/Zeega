@@ -1,5 +1,5 @@
 # src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
-Zeega\UserBundle\Entity\User:
+Zeega\DataBundle\Entity\User:
    type: entity
    id:
        id:
@@ -7,7 +7,7 @@ Zeega\UserBundle\Entity\User:
            generator: { strategy: AUTO }
    manyToMany:
       playgrounds:
-        targetEntity: Zeega\EditorBundle\Entity\Playground
+        targetEntity: Zeega\DataBundle\Entity\Playground
         inversedBy: users
         joinTable:
           name: users_playgrounds

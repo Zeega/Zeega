@@ -1,10 +1,10 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/ItemTags.orm.yml
-Zeega\IngestBundle\Entity\ItemTags:
+Zeega\DataBundle\Entity\ItemTags:
     type: entity
     repositoryClass: Zeega\IngestBundle\Repository\ItemTagsRepository
     manyToOne:
         user:
-            targetEntity: Zeega\UserBundle\Entity\User
+            targetEntity: Zeega\DataBundle\Entity\User
         item:
             targetEntity: Item
             inversedBy: tags

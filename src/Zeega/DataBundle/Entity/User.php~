@@ -1,12 +1,12 @@
 <?php
 
-namespace Zeega\UserBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\UserBundle\Entity\User
+ * Zeega\DataBundle\Entity\User
  */
 class User extends BaseUser
 
@@ -136,7 +136,7 @@ class User extends BaseUser
         return $this->created_at;
     }
     /**
-     * @var Zeega\EditorBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Playground
      */
     public $playgrounds;
 
@@ -144,9 +144,9 @@ class User extends BaseUser
     /**
      * Add playgrounds
      *
-     * @param Zeega\EditorBundle\Entity\Playground $playgrounds
+     * @param Zeega\DataBundle\Entity\Playground $playgrounds
      */
-    public function addPlayground(\Zeega\EditorBundle\Entity\Playground $playgrounds)
+    public function addPlayground(\Zeega\DataBundle\Entity\Playground $playgrounds)
     {
         $this->playgrounds[] = $playgrounds;
     }

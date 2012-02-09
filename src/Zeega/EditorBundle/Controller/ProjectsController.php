@@ -5,12 +5,12 @@ namespace Zeega\EditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\EditorBundle\Entity\Node;
-use Zeega\EditorBundle\Entity\Layer;
-use Zeega\EditorBundle\Entity\Route;
-use Zeega\EditorBundle\Entity\Project;
-use Zeega\EditorBundle\Entity\Playground;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\Project;
+use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\User;
 
 class ProjectsController extends Controller
 {
@@ -28,7 +28,7 @@ class ProjectsController extends Controller
     {
     
     	$project=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Route')
+        ->getRepository('ZeegaDataBundle:Route')
         ->findProjectById($project_id);
     	return new Response(json_encode($project[0]));
         
@@ -41,7 +41,7 @@ class ProjectsController extends Controller
     {
     	$request = $this->getRequest();
       	$em =$this->getDoctrine()->getEntityManager();
-     	$project= $this->getDoctrine()->getRepository('ZeegaEditorBundle:Project')->findOneById($project_id);
+     	$project= $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($project_id);
     	if($request->request->get('title'))$project->setTitle($request->request->get('title'));
 		$em->flush();
     	return new Response('SUCCESS',200);
@@ -53,13 +53,13 @@ class ProjectsController extends Controller
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$project= $em->getRepository('ZeegaEditorBundle:Project')->find($project_id);
+     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
      	/*
-     	$routes=$em->getRepository('ZeegaEditorBundle:Route')
+     	$routes=$em->getRepository('ZeegaDataBundle:Route')
         				->findRoutesByProject($project_id);
      	foreach($routes as $route){
      	
-     		$r=$em->getRepository('ZeegaEditorBundle:Route')
+     		$r=$em->getRepository('ZeegaDataBundle:Route')
         				->find($route['id']);
      		$em->remove($r);
      	
@@ -77,7 +77,7 @@ class ProjectsController extends Controller
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Route')
+        				->getRepository('ZeegaDataBundle:Route')
         				->findRoutesByProjectId($project_id)));
     
     } 
@@ -88,18 +88,18 @@ class ProjectsController extends Controller
     {
     		
     		$projects=$this->getDoctrine()
-        			->getRepository('ZeegaEditorBundle:Route')
+        			->getRepository('ZeegaDataBundle:Route')
         			->findProjectById($project_id);
     	
     		$project=$projects[0];
     
     		$routes=$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Node')
+        				->getRepository('ZeegaDataBundle:Node')
         				->findRoutesByProject($project_id);
         				
         	for($i=0;$i<sizeof($routes);$i++){
         		$routes[$i]['nodes']=$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Node')
+        				->getRepository('ZeegaDataBundle:Node')
         				->findNodesByRouteId($routes[$i]['id']);
         	
         		$order=array();
@@ -113,13 +113,13 @@ class ProjectsController extends Controller
 			
         		$output=array();
     			$route=$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Route')
+        				->getRepository('ZeegaDataBundle:Route')
         				->find($routes[$i]['id']);
         				
         		$layers=$route->getLayers()->toArray();
         			foreach($layers as $layer){
         				$l=$this->getDoctrine()
-        					->getRepository('ZeegaEditorBundle:Layer')
+        					->getRepository('ZeegaDataBundle:Layer')
         					->findLayerById($layer->getId());
         				$output[]=$l[0];
         		}
@@ -142,7 +142,7 @@ class ProjectsController extends Controller
 		
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
-		$project= $em->getRepository('ZeegaEditorBundle:Project')->find($project_id);
+		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
 		$route = new Route();
 		$node = new Node();
 		$node->setRoute($route);

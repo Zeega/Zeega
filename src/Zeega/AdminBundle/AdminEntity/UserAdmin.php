@@ -20,7 +20,7 @@ class UserAdmin extends Admin
 			->add('thumb_url')
 			->add('email')
 			->add('email')
-			->add('playgrounds', 'entity', array('class' => 'Zeega\EditorBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'))
+			->add('playgrounds', 'entity', array('class' => 'Zeega\DataBundle\Entity\Playground', 'multiple' => true, 'property' => 'short'))
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
     }

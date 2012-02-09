@@ -1,5 +1,5 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Item.orm.yml
-Zeega\IngestBundle\Entity\Item:
+Zeega\DataBundle\Entity\Item:
     type: entity
     repositoryClass: Zeega\IngestBundle\Repository\ItemRepository
     lifecycleCallbacks:
@@ -44,9 +44,9 @@ Zeega\IngestBundle\Entity\Item:
                 referencedColumnName: item_id
     manyToOne:
         playground:
-            targetEntity: Zeega\EditorBundle\Entity\Playground
+            targetEntity: Zeega\DataBundle\Entity\Playground
         user:
-            targetEntity: Zeega\UserBundle\Entity\User
+            targetEntity: Zeega\DataBundle\Entity\User
     id:
         id:
             type: bigint

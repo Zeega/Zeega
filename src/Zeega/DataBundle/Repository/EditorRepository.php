@@ -1,12 +1,12 @@
 <?php
 
 // src/Zeega/EditorBundle/Repository/EditorRepository.php
-namespace Zeega\EditorBundle\Repository;
+namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Zeega\EditorBundle\Entity\Item;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\User;
 
 
 class EditorRepository extends EntityRepository

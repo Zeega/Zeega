@@ -3,7 +3,7 @@ namespace Zeega\EditorBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\User;
 
 class UserType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
@@ -26,7 +26,7 @@ class UserType extends AbstractType {
 
     public function getDefaultOptions(array $options) {
         return array(
-            'data_class' => 'Zeega\UserBundle\Entity\User',
+            'data_class' => 'Zeega\DataBundle\Entity\User',
         );
     }
 }

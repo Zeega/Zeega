@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\IngestBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\IngestBundle\Entity\Media
+ * Zeega\DataBundle\Entity\Media
  */
 class Media
 {
@@ -175,7 +175,7 @@ class Media
         return $this->aspect_ratio;
     }
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\DataBundle\Entity\Item
      */
     private $item;
 
@@ -183,9 +183,9 @@ class Media
     /**
      * Set item
      *
-     * @param Zeega\IngestBundle\Entity\Item $item
+     * @param Zeega\DataBundle\Entity\Item $item
      */
-    public function setItem(\Zeega\IngestBundle\Entity\Item $item)
+    public function setItem(\Zeega\DataBundle\Entity\Item $item)
     {
         $this->item = $item;
     }
@@ -193,7 +193,7 @@ class Media
     /**
      * Get item
      *
-     * @return Zeega\IngestBundle\Entity\Item 
+     * @return Zeega\DataBundle\Entity\Item 
      */
     public function getItem()
     {

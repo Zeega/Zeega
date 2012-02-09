@@ -1,5 +1,5 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/TagCorrelation.orm.yml
-Zeega\IngestBundle\Entity\TagCorrelation:
+Zeega\DataBundle\Entity\TagCorrelation:
     type: entity
     repositoryClass: Zeega\IngestBundle\Repository\TagCorrelationRepository
     manyToOne:

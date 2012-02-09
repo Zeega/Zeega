@@ -5,12 +5,12 @@ namespace Zeega\EditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\EditorBundle\Entity\Node;
-use Zeega\EditorBundle\Entity\Layer;
-use Zeega\EditorBundle\Entity\Route;
-use Zeega\EditorBundle\Entity\Playground;
-use Zeega\EditorBundle\Entity\Project;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Project;
+use Zeega\DataBundle\Entity\User;
 
 class PlaygroundsController extends Controller
 {
@@ -37,7 +37,7 @@ class PlaygroundsController extends Controller
     public function getPlaygroundAction($playground_id)
     {
     	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Playground')
+        ->getRepository('ZeegaDataBundle:Playground')
         ->findPlaygroundById($playground_id);
     	return new Response(json_encode($playground[0]));
         
@@ -48,7 +48,7 @@ class PlaygroundsController extends Controller
     
     	
     	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Playground')
+        ->getRepository('ZeegaDataBundle:Playground')
         ->find($playground_id);
         $user=$this->getDoctrine()
         ->getRepository('ZeegaUserBundle:User')
@@ -76,7 +76,7 @@ class PlaygroundsController extends Controller
 		
 		else $title='Untitled Project';
     	$playground=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Playground')
+        ->getRepository('ZeegaDataBundle:Playground')
         ->find($playground_id);
     	$project= new Project();
 		$route = new Route();
@@ -103,7 +103,7 @@ class PlaygroundsController extends Controller
     {
     	$request = $this->getRequest();
       	$em =$this->getDoctrine()->getEntityManager();
-     	$playground= $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')->findOneById($playground_id);
+     	$playground= $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')->findOneById($playground_id);
     	if($request->request->get('title'))$playground->setTitle($request->request->get('title'));
 		$em->flush();
     	return new Response('SUCCESS',200);
@@ -115,7 +115,7 @@ class PlaygroundsController extends Controller
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$playground= $em->getRepository('ZeegaEditorBundle:Playground')->find($playground_id);
+     	$playground= $em->getRepository('ZeegaDataBundle:Playground')->find($playground_id);
     
     	$em->remove($playground);
     	$em->flush();
@@ -129,7 +129,7 @@ class PlaygroundsController extends Controller
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Node')
+        				->getRepository('ZeegaDataBundle:Node')
         				->findRoutesByPlaygroundId($playground_id)));
     
     } 

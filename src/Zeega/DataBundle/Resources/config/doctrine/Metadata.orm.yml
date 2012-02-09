@@ -1,5 +1,5 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Metadata.orm.yml
-Zeega\IngestBundle\Entity\Metadata:
+Zeega\DataBundle\Entity\Metadata:
     type: entity
     oneToOne:
        item:

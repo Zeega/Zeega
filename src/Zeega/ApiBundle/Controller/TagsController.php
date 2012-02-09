@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use Zeega\IngestBundle\Entity\ItemTags;
+use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\IngestBundle\Repository\ItemTagsRepository;
@@ -33,11 +33,11 @@ class TagsController extends Controller
 		$query['limit'] = 20;
 		$query['offset'] = 0;
 		
-		$tags = $em->getRepository('ZeegaIngestBundle:TagCorrelation')->searchRelatedTags($query);
+		$tags = $em->getRepository('ZeegaDataBundle:TagCorrelation')->searchRelatedTags($query);
 		*/
 		//return new Response(json_encode($tags));
 		
-		$tag = $em->getRepository('ZeegaIngestBundle:Tag')->find($tagid);
+		$tag = $em->getRepository('ZeegaDataBundle:Tag')->find($tagid);
 		
         $tagsView = $this->renderView('ZeegaApiBundle:Tags:similar.json.twig', array('tags' => $tags, 'similar' => $tag));
         
@@ -49,7 +49,7 @@ class TagsController extends Controller
     {
 		$em = $this->getDoctrine()->getEntityManager();
 
-        $tags = $em->getRepository('ZeegaIngestBundle:Tag')->findPaginated(100,0);
+        $tags = $em->getRepository('ZeegaDataBundle:Tag')->findPaginated(100,0);
         
         $tagsView = $this->renderView('ZeegaApiBundle:Tags:index.json.twig', array('tags' => $tags));
         
@@ -61,7 +61,7 @@ class TagsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('ZeegaIngestBundle:Tag')->find($id);
+        $entity = $em->getRepository('ZeegaDataBundle:Tag')->find($id);
 
         $tagView = $this->renderView('ZeegaApiBundle:Tags:show.json.twig', array('tag' => $entity));
         
@@ -103,7 +103,7 @@ class TagsController extends Controller
             foreach($new_items as $item)
             {
 
-                $child_entity = $em->getRepository('ZeegaIngestBundle:Item')->find($item);
+                $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
 
                 if (!$child_entity) 
                 {

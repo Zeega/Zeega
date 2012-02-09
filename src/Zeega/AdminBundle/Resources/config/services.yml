@@ -4,12 +4,12 @@ parameters:
 services:
     zeega.admin.user:
         class: Zeega\AdminBundle\AdminEntity\UserAdmin
-        arguments: [null, Zeega\UserBundle\Entity\User, SonataAdminBundle:CRUD]
+        arguments: [null, Zeega\DataBundle\Entity\User, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
     zeega.admin.playground:
         class: Zeega\AdminBundle\AdminEntity\PlaygroundAdmin
-        arguments: [null, Zeega\EditorBundle\Entity\Playground, SonataAdminBundle:CRUD]
+        arguments: [null, Zeega\DataBundle\Entity\Playground, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, alias: zeega_admin_playground, manager_type: orm, group: General, label: Playgrounds}
 

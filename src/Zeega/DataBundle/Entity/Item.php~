@@ -1,13 +1,13 @@
 <?php
 
-namespace Zeega\IngestBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use DateTime;
 
 /**
- * Zeega\IngestBundle\Entity\Item
+ * Zeega\DataBundle\Entity\Item
  */
 class Item
 {
@@ -112,37 +112,37 @@ class Item
     private $media_creator_realname;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Media
+     * @var Zeega\DataBundle\Entity\Media
      */
     private $media;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Metadata
+     * @var Zeega\DataBundle\Entity\Metadata
      */
     private $metadata;
 
     /**
-     * @var Zeega\IngestBundle\Entity\ItemTags
+     * @var Zeega\DataBundle\Entity\ItemTags
      */
     private $tags;
 
     /**
-     * @var Zeega\EditorBundle\Entity\Playground
+     * @var Zeega\DataBundle\Entity\Playground
      */
     private $playground;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $user;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\DataBundle\Entity\Item
      */
     private $child_items;
 
     /**
-     * @var Zeega\IngestBundle\Entity\Item
+     * @var Zeega\DataBundle\Entity\Item
      */
     private $parent_items;
 
@@ -548,9 +548,9 @@ class Item
     /**
      * Set media
      *
-     * @param Zeega\IngestBundle\Entity\Media $media
+     * @param Zeega\DataBundle\Entity\Media $media
      */
-    public function setMedia(\Zeega\IngestBundle\Entity\Media $media)
+    public function setMedia(\Zeega\DataBundle\Entity\Media $media)
     {
         $this->media = $media;
     }
@@ -558,7 +558,7 @@ class Item
     /**
      * Get media
      *
-     * @return Zeega\IngestBundle\Entity\Media 
+     * @return Zeega\DataBundle\Entity\Media 
      */
     public function getMedia()
     {
@@ -568,9 +568,9 @@ class Item
     /**
      * Set metadata
      *
-     * @param Zeega\IngestBundle\Entity\Metadata $metadata
+     * @param Zeega\DataBundle\Entity\Metadata $metadata
      */
-    public function setMetadata(\Zeega\IngestBundle\Entity\Metadata $metadata)
+    public function setMetadata(\Zeega\DataBundle\Entity\Metadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -578,7 +578,7 @@ class Item
     /**
      * Get metadata
      *
-     * @return Zeega\IngestBundle\Entity\Metadata 
+     * @return Zeega\DataBundle\Entity\Metadata 
      */
     public function getMetadata()
     {
@@ -588,9 +588,9 @@ class Item
     /**
      * Add tags
      *
-     * @param Zeega\IngestBundle\Entity\ItemTags $tags
+     * @param Zeega\DataBundle\Entity\ItemTags $tags
      */
-    public function addItemTags(\Zeega\IngestBundle\Entity\ItemTags $tags)
+    public function addItemTags(\Zeega\DataBundle\Entity\ItemTags $tags)
     {
         $this->tags[] = $tags;
     }
@@ -608,9 +608,9 @@ class Item
     /**
      * Set playground
      *
-     * @param Zeega\EditorBundle\Entity\Playground $playground
+     * @param Zeega\DataBundle\Entity\Playground $playground
      */
-    public function setPlayground(\Zeega\EditorBundle\Entity\Playground $playground)
+    public function setPlayground(\Zeega\DataBundle\Entity\Playground $playground)
     {
         $this->playground = $playground;
     }
@@ -618,7 +618,7 @@ class Item
     /**
      * Get playground
      *
-     * @return Zeega\EditorBundle\Entity\Playground 
+     * @return Zeega\DataBundle\Entity\Playground 
      */
     public function getPlayground()
     {
@@ -628,9 +628,9 @@ class Item
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param Zeega\DataBundle\Entity\User $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser(\Zeega\DataBundle\Entity\User $user)
     {
         $this->user = $user;
     }
@@ -638,7 +638,7 @@ class Item
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
@@ -649,9 +649,9 @@ class Item
 
      * Add child_items
      *
-     * @param Zeega\IngestBundle\Entity\Item $childItems
+     * @param Zeega\DataBundle\Entity\Item $childItems
      */
-    public function addItem(\Zeega\IngestBundle\Entity\Item $childItems)
+    public function addItem(\Zeega\DataBundle\Entity\Item $childItems)
     {
         $this->child_items[] = $childItems;
     }
@@ -686,5 +686,30 @@ class Item
         {
             $this->setChildItemsCount($this->getChildItems()->count());
         }
+    }
+    /**
+     * @var integer $playground_id
+     */
+    private $playground_id;
+
+
+    /**
+     * Set playground_id
+     *
+     * @param integer $playgroundId
+     */
+    public function setPlaygroundId($playgroundId)
+    {
+        $this->playground_id = $playgroundId;
+    }
+
+    /**
+     * Get playground_id
+     *
+     * @return integer 
+     */
+    public function getPlaygroundId()
+    {
+        return $this->playground_id;
     }
 }

@@ -4,12 +4,12 @@ namespace Zeega\IngestBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Zeega\IngestBundle\Entity\Media;
-use Zeega\IngestBundle\Entity\Metadata;
-use Zeega\IngestBundle\Entity\Tag;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\EditorBundle\Entity\Playground;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Media;
+use Zeega\DataBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\Tag;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\User;
 use Imagick;
 use DateTime;
 use SimpleXMLElement;
@@ -31,15 +31,15 @@ class WidgetController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		// get user items and playgrounds
-		$mycollection = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
-		$playgrounds = $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')->findPlaygroundsByUser($user->getId());
+		$mycollection = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItems($user->getId());
+		$playgrounds = $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')->findPlaygroundsByUser($user->getId());
 		
 		$widgetId = $request->query->get('widget-id');
 		$itemUrl = $request->query->get('url');
 		
 		// check if the item exists on the database	
 		$item = $this->getDoctrine()
-					 ->getRepository('ZeegaIngestBundle:Item')
+					 ->getRepository('ZeegaDataBundle:Item')
 					 ->findOneBy(array("attribution_uri" => $itemUrl));
 		
 		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15))->getContent();
@@ -127,12 +127,12 @@ class WidgetController extends Controller
     		$item->setUser($user);
     		
     		if($session->get('playgroundid')) 
-    			$playground = $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    			$playground = $this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')
     							    ->find($session->get('playgroundid'));
     		else 
     		{
     			$playgrounds = $this->getDoctrine()
-    					            ->getRepository('ZeegaEditorBundle:Playground')
+    					            ->getRepository('ZeegaDataBundle:Playground')
     							    ->findPlaygroundByUser($user->getId());
     			$playground=$playgrounds[0];
     		}
@@ -210,7 +210,7 @@ class WidgetController extends Controller
 				$em->persist($item);
 				$em->flush();
 				$response=$this->getDoctrine()
-								->getRepository('ZeegaIngestBundle:Item')
+								->getRepository('ZeegaDataBundle:Item')
 								->findItemById($item->getId());					
 				return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
     		  
@@ -236,25 +236,25 @@ class WidgetController extends Controller
 		$em=$this->getDoctrine()->getEntityManager();
 		
 		if($session->get('playgroundid')) 
-    		$playground = 	$this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    		$playground = 	$this->getDoctrine()->getRepository('ZeegaDataBundle:Playground')
     							    ->find($session->get('playgroundid'));
     	else 
 		{
 			$playgrounds = $this->getDoctrine()
-								->getRepository('ZeegaEditorBundle:Playground')
+								->getRepository('ZeegaDataBundle:Playground')
 								->findPlaygroundByUser($user->getId());
 			$playground=$playgrounds[0];
 		}
 		
 		
 	
-		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItemsByPlayground($user->getId(),$playground->getId());
+		$mycollection=$this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItemsByPlayground($user->getId(),$playground->getId());
 		
 		
 		$url=$request->query->get('url');
 			
 		$check=$this->getDoctrine()
-					->getRepository('ZeegaIngestBundle:Item')
+					->getRepository('ZeegaDataBundle:Item')
 					->findItemByAttributionUrl($url);
 	
 		if($check){

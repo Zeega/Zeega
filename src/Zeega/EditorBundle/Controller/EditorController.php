@@ -3,12 +3,12 @@
 namespace Zeega\EditorBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Zeega\EditorBundle\Entity\Item;
-use Zeega\EditorBundle\Entity\Route;
-use Zeega\EditorBundle\Entity\Project;
-use Zeega\EditorBundle\Entity\Playground;
-use Zeega\EditorBundle\Entity\Node;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\Project;
+use Zeega\DataBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\User;
 use Zeega\EditorBundle\Form\Type\UserType;
 use Zeega\EditorBundle\Form\Type\PlaygroundType;
 use Zeega\EditorBundle\Form\Type\PasswordType;
@@ -33,7 +33,7 @@ class EditorController extends Controller
 
 		if ($super) {
 			$playground=$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Playground')
+							->getRepository('ZeegaDataBundle:Playground')
 							->findPlaygroundByShort($short,$user->getId());
 			$newUser = new User();
 			$form = $this->createForm(new UserType(), $newUser);    
@@ -71,10 +71,10 @@ class EditorController extends Controller
 				$admin=true;
 				$super=true;
 				$projects=$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Project')
+							->getRepository('ZeegaDataBundle:Project')
 							->findProjectsByPlayground($playground->getId());
 				$users=	$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Playground')
+							->getRepository('ZeegaDataBundle:Playground')
 							->findUsersByPlayground($playground->getId());
 				$newUser = new User();
 				$form = $this->createForm(new UserType(), $newUser);    
@@ -136,7 +136,7 @@ class EditorController extends Controller
  
   			
 		$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 		
 		$playground=$playgrounds[0];
@@ -154,14 +154,14 @@ class EditorController extends Controller
 	if($user->getRoles()=='ROLE_SUPER_ADMIN'){
 		$super=true;
 		$playground=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findByShort($short);
 	 	
 	 }
 	else{
 		$super=false;			
 		$playground=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
 	
 	}
@@ -174,18 +174,18 @@ class EditorController extends Controller
 		
 		$admin=true;
 		$projects=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
+					->getRepository('ZeegaDataBundle:Project')
 					->findProjectsByPlayground($playground->getId());
 	
 	
 	
 		$myprojects=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
+					->getRepository('ZeegaDataBundle:Project')
 					->findProjectsByPlaygroundAndUser($playground->getId(),$user->getId());
 	
 		
 		$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 	return $this->render('ZeegaEditorBundle:Editor:playground.html.twig', array(
 	  	'user_id' => $user->getId(),
@@ -217,11 +217,11 @@ class EditorController extends Controller
 	if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 	else $super=false;
 	$playground=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundByShort($short,$user->getId());
 					
 	$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
     $admin = false;
 	if($playground||$super){
@@ -242,7 +242,7 @@ class EditorController extends Controller
 			'projectsMenu'=>true,
             'page'=>'editor',
             'myprojects'=>$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
+					->getRepository('ZeegaDataBundle:Project')
 					->findProjectsByPlaygroundAndUser($playground->getId(),$user->getId())
 			
 		));
@@ -266,18 +266,18 @@ class EditorController extends Controller
 		$super = ($user->getRoles() == 'ROLE_SUPER_ADMIN');
 			
 		$playground=$this->getDoctrine()
-						 ->getRepository('ZeegaEditorBundle:Playground')
+						 ->getRepository('ZeegaDataBundle:Playground')
 						 ->findPlaygroundByShort($short,$user->getId());
     	$admin = false;
 
 		if($playground||$super)
 		{
 			$routes = $this->getDoctrine()
-						   ->getRepository('ZeegaEditorBundle:Route')
+						   ->getRepository('ZeegaDataBundle:Route')
 						   ->findRoutesByProject($id);
 						
 			$project = $this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Project')
+							->getRepository('ZeegaDataBundle:Project')
 							->findOneById($id);
 
 			$route = $routes[0];
@@ -301,7 +301,7 @@ class EditorController extends Controller
 			
 			$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
 			$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
 				// last displayname entered by the user
@@ -319,7 +319,7 @@ class EditorController extends Controller
 					'results' => $items,
 					'collection_id' => $collection_id,
 					'myprojects'=>$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Project')
+					->getRepository('ZeegaDataBundle:Project')
 					->findProjectsByPlaygroundAndUser($playground->getId(),$user->getId()),
 					'playground' => $playground,						
 					'playgrounds'=>$playgrounds,
@@ -337,10 +337,10 @@ class EditorController extends Controller
 		if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 		else $super=false;
 		$playground=$this->getDoctrine()
-						->getRepository('ZeegaEditorBundle:Playground')
+						->getRepository('ZeegaDataBundle:Playground')
 						->findPlaygroundByShort($short,$user->getId());
 		$admin=$this->getDoctrine()
-				->getRepository('ZeegaEditorBundle:Playground')
+				->getRepository('ZeegaDataBundle:Playground')
 				->checkAdmin($short,$user->getId());
 		if($playground||$super){
 				$project= new Project();
@@ -382,7 +382,7 @@ class EditorController extends Controller
 		if($user->getRoles()=='ROLE_SUPER_ADMIN') $super=true;
 		else $super=false;
 		$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 		return $this->render('ZeegaEditorBundle:Editor:faq.html.twig', array(
 		'displayname' => $user->getDisplayName(),
@@ -408,7 +408,7 @@ class EditorController extends Controller
 	public function settingsAction(){
 		$user = $this->get('security.context')->getToken()->getUser();		
 			$playgrounds=$this->getDoctrine()
-					->getRepository('ZeegaEditorBundle:Playground')
+					->getRepository('ZeegaDataBundle:Playground')
 					->findPlaygroundsByUser($user->getId());
 		if($user){
 				$newUser = new User();

@@ -85,7 +85,7 @@ services:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: secured_area
-    user_class: Zeega\UserBundle\Entity\User
+    user_class: Zeega\DataBundle\Entity\User
     from_email:
         address: noreply@zeega.org
         sender_name: Zeega

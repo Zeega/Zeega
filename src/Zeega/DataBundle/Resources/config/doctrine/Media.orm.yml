@@ -1,5 +1,5 @@
 # src/Zeega/IngestBundle/Resources/config/doctrine/Media.orm.yml
-Zeega\IngestBundle\Entity\Media:
+Zeega\DataBundle\Entity\Media:
     type: entity
     oneToOne:
        item:

@@ -1,8 +1,8 @@
 <?php
 
-// src/Zeega/EditorBundle/Entity/Route.php
+// src/Zeega/DataBundle/Entity/Route.php
 
-namespace Zeega\EditorBundle\Entity;
+namespace Zeega\DataBundle\Entity;
 
 class Route
 {
@@ -20,7 +20,7 @@ class Route
     private $title;
 
     /**
-     * @var Zeega\UserBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\User
      */
     private $user;
 
@@ -58,9 +58,9 @@ class Route
     /**
      * Set user
      *
-     * @param Zeega\UserBundle\Entity\User $user
+     * @param Zeega\DataBundle\Entity\User $user
      */
-    public function setUser(\Zeega\UserBundle\Entity\User $user)
+    public function setUser(\Zeega\DataBundle\Entity\User $user)
     {
         $this->user = $user;
     }
@@ -68,14 +68,14 @@ class Route
     /**
      * Get user
      *
-     * @return Zeega\UserBundle\Entity\User 
+     * @return Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
         return $this->user;
     }
     /**
-     * @var Zeega\EditorBundle\Entity\Project
+     * @var Zeega\DataBundle\Entity\Project
      */
     private $project;
 
@@ -83,9 +83,9 @@ class Route
     /**
      * Set project
      *
-     * @param Zeega\EditorBundle\Entity\Project $project
+     * @param Zeega\DataBundle\Entity\Project $project
      */
-    public function setProject(\Zeega\EditorBundle\Entity\Project $project)
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
     {
         $this->project = $project;
     }
@@ -93,14 +93,14 @@ class Route
     /**
      * Get project
      *
-     * @return Zeega\EditorBundle\Entity\Project 
+     * @return Zeega\DataBundle\Entity\Project 
      */
     public function getProject()
     {
         return $this->project;
     }
     /**
-     * @var Zeega\EditorBundle\Entity\Layer
+     * @var Zeega\DataBundle\Entity\Layer
      */
     private $layers;
 
@@ -112,9 +112,9 @@ class Route
     /**
      * Add layers
      *
-     * @param Zeega\EditorBundle\Entity\Layer $layers
+     * @param Zeega\DataBundle\Entity\Layer $layers
      */
-    public function addLayers(\Zeega\EditorBundle\Entity\Layer $layers)
+    public function addLayers(\Zeega\DataBundle\Entity\Layer $layers)
     {
         $this->layers[] = $layers;
     }
@@ -132,9 +132,9 @@ class Route
     /**
      * Add layers
      *
-     * @param Zeega\EditorBundle\Entity\Layer $layers
+     * @param Zeega\DataBundle\Entity\Layer $layers
      */
-    public function addLayer(\Zeega\EditorBundle\Entity\Layer $layers)
+    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
     {
         $this->layers[] = $layers;
     }

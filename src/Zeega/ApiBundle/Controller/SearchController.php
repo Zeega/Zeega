@@ -1,7 +1,7 @@
 <?php
 
 namespace Zeega\ApiBundle\Controller;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
@@ -117,7 +117,7 @@ class SearchController extends Controller
 		// regular search - return items and/or collections
 		if($query['returnCollections'] || $query['returnItems'] || $query['returnCollectionsWithItems'])
 		{
-		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItems($query);
+		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
 			
 			
 			if($query['returnCollectionsWithItems'])
@@ -125,7 +125,7 @@ class SearchController extends Controller
 				// return collections mixed with items
 				 $results['items_and_collections'] = $queryResults;
 				 $results['returned_items_and_collections_count'] = sizeof($queryResults);
-	             $results['items_and_collections_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItemsAndCollections($query);
+	             $results['items_and_collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItemsAndCollections($query);
 			}
 			
 			if($query['returnCollections'] || $query['returnItems'])
@@ -147,21 +147,21 @@ class SearchController extends Controller
 	            {
 	                $results['items'] = $items;
 					$results['returned_items_count'] = sizeof($items);
-	                $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalItems($query);
+	                $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);
 	            }
 
 	            if($query['returnCollections'] == 1)
 	            {
 	                $results['collections'] = $collections;
 					$results['returned_collections_count'] = sizeof($collections);
-	                $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->getTotalCollections($query);
+	                $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
            	}
 			}
 	    }
 		
 		if($query['returnTime'])
 		{
-		    $queryResults = $this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->searchItemsByTimeDistribution($query);
+		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItemsByTimeDistribution($query);
 		    $results['time_distribution'] = $queryResults["results"];
 		    $results['time_distribution_info'] = array("min_date" => $queryResults["min_date"], 
 													   "max_date" => $queryResults["max_date"], "time_intervals" => sizeof($queryResults["results"]));

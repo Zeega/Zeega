@@ -6,8 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use Zeega\IngestBundle\Entity\ItemTags;
-use Zeega\IngestBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
+use Zeega\DataBundle\Entity\Item;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\IngestBundle\Repository\ItemTagsRepository;

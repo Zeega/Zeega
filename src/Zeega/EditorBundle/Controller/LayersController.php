@@ -5,9 +5,9 @@ namespace Zeega\EditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\EditorBundle\Entity\Layer;
-use Zeega\IngestBundle\Entity\Item;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\User;
 
 class LayersController extends Controller
 {
@@ -29,7 +29,7 @@ class LayersController extends Controller
     public function getLayerAction($layer_id)
     {
     	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Layer')
+        ->getRepository('ZeegaDataBundle:Layer')
         ->findLayerById($layer_id)));
     
     } // `get_layer`     [GET] /Layers/{layer_id}
@@ -41,7 +41,7 @@ class LayersController extends Controller
     	
     	$em = $this->getDoctrine()->getEntityManager();
      	
-    	$layer= $em->getRepository('ZeegaEditorBundle:Layer')->find($layer_id);
+    	$layer= $em->getRepository('ZeegaDataBundle:Layer')->find($layer_id);
     	
 		$request = $this->getRequest();
     		
@@ -53,7 +53,7 @@ class LayersController extends Controller
 		$em->persist($layer);
 		$em->flush();
     	$output=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Layer')
+        ->getRepository('ZeegaDataBundle:Layer')
         ->findLayerById($layer->getId());
         
         
@@ -69,7 +69,7 @@ class LayersController extends Controller
     public function deleteLayerAction($layer_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$layer= $em->getRepository('ZeegaEditorBundle:Layer')->find($layer_id);
+     	$layer= $em->getRepository('ZeegaDataBundle:Layer')->find($layer_id);
     	$em->remove($layer);
     	$em->flush();
     	return new Response('SUCCESS',200);
@@ -81,7 +81,7 @@ class LayersController extends Controller
     {
     	
     	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Layer')
+        ->getRepository('ZeegaDataBundle:Layer')
         ->findItemByLayerId($layer_id)));
     
     } // `get_node_layers`    [GET] /layers/{layer_id}/item

@@ -3,7 +3,7 @@ namespace Zeega\EditorBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Zeega\EditorBundle\Entity\Playground;
+use Zeega\DataBundle\Entity\Playground;
 
 class PlaygroundType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
@@ -17,7 +17,7 @@ class PlaygroundType extends AbstractType {
 
     public function getDefaultOptions(array $options) {
         return array(
-            'data_class' => 'Zeega\EditorBundle\Entity\Playground',
+            'data_class' => 'Zeega\DataBundle\Entity\Playground',
         );
     }
 }

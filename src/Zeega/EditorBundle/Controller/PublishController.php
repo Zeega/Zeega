@@ -5,9 +5,9 @@ namespace Zeega\EditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\EditorBundle\Entity\Node;
-use Zeega\EditorBundle\Entity\Layer;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\User;
 
 
 class PublishController extends Controller

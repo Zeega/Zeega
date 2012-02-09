@@ -5,10 +5,10 @@ namespace Zeega\EditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
-use Zeega\EditorBundle\Entity\Node;
-use Zeega\EditorBundle\Entity\Layer;
-use Zeega\EditorBundle\Entity\Route;
-use Zeega\UserBundle\Entity\User;
+use Zeega\DataBundle\Entity\Node;
+use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\Route;
+use Zeega\DataBundle\Entity\User;
 
 class RoutesController extends Controller
 {
@@ -25,7 +25,7 @@ class RoutesController extends Controller
 		$em->persist($route);
 		$em->flush();
     	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Route')
+        ->getRepository('ZeegaDataBundle:Route')
         ->findRouteById($route->getId())));
        */
     
@@ -50,7 +50,7 @@ class RoutesController extends Controller
     	$em->persist($route);
     	$em->flush();
 		$output=$this->getDoctrine()
-			->getRepository('ZeegaEditorBundle:Node')
+			->getRepository('ZeegaDataBundle:Node')
 			->findRouteById($route->getId());
 			
 		return new Response(json_encode($output[0]));
@@ -61,7 +61,7 @@ class RoutesController extends Controller
     public function getRouteAction($route_id)
     {
     	$routes=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Route')
+        ->getRepository('ZeegaDataBundle:Route')
         ->findRouteById($route_id);
     	
 		//removes falsy values from the return
@@ -85,7 +85,7 @@ class RoutesController extends Controller
     {
     	$request = $this->getRequest();
       	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
+     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
     	if($request->request->get('title'))$route->setTitle($request->request->get('title'));
     	if($request->request->get('attr'))$route->setAttr($request->request->get('attr'));
 		$em->flush();
@@ -98,7 +98,7 @@ class RoutesController extends Controller
 		$s=count($nodes);
 		foreach($nodes as $nodeId){
 			
-			$node=$em->getRepository('ZeegaEditorBundle:Node')
+			$node=$em->getRepository('ZeegaDataBundle:Node')
         		->find($nodeId);
         		
         		
@@ -120,7 +120,7 @@ class RoutesController extends Controller
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
+     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
     	$em->remove($route);
     	$em->flush();
     	return new Response('SUCCESS',200);
@@ -132,7 +132,7 @@ class RoutesController extends Controller
     {
     		
     		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Node')
+        				->getRepository('ZeegaDataBundle:Node')
         				->findNodesByRouteId($route_id)));
     
     } // `get_route_nodes`    [GET] /routes/{route_id}/Nodes
@@ -144,12 +144,12 @@ class RoutesController extends Controller
     	
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
-		$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
+		$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
 		
     	if($request->request->get('duplicate_id')){
     	
     		$original_node =$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Node')
+        				->getRepository('ZeegaDataBundle:Node')
         				->find($request->request->get('duplicate_id'));
     	
 			$node= new Node();
@@ -165,7 +165,7 @@ class RoutesController extends Controller
     					$route->addLayers($layer);
     					
         				$original_layer=$this->getDoctrine()
-        					->getRepository('ZeegaEditorBundle:Layer')
+        					->getRepository('ZeegaDataBundle:Layer')
         					->find($original_layer_id);
         				
 						if($original_layer->getItem()) $layer->setItem($original_layer->getItem());
@@ -184,7 +184,7 @@ class RoutesController extends Controller
 			$em->persist($node);
 			$em->flush();
 			$output=$this->getDoctrine()
-			->getRepository('ZeegaEditorBundle:Node')
+			->getRepository('ZeegaDataBundle:Node')
 			->findNodeById($node->getId());
 			return new Response(json_encode($output[0]));
 		}
@@ -198,7 +198,7 @@ class RoutesController extends Controller
 			$em->persist($node);
 			$em->flush();
 			$output=$this->getDoctrine()
-				->getRepository('ZeegaEditorBundle:Node')
+				->getRepository('ZeegaDataBundle:Node')
 				->findNodeById($node->getId());
 			return new Response(json_encode($output[0]));
 		}
@@ -214,7 +214,7 @@ class RoutesController extends Controller
     {
     	$output=array();
     	$route=$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Route')
+        				->getRepository('ZeegaDataBundle:Route')
         				->find($route_id);
         				
         if($route){
@@ -223,7 +223,7 @@ class RoutesController extends Controller
         	foreach($layers as $layer){
         	
         	$l=$this->getDoctrine()
-        				->getRepository('ZeegaEditorBundle:Layer')
+        				->getRepository('ZeegaDataBundle:Layer')
         				->findLayerById($layer->getId());
         	$output[]=$l[0];
         	}
@@ -236,7 +236,7 @@ class RoutesController extends Controller
 	  public function postRouteLayersAction($route_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$route= $em->getRepository('ZeegaEditorBundle:Route')->find($route_id);
+     	$route= $em->getRepository('ZeegaDataBundle:Route')->find($route_id);
     	
     	$layer= new Layer();
     	
@@ -267,7 +267,7 @@ class RoutesController extends Controller
 		$em->persist($route);
 		$em->flush();
     	$output=$this->getDoctrine()
-        ->getRepository('ZeegaEditorBundle:Layer')
+        ->getRepository('ZeegaDataBundle:Layer')
         ->findLayerById($layer->getId());
         
         

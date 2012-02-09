@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\IngestBundle\Repository;
+namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
