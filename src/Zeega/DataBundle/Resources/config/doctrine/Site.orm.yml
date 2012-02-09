@@ -1,0 +1,31 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Site.orm.yml
+Zeega\DataBundle\Entity\Site:
+   type: entity
+   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   manyToMany:
+    users:
+      targetEntity: Zeega\DataBundle\Entity\User
+      mappedBy: sites
+   id:
+    id:
+     type: integer
+     generator: { strategy: AUTO }
+   fields:
+    title:
+     type: string
+     length: 255
+     nullable: true
+    short:
+     type: string
+     length: 255
+     nullable: true
+     unique: true
+    published:
+     type: boolean
+     nullable: true
+    created_at:
+     type: datetime
+     nullable: true
+
+ 
+ 

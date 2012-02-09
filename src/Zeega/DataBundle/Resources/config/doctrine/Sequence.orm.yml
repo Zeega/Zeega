@@ -1,0 +1,40 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Sequence.orm.yml
+Zeega\DataBundle\Entity\Sequence:
+   type: entity
+   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   manyToOne:
+    project:
+     targetEntity: Project
+     onDelete: CASCADE
+     joinColumns:
+       project_id:
+        referencedColumnName: id
+        onDelete: CASCADE
+   manyToMany:
+    layers:
+     targetEntity: Layer
+     inversedBy:
+      name: sequences
+     joinTable:
+      name: sequences_layers
+      joinColumns:
+       sequence_id:
+        referencedColumnName: id
+        onDelete: CASCADE
+      inverseJoinColumns:
+       layer_id:
+        referencedColumnName: id
+        onDelete: CASCADE
+   id:
+    id:
+     type: integer
+     generator: { strategy: AUTO }
+   fields:
+    title:
+     type: string
+     length: 255
+    attr:
+     type: array
+     nullable: true
+
+ 

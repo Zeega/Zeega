@@ -1,0 +1,40 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
+Zeega\DataBundle\Entity\Frame:
+   type: entity
+   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   manyToOne:
+    sequence:
+     targetEntity: Sequence
+     joinColumns:
+       sequence_id:
+        referencedColumnName: id
+        onDelete: CASCADE
+    link_up:
+     targetEntity: Frame
+    link_down:
+     targetEntity: Frame
+    link_left:
+     targetEntity: Frame
+    link_right:
+     targetEntity: Frame
+   id:
+    id:
+     type: integer
+     generator: { strategy: AUTO }
+   fields:
+    sequence_index:
+     type: integer
+     length: 2
+     nullable: true
+    layers:
+     type: array
+     nullable: true
+    attr:
+     type: array
+     nullable: true
+    thumb_url:
+     type: string
+     length: 101
+     nullable: true
+
+ 
