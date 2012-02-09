@@ -663,7 +663,7 @@ ul,li
 		left: -14px;
 		
 		opacity: 0.8;
-		z-index:100;
+		z-index:80;
 }
 .corner-triangle-for-menu:hover{
 	text-decoration:none !important;
@@ -944,6 +944,12 @@ body
 	top:30px;
 }
 
+#route-title input
+{
+	height:1em;
+	width:690px;
+}
+
 /*******************************
 
 	HELP STYLES
@@ -1140,6 +1146,13 @@ body
 .inset-tray
 { zoom: 1; }
 
+
+.tray.closed
+{
+	display:none;
+}
+
+
 /*******************************
 
 	LAYERS -- these could be panels?  .panel.tray.raised.light ??
@@ -1310,6 +1323,31 @@ body
 	width : 268px;
 	height : 233px;
 }
+
+
+/*******************************
+
+	DATABASE TAB
+	
+*******************************/
+.linked-layer{cursor:pointer;}
+.linked-layer>:first-child{ margin-bottom:-4px; }
+.linked-layer
+{
+	box-shadow: 0 0 12px transparent;
+	-webkit-transition: box-shadow .5s linear;
+}
+.linked-layer:hover
+{
+	box-shadow: 0 0 12px white;
+	-webkit-transition: box-shadow .25s linear;
+}
+.link-blink
+{
+	box-shadow: 0 0 24px white;
+	-webkit-transition: box-shadow 1s linear;
+}
+
 
 /*******************************
 

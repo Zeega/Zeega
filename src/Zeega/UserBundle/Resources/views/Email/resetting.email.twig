@@ -1,0 +1,14 @@
+{# src/Zeega/UserBundle/Resources/views/Email/resetting.email.twig #}
+
+{% block subject %}Zeega - Resetting your password{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Hello {{ user.username }} !
+
+You can reset your email by accessing {{ confirmationUrl }}
+
+Greetings,
+The Zeega team
+{% endautoescape %}
+{% endblock %}

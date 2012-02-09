@@ -24,6 +24,11 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Zeega\ApiBundle\ZeegaApiBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
+			new Sonata\AdminBundle\SonataAdminBundle(),
+		    new Sonata\jQueryBundle\SonatajQueryBundle(),
+		    new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+		    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Zeega\AdminBundle\ZeegaAdminBundle(),
         );
 
 
@@ -33,6 +38,9 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
+            $bundles[] = new Profiler\LiveBundle\ProfilerLiveBundle();
+
         }
 
         return $bundles;

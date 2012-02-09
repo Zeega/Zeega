@@ -44,7 +44,7 @@ var ImageLayer = ProtoLayer.extend({
 		var widthArgs = {
 			min : 1,
 			max : 200,
-			label : 'Width',
+			label : 'Scale',
 			step : 1,
 			property : 'width',
 			suffix : '%',
@@ -55,8 +55,8 @@ var ImageLayer = ProtoLayer.extend({
 		var scaleSlider = makeUISlider( widthArgs );
 		
 		this.layerControls
-			.append( opacitySlider )
 			.append( scaleSlider )
+			.append( opacitySlider )
 			.append( makeFullscreenButton( this.layerControls ) );
 	},
 	
@@ -82,21 +82,23 @@ var ImageLayer = ProtoLayer.extend({
 		console.log('image-preload')
 		var _this = this;
 
-		var cssObj = {
-			'position' : 'absolute',
-			'top' : '-1000%',
-			'left' : '-1000%',
-			'z-index' : this.zIndex,
-			'width' : this.attr.width +'%',
-			'opacity' : this.attr.opacity
-		};
+
 		var img = $('<img>')
 			.attr( 'src' , this.attr.url )
 			.css( 'width', '100%');
-		img.load(function(){target.trigger('ready', { 'id' : _this.model.id } )});
+		//img.load(function(){target.trigger('ready', { 'id' : _this.model.id } )});
 
-		this.display.css( cssObj )
-			.append( img );
+console.log( this.innerDisplay );
+		
+		$(this.display).css('height','laskdfh');
+		
+		$(this.innerDisplay).append( img );
+			
+			
+			/*
+			console.log(img.height() );
+			img.addClass('linked-layer-hover');
+		*/
 		
 		target.trigger( 'ready' , { 'id' : this.model.id } );
 	},
@@ -104,6 +106,14 @@ var ImageLayer = ProtoLayer.extend({
 	play : function( z )
 	{
 		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+		
+		if(this.attr.link_to)
+		{
+			var _this = this;
+			_this.display.addClass('link-blink')
+			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  )
+			
+		}
 	},
 
 	stash : function()

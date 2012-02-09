@@ -88,13 +88,41 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	setListeners : function()
 	{
+		var _this = this;
 		//twipsies
 		$(this.el).find('.layer-link').twipsy({
 			placement : 'right'
 		})
-		
-		
-		
+
+		//finish entering  link info
+		$(this.el).find('.layer-link-box input')
+			.keypress(function(e){
+				if(e.which == 13)
+				{
+					$(this).blur();
+					return false;
+				}
+				else return true;
+			})
+			.blur(function(){
+				$(this).effect('highlight',{},3000);
+				_this.saveLink( $(this).val() );
+			})
+	},
+	
+	saveLink : function( url )
+	{
+		// do some validation here?
+		url = url.replace(/http:\/\//g, '' );
+
+		var properties = {
+			link : {
+				property : 'link_to',
+				value : url,
+				css : false
+			}
+		};
+		this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
 	},
 	
 	
@@ -132,17 +160,25 @@ var VisualLayerListView = Backbone.View.extend({
 	expand :function()
 	{
 		var _this = this;
-		if( $(this.el).find('.layer-content').is(':visible') )
+		console.log('expander clicked')
+		console.log( $(this.el).find('.layer-content').is(':hidden') )
+		
+		if( $(this.el).find('.layer-content').is(':hidden') )
 		{
-			//hide layer controls
-			$(this.el).find('.layer-content').hide('blind',{'direction':'vertical'});
-			this.model.layerClass.onControlsClose();
-			return false;
-		}else{
 			//show layer controls
-			$(this.el).find('.layer-content').show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.onControlsOpen() });
-			return false;
+			console.log('controls open')
+			$(this.el).find('.layer-content')
+				.show('blind',{'direction':'vertical'},function(){ _this.model.layerClass.onControlsOpen(); $(this).removeClass('closed'); });
 		}
+		else
+		{
+			console.log('controls close')
+			//hide layer controls
+			$(this.el).find('.layer-content')
+				.hide('blind',{'direction':'vertical'},function(){ $(this).addClass('closed') });
+			this.model.layerClass.onControlsClose();
+		}
+		return false;
 		
 	},
 	
@@ -192,58 +228,7 @@ var VisualLayerListView = Backbone.View.extend({
 	
 	layerLink : function()
 	{
-		console.log('open linker')
-		var _this = this;
 		$(this.el).find('.layer-link-box').show();
-		
-		/*
-		$(this.el).find('.layer-link-box input').blur(function(){
-			var url = $(this).val();
-			url = url.replace(/http:\/\//g, '' );
-
-			var properties = {
-				link : {
-					property : 'link_to',
-					value : url,
-					css : false
-				}
-			};
-			_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-			
-			$(this).blur();
-			return false;
-		})
-		*/
-		
-		//finish entering  link info
-		$(this.el).find('.layer-link-box input').keypress(function(e){
-			if(e.which == 13)
-			{
-				
-				console.log('inside')
-				// do some validation here?
-				var url = $(this).val();
-				url = url.replace(/http:\/\//g, '' );
-
-				var properties = {
-					link : {
-						property : 'link_to',
-						value : url,
-						css : false
-					}
-				};
-				_this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-				
-				$(this).blur();
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-			
-		});
-		
 		return false;
 	},
 	
@@ -280,12 +265,12 @@ var VisualLayerListView = Backbone.View.extend({
 				'<span class="zicon zicon-vert-drag"></span>'+
 			'</div>'+
 		'</div>'+
-		'<div class="layer-content inset-tray dark hidden">'+
+		'<div class="layer-content inset-tray dark tray closed">'+
 			'<div id="controls" class="clearfix"></div>'+
 			//'<br />'+
 			'<div class="standard-layer-controls clearfix">'+
 				'<div>'+
-					'<label for="persist" class="checkbox"><input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> />Persist layer to sequence</label>'+
+					'<label for="persist" class="checkbox"><input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> />Continue on all frames</label>'+
 				'</div>'+
 				'<div><a href="#" class="copy-to-next btn">Continue on next frame</a></div>';
 			

@@ -21,33 +21,6 @@ class EditorController extends Controller
 {
     
  
- 	public function initAction (){
- 	
- 	$users=$this->getDoctrine()
-						->getRepository('ZeegaUserBundle:User')
-						->findAll();
-	if(count($users)<1){
-				$em = $this->getDoctrine()->getEntityManager();
-				$factory = $this->get('security.encoder_factory');
-				$user = new User();
-				$user->setDisplayName('Zeega');
-				$user->setUsername('zeega');
-				$user->setBio($user->getDisplayName()." is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ÔLaboratories of HearingÕ to experiment with sound as art. In the 1920s, Kaufman adopted the name \"Dziga Vertov,\" which translates loosely as 'spinning top' and also was chosen because it makes the \"z-z-z-z\" sound when cranking a camera.");
-				$user->setThumbUrl('http://mlhplayground.org/gamma-james/images/vertov.jpeg');
-				$user->setSalt(md5(time()));
-				$encoder = $factory->getEncoder($user);
-				$password = $encoder->encodePassword('alphaZ', $user->getSalt());
-				$user->setUserRoles('ROLE_SUPER_ADMIN');
-				$user->setPassword($password);
-				$user->setEmail('dev@zeega.org');
-				$em->persist($user);
-				$em->flush();
-				return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
-	}
- 	else return $this->redirect($this->generateUrl('ZeegaEditorBundle_home'), 301);
- 	        	
- 	
- 	}
     
 	public function adminAction($short){
 	
@@ -196,6 +169,9 @@ class EditorController extends Controller
 		
 		
 		
+		$session = $this->getRequest()->getSession();
+		$session->set('playgroundid',$playground->getId());
+		
 		$admin=true;
 		$projects=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Project')
@@ -306,13 +282,14 @@ class EditorController extends Controller
 
 			$route = $routes[0];
 			
-			$params = array();
+			$params = array('playground'=>$playground->getId());
 			$session = $this->getRequest()->getSession();
 			$collection_id = $session->get("collection_id");
 			
 			if(isset($collection_id))
 			{
 				$params['collection'] = $collection_id;
+				
 				$session->remove("collection_id"); // reads and deletes from session
 			}
 			else

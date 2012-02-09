@@ -66,7 +66,7 @@ var NodeView = Backbone.View.extend({
 			switch($(this).data('action'))
 			{
 				case 'delete':
-					Zeega.destroyNode(_this);
+					if(confirm('Delete Frame?')) Zeega.destroyNode(_this);
 					break 
 				
 				case 'duplicate':
@@ -200,11 +200,8 @@ var NodeViewCollection = Backbone.View.extend({
 	{
 		var _this = this;
 		node.url = Zeega.url_prefix+'nodes/'+ node.id;
-				
 		
 		_(Zeega.route.nodes).push(node);
-		
-		console.log(node)
 		
 		//save node if the layer is new!
 		if( node.isNew() )
@@ -213,7 +210,6 @@ var NodeViewCollection = Backbone.View.extend({
 			node.url = Zeega.url_prefix+'routes/'+ Zeega.routeID +'/nodes';
 			//if(Zeega.currentNode) node.set({'attr':{'editorHidden':Zeega.currentNode.get('attr').editorHidden}});
 			
-
 			node.save(
 				{},
 				{
@@ -225,16 +221,44 @@ var NodeViewCollection = Backbone.View.extend({
 						
 						if(node.dupe) 
 						{
+							var changed = false;
 							_this.insertView(new NodeView({ model : node }), node.frameIndex );
 							
 							//clone layers and place them into the layer array
 							_.each( savedNode.oldLayerIDs , function(layerID, i){
-								var dupeLayer = Zeega.route.layerCollection.get(layerID).clone();
-								dupeLayer.id = savedNode.get('layers')[i];
-								dupeLayer.set({id:savedNode.get('layers')[i]});
+
+								//if layer is persistent
+								//replace frameIndex the id with the persistent id
+								//don't clone the layer
+								
+								var persistLayers = Zeega.route.get('attr').persistLayers;
+								
+								if( _.include( persistLayers, String(layerID) ) )
+								{
+									changed = true;
+									var layerOrder = savedNode.get('layers');
+									layerOrder[i] = String(layerID);
+									savedNode.set({layers:layerOrder})
+								}
+								else
+								{
+									//if a non-persistent layer, then make a whole new model for it!
+									var dupeAttr = JSON.stringify(Zeega.route.layerCollection.get(layerID));
+									dupeAttr = $.parseJSON(dupeAttr);
+								
+									var newLayer = new Layer(dupeAttr);
+									newLayer.id = String( savedNode.get('layers')[i] ); //make into string
+									newLayer.set({ id: String( savedNode.get('layers')[i] ) }); //make into string
 							
-								Zeega.addToLayerCollections( savedNode, dupeLayer );
+									Zeega.addToLayerCollections( savedNode, newLayer );
+								}
+								
+								Zeega.loadNode(savedNode);
+								
 							})
+
+							//resave the node after being updated with  persistent node ids
+							if( changed ) savedNode.save();
 							
 						}
 						else

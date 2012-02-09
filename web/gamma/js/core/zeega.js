@@ -70,7 +70,7 @@ var Zeega = {
 				_this.routeID= route.id;
 				_this.routeView = new RouteView({ model : z.route });
 				_this.routeView.render();
-				_this.loadNodes();
+				_this.loadFrames();
 				_this.loadLayers();
 			
 				console.log('new route created with id: '+ route.id);
@@ -88,16 +88,14 @@ var Zeega = {
 	//this is the first function called when loading the editor in dev
 	loadProject : function()
 	{
-		var z = this;
+		var _this = this;
 		this.projectID =  $('#project-id').val();
-		console.log(this.projectID);
 		this.project = new Project({ 'id' : this.projectID });
 		this.project.fetch({
-			success: function(project){
-				z.projectView = new ProjectView({ model : z.project });
-				z.projectView.render();
-				console.log('PROJECT')
-				console.log(project)
+			success: function(project)
+			{
+				_this.projectView = new ProjectView({ model : _this.project });
+				_this.projectView.render();
 				if( project.get('attr').ratio ) changeAspectRatio( project.get('attr').ratio )
 			}
 		});
@@ -109,21 +107,18 @@ var Zeega = {
 		this.routeID = routeID;
 		this.route = new Route({ 'id' : this.routeID });
 		this.route.fetch({
-			success: function(route, response){
-				console.log(response);
-
-				_this.loadNodes();
+			success: function(route, response)
+			{
+				_this.loadFrames();
 				_this.loadLayers();
 				_this.loadProject();
-				
-				//if(!route.get('attr')) route.set({'attr':{}});
 			}
 		});
 		
 
 	},
 	
-	loadNodes : function()
+	loadFrames : function()
 	{
 		var _this = this;
 		//create a node collection inside the route model
@@ -131,12 +126,14 @@ var Zeega = {
 		//get all existing nodes
 
 		this.route.nodes.fetch({
-			success : function(nodes,response){
+			success : function(frames,response)
+			{
+				console.log('frames')
+				console.log(frames)
 				//make a node view collection
-				_this.route.nodeViewCollection = new NodeViewCollection({ collection : nodes });
+				_this.route.nodeViewCollection = new NodeViewCollection({ collection : frames });
 				//render everything in the nodeViewCollection
 				_this.route.nodeViewCollection.render();
-				
 				_this.zeegaReady();
 			}
 		});
@@ -150,7 +147,10 @@ var Zeega = {
 		//get all existing layers
 		this.route.layerCollection.fetch({
 			
-			success : function(layers){
+			success : function(layers)
+			{
+				console.log('layers')
+				console.log(layers)
 				_this.route.layerCollection.parseLayers();
 				_this.zeegaReady();
 			}
@@ -160,10 +160,12 @@ var Zeega = {
 	nodesAndLayersReady : function()
 	{
 		this.currentNode = this.route.nodes.at(0);
-		
+		console.log('ready')
+		console.log(this)
 		//if no nodes exist, create one
 		if( _.size(this.route.nodes) == 0 )
 		{
+			console.log('no frames. MAKE ONE!')
 			var newNode = new Node;
 			this.route.nodeViewCollection.add(newNode);
 			this.loadNode( newNode );
@@ -297,6 +299,7 @@ var Zeega = {
 				//if it's not the current node, then be quiet about it
 				//this.route.layerCollection.add( layer , {silent:true} ); // do I need this??
 				//we still need to add it to the type collection though
+				this.route.layerCollection.add( layer, {silent:true} );
 			 	this.route.layerCollection.addToLayerTypeCollection( layer, false );
 			}
 		}
@@ -539,31 +542,59 @@ var Zeega = {
 	
 	destroyNode : function( view )
 	{
-//		if( confirm('Delete Node?') )
-		if( true )
+		
+		view.model.destroy();
+		view.remove();
+		this.loadLeftNode();
+		
+		//remove from Sequence Order
+		this.removeFromSequence( view.model );
+		
+		//if the sequence is empty(false), then make a new frame
+		if( this.getSequenceOrder()[0] === false )
 		{
-
-			//try to move to left node
-			if( view.model == this.currentNode) this.loadLeftNode();
-
-			this.route.nodes.remove();
-			
-			view.model.destroy();
-			view.remove();
-			//if it's the last node, make a new, empty one
-			
-			if( _.size(Zeega.route.nodes) == 0 )
-			{
-				var newNode = new Node;
-				Zeega.route.nodeViewCollection.add(newNode);
-				Zeega.loadNode( newNode );
-			}
-			this.nodeSort();
-			
-			this.destroyOrphans();
-			
+			var newNode = new Node;
+			Zeega.route.nodeViewCollection.add(newNode);
+			Zeega.loadNode( newNode );
 		}
+		
+		this.nodeSort();
+		this.destroyOrphans();
 	},
+	
+	// returns the order that the frame appears in the sequence
+	getFrameIndex : function( frame )
+	{
+		if( _.isNumber( frame ) ) frameId = frame;				//tests if it's a number id
+		else if( _.isString( frame ) ) frameId = parseInt(frame);		//tests if it's a string id
+		else if( _.isNumber( frame.id ) ) frameId = frame.id;	//assumes it must be a model
+		else return false;
+
+		return _.indexOf( this.route.get('nodesOrder') , frameId );
+	},
+	
+	getSequenceOrder : function(){ return this.route.get('nodesOrder') },
+	
+	removeFromSequence : function( frame )
+	{
+		//test to see if it's actually in the sequence first
+		if( this.getFrameIndex(frame) === false ) return false;
+		else
+		{
+			var frameId;
+			if( _.isNumber( frame ) ) frameId = frame;
+			else if( _.isString( frame ) ) frameId = parseInt(frame);
+			else if( _.isNumber( frame.id ) ) frameId = frame.id;
+			else return false;
+			
+			var newOrder = _.without( this.route.get('nodesOrder') , frameId );
+			if( _.size(newOrder) == 0 ) newOrder.push(false);
+			this.route.set({ nodesOrder:newOrder });
+			return frameId;
+		}
+		
+	},
+	
 	
 	duplicateFrame : function( view )
 	{
@@ -597,7 +628,7 @@ var Zeega = {
 	
 	exportProject : function( string )
 	{
-		console.log(this.route);
+		console.log('export');
 		
 		var order = _.map( this.route.get('nodesOrder'), function(num){ return parseInt(num) });
 		var routes = [{
@@ -614,6 +645,8 @@ var Zeega = {
 		};
 		
 		var exportObject = { 'project' : project };
+		
+		console.log(exportObject)
 		
 		if(string) return JSON.stringify(exportObject);
 		else return exportObject;

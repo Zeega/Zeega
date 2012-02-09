@@ -2,21 +2,33 @@
 Zeega\UserBundle\Entity\User:
    type: entity
    id:
-    id:
-     type: integer
-     generator: { strategy: AUTO }
+       id:
+           type: integer
+           generator: { strategy: AUTO }
+   manyToMany:
+      playgrounds:
+        targetEntity: Zeega\EditorBundle\Entity\Playground
+        inversedBy: users
+        joinTable:
+          name: users_playgrounds
+          inverseJoinColumns:
+            playground_id:
+              referencedColumnName: id
+          joinColumns:
+            user_id:
+              referencedColumnName: id
    fields:
-    display_name:
-     type: string
-     length: 255
-     nullable: true
-    bio:
-     type: text
-     nullable: true
-    thumb_url:
-     type: string
-     length: 255
-     nullable: true
-    created_at:
-     type: datetime
-     nullable: true
+       display_name:
+           type: string
+           length: 255
+           nullable: true
+       bio:
+           type: text
+           nullable: true
+       thumb_url:
+           type: string
+           length: 255
+           nullable: true
+       created_at:
+           type: datetime
+           nullable: true

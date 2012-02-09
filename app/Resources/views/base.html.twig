@@ -25,16 +25,19 @@
 			<link rel="stylesheet" href="{{ asset('gamma/js/jquery/plugins/colorpicker/css/colorpicker.css')}}" />
 			<link rel="stylesheet" href="{{ asset('gamma/js/libraries/aloha-rc9/css/aloha.css') }}" type="text/css" media="screen" />
 		{% endblock %}
+		{% block head %}
+		{% endblock %}
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
+			sessionStorage.setItem('playgroundid','{{playground.id}}');
 		</script>
 		
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
   
-<div id='add-media' style='width: 944px; height: 195px; padding: 30px; position:absolute; z-index:100000; top:88px; left: 50%; margin-left: -502px; background-color: white; display:none;'>
+<div id='add-media' style='width: 944px; height: 195px; padding: 30px; border-radius: 5px; position:absolute; z-index:100000; top:88px; left: 50%; margin-left: -502px; background-color: white; display:none;'>
 			
 			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
 
@@ -94,7 +97,7 @@
 						
 							<li ><a href="{{path('ZeegaEditorBundle_home')}}" class="dark"><img src="{{ asset('gamma/images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
 							{% if playground %}
-							<li class='drop-down clearfix' >
+							<li class='{% if num_playgrounds > 1 %} drop-down{% endif %} clearfix' >
 									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaEditorBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
 									{% if num_playgrounds > 1 %} 
 									<ul class='drop-down-menu'>
@@ -116,7 +119,7 @@
 									<a  class='drop-down-toggle' href="#" class="dark">Projects</a>
 									<ul class='drop-down-menu' style="width:200px;">
 									
-												<li><a id="new-project" href="#" style="font-size: 12px;">Create New Project</a></li><br>
+												<li><a class="new-project" href="#" style="font-size: 12px;">Create New Project</a></li><br>
 												
 												<hr>
 
@@ -132,7 +135,9 @@
 							{% else %} 
 							<li class='item add-media' style="margin-left: 45px;" ><a href="#">Add Media</a></li>
 							{% endif %} 
-							
+							{% if is_granted('ROLE_ADMIN') %}
+															<li>|</li><li><a href="{{ path('fos_user_registration_register') }}" class="dark">Register User</a></li><br>
+							{% endif %}
 						</ul>
 						
 						
@@ -148,7 +153,7 @@
 								Logged in as <a href='#' class='drop-down-toggle'>{{displayname}}</a>
 								<ul class='drop-down-menu'>	
 									<li id="css-change"><a href="#">Presentation</a></li>
-									<li><a href="{{ path('ZeegaEditorBundle_settings')}}">Settings</a></li>
+									<li><a href="{{ path('fos_user_change_password')}}">User Profile</a></li>
 									<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
 								</ul>
 							</li>
