@@ -29,6 +29,8 @@ class AppKernel extends Kernel
 		    new Knp\Bundle\MenuBundle\KnpMenuBundle(),
 		    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
+            new Zeega\CoreBundle\ZeegaCoreBundle(),
+            new Zeega\DataBundle\ZeegaDataBundle(),
         );
 
 
