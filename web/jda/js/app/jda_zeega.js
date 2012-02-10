@@ -48,7 +48,19 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
-	tester : function(){ return 'booooom' }
+	init : function()
+	{
+		// Include all modules
+		var Items = jda.module("items");
+		// make item collection
+		this.itemViewCollection = new Items.ViewCollection();
+	},
+	
+	search : function(obj)
+	{
+		this.itemViewCollection.search(obj);
+	}
+	
 	
 }, Backbone.Events)
 

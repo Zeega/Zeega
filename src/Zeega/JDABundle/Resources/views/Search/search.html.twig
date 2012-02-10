@@ -8,7 +8,7 @@
 
 {% block stylesheets %}
 
-
+<link href="{{ asset('jda/css/bootstrap-2.0.css')}}" rel="stylesheet" type="text/css">
 
 <link href="{{ asset('jda/css/itemPage.css')}}" rel="stylesheet" type="text/css">
 <link href="{{ asset('jda/css/textStyles.css')}}" rel="stylesheet" type="text/css">
@@ -38,78 +38,21 @@
 
 {% block content %}
 
-<div id="content"><div id="home-content-english">
-		<div class="narrow-container">
-
+<div class='container'>
 			
-
-
-
-			<div id="content-row" class="rowx" style="height:800px;">
+	<div id="search-bar" class='hero-unit group'>
+		<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>
+		<div id='search-filters' class="btn-group">
+			<a class='btn large active' data-goto-view='list' href="#">LIST</a>
+			<a class='btn large' data-goto-view='event' href="#">EVENT</a>
+			<a class='btn large' data-goto-view='tag' href="#">TAGS</a>
+		</div><!-- btn-group -->
+	</div><!-- search-bar -->
 			
+	<ul id="items-list" class='unstyled'></div>
 			
-					<div id="discovery-content-container">
-		
-		
-		
-		<!--
-		
-		<div id="discovery-sidebar">
-			<div id="discovery-sidebar-search">
-					<input id="discovery-sidebar-spacer"></input> <input
-						type="text" name="search-string"
-						id="discovery-search-text-field"></input> <input
-						type="submit" id="discovery-search-submit"
-						class="btn info submit" value="Search"
-						></input>
-			</div>
-			<div id="discovery-sidebar-filters"></div>
-		</div>
-		
-		-->
-		<div id="discovery-interface">
+</div><!-- #content -->
 			
-			
-			<div  class="hero-unit">
-				<div id="search-bar">
-						<form method="post" id="search-form">
-						<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="search-text" value="{% trans %}jda.home.search{% endtrans %}">
-						</form>
-						<div id="discovery-tabs">
-				<div id="discovery-tabs-table">
-					<div class="row">
-						<div id="discovery-tab-buffer-left" class='cell'>&nbsp;</div>
-						<div class='discovery-tab cell' id="list-tab">
-							<p class="body">LIST</p>
-						</div>
-						<div class='discovery-tab cell' id="event-tab">
-							<p class="body">EVENT</p>
-						</div>
-						<div class='discovery-tab cell' id="tags-tab">
-							<p class="body">TAGS</p>
-						</div>
-						<div id="discovery-tab-buffer-right" class='cell'>&nbsp;</div>
-					</div>
-				</div>
-			</div>
-					</div>
-			</div>
-			<div style="clear:both;"></div>
-			
-			
-			
-			<div id="discovery-interface-content"></div>
-		</div>
-	</div>
-
-			</div>
-			<!-- #content-row -->
-
-
-	</div>
-		
-	</div></div>
-
 
 <!-- Templates -->
 <script type="text/template" id="list-item-template">

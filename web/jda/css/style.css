@@ -1,12 +1,84 @@
 @CHARSET "ISO-8859-1";
 
-.row {
-	display: table-row;
+
+/*************************************
+
+		ICONS
+		
+**************************************/
+
+[class^="jdicon-"]
+{
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	vertical-align: text-top;
+	background-image: url(../images/jdicons-darkgrey-50.png);
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
 }
 
-.cell {
-	display: table-cell;
+.jdicon-image{background-position:0 0}
+.jdicon-email{background-position:-50px 0}
+.jdicon-website{background-position:-100px 0}
+.jdicon-twitter{background-position:-150px 0}
+.jdicon-facebook{background-position:-200px 0}
+.jdicon-map{background-position:-250px 0}
+.jdicon-document{background-position:-300px 0}
+.jdicon-date{background-position:-0px -50px}
+.jdicon-video{background-position:-400px 0}
+.jdicon-article{background-position:-450px 0}
+
+
+
+/**************************************
+
+	SEARCH BAR
+
+**************************************/
+#search-filters { float:left; padding: 8px 0 0 18px;}
+#search-bar input
+{
+	width:512px;
+	float:left;
+	font-size:2em;
+	font-weight:bold;
+	height:44px;
+	background:white url('../images/search.png') left center no-repeat;
+	padding-left:42px;
 }
+
+::-webkit-input-placeholder
+{
+	position:relative;
+	top:6px;
+}
+
+#search-bar h5
+{
+	line-height:18px;
+	color:rgba(255,255,255,0.85);
+}
+
+
+/**************************************
+
+	items list
+
+**************************************/
+
+#items-list li
+{
+	padding:12px 0;
+}
+
+/*
+#items-list li:nth-child(odd)
+{
+	background:#eee;
+	border-radius:6px;
+}
+*/
 
 a:focus {
 	outline: 0px;
@@ -37,48 +109,11 @@ a {
 	font-size: 13px;
 }
 
-html {
-	height: 100%;
-	width: 100%;
-}
-
-body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-
 p {
 	margin: 0px;
 	padding: 0px;
 }
 
-td {
-	border: 0px;
-	padding: 0px;
-}
-
-input {
-	border: 1px solid #707070;
-	
-}
-
-.button {
-	background-color: #F4F4F4;
-	text-align: center;
-	text-justify: inter-cluster;
-	font-weight: normal;
-	cursor: pointer;
-	border-radius: 3px;
-	border: 1px solid #707070;
-}
-
-.button:hover {
-	background-color: #fdfdfd;
-	color: black;
-}
 
 #content {
 	margin: 3px;
@@ -99,26 +134,12 @@ p
 	font-size:1.15em
 }
 
-.span05
-{
-	width:18px;
-}
-
-.span05l
-{
-	width:582px;
-}
-
 .hero-unit
 {
 	padding:24px;
 	padding-bottom:48px;
 }
 
-.hidden
-{
-	display:none;
-}
 
 .white
 {
@@ -221,28 +242,7 @@ header
 	font-size:2em;
 }
 
-#search-bar input
-{
-	width:512px;
-	float:left;
-	font-size:2em;
-	font-weight:bold;
-	height:44px;
-	background:white url('../images/search.png') left center no-repeat;
-	padding-left:42px;
-}
 
-::-webkit-input-placeholder
-{
-	position:relative;
-	top:6px;
-}
-
-#search-bar h5
-{
-	line-height:18px;
-	color:rgba(255,255,255,0.85);
-}
 
 #archive-stats
 {
@@ -378,4 +378,22 @@ opacity: 1;
 	position:relative;
 	left:-10px;
 	top:0;
+}
+
+
+/********************
+
+	CLEARFIX
+	
+*********************/
+.group:before,
+.group:after {
+    content:"";
+    display:table;
+}
+.group:after {
+    clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 (trigger hasLayout) */
 }

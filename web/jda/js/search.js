@@ -6,78 +6,7 @@ var filters = new FilterCollection(new Array());
 var originInterface = "list";
 var globalSearchResults;
 
-function search(filters, callback) {
-	window.location.hash='';
-	//spinner
-	$("#content-row").spin('small'); // Produces default Spinner using the text color of #el.	
 
-/*
-console.log(jda.module('items').Collection())
-
-
-var c = jda.module('items').Collection();
-c.fetch({
-	success : function(model, response){ console.log( response ) }
-});
-*/
-
-/*	
-	// TODO this will only deal with one text filter
-	var url = apiUrl + "search";
-	for ( var i = 0; i < filters.length; i++) {
-		if (i == 0) {
-			url += "?";
-		} else {
-			url += "&";
-		}
-		filter = filters.at(i);
-		switch (filter.get("type")) {
-		case "text":
-			window.location.hash+='text='+encodeURIComponent(filter.get("string"))+'&';
-			console.log('adding filter');
-			url += "q=" + encodeURIComponent(filter.get("string"));
-			break;
-		case "tag":
-			window.location.hash+='tag='+encodeURIComponent(filter.get("tags"))+'&';
-			url += "tags=";
-			tagTexts = filter.get("tags");
-			for ( var j = 0; j < tagTexts.length; j++) {
-				if (j > 0) {
-					url += ',';
-				}
-				url += tagTexts[j];
-			}
-			break;
-		}
-	}
-*/
-//	 console.log("searching: " + url);
-/*
-	$.getJSON(url, function(data) {
-		globalSearchResults = new ItemCollection(data);
-		callback(new ItemCollection(data));
-		$("#content-row").spin(false)
-	});
-*/
-
-
-
-
-}
-
-function homeSearch(searchString) {
-	if (searchString) {
-		newFilter = new Filter({
-			type : "text",
-			string : searchString
-		});
-		filters = new FilterCollection(new Array());
-		filters.add(newFilter);
-	}
-	searchItems = search(filters, function(searchResult) {
-		enterDiscovery(searchResult.at(0), filters, "list", {});
-	});
-};
 
 // go into discovery interface
 function enterDiscovery(searchResults, filters, interface, options) {

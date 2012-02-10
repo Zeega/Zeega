@@ -16,7 +16,7 @@ var loadFiles = [
 	
 	'order!libraries/jquery/jquery-1.7.1.min',
 	'order!libraries/underscore/underscore-min',
-	'order!libraries/backbone/backbone-min',
+	'order!libraries/backbone/backbone-0.9.1',
 	'order!libraries/jquery-easing/jquery.easing.1.3',
 	'order!libraries/jquery.fancybox-1.3.4/fancybox/jquery.easing-1.3.pack',
 	'order!libraries/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack',
@@ -30,7 +30,19 @@ var loadFiles = [
 
 	//mvc
 	'order!app/jda_zeega',
-	'order!app/modules/items',
+	
+	
+	//models
+	'order!app/models/items',
+	
+	//collections
+	'order!app/collections/items',
+	
+	//views
+	'order!app/views/items/items-list',
+	
+	
+	
 	'order!app/index',
 	
 	
@@ -67,7 +79,11 @@ require(loadFiles, function(jquery)
 
 	
 	var hashfilters = window.location.hash.substr(1).split('&');
-	if(hashfilters.length>0){
+	
+	/*
+	if(hashfilters.length>0)
+	{
+		
 		var filters = new FilterCollection(new Array());
 		console.log(hashfilters);
 		for ( var i = 0; i < hashfilters.length; i++) {
@@ -81,13 +97,15 @@ require(loadFiles, function(jquery)
 				filters.add(newFilter);
 			}
 		}
+		
 	}	
-	if(filters.length>0){
+	if(filters.length>0)
+	{
 		searchItems = search(filters, function(searchResult) {
 			enterDiscovery(searchResult.at(0), filters, "list", {});
 		});
 	}
 	else homeSearch('');
-	
+	*/
 });
 

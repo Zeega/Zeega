@@ -1,26 +1,18 @@
 // Treat the jQuery ready function as the entry point to the application.
 // Inside this function, kick-off all initialization, everything up to this
 // point should be definitions.
-jQuery(function($) {
-
+jQuery(function($)
+{
 	// Shorthand the application namespace
-	var app = jda.app;
+	jda.app.init();
 	
-	// Include the items module
+	/*
+	// Include all modules
 	var Items = jda.module("items");
+	// make item collection
+	var itemViewCollection = new Items.ViewCollection();
+	*/
 	
-	console.log('jda loaded')
-	
-	var itemCollection = new Items.Collection();
-	itemCollection.fetch({
-		model:Items.Model,
-		success : function(model,response)
-		{
-			console.log(model)
-		}
-	});
-	
-	console.log(window)
 /*
 	// Defining the application router, you can attach sub routers here.
 	var Router = Backbone.Router.extend({
