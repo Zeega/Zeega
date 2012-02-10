@@ -33,8 +33,8 @@ class ParserFlickrSet extends ParserCollectionAbstract
 
 		$collection->setTitle($setInfo["title"]);
 		$collection->setDescription($setInfo["description"]);
-		$collection->setType('Collection');
-	    $collection->setSource('Flickr');
+		$collection->setMediaType('Collection');
+	    $collection->setLayerType('Flickr');
 	    $collection->setUri('http://zeega.org');
 		$collection->setAttributionUri($url);
 

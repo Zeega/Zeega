@@ -86,8 +86,8 @@ class TagsController extends Controller
         $new_items = $request_data->get('newItemIDS');
 
         $collection = new Item();
-        $collection->setType('Collection');
-        $collection->setSource('Collection');
+        $collection->setMediaType('Collection');
+        $collection->setLayerType('Collection');
         $collection->setUri('http://zeega.org');
         $collection->setAttributionUri("http://zeega.org");
         $collection->setUser($user);

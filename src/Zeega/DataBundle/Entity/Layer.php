@@ -1,16 +1,16 @@
 <?php
 
-// src/Zeega/DataBundle/Entity/Layer.php
-
 namespace Zeega\DataBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zeega\DataBundle\Entity\Layer
+ */
 class Layer
 {
- 
- 
-  
     /**
-     * @var integer $id
+     * @var bigint $id
      */
     private $id;
 
@@ -29,38 +29,26 @@ class Layer
      */
     private $text;
 
-    
+    /**
+     * @var integer $zindex
+     */
+    private $zindex;
 
     /**
-     * @var Zeega\DataBundle\Entity\User
+     * @var array $attr
      */
-    private $user;
+    private $attr;
 
     /**
      * @var Zeega\DataBundle\Entity\Item
      */
     private $item;
 
-    /**
-     * @var Zeega\DataBundle\Entity\Layer
-     */
-    private $below;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Layer
-     */
-    private $above;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $frame;
-
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return bigint 
      */
     public function getId()
     {
@@ -92,7 +80,7 @@ class Layer
      *
      * @param string $type
      */
-    public function setType($type)
+    public function setMediaType($type)
     {
         $this->type = $type;
     }
@@ -128,23 +116,43 @@ class Layer
     }
 
     /**
-     * Set user
+     * Set zindex
      *
-     * @param Zeega\DataBundle\Entity\User $user
+     * @param integer $zindex
      */
-    public function setUser(\Zeega\DataBundle\Entity\User $user)
+    public function setZindex($zindex)
     {
-        $this->user = $user;
+        $this->zindex = $zindex;
     }
 
     /**
-     * Get user
+     * Get zindex
      *
-     * @return Zeega\DataBundle\Entity\User 
+     * @return integer 
      */
-    public function getUser()
+    public function getZindex()
     {
-        return $this->user;
+        return $this->zindex;
+    }
+
+    /**
+     * Set attr
+     *
+     * @param array $attr
+     */
+    public function setAttr($attr)
+    {
+        $this->attr = $attr;
+    }
+
+    /**
+     * Get attr
+     *
+     * @return array 
+     */
+    public function getAttr()
+    {
+        return $this->attr;
     }
 
     /**
@@ -166,117 +174,4 @@ class Layer
     {
         return $this->item;
     }
-
-    /**
-     * Set below
-     *
-     * @param Zeega\DataBundle\Entity\Layer $below
-     */
-    public function setBelow(\Zeega\DataBundle\Entity\Layer $below)
-    {
-        $this->below = $below;
-    }
-
-    /**
-     * Get below
-     *
-     * @return Zeega\DataBundle\Entity\Layer 
-     */
-    public function getBelow()
-    {
-        return $this->below;
-    }
-
-    /**
-     * Set above
-     *
-     * @param Zeega\DataBundle\Entity\Layer $above
-     */
-    public function setAbove(\Zeega\DataBundle\Entity\Layer $above)
-    {
-        $this->above = $above;
-    }
-
-    /**
-     * Get above
-     *
-     * @return Zeega\DataBundle\Entity\Layer 
-     */
-    public function getAbove()
-    {
-        return $this->above;
-    }
-
-    /**
-     * Set frame
-     *
-     * @param Zeega\DataBundle\Entity\Frame $frame
-     */
-    public function setFrame(\Zeega\DataBundle\Entity\Frame $frame)
-    {
-        $this->frame = $frame;
-    }
-
-    /**
-     * Get frame
-     *
-     * @return Zeega\DataBundle\Entity\Frame 
-     */
-    public function getFrame()
-    {
-        return $this->frame;
-    }
-    /**
-     * @var array $attr
-     */
-    private $attr;
-
-
-    /**
-     * Set attr
-     *
-     * @param array $attr
-     */
-    public function setAttr($attr)
-    {
-        $this->attr = $attr;
-    }
-
-    /**
-     * Get attr
-     *
-     * @return array 
-     */
-    public function getAttr()
-    {
-        return $this->attr;
-    }
-    
-    /**
-     * @var integer $zindex
-     */
-    private $zindex;
-
-
-    /**
-     * Set zindex
-     *
-     * @param integer $zindex
-     */
-    public function setZindex($zindex)
-    {
-        $this->zindex = $zindex;
-    }
-
-    /**
-     * Get zindex
-     *
-     * @return integer 
-     */
-    public function getZindex()
-    {
-        return $this->zindex;
-    }
-    
-  
 }

@@ -44,6 +44,11 @@ class Media
      */
     private $aspect_ratio;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Item
+     */
+    private $item;
+
 
     /**
      * Get id
@@ -174,11 +179,6 @@ class Media
     {
         return $this->aspect_ratio;
     }
-    /**
-     * @var Zeega\DataBundle\Entity\Item
-     */
-    private $item;
-
 
     /**
      * Set item

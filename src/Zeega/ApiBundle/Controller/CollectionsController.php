@@ -195,8 +195,8 @@ class CollectionsController extends Controller
         $item = new Item();
         
         $item->setTitle('My new collection');
-        $item->setType('Collection');
-        $item->setSource('Collection');
+        $item->setMediaType('Collection');
+        $item->setLayerType('Collection');
         $item->setUser($user);
         $item->setUri('collectionurl');
         $item->setAttributionUri('zeega.org');
@@ -365,8 +365,8 @@ class CollectionsController extends Controller
             // if(!$collection) throw error - something went wrong
         }
 
-        $collection->setType('Collection');
-        $collection->setSource('Collection');
+        $collection->setMediaType('Collection');
+        $collection->setLayerType('Collection');
         $collection->setUri('http://zeega.org');
         $collection->setDescription($description);
         $collection->setText($text);

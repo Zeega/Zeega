@@ -26,8 +26,8 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 		$collection->setTitle((string)$xml->title);
 		$collection->setDescription((string)$xml->subtitle);
 		$collection->setMediaCreatorUsername((string)$xml->author->name);
-		$collection->setType('Collection');
-	    $collection->setSource('Youtube');
+		$collection->setMediaType('Collection');
+	    $collection->setLayerType('Youtube');
 	    $collection->setUri($url);
 		$collection->setAttributionUri($url);
 		
@@ -74,8 +74,8 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			$item->setDescription((string)$entryMedia->group->description);
 			$item->setAttributionUri((string)$attributionUrl);
 			$item->setDateCreated(new \DateTime("now"));
-			$item->setType('Video');
-			$item->setSource('Youtube');
+			$item->setMediaType('Video');
+			$item->setLayerType('Youtube');
 			$item->setChildItemsCount(0);
 
 			foreach($entry->children('http://www.georss.org/georss') as $geo)

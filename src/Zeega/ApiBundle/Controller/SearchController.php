@@ -136,7 +136,7 @@ class SearchController extends Controller
 	            // separate items from collections - this is O(n) and won't scale well for huge collections
 			    foreach ($queryResults as $res)
 	            {
-	                if ((strtoupper($res["type"]) == "COLLECTION"))
+	                if ((strtoupper($res["media_type"]) == "COLLECTION"))
 	                    array_push($collections, $res);
 	                else
 	                    array_push($items, $res);

@@ -4,8 +4,6 @@ namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use DateTime;
-
 /**
  * Zeega\DataBundle\Entity\Item
  */
@@ -25,6 +23,11 @@ class Item
      * @var bigint $metadata_id
      */
     private $metadata_id;
+
+    /**
+     * @var integer $site_id
+     */
+    private $site_id;
 
     /**
      * @var string $title
@@ -52,24 +55,29 @@ class Item
     private $uri;
 
     /**
+     * @var string $archive
+     */
+    private $archive;
+
+    /**
      * @var string $attribution_uri
      */
     private $attribution_uri;
 
     /**
-     * @var date $date_created
+     * @var datetime $date_created
      */
     private $date_created;
 
     /**
-     * @var string $type
+     * @var string $media_type
      */
-    private $type;
+    private $media_type;
 
     /**
-     * @var string $source
+     * @var string $layer_type
      */
-    private $source;
+    private $layer_type;
 
     /**
      * @var string $thumbnail_url
@@ -92,12 +100,12 @@ class Item
     private $media_geo_longitude;
 
     /**
-     * @var date $media_date_created
+     * @var datetime $media_date_created
      */
     private $media_date_created;
 
     /**
-     * @var date $media_date_created_end
+     * @var datetime $media_date_created_end
      */
     private $media_date_created_end;
 
@@ -149,10 +157,8 @@ class Item
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-    	$this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-    	$this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
-    	$this->date_created = new DateTime(NULL);
-    	
+    $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -203,6 +209,26 @@ class Item
     public function getMetadataId()
     {
         return $this->metadata_id;
+    }
+
+    /**
+     * Set site_id
+     *
+     * @param integer $siteId
+     */
+    public function setSiteId($siteId)
+    {
+        $this->site_id = $siteId;
+    }
+
+    /**
+     * Get site_id
+     *
+     * @return integer 
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
     }
 
     /**
@@ -306,6 +332,26 @@ class Item
     }
 
     /**
+     * Set archive
+     *
+     * @param string $archive
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
      * Set attribution_uri
      *
      * @param string $attributionUri
@@ -328,7 +374,7 @@ class Item
     /**
      * Set date_created
      *
-     * @param date $dateCreated
+     * @param datetime $dateCreated
      */
     public function setDateCreated($dateCreated)
     {
@@ -338,7 +384,7 @@ class Item
     /**
      * Get date_created
      *
-     * @return date 
+     * @return datetime 
      */
     public function getDateCreated()
     {
@@ -346,43 +392,43 @@ class Item
     }
 
     /**
-     * Set type
+     * Set media_type
      *
-     * @param string $type
+     * @param string $mediaType
      */
-    public function setType($type)
+    public function setMediaType($mediaType)
     {
-        $this->type = $type;
+        $this->media_type = $mediaType;
     }
 
     /**
-     * Get type
+     * Get media_type
      *
      * @return string 
      */
-    public function getType()
+    public function getMediaType()
     {
-        return $this->type;
+        return $this->media_type;
     }
 
     /**
-     * Set source
+     * Set layer_type
      *
-     * @param string $source
+     * @param string $layerType
      */
-    public function setSource($source)
+    public function setLayerType($layerType)
     {
-        $this->source = $source;
+        $this->layer_type = $layerType;
     }
 
     /**
-     * Get source
+     * Get layer_type
      *
      * @return string 
      */
-    public function getSource()
+    public function getLayerType()
     {
-        return $this->source;
+        return $this->layer_type;
     }
 
     /**
@@ -468,7 +514,7 @@ class Item
     /**
      * Set media_date_created
      *
-     * @param date $mediaDateCreated
+     * @param datetime $mediaDateCreated
      */
     public function setMediaDateCreated($mediaDateCreated)
     {
@@ -478,7 +524,7 @@ class Item
     /**
      * Get media_date_created
      *
-     * @return date 
+     * @return datetime 
      */
     public function getMediaDateCreated()
     {
@@ -488,7 +534,7 @@ class Item
     /**
      * Set media_date_created_end
      *
-     * @param date $mediaDateCreatedEnd
+     * @param datetime $mediaDateCreatedEnd
      */
     public function setMediaDateCreatedEnd($mediaDateCreatedEnd)
     {
@@ -498,7 +544,7 @@ class Item
     /**
      * Get media_date_created_end
      *
-     * @return date 
+     * @return datetime 
      */
     public function getMediaDateCreatedEnd()
     {
@@ -646,7 +692,6 @@ class Item
     }
 
     /**
-
      * Add child_items
      *
      * @param Zeega\DataBundle\Entity\Item $childItems
@@ -674,192 +719,12 @@ class Item
     public function getParentItems()
     {
         return $this->parent_items;
-
     }
-
     /**
      * @ORM\prePersist
      */
     public function onPrePersist()
     {
-        if($this->type == "Collection")
-        {
-            $this->setChildItemsCount($this->getChildItems()->count());
-        }
-    }
-    /**
-     * @var integer $site_id
-     */
-    private $site_id;
-
-
-    /**
-     * Set site_id
-     *
-     * @param integer $siteId
-     */
-    public function setSiteId($siteId)
-    {
-        $this->site_id = $siteId;
-    }
-
-    /**
-     * Get site_id
-     *
-     * @return integer 
-     */
-    public function getSiteId()
-    {
-        return $this->site_id;
-    }
-    /**
-     * @var integer $sequence_id
-     */
-    private $sequence_id;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Site
-     */
-    private $site;
-
-
-    /**
-     * Set sequence_id
-     *
-     * @param integer $sequenceId
-     */
-    public function setSequenceId($sequenceId)
-    {
-        $this->sequence_id = $sequenceId;
-    }
-
-    /**
-     * Get sequence_id
-     *
-     * @return integer 
-     */
-    public function getSequenceId()
-    {
-        return $this->sequence_id;
-    }
-
-    /**
-     * Set site
-     *
-     * @param Zeega\DataBundle\Entity\Site $site
-     */
-    public function setSite(\Zeega\DataBundle\Entity\Site $site)
-    {
-        $this->site = $site;
-    }
-
-    /**
-     * Get site
-     *
-     * @return Zeega\DataBundle\Entity\Site 
-     */
-    public function getSite()
-    {
-        return $this->site;
-    }
-    /**
-     * @var integer $site_id
-     */
-    private $site_id;
-
-
-    /**
-     * Set site_id
-     *
-     * @param integer $siteId
-     */
-    public function setSiteId($siteId)
-    {
-        $this->site_id = $siteId;
-    }
-
-    /**
-     * Get site_id
-     *
-     * @return integer 
-     */
-    public function getSiteId()
-    {
-        return $this->site_id;
-    }
-    /**
-     * @var string $archive
-     */
-    private $archive;
-
-    /**
-     * @var string $media_type
-     */
-    private $media_type;
-
-    /**
-     * @var string $layer_type
-     */
-    private $layer_type;
-
-
-    /**
-     * Set archive
-     *
-     * @param string $archive
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    }
-
-    /**
-     * Get archive
-     *
-     * @return string 
-     */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
-
-    /**
-     * Set media_type
-     *
-     * @param string $mediaType
-     */
-    public function setMediaType($mediaType)
-    {
-        $this->media_type = $mediaType;
-    }
-
-    /**
-     * Get media_type
-     *
-     * @return string 
-     */
-    public function getMediaType()
-    {
-        return $this->media_type;
-    }
-
-    /**
-     * Set layer_type
-     *
-     * @param string $layerType
-     */
-    public function setLayerType($layerType)
-    {
-        $this->layer_type = $layerType;
-    }
-
-    /**
-     * Get layer_type
-     *
-     * @return string 
-     */
-    public function getLayerType()
-    {
-        return $this->layer_type;
+        // Add your code here
     }
 }

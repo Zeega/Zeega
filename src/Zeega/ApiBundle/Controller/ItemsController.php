@@ -137,8 +137,8 @@ class ItemsController extends Controller
        
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
-        $item->setType($this->getRequest()->request->get('type'));
-        $item->setSource($this->getRequest()->request->get('source'));
+        $item->setMediaType($this->getRequest()->request->get('type'));
+        $item->setLayerType($this->getRequest()->request->get('source'));
         $item->setUser($user);
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
@@ -435,8 +435,8 @@ class ItemsController extends Controller
 		
 
         $item = new Item();
-        $item->setType('Collection');
-        $collection->setSource('Collection');
+        $item->setMediaType('Collection');
+        $collection->setLayerType('Collection');
         $collection->setUri('http://zeega.org');
         $collection->setAttributionUri("http://zeega.org");
         $collection->setUser($user);

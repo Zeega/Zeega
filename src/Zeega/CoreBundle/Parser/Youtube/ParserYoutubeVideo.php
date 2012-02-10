@@ -39,8 +39,8 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		$item->setDescription((string)$entryMedia->group->keywords);
 		$item->setAttributionUri((string)$attributionUrl);
 		$item->setDateCreated(new \DateTime("now"));
-		$item->setType('Video');
-		$item->setSource('Youtube');
+		$item->setMediaType('Video');
+		$item->setLayerType('Youtube');
 		$item->setChildItemsCount(0);
 
 		foreach($entry->children('http://www.georss.org/georss') as $geo)
