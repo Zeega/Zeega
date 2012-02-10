@@ -31,7 +31,7 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-			sessionStorage.setItem('playgroundid','{{playground.id}}');
+			sessionStorage.setItem('siteid','{{site.getId()}}');
 		</script>
 		
     </head>
@@ -96,14 +96,14 @@
 						<ul>
 						
 							<li ><a href="{{path('ZeegaCoreBundle_home')}}" class="dark"><img src="{{ asset('images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
-							{% if playground %}
-							<li class='{% if num_playgrounds > 1 %} drop-down{% endif %} clearfix' >
-									<a  {% if num_playgrounds > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaCoreBundle_playground', {'short': playground.short }) }}" class="dark">  {{title}} </a>
-									{% if num_playgrounds > 1 %} 
+							{% if site%}
+							<li class='{% if num_sites > 1 %} drop-down{% endif %} clearfix' >
+									<a  {% if num_sites > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}" class="dark">  {{title}} </a>
+									{% if num_sites > 1 %} 
 									<ul class='drop-down-menu'>
 									
-										{% for p in playgrounds %}
-												<li><a  href="{{ path('ZeegaCoreBundle_playground', {'short': p.short }) }}" class="dark">  {{p.title}} </a></li>
+										{% for p in sites %}
+												<li><a  href="{{ path('ZeegaCoreBundle_site', {'short': p.short }) }}" class="dark">  {{p.title}} </a></li>
 										{% endfor %}
 									</ul>
 									{% endif %} 
@@ -111,7 +111,7 @@
 							
 							
 							<li class=' clearfix' style="margin-left: 20px;">
-									<a   href="{{ path('ZeegaCoreBundle_browser', {'short': playground.short }) }}" class="dark">Collections</a>
+									<a   href="{{ path('ZeegaCoreBundle_browser', {'short': site.short }) }}" class="dark">Collections</a>
 	
 							</li>
 							<li>|</li>
@@ -125,7 +125,7 @@
 
 									
 										{% for project in myprojects %}
-												<li><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': playground.short }) }}" class="dark">{{project.title}}</a></li><br>
+												<li><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}" class="dark">{{project.title}}</a></li><br>
 										{% endfor %}
 									</ul>
 							</li>

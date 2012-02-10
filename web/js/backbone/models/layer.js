@@ -11,7 +11,7 @@ var Layer =  Backbone.Model.extend({
 	
 	initialize: function(){
 		
-		eval( 'this.layerClass = new '+ this.get('type')+'Layer()' );
+		eval( 'this.layerClass = new '+ this.get("type")+'Layer()' );
 		this.layerClass.load(this);
 		
 		if(!this.get('attr')) this.set({'attr':{}}); //this should be covered by defaults
@@ -74,7 +74,7 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	addToLayerTypeCollection : function(layer, render)
 	{
-		eval( 'var layerClass = new '+ layer.get('type')+'Layer()' );
+		eval( 'var layerClass = new '+ layer.get("media_type")+'Layer()' );
 		var type = layerClass.layerType.toLowerCase();
 		
 		if( _.isUndefined( this.layerCollectionArray[ type ]) )

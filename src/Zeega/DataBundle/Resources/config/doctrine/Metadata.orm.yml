@@ -13,7 +13,7 @@ Zeega\DataBundle\Entity\Metadata:
         archive:
             type: string
             length: 50
-            nullable: false
+            nullable: true
         license:
             type: string
             length: 50

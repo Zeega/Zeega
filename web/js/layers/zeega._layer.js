@@ -157,7 +157,7 @@ var ProtoLayer = Class.extend({
 			this.attr = _.defaults( this.attr, defaults);
 			this.model.set({ attr:this.attr })
 			this.title = this.attr.title;
-			this.type = model.get('type');
+			this.type = model.get("type");
 			this.zIndex = model.get('zindex');
 			
 			var editorCSS = {

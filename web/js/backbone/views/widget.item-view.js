@@ -21,7 +21,7 @@ var BookmarkletItemView = Backbone.View.extend({
 
 		// move to events (didn't work for me)
 		this.el.find('#add-item').click(function(){
-			var itemType = item.get('type');
+			var itemType = item.get("media_type");
 			item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
 			item.set({id : null});
 			item.save({ }, 
@@ -139,7 +139,7 @@ var BookmarkletCollectionItemView = Backbone.View.extend({
 		var _this = this;
 
 		var blanks = {
-			type : this.model.get('type').toLowerCase(),
+			type : this.model.get("media_type").toLowerCase(),
 			title : this.model.get('title'),
 			creator : this.model.get('media_creator_username'),
 			thumbUrl : this.model.get('thumbnail_url')

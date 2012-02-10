@@ -114,7 +114,7 @@ $(document).ready(function() {
            	var thisModel = itemsCollection.get(elementID);
 			var fancyView = null;
 
-			switch(thisModel.get("source")){
+			switch(thisModel.get("layer_type")){
 				case 'Image':
 					fancyView = new FancyBoxImageView({model:thisModel});
            			fancyView.render(this);

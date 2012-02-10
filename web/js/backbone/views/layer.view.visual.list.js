@@ -29,7 +29,7 @@ var VisualLayerListView = Backbone.View.extend({
 
 		this.model.bind('remove',this.remove);
 		var text = this.model.get('text');
-		var type = this.model.get('type');
+		var type = this.model.get("media_type");
 		
 		// make sure we have a deep copy and not a reference that can be edited
 		var defaults = deepCopy(this.model.layerClass.defaultAttributes);

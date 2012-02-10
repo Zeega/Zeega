@@ -314,7 +314,7 @@ class ImportWidget
 		
 		else return false;	
 		
-		$metadata->setArchive('archive.org');
+		$item->setArchive('archive.org');
 		$metadata->setAttributes(array('tags'=>$tags));
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
@@ -353,7 +353,7 @@ class ImportWidget
 				$item->setMediaCreatorRealname((string)$xml->name->namePart);
 				$item->setMediaType('Image');
 				$item->setLayerType('Image');
-				$metadata->setArchive('Hollis');
+				$item->setArchive('Hollis');
 				//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 				//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
 				
@@ -405,7 +405,7 @@ class ImportWidget
 				
 						$item->setMediaType('Image');
 						$item->setLayerType('Image');
-						$metadata->setArchive('Hollis');
+						$item->setArchive('Hollis');
 						//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
 						
@@ -460,7 +460,7 @@ class ImportWidget
 		$item->setMediaCreatorRealname('unknown');
 		$item->setMediaType('Video');
 		$item->setLayerType('Youtube');
-		$metadata->setArchive('Youtube');
+		$item->setArchive('Youtube');
 		$item->setDescription((string)$xml->mediagroup->mediadescription);
 		$metadata->setThumbnailUrl((string)$xml->mediagroup->mediathumbnail['url']);
 
@@ -529,7 +529,7 @@ class ImportWidget
 			$thumbnailUrl = (string)$attrs['url'];
 			
 			// write metadata
-			$metadata->setArchive('Youtube');
+			$item->setArchive('Youtube');
 			$metadata->setLicense((string)$entryMedia->group->license);
 			$metadata->setThumbnailUrl((string)$thumbnailUrl);
 			
@@ -565,7 +565,7 @@ class ImportWidget
 		$item->setMediaCreatorRealname('Unknown');
 		$metadata=new Metadata();
 		$item->setDescription('None');
-		$metadata->setArchive($urlInfo['archive']);
+		$item->setArchive($urlInfo['archive']);
 		if($urlInfo['contentType']=='Image') $metadata->setThumbnailUrl($urlInfo['itemUrl']);
 		elseif($urlInfo['contentType']=='Audio') $metadata->setThumbnailUrl($container->getParameter('hostname').$container->getParameter('directory') . 'images/templates/audio.jpg');
 		elseif($urlInfo['contentType']=='Video') $metadata->setThumbnailUrl($container->getParameter('hostname') .$container->getParameter('directory') . 'images/templates/video.jpg');
@@ -647,7 +647,7 @@ class ImportWidget
 				}
 			}
 		
-			$metadata->setArchive('Flickr'); 
+			$item->setArchive('Flickr'); 
 			$item->setMediaType('Image');
 			$item->setLayerType('Image');
 			$metadata->setAttributes($attr);
@@ -717,7 +717,7 @@ class ImportWidget
 			$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
 			$item->setMediaType('Audio');
 			$item->setLayerType('Audio');
-			$metadata->setArchive('SoundCloud');
+			$item->setArchive('SoundCloud');
 			$item->setUri((string)$xml->{'stream-url'});
 			$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
 			$duration=(string)$xml->{'duraton'};
@@ -796,7 +796,7 @@ class ImportWidget
 	$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
 	$item->setMediaType('Audio');
 	$item->setLayerType('Audio');
-	$metadata->setArchive('SoundCloud');
+	$item->setArchive('SoundCloud');
 	$item->setUri((string)$xml->{'stream-url'});
 	$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
 	$duration=(string)$xml->{'duraton'};
@@ -861,7 +861,7 @@ class ImportWidget
 		
 		$item->setMediaCreatorUsername((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$metadata->setAltCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
-		$metadata->setArchive('blip.tv');
+		$item->setArchive('blip.tv');
 		$item->setMediaType('Video');
 		$item->setLayerType('Video');
 		$item->setTitle((string)$info->{'title'});
@@ -953,7 +953,7 @@ class ImportWidget
 			$item->setMediaCreatorRealname('Unknown');
 		}
 		
-		$metadata->setArchive('DocumentCloud');
+		$item->setArchive('DocumentCloud');
 		$item->setMediaType('Document');
 		$item->setLayerType('DocumentCloud');
 		$item->setTitle($document->title);

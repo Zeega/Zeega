@@ -124,7 +124,7 @@ Zeega\DataBundle\Entity\Item:
         media_creator_realname:
             type: string
             length: 80
-            nullable: false
+            nullable: true
     _indexes:
         date_created_index:
             fields: [item_date_created]      

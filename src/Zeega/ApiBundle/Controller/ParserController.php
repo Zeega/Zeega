@@ -80,7 +80,7 @@ class ParserController extends Controller
     public function postParserPersistAction()
     {
 		$url = $this->getRequest()->request->get('attribution_uri');
-		//return new Response(var_dump($url));
+		
 		$matches = array();
 		$message = "";
 		
@@ -103,8 +103,9 @@ class ParserController extends Controller
 
 					    $collection->setTitle($this->getRequest()->request->get('title'));
 						$collection->setDescription($this->getRequest()->request->get('description'));
-				        $collection->setMediaType($this->getRequest()->request->get('type'));
-				        $collection->setLayerType($this->getRequest()->request->get('source'));
+				        $collection->setMediaType($this->getRequest()->request->get('media_type'));
+				        $collection->setLayerType($this->getRequest()->request->get('layer_type'));
+						$collection->setArchive($this->getRequest()->request->get('archive'));
 				        $collection->setUser($user);
 				        $collection->setUri($this->getRequest()->request->get('uri'));
 				        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
@@ -112,7 +113,7 @@ class ParserController extends Controller
 				        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
 				        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
 				        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
-					
+
 						$parserMethod = new ReflectionMethod($parserClass, 'getCollection'); // reflection is slow, but it's probably ok here
 						$response = $parserMethod->invokeArgs(new $parserClass, array($url, $setId, $collection));
 						$collection = $response["items"];

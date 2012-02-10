@@ -242,7 +242,7 @@ class SequencesController extends Controller
     	
 		$request = $this->getRequest();
     	
-    	$sequence->addLayers($layer);
+    	$sequence->addLayer($layer);
     	
     	
     	
@@ -256,7 +256,7 @@ class SequencesController extends Controller
 			
 		}
 		
-		if($request->request->get('type')) $layer->setMediaType($request->request->get('type'));   	
+		if($request->request->get("media_type")) $layer->setMediaType($request->request->get("media_type"));   	
     	
     	if($request->request->get('text')) $layer->setText($request->request->get('text'));
     	

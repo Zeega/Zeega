@@ -64,7 +64,7 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		$thumbnailUrl = (string)$attrs['url'];
 
 		// write metadata
-		$metadata->setArchive('Youtube');
+		$item->setArchive('Youtube');
 		$metadata->setLicense((string)$entryMedia->group->license);
 		$metadata->setThumbnailUrl((string)$thumbnailUrl);
 		

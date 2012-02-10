@@ -25,7 +25,7 @@ var TwilioLayer = ProtoLayer.extend({
 		var controls = $(iLayerTemplate);
 		
 		//set title
-		controls.find('.i-layer-title').html(this.model.get('type')+ " Layer");
+		controls.find('.i-layer-title').html(this.model.get("media_type")+ " Layer");
 		
 		//set delete button
 		controls.find('#delete-layer').click(function(){

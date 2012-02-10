@@ -331,6 +331,10 @@ var Zeega = {
 							_this.updateAndSaveFrameLayer(frame,savedLayer);
 							_this.addToLayerCollections(frame, savedLayer);
 							if( savedLayer.layerClass.thumbUpdate ) frame.noteChange() ;
+						},
+						error : function(model, error)
+						{
+							console.log(response);
 						}
 					});
 				//save the new layer then prepend the layer id into the frame layers array
@@ -349,7 +353,7 @@ var Zeega = {
 	{
 		if( _.isUndefined(frame)) frame = this.currentFrame;
 		var newLayer = new Layer({
-			type: Zeega.draggedItem.get('source'),
+			type: Zeega.draggedItem.get('layer_type'),
 			attr: {
 				'item_id' : item.id,
 				'title' : item.get('title'),
@@ -384,7 +388,7 @@ var Zeega = {
 	{
 		//remove from frame.layer and save it back
 		//remove icon from tray
-		$('.'+layer.get('type').toLowerCase()+'-tray-icon').remove();
+		$('.'+layer.get("type").toLowerCase()+'-tray-icon').remove();
 		
 	
 		//test to see if the layer is a persisting layer and destroy it from all frames if so

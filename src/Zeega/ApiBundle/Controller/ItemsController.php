@@ -137,8 +137,9 @@ class ItemsController extends Controller
        
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
-        $item->setMediaType($this->getRequest()->request->get('type'));
-        $item->setLayerType($this->getRequest()->request->get('source'));
+        $item->setMediaType($this->getRequest()->request->get('media_type'));
+		$item->setArchive($this->getRequest()->request->get('archive'));
+        $item->setLayerType($this->getRequest()->request->get('layer_type'));
         $item->setUser($user);
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
