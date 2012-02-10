@@ -19,7 +19,7 @@ class Version20120209145310 extends AbstractMigration
         $this->addSql("ALTER TABLE Node RENAME Frame");
 		$this->addSql("ALTER TABLE Route RENAME Sequence");
 		$this->addSql("ALTER TABLE Playground RENAME Site");
-		$this->addSql("ALTER TABLE Users_Playgrounds RENAME users_sites");
+		$this->addSql("ALTER TABLE users_playgrounds RENAME users_sites");
 		$this->addSql("ALTER TABLE routes_layers RENAME sequences_layers");		
 		
 		// drop playground_id fk and index

@@ -39,6 +39,11 @@ class Metadata
      */
     private $location;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Item
+     */
+    private $item;
+
 
     /**
      * Get id
@@ -149,11 +154,6 @@ class Metadata
     {
         return $this->location;
     }
-    /**
-     * @var Zeega\DataBundle\Entity\Item
-     */
-    private $item;
-
 
     /**
      * Set item

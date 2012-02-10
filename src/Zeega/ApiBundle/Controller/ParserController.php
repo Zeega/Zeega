@@ -103,8 +103,8 @@ class ParserController extends Controller
 
 					    $collection->setTitle($this->getRequest()->request->get('title'));
 						$collection->setDescription($this->getRequest()->request->get('description'));
-				        $collection->setType($this->getRequest()->request->get('type'));
-				        $collection->setSource($this->getRequest()->request->get('source'));
+				        $collection->setMediaType($this->getRequest()->request->get('type'));
+				        $collection->setLayerType($this->getRequest()->request->get('source'));
 				        $collection->setUser($user);
 				        $collection->setUri($this->getRequest()->request->get('uri'));
 				        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));

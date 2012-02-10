@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemTags
 {
     /**
-     * @var date $tag_date_created
+     * @var datetime $tag_date_created
      */
     private $tag_date_created;
 
@@ -33,7 +33,7 @@ class ItemTags
     /**
      * Set tag_date_created
      *
-     * @param date $tagDateCreated
+     * @param datetime $tagDateCreated
      */
     public function setTagDateCreated($tagDateCreated)
     {
@@ -43,7 +43,7 @@ class ItemTags
     /**
      * Get tag_date_created
      *
-     * @return date 
+     * @return datetime 
      */
     public function getTagDateCreated()
     {

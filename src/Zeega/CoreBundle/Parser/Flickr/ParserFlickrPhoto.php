@@ -87,8 +87,8 @@ class ParserFlickrPhoto extends ParserItemAbstract
 			}
 
 			$metadata->setArchive('Flickr'); 
-			$item->setType('Image');
-			$item->setSource('Image');
+			$item->setMediaType('Image');
+			$item->setLayerType('Image');
 			$metadata->setAttributes($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);

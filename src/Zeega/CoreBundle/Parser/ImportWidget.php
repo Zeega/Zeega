@@ -279,8 +279,8 @@ class ImportWidget
 				
 				}
 			}
-			$item->setType('Video');
-			$item->setSource('Video');
+			$item->setMediaType('Video');
+			$item->setLayerType('Video');
 			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
@@ -293,8 +293,8 @@ class ImportWidget
 				
 				}
 			}
-			$item->setType('Audio');
-			$item->setSource('Audio');
+			$item->setMediaType('Audio');
+			$item->setLayerType('Audio');
 			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
@@ -307,8 +307,8 @@ class ImportWidget
 				
 				}
 			}
-			$item->setType('Image');
-			$item->setSource('Image');
+			$item->setMediaType('Image');
+			$item->setLayerType('Image');
 			$item->setUri($newUrl.$fileKeys[$index]);
 		}
 		
@@ -351,8 +351,8 @@ class ImportWidget
 				$item->setAttributionUri('http://hollis.harvard.edu/?itemid=|misc/via|'.$id);
 				$item->setMediaCreatorUsername((string)$xml->name->namePart);
 				$item->setMediaCreatorRealname((string)$xml->name->namePart);
-				$item->setType('Image');
-				$item->setSource('Image');
+				$item->setMediaType('Image');
+				$item->setLayerType('Image');
 				$metadata->setArchive('Hollis');
 				//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 				//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
@@ -403,8 +403,8 @@ class ImportWidget
 						$item->setMediaCreatorUsername((string)$xml->name->namePart);
 						$item->setMediaCreatorRealname((string)$xml->name->namePart);
 				
-						$item->setType('Image');
-						$item->setSource('Image');
+						$item->setMediaType('Image');
+						$item->setLayerType('Image');
 						$metadata->setArchive('Hollis');
 						//$metadata->setTagList((string)$xml->mediagroup->mediakeywords);
 						//$metadata->setDescription((string)$xml->mediagroup->mediadescription);
@@ -458,8 +458,8 @@ class ImportWidget
 		$item->setAttributionUri('http://www.youtube.com/watch?v='+$id);
 		$item->setMediaCreatorUsername((string)$xml->author->name);
 		$item->setMediaCreatorRealname('unknown');
-		$item->setType('Video');
-		$item->setSource('Youtube');
+		$item->setMediaType('Video');
+		$item->setLayerType('Youtube');
 		$metadata->setArchive('Youtube');
 		$item->setDescription((string)$xml->mediagroup->mediadescription);
 		$metadata->setThumbnailUrl((string)$xml->mediagroup->mediathumbnail['url']);
@@ -504,8 +504,8 @@ class ImportWidget
 			$item->setDescription((string)$entryMedia->group->keywords);
 			$item->setAttributionUri((string)$attributionUrl);
 			$item->setDateCreated(new \DateTime("now"));
-			$item->setType('Video');
-			$item->setSource('Youtube');
+			$item->setMediaType('Video');
+			$item->setLayerType('Youtube');
 			$item->setChildItemsCount(0);
 			
 			foreach($entry->children('http://www.georss.org/georss') as $geo)
@@ -556,8 +556,8 @@ class ImportWidget
 	public function parseAbsolute($urlInfo,$container){
 	
 		$item=new Item();
-		$item->setType($urlInfo['contentType']);
-		$item->setSource($urlInfo['contentType']);
+		$item->setMediaType($urlInfo['contentType']);
+		$item->setLayerType($urlInfo['contentType']);
 		$item->setUri($urlInfo['itemUrl']);
 		$item->setUri($urlInfo['itemUrl']);
 		$item->setTitle($urlInfo['title']);
@@ -648,8 +648,8 @@ class ImportWidget
 			}
 		
 			$metadata->setArchive('Flickr'); 
-			$item->setType('Image');
-			$item->setSource('Image');
+			$item->setMediaType('Image');
+			$item->setLayerType('Image');
 			$metadata->setAttributes($attr);
 			$item->setMedia($media);
 			$item->setMetadata($metadata);
@@ -715,8 +715,8 @@ class ImportWidget
 			
 			$item->setMediaCreatorUsername((string)$xml->{'user'}->{'username'});
 			$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
-			$item->setType('Audio');
-			$item->setSource('Audio');
+			$item->setMediaType('Audio');
+			$item->setLayerType('Audio');
 			$metadata->setArchive('SoundCloud');
 			$item->setUri((string)$xml->{'stream-url'});
 			$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
@@ -794,8 +794,8 @@ class ImportWidget
 	
 	$item->setMediaCreatorUsername((string)$xml->{'user'}->{'username'});
 	$item->setMediaCreatorRealname((string)$xml->{'user'}->{'username'});
-	$item->setType('Audio');
-	$item->setSource('Audio');
+	$item->setMediaType('Audio');
+	$item->setLayerType('Audio');
 	$metadata->setArchive('SoundCloud');
 	$item->setUri((string)$xml->{'stream-url'});
 	$item->setDateCreated(new DateTime((string)$xml->{'created-at'}));
@@ -862,8 +862,8 @@ class ImportWidget
 		$item->setMediaCreatorUsername((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$metadata->setAltCreator((string)$xml->{'payload'}->{'asset'}->{'createdBy'}->{'login'});
 		$metadata->setArchive('blip.tv');
-		$item->setType('Video');
-		$item->setSource('Video');
+		$item->setMediaType('Video');
+		$item->setLayerType('Video');
 		$item->setTitle((string)$info->{'title'});
 		$description=(string)$info->{'description'};
 		$item->setDescription(str_replace('<br />','',$description));
@@ -954,8 +954,8 @@ class ImportWidget
 		}
 		
 		$metadata->setArchive('DocumentCloud');
-		$item->setType('Document');
-		$item->setSource('DocumentCloud');
+		$item->setMediaType('Document');
+		$item->setLayerType('DocumentCloud');
 		$item->setTitle($document->title);
 		$item->setUri($document->id);
 		

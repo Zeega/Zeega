@@ -170,7 +170,7 @@ class SequencesController extends Controller
         				
 						if($original_layer->getItem()) $layer->setItem($original_layer->getItem());
 						if($original_layer->getItemUri()) $layer->setUri($original_layer->getUri());
-						if($original_layer->getType()) $layer->setType($original_layer->getType());
+						if($original_layer->getType()) $layer->setMediaType($original_layer->getType());
 						if($original_layer->getText()) $layer->setText($original_layer->getText());
 						if($original_layer->getAttr()) $layer->setAttr($original_layer->getAttr());
 						
@@ -256,7 +256,7 @@ class SequencesController extends Controller
 			
 		}
 		
-		if($request->request->get('type')) $layer->setType($request->request->get('type'));   	
+		if($request->request->get('type')) $layer->setMediaType($request->request->get('type'));   	
     	
     	if($request->request->get('text')) $layer->setText($request->request->get('text'));
     	

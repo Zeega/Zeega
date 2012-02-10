@@ -20,14 +20,9 @@ class Tag
     private $name;
 
     /**
-     * @var date $date_created
+     * @var datetime $date_created
      */
     private $date_created;
-
-    /**
-     * @var bigint $user
-     */
-    private $user;
 
     /**
      * @var text $description
@@ -77,7 +72,7 @@ class Tag
     /**
      * Set date_created
      *
-     * @param date $dateCreated
+     * @param datetime $dateCreated
      */
     public function setDateCreated($dateCreated)
     {
@@ -87,31 +82,11 @@ class Tag
     /**
      * Get date_created
      *
-     * @return date 
+     * @return datetime 
      */
     public function getDateCreated()
     {
         return $this->date_created;
-    }
-
-    /**
-     * Set user
-     *
-     * @param bigint $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * Get user
-     *
-     * @return bigint 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

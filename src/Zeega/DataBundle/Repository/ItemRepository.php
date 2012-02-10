@@ -43,14 +43,14 @@ class ItemRepository extends EntityRepository
       	{
       	    $content_type = strtoupper($query['notContentType']);
 
-      	  	$qb->andWhere('i.type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
+      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
 		}
 		
         if(isset($query['contentType']))
       	{
       	    $content_type = strtoupper($query['contentType']);
 
-      	  	$qb->andWhere('i.type = ?4')->setParameter(4, $query['contentType']);
+      	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
 		}
 		
 		if(isset($query['tags']))
@@ -121,7 +121,7 @@ class ItemRepository extends EntityRepository
 	       ->from('ZeegaDataBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
-		$qb->andWhere('i.type <> :count_filter')->setParameter('count_filter', 'Collection');
+		$qb->andWhere('i.media_type <> :count_filter')->setParameter('count_filter', 'Collection');
 		
 		return array_sum($qb->getQuery()->getArrayResult());
 		
@@ -135,7 +135,7 @@ class ItemRepository extends EntityRepository
 	       ->from('ZeegaDataBundle:Item', 'i');
 
 	    $qb = $this->buildSearchQuery($qb, $query);
-		$qb->andWhere('i.type = :count_filter')->setParameter('count_filter', 'Collection');
+		$qb->andWhere('i.media_type = :count_filter')->setParameter('count_filter', 'Collection');
 		return array_sum($qb->getQuery()->getArrayResult());
 	}
 
@@ -257,7 +257,7 @@ class ItemRepository extends EntityRepository
 				    ->add('select', 'i')
 			        ->add('from', ' ZeegaDataBundle:Item i')
 			        ->andwhere('i.id = :id')
-			        ->andwhere("i.type = 'Collection'")
+			        ->andwhere("i.media_type = 'Collection'")
 			        ->setParameter('id',$id)
 			        ->getQuery()
 			        ->getArrayResult();
@@ -315,7 +315,7 @@ class ItemRepository extends EntityRepository
 		}
         elseif($query['contentType'] != 'all')
         {
-            $qb->andWhere('i.type = ?2')
+            $qb->andWhere('i.media_type = ?2')
                 ->setParameter(2, $query['contentType']);       
         }         
        	
