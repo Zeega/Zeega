@@ -58,6 +58,9 @@ Zeega\IngestBundle\Entity\Item:
         metadata_id:
             type: bigint
             nullable: true
+        playground_id:
+            type: integer
+            nullable: true            
         title:
             type: string
             length: 1000

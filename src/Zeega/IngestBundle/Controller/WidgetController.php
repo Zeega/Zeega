@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Zeega\IngestBundle\Entity\Media;
 use Zeega\IngestBundle\Entity\Metadata;
 use Zeega\IngestBundle\Entity\Tag;
+use Zeega\IngestBundle\Entity\ItemTags;
 use Zeega\IngestBundle\Entity\Item;
 use Zeega\EditorBundle\Entity\Playground;
 use Zeega\UserBundle\Entity\User;
@@ -33,8 +34,9 @@ class WidgetController extends Controller
     		
     		$item->setUser($user);
     		
-    		if($session->get('Playground')) 
-    		    $playground=$session->get('Playground');
+    		if($session->get('playgroundid')) 
+    			$playground = $this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    							    ->find($session->get('playgroundid'));
     		else 
     		{
     			$playgrounds = $this->getDoctrine()
@@ -58,6 +60,41 @@ class WidgetController extends Controller
     		$metadata=$item->getMetadata();
     		$media=$item->getMedia();
     		
+    		
+    		
+			$attr=$metadata->getAttributes();
+			if($attr&&isset($attr['tags'])) $tags=$attr['tags'];
+			else $tags=false;
+			
+		 if($tags&&count($tags)>0){
+		 	foreach($tags as $tagName){
+				$tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
+				
+				if (!$tag) 
+				{
+					$tag = new Tag();
+					$tag->setName($tagName);
+					$tag->setDateCreated(new \DateTime("now"));
+					$em->persist($tag);
+					$em->flush();
+				}
+				
+				// can't get EAGER loading for the item tags - this is a workaround
+				$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($item->getId());
+			
+				$item_tag = new ItemTags;
+				$item_tag->setItem($item);
+				$item_tag->setTag($tag);
+				$item_tag->setTagDateCreated(new \DateTime("now"));
+				$item_tag->setTagDateCreated(new \DateTime("now"));
+	
+				$em->persist($item_tag);
+				$em->flush();
+			}
+		 }
+			
+			
+			
 			/*  Create Thumbnail Image : If no thumbnail is provided, thumbnail of attribution url is created */
 			
 			
@@ -87,7 +124,7 @@ class WidgetController extends Controller
 				return new Response(0);	
 			}
 			else{		
-				$name=tempnam('/var/www/'.$this->container->getParameter('directory').'images/tmp/','image'.$item->getId());
+				$name=tempnam($this->container->getParameter('path').'images/tmp/','image'.$item->getId());
 				file_put_contents($name,$img);
 				$square = new Imagick($name);
 				$thumb = $square->clone();
@@ -109,8 +146,8 @@ class WidgetController extends Controller
 				$logger->err("writing image");
 				$square->thumbnailImage(144,0);
 			
-				$thumb->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage('/var/www/'.$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				$thumb->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_s.jpg');
 			
 				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
 				$em->persist($item);
@@ -135,15 +172,28 @@ class WidgetController extends Controller
 	public function urlAction(){
     	$request=$this->getRequest();
     	$user = $this->get('security.context')->getToken()->getUser();
-		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItems($user->getId());
+		
 		$session = $request->getSession();
 		$widgetId=$request->query->get('widget-id');
 		$logger = $this->get('logger');
 		$em=$this->getDoctrine()->getEntityManager();
-		$playgrounds=$this->getDoctrine()
-							->getRepository('ZeegaEditorBundle:Playground')
-							->findPlaygroundsByUser($user->getId());
-							
+		
+		if($session->get('playgroundid')) 
+    		$playground = 	$this->getDoctrine()->getRepository('ZeegaEditorBundle:Playground')
+    							    ->find($session->get('playgroundid'));
+    	else 
+		{
+			$playgrounds = $this->getDoctrine()
+								->getRepository('ZeegaEditorBundle:Playground')
+								->findPlaygroundByUser($user->getId());
+			$playground=$playgrounds[0];
+		}
+		
+		
+	
+		$mycollection=$this->getDoctrine()->getRepository('ZeegaIngestBundle:Item')->findUserItemsByPlayground($user->getId(),$playground->getId());
+		
+		
 		$url=$request->query->get('url');
 			
 		$check=$this->getDoctrine()
@@ -153,11 +203,11 @@ class WidgetController extends Controller
 		if($check){
 			return $this->render('ZeegaIngestBundle:Widget:duplicate.widget.html.twig', array(
 				'displayname' => $user->getDisplayname(),
-				'playground'=>$playgrounds[0],
+				'playground'=>$playground,
 				'title'=>$check['title'],
 				'item_id'=>$check['id'],
 				'content_type'=>$check['type'],
-				 'mycollection'=>$mycollection,
+				'mycollection'=>$mycollection,
 			));
 		}
 		else{
@@ -203,6 +253,7 @@ class WidgetController extends Controller
 					'widget_id'=>$widgetId,
 					'thumb_url'=>$metadata->getThumbnailUrl(),
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 				));
 			}
         	elseif(isset($collection)&&$collection){
@@ -229,6 +280,7 @@ class WidgetController extends Controller
 					'widget_ids'=>$widgetIds,
 					'thumb_urls'=>$thumbUrls,
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 					'count'=>count($thumbUrls),
 				));
 		
@@ -240,6 +292,7 @@ class WidgetController extends Controller
 					'url'=>json_encode($widgetId),
 					'title'=>'temp title',
 					'mycollection'=>$mycollection,
+					'playground'=>$playground,
 					));
 			} 
     	}

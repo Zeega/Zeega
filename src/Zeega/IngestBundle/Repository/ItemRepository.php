@@ -24,7 +24,13 @@ class ItemRepository extends EntityRepository
       	{
 			$qb->andWhere('i.user_id = ?2')
 			   ->setParameter(2,$query['userId']);
-		} 
+		}
+		
+		if(isset($query['playgroundId']))
+      	{
+			$qb->andWhere('i.playground_id = :playground')
+			   ->setParameter('playground',$query['playgroundId']);
+		}
 		
 		if(isset($query['collection_id']))
       	{
@@ -365,6 +371,22 @@ class ItemRepository extends EntityRepository
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->setParameter('id',$id)
+			    ->orderBy('i.id','DESC')
+			   ->getQuery()
+			   ->setMaxResults(15)
+			   ->getArrayResult();
+     }
+     
+     public function findUserItemsByPlayground($id,$pid)
+     {
+     	return $this->getEntityManager()
+			   ->createQueryBuilder()
+			   ->add('select', 'i.id,i.title,i.thumbnail_url')
+			   ->add('from', ' ZeegaIngestBundle:Item i')
+			   ->innerJoin('i.user', 'u')
+			   ->andwhere('u.id = :id')
+			   ->andwhere('i.playground_id = :pid')
+			   ->setParameters(array('id'=>$id,'pid'=>$pid))
 			    ->orderBy('i.id','DESC')
 			   ->getQuery()
 			   ->setMaxResults(15)

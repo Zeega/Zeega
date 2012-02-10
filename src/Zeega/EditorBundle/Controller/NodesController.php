@@ -103,13 +103,13 @@ class NodesController extends Controller
     {
     	$em=$this->getDoctrine()->getEntityManager();
     	$node=$em->getRepository('ZeegaEditorBundle:Node')->find($node_id);
-		exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'node/'.$node_id.'/view /var/www/'.$this->container->getParameter('directory').'images/nodes',$output);
-		$url=explode(':/var/www/',$output[4]);
-		$node->setThumbUrl($this->container->getParameter('hostname') . $url[1].'#hahahah');
+		exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'node/'.$node_id.'/view '.$this->container->getParameter('path').'images/nodes',$output);
+		$url=explode(':/var/www/web',$output[4]);
+		$node->setThumbUrl($this->container->getParameter('hostname') . $url[1]);
 		$em->persist($node);
 		$em->flush();
 		
-    	return new Response($this->container->getParameter('hostname') . $url[1].'#hahahah');		
+    	return new Response($this->container->getParameter('hostname') . $url[1]);		
         
     }
 	

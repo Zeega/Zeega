@@ -611,7 +611,15 @@ class ImportWidget
 			$attr=array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
 			
-			
+			if($info['tags']){
+				foreach($info['tags']['tag'] as $tag){
+					array_push($tags, ucwords(strtolower($tag['raw'])));
+				}
+			$attr['tags']=$tags;
+			}
+			else{
+			$attr['tags']='';
+			}
 			
 			if(isset($sizes['Large']))$itemSize='Large';
 			elseif(isset($sizes['Original'])) $itemSize='Original';

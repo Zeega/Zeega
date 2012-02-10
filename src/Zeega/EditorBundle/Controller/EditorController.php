@@ -169,6 +169,9 @@ class EditorController extends Controller
 		
 		
 		
+		$session = $this->getRequest()->getSession();
+		$session->set('playgroundid',$playground->getId());
+		
 		$admin=true;
 		$projects=$this->getDoctrine()
 					->getRepository('ZeegaEditorBundle:Project')
@@ -279,13 +282,14 @@ class EditorController extends Controller
 
 			$route = $routes[0];
 			
-			$params = array();
+			$params = array('playground'=>$playground->getId());
 			$session = $this->getRequest()->getSession();
 			$collection_id = $session->get("collection_id");
 			
 			if(isset($collection_id))
 			{
 				$params['collection'] = $collection_id;
+				
 				$session->remove("collection_id"); // reads and deletes from session
 			}
 			else
@@ -386,9 +390,7 @@ class EditorController extends Controller
 		'user_id' => $user->getId(),
 		'super' => $super,
 		'page'=>'faq',
-		'myprojects'=>false,
-		'playground' => false,					
-		'playgrounds'=>false,
+
 		'num_playgrounds'=>count($playgrounds),
 		
 		));
@@ -424,9 +426,7 @@ class EditorController extends Controller
 				'title'=>'',
 				'page'=>'home',
 				'form'=>$form->createView(),
-				'myprojects'=>false,
-				'playground' => false,					
-				'playgrounds'=>false,
+			
 
 			));
     	}

@@ -1,3 +1,4 @@
+
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
@@ -34,3 +35,6 @@ editor:
     
 ingest:
     resource: "@ZeegaIngestBundle/Resources/config/routing.yml"
+
+admin:
+    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"

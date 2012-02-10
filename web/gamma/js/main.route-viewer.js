@@ -13,10 +13,14 @@ var loadFiles = [
 	
 	'order!jquery/ui/js/jquery-ui-1.8.17',
 	
+	'order!libraries/underscore',
 	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
-	'order!libraries/underscore',
+	
+	'order!libraries/spin',
+	'order!jquery/plugins/spin',
+	
 	
 	'order!layers/zeega._layer',
 	'order!layers/zeega.video',

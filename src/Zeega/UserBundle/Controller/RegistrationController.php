@@ -60,9 +60,6 @@ class RegistrationController extends Controller
 			'title'=>'',
 			'page'=>'home',
 			'projectsMenu'=>true,
-			'myprojects'=>false,
-			'playground' => false,					
-			'playgrounds'=>false,
         ));
     }
 

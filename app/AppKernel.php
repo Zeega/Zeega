@@ -24,6 +24,11 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Zeega\ApiBundle\ZeegaApiBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
+			new Sonata\AdminBundle\SonataAdminBundle(),
+		    new Sonata\jQueryBundle\SonatajQueryBundle(),
+		    new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+		    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Zeega\AdminBundle\ZeegaAdminBundle(),
         );
 
 

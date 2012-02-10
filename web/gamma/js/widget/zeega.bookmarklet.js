@@ -27,12 +27,17 @@ var bm = new bookmarklet({
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
 	            var script = document.getElementById('zeegabm');
 	            var srcUrlIdx = script.src.indexOf("/web/");
-	            if(srcUrlIdx == -1)
+	            if(srcUrlIdx == -1){
 	            	srcUrlIdx = script.src.indexOf("/gamma/");
-	            var localUrlPrefix = script.src.substring(0,srcUrlIdx);
+	            	var localUrlPrefix = script.src.substring(0,srcUrlIdx);
+	            }
+	            else{
+	            	var localUrlPrefix = script.src.substring(0,srcUrlIdx) + "/web";
+	            }
+	            
 		    
-                    if(srcUrlIdx != -1)
-			localUrlPrefix = localUrlPrefix + "/web";
+                  
+			
 	
 				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
@@ -102,7 +107,7 @@ var bm = new bookmarklet({
         		    drop: function(event, ui) {
             		    $('#zeega-highlight').hide(); 
             		    var src=ui.draggable.attr('src'); 
-            		    $('#zeega-widget-iframe').attr('src',localUrlPrefix +'/web/app_dev.php/widget?url='+encodeURIComponent(src));
+            		    $('#zeega-widget-iframe').attr('src',localUrlPrefix +'/widget?url='+encodeURIComponent(src));
             	    }
             	});
 		
