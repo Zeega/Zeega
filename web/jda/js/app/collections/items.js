@@ -12,14 +12,7 @@
 			this._childViews = [];
 		
 			$(this.el).spin('small');
-		
-			this.collection.fetch({
-				model:Items.Model,
-				success : function(modelCollection,response)
-				{
-					_this.render();
-				}
-			});
+
 		},
 	
 		render : function()
@@ -39,7 +32,6 @@
 		
 		reset : function()
 		{
-
 			if ( this._isRendered )
 			{
 				_.each( this._childViews, function(view){ $(view.el).remove() })
@@ -50,20 +42,26 @@
 		
 		search : function(obj,reset)
 		{
+			var _this = this;
 			$(this.el).fadeTo(1000,0.5);
 			$(this.el).spin('small');
 			
 			var hash = '';
-			if( !_.isUndefined(obj.query) ) hash += 'q=' + obj.query;
-			if( !_.isUndefined(obj.tags) ) hash += '&tags=' + obj.tags;
-			if( !_.isUndefined(obj.type) ) hash += '&type=' + obj.type;
+			if( !_.isUndefined(obj.query) ) hash += 'text/' + obj.query;
+			if( !_.isUndefined(obj.tags) ) hash += 'tags/' + obj.tags;
+			if( !_.isUndefined(obj.type) ) hash += 'type/' + obj.type;
 			
-			window.location.hash = hash;
+			//update hash but don't fire a second action
+			jda.app.router.navigate(hash,{trigger:false});
 			
 			this.collection.setSearch(obj,reset);
-			this.collection.fetch();
-		}
-	
+			this.collection.fetch({
+				model:Items.Model,
+				success : function(){ _this.render() }
+			});
+		},
+		
+		getSearch : function(){ return this.collection.search }
 	
 	})
 
@@ -88,6 +86,7 @@
 		{
 			if(reset) this.search = obj;
 			else _.extend(this.search,obj)
+			console.log('set search: '+obj.query)
 		},
 	
 		parse : function(response)

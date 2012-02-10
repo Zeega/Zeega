@@ -52,8 +52,8 @@
 		
 		getImageTemplate : function()
 		{
-			html = 
-			
+			html =
+
 			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+

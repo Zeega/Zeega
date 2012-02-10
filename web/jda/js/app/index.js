@@ -4,55 +4,36 @@
 jQuery(function($)
 {
 	// Shorthand the application namespace
-	jda.app.init();
+	var JDA = jda.app;
+	JDA.init();
+	//jda.app.init();
 	
-	/*
-	// Include all modules
-	var Items = jda.module("items");
-	// make item collection
-	var itemViewCollection = new Items.ViewCollection();
-	*/
-	
-/*
+
+
 	// Defining the application router, you can attach sub routers here.
 	var Router = Backbone.Router.extend({
 		
 		routes: {
-		"": "index",
-		":hash": "index"
+			""				: 'search',
+			"text/:query"	: "search"
 		},
 
-		index: function(hash)
+		search : function( query )
 		{
-			var route = this;
-			var tutorial = new Example.Views.Tutorial();
-
-			// Attach the tutorial to the DOM
-			tutorial.render(function(el) {
-				$("#main").html(el);
-
-				// Fix for hashes in pushState and hash fragment
-				if (hash && !route._alreadyTriggered)
-				{
-					// Reset to home, pushState support automatically converts hashes
-					Backbone.history.navigate("", false);
-
-					// Trigger the default browser behavior
-					location.hash = hash;
-
-					// Set an internal flag to stop recursive looping
-					route._alreadyTriggered = true;
-				}
-			});
+			var obj = { 'query' : query};
+			JDA.search(obj);
+			if( $('#search-bar input').val() != query ) $('#search-bar input').val(query);
 		}
+		
 	});
-
 	// Define your master router on the application namespace and trigger all
 	// navigation from this instance.
-	app.router = new Router();
+	JDA.router = new Router();
+	Backbone.history.start();
+/*
+
 
 	// Trigger the initial route and enable HTML5 History API support
-	Backbone.history.start({ pushState: true });
 
 	// All navigation that is relative should be passed through the navigate
 	// method, to be processed by the router.  If the link has a data-bypass
@@ -76,7 +57,7 @@ jQuery(function($)
 		app.router.navigate(href, true);
 		}
 	});
-	
 */	
+	
 	
 });
