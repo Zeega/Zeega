@@ -334,7 +334,7 @@ var Zeega = {
 						},
 						error : function(model, error)
 						{
-							console.log(response);
+							console.log(error);
 						}
 					});
 				//save the new layer then prepend the layer id into the frame layers array
@@ -364,7 +364,8 @@ var Zeega = {
 				'citation':true,
 			}
 		});
-
+		console.log("createLayerFromItem : new layer ");
+		console.log(newLayer);
 		this.addLayerToFrame( frame, newLayer );
 	},
 	

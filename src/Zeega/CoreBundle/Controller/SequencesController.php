@@ -162,7 +162,7 @@ class SequencesController extends Controller
 				
         		foreach($original_layers as $original_layer_id){
         				$layer= new Layer();
-    					$sequence->addLayers($layer);
+    					$sequence->addLayer($layer);
     					
         				$original_layer=$this->getDoctrine()
         					->getRepository('ZeegaDataBundle:Layer')
@@ -256,7 +256,7 @@ class SequencesController extends Controller
 			
 		}
 		
-		if($request->request->get("media_type")) $layer->setMediaType($request->request->get("media_type"));   	
+		if($request->request->get("type")) $layer->setType($request->request->get("type"));   	
     	
     	if($request->request->get('text')) $layer->setText($request->request->get('text'));
     	
