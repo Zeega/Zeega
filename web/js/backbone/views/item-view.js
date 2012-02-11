@@ -9,7 +9,7 @@ var ItemView = Backbone.View.extend({
 		var _this = this;
 
 		var blanks = {
-			type : this.model.get("media_type").toLowerCase(),
+			type : this.model.get("layer_type").toLowerCase(),
 			title : this.model.get('title'),
 			creator : this.model.get('media_creator_username'),
 			thumbUrl : this.model.get('thumbnail_url')

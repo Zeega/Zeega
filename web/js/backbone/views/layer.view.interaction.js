@@ -14,7 +14,7 @@ var InteractionLayerListView = Backbone.View.extend({
 		this.model.bind('remove',this.remove);
 		var _this = this;
 		var text = this.model.get('text');
-		var type = this.model.get("media_type");
+		var type = this.model.get('type');
 		
 		
 		if( !this.model.get('attr') ) this.model.set({ attr : this.model.layerClass.defaultAttributes });

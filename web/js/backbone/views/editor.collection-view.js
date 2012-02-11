@@ -24,6 +24,7 @@ var CollectionViewCollection = Backbone.View.extend({
 		this.collection.each(this.add);
 		this.collection.bind('add',this.add)
 		this.render();
+		console.log('finished');
 	},
 	
 	add : function(item)

@@ -145,7 +145,7 @@ var VisualLayerEditorViewCollection = Backbone.View.extend({
 		$('#visualeditor-view-bar').find('.icon-tray').empty();
 		var types = [];
 		_.each( this._renderedViews , function(view){
-			types.push( view.model.get("media_type").toLowerCase() );
+			types.push( view.model.get('type').toLowerCase() );
 		});
 		//types = _.uniq( types );
 		_.each( types, function(type){

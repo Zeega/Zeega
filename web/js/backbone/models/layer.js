@@ -74,14 +74,14 @@ var LayerCollection = Backbone.Collection.extend({
 	
 	addToLayerTypeCollection : function(layer, render)
 	{
-		eval( 'var layerClass = new '+ layer.get("media_type")+'Layer()' );
+		eval( 'var layerClass = new '+ layer.get("type")+'Layer()' );
 		var type = layerClass.layerType.toLowerCase();
 		
-		if( _.isUndefined( this.layerCollectionArray[ type ]) )
+		if( _.isUndefined( this.layerCollectionArray[type]) )
 		{
-			this.layerCollectionArray[ type ] = new LayerTypeCollection;
-			this.layerCollectionArray[ type ].type = type
-			this.layerCollectionArray[ type ].initViewCollection();
+			this.layerCollectionArray[type] = new LayerTypeCollection;
+			this.layerCollectionArray[type].type = type
+			this.layerCollectionArray[type].initViewCollection();
 		}
 		
 		this.layerCollectionArray[ type ].type = type
