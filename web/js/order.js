@@ -49,12 +49,12 @@
     //Callback used by the type="script/cache" callback that indicates a script
     //has finished downloading.
     function scriptCacheCallback(evt) {
-        var frame = evt.currentTarget || evt.srcElement, i,
+        var node = evt.currentTarget || evt.srcElement, i,
             moduleName, resource;
 
-        if (evt.type === "load" || readyRegExp.test(frame.readyState)) {
+        if (evt.type === "load" || readyRegExp.test(node.readyState)) {
             //Pull out the name of the module and the context.
-            moduleName = frame.getAttribute("data-requiremodule");
+            moduleName = node.getAttribute("data-requiremodule");
 
             //Mark this cache request as loaded
             cached[moduleName] = true;
@@ -77,9 +77,9 @@
 
             //Remove this script tag from the DOM
             //Use a setTimeout for cleanup because some older IE versions vomit
-            //if removing a script frame while it is being evaluated.
+            //if removing a script node while it is being evaluated.
             setTimeout(function () {
-                frame.parentFrame.removeChild(frame);
+                node.parentNode.removeChild(node);
             }, 15);
         }
     }

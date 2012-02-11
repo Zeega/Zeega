@@ -13,7 +13,7 @@ class ItemTagsRepository extends EntityRepository
 
             // search query
             $qb->select('t')
-               ->from('Zeega\CoreBundle\:Tag', 't')
+               ->from('ZeegaDataBundle:Tag', 't')
                ->innerjoin('t.item', 'i')
                ->where('i.item = ?1')
                ->setParameter(1,$itemId);
