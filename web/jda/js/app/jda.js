@@ -85,16 +85,9 @@ this.jda = {
 	{
 		if( !this.mapLoaded )
 		{
-			var mapContainer = $('#event-view');
-			var mapDiv = $("<div id='event-map'></div>").css({'height':'800px','width':'100%'});
-			mapContainer.html( mapDiv );
-		
-
 			//OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
 			//OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
 			//this.CQLformat = new OpenLayers.Format.CQL();
-
-			mapContainer.append( this.getCheckboxes() );
 		
 			var map = new OpenLayers.Map('event-map');
 			var baseLayer = new OpenLayers.Layer.WMS(
@@ -168,24 +161,6 @@ parse data.features into backbone collection and views for display in the popup 
 		mapPopupHTML = $(mapPopUpList.el).html();
 		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, mapPopupHTML, null, true));
 		*/
-	},
-	
-	getCheckboxes : function()
-	{
-		var checkboxes = $("<form></form>");
-		
-		checkboxes.append($("<input type='checkbox' id='event-municipal-checkbox'/>"));
-		checkboxes.append($("<label>Municipal Districts</label>"));
-		checkboxes.append($("<input type='checkbox' id='event-radiation-checkbox'/>"));
-		checkboxes.append($("<label>Radiation</label>"));
-		checkboxes.append($("<input type='checkbox' id='event-casualties-checkbox'/>"));
-		checkboxes.append($("<label>Casualties</label>"));
-		checkboxes.append($("<input type='checkbox' id='event-flooding-checkbox'/>"));
-		checkboxes.append($("<label>Flooding</label>"));
-		checkboxes.append($("<input type='checkbox' id='event-shake-checkbox'/>"));
-		checkboxes.append($("<label>Shake</label>"));
-		
-		return checkboxes
 	},
 	
 	getMapLayers : function()
