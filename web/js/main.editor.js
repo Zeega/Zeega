@@ -99,8 +99,8 @@ var loadFiles = [
 	
 	//players
 	
-	'order!players/zeega.player.video',
 	'order!players/zeega.player.youtube',	
+	'order!players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
 	
