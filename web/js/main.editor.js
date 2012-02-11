@@ -98,7 +98,6 @@ var loadFiles = [
 	'order!layers/zeega.website',
 	
 	//players
-	
 	'order!players/zeega.player.youtube',	
 	'order!players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
