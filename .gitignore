@@ -5,11 +5,10 @@
 /vendor/
 /app/config/parameters.ini
 /web/js/zeega.config.js
-/web/images/tmp/*
-/web/images/thumbs/*
-/web/images/nodes/*
-/web/images/items/*
-/musicsearch/
+/web/content/images/tmp/*
+/web/content/images/thumbs/*
+/web/content/images/frames/*
+/web/content/items/*
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
 Libraries/
