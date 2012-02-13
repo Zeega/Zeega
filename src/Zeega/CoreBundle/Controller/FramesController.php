@@ -38,7 +38,7 @@ class FramesController extends Controller
     
     	return new Response(json_encode($this->getDoctrine()
         		->getRepository('ZeegaDataBundle:Frame')
-        		->findFrameById($frame_id)));
+        		->findById($frame_id)));
         
     
     } // `get_frame`     [GET] /frames/{frame_id}

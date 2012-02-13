@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\ApiBundle\Helpers;
+namespace Zeega\CoreBundle\Helpers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
+use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 
 class ResponseHelper
 {

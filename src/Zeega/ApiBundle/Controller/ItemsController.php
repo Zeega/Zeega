@@ -9,8 +9,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\ItemTags;
-use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
-use Zeega\ApiBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
