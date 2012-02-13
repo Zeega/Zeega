@@ -6,9 +6,8 @@
 	
 		initialize : function()
 		{
-			var _this = this;
 			this.collection = new Items.Collection();
-			this.collection.on( 'reset', this.reset, this)
+			this.collection.on( 'reset', this.reset, this);
 			this._childViews = [];
 		
 			$(this.el).spin('small');

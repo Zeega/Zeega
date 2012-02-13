@@ -93,7 +93,7 @@ this.jda = {
 			var baseLayer = new OpenLayers.Layer.WMS(
 				"OpenLayers WMS",
 				"http://vmap0.tiles.osgeo.org/wms/vmap0?",
-				{ 'layers' : 'basic' } );
+				{ 'layers' : 'basic', tiled:true } );
 			map.addLayer( baseLayer );
 			map.setCenter(new OpenLayers.LonLat(140.652466, 38.052417), 9);
 			map.addLayers( this.getMapLayers() );
@@ -123,7 +123,8 @@ this.jda = {
 				HEIGHT : map.size.h,
 				// format : format,
 				styles : map.layers[0].params.STYLES,
-				srs : map.layers[0].params.SRS
+				srs : map.layers[0].params.SRS,
+				TILED : true
 			};
 			// merge filters
 			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
@@ -172,6 +173,7 @@ parse data.features into backbone collection and views for display in the popup 
 			this.geoUrl + "cite/wms",
 			{
 				layers : 'cite:item',
+				tiled: true,
 				transparent : true,
 				format : 'image/png'
 			})
