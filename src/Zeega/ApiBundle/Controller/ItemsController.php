@@ -134,7 +134,12 @@ class ItemsController extends Controller
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
 
 	    $item = new Item();
-       
+       	
+		$site = $this->getDoctrine()
+				     ->getRepository('ZeegaDataBundle:Site')
+				     ->findSiteByUser($user->getId());
+		
+		$item->setSite($site[0]);		
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));

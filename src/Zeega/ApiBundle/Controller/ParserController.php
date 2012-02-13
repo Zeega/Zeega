@@ -24,7 +24,7 @@ class ParserController extends Controller
 		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
 		
 		// mapbox
-		"#https:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Mapbox\ParserMapboxTiles", "IsSet" => false),
+		"#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Mapbox\ParserMapboxTiles", "IsSet" => false),
 		
 		
 		// youtube
@@ -102,12 +102,17 @@ class ParserController extends Controller
 				
 					$parserClass = $parserInfo["ParserClass"];
 					$isSet = $parserInfo["IsSet"];
-
+					
+					$site = $this->getDoctrine()
+							     ->getRepository('ZeegaDataBundle:Site')
+							     ->findSiteByUser($user->getId());
+					
 					if($isSet)
 					{
 						$collection = new Item();
-
-
+							
+						$collection->setSite($site[0]);
+								
 						$collection->setTitle($this->getRequest()->request->get('title'));
 						$collection->setDescription($this->getRequest()->request->get('description'));
 				        $collection->setMediaType($this->getRequest()->request->get('media_type'));
