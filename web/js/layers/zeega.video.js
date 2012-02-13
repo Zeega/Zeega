@@ -133,7 +133,7 @@ var VideoLayer = ProtoLayer.extend({
 		//var h = Math.floor( this.attr.width * 1.5 / this.attr.dimension );
 
 		var cssObj = {
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'content/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 			'position' : 'absolute',
 			'top' : this.attr.top+"%",
@@ -158,7 +158,7 @@ var VideoLayer = ProtoLayer.extend({
 	thumb : function()
 	{
 		var cssObj = {
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'content/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100px 100px',
 		};
 		

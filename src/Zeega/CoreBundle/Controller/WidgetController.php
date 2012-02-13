@@ -203,16 +203,16 @@ class WidgetController extends Controller
 				$logger->err("writing image");
 				$square->thumbnailImage(144,0);
 			
-				$thumb->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_t.jpg');
-				$square->writeImage($this->container->getParameter('path').'images/items/'.$item->getId().'_s.jpg');
+				$thumb->writeImage($this->container->getParameter('path').'content/images/items/'.$item->getId().'_t.jpg');
+				$square->writeImage($this->container->getParameter('path').'content/images/items/'.$item->getId().'_s.jpg');
 			
-				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'images/items/'.$item->getId().'_s.jpg');
+				$item->setThumbnailUrl($this->container->getParameter('hostname').$this->container->getParameter('directory').'content/images/items/'.$item->getId().'_s.jpg');
 				$em->persist($item);
 				$em->flush();
 				$response=$this->getDoctrine()
 								->getRepository('ZeegaDataBundle:Item')
 								->findItemById($item->getId());					
-				return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'images/items/'.$item->getId().'_s.jpg');
+				return new Response($this->container->getParameter('hostname') .$this->container->getParameter('directory') .'content/images/items/'.$item->getId().'_s.jpg');
     		  
 	  	}
 	  

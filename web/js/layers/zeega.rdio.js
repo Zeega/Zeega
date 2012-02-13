@@ -78,7 +78,7 @@ var RdioLayer = ProtoLayer.extend({
 		
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
-			'backgroundImage':'url(' + getHost() + '/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url(' + getHost() + '/content/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100% 100%',
 			'position' : 'absolute',
 			'top' : "-100%",
@@ -131,7 +131,7 @@ var RdioLayer = ProtoLayer.extend({
 		
 		var h = Math.floor(this.attr.w*1.5/this.attr.aspect);
 		var cssObj = {
-			'backgroundImage':'url('+ getHost() + '/images/items/'+this.attr.item_id+'_s.jpg)',
+			'backgroundImage':'url('+ getHost() + '/content/images/items/'+this.attr.item_id+'_s.jpg)',
 			'backgroundSize': '100% 100%',
 			'position' : 'absolute',
 			'top' : "133px",
