@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\Site;
 use Zeega\ApiBundle\Helpers\ResponseHelper;
 use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
 use Zeega\DataBundle\Repository\ItemTagsRepository;
@@ -21,6 +22,11 @@ class ParserController extends Controller
 		// flickr
 		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
 		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
+		
+		// mapbox
+		"#https:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Mapbox\ParserMapboxTiles", "IsSet" => false),
+		
+		
 		// youtube
 		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
 		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
@@ -101,7 +107,8 @@ class ParserController extends Controller
 					{
 						$collection = new Item();
 
-					    $collection->setTitle($this->getRequest()->request->get('title'));
+
+						$collection->setTitle($this->getRequest()->request->get('title'));
 						$collection->setDescription($this->getRequest()->request->get('description'));
 				        $collection->setMediaType($this->getRequest()->request->get('media_type'));
 				        $collection->setLayerType($this->getRequest()->request->get('layer_type'));
