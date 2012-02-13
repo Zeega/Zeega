@@ -12,6 +12,7 @@
     mailer_host       = localhost
     mailer_user       =
     mailer_password   =
+	mailer_encryption = ssl
 
     locale            = en
 
