@@ -81,7 +81,7 @@ var loadFiles = [
 	//'order!backbone/views/layer.view.interaction.list',
 	
 	//sequences
-	'order!backbone/sequences/sequences',
+	'order!backbone/routes/routes',
 	
 	//layers
 	'order!layers/zeega._layer',
