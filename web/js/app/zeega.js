@@ -47,7 +47,7 @@ this.zeega = {
 		//var Sequence = zeega.module("sequence");
 		var Items = zeega.module("items");
 		// make item collection
-		this.itemViewCollection = new Items.ViewCollection();
+		this.itemCollection = new Items.ViewCollection();
 		
 		// makes sure that zeega only advances after both frames and layers are loaded
 		//commented out??
@@ -58,8 +58,8 @@ this.zeega = {
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
-	searchDatabase : function( search, reset ){ this.itemViewCollection.search(search,reset) },
-	refreshDatabase : function(){ this.itemViewCollection.refresh() },
+	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
+	refreshDatabase : function(){ this.itemCollection.refresh() },
 
 	//set the sequence without loading it
 	//do we need this?

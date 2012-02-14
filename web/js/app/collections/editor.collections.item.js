@@ -12,8 +12,6 @@
 			
 			$(this.el).spin('small');
 			this.render();
-			
-			console.log(this.collection)
 		},
 		
 		render : function()
@@ -55,7 +53,7 @@
 
 			items.each(this.add);
 			items.bind('add',this.add)
-			this.render();
+			//this.render();
 
 			insertPager( _.size(this._itemViews), Database.page );
 		},
@@ -88,7 +86,7 @@
 		page : 0,
 		totalItemsCount : 0,
 		
-		base : function(){ return Zeega.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
+		base : function(){ return zeega.app.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
 		search : {},
 
 		initialize : function()
@@ -98,6 +96,7 @@
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
 				this.totalItemsCount = itemsBS.items_count;
+				console.log(itemsBS)
 				this.reset( itemsBS.items );
 			}
 			else

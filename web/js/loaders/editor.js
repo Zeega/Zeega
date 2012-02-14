@@ -117,7 +117,7 @@ require(loadFiles, function(jquery)
 	//once the files have been loaded do this
 	var sequence = $('#sequence-id').val();
 	console.log(sequence);
-	zeega.app.init();
+	//zeega.app.init();
 
 /*
 	if(!sequence) Zeega.createSequence();
