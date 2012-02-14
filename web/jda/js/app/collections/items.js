@@ -33,7 +33,7 @@
 		{
 			if ( this._isRendered )
 			{
-				_.each( this._childViews, function(view){ $(view.el).remove() })
+				$(this.el).empty();
 				this._childViews = [];
 				this.render();
 			}
