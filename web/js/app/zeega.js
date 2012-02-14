@@ -42,33 +42,24 @@ this.zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
-		
-		console.log('ZEEGA INIT');
-		
 		// Include all modules
+		var Project = zeega.module("project");
+		//var Sequence = zeega.module("sequence");
 		var Items = zeega.module("items");
-				
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
 		
-
 		// makes sure that zeega only advances after both frames and layers are loaded
 		//commented out??
 		//this.zeegaReady = _.after(2,this.framesAndLayersReady);
 
-		this.initStartHelp();
+		//this.initStartHelp(); //broken. fix!
 
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
-	searchDatabase : function( search, reset )
-	{
-		this.itemViewCollection.search(search,reset);
-	},
-	refreshDatabase : function()
-	{
-		this.itemViewCollection.refresh();
-	},
+	searchDatabase : function( search, reset ){ this.itemViewCollection.search(search,reset) },
+	refreshDatabase : function(){ this.itemViewCollection.refresh() },
 
 	//set the sequence without loading it
 	//do we need this?
@@ -718,6 +709,8 @@ this.zeega = {
 
 	initStartHelp : function()
 	{
+		
+		/*
 		if(localStorage.help != 'false' && this.helpCounter == 0)
 		{
 			//init the popovers
@@ -762,6 +755,7 @@ this.zeega = {
 
 			this.displayStartHelp();
 		}
+		*/
 	},
 
 	displayStartHelp : function()

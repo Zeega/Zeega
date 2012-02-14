@@ -13,13 +13,13 @@ function initUX(){
 
 	initHeaderUX();
 
-
+/*
 //		POPOVERS		//
 	$('.info').popover({
 		'delayIn' : 0,
 		placement : 'below'
 	});
-		
+*/		
 }
 
 

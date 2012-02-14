@@ -34,9 +34,8 @@ var loadFiles = [
 	//core
 	'order!app/zeega',
 	
-	'order!core/zeega',
+//	'order!core/zeega',
     'order!core/player',
-//    'order!core/database',
 
 	//plugins
 	'order!lib/jquery/plugins/spin',
@@ -46,34 +45,37 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
-	'order!lib/jquery/plugins/twitter-bootstrap',
+//	'order!lib/bootstrap',
 
-
-//new MVC
+//models
+	'order!app/models/editor.model.project',
+	'order!app/models/editor.model.sequence',
 	'order!app/models/editor.model.item',
 
+//collections
+	'order!app/collections/editor.collections.sequence',
 	'order!app/collections/editor.collections.item',
 
+//views
+	'order!app/views/editor.project/editor.view.project.editor',
+	'order!app/views/editor.sequence/editor.view.sequence.editor',
 	'order!app/views/editor.item/editor.view.item.database-tray',
 
 
 
 
 	//mvc
-	'order!backbone/models/sequence',
+//	'order!backbone/models/sequence',
 	'order!backbone/models/tag',
-//	'order!backbone/models/item',
 	'order!backbone/models/editor.collection',
 	'order!backbone/models/frame',
 	'order!backbone/models/layer',
-	'order!backbone/models/project',
-	'order!backbone/views/sequence-view',
-//	'order!backbone/views/item-view',
+//	'order!backbone/models/project',
+//	'order!backbone/views/sequence-view',
 	'order!backbone/views/editor.collection-view',
 	'order!backbone/views/frame-view',
-	'order!backbone/views/project-view',
+//	'order!backbone/views/project-view',
 
-	//'order!backbone/views/layer-view',
 	'order!backbone/views/layer.view.visual',
 	'order!backbone/views/layer.view.visual.list',
 	'order!backbone/views/layer.view.visual.editor',
@@ -115,7 +117,7 @@ require(loadFiles, function(jquery)
 	//once the files have been loaded do this
 	var sequence = $('#sequence-id').val();
 	console.log(sequence);
-	Zeega.init();
+	zeega.app.init();
 
 /*
 	if(!sequence) Zeega.createSequence();

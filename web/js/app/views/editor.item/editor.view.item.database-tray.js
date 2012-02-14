@@ -81,7 +81,7 @@
 				delayIn : 1500
 			};
 
-			$(this.el).popover( args );
+			//$(this.el).popover( args );
 
 			return this;
 		},
