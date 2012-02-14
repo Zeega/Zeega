@@ -218,6 +218,10 @@ function closeOpenCitationTabs()
 	//clear menus on click
 	$('html').bind("click", clearMenus);
 	
+	$('#database-search-text').click(function(event){
+		event.stopPropagation();
+	});
+	
 	function clearMenus()
 	{
 		$('.menu-items').removeClass('open');
@@ -225,15 +229,15 @@ function closeOpenCitationTabs()
 	
 	// filter database by type
 	$('#search-filter li a').click(function(){
-		zeega.app.search( {contentType: $(this).data('search-filter')}, false );
+		zeega.app.searchDatabase( {contentType: $(this).data('search-filter')}, false );
+		event.stopPropagation();
 		clearMenus();
-		
 		return false;
 	});
 	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
-		zeega.app.search( {collectionID: $(this).val()}, false );
+		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
 	});
 	
 
@@ -284,11 +288,6 @@ function closeOpenCitationTabs()
 			Zeega.frameSort();
 
 		}
-	});
-	
-	
-	$('#database-search-text').click(function(event){
-		event.stopPropagation();
 	});
 	
 	//hide layer content initially

@@ -20,11 +20,19 @@
 		{
 			var _this = this;
 			this._isRendered = true;
-			_.each( _.toArray(this.collection), function(item){
-				var itemView = new Items.Views.List({model:item});
-				_this._childViews.push( itemView );
-				$(_this.el).append( itemView.render().el );
-			})
+			
+			if(this.collection.length)
+			{
+				_.each( _.toArray(this.collection), function(item){
+					var itemView = new Items.Views.List({model:item});
+					_this._childViews.push( itemView );
+					$(_this.el).append( itemView.render().el );
+				})
+			}
+			else
+			{
+				$(this.el).html('<li class="alert alert-error">No results :(</li>')
+			}
 			
 			$(this.el).fadeTo(100,1);
 			$(this.el).spin(false);
