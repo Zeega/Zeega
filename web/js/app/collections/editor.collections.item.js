@@ -6,37 +6,39 @@
 
 		initialize : function()
 		{
-			console.log('itemViewCollection init')
-			_(this).bindAll('add');
-			this._itemViews = [];
-			this._itemBundles = [];
-			this.collection.each(this.add);
-			this.collection.bind('add',this.add)
-			this.collection.bind('reset',this.resetCollection, this)
+			this.collection = new Items.Collection();
+			this.collection.on('reset',this.reset,this);
+			this._childViews = [];
+			
+			$(this.el).spin('small');
 			this.render();
+			
+			console.log(this.collection)
 		},
-
-		add : function(item)
+		
+		render : function()
 		{
-
-			//a database item is never 'new' right?
-			//it has to exist before it can be interacted with.
-			//database items are created in XM or other tools
-			var itemView = new ItemView({ model : item });
-			this._itemViews.push(itemView);
-			if(this._rendered) $(this.el).append(itemView.render().el);
-
+			var _this = this;
+			this._isRendered = true;
+			_.each( _.toArray(this.collection), function(item){
+				var itemView = new Items.Views.List({model:item});
+				_this._childViews.push( itemView );
+				$(_this.el).append( itemView.render().el );
+			})
+			
+			$(this.el).fadeTo(100,1);
+			$(this.el).spin(false);
+			return this;
 		},
-
-		resetCollection : function()
+		
+		reset : function()
 		{
-			this._rendered = false;
-			this._itemViews = [];
-			this.el.empty();
-
-			this.collection.each(this.add);
-
-			this.render();
+			if ( this._isRendered )
+			{
+				$(this.el).empty();
+				this._childViews = [];
+				this.render();
+			}
 		},
 
 		append : function(items)
@@ -49,73 +51,76 @@
 
 			insertPager( _.size(this._itemViews), Database.page );
 		},
-
-		render : function()
+		
+		search : function(search,reset)
 		{
 			var _this = this;
-			this.el.empty();
+			$(this.el).fadeTo(1000,0.5);
+			$(this.el).spin('small');
+			
+			this.collection.setSearch(search,reset);
+			this.collection.fetch();
+		},
+		
+		refresh : function()
+		{
+			$(this.el).fadeTo(1000,0.5);
+			$(this.el).spin('small');
+			this.collection.fetch();
+		},
+		
+		getSearch : function(){ return this.collection.search }
 
-			if( this._itemViews.length )
-			{
-				//add EACH model's view to the _this.el and render it
-				_.each( this._itemViews, function( itemView ){
-					_this.el.append( itemView.render().el )
-				});
-			}else{
-				_this.el.append( $('<li class="alert-message error" style="text-align:center">').html('No Results') );
-			}
-			this._rendered = true;
 
-			return this;
-		}
 
 	});
-
-
-
 
 	Items.Collection = Backbone.Collection.extend({
 
 		page : 0,
-		contentType : null,
-		collectionID : null,
-		query : null,
 		totalItemsCount : 0,
+		
+		base : function(){ return Zeega.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
+		search : {},
 
-		initialize:function(){
-
-			this.bind('destroy',   this.decrementItemsCount, this);	
+		initialize : function()
+		{
+			if( itemsJSON )
+			{
+				//get bootstrapped data if it exists
+				var itemsBS = jQuery.parseJSON(itemsJSON);
+				this.totalItemsCount = itemsBS.items_count;
+				this.reset( itemsBS.items );
+			}
+			else
+			{
+				//if bootstrap doesn't exist, then default to a search
+				console.log( 'items NOT bootstrapped. Do search. ')
+			}
 		},
+		
 		url: function()
 		{
-			var url = Zeega.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page;
-			if( !_.isNull(this.query) && this.query != "" ) url += '&q=' + this.query;
-			if( !_.isNull(this.contentType) ) url += '&content=' + this.contentType;
-			if( !_.isNull(this.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.collectionID;
+			var url = this.base();
+			if( !_.isUndefined(this.search.query) ) url += '&q=' + this.search.query;
+			if( !_.isUndefined(this.search.contentType) ) url += '&content=' + this.search.contentType;
+			if( !_.isUndefined(this.search.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.search.collectionID;
 			return url;
 		},
-		decrementItemsCount : function(){
-			this.totalItemsCount = this.totalItemsCount - 1;
-		},
-		resetQuery : function()
+		
+		setSearch : function(search, reset)
 		{
-			this.page = 0;
-			this.contentType = null;
-			this.collecitonID = null;
-			this.query = null;
+			if(reset) this.search = search;
+			else _.extend(this.search,search)
 		},
 
 		parse : function(response)
 		{
-			this.count = response.items_count;
+			this.totalItemsCount = response.items_count;
 			return response.items;
 		}
 
 
 	});
-	
-
-	Items.Router = Backbone.Router.extend({ /* ... */ });
-
 
 })(zeega.module("items"));

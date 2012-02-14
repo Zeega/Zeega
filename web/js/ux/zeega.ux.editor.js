@@ -213,13 +213,7 @@ function closeOpenCitationTabs()
 		event.stopPropagation();
 	});
 	
-	// filter database by type
-	$('#search-filter li a').click(function(){
-		Database.filterByMediaType( $(this).data('search-filter') );
-		clearMenus();
-		
-		return false;
-	});
+
 	
 	//clear menus on click
 	$('html').bind("click", clearMenus);
@@ -229,23 +223,28 @@ function closeOpenCitationTabs()
 		$('.menu-items').removeClass('open');
 	}
 	
+	// filter database by type
+	$('#search-filter li a').click(function(){
+		zeega.app.search( {contentType: $(this).data('search-filter')}, false );
+		clearMenus();
+		
+		return false;
+	});
 	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
-		Database.filterByCollection( $(this).val() );
+		zeega.app.search( {collectionID: $(this).val()}, false );
 	});
 	
 
 	
 	$('#refresh-database').click(function(){
-	    Database.refresh();
+	    zeega.app.refreshDatabase();
 	});
 	
 	//detect when zeega comes back in focus and refresh the database
-	window.addEventListener('focus', function() {
-		Database.refresh();
-	    
-		console.log('infocus refresh database')
+	window.addEventListener('focus', function(){
+		zeega.app.refreshDatabase();
 	});
 	
 	$('#database-search-text').keypress(function(e){
@@ -253,7 +252,7 @@ function closeOpenCitationTabs()
 
 		if (keycode == 13)
 		{
-			Database.search( $("#database-search-text").val() );
+			zeega.app.searchDatabase( { query : $("#database-search-text").val() }, false );
 			
 			//open database tray if closed
 			if( $('#database-panel .panel-content').is(':hidden') )

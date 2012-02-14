@@ -44,13 +44,10 @@ this.zeega = {
 	{
 		
 		console.log('ZEEGA INIT');
-		console.log(zeega)
 		
 		// Include all modules
 		var Items = zeega.module("items");
-		
-		console.log(Items);
-		
+				
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
 		
@@ -63,7 +60,15 @@ this.zeega = {
 
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
-
+	
+	searchDatabase : function( search, reset )
+	{
+		this.itemViewCollection.search(search,reset);
+	},
+	refreshDatabase : function()
+	{
+		this.itemViewCollection.refresh();
+	},
 
 	//set the sequence without loading it
 	//do we need this?

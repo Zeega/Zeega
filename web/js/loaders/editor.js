@@ -36,7 +36,7 @@ var loadFiles = [
 	
 	'order!core/zeega',
     'order!core/player',
-    'order!core/database',
+//    'order!core/database',
 
 	//plugins
 	'order!lib/jquery/plugins/spin',
@@ -116,17 +116,17 @@ require(loadFiles, function(jquery)
 	var sequence = $('#sequence-id').val();
 	console.log(sequence);
 	Zeega.init();
+
+/*
 	if(!sequence) Zeega.createSequence();
 	else Zeega.loadSequence(sequence);
 
-
-	Database.init();
 
 	var router = new MyRouter;
 	Backbone.history.start();
 
 	initUX();
-
+*/
 });
 
 
