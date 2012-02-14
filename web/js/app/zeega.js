@@ -42,12 +42,8 @@ this.zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
-		// Include all modules
-		var Project = zeega.module("project");
-		//var Sequence = zeega.module("sequence");
-		var Items = zeega.module("items");
-		// make item collection
-		this.itemCollection = new Items.ViewCollection();
+		this.loadModules();
+		
 		
 		// makes sure that zeega only advances after both frames and layers are loaded
 		//commented out??
@@ -56,6 +52,16 @@ this.zeega = {
 		//this.initStartHelp(); //broken. fix!
 
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
+	},
+	
+	loadModules : function()
+	{
+		var Project = zeega.module("project");
+		this.project = new Project.Model( projectJSON.project );
+		//var Sequence = zeega.module("sequence");
+		var Items = zeega.module("items");
+		this.itemCollection = new Items.ViewCollection();
+		
 	},
 	
 	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
@@ -90,8 +96,6 @@ this.zeega = {
 			error: function(){
 				console.log('error');
 			}
-
-
 		});
 
 	},

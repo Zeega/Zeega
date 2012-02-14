@@ -58,7 +58,6 @@ var loadFiles = [
 
 //views
 	'order!app/views/editor.project/editor.view.project.editor',
-	'order!app/views/editor.sequence/editor.view.sequence.editor',
 	'order!app/views/editor.item/editor.view.item.database-tray',
 
 

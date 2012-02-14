@@ -3,14 +3,14 @@
 	// This will fetch the tutorial template and render it.
 	Project.Views.Editor = Backbone.View.extend({
 
-		tagName: 'span',
+		el : $('#sequence-title'),
 
 		render: function()
 		{
 			var _this = this;
-			$(this.el).html(this.model.get('title'));
+			this.$el.html( this.model.get('title') );
 
-			$(this.el).editable(
+			this.$el.editable(
 				function(value,settings)
 				{
 					_this.model.set( { 'title': value } );
@@ -27,9 +27,7 @@
 					maxlength : 40
 				});
 
-			$('#sequence-title').html(this.el);
-
-			var regex = /Untitled/
+			var regex = /Untitled/;
 			if( regex.test( this.model.get('title')) ) $(this.el).trigger('click');
 
 			return this;
