@@ -22,12 +22,20 @@
 		{
 			var Frames = zeega.module("frame");
 			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
+			this.frames.collection.on( 'destroy', this.refactorFrames )
 		},
 		
 		createLayers : function( layers )
 		{
 			var Layers = zeega.module("layer");
-			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
+			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers[0]) } ); // remove the [0] when API is fixed
+		},
+		
+		refactorFrames : function( destroyedModel )
+		{
+			console.log('refactoring frames')
+			console.log(destroyedModel)
+			console.log(this.frames)
 		}
 		
 	});

@@ -9,6 +9,7 @@ use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class SequencesController extends Controller
 {
@@ -185,8 +186,8 @@ class SequencesController extends Controller
 			$em->flush();
 			$output=$this->getDoctrine()
 			->getRepository('ZeegaDataBundle:Frame')
-			->findFrameById($frame->getId());
-			return new Response(json_encode($output[0]));
+			->findOneById($frame->getId());
+			return ResponseHelper::encodeAndGetJsonResponse($output);
 		}
 		else{
 			$frame= new Frame();
@@ -199,8 +200,8 @@ class SequencesController extends Controller
 			$em->flush();
 			$output=$this->getDoctrine()
 				->getRepository('ZeegaDataBundle:Frame')
-				->findFrameById($frame->getId());
-			return new Response(json_encode($output[0]));
+				->findOneById($frame->getId());
+			return  ResponseHelper::encodeAndGetJsonResponse($output);
 		}
     
     

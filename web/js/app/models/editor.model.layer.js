@@ -2,7 +2,11 @@
 
 	Layer.Model = Backbone.Model.extend({
 
-		url : function(){ return Zeega.url_prefix + "layers/" + this.id },
+		url : function()
+		{
+			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.sequenceID +'/layers';
+			else return zeega.app.url_prefix + "layers/" + this.id;
+		},
 	
 		defaults : {
 			'attr' : {},
@@ -11,8 +15,9 @@
 	
 		layerClass :{},
 	
-		initialize: function(){
-		
+		initialize: function()
+		{
+			console.log(this)
 			eval( 'this.layerClass = new '+ this.get("type")+'Layer()' );
 			this.layerClass.load(this);
 		

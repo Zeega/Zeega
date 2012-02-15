@@ -14,7 +14,8 @@ jQuery(function($)
 
 		goToFrame : function( frameId )
 		{
-			//Zeega.goToFrame( frameId )
+			Zeega.goToFrame( frameId );
+			Zeega.currentFrameId = frameId;
 		}
 		
 	});

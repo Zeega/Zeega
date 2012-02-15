@@ -48,7 +48,6 @@
 				}
 			});
 
-
 			$(this.el).hover(function(){
 				$(_this.el).find('.frame-menu').show();
 			},function(){
@@ -71,8 +70,12 @@
 				switch($(this).data('action'))
 				{
 					case 'delete':
-						if(confirm('Delete Frame?')) zeega.app.destroyFrame(_this);
-						break 
+						if(confirm('Delete Frame?'))
+						{
+							$(_this.el).remove();
+							_this.model.destroy();
+						}
+						break;
 				
 					case 'duplicate':
 						zeega.app.duplicateFrame(_this);
@@ -108,8 +111,7 @@
 		events : {
 			'mouseover'		: 'showGear'
 		},
-	
-
+		
 	
 		showGear : function()
 		{

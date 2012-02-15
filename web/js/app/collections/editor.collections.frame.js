@@ -8,26 +8,13 @@
 		initialize : function()
 		{
 			this._frameViews = [];
-			//if there are no frames, then add one automagically
 			
 			this.collection.on('add', this.add, this);
+			this.collection.on('destroy', this.destroyFrame );
+			//if there are no frames, then add one automagically
 			if(this.collection.length == 0) this.collection.add( new Frame.Model() )
-			console.log(this.collection)
 			this.render();
-			
-		/*
-			//	bind add & remove actions
-			_(this).bindAll('add','remove');
-		
-			//create empty _frameViews array
-		
-			//	add each frame to the view
-			this.collection.each(this.add);
-		
-			//	bind the view to the add & remove events of the collection
-			this.collection.bind('add', this.add);
-			this.collection.bind('remove', this.remove);
-		*/
+
 		},
 		
 		render : function()
@@ -43,16 +30,17 @@
 				_this._frameViews.push( frameView);
 				_this.$el.append( frameView.render().el );
 			});
-		
-			console.log('renderFrames');
-
 			return this;
+		},
+		
+		addFrame : function()
+		{
+			this.collection.add( new Frame.Model() );
 		},
 	
 		add : function(frame)
 		{
 			var _this = this;
-			//_(zeega.app.sequence.frames).push(frame); 
 			//save frame if the layer is new!
 			if( frame.isNew() )
 			{

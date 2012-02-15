@@ -22,6 +22,9 @@ function initUX(){
 */		
 }
 
+$('#add-node-button').click(function(){
+	zeega.app.addFrame();
+});
 
 $('#list-view').click(function(){
 	console.log('goto list view');
@@ -113,10 +116,12 @@ function shareButton()
 
 
 $('#new-layer-list a').click(function(){
-	addLayer( $(this).data('type') );
+	zeega.app.addLayer( { type : $(this).data('type') } );
+	//addLayer( $(this).data('type') );
 	return false;
 })
 
+/*
 function addLayer(type)
 {
 	//add new layer model
@@ -125,6 +130,7 @@ function addLayer(type)
     var newLayer = new Layer({'type':type,'attr':{}});
 	Zeega.addLayerToFrame( Zeega.currentFrame, newLayer );
 }
+*/
 
 function expandLayer(el)
 {

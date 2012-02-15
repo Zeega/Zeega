@@ -96,7 +96,6 @@
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
 				this.totalItemsCount = itemsBS.items_count;
-				console.log(itemsBS)
 				this.reset( itemsBS.items );
 			}
 			else

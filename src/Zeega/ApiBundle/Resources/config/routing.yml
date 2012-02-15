@@ -1,3 +1,9 @@
+api_projects:
+    type: rest
+    resource: Zeega\ApiBundle\Controller\ProjectsController
+    name_prefix: api_
+    prefix:   api    
+
 global_search:
     pattern: /api/search.{_format}
     defaults: { _controller: ZeegaApiBundle:Search:search, _format: json}
@@ -22,3 +28,4 @@ parser:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\ParserController
+    

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\ApiBundle\Helpers;
+namespace Zeega\CoreBundle\Helpers;
 
 use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;

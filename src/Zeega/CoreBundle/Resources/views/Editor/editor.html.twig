@@ -46,7 +46,7 @@
 					data-content='As your projects grow, you can select any frame to go back to editing the layers'
 				>
 					<ul id='frame-list' class='unstyled horizontal-list'></ul>
-					<div id="add-frame" title='Click to add a new Frame or Drag to add several Frames'><a href="#" onClick="Zeega.addFrame();return false;"><img src="{{ asset('images/addframe.png') }}" height="25" width="25"/></a></div>
+					<div id="add-frame" title='Click to add a new Frame or Drag to add several Frames'><a href="#" id='add-node-button'><img src="{{ asset('images/addframe.png') }}" height="25" width="25"/></a></div>
 				</div>
 				<div id="edit-drawer" class='clearfix'>
 					
@@ -56,7 +56,6 @@
 							<div id='new-layer-tray' class='panel-head'
 								title='Add Maps, text and color layers!'
 								data-content=''
-								
 							>
 								<ul id='new-layer-list' class='unstyled horizontal-list'>
 									<li>Add</li>
@@ -303,6 +302,7 @@
 				//bootstrapping data
 				var itemsJSON = "{{ results|e('js') }}";
 				//console.log('collection id= '+ {{collection_id}})
+/*
 				var projectJSON = {
 					"project" : {
 						"id" : "1",
@@ -317,7 +317,9 @@
 						}]
 					}
 				};
-
+*/
+				var projectJSON = "{{ project_data|e('js') }}";
+				
 			</script>
 			
 {% endblock %}

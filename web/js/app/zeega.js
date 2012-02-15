@@ -55,7 +55,7 @@ this.zeega = {
 		var _this = this;
 		var Project = zeega.module("project");
 		var Items = zeega.module("items");
-		this.project = new Project.Model(projectJSON.project);
+		this.project = new Project.Model($.parseJSON(projectJSON).project);
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject()
 		this.itemCollection = new Items.ViewCollection();
@@ -67,12 +67,7 @@ this.zeega = {
 	startEditor : function()
 	{
 		this.isLoaded = true
-		//this.goToFrame();
-		/*
-		this.currentFrame = this.project.sequences[0].frames.collection.at(0);
-
-		this.frameSort();
-		*/
+		this.goToFrame( this.frameId );
 	},
 	
 	goToFrame : function(frameId)
@@ -91,7 +86,6 @@ this.zeega = {
 		this.clearCurrentFrame();
 		this.currentFrame = frame;
 		console.log('current frame id: '+ frame.id)
-		console.log( ''+frame )
 		this.router.navigate('editor/frame/'+ this.currentFrame.id, {silent:true})
 		
 		//open/close visual editor
@@ -119,7 +113,6 @@ this.zeega = {
 			})
 		}
 
-
 		//update the auto advance tray
 		//make sure the attribute exists
 		var adv = false;
@@ -135,7 +128,9 @@ this.zeega = {
 			advanceControls.find('input[id="manual"]').prop('checked', false );
 			advanceControls.find('input[id="playback"]').prop('checked', false );
 			$('#advance-time').val(adv);
-		}else if( adv == -1 ){
+		}
+		else if( adv == -1 )
+		{
 			//manual
 
 			advanceControls.find('input[id="time"]').prop('checked', false );
@@ -145,7 +140,9 @@ this.zeega = {
 			$('#advance-time').val(10);
 
 		//if the attr doesn't exist, then give it default values
-		}else if( !adv ){
+		}
+		else if( !adv )
+		{
 			advanceControls.find('input[id="time"]').prop('checked', false );
 			advanceControls.find('input[id="manual"]').prop('checked', false );
 			advanceControls.find('input[id="playback"]').prop('checked', true );
@@ -153,10 +150,9 @@ this.zeega = {
 		}
 
 		// add the frame's layers // remove falsy values
-		var layerArray = _.compact( this.currentFrame.get('layers'));
-
-		//call render on the entire collection. it should have the logic to draw what's needed
-		//this.sequence.layerCollection.render( this.currentFrame );
+		var layerIDArray = _.compact( this.currentFrame.get('layers'));
+		console.log('layer id array: '+ layerIDArray)
+		this.project.sequences[0].layers.renderLayers( layerIDArray );
 
 		//add a new current frame style
 		$('#frame-thumb-'+this.currentFrame.id).addClass('active-frame');
@@ -169,85 +165,19 @@ this.zeega = {
 
 		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();
-
-		//clear the workspaces
-		//$('#visual-editor-workspace').empty();
-		//$('#layers-list-interaction').empty();
-
 	},
 
 	addFrame : function()
 	{
-		this.sequence.frames.add(new Frame);
+		// maybe something like function( index, numberOfFramesToAdd ) ??
+		this.project.sequences[0].frames.addFrame();
 	},
-
-	addToLayerCollections : function(frame,layer)
+	
+	addLayer : function( args )
 	{
-
-		//only add to the layers collection if it's not already there!
-		if( !this.sequence.layerCollection.get(layer.id) )
-		{
-			console.log('not in collection');
-
-			//this.sequence.layerCollection.add( layer );
-
-			//Add to the collection do update stuff if it's the current layer (like show the item in the visual editor)
-			if(frame == this.currentFrame)
-			{
-				console.log('layer should be added to the editor window')
-				this.sequence.layerCollection.add( layer );
-			}else{
-				console.log('layer should not be drawn')
-				//if it's not the current frame, then be quiet about it
-				//this.sequence.layerCollection.add( layer , {silent:true} ); // do I need this??
-				//we still need to add it to the type collection though
-				this.sequence.layerCollection.add( layer, {silent:true} );
-			 	this.sequence.layerCollection.addToLayerTypeCollection( layer, false );
-			}
-		}
-
-	},
-
-	addLayerToFrame : function( frame, layer )
-	{
-
-		//reject if there are too many layers inside the frame
-		if( !frame.get('layers') || frame.get('layers').length < this.maxLayersPerFrame || this.maxLayersPerFrame == 0)
-		{
-			var _this = this;
-
-			//add URL to layer model
-			layer.url = this.url_prefix + 'sequences/'+ this.sequenceID +'/layers';
-
-			//check to see if the layer is saved or not. save if ndeeded
-			if( layer.isNew() )
-			{
-				console.log('this is a new layer');
-				console.log(layer)
-				layer.save(
-					{},
-					{
-						success : function(savedLayer, response){
-							console.log(response)
-							savedLayer.url = _this.url_prefix + "layers/" + savedLayer.id
-							_this.updateAndSaveFrameLayer(frame,savedLayer);
-							_this.addToLayerCollections(frame, savedLayer);
-							if( savedLayer.layerClass.thumbUpdate ) frame.noteChange() ;
-						},
-						error : function(model, error)
-						{
-							console.log(error);
-						}
-					});
-				//save the new layer then prepend the layer id into the frame layers array
-			}else{
-				console.log('this is an old layer');
-				//prepend the layer id into the frame layers array
-				this.updateAndSaveFrameLayer(frame,layer);
-				console.log(layer.layerClass.thumbUpdate)
-				if( layer.layerClass.thumbUpdate ) frame.noteChange() ;
-			}
-		}
+		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
+		console.log( args )
+		this.project.sequences[0].layers.addLayer( args )
 	},
 
 	//frame arg is optional. Defaults to currentFrame if not set.

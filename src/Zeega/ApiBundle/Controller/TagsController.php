@@ -7,8 +7,8 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\ItemTags;
-use Zeega\ApiBundle\Helpers\ResponseHelper;
-use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\DataBundle\Repository\ItemTagsRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 

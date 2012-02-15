@@ -38,14 +38,17 @@
 			//shorten title if necessary
 			var title = this.model.get('attr').title;
 		
-			var persist;
+		
+			var persist = '';
+			
+		/*
 			if( Zeega.sequence.get('attr') && Zeega.sequence.get('attr').persistLayers && _.include( Zeega.sequence.get('attr').persistLayers , _this.model.id ) )
 			{
 				persist = 'checked';
 			}else{
 				persist = '';
 			}
-		
+		*/
 			var showLink = '';
 			if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
 				showLink = 'hidden';
@@ -90,10 +93,11 @@
 		{
 			var _this = this;
 			//twipsies
+			/*
 			$(this.el).find('.layer-link').twipsy({
 				placement : 'right'
 			})
-
+*/
 			//finish entering  link info
 			$(this.el).find('.layer-link-box input')
 				.keypress(function(e){

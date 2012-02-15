@@ -11,5 +11,6 @@ services:
         class: Zeega\CoreBundle\Twig\Extensions\HeaderTwigExtension
         arguments:
               doctrine: "@doctrine"
+              security: "@security.context"
         tags:
             - { name: twig.extension }

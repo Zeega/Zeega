@@ -12,7 +12,7 @@
 		url : function()
 		{
 			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.sequenceID +'/frames';
-			else return zeega.app.url_prefix+'frames/'+ frame.id;
+			else return zeega.app.url_prefix + 'frames/'+ this.id;
 		},
 	
 		initialize : function() {

@@ -58,8 +58,13 @@ class Frame
      * @var Zeega\DataBundle\Entity\Frame
      */
     private $link_right;
-
-
+	
+	public function __construct()
+	{
+		$this->created_at = new \DateTime();
+		$this->thumb_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
+	}
+	
     /**
      * Get id
      *
