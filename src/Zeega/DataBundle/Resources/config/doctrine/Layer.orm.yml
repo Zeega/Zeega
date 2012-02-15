@@ -5,6 +5,10 @@ Zeega\DataBundle\Entity\Layer:
    manyToOne:
     item:
      targetEntity: Zeega\DataBundle\Entity\Item
+   manyToMany:
+    sequences:
+     targetEntity: Zeega\DataBundle\Entity\Sequence
+     mappedBy: layers
    id:
     id:
      type: bigint

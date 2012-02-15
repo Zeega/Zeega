@@ -21,7 +21,7 @@ class EditorRepository extends EntityRepository
 			   ->join('r.project','p')
 			   ->add('where', 'p.id = :id')
 			   ->setParameter('id',$id)
-			   ->getQuery()->getArrayResult();
+			   ->getQuery()->execute();
    	 
    	 }
    	 
@@ -151,8 +151,22 @@ class EditorRepository extends EntityRepository
      }
      
      
-     
-      
+    public function findLayersByProject($projectId)
+    {
+		/*
+		SELECT sequences_layers.sequence_id, Layer.*
+		from Layer inner join sequences_layers on Layer.id = sequences_layers.layer_id
+		where sequences_layers.sequence_id in ()
+		*/
+		
+		return $this->getEntityManager()
+        			->createQueryBuilder()
+        			->add('select', 'u.id,l')
+        			->add('from', 'ZeegaDataBundle:Layer l')
+					->innerJoin('l.sequences', 'u')
+ 					->getQuery()
+ 					->getArrayResult();
+	}
      
      
      

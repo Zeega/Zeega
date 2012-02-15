@@ -298,7 +298,27 @@
 				//bootstrapping data
 				var itemsJSON = "{{ results|e('js') }}";
 				//console.log('collection id= '+ {{collection_id}})
-				
+				{
+					"project":
+					 {
+						"id" : "{{ project.getId() }}",
+						"title" : "{{ project.getTitle() }}",
+						"attr" : "{{ project.getAttr() }}",
+						"sequences" : [
+							{% set len = sequences|length - 1 -%}
+
+							{% for i in 0..len %}
+							{
+								"id" : "{{ sequences[i].id }}",
+								"title" : "{{ sequences[i].title }}",
+								"attr" : "{{ sequences[i].attr | json_encode | e('js') }}",
+								"project" : "{{ projectLayers| json_encode }}",
+							}
+							{% endfor %}
+						]
+						
+					 }
+				}
 			</script>
 			
 {% endblock %}

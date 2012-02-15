@@ -71,7 +71,9 @@ class EditorController extends Controller
 		$project = $this->getDoctrine()
 						->getRepository('ZeegaDataBundle:Project')
 						->findOneById($id);
-
+		$projectLayers =  $this->getDoctrine()
+							   ->getRepository('ZeegaDataBundle:Project')
+							   ->findLayersByProject($id);
 		$sequence = $sequences[0];
 		
 		// create project from collections browser
@@ -96,7 +98,10 @@ class EditorController extends Controller
 		return $this->render('ZeegaCoreBundle:Editor:editor.html.twig', array(
 				'projecttitle'   => $project->getTitle(),
 				'projectid'   =>$project->getId(),
+				'project'   =>$project,
 				'sequence'=>$sequence,
+				'sequences'=>$sequences,
+				'projectLayers' => $projectLayers,
            		'page'=>'editor',
 				'results' => $items,
 				'collection_id' => $collection_id,

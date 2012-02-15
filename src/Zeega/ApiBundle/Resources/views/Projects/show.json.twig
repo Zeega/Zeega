@@ -1,0 +1,28 @@
+{
+	"project":
+	 {
+		"id" : "{{ project.getId() }}",
+		"title" : "{{ project.getTitle() }}",
+		"attr" : "{{ project.getAttr() }}",
+		"sequences" : [
+			{% set len = sequences|length - 1 -%}
+
+			{% for i in 0..len %}	
+			{
+				"id" : "{{ sequences[i].id }}",
+				"title" : "{{ sequences[i].title }}",
+				"attr" : [
+					{{sequences[i].attr | json_encode | raw}}				
+				],
+				{{sequences[i].getLayers() | json_encode | raw}}
+			}
+			{% if i < len %}
+				,
+			{% endif %}
+			
+			
+			{% endfor %}
+		]
+		
+	 }
+}

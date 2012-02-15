@@ -184,4 +184,43 @@ class Layer
     {
         $this->type = $type;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\User
+     */
+    private $sequences;
+
+    public function __construct()
+    {
+        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add sequences
+     *
+     * @param Zeega\DataBundle\Entity\User $sequences
+     */
+    public function addUser(\Zeega\DataBundle\Entity\User $sequences)
+    {
+        $this->sequences[] = $sequences;
+    }
+
+    /**
+     * Get sequences
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSequences()
+    {
+        return $this->sequences;
+    }
+
+    /**
+     * Add sequences
+     *
+     * @param Zeega\DataBundle\Entity\Sequence $sequences
+     */
+    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
+    {
+        $this->sequences[] = $sequences;
+    }
 }
