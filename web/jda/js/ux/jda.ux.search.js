@@ -16,6 +16,7 @@ $(document).ready(function(){
 		jda.app.switchViewTo( $(this).data('goto-view') );
 		
 		return false;
-	})
-
+	});
+	
+	
 });

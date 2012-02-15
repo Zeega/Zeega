@@ -34,12 +34,14 @@
 			var blanks = this.model.attributes;
 			
 			$(this.el).html( _.template( template, blanks ) )
-			
+			$(this.el).addClass('fancymedia');
+			$(this.el).attr('id', this.model.id);
+			$(this.el).attr('rel', 'group');
 			return this;
 		},
 		
 		events : {
-			'mouseup' : 'openOverlay'
+			//'mouseup' : 'openOverlay'
 		},
 		
 		openOverlay : function()
