@@ -48,7 +48,7 @@ class ProjectsController extends Controller
 					      ->getRepository('ZeegaDataBundle:Layer')
 						  ->findLayerById($layer->getId());
 
-				array_push($layers[$sequenceId], $l); 
+				array_push($layers[$sequenceId], $l[0]); 
 			}
 		}
 		
