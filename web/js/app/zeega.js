@@ -42,170 +42,58 @@ this.zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
-		this.loadModules();
-		
-		
-		// makes sure that zeega only advances after both frames and layers are loaded
-		//commented out??
-		//this.zeegaReady = _.after(2,this.framesAndLayersReady);
+		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
+		this.loadModules();
+		this.startEditor();
 		//this.initStartHelp(); //broken. fix!
 
-		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 	},
 	
 	loadModules : function()
 	{
+		var _this = this;
 		var Project = zeega.module("project");
-		this.project = new Project.Model( projectJSON.project );
-		//var Sequence = zeega.module("sequence");
 		var Items = zeega.module("items");
+		this.project = new Project.Model(projectJSON.project);
+		this.project.on('ready',function(){ _this.startEditor() })
+		this.project.loadProject()
 		this.itemCollection = new Items.ViewCollection();
-		
 	},
 	
 	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
 	refreshDatabase : function(){ this.itemCollection.refresh() },
 
-	//set the sequence without loading it
-	//do we need this?
-	setSequence : function(sequenceID)
+	startEditor : function()
 	{
-		this.sequenceID = sequenceID;
-	},
-
-	createSequence : function()
-	{
-		//make a new and empty sequence
-
-		var newSequence = new Sequence();
-		var _this = this;
-
-		newSequence.save({},{
-
-			success: function(sequence,response){
-				_this.sequence = sequence;
-				_this.sequenceID= sequence.id;
-				_this.sequenceView = new SequenceView({ model : z.sequence });
-				_this.sequenceView.render();
-				_this.loadFrames();
-				_this.loadLayers();
-
-				console.log('new sequence created with id: '+ sequence.id);
-			},
-			error: function(){
-				console.log('error');
-			}
-		});
-
-	},
-
-	//set and load a new sequence
-	//this is the first function called when loading the editor in dev
-	loadProject : function()
-	{
-		var _this = this;
-		this.projectID =  $('#project-id').val();
-		this.project = new Project({ 'id' : this.projectID });
-		this.project.fetch({
-			success: function(project)
-			{
-				_this.projectView = new ProjectView({ model : _this.project });
-				_this.projectView.render();
-				if( project.get('attr').ratio ) changeAspectRatio( project.get('attr').ratio )
-			}
-		});
-	},
-	loadSequence : function(sequenceID)
-	{
-
-		var _this = this;
-		this.sequenceID = sequenceID;
-		this.sequence = new Sequence({ 'id' : this.sequenceID });
-		this.sequence.fetch({
-			success: function(sequence, response)
-			{
-				_this.loadFrames();
-				_this.loadLayers();
-				_this.loadProject();
-			}
-		});
-
-
-	},
-
-	loadFrames : function()
-	{
-		var _this = this;
-		//create a frame collection inside the sequence model
-		this.sequence.frames = new FrameCollection;
-		//get all existing frames
-
-		this.sequence.frames.fetch({
-			success : function(frames,response)
-			{
-				console.log('frames')
-				console.log(frames)
-				//make a frame view collection
-				_this.sequence.frameViewCollection = new FrameViewCollection({ collection : frames });
-				//render everything in the frameViewCollection
-				_this.sequence.frameViewCollection.render();
-				_this.zeegaReady();
-			}
-		});
-	},
-
-	loadLayers : function()
-	{
-		var _this = this;
-		//create a layer collection inside the sequence model
-		this.sequence.layerCollection = new LayerCollection;
-		//get all existing layers
-		this.sequence.layerCollection.fetch({
-
-			success : function(layers)
-			{
-				console.log('layers')
-				console.log(layers)
-				_this.sequence.layerCollection.parseLayers();
-				_this.zeegaReady();
-			}
-		});
-	},
-
-	framesAndLayersReady : function()
-	{
-		this.currentFrame = this.sequence.frames.at(0);
-		console.log('ready')
-		console.log(this)
-		//if no frames exist, create one
-		if( _.size(this.sequence.frames) == 0 )
-		{
-			console.log('no frames. MAKE ONE!')
-			var newFrame = new Frame;
-			this.sequence.frameViewCollection.add(newFrame);
-			this.loadFrame( newFrame );
-		}else if(this.url_hash.frame){
-			this.loadFrame( this.sequence.frames.get(this.url_hash.frame) );
-		}else{
-			this.loadFrame( this.sequence.frames.at(0) );
-		}
+		this.isLoaded = true
+		//this.goToFrame();
+		/*
+		this.currentFrame = this.project.sequences[0].frames.collection.at(0);
 
 		this.frameSort();
-
+		*/
+	},
+	
+	goToFrame : function(frameId)
+	{
+		if(this.isLoaded) 
+		{
+			console.log('GO TO FRAME: '+frameId)
+			if( _.isUndefined(frameId) ) this.loadFrame( this.project.sequences[0].frames.collection.at(0) );
+			else this.loadFrame( this.project.sequences[0].frames.collection.get( frameId ) );
+		}
 	},
 
 	loadFrame : function( frame )
 	{
 		var _this = this;
-
 		this.clearCurrentFrame();
-
-		//set global currentFrame to the selected frame
 		this.currentFrame = frame;
-
-		if(frame) window.location.hash = '/editor/frame/'+ frame.id; //change location hash
-		else window.location.hash = 'newFrame';
+		console.log('current frame id: '+ frame.id)
+		console.log( ''+frame )
+		this.router.navigate('editor/frame/'+ this.currentFrame.id, {silent:true})
+		
 		//open/close visual editor
 		var el = $('#workspace');
 
@@ -213,8 +101,6 @@ this.zeega = {
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
 		//right now they inherit the last frame's state
-
-
 		var storage = localStorage.getObject( this.currentFrame.id );
 		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
 		{
@@ -270,7 +156,7 @@ this.zeega = {
 		var layerArray = _.compact( this.currentFrame.get('layers'));
 
 		//call render on the entire collection. it should have the logic to draw what's needed
-		Zeega.sequence.layerCollection.render( this.currentFrame );
+		//this.sequence.layerCollection.render( this.currentFrame );
 
 		//add a new current frame style
 		$('#frame-thumb-'+this.currentFrame.id).addClass('active-frame');
@@ -331,7 +217,7 @@ this.zeega = {
 			var _this = this;
 
 			//add URL to layer model
-			layer.url = Zeega.url_prefix + 'sequences/'+ Zeega.sequenceID +'/layers';
+			layer.url = this.url_prefix + 'sequences/'+ this.sequenceID +'/layers';
 
 			//check to see if the layer is saved or not. save if ndeeded
 			if( layer.isNew() )
@@ -369,7 +255,7 @@ this.zeega = {
 	{
 		if( _.isUndefined(frame)) frame = this.currentFrame;
 		var newLayer = new Layer({
-			type: Zeega.draggedItem.get('layer_type'),
+			type: this.draggedItem.get('layer_type'),
 			attr: {
 				'item_id' : item.id,
 				'title' : item.get('title'),
@@ -500,11 +386,11 @@ this.zeega = {
 		//for now we persist to all frames EXCEPT the currentFrame
 
 		_.each( _.toArray(this.sequence.frames), function(frame){
-			if(frame != Zeega.currentFrame)
+			if(frame != this.currentFrame)
 			{
 				//test to see if it exists in any of the target frames. If so, DO NOT add
 				var layerArray = _.toArray( frame.get('layers') );
-				if( ! _.include(layerArray,layer.id) ) Zeega.addLayerToFrame(frame, layer);
+				if( ! _.include(layerArray,layer.id) ) this.addLayerToFrame(frame, layer);
 			}
 		});
 
@@ -575,8 +461,8 @@ this.zeega = {
 		if( this.getSequenceOrder()[0] === false )
 		{
 			var newFrame = new Frame;
-			Zeega.sequence.frameViewCollection.add(newFrame);
-			Zeega.loadFrame( newFrame );
+			this.sequence.frameViewCollection.add(newFrame);
+			this.loadFrame( newFrame );
 		}
 
 		this.frameSort();
@@ -629,6 +515,8 @@ this.zeega = {
 
 	frameSort : function()
 	{
+		console.log('sort frames need fixing');
+		/*
 		//turn the string IDs into integers to compare with model IDs
 		var order = _.map( $('#frame-list').sortable('toArray'), function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
 
@@ -636,6 +524,7 @@ this.zeega = {
 		this.sequence.set({'framesOrder': order});
 		console.log(this.sequence.get('framesOrder'))
 		this.sequence.save();
+		*/
 	},
 
 	previewSequence : function()
@@ -723,38 +612,38 @@ this.zeega = {
 				html:true,
 				placement:'above',
 				offset:'-250',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#database-panel').popover({
 				trigger: manual,
 				html:true,
 				placement:'right',
 				//offset:'-250',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#new-layer-tray').popover({
 				trigger: manual,
 				html:true,
 				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#layer-panel').popover({
 				trigger: manual,
 				html:true,
 				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#frame-drawer').popover({
 				trigger: manual,
 				html:true,
 				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#preview').popover({
 				trigger: manual,
 				html:true,
 				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="Zeega.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="Zeega.displayStartHelp();return false;">next</a></div></div>'
+				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 
 			this.displayStartHelp();

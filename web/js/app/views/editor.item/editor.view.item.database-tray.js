@@ -5,8 +5,6 @@
 
 		tagName : 'li',
 
-		initialize : function() {},
-
 		render: function()                 
 		{
 			var _this = this;

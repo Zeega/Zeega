@@ -11,24 +11,23 @@
 				
 		initialize : function( attributes )
 		{
-			console.log('SEQUENCE model init')
 			this.unset('frames',['silent'])
 			this.unset('layers',['silent'])
 			this.createFrames( attributes.frames );
 			this.createLayers( attributes.layers );
+			this.trigger('ready');
 		},
 		
 		createFrames : function( frames )
 		{
-			console.log(frames)
-			//var Frames = zeega.module("frames");
-			//this.frames = new Frames.ViewCollection( frames );
+			var Frames = zeega.module("frame");
+			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
 		},
+		
 		createLayers : function( layers )
 		{
-			console.log(layers)
-			//var Layers = zeega.module("layers");
-			//this.layers = new Layers.ViewCollection( layers );
+			var Layers = zeega.module("layer");
+			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
 		}
 		
 	});

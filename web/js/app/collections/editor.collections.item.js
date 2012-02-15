@@ -21,8 +21,8 @@
 			
 			if(this.collection.length)
 			{
-				_.each( _.toArray(this.collection), function(item){
-					var itemView = new Items.Views.List({model:item});
+				_.each( _.toArray(this.collection), function(itemModel){
+					var itemView = new Items.Views.List({model:itemModel});
 					_this._childViews.push( itemView );
 					$(_this.el).append( itemView.render().el );
 				})

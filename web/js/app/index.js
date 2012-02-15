@@ -2,28 +2,27 @@ jQuery(function($)
 {
 	// Shorthand the application namespace
 	var Zeega = zeega.app;
-	Zeega.init();
 	
-	/*
+	
 	// Defining the application router, you can attach sub routers here.
 	var Router = Backbone.Router.extend({
 		
 		routes: {
-			""				: 'search',
-			"text/:query"	: "search"
+			""						: 'goToFrame',
+			"editor/frame/:frameId"	: "goToFrame"
 		},
 
-		search : function( query )
+		goToFrame : function( frameId )
 		{
-			var obj = { 'query' : query};
-			JDA.search(obj);
-			if( $('#search-bar input').val() != query ) $('#search-bar input').val(query);
+			//Zeega.goToFrame( frameId )
 		}
 		
 	});
 
-	JDA.router = new Router();
+	Zeega.router = new Router();
 	Backbone.history.start();
-	*/
+	
+	Zeega.init();
+	
 	
 });

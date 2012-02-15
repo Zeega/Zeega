@@ -51,36 +51,41 @@ var loadFiles = [
 	'order!app/models/editor.model.project',
 	'order!app/models/editor.model.sequence',
 	'order!app/models/editor.model.item',
+	'order!app/models/editor.model.frame',
+	'order!app/models/editor.model.layer',
 
 //collections
 	'order!app/collections/editor.collections.sequence',
 	'order!app/collections/editor.collections.item',
+	'order!app/collections/editor.collections.frame',
+	'order!app/collections/editor.collections.layer',
 
 //views
 	'order!app/views/editor.project/editor.view.project.editor',
 	'order!app/views/editor.item/editor.view.item.database-tray',
-
-
+	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
+	'order!app/views/editor.layer/editor.view.layer.layer-list',
+	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
 
 	//mvc
 //	'order!backbone/models/sequence',
 	'order!backbone/models/tag',
 	'order!backbone/models/editor.collection',
-	'order!backbone/models/frame',
-	'order!backbone/models/layer',
+//	'order!backbone/models/frame',
+//	'order!backbone/models/layer',
 //	'order!backbone/models/project',
 //	'order!backbone/views/sequence-view',
 	'order!backbone/views/editor.collection-view',
-	'order!backbone/views/frame-view',
+//	'order!backbone/views/frame-view',
 //	'order!backbone/views/project-view',
 
-	'order!backbone/views/layer.view.visual',
-	'order!backbone/views/layer.view.visual.list',
-	'order!backbone/views/layer.view.visual.editor',
+//	'order!backbone/views/layer.view.visual',
+//	'order!backbone/views/layer.view.visual.list',
+//	'order!backbone/views/layer.view.visual.editor',
 	//'order!backbone/views/layer.view.interaction.list',
 
-	//sequences
+	//ROUTER
 	'order!backbone/routes/routes',
 
 	//layers

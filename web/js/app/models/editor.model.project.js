@@ -8,7 +8,10 @@
 		{
 			this.unset('sequences',['silent'])
 			this.createSequences( attributes.sequences );
-			
+		},
+
+		loadProject : function()
+		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
 			this.view.render();
@@ -22,7 +25,8 @@
 			_.each( sequences, function(sequence){
 				_this.sequences.push( new Sequence.Model( sequence ) );
 			});
-		} 
+			this.trigger('ready')
+		}
 		
 	});
 
