@@ -14,7 +14,8 @@
 				"attr" : [
 					{{sequences[i].attr | json_encode | raw}}				
 				],
-				{{sequences[i].getLayers() | json_encode | raw}}
+				"frames" : {{frames[sequences[i].id] | json_encode | raw}},
+				"layers" : {{layers[sequences[i].id] | json_encode | raw}}
 			}
 			{% if i < len %}
 				,

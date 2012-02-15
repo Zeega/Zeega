@@ -93,7 +93,8 @@ class EditorController extends Controller
 		}
 		
 		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
-		
+		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+		//return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id));
 		
 		return $this->render('ZeegaCoreBundle:Editor:editor.html.twig', array(
 				'projecttitle'   => $project->getTitle(),
@@ -105,6 +106,7 @@ class EditorController extends Controller
            		'page'=>'editor',
 				'results' => $items,
 				'collection_id' => $collection_id,
+				'project_data' => $projectData
 			));
 	} 
 	

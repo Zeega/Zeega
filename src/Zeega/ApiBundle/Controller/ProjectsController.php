@@ -26,11 +26,34 @@ class ProjectsController extends Controller
 						->getRepository('ZeegaDataBundle:Project')
 						->findOneById($id);
 		
-		$layers = $this->getDoctrine()
-						->getRepository('ZeegaDataBundle:Sequence')
-						->findByProject($project->getId());
+		$frames = array();
+		$layers = array();
+		// auch - should work for now, but won't scale for sure
+		foreach($sequences as $sequence)
+		{
+			$sequenceId = $sequence->getId();
+			$frames[$sequenceId] = $this->getDoctrine()
+									    ->getRepository('ZeegaDataBundle:Sequence')
+										->findFramesBySequenceId($project->getId());
+			
+			$sequence = $this->getDoctrine()
+						     ->getRepository('ZeegaDataBundle:Sequence')
+							 ->find($sequence->getId());
+
+			$layers[$sequenceId] = array();			
+			$layers_seq = $sequence->getLayers()->toArray();
+			foreach($layers_seq as $layer)
+			{
+				$l = $this->getDoctrine()
+					      ->getRepository('ZeegaDataBundle:Layer')
+						  ->findLayerById($layer->getId());
+
+				array_push($layers[$sequenceId], $l); 
+			}
+		}
 		
-		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 'sequences' => $sequences, 'layers' => $layers));
+		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
+			'sequences' => $sequences, 'frames' => $frames, 'layers' => $layers));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
@@ -39,5 +62,4 @@ class ProjectsController extends Controller
     public function getProjectsAction()
     {
     } 
-
 }
