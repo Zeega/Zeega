@@ -35,7 +35,7 @@ var loadFiles = [
 	'order!app/zeega',
 	
 //	'order!core/zeega',
-    'order!core/player',
+    'order!app/player',
 
 	//plugins
 	'order!lib/jquery/plugins/spin',
@@ -69,42 +69,29 @@ var loadFiles = [
 
 
 	//mvc
-//	'order!backbone/models/sequence',
 	'order!backbone/models/tag',
 	'order!backbone/models/editor.collection',
-//	'order!backbone/models/frame',
-//	'order!backbone/models/layer',
-//	'order!backbone/models/project',
-//	'order!backbone/views/sequence-view',
 	'order!backbone/views/editor.collection-view',
-//	'order!backbone/views/frame-view',
-//	'order!backbone/views/project-view',
 
-//	'order!backbone/views/layer.view.visual',
-//	'order!backbone/views/layer.view.visual.list',
-//	'order!backbone/views/layer.view.visual.editor',
-	//'order!backbone/views/layer.view.interaction.list',
 
 	//ROUTER
 	'order!backbone/routes/routes',
 
 	//layers
-	'order!layers/zeega._layer',
-	'order!layers/zeega.audio',
-	'order!layers/zeega.geo',
-	'order!layers/zeega.image',
-	'order!layers/zeega.text',
-	'order!layers/zeega.video',
-	'order!layers/zeega.youtube',
-	//'order!layers/zeega.rdio',
-	//'order!layers/zeega.twilio',
-	'order!layers/zeega.documentcloud',
-	'order!layers/zeega.rectangle',
-	'order!layers/zeega.website',
+	'order!app/_layer',
+	'order!plugins/layers/audio/audio',
+	'order!plugins/layers/geo/geo',
+	'order!plugins/layers/image/image',
+	'order!plugins/layers/text/text',
+	'order!plugins/layers/video/video',
+	'order!plugins/layers/youtube/youtube',
+	'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/rectangle/rectangle',
+	'order!plugins/layers/website/website',
 
 	//players
-	'order!players/zeega.player.youtube',	
-	'order!players/zeega.player.video',
+	'order!plugins/players/zeega.player.youtube',	
+	'order!plugins/players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
 	

@@ -14,7 +14,7 @@
 
 		initialize : function()
 		{
-			this.tags=new TagCollection();
+			this.tags = new TagCollection();
 		},
 
 		loadTags : function(successFunction, errorFunction){
