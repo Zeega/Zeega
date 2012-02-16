@@ -18,8 +18,8 @@ var loadFiles = [
 
 	
 	//libraries
-	'order!libraries/underscore',
-	'order!libraries/backbone',
+	'order!lib/underscore',
+	'order!lib/backbone',
 	'order!jquery/ui/js/jquery-ui.min',
 	
 	//custom
@@ -29,11 +29,11 @@ var loadFiles = [
 
 	
 	//plugins
-	'order!jquery/plugins/jeditable.min',
-	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
-	'order!jquery/plugins/colorpicker/js/colorpicker',
-	'order!jquery/plugins/bootstrapmodal',
+	'order!lib/jquery/plugins/jeditable.min',
+	'order!lib/jquery/plugins/jquery-cycle',
+	'order!lib/jquery/plugins/jquery.paging',
+	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+	'order!lib/jquery/plugins/bootstrapmodal',
 	
 	//mvc
 

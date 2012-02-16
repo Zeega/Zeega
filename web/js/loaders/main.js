@@ -17,8 +17,8 @@ var loadFiles = [
 	
 
 	//libraries
-	'order!libraries/underscore',
-	'order!libraries/backbone',
+	'order!lib/underscore',
+	'order!lib/backbone',
 	'order!jquery/ui/js/jquery-ui.min',
 	
 	//custom
@@ -30,20 +30,20 @@ var loadFiles = [
 	'order!database',
 	
 	//plugins
-	'order!jquery/plugins/jeditable.min',
-	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
-	'order!jquery/plugins/colorpicker/js/colorpicker',
-	'order!js/jquery/plugins/jquery.getUrlParam.js',
-	'order!js/jquery/plugins/jquery.json-2.2.min.js',
-	'order!js/jquery/plugins/jquery.cookie.js',
-	'order!js/jquery/plugins/jquery.tmpl.js',
-	'order!js/jquery/plugins/bootstrap-modal.js',
+	'order!lib/jquery/plugins/jeditable.min',
+	'order!lib/jquery/plugins/jquery-cycle',
+	'order!lib/jquery/plugins/jquery.paging',
+	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+	'order!js/lib/jquery/plugins/jquery.getUrlParam.js',
+	'order!js/lib/jquery/plugins/jquery.json-2.2.min.js',
+	'order!js/lib/jquery/plugins/jquery.cookie.js',
+	'order!js/lib/jquery/plugins/jquery.tmpl.js',
+	'order!js/lib/jquery/plugins/bootstrap-modal.js',
 	
 	//mvc
 	'order!backbone/models/project',
 	'order!backbone/models/sequence',
-	'order!backbone/models/item',
+	'order!app/models/editor.model.item',
 	'order!backbone/models/frame',
 	'order!backbone/models/layer',
 	'order!backbone/views/project-view',
@@ -56,13 +56,13 @@ var loadFiles = [
 	'order!backbone/sequences/sequences',
 	
 	//layers
-	'order!layers/zeega._layer',
-	'order!layers/zeega.audio',
-	'order!layers/zeega.geo',
-	'order!layers/zeega.image',
-	'order!layers/zeega.text',
-	'order!layers/zeega.video',
-	'order!layers/zeega.documentcloud',
+	'order!app/_layer',
+	'order!plugins/layers/audio/audio',
+	'order!plugins/layers/geo/geo',
+	'order!plugins/layers/image/image',
+	'order!plugins/layers/text/text',
+	'order!plugins/layers/video/video',
+	'order!plugins/layers/documentcloud/documentcloud',
 	
 	//players
 	'order!players/zeega.html5av'

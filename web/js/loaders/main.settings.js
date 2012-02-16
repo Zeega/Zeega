@@ -12,13 +12,10 @@
 var loadFiles = [
 	'jquery',
 	
-	//css?
-	//'text!../css/all.css', //not quite
-	
 	//libraries
-	'order!libraries/underscore',
-	'order!libraries/backbone',
-	'order!jquery/ui/js/jquery-ui.min',
+	'order!lib/underscore',
+	'order!lib/backbone',
+	'order!lib/jquery/ui/js/jquery-ui.min',
 	
 	//custom
 	'order!ux/zeega.ux.header',
@@ -26,27 +23,15 @@ var loadFiles = [
 
 	
 	//plugins
-	'order!jquery/plugins/jeditable.min',
-	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
-	'order!jquery/plugins/colorpicker/js/colorpicker',
-	'order!jquery/plugins/jquerygetUrlParam',
-	'order!jquery/plugins/jqueryjson',
-	'order!jquery/plugins/jquerycookie',
-	'order!jquery/plugins/jquerytmpl',
-	
-	//mvc
+	'order!lib/jquery/plugins/jeditable.min',
+	'order!lib/jquery/plugins/jquery-cycle',
+	'order!lib/jquery/plugins/jquery.paging',
+	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+	'order!lib/jquery/plugins/jquerygetUrlParam',
+	'order!lib/jquery/plugins/jqueryjson',
+	'order!lib/jquery/plugins/jquerycookie',
+	'order!lib/jquery/plugins/jquerytmpl',
 
-	
-	//sequences
-
-	
-	//layers
-
-	
-	//players
-
-	
 	];
 
 require(loadFiles, function($) {

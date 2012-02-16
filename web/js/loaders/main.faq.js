@@ -12,36 +12,20 @@
 var loadFiles = [
 	'jquery',
 	
-	//css?
-	//'text!../css/all.css', //not quite
-	
 	//libraries
-	'order!libraries/underscore',
-	'order!libraries/backbone',
-	'order!jquery/ui/js/jquery-ui.min',
+	'order!lib/underscore',
+	'order!lib/backbone',
+	'order!lib/jquery/ui/js/jquery-ui.min',
 	
 	//custom
 	'order!ux/zeega.ux.header',
 	'order!ux/zeega.ux.settings',
 
-	
 	//plugins
-	'order!jquery/plugins/jeditable.min',
-	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
-	'order!jquery/plugins/colorpicker/js/colorpicker',
-	
-	//mvc
-
-	
-	//sequences
-
-	
-	//layers
-
-	
-	//players
-
+	'order!lib/jquery/plugins/jeditable.min',
+	'order!lib/jquery/plugins/jquery-cycle',
+	'order!lib/jquery/plugins/jquery.paging',
+	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
 	
 	];
 

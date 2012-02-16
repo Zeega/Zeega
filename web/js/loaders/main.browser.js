@@ -18,9 +18,9 @@ var loadFiles = [
 
 	
 	//libraries
-	'order!libraries/underscore',
-	'order!libraries/backbone',
-	'order!libraries/spin',
+	'order!lib/underscore',
+	'order!lib/backbone',
+	'order!lib/spin',
 	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!jquery/ui/js/jquery-ui.min',
 	
@@ -32,20 +32,20 @@ var loadFiles = [
 	'order!helpers/zeega.helpers',
 
 	//core
-	'order!core/zeega',
-	'order!core/zeegaBrowser',
+	'order!app/zeega',
+	'order!app/zeegaBrowser',
 	
 	//plugins
-	'order!jquery/plugins/spin',
-	'order!jquery/plugins/jeditable.min',
-	'order!jquery/plugins/jquery-cycle',
-	'order!jquery/plugins/jquery.paging',
-	'order!jquery/plugins/colorpicker/js/colorpicker',
-	'order!jquery/plugins/jquerygetUrlParam',
-	'order!jquery/plugins/jqueryjson',
-	'order!jquery/plugins/jquerycookie',
-	'order!jquery/plugins/jquerytmpl',
-	'order!jquery/plugins/twitter-bootstrap',
+	'order!lib/jquery/plugins/spin',
+	'order!lib/jquery/plugins/jeditable.min',
+	'order!lib/jquery/plugins/jquery-cycle',
+	'order!lib/jquery/plugins/jquery.paging',
+	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+	'order!lib/jquery/plugins/jquerygetUrlParam',
+	'order!lib/jquery/plugins/jqueryjson',
+	'order!lib/jquery/plugins/jquerycookie',
+	'order!lib/jquery/plugins/jquerytmpl',
+	'order!lib/jquery/plugins/twitter-bootstrap',
 	
 	//custom
 	'order!filamentslider/selectToUISlider.jQuery',
@@ -54,7 +54,7 @@ var loadFiles = [
 	
 	//mvc
 	'order!backbone/models/tag',
-	'order!backbone/models/item',
+	'order!app/models/editor.model.item',
 	'order!backbone/models/browser.collection',
 	'order!backbone/models/browser.myCollections',
 	'order!backbone/models/browser.timeBin',

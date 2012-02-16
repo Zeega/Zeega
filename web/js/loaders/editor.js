@@ -9,7 +9,11 @@
 
 *********************************************/
 require.config({
-	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/'
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	paths : {
+			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
+		}
 })
 
 var loadFiles = [
@@ -34,7 +38,7 @@ var loadFiles = [
 	//core
 	'order!app/zeega',
 	
-//	'order!core/zeega',
+//	'order!app/zeega',
     'order!app/player',
 
 	//plugins
@@ -67,15 +71,8 @@ var loadFiles = [
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
-
 	//mvc
 	'order!backbone/models/tag',
-	'order!backbone/models/editor.collection',
-	'order!backbone/views/editor.collection-view',
-
-
-	//ROUTER
-	'order!backbone/routes/routes',
 
 	//layers
 	'order!app/_layer',
@@ -90,13 +87,13 @@ var loadFiles = [
 	'order!plugins/layers/website/website',
 
 	//players
-	'order!plugins/players/zeega.player.youtube',	
-	'order!plugins/players/zeega.player.video',
+	'order!plugins/plugins/players/zeega.player.youtube',	
+	'order!plugins/plugins/players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
 	
 	
-	'order!app/index',
+	'order!app/index'
 	
 
 	];
@@ -156,8 +153,8 @@ Aloha.ready( function() {
 		'order!app/index',
 		'order!app/zeega',
 		
-		'order!core/zeega',
-	    'order!core/player',
+		'order!app/zeega',
+	    'order!app/player',
 	    'order!core/database',
 	
 		//plugins
@@ -174,7 +171,7 @@ Aloha.ready( function() {
 		//mvc
 		'order!backbone/models/sequence',
 	    'order!backbone/models/tag',
-		'order!backbone/models/item',
+		'order!app/models/editor.model.item',
 		'order!backbone/models/editor.collection',
 		'order!backbone/models/frame',
 		'order!backbone/models/layer',
@@ -195,22 +192,22 @@ Aloha.ready( function() {
 		'order!backbone/routes/routes',
 	
 		//layers
-		'order!layers/zeega._layer',
-		'order!layers/zeega.audio',
-		'order!layers/zeega.geo',
-		'order!layers/zeega.image',
-		'order!layers/zeega.text',
-		'order!layers/zeega.video',
-		'order!layers/zeega.youtube',
-		//'order!layers/zeega.rdio',
+		'order!app/_layer',
+		'order!plugins/layers/audio/audio',
+		'order!plugins/layers/geo/geo',
+		'order!plugins/layers/image/image',
+		'order!plugins/layers/text/text',
+		'order!plugins/layers/video/video',
+		'order!plugins/layers/youtube/youtube',
+		//'order!plugins/layers/rdio/rdio',
 		//'order!layers/zeega.twilio',
-		'order!layers/zeega.documentcloud',
-		'order!layers/zeega.rectangle',
-		'order!layers/zeega.website',
+		'order!plugins/layers/documentcloud/documentcloud',
+		'order!plugins/layers/rectangle/rectangle',
+		'order!plugins/layers/website/website',
 	
 		//players
-		'order!players/zeega.player.youtube',	
-		'order!players/zeega.player.video',
+		'order!plugins/players/zeega.player.youtube',	
+		'order!plugins/players/zeega.player.video',
 		//'order!players/zeega.player.rdio',
 		//'order!players/zeega.player.rdio.token',
 	

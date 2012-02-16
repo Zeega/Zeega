@@ -10,20 +10,20 @@
 
 var loadFiles = [
 	'jquery',
-	'order!core/framePlayer',
+	'order!app/framePlayer',
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
-	'order!libraries/underscore',
+	'order!lib/underscore',
 	
-	'order!layers/zeega._layer',
-	'order!layers/zeega.image',
-	'order!layers/zeega.geo',
-	'order!layers/zeega.text',
-	'order!layers/zeega.video',
-	'order!layers/zeega.youtube',
-	'order!layers/zeega.documentcloud',
-	'order!layers/zeega.rectangle',	            
-    'order!layers/zeega.website',
+	'order!app/_layer',
+	'order!plugins/layers/image/image',
+	'order!plugins/layers/geo/geo',
+	'order!plugins/layers/text/text',
+	'order!plugins/layers/video/video',
+	'order!plugins/layers/youtube/youtube',
+	'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/rectangle/rectangle',	            
+    'order!plugins/layers/website/website',
 	];
 
 require(loadFiles, function($) {

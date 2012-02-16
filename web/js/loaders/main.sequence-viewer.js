@@ -11,33 +11,33 @@
 var loadFiles = [
 	'jquery',
 	
-	'order!jquery/ui/js/jquery-ui-1.8.17',
+	'order!lib/jquery/ui/js/jquery-ui-1.8.17',
 	
-	'order!libraries/underscore',
+	'order!lib/underscore',
 	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	
-	'order!libraries/spin',
-	'order!jquery/plugins/spin',
+	'order!lib/spin',
+	'order!lib/jquery/plugins/spin',
 	
 	
-	'order!layers/zeega._layer',
-	'order!layers/zeega.video',
-	'order!layers/zeega.audio',
-	'order!layers/zeega.image',
-	'order!layers/zeega.geo',
-	'order!layers/zeega.text',
-	'order!layers/zeega.rdio',
-	'order!layers/zeega.youtube',
-	'order!layers/zeega.rectangle',
-	'order!layers/zeega.documentcloud',
+	'order!app/_layer',
+	'order!plugins/layers/video/video',
+	'order!plugins/layers/audio/audio',
+	'order!plugins/layers/image/image',
+	'order!plugins/layers/geo/geo',
+	'order!plugins/layers/text/text',
+	'order!plugins/layers/rdio/rdio',
+	'order!plugins/layers/youtube/youtube',
+	'order!plugins/layers/rectangle/rectangle',
+	'order!plugins/layers/documentcloud/documentcloud',
 	
 	
-	'order!players/zeega.player.video',
-	'order!players/zeega.player.youtube',	
+	'order!plugins/players/zeega.player.video',
+	'order!plugins/players/zeega.player.youtube',	
 	       
-	'order!core/player'
+	'order!app/player'
 	];
 
 require(loadFiles, function($) {
