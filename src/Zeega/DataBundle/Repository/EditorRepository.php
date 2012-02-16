@@ -21,21 +21,11 @@ class EditorRepository extends EntityRepository
 			   ->join('r.project','p')
 			   ->add('where', 'p.id = :id')
 			   ->setParameter('id',$id)
-			   ->getQuery()->getArrayResult();
+			   ->getQuery()->execute();
    	 
    	 }
    	 
-   	  public function findProjectById($id){
-   	 	return $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'p')
-			   ->add('from', ' ZeegaDataBundle:Project p')
-			   ->add('where', 'p.id = :id')
-			   ->setParameter('id',$id)
-			   ->getQuery()->getArrayResult();
-   	 }
-   	 
-	 public function findSitesByUser($id){
+   	 public function findSitesByUser($id){
    	 	return $this->getEntityManager()
 				->createQueryBuilder()
 				->add('select', 's')
@@ -82,30 +72,7 @@ class EditorRepository extends EntityRepository
 		  
      }
      
-     
-     
-      public function checkAdmin($short,$id)
-     {
-     	$query= $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Site s')
-			   ->join('s.admins','u')
-			   ->add('where', 's.short = :short')
-			   ->andwhere('u.id = :id')
-			   ->setParameters(array('short'=>$short,'id'=>$id))
-			   ->getQuery();
-
-
-			try {
-				return $query->getSingleResult();
-			} catch (\Doctrine\ORM\NoResultException $e) {
-				return false;
-			}  
-     }
-   
-   
-   	public function findProjectsBySite($id)
+    public function findProjectsBySite($id)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
@@ -122,31 +89,7 @@ class EditorRepository extends EntityRepository
 
      }
      
-     
-     
-      	public function findUsersBySite($id)
-     {
-     	$query= $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 's,u')
-			   ->add('from', ' ZeegaDataBundle:Site s')
-			   ->innerJoin('s.users', 'u')
-			   ->add('where', 's.id = :id')
-			   ->setParameter('id',$id)
-				->getQuery();
-
-
-			return $query->getArrayResult();
-
-     }
-     
- 
-     
-     
-     
-   
-     
-      public function findProjectsBySiteAndUser($siteId,$userId)
+       public function findProjectsBySiteAndUser($siteId,$userId)
      {
      	$query= $this->getEntityManager()
 				->createQueryBuilder()
@@ -164,68 +107,7 @@ class EditorRepository extends EntityRepository
 			return $query->getArrayResult();
 
      }
-     
-     
-   
-     public function findByShort($short)
-     {
-     	$query= $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 's')
-			   ->add('from', ' ZeegaDataBundle:Site s')
-			   ->add('where', 's.short = :short')
-			   ->setParameter('short',$short)
-				->getQuery();
 
-		
-			try {
-				return $query->getSingleResult();
-			} catch (\Doctrine\ORM\NoResultException $e) {
-				return null;
-			}  
-     }
-   
-   
-   	public function findBySite($id)
-     {
-     	$query= $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'p')
-			   ->add('from', ' ZeegaDataBundle:Project p')
-			   ->innerJoin('p.site', 'g')
-			   ->add('where', 'g.id = :id')
-			   ->setParameter('id',$id)
-				->getQuery();
-
-		
-			return $query->getArrayResult();
-			
-     }
-     
- 
-     
-     
-     
-   
-     
-      public function findBySiteAndUser($siteId,$userId)
-     {
-     	$query= $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'p')
-			   	->add('from', 'ZeegaDataBundle:Project p')
-			   ->innerJoin('p.site', 's')
-			   ->join('p.user', 'u')
-			   ->add('where', 'u.id = :userId')
-			   ->andWhere('s.id = :siteId')
-			   ->setParameters(array('siteId'=>$siteId,'userId'=>$userId))
-				->getQuery();
-
-		
-			return $query->getArrayResult();
-			
-     }
-     
       public function findSequenceById($id)
     {
      
@@ -237,32 +119,7 @@ class EditorRepository extends EntityRepository
      		->getArrayResult();
      }
      
-     
-     
-       public function findSequence($id)
-    {
-     
-        
-        	return $this->getEntityManager()
-            ->createQuery('SELECT r FROM ZeegaDataBundle:Sequence r
-            				WHERE r.id = :id')
-     		->setParameter('id',$id)
-     		->getResult();
-     }
-     
-      public function findFrameById($id)
-    {
-     
-        
-        	return $this->getEntityManager()
-            ->createQuery('SELECT n FROM ZeegaDataBundle:Frame n
-            				WHERE n.id = :id')
-     		->setParameter('id',$id)
-     		->getArrayResult();
-     }
-     
-       
-      public function findLayerById($id)
+    public function findLayerById($id)
     {
      
         
@@ -294,8 +151,22 @@ class EditorRepository extends EntityRepository
      }
      
      
-     
-      
+    public function findLayersByProject($projectId)
+    {
+		/*
+		SELECT sequences_layers.sequence_id, Layer.*
+		from Layer inner join sequences_layers on Layer.id = sequences_layers.layer_id
+		where sequences_layers.sequence_id in ()
+		*/
+		
+		return $this->getEntityManager()
+        			->createQueryBuilder()
+        			->add('select', 'u.id,l')
+        			->add('from', 'ZeegaDataBundle:Layer l')
+					->innerJoin('l.sequences', 'u')
+ 					->getQuery()
+ 					->getArrayResult();
+	}
      
      
      

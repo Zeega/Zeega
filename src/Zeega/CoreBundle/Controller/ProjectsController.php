@@ -29,7 +29,7 @@ class ProjectsController extends Controller
     
     	$project=$this->getDoctrine()
         ->getRepository('ZeegaDataBundle:Sequence')
-        ->findProjectById($project_id);
+        ->findById($project_id);
     	return new Response(json_encode($project[0]));
         
     
@@ -89,7 +89,7 @@ class ProjectsController extends Controller
     		
     		$projects=$this->getDoctrine()
         			->getRepository('ZeegaDataBundle:Sequence')
-        			->findProjectById($project_id);
+        			->findById($project_id);
     	
     		$project=$projects[0];
     

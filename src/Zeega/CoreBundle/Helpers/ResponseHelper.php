@@ -1,11 +1,11 @@
 <?php
 
-namespace Zeega\ApiBundle\Helpers;
+namespace Zeega\CoreBundle\Helpers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Zeega\ApiBundle\Helpers\ItemCustomNormalizer;
+use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 
 class ResponseHelper
 {
@@ -13,8 +13,8 @@ class ResponseHelper
     {
         //$renderedTwig = preg_replace('/\s+/','',$renderedTwig);
 		
-        $renderedTwig = preg_replace(array('/\s{2,}/','/\n/','/\p{Zl}/'), '',$renderedTwig);
-        $renderedTwig = preg_replace(array('/\s:\s/'), ':',$renderedTwig);
+        //$renderedTwig = preg_replace(array('/\s{2,}/','/\n/','/\p{Zl}/'), '',$renderedTwig);
+        //$renderedTwig = preg_replace(array('/\s:\s/'), ':',$renderedTwig);
         //$renderedTwig = preg_replace('/\s+/', '', $renderedTwig);
         
         //array("\r", "\r\n", "\n")

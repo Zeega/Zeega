@@ -4,7 +4,7 @@ namespace Zeega\ApiBundle\Controller;
 use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Zeega\ApiBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 use DateTime;
 

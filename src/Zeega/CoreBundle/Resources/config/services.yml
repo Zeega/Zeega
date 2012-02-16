@@ -7,3 +7,10 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: zeega_user_registration }
+    zeega.twig.extension.header:
+        class: Zeega\CoreBundle\Twig\Extensions\HeaderTwigExtension
+        arguments:
+              doctrine: "@doctrine"
+              security: "@security.context"
+        tags:
+            - { name: twig.extension }

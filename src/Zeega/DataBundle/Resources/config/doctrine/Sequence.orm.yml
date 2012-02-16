@@ -12,6 +12,7 @@ Zeega\DataBundle\Entity\Sequence:
         onDelete: CASCADE
    manyToMany:
     layers:
+     fetch: EAGER
      targetEntity: Layer
      inversedBy:
       name: sequences
