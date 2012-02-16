@@ -54,7 +54,8 @@
 		{
 			html =
 
-			'<a id="<%= id %>" class="fancymedia" rel="group"><div class="span2">'+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
 			'<div class="span7">'+
@@ -62,7 +63,8 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= date_created.date %>'
-			'</div></a>';
+			'</div>'+
+			'</a>';
 			
 			return html;
 		},
@@ -70,6 +72,7 @@
 		{
 			html = 
 			
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
 			'</div>'+
@@ -78,14 +81,16 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= date_created.date %>'
-			'</div>';
+			'</div>'+
+			'</a>';
 			
 			return html;
 		},
 		getWebsiteTemplate : function()
 		{
 			html = 
-			
+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-website"></i>'+
 			'</div>'+
@@ -94,14 +99,16 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= date_created.date %>'
-			'</div>';
+			'</div>'+
+			'</a>';
 			
 			return html;
 		},
 		getTweetTemplate : function()
 		{
 			html = 
-			
+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-twitter"></i>'+
 			'</div>'+
@@ -110,7 +117,8 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= date_created.date %>'
-			'</div>';
+			'</div>'+
+			'</a>';
 			
 			return html;
 		},
@@ -118,6 +126,7 @@
 		{
 			html = 
 			
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span3">'+
 				'<%= type %>'+
 			'</div>'+
@@ -126,7 +135,8 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= media_date_created.date %>'
-			'</div>';
+			'</div>'+
+			'</a>';
 			
 			return html;
 		}
