@@ -321,10 +321,11 @@ function closeOpenCitationTabs()
 			placeholder: "ui-state-highlight",
 		
 			//resort the layers in the workspace too
-			update : function(){
+			update : function()
+			{
 				//get layer ids as ints
 				var layerIDs = _.map( $(this).sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-				Zeega.updateLayerOrder(layerIDs);
+				zeega.app.updateLayerOrder(layerIDs);
 			}
 		});
 	$( "#sortable-layers" ).disableSelection();
@@ -395,7 +396,7 @@ function closeOpenCitationTabs()
 		drop : function( event, ui )
 			{
 				ui.draggable.draggable('option','revert',false);
-				Zeega.createLayerFromItem( Zeega.draggedItem );
+				zeega.app.addLayer({ item : zeega.app.draggedItem })
 			}
 	});
 		

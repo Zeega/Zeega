@@ -6,8 +6,8 @@
 
 		initialize : function()
 		{
-			this.model.bind( 'change:visibleineditor', this.showHide, this );
-
+			this.model.on('destroy', this.remove, this );
+			this.model.on( 'change:visibleineditor', this.showHide, this );
 		},
 
 		//draws the controls
@@ -74,7 +74,9 @@
 		{
 			if( this.model.get('visibleineditor') ) $(this.el).fadeIn('fast');
 			else $(this.el).fadeOut('fast');
-		}
+		},
+		
+		remove : function(){ $(this.el).remove() }
 
 	});
 

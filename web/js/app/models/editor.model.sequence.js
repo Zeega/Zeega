@@ -28,7 +28,7 @@
 		createLayers : function( layers )
 		{
 			var Layers = zeega.module("layer");
-			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers[0]) } ); // remove the [0] when API is fixed
+			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
 		},
 		
 		refactorFrames : function( destroyedModel )

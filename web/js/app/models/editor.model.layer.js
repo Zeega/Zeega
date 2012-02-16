@@ -17,12 +17,9 @@
 	
 		initialize: function()
 		{
-			console.log(this)
 			eval( 'this.layerClass = new '+ this.get("type")+'Layer()' );
 			this.layerClass.load(this);
-		
 			if(!this.get('attr')) this.set({'attr':{}}); //this should be covered by defaults
-		
 		},
 	
 		show : function()

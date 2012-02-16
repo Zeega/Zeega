@@ -59,7 +59,7 @@
 					$('#visual-editor-workspace').addClass('target-focus');
 					$('#frame-drawer').addClass('target-focus');
 
-					Zeega.draggedItem = _this.model;
+					zeega.app.draggedItem = _this.model;
 				},
 
 				/**	stuff _this happens when the user drags the item into a frame **/	
@@ -68,7 +68,7 @@
 					$('#visual-editor-workspace').removeClass('target-focus');
 					$('#frame-drawer').removeClass('target-focus');
 
-					Zeega.draggedItem = null;
+					zeega.app.draggedItem = null;
 				}
 
 			});

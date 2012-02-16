@@ -4,7 +4,7 @@
 		initialize : function()
 		{
 			console.log('LAYER COLLECTION INIT')
-			
+			this.collection.on('destroy', this.removeLayer, this );
 			this.displayLayers = new Layer.Collection();
 			
 			this.layerList = new Layer.LayerListViewCollection({collection:this.displayLayers});
@@ -19,37 +19,40 @@
 			//args = {item, type, frame}
 			if( _.isUndefined( args.item ) )
 			{
-				console.log('new layer from tray')
-				console.log(args)
 				newLayer = new Layer.Model({type:args.type});
 				this.collection.add( newLayer );
 				if( args.show ) this.displayLayers.add( newLayer );
-				this.updateFrame( args.frame, newLayer);
-
 			}
 			else
 			{
-				console.log( args.item )
+				//media item layer
+				newLayer = new Layer.Model({
+					type: args.item.get('layer_type'),
+					attr: {
+						'item_id' : args.item.id,
+						'title' : args.item.get('title'),
+						'url' : args.item.get('uri'),
+						'uri' : args.item.get('uri'),
+						'thumbnail_url' : args.item.get('thumbnail_url'),
+						'attribution_url' : args.item.get('attribution_uri'),
+						'citation':true,
+					}
+				});
+				this.collection.add( newLayer );
 				if( args.show ) this.displayLayers.add( newLayer );
-				this.updateFrame( args.frame, newLayer);
 			}
 			
 			newLayer.save({},{
 				success : function( savedLayer )
 				{
-					console.log(savedLayer)
-					_this.updateFrame( args.frame, savedLayer )
+					_this.addLayerToFrame( args.frame, savedLayer )
 				}
 			});
 			
 		},
 		
-		updateFrame : function(frame,layer)
+		addLayerToFrame : function(frame,layer)
 		{
-			console.log('updateAndSaveFrameLayer');
-			console.log(frame.id)
-			console.log(layer.id)
-			
 			var layerOrder = [ parseInt( layer.id ) ];
 			if( frame.get('layers') )
 			{
@@ -63,15 +66,29 @@
 			frame.save();
 		},
 		
+		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },
+		
+		removeLayerFromFrame : function( layer, frame )
+		{
+			if( _.isUndefined(frame) ) frame = zeega.app.currentFrame;
+			if( frame.get('layers') )
+			{
+				//if the layer array already exists eliminate false values if they exist
+				var layerOrder = _.without( frame.get('layers'), parseInt(layer.id) );
+				if( layerOrder.length == 0 ) layerOrder.push(false);
+				//set the layerOrder array inside the frame
+				frame.set({'layers':layerOrder});
+				frame.save();
+			}
+		},
+		
 		renderLayers : function( layerIDArray )
 		{
 			var _this = this;
 			this.displayLayers.reset();
 			
 			_.each( layerIDArray, function( layerID ){
-				console.log( _this )
-				console.log( _this.collection.get( layerID ) )
-				//_this.displayLayers.add( _this.collection.get( layerID ) );
+				_this.displayLayers.add( _this.collection.get( layerID ) );
 			})
 			
 		}
@@ -101,7 +118,7 @@
 			_.each( _.toArray( this.collection ), function( layerModel ){
 				var layerView = new Layer.Views.LayerList({model:layerModel});
 				_this._layerViews.push( layerView );
-				_this.$el.append( layerView.render().el );
+				_this.$el.prepend( layerView.render().el );
 			});
 
 			return this;
@@ -115,7 +132,7 @@
 			{
 				var layerView = new Layer.Views.LayerList({model:layerModel});
 				this._layerViews.push( layerView );
-				this.$el.append( layerView.render().el );
+				this.$el.prepend( layerView.render().el );
 			}
 		}
 		
@@ -129,6 +146,7 @@
 		{
 			console.log('INIT')
 			this.collection.on('add', this.placeLayer, this );
+			this.collection.on('destroy', this.destroyLayer, this);
 			this.collection.on('reset', this.reset, this );
 			this._layerViews = [];
 			this.render();
@@ -136,8 +154,6 @@
 
 		render : function()
 		{
-			console.log('RENDER OUTER')
-			console.log( this.collection )
 			var _this = this;
 			this._isRendered = true;
 		
@@ -145,10 +161,6 @@
 			this.$el.empty();
 			//add EACH model's view to the _this.el and render it
 			_.each( _.toArray( this.collection ), function( layerModel ){
-				
-				console.log('RENDER VISUAL')
-				console.log(layerModel)
-				
 				var layerView = new Layer.Views.VisualEditor({model:layerModel});
 				_this._layerViews.push( layerView );
 				_this.$el.append( layerView.render().el );
@@ -167,6 +179,11 @@
 				this._layerViews.push( layerView );
 				this.$el.append( layerView.render().el );
 			}
+		},
+		
+		destroyLayer : function( layerModel )
+		{
+			
 		}
 		
 	});

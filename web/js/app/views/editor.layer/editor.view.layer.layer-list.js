@@ -2,32 +2,27 @@
 
 	Layer.Views.LayerList = Backbone.View.extend({
 		
-	
 		tagName : 'li',
 	
 		initialize : function()
 		{
-			this.model.bind( 'change:title', this.updateLayerTitle );
-		
-			this.model.bind( 'change:height', this.updateFrameThumb );
-			this.model.bind( 'change:width', this.updateFrameThumb );
-			this.model.bind( 'change:opacity', this.updateFrameThumb );
-			this.model.bind( 'change:color', this.updateFrameThumb );
-			this.model.bind( 'change:left', this.updateFrameThumb );
-			this.model.bind( 'change:top', this.updateFrameThumb );
+			this.model.on( 'change:title', this.updateLayerTitle );
+			
+			this.model.on( 'change:height', this.updateFrameThumb );
+			this.model.on( 'change:width', this.updateFrameThumb );
+			this.model.on( 'change:opacity', this.updateFrameThumb );
+			this.model.on( 'change:color', this.updateFrameThumb );
+			this.model.on( 'change:left', this.updateFrameThumb );
+			this.model.on( 'change:top', this.updateFrameThumb );
 		},
 	
-		updateFrameThumb : function()
-		{
-			Zeega.currentFrame.noteChange();
-		},
+		updateFrameThumb : function(){ zeega.app.currentFrame.trigger('updateThumb') },
 	
 		//draws the controls
 		render : function( )
 		{
 			var _this = this;
 
-			this.model.bind('remove',this.remove);
 			var text = this.model.get('text');
 			var type = this.model.get("type");
 		
@@ -155,8 +150,9 @@
 		{
 			if( confirm('Delete Layer?') )
 			{
-				this.remove();
-				Zeega.removeLayerFromFrame( Zeega.currentFrame, this.model );
+				this.$el.remove();
+				this.model.destroy();
+				//Zeega.removeLayerFromFrame( Zeega.currentFrame, this.model );
 			}
 		},
 	

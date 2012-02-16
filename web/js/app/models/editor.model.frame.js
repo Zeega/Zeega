@@ -15,32 +15,27 @@
 			else return zeega.app.url_prefix + 'frames/'+ this.id;
 		},
 	
-		initialize : function() {
-		
+		initialize : function()
+		{	
+			this.updating = false
+			this.on('change:layers', this.updateThumb, this );
+			this.on('updateThumb', this.updateThumb, this );
+			
 			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }})
-		
+			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
-
-			//this.on( 'change:layers', this.onLayerUpdate );
-		},
-	
-	
-		noteChange:function()
-		{
-			$('#frame-thumb-'+this.id).find('.frame-update-overlay').fadeIn('fast');
-			this.updateFrameThumb();
 		},
 	
 		//update the frame thumbnail
 		updateThumb : function()
 		{
 			var _this = this;
-	
-			if( !this.updating )
+			if( this.updating != true && zeega.app.thumbnailUpdates )
 			{
 				this.updating = true; //prevent more thumb requests while this is working
 				//Trigger new frame snapshot and persist url to database
+				$('#frame-thumb-'+this.id).find('.frame-update-overlay').fadeIn('fast');
 			
 				var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			

@@ -24,7 +24,7 @@ this.zeega = {
 	
 	sequenceID : 1,
 	currentFrame : null,
-
+	thumbnailUpdates : false,
 	previewMode:false,
 
 	helpCounter: 0,
@@ -176,45 +176,18 @@ this.zeega = {
 	addLayer : function( args )
 	{
 		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
-		console.log( args )
 		this.project.sequences[0].layers.addLayer( args )
 	},
-
-	//frame arg is optional. Defaults to currentFrame if not set.
-	createLayerFromItem : function( item, frame )
+	
+	updateLayerOrder : function( layerIDArray )
 	{
-		if( _.isUndefined(frame)) frame = this.currentFrame;
-		var newLayer = new Layer({
-			type: this.draggedItem.get('layer_type'),
-			attr: {
-				'item_id' : item.id,
-				'title' : item.get('title'),
-				'url' : item.get('uri'),
-				'uri' : item.get('uri'),
-				'thumbnail_url' : item.get('thumbnail_url'),
-				'attribution_url' : item.get('attribution_uri'),
-				'citation':true,
-			}
-		});
-		console.log("createLayerFromItem : new layer ");
-		console.log(newLayer);
-		this.addLayerToFrame( frame, newLayer );
-	},
+		layerIDs = layerIDArray.reverse();
+		// updates z-index of divs in workspace
+		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
 
-	updateAndSaveFrameLayer : function(frame, layer)
-	{
-		console.log('updateAndSaveFrameLayer');
-		var layerOrder = [parseInt(layer.id)];
-		if( frame.get('layers') )
-		{
-			//if the layer array already exists eliminate false values if they exist
-			layerOrder = _.compact( frame.get('layers') );
-			//add the layer id to the layer order array
-			layerOrder.push( parseInt( layer.id ) );
-		}
-		//set the layerOrder array inside the frame
-		frame.set({'layers':layerOrder});
-		frame.save();
+		//update the layerOrder array 
+		this.currentFrame.set({'layers':layerIDs})
+		this.currentFrame.save();
 	},
 
 	removeLayerFromFrame : function( frame, layer )
@@ -298,7 +271,6 @@ this.zeega = {
 			return false;
 		}
 
-
 	},
 
 	copyLayerToNextFrame : function(layer)
@@ -357,23 +329,6 @@ this.zeega = {
 		this.sequence.set({'attr':attr});
 		this.sequence.save();
 
-
-	},
-
-	updateLayerOrder : function(layerIDs)
-	{
-		console.log('updateLayerOrder');
-		layerIDs = layerIDs.reverse();
-		// updates z-index of divs in workspace
-		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
-		console.log(layerIDs)
-
-		//update the layerOrder array 
-		this.currentFrame.set({'layers':layerIDs})
-		this.currentFrame.save();
-
-		//update frame thumb
-		this.currentFrame.updateThumb();
 
 	},
 
