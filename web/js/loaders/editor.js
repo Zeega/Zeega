@@ -87,8 +87,8 @@ var loadFiles = [
 	'order!plugins/layers/website/website',
 
 	//players
-	'order!plugins/plugins/players/zeega.player.youtube',	
-	'order!plugins/plugins/players/zeega.player.video',
+	'order!plugins/players/zeega.player.youtube',	
+	'order!plugins/players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
 	
