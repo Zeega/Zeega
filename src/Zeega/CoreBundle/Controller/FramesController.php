@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
-
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class FramesController extends Controller
 {
@@ -58,8 +58,7 @@ class FramesController extends Controller
 		$em->persist($frame);
 		$em->flush();
 		
-    	return new Response(json_encode($em->getRepository('ZeegaDataBundle:Frame')->findFrameById($frame_id)));		
-        
+		return ResponseHelper::encodeAndGetJsonResponse($em->getRepository('ZeegaDataBundle:Frame')->findById($frame_id));        
     } // `put_frame`     [PUT] /frames/{frame_id}
 
 
