@@ -10,7 +10,6 @@
 			this._frameViews = [];
 			
 			this.collection.on('add', this.add, this);
-			this.collection.on('destroy', this.destroyFrame );
 			//if there are no frames, then add one automagically
 			if(this.collection.length == 0) this.collection.add( new Frame.Model() )
 			this.render();
@@ -110,6 +109,8 @@
 								//go to the new frame
 								zeega.app.loadFrame(savedFrame);
 							}
+							
+							_this.collection.trigger('updateFrameOrder');
 						
 						}
 					}
@@ -135,9 +136,6 @@
 			{
 				if( _.isUndefined(index) ) $(this.el).append(view.render().el);
 				else $(this.el).children('li:eq('+index+')').after(view.render().el);
-			
-				//call re-sort
-				zeega.app.frameSort();
 			}
 		}
 	});

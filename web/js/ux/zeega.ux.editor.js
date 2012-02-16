@@ -24,6 +24,7 @@ function initUX(){
 
 $('#add-node-button').click(function(){
 	zeega.app.addFrame();
+	return false;
 });
 
 $('#list-view').click(function(){
@@ -275,26 +276,7 @@ function closeOpenCitationTabs()
 	
 	
 	
-	//frame tray sortable and sorting events
-	
-	$('#frame-list').sortable({  
-		//axis : 'x',
-		containment: '#frame-drawer',
-		forceHelperSize : true,
-		placeholder: "frame-thumb ui-state-highlight",
-		forcePlaceholderSize:true,
-		forceHelperSize:true,
-		tolerance: 'pointer',
-		distance: 10,
-		
-		stop : function(){
-			var order = $(this).sortable('toArray');
-			
-			//ensure the array is made of integers
-			Zeega.frameSort();
 
-		}
-	});
 	
 	//hide layer content initially
 	$(".layer-list a:first").click(function(){
@@ -307,6 +289,20 @@ function closeOpenCitationTabs()
 			$(this).closest('li').children('div').show('fast');
 			return false;
 		}
+	});
+	
+	//frame tray sortable and sorting events
+	$('#frame-list').sortable({  
+		//axis : 'x',
+		containment: '#frame-drawer',
+		forceHelperSize : true,
+		placeholder: "frame-thumb ui-state-highlight",
+		forcePlaceholderSize:true,
+		forceHelperSize:true,
+		tolerance: 'pointer',
+		distance: 10,
+		
+		stop : function(){ zeega.app.updateFrameOrder() }
 	});
 	
 	$( "#layers-list-visual" )

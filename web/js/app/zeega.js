@@ -45,8 +45,9 @@ this.zeega = {
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
 		this.loadModules();
-		this.startEditor();
+		this.isLoaded = true
 		//this.initStartHelp(); //broken. fix!
+		this.startRouter();
 
 	},
 	
@@ -64,10 +65,19 @@ this.zeega = {
 	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
 	refreshDatabase : function(){ this.itemCollection.refresh() },
 
-	startEditor : function()
+	startRouter: function()
 	{
-		this.isLoaded = true
-		this.goToFrame( this.frameId );
+		var _this = this;
+		var Router = Backbone.Router.extend({
+			routes: {
+				""						: 'goToFrame',
+				"editor/frame/:frameID"	: "goToFrame"
+			},
+			goToFrame : function( frameID ){ _this.goToFrame( frameID ) }
+		});
+
+		this.router = new Router();
+		Backbone.history.start();
 	},
 	
 	goToFrame : function(frameId)
@@ -85,12 +95,7 @@ this.zeega = {
 		var _this = this;
 		this.clearCurrentFrame();
 		this.currentFrame = frame;
-		console.log('current frame id: '+ frame.id)
-		this.router.navigate('editor/frame/'+ this.currentFrame.id, {silent:true})
-		
-		//open/close visual editor
-		var el = $('#workspace');
-
+		this.router.navigate('editor/frame/'+ frame.id, {silent:true});
 
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
@@ -184,11 +189,10 @@ this.zeega = {
 		layerIDs = layerIDArray.reverse();
 		// updates z-index of divs in workspace
 		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
-
-		//update the layerOrder array 
 		this.currentFrame.set({'layers':layerIDs})
-		this.currentFrame.save();
 	},
+	
+	updateFrameOrder : function(){ this.project.sequences[0].updateFrameOrder() },
 
 	removeLayerFromFrame : function( frame, layer )
 	{
@@ -396,20 +400,6 @@ this.zeega = {
 		dupeModel.dupe = true;
 		dupeModel.frameIndex = _.indexOf( this.sequence.get('framesOrder'), view.model.id );
 		this.sequence.frames.add( dupeModel );
-	},
-
-	frameSort : function()
-	{
-		console.log('sort frames need fixing');
-		/*
-		//turn the string IDs into integers to compare with model IDs
-		var order = _.map( $('#frame-list').sortable('toArray'), function(num){ return parseInt( num.match( /[0-9 - ()+]+$/ )[0] ) })
-
-		//var order = _.map( $('#frame-list').sortable('toArray'), function(str){ return parseInt(str) });
-		this.sequence.set({'framesOrder': order});
-		console.log(this.sequence.get('framesOrder'))
-		this.sequence.save();
-		*/
 	},
 
 	previewSequence : function()

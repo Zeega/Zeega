@@ -31,6 +31,9 @@
 		updateThumb : function()
 		{
 			var _this = this;
+			
+			this.save();
+			
 			if( this.updating != true && zeega.app.thumbnailUpdates )
 			{
 				this.updating = true; //prevent more thumb requests while this is working

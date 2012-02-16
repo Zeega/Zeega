@@ -57,10 +57,12 @@
 
 			$(this.el).click(function(){
 				_this.goToFrame();
+				return false;
 			})
 		
 			$(this.el).find('.menu-toggle').click(function(){
 				_this.openDropdown();
+				return false;
 			})
 		
 			$(this.el).find('.menu-items a').click(function(){
