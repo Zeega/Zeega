@@ -67,7 +67,7 @@
 
 **************************************/
 
-#items-list li
+#items-list li, #items-list a
 {
 	padding:12px 0;
 }

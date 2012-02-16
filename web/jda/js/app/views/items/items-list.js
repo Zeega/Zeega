@@ -34,9 +34,7 @@
 			var blanks = this.model.attributes;
 			
 			$(this.el).html( _.template( template, blanks ) )
-			$(this.el).addClass('fancymedia');
-			$(this.el).attr('id', this.model.id);
-			$(this.el).attr('rel', 'group');
+			
 			return this;
 		},
 		
@@ -56,7 +54,7 @@
 		{
 			html =
 
-			'<div class="span2">'+
+			'<a id="<%= id %>" class="fancymedia" rel="group"><div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
 			'<div class="span7">'+
@@ -64,7 +62,7 @@
 			'</div>'+
 			'<div class="span3">'+
 				'<%= date_created.date %>'
-			'</div>';
+			'</div></a>';
 			
 			return html;
 		},

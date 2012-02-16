@@ -12,6 +12,9 @@
 }
 .fancybox-media-wrapper{
 	height:469px;
+	text-align:center !important;
+}
+.fancybox-media-wrapper p{
 	text-align:center;
 }
 .fancybox-media-wrapper-more{
