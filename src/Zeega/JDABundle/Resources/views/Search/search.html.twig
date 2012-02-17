@@ -61,7 +61,8 @@
 {% block content %}
 
 <div class='container'>
-			
+
+	<!-- search-bar -->
 	<div id="search-bar" class='hero-unit group'>
 		<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>
 		<div id='search-filters' class="btn-group">
@@ -69,9 +70,11 @@
 			<a class='btn large' data-goto-view='event' href="#">EVENT</a>
 			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
 		</div><!-- btn-group -->
-	</div><!-- search-bar -->
-			
+	</div>
+	<div id="results-count"></div>	
+	<div id="related-tags"><span id="related-tags-title" class="span2">related tags</span><ul class="span10"><li><a href=".">lorem</a></li><li><a href=".">ipsum</a></li><li><a href=".">decorum bursitis</a></li><li><a href=".">frugalem</a></li><li><a href=".">kerfluffle</a></li></div>
 	<div id='list-view'>
+
 		<ul id="items-list" class='unstyled'></ul>
 	</div>
 	<div id='event-view' class='hidden'>

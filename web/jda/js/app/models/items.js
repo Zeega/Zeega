@@ -18,10 +18,7 @@
 				error:errorFunction,
 			});
 		},
-		url: function(){
-		// http://dev.zeega.org/jda/web/api/items/703493
-		return sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ this.id;
-		},
+		
 	});
 
 })(jda.module("items"));

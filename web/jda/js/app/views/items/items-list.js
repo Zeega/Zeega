@@ -32,23 +32,14 @@
 			
 			
 			var blanks = this.model.attributes;
+			blanks["date"] = dateFormat(this.model.get("date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			
 			$(this.el).html( _.template( template, blanks ) )
 			
 			return this;
 		},
 		
-		events : {
-			//'mouseup' : 'openOverlay'
-		},
 		
-		openOverlay : function()
-		{
-			console.log('clicked item: '+ this.model.id )
-			$(this.el).fancybox({
-				content : '<i class="jdicon-'+this.model.get("type").toLowerCase()+'"></i>'+this.model.get('title')
-			})
-		},
 		
 		getImageTemplate : function()
 		{
@@ -58,11 +49,11 @@
 			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
-			'<div class="span7">'+
+			'<div class="span7 item-title">'+
 				'<%= title %>'+
 			'</div>'+
-			'<div class="span3">'+
-				'<%= date_created.date %>'
+			'<div class="span3 item-date">'+
+				'<%= date %>'
 			'</div>'+
 			'</a>';
 			
@@ -76,11 +67,11 @@
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
 			'</div>'+
-			'<div class="span7">'+
+			'<div class="span7 item-title">'+
 				'<%= title %>'+
 			'</div>'+
-			'<div class="span3">'+
-				'<%= date_created.date %>'
+			'<div class="span3 item-date">'+
+				'<%= date %>'
 			'</div>'+
 			'</a>';
 			
@@ -94,11 +85,11 @@
 			'<div class="span2">'+
 				'<i class="jdicon-website"></i>'+
 			'</div>'+
-			'<div class="span7">'+
+			'<div class="span7 item-title">'+
 				'<%= title %>'+
 			'</div>'+
-			'<div class="span3">'+
-				'<%= date_created.date %>'
+			'<div class="span3 item-date">'+
+				'<%= date %>'
 			'</div>'+
 			'</a>';
 			
@@ -112,11 +103,11 @@
 			'<div class="span2">'+
 				'<i class="jdicon-twitter"></i>'+
 			'</div>'+
-			'<div class="span7">'+
+			'<div class="span7 item-title">'+
 				'<%= title %>'+
 			'</div>'+
-			'<div class="span3">'+
-				'<%= date_created.date %>'
+			'<div class="span3 item-date">'+
+				'<%= date %>'
 			'</div>'+
 			'</a>';
 			

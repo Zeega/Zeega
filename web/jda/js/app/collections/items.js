@@ -18,6 +18,7 @@
 		render : function()
 		{
 			var _this = this;
+
 			_this._isRendered = true;
 			_.each( _.toArray(this.collection), function(item){
 				var itemView = new Items.Views.List({model:item});
@@ -27,14 +28,11 @@
 
 			
 			$(this.el).fadeTo(100,1);
+			$("#results-count").fadeTo(100,1);
 			$(this.el).spin(false);
 			return this;
 		},
-		setUpFancyBox : function(){
-
-			
-	
-		},
+		
 
 		reset : function()
 		{
@@ -49,6 +47,7 @@
 		search : function(obj,reset)
 		{
 			var _this = this;
+			$("#results-count").fadeTo(1000,0.5);
 			$(this.el).fadeTo(1000,0.5);
 			$(this.el).spin('small');
 			
@@ -63,9 +62,11 @@
 			this.collection.setSearch(obj,reset);
 			this.collection.fetch({
 				model:Items.Model,
-				success : function(){ 
+				success : function(model, response){ 
+					
+					$('#results-count').text(response["items_count"]+ " results");
 					_this.render();
-					_this.setUpFancyBox();
+					
 				}
 			});
 		},

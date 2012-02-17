@@ -37,6 +37,7 @@ this.jda = {
 	search : function(obj)
 	{
 		this.itemViewCollection.search(obj);
+		
 	},
 	
 	switchViewTo : function( view )
