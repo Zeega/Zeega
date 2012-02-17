@@ -6,7 +6,7 @@
 
 		initialize : function()
 		{
-			this.model.on('destroy', this.remove, this );
+			this.model.on('removeFromFrame destroy', this.remove, this );
 			this.model.on( 'change:visibleineditor', this.showHide, this );
 		},
 

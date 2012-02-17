@@ -5,7 +5,12 @@
 		initialize : function()
 		{
 			this.model.on( 'change:thumb_url', this.onNewThumb, this );
+			this.model.on('focus', this.focus, this );
+			this.model.on('blur', this.blur, this );
 		},
+		
+		focus : function(){ $(this.el).addClass('active-frame') },
+		blur : function(){ $(this.el).removeClass('active-frame') },
 	
 		render: function()
 		{

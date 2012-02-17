@@ -151,8 +151,7 @@
 			if( confirm('Delete Layer?') )
 			{
 				this.$el.remove();
-				this.model.destroy();
-				//Zeega.removeLayerFromFrame( Zeega.currentFrame, this.model );
+				this.model.trigger('removeFromFrame', this.model);
 			}
 		},
 	

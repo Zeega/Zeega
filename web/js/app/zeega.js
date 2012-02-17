@@ -94,9 +94,23 @@ this.zeega = {
 	{
 		var _this = this;
 		this.clearCurrentFrame();
+		if(this.currentFrame) this.currentFrame.trigger('blur');
 		this.currentFrame = frame;
+		this.currentFrame.trigger('focus');
+		
 		this.router.navigate('editor/frame/'+ frame.id, {silent:true});
 
+		this.restorePanelStates();
+		this.setAdvanceValues();
+
+		// add the frame's layers // remove falsy values
+		var layerIDArray = _.compact( this.currentFrame.get('layers'));
+		this.project.sequences[0].layers.renderLayers( layerIDArray );
+
+	},
+	
+	restorePanelStates : function()
+	{
 		//show/hide editor panels
 		// what should happen to panels which haven't been set?
 		//right now they inherit the last frame's state
@@ -117,7 +131,10 @@ this.zeega = {
 				}
 			})
 		}
-
+	},
+	
+	setAdvanceValues : function()
+	{
 		//update the auto advance tray
 		//make sure the attribute exists
 		var adv = false;
@@ -153,22 +170,10 @@ this.zeega = {
 			advanceControls.find('input[id="playback"]').prop('checked', true );
 			$('#advance-time').val(10);
 		}
-
-		// add the frame's layers // remove falsy values
-		var layerIDArray = _.compact( this.currentFrame.get('layers'));
-		console.log('layer id array: '+ layerIDArray)
-		this.project.sequences[0].layers.renderLayers( layerIDArray );
-
-		//add a new current frame style
-		$('#frame-thumb-'+this.currentFrame.id).addClass('active-frame');
 	},
 
 	clearCurrentFrame : function ()
 	{
-		//remove a prexisiting frame style
-		if(this.currentFrame) $('#frame-thumb-'+this.currentFrame.id).removeClass('active-frame');
-
-		//clear out existing stuff in icon trays
 		$('.icon-tray').empty();
 	},
 
@@ -193,89 +198,6 @@ this.zeega = {
 	},
 	
 	updateFrameOrder : function(){ this.project.sequences[0].updateFrameOrder() },
-
-	removeLayerFromFrame : function( frame, layer )
-	{
-		//remove from frame.layer and save it back
-		//remove icon from tray
-		$('.'+layer.get("type").toLowerCase()+'-tray-icon').remove();
-
-
-		//test to see if the layer is a persisting layer and destroy it from all frames if so
-		//var sequenceAttributes = this.sequence.get('attr');
-
-		if( _.include( this.sequence.get('attr').persistLayers , layer.id ) )
-		{
-			console.log('a persistent layer');
-
-
-			this.removeLayerPersist(layer)
-			_.each( _.toArray(this.sequence.frames), function(_frame){
-				var layerOrder = _frame.get('layers');
-				layerOrder = _.without(layerOrder, parseInt(layer.id) );
-				if(layerOrder.length == 0) layerOrder = [false];
-				_frame.set({'layers':layerOrder});
-				_frame.save();
-				_frame.updateThumb();
-			});
-
-
-		}else{
-			console.log('NOT a persistent layer');
-
-			var layerOrder = frame.get('layers');
-			layerOrder = _.without(layerOrder, parseInt(layer.id) );
-			//set array to false if empty  //weirdness
-			if(layerOrder.length == 0) layerOrder = [false]; //can't save an empty array so I put false instead. use _.compact() to remove it later
-			frame.set({'layers':layerOrder});
-			frame.save();
-			frame.updateThumb();
-
-		}
-
-		this.destroyOrphans();
-
-	},
-
-	destroyOrphans : function()
-	{
-		console.log('destroyOrphans');
-		_this = this;
-		// make a giant array of all the layer IDs in use by frames
-		var layersInFrames = [];
-
-		_.each( _.toArray(this.sequence.frames), function(frame){
-			layersInFrames = _.union(frame.get('layers'), layersInFrames);
-		});
-
-		layersInFrames = _.compact(layersInFrames); //remove falsy values needed to save 'empty' arrays
-
-		// make a giant array of all the layer IDs saved in the sequence
-		var layersInSequence = [];
-		_.each( _.toArray(this.sequence.layerCollection), function(layer){
-			layersInSequence.push( parseInt(layer.id) );
-		});
-
-		var orphanIDs = _.difference(layersInSequence, layersInFrames);
-
-		if(orphanIDs)
-		{
-
-			_.each(orphanIDs, function(orphanID){
-				//removes and destroys the orphan
-				var orphan = _this.sequence.layerCollection.get(orphanID);
-				_this.removeLayerPersist(orphan);
-
-				//remove from the layer collection
-				_this.sequence.layerCollection.remove(orphan)
-
-				orphan.destroy();
-			})
-		}else{
-			return false;
-		}
-
-	},
 
 	copyLayerToNextFrame : function(layer)
 	{
@@ -322,42 +244,6 @@ this.zeega = {
 
 	},
 
-	removeLayerPersist : function(layer)
-	{
-		console.log('remove persistance!');
-		//removes layers from the sequence layerPersist array
-		//does not affect existing layers or frames
-		//future frames will not have the persisting layers
-		var attr = this.sequence.get('attr');
-		attr.persistLayers = _.without( attr.persistLayers, layer.id );
-		this.sequence.set({'attr':attr});
-		this.sequence.save();
-
-
-	},
-
-	destroyFrame : function( view )
-	{
-
-		view.model.destroy();
-		view.remove();
-		this.loadLeftFrame();
-
-		//remove from Sequence Order
-		this.removeFromSequence( view.model );
-
-		//if the sequence is empty(false), then make a new frame
-		if( this.getSequenceOrder()[0] === false )
-		{
-			var newFrame = new Frame;
-			this.sequence.frameViewCollection.add(newFrame);
-			this.loadFrame( newFrame );
-		}
-
-		this.frameSort();
-		this.destroyOrphans();
-	},
-
 	// returns the order that the frame appears in the sequence
 	getFrameIndex : function( frame )
 	{
@@ -368,29 +254,6 @@ this.zeega = {
 
 		return _.indexOf( this.sequence.get('framesOrder') , frameId );
 	},
-
-	getSequenceOrder : function(){ return this.sequence.get('framesOrder') },
-
-	removeFromSequence : function( frame )
-	{
-		//test to see if it's actually in the sequence first
-		if( this.getFrameIndex(frame) === false ) return false;
-		else
-		{
-			var frameId;
-			if( _.isNumber( frame ) ) frameId = frame;
-			else if( _.isString( frame ) ) frameId = parseInt(frame);
-			else if( _.isNumber( frame.id ) ) frameId = frame.id;
-			else return false;
-
-			var newOrder = _.without( this.sequence.get('framesOrder') , frameId );
-			if( _.size(newOrder) == 0 ) newOrder.push(false);
-			this.sequence.set({ framesOrder:newOrder });
-			return frameId;
-		}
-
-	},
-
 
 	duplicateFrame : function( view )
 	{

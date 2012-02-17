@@ -10,6 +10,7 @@
 			this._frameViews = [];
 			
 			this.collection.on('add', this.add, this);
+			this.on('resort', this.resort, this)
 			//if there are no frames, then add one automagically
 			if(this.collection.length == 0) this.collection.add( new Frame.Model() )
 			this.render();
@@ -30,6 +31,11 @@
 				_this.$el.append( frameView.render().el );
 			});
 			return this;
+		},
+		
+		resort : function( frameIDArray )
+		{
+			
 		},
 		
 		addFrame : function()
@@ -121,6 +127,11 @@
 				frame.url = zeega.app.url_prefix+'frames/'+ frame.id;
 				this.insertView(new FrameView({ model : frame }));
 			}
+			
+		},
+		
+		duplicateFrame : function()
+		{
 			
 		},
 	

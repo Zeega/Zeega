@@ -37,8 +37,6 @@ var loadFiles = [
 
 	//core
 	'order!app/zeega',
-	
-//	'order!app/zeega',
     'order!app/player',
 
 	//plugins
