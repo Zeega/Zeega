@@ -280,10 +280,10 @@ this.zeega = {
 
 		var order = _.map( this.sequence.get('framesOrder'), function(num){ return parseInt(num) });
 		var sequences = [{
-			'id' : this.sequence.id,
+			'id' : this.project.sequence.id,
 			'frameOrder' : order,
-			'frames' : this.sequence.frames.toJSON(),
-			'layers' : this.sequence.layerCollection.toJSON() //$.parseJSON( JSON.stringify(this.sequence.layers) )
+			'frames' : this.project.sequence[0].frames.collection.toJSON(),
+			'layers' : this.project.sequence[0].layers.collection.toJSON() //$.parseJSON( JSON.stringify(this.sequence.layers) )
 		}];
 
 		var project = {
