@@ -102,8 +102,9 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find('.title').editable(
 			function(value, settings)
 			{ 
-				_this.model.save({ title:value }, 
+				_this.model.save({ 	title:value}, 
 						{
+							url:sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ _this.model.id,
 							success: function(model, response) { 
 								console.log("Updated item title for item " + model.id);
 			 				},

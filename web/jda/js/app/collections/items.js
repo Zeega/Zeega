@@ -76,7 +76,7 @@
 
 
 	Items.Collection = Backbone.Collection.extend({
-	
+		
 		base : 'http://dev.zeega.org/jda/web/api/search?',
 		search : {},
 	
