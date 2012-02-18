@@ -7,7 +7,8 @@
 		},
 		initialize : function()
 		{
-			this.tags=new Items.TagCollection();
+			this.tags=new Tags.Collection();
+			console.log("I'm initializing items");
 		},
 
 		loadTags : function(successFunction, errorFunction){

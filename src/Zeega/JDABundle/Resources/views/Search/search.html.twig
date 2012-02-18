@@ -65,13 +65,20 @@
 	<!-- search-bar -->
 	<div id="search-bar" class='hero-unit group'>
 		<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>
-		<div id='search-filters' class="btn-group">
-			<a class='btn large active' data-goto-view='list' href="#">LIST</a>
-			<a class='btn large' data-goto-view='event' href="#">EVENT</a>
-			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
-		</div><!-- btn-group -->
+		
 	</div>
-	<div id="results-count"></div>	
+
+	<!-- number of results -->
+	<div id="results-count"></div>
+
+	<!-- time & place vs list view -->
+	<div id='search-filters' class="btn-group">
+			<a id="list-view-button" class='btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">LIST VIEW</span></a>
+			<a id="time-view-button" class='btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">TIME & PLACE VIEW</span></a>
+			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
+	</div>	
+
+	<!-- related tags -->
 	<div id="related-tags"><span id="related-tags-title" class="span2">related tags</span><ul class="span10"><li><a href=".">lorem</a></li><li><a href=".">ipsum</a></li><li><a href=".">decorum bursitis</a></li><li><a href=".">frugalem</a></li><li><a href=".">kerfluffle</a></li></div>
 	<div id='list-view'>
 

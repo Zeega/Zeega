@@ -17,7 +17,12 @@
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 }
-
+[class^="jdicon-small-"]
+{
+	width: 25px;
+	height: 25px;
+	background-size: 306px 164px;
+}
 .jdicon-image{background-position:0 0}
 .jdicon-email{background-position:-50px 0}
 .jdicon-website{background-position:-100px 0}
@@ -29,17 +34,18 @@
 .jdicon-video{background-position:-400px 0}
 .jdicon-article{background-position:-450px 0}
 
-
+.jdicon-small-list{background-position:-125px -25px}
+.jdicon-small-world{background-position:-0px -50px}
 
 /**************************************
 
 	SEARCH BAR
 
 **************************************/
-#search-filters { float:left; padding: 8px 0 0 18px;}
+#search-filters { float:right; padding: 0 0 5px 0;}
 #search-bar input
 {
-	width:512px;
+	width:760px;
 	float:left;
 	font-size:2em;
 	font-weight:bold;
@@ -151,9 +157,22 @@ a:visited
 {
 	color:red;
 }
-
-.btn a {color: white;}
-
+.btn{
+	font-family: Arial,sans-serif;
+	font-size: 11px !important;
+	font-weight: bold;
+	padding: 5px 15px 5px 10px !important;
+	-webkit-border-radius:6px !important;
+	
+}
+.btn-group a {
+	color: #666 !important;
+}
+.btn-text{
+	position: relative;
+	top: 6px;
+	left: 4px;
+}
 p
 {
 	text-align: justify;
@@ -413,8 +432,10 @@ opacity: 1;
 	font-size: 2em;
 	font-weight: bold;
 	color: #555;
+	float:left;
 }
 #related-tags{
+	clear:both;
 	height:20px;
 	margin-top: 10px;
 	padding: 5px 0;

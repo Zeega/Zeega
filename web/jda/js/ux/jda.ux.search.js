@@ -1,5 +1,7 @@
 $(document).ready(function(){
-	
+	$('#search-bar').find('input').focus(function(){
+		$(this).attr("placeholder", "");
+	});
 	$('#search-bar').find('input').keydown(function(e){
 		// Bind searching to search field
 		if (e.which == 13)
@@ -10,9 +12,8 @@ $(document).ready(function(){
 	});
 	
 	$('#search-filters a').click(function(){
-		$('#search-filters a.active').removeClass('active');
-		$(this).addClass('active');
-		
+		$(this).siblings().show();
+		$(this).hide();
 		jda.app.switchViewTo( $(this).data('goto-view') );
 		
 		return false;
