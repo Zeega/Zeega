@@ -52,9 +52,10 @@
 			$(this.el).spin('small');
 			
 			var hash = '';
-			if( !_.isUndefined(obj.query) ) hash += 'text/' + obj.query;
+			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query;
 			if( !_.isUndefined(obj.tags) ) hash += 'tags/' + obj.tags;
 			if( !_.isUndefined(obj.type) ) hash += 'type/' + obj.type;
+			if( !_.isUndefined(obj.content) ) hash += '/content/' + obj.content;
 			
 			//update hash but don't fire a second action
 			jda.app.router.navigate(hash,{trigger:false});
@@ -63,7 +64,7 @@
 			this.collection.fetch({
 				model:Items.Model,
 				success : function(model, response){ 
-					
+
 					$('#results-count').text(response["items_count"]+ " results");
 					_this.render();
 					
@@ -85,9 +86,10 @@
 		{
 			//constructs the search URL
 			var url = this.base;
-			if( !_.isUndefined(this.search.query) ) url += 'q=' + this.search.query;
-			if( !_.isUndefined(this.search.tags) ) url += 'tags=' + this.search.tags;
-			if( !_.isUndefined(this.search.type) ) url += 'type=' + this.search.type;
+			if( !_.isUndefined(this.search.query) && this.search.query.length > 0) url += '&q=' + this.search.query;
+			if( !_.isUndefined(this.search.tags) ) url += '&tags=' + this.search.tags;
+			if( !_.isUndefined(this.search.type) ) url += '&type=' + this.search.type;
+			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
 			console.log('search url: '+ url);
 			return url;
 		},

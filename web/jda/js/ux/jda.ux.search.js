@@ -6,9 +6,14 @@ $(document).ready(function(){
 		// Bind searching to search field
 		if (e.which == 13)
 		{
-			jda.app.search({ query:$(this).val() })
+			jda.app.search({ query:$(this).val(), content:$('#content').val() });
 			return false;
 		}
+	});
+	$('#content').change(function(){
+		var test = $('#search-bar').find('input[value!="search the archive"]').val();
+		jda.app.search({ query:$('#search-bar').find('input[value!="search the archive"]').val(), content:$(this).val() });
+		return false;
 	});
 	
 	$('#search-filters a').click(function(){

@@ -25,6 +25,7 @@
 				case 'Tweet':
 					template = this.getTweetTemplate();
 					break;
+				
 				default:
 					template = this.getDefaultTemplate();
 			}
@@ -32,8 +33,14 @@
 			
 			
 			var blanks = this.model.attributes;
-			blanks["date"] = dateFormat(this.model.get("date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
-			
+			if (this.model.get("date_created") != null){
+				blanks["date"] = dateFormat(this.model.get("date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
+			}		
+			if (this.model.get("media_date_created") != null){
+				blanks["media_date"] = dateFormat(this.model.get("media_date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
+			} else {
+				blanks["media_date"] = "n/a";
+			}
 			$(this.el).html( _.template( template, blanks ) )
 			
 			return this;
@@ -125,7 +132,7 @@
 				'<%= title %>'+
 			'</div>'+
 			'<div class="span3">'+
-				'<%= media_date_created.date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			

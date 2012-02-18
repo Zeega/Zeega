@@ -33,6 +33,7 @@ this.jda = {
 		var Tags = jda.module("tags");
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
+		
 	},
 	
 	search : function(obj)
