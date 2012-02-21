@@ -12,12 +12,30 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
+		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
         {
-            $qb->where('i.title LIKE :query_string')
-               ->orWhere('i.media_creator_username LIKE :query_string')
-               ->orWhere('i.description LIKE :query_string')
-               ->setParameter('query_string','%' . $query['queryString'] . '%');
+			$queryString = $query['queryString'];
+			if(count($queryString) == 1)
+			{
+				if(strlen($queryString[0]))
+				{
+	            	$qb->where('i.title LIKE :query_string')
+	               		->orWhere('i.media_creator_username LIKE :query_string')
+	               		->orWhere('i.description LIKE :query_string')
+	               		->setParameter('query_string','%' . $queryString[0] . '%');
+				}
+			}
+			else if(count($queryString) > 1)
+			{
+				for($i=0; $i < count($queryString); $i++)
+				{ 
+					$qb->orWhere('i.title LIKE :query_string'.$i)
+	               		->orWhere('i.media_creator_username LIKE :query_string'.$i)
+	               		->orWhere('i.description LIKE :query_string'.$i)
+	               		->setParameter('query_string'.$i,'%' . $queryString[$i] . '%');            	
+				}
+			}
         }
         
         if(isset($query['userId']))
