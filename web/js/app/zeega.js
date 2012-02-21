@@ -186,7 +186,7 @@ this.zeega = {
 	addLayer : function( args )
 	{
 		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
-		this.project.sequences[0].layers.addLayer( args )
+		this.project.sequences[0].layers.addNewLayer( args )
 	},
 	
 	updateLayerOrder : function( layerIDArray )
@@ -255,14 +255,18 @@ this.zeega = {
 		return _.indexOf( this.sequence.get('framesOrder') , frameId );
 	},
 
-	duplicateFrame : function( view )
+	duplicateFrame : function( frameModel )
 	{
+		this.project.sequences[0].duplicateFrame( frameModel );
+		
+		/*
 		var dupeModel = new Frame({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
 		dupeModel.oldLayerIDs = view.model.get('layers');
 
 		dupeModel.dupe = true;
 		dupeModel.frameIndex = _.indexOf( this.sequence.get('framesOrder'), view.model.id );
 		this.sequence.frames.add( dupeModel );
+		*/
 	},
 
 	previewSequence : function()
@@ -302,33 +306,21 @@ this.zeega = {
 
 	getLeftFrame : function()
 	{
-		var frameOrder = this.sequence.get('framesOrder');
-		var currentFrameIndex = _.indexOf( frameOrder,this.currentFrame.id );
-		if( currentFrameIndex ) return this.sequence.frames.get( frameOrder[ currentFrameIndex-1 ] );
-		else return this.sequence.frames.get( frameOrder[1] );
+		var frameOrder = this.project.sequences[0].get('framesOrder');
+		var currentFrameIndex = _.indexOf( frameOrder, parseInt(this.currentFrame.id) );
+		if( currentFrameIndex ) return this.project.sequences[0].frames.collection.get( frameOrder[ currentFrameIndex-1 ] );
+		else return this.project.sequences[0].frames.collection.get( frameOrder[1] );
 	},
 
 	getRightFrame : function()
 	{
-		var currentFrameIndex = _.indexOf( this.sequence.get('framesOrder'), this.currentFrame.id );
-		if(currentFrameIndex < _.size( this.sequence.frames )-1 ) return this.sequence.frames.at( currentFrameIndex + 1 );
+		var currentFrameIndex = _.indexOf( this.project.sequences[0].get('framesOrder'), this.currentFrame.id );
+		if(currentFrameIndex < _.size( this.sequence.frames )-1 ) return this.project.sequences[0].frames.collection.at( currentFrameIndex + 1 );
 		else return false;
 	},
 
-	loadLeftFrame : function()
-	{
-		console.log('loading left frame')
-		var frame = this.getLeftFrame();
-		if(frame) this.loadFrame(frame)
-	},
-
-	loadRightFrame : function()
-	{
-		var frame = this.getRightFrame();
-		console.log(frame);
-
-		if(frame) this.loadFrame(frame)
-	},
+	loadLeftFrame : function(){ if(frame) this.loadFrame( this.getLeftFrame() ) },
+	loadRightFrame : function(){ this.loadFrame( this.getRightFrame() ) },
 
 	udpateAspectRatio : function( ratioID )
 	{

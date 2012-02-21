@@ -85,15 +85,13 @@
 						break;
 				
 					case 'duplicate':
-						zeega.app.duplicateFrame(_this);
+						zeega.app.duplicateFrame( _this.model );
 						break;
 					
 					default:
 						console.log('not recognized')
 				}
-			
-				//$(_this.el).find('.menu-items').removeClass('open');
-			
+				return false;
 			})
 		
 			//enable the hover when dragging DB items	

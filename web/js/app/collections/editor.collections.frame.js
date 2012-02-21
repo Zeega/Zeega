@@ -38,9 +38,10 @@
 			
 		},
 		
-		addFrame : function()
+		addFrame : function( frameModel )
 		{
-			this.collection.add( new Frame.Model() );
+			if( _.isUndefined( frameModel) ) this.collection.add( new Frame.Model() );
+			else this.collection.add( frameModel );
 		},
 	
 		add : function(frame)
@@ -50,7 +51,7 @@
 			if( frame.isNew() )
 			{
 				//if(zeega.app.currentFrame) frame.set({'attr':{'editorHidden':zeega.app.currentFrame.get('attr').editorHidden}});
-				console.log(frame.url())
+				console.log( 'frame is new. URL is: '+ frame.url() )
 			
 				frame.save(
 					{},
@@ -59,46 +60,34 @@
 						{
 							console.log('savedFrame')
 							console.log(savedFrame)
+
 							if(frame.dupe) 
 							{
-								var changed = false;
-								_this.insertView(new FrameView({ model : frame }), frame.frameIndex );
+								console.log('frame is a duplicate')
+								_this.insertView(new Frame.Views.FrameSequence({ model : frame }), frame.frameIndex );
 							
 								//clone layers and place them into the layer array
 								_.each( savedFrame.oldLayerIDs , function(layerID, i){
 
 									//if layer is persistent
 									//replace frameIndex the id with the persistent id
-									//don't clone the layer
-								
-									var persistLayers = zeega.app.sequence.get('attr').persistLayers;
-								
+
+									var persistLayers = zeega.app.project.sequences[0].get('attr').persistLayers;
+
 									if( _.include( persistLayers, String(layerID) ) )
 									{
-										changed = true;
 										var layerOrder = savedFrame.get('layers');
 										layerOrder[i] = String(layerID);
 										savedFrame.set({layers:layerOrder})
 									}
 									else
 									{
-										//if a non-persistent layer, then make a whole new model for it!
-										var dupeAttr = JSON.stringify(zeega.app.sequence.layerCollection.get(layerID));
-										dupeAttr = $.parseJSON(dupeAttr);
-								
-										var newLayer = new Layer(dupeAttr);
-										newLayer.id = String( savedFrame.get('layers')[i] ); //make into string
-										newLayer.set({ id: String( savedFrame.get('layers')[i] ) }); //make into string
-							
-										zeega.app.addToLayerCollections( savedFrame, newLayer );
+										zeega.app.project.sequences[0].layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
 									}
-								
-									zeega.app.loadFrame(savedFrame);
-								
 								})
-
-								//resave the frame after being updated with  persistent frame ids
-								if( changed ) savedFrame.save();
+								zeega.app.loadFrame(savedFrame);
+								//resave the frame after being updated with persistent frame ids
+								if( savedFrame.hasChanged() ) savedFrame.save();
 							
 							}
 							else
@@ -118,7 +107,7 @@
 							
 							_this.collection.trigger('updateFrameOrder');
 						
-						}
+						} // success
 					}
 				
 				);
@@ -129,12 +118,7 @@
 			}
 			
 		},
-		
-		duplicateFrame : function()
-		{
-			
-		},
-	
+
 		insertView : function( view, index )
 		{
 		

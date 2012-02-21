@@ -11,7 +11,7 @@
 			this.visualEditor = new Layer.ViewCollection.VisualEditor({collection:this.displayLayers});
 		},
 		
-		addLayer : function( args )
+		addNewLayer : function( args )
 		{
 			var _this = this
 			var newLayer;
@@ -49,6 +49,18 @@
 				}
 			});
 			
+		},
+		
+		/*
+		adds an existing layer to the layer collection.
+		Duplicated layers do not need saving
+		*/
+		duplicateLayer : function( oldLayerID, newLayerID )
+		{
+			var oldLayer = this.collection.get(oldLayerID);
+			var dupeLayer = oldLayer.clone();
+			dupeLayer.set('id', newLayerID );
+			this.collection.add(dupeLayer);
 		},
 		
 		addLayerToFrame : function(frame,layer)
@@ -189,7 +201,7 @@
 	});
 		
 	Layer.Collection = Backbone.Collection.extend({
-		model : Layer.Model
+		model : Layer.Model,
 		//url : function(){ return Zeega.url_prefix+"sequences/"+ Zeega.sequence.id +"/layers" }
 	});
 

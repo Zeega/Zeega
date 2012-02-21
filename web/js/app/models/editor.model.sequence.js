@@ -14,6 +14,7 @@
 			this.unset('layers',['silent'])
 			this.createFrames( attributes.frames );
 			this.createLayers( attributes.layers );
+			this.updateFrameOrder(false);
 			this.trigger('ready');
 		},
 		
@@ -21,7 +22,8 @@
 		{
 			var Frames = zeega.module("frame");
 			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
-			this.frames.collection.on( 'destroy updateFrameOrder', this.updateFrameOrder, this );
+			this.frames.collection.on( 'destroy', this.destroyFrame, this );
+			this.frames.collection.on( 'updateFrameOrder', this.updateFrameOrder, this );
 		},
 		
 		createLayers : function( layers )
@@ -35,12 +37,34 @@
 			this.layers.collection.on('add',function(layer){ layer.on('removeFromFrame', _this.removeLayerFromFrame, _this) })
 		},
 		
-		updateFrameOrder : function()
+		updateFrameOrder : function( save )
 		{
 			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
 			this.frames.collection.trigger('resort',frameIDArray);
 			this.set( { framesOrder: frameIDArray } );
-			this.save();
+			if( save != false ) this.save();
+		},
+		
+		duplicateFrame : function( frameModel )
+		{
+			//var dupeModel = new Frame({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
+			var dupeModel = frameModel.clone();
+			dupeModel.set( 'duplicate_id' , parseInt(frameModel.id) );
+			dupeModel.oldLayerIDs = frameModel.get('layers');
+			this.updateFrameOrder();
+			dupeModel.frameIndex = _.indexOf( this.get('framesOrder'), frameModel.id );
+			dupeModel.dupe = true;
+			dupeModel.set('id',undefined);
+			
+			this.frames.addFrame( dupeModel );
+		},
+		
+		destroyFrame : function( frameModel )
+		{
+			console.log('destroy frame:')
+			console.log(frameModel)
+			zeega.app.loadLeftFrame()
+			this.updateFrameOrder();
 		},
 		
 		removeLayerFromFrame : function( model )

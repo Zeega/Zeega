@@ -4,6 +4,7 @@
 		
 		defaults : {
 			"name" : "Untitled",
+			'layers' : [],
 			"attr" : {
 				"advance": 0
 			}
