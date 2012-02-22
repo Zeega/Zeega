@@ -57,7 +57,6 @@ class Version20120209145310 extends AbstractMigration
 		
 		// users_playgrounds -> users_sites
 		$this->addSql("ALTER TABLE users_sites DROP FOREIGN KEY FK_946022D3F8FE9381");
-		$this->addSql("DROP INDEX IDX_946022D3F8FE9381 ON users_sites");
 		$this->addSql("ALTER TABLE users_sites CHANGE playground_id site_id INT NOT NULL");
         $this->addSql("ALTER TABLE users_sites ADD CONSTRAINT FK_5B770E2AF6BD1646 FOREIGN KEY (site_id) REFERENCES Site(id)");
 		

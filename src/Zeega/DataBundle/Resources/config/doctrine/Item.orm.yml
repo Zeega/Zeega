@@ -125,8 +125,12 @@ Zeega\DataBundle\Entity\Item:
             type: string
             length: 80
             nullable: true
-    _indexes:
-        date_created_index:
-            fields: [item_date_created]      
+    indexes:
+        media_date_created_index:
+            columns: [media_date_created]      
+        media_date_created_end_index:
+            columns: [media_date_created_end]      
         item_type_index:
-            fields: [item_type]
+            columns: [layer_type]
+        site_id_index:
+            columns: [site_id]
