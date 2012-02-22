@@ -241,10 +241,7 @@ var ProtoLayer = Class.extend({
 		this.display.append( $('<div>').css(innerDisplayCSS) );
 		this.innerDisplay = this.display.children()[0];
 		
-		console.log(this.display)
 		this.thumbnail = $('<div>').css(thumbCSS);
-
-		console.log(this.attr);
 
 		if(this.attr.link_to)
 		{

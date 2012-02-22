@@ -71,9 +71,12 @@ this.zeega = {
 		var Router = Backbone.Router.extend({
 			routes: {
 				""						: 'goToFrame',
-				"editor/frame/:frameID"	: "goToFrame"
+				"editor/frame/:frameID"	: "goToFrame",
+				"player/frame/:frameID"	: "checkPlayer"
 			},
-			goToFrame : function( frameID ){ _this.goToFrame( frameID ) }
+			goToFrame : function( frameID ){ _this.goToFrame( frameID ) },
+			
+			checkPlayer : function( frameID ){ if( !_this.previewMode ) _this.goToFrame( frameID ) }
 		});
 
 		this.router = new Router();
@@ -82,6 +85,7 @@ this.zeega = {
 	
 	goToFrame : function(frameId)
 	{
+		console.log('GOTOFRAME')
 		if(this.isLoaded) 
 		{
 			console.log('GO TO FRAME: '+frameId)
@@ -199,51 +203,6 @@ this.zeega = {
 	
 	updateFrameOrder : function(){ this.project.sequences[0].updateFrameOrder() },
 
-	copyLayerToNextFrame : function(layer)
-	{
-		console.log('copy to next layer');
-		var nextFrame = this.getRightFrame();
-		if (nextFrame) this.addLayerToFrame(nextFrame,layer);
-	},
-
-	persistLayerOverFrames : function(layer)
-	{
-		console.log('peristing');
-		//function(layer,[frames])
-		//eventually you should pass in an array of frame IDs and only add to those frames
-		//for now we persist to all frames EXCEPT the currentFrame
-
-		_.each( _.toArray(this.sequence.frames), function(frame){
-			if(frame != this.currentFrame)
-			{
-				//test to see if it exists in any of the target frames. If so, DO NOT add
-				var layerArray = _.toArray( frame.get('layers') );
-				if( ! _.include(layerArray,layer.id) ) this.addLayerToFrame(frame, layer);
-			}
-		});
-
-		//add to the sequence persistLayers array
-		var attr = this.sequence.get('attr');
-
-		//if the array exists and the layer isn't already inside it
-		if( attr.persistLayers && !_.include( _.toArray(attr.persistLayers),layer.id) )
-		{
-			attr.persistLayers.push(layer.id);
-			attr.persistLayers = _.uniq(attr.persistLayers);
-			console.log('new layer persisting')
-			this.sequence.set({'attr': attr});
-			this.sequence.save();
-
-		//if the array doesn't exist
-		}else{
-
-			attr.persistLayers = [layer.id];
-			this.sequence.set({'attr':attr});
-			this.sequence.save();
-		}
-
-	},
-
 	// returns the order that the frame appears in the sequence
 	getFrameIndex : function( frame )
 	{
@@ -255,49 +214,42 @@ this.zeega = {
 		return _.indexOf( this.sequence.get('framesOrder') , frameId );
 	},
 
-	duplicateFrame : function( frameModel )
-	{
-		this.project.sequences[0].duplicateFrame( frameModel );
-		
-		/*
-		var dupeModel = new Frame({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
-		dupeModel.oldLayerIDs = view.model.get('layers');
-
-		dupeModel.dupe = true;
-		dupeModel.frameIndex = _.indexOf( this.sequence.get('framesOrder'), view.model.id );
-		this.sequence.frames.add( dupeModel );
-		*/
-	},
-
 	previewSequence : function()
 	{
+		console.log('preview the sequence')
 		this.previewMode = true;
 		//remove branch viewer if present
 
-		Player.init( this.exportProject(), this.sequence.id, this.currentFrame.id );
+		Player.init( this.exportProject(), parseInt(this.project.sequences[0].id), parseInt(this.currentFrame.id), true );
 
 	},
 
 	exportProject : function( string )
 	{
-		console.log('export');
+		console.log('-- EXPORT --');
 
-		var order = _.map( this.sequence.get('framesOrder'), function(num){ return parseInt(num) });
+		var order = _.map( this.project.sequences[0].get('framesOrder'), function(num){ return parseInt(num) });
+		
+		var frames = this.project.sequences[0].frames.collection.toJSON();
+		_.each( frames, function(frame){ frame.layers = _.compact(frame.layers) })
+		
+		var layers = this.project.sequences[0].layers.collection.toJSON();
+		_.each(layers, function(layer){ layer.id = parseInt(layer.id) });
+		
 		var sequences = [{
-			'id' : this.project.sequence.id,
+			'id' : parseInt( this.project.sequences[0].id ),
 			'frameOrder' : order,
-			'frames' : this.project.sequence[0].frames.collection.toJSON(),
-			'layers' : this.project.sequence[0].layers.collection.toJSON() //$.parseJSON( JSON.stringify(this.sequence.layers) )
+			'frames' : frames,
+			'layers' : layers //$.parseJSON( JSON.stringify(this.sequence.layers) )
 		}];
 
 		var project = {
-			'id' : this.project.id,
+			'id' : parseInt(this.project.id),
 			'title' : this.project.get('title'),
 			'sequences' : sequences
 		};
 
 		var exportObject = { 'project' : project };
-
 		console.log(exportObject)
 
 		if(string) return JSON.stringify(exportObject);

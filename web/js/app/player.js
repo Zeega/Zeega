@@ -40,19 +40,19 @@ var Player = {
 			frameID - The id of the starting frame.
 	
 	*/
-	init : function( data, sequenceID, frameID )
+	init : function( data, sequenceID, frameID, launchedFromEditor )
 	{
 		console.log('Zeega Player Initialized');
 
 		var _this = this;
 				
 		//test to see if Zeega is installed
-		if( window.Zeega )
+		if( launchedFromEditor )
 		{
 			this.zeega = true;
-			//Zeega.previewMode = false;
+			zeega.app.previewMode = true;
 		}
-
+		
 		this.removeAllVideoElements();
 		
 		//remove panel ghosts
@@ -63,22 +63,13 @@ var Player = {
 		if( _.isString( data) ) this.data = $.parseJSON(data);
 		else this.data = data;
 		
-		console.log(this)
+		this.parseData();
 		
 		$('title').html(this.data.project.title);
 		
 		//set the current sequence
 		if( sequenceID ) this.currentSequence = this.getSequence( sequenceID ); // if set, it should keep the sequence id
 		else this.currentSequence = this.data.project.sequences[0]; // default to first sequence if unset
-
-
-		//turn the frame layer array into an array of string numbers
-		_.each(this.data.project.sequences,function(sequence){
-			_.each(sequence.frames, function(frame){
-				frame.layers = _.map(frame.layers,function(num){ return String(num) });
-			})
-		})
-
 
 		//set the current frame
 		var currentFrameID;
@@ -90,6 +81,25 @@ var Player = {
 		this.setListeners();
 		
 		this.gotoFrame( currentFrameID );
+	},
+	
+	parseData : function()
+	{
+		var _this = this;
+		this.data.layers = {
+			all : [],
+			loading : [],
+			ready : []
+		};
+		this.data.frames = {
+			all : [],
+			loading : [],
+			ready : []
+		};
+		_.each( this.data.project.sequences, function(sequence){
+			_this.data.layers.all = _.pluck( sequence.layers, 'id');
+			_this.data.frames.all = _.pluck( sequence.frames, 'id');
+		});
 	},
 	
 	/*
@@ -140,7 +150,7 @@ var Player = {
 		//unhide editor
 		$('#wrapper').show();
 		
-		document.webkitCancelFullScreen();
+		//document.webkitCancelFullScreen();
 		
 		console.log('Zeega Player Close');
 		var _this = this;
@@ -164,7 +174,7 @@ var Player = {
 		if(this.zeega)
 		{
 			//turn off previewMode
-			Zeega.previewMode = false;
+			zeega.app.previewMode = false;
 			//go to the frame last viewed in the player
 			//Zeega.loadFrame( Zeega.sequence.frames.get( this.currentFrame.id ) );
 		}
@@ -195,8 +205,7 @@ var Player = {
 	{
 		var _this = this;
 		$(window).bind( 'keydown', function(e){
-		    console.log('keydown:'+e.which);
-			switch(e.which)
+		    switch(e.which)
 			{
 				case 27:
 					if(_this.zeega) _this.close(); //don't close if standalone player
@@ -244,7 +253,7 @@ var Player = {
 		}
 		
 		$('#zeega-player').keydown(function(event) {
-			console.log(event.which+":keypress");
+			
 		});
 		
 		
@@ -261,7 +270,7 @@ var Player = {
 		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
-			console.log('event: ended');
+			
 			_this.advanceAfterMedia(data.id);
 			return false;
 		});
@@ -314,9 +323,9 @@ var Player = {
 	onLayerLoad : function(layerID)
 	{
 		//remove from the layers loading array
-		this.loadingLayers = _.without( this.loadingLayers, layerID );
+		this.data.layers.loading = _.without( this.data.layers.loading, layerID );
 		//add to the layers loaded array
-		this.loadedLayers.push(layerID);
+		this.data.layers.ready.push(layerID);
 		
 		var layer = this.getLayer( layerID );
 		
@@ -333,39 +342,36 @@ var Player = {
 	{
 		_this = this;
 		//loop through each frame that is loading
-		_.each( this.loadingFrames, function( frameID ){
+		_.each( this.data.frames.loading, function( frameID ){
 			var frame = _this.getFrame( frameID ); 
 			var layers = frame.layers;
 			
 			//updated the loading bar
 			if( _this.currentFrame.id == frameID ) _this.loadingBar.update();
-			
-			console.log('UPDATE!')
-			console.log( layers )
 				
 			//if all the layers are loaded in a frame
-			if( _.difference( layers, _this.loadedLayers ).length == 0 || layers[0] == 'false' )
+			if( _.difference( layers, _this.data.layers.ready ).length == 0 )
 			{
 			
 				//remove from frames loading array
-				_this.loadingFrames = _.without( _this.loadingFrames , frameID );
+				_this.data.frames.loading = _.without( _this.data.frames.loading , frameID );
 				// add to frames loaded array
-				_this.loadedFrames.push(frameID);
+				_this.data.frames.ready.push(frameID);
 				
 				if( _this.currentFrame.id == frameID)
 				{
-					console.log('drawCurrentFrame: '+ frameID)
+					
 					_this.loadingBar.remove();
 					_this.drawFrame( frameID ); 
 				}
 				else if( frameID == _this.getRight() )
 				{
-					console.log('turn off right spinner')
+					
 					if( $('#preview-right').spin() ) $('#preview-right').spin(false)
 				}
 				else if( frameID == _this.getLeft() )
 				{
-					console.log('turn off left spinner')
+					
 					if( $('#preview-left').spin() ) $('#preview-left').spin(false)
 				}
 				
@@ -394,7 +400,10 @@ var Player = {
 			if(tryIndex >= 0 && tryIndex < frameOrder.length)
 			{
 				var frameID = frameOrder[tryIndex];
-				this.preloadFrame(frameID);
+				if( !_.include( this.data.frames.ready, frameID ) && !_.include( this.data.frames.loading, frameID ) )
+					this.preloadFrame(frameID);
+				else if( frameID == this.currentFrame.id )
+					this.drawFrame( frameID )
 			}	
 		}
 	},
@@ -409,30 +418,19 @@ var Player = {
 	*/
 	preloadFrame : function( frameID )
 	{
-		//if not loading or already loaded
-		if( !_.include( this.loadedFrames , frameID ) && !_.include( this.loadingFrames , frameID ) )
-		{
-			_this = this;
-			
-			if(frameID == this.currentFrame.id) this.loadingBar.draw();
+		_this = this;
+		
+		if(frameID == this.currentFrame.id) this.loadingBar.draw();
+		//put frame id into the frames.loading Array
+		this.data.frames.loading.push( frameID );
 
-			//put frame id into the framesLoading Array
-			this.loadingFrames.push( frameID );
-
-			//determine the layers that need to be preloaded 
-			var frame = this.getFrame( frameID );
-
-			var layersToPreload = _.difference( _.compact( frame.layers ), this.layersOnStage );
-
-			_.each( _.compact(layersToPreload),function(layerID){
-				_this.preloadLayer(layerID);
-			});
-			
-		}else if( frameID == this.currentFrame.id && _.include( this.loadedFrames , frameID ) ){
-			
-
-			this.drawFrame( frameID );
-		}
+		//determine the layers that need to be preloaded 
+		var frame = this.getFrame( frameID );
+		var layersToPreload = _.difference( frame.layers, this.layersOnStage, this.data.layers.loading, this.data.layers.ready );
+		
+		if( _.isEmpty( layersToPreload ) ) this.updateFrameStatus();
+		
+		_.each( layersToPreload , function( layerID ){ _this.preloadLayer(layerID) });
 	},
 	
 	/*
@@ -448,8 +446,10 @@ var Player = {
 		//if not loading or already loaded
 		if( !_.include( this.loadedLayers, layerID ) && !_.include( this.loadingLayers, layerID ) )
 		{
+			
+			
 			//put the layer id into the layers Loading array
-			this.loadingLayers.push( layerID );
+			this.data.layers.loading.push( layerID );
 
 			var layer = this.getLayer( layerID );
 			var layerType = layer.type;
@@ -457,7 +457,6 @@ var Player = {
 			//make a new layer class
 			eval( 'var layerClass = new '+ layerType +'Layer();' );
 			//initialize the new layer class
-
 			layerClass.lightLoad( layer );
 			
 			//add the layer content to the displayWindow
@@ -498,7 +497,7 @@ var Player = {
 		//set timeout for auto advance
 		var advanceValue = targetFrame.attr.advance;
 		
-		console.log(targetFrame)
+		
 		
 		this.setAdvance( advanceValue );
 		
@@ -541,7 +540,7 @@ var Player = {
 			$('#preview-left').hide();
 			$('#preview-right').hide();
 		}
-		else if( !_this.overlaysHidden )
+		else if( !this.overlaysHidden )
 		{
 			if( !this.getLeft( this.currentFrame.id ) ) $('#preview-left').fadeOut();
 			else if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn();
@@ -563,8 +562,10 @@ var Player = {
 	
 	drawCitation : function( layerID )
 	{
-		var layer = this.getLayer( layerID )
-		if(layer.attr.citation){
+		var layer = this.getLayer( layerID );
+		
+		if( !_.isUndefined(layer) && !_.isUndefined( layer.attr.citation) )
+		{
 			var template = _.template( this.getCitationTemplate() );
 	
 			var title = '';
@@ -610,8 +611,7 @@ var Player = {
 		var layersToRemove = _.difference( this.layersOnStage, nextFrame.layers );
 
 		_.each( layersToRemove, function( layerID ){
-			console.log('removing layer: '+layerID);
-			_this.getLayer(layerID).layerClass.stash();
+						_this.getLayer(layerID).layerClass.stash();
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		
@@ -660,9 +660,7 @@ var Player = {
 	// advance frame after the media inside it have finished playing
 	advanceAfterMedia : function()
 	{
-		console.log('should advance')
-		console.log(this.advanceOnPlayback)
-		if(this.advanceOnPlayback) this.goRight();
+						if(this.advanceOnPlayback) this.goRight();
 	},
 
 
@@ -708,7 +706,6 @@ var Player = {
 	getFrame : function( frameID )
 	{
 		//returns the frame object
-		
 		return _.find( this.currentSequence.frames, function(frame){ return frame.id == frameID });
 	},
 	
@@ -725,21 +722,14 @@ var Player = {
 	{
 		this.currentFrame = this.getFrame( frameID );
 		
-		window.location.hash = '/player/frame/'+ frameID; //change location hash
-		
+		window.location.hash = 'player/frame/'+ frameID; //change location hash
 		
 		this.preload();
 	},
-	
-	goUp : function()
-	{
-		console.log('go up…');
-	},
-	
+
 	goRight : function()
 	{
-		console.log('go Right');
-
+		
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextFrameID = this.getRight( this.currentFrame.id, 1 );
@@ -752,15 +742,9 @@ var Player = {
 		else console.log('end of the line');
 	},
 	
-	goDown : function()
-	{
-		console.log('go down…')
-	},
-	
 	goLeft : function()
 	{
-		console.log('goLeft');
-		
+				
 		if(this.timeout) clearTimeout(this.timeout);
 		
 		var nextFrameID = this.getLeft( this.currentFrame.id, 1 );
@@ -770,12 +754,6 @@ var Player = {
 			else console.log('still loading…')
 		} 
 		else console.log('end of the line');
-	},
-	
-	//returns the id of the frame in any direction n frames ahead
-	getUp : function( frameID, dist )
-	{
-		
 	},
 	
 	getRight : function( frameID, dist )
@@ -790,13 +768,7 @@ var Player = {
 		if( index + dist > frameOrder.length || index + dist < 0 ) return false;
 		else return frameOrder[ index + dist ];
 	},
-	
-	getDown : function( frameID, dist )
-	{
-		
-	},
 
-	
 	getLeft : function( frameID, dist )
 	{
 		if( _.isUndefined(frameID) ) frameID = this.currentFrame.id;
@@ -824,7 +796,11 @@ var Player = {
 		}
 	},
 	
-	isFrameLoaded : function( frameID ){ return _.include( this.loadedFrames, frameID ) },
+	isFrameLoaded : function( frameID )
+	{
+		var _this = this;
+		return _.include( _this.data.frames.ready, frameID );
+	},
 	
 	reset : function()
 	{

@@ -27,6 +27,11 @@ $('#add-node-button').click(function(){
 	return false;
 });
 
+$('#preview').click(function(){
+	zeega.app.previewSequence();
+	return false;
+});
+
 $('#list-view').click(function(){
 	console.log('goto list view');
 	$('#grid-view .zicon').removeClass('orange');

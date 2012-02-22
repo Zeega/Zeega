@@ -37,15 +37,11 @@
 		
 		
 			var persist = '';
-			console.log(zeega.app.project.sequences[0])
-			
-			console.log(zeega.app.project.sequences[0].get('attr').persistLayers)
-			console.log(this.model.id)
+
 			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
 				persist = 'checked';
 			else
 				persist = '';
-			console.log('PERSIST: '+ persist)
 			
 			var showLink = '';
 			if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
