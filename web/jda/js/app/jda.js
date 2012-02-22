@@ -29,9 +29,9 @@ this.jda = {
 	init : function()
 	{
 		// Include all modules
-		var Items = jda.module("items");
+		this.Items = jda.module("items");
 		// make item collection
-		this.itemViewCollection = new Items.ViewCollection();
+		this.itemViewCollection = new this.Items.ViewCollection();
 	},
 	
 	search : function(obj)
@@ -65,19 +65,19 @@ this.jda = {
 	
 	showListView : function()
 	{
-		console.log('switch to List view')
+		console.log('switch to List view');
 
 	},
 	
 	showEventView : function()
 	{
-		console.log('switch to Event view')
+		console.log('switch to Event view');
 		this.initWorldMap();
 	},
 	
 	showTagView : function()
 	{
-		console.log('switch to Tag view')
+		console.log('switch to Tag view');
 		
 	},
 	
@@ -129,9 +129,10 @@ this.jda = {
 			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
 			if (map.layers[0].params.FILTER != null) params.filter = map.layers[0].params.FILTER;
 			if (map.layers[0].params.FEATUREID) params.featureid = map.layers[0].params.FEATUREID;
-
+			
 			OpenLayers.loadURL(_this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick);
 			_this.mapClickEvent = e;
+			_this.map = map;
 			OpenLayers.Event.stop(e);
 		});
 	},
@@ -139,28 +140,16 @@ this.jda = {
 	onMapClick : function(response)
 	{
 		//TODO close existing popups
+		
 		var data = eval('(' + response.responseText + ')');
-		//var data = jQuery.parseJSON( response.responseText ); //doesn't work in all cases :(
-		
-		console.log(data);
-		
-		
-		/*******************
-		
-parse data.features into backbone collection and views for display in the popup window
-		
-		********************/
-		
-		
-		/*
+		var map = this.map;
 		features = data["features"];
 		features.shift();  //removes first item which is empty
-		mapPopUpList = new DiscoveryMapListView({
-			collection : new ItemCollection(features)
+		mapPopUpList = new this.Items.Collection.MapPopup({
+			collection : new this.Items.Collection(features)
 		});
 		mapPopupHTML = $(mapPopUpList.el).html();
 		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, mapPopupHTML, null, true));
-		*/
 	},
 	
 	getMapLayers : function()
