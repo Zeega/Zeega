@@ -39,30 +39,30 @@ var ItemTagView = Backbone.View.extend({
 		console.log('loading tags');
 		this.loaded=true;
 		var _this=this;
-		this.model.tags.reset({silent:true});
+		this.model.tags.emptyTags();
 		this.model.tags.item_id=this.model.id;
 	
 		this.model.tags.fetch({ 
 				success: function(tags,response){
-				console.log('tags successfully loaded');
-					_this.taglist="";
-		
-				_.each(_.toArray(tags), function(tag){
-					_this.taglist=tag.get('tag_name')+","+_this.taglist;	
-				});
-				$(_this.el).find('.tag-container').tagsInput({
-						   'interactive':true,
-						   'defaultText':'add a tag',
-						   'onAddTag':_this.addTag,
-						   'onRemoveTag':_this.deleteTag,
-						   'removeWithBackspace' : false,
-						   'minChars' : 1,
-						   'maxChars' : 0,
-						   'placeholderColor' : '#C0C0C0'
-						});
+					console.log('tags successfully loaded');
+						_this.taglist="";
 			
+					_.each(_.toArray(tags), function(tag){
+						_this.taglist=tag.get('tag_name')+","+_this.taglist;	
+					});
+					$(_this.el).find('.tag-container').tagsInput({
+							   'interactive':true,
+							   'defaultText':'add a tag',
+							   'onAddTag':_this.addTag,
+							   'onRemoveTag':_this.deleteTag,
+							   'removeWithBackspace' : false,
+							   'minChars' : 1,
+							   'maxChars' : 0,
+							   'placeholderColor' : '#C0C0C0'
+							});
+				
 					if(_this.taglist!="undefined,")$(_this.el).find('.tag-container').importTags(_this.taglist);
-					console.log(_this.taglist);
+						console.log(_this.taglist);
 				},
 				error:_this.ignore,
 	

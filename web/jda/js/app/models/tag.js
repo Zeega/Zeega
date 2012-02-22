@@ -1,5 +1,5 @@
 (function(Tags) {
-
+		type: 'tag',
 		Tags.Model =  Backbone.Model.extend({
 
 		url : function(){ 
@@ -46,12 +46,14 @@
 	});
 
 	Tags.Collection = Backbone.Collection.extend({
-		model : Tags.Tag,
+		model : Tags.Model,
 		url : function(){ 
 			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
 							+ this.item_id + "/tags";
 		},
-		
+		emptyTags : function(){
+			this.reset({silent:true});
+		},
 		initialize: function(){},
 		parse : function(response)
 		{

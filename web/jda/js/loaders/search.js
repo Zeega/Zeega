@@ -45,10 +45,11 @@ var loadFiles = [
 	'order!../app/collections/items',
 	
 	//views
+	'order!../app/views/tag.view',
 	'order!../app/views/items/items-list',
 	'order!../app/views/fancybox.views',
 	'order!../app/views/map.view',
-	'order!../app/views/tag.view',
+	
 	
 	'order!../app/index',
 

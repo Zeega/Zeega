@@ -62,9 +62,8 @@
 			
 			this.collection.setSearch(obj,reset);
 			this.collection.fetch({
-				model:Items.Model,
 				success : function(model, response){ 
-
+					
 					$('#results-count').text(response["items_count"]+ " results");
 					_this.render();
 					
@@ -79,6 +78,7 @@
 
 	Items.Collection = Backbone.Collection.extend({
 		
+		model:Items.Model,
 		base : 'http://dev.zeega.org/jda/web/api/search?',
 		search : {},
 	

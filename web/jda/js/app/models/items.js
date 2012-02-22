@@ -1,14 +1,18 @@
 (function(Items) {
 
 	Items.Model = Backbone.Model.extend({
+
+		type:'item',
+
 		defaults : {
 			'media_creator_realname' : 'unknown',
 			'media_creator_username' : 'unknown',
 		},
 		initialize : function()
 		{
+			
+			var Tags = jda.module("tags");
 			this.tags=new Tags.Collection();
-			console.log("I'm initializing items");
 		},
 
 		loadTags : function(successFunction, errorFunction){

@@ -30,7 +30,7 @@ this.jda = {
 	{
 		// Include all modules
 		var Items = jda.module("items");
-		var Tags = jda.module("tags");
+		
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
 		

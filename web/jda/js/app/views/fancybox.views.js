@@ -28,8 +28,6 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).addClass("fancybox-media-container-more");	
 		
 		//Show delete button in More view if user added this item
-		console.log(sessionStorage.getItem("userid") + ' is session nid');
-		console.log(this.model.get("user_id") + ' is mode; nid');
 		if(sessionStorage.getItem("userid") == this.model.get("user_id")){
 			$(this.el).find('.fancybox-delete-button').show();
 		} else{
@@ -78,7 +76,7 @@ var FancyBoxView = Backbone.View.extend({
 		//Add tag view
 		this.tagView = new ItemTagView({model:this.model});
 		$(this.el).find('.tags').empty().append(this.tagView.render());
-		//this.tagView.loadTags();
+		this.tagView.loadTags();
 	
 		//Fancybox will remember if user was in MORE or LESS view
 		if (sessionStorage.getItem('moreFancy') == "true"){
