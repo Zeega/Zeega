@@ -66,7 +66,8 @@
 			var nextFrame = zeega.app.getRightFrame();
 			if(nextFrame)
 			{
-				nextFrame.get('layers').push(layerID);
+				if(nextFrame.get('layers')) nextFrame.get('layers').push(layerID);
+				else nextFrame.set('layers',[layerID],{silent:true});
 				nextFrame.save();
 			}
 		},

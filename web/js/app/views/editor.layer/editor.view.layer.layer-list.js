@@ -197,7 +197,8 @@
 		copyToNext : function()
 		{
 			//Zeega.copyLayerToNextFrame( this.model)
-			this.model.trigger('copyToNext', parseInt(this.model.id) )
+			this.model.trigger('copyToNext', parseInt(this.model.id) );
+			return false;
 		},
 	
 		hideShow : function()
