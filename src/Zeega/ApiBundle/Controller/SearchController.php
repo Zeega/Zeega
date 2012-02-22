@@ -90,6 +90,7 @@ class SearchController extends Controller
 		$query["returnItems"]   = $request->query->get('r_items');   				//  bool
 		$query["returnItems"]   = $request->query->get('r_items');   				//  bool
 		$query["returnCollections"]   = $request->query->get('r_collections');   	//  bool
+		$query["returnTags"]   = $request->query->get('r_tags');   	//  bool
 		$query["returnCollectionsWithItems"] = $request->query->get('r_itemswithcollections'); //  bool
 
 		//  set defaults for missing parameters  
@@ -98,6 +99,7 @@ class SearchController extends Controller
 		if(!isset($query['returnTime']))           			$query['returnTime'] = 0;
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
 		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
+		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
 		if(!isset($query['page']))                  		$query['page'] = 0;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
 		if($query['limit'] > 100) 	                		$query['limit'] = 100;
@@ -174,6 +176,12 @@ class SearchController extends Controller
 		    $results['time_distribution'] = $queryResults["results"];
 		    $results['time_distribution_info'] = array("min_date" => $queryResults["min_date"], 
 													   "max_date" => $queryResults["max_date"], "time_intervals" => sizeof($queryResults["results"]));
+	    }
+	
+		if($query['returnTags'])
+		{
+		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getQueryTags($query);
+		    $results['tags'] = $queryResults;
 	    }
 
 		$response = ResponseHelper::getJsonResponse($results);

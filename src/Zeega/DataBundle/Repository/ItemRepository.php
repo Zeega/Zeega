@@ -156,6 +156,20 @@ class ItemRepository extends EntityRepository
 		$qb->andWhere('i.media_type = :count_filter')->setParameter('count_filter', 'Collection');
 		return array_sum($qb->getQuery()->getArrayResult());
 	}
+	
+	public function getQueryTags($query)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb->select('tg.name,tg.id,COUNT(tg.id) as occurrences')
+           ->from('ZeegaDataBundle:Tag', 'tg')
+           ->innerjoin('tg.item', 'tgit')
+		   ->innerjoin('tgit.item', 'i')
+		   ->setMaxResults(5)
+		   ->groupBy('tg.id')
+		   ->orderBy('occurrences','DESC');
+		$qb = $this->buildSearchQuery($qb, $query);
+		return $qb->getQuery()->getArrayResult();
+	}
 
     //  api/search
     public function searchItems($query)
