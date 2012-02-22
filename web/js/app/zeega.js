@@ -315,7 +315,7 @@ this.zeega = {
 	getRightFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.project.sequences[0].get('framesOrder'), this.currentFrame.id );
-		if(currentFrameIndex < _.size( this.sequence.frames )-1 ) return this.project.sequences[0].frames.collection.at( currentFrameIndex + 1 );
+		if(currentFrameIndex < _.size( this.project.sequences[0].frames.collection )-1 ) return this.project.sequences[0].frames.collection.at( currentFrameIndex + 1 );
 		else return false;
 	},
 

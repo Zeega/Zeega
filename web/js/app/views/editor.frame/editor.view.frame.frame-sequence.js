@@ -9,8 +9,8 @@
 			this.model.on('blur', this.blur, this );
 		},
 		
-		focus : function(){ $(this.el).addClass('active-frame') },
-		blur : function(){ $(this.el).removeClass('active-frame') },
+		focus : function(){ $(this.el).addClass('active-frame'), this.model.inFocus = true },
+		blur : function(){ $(this.el).removeClass('active-frame'), this.model.inFocus = false },
 	
 		render: function()
 		{

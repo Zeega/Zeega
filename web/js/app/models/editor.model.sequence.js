@@ -33,6 +33,8 @@
 			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
 			_.each( _.toArray( this.layers.collection ), function(layer){
 				layer.on('removeFromFrame', _this.removeLayerFromFrame, _this);
+				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
+				layer.on('persist', _this.updatePersistLayer, _this);
 			});
 			this.layers.collection.on('add',function(layer){ layer.on('removeFromFrame', _this.removeLayerFromFrame, _this) })
 		},
@@ -59,6 +61,16 @@
 			this.frames.addFrame( dupeModel );
 		},
 		
+		continueLayerToNextFrame : function( layerID )
+		{
+			var nextFrame = zeega.app.getRightFrame();
+			if(nextFrame)
+			{
+				nextFrame.get('layers').push(layerID);
+				nextFrame.save();
+			}
+		},
+		
 		destroyFrame : function( frameModel )
 		{
 			console.log('destroy frame:')
@@ -67,6 +79,39 @@
 			this.updateFrameOrder();
 		},
 		
+		updatePersistLayer : function( model )
+		{
+			console.log('persist this layer')
+			
+			this.set('attr',{persistLayers: [parseInt(model.id)] })
+			this.save();
+			console.log(this.get('attr'))
+			console.log(this.get('attr').persistLayers)
+			
+			
+			var attr = this.get('attr');
+		
+			if( _.include( attr.persistLayers, parseInt(model.id) ) ) 
+			{
+				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(model.id))})
+				console.log(attr)
+				//this.frames.removePersistence( parseInt(model.id) );
+			}
+			else
+			{
+				if(attr.persistLayers) attr = _.extend( attr, { persistLayers: _.compact(attr.persistLayers.push(parseInt(model.id))) });
+				else attr.persistLayers = [ parseInt(model.id) ];
+				console.log(attr)
+				//this.frames.addPersistence( parseInt(model.id) );
+			}
+			//this.set('attr',attr);
+			//this.save();
+			
+			
+			console.log(this)
+			
+		},
+				
 		removeLayerFromFrame : function( model )
 		{
 			// if layer is persistent then remove ALL instances from frames
@@ -105,14 +150,6 @@
 			_.each( orphanLayerIDs, function(orphanID){
 				_this.layers.collection.get( orphanID ).destroy();
 			});
-		},
-		
-		removePersistence : function( layerID )
-		{
-			console.log('remove persistance!');
-			var newPersistArray = _.without( this.get('persistLayers'), parseInt(layerID ) );
-			this.set('persistLayers',newPersistArray);
-			this.save();
 		}
 		
 	});

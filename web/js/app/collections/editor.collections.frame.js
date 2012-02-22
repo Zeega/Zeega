@@ -10,7 +10,6 @@
 			this._frameViews = [];
 			
 			this.collection.on('add', this.add, this);
-			this.on('resort', this.resort, this)
 			//if there are no frames, then add one automagically
 			if(this.collection.length == 0) this.collection.add( new Frame.Model() )
 			this.render();
@@ -33,9 +32,39 @@
 			return this;
 		},
 		
-		resort : function( frameIDArray )
+		addPersistence : function( layerID )
 		{
-			
+			console.log(zeega.app.project.sequences[0])
+			_.each( _.toArray(this.collection), function(frame){
+				if( !frame.inFocus )
+				{
+					console.log(frame)
+					var layerArray = frame.get('layers');
+					console.log(layerArray)
+					if( ! _.include( layerArray, layerID ) )
+					{
+						if( _.isArray(layerArray) ) layerArray.unshift(layerID);
+						else layerArray = [layerID];
+						frame.set( 'layers', layerArray );
+						frame.save();
+					}
+				}
+			});
+		},
+		
+		removePersistence : function( layerID )
+		{
+			_.each( _.toArray(this.collection), function(frame){
+				if( !frame.inFocus )
+				{
+					var layerArray = frame.get('layers');
+					if( _.include( layerArray, layerID ) )
+					{
+						frame.set( 'layers', _.without(layerArray,layerID) );
+						frame.save();
+					}
+				}
+			});
 		},
 		
 		addFrame : function( frameModel )
@@ -74,7 +103,7 @@
 
 									var persistLayers = zeega.app.project.sequences[0].get('attr').persistLayers;
 
-									if( _.include( persistLayers, String(layerID) ) )
+									if( _.include( persistLayers, parseInt(layerID) ) )
 									{
 										var layerOrder = savedFrame.get('layers');
 										layerOrder[i] = String(layerID);
@@ -85,9 +114,7 @@
 										zeega.app.project.sequences[0].layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
 									}
 								})
-								zeega.app.loadFrame(savedFrame);
 								//resave the frame after being updated with persistent frame ids
-								if( savedFrame.hasChanged() ) savedFrame.save();
 							
 							}
 							else
@@ -97,13 +124,11 @@
 						
 								//add persisting layers to new frames
 								var persistLayers = zeega.app.project.sequences[0].get('attr').persistLayers;
-								_.each( persistLayers, function(layerID){
-									zeega.app.addLayerToFrame( savedFrame, zeega.app.sequence.layerCollection.get(layerID) );
-								});
-
-								//go to the new frame
-								zeega.app.loadFrame(savedFrame);
+								savedFrame.set( 'layers', persistLayers );
 							}
+							
+							zeega.app.loadFrame(savedFrame);
+							if( savedFrame.hasChanged() ) savedFrame.save();
 							
 							_this.collection.trigger('updateFrameOrder');
 						

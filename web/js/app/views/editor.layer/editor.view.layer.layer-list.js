@@ -8,12 +8,14 @@
 		{
 			this.model.on( 'change:title', this.updateLayerTitle );
 			
-			this.model.on( 'change:height', this.updateFrameThumb );
+			this.model.on( 'change:height change:width change:opacity change:color change:left change:top', this.updateFrameThumb );
+			/*
 			this.model.on( 'change:width', this.updateFrameThumb );
 			this.model.on( 'change:opacity', this.updateFrameThumb );
 			this.model.on( 'change:color', this.updateFrameThumb );
 			this.model.on( 'change:left', this.updateFrameThumb );
 			this.model.on( 'change:top', this.updateFrameThumb );
+			*/
 		},
 	
 		updateFrameThumb : function(){ zeega.app.currentFrame.trigger('updateThumb') },
@@ -35,15 +37,16 @@
 		
 		
 			var persist = '';
+			console.log(zeega.app.project.sequences[0])
 			
-		/*
-			if( Zeega.sequence.get('attr') && Zeega.sequence.get('attr').persistLayers && _.include( Zeega.sequence.get('attr').persistLayers , _this.model.id ) )
-			{
+			console.log(zeega.app.project.sequences[0].get('attr').persistLayers)
+			console.log(this.model.id)
+			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
 				persist = 'checked';
-			}else{
+			else
 				persist = '';
-			}
-		*/
+			console.log('PERSIST: '+ persist)
+			
 			var showLink = '';
 			if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
 				showLink = 'hidden';
@@ -184,13 +187,17 @@
 		//set persistance action
 		persist : function()
 		{
+			this.model.trigger('persist', this.model);
+			/*
 			if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverFrames(this.model);
 			else Zeega.removeLayerPersist( this.model );
+			*/
 		},
 	
 		copyToNext : function()
 		{
-			Zeega.copyLayerToNextFrame( this.model)
+			//Zeega.copyLayerToNextFrame( this.model)
+			this.model.trigger('copyToNext', parseInt(this.model.id) )
 		},
 	
 		hideShow : function()
