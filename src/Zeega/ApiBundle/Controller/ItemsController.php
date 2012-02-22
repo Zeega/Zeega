@@ -130,7 +130,12 @@ class ItemsController extends Controller
     public function postItemsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-    	
+    	// temp - needs to be removed
+		if($user == "anon.")
+		{
+            $user =  $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->find(1);
+        }
+
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
 
 	    $item = new Item();
@@ -138,6 +143,7 @@ class ItemsController extends Controller
 		$site = $this->getDoctrine()
 				     ->getRepository('ZeegaDataBundle:Site')
 				     ->findSiteByUser($user->getId());
+		//return new Response(var_dump($this->getRequest()->request));
 		
 		$item->setSite($site[0]);		
         $item->setTitle($this->getRequest()->request->get('title'));
@@ -149,7 +155,16 @@ class ItemsController extends Controller
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
 		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
-        $item->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
+		
+		$childItemsCount = $this->getRequest()->request->get('child_items_count');
+		if(isset($childItemsCount))
+		{
+        	$item->setChildItemsCount($childItemsCount);
+		}
+		else
+		{
+			$item->setChildItemsCount(0);
+		}
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
         $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
         
