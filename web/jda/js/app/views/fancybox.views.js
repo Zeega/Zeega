@@ -52,7 +52,7 @@ var FancyBoxView = Backbone.View.extend({
 		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title') == "none" ? this.model.get('source') : this.model.get('title'),
+			title : this.model.get('title') == "none" || this.model.get('title') == null ? this.model.get('source') : this.model.get('title'),
 			description : this.model.get('description'),
 			creator : this.model.get('media_creator_username'),
 		};
@@ -634,7 +634,55 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 		var html =	'<div id="fancybox-website">'+
 					'<iframe type="text/html" width="100%" height="335px" src="<%=src%>" frameborder="0">'+
 					'</iframe>'+
-					'<div class="website-caption"><div style="float:left"><%=type%>: </div><a href="<%=src%>" target="_blank"><%=src%></a></div></div>';
+					'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div></div>';
+								
+		return html;
+	},
+
+});
+// For displaying Tweets
+var FancyBoxTestimonialView = FancyBoxView.extend({
+	
+	initialize: function(){
+
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+		
+	},
+	
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		var text = this.model.get('text');
+
+		//Fill in tweet-specific stuff
+		var blanks = {
+			text : text,
+			
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getMediaTemplate() );
+		
+		//copy the cloned item into the el
+		var tweetHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(tweetHTML);
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		
+
+		
+		return this;
+	},
+	getMediaTemplate : function()
+	{
+		
+		var html =	'<p class="fancybox-testimonial"><%= text %></p>';
 								
 		return html;
 	},

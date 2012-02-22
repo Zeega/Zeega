@@ -166,7 +166,7 @@
  .fancybox-media-item-more iframe,  .fancybox-media-item-more video{
 	width:100% !important;
 	margin:0 !important;
-	height:200px !important;
+	/*height:200px !important;*/
 }
 .fancybox-media-item #fancybox-website {
 	height:335px;
@@ -186,7 +186,12 @@
 	font-size:2.0em;
 	height:auto;
 }
-
+.fancybox-media-item-more .fancybox-testimonial{
+	font-size: 1.2em;
+	height: auto;
+	text-align: justify !important;
+	line-height: 1.3em;
+}
 
 .fancybox-media-container-more p{
 	text-align:left;
@@ -253,7 +258,7 @@
 .fancybox-editable{
 	
 }
-.fancybox-tweet{
+.fancybox-tweet, .fancybox-testimonial{
 	font-size: 3.3em;
 	line-height: 1.3em;
 	color: #3289CB;
@@ -261,8 +266,12 @@
 	font-weight: bold;
 	height: 420px;
 	font-family: Palatino, serif;
-	
+	overflow: auto;
 
+}
+.fancybox-testimonial{
+	font-size:2.0em;
+	text-align:left !important;
 }
 #fancybox-document-cloud{
 
@@ -322,13 +331,15 @@ overflow:hidden;
 	top: -342px;
 	height: 25px;
 	color:white;
-	padding: 10px;
+	padding: 20px 15px 15px 15px;
 	font-weight: bold;
 	font-size: 16px;
+	word-wrap: break-word !important;
+	line-height: 10px;
 }
 .website-caption a{
 	color: white;
-	font-size: 11px;
+	font-size: 10px;
 	font-weight:normal;
 }
 .website-caption a:hover{
