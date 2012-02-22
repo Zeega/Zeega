@@ -168,6 +168,12 @@
 	margin:0 !important;
 	height:200px !important;
 }
+.fancybox-media-item #fancybox-website {
+	height:335px;
+}
+.fancybox-media-item #fancybox-website iframe{
+	border:1px solid #ccc;
+}
 .fancybox-media-item video{
 	border: 1px solid #000;
 	background-color:black;
@@ -310,7 +316,27 @@ padding: 3px;
 overflow:hidden;
 
 }
-
+.website-caption{
+	background: rgba(0, 0, 0, 0.5);
+	position: relative;
+	top: -342px;
+	height: 25px;
+	color:white;
+	padding: 10px;
+	font-weight: bold;
+	font-size: 16px;
+}
+.website-caption a{
+	color: white;
+	font-size: 11px;
+	font-weight:normal;
+}
+.website-caption a:hover{
+	color:yellow !important;
+}
+.website-caption a:visited{
+	color:white !important;
+}
 /******************************************
 
 	END MAP VIEW 

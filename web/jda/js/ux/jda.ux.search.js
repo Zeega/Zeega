@@ -105,6 +105,14 @@ $(document).ready(function(){
            			fancyView = new FancyBoxDocCloudView({model:thisModel});
            			fancyView.render(this);
            			break;
+           		case 'Website':
+           			fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			fancyView.render(this);
+           			break;
+           		case 'PDF':
+           			fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			fancyView.render(this);
+           			break;
 			}
         },
         
