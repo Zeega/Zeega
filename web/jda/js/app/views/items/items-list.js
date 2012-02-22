@@ -25,6 +25,13 @@
 				case 'Tweet':
 					template = this.getTweetTemplate();
 					break;
+				case 'Text':
+					template = this.getTestimonialTemplate();
+					break;
+				
+				case 'PDF':
+					template = this.getPDFTemplate();
+					break;
 				
 				default:
 					template = this.getDefaultTemplate();
@@ -41,6 +48,17 @@
 			} else {
 				blanks["media_date"] = "n/a";
 			}
+			if (this.model.get("text") != null){
+				blanks["text"] = this.model.get("text").substring(0,255) + "...";
+			}
+			if (this.model.get("description") != null){
+				blanks["description"] = this.model.get("description").substring(0,255) + "...";
+			}
+			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
+				blanks["title"] = "Untitled";
+			}
+			
+
 			$(this.el).html( _.template( template, blanks ) )
 			
 			return this;
@@ -73,9 +91,11 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
+				'<div class="item-author"><%= media_creator_realname %></div>'+
 			'</div>'+
-			'<div class="span7 item-title">'+
-				'<%= title %>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
 				'<%= date %>'
@@ -93,7 +113,8 @@
 				'<i class="jdicon-website"></i>'+
 			'</div>'+
 			'<div class="span7 item-title">'+
-				'<%= title %>'+
+				'<div class="item-title"><%= title %></div>'+
+				
 			'</div>'+
 			'<div class="span3 item-date">'+
 				'<%= date %>'
@@ -109,9 +130,49 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-twitter"></i>'+
+				'<div class="item-author"><%= media_creator_realname %></div>'+
 			'</div>'+
-			'<div class="span7 item-title">'+
-				'<%= title %>'+
+			'<div class="span7 item-description">'+
+				'<%= text %>'+
+			'</div>'+
+			'<div class="span3 item-date">'+
+				'<%= date %>'
+			'</div>'+
+			'</a>';
+			
+			return html;
+		},
+		getTestimonialTemplate : function()
+		{
+			html = 
+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<div class="span2">'+
+				'<i class="jdicon-testimonial"></i>'+
+				'<div class="item-author"><%= media_creator_realname %></div>'+
+			'</div>'+
+			'<div class="span7 item-description">'+
+				'<%= text %>'+
+			'</div>'+
+			'<div class="span3 item-date">'+
+				'<%= date %>'
+			'</div>'+
+			'</a>';
+			
+			return html;
+		},
+		getPDFTemplate : function()
+		{
+			html = 
+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<div class="span2">'+
+				'<i class="jdicon-pdf"></i>'+
+				'<div class="item-author"><%= media_creator_realname %></div>'+
+			'</div>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
 				'<%= date %>'

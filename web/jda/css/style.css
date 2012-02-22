@@ -16,6 +16,8 @@
 	background-image: url(../images/jdicons-darkgrey-50.png);
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
+	float:left;
+	margin-right:5px;
 }
 [class^="jdicon-small-"]
 {
@@ -29,10 +31,12 @@
 .jdicon-twitter{background-position:-150px 0}
 .jdicon-facebook{background-position:-200px 0}
 .jdicon-map{background-position:-250px 0}
-.jdicon-document{background-position:-300px 0}
+.jdicon-document{background-position:-300px -50px}
 .jdicon-date{background-position:-0px -50px}
 .jdicon-video{background-position:-400px 0}
 .jdicon-article{background-position:-450px 0}
+.jdicon-testimonial{background-position:-100px -150px}
+.jdicon-pdf{background-position:-350px -50px}
 
 .jdicon-small-list{background-position:-125px -25px}
 .jdicon-small-world{background-position:-0px -50px}
@@ -76,7 +80,7 @@
 #items-list li, #items-list a
 {
 	padding:12px 0;
-	color:#333;
+	color:#555;
 }
 
 #items-list li{
@@ -463,12 +467,24 @@ opacity: 1;
 }
 .item-title{
 	text-align:justify;
+	font-weight:bold;
 }
-.item-date{
+.item-date, .item-author{
 	font-size:11px;
 	font-family:Arial, sans-serif;
 	text-align:right;
 	color:#777;
+
+}
+.item-author{
+	text-align:left;
+	margin-top:10px;
+}
+.item-description{
+	font-weight:normal;
+}
+.item-website{
+	font-weight:normal;
 
 }
 
