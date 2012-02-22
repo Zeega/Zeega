@@ -95,7 +95,7 @@ class SearchController extends Controller
 
 		//  set defaults for missing parameters  
 		if(!isset($query['returnCollections']))     		$query['returnCollections'] = 0;		
-		if(!isset($query['returnItems']))           		$query['returnItems'] = 1;
+		if(!isset($query['returnItems']))           		$query['returnItems'] = 0;
 		if(!isset($query['returnTime']))           			$query['returnTime'] = 0;
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
 		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
