@@ -28,6 +28,9 @@
 				case 'Text':
 					template = this.getTestimonialTemplate();
 					break;
+				case 'Video':
+					template = this.getVideoTemplate();
+					break;
 				
 				case 'PDF':
 					template = this.getPDFTemplate();
@@ -49,13 +52,19 @@
 				blanks["media_date"] = "n/a";
 			}
 			if (this.model.get("text") != null){
-				blanks["text"] = this.model.get("text").substring(0,255) + "...";
+				blanks["text"] = this.linkifyTweet(this.model.get("text").substring(0,255) + "...");
+
 			}
 			if (this.model.get("description") != null){
 				blanks["description"] = this.model.get("description").substring(0,255) + "...";
 			}
 			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
 				blanks["title"] = "Untitled";
+			}
+			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == ""){
+				blanks["author"] = this.model.get("media_creator_username");
+			} else {
+				blanks["author"] = this.model.get("media_creator_realname");	
 			}
 			
 
@@ -64,7 +73,25 @@
 			return this;
 		},
 		
-		
+		/* formats tweet text, doesn't linkify bc tweet is already linked to fancybox */
+		linkifyTweet : function(tweet){
+
+			// urls
+			var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+	    	tweet = tweet.replace(exp,"<strong>$1</strong>"); 
+
+	    	// users
+	    	 tweet = tweet.replace(/(^|)@(\w+)/gi, function (s) {
+	        	return '<strong>' + s + '</strong>';
+	    	});
+
+	    	// tags
+	    	tweet = tweet.replace(/(^|)#(\w+)/gi, function (s) {
+	        	return '<strong>' + s + '</strong>';
+	     	});
+
+	    	return tweet;
+		},
 		
 		getImageTemplate : function()
 		{
@@ -74,8 +101,30 @@
 			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
-			'<div class="span7 item-title">'+
-				'<%= title %>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-author">by <%= author %></div>'+
+				
+			'</div>'+
+			'<div class="span3 item-date">'+
+				'<%= date %>'
+			'</div>'+
+			'</a>';
+			
+			return html;
+		},
+		getVideoTemplate : function()
+		{
+			html =
+
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<div class="span2">'+
+				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
+			'</div>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-source"><%= source %></div>'+
+				'<div class="item-author">by <%= author %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
 				'<%= date %>'
@@ -91,7 +140,7 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
-				'<div class="item-author"><%= media_creator_realname %></div>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
 			'<div class="span7">'+
 				'<div class="item-title"><%= title %></div>'+
@@ -130,7 +179,7 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-twitter"></i>'+
-				'<div class="item-author"><%= media_creator_realname %></div>'+
+				'<div class="item-author item-author-left">by <%= author %></div>'+
 			'</div>'+
 			'<div class="span7 item-description">'+
 				'<%= text %>'+
@@ -149,7 +198,7 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-testimonial"></i>'+
-				'<div class="item-author"><%= media_creator_realname %></div>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
 			'<div class="span7 item-description">'+
 				'<%= text %>'+
@@ -168,7 +217,7 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-pdf"></i>'+
-				'<div class="item-author"><%= media_creator_realname %></div>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
 			'<div class="span7">'+
 				'<div class="item-title"><%= title %></div>'+
@@ -186,14 +235,16 @@
 			html = 
 			
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
-			'<div class="span3">'+
-				'<%= type %>'+
+			'<div class="span2">'+
+				'<i class="jdicon-document"></i>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
-			'<div class="span6">'+
-				'<%= title %>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
-			'<div class="span3">'+
-				'<%= media_date %>'
+			'<div class="span3 item-date">'+
+				'<%= date %>'
 			'</div>'+
 			'</a>';
 			

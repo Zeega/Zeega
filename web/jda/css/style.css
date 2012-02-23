@@ -469,14 +469,17 @@ opacity: 1;
 	text-align:justify;
 	font-weight:bold;
 }
-.item-date, .item-author{
+.item-date, .item-author, .item-source{
 	font-size:11px;
 	font-family:Arial, sans-serif;
-	text-align:right;
 	color:#777;
+	line-height:16px;
 
 }
-.item-author{
+.item-date{
+	text-align:right;
+}
+.item-author-left{
 	text-align:left;
 	margin-top:10px;
 }
