@@ -23,6 +23,7 @@ this.jda = {
 	
 	currentView : 'list',
 	mapLoaded : false,
+	timeSliderLoaded : false,
 	japanMapUrl : "http://worldmap.harvard.edu/geoserver/",
 	geoUrl : "http://geo.zeega.org/geoserver/",
 	
@@ -73,12 +74,56 @@ this.jda = {
 	{
 		console.log('switch to Event view');
 		this.initWorldMap();
+		this.initTimeSlider();
 	},
 	
 	showTagView : function()
 	{
 		console.log('switch to Tag view');
 		
+	},
+	
+	initTimeSlider : function()
+	{
+	if( !this.timliderLoaded )
+		{
+			this.timeSliderLoaded = true;
+			timeSliderContainer = $("#event-time-slider");
+			
+			//Put HTML into the div
+			timesliderHTML = "<div id='range-slider'></p>";
+			timeSliderContainer.html(timesliderHTML);
+			
+			//Set up the range slider
+			$("#range-slider").slider({
+				range: true, 
+			 	min: 0, 
+			 	max: 500,
+				values: [75, 300],
+			 	slide: function( event, ui ) {
+					this.setStartDateTime(ui.values[0]);
+					this.setEndDateTime(ui.values[1]);
+					this.upDateEventSearch();
+				 }
+			});
+			
+			
+			//Set the dateTime pickers to the starting slider condition
+			this.setStartDateTime($( "#range-slider" ).slider( "values", 0 ));
+			this.setEndDateTime($( "#range-slider" ).slider( "values", 1 ));
+		}
+	},
+	
+	setStartDateTime : function(val)
+	{
+	},
+	
+	setEndDateTime : function(val)
+	{
+	},
+	
+	upDateEventSearch : function()
+	{
 	},
 	
 	initWorldMap : function()
@@ -140,21 +185,49 @@ this.jda = {
 	onMapClick : function(response)
 	{
 		//TODO close existing popups
+		//FIXIT clicking on an item in the OpenLayers popup does not ope the fancybox
 		
+		//TODO error checking on response
 		var data = eval('(' + response.responseText + ')');
+		
 		var map = this.map;
 		features = data["features"];
 		features.shift();  //removes first item which is empty
-		mapPopUpList = new this.Items.Collection.MapPopup({
+		
+		mapPopUpList = new this.Items.MapPoppupViewCollection({
 			collection : new this.Items.Collection(features)
 		});
-		mapPopupHTML = $(mapPopUpList.el).html();
-		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, mapPopupHTML, null, true));
+		popupHTML = $(mapPopUpList.el).html();
+		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true));
 	},
 	
 	getMapLayers : function()
 	{
 		var layers = [];
+		
+		//Set up the CQL filter for the geoserver based on existing search:
+		var format = new OpenLayers.Format.CQL();
+		cqlFilters = [];   //array of filter strings
+		search = this.itemViewCollection.getSearch();	
+		
+		if( !_.isUndefined(search.query) ){
+			cqlFilters.push("q='" + search.query + "'");
+		}
+		if( !_.isUndefined(search.tags) ){
+		 	cqlFilters.push("tags='" + search.tags + "'");
+		 }
+		if( !_.isUndefined(search.type) ){  
+			cqlFilters.push("type='" + search.type + "'");
+		}
+		if (cqlFilters.length>0){
+			cqlFilterString = cqlFilters.join("AND");
+		}else{
+			cqlFilterString = "INCLUDE";   //acts as an empty filter
+		}
+		//Format the string 
+		//cqlFilterString = format.read(cqlFilterString);
+
+		console.log("Retrieving map data : " + cqlFilterString);
 		
 		layers.push(new OpenLayers.Layer.WMS(
 			"cite:item - tiled",
@@ -162,7 +235,8 @@ this.jda = {
 			{
 				layers : 'cite:item',
 				transparent : true,
-				format : 'image/png'
+				format : 'image/png',
+				CQL_FILTER : cqlFilterString 
 			})
 		);
 		

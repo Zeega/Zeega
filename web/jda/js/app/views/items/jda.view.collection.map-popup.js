@@ -12,7 +12,6 @@
 			var thisListView = this;
 			
 			this._listItemViews = [];
-			console.log(this.collection);
 			this.collection.each(function(item) { 
 				var itemView = new thisListView.Items.Views.MapPopup(
 					{model : item}

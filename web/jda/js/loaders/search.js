@@ -40,7 +40,6 @@ var loadFiles = [
 	//views
 	'order!../app/views/items/jda.view.item.search-results',
 	'order!../app/views/items/jda.view.item.map-popup',
-	'order!../app/views/items/jda.view.collection.map-popup',
 	
 	'order!../app/index',
 

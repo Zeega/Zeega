@@ -1,6 +1,5 @@
 (function(Items) {
 	Items.ViewCollection = Backbone.View.extend({
-	
 		el : $('#items-list'),
 	
 		initialize : function()
@@ -9,7 +8,6 @@
 			this.collection = new Items.Collection();
 			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
-		
 			$(this.el).spin('small');
 
 		},
@@ -65,44 +63,27 @@
 	});
 
 
-	Items.MapPoppupCollectionView = Backbone.View.extend({
-		
-		tagName : 'ul',
-		className : 'discovery-map-list',
-	
-		initialize : function()
-		{
+	Items.MapPoppupViewCollection = Backbone.View.extend({
+		className : 'discovery-map-list-container',
+
+		initialize : function() {
 			var _this = this;
-//			this.collection = new Items.Collection();
-			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
-			$(this.el).spin('small');
+			this.render();
 		},
-	
-		render : function()
-		{
+
+		render : function() {
 			var _this = this;
 			_this._isRendered = true;
+			list = $("<ul class='discovery-map-list'></ul>");
+ 			$(this.el).append(list);
 			_.each( _.toArray(this.collection), function(item){
-				var itemView = new Items.Views.MapPoppup ({model:item});
-				_this._childViews.push( itemView );
-				$(_this.el).append( itemView.render().el );
-			})
-			
-			$(this.el).fadeTo(100,1);
-			$(this.el).spin(false);
+				var itemView = new Items.Views.MapPopup({model:item});
+				//_this._childViews.push(itemView);
+				list.append( itemView.render().el );
+			});
 			return this;
 		},
-		
-		reset : function()
-		{
-			if ( this._isRendered )
-			{
-				_.each( this._childViews, function(view){ $(view.el).remove() })
-				this._childViews = [];
-				this.render();
-			}
-		}
 	});
 
 
@@ -127,6 +108,11 @@
 			if(reset) this.search = obj;
 			else _.extend(this.search,obj)
 			console.log('set search: '+obj.query)
+		},
+		
+		getSearch : function()
+		{
+			return this.search;
 		},
 	
 		parse : function(response)

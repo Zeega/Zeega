@@ -4,24 +4,24 @@
 	Items.Views.MapPopup = Backbone.View.extend({
 		
 		tagName : 'li',
-		className : 'row',
+		className : 'map-popup-list-items',
 
 		render: function(done)
 		{
 			var _this = this;
 
 			template = this.getTemplate();
-			
+
 			var blanks = this.model.attributes;
-			
-			$(this.el).html( _.template( template, blanks ) )
+
+			$(this.el).html( _.template( template, blanks ))
 			return this;
 		},
-		
+
 		events : {
 			'mouseup' : 'openOverlay'
 		},
-		
+
 		openOverlay : function()
 		{
 			console.log('clicked map popup item: '+ this.model.id )
@@ -29,20 +29,20 @@
 				content : '<i class="jdicon-'+this.model.get("type").toLowerCase()+'"></i>'+this.model.get('title')
 			})
 		},
-		
+
 		getTemplate : function()
 		{
 			html =
-			
-			'<div class="span2">'+
+
+			'<div class="span1">'+
 				'<img src="<%= thumbnail_url %>" height="50" width="50"/>'+
 			'</div>'+
-			'<div class="span7">'+
+			'<div class="span3">'+
 				'<%= title %>'+
 			'</div>'
-			
+
 			return html;
 		}		
 	});
-	
+
 })(jda.module("items"));
