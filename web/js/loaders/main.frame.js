@@ -10,7 +10,7 @@
 
 var loadFiles = [
 	'jquery',
-	'order!app/framePlayer',
+	'order!app/zeega.frame-player',
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	'order!lib/underscore',

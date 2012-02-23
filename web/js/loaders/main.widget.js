@@ -20,7 +20,7 @@ var loadFiles = [
 	
 	//custom
 	'order!ux/zeega.ux.widget',
-	'order!app/zeegaWidget',
+	'order!app/zeega.widget',
 	'order!helpers/zeega.extends',
 	'order!helpers/zeega.helpers',
 	

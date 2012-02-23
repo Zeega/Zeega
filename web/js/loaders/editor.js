@@ -37,7 +37,7 @@ var loadFiles = [
 
 	//core
 	'order!app/zeega',
-    'order!app/player',
+    'order!app/zeega.player',
 
 	//plugins
 	'order!lib/jquery/plugins/spin',

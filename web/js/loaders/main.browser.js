@@ -8,6 +8,13 @@
 
 
 *********************************************/
+require.config({
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	paths : {
+			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
+		}
+})
 
 var loadFiles = [
 	'jquery',
@@ -21,8 +28,8 @@ var loadFiles = [
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!lib/spin',
-	'order!libraries/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
-	'order!jquery/ui/js/jquery-ui.min',
+	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
+	'order!lib/jquery/ui/js/jquery-ui.min',
 	
 	//custom
 
@@ -33,7 +40,7 @@ var loadFiles = [
 
 	//core
 	'order!app/zeega',
-	'order!app/zeegaBrowser',
+	'order!app/zeega.browser',
 	
 	//plugins
 	'order!lib/jquery/plugins/spin',
@@ -48,9 +55,9 @@ var loadFiles = [
 	'order!lib/jquery/plugins/twitter-bootstrap',
 	
 	//custom
-	'order!filamentslider/selectToUISlider.jQuery',
-	'order!jcarousel/jquery.jcarousel',
-	'order!jcarousel/jcarousel.zeega',
+	'order!lib/filamentslider/selectToUISlider.jQuery',
+	'order!lib/jcarousel/jquery.jcarousel',
+	'order!lib/jcarousel/jcarousel.zeega',
 	
 	//mvc
 	'order!backbone/models/tag',
@@ -76,7 +83,7 @@ var loadFiles = [
 
 require(loadFiles, function($) {
     
-	
+	console.log('loaded')
 	ZeegaBrowser.init();
 	
 	
