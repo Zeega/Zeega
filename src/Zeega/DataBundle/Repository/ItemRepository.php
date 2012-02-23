@@ -30,9 +30,7 @@ class ItemRepository extends EntityRepository
 			{
 				for($i=0; $i < count($queryString); $i++)
 				{ 
-					$qb->orWhere('i.title LIKE :query_string'.$i)
-	               		->orWhere('i.media_creator_username LIKE :query_string'.$i)
-	               		->orWhere('i.description LIKE :query_string'.$i)
+					$qb->andWhere('i.title LIKE :query_string'.$i . ' OR i.media_creator_username LIKE :query_string'.$i . ' OR i.description LIKE :query_string'.$i)
 	               		->setParameter('query_string'.$i,'%' . $queryString[$i] . '%');            	
 				}
 			}
