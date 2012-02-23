@@ -7,13 +7,12 @@ $(document).ready(function(){
 		// Bind searching to search field
 		if (e.which == 13)
 		{
-			jda.app.search({ query:$(this).val(), content:$('#content').val() });
+			jda.app.search({ page:1 });
 			return false;
 		}
 	});
 	$('#content').change(function(){
-		var test = $('#search-bar').find('input[value!="search the archive"]').val();
-		jda.app.search({ query:$('#search-bar').find('input[value!="search the archive"]').val(), content:$(this).val() });
+		jda.app.search({ page:1});
 		return false;
 	});
 	
@@ -32,8 +31,7 @@ $(document).ready(function(){
                     if (jda.app.killScroll == false) { // Keeps the loader from fetching more than once.
                             jda.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
                             var page = jda.app.itemViewCollection.collection.search.page;
-                            jda.app.search({ 	query:$('#search-bar').find('input[value!="search the archive"]').val(), 
-                            					content:$('#content').val(), 
+                            jda.app.search({ 	
                             					page: jda.app.itemViewCollection.collection.search.page+1 
                             				});
 

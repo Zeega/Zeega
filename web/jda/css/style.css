@@ -490,7 +490,9 @@ opacity: 1;
 	font-weight:normal;
 
 }
-
+#spinner{
+	margin-top:30px;
+}
 /********************
 
 	CLEARFIX

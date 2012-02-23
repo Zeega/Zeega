@@ -38,6 +38,9 @@ this.jda = {
 	
 	search : function(obj)
 	{
+		
+		obj.query = $('#search-bar').find('input[value!="search the archive"]').val();
+		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
 
 	},

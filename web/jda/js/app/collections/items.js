@@ -30,6 +30,7 @@
 			//$(this.el).fadeTo(100,1);
 			//$("#results-count").fadeTo(100,1);
 			$('#spinner').spin(false);
+			$(this.el).show();
 			return this;
 		},
 		
@@ -49,6 +50,7 @@
 			var _this = this;
 			//$("#results-count").fadeTo(1000,0.5);
 			//$(this.el).fadeTo(1000,0.5);
+			if (obj.page == 1) {$(this.el).hide();}
 			$('#spinner').spin('small');
 			
 			var hash = '';
@@ -61,10 +63,11 @@
 			
 			this.collection.setSearch(obj,reset);
 			this.collection.fetch({
+				add : obj.page > 1 ? true : false,
 				success : function(model, response){ 
-					jda.app.killScroll = false; //to activate infinite scroll again
 					$('#results-count').text("Showing " + _this.collection.length + " of " + response["items_count"]+ " results");
 					_this.render();
+					jda.app.killScroll = false; //to activate infinite scroll again
 					
 				}
 			});
