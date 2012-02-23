@@ -30,8 +30,29 @@
 			//$(this.el).fadeTo(100,1);
 			//$("#results-count").fadeTo(100,1);
 			$('#spinner').spin(false);
+			$('#results-count').show();
 			$(this.el).show();
 			return this;
+		},
+
+		renderTags : function(tags){
+			$("#related-tags ul").empty();
+			if (tags.length > 0){
+				_.each( _.toArray(tags), function(tag){
+					var li = '<li><a href=".">'+tag.name+'</a></li>';
+					$("#related-tags ul").append(li);
+					$("#related-tags li").filter(":last").click(function(){
+						jda.app.search({ 	
+                            					tags: tag.name,
+                            					page:1, 
+                            				});
+						return false;
+					});
+				})
+				$("#related-tags").show();
+			} else {
+				$("#related-tags").hide();
+			}
 		},
 		
 
@@ -52,7 +73,8 @@
 			//$(this.el).fadeTo(1000,0.5);
 			if (obj.page == 1) {$(this.el).hide();}
 			$('#spinner').spin('small');
-			
+			$('#results-count').hide();
+			$('#related-tags').hide();
 			var hash = '';
 			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query;
 			if( !_.isUndefined(obj.tags) ) hash += 'tags/' + obj.tags;
@@ -66,6 +88,7 @@
 				add : obj.page > 1 ? true : false,
 				success : function(model, response){ 
 					$('#results-count').text("Showing " + _this.collection.length + " of " + response["items_count"]+ " results");
+					_this.renderTags(response.tags);
 					_this.render();
 					jda.app.killScroll = false; //to activate infinite scroll again
 					
@@ -81,8 +104,13 @@
 	Items.Collection = Backbone.Collection.extend({
 		
 		model:Items.Model,
-		base : 'http://dev.zeega.org/jdaapi/web/api/search?r_itemswithcollections=0&r_items=1',
-		search : {page:1},
+		base : 'http://dev.zeega.org/jdaapi/web/api/search?',
+		search : {	page:1,
+					r_itemswithcollections: 0,
+					r_items:1,
+					r_tags:1
+
+							},
 	
 		url : function()
 		{
@@ -92,6 +120,9 @@
 			if( !_.isUndefined(this.search.tags) ) url += '&tags=' + this.search.tags;
 			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
 			if( !_.isUndefined(this.search.page) ) url += '&page=' + this.search.page;
+			if( !_.isUndefined(this.search.r_items) ) url += '&r_items=' + this.search.r_items;
+			if( !_.isUndefined(this.search.r_tags) ) url += '&r_tags=' + this.search.r_tags;
+			if( !_.isUndefined(this.search.r_itemswithcollections) ) url += '&r_itemswithcollections=' + this.search.r_itemswithcollections;
 			console.log('search url: '+ url);
 			return url;
 		},

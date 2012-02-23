@@ -76,7 +76,9 @@
 	items list
 
 **************************************/
-
+#list-view{
+	clear:both;
+}
 #items-list li, #items-list a
 {
 	padding:12px 0;

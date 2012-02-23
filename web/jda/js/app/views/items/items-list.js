@@ -61,7 +61,7 @@
 			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
 				blanks["title"] = "Untitled";
 			}
-			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == ""){
+			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == "" || this.model.get("media_creator_realname") == "Unknown"){
 				blanks["author"] = this.model.get("media_creator_username");
 			} else {
 				blanks["author"] = this.model.get("media_creator_realname");	

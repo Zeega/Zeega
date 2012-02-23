@@ -30,7 +30,7 @@ $(document).ready(function(){
             if  ($(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
                     if (jda.app.killScroll == false) { // Keeps the loader from fetching more than once.
                             jda.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
-                            var page = jda.app.itemViewCollection.collection.search.page;
+                         
                             jda.app.search({ 	
                             					page: jda.app.itemViewCollection.collection.search.page+1 
                             				});
