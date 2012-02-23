@@ -11,7 +11,7 @@
 			var _this = this;
 
 			var template;
-			switch( this.model.get('type') )
+			switch( this.model.get('media_type') )
 			{
 				case 'Image':
 					template = this.getImageTemplate();
@@ -123,7 +123,7 @@
 			'</div>'+
 			'<div class="span7">'+
 				'<div class="item-title"><%= title %></div>'+
-				'<div class="item-source"><%= source %></div>'+
+				'<div class="item-source"><%= layer_type %></div>'+
 				'<div class="item-author">by <%= author %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+

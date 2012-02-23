@@ -11,7 +11,7 @@
 			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
 		
-			$(this.el).spin('small');
+			$('#spinner').spin('small');
 
 		},
 	
@@ -27,9 +27,9 @@
 			})
 
 			
-			$(this.el).fadeTo(100,1);
-			$("#results-count").fadeTo(100,1);
-			$(this.el).spin(false);
+			//$(this.el).fadeTo(100,1);
+			//$("#results-count").fadeTo(100,1);
+			$('#spinner').spin(false);
 			return this;
 		},
 		
@@ -47,14 +47,13 @@
 		search : function(obj,reset)
 		{
 			var _this = this;
-			$("#results-count").fadeTo(1000,0.5);
-			$(this.el).fadeTo(1000,0.5);
-			$(this.el).spin('small');
+			//$("#results-count").fadeTo(1000,0.5);
+			//$(this.el).fadeTo(1000,0.5);
+			$('#spinner').spin('small');
 			
 			var hash = '';
 			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query;
 			if( !_.isUndefined(obj.tags) ) hash += 'tags/' + obj.tags;
-			if( !_.isUndefined(obj.type) ) hash += 'type/' + obj.type;
 			if( !_.isUndefined(obj.content) ) hash += '/content/' + obj.content;
 			
 			//update hash but don't fire a second action
@@ -63,8 +62,8 @@
 			this.collection.setSearch(obj,reset);
 			this.collection.fetch({
 				success : function(model, response){ 
-					
-					$('#results-count').text(response["items_count"]+ " results");
+					jda.app.killScroll = false; //to activate infinite scroll again
+					$('#results-count').text("Showing " + _this.collection.length + " of " + response["items_count"]+ " results");
 					_this.render();
 					
 				}
@@ -79,8 +78,8 @@
 	Items.Collection = Backbone.Collection.extend({
 		
 		model:Items.Model,
-		base : 'http://dev.zeega.org/jda/web/api/search?',
-		search : {},
+		base : 'http://dev.zeega.org/jdaapi/web/api/search?r_itemswithcollections=0&r_items=1',
+		search : {page:1},
 	
 		url : function()
 		{
@@ -88,8 +87,8 @@
 			var url = this.base;
 			if( !_.isUndefined(this.search.query) && this.search.query.length > 0) url += '&q=' + this.search.query;
 			if( !_.isUndefined(this.search.tags) ) url += '&tags=' + this.search.tags;
-			if( !_.isUndefined(this.search.type) ) url += '&type=' + this.search.type;
 			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
+			if( !_.isUndefined(this.search.page) ) url += '&page=' + this.search.page;
 			console.log('search url: '+ url);
 			return url;
 		},

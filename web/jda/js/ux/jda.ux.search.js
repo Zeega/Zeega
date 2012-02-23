@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 	$('#search-bar').find('input').focus(function(){
 		$(this).attr("placeholder", "");
@@ -23,6 +24,23 @@ $(document).ready(function(){
 		
 		return false;
 	});
+	
+	//Infinite Scroll
+    jda.app.killScroll = false; 
+    $(window).scroll(function(){ 
+            if  ($(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
+                    if (jda.app.killScroll == false) { // Keeps the loader from fetching more than once.
+                            jda.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
+                            var page = jda.app.itemViewCollection.collection.search.page;
+                            jda.app.search({ 	query:$('#search-bar').find('input[value!="search the archive"]').val(), 
+                            					content:$('#content').val(), 
+                            					page: jda.app.itemViewCollection.collection.search.page+1 
+                            				});
+
+                    }
+            }
+    });
+	
 
 	//Sets variable for Fancybox "more" view to false each time the page is reloaded
 	sessionStorage.setItem('moreFancy', false);
@@ -80,7 +98,7 @@ $(document).ready(function(){
            	var thisModel = jda.app.itemViewCollection.collection.get(elementID);
 			var fancyView = null;
 
-			switch(thisModel.get("source")){
+			switch(thisModel.get("media_type")){
 				case 'Image':
 					fancyView = new FancyBoxImageView({model:thisModel});
            			fancyView.render(this);

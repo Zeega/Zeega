@@ -52,7 +52,7 @@ var FancyBoxView = Backbone.View.extend({
 		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title') == "none" || this.model.get('title') == null ? this.model.get('source') : this.model.get('title'),
+			title : this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == null ? this.model.get('media_type') : this.model.get('title'),
 			description : this.model.get('description'),
 			creator : this.model.get('media_creator_username'),
 		};
