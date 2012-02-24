@@ -297,7 +297,7 @@ this.jda = {
 		//This will be altered to handle multiple search queries
 		if( !_.isUndefined(search.query) ){
 			q = search.query;
-			cqlFilters.push("title LIKE '" + q + "' OR media_creator_username LIKE '" + q + "' OR description LIKE '" + q + "'");
+			cqlFilters.push("title LIKE '%" + q + "%' OR media_creator_username LIKE '%" + q + "%' OR description LIKE '%" + q + "%'");
 			//cqlFilters.push("title LIKE '" + q + "'");
 		}
 		if( !_.isUndefined(search.tags) ){
