@@ -276,6 +276,53 @@
 	cursor: pointer;
 }
 
+
+
+/*time slider */
 #range-slider{
-	margin : 20px 150px 30px 150px;
+	margin : 20px 144px 0px 144px;
+	top : 20px;
 }
+
+.date-time-block{
+	position: absolute;
+	top : -20px;
+	border : 1px solid #999;
+	border-radius: 3px;
+	padding : 3px;
+	background : #F4F4F4;
+	width : 167px;
+}
+
+.date-time-block>input{
+	font-size: 12px;
+	margin : 1px;
+	text-align: right;
+	padding : 2px;
+	border : 1px solid #CCC;
+}
+
+#start-time, #end-time{
+	width : 55px;
+}
+
+#start-date, #end-date{
+	width : 95px;
+}
+
+#event-time-slider{
+	position: relative;
+	height : 60px;
+}
+
+#ui-datepicker-div 
+{
+ z-index: 1005 !important; /* must be > than popup editor (950) */
+}
+
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }

@@ -22,11 +22,12 @@ var loadFiles = [
 	'order!../lib/jquery.fancybox-1.3.4/fancybox/jquery.easing-1.3.pack',
 	'order!../lib/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack',
 	'order!../lib/jquerySVG/jquery.svg',
-	'order!../lib/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min',
+	'order!../lib/jquery-ui-1.8.18.custom/js/jquery-ui-1.8.18.custom.min',
 	'order!../lib/spin',
 	'order!../lib/spin-jquery',
 	'order!../lib/OpenLayers-2.11/OpenLayers',
 	'order!../lib/date.format',
+	'order!../lib/jquery-ui-timepicker-addon',
 
 	//mvc
 	'order!../app/jda',

@@ -85,41 +85,122 @@ this.jda = {
 	
 	initTimeSlider : function()
 	{
-	if( !this.timliderLoaded )
+	_this = this;
+	if( !this.timesliderLoaded )
 		{
 			this.timeSliderLoaded = true;
 			timeSliderContainer = $("#event-time-slider");
 			
 			//Put HTML into the div
-			timesliderHTML = "<div id='range-slider'></p>";
+			timesliderHTML = 
+				"<div id='date-time-start' class='date-time-block'>" +
+					"<input type='text' name='start-date' id='start-date' value='' class='date-picker'>" + 
+					"<input type='text' name='start-time' id='start-time' value='' class='time-picker'>" +
+				"</div>" +  
+				"<div id='date-time-end' class='date-time-block'>" +
+					"<input type='text' name='end-date' id='end-date' value='' class='date-picker'>" +
+					"<input type='text' name='end-time' id='end-time' value='' class='time-picker'>" +
+				"</div>" +
+				"<div id='range-slider'></div>";
 			timeSliderContainer.html(timesliderHTML);
 			
+			//add the jquery-ui date and time pickers and change handlers
+			$('#start-time').timepicker({}).change(this.setStartDateTimeSliderHandle);
+			$('#end-time').timepicker({}).change(this.setEndDateTimeSliderHandle);
+			
+			$('#start-date').datepicker({
+				onSelect: function() {},
+				dateFormat : 'MM d, yy',
+				onClose : this.setStartDateTimeSliderHandle
+			});
+
+			$('#end-date').datepicker({
+				onSelect: function() {},
+				dateFormat : 'MM d, yy',
+				onClose : this.setEndDateTimeSliderHandle
+			});
+			
 			//Set up the range slider
+			//times are seconds since jan 1 1970
+			minTime = 1293840000;
+			maxTime = 1330095357;
+			//maxTime = 1293940000;      //short range for testing hours and minutes
 			$("#range-slider").slider({
 				range: true, 
-			 	min: 0, 
-			 	max: 500,
-				values: [75, 300],
+			 	min: minTime, 
+			 	max: maxTime,
+				values: [minTime, maxTime],
 			 	slide: function( event, ui ) {
-					this.setStartDateTime(ui.values[0]);
-					this.setEndDateTime(ui.values[1]);
-					this.upDateEventSearch();
+			 		if (ui.values[0]<ui.values[1]){
+						_this.setStartDateTimeSliderBubble(ui.values[0]);
+						_this.setEndDateTimeSliderBubble(ui.values[1]);
+						return true;
+					}else{
+						return false;
+					}
+				 },
+				 change : function(event, ui){	
+					_this.setStartDateTimeSliderBubble(ui.values[0]);
+					_this.setEndDateTimeSliderBubble(ui.values[1]);
+				 	//this is where the map should upDateEventSearch
 				 }
 			});
+			$("#range-slider").css("margin-left", $("#date-time-start").outerWidth());
+			$("#range-slider").css("margin-right", $("#date-time-end").outerWidth());
 			
 			
 			//Set the dateTime pickers to the starting slider condition
-			this.setStartDateTime($( "#range-slider" ).slider( "values", 0 ));
-			this.setEndDateTime($( "#range-slider" ).slider( "values", 1 ));
+			this.setStartDateTimeSliderBubble($( "#range-slider" ).slider( "values", 0 ));
+			this.setEndDateTimeSliderBubble($( "#range-slider" ).slider( "values", 1 ));
 		}
 	},
 	
-	setStartDateTime : function(val)
+	setStartDateTimeSliderHandle : function()
 	{
+		dateMillis = $("#start-date").datepicker('getDate').getTime();
+		timeStrings = $("#start-time").val().split(':');
+		h = timeStrings[0];
+		m = timeStrings[1].split(' ')[0];
+		timeMillis = h*60*60*1000 + m*60*1000;
+		seconds = (dateMillis + timeMillis)/1000;
+		oldValues =  $("#range-slider").slider( "option", "values" );
+		$( "#range-slider" ).slider( "option", "values", [seconds, oldValues[1]] );
+		jda.app.setStartDateTimeSliderBubble(seconds);
 	},
 	
-	setEndDateTime : function(val)
+	setEndDateTimeSliderHandle : function()
 	{
+		dateMillis = $("#end-date").datepicker('getDate').getTime();
+		timeStrings = $("#end-time").val().split(':');
+		h = timeStrings[0];
+		m = timeStrings[1].split(' ')[0];
+		timeMillis = h*60*60*1000 + m*60*1000;
+		seconds = (dateMillis + timeMillis)/1000;
+		oldValues =  $("#range-slider").slider( "option", "values" );
+		$( "#range-slider" ).slider( "option", "values", [oldValues[0], seconds] );
+		jda.app.setEndDateTimeSliderBubble(seconds);
+	},
+	
+	setStartDateTimeSliderBubble : function(val)
+	{		
+		centerX = $("#range-slider a").first().position()["left"];
+		console.log(centerX);
+		dateTimeWidth = $("#date-time-start").outerWidth();
+		$("#date-time-start").css("left", centerX);
+		var d = new Date(val*1000);
+		$("#start-date").val(d.format('mmmm d, yy'));
+		$("#start-time").val(d.format("h:MM tt"));
+	},
+	
+	setEndDateTimeSliderBubble : function(val)
+	{
+		handleWidth =  $("#range-slider a").last().outerWidth();
+		centerX = $("#range-slider a").last().position()["left"];
+		dateTimeWidth = $("#date-time-end").width();
+		$("#date-time-end").css("left", centerX + dateTimeWidth + handleWidth/2);
+		var d = new Date(val*1000);
+		$("#end-date").val(d.format('mmmm d, yy'));
+		$("#end-time").val(d.format("h:MM tt"));
 	},
 	
 	upDateEventSearch : function()
@@ -206,12 +287,18 @@ this.jda = {
 		var layers = [];
 		
 		//Set up the CQL filter for the geoserver based on existing search:
-		var format = new OpenLayers.Format.CQL();
+		var formatCQL = new OpenLayers.Format.CQL();
+		var formatXML = new OpenLayers.Format.XML();
+		var format10 = new OpenLayers.Format.Filter({version: "1.0.0"});
+
 		cqlFilters = [];   //array of filter strings
 		search = this.itemViewCollection.getSearch();	
 		
+		//This will be altered to handle multiple search queries
 		if( !_.isUndefined(search.query) ){
-			cqlFilters.push("q='" + search.query + "'");
+			q = search.query;
+			cqlFilters.push("title LIKE '" + q + "' OR media_creator_username LIKE '" + q + "' OR description LIKE '" + q + "'");
+			//cqlFilters.push("title LIKE '" + q + "'");
 		}
 		if( !_.isUndefined(search.tags) ){
 		 	cqlFilters.push("tags='" + search.tags + "'");
@@ -224,11 +311,23 @@ this.jda = {
 		}else{
 			cqlFilterString = "INCLUDE";   //acts as an empty filter
 		}
-		//Format the string 
-		//cqlFilterString = format.read(cqlFilterString);
-
-		console.log("Retrieving map data : " + cqlFilterString);
 		
+		//Format the string 
+		console.log("Retrieving map data CQL: " + cqlFilterString);
+
+
+  //   	try {
+// 			olFilter  = formatCQL.read(cqlFilterString);
+// 	    } catch (err) {
+//     	    console.log(err.message);
+// 	    }
+//         xmlFilter = formatXML.write(format10.write(olFilter))
+// 		
+// 		
+		
+		//console.log(olFilter);
+		//console.log("Retrieving map data XML: " + xmlFilter);
+
 		layers.push(new OpenLayers.Layer.WMS(
 			"cite:item - tiled",
 			this.geoUrl + "cite/wms",
@@ -236,7 +335,7 @@ this.jda = {
 				layers : 'cite:item',
 				transparent : true,
 				format : 'image/png',
-				CQL_FILTER : cqlFilterString 
+        		cql_filter : cqlFilterString
 			})
 		);
 		
