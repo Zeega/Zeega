@@ -486,6 +486,9 @@ opacity: 1;
 	border-top:1px solid whiteSmoke;
 	border-bottom:1px solid whiteSmoke;
 }
+#related-tags-title{
+	display:none;
+}
 #related-tags-title, #related-tags li{
 	display: inline;
 	font-variant: small-caps;
