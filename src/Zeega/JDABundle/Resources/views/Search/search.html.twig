@@ -18,16 +18,37 @@
 <link href="{{ asset('jda/css/imageStyles.css')}}" rel="stylesheet" type="text/css">
 
 
+
 <link href="{{ asset('jda/js/lib/jquerySVG/jquery.svg.css')}}" rel="stylesheet" type="text/css">
-<link href="{{ asset('jda/js/lib/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css')}}" rel="stylesheet" type="text/css">
 <link type="text/css" href="{{ asset('jda/js/lib/jquery-ui-1.8.18.custom/css/smoothness/jquery-ui-1.8.18.custom.css')}}" rel="Stylesheet" />
+
+<!-- Leaflet CSS --> 
+<link rel="stylesheet" href="{{ asset('jda/js/lib/leaflet/leaflet.css')}}" />
+<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('jda/js/lib/leaflet/leaflet.ie.css')}}" /><![endif]-->
+
+
+<!-- Tags --> 
+<link rel="stylesheet" type="text/css" href="{{ asset('jda/js/lib/jquery.tagsinput.css')}}" />
+
+<!-- FANCYBOX -->
+
+
+<!-- Add fancyBox -->
+<link rel="stylesheet" href="{{ asset('jda/css/zeega.fancybox.css')}}" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ asset('jda/js/lib/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ asset('jda/js/lib/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
+
 	
 {% endblock %}	
 
 {% block scripts %}
 
+
+
 <script type="text/javascript" src="http://s3.documentcloud.org/viewer/loader.js"></script>
 <script data-main="{{ asset('jda/js/loaders/search') }}" src="{{ asset('jda/js/lib/require/require-1.0.5.js') }}"></script>
+
+
 
 
 {% endblock %}
@@ -39,18 +60,43 @@
 {% block content %}
 
 <div class='container'>
-			
+
+	<!-- search-bar -->
 	<div id="search-bar" class='hero-unit group'>
 		<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>
-		<div id='search-filters' class="btn-group">
-			<a class='btn large active' data-goto-view='list' href="#">LIST</a>
-			<a class='btn large' data-goto-view='event' href="#">EVENT</a>
+		<span id="select-wrap"><span id="select-wrap-text">all formats</span><div class="arrow-down"></div><select id="content">
+		  <option value="all">all formats</option>
+		  <option value="Image">Images</option>
+		  <option value="Video">Video</option>
+		  <option value="Audio">Audio</option>
+		  <option value="Tweet">Tweet</option>
+		  <option value="Document">Document</option>
+		  <option value="Website">Website</option>
+		  <option value="PDF">PDF</option>
+		  <option value="Text">Testimonial</option>
+		</select>
+		</span>
+		
+	</div>
+
+	<!-- number of results -->
+	<div id="results-count"></div>
+
+	<!-- time & place vs list view -->
+	<div id='search-filters' class="btn-group">
+			<a id="list-view-button" class='btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">LIST VIEW</span></a>
+			<a id="time-view-button" class='btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">TIME & PLACE VIEW</span></a>
 			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
-		</div><!-- btn-group -->
-	</div><!-- search-bar -->
-			
+	</div>	
+
+	<!-- related tags -->
+	<div id="related-tags"><span id="related-tags-title" class="span2">related tags</span><ul class="span10"></ul></div>
+	
+	<!-- item list -->
 	<div id='list-view'>
+
 		<ul id="items-list" class='unstyled'></ul>
+		<div id="spinner"></div>
 	</div>
 	<div id='event-view' class='hidden'>
 		<div id='event-time-slider'></div>

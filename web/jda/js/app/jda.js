@@ -30,14 +30,26 @@ this.jda = {
 	init : function()
 	{
 		// Include all modules
-		this.Items = jda.module("items");
+
+		var Items = jda.module("items");
+		
 		// make item collection
-		this.itemViewCollection = new this.Items.ViewCollection();
+		this.itemViewCollection = new Items.ViewCollection();
 	},
-	
+	clearSearchFilters : function(){
+		$('#search-bar').find('input[value!="search the archive"]').val("");
+		$('#content').val("");
+
+	},
 	search : function(obj)
 	{
+		if( _.isUndefined(obj.query)) obj.query = new Array();
+		if($('#search-bar').find('input[value!="search the archive"]').val() != ""){
+			obj.query.push($('#search-bar').find('input[value!="search the archive"]').val());
+		}
+		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
+
 	},
 	
 	switchViewTo : function( view )
