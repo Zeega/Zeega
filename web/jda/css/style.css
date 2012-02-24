@@ -46,11 +46,12 @@
 	SEARCH BAR
 
 **************************************/
+
 #search-filters { float:right; padding: 0 0 5px 0;}
 #search-bar input
 {
 	width:760px;
-	float:left;
+	
 	font-size:2em;
 	font-weight:bold;
 	height:44px;
@@ -63,14 +64,50 @@
 	position:relative;
 	top:6px;
 }
-
+#search-bar{
+	position:relative;
+	margin:10px 0 30px 0;
+}
 #search-bar h5
 {
 	line-height:18px;
 	color:rgba(255,255,255,0.85);
 }
-
-
+#search-bar select{
+	opacity: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity=0);
+	border: 0;
+	background: transparent;
+	width:170px;
+	margin-left: 50px;
+}
+#select-wrap {
+	
+	position: absolute;
+	top: 20px;
+	left: 650px;
+	font-size: 2em;
+	font-weight: bold;
+	color: #999;
+	width: 200px;
+	border-left: 1px solid #CCC;
+}
+#select-wrap-text{
+	position: absolute;
+	top: 6px;
+	left: 40px;
+}
+.arrow-down {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #999;
+	position: absolute;
+	top: 12px;
+	left: 180px;
+}
 /**************************************
 
 	items list
@@ -188,8 +225,8 @@ p
 
 .hero-unit
 {
-	padding:24px;
-	padding-bottom:48px;
+	padding:10px 0 0 10px !important;
+	text-align:center;
 }
 
 
@@ -434,11 +471,12 @@ opacity: 1;
 
 .hidden{ display: none;}
 
-#results-count{
-	font-size: 2em;
-	font-weight: bold;
-	color: #555;
-	float:left;
+#results-count {
+	font-size: 1.5em;
+	color: #666;
+	float: left;
+	margin-top: 18px;
+	font-weight:bold;
 }
 #related-tags{
 	clear:both;
@@ -495,6 +533,7 @@ opacity: 1;
 #spinner{
 	margin-top:30px;
 }
+
 /********************
 
 	CLEARFIX

@@ -1,5 +1,8 @@
 
 $(document).ready(function(){
+	
+	
+
 	$('#search-bar').find('input').focus(function(){
 		$(this).attr("placeholder", "");
 	});
@@ -12,6 +15,7 @@ $(document).ready(function(){
 		}
 	});
 	$('#content').change(function(){
+		$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 		jda.app.search({ page:1});
 		return false;
 	});
@@ -27,13 +31,11 @@ $(document).ready(function(){
 	//Infinite Scroll
     jda.app.killScroll = false; 
     $(window).scroll(function(){ 
-            if  ($(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
+            if  (jda.app.isLoading = false && $(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
                     if (jda.app.killScroll == false) { // Keeps the loader from fetching more than once.
                             jda.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
                          
-                            jda.app.search({ 	
-                            					page: jda.app.itemViewCollection.collection.search.page+1 
-                            				});
+                            jda.app.search({ page: jda.app.itemViewCollection.collection.search.page+1 });
 
                     }
             }

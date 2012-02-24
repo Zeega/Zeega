@@ -11,8 +11,8 @@
 			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
 		
-			$('#spinner').spin('small');
-
+			$('#spinner').spin('large');
+			jda.app.isLoading = true;
 		},
 	
 		render : function()
@@ -29,9 +29,11 @@
 			
 			//$(this.el).fadeTo(100,1);
 			//$("#results-count").fadeTo(100,1);
+
 			$('#spinner').spin(false);
 			$('#results-count').show();
 			$(this.el).show();
+			jda.app.isLoading = false;
 			return this;
 		},
 
@@ -42,8 +44,9 @@
 					var li = '<li><a href=".">'+tag.name+'</a></li>';
 					$("#related-tags ul").append(li);
 					$("#related-tags li").filter(":last").click(function(){
+						jda.app.clearSearchFilters();
 						jda.app.search({ 	
-                            					tags: tag.name,
+                            					query: "tag:" + tag.name,
                             					page:1, 
                             				});
 						return false;
@@ -71,13 +74,13 @@
 			var _this = this;
 			//$("#results-count").fadeTo(1000,0.5);
 			//$(this.el).fadeTo(1000,0.5);
+			jda.app.isLoading = true;
 			if (obj.page == 1) {$(this.el).hide();}
-			$('#spinner').spin('small');
+			$('#spinner').spin('large');
 			$('#results-count').hide();
 			$('#related-tags').hide();
 			var hash = '';
-			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query;
-			if( !_.isUndefined(obj.tags) ) hash += 'tags/' + obj.tags;
+			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query.toString();
 			if( !_.isUndefined(obj.content) ) hash += '/content/' + obj.content;
 			
 			//update hash but don't fire a second action
@@ -116,8 +119,7 @@
 		{
 			//constructs the search URL
 			var url = this.base;
-			if( !_.isUndefined(this.search.query) && this.search.query.length > 0) url += '&q=' + this.search.query;
-			if( !_.isUndefined(this.search.tags) ) url += '&tags=' + this.search.tags;
+			if( !_.isUndefined(this.search.query) && this.search.query.length > 0) url += '&q=' + this.search.query.toString();
 			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
 			if( !_.isUndefined(this.search.page) ) url += '&page=' + this.search.page;
 			if( !_.isUndefined(this.search.r_items) ) url += '&r_items=' + this.search.r_items;
