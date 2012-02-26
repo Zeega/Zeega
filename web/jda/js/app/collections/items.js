@@ -45,11 +45,15 @@
 					var li = '<li><a href=".">'+tag.name+'</a></li>';
 					$("#related-tags ul").append(li);
 					$("#related-tags li").filter(":last").click(function(){
-						jda.app.clearSearchFilters();
-						jda.app.search({ 	
-                            					query: "tag:" + tag.name,
-                            					page:1, 
-                            				});
+						/*$('.VS-search-inner').append('<div class="search_facet not_selected not_editing">'+
+														'<div class="category">tag:</div>'+
+														'<div class="search_facet_input_container">'+
+  														'<input type="text" class="search_facet_input VS-interface ui-autocomplete-input" value="" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="width: 47px; "><div style="opacity: 0; top: -9999px; left: -9999px; white-space: nowrap; position: absolute; " class="VS-input-width-tester VS-interface">'+
+  														+tag.name+
+  														'</div></div>'+
+														'<div class="search_facet_remove VS-icon VS-icon-cancel"></div></div>'
+													);*/
+						jda.app.search({ page:1,});
 						return false;
 					});
 				})
@@ -96,7 +100,7 @@
 					_this.renderTags(response.tags);
 					_this.render();
 					jda.app.killScroll = false; //to activate infinite scroll again
-					
+					jda.app.isLoading = false;
 				}
 			});
 		},

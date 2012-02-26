@@ -34,6 +34,7 @@ var loadFiles = [
 	'order!../lib/fancybox/helpers/jquery.fancybox-buttons',
 	'order!../lib/jeditable.min',
 	'order!../lib/dateformat/date.format',
+	'order!../lib/visualsearch/visualsearch',
 	//mvc
 	'order!../app/jda',
 	

@@ -30,6 +30,14 @@
 <!-- Tags --> 
 <link rel="stylesheet" type="text/css" href="{{ asset('jda/js/lib/jquery.tagsinput.css')}}" />
 
+<!-- Visual Search --> 
+<!--[if (!IE)|(gte IE 8)]><!-->
+  <link href="{{ asset('jda/js/lib/visualsearch/visualsearch-datauri.css')}}" media="screen" rel="stylesheet" type="text/css" />
+<!--<![endif]-->
+<!--[if lte IE 7]><!-->
+  <link href="{{ asset('jda/js/lib/visualsearch/visualsearch.css')}}" media="screen" rel="stylesheet" type="text/css" />
+<!--<![endif]-->
+
 <!-- FANCYBOX -->
 
 
@@ -64,17 +72,18 @@
 
 	<!-- search-bar -->
 	<div id="search-bar" class='hero-unit group'>
-		<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>
+		<!--<input class="input-medium" type="text" id="home-search-text-field" name="search-text" placeholder="{% trans %}jda.home.search{% endtrans %}"/>-->
+		<div class="visual_search"></div>
 		<span id="select-wrap"><span id="select-wrap-text">all formats</span><div class="arrow-down"></div><select id="content">
 		  <option value="all">all formats</option>
-		  <option value="Image">Images</option>
-		  <option value="Video">Video</option>
-		  <option value="Audio">Audio</option>
-		  <option value="Tweet">Tweet</option>
-		  <option value="Document">Document</option>
-		  <option value="Website">Website</option>
-		  <option value="PDF">PDF</option>
-		  <option value="Text">Testimonial</option>
+		  <option value="Image">images</option>
+		  <option value="Video">video</option>
+		  <option value="Audio">audio</option>
+		  <option value="Tweet">tweet</option>
+		  <option value="Document">document</option>
+		  <option value="Website">website</option>
+		  <option value="PDF">pdf</option>
+		  <option value="Text">testimonial</option>
 		</select>
 		</span>
 		

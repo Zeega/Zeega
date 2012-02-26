@@ -1,9 +1,49 @@
 
 $(document).ready(function(){
 	
-	
+	jda.app.visualSearch = VS.init({
+      container : $('.visual_search'),
+      query     : '',
+      callbacks : {
+        search       : function(){	jda.app.search({page:1});	},
+        // These are the facets that will be autocompleted in an empty input.
+		  facetMatches : function(callback) {
+		    callback([
+		      'tag', 'keyword',
+			/*{ label: 'city',    category: 'location' },
+		      { label: 'address', category: 'location' },
+		      { label: 'country', category: 'location' },
+		      { label: 'state',   category: 'location' },*/
+		    ]);
+		  },
+        	// These are the values that match specific categories, autocompleted
+		  // in a category's input field.  searchTerm can be used to filter the
+		  // list on the server-side, prior to providing a list to the widget.
+		  valueMatches : function(facet, searchTerm, callback) {
+		    switch (facet) {
+		    /*case 'account':
+		        callback([
+		          { value: '1-amanda', label: 'Amanda' },
+		          { value: '2-aron',   label: 'Aron' },
+		          { value: '3-eric',   label: 'Eric' },
+		          { value: '4-jeremy', label: 'Jeremy' },
+		          { value: '5-samuel', label: 'Samuel' },
+		          { value: '6-scott',  label: 'Scott' }
+		        ]);
+		        break;*/
+		      case 'tag':
+		        callback(['sendai', 'japan', 'jishin']);
+		        break;
+		      case 'keyword':
+		        callback(['japan', 'something', 'something else']);
+		        break;
+		     
+		    }
+		  }
+      }
+    });
 
-	$('#search-bar').find('input').focus(function(){
+	/*$('#search-bar').find('input').focus(function(){
 		$(this).attr("placeholder", "");
 	});
 	$('#search-bar').find('input').keydown(function(e){
@@ -13,7 +53,7 @@ $(document).ready(function(){
 			jda.app.search({ page:1 });
 			return false;
 		}
-	});
+	});*/
 	$('#content').change(function(){
 		$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 		jda.app.search({ page:1});
@@ -31,7 +71,7 @@ $(document).ready(function(){
 	//Infinite Scroll
     jda.app.killScroll = false; 
     $(window).scroll(function(){ 
-            if  (jda.app.isLoading = false && $(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
+            if  (jda.app.isLoading == false && $(window).scrollTop()+200 >= ($(document).height() - ($(window).height()))){ 
                     if (jda.app.killScroll == false) { // Keeps the loader from fetching more than once.
                             jda.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
                          

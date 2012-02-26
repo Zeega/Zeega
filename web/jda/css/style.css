@@ -46,17 +46,22 @@
 	SEARCH BAR
 
 **************************************/
-
+.VS-search .VS-search-box {
+	-webkit-border-radius:6px !important;
+}
 #search-filters { float:right; padding: 0 0 5px 0;}
+#search{
+	height:44px;
+}
 #search-bar input
 {
-	width:760px;
+	/*width:760px;
 	
 	font-size:2em;
 	font-weight:bold;
 	height:44px;
-	background:white url('../images/search.png') left center no-repeat;
-	padding-left:42px;
+	
+	padding-left:42px;*/
 }
 
 ::-webkit-input-placeholder
@@ -79,34 +84,37 @@
 	filter:alpha(opacity=0);
 	border: 0;
 	background: transparent;
-	width:170px;
-	margin-left: 50px;
+	width:154px;
+	
 }
 #select-wrap {
-	
+	height:30px;
 	position: absolute;
 	top: 20px;
-	left: 650px;
-	font-size: 2em;
+	left: 745px;
+	font-size: 1.2em;
 	font-weight: bold;
 	color: #999;
-	width: 200px;
-	border-left: 1px solid #CCC;
+	width: 150px;
+	border-left: 2px solid #CCC;
+	border-right: 2px solid #CCC;
+	font-variant: small-caps;
+	font-family:Arial,sans-serif;
 }
 #select-wrap-text{
 	position: absolute;
 	top: 6px;
-	left: 40px;
+	left: 20px;
 }
 .arrow-down {
 	width: 0;
 	height: 0;
-	border-left: 10px solid transparent;
-	border-right: 10px solid transparent;
-	border-top: 10px solid #999;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid #999;
 	position: absolute;
-	top: 12px;
-	left: 180px;
+	top: 14px;
+	left: 117px;
 }
 /**************************************
 
@@ -225,7 +233,7 @@ p
 
 .hero-unit
 {
-	padding:10px 0 0 10px !important;
+	padding:20px 10px 10px 10px !important;
 	text-align:center;
 }
 

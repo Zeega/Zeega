@@ -36,16 +36,21 @@ this.jda = {
 		
 	},
 	clearSearchFilters : function(){
-		$('#search-bar').find('input[value!="search the archive"]').val("");
-		$('#content').val("");
+		
+		$('#content').val("all");
+		$('#content').trigger('change');
 
 	},
 	search : function(obj)
 	{
 		if( _.isUndefined(obj.query)) obj.query = new Array();
-		if($('#search-bar').find('input[value!="search the archive"]').val() != ""){
-			obj.query.push($('#search-bar').find('input[value!="search the archive"]').val());
+		if (!_.isUndefined(jda.app.visualSearch)){
+			obj.query.push(jda.app.visualSearch.searchBox.value()); 
 		}
+		
+		/*if($('#search-bar').find('input[value!="search the archive"]').val() != ""){
+			obj.query.push($('#search-bar').find('input[value!="search the archive"]').val());
+		}*/
 		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
 
