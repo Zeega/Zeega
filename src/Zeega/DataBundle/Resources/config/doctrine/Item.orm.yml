@@ -11,7 +11,7 @@ Zeega\DataBundle\Entity\Item:
             inversedBy: parent_items
             onDelete: CASCADE
             joinTable:
-                name: Collection
+                name: collection
                 joinColumns:
                     id:
                         referencedColumnName: id
