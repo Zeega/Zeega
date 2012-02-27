@@ -20,16 +20,16 @@ class ParserController extends Controller
 {
 	private $supportedServices = array( 
 		// flickr
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
-		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrPhoto", "IsSet" => false),
+		"#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet", "IsSet" => true),
 		
 		// mapbox
-		"#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#" => array("ParserClass" => "Zeega\CoreBundle\Parser\Mapbox\ParserMapboxTiles", "IsSet" => false),
+		"#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Mapbox\ParserMapboxTiles", "IsSet" => false),
 		
 		
 		// youtube
-		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
-		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\CoreBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
+		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
+		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}

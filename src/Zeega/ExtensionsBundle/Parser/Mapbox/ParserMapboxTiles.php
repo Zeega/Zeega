@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\CoreBundle\Parser\Mapbox;
+namespace Zeega\ExtensionsBundle\Parser\Mapbox;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
 use Zeega\DataBundle\Entity\Media;

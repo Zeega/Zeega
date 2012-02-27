@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\CoreBundle\Parser\Youtube;
+namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
 use Zeega\DataBundle\Entity\Media;
