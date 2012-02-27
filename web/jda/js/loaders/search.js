@@ -47,16 +47,9 @@ var loadFiles = [
 	'order!../app/collections/items',
 	
 	//views
-<<<<<<< HEAD
 	'order!../app/views/items/jda.view.item.search-results',
 	'order!../app/views/items/jda.view.item.map-popup',
-=======
-	'order!../app/views/tag.view',
-	'order!../app/views/items/items-list',
-	'order!../app/views/fancybox.views',
-	'order!../app/views/map.view',
 	
->>>>>>> 4893180bfd1468de76b9b443c20e1d184cc664e2
 	
 	'order!../app/index',
 
