@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/ItemTags.orm.yml
 Zeega\DataBundle\Entity\ItemTags:
     type: entity
+    table: itemtags
     repositoryClass: Zeega\DataBundle\Repository\ItemTagsRepository
     manyToOne:
         user:

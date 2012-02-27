@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/Item.orm.yml
 Zeega\DataBundle\Entity\Item:
     type: entity
+    table: item
     repositoryClass: Zeega\DataBundle\Repository\ItemRepository
     lifecycleCallbacks:
        prePersist: [onPrePersist]

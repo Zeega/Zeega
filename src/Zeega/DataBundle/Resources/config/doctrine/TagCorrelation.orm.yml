@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/TagCorrelation.orm.yml
 Zeega\DataBundle\Entity\TagCorrelation:
     type: entity
+    table: tagcorrelation
     repositoryClass: Zeega\DataBundle\Repository\TagCorrelationRepository
     manyToOne:
         tag:

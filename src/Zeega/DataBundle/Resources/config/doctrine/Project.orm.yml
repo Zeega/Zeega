@@ -1,6 +1,7 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Project.orm.yml
 Zeega\DataBundle\Entity\Project:
    type: entity
+   table: project
    cascade: remove
    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
    manyToMany:

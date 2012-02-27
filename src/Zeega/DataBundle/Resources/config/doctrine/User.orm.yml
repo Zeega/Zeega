@@ -1,7 +1,7 @@
 # src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
 Zeega\DataBundle\Entity\User:
    type: entity
-   table: zUser
+   table: zuser
    id:
        id:
            type: integer

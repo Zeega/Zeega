@@ -1,6 +1,7 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Sequence.orm.yml
 Zeega\DataBundle\Entity\Sequence:
    type: entity
+   table: sequence
    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
    manyToOne:
     project:

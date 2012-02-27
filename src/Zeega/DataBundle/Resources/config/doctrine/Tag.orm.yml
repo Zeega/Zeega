@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/Tag.orm.yml
 Zeega\DataBundle\Entity\Tag:
     type: entity
+    table: tag
     repositoryClass: Zeega\DataBundle\Repository\TagRepository
     oneToMany:
         item:
