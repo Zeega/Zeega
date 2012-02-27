@@ -16,31 +16,42 @@
 	background-image: url(../images/jdicons-darkgrey-50.png);
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
+	float:left;
+	margin-right:5px;
 }
-
+[class^="jdicon-small-"]
+{
+	width: 25px;
+	height: 25px;
+	background-size: 306px 164px;
+}
 .jdicon-image{background-position:0 0}
 .jdicon-email{background-position:-50px 0}
 .jdicon-website{background-position:-100px 0}
 .jdicon-twitter{background-position:-150px 0}
 .jdicon-facebook{background-position:-200px 0}
 .jdicon-map{background-position:-250px 0}
-.jdicon-document{background-position:-300px 0}
+.jdicon-document{background-position:-300px -50px}
 .jdicon-date{background-position:-0px -50px}
 .jdicon-video{background-position:-400px 0}
 .jdicon-article{background-position:-450px 0}
+.jdicon-pdf{background-position:-350px -50px}
+.jdicon-testimonial{background-position:-200px -200px}
 
-
+.jdicon-small-list{background-position:-125px -25px}
+.jdicon-small-world{background-position:-0px -50px}
 
 /**************************************
 
 	SEARCH BAR
 
 **************************************/
-#search-filters { float:left; padding: 8px 0 0 18px;}
+
+#search-filters { float:right; padding: 0 0 5px 0;}
 #search-bar input
 {
-	width:512px;
-	float:left;
+	width:760px;
+	
 	font-size:2em;
 	font-weight:bold;
 	height:44px;
@@ -53,25 +64,76 @@
 	position:relative;
 	top:6px;
 }
-
+#search-bar{
+	position:relative;
+	margin:10px 0 30px 0;
+}
 #search-bar h5
 {
 	line-height:18px;
 	color:rgba(255,255,255,0.85);
 }
-
-
+#search-bar select{
+	opacity: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity=0);
+	border: 0;
+	background: transparent;
+	width:170px;
+	margin-left: 50px;
+}
+#select-wrap {
+	
+	position: absolute;
+	top: 20px;
+	left: 650px;
+	font-size: 2em;
+	font-weight: bold;
+	color: #999;
+	width: 200px;
+	border-left: 1px solid #CCC;
+}
+#select-wrap-text{
+	position: absolute;
+	top: 6px;
+	left: 40px;
+}
+.arrow-down {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #999;
+	position: absolute;
+	top: 12px;
+	left: 180px;
+}
 /**************************************
 
 	items list
 
 **************************************/
-
-#items-list li
+#list-view{
+	clear:both;
+}
+#items-list li, #items-list a
 {
 	padding:12px 0;
+	color:#555;
 }
 
+#items-list li{
+	border-bottom:1px solid whiteSmoke;
+	border-radius:6px;
+}
+#items-list li:hover{
+	background-color:whiteSmoke;
+	cursor: pointer;
+}
+#items-list li a:hover{
+	text-decoration:none;
+	color:#08C;
+}
 /*
 #items-list li:nth-child(odd)
 {
@@ -138,9 +200,22 @@ a:visited
 {
 	color:red;
 }
-
-.btn a {color: white;}
-
+.btn{
+	font-family: Arial,sans-serif;
+	font-size: 11px !important;
+	font-weight: bold;
+	padding: 5px 15px 5px 10px !important;
+	-webkit-border-radius:6px !important;
+	
+}
+.btn-group a {
+	color: #666 !important;
+}
+.btn-text{
+	position: relative;
+	top: 6px;
+	left: 4px;
+}
 p
 {
 	text-align: justify;
@@ -150,8 +225,8 @@ p
 
 .hero-unit
 {
-	padding:24px;
-	padding-bottom:48px;
+	padding:10px 0 0 10px !important;
+	text-align:center;
 }
 
 
@@ -395,6 +470,72 @@ opacity: 1;
 }
 
 .hidden{ display: none;}
+
+#results-count {
+	font-size: 1.5em;
+	color: #666;
+	float: left;
+	margin-top: 18px;
+	font-weight:bold;
+}
+#related-tags{
+	clear:both;
+	height:20px;
+	margin-top: 10px;
+	padding: 5px 0;
+	border-top:1px solid whiteSmoke;
+	border-bottom:1px solid whiteSmoke;
+}
+#related-tags-title{
+	display:none;
+}
+#related-tags-title, #related-tags li{
+	display: inline;
+	font-variant: small-caps;
+	font-size: 16px;
+	font-weight: bold;
+	color: #666;
+	font-family: Arial, sans-serif;
+	margin-left:0;
+}
+#related-tags ul{
+	list-style:none;
+	
+}
+#related-tags ul, #related-tags li{
+	display: inline;
+}
+#related-tags li{
+	margin-right:20px;
+}
+.item-title{
+	text-align:justify;
+	font-weight:bold;
+}
+.item-date, .item-author, .item-source{
+	font-size:11px;
+	font-family:Arial, sans-serif;
+	color:#777;
+	line-height:16px;
+
+}
+.item-date{
+	text-align:right;
+}
+.item-author-left{
+	text-align:left;
+	margin-top:10px;
+}
+.item-description{
+	font-weight:normal;
+}
+.item-website{
+	font-weight:normal;
+
+}
+#spinner{
+	margin-top:30px;
+}
 
 /********************
 

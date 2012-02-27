@@ -30,14 +30,26 @@ this.jda = {
 	init : function()
 	{
 		// Include all modules
-		this.Items = jda.module("items");
+
+		var Items = jda.module("items");
+		
 		// make item collection
-		this.itemViewCollection = new this.Items.ViewCollection();
+		this.itemViewCollection = new Items.ViewCollection();
 	},
-	
+	clearSearchFilters : function(){
+		$('#search-bar').find('input[value!="search the archive"]').val("");
+		$('#content').val("");
+
+	},
 	search : function(obj)
 	{
+		if( _.isUndefined(obj.query)) obj.query = new Array();
+		if($('#search-bar').find('input[value!="search the archive"]').val() != ""){
+			obj.query.push($('#search-bar').find('input[value!="search the archive"]').val());
+		}
+		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
+
 	},
 	
 	switchViewTo : function( view )
@@ -73,8 +85,9 @@ this.jda = {
 	showEventView : function()
 	{
 		console.log('switch to Event view');
-		this.initWorldMap();
-		this.initTimeSlider();
+		var map = this.initWorldMap();
+		this.initTimeSlider(map);
+		this.initLayerControl();
 	},
 	
 	showTagView : function()
@@ -83,7 +96,25 @@ this.jda = {
 		
 	},
 	
-	initTimeSlider : function()
+	initLayerControl : function(){
+		_this=this;
+
+		$("#layer-control").tabs();
+		this.layerControlIsOut = true;
+		
+		$("#layer-control-drawer-tab").click(function(){
+			if (_this.layerControlIsOut){
+				console.log("retract layer controls");
+				$("#layer-control-drawer").animate({right : -200}, 400);
+			}else{
+				console.log("expand layer controls");
+				$("#layer-control-drawer").animate({right : 0}, 400);
+			}
+			_this.layerControlIsOut = !_this.layerControlIsOut;
+		})
+	},
+	
+	initTimeSlider : function(map)
 	{
 	_this = this;
 	if( !this.timesliderLoaded )
@@ -142,7 +173,7 @@ this.jda = {
 				 change : function(event, ui){	
 					_this.setStartDateTimeSliderBubble(ui.values[0]);
 					_this.setEndDateTimeSliderBubble(ui.values[1]);
-				 	//this is where the map should upDateEventSearch
+					_this.updateMapForTimeSlider(ui, map);
 				 }
 			});
 			$("#range-slider").css("margin-left", $("#date-time-start").outerWidth());
@@ -153,6 +184,16 @@ this.jda = {
 			this.setStartDateTimeSliderBubble($( "#range-slider" ).slider( "values", 0 ));
 			this.setEndDateTimeSliderBubble($( "#range-slider" ).slider( "values", 1 ));
 		}
+	},
+	
+	updateMapForTimeSlider : function(sliderUI, map){
+		startDate = new Date(sliderUI.values[0]*1000);
+		endDate = new Date(sliderUI.values[1]*1000);
+		startString = startDate.format('yyyy-mm-dd HH:MM:ss');
+		endString = endDate.format('yyyy-mm-dd HH:MM:ss');
+		map.layers[1].mergeNewParams({
+			'CQL_FILTER' : "media_date_created >= '" + startString + "' AND media_date_created <= '" + endString + "'"
+		});
 	},
 	
 	setStartDateTimeSliderHandle : function()
@@ -184,11 +225,10 @@ this.jda = {
 	setStartDateTimeSliderBubble : function(val)
 	{		
 		centerX = $("#range-slider a").first().position()["left"];
-		console.log(centerX);
 		dateTimeWidth = $("#date-time-start").outerWidth();
 		$("#date-time-start").css("left", centerX);
 		var d = new Date(val*1000);
-		$("#start-date").val(d.format('mmmm d, yy'));
+		$("#start-date").val(d.format('yyyy-mm-dd '));
 		$("#start-time").val(d.format("h:MM tt"));
 	},
 	
@@ -222,11 +262,12 @@ this.jda = {
 				{ 'layers' : 'basic' } );
 			map.addLayer( baseLayer );
 			map.setCenter(new OpenLayers.LonLat(140.652466, 38.052417), 9);
-			map.addLayers( this.getMapLayers() );
+			map.addLayers(this.getMapLayers());
 
 			this.startMapListeners( map );
 			this.mapLoaded = true;
 		}
+		return map;
 	},
 	
 	startMapListeners : function( map )
@@ -261,22 +302,32 @@ this.jda = {
 			_this.map = map;
 			OpenLayers.Event.stop(e);
 		});
+		$(".layer-checkbox").click(function(){
+			_this.toggleMapLayer($(this).attr("id"), map)
+		});
 	},
+	
+	toggleMapLayer : function(checkboxID, map) {
+		//map layer names are the same as checkbox id's
+		map.getLayersByName(checkboxID)[0].setVisibility($('#'+checkboxID).is(':checked'));
+	},
+	
 	
 	onMapClick : function(response)
 	{
 		//TODO close existing popups
-		//FIXIT clicking on an item in the OpenLayers popup does not ope the fancybox
-		
+		//FIXIT clicking on an item in the OpenLayers popup does not open the fancybox
 		//TODO error checking on response
-		var data = eval('(' + response.responseText + ')');
 		
+		var data = eval('(' + response.responseText + ')');
+		var Items = jda.module("items");
+
 		var map = this.map;
 		features = data["features"];
 		features.shift();  //removes first item which is empty
 		
-		mapPopUpList = new this.Items.MapPoppupViewCollection({
-			collection : new this.Items.Collection(features)
+		mapPopUpList = new Items.MapPoppupViewCollection({
+			collection : new Items.Collection(features)
 		});
 		popupHTML = $(mapPopUpList.el).html();
 		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true));
@@ -295,10 +346,12 @@ this.jda = {
 		search = this.itemViewCollection.getSearch();	
 		
 		//This will be altered to handle multiple search queries
+		
 		if( !_.isUndefined(search.query) ){
-			q = search.query;
-			cqlFilters.push("title LIKE '%" + q + "%' OR media_creator_username LIKE '%" + q + "%' OR description LIKE '%" + q + "%'");
-			//cqlFilters.push("title LIKE '" + q + "'");
+			for (var i=0; i<search.query.length; i++) {
+				q = search.query[i];
+//				cqlFilters.push("media_date_created >= '2011' AND media_date_created <= '2012'");
+			}
 		}
 		if( !_.isUndefined(search.tags) ){
 		 	cqlFilters.push("tags='" + search.tags + "'");
@@ -316,35 +369,34 @@ this.jda = {
 		console.log("Retrieving map data CQL: " + cqlFilterString);
 
 
-  //   	try {
-// 			olFilter  = formatCQL.read(cqlFilterString);
+// 	   	try {
+// 	   		if (cqlFilterString=="INCLUDE"){
+// 	   				olFilter  = new OpenLayers.Filter({});
+// 			}else{
+// 				olFilter  = formatCQL.read(cqlFilterString);
+// 			}
 // 	    } catch (err) {
 //     	    console.log(err.message);
 // 	    }
 //         xmlFilter = formatXML.write(format10.write(olFilter))
-// 		
-// 		
 		
-		//console.log(olFilter);
-		//console.log("Retrieving map data XML: " + xmlFilter);
-
+		
 		layers.push(new OpenLayers.Layer.WMS(
 			"cite:item - tiled",
 			this.geoUrl + "cite/wms",
 			{
 				layers : 'cite:item',
 				transparent : true,
-				format : 'image/png',
-        		cql_filter : cqlFilterString
+				format : 'image/png'
+//				'CQL_FILTER' : cqlFilterString
 			})
 		);
-		
-		
-		
-		/*
 
+		
+		//JapanMap layers.  For more layers, it will make sense to load these only when needed.
+		
 		layers.push( new OpenLayers.Layer.WMS(
-			"Municipal Districts",
+			"municipal-layer",
 			this.japanMapUrl + "wms",
 			{
 				layers : "geonode:Admin_Dissolve_Test2_JOB",
@@ -361,7 +413,7 @@ this.jda = {
 		);
 			
 		layers.push( new OpenLayers.Layer.WMS(
-			"Radiation",
+			"radiation-layer",
 			this.japanMapUrl + "wms",
 			{
 				layers : "geonode:rad_may11_contours_final_cgl",
@@ -377,7 +429,7 @@ this.jda = {
 		);
 		
 		layers.push( new OpenLayers.Layer.WMS(
-			"Casualties",
+			"casualties-layer",
 			this.japanMapUrl + "wms",
 			{
 				layers : "geonode:Slct_Casualty2010Join1_Final_zDe",
@@ -394,7 +446,7 @@ this.jda = {
 		);
 		
 		layers.push( new OpenLayers.Layer.WMS(
-			"Flooding",
+			"flooding-layer",
 			this.japanMapUrl + "wms",
 			{
 				layers : "geonode:japan8m_ezt",
@@ -410,7 +462,7 @@ this.jda = {
 		);
 			
 		layers.push( new OpenLayers.Layer.WMS(
-			"Shake",
+			"shake-layer",
 			this.japanMapUrl + "wms",
 			{
 				layers : "geonode:InstruIntensity_Clip_dOd",
@@ -425,13 +477,8 @@ this.jda = {
 				opacity : 0.3
 			})
 		);
-		*/
-		
 		return layers;
 	}
-	
-	
-	
 	
 }, Backbone.Events)
 

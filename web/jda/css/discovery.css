@@ -315,11 +315,32 @@
 	height : 60px;
 }
 
-#ui-datepicker-div 
-{
- z-index: 1005 !important; /* must be > than popup editor (950) */
+#event-view{
+	position : relative;
+	overflow: hidden;
 }
 
+#layer-control{
+	display : inline-block;
+	height : 780px;
+	width : 200px;
+}
+#layer-control-drawer-tab{
+	display : inline-block;
+}
+#layer-control-drawer{
+	display : inline-block;
+	z-index: 1004 !important;  
+	position : absolute;
+	right : 0px;
+	top : 70px;
+}
+
+
+
+#ui-datepicker-div {
+	z-index: 1005 !important;
+}
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
 .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }

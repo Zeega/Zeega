@@ -9,12 +9,10 @@
 		render: function(done)
 		{
 			var _this = this;
-
 			template = this.getTemplate();
-
 			var blanks = this.model.attributes;
-
-			$(this.el).html( _.template( template, blanks ))
+			id = this.model.get("id").split('.')[1];
+			$(this.el).html("<a class='fancymedia' id=" + id + ">" +  _.template( template, blanks ) + "</a>");
 			return this;
 		},
 
