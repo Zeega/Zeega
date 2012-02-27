@@ -13,7 +13,7 @@ class TagRepository extends EntityRepository
 
         // search query
         $qb->select('t')
-           ->from('Zeega\CoreBundle\:Tag', 't')
+           ->from('ZeegaDataBundle:Tag', 't')
            ->orderBy('t.date_created','DESC')
       	   ->setMaxResults($limit)
       	   ->setFirstResult($limit * $offset);

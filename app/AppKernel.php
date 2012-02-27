@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Zeega\CoreBundle\ZeegaCoreBundle(),
             new Zeega\DataBundle\ZeegaDataBundle(),
 			new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
+            new Zeega\ExtensionsBundle\ZeegaExtensionsBundle(),
         );
 
 

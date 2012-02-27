@@ -213,4 +213,14 @@ class Layer
     {
         return $this->sequences;
     }
+
+    /**
+     * Add sequences
+     *
+     * @param Zeega\DataBundle\Entity\Sequence $sequences
+     */
+    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
+    {
+        $this->sequences[] = $sequences;
+    }
 }

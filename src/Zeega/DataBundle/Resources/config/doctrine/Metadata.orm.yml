@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/Metadata.orm.yml
 Zeega\DataBundle\Entity\Metadata:
     type: entity
+    table: metadata
     oneToOne:
        item:
          targetEntity: Item

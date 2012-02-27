@@ -1,6 +1,7 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Site.orm.yml
 Zeega\DataBundle\Entity\Site:
    type: entity
+   table: site
    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
    manyToMany:
     users:

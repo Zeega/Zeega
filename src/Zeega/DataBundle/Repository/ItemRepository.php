@@ -12,12 +12,28 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
+		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
         {
-            $qb->where('i.title LIKE :query_string')
-               ->orWhere('i.media_creator_username LIKE :query_string')
-               ->orWhere('i.description LIKE :query_string')
-               ->setParameter('query_string','%' . $query['queryString'] . '%');
+			$queryString = $query['queryString'];
+			if(count($queryString) == 1)
+			{
+				if(strlen($queryString[0]))
+				{
+	            	$qb->where('i.title LIKE :query_string')
+	               		->orWhere('i.media_creator_username LIKE :query_string')
+	               		->orWhere('i.description LIKE :query_string')
+	               		->setParameter('query_string','%' . $queryString[0] . '%');
+				}
+			}
+			else if(count($queryString) > 1)
+			{
+				for($i=0; $i < count($queryString); $i++)
+				{ 
+					$qb->andWhere('i.title LIKE :query_string'.$i . ' OR i.media_creator_username LIKE :query_string'.$i . ' OR i.description LIKE :query_string'.$i)
+	               		->setParameter('query_string'.$i,'%' . $queryString[$i] . '%');            	
+				}
+			}
         }
         
         if(isset($query['userId']))
@@ -137,6 +153,20 @@ class ItemRepository extends EntityRepository
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.media_type = :count_filter')->setParameter('count_filter', 'Collection');
 		return array_sum($qb->getQuery()->getArrayResult());
+	}
+	
+	public function getQueryTags($query)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb->select('tg.name,tg.id,COUNT(tg.id) as occurrences')
+           ->from('ZeegaDataBundle:Tag', 'tg')
+           ->innerjoin('tg.item', 'tgit')
+		   ->innerjoin('tgit.item', 'i')
+		   ->setMaxResults(5)
+		   ->groupBy('tg.id')
+		   ->orderBy('occurrences','DESC');
+		$qb = $this->buildSearchQuery($qb, $query);
+		return $qb->getQuery()->getArrayResult();
 	}
 
     //  api/search

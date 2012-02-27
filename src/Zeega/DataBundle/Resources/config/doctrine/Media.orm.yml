@@ -1,6 +1,7 @@
 # src/Zeega/\CoreBundle\/Resources/config/doctrine/Media.orm.yml
 Zeega\DataBundle\Entity\Media:
     type: entity
+    table: media
     oneToOne:
        item:
          targetEntity: Item
