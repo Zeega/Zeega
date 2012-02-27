@@ -8,7 +8,13 @@
 
 
 *********************************************/
-
+require.config({
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	paths : {
+			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
+		}
+})
 var loadFiles = [
 	'jquery',
 
