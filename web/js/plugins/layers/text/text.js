@@ -205,9 +205,15 @@ var TextLayer = ProtoLayer.extend({
 			
 		});
 
+/*
+		var myNicEditor = new nicEditor();
+		myNicEditor.setPanel('edit-panel');
+		//myNicEditor.addInstance('layer-preview-67');
+*/
+
 		//this.visualEditorElement.children('.text-layer-content')[0].style.WebkitColumnCount = this.attr.columns;
 		//console.log('text layer alohad')
-		Aloha.jQuery(content).aloha();
+		//Aloha.jQuery(content).aloha();
 		//window.Aloha.unregisterEditable( Aloha.jQuery(content) );
 		//console.log( window.Aloha )
 		/*

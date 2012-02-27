@@ -47,6 +47,7 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
+	'order!lib/nicedit/nicEdit',
 //	'order!lib/bootstrap',
 
 //models
