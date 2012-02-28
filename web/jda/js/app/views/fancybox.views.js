@@ -10,6 +10,12 @@ var FancyBoxView = Backbone.View.extend({
 		'click .fancybox-less-button' : 'less',
 
 	},
+	beforeClose : function(){
+
+	},
+	afterShow : function(){
+
+	},
 	more : function(){
 		var _this=this;
 		sessionStorage.setItem('moreFancy', true);
@@ -100,9 +106,10 @@ var FancyBoxView = Backbone.View.extend({
 		$(this.el).find('.title').editable(
 			function(value, settings)
 			{ 
+				
 				_this.model.save({ 	title:value}, 
 						{
-							url:sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/"+ _this.model.id,
+							url: jda.app.apiLocation + "api/items/"+ _this.model.id,
 							success: function(model, response) { 
 								console.log("Updated item title for item " + model.id);
 			 				},
@@ -129,6 +136,7 @@ var FancyBoxView = Backbone.View.extend({
 			{ 
 				_this.model.save({ description:value }, 
 						{
+							url: jda.app.apiLocation + "api/items/"+ _this.model.id,
 							success: function(model, response) { 
 								theElement.find('.description').text(_this.model.get("description"));
 								console.log("Updated item description for item " + _this.model.id);
@@ -157,6 +165,7 @@ var FancyBoxView = Backbone.View.extend({
 			{ 
 				_this.model.save({ "media_creator_username":value }, 
 						{
+							url: jda.app.apiLocation + "api/items/"+ _this.model.id,
 							success: function(model, response) { 
 								console.log("Updated item creator for item " + _this.model.id);
 			 				},
@@ -185,7 +194,7 @@ var FancyBoxView = Backbone.View.extend({
 		});
 		$(this.el).find('.yes-confirm-delete').click(function(e){
 			
-			var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+			var deleteURL = jda.app.apiLocation + "api/items/"
 						+ _this.model.id;
 			
 
@@ -325,9 +334,11 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		//copy the cloned item into the el
 		var mediaHTML =  template( blanks ) ;
 
-		$(this.el).find('.fancybox-media-item').html(mediaHTML);
+		
 
-
+		//$(this.el).find('.fancybox-media-item').html(mediaHTML);
+		this.unique =Math.floor(Math.random() *10000)
+		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
 		
 
 
@@ -335,6 +346,21 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		obj.content = $(this.el);
 		
 		return this;
+	},
+	afterShow:function(){
+	
+		console.log('afterShow');
+		
+		var source = "http://www.youtube.com/watch?v="+this.model.get('uri')+"&controls=0";
+		//format is either youtube or video
+		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,format:'youtube',load:'true'});
+		
+	},
+	
+	beforeClose: function(){
+		console.log('beforeClose');
+		Popcorn.destroy( this.plyr.pop );
+
 	},
 	getMediaTemplate : function()
 	{
@@ -656,6 +682,7 @@ var FancyBoxTestimonialView = FancyBoxView.extend({
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		var text = this.model.get('text');
+
 
 		//Fill in tweet-specific stuff
 		var blanks = {

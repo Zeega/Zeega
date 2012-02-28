@@ -45,14 +45,15 @@
 					var li = '<li><a href=".">'+tag.name+'</a></li>';
 					$("#related-tags ul").append(li);
 					$("#related-tags li").filter(":last").click(function(){
-						/*$('.VS-search-inner').append('<div class="search_facet not_selected not_editing">'+
-														'<div class="category">tag:</div>'+
-														'<div class="search_facet_input_container">'+
-  														'<input type="text" class="search_facet_input VS-interface ui-autocomplete-input" value="" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="width: 47px; "><div style="opacity: 0; top: -9999px; left: -9999px; white-space: nowrap; position: absolute; " class="VS-input-width-tester VS-interface">'+
-  														+tag.name+
-  														'</div></div>'+
-														'<div class="search_facet_remove VS-icon VS-icon-cancel"></div></div>'
-													);*/
+						
+						//clear all current search filters
+						jda.app.visualSearch.searchBox.clearSearch();
+
+						//add only tag filter
+						jda.app.visualSearch.searchBox.addFacet('tag', tag.name, 0);
+						
+
+
 						jda.app.search({ page:1,});
 						return false;
 					});
@@ -93,14 +94,21 @@
 			jda.app.router.navigate(hash,{trigger:false});
 			
 			this.collection.setSearch(obj,reset);
+			
+			
 			this.collection.fetch({
 				add : obj.page > 1 ? true : false,
 				success : function(model, response){ 
+					
+					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
+					jda.app.visualSearch.searchBox.disableFacets();
+					
 					$('#results-count').text("Showing " + _this.collection.length + " of " + response["items_count"]+ " results");
 					_this.renderTags(response.tags);
 					_this.render();
 					jda.app.killScroll = false; //to activate infinite scroll again
-					jda.app.isLoading = false;
+					jda.app.isLoading = false;	//to activate infinite scroll again
+
 				}
 			});
 		},
@@ -113,7 +121,7 @@
 	Items.Collection = Backbone.Collection.extend({
 		
 		model:Items.Model,
-		base : 'http://dev.zeega.org/jdaapi/web/api/search?',
+		base : jda.app.apiLocation + 'api/search?',
 		search : {	page:1,
 					r_itemswithcollections: 0,
 					r_items:1,

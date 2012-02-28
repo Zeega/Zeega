@@ -20,7 +20,7 @@ this.jda = {
 
   // Keep active application instances namespaced under an app object.
   app: _.extend({
-	
+	apiLocation : 'http://dev.zeega.org/jdaapi/web/',
 	currentView : 'list',
 	mapLoaded : false,
 	japanMapUrl : "http://worldmap.harvard.edu/geoserver/",
@@ -35,17 +35,32 @@ this.jda = {
 		this.itemViewCollection = new Items.ViewCollection();
 		
 	},
-	clearSearchFilters : function(){
-		
-		$('#content').val("all");
-		$('#content').trigger('change');
+	
 
-	},
 	search : function(obj)
 	{
-		if( _.isUndefined(obj.query)) obj.query = new Array();
+		
+		//Parse out search box values for putting them in the Search query
 		if (!_.isUndefined(jda.app.visualSearch)){
-			obj.query.push(jda.app.visualSearch.searchBox.value()); 
+			
+
+			var facets = jda.app.visualSearch.searchQuery.models;
+			
+			var tagQuery = "tag:";
+			var textQuery = "";
+
+			_.each(facets, function(facet) {
+			    switch (facet.get('category')) {
+			        case 'text':
+			            textQuery = textQuery.length > 0 ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
+			        break;
+			        case 'tag':
+			            tagQuery = tagQuery.length > 4 ? tagQuery + ", " + facet.get('value') : tagQuery + facet.get('value');
+			        break;
+			        
+			    }
+			});
+			obj.query = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
 		}
 		
 		/*if($('#search-bar').find('input[value!="search the archive"]').val() != ""){

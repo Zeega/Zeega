@@ -35,9 +35,13 @@ var loadFiles = [
 	'order!../lib/jeditable.min',
 	'order!../lib/dateformat/date.format',
 	'order!../lib/visualsearch/visualsearch',
+	'order!../lib/popcorn_flash',
 	//mvc
 	'order!../app/jda',
 	
+	//plugins
+	'order!../plugins/players/plyr',
+
 	//models
 	'order!../app/models/items',
 	'order!../app/models/tag',

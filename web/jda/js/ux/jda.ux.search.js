@@ -5,11 +5,20 @@ $(document).ready(function(){
       container : $('.visual_search'),
       query     : '',
       callbacks : {
-        search       : function(){	jda.app.search({page:1});	},
+        search       : function(){	
+        	jda.app.search({page:1});	
+        },
+        clearSearch : function(){
+        	$('#content').val("all");
+        	jda.app.visualSearch.searchBox.disableFacets();
+		    jda.app.visualSearch.searchBox.value('');
+		    jda.app.visualSearch.searchBox.flags.allSelected = false;
+		    
+        },
         // These are the facets that will be autocompleted in an empty input.
 		  facetMatches : function(callback) {
 		    callback([
-		      'tag', 'keyword',
+		      'tag', 'keyword', 'text'
 			/*{ label: 'city',    category: 'location' },
 		      { label: 'address', category: 'location' },
 		      { label: 'country', category: 'location' },
@@ -37,28 +46,22 @@ $(document).ready(function(){
 		      case 'keyword':
 		        callback(['japan', 'something', 'something else']);
 		        break;
+		      case 'text':
+		        callback(['japan', 'something', 'something else']);
+		        break;
 		     
 		    }
 		  }
       }
     });
 
-	/*$('#search-bar').find('input').focus(function(){
-		$(this).attr("placeholder", "");
-	});
-	$('#search-bar').find('input').keydown(function(e){
-		// Bind searching to search field
-		if (e.which == 13)
-		{
-			jda.app.search({ page:1 });
-			return false;
-		}
-	});*/
+
 	$('#content').change(function(){
 		$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 		jda.app.search({ page:1});
 		return false;
 	});
+
 	
 	$('#search-filters a').click(function(){
 		$(this).siblings().show();
@@ -122,10 +125,14 @@ $(document).ready(function(){
     		
     	},
     	beforeClose : function() {
+
+    			this.fancyView.beforeClose();
     			//set video src to null to prevent browser bug
-    			
     			$('video').attr("src", null);
 
+    	},
+    	afterShow : function(){
+    		this.fancyView.afterShow();
     	},
 
 		/* This is where we decide which kind of content to put in the fancybox */    
@@ -136,44 +143,44 @@ $(document).ready(function(){
     		
             var elementID = $(this.element).attr('id');
            	var thisModel = jda.app.itemViewCollection.collection.get(elementID);
-			var fancyView = null;
+			this.fancyView = null;
 
 			switch(thisModel.get("media_type")){
 				case 'Image':
-					fancyView = new FancyBoxImageView({model:thisModel});
-           			fancyView.render(this);
+					this.fancyView = new FancyBoxImageView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'Video':
-           			fancyView = new FancyBoxVideoView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxVideoView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'Audio':
-           			fancyView = new FancyBoxAudioView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxAudioView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'Youtube':
-           			fancyView = new FancyBoxYouTubeView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxYouTubeView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'Tweet':
-           			fancyView = new FancyBoxTweetView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxTweetView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
-       			case 'Testimonial':
-	       			fancyView = new FancyBoxTestimonialView({model:thisModel});
-	       			fancyView.render(this);
+       			case 'Text':
+	       			this.fancyView = new FancyBoxTestimonialView({model:thisModel});
+	       			this.fancyView.render(this);
 	       			break;
            		case 'DocumentCloud':
-           			fancyView = new FancyBoxDocCloudView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxDocCloudView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'Website':
-           			fancyView = new FancyBoxWebsiteView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
            		case 'PDF':
-           			fancyView = new FancyBoxWebsiteView({model:thisModel});
-           			fancyView.render(this);
+           			this.fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			this.fancyView.render(this);
            			break;
 			}
         },
