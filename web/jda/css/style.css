@@ -31,7 +31,7 @@
 .jdicon-twitter{background-position:-150px 0}
 .jdicon-facebook{background-position:-200px 0}
 .jdicon-map{background-position:-250px 0}
-.jdicon-document{background-position:-300px -50px}
+.jdicon-document{background-position:-300px 0px}
 .jdicon-date{background-position:-0px -50px}
 .jdicon-video{background-position:-400px 0}
 .jdicon-article{background-position:-450px 0}
@@ -40,6 +40,7 @@
 
 .jdicon-small-list{background-position:-125px -25px}
 .jdicon-small-world{background-position:-0px -50px}
+.jdicon-small-document{background-position:-150px -0px}
 
 /**************************************
 
@@ -73,6 +74,7 @@
 	line-height:18px;
 	color:rgba(255,255,255,0.85);
 }
+
 #search-bar select{
 	opacity: 0;
 	-moz-opacity: 0;
@@ -82,8 +84,8 @@
 	width:170px;
 	margin-left: 50px;
 }
+
 #select-wrap {
-	
 	position: absolute;
 	top: 20px;
 	left: 650px;

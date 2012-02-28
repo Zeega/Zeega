@@ -321,26 +321,51 @@
 }
 
 #layer-control{
+	z-index:-1;
 	display : inline-block;
 	width : 200px;
 	height : 786px;
+	padding-right:50px;
 }
+
+#layer-control>ul{
+	margin-left : -55px;
+	padding-left : 55px;
+	margin-right : -50px;
+}
+
 #layer-control-drawer-tab{
 	display : inline-block;
+	vertical-align : top;
+	margin-top : 5px;
+	cursor : pointer;
 }
+
+.ui-tabs .ui-tabs-nav li a {
+	padding-top : 3px;
+	padding-bottom : 3px;
+}
+	
 #layer-legend{
 	overflow: scroll;
 	height : 700px;
 }
+
 #layer-control-drawer{
 	display : inline-block;
 	z-index: 1004 !important;  
 	position : absolute;
-	right : 0px;
+	right : -50px;
 	top : 100px;
 }
 
-
+.legend-entry{
+	border-bottom : 1px solid #999;
+}
+.legend-entry p{
+	padding-bottom: :0px;
+	padding-top: 10px;
+}
 
 #ui-datepicker-div {
 	z-index: 1005 !important;

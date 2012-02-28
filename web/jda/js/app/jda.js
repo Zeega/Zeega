@@ -112,10 +112,13 @@ this.jda = {
 		$("#layer-control-drawer-tab").click(function(){
 			if (_this.layerControlIsOut){
 				console.log("retract layer controls");
-				$("#layer-control-drawer").animate({right : -200}, 400);
+				$("#layer-control-drawer-arrows").html("&lt;&lt;");
+				$("#layer-control-drawer").animate({right : "-=200"}, 400);
 			}else{
 				console.log("expand layer controls");
-				$("#layer-control-drawer").animate({right : 0}, 400);
+				console.log($("#layer-control-drawer-arrows"));
+				$("#layer-control-drawer-arrows").html("&gt;&gt;");
+				$("#layer-control-drawer").animate({right : "+=200"}, 400);
 			}
 			_this.layerControlIsOut = !_this.layerControlIsOut;
 		})

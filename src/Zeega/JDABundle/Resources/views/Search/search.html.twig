@@ -7,6 +7,7 @@
 
 
 {% block stylesheets %}
+<link type="text/css" href="{{ asset('jda/js/lib/jquery-ui-1.8.18.custom/css/smoothness/jquery-ui-1.8.18.custom.css')}}" rel="Stylesheet" />
 
 <link href="{{ asset('jda/css/bootstrap-2.0.css')}}" rel="stylesheet" type="text/css">
 
@@ -20,7 +21,6 @@
 
 
 <link href="{{ asset('jda/js/lib/jquerySVG/jquery.svg.css')}}" rel="stylesheet" type="text/css">
-<link type="text/css" href="{{ asset('jda/js/lib/jquery-ui-1.8.18.custom/css/smoothness/jquery-ui-1.8.18.custom.css')}}" rel="Stylesheet" />
 
 <!-- Leaflet CSS --> 
 <link rel="stylesheet" href="{{ asset('jda/js/lib/leaflet/leaflet.css')}}" />
@@ -103,7 +103,7 @@
 		<div id='event-map'></div>
 		<div id="layer-control-drawer">
 		<div id ="layer-control-drawer-tab">
-			<p>x</p>
+			<p><span id="layer-control-drawer-arrows">&gt;&gt;</span><i class="jdicon-small--document"></i></p>
 		</div>
 		<div id="layer-control">
 			<ul>
