@@ -175,7 +175,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
     
         // search query
-        $qb->select('distinct i')
+        $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
