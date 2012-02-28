@@ -173,7 +173,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
     
         // search query
-        $qb->select('i.id as id, i.metadata_id, i.site_id, i.media_id, i.user_id, i.title, i.description, i.text, i.uri,i.date_created,
+        $qb->select('i.id as id, i.metadata_id, i.site_id, i.media_id, i.user_id, i.title, i.description, i.text, i.uri, i.attribution_uri, i.date_created,
                     i.media_type, i.layer_type, i.thumbnail_url, i.child_items_count, i.media_geo_latitude, i.media_geo_longitude, i.media_date_created, i.media_date_created_end,
                     i.media_creator_username, i.media_creator_realname, i.archive')
             ->from('ZeegaDataBundle:Item', 'i')
