@@ -79,6 +79,7 @@ class ItemRepository extends EntityRepository
 		
 		if(isset($query['tagsName']))
       	{
+      	     $qb->groupBy('i.id');
 			 $qb->innerjoin('i.tags', 'it')
 			    ->innerjoin('it.tag','t')
                 ->andWhere('t.name IN (:tags_name)')
@@ -177,7 +178,6 @@ class ItemRepository extends EntityRepository
                     i.media_creator_username, i.media_creator_realname, i.archive')
             ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
-            ->groupBy('i.id')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
