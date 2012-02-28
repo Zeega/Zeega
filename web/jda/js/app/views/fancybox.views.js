@@ -657,10 +657,11 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 	getMediaTemplate : function()
 	{
 		
-		var html =	'<div id="fancybox-website">'+
+		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
+					'<div id="fancybox-website">'+
 					'<iframe type="text/html" width="100%" height="335px" src="<%=src%>" frameborder="0">'+
 					'</iframe>'+
-					'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div></div>';
+					'</div>';
 								
 		return html;
 	},
@@ -709,7 +710,7 @@ var FancyBoxTestimonialView = FancyBoxView.extend({
 	getMediaTemplate : function()
 	{
 		
-		var html =	'<p class="fancybox-testimonial"><%= text %></p>';
+		var html =	'<p class="fancybox-testimonial"><i class="jdicon-testimonial" style="margin-right:20px;margin-bottom:20px"></i><%= text %></p>';
 								
 		return html;
 	},

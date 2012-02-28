@@ -327,15 +327,13 @@ overflow:hidden;
 }
 .website-caption{
 	background: rgba(0, 0, 0, 0.5);
-	position: relative;
-	top: -342px;
-	height: 25px;
 	color:white;
-	padding: 20px 15px 15px 15px;
+	padding: 10px;
 	font-weight: bold;
 	font-size: 16px;
 	word-wrap: break-word !important;
 	line-height: 10px;
+	width:612px;
 }
 .website-caption a{
 	color: white;
