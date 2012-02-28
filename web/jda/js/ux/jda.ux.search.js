@@ -13,7 +13,7 @@ $(document).ready(function(){
         	jda.app.visualSearch.searchBox.disableFacets();
 		    jda.app.visualSearch.searchBox.value('');
 		    jda.app.visualSearch.searchBox.flags.allSelected = false;
-		    
+
         },
         // These are the facets that will be autocompleted in an empty input.
 		  facetMatches : function(callback) {
@@ -54,7 +54,7 @@ $(document).ready(function(){
 		  }
       }
     });
-
+	$("#search-bar").fadeTo('slow',1);
 
 	$('#content').change(function(){
 		$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );

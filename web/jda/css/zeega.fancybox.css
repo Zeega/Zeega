@@ -36,6 +36,9 @@
 	font-weight: bold;
 	display:inline;
 }
+.fancybox-media-container-more .title{
+	display:block !important;
+}
 #fancybox-media-container .source{
 	margin-left:30px;	
 }
@@ -183,7 +186,7 @@
 	margin:0 !important;
 }
 .fancybox-media-item-more .fancybox-tweet{
-	font-size:2.0em;
+	font-size:1.5em;
 	height:auto;
 }
 .fancybox-media-item-more .fancybox-testimonial{
@@ -254,25 +257,22 @@
 /*override the default from the fancybox stylesheet*/
 .fancybox-outer {
 	background-color:#fff !important;
+	color:#555 !important;
 }
 .fancybox-editable{
 	
 }
 .fancybox-tweet, .fancybox-testimonial{
-	font-size: 3.3em;
+	font-size: 2.0em;
 	line-height: 1.3em;
-	color: #3289CB;
-	text-align: left;
+	text-align: left !important;
 	font-weight: bold;
 	height: 420px;
 	font-family: Palatino, serif;
 	overflow: auto;
 
 }
-.fancybox-testimonial{
-	font-size:2.0em;
-	text-align:left !important;
-}
+
 #fancybox-document-cloud{
 
 }

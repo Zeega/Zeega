@@ -58,7 +58,7 @@ var FancyBoxView = Backbone.View.extend({
 		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == null ? this.model.get('media_type') : this.model.get('title'),
+			title : this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == null ? " " : this.model.get('title'),
 			description : this.model.get('description'),
 			creator : this.model.get('media_creator_username'),
 		};
@@ -530,7 +530,7 @@ var FancyBoxTweetView = FancyBoxView.extend({
 	getMediaTemplate : function()
 	{
 		
-		var html =	'<p class="fancybox-tweet"><%= tweet %></p>';
+		var html =	'<p class="fancybox-tweet"><i class="jdicon-twitter" style="margin-right:20px;margin-bottom:20px"></i><%= tweet %></p>';
 								
 		return html;
 	},

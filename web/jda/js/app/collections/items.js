@@ -103,7 +103,7 @@
 					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
 					jda.app.visualSearch.searchBox.disableFacets();
 					
-					$('#results-count').text("Showing " + _this.collection.length + " of " + response["items_count"]+ " results");
+					$('#results-count').text(response["items_count"]+ " results");
 					_this.renderTags(response.tags);
 					_this.render();
 					jda.app.killScroll = false; //to activate infinite scroll again

@@ -63,10 +63,14 @@
 #search-bar{
 	position:relative;
 	margin:10px 0 30px 0;
+	opacity: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity=0);
 }
 #search-bar h5
 {
 	line-height:18px;
+	height:44px;
 	color:rgba(255,255,255,0.85);
 }
 #search-bar select{
@@ -533,7 +537,7 @@ opacity: 1;
 
 }
 #spinner{
-	margin-top:30px;
+	margin-top:50px;
 }
 
 /********************
