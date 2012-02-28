@@ -20,7 +20,6 @@ this.jda = {
 
   // Keep active application instances namespaced under an app object.
   app: _.extend({
-	
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,
@@ -49,7 +48,12 @@ this.jda = {
 		}
 		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
-
+		if (this.currentView == 'event'){
+			cqlFilterString = this.itemViewCollection.getCQLSearchString();
+			this.map.layers[1].mergeNewParams({
+				'CQL_FILTER' : cqlFilterString
+			});	
+		}
 	},
 	
 	switchViewTo : function( view )
@@ -85,6 +89,8 @@ this.jda = {
 	showEventView : function()
 	{
 		console.log('switch to Event view');
+		//For some reason, the map collapses after a search to 0px width
+		$("#event-view").width(940);
 		var map = this.initWorldMap();
 		this.initTimeSlider(map);
 		this.initLayerControl();
@@ -97,6 +103,7 @@ this.jda = {
 	},
 	
 	initLayerControl : function(){
+		console.log("Initializing Layer Controls");
 		_this=this;
 
 		$("#layer-control").tabs();
@@ -116,6 +123,7 @@ this.jda = {
 	
 	initTimeSlider : function(map)
 	{
+	console.log("Initializing Time Slider");
 	_this = this;
 	if( !this.timesliderLoaded )
 		{
@@ -189,10 +197,12 @@ this.jda = {
 	updateMapForTimeSlider : function(sliderUI, map){
 		startDate = new Date(sliderUI.values[0]*1000);
 		endDate = new Date(sliderUI.values[1]*1000);
-		startString = startDate.format('yyyy-mm-dd HH:MM:ss');
-		endString = endDate.format('yyyy-mm-dd HH:MM:ss');
-		map.layers[1].mergeNewParams({
-			'CQL_FILTER' : "media_date_created >= '" + startString + "' AND media_date_created <= '" + endString + "'"
+		this.itemViewCollection.setStartAndEndTimes(startDate, endDate);
+		
+		//Time filter string		
+		cqlFilterString = this.itemViewCollection.getCQLSearchString();
+		this.map.layers[1].mergeNewParams({
+			'CQL_FILTER' : cqlFilterString
 		});
 	},
 	
@@ -228,7 +238,7 @@ this.jda = {
 		dateTimeWidth = $("#date-time-start").outerWidth();
 		$("#date-time-start").css("left", centerX);
 		var d = new Date(val*1000);
-		$("#start-date").val(d.format('yyyy-mm-dd '));
+		$("#start-date").val(d.format('mmmm d, yy'));
 		$("#start-time").val(d.format("h:MM tt"));
 	},
 	
@@ -243,23 +253,22 @@ this.jda = {
 		$("#end-time").val(d.format("h:MM tt"));
 	},
 	
-	upDateEventSearch : function()
-	{
-	},
-	
 	initWorldMap : function()
 	{
+		console.log("Initializing Map");
 		if( !this.mapLoaded )
 		{
 			//OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
 			//OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
-			//this.CQLformat = new OpenLayers.Format.CQL();
-		
+			
 			var map = new OpenLayers.Map('event-map');
 			var baseLayer = new OpenLayers.Layer.WMS(
 				"OpenLayers WMS",
 				"http://vmap0.tiles.osgeo.org/wms/vmap0?",
-				{ 'layers' : 'basic' } );
+				{ 
+					'layers' : 'basic',
+				}
+			);
 			map.addLayer( baseLayer );
 			map.setCenter(new OpenLayers.LonLat(140.652466, 38.052417), 9);
 			map.addLayers(this.getMapLayers());
@@ -267,6 +276,7 @@ this.jda = {
 			this.startMapListeners( map );
 			this.mapLoaded = true;
 		}
+		this.map = map;
 		return map;
 	},
 	
@@ -299,12 +309,47 @@ this.jda = {
 			
 			OpenLayers.loadURL(_this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick);
 			_this.mapClickEvent = e;
-			_this.map = map;
 			OpenLayers.Event.stop(e);
 		});
+		
 		$(".layer-checkbox").click(function(){
-			_this.toggleMapLayer($(this).attr("id"), map)
+			_this.toggleMapLayer($(this).attr("id"), map);
+			_this.toggleLegendEntry($(this).attr("id"), map);
 		});
+	},
+	
+	toggleLegendEntry :  function(checkboxID, map) {
+		switch(checkboxID){
+			case "municipal-layer":			
+				layer = "geonode:Admin_Dissolve_Test2_JOB";
+				legendID = "municipal-legend";
+				break;
+			case "radiation-layer":			
+				layer = "geonode:rad_may11_contours_final_cgl";
+				legendID = "radiation-legend";
+				break;
+			case "casualties-layer":			
+				layer =  "geonode:Slct_Casualty2010Join1_Final_zDe";
+				legendID = "casualties-legend";
+				break;
+			case "flooding-layer":			
+				layer =  "geonode:japan8m_ezt";
+				legendID = "flooding-legend";
+				break;
+			case "shake-layer":
+				layer ="geonode:InstruIntensity_Clip_dOd";
+				legendID = "shake-legend";
+				break;
+		}
+		
+		//If the image hasn't been loaded yet, do so
+		if ($("#"+legendID).find("img").length==0){
+			legendString = "http://worldmap.harvard.edu/geoserver/wms?TRANSPARENT=TRUE&EXCEPTIONS=application%2Fvnd.ogc.se_xml&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&LLBBOX=133.65533295554525,34.24189997810896,143.33901303676075,42.22959346742014&URL=http%3A%2F%2Fworldmap.harvard.edu%2Fgeoserver%2Fwms&TILED=true&TILESORIGIN=14878443.604346,4061329.7164352&LAYER="+layer+"&FORMAT=image/gif&SCALE=1091958.1364361627";
+			$("#"+legendID).append("<img src='" + legendString + "'>");
+		}		
+		//toggle visibility of that legend item
+		$("#"+legendID).toggleClass("hidden");
+
 	},
 	
 	toggleMapLayer : function(checkboxID, map) {
@@ -312,6 +357,9 @@ this.jda = {
 		map.getLayersByName(checkboxID)[0].setVisibility($('#'+checkboxID).is(':checked'));
 	},
 	
+	onLegendLoad : function(response){
+		console.log(response);
+	},
 	
 	onMapClick : function(response)
 	{
@@ -335,66 +383,24 @@ this.jda = {
 	
 	getMapLayers : function()
 	{
+		_this = this;
 		var layers = [];
 		
 		//Set up the CQL filter for the geoserver based on existing search:
-		var formatCQL = new OpenLayers.Format.CQL();
-		var formatXML = new OpenLayers.Format.XML();
-		var format10 = new OpenLayers.Format.Filter({version: "1.0.0"});
+		cqlFilterString = this.itemViewCollection.getCQLSearchString();
 
-		cqlFilters = [];   //array of filter strings
-		search = this.itemViewCollection.getSearch();	
-		
-		//This will be altered to handle multiple search queries
-		
-		if( !_.isUndefined(search.query) ){
-			for (var i=0; i<search.query.length; i++) {
-				q = search.query[i];
-//				cqlFilters.push("media_date_created >= '2011' AND media_date_created <= '2012'");
-			}
-		}
-		if( !_.isUndefined(search.tags) ){
-		 	cqlFilters.push("tags='" + search.tags + "'");
-		 }
-		if( !_.isUndefined(search.type) ){  
-			cqlFilters.push("type='" + search.type + "'");
-		}
-		if (cqlFilters.length>0){
-			cqlFilterString = cqlFilters.join("AND");
-		}else{
-			cqlFilterString = "INCLUDE";   //acts as an empty filter
-		}
-		
-		//Format the string 
-		console.log("Retrieving map data CQL: " + cqlFilterString);
-
-
-// 	   	try {
-// 	   		if (cqlFilterString=="INCLUDE"){
-// 	   				olFilter  = new OpenLayers.Filter({});
-// 			}else{
-// 				olFilter  = formatCQL.read(cqlFilterString);
-// 			}
-// 	    } catch (err) {
-//     	    console.log(err.message);
-// 	    }
-//         xmlFilter = formatXML.write(format10.write(olFilter))
-		
-		
 		layers.push(new OpenLayers.Layer.WMS(
 			"cite:item - tiled",
 			this.geoUrl + "cite/wms",
 			{
 				layers : 'cite:item',
 				transparent : true,
-				format : 'image/png'
-//				'CQL_FILTER' : cqlFilterString
-			})
-		);
-
+				format : 'image/png',
+				'CQL_FILTER' : cqlFilterString 
+			}
+		));
 		
 		//JapanMap layers.  For more layers, it will make sense to load these only when needed.
-		
 		layers.push( new OpenLayers.Layer.WMS(
 			"municipal-layer",
 			this.japanMapUrl + "wms",
@@ -428,7 +434,7 @@ this.jda = {
 			})
 		);
 		
-		layers.push( new OpenLayers.Layer.WMS(
+		layers.push(new OpenLayers.Layer.WMS(
 			"casualties-layer",
 			this.japanMapUrl + "wms",
 			{

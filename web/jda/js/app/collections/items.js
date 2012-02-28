@@ -98,8 +98,45 @@
 			});
 		},
 		
-		getSearch : function(){ return this.collection.search }
+		setStartAndEndTimes : function(startDate, endDate){
+			var search = this.collection.search;
+			search.times = {};
+			search.times.start = startDate.format('yyyy-mm-dd HH:MM:ss');
+			search.times.end = endDate.format('yyyy-mm-dd HH:MM:ss');
+		},
+		
+		getCQLSearchString : function(){
+			var search = this.collection.search;
+			var cqlFilters = [];
+			if( !_.isUndefined(search.times) ){
+				startString = search.times.start;
+				endString = search.times.end;
+				timeSTring = "(media_date_created >= '" + startString + "' AND media_date_created <= '" + endString + "')";	
+				cqlFilters.push(timeSTring);
+			}
+			if( !_.isUndefined(search.query) ){
+				for (var i=0; i<search.query.length; i++) {
+					q = search.query[i];
+					cqlFilters.push("(title LIKE '%"+q+"%' OR media_creator_username LIKE '%"+q+"%' OR description LIKE '%"+q+"%')");
+				}
+			}
+			if( !_.isUndefined(search.tags) ){
+				cqlFilters.push("tags='" + search.tags + "'");
+			 }
+			if( !_.isUndefined(search.type) ){  
+				cqlFilters.push("type='" + search.type + "'");
+			}
+			if (cqlFilters.length>0){
+				cqlFilterString = cqlFilters.join(" AND ");
+			}else{
+				cqlFilterString = "INCLUDE";   //acts as an empty filter
+			}
+			return cqlFilterString;
+		},
 	
+		
+		getSearch : function(){ return this.collection.search },
+		
 	});
 
 

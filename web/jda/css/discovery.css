@@ -322,18 +322,22 @@
 
 #layer-control{
 	display : inline-block;
-	height : 780px;
 	width : 200px;
+	height : 786px;
 }
 #layer-control-drawer-tab{
 	display : inline-block;
+}
+#layer-legend{
+	overflow: scroll;
+	height : 700px;
 }
 #layer-control-drawer{
 	display : inline-block;
 	z-index: 1004 !important;  
 	position : absolute;
 	right : 0px;
-	top : 70px;
+	top : 100px;
 }
 
 
