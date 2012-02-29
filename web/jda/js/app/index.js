@@ -17,21 +17,14 @@ jQuery(function($)
 		search : function( query )
 		{
 			
-			var obj = '';
+			var obj = '{page:1}';
 			if (!_.isUndefined(query)){
 				obj = QueryStringToHash(query);
 			}
 
-			//Don't search with JDA.search because that will check UI components and we want to override those with the URL
-			JDA.itemViewCollection.search(obj);
+			JDA.search(obj, true);
 
-			//clear all current search filters
-			//jda.app.visualSearch.searchBox.clearSearch();
 			
-			//loading from URL, load url stuff into the search bar
-
-			//add only tag filter
-			//jda.app.visualSearch.searchBox.addFacet('tag', tag.name, 0);*/
 		}
 
 		

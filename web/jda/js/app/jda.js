@@ -43,33 +43,68 @@ this.jda = {
 	},
 	
 
-	search : function(obj)
+	search : function(obj, useValuesFromURL)
 	{
 		
 		//Parse out search box values for putting them in the Search query
 		if (!_.isUndefined(jda.app.visualSearch)){
 
+			if (useValuesFromURL){
+				//get the search query and put it in the search box
+				var q = obj.q;
+				if (!_.isUndefined(q))
+				{
+					//check for tags
+					if (q.indexOf("tag:") >=0){
+						var tagPart = q.substr(q.indexOf("tag:") + 4);
+						var tagNames = tagPart.split(" ");
+						for(var i=0;i<tagNames.length;i++)
+						{
+							var tagName = tagNames[i];
+							jda.app.visualSearch.searchBox.addFacet('tag', tagName, 0);
+						}
+					}
+					//check for text
+					var textPart = q.indexOf("tag:") >= 0 ? q.substr(0,  q.indexOf("tag:")) : q;
+					var texts = textPart.split(",");
+					for(var i=0;i<texts.length;i++)
+					{
+						var text = texts[i];
+						jda.app.visualSearch.searchBox.addFacet('text', text, 0);
+					}
+					
+				}
+				if (!_.isUndefined(obj.content)){
+					$('#content').val(obj.content);
+					$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
+				}
+			}
+			else {
+				//Use content value from UI box
+				obj.content = $('#content').val();
 
-			var facets = jda.app.visualSearch.searchQuery.models;
-			
-			var tagQuery = "tag:";
-			var textQuery = "";
+				//Parse searchbox values
+				var facets = jda.app.visualSearch.searchQuery.models;
+				
+				var tagQuery = "tag:";
+				var textQuery = "";
 
-			_.each(facets, function(facet) {
-			    switch (facet.get('category')) {
-			        case 'text':
-			            textQuery = textQuery.length > 0 ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
-			        break;
-			        case 'tag':
-			            tagQuery = tagQuery.length > 4 ? tagQuery + ", " + facet.get('value') : tagQuery + facet.get('value');
-			        break;
-			        
-			    }
-			});
-			obj.query = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
+				_.each(facets, function(facet) {
+				    switch (facet.get('category')) {
+				        case 'text':
+				            textQuery = textQuery.length > 0 ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
+				        break;
+				        case 'tag':
+				            tagQuery = tagQuery.length > 4 ? tagQuery + ", " + facet.get('value') : tagQuery + facet.get('value');
+				        break;
+				        
+				    }
+				});
+				obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
+			}
 		}
 		
-		obj.content = $('#content').val();
+		
 		this.itemViewCollection.search(obj);
 		if (this.currentView == 'event'){
 			cqlFilterString = this.itemViewCollection.getCQLSearchString();

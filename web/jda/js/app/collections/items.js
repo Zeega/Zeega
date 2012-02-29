@@ -8,7 +8,7 @@
 			this.collection = new Items.Collection();
 			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
-			$(this.el).spin('small');
+			$('#spinner').spin('large');
 
 			jda.app.isLoading = true;
 		},
@@ -80,11 +80,13 @@
 			$("#related-tags, #related-tags-title").fadeTo(1000,0.5);
 			//$(this.el).fadeTo(1000,0.5);
 			jda.app.isLoading = true;
-			if (obj.page == 1) {$(this.el).hide();}
+			if (obj.page == 1) {
+				$(this.el).hide();
+			}
 			$('#spinner').spin('large');
 			
 			var hash = '';
-			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'q=' + obj.query + '&';
+			if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
 			if( !_.isUndefined(obj.content) ) { 
 				
 				hash += 'content='+ obj.content;
@@ -214,7 +216,7 @@
 		{
 			//constructs the search URL
 			var url = this.base;
-			if( !_.isUndefined(this.search.query) && this.search.query.length > 0) url += '&q=' + this.search.query.toString();
+			if( !_.isUndefined(this.search.q) && this.search.q.length > 0) url += '&q=' + this.search.q.toString();
 			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
 			if( !_.isUndefined(this.search.page) ) url += '&page=' + this.search.page;
 			if( !_.isUndefined(this.search.r_items) ) url += '&r_items=' + this.search.r_items;
@@ -228,7 +230,7 @@
 		{
 			if(reset) this.search = obj;
 			else _.extend(this.search,obj)
-			console.log('set search: '+obj.query)
+			console.log('set search: '+obj)
 		},
 		
 		getSearch : function()

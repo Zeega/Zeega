@@ -49,20 +49,7 @@ $(document).ready(function(){
       }
     });
 	
-	//See if we need to add search terms from URL into search box
-	var searchQuery = jda.app.itemViewCollection.collection.search.query;
-	var searchContent = jda.app.itemViewCollection.collection.search.content; 
 	
-	if (jda.app.visualSearch.searchBox.value() == '' && 
-		(searchQuery != null || searchContent != null)){
-		if (searchQuery != null && searchQuery.length >0){
-			jda.app.visualSearch.searchBox.addFacet('text', searchQuery, 0);
-		}
-		if (searchContent != null && searchContent.length >0){
-			$('#content').val(jda.app.itemViewCollection.collection.search.content);
-			$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
-		}
-	}
 
 	$("#search-bar").fadeTo('slow',1);
 
