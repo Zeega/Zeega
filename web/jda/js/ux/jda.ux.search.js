@@ -8,13 +8,7 @@ $(document).ready(function(){
         search       : function(){	
         	jda.app.search({page:1});	
         },
-        clearSearch : function(){
-        	$('#content').val("all");
-        	jda.app.visualSearch.searchBox.disableFacets();
-		    jda.app.visualSearch.searchBox.value('');
-		    jda.app.visualSearch.searchBox.flags.allSelected = false;
-
-        },
+        clearSearch : jda.app.clearSearchFilters,
         // These are the facets that will be autocompleted in an empty input.
 		  facetMatches : function(callback) {
 		    callback([
@@ -54,6 +48,22 @@ $(document).ready(function(){
 		  }
       }
     });
+	
+	//See if we need to add search terms from URL into search box
+	var searchQuery = jda.app.itemViewCollection.collection.search.query;
+	var searchContent = jda.app.itemViewCollection.collection.search.content; 
+	
+	if (jda.app.visualSearch.searchBox.value() == '' && 
+		(searchQuery != null || searchContent != null)){
+		if (searchQuery != null && searchQuery.length >0){
+			jda.app.visualSearch.searchBox.addFacet('text', searchQuery, 0);
+		}
+		if (searchContent != null && searchContent.length >0){
+			$('#content').val(jda.app.itemViewCollection.collection.search.content);
+			$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
+		}
+	}
+
 	$("#search-bar").fadeTo('slow',1);
 
 	$('#content').change(function(){
