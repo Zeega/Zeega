@@ -1,3 +1,5 @@
+
+
 // This contains the module definition factory function, application state,
 // events, and the router.
 this.jda = {
@@ -25,6 +27,7 @@ this.jda = {
 	mapLoaded : false,
 	japanMapUrl : "http://worldmap.harvard.edu/geoserver/",
 	geoUrl : "http://geo.zeega.org/geoserver/",
+	resultsPerPage : 100,
 	
 	init : function()
 	{
@@ -34,6 +37,7 @@ this.jda = {
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
 		
+		
 	},
 	
 
@@ -42,7 +46,7 @@ this.jda = {
 		
 		//Parse out search box values for putting them in the Search query
 		if (!_.isUndefined(jda.app.visualSearch)){
-			
+
 
 			var facets = jda.app.visualSearch.searchQuery.models;
 			
@@ -63,9 +67,6 @@ this.jda = {
 			obj.query = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
 		}
 		
-		/*if($('#search-bar').find('input[value!="search the archive"]').val() != ""){
-			obj.query.push($('#search-bar').find('input[value!="search the archive"]').val());
-		}*/
 		obj.content = $('#content').val();
 		this.itemViewCollection.search(obj);
 
@@ -112,7 +113,21 @@ this.jda = {
 		console.log('switch to Tag view')
 		
 	},
+
+	//NOTE - this does not search, it only clears out all the filters on the page
+	clearSearchFilters : function(){
 	
+    	//update the content filter
+    	$('#content').val("all");
+    	$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
+
+    	//remove search box values
+    	jda.app.visualSearch.searchBox.disableFacets();
+	    jda.app.visualSearch.searchBox.value('');
+	    jda.app.visualSearch.searchBox.flags.allSelected = false;
+
+        
+	},
 	initWorldMap : function()
 	{
 		if( !this.mapLoaded )

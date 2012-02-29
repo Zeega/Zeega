@@ -87,8 +87,12 @@
 			$('#spinner').spin('large');
 			
 			var hash = '';
-			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'text/' + obj.query.toString();
-			if( !_.isUndefined(obj.content) ) hash += '/content/' + obj.content;
+			if( !_.isUndefined(obj.query) && obj.query.length > 0) hash += 'q=' + obj.query + '&';
+			if( !_.isUndefined(obj.content) ) { 
+				
+				hash += 'content='+ obj.content;
+				
+			}
 			
 			//update hash but don't fire a second action
 			jda.app.router.navigate(hash,{trigger:false});
@@ -102,8 +106,8 @@
 					
 					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
 					jda.app.visualSearch.searchBox.disableFacets();
-					
-					$('#results-count').text(response["items_count"]+ " results");
+
+					$('#results-count').text(_this.addCommas(response["items_count"])+ " results");
 					_this.renderTags(response.tags);
 					_this.render();
 					jda.app.killScroll = false; //to activate infinite scroll again
@@ -113,8 +117,22 @@
 			});
 		},
 		
-		getSearch : function(){ return this.collection.search }
-	
+		getSearch : function(){ return this.collection.search },
+
+		//Formats returned results number
+		addCommas : function(nStr)
+		{
+		  nStr += '';
+		  x = nStr.split('.');
+		  x1 = x[0];
+		  x2 = x.length > 1 ? '.' + x[1] : '';
+		  var rgx = /(\d+)(\d{3})/;
+		  while (rgx.test(x1)) {
+		    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		  }
+		  return x1 + x2;
+		},
+
 	})
 
 
