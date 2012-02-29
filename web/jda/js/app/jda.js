@@ -50,7 +50,7 @@ this.jda = {
 		if (!_.isUndefined(jda.app.visualSearch)){
 
 			if (useValuesFromURL){
-				//get the search query and put it in the search box
+				//get the search query from URL and put it in the search box
 				var q = obj.q;
 				if (!_.isUndefined(q))
 				{

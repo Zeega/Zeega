@@ -44,28 +44,34 @@
 			
 			var blanks = this.model.attributes;
 			if (this.model.get("date_created") != null){
-				blanks["date"] = dateFormat(this.model.get("date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
+				var date = this.model.get("date_created");
+				blanks["date"] = dateFormat(this.model.get("date_created"), "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			}		
 			if (this.model.get("media_date_created") != null){
-				blanks["media_date"] = dateFormat(this.model.get("media_date_created").date, "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
+				blanks["media_date"] = dateFormat(this.model.get("media_date_created"), "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			} else {
 				blanks["media_date"] = "n/a";
 			}
 			if (this.model.get("text") != null){
-				blanks["text"] = this.linkifyTweet(this.model.get("text").substring(0,255) + "...");
+				var excerpt = this.model.get("text").toString();
+				blanks["text"] = this.linkifyTweet(excerpt);
 
 			}
 			if (this.model.get("description") != null){
 				blanks["description"] = this.model.get("description").substring(0,255) + "...";
 			}
 			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
+				blanks["title"] = "&nbsp;";
+			}
+			if (this.model.get("media_type") == "PDF" && (this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == ""  || this.model.get('title') == "&nbsp;" || this.model.get('title') == null)){
 				blanks["title"] = "Untitled";
 			}
-			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == "" || this.model.get("media_creator_realname") == "Unknown"){
+			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == "" || this.model.get("media_creator_realname") == "Unknown" || this.model.get("media_creator_realname") == "unknown"){
 				blanks["author"] = this.model.get("media_creator_username");
 			} else {
 				blanks["author"] = this.model.get("media_creator_realname");	
 			}
+
 			
 
 			$(this.el).html( _.template( template, blanks ) )

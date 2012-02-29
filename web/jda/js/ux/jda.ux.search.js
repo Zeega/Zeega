@@ -119,11 +119,14 @@ $(document).ready(function(){
 
     	helpers : {
     		title : false,
+    		buttons: {}
     		
     	},
     	beforeClose : function() {
 
-    			this.fancyView.beforeClose();
+    			if (this.fancyView !=null){
+    				this.fancyView.beforeClose();
+    			}
     			//set video src to null to prevent browser bug
     			$('video').attr("src", null);
 
@@ -167,7 +170,7 @@ $(document).ready(function(){
 	       			this.fancyView = new FancyBoxTestimonialView({model:thisModel});
 	       			this.fancyView.render(this);
 	       			break;
-           		case 'DocumentCloud':
+           		case 'Document':
            			this.fancyView = new FancyBoxDocCloudView({model:thisModel});
            			this.fancyView.render(this);
            			break;

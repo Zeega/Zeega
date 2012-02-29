@@ -58,16 +58,30 @@ var FancyBoxView = Backbone.View.extend({
 		/** Temp Fix **/
 		var blanks = {
 			sourceLink : this.model.get('attribution_uri'),
-			title : this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == null ? " " : this.model.get('title'),
+			title :  this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == null ? "&nbsp;" : this.model.get('title'),
 			description : this.model.get('description'),
 			creator : this.model.get('media_creator_username'),
 		};
-		
-		if(this.model.get('attribution_uri').indexOf('flickr')>-1) blanks.sourceText = 'View on Flickr';
-		else 	if(this.model.get('attribution_uri').indexOf('youtube')>-1) blanks.sourceText = 'View on Youtube';
-		else 	if(this.model.get('attribution_uri').indexOf('soundcloud')>-1) blanks.sourceText = 'Listen on Soundcloud';
-		else blanks.sourceText ='View Source';
-	
+
+		if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == "" || this.model.get("media_creator_realname") == "Unknown" || this.model.get("media_creator_realname") == "unknown"){
+			blanks["creator"] = this.model.get("media_creator_username");
+		} else {
+			blanks["creator"] = this.model.get("media_creator_realname");	
+		}
+		if (this.model.get("media_type") == "Website"){
+			blanks["creator"] = "&nbsp;";
+		}
+		if (this.model.get("media_type") == "PDF" && (this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == ""  || this.model.get('title') == "&nbsp;" || this.model.get('title') == null)){
+			blanks["title"] = "Untitled";
+		}
+		if(this.model.get('archive').indexOf('http')>0) {
+			blanks.sourceText = 'View Source';
+		} else {
+			blanks.sourceText = 'View on ' + this.model.get('archive');
+		}
+		if (this.model.get("media_type") == "Text"){
+			blanks.sourceText = 'Submitted to JDAarchive';
+		}
 		
 		//use template to clone the database items into
 		var template = _.template( this.getTemplate() );
