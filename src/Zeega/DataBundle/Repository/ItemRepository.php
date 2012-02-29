@@ -79,7 +79,6 @@ class ItemRepository extends EntityRepository
 		
 		if(isset($query['tagsName']))
       	{
-      	     $qb->groupBy('i.id');
 			 $qb->innerjoin('i.tags', 'it')
 			    ->innerjoin('it.tag','t')
                 ->andWhere('t.name IN (:tags_name)')
@@ -122,7 +121,7 @@ class ItemRepository extends EntityRepository
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 		
 		//return 0;
 	}
@@ -137,7 +136,7 @@ class ItemRepository extends EntityRepository
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.media_type <> :count_filter')->setParameter('count_filter', 'Collection');
 		
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 		
 		//return 0;
 	}
@@ -150,7 +149,7 @@ class ItemRepository extends EntityRepository
 
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.media_type = :count_filter')->setParameter('count_filter', 'Collection');
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 	}
 	
 	public function getQueryTags($query)
