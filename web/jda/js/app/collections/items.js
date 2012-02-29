@@ -1,7 +1,5 @@
 (function(Items) {
-
 	Items.ViewCollection = Backbone.View.extend({
-	
 		el : $('#items-list'),
 	
 		initialize : function()
@@ -10,8 +8,7 @@
 			this.collection = new Items.Collection();
 			this.collection.on( 'reset', this.reset, this)
 			this._childViews = [];
-		
-			$('#spinner').spin('large');
+			$(this.el).spin('small');
 
 			jda.app.isLoading = true;
 		},
@@ -113,9 +110,70 @@
 			});
 		},
 		
-		getSearch : function(){ return this.collection.search }
+		setStartAndEndTimes : function(startDate, endDate){
+			var search = this.collection.search;
+			search.times = {};
+			search.times.start = startDate.format('yyyy-mm-dd HH:MM:ss');
+			search.times.end = endDate.format('yyyy-mm-dd HH:MM:ss');
+		},
+		
+		getCQLSearchString : function(){
+			var search = this.collection.search;
+			var cqlFilters = [];
+			if( !_.isUndefined(search.times) ){
+				startString = search.times.start;
+				endString = search.times.end;
+				timeSTring = "(media_date_created >= '" + startString + "' AND media_date_created <= '" + endString + "')";	
+				cqlFilters.push(timeSTring);
+			}
+			if( !_.isUndefined(search.query) ){
+				for (var i=0; i<search.query.length; i++) {
+					q = search.query[i];
+					cqlFilters.push("(title LIKE '%"+q+"%' OR media_creator_username LIKE '%"+q+"%' OR description LIKE '%"+q+"%')");
+				}
+			}
+			if( !_.isUndefined(search.tags) ){
+				cqlFilters.push("tags='" + search.tags + "'");
+			 }
+			if( !_.isUndefined(search.type) ){  
+				cqlFilters.push("type='" + search.type + "'");
+			}
+			if (cqlFilters.length>0){
+				cqlFilterString = cqlFilters.join(" AND ");
+			}else{
+				cqlFilterString = "INCLUDE";   //acts as an empty filter
+			}
+			return cqlFilterString;
+		},
 	
-	})
+		
+		getSearch : function(){ return this.collection.search },
+		
+	});
+
+
+	Items.MapPoppupViewCollection = Backbone.View.extend({
+		className : 'discovery-map-list-container',
+
+		initialize : function() {
+			var _this = this;
+			this._childViews = [];
+			this.render();
+		},
+
+		render : function() {
+			var _this = this;
+			_this._isRendered = true;
+			list = $("<ul class='discovery-map-list'></ul>");
+ 			$(this.el).append(list);
+			_.each( _.toArray(this.collection), function(item){
+				var itemView = new Items.Views.MapPopup({model:item});
+				//_this._childViews.push(itemView);
+				list.append( itemView.render().el );
+			});
+			return this;
+		},
+	});
 
 
 	Items.Collection = Backbone.Collection.extend({
@@ -148,6 +206,11 @@
 			if(reset) this.search = obj;
 			else _.extend(this.search,obj)
 			console.log('set search: '+obj.query)
+		},
+		
+		getSearch : function()
+		{
+			return this.search;
 		},
 	
 		parse : function(response)

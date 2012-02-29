@@ -20,11 +20,13 @@ var loadFiles = [
 	'order!../lib/backbone/backbone-0.9.1',
 	'order!../lib/jquery-easing/jquery.easing.1.3',
 	'order!../lib/jquerySVG/jquery.svg',
-	'order!../lib/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min',
+	'order!../lib/jquery-ui-1.8.18.custom/js/jquery-ui-1.8.18.custom.min',
 	'order!../lib/spin',
 	'order!../lib/spin-jquery',
 	'order!../lib/OpenLayers-2.11/OpenLayers',
 	'order!../lib/date.format',
+	'order!../lib/jquery-ui-timepicker-addon',
+
 	'order!../lib/leaflet/leaflet',
 	'order!../lib/jquery.tagsinput.min',
 	'order!../lib/fancybox/jquery.easing-1.3.pack',
@@ -50,11 +52,11 @@ var loadFiles = [
 	'order!../app/collections/items',
 	
 	//views
+	'order!../app/views/items/jda.view.item.search-results',
+	'order!../app/views/items/jda.view.item.map-popup',
 	'order!../app/views/tag.view',
-	'order!../app/views/items/items-list',
 	'order!../app/views/fancybox.views',
 	'order!../app/views/map.view',
-	
 	
 	'order!../app/index',
 

@@ -7,6 +7,7 @@
 
 
 {% block stylesheets %}
+<link type="text/css" href="{{ asset('jda/js/lib/jquery-ui-1.8.18.custom/css/smoothness/jquery-ui-1.8.18.custom.css')}}" rel="Stylesheet" />
 
 <link href="{{ asset('jda/css/bootstrap-2.0.css')}}" rel="stylesheet" type="text/css">
 
@@ -20,7 +21,6 @@
 
 
 <link href="{{ asset('jda/js/lib/jquerySVG/jquery.svg.css')}}" rel="stylesheet" type="text/css">
-<link type="text/css" href="{{ asset('jda/js/lib/jquery-ui-1.8.16.custom/css/custom-theme/jquery-ui-1.8.16.custom.css')}}" rel="Stylesheet" />
 
 <!-- Leaflet CSS --> 
 <link rel="stylesheet" href="{{ asset('jda/js/lib/leaflet/leaflet.css')}}" />
@@ -45,7 +45,6 @@
 <link rel="stylesheet" href="{{ asset('jda/css/zeega.fancybox.css')}}" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ asset('jda/js/lib/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 <link rel="stylesheet" href="{{ asset('jda/js/lib/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
-
 
 	
 {% endblock %}	
@@ -111,30 +110,57 @@
 	<div id='event-view' class='hidden'>
 		<div id='event-time-slider'></div>
 		<div id='event-map'></div>
-		<div id='event-map-filters' class='controls'>
-			
-			<label class="checkbox">
-				<input type='checkbox' id='event-municipal-checkbox'/>
-				Municipal Districts
-			</label>
-			<label class="checkbox">
-				<input type='checkbox' id='event-radiation-checkbox'/>
-				Radiation
-			</label>
-			<label class="checkbox">
-				<input type='checkbox' id='event-casualties-checkbox'/>
-				Casualties
-			</label>
-			<label class="checkbox">
-				<input type='checkbox' id='event-flooding-checkbox'/>
-				Flooding
-			</label>
-			<label class="checkbox">
-				<input type='checkbox' id='event-shake-checkbox'/>
-				Shake
-			</label>
-			
+		<div id="layer-control-drawer">
+		<div id ="layer-control-drawer-tab">
+			<p><span id="layer-control-drawer-arrows">&gt;&gt;</span><i class="jdicon-small--document"></i></p>
 		</div>
+		<div id="layer-control">
+			<ul>
+				<li><a href="#layer-checkboxes">Data</a></li>
+				<li><a href="#layer-legend">Legend</a></li>
+			</ul>
+			<div id='layer-checkboxes'>
+				<label class="checkbox">
+					Municipal Districts
+					<input type='checkbox' class="layer-checkbox" id='municipal-layer'/>
+				</label>
+				<label class="checkbox">
+					Radiation
+					<input type='checkbox' class="layer-checkbox" id='radiation-layer'/>
+				</label>
+				<label class="checkbox">
+					Casualties
+					<input type='checkbox' class="layer-checkbox" id='casualties-layer'/>
+				</label>
+				<label class="checkbox">
+					Flooding
+					<input type='checkbox' class="layer-checkbox" id='flooding-layer'/>
+				</label>
+				<label class="checkbox">
+					Shake
+					<input type='checkbox' class="layer-checkbox" id='shake-layer'/>
+				</label>
+			</div>
+			
+			<div id='layer-legend'>
+				<div class="legend-entry hidden" id="municipal-legend">
+					<p>Municipal Districts</p>
+				</div>
+				<div class="legend-entry hidden" id="radiation-legend">
+					<p>Radiation</p>
+				</div>
+				<div class="legend-entry hidden" id="casualties-legend">
+					<p>Casualties</p>
+				</div>
+				<div class="legend-entry hidden" id="flooding-legend">
+					<p>Flooding</p>
+				</div>
+				<div class="legend-entry hidden" id="shake-legend">
+					<p>Shake</p>
+				</div>
+			</div>
+		</div> <!-- layer control -->
+		</div> <!--layer-control-drawer -->
 	</div>
 	<!-- <div id='tag-view' class='hidden'>tag-view</div>-->
 	
