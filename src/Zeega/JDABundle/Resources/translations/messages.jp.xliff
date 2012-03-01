@@ -86,6 +86,104 @@
                 <source>jda.about.participatefour</source>
                 <target>震災に関する皆様の「物語」を共有する</target>
             </trans-unit>
-        </body>
+             <trans-unit id="22">
+                <source>jda.search.allformats</source>
+                <target>すべて検索</target>
+            </trans-unit>
+             <trans-unit id="23">
+                <source>jda.search.image</source>
+                <target>画像</target>
+            </trans-unit>            
+             <trans-unit id="24">
+                <source>jda.search.video</source>
+                <target>動画</target>
+            </trans-unit>
+             <trans-unit id="25">
+                <source>jda.search.audio</source>
+                <target>音声</target>
+            </trans-unit>            
+             <trans-unit id="26">
+                <source>jda.search.tweet</source>
+                <target>ツイート</target>
+            </trans-unit>
+             <trans-unit id="27">
+                <source>jda.search.document</source>
+                <target>ドキュメント</target>
+            </trans-unit>
+             <trans-unit id="28">
+                <source>jda.search.website</source>
+                <target>ウェブサイト</target>
+            </trans-unit>   
+             <trans-unit id="29">
+                <source>jda.search.pdf</source>
+                <target>PDF</target>
+            </trans-unit>
+             <trans-unit id="30">
+                <source>jda.search.testimonial</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="31">
+                <source>jda.search.listview</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="32">
+                <source>jda.search.timeplaceview</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="33">
+                <source>jda.search.relatedtags</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="34">
+                <source>jda.search.data</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="35">
+                <source>jda.search.legend</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="36">
+                <source>jda.search.muncipaldistricts</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="37">
+                <source>jda.search.radiation</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="38">
+                <source>jda.search.casualties</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="39">
+                <source>jda.search.flooding</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+             <trans-unit id="40">
+                <source>jda.search.shake</source>
+                <target>わたしの「東日本大震災」</target>
+            </trans-unit>
+		    <trans-unit id="41">
+                <source>jda.header.about</source>
+                <target>このアーカイブについて</target>
+            </trans-unit>
+    		<trans-unit id="42">
+                <source>jda.header.feedback</source>
+                <target>お問い合わせ</target>
+            </trans-unit>
+			<trans-unit id="43">
+                <source>jda.header.japanese</source>
+                <target>日本語</target>
+            </trans-unit>				
+			<trans-unit id="44">
+                <source>jda.header.english</source>
+                <target>English</target>
+            </trans-unit>			
+			<trans-unit id="45">
+                <source>jda.home.partners</source>
+                <target>協力企業・団体</target>
+            </trans-unit>			
+		
+	
+	</body>
     </file>
 </xliff>
