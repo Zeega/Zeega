@@ -104,11 +104,15 @@ this.jda = {
 			}
 		}
 		
-		
+		console.log('this view is : '+this.currentView);
 		this.itemViewCollection.search(obj);
 		if (this.currentView == 'event'){
+			console.log('got here');
+			console.log(cqlFilterString);
 			cqlFilterString = this.itemViewCollection.getCQLSearchString();
+			console.log(cqlFilterString);
 			this.map.layers[1].mergeNewParams({
+			
 				'CQL_FILTER' : cqlFilterString
 			});	
 		}
@@ -242,7 +246,9 @@ this.jda = {
 				 change : function(event, ui){	
 					_this.setStartDateTimeSliderBubble(ui.values[0]);
 					_this.setEndDateTimeSliderBubble(ui.values[1]);
-					_this.updateMapForTimeSlider(ui, map);
+					_this.itemViewCollection.setStartAndEndTimes(ui.values[0], ui.values[1]);
+ 	 				_this.updateMapForTimeSlider(map);
+ 	 				_this.updateResultsCountForTimeSlider();
 				 }
 			});
 			$("#range-slider").css("margin-left", $("#date-time-start").outerWidth());
@@ -255,18 +261,27 @@ this.jda = {
 		}
 	},
 	
-	updateMapForTimeSlider : function(sliderUI, map){
-		startDate = new Date(sliderUI.values[0]*1000);
-		endDate = new Date(sliderUI.values[1]*1000);
-		this.itemViewCollection.setStartAndEndTimes(startDate, endDate);
-		
-		//Time filter string		
-		cqlFilterString = this.itemViewCollection.getCQLSearchString();
-		this.map.layers[1].mergeNewParams({
-			'CQL_FILTER' : cqlFilterString
+
+	updateResultsCountForTimeSlider : function(sliderUI, map){
+		var searchView = this.itemViewCollection;
+		$("#related-tags, #related-tags-title, #results-count").fadeTo(100,0);
+		searchView.collection.fetch({
+			success : function(model, response){ 
+				searchView.renderTags(response.tags);
+				searchView.render();      
+				$('#results-count').text(response["items_count"]+ " results");        
+				$('#results-count').fadeTo(100, 1);
+			}
 		});
-	},
-	
+ 	},
+	updateMapForTimeSlider : function(map){
+		 //Time filter string    
+		 cqlFilterString = this.itemViewCollection.getCQLSearchString();
+		 map.layers[1].mergeNewParams({
+		   'CQL_FILTER' : cqlFilterString
+		});
+   	},
+   	
 	setStartDateTimeSliderHandle : function()
 	{
 		dateMillis = $("#start-date").datepicker('getDate').getTime();

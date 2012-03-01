@@ -120,22 +120,30 @@
 		setStartAndEndTimes : function(startDate, endDate){
 			var search = this.collection.search;
 			search.times = {};
-			search.times.start = startDate.format('yyyy-mm-dd HH:MM:ss');
-			search.times.end = endDate.format('yyyy-mm-dd HH:MM:ss');
+			search.times.start = startDate;
+ 	 		search.times.end = endDate;
 		},
 		
 		getCQLSearchString : function(){
+			
 			var search = this.collection.search;
+			console.log(search);
 			var cqlFilters = [];
 			if( !_.isUndefined(search.times) ){
-				startString = search.times.start;
-				endString = search.times.end;
-				timeSTring = "(media_date_created >= '" + startString + "' AND media_date_created <= '" + endString + "')";	
-				cqlFilters.push(timeSTring);
+				if( !_.isUndefined(search.times.start) ){
+					startDate = new Date(search.times.start*1000);
+					startString = startDate.format('yyyy-mm-dd HH:MM:ss');
+					cqlFilters.push("media_date_created >= '" + startString +"'");
+				}
+				if( !_.isUndefined(search.times.start) ){
+					endDate = new Date(search.times.end*1000);
+					endString = endDate.format('yyyy-mm-dd HH:MM:ss');
+					cqlFilters.push("media_date_created <= '" + endString +"'");
+				}	
 			}
-			if( !_.isUndefined(search.query) ){
-				for (var i=0; i<search.query.length; i++) {
-					q = search.query[i];
+			if( !_.isUndefined(search.q) ){
+				for (var i=0; i<search.q.length; i++) {
+					q = search.q[i];
 					cqlFilters.push("(title LIKE '%"+q+"%' OR media_creator_username LIKE '%"+q+"%' OR description LIKE '%"+q+"%')");
 				}
 			}
@@ -222,6 +230,10 @@
 			if( !_.isUndefined(this.search.r_items) ) url += '&r_items=' + this.search.r_items;
 			if( !_.isUndefined(this.search.r_tags) ) url += '&r_tags=' + this.search.r_tags;
 			if( !_.isUndefined(this.search.r_itemswithcollections) ) url += '&r_itemswithcollections=' + this.search.r_itemswithcollections;
+			if( !_.isUndefined(this.search.times) ){
+				if( !_.isUndefined(this.search.times.start) ) url += '&dtstart=' + this.search.times.start;
+				if( !_.isUndefined(this.search.times.end) ) url += '&dtend=' + this.search.times.end;
+	     	}
 			console.log('search url: '+ url);
 			return url;
 		},
