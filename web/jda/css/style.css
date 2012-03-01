@@ -44,6 +44,15 @@
 
 /**************************************
 
+	HOME
+
+**************************************/
+
+#frequent-tags{
+	font-weight:bold;
+}
+/**************************************
+
 	SEARCH BAR
 
 **************************************/
@@ -60,6 +69,15 @@
 {
 	position:relative;
 	top:6px;
+}
+#home-search-bar input{
+	width: 450px;
+	float: left;
+	font-size: 2em;
+	font-weight: bold;
+	height: 44px;
+	background: white url('../images/search.png') left center no-repeat;
+	padding-left: 42px;
 }
 #search-bar{
 	position:relative;
@@ -208,14 +226,14 @@ a:visited
 {
 	color:red;
 }
-.btn{
+/*.btn{
 	font-family: Arial,sans-serif;
 	font-size: 11px !important;
 	font-weight: bold;
 	padding: 5px 15px 5px 10px !important;
 	-webkit-border-radius:6px !important;
 	
-}
+}*/
 .btn-group a {
 	color: #666 !important;
 }
@@ -300,6 +318,7 @@ header
 	left:0;
 	width:892px;
 	border-radius:0 0 6px 6px;
+	height: 60px;
 }
 
 #intro-bar .left-col{float:left;width:600px}
@@ -543,7 +562,7 @@ opacity: 1;
 }
 #spinner{
 	margin-top:50px;
-	
+
 }
 
 /********************
