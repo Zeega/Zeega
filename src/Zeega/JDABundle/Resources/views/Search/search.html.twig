@@ -73,16 +73,16 @@
 	<div id="search-bar" class='hero-unit group'>
 		
 		<div class="visual_search"></div>
-		<span id="select-wrap"><span id="select-wrap-text">all formats</span><div class="arrow-down"></div><select id="content">
-		  <option value="all">all formats</option>
-		  <option value="image">image</option>
-		  <option value="video">video</option>
-		  <option value="audio">audio</option>
-		  <option value="tweet">tweet</option>
-		  <option value="document">document</option>
-		  <option value="website">website</option>
-		  <option value="PDF">pdf</option>
-		  <option value="text">testimonial</option>
+		<span id="select-wrap"><span id="select-wrap-text">{% trans %}jda.search.allformats{% endtrans %}</span><div class="arrow-down"></div><select id="content">
+		  <option value="all">{% trans %}jda.search.allformats{% endtrans %}</option>
+		  <option value="image">{% trans %}jda.search.image{% endtrans %}</option>
+		  <option value="video">{% trans %}jda.search.video{% endtrans %}</option>
+		  <option value="audio">{% trans %}jda.search.audio{% endtrans %}</option>
+		  <option value="tweet">{% trans %}jda.search.tweet{% endtrans %}</option>
+		  <option value="document">{% trans %}jda.search.document{% endtrans %}</option>
+		  <option value="website">{% trans %}jda.search.website{% endtrans %}</option>
+		  <option value="PDF">{% trans %}jda.search.pdf{% endtrans %}</option>
+		  <option value="text">{% trans %}jda.search.testimonial{% endtrans %}</option>
 		</select>
 		</span>
 		
@@ -93,13 +93,13 @@
 
 	<!-- time & place vs list view -->
 	<div id='search-filters' class="btn-group">
-			<a id="list-view-button" class='nav-btn btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">LIST VIEW</span></a>
-			<a id="time-view-button" class='nav-btn btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">TIME & PLACE VIEW</span></a>
+			<a id="list-view-button" class='nav-btn btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">{% trans %}jda.search.listview{% endtrans %}</span></a>
+			<a id="time-view-button" class='nav-btn btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">{% trans %}jda.search.timeplaceview{% endtrans %}</span></a>
 			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
 	</div>	
 
 	<!-- related tags -->
-	<div id="related-tags"><span id="related-tags-title" class="span2">related tags</span><ul class="span10"></ul></div>
+	<div id="related-tags"><span id="related-tags-title" class="span2">{% trans %}jda.search.relatedtags{% endtrans %}</span><ul class="span10"></ul></div>
 	
 	<!-- item list -->
 	<div id='list-view'>
@@ -116,47 +116,47 @@
 		</div>
 		<div id="layer-control">
 			<ul>
-				<li><a href="#layer-checkboxes">Data</a></li>
-				<li><a href="#layer-legend">Legend</a></li>
+				<li><a href="#layer-checkboxes">{% trans %}jda.search.data{% endtrans %}</a></li>
+				<li><a href="#layer-legend">{% trans %}jda.search.legend{% endtrans %}</a></li>
 			</ul>
 			<div id='layer-checkboxes'>
 				<label class="checkbox">
-					Municipal Districts
+					{% trans %}jda.search.muncipaldistricts{% endtrans %}
 					<input type='checkbox' class="layer-checkbox" id='municipal-layer'/>
 				</label>
 				<label class="checkbox">
-					Radiation
+					{% trans %}jda.search.radiation{% endtrans %}
 					<input type='checkbox' class="layer-checkbox" id='radiation-layer'/>
 				</label>
 				<label class="checkbox">
-					Casualties
+					{% trans %}jda.search.casualties{% endtrans %}
 					<input type='checkbox' class="layer-checkbox" id='casualties-layer'/>
 				</label>
 				<label class="checkbox">
-					Flooding
+					{% trans %}jda.search.flooding{% endtrans %}
 					<input type='checkbox' class="layer-checkbox" id='flooding-layer'/>
 				</label>
 				<label class="checkbox">
-					Shake
+					{% trans %}jda.search.shake{% endtrans %}
 					<input type='checkbox' class="layer-checkbox" id='shake-layer'/>
 				</label>
 			</div>
 			
 			<div id='layer-legend'>
 				<div class="legend-entry hidden" id="municipal-legend">
-					<p>Municipal Districts</p>
+					<p>{% trans %}jda.search.muncipaldistricts{% endtrans %}</p>
 				</div>
 				<div class="legend-entry hidden" id="radiation-legend">
-					<p>Radiation</p>
+					<p>{% trans %}jda.search.radiation{% endtrans %}</p>
 				</div>
 				<div class="legend-entry hidden" id="casualties-legend">
-					<p>Casualties</p>
+					<p>{% trans %}jda.search.casualties{% endtrans %}</p>
 				</div>
 				<div class="legend-entry hidden" id="flooding-legend">
-					<p>Flooding</p>
+					<p>{% trans %}jda.search.flooding{% endtrans %}</p>
 				</div>
 				<div class="legend-entry hidden" id="shake-legend">
-					<p>Shake</p>
+					<p>{% trans %}jda.search.shake{% endtrans %}</p>
 				</div>
 			</div>
 		</div> <!-- layer control -->

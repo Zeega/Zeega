@@ -86,6 +86,103 @@
                 <source>jda.about.participatefour</source>
                 <target>Create and share narratives</target>
             </trans-unit>
+             <trans-unit id="22">
+                <source>jda.search.allformats</source>
+                <target>all formats</target>
+            </trans-unit>
+             <trans-unit id="23">
+                <source>jda.search.image</source>
+                <target>image</target>
+            </trans-unit>            
+             <trans-unit id="24">
+                <source>jda.search.video</source>
+                <target>video</target>
+            </trans-unit>
+             <trans-unit id="25">
+                <source>jda.search.audio</source>
+                <target>audio</target>
+            </trans-unit>            
+             <trans-unit id="26">
+                <source>jda.search.tweet</source>
+                <target>tweet</target>
+            </trans-unit>
+             <trans-unit id="27">
+                <source>jda.search.document</source>
+                <target>document</target>
+            </trans-unit>
+             <trans-unit id="28">
+                <source>jda.search.website</source>
+                <target>website</target>
+            </trans-unit>   
+             <trans-unit id="29">
+                <source>jda.search.pdf</source>
+                <target>PDF</target>
+            </trans-unit>
+             <trans-unit id="30">
+                <source>jda.search.testimonial</source>
+                <target>testimonial</target>
+            </trans-unit>
+             <trans-unit id="31">
+                <source>jda.search.listview</source>
+                <target>List View</target>
+            </trans-unit>
+             <trans-unit id="32">
+                <source>jda.search.timeplaceview</source>
+                <target>Time + Place View</target>
+            </trans-unit>
+             <trans-unit id="33">
+                <source>jda.search.relatedtags</source>
+                <target>Related Tags</target>
+            </trans-unit>
+             <trans-unit id="34">
+                <source>jda.search.data</source>
+                <target>Data</target>
+            </trans-unit>
+             <trans-unit id="35">
+                <source>jda.search.legend</source>
+                <target>Legend</target>
+            </trans-unit>
+             <trans-unit id="36">
+                <source>jda.search.muncipaldistricts</source>
+                <target>Muncipal Districts</target>
+            </trans-unit>
+             <trans-unit id="37">
+                <source>jda.search.radiation</source>
+                <target>Radiation</target>
+            </trans-unit>
+             <trans-unit id="38">
+                <source>jda.search.casualties</source>
+                <target>Casualties</target>
+            </trans-unit>
+             <trans-unit id="39">
+                <source>jda.search.flooding</source>
+                <target>Flooding</target>
+            </trans-unit>
+             <trans-unit id="40">
+                <source>jda.search.shake</source>
+                <target>Shake</target>
+            </trans-unit>
+ 		    <trans-unit id="41">
+                <source>jda.header.about</source>
+                <target>About</target>
+            </trans-unit>
+    		<trans-unit id="42">
+                <source>jda.header.feedback</source>
+                <target>Feedback</target>
+            </trans-unit>           
+<trans-unit id="43">
+                <source>jda.header.japanese</source>
+                <target>日本語</target>
+            </trans-unit>				
+			<trans-unit id="44">
+                <source>jda.header.english</source>
+                <target>English</target>
+            </trans-unit>			            
+			<trans-unit id="45">
+                <source>jda.home.partners</source>
+                <target>Partners</target>
+            </trans-unit>			            
+            
         </body>
     </file>
 </xliff>

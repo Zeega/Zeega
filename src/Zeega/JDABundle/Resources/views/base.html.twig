@@ -48,7 +48,7 @@
 
 				
 				{% if locale == 'jp' %}
-					<li>Japanese</li>
+					<li>{% trans %}jda.header.japanese{% endtrans %}</li>
 					<li>
 						{% if page == 'home' %}
 							<a href="{{path('home', { '_locale': 'en' })}}">
@@ -59,7 +59,7 @@
 						{% else %}
 							<a>
 						{% endif %}
-						English</a>
+						{% trans %}jda.header.english{% endtrans %}</a>
 					</li>
 				{% else %}
 					<li>
@@ -72,17 +72,17 @@
 						{% else %}
 							<a>
 						{% endif %}
-						Japanese</a>
+						{% trans %}jda.header.japanese{% endtrans %}</a>
 					</li>
-					<li>English</li>
+					<li>{% trans %}jda.header.english{% endtrans %}</li>
 				{% endif %}
 				
 				<li>/</li>
 				
-				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">About</a></li>
-				<li><a href="#">Feedback</a></li>
+				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">{% trans %}jda.header.about{% endtrans %}</a></li>
+				<li><a href="#">{% trans %}jda.header.feedback{% endtrans %}</a></li>
 				
-				<li><a href='#' class='btn success small'>Add to the Archive</a></li>
+				<li><a href='#' class='btn success small'>{% trans %}jda.home.add{% endtrans %}</a></li>
 				<!--
 				<li><a href="#">login</a></li>
 				<li>/</li>
