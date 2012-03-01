@@ -43,14 +43,11 @@
 			
 			
 			var blanks = this.model.attributes;
-			if (this.model.get("date_created") != null&&1==0){
+			if (this.model.get("date_created") != null){
 				var date = this.model.get("date_created");
 				blanks["date"] = dateFormat(this.model.get("date_created"), "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
-			}	
-			else{
-				blanks["date"] ='n/a';
-			}
-			if (this.model.get("media_date_created") != null&&1==0){
+			}		
+			if (this.model.get("media_date_created") != null){
 				blanks["media_date"] = dateFormat(this.model.get("media_date_created"), "ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			} else {
 				blanks["media_date"] = "n/a";
