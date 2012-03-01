@@ -106,7 +106,7 @@
 					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
 					jda.app.visualSearch.searchBox.disableFacets();
 
-					$('#results-count').text(_this.addCommas(response["items_count"])+ " results");
+					$('##results-count-number').text(_this.addCommas(response["items_count"]));
 					_this.renderTags(response.tags);
 					_this.render();
 					

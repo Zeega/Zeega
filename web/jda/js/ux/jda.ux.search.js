@@ -52,7 +52,7 @@ $(document).ready(function(){
       }
     });
 	
-	
+	//IMPORTANT - updates Search UI box with the search query from URL
 	jda.app.updateSearchUI(jda.app.itemViewCollection.getSearch());
 	
 	$("#search-bar").fadeTo('slow',1);

@@ -31,6 +31,7 @@
 			$(this.el).width(380);
 			$(this.el).height(interfaceContentHeight);
 			_(this._listItemViews).each(function(itemView) {
+				
 				$(that.el).append(itemView.el);
 			});
 	

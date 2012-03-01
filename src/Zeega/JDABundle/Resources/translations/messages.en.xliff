@@ -124,15 +124,15 @@
             </trans-unit>
              <trans-unit id="31">
                 <source>jda.search.listview</source>
-                <target>List View</target>
+                <target>LIST VIEW</target>
             </trans-unit>
              <trans-unit id="32">
                 <source>jda.search.timeplaceview</source>
-                <target>Time + Place View</target>
+                <target>TIME + PLACE VIEW</target>
             </trans-unit>
              <trans-unit id="33">
                 <source>jda.search.relatedtags</source>
-                <target>Related Tags</target>
+                <target>related tags</target>
             </trans-unit>
              <trans-unit id="34">
                 <source>jda.search.data</source>

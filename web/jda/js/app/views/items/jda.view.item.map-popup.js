@@ -13,22 +13,29 @@
 			var blanks = this.model.attributes;
 		
 			
-			//blanks.id=this.model.get("id").split('.')[1];
+			blanks.id=this.model.get("id").split('.')[1];
 			$(this.el).html( _.template( template, blanks ));
+			
+			//For testing whether events getting triggered or not
+			$(this.el).click(function(){
+				console.log('clicked finally');
+				alert("hi");
+				return false;
+			});
 			return this;
 		},
 
 		events : {
-			'mouseup' : 'openOverlay'
+			//'click' : 'openOverlay',
 		},
 
-		openOverlay : function()
+		/*openOverlay : function()
 		{
 			console.log('clicked map popup item: '+ this.model.id )
 			$(this.el).fancybox({
 				content : '<i class="jdicon-'+this.model.get("type").toLowerCase()+'"></i>'+this.model.get('title')
 			})
-		},
+		},*/
 
 		getTemplate : function()
 		{

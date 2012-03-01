@@ -480,7 +480,14 @@ this.jda = {
 			
 			jda.app.itemViewCollection.collection = new Items.Collection(features);
 			popupHTML = $(mapPopUpList.el).html();
-			map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true));
+
+			var myPopup = new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true);
+			myPopup.events.register("click", myPopup, function(evt){
+				var test = "hi";
+				console.log("onclick");
+			});
+			
+			map.addPopup(myPopup);
 			
 		}
 		
