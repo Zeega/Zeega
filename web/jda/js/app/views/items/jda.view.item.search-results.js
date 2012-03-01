@@ -115,7 +115,7 @@
 				
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -135,7 +135,7 @@
 				'<div class="item-author">by <%= author %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -155,7 +155,7 @@
 				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -174,7 +174,7 @@
 				
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -193,7 +193,7 @@
 				'<%= text %>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -212,7 +212,7 @@
 				'<%= text %>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -232,7 +232,7 @@
 				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -253,7 +253,7 @@
 				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
@@ -273,7 +273,7 @@
 				'<div class="item-description"><%= description %></div>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
-				'<%= date %>'
+				'<%= media_date %>'
 			'</div>'+
 			'</a>';
 			
