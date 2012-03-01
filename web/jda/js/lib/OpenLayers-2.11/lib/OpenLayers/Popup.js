@@ -1027,7 +1027,7 @@ OpenLayers.Popup = OpenLayers.Class({
      * evt - {Event} 
      */
     onclick: function (evt) {
-       // OpenLayers.Event.stop(evt, true);
+        OpenLayers.Event.stop(evt, true);
     },
 
     /** 
