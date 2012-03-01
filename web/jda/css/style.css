@@ -44,6 +44,15 @@
 
 /**************************************
 
+	HOME
+
+**************************************/
+
+#frequent-tags{
+	font-weight:bold;
+}
+/**************************************
+
 	SEARCH BAR
 
 **************************************/
@@ -60,6 +69,15 @@
 {
 	position:relative;
 	top:6px;
+}
+#home-search-bar input{
+	width: 450px;
+	float: left;
+	font-size: 2em;
+	font-weight: bold;
+	height: 44px;
+	background: white url('../images/search.png') left center no-repeat;
+	padding-left: 42px;
 }
 #search-bar{
 	position:relative;
@@ -543,7 +561,7 @@ opacity: 1;
 }
 #spinner{
 	margin-top:50px;
-	
+
 }
 
 /********************
