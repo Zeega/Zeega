@@ -38,13 +38,13 @@ $(document).ready(function(){
 		        ]);
 		        break;*/
 		      case 'tag':
-		        callback(['sendai', 'japan', 'jishin']);
+		        callback([]);
 		        break;
 		      case 'keyword':
-		        callback(['japan', 'something', 'something else']);
+		        callback([]);
 		        break;
 		      case 'text':
-		        callback(['japan', 'something', 'something else']);
+		        callback([]);
 		        break;
 		     
 		    }
@@ -90,6 +90,7 @@ $(document).ready(function(){
 	sessionStorage.setItem('moreFancy', false);
 
 	//set up fancybox lightbox plugin
+	
 	$(".fancymedia").fancybox({
 		openEffect : 'fade',
     	closeEffect	: 'fade',
@@ -141,7 +142,7 @@ $(document).ready(function(){
 
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function() {
-    
+    		console.log('tryin ta lod');
     		$('#fancybox-document-cloud').remove();
 
     		

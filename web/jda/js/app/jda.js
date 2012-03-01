@@ -379,6 +379,7 @@ this.jda = {
 	{
 		var _this = this;
 		map.events.register('click', map, function(e) {
+			
 			var params = {
 				REQUEST : "GetFeatureInfo",
 				EXCEPTIONS : "application/vnd.ogc.se_xml",
@@ -458,22 +459,31 @@ this.jda = {
 	
 	onMapClick : function(response)
 	{
-		//TODO close existing popups
+		
 		//FIXIT clicking on an item in the OpenLayers popup does not open the fancybox
-		//TODO error checking on response
-		
-		var data = eval('(' + response.responseText + ')');
-		var Items = jda.module("items");
 
-		var map = this.map;
-		features = data["features"];
-		features.shift();  //removes first item which is empty
 		
-		mapPopUpList = new Items.MapPoppupViewCollection({
-			collection : new Items.Collection(features)
-		});
-		popupHTML = $(mapPopUpList.el).html();
-		map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true));
+		//remove existing popups.
+		$('#event-map').find('#map-popup').remove();
+		if (response.responseText != "") {
+			
+			var data = eval('(' + response.responseText + ')');
+			var Items = jda.module("items");
+	
+			var map = this.map;
+			features = data["features"];
+			features.shift();  //removes first item which is empty
+			
+			mapPopUpList = new Items.MapPoppupViewCollection({
+				collection : new Items.Collection(features)
+			});
+			
+			jda.app.itemViewCollection.collection = new Items.Collection(features);
+			popupHTML = $(mapPopUpList.el).html();
+			map.addPopup(new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true));
+			
+		}
+		
 	},
 	
 	getMapLayers : function()
@@ -546,21 +556,7 @@ this.jda = {
 			})
 		);
 		
-		layers.push( new OpenLayers.Layer.WMS(
-			"flooding-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:japan8m_ezt",
-				format : 'image/png',
-				transparent : true,
-				tiled : true
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false
-			})
-		);
+	
 			
 		layers.push( new OpenLayers.Layer.WMS(
 			"shake-layer",
@@ -578,6 +574,23 @@ this.jda = {
 				opacity : 0.3
 			})
 		);
+		
+			layers.push( new OpenLayers.Layer.WMS(
+			"flooding-layer",
+			this.japanMapUrl + "wms",
+			{
+				layers : "geonode:japan8m_ezt",
+				format : 'image/png',
+				transparent : true,
+				tiled : true
+			},
+			{
+				singleTile : false,
+				wrapDateLine : true,
+				visibility : false
+			})
+		);
+		
 		return layers;
 	}
 	

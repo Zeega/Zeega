@@ -31,7 +31,9 @@
 				case 'Video':
 					template = this.getVideoTemplate();
 					break;
-				
+				case 'Audio':
+					template = this.getAudioTemplate();
+					break;
 				case 'PDF':
 					template = this.getPDFTemplate();
 					break;
@@ -223,6 +225,27 @@
 			'<a id="<%= id %>" class="fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-pdf"></i>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
+			'</div>'+
+			'<div class="span7">'+
+				'<div class="item-title"><%= title %></div>'+
+				'<div class="item-description"><%= description %></div>'+
+			'</div>'+
+			'<div class="span3 item-date">'+
+				'<%= date %>'
+			'</div>'+
+			'</a>';
+			
+			return html;
+		},
+	
+		getAudioTemplate : function()
+		{
+			html = 
+			
+			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<div class="span2">'+
+				'<i class="jdicon-audio"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
 			'<div class="span7">'+
