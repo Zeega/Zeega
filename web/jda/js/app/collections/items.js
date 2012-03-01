@@ -109,7 +109,11 @@
 					$('#results-count').text(_this.addCommas(response["items_count"])+ " results");
 					_this.renderTags(response.tags);
 					_this.render();
-					jda.app.killScroll = false; //to activate infinite scroll again
+					
+					
+					if(_this.collection.length<parseInt(response["items_count"])) jda.app.killScroll = false; //to activate infinite scroll again
+					else jda.app.killScroll = true;
+					
 					jda.app.isLoading = false;	//to activate infinite scroll again
 
 				}
