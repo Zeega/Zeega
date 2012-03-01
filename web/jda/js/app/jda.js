@@ -42,7 +42,38 @@ this.jda = {
 
 	},
 	
-
+	updateSearchUI : function(obj){
+		var q = obj.q;
+		if (!_.isUndefined(q))
+		{
+			//check for tags
+			if (q.indexOf("tag:") >=0){
+				var tagPart = q.substr(q.indexOf("tag:") + 4);
+				var tagNames = tagPart.split(" ");
+				for(var i=0;i<tagNames.length;i++)
+				{
+					var tagName = tagNames[i];
+					jda.app.visualSearch.searchBox.addFacet('tag', tagName, 0);
+				}
+			}
+			//check for text
+			var textPart = q.indexOf("tag:") >= 0 ? q.substr(0,  q.indexOf("tag:")) : q;
+			if (textPart.length > 0){
+				var texts = textPart.split(",");
+				for(var i=0;i<texts.length;i++)
+				{
+					var text = texts[i];
+					jda.app.visualSearch.searchBox.addFacet('text', text, 0);
+				}
+			}
+			
+		}
+		if (!_.isUndefined(obj.content)){
+			$('#content').val(obj.content);
+			$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
+		}
+		
+	},
 	search : function(obj, useValuesFromURL)
 	{
 		
@@ -51,33 +82,7 @@ this.jda = {
 
 			if (useValuesFromURL){
 				//get the search query from URL and put it in the search box
-				var q = obj.q;
-				if (!_.isUndefined(q))
-				{
-					//check for tags
-					if (q.indexOf("tag:") >=0){
-						var tagPart = q.substr(q.indexOf("tag:") + 4);
-						var tagNames = tagPart.split(" ");
-						for(var i=0;i<tagNames.length;i++)
-						{
-							var tagName = tagNames[i];
-							jda.app.visualSearch.searchBox.addFacet('tag', tagName, 0);
-						}
-					}
-					//check for text
-					var textPart = q.indexOf("tag:") >= 0 ? q.substr(0,  q.indexOf("tag:")) : q;
-					var texts = textPart.split(",");
-					for(var i=0;i<texts.length;i++)
-					{
-						var text = texts[i];
-						jda.app.visualSearch.searchBox.addFacet('text', text, 0);
-					}
-					
-				}
-				if (!_.isUndefined(obj.content)){
-					$('#content').val(obj.content);
-					$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
-				}
+				this.updateSearchUI(obj);
 			}
 			else {
 				//Use content value from UI box

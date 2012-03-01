@@ -36,7 +36,8 @@
         focus           : $.noop,
         blur            : $.noop,
         facetMatches    : $.noop,
-        valueMatches    : $.noop
+        valueMatches    : $.noop,
+        loaded          : $.noop
       }
     };
     this.options           = _.extend({}, defaults, options);
@@ -55,6 +56,8 @@
     // Disable page caching for browsers that incorrectly cache the visual search inputs.
     // This is forced the browser to re-render the page when it is retrieved in its history.
     $(window).bind('unload', function(e) {});
+
+    this.options.callbacks.loaded();
 
     // Gives the user back a reference to the `searchBox` so they
     // can use public methods.
