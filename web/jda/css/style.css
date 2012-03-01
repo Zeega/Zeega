@@ -226,14 +226,15 @@ a:visited
 {
 	color:red;
 }
-/*.btn{
+
+.nav-btn{
 	font-family: Arial,sans-serif;
 	font-size: 11px !important;
 	font-weight: bold;
 	padding: 5px 15px 5px 10px !important;
 	-webkit-border-radius:6px !important;
 	
-}*/
+}
 .btn-group a {
 	color: #666 !important;
 }

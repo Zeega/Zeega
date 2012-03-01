@@ -5,6 +5,9 @@ $(document).ready(function(){
       container : $('.visual_search'),
       query     : '',
       callbacks : {
+      	loaded	: function(){
+
+      	},
         search       : function(){	
         	jda.app.search({page:1});	
         },
@@ -50,7 +53,8 @@ $(document).ready(function(){
     });
 	
 	
-
+	jda.app.updateSearchUI(jda.app.itemViewCollection.getSearch());
+	
 	$("#search-bar").fadeTo('slow',1);
 
 	$('#content').change(function(){
