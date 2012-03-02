@@ -106,9 +106,10 @@ this.jda = {
 				    }
 				});
 				obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
+				obj.viewType = this.currentView;
 			}
 		}
-		
+		 if (!_.isUndefined(obj.view_type))  this.switchViewTo(obj.view_type) ;
 		console.log('this view is : '+this.currentView);
 		this.itemViewCollection.search(obj);
 		if (this.currentView == 'event'){
@@ -174,7 +175,12 @@ this.jda = {
 		_this=this;
 
 		$("#layer-control").tabs();
-		this.layerControlIsOut = true;
+		this.layerControlIsOut = false;
+		
+		
+		//Probably better way to start layer Controls closed
+		$("#layer-control-drawer-arrows").html("&lt;&lt;");
+		$("#layer-control-drawer").animate({right : "-=200"}, 10);
 		
 		$("#layer-control-drawer-tab").click(function(){
 			if (_this.layerControlIsOut){
@@ -274,7 +280,7 @@ this.jda = {
 			success : function(model, response){ 
 				searchView.renderTags(response.tags);
 				searchView.render();      
-				$('#results-count').text(response["items_count"]+ " results");        
+				$('#results-count-number').text(response["items_count"]+ " results");        
 				$('#results-count').fadeTo(100, 1);
 			}
 		});

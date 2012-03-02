@@ -38,7 +38,9 @@
 .jdicon-article{background-position:-450px 0}
 .jdicon-pdf{background-position:-350px -50px}
 .jdicon-testimonial{background-position:-200px -200px}
+.jdicon-layers{background-position:-250px -200px}
 
+.jdicon-small-layers{background-position:-125px -100px}
 .jdicon-small-list{background-position:-125px -25px}
 .jdicon-small-world{background-position:-0px -50px}
 .jdicon-small-document{background-position:-150px -0px}
@@ -72,7 +74,7 @@
 	top:6px;
 }
 #home-search-bar input{
-	width: 450px;
+	width: 770px;
 	float: left;
 	font-size: 2em;
 	font-weight: bold;
@@ -328,9 +330,19 @@ header
 
 #intro-bar h3{color:white;}
 
+
+.span05l{
+	width:500px;
+}
+
+#core-missions .span-two-thirds {
+
+padding-top:30px;
+}
+
 #teaser-text
 {
-	width:250px;
+	width:252px;
 	background:rgba(255,255,255,0.90);
 	padding:12px;
 	float:right;

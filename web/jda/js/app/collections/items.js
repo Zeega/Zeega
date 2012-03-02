@@ -86,6 +86,7 @@
 			$('#spinner').spin('large');
 			
 			var hash = '';
+			 if( !_.isUndefined(obj.viewType)) hash += 'view_type=' + obj.viewType + '&';
 			if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
 			if( !_.isUndefined(obj.content) ) { 
 				
@@ -106,7 +107,8 @@
 					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
 					jda.app.visualSearch.searchBox.disableFacets();
 
-					$('##results-count-number').text(_this.addCommas(response["items_count"]));
+					$('#results-count-number').html(response["items_count"]);
+					console.log(response["items_count"]);
 					_this.renderTags(response.tags);
 					_this.render();
 					
@@ -154,9 +156,11 @@
 			if( !_.isUndefined(search.tags) ){
 				cqlFilters.push("tags='" + search.tags + "'");
 			 }
-			if( !_.isUndefined(search.type) ){  
-				cqlFilters.push("type='" + search.type + "'");
-			}
+			 if( !_.isUndefined(search.content)&&search.content!="all" ){  
+         var capitalizedContent =  search.content.charAt(0).toUpperCase() + search.content.slice(1);
+         cqlFilters.push("media_type='" + capitalizedContent + "'");
+	
+       }
 			if (cqlFilters.length>0){
 				cqlFilterString = cqlFilters.join(" AND ");
 			}else{
@@ -229,6 +233,7 @@
 			//constructs the search URL
 			var url = this.base;
 			if( !_.isUndefined(this.search.q) && this.search.q.length > 0) url += '&q=' + this.search.q.toString();
+			if( !_.isUndefined(this.search.viewType) ) url += '&view_type=' + this.search.viewType;
 			if( !_.isUndefined(this.search.content) ) url += '&content=' + this.search.content;
 			if( !_.isUndefined(this.search.page) ) url += '&page=' + this.search.page;
 			if( !_.isUndefined(this.search.r_items) ) url += '&r_items=' + this.search.r_items;

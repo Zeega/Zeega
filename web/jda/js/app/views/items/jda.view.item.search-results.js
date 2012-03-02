@@ -43,14 +43,15 @@
 			}
 			
 			
-			
+			console.log(this.model);
 			var blanks = this.model.attributes;
-			if (this.model.get("date_created") != null){
-				var date = this.model.get("date_created");
-				blanks["date"] = new Date(this.model.get("date_created").replace(" ", "T"));
+			if (this.model.get("media_date_created") != null){
+				blanks["date"] = new Date(this.model.get("media_date_created").replace(" ", "T"));
+				blanks["date"]=blanks["date"].format("ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			}		
 			if (this.model.get("media_date_created") != null && this.model.get("media_date_created") != "0000-00-00 00:00:00"){
-				blanks["media_date"] = new Date(this.model.get("date_created").replace(" ", "T"));
+				blanks["media_date"] = new Date(this.model.get("media_date_created").replace(" ", "T"));
+				blanks["media_date"]=blanks["media_date"].format("ddd, mmm dS, yyyy<br/>h:MM:ss TT Z");
 			} else {
 				blanks["media_date"] = "n/a";
 			}

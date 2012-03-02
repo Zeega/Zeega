@@ -29,22 +29,14 @@
 				<div id="intro-bar" class="en">
 					<div id="home-search-bar">
 						
-						<div class='left-col'>
+						<div >
 							
 							<input size="30" class="xlarge span8" type="text" id="home-search-text-field" name="q" placeholder="{% trans %}jda.home.search{% endtrans %}">
 							
 							<button id="go-button" class="btn info large">go</button>
-							<span class=""><img class="divider" src="{{ asset('jda/images/divider.png')}}"></span>
 						</div>
 						
-						<div class='right-col'>
-							<h3>{% trans %}jda.home.archive{% endtrans %}</h3>
-							<strong> <small><a href="search#content=tweet">666,552
-										Tweets</a> / <a href="search#content=website">7,640 Websites</a> / <a href="search#content=image">32,975
-										Images</a> / <a href="search#content=video">99 Videos</a> / <a href="search#content=text">48
-										Testimonials</a></small>
-							</strong>
-						</div>
+					
 
 					</div>
 				</div>
@@ -59,10 +51,11 @@
 						<div class="span-two-thirds">
 							<h3>{% trans %}jda.home.featured{% endtrans %}</h3>
 							<ul class="media-grid">
-								<li><a href="#"><img class="thumbnail" src="{{ asset('jda/images/thumb3.jpg')}}"width="180"></a></li>
-								<li><a href="http://dev.zeega.org/japan/web/project/26/view"><img class="thumbnail" src="{{ asset('jda/images/thumb.jpg')}}"width="180"></a></li>
-								<li><a href="#"><img class="thumbnail" src="{{ asset('jda/images/thumb2.jpg')}}" width="180"></a></li>
+								<li><a href=" http://alpha.zeega.org/project/332/view" target="_blank"><img class="thumbnail" src="{{ asset('jda/images/featured1.jpg')}}"width="180"></a></li>
+								<li><a href="http://alpha.zeega.org/project/333/view" target="_blank"><img class="thumbnail" src="{{ asset('jda/images/featured2.jpg')}}"width="180"></a></li>
+								<li><a href="http://dev.zeega.org/japan/web/project/26/view" target="_blank"><img class="thumbnail" src="{{ asset('jda/images/featured3.jpg')}}" width="180"></a></li>
 							</ul>
+						
 						</div>
 					</div>
 					<!-- #collections-teaser -->
@@ -71,17 +64,25 @@
 
 
 				<div id="right-col" class="span-one-third">
-
-					
-
+					<h3>{% trans %}jda.home.archive{% endtrans %}</h3>
+							<strong> <small><a href="search#content=tweet">666,552
+										Tweets</a> / <a href="search#content=website">7,640 Websites</a> / <a href="search#content=image">32,975
+										Images</a> / <a href="search#content=video">99 Videos</a> / <a href="search#content=text">48
+										Testimonials</a></small>
+							</strong>
+					<br>
 					<h3>{% trans %}jda.home.tags{% endtrans %}</h3>
 
-					<div id="frequent-tags"><a href="search#q=tag:jishin">jishin</a>
+					<strong> <small><a href="search#q=tag:jishin">jishin</a>
 							/ <a href="search#q=tag:anpi">anpi</a> / <a href="search#q=tag:jisin">jisin</a>
 							/ <a href="search#q=tag:hinan">hinan</a> / <a href="search#q=tag:311care">311care</a>
-							/ <a href="search#q=tag:sendai">sendai</a> / <a href="search#q=tag:jgsdf">jgsdf</a> </div>
+							/ <a href="search#q=tag:sendai">sendai</a> / <a href="search#q=tag:jgsdf">jgsdf</a>
+						</small>
+							</strong>
+	
+						</div>
 
-				</div>
+					</div>
 				<!-- right-col -->
 
 			</div>
