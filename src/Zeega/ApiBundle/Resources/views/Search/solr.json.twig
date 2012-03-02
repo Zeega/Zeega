@@ -1,13 +1,10 @@
 {
-{% set docs = items.getDocuments() %}
-{% if docs|length > 0 %}
-	"items":
+{% for res_type,res_docs in results %}
+	"{{res_type}}":
 	[
-		{% set len = docs|length - 1 -%}
-
-		{% for i in 0..len %}
+		{% for doc in res_docs %}
 		{
-			{% set doc_fields = docs[i].getFields() %}
+			{% set doc_fields = doc.getFields() %}
 			"id": {{ doc_fields.id }},
 			{% if doc_fields.description_i is defined %}
 				"description": "{{ doc_fields.description_i }}",
@@ -19,7 +16,7 @@
 			{% else %}
 				"title": "",
 			{% endif %}			
-			
+
 			"date_created": "{{ doc_fields.date_created }}",
 			"uri": "{{ doc_fields.uri }}",
 			"attribution_uri": "{{ doc_fields.attribution_uri }}",
@@ -49,11 +46,16 @@
 				"tags" : ""
 			{% endif %}
 		}
-		{% if i < len %}
-			,
+		{% if loop.index0 < res_docs|length - 1 %}
+		,
 		{% endif %}
 		{% endfor %}
-		
-	]
-{% endif %}
+
+	],
+	"returned_{{res_type}}": {{res_docs|length}},
+	"total_{{res_type}}": {{res_docs.getNumFound}}
+	{% if loop.index0 < results|length - 1%}
+	,
+	{% endif %}	
+{% endfor %}
 }

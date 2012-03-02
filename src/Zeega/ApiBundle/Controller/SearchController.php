@@ -23,12 +23,23 @@ class SearchController extends Controller
 	    // ----------- api global parameters
 		$page  = $request->query->get('page');      //  string
 		$limit = $request->query->get('limit');     //  string
-
 	    $q = $request->query->get('q');
-	    
+	    $userId = $request->query->get('user');                 //  int
+		$siteId = $request->query->get('site');                 //  int
+		$contentType = $request->query->get('content');         //  string
+		$collection_id  = $request->query->get('collection');   //  string
+		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
+		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
+		
 	    if(!isset($page))               $page = 0;
-		if(!isset($limit))              $limit = 10;
+		if(!isset($limit))              $limit = 100;
 		if($limit > 100)                $limit = 100;
+		
+		if(preg_match('/tag\:(.*)/', $q, $matches))
+		{
+		 	$q = str_replace("tag:".$matches[1], "", $q);
+		 	$tags = "tag_name:" . str_replace(","," tag_name:",$matches[1]);
+		}
 		
 	    // ----------- build the search query
         $client = $this->get("solarium.client");
@@ -40,30 +51,46 @@ class SearchController extends Controller
         $query->setStart($limit * $page);
         
         // check if there is a query string
-        if(isset($q) and $q != '')
+        if(isset($q) and $q != '')                          $query->setQuery($q);
+        if(isset($contentType) and $contentType != 'all')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
+        if(isset($tags))                                    $query->createFilterQuery('tag_name')->setQuery($tags);
+        
+        if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
-            $query->setQuery($q);
-        }        
-
+            if(isset($minDateTimestamp) && isset($maxDateTimestamp))
+            {
+                $minDate = new DateTime();
+                $minDate->setTimestamp($minDateTimestamp);
+                $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
+                $maxDate = new DateTime();
+                $maxDate->setTimestamp($maxDateTimestamp);
+                $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
+                
+                $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
+            }
+        }
+        
+        $groupComponent = $query->getGrouping();
+        $groupComponent->addQuery('-media_type:Collection');
+        $groupComponent->addQuery('media_type:Collection');
+        $groupComponent->addQuery('media_type:*');
+        // maximum number of items per group
+        $groupComponent->setLimit($limit);
+        
+        
         // run the query
         $resultset = $client->select($query);
-        $res = $resultset->getDocuments();
-        //return new Response(var_dump($res[0]->getFields()));
+        //$res = $resultset->getDocuments();
+        $groups = $resultset->getGrouping();
+        
+        $results["items"] = $groups->getGroup('-media_type:Collection');
+        $results["collections"] = $groups->getGroup('media_type:Collection');
+        $results["items_and_collections"] = $groups->getGroup('media_type:*');
+        
         
         // render the results
-		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('items' => $resultset));
+		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-        
-        /*
-        $res = $resultset->getDocuments();
-        return new Response(var_dump($res[0]->getFields()));
-        foreach ($resultset as $document) 
-        {
-            foreach($document AS $field => $value)
-            {
-                return new Response($field);
-            }
-        }*/
     }
     
 	/**
