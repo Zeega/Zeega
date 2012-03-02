@@ -135,10 +135,13 @@ this.jda = {
 		this.itemViewCollection.search(obj);
 		if (this.currentView == 'event'){
 			cqlFilterString = this.itemViewCollection.getCQLSearchString();
-			this.map.layers[1].mergeNewParams({
 			
-				'CQL_FILTER' : cqlFilterString
-			});	
+			if(cqlFilterString!='INCLUDE'){
+				this.map.layers[1].mergeNewParams({
+				
+					'CQL_FILTER' : cqlFilterString
+				});
+			}
 		}
 	},
 	
@@ -425,7 +428,8 @@ this.jda = {
 				HEIGHT : map.size.h,
 				// format : format,
 				styles : map.layers[0].params.STYLES,
-				srs : map.layers[0].params.SRS
+				srs : map.layers[0].params.SRS,
+				
 			};
 			// merge filters
 			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
@@ -529,7 +533,10 @@ this.jda = {
 		
 		//Set up the CQL filter for the geoserver based on existing search:
 		cqlFilterString = this.itemViewCollection.getCQLSearchString();
-
+		
+		
+		if(1==1){
+		
 		layers.push(new OpenLayers.Layer.WMS(
 			"cite:item - tiled",
 			this.geoUrl + "cite/wms",
@@ -537,10 +544,23 @@ this.jda = {
 				layers : 'cite:item',
 				transparent : true,
 				format : 'image/png',
-				'CQL_FILTER' : cqlFilterString 
+				tiled: true
 			}
 		));
-		
+		}
+		else{
+		layers.push(new OpenLayers.Layer.WMS(
+			"cite:item - tiled",
+			this.geoUrl + "cite/wms",
+			{
+				layers : 'cite:item',
+				transparent : true,
+				format : 'image/png',
+				'CQL_FILTER' : cqlFilterString,
+				tiled: true
+			}
+		));
+		}
 		//JapanMap layers.  For more layers, it will make sense to load these only when needed.
 		layers.push( new OpenLayers.Layer.WMS(
 			"municipal-layer",
@@ -566,7 +586,7 @@ this.jda = {
 				layers : "geonode:rad_may11_contours_final_cgl",
 				format : 'image/png',
 				transparent : true,
-				tiled : true
+				tiled : true,
 			},
 			{
 				singleTile : false,
