@@ -89,3 +89,6 @@ fos_user:
     resetting:
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig
+            
+nelmio_solarium:
+    adapter: ~
