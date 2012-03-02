@@ -91,7 +91,8 @@ $(document).ready(function(){
 
 	//set up fancybox lightbox plugin
 	
-	$(".fancymedia").fancybox({
+	
+	$(".list-fancymedia").fancybox({
 		openEffect : 'fade',
     	closeEffect	: 'fade',
     	openSpeed : 'fast',
@@ -147,7 +148,109 @@ $(document).ready(function(){
 
     		
             var elementID = $(this.element).attr('id');
+            console.log(elementID);
            	var thisModel = jda.app.itemViewCollection.collection.get(elementID);
+			this.fancyView = null;
+
+			switch(thisModel.get("media_type")){
+				case 'Image':
+					this.fancyView = new FancyBoxImageView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'Video':
+           			this.fancyView = new FancyBoxVideoView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'Audio':
+           			this.fancyView = new FancyBoxAudioView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'Youtube':
+           			this.fancyView = new FancyBoxYouTubeView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'Tweet':
+           			this.fancyView = new FancyBoxTweetView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+       			case 'Text':
+	       			this.fancyView = new FancyBoxTestimonialView({model:thisModel});
+	       			this.fancyView.render(this);
+	       			break;
+           		case 'Document':
+           			this.fancyView = new FancyBoxDocCloudView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'Website':
+           			this.fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+           		case 'PDF':
+           			this.fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			this.fancyView.render(this);
+           			break;
+			}
+        },
+        
+	});
+	
+	$(".map-fancymedia").fancybox({
+		openEffect : 'fade',
+    	closeEffect	: 'fade',
+    	openSpeed : 'fast',
+    	closeSpeed : 'fast',
+		closeClick:false,
+		nextClick:false,
+		mouseWheel:false,
+		fitToView:false,
+		arrows:false,
+		closeBtn:false,
+		aspectRatio:true,
+		scroll:'none',
+			// Changing next gallery item
+		nextEffect: 'none', // 'elastic', 'fade' or 'none'
+		nextSpeed: 700,
+		nextEasing: 'none',
+		nextMethod: 'changeIn',
+
+		// Changing previous gallery item
+		prevEffect: 'none', // 'elastic', 'fade' or 'none'
+		prevSpeed: 700,
+		prevEasing: 'none',
+		prevMethod: 'changeOut',
+
+		keys: {
+				next: [ 34, 39, 40], //  page down, right arrow, down arrow
+				prev: [ 33, 37, 38], //  page up, left arrow, up arrow
+				close: [27] // escape key
+		},
+
+    	helpers : {
+    		title : false,
+    		buttons: {}
+    		
+    	},
+    	beforeClose : function() {
+
+    			if (this.fancyView !=null){
+    				this.fancyView.beforeClose();
+    			}
+    			//set video src to null to prevent browser bug
+    			$('video').attr("src", null);
+
+    	},
+    	afterShow : function(){
+    		this.fancyView.afterShow();
+    	},
+
+		/* This is where we decide which kind of content to put in the fancybox */    
+    	beforeLoad : function() {
+    	
+    		$('#fancybox-document-cloud').remove();
+
+    		
+            var elementID = $(this.element).attr('id');
+           	var thisModel = jda.app.mapViewCollection.collection.get(elementID);
 			this.fancyView = null;
 
 			switch(thisModel.get("media_type")){

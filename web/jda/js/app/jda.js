@@ -74,6 +74,23 @@ this.jda = {
 		}
 		
 	},
+	
+	 setEventViewTimePlace : function(obj){
+
+ 	 if (!_.isUndefined(obj.start))  {
+ 	   oldValues =  $("#range-slider").slider( "option", "values" );
+ 	   $( "#range-slider" ).slider( "option", "values", [obj.start, oldValues[1]] );
+ 	 }
+ 	 if (!_.isUndefined(obj.end))  {
+ 	   oldValues =  $("#range-slider").slider( "option", "values" );
+ 	   $( "#range-slider" ).slider( "option", "values", [oldValues[0], obj.end]);
+ 	 }
+ 	 if (!_.isUndefined(obj.map_bounds))  {
+ 	   coords = (obj.map_bounds).split(',');
+ 	   bounds = new OpenLayers.Bounds(coords[0], coords[1], coords[2], coords[3]);
+ 	   this.map.zoomToExtent(bounds);
+ 	 }
+ 	},
 	search : function(obj, useValuesFromURL)
 	{
 		
@@ -110,13 +127,14 @@ this.jda = {
 			}
 		}
 		 if (!_.isUndefined(obj.view_type))  this.switchViewTo(obj.view_type) ;
-		console.log('this view is : '+this.currentView);
+		
+		
+		 if (obj.view_type == 'event'){
+ 	 		this.setEventViewTimePlace(obj);
+ 	 	}
 		this.itemViewCollection.search(obj);
 		if (this.currentView == 'event'){
-			console.log('got here');
-			console.log(cqlFilterString);
 			cqlFilterString = this.itemViewCollection.getCQLSearchString();
-			console.log(cqlFilterString);
 			this.map.layers[1].mergeNewParams({
 			
 				'CQL_FILTER' : cqlFilterString
@@ -126,11 +144,15 @@ this.jda = {
 	
 	switchViewTo : function( view )
 	{
+		this.itemViewCollection  .setView(view);
 		if( view != this.currentView )
 		{
 			$('#'+this.currentView+'-view').hide();
 			this.currentView = view;
-			$('#'+view+'-view').show();
+			 $('#'+view+'-view').show();
+ 	 		 $("#"+view+"-view-button").hide();
+ 			 $("#"+view+"-view-button").siblings().show();
+ 	 		$(this).hide();
 			switch( this.currentView )
 			{
 				case 'list':
@@ -158,6 +180,7 @@ this.jda = {
 	{
 		console.log('switch to Event view');
 		//For some reason, the map collapses after a search to 0px width
+		
 		$("#event-view").width(940);
 		var map = this.initWorldMap();
 		this.initTimeSlider(map);
@@ -466,36 +489,36 @@ this.jda = {
 	onMapClick : function(response)
 	{
 		
-		//FIXIT clicking on an item in the OpenLayers popup does not open the fancybox
-
-		
 		//remove existing popups.
-		$('#event-map').find('#map-popup').remove();
+		if(this.popup)this.popup.destroy();
+		
 		if (response.responseText != "") {
-			
-			var data = eval('(' + response.responseText + ')');
 			var Items = jda.module("items");
-	
-			var map = this.map;
+			try{
+					var data = eval('(' + response.responseText + ')');
+			}catch(err){
+			  	this.popup=false;
+				return;
+			}
+			
 			features = data["features"];
 			features.shift();  //removes first item which is empty
+	
+			jda.app.mapViewCollection = new Items.MapPoppupViewCollection({ collection : new Items.Collection(features)});
 			
-			mapPopUpList = new Items.MapPoppupViewCollection({
-				collection : new Items.Collection(features)
+			//Fix model ids (remove prepended "item.id")
+			_.each(_.toArray(jda.app.mapViewCollection.collection),function(model){
+				jda.app.mapViewCollection.collection.get(model.id).set({id:model.get('id')});
 			});
 			
-			jda.app.itemViewCollection.collection = new Items.Collection(features);
-			popupHTML = $(mapPopUpList.el).html();
-
-			var myPopup = new OpenLayers.Popup.FramedCloud("map-popup", map.getLonLatFromPixel(this.mapClickEvent.xy), map.size, popupHTML, null, true);
-			myPopup.events.register("click", myPopup, function(evt){
-				var test = "hi";
-				console.log("onclick");
-			});
+			this.popup = new OpenLayers.Popup.FramedCloud("map-popup", this.map.getLonLatFromPixel(this.mapClickEvent.xy), this.map.size, $(jda.app.mapViewCollection.el).html(), null, true);
 			
-			map.addPopup(myPopup);
+			//openlayers workaround, propogates click events to trigger fancybox
+			this.popup.events.register("click", this.popup, function(event){$(event.target).trigger('click');});
 			
+			this.map.addPopup(this.popup);	
 		}
+		else this.popup=false;
 		
 	},
 	

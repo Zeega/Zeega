@@ -28,7 +28,7 @@
 	
 			var windowHeight = $(window).height();
 			interfaceContentHeight = windowHeight - 115;
-			$(this.el).width(380);
+			$(this.el).width(250);
 			$(this.el).height(interfaceContentHeight);
 			_(this._listItemViews).each(function(itemView) {
 				

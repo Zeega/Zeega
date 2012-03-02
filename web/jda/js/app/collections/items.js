@@ -85,21 +85,12 @@
 			}
 			$('#spinner').spin('large');
 			
-			var hash = '';
-			 if( !_.isUndefined(obj.viewType)) hash += 'view_type=' + obj.viewType + '&';
-			if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
-			if( !_.isUndefined(obj.content) ) { 
-				
-				hash += 'content='+ obj.content;
-				
-			}
 			
-			//update hash but don't fire a second action
-			jda.app.router.navigate(hash,{trigger:false});
 			
+		
 			this.collection.setSearch(obj,reset);
 			
-			
+			this.setURLHash();
 			this.collection.fetch({
 				add : obj.page > 1 ? true : false,
 				success : function(model, response){ 
@@ -108,7 +99,7 @@
 					jda.app.visualSearch.searchBox.disableFacets();
 
 					$('#results-count-number').html(response["items_count"]);
-					console.log(response["items_count"]);
+					
 					_this.renderTags(response.tags);
 					_this.render();
 					
@@ -120,7 +111,44 @@
 
 				}
 			});
+			
 		},
+		
+		
+		setMapBounds : function(bounds){
+ 		   this.collection.search.mapBounds = bounds;
+ 		   this.setURLHash();
+ 		   },
+ 	 
+ 
+ 	    	setView : function(view){
+ 	 		this.collection.search.viewType = view;	
+       		this.setURLHash();
+			},
+		
+		setContent : function(content){
+ 		this.collection.search.content = content;
+ 		this.setURLHash();
+ 		 },
+		
+	setURLHash : function (){
+	
+	
+	
+	obj = this.collection.search;
+ 	var hash = '';      
+ 	if( !_.isUndefined(obj.viewType)) hash += 'view_type=' + obj.viewType + '&';
+ 	if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
+ 	if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
+ 	if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
+ 	if( !_.isUndefined(obj.times) ){
+ 	if( !_.isUndefined(obj.times.start) ) hash += 'start='+ obj.times.start + '&';
+ 	if( !_.isUndefined(obj.times.end) ) hash += 'end='+ obj.times.end + '&';
+	}  
+	
+ 	jda.app.router.navigate(hash,{trigger:false});
+	
+	},
 		
 
 		setStartAndEndTimes : function(startDate, endDate){
@@ -128,12 +156,13 @@
 			search.times = {};
 			search.times.start = startDate;
  	 		search.times.end = endDate;
+ 	 		this.setURLHash()
 		},
 		
 		getCQLSearchString : function(){
 			
 			var search = this.collection.search;
-			console.log(search);
+			
 			var cqlFilters = [];
 			if( !_.isUndefined(search.times) ){
 				if( !_.isUndefined(search.times.start) ){

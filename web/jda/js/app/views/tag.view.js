@@ -62,7 +62,7 @@ var ItemTagView = Backbone.View.extend({
 							});
 				
 					if(_this.taglist!="undefined,")$(_this.el).find('.tag-container').importTags(_this.taglist);
-						console.log(_this.taglist);
+				
 				},
 				error:_this.ignore,
 	

@@ -43,7 +43,7 @@
 			}
 			
 			
-			console.log(this.model);
+		
 			var blanks = this.model.attributes;
 			if (this.model.get("media_date_created") != null){
 				blanks["date"] = new Date(this.model.get("media_date_created").replace(" ", "T"));
@@ -106,7 +106,7 @@
 		{
 			html =
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
@@ -126,7 +126,7 @@
 		{
 			html =
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<img src="<%= thumbnail_url %>" height="100" width="100"/>'+
 			'</div>'+
@@ -146,7 +146,7 @@
 		{
 			html = 
 			
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+
@@ -166,7 +166,7 @@
 		{
 			html = 
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-website"></i>'+
 			'</div>'+
@@ -185,7 +185,7 @@
 		{
 			html = 
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-twitter"></i>'+
 				'<div class="item-author item-author-left">by <%= author %></div>'+
@@ -204,7 +204,7 @@
 		{
 			html = 
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-testimonial"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+
@@ -223,7 +223,7 @@
 		{
 			html = 
 
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-pdf"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+
@@ -244,7 +244,7 @@
 		{
 			html = 
 			
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-audio"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+
@@ -264,7 +264,7 @@
 		{
 			html = 
 			
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
+			'<a id="<%= id %>" class="list-fancymedia" rel="group">'+
 			'<div class="span2">'+
 				'<i class="jdicon-document"></i>'+
 				'<div class="item-author item-author-left"><%= author %></div>'+

@@ -15,36 +15,17 @@
 			
 			blanks.id=this.model.get("id").split('.')[1];
 			$(this.el).html( _.template( template, blanks ));
-			
-			//For testing whether events getting triggered or not
-			$(this.el).click(function(){
-				console.log('clicked finally');
-				alert("hi");
-				return false;
-			});
 			return this;
 		},
-
-		events : {
-			//'click' : 'openOverlay',
-		},
-
-		/*openOverlay : function()
-		{
-			console.log('clicked map popup item: '+ this.model.id )
-			$(this.el).fancybox({
-				content : '<i class="jdicon-'+this.model.get("type").toLowerCase()+'"></i>'+this.model.get('title')
-			})
-		},*/
 
 		getTemplate : function()
 		{
 			html =
-			'<a id="<%= id %>" class="fancymedia" rel="group">'+
-			'<div class="span1">'+
-				'<img src="<%= thumbnail_url %>" height="50" width="50"/>'+
+			'<a  class="map-fancymedia" id="<%= id %>" rel="group">'+
+			'<div style="float:left;">'+
+				'<img  src="<%= thumbnail_url %>" height="50" width="50"/>'+
 			'</div>'+
-			'<div class="span3">'+
+			'<div class="span">'+
 				'<%= title %>'+
 			'</div>'+
 			'</a>';
