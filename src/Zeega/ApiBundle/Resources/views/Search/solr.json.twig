@@ -6,21 +6,34 @@
 		{
 			{% set doc_fields = doc.getFields() %}
 			"id": {{ doc_fields.id }},
-			{% if doc_fields.description_i is defined %}
-				"description": "{{ doc_fields.description_i }}",
+			"site_id": "1",
+			{% if doc_fields.user_id is defined %}
+				"user_id": "{{ doc_fields.user_id }}",
 			{% else %}
-				"description": "",
+				"user_id": "1",
 			{% endif %}
 			{% if doc_fields.title_i is defined %}
 				"title": "{{ doc_fields.title_i }}",
 			{% else %}
 				"title": "",
 			{% endif %}			
-
-			"date_created": "{{ doc_fields.date_created }}",
+			{% if doc_fields.description_i is defined %}
+				"description": "{{ doc_fields.description_i }}",
+			{% else %}
+				"description": "",
+			{% endif %}
+			{% if doc_fields.text_i is defined %}
+				"text": "{{ doc_fields.text_i }}",
+			{% else %}
+				"text": "",
+			{% endif %}
+			
 			"uri": "{{ doc_fields.uri }}",
 			"attribution_uri": "{{ doc_fields.attribution_uri }}",
+			"date_created": "2012-01-02T00:00:00",
 			"media_type": "{{ doc_fields.media_type }}",
+			"media_id": null,
+			"metadata_id": null,
 			"layer_type": "{{ doc_fields.layer_type }}",
 			{% if doc_fields.thumbnail_url is defined %}
 				"thumbnail_url": "{{ doc_fields.thumbnail_url }}",
@@ -29,22 +42,25 @@
 			{% endif %}
 			"child_items_count": {{ doc_fields.child_items_count }},
 			"media_creator_username": "{{ doc_fields.media_creator_username }}",
+			"media_creator_realname": "{{ doc_fields.media_creator_username }}",
 			"archive": "{{ doc_fields.archive }}",
 			{% if doc_fields.media_date_created is defined %}
-				"media_date_created" : "{{ doc_fields.media_date_created|date("Y-m-d") }}",
+				"media_date_created" : "2012-01-02T00:00:00",
 			{% else %}
-				"media_date_created" : "",
+				"media_date_created" : "2012-01-02T00:00:00",
 			{% endif %}
 			{% if doc_fields.media_date_created_end is defined %}
-				"media_date_created_end" : "{{ doc_fields.media_date_created_end|date("Y-m-d") }}",
+				"media_date_created_end" : "2012-01-02T00:00:00",
 			{% else %}
-				"media_date_created_end" : "",
+				"media_date_created_end" : "2012-01-02T00:00:00",
 			{% endif %}
 			{% if doc_fields.tag_name is defined %}
 				"tags" : "{{doc_fields.tag_name|join(",")}}"
 			{% else %}
 				"tags" : ""
-			{% endif %}
+			{% endif %},
+			"media_geo_latitude": null,
+			"media_geo_longitude": null
 		}
 		{% if loop.index0 < res_docs|length - 1 %}
 		,
@@ -52,8 +68,8 @@
 		{% endfor %}
 
 	],
-	"returned_{{res_type}}": {{res_docs|length}},
-	"total_{{res_type}}": {{res_docs.getNumFound}}
+	"returned_{{res_type}}_count": {{res_docs|length}},
+	"{{res_type}}_count": {{res_docs.getNumFound}}
 	{% if loop.index0 < results|length - 1%}
 	,
 	{% endif %}	
@@ -62,6 +78,7 @@
 {% for tag_name, tag_count in tags %}
 {
 	"name" : "{{tag_name}}",
+	"id": "18751",
 	"occurrences" : "{{tag_count}}"
 }
 	{% if loop.index0 < tags|length - 1 %}

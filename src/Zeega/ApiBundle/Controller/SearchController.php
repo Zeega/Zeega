@@ -34,6 +34,7 @@ class SearchController extends Controller
 	    if(!isset($page))               $page = 0;
 		if(!isset($limit))              $limit = 100;
 		if($limit > 100)                $limit = 100;
+		if(isset($contentType))        $contentType = ucfirst($contentType);
 		
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
@@ -91,8 +92,8 @@ class SearchController extends Controller
         //return new Response(var_dump($facets->getFacet('tags')));
         
         $results["items"] = $groups->getGroup('-media_type:Collection');
-        $results["collections"] = $groups->getGroup('media_type:Collection');
-        $results["items_and_collections"] = $groups->getGroup('media_type:*');
+        //$results["collections"] = $groups->getGroup('media_type:Collection');
+        //$results["items_and_collections"] = $groups->getGroup('media_type:*');
         $tags = $facets->getFacet('tags');
         
         
