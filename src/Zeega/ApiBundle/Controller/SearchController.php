@@ -53,7 +53,7 @@ class SearchController extends Controller
         
         // check if there is a query string
         if(isset($q) and $q != '')                          $query->setQuery($q);
-        if(isset($contentType) and $contentType != 'all')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
+        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
         if(isset($tags))                                    $query->createFilterQuery('tag_name')->setQuery($tags);
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
@@ -85,6 +85,7 @@ class SearchController extends Controller
         
         // run the query
         $resultset = $client->select($query);
+        return new Response(var_dump($resultset));
         //$res = $resultset->getDocuments();
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
