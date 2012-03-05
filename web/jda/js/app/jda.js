@@ -185,9 +185,91 @@ this.jda = {
 		//For some reason, the map collapses after a search to 0px width
 		
 		$("#event-view").width(940);
-		var map = this.initWorldMap();
-		this.initTimeSlider(map);
-		this.initLayerControl();
+		
+		if( !this.mapLoaded )
+		{
+			var map = this.initWorldMap();
+			this.initTimeSlider(map);
+			this.initLayerControl();
+		}
+		this.mapLoaded = true;
+
+	},
+	
+	initWorldMap : function()
+	{
+		console.log("Initializing Map");
+
+		//OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
+		//OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
+		
+		var myControls = [
+			new OpenLayers.Control.OverviewMap(), 
+			//new OpenLayers.Control.LayerSwitcher(),
+			new OpenLayers.Control.PanZoomBar(),
+			//new OpenLayers.Control.MouseToolbar(), 
+			new OpenLayers.Control.KeyboardDefaults()
+		];
+		
+		var map = new OpenLayers.Map(
+			'event-map',
+			{
+				controls:myControls
+			}
+		);
+		var baseLayer = new OpenLayers.Layer.WMS(
+			"OpenLayers WMS",
+			"http://vmap0.tiles.osgeo.org/wms/vmap0?",
+			{ 'layers' : 'basic', tiled:true } );
+
+		map.addLayer( baseLayer );
+		map.setCenter(new OpenLayers.LonLat(140.652466, 38.052417), 9);
+		map.addLayers(this.getMapLayers());
+
+		this.startMapListeners( map );
+		this.map = map;
+		return map;
+	},
+	
+	startMapListeners : function( map )
+	{
+		var _this = this;
+		map.events.register('click', map, function(e) {
+			
+			var params = {
+				REQUEST : "GetFeatureInfo",
+				EXCEPTIONS : "application/vnd.ogc.se_xml",
+				BBOX : map.getExtent().toBBOX(),
+				SERVICE : "WMS",
+				VERSION : "1.1.1",
+				X : e.xy.x,
+				Y : e.xy.y,
+				INFO_FORMAT : 'text/html',
+				QUERY_LAYERS : 'cite:item',
+				FEATURE_COUNT : 50,
+				Layers : 'cite:item',
+				WIDTH : map.size.w,
+				HEIGHT : map.size.h,
+				// format : format,
+				styles : map.layers[0].params.STYLES,
+				srs : map.layers[0].params.SRS,
+				TILED : true
+
+			};
+			// merge filters
+			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
+			if (map.layers[0].params.FILTER != null) params.filter = map.layers[0].params.FILTER;
+			if (map.layers[0].params.FEATUREID) params.featureid = map.layers[0].params.FEATUREID;
+			
+			OpenLayers.loadURL(_this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick);
+			_this.mapClickEvent = e;
+			OpenLayers.Event.stop(e);
+		});
+		
+		$(".layer-checkbox").click(function(){
+			_this.toggleMapLayer($(this).attr("id"), map);
+			_this.toggleLegendEntry($(this).attr("id"), map);
+		});
 	},
 	
 	showTagView : function()
@@ -206,18 +288,18 @@ this.jda = {
 		
 		//Probably better way to start layer Controls closed
 		$("#layer-control-drawer-arrows").html("&lt;&lt;");
-		$("#layer-control-drawer").animate({right : "-=200"}, 10);
+		$("#layer-control-drawer").animate({right : "-253px"}, 10);
 		
 		$("#layer-control-drawer-tab").click(function(){
 			if (_this.layerControlIsOut){
 				console.log("retract layer controls");
-				$("#layer-control-drawer-arrows").html("&lt;&lt;");
-				$("#layer-control-drawer").animate({right : "-=200"}, 400);
+				$("#layer-control-drawer-arrows").html("&laquo;");
+				$("#layer-control-drawer").animate({right : "-253px"}, 400);
 			}else{
 				console.log("expand layer controls");
 				console.log($("#layer-control-drawer-arrows"));
-				$("#layer-control-drawer-arrows").html("&gt;&gt;");
-				$("#layer-control-drawer").animate({right : "+=200"}, 400);
+				$("#layer-control-drawer-arrows").html("&raquo;");
+				$("#layer-control-drawer").animate({right : "-25px"}, 400);
 			}
 			_this.layerControlIsOut = !_this.layerControlIsOut;
 		})
@@ -380,75 +462,13 @@ this.jda = {
 
         
 	},
-	initWorldMap : function()
+	
+	
+	toggleLegendEntry :  function(checkboxID, map)
 	{
-		console.log("Initializing Map");
-		if( !this.mapLoaded )
+		switch(checkboxID)
 		{
-			//OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
-			//OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
-			
-			var map = new OpenLayers.Map('event-map');
-			var baseLayer = new OpenLayers.Layer.WMS(
-				"OpenLayers WMS",
-				"http://vmap0.tiles.osgeo.org/wms/vmap0?",
-				{ 'layers' : 'basic', tiled:true } );
-
-			map.addLayer( baseLayer );
-			map.setCenter(new OpenLayers.LonLat(140.652466, 38.052417), 9);
-			map.addLayers(this.getMapLayers());
-
-			this.startMapListeners( map );
-			this.mapLoaded = true;
-		}
-		this.map = map;
-		return map;
-	},
-	
-	startMapListeners : function( map )
-	{
-		var _this = this;
-		map.events.register('click', map, function(e) {
-			
-			var params = {
-				REQUEST : "GetFeatureInfo",
-				EXCEPTIONS : "application/vnd.ogc.se_xml",
-				BBOX : map.getExtent().toBBOX(),
-				SERVICE : "WMS",
-				VERSION : "1.1.1",
-				X : e.xy.x,
-				Y : e.xy.y,
-				INFO_FORMAT : 'text/html',
-				QUERY_LAYERS : 'cite:item',
-				FEATURE_COUNT : 50,
-				Layers : 'cite:item',
-				WIDTH : map.size.w,
-				HEIGHT : map.size.h,
-				// format : format,
-				styles : map.layers[0].params.STYLES,
-				srs : map.layers[0].params.SRS,
-				TILED : true
-
-			};
-			// merge filters
-			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
-			if (map.layers[0].params.FILTER != null) params.filter = map.layers[0].params.FILTER;
-			if (map.layers[0].params.FEATUREID) params.featureid = map.layers[0].params.FEATUREID;
-			
-			OpenLayers.loadURL(_this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick);
-			_this.mapClickEvent = e;
-			OpenLayers.Event.stop(e);
-		});
-		
-		$(".layer-checkbox").click(function(){
-			_this.toggleMapLayer($(this).attr("id"), map);
-			_this.toggleLegendEntry($(this).attr("id"), map);
-		});
-	},
-	
-	toggleLegendEntry :  function(checkboxID, map) {
-		switch(checkboxID){
-			case "municipal-layer":			
+			case "municipal-layer":
 				layer = "geonode:Admin_Dissolve_Test2_JOB";
 				legendID = "municipal-legend";
 				break;
@@ -471,7 +491,8 @@ this.jda = {
 		}
 		
 		//If the image hasn't been loaded yet, do so
-		if ($("#"+legendID).find("img").length==0){
+		if ( $("#"+legendID).find("img").length == 0)
+		{
 			legendString = "http://worldmap.harvard.edu/geoserver/wms?TRANSPARENT=TRUE&EXCEPTIONS=application%2Fvnd.ogc.se_xml&VERSION=1.1.1&SERVICE=WMS&REQUEST=GetLegendGraphic&LLBBOX=133.65533295554525,34.24189997810896,143.33901303676075,42.22959346742014&URL=http%3A%2F%2Fworldmap.harvard.edu%2Fgeoserver%2Fwms&TILED=true&TILESORIGIN=14878443.604346,4061329.7164352&LAYER="+layer+"&FORMAT=image/gif&SCALE=1091958.1364361627";
 			$("#"+legendID).append("<img src='" + legendString + "'>");
 		}		
@@ -480,12 +501,14 @@ this.jda = {
 
 	},
 	
-	toggleMapLayer : function(checkboxID, map) {
+	toggleMapLayer : function(checkboxID, map)
+	{
 		//map layer names are the same as checkbox id's
 		map.getLayersByName(checkboxID)[0].setVisibility($('#'+checkboxID).is(':checked'));
 	},
 	
-	onLegendLoad : function(response){
+	onLegendLoad : function(response)
+	{
 		console.log(response);
 	},
 	
@@ -495,11 +518,16 @@ this.jda = {
 		//remove existing popups.
 		if(this.popup)this.popup.destroy();
 		
-		if (response.responseText != "") {
+		if (response.responseText != "")
+		{
 			var Items = jda.module("items");
-			try{
-					var data = eval('(' + response.responseText + ')');
-			}catch(err){
+			console.log(response)
+			try
+			{
+				var data = eval('(' + response.responseText + ')');
+			}
+			catch(err)
+			{
 			  	this.popup=false;
 				return;
 			}
@@ -514,10 +542,18 @@ this.jda = {
 				jda.app.mapViewCollection.collection.get(model.id).set({id:model.get('id')});
 			});
 			
-			this.popup = new OpenLayers.Popup.FramedCloud("map-popup", this.map.getLonLatFromPixel(this.mapClickEvent.xy), this.map.size, $(jda.app.mapViewCollection.el).html(), null, true);
+			this.popup = new OpenLayers.Popup.FramedCloud( 
+				"map-popup",
+				this.map.getLonLatFromPixel(this.mapClickEvent.xy),
+				this.map.size,
+				$(jda.app.mapViewCollection.el).html(),
+				null,
+				true
+			);
+			this.popup.border = '0px';
 			
 			//openlayers workaround, propogates click events to trigger fancybox
-			this.popup.events.register("click", this.popup, function(event){$(event.target).trigger('click');});
+			this.popup.events.register("click", this.popup, function(event){ $(event.target).trigger('click') });
 			
 			this.map.addPopup(this.popup);	
 		}
