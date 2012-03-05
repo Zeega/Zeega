@@ -45,7 +45,7 @@ class SearchController extends Controller
         $client = $this->get("solarium.client");
 
         $query = $client->createSelect();
-        
+        //return new Response(var_dump($query));
         // pagination and limit
         $query->setRows($limit);
         $query->setStart($limit * $page);
@@ -77,19 +77,27 @@ class SearchController extends Controller
         // maximum number of items per group
         $groupComponent->setLimit($limit);
         
+        $facetComponent = $query->getFacetSet();
+        $facetComponent->createFacetField();
+        
+        $facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5);
         
         // run the query
         $resultset = $client->select($query);
         //$res = $resultset->getDocuments();
         $groups = $resultset->getGrouping();
+        $facets = $resultset->getFacetSet();
+        
+        //return new Response(var_dump($facets->getFacet('tags')));
         
         $results["items"] = $groups->getGroup('-media_type:Collection');
         $results["collections"] = $groups->getGroup('media_type:Collection');
         $results["items_and_collections"] = $groups->getGroup('media_type:*');
+        $tags = $facets->getFacet('tags');
         
         
         // render the results
-		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results));
+		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tags));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     

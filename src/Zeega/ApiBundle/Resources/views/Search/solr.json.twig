@@ -57,5 +57,16 @@
 	{% if loop.index0 < results|length - 1%}
 	,
 	{% endif %}	
+{% endfor %},
+"tags":[
+{% for tag_name, tag_count in tags %}
+{
+	"name" : "{{tag_name}}",
+	"occurrences" : "{{tag_count}}"
+}
+	{% if loop.index0 < tags|length - 1 %}
+	,
+	{% endif %}
 {% endfor %}
+]
 }
