@@ -211,11 +211,27 @@
 	vertical-align: top;
 }
 
+.map-popup-list-items{
+	width : 270px;
+	height : 60px;
+	margin-left: 5px;
+}
+
+.map-popup-list-items>div{
+	margin-left: 5px;
+}
+
 #discovery-event-map {
 	border: 1px solid #999;
 	border-radius: 3px;
 	margin-left: 5px;
 	overflow: visible;
+}
+
+.discovery-map-list {
+	margin-left: 5px;
+	list-style: none;
+	max-height: 100%;
 }
 
 .discovery-time-slider {
@@ -259,3 +275,104 @@
 .discovery-tag-interface-tag {
 	cursor: pointer;
 }
+
+
+
+/*time slider */
+#range-slider{
+	margin : 20px 144px 0px 144px;
+	top : 20px;
+}
+
+.date-time-block{
+	position: absolute;
+	top : -20px;
+	border : 1px solid #999;
+	border-radius: 3px;
+	padding : 3px;
+	background : #F4F4F4;
+	width : 167px;
+}
+
+.date-time-block>input{
+	font-size: 12px;
+	margin : 1px;
+	text-align: right;
+	padding : 2px;
+	border : 1px solid #CCC;
+}
+
+#start-time, #end-time{
+	width : 55px;
+}
+
+#start-date, #end-date{
+	width : 95px;
+}
+
+#event-time-slider{
+	position: relative;
+	height : 60px;
+}
+
+#event-view{
+	position : relative;
+	overflow: hidden;
+}
+
+#layer-control{
+	z-index:-1;
+	display : inline-block;
+	width : 200px;
+	height : 786px;
+	padding-right:50px;
+}
+
+#layer-control>ul{
+	margin-left : -55px;
+	padding-left : 55px;
+	margin-right : -50px;
+}
+
+#layer-control-drawer-tab{
+	display : inline-block;
+	vertical-align : top;
+	margin-top : 5px;
+	cursor : pointer;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+	padding-top : 3px;
+	padding-bottom : 3px;
+}
+	
+#layer-legend{
+	overflow: scroll;
+	height : 700px;
+}
+
+#layer-control-drawer{
+	display : inline-block;
+	z-index: 1004 !important;  
+	position : absolute;
+	right : -50px;
+	top : 100px;
+}
+
+.legend-entry{
+	border-bottom : 1px solid #999;
+}
+.legend-entry p{
+	padding-bottom: :0px;
+	padding-top: 10px;
+}
+
+#ui-datepicker-div {
+	z-index: 1005 !important;
+}
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }

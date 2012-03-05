@@ -489,7 +489,7 @@ dl dt,dl dd {
 }
 
 dl dt {
-	font-weight: bold;
+	font-weight: 500;
 }
 
 dl dd {

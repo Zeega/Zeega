@@ -17,7 +17,7 @@ class ItemsController extends Controller
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        $query = array();
+        $query = array(); 
         
         $request = $this->getRequest();
         //  api global parameters
@@ -168,6 +168,44 @@ class ItemsController extends Controller
         return ResponseHelper::encodeAndGetJsonResponse($item);
     }
     
+	public function putItemsAction($item_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->getRequest();
+        $request_data = $this->getRequest()->request;        
+
+		$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
+
+        if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find the Item with the id ' + $item_id);
+        }
+
+		$title = $request_data->get('title');
+		$description = $request_data->get('description');
+        $tags = $request_data->get('tags');
+		$tags = $request_data->get('tags');
+		$creator_username = $request_data->get('media_creator_username');
+		$creator_realname = $request_data->get('media_creator_realname');
+		$media_geo_latitude = $request_data->get('media_geo_latitude');
+		$media_geo_longitude = $request_data->get('media_geo_longitude');
+
+		if(isset($title)) $item->setTitle($title);
+		if(isset($description)) $item->setDescription($description);
+		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
+		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
+		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
+		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($item);
+        $em->flush();
+
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+    }
+
     // Private methods 
     
     private function populateCollectionWithRequestData($request_data)
