@@ -170,7 +170,7 @@
                 <source>jda.header.feedback</source>
                 <target>Feedback</target>
             </trans-unit>           
-<trans-unit id="43">
+			<trans-unit id="43">
                 <source>jda.header.japanese</source>
                 <target>日本語</target>
             </trans-unit>				
@@ -182,7 +182,10 @@
                 <source>jda.home.partners</source>
                 <target>Partners</target>
             </trans-unit>			            
-            
+			<trans-unit id="46">
+                <source>jda.home.go</source>
+                <target>go</target>
+            </trans-unit>		            
         </body>
     </file>
 </xliff>

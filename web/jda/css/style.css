@@ -74,7 +74,7 @@
 	top:6px;
 }
 #home-search-bar input{
-	width: 770px;
+	width: 740px;
 	float: left;
 	font-size: 2em;
 	font-weight: bold;
@@ -359,6 +359,7 @@ padding-top:30px;
 #go-button
 {
 	height:55px;
+	width: 85px;
 	float:left;
 	font-size:2em;
 	margin-left:12px;
@@ -595,4 +596,6 @@ opacity: 1;
 .group {
     zoom:1; /* For IE 6/7 (trigger hasLayout) */
 }
+
+
 

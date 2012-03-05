@@ -28,7 +28,7 @@
             </trans-unit>
             <trans-unit id="7">
                 <source>jda.home.more</source>
-                <target>且</target>
+                <target>続きを読む</target>
             </trans-unit> 
             <trans-unit id="8">
                 <source>jda.home.add</source>
@@ -36,7 +36,7 @@
             </trans-unit>
             <trans-unit id="9">
                 <source>jda.home.search</source>
-                <target>アーカイブを検索する</target>
+                <target>キーワードを入力して下さい</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>jda.home.logo</source>
@@ -120,15 +120,15 @@
             </trans-unit>
              <trans-unit id="30">
                 <source>jda.search.testimonial</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>物語</target>
             </trans-unit>
              <trans-unit id="31">
                 <source>jda.search.listview</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>リスト表示</target>
             </trans-unit>
              <trans-unit id="32">
                 <source>jda.search.timeplaceview</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>時間／空間表示</target>
             </trans-unit>
              <trans-unit id="33">
                 <source>jda.search.relatedtags</source>
@@ -181,6 +181,10 @@
 			<trans-unit id="45">
                 <source>jda.home.partners</source>
                 <target>協力企業・団体</target>
+            </trans-unit>			
+			<trans-unit id="46">
+                <source>jda.home.go</source>
+                <target>検索</target>
             </trans-unit>			
 		
 	
