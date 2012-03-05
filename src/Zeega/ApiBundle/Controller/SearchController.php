@@ -85,7 +85,7 @@ class SearchController extends Controller
         
         // run the query
         $resultset = $client->select($query);
-        return new Response(var_dump($resultset));
+        //return new Response(var_dump($resultset));
         //$res = $resultset->getDocuments();
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
