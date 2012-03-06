@@ -23,8 +23,7 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 
-	apiLocation : 'http://dev.zeega.org/jdaapisolr/web/', //solr
-	//apiLocation : 'http://dev.zeega.org/jdaapi/web/', //old
+	apiLocation : 'http://dev.zeega.org/jdaapi/web/',
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,
@@ -49,7 +48,6 @@ this.jda = {
 		if (useValuesFromURL)
 		{
 			//get the search query from URL and put it in the search box
-			console.log("@@@@@@@@@@@@@@")
 			this.updateSearchUI(params);
 			console.log('from url');
 			console.log(params)
@@ -131,7 +129,6 @@ this.jda = {
 				var texts = textPart.split(",");
 				for(var i=0;i<texts.length;i++)
 				{
-					console.log("ADD FACETS")
 					var text = texts[i];
 					VisualSearch.searchBox.addFacet('text', text, 0);
 				}
@@ -197,6 +194,12 @@ this.jda = {
 	showListView : function()
 	{
 		console.log('switch to List view');
+
+		//loop through all facets to find the data & time one
+		_.each( VisualSearch.searchBox.facetViews, function( facet ){
+			if( facet.model.get('category') == 'data:time & place' ) facet.remove();
+		})
+		
 		if(this.itemViewCollection.updated)
 		{
 			console.log('render collection')
@@ -208,6 +211,8 @@ this.jda = {
 	{
 		console.log('switch to Event view');
 		//For some reason, the map collapses after a search to 0px width
+		
+		VisualSearch.searchBox.addFacet('data:time & place', '', 0);
 		
 		$("#event-view").width(940);
 

@@ -15,7 +15,8 @@
 			this.tags=new Tags.Collection();
 		},
 
-		loadTags : function(successFunction, errorFunction){
+		loadTags : function(successFunction, errorFunction)
+		{
 			this.tags.reset({silent:true});
 			this.tags.item_id=this.id;
 			this.tags.fetch({ 

@@ -45,10 +45,10 @@
 					$("#related-tags li").filter(":last").click(function(){
 						
 						//clear all current search filters
-						jda.app.visualSearch.searchBox.clearSearch();
+						VisualSearch.searchBox.clearSearch();
 
 						//add only tag filter
-						jda.app.visualSearch.searchBox.addFacet('tag', tag.name, 0);
+						VisualSearch.searchBox.addFacet('tag', tag.name, 0);
 						
 
 
