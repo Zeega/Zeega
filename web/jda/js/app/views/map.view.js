@@ -85,7 +85,8 @@ var LocatorMapView = Backbone.View.extend({
 		$(this.el).find('.edit-geo-location').fadeOut('fast',function(){$(that.el).find('.locator-search-bar').fadeIn();});
 		this.geocoder = new google.maps.Geocoder();
 	},
-	runSearch : function(e){
+	runSearch : function(e)
+	{
 		if(e.keyCode==13){
 			$(this.el).find('.locator-search-input').blur();
 			var that=this;

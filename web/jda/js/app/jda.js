@@ -23,7 +23,8 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 
-	apiLocation : 'http://dev.zeega.org/jdaapi/web/',
+	apiLocation : 'http://dev.zeega.org/jdaapisolr/web/', //solr
+	//apiLocation : 'http://dev.zeega.org/jdaapi/web/', //old
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,
@@ -36,13 +37,80 @@ this.jda = {
 		// Include all modules
 
 		var Items = jda.module("items");
-		
 		// make item collection
 		this.itemViewCollection = new Items.ViewCollection();
-
 	},
 	
-	updateSearchUI : function(obj){
+	search : function(params, useValuesFromURL)
+	{
+		console.log('search')
+		
+		//Parse out search box values for putting them in the Search query
+		if (useValuesFromURL)
+		{
+			//get the search query from URL and put it in the search box
+			console.log("@@@@@@@@@@@@@@")
+			this.updateSearchUI(params);
+			console.log('from url');
+			console.log(params)
+		}
+		else
+		{
+			//Use content value from format dropdown
+			console.log('new search')
+			console.log(params)
+			params.content = $('#content').val();
+
+			//Parse searchbox values
+			var facets = VisualSearch.searchQuery.models;
+			console.log(facets)
+			
+			var tagQuery = "tag:";
+			var textQuery = "";
+
+			_.each(facets, function(facet){
+				
+				switch ( facet.get('category') )
+				{
+					case 'text':
+						textQuery = (textQuery.length > 0) ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
+						break;
+					case 'tag':
+						tagQuery = (tagQuery.length > 4) ? tagQuery + ", " + facet.get('value') : tagQuery + facet.get('value');
+						break;
+			    }
+			});
+			params.q = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
+			params.viewType = this.currentView;
+			console.log(params)
+		
+		}
+		
+		if (!_.isUndefined(params.view_type))  this.switchViewTo(params.view_type) ;
+		
+		if (params.view_type == 'event')
+		{
+			this.setEventViewTimePlace(params);
+		}
+		this.itemViewCollection.search( params );
+		
+		
+		if (this.currentView == 'event')
+		{
+			if(cqlFilterString!='INCLUDE')
+			{
+				this.map.layers[1].mergeNewParams({
+					'CQL_FILTER' : this.itemViewCollection.getCQLSearchString()
+				});
+			}
+		}
+		
+	},
+	
+	
+	
+	updateSearchUI : function(obj)
+	{
 		var q = obj.q;
 		if (!_.isUndefined(q))
 		{
@@ -53,17 +121,19 @@ this.jda = {
 				for(var i=0;i<tagNames.length;i++)
 				{
 					var tagName = tagNames[i];
-					jda.app.visualSearch.searchBox.addFacet('tag', tagName, 0);
+					VisualSearch.searchBox.addFacet('tag', tagName, 0);
 				}
 			}
 			//check for text
 			var textPart = q.indexOf("tag:") >= 0 ? q.substr(0,  q.indexOf("tag:")) : q;
-			if (textPart.length > 0){
+			if (textPart.length > 0)
+			{
 				var texts = textPart.split(",");
 				for(var i=0;i<texts.length;i++)
 				{
+					console.log("ADD FACETS")
 					var text = texts[i];
-					jda.app.visualSearch.searchBox.addFacet('text', text, 0);
+					VisualSearch.searchBox.addFacet('text', text, 0);
 				}
 			}
 			
@@ -75,75 +145,26 @@ this.jda = {
 		
 	},
 	
-	 setEventViewTimePlace : function(obj){
-
- 	 if (!_.isUndefined(obj.start))  {
- 	   oldValues =  $("#range-slider").slider( "option", "values" );
- 	   $( "#range-slider" ).slider( "option", "values", [obj.start, oldValues[1]] );
- 	 }
- 	 if (!_.isUndefined(obj.end))  {
- 	   oldValues =  $("#range-slider").slider( "option", "values" );
- 	   $( "#range-slider" ).slider( "option", "values", [oldValues[0], obj.end]);
- 	 }
- 	 if (!_.isUndefined(obj.map_bounds))  {
- 	   coords = (obj.map_bounds).split(',');
- 	   bounds = new OpenLayers.Bounds(coords[0], coords[1], coords[2], coords[3]);
- 	   this.map.zoomToExtent(bounds);
- 	 }
- 	},
-	search : function(obj, useValuesFromURL)
+	 setEventViewTimePlace : function(obj)
 	{
-		
-		//Parse out search box values for putting them in the Search query
-		if (!_.isUndefined(jda.app.visualSearch)){
-
-			if (useValuesFromURL){
-				//get the search query from URL and put it in the search box
-				this.updateSearchUI(obj);
-			}
-			else {
-				//Use content value from UI box
-				obj.content = $('#content').val();
-
-				//Parse searchbox values
-				var facets = jda.app.visualSearch.searchQuery.models;
-				
-				var tagQuery = "tag:";
-				var textQuery = "";
-
-				_.each(facets, function(facet) {
-				    switch (facet.get('category')) {
-				        case 'text':
-				            textQuery = textQuery.length > 0 ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
-				        break;
-				        case 'tag':
-				            tagQuery = tagQuery.length > 4 ? tagQuery + ", " + facet.get('value') : tagQuery + facet.get('value');
-				        break;
-				        
-				    }
-				});
-				obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 4 ? " " : "") + (tagQuery.length > 4 ? tagQuery : ""); 
-				obj.viewType = this.currentView;
-			}
+		if (!_.isUndefined(obj.start))
+		{
+			oldValues =  $("#range-slider").slider( "option", "values" );
+			$( "#range-slider" ).slider( "option", "values", [obj.start, oldValues[1]] );
 		}
-		 if (!_.isUndefined(obj.view_type))  this.switchViewTo(obj.view_type) ;
-		
-		
-		 if (obj.view_type == 'event'){
- 	 		this.setEventViewTimePlace(obj);
- 	 	}
-		this.itemViewCollection.search(obj);
-		if (this.currentView == 'event'){
-			cqlFilterString = this.itemViewCollection.getCQLSearchString();
-			
-			if(cqlFilterString!='INCLUDE'){
-				this.map.layers[1].mergeNewParams({
-				
-					'CQL_FILTER' : cqlFilterString
-				});
-			}
+		if (!_.isUndefined(obj.end))
+		{
+			oldValues =  $("#range-slider").slider( "option", "values" );
+			$( "#range-slider" ).slider( "option", "values", [oldValues[0], obj.end]);
 		}
-	},
+		if (!_.isUndefined(obj.map_bounds))
+		{
+			coords = (obj.map_bounds).split(',');
+			bounds = new OpenLayers.Bounds(coords[0], coords[1], coords[2], coords[3]);
+			this.map.zoomToExtent(bounds);
+		}
+ 	},
+	
 	
 	switchViewTo : function( view )
 	{
@@ -176,7 +197,11 @@ this.jda = {
 	showListView : function()
 	{
 		console.log('switch to List view');
-
+		if(this.itemViewCollection.updated)
+		{
+			console.log('render collection')
+			this.itemViewCollection.render();
+		}
 	},
 	
 	showEventView : function()
@@ -185,15 +210,20 @@ this.jda = {
 		//For some reason, the map collapses after a search to 0px width
 		
 		$("#event-view").width(940);
-		
+
 		if( !this.mapLoaded )
 		{
 			var map = this.initWorldMap();
 			this.initTimeSlider(map);
 			this.initLayerControl();
+			this.mapLoaded = true;
 		}
-		this.mapLoaded = true;
-
+		
+		this.map.layers[1].mergeNewParams({
+			'CQL_FILTER' : this.itemViewCollection.getCQLSearchString()
+		});
+		
+		console.log('map loaded')
 	},
 	
 	initWorldMap : function()
@@ -204,7 +234,7 @@ this.jda = {
 		//OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
 		
 		var myControls = [
-			new OpenLayers.Control.OverviewMap(), 
+			//new OpenLayers.Control.OverviewMap(), 
 			//new OpenLayers.Control.LayerSwitcher(),
 			new OpenLayers.Control.PanZoomBar(),
 			//new OpenLayers.Control.MouseToolbar(), 
@@ -234,7 +264,7 @@ this.jda = {
 	startMapListeners : function( map )
 	{
 		var _this = this;
-		map.events.register('click', map, function(e) {
+		map.events.register('click', map, function(e){
 			
 			var params = {
 				REQUEST : "GetFeatureInfo",
@@ -254,14 +284,13 @@ this.jda = {
 				styles : map.layers[0].params.STYLES,
 				srs : map.layers[0].params.SRS,
 				TILED : true
-
 			};
 			// merge filters
 			if (map.layers[0].params.CQL_FILTER != null) params.cql_filter = map.layers[0].params.CQL_FILTER;
 			if (map.layers[0].params.FILTER != null) params.filter = map.layers[0].params.FILTER;
 			if (map.layers[0].params.FEATUREID) params.featureid = map.layers[0].params.FEATUREID;
 			
-			OpenLayers.loadURL(_this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick);
+			OpenLayers.loadURL( _this.geoUrl + "cite/wms", params, _this, _this.onMapClick, _this.onMapClick );
 			_this.mapClickEvent = e;
 			OpenLayers.Event.stop(e);
 		});
@@ -276,33 +305,6 @@ this.jda = {
 	{
 		console.log('switch to Tag view');
 		
-	},
-	
-	initLayerControl : function(){
-		console.log("Initializing Layer Controls");
-		_this=this;
-
-		$("#layer-control").tabs();
-		this.layerControlIsOut = false;
-		
-		
-		//Probably better way to start layer Controls closed
-		$("#layer-control-drawer-arrows").html("&lt;&lt;");
-		$("#layer-control-drawer").animate({right : "-253px"}, 10);
-		
-		$("#layer-control-drawer-tab").click(function(){
-			if (_this.layerControlIsOut){
-				console.log("retract layer controls");
-				$("#layer-control-drawer-arrows").html("&laquo;");
-				$("#layer-control-drawer").animate({right : "-253px"}, 400);
-			}else{
-				console.log("expand layer controls");
-				console.log($("#layer-control-drawer-arrows"));
-				$("#layer-control-drawer-arrows").html("&raquo;");
-				$("#layer-control-drawer").animate({right : "-25px"}, 400);
-			}
-			_this.layerControlIsOut = !_this.layerControlIsOut;
-		})
 	},
 	
 	initTimeSlider : function(map)
@@ -350,19 +352,20 @@ this.jda = {
 			//maxTime = 1293940000;      //short range for testing hours and minutes
 			$("#range-slider").slider({
 				range: true, 
-			 	min: minTime, 
-			 	max: maxTime,
+				min: minTime, 
+				max: maxTime,
 				values: [minTime, maxTime],
-			 	slide: function( event, ui ) {
-			 		if (ui.values[0]<ui.values[1]){
+				slide: function( event, ui )
+				{
+					if (ui.values[0]<ui.values[1]){
 						_this.setStartDateTimeSliderBubble(ui.values[0]);
 						_this.setEndDateTimeSliderBubble(ui.values[1]);
 						return true;
-					}else{
-						return false;
 					}
-				 },
-				 change : function(event, ui){	
+					else return false;
+				},
+				change : function(event, ui)
+				{	
 					_this.setStartDateTimeSliderBubble(ui.values[0]);
 					_this.setEndDateTimeSliderBubble(ui.values[1]);
 					_this.itemViewCollection.setStartAndEndTimes(ui.values[0], ui.values[1]);
@@ -378,8 +381,35 @@ this.jda = {
 			this.setStartDateTimeSliderBubble($( "#range-slider" ).slider( "values", 0 ));
 			this.setEndDateTimeSliderBubble($( "#range-slider" ).slider( "values", 1 ));
 		}
-	},
+	}, 
 	
+	initLayerControl : function(){
+		console.log("Initializing Layer Controls");
+		_this=this;
+
+		$("#layer-control").tabs();
+		this.layerControlIsOut = false;
+		
+		
+		//Probably better way to start layer Controls closed
+		$("#layer-control-drawer-arrows").html("&lt;&lt;");
+		$("#layer-control-drawer").animate({right : "-253px"}, 10);
+		
+		$("#layer-control-drawer-tab").click(function(){
+			if (_this.layerControlIsOut){
+				console.log("retract layer controls");
+				$("#layer-control-drawer-arrows").html("&laquo;");
+				$("#layer-control-drawer").animate({right : "-253px"}, 400);
+			}else{
+				console.log("expand layer controls");
+				console.log($("#layer-control-drawer-arrows"));
+				$("#layer-control-drawer-arrows").html("&raquo;");
+				$("#layer-control-drawer").animate({right : "-25px"}, 400);
+			}
+			_this.layerControlIsOut = !_this.layerControlIsOut;
+		})
+	},
+
 
 	updateResultsCountForTimeSlider : function(sliderUI, map){
 		var searchView = this.itemViewCollection;
@@ -456,9 +486,9 @@ this.jda = {
     	$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 
     	//remove search box values
-    	jda.app.visualSearch.searchBox.disableFacets();
-	    jda.app.visualSearch.searchBox.value('');
-	    jda.app.visualSearch.searchBox.flags.allSelected = false;
+    	//jda.app.visualSearch.searchBox.disableFacets();
+	    //jda.app.visualSearch.searchBox.value('');
+	    //jda.app.visualSearch.searchBox.flags.allSelected = false;
 
         
 	},
@@ -550,7 +580,6 @@ this.jda = {
 				null,
 				true
 			);
-			this.popup.border = '0px';
 			
 			//openlayers workaround, propogates click events to trigger fancybox
 			this.popup.events.register("click", this.popup, function(event){ $(event.target).trigger('click') });
@@ -564,124 +593,124 @@ this.jda = {
 	getMapLayers : function()
 	{
 		_this = this;
-		var layers = [];
+		var layers = [];		
 		
-		//Set up the CQL filter for the geoserver based on existing search:
-		cqlFilterString = this.itemViewCollection.getCQLSearchString();
-		
-		
-		if(1==1){
-		
-		layers.push(new OpenLayers.Layer.WMS(
-			"cite:item - tiled",
-			this.geoUrl + "cite/wms",
-			{
-				layers : 'cite:item',
-				tiled: true,
-				transparent : true,
-				format : 'image/png',
-				tiled: true
-			}
-		));
-		}
-		else{
-		layers.push(new OpenLayers.Layer.WMS(
-			"cite:item - tiled",
-			this.geoUrl + "cite/wms",
-			{
-				layers : 'cite:item',
-				transparent : true,
-				format : 'image/png',
-				'CQL_FILTER' : cqlFilterString,
-				tiled: true
-			}
-		));
-		}
-		//JapanMap layers.  For more layers, it will make sense to load these only when needed.
-		layers.push( new OpenLayers.Layer.WMS(
-			"municipal-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:Admin_Dissolve_Test2_JOB",
-				format : 'image/png',
-				transparent : true,
-				tiled : true
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false,
-				opacity : 0.3
-			})
-		);
+		if(true)
+		{
+			/*
+			layers.push(new OpenLayers.Layer.WMS(
+				"cite:item - tiled",
+				this.geoUrl + "cite/wms",
+				{
+					layers : 'cite:item',
+					tiled: true,
+					transparent : true,
+					format : 'image/png',
+					tiled: true
+				}
+			));
+			*/
+
+			layers.push(new OpenLayers.Layer.WMS(
+				"cite:item - tiled",
+				this.geoUrl + "cite/wms",
+				{
+					layers : 'cite:item',
+					transparent : true,
+					format : 'image/png',
+					'CQL_FILTER' : function(){ return this.itemViewCollection.getCQLSearchString() },
+					tiled: true
+				}
+			));
 			
-		layers.push( new OpenLayers.Layer.WMS(
-			"radiation-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:rad_may11_contours_final_cgl",
-				format : 'image/png',
-				transparent : true,
-				tiled : true,
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false
-			})
-		);
+			/*
+			//JapanMap layers.  For more layers, it will make sense to load these only when needed.
+			layers.push( new OpenLayers.Layer.WMS(
+				"municipal-layer",
+				this.japanMapUrl + "wms",
+				{
+					layers : "geonode:Admin_Dissolve_Test2_JOB",
+					format : 'image/png',
+					transparent : true,
+					tiled : true
+				},
+				{
+					singleTile : false,
+					wrapDateLine : true,
+					visibility : false,
+					opacity : 0.3
+				})
+			);
+			
+			layers.push( new OpenLayers.Layer.WMS(
+				"radiation-layer",
+				this.japanMapUrl + "wms",
+				{
+					layers : "geonode:rad_may11_contours_final_cgl",
+					format : 'image/png',
+					transparent : true,
+					tiled : true,
+				},
+				{
+					singleTile : false,
+					wrapDateLine : true,
+					visibility : false
+				})
+			);
 		
-		layers.push(new OpenLayers.Layer.WMS(
-			"casualties-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:Slct_Casualty2010Join1_Final_zDe",
-				format : 'image/png',
-				transparent : true,
-				tiled : true
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false,
-				opacity : 0.5
-			})
-		);
+			layers.push(new OpenLayers.Layer.WMS(
+				"casualties-layer",
+				this.japanMapUrl + "wms",
+				{
+					layers : "geonode:Slct_Casualty2010Join1_Final_zDe",
+					format : 'image/png',
+					transparent : true,
+					tiled : true
+				},
+				{
+					singleTile : false,
+					wrapDateLine : true,
+					visibility : false,
+					opacity : 0.5
+				})
+			);
 		
 	
 			
-		layers.push( new OpenLayers.Layer.WMS(
-			"shake-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:InstruIntensity_Clip_dOd",
-				format : 'image/png',
-				transparent : true,
-				tiled : true
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false,
-				opacity : 0.3
-			})
-		);
+			layers.push( new OpenLayers.Layer.WMS(
+				"shake-layer",
+				this.japanMapUrl + "wms",
+				{
+					layers : "geonode:InstruIntensity_Clip_dOd",
+					format : 'image/png',
+					transparent : true,
+					tiled : true
+				},
+				{
+					singleTile : false,
+					wrapDateLine : true,
+					visibility : false,
+					opacity : 0.3
+				})
+			);
 		
 			layers.push( new OpenLayers.Layer.WMS(
-			"flooding-layer",
-			this.japanMapUrl + "wms",
-			{
-				layers : "geonode:japan8m_ezt",
-				format : 'image/png',
-				transparent : true,
-				tiled : true
-			},
-			{
-				singleTile : false,
-				wrapDateLine : true,
-				visibility : false
-			})
-		);
+				"flooding-layer",
+				this.japanMapUrl + "wms",
+				{
+					layers : "geonode:japan8m_ezt",
+					format : 'image/png',
+					transparent : true,
+					tiled : true
+				},
+				{
+					singleTile : false,
+					wrapDateLine : true,
+					visibility : false
+				})
+			);
+			*/
+		}
 		
 		return layers;
 	}
