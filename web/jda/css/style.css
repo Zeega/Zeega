@@ -283,6 +283,14 @@ header
 {
 	height:50px;
 }
+.alpha-header
+{
+	position:relative;
+	top:33px;
+	margin-left:6px;
+	font-size:11px;
+}
+
 
 #logo
 {
