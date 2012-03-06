@@ -290,6 +290,15 @@ header
 	margin-left:6px;
 	font-size:11px;
 }
+.photo-credit
+{
+	color: rgba(255, 255, 255, .7);
+	position: absolute;
+	left: 12px;
+	top: 12px;
+	font-size: 11px;
+	
+}
 
 
 #logo
