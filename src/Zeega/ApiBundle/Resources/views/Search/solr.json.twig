@@ -2,15 +2,20 @@
 {
 {%- for res_type,res_docs in results -%}
 	"{{ res_type}}":
+	{% if res_docs|length > 0 %}
 	[
 		{%- for doc in res_docs -%}
 		{
 			{%- set doc_fields = doc.getFields() -%}
 			"id": {{ doc_fields.id }},
+			{%- if doc_fields.site_id is defined -%}
 			"site_id": {{ doc_fields.site_id }},
+			{%- else -%}
+				"site_id": "",
+			{%- endif -%}	
 			"user_id": {{ doc_fields.user_id }},
 			{%- if doc_fields.title_i is defined -%}
-				"title": "{{ doc_fields.title_i }}",
+				"title": "{{ doc_fields.title_i|json_encode }}",
 			{%- else -%}
 				"title": "",
 			{%- endif -%}			
@@ -42,12 +47,12 @@
 			"media_creator_realname": "{{ doc_fields.media_creator_username }}",
 			"archive": "{{ doc_fields.archive }}",
 			{%- if doc_fields.media_date_created is defined -%}
-				"media_date_created" : "2012-01-02T00:00:00",
+				"media_date_created" : "{{doc_fields.media_date_created}}",
 			{%- else -%}
 				"media_date_created" : "2012-01-02T00:00:00",
 			{%- endif -%}
 			{%- if doc_fields.media_date_created_end is defined -%}
-				"media_date_created_end" : "2012-01-02T00:00:00",
+				"media_date_created_end" : "{{doc_fields.media_date_created_end}}",
 			{%- else -%}
 				"media_date_created_end" : "2012-01-02T00:00:00",
 			{%- endif -%}
@@ -69,18 +74,29 @@
 	"{{res_type}}_count": {{res_docs.getNumFound}}
 	{%- if loop.index0 < results|length - 1%}
 	,
-	{%- endif -%}	
+	{%- endif -%}
+	{% else %}
+		[],
+		"returned_{{res_type}}_count": 0,
+		"{{res_type}}_count": 0
+
+	{% endif %}	
 {%- endfor -%},
-"tags":[
+"tags":
+{% if tags|length > 0 %}
+[
 {%- for tag_name, tag_count in tags -%}
 {
 	"name" : "{{tag_name}}",
-	"id": "18751",
 	"occurrences" : "{{tag_count}}"
 }
 	{%- if loop.index0 < tags|length - 1 -%}
 	,
 	{%- endif -%}
+
 {%- endfor -%}
 ]
+{% else %}
+	[]
+{% endif %}
 }

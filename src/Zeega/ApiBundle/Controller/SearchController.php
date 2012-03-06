@@ -96,10 +96,20 @@ class SearchController extends Controller
         //$results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
         $tags = $facets->getFacet('tags');
+        $tagsArray = array(); 
+  
+        foreach ($tags as $tag_name => $tag_count)
+        {
+        	if($tag_count > 0)
+        	{
+        		$tagsArray[$tag_name] = $tag_count;
+        	}
+        }
         
-        
+        //return new Response(var_dump($tagsArray));
+		
         // render the results
-		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tags));
+		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
