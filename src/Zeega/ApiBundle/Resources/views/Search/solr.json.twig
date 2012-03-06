@@ -1,3 +1,4 @@
+{% set value = 'no spaces' %}
 {
 {%- for res_type,res_docs in results -%}
 	"{{ res_type}}":
@@ -6,24 +7,20 @@
 		{
 			{%- set doc_fields = doc.getFields() -%}
 			"id": {{ doc_fields.id }},
-			"site_id": "1",
-			{%- if doc_fields.user_id is defined -%}
-				"user_id": "{{ doc_fields.user_id }}",
-			{%- else -%}
-				"user_id": "1",
-			{%- endif -%}
+			"site_id": {{ doc_fields.site_id }},
+			"user_id": {{ doc_fields.user_id }},
 			{%- if doc_fields.title_i is defined -%}
 				"title": "{{ doc_fields.title_i }}",
 			{%- else -%}
 				"title": "",
 			{%- endif -%}			
 			{%- if doc_fields.description_i is defined -%}
-				"description": "{{ doc_fields.description_i|json_encode  }}",
+				"description": "{{- doc_fields.description_i|json_encode  -}}",
 			{%- else -%}
 				"description": "",
 			{%- endif -%}
 			{%- if doc_fields.text_i is defined -%}
-				"text": "{{ doc_fields.text_i|json_encode }}",
+				"text": "{{- doc_fields.text_i|json_encode -}}",
 			{%- else -%}
 				"text": "",
 			{%- endif -%}

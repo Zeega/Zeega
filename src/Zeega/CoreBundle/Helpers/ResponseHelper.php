@@ -18,6 +18,7 @@ class ResponseHelper
         //$renderedTwig = preg_replace('/\s+/', '', $renderedTwig);
         
         //array("\r", "\r\n", "\n")
+        $renderedTwig = str_replace("\&quot","&quot",$renderedTwig);
         $response = new Response($renderedTwig);
      	$response->headers->set('Content-Type', 'application/json; charset=UTF-8');
         return $response;
