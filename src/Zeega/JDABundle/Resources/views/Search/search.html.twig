@@ -66,11 +66,11 @@
 
 
 {% block content %}
-
+<div id="white-background"></div>
 <div class='container'>
 
 	
-
+	<div id="non-scrolling-things">
 	<!-- search-bar -->
 	<div id="search-bar" class='hero-unit group'>
 		
@@ -89,84 +89,86 @@
 		</span>
 		
 	</div>
-
-	<!-- number of results -->
-	<div id="results-count"><span id="results-count-number"></span> Results</div>
-
-	<!-- time & place vs list view -->
-	<div id='search-filters' class="btn-group">
-			<a id="list-view-button" class='nav-btn btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">{% trans %}jda.search.listview{% endtrans %}</span></a>
-			<a id="event-view-button" class='nav-btn btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">{% trans %}jda.search.timeplaceview{% endtrans %}</span></a>
-			<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
-	</div>	
-
-	<!-- related tags -->
-	<div id="related-tags"><span id="related-tags-title" class="span2">{% trans %}jda.search.relatedtags{% endtrans %}</span><ul class="span10"></ul></div>
 	
-	<!-- item list -->
-	<div id='list-view'>
+		<!-- number of results -->
+		<div id="results-count"><span id="results-count-number"></span> Results</div>
 
-		<ul id="items-list" class='unstyled'></ul>
-		<div id="spinner"></div>
-	</div>
-	<div id='event-view' class='hidden'>
-		<div id='event-time-slider'></div>
-		<div id='event-map'></div>
-		<div id="layer-control-drawer">
-		<div id ="layer-control-drawer-tab">
-			<p><span id="layer-control-drawer-arrows">&gt;&gt;</span><i class="jdicon-small-layers"></i></p>
+		<!-- time & place vs list view -->
+		<div id='search-filters' class="btn-group">
+				<a id="list-view-button" class='nav-btn btn large' data-goto-view='list' href="#" style="display:none"><i class="jdicon-small-list"></i><span class="btn-text">{% trans %}jda.search.listview{% endtrans %}</span></a>
+				<a id="event-view-button" class='nav-btn btn large' data-goto-view='event' href="#"><i class="jdicon-small-world"></i><span class="btn-text">{% trans %}jda.search.timeplaceview{% endtrans %}</span></a>
+				<!-- <a class='btn large' data-goto-view='tag' href="#">TAGS</a> -->
+		</div>	
+
+		<!-- related tags -->
+		<div id="related-tags"><span id="related-tags-title" class="span2">{% trans %}jda.search.relatedtags{% endtrans %}</span><ul class="span10"></ul></div>
+	</div><!-- end non-scrolling things -->
+		<!-- item list -->
+		<div id="scrolling-things">
+		<div id='list-view'>
+
+			<ul id="items-list" class='unstyled'></ul>
+			<div id="spinner"></div>
 		</div>
-		<div id="layer-control">
-			<ul>
-				<li><a href="#layer-checkboxes">{% trans %}jda.search.data{% endtrans %}</a></li>
-				<li><a href="#layer-legend">{% trans %}jda.search.legend{% endtrans %}</a></li>
-			</ul>
-			<div id='layer-checkboxes'>
-				<label class="checkbox">
-					{% trans %}jda.search.muncipaldistricts{% endtrans %}
-					<input type='checkbox' class="layer-checkbox" id='municipal-layer'/>
-				</label>
-				<label class="checkbox">
-					{% trans %}jda.search.radiation{% endtrans %}
-					<input type='checkbox' class="layer-checkbox" id='radiation-layer'/>
-				</label>
-				<label class="checkbox">
-					{% trans %}jda.search.casualties{% endtrans %}
-					<input type='checkbox' class="layer-checkbox" id='casualties-layer'/>
-				</label>
-				<label class="checkbox">
-					{% trans %}jda.search.flooding{% endtrans %}
-					<input type='checkbox' class="layer-checkbox" id='flooding-layer'/>
-				</label>
-				<label class="checkbox">
-					{% trans %}jda.search.shake{% endtrans %}
-					<input type='checkbox' class="layer-checkbox" id='shake-layer'/>
-				</label>
-				<br><br>
+
+		<div id='event-view' class='hidden'>
+			<div id='event-time-slider'></div>
+			<div id='event-map'></div>
+			<div id="layer-control-drawer">
+			<div id ="layer-control-drawer-tab">
+				<p><span id="layer-control-drawer-arrows">&gt;&gt;</span><i class="jdicon-small-layers"></i></p>
 			</div>
-			
-			<div id='layer-legend'>
-				<div class="legend-entry hidden" id="municipal-legend">
-					<p>{% trans %}jda.search.muncipaldistricts{% endtrans %}</p>
+			<div id="layer-control">
+				<ul>
+					<li><a href="#layer-checkboxes">{% trans %}jda.search.data{% endtrans %}</a></li>
+					<li><a href="#layer-legend">{% trans %}jda.search.legend{% endtrans %}</a></li>
+				</ul>
+				<div id='layer-checkboxes'>
+					<label class="checkbox">
+						{% trans %}jda.search.muncipaldistricts{% endtrans %}
+						<input type='checkbox' class="layer-checkbox" id='municipal-layer'/>
+					</label>
+					<label class="checkbox">
+						{% trans %}jda.search.radiation{% endtrans %}
+						<input type='checkbox' class="layer-checkbox" id='radiation-layer'/>
+					</label>
+					<label class="checkbox">
+						{% trans %}jda.search.casualties{% endtrans %}
+						<input type='checkbox' class="layer-checkbox" id='casualties-layer'/>
+					</label>
+					<label class="checkbox">
+						{% trans %}jda.search.flooding{% endtrans %}
+						<input type='checkbox' class="layer-checkbox" id='flooding-layer'/>
+					</label>
+					<label class="checkbox">
+						{% trans %}jda.search.shake{% endtrans %}
+						<input type='checkbox' class="layer-checkbox" id='shake-layer'/>
+					</label>
+					<br><br>
 				</div>
-				<div class="legend-entry hidden" id="radiation-legend">
-					<p>{% trans %}jda.search.radiation{% endtrans %}</p>
+				
+				<div id='layer-legend'>
+					<div class="legend-entry hidden" id="municipal-legend">
+						<p>{% trans %}jda.search.muncipaldistricts{% endtrans %}</p>
+					</div>
+					<div class="legend-entry hidden" id="radiation-legend">
+						<p>{% trans %}jda.search.radiation{% endtrans %}</p>
+					</div>
+					<div class="legend-entry hidden" id="casualties-legend">
+						<p>{% trans %}jda.search.casualties{% endtrans %}</p>
+					</div>
+					<div class="legend-entry hidden" id="flooding-legend">
+						<p>{% trans %}jda.search.flooding{% endtrans %}</p>
+					</div>
+					<div class="legend-entry hidden" id="shake-legend">
+						<p>{% trans %}jda.search.shake{% endtrans %}</p>
+					</div>
 				</div>
-				<div class="legend-entry hidden" id="casualties-legend">
-					<p>{% trans %}jda.search.casualties{% endtrans %}</p>
-				</div>
-				<div class="legend-entry hidden" id="flooding-legend">
-					<p>{% trans %}jda.search.flooding{% endtrans %}</p>
-				</div>
-				<div class="legend-entry hidden" id="shake-legend">
-					<p>{% trans %}jda.search.shake{% endtrans %}</p>
-				</div>
-			</div>
-		</div> <!-- layer control -->
-		</div> <!--layer-control-drawer -->
-	</div>
-	<!-- <div id='tag-view' class='hidden'>tag-view</div>-->
-	
+			</div> <!-- layer control -->
+			</div> <!--layer-control-drawer -->
+		</div>
+		<!-- <div id='tag-view' class='hidden'>tag-view</div>-->
+	</div><!-- #scrolling things -->
 </div><!-- #container -->
 			
 
