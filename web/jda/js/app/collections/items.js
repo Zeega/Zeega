@@ -4,9 +4,8 @@
 	
 		initialize : function()
 		{
-			var _this = this;
 			this.collection = new Items.Collection();
-			this.collection.on( 'reset', this.reset, this)
+			this.collection.on( 'reset', this.reset, this);
 			this._childViews = [];
 			$('#spinner').spin('large');
 
@@ -35,19 +34,21 @@
 			return this;
 		},
 
-		renderTags : function(tags){
+		renderTags : function(tags)
+		{
 			$("#related-tags ul").empty();
-			if (tags.length > 0){
+			if (tags.length > 0)
+			{
 				_.each( _.toArray(tags), function(tag){
 					var li = '<li><a href=".">'+tag.name+'</a></li>';
 					$("#related-tags ul").append(li);
 					$("#related-tags li").filter(":last").click(function(){
 						
 						//clear all current search filters
-						jda.app.visualSearch.searchBox.clearSearch();
+						VisualSearch.searchBox.clearSearch();
 
 						//add only tag filter
-						jda.app.visualSearch.searchBox.addFacet('tag', tag.name, 0);
+						VisualSearch.searchBox.addFacet('tag', tag.name, 0);
 						
 
 
@@ -57,7 +58,9 @@
 				})
 				
 				$("#related-tags, #related-tags-title").fadeTo(100,1);
-			} else {
+			}
+			else
+			{
 				if ($("#related-tags-title").is(":visible")){$("#related-tags-title").fadeTo(1000,0);}
 			}
 		},
@@ -67,7 +70,7 @@
 		{
 			if ( this._isRendered )
 			{
-				_.each( this._childViews, function(view){ $(view.el).remove() })
+				$(this.el).empty();
 				this._childViews = [];
 				this.render();
 			}
@@ -76,27 +79,28 @@
 		search : function(obj,reset)
 		{
 			var _this = this;
+			
+			this.updated = true;
+			
 			$("#results-count").fadeTo(1000,0.5);
 			$("#related-tags, #related-tags-title").fadeTo(1000,0.5);
 			//$(this.el).fadeTo(1000,0.5);
 			jda.app.isLoading = true;
-			if (obj.page == 1) {
-				$(this.el).hide();
-			}
+			if (obj.page == 1) $(this.el).hide();
+
 			$('#spinner').spin('large');
-			
-			
-			
-		
+
 			this.collection.setSearch(obj,reset);
-			
 			this.setURLHash();
+			
+			// fetch search collection for the list view
 			this.collection.fetch({
-				add : obj.page > 1 ? true : false,
-				success : function(model, response){ 
+				add : (obj.page) > 1 ? true : false,
+				success : function(model, response)
+				{ 
 					
 					//deselect/unfocus last tag - temp fix till figure out why tag is popping up autocomplete
-					jda.app.visualSearch.searchBox.disableFacets();
+					VisualSearch.searchBox.disableFacets();
 
 					$('#results-count-number').html(response["items_count"]);
 					
@@ -108,112 +112,123 @@
 					else jda.app.killScroll = true;
 					
 					jda.app.isLoading = false;	//to activate infinite scroll again
-
 				}
 			});
 			
+			//get the CQL response if event view is active
+			
 		},
 		
 		
-		setMapBounds : function(bounds){
- 		   this.collection.search.mapBounds = bounds;
- 		   this.setURLHash();
- 		   },
- 	 
- 
- 	    	setView : function(view){
- 	 		this.collection.search.viewType = view;	
-       		this.setURLHash();
-			},
+		setMapBounds : function(bounds)
+		{
+			this.collection.search.mapBounds = bounds;
+			this.setURLHash();
+		},
+	 
+		setView : function(view)
+		{
+			this.collection.search.viewType = view;	
+			this.setURLHash();
+		},
+	
+		setContent : function(content)
+		{
+			this.collection.search.content = content;
+			this.setURLHash();
+		},
 		
-		setContent : function(content){
- 		this.collection.search.content = content;
- 		this.setURLHash();
- 		 },
-		
-	setURLHash : function (){
+		setURLHash : function()
+		{
+			obj = this.collection.search;
+		 	var hash = '';      
+		 	if( !_.isUndefined(obj.viewType)) hash += 'view_type=' + obj.viewType + '&';
+		 	if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
+		 	if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
+		 	if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
+		 	if( !_.isUndefined(obj.times) )
+			{
+		 		if( !_.isUndefined(obj.times.start) ) hash += 'start='+ obj.times.start + '&';
+		 		if( !_.isUndefined(obj.times.end) ) hash += 'end='+ obj.times.end + '&';
+			}  
 	
+	 		jda.app.router.navigate(hash,{trigger:false});
 	
-	
-	obj = this.collection.search;
- 	var hash = '';      
- 	if( !_.isUndefined(obj.viewType)) hash += 'view_type=' + obj.viewType + '&';
- 	if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
- 	if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
- 	if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
- 	if( !_.isUndefined(obj.times) ){
- 	if( !_.isUndefined(obj.times.start) ) hash += 'start='+ obj.times.start + '&';
- 	if( !_.isUndefined(obj.times.end) ) hash += 'end='+ obj.times.end + '&';
-	}  
-	
- 	jda.app.router.navigate(hash,{trigger:false});
-	
-	},
+		},
 		
 
-		setStartAndEndTimes : function(startDate, endDate){
+		setStartAndEndTimes : function(startDate, endDate)
+		{
 			var search = this.collection.search;
 			search.times = {};
 			search.times.start = startDate;
- 	 		search.times.end = endDate;
- 	 		this.setURLHash()
+			search.times.end = endDate;
+			this.setURLHash()
 		},
 		
-		getCQLSearchString : function(){
-			
+		getCQLSearchString : function()
+		{
+		
 			var search = this.collection.search;
-			
+		
 			var cqlFilters = [];
-			if( !_.isUndefined(search.times) ){
-				if( !_.isUndefined(search.times.start) ){
+			if( !_.isUndefined(search.times) )
+			{
+				if( !_.isUndefined(search.times.start) )
+				{
 					startDate = new Date(search.times.start*1000);
 					startString = startDate.format('yyyy-mm-dd HH:MM:ss');
 					cqlFilters.push("media_date_created >= '" + startString +"'");
 				}
-				if( !_.isUndefined(search.times.start) ){
+				if( !_.isUndefined(search.times.start) )
+				{
 					endDate = new Date(search.times.end*1000);
 					endString = endDate.format('yyyy-mm-dd HH:MM:ss');
 					cqlFilters.push("media_date_created <= '" + endString +"'");
 				}	
 			}
-			if( !_.isUndefined(search.q) ){
-				for (var i=0; i<search.q.length; i++) {
-					q = search.q[i];
-					cqlFilters.push("(title LIKE '%"+q+"%' OR media_creator_username LIKE '%"+q+"%' OR description LIKE '%"+q+"%')");
-				}
+			if( !_.isUndefined(search.q) )
+			{
+				cqlFilters.push("(title LIKE '%"+search.q+"%' OR media_creator_username LIKE '%"+search.q+"%' OR description LIKE '%"+search.q+"%')");
 			}
-			if( !_.isUndefined(search.tags) ){
+			if( !_.isUndefined(search.tags) )
+			{
 				cqlFilters.push("tags='" + search.tags + "'");
-			 }
-			 if( !_.isUndefined(search.content)&&search.content!="all" ){  
-         var capitalizedContent =  search.content.charAt(0).toUpperCase() + search.content.slice(1);
-         cqlFilters.push("media_type='" + capitalizedContent + "'");
-	
-       }
-			if (cqlFilters.length>0){
+			}
+			if( !_.isUndefined(search.content)&&search.content!="all" )
+			{  
+				var capitalizedContent =  search.content.charAt(0).toUpperCase() + search.content.slice(1);
+				cqlFilters.push("media_type='" + capitalizedContent + "'");
+			}
+			if (cqlFilters.length>0)
+			{
 				cqlFilterString = cqlFilters.join(" AND ");
-			}else{
+			}
+			else
+			{
 				cqlFilterString = "INCLUDE";   //acts as an empty filter
 			}
+			
 			return cqlFilterString;
 		},
 	
 		
 		getSearch : function(){ return this.collection.search },
 		
-			//Formats returned results number
+		//Formats returned results number
 		addCommas : function(nStr)
 		{
-		  nStr += '';
-		  x = nStr.split('.');
-		  x1 = x[0];
-		  x2 = x.length > 1 ? '.' + x[1] : '';
-		  var rgx = /(\d+)(\d{3})/;
-		  while (rgx.test(x1)) {
-		    x1 = x1.replace(rgx, '$1' + ',' + '$2');
-		  }
-		  return x1 + x2;
-		},
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1))
+			{
+				x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			}
+			return x1 + x2;
+		}
 		
 	});
 
@@ -221,13 +236,15 @@
 	Items.MapPoppupViewCollection = Backbone.View.extend({
 		className : 'discovery-map-list-container',
 
-		initialize : function() {
+		initialize : function()
+		{
 			var _this = this;
 			this._childViews = [];
 			this.render();
 		},
 
-		render : function() {
+		render : function()
+		{
 			var _this = this;
 			_this._isRendered = true;
 			list = $("<ul class='discovery-map-list'></ul>");
@@ -238,7 +255,7 @@
 				list.append( itemView.render().el );
 			});
 			return this;
-		},
+		}
 	});
 
 		

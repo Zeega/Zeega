@@ -27,6 +27,7 @@ var loadFiles = [
 	'order!../lib/date.format',
 	'order!../lib/jquery-ui-timepicker-addon',
 
+	'order!../lib/bootstrap',
 	'order!../lib/leaflet/leaflet',
 	'order!../lib/jquery.tagsinput.min',
 	'order!../lib/fancybox/jquery.easing-1.3.pack',

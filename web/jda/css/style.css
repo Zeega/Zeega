@@ -283,6 +283,23 @@ header
 {
 	height:50px;
 }
+.alpha-header
+{
+	position:relative;
+	top:33px;
+	margin-left:6px;
+	font-size:11px;
+}
+.photo-credit
+{
+	color: rgba(255, 255, 255, .7);
+	position: absolute;
+	left: 12px;
+	top: 12px;
+	font-size: 11px;
+	
+}
+
 
 #logo
 {
@@ -579,6 +596,19 @@ opacity: 1;
 	margin-top:50px;
 
 }
+
+/********************
+
+	OPEN LAYERS MAP
+	
+*********************/
+
+.olControlOverviewMapElement
+{
+	background-color:rgba(0,0,0,0.75);
+	border-radius:6px;
+}
+
 
 /********************
 

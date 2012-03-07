@@ -44,6 +44,9 @@
 		{% else %}
 			<a href="{{path('home', { '_locale': locale })}}"><img id="logo" class="home-english" src="{{ asset('jda/images/logo.png')}}"></a>
 		{% endif %}
+		
+		<a href='#myModal' class='alpha-header' data-toggle='modal'>alpha</a>
+		
 		<div id="user-bar">
 			<ul id="header-menu" class="unstyled">
 
@@ -82,8 +85,9 @@
 				
 				<li><a  href="{{path('about', { '_locale': locale})}}" class="about-english">{% trans %}jda.header.about{% endtrans %}</a></li>
 				<li><a href="#">{% trans %}jda.header.feedback{% endtrans %}</a></li>
-				
+				<!--
 				<li><a href='#' class='btn success small'>{% trans %}jda.home.add{% endtrans %}</a></li>
+				-->
 				<!--
 				<li><a href="#">login</a></li>
 				<li>/</li>
@@ -105,8 +109,20 @@
 		{% endblock %}
 
 
-  
 		
+			
+			<div class="modal" id="myModal" style='display:none'>
+				<div class="modal-header">
+					<a class="close" data-dismiss="modal">×</a>
+					<h3>About Alpha</h3>
+				</div>
+				<div class="modal-body">
+					<p>This 'alpha' version of the Digital Archive of Japan's 2011 Disasters is still a work in progress. We invite you to look around and see what's going on, but there will be a few bumps in the road. We're working every day to expand the functionality of the site and fix bugs. We hope you you are able to make use of the site and keep checking back!</p>
+				</div>
+
+			</div>
+			
+
 		
          
     </body>
