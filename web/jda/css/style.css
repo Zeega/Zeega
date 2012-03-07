@@ -81,6 +81,7 @@
 	height: 44px;
 	background: white url('../images/search.png') left center no-repeat;
 	padding-left: 42px;
+	line-height:22px;
 }
 #search-bar{
 	position:relative;
