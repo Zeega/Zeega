@@ -427,6 +427,7 @@ var FancyBoxAudioView = FancyBoxView.extend({
 		
 		return this;
 	},
+	
 	getMediaTemplate : function()
 	{
 		

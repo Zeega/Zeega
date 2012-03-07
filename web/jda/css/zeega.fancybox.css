@@ -210,7 +210,7 @@
 }
 
  .fancybox-media-item-more iframe,  .fancybox-media-item-more video{
-	width:100% !important;
+	/*width:100% !important;*/
 	margin:0 !important;
 	/*height:200px !important;*/
 }
@@ -218,7 +218,16 @@
 	height:400px;
 }
 .fancybox-media-item #fancybox-website iframe{
+	width: 133%;
+	height : 700px;
 	border:1px solid #ccc;
+	zoom: 0.75;
+ 	-moz-transform: scale(0.75);
+	-moz-transform-origin: 0 0;
+	-o-transform: scale(0.75);
+	-o-transform-origin: 0 0;
+	-webkit-transform: scale(0.75);
+	-webkit-transform-origin: 0 0;
 }
 .fancybox-media-item video{
 	border: 1px solid #000;
@@ -379,7 +388,7 @@ overflow:hidden;
 	font-size: 16px;
 	word-wrap: break-word !important;
 	line-height: 10px;
-	width:772px;
+	width:769px;
 }
 .website-caption a{
 	color: white;
@@ -410,8 +419,8 @@ overflow:hidden;
 
 .plyr-video {
 position: relative;
-width:625px;
-height: 400px;
+width:785px;
+height: 460px;
 background-color:black;
 
 }
@@ -437,7 +446,7 @@ display:none;
 height: 20px;
 z-index:10px;
 background-color: rgba(1,0,1,0.5);
-width:625px;
+width:785px;
 }
 .fancybox-media-item-more .plyr-controls{
 	width:275px;
