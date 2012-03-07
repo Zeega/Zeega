@@ -56,7 +56,7 @@
 				blanks["media_date"] = "n/a";
 			}
 			if (this.model.get("text") != null){
-				var excerpt = this.model.get("text").toString();
+				var excerpt = this.model.get("text").replace(/\r\n/gi, '<br/>');;
 				blanks["text"] = this.linkifyTweet(excerpt);
 
 			}

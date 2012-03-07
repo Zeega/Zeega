@@ -74,10 +74,13 @@ var FancyBoxView = Backbone.View.extend({
 		if (this.model.get("media_type") == "PDF" && (this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == ""  || this.model.get('title') == "&nbsp;" || this.model.get('title') == null)){
 			blanks["title"] = "Untitled";
 		}
-		if(this.model.get('archive').indexOf('http')>0) {
+		if(this.model.get('archive').indexOf('http')>=0) {
 			blanks.sourceText = 'View Source';
 		} else {
 			blanks.sourceText = 'View on ' + this.model.get('archive');
+		}
+		if(this.model.get('archive').indexOf('Internet Archive')>=0) {
+			blanks.sourceLink = this.model.get('uri');
 		}
 		if (this.model.get("media_type") == "Text"){
 			blanks.sourceText = 'Submitted to JDAarchive';
@@ -651,7 +654,7 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 		
 		//Fill in media-specific stuff
 		var blanks = {
-			src : this.model.get("uri"),
+			src : this.model.get("attribution_uri"),
 			type : this.model.get("type"),
 		};
 		
@@ -696,7 +699,7 @@ var FancyBoxTestimonialView = FancyBoxView.extend({
 		
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		var text = this.model.get('text');
+		var text = this.model.get('text').replace(/\r\n/gi, '<br/>');
 
 
 		//Fill in tweet-specific stuff
