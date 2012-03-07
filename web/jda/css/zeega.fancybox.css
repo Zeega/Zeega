@@ -169,6 +169,7 @@
 	font-family: Arial,sans-serif;
 	text-shadow: 1px 1px 1px #666;
 	filter: dropshadow(color=#666, offx=1, offy=1);
+	z-index:100;
 }
 .tagsinput input{
 	padding:2px !important;

@@ -341,24 +341,10 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		//Fill in media-specific stuff
-		var blanks = {
-					src : this.model.get('uri'),
-		};
 		
-		//use template to clone the database items into
-		var template = _.template( this.getMediaTemplate() );
-		
-		//copy the cloned item into the el
-		var mediaHTML =  template( blanks ) ;
-
-		
-
-		//$(this.el).find('.fancybox-media-item').html(mediaHTML);
 		this.unique =Math.floor(Math.random() *10000)
 		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
 		
-
 
 		//set fancybox content
 		obj.content = $(this.el);
@@ -366,8 +352,6 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		return this;
 	},
 	afterShow:function(){
-	
-		console.log('afterShow');
 		
 		var source = "http://www.youtube.com/watch?v="+this.model.get('uri')+"&controls=0";
 		//format is either youtube or video
@@ -376,19 +360,10 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	},
 	
 	beforeClose: function(){
-		console.log('beforeClose');
 		Popcorn.destroy( this.plyr.pop );
 
 	},
-	getMediaTemplate : function()
-	{
-		
-		var html =	'<div id="fancybox-video">'+
-						'<video controls="true"  width="90%" preload><source src="<%=src%>"></video>'+
-					'</div';
-								
-		return html;
-	},
+	
 
 });
 // For displaying Audio
@@ -407,21 +382,9 @@ var FancyBoxAudioView = FancyBoxView.extend({
 		
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
 
-		
-		//Fill in media-specific stuff
-		var blanks = {
-					src : this.model.get('uri'),
-		};
-		
-		//use template to clone the database items into
-		var template = _.template( this.getMediaTemplate() );
-		
-		//copy the cloned item into the el
-		var mediaHTML =  template( blanks ) ;
-
-		$(this.el).find('.fancybox-media-item').html(mediaHTML);
+		this.unique =Math.floor(Math.random() *10000)
+		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
 
 		//set fancybox content
 		obj.content = $(this.el);
@@ -429,14 +392,18 @@ var FancyBoxAudioView = FancyBoxView.extend({
 		return this;
 	},
 	
-	getMediaTemplate : function()
-	{
+	
+	afterShow:function(){
+	
 		
-		var html =	'<div id="fancybox-audio">'+
-					'<audio width="626px" controls="true" src="<%=src%>"></audio>'+
-					'</div>';
-								
-		return html;
+		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:this.model.get('uri'),format:'html5',load:'true'});
+		
+	},
+	
+	beforeClose: function(){
+		
+		Popcorn.destroy( this.plyr.pop );
+
 	},
 
 });
