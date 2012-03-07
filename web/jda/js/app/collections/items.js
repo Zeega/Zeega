@@ -69,7 +69,7 @@
 			{
 				_.each( this._childViews, function(view){ $(view.el).remove() })
 				this._childViews = [];
-				this.render();
+				//this.render();
 			}
 		},
 		
