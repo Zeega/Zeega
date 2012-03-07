@@ -392,6 +392,13 @@ overflow:hidden;
 .website-caption a:visited{
 	color:white !important;
 }
+.download-pdf{
+	height:225px;
+	width:100%;
+	font-size:3em;
+	padding-top:180px;
+	border:1px solid #ccc;
+}
 /********************
 
 	PLYR

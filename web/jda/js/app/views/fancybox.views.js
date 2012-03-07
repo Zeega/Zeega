@@ -684,6 +684,68 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 	},
 
 });
+//For displaying PDFs in iframe or for download
+var FancyBoxPDFView = FancyBoxView.extend({
+	
+	initialize: function(){
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		
+		//Fill in media-specific stuff
+		var blanks = {
+			src : this.model.get("attribution_uri"),
+			type : this.model.get("type"),
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getChromeTemplate() );
+		var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+		if (!is_chrome){template = _.template( this.getNonChromeTemplate() );}
+		
+		//copy the cloned item into the el
+		var mediaHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(mediaHTML); 
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		return this;
+	},
+	getChromeTemplate : function()
+	{
+		
+		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
+					'<div id="fancybox-website">'+
+					'<iframe type="text/html" width="100%" height="400px" src="<%=src%>" frameborder="0">'+
+					'</iframe>'+
+					'</div>';
+								
+		return html;
+	},
+	getNonChromeTemplate : function()
+	{
+		
+		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
+					'<div id="fancybox-website">'+
+					'<div class="download-pdf"><a href="<%=src%>">Download PDF</a></div>'+
+					
+					'</div>';
+								
+		return html;
+	},
+
+});
 // For displaying Tweets
 var FancyBoxTestimonialView = FancyBoxView.extend({
 	

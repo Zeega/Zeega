@@ -189,7 +189,7 @@ $(document).ready(function(){
            			this.fancyView.render(this);
            			break;
            		case 'PDF':
-           			this.fancyView = new FancyBoxWebsiteView({model:thisModel});
+           			this.fancyView = new FancyBoxPDFView({model:thisModel});
            			this.fancyView.render(this);
            			break;
 			}
