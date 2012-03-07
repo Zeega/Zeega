@@ -125,7 +125,10 @@ $(document).ready(function(){
 
     	helpers : {
     		title : false,
-    		buttons: {}
+    		buttons: {
+    			prev : $('zeega-fancybox-buttons').find('.zeega-btnPrev'),
+				next : $('zeega-fancybox-buttons').find('.zeega-btnNext'),
+    		}
     		
     	},
     	beforeClose : function() {

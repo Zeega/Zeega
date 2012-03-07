@@ -23,7 +23,9 @@
 
 		beforeShow: function () {
 			//Increase top margin to give space for buttons
-			F.current.margin[0] += 30;
+			
+			//CSD commented out
+			//F.current.margin[0] += 30;
 		},
 
 		// Update slideshow button

@@ -1,7 +1,50 @@
+/********************************************/
+/* overriding fancybox buttons settings 	*/
+/********************************************/
+#fancybox-buttons a.btnPrev {
+	position:absolute;
+	top:300px;
+	left:10px;
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	background-image: url('../images/mediaPlayerArrow_shadow.png');
+	width:57px !important;
+	height:110px;
+	background-position: -33px 0 !important;
+
+}
+#fancybox-buttons a.btnNext {
+	position:absolute;
+	top:300px;
+	right:10px;
+	background-image: url('../images/mediaPlayerArrow_shadow.png');
+	width:57px !important;
+	height:110px;
+	background-position: -33px 0 !important;
+}
+
+#fancybox-buttons a.btnClose{
+	position:absolute;
+	top:-5px;
+	right:0;
+	border-left:0 !important;
+}
+#fancybox-buttons ul{
+
+	width:0px !important;
+	height:0px !important;
+}
+#fancybox-buttons a.btnPlay,#fancybox-buttons a.btnToggle{
+	display:none;
+}
+/********************************************/
 
 #fancybox-media-container{
-	width:640px;
+	/*width:640px;
 	height:480px;
+	*/
+	width:800px;
+	height:550px;
 	background-color:white;
 	text-align:left;
 	
@@ -11,7 +54,7 @@
 	color:#F15A29;
 }
 .fancybox-media-wrapper{
-	height:469px;
+	/*height:469px;*/
 	text-align:center !important;
 }
 .fancybox-media-wrapper p{
@@ -22,7 +65,7 @@
 	overflow: auto;
 }
 .fancybox-media-item{
-	width:630px;
+	width:790px;
 	
 	text-align:center;
 	margin-bottom:5px;
@@ -172,7 +215,7 @@
 	/*height:200px !important;*/
 }
 .fancybox-media-item #fancybox-website {
-	height:335px;
+	height:400px;
 }
 .fancybox-media-item #fancybox-website iframe{
 	border:1px solid #ccc;
@@ -336,7 +379,7 @@ overflow:hidden;
 	font-size: 16px;
 	word-wrap: break-word !important;
 	line-height: 10px;
-	width:612px;
+	width:772px;
 }
 .website-caption a{
 	color: white;

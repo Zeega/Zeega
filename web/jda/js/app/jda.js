@@ -23,7 +23,7 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 
-	apiLocation : 'http://dev.zeega.org/jdaapi/web/',
+	apiLocation : 'http://dev.zeega.org/jdaapisolr/web/',
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,

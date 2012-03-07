@@ -673,7 +673,7 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 		
 		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
 					'<div id="fancybox-website">'+
-					'<iframe type="text/html" width="100%" height="335px" src="<%=src%>" frameborder="0">'+
+					'<iframe type="text/html" width="100%" height="400px" src="<%=src%>" frameborder="0">'+
 					'</iframe>'+
 					'</div>';
 								
