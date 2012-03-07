@@ -249,7 +249,8 @@ var FancyBoxView = Backbone.View.extend({
 	getTemplate : function()
 	{
 		
-		var html =	'<div class="fancybox-media-wrapper">'+
+		var html =	'<div class="fancybox-close-button"><a title="Close" href="javascript:$.fancybox.close();">x</a></div>'+
+					'<div class="fancybox-media-wrapper">'+
 						'<div class="fancybox-left-column">' +
 							'<div class="fancybox-media-item media-item"></div>'+
 							'<p class="more subheader" style="clear:both">Tags</p><div class="more tags"></div>'+

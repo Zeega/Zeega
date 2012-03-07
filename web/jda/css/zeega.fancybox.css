@@ -12,6 +12,8 @@
 	height:110px;
 	background-position: -33px 0 !important;
 
+	display:none;
+
 }
 #fancybox-buttons a.btnNext {
 	position:absolute;
@@ -21,6 +23,8 @@
 	width:57px !important;
 	height:110px;
 	background-position: -33px 0 !important;
+
+	display:none;
 }
 
 #fancybox-buttons a.btnClose{
@@ -28,6 +32,8 @@
 	top:-5px;
 	right:0;
 	border-left:0 !important;
+
+	display:none;
 }
 #fancybox-buttons ul{
 
@@ -153,6 +159,16 @@
 	border-radius: 4px;
 	color: #777;
 	font-size: 11px;
+}
+.fancybox-close-button{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	font-size: 2em;
+	font-weight:bold;
+	font-family: Arial,sans-serif;
+	text-shadow: 1px 1px 1px #666;
+	filter: dropshadow(color=#666, offx=1, offy=1);
 }
 .tagsinput input{
 	padding:2px !important;
