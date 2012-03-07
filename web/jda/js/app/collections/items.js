@@ -72,7 +72,7 @@
 			{
 				$(this.el).empty();
 				this._childViews = [];
-				this.render();
+				//this.render();
 			}
 		},
 		
