@@ -135,8 +135,8 @@
                 <target>related tags</target>
             </trans-unit>
              <trans-unit id="34">
-                <source>jda.search.data</source>
-                <target>Data</target>
+                <source>jda.search.layers</source>
+                <target>Layers</target>
             </trans-unit>
              <trans-unit id="35">
                 <source>jda.search.legend</source>
@@ -185,7 +185,19 @@
 			<trans-unit id="46">
                 <source>jda.home.go</source>
                 <target>go</target>
-            </trans-unit>		            
+            </trans-unit>
+            <trans-unit id="47">
+                <source>jda.about.paragraph</source>
+                <target>This alpha version of the Digital Archive of Japan's 2011 Disasters is the result of an ongoing global collaborative effort. Its ever-expanding content represents the contributions of an array of individuals and organizations variously affected by the unprecedented events of March 2011 and their aftermath. The development of the archive interface has been led by the Edwin O. Reischauer Institute at Harvard University in collaboration with metaLAB (at) Harvard, Harvard's Center for Geographic Analysis and Zeega.org, a non-profit creative technology company. This current version lays the groundwork for an ever-evolving and ultimately participatory archive. The interface is built using Zeega, an open-source platform that supports initaitives in crisis archiving, enabling anyone to create participatory projects that combine original content with photos, videos, text, audio, data feeds and maps via APIs from across the web.</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>jda.search.results</source>
+                <target> results</target>
+            </trans-unit>
+             <trans-unit id="49">
+                <source>jda.home.source</source>
+                <target>image source</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

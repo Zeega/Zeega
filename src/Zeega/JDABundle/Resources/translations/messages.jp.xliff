@@ -132,35 +132,35 @@
             </trans-unit>
              <trans-unit id="33">
                 <source>jda.search.relatedtags</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>関連タグ</target>
             </trans-unit>
              <trans-unit id="34">
-                <source>jda.search.data</source>
-                <target>わたしの「東日本大震災」</target>
+                <source>jda.search.layers</source>
+                <target>レイヤー</target>
             </trans-unit>
              <trans-unit id="35">
                 <source>jda.search.legend</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Legend</target>
             </trans-unit>
              <trans-unit id="36">
                 <source>jda.search.muncipaldistricts</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Municipal Districts</target>
             </trans-unit>
              <trans-unit id="37">
                 <source>jda.search.radiation</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Radiation</target>
             </trans-unit>
              <trans-unit id="38">
                 <source>jda.search.casualties</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Casualties</target>
             </trans-unit>
              <trans-unit id="39">
                 <source>jda.search.flooding</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Flooding</target>
             </trans-unit>
              <trans-unit id="40">
                 <source>jda.search.shake</source>
-                <target>わたしの「東日本大震災」</target>
+                <target>Shake</target>
             </trans-unit>
 		    <trans-unit id="41">
                 <source>jda.header.about</source>
@@ -186,8 +186,17 @@
                 <source>jda.home.go</source>
                 <target>検索</target>
             </trans-unit>			
-		
-	
-	</body>
+			 <trans-unit id="47">
+                <source>jda.about.paragraph</source>
+                <target>This alpha version of the Digital Archive of Japan's 2011 Disasters is the result of an ongoing global collaborative effort. Its ever-expanding content represents the contributions of an array of individuals and organizations variously affected by the unprecedented events of March 2011 and their aftermath. The development of the archive interface has been led by the Edwin O. Reischauer Institute in collaboration with metaLAB (at) Harvard, Harvard's Center for Geographic Analysis and non-profit technology company Zeega.org. This current version lays the groundwork for an ever-evolving and ultimately participatory archive. The interface is built using Zeega, an open-source platform that supports initaitives in crisis archiving, enabling anyone to create participatory projects that combine original content with photos, videos, text, audio, data feeds and maps via APIs from across the web.</target>
+            </trans-unit>
+  			<trans-unit id="48">
+                <source>jda.search.results</source>
+                <target> 検索結果</target>
+            </trans-unit>	
+			   <trans-unit id="49">
+                <source>jda.home.source</source>
+                <target>image source</target>
+            </trans-unit></body>
     </file>
 </xliff>
