@@ -9,7 +9,9 @@ $(document).ready(function(){
     return false;
   });
 
-  
+  $(window).resize(function() {
+    jda.app.resetMapSize();
+  });
   $('#search-filters a').click(function(){
     $(this).siblings().show();
     $(this).hide();

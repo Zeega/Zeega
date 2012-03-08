@@ -206,7 +206,10 @@ this.jda = {
 			this.itemViewCollection.render();
 		}
 	},
-	
+	resetMapSize :function(){
+		var h = $(window).height() - 310;
+		$("#event-map").height(h);
+	},
 	showEventView : function()
 	{
 		console.log('switch to Event view');
@@ -215,6 +218,7 @@ this.jda = {
 		VisualSearch.searchBox.addFacet('data:time & place', '', 0);
 		
 		$("#event-view").width(940);
+		this.resetMapSize();
 
 		if( !this.mapLoaded )
 		{
@@ -423,7 +427,7 @@ this.jda = {
 			success : function(model, response){ 
 				searchView.renderTags(response.tags);
 				searchView.render();      
-				$('#results-count-number').text(response["items_count"]+ " results");        
+				$('#results-count-number').text(response["items_count"]);        
 				$('#results-count').fadeTo(100, 1);
 			}
 		});
