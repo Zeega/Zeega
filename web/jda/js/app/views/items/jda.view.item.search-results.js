@@ -56,13 +56,13 @@
 				blanks["media_date"] = "n/a";
 			}
 			if (this.model.get("text") != null){
-				var excerpt = this.model.get("text").toString();
+				var excerpt = this.model.get("text").replace(/\r\n/gi, '<br/>');;
 				blanks["text"] = this.linkifyTweet(excerpt);
 
 			}
-			if (this.model.get("description") != null){
+			if (this.model.get("description") != null && this.model.get("description").length > 255){
 				blanks["description"] = this.model.get("description").substring(0,255) + "...";
-			}
+			} 
 			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
 				blanks["title"] = "&nbsp;";
 			}
@@ -210,7 +210,7 @@
 				'<div class="item-author item-author-left"><%= author %></div>'+
 			'</div>'+
 			'<div class="span7 item-description">'+
-				'<%= text %>'+
+				'<%= description %>'+
 			'</div>'+
 			'<div class="span3 item-date">'+
 				'<%= media_date %>'

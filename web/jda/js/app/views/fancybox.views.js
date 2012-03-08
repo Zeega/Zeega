@@ -74,10 +74,13 @@ var FancyBoxView = Backbone.View.extend({
 		if (this.model.get("media_type") == "PDF" && (this.model.get('title') == "none" || this.model.get('title') == "Untitled" || this.model.get('title') == ""  || this.model.get('title') == "&nbsp;" || this.model.get('title') == null)){
 			blanks["title"] = "Untitled";
 		}
-		if(this.model.get('archive').indexOf('http')>0) {
+		if(this.model.get('archive').indexOf('http')>=0) {
 			blanks.sourceText = 'View Source';
 		} else {
 			blanks.sourceText = 'View on ' + this.model.get('archive');
+		}
+		if(this.model.get('archive').indexOf('Internet Archive')>=0) {
+			blanks.sourceLink = this.model.get('uri');
 		}
 		if (this.model.get("media_type") == "Text"){
 			blanks.sourceText = 'Submitted to JDAarchive';
@@ -246,7 +249,8 @@ var FancyBoxView = Backbone.View.extend({
 	getTemplate : function()
 	{
 		
-		var html =	'<div class="fancybox-media-wrapper">'+
+		var html =	'<div class="fancybox-close-button"><a title="Close" href="javascript:$.fancybox.close();">x</a></div>'+
+					'<div class="fancybox-media-wrapper">'+
 						'<div class="fancybox-left-column">' +
 							'<div class="fancybox-media-item media-item"></div>'+
 							'<p class="more subheader" style="clear:both">Tags</p><div class="more tags"></div>'+
@@ -337,24 +341,10 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
 		
-		//Fill in media-specific stuff
-		var blanks = {
-					src : this.model.get('uri'),
-		};
 		
-		//use template to clone the database items into
-		var template = _.template( this.getMediaTemplate() );
-		
-		//copy the cloned item into the el
-		var mediaHTML =  template( blanks ) ;
-
-		
-
-		//$(this.el).find('.fancybox-media-item').html(mediaHTML);
 		this.unique =Math.floor(Math.random() *10000)
 		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
 		
-
 
 		//set fancybox content
 		obj.content = $(this.el);
@@ -362,8 +352,6 @@ var FancyBoxVideoView = FancyBoxView.extend({
 		return this;
 	},
 	afterShow:function(){
-	
-		console.log('afterShow');
 		
 		var source = "http://www.youtube.com/watch?v="+this.model.get('uri')+"&controls=0";
 		//format is either youtube or video
@@ -372,19 +360,10 @@ var FancyBoxVideoView = FancyBoxView.extend({
 	},
 	
 	beforeClose: function(){
-		console.log('beforeClose');
 		Popcorn.destroy( this.plyr.pop );
 
 	},
-	getMediaTemplate : function()
-	{
-		
-		var html =	'<div id="fancybox-video">'+
-						'<video controls="true"  width="90%" preload><source src="<%=src%>"></video>'+
-					'</div';
-								
-		return html;
-	},
+	
 
 });
 // For displaying Audio
@@ -403,35 +382,28 @@ var FancyBoxAudioView = FancyBoxView.extend({
 		
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		
 
-		
-		//Fill in media-specific stuff
-		var blanks = {
-					src : this.model.get('uri'),
-		};
-		
-		//use template to clone the database items into
-		var template = _.template( this.getMediaTemplate() );
-		
-		//copy the cloned item into the el
-		var mediaHTML =  template( blanks ) ;
-
-		$(this.el).find('.fancybox-media-item').html(mediaHTML);
+		this.unique =Math.floor(Math.random() *10000)
+		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
 
 		//set fancybox content
 		obj.content = $(this.el);
 		
 		return this;
 	},
-	getMediaTemplate : function()
-	{
+	
+	
+	afterShow:function(){
+	
 		
-		var html =	'<div id="fancybox-audio">'+
-					'<audio width="626px" controls="true" src="<%=src%>"></audio>'+
-					'</div>';
-								
-		return html;
+		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:this.model.get('uri'),format:'html5',load:'true'});
+		
+	},
+	
+	beforeClose: function(){
+		
+		Popcorn.destroy( this.plyr.pop );
+
 	},
 
 });
@@ -651,7 +623,7 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 		
 		//Fill in media-specific stuff
 		var blanks = {
-			src : this.model.get("uri"),
+			src : this.model.get("attribution_uri"),
 			type : this.model.get("type"),
 		};
 		
@@ -673,8 +645,70 @@ var FancyBoxWebsiteView = FancyBoxView.extend({
 		
 		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
 					'<div id="fancybox-website">'+
-					'<iframe type="text/html" width="100%" height="335px" src="<%=src%>" frameborder="0">'+
+					'<iframe type="text/html" width="100%" height="400px" src="<%=src%>" frameborder="0">'+
 					'</iframe>'+
+					'</div>';
+								
+		return html;
+	},
+
+});
+//For displaying PDFs in iframe or for download
+var FancyBoxPDFView = FancyBoxView.extend({
+	
+	initialize: function(){
+		FancyBoxView.prototype.initialize.call(this); //This is like calling super()
+
+	},
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
+		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
+		
+		
+		//Fill in media-specific stuff
+		var blanks = {
+			src : this.model.get("attribution_uri"),
+			type : this.model.get("type"),
+		};
+		
+		//use template to clone the database items into
+		var template = _.template( this.getChromeTemplate() );
+		var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+		if (!is_chrome){template = _.template( this.getNonChromeTemplate() );}
+		
+		//copy the cloned item into the el
+		var mediaHTML =  template( blanks ) ;
+
+		$(this.el).find('.fancybox-media-item').html(mediaHTML); 
+
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		return this;
+	},
+	getChromeTemplate : function()
+	{
+		
+		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
+					'<div id="fancybox-website">'+
+					'<iframe type="text/html" width="100%" height="400px" src="<%=src%>" frameborder="0">'+
+					'</iframe>'+
+					'</div>';
+								
+		return html;
+	},
+	getNonChromeTemplate : function()
+	{
+		
+		var html =	'<div class="website-caption"><%=type%>: <a href="<%=src%>" target="_blank"><%=src%></a></div>'+
+					'<div id="fancybox-website">'+
+					'<div class="download-pdf"><a href="<%=src%>">Download PDF</a></div>'+
+					
 					'</div>';
 								
 		return html;
@@ -696,7 +730,7 @@ var FancyBoxTestimonialView = FancyBoxView.extend({
 		
 		//Call parent class to do captioning and metadata
 		FancyBoxView.prototype.render.call(this, obj); //This is like calling super()
-		var text = this.model.get('text');
+		var text = this.model.get('text').replace(/\r\n/gi, '<br/>');
 
 
 		//Fill in tweet-specific stuff

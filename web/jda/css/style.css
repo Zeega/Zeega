@@ -56,6 +56,29 @@
 }
 /**************************************
 
+	HEADER BAR
+
+**************************************/
+#header-bar{
+position: fixed;
+left: 0;
+right: 0;
+background-color: white;
+z-index:10;
+}
+#white-background{
+	position:fixed;
+	background-color:white;
+	width:100%;
+	top:0;
+	left:0;
+	height:300px;
+	z-index:9;
+	color:white;
+
+}
+/**************************************
+
 	SEARCH BAR
 
 **************************************/
@@ -81,13 +104,27 @@
 	height: 44px;
 	background: white url('../images/search.png') left center no-repeat;
 	padding-left: 42px;
+	line-height:22px;
+}
+#non-scrolling-things{
+	position:fixed;	
+	top: 80px;
+	left: 0;
+	right: 0;
+	width: 940px;
+	margin: 5% auto;
+	z-index:10;
 }
 #search-bar{
-	position:relative;
-	margin:10px 0 30px 0;
+	
 	opacity: 0;
 	-moz-opacity: 0;
 	filter:alpha(opacity=0);
+	
+}
+#scrolling-things{
+	position:relative;
+	top:200px;
 }
 #search-bar h5
 {
@@ -354,7 +391,7 @@ header
 
 #core-missions .span-two-thirds {
 
-padding-top:30px;
+padding-top:10px;
 }
 
 #teaser-text

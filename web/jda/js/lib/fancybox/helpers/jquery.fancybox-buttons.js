@@ -10,6 +10,12 @@
 
 		//Recheck if can toggle size
 		update: function () {
+
+			
+			this.list.find('.btnPrev').css('left', $(window).width()/2 - 500);
+			this.list.find('.btnNext').css('right', $(window).width()/2 - 500);
+			
+
 			var toggle = this.buttons.toggle.removeClass('btnDisabled btnToggleOn');
 
 			//Size toggle button
@@ -23,7 +29,9 @@
 
 		beforeShow: function () {
 			//Increase top margin to give space for buttons
-			F.current.margin[0] += 30;
+			
+			//CSD commented out
+			//F.current.margin[0] += 30;
 		},
 
 		// Update slideshow button
@@ -50,6 +58,11 @@
 					play : this.list.find('.btnPlay'),
 					toggle : this.list.find('.btnToggle')
 				}
+				//CSD ADDED HERE
+				this.list.find('.btnPrev').css('left', $(window).width()/2 - 500);
+				this.list.find('.btnNext').css('right', $(window).width()/2 - 500);
+				//this.list.find('.btnClose').css('right', $(window).width()/2 + 500);
+				this.list.find('.btnPrev, .btnNext').fadeIn('slow');
 			}
 
 			//Update navigation buttons
