@@ -79,10 +79,18 @@ class SearchController extends Controller
         $groupComponent->setLimit($limit);
         
         $facetComponent = $query->getFacetSet();
-        $facetComponent->createFacetField();
         
-        $facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5);
-        
+        $facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
+        /*
+        if(isset($tags) && count($tags) > 0)
+        {
+    		$facetComponent->createFacetQuery('tags')->setQuery("-tag_name:tags");
+        }
+		else       
+        {
+        	$facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
+        }
+        */
         // run the query
         $resultset = $client->select($query);
         //return new Response(var_dump($resultset));

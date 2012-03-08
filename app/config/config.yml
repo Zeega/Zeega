@@ -91,4 +91,8 @@ fos_user:
             template: ZeegaUserBundle:Email:resetting.email.twig
             
 nelmio_solarium:
-    adapter: ~
+    adapter:
+        class: Solarium_Client_Adapter_Http
+        host: geo.zeega.org
+        port: 8080
+        path: /solr
