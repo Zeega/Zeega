@@ -1,3 +1,0 @@
-ZeegaIngestBundle_widget:
-    pattern: /widget/
-    defaults: { _controller:  ZeegaIngestBundle:Widget:url }
