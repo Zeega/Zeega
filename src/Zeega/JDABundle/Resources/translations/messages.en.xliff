@@ -68,7 +68,7 @@
             </trans-unit>
              <trans-unit id="17">
                 <source>jda.about.connectbody</source>
-                <target>The archive aims to foster new connections, both between items and among users.  As users move from item to item and collection to collection they encounter an ever-expanding network of fellow archivists, from the major organization that submits thousands of location- and direction-tagged photographs to the fellow citizen who submits her family's contribute to the historian who seeks to understand the interaction of public and private actors in the relief effort.</target>
+                <target>The archive aims to foster new connections, both between items and among users. As they move from item to item and collection to collection users encounter an ever-expanding network of fellow archivists, from the major organization that submits thousands of location- and direction-tagged photographs to the fellow citizen who submits her family's testimonial to the historian who seeks to understand the interaction of public and private actors in the relief effort.</target>
             </trans-unit>
             <trans-unit id="18">
                 <source>jda.about.participateone</source>
@@ -76,7 +76,7 @@
             </trans-unit>
             <trans-unit id="19">
                 <source>jda.about.participatetwo</source>
-                <target>Build and share collections</target>
+                <target>Build and share collections (in development)</target>
             </trans-unit>
             <trans-unit id="20">
                 <source>jda.about.participatethree</source>
@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="21">
                 <source>jda.about.participatefour</source>
-                <target>Create and share narratives</target>
+                <target>Create and share narratives (in development)</target>
             </trans-unit>
              <trans-unit id="22">
                 <source>jda.search.allformats</source>

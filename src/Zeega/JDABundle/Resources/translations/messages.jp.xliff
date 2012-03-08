@@ -76,7 +76,7 @@
             </trans-unit>
             <trans-unit id="19">
                 <source>jda.about.participatetwo</source>
-                <target>自分だけのコレクションをつくり、他のユーザに公開する</target>
+                <target>自分だけのコレクションをつくり、他のユーザに公開する(開発中)</target>
             </trans-unit>
             <trans-unit id="20">
                 <source>jda.about.participatethree</source>
@@ -84,7 +84,7 @@
             </trans-unit>
             <trans-unit id="21">
                 <source>jda.about.participatefour</source>
-                <target>震災に関する皆様の「物語」を共有する</target>
+                <target>震災に関する皆様の「物語」を共有する (開発中)</target>
             </trans-unit>
              <trans-unit id="22">
                 <source>jda.search.allformats</source>
