@@ -6,7 +6,7 @@
 
 
 {% block scripts %}
-<script type="text/javascript" src="{{ asset('jda/js/lib/jquery/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('jda/js/lib/jquery/jquery-1.7.1.min.js')}}"></script>
 <script type="text/javascript" src="{{ asset('jda/js/ux/jda.ux.home.js')}}"></script>
 
 {% endblock %}
@@ -20,7 +20,7 @@
 
 			<div id="banner-index" class="hero-unit">
 				
-				<span class='photo-credit'>{% trans %}jda.home.source{% endtrans %}</span>
+				<a class='photo-credit' href='http://archive.shinsai.yahoo.co.jp/entry/65276/?sy=2011&sm=5&sd=4&ey=2011&em=5&ed=4&s=5' target='_blank'>{% trans %}jda.home.source{% endtrans %}</a>
 				
 				<div id="teaser-text">
 					<p class="en">
@@ -149,6 +149,7 @@
 		</footer></div>
 		
 	</div></div>
+
 
 
 {% endblock %}	

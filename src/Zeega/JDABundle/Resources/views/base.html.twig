@@ -17,8 +17,7 @@
 			
 			
 		{% endblock %}
-		
-		
+				
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
@@ -28,6 +27,7 @@
 		{% block scripts %}
 		{% endblock %}
 		
+		<script type="text/javascript" src="{{ asset('jda/js/lib/bootstrap.js')}}"></script>
 		
 		
     </head>
