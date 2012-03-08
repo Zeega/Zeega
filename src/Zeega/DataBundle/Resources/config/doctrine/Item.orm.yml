@@ -77,14 +77,15 @@ Zeega\DataBundle\Entity\Item:
             nullable: true
         uri:
             type: string
-            length: 200
+            length: 500
+            unique: true
         archive:
             type: string
             length: 50
             nullable: false
         attribution_uri:
             type: string
-            length: 200
+            length: 500
         date_created:
             type: datetime
             nullable: true
