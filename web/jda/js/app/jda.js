@@ -207,8 +207,8 @@ this.jda = {
 		}
 	},
 	resetMapSize :function(){
-		//var h = $(window).height() - 310;
-		//$("#event-map").height(h);
+		var h = $(window).height() - 310;
+		$("#event-map").height(h);
 	},
 	showEventView : function()
 	{
