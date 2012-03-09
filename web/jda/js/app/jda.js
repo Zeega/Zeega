@@ -207,8 +207,8 @@ this.jda = {
 		}
 	},
 	resetMapSize :function(){
-		var h = $(window).height() - 310;
-		$("#event-map").height(h);
+		//var h = $(window).height() - 310;
+		//$("#event-map").height(h);
 	},
 	showEventView : function()
 	{
@@ -543,7 +543,9 @@ this.jda = {
 	toggleMapLayer : function(checkboxID, map)
 	{
 		//map layer names are the same as checkbox id's
-		map.getLayersByName(checkboxID)[0].setVisibility($('#'+checkboxID).is(':checked'));
+		var isChecked = $('#'+checkboxID).is(':checked');
+		var layer = map.getLayersByName(checkboxID)[0];
+		layer.setVisibility(isChecked);
 	},
 	
 	onLegendLoad : function(response)
@@ -632,7 +634,7 @@ this.jda = {
 				}
 			));
 			
-			/*
+			
 			//JapanMap layers.  For more layers, it will make sense to load these only when needed.
 			layers.push( new OpenLayers.Layer.WMS(
 				"municipal-layer",
@@ -718,7 +720,7 @@ this.jda = {
 					visibility : false
 				})
 			);
-			*/
+			
 		}
 		
 		return layers;
