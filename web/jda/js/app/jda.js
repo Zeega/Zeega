@@ -495,9 +495,9 @@ this.jda = {
     	$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 
     	//remove search box values
-    	//jda.app.visualSearch.searchBox.disableFacets();
-	    //jda.app.visualSearch.searchBox.value('');
-	    //jda.app.visualSearch.searchBox.flags.allSelected = false;
+    	VisualSearch.searchBox.disableFacets();
+	    VisualSearch.searchBox.value('');
+	   VisualSearch.searchBox.flags.allSelected = false;
 
         
 	},
