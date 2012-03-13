@@ -93,6 +93,6 @@ fos_user:
 nelmio_solarium:
     adapter:
         class: Solarium_Client_Adapter_Http
-        host: geo.zeega.org
+        host: localhost
         port: 8080
         path: /solr
