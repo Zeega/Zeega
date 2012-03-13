@@ -36,7 +36,7 @@ function initHeaderUX(){
 	
 	
 
-	$('.add-media').click(function(){
+	$('.add-media a').click(function(){
 		console.log('add media clicked')
 		$('#add-media').fadeIn('fast');
 		$('body').bind('click',function(){

@@ -18,12 +18,7 @@ require.config({
 
 var loadFiles = [
 	'jquery',
-	
-	//css?
-	//'text!../css/all.css', //not quite
-	
 
-	
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
@@ -60,12 +55,18 @@ var loadFiles = [
 	'order!lib/jcarousel/jcarousel.zeega',
 	
 	//mvc
-	'order!backbone/models/tag',
+	
 	'order!app/models/editor.model.item',
+	'order!app/models/browser.model.search',
+	
+	
+	
+	
+	'order!backbone/models/tag',
 	'order!backbone/models/browser.collection',
 	'order!backbone/models/browser.myCollections',
 	'order!backbone/models/browser.timeBin',
-	'order!backbone/models/browser.search',
+	//'order!backbone/models/browser.search',
 
 
 	'order!backbone/views/browser.my-collections-view',

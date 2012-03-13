@@ -288,37 +288,16 @@
 
 			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
 
-<!--
-			<script src="{{ asset('js/aloha-config.js') }}" language="javascript"></script>
-			<script src="{{ asset('js/lib/aloha/lib/aloha.js') }}" data-aloha-plugins="common/format,common/highlighteditables"></script>
--->
-
-
-
 
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 			
 			<script type="text/javascript" language="Javascript">
 				//bootstrapping data
 				var itemsJSON = "{{ results|e('js') }}";
-				//console.log('collection id= '+ {{collection_id}})
-/*
-				var projectJSON = {
-					"project" : {
-						"id" : "1",
-						"title" : "New collection 81",
-						"attr" : "",
-						"sequences" : [{
-							"id" : "7",
-							"title" : "New collection 81",
-							"attr" : {},
-							"frames": [],
-							"layers" : []
-						}]
-					}
-				};
-*/
+
 				var projectJSON = "{{ project_data|e('js') }}";
+				console.log(itemsJSON)
+				console.log(projectJSON)
 				
 			</script>
 			

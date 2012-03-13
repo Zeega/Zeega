@@ -35,7 +35,9 @@ var ZeegaBrowser = {
 		$('#browser-my-collections .browser-loading').hide();
 
 		//Load Search items
-		this.search = new BrowserSearch();
+		var BrowserSearch = zeega.module("browserSearch");
+		
+		this.search = new BrowserSearch.Model();
 		
 		//attach items collection to items view and collections collection to collections view
 		this.searchItemsView = new BrowserSearchItemsView({ collection: this.search.get("itemsCollection") });
