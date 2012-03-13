@@ -206,7 +206,7 @@
 			}
 			else
 			{
-				cqlFilterString = "INCLUDE";   //acts as an empty filter
+				cqlFilterString = null;
 			}
 			
 			return cqlFilterString;

@@ -23,12 +23,12 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 
-	apiLocation : 'http://dev.zeega.org/jdaapisolr/web/',
+	apiLocation : 'http://184.106.135.57/zeega/web/',
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,
 	japanMapUrl : "http://worldmap.harvard.edu/geoserver/",
-	geoUrl : "http://geo.zeega.org/geoserver/",
+	geoUrl : "http://184.106.135.57/geoserver/",
 	resultsPerPage : 100,
 	
 	init : function()
@@ -95,7 +95,7 @@ this.jda = {
 		
 		if (this.currentView == 'event')
 		{
-			if(cqlFilterString!='INCLUDE')
+			if(!_.isUndefined(cqlFilterString))
 			{
 				this.map.layers[1].mergeNewParams({
 					'CQL_FILTER' : this.itemViewCollection.getCQLSearchString()
@@ -433,11 +433,15 @@ this.jda = {
 		});
  	},
 	updateMapForTimeSlider : function(map){
+		console.log("UP");
 		 //Time filter string    
 		 cqlFilterString = this.itemViewCollection.getCQLSearchString();
-		 map.layers[1].mergeNewParams({
-		   'CQL_FILTER' : cqlFilterString
-		});
+		 if(!_.isUndefined(cqlFilterString))
+		 {
+		 	map.layers[1].mergeNewParams({
+		   		'CQL_FILTER' : cqlFilterString
+			});
+		 }
    	},
    	
 	setStartDateTimeSliderHandle : function()
