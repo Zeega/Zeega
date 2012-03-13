@@ -93,10 +93,13 @@
 		{
 			if( itemsJSON )
 			{
+
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
-				this.totalItemsCount = itemsBS.items_count;
-				this.reset( itemsBS.items );
+				console.log('items exist');
+				console.log(itemsBS)
+				this.totalItemsCount = itemsBS.items_and_collections_count;
+				this.reset( itemsBS.items_and_collections );
 			}
 			else
 			{
@@ -122,8 +125,8 @@
 
 		parse : function(response)
 		{
-			this.totalItemsCount = response.items_count;
-			return response.items;
+			this.totalItemsCount = response.items_and_collections_count;
+			return response.items_and_collections;
 		}
 
 

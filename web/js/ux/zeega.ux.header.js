@@ -9,9 +9,7 @@
 
 //	stuff that has to happen after the js fully loads
 function initHeaderUX(){
-	
-	console.log('headerUX init')
-	
+		
    	//dropdown menu
     $('.drop-down').click(function(){
 		if( $(this).hasClass('open') ) $(this).removeClass('open');
