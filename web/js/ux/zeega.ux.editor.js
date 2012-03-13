@@ -10,7 +10,6 @@
 
 //	stuff that has to happen after the js fully loads
 function initUX(){
-
 	initHeaderUX();
 
 /*
