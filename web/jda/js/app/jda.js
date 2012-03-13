@@ -23,12 +23,12 @@ this.jda = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 
-	apiLocation : 'http://dev.zeega.org/jdaapisolr/web/',
+	apiLocation : 'http://184.106.135.57/zeega/web/',
 	currentView : 'list',
 	mapLoaded : false,
 	timeSliderLoaded : false,
 	japanMapUrl : "http://worldmap.harvard.edu/geoserver/",
-	geoUrl : "http://geo.zeega.org/geoserver/",
+	geoUrl : "http://184.106.135.57/geoserver/",
 	resultsPerPage : 100,
 	
 	init : function()
@@ -95,7 +95,7 @@ this.jda = {
 		
 		if (this.currentView == 'event')
 		{
-			if(cqlFilterString!='INCLUDE')
+			if(!_.isUndefined(cqlFilterString))
 			{
 				this.map.layers[1].mergeNewParams({
 					'CQL_FILTER' : this.itemViewCollection.getCQLSearchString()
@@ -206,7 +206,10 @@ this.jda = {
 			this.itemViewCollection.render();
 		}
 	},
-	
+	resetMapSize :function(){
+		var h = $(window).height() - 310;
+		$("#event-map").height(h);
+	},
 	showEventView : function()
 	{
 		console.log('switch to Event view');
@@ -215,6 +218,7 @@ this.jda = {
 		VisualSearch.searchBox.addFacet('data:time & place', '', 0);
 		
 		$("#event-view").width(940);
+		this.resetMapSize();
 
 		if( !this.mapLoaded )
 		{
@@ -423,17 +427,21 @@ this.jda = {
 			success : function(model, response){ 
 				searchView.renderTags(response.tags);
 				searchView.render();      
-				$('#results-count-number').text(response["items_count"]+ " results");        
+				$('#results-count-number').text(response["items_count"]);        
 				$('#results-count').fadeTo(100, 1);
 			}
 		});
  	},
 	updateMapForTimeSlider : function(map){
+		console.log("UP");
 		 //Time filter string    
 		 cqlFilterString = this.itemViewCollection.getCQLSearchString();
-		 map.layers[1].mergeNewParams({
-		   'CQL_FILTER' : cqlFilterString
-		});
+		 if(!_.isUndefined(cqlFilterString))
+		 {
+		 	map.layers[1].mergeNewParams({
+		   		'CQL_FILTER' : cqlFilterString
+			});
+		 }
    	},
    	
 	setStartDateTimeSliderHandle : function()
@@ -491,9 +499,9 @@ this.jda = {
     	$('#select-wrap-text').text( $('#content option[value=\''+$('#content').val()+'\']').text() );
 
     	//remove search box values
-    	//jda.app.visualSearch.searchBox.disableFacets();
-	    //jda.app.visualSearch.searchBox.value('');
-	    //jda.app.visualSearch.searchBox.flags.allSelected = false;
+    	VisualSearch.searchBox.disableFacets();
+	    VisualSearch.searchBox.value('');
+	   VisualSearch.searchBox.flags.allSelected = false;
 
         
 	},
@@ -539,7 +547,9 @@ this.jda = {
 	toggleMapLayer : function(checkboxID, map)
 	{
 		//map layer names are the same as checkbox id's
-		map.getLayersByName(checkboxID)[0].setVisibility($('#'+checkboxID).is(':checked'));
+		var isChecked = $('#'+checkboxID).is(':checked');
+		var layer = map.getLayersByName(checkboxID)[0];
+		layer.setVisibility(isChecked);
 	},
 	
 	onLegendLoad : function(response)
@@ -628,7 +638,7 @@ this.jda = {
 				}
 			));
 			
-			/*
+			
 			//JapanMap layers.  For more layers, it will make sense to load these only when needed.
 			layers.push( new OpenLayers.Layer.WMS(
 				"municipal-layer",
@@ -714,7 +724,7 @@ this.jda = {
 					visibility : false
 				})
 			);
-			*/
+			
 		}
 		
 		return layers;

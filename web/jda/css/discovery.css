@@ -312,13 +312,15 @@
 
 #event-time-slider{
 	position: relative;
-	height : 60px;
+	height : 40px;
 }
 
 #event-view{
 	position : relative;
 	overflow: hidden;
+	
 }
+
 
 #layer-control{
 	z-index:-1;
