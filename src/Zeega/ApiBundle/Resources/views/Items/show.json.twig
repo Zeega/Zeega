@@ -6,8 +6,8 @@
 		"id" : "{{ item.id }}",
 		"media_id" : "{{ item.getMediaId() }}",
 		"metadata_id" : "{{ item.getMetadataId() }}",
-		"title" : "{{ item.title }}",
-		"description" : "{{ item.description }}",
+		"title" : "{{ item.title | json_encode}}",
+		"description" : "description",
 		"text" : "{{ item.text }}",
 		"uri" : "{{ item.uri }}",
 		"attribution_uri" : "{{ item.getAttributionUri() }}",
@@ -30,12 +30,7 @@
 			"media_date_created_end" : "",
 		{% endif %}
 		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
-		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
-		"tags" : " 
-			{% if tags is defined%}
-			{{ tags }}
-			{% endif %}
-		"
+		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}"
 	}
 	{% else %}
 		{}

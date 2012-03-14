@@ -34,7 +34,7 @@ var loadFiles = [
 	'order!helpers/zeega.helpers',
 
 	//core
-	'order!app/zeega',
+	//'order!app/zeega',
 	'order!app/zeega.browser',
 	
 	//plugins
@@ -55,7 +55,30 @@ var loadFiles = [
 	'order!lib/jcarousel/jcarousel.zeega',
 	
 	//mvc
+	'order!app/models/browser.model.collection',
+	'order!app/models/browser.model.search',
+	'order!app/models/browser.model.item',
+	'order!app/models/browser.model.tag',
+
+	'order!app/collections/browser.collections.collection',
+	'order!app/collections/browser.collections.item',
+	'order!app/collections/browser.collections.tag',
 	
+	'order!app/views/browser.item/browser.view.item.item-tray',
+	'order!app/views/browser.collection/browser.view.collection.my-collection-drawer',
+
+	'order!app/views/browser.fancybox/browser.view.fancybox._fancybox',
+	'order!app/views/browser.fancybox/browser.view.fancybox.audio',
+	'order!app/views/browser.fancybox/browser.view.fancybox.document-cloud',
+	'order!app/views/browser.fancybox/browser.view.fancybox.image',
+	'order!app/views/browser.fancybox/browser.view.fancybox.tweet',
+	'order!app/views/browser.fancybox/browser.view.fancybox.video',
+	'order!app/views/browser.fancybox/browser.view.fancybox.youtube',
+	'order!app/views/browser.map/browser.view.map.fancybox',
+	'order!app/views/browser.tag/browser.view.tag.fancybox',
+	
+	
+	/*
 	'order!app/models/editor.model.item',
 	'order!app/models/browser.model.search',
 	
@@ -76,8 +99,10 @@ var loadFiles = [
 	'order!backbone/views/browser.search-time-view',
 	'order!backbone/views/tag.view',
 	'order!backbone/views/fancybox.views',
-		'order!backbone/views/map.view',
+	'order!backbone/views/map.view',
 
+	*/
+	'order!app/index.browser'
 	
 
 	];
@@ -85,7 +110,7 @@ var loadFiles = [
 require(loadFiles, function($) {
     
 	console.log('loaded')
-	ZeegaBrowser.init();
+	//ZeegaBrowser.init();
 	
 	
 	initUX();

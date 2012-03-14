@@ -18,12 +18,7 @@ class HeaderTwigExtension extends \Twig_Extension
 
     public function getGlobals()
     {
-		$user = $this->securityContext->getToken()->getUser();
-		if($user == "anon.")
-		{
-            $user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
-        }
-		
+		$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);		
 		$sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
 		$site = $sites[0];
 		

@@ -1,8 +1,8 @@
 (function(Items) {
 
-	Items.ViewCollection = Backbone.View.extend({
+	Items.MasterCollection = Backbone.View.extend({
 
-		el : $('#database-item-list'),
+		el : $('#browser-results-items'),
 
 		initialize : function()
 		{
@@ -11,40 +11,42 @@
 			this._childViews = [];
 			
 			$(this.el).spin('small');
-			this.render();
+			//this.render();
 		},
 		
 		render : function()
 		{
+			
 			var _this = this;
 			this._isRendered = true;
 			
 			if(this.collection.length)
 			{
 				_.each( _.toArray(this.collection), function(itemModel){
-					var itemView = new Items.Views.List({model:itemModel});
+					
+					var itemView = new Items.Views.Item({ model : itemModel });
 					_this._childViews.push( itemView );
 					$(_this.el).append( itemView.render().el );
 				})
 			}
-			else
-			{
-				$(this.el).html('<li class="alert alert-error">No results :(</li>')
-			}
+			else $(this.el).html('<li class="alert alert-error">No results :(</li>') // remove?
 			
 			$(this.el).fadeTo(100,1);
 			$(this.el).spin(false);
+			
 			return this;
 		},
 		
 		reset : function()
 		{
+			console.log('view col reset')
 			if ( this._isRendered )
 			{
 				$(this.el).empty();
 				this._childViews = [];
 				this.render();
 			}
+			else this.render();
 		},
 
 		append : function(items)
@@ -83,15 +85,16 @@
 
 	Items.Collection = Backbone.Collection.extend({
 
-		page : 0,
+		model : Items.Model,
+
 		totalItemsCount : 0,
-		
-		base : function(){ return zeega.app.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
-		search : {},
 
 		initialize : function()
 		{
-			if( itemsJSON )
+			this.search = new Items.Search();
+			
+			console.log('defined? '+ typeof itemsJSON )
+			if( typeof itemsJSON != 'undefined' )
 			{
 
 				//get bootstrapped data if it exists
@@ -104,19 +107,18 @@
 			else
 			{
 				//if bootstrap doesn't exist, then default to a search
-				console.log( 'items NOT bootstrapped. Do search. ')
-				this.fetch();
+				var _this = this;
+				this.fetch({
+					success : function(response)
+					{
+						console.log('items count: '+ response.length ) // + works
+						_this.trigger('reset');
+					}
+				});
 			}
 		},
 		
-		url: function()
-		{
-			var url = this.base();
-			if( !_.isUndefined(this.search.query) ) url += '&q=' + this.search.query;
-			if( !_.isUndefined(this.search.contentType) ) url += '&content=' + this.search.contentType;
-			if( !_.isUndefined(this.search.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.search.collectionID;
-			return url;
-		},
+		url : function(){ return this.search.getUrl() },
 		
 		setSearch : function(search, reset)
 		{
@@ -133,4 +135,4 @@
 
 	});
 
-})(zeega.module("items"));
+})(zeegaBrowser.module("items"));

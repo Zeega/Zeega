@@ -8,6 +8,13 @@
 
 
 *********************************************/
+require.config({
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	paths : {
+			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
+		}
+})
 
 var loadFiles = [
 	'jquery',
@@ -40,8 +47,8 @@ var loadFiles = [
 	'order!lib/filamentslider/selectToUISlider.jQuery',
 	
 	//mvc
-	'order!backbone/models/tag',
-	'order!backbone/views/widget.item-view',
+	//'order!backbone/models/tag',
+	'order!app/views/widget.item/widget.view.item.widget-view',
 	
 ];
 

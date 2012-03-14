@@ -1,29 +1,7 @@
-(function(BrowserSearch){
+(function(Items){
 
-	BrowserSearch.Model = Backbone.Model.extend({
+	Items.Search = Backbone.Model.extend({
 		
-
-	
-		url : function(){
-		
-			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
-			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
-						+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
-						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
-						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
-						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
-						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
-						+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
-						+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")
-						+ (isTimeSearch ? "dtintervals=" + this.get("dtintervals") + "&": "")
-						+ (isTimeSearch ? "r_collections=" + this.get("r_collections") + "&": "")
-						+ (isTimeSearch ? "r_items=" + this.get("r_items") + "&": "")
-						+ (isTimeSearch ? "r_time=" + this.get("r_time") + "&": "");
-			console.log("Final URL is: " + finalURL);
-			return finalURL;
-
-		},
-
 		defaults: {
     	
 	    	//Parameters you can send the server
@@ -40,51 +18,57 @@
 	    	"dtintervals"			: 5, //10 is really too many right now
     	
 	    	//What do you want back?
-	    	"r_collections"			: 0, //return collections?
-	    	"r_itemswithcollections" : 1, //return items and collections, mixed?
-	    	"r_items"				: 0, //return items?
-	    	"r_time"				: 0, //return time bins?
+	    	"r_collections"			: false, //return collections?
+	    	"r_itemswithcollections" : true, //return items and collections, mixed?
+	    	"r_items"				: false, //return items?
+	    	"r_time"				: true, //return time bins?
 
-	    	//Collections that hold search results
-	    	
-			"itemsCollection"		: 	new ItemCollection(), //holds results of type =image, video or audio
-	    	
-			"collectionsCollection" : 	new BrowserCollectionCollection(), //holds results of type='collection'
-
-	    	//Models that hold distributions of results
-	    	"timeBinsCollection"			:   new BrowserTimeBinCollection(), //BrowserTimeBinsModel
-	    	"mapBinsModel"			: 	[], 	//BrowserMapBinsModel, NOT IMPLEMENTED
-
-    	
-	  	}, 
+	  	},
 	
-		//initialize default search for all 'My Media'
-		initialize: function(){
-		
-		
-		
-		
-		},
+		getUrl : function()
+		{
+			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
+			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
+						+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
+						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
+						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
+						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
+						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
+						+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
+						+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")
+						+ (isTimeSearch ? "dtintervals=" + this.get("dtintervals") + "&": "")
+						+ (isTimeSearch ? "r_collections=" + this.get("r_collections") + "&": "")
+						+ (isTimeSearch ? "r_items=" + this.get("r_items") + "&": "")
+						+ (isTimeSearch ? "r_time=" + this.get("r_time") + "&": "");
+			console.log("Final URL is: " + finalURL);
+			return finalURL;
 
-		parse: function(data){
+		}
 
+		
+
+/*
+		parse: function(data)
+		{
 			var items = this.get("itemsCollection");
 			var colls = this.get("collectionsCollection");
 			var timeBins = this.get("timeBinsCollection");
 
 			//Only reset items and collections if we are on page 1
 			//Otherwise we want to add to the results because the user has loaded more results
-			if (this.get("page") == 1){
+			if (this.get("page") == 1)
+			{
 				items.reset();
 				colls.reset();
-			
 			}
 			timeBins.reset();	
 		
-
-			if (data == null || data['items_count'] ==null){
+			if (data == null || data['items_count'] ==null)
+			{
 				console.log('No search items returned. Something is null man.');
-			} else {
+			}
+			else
+			{
 				console.log('returned ' + data['returned_items_and_collections_count'] + ' out of ' + data['items_and_collections_count'] + ' total items and collections');
 				console.log('returned ' + data['returned_items_count'] + ' out of ' + data['items_count'] + ' total items');
 				console.log('returned ' + data['returned_collections_count'] + ' out of ' + data['collections_count'] +' total collections');
@@ -102,7 +86,7 @@
 					}
 				}, this);
 			}
-
+*/
 			//	Assemble item data into BrowserItems
 			/* THIS IS FOR WHEN ITEMS AND COLLECTIONS COME BACK SEPARATELY WHICH IS NOT THE CASE RIGHT NOW
 			if (data['items'] != null){
@@ -123,6 +107,7 @@
 				}, this);
 
 			}*/
+/*
 			//Assemble time bin data into TimeBinCollection
 			if (data['time_distribution'] != null){
 				_.each(data['time_distribution'], function(timeBin){
@@ -134,22 +119,9 @@
 				this.get("timeBinsCollection").max_date = data['time_distribution_info']['max_date'];
 			}
 		
-		},
-	
-		//updates query and then fetches results from DB
-		updateQuery: function(){
-
-			this.fetch({
-				success : function()
-				{
-					console.log('successful query - good work everyone');
-					ZeegaBrowser.renderResults();
-				}
-			});
-		}, 
-
-	
-
+		}
+*/
 	});
-})(zeega.module("browserSearch"));
+	
+})(zeegaBrowser.module("items"));
 

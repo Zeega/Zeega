@@ -10,11 +10,9 @@
 
 //	stuff that has to happen after the js fully loads
 
-function initUX(){
+function initUX()
+{
 	initHeaderUX();
-
-	
-
 }
 
 
@@ -41,11 +39,11 @@ $(document).ready(function() {
 	// filter database by type
 	$('#search-filter li a').click(function(){
 		
-		ZeegaBrowser.search.set({ 
+		zeegaBrowser.app.items.collection.search.set({ 
 							content:$(this).data('search-filter')
 						});
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
+		zeegaBrowser.app.resetPageCount();
+		zeegaBrowser.app.doSearch();
 		
 		clearMenus();
 		return false;
@@ -54,8 +52,8 @@ $(document).ready(function() {
 	//Click event for collection filter
 	$('#browser-collection-filter-tab').click(function(){
 		
-		ZeegaBrowser.doCollectionSearch(ZeegaBrowser.clickedCollectionID);
-		ZeegaBrowser.showCollectionFilter();
+		zeegaBrowser.app.doCollectionSearch(zeegaBrowser.app.clickedCollectionID);
+		zeegaBrowser.app.showCollectionFilter();
 		return false;
 	});
 
@@ -96,49 +94,50 @@ $(document).ready(function() {
     	helpers : {
     		title : false
     	},
-    	beforeClose : function() {
-    			//set video src to null to prevent browser bug
-    			
-    			$('video').attr("src", null);
-				
+    	beforeClose : function()
+		{
+			//set video src to null to prevent browser bug
+			$('video').attr("src", null);
     	},
 		
 		/* This is where we decide which kind of content to put in the fancybox */    
-    	beforeLoad : function() {
-    
-    		$('#fancybox-document-cloud').remove();
+    	beforeLoad : function()
+		{
+			$('#fancybox-document-cloud').remove();
 
-    		
-            var elementID = $(this.element).attr('id');
-           	var itemsCollection = ZeegaBrowser.search.get("itemsCollection");
-           	var thisModel = itemsCollection.get(elementID);
+			var elementID = $(this.element).attr('id');
+			var itemsCollection = zeegaBrowser.app.items.collection;
+			var thisModel = itemsCollection.get(elementID);
 			var fancyView = null;
 
-			switch(thisModel.get("layer_type")){
+			var Fancybox = zeegaBrowser.module('fancybox');
+
+			switch( thisModel.get("layer_type") )
+			{
 				case 'Image':
-					fancyView = new FancyBoxImageView({model:thisModel});
-           			fancyView.render(this);
-           			break;
-           		case 'Video':
-           			fancyView = new FancyBoxVideoView({model:thisModel});
-           			fancyView.render(this);
-           			break;
-           		case 'Audio':
-           			fancyView = new FancyBoxAudioView({model:thisModel});
-           			fancyView.render(this);
-           			break;
-           		case 'Youtube':
-           			fancyView = new FancyBoxYouTubeView({model:thisModel});
-           			fancyView.render(this);
-           			break;
-           		case 'Tweet':
-           			fancyView = new FancyBoxTweetView({model:thisModel});
-           			fancyView.render(this);
-           			break;
-           		case 'DocumentCloud':
-           			fancyView = new FancyBoxDocCloudView({model:thisModel});
-           			fancyView.render(this);
-           			break;
+					fancyView = new Fancybox.Views.Image({ model : thisModel });
+					fancyView.render(this);
+					break;
+				case 'Video':
+					fancyView = new FancyBoxVideoView({model:thisModel});
+					fancyView.render(this);
+					break;
+				case 'Audio':
+					fancyView = new FancyBoxAudioView({model:thisModel});
+					fancyView.render(this);
+					break;
+				case 'Youtube':
+					fancyView = new FancyBoxYouTubeView({model:thisModel});
+					fancyView.render(this);
+					break;
+				case 'Tweet':
+					fancyView = new FancyBoxTweetView({model:thisModel});
+					fancyView.render(this);
+					break;
+				case 'DocumentCloud':
+					fancyView = new FancyBoxDocCloudView({model:thisModel});
+					fancyView.render(this);
+					break;
 			}
         },
         
@@ -146,13 +145,13 @@ $(document).ready(function() {
 	
 	//Collection playback and editor connection
 	$('#collection-player-button').click(function(){
-		ZeegaBrowser.showShareButton(ZeegaBrowser.search.get("collection"));
+		zeegaBrowser.app.showShareButton(zeegaBrowser.app.items.collection.search.get("collection"));
 		return false;
 	
 	}); 
 
 	$('#collection-to-editor-button, #browser-open-in-editor').click(function(){
-		ZeegaBrowser.goToEditor(ZeegaBrowser.search.get("collection"), ZeegaBrowser.clickedCollectionTitle);
+		zeegaBrowser.app.goToEditor(zeegaBrowser.app.items.collection.search.get("collection"), zeegaBrowser.app.clickedCollectionTitle);
 		return false;
 	});
 	$( '#database-search-text' ).bind('focus', function(e){
@@ -163,13 +162,13 @@ $(document).ready(function() {
 	$( '#database-search-text' ).bind('keypress', function(e){
 	   if ( e.keyCode == 13 ) {
 	     e.preventDefault();
-	     ZeegaBrowser.resetPageCount();
-	     ZeegaBrowser.doSearch();
+	     zeegaBrowser.app.resetPageCount();
+	     zeegaBrowser.app.doSearch();
 	   }
 	 });
 	 $( '#database-search-filter' ).bind('change', function(e){
-	 	ZeegaBrowser.resetPageCount();
-	     ZeegaBrowser.doSearch();
+	 	zeegaBrowser.app.resetPageCount();
+	     zeegaBrowser.app.doSearch();
 	 });
 
 	
@@ -180,8 +179,8 @@ $(document).ready(function() {
 		
 		
 		//Reset page count & Do initial search
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
+		zeegaBrowser.app.resetPageCount();
+		zeegaBrowser.app.doSearch();
 		
 		return false;
 	});
@@ -192,8 +191,8 @@ $(document).ready(function() {
 		
 
 		//Do full search to reset
-		ZeegaBrowser.resetPageCount();
-		ZeegaBrowser.doSearch();
+		zeegaBrowser.app.resetPageCount();
+		zeegaBrowser.app.doSearch();
 
 		return false;
 	});
@@ -214,7 +213,7 @@ $(document).ready(function() {
 			$('#browser-results-collections').hide();
 			$('#browser-results-items').show();
 		}
-		ZeegaBrowser.renderResults();
+		zeegaBrowser.app.renderResults();
 		return false;
 	});
 
@@ -226,21 +225,21 @@ $(document).ready(function() {
 		$(this).addClass('browser-selected-toggle');
 	
 		if ($(this).attr('id') == "browser-my-media"){
-			ZeegaBrowser.search.set({user:-1});
+			zeegaBrowser.app.items.collection.search.set({user:-1});
 			$('#database-search-text').val("search my stuff");
 
 		}else if ($(this).attr('id') == "browser-all-media"){
 			$('#database-search-text').val("search everything");
-			ZeegaBrowser.search.set({user:-2});
+			zeegaBrowser.app.items.collection.search.set({user:-2});
 		} 
 
 		//Clear any collection filter on page
-		ZeegaBrowser.removeCollectionFilter();
+		zeegaBrowser.app.removeCollectionFilter();
 
 		//reset page count
-		ZeegaBrowser.resetPageCount();
+		zeegaBrowser.app.resetPageCount();
 
-		ZeegaBrowser.doSearch();
+		zeegaBrowser.app.doSearch();
 	});
 	
 	$('#browser-collection-filter-tab-edit-icon, #browser-collection-filter-edit-menu').hover(
@@ -267,56 +266,61 @@ $(document).ready(function() {
 				
 				ui.draggable.draggable('option','revert',false);
 				
-
 				$(this).effect("highlight", {}, 3000);
 
-				if(ZeegaBrowser.draggedItem.id){
-				var newGuy = new BrowserCollection();
-
-				newGuy.addNewItemID(ZeegaBrowser.draggedItem.id);
+				if(zeegaBrowser.app.draggedItem.id)
+				{
+					//var newGuy = new BrowserCollection();
+					var Collection = zeegaBrowser.module('collection');
+					var newGuy = new Collection.CollectionModel()
+					newGuy.addNewItemID(zeegaBrowser.app.draggedItem.id);
+					console.log(newGuy)
 				
-				newGuy.save({ title:'New collection ' + Math.floor(Math.random()*1000)}, 
+					newGuy.save({
+						title:'New collection ' + Math.floor(Math.random()*1000)}, 
+						{
+							success: function(model, response)
+							{ 
+								zeegaBrowser.app.draggedItem = null;
+					
+								//Update newGuy
+								model.set({id:response.collections.id});
+								model.set({thumbnail_url:response.collections.thumbnail_url});
+								model.set({child_items_count:response.collections.child_items_count});
+								zeegaBrowser.app.myCollectionsView.collection.add(model, {at: 0});
+		 					},
+			 				error: function(model, response)
 							{
-								success: function(model, response) { 
-									ZeegaBrowser.draggedItem = null;
-									
-									//Update newGuy
-									model.set({id:response.collections.id});
-									model.set({thumbnail_url:response.collections.thumbnail_url});
-									model.set({child_items_count:response.collections.child_items_count});
-									ZeegaBrowser.myCollectionsView.collection.add(model, {at: 0});
-				 				},
-				 				error: function(model, response){
-				 					ZeegaBrowser.draggedItem = null;
-				 					console.log("Error creating a new collection.");
-				 					console.log(response);
-				 				}
-				 			});
-				
+			 					zeegaBrowser.app.draggedItem = null;
+			 					console.log("Error creating a new collection.");
+			 					console.log(response);
+			 				}
+		 			});
 				
 				}
-				else{
+				else
+				{
 					console.log('Error: failure to recognize dragged item');
-					console.log(ZeegaBrowser);
-				
+					console.log(zeegaBrowser.app);
 				}
 			}
-		});
+	});
+		
 	$('#browser-delete-collection').click(function() {
-		ZeegaBrowser.deleteCollection(ZeegaBrowser.search.get("collection"));
+		zeegaBrowser.app.deleteCollection(zeegaBrowser.app.items.collection.search.get("collection"));
 		return false;
 	});
 	$('#browser-rename-collection').click(function() {
 		alert('implement in modal window');//Commenting out
 		//using jeditable framework - pretend like user clicked on the title element
-		//see ZeegaBrowser.showCollectionFilter for definition of behavior
+		//see zeegaBrowser.app.showCollectionFilter for definition of behavior
 		//$('#browser-collection-filter-tab-text').trigger('click');
 	});
 	
 	//Load the next page of results into the results drawer
 	$('#browser-view-more-item-results, #browser-view-more-collection-results').click(function(){
-	 	ZeegaBrowser.search.set({page: ZeegaBrowser.search.get("page") + 1 });
-	 	ZeegaBrowser.doSearch();
+	 	zeegaBrowser.app.items.collection.search.set({page: zeegaBrowser.app.items.collection.search.get("page")++ });
+	 	zeegaBrowser.app.doSearch();
 	 	return false;
 	 });
 	 
@@ -324,9 +328,8 @@ $(document).ready(function() {
 	 
 	 
 	
-	 window.addEventListener('focus', function() {
-		ZeegaBrowser.refresh();
-	    
+	 window.addEventListener('focus', function(){
+		zeegaBrowser.app.refreshItems();
 		console.log('infocus refresh database')
 	});
 	

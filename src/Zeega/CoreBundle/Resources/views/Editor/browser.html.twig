@@ -20,7 +20,9 @@
 								<p>Drag media to create a new collection</p>
 							</div>
 						</div>
+						<!--
 						<div class="browser-loading"><img src="{{asset('images/loading.gif')}}"></div>
+						-->
 						<ul id="browser-my-collections-drawer" class="jcarousel-skin-zeega"></ul>
 					</div>
 				</div>
@@ -92,8 +94,9 @@
 						</div>
 						
 						
-						
+						<!--
 						<div class="browser-loading"><img src="{{asset('images/loading.gif')}}"></div>
+						-->
 						<div id="browser-no-results-my-media-message">You don't currently have any media. Want to <a class='add-media' href="#">add some</a>?</div>
 						<div id="browser-no-items-results-message">Sorry, no items found.</div>
 						<div id="browser-no-collections-results-message">Sorry, no collections found.</div>
@@ -219,14 +222,14 @@
 {% block scripts %}
 				<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script data-main="{{ asset('js/loaders/main.browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+		<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
 		<!-- Leaflet CSS --> 
 		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
 		
 		
 		<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
-		<link rel="stylesheet" type="text/css" href="{{ asset('js/libraries/jquery.tagsinput.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jquery.tagsinput.css')}}" />
 		
 		
 		<!-- Leaflet JavaScript -->
@@ -256,8 +259,10 @@
 			
 			
 		<script>
-		sessionStorage.setItem('siteId','{{site.id}}')
-		sessionStorage.setItem('siteShort','{{site.short}}')
+		sessionStorage.setItem('siteId','{{site.id}}');
+		sessionStorage.setItem('siteShort','{{site.short}}');
+		
+		//bootstrapping data
 		</script>	
 			
 {% endblock %}
