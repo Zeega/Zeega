@@ -30,11 +30,20 @@ class SearchController extends Controller
 		$collection_id  = $request->query->get('collection');   //  string
 		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
 		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
+		$geoLocated = $request->query->get('geo_located'); 
 		
 	    if(!isset($page))               $page = 0;
 		if(!isset($limit))              $limit = 100;
 		if($limit > 100)                $limit = 100;
-		if(isset($contentType))        $contentType = ucfirst($contentType);
+		if(isset($contentType))         $contentType = ucfirst($contentType);
+		if(!isset($geoLocated))         
+		{
+			$geoLocated = 0;
+		}
+		else
+		{
+			$geoLocated = intval($geoLocated);
+		}
 		
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
@@ -55,6 +64,7 @@ class SearchController extends Controller
         if(isset($q) and $q != '')                          $query->setQuery($q);
         if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
         if(isset($tags))                                    $query->createFilterQuery('tag_name')->setQuery($tags);
+        if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
