@@ -15,10 +15,24 @@ class HeaderTwigExtension extends \Twig_Extension
         $this->doctrine = $doctrine;
 		$this->securityContext = $securityContext;
     }
-
+/////// HEAD
     public function getGlobals()
     {
-		$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);		
+		$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
+////////////		
+/*
+// 3/25/2012
+// unsure if this should be removed so i'm commenting it out instead
+    {	
+    	$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
+		//$user = $this->securityContext->getToken()->getUser();
+		if($user == "anon.")
+		{
+            $user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
+        }
+		
+*/
+//////
 		$sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
 		$site = $sites[0];
 		
