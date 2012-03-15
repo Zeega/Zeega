@@ -12,7 +12,7 @@ var LocatorMapView = Backbone.View.extend({
 		if(parseFloat(this.model.get('media_geo_latitude'))) this.geoLocated=true;
 		else this.geoLocated=false;
 		
-		this.latlng=new L.LatLng(parseFloat(this.model.get('media_geo_latitude')),parseFloat(this.model.get('media_geo_longitude')));
+		this.latlng = new L.LatLng(parseFloat(this.model.get('media_geo_latitude')),parseFloat(this.model.get('media_geo_longitude')));
 		
 		var values = {
 			latitude : this.model.get('media_geo_latitude'),

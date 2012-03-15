@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
@@ -12,7 +12,7 @@
 			<meta name="description" content="">
 			<meta name="keywords" content="">
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<link rel="stylesheet" href="{{ asset('js/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
+			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.css')}}" /> 
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.widget.css')}}" /> 
 			<link rel="icon" type="image/png" href="{{asset('images/zeega.ico')}}"> 
@@ -118,7 +118,7 @@
          
     {% block scripts %}
 		<!-- SCRIPTS -->
-		<script data-main="{{ asset('js/main.widget.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
+		<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
 	{% endblock %}
 
     </body>

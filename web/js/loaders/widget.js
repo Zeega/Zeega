@@ -48,12 +48,17 @@ var loadFiles = [
 	
 	//mvc
 	//'order!backbone/models/tag',
-	'order!app/views/widget.item/widget.view.item.widget-view',
+	'order!app/models/widget.model.item',
+
+	'order!app/collections/widget.collections.item',
+
+	'order!app/views/widget.item/widget.view.item.collection',
+	'order!app/views/widget.item/widget.view.item.ingesting',
 	
 ];
 
 require(loadFiles, function($) 
 {
-	ZeegaWidget.init();
+	zeegaWidget.app.init();
 	//initUX();	
 });
