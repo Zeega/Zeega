@@ -79,13 +79,10 @@ class ItemRepository extends EntityRepository
 		
 		if(isset($query['tagsName']))
       	{
-			 $qb->groupBy('i.id');      	
 			 $qb->innerjoin('i.tags', 'it')
 			    ->innerjoin('it.tag','t')
                 ->andWhere('t.name IN (:tags_name)')
-                ->having('COUNT(DISTINCT t.id) = :tags_name_count')
-                ->setParameter('tags_name', $query['tagsName'])
-                ->setParameter('tags_name_count', count($query['tagsName']));
+                ->setParameter('tags_name', $query['tagsName']);
 		}
 		
 		if(isset($query['earliestDate']))
@@ -119,12 +116,12 @@ class ItemRepository extends EntityRepository
 	{
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('COUNT(distinct i)')
+		$qb->select('COUNT(i)')
 	       ->from('ZeegaDataBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 		
 		//return 0;
 	}
@@ -133,13 +130,13 @@ class ItemRepository extends EntityRepository
 	{
 		
 		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('COUNT(distinct i)')
+		$qb->select('COUNT(i)')
 	       ->from('ZeegaDataBundle:Item', 'i');
 		   
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.media_type <> :count_filter')->setParameter('count_filter', 'Collection');
 		
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 		
 		//return 0;
 	}
@@ -152,7 +149,7 @@ class ItemRepository extends EntityRepository
 
 	    $qb = $this->buildSearchQuery($qb, $query);
 		$qb->andWhere('i.media_type = :count_filter')->setParameter('count_filter', 'Collection');
-		return array_sum($qb->getQuery()->getArrayResult());
+		return intval($qb->getQuery()->getSingleScalarResult());
 	}
 	
 	public function getQueryTags($query)
@@ -163,7 +160,7 @@ class ItemRepository extends EntityRepository
            ->innerjoin('tg.item', 'tgit')
 		   ->innerjoin('tgit.item', 'i')
 		   ->setMaxResults(5)
-		   ->groupBy('tg.id')
+		   ->groupBy('tg')
 		   ->orderBy('occurrences','DESC');
 		$qb = $this->buildSearchQuery($qb, $query);
 		return $qb->getQuery()->getArrayResult();
@@ -175,7 +172,9 @@ class ItemRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
     
         // search query
-        $qb->select('distinct i')
+        $qb->select('i.id as id, i.metadata_id, i.site_id, i.media_id, i.user_id, i.title, i.description, i.text, i.uri, i.attribution_uri, i.date_created,
+                    i.media_type, i.layer_type, i.thumbnail_url, i.child_items_count, i.media_geo_latitude, i.media_geo_longitude, i.media_date_created, i.media_date_created_end,
+                    i.media_creator_username, i.media_creator_realname, i.archive')
             ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
