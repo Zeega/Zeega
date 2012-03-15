@@ -51,40 +51,19 @@ var ProtoLayer = Class.extend({
 	/** EXTENDABLE LAYER FUNCTIONS **/
 	thumbUpdate : true,
 	
-	init : function()
-	{
+	init : function(){},
+	
+	controls : function(){},
+	
+	visual : function(){},
+	
+	onDomPlacement : function(){},
+	
+	onControlsOpen : function(){},
 
-	},
+	onControlsClose : function(){},
 	
-	controls : function()
-	{
-		
-	},
-	
-	visual : function()
-	{
-		
-	},
-	
-	onDomPlacement : function()
-	{
-		
-	},
-	
-	onControlsOpen : function()
-	{
-
-	},
-
-	onControlsClose : function()
-	{
-
-	},
-	
-	onAttributeUpdate : function()
-	{
-		
-	},
+	onAttributeUpdate : function(){},
 	
 	thumb : function()
 	{
@@ -95,15 +74,9 @@ var ProtoLayer = Class.extend({
 		this.thumbnail.append( img );
 	},
 	
-	updateZIndex : function(z)
-	{
+	updateZIndex : function(z){},
 
-	},
-
-	onExit : function()
-	{
-
-	},
+	onExit : function(){},
 
 	////////// player
 		
@@ -112,32 +85,16 @@ var ProtoLayer = Class.extend({
 		$('#zeega-player').trigger('ready',{'id':this.model.id});
 	},
 	
-	play : function()
-	{
-		
-	},
+	play : function(){},
 	
-	pause : function()
-	{
-		
-	},
+	pause : function(){},
 	
-	stash : function()
-	{
-		
-	},
+	stash : function(){},
 	
-	playUnsupported : function()
-	{
-		
-	},
+	playUnsupported : function(){},
 	
-	onExit : function()
-	{
-
-	},
+	onExit : function(){},
 	
-
 	// utlities
 		
 	load : function( model )
@@ -173,9 +130,9 @@ var ProtoLayer = Class.extend({
 			this.visualEditorElement = $('<div>').css( editorCSS );
 			this.layerControls = $('<div>');
 
-			
-			
-		}else{
+		}
+		else
+		{
 			//make it possible to load objects and not models.
 			this.model = model;
 			this.attr = deepCopy( model.attr );
