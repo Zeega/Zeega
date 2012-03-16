@@ -10,6 +10,8 @@
 				
 		initialize : function( attributes )
 		{
+			console.log('sequence init')
+			console.log(attributes)
 			this.unset('frames',['silent'])
 			this.unset('layers',['silent'])
 			this.createFrames( attributes.frames );
@@ -21,16 +23,18 @@
 		createFrames : function( frames )
 		{
 			var Frames = zeega.module("frame");
-			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
+			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames), sequenceID : this.id } );
 			this.frames.collection.on( 'destroy', this.destroyFrame, this );
 			this.frames.collection.on( 'updateFrameOrder', this.updateFrameOrder, this );
 		},
 		
 		createLayers : function( layers )
 		{
+			console.log('create layers')
+			console.log(layers)
 			var _this = this;
 			var Layers = zeega.module("layer");
-			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
+			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers), sequenceID : this.id } );
 			_.each( _.toArray( this.layers.collection ), function(layer){
 				layer.on('removeFromFrame', _this.removeLayerFromFrame, _this);
 				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);

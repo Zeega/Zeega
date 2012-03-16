@@ -1,6 +1,8 @@
 (function(Layer){
 
 	Layer.Model = Backbone.Model.extend({
+		
+		//sequenceID : null,
 
 		url : function()
 		{

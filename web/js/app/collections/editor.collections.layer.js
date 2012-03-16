@@ -19,12 +19,17 @@
 			//args = {item, type, frame}
 			if( _.isUndefined( args.item ) )
 			{
+				CONSOLE.LOG('DISPLAY OLD LAYER')
 				newLayer = new Layer.Model({type:args.type});
+				//newLayer = new Layer.
+				console.log("+++++++++++++ "+args.type.toCapitalCase);
+				
 				this.collection.add( newLayer );
 				if( args.show ) this.displayLayers.add( newLayer );
 			}
 			else
 			{
+				console.log('MAKE NEW LAYER')
 				//media item layer
 				newLayer = new Layer.Model({
 					type: args.item.get('layer_type'),
@@ -41,10 +46,12 @@
 				this.collection.add( newLayer );
 				if( args.show ) this.displayLayers.add( newLayer );
 			}
-			
+			console.log('SAVE NEW LAYER')
 			newLayer.save({},{
 				success : function( savedLayer )
 				{
+					console.log('SAVED NEW LAYER')
+					console.log(savedLayer)
 					_this.addLayerToFrame( args.frame, savedLayer )
 				}
 			});
@@ -96,11 +103,14 @@
 		
 		renderLayers : function( layerIDArray )
 		{
+			console.log(layerIDArray)
 			var _this = this;
 			this.displayLayers.reset();
 			
 			_.each( layerIDArray, function( layerID ){
-				_this.displayLayers.add( _this.collection.get( layerID ) );
+				console.log(layerID)
+				console.log( _this.collection )
+				_this.displayLayers.add( _this.collection.get( layerID ) ); //////
 			})
 			
 		}
