@@ -64,7 +64,7 @@ Zeega\DataBundle\Entity\Item:
             nullable: true            
         title:
             type: string
-            length: 1000
+            length: 255
             nullable: true
         user_id:
             type: integer
@@ -77,7 +77,7 @@ Zeega\DataBundle\Entity\Item:
             nullable: true
         uri:
             type: string
-            length: 500
+            length: 255
             unique: true
         archive:
             type: string
@@ -85,7 +85,7 @@ Zeega\DataBundle\Entity\Item:
             nullable: false
         attribution_uri:
             type: string
-            length: 500
+            length: 255
         date_created:
             type: datetime
             nullable: true
