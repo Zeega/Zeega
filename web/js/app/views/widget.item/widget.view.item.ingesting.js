@@ -31,7 +31,16 @@
 				item.save({ }, 
 				{
 					success: function(model, response) { 
-				        $('#add-item').fadeOut();
+				        $('#item-add .pill-buttons-widget').fadeOut();
+				        $('#widget-title').fadeOut();
+				        $('#widget-creator').fadeOut();
+				        $('#widget-description').fadeOut();
+				        $('#btn-more').fadeOut();
+				        $('#btn-less').fadeOut();
+				        $('#widget-title-added-text').text(model.get("title"));
+				        $('#widget-creator-added-text').text(model.get("media_creator_username"));
+				        $('#widget-added-text').fadeIn();
+
 				 	    $('#message').html('Media successfully added to your Zeega Collection');
 				 	    zeegaWidget.app.itemCollection.add(item);
 				 	},
@@ -47,6 +56,17 @@
 	            $("#description").slideToggle('slow',function() {
 	               // Animation complete.
 	             });
+	            $(theElement).find('#btn-more').hide();
+	            $(theElement).find('#btn-less').show();
+	            return false;
+	    	});
+	    	this.$el.find('#btn-less').click(function(){
+	    		$("#description").slideToggle('slow',function() {
+	               // Animation complete.
+	             });
+	            $(theElement).find('#btn-less').hide();
+	            $(theElement).find('#btn-more').show();
+	            return false;
 	    	});
 
 
@@ -56,7 +76,8 @@
 					tooltip   : 'Click to edit description...',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
-					onblur : 'submit'
+					onblur : 'submit',
+					cssclass : 'widget-form'
 			};
 			console.log(typeof(this.editableSetup));
 			//EDIT TITLE
@@ -68,14 +89,15 @@
 					return value; //must return the value
 				},
 				{
-					type 	: 'textarea',
+					type 	: 'text',
 					indicator : 'Saving...',
 					tooltip   : 'Click to edit description...',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
 					width : 200,
-					cssclass : 'fancybox-form'
+					cssclass : 'widget-form'
+					
 			});
 			//EDIT DESCRIPTION
 			this.$el.find('#widget-description').editable(
@@ -91,8 +113,9 @@
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
-					width : 400,
-					cssclass : 'fancybox-form'
+					
+					cssclass : 'widget-form'
+					
 			});
 			//EDIT CREATOR
 			this.$el.find('#widget-creator').editable(
@@ -102,13 +125,15 @@
 					return value; //must return the value
 				},
 				{
+					type 	: 'text',
 					indicator : 'Saving...',
 					tooltip   : 'Click to edit...',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
 					width : 200,
-					cssclass : 'fancybox-form'
+					cssclass : 'widget-form'
+					
 			});
 
 			return this;
