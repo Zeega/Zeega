@@ -23,7 +23,7 @@
 		createFrames : function( frames )
 		{
 			var Frames = zeega.module("frame");
-			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames), sequenceID : this.id } );
+			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
 			this.frames.collection.on( 'destroy', this.destroyFrame, this );
 			this.frames.collection.on( 'updateFrameOrder', this.updateFrameOrder, this );
 		},
@@ -31,16 +31,27 @@
 		createLayers : function( layers )
 		{
 			console.log('create layers')
-			console.log(layers)
 			var _this = this;
 			var Layers = zeega.module("layer");
-			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers), sequenceID : this.id } );
+			
+			// generate layer models from layers
+			var modelArray = [];
+			_.each( layers, function(layer){
+				modelArray.push( new Layers[ layer.type ](layer) )
+			});
+			console.log(modelArray);
+			this.layers = new Layers.MasterCollection(modelArray);
+			
+			
+			/*
+			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
 			_.each( _.toArray( this.layers.collection ), function(layer){
 				layer.on('removeFromFrame', _this.removeLayerFromFrame, _this);
 				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
 				layer.on('persist', _this.updatePersistLayer, _this);
 			});
 			this.layers.collection.on('add',function(layer){ layer.on('removeFromFrame', _this.removeLayerFromFrame, _this) })
+			*/
 		},
 		
 		updateFrameOrder : function( save )
