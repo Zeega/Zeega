@@ -1,5 +1,7 @@
 (function(Layer){
 
+	Layer.Views.Lib = Backbone.View.extend({});
+
 	Layer.Model = Backbone.Model.extend({
 		
 		editorWindow : $('#visual-editor-workspace'),
@@ -31,7 +33,7 @@
 		renderLayer : function()
 		{
 			this.editorWindow.append( this.visual.render().el );
-			this.layerPanel.append( this.controls.render().el );
+			this.layerPanel.prepend( this.controls.render().el );
 			
 			this.trigger('rendered');
 		},
@@ -349,6 +351,8 @@
 			this.model.on('controls_open', this.onControlsOpen, this);
 			this.model.on('controls_closed', this.onControlsClosed, this);
 			
+			this.model.on('update_visual', this.updateVisual, this );
+			
 			this.attr = this.model.get('attr')
 			
 			$(this.el).css({
@@ -381,6 +385,16 @@
 		{
 			console.log('!!!!!!controls closed')
 			
+		},
+		
+		updateVisual: function()
+		{
+			this.$el.css({
+				'width' : this.attr.width+'%',
+				'opacity' : this.attr.opacity,
+				'top' : this.attr.top +'%',
+				'left' : this.attr.left+'%'
+			});
 		},
 		
 		makeDraggable : function()
@@ -417,6 +431,8 @@
 			
 			_.extend( this.events, this.eventTriggers );
 			this.setBaseTemplate();
+			
+			this.controls = this.$el.find('#controls');
 		},
 		
 		onRender : function()

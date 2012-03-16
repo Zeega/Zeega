@@ -1,43 +1,176 @@
+/*
+function makeUISlider(args)
+{
+	var defaults = {
+		min : 0,
+		max : 100,
+		step : 1,
+		value : 100,
+		silent : false,
+		suffix : '',
+		css : false,
+		
+		scaleWith : false,
+		scaleValue : false,
+		
+		callback : false
+	};
+	
+	_.defaults(args,defaults);
+	
+	var sliderWrapper = $('<div>').addClass('slider');
+	if( args.label ) sliderWrapper.append( $("<h4>").html( args.label) );
+	var slider = $('<div>').addClass('layer-slider').attr('id',args.property+'-slider');
+		
+	slider.slider({
+		min : args.min,
+		max : args.max,
+		value : args.value,
+		step : args.step,
+		slide : function(e, ui)
+		{
+			//sets the optional input field to the value
+			if( args.input ) args.input.val( ui.value )
+			
+			//set the object to save.
+			var properties = {
+				propertyA : {
+					property : args.property,
+					value : ui.value,
+					suffix : args.suffix,
+					css : args.css
+				}
+			};
+			// test to see if scale is set
+			if( args.scaleWith && args.scaleValue )
+			{
+				var scaled = ( ui.value * args.scaleValue ) / args.value;
+				properties.propertyB = {
+					property : args.scaleWith,
+					value : scaled,
+					suffix : args.suffix,
+					css : args.css
+				}
+			}
+			
+			args.dom.trigger( 'update' , [ properties , true ] );
+		},
+		stop : function(e,ui)
+		{
+			//sets the optional input field to the value
+			if( args.input ) args.input.val( ui.value )
+			
+			console.log( args );
+			
+			//set the object to save.
+			var properties = {
+				propertyA : {
+					property : args.property,
+					value : ui.value,
+					suffix : args.suffix,
+					css : args.css
+				}
+			};
+			// test to see if scale is set
+			if( args.scaleWith && args.scaleValue )
+			{
+				var scaled = ( ui.value * args.scaleValue ) / args.value;
+				properties.propertyB = {
+					property : args.scaleWith,
+					value : scaled,
+					suffix : args.suffix,
+					css : args.css
+				}
+			}
+			
+			args.dom.trigger( 'update' , [ properties , args.silent ] );
+			
+			if( args.callback )
+			{
+				console.log( args.callback );
+			}
+		}
+	});
+	
+	sliderWrapper.append( slider );
+	
+	return sliderWrapper;
+}
+*/
+
 (function(Layer){
+
+	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
+		
+		defaults : {
+			min : 0,
+			max : 100,
+			step : 1,
+			value : 100,
+			silent : false,
+			suffix : '',
+			css : false,
+			scaleWith : false,
+			scaleValue : false,
+			callback : false
+		},
+		
+		initialize : function( args )
+		{
+			this.settings = _.defaults( args, this.defaults );
+		},
+		
+		render : function()
+		{
+			var _this = this;
+			//slider stuff here
+			$(this.el).slider({
+				min : this.settings.min,
+				max : this.settings.max,
+				value : this.model.get('attr')[this.settings.property] || this.settings.value,
+				step : this.settings.step,
+				slide : function(e, ui)
+				{
+					_this.model.get('attr')[_this.settings.property] = ui.value;
+					_this.model.trigger('update_visual')
+				},
+				stop : function(e,ui)
+				{
+					_this.model.save();
+				}
+			});
+			
+			return this;
+		}
+		
+	});
+
 
 	Layer.Views.ImageControls = Layer.Views.Controls.extend({
 		
 		render : function()
 		{
 			
-			/*
-			var opacityArgs = {
-				max : 1,
-				label : 'Opacity',
-				step : 0.01,
-				property : 'opacity',
-				value : this.attr.opacity,
-				dom : this.layerControls, ///////////<<<<<<<
-				css : true
-			};
-			var opacitySlider = makeUISlider( opacityArgs );
-		
-			var widthArgs = {
+			var scaleSlider = new Layer.Views.Lib.Slider({
+				property : 'width',
+				model: this.model,
+				label : 'Scale',
 				min : 1,
 				max : 200,
+			});
+			
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
 				label : 'Scale',
-				step : 1,
-				property : 'width',
-				suffix : '%',
-				value : this.attr.width,
-				dom : this.layerControls, ///////////<<<<<<<<<
-				css : true
-			};
-			var scaleSlider = makeUISlider( widthArgs );
-		
-			$(this.el)
-				.append( scaleSlider )
-				.append( opacitySlider )
-				.append( makeFullscreenButton( this.layerControls ) );
-		*/
-			//$(this.el).append('layer');
+				step : 0.01,
+				max : 1,
+			});
+			
+			this.controls.append( scaleSlider.render().el )
+				.append( opacitySlider.render().el );
+			
 			return this;
-		
 		
 		}
 		
