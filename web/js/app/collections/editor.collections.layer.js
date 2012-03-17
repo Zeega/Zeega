@@ -12,6 +12,9 @@
 		renderLayers : function( layerIDArray )
 		{
 			var _this = this;
+			_.each( _.toArray( this.displayCollection ), function(layer){
+				layer.unrenderLayer();
+			})
 			this.displayCollection.reset();
 			
 			_.each( layerIDArray, function( layerID ){
@@ -112,8 +115,9 @@
 		
 		initialize : function()
 		{
-			this.on('add', this.renderLayer ),
-			this.on('remove', this.removeLayer )
+			this.on('add', this.renderLayer );
+			this.on('remove', this.removeLayer );
+			this.on('reset', this.clearAll, this )
 		},
 		
 		render : function(){},
@@ -121,7 +125,17 @@
 		
 		renderLayer : function(layer){ layer.renderLayer() },
 		
-		removeLayer : function(layer){}
+		removeLayer : function(layer){},
+		
+		clearAll : function()
+		{
+			console.log('RESETTTTT')
+			console.log(this)
+			_.each( this, function(layer){
+				console.log('layer')
+				console.log(layer)
+			})
+		}
 		
 	});
 

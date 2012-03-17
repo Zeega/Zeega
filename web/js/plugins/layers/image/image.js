@@ -1,51 +1,5 @@
 (function(Layer){
 
-	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
-		
-		defaults : {
-			min : 0,
-			max : 100,
-			step : 1,
-			value : 100,
-			silent : false,
-			suffix : '',
-			css : false,
-			scaleWith : false,
-			scaleValue : false,
-			callback : false
-		},
-		
-		initialize : function( args )
-		{
-			this.settings = _.defaults( args, this.defaults );
-		},
-		
-		render : function()
-		{
-			var _this = this;
-			//slider stuff here
-			$(this.el).slider({
-				min : this.settings.min,
-				max : this.settings.max,
-				value : this.model.get('attr')[this.settings.property] || this.settings.value,
-				step : this.settings.step,
-				slide : function(e, ui)
-				{
-					_this.model.get('attr')[_this.settings.property] = ui.value;
-					_this.model.trigger('update_visual')
-				},
-				stop : function(e,ui)
-				{
-					_this.model.save();
-				}
-			});
-			
-			return this;
-		}
-		
-	});
-
-
 	Layer.Views.ImageControls = Layer.Views.Controls.extend({
 		
 		render : function()
@@ -55,6 +9,7 @@
 				property : 'width',
 				model: this.model,
 				label : 'Scale',
+				suffix : '%',
 				min : 1,
 				max : 200,
 			});
@@ -64,6 +19,7 @@
 				model: this.model,
 				label : 'Scale',
 				step : 0.01,
+				min : .05,
 				max : 1,
 			});
 			

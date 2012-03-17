@@ -1,7 +1,5 @@
 (function(Layer){
 
-	Layer.Views.Lib = Backbone.View.extend({});
-
 	Layer.Model = Backbone.Model.extend({
 		
 		editorWindow : $('#visual-editor-workspace'),
@@ -32,10 +30,19 @@
 		
 		renderLayer : function()
 		{
+			console.log('RENDER LAYER')
+			
 			this.editorWindow.append( this.visual.render().el );
 			this.layerPanel.prepend( this.controls.render().el );
 			
 			this.trigger('rendered');
+		},
+		
+		unrenderLayer : function()
+		{
+			this.visual.remove();
+			this.controls.remove();
+			this.trigger('unrendered');
 		},
 	
 		/////////////////////
@@ -46,7 +53,10 @@
 		update : function( newAttr, silent )
 		{
 			_.extend( this.get('attr'), newAttr );
-			if( !silent ) this.save();
+			if( !silent )
+			{
+				this.save();
+			}
 		},
 		
 		// draws controls
@@ -240,9 +250,7 @@
 			var _this = this;
 			///////set listener
 			this.layerControls.bind( 'update' , function( e , settings, silent ){
-				//console.log('update called');
 				// look through each setting object
-
 				_.each( settings, function(setting){
 					if( setting.css )
 					{
@@ -350,7 +358,6 @@
 			this.model.on('unrendered', this.onUnrender, this);
 			this.model.on('controls_open', this.onControlsOpen, this);
 			this.model.on('controls_closed', this.onControlsClosed, this);
-			
 			this.model.on('update_visual', this.updateVisual, this );
 			
 			this.attr = this.model.get('attr')
@@ -362,18 +369,15 @@
 				'top' : _this.attr.top +'%',
 				'left' : _this.attr.left+'%'
 			});
-			
-			if(this.draggable) this.makeDraggable();
 		},
 		
 		onRender : function()
 		{
-			console.log('THIS SHIZ GOT RENDERED')
+			if(this.draggable) this.makeDraggable();
 		},
 		
 		onUnrender : function()
 		{
-			console.log('THIS SHIZ GOT UnRENDERED')
 		},
 		
 		onControlsOpen : function()
@@ -389,7 +393,8 @@
 		
 		updateVisual: function()
 		{
-			this.$el.css({
+			//console.log('UPDATE VISUAL PROPERTIES')
+			$(this.el).css({
 				'width' : this.attr.width+'%',
 				'opacity' : this.attr.opacity,
 				'top' : this.attr.top +'%',
@@ -437,12 +442,10 @@
 		
 		onRender : function()
 		{
-			console.log('THIS SHIZ GOT RENDERED')
 		},
 		
 		onUnrender : function()
 		{
-			console.log('THIS SHIZ GOT UnRENDERED')
 		},
 		
 		events : {
