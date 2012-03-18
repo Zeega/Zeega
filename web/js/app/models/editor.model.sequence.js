@@ -34,24 +34,24 @@
 			var _this = this;
 			var Layers = zeega.module("layer");
 			
-			// generate layer models from layers
-			var modelArray = [];
-			_.each( layers, function(layer){
-				modelArray.push( new Layers[ layer.type ](layer) )
-			});
-			console.log(modelArray);
-			this.layers = new Layers.MasterCollection(modelArray);
-			
-			
-			/*
-			this.layers = new Layers.ViewCollection( {collection : new Layers.Collection(layers) } );
-			_.each( _.toArray( this.layers.collection ), function(layer){
-				layer.on('removeFromFrame', _this.removeLayerFromFrame, _this);
+			var addListeners = function(layer)
+			{
+				layer.on('remove_from_frame', _this.removeLayerFromFrame, _this);
 				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
 				layer.on('persist', _this.updatePersistLayer, _this);
+			};
+			
+			// generate layer models from layers
+			var layerModelArray = [];
+			_.each( layers, function(layer){
+				var newLayer = new Layers[ layer.type ](layer);
+				addListeners(newLayer);
+				layerModelArray.push( newLayer );
 			});
-			this.layers.collection.on('add',function(layer){ layer.on('removeFromFrame', _this.removeLayerFromFrame, _this) })
-			*/
+			this.layers = new Layers.MasterCollection(layerModelArray);
+			
+			this.layers.on('add',function(layer){ addListeners(layer) })
+			
 		},
 		
 		updateFrameOrder : function( save )
@@ -154,17 +154,16 @@
 				zeega.app.currentFrame.save();
 				this.destroyOrphanLayers();
 			}
-
 		},
 		
 		destroyOrphanLayers : function()
 		{
 			var _this = this;
-			var layersInCollection = _.map( this.layers.collection.pluck('id'), function(id){return parseInt(id)}); // all layers including orphans
+			var layersInCollection = _.map( this.layers.pluck('id'), function(id){return parseInt(id)}); // all layers including orphans
 			var layersInFrames = _.flatten( this.frames.collection.pluck('layers') ); // layers in use
 			var orphanLayerIDs = _.difference( layersInCollection, layersInFrames ); // layers to be nuked
 			_.each( orphanLayerIDs, function(orphanID){
-				_this.layers.collection.get( orphanID ).destroy();
+				_this.layers.get( orphanID ).destroy();
 			});
 		}
 		

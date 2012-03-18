@@ -13,7 +13,7 @@
 		{
 			var _this = this;
 			_.each( _.toArray( this.displayCollection ), function(layer){
-				layer.unrenderLayer();
+				layer.unrenderLayerFromEditor();
 			})
 			this.displayCollection.reset();
 			
@@ -97,6 +97,7 @@
 		
 		removeLayerFromFrame : function( layer, frame )
 		{
+			/*
 			if( _.isUndefined(frame) ) frame = zeega.app.currentFrame;
 			if( frame.get('layers') )
 			{
@@ -107,6 +108,7 @@
 				frame.set({'layers':layerOrder});
 				frame.save();
 			}
+			*/
 		}
 		
 	});
@@ -115,26 +117,7 @@
 		
 		initialize : function()
 		{
-			this.on('add', this.renderLayer );
-			this.on('remove', this.removeLayer );
-			this.on('reset', this.clearAll, this )
-		},
-		
-		render : function(){},
-		remove : function(){},
-		
-		renderLayer : function(layer){ layer.renderLayer() },
-		
-		removeLayer : function(layer){},
-		
-		clearAll : function()
-		{
-			console.log('RESETTTTT')
-			console.log(this)
-			_.each( this, function(layer){
-				console.log('layer')
-				console.log(layer)
-			})
+			this.on('add', function(layer){ layer.renderLayerInEditor() } );
 		}
 		
 	});

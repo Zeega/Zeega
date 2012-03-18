@@ -17,7 +17,7 @@
 			var opacitySlider = new Layer.Views.Lib.Slider({
 				property : 'opacity',
 				model: this.model,
-				label : 'Scale',
+				label : 'Opacity',
 				step : 0.01,
 				min : .05,
 				max : 1,
@@ -33,6 +33,20 @@
 	});
 
 	Layer.Views.ImageVisual = Layer.Views.Visual.extend({
+		
+		render : function()
+		{
+			var img = $('<img>')
+				.attr('src', this.attr.url)
+				.css({'width':'100%'});
+
+			$(this.el).html( img );
+				
+			return this;
+		}
+	});
+	
+	Layer.Views.ImagePlayer = Layer.Views.Visual.extend({
 		
 		render : function()
 		{
@@ -64,10 +78,7 @@
 			'citation':true,
 		},
 
-		init : function()
-		{
-			console.log('IMAGE INIT')
-		},
+		init : function(){},
 
 	
 		preload : function( target )

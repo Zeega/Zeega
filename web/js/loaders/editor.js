@@ -68,6 +68,8 @@ var loadFiles = [
 	'order!app/views/editor.item/editor.view.item.database-tray',
 	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
 	'order!app/views/editor.layer/editor.view.layer.control-library',
+	'order!app/views/editor.layer/editor.view.layer.layer-list',
+	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
 	//mvc
 	'order!backbone/models/tag',

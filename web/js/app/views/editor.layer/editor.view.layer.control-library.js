@@ -4,7 +4,10 @@
 
 	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
 		
+		className : 'control control-slider',
+		
 		defaults : {
+			label : 'control',
 			min : 0,
 			max : 100,
 			step : 1,
@@ -25,8 +28,11 @@
 		render : function()
 		{
 			var _this = this;
+			
+			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			
 			//slider stuff here
-			this.$el.slider({
+			this.$el.find('.control-slider').slider({
 				min : this.settings.min,
 				max : this.settings.max,
 				value : this.model.get('attr')[this.settings.property] || this.settings.value,
@@ -45,6 +51,16 @@
 			});
 			
 			return this;
+		},
+		
+		getTemplate : function()
+		{
+			var html = ''+
+			
+					"<div class='control-name'><%= label %></div>"+
+					"<div class='control-slider'></div>";
+			
+			return html;
 		}
 	});
 
