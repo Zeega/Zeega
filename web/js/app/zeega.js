@@ -236,7 +236,7 @@ this.zeega = {
 		var frames = this.project.sequences[0].frames.collection.toJSON();
 		_.each( frames, function(frame){ frame.layers = _.compact(frame.layers) })
 		
-		var layers = this.project.sequences[0].layers.collection.toJSON();
+		var layers = this.project.sequences[0].layers.toJSON();
 		_.each(layers, function(layer){ layer.id = parseInt(layer.id) });
 		
 		var sequences = [{

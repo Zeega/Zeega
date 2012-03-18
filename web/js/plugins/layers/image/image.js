@@ -80,7 +80,6 @@
 
 		init : function(){},
 
-	
 		preload : function( target )
 		{
 			console.log('image-preload')
