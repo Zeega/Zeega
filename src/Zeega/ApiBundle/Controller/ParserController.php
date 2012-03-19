@@ -42,7 +42,7 @@ class ParserController extends Controller
 		$url = $this->getRequest()->query->get('url');
 		$results = array("is_valid"=>false, "is_set"=>false);
 		$matches = array();
-		//return new Response(var_dump($url));
+
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -68,7 +68,7 @@ class ParserController extends Controller
 					$parserMethod = new ReflectionMethod($parserClass, 'getItem');
 				}
 				$response = $parserMethod->invokeArgs(new $parserClass, array($url,$itemId));
-				//return new Response(var_dump($respo));
+
 				if(isset($response))
 				{
 					$success = $response["success"] ? 'true' : 'false'; // twig wasn't rendering 'false' for some reason
@@ -97,7 +97,7 @@ class ParserController extends Controller
 		
 		$matches = array();
 		$message = "";
-		
+		//return new Response($url);
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -105,68 +105,75 @@ class ParserController extends Controller
 				if(count($matches) > 1)
 				{
 					$setId = $matches[1];
-					$user = $this->get('security.context')->getToken()->getUser();
-					$em = $this->getDoctrine()->getEntityManager();
-				
-					$parserClass = $parserInfo["ParserClass"];
-					$isSet = $parserInfo["IsSet"];
-					
-					$site = $this->getDoctrine()
-							     ->getRepository('ZeegaDataBundle:Site')
-							     ->findSiteByUser($user->getId());
-					
-					if($isSet)
-					{
-						$collection = new Item();
-							
-						$collection->setSite($site[0]);
-								
-						$collection->setTitle($this->getRequest()->request->get('title'));
-						$collection->setDescription($this->getRequest()->request->get('description'));
-				        $collection->setMediaType($this->getRequest()->request->get('media_type'));
-				        $collection->setLayerType($this->getRequest()->request->get('layer_type'));
-						$collection->setArchive($this->getRequest()->request->get('archive'));
-				        $collection->setUser($user);
-				        $collection->setUri($this->getRequest()->request->get('uri'));
-				        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
-						$collection->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
-				        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
-				        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
-				        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
-
-						$parserMethod = new ReflectionMethod($parserClass, 'getCollection'); // reflection is slow, but it's probably ok here
-						$response = $parserMethod->invokeArgs(new $parserClass, array($url, $setId, $collection));
-						$collection = $response["items"];
-					
-						$collection->setUser($user);
-						$collectionItems = $collection->getChildItems();
-					
-						foreach($collectionItems as $item)
-				        {
-							$item->setUser($user);
-							$em->persist($item->getMetadata());
-							$em->persist($item->getMedia());
-							$em->flush();
-							$em->persist($item);
-							$em->flush();
-						}
-					
-						$collection->setUser($user);
-						
-						$message = isset($response["message"]) ? $response["message"] : " ";
-						
-						$em->persist($collection);
-						$em->flush();
-
-						$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true, 'message' => $message));
-				        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
-					}
-					else
-					{
-						return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
-					}
 				}
-			} 
+				else
+				{
+				    $setId = null;
+				}
+				
+				$user = $this->get('security.context')->getToken()->getUser();
+				$em = $this->getDoctrine()->getEntityManager();
+			
+				$parserClass = $parserInfo["ParserClass"];
+				$isSet = $parserInfo["IsSet"];
+				
+				$site = $this->getDoctrine()
+						     ->getRepository('ZeegaDataBundle:Site')
+						     ->findSiteByUser($user->getId());
+				
+				if($isSet)
+				{
+					$collection = new Item();
+						
+					$collection->setSite($site[0]);
+							
+					$collection->setTitle($this->getRequest()->request->get('title'));
+					$collection->setDescription($this->getRequest()->request->get('description'));
+			        $collection->setMediaType($this->getRequest()->request->get('media_type'));
+			        $collection->setLayerType($this->getRequest()->request->get('layer_type'));
+					$collection->setArchive($this->getRequest()->request->get('archive'));
+			        $collection->setUser($user);
+			        $collection->setUri($this->getRequest()->request->get('uri'));
+			        $collection->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+					$collection->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+			        $collection->setChildItemsCount($this->getRequest()->request->get('child_items_count'));
+			        $collection->setDateCreated(new \DateTime("now"));
+			        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+			        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+
+					$parserMethod = new ReflectionMethod($parserClass, 'getCollection'); // reflection is slow, but it's probably ok here
+					$response = $parserMethod->invokeArgs(new $parserClass, array($url, $setId, $collection));
+					$collection = $response["items"];
+				
+					$collection->setUser($user);
+					$collectionItems = $collection->getChildItems();
+				
+					foreach($collectionItems as $item)
+			        {
+						$item->setUser($user);
+						$item->setSite($site[0]);
+						$em->persist($item->getMetadata());
+						$em->persist($item->getMedia());
+						$em->flush();
+						$em->persist($item);
+						$em->flush();
+					}
+				
+					$collection->setUser($user);
+					
+					$message = isset($response["message"]) ? $response["message"] : " ";
+					
+					$em->persist($collection);
+					$em->flush();
+
+					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $collection, 'is_collection' => true, 'is_valid' => true, 'message' => $message));
+			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+				}
+				else
+				{
+					return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
+				}
+			}
 		}
 		
 		$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => null, 'is_collection' => 0, 'is_valid' => 0, 'message' => $message));

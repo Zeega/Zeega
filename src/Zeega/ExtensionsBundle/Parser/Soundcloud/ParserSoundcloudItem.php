@@ -46,6 +46,7 @@ class ParserSoundcloudItem extends ParserItemAbstract
 		$item->setArchive('SoundCloud');
 		$item->setUri($itemJson['stream_url']);
 		$item->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
+        $item->setAttributionUri($itemJson['permalink_url']);
 		$item->setDateCreated(new DateTime((string)$itemJson['created_at']));
 		$item->setThumbnailUrl($itemJson['waveform_url']);
 		$item->setChildItemsCount(0);
