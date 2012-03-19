@@ -33,6 +33,9 @@ class ParserController extends Controller
 		// soundcloud - order matters (last regex matches any soundlcoud url)
 		"/http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudSet", "IsSet" => true),
 		"/http:\/\/(?:www\.)?soundcloud.com.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudItem", "IsSet" => false),
+		
+		// document cloud
+		"/http:\/\/(?:www\.)?documentcloud.org\/documents.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\DocumentCloud\ParserDocumentCloud", "IsSet" => false),
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
