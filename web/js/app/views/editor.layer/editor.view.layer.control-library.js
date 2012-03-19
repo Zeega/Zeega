@@ -17,7 +17,8 @@
 			css : true,
 			scaleWith : false,
 			scaleValue : false,
-			callback : false
+			callback : false,
+			save : true
 		},
 		
 		initialize : function( args )
@@ -44,9 +45,12 @@
 				},
 				stop : function(e,ui)
 				{
-					var attr = {};
-					attr[_this.settings.property] = ui.value;
-					_this.model.update( attr )
+					if(_this.settings.save)
+					{
+						var attr = {};
+						attr[_this.settings.property] = ui.value;
+						_this.model.update( attr )
+					}
 				}
 			});
 			
@@ -71,7 +75,8 @@
 		
 		defaults : {
 			property : 'backgroundColor',
-			color : '#ffffff'
+			color : '#ffffff',
+			save : 'true'
 		},
 		
 		initialize : function( args )
@@ -102,7 +107,7 @@
 					console.log(color)
 					_this.model.visual.$el.css( _this.settings.property, color );
 					_this.settings.color = color;
-					_this.lazySave();
+					if(_this.settings.save) _this.lazySave();
 				});
 			
 			return this;

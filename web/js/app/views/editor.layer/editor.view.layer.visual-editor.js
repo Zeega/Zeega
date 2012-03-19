@@ -19,6 +19,8 @@
 			
 			this.attr = this.model.get('attr')
 			
+			$(this.el).addClass('layer-'+ this.model.layerType.toLowerCase() );
+			
 			$(this.el).css({
 				'position' : 'absolute',
 				'width' : _this.attr.width+'%',

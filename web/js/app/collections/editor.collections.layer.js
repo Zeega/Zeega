@@ -60,6 +60,7 @@
 			console.log(newLayer)
 			
 			console.log('SAVE NEW LAYER')
+			
 			newLayer.save({},{
 				success : function( savedLayer )
 				{

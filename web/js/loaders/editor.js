@@ -80,7 +80,7 @@ var loadFiles = [
 	//'order!plugins/layers/audio/audio',
 	//'order!plugins/layers/geo/geo',
 	'order!plugins/layers/image/image',
-	//'order!plugins/layers/text/text',
+	'order!plugins/layers/text/text',
 	//'order!plugins/layers/video/video',
 	//'order!plugins/layers/youtube/youtube',
 	//'order!plugins/layers/documentcloud/documentcloud',
