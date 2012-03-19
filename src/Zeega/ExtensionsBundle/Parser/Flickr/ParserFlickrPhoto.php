@@ -6,6 +6,7 @@ use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
 use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
@@ -33,15 +34,20 @@ class ParserFlickrPhoto extends ParserItemAbstract
 
 			if($info['tags'])
 			{
-				foreach($info['tags']['tag'] as $tag)
+				/*
+				foreach($info['tags']['tag'] as $t)
 				{
-					array_push($tags, ucwords(strtolower($tag['raw'])));
+				    $tag = new Tag;
+				    $tag->setName($t["raw"]);
+	                $tag->setDateCreated(new \DateTime("now"));
+		            $item_tag = new ItemTags;
+		            $item_tag->setItem($item);
+		            $item_tag->setTag($tag);
+		            $item_tag->setTagDateCreated(new \DateTime("now"));
+	                $item->addItemTags($item_tag);
+					//array_push($tags, ucwords(strtolower($tag['raw'])));
 				}
-				$attr['tags']=$tags;
-			}
-			else
-			{
-				$attr['tags']='';
+				*/
 			}
 
 			foreach ($size as $s)

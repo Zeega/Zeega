@@ -149,6 +149,7 @@ class ItemsController extends Controller
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));
+        $item->setDateCreated(new \DateTime("now"));
 		$item->setArchive($this->getRequest()->request->get('archive'));
         $item->setLayerType($this->getRequest()->request->get('layer_type'));
         $item->setUser($user);
@@ -310,7 +311,7 @@ class ItemsController extends Controller
 
                return ResponseHelper::encodeAndGetJsonResponse($item);
    }
-    /**
+    /*
 	// post_items_tags  DELETE   /api/items/{itemId}/tags/{tag_name}.{_format}
     public function deleteItemTagsAction($itemId,$tag_name)
     {
@@ -340,7 +341,7 @@ class ItemsController extends Controller
 
 		return ResponseHelper::encodeAndGetJsonResponse($item);
     }
-**/
+*/
 	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putItemsAction($item_id)
     {

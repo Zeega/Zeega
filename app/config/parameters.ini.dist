@@ -18,7 +18,11 @@
 
     secret            = 
 
-	    
     hostname          = http://alpha.zeega.org/
     directory         = test/web/
     path			  = /var/www/web/
+
+	solr_enabled	  = false
+	solr_host         = localhost
+    solr_port         = 8080
+    solr_path         = /solr

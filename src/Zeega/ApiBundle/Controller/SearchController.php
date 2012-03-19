@@ -10,10 +10,137 @@ use DateTime;
 
 class SearchController extends Controller
 {
-    public function indexAction($name)
+    public function searchAction()
     {
+		/**
+		* Work in progres - both responses need to be optimized 
+		* and should be similar but aren't yet.
+		*/
+        $solr_enable = $this->container->getParameter('solr_enabled');
+		
+		if($solr_enable)
+		{
+			return $this->searchWithSolr();
+		}
+		else
+        {
+			return $this->searchWithDoctrine();
+		}
+    }
+    
+    private function searchWithSolr()
+    {	
+        $request = $this->getRequest();
         
-        return $this->render('ZeegaApiBundle:Default:index.html.twig', $this->getRequest());
+	    // ----------- api global parameters
+		$page  = $request->query->get('page');      //  string
+		$limit = $request->query->get('limit');     //  string
+	    $q = $request->query->get('q');
+	    $userId = $request->query->get('user');                 //  int
+		$siteId = $request->query->get('site');                 //  int
+		$contentType = $request->query->get('content');         //  string
+		$collection_id  = $request->query->get('collection');   //  string
+		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
+		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
+		$geoLocated = $request->query->get('geo_located'); 
+		
+	    if(!isset($page))               $page = 0;
+		if(!isset($limit))              $limit = 100;
+		if($limit > 100)                $limit = 100;
+		if(isset($contentType))         $contentType = ucfirst($contentType);
+		if(!isset($geoLocated))         
+		{
+			$geoLocated = 0;
+		}
+		else
+		{
+			$geoLocated = intval($geoLocated);
+		}
+		
+		if(preg_match('/tag\:(.*)/', $q, $matches))
+		{
+		 	$q = str_replace("tag:".$matches[1], "", $q);
+		 	$tags = "tag_name:" . str_replace(","," tag_name:",$matches[1]);
+		}
+		
+	    // ----------- build the search query
+        $client = $this->get("solarium.client");
+
+        $query = $client->createSelect();
+        //return new Response(var_dump($query));
+        // pagination and limit
+        $query->setRows($limit);
+        $query->setStart($limit * $page);
+        
+        // check if there is a query string
+        if(isset($q) and $q != '')                          $query->setQuery($q);
+        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
+        if(isset($tags))                                    $query->createFilterQuery('tag_name')->setQuery($tags);
+        if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
+        
+        if(isset($minDateTimestamp) || isset($maxDateTimestamp))
+        {
+            if(isset($minDateTimestamp) && isset($maxDateTimestamp))
+            {
+                $minDate = new DateTime();
+                $minDate->setTimestamp($minDateTimestamp);
+                $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
+                $maxDate = new DateTime();
+                $maxDate->setTimestamp($maxDateTimestamp);
+                $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
+                
+                $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
+            }
+        }
+        
+        $groupComponent = $query->getGrouping();
+        $groupComponent->addQuery('-media_type:Collection');
+        $groupComponent->addQuery('media_type:Collection');
+        $groupComponent->addQuery('media_type:*');
+        // maximum number of items per group
+        $groupComponent->setLimit($limit);
+        
+        $facetComponent = $query->getFacetSet();
+        
+        $facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
+        /*
+        if(isset($tags) && count($tags) > 0)
+        {
+    		$facetComponent->createFacetQuery('tags')->setQuery("-tag_name:tags");
+        }
+		else       
+        {
+        	$facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
+        }
+        */
+        // run the query
+        $resultset = $client->select($query);
+        //return new Response(var_dump($resultset));
+        //$res = $resultset->getDocuments();
+        $groups = $resultset->getGrouping();
+        $facets = $resultset->getFacetSet();
+        
+        //return new Response(var_dump($facets->getFacet('tags')));
+        
+        $results["items"] = $groups->getGroup('-media_type:Collection');
+        //$results["collections"] = $groups->getGroup('media_type:Collection');
+        //$results["items_and_collections"] = $groups->getGroup('media_type:*');
+        $tags = $facets->getFacet('tags');
+        $tagsArray = array(); 
+  
+        foreach ($tags as $tag_name => $tag_count)
+        {
+        	if($tag_count > 0)
+        	{
+        		$tagsArray[$tag_name] = $tag_count;
+        	}
+        }
+        
+        //return new Response(var_dump($tagsArray));
+		
+        // render the results
+		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
 	/**
@@ -22,7 +149,7 @@ class SearchController extends Controller
 	 * the database queries generated by Doctrine are not optimal.
 	 *
      */
-    public function searchAction()
+    private function searchWithDoctrine()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         if($user == "anon.")
