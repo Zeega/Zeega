@@ -7,7 +7,7 @@
 		"media_id" : "{{ item.getMediaId() }}",
 		"metadata_id" : "{{ item.getMetadataId() }}",
 		"title" : "{{ item.title | json_encode}}",
-		"description" : "description",
+		"description" : "{{ item.description | json_encode}}",
 		"text" : "{{ item.text }}",
 		"uri" : "{{ item.uri }}",
 		"attribution_uri" : "{{ item.getAttributionUri() }}",
