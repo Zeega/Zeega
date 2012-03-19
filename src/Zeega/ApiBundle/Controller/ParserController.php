@@ -36,6 +36,10 @@ class ParserController extends Controller
 		
 		// document cloud
 		"/http:\/\/(?:www\.)?documentcloud.org\/documents.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\DocumentCloud\ParserDocumentCloud", "IsSet" => false),
+		
+		// archive
+		"/http:\/\/(?:www\.)?archive.org\/details.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\InternetArchive\ParserInternetArchive", "IsSet" => false),
+		
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
