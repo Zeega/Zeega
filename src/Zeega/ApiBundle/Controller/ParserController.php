@@ -13,7 +13,7 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\DataBundle\Repository\ItemTagsRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Zeega\CoreBundle\Parser\ParserFlickr;
+use Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
 use \ReflectionMethod;
 
 class ParserController extends Controller
@@ -33,7 +33,6 @@ class ParserController extends Controller
 		// soundcloud - order matters (last regex matches any soundlcoud url)
 		"/http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudSet", "IsSet" => true),
 		"/http:\/\/(?:www\.)?soundcloud.com.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudItem", "IsSet" => false),
-		
 	);
 	
 	// get_tag_related   GET    /api/tags/{tagid}/related.{_format}
@@ -77,16 +76,23 @@ class ParserController extends Controller
 					
 					$isSet = ($isSet) ? 'true' : 'false'; 
 					
-					$item = $response["items"];
-					
 					$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => $isSet, 'is_valid' => $success, 'message' => $message));
 			        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
-					
 				}
 			}
 		}
-
-		$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => null, 'is_collection' => 0, 'is_valid' => 0, 'message' => "Something went wrong..."));
+		
+		$parser = new ParserAbsoluteUrl;
+        $response = $parser->getItem($url,null);
+        $success = $response["success"] ? 'true' : 'false'; // twig wasn't rendering 'false' for some reason
+		$item = $response["items"];
+		$message = isset($response["message"]) ? $response["message"] : " ";
+		
+		$isSet = 'false'; 
+        //return new Response(var_dump($response));
+		
+        // absolute URL or unsupported service
+        $itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => $isSet, 'is_valid' => $success, 'message' => $message));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 		
@@ -175,8 +181,16 @@ class ParserController extends Controller
 				}
 			}
 		}
+
+		$parser = new ParserAbsoluteUrl;
+        $response = $parser->getItem($url,null);
+        $success = $response["success"];
+
+		if($success)
+            return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
 		
-		$itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => null, 'is_collection' => 0, 'is_valid' => 0, 'message' => $message));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);		
+        // absolute URL or unsupported service
+        $itemView = $this->renderView('ZeegaApiBundle:Import:info.json.twig', array('item' => $item, 'is_collection' => $isSet, 'is_valid' => $success, 'message' => $message));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 }
