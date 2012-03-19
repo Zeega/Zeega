@@ -22,14 +22,20 @@
 		
 		initialize: function()
 		{
-			//create visual view
-			this.visual = new Layer.Views.ImageVisual({model:this})
-			//create control view
-			this.controls = new Layer.Views.ImageControls({model:this})
+			if( !_.isNull( this.layerType ) )
+			{
+				this.set('type',this.layerType);
+				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes) );
+
+				//create visual view
+				this.visual = new Layer.Views.Visual[this.layerType]({model:this})
+				//create control view
+				this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			
-			this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes) );
 			
-			this.init();
+				this.init();
+			}
+			else console.log('MISSING LAYER TYPE')
 		},
 		
 		//called at the end of initialize. we don't want to override it

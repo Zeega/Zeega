@@ -5,6 +5,7 @@
 		className : 'visual-element',
 		
 		draggable : true,
+		linkable : true,
 		
 		initialize : function()
 		{

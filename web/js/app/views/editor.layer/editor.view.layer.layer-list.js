@@ -154,9 +154,9 @@
 				
 		setBaseTemplate : function()
 		{
-			//shorten title if necessary
+			console.log('set base template')
 			var title = this.model.get('attr').title;
-
+			console.log(title)
 			var persist = '';
 			/*
 			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )

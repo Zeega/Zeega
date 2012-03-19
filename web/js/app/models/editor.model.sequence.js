@@ -44,6 +44,7 @@
 			// generate layer models from layers
 			var layerModelArray = [];
 			_.each( layers, function(layer){
+				console.log(layer)
 				var newLayer = new Layers[ layer.type ](layer);
 				addListeners(newLayer);
 				layerModelArray.push( newLayer );

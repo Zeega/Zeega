@@ -26,15 +26,18 @@
 		{
 			var _this = this
 			var newLayer;
+			console.log('ADD NEW LAYER')
 			
 			//args = {item, type, frame}
 			if( _.isUndefined( args.item ) )
 			{
-				CONSOLE.LOG('DISPLAY OLD LAYER')
+				console.log('add non item layer type');
+
 				newLayer = new Layer[args.type]();
-				
+	
 				this.add( newLayer );
 				if( args.show ) this.displayCollection.add( newLayer );
+				
 			}
 			else
 			{
@@ -54,6 +57,8 @@
 				this.add( newLayer );
 				if( args.show ) this.displayCollection.add( newLayer );
 			}
+			console.log(newLayer)
+			
 			console.log('SAVE NEW LAYER')
 			newLayer.save({},{
 				success : function( savedLayer )
@@ -63,6 +68,7 @@
 					_this.addLayerToFrame( args.frame, savedLayer )
 				}
 			});
+			
 			
 		},
 		
@@ -117,7 +123,7 @@
 		
 		initialize : function()
 		{
-			this.on('add', function(layer){ layer.renderLayerInEditor() } );
+			this.on('add', function(layer){ console.log(layer); layer.renderLayerInEditor() } );
 		}
 		
 	});

@@ -9,126 +9,109 @@
 			-fullscreen bleed?
 
 ************************************/
+(function(Layer){
 
-var RectangleLayer = ProtoLayer.extend({
-	
-	layerType : 'VISUAL',
-	draggable : true,
-	linkable : true,
+	Layer.Rectangle = Layer.Model.extend({
 
-	defaultAttributes : {
-		'title' : 'Color Layer',
-		'url' : 'none',
-		backgroundColor: {r:255,g:0,b:255,a:0.8},
-		'left' : 0,
-		'top' : 0,
-		'height' : 100,
-		'width' : 100,
-		'opacity':1,
-	},
-
-
-	controls : function()
-	{
-
-		var widthArgs = {
-			min : 1,
-			max : 100,
-			label : 'Width',
-			step : 1,
-			property : 'width',
-			suffix : '%',
-			value : this.model.get('attr').width,
-			dom : this.layerControls,
-			css : true
-		};
-		var widthSlider = makeUISlider( widthArgs );
+		layerType : 'Rectangle',
 		
-		var heightArgs = {
-			min : 1,
-			max : 100,
-			label : 'Height',
-			step : 1,
-			property : 'height',
-			suffix : '%',
-			value : this.model.get('attr').height,
-			dom : this.layerControls,
-			css : true
-		};
-		var heightSlider = makeUISlider( heightArgs );
-		
-		var colorPickerArgs = {
-			label : 'Color',
-			property : 'backgroundColor',
-			id : this.model.id,
-			color : this.attr.backgroundColor,
-			controls : this.layerControls,
-			target : this.visualEditorElement
-	    };
-	    var colorPicker = makeColorPicker(colorPickerArgs);
-		
-		this.layerControls
-			.append( widthSlider )
-			.append( heightSlider )
-			.append( colorPicker )
-			.append( makeFullscreenButton( this.layerControls ) );
-	},
-	
-	visual : function()
-	{
-		
-		var cssObj = {
-			backgroundColor : this.getRGBAColor( this.attr.backgroundColor )
-		};
-		
-		this.visualEditorElement
-			.css( cssObj );
-	},
+		defaultAttributes : {
+			'title' : 'Color Layer',
+			'url' : null,
+			'backgroundColor': '#ff00ff',
+			'left' : 0,
+			'top' : 0,
+			'height' : 100,
+			'width' : 100,
+			'opacity':.75,
+		},
 
-	thumb : function()
-	{
-		var cssObj = {
-			backgroundColor : this.getRGBAColor( this.attr.backgroundColor )
-		};
-				
-		this.thumbnail.css( cssObj );
-	},
-	
-	preload : function( target )
-	{
-		var cssObj = {
-			backgroundColor : this.getRGBAColor( this.attr.backgroundColor ),
-			height : '100%'
-		};
-		$(this.display).css('height',this.attr.height +'%')
-		$(this.innerDisplay).css( cssObj );
+		init : function(){
+			console.log('RECTANGLE INIT')
+		},
 
-		target.trigger( 'ready' , { 'id' : this.model.id } );
-	},
-	
-	play : function( z )
-	{
-		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
-		
-		if(this.attr.link_to)
+		preload : function( target )
 		{
-			var _this = this;
-			_this.display.addClass('link-blink')
-			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  );
-		}
-	},
-
-	stash : function()
-	{
-		this.display.css({'top':"-1000%",'left':"-1000%"});
-	},
+			
+		},
 	
-	getRGBAColor : function ( colorObj )
-	{
-		_.defaults( colorObj , {a : 1 } );
-		var rgbaColor = 'rgba('+colorObj.r+','+colorObj.g+','+colorObj.b+','+colorObj.a+')'
-		return rgbaColor;
-	}
+		play : function( z )
+		{
+			
+		},
+
+		stash : function()
+		{
+			this.display.css({'top':"-1000%",'left':"-1000%"});
+		}
 	
 		
-});
+	});
+	
+	Layer.Views.Controls.Rectangle = Layer.Views.Controls.extend({
+		
+		render : function()
+		{
+			var color = new Layer.Views.Lib.ColorPicker({
+				property : 'backgroundColor',
+				color : this.attr.backgroundColor,
+				model: this.model,
+				label : 'Color'
+			});
+			
+			var widthSlider = new Layer.Views.Lib.Slider({
+				property : 'width',
+				model: this.model,
+				label : 'Width',
+				suffix : '%',
+				min : 1,
+				max : 200,
+			});
+			
+			var heightSlider = new Layer.Views.Lib.Slider({
+				property : 'height',
+				model: this.model,
+				label : 'Height',
+				suffix : '%',
+				min : 1,
+				max : 200,
+			});
+			
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
+				label : 'Opacity',
+				step : 0.01,
+				min : .05,
+				max : 1,
+			});
+			
+			this.controls
+				.append( color.render().el )
+				.append( opacitySlider.render().el )
+				.append( widthSlider.render().el )
+				.append( heightSlider.render().el );
+			
+			return this;
+		
+		}
+		
+	});
+
+	Layer.Views.Visual.Rectangle = Layer.Views.Visual.extend({
+		
+		render : function()
+		{
+			var style = {
+				'backgroundColor' : this.attr.backgroundColor,
+				'height' : this.attr.height +'%'
+			}
+
+			$(this.el).css( style );
+				
+			return this;
+		}
+		
+	});
+	
+})(zeega.module("layer"));
