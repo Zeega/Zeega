@@ -30,6 +30,6 @@ Zeega\DataBundle\Entity\Frame:
      length: 101
      nullable: true
     enabled:
-     type: bool
+     type: boolean
      nullable: true
  

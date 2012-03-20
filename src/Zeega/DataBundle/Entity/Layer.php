@@ -15,11 +15,6 @@ class Layer
     private $id;
 
     /**
-     * @var string $item_uri
-     */
-    private $item_uri;
-
-    /**
      * @var string $type
      */
     private $type;
@@ -30,21 +25,25 @@ class Layer
     private $text;
 
     /**
-     * @var integer $zindex
+     * @var array $attributes
      */
-    private $zindex;
-
-    /**
-     * @var array $attr
-     */
-    private $attr;
+    private $attributes;
 
     /**
      * @var Zeega\DataBundle\Entity\Item
      */
     private $item;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Sequence
+     */
+    private $sequences;
 
+    public function __construct()
+    {
+        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -56,31 +55,11 @@ class Layer
     }
 
     /**
-     * Set item_uri
-     *
-     * @param string $itemUri
-     */
-    public function setItemUri($itemUri)
-    {
-        $this->item_uri = $itemUri;
-    }
-
-    /**
-     * Get item_uri
-     *
-     * @return string 
-     */
-    public function getItemUri()
-    {
-        return $this->item_uri;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
      */
-    public function setMediaType($type)
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -116,43 +95,23 @@ class Layer
     }
 
     /**
-     * Set zindex
+     * Set attributes
      *
-     * @param integer $zindex
+     * @param array $attributes
      */
-    public function setZindex($zindex)
+    public function setAttributes($attributes)
     {
-        $this->zindex = $zindex;
+        $this->attributes = $attributes;
     }
 
     /**
-     * Get zindex
-     *
-     * @return integer 
-     */
-    public function getZindex()
-    {
-        return $this->zindex;
-    }
-
-    /**
-     * Set attr
-     *
-     * @param array $attr
-     */
-    public function setAttr($attr)
-    {
-        $this->attr = $attr;
-    }
-
-    /**
-     * Get attr
+     * Get attributes
      *
      * @return array 
      */
-    public function getAttr()
+    public function getAttributes()
     {
-        return $this->attr;
+        return $this->attributes;
     }
 
     /**
@@ -176,30 +135,11 @@ class Layer
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-    /**
-     * @var Zeega\DataBundle\Entity\User
-     */
-    private $sequences;
-
-    public function __construct()
-    {
-        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Add sequences
      *
-     * @param Zeega\DataBundle\Entity\User $sequences
+     * @param Zeega\DataBundle\Entity\Sequence $sequences
      */
-    public function addUser(\Zeega\DataBundle\Entity\User $sequences)
+    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
     {
         $this->sequences[] = $sequences;
     }
@@ -212,40 +152,5 @@ class Layer
     public function getSequences()
     {
         return $this->sequences;
-    }
-
-    /**
-     * Add sequences
-     *
-     * @param Zeega\DataBundle\Entity\Sequence $sequences
-     */
-    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
-    {
-        $this->sequences[] = $sequences;
-    }
-    /**
-     * @var array $attributes
-     */
-    private $attributes;
-
-
-    /**
-     * Set attributes
-     *
-     * @param array $attributes
-     */
-    public function setAttributes($attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    /**
-     * Get attributes
-     *
-     * @return array 
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
     }
 }

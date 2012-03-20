@@ -25,6 +25,8 @@ $loader->registerNamespaces(array(
  	'Doctrine\\DBAL\\Migrations' => __DIR__.'/../vendor/doctrine-migrations/lib',
     'Doctrine\\DBAL'             => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Nelmio'                        => __DIR__.'/../vendor/bundles',
+    'Doctrine\\Common\\DataFixtures' => __DIR__.'/../vendor/doctrine-fixtures/lib',
+    'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',

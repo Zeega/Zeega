@@ -25,46 +25,26 @@ class Frame
     private $layers;
 
     /**
-     * @var array $attr
+     * @var array $attributes
      */
-    private $attr;
+    private $attributes;
 
     /**
-     * @var string $thumb_url
+     * @var string $thumbnail_url
      */
-    private $thumb_url;
+    private $thumbnail_url;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
 
     /**
      * @var Zeega\DataBundle\Entity\Sequence
      */
     private $sequence;
 
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $link_up;
 
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $link_down;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $link_left;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $link_right;
-	
-	public function __construct()
-	{
-		$this->created_at = new \DateTime();
-		$this->thumb_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
-	}
-	
     /**
      * Get id
      *
@@ -116,161 +96,6 @@ class Frame
     }
 
     /**
-     * Set attr
-     *
-     * @param array $attr
-     */
-    public function setAttr($attr)
-    {
-        $this->attr = $attr;
-    }
-
-    /**
-     * Get attr
-     *
-     * @return array 
-     */
-    public function getAttr()
-    {
-        return $this->attr;
-    }
-
-    /**
-     * Set thumb_url
-     *
-     * @param string $thumbUrl
-     */
-    public function setThumbUrl($thumbUrl)
-    {
-        $this->thumb_url = $thumbUrl;
-    }
-
-    /**
-     * Get thumb_url
-     *
-     * @return string 
-     */
-    public function getThumbUrl()
-    {
-        return $this->thumb_url;
-    }
-
-    /**
-     * Set sequence
-     *
-     * @param Zeega\DataBundle\Entity\Sequence $sequence
-     */
-    public function setSequence(\Zeega\DataBundle\Entity\Sequence $sequence)
-    {
-        $this->sequence = $sequence;
-    }
-
-    /**
-     * Get sequence
-     *
-     * @return Zeega\DataBundle\Entity\Sequence 
-     */
-    public function getSequence()
-    {
-        return $this->sequence;
-    }
-
-    /**
-     * Set link_up
-     *
-     * @param Zeega\DataBundle\Entity\Frame $linkUp
-     */
-    public function setLinkUp(\Zeega\DataBundle\Entity\Frame $linkUp)
-    {
-        $this->link_up = $linkUp;
-    }
-
-    /**
-     * Get link_up
-     *
-     * @return Zeega\DataBundle\Entity\Frame 
-     */
-    public function getLinkUp()
-    {
-        return $this->link_up;
-    }
-
-    /**
-     * Set link_down
-     *
-     * @param Zeega\DataBundle\Entity\Frame $linkDown
-     */
-    public function setLinkDown(\Zeega\DataBundle\Entity\Frame $linkDown)
-    {
-        $this->link_down = $linkDown;
-    }
-
-    /**
-     * Get link_down
-     *
-     * @return Zeega\DataBundle\Entity\Frame 
-     */
-    public function getLinkDown()
-    {
-        return $this->link_down;
-    }
-
-    /**
-     * Set link_left
-     *
-     * @param Zeega\DataBundle\Entity\Frame $linkLeft
-     */
-    public function setLinkLeft(\Zeega\DataBundle\Entity\Frame $linkLeft)
-    {
-        $this->link_left = $linkLeft;
-    }
-
-    /**
-     * Get link_left
-     *
-     * @return Zeega\DataBundle\Entity\Frame 
-     */
-    public function getLinkLeft()
-    {
-        return $this->link_left;
-    }
-
-    /**
-     * Set link_right
-     *
-     * @param Zeega\DataBundle\Entity\Frame $linkRight
-     */
-    public function setLinkRight(\Zeega\DataBundle\Entity\Frame $linkRight)
-    {
-        $this->link_right = $linkRight;
-    }
-
-    /**
-     * Get link_right
-     *
-     * @return Zeega\DataBundle\Entity\Frame 
-     */
-    public function getLinkRight()
-    {
-        return $this->link_right;
-    }
-    /**
-     * @var array $attributes
-     */
-    private $attributes;
-
-    /**
-     * @var string $thumbnail_url
-     */
-    private $thumbnail_url;
-
-    /**
-     * @var bool $enabled
-     */
-    private $enabled;
-
-
-    /**
      * Set attributes
      *
      * @param array $attributes
@@ -313,9 +138,9 @@ class Frame
     /**
      * Set enabled
      *
-     * @param bool $enabled
+     * @param boolean $enabled
      */
-    public function setEnabled(\bool $enabled)
+    public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
     }
@@ -323,10 +148,30 @@ class Frame
     /**
      * Get enabled
      *
-     * @return bool 
+     * @return boolean 
      */
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * Set sequence
+     *
+     * @param Zeega\DataBundle\Entity\Sequence $sequence
+     */
+    public function setSequence(\Zeega\DataBundle\Entity\Sequence $sequence)
+    {
+        $this->sequence = $sequence;
+    }
+
+    /**
+     * Get sequence
+     *
+     * @return Zeega\DataBundle\Entity\Sequence 
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
     }
 }

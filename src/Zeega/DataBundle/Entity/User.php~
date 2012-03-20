@@ -2,50 +2,48 @@
 
 namespace Zeega\DataBundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Zeega\DataBundle\Entity\User
  */
-class User extends BaseUser
-
+class User
 {
-	   /**
-     * Constructs a new instance of User
-     */
-    public function __construct()
-    {
-		parent::__construct();
-        $this->created_at = new \DateTime();
-    }
-
     /**
      * @var integer $id
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string $display_name
      */
-    protected $display_name;
+    private $display_name;
 
     /**
      * @var text $bio
      */
-    protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
+    private $bio;
 
     /**
      * @var string $thumb_url
      */
-    protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
+    private $thumb_url;
 
     /**
      * @var datetime $created_at
      */
-    protected $created_at;
-	
+    private $created_at;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Site
+     */
+    private $sites;
+
+    public function __construct()
+    {
+        $this->sites = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -135,16 +133,11 @@ class User extends BaseUser
     {
         return $this->created_at;
     }
-    /**
-     * @var Zeega\DataBundle\Entity\Playground
-     */
-    public $sites;
-
 
     /**
-     * Add playgrounds
+     * Add sites
      *
-     * @param Zeega\DataBundle\Entity\Site $playgrounds
+     * @param Zeega\DataBundle\Entity\Site $sites
      */
     public function addSite(\Zeega\DataBundle\Entity\Site $sites)
     {
@@ -152,7 +145,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get playgrounds
+     * Get sites
      *
      * @return Doctrine\Common\Collections\Collection 
      */

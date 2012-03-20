@@ -30,9 +30,9 @@ class Site
     private $published;
 
     /**
-     * @var datetime $created_at
+     * @var datetime $date_created
      */
-    private $created_at;
+    private $date_created;
 
     /**
      * @var Zeega\DataBundle\Entity\User
@@ -115,23 +115,23 @@ class Site
     }
 
     /**
-     * Set created_at
+     * Set date_created
      *
-     * @param datetime $createdAt
+     * @param datetime $dateCreated
      */
-    public function setCreatedAt($createdAt)
+    public function setDateCreated($dateCreated)
     {
-        $this->created_at = $createdAt;
+        $this->date_created = $dateCreated;
     }
 
     /**
-     * Get created_at
+     * Get date_created
      *
      * @return datetime 
      */
-    public function getCreatedAt()
+    public function getDateCreated()
     {
-        return $this->created_at;
+        return $this->date_created;
     }
 
     /**
@@ -152,30 +152,5 @@ class Site
     public function getUsers()
     {
         return $this->users;
-    }
-    /**
-     * @var datetime $date_created
-     */
-    private $date_created;
-
-
-    /**
-     * Set date_created
-     *
-     * @param datetime $dateCreated
-     */
-    public function setDateCreated($dateCreated)
-    {
-        $this->date_created = $dateCreated;
-    }
-
-    /**
-     * Get date_created
-     *
-     * @return datetime 
-     */
-    public function getDateCreated()
-    {
-        return $this->date_created;
     }
 }

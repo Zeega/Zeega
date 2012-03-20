@@ -20,19 +20,24 @@ class Project
     private $title;
 
     /**
+     * @var datetime $date_created
+     */
+    private $date_created;
+
+    /**
+     * @var array $attributes
+     */
+    private $attributes;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+    /**
      * @var boolean $published
      */
     private $published;
-
-    /**
-     * @var datetime $created_at
-     */
-    private $created_at;
-
-    /**
-     * @var array $attr
-     */
-    private $attr;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
@@ -78,121 +83,6 @@ class Project
     {
         return $this->title;
     }
-
-    /**
-     * Set published
-     *
-     * @param boolean $published
-     */
-    public function setPublished($published)
-    {
-        $this->published = $published;
-    }
-
-    /**
-     * Get published
-     *
-     * @return boolean 
-     */
-    public function getPublished()
-    {
-        return $this->published;
-    }
-
-    /**
-     * Set created_at
-     *
-     * @param datetime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return datetime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set attr
-     *
-     * @param array $attr
-     */
-    public function setAttr($attr)
-    {
-        $this->attr = $attr;
-    }
-
-    /**
-     * Get attr
-     *
-     * @return array 
-     */
-    public function getAttr()
-    {
-        return $this->attr;
-    }
-
-    /**
-     * Set site
-     *
-     * @param Zeega\DataBundle\Entity\Site $site
-     */
-    public function setSite(\Zeega\DataBundle\Entity\Site $site)
-    {
-        $this->site = $site;
-    }
-
-    /**
-     * Get site
-     *
-     * @return Zeega\DataBundle\Entity\Site 
-     */
-    public function getSite()
-    {
-        return $this->site;
-    }
-
-    /**
-     * Add users
-     *
-     * @param Zeega\DataBundle\Entity\User $users
-     */
-    public function addUser(\Zeega\DataBundle\Entity\User $users)
-    {
-        $this->users[] = $users;
-    }
-
-    /**
-     * Get users
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-    /**
-     * @var datetime $date_created
-     */
-    private $date_created;
-
-    /**
-     * @var array $attributes
-     */
-    private $attributes;
-
-    /**
-     * @var boolean $enabled
-     */
-    private $enabled;
-
 
     /**
      * Set date_created
@@ -252,5 +142,65 @@ class Project
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean 
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * Set site
+     *
+     * @param Zeega\DataBundle\Entity\Site $site
+     */
+    public function setSite(\Zeega\DataBundle\Entity\Site $site)
+    {
+        $this->site = $site;
+    }
+
+    /**
+     * Get site
+     *
+     * @return Zeega\DataBundle\Entity\Site 
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
+     * Add users
+     *
+     * @param Zeega\DataBundle\Entity\User $users
+     */
+    public function addUser(\Zeega\DataBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
