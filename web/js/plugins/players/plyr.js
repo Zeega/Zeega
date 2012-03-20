@@ -389,7 +389,7 @@ function convertTime(seconds,tenths){
 	return m+":"+s;
 }
 
-
+/*
 
 
 $(document).ready(function(){
@@ -400,3 +400,4 @@ $(document).ready(function(){
 	//var p = new Plyr('video',{url:'http://vimeo.com/6059734'});
 });
 
+*/
