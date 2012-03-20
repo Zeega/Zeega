@@ -106,7 +106,7 @@ $(document).ready(function() {
 			this.fancyView = null;
 
 			var Fancybox = zeegaBrowser.module('fancybox');
-
+			console.log(thisModel);
 			switch( thisModel.get("layer_type") )
 			{
 				case 'Image':

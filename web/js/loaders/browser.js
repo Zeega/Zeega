@@ -48,6 +48,8 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/jquery/plugins/jquerytmpl',
 	'order!lib/jquery/plugins/twitter-bootstrap',
+	'order!lib/popcorn_flash',
+	'order!plugins/players/plyr',
 	
 	//custom
 	'order!lib/filamentslider/selectToUISlider.jQuery',

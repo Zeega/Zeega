@@ -30,10 +30,25 @@
 	},
 	afterShow:function(){
 		
-		var source = "http://www.youtube.com/watch?v="+this.model.get('uri')+"&controls=0";
+		
+		switch( this.model.get("layer_type") )
+			{
+
+				case 'Video':
+					var source = this.model.get('uri');
+					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,controls:1});
+				case 'Youtube':
+					var source = "http://www.youtube.com/watch?v="+this.model.get('uri');
+					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,controls:1});
+					break;
+				case 'Vimeo':
+					var source = "http://vimeo.com/"+this.model.get('uri');
+					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,controls:0});
+					break;
+			
+			}
 		
 		
-		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source});
 		
 	},
 	
