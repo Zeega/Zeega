@@ -27,6 +27,7 @@
 			var _this = this
 			var newLayer;
 			console.log('ADD NEW LAYER')
+			console.log(args)
 			
 			//args = {item, type, frame}
 			if( _.isUndefined( args.item ) )
@@ -42,6 +43,9 @@
 			else
 			{
 				//media item layer
+				console.log( args.item.get('layer_type'))
+				console.log(new Layer.Youtube() );
+				
 				newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
 					attr: {

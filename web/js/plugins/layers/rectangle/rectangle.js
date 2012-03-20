@@ -87,10 +87,10 @@
 			});
 			
 			this.controls
-				.append( color.render().el )
-				.append( opacitySlider.render().el )
-				.append( widthSlider.render().el )
-				.append( heightSlider.render().el );
+				.append( color.getControl() )
+				.append( opacitySlider.getControl() )
+				.append( widthSlider.getControl() )
+				.append( heightSlider.getControl() );
 			
 			return this;
 		

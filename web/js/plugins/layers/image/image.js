@@ -16,10 +16,6 @@
 			'citation':true,
 		},
 
-		init : function(){},
-
-		
-		
 	});
 	
 	Layer.Views.Controls.Image = Layer.Views.Controls.extend({
@@ -45,8 +41,8 @@
 				max : 1,
 			});
 			
-			this.controls.append( scaleSlider.render().el )
-				.append( opacitySlider.render().el );
+			this.controls.append( scaleSlider.getControl() )
+				.append( opacitySlider.getControl() );
 			
 			return this;
 		
