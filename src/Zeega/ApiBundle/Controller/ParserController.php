@@ -48,7 +48,7 @@ class ParserController extends Controller
 		$url = $this->getRequest()->query->get('url');
 		$results = array("is_valid"=>false, "is_set"=>false);
 		$matches = array();
-
+        //return new Response($url);
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -153,6 +153,8 @@ class ParserController extends Controller
 			        $collection->setDateCreated(new \DateTime("now"));
 			        $collection->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
 			        $collection->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+			        $collection->setEnabled(true);
+			        $collection->setPublished(true);
 
 					$parserMethod = new ReflectionMethod($parserClass, 'getCollection'); // reflection is slow, but it's probably ok here
 					$response = $parserMethod->invokeArgs(new $parserClass, array($url, $setId, $collection));
@@ -165,6 +167,8 @@ class ParserController extends Controller
 			        {
 						$item->setUser($user);
 						$item->setSite($site[0]);
+						$item->setEnabled(true);
+    			        $item->setPublished(true);
 						$em->flush();
 						$em->persist($item);
 						$em->flush();

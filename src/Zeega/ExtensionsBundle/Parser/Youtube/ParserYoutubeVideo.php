@@ -29,7 +29,7 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		$attrs = $entryMedia->group->player->attributes();
 		$attributionUrl = $attrs['url'];
 
-		$item->setUri((string)$yt->videoid);
+		$item->setUri($itemId);
 		$item->setTitle((string)$entryMedia->group->title);
 		//$item->setDescription((string)$entryMedia->group->description);
 		$item->setDescription((string)$entryMedia->group->keywords);
@@ -66,11 +66,8 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		$item->setThumbnailUrl((string)$thumbnailUrl);
 		
 		// read media from xml
-		$attrs = $yt->duration->attributes();
-		$duration = $attrs['seconds'];
-
-		// write media information
-		$media->setDuration((string)$duration);
+		//$attrs = $yt->duration->attributes();
+		//$duration = $attrs['seconds'];
 
 		
 		// access control

@@ -100,11 +100,9 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			$item->setThumbnailUrl((string)$thumbnailUrl);
 			
 			// read media from xml
-			$attrs = $yt->duration->attributes();
-			$duration = $attrs['seconds'];
+			//$attrs = $yt->duration->attributes();
+			//$duration = $attrs['seconds'];
 			
-			// write media information
-			$media->setDuration((string)$duration);
 			
 			// access control
 			$yt = $entry->children('http://gdata.youtube.com/schemas/2007');

@@ -65,8 +65,6 @@ class ParserFlickrPhoto extends ParserItemAbstract
 
 			$item->setUri($sizes[$itemSize]['source']);
 			$item->setChildItemsCount(0);
-			$media->setWidth($sizes[$itemSize]['width']);
-			$media->setHeight($sizes[$itemSize]['height']);
 
 			$attr['sizes']=$sizes;
 			$item->setDescription($info['description']);
