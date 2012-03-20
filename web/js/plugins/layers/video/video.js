@@ -1,255 +1,176 @@
+(function(Layer){
 
-/************************************
 
-	VIDEO LAYER CHILD CLASS
 
-************************************/
-
-var VideoLayer = ProtoLayer.extend({
-	
-	layerType : 'VISUAL',
-	draggable : true,
-	linkable : true,
-	
-	defaultAttributes : 
-	{
-		'title' : 'Video Layer',
-		'url' : 'none',
-		'left' : 0,
-		'top' : 0,
-		'height' : 100,
-		'width' : 100,
-		'volume' : 50,
-		'in'  : 0,
-		'out' : 0,
-		'opacity':1,
-		'dimension':1.5,
-		'citation':true,
-	},
-	
-	controls : function()
-	{
-		var _this  = this;
-		
-		//need this to be accessable inside the draggable function
-		
-		this.layerControls.addClass('timeLEF')
-			.addClass('layerEditingFrame')
-			.attr('id','player-'+this.model.id);
-		
-		/*
-		var div = $('<div>').addClass('timeLEF').addClass('layerEditingFrame').attr('id','player-'+this.model.id);
-		template.find('#controls').append(div);
-		*/
-
-		this.editorLoaded = false;
-		
-		var widthArgs = {
-			min : 1,
-			max : 200,
-			label : 'Scale',
-			step : 1,
-			property : 'width',
-			suffix : '%',
-			value : this.model.get('attr').width,
-			dom : this.layerControls,
-			css : true,
+	Layer.Video = Layer.Model.extend({
 			
-			scaleWith : 'height',
-			scaleValue : this.model.get('attr').height
-			
-		};
-		var scaleSlider = makeUISlider( widthArgs );
-		
-		var opacityArgs = {
-			max : 1,
-			label : 'Opacity',
-			step : 0.01,
-			property : 'opacity',
-			value : this.model.get('attr').opacity,
-			dom : this.layerControls,
-			css : true
-		};
-		var opacitySlider = makeUISlider( opacityArgs );
-		
-		this.layerControls
-			.append( scaleSlider )
-			.append( opacitySlider )
-			.append( makeFullscreenButton( this.layerControls ) );
-		
-	},
-	
-	onControlsOpen: function()
-	{
-		if( !this.editorLoaded )
+		layerType : 'Video',
+
+		defaultAttributes : 
 		{
-			console.log('OPEN CONTROLSSSSSS');
-			console.log(this.model)
-			var _this = this;
-			
-			//is this necessary?
-			var html = $('<div>').addClass('clearfix')
-				.css( 'height' , '140px' ) //this should moved out
-				.html( this.getTemplate() );
-			this.layerControls.prepend( html );
-			this.player = new ZeegaVideoEditor( _this.model.id,_this.attr.url,_this.attr.in,_this.attr.out,_this.attr.volume,'layer-preview-'+_this.model.id, 'player-' +_this.model.id );
+			'title' : 'Video Layer',
+			'url' : 'none',
+			'left' : 0,
+			'top' : 0,
+			'height' : 100,
+			'width' : 100,
+			'volume' : 50,
+			'in'  : 0,
+			'out' : 0,
+			'opacity':1,
+			'dimension':1.5,
+			'citation':true,
+		},
 
-			//player triggers 'update' event to persist changes
-			this.layerControls.bind( 'updated' , function(){
-				
-				var properties = {
-					inPoint : {
-						property : 'in',
-						value : _this.player.getInPoint(),
-						css : false
-					},
-					outPoint : {
-						property : 'out',
-						value : _this.player.getOutPoint(),
-						css : false
-					},
-					volume : {
-						property : 'volume',
-						value : _this.player.getVolume(),
-						css : false
-					}
-				};
-				_this.layerControls.trigger( 'update' , [ properties ]);
-				
+		init : function(){},
+
+	});
+	
+	Layer.Views.Controls.Video = Layer.Views.Controls.extend({
+		
+		render : function()
+		{
+			var targetDiv = new Layer.Views.Lib.Target({
+				idName : 'video-controls-'+ this.model.id,
+				className : 'video-controls'
 			});
-			this.editorLoaded = true;
+			
+			var volumeSlider = new Layer.Views.Lib.Slider({
+				property : 'volume',
+				model: this.model,
+				label : 'Volume',
+				min : 0,
+				max : 100,
+				css : false
+			});
+			
+			var scaleSlider = new Layer.Views.Lib.Slider({
+				property : 'width',
+				model: this.model,
+				label : 'Scale',
+				suffix : '%',
+				min : 1,
+				max : 200,
+			});
+			
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
+				label : 'Opacity',
+				step : 0.01,
+				min : .05,
+				max : 1,
+			});
+			
+			this.controls
+				.append( targetDiv.getControl() )
+				.append( volumeSlider.getControl() )
+				.append( scaleSlider.getControl() )
+				.append( opacitySlider.getControl() );
+			
+			return this;
+		
+		},
+		
+		onControlsOpen : function()
+		{
+			console.log('init video controls')
+			this.$el.find('.video-controls').html( this.getTemplate() );
+		},
+		
+		onControlsClosed : function()
+		{
+			console.log('video controls closed : controls')
+		},
+		
+		
+		getTemplate : function()
+		{
+			var html = 
+			
+			'<div class="plyr-time-wrapper">'+
+				'<div class="plyr-cuein-time"></div>'+
+				'<div class="plyr-cueout-time"></div>'+
+			'</div>'+
+			'<div class="plyr-timeline-wrapper">'+
+				'<div class="plyr-button-wrapper">'+
+					'<div class="plyr-button plyr-play"></div>'+
+				'</div>'+
+				'<div class="plyr-timeline">'+
+					'<div class="plyr-cuein-bar plyr-bar"></div>'+
+					'<div class="plyr-time-bar plyr-bar"></div>'+
+					'<div class="plyr-cueout-bar plyr-bar"></div>'+
+					'<div class="plyr-cuiein-scrubber plyr-edit-scrubber">'+
+						'<div class="plyr-scrubber-select"></div>'+
+						'<div class="plyr-arrow-down-green"></div>'+
+					'</div>'+
+					'<div class="plyr-scrubber plyr-edit-scrubber">'+
+						'<div class="plyr-hanging-box"><div>'+
+					'</div>'+
+					'<div class="plyr-cueout-scrubber plyr-edit-scrubber">'+
+						'<div class="plyr-scrubber-select"></div>'+
+						'<div class="plyr-plyr-arrow-down"></div>'+
+					'</div>'+
+				'</div>'+
+			'</div>'+
+			'<div class="plyr-time-wrapper">'+
+				'<span class="plyr-time"></span>'+
+			'</div>';
+			
+			return html;
 		}
+		
+	});
 
-	},
-	
-	onControlsClose: function()
-	{
-		if(this.player) this.player.pause();
-	},
-	
-	
-	visual : function()
-	{
-		//var h = Math.floor( this.attr.width * 1.5 / this.attr.dimension );
+	Layer.Views.Visual.Video = Layer.Views.Visual.extend({
+		
+		draggable : true,
+		linkable : true,
+		
+		render : function()
+		{
+			console.log(this.attr)
+			var img = $('<img>')
+				.attr('src', this.attr.thumbnail_url)
+				.css({'width':'100%'});
 
-		var cssObj = {
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'content/images/items/'+this.attr.item_id+'_s.jpg)',
-			'backgroundSize': '100px 100px',
-			'position' : 'absolute',
-			'top' : this.attr.top+"%",
-			'left' : this.attr.left+"%",
-			'z-index' : this.zIndex,
+			$(this.el).html( img );
 			
-			'width' : this.attr.width +'%',
-			'height' : this.attr.height +'%',
+			this.model.trigger('ready',this.model.id)
 			
-			'opacity' : this.attr.opacity
-		};
+			return this;
+		},
+		
+		onControlsOpen : function()
+		{
+			console.log('video controls open : visual')
+			//replace with the actual video object
+		},
+		
+		onControlsClosed : function()
+		{
+			console.log('video controls closed : visual')
+		}
+		
+	});
+	
+	Layer.Youtube = Layer.Video.extend();
+	Layer.Views.Controls.Youtube = Layer.Views.Controls.Video.extend();
+	Layer.Views.Visual.Youtube = Layer.Views.Visual.Video.extend();
+	
+/*	
+	Layer.Views.Player.Image = Layer.Views.Visual.extend({
+		
+		render : function()
+		{
+			var img = $('<img>')
+				.attr('src', this.attr.url)
+				.css({'width':'100%'});
 
-		
-		this.visualEditorElement.addClass('media editable draggable')
-			.attr({
-				'id' : 'layer-preview-'+this.model.id,
-				'data-layer-id' : this.model.id
-			})
-			.css(cssObj);
-	},
-	
-	thumb : function()
-	{
-		var cssObj = {
-			'backgroundImage':'url('  + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'content/images/items/'+this.attr.item_id+'_s.jpg)',
-			'backgroundSize': '100px 100px',
-		};
-		
-		this.thumbnail.css( cssObj );
-	},
-	
-	
-	preload : function()
-	{
-		//make dom object
-		var _this = this;
-		
-		var ratio = 1.5;
-		var h = Math.floor( this.attr.width * ratio / this.attr.dimension );
-		var cssObj = {
-			'position' : 'absolute',
-			'top' : "-1000%",
-			'left' : "-1000%",
-			'z-index' : this.zIndex,
-			'width' : this.attr.width+"%",
-			'height' : this.attr.width+"%",
-			'opacity' : this.attr.opacity
-		};
-		
-		this.display
-			.attr({
-				'id' : 'layer-publish-'+this.model.id,
-				'data-layer-id' : this.model.id
-			})
-			.css(cssObj);
-		
-		this.player=new ZeegaVideoPlayer(this.model.id,this.attr.url,this.attr.in,this.attr.out,this.attr.volume,'layer-publish-'+this.model.id,'zeega-player');
-		
-	},
-	
-	play : function( z )
-	{
-			if(z>=0) this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
-		this.player.play();
-	},
-	pause: function (){
-		this.player.pause();
-	},
-	
-	stash :function()
-	{
-		this.display.css({'top':"-1000%",'left':"-1000%"});
-		
-		this.player.setVolume(0);
-		this.player.pause();
-	},
-
-	exit: function()
-	{
-		this.player.pause();
-	},
-	
-	getTemplate : function(){
-	
-		var 		html ='		<div id="loadingMP" ><p>Loading Media...</p></div>';
-		html+='<div id="durationWrapper"><span style="line-height: 1.9;"> Duration: </span><span id="layerDuration" class="layerLength">0 </span> </div>';
-		html +='<div id="avControls"> ';
-		html +='<div id="avStart"> ';
-		html +='<span style="font-weight: bold;">In:</span><span id="avStartMinutes" >0</span>:<span id="avStartSeconds" >0</span>';
-		html +='</div>';
-		html +='<div id="avStop"> ';
-		html +='<span style="font-weight: bold;">In:</span><span id="avStopMinutes" >0</span>:<span id="avStopSeconds" >0</span>';
-		html +=	'</div>';
-		html +='</div>';
-		html +='<div class="avComponent"> ';
-		html +='	<div id="mediaPlayerMP"> ';
-
-		html +='		<div id="playMP" class="playButtonMP"> </div> ';
-		html +='		<div id="loadingOutsideMP"> ';
-		html +='			<div id="startBar"></div>';
-		html +='			<div id="stopBar"></div>';
-		html +='			<div id="startMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
-		html +='			<div id="stopMP" class="markerMP"><div class="bar"></div><div class="arrow-down"></div></div>';
-		html +='			<div id="currentMP" class="markerMP"><div class="box"></div></div>';
-		html +='			<div id="loadingInsideMP"> </div> ';
-		html +='			<div id="loadingStatusMP"></div> ';
-		html +='		</div> ';
-		html +='		<div id="timeWrapperMP"><span id="currentTime"></span> </div>';
-		html +='	</div>				';	 
-		html +='</div> <!-- #avComponent --> ';
-		html +='<div id="clear"></div> ';
-		html +='<div id ="volumeMP">';
-		html +='<h4 style="margin:10px">Volume</h4>';
-		html +='<div id="volume-slider" ></div>';
-		html +='</div>';
-		return html;
-	}
-	
-});
+			$(this.el).html( img );
+				
+			return this;
+		}
+	});
+*/	
+})(zeega.module("layer"));

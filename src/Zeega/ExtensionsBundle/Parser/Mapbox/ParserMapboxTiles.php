@@ -22,7 +22,7 @@ class ParserMapBoxTiles extends ParserItemAbstract
 	
 		$item= new Item();
 
-		$item->setUri((string)$itemId);
+		$item->setUri((string)$entry->id);
 		$item->setTitle((string)$entry->name);
 		$item->setAttributionUri((string)$entry->webpage);
 		$item->setDateCreated(new \DateTime("now"));

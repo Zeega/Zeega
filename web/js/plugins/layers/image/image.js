@@ -1,125 +1,86 @@
-/************************************
+(function(Layer){
 
-	IMAGE LAYER CHILD CLASS
-	
-	
-	TODO:
-		
-		Features: 
-			-fullscreen bleed?
-
-************************************/
-
-var ImageLayer = ProtoLayer.extend({
-	
-	layerType : 'VISUAL',
-	draggable : true,
-	linkable : true,
-
-	defaultAttributes : {
-		'title' : 'Image Layer',
-		'url' : 'none',
-		'left' : 0,
-		'top' : 0,
-		'height' : 100,
-		'width' : 100,
-		'opacity':1,
-		'aspect':1.33,
-		'citation':true,
-	},
-
-	controls : function()
-	{
-		var opacityArgs = {
-			max : 1,
-			label : 'Opacity',
-			step : 0.01,
-			property : 'opacity',
-			value : this.model.get('attr').opacity,
-			dom : this.layerControls,
-			css : true
-		};
-		var opacitySlider = makeUISlider( opacityArgs );
-		
-		var widthArgs = {
-			min : 1,
-			max : 200,
-			label : 'Scale',
-			step : 1,
-			property : 'width',
-			suffix : '%',
-			value : this.model.get('attr').width,
-			dom : this.layerControls,
-			css : true
-		};
-		var scaleSlider = makeUISlider( widthArgs );
-		
-		this.layerControls
-			.append( scaleSlider )
-			.append( opacitySlider )
-			.append( makeFullscreenButton( this.layerControls ) );
-	},
-	
-	visual : function()
-	{
-		var cssObj = {
-			width : this.attr.width+'%',
-			opacity : this.attr.opacity
-		};
-		
-		var img = $('<img>')
-			.attr('src', this.model.get('attr').url)
-			.css({'width':'100%'});
-						
-		this.visualEditorElement
-			.css( cssObj )
-			.append( img );
-	},
-
-	
-	preload : function( target )
-	{
-		console.log('image-preload')
-		var _this = this;
-
-
-		var img = $('<img>')
-			.attr( 'src' , this.attr.url )
-			.css( 'width', '100%');
-		//img.load(function(){target.trigger('ready', { 'id' : _this.model.id } )});
-
-console.log( this.innerDisplay );
-		
-		$(this.display).css('height','laskdfh');
-		
-		$(this.innerDisplay).append( img );
+	Layer.Image = Layer.Model.extend({
 			
-			
-			/*
-			console.log(img.height() );
-			img.addClass('linked-layer-hover');
-		*/
-		
-		target.trigger( 'ready' , { 'id' : this.model.id } );
-	},
+		layerType : 'Image',
+
+		defaultAttributes : {
+			'title' : 'Image Layer',
+			'url' : 'none',
+			'left' : 0,
+			'top' : 0,
+			'height' : 100,
+			'width' : 100,
+			'opacity':1,
+			'aspect':1.33,
+			'citation':true,
+		},
+
+	});
 	
-	play : function( z )
-	{
-		this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
+	Layer.Views.Controls.Image = Layer.Views.Controls.extend({
 		
-		if(this.attr.link_to)
+		render : function()
 		{
-			var _this = this;
-			_this.display.addClass('link-blink')
-			_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  )
 			
-		}
-	},
-
-	stash : function()
-	{
-		this.display.css({'top':"-1000%",'left':"-1000%"});
-	}
-	
+			var scaleSlider = new Layer.Views.Lib.Slider({
+				property : 'width',
+				model: this.model,
+				label : 'Scale',
+				suffix : '%',
+				min : 1,
+				max : 200,
+			});
+			
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
+				label : 'Opacity',
+				step : 0.01,
+				min : .05,
+				max : 1,
+			});
+			
+			this.controls.append( scaleSlider.getControl() )
+				.append( opacitySlider.getControl() );
+			
+			return this;
 		
-});
+		}
+		
+	});
+
+	Layer.Views.Visual.Image = Layer.Views.Visual.extend({
+		
+		draggable : true,
+		linkable : true,
+		
+		render : function()
+		{
+			var img = $('<img>')
+				.attr('src', this.attr.url)
+				.css({'width':'100%'});
+
+			$(this.el).html( img );
+			
+			this.model.trigger('ready',this.model.id)
+			
+			return this;
+		}
+	});
+/*	
+	Layer.Views.Player.Image = Layer.Views.Visual.extend({
+		
+		render : function()
+		{
+			var img = $('<img>')
+				.attr('src', this.attr.url)
+				.css({'width':'100%'});
+
+			$(this.el).html( img );
+				
+			return this;
+		}
+	});
+*/	
+})(zeega.module("layer"));

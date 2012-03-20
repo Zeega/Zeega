@@ -14,6 +14,7 @@ var loadFiles = [
 	'order!lib/jquery/ui/js/jquery-ui-1.8.17',
 	
 	'order!lib/underscore',
+	'order!lib/backbone',
 	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
@@ -21,8 +22,7 @@ var loadFiles = [
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
 	
-	
-	'order!app/_layer',
+
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',
 	'order!plugins/layers/image/image',

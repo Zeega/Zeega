@@ -24,6 +24,8 @@
 			this.sequences = [];
 			_.each( sequences, function(sequence){
 				_this.sequences.push( new Sequence.Model( sequence ) );
+				zeega.app.sequenceID = sequence.id;
+				console.log('sequence id = '+ sequence.id)
 			});
 			this.trigger('ready')
 		}

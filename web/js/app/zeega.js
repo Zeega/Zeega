@@ -22,7 +22,7 @@ this.zeega = {
   app: _.extend({
 	
 	
-	sequenceID : 1,
+	//sequenceID : 1,
 	currentFrame : null,
 	thumbnailUpdates : false,
 	previewMode:false,
@@ -56,6 +56,7 @@ this.zeega = {
 		var _this = this;
 		var Project = zeega.module("project");
 		var Items = zeega.module("items");
+		console.log($.parseJSON(projectJSON))
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject()
@@ -189,7 +190,9 @@ this.zeega = {
 	
 	addLayer : function( args )
 	{
+		console.log('ADD LAYER')
 		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
+		console.log(args)
 		this.project.sequences[0].layers.addNewLayer( args )
 	},
 	
@@ -233,7 +236,7 @@ this.zeega = {
 		var frames = this.project.sequences[0].frames.collection.toJSON();
 		_.each( frames, function(frame){ frame.layers = _.compact(frame.layers) })
 		
-		var layers = this.project.sequences[0].layers.collection.toJSON();
+		var layers = this.project.sequences[0].layers.toJSON();
 		_.each(layers, function(layer){ layer.id = parseInt(layer.id) });
 		
 		var sequences = [{
