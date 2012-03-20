@@ -727,4 +727,129 @@ class Item
     {
         // Add your code here
     }
+    /**
+     * @var string $location
+     */
+    private $location;
+
+    /**
+     * @var string $license
+     */
+    private $license;
+
+    /**
+     * @var array $attributes
+     */
+    private $attributes;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+    /**
+     * @var boolean $published
+     */
+    private $published;
+
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set license
+     *
+     * @param string $license
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
+    }
+
+    /**
+     * Get license
+     *
+     * @return string 
+     */
+    public function getLicense()
+    {
+        return $this->license;
+    }
+
+    /**
+     * Set attributes
+     *
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return array 
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean 
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
 }

@@ -10,14 +10,6 @@ Zeega\DataBundle\Entity\Frame:
        sequence_id:
         referencedColumnName: id
         onDelete: CASCADE
-    link_up:
-     targetEntity: Frame
-    link_down:
-     targetEntity: Frame
-    link_left:
-     targetEntity: Frame
-    link_right:
-     targetEntity: Frame
    id:
     id:
      type: integer
@@ -30,12 +22,14 @@ Zeega\DataBundle\Entity\Frame:
     layers:
      type: array
      nullable: true
-    attr:
+    attributes:
      type: array
      nullable: true
-    thumb_url:
+    thumbnail_url:
      type: string
      length: 101
      nullable: true
-
+    enabled:
+     type: bool
+     nullable: true
  

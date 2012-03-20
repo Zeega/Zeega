@@ -223,4 +223,29 @@ class Layer
     {
         $this->sequences[] = $sequences;
     }
+    /**
+     * @var array $attributes
+     */
+    private $attributes;
+
+
+    /**
+     * Set attributes
+     *
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return array 
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 }

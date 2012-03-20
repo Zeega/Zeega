@@ -109,4 +109,54 @@ class ItemTags
     {
         return $this->tag;
     }
+    /**
+     * @var datetime $date_created
+     */
+    private $date_created;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+
+    /**
+     * Set date_created
+     *
+     * @param datetime $dateCreated
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->date_created = $dateCreated;
+    }
+
+    /**
+     * Get date_created
+     *
+     * @return datetime 
+     */
+    public function getDateCreated()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 }

@@ -254,4 +254,79 @@ class Frame
     {
         return $this->link_right;
     }
+    /**
+     * @var array $attributes
+     */
+    private $attributes;
+
+    /**
+     * @var string $thumbnail_url
+     */
+    private $thumbnail_url;
+
+    /**
+     * @var bool $enabled
+     */
+    private $enabled;
+
+
+    /**
+     * Set attributes
+     *
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return array 
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Set thumbnail_url
+     *
+     * @param string $thumbnailUrl
+     */
+    public function setThumbnailUrl($thumbnailUrl)
+    {
+        $this->thumbnail_url = $thumbnailUrl;
+    }
+
+    /**
+     * Get thumbnail_url
+     *
+     * @return string 
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail_url;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param bool $enabled
+     */
+    public function setEnabled(\bool $enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return bool 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 }

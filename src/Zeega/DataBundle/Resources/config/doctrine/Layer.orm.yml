@@ -15,10 +15,6 @@ Zeega\DataBundle\Entity\Layer:
      type: bigint
      generator: { strategy: AUTO }
    fields:
-    item_uri:
-     type: string
-     length: 255
-     nullable: true
     type:
      type: string
      length: 50
@@ -27,11 +23,7 @@ Zeega\DataBundle\Entity\Layer:
      type: string
      length: 1000
      nullable: true
-    zindex:
-     type: integer
-     length: 5
-     nullable: true
-    attr:
+    attributes:
      type: array
      nullable: true
  
