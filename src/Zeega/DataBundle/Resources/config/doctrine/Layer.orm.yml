@@ -23,7 +23,7 @@ Zeega\DataBundle\Entity\Layer:
      type: string
      length: 1000
      nullable: true
-    attributes:
+    attr:
      type: array
      nullable: true
  

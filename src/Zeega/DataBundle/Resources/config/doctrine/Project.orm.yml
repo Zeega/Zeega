@@ -32,7 +32,7 @@ Zeega\DataBundle\Entity\Project:
     date_created:
      type: datetime
      nullable: false
-    attributes:
+    attr:
      type: array
      nullable: true
     enabled:

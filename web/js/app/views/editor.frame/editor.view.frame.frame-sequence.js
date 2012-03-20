@@ -4,7 +4,7 @@
 		
 		initialize : function()
 		{
-			this.model.on( 'change:thumb_url', this.onNewThumb, this );
+			this.model.on( 'change:thumbnail_url', this.onNewThumb, this );
 			this.model.on('focus', this.focus, this );
 			this.model.on('blur', this.blur, this );
 		},
@@ -23,7 +23,7 @@
 	
 			var blanks = {
 				frameID : this.model.id,
-				thumbURL : this.model.get('thumb_url')
+				thumbURL : this.model.get('thumbnail_url')
 			}
 			var template = _.template( this.getTemplate() );
 		
@@ -154,14 +154,14 @@
 			{
 				$(this.el).fadeOut('fast',function(){
 					$(this)
-						.css('background-image','url("'+ _this.model.get('thumb_url') +'")')
+						.css('background-image','url("'+ _this.model.get('thumbnail_url') +'")')
 						.fadeIn('fast');
 					$(this).find('.frame-update-overlay').hide();
 				});
 			}
 			else
 			{
-				$(this.el).css('background-image','url("'+ this.model.get('thumb_url') +'")');
+				$(this.el).css('background-image','url("'+ this.model.get('thumbnail_url') +'")');
 				$(this.el).find('.frame-update-overlay').hide();
 			}
 		},

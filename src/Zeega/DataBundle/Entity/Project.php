@@ -25,9 +25,9 @@ class Project
     private $date_created;
 
     /**
-     * @var array $attributes
+     * @var array $attr
      */
-    private $attributes;
+    private $attr;
 
     /**
      * @var boolean $enabled
@@ -105,23 +105,23 @@ class Project
     }
 
     /**
-     * Set attributes
+     * Set attr
      *
-     * @param array $attributes
+     * @param array $attr
      */
-    public function setAttributes($attributes)
+    public function setAttr($attr)
     {
-        $this->attributes = $attributes;
+        $this->attr = $attr;
     }
 
     /**
-     * Get attributes
+     * Get attr
      *
      * @return array 
      */
-    public function getAttributes()
+    public function getAttr()
     {
-        return $this->attributes;
+        return $this->attr;
     }
 
     /**

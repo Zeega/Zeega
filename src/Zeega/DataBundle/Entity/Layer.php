@@ -25,9 +25,9 @@ class Layer
     private $text;
 
     /**
-     * @var array $attributes
+     * @var array $attr
      */
-    private $attributes;
+    private $attr;
 
     /**
      * @var Zeega\DataBundle\Entity\Item
@@ -95,23 +95,23 @@ class Layer
     }
 
     /**
-     * Set attributes
+     * Set attr
      *
-     * @param array $attributes
+     * @param array $attr
      */
-    public function setAttributes($attributes)
+    public function setAttr($attr)
     {
-        $this->attributes = $attributes;
+        $this->attr = $attr;
     }
 
     /**
-     * Get attributes
+     * Get attr
      *
      * @return array 
      */
-    public function getAttributes()
+    public function getAttr()
     {
-        return $this->attributes;
+        return $this->attr;
     }
 
     /**

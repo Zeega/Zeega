@@ -15,16 +15,6 @@ class Item
     private $id;
 
     /**
-     * @var bigint $media_id
-     */
-    private $media_id;
-
-    /**
-     * @var bigint $metadata_id
-     */
-    private $metadata_id;
-
-    /**
      * @var integer $site_id
      */
     private $site_id;
@@ -185,47 +175,7 @@ class Item
     {
         return $this->id;
     }
-
-    /**
-     * Set media_id
-     *
-     * @param bigint $mediaId
-     */
-    public function setMediaId($mediaId)
-    {
-        $this->media_id = $mediaId;
-    }
-
-    /**
-     * Get media_id
-     *
-     * @return bigint 
-     */
-    public function getMediaId()
-    {
-        return $this->media_id;
-    }
-
-    /**
-     * Set metadata_id
-     *
-     * @param bigint $metadataId
-     */
-    public function setMetadataId($metadataId)
-    {
-        $this->metadata_id = $metadataId;
-    }
-
-    /**
-     * Get metadata_id
-     *
-     * @return bigint 
-     */
-    public function getMetadataId()
-    {
-        return $this->metadata_id;
-    }
-
+    
     /**
      * Set site_id
      *

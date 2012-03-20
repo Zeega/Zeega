@@ -22,7 +22,7 @@ Zeega\DataBundle\Entity\Frame:
     layers:
      type: array
      nullable: true
-    attributes:
+    attr:
      type: array
      nullable: true
     thumbnail_url:

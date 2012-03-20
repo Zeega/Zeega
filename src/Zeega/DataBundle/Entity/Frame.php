@@ -25,9 +25,9 @@ class Frame
     private $layers;
 
     /**
-     * @var array $attributes
+     * @var array $attr
      */
-    private $attributes;
+    private $attr;
 
     /**
      * @var string $thumbnail_url
@@ -44,7 +44,12 @@ class Frame
      */
     private $sequence;
 
-
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+        $this->thumbnail_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
+    }
+    
     /**
      * Get id
      *
@@ -96,23 +101,23 @@ class Frame
     }
 
     /**
-     * Set attributes
+     * Set attr
      *
-     * @param array $attributes
+     * @param array $attr
      */
-    public function setAttributes($attributes)
+    public function setAttr($attr)
     {
-        $this->attributes = $attributes;
+        $this->attr = $attr;
     }
 
     /**
-     * Get attributes
+     * Get attr
      *
      * @return array 
      */
-    public function getAttributes()
+    public function getAttr()
     {
-        return $this->attributes;
+        return $this->attr;
     }
 
     /**

@@ -38,7 +38,6 @@ class SequencesController extends Controller
 
     public function postSequencesAction()
     {
-    
     	$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 
@@ -142,25 +141,26 @@ class SequencesController extends Controller
   
 	public function postSequenceFramesAction($sequence_id)
     {
-    	
 		$em=$this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
 		
-    	if($request->request->get('duplicate_id')){
+    	if($request->request->get('duplicate_id'))
+    	{
+    		$original_frame = $this->getDoctrine()
+        				           ->getRepository('ZeegaDataBundle:Frame')
+        				           ->find($request->request->get('duplicate_id'));
     	
-    		$original_frame =$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Frame')
-        				->find($request->request->get('duplicate_id'));
-    	
-			$frame= new Frame();
+			$frame = new Frame();
 			$frame->setSequence($sequence);
-			if($request->request->get('thumb_url')) $frame->setThumbUrl($request->request->get('thumb_url'));	
+			
+			if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));	
 			if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
 
 			$original_layers=$original_frame->getLayers();
-			if($original_layers){
-				
+			
+			if($original_layers)
+			{
         		foreach($original_layers as $original_layer_id){
         				$layer= new Layer();
     					$sequence->addLayer($layer);
@@ -189,18 +189,21 @@ class SequencesController extends Controller
 			->findOneById($frame->getId());
 			return ResponseHelper::encodeAndGetJsonResponse($output);
 		}
-		else{
+		else
+		{
 			$frame= new Frame();
 			$frame->setSequence($sequence);
-			if($request->request->get('thumb_url'))$frame->setThumbUrl($request->request->get('thumb_url'));
+			if($request->request->get('thumbnail_url'))$frame->setThumbnailUrl($request->request->get('thumbnail_url'));
 			if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
-
-			$em=$this->getDoctrine()->getEntityManager();
+            $frame->setEnabled(true);
+			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($frame);
 			$em->flush();
+			
 			$output=$this->getDoctrine()
-				->getRepository('ZeegaDataBundle:Frame')
-				->findOneById($frame->getId());
+				         ->getRepository('ZeegaDataBundle:Frame')
+				         ->findOneById($frame->getId());
+				         
 			return  ResponseHelper::encodeAndGetJsonResponse($output);
 		}
     
