@@ -23,6 +23,8 @@
 			
 			$(this.el).css({
 				'position' : 'absolute',
+				'overflow' : 'hidden',
+				
 				'width' : _this.attr.width+'%',
 				'opacity' : _this.attr.opacity,
 				

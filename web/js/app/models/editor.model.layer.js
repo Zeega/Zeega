@@ -29,7 +29,9 @@
 		{
 			console.log('LAYERS')
 			
-			this.on('ready', function(){ this.visualLoaded = true })
+			this.on('ready', function(){ this.visualLoaded = true });
+			this.on('controls_open', this.onControlsOpen, this);
+			this.on('controls_closed', this.onControlsClosed, this);
 			
 			if( options ) _.extend(this,options);
 			
@@ -50,6 +52,19 @@
 		
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
+		
+		
+		onControlsOpen : function()
+		{
+			console.log('!!!!!!controls open : model')
+		},
+		
+		onControlsClosed : function()
+		{
+			console.log('!!!!!!controls closed : model')
+			
+		},
+		
 		
 		renderLayerInEditor : function()
 		{

@@ -77,9 +77,116 @@
 })();
 
 
+var Plyr2 = Backbone.Model.extend({
+	
+	defaults : {
+		id : 0,
+		url : 'http://www.youtube.com/watch?v=dQw4w9WgXcQ&ob=av3e',
+		control_mode : 'standard', // standard / editor / none
+		autoplay : true,
+		cue_in : 0,
+		volume : 50,
+		
+		video_target : null, // element id
+		controls_target : null, // element id
+	},
+	
+	initialize : function()
+	{
+		//set video format type
+		
+		this.set( 'format', this.getFormat(this.get('url')) );
+		this.videoView = this.getVideoView().el;
+	},
+	
+	getFormat : function(url)
+	{
+		//separated to make it easier to isolate and update this list
+		var format = '';
+		if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
+		else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
+		else format ='html5';
+		//Force flash for html5 in Firefox browser
+		if( navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length-1].split('/')[0] == 'Firefox' && format=='html5' ) format='flashvideo';
+		return format;
+	},
+	
+	placeVideo : function()
+	{
+		console.log('PLACE VIDEO')
+		var _this = this;
+		switch( this.get('format') )
+		{
+			case 'html5':
+				console.log('html5 video')
+				
+				this.pop = Popcorn('#zvideo-'+ this.id);
+				this.pop.listen( 'canplay', function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls(); });
+				break;
+			case 'flashvideo':
+				console.log('flash video video')
+				
+				this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('url') );
+				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' )_this.displayControls();});
+				break;
+			case 'youtube':
+				console.log('youtube video')
+			
+				this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
+				this.pop.listen('canplaythrough',function(){ _this.pop.play(); _this.pop.pause(); if( _this.get('control_mode') != 'none' ) _this.displayControls();});
+				break;
+			case 'vimeo':
+				console.log('vimeo video')
+			
+				this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
+				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls();});
+				break;
+			default:
+				console.log('none set');
+		}
+	},
+	
+	displayControls : function()
+	{
+		console.log('display controls')
+	},
+	
+	getVideoView : function()
+	{
+		
+		var Video = Backbone.View.extend({
+			
+			className : 'plyr-video',
+			
+			initialize : function()
+			{
+				console.log(this)
+				if( this.model.get('format') == 'html5') this.tagName = 'video';
+				this.render();
+			},
+			
+			render : function()
+			{
+				if( this.model.get('format') == 'html5') $(this.el).attr({ 'id' : 'zvideo-'+ this.model.id, 'src' : this.model.get('url') });
+				else $(this.el).attr( 'id' , 'zvideo-'+ this.model.id);
+				
+				$(this.el).css('position', 'absolute');
+				return this;
+			}
+			
+		});
+		
+		return new Video({model:this});
+	}
+	
+	
+})
+
+
 
 var Plyr = Class.extend({
-	init: function(id,args){
+	init : function(id,args)
+	{
 		this.id = id;
 		this.url = args['url'];
 		this.format = args['format'];
@@ -103,7 +210,7 @@ var Plyr = Class.extend({
 		if("volume" in args) this.volume  = args['volume'];
 		else this.volume  = 1;
 	
-		
+/*		
 		if(this.controls==1){
 			if(this.controlsType =='standard'){		
 				this.controlsWrapper.append($('<div>').attr('id','plyr-standard')
@@ -159,12 +266,9 @@ var Plyr = Class.extend({
 	
 			}
 		}
-		
+*/		
 		var _this=this;
-		
-		
-		
-		
+
 		if(this.url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/)) this.format = 'youtube'
 		else if (this.url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/)) this.format = 'vimeo'
 		else this.format ='html5';
@@ -250,24 +354,36 @@ var Plyr = Class.extend({
 			}
 		});
 		
-		}else if(this.controlsType=='editor'){
+		}
+		else if(this.controlsType=='editor')
+		{
+		// for editor controls
+		// move to  playback controls
 		
-			this.controlsWrapper.find('.plyr-scrubber').draggable({axis:'x',containment: 'parent',stop: function(event, ui) {
+		
+		/*
+			this.controlsWrapper.find('.plyr-scrubber').draggable({
+				axis:'x',
+				containment: 'parent',
+				stop: function(event, ui)
+				{
 				var newTime = Math.floor(parseFloat(_this.controlsWrapper.find('.plyr-scrubber').css('left'))*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));
-				if(newTime<_this.cueIn) newTime=_this.cueIn;
-				else if(newTime>_this.cueOut) newTime=Math.max(parseFloat(_this.cueIn), parseFloat(_this.cueOut)-5.0);
+				if(newTime<_this.cueIn) newTime = _this.cueIn;
+				else if(newTime>_this.cueOut) newTime = Math.max(parseFloat(_this.cueIn), parseFloat(_this.cueOut)-5.0);
 				
 				_this.pop.trigger('timeupdate');
 				_this.pop.currentTime(newTime);
 				//_this.pop.play();
-			},
-			start:function(){
-				_this.pop.pause();
-			},
-			drag:function(event, ui){
-				var newTime = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));	
-				_this.controlsWrapper.find('.plyr-time').html(convertTime(newTime)+' / '+convertTime(_this.pop.duration()));
-			}
+				},
+				start:function()
+				{
+					_this.pop.pause();
+				},
+				drag:function(event, ui)
+				{
+					var newTime = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));	
+					_this.controlsWrapper.find('.plyr-time').html(convertTime(newTime)+' / '+convertTime(_this.pop.duration()));
+				}
 		});
 		this.controlsWrapper.find('.plyr-cuein-scrubber').draggable({axis:'x',containment: 'parent',stop: function(event, ui) {
 				_this.controlsWrapper.find('.plyr-cuein-bar').css({'width':_this.controlsWrapper.find('.plyr-cuein-scrubber').css('left')});
@@ -299,9 +415,9 @@ var Plyr = Class.extend({
 			
 			}
 		});
-		
+		*/
 		}
-		
+		/*
 		this.controlsWrapper.find('#plyr-volume').slider({
 				min : 0,
 				max : 1,
@@ -316,7 +432,7 @@ var Plyr = Class.extend({
 					//$('#player-'+_this._id).trigger('updated');
 				}
 		});
-		
+		*/
 		
 		
 		//Add popcorn listeners
@@ -391,12 +507,18 @@ function convertTime(seconds,tenths){
 
 
 
-
+/*
 $(document).ready(function(){
+
+	// new Plyr({
+		url:'string',
+		mode:'string - ['standalone(default)',editor]
+		,})
+	
 	//var p = new Plyr('video',{url:'http://ia700202.us.archive.org/23/items/youth_media_clip2/youth_media_clip2_512kb.mp4',format:'flash'});
 	
 	var p = new Plyr('video',{url:'http://ia600404.us.archive.org/2/items/052706Muddybrook/052706muddybrookartmusic.mp3',controlsId:'controls',controlsType:'editor', cueIn:10,cueOut:200});
 
 	//var p = new Plyr('video',{url:'http://vimeo.com/6059734'});
 });
-
+*/

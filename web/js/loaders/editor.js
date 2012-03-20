@@ -43,13 +43,15 @@ var loadFiles = [
 	'order!lib/jquery/plugins/spin',
 	'order!lib/jquery/plugins/jeditable.min',
 	'order!lib/jquery/plugins/jquery-cycle',
-//	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
 	'order!lib/farbtastic/farbtastic',
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/nicedit/nicEdit',
-//	'order!lib/bootstrap',
+	'order!lib/popcorn_flash',
+	
+	
+	'order!plugins/players/plyr',
 
 //models
 	'order!app/models/editor.model.project',
@@ -88,8 +90,8 @@ var loadFiles = [
 	//'order!plugins/layers/website/website',
 
 	//players
-	'order!plugins/players/zeega.player.youtube',	
-	'order!plugins/players/zeega.player.video',
+	//'order!plugins/players/zeega.player.youtube',	
+	//'order!plugins/players/zeega.player.video',
 	//'order!players/zeega.player.rdio',
 	//'order!players/zeega.player.rdio.token',
 	
