@@ -113,7 +113,8 @@
 			
 			$(this.el).html( _.template( this.getTemplate(), this.attr ) ).css( style );
 			
-				
+			this.model.trigger('ready',this.model.id)
+			
 			return this;
 		},
 		
