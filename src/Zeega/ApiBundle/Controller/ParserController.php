@@ -165,8 +165,6 @@ class ParserController extends Controller
 			        {
 						$item->setUser($user);
 						$item->setSite($site[0]);
-						$em->persist($item->getMetadata());
-						$em->persist($item->getMedia());
 						$em->flush();
 						$em->persist($item);
 						$em->flush();

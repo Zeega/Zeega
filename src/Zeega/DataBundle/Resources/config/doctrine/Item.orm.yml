@@ -38,12 +38,6 @@ Zeega\DataBundle\Entity\Item:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        media_id:
-            type: bigint
-            nullable: true
-        metadata_id:
-            type: bigint
-            nullable: true
         site_id:
             type: integer
             nullable: true            

@@ -3,10 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser\Soundcloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 
@@ -27,17 +25,9 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 		}
 		
 		$item = new Item();
-		$metadata = new Metadata();
-		$media = new Media();
-		
-		$attr=array();
-		$attr['tags']=$itemJson["tag_list"];
-		$metadata->setThumbnailUrl($itemJson['tracks'][0]['waveform_url']);
 
 		$item->setTitle($itemJson['permalink']);
-
 		$item->setDescription($itemJson['description']);
-
 		$item->setMediaCreatorUsername($itemJson['user']['username']);
 		$item->setMediaCreatorRealname($itemJson['user']['username']);
 		$item->setMediaType('Audio');
@@ -50,13 +40,7 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 		$item->setThumbnailUrl($itemJson['tracks'][0]['waveform_url']);
 		$item->setChildItemsCount(count($itemJson['tracks']));
 
-		$duration=$itemJson['duration'];
-		$media->setDuration(floor($duration/1000));
-
-		$metadata->setLicense($itemJson['license']);
-		
-		$item->setMetadata($metadata);
-		$item->setMedia($media);
+		$item->setLicense($itemJson['license']);
 		
 		return $this->returnResponse($item, true);
 	}
@@ -73,17 +57,9 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 			if($itemJson["streamable"])
 			{
 				$item = new Item();
-				$metadata = new Metadata();
-				$media = new Media();
-
-				$attr=array();
-				$attr['tags']=$itemJson["tag_list"];
-				$metadata->setThumbnailUrl($itemJson['waveform_url']);
 
 				$item->setTitle($itemJson['permalink']);
-
 				$item->setDescription($itemJson['description']);
-
 				$item->setMediaCreatorUsername($itemJson['user']['username']);
 				$item->setMediaCreatorRealname($itemJson['user']['username']);
 				$item->setMediaType('Audio');
@@ -95,14 +71,7 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 				$item->setDateCreated(new DateTime((string)$itemJson['created_at']));
 				$item->setThumbnailUrl($itemJson['waveform_url']);
 				$item->setChildItemsCount(0);
-
-				$duration=$itemJson['duration'];
-				$media->setDuration(floor($duration/1000));
-
-				$metadata->setLicense($itemJson['license']);
-
-				$item->setMetadata($metadata);
-				$item->setMedia($media);
+				$item->setLicense($itemJson['license']);
 			
 				$collection->addItem($item);;
 			}

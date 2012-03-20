@@ -3,10 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
 use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -59,8 +57,6 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
 
 			$item= new Item();
-			$metadata= new Metadata();
-			$media = new Media();
 
 			$arr = explode(':',$entry->id);
 			$entryId = $arr[count($arr)-1];
@@ -100,8 +96,7 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 
 			// write metadata
 			$item->setArchive('Youtube');
-			$metadata->setLicense((string)$entryMedia->group->license);
-			$metadata->setThumbnailUrl((string)$thumbnailUrl);
+			$item->setLicense((string)$entryMedia->group->license);
 			$item->setThumbnailUrl((string)$thumbnailUrl);
 			
 			// read media from xml
@@ -115,8 +110,6 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
 			$embed = (isset($yt->accessContro)) ? 'true' : 'false';
 
-			$item->setMetadata($metadata);
-			$item->setMedia($media);
 			if(!isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
 			{
 				$collection->addItem($item);;
