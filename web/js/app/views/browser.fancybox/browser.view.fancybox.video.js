@@ -8,41 +8,41 @@
 		},
 		
 		/* Pass in the element that the user clicked on from fancybox. */
-		render: function(obj)
-		{
-			sessionStorage.setItem('currentItemId', this.model.id);
-
-			//Call parent class to do captioning and metadata
-			Fancybox.Views._Fancybox.prototype.render.call(this, obj); //This is like calling super()
-
-			//Fill in media-specific stuff
-			var blanks = {
-						src : this.model.get('uri'),
-			};
-
-			//use template to clone the database items into
-			var template = _.template( this.getMediaTemplate() );
-
-			//copy the cloned item into the el
-			var mediaHTML =  template( blanks ) ;
-
-			$(this.el).find('.fancybox-media-item').html(mediaHTML);
-
-			//set fancybox content
-			obj.content = $(this.el);
-
-			return this;
-		},
 		
-		getMediaTemplate : function()
-		{
+	/* Pass in the element that the user clicked on from fancybox. */
+	render: function(obj)
+	{
+		
+		sessionStorage.setItem('currentItemId', this.model.id);
+		
+		//Call parent class to do captioning and metadata
+		Fancybox.Views._Fancybox.prototype.render.call(this, obj); //This is like calling super()
+		
+		
+		this.unique =Math.floor(Math.random() *10000)
+		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
+		
 
-			var html =	'<div id="fancybox-video">'+
-							'<video controls="true"  width="90%" preload><source src="<%=src%>"></video>'+
-						'</div';
+		//set fancybox content
+		obj.content = $(this.el);
+		
+		return this;
+	},
+	afterShow:function(){
+		
+		var source = "http://www.youtube.com/watch?v="+this.model.get('uri')+"&controls=0";
+		
+		
+		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source});
+		
+	},
+	
+	beforeClose: function(){
+		Popcorn.destroy( this.plyr.pop );
 
-			return html;
-		}
-	});
+	},
+	
+
+});
 	
 })(zeegaBrowser.module("fancybox"));

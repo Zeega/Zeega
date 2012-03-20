@@ -13,6 +13,10 @@
 			'click .fancybox-more-button' : 'more',
 			'click .fancybox-less-button' : 'less',
 		},
+		beforeClose: function(){
+		},
+		afterShow:function(){
+		},
 		
 		more : function(){
 			var _this=this;

@@ -94,12 +94,7 @@ $(document).ready(function() {
     	helpers : {
     		title : false
     	},
-    	beforeClose : function()
-		{
-			//set video src to null to prevent browser bug
-			$('video').attr("src", null);
-    	},
-		
+    	
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function()
 		{
@@ -108,39 +103,50 @@ $(document).ready(function() {
 			var elementID = $(this.element).attr('id');
 			var itemsCollection = zeegaBrowser.app.items.collection;
 			var thisModel = itemsCollection.get(elementID);
-			var fancyView = null;
+			this.fancyView = null;
 
 			var Fancybox = zeegaBrowser.module('fancybox');
 
 			switch( thisModel.get("layer_type") )
 			{
 				case 'Image':
-					fancyView = new Fancybox.Views.Image({ model : thisModel });
-					fancyView.render(this);
+					this.fancyView = new Fancybox.Views.Image({ model : thisModel });
+					this.fancyView.render(this);
 					break;
 				case 'Video':
-					fancyView = new FancyBoxVideoView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'Audio':
-					fancyView = new FancyBoxAudioView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new FancyBoxAudioView({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'Youtube':
-					fancyView = new FancyBoxYouTubeView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
+					break;
+				case 'Vimeo':
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'Tweet':
-					fancyView = new FancyBoxTweetView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new FancyBoxTweetView({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'DocumentCloud':
-					fancyView = new FancyBoxDocCloudView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new FancyBoxDocCloudView({model:thisModel});
+					this.fancyView.render(this);
 					break;
 			}
         },
         
+		afterShow : function(){
+        	this.fancyView.afterShow();
+       	},
+        beforeClose : function()
+		{
+			if (this.fancyView !=null) this.fancyView.beforeClose();
+    	},
 	});
 	
 	//Collection playback and editor connection
