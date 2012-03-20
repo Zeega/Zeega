@@ -108,7 +108,9 @@
 			}
 
 			$(this.el).css( style );
-				
+			
+			this.model.trigger('ready',this.model.id)
+			
 			return this;
 		}
 		

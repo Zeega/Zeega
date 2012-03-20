@@ -3,8 +3,6 @@
 	Layer.Image = Layer.Model.extend({
 			
 		layerType : 'Image',
-		draggable : true,
-		linkable : true,
 
 		defaultAttributes : {
 			'title' : 'Image Layer',
@@ -20,50 +18,7 @@
 
 		init : function(){},
 
-		preload : function( target )
-		{
-			console.log('image-preload')
-			var _this = this;
-
-
-			var img = $('<img>')
-				.attr( 'src' , this.attr.url )
-				.css( 'width', '100%');
-			//img.load(function(){target.trigger('ready', { 'id' : _this.model.id } )});
-
-	console.log( this.innerDisplay );
 		
-			$(this.display).css('height','laskdfh');
-		
-			$(this.innerDisplay).append( img );
-			
-			
-				/*
-				console.log(img.height() );
-				img.addClass('linked-layer-hover');
-			*/
-		
-			target.trigger( 'ready' , { 'id' : this.model.id } );
-		},
-	
-		play : function( z )
-		{
-			this.display.css({'z-index':z,'top':this.attr.top+"%",'left':this.attr.left+"%"});
-		
-			if(this.attr.link_to)
-			{
-				var _this = this;
-				_this.display.addClass('link-blink')
-				_.delay( function(){ _this.display.removeClass('link-blink') }, 2000  )
-			
-			}
-		},
-
-		stash : function()
-		{
-			this.display.css({'top':"-1000%",'left':"-1000%"});
-		}
-	
 		
 	});
 	
@@ -101,6 +56,9 @@
 
 	Layer.Views.Visual.Image = Layer.Views.Visual.extend({
 		
+		draggable : true,
+		linkable : true,
+		
 		render : function()
 		{
 			var img = $('<img>')
@@ -108,7 +66,9 @@
 				.css({'width':'100%'});
 
 			$(this.el).html( img );
-				
+			
+			this.model.trigger('ready',this.model.id)
+			
 			return this;
 		}
 	});

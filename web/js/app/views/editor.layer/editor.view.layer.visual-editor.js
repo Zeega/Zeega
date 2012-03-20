@@ -25,14 +25,37 @@
 				'position' : 'absolute',
 				'width' : _this.attr.width+'%',
 				'opacity' : _this.attr.opacity,
-				'top' : _this.attr.top +'%',
-				'left' : _this.attr.left+'%'
+				
+				// if previewing, then set way off stage somewhere
+				'top' : (this.model.player) ? '-1000%' : _this.attr.top +'%',
+				'left' : (this.model.player) ? '-1000%' : _this.attr.left+'%'
 			});
 		},
 		
 		onRender : function()
 		{
 			if(this.draggable) this.makeDraggable();
+		},
+		
+		moveOnStage :function()
+		{
+			$(this.el).css({
+				'top' : this.attr.top +'%',
+				'left' : this.attr.left+'%'
+			});
+		},
+		
+		moveOffStage :function()
+		{
+			$(this.el).css({
+				'top' : '-1000%',
+				'left' : '-1000%'
+			});
+		},
+		
+		updateZIndex : function( z )
+		{
+			$(this.el).css({ 'zIndex' : 'z' });
 		},
 		
 		onUnrender : function()
