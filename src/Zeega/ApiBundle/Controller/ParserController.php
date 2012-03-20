@@ -38,7 +38,7 @@ class ParserController extends Controller
 		"/http:\/\/(?:www\.)?documentcloud.org\/documents.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\DocumentCloud\ParserDocumentCloud", "IsSet" => false),
 		
 		// vimeo
-		"/http:\/\/(?:www\.)?vimeo.com.*/([a-zA-Z0-9\-_]+)" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeo", "IsSet" => false),
+		"/http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo", "IsSet" => false),
 		
 		
 		// archive
