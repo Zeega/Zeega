@@ -10,6 +10,9 @@
 		{
 			this.model.on('rendered_editor', this.onRender, this);
 			this.model.on('unrendered_editor', this.onUnrender, this);
+			this.model.on('controls_open', this.onControlsOpen, this);
+			this.model.on('controls_closed', this.onControlsClosed, this);
+			
 			this.attr = this.model.get('attr')
 			
 			_.extend( this.events, this.eventTriggers );
@@ -27,6 +30,17 @@
 		{
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
+		},
+		
+		onControlsOpen : function()
+		{
+			console.log('!!!!!!controls open : controls')
+		},
+		
+		onControlsClosed : function()
+		{
+			console.log('!!!!!!controls closed : controls')
+			
 		},
 		
 		events : {

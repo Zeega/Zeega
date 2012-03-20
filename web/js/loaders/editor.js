@@ -81,7 +81,7 @@ var loadFiles = [
 	//'order!plugins/layers/geo/geo',
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/text/text',
-	//'order!plugins/layers/video/video',
+	'order!plugins/layers/video/video',
 	//'order!plugins/layers/youtube/youtube',
 	//'order!plugins/layers/documentcloud/documentcloud',
 	'order!plugins/layers/rectangle/rectangle',
