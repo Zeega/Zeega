@@ -76,6 +76,7 @@
 		
 		unrenderLayerFromEditor : function()
 		{
+			this.trigger('unrender_editor')
 			this.visual.remove();
 			this.controls.remove();
 			this.trigger('unrendered_editor');

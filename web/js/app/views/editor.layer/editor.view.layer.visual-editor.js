@@ -12,6 +12,8 @@
 			var _this = this;
 			
 			this.model.on('rendered_editor', this.onRender, this);
+			this.model.on('unrender_editor', this.unrender, this);
+			
 			this.model.on('unrendered_editor', this.onUnrender, this);
 			this.model.on('controls_open', this.onControlsOpen, this);
 			this.model.on('controls_closed', this.onControlsClosed, this);
@@ -58,6 +60,10 @@
 		updateZIndex : function( z )
 		{
 			$(this.el).css({ 'zIndex' : 'z' });
+		},
+		
+		unrender : function()
+		{
 		},
 		
 		onUnrender : function()

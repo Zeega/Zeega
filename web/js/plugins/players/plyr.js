@@ -85,6 +85,7 @@ var Plyr2 = Backbone.Model.extend({
 		control_mode : 'standard', // standard / editor / none
 		autoplay : true,
 		cue_in : 0,
+		cue_out : 150,
 		volume : 50,
 		
 		video_target : null, // element id
@@ -118,26 +119,18 @@ var Plyr2 = Backbone.Model.extend({
 		switch( this.get('format') )
 		{
 			case 'html5':
-				console.log('html5 video')
-				
 				this.pop = Popcorn('#zvideo-'+ this.id);
 				this.pop.listen( 'canplay', function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls(); });
 				break;
 			case 'flashvideo':
-				console.log('flash video video')
-				
 				this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('url') );
 				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' )_this.displayControls();});
 				break;
 			case 'youtube':
-				console.log('youtube video')
-			
 				this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
 				this.pop.listen('canplaythrough',function(){ _this.pop.play(); _this.pop.pause(); if( _this.get('control_mode') != 'none' ) _this.displayControls();});
 				break;
 			case 'vimeo':
-				console.log('vimeo video')
-			
 				this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
 				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls();});
 				break;

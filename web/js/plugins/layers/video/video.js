@@ -14,7 +14,7 @@
 			'top' : 0,
 			'height' : 100,
 			'width' : 100,
-			'volume' : 50,
+			'volume' : 0.5,
 			'in'  : 0,
 			'out' : 0,
 			'opacity':1,
@@ -27,7 +27,6 @@
 		onControlsOpen : function()
 		{
 			//load popcorn object
-			console.log(this)
 			this.video = new Plyr2({
 				url : this.get('attr').attribution_url,
 				id : this.id
@@ -35,8 +34,6 @@
 			
 			this.visual.$el.prepend( this.video.videoView );
 			this.video.placeVideo();
-			
-			console.log('video model controls open')
 		}
 
 
@@ -56,7 +53,8 @@
 				model: this.model,
 				label : 'Volume',
 				min : 0,
-				max : 100,
+				max : 1,
+				step : 0.01,
 				css : false
 			});
 			
@@ -107,13 +105,10 @@
 			// attach control events after here -------
 			
 			this.$el.find('.plyr-button').click(function(){
-				console.log( _this.model.video )
-				//_this.model.video.volume(parseInt(_this.volume));
+				console.log( 'volume: '+ _this.model.get('attr').volume )
+				_this.model.video.pop.volume( _this.model.get('attr').volume );
 				if (_this.model.video.pop.paused()) _this.model.video.pop.play();
 				else _this.model.video.pop.pause();
-				
-				console.log('control clicked')
-				console.log( _this.model.video )
 			});
 			
 			this.$el.find('.plyr-scrubber').draggable({
@@ -124,27 +119,27 @@
 				start:function()
 				{
 					console.log('scrub start -- pause video')
-				//_this.pop.pause();
+					_this.model.video.pop.pause();
 				},
 				
 				drag:function(event, ui)
 				{
 					console.log('scrub drag')
-					//var newTime = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));	
-					//_this.$el.find('.plyr-time').html(convertTime(newTime)+' / '+convertTime(_this.pop.duration()));
+					var newTime = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
+					_this.$el.find('.plyr-time').html( convertTime(newTime)+' / '+convertTime(_this.model.video.pop.duration()));
 				},
 				
 				stop: function(event, ui)
 				{
 					console.log('scrub stop')
-					/*
-					var newTime = Math.floor(parseFloat(_this.controlsWrapper.find('.plyr-scrubber').css('left'))*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));
-					if(newTime<_this.cueIn) newTime = _this.cueIn;
-					else if(newTime>_this.cueOut) newTime = Math.max(parseFloat(_this.cueIn), parseFloat(_this.cueOut)-5.0);
+					
+					var newTime = Math.floor(parseFloat(_this.$el.find('.plyr-scrubber').css('left'))*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));
+					if( newTime < _this.attr.cue_in ) newTime = _this.attr.cue_in;
+					else if( newTime > _this.attr.cue_out) newTime = Math.max(parseFloat(_this.attr.cue_in), parseFloat(_this.attr.cue_out)-5.0);
 				
-					_this.pop.trigger('timeupdate');
-					_this.pop.currentTime(newTime);
-					*/
+					_this.model.video.pop.trigger('timeupdate');
+					_this.model.video.pop.currentTime( newTime );
+					
 					//_this.pop.play();
 				}
 			});
@@ -155,21 +150,20 @@
 				
 				drag:function(event, ui)
 				{
-					//_this.cueIn = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));	
-					//_this.$el.find('.plyr-cuein-time').html( convertTime(_this.cueIn,true) );
+					_this.attr.cue_in = Math.floor( parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
+					_this.$el.find('.plyr-cuein-time').html( convertTime(_this.attr.cue_in,true) );
 				},
 				
 				stop: function(event, ui)
 				{
-					/*
-					_this.controlsWrapper.find('.plyr-cuein-bar').css({'width':_this.controlsWrapper.find('.plyr-cuein-scrubber').css('left')});
-					_this.pop.currentTime(Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width())));
+					
+					_this.$el.find('.plyr-cuein-bar').css({'width':_this.$el.find('.plyr-cuein-scrubber').css('left')});
+					_this.model.video.pop.currentTime( Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width())));
 
-					var left = parseFloat(_this.pop.currentTime())/parseFloat(_this.pop.duration())*100;
-					_this.controlsWrapper.find('.plyr-scrubber').css({'left':left+'%'});
-					_this.controlsWrapper.find('.plyr-time').html(convertTime(_this.pop.currentTime())+' / '+convertTime(_this.pop.duration()));
-					_this.controlsWrapper.find('.plyr-time-bar').css({'width':left+'%'});
-					*/
+					var left = parseFloat(_this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
+					_this.$el.find('.plyr-scrubber').css({'left':left+'%'});
+					_this.$el.find('.plyr-time').html(convertTime(_this.model.video.pop.currentTime())+' / '+convertTime(_this.model.video.pop.duration()));
+					_this.$el.find('.plyr-time-bar').css({'width':left+'%'});
 				}
 			});
 			
@@ -177,35 +171,66 @@
 				axis:'x',
 				containment: 'parent',
 				
-				start:function(){
-					//_this.pop.pause();
+				start:function()
+				{
+					_this.model.video.pop.pause();
 				},
 				
 				drag:function(event, ui)
 				{
-					/*
-					_this.cueOut = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width()));	
-					_this.controlsWrapper.find('.plyr-cueout-time').html(convertTime(_this.cueOut,true));
-					*/
+					_this.attr.cue_out = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration() / parseFloat( _this.$el.find('.plyr-timeline').width()));	
+					_this.$el.find('.plyr-cueout-time').html(convertTime( _this.attr.cue_out,true));
 				},
 				
 				stop: function(event, ui)
 				{
-					/*
-					_this.controlsWrapper.find('.plyr-cueout-bar').css({'width':parseInt(_this.controlsWrapper.find('.plyr-timeline').width())-parseInt(_this.controlsWrapper.find('.plyr-cueout-scrubber').css('left'))});
-					_this.pop.currentTime(Math.max(parseFloat(_this.cueIn), parseFloat(_this.cueOut)-5.0));
-					*/
+					_this.$el.find('.plyr-cueout-bar').css({'width':parseInt(_this.$el.find('.plyr-timeline').width())-parseInt(_this.$el.find('.plyr-cueout-scrubber').css('left'))});
+					_this.model.video.pop.currentTime(Math.max(parseFloat(_this.attr.cue_in), parseFloat(_this.attr.cue_out)-5.0));
 				}
 			});
 			
+			this.initListeners();
 			
+			
+		},
+		
+		initListeners : function()
+		{
+			var _this = this;
+			this.model.video.pop.listen('timeupdate', function(){
+
+				if(_this.model.video.pop.currentTime() > _this.attr.cue_out )
+				{
+					_this.model.video.pop.pause();
+					_this.model.video.pop.currentTime( _this.attr.cue_in );
+				}
+				
+				var left = parseFloat( _this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
+				_this.$el.find('.plyr-scrubber').css({ 'left' : left+'%' });
+				_this.$el.find('.plyr-time').html( convertTime( _this.model.video.pop.currentTime() )+' / '+convertTime( _this.model.video.pop.duration() ) );
+				_this.$el.find('.plyr-time-bar').css({ 'width' : left+'%' });
+
+			});
+			this.model.video.pop.listen('pause',function(){
+				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
+			});
+			
+			this.model.video.pop.listen('play',function(){
+				_this.$el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
+			});
+			
+			this.model.video.pop.listen('seeking',function(){});
+			this.model.video.pop.listen('seeked',function(){});
+			this.model.video.pop.listen('ended',function(){
+				//this.currentTime(0);
+			});
+			this.model.video.pop.listen('loadeddata',function(){});
 		},
 		
 		onControlsClosed : function()
 		{
 			console.log('video controls closed : controls')
 		},
-		
 		
 		getTemplate : function()
 		{
@@ -276,7 +301,13 @@
 		onControlsClosed : function()
 		{
 			console.log('video controls closed : visual')
-		}
+		},
+		
+		unrender : function()
+		{
+			console.log('video unrender!')
+			if(this.model.video) Popcorn.destroy(this.model.video.pop);
+		},
 		
 	});
 	
