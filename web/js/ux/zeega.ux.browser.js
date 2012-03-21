@@ -286,7 +286,7 @@ $(document).ready(function() {
 					var Collection = zeegaBrowser.module('collection');
 					var newGuy = new Collection.Model()
 					newGuy.addNewItemID(zeegaBrowser.app.draggedItem.id);
-					console.log(newGuy)
+				
 				
 					newGuy.save({
 						title:'New collection ' + Math.floor(Math.random()*1000)}, 
@@ -299,7 +299,8 @@ $(document).ready(function() {
 								model.set({id:response.collections.id});
 								model.set({thumbnail_url:response.collections.thumbnail_url});
 								model.set({child_items_count:response.collections.child_items_count});
-								zeegaBrowser.app.myCollectionsView.collection.add(model, {at: 0});
+								console.log(zeegaBrowser.app.myCollections);
+								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)
 							{

@@ -26,6 +26,7 @@ this.zeegaBrowser = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
+	carousel:null,
 	myCollections : null,
 	searchItemsView : null,
 	searchCollectionsView : null,
@@ -53,7 +54,11 @@ this.zeegaBrowser = {
 	
 	mycarousel_initCallback : function (carousel, state)
 	{
-		if (state == 'init') this.carousel = carousel;
+		
+		if (state == 'init') {zeegaBrowser.app.carousel = carousel;
+		console.log('here comes the app');
+		console.log(zeegaBrowser.app);
+		}
 	},
 	
 	renderResults : function()
@@ -171,7 +176,7 @@ this.zeegaBrowser = {
 		
 		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"
 						+ collectionID;
-		var theCollection = zeegaBrowser.app.myCollections.get(collectionID);
+		var theCollection = zeegaBrowser.app.myCollections.collection.get(collectionID);
 
 		//DESTROYYYYYYYY
 		theCollection.destroy({	
