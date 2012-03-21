@@ -22,8 +22,7 @@ class ParserVimeoVideo extends ParserItemAbstract
 		
 		$entry=$entry[0];
 		$item= new Item();
-		$metadata= new Metadata();
-		$media = new Media();
+	
 
 		
 		$item->setUri((string)$entry->id);
@@ -46,12 +45,13 @@ class ParserVimeoVideo extends ParserItemAbstract
 		
 		// write metadata
 		$item->setArchive('Vimeo');
+		/*
 		$metadata->setLicense((string)$entry->embed_privacy);
 		$metadata->setThumbnailUrl((string)$entry->thumbnail_medium);
-		
+		*/
 		$item->setThumbnailUrl((string)$entry->thumbnail_medium);
 		
-
+		/*
 
 		// write media information
 		$media->setDuration((string)$entry->duration);
@@ -61,7 +61,7 @@ class ParserVimeoVideo extends ParserItemAbstract
 		
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
-
+*/
 		return $this->returnResponse($item, true);
 		
 	}
