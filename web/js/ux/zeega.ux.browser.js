@@ -284,7 +284,7 @@ $(document).ready(function() {
 				{
 					//var newGuy = new BrowserCollection();
 					var Collection = zeegaBrowser.module('collection');
-					var newGuy = new Collection.CollectionModel()
+					var newGuy = new Collection.Model()
 					newGuy.addNewItemID(zeegaBrowser.app.draggedItem.id);
 					console.log(newGuy)
 				
