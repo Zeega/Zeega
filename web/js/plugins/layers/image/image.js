@@ -14,7 +14,7 @@
 			'opacity':1,
 			'aspect':1.33,
 			'citation':true,
-		},
+		}
 
 	});
 	
@@ -62,25 +62,9 @@
 				.css({'width':'100%'});
 
 			$(this.el).html( img );
-			
-			this.model.trigger('ready',this.model.id)
-			
+						
 			return this;
 		}
 	});
-/*	
-	Layer.Views.Player.Image = Layer.Views.Visual.extend({
-		
-		render : function()
-		{
-			var img = $('<img>')
-				.attr('src', this.attr.url)
-				.css({'width':'100%'});
 
-			$(this.el).html( img );
-				
-			return this;
-		}
-	});
-*/	
 })(zeega.module("layer"));

@@ -22,20 +22,16 @@
 			'citation':true,
 		},
 
-		init : function(){},
-
-		onControlsOpen : function()
+		init : function()
 		{
+			console.log('video INIT')
 			//load popcorn object
 			this.video = new Plyr2({
 				url : this.get('attr').attribution_url,
 				id : this.id
 			})
-			
-			this.visual.$el.prepend( this.video.videoView );
-			this.video.placeVideo();
+			console.log(this)
 		}
-
 
 	});
 	
@@ -43,9 +39,9 @@
 				
 		render : function()
 		{
-			var targetDiv = new Layer.Views.Lib.Target({
-				idName : 'plyr-editor',
-				className : 'plyr-controls-wrapper'
+			
+			var playbackControls = new Layer.Views.Lib.Playback({
+				model : this.model
 			});
 			
 			var volumeSlider = new Layer.Views.Lib.Slider({
@@ -86,7 +82,7 @@
 			});
 			
 			this.controls
-				.append( targetDiv.getControl() )
+				.append( playbackControls.getControl() )
 				.append( volumeSlider.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
@@ -94,180 +90,8 @@
 			
 			return this;
 		
-		},
-		
-		onControlsOpen : function()
-		{
-			console.log('init video controls')
-			var _this = this;
-			this.$el.find('.plyr-controls-wrapper').html( this.getTemplate() );
-			
-			// attach control events after here -------
-			
-			this.$el.find('.plyr-button').click(function(){
-				console.log( 'volume: '+ _this.model.get('attr').volume )
-				_this.model.video.pop.volume( _this.model.get('attr').volume );
-				if (_this.model.video.pop.paused()) _this.model.video.pop.play();
-				else _this.model.video.pop.pause();
-			});
-			
-			this.$el.find('.plyr-scrubber').draggable({
-				
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					console.log('scrub start -- pause video')
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					console.log('scrub drag')
-					var newTime = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-time').html( convertTime(newTime)+' / '+convertTime(_this.model.video.pop.duration()));
-				},
-				
-				stop: function(event, ui)
-				{
-					console.log('scrub stop')
-					
-					var newTime = Math.floor(parseFloat(_this.$el.find('.plyr-scrubber').css('left'))*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));
-					if( newTime < _this.attr.cue_in ) newTime = _this.attr.cue_in;
-					else if( newTime > _this.attr.cue_out) newTime = Math.max(parseFloat(_this.attr.cue_in), parseFloat(_this.attr.cue_out)-5.0);
-				
-					_this.model.video.pop.trigger('timeupdate');
-					_this.model.video.pop.currentTime( newTime );
-					
-					//_this.pop.play();
-				}
-			});
-			
-			this.$el.find('.plyr-cuein-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				drag:function(event, ui)
-				{
-					_this.attr.cue_in = Math.floor( parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cuein-time').html( convertTime(_this.attr.cue_in,true) );
-				},
-				
-				stop: function(event, ui)
-				{
-					
-					_this.$el.find('.plyr-cuein-bar').css({'width':_this.$el.find('.plyr-cuein-scrubber').css('left')});
-					_this.model.video.pop.currentTime( Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width())));
-
-					var left = parseFloat(_this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
-					_this.$el.find('.plyr-scrubber').css({'left':left+'%'});
-					_this.$el.find('.plyr-time').html(convertTime(_this.model.video.pop.currentTime())+' / '+convertTime(_this.model.video.pop.duration()));
-					_this.$el.find('.plyr-time-bar').css({'width':left+'%'});
-				}
-			});
-			
-			this.$el.find('.plyr-cueout-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					_this.attr.cue_out = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration() / parseFloat( _this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cueout-time').html(convertTime( _this.attr.cue_out,true));
-				},
-				
-				stop: function(event, ui)
-				{
-					_this.$el.find('.plyr-cueout-bar').css({'width':parseInt(_this.$el.find('.plyr-timeline').width())-parseInt(_this.$el.find('.plyr-cueout-scrubber').css('left'))});
-					_this.model.video.pop.currentTime(Math.max(parseFloat(_this.attr.cue_in), parseFloat(_this.attr.cue_out)-5.0));
-				}
-			});
-			
-			this.initListeners();
-			
-			
-		},
-		
-		initListeners : function()
-		{
-			var _this = this;
-			this.model.video.pop.listen('timeupdate', function(){
-
-				if(_this.model.video.pop.currentTime() > _this.attr.cue_out )
-				{
-					_this.model.video.pop.pause();
-					_this.model.video.pop.currentTime( _this.attr.cue_in );
-				}
-				
-				var left = parseFloat( _this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
-				_this.$el.find('.plyr-scrubber').css({ 'left' : left+'%' });
-				_this.$el.find('.plyr-time').html( convertTime( _this.model.video.pop.currentTime() )+' / '+convertTime( _this.model.video.pop.duration() ) );
-				_this.$el.find('.plyr-time-bar').css({ 'width' : left+'%' });
-
-			});
-			this.model.video.pop.listen('pause',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
-			});
-			
-			this.model.video.pop.listen('play',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
-			});
-			
-			this.model.video.pop.listen('seeking',function(){});
-			this.model.video.pop.listen('seeked',function(){});
-			this.model.video.pop.listen('ended',function(){
-				//this.currentTime(0);
-			});
-			this.model.video.pop.listen('loadeddata',function(){});
-		},
-		
-		onControlsClosed : function()
-		{
-			console.log('video controls closed : controls')
-		},
-		
-		getTemplate : function()
-		{
-			var html = 
-			
-			'<div class="plyr-time-wrapper">'+
-				'<div class="plyr-cuein-time"></div>'+
-				'<div class="plyr-cueout-time"></div>'+
-			'</div>'+
-			'<div class="plyr-timeline-wrapper">'+
-				'<div class="plyr-button-wrapper">'+
-					'<div class="plyr-button plyr-play"></div>'+
-				'</div>'+
-				'<div class="plyr-timeline">'+
-					'<div class="plyr-cuein-bar plyr-bar"></div>'+
-					'<div class="plyr-time-bar plyr-bar"></div>'+
-					'<div class="plyr-cueout-bar plyr-bar"></div>'+
-					'<div class="plyr-cuein-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down-green"></div>'+
-					'</div>'+
-					'<div class="plyr-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-hanging-box"></div>'+
-					'</div>'+
-					'<div class="plyr-cueout-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down"></div>'+
-					'</div>'+
-				'</div>'+
-			'</div>'+
-			'<div class="plyr-time-wrapper">'+
-				'<span class="plyr-time"></span>'+
-			'</div>';
-			
-			return html;
 		}
-		
+	
 	});
 
 	Layer.Views.Visual.Video = Layer.Views.Visual.extend({
@@ -285,29 +109,89 @@
 
 			$(this.el).html( img ).css('height', this.attr.height+'%');
 			
-			this.model.trigger('ready',this.model.id)
+			//this.model.trigger('ready',this.model.id)
 			
 			return this;
+		},
+		
+		
+		onLayerEnter : function()
+		{
+			//if coming from another frame and the controls are open but the video isn't loaded
+			if( this.model.controls.visible == true )
+			{
+				this.$el.find('img').remove();
+				this.model.video.placeVideo( this.$el );
+				this.model.loaded = true;
+			}
+		},
+		
+		onLayerExit : function()
+		{
+			this.model.video.pop.pause();
+			if( this.model.video.isVideoLoaded ) Popcorn.destroy(this.model.video.pop);
+			this.model.loaded = false;
+			
+			//must call this if you extend onLayerExit
+			this.model.trigger('editor_readyToRemove')
 		},
 		
 		onControlsOpen : function()
 		{
 			console.log('video controls open : visual')
-			this.$el.find('img').remove();
 			
+			if( !this.model.loaded )
+			{
+				this.model.video.placeVideo( this.$el );
+				this.model.loaded = true;
+			}
+			else
+			{
+				this.model.video.pop.pause();
+			}
+			
+			this.model.trigger('video_ready');
 			//replace with the actual video object
 		},
 		
 		onControlsClosed : function()
 		{
-			console.log('video controls closed : visual')
+			this.model.video.pop.pause();
 		},
 		
-		unrender : function()
+		onPreload : function()
 		{
-			console.log('video unrender!')
-			if(this.model.video) Popcorn.destroy(this.model.video.pop);
+			var _this = this;
+			if( !this.model.loaded )
+			{
+				this.model.video.placeVideo( this.$el );
+				this.model.video.on('video_canPlay', function(){ _this.model.trigger('ready', _this.model.id ) }, this )
+				this.model.loaded = true;
+			}
+			else
+			{
+				this.model.video.pop.pause();
+			}
 		},
+		
+		onPlay : function()
+		{
+			console.log('video playyyyyyyy')
+			console.log(this)
+			this.model.video.pop.play();
+		},
+		
+		onExit : function()
+		{
+			console.log('video pauseeee')
+			this.model.video.pop.pause();
+		},
+		
+		onUnrender : function()
+		{
+			console.log('unrender VIDEO')
+			
+		}
 		
 	});
 	

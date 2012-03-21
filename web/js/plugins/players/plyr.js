@@ -97,7 +97,6 @@ var Plyr2 = Backbone.Model.extend({
 		//set video format type
 		
 		this.set( 'format', this.getFormat(this.get('url')) );
-		this.videoView = this.getVideoView().el;
 	},
 	
 	getFormat : function(url)
@@ -112,30 +111,51 @@ var Plyr2 = Backbone.Model.extend({
 		return format;
 	},
 	
-	placeVideo : function()
+	placeVideo : function( el )
 	{
-		console.log('PLACE VIDEO')
-		var _this = this;
-		switch( this.get('format') )
+		if( !this.isVideoLoaded)
 		{
-			case 'html5':
-				this.pop = Popcorn('#zvideo-'+ this.id);
-				this.pop.listen( 'canplay', function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls(); });
-				break;
-			case 'flashvideo':
-				this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('url') );
-				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' )_this.displayControls();});
-				break;
-			case 'youtube':
-				this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
-				this.pop.listen('canplaythrough',function(){ _this.pop.play(); _this.pop.pause(); if( _this.get('control_mode') != 'none' ) _this.displayControls();});
-				break;
-			case 'vimeo':
-				this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
-				this.pop.listen('loadeddata',function(){ if( _this.get('control_mode') != 'none' ) _this.displayControls();});
-				break;
-			default:
-				console.log('none set');
+			console.log('PLACE VIDEO')
+			var _this = this;
+			
+			el.empty().prepend( this.getVideoView().el )
+			
+			switch( this.get('format') )
+			{
+				case 'html5':
+					this.pop = Popcorn('#zvideo-'+ this.id);
+					this.pop.listen( 'canplay', function(){
+						_this.trigger('video_canPlay');
+						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+					});
+					break;
+				case 'flashvideo':
+					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('url') );
+					this.pop.listen('loadeddata',function(){
+						_this.trigger('video_canPlay');
+						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+					});
+					break;
+				case 'youtube':
+					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
+					this.pop.listen('canplaythrough',function(){
+						_this.pop.play();
+						_this.pop.pause();
+						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						_this.trigger('video_canPlay');
+					});
+					break;
+				case 'vimeo':
+					this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
+					this.pop.listen('loadeddata',function(){
+						_this.trigger('video_canPlay');
+						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+					});
+					break;
+				default:
+					console.log('none set');
+			}
+			this.isVideoLoaded = true;
 		}
 	},
 	

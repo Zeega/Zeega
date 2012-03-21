@@ -24,27 +24,7 @@
 			'height' : 100,
 			'width' : 100,
 			'opacity':.75,
-		},
-
-		init : function(){
-			console.log('RECTANGLE INIT')
-		},
-
-		preload : function( target )
-		{
-			
-		},
-	
-		play : function( z )
-		{
-			
-		},
-
-		stash : function()
-		{
-			this.display.css({'top':"-1000%",'left':"-1000%"});
-		}
-	
+		}	
 		
 	});
 	

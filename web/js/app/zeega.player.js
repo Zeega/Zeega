@@ -282,12 +282,12 @@ var Player = {
 		})
 		
 		
-		// all layers will make this call
+/*		// all layers will make this call
 		$('#zeega-player').bind('ready',function(e, data){
 			_this.onLayerLoad(data.id);
 			return false;
 		});
-		
+*/		
 		// not all layers will call this
 		$('#zeega-player').bind('ended',function(e, data){
 			
@@ -342,7 +342,6 @@ var Player = {
 	*/
 	onLayerLoad : function(layerID)
 	{
-		console.log('layerLoaded'+ layerID)
 		//remove from the layers loading array
 		this.data.layers.loading = _.without( this.data.layers.loading, layerID );
 		//add to the layers loaded array
@@ -361,6 +360,8 @@ var Player = {
 	*/
 	updateFrameStatus : function( layerID )
 	{
+		console.log('++++++++++layerLoaded: '+ layerID)
+		
 		_this = this;
 		//loop through each frame that is loading
 		_.each( _.toArray( this.frameCollection ), function(frame){
@@ -458,13 +459,12 @@ var Player = {
 	{
 		var _this = this;
 		
-		layer.trigger('loading', layer.id)
+		layer.trigger('loading', layer.id);
 
 		//add the layer content to the displayWindow
+		
 		this.displayWindow.find('#preview-media').append( layer.visual.render().el );
-		
-		
-		
+		layer.trigger('player_preload');
 		
 		/*
 		
@@ -521,8 +521,8 @@ var Player = {
 			{
 				//draw new layer to the preview window
 				
-				_this.layerCollection.get(layerID).visual.moveOnStage();
-				//_this.getLayerData(layerID).layerClass.play(i);
+				_this.layerCollection.get(layerID).trigger('player_play');
+
 				_this.layersOnStage.push(layerID);
 			}else{
 				//update existing persistant layer with new z-index
@@ -616,7 +616,7 @@ var Player = {
 		var layersToRemove = _.difference( this.layersOnStage, nextFrame.layers );
 
 		_.each( layersToRemove, function( layerID ){
-			_this.layerCollection.get(layerID).visual.moveOffStage();
+			_this.layerCollection.get(layerID).trigger('player_exit');
 		});
 		this.layersOnStage = _.difference( this.layersOnStage, layersToRemove );
 		

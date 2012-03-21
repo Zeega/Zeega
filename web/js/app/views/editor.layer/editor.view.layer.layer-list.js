@@ -8,10 +8,7 @@
 		
 		initialize : function()
 		{
-			this.model.on('rendered_editor', this.onRender, this);
-			this.model.on('unrendered_editor', this.onUnrender, this);
-			this.model.on('controls_open', this.onControlsOpen, this);
-			this.model.on('controls_closed', this.onControlsClosed, this);
+			this.initListeners();
 			
 			this.attr = this.model.get('attr')
 			
@@ -19,29 +16,145 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
+			
+			this.init();
 		},
 		
-		onRender : function()
+		initListeners : function()
+		{
+			if( this.model.player )
+			{
+				this.model.on('player_preload', this.private_onPreload, this);
+				this.model.on('player_play', this.private_onPlay, this);
+				this.model.on('player_exit', this.private_onExit, this);
+				this.model.on('player_unrender', this.private_onUnrender, this);
+			}
+			else
+			{
+				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerExit', this.private_onLayerExit, this);
+				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
+				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+			}
+		},
+		
+		init : function(){},
+		
+		/*******************
+		
+		PUBLIC EDITOR FUNCTIONS
+		
+		*******************/
+		
+		onLayerEnter : function(){},
+		
+		onLayerExit : function(){},
+		
+		onControlsOpen : function(){},
+		
+		onControlsClosed : function(){},
+		
+		// cleanupEditor : function(){},
+		
+		
+		/*******************
+		
+		PUBLIC PLAYER FUNCTIONS
+		
+		*******************/
+		
+		onPreload : function(){},
+		
+		onPlay : function(){},
+		
+		onExit : function(){},
+		
+		onUnrender : function(){},
+		
+		
+		/*******************
+		
+		PRIVATE EDITOR FUNCTIONS
+		
+		*******************/
+		
+		private_onLayerEnter : function()
 		{
 			this.delegateEvents();
+			this.onLayerEnter();
 		},
 		
-		onUnrender : function()
+		private_onLayerExit : function()
 		{
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
+			this.remove();
+			this.onLayerExit();
 		},
 		
-		onControlsOpen : function()
+		private_onControlsOpen : function()
 		{
-			console.log('!!!!!!controls open : controls')
+			this.onControlsOpen();
 		},
 		
-		onControlsClosed : function()
+		private_onControlsClosed : function()
 		{
-			console.log('!!!!!!controls closed : controls')
-			
+			this.onControlsClosed();
 		},
+		
+		/*******************
+		
+		PRIVATE PLAYER FUNCTIONS
+		
+		*******************/
+		
+		private_onPreload : function()
+		{
+			this.onPreload();
+			this.moveOffStage();
+		},
+		
+		private_onPlay : function()
+		{
+			this.moveOnStage();
+			this.onPlay();
+		},
+		
+		private_onExit : function()
+		{
+			this.moveOffStage();
+			this.onExit();
+		},
+		
+		private_onUnrender : function()
+		{
+			this.remove();
+			this.onUnrender();
+		},
+		
+		////// HELPERS //////
+		
+		moveOnStage :function()
+		{
+			$(this.el).css({
+				'top' : this.attr.top +'%',
+				'left' : this.attr.left+'%'
+			});
+		},
+		
+		moveOffStage :function()
+		{
+			$(this.el).css({
+				'top' : '-1000%',
+				'left' : '-1000%'
+			});
+		},
+		
+		/*******************
+		
+			EVENTS
+		
+		*******************/
 		
 		events : {
 			'click .delete-layer'		: 'delete',
@@ -70,7 +183,7 @@
 		},
 
 		//	open/close and expanding layer items
-		expand :function()
+		expand : function()
 		{
 			var _this = this;
 			if( $(this.el).find('.layer-content').is(':hidden') )
@@ -78,9 +191,11 @@
 				//show layer controls
 				$(this.el).find('.layer-content')
 					.show('blind',{'direction':'vertical'},function(){
-						_this.model.trigger('controls_open');
+						_this.model.trigger('editor_controlsOpen');
 						$(this).removeClass('closed');
 				});
+				
+				this.visible = true;
 			}
 			else
 			{
@@ -88,8 +203,10 @@
 				$(this.el).find('.layer-content')
 					.hide('blind',{'direction':'vertical'},function(){
 						$(this).addClass('closed');
-						_this.model.trigger('controls_closed');
+						_this.model.trigger('editor_controlsClosed');
 				});
+				
+				this.visible = false;
 			}
 			return false;
 		},
@@ -168,9 +285,7 @@
 				
 		setBaseTemplate : function()
 		{
-			console.log('set base template')
 			var title = this.model.get('attr').title;
-			console.log(title)
 			var persist = '';
 			/*
 			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
