@@ -51,7 +51,7 @@ class FramesController extends Controller
     	$request = $this->getRequest();
     	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
     	
-		if($request->request->get('thumb_url')) $frame->setThumbUrl($request->request->get('thumb_url'));
+		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
 		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
 		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 		

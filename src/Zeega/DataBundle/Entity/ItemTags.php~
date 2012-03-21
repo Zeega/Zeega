@@ -10,9 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemTags
 {
     /**
-     * @var datetime $tag_date_created
+     * @var datetime $date_created
      */
-    private $tag_date_created;
+    private $date_created;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
 
     /**
      * @var Zeega\DataBundle\Entity\User
@@ -31,23 +36,43 @@ class ItemTags
 
 
     /**
-     * Set tag_date_created
+     * Set date_created
      *
-     * @param datetime $tagDateCreated
+     * @param datetime $dateCreated
      */
-    public function setTagDateCreated($tagDateCreated)
+    public function setDateCreated($dateCreated)
     {
-        $this->tag_date_created = $tagDateCreated;
+        $this->date_created = $dateCreated;
     }
 
     /**
-     * Get tag_date_created
+     * Get date_created
      *
      * @return datetime 
      */
-    public function getTagDateCreated()
+    public function getDateCreated()
     {
-        return $this->tag_date_created;
+        return $this->date_created;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 
     /**

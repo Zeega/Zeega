@@ -21,21 +21,6 @@ Zeega\DataBundle\Entity\Item:
         parent_items:
             targetEntity: Item
             mappedBy: child_items
-    oneToOne:
-        media:
-            targetEntity: Media
-            inversedBy: item
-            onDelete: CASCADE
-            joinColumn:
-                name: media_id
-                referencedColumnName: id
-        metadata:
-            targetEntity: Metadata
-            inversedBy: item
-            onDelete: CASCADE
-            joinColumn:
-                name: metadata_id
-                referencedColumnName: id
     oneToMany:
         tags:
             targetEntity: ItemTags
@@ -53,12 +38,6 @@ Zeega\DataBundle\Entity\Item:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        media_id:
-            type: bigint
-            nullable: true
-        metadata_id:
-            type: bigint
-            nullable: true
         site_id:
             type: integer
             nullable: true            
@@ -78,17 +57,17 @@ Zeega\DataBundle\Entity\Item:
         uri:
             type: string
             length: 255
-            unique: true
-        archive:
-            type: string
-            length: 50
-            nullable: false
+            unique: false
         attribution_uri:
             type: string
             length: 255
         date_created:
             type: datetime
             nullable: true
+        archive:
+            type: string
+            length: 50
+            nullable: false
         media_type:
             type: string
             length: 20
@@ -113,6 +92,10 @@ Zeega\DataBundle\Entity\Item:
             type: float
             length: 10
             nullable: true
+        location:
+            type: string
+            length: 100
+            nullable: true
         media_date_created:
             type: datetime
             nullable: true
@@ -127,6 +110,24 @@ Zeega\DataBundle\Entity\Item:
             type: string
             length: 80
             nullable: true
+        media_creator_realname:
+            type: string
+            length: 80
+            nullable: true
+        license:
+            type: string
+            length: 50
+            nullable: true
+        attributes:
+            type: array
+            nullable: true
+        enabled:
+            type: boolean
+            nullable: false
+        published:
+            type: boolean
+            nullable: false
+
     indexes:
         media_date_created_index:
             columns: [media_date_created]      

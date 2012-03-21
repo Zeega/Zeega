@@ -3,10 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser\Soundcloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
 use Symfony\Component\HttpFoundation\Response;
 
 use \DateTime;
@@ -28,12 +26,9 @@ class ParserSoundcloudItem extends ParserItemAbstract
 		}
 		
 		$item = new Item();
-		$metadata = new Metadata();
-		$media = new Media();
 		
 		$attr=array();
 		$attr['tags']=$itemJson["tag_list"];
-		$metadata->setThumbnailUrl($itemJson['waveform_url']);
 
 		$item->setTitle($itemJson['permalink']);
 
@@ -51,14 +46,8 @@ class ParserSoundcloudItem extends ParserItemAbstract
 		$item->setThumbnailUrl($itemJson['waveform_url']);
 		$item->setChildItemsCount(0);
 
-		$duration=$itemJson['duration'];
-		$media->setDuration(floor($duration/1000));
-
-		$metadata->setLicense($itemJson['license']);
-		
-		$item->setMetadata($metadata);
-		$item->setMedia($media);
-		
+		$item->setLicense($itemJson['license']);
+				
 		return $this->returnResponse($item, true);
 	}
 }

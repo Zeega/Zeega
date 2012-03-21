@@ -18,6 +18,9 @@ Zeega\DataBundle\Entity\ItemTags:
         tag:
             associationKey: true
     fields:
-        tag_date_created:
+        date_created:
             type: datetime
             nullable: false
+        enabled:
+            type: boolean
+            nullable: true

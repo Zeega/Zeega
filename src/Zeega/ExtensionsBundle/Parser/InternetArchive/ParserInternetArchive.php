@@ -3,11 +3,9 @@
 namespace Zeega\ExtensionsBundle\Parser\InternetArchive;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\ItemTags;
-use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 
@@ -29,8 +27,6 @@ class ParserInternetArchive extends ParserItemAbstract
 	
 	
 		$item= new Item();
-		$metadata= new Metadata();
-		$media = new Media();
 		$attr=array();
 		
 		//if(isset($mdata->subject)&&isset($mdata->subject[0])) $tags=str_replace("; ",",",(string)$mdata->subject[0]);
@@ -112,9 +108,6 @@ class ParserInternetArchive extends ParserItemAbstract
 		else return false;	
 		
 		$item->setArchive('InternetArchive');
-		//$metadata->setAttributes(array('tags'=>$tags));
-		$item->setMetadata($metadata);
-		$item->setMedia($media);
 		
 		return $this->returnResponse($item, true);
 	}

@@ -21,8 +21,4 @@ Zeega\DataBundle\Entity\Tag:
             nullable: false
         date_created:
             type: datetime
-            nullable: false
-        description:
-            type: text
-            nullable: true
-            
+            nullable: false            

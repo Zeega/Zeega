@@ -31,7 +31,8 @@ class AppKernel extends Kernel
             new Zeega\DataBundle\ZeegaDataBundle(),
 			new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
             new Zeega\ExtensionsBundle\ZeegaExtensionsBundle(),
-            new Nelmio\SolariumBundle\NelmioSolariumBundle()
+            new Nelmio\SolariumBundle\NelmioSolariumBundle(),
+            new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle()
         );
 
 
@@ -43,7 +44,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
             $bundles[] = new Profiler\LiveBundle\ProfilerLiveBundle();
-
         }
 
         return $bundles;

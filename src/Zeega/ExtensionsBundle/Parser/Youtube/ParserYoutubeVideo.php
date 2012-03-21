@@ -3,10 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -24,8 +22,6 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
 
 		$item= new Item();
-		$metadata= new Metadata();
-		$media = new Media();
 
 		$arr = explode(':',$entry->id);
 		$entryId = $arr[count($arr)-1];
@@ -65,26 +61,19 @@ class ParserYoutubeVideo extends ParserItemAbstract
 
 		// write metadata
 		$item->setArchive('Youtube');
-		$metadata->setLicense((string)$entryMedia->group->license);
-		$metadata->setThumbnailUrl((string)$thumbnailUrl);
+		$item->setLicense((string)$entryMedia->group->license);
 		
 		$item->setThumbnailUrl((string)$thumbnailUrl);
 		
 		// read media from xml
-		$attrs = $yt->duration->attributes();
-		$duration = $attrs['seconds'];
-
-		// write media information
-		$media->setDuration((string)$duration);
+		//$attrs = $yt->duration->attributes();
+		//$duration = $attrs['seconds'];
 
 		
 		// access control
 		$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
 		$embed = (isset($yt->accessContro)) ? 'true' : 'false';
 		
-		
-		$item->setMetadata($metadata);
-		$item->setMedia($media);
 		if(isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
 		{
 			return $this->returnResponse($item, false,"This video is not embeddable and cannot be added to Zeega.");

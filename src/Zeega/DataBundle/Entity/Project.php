@@ -20,19 +20,24 @@ class Project
     private $title;
 
     /**
-     * @var boolean $published
+     * @var datetime $date_created
      */
-    private $published;
-
-    /**
-     * @var datetime $created_at
-     */
-    private $created_at;
+    private $date_created;
 
     /**
      * @var array $attr
      */
     private $attr;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+    /**
+     * @var boolean $published
+     */
+    private $published;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
@@ -80,43 +85,23 @@ class Project
     }
 
     /**
-     * Set published
+     * Set date_created
      *
-     * @param boolean $published
+     * @param datetime $dateCreated
      */
-    public function setPublished($published)
+    public function setDateCreated($dateCreated)
     {
-        $this->published = $published;
+        $this->date_created = $dateCreated;
     }
 
     /**
-     * Get published
-     *
-     * @return boolean 
-     */
-    public function getPublished()
-    {
-        return $this->published;
-    }
-
-    /**
-     * Set created_at
-     *
-     * @param datetime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    }
-
-    /**
-     * Get created_at
+     * Get date_created
      *
      * @return datetime 
      */
-    public function getCreatedAt()
+    public function getDateCreated()
     {
-        return $this->created_at;
+        return $this->date_created;
     }
 
     /**
@@ -137,6 +122,46 @@ class Project
     public function getAttr()
     {
         return $this->attr;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean 
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 
     /**

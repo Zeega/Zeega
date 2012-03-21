@@ -166,6 +166,10 @@ class ItemsController extends Controller
 		{
 			$item->setChildItemsCount(0);
 		}
+		
+		$item->setEnabled(true);
+        $item->setPublished(true);
+		
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
         $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
         
