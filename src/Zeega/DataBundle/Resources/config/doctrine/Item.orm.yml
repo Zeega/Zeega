@@ -57,7 +57,7 @@ Zeega\DataBundle\Entity\Item:
         uri:
             type: string
             length: 255
-            unique: true
+            unique: false
         attribution_uri:
             type: string
             length: 255
