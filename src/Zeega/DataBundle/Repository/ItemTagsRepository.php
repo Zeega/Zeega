@@ -11,19 +11,15 @@ class ItemTagsRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-            // search query
-            $qb->select('t')
-               ->from('ZeegaDataBundle:Tag', 't')
-               ->innerjoin('t.item', 'i')
-               ->where('i.item = ?1')
-               ->setParameter(1,$itemId);
-           
-            // execute the query
-            return $qb->getQuery()->getArrayResult();
+        // search query
+        $qb->select('t')
+           ->from('ZeegaDataBundle:Tag', 't')
+           ->innerjoin('t.item', 'i')
+           ->where('i.item = ?1')
+           ->setParameter(1,$itemId);
+       
+        // execute the query
+        return $qb->getQuery()->getArrayResult();
     }
-    
-
-    
-    
 }
 

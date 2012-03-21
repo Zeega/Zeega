@@ -12,6 +12,8 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
+        $qb->andwhere('i.enabled = 1');
+        
 		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
         {
@@ -287,6 +289,7 @@ class ItemRepository extends EntityRepository
 			        ->add('from', ' ZeegaDataBundle:Item i')
 			        ->andwhere('i.id = :id')
 			        ->andwhere("i.media_type = 'Collection'")
+			        ->andwhere("i.enabled = 1")
 			        ->setParameter('id',$id)
 			        ->getQuery()
 			        ->getArrayResult();
@@ -309,87 +312,33 @@ class ItemRepository extends EntityRepository
 		return $qb->getQuery()->getArrayResult();
     }
     
-    public function findItems($query, $offset,$limit)
+    public function findItemById($id)
     {
-        // $qb instanceof QueryBuilder
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('i')
-            ->from('ZeegaDataBundle:Item', 'i')
-            ->where('i.title LIKE ?1')
-            ->orWhere('i.media_creator_username LIKE ?1')
-            ->orWhere('i.description LIKE ?1')
-            ->orderBy('i.id','DESC')
-       		->setMaxResults($limit)
-       		->setFirstResult($query['limit'] * $query['offset']);
-        
-        // filter by type or by userId
-        if($query['contentType'] == 'mine')
-      	{
-			$qb->innerJoin('i.user', 'u')
-			   ->andWhere('u.id = ?3')
-			   ->setParameter(3,$query['userId']);
-		}
-        elseif($query['contentType'] != 'all')
-        {
-            $qb->andWhere('i.media_type = ?2')
-                ->setParameter(2, $query['contentType']);       
-        }         
-       	
-       	if(is_array($query['userSites']) && sizeof($query['userSites']) > 0)
-       	{
-       	    $qb->andWhere('i.site = ?4')
-                ->setParameter(4, $query['userSites'][0]['id']);       
-       	}
-       	
-       	// get query and add parameter - for some reason set parameter in this
-       	// situation only works like this (query->setParameter vs querybuilder->setParameter) 	   
-        $q = $qb->getQuery();         		   
-        $q->setParameter(1, '%' . $query['queryString'] . '%');
-        
-        return $q->getArrayResult();
+        return $this->getEntityManager()
+    			->createQueryBuilder()
+    			->add('select', 'i')
+    		   ->add('from', ' ZeegaDataBundle:Item i')
+    		   ->andwhere('i.id = :id')
+    		   ->andwhere('i.enabled = 1')
+    		   ->setParameter('id',$id)
+    		   ->getQuery()
+    		   ->getArrayResult();
     }
- 
-     public function findItemById($id)
-     {
-     	return $this->getEntityManager()
-				->createQueryBuilder()
-				->add('select', 'i')
-			   ->add('from', ' ZeegaDataBundle:Item i')
-			   ->andwhere('i.id = :id')
-			   ->setParameter('id',$id)
-			   ->getQuery()
-			   ->getArrayResult();
-     }
      
-      public function findUserItems($id)
-     {
+    public function findUserItems($id)
+    {
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
 			   ->add('select', 'i.id,i.title,i.thumbnail_url')
 			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
+			   ->andwhere('i.enabled = 1')
 			   ->setParameter('id',$id)
 			    ->orderBy('i.id','DESC')
 			   ->getQuery()
 			   ->setMaxResults(15)
 			   ->getArrayResult();
-     }
-     
-     public function findUserItemsBySite($id,$pid)
-     {
-     	return $this->getEntityManager()
-			   ->createQueryBuilder()
-			   ->add('select', 'i.id,i.title,i.thumbnail_url')
-			   ->add('from', ' ZeegaDataBundle:Item i')
-			   ->innerJoin('i.user', 'u')
-			   ->andwhere('u.id = :id')
-			   ->andwhere('i.site_id = :pid')
-			   ->setParameters(array('id'=>$id,'pid'=>$pid))
-			    ->orderBy('i.id','DESC')
-			   ->getQuery()
-			   ->setMaxResults(15)
-			   ->getArrayResult();
-     }
+    }
 }
 
