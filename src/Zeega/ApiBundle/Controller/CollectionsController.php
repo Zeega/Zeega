@@ -318,8 +318,8 @@ class CollectionsController extends Controller
     public function deleteCollectionItemAction($collection_id, $item_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
-     	$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
+     	$collection = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$collection_id,"enabled"=>1));
+     	$item = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$item_id,"enabled"=>1));
      	
      	if (!$collection) 
         {

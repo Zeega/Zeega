@@ -13,21 +13,24 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 {
 	public function getInfo($url, $setId)
 	{
-		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
-
+		if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
+        
 		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2";
-
+        
 		// read feed into SimpleXML object
 		$xml = simplexml_load_file($originalUrl);
 		
 		$collection = new Item();
 		$collection->setTitle((string)$xml->title);
+		$collection->setArchive("Youtube");
 		$collection->setDescription((string)$xml->subtitle);
 		$collection->setMediaCreatorUsername((string)$xml->author->name);
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Youtube');
 	    $collection->setUri($url);
 		$collection->setAttributionUri($url);
+		$collection->setEnabled(true);
+		$collection->setPublished(true);
 		
 		// get a thumbnail from the first item and break
 		foreach ($xml->entry as $entry) 
@@ -38,13 +41,14 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			break;
 		}
 		
-		return parent::returnResponse($collection, true, "ai");
+		return parent::returnResponse($collection, true);
 	}
 	
 	public function getCollection($url, $setId, $collection)
 	{
-		//REF ABOUT HOW YOUTUBE IS PARSED IN THIS METHOD: http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
-
+		// http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
+        if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
+        
 		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2";
 
 		// read feed into SimpleXML object
@@ -66,7 +70,6 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 
 			$item->setUri((string)$yt->videoid);
 			$item->setTitle((string)$entryMedia->group->title);
-			//$item->setDescription((string)$entryMedia->group->description);
 			$item->setDescription((string)$entryMedia->group->description);
 			$item->setAttributionUri((string)$attributionUrl);
 			$item->setDateCreated(new \DateTime("now"));
@@ -103,7 +106,6 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			//$attrs = $yt->duration->attributes();
 			//$duration = $attrs['seconds'];
 			
-			
 			// access control
 			$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
 			$embed = (isset($yt->accessContro)) ? 'true' : 'false';
@@ -111,7 +113,9 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			if(!isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
 			{
 				$collection->addItem($item);;
+				$collection->setChildItemsCount($collection->getChildItemsCount() + 1);
 			}
+			
 		}
 
 		return parent::returnResponse($collection, true, "");
