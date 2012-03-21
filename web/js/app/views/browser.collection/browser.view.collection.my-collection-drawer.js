@@ -168,8 +168,8 @@
 
 					var theElement = this;
 					var oldThumbnail = $(theElement).find('img').attr("src");
-					var oldCount = thisView.model.get('child_items_count');
-
+					var oldCount = parseInt(thisView.model.get('child_items_count'));
+					console.log("old count" + oldCount);
 					$(theElement).find('img').attr("src", zeegaBrowser.app.draggedItem.get("thumbnail_url")).hide().fadeIn('slow');
 					$(theElement).find('.browser-item-count').text('Adding item...');
 
@@ -181,10 +181,11 @@
 								success: function(model, response)
 								{ 
 									$(theElement).find('img').attr("src", oldThumbnail).hide().fadeIn('slow');
-
+								
 									//Alert user they added an item that's already in the collection
-									if (oldCount == model.get('child_items_count'))
+									if (oldCount == response.collections.child_items_count)
 										$(theElement).find('.duplicate-item').show().fadeOut(3000);
+									model.set({'child_items_count':response.collections.child_items_count});
 									zeegaBrowser.app.draggedItem = null;
 
 								},

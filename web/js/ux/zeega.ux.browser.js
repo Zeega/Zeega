@@ -94,12 +94,7 @@ $(document).ready(function() {
     	helpers : {
     		title : false
     	},
-    	beforeClose : function()
-		{
-			//set video src to null to prevent browser bug
-			$('video').attr("src", null);
-    	},
-		
+    	
 		/* This is where we decide which kind of content to put in the fancybox */    
     	beforeLoad : function()
 		{
@@ -108,39 +103,56 @@ $(document).ready(function() {
 			var elementID = $(this.element).attr('id');
 			var itemsCollection = zeegaBrowser.app.items.collection;
 			var thisModel = itemsCollection.get(elementID);
-			var fancyView = null;
+			this.fancyView = null;
 
 			var Fancybox = zeegaBrowser.module('fancybox');
-
+			console.log(thisModel);
 			switch( thisModel.get("layer_type") )
 			{
 				case 'Image':
-					fancyView = new Fancybox.Views.Image({ model : thisModel });
-					fancyView.render(this);
+					this.fancyView = new Fancybox.Views.Image({ model : thisModel });
+					this.fancyView.render(this);
 					break;
 				case 'Video':
-					fancyView = new FancyBoxVideoView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'Audio':
-					fancyView = new FancyBoxAudioView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new Fancybox.Views.Audio({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'Youtube':
-					fancyView = new FancyBoxYouTubeView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
 					break;
+				case 'Vimeo':
+					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+					this.fancyView.render(this);
+					break;
+				case 'Mapbox':
+					this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
+					this.fancyView.render(this);
+					break;
+				/*
 				case 'Tweet':
-					fancyView = new FancyBoxTweetView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new FancyBoxTweetView({model:thisModel});
+					this.fancyView.render(this);
 					break;
 				case 'DocumentCloud':
-					fancyView = new FancyBoxDocCloudView({model:thisModel});
-					fancyView.render(this);
+					this.fancyView = new FancyBoxDocCloudView({model:thisModel});
+					this.fancyView.render(this);
 					break;
+					*/
 			}
         },
         
+		afterShow : function(){
+        	this.fancyView.afterShow();
+       	},
+        beforeClose : function()
+		{
+			if (this.fancyView !=null) this.fancyView.beforeClose();
+    	},
 	});
 	
 	//Collection playback and editor connection
@@ -272,9 +284,9 @@ $(document).ready(function() {
 				{
 					//var newGuy = new BrowserCollection();
 					var Collection = zeegaBrowser.module('collection');
-					var newGuy = new Collection.CollectionModel()
+					var newGuy = new Collection.Model()
 					newGuy.addNewItemID(zeegaBrowser.app.draggedItem.id);
-					console.log(newGuy)
+				
 				
 					newGuy.save({
 						title:'New collection ' + Math.floor(Math.random()*1000)}, 
@@ -287,7 +299,8 @@ $(document).ready(function() {
 								model.set({id:response.collections.id});
 								model.set({thumbnail_url:response.collections.thumbnail_url});
 								model.set({child_items_count:response.collections.child_items_count});
-								zeegaBrowser.app.myCollectionsView.collection.add(model, {at: 0});
+								console.log(zeegaBrowser.app.myCollections);
+								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)
 							{

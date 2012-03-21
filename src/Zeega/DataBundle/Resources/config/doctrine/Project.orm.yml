@@ -29,13 +29,16 @@ Zeega\DataBundle\Entity\Project:
      type: string
      length: 255
      nullable: true
-    published:
-     type: boolean
-     nullable: true
-    created_at:
+    date_created:
      type: datetime
-     nullable: true
+     nullable: false
     attr:
      type: array
      nullable: true
+    enabled:
+     type: boolean
+     nullable: false
+    published:
+     type: boolean
+     nullable: false
  

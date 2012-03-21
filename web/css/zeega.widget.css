@@ -1,15 +1,26 @@
+
 #widget-wrapper
 {
     margin-top:20px; 
-    color: white; 
-    font-size:14px;
+    color: whiteSmoke;
+	font-size: 14px !important;
+	font-family: Helvetica;
+	font-weight: lighter;
 }
-
+#widget-wrapper a:hover, #widget-wrapper a:active, #widget-wrapper a:visited{
+	text-decoration:none;
+	color: #F15A29;
+}
 #widget-wrapper #media-item
 {
     margin-bottom: 5px;
 }
-
+.widget-form textarea, .widget-form input{
+	background:transparent;
+	border:none;
+	color:whiteSmoke;
+	width:100%;
+}
 .widget-textbox
 {
 	background-color: #333333;
@@ -22,21 +33,47 @@
 	overflow: auto;
 }
 
-
-#widget-title
+#message{
+	font-style: italic;
+	color: #F15A29;
+}
+#widget-title, #widget-creator, #widget-description
 {
 	width: 90%;
+	border:1px dotted #555;
+	padding:4px;
+	margin-bottom:4px;
 }
-
-#widget-creator
-{
-	
-	
+#description{
+	display:none;
+	height:200px;
 }
-
-
 #widget-description
 {
-	width: 400px;
-	height: 300px;
+	height:100%;
+}
+#item-image{
+	width:150px;
+}
+#btn-more, #btn-less{
+	font-variant: small-caps;
+	letter-spacing: 1px;
+	margin-top: 10px;
+	display:block;
+}
+.add-button{
+	position:relative; width:250px; float:right;
+}
+#widget-added-text{
+	margin-left: 2em;
+	font-weight:normal;
+	display:none;
+}
+.widget-creator-added{
+	font-size:10px;
+}
+#results-count{
+	font-size:16px;
+	font-weight:normal;
+	margin-bottom:5px;
 }

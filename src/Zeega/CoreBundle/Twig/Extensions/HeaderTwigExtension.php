@@ -15,39 +15,42 @@ class HeaderTwigExtension extends \Twig_Extension
         $this->doctrine = $doctrine;
 		$this->securityContext = $securityContext;
     }
-/////// HEAD
+
     public function getGlobals()
     {
-		$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
-////////////		
-/*
-// 3/25/2012
-// unsure if this should be removed so i'm commenting it out instead
-    {	
-    	$user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
-		//$user = $this->securityContext->getToken()->getUser();
-		if($user == "anon.")
-		{
-            $user = $this->doctrine->getRepository('ZeegaDataBundle:User')->find(1);
+        $securityToken = $this->securityContext->getToken();
+        if(isset($securityToken))
+        {
+            $user = $this->securityContext->getToken()->getUser();
+    		if(isset($user) && $user != "anon.")
+    		{
+    		    $sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
+        		$site = $sites[0];
+
+        		$projects = $this->doctrine
+        						 ->getRepository('ZeegaDataBundle:Project')
+        						 ->findProjectsBySiteAndUser($site->getId(),$user->getId());
+
+                return array(
+                    'site' => $site,
+        			'title'=>$site->getTitle(),
+        			'short'=>$site->getShort(),
+        			'num_sites'=>count($sites),
+        			'user_id' => $user->getId(),
+        			'myprojects'=> $projects,
+        			'displayname' => $user->getDisplayName(),
+        			);
+    		}
         }
-		
-*/
-//////
-		$sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
-		$site = $sites[0];
-		
-		$projects = $this->doctrine
-						 ->getRepository('ZeegaDataBundle:Project')
-						 ->findProjectsBySiteAndUser($site->getId(),$user->getId());
-        		
+
         return array(
-            'site' => $site,
-			'title'=>$site->getTitle(),
-			'short'=>$site->getShort(),
-			'num_sites'=>count($sites),
-			'user_id' => $user->getId(),
-			'myprojects'=> $projects,
-			'displayname' => $user->getDisplayName(),
+            'site' => -1,
+			'title' => 'Unknown',
+			'short' => 'Unknown',
+			'num_sites' => 0,
+			'user_id' => -1,
+			'myprojects'=> 'Unknown',
+			'displayname' => 'Unknown'
 			);
     }
 	

@@ -27,6 +27,8 @@ var loadFiles = [
 	'order!lib/spin',
 	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!lib/jquery/ui/js/jquery-ui.min',
+	
+	'order!lib/leaflet/leaflet',
 
 	//custom
 	'order!ux/zeega.ux.header',
@@ -82,6 +84,7 @@ var loadFiles = [
 	//'order!plugins/layers/audio/audio',
 	//'order!plugins/layers/geo/geo',
 	'order!plugins/layers/image/image',
+	'order!plugins/layers/mapbox/mapbox',
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/video/video',
 	//'order!plugins/layers/youtube/youtube',

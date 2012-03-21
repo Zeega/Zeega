@@ -3,10 +3,9 @@
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -25,23 +24,26 @@ class ParserFlickrPhoto extends ParserItemAbstract
 		if(is_array($info)&&is_array($size)) // why?
 		{
 			$item = new Item();
-			$metadata = new Metadata();
-			$media = new Media();
 			$tags = array();
 
 			$item->setAttributionUri($info['urls']['url'][0]['_content']);
 
 			if($info['tags'])
 			{
-				foreach($info['tags']['tag'] as $tag)
+				/*
+				foreach($info['tags']['tag'] as $t)
 				{
-					array_push($tags, ucwords(strtolower($tag['raw'])));
+				    $tag = new Tag;
+				    $tag->setName($t["raw"]);
+	                $tag->setDateCreated(new \DateTime("now"));
+		            $item_tag = new ItemTags;
+		            $item_tag->setItem($item);
+		            $item_tag->setTag($tag);
+		            $item_tag->setTagDateCreated(new \DateTime("now"));
+	                $item->addItemTags($item_tag);
+					//array_push($tags, ucwords(strtolower($tag['raw'])));
 				}
-				$attr['tags']=$tags;
-			}
-			else
-			{
-				$attr['tags']='';
+				*/
 			}
 
 			foreach ($size as $s)
@@ -50,7 +52,6 @@ class ParserFlickrPhoto extends ParserItemAbstract
 			}	
 			//return $sizes;
 			$item->setThumbnailUrl($sizes['Square']['source']);
-			$metadata->setThumbnailUrl($sizes['Small']['source']);
 
 			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
@@ -64,14 +65,12 @@ class ParserFlickrPhoto extends ParserItemAbstract
 
 			$item->setUri($sizes[$itemSize]['source']);
 			$item->setChildItemsCount(0);
-			$media->setWidth($sizes[$itemSize]['width']);
-			$media->setHeight($sizes[$itemSize]['height']);
 
 			$attr['sizes']=$sizes;
 			$item->setDescription($info['description']);
 
-			if($info['license'])$metadata->setLicense(self::$license[$info['license']]);
-			else $metadata->setLicense('All Rights Reserved');
+			if($info['license'])$item->setLicense(self::$license[$info['license']]);
+			else $item->setLicense('All Rights Reserved');
 
 			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
 			else $item->setMediaCreatorUsername($info['owner']['realname']);
@@ -89,9 +88,6 @@ class ParserFlickrPhoto extends ParserItemAbstract
 			$item->setArchive('Flickr'); 
 			$item->setMediaType('Image');
 			$item->setLayerType('Image');
-			$metadata->setAttributes($attr);
-			$item->setMedia($media);
-			$item->setMetadata($metadata);
 
 			return $this->returnResponse($item, true);
 		}

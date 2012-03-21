@@ -225,6 +225,10 @@ class CollectionsController extends Controller
         {
             throw $this->createNotFoundException('Unable to create the collection.');
         }
+        $new_collection->setArchive('Zeega');
+        
+		$new_collection->setEnabled(true);
+		$new_collection->setPublished(true);
         
         $em->persist($new_collection);
         $em->flush();

@@ -20,6 +20,9 @@
 		
 		removeCollection : function(m)
 		{
+			console.log(this._views);
+			console.log(m);
+			console.log(this._views[m.id]);
 			var oldView = this._views[m.id];
 			var carouselIdx = $(oldView.el).attr('jcarouselindex');
 
@@ -38,7 +41,7 @@
 		
 		addCollection : function(m)
 		{
-			var collectionView = new BrowserCollectionView({ model: m });
+			var collectionView = new Collection.Views.Collection({ model: m });
 			this._views[m.id] = collectionView;
 			var addThis = collectionView.render(); 
 			//Add to carousel
@@ -56,7 +59,7 @@
 			{
 				var myBrowserCollection = this.collection.at(i);
 				var collectionView = new Collection.Views.Collection({ model: myBrowserCollection });
-		        this._views.push(collectionView);
+		        this._views[myBrowserCollection.id]=collectionView;
 			}
 		
 	       this.render();
@@ -75,9 +78,10 @@
 			$('#browser-my-collections-count').text("("+this.collection.length+")");
 
 			//launch jcarousel if hasn't been launched yet
-			if (zeegaBrowser.app.carousel == null) 
+			if (zeegaBrowser.app.carousel == null) {
 				$(this.el).jcarousel({ initCallback: zeegaBrowser.app.mycarousel_initCallback });
-
+			console.log('loading jcariusel');
+			}
 			return this;
 		}
 	

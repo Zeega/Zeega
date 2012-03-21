@@ -61,8 +61,9 @@ class WidgetController extends Controller
 			//$parserResponse = substr( $parserResponse,1);
 			//$parserResponse = substr( $parserResponse,0,-1);
 			//return new Response($parserResponse);
-			$parserResponse = utf8_decode($parserResponse);
-			$parserResponse = json_decode($parserResponse,true);
+			//$parserResponse = utf8_decode($parserResponse);
+			
+            $parserResponse = json_decode($parserResponse,true);
 			//return new Response(var_dump($parserResponse));
 			//$parserResponse = json_decode($parserResponse,true);
 			

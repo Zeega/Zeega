@@ -47,7 +47,7 @@
 					console.log(e)
 					if(e.data)
 					{
-						_this.set({thumb_url:e.data});
+						_this.set({thumbnail_url:e.data});
 					}else{
 						_this.trigger('thumbUpdateFail');
 					}
