@@ -79,6 +79,10 @@ class SitesController extends Controller
         ->getRepository('ZeegaDataBundle:Site')
         ->find($site_id);
     	$project= new Project();
+    	$project->setDateCreated(new \DateTime("now"));
+    	$project->setEnabled(true);
+    	$project->setPublished(true);
+    	
 		$sequence = new Sequence();
 		$frame = new Frame();
 		$frame->setSequence($sequence);

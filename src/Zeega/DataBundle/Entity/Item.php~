@@ -15,16 +15,6 @@ class Item
     private $id;
 
     /**
-     * @var bigint $media_id
-     */
-    private $media_id;
-
-    /**
-     * @var bigint $metadata_id
-     */
-    private $metadata_id;
-
-    /**
      * @var integer $site_id
      */
     private $site_id;
@@ -55,11 +45,6 @@ class Item
     private $uri;
 
     /**
-     * @var string $archive
-     */
-    private $archive;
-
-    /**
      * @var string $attribution_uri
      */
     private $attribution_uri;
@@ -68,6 +53,11 @@ class Item
      * @var datetime $date_created
      */
     private $date_created;
+
+    /**
+     * @var string $archive
+     */
+    private $archive;
 
     /**
      * @var string $media_type
@@ -100,6 +90,11 @@ class Item
     private $media_geo_longitude;
 
     /**
+     * @var string $location
+     */
+    private $location;
+
+    /**
      * @var datetime $media_date_created
      */
     private $media_date_created;
@@ -120,14 +115,24 @@ class Item
     private $media_creator_realname;
 
     /**
-     * @var Zeega\DataBundle\Entity\Media
+     * @var string $license
      */
-    private $media;
+    private $license;
 
     /**
-     * @var Zeega\DataBundle\Entity\Metadata
+     * @var array $attributes
      */
-    private $metadata;
+    private $attributes;
+
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+    /**
+     * @var boolean $published
+     */
+    private $published;
 
     /**
      * @var Zeega\DataBundle\Entity\ItemTags
@@ -170,47 +175,7 @@ class Item
     {
         return $this->id;
     }
-
-    /**
-     * Set media_id
-     *
-     * @param bigint $mediaId
-     */
-    public function setMediaId($mediaId)
-    {
-        $this->media_id = $mediaId;
-    }
-
-    /**
-     * Get media_id
-     *
-     * @return bigint 
-     */
-    public function getMediaId()
-    {
-        return $this->media_id;
-    }
-
-    /**
-     * Set metadata_id
-     *
-     * @param bigint $metadataId
-     */
-    public function setMetadataId($metadataId)
-    {
-        $this->metadata_id = $metadataId;
-    }
-
-    /**
-     * Get metadata_id
-     *
-     * @return bigint 
-     */
-    public function getMetadataId()
-    {
-        return $this->metadata_id;
-    }
-
+    
     /**
      * Set site_id
      *
@@ -332,26 +297,6 @@ class Item
     }
 
     /**
-     * Set archive
-     *
-     * @param string $archive
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    }
-
-    /**
-     * Get archive
-     *
-     * @return string 
-     */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
-
-    /**
      * Set attribution_uri
      *
      * @param string $attributionUri
@@ -389,6 +334,26 @@ class Item
     public function getDateCreated()
     {
         return $this->date_created;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
     }
 
     /**
@@ -512,6 +477,26 @@ class Item
     }
 
     /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
      * Set media_date_created
      *
      * @param datetime $mediaDateCreated
@@ -592,43 +577,83 @@ class Item
     }
 
     /**
-     * Set media
+     * Set license
      *
-     * @param Zeega\DataBundle\Entity\Media $media
+     * @param string $license
      */
-    public function setMedia(\Zeega\DataBundle\Entity\Media $media)
+    public function setLicense($license)
     {
-        $this->media = $media;
+        $this->license = $license;
     }
 
     /**
-     * Get media
+     * Get license
      *
-     * @return Zeega\DataBundle\Entity\Media 
+     * @return string 
      */
-    public function getMedia()
+    public function getLicense()
     {
-        return $this->media;
+        return $this->license;
     }
 
     /**
-     * Set metadata
+     * Set attributes
      *
-     * @param Zeega\DataBundle\Entity\Metadata $metadata
+     * @param array $attributes
      */
-    public function setMetadata(\Zeega\DataBundle\Entity\Metadata $metadata)
+    public function setAttributes($attributes)
     {
-        $this->metadata = $metadata;
+        $this->attributes = $attributes;
     }
 
     /**
-     * Get metadata
+     * Get attributes
      *
-     * @return Zeega\DataBundle\Entity\Metadata 
+     * @return array 
      */
-    public function getMetadata()
+    public function getAttributes()
     {
-        return $this->metadata;
+        return $this->attributes;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean 
+     */
+    public function getPublished()
+    {
+        return $this->published;
     }
 
     /**

@@ -25,11 +25,6 @@ class Tag
     private $date_created;
 
     /**
-     * @var text $description
-     */
-    private $description;
-
-    /**
      * @var Zeega\DataBundle\Entity\ItemTags
      */
     private $item;
@@ -87,26 +82,6 @@ class Tag
     public function getDateCreated()
     {
         return $this->date_created;
-    }
-
-    /**
-     * Set description
-     *
-     * @param text $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get description
-     *
-     * @return text 
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

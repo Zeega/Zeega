@@ -15,11 +15,6 @@ class Layer
     private $id;
 
     /**
-     * @var string $item_uri
-     */
-    private $item_uri;
-
-    /**
      * @var string $type
      */
     private $type;
@@ -28,11 +23,6 @@ class Layer
      * @var string $text
      */
     private $text;
-
-    /**
-     * @var integer $zindex
-     */
-    private $zindex;
 
     /**
      * @var array $attr
@@ -44,7 +34,16 @@ class Layer
      */
     private $item;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Sequence
+     */
+    private $sequences;
 
+    public function __construct()
+    {
+        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -56,31 +55,11 @@ class Layer
     }
 
     /**
-     * Set item_uri
-     *
-     * @param string $itemUri
-     */
-    public function setItemUri($itemUri)
-    {
-        $this->item_uri = $itemUri;
-    }
-
-    /**
-     * Get item_uri
-     *
-     * @return string 
-     */
-    public function getItemUri()
-    {
-        return $this->item_uri;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
      */
-    public function setMediaType($type)
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -113,26 +92,6 @@ class Layer
     public function getText()
     {
         return $this->text;
-    }
-
-    /**
-     * Set zindex
-     *
-     * @param integer $zindex
-     */
-    public function setZindex($zindex)
-    {
-        $this->zindex = $zindex;
-    }
-
-    /**
-     * Get zindex
-     *
-     * @return integer 
-     */
-    public function getZindex()
-    {
-        return $this->zindex;
     }
 
     /**
@@ -176,30 +135,11 @@ class Layer
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-    /**
-     * @var Zeega\DataBundle\Entity\User
-     */
-    private $sequences;
-
-    public function __construct()
-    {
-        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Add sequences
      *
-     * @param Zeega\DataBundle\Entity\User $sequences
+     * @param Zeega\DataBundle\Entity\Sequence $sequences
      */
-    public function addUser(\Zeega\DataBundle\Entity\User $sequences)
+    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
     {
         $this->sequences[] = $sequences;
     }
@@ -212,15 +152,5 @@ class Layer
     public function getSequences()
     {
         return $this->sequences;
-    }
-
-    /**
-     * Add sequences
-     *
-     * @param Zeega\DataBundle\Entity\Sequence $sequences
-     */
-    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
-    {
-        $this->sequences[] = $sequences;
     }
 }

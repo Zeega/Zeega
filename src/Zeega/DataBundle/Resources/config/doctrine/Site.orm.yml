@@ -24,7 +24,7 @@ Zeega\DataBundle\Entity\Site:
     published:
      type: boolean
      nullable: true
-    created_at:
+    date_created:
      type: datetime
      nullable: true
 

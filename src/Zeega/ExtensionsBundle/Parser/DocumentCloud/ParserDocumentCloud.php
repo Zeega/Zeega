@@ -3,11 +3,9 @@
 namespace Zeega\ExtensionsBundle\Parser\DocumentCloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\ItemTags;
-use Zeega\DataBundle\Entity\Metadata;
 
 use \DateTime;
 
@@ -24,8 +22,6 @@ class ParserDocumentCloud extends ParserItemAbstract
 		
 		$document = $itemJson["document"];
 		$item= new Item();
-		$metadata= new Metadata();
-		$media = new Media();
 		
 		if($document["source"]){
 			$item->setMediaCreatorUsername($document["source"]);
@@ -51,9 +47,7 @@ class ParserDocumentCloud extends ParserItemAbstract
 		$image=str_replace('{size}','small',$image);
 		
 	
-		$metadata->setThumbnailUrl($image);
-		$item->setMetadata($metadata);
-		$item->setMedia($media);
+		$item->setThumbnailUrl($image);
 		
 		
 		return $this->returnResponse($item, true);
