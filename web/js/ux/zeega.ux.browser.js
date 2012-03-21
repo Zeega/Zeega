@@ -118,7 +118,7 @@ $(document).ready(function() {
 					this.fancyView.render(this);
 					break;
 				case 'Audio':
-					this.fancyView = new FancyBoxAudioView({model:thisModel});
+					this.fancyView = new Fancybox.Views.Audio({model:thisModel});
 					this.fancyView.render(this);
 					break;
 				case 'Youtube':
@@ -129,6 +129,11 @@ $(document).ready(function() {
 					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
 					this.fancyView.render(this);
 					break;
+				case 'Mapbox':
+					this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
+					this.fancyView.render(this);
+					break;
+				/*
 				case 'Tweet':
 					this.fancyView = new FancyBoxTweetView({model:thisModel});
 					this.fancyView.render(this);
@@ -137,6 +142,7 @@ $(document).ready(function() {
 					this.fancyView = new FancyBoxDocCloudView({model:thisModel});
 					this.fancyView.render(this);
 					break;
+					*/
 			}
         },
         

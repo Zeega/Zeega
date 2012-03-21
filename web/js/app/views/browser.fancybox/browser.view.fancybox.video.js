@@ -53,7 +53,7 @@
 	},
 	
 	beforeClose: function(){
-		Popcorn.destroy( this.plyr.pop );
+		this.plyr.destroy();
 
 	},
 	
