@@ -16,9 +16,9 @@ class SearchController extends Controller
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
-        $solr_enable = $this->container->getParameter('solr_enabled');
+        $solr_enabled = $this->container->getParameter('solr_enabled');
 		
-		if($solr_enable)
+		if($solr_enabled)
 		{
 			return $this->searchWithSolr();
 		}
