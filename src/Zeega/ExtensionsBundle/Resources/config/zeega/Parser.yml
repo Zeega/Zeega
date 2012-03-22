@@ -1,0 +1,12 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
+zeega.parsers:
+    documentcloud.org:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?documentcloud.org\/documents.*/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\DocumentCloud\ParserDocumentCloud
+    youtube.com:
+        item_parser:
+            regex: blabla
+            type: item
+            class_path: blablabla
