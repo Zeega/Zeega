@@ -95,9 +95,7 @@ var Plyr2 = Backbone.Model.extend({
 	initialize : function()
 	{
 		//set video format type
-		console.log('video url: '+ this.get('url'))
-		console.log(this)
-		this.set( 'format', this.getFormat(this.get('url')) );
+		this.set( 'format', this.getFormat(this.get('uri')) );
 	},
 	
 	getFormat : function(url)
