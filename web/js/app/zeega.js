@@ -223,7 +223,10 @@ this.zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 
-		Player.init( this.exportProject(), parseInt(this.project.sequences[0].id), parseInt(this.currentFrame.id), true );
+		this.player = new Player2(this.exportProject(), {sequenceID: parseInt(this.project.sequences[0].id), frameID : parseInt(this.currentFrame.id) } )
+
+
+		//Player.init( this.exportProject(), parseInt(this.project.sequences[0].id), parseInt(this.currentFrame.id), true );
 
 	},
 

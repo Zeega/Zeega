@@ -146,7 +146,6 @@
 		
 		private_onPreload : function()
 		{
-			console.log('[private preload] '+ this.model.id)
 			this.onPreload();
 			//this.moveOffStage();
 		},
@@ -173,18 +172,16 @@
 		
 		moveOnStage :function()
 		{
-			console.log('MOVE ON STAGE')
-			console.log(this.attr.top +':'+this.attr.left);
-			console.log(this.$el.css('top') +':'+ this.$el.css('left'))
+			console.log('MOVE ON STAGE: '+ this.model.id)
 			$(this.el).css({
 				'top' : this.attr.top +'%',
 				'left' : this.attr.left+'%'
 			});
-			console.log(this.$el.css('top') +':'+ this.$el.css('left'))
 		},
 		
 		moveOffStage :function()
 		{
+			console.log('MOVE OFF STAGE: '+ this.model.id)
 			$(this.el).css({
 				'top' : '-1000%',
 				'left' : '-1000%'
