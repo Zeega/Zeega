@@ -2869,13 +2869,13 @@ Media Player and Controls
 
 /*TIME_LEF*/
 
-#plyr-editor .plyr-controls-wrapper {
+#plyr-editor{
 
 	position: relative;
 	border: 1px dotted #999;
 	height: 165px;
 	width: 266px;
-	display:none;
+	/*display:none;*/
 }
 
 

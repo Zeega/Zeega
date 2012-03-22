@@ -17,16 +17,7 @@
 				"frames" : {{frames[sequences[i].id] | json_encode | raw}},
 				{% set layers_len = layers[sequences[i].id]|length - 1 -%}
 				"layers" : 
-				[
-					{% if layers_len > 0 %}
-					{% for j in 0..layers_len %}	
-						{{layers[sequences[i].id][j] | json_encode | raw}}
-					{% if j < layers_len %}
-						,
-					{% endif %}
-					{% endfor %}
-					{% endif %}
-				]
+					{{layers[sequences[i].id] | json_encode | raw}}
 			}
 			{% if i < len %}
 				,

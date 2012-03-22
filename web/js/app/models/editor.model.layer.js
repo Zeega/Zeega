@@ -29,7 +29,9 @@
 		{
 			console.log('LAYERS')
 			
-			this.on('ready', function(){ this.visualLoaded = true })
+			this.on('ready', function(){ this.visualLoaded = true });
+			this.on('editor_controlsOpen', this.onControlsOpen, this);
+			this.on('editor_controlsClosed', this.onControlsClosed, this);
 			
 			if( options ) _.extend(this,options);
 			
@@ -51,19 +53,23 @@
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
 		
+		
+		onControlsOpen : function(){},
+		
+		onControlsClosed : function(){},
+		
+		
 		renderLayerInEditor : function()
 		{
 			this.editorWindow.append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
-			this.trigger('rendered_editor');
+			this.trigger('editor_rendered');
 		},
 		
 		unrenderLayerFromEditor : function()
 		{
-			this.visual.remove();
-			this.controls.remove();
-			this.trigger('unrendered_editor');
+			this.trigger('editor_layerExit')
 		},
 		
 		renderLayerInEditor : function()
@@ -71,7 +77,7 @@
 			this.editorWindow.append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
-			this.trigger('rendered_editor');
+			this.trigger('editor_layerEnter');
 		},
 		
 
@@ -83,20 +89,7 @@
 				this.save();
 			}
 		},
-		
-		// triggers after the visual element is drawn
-		onDomPlacement : function(){},
 
-		// triggers after the controls are open. attach listeners etc
-		onControlsOpen : function(){},
-
-		// triggers after the controls are closed. detach listeners etc
-		onControlsClose : function(){},
-
-/*
-		// triggers when the attributes are updated.
-		onAttributeUpdate : function(){},
-*/
 		// draws the thumb?
 		thumb : function()
 		{
@@ -111,8 +104,6 @@
 		// updates the z-index for the visual element
 		updateZIndex : function(z){},
 */
-		// triggered when the layer leaves scope (new frame etc)
-		onExit : function(){},
 
 		////////// player
 
@@ -121,12 +112,6 @@
 		{
 			$('#zeega-player').trigger('ready',{'id':this.model.id});
 		},
-
-		// player :: triggers when the frame starts playing
-		play : function(){},
-
-		// player :: triggers when the frame exits
-		pause : function(){},
 
 		// player :: puts the visual element offscreen
 		stash : function(){},

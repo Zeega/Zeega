@@ -44,7 +44,6 @@
 			{
 				//media item layer
 				console.log( args.item.get('layer_type'))
-				console.log(new Layer.Youtube() );
 				
 				newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
