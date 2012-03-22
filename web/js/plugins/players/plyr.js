@@ -81,7 +81,7 @@ var Plyr2 = Backbone.Model.extend({
 	
 	defaults : {
 		id : 0,
-		url : 'http://www.youtube.com/watch?v=dQw4w9WgXcQ&ob=av3e',
+		uri : 'http://www.youtube.com/watch?v=dQw4w9WgXcQ&ob=av3e',
 		control_mode : 'standard', // standard / editor / none
 		autoplay : true,
 		cue_in : 0,
@@ -98,11 +98,11 @@ var Plyr2 = Backbone.Model.extend({
 		this.set( 'format', this.getFormat(this.get('uri')) );
 	},
 	
-	getFormat : function(url)
+	getFormat : function(uri)
 	{
 		//separated to make it easier to isolate and update this list
 		var format = '';
-		if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
+		if( uri.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
 		else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
 		else format = 'html5';
 		//Force flash for html5 in Firefox browser
