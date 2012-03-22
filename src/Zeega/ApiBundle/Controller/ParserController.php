@@ -28,7 +28,7 @@ class ParserController extends Controller
 		
 		// youtube
 		"/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubeVideo", "IsSet" => false),
-		"/http:\/\/(?:www\.)?youtube.*#p\/c\/([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
+		"/http:\/\/(?:www\.)?youtube.*list=([a-zA-Z0-9\-_]+)+/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist", "IsSet" => true),
 		
 		// soundcloud - order matters (last regex matches any soundlcoud url)
 		"/http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/" => array("ParserClass" => "Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudSet", "IsSet" => true),
@@ -52,7 +52,7 @@ class ParserController extends Controller
 		$url = $this->getRequest()->query->get('url');
 		$results = array("is_valid"=>false, "is_set"=>false);
 		$matches = array();
-        //return new Response($url);
+        
 		foreach ($this->supportedServices as $parserRegex => $parserInfo)
 		{
 			if (preg_match($parserRegex, $url, $matches)) 
@@ -65,7 +65,6 @@ class ParserController extends Controller
 				{
 					$itemId = null;
 				}
-				
 				$parserClass = $parserInfo["ParserClass"];
 				$isSet = $parserInfo["IsSet"];
 				
@@ -146,8 +145,8 @@ class ParserController extends Controller
 							
 					$collection->setTitle($this->getRequest()->request->get('title'));
 					$collection->setDescription($this->getRequest()->request->get('description'));
-			        $collection->setMediaType($this->getRequest()->request->get('media_type'));
-			        $collection->setLayerType($this->getRequest()->request->get('layer_type'));
+			        $collection->setMediaType("Collection");
+			        $collection->setLayerType("Collection");
 					$collection->setArchive($this->getRequest()->request->get('archive'));
 			        $collection->setUser($user);
 			        $collection->setUri($this->getRequest()->request->get('uri'));

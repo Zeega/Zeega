@@ -14,8 +14,6 @@ use Zeega\DataBundle\Entity\User;
 
 class ProjectsController extends Controller
 {
-    
-     
 	 // `post_project`   [POST] /projects
     public function postProjectAction()
     {
@@ -53,23 +51,12 @@ class ProjectsController extends Controller
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
-     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
-     	/*
-     	$sequences=$em->getRepository('ZeegaDataBundle:Sequence')
-        				->findSequencesByProject($project_id);
-     	foreach($sequences as $sequence){
-     	
-     		$r=$em->getRepository('ZeegaDataBundle:Sequence')
-        				->find($sequence['id']);
-     		$em->remove($r);
-     	
-     	}
-     	*/
-    	$em->remove($project);
+     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+    	$project->setEnabled(false);
+
     	$em->flush();
     	return new Response('SUCCESS',200);
-    
-    
     } 
 
 	// `get_project_sequences`    [GET] /projects/{project_id}/sequences

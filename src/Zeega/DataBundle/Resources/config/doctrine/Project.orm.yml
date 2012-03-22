@@ -1,44 +1,47 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Project.orm.yml
 Zeega\DataBundle\Entity\Project:
-   type: entity
-   table: project
-   cascade: remove
-   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
-   manyToMany:
-    users:
-     targetEntity: Zeega\DataBundle\Entity\User
-     inversedBy:
-      name: projects
-     joinTable:
-      name: project_users
-      joinColumns:
-       project_id:
-        referencedColumnName: id
-      inverseJoinColumns:
-       user_id:
-        referencedColumnName: id
-   manyToOne:
-    site:
-     targetEntity: Site
-   id:
+    type: entity
+    table: project
+    cascade: remove
+    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+    manyToMany:
+        users:
+            targetEntity: Zeega\DataBundle\Entity\User
+            inversedBy:
+                name: projects
+            joinTable:
+                name: project_users
+                joinColumns:
+                    project_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    user_id:
+                        referencedColumnName: id
+    manyToOne:
+        site:
+            targetEntity: Site
     id:
-     type: integer
-     generator: { strategy: AUTO }
-   fields:
-    title:
-     type: string
-     length: 255
-     nullable: true
-    date_created:
-     type: datetime
-     nullable: false
-    attr:
-     type: array
-     nullable: true
-    enabled:
-     type: boolean
-     nullable: false
-    published:
-     type: boolean
-     nullable: false
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        title:
+            type: string
+            length: 255
+            nullable: true
+        date_created:
+            type: datetime
+            nullable: false
+        attr:
+            type: array
+            nullable: true
+        enabled:
+            type: boolean
+            nullable: false
+        published:
+            type: boolean
+            nullable: false
+    indexes:
+             enabled_index:
+                 columns: [enabled]
  
