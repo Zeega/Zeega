@@ -6,27 +6,30 @@
 
 {% block body %}
 
-
-	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
-		<h>This {{item.getType()}} has already been added to Zeega.</h><br><br>
+	<div id="widget-wrapper" data-id="{{widget_id}}"> 
+		<h>This {{media_type}} has already been added to Zeega.</h><br><br>
 		<div id="item-view">
-			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="{{item.getThumbnailUrl}}" class="item-image" />
+			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" class="item-image" />
+			
 			<div style="clear:both;">&nbsp;</div>
-			<span id="widget-title">&nbsp;</span></br>
-			<span id="widget-creator">&nbsp;</span></br>
-			<div id="description" style="display:none; height:400px;">
+			<div id="message"></div>
+			<div id="widget-title">&nbsp;</div>
+			<div id="widget-creator">&nbsp;</div>
+			<a href="." id="btn-more">view more</a>
+			<a href="." id="btn-less" style="display:none">view less</a>
+			<div id="description">
 				<p id="widget-description" class="widget-textbox" >description</p>
 			</div>
 		</div>
-	</div>
-
+		
+	</div><!--#widget-wrapper-->
 {% endblock %}	
 
 {% block scripts %}
-	<script data-main="{{ asset('js/main.widget.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
+	<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
 	<script type="text/javascript" language="Javascript">
 		//bootstrapping data
-		var itemJSON = {};
+		var itemJSON = "{{item|e('js')}}";
 		var itemCollectionJSON = "{{mycollection|e('js')}}";
 	</script>	
 {% endblock %}

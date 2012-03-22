@@ -305,14 +305,14 @@ class CollectionsController extends Controller
     public function deleteCollectionAction($collection_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
+     	$collection = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$collection_id,"enabled"=>1));
      	
      	if (!$collection) 
         {
             throw $this->createNotFoundException('Unable to find a Collection with the id ' . $collection_id);
         }
         
-    	$em->remove($collection);
+    	$em->setEnabled(false);
     	$em->flush();
 
     	$itemView = $this->renderView('ZeegaApiBundle:Collections:delete.json.twig', array('item_id' => $collection_id, 'status' => "Success"));
@@ -322,8 +322,8 @@ class CollectionsController extends Controller
     public function deleteCollectionItemAction($collection_id, $item_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$collection = $em->getRepository('ZeegaDataBundle:Item')->find($collection_id);
-     	$item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
+     	$collection = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$collection_id,"enabled"=>1));
+     	$item = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$item_id,"enabled"=>1));
      	
      	if (!$collection) 
         {
