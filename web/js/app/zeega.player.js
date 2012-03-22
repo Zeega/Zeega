@@ -123,6 +123,8 @@ var Player2 = Backbone.View.extend({
 		})
 		this.currentFrame = frame;
 		
+		this.updateCitations();
+		
 		this.updateArrows();
 	},
 	
@@ -156,6 +158,57 @@ var Player2 = Backbone.View.extend({
 		
 		if( index+1 + step > frameOrder.length ) return false;
 		else return this.currentSequence.frames.get( frameOrder[index+step] );
+	},
+	
+	updateCitations : function()
+	{
+		var _this = this;
+		var Citation = Backbone.View.extend({
+			tagName : 'li',
+			className : 'clearfix',
+			render : function()
+			{
+				$(this.el).append( _.template(this.getTemplate(),this.model.attributes ) )
+			},
+			
+			events : {
+				'click' : 'expandCitation'
+			},
+			
+			expandCitation : function()
+			{
+				_this.expandCitationBar();
+				
+				if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
+				else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
+			},
+			
+			getTemplate : function()
+			{
+				var html =
+
+					'<div class="citation-tab">'+
+						'<span class="zicon grey zicon-<%= type %>"></span>'+
+					'</div>'+
+					'<div class="citation-content hidden">'+
+						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
+						'<div class="citation-body">'+
+							'<div class="citation-title"><%= attr.title %></div>'+
+							'<div class="citation-metadata"><a href="<%= attr.attribution_url %>" target="blank">Link to original</a></div>'+
+						'</div>'+
+					'</div>';
+				return html;
+			}
+		});
+		
+		this.$el.find('#citation ul').empty();
+		_.each( this.currentFrame.get('layers'), function(layerID){
+			var layer = _this.currentSequence.layers.get( layerID );
+			
+			if( !layer.citation ) layer.citation = new Citation({model:layer});
+			layer.citation.render();
+			_this.$el.find('#citation ul').append( layer.citation.el );
+		})
 	},
 	
 	closePlayer : function()
@@ -339,9 +392,22 @@ var Player2 = Backbone.View.extend({
 	events : {
 		'click #preview-left' : 'goLeft',
 		'click #preview-right' : 'goRight',
-		'click #preview-close' : 'closePlayer'
+		'click #preview-close' : 'closePlayer',
+		//'mouseover #citation' : 'expandCitationBar',
+		'mouseout #citation'	: "closeCitationBar", 
 	},
 	
+	expandCitationBar : function()
+	{
+		console.log('expand citation bar')
+		this.$el.find('#citation').animate({ height : '100px' })
+	},
+	
+	closeCitationBar : function()
+	{
+		console.log('close citation bar')
+		
+	},
 	
 	/*****************************
 	
@@ -513,25 +579,6 @@ var Player2 = Backbone.View.extend({
 			"</div>"+
 		"";
 		
-		return html;
-	},
-	
-	getCitationTemplate : function()
-	{
-		var html =
-		
-		'<li class="clearfix">'+
-			'<div class="citation-tab">'+
-				'<span class="zicon grey zicon-<%= type %>"></span>'+
-			'</div>'+
-			'<div class="citation-content hidden">'+
-				'<div class="citation-thumb"><img width="100%" height="100%" src="<%= imgUrl %>"/></div>'+
-				'<div class="citation-body">'+
-					'<div class="citation-title"><%= title %></div>'+
-					'<div class="citation-metadata"><a href="<%= trackback %>" target="blank">Link to original</a></div>'+
-				'</div>'+
-			'</div>'+
-		'</li>';
 		return html;
 	}
 		
