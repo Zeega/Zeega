@@ -22,6 +22,14 @@
 			})
 		},
 		
+		unrenderLayers : function()
+		{
+			_.each( _.toArray( this.displayCollection ), function(layer){
+				layer.unrenderLayerFromEditor();
+			});
+			this.displayCollection.reset();
+		},
+		
 		addNewLayer : function( args )
 		{
 			var _this = this

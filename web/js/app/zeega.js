@@ -216,6 +216,11 @@ this.zeega = {
 
 		return _.indexOf( this.sequence.get('framesOrder') , frameId );
 	},
+	
+	cleanWorkspace : function()
+	{
+		this.project.sequences[0].layers.unrenderLayers();
+	},
 
 	previewSequence : function()
 	{
@@ -223,11 +228,15 @@ this.zeega = {
 		this.previewMode = true;
 		//remove branch viewer if present
 
+		this.cleanWorkspace();
+
 		this.player = new Player2(this.exportProject(), {sequenceID: parseInt(this.project.sequences[0].id), frameID : parseInt(this.currentFrame.id) } )
-
-
-		//Player.init( this.exportProject(), parseInt(this.project.sequences[0].id), parseInt(this.currentFrame.id), true );
-
+	},
+	
+	restoreFromPreview : function()
+	{
+		this.previewMode = false;
+		this.project.sequences[0].layers.renderLayers( this.currentFrame.get('layers') );
 	},
 
 	exportProject : function( string )

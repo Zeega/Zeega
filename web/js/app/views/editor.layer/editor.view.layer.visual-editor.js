@@ -147,6 +147,7 @@
 		private_onPreload : function()
 		{
 			this.onPreload();
+			this.model.rendered = true;
 			//this.moveOffStage();
 		},
 		
@@ -154,18 +155,22 @@
 		{
 			this.moveOnStage();
 			this.onPlay();
+			this.model.inFocus = true;
 		},
 		
 		private_onExit : function()
 		{
 			this.moveOffStage();
 			this.onExit();
+			this.model.inFocus = false;
 		},
 		
 		private_onUnrender : function()
 		{
-			this.remove();
 			this.onUnrender();
+			this.model.inFocus = false;
+			this.model.rendered = false;
+			this.remove();
 		},
 		
 		////// HELPERS //////

@@ -128,8 +128,11 @@
 		
 		onLayerExit : function()
 		{
-			this.model.video.pop.pause();
-			if( this.model.video.isVideoLoaded ) Popcorn.destroy(this.model.video.pop);
+			if( this.model.video.isVideoLoaded )
+			{
+				this.model.video.pop.pause();
+				Popcorn.destroy(this.model.video.pop);	
+			} 
 			this.model.loaded = false;
 			
 			//must call this if you extend onLayerExit
@@ -176,8 +179,6 @@
 		
 		onPlay : function()
 		{
-			console.log('video playyyyyyyy')
-			console.log(this)
 			this.model.video.pop.play();
 		},
 		
@@ -189,8 +190,9 @@
 		
 		onUnrender : function()
 		{
-			console.log('unrender VIDEO')
-			
+			this.model.video.pop.pause();
+			Popcorn.destroy(this.model.video.pop);	
+
 		}
 		
 	});

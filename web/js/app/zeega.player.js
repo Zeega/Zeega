@@ -119,7 +119,7 @@ var Player2 = Backbone.View.extend({
 		frame.off('ready', this.renderFrame);
 		
 		_.each( frame.get('layers'), function(layerID){
-			_this.currentSequence.layers.get( layerID ).trigger('player_play')
+			_this.currentSequence.layers.get( layerID ).trigger('player_play');
 		})
 		this.currentFrame = frame;
 		
@@ -219,15 +219,12 @@ var Player2 = Backbone.View.extend({
 		$('#wrapper').show();
 
 		this.unsetListeners();
-		
-		//turn off/pause all media first
-		/*
-		_.each(this.layersOnStage, function(layerID){
-			_this.layerCollection.get(layerID).visual.moveOffStage();
+		console.log('prelare to remove')
+		_.each( _.toArray( this.currentSequence.layers ), function(layer){
+			if( layer.rendered ) layer.trigger('player_unrender')
 		});
-		*/
 		
-		if(this.zeega) zeega.app.previewMode = false;
+		if(this.zeega) zeega.app.restoreFromPreview();//zeega.app.previewMode = false;
 		
 		// remove the player div
 		this.$el.fadeOut( 450, function(){ $(this).remove() });

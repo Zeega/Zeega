@@ -53,11 +53,9 @@
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
 		
-		
 		onControlsOpen : function(){},
 		
 		onControlsClosed : function(){},
-		
 		
 		renderLayerInEditor : function()
 		{
