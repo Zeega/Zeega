@@ -118,6 +118,22 @@
 			return this;
 		},
 		
+		onLayerEnter : function()
+		{
+			var _this = this;
+			this.$el.find('#zedit-target').keypress(function(e){
+				_this.lazySave();
+			})
+			.click(function(){
+				this.$el.find('#zedit-target').focus();
+			})
+			
+		},
+		
+		lazySave : _.debounce( function(){
+			this.model.update( { content : this.$el.find('#zedit-target').html() } );
+		}, 1000),
+		
 		getTemplate : function()
 		{
 			var html = 

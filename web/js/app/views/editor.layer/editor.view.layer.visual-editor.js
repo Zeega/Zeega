@@ -11,6 +11,8 @@
 		{
 			var _this = this;
 			
+			_.extend( this.events, this.eventTriggers );
+			
 			this.initListeners();
 			
 			this.attr = this.model.get('attr')
@@ -48,6 +50,9 @@
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
 			}
 		},
+		
+		events : {},
+		eventTriggers : {},
 		
 		init : function(){},
 		
