@@ -1,10 +1,9 @@
 (function(Layer){
 
 
-
 	Layer.Audio = Layer.Model.extend({
 			
-		layerType : 'Video',
+		layerType : 'Audio',
 
 		defaultAttributes : 
 		{
@@ -54,39 +53,9 @@
 				css : false
 			});
 			
-			var widthSlider = new Layer.Views.Lib.Slider({
-				property : 'width',
-				model: this.model,
-				label : 'Width',
-				suffix : '%',
-				min : 1,
-				max : 200,
-			});
-			
-			var heightSlider = new Layer.Views.Lib.Slider({
-				property : 'height',
-				model: this.model,
-				label : 'Height',
-				suffix : '%',
-				min : 1,
-				max : 200,
-			});
-			
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : .05,
-				max : 1,
-			});
-			
 			this.controls
 				.append( playbackControls.getControl() )
-				.append( volumeSlider.getControl() )
-				.append( widthSlider.getControl() )
-				.append( heightSlider.getControl() )
-				.append( opacitySlider.getControl() );
+				.append( volumeSlider.getControl() );
 			
 			return this;
 		
