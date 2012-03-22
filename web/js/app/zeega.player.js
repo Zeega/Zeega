@@ -168,7 +168,7 @@ var Player2 = Backbone.View.extend({
 			className : 'clearfix',
 			render : function()
 			{
-				$(this.el).append( _.template(this.getTemplate(),this.model.attributes ) )
+				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) )
 			},
 			
 			events : {
