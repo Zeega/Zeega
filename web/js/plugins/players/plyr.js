@@ -105,7 +105,7 @@ var Plyr2 = Backbone.Model.extend({
 		var format = '';
 		if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
 		else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
-		else format ='html5';
+		else format = 'html5';
 		//Force flash for html5 in Firefox browser
 		if( navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length-1].split('/')[0] == 'Firefox' && format=='html5' ) format='flashvideo';
 		return format;
