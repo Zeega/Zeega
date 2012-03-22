@@ -27,7 +27,7 @@
 			console.log('video INIT')
 			//load popcorn object
 			this.video = new Plyr2({
-				url : this.get('attr').attribution_url,
+				uri : this.get('attr').attribution_url,
 				id : this.id
 			})
 			console.log(this)

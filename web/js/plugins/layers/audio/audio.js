@@ -26,10 +26,9 @@
 			console.log('AUDIO INIT')
 			//load popcorn object
 			this.video = new Plyr2({
-				url : this.get('attr').uri,
+				uri : this.get('attr').uri,
 				id : this.id
 			})
-			console.log(this)
 		}
 
 	});
@@ -70,7 +69,6 @@
 		
 		render : function()
 		{
-			$(this.el).append('audio')
 			return this;
 		},
 		

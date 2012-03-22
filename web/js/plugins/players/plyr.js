@@ -92,9 +92,15 @@ var Plyr2 = Backbone.Model.extend({
 		controls_target : null, // element id
 	},
 	
-	initialize : function()
+	initialize : function( options )
 	{
 		//set video format type
+		this.set(options);
+		
+		console.log('INIT PLAYERRRR')
+		console.log(this)
+		console.log(''+ this.get('uri'))
+		
 		this.set( 'format', this.getFormat(this.get('uri')) );
 	},
 	
@@ -103,7 +109,7 @@ var Plyr2 = Backbone.Model.extend({
 		//separated to make it easier to isolate and update this list
 		var format = '';
 		if( uri.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
-		else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
+		else if ( uri.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
 		else format = 'html5';
 		//Force flash for html5 in Firefox browser
 		if( navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length-1].split('/')[0] == 'Firefox' && format=='html5' ) format='flashvideo';
@@ -116,6 +122,7 @@ var Plyr2 = Backbone.Model.extend({
 		{
 			console.log('PLACE VIDEO :: '+this.get('format') )
 			console.log(el)
+			console.log(this)
 			var _this = this;
 			
 			el.empty().prepend( this.getVideoView().el )
@@ -131,14 +138,14 @@ var Plyr2 = Backbone.Model.extend({
 					});
 					break;
 				case 'flashvideo':
-					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('url') );
+					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('uri') );
 					this.pop.listen('loadeddata',function(){
 						_this.trigger('video_canPlay');
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 					});
 					break;
 				case 'youtube':
-					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
+					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('uri') );
 					this.pop.listen('canplaythrough',function(){
 						_this.pop.play();
 						_this.pop.pause();
@@ -147,7 +154,7 @@ var Plyr2 = Backbone.Model.extend({
 					});
 					break;
 				case 'vimeo':
-					this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
+					this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('uri') );
 					this.pop.listen('loadeddata',function(){
 						_this.trigger('video_canPlay');
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
@@ -181,7 +188,7 @@ var Plyr2 = Backbone.Model.extend({
 			render : function()
 			{
 				if( this.model.get('format') == 'html5') this.el = $('<video class="'+ this.className +'">');
-				if( this.model.get('format') == 'html5') $(this.el).attr({ 'id' : 'zvideo-'+ this.model.id, 'src' : this.model.get('url') });
+				if( this.model.get('format') == 'html5') $(this.el).attr({ 'id' : 'zvideo-'+ this.model.id, 'src' : this.model.get('uri') });
 				else $(this.el).attr( 'id' , 'zvideo-'+ this.model.id);
 				
 				$(this.el).css('position', 'absolute');
