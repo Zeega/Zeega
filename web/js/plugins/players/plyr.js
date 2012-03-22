@@ -95,7 +95,8 @@ var Plyr2 = Backbone.Model.extend({
 	initialize : function()
 	{
 		//set video format type
-		
+		console.log('video url: '+ this.get('url'))
+		console.log(this)
 		this.set( 'format', this.getFormat(this.get('url')) );
 	},
 	
@@ -115,17 +116,19 @@ var Plyr2 = Backbone.Model.extend({
 	{
 		if( !this.isVideoLoaded)
 		{
-			console.log('PLACE VIDEO')
+			console.log('PLACE VIDEO :: '+this.get('format') )
+			console.log(el)
 			var _this = this;
 			
 			el.empty().prepend( this.getVideoView().el )
-			
+		
 			switch( this.get('format') )
 			{
 				case 'html5':
 					this.pop = Popcorn('#zvideo-'+ this.id);
 					this.pop.listen( 'canplay', function(){
 						_this.trigger('video_canPlay');
+						console.log(' CAn PLAY!!!  ')
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 					});
 					break;
@@ -173,13 +176,13 @@ var Plyr2 = Backbone.Model.extend({
 			
 			initialize : function()
 			{
-				console.log(this)
-				if( this.model.get('format') == 'html5') this.tagName = 'video';
+				
 				this.render();
 			},
 			
 			render : function()
 			{
+				if( this.model.get('format') == 'html5') this.el = $('<video class="'+ this.className +'">');
 				if( this.model.get('format') == 'html5') $(this.el).attr({ 'id' : 'zvideo-'+ this.model.id, 'src' : this.model.get('url') });
 				else $(this.el).attr( 'id' , 'zvideo-'+ this.model.id);
 				
