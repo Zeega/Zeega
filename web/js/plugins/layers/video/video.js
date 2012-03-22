@@ -200,5 +200,9 @@
 	Layer.Youtube = Layer.Video.extend();
 	Layer.Views.Controls.Youtube = Layer.Views.Controls.Video.extend();
 	Layer.Views.Visual.Youtube = Layer.Views.Visual.Video.extend();
+	
+	Layer.Vimeo = Layer.Video.extend();
+	Layer.Views.Controls.Vimeo = Layer.Views.Controls.Video.extend();
+	Layer.Views.Visual.Vimeo = Layer.Views.Visual.Video.extend();
 
 })(zeega.module("layer"));
