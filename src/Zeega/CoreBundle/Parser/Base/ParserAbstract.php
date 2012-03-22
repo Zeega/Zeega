@@ -51,8 +51,8 @@ abstract class ParserAbstract
 	 * @param String  $message  Parser message
 	 * @return Array|response
      */
-	protected function returnResponse($object, $success, $message = "")
+	protected function returnResponse($object, $success, $isSet, $message = "")
 	{
-		return array("success" => $success, "items" => $object, "message" => $message);
+		return array("success" => $success, "items" => $object, "is_set" => $isSet, "message" => $message);
 	}
 }

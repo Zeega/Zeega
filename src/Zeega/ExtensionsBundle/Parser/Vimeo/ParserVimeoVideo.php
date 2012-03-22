@@ -62,7 +62,7 @@ class ParserVimeoVideo extends ParserItemAbstract
 		$item->setMetadata($metadata);
 		$item->setMedia($media);
 */
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 		
 	}
 }

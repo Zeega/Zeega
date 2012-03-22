@@ -76,11 +76,11 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		
 		if(isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
 		{
-			return $this->returnResponse($item, false,"This video is not embeddable and cannot be added to Zeega.");
+			return $this->returnResponse($item, false, false, "This video is not embeddable and cannot be added to Zeega.");
 		}
 		else
 		{
-			return $this->returnResponse($item, true);
+			return $this->returnResponse($item, true, false);
 		}
 	}
 }

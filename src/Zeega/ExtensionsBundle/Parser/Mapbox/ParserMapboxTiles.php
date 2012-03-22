@@ -48,7 +48,7 @@ class ParserMapBoxTiles extends ParserItemAbstract
 		
 		$item->setThumbnailUrl($thumbnailUrl);
 	
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 		
 	}
 }

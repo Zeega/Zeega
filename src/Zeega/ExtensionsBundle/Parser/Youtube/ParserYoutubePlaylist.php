@@ -41,7 +41,7 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			break;
 		}
 		
-		return parent::returnResponse($collection, true);
+		return parent::returnResponse($collection, true,true);
 	}
 	
 	public function getCollection($url, $setId, $collection)
@@ -118,6 +118,6 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			
 		}
 
-		return parent::returnResponse($collection, true, "");
+		return parent::returnResponse($collection, true, true, "");
 	}
 }

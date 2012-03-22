@@ -50,6 +50,6 @@ class ParserDocumentCloud extends ParserItemAbstract
 		$item->setThumbnailUrl($image);
 		
 		
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }

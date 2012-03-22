@@ -52,7 +52,7 @@ class ParserFlickrSet extends ParserCollectionAbstract
 		}
 		$collection->setThumbnailUrl($sizes['Square']['source']);
 		
-		return parent::returnResponse($collection, true);
+		return parent::returnResponse($collection, true, true);
 	}
 	
 	public function getCollection($url, $setId, $collection)
@@ -74,8 +74,8 @@ class ParserFlickrSet extends ParserCollectionAbstract
 				$collection->addItem($item["items"]);
 			}
 			
-			return $this->returnResponse($collection, true);
+			return $this->returnResponse($collection, true, true);
 		}
-		return $this->returnResponse($collection, false);
+		return $this->returnResponse($collection, false, true);
 	}
 }

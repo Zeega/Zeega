@@ -42,7 +42,7 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 
 		$item->setLicense($itemJson['license']);
 		
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, true);
 	}
 	
 	public function getCollection($url, $setId, $collection)
@@ -76,6 +76,6 @@ class ParserSoundcloudSet  extends ParserCollectionAbstract
 				$collection->addItem($item);;
 			}
 		}
-		return $this->returnResponse($collection, true);
+		return $this->returnResponse($collection, true, true);
 	}
 }

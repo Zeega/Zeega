@@ -89,10 +89,10 @@ class ParserFlickrPhoto extends ParserItemAbstract
 			$item->setMediaType('Image');
 			$item->setLayerType('Image');
 
-			return $this->returnResponse($item, true);
+			return $this->returnResponse($item, true, false);
 		}
 		else{
-			return $this->returnResponse($item, false);
+			return $this->returnResponse($item, false, false);
 		}
 	}
 }

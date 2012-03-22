@@ -48,6 +48,6 @@ class ParserSoundcloudItem extends ParserItemAbstract
 
 		$item->setLicense($itemJson['license']);
 				
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }

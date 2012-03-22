@@ -109,6 +109,6 @@ class ParserInternetArchive extends ParserItemAbstract
 		
 		$item->setArchive('InternetArchive');
 		
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }
