@@ -2,17 +2,22 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
-use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 use SimpleXMLElement;
 
-class ParserYoutubePlaylist extends ParserCollectionAbstract
+class ParserYoutubePlaylist extends ParserAbstract
 {
-	public function getInfo($url, $setId)
+	public function load($url, $parameters = null)
 	{
+	    $regexMatches = $parameters["regex_matches"];
+	    $loadCollectionItems = $parameters["load_child_items"];
+	    
+	    $setId = $regexMatches[1]; // bam
+	    
 		if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
         
 		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2";
@@ -32,34 +37,19 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 		$collection->setEnabled(true);
 		$collection->setPublished(true);
 		
-		// get a thumbnail from the first item and break
 		foreach ($xml->entry as $entry) 
 		{
 			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
 			$attrs = $entryMedia->group->thumbnail->attributes();
-			$collection->setThumbnailUrl((string)$attrs['url']);
-			break;
-		}
-		
-		return parent::returnResponse($collection, true,true);
-	}
-	
-	public function getCollection($url, $setId, $collection)
-	{
-		// http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
-        if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
-        
-		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2";
-
-		// read feed into SimpleXML object
-		$xml = simplexml_load_file($originalUrl);
-
-		foreach ($xml->entry as $entry) 
-		{
-			// get frames in media: namespace for media information
-			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
-			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007');
-
+			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007'); // get frames in media: namespace for media information
+            
+            if($loadCollectionItems == false)
+            {
+                // we just want the set description - get a thumbnail from the first item and break
+                $collection->setThumbnailUrl((string)$attrs['url']);
+                break;
+            }
+			
 			$item= new Item();
 
 			$arr = explode(':',$entry->id);
@@ -117,7 +107,7 @@ class ParserYoutubePlaylist extends ParserCollectionAbstract
 			}
 			
 		}
-
-		return parent::returnResponse($collection, true, true, "");
+		
+		return parent::returnResponse($collection, true,true);
 	}
 }

@@ -2,11 +2,11 @@
 zeega.parsers:
     flickr.com:
         item_parser:
-            regex: /https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)/
+            regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#"
             is_set: false
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrPhoto
         set_parser:
-            regex: /https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)/
+            regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#"
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet
     youtube.com:

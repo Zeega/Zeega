@@ -5,6 +5,9 @@ namespace Zeega\CoreBundle\Twig\Extensions;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 
 class HeaderTwigExtension extends \Twig_Extension
 {
@@ -57,13 +60,14 @@ class HeaderTwigExtension extends \Twig_Extension
 	public function getFilters()
 	{
         return array(
-            'rot13' => new \Twig_Filter_Method($this, 'rot13Filter'),
+            'json_encode_entity' => new \Twig_Filter_Method($this, 'entityNormalizer'),
         );
     }
 
-    public function rot13Filter($arrayObject)
+    public function entityNormalizer($arrayObject)
     {
-        return json_encode($arrayObject);
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        return $serializer->serialize($arrayObject, 'json');
     }
 	
 	public function getName()

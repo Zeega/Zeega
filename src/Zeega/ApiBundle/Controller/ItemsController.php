@@ -14,6 +14,24 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    public function getItemsParserAction()
+    {
+        $request = $this->getRequest();
+
+    	$url  = $request->query->get('url');      
+    	$loadChildren = $request->query->get('load_children');
+        
+        $parser = $this->get('zeega_parser');
+		
+		// parse the url with the ExtensionsBundle\Parser\ParserService
+		$response = $parser->load($url, $loadChildren);
+		//return new Response(var_dump($response["items"]));
+		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'details' => $response["details"]));
+        
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+    
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
@@ -107,7 +125,7 @@ class ItemsController extends Controller
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
-    
+
 	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
@@ -179,7 +197,6 @@ class ItemsController extends Controller
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-	
 
       // post_items_tags  POST   /api/items/{itemId}/tags/{tag_name}.{_format}
     public function postItemsTagsAction($itemId,$tagName)
