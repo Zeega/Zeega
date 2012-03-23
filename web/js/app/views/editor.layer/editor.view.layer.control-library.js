@@ -39,8 +39,9 @@
 		
 		continueLayerToNextFrame : function()
 		{
-			console.log( 'copy layer to next frame!: '+ this.model.id )
 			this.$el.find('button').effect('highlight',{},2000);
+			
+			zeega.app.continueLayerToNextFrame( this.model.id )
 		}
 		
 	});

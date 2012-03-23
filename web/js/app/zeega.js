@@ -201,6 +201,13 @@ this.zeega = {
 		this.project.sequences[0].layers.addNewLayer( args )
 	},
 	
+	continueLayerToNextFrame : function( layerID )
+	{
+		console.log( 'copy layer to next frame!: '+ layerID )
+		this.project.sequences[0].continueLayerToNextFrame( layerID );
+		
+	},
+	
 	updateLayerOrder : function( layerIDArray )
 	{
 		layerIDs = layerIDArray.reverse();
