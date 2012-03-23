@@ -1,6 +1,7 @@
 (function(Layer){
 
 	Layer.Views.Lib = Backbone.View.extend({
+		defaults : {},
 		initialize : function( args )
 		{
 			this.settings = _.defaults( args, this.defaults );
@@ -13,6 +14,133 @@
 			return this.el;
 		}
 	});
+
+
+
+/****************************
+
+	DEFAULT CONTROLS
+	
+****************************/
+
+	Layer.Views.Lib.ContinueToNextFrame = Layer.Views.Lib.extend({
+
+		className : 'continue-to-next',
+
+		render : function()
+		{
+			var button = '<button class="btn" style="width:100%">Continue on next frame</button>'
+			$(this.el).append( button );
+		},
+		
+		events : {
+			'click' : 'continueLayerToNextFrame'
+		},
+		
+		continueLayerToNextFrame : function()
+		{
+			console.log( 'copy layer to next frame!: '+ this.model.id )
+			this.$el.find('button').effect('highlight',{},2000);
+		}
+		
+	});
+	
+	Layer.Views.Lib.ContinueOnAllFrames = Layer.Views.Lib.extend({
+
+		className : 'continue-to-next',
+
+		render : function()
+		{
+			var button = '<button class="btn" style="width:100%">Continue on all frames</button>'
+			$(this.el).append( button );
+		},
+		
+		events : {
+			'click' : 'continueOnAllFrames'
+		},
+		
+		continueOnAllFrames : function()
+		{
+			if( this.$el.find('button').hasClass('active') )
+				this.$el.find('button').removeClass('active btn-warning');
+			else
+				this.$el.find('button').addClass('active btn-warning');
+			
+			this.$el.find('button').effect('highlight',{},2000);
+			
+			console.log( 'continue layer on all frames!: '+ this.model.id )
+		}
+		
+	});
+	
+	Layer.Views.Lib.Link = Layer.Views.Lib.extend({
+
+		className : 'link-controls',
+
+		render : function()
+		{
+			var link = this.model.get('attr').link || '';
+			$(this.el).append( _.template( this.getTemplate(), {link:link} ) );
+		},
+		
+		events : {
+			'click .remove-link' : 'clearLink',
+			'focus input' : 'focusInput',
+			'blur input'	: 'updateLink', 
+		},
+		
+		clearLink : function()
+		{
+			this.$el.find('input').val('');
+			this.updateLink();
+			return false;
+		},
+		
+		focusInput : function()
+		{
+			var _this = this;
+			this.$el.find('input').keypress(function(e){
+				if( e.which == 13 )
+				{
+					_this.updateLink();
+					this.blur();
+					return false;
+				}
+			})
+		},
+		
+		updateLink : function()
+		{
+			this.$el.find('input').unbind('keypress');
+			var fieldValue = this.$el.find('input').val();
+			if( fieldValue != this.model.get('attr').link )
+			{
+				this.$el.find('input, .add-on').effect('highlight',{},2000);
+				this.model.update({ link : fieldValue })
+			}
+		},
+
+		getTemplate : function()
+		{
+			html =
+			
+				'<div class="input-prepend">'+
+					'<span class="add-on">http://</span>'+
+					'<input class="span2" type="text" placeholder="www.example.com" value="<%= link %>">'+
+					'<a href="#" class="remove-link">&times;</span>'
+				'</div>';
+				
+			return html;
+		}
+		
+	});
+	
+	
+/***********************************
+
+	OPTIONAL CONTROLS
+	
+************************************/
 
 	Layer.Views.Lib.Target = Layer.Views.Lib.extend({
 		
@@ -32,8 +160,6 @@
 		}
 		
 	});
-
-
 
 	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
 		

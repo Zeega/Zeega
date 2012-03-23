@@ -14,6 +14,8 @@
 			'opacity':1,
 			'aspect':1.33,
 			'citation':true,
+			
+			'linkable' : true
 		}
 
 	});
@@ -58,7 +60,7 @@
 		render : function()
 		{
 			var img = $('<img>')
-				.attr('src', this.attr.url)
+				.attr('src', this.attr.uri)
 				.css({'width':'100%'});
 
 			$(this.el).html( img );

@@ -12,9 +12,8 @@
 		
 		defaults : {
 			attr : {},
-			visibleineditor : true,
+			linkable: true,
 			thumbUpdate : true,
-			linkable : true
 		},
 		
 		defaultAttributes : {},
@@ -38,10 +37,14 @@
 			if( !_.isNull( this.layerType ) )
 			{
 				this.set('type',this.layerType);
-				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes) );
-
+				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes ) );
+				
+				console.log( this.get('attr').linkable )
+				
 				//create visual view
-				this.visual = new Layer.Views.Visual[this.layerType]({model:this})
+				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
+				
+				
 				//create control view
 				if(this.showControls) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			

@@ -188,6 +188,11 @@ this.zeega = {
 		this.project.sequences[0].frames.addFrame();
 	},
 	
+	duplicateFrame : function( frameModel )
+	{
+		
+	},
+	
 	addLayer : function( args )
 	{
 		console.log('ADD LAYER')
