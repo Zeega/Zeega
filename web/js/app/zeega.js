@@ -47,8 +47,6 @@ this.zeega = {
 		this.loadModules();
 		this.isLoaded = true
 		//this.initStartHelp(); //broken. fix!
-		this.startRouter();
-
 	},
 	
 	loadModules : function()
@@ -56,16 +54,28 @@ this.zeega = {
 		var _this = this;
 		var Project = zeega.module("project");
 		var Items = zeega.module("items");
+		
 		console.log($.parseJSON(projectJSON))
+		
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
+		
 		this.project.on('ready',function(){ _this.startEditor() })
-		this.project.loadProject()
+		this.project.loadProject();
 		this.itemCollection = new Items.ViewCollection();
 	},
 	
 	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
 	refreshDatabase : function(){ this.itemCollection.refresh() },
 
+	startEditor : function()
+	{
+		console.log('editor started')
+		
+		this.renderSequenceFrames();
+		this.startRouter();
+		
+	},
+	
 	startRouter: function()
 	{
 		var _this = this;
@@ -86,32 +96,65 @@ this.zeega = {
 	
 	goToFrame : function(frameId)
 	{
-		console.log('GOTOFRAME')
-		if(this.isLoaded) 
+		console.log('GO TO FRAME: '+frameId)
+		if( _.isUndefined(frameId) )
 		{
-			console.log('GO TO FRAME: '+frameId)
-			if( _.isUndefined(frameId) ) this.loadFrame( this.project.sequences[0].frames.collection.at(0) );
-			else this.loadFrame( this.project.sequences[0].frames.collection.get( frameId ) );
+			this.currentFrame = this.currentSequence.frames.at(0);
+			this.loadFrame( this.currentFrame );
 		}
+		else this.loadFrame( this.project.sequences.at(0).frames.get( frameId ) );
 	},
 
 	loadFrame : function( frame )
 	{
 		var _this = this;
-		this.clearCurrentFrame();
+		this.unrenderFrame( this.currentFrame );
 		if(this.currentFrame) this.currentFrame.trigger('blur');
 		this.currentFrame = frame;
+
 		this.currentFrame.trigger('focus');
+		this.renderFrame( this.currentFrame );
 		
 		this.router.navigate('editor/frame/'+ frame.id, {silent:true});
 
 		this.restorePanelStates();
 		this.setAdvanceValues();
 
-		// add the frame's layers // remove falsy values
-		var layerIDArray = _.compact( this.currentFrame.get('layers'));
-		this.project.sequences[0].layers.renderLayers( layerIDArray );
-
+	},
+	
+	renderSequenceFrames : function()
+	{
+		_.each( _.toArray(this.currentSequence.frames), function(frame){
+			frame.render();
+		})
+	},
+	
+	renderFrame : function(frame)
+	{
+		if(frame)
+		{
+			var _this = this;
+			_.each( frame.get('layers'), function(layerID){
+			
+				var layerModel = _this.currentSequence.layers.get(layerID);
+				if(_.isUndefined(layerModel)) console.log('layer missing')
+				else layerModel.trigger('editor_layerRender')
+			})
+		}
+	},
+	
+	unrenderFrame : function ( frame )
+	{
+		if(frame)
+		{
+			var _this = this;
+			_.each( frame.get('layers'), function(layerID){
+			
+				var layerModel = _this.currentSequence.layers.get(layerID);
+				if(_.isUndefined(layerModel)) console.log('layer missing')
+				else layerModel.trigger('editor_layerUnrender')
+			})
+		}
 	},
 	
 	restorePanelStates : function()
@@ -177,11 +220,6 @@ this.zeega = {
 		}
 	},
 
-	clearCurrentFrame : function ()
-	{
-		$('.icon-tray').empty();
-	},
-
 	addFrame : function()
 	{
 		// maybe something like function( index, numberOfFramesToAdd ) ??
@@ -206,6 +244,12 @@ this.zeega = {
 		console.log( 'copy layer to next frame!: '+ layerID )
 		this.project.sequences[0].continueLayerToNextFrame( layerID );
 		
+	},
+	
+	continueOnAllFrames : function( layerModel )
+	{
+		console.log('zeega continue on all')
+		this.project.sequences[0].updatePersistLayer( layerModel );
 	},
 	
 	updateLayerOrder : function( layerIDArray )

@@ -43,7 +43,7 @@
 				max : 1,
 			});
 			
-			this.controls.append( scaleSlider.getControl() )
+			$(this.controls).append( scaleSlider.getControl() )
 				.append( opacitySlider.getControl() );
 			
 			return this;

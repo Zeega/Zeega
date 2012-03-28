@@ -15,19 +15,19 @@
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
 			this.view.render();
+			this.trigger('ready')
 		},
 		
 		createSequences : function( sequences )
 		{
 			var _this = this;
 			var Sequence = zeega.module("sequence");
-			this.sequences = [];
-			_.each( sequences, function(sequence){
-				_this.sequences.push( new Sequence.Model( sequence ) );
-				zeega.app.sequenceID = sequence.id;
-				console.log('sequence id = '+ sequence.id)
-			});
-			this.trigger('ready')
+			
+			this.sequences = new Sequence.Collection( sequences );
+
+			zeega.app.currentSequence = this.sequences.at(0);
+			console.log(zeega.app.currentSequence)
+
 		}
 		
 	});

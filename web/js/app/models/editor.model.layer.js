@@ -29,8 +29,15 @@
 			console.log('LAYERS')
 			
 			this.on('ready', function(){ this.visualLoaded = true });
+			
+			this.on('editor_layerRender', this.renderLayerInEditor, this );
+			this.on('editor_destroyLayer editor_layerUnrender', this.unrenderLayerFromEditor, this);
+			
 			this.on('editor_controlsOpen', this.onControlsOpen, this);
 			this.on('editor_controlsClosed', this.onControlsClosed, this);
+			
+			this.on('editor_destroyLayer', this.unrenderLayerFromEditor, this);
+			
 			
 			if( options ) _.extend(this,options);
 			

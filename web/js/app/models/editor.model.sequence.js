@@ -11,11 +11,12 @@
 		initialize : function( attributes )
 		{
 			console.log('sequence init')
-			console.log(attributes)
 			this.unset('frames',['silent'])
 			this.unset('layers',['silent'])
+			
 			this.createFrames( attributes.frames );
 			this.createLayers( attributes.layers );
+			
 			this.updateFrameOrder(false);
 			this.trigger('ready');
 		},
@@ -23,9 +24,10 @@
 		createFrames : function( frames )
 		{
 			var Frames = zeega.module("frame");
-			this.frames = new Frames.ViewCollection( {collection : new Frames.Collection(frames) } );
-			this.frames.collection.on( 'destroy', this.destroyFrame, this );
-			this.frames.collection.on( 'updateFrameOrder', this.updateFrameOrder, this );
+			this.frames = new Frames.Collection( frames );
+			
+			this.frames.on( 'destroy', this.destroyFrame, this );
+			this.frames.on( 'updateFrameOrder', this.updateFrameOrder, this );
 		},
 		
 		createLayers : function( layers )
@@ -36,7 +38,7 @@
 			
 			var addListeners = function(layer)
 			{
-				layer.on('remove_from_frame', _this.removeLayerFromFrame, _this);
+				layer.on('editor_removeLayerFromFrame', _this.removeLayerFromFrame, _this);
 				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
 				layer.on('persist', _this.updatePersistLayer, _this);
 			};
@@ -44,12 +46,14 @@
 			// generate layer models from layers
 			var layerModelArray = [];
 			_.each( layers, function(layer){
-				console.log(layer)
 				var newLayer = new Layers[ layer.type ](layer);
 				addListeners(newLayer);
 				layerModelArray.push( newLayer );
 			});
-			this.layers = new Layers.MasterCollection(layerModelArray);
+			
+			console.log( layerModelArray )
+			
+			this.layers = new Layers.MasterCollection( layerModelArray );
 			
 			this.layers.on('add',function(layer){ addListeners(layer) })
 			
@@ -58,7 +62,7 @@
 		updateFrameOrder : function( save )
 		{
 			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			this.frames.collection.trigger('resort',frameIDArray);
+			this.frames.trigger('resort',frameIDArray);
 			this.set( { framesOrder: frameIDArray } );
 			if( save != false ) this.save();
 		},

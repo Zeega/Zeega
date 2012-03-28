@@ -69,6 +69,7 @@
 			
 			this.$el.find('button').effect('highlight',{},2000);
 			
+			zeega.app.continueOnAllFrames( this.model );
 			console.log( 'continue layer on all frames!: '+ this.model.id )
 		}
 		
@@ -191,7 +192,7 @@
 			this.$el.find('.control-slider').slider({
 				min : this.settings.min,
 				max : this.settings.max,
-				value : this.model.get('attr')[this.settings.property] || this.settings.value,
+				value : this.settings.value || this.model.get('attr')[this.settings.property],
 				step : this.settings.step,
 				slide : function(e, ui)
 				{

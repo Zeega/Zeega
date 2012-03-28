@@ -35,6 +35,7 @@
 		
 		initListeners : function()
 		{
+//editor_removeLayerFromFrame
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -45,7 +46,7 @@
 			else
 			{
 				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-				this.model.on('editor_layerExit', this.private_onLayerExit, this);
+				this.model.on('editor_layerExit editor_removeLayerFromFrame', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
 			}

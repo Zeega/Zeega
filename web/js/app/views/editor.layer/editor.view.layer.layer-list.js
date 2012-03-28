@@ -97,6 +97,7 @@
 		{
 			this.delegateEvents();
 			this.onLayerEnter();
+			console.log('	layer list enter')
 		},
 		
 		private_onLayerExit : function()
@@ -192,8 +193,8 @@
 		{
 			if( confirm('Delete Layer?') )
 			{
+				this.model.trigger('editor_removeLayerFromFrame', this.model);
 				this.remove();
-				this.model.trigger('remove_from_frame', this.model);
 			}
 		},
 
