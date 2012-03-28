@@ -2,7 +2,7 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Vimeo;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
@@ -11,10 +11,13 @@ use Zeega\DataBundle\Entity\Metadata;
 use \DateTime;
 use SimpleXMLElement;
 
-class ParserVimeoVideo extends ParserItemAbstract
+class ParserVimeoVideo extends ParserAbstract
 {
-	public function getItem($url, $itemId)
-	{
+	public function load($url, $parameters = null)
+    {
+        $regexMatches = $parameters["regex_matches"];
+        $itemId = $regexMatches[1]; // bam
+        
 		$originalUrl = 'http://vimeo.com/api/v2/video/'.$itemId.'.json';
 
 		// read feed into SimpleXML object
@@ -22,8 +25,6 @@ class ParserVimeoVideo extends ParserItemAbstract
 		
 		$entry=$entry[0];
 		$item= new Item();
-	
-
 		
 		$item->setUri((string)$entry->id);
 
@@ -63,6 +64,5 @@ class ParserVimeoVideo extends ParserItemAbstract
 		$item->setMedia($media);
 */
 		return $this->returnResponse($item, true, false);
-		
 	}
 }
