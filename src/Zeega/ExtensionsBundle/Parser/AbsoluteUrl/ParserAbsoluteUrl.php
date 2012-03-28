@@ -2,16 +2,16 @@
 
 namespace Zeega\ExtensionsBundle\Parser\AbsoluteUrl;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 use SimpleXMLElement;
 
-class ParserAbsoluteUrl extends ParserItemAbstract
+class ParserAbsoluteUrl extends ParserAbstract
 {
-	public function getItem($url, $itemId)
+	public function load($url, $parameters = null)
 	{
 	    /* TEMP */
 	    
@@ -65,6 +65,6 @@ class ParserAbsoluteUrl extends ParserItemAbstract
 		elseif($contentType=='Audio') $item->setThumbnailUrl('../images/templates/audio.jpg');
 		elseif($contentType=='Video') $item->setThumbnailUrl('../images/templates/video.jpg');
 
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }

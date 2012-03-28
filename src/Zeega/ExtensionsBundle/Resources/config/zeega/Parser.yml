@@ -1,0 +1,49 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
+zeega.parsers:
+    flickr.com:
+        item_parser:
+            regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#"
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrPhoto
+        set_parser:
+            regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#"
+            is_set: true
+            parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet
+    youtube.com:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubeVideo
+        set_parser:
+            regex: /http:\/\/(?:www\.)?youtube.*list=([a-zA-Z0-9\-_]+)+/
+            is_set: true
+            parser_class: Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist
+    soundcloud.com: #order matters (last regex matches any soundlcoud url)
+        item_parser:
+            regex: /http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/
+            is_set: true
+            parser_class: Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudSet
+        set_parser:
+            regex: /http:\/\/(?:www\.)?soundcloud.com.*/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Soundcloud\ParserSoundcloudItem
+    mapbox.com:
+        item_parser:
+            regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#"
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Mapbox\ParserMapboxTiles
+    vimeo.com:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo
+    archive.org:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?archive.org\/details.*/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\InternetArchive\ParserInternetArchive
+    documentcloud.org:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?documentcloud.org\/documents.*/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\DocumentCloud\ParserDocumentCloud
