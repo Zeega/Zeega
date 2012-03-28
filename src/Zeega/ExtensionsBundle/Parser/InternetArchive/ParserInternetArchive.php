@@ -2,17 +2,17 @@
 
 namespace Zeega\ExtensionsBundle\Parser\InternetArchive;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
-class ParserInternetArchive extends ParserItemAbstract
+class ParserInternetArchive extends ParserAbstract
 {
-	public function getItem($url,$itemId)
-	{
+	public function load($url, $parameters = null)
+    {
 	    $originalUrl = $url;
 	    $url = $url."?output=json";
 	    
@@ -109,6 +109,6 @@ class ParserInternetArchive extends ParserItemAbstract
 		
 		$item->setArchive('InternetArchive');
 		
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }

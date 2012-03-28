@@ -18,7 +18,23 @@ class WidgetController extends Controller
 {
    	public function persistAction()
 	{
-		return $this->forward('ZeegaApiBundle:Parser:postParserPersist', array(), array());
+	    $request = $this->getRequest();
+	    $itemUrl = $request->request->get('attribution_uri');
+	    $mediaType = strtolower($request->request->get('media_type'));
+
+        // if it is a collection load the collection items
+	    if($mediaType == "collection")
+	    {
+	        $itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
+	        $itemWithChildren = json_decode($itemWithChildren,true);
+	        
+	        if(isset($itemWithChildren))
+	        {
+	            $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);
+	        }
+	    }
+	    
+	    return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
 	}
 	
 	public function openAction()
@@ -31,27 +47,28 @@ class WidgetController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		// get user items and sites
-		//$mycollection = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findBy(array('id'-$user->getId());
 		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
 		$sites = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSitesByUser($user->getId());
 		
 		$widgetId = $request->query->get('widget-id');
 		$itemUrl = $request->query->get('url');
 		
-		$parserResponse = $this->forward('ZeegaApiBundle:Parser:getParserValidate', array(), array("url" => $itemUrl))->getContent();
+		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
 
 		if(isset($parserResponse))
 		{
-			$isUrlValid = $parserResponse["result"]["is_url_valid"];
-			$isUrlCollection = $parserResponse["result"]["is_url_collection"];
-			$message = $parserResponse["result"]["message"];
+			$isUrlValid = $parserResponse["request"]["success"];
+			$isUrlCollection = $parserResponse["request"]["is_set"];
+			$message = $parserResponse["request"]["message"];
 			$items = $parserResponse["items"];
-
-			if($isUrlValid)
+            
+			if($isUrlValid && count($items) > 0)
 			{
+			    
+			    $parsedItem = $items[0];
 				// check if the item exists on the database	
-        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $items["attribution_uri"]));
+        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"]));
                 
         		if(isset($item))
         		{
@@ -70,7 +87,7 @@ class WidgetController extends Controller
 					return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
 						'widget_id'=>$widgetId,
-						'item'=>json_encode($items), 
+						'item'=>json_encode($parsedItem), 
 						'mycollection'=>$mycollection,
 					));						
 				}
@@ -79,7 +96,7 @@ class WidgetController extends Controller
 					return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
 						'widget_id'=>$widgetId,
-						'item'=>json_encode($items), 
+						'item'=>json_encode($parsedItem), 
 						'mycollection'=>$mycollection,
 					));
 				}
@@ -97,26 +114,4 @@ class WidgetController extends Controller
 			}
 		}
 	}	
- 
-    public function thumbAction($query="Help"){
-    	 
-    	 $doc= $this->getDoctrine();
-    	 $loader = $this->get('item_loader');
-    
-    	 $loader->loadTagThumbs($doc);
-    	 
-    	 return $this->render('ZeegaCoreBundle:Default:index.html.twig', array('name' => $query));
-   
-    }
-    
-    public function mediadataAction($query="Help"){
-    	 
-    	 $doc= $this->getDoctrine();
-    	 $loader = $this->get('item_loader');
-    
-    	 $loader->loadMediaData($doc);
-    	 
-    	 return $this->render('ZeegaCoreBundle:Default:index.html.twig', array('name' => $query));
-   
-    }
 }

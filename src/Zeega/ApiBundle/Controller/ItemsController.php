@@ -14,6 +14,24 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    public function getItemsParserAction()
+    {
+        $request = $this->getRequest();
+
+    	$url  = $request->query->get('url');      
+    	$loadChildren = $request->query->get('load_children');
+    	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
+
+        $parser = $this->get('zeega_parser');
+		
+		// parse the url with the ExtensionsBundle\Parser\ParserService
+		$response = $parser->load($url, $loadChildren);
+        
+		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+    
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
@@ -59,7 +77,7 @@ class ItemsController extends Controller
         }
         $tags = join(",",$tags);
                 
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => $tags));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
@@ -107,7 +125,7 @@ class ItemsController extends Controller
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }   
-    
+
 	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
@@ -130,12 +148,7 @@ class ItemsController extends Controller
     public function postItemsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
-    	// temp - needs to be removed
-		if($user == "anon.")
-		{
-            $user =  $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->find(1);
-        }
-
+        $em = $this->getDoctrine()->getEntityManager();
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
 
 	    $item = new Item();
@@ -143,7 +156,6 @@ class ItemsController extends Controller
 		$site = $this->getDoctrine()
 				     ->getRepository('ZeegaDataBundle:Site')
 				     ->findSiteByUser($user->getId());
-		//return new Response(var_dump($this->getRequest()->request));
 		
 		$item->setSite($site[0]);		
         $item->setTitle($this->getRequest()->request->get('title'));
@@ -160,6 +172,37 @@ class ItemsController extends Controller
         $item->setPublished(true);
 		
 		$childItemsCount = $this->getRequest()->request->get('child_items_count');
+		$childItems = $this->getRequest()->request->get('child_items');
+		if(isset($childItems))
+		{
+		    foreach($childItems as $child)
+            {
+                $childItem = new Item();
+
+        		$childItem->setSite($site[0]);		
+                $childItem->setTitle($child['title']);
+        		$childItem->setDescription($child['description']);
+                $childItem->setMediaType($child['media_type']);
+                $childItem->setDateCreated(new \DateTime("now"));
+        		$childItem->setArchive($child['archive']);
+                $childItem->setLayerType($child['layer_type']);
+                $childItem->setUser($user);
+                $childItem->setUri($child['uri']);
+                $childItem->setAttributionUri($child['attribution_uri']);
+        		$childItem->setThumbnailUrl($child['thumbnail_url']);
+                $childItem->setEnabled(true);
+                $childItem->setPublished(true);
+                $childItem->setChildItemsCount(0);
+                $childItem->setMediaCreatorUsername($child['media_creator_username']);
+                $childItem->setMediaCreatorRealname($child['media_creator_realname']);
+                
+                $em->persist($childItem);
+                $em->flush();
+                
+                $item->addItem($childItem);
+            }
+		}
+		
 		if(isset($childItemsCount))
 		{
         	$item->setChildItemsCount($childItemsCount);
@@ -171,15 +214,13 @@ class ItemsController extends Controller
 
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
         $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
-        
-        $em = $this->getDoctrine()->getEntityManager();
+
         $em->persist($item);
         $em->flush();
 
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-	
 
       // post_items_tags  POST   /api/items/{itemId}/tags/{tag_name}.{_format}
     public function postItemsTagsAction($itemId,$tagName)

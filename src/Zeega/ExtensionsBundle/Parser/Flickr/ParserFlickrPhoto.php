@@ -2,21 +2,33 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
-class ParserFlickrPhoto extends ParserItemAbstract
+class ParserFlickrPhoto extends ParserAbstract
 {
 	private static $license=array('','Attribution-NonCommercial-ShareAlike Creative Commons','Attribution-NonCommercial Creative 		
 			Commons','Attribution-NonCommercial-NoDerivs Creative Commons','Attribution Creative Commons',
 			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
 	
-	public function getItem($url,$itemId)
-	{
+	public function load($url, $parameters = null)
+    {
+
+        if(isset($parameters["photo_id"]))
+        {
+            $itemId = $parameters["photo_id"];
+        }
+        else
+        {
+            $regexMatches = $parameters["regex_matches"];
+            $itemId = $regexMatches[1]; // bam
+        }
+	    
+	    
 		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
 		$info = $f->photos_getInfo($itemId);
 		$size = $f->photos_getSizes($itemId);
@@ -89,10 +101,10 @@ class ParserFlickrPhoto extends ParserItemAbstract
 			$item->setMediaType('Image');
 			$item->setLayerType('Image');
 
-			return $this->returnResponse($item, true);
+			return $this->returnResponse($item, true, false);
 		}
 		else{
-			return $this->returnResponse($item, false);
+			return $this->returnResponse(null, false, false);
 		}
 	}
 }

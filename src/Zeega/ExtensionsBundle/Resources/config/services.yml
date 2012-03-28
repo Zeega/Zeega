@@ -1,7 +1,10 @@
 parameters:
 #    zeega_extensions.example.class: Zeega\ExtensionsBundle\Example
-
+    zeega_parser.class:      Zeega\ExtensionsBundle\Parser\ParserService
+    
 services:
+    zeega_parser:
+        class: %zeega_parser.class%
 #    zeega_extensions.example:
 #        class: %zeega_extensions.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
