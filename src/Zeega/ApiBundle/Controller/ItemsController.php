@@ -24,12 +24,18 @@ class ItemsController extends Controller
         $parser = $this->get('zeega_parser');
 		
 		// parse the url with the ExtensionsBundle\Parser\ParserService
-		$response = $parser->load($url, $loadChildren);
-		//return new Response(var_dump($response["items"]));
-		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'details' => $response["details"]));
+		$response = $parser->load($url, true);
         
+		//return new Response(var_dump($response["items"]));
+		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+    
+    private function entityNormalizer($arrayObject)
+    {
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        return $serializer->serialize($arrayObject, 'json');
     }
     
     //  get_collections GET    /api/items.{_format}
@@ -77,7 +83,7 @@ class ItemsController extends Controller
         }
         $tags = join(",",$tags);
                 
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'tags' => $tags));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }

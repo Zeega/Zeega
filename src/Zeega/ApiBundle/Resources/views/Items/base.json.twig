@@ -1,0 +1,44 @@
+{{ _self.show(item) }}
+{% macro show(item) %}
+	{% if item is not null %}
+	{
+		"id" : "{{ item.id }}",
+		"title" : "{{ item.title | json_encode}}",
+		"description" : "{{ item.description | json_encode}}",
+		"text" : "{{ item.text }}",
+		"uri" : "{{ item.uri }}",
+		"attribution_uri" : "{{ item.getAttributionUri() }}",
+		"date_created" : "{{ item.getDateCreated()|date("Y-m-d") }}",
+		"media_type" : "{{ item.getMediaType() }}",
+		"layer_type" : "{{ item.getLayerType() }}",
+		"archive" : "{{ item.archive }}",
+		"thumbnail_url" : "{{ item.getThumbnailUrl() }}",
+		"media_geo_latitude" : "{{ item.getMediaGeoLatitude() }}",
+		"media_geo_longitude" : "{{ item.getMediaGeoLongitude() }}",
+		{% if item.getMediaDateCreated() %}
+			"media_date_created" : "{{ item.getMediaDateCreated()|date("Y-m-d") }}",
+		{% else %}
+			"media_date_created" : "",
+		{% endif %}
+		{% if item.getMediaDateCreatedEnd() %}
+			"media_date_created_end" : "{{ item.getMediaDateCreatedEnd|date("Y-m-d") }}",
+		{% else %}
+			"media_date_created_end" : "",
+		{% endif %}
+		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
+		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
+		"child_items_count" : {{ item.getChildItemsCount() }},
+		"child_items":
+		[
+		{% for child in item.getChildItems %}
+            {{ _self.show(child) }}
+			{%- if loop.index0 < item.getChildItems|length - 1 -%}
+			,
+			{%- endif -%}
+        {% endfor %}
+		]
+	}
+	{% else %}
+		{}
+	{% endif %}
+{% endmacro %}
