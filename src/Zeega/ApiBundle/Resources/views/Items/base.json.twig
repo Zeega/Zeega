@@ -27,7 +27,7 @@
 		{% endif %}
 		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
 		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
-		"child_items_count" : {{ item.getChildItemsCount() }},
+		"child_items_count" : {{ item.getChildItemsCount }},
 		"child_items":
 		[
 		{% for child in item.getChildItems %}

@@ -36,6 +36,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 		$collection->setAttributionUri($url);
 		$collection->setEnabled(true);
 		$collection->setPublished(true);
+		$collection->setChildItemsCount(count($xml->entry));
 		
 		foreach ($xml->entry as $entry) 
 		{
