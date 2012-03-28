@@ -2,7 +2,7 @@
 
 namespace Zeega\ExtensionsBundle\Parser;
 
-use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
+use Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Symfony\Component\Yaml\Parser;
@@ -88,7 +88,9 @@ class ParserService
     		    }
     		}
 	    }
-	    return array("items" => null, "details" => array("is_set" => "", "message" => "", "success" => "false"));
+	    
+	    $parser = new ParserAbsoluteUrl;
+        return $parser->load($url);
 	}
 	
 	// ------------------- private methods
