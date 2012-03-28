@@ -23,24 +23,6 @@
 			
 		},
 		
-		init : function(){},
-
-		preload : function( target )
-		{
-
-		},
-	
-		play : function( z )
-		{
-
-		},
-
-		stash : function()
-		{
-			this.display.css({'top':"-1000%",'left':"-1000%"});
-		}
-	
-		
 	});
 	
 	Layer.Views.Controls.Mapbox = Layer.Views.Controls.extend({
@@ -130,7 +112,7 @@
 			return this;
 		},
 		
-		onRender : function()
+		onLayerEnter : function()
 		{
 			
 			var div = $(this.el).find('.cloud-map').get(0);
@@ -153,23 +135,38 @@
 			
 			this.zoomControl = new L.Control.Zoom();
 			this.map.addControl(this.zoomControl);
-		}
+		},
 		
 		
-	});
-/*	
-	Layer.Views.Player.Mapbox = Layer.Views.Visual.extend({
-		
-		render : function()
+		onPreload : function()
 		{
-			var img = $('<img>')
-				.attr('src', this.attr.url)
-				.css({'width':'100%'});
-
-			$(this.el).html( img );
-				
-			return this;
+			console.log('oh yeah');
+			console.log(this.el);
+			console.log('oh yeah');
+			var div = $(this.el).find('.cloud-map').get(0);
+		  console.log(this.el);
+			this.map = new L.Map(div,{scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
+			this.map.setView(this.latlng, this.attr.zoom).addLayer(this.tileLayer);
+			
+			//Save position and zoom level of map
+			
+			var _this=this;
+			this.map.on('zoomend', function(e) {
+				_this.model.update({zoom :  e.target.getZoom() });
+			});
+			
+			
+			this.map.on('dragend', function(e) {
+				_this.model.update({media_geo_latitude : e.target.getCenter().lat, media_geo_longitude : e.target.getCenter().lng });
+			});
+			
+			
+			this.zoomControl = new L.Control.Zoom();
+			this.map.addControl(this.zoomControl);
+			this.model.trigger('ready',this.model.id);
 		}
+		
+		
 	});
-*/	
+	
 })(zeega.module("layer"));
