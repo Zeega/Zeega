@@ -2,17 +2,19 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Mapbox;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 
-class ParserMapBoxTiles extends ParserItemAbstract
+class ParserMapBoxTiles extends ParserAbstract
 {
-	public function getItem($url, $itemId)
-	{
-	
+    public function load($url, $parameters = null)
+    {
+        $regexMatches = $parameters["regex_matches"];
+        $itemId = $regexMatches[1]; // bam
+
 		$info = explode('/map/',$itemId);
 		
 		$originalUrl = 'http://api.tiles.mapbox.com/v2/'.$info[0].'.'.$info[1].'.json';
