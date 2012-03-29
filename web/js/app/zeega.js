@@ -241,6 +241,7 @@ this.zeega = {
 			});
 			newFrame.render();
 			this.currentSequence.frames.add( newFrame );
+			this.loadFrame( newFrame );
 		}
 	},
 	
