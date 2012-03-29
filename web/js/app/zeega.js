@@ -231,7 +231,6 @@ this.zeega = {
 		{
 			var layers = this.currentSequence.get('layerPersist') || [];
 			var newFrame = new Frame.Model();
-			console.log(newFrame.url())
 			newFrame.save({'layers' : layers},{
 				success : function()
 				{

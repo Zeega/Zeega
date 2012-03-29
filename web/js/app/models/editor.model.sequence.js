@@ -101,7 +101,7 @@
 		{
 			console.log('destroy frame:')
 			console.log(frameModel)
-			zeega.app.loadLeftFrame()
+			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
 			this.updateFrameOrder();
 		},
 		
