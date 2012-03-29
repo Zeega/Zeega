@@ -85,9 +85,21 @@ var bm = new bookmarklet({
         			'opacity':0.5,
         		}).attr('id','zeega-highlight');
 			
+				var close=$('<div>').css({
+        			'position':'absolute',
+        			'right':15,
+        			'top' :10,
+        			'background-color':'transparent',
+        			'color':'red',
+        			'cursor':'pointer',
+        			'font-weight':'bold',
+        			'z-index':60000,
+        			'opacity':1,
+        		}).attr('id','zeega-close').html('X');
 			
         		overlay.append(cover);
         		overlay.append(highlight);
+        		overlay.append(close);
 				
         		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/widget?url="+this.url+"' />").animate({
         		        'width': 470 }, 500, function() {
@@ -120,13 +132,15 @@ var bm = new bookmarklet({
         		    stack: 'iframe' 
         		}).addClass('zeega-draggable').css({ 'z-index' : '100001'});
 			
-        		//$('#zeega-widget-iframe').ready(function(event){console.log(event);});
-			
+        		
         		$('body').click(function()
         		{
         		    if($(this).attr('id')!='zeega-overlay') 
         		        $('#zeega-overlay').hide();
         		});
+        		
+        
+  
         	},
 		}
  		zeegaBM.init();
