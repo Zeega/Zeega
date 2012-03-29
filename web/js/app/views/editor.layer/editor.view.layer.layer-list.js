@@ -16,6 +16,7 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
+			this.$el.attr( 'id', 'layer-'+ this.model.id )
 			
 			this.drawDefaultControls();
 			

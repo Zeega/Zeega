@@ -236,7 +236,7 @@ this.zeega = {
 		console.log('ADD LAYER')
 		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
 		console.log(args)
-		this.project.sequences[0].layers.addNewLayer( args )
+		this.currentSequence.layers.addNewLayer( args )
 	},
 	
 	continueLayerToNextFrame : function( layerID )
@@ -254,9 +254,11 @@ this.zeega = {
 	
 	updateLayerOrder : function( layerIDArray )
 	{
+		console.log('update layer order ------')
+		console.log( layerIDArray )
 		layerIDs = layerIDArray.reverse();
 		// updates z-index of divs in workspace
-		_.each(layerIDs, function(id, i){ $('#layer-preview-'+ id ).css('z-index', i) });
+		_.each(layerIDs, function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
 		this.currentFrame.set({'layers':layerIDs})
 	},
 	

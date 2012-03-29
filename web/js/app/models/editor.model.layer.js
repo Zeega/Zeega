@@ -20,13 +20,12 @@
 		
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.sequenceID +'/layers';
+			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.currentSequence.id +'/layers';
 			else return zeega.app.url_prefix + "layers/" + this.id;
 		},
 		
 		initialize: function(attributes,options)
 		{
-			console.log('LAYERS')
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			
@@ -46,7 +45,6 @@
 				this.set('type',this.layerType);
 				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes ) );
 				
-				console.log( this.get('attr').linkable )
 				
 				//create visual view
 				this.visual = new Layer.Views.Visual[this.layerType]({model:this});

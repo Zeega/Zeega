@@ -45,11 +45,12 @@
 					}
 				});
 				this.add( newLayer );
-				if( args.show ) this.displayCollection.add( newLayer );
+				if( args.show ) newLayer.trigger('editor_layerRender');
 			}
 			console.log(newLayer)
 			
 			console.log('SAVE NEW LAYER')
+			console.log('save to: '+ newLayer.url() )
 			
 			newLayer.save({},{
 				success : function( savedLayer )

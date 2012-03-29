@@ -105,6 +105,7 @@
 		private_onLayerEnter : function()
 		{
 			if(this.draggable) this.makeDraggable();
+			this.$el.attr('id', 'layer-visual-'+this.model.id)
 			this.onLayerEnter();
 		},
 		
@@ -197,14 +198,8 @@
 				'top' : '-1000%',
 				'left' : '-1000%'
 			});
-		},
-		
-		updateZIndex : function( z )
-		{
-			$(this.el).css({ 'zIndex' : 'z' });
 		}
 		
-
 	});
 
 })(zeega.module("layer"));
