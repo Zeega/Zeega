@@ -17,6 +17,8 @@
 			this.createFrames( attributes.frames );
 			this.createLayers( attributes.layers );
 			
+			this.on('updateFrameOrder',this.updateFrameOrder,this);
+			
 			this.updateFrameOrder(false);
 			this.trigger('ready');
 		},
@@ -28,6 +30,7 @@
 			
 			this.frames.on( 'destroy', this.destroyFrame, this );
 			this.frames.on( 'updateFrameOrder', this.updateFrameOrder, this );
+
 		},
 		
 		createLayers : function( layers )
@@ -55,13 +58,15 @@
 			
 			this.layers = new Layers.MasterCollection( layerModelArray );
 			
-			this.layers.on('add',function(layer){ addListeners(layer) })
+			
 			
 		},
 		
 		updateFrameOrder : function( save )
 		{
+			console.log('UPDATE FRAME ORDER	')
 			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+			console.log(frameIDArray)
 			this.frames.trigger('resort',frameIDArray);
 			this.set( { framesOrder: frameIDArray } );
 			if( save != false ) this.save();

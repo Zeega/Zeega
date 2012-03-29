@@ -7,18 +7,10 @@
 		
 		initialize : function()
 		{
-			console.log('frames collection')
-			console.log(this)
-			
-			this.on('add', this.addFrame , this);
+
 		},
 		
 		render : function()
-		{
-			
-		},
-		
-		addFrame : function()
 		{
 			
 		},

@@ -127,6 +127,7 @@ this.zeega = {
 		_.each( _.toArray(this.currentSequence.frames), function(frame){
 			frame.render();
 		})
+		this.currentSequence.updateFrameOrder(false);
 	},
 	
 	renderFrame : function(frame)
@@ -220,10 +221,27 @@ this.zeega = {
 		}
 	},
 
-	addFrame : function()
+	addFrame : function( num )
 	{
-		// maybe something like function( index, numberOfFramesToAdd ) ??
-		this.project.sequences[0].frames.addFrame();
+		var _this = this
+		var n = num || 1;
+		var Frame = zeega.module('frame');
+		
+		for( var i = 0 ; i < n ; i++ )
+		{
+			var layers = this.currentSequence.get('layerPersist') || [];
+			var newFrame = new Frame.Model();
+			console.log(newFrame.url())
+			newFrame.save({'layers' : layers},{
+				success : function()
+				{
+					newFrame.trigger('refresh_view');
+					_this.currentSequence.trigger('updateFrameOrder');
+				}
+			});
+			newFrame.render();
+			this.currentSequence.frames.add( newFrame );
+		}
 	},
 	
 	duplicateFrame : function( frameModel )
@@ -254,15 +272,12 @@ this.zeega = {
 	
 	updateLayerOrder : function( layerIDArray )
 	{
-		console.log('update layer order ------')
-		console.log( layerIDArray )
+
 		layerIDs = layerIDArray.reverse();
 		// updates z-index of divs in workspace
 		_.each(layerIDs, function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
 		this.currentFrame.set({'layers':layerIDs})
 	},
-	
-	updateFrameOrder : function(){ this.project.sequences[0].updateFrameOrder() },
 
 	// returns the order that the frame appears in the sequence
 	getFrameIndex : function( frame )
@@ -331,20 +346,31 @@ this.zeega = {
 
 	getLeftFrame : function()
 	{
-		var frameOrder = this.project.sequences[0].get('framesOrder');
+		var frameOrder = this.currentSequence.get('framesOrder') || this.currentSequence.frames.pluck('id');
+		
+		console.log('getLeft frame ----')
+		console.log(this.currentSequence)
+		console.log(frameOrder)
+		
 		var currentFrameIndex = _.indexOf( frameOrder, parseInt(this.currentFrame.id) );
-		if( currentFrameIndex ) return this.project.sequences[0].frames.collection.get( frameOrder[ currentFrameIndex-1 ] );
-		else return this.project.sequences[0].frames.collection.get( frameOrder[1] );
+		if( currentFrameIndex ) return this.currentSequence.frames.get( frameOrder[ currentFrameIndex-1 ] );
+		else return this.currentSequence.frames.get( frameOrder[1] );
 	},
 
 	getRightFrame : function()
 	{
-		var currentFrameIndex = _.indexOf( this.project.sequences[0].get('framesOrder'), this.currentFrame.id );
-		if(currentFrameIndex < _.size( this.project.sequences[0].frames.collection )-1 ) return this.project.sequences[0].frames.collection.at( currentFrameIndex + 1 );
+		var currentFrameIndex = _.indexOf( this.currentSequence.get('framesOrder'), this.currentFrame.id );
+		if(currentFrameIndex < _.size( this.currentSequence.frames )-1 ) return this.currentSequence.frames.at( currentFrameIndex + 1 );
 		else return false;
 	},
 
-	loadLeftFrame : function(){ if(frame) this.loadFrame( this.getLeftFrame() ) },
+	loadLeftFrame : function()
+	{
+		console.log('load left ----')
+		console.log( this.getLeftFrame() )
+		this.loadFrame( this.getLeftFrame() )
+	},
+	
 	loadRightFrame : function(){ this.loadFrame( this.getRightFrame() ) },
 
 	udpateAspectRatio : function( ratioID )

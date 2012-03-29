@@ -7,6 +7,7 @@
 			this.model.on( 'change:thumbnail_url', this.onNewThumb, this );
 			this.model.on('focus', this.focus, this );
 			this.model.on('blur', this.blur, this );
+			this.model.on('refresh_view', this.refreshView, this);
 		},
 		
 		focus : function(){ $(this.el).addClass('active-frame'), this.model.inFocus = true },
@@ -117,6 +118,10 @@
 			'mouseover'		: 'showGear'
 		},
 		
+		refreshView : function()
+		{
+			$(this.el).attr('id', 'frame-thumb-'+this.model.id)
+		},
 	
 		showGear : function()
 		{

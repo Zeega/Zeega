@@ -14,7 +14,7 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.sequenceID +'/frames';
+			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames';
 			else return zeega.app.url_prefix + 'frames/'+ this.id;
 		},
 	
@@ -47,7 +47,7 @@
 		{
 			this.frameTarget.append( this.view.remove() )
 		},
-	
+		
 		//update the frame thumbnail
 		updateThumb : function()
 		{
