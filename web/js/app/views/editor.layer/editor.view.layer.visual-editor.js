@@ -28,7 +28,8 @@
 				'top' : (this.model.player) ? '-1000%' : _this.model.get('attr').top +'%',
 				'left' : (this.model.player) ? '-1000%' : _this.model.get('attr').left+'%'
 				})
-				.addClass('layer-'+ this.model.layerType.toLowerCase() );
+				.addClass('layer-'+ this.model.layerType.toLowerCase() )
+				.attr('id', 'layer-visual-'+this.model.id);
 				
 				this.init();
 		},
@@ -105,7 +106,6 @@
 		private_onLayerEnter : function()
 		{
 			if(this.draggable) this.makeDraggable();
-			this.$el.attr('id', 'layer-visual-'+this.model.id)
 			this.onLayerEnter();
 		},
 		

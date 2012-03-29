@@ -57,6 +57,7 @@
 				{
 					console.log('SAVED NEW LAYER')
 					console.log(savedLayer)
+					savedLayer.trigger('refresh_view')
 					_this.addLayerToFrame( args.frame, savedLayer )
 				}
 			});
@@ -86,6 +87,7 @@
 				//add the layer id to the layer order array
 				layerOrder.push( parseInt( layer.id ) );
 			}
+			zeega.app.updateLayerOrder(layerOrder.reverse());
 			//set the layerOrder array inside the frame
 			frame.set({'layers':layerOrder});
 			frame.save();

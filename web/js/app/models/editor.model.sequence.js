@@ -165,7 +165,7 @@
 		{
 			var _this = this;
 			var layersInCollection = _.map( this.layers.pluck('id'), function(id){return parseInt(id)}); // all layers including orphans
-			var layersInFrames = _.flatten( this.frames.collection.pluck('layers') ); // layers in use
+			var layersInFrames = _.flatten( this.frames.pluck('layers') ); // layers in use
 			var orphanLayerIDs = _.difference( layersInCollection, layersInFrames ); // layers to be nuked
 			_.each( orphanLayerIDs, function(orphanID){
 				_this.layers.get( orphanID ).destroy();
