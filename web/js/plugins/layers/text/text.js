@@ -123,9 +123,10 @@
 			var _this = this;
 			this.$el.find('#zedit-target').keypress(function(e){
 				_this.lazySave();
-			})
-			.click(function(){
-				this.$el.find('#zedit-target').focus();
+			});
+			
+			this.$el.click(function(){
+				_this.$el.find('#zedit-target').focus();
 			})
 			
 		},

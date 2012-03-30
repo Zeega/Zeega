@@ -2,6 +2,8 @@
 
 	Frame.Model = Backbone.Model.extend({
 		
+		frameTarget : $('#frame-list'),
+		
 		defaults : {
 			"name" : "Untitled",
 			'layers' : [],
@@ -12,22 +14,40 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.sequenceID +'/frames';
+			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames';
 			else return zeega.app.url_prefix + 'frames/'+ this.id;
 		},
 	
 		initialize : function()
 		{	
 			this.updating = false
+			
+			
+			this.view = new Frame.Views.FrameSequence({ model : this })
+			
+			//this.on('focus', this.render, this );
+			//this.on('blur', this.unrender, this );
+
 			this.on('change:layers', this.updateThumb, this );
 			this.on('updateThumb', this.updateThumb, this );
 			
-			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }})
+			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }});
 			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 		},
 	
+	
+		render : function()
+		{
+			this.frameTarget.append( this.view.render().el )
+		},
+		
+		unrender : function()
+		{
+			this.frameTarget.append( this.view.remove() )
+		},
+		
 		//update the frame thumbnail
 		updateThumb : function()
 		{

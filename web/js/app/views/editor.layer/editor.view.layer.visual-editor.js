@@ -28,13 +28,15 @@
 				'top' : (this.model.player) ? '-1000%' : _this.model.get('attr').top +'%',
 				'left' : (this.model.player) ? '-1000%' : _this.model.get('attr').left+'%'
 				})
-				.addClass('layer-'+ this.model.layerType.toLowerCase() );
+				.addClass('layer-'+ this.model.layerType.toLowerCase() )
+				.attr('id', 'layer-visual-'+this.model.id);
 				
 				this.init();
 		},
 		
 		initListeners : function()
 		{
+//editor_removeLayerFromFrame
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -45,7 +47,7 @@
 			else
 			{
 				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-				this.model.on('editor_layerExit', this.private_onLayerExit, this);
+				this.model.on('editor_layerExit editor_removeLayerFromFrame', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
 			}
@@ -196,14 +198,8 @@
 				'top' : '-1000%',
 				'left' : '-1000%'
 			});
-		},
-		
-		updateZIndex : function( z )
-		{
-			$(this.el).css({ 'zIndex' : 'z' });
 		}
 		
-
 	});
 
 })(zeega.module("layer"));
