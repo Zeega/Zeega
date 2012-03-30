@@ -259,8 +259,17 @@ this.zeega = {
 	
 	continueLayerToNextFrame : function( layerID )
 	{
-		console.log( 'copy layer to next frame!: '+ layerID )
-		this.project.sequences[0].continueLayerToNextFrame( layerID );
+		console.log( 'copy layer to next frame!: '+ layerID );
+		
+		
+		var nextFrame = this.getRightFrame();
+		
+		if( nextFrame != this.currentFrame )
+		{
+			if(nextFrame.get('layers')) nextFrame.get('layers').push(layerID);
+			else nextFrame.set('layers',[layerID],{silent:true});
+			nextFrame.save();
+		}
 		
 	},
 	
