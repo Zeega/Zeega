@@ -1,11 +1,11 @@
 (function(Layer){
 
-	Layer.Website = Layer.Model.extend({
+	Layer.GoogleBook = Layer.Model.extend({
 			
-		layerType : 'Website',
+		layerType : 'GoogleBook',
 
 		defaultAttributes : {
-			'title' : 'Website Layer',
+			'title' : 'GoogleBook Layer',
 			'url' : 'none',
 			'left' : 0,
 			'top' : 0,
@@ -18,7 +18,7 @@
 
 	});
 	
-	Layer.Views.Controls.Website = Layer.Views.Controls.extend({
+	Layer.Views.Controls.GoogleBook = Layer.Views.Controls.extend({
 		
 		render : function()
 		{
@@ -50,18 +50,19 @@
 		
 	});
 
-	Layer.Views.Visual.Website = Layer.Views.Visual.extend({
+	Layer.Views.Visual.GoogleBook = Layer.Views.Visual.extend({
 		
 		draggable : true,
 		linkable : true,
 		
 		render : function()
 		{
-			var iframe = $('<iframe>')
-				.attr('src', this.attr.url)
-				.css({'width':'100%','height':'100%','border':'none'});
+			console.log(this);
+			var img = $('<img>')
+				.attr('src', this.attr.thumbnail_url)
+				.css({'width':'100%'});
 
-			$(this.el).html( iframe );
+			$(this.el).html( img );
 						
 			return this;
 		}

@@ -1,5 +1,10 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
 zeega.parsers:
+    google.com:
+        item_parser:
+            regex: /http:\/\/(?:books\.)?google.com\/books\?id=([a-zA-Z0-9\-_]+)/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\GoogleBook\ParserGoogleBook
     flickr.com:
         item_parser:
             regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#"

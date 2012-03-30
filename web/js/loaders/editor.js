@@ -86,6 +86,7 @@ var loadFiles = [
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/mapbox/mapbox',
 	'order!plugins/layers/text/text',
+	'order!plugins/layers/googlebook/googlebook',
 	
 
 

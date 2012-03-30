@@ -3,8 +3,8 @@
 	{% if item is not null %}
 	{
 		"id" : "{{ item.id }}",
-		"title" : "{{ item.title | json_encode}}",
-		"description" : "{{ item.description | json_encode}}",
+		"title" : {{ item.title | json_encode | raw}},
+		"description" : {{ item.description | json_encode | raw}},
 		"text" : "{{ item.text }}",
 		"uri" : "{{ item.uri }}",
 		"attribution_uri" : "{{ item.getAttributionUri() }}",
@@ -12,7 +12,7 @@
 		"media_type" : "{{ item.getMediaType() }}",
 		"layer_type" : "{{ item.getLayerType() }}",
 		"archive" : "{{ item.archive }}",
-		"thumbnail_url" : "{{ item.getThumbnailUrl() }}",
+		"thumbnail_url" : {{ item.getThumbnailUrl() | json_encode | raw}},
 		"media_geo_latitude" : "{{ item.getMediaGeoLatitude() }}",
 		"media_geo_longitude" : "{{ item.getMediaGeoLongitude() }}",
 		{% if item.getMediaDateCreated() %}
