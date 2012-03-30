@@ -1,30 +1,34 @@
 <?php
 
-namespace {{ namespace }}\Controller;
+namespace {{namespace}};
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-{% if 'annotation' == format -%}
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-{%- endif %}
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
+use Zeega\DataBundle\Entity\Item;
 
+use \DateTime;
 
-class DefaultController extends Controller
+class {{parserClass}} extends ParserAbstract
 {
-    {% if 'annotation' == format -%}
-    /**
-     * @Route("/hello/{name}")
-     * @Template()
-     */
-    {%- endif %}
-
-    public function indexAction($name)
+	public function load($url, $parameters = null)
     {
-        {% if 'annotation' != format -%}
-        return $this->render('{{ bundle }}:Default:index.html.twig', array('name' => $name));
-        {%- else -%}
-        return array('name' => $name);
-        {%- endif %}
-
-    }
+		$item = new Item();
+		/
+		/*
+		$item->setTitle();                  // string
+		$item->setDescription();            // string
+		$item->setMediaCreatorUsername();   // string
+		$item->setMediaCreatorRealname();   // string
+		$item->setMediaType();              // string
+		$item->setLayerType();              // string
+		$item->setArchive();                // string
+		$item->setUri();                    // string
+        $item->setAttributionUri();         // string
+		$item->setDateCreated();            // string
+		$item->setThumbnailUrl();           // string
+		$item->setChildItemsCount();        // int
+        */
+        
+        // returnResponse($object:Item, $success:Boolean, $isSet:Boolean, $message:String: default = "")
+		return $this->returnResponse($item, true, false, "I am a parser for the url $url");
+	}
 }

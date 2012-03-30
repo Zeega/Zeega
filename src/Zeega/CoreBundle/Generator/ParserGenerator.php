@@ -12,23 +12,17 @@ class ParserGenerator extends Generator
         $this->skeletonDir = $skeletonDir;
     }
     
-    public function generate($namespace, $bundle, $dir, $format, $structure)
+    public function generate($namespace, $class, $service, $dir)
     {
-        $dir .= '/'.strtr($namespace, '\\', '/');
-        if (file_exists($dir)) {
-            throw new \RuntimeException(sprintf('Unable to generate the bundle as the target directory "%s" is not empty.', realpath($dir)));
-        }
-
-        $basename = substr($bundle, 0, -6);
+        $this->filesystem->mkdir($dir);
+        
+        //$basename = substr($name, 0, -6);
         $parameters = array(
-            'namespace' => $namespace,
-            'bundle'    => $bundle,
-            'format'    => $format,
-            'bundle_basename' => $basename,
-            'extension_alias' => Container::underscore($basename),
+            'parserClass' => $class,
+            'namespace'    => $namespace,
         );
 
-        $this->renderFile($this->skeletonDir, 'DefaultParser.php', $dir.'/'.$bundle.'.php', $parameters);
+        $this->render($this->skeletonDir, 'DefaultParser.php', $dir.'/'.$class.'.php', $parameters);
         
         /*
         if ('xml' === $format || 'annotation' === $format) {

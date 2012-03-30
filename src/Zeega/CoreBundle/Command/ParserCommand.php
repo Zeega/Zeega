@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 use Zeega\CoreBundle\Generator\ParserGenerator;
 use Zeega\CoreBundle\Generator\Generator;
-
 
 class ParserCommand extends ContainerAwareCommand
 {
@@ -62,31 +62,46 @@ EOT
         
         $style = new OutputFormatterStyle();
         $style->setBackground('blue');
-        $output->getFormatter()->setStyle('fire', $style);
-        $style->setBackground('red');
-        $output->getFormatter()->setStyle('red', $style);
+        $output->getFormatter()->setStyle('header', $style);
+        
+        $style = new OutputFormatterStyle();
+        $style->setForeground('yellow');
+        $output->getFormatter()->setStyle('ask', $style);
         
         $output->writeln(array(
             '',
-            '<fire>                                   </fire>',
-            '<fire> Welcome to Zeega parser generator </fire>',
-            '<fire>                                   </fire>'),
-            '');
+            '<header>                                   </header>',
+            '<header> Welcome to Zeega parser generator </header>',
+            '<header>                                   </header>',
+            ''
+            ));
+
+        // service name
+        $service = $dialog->ask($output, '<ask>Please enter the name of your service (i.e. Soundcloud): </ask>', '');
         
+        // class name
+        $class = $dialog->ask($output, '<ask>Please name your parser class: </ask>', '');
+
+        $namespace = "Zeega\ExtensionsBundle\Parser\\$service";
         
-        //$dialog = $this->getHelperSet()->get('dialog');
-        $name = $dialog->ask($output, '<red>Please enter the name of your Parser: </red>', '');
+        // target dir
+        $dir = $input->getOption('dir') ?: dirname($this->getContainer()->getParameter('kernel.root_dir'))."/src/Zeega/ExtensionsBundle/Parser/$service";
+        $output->writeln(array(
+            '',
+            'The bundle can be generated anywhere. The suggested default directory uses',
+            'the standard conventions.',
+            '',
+        ));
+        $dir = $dialog->ask($output, "<ask>Default directory [$dir]: </ask>", $dir);
+
+        $output->writeln(array(
+            '',
+            "Writting the parser file at <ask>$dir/$class.php</ask>",
+            '',
+        ));
         
-        $namespace = $input->getOption('namespace');
-        if (!$bundle = $input->getOption('bundle-name')) 
-        {
-                    $bundle = strtr($namespace, array('\\' => ''));
-        }
+        //$generator = $this->getGenerator();
+        $generator->generate($namespace, $class, $service, $dir);
+        
     }
-    
-    protected function getGenerator()
-    {
-        
-        return $this->generator;
-    }    
 }
