@@ -276,22 +276,18 @@ this.zeega = {
 	continueOnAllFrames : function( layerModel )
 	{
 		console.log('zeega continue on all');
-		console.log(this.currentSequence)
 		
 		var layerID = parseInt(layerModel.id);
 		//get persistent layers
 		var persistentLayers = this.currentSequence.get('attr').persistLayers;
-		console.log( this.currentSequence.get('attr') );
 		// if they do not exist
 		if( _.isUndefined(persistentLayers) )
 		{
-			console.log('is undefined')
 			persistentLayers = [ layerID ];
 			this.addPersistenceToFrames( layerID );
 		}
 		else
 		{
-			console.log('included? '+ layerID +"  :  "+ _.include(persistentLayers, layerID ))
 			//check to see if it's already in there
 			if( _.include(persistentLayers, layerID ) )
 			{
@@ -311,38 +307,29 @@ this.zeega = {
 		var attr = this.currentSequence.get('attr') || {};
 		_.extend( attr , { persistLayers : persistentLayers });
 		
-		console.log(persistentLayers)
-		console.log(attr)
 		this.currentSequence.set({ 'attr': attr });
 		this.currentSequence.save();
-		console.log(this.currentSequence)
 		
 	},
 	
 	addPersistenceToFrames : function( layerID )
 	{
-		console.log('	add to all frames')
 		// add this layer to each frame in the sequence
 		_.each( _.toArray( this.currentSequence.frames ), function(frame){
 			if( !_.include(frame.get('layers'), layerID ) )
 			{
 				//add to frame
-				
 				var layers = frame.get('layers') || [];
 				//var layers = [];
 				layers.push( layerID );
 				layers = _.compact( layers );
 				frame.set({ 'layers' : layers });
-				
-				console.log(layers)
-
 			}
 			
 		})
 	},
 	removePersistenceFromFrames : function( layerID )
 	{
-		console.log('	remove from frame')
 		var _this = this;
 		// add this layer to each frame in the sequence
 		_.each( _.toArray( this.currentSequence.frames ), function(frame){
@@ -352,9 +339,6 @@ this.zeega = {
 				var layers = _.without( frame.get('layers'), layerID );
 				if( layers.length == 0 ) layers = [false];
 				frame.set({ 'layers' : layers });
-				
-				console.log(layers)
-
 			}
 			
 		})
