@@ -94,11 +94,11 @@
 			this.updateFrameOrder();
 		},
 		
-		updatePersistLayer : function( model )
+		updatePersistLayer : function( modelID )
 		{
 			console.log('persist this layer')
 			
-			this.set('attr',{persistLayers: [parseInt(model.id)] })
+			this.set('attr',{persistLayers: [parseInt(modelID)] })
 			this.save();
 			console.log(this.get('attr'))
 			console.log(this.get('attr').persistLayers)
@@ -106,16 +106,16 @@
 			
 			var attr = this.get('attr');
 		
-			if( _.include( attr.persistLayers, parseInt(model.id) ) ) 
+			if( _.include( attr.persistLayers, parseInt(modelID) ) ) 
 			{
-				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(model.id))})
+				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(modelID))})
 				console.log(attr)
 				//this.frames.removePersistence( parseInt(model.id) );
 			}
 			else
 			{
-				if(attr.persistLayers) attr = _.extend( attr, { persistLayers: _.compact(attr.persistLayers.push(parseInt(model.id))) });
-				else attr.persistLayers = [ parseInt(model.id) ];
+				if(attr.persistLayers) attr = _.extend( attr, { persistLayers: _.compact(attr.persistLayers.push(parseInt(modelID))) });
+				else attr.persistLayers = [ parseInt(modelID) ];
 				console.log(attr)
 				//this.frames.addPersistence( parseInt(model.id) );
 			}

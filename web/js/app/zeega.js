@@ -275,8 +275,10 @@ this.zeega = {
 	
 	continueOnAllFrames : function( layerModel )
 	{
-		console.log('zeega continue on all')
-		this.project.sequences[0].updatePersistLayer( layerModel );
+		console.log('zeega continue on all');
+		console.log(this.currentSequence)
+		this.currentSequence.updatePersistLayer( layerModel.id );
+		//this.project.sequences[0].updatePersistLayer( layerModel );
 	},
 	
 	updateLayerOrder : function( layerIDArray )

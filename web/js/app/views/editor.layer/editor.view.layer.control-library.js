@@ -69,8 +69,8 @@
 			
 			this.$el.find('button').effect('highlight',{},2000);
 			
+			console.log( 'continue layer on all frames!: '+ this.model.id );
 			zeega.app.continueOnAllFrames( this.model );
-			console.log( 'continue layer on all frames!: '+ this.model.id )
 		}
 		
 	});
