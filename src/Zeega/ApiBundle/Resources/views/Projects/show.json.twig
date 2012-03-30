@@ -12,10 +12,10 @@
 				"id" : "{{ sequences[i].id }}",
 				"title" : "{{ sequences[i].title }}",
 				"attr" :
-					{% if sequences[i].attr is null %}
-						{}						
-					{% else %}
+					{% if sequences[i].attr is not empty %}
 						{{sequences[i].attr | json_encode | raw}}
+					{% else %}	
+						{}					
 					{% endif %},
 				"frames" : {{frames[sequences[i].id] | json_encode | raw}},
 				{% set layers_len = layers[sequences[i].id]|length - 1 -%}

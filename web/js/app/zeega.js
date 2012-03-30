@@ -229,7 +229,7 @@ this.zeega = {
 		
 		for( var i = 0 ; i < n ; i++ )
 		{
-			var layers = this.currentSequence.get('layerPersist') || [];
+			var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
 			var newFrame = new Frame.Model();
 			newFrame.save({'layers' : layers},{
 				success : function()
@@ -305,7 +305,7 @@ this.zeega = {
 		}
 		
 		var attr = this.currentSequence.get('attr') || {};
-		_.extend( attr , { persistLayers : persistentLayers });
+		_.extend( attr , { persistLayers : _.compact(persistentLayers) });
 		
 		this.currentSequence.set({ 'attr': attr });
 		this.currentSequence.save();
