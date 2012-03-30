@@ -84,14 +84,13 @@
 			this.$el.find('#widget-title').editable(
 				function(value, settings)
 				{ 
-				console.log(item);
 					item.set({title: value},{silent: true});
 					return value; //must return the value
 				},
 				{
 					type 	: 'text',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit description...',
+					tooltip   : 'Click to edit...',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
@@ -109,7 +108,7 @@
 				{
 					type 	: 'textarea',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit description...',
+					tooltip   : 'Click to edit...',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',

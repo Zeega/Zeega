@@ -2,17 +2,20 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 use SimpleXMLElement;
 
-class ParserYoutubeVideo extends ParserItemAbstract
+class ParserYoutubeVideo extends ParserAbstract
 {
-	public function getItem($url, $itemId)
+	public function load($url, $parameters = null)
 	{
+	    $regexMatches = $parameters["regex_matches"];
+	    $itemId = $regexMatches[1]; // bam
+	    
 		$originalUrl = 'http://gdata.youtube.com/feeds/api/videos/'.$itemId;
 
 		// read feed into SimpleXML object
@@ -76,11 +79,11 @@ class ParserYoutubeVideo extends ParserItemAbstract
 		
 		if(isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
 		{
-			return $this->returnResponse($item, false,"This video is not embeddable and cannot be added to Zeega.");
+			return $this->returnResponse($item, false, false, "This video is not embeddable and cannot be added to Zeega.");
 		}
 		else
 		{
-			return $this->returnResponse($item, true);
+			return $this->returnResponse($item, true, false);
 		}
 	}
 }

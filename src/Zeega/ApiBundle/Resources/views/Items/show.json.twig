@@ -1,42 +1,12 @@
 {
-{% block header %}{% endblock %}	
-"{% block listName %}items{% endblock %}":
-	{% if item is not null %}
-	{
-		"id" : "{{ item.id }}",
-		"title" : "{{ item.title | json_encode}}",
-		"description" : "{{ item.description | json_encode}}",
-		"text" : "{{ item.text }}",
-		"uri" : "{{ item.uri }}",
-		"attribution_uri" : "{{ item.getAttributionUri() }}",
-		"date_created" : "{{ item.getDateCreated()|date("Y-m-d") }}",
-		"media_type" : "{{ item.getMediaType() }}",
-		"layer_type" : "{{ item.getLayerType() }}",
-		"archive" : "{{ item.archive }}",
-		"thumbnail_url" : "{{ item.getThumbnailUrl() }}",
-		"child_items_count" : "{{ item.getChildItemsCount() }}",
-		"media_geo_latitude" : "{{ item.getMediaGeoLatitude() }}",
-		"media_geo_longitude" : "{{ item.getMediaGeoLongitude() }}",
-		{% if item.getMediaDateCreated() %}
-			"media_date_created" : "{{ item.getMediaDateCreated()|date("Y-m-d") }}",
+"items":
+[
+	{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}
+],
+	"request":
+		{% if request is defined %}
+			{{ request | json_encode | raw}}
 		{% else %}
-			"media_date_created" : "",
-		{% endif %}
-		{% if item.getMediaDateCreatedEnd() %}
-			"media_date_created_end" : "{{ item.getMediaDateCreatedEnd|date("Y-m-d") }}",
-		{% else %}
-			"media_date_created_end" : "",
-		{% endif %}
-		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
-		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}"
-	}
-	{% else %}
 		{}
-	{% endif %},
-"{% block countName %}items_count{% endblock %}": 
-	{% if item is not null %}
-		1
-	{% else %}
-		0
-	{% endif %}
+		{% endif %}
 }

@@ -2,13 +2,13 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
-use Zeega\CoreBundle\Parser\Base\ParserCollectionAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 
-class ParserFlickrSet extends ParserCollectionAbstract
+class ParserFlickrSet extends ParserAbstract
 {
 	private static $license=array('','Attribution-NonCommercial-ShareAlike Creative Commons','Attribution-NonCommercial Creative 		
 			Commons','Attribution-NonCommercial-NoDerivs Creative Commons','Attribution Creative Commons',
@@ -21,8 +21,12 @@ class ParserFlickrSet extends ParserCollectionAbstract
 		$this->itemParser = new ParserFlickrPhoto();
 	}
 	
-	public function getInfo($url, $setId)
-	{
+	public function load($url, $parameters = null)
+    {
+        $loadCollectionItems = $parameters["load_child_items"];
+        $regexMatches = $parameters["regex_matches"];
+	    $setId = $regexMatches[1]; // bam
+	    
 		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
 		$setInfo = $f->photosets_getInfo($setId);
 
@@ -52,30 +56,24 @@ class ParserFlickrSet extends ParserCollectionAbstract
 		}
 		$collection->setThumbnailUrl($sizes['Square']['source']);
 		
-		return parent::returnResponse($collection, true);
-	}
-	
-	public function getCollection($url, $setId, $collection)
-	{
-		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
-		$setPhotos = $f->photosets_getPhotos($setId);
-		$setInfo = $f->photosets_getInfo($setId);
-		
-		$photos = $setPhotos['photoset']['photo'];
-
-		if($photos)
+		if($loadCollectionItems == true)
 		{
-			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
-			$collection->setChildItemsCount(count($photos));
-			
-			foreach($photos as $photo)
-			{
-				$item = $this->itemParser->getItem("", $photo['id']);
-				$collection->addItem($item["items"]);
-			}
-			
-			return $this->returnResponse($collection, true);
+		 	$setPhotos = $f->photosets_getPhotos($setId);
+		 	$photos = $setPhotos['photoset']['photo'];
+
+    		if($photos)
+    		{
+    			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
+    			$collection->setChildItemsCount(count($photos));
+
+    			foreach($photos as $photo)
+    			{
+    				$item = $this->itemParser->load(null, array("photo_id" => $photo['id']));
+    				$collection->addItem($item["items"]);
+    			}
+    		}
 		}
-		return $this->returnResponse($collection, false);
+		
+		return parent::returnResponse($collection, true, true);
 	}
 }

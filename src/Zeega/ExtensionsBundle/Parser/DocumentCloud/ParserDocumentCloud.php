@@ -2,16 +2,16 @@
 
 namespace Zeega\ExtensionsBundle\Parser\DocumentCloud;
 
-use Zeega\CoreBundle\Parser\Base\ParserItemAbstract;
+use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
-class ParserDocumentCloud extends ParserItemAbstract
+class ParserDocumentCloud extends ParserAbstract
 {
-	public function getItem($url,$itemId)
+	public function load($url, $parameters = null)
 	{
 	    $originalUrl = $url;
 	    $url=str_replace( 'org/documents', 'org/api/documents',$url);
@@ -38,6 +38,7 @@ class ParserDocumentCloud extends ParserItemAbstract
 		$item->setTitle($document["title"]);
 		$item->setUri($document["id"]);
 		$item->setAttributionUri($originalUrl);
+		$item->setChildItemsCount(0);
 		
 		$item->setDescription($document["description"]);
 	
@@ -50,6 +51,6 @@ class ParserDocumentCloud extends ParserItemAbstract
 		$item->setThumbnailUrl($image);
 		
 		
-		return $this->returnResponse($item, true);
+		return $this->returnResponse($item, true, false);
 	}
 }
