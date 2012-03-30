@@ -105,21 +105,6 @@ function embedButton()
 	
 }
 
-function shareButton()
-{	
-	$('#share-project-modal').modal('show');
-	
-	//$('#project-link').attr('href','')
-	
-	$('#share-project-modal').find('#close-modal').mouseup(function(){
-		$('#share-project-modal').modal('hide');
-	})
-
-	return false;
-}
-
-
-
 $('#new-layer-list a').click(function(){
 	zeega.app.addLayer( { type : $(this).data('type') } );
 	//addLayer( $(this).data('type') );
@@ -205,7 +190,14 @@ function closeOpenCitationTabs()
 	
 	//share button
 	$('#share-project').click(function(){
-		shareButton();
+	
+		$('#share-project-modal').modal('show');
+
+		$('#share-project-modal').find('#close-modal').mouseup(function(){
+			$('#share-project-modal').modal('hide');
+			return false;
+		})
+		return false;
 	});
 	
 	$('#get-help').click(function(){
