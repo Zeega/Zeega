@@ -86,7 +86,16 @@
 		
 		onPreload : function()
 		{
-			console.log('default preload')
+			var _this = this;
+			if(this.attr.link)
+			{
+				
+				$(this.el).click(function(){
+					window.location = 'http://'+ _this.attr.link
+				})
+				.addClass('linked-layer');
+			}
+			
 			this.model.trigger('ready',this.model.id)
 		},
 		
