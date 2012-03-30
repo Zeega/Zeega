@@ -1200,11 +1200,6 @@ body
 	clear:both;
 }
 
-.input-prepend { padding-left:23px }
-.standard-layer-controls>div{ margin-top:6px }
-.layer-link-box input { width:170px }
-.layer-link-box .zicon { float:right; }
-
 .layer-uber-bar div { padding : 3px }
 .layer-uber-controls, .layer-drag-handle span { float:left }
 

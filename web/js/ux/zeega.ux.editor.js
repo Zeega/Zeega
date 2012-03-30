@@ -306,7 +306,7 @@ function closeOpenCitationTabs()
 		tolerance: 'pointer',
 		distance: 10,
 		
-		stop : function(){ zeega.app.updateFrameOrder() }
+		stop : function(){ zeega.app.currentSequence.updateFrameOrder() }
 	});
 	
 	$( "#layers-list-visual" )

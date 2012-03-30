@@ -49,7 +49,6 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
-	'order!lib/nicedit/nicEdit',
 	'order!lib/popcorn_flash',
 	
 	
@@ -77,7 +76,7 @@ var loadFiles = [
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
 	//mvc
-	'order!backbone/models/tag',
+	//'order!backbone/models/tag',
 
 	//layers
 	//'order!plugins/layers/geo/geo',

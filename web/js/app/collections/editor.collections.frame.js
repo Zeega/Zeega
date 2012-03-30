@@ -1,5 +1,29 @@
 (function(Frame){
 
+
+	Frame.Collection = Backbone.Collection.extend({
+		model: Frame.Model,
+		url : function(){ return zeega.app.url_prefix+"sequences/"+ zeega.app.sequence.id +"/frames" },
+		
+		initialize : function()
+		{
+
+		},
+		
+		render : function()
+		{
+			
+		},
+		
+		removeFrame : function()
+		{
+			
+		}
+		
+		
+	});
+	
+/*	
 	Frame.ViewCollection = Backbone.View.extend({
 		
 		//set the location where the frames are to be drawn
@@ -159,10 +183,7 @@
 			}
 		}
 	});
+*/
 
-	Frame.Collection = Backbone.Collection.extend({
-		model: Frame.Model,
-		url : function(){ return zeega.app.url_prefix+"sequences/"+ zeega.app.sequence.id +"/frames" }
-	});
 
 })(zeega.module("frame"));

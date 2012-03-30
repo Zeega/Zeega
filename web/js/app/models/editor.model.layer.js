@@ -12,36 +12,46 @@
 		
 		defaults : {
 			attr : {},
-			visibleineditor : true,
+			linkable: true,
 			thumbUpdate : true,
-			linkable : true
 		},
 		
 		defaultAttributes : {},
 		
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.sequenceID +'/layers';
+			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.currentSequence.id +'/layers';
 			else return zeega.app.url_prefix + "layers/" + this.id;
 		},
 		
 		initialize: function(attributes,options)
 		{
-			console.log('LAYERS')
 			
 			this.on('ready', function(){ this.visualLoaded = true });
+			this.on('refresh_view', this.refreshView, this);
+			
+			
+			this.on('editor_layerRender', this.renderLayerInEditor, this );
+			this.on('editor_destroyLayer editor_layerUnrender', this.unrenderLayerFromEditor, this);
+			
 			this.on('editor_controlsOpen', this.onControlsOpen, this);
 			this.on('editor_controlsClosed', this.onControlsClosed, this);
+			
+			this.on('editor_destroyLayer', this.unrenderLayerFromEditor, this);
+			
 			
 			if( options ) _.extend(this,options);
 			
 			if( !_.isNull( this.layerType ) )
 			{
 				this.set('type',this.layerType);
-				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes) );
-
+				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes ) );
+				
+				
 				//create visual view
-				this.visual = new Layer.Views.Visual[this.layerType]({model:this})
+				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
+				
+				
 				//create control view
 				if(this.showControls) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			
@@ -59,10 +69,15 @@
 		
 		renderLayerInEditor : function()
 		{
-			this.editorWindow.append( this.visual.render().el );
+			if(this.isNew()) 
+			{
+				this.visual.render().$el.css('zIndex',1000);
+				this.editorWindow.append( this.visual.el );
+			}
+			else this.editorWindow.append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
-			this.trigger('editor_rendered');
+			this.trigger('editor_rendered editor_layerEnter');
 		},
 		
 		unrenderLayerFromEditor : function()
@@ -70,14 +85,12 @@
 			this.trigger('editor_layerExit')
 		},
 		
-		renderLayerInEditor : function()
+		refreshView : function()
 		{
-			this.editorWindow.append( this.visual.render().el );
-			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
-			
-			this.trigger('editor_layerEnter');
+			console.log('	refresh view')
+			this.visual.$el.attr('id','layer-visual-'+this.id)
+			this.controls.$el.attr('id','layer-'+this.id)
 		},
-		
 
 		update : function( newAttr, silent )
 		{

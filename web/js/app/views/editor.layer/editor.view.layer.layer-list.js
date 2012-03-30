@@ -16,8 +16,24 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
+			this.$el.attr( 'id', 'layer-'+ this.model.id )
+			
+			this.drawDefaultControls();
+			
 			
 			this.init();
+		},
+		
+		drawDefaultControls : function()
+		{
+			var continueToNext = new Layer.Views.Lib.ContinueToNextFrame({ model: this.model });
+			var continueOnAll = new Layer.Views.Lib.ContinueOnAllFrames({ model: this.model });
+			var link = new Layer.Views.Lib.Link({ model: this.model });
+			
+			$(this.el).find('.default-layer-controls')
+				.append( continueOnAll.getControl() )
+				.append( continueToNext.getControl() );
+			if( this.model.get('attr').linkable ) $(this.el).find('.default-layer-controls').append( link.getControl() );
 		},
 		
 		initListeners : function()
@@ -82,6 +98,7 @@
 		{
 			this.delegateEvents();
 			this.onLayerEnter();
+			console.log('	layer list enter')
 		},
 		
 		private_onLayerExit : function()
@@ -177,8 +194,8 @@
 		{
 			if( confirm('Delete Layer?') )
 			{
+				this.model.trigger('editor_removeLayerFromFrame', this.model);
 				this.remove();
-				this.model.trigger('remove_from_frame', this.model);
 			}
 		},
 
@@ -328,24 +345,9 @@
 						'</div>'+
 						'<div class="layer-content inset-tray dark tray closed">'+
 							'<div id="controls" class="clearfix"></div>'+
-							//'<br />'+
-							'<div class="standard-layer-controls clearfix">'+
-								'<div>'+
-									'<label for="persist" class="checkbox"><input id="persist" type="checkbox" name="vehicle" value="persist" <%= persist %> />Continue on all frames</label>'+
-								'</div>'+
-								'<div><a href="#" class="copy-to-next btn">Continue on next frame</a></div>';
 
-						if( this.model.get('linkable') )
-						{
-
-							html +=	'<div><a href="#" class="layer-link" title="click here to set this layer as a link" style="float:left"><span class="zicon zicon-link orange"></span></a></div>';
-							html += '<div class="layer-link-box <%= show_link %>">';
-							html +=		'<div class="input-prepend"><span class="add-on">http://</span><input class="span4" name="prependedInput" type="text" placeholder="www.example.com" value="<%= link_to %>">';
-							html +=		'<a href="#" class="clear-link"><span class="zicon zicon-close orange"></span></a>';
-							html += '</div></div>';
-						}
-						html += 	'</div>'; //standard layer controls
-						html += '</div>';
+							'<div class="default-layer-controls clearfix"></div>'+ //standard layer controls
+						'</div>';
 
 						return html;
 		}
@@ -354,3 +356,5 @@
 	
 	
 })(zeega.module("layer"));
+
+
