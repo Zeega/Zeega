@@ -277,8 +277,49 @@ this.zeega = {
 	{
 		console.log('zeega continue on all');
 		console.log(this.currentSequence)
-		this.currentSequence.updatePersistLayer( layerModel.id );
-		//this.project.sequences[0].updatePersistLayer( layerModel );
+		
+		var layerID = parseInt(layerModel.id);
+		//get persistent layers
+		var persistentLayers = this.currentSequence.get('persistLayers');
+		
+		// if they do not exist
+		if( _.isUndefined(persistentLayers) )
+		{
+			persistentLayers = [ layerID ];
+		}
+		else
+		{
+			//check to see if it's already in there
+			if( _.include(persistentLayers, layerID ) )
+			{
+				persistentLayers = _.without( layerID );
+				if(persistentLayers.length == 0 ) persistentLayers = [false];
+			}
+			else persistentLayers.push( layerID );
+		}
+		this.currentSequence.set({'persistLayers':persistentLayers});
+		this.currentSequence.save();
+		
+		// add this layer to each frame in the sequence
+		_.each( _.toArray( this.currentSequence.frames ), function(frame){
+			if( !_.include(frame.get('layers'), layerID ) )
+			{
+				//add to frame
+				
+				var layers = frame.get('layers') || [];
+				//var layers = [];
+				layers.push( layerID );
+				layers = _.compact( layers );
+				frame.set({ 'layers' : layers });
+				
+				console.log(layers)
+				console.log(frame.get('layers'))
+
+			}
+			
+		})
+		
+
 	},
 	
 	updateLayerOrder : function( layerIDArray )
@@ -303,7 +344,12 @@ this.zeega = {
 	
 	cleanWorkspace : function()
 	{
-		this.project.sequences[0].layers.unrenderLayers();
+		var _this = this;
+		_.each( this.currentFrame.get('layers'), function( layerID ){
+			console.log( _this.currentSequence.layers.get(layerID) );
+			
+			_this.currentSequence.layers.get(layerID).trigger('editor_layerExit');
+		})
 	},
 
 	previewSequence : function()
@@ -314,29 +360,29 @@ this.zeega = {
 
 		this.cleanWorkspace();
 
-		this.player = new Player2(this.exportProject(), {sequenceID: parseInt(this.project.sequences[0].id), frameID : parseInt(this.currentFrame.id) } )
+		this.player = new Player2(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
 	},
 	
 	restoreFromPreview : function()
 	{
 		this.previewMode = false;
-		this.project.sequences[0].layers.renderLayers( this.currentFrame.get('layers') );
+		this.renderFrame( this.currentFrame );
 	},
 
 	exportProject : function( string )
 	{
 		console.log('-- EXPORT --');
 
-		var order = _.map( this.project.sequences[0].get('framesOrder'), function(num){ return parseInt(num) });
+		var order = _.map( this.currentSequence.get('framesOrder'), function(num){ return parseInt(num) });
 		
-		var frames = this.project.sequences[0].frames.collection.toJSON();
+		var frames = this.currentSequence.frames.toJSON();
 		_.each( frames, function(frame){ frame.layers = _.compact(frame.layers) })
 		
-		var layers = this.project.sequences[0].layers.toJSON();
+		var layers = this.currentSequence.layers.toJSON();
 		_.each(layers, function(layer){ layer.id = parseInt(layer.id) });
 		
 		var sequences = [{
-			'id' : parseInt( this.project.sequences[0].id ),
+			'id' : parseInt( this.currentSequence.id ),
 			'frameOrder' : order,
 			'frames' : frames,
 			'layers' : layers //$.parseJSON( JSON.stringify(this.sequence.layers) )
