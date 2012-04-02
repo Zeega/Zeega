@@ -318,6 +318,7 @@
 			
 			var blanks = {
 				id : 'layer-edit-'+this.model.id,
+				type : this.model.get('type').toLowerCase(),
 				layerName : title,
 				persist : persist,
 				show_link : showLink,
@@ -333,11 +334,12 @@
 
 						'<div class="layer-uber-bar clearfix">'+
 							'<div class="layer-icon">'+
-								'<span class="asset-type-icon orange zicon"></span>'+
+								'<i class="zicon-<%= type %> orange"></i>'+
+								//'<span class="asset-type-icon orange zicon"></span>'+
 							'</div>'+
 							'<div class="layer-title"><%= layerName %></div>'+
 							'<div class="layer-uber-controls">'+
-								'<span class="delete-layer zicon zicon-trash-closed"></span>'+
+								'<i class="zicon-trash-closed delete-layer"></i>'+
 							'</div>'+
 							'<div class="layer-drag-handle">'+
 								'<span class="zicon zicon-vert-drag"></span>'+

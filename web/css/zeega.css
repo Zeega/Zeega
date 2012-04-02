@@ -885,6 +885,37 @@ a.white:hover
 .zicon-close{background-position:-162px -284px}
 
 
+
+
+[class^="zicon-"]
+{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: text-top;
+	background-image: url('../images/zicons-darkgrey-20.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
+[class^="zicon-"].orange{ background-image: url('../images/zicons-orange-20.png') }
+
+
+.zicon-image{background-position:-20px 0}
+.zicon-video{background-position:-40px 0}
+.zicon-geo{background-position:-60px 0}
+.zicon-text{background-position:-80px 0}
+.zicon-audio{background-position:-100px 0}
+.zicon-link{background-position:-120px 0}
+.zicon-volume-high{background-position:-140px 0}
+.zicon-volume-off{background-position:-160px -50px}
+.zicon-trash-closed{background-position:-180px 0}
+.zicon-trash-open{background-position:-0px -20px}
+
+
+
+
+
 /*********************************************
 
 	ZEDITOR STYLES BELOW
@@ -1180,7 +1211,7 @@ body
 {
 	color: #ddd;
 	font-weight: bold;
-	width: 174px;
+	width: 172px;
 	overflow:hidden;
 	float:left;
 	cursor:pointer;
