@@ -213,6 +213,26 @@
 {% endblock %}
 
 {% block extras %}
+
+
+<div id="share-project-modal" class='modal hide' >
+	<div class="modal-header">
+		<h3>Share Your Project</h3>
+	</div>
+	<div class="modal-body clearfix">
+		<p>Share your project: <b>{{projecttitle}}</b></p>
+		<a href='{{hostname}}{{directory}}project/{{sequence.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{sequence.id}}/view</a>
+	</div>
+	<div class="modal-footer">
+		<span class='admin-submit'>
+			<br />
+			<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+		</span>
+	</div>
+</div> <!-- modal -->
+
+
+
 	<div id='templates' class='hidden'>
 		
 		<div id="export" class='modal hidden' >
@@ -253,22 +273,7 @@
 			</div>
 		</div> <!-- modal -->
 		
-		<div id="share-project-modal" class='modal hidden' >
-			<div class="modal-header">
-				<a href='#' class='close'>x</a>
-				<h3>Share Your Project</h3>
-			</div>
-			<div class="modal-body clearfix">
-				<p>Share your project: <b>{{projecttitle}}</b></p>
-				<a href='{{hostname}}{{directory}}project/{{sequence.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{sequence.id}}/view</a>
-			</div>
-			<div class="modal-footer">
-				<span class='admin-submit'>
-					<br />
-					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
-				</span>
-			</div>
-		</div> <!-- modal -->
+		
 		
 		<div id="frame-item-template" class="">
 			<div class='frame-overlay'>

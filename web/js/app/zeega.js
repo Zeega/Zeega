@@ -229,7 +229,7 @@ this.zeega = {
 		
 		for( var i = 0 ; i < n ; i++ )
 		{
-			var layers = this.currentSequence.get('layerPersist') || [];
+			var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
 			var newFrame = new Frame.Model();
 			newFrame.save({'layers' : layers},{
 				success : function()
@@ -276,51 +276,74 @@ this.zeega = {
 	continueOnAllFrames : function( layerModel )
 	{
 		console.log('zeega continue on all');
-		console.log(this.currentSequence)
 		
 		var layerID = parseInt(layerModel.id);
 		//get persistent layers
-		var persistentLayers = this.currentSequence.get('persistLayers');
-		
+		var persistentLayers = this.currentSequence.get('attr').persistLayers;
 		// if they do not exist
 		if( _.isUndefined(persistentLayers) )
 		{
 			persistentLayers = [ layerID ];
+			this.addPersistenceToFrames( layerID );
 		}
 		else
 		{
 			//check to see if it's already in there
 			if( _.include(persistentLayers, layerID ) )
 			{
+				//remove persistence
 				persistentLayers = _.without( layerID );
 				if(persistentLayers.length == 0 ) persistentLayers = [false];
+				this.removePersistenceFromFrames( layerID );
 			}
-			else persistentLayers.push( layerID );
+			else
+			{
+				//add persistence
+				persistentLayers.push( layerID );
+				this.addPersistenceToFrames( layerID );
+			}
 		}
-		this.currentSequence.set({'persistLayers':persistentLayers});
+		
+		var attr = this.currentSequence.get('attr') || {};
+		_.extend( attr , { persistLayers : _.compact(persistentLayers) });
+		
+		this.currentSequence.set({ 'attr': attr });
 		this.currentSequence.save();
 		
+	},
+	
+	addPersistenceToFrames : function( layerID )
+	{
 		// add this layer to each frame in the sequence
 		_.each( _.toArray( this.currentSequence.frames ), function(frame){
 			if( !_.include(frame.get('layers'), layerID ) )
 			{
 				//add to frame
-				
 				var layers = frame.get('layers') || [];
 				//var layers = [];
 				layers.push( layerID );
 				layers = _.compact( layers );
 				frame.set({ 'layers' : layers });
-				
-				console.log(layers)
-				console.log(frame.get('layers'))
-
 			}
 			
 		})
-		
-
 	},
+	removePersistenceFromFrames : function( layerID )
+	{
+		var _this = this;
+		// add this layer to each frame in the sequence
+		_.each( _.toArray( this.currentSequence.frames ), function(frame){
+			if( _.include(frame.get('layers'), layerID ) && frame != _this.currentFrame )
+			{
+				//remove from frame
+				var layers = _.without( frame.get('layers'), layerID );
+				if( layers.length == 0 ) layers = [false];
+				frame.set({ 'layers' : layers });
+			}
+			
+		})
+	},
+	
 	
 	updateLayerOrder : function( layerIDArray )
 	{

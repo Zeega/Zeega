@@ -50,6 +50,7 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/popcorn_flash',
+	'order!lib/bootstrap',
 	
 	
 	'order!plugins/players/plyr',
