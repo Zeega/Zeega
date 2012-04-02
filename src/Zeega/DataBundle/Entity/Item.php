@@ -665,6 +665,13 @@ class Item
     {
         $this->tags[] = $tags;
     }
+    
+    public function addItemTag(\Zeega\DataBundle\Entity\ItemTags $tag)
+    {
+        $tag->setItem($this);
+        $this->tags[] = $tag;
+    }
+    
 
     /**
      * Get tags

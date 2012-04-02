@@ -5,6 +5,7 @@ namespace Zeega\ExtensionsBundle\Parser\GoogleBook;
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -19,7 +20,7 @@ class ParserGoogleBook extends ParserAbstract
 		$originalUrl = 'https://www.googleapis.com/books/v1/volumes/'.$itemId;
 
 		// read feed into SimpleXML object
-		$entry = json_decode(file_get_contents(($originalUrl)));
+		$entry = json_decode(file_get_contents($originalUrl));
 	
 		$item= new Item();
 		$volume=$entry->volumeInfo;
@@ -41,9 +42,24 @@ class ParserGoogleBook extends ParserAbstract
 		$item->setArchive('Google Books');
 		$item->setLicense('Unknown');
 		$item->setThumbnailUrl($volume->imageLinks->thumbnail);
-
-	
-		return $this->returnResponse($item, true, false);
 		
+		$mainCategories = (string)$entry->volumeInfo->mainCategory;
+		if(isset($mainCategories))
+		{
+		    $mainCategories = explode(" / ", $mainCategories);
+			foreach($mainCategories as $category)
+			{
+			    $tag = new Tag;
+			    $tag->setName($category);
+                $tag->setDateCreated(new \DateTime("now"));
+	            $item_tag = new ItemTags;
+	            $item_tag->setItem($item);
+	            $item_tag->setTag($tag);
+	            $item_tag->setDateCreated(new \DateTime("now"));
+                $item->addItemTags($item_tag);
+			}
+		}
+
+		return $this->returnResponse($item, true, false);		
 	}
 }

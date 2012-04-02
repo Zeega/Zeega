@@ -25,16 +25,31 @@ class ParserInternetArchive extends ParserAbstract
 		$dir=$itemJson["dir"];
 		$misc=$itemJson["misc"];
 	
-	
 		$item= new Item();
 		$attr=array();
 		
-		//if(isset($mdata->subject)&&isset($mdata->subject[0])) $tags=str_replace("; ",",",(string)$mdata->subject[0]);
-		//else $tags='';
+		if(isset($mdata["subject"])) 
+		{
+		    $subjects = $mdata["subject"];
+		    foreach($subjects as $category)
+			{
+			    $tag = new Tag;
+			    $tag->setName($category);
+                $tag->setDateCreated(new \DateTime("now"));
+	            $item_tag = new ItemTags;
+	            $item_tag->setItem($item);
+	            $item_tag->setTag($tag);
+	            $item_tag->setDateCreated(new \DateTime("now"));
+                $item->addItemTags($item_tag);
+			}
+			
+		}
+
 		$item->setTitle($mdata["title"][0]);
 	
 		//if(!$item->getTitle()){return false;}
 	
+	    $item->setAttributionUri($originalUrl);
 		$item->setDescription($mdata["description"][0]);
 		$item->setDescription(str_replace('<br />','',$item->getDescription()));
 		$item->setChildItemsCount(0);

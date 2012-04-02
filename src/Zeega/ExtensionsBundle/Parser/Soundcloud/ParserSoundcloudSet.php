@@ -5,6 +5,7 @@ namespace Zeega\ExtensionsBundle\Parser\Soundcloud;
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -43,6 +44,25 @@ class ParserSoundcloudSet extends ParserAbstract
 		$item->setChildItemsCount(count($itemJson['tracks']));
 		$item->setLicense($itemJson['license']);
 		
+		if(isset($tags) && count($tags) > 0) 
+		{
+		    $tags = explode(" ", $tags);
+		    foreach($tags as $tagName)
+			{
+			    if(!empty($tagName))
+			    {
+    			    $tag = new Tag;
+    			    $tag->setName($tagName);
+                    $tag->setDateCreated(new \DateTime("now"));
+    	            $item_tag = new ItemTags;
+    	            $item_tag->setItem($item);
+    	            $item_tag->setTag($tag);
+    	            $item_tag->setDateCreated(new \DateTime("now"));
+                    $item->addItemTags($item_tag);
+                }
+			}
+		}
+		
 		if($loadCollectionItems)
 		{
     		foreach ($itemJson["tracks"] as $itemJson) 
@@ -65,7 +85,28 @@ class ParserSoundcloudSet extends ParserAbstract
     				$childItem->setThumbnailUrl($itemJson['waveform_url']);
     				$childItem->setChildItemsCount(0);
     				$childItem->setLicense($itemJson['license']);
-			
+			        
+			        $tags = $itemJson["tag_list"];
+            		
+            		if(isset($tags)) 
+            		{
+            		    $tags = explode(" ", $tags);
+            		    foreach($tags as $tagName)
+            			{
+            			    if(!empty($tagName))
+            			    {
+                			    $tag = new Tag;
+                			    $tag->setName($tagName);
+                                $tag->setDateCreated(new \DateTime("now"));
+                	            $item_tag = new ItemTags;
+                	            $item_tag->setItem($childItem);
+                	            $item_tag->setTag($tag);
+                	            $item_tag->setDateCreated(new \DateTime("now"));
+                                $childItem->addItemTags($item_tag);
+                            }
+            			}
+            		}
+            		
     				$item->addItem($childItem);
     			}
     		}
