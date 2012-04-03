@@ -212,8 +212,8 @@ function closeOpenCitationTabs()
 		
 		if( menu.hasClass('open') ) menu.removeClass('open');
 		else menu.addClass('open');
-		
-		event.stopPropagation();
+		return false;
+		//event.stopPropagation();
 	});
 	
 
