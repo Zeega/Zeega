@@ -23,9 +23,3 @@ tags:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\TagsController
-    
-parser:
-    type:     rest
-    prefix:   api
-    resource: Zeega\ApiBundle\Controller\ParserController
-    
