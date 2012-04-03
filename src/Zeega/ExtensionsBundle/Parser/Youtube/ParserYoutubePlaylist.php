@@ -5,6 +5,7 @@ namespace Zeega\ExtensionsBundle\Parser\Youtube;
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -20,93 +21,80 @@ class ParserYoutubePlaylist extends ParserAbstract
 	    
 		if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
         
-		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2";
+		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2&alt=json";
         
 		// read feed into SimpleXML object
-		$xml = simplexml_load_file($originalUrl);
+		$playlistInfo = json_decode(file_get_contents($originalUrl),true);
+		$entry = $playlistInfo["feed"];
 		
 		$collection = new Item();
-		$collection->setTitle((string)$xml->title);
+		$collection->setTitle($entry["title"]["\$t"]);
 		$collection->setArchive("Youtube");
-		$collection->setDescription((string)$xml->subtitle);
-		$collection->setMediaCreatorUsername((string)$xml->author->name);
+		$collection->setDescription($entry["subtitle"]["\$t"]);
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Youtube');
 	    $collection->setUri($url);
-		$collection->setAttributionUri($url);
+		$collection->setAttributionUri($entry["media\$group"]["media\$content"][0]["url"]);
 		$collection->setEnabled(true);
 		$collection->setPublished(true);
-		$collection->setChildItemsCount(count($xml->entry));
+		$collection->setChildItemsCount($entry["openSearch\$totalResults"]["\$t"]);
+		$collection->setMediaCreatorUsername($entry["author"][0]["name"]["\$t"]);
+		$collection->setMediaCreatorRealname('Unknown');
 		
-		foreach ($xml->entry as $entry) 
+		foreach ($entry["entry"] as $child) 
 		{
-			$entryMedia = $entry->children('http://search.yahoo.com/mrss/');
-			$attrs = $entryMedia->group->thumbnail->attributes();
-			$yt = $entryMedia->children('http://gdata.youtube.com/schemas/2007'); // get frames in media: namespace for media information
+           	$collection->setThumbnailUrl($child["media\$group"]["media\$thumbnail"][0]["url"]);
             
-            if($loadCollectionItems == false)
+			if($loadCollectionItems == false)
             {
                 // we just want the set description - get a thumbnail from the first item and break
-                $collection->setThumbnailUrl((string)$attrs['url']);
                 break;
             }
 			
 			$item= new Item();
 
-			$arr = explode(':',$entry->id);
-			$entryId = $arr[count($arr)-1];
-
-			$attrs = $entryMedia->group->player->attributes();
-			$attributionUrl = $attrs['url'];
-
-			$item->setUri((string)$yt->videoid);
-			$item->setTitle((string)$entryMedia->group->title);
-			$item->setDescription((string)$entryMedia->group->description);
-			$item->setAttributionUri((string)$attributionUrl);
+			$item->setUri($child["media\$group"]["yt\$videoid"]);
+			$item->setTitle($child["title"]["\$t"]);
+			$item->setDescription($child["media\$group"]["media\$description"]["\$t"]);
+			$item->setAttributionUri($child["media\$group"]["media\$player"]["url"]);
+			$item->setMediaDateCreated($child["updated"]["\$t"]);
 			$item->setDateCreated(new \DateTime("now"));
 			$item->setMediaType('Video');
 			$item->setLayerType('Youtube');
 			$item->setChildItemsCount(0);
+			$item->setThumbnailUrl($child["media\$group"]["media\$thumbnail"][0]["url"]);
 
-			foreach($entry->children('http://www.georss.org/georss') as $geo)
+			$categories = $child["category"];
+	        if(isset($categories)) 
 			{
-				foreach($geo->children('http://www.opengis.net/gml') as $position)
+			    foreach($categories as $cat)
 				{
-					// Coordinates are separated by a space
-					$coordinates = explode(' ', (string)$position->pos);
+				    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#video")
+				    {
+				        $tag = new Tag;
+	        		    $tag->setName($cat["term"]);
+	                    $tag->setDateCreated(new \DateTime("now"));
+	                    $item_tag = new ItemTags;
+	                    $item_tag->setItem($item);
+	                    $item_tag->setTag($tag);
+	                    $item_tag->setDateCreated(new \DateTime("now"));
+	                    $item->addItemTags($item_tag);
 
-					$item->setMediaGeoLatitude((string)$coordinates[0]);
-					$item->setMediaGeoLongitude((string)$coordinates[1]);
-					break;
+				    }
 				}
 			}
-
-			$item->setMediaCreatorUsername((string)$entry->author->name);
+			$item->setMediaCreatorUsername($child["author"][0]["name"]["\$t"]);
 			$item->setMediaCreatorRealname('Unknown');
+			$item->setLicense($child["media\$group"]["media\$license"]["\$t"]);
 
-			// read metadata from xml
-			$attrs = $entryMedia->group->thumbnail->attributes();
-			$thumbnailUrl = (string)$attrs['url'];
-
-			// write metadata
-			$item->setArchive('Youtube');
-			$item->setLicense((string)$entryMedia->group->license);
-			$item->setThumbnailUrl((string)$thumbnailUrl);
-			
-			// read media from xml
-			//$attrs = $yt->duration->attributes();
-			//$duration = $attrs['seconds'];
-			
-			// access control
-			$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
-			$embed = (isset($yt->accessContro)) ? 'true' : 'false';
-
-			if(!isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
+			$accessControl = $child["yt\$accessControl"];
+			foreach($accessControl as $access)
 			{
-				$collection->addItem($item);;
-				$collection->setChildItemsCount($collection->getChildItemsCount() + 1);
+				if($access["action"] == "embed" && $access["permission"] == "allowed")
+				{
+					$collection->addItem($item);
+				}
 			}
-			
 		}
 		
 		return parent::returnResponse($collection, true,true);

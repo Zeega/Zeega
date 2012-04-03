@@ -17,25 +17,37 @@ class ParserYoutubeVideo extends ParserAbstract
 	    $regexMatches = $parameters["regex_matches"];
 	    $itemId = $regexMatches[1]; // bam
 	    
-		$originalUrl = 'http://gdata.youtube.com/feeds/api/videos/'.$itemId.'?alt=json';
+		$originalUrl = 'http://gdata.youtube.com/feeds/api/videos/'.$itemId.'?alt=json&v=2';
 
 		// read feed into SimpleXML object
 		$videoInfo = json_decode(file_get_contents($originalUrl),true);
 		$entry = $videoInfo["entry"];
-
+		
+		
 		$item= new Item();
-
+		
+		// access control
+		$accessControl = $entry["yt\$accessControl"];
+		foreach($accessControl as $access)
+		{
+			if($access["action"] == "embed" && $access["permission"] != "allowed")
+			{
+				return $this->returnResponse($item, false, false, "This video is not embeddable and cannot be added to Zeega.");
+			}
+		}
+		
 		$item->setUri($itemId);
 		$item->setTitle($entry["title"]["\$t"]);
-		$item->setDescription($entry["content"]["\$t"]);
-		$item->setAttributionUri($entry["link"][0]["href"]);
+		$item->setDescription($entry["media\$group"]["media\$description"]["\$t"]);
+		$item->setAttributionUri($entry["media\$group"]["media\$player"]["url"]);
+		$item->setMediaDateCreated($entry["published"]["\$t"]);
 		$item->setDateCreated(new \DateTime("now"));
 		$item->setMediaType('Video');
 		$item->setLayerType('Youtube');
 		$item->setChildItemsCount(0);
+		$item->setThumbnailUrl($entry["media\$group"]["media\$thumbnail"][0]["url"]);
 		
 		$categories = $entry["category"];
-
         if(isset($categories)) 
 		{
 		    foreach($categories as $cat)
@@ -55,49 +67,13 @@ class ParserYoutubeVideo extends ParserAbstract
 			}
 		}
         
-        /*
-		foreach($entry->children('http://www.georss.org/georss') as $geo)
-		{
-			foreach($geo->children('http://www.opengis.net/gml') as $position)
-			{
-				// Coordinates are separated by a space
-				$coordinates = explode(' ', (string)$position->pos);
-
-				$item->setMediaGeoLatitude((string)$coordinates[0]);
-				$item->setMediaGeoLongitude((string)$coordinates[1]);
-				break;
-			}
-		}*/
-
-		$item->setMediaCreatorUsername((string)$entry->author->name);
+		$item->setMediaCreatorUsername($entry["author"][0]["name"]["\$t"]);
 		$item->setMediaCreatorRealname('Unknown');
-
-		// read metadata from xml
-		$attrs = $entryMedia->group->thumbnail->attributes();
-		$thumbnailUrl = (string)$attrs['url'];
 
 		// write metadata
 		$item->setArchive('Youtube');
-		$item->setLicense((string)$entryMedia->group->license);
+		$item->setLicense($entry["media\$license"]["\$t"]);
 		
-		$item->setThumbnailUrl((string)$thumbnailUrl);
-		
-		// read media from xml
-		//$attrs = $yt->duration->attributes();
-		//$duration = $attrs['seconds'];
-
-		
-		// access control
-		$yt = $entry->children('http://gdata.youtube.com/schemas/2007');
-		$embed = (isset($yt->accessControl)) ? 'true' : 'false';
-		
-		if(isset($entry->children('http://gdata.youtube.com/schemas/2007')->noembed)) // deprecated, but works for now
-		{
-			return $this->returnResponse($item, false, false, "This video is not embeddable and cannot be added to Zeega.");
-		}
-		else
-		{
-			return $this->returnResponse($item, true, false);
-		}
+		return $this->returnResponse($item, true, false);
 	}
 }
