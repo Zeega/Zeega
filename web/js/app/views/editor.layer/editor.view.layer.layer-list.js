@@ -176,15 +176,12 @@
 		events : {
 			'click .delete-layer'		: 'delete',
 			'click .layer-title'		: 'expand',
-			'change #persist'			: 'persist',
-			'click .copy-to-next'		: 'copyToNext',
 			'click .layer-icon'			: 'hideShow',
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
 			'mouseleave .delete-layer'	: 'onLayerTrashLeave',
-			'click .layer-link'			: "layerLink",
-			'click .clear-link'			: 'clearLayerLink'
+
 		},
 		
 		// the events end users have access to
@@ -259,30 +256,6 @@
 			$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
 		},
 		
-		layerLink : function()
-		{
-			$(this.el).find('.layer-link-box').show();
-			return false;
-		},
-
-		clearLayerLink : function()
-		{
-
-			$(this.el).find('.layer-link-box input').val('');
-
-			var properties = {
-				link : {
-					property : 'link_to',
-					value : '',
-					css : false
-				}
-			};
-			this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-
-			return false;
-		},
-				
-				
 		setBaseTemplate : function()
 		{
 			var title = this.model.get('attr').title;
