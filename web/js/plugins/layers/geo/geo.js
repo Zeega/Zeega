@@ -149,7 +149,12 @@
 					mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
 				
 					disableDefaultUI : true,
-					draggable : false
+					draggable : false,
+					
+					StreetViewPanoramaOptions :
+					{
+						panControl : false,
+					}
 				};
 				
 				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);

@@ -26,8 +26,7 @@
 	});
 	
 	Layer.Views.Controls.Mapbox = Layer.Views.Controls.extend({
-		draggable : false,
-		linkable : true,
+
 		render : function()
 		{
 			
@@ -91,6 +90,9 @@
 	});
 
 	Layer.Views.Visual.Mapbox = Layer.Views.Visual.extend({
+		
+		draggable : false,
+		linkable : true,
 		
 		render : function()
 		{
