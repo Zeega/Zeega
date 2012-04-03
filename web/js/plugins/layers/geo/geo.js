@@ -151,6 +151,7 @@
 					disableDefaultUI : true,
 					draggable : false
 				};
+				
 				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
 			
 				if( this.model.get('attr').type == "streetview" )
@@ -167,6 +168,14 @@
 				
 				this.isLoaded = true;
 			}
+		},
+		
+		onLayerExit : function()
+		{
+			//this destroys the map every time the frame is changed. there is probably a better way to do this
+			this.map = {};
+			$(this.el).find('#gmap-'+this.model.id).remove();
+			this.isLoaded = false;
 		},
 		
 		onPreload : function()
