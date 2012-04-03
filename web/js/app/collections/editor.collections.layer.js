@@ -20,11 +20,10 @@
 			if( _.isUndefined( args.item ) )
 			{
 				console.log('add non item layer type');
-
+				console.log(args)
 				newLayer = new Layer[args.type]();
-	
 				this.add( newLayer );
-				if( args.show ) this.displayCollection.add( newLayer );
+				if( args.show ) newLayer.trigger('editor_layerRender');
 				
 			}
 			else
