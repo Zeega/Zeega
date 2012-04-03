@@ -300,7 +300,7 @@
 		
 		init : function()
 		{
-			this.model.on('video_ready', this.onVideoReady, this);
+			this.model.on('init_controls', this.onVideoReady, this);
 		},
 		
 		render : function()
@@ -314,6 +314,7 @@
 		
 		onVideoReady : function()
 		{
+			console.log('onvideoready being called');
 			this.delegateEvents();
 			this.initPopcornEvents();
 			this.initScrubbers();
@@ -322,7 +323,7 @@
 		initPopcornEvents : function()
 		{
 			var _this = this;
-			
+			console.log('initing popcorn events');
 			console.log(this.model.video)
 			
 			this.model.video.pop.listen('pause',function(){
@@ -387,6 +388,9 @@
 					//_this.pop.play();
 				}
 			});
+		
+			this.$el.find('.plyr-cuein-scrubber').css({'left':Math.floor(_this.model.get('attr').cue_in*parseFloat(_this.$el.find('.plyr-timeline').width()/_this.model.video.pop.duration()))});
+			if(_this.model.get('attr').cue_out>0)this.$el.find('.plyr-cueout-scrubber').css({'left':Math.floor(_this.model.get('attr').cue_out*parseFloat(_this.$el.find('.plyr-timeline').width()/_this.model.video.pop.duration()))});
 			
 			this.$el.find('.plyr-cuein-scrubber').draggable({
 				axis:'x',

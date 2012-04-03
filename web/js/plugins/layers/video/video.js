@@ -150,9 +150,10 @@
 			if( !this.model.loaded )
 			{
 				
-				this.model.video.placeVideo( this.$el );
-				this.model.video.on('video_canPlay', function(){ _this.model.trigger('initControls', _this.model.id ) }, this )
-				this.model.loaded = true;
+			
+					this.model.video.on('video_canPlay', function(){ _this.model.trigger('init_controls', _this.model.id ) }, this )
+					this.model.video.placeVideo( this.$el );
+					this.model.loaded = true;
 			}
 			else
 			{
@@ -197,7 +198,7 @@
 		onUnrender : function()
 		{
 			this.model.video.pop.pause();
-			Popcorn.destroy(this.model.video.pop);	
+			//Popcorn.destroy(this.model.video.pop);	
 
 		}
 		
