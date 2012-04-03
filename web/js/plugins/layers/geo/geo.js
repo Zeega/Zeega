@@ -137,33 +137,72 @@
 		{
 			
 			console.log('geo layer enter')
-			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
-
-			//var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
-
-			var mapOptions = {
-				zoom : this.model.get('attr').zoom,
-				center : center,
-				mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
-				
-				disableDefaultUI : true,
-				draggable : false
-			};
-			this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
-			
-			if( this.model.get('attr').type == "streetview" )
+			if( !this.isLoaded )
 			{
-				var pov = {
-						'heading' : this.model.get('attr').heading,
-						'pitch' : this.model.get('attr').pitch,
-						'zoom' : this.model.get('attr').streetZoom,
-						}
-				this.map.getStreetView().setPosition( center );
-				this.map.getStreetView().setPov( pov );
-				this.map.getStreetView().setVisible( true );
+				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
+
+				//var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
+
+				var mapOptions = {
+					zoom : this.model.get('attr').zoom,
+					center : center,
+					mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
+				
+					disableDefaultUI : true,
+					draggable : false
+				};
+				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
+			
+				if( this.model.get('attr').type == "streetview" )
+				{
+					var pov = {
+							'heading' : this.model.get('attr').heading,
+							'pitch' : this.model.get('attr').pitch,
+							'zoom' : this.model.get('attr').streetZoom,
+							}
+					this.map.getStreetView().setPosition( center );
+					this.map.getStreetView().setPov( pov );
+					this.map.getStreetView().setVisible( true );
+				}
+				
+				this.isLoaded = true;
 			}
+		},
 		
-		
+		onPreload : function()
+		{
+			if( !this.isLoaded )
+			{
+				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
+
+				//var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
+
+				var mapOptions = {
+					zoom : this.model.get('attr').zoom,
+					center : center,
+					mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
+				
+					disableDefaultUI : true,
+					draggable : false
+				};
+				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
+			
+				if( this.model.get('attr').type == "streetview" )
+				{
+					var pov = {
+							'heading' : this.model.get('attr').heading,
+							'pitch' : this.model.get('attr').pitch,
+							'zoom' : this.model.get('attr').streetZoom,
+							}
+					this.map.getStreetView().setPosition( center );
+					this.map.getStreetView().setPov( pov );
+					this.map.getStreetView().setVisible( true );
+				}
+				
+				this.isLoaded = true;
+			}
+			
+			this.model.trigger('ready', this.model.id)
 		}
 		
 	});
