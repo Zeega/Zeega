@@ -170,8 +170,7 @@ class SequencesController extends Controller
         					->find($original_layer_id);
         				
 						if($original_layer->getItem()) $layer->setItem($original_layer->getItem());
-						if($original_layer->getItemUri()) $layer->setUri($original_layer->getUri());
-						if($original_layer->getType()) $layer->setMediaType($original_layer->getType());
+						if($original_layer->getType()) $layer->setType($original_layer->getType());
 						if($original_layer->getText()) $layer->setText($original_layer->getText());
 						if($original_layer->getAttr()) $layer->setAttr($original_layer->getAttr());
 						
@@ -251,9 +250,6 @@ class SequencesController extends Controller
     	
     	
     	if($request->request->get('item_id')){
-    		$layer->setItemUri($this->getDoctrine()
-			->getRepository('ZeegaItemBundle:Item')
-			->findItemById($request->request->get('item_id'))->getUrl());
 			$layer->setItem($this->getDoctrine()
 			->getRepository('ZeegaItemBundle:Item')
 			->find($request->request->get('item_id')));

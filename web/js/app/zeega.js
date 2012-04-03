@@ -246,7 +246,7 @@ this.zeega = {
 	
 	duplicateFrame : function( frameModel )
 	{
-		
+		this.currentSequence.duplicateFrame( frameModel )
 	},
 	
 	addLayer : function( args )

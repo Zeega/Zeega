@@ -78,16 +78,57 @@
 		
 		duplicateFrame : function( frameModel )
 		{
-			//var dupeModel = new Frame({'duplicate_id':view.model.id,'thumb_url':view.model.get('thumb_url')});
+			console.log('	DUPLICATE FRAME')
+			var _this = this;
 			var dupeModel = frameModel.clone();
+			
 			dupeModel.set( 'duplicate_id' , parseInt(frameModel.id) );
 			dupeModel.oldLayerIDs = frameModel.get('layers');
-			this.updateFrameOrder();
 			dupeModel.frameIndex = _.indexOf( this.get('framesOrder'), frameModel.id );
 			dupeModel.dupe = true;
-			dupeModel.set('id',undefined);
+			dupeModel.set('id',null);
 			
-			this.frames.addFrame( dupeModel );
+			console.log(dupeModel)
+			
+			dupeModel.save({},{
+				success : function( savedFrame )
+				{
+					console.log('frame saved and is a duplicate')
+					
+					_this.insertFrameView( savedFrame , dupeModel.frameIndex );
+				
+					//clone layers and place them into the layer array
+					_.each( savedFrame.oldLayerIDs , function(layerID, i){
+
+						//if layer is persistent
+						//replace frameIndex the id with the persistent id
+
+						var persistLayers = _this.get('attr').persistLayers;
+
+						if( _.include( persistLayers, parseInt(layerID) ) )
+						{
+							var layerOrder = savedFrame.get('layers');
+							layerOrder[i] = String(layerID);
+							savedFrame.set({layers:layerOrder})
+						}
+						else
+						{
+							_this.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
+						}
+					})
+					//resave the frame after being updated with persistent frame ids
+				}
+			});
+			
+			this.frames.add( dupeModel );
+		},
+		
+		insertFrameView : function( frame, index )
+		{
+				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );
+				else $('#frame-list').children('li:eq('+index+')').after( frame.render() );
+				
+				this.updateFrameOrder();
 		},
 		
 		destroyFrame : function( frameModel )
