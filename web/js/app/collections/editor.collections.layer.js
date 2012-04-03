@@ -12,7 +12,7 @@
 		addNewLayer : function( args )
 		{
 			var _this = this
-			var newLayer;
+			//var newLayer;
 			console.log('ADD NEW LAYER')
 	
 			
@@ -20,12 +20,14 @@
 			if( _.isUndefined( args.item ) )
 			{
 
-				console.log('add non item layer type'+args.type);
-	
+				console.log('add non item layer type: '+args.type);
 
-				newLayer = new Layer[args.type]();
+				var newLayer = new Layer[args.type]({attr:{}});
+				console.log( new Layer[args.type] )
+				console.log(newLayer)
 				this.add( newLayer );
 				if( args.show ) newLayer.trigger('editor_layerRender');
+				this.saveLayer(newLayer, args.frame);
 				
 			}
 			else
@@ -33,7 +35,7 @@
 				//media item layer
 				console.log( args.item.get('layer_type'))
 				
-				newLayer = new Layer[args.item.get('layer_type')]({
+				var newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
 					attr: {
 						'item_id' : args.item.id,
@@ -47,23 +49,30 @@
 				});
 				this.add( newLayer );
 				if( args.show ) newLayer.trigger('editor_layerRender');
+				this.saveLayer(newLayer, args.frame);
 			}
 			console.log(newLayer)
 			
-			console.log('SAVE NEW LAYER')
-			console.log('save to: '+ newLayer.url() )
 			
-			newLayer.save({},{
+			
+			
+		},
+		
+		saveLayer : function(layerModel, frame)
+		{
+			console.log('SAVE NEW LAYER')
+			console.log('save to: '+ layerModel.url() )
+			
+			var _this = this;
+			layerModel.save({},{
 				success : function( savedLayer )
 				{
 					console.log('SAVED NEW LAYER')
 					console.log(savedLayer)
-					savedLayer.trigger('refresh_view')
-					_this.addLayerToFrame( args.frame, savedLayer )
+					savedLayer.trigger('refresh_view');
+					_this.addLayerToFrame( frame, savedLayer );
 				}
 			});
-			
-			
 		},
 		
 		/*
@@ -115,4 +124,3 @@
 	});
 
 })(zeega.module("layer"));
-
