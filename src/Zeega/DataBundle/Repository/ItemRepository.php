@@ -4,6 +4,7 @@
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Collections;
 use DateInterval;
 
 use DateTime;
@@ -170,22 +171,23 @@ class ItemRepository extends EntityRepository
 
     //  api/search
     public function searchItems($query)
-    {    
-        $qb = $this->getEntityManager()->createQueryBuilder();
+    {   
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i.id as id, i.site_id, i.user_id, i.title, i.description, i.text, i.uri, i.attribution_uri, i.date_created,
-                    i.media_type, i.layer_type, i.thumbnail_url, i.child_items_count, i.media_geo_latitude, i.media_geo_longitude, i.media_date_created, i.media_date_created_end,
-                    i.media_creator_username, i.media_creator_realname, i.archive')
+        $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
             ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
         $qb = $this->buildSearchQuery($qb, $query);
-
-        // execute the query
-        return $qb->getQuery()->getArrayResult();
+        
+        if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
+            return $qb->getQuery()->getArrayResult();
+        else
+            return $qb->getQuery()->execute();
     }
 
     //  api/search
