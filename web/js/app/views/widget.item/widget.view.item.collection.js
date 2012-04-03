@@ -29,7 +29,8 @@
 					'data-original-title' : this.model.get('title'),
 					'data-content' : 'created by: ' + this.model.get('media_creator_username')
 				});
-
+			console.log('rendering this shit');
+			console.log(this.model);
 			return this;
 		},
 

@@ -22,7 +22,11 @@ class ParserGoogleBook extends ParserAbstract
 		// read feed into SimpleXML object
 		$entry = json_decode(file_get_contents($originalUrl));
 	
+		
 		$item= new Item();
+		
+	
+	
 		$volume=$entry->volumeInfo;
 		
 		$item->setUri((string)$entry->accessInfo->webReaderLink);
@@ -41,8 +45,7 @@ class ParserGoogleBook extends ParserAbstract
 		// write metadata
 		$item->setArchive('Google Books');
 		$item->setLicense('Unknown');
-		$item->setThumbnailUrl($volume->imageLinks->thumbnail);
-		
+		$item->setThumbnailUrl($volume->imageLinks->thumbnail);		
 		$mainCategories = (string)$entry->volumeInfo->mainCategory;
 		if(isset($mainCategories))
 		{
@@ -60,6 +63,10 @@ class ParserGoogleBook extends ParserAbstract
 			}
 		}
 
-		return $this->returnResponse($item, true, false);		
+		if((bool)$entry->accessInfo->embeddable) return $this->returnResponse($item, true, false);
+		
+		else return $this->returnResponse($item, false, false, "This book cannot be embedded.");
+		
+			
 	}
 }

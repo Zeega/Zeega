@@ -133,16 +133,10 @@ $(document).ready(function() {
 					this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
 					this.fancyView.render(this);
 					break;
-				/*
-				case 'Tweet':
-					this.fancyView = new FancyBoxTweetView({model:thisModel});
+				default:
+					this.fancyView =new Fancybox.Views.Default({model:thisModel});
 					this.fancyView.render(this);
 					break;
-				case 'DocumentCloud':
-					this.fancyView = new FancyBoxDocCloudView({model:thisModel});
-					this.fancyView.render(this);
-					break;
-					*/
 			}
         },
         

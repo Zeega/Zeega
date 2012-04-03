@@ -50,6 +50,7 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/popcorn_flash',
+	'order!lib/bootstrap',
 	
 	
 	'order!plugins/players/plyr',
@@ -82,6 +83,7 @@ var loadFiles = [
 	//'order!plugins/layers/geo/geo',
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',
+	'order!plugins/layers/geo/geo',
 	
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/mapbox/mapbox',

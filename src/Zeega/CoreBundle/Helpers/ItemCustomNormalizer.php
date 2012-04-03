@@ -31,79 +31,35 @@ class ItemCustomNormalizer extends SerializerAwareNormalizer
      */
     public function normalize($object, $format = null)
     {
-        $reflectionClass = new \ReflectionClass($object);
+        $reflectionObject = new \ReflectionObject($object);
+        $reflectionMethods = $reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         $attributes = array();
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) 
-        {
-            
-            if (strtolower(substr($reflectionMethod->getName(), 0, 3)) !== 'get') 
-            {
-                continue;
-            }
-            
-            $property = lcfirst(substr($reflectionMethod->getName(), 3));
-            $value = $reflectionMethod->invoke($object);
-
-            //            $data[$property] = $value;
-            /*
-            if (null !== $attributeValue && !is_scalar($attributeValue)) {
-                $attributeValue = $this->serializer->normalize($attributeValue, $format);
-            }
-            */
-            
-            if(is_object($value))
-            {
-                $value = self::normalize($value, $format);
-            }
-            /*
-            if(is_array($value))
-            {
-                $temp = array();
-                foreach ($value as $v) 
-                {
-                    array_push($temp, self::normalize($v, $format));
-                    // $attributeValue = 
+        foreach ($reflectionMethods as $method) {
+            if ($this->isGetMethod($method)) {
+                $attributeName = preg_replace('/([A-Z])/', '_$1', substr($method->getName(), 3));
+                // TO-DO: this is terrible; remove the substr and use only the regular expression
+                $pos = strpos($attributeName, '_');
+                if ($pos == 0)
+                { 
+                    $attributeName = substr($attributeName,1);
                 }
-                $value = $temp;
-                //$value = "yo";
+                
+                $attributeName = strtolower($attributeName);
+
+                $attributeValue = $method->invoke($object);
+                /*
+                if (null !== $attributeValue && !is_scalar($attributeValue)) {
+                    $attributeValue = $this->serializer->normalize($attributeValue, $format);
+                }
+                */
+                $attributes[$attributeName] = $attributeValue;
             }
-            */
-            $attributes[$property] = $value;
         }
 
         return $attributes;
     }
-    /*
-    public function normalize($object, $format = null)
-    {
-        $data = array();
 
-        $reflectionClass = new \ReflectionClass($object);
-
-        $data['__jsonclass__'] = array(
-            get_class($object),
-            array(), // constructor arguments
-        );
-
-        foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-            if (strtolower(substr($reflectionMethod->getName(), 0, 3)) !== 'get') {
-                continue;
-            }
-
-            if ($reflectionMethod->getNumberOfRequiredParameters() > 0) {
-                continue;
-            }
-
-            $property = lcfirst(substr($reflectionMethod->getName(), 3));
-            $value = $reflectionMethod->invoke($object);
-
-            $data[$property] = $value;
-        }
-
-        return $data;
-    }    
-    */
     /**
      * {@inheritdoc}
      */

@@ -101,15 +101,15 @@ var Plyr2 = Backbone.Model.extend({
 		console.log(this)
 		console.log(''+ this.get('uri'))
 		
-		this.set( 'format', this.getFormat(this.get('uri')) );
+		this.set( 'format', this.getFormat(this.get('url')) );
 	},
 	
-	getFormat : function(uri)
+	getFormat : function(url)
 	{
 		//separated to make it easier to isolate and update this list
 		var format = '';
-		if( uri.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
-		else if ( uri.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
+		if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
+		else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
 		else format = 'html5';
 		//Force flash for html5 in Firefox browser
 		if( navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length-1].split('/')[0] == 'Firefox' && format=='html5' ) format='flashvideo';
@@ -121,7 +121,6 @@ var Plyr2 = Backbone.Model.extend({
 		if( !this.isVideoLoaded)
 		{
 			console.log('PLACE VIDEO :: '+this.get('format') )
-			console.log(el)
 			console.log(this)
 			var _this = this;
 			
@@ -134,29 +133,37 @@ var Plyr2 = Backbone.Model.extend({
 					this.pop.listen( 'canplay', function(){
 						_this.trigger('video_canPlay');
 						console.log(' CAn PLAY!!!  ')
+						console.log(_this.get('cue_in'));
+						_this.pop.currentTime(_this.get('cue_in'));
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						
 					});
 					break;
 				case 'flashvideo':
 					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('uri') );
 					this.pop.listen('loadeddata',function(){
 						_this.trigger('video_canPlay');
+						_this.pop.currentTime(_this.get('cue_in'));
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 					});
 					break;
 				case 'youtube':
-					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('uri') );
+					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
 					this.pop.listen('canplaythrough',function(){
+						
 						_this.pop.play();
 						_this.pop.pause();
+						
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 						_this.trigger('video_canPlay');
 					});
 					break;
 				case 'vimeo':
-					this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('uri') );
+					this.pop = Popcorn.vimeo('#zvideo-'+ this.id, this.get('url') );
 					this.pop.listen('loadeddata',function(){
+						
 						_this.trigger('video_canPlay');
+						_this.pop.currentTime(_this.get('cue_in'));
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 					});
 					break;
@@ -164,6 +171,7 @@ var Plyr2 = Backbone.Model.extend({
 					console.log('none set');
 			}
 			this.isVideoLoaded = true;
+			
 		}
 	},
 	
@@ -172,8 +180,7 @@ var Plyr2 = Backbone.Model.extend({
 		console.log('display controls')
 	},
 	
-	getVideoView : function()
-	{
+	getVideoView : function(){
 		
 		var Video = Backbone.View.extend({
 			
@@ -198,7 +205,21 @@ var Plyr2 = Backbone.Model.extend({
 		});
 		
 		return new Video({model:this});
+	},
+	
+	destroy : function(){
+		this.isVideoLoaded=false;
+		this.pop.pause();
+		Popcorn.destroy(this.pop);
+		
+	},
+	
+	currentTime :function(){
+	
+	return this.pop.currentTime();
+	
 	}
+	
 	
 	
 })

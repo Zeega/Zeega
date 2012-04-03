@@ -38,6 +38,8 @@
 		
 		initListeners : function()
 		{
+			this.model.on('change:attr', this.updateViewInPlace, this);
+			
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -167,6 +169,11 @@
 			});
 		},
 		
+		updateViewInPlace : function()
+		{
+			$(this.el).find('.layer-title').html(this.model.get('attr').title)
+		},
+		
 		/*******************
 		
 			EVENTS
@@ -176,15 +183,12 @@
 		events : {
 			'click .delete-layer'		: 'delete',
 			'click .layer-title'		: 'expand',
-			'change #persist'			: 'persist',
-			'click .copy-to-next'		: 'copyToNext',
 			'click .layer-icon'			: 'hideShow',
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
 			'mouseleave .delete-layer'	: 'onLayerTrashLeave',
-			'click .layer-link'			: "layerLink",
-			'click .clear-link'			: 'clearLayerLink'
+
 		},
 		
 		// the events end users have access to
@@ -228,23 +232,6 @@
 			return false;
 		},
 
-		//set persistance action
-		persist : function()
-		{
-			this.model.trigger('persist', this.model);
-			/*
-			if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverFrames(this.model);
-			else Zeega.removeLayerPersist( this.model );
-			*/
-		},
-
-		copyToNext : function()
-		{
-			//Zeega.copyLayerToNextFrame( this.model)
-			this.model.trigger('copyToNext', parseInt(this.model.id) );
-			return false;
-		},
-
 		hideShow : function()
 		{
 			//set the visible in editor to the opposite of what it is currently
@@ -276,30 +263,6 @@
 			$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
 		},
 		
-		layerLink : function()
-		{
-			$(this.el).find('.layer-link-box').show();
-			return false;
-		},
-
-		clearLayerLink : function()
-		{
-
-			$(this.el).find('.layer-link-box input').val('');
-
-			var properties = {
-				link : {
-					property : 'link_to',
-					value : '',
-					css : false
-				}
-			};
-			this.model.layerClass.layerControls.trigger( 'update' , [ properties ]);
-
-			return false;
-		},
-				
-				
 		setBaseTemplate : function()
 		{
 			var title = this.model.get('attr').title;
@@ -318,6 +281,7 @@
 			
 			var blanks = {
 				id : 'layer-edit-'+this.model.id,
+				type : this.model.get('type').toLowerCase(),
 				layerName : title,
 				persist : persist,
 				show_link : showLink,
@@ -333,11 +297,12 @@
 
 						'<div class="layer-uber-bar clearfix">'+
 							'<div class="layer-icon">'+
-								'<span class="asset-type-icon orange zicon"></span>'+
+								'<i class="zicon-<%= type %> orange"></i>'+
+								//'<span class="asset-type-icon orange zicon"></span>'+
 							'</div>'+
 							'<div class="layer-title"><%= layerName %></div>'+
 							'<div class="layer-uber-controls">'+
-								'<span class="delete-layer zicon zicon-trash-closed"></span>'+
+								'<i class="zicon-trash-closed delete-layer"></i>'+
 							'</div>'+
 							'<div class="layer-drag-handle">'+
 								'<span class="zicon zicon-vert-drag"></span>'+

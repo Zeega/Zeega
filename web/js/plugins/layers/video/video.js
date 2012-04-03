@@ -15,8 +15,8 @@
 			'height' : 100,
 			'width' : 100,
 			'volume' : 0.5,
-			'in'  : 0,
-			'out' : 0,
+			'cue_in'  : 0,
+			'cue_out' : 0,
 			'opacity':1,
 			'dimension':1.5,
 			'citation':true,
@@ -27,8 +27,12 @@
 			console.log('video INIT')
 			//load popcorn object
 			this.video = new Plyr2({
-				uri : this.get('attr').attribution_url,
-				id : this.id
+				url : this.get('attr').attribution_url,
+				uri : this.get('attr').uri,
+				id : this.id,
+				cue_in  : this.get('attr').cue_in,
+				cue_out : this.get('attr').cue_out,
+				volume : this.get('attr').volume,
 			})
 			console.log(this)
 		}
@@ -123,6 +127,7 @@
 				this.$el.find('img').remove();
 				this.model.video.placeVideo( this.$el );
 				this.model.loaded = true;
+				this.model.trigger('video_ready');
 			}
 		},
 		
@@ -130,8 +135,7 @@
 		{
 			if( this.model.video.isVideoLoaded )
 			{
-				this.model.video.pop.pause();
-				Popcorn.destroy(this.model.video.pop);	
+				this.model.video.destroy();
 			} 
 			this.model.loaded = false;
 			
@@ -142,11 +146,14 @@
 		onControlsOpen : function()
 		{
 			console.log('video controls open : visual')
-			
+			var _this = this;
 			if( !this.model.loaded )
 			{
-				this.model.video.placeVideo( this.$el );
-				this.model.loaded = true;
+				
+			
+					this.model.video.on('video_canPlay', function(){ _this.model.trigger('init_controls', _this.model.id ) }, this )
+					this.model.video.placeVideo( this.$el );
+					this.model.loaded = true;
 			}
 			else
 			{
@@ -191,7 +198,7 @@
 		onUnrender : function()
 		{
 			this.model.video.pop.pause();
-			Popcorn.destroy(this.model.video.pop);	
+			//Popcorn.destroy(this.model.video.pop);	
 
 		}
 		

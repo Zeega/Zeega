@@ -24,7 +24,7 @@
 		
 		render : function()
 		{
-			
+
 			var scaleSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
 				model: this.model,
