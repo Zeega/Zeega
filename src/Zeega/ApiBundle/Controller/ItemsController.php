@@ -14,20 +14,35 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    /**
+     * Parses a url and creates a Zeega item if the url is valid and supported.
+     * Path: GET items/parser
+     *
+     * @param String  $url  Url to be parsed
+     * @param Boolean  $loadChildItems  If true the child item of the item will be loaded. Should be used for large collections if only the collection description is wanted.
+	 * @return Array|response
+     */    
     public function getItemsParserAction()
     {
         $request = $this->getRequest();
+    	$url  = $request->query->get('url');
+    	
+    	if(!isset($url))
+    	{
+    	    $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
+    	}
+    	else
+    	{    	    
+        	$loadChildren = $request->query->get('load_children');
+        	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
 
-    	$url  = $request->query->get('url');      
-    	$loadChildren = $request->query->get('load_children');
-    	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
-
-        $parser = $this->get('zeega_parser');
+            $parser = $this->get('zeega_parser');
 		
-		// parse the url with the ExtensionsBundle\Parser\ParserService
-		$response = $parser->load($url, $loadChildren);
+    		// parse the url with the ExtensionsBundle\Parser\ParserService
+    		$response = $parser->load($url, $loadChildren);
 
-		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
+    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
+	    }
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
