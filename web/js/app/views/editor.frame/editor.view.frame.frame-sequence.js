@@ -50,7 +50,12 @@
 				{
 					$('#frame-drawer').removeClass('hover');
 					ui.draggable.draggable('option','revert',false);
-					zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
+					zeega.app.addLayer({
+						item : zeega.app.draggedItem,
+						frame : _this.model
+					})
+					
+					//zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
 				}
 			});
 

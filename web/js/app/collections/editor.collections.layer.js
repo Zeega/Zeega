@@ -26,7 +26,7 @@
 				console.log( new Layer[args.type] )
 				console.log(newLayer)
 				this.add( newLayer );
-				if( args.show ) newLayer.trigger('editor_layerRender');
+				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
 				
 			}
@@ -48,7 +48,7 @@
 					}
 				});
 				this.add( newLayer );
-				if( args.show ) newLayer.trigger('editor_layerRender');
+				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
 			}
 			console.log(newLayer)
@@ -89,6 +89,10 @@
 		
 		addLayerToFrame : function(frame,layer)
 		{
+			console.log('	ADD LAYER TO FRAME')
+			console.log(zeega.app.currentSequence)
+			//console.log(layer)
+			
 			var layerOrder = [ parseInt( layer.id ) ];
 			if( frame.get('layers') )
 			{
@@ -97,7 +101,7 @@
 				//add the layer id to the layer order array
 				layerOrder.push( parseInt( layer.id ) );
 			}
-			zeega.app.updateLayerOrder(layerOrder.reverse());
+			zeega.app.updateLayerOrder(layerOrder.reverse(), frame);
 			//set the layerOrder array inside the frame
 			frame.set({'layers':layerOrder});
 			frame.save();

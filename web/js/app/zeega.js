@@ -102,7 +102,7 @@ this.zeega = {
 			this.currentFrame = this.currentSequence.frames.at(0);
 			this.loadFrame( this.currentFrame );
 		}
-		else this.loadFrame( this.project.sequences.at(0).frames.get( frameId ) );
+		else this.loadFrame( this.currentSequence.frames.get( frameId ) );
 	},
 
 	loadFrame : function( frame )
@@ -252,7 +252,12 @@ this.zeega = {
 	addLayer : function( args )
 	{
 		console.log('ADD LAYER')
-		args = _.defaults( args, { frame : this.currentFrame, show : function(){ return _.isEqual( this.currentFrame, args.frame ) } } );
+
+
+		var _this = this;
+		args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
+		console.log('show layer? '+ args.show() )
+
 		console.log(args)
 		this.currentSequence.layers.addNewLayer( args )
 	},
@@ -345,13 +350,13 @@ this.zeega = {
 	},
 	
 	
-	updateLayerOrder : function( layerIDArray )
+	updateLayerOrder : function( layerIDArray, frame )
 	{
-
+		var frameToUpdate = frame || this.currentFrame;
 		layerIDs = layerIDArray.reverse();
 		// updates z-index of divs in workspace
 		_.each(layerIDs, function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
-		this.currentFrame.set({'layers':layerIDs})
+		frameToUpdate.set({'layers':layerIDs})
 	},
 
 	// returns the order that the frame appears in the sequence
