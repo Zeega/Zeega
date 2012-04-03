@@ -69,16 +69,6 @@
 	    	});
 
 
-			this.editableSetup = {
-					type 	: 'textarea',
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit description...',
-					indicator : '<img src="images/loading.gif">',
-					select : false,
-					onblur : 'submit',
-					cssclass : 'widget-form'
-			};
-			console.log(typeof(this.editableSetup));
 			//EDIT TITLE
 			this.$el.find('#widget-title').editable(
 				function(value, settings)
@@ -89,7 +79,8 @@
 				{
 					type 	: 'text',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the title',
+					placeholder: 'Click to edit the title',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
@@ -107,7 +98,8 @@
 				{
 					type 	: 'textarea',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the description',
+					placeholder: 'Click to edit the desciption',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
@@ -125,7 +117,8 @@
 				{
 					type 	: 'text',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the creator name',
+					placeholder: 'Click to edit the creator name',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
