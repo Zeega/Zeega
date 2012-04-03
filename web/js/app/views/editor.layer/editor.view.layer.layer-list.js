@@ -228,23 +228,6 @@
 			return false;
 		},
 
-		//set persistance action
-		persist : function()
-		{
-			this.model.trigger('persist', this.model);
-			/*
-			if( $(this.el).find('#persist').is(':checked') ) Zeega.persistLayerOverFrames(this.model);
-			else Zeega.removeLayerPersist( this.model );
-			*/
-		},
-
-		copyToNext : function()
-		{
-			//Zeega.copyLayerToNextFrame( this.model)
-			this.model.trigger('copyToNext', parseInt(this.model.id) );
-			return false;
-		},
-
 		hideShow : function()
 		{
 			//set the visible in editor to the opposite of what it is currently
