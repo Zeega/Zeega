@@ -38,6 +38,8 @@
 		
 		initListeners : function()
 		{
+			this.model.on('change:attr', this.updateViewInPlace, this);
+			
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -165,6 +167,11 @@
 				'top' : '-1000%',
 				'left' : '-1000%'
 			});
+		},
+		
+		updateViewInPlace : function()
+		{
+			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 		},
 		
 		/*******************
