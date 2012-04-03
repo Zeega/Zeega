@@ -7,10 +7,10 @@
 			this.settings = _.defaults( args, this.defaults );
 			this.init();
 			
-			this.model.on('editor_controlsOpen', this.onControlsOpen, this);
-			this.model.on('editor_controlsClosed', this.onControlsClosed, this);
-			this.model.on('editor_layerEnter', this.onLayerEnter, this);
-			this.model.on('editor_layerExit', this.onLayerExit, this);
+			this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
+			this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+			this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+			this.model.on('editor_layerExit', this.private_onLayerExit, this);
 		},
 		
 		init : function(){},
@@ -23,7 +23,29 @@
 		onControlsOpen : function(){},
 		onControlsClosed : function(){},
 		onLayerEnter : function(){},
-		onLayerExit : function(){}
+		onLayerExit : function(){},
+		
+		private_onControlsOpen : function()
+		{
+			this.onControlsOpen();
+			this.delegateEvents();
+		},
+		private_onControlsClosed : function()
+		{
+			this.onControlsClosed();
+			this.undelegateEvents();
+		},
+		private_onLayerEnter : function()
+		{
+			this.onLayerEnter();
+			this.delegateEvents();
+		},
+		private_onLayerExit : function()
+		{
+			this.onLayerExit();
+			this.undelegateEvents();
+		}
+		
 	});
 
 
@@ -303,7 +325,7 @@
 		
 		init : function()
 		{
-			this.model.on('init_controls', this.onVideoReady, this);
+			this.model.on('video_ready', this.onVideoReady, this);
 		},
 		
 		render : function()
@@ -317,7 +339,6 @@
 		
 		onVideoReady : function()
 		{
-			console.log('onvideoready being called');
 			this.delegateEvents();
 			this.initPopcornEvents();
 			this.initScrubbers();
@@ -326,7 +347,7 @@
 		initPopcornEvents : function()
 		{
 			var _this = this;
-			console.log('initing popcorn events');
+			
 			console.log(this.model.video)
 			
 			this.model.video.pop.listen('pause',function(){
@@ -391,9 +412,6 @@
 					//_this.pop.play();
 				}
 			});
-		
-			this.$el.find('.plyr-cuein-scrubber').css({'left':Math.floor(_this.model.get('attr').cue_in*parseFloat(_this.$el.find('.plyr-timeline').width()/_this.model.video.pop.duration()))});
-			if(_this.model.get('attr').cue_out>0)this.$el.find('.plyr-cueout-scrubber').css({'left':Math.floor(_this.model.get('attr').cue_out*parseFloat(_this.$el.find('.plyr-timeline').width()/_this.model.video.pop.duration()))});
 			
 			this.$el.find('.plyr-cuein-scrubber').draggable({
 				axis:'x',
