@@ -3,10 +3,9 @@
 namespace Zeega\ExtensionsBundle\Parser\Vimeo;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Metadata;
+use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -38,8 +37,26 @@ class ParserVimeoVideo extends ParserAbstract
 
 
 		// TODO: ADD TAGS
-
-
+        $tags = (string)$entry->tags;
+        if(isset($tags)) 
+		{
+		    $tags = explode(", ", $tags);
+		    foreach($tags as $tagName)
+			{
+			    if(!empty($tagName))
+			    {
+    			    $tag = new Tag;
+    			    $tag->setName($tagName);
+                    $tag->setDateCreated(new \DateTime("now"));
+    	            $item_tag = new ItemTags;
+    	            $item_tag->setItem($item);
+    	            $item_tag->setTag($tag);
+    	            $item_tag->setDateCreated(new \DateTime("now"));
+                    $item->addItemTags($item_tag);
+                }
+			}
+		}
+        
 		$item->setMediaCreatorUsername((string)$entry->user_name);
 		$item->setMediaCreatorRealname('Unknown');
 
