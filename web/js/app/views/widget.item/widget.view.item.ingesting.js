@@ -25,13 +25,14 @@
 
 			// move to events (didn't work for me)
 			this.$el.find('#add-item').click(function(){
+			    $('#item-add .pill-buttons-widget').fadeOut();
 				var itemType = item.get("media_type");
 				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
 				item.set({id : null});
 				item.save({ }, 
 				{
 					success: function(model, response) { 
-				        $('#item-add .pill-buttons-widget').fadeOut();
+				        
 				        $('#widget-title').fadeOut();
 				        $('#widget-creator').fadeOut();
 				        $('#widget-description').fadeOut();
