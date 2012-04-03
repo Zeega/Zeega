@@ -9,7 +9,8 @@
 			
 			this.model.on('editor_controlsOpen', this.onControlsOpen, this);
 			this.model.on('editor_controlsClosed', this.onControlsClosed, this);
-			
+			this.model.on('editor_layerEnter', this.onLayerEnter, this);
+			this.model.on('editor_layerExit', this.onLayerExit, this);
 		},
 		
 		init : function(){},
@@ -20,7 +21,9 @@
 		},
 		
 		onControlsOpen : function(){},
-		onControlsClosed : function(){}
+		onControlsClosed : function(){},
+		onLayerEnter : function(){},
+		onLayerExit : function(){}
 	});
 
 
@@ -525,6 +528,11 @@
 		
 		onControlsOpen : function()
 		{
+			this.initMap();
+		},
+		
+		initMap : function()
+		{
 			console.log('geo layer open')
 			console.log(this)
 			if( this.loaded != true )
@@ -683,6 +691,18 @@
 			console.log(this)
 			//attr[ this.settings.property ] = this.settings.color;
 			//this.model.update( attr )
+		},
+		
+		onLayerEnter : function()
+		{
+			this.initMap();
+		},
+		
+		onLayerExit : function()
+		{
+			this.map = {};
+			$(this.el).find( '.google-map' ).empty();
+			this.loaded = false;
 		},
 		
 		render : function()
