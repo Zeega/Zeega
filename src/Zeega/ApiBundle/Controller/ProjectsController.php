@@ -57,9 +57,4 @@ class ProjectsController extends Controller
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
-
-    //  get_collections GET    /api/collections.{_format}
-    public function getProjectsAction()
-    {
-    } 
 }

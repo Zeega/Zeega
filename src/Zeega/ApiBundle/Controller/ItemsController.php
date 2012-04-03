@@ -14,20 +14,35 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    /**
+     * Parses a url and creates a Zeega item if the url is valid and supported.
+     * Path: GET items/parser
+     *
+     * @param String  $url  Url to be parsed
+     * @param Boolean  $loadChildItems  If true the child item of the item will be loaded. Should be used for large collections if only the collection description is wanted.
+	 * @return Array|response
+     */    
     public function getItemsParserAction()
     {
         $request = $this->getRequest();
+    	$url  = $request->query->get('url');
+    	
+    	if(!isset($url))
+    	{
+    	    $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
+    	}
+    	else
+    	{    	    
+        	$loadChildren = $request->query->get('load_children');
+        	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
 
-    	$url  = $request->query->get('url');      
-    	$loadChildren = $request->query->get('load_children');
-    	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
-
-        $parser = $this->get('zeega_parser');
+            $parser = $this->get('zeega_parser');
 		
-		// parse the url with the ExtensionsBundle\Parser\ParserService
-		$response = $parser->load($url, $loadChildren);
-        
-		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
+    		// parse the url with the ExtensionsBundle\Parser\ParserService
+    		$response = $parser->load($url, $loadChildren);
+
+    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
+	    }
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
@@ -170,8 +185,7 @@ class ItemsController extends Controller
 		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
         $item->setEnabled(true);
         $item->setPublished(true);
-		
-		$childItemsCount = $this->getRequest()->request->get('child_items_count');
+        
 		$childItems = $this->getRequest()->request->get('child_items');
 		if(isset($childItems))
 		{
@@ -199,10 +213,34 @@ class ItemsController extends Controller
                 $em->persist($childItem);
                 $em->flush();
                 
+                $tags = $child['tags'];
+
+                foreach($tags as $tagName)
+            	{
+            	    $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
+
+                    if (!isset($tag))
+                    {
+                        $tag = new Tag;
+            		    $tag->setName($tagName);
+                        $tag->setDateCreated(new \DateTime("now"));
+                        $em->persist($tag);
+                        $em->flush();            
+                    }
+                    $item_tag = new ItemTags;
+                    $item_tag->setItem($childItem);
+                    $item_tag->setTag($tag);
+                    $item_tag->setDateCreated(new \DateTime("now"));
+                    $em->persist($item_tag);
+                    $em->flush();            
+                    $childItem->addItemTags($item_tag);
+            	} 
+                
                 $item->addItem($childItem);
             }
 		}
 		
+		$childItemsCount = $this->getRequest()->request->get('child_items_count');
 		if(isset($childItemsCount))
 		{
         	$item->setChildItemsCount($childItemsCount);
@@ -217,7 +255,31 @@ class ItemsController extends Controller
 
         $em->persist($item);
         $em->flush();
+        
+        $tags = $this->getRequest()->request->get('tags');
+        
+        foreach($tags as $tagName)
+    	{
+    	    $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
 
+            if (!isset($tag))
+            {
+                $tag = new Tag;
+    		    $tag->setName($tagName);
+                $tag->setDateCreated(new \DateTime("now"));
+                $em->persist($tag);
+                $em->flush();            
+            }
+            $item_tag = new ItemTags;
+            $item_tag->setItem($item);
+            $item_tag->setTag($tag);
+            $item_tag->setDateCreated(new \DateTime("now"));
+            $em->persist($item_tag);
+            $em->flush();            
+            $item->addItemTags($item_tag);
+    	} 
+        
+        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }

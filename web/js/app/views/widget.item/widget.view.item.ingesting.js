@@ -42,14 +42,13 @@
 				        $('#widget-added-text').fadeIn();
 
 				 	    $('#message').html('Media successfully added to your Zeega Collection');
-				 	    zeegaWidget.app.itemCollection.add(item);
+				 	    zeegaWidget.app.items.collection.add(item);
 				 	},
 				 	error: function(model, response){
 	        		    $('#message').html('Unable to add Media to your Zeega Collection');
 				 	}
 				});
-				//zeegaWidget.app.itemCollection.add(item);
-				console.log(zeegaWidget.app.itemCollection);
+				console.log(zeegaWidget);
 	    	});
 
 	    	this.$el.find('#btn-more').click(function(){

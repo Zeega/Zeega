@@ -26,8 +26,8 @@ class WidgetController extends Controller
 	    if($mediaType == "collection")
 	    {
 	        $itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
-	        $itemWithChildren = json_decode($itemWithChildren,true);
-	        
+			$itemWithChildren = json_decode($itemWithChildren,true);
+
 	        if(isset($itemWithChildren))
 	        {
 	            $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);

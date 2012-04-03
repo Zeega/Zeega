@@ -8,6 +8,7 @@
 		{
 			this.collection = new Items.Collection();
 			this.collection.on('reset',this.reset,this);
+			this.collection.on('add',this.add,this);
 			this._childViews = [];
 			
 			$(this.el).spin('small');
@@ -35,6 +36,13 @@
 			$(this.el).fadeTo(100,1);
 			$(this.el).spin(false);
 			return this;
+		},
+		add: function(item)
+		{
+			var itemView = new Items.Views.CollectionItem({model:item});
+			this._childViews.push( itemView );
+			$(this.el).prepend( itemView.render().el );
+					
 		}
 
 	});

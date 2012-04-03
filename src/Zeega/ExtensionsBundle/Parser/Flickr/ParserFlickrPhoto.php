@@ -42,7 +42,6 @@ class ParserFlickrPhoto extends ParserAbstract
 
 			if($info['tags'])
 			{
-				/*
 				foreach($info['tags']['tag'] as $t)
 				{
 				    $tag = new Tag;
@@ -51,11 +50,9 @@ class ParserFlickrPhoto extends ParserAbstract
 		            $item_tag = new ItemTags;
 		            $item_tag->setItem($item);
 		            $item_tag->setTag($tag);
-		            $item_tag->setTagDateCreated(new \DateTime("now"));
+		            $item_tag->setDateCreated(new \DateTime("now"));
 	                $item->addItemTags($item_tag);
-					//array_push($tags, ucwords(strtolower($tag['raw'])));
 				}
-				*/
 			}
 
 			foreach ($size as $s)

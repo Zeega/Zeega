@@ -299,7 +299,7 @@
 		
 		init : function()
 		{
-			this.model.on('video_ready', this.onVideoReady, this);
+			this.model.on('initControls', this.onVideoReady, this);
 		},
 		
 		render : function()
@@ -358,6 +358,12 @@
 		initScrubbers : function()
 		{
 			var _this = this;
+			
+			
+			this.$el.find('.plyr-cuein-scrubber').css({'left':Math.floor( this.model.get('attr').cue_in*parseFloat(_this.$el.find('.plyr-timeline').width())/_this.model.video.pop.duration())+'px'});
+			if(this.model.get('attr').cue_out>0) this.$el.find('.plyr-cueout-scrubber').css({'left':Math.floor( this.model.get('attr').cue_out*parseFloat(_this.$el.find('.plyr-timeline').width())/_this.model.video.pop.duration())+'px'});
+			
+			
 			this.$el.find('.plyr-scrubber').draggable({
 				
 				axis:'x',
