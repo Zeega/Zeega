@@ -25,13 +25,14 @@
 
 			// move to events (didn't work for me)
 			this.$el.find('#add-item').click(function(){
+			    $('#item-add .pill-buttons-widget').fadeOut();
 				var itemType = item.get("media_type");
 				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
 				item.set({id : null});
 				item.save({ }, 
 				{
 					success: function(model, response) { 
-				        $('#item-add .pill-buttons-widget').fadeOut();
+				        
 				        $('#widget-title').fadeOut();
 				        $('#widget-creator').fadeOut();
 				        $('#widget-description').fadeOut();
@@ -69,16 +70,6 @@
 	    	});
 
 
-			this.editableSetup = {
-					type 	: 'textarea',
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit description...',
-					indicator : '<img src="images/loading.gif">',
-					select : false,
-					onblur : 'submit',
-					cssclass : 'widget-form'
-			};
-			console.log(typeof(this.editableSetup));
 			//EDIT TITLE
 			this.$el.find('#widget-title').editable(
 				function(value, settings)
@@ -89,7 +80,8 @@
 				{
 					type 	: 'text',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the title',
+					placeholder: 'Click to edit the title',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
@@ -107,7 +99,8 @@
 				{
 					type 	: 'textarea',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the description',
+					placeholder: 'Click to edit the desciption',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',
@@ -125,7 +118,8 @@
 				{
 					type 	: 'text',
 					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
+					tooltip   : 'Click to edit the creator name',
+					placeholder: 'Click to edit the creator name',
 					indicator : '<img src="images/loading.gif">',
 					select : false,
 					onblur : 'submit',

@@ -37,7 +37,6 @@ class ParserFlickrSet extends ParserAbstract
 		$collection->setDescription($setInfo["description"]);
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Flickr');
-	    $collection->setUri('http://zeega.org');
 		$collection->setAttributionUri($url);
 
         $collection->setChildItemsCount($setInfo["count_photos"]);
@@ -55,6 +54,12 @@ class ParserFlickrSet extends ParserAbstract
 			}	
 		}
 		$collection->setThumbnailUrl($sizes['Square']['source']);
+		if(isset($sizes['Large']))$itemSize='Large';
+		elseif(isset($sizes['Original'])) $itemSize='Original';
+		elseif(isset($sizes['Medium'])) $itemSize='Medium';
+		else $itemSize='Small';
+
+		$collection->setUri($sizes[$itemSize]['source']);
 		
 		if($loadCollectionItems == true)
 		{
