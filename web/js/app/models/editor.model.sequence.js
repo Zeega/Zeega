@@ -17,6 +17,7 @@
 			this.createFrames( attributes.frames );
 			this.createLayers( attributes.layers );
 			
+			this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 			
 			this.updateFrameOrder(false);
@@ -58,8 +59,11 @@
 			
 			this.layers = new Layers.MasterCollection( layerModelArray );
 			
-			
-			
+		},
+		
+		onLayerAdded : function(layer)
+		{
+			layer.on('editor_removeLayerFromFrame', this.removeLayerFromFrame, this);
 		},
 		
 		updateFrameOrder : function( save )
