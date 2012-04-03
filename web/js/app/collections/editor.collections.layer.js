@@ -19,8 +19,10 @@
 			//args = {item, type, frame}
 			if( _.isUndefined( args.item ) )
 			{
+
 				console.log('add non item layer type'+args.type);
 	
+
 				newLayer = new Layer[args.type]();
 				this.add( newLayer );
 				if( args.show ) newLayer.trigger('editor_layerRender');

@@ -6,13 +6,20 @@
 		{
 			this.settings = _.defaults( args, this.defaults );
 			this.init();
+			
+			this.model.on('editor_controlsOpen', this.onControlsOpen, this);
+			this.model.on('editor_controlsClosed', this.onControlsClosed, this);
+			
 		},
 		init : function(){},
 		getControl : function()
 		{
 			this.render();
 			return this.el;
-		}
+		},
+		
+		onControlsOpen : function(){},
+		onControlsClosed : function(){}
 	});
 
 
@@ -486,6 +493,230 @@
 			return html;
 		}
 	});
+	
+	
+	Layer.Views.Lib.GoogleMaps = Layer.Views.Lib.extend({
+		
+		className : 'control control-google-map',
+		
+		defaults : {
+			
+			mapWidth : 268,
+			mapHeight : 268,
+			
+			type : 'map',
+			streetView : true,
+			searchBar : true,
+			disableDoubleClickZoom : true,
+
+			panControl: false,
+			zoomControl: true,
+			mapTypeControl: true,
+			scaleControl: false,
+			streetViewControl: true,
+			overviewMapControl: false
+		},
+		
+		init : function()
+		{
+			
+			//console.log(this.model)
+			/*
+			this.model.on("all", function(eventName) {
+				console.log('event: '+ eventName);
+			});
+			*/
+		},
+		
+		onControlsOpen : function()
+		{
+			console.log('geo layer open')
+			console.log(this)
+			if( this.loaded != true )
+			{
+				//make center lat lng
+				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
+
+				var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
+
+				var mapOptions = {
+					zoom : this.model.get('attr').zoom,
+					center : center,
+					mapTypeId : gMapType,
+					
+					disableDoubleClickZoom : this.settings.disableDoubleClickZoom,
+					panControl: this.settings.panControl,
+					zoomControl: this.settings.zoomControl,
+					mapTypeControl: this.settings.mapTypeControl,
+					scaleControl: this.settings.scaleControl,
+					streetViewControl: this.settings.streetView,
+					overviewMapControl: this.settings.overviewMapControl
+				};
+				this.map = new google.maps.Map( $(this.el).find( '.google-map' )[0], mapOptions);
+			
+				if( this.model.get('attr').type == "streetview" )
+				{
+					var pov = {
+							'heading' : this.model.get('attr').heading,
+							'pitch' : this.model.get('attr').pitch,
+							'zoom' : this.model.get('attr').streetZoom,
+							}
+					this.map.getStreetView().setPosition( center );
+					this.map.getStreetView().setPov( pov );
+					this.map.getStreetView().setVisible( true );
+				}
+			
+				this.initMapListeners();
+				this.initGeoCoder();
+				
+				this.loaded = true
+			}
+		},
+		
+		initGeoCoder : function()
+		{
+			var _this = this;
+			this.geocoder = new google.maps.Geocoder();
+			
+			$(this.el).find('.geocoder').keypress(function(e){
+				if(e.which == 13)
+				{
+					_this.lookup( $(this).val() );
+					$(this).blur();
+					return false;
+				}
+			}).blur(function(){
+				_this.lookup( $(this).val() )
+			})
+		},
+		
+		lookup : function( location )
+		{
+			console.log('lookup: '+location)
+			var _this = this;
+			this.geocoder.geocode( { 'address': location}, function(results, status) {
+				if ( status == google.maps.GeocoderStatus.OK )
+				{
+					if( _this.map.getStreetView().getVisible() ) _this.map.getStreetView().setVisible( false );
+					var center = results[0].geometry.location;
+					_this.map.setCenter( center );
+					_this.model.update({ title : location });
+				}
+				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
+			});
+			
+			
+		},
+		
+		initMapListeners : function()
+		{
+			var _this = this;
+			google.maps.event.addListener( this.map, 'idle', function(){
+				var newCenter = _this.map.getCenter();
+				console.log('map is idle now')
+				_this.model.update({
+					lat : newCenter.lat(),
+					lng : newCenter.lng()
+				})
+			});
+
+			google.maps.event.addListener(this.map, 'maptypeid_changed', function(){
+				console.log('the maps type has changed')
+				_this.model.update({ mapType : _this.map.getMapTypeId() })
+			});
+			
+			google.maps.event.addListener( this.map , 'zoom_changed', function(){
+				console.log('map zoom level changed')
+				_this.model.update({ zoom : _this.map.getZoom() })
+			});
+			
+			google.maps.event.addListener( this.map.getStreetView(), 'visible_changed', function(){
+				
+				console.log('streetview changed')
+				if( _this.map.getStreetView().getVisible() )
+				{
+					var center = _this.map.getStreetView().getPosition();
+
+					//when streetview is visible
+					_this.model.update({
+						type : 'streetview',
+						lat : center.lat(),
+						lng : center.lng()
+					});
+				}
+				else
+				{
+					//when streetview is hidden
+					_this.model.update({ type: 'map' })
+				}
+			});
+			
+			//called when the streetview is panned
+			google.maps.event.addListener( _this.map.getStreetView(), 'pov_changed', function(){
+				
+				delayedUpdate();
+			});
+
+			// need this so we don't spam the servers
+			var delayedUpdate = _.debounce( function(){
+				var center = _this.map.getStreetView().getPosition();
+				var pov = _this.map.getStreetView().getPov();
+				
+				console.log('streetview moved')
+				
+				_this.model.update({
+					heading : pov.heading,
+					lat : center.lat(),
+					lng : center.lng(),
+					pitch : pov.pitch,
+					streetZoom : Math.floor( pov.zoom )
+				})
+				
+			} , 1000);
+		},
+		
+		
+		onControlsClosed : function()
+		{
+			console.log('geo layer closed')
+		},
+		
+		save : function()
+		{
+			console.log('save rect')
+			var attr = {};
+			console.log(this)
+			//attr[ this.settings.property ] = this.settings.color;
+			//this.model.update( attr )
+		},
+		
+		render : function()
+		{
+			var _this = this;
+
+			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			
+			
+			return this;
+		},
+		
+		lazySave : _.debounce( function(){
+			var attr = {};
+			attr[ this.settings.property ] = this.settings.color;
+			this.model.update( attr );
+		}, 3000),
+		
+		getTemplate : function()
+		{
+			var html = ''+
+			
+					"<div class='google-map' style='width:<%= mapWidth %>px; height:<%= mapHeight %>px'></div>"+
+					"<input class='geocoder' type='text' placeholder='type a place name'>"
+			
+			return html;
+		}
+	});
+	
 	
 })(zeega.module("layer"));
 
