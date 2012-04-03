@@ -1,50 +1,46 @@
-{{ _self.show(item) }}
-{% macro show(item) %}
+{# Template to render items recursively. #}
+
+{{ _self.show(item) }} 	{# Render the first item by making a call to the show(item) macro#}
+
+{% macro show(item) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
 		"id" : "{{ item.id }}",
 		"title" : {{ item.title | json_encode | raw}},
-		"description" : {{ item.description | json_encode | raw}},
-		"text" : "{{ item.text }}",
+		"description" : {{ item.description | default("") | json_encode | raw}},
+		"text" : {{ item.text | default("") | json_encode | raw}},
 		"uri" : "{{ item.uri }}",
-		"attribution_uri" : "{{ item.getAttributionUri() }}",
-		"date_created" : "{{ item.getDateCreated()|date("Y-m-d") }}",
-		"media_type" : "{{ item.getMediaType() }}",
-		"layer_type" : "{{ item.getLayerType() }}",
+		"attribution_uri" : "{{ item.attributionuri }}",
+		"date_created" : "{{ item.datecreated | date("Y-m-d") }}",
+		"media_type" : "{{ item.mediatype }}",
+		"layer_type" : "{{ item.layertype }}",
 		"archive" : "{{ item.archive }}",
-		"thumbnail_url" : {{ item.getThumbnailUrl() | json_encode | raw}},
-		"media_geo_latitude" : "{{ item.getMediaGeoLatitude() }}",
-		"media_geo_longitude" : "{{ item.getMediaGeoLongitude() }}",
-		{% if item.getMediaDateCreated() %}
-			"media_date_created" : "{{ item.getMediaDateCreated()|date("Y-m-d") }}",
-		{% else %}
-			"media_date_created" : "",
-		{% endif %}
-		{% if item.getMediaDateCreatedEnd() %}
-			"media_date_created_end" : "{{ item.getMediaDateCreatedEnd|date("Y-m-d") }}",
-		{% else %}
-			"media_date_created_end" : "",
-		{% endif %}
-		"media_creator_username" : "{{ item.getMediaCreatorUsername() }}",
-		"media_creator_realname" : "{{ item.getMediaCreatorRealname() }}",
-		"child_items_count" : {{ item.getChildItemsCount }},
+		"thumbnail_url" : {{ item.thumbnailurl | json_encode | raw}},
+		"media_geo_latitude" : "{{ item.mediageolatitude }}",
+		"media_geo_longitude" : "{{ item.mediageolongitude }}",
+		"media_date_created" :"{{ item.mediadatecreated is empty ? "" : item.mediadatecreated | date("m/d/Y") }}",
+		"media_date_created_end" :"{{ item.mediadatecreatedend is empty ? "" : item.mediadatecreatedend | date("m/d/Y") }}",
+		"media_creator_username" : "{{ item.mediacreatorusername }}",
+		"media_creator_realname" : "{{ item.mediacreatorrealname }}",
+		"child_items_count" : {{ item.childitemscount }},
 		"child_items":
 		[
-		{% for child in item.getChildItems %}
-            {{ _self.show(child) }}
-			{%- if loop.index0 < item.getChildItems|length - 1 -%}
-			,
-			{%- endif -%}
-        {% endfor %}
+			{% for child in item.childitems %}
+				{# Item is a collection. Render the children by recursively calling the macro #}
+	            {{ _self.show(child) }}
+				{%- if loop.index0 < item.childitems|length - 1 -%}
+				,
+				{%- endif -%}
+	        {% endfor %}
 		],
 		"tags":
 		[ 
-		{% for itemtag in item.getTags %}
-			{{itemtag.getTag.getName | json_encode | raw}}
-			{%- if loop.index0 < item.getTags|length - 1 -%}
-			,
-			{%- endif -%}
-        {% endfor %}
+			{% for itemtag in item.getTags %}
+				{{itemtag.getTag.getName | json_encode | raw}}
+				{%- if loop.index0 < item.getTags|length - 1 -%}
+				,
+				{%- endif -%}
+	        {% endfor %}
 		]
 	}
 	{% else %}

@@ -70,10 +70,14 @@ class ItemsController extends Controller
  		$queryResults = $this->getDoctrine()
  					         ->getRepository('ZeegaDataBundle:Item')
  					         ->searchItems($query);								
-		
+		//return new Response(var_dum$queryResults);
 		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
+		//$response = new Response($itemsView);
+     	//$response->headers->set('Content-Type', 'text');
+        //return $response;
+        
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
@@ -91,7 +95,8 @@ class ItemsController extends Controller
             array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
         }
         $tags = join(",",$tags);
-                
+        //var_dum($item);
+        //return new Response();        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);

@@ -253,6 +253,8 @@ class SearchController extends Controller
 		// prepare an array for the results
         $results = array();
 		
+		$query["arrayResults"] = true;
+		
 		// regular search - return items and/or collections
 		if($query['returnCollections'] || $query['returnItems'] || $query['returnCollectionsWithItems'])
 		{

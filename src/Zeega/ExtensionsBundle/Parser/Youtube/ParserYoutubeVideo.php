@@ -72,7 +72,7 @@ class ParserYoutubeVideo extends ParserAbstract
 
 		// write metadata
 		$item->setArchive('Youtube');
-		$item->setLicense($entry["media\$license"]["\$t"]);
+		$item->setLicense($entry["media\$group"]["media\$license"]["\$t"]);
 		
 		return $this->returnResponse($item, true, false);
 	}
