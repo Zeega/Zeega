@@ -110,7 +110,6 @@
 				'padding' : this.attr.padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
-			
 			$(this.el).html( _.template( this.getTemplate(), this.attr ) ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
@@ -132,7 +131,12 @@
 		},
 		
 		lazySave : _.debounce( function(){
-			this.model.update( { content : this.$el.find('#zedit-target').html() } );
+			
+			var str = this.$el.find('#zedit-target').html();
+			this.model.update( {
+				content : str,
+				title : str
+			} );
 		}, 1000),
 		
 		getTemplate : function()
