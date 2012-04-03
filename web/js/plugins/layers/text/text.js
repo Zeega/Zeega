@@ -110,7 +110,8 @@
 				'padding' : this.attr.padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
-			$(this.el).html( _.template( this.getTemplate(), this.attr ) ).css( style );
+
+			$(this.el).html( _.template( this.getTemplate(), this.model.get('attr') ) ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
 			
