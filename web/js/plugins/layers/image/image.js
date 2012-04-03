@@ -24,7 +24,7 @@
 		
 		render : function()
 		{
-			
+
 			var scaleSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
 				model: this.model,
@@ -54,7 +54,7 @@
 
 	Layer.Views.Visual.Image = Layer.Views.Visual.extend({
 		
-		draggable : false,
+		draggable : true,
 		linkable : true,
 		
 		render : function()

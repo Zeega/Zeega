@@ -11,6 +11,7 @@
 			this.model.on('editor_controlsClosed', this.onControlsClosed, this);
 			
 		},
+		
 		init : function(){},
 		getControl : function()
 		{
@@ -199,7 +200,7 @@
 			this.$el.find('.control-slider').slider({
 				min : this.settings.min,
 				max : this.settings.max,
-				value : this.settings.value || this.model.get('attr')[this.settings.property],
+				value : this.model.get('attr')[this.settings.property] || this.settings.value,
 				step : this.settings.step,
 				slide : function(e, ui)
 				{
@@ -299,7 +300,7 @@
 		
 		init : function()
 		{
-			this.model.on('initControls', this.onVideoReady, this);
+			this.model.on('video_ready', this.onVideoReady, this);
 		},
 		
 		render : function()
@@ -358,12 +359,6 @@
 		initScrubbers : function()
 		{
 			var _this = this;
-			
-			
-			this.$el.find('.plyr-cuein-scrubber').css({'left':Math.floor( this.model.get('attr').cue_in*parseFloat(_this.$el.find('.plyr-timeline').width())/_this.model.video.pop.duration())+'px'});
-			if(this.model.get('attr').cue_out>0) this.$el.find('.plyr-cueout-scrubber').css({'left':Math.floor( this.model.get('attr').cue_out*parseFloat(_this.$el.find('.plyr-timeline').width())/_this.model.video.pop.duration())+'px'});
-			
-			
 			this.$el.find('.plyr-scrubber').draggable({
 				
 				axis:'x',
