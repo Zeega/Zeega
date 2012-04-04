@@ -56,12 +56,22 @@ this.zeega = {
 		var Items = zeega.module("items");
 		
 		console.log($.parseJSON(projectJSON))
+		console.log( $.parseJSON(collectionsJSON))
+		
+		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
 		
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject();
 		this.itemCollection = new Items.ViewCollection();
+	},
+	
+	loadCollectionsDropdown : function( collections )
+	{
+		_.each( collections, function( collection ){
+			$('#database-collection-filter').append('<option value="'+ collection.id +'">'+ collection.title +'</option>')
+		})
 	},
 	
 	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
