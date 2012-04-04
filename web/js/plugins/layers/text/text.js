@@ -131,6 +131,9 @@
 			
 			this.$el.click(function(){
 				_this.$el.find('#zedit-target').focus();
+				_this.$el.draggable('option','disabled', true);
+			}).focusout(function(){
+				_this.$el.draggable('option','disabled', false);
 			})
 			
 		},
