@@ -342,5 +342,21 @@ class ItemRepository extends EntityRepository
 			   ->setMaxResults(15)
 			   ->getArrayResult();
     }
+
+    public function findUserCollections($userId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+            // search query
+    	$qb->select('i.id, i.title')
+    	   ->from('ZeegaDataBundle:Item', 'i')
+		   ->where('i.user_id = :user_id')
+		   ->andwhere('i.media_type = :media_type')
+		   ->setParameter('user_id',$userId)
+		   ->setParameter('media_type','Collection');
+
+            // execute the query
+        return $qb->getQuery()->getArrayResult();
+    }
 }
 
