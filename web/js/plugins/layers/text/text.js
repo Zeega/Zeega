@@ -4,6 +4,8 @@
 
 		layerType : 'Text',
 		
+		linkable : true,
+		
 		defaultAttributes: {
 			'title' :'Text Layer',
 			'content' : 'Text',
@@ -14,6 +16,8 @@
 			'opacity' : 0.9,
 			'fontSize' : 100,
 			'padding' : 5,
+			
+			linkable : true
 		},
 		
 		updateContentInPlace : function()
@@ -45,7 +49,7 @@
 		{
 			var bgcolor = new Layer.Views.Lib.ColorPicker({
 				property : 'backgroundColor',
-				color : this.attr.backgroundColor,
+				color : this.model.get('attr').backgroundColor,
 				model: this.model,
 				label : 'Background Color',
 				opacity : true
@@ -53,7 +57,7 @@
 			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
-				color : this.attr.color,
+				color : this.model.get('attr').color,
 				model: this.model,
 				label : 'Text Color',
 				opacity : true
@@ -95,14 +99,16 @@
 
 	Layer.Views.Visual.Text = Layer.Views.Visual.extend({
 		
+		draggable : true,
+		
 		render : function()
 		{
 			var style = {
-				'color' : this.attr.color,
-				'backgroundColor' : 'rgba('+ this.attr.backgroundColor.toRGB() +','+ (this.attr.backgroundColorOpacity || 1) +')',
-				'opacity' : this.attr.opacity,
-				'fontSize' : this.attr.fontSize +'%',
-				'padding' : this.attr.padding +'%',
+				'color' : this.model.get('attr').color,
+				'backgroundColor' : 'rgba('+ this.model.get('attr').backgroundColor.toRGB() +','+ (this.attr.backgroundColorOpacity || 1) +')',
+				'opacity' : this.model.get('attr').opacity,
+				'fontSize' : this.model.get('attr').fontSize +'%',
+				'padding' : this.model.get('attr').padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
 			console.log('color: '+ style.backgroundColor)

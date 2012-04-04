@@ -28,12 +28,15 @@
 		{
 			var continueToNext = new Layer.Views.Lib.ContinueToNextFrame({ model: this.model });
 			var continueOnAll = new Layer.Views.Lib.ContinueOnAllFrames({ model: this.model });
-			var link = new Layer.Views.Lib.Link({ model: this.model });
 			
 			$(this.el).find('.default-layer-controls')
 				.append( continueOnAll.getControl() )
 				.append( continueToNext.getControl() );
-			if( this.model.get('attr').linkable ) $(this.el).find('.default-layer-controls').append( link.getControl() );
+			if( this.model.get('attr').linkable )
+			{
+				var link = new Layer.Views.Lib.Link({ model: this.model });
+				$(this.el).find('.default-layer-controls').append( link.getControl() );
+			}
 		},
 		
 		initListeners : function()

@@ -360,7 +360,7 @@
 			var attr = {};
 			attr[ this.settings.property ] = this.settings.color;
 			this.model.update( attr );
-		}, 3000),
+		}, 1000),
 		
 		getTemplate : function()
 		{
