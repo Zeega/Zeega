@@ -212,7 +212,9 @@
 			scaleWith : false,
 			scaleValue : false,
 			callback : false,
-			save : true
+			save : true,
+			
+			slide : null
 		},
 		
 		render : function()
@@ -231,6 +233,8 @@
 				{
 					if( _this.settings.css )
 						_this.model.visual.$el.css( _this.settings.property, ui.value + _this.settings.suffix );
+						
+					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
 				},
 				stop : function(e,ui)
 				{
@@ -244,6 +248,11 @@
 			});
 			
 			return this;
+		},
+		
+		getValue : function()
+		{
+			return this.$el.find('.control-slider').slider('option','value');
 		},
 		
 		getTemplate : function()
@@ -290,9 +299,9 @@
 		defaults : {
 			property : 'backgroundColor',
 			color : '#ffffff',
-			save : 'true'
+			save : true,
+			opacity: false
 		},
-		
 		
 		save : function()
 		{
@@ -307,20 +316,44 @@
 		{
 			var _this = this;
 			
-			
+			if(this.settings.opacity )
+			{
+				var opacitySlider = new Layer.Views.Lib.Slider({
+					css : false,
+					property : this.settings.property +'Opacity',
+					value : this.settings[this.settings.property+'Opacity'] || 1,
+					model: this.model,
+					label : 'Opacity',
+					step : 0.01,
+					min : .05,
+					max : 1,
+					slide : function()
+					{
+						_this.refreshColor(_this.settings.color, opacitySlider.getValue() )
+					}
+				});
+			}
 			
 			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			
+			if( this.settings.opacity ) this.$el.append( opacitySlider.getControl() );
 			
 			$.farbtastic(this.$el.find('.control-colorpicker'))
 				.setColor( _this.settings.color )
 				.linkTo(function(color){
-					console.log(color)
-					_this.model.visual.$el.css( _this.settings.property, color );
+					_this.refreshColor( color, (( opacitySlider)? opacitySlider.getValue() : 1 ) );
 					_this.settings.color = color;
-					if(_this.settings.save) _this.lazySave();
 				});
+				
+			
 			
 			return this;
+		},
+		
+		refreshColor : function( hex, a )
+		{
+			this.model.visual.$el.css( this.settings.property, 'rgba('+ hex.toRGB() +','+ a +')' );
+			if(this.settings.save) this.lazySave();
 		},
 		
 		lazySave : _.debounce( function(){

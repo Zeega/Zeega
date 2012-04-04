@@ -48,23 +48,15 @@
 				color : this.attr.backgroundColor,
 				model: this.model,
 				label : 'Background Color',
+				opacity : true
 			});
 			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
 				color : this.attr.color,
 				model: this.model,
-				label : 'Text Color'
-			});
-			
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : .05,
-				max : 1,
-				
+				label : 'Text Color',
+				opacity : true
 			});
 			
 			var sizeSlider = new Layer.Views.Lib.Slider({
@@ -92,7 +84,6 @@
 			this.controls
 				.append( bgcolor.getControl() )
 				.append( color.getControl() )
-				.append( opacitySlider.getControl() )
 				.append( sizeSlider.getControl() )
 				.append( paddingSlider.getControl() )
 				.append( clearButton.getControl() );
@@ -108,12 +99,13 @@
 		{
 			var style = {
 				'color' : this.attr.color,
-				'backgroundColor' : this.attr.backgroundColor,
+				'backgroundColor' : 'rgba('+ this.attr.backgroundColor.toRGB() +','+ (this.attr.backgroundColorOpacity || 1) +')',
 				'opacity' : this.attr.opacity,
 				'fontSize' : this.attr.fontSize +'%',
 				'padding' : this.attr.padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
+			console.log('color: '+ style.backgroundColor)
 
 			$(this.el).html( _.template( this.getTemplate(), this.model.get('attr') ) ).css( style );
 			
