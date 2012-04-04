@@ -8,37 +8,39 @@
 
 {% block body %}
 
-	
-	<div id="widget-wrapper"  data-id="{% for widget_id in widget_ids %}{{widget_ids}}{%endfor%}" style="margin-top:20px; color: white; font-size:14px;"> 
-		<h>Import Media: {{title}}</h>
-		<div style="width:100%; margin-left:25px; margin-top:35px; margin-right:25px;">
-			<div style="position:relative;  height: 200px; float:left;">
-		<div id="import-item" data-count="{{count}}" style='text-align:left; width:400px;'>
-			{% for thumb_url in thumb_urls %}
-				{% if thumb_url.index < 6 %}
-			<img data-id="{{thumb_url.widgetId}}" style="border: solid 1px white; width:40px; height:40px; margin:2px" id="image" src="{{thumb_url.thumbUrl}}" class="scaled" />
-				{% elseif thumb_url.index >5 %}
-			<img data-id="{{thumb_url.widgetId}}" style="display:none; border: solid 1px white; width:40px; height:40px; margin:2px" id="image"  class="scaled" />
-			
-				{% endif %}
-			
-			
-			{%endfor%}
-		</div>
-	</div>
-
-		
-			<div id="item-add" style="clear:both" >
-					<ul class="pill-buttons-widget">
-						<li><a id="add-item" href="#">Add to Zeega Collection</a></li><br>
-					</ul>
+	<div id="widget-wrapper" data-id="{{widget_id}}"> 
+		<div id="results-count">1 set of {{child_items_count}} items found</div>
+		<div id="item-view">
+			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" class="item-image" />
+			<div id="item-add" class="add-button">
+				<ul class="pill-buttons-widget">
+					<li><a id="add-item" href="#">Add Set as Collection</a></li><br>
+				</ul>
+				<div id="widget-added-text">
+					<span class="widget-title-added">Title: <span id="widget-title-added-text">hello</span></span><br/>
+					<span class="widget-creator-added">Creator: <span id="widget-creator-added-text">b</span></span>
+				</div>
 			</div>
-
-		</div>	
-	</div>
+			
+			<div style="clear:both;">&nbsp;</div>
+			<div id="message"></div>
+			<div id="widget-title">&nbsp;</div>
+			<div id="widget-creator">&nbsp;</div>
+			<a href="." id="btn-more">view more</a>
+			<a href="." id="btn-less" style="display:none">view less</a>
+			<div id="description">
+				<p id="widget-description" class="widget-textbox" >description</p>
+			</div>
+		</div>
+		
+	</div><!--#widget-wrapper-->
 {% endblock %}		
-	
-
+ 
 {% block scripts %}
-     <script type="text/javascript" src="{{asset('js/widget/zeega.batch.js')}}"></script>  
-{% endblock %}	
+	<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+	<script type="text/javascript" language="Javascript">
+		//bootstrapping data
+		var itemJSON = "{{item|e('js')}}";
+		var itemCollectionJSON = "{{mycollection|e('js')}}";
+	</script>	
+{% endblock %}

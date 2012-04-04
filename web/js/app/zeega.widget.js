@@ -33,19 +33,12 @@ this.zeegaWidget = {
 
 		init : function()
 		{
-			console.log('WIDGET INIT')
 			var Items = zeegaWidget.module('items');
 			this.items = new Items.MasterCollection();
-			console.log(this.items)
 			var itemBS = jQuery.parseJSON(itemJSON);
-			console.log(itemBS)
 			var newItem = new Items.Model( itemBS );
-			console.log(newItem);
 			var newItemView = new Items.Views.Ingesting({ model : newItem } )
 			newItemView.render();
-			//not html
-			//$('#item-view').append( newItemView.render().el );
-
 		}
 
 	}, Backbone.Events)

@@ -10,6 +10,7 @@ use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Imagick;
 use DateTime;
 use SimpleXMLElement;
@@ -77,18 +78,18 @@ class WidgetController extends Controller
         				'displayname' => $user->getDisplayname(),
         				'media_type' => $item->getMediaType(),
         				'widget_id'=>$widgetId,
-        				'item' => json_encode($items),
+        				'item' => ResponseHelper::serializeEntityToJson($item),
         				'mycollection'=>$mycollection,
         			));
         		}
 				else if($isUrlCollection)
 				{
-					//return new Response(var_dump($parserResponse));
-					return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
+					return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
 						'widget_id'=>$widgetId,
 						'item'=>json_encode($parsedItem), 
 						'mycollection'=>$mycollection,
+						'child_items_count'=>$parsedItem["child_items_count"],
 					));						
 				}
 				else
