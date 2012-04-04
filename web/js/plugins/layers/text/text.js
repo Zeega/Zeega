@@ -16,8 +16,9 @@
 			'padding' : 5,
 		},
 		
-		init : function(){
-			console.log('Text INIT')
+		updateContentInPlace : function()
+		{
+			this.visual.updateContentInPlace();
 		},
 
 		preload : function( target )
@@ -86,12 +87,15 @@
 				
 			});
 			
+			var clearButton = new Layer.Views.Lib.ClearStyles({ model : this.model });
+			
 			this.controls
-				.append( bgcolor.render().el )
-				.append( color.render().el )
-				.append( opacitySlider.render().el )
-				.append( sizeSlider.render().el )
-				.append( paddingSlider.render().el );
+				.append( bgcolor.getControl() )
+				.append( color.getControl() )
+				.append( opacitySlider.getControl() )
+				.append( sizeSlider.getControl() )
+				.append( paddingSlider.getControl() )
+				.append( clearButton.getControl() );
 			
 			return this;
 		}
@@ -146,6 +150,11 @@
 		cleanString : function(str)
 		{
 			return str.replace(/(<([^>]+)>)/ig, "");
+		},
+		
+		updateContentInPlace : function()
+		{
+			$(this.el).find('#zedit-target').html(this.model.get('attr').content );
 		},
 		
 		getTemplate : function()

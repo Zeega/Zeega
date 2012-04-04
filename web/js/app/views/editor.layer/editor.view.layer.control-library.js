@@ -257,6 +257,31 @@
 		}
 	});
 	
+	//for text layer
+	Layer.Views.Lib.ClearStyles = Layer.Views.Lib.extend({
+		
+		className : 'clear-styles',
+
+		render : function()
+		{
+			var button = '<button class="btn" style="width:100%">Clear Styles</button>'
+			$(this.el).append( button );
+		},
+
+		events : {
+			'click' : 'clearStyles'
+		},
+
+		clearStyles : function()
+		{
+			var clean = this.model.get('attr').content.replace(/(<([^>]+)>)/ig, "");
+
+			this.model.update({ content : clean });
+			console.log( 'clear styles!: '+ clean );
+			this.model.updateContentInPlace();
+		}
+		
+	});
 	
 	Layer.Views.Lib.ColorPicker = Layer.Views.Lib.extend({
 		
