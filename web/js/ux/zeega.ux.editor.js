@@ -240,6 +240,7 @@ function closeOpenCitationTabs()
 	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
+		console.log('search collection: '+ $(this).val());
 		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
 	});
 	

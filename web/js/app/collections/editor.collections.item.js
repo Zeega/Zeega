@@ -86,7 +86,11 @@
 		page : 0,
 		totalItemsCount : 0,
 		
-		base : function(){ return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
+		base : function()
+		{
+			return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&site="+sessionStorage.getItem('siteid')+"&page="+ this.page
+		},
+		
 		search : {},
 
 		initialize : function()
@@ -114,7 +118,8 @@
 			var url = this.base();
 			if( !_.isUndefined(this.search.query) ) url += '&q=' + this.search.query;
 			if( !_.isUndefined(this.search.contentType) ) url += '&content=' + this.search.contentType;
-			if( !_.isUndefined(this.search.collectionID) && this.collectionID != 'all' ) url += '&collection=' + this.search.collectionID;
+			if( !_.isUndefined(this.search.collectionID) && this.search.collectionID != 'all' ) url += '&collection=' + this.search.collectionID;
+			console.log('***** search: '+ url )
 			return url;
 		},
 		
