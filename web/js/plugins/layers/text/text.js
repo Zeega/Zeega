@@ -119,6 +119,10 @@
 			var _this = this;
 			this.$el.find('#zedit-target').keypress(function(e){
 				_this.lazySave();
+			})
+			.bind('paste', function(e){
+				console.log('content pasted in!')
+				_this.lazySave();
 			});
 			
 			this.$el.click(function(){
@@ -126,6 +130,7 @@
 				_this.$el.draggable('option','disabled', true);
 			}).focusout(function(){
 				_this.$el.draggable('option','disabled', false);
+				_this.lazySave();
 			})
 			
 		},
