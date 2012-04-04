@@ -92,6 +92,9 @@ class EditorController extends Controller
 			$collection_id = -1;
 		}
 		
+		$params["r_itemswithcollections"] = 0;
+		$params["r_items"] = 1;
+		
 		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		//return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id));

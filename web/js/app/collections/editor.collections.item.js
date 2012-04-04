@@ -86,7 +86,7 @@
 		page : 0,
 		totalItemsCount : 0,
 		
-		base : function(){ return zeega.app.url_prefix + "api/search?site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
+		base : function(){ return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&site="+sessionStorage.getItem('siteid')+"&page="+ this.page },
 		search : {},
 
 		initialize : function()
@@ -98,8 +98,8 @@
 				var itemsBS = jQuery.parseJSON(itemsJSON);
 				console.log('items exist');
 				console.log(itemsBS)
-				this.totalItemsCount = itemsBS.items_and_collections_count;
-				this.reset( itemsBS.items_and_collections );
+				this.totalItemsCount = itemsBS.items_count;
+				this.reset( itemsBS.items );
 			}
 			else
 			{
@@ -126,8 +126,8 @@
 
 		parse : function(response)
 		{
-			this.totalItemsCount = response.items_and_collections_count;
-			return response.items_and_collections;
+			this.totalItemsCount = response.items_count;
+			return response.items;
 		}
 
 
