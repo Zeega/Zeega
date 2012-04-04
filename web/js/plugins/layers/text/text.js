@@ -134,11 +134,19 @@
 		lazySave : _.debounce( function(){
 			
 			var str = this.$el.find('#zedit-target').html();
+			
+			var clean = this.cleanString( str );
+			
 			this.model.update( {
 				content : str,
-				title : str
+				title : clean
 			} );
 		}, 1000),
+		
+		cleanString : function(str)
+		{
+			return str.replace(/(<([^>]+)>)/ig, "");
+		},
 		
 		getTemplate : function()
 		{
