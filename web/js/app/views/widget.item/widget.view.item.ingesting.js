@@ -26,6 +26,9 @@
 			// move to events (didn't work for me)
 			this.$el.find('#add-item').click(function(){
 			    $('#item-add .pill-buttons-widget').fadeOut();
+			    $('#message').html("Adding media to Zeega.")
+			                 .append('<br />')
+			                 .append('This might take a while if you are importing several items. You can close the Zeega bookmarklet and continue to browse the web while the items are being imported.');
 				var itemType = item.get("media_type");
 				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
 				item.set({id : null});

@@ -43,4 +43,10 @@ class ResponseHelper
         // return the results
         return $response;
     }
+    
+    static public function serializeEntityToJson($entity)
+    {
+        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
+        return $serializer->serialize($entity, 'json');
+    }
 }
