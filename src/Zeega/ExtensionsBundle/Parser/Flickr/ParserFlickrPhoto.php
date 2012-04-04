@@ -42,6 +42,10 @@ class ParserFlickrPhoto extends ParserAbstract
 
 			if($info['tags'])
 			{
+			    $tags = $info['tags'];
+			    if(isset($tags) && count($tags))
+			        $tags = array_slice($arr,0,2);
+			        
 				foreach($info['tags']['tag'] as $t)
 				{
 				    $tag = new Tag;

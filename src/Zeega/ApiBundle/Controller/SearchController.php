@@ -258,10 +258,10 @@ class SearchController extends Controller
 		// regular search - return items and/or collections
 		if($query['returnCollections'] || $query['returnItems'] || $query['returnCollectionsWithItems'])
 		{
-		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
-			
 			if($query['returnCollectionsWithItems'])
 			{
+			     $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+    		    
 				// return collections mixed with items
 				 $results['items_and_collections'] = $queryResults;
 				 $results['returned_items_and_collections_count'] = sizeof($queryResults);
@@ -270,21 +270,14 @@ class SearchController extends Controller
 			
 			if($query['returnCollections'] || $query['returnItems'])
 			{
-		    	$items = array();
-	            $collections = array();
-            
-	            // separate items from collections - this is O(n) and won't scale well for huge collections
-			    foreach ($queryResults as $res)
-	            {
-	                if ((strtoupper($res["media_type"]) == "COLLECTION"))
-	                    array_push($collections, $res);
-	                else
-	                    array_push($items, $res);
-	            }
-           
+
 	            // populate the results object
 	            if($query['returnItems'] == 1)
 	            {
+	                $query["notContentType"] = 'Collection';
+	                $query["contentType"] = null;
+	                $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+   			     
 	                $results['items'] = $items;
 					$results['returned_items_count'] = sizeof($items);
 	                $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);
@@ -292,6 +285,11 @@ class SearchController extends Controller
 
 	            if($query['returnCollections'] == 1)
 	            {
+	                $query["notContentType"] = null;
+	                $query["contentType"] = 'Collection';
+	                
+	                $collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+   			     
 	                $results['collections'] = $collections;
 					$results['returned_collections_count'] = sizeof($collections);
 	                $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
