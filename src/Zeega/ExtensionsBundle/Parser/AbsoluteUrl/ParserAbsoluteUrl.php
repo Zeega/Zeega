@@ -20,8 +20,8 @@ class ParserAbsoluteUrl extends ParserAbstract
 		
 	    $fileFormat = strtolower(substr($urlClean,strlen($urlClean)-4));
 		$fileFormatLong = strtolower(substr($urlClean,strlen($urlClean)-5));
-		
-		if(in_array($fileFormat,array('.jpg','.png','.gif'))) 
+
+		if(in_array($fileFormat,array('.jpg','.png','.gif','jpeg'))) 
 		{
 		    $contentType = 'Image';
 		}
