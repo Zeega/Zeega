@@ -24,6 +24,8 @@
 			'height' : 100,
 			'width' : 100,
 			'opacity':.75,
+			
+			linkable : true
 		}	
 		
 	});
