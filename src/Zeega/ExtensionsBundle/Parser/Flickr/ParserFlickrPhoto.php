@@ -39,12 +39,12 @@ class ParserFlickrPhoto extends ParserAbstract
 			$tags = array();
 
 			$item->setAttributionUri($info['urls']['url'][0]['_content']);
-
+            
 			if($info['tags'])
 			{
 			    $tags = $info['tags'];
 			    if(isset($tags) && count($tags))
-			        $tags = array_slice($arr,0,2);
+			        $tags = array_slice($tags,0,2);
 			        
 				foreach($info['tags']['tag'] as $t)
 				{
@@ -58,7 +58,7 @@ class ParserFlickrPhoto extends ParserAbstract
 	                $item->addItemTags($item_tag);
 				}
 			}
-
+            
 			foreach ($size as $s)
 			{
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
