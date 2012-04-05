@@ -53,7 +53,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 			
 			$item= new Item();
 
-			$item->setUri($child["media\$group"]["yt\$videoid"]);
+			$item->setUri($child["media\$group"]["yt\$videoid"]["\$t"]);
 			$item->setTitle($child["title"]["\$t"]);
 			$item->setDescription($child["media\$group"]["media\$description"]["\$t"]);
 			$item->setAttributionUri($child["media\$group"]["media\$player"]["url"]);
