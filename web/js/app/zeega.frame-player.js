@@ -70,7 +70,6 @@ this.zeega = {
 	
 	drawLayer : function( layerID )
 	{
-		console.log( this.layerCollection.get( layerID ) )
 		var layer = this.layerCollection.get( layerID );
 		$('#zeega-player').append( layer.visual.render().el );
 		layer.trigger('player_preload');

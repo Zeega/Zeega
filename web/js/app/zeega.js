@@ -24,7 +24,7 @@ this.zeega = {
 	
 	//sequenceID : 1,
 	currentFrame : null,
-	thumbnailUpdates : false,
+	thumbnailUpdates : true,
 	previewMode:false,
 
 	helpCounter: 0,
