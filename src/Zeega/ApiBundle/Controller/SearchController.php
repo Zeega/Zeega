@@ -275,7 +275,6 @@ class SearchController extends Controller
 	            if($query['returnItems'] == 1)
 	            {
 	                $query["notContentType"] = 'Collection';
-	                $query["contentType"] = null;
 	                $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
    			     
 	                $results['items'] = $items;

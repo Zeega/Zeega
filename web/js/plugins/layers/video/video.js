@@ -127,7 +127,7 @@
 				this.$el.find('img').remove();
 				this.model.video.placeVideo( this.$el );
 				this.model.loaded = true;
-				this.model.trigger('video_ready');
+			
 			}
 		},
 		
@@ -149,9 +149,7 @@
 			var _this = this;
 			if( !this.model.loaded )
 			{
-				
-			
-					this.model.video.on('video_canPlay', function(){ _this.model.trigger('init_controls', _this.model.id ) }, this )
+					this.model.video.on('video_canPlay', function(){ _this.model.trigger('video_ready', _this.model.id ) }, this )
 					this.model.video.placeVideo( this.$el );
 					this.model.loaded = true;
 			}
@@ -160,7 +158,7 @@
 				this.model.video.pop.pause();
 			}
 			
-			this.model.trigger('video_ready');
+		
 			//replace with the actual video object
 		},
 		

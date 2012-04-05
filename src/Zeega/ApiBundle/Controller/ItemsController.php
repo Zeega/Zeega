@@ -118,7 +118,7 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-
+        //return new Response(json_encode($tags));
         $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
@@ -204,6 +204,9 @@ class ItemsController extends Controller
 		$childItems = $this->getRequest()->request->get('child_items');
 		if(isset($childItems))
 		{
+		    if(isset($childItems) && count($childItems) > 100)
+		        $childItems = array_slice($childItems,0,10);
+		    
 		    foreach($childItems as $child)
             {
                 $childItem = new Item();
@@ -229,6 +232,9 @@ class ItemsController extends Controller
                 $em->flush();
                 
                 $tags = $child['tags'];
+
+			    if(isset($tags) && count($tags) > 3)
+			        $tags = array_slice($tags,0,3);
 
                 foreach($tags as $tagName)
             	{

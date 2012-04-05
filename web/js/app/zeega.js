@@ -107,7 +107,7 @@ this.zeega = {
 	goToFrame : function(frameId)
 	{
 		console.log('GO TO FRAME: '+frameId)
-		if( _.isUndefined(frameId) )
+		if( _.isUndefined(frameId)||frameId=="undefined" )
 		{
 			this.currentFrame = this.currentSequence.frames.at(0);
 			this.loadFrame( this.currentFrame );

@@ -148,7 +148,8 @@ var Plyr2 = Backbone.Model.extend({
 					});
 					break;
 				case 'youtube':
-					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url') );
+					
+					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{cue_in:this.get('cue_in')} );
 					this.pop.listen('canplaythrough',function(){
 						
 						_this.pop.play();

@@ -9972,13 +9972,17 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "currentTime", {
           set: function( val ) {
-
+			if(val!=0||options.cue_in==0){
             // make sure val is a number
             currentTime = seekTime = +val;
             seeking = true;
             media.dispatchEvent( "seeked" );
             media.dispatchEvent( "timeupdate" );
             youtubeObject.seekTo( currentTime );
+            }
+            else if(val==0&&options.cue_in==0){
+            	 media.dispatchEvent( "timeupdate" );
+            }
             return currentTime;
           },
           get: function() {
@@ -10030,14 +10034,15 @@ Popcorn.player( "youtube", {
           }
         });
 		
-		youtubeObject.loadVideoById(src);
+		youtubeObject.loadVideoById(src,options.cue_in);
         
       };
 
       options.controls = +options.controls === 0 || +options.controls === 1 ? options.controls : 1;
       options.annotations = +options.annotations === 1 || +options.annotations === 3 ? options.annotations : 1;
-
-      flashvars = {
+	options.cue_in=options.cue_in||0
+     
+     flashvars = {
         playerapiid: container.id
       };
 

@@ -328,7 +328,7 @@ class ItemRepository extends EntityRepository
 
 		$qb = $this->buildSearchQuery($qb, $query);
 		
-		return $qb->getQuery()->getArrayResult();
+		return $qb->getQuery()->getResult();
     }
     
     public function findItemById($id)

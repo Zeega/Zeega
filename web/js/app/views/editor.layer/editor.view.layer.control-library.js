@@ -420,8 +420,15 @@
 
 				if(_this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
 				{
-					_this.model.video.pop.pause();
+					
 					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
+					_this.model.video.pop.pause();
+				}
+				else if(_this.model.video.pop.currentTime() < _this.model.get('attr').cue_in )
+				{
+					
+					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
+					_this.model.video.pop.pause();
 				}
 				
 				var left = parseFloat( _this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
@@ -462,7 +469,7 @@
 				{
 					var newTime = Math.floor(parseFloat(_this.$el.find('.plyr-scrubber').css('left'))*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));
 					if( newTime < _this.model.get('attr').cue_in ) newTime = _this.model.get('attr').cue_in;
-					else if( newTime > _this.model.get('attr').cue_out) newTime = Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0);
+					else if( newTime > _this.model.get('attr').cue_out && parseFloat(_this.model.get('attr').cue_out)>0) newTime = Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0);
 				
 					_this.model.video.pop.trigger('timeupdate');
 					_this.model.video.pop.currentTime( newTime );
@@ -471,6 +478,9 @@
 				}
 			});
 			
+			console.log(this.model);
+			
+		
 			this.$el.find('.plyr-cuein-scrubber').draggable({
 				axis:'x',
 				containment: 'parent',
@@ -485,6 +495,7 @@
 				{
 					
 					_this.$el.find('.plyr-cuein-bar').css({'width':_this.$el.find('.plyr-cuein-scrubber').css('left')});
+					console.log(Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
 					_this.model.video.pop.currentTime( Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
 
 					var left = parseFloat( _this.model.video.pop.currentTime() ) / parseFloat( _this.model.video.pop.duration() ) * 100;
@@ -492,10 +503,13 @@
 					_this.$el.find('.plyr-time').html(convertTime(_this.model.video.pop.currentTime())+' / '+convertTime(_this.model.video.pop.duration()));
 					_this.$el.find('.plyr-time-bar').css({'width':left+'%'});
 					
-					_this.model.update({'cue_in' : _this.model.video.pop.currentTime() })
+					_this.model.update({'cue_in' : _this.model.get('attr').cue_in });
 				}
 			});
+			   this.$el.find('.plyr-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
 			
+				this.$el.find('.plyr-cuein-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
+			if(parseFloat(this.model.get('attr').cue_out)>0)this.$el.find('.plyr-cueout-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_out )* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
 			this.$el.find('.plyr-cueout-scrubber').draggable({
 				axis:'x',
 				containment: 'parent',
@@ -516,7 +530,7 @@
 					_this.$el.find('.plyr-cueout-bar').css({'width':parseInt(_this.$el.find('.plyr-timeline').width())-parseInt(_this.$el.find('.plyr-cueout-scrubber').css('left'))});
 					_this.model.video.pop.currentTime(Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0));
 				
-					_this.model.update({'cue_out' : _this.model.video.pop.currentTime() })
+					_this.model.update({'cue_out' : _this.model.get('attr').cue_out });
 				}
 			});
 		},
