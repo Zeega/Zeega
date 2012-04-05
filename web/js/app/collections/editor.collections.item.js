@@ -119,7 +119,6 @@
 			if( !_.isUndefined(this.search.query) ) url += '&q=' + this.search.query;
 			if( !_.isUndefined(this.search.contentType) ) url += '&content=' + this.search.contentType;
 			if( !_.isUndefined(this.search.collectionID) && this.search.collectionID != 'all' ) url += '&collection=' + this.search.collectionID;
-			console.log('***** search: '+ url )
 			return url;
 		},
 		

@@ -55,7 +55,6 @@
 	Layer.Views.Visual.Image = Layer.Views.Visual.extend({
 		
 		draggable : true,
-		linkable : true,
 		
 		render : function()
 		{

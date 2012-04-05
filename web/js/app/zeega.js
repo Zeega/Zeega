@@ -57,7 +57,7 @@ this.zeega = {
 		
 		console.log($.parseJSON(projectJSON))
 		console.log( $.parseJSON(collectionsJSON))
-		
+		console.log( '#ffffff'.toRGB() )
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		
 		this.project = new Project.Model($.parseJSON(projectJSON).project);

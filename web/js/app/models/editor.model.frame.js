@@ -51,6 +51,8 @@
 		//update the frame thumbnail
 		updateThumb : function()
 		{
+			
+			// single frame url: frame
 			console.log('SAVE FRAME')
 			console.log(this)
 			var _this = this;

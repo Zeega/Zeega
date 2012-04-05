@@ -84,6 +84,7 @@
 		
 		unrenderLayerFromEditor : function()
 		{
+			if( this.hasChanged() ) this.save();
 			this.trigger('editor_layerExit')
 		},
 		

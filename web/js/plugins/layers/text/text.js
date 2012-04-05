@@ -4,6 +4,8 @@
 
 		layerType : 'Text',
 		
+		linkable : true,
+		
 		defaultAttributes: {
 			'title' :'Text Layer',
 			'content' : 'Text',
@@ -14,6 +16,8 @@
 			'opacity' : 0.9,
 			'fontSize' : 100,
 			'padding' : 5,
+			
+			linkable : true
 		},
 		
 		updateContentInPlace : function()
@@ -45,26 +49,18 @@
 		{
 			var bgcolor = new Layer.Views.Lib.ColorPicker({
 				property : 'backgroundColor',
-				color : this.attr.backgroundColor,
+				color : this.model.get('attr').backgroundColor,
 				model: this.model,
 				label : 'Background Color',
+				opacity : true
 			});
 			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
-				color : this.attr.color,
+				color : this.model.get('attr').color,
 				model: this.model,
-				label : 'Text Color'
-			});
-			
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : .05,
-				max : 1,
-				
+				label : 'Text Color',
+				opacity : true
 			});
 			
 			var sizeSlider = new Layer.Views.Lib.Slider({
@@ -92,7 +88,6 @@
 			this.controls
 				.append( bgcolor.getControl() )
 				.append( color.getControl() )
-				.append( opacitySlider.getControl() )
 				.append( sizeSlider.getControl() )
 				.append( paddingSlider.getControl() )
 				.append( clearButton.getControl() );
@@ -104,16 +99,19 @@
 
 	Layer.Views.Visual.Text = Layer.Views.Visual.extend({
 		
+		draggable : true,
+		
 		render : function()
 		{
 			var style = {
-				'color' : this.attr.color,
-				'backgroundColor' : this.attr.backgroundColor,
-				'opacity' : this.attr.opacity,
-				'fontSize' : this.attr.fontSize +'%',
-				'padding' : this.attr.padding +'%',
+				'color' : this.model.get('attr').color,
+				'backgroundColor' : 'rgba('+ this.model.get('attr').backgroundColor.toRGB() +','+ (this.attr.backgroundColorOpacity || 1) +')',
+				'opacity' : this.model.get('attr').opacity,
+				'fontSize' : this.model.get('attr').fontSize +'%',
+				'padding' : this.model.get('attr').padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
+			console.log('color: '+ style.backgroundColor)
 
 			$(this.el).html( _.template( this.getTemplate(), this.model.get('attr') ) ).css( style );
 			
@@ -127,6 +125,10 @@
 			var _this = this;
 			this.$el.find('#zedit-target').keypress(function(e){
 				_this.lazySave();
+			})
+			.bind('paste', function(e){
+				console.log('content pasted in!')
+				_this.lazySave();
 			});
 			
 			this.$el.click(function(){
@@ -134,6 +136,7 @@
 				_this.$el.draggable('option','disabled', true);
 			}).focusout(function(){
 				_this.$el.draggable('option','disabled', false);
+				_this.lazySave();
 			})
 			
 		},

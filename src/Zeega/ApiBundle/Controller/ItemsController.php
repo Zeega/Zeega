@@ -101,7 +101,17 @@ class ItemsController extends Controller
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-    
+
+    // get_item_tags GET /api/items/{itemId}/tags.{_format}
+    public function getItemCollectionsAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
+		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
+		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+
     // get_item_tags GET /api/items/{itemId}/tags.{_format}
     public function getItemTagsAction($itemId)
     {

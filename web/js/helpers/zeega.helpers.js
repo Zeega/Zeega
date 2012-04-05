@@ -90,3 +90,13 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
+String.prototype.toRGB = function()
+{
+	var cutHex = function(h){ return (h.charAt(0)=="#") ? h.substring(1,7) : h }
+	var rgb = '';
+	rgb += parseInt( ( cutHex(this) ).substring( 0,2 ) , 16 ) +',';
+	rgb += parseInt( ( cutHex(this) ).substring( 2,4 ) , 16 ) +',';
+	rgb += parseInt( ( cutHex(this) ).substring( 4,6 ) , 16 );
+	return rgb;
+}
+
