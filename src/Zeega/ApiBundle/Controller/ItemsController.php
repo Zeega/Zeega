@@ -118,7 +118,7 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-
+        //return new Response(json_encode($tags));
         $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
