@@ -46,13 +46,7 @@ class ItemCustomNormalizer extends SerializerAwareNormalizer
                 }
                 
                 $attributeName = strtolower($attributeName);
-
                 $attributeValue = $method->invoke($object);
-                /*
-                if (null !== $attributeValue && !is_scalar($attributeValue)) {
-                    $attributeValue = $this->serializer->normalize($attributeValue, $format);
-                }
-                */
                 $attributes[$attributeName] = $attributeValue;
             }
         }

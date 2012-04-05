@@ -28,7 +28,10 @@
 
 		<script data-main="{{ asset('js/main.frame.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-			
+		<script type="text/javascript" language="Javascript">
+			var frameJSON = "{{ frame | e('js') }}";
+			var layersJSON = "{{ layers | json_encode | e('js') }}";
+		</script>	
 	</head>
 
 	<body>

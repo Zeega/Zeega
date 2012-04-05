@@ -8,15 +8,29 @@ use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 
 class PublishController extends Controller
 {
     
-    public function frameAction($id){
-    
+    public function frameAction($id)
+    {
+        $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
+
+    	$layerList = $frame->getLayers();
+
+    	foreach($layerList as $layer_id)
+    	{
+    	    $l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findLayerById($layer_id);
+
+    	    if(count($l) > 0) 
+    	        $layers[] = $l[0];
+    	}
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
-					'frameId'=>$id,
+					'frameId'=> $frame->getId(),
+					'frame'=>ResponseHelper::serializeEntityToJson($frame),
+					'layers'=>$layers
 				));
      }
      
