@@ -22,11 +22,16 @@ var loadFiles = [
 	'order!lib/leaflet/leaflet',
 	'order!helpers/zeega.helpers',
 
+	'order!app/zeega.frame-player',
+
+
 	//models
 	'order!app/models/editor.model.layer',
 
 	//views
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
+	'order!app/views/editor.layer/editor.view.layer.layer-list',
+	//'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
 	//layers
 	'order!plugins/layers/video/video',
@@ -38,11 +43,12 @@ var loadFiles = [
 	'order!plugins/layers/googlebook/googlebook',
 	'order!plugins/layers/rectangle/rectangle',
 	
-	'order!app/frame'
 	];
 
 require(loadFiles, function($) {
-	var frameId = sessionStorage.getItem('frameId');
+
+	console.log('LOADED')
+	zeega.app.init();
 
 /*
 	//this url needs to change
