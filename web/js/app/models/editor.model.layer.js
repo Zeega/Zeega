@@ -53,9 +53,8 @@
 				//create visual view
 				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
 				
-				
 				//create control view
-				if(this.showControls) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
+				if( !this.player ) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			
 				this.init();
 			}

@@ -7,47 +7,6 @@
 
 ---------------------------------------------*/
 
-var FramePlayer = {
-	
-	/*
-		Method: init
-		Initializes the player object
-		
-		Parameters:
-			
-			data - A Zeega data object in JSON.
-			sequence - The sequence index of the starting frame.
-			frameID - The id of the starting frame.
-	
-	*/
-	init : function( data )
-	{
-
-		//this.parseProject;
-		this.drawFrame(data);
-
-	},
-	
-	/*
-		Method: drawFrame
-		Places a completely preloaded frame into view. Also manages the state of the navigation arrows.
-		
-		Parameters:
-			
-			frameID - The id of the frame to be drawn.
-	*/
-	drawFrame : function( data )
-	{
-		_.each( data, function( layer ){
-			if(layer.type=='Youtube'||layer.type=='Video' || layer.type == 'image') layerClass = new ImageLayer();
-			else eval( 'var layerClass = new '+ layer.type +'Layer();' );
-			layerClass.lightLoad( layer )
-
-			$('#zeega-player').append( layerClass.thumbnail );
-		});
-	}
-}
-
 // This contains the module definition factory function, application state,
 // events, and the router.
 this.zeega = {
@@ -82,24 +41,45 @@ this.zeega = {
 	loadModules : function()
 	{
 		var _this = this;
-		var Project = zeega.module("project");
-		var Items = zeega.module("items");
-		
-		console.log($.parseJSON(projectJSON))
-		console.log( $.parseJSON(collectionsJSON))
-		console.log( '#ffffff'.toRGB() )
-		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
-		
-		this.project = new Project.Model($.parseJSON(projectJSON).project);
-		
-		this.project.on('ready',function(){ _this.startEditor() })
-		this.project.loadProject();
-		this.itemCollection = new Items.ViewCollection();
-	},
 
+		this.frameData = $.parseJSON(frameJSON) || {};
+		
+		var layerArray = this.getLayerModelArray( $.parseJSON(layersJSON) )
+		this.layerCollection = new Backbone.Collection( layerArray );
+		
+		this.drawFrame();
+	},
 	
+	getLayerModelArray : function( layers )
+	{
+		var Layer = zeega.module('layer');
+		var layerArray = [];
+		_.each( layers, function(layer){
+			layerArray.push( new Layer[layer.type](layer, {player:true}) )
+		})
+		return layerArray;
+	},
 	
+	drawFrame : function()
+	{
+		var _this = this;
+		_.each( this.frameData.layers, function( layerID ){
+			_this.drawLayer( layerID );
+		})
+	},
 	
+	drawLayer : function( layerID )
+	{
+		console.log( this.layerCollection.get( layerID ) )
+		var layer = this.layerCollection.get( layerID );
+		$('#zeega-player').append( layer.visual.render().el );
+		layer.trigger('player_preload');
+		layer.trigger('player_play')
+	}
+
+
+
+
 }, Backbone.Events)
 
 

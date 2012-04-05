@@ -8,6 +8,7 @@
 		
 		initialize : function()
 		{
+			console.log('init layer controls')
 			this.initListeners();
 			
 			this.attr = this.model.get('attr')
