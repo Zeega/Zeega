@@ -21,7 +21,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 	    
 		if(strpos($setId, 'PL') === 0)    $setId = substr($setId, 2); // apparently the playlist ID changed... need to remove the PL prefix.
         
-		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2&alt=json";
+		$originalUrl="http://gdata.youtube.com/feeds/api/playlists/$setId?v=2&alt=json&max_results=50";
         
 		// read feed into SimpleXML object
 		$playlistInfo = json_decode(file_get_contents($originalUrl),true);
@@ -53,7 +53,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 			
 			$item= new Item();
 
-			$item->setUri($child["media\$group"]["yt\$videoid"]);
+			$item->setUri($child["media\$group"]["yt\$videoid"]["\$t"]);
 			$item->setTitle($child["title"]["\$t"]);
 			$item->setDescription($child["media\$group"]["media\$description"]["\$t"]);
 			$item->setAttributionUri($child["media\$group"]["media\$player"]["url"]);
