@@ -214,23 +214,32 @@
 
 {% block extras %}
 
-
+ <!-- modal -->
 <div id="share-project-modal" class='modal hide' >
-	<div class="modal-header">
-		<h3>Share Your Project</h3>
-	</div>
-	<div class="modal-body clearfix">
-		<p>Share your project: <b>{{projecttitle}}</b></p>
-		<a href='{{hostname}}{{directory}}project/{{sequence.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{sequence.id}}/view</a>
-	</div>
-	<div class="modal-footer">
-		<span class='admin-submit'>
-			<br />
-			<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
-		</span>
-	</div>
-</div> <!-- modal -->
 
+	<div class="modal-header">
+		<a href='#' id='close-modal' class='btn secondary close-modal'>x</a>
+		<h3>Share "{{projecttitle}}"</h3>
+	</div>
+
+	<div class="modal-body clearfix">
+		<label for="share-link">By Link:</label>
+		<input type="text" id="share-link" value="{{hostname}}{{directory}}project/{{sequence.id}}/view"/>
+
+		<label for="share-embed">By Embed:</label>
+		<p>Copy and paste this HTML to embed in your website</p>
+
+		<textarea >{{hostname}}{{directory}}project/{{sequence.id}}/view</textarea>
+		<p><a href='#'>Customize</a></p>
+
+		<label for="share-preview">Preview</label>
+		<div id="preview"></div>
+		
+
+	</div>
+	
+</div>
+ <!-- /modal -->
 
 
 	<div id='templates' class='hidden'>

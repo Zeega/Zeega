@@ -414,9 +414,14 @@ ul,li
 	border:none;
 	
 }
+.modal-header{
+	border-bottom:0;
+}
 .modal-header h3{
 	padding-top:5px;
 	height:44px;
+	font-size:1.5em;
+
 }
 .modal-header .close{
 	opacity:1.0;
@@ -2802,7 +2807,36 @@ color: white;
 background-color: red;
 
 }
+#share-project-modal{
+	font-size:1.1em;
 
+}
+#preview{
+	width: 75%;
+	height: 210px;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+#share-project-modal p{
+	font-size:0.8em;
+	line-height:20px;
+}
+#share-project-modal label{
+	font-weight:bold;
+	clear:both;
+}
+#share-project-modal input{
+	width:90%;
+}
+#share-project-modal textarea{
+	width:45%;
+	float:left;
+}
+#share-project-modal input, #share-project-modal textarea{
+	margin-bottom:20px;
+	margin-right:10px;
+}
 #shareProject {
 
 cursor: pointer;
@@ -2839,6 +2873,11 @@ text-decoration: none;
 color: white;
 background-color: red;
 
+}
+.modal-header .btn {
+float: right;
+margin-left: 5px;
+margin-bottom: 0;
 }
 
 .clear {
