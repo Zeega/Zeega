@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -67,21 +65,15 @@ class ParserYoutubePlaylist extends ParserAbstract
 			$categories = $child["category"];
 	        if(isset($categories)) 
 			{
+			    $itemTags = array();
 			    foreach($categories as $cat)
 				{
-				    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#video")
+				    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#playlist")
 				    {
-				        $tag = new Tag;
-	        		    $tag->setName($cat["term"]);
-	                    $tag->setDateCreated(new \DateTime("now"));
-	                    $item_tag = new ItemTags;
-	                    $item_tag->setItem($item);
-	                    $item_tag->setTag($tag);
-	                    $item_tag->setDateCreated(new \DateTime("now"));
-	                    $item->addItemTags($item_tag);
-
+	                    array_push($itemTags, $cat["term"]);
 				    }
 				}
+				$item->setTags($itemTags);
 			}
 			$item->setMediaCreatorUsername($child["author"][0]["name"]["\$t"]);
 			$item->setMediaCreatorRealname('Unknown');

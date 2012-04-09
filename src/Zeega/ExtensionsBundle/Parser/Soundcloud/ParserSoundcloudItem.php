@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\Soundcloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 use Symfony\Component\HttpFoundation\Response;
 
 use \DateTime;
@@ -32,17 +30,14 @@ class ParserSoundcloudItem extends ParserAbstract
 		if(isset($tags)) 
 		{
 		    $tags = explode(" ", $tags);
-		    foreach($tags as $tagName)
+        	$itemTags = array();
+
+        	foreach($tags as $tag)
 			{
-			    $tag = new Tag;
-			    $tag->setName($tagName);
-                $tag->setDateCreated(new \DateTime("now"));
-	            $item_tag = new ItemTags;
-	            $item_tag->setItem($item);
-	            $item_tag->setTag($tag);
-	            $item_tag->setDateCreated(new \DateTime("now"));
-                $item->addItemTags($item_tag);
+			    array_push($itemTags, $tag);
 			}
+
+        	$item->setTags($itemTags);
 		}
 
 		$item->setTitle($itemJson['permalink']);
