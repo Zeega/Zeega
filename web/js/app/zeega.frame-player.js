@@ -16,7 +16,7 @@ $(document).ready(function(){
 	_.each( frameData.layers, function(layerID){
 		var layer = _.find( layersData, function(layer){ return layer.id == layerID });
 		
-		if(layer.type == 'Image' || layer.type == 'Video') drawLayer( layer );
+		if( !_.isUndefined( layer.attr.thumbnail_url) && layer.attr.thumbnail_url != '' ) drawLayer( layer );
 	})
 	
 	
