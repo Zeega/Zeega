@@ -22,6 +22,7 @@ var loadFiles = [
 	
 	'order!lib/underscore',
 	'order!lib/backbone',
+	'order!lib/leaflet/leaflet',
 	
 	'order!app/zeega.project-viewer',
 	'order!app/zeega.player',
@@ -32,6 +33,7 @@ var loadFiles = [
 	
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
+	'order!lib/popcorn_flash',
 	
 	//'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
@@ -43,8 +45,8 @@ var loadFiles = [
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/geo/geo',
 	'order!plugins/layers/text/text',
-	//'order!plugins/layers/rdio/rdio',
-	//'order!plugins/layers/youtube/youtube',
+	'order!plugins/layers/mapbox/mapbox',
+
 	'order!plugins/layers/rectangle/rectangle',
 	//'order!plugins/layers/documentcloud/documentcloud',
 	

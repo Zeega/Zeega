@@ -26,8 +26,11 @@ var Player2 = Backbone.View.extend({
 		
 		this.parseData( data );
 		
-		this.setCurrentSequence( options.sequenceID );
-		this.setCurrentFrame( options.frameID );
+		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
+		var f = ( _.isUndefined(options) || _.isUndefined(options.frameID) ) ? _.find(data.project.sequences, function(seq){return seq.id == s }).frames[0].id : options.frameID;
+		
+		this.setCurrentSequence( s );
+		this.setCurrentFrame( f );
 		this.setCurrentLayers();
 		
 		//this.currentFrame.on('ready', this.renderCurrentFrame, this);
@@ -49,7 +52,8 @@ var Player2 = Backbone.View.extend({
 	loadAhead : function()
 	{
 		//find the frame you're coming from and where it is in the order
-		var frameOrder = this.currentSequence.get('frameOrder');
+		var frameOrder = this.currentSequence.get('frameOrder') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
+		this.currentSequence.set('frameOrder',frameOrder);
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
 
 		//see if frame's layers are preloaded // starting with the currentFrame
@@ -569,7 +573,6 @@ var Player2 = Backbone.View.extend({
 				var model = this.get(id);
 				if( model.status != 'loading' && model.status != 'ready')
 				{
-					console.log('loading: '+id)
 					model.status = 'loading';
 					this.loading.push(id)
 				}
@@ -614,11 +617,12 @@ var Player2 = Backbone.View.extend({
 				var layerArray = [];
 				_.each( this.get('layers'), function( layerData ){
 					var layer = new Layer[layerData.type]( layerData, {player:true} );
+					layer.id = parseInt(layer.id);
 					layerArray.push( layer );
 				});
 				this.layers = new LoadingCollection( layerArray );
 				
-				this.layers.on( 'ready', __this.updateFrameStatus, this );
+				this.layers.on( 'ready', this.updateFrameStatus, this );
 				
 				this.unset('frames');
 				this.unset('layers')
@@ -632,9 +636,7 @@ var Player2 = Backbone.View.extend({
 				_.each( _.toArray(this.frames), function(frame){
 					var frameLayers = frame.get('layers');
 					var readyLayers = __this.layers.ready;
-					
-					console.log(frame)
-					
+
 					if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded();
 					if( _.difference(frameLayers,readyLayers).length == 0 )
 					{
