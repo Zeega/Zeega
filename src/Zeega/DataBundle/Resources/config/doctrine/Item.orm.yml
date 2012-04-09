@@ -121,6 +121,9 @@ Zeega\DataBundle\Entity\Item:
         attributes:
             type: array
             nullable: true
+        tags:
+            type: array
+            nullable: true
         enabled:
             type: boolean
             nullable: false
