@@ -54,11 +54,7 @@ class ItemsController extends Controller
         //  api global parameters
 		$query["page"]  = $request->query->get('page');      //  string
 		$query["limit"] = $request->query->get('limit');     //  string
-		
-		//  collection specific parameters
-        $query['returnCollections'] = 0;
-		$query['notContentType'] = "Collection";
-        
+		        
         //  set defaults for missing parameters  
 		if(!isset($query['page']))          $query['page'] = 0;
 		if(!isset($query['limit']))         $query['limit'] = 100;
