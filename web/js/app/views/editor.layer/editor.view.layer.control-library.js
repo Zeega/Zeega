@@ -418,7 +418,7 @@
 			
 			this.model.video.pop.listen('timeupdate', function(){
 
-				if(_this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
+				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
 				{
 					
 					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
