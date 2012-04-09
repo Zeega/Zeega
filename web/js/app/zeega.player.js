@@ -31,7 +31,7 @@ var Player2 = Backbone.View.extend({
 		this.setCurrentLayers();
 		
 		//this.currentFrame.on('ready', this.renderCurrentFrame, this);
-		
+		console.log('current sequence/frame/layers')
 		console.log(this.currentSequence)
 		console.log(this.currentFrame)
 		console.log(this.currentLayers)
@@ -221,7 +221,6 @@ var Player2 = Backbone.View.extend({
 		$('#wrapper').show();
 
 		this.unsetListeners();
-		console.log('prelare to remove')
 		_.each( _.toArray( this.currentSequence.layers ), function(layer){
 			if( layer.rendered ) layer.trigger('player_unrender')
 		});
@@ -459,12 +458,10 @@ var Player2 = Backbone.View.extend({
 			initialize : function( options )
 			{
 				this.options = options;
-				console.log(options)
 			},
 			
 			render : function()
 			{
-				console.log('	render loader bar#######')
 				$(this.el).append( _.template(this.getTemplate(), this.options) )
 				
 				return this;
@@ -474,7 +471,6 @@ var Player2 = Backbone.View.extend({
 			{
 				var _this = this;
 				this.loadedCount++;
-				console.log('loade count: '+ this.loadedCount)
 				$(this.el).find('.loaded-count').html( this.loadedCount );
 				$(this.el).find('.progress').css({ width : this.loadedCount/this.options.count * 100 +'%' })
 				
@@ -556,8 +552,6 @@ var Player2 = Backbone.View.extend({
 				_.each( _.toArray(this.frames), function(frame){
 					frame.loader = _this.getLoaderView({count: frame.get('layers')});
 				})
-				console.log('FRAMES')
-				console.log(this.frames)
 				
 				/***************
 				added loader view to each frame model
@@ -585,14 +579,12 @@ var Player2 = Backbone.View.extend({
 				var __this = this;
 				
 				_this.loader.incrementLoaded();
-				console.log('+++loaded frame: '+ layerID)
 				
 				_.each( _.toArray(this.frames), function(frame){
 					var frameLayers = frame.get('layers');
 					var readyLayers = __this.layers.ready;
 					if( _.difference(frameLayers,readyLayers).length == 0 )
 					{
-						console.log('trigger frame '+ frame.id)
 						frame.trigger('ready', frame.id);
 					}
 				})
@@ -607,8 +599,7 @@ var Player2 = Backbone.View.extend({
 
 			initialize : function()
 			{
-				console.log('-- sequence collection --')
-				console.log(this)
+
 			}
 
 		});

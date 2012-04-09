@@ -24,7 +24,6 @@
 
 		init : function()
 		{
-			console.log('video INIT')
 			//load popcorn object
 			this.video = new Plyr2({
 				url : this.get('attr').attribution_url,
@@ -34,7 +33,6 @@
 				cue_out : this.get('attr').cue_out,
 				volume : this.get('attr').volume,
 			})
-			console.log(this)
 		}
 
 	});
@@ -105,7 +103,6 @@
 		
 		render : function()
 		{
-			console.log(this.attr)
 			var img = $('<img>')
 				.attr('id', 'video-player-'+ this.model.id)
 				.attr('src', this.attr.thumbnail_url)
@@ -189,7 +186,6 @@
 		
 		onExit : function()
 		{
-			console.log('video pauseeee')
 			this.model.video.pop.pause();
 		},
 		

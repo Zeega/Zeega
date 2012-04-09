@@ -8,7 +8,6 @@
 		
 		initialize : function()
 		{
-			console.log('init layer controls')
 			this.initListeners();
 			
 			this.attr = this.model.get('attr')
@@ -104,7 +103,6 @@
 		{
 			this.delegateEvents();
 			this.onLayerEnter();
-			console.log('	layer list enter')
 		},
 		
 		private_onLayerExit : function()

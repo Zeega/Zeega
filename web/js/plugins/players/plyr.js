@@ -96,11 +96,6 @@ var Plyr2 = Backbone.Model.extend({
 	{
 		//set video format type
 		this.set(options);
-		
-		console.log('INIT PLAYERRRR')
-		console.log(this)
-		console.log(''+ this.get('uri'))
-		
 		this.set( 'format', this.getFormat(this.get('url')) );
 	},
 	
@@ -120,8 +115,6 @@ var Plyr2 = Backbone.Model.extend({
 	{
 		if( !this.isVideoLoaded)
 		{
-			console.log('PLACE VIDEO :: '+this.get('format') )
-			console.log(this)
 			var _this = this;
 			
 			el.empty().prepend( this.getVideoView().el )
@@ -132,8 +125,6 @@ var Plyr2 = Backbone.Model.extend({
 					this.pop = Popcorn('#zvideo-'+ this.id);
 					this.pop.listen( 'canplay', function(){
 						_this.trigger('video_canPlay');
-						console.log(' CAn PLAY!!!  ')
-						console.log(_this.get('cue_in'));
 						_this.pop.currentTime(_this.get('cue_in'));
 						if( _this.get('control_mode') != 'none' ) _this.displayControls();
 						
@@ -325,7 +316,6 @@ var Plyr = Class.extend({
 		
 		
 		this.displayControls=function(){
-			console.log('disping controls');
 			if(this.cueOut==0) _this.cueOut=_this.pop.duration();
 			
 			//	_this.pop.currentTime(Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(_this.controlsWrapper.find('.plyr-timeline').width())));
@@ -342,12 +332,10 @@ var Plyr = Class.extend({
 			_this.controlsWrapper.find('.plyr-cuein-time').html(convertTime(_this.cueIn,true));
 			_this.controlsWrapper.find('.plyr-cueout-time').html(convertTime(_this.cueOut,true));
 			_this.controlsWrapper.find('.plyr-controls-wrapper').fadeIn();
-			console.log(_this.pop.duration());
 			
 		}
 		
 		//Create Popcorn instance
-		console.log(this.format);
 		switch(this.format)
 		{
 			case 'html5':
