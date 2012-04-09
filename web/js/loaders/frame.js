@@ -47,8 +47,10 @@ var loadFiles = [
 
 require(loadFiles, function($) {
 
+	jQuery('body').css({'background-color': 'red'});
 	console.log('LOADED')
 	zeega.app.init();
+	
 
 /*
 	//this url needs to change
