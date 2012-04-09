@@ -173,7 +173,7 @@
 			if( !this.model.loaded )
 			{
 				this.model.video.placeVideo( this.$el );
-				this.model.video.on('video_canPlay', function(){ _this.model.trigger('ready', _this.model.id ) }, this )
+				this.model.video.on('video_canPlay', function(){console.log('video ready player'); _this.model.trigger('ready', _this.model.id ) }, this )
 				this.model.loaded = true;
 			}
 			else

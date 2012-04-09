@@ -2189,6 +2189,39 @@ td+td
 	color:#ccc;
 }
 
+
+/****************************
+
+	LOADER
+	
+****************************/
+
+.load-wrapper
+{
+	position:absolute;
+	top:150px;
+	color:#aaa;
+	width:100%;
+}
+
+.loader
+{
+
+	width:100%;
+	height:2px;
+	background:rgba(255,255,255,.25);
+}
+
+.progress
+{
+	background:red;
+	width:0%;
+	height:100%;
+	box-shadow: 0 0 10px white;
+}
+
+
+/*
 #loading-container
 {
 	height:2px;
@@ -2212,7 +2245,7 @@ td+td
 	color: white;
 	margin-left: 10px;
 }
-
+*/
 .ghost-frame
 {
 }
