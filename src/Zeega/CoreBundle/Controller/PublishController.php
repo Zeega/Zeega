@@ -34,13 +34,13 @@ class PublishController extends Controller
 				));
      }
      
-     public function projectAction($id){
-     	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
-     		'projectId'=>$id,
-     		'collectionId'=>0,
-     	
-     	));
-     
+     public function projectAction($id)
+     {
+         $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+     	 return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
+     	     'projectId'=>$id,
+     	     'project_data' => $projectData
+     	 ));
      }
      
      
