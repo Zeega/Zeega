@@ -246,11 +246,13 @@ this.zeega = {
 				{
 					newFrame.trigger('refresh_view');
 					_this.currentSequence.trigger('updateFrameOrder');
+					
+					newFrame.render();
+					_this.currentSequence.frames.add( newFrame );
+					_this.loadFrame( newFrame );
 				}
 			});
-			newFrame.render();
-			this.currentSequence.frames.add( newFrame );
-			this.loadFrame( newFrame );
+			
 		}
 	},
 	
