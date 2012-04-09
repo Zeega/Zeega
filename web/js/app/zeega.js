@@ -384,8 +384,6 @@ this.zeega = {
 	{
 		var _this = this;
 		_.each( this.currentFrame.get('layers'), function( layerID ){
-			console.log( _this.currentSequence.layers.get(layerID) );
-			
 			_this.currentSequence.layers.get(layerID).trigger('editor_layerExit');
 		})
 	},
