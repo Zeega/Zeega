@@ -21,13 +21,6 @@ Zeega\DataBundle\Entity\Item:
         parent_items:
             targetEntity: Item
             mappedBy: child_items
-    oneToMany:
-        tags:
-            targetEntity: ItemTags
-            mappedBy: item
-            joinColumn:
-                name: id
-                referencedColumnName: item_id
     manyToOne:
         site:
             targetEntity: Zeega\DataBundle\Entity\Site

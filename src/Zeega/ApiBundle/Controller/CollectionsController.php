@@ -49,17 +49,10 @@ class CollectionsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $collection = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-        $collectionTags = $em->getRepository('ZeegaDataBundle:ItemTags')->findByItem($id);
         
         $tags = array();
-        foreach($collectionTags as $tag)
-        {
-            array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
-        }
-        $tags = join(",",$tags);
         
-        $collectionView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $collection, 
-            'tags' => $tags));
+        $collectionView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $collection));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($collectionView);
     }
@@ -139,15 +132,10 @@ class CollectionsController extends Controller
     public function getCollectionTagsAction($collectionId)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($collectionId);
-
-        if (!$tags) 
-        {
-            throw $this->createNotFoundException('Unable to find the Tags for the collection with the id ' . $collectionId);
-        }
         
-        //$tags = $item->getTags();
+        $collection = $em->getRepository('ZeegaDataBundle:Item')->findOneById($collectionId);
+
+        $tags = $collection->getTags();
         
         $tagsView = $this->renderView('ZeegaApiBundle:Collections:tags.json.twig', 
             array('tags' => $tags, 'collection_id' => $collectionId));
@@ -155,38 +143,6 @@ class CollectionsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
-    // get_item_tags GET    /api/items/{itemId}/tags.{_format}
-    public function getCollectionSimilarAction($itemId)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        // get item tags
-        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-        
-        $tagsId = array();
-        foreach($tags as $tag)
-        {
-            array_push($tagsId, $tag["id"]);
-        }
-        
-        $tagsId = join(",",$tagsId);
-        
-		$query['page'] = 0;
-		$query['limit'] = 100;
-		$query['tags'] = $tagsId;
-		$query['item_id'] = $itemId;
-		$query['not_item_id'] = $itemId;
-		
-        // get items with the same tags
-        $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchItemsByTags($query);
-        
-        // render results
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
-        
-		$itemsView = $this->renderView('ZeegaApiBundle:Collections:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
-        
     // post_collections POST   /api/collections.{_format}
     public function postCollectionsAction()
     {

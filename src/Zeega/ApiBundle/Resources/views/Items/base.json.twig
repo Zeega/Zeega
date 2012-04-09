@@ -34,14 +34,7 @@
 	        {% endfor %}
 		],
 		"tags":
-		[ 
-			{% for itemtag in item.getTags %}
-				{{itemtag.getTag.getName | json_encode | raw}}
-				{%- if loop.index0 < item.getTags|length - 1 -%}
-				,
-				{%- endif -%}
-	        {% endfor %}
-		]
+			{{ item.tags | default([ ]) | json_encode | raw}}
 	}
 	{% else %}
 		{}
