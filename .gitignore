@@ -7,6 +7,7 @@
 /web/js/zeega.config.js
 /web/content/images/tmp/*
 /web/content/images/thumbs/*
+/web/content/images/frames/*
 /web/content/items/*
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
