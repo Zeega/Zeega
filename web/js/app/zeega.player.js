@@ -74,6 +74,12 @@ var Player2 = Backbone.View.extend({
 	{
 		var _this = this;
 		
+		if(this.currentFrame == frame)
+		{
+			$('#zeega-player').prepend( frame.loader.render().el );
+		}
+		
+		
 		_.each( frame.get('layers'), function(layerID){
 			var layer = _this.currentSequence.layers.get( layerID );
 			if( layer.status != 'loading' && frame.status != 'ready' )
@@ -503,6 +509,51 @@ var Player2 = Backbone.View.extend({
 		var LayerModel = Backbone.Model.extend();
 		var FrameModel = Backbone.Model.extend();
 		
+		var loaderView = Backbone.View.extend({
+			
+			className : 'load-wrapper',
+			loadedCount : 0,
+			
+			initialize : function( options )
+			{
+				this.options = options;
+			},
+			
+			render : function()
+			{
+				$(this.el).append( _.template(this.getTemplate(), this.options) )
+				
+				return this;
+			},
+			
+			incrementLoaded : function()
+			{
+				var _this = this;
+				this.loadedCount++;
+				$(this.el).find('.loaded-count').html( this.loadedCount );
+				$(this.el).find('.progress').css({ width : this.loadedCount/this.options.count * 100 +'%' })
+				console.log(this.loadedCount +'/'+this.options.count +' loaded')
+				
+				if(this.options.count == this.loadedCount)
+				{
+					console.log('FRAME ENTIRELY LOADED')
+					$(this.el).fadeOut('slow', function(){ _this.remove() });
+				}
+			},
+			
+			getTemplate : function()
+			{
+				html =
+				
+					'<div class="loader">'+
+						'<div class="progress"></div>'+
+					'</div>'+
+					'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= count %></span> items</div>';
+				
+				return html;
+			}
+		})
+		
 		var LoadingCollection = Backbone.Collection.extend({
 			
 			loading : [],
@@ -550,15 +601,14 @@ var Player2 = Backbone.View.extend({
 				
 				// add a loader view to each frame
 				_.each( _.toArray(this.frames), function(frame){
-					frame.loader = _this.getLoaderView({count: frame.get('layers')});
+					frame.loader = new loaderView({count: frame.get('layers').length });
 				})
 				
 				/***************
+				
 				added loader view to each frame model
 				
 				**************/
-				
-				
 				
 				var Layer = zeega.module('layer');
 				var layerArray = [];
@@ -578,11 +628,14 @@ var Player2 = Backbone.View.extend({
 			{
 				var __this = this;
 				
-				_this.loader.incrementLoaded();
 				
 				_.each( _.toArray(this.frames), function(frame){
 					var frameLayers = frame.get('layers');
 					var readyLayers = __this.layers.ready;
+					
+					console.log(frame)
+					
+					if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded();
 					if( _.difference(frameLayers,readyLayers).length == 0 )
 					{
 						frame.trigger('ready', frame.id);
