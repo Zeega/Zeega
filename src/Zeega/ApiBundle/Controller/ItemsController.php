@@ -7,8 +7,6 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Tag;
-use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 
@@ -195,53 +193,6 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 
-    // post_items_tags  POST   /api/items/{itemId}/tags/{tag_name}.{_format}
-    public function postItemsTagsAction($itemId,$tagName)
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-		if (!$item) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
-        }
-      
-        $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
-        
-        if (!$tag) 
-        {
-            $tag = new Tag();
-            $tag->setName($tagName);
-            $tag->setDateCreated(new \DateTime("now"));
-            $em->persist($tag);
-            $em->flush();
-        }
-        
-        // can't get EAGER loading for the item tags - this is a workaround
-		$itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-        foreach($itemTags as $itemTag)
-    	{
-    		
-        	if($tag->getId() == $itemTag["id"])
-        	{
-        	return ResponseHelper::encodeAndGetJsonResponse($itemTag["id"]);
-		           	return ResponseHelper::encodeAndGetJsonResponse($itemTag);
-        	}
-    	}
-    
-       	$item_tag = new ItemTags;
-		$item_tag->setItem($item);
-		$item_tag->setTag($tag);
-		$item_tag->setEnabled(false);
-		$item_tag->setTagDateCreated(new \DateTime("now"));
-
-        $em->persist($item_tag);
-        $em->flush();
-        
-        return ResponseHelper::encodeAndGetJsonResponse($item);
-    }
-    
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
    
     public function deleteItemTagsAction($itemId, $tagName)
@@ -250,19 +201,22 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-		$tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
 		   
         if (!$item)
         {
             throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
         }
 
-        $tag = $em->getRepository('ZeegaDataBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
-
-        if(isset($tag))
+        $tags = $item->getTags();
+        if(isset($tags))
         {
-            $tag->setEnabled(false);
-            $em->flush();
+            if (in_array($tagName,$tags))
+            {
+                unset($tags["$tagName"]);
+                $item->setTags($tags);
+                $em->persist($item);
+                $em->flush();
+            }
         }
 
         return ResponseHelper::encodeAndGetJsonResponse($item);
