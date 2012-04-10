@@ -40,7 +40,7 @@
 						+ (isTimeSearch ? "r_collections=" + this.get("r_collections") + "&": "")
 						+ (isTimeSearch ? "r_items=" + this.get("r_items") + "&": "")
 						+ (isTimeSearch ? "r_time=" + this.get("r_time") + "&": "");
-			console.log("Final URL is: " + finalURL);
+			//console.log("Final URL is: " + finalURL);
 			return finalURL;
 
 		}

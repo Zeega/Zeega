@@ -39,7 +39,7 @@
 		
 		reset : function()
 		{
-			console.log('view col reset')
+			//console.log('view col reset')
 			if ( this._isRendered )
 			{
 				$(this.el).empty();
@@ -51,7 +51,7 @@
 
 		append : function(items)
 		{
-			console.log('appending!');
+			//console.log('appending!');
 
 			items.each(this.add);
 			items.bind('add',this.add)
@@ -93,14 +93,14 @@
 		{
 			this.search = new Items.Search();
 			
-			console.log('defined? '+ typeof itemsJSON )
+			//console.log('defined? '+ typeof itemsJSON )
 			if( typeof itemsJSON != 'undefined' )
 			{
 
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
-				console.log('items exist');
-				console.log(itemsBS)
+				//console.log('items exist');
+				//console.log(itemsBS)
 				this.totalItemsCount = itemsBS.items_and_collections_count;
 				this.reset( itemsBS.items_and_collections );
 			}
@@ -111,7 +111,7 @@
 				this.fetch({
 					success : function(response)
 					{
-						console.log('items count: '+ response.length ) // + works
+						//console.log('items count: '+ response.length ) // + works
 						_this.trigger('reset');
 					}
 				});

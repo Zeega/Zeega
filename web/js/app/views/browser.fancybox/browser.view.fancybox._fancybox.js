@@ -64,6 +64,8 @@
 				title : this.model.get('title') == "none" ? this.model.get('layer_type') : this.model.get('title'),
 				description : this.model.get('description'),
 				creator : this.model.get('media_creator_username'),
+				tags : this.model.get('tags'),
+				randId: Math.floor(Math.random()*10000),
 			};
 
 			if(this.model.get('attribution_uri').indexOf('flickr')>-1) blanks.sourceText = 'View on Flickr';
@@ -83,20 +85,51 @@
 			$(this.el).find('.geo').append(this.locatorMapView.render());
 
 
-console.log(this.model)
-
 			//Add tag view
+			/*
 			var Tag = zeegaBrowser.module('tag');
 			this.tagView = new Tag.Views.Fancybox({ model : this.model });
 			$(this.el).find('.tags').empty().append(this.tagView.render());
 			this.tagView.loadTags();
-
+			*/
+			
 			//Fancybox will remember if user was in MORE or LESS view
 			if (sessionStorage.getItem('moreFancy') == "true") this.more(this.el);
 			else this.less(this.el);
 
 			var _this=this;
+			
+			console.log($(this.el).find('.tag-container'));
+			
+			//$(this.el).find('.tags').tagsInput({width:'auto'});
+			//EDIT TAGS
+			
+			$(this.el).find('.tags').editable(
+				function(value, settings)
+				{ 
+					_this.model.save({ tags:value }, 
+							{
+								success: function(model, response) { 
+									console.log("Updated item tags for item " + value);
+				 				},
+				 				error: function(model, response){
 
+				 					console.log("Error updating item tags.");
+				 					console.log(response);
+				 				}
+				 			});
+					return value; //must return the value
+				},
+				{
+					indicator : 'Saving...',
+					tooltip   : 'Click to edit...',
+					indicator : '<img src="images/loading.gif">',
+					select : false,
+					onblur : 'submit',
+					width : 250,
+					cssclass : 'fancybox-form'
+			});
+			
 			//EDIT TITLE
 			$(this.el).find('.title').editable(
 				function(value, settings)
@@ -223,7 +256,9 @@ console.log(this.model)
 			var html =	'<div class="fancybox-media-wrapper">'+
 							'<div class="fancybox-left-column">' +
 								'<div class="fancybox-media-item media-item"></div>'+
-								'<p class="more subheader" style="clear:both">Tags</p><div class="more tags"></div>'+
+								'<p class="more subheader" style="clear:both">Tags</p><div class="more tags">'+
+								'<p class="fancybox-editable tags"><%= tags %></p>'+
+								'</div>'+
 							'</div>'+
 							'<p class="fancybox-editable title"><%= title %></p>'+
 							'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+

@@ -236,7 +236,6 @@ class ItemsController extends Controller
 		$title = $request_data->get('title');
 		$description = $request_data->get('description');
         $tags = $request_data->get('tags');
-		$tags = $request_data->get('tags');
 		$creator_username = $request_data->get('media_creator_username');
 		$creator_realname = $request_data->get('media_creator_realname');
 		$media_geo_latitude = $request_data->get('media_geo_latitude');
@@ -248,6 +247,13 @@ class ItemsController extends Controller
 		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
 		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
 		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
+        if(isset($tags)) 
+        {
+        	$tags = explode(",",$tags);
+        	$item->setTags($tags);
+        }
+        
+        
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
