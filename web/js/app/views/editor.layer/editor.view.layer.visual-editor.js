@@ -167,9 +167,10 @@
 			//this.moveOffStage();
 		},
 		
-		private_onPlay : function()
+		private_onPlay : function( z )
 		{
 			this.moveOnStage();
+			if(z) this.updateZIndex( z )
 			this.onPlay();
 			this.model.inFocus = true;
 		},
@@ -193,11 +194,15 @@
 		
 		moveOnStage :function()
 		{
-			console.log('MOVE ON STAGE: '+ this.model.id)
 			$(this.el).css({
 				'top' : this.attr.top +'%',
 				'left' : this.attr.left+'%'
 			});
+		},
+		
+		updateZIndex : function( z )
+		{
+			$(this.el).css('z-index', z)
 		},
 		
 		moveOffStage :function()

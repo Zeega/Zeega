@@ -130,8 +130,8 @@ var Player2 = Backbone.View.extend({
 		var frame = this.currentSequence.frames.get(id);
 		frame.off('ready', this.renderFrame);
 		
-		_.each( frame.get('layers'), function(layerID){
-			_this.currentSequence.layers.get( layerID ).trigger('player_play');
+		_.each( frame.get('layers'), function(layerID,i){
+			_this.currentSequence.layers.get( layerID ).trigger('player_play',i+1);
 		})
 		
 		this.setAdvance( frame.get('attr').advance )
