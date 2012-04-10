@@ -12,13 +12,17 @@
 function initUX(){
 	initHeaderUX();
 
-/*
+
 //		POPOVERS		//
 	$('.info').popover({
-		'delayIn' : 0,
-		placement : 'below'
+		'delayIn' : 0
 	});
-*/		
+	$('.database-asset-list').popover({
+		'delayIn' : 1,
+		'placement' : 'right'
+	});
+	
+	
 }
 
 $('#add-node-button').click(function(){

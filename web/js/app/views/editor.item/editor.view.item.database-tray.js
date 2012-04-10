@@ -4,6 +4,7 @@
 	Items.Views.List = Backbone.View.extend({
 
 		tagName : 'li',
+		className : 'database-asset-list',
 
 		render: function()                 
 		{
@@ -21,7 +22,7 @@
 			//copy the cloned item into the el
 			$(this.el).append( template( blanks ) );
 			$(this.el)
-				.addClass('database-asset-list')
+				//.addClass('database-asset-list')
 				.attr({
 					'id':'item-'+this.model.id,
 					'data-original-title' : this.model.get('title'),
