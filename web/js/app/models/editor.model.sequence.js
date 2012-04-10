@@ -67,9 +67,8 @@
 		
 		updateFrameOrder : function( save )
 		{
-			console.log('UPDATE FRAME ORDER	')
-			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
 			this.frames.trigger('resort',frameIDArray);
+			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
 			this.set( { framesOrder: frameIDArray } );
 			if( save != false ) this.save();
 		},
