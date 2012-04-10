@@ -22,6 +22,7 @@
 		{	
 			this.updating = false
 			
+			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
 			
 			this.view = new Frame.Views.FrameSequence({ model : this })
 			

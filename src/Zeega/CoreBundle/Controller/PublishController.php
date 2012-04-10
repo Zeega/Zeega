@@ -19,7 +19,7 @@ class PublishController extends Controller
         $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
 
     	$layerList = $frame->getLayers();
-
+        $layers = array();
     	foreach($layerList as $layer_id)
     	{
     	    $l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findLayerById($layer_id);
