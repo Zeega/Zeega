@@ -98,7 +98,7 @@
 
 		getTemplate : function()
 		{
-			var html =	'<span class="item-icon show-in-list-view zicon zicon-<%= type %>"></span>' +
+			var html =	'<i class="zicon-<%= type %> item-icon show-in-list-view"></i>' +
 						'<img class="item-thumbnail" src="<%= thumbUrl %>"/>' +
 						'<div class="item-title show-in-list-view"><%= title %></div>';
 
