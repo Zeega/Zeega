@@ -181,6 +181,9 @@
 				//remove from the current frame layer array
 				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
 				if( layerArray.length == 0 ) layerArray = [false];
+				
+				console.log(layerArray)
+				
 				zeega.app.currentFrame.set('layers',layerArray);
 				zeega.app.currentFrame.save();
 				this.destroyOrphanLayers();
