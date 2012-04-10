@@ -133,11 +133,35 @@ var Player2 = Backbone.View.extend({
 		_.each( frame.get('layers'), function(layerID){
 			_this.currentSequence.layers.get( layerID ).trigger('player_play');
 		})
+		
+		this.setAdvance( frame.get('attr').advance )
+		
 		this.currentFrame = frame;
 		
 		this.updateCitations();
 		
 		this.updateArrows();
+	},
+	
+	setAdvance : function( adv )
+	{
+		var _this = this;
+		
+		if(this.t) clearTimeout( this.t )
+		
+		console.log('set advance: '+ adv)
+		if(adv == -1) //manual control
+		{
+			//do nothing
+		}
+		else if(adv == 0) //after playback - default
+		{
+			
+		}
+		else if(adv > 0) //after n seconds
+		{
+			this.t = setTimeout( function(){ _this.goRight() },adv*1000 )
+		}
 	},
 	
 	goLeft : function()
