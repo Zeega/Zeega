@@ -15,8 +15,33 @@
 		},
 		beforeClose: function(){
 		},
-		afterShow:function(){
+		afterShow:function()
+		{
+			var _this = this;
+			$(this.el).find('.tags').empty().tagsInput({
+				'interactive':true,
+				'defaultText':'add a tag',
+				'onAddTag':function(){_this.updateTags('',_this.model)},
+				'onRemoveTag':function(){_this.updateTags('',_this.model)},
+				'removeWithBackspace' : false,
+				'minChars' : 1,
+				'maxChars' : 0,
+				'placeholderColor' : '#C0C0C0'
+			});
 		},
+		
+		updateTags:function(name, model)
+		{
+			var $tags = $("#tags").siblings(".tagsinput").children(".tag");  
+			var tags = [];  
+			for (var i = $tags.length; i--;) 
+			{  
+				tags.push($($tags[i]).text().substring(0, $($tags[i]).text().length -  1).trim());  
+			}	 	 
+			var uniqueTags = $.unique(tags);
+			
+			model.save({tags : tags});
+		},		
 		
 		more : function(){
 			var _this=this;
@@ -99,11 +124,8 @@
 
 			var _this=this;
 			
-			console.log($(this.el).find('.tag-container'));
-			
-			//$(this.el).find('.tags').tagsInput({width:'auto'});
 			//EDIT TAGS
-			
+			/*
 			$(this.el).find('.tags').editable(
 				function(value, settings)
 				{ 
@@ -129,7 +151,7 @@
 					width : 250,
 					cssclass : 'fancybox-form'
 			});
-			
+			*/
 			//EDIT TITLE
 			$(this.el).find('.title').editable(
 				function(value, settings)
@@ -257,7 +279,7 @@
 							'<div class="fancybox-left-column">' +
 								'<div class="fancybox-media-item media-item"></div>'+
 								'<p class="more subheader" style="clear:both">Tags</p><div class="more tags">'+
-								'<p class="fancybox-editable tags"><%= tags %></p>'+
+								'<input name="tags" class="fancybox-editable tags" id=<%=randId%> />'+
 								'</div>'+
 							'</div>'+
 							'<p class="fancybox-editable title"><%= title %></p>'+

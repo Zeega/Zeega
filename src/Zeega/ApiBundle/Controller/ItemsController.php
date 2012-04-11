@@ -247,13 +247,7 @@ class ItemsController extends Controller
 		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
 		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
 		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
-        if(isset($tags)) 
-        {
-        	$tags = explode(",",$tags);
-        	$item->setTags($tags);
-        }
-        
-        
+        if(isset($tags)) $item->setTags($tags);
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
