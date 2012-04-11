@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\Vimeo;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 use SimpleXMLElement;
@@ -41,18 +39,16 @@ class ParserVimeoVideo extends ParserAbstract
         if(isset($tags)) 
 		{
 		    $tags = explode(", ", $tags);
+		    $itemTags = array();
 		    foreach($tags as $tagName)
 			{
 			    if(!empty($tagName))
 			    {
-    			    $tag = new Tag;
-    			    $tag->setName($tagName);
-                    $tag->setDateCreated(new \DateTime("now"));
-    	            $item_tag = new ItemTags;
-    	            $item_tag->setItem($item);
-    	            $item_tag->setTag($tag);
-    	            $item_tag->setDateCreated(new \DateTime("now"));
-                    $item->addItemTags($item_tag);
+                	foreach($tags as $tag)
+        			{
+        			    array_push($itemTags, $tag);
+        			}
+                    $item->setTags($itemTags);
                 }
 			}
 		}

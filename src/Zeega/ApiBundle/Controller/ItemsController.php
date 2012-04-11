@@ -7,8 +7,6 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Tag;
-use Zeega\DataBundle\Entity\ItemTags;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 
@@ -56,11 +54,7 @@ class ItemsController extends Controller
         //  api global parameters
 		$query["page"]  = $request->query->get('page');      //  string
 		$query["limit"] = $request->query->get('limit');     //  string
-		
-		//  collection specific parameters
-        $query['returnCollections'] = 0;
-		$query['notContentType'] = "Collection";
-        
+		        
         //  set defaults for missing parameters  
 		if(!isset($query['page']))          $query['page'] = 0;
 		if(!isset($query['limit']))         $query['limit'] = 100;
@@ -87,16 +81,6 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-        $itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->findByItem($id);
-        
-        $tags = array();
-        foreach($itemTags as $tag)
-        {
-            array_push($tags, $tag->getTag()->getId() . ":" . $tag->getTag()->getName());
-        }
-        $tags = join(",",$tags);
-        //var_dum($item);
-        //return new Response();        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
@@ -111,51 +95,7 @@ class ItemsController extends Controller
 		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
 		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-
-    // get_item_tags GET /api/items/{itemId}/tags.{_format}
-    public function getItemTagsAction($itemId)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-        //return new Response(json_encode($tags));
-        $tagsView = $this->renderView('ZeegaApiBundle:Items:tags.json.twig', array('tags' => $tags, 'item_id'=>$itemId));
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
-    }
     
-    // get_item_tags GET    /api/items/{itemId}/similar.{_format}
-    public function getItemSimilarAction($itemId)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        // get item tags
-        $tags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-        
-        $tagsId = array();
-        foreach($tags as $tag)
-        {
-            array_push($tagsId, $tag["id"]);
-        }
-        
-        $tagsId = join(",",$tagsId);
-        
-		$query = array();
-		$query['page'] = 0;
-		$query['limit'] = 100;
-		$query['tags'] = $tagsId;
-		$query['item_id'] = $itemId;
-		$query['not_item_id'] = $itemId;
-		
-        // get items with the same tags
-        $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchItemsByTags($query);
-        
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
-        
-		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }   
-
 	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
@@ -198,10 +138,14 @@ class ItemsController extends Controller
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
 		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+		$item->setTags($this->getRequest()->request->get('tags'));
         $item->setEnabled(true);
         $item->setPublished(true);
+        $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+        $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
         
 		$childItems = $this->getRequest()->request->get('child_items');
+		
 		if(isset($childItems))
 		{
 		    if(isset($childItems) && count($childItems) > 100)
@@ -227,131 +171,24 @@ class ItemsController extends Controller
                 $childItem->setChildItemsCount(0);
                 $childItem->setMediaCreatorUsername($child['media_creator_username']);
                 $childItem->setMediaCreatorRealname($child['media_creator_realname']);
-                
-                $em->persist($childItem);
-                $em->flush();
-                
-                $tags = $child['tags'];
-
-			    if(isset($tags) && count($tags) > 3)
-			        $tags = array_slice($tags,0,3);
-
-                foreach($tags as $tagName)
-            	{
-            	    $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
-
-                    if (!isset($tag))
-                    {
-                        $tag = new Tag;
-            		    $tag->setName($tagName);
-                        $tag->setDateCreated(new \DateTime("now"));
-                        $em->persist($tag);
-                        $em->flush();            
-                    }
-                    $item_tag = new ItemTags;
-                    $item_tag->setItem($childItem);
-                    $item_tag->setTag($tag);
-                    $item_tag->setDateCreated(new \DateTime("now"));
-                    $em->persist($item_tag);
-                    $em->flush();            
-                    $childItem->addItemTags($item_tag);
-            	} 
+                $childItem->setTags($child['tags']);
                 
                 $item->addItem($childItem);
             }
-		}
-		
-		$childItemsCount = $this->getRequest()->request->get('child_items_count');
-		if(isset($childItemsCount))
-		{
-        	$item->setChildItemsCount($childItemsCount);
+            $item->setChildItemsCount(count($childItems));
 		}
 		else
 		{
-			$item->setChildItemsCount(0);
+		    $item->setChildItemsCount(0);
 		}
-
-        $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
-        $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
 
         $em->persist($item);
         $em->flush();
-        
-        $tags = $this->getRequest()->request->get('tags');
-        
-        foreach($tags as $tagName)
-    	{
-    	    $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
-
-            if (!isset($tag))
-            {
-                $tag = new Tag;
-    		    $tag->setName($tagName);
-                $tag->setDateCreated(new \DateTime("now"));
-                $em->persist($tag);
-                $em->flush();            
-            }
-            $item_tag = new ItemTags;
-            $item_tag->setItem($item);
-            $item_tag->setTag($tag);
-            $item_tag->setDateCreated(new \DateTime("now"));
-            $em->persist($item_tag);
-            $em->flush();            
-            $item->addItemTags($item_tag);
-    	} 
-        
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 
-      // post_items_tags  POST   /api/items/{itemId}/tags/{tag_name}.{_format}
-    public function postItemsTagsAction($itemId,$tagName)
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-		if (!$item) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
-        }
-      
-        $tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
-        
-        if (!$tag) 
-        {
-            $tag = new Tag();
-            $tag->setName($tagName);
-            $tag->setDateCreated(new \DateTime("now"));
-            $em->persist($tag);
-            $em->flush();
-        }
-        
-        // can't get EAGER loading for the item tags - this is a workaround
-		$itemTags = $em->getRepository('ZeegaDataBundle:ItemTags')->searchItemTags($itemId);
-        foreach($itemTags as $itemTag)
-    	{
-    		
-        	if($tag->getId() == $itemTag["id"])
-        	{
-        	return ResponseHelper::encodeAndGetJsonResponse($itemTag["id"]);
-		           	return ResponseHelper::encodeAndGetJsonResponse($itemTag);
-        	}
-    	}
-    
-       	$item_tag = new ItemTags;
-		$item_tag->setItem($item);
-		$item_tag->setTag($tag);
-		$item_tag->setEnabled(false);
-		$item_tag->setTagDateCreated(new \DateTime("now"));
-
-        $em->persist($item_tag);
-        $em->flush();
-        
-        return ResponseHelper::encodeAndGetJsonResponse($item);
-    }
-    
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
    
     public function deleteItemTagsAction($itemId, $tagName)
@@ -360,19 +197,22 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-		$tag = $em->getRepository('ZeegaDataBundle:Tag')->findOneByName($tagName);
 		   
         if (!$item)
         {
             throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
         }
 
-        $tag = $em->getRepository('ZeegaDataBundle:ItemTags')->findOneBy(array('item' => $itemId, 'tag' => $tag->getId()));
-
-        if(isset($tag))
+        $tags = $item->getTags();
+        if(isset($tags))
         {
-            $tag->setEnabled(false);
-            $em->flush();
+            if (in_array($tagName,$tags))
+            {
+                unset($tags["$tagName"]);
+                $item->setTags($tags);
+                $em->persist($item);
+                $em->flush();
+            }
         }
 
         return ResponseHelper::encodeAndGetJsonResponse($item);
@@ -396,7 +236,6 @@ class ItemsController extends Controller
 		$title = $request_data->get('title');
 		$description = $request_data->get('description');
         $tags = $request_data->get('tags');
-		$tags = $request_data->get('tags');
 		$creator_username = $request_data->get('media_creator_username');
 		$creator_realname = $request_data->get('media_creator_realname');
 		$media_geo_latitude = $request_data->get('media_geo_latitude');
@@ -408,6 +247,7 @@ class ItemsController extends Controller
 		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
 		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
 		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
+        if(isset($tags)) $item->setTags($tags);
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);

@@ -13,8 +13,8 @@
 		
 		initialize : function()
 		{
-			console.log('COLLECTION MODEL INITIALIZED')
-			console.log(this)
+			//console.log('COLLECTION MODEL INITIALIZED')
+			//console.log(this)
 			this.set({"newItemIDS": new Array()});
 		},
 		
@@ -34,7 +34,7 @@
 			{
 				url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+this.id+"/items";
 			}
-			console.log("Final URL is " + url);
+			//console.log("Final URL is " + url);
 			return url; 
 		},
 		

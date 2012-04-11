@@ -106,7 +106,7 @@ $(document).ready(function() {
 			this.fancyView = null;
 
 			var Fancybox = zeegaBrowser.module('fancybox');
-			console.log(thisModel);
+			//console.log(thisModel);
 			switch( thisModel.get("layer_type") )
 			{
 				case 'Image':
@@ -293,7 +293,7 @@ $(document).ready(function() {
 								model.set({id:response.collections.id});
 								model.set({thumbnail_url:response.collections.thumbnail_url});
 								model.set({child_items_count:response.collections.child_items_count});
-								console.log(zeegaBrowser.app.myCollections);
+								//console.log(zeegaBrowser.app.myCollections);
 								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)
@@ -337,7 +337,7 @@ $(document).ready(function() {
 	
 	 window.addEventListener('focus', function(){
 		zeegaBrowser.app.refreshItems();
-		console.log('infocus refresh database')
+		//console.log('infocus refresh database')
 	});
 	
 	

@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\InternetArchive;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -28,21 +26,18 @@ class ParserInternetArchive extends ParserAbstract
 		$item= new Item();
 		$attr=array();
 		
-		if(isset($mdata["subject"])) 
+		if(isset($mdata["subject"]) && count($mdata["subject"]) > 0) 
 		{
 		    $subjects = $mdata["subject"];
+		    $subjects = explode(";", $subjects[0]);
+		    $tags = array();
+		    
 		    foreach($subjects as $category)
 			{
-			    $tag = new Tag;
-			    $tag->setName($category);
-                $tag->setDateCreated(new \DateTime("now"));
-	            $item_tag = new ItemTags;
-	            $item_tag->setItem($item);
-	            $item_tag->setTag($tag);
-	            $item_tag->setDateCreated(new \DateTime("now"));
-                $item->addItemTags($item_tag);
+			    array_push($tags, $category);
 			}
 			
+			$item->setTags($tags);
 		}
 
 		$item->setTitle($mdata["title"][0]);

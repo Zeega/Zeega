@@ -10,6 +10,7 @@ Zeega\DataBundle\Entity\Item:
             targetEntity: Item
             inversedBy: parent_items
             onDelete: CASCADE
+            cascade: ["persist"]
             joinTable:
                 name: collection
                 joinColumns:
@@ -21,13 +22,7 @@ Zeega\DataBundle\Entity\Item:
         parent_items:
             targetEntity: Item
             mappedBy: child_items
-    oneToMany:
-        tags:
-            targetEntity: ItemTags
-            mappedBy: item
-            joinColumn:
-                name: id
-                referencedColumnName: item_id
+            cascade: ["persist"]
     manyToOne:
         site:
             targetEntity: Zeega\DataBundle\Entity\Site
@@ -119,6 +114,9 @@ Zeega\DataBundle\Entity\Item:
             length: 50
             nullable: true
         attributes:
+            type: array
+            nullable: true
+        tags:
             type: array
             nullable: true
         enabled:

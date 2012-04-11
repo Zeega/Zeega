@@ -3,7 +3,6 @@
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
