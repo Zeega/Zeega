@@ -16,7 +16,7 @@
 			'pitch' : 0,
 			'mapType' : 'satellite',
 			
-			'url' : 'http://4.mshcdn.com/wp-content/gallery/awkward-stock-photos/tumblr_lt2fe6mnmw1qakqfvo1_400.jpg',
+			'url' : '',
 			'left' : 0,
 			'top' : 0,
 			'height' : 100,
@@ -111,8 +111,8 @@
 			
 			//this.map.setMapTypeId( this.model.get('attr').mapType.toUpperCase() );
 			
-			if( this.model.get('attr').type == "streetview" )
-			{
+			//if( this.model.get('attr').type == "streetview" )
+			//{
 				this.map.getStreetView().setVisible( true );
 				
 				var pov = {
@@ -123,6 +123,7 @@
 				this.map.getStreetView().setPosition( center );
 				this.map.getStreetView().setPov( pov );
 				this.map.getStreetView().setVisible( true );
+/*
 			}
 			else
 			{
@@ -130,7 +131,7 @@
 				this.map.setCenter(center)
 				this.map.setZoom( this.model.get('attr').zoom )
 			}
-			
+*/			
 		},
 		
 		onLayerEnter : function()
@@ -159,8 +160,8 @@
 				
 				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
 			
-				if( this.model.get('attr').type == "streetview" )
-				{
+				//if( this.model.get('attr').type == "streetview" )
+				//{
 					var pov = {
 							'heading' : this.model.get('attr').heading,
 							'pitch' : this.model.get('attr').pitch,
@@ -169,7 +170,7 @@
 					this.map.getStreetView().setPosition( center );
 					this.map.getStreetView().setPov( pov );
 					this.map.getStreetView().setVisible( true );
-				}
+				//}
 				
 				this.isLoaded = true;
 			}
@@ -201,8 +202,8 @@
 				};
 				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
 			
-				if( this.model.get('attr').type == "streetview" )
-				{
+				//if( this.model.get('attr').type == "streetview" )
+				//{
 					var pov = {
 							'heading' : this.model.get('attr').heading,
 							'pitch' : this.model.get('attr').pitch,
@@ -211,7 +212,7 @@
 					this.map.getStreetView().setPosition( center );
 					this.map.getStreetView().setPov( pov );
 					this.map.getStreetView().setVisible( true );
-				}
+				//}
 				
 				this.isLoaded = true;
 			}
