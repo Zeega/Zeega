@@ -342,7 +342,8 @@ this.zeega = {
 				//var layers = [];
 				layers.push( layerID );
 				layers = _.compact( layers );
-				frame.set({ 'layers' : layers });
+				//frame.set();
+				frame.save({ 'layers' : layers });
 			}
 			
 		})
@@ -387,7 +388,7 @@ this.zeega = {
 	cleanWorkspace : function()
 	{
 		var _this = this;
-		_.each( this.currentFrame.get('layers'), function( layerID ){
+		_.each( _.compact(this.currentFrame.get('layers')), function( layerID ){
 			_this.currentSequence.layers.get(layerID).trigger('editor_layerExit');
 		})
 	},

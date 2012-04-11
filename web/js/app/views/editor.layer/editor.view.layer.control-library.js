@@ -82,11 +82,14 @@
 	Layer.Views.Lib.ContinueOnAllFrames = Layer.Views.Lib.extend({
 
 		className : 'continue-to-next',
-
+		
+		defaults : {active:false},
+		
 		render : function()
 		{
-			var button = '<button class="btn" style="width:100%">Continue on all frames</button>'
+			var button = '<button class="btn" style="width:100%">Continue on all frames</button>';
 			$(this.el).append( button );
+			if(this.settings.active) $(this.el).find('button').addClass('active btn-warning');
 		},
 		
 		events : {
