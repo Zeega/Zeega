@@ -17,6 +17,13 @@
 			this.view.render();
 			this.trigger('ready')
 		},
+		loadPublishProject : function()
+		{
+			// publishing view for project //
+			this.view = new Project.Views.Publish({model:this});
+			this.view.render();
+			
+		},
 		
 		createSequences : function( sequences )
 		{

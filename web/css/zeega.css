@@ -420,7 +420,7 @@ ul,li
 .modal-header h3{
 	padding-top:5px;
 	height:44px;
-	font-size:1.5em;
+	font-size:1.6em;
 
 }
 .modal-header .close{
@@ -2807,33 +2807,29 @@ color: white;
 background-color: red;
 
 }
-#share-project-modal{
+#publish-project-modal{
 	font-size:1.1em;
 
 }
-#preview{
-	width: 75%;
-	height: 210px;
-	border: 1px solid #ccc;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-}
-#share-project-modal p{
+
+#publish-project-modal p{
 	font-size:0.8em;
 	line-height:20px;
 }
-#share-project-modal label{
-	font-weight:bold;
+#publish-project-modal label{
+	color: #555;
+	font-size: 1.2em;
+	font-weight: lighter;
 	clear:both;
 }
-#share-project-modal input{
+#publish-project-modal input{
 	width:90%;
 }
-#share-project-modal textarea{
+#publish-project-modal textarea{
 	width:45%;
 	float:left;
 }
-#share-project-modal input, #share-project-modal textarea{
+#publish-project-modal input, #publish-project-modal textarea{
 	margin-bottom:20px;
 	margin-right:10px;
 }
