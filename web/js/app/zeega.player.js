@@ -481,54 +481,6 @@ var Player2 = Backbone.View.extend({
 	
 	*****************************/
 	
-	getLoaderView : function()
-	{
-	
-		var loaderView = Backbone.View.extend({
-			
-			className : 'load-wrapper',
-			loadedCount : 0,
-			
-			initialize : function( options )
-			{
-				this.options = options;
-			},
-			
-			render : function()
-			{
-				$(this.el).append( _.template(this.getTemplate(), this.options) )
-				
-				return this;
-			},
-			
-			incrementLoaded : function()
-			{
-				var _this = this;
-				this.loadedCount++;
-				$(this.el).find('.loaded-count').html( this.loadedCount );
-				$(this.el).find('.progress').css({ width : this.loadedCount/this.options.count * 100 +'%' })
-				
-				
-				if(this.options.count == this.loadedCount)
-					$(this.el).fadeOut('slow', function(){ _this.remove() });
-				
-			},
-			
-			getTemplate : function()
-			{
-				html =
-				
-					'<div class="loader">'+
-						'<div class="progress"></div>'+
-					'</div>'+
-					'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= count %></span> items</div>';
-				
-				return html;
-			}
-		})
-		
-		return loaderView;
-	},
 	
 	generateBackbone : function()
 	{
@@ -549,7 +501,7 @@ var Player2 = Backbone.View.extend({
 			
 			render : function()
 			{
-				$(this.el).append( _.template(this.getTemplate(), this.options) )
+				if(this.options.count>0) $(this.el).append( _.template(this.getTemplate(), this.options) )
 				
 				return this;
 			},
@@ -560,11 +512,9 @@ var Player2 = Backbone.View.extend({
 				this.loadedCount++;
 				$(this.el).find('.loaded-count').html( this.loadedCount );
 				$(this.el).find('.progress').css({ width : this.loadedCount/this.options.count * 100 +'%' })
-				console.log(this.loadedCount +'/'+this.options.count +' loaded')
 				
 				if(this.options.count == this.loadedCount)
 				{
-					console.log('FRAME ENTIRELY LOADED')
 					$(this.el).fadeOut('slow', function(){ _this.remove() });
 				}
 			},
