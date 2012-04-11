@@ -285,10 +285,13 @@ var Player2 = Backbone.View.extend({
 		{
 			cssObj.height = viewHeight +'px';
 			cssObj.width = viewHeight * this.viewportRatio +'px'
+			cssObj.fontSize = (viewHeight / 519 *100) +"%";
 		}else{
 			cssObj.height = viewWidth / this.viewportRatio +'px';
 			cssObj.width = viewWidth +'px'
+			cssObj.fontSize = (viewWidth / 704 *100) +"%";
 		}
+		
 		
 		//constrain proportions in player
 		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
@@ -300,6 +303,8 @@ var Player2 = Backbone.View.extend({
 		
 		$(this.el).fadeIn();
 		this.initListeners();
+		
+		return this;
 	},
 	
 	/*****************************

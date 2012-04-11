@@ -242,10 +242,17 @@ this.zeega = {
 		for( var i = 0 ; i < n ; i++ )
 		{
 			var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
+			console.log('new frame!!!')
+			console.log( this.currentSequence.get('attr').persistLayers )
+			console.log(layers)
+			
 			var newFrame = new Frame.Model();
-			newFrame.save({'layers' : layers},{
+			//newFrame.set({'layers' : layers},{'silent':true});
+			
+			newFrame.save({},{
 				success : function()
 				{
+					console.log(newFrame)
 					newFrame.render();
 					
 					newFrame.trigger('refresh_view');
