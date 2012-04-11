@@ -911,7 +911,12 @@ a.white:hover
 .zicon-volume-off{background-position:-160px -50px}
 .zicon-trash-closed{background-position:-180px 0}
 .zicon-trash-open{background-position:-0px -20px}
-
+.zicon-search-dropdown
+{
+	background-position:-0px -20px;
+	background-position: -0px -101px;
+	width: 30px;
+}
 
 
 
@@ -1025,7 +1030,11 @@ body
 
 **********************************/
 
-.menu-toggle { position:relative }
+.menu-toggle
+{
+	position:relative;
+	top:4px;
+}
 .menu-items
 {
 	color:#444;
@@ -1404,7 +1413,7 @@ body
 	color:#666;
 	background:transparent;
 	border:none;
-	width:233px;
+	width:230px;
 	font-size:1.25em;
 }
 
