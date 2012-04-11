@@ -18,29 +18,28 @@
 		afterShow:function()
 		{
 			var _this = this;
-			$(this.el).find('.tags').empty().tagsInput({
+			
+			$(this.el).find('.tagsedit').empty().tagsInput({
 				'interactive':true,
 				'defaultText':'add a tag',
-				'onAddTag':function(){_this.updateTags('',_this.model)},
-				'onRemoveTag':function(){_this.updateTags('',_this.model)},
+				'onAddTag':function(){_this.updateTags('',_this)},
+				'onRemoveTag':function(){_this.updateTags('',_this)},
 				'removeWithBackspace' : false,
 				'minChars' : 1,
 				'maxChars' : 0,
-				'placeholderColor' : '#C0C0C0'
+				'placeholderColor' : '#C0C0C0',
 			});
 		},
-		
-		updateTags:function(name, model)
+		updateTags:function(name, _this)
 		{
-			var $tags = $("#tags").siblings(".tagsinput").children(".tag");  
-			var tags = [];  
-			for (var i = $tags.length; i--;) 
+		    model = _this.model;
+			var $t = $("#"+_this.elemId+"_tagsinput").children(".tag");
+			var tags = [];
+			for (var i = $t.length; i--;) 
 			{  
-				tags.push($($tags[i]).text().substring(0, $($tags[i]).text().length -  1).trim());  
-			}	 	 
-			var uniqueTags = $.unique(tags);
-			
-			model.save({tags : tags});
+				tags.push($($t[i]).text().substring(0, $($t[i]).text().length -  1).trim());  
+			}
+			_this.model.save({tags : tags});
 		},		
 		
 		more : function(){
@@ -82,7 +81,7 @@
 		
 		render: function(obj)
 		{
-
+            this.elemId = Math.floor(Math.random()*10000);
 			/** Temp Fix **/
 			var blanks = {
 				sourceLink : this.model.get('attribution_uri'),
@@ -90,9 +89,8 @@
 				description : this.model.get('description'),
 				creator : this.model.get('media_creator_username'),
 				tags : this.model.get('tags'),
-				randId: Math.floor(Math.random()*10000),
+				randId: this.elemId
 			};
-
 			if(this.model.get('attribution_uri').indexOf('flickr')>-1) blanks.sourceText = 'View on Flickr';
 			else 	if(this.model.get('attribution_uri').indexOf('youtube')>-1) blanks.sourceText = 'View on Youtube';
 			else 	if(this.model.get('attribution_uri').indexOf('soundcloud')>-1) blanks.sourceText = 'Listen on Soundcloud';
@@ -110,48 +108,12 @@
 			$(this.el).find('.geo').append(this.locatorMapView.render());
 
 
-			//Add tag view
-			/*
-			var Tag = zeegaBrowser.module('tag');
-			this.tagView = new Tag.Views.Fancybox({ model : this.model });
-			$(this.el).find('.tags').empty().append(this.tagView.render());
-			this.tagView.loadTags();
-			*/
-			
 			//Fancybox will remember if user was in MORE or LESS view
 			if (sessionStorage.getItem('moreFancy') == "true") this.more(this.el);
 			else this.less(this.el);
 
 			var _this=this;
 			
-			//EDIT TAGS
-			/*
-			$(this.el).find('.tags').editable(
-				function(value, settings)
-				{ 
-					_this.model.save({ tags:value }, 
-							{
-								success: function(model, response) { 
-									console.log("Updated item tags for item " + value);
-				 				},
-				 				error: function(model, response){
-
-				 					console.log("Error updating item tags.");
-				 					console.log(response);
-				 				}
-				 			});
-					return value; //must return the value
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : false,
-					onblur : 'submit',
-					width : 250,
-					cssclass : 'fancybox-form'
-			});
-			*/
 			//EDIT TITLE
 			$(this.el).find('.title').editable(
 				function(value, settings)
@@ -279,7 +241,7 @@
 							'<div class="fancybox-left-column">' +
 								'<div class="fancybox-media-item media-item"></div>'+
 								'<p class="more subheader" style="clear:both">Tags</p><div class="more tags">'+
-								'<input name="tags" class="fancybox-editable tags" id=<%=randId%> />'+
+								'<input name="tags" class="fancybox-editable tagsedit" id="<%=randId%>" value="<%=tags%>" />'+
 								'</div>'+
 							'</div>'+
 							'<p class="fancybox-editable title"><%= title %></p>'+
