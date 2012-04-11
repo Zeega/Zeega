@@ -52,6 +52,23 @@
 				max : 200,
 			});
 			
+			var leftSlider = new Layer.Views.Lib.Slider({
+				property : 'left',
+				model: this.model,
+				label : 'Horizontal Position',
+				suffix : '%',
+				min : 0,
+				max : 100,
+			});
+			var topSlider = new Layer.Views.Lib.Slider({
+				property : 'top',
+				model: this.model,
+				label : 'Vertical Position',
+				suffix : '%',
+				min : 0,
+				max : 100,
+			});
+			
 			var opacitySlider = new Layer.Views.Lib.Slider({
 				property : 'opacity',
 				model: this.model,
@@ -69,6 +86,8 @@
 				.append( gMaps.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
+				.append( leftSlider.getControl() )
+				.append( topSlider.getControl() )
 				.append( opacitySlider.getControl() );
 			
 			return this;
@@ -79,7 +98,7 @@
 
 	Layer.Views.Visual.Geo = Layer.Views.Visual.extend({
 		
-		draggable : true,
+		draggable : false,
 		linkable : true,
 		
 		init : function()
@@ -108,30 +127,15 @@
 			console.log('	update visual')
 			console.log(this)
 			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
-			
-			//this.map.setMapTypeId( this.model.get('attr').mapType.toUpperCase() );
-			
-			//if( this.model.get('attr').type == "streetview" )
-			//{
-				this.map.getStreetView().setVisible( true );
-				
-				var pov = {
-						'heading' : this.model.get('attr').heading,
-						'pitch' : this.model.get('attr').pitch,
-						'zoom' : this.model.get('attr').streetZoom,
-						}
-				this.map.getStreetView().setPosition( center );
-				this.map.getStreetView().setPov( pov );
-				this.map.getStreetView().setVisible( true );
-/*
+			var pov = {
+					'heading' : this.model.get('attr').heading,
+					'pitch' : this.model.get('attr').pitch,
+					'zoom' : this.model.get('attr').streetZoom,
 			}
-			else
-			{
-				this.map.getStreetView().setVisible( false );
-				this.map.setCenter(center)
-				this.map.setZoom( this.model.get('attr').zoom )
-			}
-*/			
+			
+			this.streetview.setPosition( center );
+			this.streetview.setPov( pov );
+			
 		},
 		
 		onLayerEnter : function()
@@ -142,35 +146,33 @@
 			{
 				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 
-				//var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
-
 				var mapOptions = {
-					zoom : this.model.get('attr').zoom,
-					center : center,
-					mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
-				
-					disableDefaultUI : true,
-					draggable : false,
 					
-					StreetViewPanoramaOptions :
-					{
-						panControl : false,
-					}
-				};
-				
-				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
-			
-				//if( this.model.get('attr').type == "streetview" )
-				//{
-					var pov = {
+					addressControl : false,
+					addressControlOptions : false,
+					clickToGo : true,
+					disableDoubleClickZoom : false,
+					enableCloseButton : false,
+					imageDateControl : false,
+					linksControl : false,
+					panControl : true,
+					panControlOptions : true,
+					//pano : '',
+					position : center,
+					visible :true,
+					zoomControl :true,
+					zoomControlOptions :true,
+					
+					pov : {
 							'heading' : this.model.get('attr').heading,
 							'pitch' : this.model.get('attr').pitch,
 							'zoom' : this.model.get('attr').streetZoom,
-							}
-					this.map.getStreetView().setPosition( center );
-					this.map.getStreetView().setPov( pov );
-					this.map.getStreetView().setVisible( true );
-				//}
+					}
+					
+				};
+				
+				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
+
 				
 				this.isLoaded = true;
 			}
@@ -190,29 +192,32 @@
 			{
 				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 
-				//var gMapType = google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ];
-
 				var mapOptions = {
-					zoom : this.model.get('attr').zoom,
-					center : center,
-					mapTypeId : google.maps.MapTypeId[ this.model.get('attr').mapType.toUpperCase() ],
-				
-					disableDefaultUI : true,
-					draggable : false
-				};
-				this.map = new google.maps.Map( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
-			
-				//if( this.model.get('attr').type == "streetview" )
-				//{
-					var pov = {
+					
+					addressControl : false,
+					addressControlOptions : false,
+					clickToGo : true,
+					disableDoubleClickZoom : false,
+					enableCloseButton : false,
+					imageDateControl : false,
+					linksControl : false,
+					panControl : true,
+					panControlOptions : true,
+					//pano : '',
+					position : center,
+					visible :true,
+					zoomControl :true,
+					zoomControlOptions :true,
+					
+					pov : {
 							'heading' : this.model.get('attr').heading,
 							'pitch' : this.model.get('attr').pitch,
 							'zoom' : this.model.get('attr').streetZoom,
-							}
-					this.map.getStreetView().setPosition( center );
-					this.map.getStreetView().setPov( pov );
-					this.map.getStreetView().setVisible( true );
-				//}
+					}
+					
+				};
+				
+				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
 				
 				this.isLoaded = true;
 			}

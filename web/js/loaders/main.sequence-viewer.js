@@ -18,15 +18,15 @@ require.config({
 var loadFiles = [
 	'jquery',
 	
-	'order!lib/jquery/ui/js/jquery-ui-1.8.17',
+	//'order!lib/jquery/ui/js/jquery-ui-1.8.17',
 	
 	'order!lib/underscore',
 	'order!lib/backbone',
+	
 	'order!lib/leaflet/leaflet',
 	
 	'order!app/zeega.project-viewer',
 	'order!app/zeega.player',
-	
 	
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
