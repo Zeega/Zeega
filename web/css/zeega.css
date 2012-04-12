@@ -918,7 +918,36 @@ a.white:hover
 .zicon-trash-open{background-position:-0px -20px}
 
 
+.socialmedia-icon
+{
+	
+	overflow:hidden;
+	height:33px;
+	width:33px;
+	background-image:url('../images/socialmediaicons.png');
+	background-repeat: no-repeat;
+	
+}
+[class^="socialmedia-icon-"]
+{
+	display: inline-block;
+	width: 33px;
+	height: 33px;
+	vertical-align: text-top;
+	background-image:url('../images/socialmediaicons.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	margin-top:5px;
+}
 
+.socialmedia-icon-facebook{background-position:-81px -56px}
+.socialmedia-icon-facebook:hover{background-position:-81px -16px}
+.socialmedia-icon-twitter{background-position:-122px -56px}
+.socialmedia-icon-twitter:hover{background-position:-122px -16px}
+.socialmedia-icon-tumblr{background-position:-311px -56px}
+.socialmedia-icon-tumblr:hover{background-position:-311px -16px}
+.socialmedia-icon-googleplus{background-position:-274px -134px}
+.socialmedia-icon-googleplus:hover{background-position:-274px -96px}
 
 
 /*********************************************
@@ -2811,6 +2840,9 @@ background-color: red;
 	font-size:1.1em;
 
 }
+#publish-project-modal .modal-header h3{
+	height:auto;
+}
 
 #publish-project-modal p{
 	font-size:0.8em;
@@ -2821,6 +2853,8 @@ background-color: red;
 	font-size: 1.2em;
 	font-weight: lighter;
 	clear:both;
+	margin-top:10px;
+	margin-right:10px;
 }
 #publish-project-modal input{
 	width:90%;
@@ -2830,11 +2864,13 @@ background-color: red;
 	float:left;
 }
 #publish-project-modal input, #publish-project-modal textarea{
-	margin-bottom:20px;
+	margin-bottom:10px;
 	margin-right:10px;
+	font-size: 0.8em;
+	color: #666;
 }
 .publish-preview{
-	height:210px;
+	height:150px;
 	border:1px solid #ccc;
 	width:100%;
 }
@@ -2848,15 +2884,19 @@ background-color: red;
 	float:left;
 	padding-left:15px;
 	border-left:1px solid #ccc;
+	margin-bottom:10px;
 }
-.publish-done{
+.publish-footer{
 	clear:both;
+	margin-top:10px;
 }
-.publish-image{
+#preview-images img{
 	width:50px;
 	height:50px;
 	border:1px solid #ccc;
+
 }
+
 #shareProject {
 
 cursor: pointer;
