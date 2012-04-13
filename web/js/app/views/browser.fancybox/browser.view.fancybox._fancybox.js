@@ -17,6 +17,7 @@
 		},
 		afterShow:function()
 		{
+			//console.log("I'm rendering after show");
 			var _this = this;
 			
 			$(this.el).find('.tagsedit').empty().tagsInput({
