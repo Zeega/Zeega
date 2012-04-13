@@ -107,36 +107,44 @@ $(document).ready(function() {
 
 			var Fancybox = zeegaBrowser.module('fancybox');
 			console.log(thisModel);
-			switch( thisModel.get("layer_type") )
+			if (thisModel.get("archive") == 'SoundCloud')
 			{
-				case 'Image':
-					this.fancyView = new Fancybox.Views.Image({ model : thisModel });
-					this.fancyView.render(this);
-					break;
-				case 'Video':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Audio':
-					this.fancyView = new Fancybox.Views.Audio({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Youtube':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Vimeo':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Mapbox':
-					this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				default:
-					this.fancyView =new Fancybox.Views.Default({model:thisModel});
-					this.fancyView.render(this);
-					break;
+				this.fancyView = new Fancybox.Views.SoundCloud({ model : thisModel });
+				this.fancyView.render(this);
+			} 
+			else
+			{
+				switch( thisModel.get("layer_type") )
+				{
+					case 'Image':
+						this.fancyView = new Fancybox.Views.Image({ model : thisModel });
+						this.fancyView.render(this);
+						break;
+					case 'Video':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Audio':
+						this.fancyView = new Fancybox.Views.Audio({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Youtube':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Vimeo':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Mapbox':
+						this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					default:
+						this.fancyView =new Fancybox.Views.Default({model:thisModel});
+						this.fancyView.render(this);
+						break;
+				}
 			}
         },
         

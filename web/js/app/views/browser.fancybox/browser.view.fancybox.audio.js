@@ -22,6 +22,7 @@
 		
 
 		//set fancybox content
+		
 		obj.content = $(this.el);
 		
 		return this;
@@ -29,8 +30,9 @@
 	afterShow:function(){
 		
 		
-	var source = this.model.get('uri');
-					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source});
+		var source = this.model.get('uri');
+		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source});
+		//this.plyr = new Plyr('fancybox-video-'+this.unique,{url:this.model.get('uri'),format:'html5',load:'true'});
 			
 		
 		
