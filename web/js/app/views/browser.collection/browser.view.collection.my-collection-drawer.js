@@ -112,6 +112,7 @@
 				zeegaBrowser.app.clickedCollectionTitle = modelTitle;
 				zeegaBrowser.app.clickedCollectionID = modelID;
 				zeegaBrowser.app.doCollectionSearch(modelID);
+				zeegaBrowser.app.showCollectionFilter();
 
 
 			});

@@ -39,7 +39,7 @@
 		
 		reset : function()
 		{
-			console.log('view col reset')
+			
 			if ( this._isRendered )
 			{
 				$(this.el).empty();

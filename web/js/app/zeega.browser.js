@@ -314,7 +314,7 @@ this.zeegaBrowser = {
 		// expand item editing bar to remove item OR make an item the cover image of the collection
 		//But only do this if user is looking at one of their own collections
 		var collectionID = this.items.collection.search.get("collection");
-		var theCollection = this.myCollections.get(collectionID);
+		var theCollection = this.myCollections.collection.get(collectionID);
 		if( theCollection != null){
 			
 
