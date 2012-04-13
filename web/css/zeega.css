@@ -1353,6 +1353,16 @@ body
 
 .layer-control { margin:12px 0 }
 
+.controls
+{
+	padding: 6px 0;
+}
+
+default-layer-controls
+{
+	padding-top: 12px;
+}
+
 .map
 {
 	width : 268px;

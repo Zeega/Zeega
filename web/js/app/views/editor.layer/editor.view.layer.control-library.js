@@ -5,6 +5,7 @@
 		initialize : function( args )
 		{
 			this.settings = _.defaults( args, this.defaults );
+			$(this.el).addClass('control');
 			this.init();
 			
 			this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
@@ -58,7 +59,7 @@
 
 	Layer.Views.Lib.ContinueToNextFrame = Layer.Views.Lib.extend({
 
-		className : 'continue-to-next',
+		className : 'control continue-to-next',
 
 		render : function()
 		{
@@ -81,7 +82,7 @@
 	
 	Layer.Views.Lib.ContinueOnAllFrames = Layer.Views.Lib.extend({
 
-		className : 'continue-to-next',
+		className : 'control continue-to-next',
 		
 		defaults : {active:false},
 		
@@ -113,7 +114,7 @@
 	
 	Layer.Views.Lib.Link = Layer.Views.Lib.extend({
 
-		className : 'link-controls',
+		className : 'control link-controls',
 
 		render : function()
 		{
