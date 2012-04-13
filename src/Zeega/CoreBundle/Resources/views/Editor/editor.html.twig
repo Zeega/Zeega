@@ -106,9 +106,21 @@
 							<div class="panel-content inset-tray hidden">
 								
 								<ul id='advance-controls' class='unstyled'>
-									<li><input type="radio" value='0' id="playback" name="advance"  /><label for="playback"> After playback</label></li>
-									<li><input type="radio" value ='-1' id="manual" name="advance" /><label for="manual"> Manually</label></li>
-									<li><input type="radio" value='10' id="time" name="advance" /><label for="time"> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds</label></li>
+									<li>
+										<label class="radio">
+											<input type="radio" name='optionsRadio' id='playback' value='0'> After playback
+										</label>
+									</li>
+									<li>
+										<label class="radio">
+											<input type="radio" name='optionsRadio' value='-1' id='manual'> Manually
+										</label>
+									</li>
+									<li>
+										<label class="radio">
+											<input type="radio" name='optionsRadio' value='10' id='time'> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds
+										</label>
+									</li>
 								</ul>
 							</div><!-- panel-content -->
 							
