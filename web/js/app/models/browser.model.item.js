@@ -15,7 +15,7 @@
 		{
 			var Tag = zeegaBrowser.module('tag');
 			this.tags = new Tag.Collection();
-			console.log(this)
+			
 		},
 
 		loadTags : function()
