@@ -47,4 +47,5 @@ security:
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
