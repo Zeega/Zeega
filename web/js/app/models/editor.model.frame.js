@@ -14,8 +14,14 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames';
-			else return zeega.app.url_prefix + 'frames/'+ this.id;
+			if( this.isNew() ) {
+				console.log('FRAME URL ' + zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames');
+				return zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames';
+				}
+			else {
+				console.log('FRAME URL ' + zeega.app.url_prefix + 'frames/'+ this.id);
+				return zeega.app.url_prefix + 'frames/'+ this.id;
+			}
 		},
 	
 		initialize : function()

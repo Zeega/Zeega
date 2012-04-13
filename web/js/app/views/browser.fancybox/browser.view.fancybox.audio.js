@@ -22,13 +22,16 @@
 		
 
 		//set fancybox content
+		
 		obj.content = $(this.el);
 		return this;
 	},
 	afterShow:function(){
+
 		Fancybox.Views._Fancybox.prototype.afterShow.call(this); //This is like calling super()
 		var source = this.model.get('uri');
 		this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source});
+
 	},
 	
 	beforeClose: function(){

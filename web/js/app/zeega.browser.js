@@ -80,7 +80,7 @@ this.zeegaBrowser = {
 	refreshItems : function(){ this.items.refresh() },
 	
 	/* Resets the page count so that results are refreshed completely */
-	resetPageCount : function(){ this.items.collection.search.set( 'page' , 1 ) },
+	resetPageCount : function(){ this.items.collection.search.set( 'page' , 0 ) },
 	
 	doCollectionSearch : function(collectionID)
 	{
@@ -90,10 +90,13 @@ this.zeegaBrowser = {
 		this.doSearch();
 	},
 	
-	doSearch : function()
+	doSearch : function(addToExistingCollection)
 	{
-		
-		if ( this.items.collection.search.get("page") == 1 )
+		if (!addToExistingCollection)
+		{
+			this.resetPageCount();
+		}
+		if ( this.items.collection.search.get("page") == 0 )
 		{
 			//Empty items and collections from results drawer
 			$('#browser-results #browser-results-items .browser-results-image, #browser-results #browser-results-items .browser-results-collection').remove();
@@ -152,7 +155,12 @@ this.zeegaBrowser = {
 		else
 			this.items.collection.search.set({ q: null });
 		
-		this.items.collection.fetch();
+		var theItems = this.items;
+		this.items.collection.fetch({add: addToExistingCollection,
+		  success: theItems.success,
+		  error: theItems.errorFunction
+		});
+
 	}, 
 	showShareButton : function(collectionID){	
 		$('#share-collection-modal').find('.modal-body').html("<p>Share your collection: <b></b></p><a target='blank' href='"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+collectionID+"/view'>"+sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'collection/'+collectionID+"/view</a>");
@@ -314,7 +322,7 @@ this.zeegaBrowser = {
 		// expand item editing bar to remove item OR make an item the cover image of the collection
 		//But only do this if user is looking at one of their own collections
 		var collectionID = this.items.collection.search.get("collection");
-		var theCollection = this.myCollections.get(collectionID);
+		var theCollection = this.myCollections.collection.get(collectionID);
 		if( theCollection != null){
 			
 

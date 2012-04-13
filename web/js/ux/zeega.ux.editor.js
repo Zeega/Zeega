@@ -192,15 +192,16 @@ function closeOpenCitationTabs()
 		}
 	});
 	
-	//share button
-	$('#share-project').click(function(){
-	
-		$('#share-project-modal').modal('show');
+	//publish button
+	$('#publish-project').click(function(){
+		zeega.app.project.loadPublishProject();
+		
+		/*$('#publish-project-modal').modal('show');
 
-		$('#share-project-modal').find('#close-modal').mouseup(function(){
-			$('#share-project-modal').modal('hide');
+		$('#publish-project-modal').find('#close-modal').mouseup(function(){
+			$('#publish-project-modal').modal('hide');
 			return false;
-		})
+		})*/
 		return false;
 	});
 	

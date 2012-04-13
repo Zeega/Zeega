@@ -13,8 +13,7 @@
 		
 		initialize : function()
 		{
-			//console.log('COLLECTION MODEL INITIALIZED')
-			//console.log(this)
+
 			this.set({"newItemIDS": new Array()});
 		},
 		

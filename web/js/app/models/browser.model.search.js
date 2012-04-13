@@ -9,7 +9,7 @@
 	    	"q"						: 	"", //query string
 	    	"content"				: 	"all", //All/image/video/audio
 	    	"collection"			: 	null, //collection ID, only search within this collection
-	    	"page"					: 	1, //which page we are on
+	    	"page"					: 	0, //which page we are on, page count starts at 0
 	    	"limit"					:  	100, //how many results to send back
 
 	    	//Time filter parameters
@@ -29,9 +29,10 @@
 		{
 			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
+
 						+ "r_items=" + this.get("r_items") + "&"
 						+ "r_itemswithcollections=" + this.get("r_itemswithcollections") + "&"
-						+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
+						+ (this.get("page") > 0 ? "page=" + (this.get("page")) + "&" : "")
 						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")

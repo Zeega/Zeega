@@ -18,7 +18,7 @@
 						
 						<li>
 							<ul class='pill-buttons'>
-								<li><a id='share-project' href='#'>Share</a></li>
+								<li><a id='publish-project' href='#'>Publish</a></li>
 								<!--
 								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 								-->
@@ -228,38 +228,9 @@
 
 {% block extras %}
 
+ <!-- modal -->
+<div id="publish-project-modal" class="modal hide" ></div>
 
-<div id="share-project-modal" class='modal hide' >
-	<div class="modal-header">
-		<h3>Share Your Project</h3>
-	</div>
-	<div class="modal-body clearfix">
-		<p>Share your project: <b>{{projecttitle}}</b></p>
-		<a href='{{hostname}}{{directory}}project/{{sequence.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{sequence.id}}/view</a>
-	</div>
-	<div class="modal-footer">
-		<span class='admin-submit'>
-			<br />
-			<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
-		</span>
-	</div>
-</div> <!-- modal -->
-
-<div id="project-settings-modal" class='modal hide' >
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal">&times;</a>
-		<h3>Project Settings</h3>
-	</div>
-	<div class="modal-body clearfix">
-		
-		<h3 class="">Screen Ratio</h3>
-		<ul id='ratio-list' class='unstyled'>
-			<li><a href="#" data-ratio-id='0'>3:2</a></li>
-			<li><a href="#" data-ratio-id='1'>4:3</a></li>
-		</ul>
-	</div>
-	
-</div> <!-- modal -->
 
 
 	<div id='templates' class='hidden'>
