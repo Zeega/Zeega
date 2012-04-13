@@ -19,9 +19,9 @@
     	
 	    	//What do you want back?
 	    	"r_collections"			: false, //return collections?
-	    	"r_itemswithcollections" : true, //return items and collections, mixed?
-	    	"r_items"				: false, //return items?
-	    	"r_time"				: true, //return time bins?
+	    	"r_itemswithcollections" : 0, //return items and collections, mixed?
+	    	"r_items"				: 1, //return items?
+	    	"r_time"				: false, //return time bins?
 
 	  	},
 	
@@ -29,10 +29,13 @@
 		{
 			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
+						+ "r_items=" + this.get("r_items") + "&"
+						+ "r_itemswithcollections=" + this.get("r_itemswithcollections") + "&"
 						+ (this.get("page") > 1 ? "page=" + (this.get("page")) + "&" : "")
 						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
+						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
 						+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")
@@ -40,7 +43,7 @@
 						+ (isTimeSearch ? "r_collections=" + this.get("r_collections") + "&": "")
 						+ (isTimeSearch ? "r_items=" + this.get("r_items") + "&": "")
 						+ (isTimeSearch ? "r_time=" + this.get("r_time") + "&": "");
-			//console.log("Final URL is: " + finalURL);
+			console.log("Final URL is: " + finalURL);
 			return finalURL;
 
 		}
