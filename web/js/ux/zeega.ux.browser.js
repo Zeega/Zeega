@@ -250,9 +250,6 @@ $(document).ready(function() {
 		//Clear any collection filter on page
 		zeegaBrowser.app.removeCollectionFilter();
 
-		//reset page count
-		zeegaBrowser.app.resetPageCount();
-
 		zeegaBrowser.app.doSearch();
 	});
 	
@@ -338,7 +335,30 @@ $(document).ready(function() {
 	 	return false;
 	 });
 	 
-	 
+	//Infinite Scroll
+	  zeegaBrowser.app.killScroll = false; 
+	  $('#browser-results-items').scroll(function(){
+
+	  	var totalHeight = $('#browser-results-items')[0].scrollHeight;
+	  	var viewportHeight = $('#browser-results-items').height();
+	  	var proximityToBottom = 100;
+	  	var scrollTop = $('#browser-results-items').scrollTop();
+
+	  	var left = scrollTop + 2 * viewportHeight;
+	    //don't excecute if the app is loading, if it's too far down, or if the viewing the map event view
+	    if  ( left >= totalHeight )
+	    { 
+	    	if(zeegaBrowser.app.items.collection.length < zeegaBrowser.app.items.collection.totalItemsCount) //make sure there are more items to, indeed, get
+	    	{
+		      if (zeegaBrowser.app.killScroll == false) // Keeps the loader from fetching more than once.
+		      {
+		        zeegaBrowser.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
+		        zeegaBrowser.app.items.collection.search.set( {"page": zeegaBrowser.app.items.collection.search.get("page") + 1 }); //set page +1 
+		        zeegaBrowser.app.doSearch(true);
+		      }
+	      }
+	    }
+	  });
 	 
 	 
 	

@@ -2940,6 +2940,10 @@ margin-left: 5px;
 margin-bottom: 0;
 }
 
+#browser-item-count{
+	color:white;
+}
+
 .clear {
 
 clear: both;

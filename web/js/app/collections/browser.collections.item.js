@@ -20,6 +20,8 @@
 			var _this = this;
 			this._isRendered = true;
 			
+			$('#browser-item-count').text("Displaying " + this.collection.length + " of " + this.collection.totalItemsCount + " items");
+
 			if(this.collection.length)
 			{
 				_.each( _.toArray(this.collection), function(itemModel){
@@ -67,18 +69,35 @@
 			$(this.el).spin('small');
 			
 			this.collection.setSearch(search,reset);
-			this.collection.fetch();
+			this.collection.fetch({	add: 		(_this.collection.search.get("page") > 0),
+									success: 	_this.success, 
+									error: 		_this.errorFunction
+								});
+
 		},
 		
 		refresh : function()
 		{
 			$(this.el).fadeTo(1000,0.5);
 			$(this.el).spin('small');
-			this.collection.fetch();
+			this.collection.fetch({	add: 		(_this.collection.search.get("page") > 0),
+									success: 	_this.success, 
+									error: 		_this.errorFunction
+								});
 		},
 		
-		getSearch : function(){ return this.collection.search }
+		getSearch : function(){ return this.collection.search },
 
+		success : function(){
+			if(zeegaBrowser.app.items.collection.search.get("page") > 0){
+		  		zeegaBrowser.app.items.reset();
+		  	}
+		    zeegaBrowser.app.killScroll = false;
+		},
+		errorFunction: function(){
+		    console.log('error doing search');
+		    zeegaBrowser.app.killScroll = false;
+		 }
 
 
 	});
@@ -88,6 +107,8 @@
 		model : Items.Model,
 
 		totalItemsCount : 0,
+
+		returnedItemsCount : 0,
 
 		initialize : function()
 		{
@@ -112,7 +133,9 @@
 					success : function(response)
 					{
 						console.log('items count: '+ response.length ) // + works
-						_this.trigger('reset');
+						if (_this.search.get("page") <= 0){
+							_this.trigger('reset');
+						}
 					}
 				});
 			}
@@ -128,6 +151,7 @@
 
 		parse : function(response)
 		{
+			this.returnedItemsCount = response.returned_items_and_collections_count;
 			this.totalItemsCount = response.items_and_collections_count;
 			return response.items_and_collections;
 		}
