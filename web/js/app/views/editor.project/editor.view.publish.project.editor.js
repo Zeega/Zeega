@@ -9,7 +9,8 @@
 		{
 			var _this = this;
 			
-			
+			this.elemId = Math.floor(Math.random()*10000);
+
 			var imageHTML = '';
 
 			var frames = this.model.sequences.at(0).frames.models;
@@ -28,7 +29,7 @@
 			
 			var projectlink = zeega.app.url_prefix + "project/" + this.model.id + '/view';
 			var iframeHTML = '<iframe src="'+ projectlink +'"></iframe>';
-			var iframeEmbed = iframeHTML.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/"/gi, "&quot;");
+			var iframeEmbed = this.convertHTML(iframeHTML);
 
 
 			var blanks = {
@@ -41,7 +42,7 @@
 				uriEncodedTitle : encodeURIComponent(this.model.get("title")),
 				iframeEmbed : iframeEmbed,
 				iframeHTML : iframeHTML,
-				randId : Math.floor(Math.random()*10000),
+				randId : this.elemId,
 				tags : this.model.get('tags'),
 
 			};
@@ -68,6 +69,10 @@
 			$(this.el).find('#close-modal').mouseup(function(){
 				$(_this.el).html(" "); //need to get rid of preview because audio/video keeps playing
 				$(_this.el).modal('hide');
+				return false;
+			});
+			$(this.el).find('#publish-open-customize-size').mouseup(function(){
+				$('#publish-customize-size').fadeToggle();
 				return false;
 			});
 			$(this.el).find('#looks-good').mouseup(function(){
@@ -102,6 +107,9 @@
 			$(this.el).modal('show');
 			return this;
 		},
+	convertHTML : function(str){
+		return str.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/"/gi, "&quot;");
+	},
 	updateTags:function(name, _this)
 	{
 	    model = _this.model;
@@ -179,7 +187,13 @@
 							'<div class="publish-right-column">'+
 								'<label for="publish-embed">Embed your project</label>'+
 								'<textarea id="publish-embed"><%= iframeEmbed %></textarea>'+
-
+								'<a href="#" id="publish-open-customize-size">Customize size</a>'+
+								'<div id="publish-customize-size">'+
+									'<label for="publish-width">Width</label>'+
+									'<input type="text" id="publish-width" value=""/>'+
+									'<label for="publish-height">Height</label>'+
+									'<input type="text" id="publish-height" value=""/>'+
+								'</div>'+
 								'<label for="publish-preview">Preview</label>'+
 								'<div class="publish-preview"><%= iframeHTML %></div>'+
 							'</div>'+

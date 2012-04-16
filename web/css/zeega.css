@@ -2983,6 +2983,13 @@ background-color: red;
 	border:2px solid #F15A29 !important;
 	padding:0 !important;
 }
+#publish-customize-size{
+	display:none;
+	font-size:0.6em;
+}
+#publish-customize-size input{
+width:50px;
+	}
 #shareProject {
 
 cursor: pointer;
