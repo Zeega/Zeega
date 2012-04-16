@@ -2912,7 +2912,7 @@ background-color: red;
 	width:90%;
 }
 #publish-project-modal textarea{
-	width:45%;
+	
 	float:left;
 }
 #publish-project-modal input, #publish-project-modal textarea{
@@ -2924,7 +2924,8 @@ background-color: red;
 .publish-preview{
 	height:150px;
 	border:1px solid #ccc;
-	width:100%;
+	width:100% !important;
+	overflow: hidden;
 }
 .publish-left-column{
 	float:left;
@@ -2942,13 +2943,23 @@ background-color: red;
 	clear:both;
 	margin-top:10px;
 }
+#publish-embed{
+	width: 90%;
+	height: 50px;
+	word-break: break-all;
+}
+
 #preview-images img{
 	width:50px;
 	height:50px;
 	border:1px solid #ccc;
+	padding:1px;
 
 }
-
+#preview-images img:hover, .publish-image-select{
+border:2px solid #F15A29 !important;
+padding:0 !important;
+}
 #shareProject {
 
 cursor: pointer;
@@ -2993,7 +3004,11 @@ margin-bottom: 0;
 }
 
 #browser-item-count{
-	color:white;
+	color: #CCC;
+	position: relative;
+	top: 6px;
+	left: 5px;
+	font-size: 1.25em;
 }
 
 .clear {

@@ -9,63 +9,62 @@
 		{
 			var _this = this;
 			
-			var frameThumbnails = this.model.getAllFrameThumbnails();
+			
 			var imageHTML = '';
-			for (var i=0;i<frameThumbnails.length;i++){
-				imageHTML += '<img src="' + frameThumbnails[i] + '">';
+
+			var frames = this.model.sequences.at(0).frames.models;
+			
+			var attr = this.model.get('attr') == "" ? new Object() : this.model.get('attr');
+
+			//maybe don't need frame id there if just need img src
+			for(var i=0;i<frames.length;i++){
+				var frame = frames[i];
+				imageHTML += 	'<a href="#"><img class="publish-cover-image'+ 
+								(attr.project_thumbnail == frame.get('thumbnail_url') ? ' publish-image-select' : '') + 
+								'" id="'+ frame.id +'" src="' + frame.get('thumbnail_url')+ '"></a>';
+				
 			}
 
-			var attr = this.model.get('attr') == "" ? new Object() : this.model.get('attr');
 			
-			
+			var projectlink = zeega.app.url_prefix + "project/" + this.model.id + '/view';
+			var iframeHTML = '<iframe src="'+ projectlink +'"></iframe>';
+			var iframeEmbed = iframeHTML.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/"/gi, "&quot;");
+
 
 			var blanks = {
 				
 				title : this.model.get('title'),
 				author : attr.author,
 				imageHTML : imageHTML,
-				projectlink 	: 	zeega.app.url_prefix + this.model.id + '/view',
-				uriEncodedProjectlink : encodeURIComponent(zeega.app.url_prefix + this.model.id + '/view'),
-				uriEncodedTitle : encodeURIComponent(this.model.get("title"))
+				projectlink 	: 	projectlink,
+				uriEncodedProjectlink : encodeURIComponent(projectlink),
+				uriEncodedTitle : encodeURIComponent(this.model.get("title")),
+				iframeEmbed : iframeEmbed,
+				iframeHTML : iframeHTML
 
 			};
 			var template = _.template( this.getTemplate() );
 
 			$(this.el).html( template( blanks ) );
 
-			/*this.$el.editable(
-				function(value,settings)
-				{
-					_this.model.set( { 'title': value } );
-					_this.model.save();
-					return value; //must return the value!!
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : true,
-					onblur : 'submit',
-					width : 700,
-					maxlength : 40
-				});
-			*/
-			
+			$(this.el).find('#preview-images img').mouseup(function(){
+				$('#preview-images img').removeClass('publish-image-select');
+				$(this).addClass('publish-image-select');
+				
+			});
 			$(this.el).find('#close-modal').mouseup(function(){
-
+				$(_this.el).html(" "); //need to get rid of preview because audio/video keeps playing
 				$(_this.el).modal('hide');
 				return false;
 			});
 			$(this.el).find('#looks-good').mouseup(function(){
 
-				/*_this.model.set({	
-							'title': $('#publish-project-title').val(),
-							'attr["author"]': $('#publish-project-author').val(),
-				});*/
+				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
 				attr.author = $('#publish-project-author').val();
 				_this.model.save({	
 							'title': $('#publish-project-title').val(),
 							'attr': attr,
+							'published':true,
 				},
 				{
 					success : function(model, response){
@@ -155,11 +154,11 @@
 								'<input type="text" id="project-link" value="<%= projectlink %>"/>'+
 							'</div>'+
 							'<div class="publish-right-column">'+
-								'<label for="project-authors">Embed your project</label>'+
-								'<input type="text" id="project-authors" value="<%= author %>"/>'+
+								'<label for="publish-embed">Embed your project</label>'+
+								'<textarea id="publish-embed"><%= iframeEmbed %></textarea>'+
 
-								'<label for="project-preview">Preview</label>'+
-								'<div class="publish-preview"></div>'+
+								'<label for="publish-preview">Preview</label>'+
+								'<div class="publish-preview"><%= iframeHTML %></div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
 								'<a href="#" id="publish-back" class="btn secondary">Back</a>'+
