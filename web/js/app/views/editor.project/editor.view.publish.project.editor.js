@@ -15,10 +15,14 @@
 				imageHTML += '<img src="' + frameThumbnails[i] + '">';
 			}
 
+			var attr = this.model.get('attr') == "" ? new Object() : this.model.get('attr');
+			
+			
+
 			var blanks = {
 				
 				title : this.model.get('title'),
-				author : this.model.get('attr.author'),
+				author : attr.author,
 				imageHTML : imageHTML,
 				projectlink 	: 	zeega.app.url_prefix + this.model.id + '/view',
 				uriEncodedProjectlink : encodeURIComponent(zeega.app.url_prefix + this.model.id + '/view'),
@@ -54,10 +58,26 @@
 			});
 			$(this.el).find('#looks-good').mouseup(function(){
 
-				//TODO - put in save for title/author
-
-				$(_this.el).find('#publish-project-modal-step1').hide();
-				$(_this.el).find('#publish-project-modal-step2').show();
+				/*_this.model.set({	
+							'title': $('#publish-project-title').val(),
+							'attr["author"]': $('#publish-project-author').val(),
+				});*/
+				attr.author = $('#publish-project-author').val();
+				_this.model.save({	
+							'title': $('#publish-project-title').val(),
+							'attr': attr,
+				},
+				{
+					success : function(model, response){
+						$(_this.el).find('#publish-project-modal-step1').hide();
+						$(_this.el).find('#publish-project-modal-step2').show();
+					},
+					error : function(model, response){
+						console.log('error publishing project');
+						console.log(model);
+					},
+				});
+				
 				return false;
 			});
 			$(this.el).find('#publish-back').mouseup(function(){
@@ -83,11 +103,11 @@
 						'</div>'+
 
 						'<div class="modal-body clearfix">'+
-							'<label for="project-title">Title</label>'+
-							'<input type="text" id="project-title" value="<%= title %>"/>'+
+							'<label for="publish-project-title">Title</label>'+
+							'<input type="text" id="publish-project-title" value="<%= title %>"/>'+
 
-							'<label for="project-authors">Author(s)</label>'+
-							'<input type="text" id="project-authors" value="<%= author %>"/>'+
+							'<label for="publish-project-author">Author(s)</label>'+
+							'<input type="text" id="publish-project-author" value="<%= author %>"/>'+
 
 							'<label for="tags">Tags</label>'+
 							'<p><a href="#">Add a tag</a></p>'+
