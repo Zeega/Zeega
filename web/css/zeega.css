@@ -2948,6 +2948,29 @@ background-color: red;
 	height: 50px;
 	word-break: break-all;
 }
+.tags .tagsinput {
+	border: none !important;
+	height: auto !important;
+	width: auto !important;
+	padding-left: 0;
+}
+.tag {
+	margin-right: 4px !important;
+	margin-top: 4px !important;
+
+	-moz-border-radius: 4px !important;
+	-webkit-border-radius: 4px !important;
+	border-radius: 4px !important;
+	color: #777 !important;
+	font-size: 11px !important;
+	border: 1px solid #CCC !important;
+	background: #EFEFEF !important;
+	padding: 2px 5px !important;
+}
+.tags a {
+	color: gray !important;
+	font-size: 11px !important;
+}
 
 #preview-images img{
 	width:50px;
@@ -2957,8 +2980,8 @@ background-color: red;
 
 }
 #preview-images img:hover, .publish-image-select{
-border:2px solid #F15A29 !important;
-padding:0 !important;
+	border:2px solid #F15A29 !important;
+	padding:0 !important;
 }
 #shareProject {
 

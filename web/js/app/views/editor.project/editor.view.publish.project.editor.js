@@ -40,12 +40,25 @@
 				uriEncodedProjectlink : encodeURIComponent(projectlink),
 				uriEncodedTitle : encodeURIComponent(this.model.get("title")),
 				iframeEmbed : iframeEmbed,
-				iframeHTML : iframeHTML
+				iframeHTML : iframeHTML,
+				randId : Math.floor(Math.random()*10000),
+				tags : this.model.get('tags'),
 
 			};
 			var template = _.template( this.getTemplate() );
 
 			$(this.el).html( template( blanks ) );
+
+			$(this.el).find('.tagsedit').empty().tagsInput({
+				'interactive':true,
+				'defaultText':'add a tag',
+				'onAddTag':function(){_this.updateTags('',_this)},
+				'onRemoveTag':function(){_this.updateTags('',_this)},
+				'removeWithBackspace' : false,
+				'minChars' : 1,
+				'maxChars' : 0,
+				'placeholderColor' : '#C0C0C0',
+			});
 
 			$(this.el).find('#preview-images img').mouseup(function(){
 				$('#preview-images img').removeClass('publish-image-select');
@@ -89,7 +102,17 @@
 			$(this.el).modal('show');
 			return this;
 		},
-	
+	updateTags:function(name, _this)
+	{
+	    model = _this.model;
+		var $t = $("#"+_this.elemId+"_tagsinput").children(".tag");
+		var tags = [];
+		for (var i = $t.length; i--;) 
+		{  
+			tags.push($($t[i]).text().substring(0, $($t[i]).text().length -  1).trim());  
+		}
+		_this.model.save({tags : tags});
+	},		
 	getTemplate : function()
 	{
 
@@ -109,7 +132,7 @@
 							'<input type="text" id="publish-project-author" value="<%= author %>"/>'+
 
 							'<label for="tags">Tags</label>'+
-							'<p><a href="#">Add a tag</a></p>'+
+							'<div class="tags"><input name="tags" class="tagsedit" id="<%=randId%>" value="<%=tags%>" /></div>'+
 
 							'<label for="preview-images">Choose an image to represent your project</label>'+
 							'<div id="preview-images"><%= imageHTML %></div>'+
