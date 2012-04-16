@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\DocumentCloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 

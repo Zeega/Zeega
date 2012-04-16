@@ -70,7 +70,7 @@
 		{
 			_.each(this._views, function(collectionView){
 				// item draws itself
-				console.log(collectionView)
+				//console.log(collectionView)
 				var addThis = collectionView.render(); 
 				$(this.el).prepend(addThis.el);
 				}, this);

@@ -3,7 +3,6 @@
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
@@ -63,7 +62,7 @@ class ParserFlickrSet extends ParserAbstract
 		
 		if($loadCollectionItems == true)
 		{
-		 	$setPhotos = $f->photosets_getPhotos($setId);
+		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,100);
 		 	$photos = $setPhotos['photoset']['photo'];
 
     		if($photos)

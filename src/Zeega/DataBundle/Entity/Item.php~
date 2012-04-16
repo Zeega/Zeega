@@ -125,6 +125,11 @@ class Item
     private $attributes;
 
     /**
+     * @var array $tags
+     */
+    private $tags;
+
+    /**
      * @var boolean $enabled
      */
     private $enabled;
@@ -133,11 +138,6 @@ class Item
      * @var boolean $published
      */
     private $published;
-
-    /**
-     * @var Zeega\DataBundle\Entity\ItemTags
-     */
-    private $tags;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
@@ -161,8 +161,7 @@ class Item
 
     public function __construct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
     $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -175,7 +174,7 @@ class Item
     {
         return $this->id;
     }
-    
+
     /**
      * Set site_id
      *
@@ -617,6 +616,26 @@ class Item
     }
 
     /**
+     * Set tags
+     *
+     * @param array $tags
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return array 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
      * Set enabled
      *
      * @param boolean $enabled
@@ -654,26 +673,6 @@ class Item
     public function getPublished()
     {
         return $this->published;
-    }
-
-    /**
-     * Add tags
-     *
-     * @param Zeega\DataBundle\Entity\ItemTags $tags
-     */
-    public function addItemTags(\Zeega\DataBundle\Entity\ItemTags $tags)
-    {
-        $this->tags[] = $tags;
-    }
-
-    /**
-     * Get tags
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getTags()
-    {
-        return $this->tags;
     }
 
     /**

@@ -12,13 +12,17 @@
 function initUX(){
 	initHeaderUX();
 
-/*
+
 //		POPOVERS		//
 	$('.info').popover({
-		'delayIn' : 0,
-		placement : 'below'
+		'delayIn' : 0
 	});
-*/		
+	$('.database-asset-list').popover({
+		'delayIn' : 1,
+		'placement' : 'right'
+	});
+	
+	
 }
 
 $('#add-node-button').click(function(){
@@ -326,12 +330,12 @@ function closeOpenCitationTabs()
 	
 
 	$('#advance-controls input').change(function(){
-		var attr = Zeega.currentFrame.get('attr');
-		if(attr) attr.advance = $(this).val();
-		else attr = {'advance':$(this).val()}
+		var attr = zeega.app.currentFrame.get('attr');
+		if(attr) attr.advance = parseInt($(this).val());
+		else attr = {'advance': parseInt($(this).val())}
 		
-		Zeega.currentFrame.set({'attr':attr});
-		Zeega.currentFrame.save();
+		zeega.app.currentFrame.set({'attr':attr});
+		zeega.app.currentFrame.save();
 	});
 	
 	$('#frame-advance-random input').change(function(){

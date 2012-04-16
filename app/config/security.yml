@@ -18,18 +18,6 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        node:
-            pattern:  ^/node/
-            anonymous: ~
-        init:
-            pattern:  ^/init
-            anonymous: ~
-        nodes:
-            pattern:  ^/nodes
-            anonymous: ~
-        layers:
-            pattern:  ^/layers/
-            anonymous: ~
         secured_area:
             pattern:    ^/
             form_login:
@@ -56,7 +44,8 @@ security:
         - { path: ^/api/collections, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/nodes, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/node, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }

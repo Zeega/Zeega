@@ -107,7 +107,7 @@
 		
 		getTemplate:function()
 		{
-	    	var html = '<div id="<%=randId%>" class="tag-container"></div>';
+	    	var html = '<div id="<%=randId%>" class="tag-container">blabla s ginger</div>';
 	    	return html;
 	    }
 		

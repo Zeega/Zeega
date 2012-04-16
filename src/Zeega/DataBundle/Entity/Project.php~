@@ -203,29 +203,4 @@ class Project
     {
         return $this->users;
     }
-    /**
-     * @var array $tags
-     */
-    private $tags;
-
-
-    /**
-     * Set tags
-     *
-     * @param array $tags
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-    }
-
-    /**
-     * Get tags
-     *
-     * @return array 
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
 }

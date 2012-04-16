@@ -49,8 +49,6 @@
 
 		append : function(items)
 		{
-			console.log('appending!');
-
 			items.each(this.add);
 			items.bind('add',this.add)
 			//this.render();
@@ -100,8 +98,6 @@
 
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
-				console.log('items exist');
-				console.log(itemsBS)
 				this.totalItemsCount = itemsBS.items_count;
 				this.reset( itemsBS.items );
 			}

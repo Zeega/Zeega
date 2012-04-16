@@ -55,7 +55,6 @@
 				layerModelArray.push( newLayer );
 			});
 			
-			console.log( layerModelArray )
 			
 			this.layers = new Layers.MasterCollection( layerModelArray );
 			
@@ -68,10 +67,8 @@
 		
 		updateFrameOrder : function( save )
 		{
-			console.log('UPDATE FRAME ORDER	')
-			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			console.log(frameIDArray)
 			this.frames.trigger('resort',frameIDArray);
+			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
 			this.set( { framesOrder: frameIDArray } );
 			if( save != false ) this.save();
 		},
@@ -87,8 +84,6 @@
 			dupeModel.frameIndex = _.indexOf( this.get('framesOrder'), frameModel.id );
 			dupeModel.dupe = true;
 			dupeModel.set('id',null);
-			
-			console.log(dupeModel)
 			
 			dupeModel.save({},{
 				success : function( savedFrame )
@@ -134,7 +129,6 @@
 		destroyFrame : function( frameModel )
 		{
 			console.log('destroy frame:')
-			console.log(frameModel)
 			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
 			this.updateFrameOrder();
 		},
@@ -145,16 +139,12 @@
 			
 			this.set('attr',{persistLayers: [parseInt(modelID)] })
 			this.save();
-			console.log(this.get('attr'))
-			console.log(this.get('attr').persistLayers)
-			
 			
 			var attr = this.get('attr');
 		
 			if( _.include( attr.persistLayers, parseInt(modelID) ) ) 
 			{
 				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(modelID))})
-				console.log(attr)
 				//this.frames.removePersistence( parseInt(model.id) );
 			}
 			else
@@ -166,10 +156,7 @@
 			}
 			//this.set('attr',attr);
 			//this.save();
-			
-			
-			console.log(this)
-			
+
 		},
 				
 		removeLayerFromFrame : function( model )
@@ -194,6 +181,9 @@
 				//remove from the current frame layer array
 				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
 				if( layerArray.length == 0 ) layerArray = [false];
+				
+				console.log(layerArray)
+				
 				zeega.app.currentFrame.set('layers',layerArray);
 				zeega.app.currentFrame.save();
 				this.destroyOrphanLayers();

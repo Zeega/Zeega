@@ -1,6 +1,70 @@
 (function(Layer){
 
 
+	Layer.Audio = Layer.Video.extend({
+		
+		layerType : 'Audio',
+
+		defaultAttributes : 
+		{
+			'title' : 'Audio Layer',
+			'url' : 'none',
+			'left' : 0,
+			'top' : 0,
+			'height' : 100,
+			'width' : 100,
+			'volume' : 0.5,
+			'cue_in'  : 0,
+			'cue_out' : 0,
+			'opacity':1,
+			'dimension':1.5,
+			'citation':true,
+		}
+		
+	});
+	
+	Layer.Views.Controls.Audio = Layer.Views.Controls.Video.extend({
+		
+			render : function()
+			{
+
+				var playbackControls = new Layer.Views.Lib.Playback({
+					model : this.model
+				});
+
+				var volumeSlider = new Layer.Views.Lib.Slider({
+					property : 'volume',
+					model: this.model,
+					label : 'Volume',
+					min : 0,
+					max : 1,
+					step : 0.01,
+					css : false
+				});
+
+				this.controls
+					.append( playbackControls.getControl() )
+					.append( volumeSlider.getControl() );
+					
+				return this;
+
+			}
+		
+	});
+	
+	Layer.Views.Visual.Audio = Layer.Views.Visual.Video.extend({
+		
+		draggable : false,
+		linkable : false,
+		
+		render : function()
+		{
+			return this;
+		},
+
+		
+	});
+/*
 	Layer.Audio = Layer.Model.extend({
 			
 		layerType : 'Audio',
@@ -152,5 +216,5 @@
 		}
 		
 	});
-
+*/
 })(zeega.module("layer"));

@@ -19,7 +19,9 @@ class PublishController extends Controller
         $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
 
     	$layerList = $frame->getLayers();
-
+        $layers = array();
+        if(isset($layerList))
+        {
     	foreach($layerList as $layer_id)
     	{
     	    $l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findLayerById($layer_id);
@@ -27,6 +29,9 @@ class PublishController extends Controller
     	    if(count($l) > 0) 
     	        $layers[] = $l[0];
     	}
+	}
+	else
+	    $layers = array();
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
 					'frameId'=> $frame->getId(),
 					'frame'=>ResponseHelper::serializeEntityToJson($frame),
@@ -34,13 +39,13 @@ class PublishController extends Controller
 				));
      }
      
-     public function projectAction($id){
-     	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
-     		'projectId'=>$id,
-     		'collectionId'=>0,
-     	
-     	));
-     
+     public function projectAction($id)
+     {
+         $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+     	 return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
+     	     'projectId'=>$id,
+     	     'project_data' => $projectData
+     	 ));
      }
      
      

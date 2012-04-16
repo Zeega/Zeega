@@ -5,6 +5,7 @@
 		initialize : function( args )
 		{
 			this.settings = _.defaults( args, this.defaults );
+			$(this.el).addClass('control');
 			this.init();
 			
 			this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
@@ -58,7 +59,7 @@
 
 	Layer.Views.Lib.ContinueToNextFrame = Layer.Views.Lib.extend({
 
-		className : 'continue-to-next',
+		className : 'control continue-to-next',
 
 		render : function()
 		{
@@ -81,12 +82,15 @@
 	
 	Layer.Views.Lib.ContinueOnAllFrames = Layer.Views.Lib.extend({
 
-		className : 'continue-to-next',
-
+		className : 'control continue-to-next',
+		
+		defaults : {active:false},
+		
 		render : function()
 		{
-			var button = '<button class="btn" style="width:100%">Continue on all frames</button>'
+			var button = '<button class="btn" style="width:100%">Continue on all frames</button>';
 			$(this.el).append( button );
+			if(this.settings.active) $(this.el).find('button').addClass('active btn-warning');
 		},
 		
 		events : {
@@ -110,7 +114,7 @@
 	
 	Layer.Views.Lib.Link = Layer.Views.Lib.extend({
 
-		className : 'link-controls',
+		className : 'control link-controls',
 
 		render : function()
 		{
@@ -418,7 +422,7 @@
 			
 			this.model.video.pop.listen('timeupdate', function(){
 
-				if(_this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
+				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
 				{
 					
 					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );

@@ -17,9 +17,4 @@ collections:
 items:
     type:     rest
     prefix:   api
-    resource: Zeega\ApiBundle\Controller\ItemsController 
-  
-tags:
-    type:     rest
-    prefix:   api
-    resource: Zeega\ApiBundle\Controller\TagsController
+    resource: Zeega\ApiBundle\Controller\ItemsController

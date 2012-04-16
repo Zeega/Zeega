@@ -41,7 +41,6 @@
 		
 		reset : function()
 		{
-			
 			if ( this._isRendered )
 			{
 				$(this.el).empty();
@@ -53,7 +52,7 @@
 
 		append : function(items)
 		{
-			console.log('appending!');
+			//console.log('appending!');
 
 			items.each(this.add);
 			items.bind('add',this.add)
@@ -114,16 +113,16 @@
 		{
 			this.search = new Items.Search();
 			
-			console.log('defined? '+ typeof itemsJSON )
+			//console.log('defined? '+ typeof itemsJSON )
 			if( typeof itemsJSON != 'undefined' )
 			{
 
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
-				console.log('items exist');
-				console.log(itemsBS)
-				this.totalItemsCount = itemsBS.items_and_collections_count;
-				this.reset( itemsBS.items_and_collections );
+				//console.log('items exist');
+				//console.log(itemsBS)
+				this.totalItemsCount = itemsBS.items_count;
+				this.reset( itemsBS.items );
 			}
 			else
 			{
@@ -132,10 +131,15 @@
 				this.fetch({
 					success : function(response)
 					{
+<<<<<<< HEAD
+						//console.log('items count: '+ response.length ) // + works
+						_this.trigger('reset');
+=======
 						console.log('items count: '+ response.length ) // + works
 						if (_this.search.get("page") <= 0){
 							_this.trigger('reset');
 						}
+>>>>>>> abf1b6577b1d7b39af82635b9371addc0639922c
 					}
 				});
 			}
@@ -151,9 +155,14 @@
 
 		parse : function(response)
 		{
+<<<<<<< HEAD
+			this.totalItemsCount = response.items_count;
+			return response.items;
+=======
 			this.returnedItemsCount = response.returned_items_and_collections_count;
 			this.totalItemsCount = response.items_and_collections_count;
 			return response.items_and_collections;
+>>>>>>> abf1b6577b1d7b39af82635b9371addc0639922c
 		}
 
 

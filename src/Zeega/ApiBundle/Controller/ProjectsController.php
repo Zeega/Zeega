@@ -57,4 +57,37 @@ class ProjectsController extends Controller
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
+    
+    // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    public function putProjectsAction($projectId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->getRequest();
+        $request_data = $this->getRequest()->request;        
+        
+		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+
+        if (!$project) 
+        {
+            throw $this->createNotFoundException('Unable to find the Item with the id ' + $projectId);
+        }
+
+		$title = $request_data->get('title');
+		$attr = $request_data->get('attr');
+        $tags = $request_data->get('tags');
+		$published = $request_data->get('published');
+        
+		if(isset($title)) $project->setTitle($title);
+		if(isset($attr)) $project->setAttr($attr);
+		if(isset($tags)) $project->setTags($tags);
+		if(isset($published)) $project->setPublished($published);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($project);
+        $em->flush();
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        return ResponseHelper::compressTwigAndGetJsonResponse($projectView);       
+    }
 }

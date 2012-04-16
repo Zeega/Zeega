@@ -43,8 +43,6 @@
 			this.sequences = new Sequence.Collection( sequences );
 
 			zeega.app.currentSequence = this.sequences.at(0);
-			console.log(zeega.app.currentSequence)
-
 		}
 		
 	});

@@ -47,15 +47,11 @@
 				this.set('type',this.layerType);
 				this.set('attr', _.defaults( this.get('attr'), this.defaultAttributes ) );
 				
-				console.log( this.defaultAttributes )
-				console.log( this.get('attr') )
-				
 				//create visual view
 				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
 				
-				
 				//create control view
-				if(this.showControls) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
+				if( !this.player ) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			
 				this.init();
 			}

@@ -26,13 +26,20 @@
 			}
 		</style>
 
-		<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+		
+		<!--
 		<script data-main="{{ asset('js/loaders/frame.js')}}" src="{{ asset('js/lib/require.js')}}"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		-->
 		<script type="text/javascript" language="Javascript">
 			var frameJSON = "{{ frame | e('js') }}";
 			var layersJSON = "{{ layers | json_encode | e('js') }}";
-		</script>	
+		</script>
+		<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/underscore.js')}}"></script>	
+		<!--<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/backbone.js')}}"></script>-->	
+		<script type="text/javascript" language="Javascript" src="{{ asset('js/app/zeega.frame-player.js')}}"></script>	
 	</head>
 
 	<body>

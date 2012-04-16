@@ -97,13 +97,13 @@
 			if( frame.get('layers') )
 			{
 				//if the layer array already exists eliminate false values if they exist
-				layerOrder = _.compact( frame.get('layers') );
+				layerOrder = frame.get('layers');
 				//add the layer id to the layer order array
 				layerOrder.push( parseInt( layer.id ) );
 			}
 			zeega.app.updateLayerOrder(layerOrder.reverse(), frame);
 			//set the layerOrder array inside the frame
-			frame.set({'layers':layerOrder});
+			frame.set({'layers': _.compact(layerOrder) });
 			frame.save();
 		},
 		

@@ -916,7 +916,12 @@ a.white:hover
 .zicon-volume-off{background-position:-160px -50px}
 .zicon-trash-closed{background-position:-180px 0}
 .zicon-trash-open{background-position:-0px -20px}
-
+.zicon-search-dropdown
+{
+	background-position:-0px -20px;
+	background-position: -0px -101px;
+	width: 30px;
+}
 
 .socialmedia-icon
 {
@@ -1059,7 +1064,11 @@ body
 
 **********************************/
 
-.menu-toggle { position:relative }
+.menu-toggle
+{
+	position:relative;
+	top:4px;
+}
 .menu-items
 {
 	color:#444;
@@ -1378,6 +1387,16 @@ body
 
 .layer-control { margin:12px 0 }
 
+.controls
+{
+	padding: 6px 0;
+}
+
+default-layer-controls
+{
+	padding-top: 12px;
+}
+
 .map
 {
 	width : 268px;
@@ -1438,7 +1457,7 @@ body
 	color:#666;
 	background:transparent;
 	border:none;
-	width:233px;
+	width:230px;
 	font-size:1.25em;
 }
 
@@ -2223,6 +2242,39 @@ td+td
 	color:#ccc;
 }
 
+
+/****************************
+
+	LOADER
+	
+****************************/
+
+.load-wrapper
+{
+	position:absolute;
+	top:150px;
+	color:#aaa;
+	width:100%;
+}
+
+.loader
+{
+
+	width:100%;
+	height:2px;
+	background:rgba(255,255,255,.25);
+}
+
+.progress
+{
+	background:red;
+	width:0%;
+	height:100%;
+	box-shadow: 0 0 10px white;
+}
+
+
+/*
 #loading-container
 {
 	height:2px;
@@ -2246,7 +2298,7 @@ td+td
 	color: white;
 	margin-left: 10px;
 }
-
+*/
 .ghost-frame
 {
 }

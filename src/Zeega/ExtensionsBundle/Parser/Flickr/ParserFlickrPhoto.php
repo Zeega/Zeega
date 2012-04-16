@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\Flickr;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -42,17 +40,12 @@ class ParserFlickrPhoto extends ParserAbstract
             
 			if($info['tags'])
 			{
+			    $tags = array();
 				foreach($info['tags']['tag'] as $t)
 				{
-				    $tag = new Tag;
-				    $tag->setName($t["raw"]);
-	                $tag->setDateCreated(new \DateTime("now"));
-		            $item_tag = new ItemTags;
-		            $item_tag->setItem($item);
-		            $item_tag->setTag($tag);
-		            $item_tag->setDateCreated(new \DateTime("now"));
-	                $item->addItemTags($item_tag);
+				    array_push($tags, $t["raw"]);
 				}
+				$item->setTags($tags);
 			}
             
 			foreach ($size as $s)

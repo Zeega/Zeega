@@ -3,9 +3,7 @@
 namespace Zeega\ExtensionsBundle\Parser\Soundcloud;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\ItemTags;
 
 use \DateTime;
 
@@ -47,64 +45,52 @@ class ParserSoundcloudSet extends ParserAbstract
 		if(isset($tags) && count($tags) > 0) 
 		{
 		    $tags = explode(" ", $tags);
-		    foreach($tags as $tagName)
+        	$itemTags = array();
+
+        	foreach($tags as $tag)
 			{
-			    if(!empty($tagName))
-			    {
-    			    $tag = new Tag;
-    			    $tag->setName($tagName);
-                    $tag->setDateCreated(new \DateTime("now"));
-    	            $item_tag = new ItemTags;
-    	            $item_tag->setItem($item);
-    	            $item_tag->setTag($tag);
-    	            $item_tag->setDateCreated(new \DateTime("now"));
-                    $item->addItemTags($item_tag);
-                }
+			    array_push($itemTags, $tag);
 			}
+
+        	$item->setTags($tags);
 		}
 		
 		if($loadCollectionItems)
 		{
-    		foreach ($itemJson["tracks"] as $itemJson) 
+    		foreach ($itemJson["tracks"] as $childItemJson) 
     		{
-    			if($itemJson["streamable"])
+    			if($childItemJson["streamable"])
     			{
     				$childItem = new Item();
 
-    				$childItem->setTitle($itemJson['permalink']);
-    				$childItem->setDescription($itemJson['description']);
-    				$childItem->setMediaCreatorUsername($itemJson['user']['username']);
-    				$childItem->setMediaCreatorRealname($itemJson['user']['username']);
+    				$childItem->setTitle($childItemJson['permalink']);
+    				$childItem->setDescription($childItemJson['description']);
+    				$childItem->setMediaCreatorUsername($childItemJson['user']['username']);
+    				$childItem->setMediaCreatorRealname($childItemJson['user']['username']);
     				$childItem->setMediaType('Audio');
     				$childItem->setLayerType('Audio');
     				$childItem->setArchive('SoundCloud');
-    				$childItem->setUri($itemJson['stream_url']);
-    				$childItem->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
-    				$childItem->setAttributionUri($itemJson['permalink_url']);
+    				$childItem->setUri($childItemJson['stream_url']);
+    				$childItem->setUri($childItem->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
+    				$childItem->setAttributionUri($childItemJson['permalink_url']);
     				$childItem->setDateCreated(new DateTime((string)$itemJson['created_at']));
-    				$childItem->setThumbnailUrl($itemJson['waveform_url']);
+    				$childItem->setThumbnailUrl($childItemJson['waveform_url']);
     				$childItem->setChildItemsCount(0);
-    				$childItem->setLicense($itemJson['license']);
+    				$childItem->setLicense($childItemJson['license']);
 			        
-			        $tags = $itemJson["tag_list"];
+			        $tags = $childItemJson["tag_list"];
             		
             		if(isset($tags)) 
             		{
             		    $tags = explode(" ", $tags);
-            		    foreach($tags as $tagName)
+                    	$itemTags = array();
+
+                    	foreach($tags as $tag)
             			{
-            			    if(!empty($tagName))
-            			    {
-                			    $tag = new Tag;
-                			    $tag->setName($tagName);
-                                $tag->setDateCreated(new \DateTime("now"));
-                	            $item_tag = new ItemTags;
-                	            $item_tag->setItem($childItem);
-                	            $item_tag->setTag($tag);
-                	            $item_tag->setDateCreated(new \DateTime("now"));
-                                $childItem->addItemTags($item_tag);
-                            }
+            			    array_push($itemTags, $tag);
             			}
+
+                    	$childItem->setTags($tags);
             		}
             		
     				$item->addItem($childItem);

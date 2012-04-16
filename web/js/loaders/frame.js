@@ -34,8 +34,8 @@ var loadFiles = [
 	//'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
 	//layers
-	'order!plugins/layers/video/video',
-	'order!plugins/layers/audio/audio',
+	//'order!plugins/layers/video/video',
+	//'order!plugins/layers/audio/audio',
 	'order!plugins/layers/geo/geo',
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/mapbox/mapbox',
@@ -47,8 +47,10 @@ var loadFiles = [
 
 require(loadFiles, function($) {
 
+	jQuery('body').css({'background-color': 'red'});
 	console.log('LOADED')
 	zeega.app.init();
+	
 
 /*
 	//this url needs to change

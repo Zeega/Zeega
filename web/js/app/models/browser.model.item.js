@@ -1,7 +1,6 @@
 (function(Items){
 
 	Items.Model = Backbone.Model.extend({
-
 		defaults : {
 			title : 'Untitled'
 		},
@@ -13,23 +12,8 @@
 
 		initialize : function()
 		{
-			var Tag = zeegaBrowser.module('tag');
-			this.tags = new Tag.Collection();
-			
-		},
 
-		loadTags : function()
-		{
-			this.tags.item_id = this.id;
-			this.tags.fetch({ 
-				success: function(response)
-				{
-					console.log('tags loaded')
-				}
-			});
-			
 		}
-
 	});
 
 })(zeegaBrowser.module("items"));

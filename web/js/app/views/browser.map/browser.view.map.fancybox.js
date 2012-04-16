@@ -9,7 +9,11 @@
 		initialize : function()
 		{
 			this.mapRendered=false;
-			this.cloudmadeUrl = 'http://{s}.tile.cloudmade.com/da4f1fa0e3634976afb1083e06407ffc/3121/256/{z}/{x}/{y}.png',
+			
+			
+			
+			
+			this.cloudmadeUrl = 'http://{s}.tiles.mapbox.com/v2/mapbox.mapbox-streets/{z}/{x}/{y}.png',
 	    	this.cloudmadeAttrib = '',
 	   		this.cloudmade = new L.TileLayer(this.cloudmadeUrl, {maxZoom: 18, attribution: this.cloudmadeAttrib});
 			if(parseFloat(this.model.get('media_geo_latitude'))) this.geoLocated=true;

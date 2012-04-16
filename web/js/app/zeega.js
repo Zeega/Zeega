@@ -24,7 +24,7 @@ this.zeega = {
 	
 	//sequenceID : 1,
 	currentFrame : null,
-	thumbnailUpdates : false,
+	thumbnailUpdates : true,
 	previewMode:false,
 
 	helpCounter: 0,
@@ -57,7 +57,7 @@ this.zeega = {
 		
 		console.log($.parseJSON(projectJSON))
 		console.log( $.parseJSON(collectionsJSON))
-		console.log( '#ffffff'.toRGB() )
+		
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
@@ -144,9 +144,11 @@ this.zeega = {
 	{
 		if(frame)
 		{
+			console.log('render frame id: '+ frame.id)
+			console.log( frame.get('layers'))
 			var _this = this;
-			_.each( frame.get('layers'), function(layerID){
-			
+			_.each( _.compact( frame.get('layers') ), function(layerID){
+				
 				var layerModel = _this.currentSequence.layers.get(layerID);
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerRender')
@@ -240,17 +242,27 @@ this.zeega = {
 		for( var i = 0 ; i < n ; i++ )
 		{
 			var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
+			console.log('new frame!!!')
+			console.log( this.currentSequence.get('attr').persistLayers )
+			console.log(layers)
+			
 			var newFrame = new Frame.Model();
-			newFrame.save({'layers' : layers},{
+			//newFrame.set({'layers' : layers},{'silent':true});
+			
+			newFrame.save({},{
 				success : function()
 				{
+					console.log(newFrame)
+					newFrame.render();
+					
 					newFrame.trigger('refresh_view');
 					_this.currentSequence.trigger('updateFrameOrder');
+					
+					_this.currentSequence.frames.add( newFrame );
+					_this.loadFrame( newFrame );
 				}
 			});
-			newFrame.render();
-			this.currentSequence.frames.add( newFrame );
-			this.loadFrame( newFrame );
+			
 		}
 	},
 	
@@ -275,14 +287,13 @@ this.zeega = {
 	continueLayerToNextFrame : function( layerID )
 	{
 		console.log( 'copy layer to next frame!: '+ layerID );
-		
-		
+		console.log(parseInt(layerID))
 		var nextFrame = this.getRightFrame();
 		
 		if( nextFrame != this.currentFrame )
 		{
-			if(nextFrame.get('layers')) nextFrame.get('layers').push(layerID);
-			else nextFrame.set('layers',[layerID],{silent:true});
+			if(nextFrame.get('layers')) nextFrame.get('layers').push(parseInt(layerID));
+			else nextFrame.set('layers',[parseInt(layerID)],{silent:true});
 			nextFrame.save();
 		}
 		
@@ -338,7 +349,8 @@ this.zeega = {
 				//var layers = [];
 				layers.push( layerID );
 				layers = _.compact( layers );
-				frame.set({ 'layers' : layers });
+				//frame.set();
+				frame.save({ 'layers' : layers });
 			}
 			
 		})
@@ -383,9 +395,7 @@ this.zeega = {
 	cleanWorkspace : function()
 	{
 		var _this = this;
-		_.each( this.currentFrame.get('layers'), function( layerID ){
-			console.log( _this.currentSequence.layers.get(layerID) );
-			
+		_.each( _.compact(this.currentFrame.get('layers')), function( layerID ){
 			_this.currentSequence.layers.get(layerID).trigger('editor_layerExit');
 		})
 	},

@@ -23,14 +23,18 @@ var Player2 = Backbone.View.extend({
 		this.render();
 		
 		this.generateBackbone();
+		
 		this.parseData( data );
 		
-		this.setCurrentSequence( options.sequenceID );
-		this.setCurrentFrame( options.frameID );
+		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
+		var f = ( _.isUndefined(options) || _.isUndefined(options.frameID) ) ? _.find(data.project.sequences, function(seq){return seq.id == s }).frames[0].id : options.frameID;
+		
+		this.setCurrentSequence( s );
+		this.setCurrentFrame( f );
 		this.setCurrentLayers();
 		
 		//this.currentFrame.on('ready', this.renderCurrentFrame, this);
-		
+		console.log('current sequence/frame/layers')
 		console.log(this.currentSequence)
 		console.log(this.currentFrame)
 		console.log(this.currentLayers)
@@ -48,7 +52,8 @@ var Player2 = Backbone.View.extend({
 	loadAhead : function()
 	{
 		//find the frame you're coming from and where it is in the order
-		var frameOrder = this.currentSequence.get('frameOrder');
+		var frameOrder = this.currentSequence.get('frameOrder') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
+		this.currentSequence.set('frameOrder',frameOrder);
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
 
 		//see if frame's layers are preloaded // starting with the currentFrame
@@ -72,6 +77,13 @@ var Player2 = Backbone.View.extend({
 	preloadFrame : function( frame )
 	{
 		var _this = this;
+		
+		if(this.currentFrame == frame)
+		{
+			$('#zeega-player').prepend( frame.loader.render().el );
+		}
+		
+		
 		_.each( frame.get('layers'), function(layerID){
 			var layer = _this.currentSequence.layers.get( layerID );
 			if( layer.status != 'loading' && frame.status != 'ready' )
@@ -118,14 +130,38 @@ var Player2 = Backbone.View.extend({
 		var frame = this.currentSequence.frames.get(id);
 		frame.off('ready', this.renderFrame);
 		
-		_.each( frame.get('layers'), function(layerID){
-			_this.currentSequence.layers.get( layerID ).trigger('player_play');
+		_.each( frame.get('layers'), function(layerID,i){
+			_this.currentSequence.layers.get( layerID ).trigger('player_play',i+1);
 		})
+		
+		this.setAdvance( frame.get('attr').advance )
+		
 		this.currentFrame = frame;
 		
 		this.updateCitations();
 		
 		this.updateArrows();
+	},
+	
+	setAdvance : function( adv )
+	{
+		var _this = this;
+		
+		if(this.t) clearTimeout( this.t )
+		
+		console.log('set advance: '+ adv)
+		if(adv == -1) //manual control
+		{
+			//do nothing
+		}
+		else if(adv == 0) //after playback - default
+		{
+			
+		}
+		else if(adv > 0) //after n seconds
+		{
+			this.t = setTimeout( function(){ _this.goRight() },adv*1000 )
+		}
 	},
 	
 	goLeft : function()
@@ -219,7 +255,6 @@ var Player2 = Backbone.View.extend({
 		$('#wrapper').show();
 
 		this.unsetListeners();
-		console.log('prelare to remove')
 		_.each( _.toArray( this.currentSequence.layers ), function(layer){
 			if( layer.rendered ) layer.trigger('player_unrender')
 		});
@@ -250,10 +285,13 @@ var Player2 = Backbone.View.extend({
 		{
 			cssObj.height = viewHeight +'px';
 			cssObj.width = viewHeight * this.viewportRatio +'px'
+			cssObj.fontSize = (viewHeight / 519 *100) +"%";
 		}else{
 			cssObj.height = viewWidth / this.viewportRatio +'px';
 			cssObj.width = viewWidth +'px'
+			cssObj.fontSize = (viewWidth / 704 *100) +"%";
 		}
+		
 		
 		//constrain proportions in player
 		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
@@ -265,6 +303,8 @@ var Player2 = Backbone.View.extend({
 		
 		$(this.el).fadeIn();
 		this.initListeners();
+		
+		return this;
 	},
 	
 	/*****************************
@@ -446,12 +486,56 @@ var Player2 = Backbone.View.extend({
 	
 	*****************************/
 	
+	
 	generateBackbone : function()
 	{
 		var _this = this;
 		
 		var LayerModel = Backbone.Model.extend();
 		var FrameModel = Backbone.Model.extend();
+		
+		var loaderView = Backbone.View.extend({
+			
+			className : 'load-wrapper',
+			loadedCount : 0,
+			
+			initialize : function( options )
+			{
+				this.options = options;
+			},
+			
+			render : function()
+			{
+				if(this.options.count>0) $(this.el).append( _.template(this.getTemplate(), this.options) )
+				
+				return this;
+			},
+			
+			incrementLoaded : function()
+			{
+				var _this = this;
+				this.loadedCount++;
+				$(this.el).find('.loaded-count').html( this.loadedCount );
+				$(this.el).find('.progress').css({ width : this.loadedCount/this.options.count * 100 +'%' })
+				
+				if(this.options.count == this.loadedCount)
+				{
+					$(this.el).fadeOut('slow', function(){ _this.remove() });
+				}
+			},
+			
+			getTemplate : function()
+			{
+				html =
+				
+					'<div class="loader">'+
+						'<div class="progress"></div>'+
+					'</div>'+
+					'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= count %></span> items</div>';
+				
+				return html;
+			}
+		})
 		
 		var LoadingCollection = Backbone.Collection.extend({
 			
@@ -468,7 +552,6 @@ var Player2 = Backbone.View.extend({
 				var model = this.get(id);
 				if( model.status != 'loading' && model.status != 'ready')
 				{
-					console.log('loading: '+id)
 					model.status = 'loading';
 					this.loading.push(id)
 				}
@@ -494,19 +577,31 @@ var Player2 = Backbone.View.extend({
 			
 			parseData : function()
 			{
-				var _this = this;
+				var __this = this;
 				//generate frames & layers collections
 				this.frames = new LoadingCollection( this.get('frames') );
+				
+				// add a loader view to each frame
+				_.each( _.toArray(this.frames), function(frame){
+					frame.loader = new loaderView({count: frame.get('layers').length });
+				})
+				
+				/***************
+				
+				added loader view to each frame model
+				
+				**************/
 				
 				var Layer = zeega.module('layer');
 				var layerArray = [];
 				_.each( this.get('layers'), function( layerData ){
 					var layer = new Layer[layerData.type]( layerData, {player:true} );
+					layer.id = parseInt(layer.id);
 					layerArray.push( layer );
 				});
 				this.layers = new LoadingCollection( layerArray );
 				
-				this.layers.on( 'ready', _this.updateFrameStatus, this );
+				this.layers.on( 'ready', this.updateFrameStatus, this );
 				
 				this.unset('frames');
 				this.unset('layers')
@@ -514,13 +609,16 @@ var Player2 = Backbone.View.extend({
 			
 			updateFrameStatus : function( layerID )
 			{
-				var _this = this;
+				var __this = this;
+				
+				
 				_.each( _.toArray(this.frames), function(frame){
 					var frameLayers = frame.get('layers');
-					var readyLayers = _this.layers.ready;
+					var readyLayers = __this.layers.ready;
+
+					if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded();
 					if( _.difference(frameLayers,readyLayers).length == 0 )
 					{
-						console.log('trigger frame '+ frame.id)
 						frame.trigger('ready', frame.id);
 					}
 				})
@@ -535,8 +633,7 @@ var Player2 = Backbone.View.extend({
 
 			initialize : function()
 			{
-				console.log('-- sequence collection --')
-				console.log(this)
+
 			}
 
 		});
