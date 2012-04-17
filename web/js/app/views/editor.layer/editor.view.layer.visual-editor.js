@@ -94,6 +94,7 @@
 					window.location = 'http://'+ _this.attr.link
 				})
 				.addClass('linked-layer');
+
 			}
 			
 			this.model.trigger('ready',this.model.id)
@@ -173,6 +174,12 @@
 			if(z) this.updateZIndex( z )
 			this.onPlay();
 			this.model.inFocus = true;
+			if(this.attr.link)
+			{
+				var _this = this;
+				setTimeout( function(){ $(_this.el).addClass('link-blink') }, 500 );
+				setTimeout( function(){ $(_this.el).removeClass('link-blink') }, 3000 );
+			}
 		},
 		
 		private_onExit : function()
