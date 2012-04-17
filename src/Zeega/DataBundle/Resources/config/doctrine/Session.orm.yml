@@ -1,0 +1,13 @@
+# src/Zeega/EditorBundle/Resources/config/doctrine/Site.orm.yml
+Zeega\DataBundle\Entity\Session:
+    type: entity
+    table: session
+    id:
+        session_id:
+            type: string
+            lenght: 255
+    fields:
+        session_value:
+            type: text
+        session_time:
+            type: integer
