@@ -20,10 +20,12 @@ var Player2 = Backbone.View.extend({
 	
 	initialize : function( data, options )
 	{
+		
 		this.render();
 		
 		this.generateBackbone();
 		
+		this.data = data;
 		this.parseData( data );
 		
 		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
@@ -39,9 +41,49 @@ var Player2 = Backbone.View.extend({
 		console.log(this.currentFrame)
 		console.log(this.currentLayers)
 		
-		this.goToFrame( this.currentFrame );
+		//this.goToFrame( this.currentFrame );
+		if( _.isUndefined(zeega.app.router) )
+		{
+			this.zeega = false;
+			this.startRouter();
+			this.updateTitle();
+		}
+		else
+		{
+			this.router = zeega.app.router;
+			this.goToFrame( this.currentFrame )
+		}
 	},
 	
+	startRouter: function()
+	{
+		var _this = this;
+		var Router = Backbone.Router.extend({
+			
+			routes: {
+				"" : 'goToCurrentFrame',
+				"player/frame/:frameID"	: "goToFrame",
+			},
+			
+			goToFrame : function( frameID )
+			{
+				_this.goToFrame( _this.currentSequence.frames.get( frameID ) ) 
+			},
+			goToCurrentFrame : function()
+			{
+				_this.goToFrame( _this.currentFrame ) 
+			}
+			
+		});
+
+		this.router = new Router();
+		Backbone.history.start();
+	},
+	
+	updateTitle : function()
+	{
+		$('title').html(this.data.project.title)
+	},
 	
 	/*****************************
 	
@@ -108,6 +150,8 @@ var Player2 = Backbone.View.extend({
 		
 		if( frame.status == 'ready') this.renderFrame(frame.id )
 		else frame.on('ready', this.renderFrame, this );
+
+		this.router.navigate('player/frame/'+ frame.id, {silent:true});
 
 		this.loadAhead();
 	},
@@ -652,9 +696,7 @@ var Player2 = Backbone.View.extend({
 		html =
 		
 		"<div id='zeega-player'>";
-		
-		//	"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
-		
+			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
 		
 		if(this.zeega) html +=
 			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
