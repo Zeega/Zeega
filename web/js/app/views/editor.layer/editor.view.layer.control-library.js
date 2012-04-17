@@ -800,6 +800,7 @@ console.log(center.lat() +':'+ center.lng() )
 		
 		onLayerEnter : function()
 		{
+			if( $(this.el).find( '.google-map' ).is(':visible') ) this.onControlsOpen();
 		},
 		
 		onLayerExit : function()

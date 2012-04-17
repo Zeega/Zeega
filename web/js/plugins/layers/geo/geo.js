@@ -142,9 +142,10 @@
 		onLayerEnter : function()
 		{
 			
-			console.log('geo layer enter')
 			if( !this.isLoaded )
 			{
+				console.log('geo layer enter')
+
 				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 
 				var mapOptions = {
@@ -212,6 +213,7 @@
 				
 			} , 1000);
 		},
+		
 		onLayerExit : function()
 		{
 			//this destroys the map every time the frame is changed. there is probably a better way to do this
