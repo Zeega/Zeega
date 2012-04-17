@@ -24,9 +24,10 @@
 
 		init : function()
 		{
+			console.log(this.get('attr'));
 			//load popcorn object
 			this.video = new Plyr2({
-				url : this.get('attr').attribution_url,
+				url : this.get('attr').attribution_uri,
 				uri : this.get('attr').uri,
 				id : this.id,
 				cue_in  : this.get('attr').cue_in,
@@ -166,6 +167,19 @@
 		
 		onPreload : function()
 		{
+			this.model.video.on('timeupdate', function(){ 
+				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
+				{
+					
+					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
+					_this.model.video.pop.pause();
+					_this.model.trigger('playback_ended');
+					console.log('playback ended');
+				}
+				
+			}, this )
+			
+			
 			var _this = this;
 			if( !this.model.loaded )
 			{
