@@ -623,9 +623,6 @@
 				console.log('event: '+ eventName);
 			});
 			*/
-			
-
-			
 		},
 		
 		onControlsOpen : function()
@@ -797,7 +794,6 @@
 		
 		onLayerEnter : function()
 		{
-			this.initMap();
 		},
 		
 		onLayerExit : function()
