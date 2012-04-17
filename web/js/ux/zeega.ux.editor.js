@@ -331,8 +331,8 @@ function closeOpenCitationTabs()
 
 	$('#advance-controls input').change(function(){
 		var attr = zeega.app.currentFrame.get('attr');
-		if(attr) attr.advance = parseInt($(this).val());
-		else attr = {'advance': parseInt($(this).val())}
+		if(attr) attr.advance = parseInt($(this).val()*1000);
+		else attr = {'advance': parseInt($(this).val()*1000)}
 		
 		zeega.app.currentFrame.set({'attr':attr});
 		zeega.app.currentFrame.save();

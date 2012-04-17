@@ -215,7 +215,7 @@ this.zeega = {
 			advanceControls.find('input[id="time"]').prop('checked', true );
 			advanceControls.find('input[id="manual"]').prop('checked', false );
 			advanceControls.find('input[id="playback"]').prop('checked', false );
-			$('#advance-time').val(adv);
+			$('#advance-time').val(adv/1000);
 		}
 		else if( adv == -1 )
 		{

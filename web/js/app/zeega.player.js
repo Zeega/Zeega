@@ -204,7 +204,8 @@ var Player2 = Backbone.View.extend({
 		}
 		else if(adv > 0) //after n seconds
 		{
-			this.t = setTimeout( function(){ _this.goRight() },adv*1000 )
+			adv = adv < 1 ? 1 : adv;
+			this.t = setTimeout( function(){ _this.goRight() },adv )
 		}
 	},
 	
@@ -697,6 +698,7 @@ var Player2 = Backbone.View.extend({
 		
 		"<div id='zeega-player'>";
 			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
+		
 		
 		if(this.zeega) html +=
 			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
