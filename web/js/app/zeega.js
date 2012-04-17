@@ -252,7 +252,8 @@ this.zeega = {
 			console.log(layers)
 			
 			var newFrame = new Frame.Model();
-			//newFrame.set({'layers' : layers},{'silent':true});
+			newFrame.set({'layers' : layers},{'silent':true});
+			console.log(newFrame)
 			
 			newFrame.save({},{
 				success : function()
@@ -262,7 +263,7 @@ this.zeega = {
 					
 					newFrame.trigger('refresh_view');
 					_this.currentSequence.trigger('updateFrameOrder');
-					
+					newFrame.trigger('updateThumb');
 					_this.currentSequence.frames.add( newFrame );
 					_this.loadFrame( newFrame );
 				}

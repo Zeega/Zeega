@@ -35,7 +35,7 @@
 			//this.on('focus', this.render, this );
 			//this.on('blur', this.unrender, this );
 
-			this.on('change:layers', this.updateThumb, this );
+			this.on('change:layers', this.onLayersUpdate, this );
 			this.on('updateThumb', this.updateThumb, this );
 			
 			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }});
@@ -55,6 +55,15 @@
 			this.frameTarget.append( this.view.remove() )
 		},
 		
+		onLayersUpdate : function()
+		{
+			if(!this.isNew())
+			{
+				this.save();
+				this.updateThumb();
+			}
+		},
+		
 		//update the frame thumbnail
 		updateThumb : function()
 		{
@@ -63,9 +72,7 @@
 			console.log('SAVE FRAME')
 			console.log(this)
 			var _this = this;
-			
-			this.save();
-			
+						
 			if( this.updating != true && zeega.app.thumbnailUpdates )
 			{
 				this.updating = true; //prevent more thumb requests while this is working
