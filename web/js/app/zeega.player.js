@@ -20,12 +20,6 @@ var Player2 = Backbone.View.extend({
 	
 	initialize : function( data, options )
 	{
-		if( _.isUndefined(zeega.app.router) )
-		{
-			this.zeega = false;
-			this.startRouter();
-		}
-		else this.router = zeega.app.router;
 		
 		this.render();
 		
@@ -46,7 +40,13 @@ var Player2 = Backbone.View.extend({
 		console.log(this.currentFrame)
 		console.log(this.currentLayers)
 		
-		this.goToFrame( this.currentFrame );
+		//this.goToFrame( this.currentFrame );
+		if( _.isUndefined(zeega.app.router) )
+		{
+			this.zeega = false;
+			this.startRouter();
+		}
+		else this.router = zeega.app.router;
 	},
 	
 	startRouter: function()
@@ -55,15 +55,20 @@ var Player2 = Backbone.View.extend({
 		var Router = Backbone.Router.extend({
 			
 			routes: {
-				
-				""						: 'goToFrame',
-				"editor/frame/:frameID"	: "goToFrame",
-				"player/frame/:frameID"	: "checkPlayer"
-				
+				"" : 'goToCurrentFrame',
+				"player/frame/:frameID"	: "goToFrame",
 			},
-			goToFrame : function( frameID ){  },
 			
-			checkPlayer : function( frameID ){  }
+			goToFrame : function( frameID )
+			{
+				console.log('	go to frame')
+				console.log( _this.currentSequence );
+				_this.goToFrame( _this.currentSequence.frames.get( frameID ) ) 
+			},
+			goToCurrentFrame : function()
+			{
+				_this.goToFrame( _this.currentFrame ) 
+			}
 			
 		});
 
