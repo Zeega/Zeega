@@ -1575,6 +1575,7 @@ default-layer-controls
 
 .grid-view li img
 {
+	background :#333;
 	height : 54px;
 	width : 54px;
 }
