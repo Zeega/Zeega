@@ -61,9 +61,9 @@
     
 			//this.circle = new L.CircleMarker(this.latlng, 100, this.circleOptions);
 			this.marker = new L.Marker(this.latlng,{draggable:true});
-			this.map.addLayer(that.marker);
 			this.marker.addEventListener( 'drag', that.updateLatLng, that );
 			this.marker.addEventListener( 'dragend', that.updateItem, that );
+			this.map.addLayer(this.marker);
 		},
 		updateMap:function(){
 			this.map.setView(this.latlng, 13);

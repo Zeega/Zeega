@@ -44,13 +44,14 @@
 		},		
 		
 		more : function(){
+			console.log('calling more');
 			var _this=this;
 			sessionStorage.setItem('moreFancy', true);
 			$(this.el).find('.less').hide();
 			$(this.el).find('.more').fadeIn('fast',function(){
-				if(_this.locatorMapView.geoLocated)_this.locatorMapView.addMap();
+				if(_this.locatorMapView.geoLocated&&$(this).attr('id')=='fancybox-map')_this.locatorMapView.addMap();
 			});
-
+			
 			$(this.el).find(".fancybox-shrinkable").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-media-wrapper").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-left-column").addClass("fancybox-left-column-more");
@@ -250,7 +251,7 @@
 							'<p class="fancybox-editable title"><%= title %></p>'+
 							'<p><span class=" creator fancybox-editable"><%= creator %></span> <span class="source"><a href="<%= sourceLink %>" target="_blank"><%= sourceText %></a></span></p>'+
 							'<p class="more subheader">Description</p><p class="more description fancybox-editable"><%= description %></p>'+
-							'<div class="more geo"></div>'+
+							'<div id = "fancybox-map" class="more geo"></div>'+
 
 						'</div>'+
 						'<div class="fancybox-buttons" class="clearfix">'+
