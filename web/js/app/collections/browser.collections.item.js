@@ -131,15 +131,11 @@
 				this.fetch({
 					success : function(response)
 					{
-<<<<<<< HEAD
-						//console.log('items count: '+ response.length ) // + works
-						_this.trigger('reset');
-=======
+
 						console.log('items count: '+ response.length ) // + works
 						if (_this.search.get("page") <= 0){
 							_this.trigger('reset');
 						}
->>>>>>> abf1b6577b1d7b39af82635b9371addc0639922c
 					}
 				});
 			}
@@ -155,14 +151,10 @@
 
 		parse : function(response)
 		{
-<<<<<<< HEAD
-			this.totalItemsCount = response.items_count;
-			return response.items;
-=======
+
 			this.returnedItemsCount = response.returned_items_and_collections_count;
 			this.totalItemsCount = response.items_and_collections_count;
 			return response.items_and_collections;
->>>>>>> abf1b6577b1d7b39af82635b9371addc0639922c
 		}
 
 
