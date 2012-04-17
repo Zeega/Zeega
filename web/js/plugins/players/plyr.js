@@ -136,7 +136,7 @@ var Plyr2 = Backbone.Model.extend({
 						}
 						else _this.trigger('video_canPlay');
 						
-						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 						
 					});
 					break;
@@ -145,7 +145,7 @@ var Plyr2 = Backbone.Model.extend({
 					this.pop.listen('loadeddata',function(){
 						_this.trigger('video_canPlay');
 						_this.pop.currentTime(_this.get('cue_in'));
-						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 					});
 					break;
 				case 'youtube':
@@ -155,8 +155,8 @@ var Plyr2 = Backbone.Model.extend({
 						
 						_this.pop.play();
 						_this.pop.pause();
-						
-						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						console.log( _this.get('control_mode'));
+						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 						_this.trigger('video_canPlay');
 					});
 					break;
@@ -166,7 +166,7 @@ var Plyr2 = Backbone.Model.extend({
 						
 						_this.trigger('video_canPlay');
 						_this.pop.currentTime(_this.get('cue_in'));
-						if( _this.get('control_mode') != 'none' ) _this.displayControls();
+						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 					});
 					break;
 				default:
@@ -177,8 +177,78 @@ var Plyr2 = Backbone.Model.extend({
 		}
 	},
 	
-	displayControls : function(){
-		console.log('display controls')
+	displayControls : function(el){
+		console.log('disping controls');
+		console.log(el);
+		el.append($('<div>').attr('id','plyr-standard')
+					.append($('<div>').addClass('plyr-controls-wrapper').addClass('plyr-controls-wrapper')
+					.append($('<div>').addClass('plyr-controls')
+					.append($('<div>').addClass('plyr-button-wrapper').append($('<div>').addClass('plyr-button').addClass('plyr-play')))
+					.append($('<div>').addClass('plyr-time'))
+					.append($('<div>').addClass('plyr-timeline').append($('<div>').addClass('plyr-scrubber'))))));
+		var _this=this;
+		
+		el.find('.plyr-button').click(function(){ _this.pop.volume(parseInt(_this.volume));if (_this.pop.paused()) _this.pop.play(); else _this.pop.pause();});
+		
+		
+		el.find('.plyr-scrubber').draggable({axis:'x',containment: 'parent',stop: function(event, ui) {
+				var newTime = Math.floor(parseFloat(el.find('.plyr-scrubber').css('left'))*_this.pop.duration()/parseFloat(el.find('.plyr-timeline').width()));
+				_this.pop.trigger('timeupdate');
+				_this.pop.currentTime(newTime);
+				//_this.pop.play();
+				
+			},
+			start:function(){
+				_this.pop.pause();
+			},
+			drag:function(event, ui){
+				var newTime = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(el.find('.plyr-timeline').width()));	
+				el.find('.plyr-time').html(convertTime(newTime)+' / '+convertTime(_this.pop.duration()));
+			}
+		});
+		
+		this.pop.listen('timeupdate',function(){
+
+
+			
+			if(_this.pop.currentTime()>_this.cueOut) {
+				_this.pop.pause();
+				_this.pop.currentTime(_this.cueIn);
+			}
+		
+			
+			var left = parseFloat(_this.pop.currentTime())/parseFloat(_this.pop.duration())*100;
+			el.find('.plyr-scrubber').css({'left':left+'%'});
+			el.find('.plyr-time').html(convertTime(_this.pop.currentTime())+' / '+convertTime(_this.pop.duration()));
+			el.find('.plyr-time-bar').css({'width':left+'%'});
+			
+			
+		});
+		this.pop.listen('pause',function(){
+			el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
+		
+		});
+		this.pop.listen('play',function(){
+			el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
+		});
+		this.pop.listen('seeking',function(){
+		
+			
+		
+		});
+		this.pop.listen('seeked',function(){
+			
+			
+			
+			
+		});
+		this.pop.listen('ended',function(){
+			
+			this.currentTime(0);
+		
+		});
+	
+	
 	},
 	
 	getVideoView : function(){
@@ -271,7 +341,7 @@ var Plyr = Class.extend({
 		if("volume" in args) this.volume  = args['volume'];
 		else this.volume  = 1;
 	
-/*		
+	
 		if(this.controls==1){
 			if(this.controlsType =='standard'){		
 				this.controlsWrapper.append($('<div>').attr('id','plyr-standard')
@@ -327,7 +397,7 @@ var Plyr = Class.extend({
 	
 			}
 		}
-*/		
+		
 		var _this=this;
 
 		if(this.url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/)) this.format = 'youtube'
@@ -419,7 +489,7 @@ var Plyr = Class.extend({
 		// move to  playback controls
 		
 		
-		/*
+
 			this.controlsWrapper.find('.plyr-scrubber').draggable({
 				axis:'x',
 				containment: 'parent',
@@ -473,9 +543,9 @@ var Plyr = Class.extend({
 			
 			}
 		});
-		*/
+	
 		}
-		/*
+	
 		this.controlsWrapper.find('#plyr-volume').slider({
 				min : 0,
 				max : 1,
@@ -490,7 +560,7 @@ var Plyr = Class.extend({
 					//$('#player-'+_this._id).trigger('updated');
 				}
 		});
-		*/
+	
 		
 		
 		//Add popcorn listeners
