@@ -51,6 +51,7 @@
 				if(_this.locatorMapView.geoLocated)_this.locatorMapView.addMap();
 			});
 
+			$(this.el).find(".fancybox-shrinkable").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-media-wrapper").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-left-column").addClass("fancybox-left-column-more");
 			$(this.el).find(".fancybox-media-item").addClass("fancybox-media-item-more");
