@@ -403,6 +403,7 @@ this.zeega = {
 		_.each( this.currentSequence.layers.visible, function(layerModel){
 			layerModel.visual.remove();
 			layerModel.controls.remove();
+			layerModel.trigger('editor_layerExit');
 		})
 		// clear out the visible array
 		this.currentSequence.layers.visible = [];
