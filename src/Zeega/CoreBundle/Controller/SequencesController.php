@@ -194,6 +194,7 @@ class SequencesController extends Controller
 			$frame->setSequence($sequence);
 			if($request->request->get('thumbnail_url'))$frame->setThumbnailUrl($request->request->get('thumbnail_url'));
 			if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
+			if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
             $frame->setEnabled(true);
 			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($frame);
