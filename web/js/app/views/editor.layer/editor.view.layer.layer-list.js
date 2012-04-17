@@ -106,6 +106,7 @@
 		
 		private_onLayerEnter : function()
 		{
+			console.log('	LAYER LIST enter')
 			this.drawDefaultControls();
 			this.delegateEvents();
 			this.onLayerEnter();
@@ -113,6 +114,7 @@
 		
 		private_onLayerExit : function()
 		{
+			console.log('	LAYER LIST EXIT')
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
 			//this.remove();

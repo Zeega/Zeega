@@ -304,7 +304,8 @@
 			property : 'backgroundColor',
 			color : '#ffffff',
 			save : true,
-			opacity: false
+			opacity: false,
+			opacityValue : 1,
 		},
 		
 		save : function()
@@ -325,7 +326,7 @@
 				var opacitySlider = new Layer.Views.Lib.Slider({
 					css : false,
 					property : this.settings.property +'Opacity',
-					value : this.settings[this.settings.property+'Opacity'] || 1,
+					value : this.settings[this.settings.property+'Opacity'] || this.settings.opacityValue,
 					model: this.model,
 					label : 'Opacity',
 					step : 0.01,
@@ -835,4 +836,3 @@
 	
 	
 })(zeega.module("layer"));
-
