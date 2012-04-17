@@ -96,6 +96,7 @@ var Plyr2 = Backbone.Model.extend({
 	{
 		//set video format type
 		this.set(options);
+		console.log(this);
 		this.set( 'format', this.getFormat(this.get('url')) );
 	},
 	
@@ -171,85 +172,20 @@ var Plyr2 = Backbone.Model.extend({
 					break;
 				default:
 					console.log('none set');
+				
 			}
+			this.pop.listen('timeupdate', function(){
+				_this.trigger('timeupdate');
+				_this.trigger('timeupdate_controls');
+			});
+			
+			
 			this.isVideoLoaded = true;
 			
 		}
 	},
 	
-	displayControls : function(el){
-		console.log('disping controls');
-		console.log(el);
-		el.append($('<div>').attr('id','plyr-standard')
-					.append($('<div>').addClass('plyr-controls-wrapper').addClass('plyr-controls-wrapper')
-					.append($('<div>').addClass('plyr-controls')
-					.append($('<div>').addClass('plyr-button-wrapper').append($('<div>').addClass('plyr-button').addClass('plyr-play')))
-					.append($('<div>').addClass('plyr-time'))
-					.append($('<div>').addClass('plyr-timeline').append($('<div>').addClass('plyr-scrubber'))))));
-		var _this=this;
-		
-		el.find('.plyr-button').click(function(){ _this.pop.volume(parseInt(_this.volume));if (_this.pop.paused()) _this.pop.play(); else _this.pop.pause();});
-		
-		
-		el.find('.plyr-scrubber').draggable({axis:'x',containment: 'parent',stop: function(event, ui) {
-				var newTime = Math.floor(parseFloat(el.find('.plyr-scrubber').css('left'))*_this.pop.duration()/parseFloat(el.find('.plyr-timeline').width()));
-				_this.pop.trigger('timeupdate');
-				_this.pop.currentTime(newTime);
-				//_this.pop.play();
-				
-			},
-			start:function(){
-				_this.pop.pause();
-			},
-			drag:function(event, ui){
-				var newTime = Math.floor(parseFloat(ui.position.left)*_this.pop.duration()/parseFloat(el.find('.plyr-timeline').width()));	
-				el.find('.plyr-time').html(convertTime(newTime)+' / '+convertTime(_this.pop.duration()));
-			}
-		});
-		
-		this.pop.listen('timeupdate',function(){
-
-
-			
-			if(_this.pop.currentTime()>_this.cueOut) {
-				_this.pop.pause();
-				_this.pop.currentTime(_this.cueIn);
-			}
-		
-			
-			var left = parseFloat(_this.pop.currentTime())/parseFloat(_this.pop.duration())*100;
-			el.find('.plyr-scrubber').css({'left':left+'%'});
-			el.find('.plyr-time').html(convertTime(_this.pop.currentTime())+' / '+convertTime(_this.pop.duration()));
-			el.find('.plyr-time-bar').css({'width':left+'%'});
-			
-			
-		});
-		this.pop.listen('pause',function(){
-			el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
-		
-		});
-		this.pop.listen('play',function(){
-			el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
-		});
-		this.pop.listen('seeking',function(){
-		
-			
-		
-		});
-		this.pop.listen('seeked',function(){
-			
-			
-			
-			
-		});
-		this.pop.listen('ended',function(){
-			
-			this.currentTime(0);
-		
-		});
-	
-	
-	},
+	displayControls : function(el){},
 	
 	getVideoView : function(){
 		
