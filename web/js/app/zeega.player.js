@@ -20,6 +20,13 @@ var Player2 = Backbone.View.extend({
 	
 	initialize : function( data, options )
 	{
+		if( _.isUndefined(zeega.app.router) )
+		{
+			this.zeega = false;
+			this.startRouter();
+		}
+		else this.router = zeega.app.router;
+		
 		this.render();
 		
 		this.generateBackbone();
@@ -42,6 +49,27 @@ var Player2 = Backbone.View.extend({
 		this.goToFrame( this.currentFrame );
 	},
 	
+	startRouter: function()
+	{
+		var _this = this;
+		var Router = Backbone.Router.extend({
+			
+			routes: {
+				
+				""						: 'goToFrame',
+				"editor/frame/:frameID"	: "goToFrame",
+				"player/frame/:frameID"	: "checkPlayer"
+				
+			},
+			goToFrame : function( frameID ){  },
+			
+			checkPlayer : function( frameID ){  }
+			
+		});
+
+		this.router = new Router();
+		Backbone.history.start();
+	},
 	
 	/*****************************
 	
@@ -108,6 +136,8 @@ var Player2 = Backbone.View.extend({
 		
 		if( frame.status == 'ready') this.renderFrame(frame.id )
 		else frame.on('ready', this.renderFrame, this );
+
+		this.router.navigate('player/frame/'+ frame.id, {silent:true});
 
 		this.loadAhead();
 	},
