@@ -52,7 +52,8 @@
 				color : this.model.get('attr').backgroundColor,
 				model: this.model,
 				label : 'Background Color',
-				opacity : true
+				opacity : true,
+				opacityValue : 0
 			});
 			
 			var color = new Layer.Views.Lib.ColorPicker({
@@ -105,7 +106,7 @@
 		{
 			var style = {
 				'color' : 'rgba('+ this.model.get('attr').color.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
-				'backgroundColor' : 'rgba('+ this.model.get('attr').backgroundColor.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 1) +')',
+				'backgroundColor' : 'rgba('+ this.model.get('attr').backgroundColor.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
 				'opacity' : this.model.get('attr').opacity,
 				'fontSize' : this.model.get('attr').fontSize +'%',
 				'padding' : this.model.get('attr').padding +'%',
