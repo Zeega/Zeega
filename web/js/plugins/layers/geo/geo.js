@@ -104,7 +104,8 @@
 		init : function()
 		{
 			console.log('	GEO INIT')
-			this.model.on('change', this.updateVisual, this)
+			var _this = this;
+			this.model.on('update', this.updateVisual, this)
 		},
 		
 		render : function()
