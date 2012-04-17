@@ -82,7 +82,7 @@
 	
 	Layer.Views.Lib.ContinueOnAllFrames = Layer.Views.Lib.extend({
 
-		className : 'control continue-to-next',
+		className : 'control continue-to-all',
 		
 		defaults : {active:false},
 		

@@ -1397,12 +1397,12 @@ body
 
 .layer-control { margin:12px 0 }
 
-.controls
+.control
 {
 	padding: 6px 0;
 }
 
-default-layer-controls
+default-layer-control
 {
 	padding-top: 12px;
 }
