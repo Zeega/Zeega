@@ -87,8 +87,8 @@
 			var clearButton = new Layer.Views.Lib.ClearStyles({ model : this.model });
 			
 			this.controls
-				.append( bgcolor.getControl() )
 				.append( color.getControl() )
+				.append( bgcolor.getControl() )
 				.append( sizeSlider.getControl() )
 				.append( paddingSlider.getControl() )
 				.append( clearButton.getControl() );
