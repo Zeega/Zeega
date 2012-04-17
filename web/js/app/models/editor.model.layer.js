@@ -65,8 +65,9 @@
 		
 		onControlsClosed : function(){},
 		
-		renderLayerInEditor : function()
+		renderLayerInEditor : function( i )
 		{
+			this.visual.render().$el.css('zIndex',i+1);
 			if(this.isNew()) 
 			{
 				this.visual.render().$el.css('zIndex',1000);

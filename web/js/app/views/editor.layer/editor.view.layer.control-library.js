@@ -231,7 +231,7 @@
 			this.$el.find('.control-slider').slider({
 				min : this.settings.min,
 				max : this.settings.max,
-				value : this.model.get('attr')[this.settings.property] || this.settings.value,
+				value : ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value,
 				step : this.settings.step,
 				slide : function(e, ui)
 				{

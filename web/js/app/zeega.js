@@ -151,11 +151,11 @@ this.zeega = {
 			console.log( frame.get('layers'))
 			var _this = this;
 			console.log(_this.currentSequence.layers)
-			_.each( _.compact( frame.get('layers') ), function(layerID){
+			_.each( _.compact( frame.get('layers') ), function(layerID, i){
 				
 				var layerModel = _this.currentSequence.layers.get(layerID);
 				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else layerModel.trigger('editor_layerRender')
+				else layerModel.trigger('editor_layerRender', i)
 			})
 		}
 	},
