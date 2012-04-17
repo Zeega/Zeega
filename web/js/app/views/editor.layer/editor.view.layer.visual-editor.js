@@ -179,8 +179,8 @@
 			if(this.attr.link)
 			{
 				var _this = this;
-				setTimeout( function(){ $(_this.el).addClass('link-blink') }, 500 );
-				setTimeout( function(){ $(_this.el).removeClass('link-blink') }, 3000 );
+				setTimeout( function(){ $(_this.el).addClass('link-blink') }, 250 );
+				setTimeout( function(){ $(_this.el).removeClass('link-blink') }, 2000 );
 			}
 		},
 		
