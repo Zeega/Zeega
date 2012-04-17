@@ -174,6 +174,8 @@
 			if(z) this.updateZIndex( z )
 			this.onPlay();
 			this.model.inFocus = true;
+			
+			//make the linked layers blink on entrance
 			if(this.attr.link)
 			{
 				var _this = this;
