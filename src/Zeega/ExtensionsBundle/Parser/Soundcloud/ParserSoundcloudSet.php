@@ -22,12 +22,6 @@ class ParserSoundcloudSet extends ParserAbstract
 		
 		$item = new Item();
 		
-		if(!$itemJson["streamable"])
-		{
-			return $this->returnResponse($item, false,"This track is not embeddable and cannot be added to Zeega.");
-		}
-		
-
 		$item->setTitle($itemJson['permalink']);
 		$item->setDescription($itemJson['description']);
 		$item->setMediaCreatorUsername($itemJson['user']['username']);
