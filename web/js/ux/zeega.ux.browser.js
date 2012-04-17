@@ -296,16 +296,10 @@ $(document).ready(function() {
 								zeegaBrowser.app.draggedItem = null;
 					
 								//Update newGuy
-<<<<<<< HEAD
-								model.set({id:response.collections.id});
-								model.set({thumbnail_url:response.collections.thumbnail_url});
-								model.set({child_items_count:response.collections.child_items_count});
-								//console.log(zeegaBrowser.app.myCollections);
-=======
+
 								model.set({id:response.items[0].id});
 								model.set({thumbnail_url:response.items[0].thumbnail_url});
 								model.set({child_items_count:response.items[0].child_items_count});
->>>>>>> abf1b6577b1d7b39af82635b9371addc0639922c
 								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)

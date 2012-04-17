@@ -119,6 +119,9 @@ this.zeega = {
 	{
 		var _this = this;
 		this.unrenderFrame( this.currentFrame );
+		
+		this.cleanWorkspace();
+		
 		if(this.currentFrame) this.currentFrame.trigger('blur');
 		this.currentFrame = frame;
 
@@ -147,6 +150,7 @@ this.zeega = {
 			console.log('render frame id: '+ frame.id)
 			console.log( frame.get('layers'))
 			var _this = this;
+			console.log(_this.currentSequence.layers)
 			_.each( _.compact( frame.get('layers') ), function(layerID){
 				
 				var layerModel = _this.currentSequence.layers.get(layerID);
@@ -158,6 +162,7 @@ this.zeega = {
 	
 	unrenderFrame : function ( frame )
 	{
+		console.log('	unrender frame')
 		if(frame)
 		{
 			var _this = this;
@@ -394,10 +399,14 @@ this.zeega = {
 	
 	cleanWorkspace : function()
 	{
-		var _this = this;
-		_.each( _.compact(this.currentFrame.get('layers')), function( layerID ){
-			_this.currentSequence.layers.get(layerID).trigger('editor_layerExit');
+		// remove all visible layers
+		_.each( this.currentSequence.layers.visible, function(layerModel){
+			layerModel.visual.remove();
+			layerModel.controls.remove();
+			layerModel.trigger('editor_layerExit');
 		})
+		// clear out the visible array
+		this.currentSequence.layers.visible = [];
 	},
 
 	previewSequence : function()

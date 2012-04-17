@@ -41,6 +41,7 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/projects, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/collections, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }

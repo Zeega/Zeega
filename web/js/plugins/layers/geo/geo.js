@@ -110,7 +110,7 @@
 		render : function()
 		{
 			
-			var map = $('<div id="gmap-'+ this.model.id +'">')
+			var map = $('<div class="gmap-container">')
 				.css({
 					'width':'100%',
 					'height':'100%'
@@ -171,7 +171,7 @@
 					
 				};
 				
-				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
+				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('.gmap-container')[0], mapOptions);
 
 				
 				this.isLoaded = true;
@@ -182,7 +182,7 @@
 		{
 			//this destroys the map every time the frame is changed. there is probably a better way to do this
 			this.map = {};
-			$(this.el).find('#gmap-'+this.model.id).remove();
+			$(this.el).find('.gmap-container').hide();
 			this.isLoaded = false;
 		},
 		
@@ -217,7 +217,9 @@
 					
 				};
 				
-				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('#gmap-'+this.model.id)[0], mapOptions);
+				//console.log($(this.el).find($(this.el).find('.gmap-container')[0]);
+				this.streetview = {}
+				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('.gmap-container')[0], mapOptions);
 				
 				this.isLoaded = true;
 			}
