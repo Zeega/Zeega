@@ -15,5 +15,5 @@ Zeega\DataBundle\Entity\UsersSites:
         site:
             associationKey: true
     fields:
-        user_type:
+        user_role:
             type: string

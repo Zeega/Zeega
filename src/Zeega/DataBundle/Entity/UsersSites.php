@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class UsersSites
 {
     /**
-     * @var string $user_type
+     * @var string $user_role
      */
-    private $user_type;
+    private $user_role;
 
     /**
      * @var Zeega\DataBundle\Entity\User
@@ -26,23 +26,23 @@ class UsersSites
 
 
     /**
-     * Set user_type
+     * Set user_role
      *
-     * @param string $userType
+     * @param string $userRole
      */
-    public function setUserType($userType)
+    public function setUserRole($userRole)
     {
-        $this->user_type = $userType;
+        $this->user_role = $userRole;
     }
 
     /**
-     * Get user_type
+     * Get user_role
      *
      * @return string 
      */
-    public function getUserType()
+    public function getUserRole()
     {
-        return $this->user_type;
+        return $this->user_role;
     }
 
     /**

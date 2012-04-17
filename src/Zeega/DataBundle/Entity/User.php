@@ -153,4 +153,29 @@ class User extends BaseUser
     {
         return $this->sites;
     }
+    /**
+     * @var datetime $user_type
+     */
+    private $user_type;
+
+
+    /**
+     * Set user_type
+     *
+     * @param datetime $userType
+     */
+    public function setUserType($userType)
+    {
+        $this->user_type = $userType;
+    }
+
+    /**
+     * Get user_type
+     *
+     * @return datetime 
+     */
+    public function getUserType()
+    {
+        return $this->user_type;
+    }
 }

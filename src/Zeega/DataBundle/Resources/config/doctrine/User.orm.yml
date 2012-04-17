@@ -25,3 +25,10 @@ Zeega\DataBundle\Entity\User:
         created_at:
             type: datetime
             nullable: true
+        user_type:
+            type: string
+            length: 50
+            nullable: true
+    indexes:
+        user_type_index:
+            columns: [user_type]      

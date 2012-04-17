@@ -3,21 +3,22 @@
 namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * Zeega\DataBundle\Entity\User
  */
-class User
+class User extends BaseUser
 {
     /**
      * @var integer $id
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $display_name
      */
-    private $display_name;
+    protected $display_name;
 
     /**
      * @var text $bio
@@ -31,12 +32,12 @@ class User
     /**
      * @var datetime $created_at
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @var Zeega\DataBundle\Entity\UsersSites
      */
-    private $sites;
+    protected $sites;
 
     public function __construct()
     {
@@ -151,5 +152,30 @@ class User
     public function getSites()
     {
         return $this->sites;
+    }
+    /**
+     * @var datetime $user_type
+     */
+    private $user_type;
+
+
+    /**
+     * Set user_type
+     *
+     * @param datetime $userType
+     */
+    public function setUserType($userType)
+    {
+        $this->user_type = $userType;
+    }
+
+    /**
+     * Get user_type
+     *
+     * @return datetime 
+     */
+    public function getUserType()
+    {
+        return $this->user_type;
     }
 }
