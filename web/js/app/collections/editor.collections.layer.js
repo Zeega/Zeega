@@ -36,19 +36,13 @@
 			{
 				//media item layer
 				console.log( args.item.get('layer_type'))
+	
 				
 				var newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
-					attr: {
-						'item_id' : args.item.id,
-						'title' : args.item.get('title'),
-						'url' : args.item.get('uri'),
-						'uri' : args.item.get('uri'),
-						'thumbnail_url' : args.item.get('thumbnail_url'),
-						'attribution_url' : args.item.get('attribution_uri'),
-						'citation':true,
-					}
+					attr: args.item.attributes
 				});
+			
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);

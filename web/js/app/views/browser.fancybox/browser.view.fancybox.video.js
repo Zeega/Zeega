@@ -20,7 +20,7 @@
 		
 		
 		this.unique =Math.floor(Math.random() *10000)
-		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}));
+		$(this.el).find('.fancybox-media-item').append($('<div>').attr({id:'fancybox-video-'+this.unique}).addClass('fancybox-shrinkable'));
 		
 
 		//set fancybox content
@@ -37,6 +37,7 @@
 				case 'Video':
 					var source = this.model.get('uri');
 					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,controls:1});
+					break;
 				case 'Youtube':
 					var source = "http://www.youtube.com/watch?v="+this.model.get('uri');
 					this.plyr = new Plyr('fancybox-video-'+this.unique,{url:source,controls:1});

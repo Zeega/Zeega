@@ -127,6 +127,7 @@ class ItemsController extends Controller
 		$firstSite = $sites[0]->getSite();
 		
 		$item->setSite($firstSite);		
+
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));
@@ -137,7 +138,10 @@ class ItemsController extends Controller
         $item->setUri($this->getRequest()->request->get('uri'));
         $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
 		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+		$item->setMediaGeoLatitude($this->getRequest()->request->get('media_geo_latitude'));
+		$item->setMediaGeoLongitude($this->getRequest()->request->get('media_geo_longitude'));
 		$item->setTags($this->getRequest()->request->get('tags'));
+		$item->setAttributes($this->getRequest()->request->get('attributes'));
         $item->setEnabled(true);
         $item->setPublished(true);
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));

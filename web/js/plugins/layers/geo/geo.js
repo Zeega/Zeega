@@ -104,7 +104,8 @@
 		init : function()
 		{
 			console.log('	GEO INIT')
-			this.model.on('change', this.updateVisual, this)
+			var _this = this;
+			this.model.on('update', this.updateVisual, this)
 		},
 		
 		render : function()
@@ -172,12 +173,45 @@
 				};
 				
 				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('.gmap-container')[0], mapOptions);
-
+				
+				this.initMapListeners();
 				
 				this.isLoaded = true;
 			}
 		},
 		
+		initMapListeners : function()
+		{
+			var _this = this;
+			
+			google.maps.event.addListener( this.streetview, 'position_changed', function(){
+				delayedUpdate();
+			});
+
+			google.maps.event.addListener( this.streetview, 'pov_changed', function(){
+				delayedUpdate();
+			});
+
+			// need this so we don't spam the servers
+			var delayedUpdate = _.debounce( function(){
+				
+				var a = _this.model.get('attr');
+				
+				if( a.heading != _this.streetview.getPov().heading || a.pitch !=  _this.streetview.getPov().pitch || a.streetZoom != _this.streetview.getPov().zoom || Math.floor(a.lat*1000) != Math.floor(_this.streetview.getPosition().lat()*1000) || Math.floor(a.lng*1000) != Math.floor(_this.streetview.getPosition().lng()*1000)  )
+				{
+					_this.model.update({
+						heading : _this.streetview.getPov().heading,
+						pitch : _this.streetview.getPov().pitch,
+						streetZoom : Math.floor( _this.streetview.getPov().zoom ),
+						lat : _this.streetview.getPosition().lat(),
+						lng : _this.streetview.getPosition().lng()
+					
+					})
+				}
+				
+				
+			} , 1000);
+		},
 		onLayerExit : function()
 		{
 			//this destroys the map every time the frame is changed. there is probably a better way to do this

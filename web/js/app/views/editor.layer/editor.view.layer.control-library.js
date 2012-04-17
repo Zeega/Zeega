@@ -623,9 +623,6 @@
 				console.log('event: '+ eventName);
 			});
 			*/
-			
-
-			
 		},
 		
 		onControlsOpen : function()
@@ -723,6 +720,7 @@
 					lat : newCenter.lat(),
 					lng : newCenter.lng()
 				})
+				_this.model.trigger('update');
 			});
 
 			google.maps.event.addListener(this.map, 'maptypeid_changed', function(){
@@ -741,12 +739,16 @@
 				if( _this.map.getStreetView().getVisible() )
 				{
 					var center = _this.map.getStreetView().getPosition();
+console.log(center.lat() +':'+ center.lng() )
 
 					//when streetview is visible
 					_this.model.update({
 						type : 'streetview',
 						lat : center.lat(),
-						lng : center.lng()
+						lng : center.lng(),
+						heading : _this.map.getStreetView().getPov().heading,
+						pitch : _this.map.getStreetView().getPov().pitch,
+						streetZoom : Math.floor( _this.map.getStreetView().getPov().zoom )
 					});
 				}
 				else
@@ -754,11 +756,12 @@
 					//when streetview is hidden
 					_this.model.update({ type: 'map' })
 				}
+				
+				//_this.model.trigger('update');
 			});
 			
 			//called when the streetview is panned
 			google.maps.event.addListener( _this.map.getStreetView(), 'pov_changed', function(){
-				
 				delayedUpdate();
 			});
 
@@ -797,7 +800,6 @@
 		
 		onLayerEnter : function()
 		{
-			this.initMap();
 		},
 		
 		onLayerExit : function()

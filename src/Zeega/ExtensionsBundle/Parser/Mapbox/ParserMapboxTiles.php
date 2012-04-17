@@ -36,7 +36,10 @@ class ParserMapBoxTiles extends ParserAbstract
 		
 		$item->setMediaGeoLatitude((string)$center[0]);
 		$item->setMediaGeoLongitude((string)$center[1]);
-	
+		$item->setAttributes(array('zoom'=>(string)$center[1]));
+		
+		
+		
 		$item->setMediaCreatorUsername((string)$info[0]);
 		$item->setMediaCreatorRealname('Unknown');
 
