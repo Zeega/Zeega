@@ -414,9 +414,14 @@ ul,li
 	border:none;
 	
 }
+.modal-header{
+	border-bottom:0;
+}
 .modal-header h3{
 	padding-top:5px;
 	height:44px;
+	font-size:1.6em;
+
 }
 .modal-header .close{
 	opacity:1.0;
@@ -878,7 +883,7 @@ a.white:hover
 .zicon-settings{background-position:-291px -312px}
 .zicon-link{background-position:-32px 0}
 .zicon-gear{background-position:-259px -312px}
-.zicon-searchdropdown{background-image:url('../images/zicons-darkgrey-18.png');background-position: -259px -369px;width: 27px;}
+.zicon-searchdropdown{background-image:url('../images/zicons-darkgrey-18.png');background-position: -127px -72px;width: 18px;}
 .zicon-vert-drag{background-position:-65px -1px}
 
 
@@ -918,7 +923,36 @@ a.white:hover
 	width: 30px;
 }
 
+.socialmedia-icon
+{
+	
+	overflow:hidden;
+	height:33px;
+	width:33px;
+	background-image:url('../images/socialmediaicons.png');
+	background-repeat: no-repeat;
+	
+}
+[class^="socialmedia-icon-"]
+{
+	display: inline-block;
+	width: 33px;
+	height: 33px;
+	vertical-align: text-top;
+	background-image:url('../images/socialmediaicons.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	margin-top:5px;
+}
 
+.socialmedia-icon-facebook{background-position:-81px -56px}
+.socialmedia-icon-facebook:hover{background-position:-81px -16px}
+.socialmedia-icon-twitter{background-position:-122px -56px}
+.socialmedia-icon-twitter:hover{background-position:-122px -16px}
+.socialmedia-icon-tumblr{background-position:-311px -56px}
+.socialmedia-icon-tumblr:hover{background-position:-311px -16px}
+.socialmedia-icon-googleplus{background-position:-274px -134px}
+.socialmedia-icon-googleplus:hover{background-position:-274px -96px}
 
 
 /*********************************************
@@ -2854,6 +2888,66 @@ color: white;
 background-color: red;
 
 }
+#publish-project-modal{
+	font-size:1.1em;
+
+}
+#publish-project-modal .modal-header h3{
+	height:auto;
+}
+
+#publish-project-modal p{
+	font-size:0.8em;
+	line-height:20px;
+}
+#publish-project-modal label{
+	color: #555;
+	font-size: 1.2em;
+	font-weight: lighter;
+	clear:both;
+	margin-top:10px;
+	margin-right:10px;
+}
+#publish-project-modal input{
+	width:90%;
+}
+#publish-project-modal textarea{
+	width:45%;
+	float:left;
+}
+#publish-project-modal input, #publish-project-modal textarea{
+	margin-bottom:10px;
+	margin-right:10px;
+	font-size: 0.8em;
+	color: #666;
+}
+.publish-preview{
+	height:150px;
+	border:1px solid #ccc;
+	width:100%;
+}
+.publish-left-column{
+	float:left;
+	width:47%;
+	
+}
+.publish-right-column{
+	width:50%;
+	float:left;
+	padding-left:15px;
+	border-left:1px solid #ccc;
+	margin-bottom:10px;
+}
+.publish-footer{
+	clear:both;
+	margin-top:10px;
+}
+#preview-images img{
+	width:50px;
+	height:50px;
+	border:1px solid #ccc;
+
+}
 
 #shareProject {
 
@@ -2891,6 +2985,15 @@ text-decoration: none;
 color: white;
 background-color: red;
 
+}
+.modal-header .btn {
+float: right;
+margin-left: 5px;
+margin-bottom: 0;
+}
+
+#browser-item-count{
+	color:white;
 }
 
 .clear {

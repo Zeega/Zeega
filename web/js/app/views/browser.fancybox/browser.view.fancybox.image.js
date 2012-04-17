@@ -17,7 +17,7 @@
 			//Call parent class to do captioning and metadata
 			Fancybox.Views._Fancybox.prototype.render.call(this, obj); //This is like calling super()
 
-			//console.log(this.model);
+
 			//Fill in image-specific stuff
 			var blanks = {
 				src : this.model.get('uri'),

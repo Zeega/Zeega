@@ -57,28 +57,28 @@ class ParserSoundcloudSet extends ParserAbstract
 		
 		if($loadCollectionItems)
 		{
-    		foreach ($itemJson["tracks"] as $itemJson) 
+    		foreach ($itemJson["tracks"] as $childItemJson) 
     		{
-    			if($itemJson["streamable"])
+    			if($childItemJson["streamable"])
     			{
     				$childItem = new Item();
 
-    				$childItem->setTitle($itemJson['permalink']);
-    				$childItem->setDescription($itemJson['description']);
-    				$childItem->setMediaCreatorUsername($itemJson['user']['username']);
-    				$childItem->setMediaCreatorRealname($itemJson['user']['username']);
+    				$childItem->setTitle($childItemJson['permalink']);
+    				$childItem->setDescription($childItemJson['description']);
+    				$childItem->setMediaCreatorUsername($childItemJson['user']['username']);
+    				$childItem->setMediaCreatorRealname($childItemJson['user']['username']);
     				$childItem->setMediaType('Audio');
     				$childItem->setLayerType('Audio');
     				$childItem->setArchive('SoundCloud');
-    				$childItem->setUri($itemJson['stream_url']);
-    				$childItem->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
-    				$childItem->setAttributionUri($itemJson['permalink_url']);
+    				$childItem->setUri($childItemJson['stream_url']);
+    				$childItem->setUri($childItem->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
+    				$childItem->setAttributionUri($childItemJson['permalink_url']);
     				$childItem->setDateCreated(new DateTime((string)$itemJson['created_at']));
-    				$childItem->setThumbnailUrl($itemJson['waveform_url']);
+    				$childItem->setThumbnailUrl($childItemJson['waveform_url']);
     				$childItem->setChildItemsCount(0);
-    				$childItem->setLicense($itemJson['license']);
+    				$childItem->setLicense($childItemJson['license']);
 			        
-			        $tags = $itemJson["tag_list"];
+			        $tags = $childItemJson["tag_list"];
             		
             		if(isset($tags)) 
             		{

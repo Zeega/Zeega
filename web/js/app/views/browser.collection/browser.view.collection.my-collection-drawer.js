@@ -112,6 +112,8 @@
 				zeegaBrowser.app.clickedCollectionTitle = modelTitle;
 				zeegaBrowser.app.clickedCollectionID = modelID;
 				zeegaBrowser.app.doCollectionSearch(modelID);
+				zeegaBrowser.app.showCollectionFilter();
+
 
 			});
 
@@ -183,9 +185,13 @@
 									$(theElement).find('img').attr("src", oldThumbnail).hide().fadeIn('slow');
 								
 									//Alert user they added an item that's already in the collection
-									if (oldCount == response.collections.child_items_count)
-										$(theElement).find('.duplicate-item').show().fadeOut(3000);
-									model.set({'child_items_count':response.collections.child_items_count});
+									if (oldCount == response.items[0].child_items_count)
+										$(theElement).find('.duplicate-item').show().fadeOut(3000, function() {
+										    	$(thisView.el).find('.browser-item-count').text(model.get('child_items_count') + " items");
+										  });
+
+									model.set({'child_items_count':response.items[0].child_items_count});
+									//
 									zeegaBrowser.app.draggedItem = null;
 
 								},

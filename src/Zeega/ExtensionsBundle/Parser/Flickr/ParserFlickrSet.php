@@ -62,7 +62,7 @@ class ParserFlickrSet extends ParserAbstract
 		
 		if($loadCollectionItems == true)
 		{
-		 	$setPhotos = $f->photosets_getPhotos($setId);
+		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,100);
 		 	$photos = $setPhotos['photoset']['photo'];
 
     		if($photos)

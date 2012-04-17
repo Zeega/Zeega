@@ -622,6 +622,9 @@
 				console.log('event: '+ eventName);
 			});
 			*/
+			
+
+			
 		},
 		
 		onControlsOpen : function()

@@ -1,10 +1,10 @@
 [symfony]
     git=http://github.com/symfony/symfony.git
-    version=v2.0.10
+    version=v2.0.12
 
 [twig]
     git=http://github.com/fabpot/Twig.git
-    version=v1.6.0
+    version=v1.6.2
 
 [monolog]
     git=http://github.com/Seldaek/monolog.git
@@ -28,7 +28,7 @@
 
 [assetic]
     git=http://github.com/kriswallsmith/assetic.git
-    version=v1.0.2
+    version=v1.0.3
 
 [twig-extensions]
     git=http://github.com/fabpot/Twig-extensions.git
@@ -36,13 +36,6 @@
 [metadata]
     git=http://github.com/schmittjoh/metadata.git
     version=1.0.0
-
-[doctrine-fixtures]
-    git=http://github.com/doctrine/data-fixtures.git
-
-[DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
-    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
 
 [SensioFrameworkExtraBundle]
     git=http://github.com/sensio/SensioFrameworkExtraBundle.git
@@ -68,6 +61,7 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
+
 
 [FOSRestBundle]
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git

@@ -1,34 +1,37 @@
 {
 	"project":
 	 {
-		"id" : "{{ project.getId() }}",
-		"title" : "{{ project.getTitle() }}",
-		"attr" : "{{ project.getAttr() }}",
+		"id" : {{ project.getId() }},
+		"title" : {{ project.getTitle() | default("") | json_encode | raw}},
+		"attr" : {{ project.getAttr() | default({ }) | json_encode | raw}},
+		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
+		"enabled" : {{ project.getTags() | default("") | json_encode | raw}},
+		"description" : {{ project.getDescription() | default("") | json_encode | raw}},
 		"sequences" : [
-			{% set len = sequences|length - 1 -%}
-
-			{% for i in 0..len %}	
-			{
-				"id" : "{{ sequences[i].id }}",
-				"title" : "{{ sequences[i].title }}",
-				"attr" :
-					{% if sequences[i].attr is not empty %}
-						{{sequences[i].attr | json_encode | raw}}
-					{% else %}	
-						{}					
-					{% endif %},
-				"frames" : {{frames[sequences[i].id] | json_encode | raw}},
-				{% set layers_len = layers[sequences[i].id]|length - 1 -%}
-				"layers" : 
-					{{layers[sequences[i].id] | json_encode | raw}}
-			}
-			{% if i < len %}
-				,
-			{% endif %}
+			{% if sequences is defined and sequences is not empty %}
+				{% set len = sequences|length - 1 -%}
+	
+				{% for i in 0..len %}	
+				{
+					"id" : "{{ sequences[i].id }}",
+					"title" : "{{ sequences[i].title }}",
+					"attr" :
+						{% if sequences[i].attr is not empty %}
+							{{sequences[i].attr | json_encode | raw}}
+						{% else %}	
+							{}					
+						{% endif %},
+					"frames" : {{frames[sequences[i].id] | json_encode | raw}},
+					{% set layers_len = layers[sequences[i].id]|length - 1 -%}
+					"layers" : 
+						{{layers[sequences[i].id] | json_encode | raw}}
+				}
+				{% if i < len %}
+					,
+				{% endif %}
 			
 			
-			{% endfor %}
-		]
-		
+				{% endfor %}
+			{% endif %}		]		
 	 }
 }

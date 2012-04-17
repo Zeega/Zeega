@@ -106,37 +106,46 @@ $(document).ready(function() {
 			this.fancyView = null;
 
 			var Fancybox = zeegaBrowser.module('fancybox');
-			//console.log(thisModel);
-			switch( thisModel.get("layer_type") )
+
+			console.log(thisModel);
+			if (thisModel.get("archive") == 'SoundCloud')
 			{
-				case 'Image':
-					this.fancyView = new Fancybox.Views.Image({ model : thisModel });
-					this.fancyView.render(this);
-					break;
-				case 'Video':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Audio':
-					this.fancyView = new Fancybox.Views.Audio({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Youtube':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Vimeo':
-					this.fancyView =  new Fancybox.Views.Video({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				case 'Mapbox':
-					this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
-					this.fancyView.render(this);
-					break;
-				default:
-					this.fancyView =new Fancybox.Views.Default({model:thisModel});
-					this.fancyView.render(this);
-					break;
+				this.fancyView = new Fancybox.Views.SoundCloud({ model : thisModel });
+				this.fancyView.render(this);
+			} 
+			else
+			{
+				switch( thisModel.get("layer_type") )
+				{
+					case 'Image':
+						this.fancyView = new Fancybox.Views.Image({ model : thisModel });
+						this.fancyView.render(this);
+						break;
+					case 'Video':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Audio':
+						this.fancyView = new Fancybox.Views.Audio({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Youtube':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Vimeo':
+						this.fancyView =  new Fancybox.Views.Video({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					case 'Mapbox':
+						this.fancyView =  new Fancybox.Views.Mapbox({model:thisModel});
+						this.fancyView.render(this);
+						break;
+					default:
+						this.fancyView =new Fancybox.Views.Default({model:thisModel});
+						this.fancyView.render(this);
+						break;
+				}
 			}
         },
         
@@ -242,9 +251,6 @@ $(document).ready(function() {
 		//Clear any collection filter on page
 		zeegaBrowser.app.removeCollectionFilter();
 
-		//reset page count
-		zeegaBrowser.app.resetPageCount();
-
 		zeegaBrowser.app.doSearch();
 	});
 	
@@ -290,10 +296,10 @@ $(document).ready(function() {
 								zeegaBrowser.app.draggedItem = null;
 					
 								//Update newGuy
-								model.set({id:response.collections.id});
-								model.set({thumbnail_url:response.collections.thumbnail_url});
-								model.set({child_items_count:response.collections.child_items_count});
-								//console.log(zeegaBrowser.app.myCollections);
+
+								model.set({id:response.items[0].id});
+								model.set({thumbnail_url:response.items[0].thumbnail_url});
+								model.set({child_items_count:response.items[0].child_items_count});
 								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)
@@ -331,7 +337,30 @@ $(document).ready(function() {
 	 	return false;
 	 });
 	 
-	 
+	//Infinite Scroll
+	  zeegaBrowser.app.killScroll = false; 
+	  $('#browser-results-items').scroll(function(){
+
+	  	var totalHeight = $('#browser-results-items')[0].scrollHeight;
+	  	var viewportHeight = $('#browser-results-items').height();
+	  	var proximityToBottom = 100;
+	  	var scrollTop = $('#browser-results-items').scrollTop();
+
+	  	var left = scrollTop + 2 * viewportHeight;
+	    //don't excecute if the app is loading, if it's too far down, or if the viewing the map event view
+	    if  ( left >= totalHeight )
+	    { 
+	    	if(zeegaBrowser.app.items.collection.length < zeegaBrowser.app.items.collection.totalItemsCount) //make sure there are more items to, indeed, get
+	    	{
+		      if (zeegaBrowser.app.killScroll == false) // Keeps the loader from fetching more than once.
+		      {
+		        zeegaBrowser.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
+		        zeegaBrowser.app.items.collection.search.set( {"page": zeegaBrowser.app.items.collection.search.get("page") + 1 }); //set page +1 
+		        zeegaBrowser.app.doSearch(true);
+		      }
+	      }
+	    }
+	  });
 	 
 	 
 	

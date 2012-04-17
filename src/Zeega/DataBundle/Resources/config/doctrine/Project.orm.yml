@@ -35,6 +35,9 @@ Zeega\DataBundle\Entity\Project:
         attr:
             type: array
             nullable: true
+        tags:
+            type: array
+            nullable: true        
         enabled:
             type: boolean
             nullable: false

@@ -75,6 +75,7 @@ var loadFiles = [
 	'order!app/views/browser.fancybox/browser.view.fancybox.image',
 	'order!app/views/browser.fancybox/browser.view.fancybox.default',
 	'order!app/views/browser.fancybox/browser.view.fancybox.tweet',
+	'order!app/views/browser.fancybox/browser.view.fancybox.soundcloud',
 	'order!app/views/browser.fancybox/browser.view.fancybox.video',
 		'order!app/views/browser.fancybox/browser.view.fancybox.mapbox',
 	'order!app/views/browser.fancybox/browser.view.fancybox.youtube',
