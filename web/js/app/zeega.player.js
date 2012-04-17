@@ -696,13 +696,7 @@ var Player2 = Backbone.View.extend({
 		html =
 		
 		"<div id='zeega-player'>";
-<<<<<<< HEAD
 			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
-=======
-		
-		//	"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
->>>>>>> 77e4d29a36fe32d2adeb8f767481cbc18aa45b7d
-		
 		
 		if(this.zeega) html +=
 			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
