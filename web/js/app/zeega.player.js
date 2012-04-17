@@ -61,8 +61,6 @@ var Player2 = Backbone.View.extend({
 			
 			goToFrame : function( frameID )
 			{
-				console.log('	go to frame')
-				console.log( _this.currentSequence );
 				_this.goToFrame( _this.currentSequence.frames.get( frameID ) ) 
 			},
 			goToCurrentFrame : function()
