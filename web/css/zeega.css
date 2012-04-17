@@ -80,6 +80,16 @@ ul,li
 
 }
 
+#browser-item-count{
+
+
+padding-right: 20px;
+padding-top: 3px;
+font-size: 18px;
+float: right;
+
+}
+
 
 #browser-results{
 	border:1px solid #555;
@@ -3252,9 +3262,10 @@ position:relative;
 }
 
 
+
+
 #plyr-standard .plyr-controls-wrapper {
-	position:relative;
-		display:none;
+	height:30px;
 }
 
 
@@ -3264,9 +3275,8 @@ position:relative;
 
 #plyr-standard .plyr-controls {
 	padding-bottom:10px;
-	position:absolute;
-	bottom:5px;
-
+	position: relative;
+	bottom: 35px;
 	height: 20px;
 	z-index:10px;
 	background-color: rgba(1,0,1,0.8);
@@ -3289,7 +3299,7 @@ position:relative;
 	color:white;
 	float:right;
 	width:20%;
-	padding-right: 5px;
+	padding-right: 10px;
 	padding-top:10px;
 	height:20px;
 	text-align:right;
