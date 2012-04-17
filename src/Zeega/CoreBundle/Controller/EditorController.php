@@ -107,10 +107,6 @@ class EditorController extends Controller
 	{
 	    $user = $this->get('security.context')->getToken()->getUser();
 
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
-
 		return $this->render('ZeegaCoreBundle:Editor:faq.html.twig', array('page'=>'faq'));
     } 
 }

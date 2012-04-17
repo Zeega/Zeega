@@ -49,7 +49,7 @@ class WidgetController extends Controller
 		
 		// get user items and sites
 		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
-		$sites = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSitesByUser($user->getId());
+		$sites = $user->getSites();
 		
 		$widgetId = $request->query->get('widget-id');
 		$itemUrl = $request->query->get('url');

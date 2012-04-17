@@ -2,7 +2,6 @@
 Zeega\DataBundle\Entity\Site:
     type: entity
     table: site
-    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
     oneToMany:
         users:
             targetEntity: UsersSites

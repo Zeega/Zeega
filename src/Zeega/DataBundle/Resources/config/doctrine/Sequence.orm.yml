@@ -2,7 +2,7 @@
 Zeega\DataBundle\Entity\Sequence:
    type: entity
    table: sequence
-   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   repositoryClass: Zeega\DataBundle\Repository\SequenceRepository
    manyToOne:
     project:
      targetEntity: Project
