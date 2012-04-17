@@ -17,7 +17,9 @@
 			'citation':true,
 			'media_geo_latitude':  40.7774,
 			'media_geo_longitude' : -73.9606,
-			'zoom':12,
+			'attributes':{
+				zoom:12,
+			},
 			'zoomControl':12,
 			'interaction':false,
 			
@@ -120,18 +122,21 @@
 			var div = $(this.el).find('.cloud-map').get(0);
 		  
 			this.map = new L.Map(div,{scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
-			this.map.setView(this.latlng, this.attr.zoom).addLayer(this.tileLayer);
+			console.log(this.attr);
+			this.map.setView(this.latlng, this.attr.attributes.zoom).addLayer(this.tileLayer);
 			
 			//Save position and zoom level of map
 			
 			var _this=this;
 			this.map.on('zoomend', function(e) {
-				_this.model.update({zoom :  e.target.getZoom() });
+				_this.model.update({attributes : {zoom: e.target.getZoom()} });
+				_this.attr.attributes.zoom =e.target.getZoom();
 			});
 			
 			
 			this.map.on('dragend', function(e) {
 				_this.model.update({media_geo_latitude : e.target.getCenter().lat, media_geo_longitude : e.target.getCenter().lng });
+				_this.latlng=e.target.getCenter();
 			});
 			
 			
