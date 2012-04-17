@@ -77,6 +77,7 @@
 		
 		refresh : function()
 		{
+			var  _this=this;
 			$(this.el).fadeTo(1000,0.5);
 			$(this.el).spin('small');
 			this.collection.fetch({	add: 		(_this.collection.search.get("page") > 0),
@@ -152,9 +153,9 @@
 		parse : function(response)
 		{
 
-			this.returnedItemsCount = response.returned_items_and_collections_count;
-			this.totalItemsCount = response.items_and_collections_count;
-			return response.items_and_collections;
+			this.returnedItemsCount = response.returned_items_count;
+			this.totalItemsCount = response.items_count;
+			return response.items;
 		}
 
 
