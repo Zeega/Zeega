@@ -27,13 +27,9 @@
 		drawDefaultControls : function()
 		{
 			$(this.el).find('.default-layer-controls').empty();
-			console.log(zeega);
 
 			var persistentLayers = ( zeega.app.currentSequence.get('attr') ) ? zeega.app.currentSequence.get('attr').persistLayers : {};
 			var isActive = _.include(persistentLayers, parseInt(this.model.id) );
-			console.log(persistentLayers)
-			console.log(this.model.id)
-			console.log(isActive)
 			
 			var continueToNext = new Layer.Views.Lib.ContinueToNextFrame({ model: this.model });
 			var continueOnAll = new Layer.Views.Lib.ContinueOnAllFrames({ model: this.model, active : isActive });
@@ -119,7 +115,7 @@
 		{
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
-			this.remove();
+			//this.remove();
 			this.onLayerExit();
 		},
 		

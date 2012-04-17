@@ -6,6 +6,8 @@
 		{
 			//create a display collection that will have layer models
 			//copied into it and then displayed ad hoc
+			
+			this.visible = []
 
 		},
 		
