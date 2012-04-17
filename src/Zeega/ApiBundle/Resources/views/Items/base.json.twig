@@ -22,7 +22,7 @@
 		"media_date_created_end" :"{{ item.mediadatecreatedend is empty ? "" : item.mediadatecreatedend | date("m/d/Y") }}",
 		"media_creator_username" : "{{ item.mediacreatorusername }}",
 		"media_creator_realname" : "{{ item.mediacreatorrealname }}",
-		"child_items_count" : {{ item.childitemscount }},
+		"child_items_count" : {{ item.childitemscount | default(0) }},
 		"child_items":
 		[
 			{% for child in item.childitems %}
