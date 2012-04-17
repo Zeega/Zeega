@@ -27,8 +27,8 @@ class HeaderTwigExtension extends \Twig_Extension
             $user = $this->securityContext->getToken()->getUser();
     		if(isset($user) && $user != "anon.")
     		{
-    		    $sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
-        		$site = $sites[0];
+    		    $sites = $user->getSites();
+        		$site = $sites[0]->getSite();
 
         		$projects = $this->doctrine
         						 ->getRepository('ZeegaDataBundle:Project')
