@@ -23,6 +23,7 @@
 		"media_creator_username" : "{{ item.mediacreatorusername }}",
 		"media_creator_realname" : "{{ item.mediacreatorrealname }}",
 		"child_items_count" : {{ item.childitemscount | default(0) }},
+		"attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
 		"child_items":
 		[
 			{% for child in item.childitems %}

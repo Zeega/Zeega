@@ -369,6 +369,7 @@ class ItemRepository extends EntityRepository
     	   ->from('ZeegaDataBundle:Item', 'i')
 		   ->where('i.user_id = :user_id')
 		   ->andwhere('i.media_type = :media_type')
+		   ->andwhere('i.enabled = true')
 		   ->setParameter('user_id',$userId)
 		   ->setParameter('media_type','Collection');
 
