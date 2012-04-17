@@ -25,6 +25,7 @@ var Player2 = Backbone.View.extend({
 		
 		this.generateBackbone();
 		
+		this.data = data;
 		this.parseData( data );
 		
 		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
@@ -45,8 +46,13 @@ var Player2 = Backbone.View.extend({
 		{
 			this.zeega = false;
 			this.startRouter();
+			this.updateTitle();
 		}
-		else this.router = zeega.app.router;
+		else
+		{
+			this.router = zeega.app.router;
+			this.goToFrame( this.currentFrame )
+		}
 	},
 	
 	startRouter: function()
@@ -72,6 +78,11 @@ var Player2 = Backbone.View.extend({
 
 		this.router = new Router();
 		Backbone.history.start();
+	},
+	
+	updateTitle : function()
+	{
+		$('title').html(this.data.project.title)
 	},
 	
 	/*****************************
