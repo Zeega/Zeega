@@ -181,17 +181,17 @@
 		
 		onPlay : function()
 		{
-			this.model.video.pop.play();
+			this.model.video.play();
 		},
 		
 		onExit : function()
 		{
-			this.model.video.pop.pause();
+			this.model.video.pause();
 		},
 		
 		onUnrender : function()
 		{
-			this.model.video.pop.pause();
+			this.model.video.pause();
 			//Popcorn.destroy(this.model.video.pop);	
 
 		}
