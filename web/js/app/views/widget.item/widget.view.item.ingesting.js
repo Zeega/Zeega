@@ -32,7 +32,9 @@
 			    {
 					$('#message').html("Adding media to Zeega.")
 								 .append('<br />')
-								 .append('This might take a while if you are importing several items. You can close the Zeega bookmarklet and continue to browse the web while the items are being imported.');
+								 .append('This might take a while if you are importing several items. You can close the Zeega bookmarklet and continue to browse the web while the items are being imported.')
+								 .append('<br />')
+								 .append('Currently, we only import the first 100 items of a set.');
 				}
 				else
 				{
