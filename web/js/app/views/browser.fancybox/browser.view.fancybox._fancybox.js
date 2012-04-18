@@ -51,7 +51,7 @@
 			$(this.el).find('.more').fadeIn('fast',function(){
 				if(_this.locatorMapView.geoLocated&&$(this).attr('id')=='fancybox-map')_this.locatorMapView.addMap();
 			});
-			
+			$(this.el).find('.plyr-video').css({'height':'200px'});
 			$(this.el).find(".fancybox-shrinkable").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-media-wrapper").addClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-left-column").addClass("fancybox-left-column-more");
@@ -75,6 +75,7 @@
 			sessionStorage.setItem('moreFancy', false);
 			$(this.el).find('.more').hide();
 			$(this.el).find('.less').show();
+			$(this.el).find('.plyr-video').css({'height':'400px'});
 			$(this.el).find(".fancybox-media-wrapper").removeClass("fancybox-media-wrapper-more");
 			$(this.el).find(".fancybox-left-column").removeClass("fancybox-left-column-more");
 			$(this.el).find(".fancybox-media-item").removeClass("fancybox-media-item-more");
