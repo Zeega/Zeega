@@ -43,7 +43,19 @@
 			this.sequences = new Sequence.Collection( sequences );
 
 			zeega.app.currentSequence = this.sequences.at(0);
-		}
+		},
+		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
 		
 	});
 

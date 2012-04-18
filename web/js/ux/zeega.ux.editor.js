@@ -23,6 +23,22 @@ function initUX(){
 	});
 	
 	
+	
+	$('#sequence-cover-image').droppable({
+
+		accept : '.database-asset-list',
+		hoverClass : 'workspace-item-hover',
+		tolerance : 'pointer',
+
+		//this happens when you drop a database item onto a frame
+		drop : function( event, ui )
+			{
+				ui.draggable.draggable('option','revert',false);
+				zeega.app.editCoverImage({ item : zeega.app.draggedItem })
+			}
+	});
+	
+	
 }
 
 $('#add-node-button').click(function(){
