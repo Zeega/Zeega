@@ -104,9 +104,28 @@
 		
 		render : function()
 		{
+			
+			var c = '';
+			var b = '';
+			if( _.isObject( this.model.get('attr').color ) )
+			{
+				var a = this.model.get('attr').color;
+				c = rgbToHex(a.r,a.g,a.b);
+				
+			}
+			else c = this.model.get('attr').color;
+			
+			if( _.isObject( this.model.get('attr').backgroundColor ) )
+			{
+				var a = this.model.get('attr').backgroundColor;
+				b = rgbToHex(a.r,a.g,a.b);
+			}
+			else b = this.model.get('attr').backgroundColor;
+			
+			
 			var style = {
-				'color' : 'rgba('+ this.model.get('attr').color.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
-				'backgroundColor' : 'rgba('+ this.model.get('attr').backgroundColor.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
+				'color' : 'rgba('+ c.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
+				'backgroundColor' : 'rgba('+ b.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
 				'opacity' : this.model.get('attr').opacity,
 				'fontSize' : this.model.get('attr').fontSize +'%',
 				'padding' : this.model.get('attr').padding +'%',

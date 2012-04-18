@@ -100,3 +100,6 @@ String.prototype.toRGB = function()
 	return rgb;
 }
 
+function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B)}
+
+
