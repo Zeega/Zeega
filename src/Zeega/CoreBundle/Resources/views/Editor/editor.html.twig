@@ -11,35 +11,16 @@
 		
 		
 			<div id="sequence-header" class='clearfix'>
+				
+				<div id='sequence-cover-image'></div>
+				
 				<div id='sequence-title'>{{projecttitle}}</div>
-				<div id='sequence-publish'>
 					
-					<ul class='unstyled'>
-						
-						<li>
-							<ul class='pill-buttons'>
-								<li><a id='publish-project' href='#'>Share</a></li>
-								<!--
-								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
-								-->
-								<li><a id='preview' href='#'
-									title='Preview Anytime'
-									data-content='Once you’re complete, you can select share to create a unique url for your project.'
-								>Preview</a>
-								</li>
-								<!--
-								<li><a id='get-help' href='#'>?</a></li>
-								-->
-								
-							</ul>
-						</li>
-						
-						<!--
-						<li><span id='project-settings' class='zicon zicon-settings'></span></li>
-						-->
-						
-					</ul>
+				<div id='sequence-actions' class="btn-group pull-right">
+				  <button id='preview' class="btn btn-inverse"><i class='zicon-preview raise-up'></i> Preview</button>
+				  <button id='publish-project' class="btn btn-inverse"><i class='zicon-share raise-up'></i> Share</button>
 				</div>
+					
 			</div>
 
 			<a href="http://#"></a>
@@ -77,11 +58,11 @@
 						>
 							<div class='panel-head title'>
 								Edit Layers
-								<span class='info zicon zicon-info'
+								<i class='zicon-info info'
 									data-placement = "right"
 									data-original-title='Layers'
 									data-content='This is where your media layers Appear. You can reorder and change their properties.'
-								></span>
+								></i>
 							</div>
 							
 							<div id='layers'>
@@ -98,11 +79,11 @@
 
 							<div class='panel-head'>
 								Edit Transitions
-								<span class='info zicon zicon-info'
+								<i class='zicon-info info'
 									data-placement = "right"
 									data-original-title='Transitions'
 									data-content='This is where you edit the way this frame transitions to the next frame.'
-								></span>
+								></i>
 							</div>
 
 							<div class="panel-content inset-tray hidden">
@@ -138,11 +119,11 @@
 							<div class='panel-head'>
 								<div>
 									Add Media
-									<span class='info zicon zicon-info'
+									<i class='zicon-info info'
 										data-placement = "right"
 										data-original-title='Items Database'
 										data-content='This is where you can search items from your collections.'
-									></span>
+									></i>
 								</div>
 								
 								
@@ -202,11 +183,11 @@
 							<div id='visualeditor-view-bar' class='panel-head'>
 
 								<ul id='visual-icon-tray' class='unstyled horizontal-list icon-tray'></ul>
-								<span class='info zicon zicon-info'
+								<i class='zicon-info info'
 									data-placement = "left"
 									data-original-title='The Visual Editor Window'
 									data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'
-								></span>
+								></i>
 							</div>
 							
 							<div id='workspace-outer-wrapper' class='clearfix'>
