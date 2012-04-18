@@ -36,6 +36,7 @@ class HeaderTwigExtension extends \Twig_Extension
 
                 return array(
                     'site' => $site,
+                    'sites' => $sites,
         			'title'=>$site->getTitle(),
         			'short'=>$site->getShort(),
         			'num_sites'=>count($sites),

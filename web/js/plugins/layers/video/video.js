@@ -27,7 +27,7 @@
 			console.log(this.get('attr'));
 			//load popcorn object
 			this.video = new Plyr2({
-				url : this.get('attr').attribution_uri,
+				url : this.get('attr').attribution_uri || this.get('attr').attribution_url,
 				uri : this.get('attr').uri,
 				id : this.id,
 				cue_in  : this.get('attr').cue_in,

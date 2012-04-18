@@ -121,7 +121,7 @@
 		
 		private_onLayerExit : function()
 		{
-			//this.model.on('editor_readyToRemove', this.remove, this )
+			this.model.on('editor_readyToRemove', this.remove, this )
 			this.onLayerExit();
 		},
 		

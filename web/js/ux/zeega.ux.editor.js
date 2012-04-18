@@ -188,7 +188,7 @@ function closeOpenCitationTabs()
 		stop : function(e,ui)
 		{
 			$('.ghost-frame').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addFrame() });
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
 		}
 	});
 	
@@ -209,7 +209,7 @@ function closeOpenCitationTabs()
 	
 	$('#get-help').click(function(){
 		localStorage.help = true;
-		Zeega.initStartHelp();
+		zeega.app.initStartHelp();
 	})
 	
 	
