@@ -26,20 +26,18 @@ var bm = new bookmarklet({
 	        init: function(){
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
 	            var script = document.getElementById('zeegabm');
+	            
 	            var srcUrlIdx = script.src.indexOf("/web/");
-	            if(srcUrlIdx == -1){
-	            	srcUrlIdx = script.src.indexOf("/");
-	            	var localUrlPrefix = script.src.substring(0,srcUrlIdx);
+	            var localUrlPrefix;
+	
+				if(srcUrlIdx == -1){
+	            	srcUrlIdx = script.src.indexOf("/js/widget/");
+	            	localUrlPrefix = script.src.substring(0,srcUrlIdx);
 	            }
 	            else{
-	            	var localUrlPrefix = script.src.substring(0,srcUrlIdx) + "/web";
+	            	localUrlPrefix = script.src.substring(0,srcUrlIdx) + "/web";
 	            }
 	            
-		    
-                  
-			
-	
-				//console.log("local " + localUrlPrefix);
         		$('#zeega-overlay').remove();
 			
         		var overlay=$('<div>').css({

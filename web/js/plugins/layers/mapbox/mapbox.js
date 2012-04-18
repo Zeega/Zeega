@@ -99,7 +99,7 @@
 		render : function()
 		{
 			
-			this.tileUrl='http://{s}.tiles.mapbox.com/v2/'+this.attr.uri+'/{z}/{x}/{y}.png',
+			this.tileUrl='http://{s}.tiles.mapbox.com/v3/'+this.attr.uri+'/{z}/{x}/{y}.png',
    			this.tileLayer = new L.TileLayer(this.tileUrl, {maxZoom: 18, attribution: ''});
 			this.latlng=new L.LatLng(parseFloat(this.attr.media_geo_latitude),parseFloat(this.attr.media_geo_longitude));
 
@@ -153,7 +153,7 @@
 			var div = $(this.el).find('.cloud-map').get(0);
 		  console.log(this.el);
 			this.map = new L.Map(div,{scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
-			this.map.setView(this.latlng, this.attr.zoom).addLayer(this.tileLayer);
+			this.map.setView(this.latlng, this.attr.attributes.zoom).addLayer(this.tileLayer);
 			
 			//Save position and zoom level of map
 			

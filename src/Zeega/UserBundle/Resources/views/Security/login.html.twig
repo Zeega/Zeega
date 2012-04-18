@@ -80,7 +80,7 @@
     	{% if error %}
 	        <div class="error">{{ error.message }}</div>
 	    {% endif %}
-    
+
 		<form action="{{ path("fos_user_security_check") }}" method="post">
 			<div class="box">
 		    	<label for="username">{{ 'Username'|trans({}, 'FOSUserBundle') }}</label>
@@ -97,6 +97,12 @@
 				<br><br>
 			</div>
 		</form>
+		<br><br><br><br>
+		<div style="padding-top: 180px;
+		text-align: left;
+		font-style: italic;
+		font-size: 11pt;">We've recently upgraded Zeega to a new version. Amongst many exciting changes, we dramatically improved the functionality of the text layer. However, previously existing text layers might have strange behaviors. As always, if you have any questions please contact us at bugs@zeega.org</div>
+    	
 	</div> <!--#main-->
 
 {% endblock fos_user_content %}
