@@ -45,6 +45,7 @@ twig:
     globals:
         hostname: %hostname%
         directory: %directory%
+        web_directory: %web_directory%
 
 # Assetic Configuration
 assetic:
@@ -84,7 +85,22 @@ fos_rest:
             html: true
         failed_validation: HTTP_BAD_REQUEST
         default_engine: twig
-        
+
+# fos rest requirement
+sensio_framework_extra:
+    view:
+        annotations: false
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.action:
+        sonata.block.service.rss:
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%

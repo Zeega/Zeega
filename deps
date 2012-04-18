@@ -1,3 +1,7 @@
+; ---------------------------------------------
+; symfony core bundles - frequently replaced 
+; ---------------------------------------------
+
 [symfony]
     git=http://github.com/symfony/symfony.git
     version=v2.0.12
@@ -62,29 +66,24 @@
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
 
-[doctrine-fixtures]
-    git=http://github.com/doctrine/data-fixtures.git
-
-[DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
-    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
-
-[FOSRestBundle]
-    git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
-    target=bundles/FOS/RestBundle
-    version=origin/2.0
-
-[JMSSerializerBundle]
-    git=git://github.com/schmittjoh/JMSSerializerBundle.git
-    target=bundles/JMS/SerializerBundle
-
-[FOSUserBundle]
-	git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
-	target=bundles/FOS/UserBundle
+; ---------------------------------------------
+; sonata admin bundle
+; ---------------------------------------------
 
 [SonataAdminBundle]
-    git=http://github.com/sonata-project/SonataAdminBundle.git
+    git=git://github.com/sonata-project/SonataAdminBundle.git
     target=/bundles/Sonata/AdminBundle
+    version=origin/2.0
+
+[SonataBlockBundle]
+    git=git://github.com/sonata-project/SonataBlockBundle.git
+    target=/bundles/Sonata/BlockBundle
+    version=origin/2.0
+
+[SonataCacheBundle]
+    git=git://github.com/sonata-project/SonataCacheBundle.git
+    target=/bundles/Sonata/CacheBundle
+    version=origin/2.0
 
 [SonatajQueryBundle]
     git=http://github.com/sonata-project/SonatajQueryBundle.git
@@ -98,16 +97,18 @@
     git=http://github.com/KnpLabs/KnpMenu.git
     target=/knp/menu
 
+[Exporter]
+    git=http://github.com/sonata-project/exporter.git
+    target=/exporter
+
 [SonataDoctrineORMAdminBundle]
     git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
     target=/bundles/Sonata/DoctrineORMAdminBundle
-	
-[WebProfilerExtraBundle]
-	git=http://github.com/Elao/WebProfilerExtraBundle.git
-	target=bundles/Elao/WebProfilerExtraBundle
-[ProfilerLiveBundle]
-    git=git://github.com/dsyph3r/ProfilerLiveBundle.git
-    target=/bundles/Profiler/LiveBundle
+    version=origin/2.0
+
+; ---------------------------------------------
+; database migrations bundle
+; ---------------------------------------------
 
 [doctrine-migrations]
     git=http://github.com/doctrine/migrations.git
@@ -116,6 +117,10 @@
     git=http://github.com/symfony/DoctrineMigrationsBundle.git
     target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
 
+; ---------------------------------------------
+; solr related bundles
+; ---------------------------------------------
+
 [solarium]
     git=https://github.com/basdenooijer/solarium.git
     version=2.3.0-RC1
@@ -123,3 +128,50 @@
 [NelmioSolariumBundle]
     git=https://github.com/nelmio/NelmioSolariumBundle.git
     target=/bundles/Nelmio/SolariumBundle
+
+; ---------------------------------------------
+; doctrine fixtures bundles
+; ---------------------------------------------
+
+[doctrine-fixtures]
+    git=http://github.com/doctrine/data-fixtures.git
+
+[DoctrineFixturesBundle]
+    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
+
+; ---------------------------------------------
+; FOSUserBundle
+; ---------------------------------------------
+
+[JMSSerializerBundle]
+    git=git://github.com/schmittjoh/JMSSerializerBundle.git
+    target=bundles/JMS/SerializerBundle
+
+[FOSRest]
+    git=git://github.com/FriendsOfSymfony/FOSRest.git
+    target=fos/FOS/Rest
+
+[FOSRestBundle]
+    git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
+    target=bundles/FOS/RestBundle
+
+; ---------------------------------------------
+; other bundles
+; ---------------------------------------------
+
+
+[FOSUserBundle]
+    git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
+    target=bundles/FOS/UserBundle
+    version=1.2.0
+
+[WebProfilerExtraBundle]
+	git=http://github.com/Elao/WebProfilerExtraBundle.git
+	target=bundles/Elao/WebProfilerExtraBundle
+
+[ProfilerLiveBundle]
+    git=git://github.com/dsyph3r/ProfilerLiveBundle.git
+    target=/bundles/Profiler/LiveBundle
+
+
