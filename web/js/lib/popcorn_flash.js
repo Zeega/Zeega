@@ -9589,7 +9589,7 @@ Popcorn.player( "youtube", {
         // state code for volume changed polling
         volumeChanged = false,
         lastMuted = false,
-        lastVolume = 100;
+        lastVolume = 0;
 
     container.id = media.id + Popcorn.guid();
 	youtubeId = Popcorn.guid();
@@ -9615,7 +9615,7 @@ Popcorn.player( "youtube", {
         // more youtube callback nonsense
        stateChangeEventHandler[media.youtubeId] = function( state ) {
 	
-		 console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
+		// console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
           // playing is state 1
           // paused is state 2
           
@@ -9626,11 +9626,12 @@ Popcorn.player( "youtube", {
           	media.pause();
           	media.readyState = 4;
           	media.duration = media.youtubeObject.getDuration();
+			
 			media.dispatchEvent( "canplaythrough" );
 			media.dispatchEvent( "load" );
 			
 			media.dispatchEvent( "durationchange" );
-			volumeupdate();
+			//volumeupdate();
 	
 			media.dispatchEvent( "loadeddata" );
           
@@ -9640,7 +9641,7 @@ Popcorn.player( "youtube", {
           // youtube fires paused events while seeking
           // this is the only way to get seeking events
           } else if ( state === 2 ) {
-
+			
             // silly logic forced on me by the youtube API
             // calling youtube.seekTo triggers multiple events
             // with the second events getCurrentTime being the old time
@@ -9665,10 +9666,13 @@ Popcorn.player( "youtube", {
             	return;
             	}
             else{
-
+            	
 				currentTime = media.youtubeObject.getCurrentTime();
 				media.dispatchEvent( "timeupdate" );
 				!media.paused && media.pause();
+				console.log('setting the volume');
+            	console.log(options.volume);
+				media.youtubeObject.setVolume(options.volume);
             }
 				
           }
@@ -9697,6 +9701,7 @@ Popcorn.player( "youtube", {
 
         var volumeupdate = function() {
 	
+		if(media&&media.youtubeObject&&media.youtubeObject.isMuted()){	
           if ( lastMuted !== media.youtubeObject.isMuted() ) {
 
             lastMuted = media.youtubeObject.isMuted();
@@ -9710,7 +9715,7 @@ Popcorn.player( "youtube", {
           }
 
           setTimeout( volumeupdate, 250 );
-          
+          }
           
         };
 
@@ -9782,10 +9787,13 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "volume", {
           set: function( val ) {
-
+			console.log(media.youtubeObject.getVolume());
+			console.log(val);
+			
             if ( media.youtubeObject.getVolume() / 100 !== val ) {
 
               media.youtubeObject.setVolume( val * 100 );
+              console.log(val*100);
               lastVolume = media.youtubeObject.getVolume();
               media.dispatchEvent( "volumechange" );
             }
@@ -9805,6 +9813,7 @@ Popcorn.player( "youtube", {
       options.controls = +options.controls === 0 || +options.controls === 1 ? options.controls : 1;
       options.annotations = +options.annotations === 1 || +options.annotations === 3 ? options.annotations : 1;
 	options.cue_in=options.cue_in||0
+	options.volume=options.volume||1
      
      flashvars = {
         playerapiid: container.id

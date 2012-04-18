@@ -86,7 +86,7 @@ var Plyr2 = Backbone.Model.extend({
 		autoplay : true,
 		cue_in : 0,
 		cue_out : 150,
-		volume : 50,
+		volume : .5,
 		
 		video_target : null, // element id
 		controls_target : null, // element id
@@ -136,28 +136,28 @@ var Plyr2 = Backbone.Model.extend({
 						
 						}
 						else _this.trigger('video_canPlay');
+						_this.pop.volume(_this.get('volume'));
 						
-						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 						
 					});
 					break;
 				case 'flashvideo':
 					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('uri') );
 					this.pop.listen('loadeddata',function(){
+						_this.pop.volume(_this.get('volume'));
 						_this.trigger('video_canPlay');
 						_this.pop.currentTime(_this.get('cue_in'));
-						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 					});
 					break;
 				case 'youtube':
-					
-					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{cue_in:this.get('cue_in')} );
+					console.log(_this.get('volume'));
+					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
 					this.pop.listen('canplaythrough',function(){
-						
+						console.log(_this.get('volume'));
 						_this.pop.play();
 						_this.pop.pause();
+						_this.pop.volume(_this.get('volume'));
 						console.log( _this.get('control_mode'));
-						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 						_this.trigger('video_canPlay');
 					});
 					break;
@@ -167,13 +167,13 @@ var Plyr2 = Backbone.Model.extend({
 						
 						_this.trigger('video_canPlay');
 						_this.pop.currentTime(_this.get('cue_in'));
-						if( _this.get('control_mode') != 'none' ) _this.displayControls(el);
 					});
 					break;
 				default:
 					console.log('none set');
 				
 			}
+			
 			this.pop.listen('timeupdate', function(){
 				_this.trigger('timeupdate');
 				_this.trigger('timeupdate_controls');
@@ -185,7 +185,7 @@ var Plyr2 = Backbone.Model.extend({
 		}
 	},
 	
-	displayControls : function(el){},
+
 	
 	getVideoView : function(){
 		
@@ -231,18 +231,14 @@ var Plyr2 = Backbone.Model.extend({
 	
 		if(this.pop&&this.pop.paused()){
 			this.pop.play();
-				console.log( "playing video:"+this.id);
-			console.log(this.pop.paused());
-			console.log("--------");
+
 		}
 	},
 	pause : function(){
 	
 		if(this.pop&&!this.pop.paused()){
 			this.pop.pause();
-			console.log( "pausing video:"+this.id);
-			console.log(this.pop.paused());
-			console.log("--------");
+
 		}
 	}
 	
