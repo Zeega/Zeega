@@ -923,37 +923,6 @@ a.white:hover
 	width: 30px;
 }
 
-.socialmedia-icon
-{
-	
-	overflow:hidden;
-	height:33px;
-	width:33px;
-	background-image:url('../images/socialmediaicons.png');
-	background-repeat: no-repeat;
-	
-}
-[class^="socialmedia-icon-"]
-{
-	display: inline-block;
-	width: 33px;
-	height: 33px;
-	vertical-align: text-top;
-	background-image:url('../images/socialmediaicons.png');
-	background-position: 0px 0px;
-	background-repeat: no-repeat;
-	margin-top:5px;
-}
-
-.socialmedia-icon-facebook{background-position:-81px -56px}
-.socialmedia-icon-facebook:hover{background-position:-81px -16px}
-.socialmedia-icon-twitter{background-position:-122px -56px}
-.socialmedia-icon-twitter:hover{background-position:-122px -16px}
-.socialmedia-icon-tumblr{background-position:-311px -56px}
-.socialmedia-icon-tumblr:hover{background-position:-311px -16px}
-.socialmedia-icon-googleplus{background-position:-274px -134px}
-.socialmedia-icon-googleplus:hover{background-position:-274px -96px}
-
 
 /*********************************************
 
@@ -3005,6 +2974,14 @@ width:50px;
 	top: -7px;
 
 }
+#___plusone_0{
+	margin-top:10px !important;
+}
+#publish-social-media{
+	padding:10px 0;
+}
+
+
 #shareProject {
 
 cursor: pointer;

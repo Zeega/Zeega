@@ -181,13 +181,18 @@
 								'<label for="project-title">Share your project</label>'+
 								'<div id="publish-social-media">'+
 									//FACEBOOK
+									'<span class="publish-social-media">'+
 									'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px; float:left" allowTransparency="true"></iframe>'+
+									'</span>'+
 									
 									//TWITTER
+									'<span class="publish-social-media">'+
 									'<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%=projectlink %>" data-text="Zeega Project: <%=title %>">Tweet</a>'+
 									'<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>'+
-									
+									'</span>'+
+
 									//TUMBLR
+									'<span class="publish-social-media">'+
 									'<span id="tumblr_button_abc123"></span>'+
 
 									'<script type="text/javascript">'+
@@ -205,8 +210,10 @@
 									    'tumblr_button.innerHTML = "Share on Tumblr";'+
 									    'document.getElementById("tumblr_button_abc123").appendChild(tumblr_button);'+
 									'</script>'+
+									'</span>'+
 
 									//GOOGLE+
+									'<span class="publish-social-media">'+
 									'<g:plusone size="medium" annotation="inline" width="120" href="<%= projectlink %>"></g:plusone>'+
 
 									'<script type="text/javascript">'+
@@ -216,6 +223,7 @@
 									    'var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(po, s);'+
 									  '})();'+
 									'</script>'+
+									'</span>'+
 								'</div>'+
 
 								//END SOCIAL MEDIA INTEGRATION
