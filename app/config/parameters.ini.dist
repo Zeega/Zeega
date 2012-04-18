@@ -21,6 +21,7 @@
     hostname          = http://alpha.zeega.org/
     directory         = test/web/
     path			  = /var/www/web/
+	web_directory     = /var/www/
 
 	solr_enabled	  = false
 	solr_host         = localhost

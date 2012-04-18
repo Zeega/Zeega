@@ -45,6 +45,7 @@ twig:
     globals:
         hostname: %hostname%
         directory: %directory%
+        web_directory: %web_directory%
 
 # Assetic Configuration
 assetic:
