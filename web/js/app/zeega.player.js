@@ -200,7 +200,9 @@ var Player2 = Backbone.View.extend({
 		}
 		else if(adv == 0) //after playback - default
 		{
-			
+			_.each( _.toArray( this.currentLayers), function(layer){
+				layer.on('playback_ended',function(){ _this.goRight() })
+			})
 		}
 		else if(adv > 0) //after n seconds
 		{
@@ -208,6 +210,7 @@ var Player2 = Backbone.View.extend({
 			this.t = setTimeout( function(){ _this.goRight() },adv )
 		}
 	},
+	
 	
 	goLeft : function()
 	{
