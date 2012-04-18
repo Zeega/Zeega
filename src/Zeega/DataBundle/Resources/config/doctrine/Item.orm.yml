@@ -135,5 +135,5 @@ Zeega\DataBundle\Entity\Item:
             columns: [layer_type]
         site_id_index:
             columns: [site_id]
-        enabled_index:
+        item_enabled_index:
             columns: [enabled]

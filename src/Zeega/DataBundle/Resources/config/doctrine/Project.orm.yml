@@ -45,6 +45,6 @@ Zeega\DataBundle\Entity\Project:
             type: boolean
             nullable: false
     indexes:
-             enabled_index:
+             project_enabled_index:
                  columns: [enabled]
  

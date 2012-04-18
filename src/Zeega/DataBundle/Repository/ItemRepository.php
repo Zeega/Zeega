@@ -13,7 +13,7 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
-        $qb->andwhere('i.enabled = 1');
+        $qb->andwhere('i.enabled = true');
         
 		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
@@ -308,7 +308,7 @@ class ItemRepository extends EntityRepository
 			        ->add('from', ' ZeegaDataBundle:Item i')
 			        ->andwhere('i.id = :id')
 			        ->andwhere("i.media_type = 'Collection'")
-			        ->andwhere("i.enabled = 1")
+			        ->andwhere("i.enabled = true")
 			        ->setParameter('id',$id)
 			        ->getQuery()
 			        ->getArrayResult();
@@ -338,7 +338,7 @@ class ItemRepository extends EntityRepository
     			->add('select', 'i')
     		   ->add('from', ' ZeegaDataBundle:Item i')
     		   ->andwhere('i.id = :id')
-    		   ->andwhere('i.enabled = 1')
+    		   ->andwhere('i.enabled = true')
     		   ->setParameter('id',$id)
     		   ->getQuery()
     		   ->getArrayResult();
@@ -352,7 +352,7 @@ class ItemRepository extends EntityRepository
 			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
-			   ->andwhere('i.enabled = 1')
+			   ->andwhere('i.enabled = true')
 			   ->setParameter('id',$id)
 			    ->orderBy('i.id','DESC')
 			   ->getQuery()
