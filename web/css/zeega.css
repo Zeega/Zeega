@@ -912,6 +912,7 @@ a.white:hover
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
 }
+[class^="zicon-"].raise-up{ vertical-align:text-bottom }
 
 [class^="zicon-"].orange{ background-image: url('../images/zicons-orange-20.png') }
 
@@ -926,10 +927,14 @@ a.white:hover
 .zicon-volume-off{background-position:-160px -50px}
 .zicon-trash-closed{background-position:-180px 0}
 .zicon-trash-open{background-position:-0px -20px}
-.zicon-add-media{background-position:0 -80px}
+.zicon-add-media{background-position:-100px -100px}
 .zicon-add-user{background-position:-60px -100px}
 .zicon-user{background-position:-40px -100px}
 .zicon-new-document{background-position:-40px -80px}
+.zicon-preview{background-position:-140px -100px}
+.zicon-share{background-position:-120px -100px}
+.zicon-info{background-position:-60px -40px}
+.zicon-help{background-position:-80px -40px}
 
 .zicon-search-dropdown
 {
@@ -1002,11 +1007,6 @@ body
 	background: #333;
 }
 
-.container
-{
-	width:1000px;
-}
-
 #wrapper
 {
 	position:relative;
@@ -1039,6 +1039,15 @@ body
 	height:1em;
 	width:690px;
 }
+
+/*******************************
+
+	BOOTSTRAP OVERRIDES
+	
+*******************************/
+
+.navbar .nav > li > a:hover{ text-shadow: 0 0 6px whiteSmoke }
+.container{ width:1000px }
 
 /*******************************
 
@@ -1657,7 +1666,7 @@ default-layer-control
 {
 	color:#eee;
 	margin : 10px 0;
-	width:100%;
+	height:38px;
 }
 
 #sequence-title
@@ -1676,100 +1685,10 @@ default-layer-control
 	-webkit-transition: border .25s linear;
 }
 
-
-#sequence-publish
+#sequence-actions
 {
-	float:right;
-	height:40px;
-	font-size: 0.8em;
-	width : 300px;
+	top:5px;
 }
-
-#sequence-publish li{ float:right }
-#sequence-publish>ul>li+li{margin-right:6px;}
-#upper-select
-{
-	font-size:18px;
-	position:relative;
-	top:6px;
-}
-
-#upper-select select
-{
-	background:transparent;
-	color:#ccc;
-	max-width:72px;
-}
-
-/** ripped from twitter bootstrap **/
-.pill-buttons
-{
-	margin: 0 0 20px;
-	padding: 0;
-	list-style: none;
-	zoom: 1;
-}
-
-
-.pill-buttons:before,
-.pill-buttons:after
-{
-	display: table;
-	content: "";
-}
-
-.pill-buttons:after {
-  clear: both;
-}
-.pill-buttons > li {
-  float: left;
-}
-.pill-buttons > li > a {
-  display: block;
-}
-
-.pill-buttons a {
-	color:#ddd;
-	margin: 5px 3px 5px 0;
-	padding: 0 15px;
-	line-height: 30px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	background: #444;
-
-}
-
-.pill-buttons-widget a {
-	color: white;
-	margin: 5px 3px 5px 0px;
-	padding: 10px;
-	line-height: 30px;
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	background: red;
-
-}
-
-.pill-buttons a:hover {
-  background: #eee;
-  color: #333;
-  text-decoration: none;
-}
-
-.pill-buttons-widget a:hover {
-  background: #eee;
-  color: red;
-  text-decoration: none;
-}
-.pill-buttons .active a {
-  background: red;
-  color: #333;
-}
-/** end ripped from twitter bootstrap **/
-
-
 
 
 
