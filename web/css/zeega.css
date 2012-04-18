@@ -2907,6 +2907,7 @@ background-color: red;
 	clear:both;
 	margin-top:10px;
 	margin-right:10px;
+
 }
 #publish-project-modal input{
 	width:90%;
@@ -2985,11 +2986,25 @@ background-color: red;
 }
 #publish-customize-size{
 	display:none;
-	font-size:0.6em;
+	font-size:0.8em;
+	
+}
+#publish-customize-size label{
+	display: inline;
+	font-size:0.8em;
 }
 #publish-customize-size input{
 width:50px;
 	}
+.customize{
+		font-size:0.8em;
+}
+#tumblr_button_abc123 a{
+	width:120px !important;
+	position: relative;
+	top: -7px;
+
+}
 #shareProject {
 
 cursor: pointer;

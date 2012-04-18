@@ -28,8 +28,8 @@
 
 			
 			var projectlink = zeega.app.url_prefix + "project/" + this.model.id + '/view';
-			var iframeHTML = '<iframe src="'+ projectlink +'"></iframe>';
-			var iframeEmbed = this.convertHTML(iframeHTML);
+			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="150px" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
 
 			var blanks = {
@@ -41,7 +41,7 @@
 				uriEncodedProjectlink : encodeURIComponent(projectlink),
 				uriEncodedTitle : encodeURIComponent(this.model.get("title")),
 				iframeEmbed : iframeEmbed,
-				iframeHTML : iframeHTML,
+				iframeHTML : this.iframeHTML,
 				randId : this.elemId,
 				tags : this.model.get('tags'),
 
@@ -103,7 +103,22 @@
 				$(_this.el).find('#publish-project-modal-step1').show();
 				return false;
 			});
-
+			$(this.el).find('#publish-width, #publish-height').blur(
+				function(e){
+					var iframeElem = null;
+					if ($(this).attr("id") == 'publish-width')
+					{
+					 	iframeElem = $(_this.iframeHTML).attr("width", $(this).val());
+					} else {
+						iframeElem = $(_this.iframeHTML).attr("height", $(this).val());
+					}
+					_this.iframeHTML = iframeElem[0].outerHTML;
+					$(_this.el).find('#publish-embed').html(_this.convertHTML(_this.iframeHTML));
+					e.stopPropagation();
+					e.preventDefault();
+					return false;
+				}
+			);
 			$(this.el).modal('show');
 			return this;
 		},
@@ -164,30 +179,55 @@
 
 							'<div class="publish-left-column">'+
 								'<label for="project-title">Share your project</label>'+
-								//Add this button
-								'<div class="addthis_toolbox addthis_default_style ">'+
-								'<a class="addthis_button_preferred_1"></a>'+
-								'<a class="addthis_button_preferred_2"></a>'+
-								'<a class="addthis_button_preferred_3"></a>'+
-								'<a class="addthis_button_preferred_4"></a>'+
-								'</div>'+
-								'<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f8720015e8fa2ab"></script>'+
-								
+								'<div id="publish-social-media">'+
+									//FACEBOOK
+									'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px; float:left" allowTransparency="true"></iframe>'+
+									
+									//TWITTER
+									'<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%=projectlink %>" data-text="Zeega Project: <%=title %>">Tweet</a>'+
+									'<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>'+
+									
+									//TUMBLR
+									'<span id="tumblr_button_abc123"></span>'+
 
-								'<a href="http://www.facebook.com/sharer.php?u=<%= uriEncodedProjectlink %>&t=<%= uriEncodedTitle %>"><span class="socialmedia-icon-facebook" title="Facebook"></span></a>'+
-								'<span class="socialmedia-icon-twitter" title="Twitter"></span>'+
-								'<span class="socialmedia-icon-tumblr" title="Tumblr"></span>'+
-								'<span class="socialmedia-icon-googleplus" title="Google+"></span>'+
-								'<span class="socialmedia-icon-wordpress" title="WordPress"></span>'+
-								'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>'+
-								
+									'<script type="text/javascript">'+
+									    'var tumblr_link_url = "<%=projectlink%>";'+
+									    'var tumblr_link_name = "<%=title%>";'+
+									    'var tumblr_link_description = "<%=author%>";'+
+									'</script>'+
+
+									'<script type="text/javascript">'+
+									    'var tumblr_button = document.createElement("a");'+
+									    'tumblr_button.setAttribute("href", "http://www.tumblr.com/share/link?url=" + encodeURIComponent(tumblr_link_url) + "&name=" + encodeURIComponent(tumblr_link_name) + "&description=" + encodeURIComponent(tumblr_link_description));'+
+									    'tumblr_button.setAttribute("title", "Share on Tumblr");'+
+									    'tumblr_button.setAttribute("target", "_blank");'+
+									    'tumblr_button.setAttribute("style", "display:inline-block; text-indent:-9999px; overflow:hidden; width:61px; height:20px; background:url(\'http://platform.tumblr.com/v1/share_2.png\') top left no-repeat transparent;");'+
+									    'tumblr_button.innerHTML = "Share on Tumblr";'+
+									    'document.getElementById("tumblr_button_abc123").appendChild(tumblr_button);'+
+									'</script>'+
+
+									//GOOGLE+
+									'<g:plusone size="medium" annotation="inline" width="120" href="<%= projectlink %>"></g:plusone>'+
+
+									'<script type="text/javascript">'+
+									  '(function() {'+
+									    'var po = document.createElement(\'script\'); po.type = \'text/javascript\'; po.async = true;'+
+									    'po.src = \'https://apis.google.com/js/plusone.js\';'+
+									    'var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(po, s);'+
+									  '})();'+
+									'</script>'+
+								'</div>'+
+
+								//END SOCIAL MEDIA INTEGRATION
+
 								'<label for="project-link">Or copy this link</label>'+
 								'<input type="text" id="project-link" value="<%= projectlink %>"/>'+
+
 							'</div>'+
 							'<div class="publish-right-column">'+
 								'<label for="publish-embed">Embed your project</label>'+
 								'<textarea id="publish-embed"><%= iframeEmbed %></textarea>'+
-								'<a href="#" id="publish-open-customize-size">Customize size</a>'+
+								'<a href="#" class="customize" id="publish-open-customize-size">Customize size</a>'+
 								'<div id="publish-customize-size">'+
 									'<label for="publish-width">Width</label>'+
 									'<input type="text" id="publish-width" value=""/>'+

@@ -258,6 +258,7 @@ function closeOpenCitationTabs()
 	//detect when zeega comes back in focus and refresh the database
 	window.addEventListener('focus', function(){
 		zeega.app.refreshDatabase();
+		console.log('refreshing database from zeega.ux.editor line 260');
 	});
 	
 	$('#database-search-text').keypress(function(e){
