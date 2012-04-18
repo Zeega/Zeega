@@ -16,7 +16,7 @@ $(document).ready(function(){
 	_.each( frameData.layers, function(layerID){
 		var layer = _.find( layersData, function(layer){ return layer.id == layerID });
 		
-		if( !_.isUndefined( layer.attr.thumbnail_url) && layer.attr.thumbnail_url != '' ) drawLayerThumbnail( layer );
+		if( !_.isUndefined( layer.attr.thumbnail_url) && layer.attr.thumbnail_url != '' && layer.type != 'Audio' ) drawLayerThumbnail( layer );
 		else if( layer.type == 'Rectangle' ) drawRectangle( layer ); // this is a bandaid
 	})
 	
