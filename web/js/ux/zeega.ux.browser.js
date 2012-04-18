@@ -297,9 +297,11 @@ $(document).ready(function() {
 					
 								//Update newGuy
 
+
 								model.set({id:response.items[0].id});
 								model.set({thumbnail_url:response.items[0].thumbnail_url});
 								model.set({child_items_count:response.items[0].child_items_count});
+
 								zeegaBrowser.app.myCollections.collection.add(model, {at: 0});
 		 					},
 			 				error: function(model, response)

@@ -2,7 +2,7 @@
 
 	Project.Model = Backbone.Model.extend({
 		
-		url : function(){ return zeega.app.url_prefix+"projects/"+this.id },
+		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
 		
 		initialize : function( attributes )
 		{
@@ -23,17 +23,6 @@
 			this.view = new Project.Views.Publish({model:this});
 			this.view.render();
 			
-		},
-		getAllFrameThumbnails : function()
-		{
-			var frames = this.sequences.at(0).frames.models;
-			var frameThumbs = [];
-			for(var i=0;i<frames.length;i++){
-				var frame = frames[i];
-				frameThumbs.push(frame.get('thumbnail_url'));
-			}
-			return frameThumbs;
-				
 		},
 		createSequences : function( sequences )
 		{

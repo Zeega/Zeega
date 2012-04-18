@@ -60,11 +60,9 @@ var loadFiles = [
 	'order!app/models/browser.model.collection',
 	'order!app/models/browser.model.search',
 	'order!app/models/browser.model.item',
-	'order!app/models/browser.model.tag',
 
 	'order!app/collections/browser.collections.collection',
 	'order!app/collections/browser.collections.item',
-	'order!app/collections/browser.collections.tag',
 	
 	'order!app/views/browser.item/browser.view.item.item-tray',
 	'order!app/views/browser.collection/browser.view.collection.my-collection-drawer',

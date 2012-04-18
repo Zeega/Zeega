@@ -933,37 +933,6 @@ a.white:hover
 	width: 30px;
 }
 
-.socialmedia-icon
-{
-	
-	overflow:hidden;
-	height:33px;
-	width:33px;
-	background-image:url('../images/socialmediaicons.png');
-	background-repeat: no-repeat;
-	
-}
-[class^="socialmedia-icon-"]
-{
-	display: inline-block;
-	width: 33px;
-	height: 33px;
-	vertical-align: text-top;
-	background-image:url('../images/socialmediaicons.png');
-	background-position: 0px 0px;
-	background-repeat: no-repeat;
-	margin-top:5px;
-}
-
-.socialmedia-icon-facebook{background-position:-81px -56px}
-.socialmedia-icon-facebook:hover{background-position:-81px -16px}
-.socialmedia-icon-twitter{background-position:-122px -56px}
-.socialmedia-icon-twitter:hover{background-position:-122px -16px}
-.socialmedia-icon-tumblr{background-position:-311px -56px}
-.socialmedia-icon-tumblr:hover{background-position:-311px -16px}
-.socialmedia-icon-googleplus{background-position:-274px -134px}
-.socialmedia-icon-googleplus:hover{background-position:-274px -96px}
-
 
 /*********************************************
 
@@ -2918,12 +2887,13 @@ background-color: red;
 	clear:both;
 	margin-top:10px;
 	margin-right:10px;
+
 }
 #publish-project-modal input{
 	width:90%;
 }
 #publish-project-modal textarea{
-	width:45%;
+	
 	float:left;
 }
 #publish-project-modal input, #publish-project-modal textarea{
@@ -2935,7 +2905,8 @@ background-color: red;
 .publish-preview{
 	height:150px;
 	border:1px solid #ccc;
-	width:100%;
+	width:100% !important;
+	overflow: hidden;
 }
 .publish-left-column{
 	float:left;
@@ -2953,12 +2924,74 @@ background-color: red;
 	clear:both;
 	margin-top:10px;
 }
+#publish-embed{
+	width: 90%;
+	height: 50px;
+	word-break: break-all;
+}
+.tags .tagsinput {
+	border: none !important;
+	height: auto !important;
+	width: auto !important;
+	padding-left: 0;
+}
+.tag {
+	margin-right: 4px !important;
+	margin-top: 4px !important;
+
+	-moz-border-radius: 4px !important;
+	-webkit-border-radius: 4px !important;
+	border-radius: 4px !important;
+	color: #777 !important;
+	font-size: 11px !important;
+	border: 1px solid #CCC !important;
+	background: #EFEFEF !important;
+	padding: 2px 5px !important;
+}
+.tags a {
+	color: gray !important;
+	font-size: 11px !important;
+}
+
 #preview-images img{
 	width:50px;
 	height:50px;
 	border:1px solid #ccc;
+	padding:1px;
 
 }
+#preview-images img:hover, .publish-image-select{
+	border:2px solid #F15A29 !important;
+	padding:0 !important;
+}
+#publish-customize-size{
+	display:none;
+	font-size:0.8em;
+	
+}
+#publish-customize-size label{
+	display: inline;
+	font-size:0.8em;
+}
+#publish-customize-size input{
+width:50px;
+	}
+.customize{
+		font-size:0.8em;
+}
+#tumblr_button_abc123 a{
+	width:120px !important;
+	position: relative;
+	top: -7px;
+
+}
+#___plusone_0{
+	margin-top:10px !important;
+}
+#publish-social-media{
+	padding:10px 0;
+}
+
 
 #shareProject {
 
@@ -3004,7 +3037,11 @@ margin-bottom: 0;
 }
 
 #browser-item-count{
-	color:white;
+	color: #CCC;
+	position: relative;
+	top: 6px;
+	left: 5px;
+	font-size: 1.25em;
 }
 
 .clear {

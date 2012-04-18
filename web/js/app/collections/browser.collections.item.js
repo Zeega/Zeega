@@ -20,7 +20,7 @@
 			var _this = this;
 			this._isRendered = true;
 			
-			$('#browser-item-count').text("Displaying " + this.collection.length + " of " + this.collection.totalItemsCount + " items");
+			$('#browser-item-count').text( this.collection.totalItemsCount + " result" + (this.collection.totalItemsCount == 1 ? "" : "s"));
 
 			if(this.collection.length)
 			{
@@ -137,6 +137,7 @@
 						if (_this.search.get("page") <= 0){
 							_this.trigger('reset');
 						}
+
 					}
 				});
 			}
