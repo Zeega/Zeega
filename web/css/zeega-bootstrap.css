@@ -1,0 +1,47 @@
+@import url(http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy|Poiret+One|Trocchi|Pontano+Sans);
+
+.font-sorts-mill-goudy{font-family: 'Sorts Mill Goudy', serif;}
+.font-poiret-one{ font-family: 'Poiret One', cursive; }
+.font-trocchi{ font-family: 'Trocchi', serif;}
+.font-pontano-sans{font-family: 'Pontano Sans', sans-serif;}
+
+[class^="zicon-"]
+{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: text-top;
+	background-image: url('../images/zicons-darkgrey-20.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+[class^="zicon-"].raise-up{ vertical-align:text-bottom }
+
+[class^="zicon-"].orange{ background-image: url('../images/zicons-orange-20.png') }
+
+
+.zicon-image{background-position:-20px 0}
+.zicon-video{background-position:-40px 0}
+.zicon-geo{background-position:-60px 0}
+.zicon-text{background-position:-80px 0}
+.zicon-audio{background-position:-100px 0}
+.zicon-link{background-position:-120px 0}
+.zicon-volume-high{background-position:-140px 0}
+.zicon-volume-off{background-position:-160px -50px}
+.zicon-trash-closed{background-position:-180px 0}
+.zicon-trash-open{background-position:-0px -20px}
+.zicon-add-media{background-position:-100px -100px}
+.zicon-add-user{background-position:-60px -100px}
+.zicon-user{background-position:-40px -100px}
+.zicon-new-document{background-position:-40px -80px}
+.zicon-preview{background-position:-140px -100px}
+.zicon-share{background-position:-120px -100px}
+.zicon-info{background-position:-60px -40px}
+.zicon-help{background-position:-80px -40px}
+
+.zicon-search-dropdown
+{
+	background-position:-0px -20px;
+	background-position: -0px -101px;
+	width: 30px;
+}
