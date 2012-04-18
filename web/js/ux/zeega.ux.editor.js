@@ -196,14 +196,15 @@ function closeOpenCitationTabs()
 	$('#publish-project').click(function(){
 		
 		//Uncomment to activate publish modal
-		//zeega.app.project.loadPublishProject();
-		
+		zeega.app.project.loadPublishProject();
+		/*
 		$('#share-project-modal').modal('show');
 
 		$('#share-project-modal').find('.close-modal').mousedown(function(){
 			$('#share-project-modal').modal('hide');
 			return false;
 		})
+		*/
 		return false;
 	});
 	
