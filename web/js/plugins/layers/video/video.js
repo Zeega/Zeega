@@ -168,6 +168,8 @@
 		onPreload : function()
 		{
 			this.model.video.on('timeupdate', function(){ 
+				if(Math.abs(_this.model.video.pop.volume()-_this.model.get('attr').volume)>.01)_this.model.video.pop.volume(_this.model.get('attr').volume);
+				
 				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
 				{
 					
