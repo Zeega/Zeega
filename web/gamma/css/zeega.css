@@ -1626,6 +1626,16 @@ body
 	z-index:100;
 }
 
+.drop-down-menu
+{
+	width:500px;
+}
+#header-nav .drop-down-menu li,
+#header-title .drop-down-menu li
+{
+	float:none;
+}
+
 .drop-down {
   position: relative;
 }

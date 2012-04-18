@@ -47,9 +47,9 @@
 			</div><!--#intro-actions-->
 			
 			
-			
+			{% if myprojects[0] is defined %}
 			<div id="projects-lists" style="margin-top: 50px;">
-				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; margin-left: 15px;">All Projects</div><br><br>
+				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div> {% if is_granted('ROLE_ADMIN') %} <div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; margin-left: 15px;">All Projects</div>{% endif %}	<br><br>
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
@@ -57,7 +57,8 @@
 						{% endfor %}
 					</ul>
 				</div>
-
+		{% endif %}	
+		{% if is_granted('ROLE_ADMIN') %}
 
 				<!--<div class="item-title" style="font-size: 16px; ">All Recently Updated Projects in {{playground.title}}</div> <br><br>
 				-->
@@ -69,7 +70,8 @@
 					</ul>
 				</div>
 			</div> <!--#projects-list-->
-			
+		
+	{% endif %}	
 </div><br>	<!--#projects-->
 
 {% endblock %}	
