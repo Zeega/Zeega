@@ -37,6 +37,10 @@ ZeegaCoreBundle_browser:
 ZeegaCoreBundle_faq:
     pattern: /faq
     defaults: { _controller:  ZeegaCoreBundle:Editor:faq }
+    
+ZeegaCoreBundle_embed:
+    pattern: /z/{id}
+    defaults: { _controller:  ZeegaCoreBundle:Embed:index }
 
 ZeegaCoreBundle_frame_publish:
     pattern: /frame/{id}/view
