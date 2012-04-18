@@ -188,20 +188,22 @@ function closeOpenCitationTabs()
 		stop : function(e,ui)
 		{
 			$('.ghost-frame').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ Zeega.addFrame() });
+			_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
 		}
 	});
 	
 	//publish button
 	$('#publish-project').click(function(){
-		zeega.app.project.loadPublishProject();
 		
-		/*$('#publish-project-modal').modal('show');
+		//Uncomment to activate publish modal
+		//zeega.app.project.loadPublishProject();
+		
+		$('#share-project-modal').modal('show');
 
-		$('#publish-project-modal').find('#close-modal').mouseup(function(){
-			$('#publish-project-modal').modal('hide');
+		$('#share-project-modal').find('.close-modal').mousedown(function(){
+			$('#share-project-modal').modal('hide');
 			return false;
-		})*/
+		})
 		return false;
 	});
 	
