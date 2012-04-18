@@ -200,7 +200,9 @@ var Player2 = Backbone.View.extend({
 		}
 		else if(adv == 0) //after playback - default
 		{
-			
+			_.each( _.toArray( this.currentLayers), function(layer){
+				layer.on('playback_ended',function(){ _this.goRight() })
+			})
 		}
 		else if(adv > 0) //after n seconds
 		{
@@ -208,6 +210,7 @@ var Player2 = Backbone.View.extend({
 			this.t = setTimeout( function(){ _this.goRight() },adv )
 		}
 	},
+	
 	
 	goLeft : function()
 	{
@@ -249,19 +252,28 @@ var Player2 = Backbone.View.extend({
 			className : 'clearfix',
 			render : function()
 			{
+				console.log(this.model.attributes)
 				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) )
 			},
 			
 			events : {
-				'click' : 'expandCitation'
+				'mouseover' : 'expandCitation',
+				'mouseout' : 'closeCitation'
 			},
 			
 			expandCitation : function()
 			{
 				_this.expandCitationBar();
+				//if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
+				//else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
+			},
+			
+			closeCitation : function()
+			{
+				_this.closeCitationBar();
 				
-				if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
-				else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
+				//if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
+				//else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
 			},
 			
 			getTemplate : function()
@@ -271,11 +283,11 @@ var Player2 = Backbone.View.extend({
 					'<div class="citation-tab">'+
 						'<span class="zicon grey zicon-<%= type %>"></span>'+
 					'</div>'+
-					'<div class="citation-content hidden">'+
+					'<div class="citation-content">'+
 						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
 						'<div class="citation-body">'+
 							'<div class="citation-title"><%= attr.title %></div>'+
-							'<div class="citation-metadata"><a href="<%= attr.attribution_url %>" target="blank">Link to original</a></div>'+
+							'<div class="citation-metadata"><a href="<%= attr.attribution_uri %>" target="blank">Link to original</a></div>'+
 						'</div>'+
 					'</div>';
 				return html;
@@ -442,12 +454,6 @@ var Player2 = Backbone.View.extend({
 			
 		});
 		
-		
-		$('#citation').mouseleave(function(){
-			_.delay( closeCitationBar, 500 );
-		})
-		
-
 		var fadeOutOverlays = _.debounce(this.fadeOutOverlays,5000);
 		//hide all controls and citation
 		onmousemove = function()
@@ -476,7 +482,7 @@ var Player2 = Backbone.View.extend({
 		'click #preview-right' : 'goRight',
 		'click #preview-close' : 'closePlayer',
 		//'mouseover #citation' : 'expandCitationBar',
-		'mouseout #citation'	: "closeCitationBar", 
+		//'mouseout #citation'	: "closeCitationBar", 
 	},
 	
 	expandCitationBar : function()
@@ -488,6 +494,8 @@ var Player2 = Backbone.View.extend({
 	closeCitationBar : function()
 	{
 		console.log('close citation bar')
+		_.delay(function(){ $('#citation').animate({ height : '20px' }) }, 2000);
+		//closeOpenCitationTabs();
 		
 	},
 	
