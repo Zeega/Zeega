@@ -257,23 +257,46 @@ var Player2 = Backbone.View.extend({
 			},
 			
 			events : {
-				'mouseover' : 'expandCitation',
-				'mouseout' : 'closeCitation'
+				'click' : 'expandCitation',
+				//'mouseout' : 'closeCitation'
 			},
 			
-			expandCitation : function()
+			expandCitation : function(e)
 			{
-				_this.expandCitationBar();
-				//if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
-				//else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
+				e.stopPropagation();
+				$('#citation').animate({ height : '100px' })
+				
+				this.closeOtherCitations();
+				
+				if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show();
+				else 
+				{
+					this.$el.find('.citation-content').hide();
+					this.closeCitationBar();
+				}
+			},
+			
+			closeOtherCitations : function()
+			{
+				var _this = this;
+				_.each( $('.citation-content'), function(c){
+					if( $(c).is(':visible') && c != _this.$el.find('.citation-content')[0] ) $(c).hide();
+				})
 			},
 			
 			closeCitation : function()
 			{
-				_this.closeCitationBar();
-				
-				//if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show('fast');
-				//else if(this.$el.find('.citation-content').is(':visible') ) this.$el.find('.citation-content').hide('fast');
+				if(this.$el.find('.citation-content').is(':visible')  ) this.$el.find('.citation-content').hide();
+			},
+			
+			expandCitationBar : function()
+			{
+				$('#citation').animate({ height : '100px' })
+			},
+
+			closeCitationBar : function()
+			{
+				$('#citation').animate({ height : '24px' })
 			},
 			
 			getTemplate : function()
@@ -281,9 +304,9 @@ var Player2 = Backbone.View.extend({
 				var html =
 
 					'<div class="citation-tab">'+
-						'<span class="zicon grey zicon-<%= type %>"></span>'+
+						'<i class="zicon-<%= type.toLowerCase() %>"></i>'+
 					'</div>'+
-					'<div class="citation-content">'+
+					'<div class="citation-content" style="display:none">'+
 						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
 						'<div class="citation-body">'+
 							'<div class="citation-title"><%= attr.title %></div>'+
@@ -394,8 +417,13 @@ var Player2 = Backbone.View.extend({
 	fadeOutOverlays : function( _this )
 	{
 		_this.overlaysHidden = true;
+		
 		$('.player-overlay').fadeOut('slow');
 		$('.preview-nav').fadeOut('slow');
+		
+		$('#citation').animate({ height : '24px' });
+		$('.citation-content').hide();
+		
 	},
 	
 	initListeners : function()
@@ -485,6 +513,7 @@ var Player2 = Backbone.View.extend({
 		//'mouseout #citation'	: "closeCitationBar", 
 	},
 	
+	/*
 	expandCitationBar : function()
 	{
 		console.log('expand citation bar')
@@ -498,6 +527,7 @@ var Player2 = Backbone.View.extend({
 		//closeOpenCitationTabs();
 		
 	},
+	*/
 	
 	/*****************************
 	
