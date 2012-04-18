@@ -18,7 +18,7 @@
 						
 						<li>
 							<ul class='pill-buttons'>
-								<li><a id='publish-project' href='#'>Publish</a></li>
+								<li><a id='publish-project' href='#'>Share</a></li>
 								<!--
 								<li><a id='embed' href='http://www.getjavascript.com' onclick='embedButton();return false;'>Export</a></li>
 								-->
@@ -229,8 +229,23 @@
 {% block extras %}
 
  <!-- modal -->
-<div id="publish-project-modal" class="modal hide" ></div>
 
+	<div id="share-project-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close close-modal'>x</a>
+				<h3>Share Your Project</h3>
+			</div>
+			<div class="modal-body clearfix">
+				<p>Share your project: <b>{{projecttitle}}</b></p>
+				<a href='{{hostname}}{{directory}}project/{{project.id}}/view' id='project-link' target='blank'>{{hostname}}{{directory}}project/{{project.id}}/view</a>
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+				</span>
+			</div>
+		</div> 
 
 
 	<div id='templates' class='hidden'>
