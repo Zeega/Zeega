@@ -207,7 +207,7 @@ function closeOpenCitationTabs()
 	
 	$('#get-help').click(function(){
 		localStorage.help = true;
-		Zeega.initStartHelp();
+		zeega.app.initStartHelp();
 	})
 	
 	

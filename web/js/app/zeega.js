@@ -499,52 +499,55 @@ this.zeega = {
 	initStartHelp : function()
 	{
 		
-		/*
+		
 		if(localStorage.help != 'false' && this.helpCounter == 0)
 		{
 			//init the popovers
 			$('#visual-editor-workspace').popover({
-				trigger: manual,
-				html:true,
-				placement:'above',
-				offset:'-250',
-				template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
+				trigger: 'manual',
+				//html:true,
+				//placement:'above',
+				//offset:'-250',
+				//content : 'tester'
+				//template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
+			
+			/*
 			$('#database-panel').popover({
-				trigger: manual,
+				trigger: 'manual',
 				html:true,
 				placement:'right',
 				//offset:'-250',
 				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#new-layer-tray').popover({
-				trigger: manual,
+				trigger: 'manual',
 				html:true,
 				placement:'above',
 				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#layer-panel').popover({
-				trigger: manual,
+				trigger: 'manual',
 				html:true,
 				placement:'above',
 				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#frame-drawer').popover({
-				trigger: manual,
+				trigger: 'manual',
 				html:true,
 				placement:'below',
 				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
 			$('#preview').popover({
-				trigger: manual,
+				trigger: 'manual',
 				html:true,
 				placement:'below',
 				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
 			});
-
+*/
 			this.displayStartHelp();
 		}
-		*/
+		
 	},
 
 	displayStartHelp : function()
@@ -552,13 +555,19 @@ this.zeega = {
 		var _this = this;
 		var helpOrderArray = [
 			'visual-editor-workspace',
+			/*
 			'database-panel',
 			'new-layer-tray',
 			'layer-panel',
 			'frame-drawer',
 			'preview'
+			*/
 		];
-
+		
+		console.log('	HELPPPPPPP')
+		console.log(helpOrderArray[0]);
+		console.log(this.helpCounter)
+		console.log( $('#'+helpOrderArray[_this.helpCounter]) )
 
 		if(_this.helpCounter > 0 )
 		{
