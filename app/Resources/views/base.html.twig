@@ -85,81 +85,93 @@
  	
     	
     	{% block header %}
-    	<div id='header-bg'></div>
-    	<div id="wrapper" >
-    	
-    			
-    			
-				<div id="header">
-					
-					<div id="header-title" style="margin-left: -30px;">
-						<ul>
-						
-							<li ><a href="{{path('ZeegaCoreBundle_home')}}" class="dark"><img src="{{ asset('images/zeega-logo-header.png') }}" style="margin-top: -4px;"/></a></li>
-							{% if site%}
-							<li class='{% if num_sites > 1 %} drop-down{% endif %} clearfix' >
-									<a  {% if num_sites > 1 %} class='drop-down-toggle' {% endif %}  href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}" class="dark">  {{title}} </a>
-									{% if num_sites > 1 %} 
-									<ul class='drop-down-menu'>
-									
-										{% for p in sites %}
-												<li><a  href="{{ path('ZeegaCoreBundle_site', {'short': p.short }) }}" class="dark">  {{p.title}} </a></li>
-										{% endfor %}
-									</ul>
-									{% endif %} 
-							</li>
-							
-							
-							<li class=' clearfix' style="margin-left: 20px;">
-									<a   href="{{ path('ZeegaCoreBundle_browser', {'short': site.short }) }}" class="dark">Collections</a>
-	
-							</li>
-							<li>|</li>
-							<li class='drop-down clearfix' >
-									<a  class='drop-down-toggle' href="#" class="dark">Projects</a>
-									<ul class='drop-down-menu' style="width:200px;">
-									
-												<li><a class="new-project" href="#" style="font-size: 12px;">Create New Project</a></li><br>
-												
-												<hr>
 
-									
-										{% for project in myprojects %}
-												<li><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}" class="dark">{{project.title}}</a></li><br>
+    	<div id="wrapper" >
+
+			<header>
+				<div class="navbar navbar-fixed-top">
+					<div class="navbar-inner">
+						<div class="container">
+							
+							<a class="brand" href="{{path('ZeegaCoreBundle_home')}}">
+								<img src="{{ asset('images/zeega-logo-header.png') }}"/>
+							</a>
+							
+							<ul class="nav">
+								
+							{% if site%}
+							
+								{% if num_sites > 1 %}
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{title}}<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										{% for p in sites %}
+											<li>
+												<a href="{{ path('ZeegaCoreBundle_site', {'short': p.short }) }}">{{p.title}}</a>
+											</li>
 										{% endfor %}
 									</ul>
-							</li>
-							<li>|</li>
+								</li><!-- sites .dropdown -->
+								{% else %}
+								<li class="">
+									<a href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}">{{title}}</a>
+								</li>
+								{% endif %}
+								
+								<li><a href="{{ path('ZeegaCoreBundle_browser', {'short': site.short }) }}">Collections</a></li>
+								
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										Projects
+										<b class="caret"></b>
+									</a>
+									<ul class="dropdown-menu">
+										
+										<li><a class="new-project" href="#"><i class='zicon-new-document'></i> New Project</a></li>
+										<li class="divider"></li>
+										
+										{% for project in myprojects %}
+										<li>
+											<a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a>
+										</li>
+										{% endfor %}
+										
+									</ul>
+								</li><!-- project .dropdown -->
+								<li class="divider-vertical"></li>
+								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
 							
-							<li class='item add-media' ><a href="#">Add Media</a></li>							
 							{% else %} 
-							<li class='item add-media' style="margin-left: 45px;" ><a href="#">Add Media</a></li>
+								<li class="divider-vertical"></li>
+								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
+								
 							{% endif %} 
-							{% if is_granted('ROLE_ADMIN') %}
-															<li>|</li><li><a href="{{ path('fos_user_registration_register') }}" class="dark">Register User</a></li><br>
-							{% endif %}
-						</ul>
-						
-						
-						
+							
+								{% if is_granted('ROLE_ADMIN') %}
+								<li><a href="{{ path('fos_user_registration_register') }}"><i class='zicon-add-user'></i> Register User</a></li>
+								{% endif %}
+							</ul>
+							
+							<ul class="nav pull-right">
+								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a></li>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li><a href="#">Presentation</a></li>
+										<li><a href="{{ path('fos_user_change_password')}}">User Profile</a></li>
+										<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
+									</ul>
+								</li>
+							</ul>
+							
+							
+						</div>
 					</div>
-					
-	
-					<div id="header-nav">
-		
-						<ul>
-							<li class='item'><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a></li>
-							<li class='drop-down clearfix item'>
-								Logged in as <a href='#' class='drop-down-toggle'>{{displayname}}</a>
-								<ul class='drop-down-menu'>	
-									<li id="css-change"><a href="#">Presentation</a></li>
-									<li><a href="{{ path('fos_user_change_password')}}">User Profile</a></li>
-									<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
-								</ul>
-							</li>
-						</ul>
-					</div> <!-- #headerLoggedInWrapper -->
-			</div> <!-- #header -->	
+				</div>
+			</header>
+    			
+    			
+				
 			{% endblock %}
 		
 
