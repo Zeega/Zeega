@@ -105,6 +105,7 @@
 		render : function()
 		{
 			
+			// this should be removed later!
 			var c = '';
 			var b = '';
 			if( _.isObject( this.model.get('attr').color ) )
@@ -127,7 +128,7 @@
 				'color' : 'rgba('+ c.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
 				'backgroundColor' : 'rgba('+ b.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
 				'opacity' : this.model.get('attr').opacity,
-				'fontSize' : this.model.get('attr').fontSize < 100 ? '100%' : this.model.get('attr').fontSize +'%',
+				'fontSize' : this.model.get('attr').fontSize < 100 ? '100%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
 				'padding' : this.model.get('attr').padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
