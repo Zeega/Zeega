@@ -127,7 +127,7 @@
 				'color' : 'rgba('+ c.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
 				'backgroundColor' : 'rgba('+ b.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
 				'opacity' : this.model.get('attr').opacity,
-				'fontSize' : this.model.get('attr').fontSize +'%',
+				'fontSize' : this.model.get('attr').fontSize < 100 ? '100%' : this.model.get('attr').fontSize +'%',
 				'padding' : this.model.get('attr').padding +'%',
 				'whiteSpace' : 'nowrap'
 			}
