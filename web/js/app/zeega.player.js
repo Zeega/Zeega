@@ -275,7 +275,7 @@ var Player2 = Backbone.View.extend({
 						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
 						'<div class="citation-body">'+
 							'<div class="citation-title"><%= attr.title %></div>'+
-							'<div class="citation-metadata"><a href="<%= attr.attribution_url %>" target="blank">Link to original</a></div>'+
+							'<div class="citation-metadata"><a href="<%= attr.attribution_uri %>" target="blank">Link to original</a></div>'+
 						'</div>'+
 					'</div>';
 				return html;
