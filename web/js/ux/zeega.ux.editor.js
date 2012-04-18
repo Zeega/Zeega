@@ -125,7 +125,7 @@ function addLayer(type)
 	Zeega.addLayerToFrame( Zeega.currentFrame, newLayer );
 }
 */
-
+/*
 function expandLayer(el)
 {
 	var w = $(el).closest('.layer-wrapper').find('.layer-content');
@@ -147,7 +147,7 @@ function closeOpenCitationTabs()
 		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
 	})	
 }
-
+*/
 
 
 //$(document).ready(function(){
