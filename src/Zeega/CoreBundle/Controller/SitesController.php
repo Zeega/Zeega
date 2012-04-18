@@ -82,6 +82,7 @@ class SitesController extends Controller
     	$project->setDateCreated(new \DateTime("now"));
     	$project->setEnabled(true);
     	$project->setPublished(true);
+    	$project->setAttr(array('cover_image'=>'http://zeega.org/images/zeega_clear2.png'));
     	
 		$sequence = new Sequence();
 		$frame = new Frame();
