@@ -2,10 +2,14 @@
 
 	Project.Model = Backbone.Model.extend({
 		
+		default_attr : {
+		},
+		
 		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
 		
 		initialize : function( attributes )
 		{
+			_.defaults( this.get('attr'), this.default_attr );
 			this.unset('sequences',['silent'])
 			this.createSequences( attributes.sequences );
 		},

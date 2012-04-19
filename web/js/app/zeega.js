@@ -65,6 +65,10 @@ this.zeega = {
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject();
 		this.itemCollection = new Items.ViewCollection();
+		
+		
+		console.log(this.project)
+		
 	},
 	
 	loadCollectionsDropdown : function( collections )

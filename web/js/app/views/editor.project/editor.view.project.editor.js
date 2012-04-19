@@ -30,6 +30,10 @@
 			var regex = /Untitled/;
 			if( regex.test( this.model.get('title')) ) $(this.el).trigger('click');
 
+			//display the cover image
+			$('#sequence-cover-image').css({'background-image' : 'url("'+ this.model.get('attr').cover_image +'")'})
+
+
 			return this;
 		}
 	});
