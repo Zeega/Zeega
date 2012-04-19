@@ -6,7 +6,8 @@
     database_host     = 
     database_name     = 
     database_user     = 
-    database_password = 
+    database_password =
+	database_type     = pgsql
 
     mailer_transport  = smtp
     mailer_host       = localhost
@@ -21,7 +22,8 @@
     hostname          = http://alpha.zeega.org/
     directory         = test/web/
     path			  = /var/www/web/
-
+	web_directory	  = /var/www/
+	
 	solr_enabled	  = false
 	solr_host         = localhost
     solr_port         = 8080
