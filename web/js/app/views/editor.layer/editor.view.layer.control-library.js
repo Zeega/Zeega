@@ -488,9 +488,13 @@
 		
 		getTemplate : function()
 		{
-			var html = ''+
+			var html =
 			
 					"<div class='control-name'><%= label %></div>"+
+					
+						"<div class='color-block'></div>"+
+						"<input class='span1' type='text' name='hex-color'/>"+
+					
 					"<div class='control-colorpicker'></div>";
 			
 			return html;
