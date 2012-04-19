@@ -1,36 +1,55 @@
 <!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-
-	<title></title>
-	 <link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
-	<meta name="robots" content="noindex,follow">
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
-	<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
+	<head>
+		<style type="text/css">
+			html {
+				background: url({{project.getAttr().cover_image}}) no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				color:white;
+			}
+			
+			h1 {
+				font-size:14px;
+			}
+			
+			h2 {
+				font-size:12px;
+			}
+			
+			
+			#text{
+				background-color:rgba(0,0,0,.5); 
+				position: absolute; 
+				bottom: 10%; 
+				width:100%; 
+				padding:10px;
+			}
+			
+			a{
+				width:100%;
+				height:100%; 
+				z-index:1000; 
+				position:absolute;
+			
+			}
+		</style>
+			<script> 
+				sessionStorage.setItem('directory', '{{directory}}');
+				sessionStorage.setItem('hostname','{{hostname}}');
+				sessionStorage.setItem('projectId','{{projectId}}');
+			
+		</script>
 	
-	<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
+	</head>
 
-	<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	<script> 
-		sessionStorage.setItem('directory', '{{directory}}');
-		sessionStorage.setItem('hostname','{{hostname}}');
-		sessionStorage.setItem('projectId','{{projectId}}');
-	</script>
-
-	
-</head>
-
-<body>
-
-
-{{project.getId()}}<br>
-{{project.getTitle()}}<br>
-
-
-
-</body>
+	<body style="margin:0px;">
+		<a href="{{hostname}}{{directory}}project/{{projectId}}/view"></a>
+		<div id="text">
+			<h1>{{project.getTitle()}}</h1>
+			{% if project.getAttr().author is defined %}<h2>{{project.getAttr().author}}</h2>{% endif %}
+		</div>
+	</body>
 </html>

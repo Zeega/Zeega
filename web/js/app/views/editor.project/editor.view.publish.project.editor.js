@@ -27,7 +27,7 @@
 			}
 
 			
-			var projectlink = zeega.app.url_prefix + "project/" + this.model.id + '/view';
+			var projectlink = zeega.app.url_prefix + "z/" + this.model.id;
 			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="150px" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
@@ -157,8 +157,8 @@
 							'<label for="tags">Tags</label>'+
 							'<div class="tags"><input name="tags" class="tagsedit" id="<%=randId%>" value="<%=tags%>" /></div>'+
 
-							'<label for="preview-images">Choose an image to represent your project</label>'+
-							'<div id="preview-images"><%= imageHTML %></div>'+
+							//'<label for="preview-images">Choose an image to represent your project</label>'+
+							//'<div id="preview-images"><%= imageHTML %></div>'+
 
 							'<div class="publish-footer">'+
 								'<a href="#" id="looks-good" class="btn secondary">looks good</a>'+
