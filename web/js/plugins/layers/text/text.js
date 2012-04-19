@@ -84,9 +84,19 @@
 				
 			});
 			
+			var textStyles = new Layer.Views.Lib.TextStyles({
+				model : this.model
+			})
+			
+			var fontChooser = new Layer.Views.Lib.FontChooser({
+				model : this.model
+			})
+			
 			var clearButton = new Layer.Views.Lib.ClearStyles({ model : this.model });
 			
 			this.controls
+				.append( textStyles.getControl() )
+				.append( fontChooser.getControl() )
 				.append( color.getControl() )
 				.append( bgcolor.getControl() )
 				.append( sizeSlider.getControl() )

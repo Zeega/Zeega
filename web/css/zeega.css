@@ -1214,7 +1214,7 @@ body
 	
 *******************************/
 
-#layers-list-visual li
+#layers-list-visual>li
 {
 	min-height:25px;
 	background:#555;

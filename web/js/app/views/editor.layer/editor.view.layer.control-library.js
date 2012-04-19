@@ -296,6 +296,125 @@
 		
 	});
 	
+	Layer.Views.Lib.TextStyles = Layer.Views.Lib.extend({
+
+		className : 'text-styles',
+
+		render : function()
+		{
+			var buttonSet = this.getTemplate();
+			$(this.el).append( buttonSet );
+		},
+		
+		events : {
+			'click .bold' : 'addBold',
+			'click .italic' : 'addItalic',
+			'click .underline' : 'addUnderline'
+		},
+		
+		addBold : function()
+		{
+			if( this.model.visual.$el.find('.style-bold').length  )
+				this.model.visual.$el.find('.style-bold').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-bold" style="font-weight:bold"/>');
+			this.$el.find('.bold').effect('highlight',{},2000);
+			this.saveContent();
+		},
+		
+		addItalic: function()
+		{
+			if( this.model.visual.$el.find('.style-italic').length  )
+				this.model.visual.$el.find('.style-italic').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-italic" style="font-style:italic"/>');
+			this.$el.find('.italic').effect('highlight',{},2000);
+			this.saveContent();
+		},
+		addUnderline : function()
+		{
+			if( this.model.visual.$el.find('.style-underline').length  )
+				this.model.visual.$el.find('.style-underline').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-underline" style="text-decoration:underline"/>');
+			this.$el.find('.underline').effect('highlight',{},2000);
+			
+			this.saveContent();
+		},
+		
+		saveContent : function()
+		{
+			var str = this.model.visual.$el.find('#zedit-target').html();
+			this.model.update({ content : str });
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+				'<div class="btn-group">'+
+					'<button class="btn bold"><i class="zicon-bold"></i></button>'+
+					'<button class="btn italic"><i class="zicon-italic"></i></button>'+
+					'<button class="btn underline"><i class="zicon-underline"></i></button>'+
+				'</div>';
+					
+			return html;
+		}
+		
+	});
+	
+	Layer.Views.Lib.FontChooser = Layer.Views.Lib.extend({
+		
+		className : 'font-chooser',
+
+		render : function()
+		{
+			var buttonSet = this.getTemplate();
+			$(this.el).append( buttonSet );
+		},
+		
+		events : {
+			'click .font-list a' : 'changeFont'
+		},
+		
+		changeFont : function( ui )
+		{
+			this.model.visual.$el.find('.style-font-family').contents().unwrap();
+			this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
+			this.saveContent();
+			return false;
+		},
+		
+		saveContent : function()
+		{
+			var str = this.model.visual.$el.find('#zedit-target').html();
+			this.model.update({ content : str });
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+			'<div class="btn-group">'+
+				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Fonts'+
+					'<span class="caret"></span>'+
+				'</a>'+
+				'<ul class="dropdown-menu font-list">'+
+					'<li style="font-family:\'Arial\'"><a href="#" data-font-family="Arial">Arial</a></li>'+
+					'<li style="font-family:\'Georgia\'"><a href="#" data-font-family="Georgia">Georgia</a></li>'+
+					'<li style="font-family:\'Verdana\'"><a href="#" data-font-family="Verdana">Verdana</a></li>'+
+					'<li style="font-family:\'Sorts Mill Goudy\'"><a href="#" data-font-family="Sorts Mill Goudy">Sorts Mill Goudy</a></li>'+
+					'<li style="font-family:\'Poiret One\'"><a href="#" data-font-family="Poiret One">Poiret One</a></li>'+
+					'<li style="font-family:\'Trocchi\'"><a href="#" data-font-family="Trocchi">Trocchi</a></li>'+
+					'<li style="font-family:\'Pontano Sans\'"><a href="#" data-font-family="Pontano Sans">Pontano Sans</a></li>'+
+				'</ul>'+
+			'</div>';
+					
+			return html;
+		}
+		
+	});
+	
 	Layer.Views.Lib.ColorPicker = Layer.Views.Lib.extend({
 		
 		className : 'control control-colorpicker',
