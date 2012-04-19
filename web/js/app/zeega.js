@@ -418,7 +418,10 @@ this.zeega = {
 
 		this.cleanWorkspace();
 
-		this.player = new Player2(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
+		this.player = new Player2($('body'));
+		
+		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
+	
 	},
 	
 	restoreFromPreview : function()
