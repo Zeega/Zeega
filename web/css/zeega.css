@@ -1571,6 +1571,9 @@ default-layer-control
 	width:700px;
 	border:1px dotted #666;
 	-webkit-transition: border .25s linear;
+	height: 1.25em;
+	line-height: 1.2em;
+	background-color:#333;
 }
 
 #sequence-title:hover

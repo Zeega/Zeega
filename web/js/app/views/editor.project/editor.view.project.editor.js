@@ -10,31 +10,32 @@
 			var _this = this;
 			this.$el.html( this.model.get('title') );
 
-			this.$el.editable(
-				function(value,settings)
+			this.$el.attr('contenteditable','true').keypress(function(e){
+				if(e.which==13)
 				{
-					_this.model.set( { 'title': value } );
-					_this.model.save();
-					return value; //must return the value!!
-				},
-				{
-					indicator : 'Saving...',
-					tooltip   : 'Click to edit...',
-					indicator : '<img src="images/loading.gif">',
-					select : true,
-					onblur : 'submit',
-					width : 700,
-					maxlength : 40
-				});
-
-			var regex = /Untitled/;
-			if( regex.test( this.model.get('title')) ) $(this.el).trigger('click');
+					e.preventDefault();
+					$(this).blur();
+				}
+			})
+			.blur(function(){
+				_this.saveTitle();
+			});
 
 			//display the cover image
 			$('#sequence-cover-image').css({'background-image' : 'url("'+ this.model.get('attr').cover_image +'")'})
 
-
 			return this;
+		},
+		
+		saveTitle : function()
+		{
+			if(this.$el.text() != this.model.get('title'))
+			{
+				var t = this.$el.text() == '' ? 'untitled' : this.$el.text();
+				this.$el.effect('highlight',{},2000);
+				this.model.save({ 'title' : t });
+			}
+			
 		}
 	});
 	
