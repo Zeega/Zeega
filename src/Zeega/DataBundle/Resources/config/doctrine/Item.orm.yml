@@ -38,24 +38,25 @@ Zeega\DataBundle\Entity\Item:
             nullable: true            
         title:
             type: string
-            length: 255
+            length: 
             nullable: true
         user_id:
             type: integer
             nullable: false
         description:
             type: string
+            length: 500
             nullable: true
         text:
             type: text
             nullable: true
         uri:
             type: string
-            length: 255
+            length: 500
             unique: false
         attribution_uri:
             type: string
-            length: 255
+            length: 500
         date_created:
             type: datetime
             nullable: true
