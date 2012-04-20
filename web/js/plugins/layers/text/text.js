@@ -157,7 +157,14 @@
 		onLayerEnter : function()
 		{
 			var _this = this;
+
+			this.$el.css('width' , _this.$el.find('#zedit-target').width()+'px' );
+			
+			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
+			
 			this.$el.find('#zedit-target').keypress(function(e){
+				_this.$el.css('width' , '' );
+				
 				_this.lazySave();
 			})
 			.bind('paste', function(e){
@@ -176,6 +183,7 @@
 		},
 		
 		lazySave : _.debounce( function(){
+			$(this.el).css( 'width',this.$el.find('#zedit-target').width()+'px' );
 			
 			var str = this.$el.find('#zedit-target').html();
 			
