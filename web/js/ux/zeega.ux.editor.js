@@ -23,6 +23,22 @@ function initUX(){
 	});
 	
 	
+	
+	$('#sequence-cover-image').droppable({
+
+		accept : '.database-asset-list',
+		hoverClass : 'workspace-item-hover',
+		tolerance : 'pointer',
+
+		//this happens when you drop a database item onto a frame
+		drop : function( event, ui )
+			{
+				ui.draggable.draggable('option','revert',false);
+				zeega.app.editCoverImage({ item : zeega.app.draggedItem })
+			}
+	});
+	
+	
 }
 
 $('#add-node-button').click(function(){
@@ -115,40 +131,6 @@ $('#new-layer-list a').click(function(){
 	return false;
 })
 
-/*
-function addLayer(type)
-{
-	//add new layer model
-	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
- 	 
-    var newLayer = new Layer({'type':type,'attr':{}});
-	Zeega.addLayerToFrame( Zeega.currentFrame, newLayer );
-}
-*/
-/*
-function expandLayer(el)
-{
-	var w = $(el).closest('.layer-wrapper').find('.layer-content');
-	if( w.is(':hidden') ) w.show('blind',{'direction':'vertical'});
-	else w.hide('blind',{'direction':'vertical'});
-}
-
-
-function closeCitationBar()
-{
-	$('#citation').animate({ height : '20px' })
-	//$('#hide-citation').fadeOut();
-	closeOpenCitationTabs();
-}
-
-function closeOpenCitationTabs()
-{
-	$('.citation-tab').closest('ul').children('li').each(function(i,el){
-		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
-	})	
-}
-*/
-
 
 //$(document).ready(function(){
 	
@@ -196,14 +178,15 @@ function closeOpenCitationTabs()
 	$('#publish-project').click(function(){
 		
 		//Uncomment to activate publish modal
-		//zeega.app.project.loadPublishProject();
-		
+		zeega.app.project.loadPublishProject();
+		/*
 		$('#share-project-modal').modal('show');
 
 		$('#share-project-modal').find('.close-modal').mousedown(function(){
 			$('#share-project-modal').modal('hide');
 			return false;
 		})
+		*/
 		return false;
 	});
 	
@@ -260,6 +243,7 @@ function closeOpenCitationTabs()
 	//detect when zeega comes back in focus and refresh the database
 	window.addEventListener('focus', function(){
 		zeega.app.refreshDatabase();
+		console.log('refreshing database from zeega.ux.editor line 260');
 	});
 	
 	$('#database-search-text').keypress(function(e){

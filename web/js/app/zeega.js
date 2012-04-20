@@ -65,6 +65,10 @@ this.zeega = {
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject();
 		this.itemCollection = new Items.ViewCollection();
+		
+		
+		console.log(this.project)
+		
 	},
 	
 	loadCollectionsDropdown : function( collections )
@@ -608,6 +612,19 @@ console.log( helpOrderArray[this.helpCounter-1] )
 			$('#'+helpOrderArray[this.helpCounter-1]).css('box-shadow', '');
 			this.helpCounter = 0;
 
+	},
+	
+	editCoverImage : function(obj)
+	{
+		if(obj.item.get('layer_type') == 'Image')
+		{
+			console.log(obj)
+			console.log( 'we can make something out of this' )
+			$('#sequence-cover-image').css('background-image' , 'url("'+ obj.item.get('uri') +'")' );
+			console.log(this)
+			this.project.update({'cover_image':obj.item.get('uri')})
+			
+		}
 	}
 
 	

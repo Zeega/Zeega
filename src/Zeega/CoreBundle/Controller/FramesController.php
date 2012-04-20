@@ -103,7 +103,7 @@ class FramesController extends Controller
     	$em=$this->getDoctrine()->getEntityManager();
     	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
 		exec('/opt/webcapture/webpage_capture -t 50x50 -crop ' .$this->container->getParameter('hostname') .$this->container->getParameter('directory') .'frame/'.$frame_id.'/view '.$this->container->getParameter('path').'images/frames',$output);
-		$url=explode(':/var/www/web/',$output[4]);
+		$url=explode(":".$this->container->getParameter('web_directory'),$output[4]);
 		$frame->setThumbnailUrl($this->container->getParameter('hostname') . $url[1]);
 		$em->persist($frame);
 		$em->flush();

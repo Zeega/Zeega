@@ -5,8 +5,9 @@
 		"title" : {{ project.getTitle() | default("") | json_encode | raw}},
 		"attr" : {{ project.getAttr() | default({ }) | json_encode | raw}},
 		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
-		"enabled" : {{ project.getTags() | default("") | json_encode | raw}},
-		"description" : {{ project.getDescription() | default("") | json_encode | raw}},
+                "tags" : {{ project.getTags() | default("") | json_encode | raw}},
+		"enabled" : {{ project.getEnabled() | default("") | json_encode | raw}},
+		"published" : {{ project.getPublished() | default("") | json_encode | raw}},
 		"sequences" : [
 			{% if sequences is defined and sequences is not empty %}
 				{% set len = sequences|length - 1 -%}

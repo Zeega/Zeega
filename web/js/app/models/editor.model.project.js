@@ -2,10 +2,14 @@
 
 	Project.Model = Backbone.Model.extend({
 		
-		url : function(){ return zeega.app.url_prefix+"projects/"+this.id },
+		default_attr : {
+		},
+		
+		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
 		
 		initialize : function( attributes )
 		{
+			_.defaults( this.get('attr'), this.default_attr );
 			this.unset('sequences',['silent'])
 			this.createSequences( attributes.sequences );
 		},
@@ -24,17 +28,6 @@
 			this.view.render();
 			
 		},
-		getAllFrameThumbnails : function()
-		{
-			var frames = this.sequences.at(0).frames.models;
-			var frameThumbs = [];
-			for(var i=0;i<frames.length;i++){
-				var frame = frames[i];
-				frameThumbs.push(frame.get('thumbnail_url'));
-			}
-			return frameThumbs;
-				
-		},
 		createSequences : function( sequences )
 		{
 			var _this = this;
@@ -43,7 +36,19 @@
 			this.sequences = new Sequence.Collection( sequences );
 
 			zeega.app.currentSequence = this.sequences.at(0);
-		}
+		},
+		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
 		
 	});
 

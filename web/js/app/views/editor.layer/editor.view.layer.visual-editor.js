@@ -141,6 +141,13 @@
 		{
 			var _this = this;
 			$(this.el).draggable({
+				
+				start : function(e,ui)
+				{
+					console.log( 'actual width: '+ $(this).width() )
+					console.log( 'width: '+ $(this).css('width') )
+				},
+				
 				stop : function(e,ui)
 				{
 					//convert to % first // based on parent

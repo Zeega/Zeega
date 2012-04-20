@@ -296,9 +296,137 @@
 		
 	});
 	
+	Layer.Views.Lib.TextStyles = Layer.Views.Lib.extend({
+
+		className : 'text-styles',
+
+		render : function()
+		{
+			var buttonSet = this.getTemplate();
+			$(this.el).append( buttonSet );
+		},
+		
+		events : {
+			'click .bold' : 'addBold',
+			'click .italic' : 'addItalic',
+			'click .underline' : 'addUnderline',
+			'click .clear-styles' : 'clearStyles'
+		},
+		
+		addBold : function()
+		{
+			if( this.model.visual.$el.find('.style-bold').length  )
+				this.model.visual.$el.find('.style-bold').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-bold" style="font-weight:bold"/>');
+			this.$el.find('.bold').effect('highlight',{},2000);
+			this.saveContent();
+		},
+		
+		addItalic: function()
+		{
+			if( this.model.visual.$el.find('.style-italic').length  )
+				this.model.visual.$el.find('.style-italic').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-italic" style="font-style:italic"/>');
+			this.$el.find('.italic').effect('highlight',{},2000);
+			this.saveContent();
+		},
+		addUnderline : function()
+		{
+			if( this.model.visual.$el.find('.style-underline').length  )
+				this.model.visual.$el.find('.style-underline').contents().unwrap();
+			else
+				this.model.visual.$el.find('.inner').wrapInner('<span class="style-underline" style="text-decoration:underline"/>');
+			this.$el.find('.underline').effect('highlight',{},2000);
+			
+			this.saveContent();
+		},
+		
+		saveContent : function()
+		{
+			var str = this.model.visual.$el.find('#zedit-target').html();
+			this.model.update({ content : str });
+		},
+		
+		clearStyles : function()
+		{
+			var clean = this.model.get('attr').content.replace(/(<([^>]+)>)/ig, "");
+			this.model.update({ content : clean });
+			this.model.updateContentInPlace();
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+				'<div class="btn-group">'+
+					'<button class="btn bold"><i class="zicon-bold"></i></button>'+
+					'<button class="btn italic"><i class="zicon-italic"></i></button>'+
+					'<button class="btn underline"><i class="zicon-underline"></i></button>'+
+					'<button class="btn clear-styles"><i class="zicon-cancel"></i></button>'+
+				'</div>';
+					
+			return html;
+		}
+		
+	});
+	
+	Layer.Views.Lib.FontChooser = Layer.Views.Lib.extend({
+		
+		className : 'font-chooser',
+
+		render : function()
+		{
+			var buttonSet = this.getTemplate();
+			$(this.el).append( buttonSet );
+		},
+		
+		events : {
+			'click .font-list a' : 'changeFont'
+		},
+		
+		changeFont : function( ui )
+		{
+			this.model.visual.$el.find('.style-font-family').contents().unwrap();
+			this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
+			this.saveContent();
+			return false;
+		},
+		
+		saveContent : function()
+		{
+			var str = this.model.visual.$el.find('#zedit-target').html();
+			this.model.update({ content : str });
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+			'<div class="btn-group">'+
+				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Fonts'+
+					'<span class="caret"></span>'+
+				'</a>'+
+				'<ul class="dropdown-menu font-list">'+
+					'<li style="font-family:\'Arial\'"><a href="#" data-font-family="Arial">Arial</a></li>'+
+					'<li style="font-family:\'Georgia\'"><a href="#" data-font-family="Georgia">Georgia</a></li>'+
+					'<li style="font-family:\'Verdana\'"><a href="#" data-font-family="Verdana">Verdana</a></li>'+
+					'<li style="font-family:\'Sorts Mill Goudy\'"><a href="#" data-font-family="Sorts Mill Goudy">Sorts Mill Goudy</a></li>'+
+					'<li style="font-family:\'Poiret One\'"><a href="#" data-font-family="Poiret One">Poiret One</a></li>'+
+					'<li style="font-family:\'Trocchi\'"><a href="#" data-font-family="Trocchi">Trocchi</a></li>'+
+					'<li style="font-family:\'Pontano Sans\'"><a href="#" data-font-family="Pontano Sans">Pontano Sans</a></li>'+
+				'</ul>'+
+			'</div>';
+					
+			return html;
+		}
+		
+	});
+	
 	Layer.Views.Lib.ColorPicker = Layer.Views.Lib.extend({
 		
-		className : 'control control-colorpicker',
+		className : 'control-colorpicker',
 		
 		defaults : {
 			property : 'backgroundColor',
@@ -323,41 +451,93 @@
 			
 			if(this.settings.opacity )
 			{
-				var opacitySlider = new Layer.Views.Lib.Slider({
+				this.opacitySlider = new Layer.Views.Lib.Slider({
 					css : false,
 					property : this.settings.property +'Opacity',
 					value : this.settings[this.settings.property+'Opacity'] || this.settings.opacityValue,
 					model: this.model,
-					label : 'Opacity',
+					label : this.settings.label+' Opacity',
 					step : 0.01,
 					min : .05,
 					max : 1,
 					slide : function()
 					{
-						_this.refreshColor(_this.settings.color, opacitySlider.getValue() )
+						_this.refreshColor(_this.settings.color, _this.opacitySlider.getValue() )
 					}
 				});
 			}
 			
 			this.$el.append( _.template( this.getTemplate(), this.settings ));
 			
-			if( this.settings.opacity ) this.$el.append( opacitySlider.getControl() );
+			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
-			$.farbtastic(this.$el.find('.control-colorpicker'))
-				.setColor( _this.settings.color )
-				.linkTo(function(color){
-					_this.refreshColor( color, (( opacitySlider)? opacitySlider.getValue() : 1 ) );
-					_this.settings.color = color;
-				});
-				
-			
+			this.initHexField();
 			
 			return this;
+		},
+		
+		events : {
+			'click .color-box, input' : 'initWheel',
+			'click .close' : 'closeWheel'
+		},
+		
+		initHexField : function()
+		{
+			var _this = this;
+			this.$el.find('input').keypress(function(e){
+				if(e.which == 13)
+				{
+					console.log($(this).val())
+					var validHex  = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test( $(this).val() );
+					if( validHex )
+					{
+						$(this).effect('highlight',{},2000);
+					}
+					else
+					{
+						$(this).val('#FF00FF'); //set to a default
+						$(this).effect('highlight',{'color':'#ff0000'},2000); //blink red
+					}
+					$.farbtastic( _this.$el.find('.control-colorpicker')).setColor( $(this).val() );
+					this.lazySave();
+				}
+			})
+		},
+		
+		initWheel : function()
+		{
+			var _this = this;
+			console.log('pull up color wheel!')
+			this.$el.find('.close').show();
+			
+			if( this.wheelLoaded != true )
+			{
+				$.farbtastic(this.$el.find('.control-colorpicker'))
+					.setColor( _this.settings.color )
+					.linkTo(function(color){
+						_this.refreshColor( color, (( _this.opacitySlider)? _this.opacitySlider.getValue() : 1 ) );
+						_this.settings.color = color;
+					});
+				this.wheelLoaded = true;
+			}
+			else
+			{
+				this.$el.find('.control-colorpicker').show();
+				
+			}
+		},
+		
+		closeWheel : function()
+		{
+			this.$el.find('.close').hide();
+			this.$el.find('.control-colorpicker').hide();
 		},
 		
 		refreshColor : function( hex, a )
 		{
 			this.model.visual.$el.css( this.settings.property, 'rgba('+ hex.toRGB() +','+ a +')' );
+			this.$el.find('.color-box').css( 'background-color', hex );
+			this.$el.find('input').val( hex );
 			if(this.settings.save) this.lazySave();
 		},
 		
@@ -369,9 +549,14 @@
 		
 		getTemplate : function()
 		{
-			var html = ''+
+			var html =
 			
-					"<div class='control-name'><%= label %></div>"+
+					"<div class='input-prepend input-append'>"+
+						"<span class='add-on'><%= label %></span>"+
+						"<input id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
+						"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
+					"</div>"+
+					'<a class="close" style="display:none">&times;</a>'+
 					"<div class='control-colorpicker'></div>";
 			
 			return html;
