@@ -749,11 +749,6 @@ float: right;
 
 }
 
-body { font:13px/1.231 sans-serif; *font-size:small; }
-select, input, textarea, button { font:99% sans-serif; }
-
-input::-webkit-input-placeholder { color: #777;}
-form,input{ margin:0;padding:0;}
 
 body, select, input, textarea { color: #444; }
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
@@ -933,6 +928,18 @@ body
 .navbar-fixed-top .container,
 .navbar-fixed-bottom .container
 { width:1000px }
+
+
+/* this should be removed with next version */
+.add-on {
+margin-top: -9px;
+color:#444;
+}
+.form-inline .add-on,
+.form-search .add-on,
+.form-horizontal .add-on {
+margin-top: 0;
+}
 
 /*******************************
 
@@ -1317,14 +1324,8 @@ default-layer-control
 	height : 233px;
 }
 
-.control .color-block
-{
-	height:20px;
-	width:30px;
-	border-radius:3px;
-	box-shadow:inset 2px 2px 3px rgba(255,255,255,0.75);
-	background-color:#222;
-}
+.farbtastic { margin : 0 auto }
+
 
 
 /*******************************

@@ -417,7 +417,7 @@
 	
 	Layer.Views.Lib.ColorPicker = Layer.Views.Lib.extend({
 		
-		className : 'control control-colorpicker',
+		className : 'control-colorpicker',
 		
 		defaults : {
 			property : 'backgroundColor',
@@ -442,41 +442,93 @@
 			
 			if(this.settings.opacity )
 			{
-				var opacitySlider = new Layer.Views.Lib.Slider({
+				this.opacitySlider = new Layer.Views.Lib.Slider({
 					css : false,
 					property : this.settings.property +'Opacity',
 					value : this.settings[this.settings.property+'Opacity'] || this.settings.opacityValue,
 					model: this.model,
-					label : 'Opacity',
+					label : this.settings.label+' Opacity',
 					step : 0.01,
 					min : .05,
 					max : 1,
 					slide : function()
 					{
-						_this.refreshColor(_this.settings.color, opacitySlider.getValue() )
+						_this.refreshColor(_this.settings.color, _this.opacitySlider.getValue() )
 					}
 				});
 			}
 			
 			this.$el.append( _.template( this.getTemplate(), this.settings ));
 			
-			if( this.settings.opacity ) this.$el.append( opacitySlider.getControl() );
+			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
-			$.farbtastic(this.$el.find('.control-colorpicker'))
-				.setColor( _this.settings.color )
-				.linkTo(function(color){
-					_this.refreshColor( color, (( opacitySlider)? opacitySlider.getValue() : 1 ) );
-					_this.settings.color = color;
-				});
-				
-			
+			this.initHexField();
 			
 			return this;
+		},
+		
+		events : {
+			'click .color-box, input' : 'initWheel',
+			'click .close' : 'closeWheel'
+		},
+		
+		initHexField : function()
+		{
+			var _this = this;
+			this.$el.find('input').keypress(function(e){
+				if(e.which == 13)
+				{
+					console.log($(this).val())
+					var validHex  = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test( $(this).val() );
+					if( validHex )
+					{
+						$(this).effect('highlight',{},2000);
+					}
+					else
+					{
+						$(this).val('#FF00FF'); //set to a default
+						$(this).effect('highlight',{'color':'#ff0000'},2000); //blink red
+					}
+					$.farbtastic( _this.$el.find('.control-colorpicker')).setColor( $(this).val() );
+					this.lazySave();
+				}
+			})
+		},
+		
+		initWheel : function()
+		{
+			var _this = this;
+			console.log('pull up color wheel!')
+			this.$el.find('.close').show();
+			
+			if( this.wheelLoaded != true )
+			{
+				$.farbtastic(this.$el.find('.control-colorpicker'))
+					.setColor( _this.settings.color )
+					.linkTo(function(color){
+						_this.refreshColor( color, (( _this.opacitySlider)? _this.opacitySlider.getValue() : 1 ) );
+						_this.settings.color = color;
+					});
+				this.wheelLoaded = true;
+			}
+			else
+			{
+				this.$el.find('.control-colorpicker').show();
+				
+			}
+		},
+		
+		closeWheel : function()
+		{
+			this.$el.find('.close').hide();
+			this.$el.find('.control-colorpicker').hide();
 		},
 		
 		refreshColor : function( hex, a )
 		{
 			this.model.visual.$el.css( this.settings.property, 'rgba('+ hex.toRGB() +','+ a +')' );
+			this.$el.find('.color-box').css( 'background-color', hex );
+			this.$el.find('input').val( hex );
 			if(this.settings.save) this.lazySave();
 		},
 		
@@ -490,11 +542,12 @@
 		{
 			var html =
 			
-					"<div class='control-name'><%= label %></div>"+
-					
-						"<div class='color-block'></div>"+
-						"<input class='span1' type='text' name='hex-color'/>"+
-					
+					"<div class='input-prepend input-append'>"+
+						"<span class='add-on'><%= label %></span>"+
+						"<input id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
+						"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
+					"</div>"+
+					'<a class="close" style="display:none">&times;</a>'+
 					"<div class='control-colorpicker'></div>";
 			
 			return html;

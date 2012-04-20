@@ -16,6 +16,7 @@
 			'opacity' : 0.9,
 			'fontSize' : 100,
 			'padding' : 5,
+			'overflow' : 'visible',
 			
 			linkable : true
 		},
