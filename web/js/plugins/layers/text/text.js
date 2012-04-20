@@ -93,16 +93,13 @@
 				model : this.model
 			})
 			
-			var clearButton = new Layer.Views.Lib.ClearStyles({ model : this.model });
-			
 			this.controls
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
 				.append( color.getControl() )
 				.append( bgcolor.getControl() )
 				.append( sizeSlider.getControl() )
-				.append( paddingSlider.getControl() )
-				.append( clearButton.getControl() );
+				.append( paddingSlider.getControl() );
 			
 			return this;
 		}
@@ -164,6 +161,11 @@
 			
 			this.$el.find('#zedit-target').keypress(function(e){
 				_this.$el.css('width' , '' );
+				console.log(e.which)
+				if(e.which == 13)
+				{
+					
+				}
 				
 				_this.lazySave();
 			})

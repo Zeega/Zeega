@@ -309,7 +309,8 @@
 		events : {
 			'click .bold' : 'addBold',
 			'click .italic' : 'addItalic',
-			'click .underline' : 'addUnderline'
+			'click .underline' : 'addUnderline',
+			'click .clear-styles' : 'clearStyles'
 		},
 		
 		addBold : function()
@@ -348,6 +349,13 @@
 			this.model.update({ content : str });
 		},
 		
+		clearStyles : function()
+		{
+			var clean = this.model.get('attr').content.replace(/(<([^>]+)>)/ig, "");
+			this.model.update({ content : clean });
+			this.model.updateContentInPlace();
+		},
+		
 		getTemplate : function()
 		{
 			var html =
@@ -356,6 +364,7 @@
 					'<button class="btn bold"><i class="zicon-bold"></i></button>'+
 					'<button class="btn italic"><i class="zicon-italic"></i></button>'+
 					'<button class="btn underline"><i class="zicon-underline"></i></button>'+
+					'<button class="btn clear-styles"><i class="zicon-cancel"></i></button>'+
 				'</div>';
 					
 			return html;
