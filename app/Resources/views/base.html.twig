@@ -31,7 +31,9 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-			sessionStorage.setItem('siteid','{{site.getId()}}');
+			{% if site%}
+				sessionStorage.setItem('siteid','{{site.getId()}}');
+			{% endif %}
 		</script>
 		
     </head>
