@@ -31,7 +31,7 @@ services:
     pdo:
         class: PDO
         arguments:
-            - "mysql:dbname=%database_name%"
+            - "%database_type%:dbname=%database_name%;host=%database_host%"
             - %database_user%
             - %database_password%
     session.storage.pdo:

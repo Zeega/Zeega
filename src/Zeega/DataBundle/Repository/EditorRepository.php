@@ -80,7 +80,7 @@ class EditorRepository extends EntityRepository
 			   ->add('from', ' ZeegaDataBundle:Project p')
 			   ->innerJoin('p.site', 'g')
 			   ->add('where', 'g.id = :id')
-			   ->andwhere('p.enabled = 1')
+			   ->andwhere('p.enabled = true')
 			   ->setParameter('id',$id)
 			   ->orderBy('p.id','DESC')
 			   ->getQuery();
@@ -100,7 +100,7 @@ class EditorRepository extends EntityRepository
 			   ->join('p.users', 'u')
 			   ->add('where', 'u.id = :userId')
 			   ->andWhere('s.id = :siteId')
-			   ->andwhere('p.enabled = 1')
+			   ->andwhere('p.enabled = true')
 			   ->setParameters(array('siteId'=>$siteId,'userId'=>$userId))
 				 ->orderBy('p.id','DESC')
 				 ->getQuery();
