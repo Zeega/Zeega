@@ -16,6 +16,7 @@
 			'opacity' : 0.9,
 			'fontSize' : 100,
 			'padding' : 5,
+			'overflow' : 'visible',
 			
 			linkable : true
 		},
@@ -84,14 +85,21 @@
 				
 			});
 			
-			var clearButton = new Layer.Views.Lib.ClearStyles({ model : this.model });
+			var textStyles = new Layer.Views.Lib.TextStyles({
+				model : this.model
+			})
+			
+			var fontChooser = new Layer.Views.Lib.FontChooser({
+				model : this.model
+			})
 			
 			this.controls
+				.append( textStyles.getControl() )
+				.append( fontChooser.getControl() )
 				.append( color.getControl() )
 				.append( bgcolor.getControl() )
 				.append( sizeSlider.getControl() )
-				.append( paddingSlider.getControl() )
-				.append( clearButton.getControl() );
+				.append( paddingSlider.getControl() );
 			
 			return this;
 		}
@@ -146,7 +154,19 @@
 		onLayerEnter : function()
 		{
 			var _this = this;
+
+			this.$el.css('width' , _this.$el.find('#zedit-target').width()+'px' );
+			
+			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
+			
 			this.$el.find('#zedit-target').keypress(function(e){
+				_this.$el.css('width' , '' );
+				console.log(e.which)
+				if(e.which == 13)
+				{
+					
+				}
+				
 				_this.lazySave();
 			})
 			.bind('paste', function(e){
@@ -165,6 +185,7 @@
 		},
 		
 		lazySave : _.debounce( function(){
+			$(this.el).css( 'width',this.$el.find('#zedit-target').width()+'px' );
 			
 			var str = this.$el.find('#zedit-target').html();
 			

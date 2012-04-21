@@ -131,40 +131,6 @@ $('#new-layer-list a').click(function(){
 	return false;
 })
 
-/*
-function addLayer(type)
-{
-	//add new layer model
-	//add new layer model (note attr must be empty object or will adopt attr of previously created layer)
- 	 
-    var newLayer = new Layer({'type':type,'attr':{}});
-	Zeega.addLayerToFrame( Zeega.currentFrame, newLayer );
-}
-*/
-/*
-function expandLayer(el)
-{
-	var w = $(el).closest('.layer-wrapper').find('.layer-content');
-	if( w.is(':hidden') ) w.show('blind',{'direction':'vertical'});
-	else w.hide('blind',{'direction':'vertical'});
-}
-
-
-function closeCitationBar()
-{
-	$('#citation').animate({ height : '20px' })
-	//$('#hide-citation').fadeOut();
-	closeOpenCitationTabs();
-}
-
-function closeOpenCitationTabs()
-{
-	$('.citation-tab').closest('ul').children('li').each(function(i,el){
-		if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
-	})	
-}
-*/
-
 
 //$(document).ready(function(){
 	
