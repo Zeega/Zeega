@@ -271,6 +271,7 @@
 	});
 	
 	//for text layer
+	// ** deprecated ** //
 	Layer.Views.Lib.ClearStyles = Layer.Views.Lib.extend({
 		
 		className : 'clear-styles',

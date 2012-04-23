@@ -4,6 +4,8 @@
 		
 		className : 'visual-element',
 		
+		layerClassName : '',
+		
 		draggable : true,
 		linkable : true,
 		
@@ -30,6 +32,7 @@
 				})
 				.addClass('layer-'+ this.model.layerType.toLowerCase() )
 				.attr('id', 'layer-visual-'+this.model.id);
+			$(this.el).addClass(this.layerClassName);
 				
 				this.init();
 		},
