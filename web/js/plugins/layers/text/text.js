@@ -11,12 +11,12 @@
 			'content' : 'Text',
 			'left' :0,
 			'top' :0,
-			'color' : '#ff0000',
-			'backgroundColor' : '#ffffff',
+			'color' : '#ffffff',
 			'opacity' : 0.9,
-			'fontSize' : 100,
-			'padding' : 5,
+			'fontSize' : 200,
 			'overflow' : 'visible',
+			'width' : 25,
+			'height' : 10,
 			
 			linkable : true
 		},
@@ -48,15 +48,6 @@
 		
 		render : function()
 		{
-			var bgcolor = new Layer.Views.Lib.ColorPicker({
-				property : 'backgroundColor',
-				color : this.model.get('attr').backgroundColor,
-				model: this.model,
-				label : 'Background Color',
-				opacity : true,
-				opacityValue : 0
-			});
-			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
 				color : this.model.get('attr').color,
@@ -70,20 +61,11 @@
 				model: this.model,
 				label : 'Font Size',
 				suffix : '%',
-				min : 100,
+				min : 200,
 				max : 1000,
 				
 			});
 			
-			var paddingSlider = new Layer.Views.Lib.Slider({
-				property : 'padding',
-				model: this.model,
-				label : 'Padding',
-				suffix : '%',
-				min : 1,
-				max : 50,
-				
-			});
 			
 			var textStyles = new Layer.Views.Lib.TextStyles({
 				model : this.model
@@ -97,9 +79,7 @@
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
 				.append( color.getControl() )
-				.append( bgcolor.getControl() )
-				.append( sizeSlider.getControl() )
-				.append( paddingSlider.getControl() );
+				.append( sizeSlider.getControl() );
 			
 			return this;
 		}
@@ -120,7 +100,6 @@
 			{
 				var a = this.model.get('attr').color;
 				c = rgbToHex(a.r,a.g,a.b);
-				
 			}
 			else c = this.model.get('attr').color;
 			
@@ -134,17 +113,16 @@
 			
 			var style = {
 				'color' : 'rgba('+ c.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
-				'backgroundColor' : 'rgba('+ b.toRGB() +','+ (this.model.get('attr').backgroundColorOpacity || 0) +')',
 				'opacity' : this.model.get('attr').opacity,
-				'fontSize' : this.model.get('attr').fontSize < 100 ? '100%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
-				'padding' : this.model.get('attr').padding +'%',
-				'whiteSpace' : 'nowrap'
+				'fontSize' : this.model.get('attr').fontSize < 200 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
+				'width' : this.model.get('attr').width+'%',
+				'height' : this.model.get('attr').height+'%',
+				'line-height' : '100%',
+				//'border' : this.model.player ? '' : '1px dotted white'
 			}
-			console.log(this.model.get('attr'))
-			console.log('color: '+ style.backgroundColor)
-			console.log(this.model)
 
-			$(this.el).html( _.template( this.getTemplate(), this.model.get('attr') ) ).css( style );
+			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
+			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
 			this.model.trigger('ready',this.model.id)
 			
@@ -154,18 +132,12 @@
 		onLayerEnter : function()
 		{
 			var _this = this;
-
-			this.$el.css('width' , _this.$el.find('#zedit-target').width()+'px' );
 			
 			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
 			
-			this.$el.find('#zedit-target').keypress(function(e){
-				_this.$el.css('width' , '' );
+			this.$el.find('#zedit-target').keyup(function(e){
 				console.log(e.which)
-				if(e.which == 13)
-				{
-					
-				}
+				if(e.which == 27){ $(this).blur() }
 				
 				_this.lazySave();
 			})
@@ -177,15 +149,30 @@
 			this.$el.click(function(){
 				_this.$el.find('#zedit-target').focus();
 				_this.$el.draggable('option','disabled', true);
+				_this.$el.addClass('text-editing').removeClass('text-non-editing');
+				
+				
+				
 			}).focusout(function(){
 				_this.$el.draggable('option','disabled', false);
+				_this.$el.removeClass('text-editing').addClass('text-non-editing');
 				_this.lazySave();
 			})
+			
+			$(this.el).resizable({
+				stop : function(e,ui)
+				{
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			});
+			
 			
 		},
 		
 		lazySave : _.debounce( function(){
-			$(this.el).css( 'width',this.$el.find('#zedit-target').width()+'px' );
 			
 			var str = this.$el.find('#zedit-target').html();
 			
@@ -211,7 +198,7 @@
 		{
 			var html = 
 			
-					'<div id="zedit-target" class="inner" contenteditable="true" ><%= content %></div>';
+					'<div id="zedit-target" class="inner" contenteditable="<%= contentEditable %>" ><%= content %></div>';
 			
 			return html;
 		}
