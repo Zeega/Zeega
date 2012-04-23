@@ -20,6 +20,7 @@ var loadFiles = [
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!jquery/ui/js/jquery-ui.min',
+	'order!lib/bootstrap',
 	
 	//custom
 
