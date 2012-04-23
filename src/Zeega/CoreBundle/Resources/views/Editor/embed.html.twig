@@ -46,7 +46,7 @@
 	</head>
 
 	<body style="margin:0px;">
-		<a href="{{hostname}}{{directory}}project/{{projectId}}/view"></a>
+		<a href="{{hostname}}{{directory}}project/{{projectId}}/view" target= "_blank"></a>
 		<div id="text">
 			<h1>{{project.getTitle()}}</h1>
 			{% if project.getAttr().author is defined %}<h2>{{project.getAttr().author}}</h2>{% endif %}

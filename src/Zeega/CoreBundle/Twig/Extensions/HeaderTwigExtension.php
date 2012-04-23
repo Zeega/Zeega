@@ -62,6 +62,7 @@ class HeaderTwigExtension extends \Twig_Extension
 	{
         return array(
             'json_encode_entity' => new \Twig_Filter_Method($this, 'entityNormalizer'),
+            'unserialize_array' => new \Twig_Filter_Method($this, 'unserializeArray'),
         );
     }
 
@@ -70,6 +71,15 @@ class HeaderTwigExtension extends \Twig_Extension
         $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
         return $serializer->serialize($arrayObject, 'json');
     }
+
+    public function unserializeArray($arrayObject)
+    {
+    	if(isset($arrayObject))
+    		return unserialize($arrayObject);
+    	else 
+    		return array();
+    }
+
 	
 	public function getName()
 	{

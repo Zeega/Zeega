@@ -247,7 +247,6 @@
 							'</div>'+
 							'<div class="publish-footer">'+
 								'<a href="#" id="publish-back" class="btn secondary">Back</a>'+
-								'<a href="#" id="close-modal" class="btn secondary" style="float:right">Done</a>'+
 							'</div>'+
 						'</div>'+
 					'</div>';

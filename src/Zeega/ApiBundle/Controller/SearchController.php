@@ -75,7 +75,7 @@ class SearchController extends Controller
         // check if there is a query string
         if(isset($q) and $q != '')                          $query->setQuery($q);
         if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
-        if(isset($tags))                                    $query->createFilterQuery('tag_name')->setQuery($tags);
+        if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
@@ -101,30 +101,18 @@ class SearchController extends Controller
         $groupComponent->setLimit($limit);
         
         $facetComponent = $query->getFacetSet();
-        
-        $facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
-        /*
-        if(isset($tags) && count($tags) > 0)
-        {
-    		$facetComponent->createFacetQuery('tags')->setQuery("-tag_name:tags");
-        }
-		else       
-        {
-        	$facetComponent->createFacetField('tags')->setField('tag_name')->setLimit(5)->setMinCount(1);
-        }
-        */
+        $facetComponent->createFacetField('tags')->setField('tags')->setLimit(5)->setMinCount(1);
+
         // run the query
         $resultset = $client->select($query);
-        //return new Response(var_dump($resultset));
-        //$res = $resultset->getDocuments();
+
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
-        
-        //return new Response(var_dump($facets->getFacet('tags')));
         
         $results["items"] = $groups->getGroup('-media_type:Collection');
         //$results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
+
         $tags = $facets->getFacet('tags');
         $tagsArray = array(); 
   
@@ -136,8 +124,6 @@ class SearchController extends Controller
         	}
         }
         
-        //return new Response(var_dump($tagsArray));
-		
         // render the results
 		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
