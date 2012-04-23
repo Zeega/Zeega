@@ -34,7 +34,7 @@
 				.attr('id', 'layer-visual-'+this.model.id);
 			$(this.el).addClass(this.layerClassName);
 				
-				this.init();
+			this.init();
 		},
 		
 		initListeners : function()
