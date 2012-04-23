@@ -16,7 +16,7 @@
 			'fontSize' : 200,
 			'overflow' : 'visible',
 			'width' : 25,
-			'height' : 10,
+			//'height' : 10,
 			
 			linkable : true
 		},
@@ -117,9 +117,7 @@
 				'fontSize' : this.model.get('attr').fontSize < 200 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
-				//'height' : this.model.get('attr').height+'%',
 				'line-height' : '100%',
-				//'border' : this.model.player ? '' : '1px dotted white'
 			}
 
 			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );

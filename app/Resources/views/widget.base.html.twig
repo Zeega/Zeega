@@ -12,7 +12,9 @@
 			<meta name="description" content="">
 			<meta name="keywords" content="">
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/bootstrap.min.css')}}" /> 
 			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega-bootstrap.css')}}" /> 
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.css')}}" /> 
 			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.widget.css')}}" /> 
 			<link rel="icon" type="image/png" href="{{asset('images/zeega.ico')}}"> 
@@ -28,19 +30,34 @@
   <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='{{hostname}}/web/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
   
    	{% block header %}
-   		<div id='header-bg'></div>
+   		
+		<header>
+			<div class="navbar navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="container" style='width:450px'>
+						
+						<a class="brand" href="{{path('ZeegaCoreBundle_home')}}">
+							<img src="{{ asset('images/zeega-logo-header.png') }}"/>
+						</a>
+						
+						<ul class="nav">
+							<li class='active'>
+								<a href='#'>Hello {{displayname}}!</a>
+							</li>
+							<li>
+								<a href='#'>( Not {{displayname}}? )</a>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+			</div>
+		</header>
+		
+
    		<div id="wrapper" style="width:450px; height: 100%;">
 			<div id="header" style="top:-20px;width:430px;">
-				<div id="header-title">
-					<ul>
-						<li class='drop-down clearfix '>
-							Hello <a href='#' >{{displayname}}</a>! (<a href='#' >Not {{displayname}}?</a>)
-							<ul class='drop-down-menu'>
-								<li><a href="#">Projects</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+				
 				<div id="header-nav" >
 				
 				</div> <!-- #headerLoggedInWrapper -->

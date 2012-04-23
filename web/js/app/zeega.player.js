@@ -366,11 +366,11 @@ var Player2 = Backbone.View.extend({
 		{
 			cssObj.height = viewHeight +'px';
 			cssObj.width = viewHeight * this.viewportRatio +'px'
-			cssObj.fontSize = (viewHeight / 519 *100) +"%";
+			cssObj.fontSize = (viewHeight / 519 *100 +10) +"%";
 		}else{
 			cssObj.height = viewWidth / this.viewportRatio +'px';
 			cssObj.width = viewWidth +'px'
-			cssObj.fontSize = (viewWidth / 704 *100) +"%";
+			cssObj.fontSize = (viewWidth / 704 *100 +10) +"%";
 		}
 		
 		
