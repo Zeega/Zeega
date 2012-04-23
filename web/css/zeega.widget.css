@@ -1,11 +1,16 @@
 
+.ingest-info
+{
+	padding: 8px 19px;
+	background:#555;
+	margin-bottom:3px;
+}
+
 #widget-wrapper
 {
     margin-top:20px; 
     color: whiteSmoke;
 	font-size: 14px !important;
-	font-family: Helvetica;
-	font-weight: lighter;
 }
 #widget-wrapper a:hover, #widget-wrapper a:active, #widget-wrapper a:visited{
 	text-decoration:none;
@@ -37,13 +42,7 @@
 	font-style: italic;
 	color: #F15A29;
 }
-#widget-title, #widget-creator, #widget-description
-{
-	width: 90%;
-	border:1px dotted #555;
-	padding:4px;
-	margin-bottom:4px;
-}
+
 #description{
 	display:none;
 	height:200px;
