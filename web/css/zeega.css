@@ -937,8 +937,14 @@ color:#444;
 }
 .form-inline .add-on,
 .form-search .add-on,
-.form-horizontal .add-on {
-margin-top: 0;
+.form-horizontal .add-on
+{
+	margin-top: 0;
+}
+
+.nav-pills>li>a
+{
+	background-color:#444;
 }
 
 /*******************************
