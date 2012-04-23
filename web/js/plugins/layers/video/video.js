@@ -26,7 +26,7 @@
 		{
 			console.log(this.get('attr'));
 			console.log(this);
-			if( _.isUndefined(this.get('attr').attribution_uri)) this.set({attribution_uri:this.get('attribution_url')});
+			//if( _.isUndefined(this.get('attr').attribution_uri)) this.set({attribution_uri:this.get('attribution_url')});
 			this.video = new Plyr2({
 				url : this.get('attr').attribution_uri,
 				uri : this.get('attr').uri,
