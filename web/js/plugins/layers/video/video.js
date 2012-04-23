@@ -28,7 +28,7 @@
 			console.log(this);
 			if( _.isUndefined(this.get('attr').attribution_uri)) this.set({attribution_uri:this.get('attribution_url')});
 			this.video = new Plyr2({
-				url : this.get('attr').attribution_uri
+				url : this.get('attr').attribution_uri,
 				uri : this.get('attr').uri,
 				id : this.id,
 				cue_in  : this.get('attr').cue_in,
