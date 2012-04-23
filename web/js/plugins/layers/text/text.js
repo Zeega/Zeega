@@ -116,7 +116,7 @@
 				'opacity' : this.model.get('attr').opacity,
 				'fontSize' : this.model.get('attr').fontSize < 200 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
 				'width' : this.model.get('attr').width+'%',
-				'height' : this.model.get('attr').height+'%',
+				//'height' : this.model.get('attr').height+'%',
 				'line-height' : '100%',
 				//'border' : this.model.player ? '' : '1px dotted white'
 			}
@@ -164,7 +164,7 @@
 				{
 					_this.model.update({
 						'width' : $(this).width() / $(this).parent().width() * 100,
-						'height' : $(this).height() / $(this).parent().height() * 100
+						//'height' : $(this).height() / $(this).parent().height() * 100
 					})
 				}
 			});
