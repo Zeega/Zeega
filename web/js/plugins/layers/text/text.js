@@ -61,7 +61,7 @@
 				model: this.model,
 				label : 'Font Size',
 				suffix : '%',
-				min : 200,
+				min : 100,
 				max : 1000,
 				
 			});
@@ -114,7 +114,7 @@
 			var style = {
 				'color' : 'rgba('+ c.toRGB() +','+ (this.model.get('attr').colorOpacity || 1) +')',
 				'opacity' : this.model.get('attr').opacity,
-				'fontSize' : this.model.get('attr').fontSize < 200 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
+				'fontSize' : this.model.get('attr').fontSize < 100 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
