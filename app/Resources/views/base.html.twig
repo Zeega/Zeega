@@ -31,7 +31,9 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-			sessionStorage.setItem('siteid','{{site.getId()}}');
+			{% if site.getId() is defined %}
+				sessionStorage.setItem('siteid',  '{{site.getId()}}');
+			{% endif %}
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
