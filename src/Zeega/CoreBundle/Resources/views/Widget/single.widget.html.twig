@@ -13,9 +13,9 @@
 		<div id="item-view">
 			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" class="item-image" />
 			<div id="item-add" class="add-button">
-				<ul class="pill-buttons-widget">
-					<li><a id="add-item" href="#">Add to My Media</a></li><br>
-				</ul>
+				
+				<button id="add-item" class='btn btn-success'><i class='zicon-add-media'></i> Add to My Media</button>
+				
 				<div id="widget-added-text">
 					<span class="widget-title-added">Title: <span id="widget-title-added-text">hello</span></span><br/>
 					<span class="widget-creator-added">Creator: <span id="widget-creator-added-text">b</span></span>
@@ -24,8 +24,17 @@
 			
 			<div style="clear:both;">&nbsp;</div>
 			<div id="message"></div>
-			<div id="widget-title">&nbsp;</div>
-			<div id="widget-creator">&nbsp;</div>
+			
+			<!--
+			<ul class="nav nav-tabs nav-stacked">
+			  <li id="widget-title"></li>
+			  <li id="widget-creator"></li>
+			</ul>
+			-->
+			
+			<div id="widget-title" class='well ingest-info'>&nbsp;</div>
+			<div id="widget-creator" class='well ingest-info'>&nbsp;</div>
+						
 			<a href="." id="btn-more">view more</a>
 			<a href="." id="btn-less" style="display:none">view less</a>
 			<div id="description">

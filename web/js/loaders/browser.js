@@ -25,6 +25,7 @@ var loadFiles = [
 	'order!lib/spin',
 	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!lib/jquery/ui/js/jquery-ui.min',
+	'order!lib/bootstrap',
 	
 	//custom
 

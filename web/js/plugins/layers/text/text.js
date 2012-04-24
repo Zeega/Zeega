@@ -16,7 +16,7 @@
 			'fontSize' : 200,
 			'overflow' : 'visible',
 			'width' : 25,
-			'height' : 10,
+			//'height' : 10,
 			
 			linkable : true
 		},
@@ -116,9 +116,8 @@
 				'opacity' : this.model.get('attr').opacity,
 				'fontSize' : this.model.get('attr').fontSize < 200 ? '200%' : this.model.get('attr').fontSize +'%', // enforces minimum. remove this later
 				'width' : this.model.get('attr').width+'%',
-				'height' : this.model.get('attr').height+'%',
+				'overflow' : 'visible',
 				'line-height' : '100%',
-				//'border' : this.model.player ? '' : '1px dotted white'
 			}
 
 			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
@@ -164,7 +163,7 @@
 				{
 					_this.model.update({
 						'width' : $(this).width() / $(this).parent().width() * 100,
-						'height' : $(this).height() / $(this).parent().height() * 100
+						//'height' : $(this).height() / $(this).parent().height() * 100
 					})
 				}
 			});

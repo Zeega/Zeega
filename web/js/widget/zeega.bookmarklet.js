@@ -93,7 +93,7 @@ var bm = new bookmarklet({
         			'font-weight':'bold',
         			'z-index':60000,
         			'opacity':1,
-        		}).attr('id','zeega-close').html('X');
+        		}).attr('id','zeega-close').html('<a class="close" style="font-size:24px">&times;</a>');
 			
         		overlay.append(cover);
         		overlay.append(highlight);
