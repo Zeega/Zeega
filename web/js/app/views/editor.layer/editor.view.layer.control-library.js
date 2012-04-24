@@ -389,6 +389,7 @@
 		
 		changeFont : function( ui )
 		{
+			this.$el.find('.open').removeClass('open');
 			this.model.visual.$el.find('.style-font-family').contents().unwrap();
 			this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
 			this.saveContent();
