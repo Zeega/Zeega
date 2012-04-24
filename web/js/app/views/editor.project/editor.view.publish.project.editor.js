@@ -27,7 +27,7 @@
 			}
 
 			
-			var projectlink = zeega.app.url_prefix + "z/" + this.model.id;
+			var projectlink = zeega.app.url_prefix + this.model.id;
 			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
