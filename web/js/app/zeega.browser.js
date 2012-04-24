@@ -289,6 +289,9 @@ this.zeegaBrowser = {
 		$('#browser-collection-filter-tab-text').show();
 
 		//show the collection tab
+		$('#browser-toggles .nav li.active').removeClass('active');
+		$('#browser-collection-filter-tab-text').parent('li').addClass('active');
+		
 		$('#browser-collection-filter-tab-text').text(zeegaBrowser.app.clickedCollectionTitle);
 		$('#browser-collection-filter-tab').show();
 		$('#database-search-text').val("search " + zeegaBrowser.app.clickedCollectionTitle);

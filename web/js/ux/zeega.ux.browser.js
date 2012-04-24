@@ -215,45 +215,47 @@ $(document).ready(function() {
 	//Switches the results drawer between items and collections
 	$('#browser-toggle-items-vs-collections span').click(function(){
 
-		$(this).closest('span').removeClass('browser-unselected-toggle');
-		$(this).closest('span').addClass('browser-selected-toggle');
-		$(this).siblings().removeClass('browser-selected-toggle');
-		$(this).siblings().addClass('browser-unselected-toggle');
+		$(this).closest('span').removeClass('active');
+		$(this).closest('span').addClass('active');
+		$(this).siblings().removeClass('active');
+		$(this).siblings().addClass('active');
 
 		
-		if ($(this).attr('id') == 'browser-collection-count'){
+		if ($(this).attr('id') == 'browser-collection-count')
+		{
 			$('#browser-results-collections').show();
 			$('#browser-results-items').hide();
-		} else {
+		}
+		else
+		{
 			$('#browser-results-collections').hide();
 			$('#browser-results-items').show();
 		}
 		zeegaBrowser.app.renderResults();
 		return false;
 	});
-
-	//makes call to server to load All Media vs. My Media
-	$('#browser-my-media, #browser-all-media').click(function(e){
-		
-		$('#browser-toggle-all-media-vs-my-media li').removeClass('browser-selected-toggle');
-		$('#browser-toggle-all-media-vs-my-media li').addClass('browser-unselected-toggle');
-		$(this).addClass('browser-selected-toggle');
 	
-		if ($(this).attr('id') == "browser-my-media"){
+	$('#browser-toggles .nav li a').click(function(){
+		$('#browser-toggles .nav li.active').removeClass('active');
+		$(this).parent('li').addClass('active');
+		
+		if ($(this).data('media') == "mine")
+		{
 			zeegaBrowser.app.items.collection.search.set({user:-1});
 			$('#database-search-text').val("search my stuff");
-
-		}else if ($(this).attr('id') == "browser-all-media"){
+		}
+		else if ($(this).data('media') == "all")
+		{
 			$('#database-search-text').val("search everything");
 			zeegaBrowser.app.items.collection.search.set({user:-2});
 		} 
 
 		//Clear any collection filter on page
 		zeegaBrowser.app.removeCollectionFilter();
-
 		zeegaBrowser.app.doSearch();
-	});
-	
+	})
+
+
 	$('#browser-collection-filter-tab-edit-icon, #browser-collection-filter-edit-menu').hover(
 		function(){
 			//calculate position dynamically based on text position
