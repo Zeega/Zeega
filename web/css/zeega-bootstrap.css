@@ -43,9 +43,24 @@
 .zicon-underline{background-position:0 -120px}
 .zicon-cancel{background-position:-20px -120px}
 .zicon-close{background-position:-40px -120px}
+.zicon-resize{background-position:-60px -120px}
+
 .zicon-search-dropdown
 {
 	background-position:-0px -20px;
 	background-position: -0px -101px;
 	width: 30px;
+}
+
+
+.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
+{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: text-top;
+	background-image: url('../images/zicons-darkgrey-20.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-position:-60px -120px;
 }
