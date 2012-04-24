@@ -23,15 +23,7 @@ class EditorController extends Controller
     	
   		$user = $this->get('security.context')->getToken()->getUser();
   			
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
-		
-		$site=$sites[0];
-		$url=$this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true);
-		
-		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true),302);
-    		
+		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'), array());
     }
 
 	public function siteAction($short)
@@ -43,7 +35,7 @@ class EditorController extends Controller
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSiteByShort($short,$user->getId());
 
 		$projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
-	
+	    
 		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array(
 			'allprojects'   => $projects,
 			'page'=>'site',
