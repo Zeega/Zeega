@@ -10,12 +10,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class SiteAdmin extends Admin
 {
+    protected $datagridValues = array(
+           '_page' => 1,
+           '_sort_order' => 'DESC', // sort direction 
+           '_sort_by' => 'id' // field name 
+       );
+       
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
 			->add('title')
 			->add('short')
-			->add('created_at')
         ;
     }
 
@@ -31,11 +36,10 @@ class SiteAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-			->add('title')
+            ->addIdentifier('id')
+			->addIdentifier('title')
 			->add('short')
-			->add('published')
-			->add('created_at')
+			->add('date_created')
         ;
     }
 

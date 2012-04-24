@@ -22,19 +22,7 @@ function initHeaderUX(){
 	});
 	
 	// FAKE STUFF
-	
-	$('#css-change').toggle(function(){
-		$('body').css('background','#fff');
-		$('#sequence-header').css('color','#444')
-		$(this).find('a').html('Desktop');
-		$('.item-title').css('color','black');
-	},function(){
-		$('body').css('background','');
-		$('#sequence-header').css('color','')
-		$(this).find('a').html('Presentation');
-		$('.item-title').css('color','white');
-	});
-	
+
 	
 
 	$('.add-media a').click(function(){

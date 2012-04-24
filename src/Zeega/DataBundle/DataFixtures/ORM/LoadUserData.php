@@ -13,8 +13,8 @@ class LoadUserData implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $site = new Site();
-        $site->setTitle('Demo');
-        $site->setShort('Demo');
+        $site->setTitle('Home');
+        $site->setShort('home');
         $site->setPublished(true);
         $site->setDateCreated(new \DateTime("now"));
         

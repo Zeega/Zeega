@@ -246,7 +246,7 @@ $(document).ready(function() {
 		}
 		else if ($(this).data('media') == "all")
 		{
-			$('#database-search-text').val("search everything");
+			$('#database-search-text').val("search the library");
 			zeegaBrowser.app.items.collection.search.set({user:-2});
 		} 
 

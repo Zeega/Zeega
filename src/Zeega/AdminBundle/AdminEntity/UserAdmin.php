@@ -32,10 +32,18 @@ class UserAdmin extends Admin
 
         ;
     }
+    
+    protected $datagridValues = array(
+        '_page' => 1,
+        '_sort_order' => 'DESC', // sort direction 
+        '_sort_by' => 'id' // field name 
+    );
+    
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->addIdentifier('id')
             ->addIdentifier('username')
 			->add('display_name')
 			->add('email')

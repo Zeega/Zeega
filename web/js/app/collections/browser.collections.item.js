@@ -20,8 +20,7 @@
 			var _this = this;
 			this._isRendered = true;
 			
-			$('#browser-item-count').text( this.collection.totalItemsCount + " result" + (this.collection.totalItemsCount == 1 ? "" : "s"));
-
+			$('#browser-item-count').text("Displaying " + this.collection.length + " of " + this.collection.totalItemsCount + " items");
 			if(this.collection.length)
 			{
 				_.each( _.toArray(this.collection), function(itemModel){
