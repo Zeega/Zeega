@@ -18,14 +18,22 @@ var Player2 = Backbone.View.extend({
 	zeega : true,
 	
 	
-	initialize : function( data, options )
-	{
-		console.log(data)
-		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
-		
-		this.render();
-		
+	initialize: function(container,apiplayer){
+	
+		this.model= new Backbone.Model();
+		this.container=container;
 		this.generateBackbone();
+		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
+		if( _.isUndefined(apiplayer) ) this.apiplayer = false;	
+		else apiplayer=true;
+		console.log(this.apiplayer);
+	},
+	
+	loadProject : function( data, options )
+	
+	{
+
+		this.render();
 		
 		this.data = data;
 		this.parseData( data );
@@ -36,12 +44,6 @@ var Player2 = Backbone.View.extend({
 		this.setCurrentSequence( s );
 		this.setCurrentFrame( f );
 		this.setCurrentLayers();
-		
-		//this.currentFrame.on('ready', this.renderCurrentFrame, this);
-		console.log('current sequence/frame/layers')
-		console.log(this.currentSequence)
-		console.log(this.currentFrame)
-		console.log(this.currentLayers)
 		
 		//this.goToFrame( this.currentFrame );
 		if( _.isUndefined(zeega.app.router) )
@@ -54,6 +56,42 @@ var Player2 = Backbone.View.extend({
 			this.router = zeega.app.router;
 			this.goToFrame( this.currentFrame )
 		}
+	},
+	
+	loadProjectById : function(projectId, options){
+	
+		//this.resetPlayer();
+		var _this = this;
+		this.model.on('sequences_loaded',function(){
+			_this.render();
+			_this.setCurrentSequence( _this.initial_s );
+			_this.setCurrentFrame( _this.initial_f );
+			_this.setCurrentLayers();
+			
+			//this.currentFrame.on('ready', this.renderCurrentFrame, this);
+			console.log('current sequence/frame/layers')
+			console.log(_this.currentSequence)
+			console.log(_this.currentFrame)
+			console.log(_this.currentLayers)
+			
+			_this.goToFrame( _this.currentFrame );
+		});
+		$.getJSON(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'api/projects/'+projectId,function(data){
+			_this.sequences = new _this.Sequences(data.project.sequences);
+		 	
+		 	_this.initial_s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
+			_this.initial_f = ( _.isUndefined(options) || _.isUndefined(options.frameID) ) ? _.find(data.project.sequences, function(seq){return seq.id == _this.initial_s }).frames[0].id : options.frameID;
+			console.log(_this.initial_s);
+			console.log(_this.initial_f);
+			
+		 	_this.model.trigger('sequences_loaded');
+		 	
+		 	console.log(_this.sequences );
+		 });
+		
+	
+	
+	
 	},
 	
 	startRouter: function()
@@ -357,27 +395,38 @@ var Player2 = Backbone.View.extend({
 	
 	render : function()
 	{
+		//$(this.el).empty();
 		//get the current viewport resolution
-		var viewWidth = window.innerWidth;
-		var viewHeight = window.innerHeight;
+		
+		if(this.apiplayer){
+			var viewWidth = this.container.width();
+			var viewHeight = this.container.height();
+		}
+		else{
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+			console.log(window.height);
+		
+		}
+
 		
 		var cssObj = {};
 		if( viewWidth / viewHeight > this.viewportRatio )
 		{
 			cssObj.height = viewHeight +'px';
 			cssObj.width = viewHeight * this.viewportRatio +'px'
-			cssObj.fontSize = (viewHeight / 519 *100 +10) +"%";
+			cssObj.fontSize = (viewHeight / 519 *100) +"%";
 		}else{
 			cssObj.height = viewWidth / this.viewportRatio +'px';
 			cssObj.width = viewWidth +'px'
-			cssObj.fontSize = (viewWidth / 704 *100 +10) +"%";
+			cssObj.fontSize = (viewWidth / 704 *100) +"%";
 		}
 		
 		
 		//constrain proportions in player
 		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
 		$(this.el).find('#preview-media').css( cssObj );
-		$('body').prepend( this.el );
+		this.container.prepend( this.el );
 
 		//hide the editor underneath to prevent scrolling
 		$('#wrapper').hide();
@@ -457,6 +506,7 @@ var Player2 = Backbone.View.extend({
 			}
 		});
 		
+		if(!this.apiplayer){
 		//resize player on window resize
 		window.onresize = function(event)
 		{
@@ -475,8 +525,10 @@ var Player2 = Backbone.View.extend({
 			}
 
 			//constrain proportions in player
-			_this.$el.find('#preview-media').css( cssObj );
+			_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
 			
+		}
+		
 		}
 		
 		$('#zeega-player').keydown(function(event) {
@@ -539,8 +591,8 @@ var Player2 = Backbone.View.extend({
 	parseData : function( data )
 	{
 		// make sequence collection
-		console.log(data)
 		this.sequences = new this.Sequences( data.project.sequences )
+		this.model.trigger('sequences_loaded');
 	},
 	
 	setCurrentSequence : function( id )
