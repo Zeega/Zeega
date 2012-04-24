@@ -31,8 +31,8 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-			{% if site.getId() is defined %}
-				sessionStorage.setItem('siteid',  '{{site.getId()}}');
+			{% if site %}
+				sessionStorage.setItem('siteid','{{site.getId()}}');
 			{% endif %}
 var BrowserDetect = {
 	init: function () {
