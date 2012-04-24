@@ -47,10 +47,16 @@ function initUX(){
 				console.log(query)
 
 				var s = {};
+				var multipleFilters = false;
 				_.each( _.toArray( searchCollection ), function(facet){
 					console.log(facet)
 					
-					if( facet.get('category') == 'filter' ) s.contentType = facet.get('value');
+					if( facet.get('category') == 'filter' )
+					{
+						if(multipleFilters) facet.destroy();
+						else s.contentType = facet.get('value');
+						multipleFilters = true;
+					}
 					if( facet.get('category') == 'text' ) s.query = facet.get('value');
 					
 				})
@@ -83,8 +89,16 @@ function initUX(){
 	
 	$('.VS-icon.VS-icon-search').click(function(){
 		console.log('open filter dialog')
+		$('.filter-list').show();
+		
 	})
-	
+	$('.filter-list a').click(function(e){
+		visualSearch.searchBox.addFacet('filter',$(this).data('searchFilter'));
+		visualSearch.options.callbacks.search();
+		$('.filter-list').hide();
+		e.stopPropagation();
+		return false;
+	})
 	
 }
 

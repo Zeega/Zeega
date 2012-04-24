@@ -1349,6 +1349,12 @@ default-layer-control
 .VS-search .VS-search-inner{ margin-left:30px;}
 .VS-icon.VS-icon-search{  cursor:pointer;}
 
+.filter-list
+{
+	position:absolute;
+	padding:8px 0;
+}
+
 #database-item-list
 {
 	height : 275px;
