@@ -38,8 +38,72 @@ function initUX(){
 			}
 	});
 	
+	var visualSearch = VS.init({
+		container : $('.visual_search'),
+		query     : '',
+		callbacks : {
+			search : function(query, searchCollection)
+			{
+				console.log(query)
+
+				var s = {};
+				_.each( _.toArray( searchCollection ), function(facet){
+					console.log(facet)
+					
+					if( facet.get('category') == 'filter' ) s.contentType = facet.get('value');
+					if( facet.get('category') == 'text' ) s.query = facet.get('value');
+					
+				})
+				console.log(s)
+				zeega.app.searchDatabase( s , true );
+			},
+			facetMatches : function(callback)
+			{
+				callback([ 'filter',
+				
+					{ label: 'all', category: 'Media Type' },
+					{ label: 'audio', category: 'Media Type' },
+					{ label: 'image', category: 'Media Type' },
+					{ label: 'video', category: 'Media Type' }
+				
+				 ]);
+			},
+			valueMatches : function(facet, searchTerm, callback)
+			{
+				switch (facet)
+				{
+					case 'filter':
+						callback(['all', 'audio', 'image', 'video']);
+						break;
+				}
+			}
+		}
+	});
+	
+	
+	$('.VS-icon.VS-icon-search').click(function(){
+		console.log('open filter dialog')
+	})
+	
 	
 }
+
+/*
+// filter database by type
+$('#search-filter li a').click(function(){
+	zeega.app.searchDatabase( {contentType: $(this).data('search-filter')}, false );
+	event.stopPropagation();
+	clearMenus();
+	return false;
+});
+*/
+
+$('#database-collection-filter').change(function(){
+	$('#database-search-filter').val('all');
+	console.log('search collection: '+ $(this).val());
+	zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
+});
+
 
 $('#add-node-button').click(function(){
 	zeega.app.addFrame();
@@ -211,7 +275,7 @@ $('#new-layer-list a').click(function(){
 	//clear menus on click
 	$('html').bind("click", clearMenus);
 	
-	$('#database-search-text').click(function(event){
+	$('.visual_search').click(function(event){
 		event.stopPropagation();
 	});
 	
@@ -220,21 +284,6 @@ $('#new-layer-list a').click(function(){
 		$('.menu-items').removeClass('open');
 	}
 	
-	// filter database by type
-	$('#search-filter li a').click(function(){
-		zeega.app.searchDatabase( {contentType: $(this).data('search-filter')}, false );
-		event.stopPropagation();
-		clearMenus();
-		return false;
-	});
-	
-	$('#database-collection-filter').change(function(){
-		$('#database-search-filter').val('all');
-		console.log('search collection: '+ $(this).val());
-		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
-	});
-	
-
 	
 	$('#refresh-database').click(function(){
 	    zeega.app.refreshDatabase();

@@ -913,6 +913,7 @@ color:#444;
 	background-color:#444;
 }
 
+
 /*******************************
 
 	HELP STYLES
@@ -1032,7 +1033,9 @@ color:#444;
 	color:rgba(255,255,255,0.65);
 	font-size:18px;
 }
-.panel-head+div,.panel-head div+div { margin:6px 0 }
+
+.panel-head+div { margin:6px 0 }
+
 .panel-head li{color:rgba(255,255,255,0.65)}
 .panel.raised .panel-head
 {
@@ -1337,28 +1340,14 @@ default-layer-control
 	margin-bottom:6px;
 }
 
-#searchbar
+.visual_search
 {
-	max-width: 268px;
-	background:#ccc;
-	-webkit-border-radius: 12px;
-	padding: 0 6px;
-	border-bottom: 1px solid #eee;
-	-webkit-box-shadow: inset 3px 3px 6px #999;
-	position:relative;
+	margin-top: 10px;
 }
 
-#searchbar input
-{
-	color:#666;
-	background:transparent;
-	border:none;
-	width:230px;
-	font-size:1.25em;
-}
-
-
-
+.VS-search .VS-icon-search{ width:20px;}
+.VS-search .VS-search-inner{ margin-left:30px;}
+.VS-icon.VS-icon-search{  cursor:pointer;}
 
 #database-item-list
 {
