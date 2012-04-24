@@ -230,7 +230,7 @@ this.zeegaBrowser = {
 	
 	editCollectionTitle : function(value, settings, collectionID){
 		//Look up collection model to update
-		var collectionToUpdate = zeegaBrowser.app.myCollections.get(collectionID);
+		var collectionToUpdate = zeegaBrowser.app.myCollections.collection.get(collectionID);
 		
 		collectionToUpdate.isUpdate = true;
 		var newTitle = value;
@@ -248,7 +248,7 @@ this.zeegaBrowser = {
 							$('#database-search-text').val("search " + model.get("title"));
 						}
 						//Update title in itemsview if it's there
-						var otherModel = zeegaBrowser.app.searchItemsView.collection.get(model.id);
+						var otherModel = zeegaBrowser.app.searchItemsView ? zeegaBrowser.app.searchItemsView.collection.get(model.id) : null;
 						if(otherModel!=null) {
 							otherModel.set({"title":model.get("title")});
 						}
