@@ -248,7 +248,6 @@
 						'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items"></a>'+
 						'<a href="#" class="corner-triangle-for-menu"><!--<span class="zicon zicon-gear orange"></span>--></a><ul class="menu-items">'+
 						'<li><a href="#" data-action="settings">settings</a></li>'+
-						'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+
 						'</ul>'+
 						'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span><br/><span class="duplicate-item">Duplicate item</span></p>';
 
