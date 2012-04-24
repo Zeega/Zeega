@@ -19,6 +19,8 @@
 			'media_geo_longitude' : -73.9606,
 			'attributes':{
 				zoom:12,
+				maxzoom: 18,
+				minzoom:0,
 			},
 			'zoomControl':12,
 			'interaction':false,
@@ -100,7 +102,7 @@
 		{
 			
 			this.tileUrl='http://{s}.tiles.mapbox.com/v3/'+this.attr.uri+'/{z}/{x}/{y}.png',
-   			this.tileLayer = new L.TileLayer(this.tileUrl, {maxZoom: 18, attribution: ''});
+   			this.tileLayer = new L.TileLayer(this.tileUrl, {minZoom: this.attr.attributes.minzoom,maxZoom: this.attr.attributes.maxzoom, attribution: ''});
 			this.latlng=new L.LatLng(parseFloat(this.attr.media_geo_latitude),parseFloat(this.attr.media_geo_longitude));
 
 			$(this.el).css( {
@@ -120,8 +122,17 @@
 		{
 			
 			var div = $(this.el).find('.cloud-map').get(0);
-		  
-			this.map = new L.Map(div,{scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
+		  	var mapOptions ={ 
+		  		minZoom: this.attr.attributes.minzoom,
+		  		maxZoom: this.attr.attributes.maxzoom, 
+		  		scrollWheelZoom:false,
+		  		zoomControl:false,
+		  		doubleClickZoom:false
+		  	}
+		  	console.log(mapOptions);
+		  	console.log(this.attr);
+		  	
+			this.map = new L.Map(div,mapOptions);
 			console.log(this.attr);
 			this.map.setView(this.latlng, this.attr.attributes.zoom).addLayer(this.tileLayer);
 			
@@ -152,7 +163,7 @@
 			console.log('oh yeah');
 			var div = $(this.el).find('.cloud-map').get(0);
 		  console.log(this.el);
-			this.map = new L.Map(div,{scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
+			this.map = new L.Map(div,{minZoom: this.attr.attributes.minzoom,maxZoom: this.attr.attributes.maxzoom, scrollWheelZoom:false,zoomControl:false,doubleClickZoom:false});
 			this.map.setView(this.latlng, this.attr.attributes.zoom).addLayer(this.tileLayer);
 			
 			//Save position and zoom level of map

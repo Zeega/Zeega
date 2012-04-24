@@ -36,7 +36,7 @@
 				<div class="navbar-inner">
 					<div class="container" style='width:450px'>
 						
-						<a class="brand" href="{{path('ZeegaCoreBundle_home')}}">
+						<a class="brand" >
 							<img src="{{ asset('images/zeega-logo-header.png') }}"/>
 						</a>
 						
@@ -45,7 +45,7 @@
 								<a href='#'>Hello {{displayname}}!</a>
 							</li>
 							<li>
-								<a href='#'>( Not {{displayname}}? )</a>
+								<a href='{{ path('_security_logout') }}	'>( Not {{displayname}}? )</a>
 							</li>
 						</ul>
 

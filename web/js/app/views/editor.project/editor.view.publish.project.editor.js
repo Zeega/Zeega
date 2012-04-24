@@ -27,8 +27,8 @@
 			}
 
 			
-			var projectlink = zeega.app.url_prefix + "z/" + this.model.id;
-			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="150px" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			var projectlink = zeega.app.url_prefix + this.model.id;
+			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
 
@@ -144,7 +144,7 @@
 					'<div id="publish-project-modal-step1">'+
 						'<div class="modal-header">'+
 							'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>Before you publish, make sure everything looks good</h3>'+
+							'<h3>Before you share your project, make sure everything looks good!</h3>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix">'+
@@ -172,7 +172,7 @@
 						'<div class="modal-header">'+
 							'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
 							'<h3>You\'re ready to publish <span style="color:#F15A29"><%= title %></span>!</h3>'+
-							'<p>As you edit in the future this project will be automatically re-published.</p>'+
+							'<p>As you edit in the future this project will be automatically updated.</p>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix">'+
