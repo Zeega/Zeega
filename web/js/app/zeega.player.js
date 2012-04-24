@@ -32,9 +32,7 @@ var Player2 = Backbone.View.extend({
 	loadProject : function( data, options )
 	
 	{
-		
-	
-		
+
 		this.render();
 		
 		this.data = data;
