@@ -1686,7 +1686,7 @@ default-layer-control
 	border:1px dotted white
 }
 
-.layer-text input:focus{ outline :none }
+.layer-text #zedit-target:focus{ outline :none }
 
 /******************************
 

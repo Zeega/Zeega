@@ -51,3 +51,16 @@
 	background-position: -0px -101px;
 	width: 30px;
 }
+
+
+.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
+{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: text-top;
+	background-image: url('../images/zicons-darkgrey-20.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	background-position:-60px -120px;
+}
