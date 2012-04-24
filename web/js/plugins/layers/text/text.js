@@ -135,7 +135,6 @@
 			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
 			
 			this.$el.find('#zedit-target').keyup(function(e){
-				console.log(e.which)
 				if(e.which == 27){ $(this).blur() }
 				
 				_this.lazySave();
@@ -161,9 +160,9 @@
 			$(this.el).resizable({
 				stop : function(e,ui)
 				{
+					$(this).css('height','');
 					_this.model.update({
 						'width' : $(this).width() / $(this).parent().width() * 100,
-						//'height' : $(this).height() / $(this).parent().height() * 100
 					})
 				}
 			});
