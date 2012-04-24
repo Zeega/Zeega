@@ -3,7 +3,7 @@
 	Layer.Text = Layer.Model.extend({
 
 		layerType : 'Text',
-		
+		displayCitation : false,
 		linkable : true,
 		
 		defaultAttributes: {

@@ -360,9 +360,13 @@ var Player2 = Backbone.View.extend({
 		_.each( this.currentFrame.get('layers'), function(layerID){
 			var layer = _this.currentSequence.layers.get( layerID );
 			
-			if( !layer.citation ) layer.citation = new Citation({model:layer});
-			layer.citation.render();
-			_this.$el.find('#citation ul').append( layer.citation.el );
+			if( !layer.citation && layer.displayCitation ) layer.citation = new Citation({model:layer});
+			
+			if( layer.citation )
+			{
+				layer.citation.render();
+				_this.$el.find('#citation ul').append( layer.citation.el );
+			}
 		})
 	},
 	
