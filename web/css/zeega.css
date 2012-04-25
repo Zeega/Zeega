@@ -86,6 +86,31 @@ float: right;
 
 }
 
+.collections-title-overlay
+{
+	background-color: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	bottom: 5px;
+	width: 132px;
+	color: white;
+	padding: 6px;
+}
+
+.collections-title-overlay .title
+{
+	font-weight:bold;
+}
+
+.browser-results-collection .menu
+{
+position: absolute;
+top: 0;
+padding: 8px 0;
+right: 0;
+background-color: rgba(255, 255, 255, 0.9);
+display:none;
+}
+
 #browser-results-items, #browser-results-collections{
 	min-height:200px !important;
 	max-height:350px !important;
@@ -330,10 +355,6 @@ float: right;
 	text-decoration:none;
 }
 
-.browser-results-collection a:hover, .browser-results-image a:hover{
-	border-bottom:2px solid #F15A29;
-
-}
 #browser-show-more-results{
 	border:1px solid #777;
 	text-align:center;

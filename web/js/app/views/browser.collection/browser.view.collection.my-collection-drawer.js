@@ -37,71 +37,6 @@
 			{
 				var theElement = this.el;
 				var theModel = this.model;
-
-				$(this.el).find('.menu-items li a').click(function(){
-
-
-					switch( $(this).data('action') )
-					{
-						case 'settings':
-
-
-							$('#collection-settings-modal').find('.collection-modal-title').text(theModel.get('title'));
-
-
-							$('#collection-settings-modal').find('#close-modal').click(function(){
-
-								$('#collection-settings-modal').modal('hide');
-							});
-							$('#collection-settings-modal').find('#collection-modal-delete').click(function(){
-								//need to unbind or else previous events are still attached and data gets messed up
-								$(this).unbind();
-
-								zeegaBrowser.app.deleteCollection(theModel.id);
-								$('#collection-settings-modal').modal('hide');
-								return false;
-							});
-
-							$('#collection-settings-modal').find('.collection-modal-title').editable(
-								function(value, settings)
-								{ 
-
-									return zeegaBrowser.app.editCollectionTitle(value, settings, collectionID);
-
-								},
-								{
-									indicator : 'Saving...',
-									tooltip   : 'Click to edit...',
-									indicator : '<img src="images/loading.gif">',
-									select : true,
-									onblur : 'submit',
-									width: '250px',
-									cssclass : 'modal-form'
-							}).click(function(e) {
-
-								e.stopPropagation();
-
-					     	});
-							$('#collection-settings-modal').find('#collection-modal-rename-link').click(function(e) {
-								$(this).unbind();
-								//using jeditable framework - pretend like user clicked on the title element
-								$('#collection-settings-modal').find('.collection-modal-title').trigger('click');
-								//stop from selecting the collection filter at the same click
-								e.stopPropagation();
-							});
-							$('#collection-settings-modal').modal('show');
-
-							break;
-						case 'open-in-editor' :
-							zeegaBrowser.app.goToEditor(collectionID, collectionTitle);
-							break
-					}
-
-
-					event.stopPropagation();
-
-				});
-
 			}
 
 			var thisView = this;
@@ -217,39 +152,105 @@
 		events : {
 
 			"mouseenter .corner-triangle-for-menu, .menu-items"   : "openMenu",
-	  		"mouseleave .corner-triangle-for-menu, .menu-items"   : "closeMenu"
+			'click .nav a' : 'menuItemClicked'
+	  		//"mouseleave .corner-triangle-for-menu, .menu-items"   : "closeMenu"
 		},
 
 		openMenu : function()
 		{
-			/*var menu = $(this.el).find('.menu-toggle').next();
-			if( menu.hasClass('open') ) menu.removeClass('open');
-			else menu.addClass('open');
-			*/
-			var menu = $(this.el).find('.menu-items');
-			$(menu).css("top", "-119px");
-			$(menu).css("left", "5px");
-			$(menu).css("position", "relative");
-
-			$(this.el).find('.menu-items').show();
+			var _this = this;
+			var menu = this.$el.find('.menu').show();
+			$('body').click(function(){ _this.closeMenu() })
 		},
 		closeMenu : function()
 		{
-
-			$(this.el).find('.menu-items').hide();
+			$('body').unbind('click');
+			this.$el.find('.menu').hide();
 		},
+		
+		menuItemClicked : function( e )
+		{
+			var _this = this;
+			console.log(this)
+			console.log( $(e.target).data('action'))
+		/*
+		
+		var collectionTitle = this.model.get("title");
+		var thisCollection = zeegaBrowser.app.myCollections.collection.get( collectionID );
+		
+		*/
+			switch( $(e.target).data('action') )
+			{
+				case 'settings':
 
+					$('#collection-settings-modal').find('.collection-modal-title').text(this.model.get('title'));
+
+					$('#collection-settings-modal').find('#close-modal').click(function(){
+						$('#collection-settings-modal').modal('hide');
+					});
+					
+					$('#collection-settings-modal').find('#collection-modal-delete').click(function(){
+						//need to unbind or else previous events are still attached and data gets messed up
+						$(this).unbind();
+						zeegaBrowser.app.deleteCollection(theModel.id);
+						$('#collection-settings-modal').modal('hide');
+						return false;
+					});
+
+					$('#collection-settings-modal').find('.collection-modal-title').editable(
+						function(value, settings)
+						{ 
+							return zeegaBrowser.app.editCollectionTitle( value, settings, _this.model.id );
+						},
+						{
+							indicator : 'Saving...',
+							tooltip   : 'Click to edit...',
+							indicator : '<img src="images/loading.gif">',
+							select : true,
+							onblur : 'submit',
+							width: '250px',
+							cssclass : 'modal-form'
+					}).click(function(e){
+						e.stopPropagation();
+			     	});
+			
+					$('#collection-settings-modal').find('#collection-modal-rename-link').click(function(e) {
+						$(this).unbind();
+						//using jeditable framework - pretend like user clicked on the title element
+						$('#collection-settings-modal').find('.collection-modal-title').trigger('click');
+						//stop from selecting the collection filter at the same click
+						e.stopPropagation();
+					});
+					
+					$('#collection-settings-modal').modal('show');
+					break;
+					
+				case 'open-in-editor' :
+					zeegaBrowser.app.goToEditor(collectionID, collectionTitle);
+					break
+			}
+
+			event.stopPropagation();
+			return false;
+		},
 
 		getTemplate : function()
 		{
-
-
 			var html =	
-						'<a href="#"><img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items"></a>'+
-						'<a href="#" class="corner-triangle-for-menu"><!--<span class="zicon zicon-gear orange"></span>--></a><ul class="menu-items">'+
-						'<li><a href="#" data-action="settings">settings</a></li>'+
-						'</ul>'+
-						'<p><span class="title"><%= title %></span><br><span class="browser-item-count"><%= count %> items</span><br/><span class="duplicate-item">Duplicate item</span></p>';
+						'<a href="#">'+
+							'<img class="browser-img-large" src="<%= src %>" alt="<%= title %> -- <%= count %> items" title="<%= title %> -- <%= count %> items">'+
+						'</a>'+
+						'<a href="#" class="corner-triangle-for-menu"></a>'+
+						'<div class="well menu">'+
+							'<ul class="nav nav-list">'+
+								'<li><a href="#" data-action="settings">settings</a></li>'+
+								'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+
+							'</ul>'+
+						'</div>'+
+						'<div class="collections-title-overlay">'+
+							'<div class="title"><%= title %></div>'+
+							'<div class="browser-item-count"><%= count %> items</div>'+
+						'</div>';
 
 			return html;
 		},
