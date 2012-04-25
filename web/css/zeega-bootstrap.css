@@ -21,8 +21,13 @@
 
 
 .zicon-image{background-position:-20px 0}
-.zicon-video{background-position:-40px 0}
-.zicon-geo{background-position:-60px 0}
+.zicon-video,
+.zicon-youtube,
+.zicon-vimeo
+{background-position:-40px 0}
+.zicon-geo,
+.zicon-mapbox
+{background-position:-60px 0}
 .zicon-text{background-position:-80px 0}
 .zicon-audio{background-position:-100px 0}
 .zicon-link{background-position:-120px 0}
