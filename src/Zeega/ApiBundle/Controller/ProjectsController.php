@@ -44,11 +44,8 @@ class ProjectsController extends Controller
 			$layers_seq = $sequence->getLayers()->toArray();
 			foreach($layers_seq as $layer)
 			{
-				$l = $this->getDoctrine()
-					      ->getRepository('ZeegaDataBundle:Layer')
-						  ->findLayerById($layer->getId());
-
-				array_push($layers[$sequenceId], $l[0]); 
+				$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+				array_push($layers[$sequenceId], $l);
 			}
 		}
 		

@@ -123,11 +123,11 @@ class ItemsController extends Controller
 
 	    $item = new Item();
        	
-		$site = $this->getDoctrine()
-				     ->getRepository('ZeegaDataBundle:Site')
-				     ->findSiteByUser($user->getId());
+		$sites = $user->getSites();
+		$firstSite = $sites[0]->getSite();
+		
+		$item->setSite($firstSite);		
 
-		$item->setSite($site[0]);		
         $item->setTitle($this->getRequest()->request->get('title'));
 		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));
@@ -158,7 +158,7 @@ class ItemsController extends Controller
             {
                 $childItem = new Item();
 
-        		$childItem->setSite($site[0]);		
+        		$childItem->setSite($firstSite);		
                 $childItem->setTitle($child['title']);
         		$childItem->setDescription($child['description']);
                 $childItem->setMediaType($child['media_type']);

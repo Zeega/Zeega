@@ -3,7 +3,7 @@ Zeega\DataBundle\Entity\Project:
     type: entity
     table: project
     cascade: remove
-    repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+    repositoryClass: Zeega\DataBundle\Repository\ProjectRepository
     manyToMany:
         users:
             targetEntity: Zeega\DataBundle\Entity\User

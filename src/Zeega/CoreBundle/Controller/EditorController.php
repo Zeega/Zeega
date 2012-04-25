@@ -19,40 +19,29 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends Controller
 {
-    public function homeAction(){
-    	
-		$user = $this->get('security.context')->getToken()->getUser();
-  
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
-
-		$site=$sites[0];
-		$url=$this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true);
-
-		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true),302);    
-	}
+    public function homeAction()
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+		
+		$sites = $user->getSites();
+		$siteShort = $sites[0]->getSite()->getShort();
+        
+		$url = $this->generateUrl('ZeegaCoreBundle_site',array('short'=>$siteShort),true);
+		
+		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$siteShort),true),302);
+    }
 
 	public function siteAction($short)
 	{
-	
 		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $this->getRequest()->getSession();
-	
-		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSiteByShort($short,$user->getId());
-
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
+		
 		$projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
-	    
-		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array(
-			'allprojects'   => $projects,
-			'page'=>'site',
-		));
+		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 
 	public function browserAction($short)
 	{
-		$user = $this->get('security.context')->getToken()->getUser();
-		
 		return $this->render('ZeegaCoreBundle:Editor:browser.html.twig', array('page'=>'editor'));
 	} 
 	
@@ -60,9 +49,7 @@ class EditorController extends Controller
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
 		
-		$site=$this->getDoctrine()
-						 ->getRepository('ZeegaDataBundle:Site')
-						 ->findSiteByShort($short,$user->getId());
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 		$sequences = $this->getDoctrine()
 					   ->getRepository('ZeegaDataBundle:Sequence')
 					   ->findSequencesByProject($id);
@@ -118,10 +105,6 @@ class EditorController extends Controller
 	public function faqAction()
 	{
 	    $user = $this->get('security.context')->getToken()->getUser();
-
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
 
 		return $this->render('ZeegaCoreBundle:Editor:faq.html.twig', array('page'=>'faq'));
     } 

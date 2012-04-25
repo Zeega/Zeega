@@ -2,24 +2,14 @@
 
 namespace Zeega\DataBundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * Zeega\DataBundle\Entity\User
  */
 class User extends BaseUser
-
 {
-	   /**
-     * Constructs a new instance of User
-     */
-    public function __construct()
-    {
-		parent::__construct();
-        $this->created_at = new \DateTime();
-    }
-
     /**
      * @var integer $id
      */
@@ -36,16 +26,24 @@ class User extends BaseUser
     protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
 
     /**
-     * @var string $thumb_url
-     */
+    * @var string $thumb_url
+    */
     protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
-
     /**
      * @var datetime $created_at
      */
     protected $created_at;
-	
 
+    /**
+     * @var Zeega\DataBundle\Entity\UsersSites
+     */
+    protected $sites;
+
+    public function __construct()
+    {
+        $this->sites = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -135,29 +133,49 @@ class User extends BaseUser
     {
         return $this->created_at;
     }
-    /**
-     * @var Zeega\DataBundle\Entity\Playground
-     */
-    public $sites;
-
 
     /**
-     * Add playgrounds
+     * Add sites
      *
-     * @param Zeega\DataBundle\Entity\Site $playgrounds
+     * @param Zeega\DataBundle\Entity\UsersSites $sites
      */
-    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
+    public function addUsersSites(\Zeega\DataBundle\Entity\UsersSites $sites)
     {
         $this->sites[] = $sites;
     }
 
     /**
-     * Get playgrounds
+     * Get sites
      *
      * @return Doctrine\Common\Collections\Collection 
      */
     public function getSites()
     {
         return $this->sites;
+    }
+    /**
+     * @var datetime $user_type
+     */
+    private $user_type;
+
+
+    /**
+     * Set user_type
+     *
+     * @param datetime $userType
+     */
+    public function setUserType($userType)
+    {
+        $this->user_type = $userType;
+    }
+
+    /**
+     * Get user_type
+     *
+     * @return datetime 
+     */
+    public function getUserType()
+    {
+        return $this->user_type;
     }
 }

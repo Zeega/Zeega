@@ -1,0 +1,19 @@
+# src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
+Zeega\DataBundle\Entity\UsersSites:
+    type: entity
+    table: users_sites
+    manyToOne:
+        user:
+            targetEntity: User
+            inversedBy: sites
+        site:
+            targetEntity: Site
+            inversedBy: users
+    id:
+        user:
+            associationKey: true
+        site:
+            associationKey: true
+    fields:
+        user_role:
+            type: string

@@ -35,7 +35,7 @@ class Site
     private $date_created;
 
     /**
-     * @var Zeega\DataBundle\Entity\User
+     * @var Zeega\DataBundle\Entity\UsersSites
      */
     private $users;
 
@@ -138,9 +138,9 @@ class Site
     /**
      * Add users
      *
-     * @param Zeega\DataBundle\Entity\User $users
+     * @param Zeega\DataBundle\Entity\UsersSites $users
      */
-    public function addUser(\Zeega\DataBundle\Entity\User $users)
+    public function addUsersSites(\Zeega\DataBundle\Entity\UsersSites $users)
     {
         $this->users[] = $users;
     }

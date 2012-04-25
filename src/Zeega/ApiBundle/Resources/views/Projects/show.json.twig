@@ -12,26 +12,31 @@
 			{% if sequences is defined and sequences is not empty %}
 				{% set len = sequences|length - 1 -%}
 	
-				{% for i in 0..len %}	
+				{% for sequence in sequences %}	
 				{
-					"id" : "{{ sequences[i].id }}",
-					"title" : "{{ sequences[i].title }}",
-					"attr" :
-						{% if sequences[i].attr is not empty %}
-							{{sequences[i].attr | json_encode | raw}}
-						{% else %}	
-							{}					
-						{% endif %},
-					"frames" : {{frames[sequences[i].id] | json_encode | raw}},
-					{% set layers_len = layers[sequences[i].id]|length - 1 -%}
-					"layers" : 
-						{{layers[sequences[i].id] | json_encode | raw}}
+					"id" : {{ sequence.id }},
+					"title" : "{{ sequence.title }}",
+					"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+					"frames" : {{frames[sequence.id] | json_encode | raw}},
+					"layers" :
+					[
+						{% for layer in layers[sequence.id] %}
+							{
+								"id" : {{ layer.id}},
+								"type" : {{ layer.type | json_encode | raw}},
+								"text" : {{ layer.text | json_encode | raw}},
+								"attr" : {{ layer.attr | json_encode | raw}}
+							}
+
+							{%- if loop.index0 < layers[sequence.id]|length - 1 -%}
+							,
+							{%- endif -%}
+				        {% endfor %}
+					]
 				}
-				{% if i < len %}
-					,
-				{% endif %}
-			
-			
+				{%- if loop.index0 < sequences|length - 1 -%}
+				,
+				{%- endif -%}			
 				{% endfor %}
 			{% endif %}		]		
 	 }
