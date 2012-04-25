@@ -17,11 +17,12 @@ function initUX(){
 	$('.info').popover({
 		'delayIn' : 0
 	});
+	/*
 	$('.database-asset-list').popover({
 		'delayIn' : 1,
 		'placement' : 'right'
 	});
-	
+	*/
 	
 	
 	$('#sequence-cover-image').droppable({
