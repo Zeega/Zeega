@@ -894,35 +894,6 @@ body
 
 /*******************************
 
-	BOOTSTRAP OVERRIDES
-	
-*******************************/
-
-.navbar .nav > li > a:hover,
-.btn-group .btn:hover,
-.btn-group .btn:focus,
-.btn-group .btn:active,
-.btn-group .btn.active
-{ text-shadow: 0 0 6px whiteSmoke }
-
-.navbar-fixed-top .container,
-.navbar-fixed-bottom .container
-{ width:1000px }
-
-
-/* this should be removed with next version */
-.add-on {
-color:#444;
-}
-
-.nav-pills>li>a
-{
-	background-color:#444;
-}
-
-
-/*******************************
-
 	HELP STYLES
 	
 *******************************/
