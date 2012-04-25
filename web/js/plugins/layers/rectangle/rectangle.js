@@ -86,7 +86,7 @@
 		{
 			var style = {
 				'backgroundColor' : this.attr.backgroundColor,
-				'height' : this.attr.height +'%'
+				'height' : this.model.get('attr').height +'%'
 			}
 
 			$(this.el).css( style );
@@ -95,6 +95,7 @@
 			
 			return this;
 		}
+		
 		
 	});
 	

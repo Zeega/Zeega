@@ -4,7 +4,7 @@
 		
 		showControls : true,
 		player : false,
-		
+		displayCitation: true,
 		visualLoaded : false,
 		
 		editorWindow : $('#visual-editor-workspace'),

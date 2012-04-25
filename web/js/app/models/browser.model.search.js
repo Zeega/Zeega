@@ -5,7 +5,7 @@
 		defaults: {
     	
 	    	//Parameters you can send the server
-	    	"user"					: 	-1, //if userID is -1 then it'll search in current user's stuff
+	    	//"user"					: 	-1, //if userID is -1 then it'll search in current user's stuff
 	    	"q"						: 	"", //query string
 	    	"content"				: 	"all", //All/image/video/audio
 	    	"collection"			: 	null, //collection ID, only search within this collection
@@ -22,7 +22,6 @@
 	    	"r_itemswithcollections" : 0, //return items and collections, mixed?
 	    	"r_items"				: 1, //return items?
 	    	"r_time"				: false, //return time bins?
-
 	  	},
 	
 		getUrl : function()
@@ -32,6 +31,7 @@
 
 						+ "r_items=" + this.get("r_items") + "&"
 						+ "r_itemswithcollections=" + this.get("r_itemswithcollections") + "&"
+						+ (sessionStorage.getItem('site') != null ? "site=" + sessionStorage.getItem('site') : "")
 						+ (this.get("page") > 0 ? "page=" + (this.get("page")) + "&" : "")
 						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
