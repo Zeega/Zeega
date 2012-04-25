@@ -21,10 +21,17 @@ class EditorController extends Controller
 {
     public function homeAction(){
     	
-  		$user = $this->get('security.context')->getToken()->getUser();
-  			
-		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'), array());
-    }
+		$user = $this->get('security.context')->getToken()->getUser();
+  
+		$sites=$this->getDoctrine()
+					->getRepository('ZeegaDataBundle:Site')
+					->findSitesByUser($user->getId());
+
+		$site=$sites[0];
+		$url=$this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true);
+
+		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true),302);    
+	}
 
 	public function siteAction($short)
 	{
