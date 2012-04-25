@@ -189,10 +189,12 @@
 						$('#collection-settings-modal').modal('hide');
 					});
 					
+					var _this=this;
+					
 					$('#collection-settings-modal').find('#collection-modal-delete').click(function(){
 						//need to unbind or else previous events are still attached and data gets messed up
 						$(this).unbind();
-						zeegaBrowser.app.deleteCollection(theModel.id);
+						zeegaBrowser.app.deleteCollection(_this.model.id);
 						$('#collection-settings-modal').modal('hide');
 						return false;
 					});
@@ -244,7 +246,7 @@
 						'<div class="well menu">'+
 							'<ul class="nav nav-list">'+
 								'<li><a href="#" data-action="settings">settings</a></li>'+
-								'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+
+						//		'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+ 
 							'</ul>'+
 						'</div>'+
 						'<div class="collections-title-overlay">'+

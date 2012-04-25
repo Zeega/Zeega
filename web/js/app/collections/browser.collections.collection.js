@@ -20,9 +20,11 @@
 		
 		removeCollection : function(m)
 		{
+			/*
 			console.log(this._views);
 			console.log(m);
 			console.log(this._views[m.id]);
+			*/
 			var oldView = this._views[m.id];
 			var carouselIdx = $(oldView.el).attr('jcarouselindex');
 
