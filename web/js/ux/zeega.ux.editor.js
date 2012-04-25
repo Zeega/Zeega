@@ -45,7 +45,9 @@ function initUX(){
 		callbacks : {
 			search : function(query, searchCollection)
 			{
+				console.log('	vs search')
 				console.log(query)
+				console.log(searchCollection)
 
 				var s = {};
 				var multipleFilters = false;
@@ -63,9 +65,11 @@ function initUX(){
 				})
 				console.log(s)
 				zeega.app.searchDatabase( s , true );
+				
 			},
 			facetMatches : function(callback)
 			{
+				console.log('	facet matches')
 				callback([ 'filter',
 				
 					{ label: 'all', category: 'Media Type' },
@@ -96,9 +100,24 @@ function initUX(){
 			$('body').unbind('click');
 		})
 	})
+	//when a filter is selected via dropdown
 	$('.filter-list a').click(function(e){
-		visualSearch.searchBox.addFacet('filter',$(this).data('searchFilter'));
-		visualSearch.options.callbacks.search();
+		
+		var model = new VS.model.SearchFacet({
+	      category : 'filter',
+	      value    : $(this).data('searchFilter'),
+	      app      : VS.app
+		});
+		visualSearch.searchQuery.add(model);
+		visualSearch.searchBox.renderFacets();
+		console.log(visualSearch.searchQuery.facets() )
+		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
+		
+		
+		/*
+		visualSearch.searchBox.addFacet('filter',$(this).data('searchFilter'),0);
+		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
+		*/
 		$('.filter-list').hide();
 		e.stopPropagation();
 		return false;
