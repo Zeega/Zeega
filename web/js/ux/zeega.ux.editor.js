@@ -90,7 +90,10 @@ function initUX(){
 	$('.VS-icon.VS-icon-search').click(function(){
 		console.log('open filter dialog')
 		$('.filter-list').show();
-		
+		$('body').click(function(){
+			$('.filter-list').hide();
+			$('body').unbind('click');
+		})
 	})
 	$('.filter-list a').click(function(e){
 		visualSearch.searchBox.addFacet('filter',$(this).data('searchFilter'));
