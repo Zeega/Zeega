@@ -154,4 +154,14 @@ class Site
     {
         return $this->users;
     }
+
+    /**
+     * Add users
+     *
+     * @param Zeega\DataBundle\Entity\UserSites $users
+     */
+    public function addUserSites(\Zeega\DataBundle\Entity\UserSites $users)
+    {
+        $this->users[] = $users;
+    }
 }

@@ -1,7 +1,7 @@
 # src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
-Zeega\DataBundle\Entity\UsersSites:
+Zeega\DataBundle\Entity\UserSites:
     type: entity
-    table: users_sites
+    table: user_sites
     manyToOne:
         user:
             targetEntity: User

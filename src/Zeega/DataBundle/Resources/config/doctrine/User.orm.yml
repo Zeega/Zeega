@@ -8,7 +8,7 @@ Zeega\DataBundle\Entity\User:
             generator: { strategy: AUTO }
     oneToMany:
         sites:
-            targetEntity: UsersSites
+            targetEntity: UserSites
             mappedBy: user
     fields:
         display_name:

@@ -41,6 +41,7 @@ class User extends BaseUser
 
     public function __construct()
     {
+        parent::__construct();
         $this->sites = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -177,5 +178,15 @@ class User extends BaseUser
     public function getUserType()
     {
         return $this->user_type;
+    }
+
+    /**
+     * Add sites
+     *
+     * @param Zeega\DataBundle\Entity\UserSites $sites
+     */
+    public function addUserSites(\Zeega\DataBundle\Entity\UserSites $sites)
+    {
+        $this->sites[] = $sites;
     }
 }

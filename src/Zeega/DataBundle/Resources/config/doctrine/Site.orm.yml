@@ -4,7 +4,7 @@ Zeega\DataBundle\Entity\Site:
     table: site
     oneToMany:
         users:
-            targetEntity: UsersSites
+            targetEntity: UserSites
             mappedBy: site
     id:
         id:
