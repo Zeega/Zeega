@@ -1211,12 +1211,23 @@ body
 	padding:10px 17px;
 }
 
+#sequence-tabs
+{
+	margin:0;
+}
+
+#sequence-tabs.nav-tabs>li>a
+{
+	padding-top:2px;
+	padding-bottom:2px;
+}
+
 #frame-drawer, #browser-my-collections
 {
 	white-space:nowrap;
 	background:#eee;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
-	border-radius: 6px;
+	border-radius: 0 0 6px 6px;
 	
 	box-shadow : none;
 	-webkit-transition: box-shadow .25s linear;
