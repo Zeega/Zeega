@@ -90,6 +90,17 @@ this.zeegaBrowser = {
 		this.doSearch();
 	},
 	
+	searchDatabase : function( query, reset)
+	{
+		
+		console.log( query )
+		this.items.collection.search.set(query, reset);
+		
+		var theItems = this.items;
+		this.items.collection.fetch();
+		
+	},
+	
 	doSearch : function(addToExistingCollection)
 	{
 		if (!addToExistingCollection)

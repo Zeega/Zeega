@@ -70,6 +70,9 @@
 	background-position:-60px -120px;
 }
 
+.filter-list{ z-index:100 }
+
+
 /*********************
 
 BOOTSTRAP OVERRIDES

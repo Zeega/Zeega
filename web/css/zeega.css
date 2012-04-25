@@ -69,6 +69,13 @@ ul,li
 	
 *******************************************/
 
+#browser-search
+{
+	width: 66%;
+	float:left
+}
+#browser-search .visual_search{ margin-top:0 }
+
 .browser-searchbar
 {
 	width: 345px;

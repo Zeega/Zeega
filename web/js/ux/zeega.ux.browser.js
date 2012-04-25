@@ -13,6 +13,72 @@
 function initUX()
 {
 	initHeaderUX();
+	
+	var visualSearch = VS.init({
+		container : $('.visual_search'),
+		query     : '',
+		callbacks : {
+			search : function(query, searchCollection)
+			{
+				console.log('	search')
+				var s = { q:null, content:'all' };
+				var filtered = false;
+				_.each( _.toArray( searchCollection ), function(facet){
+					console.log(facet)
+					
+					if( facet.get('category') == 'filter' )
+					{
+						if(filtered) facet.destroy();
+						else s.content = facet.get('value');
+						filtered = true;
+					}
+					if( facet.get('category') == 'text' ) s.q = facet.get('value');
+				})
+				visualSearch.searchBox.renderFacets();
+				zeegaBrowser.app.searchDatabase( s , true );
+			},
+			facetMatches : function(callback)
+			{
+				callback([ 'filter',
+				
+					{ label: 'all', category: 'Media Type' },
+					{ label: 'audio', category: 'Media Type' },
+					{ label: 'image', category: 'Media Type' },
+					{ label: 'video', category: 'Media Type' }
+				
+				 ]);
+			},
+			valueMatches : function(facet, searchTerm, callback)
+			{
+				switch (facet)
+				{
+					case 'filter':
+						callback(['all', 'audio', 'image', 'video']);
+						break;
+				}
+			}
+		}
+	});
+	
+	
+	$('.VS-icon.VS-icon-search').click(function(){
+		$('.filter-list').show('fast');
+	})
+	//when a filter is selected via dropdown
+	$('.filter-list a').click(function(e){
+		
+		var model = new VS.model.SearchFacet({
+	      category : 'filter',
+	      value    : $(this).data('searchFilter'),
+	      app      : visualSearch.searchBox.app
+		});
+		visualSearch.searchQuery.add(model, {at:0});
+		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
+		
+		$('.filter-list').hide();
+		e.stopPropagation();
+		return false;
+	})
 }
 
 
@@ -169,6 +235,9 @@ $(document).ready(function() {
 		zeegaBrowser.app.goToEditor(zeegaBrowser.app.items.collection.search.get("collection"), zeegaBrowser.app.clickedCollectionTitle);
 		return false;
 	});
+	
+	
+	/*
 	$( '#database-search-text' ).bind('focus', function(e){
 	   
 	     $(this).val('');
@@ -185,7 +254,7 @@ $(document).ready(function() {
 	 	zeegaBrowser.app.resetPageCount();
 	     zeegaBrowser.app.doSearch();
 	 });
-
+*/
 	
 	$('#browser-open-timeline').click( function(){
 		$('#browser-right-sidebar').show();		
