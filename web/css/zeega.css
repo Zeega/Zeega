@@ -1021,7 +1021,6 @@ body
 
 .panel-head+div { margin:6px 0 }
 
-.panel-head li{color:rgba(255,255,255,0.65)}
 .panel.raised .panel-head
 {
 	-webkit-border-radius: 6px;
