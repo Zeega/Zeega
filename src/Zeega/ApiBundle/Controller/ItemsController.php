@@ -124,7 +124,7 @@ class ItemsController extends Controller
 	    $item = new Item();
        	
 		$sites = $user->getSites();
-		$firstSite = $sites[0]->getSite();
+		$firstSite = $sites[0];
 		
 		$item->setSite($firstSite);		
 
