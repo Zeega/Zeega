@@ -21,14 +21,7 @@ class EditorController extends Controller
 {
     public function homeAction()
     {
-    	$user = $this->get('security.context')->getToken()->getUser();
-		
-		$sites = $user->getSites();
-		$siteShort = $sites[0]->getSite()->getShort();
-        
-		$url = $this->generateUrl('ZeegaCoreBundle_site',array('short'=>$siteShort),true);
-		
-		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$siteShort),true),302);
+		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
     }
 
 	public function siteAction($short)
@@ -58,7 +51,7 @@ class EditorController extends Controller
 						->getRepository('ZeegaDataBundle:Project')
 						->findOneById($id);
 		$projectLayers =  $this->getDoctrine()
-							   ->getRepository('ZeegaDataBundle:Project')
+							   ->getRepository('ZeegaDataBundle:Layer')
 							   ->findLayersByProject($id);
 		$sequence = $sequences[0];
 		

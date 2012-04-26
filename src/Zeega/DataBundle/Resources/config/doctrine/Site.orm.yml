@@ -2,10 +2,10 @@
 Zeega\DataBundle\Entity\Site:
     type: entity
     table: site
-    oneToMany:
-        users:
-            targetEntity: UserSites
-            mappedBy: site
+    manyToMany:
+       users:
+         targetEntity: Zeega\DataBundle\Entity\User
+         mappedBy: sites
     id:
         id:
             type: integer

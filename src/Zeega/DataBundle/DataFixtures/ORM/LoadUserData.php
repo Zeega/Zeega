@@ -29,18 +29,10 @@ class LoadUserData implements FixtureInterface
         $userAdmin->setPlainPassword(mt_rand());
         $userAdmin->setSuperAdmin(true);
         $userAdmin->setUserType("User");
+        $userAdmin->addSite($site);
 
         $manager->persist($userAdmin);
 
-        $manager->flush();
-        
-        $userSite = new UserSites();
-        $userSite->setSite($site);
-        $userSite->setUser($userAdmin);
-        $userSite->setUserRole("SITE_ADMIN");
-
-        $manager->persist($userSite);
-        
         $manager->flush();
     }
 }

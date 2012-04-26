@@ -35,14 +35,14 @@ class Site
     private $date_created;
 
     /**
-     * @var Zeega\DataBundle\Entity\UsersSites
+     * @var Zeega\DataBundle\Entity\User
      */
     private $users;
 
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->date_created = new \DateTime();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -138,9 +138,9 @@ class Site
     /**
      * Add users
      *
-     * @param Zeega\DataBundle\Entity\UsersSites $users
+     * @param Zeega\DataBundle\Entity\User $users
      */
-    public function addUsersSites(\Zeega\DataBundle\Entity\UsersSites $users)
+    public function addUser(\Zeega\DataBundle\Entity\User $users)
     {
         $this->users[] = $users;
     }
@@ -153,15 +153,5 @@ class Site
     public function getUsers()
     {
         return $this->users;
-    }
-
-    /**
-     * Add users
-     *
-     * @param Zeega\DataBundle\Entity\UserSites $users
-     */
-    public function addUserSites(\Zeega\DataBundle\Entity\UserSites $users)
-    {
-        $this->users[] = $users;
     }
 }

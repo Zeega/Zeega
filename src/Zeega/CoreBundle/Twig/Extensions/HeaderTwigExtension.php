@@ -8,6 +8,7 @@ use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
+use Symfony\Component\HttpFoundation\Response;
 
 class HeaderTwigExtension extends \Twig_Extension
 {
@@ -28,7 +29,7 @@ class HeaderTwigExtension extends \Twig_Extension
     		if(isset($user) && $user != "anon.")
     		{
     		    $sites = $user->getSites();
-        		$site = $sites[0]->getSite();
+        		$site = $sites[0];
 
         		$projects = $this->doctrine
         						 ->getRepository('ZeegaDataBundle:Project')

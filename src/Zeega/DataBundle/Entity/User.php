@@ -26,16 +26,22 @@ class User extends BaseUser
     protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
 
     /**
-    * @var string $thumb_url
-    */
+     * @var string $thumb_url
+     */
     protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
+
     /**
      * @var datetime $created_at
      */
     protected $created_at;
 
     /**
-     * @var Zeega\DataBundle\Entity\UsersSites
+     * @var string $user_type
+     */
+    protected $user_type;
+
+    /**
+     * @var Zeega\DataBundle\Entity\Site
      */
     protected $sites;
 
@@ -136,11 +142,31 @@ class User extends BaseUser
     }
 
     /**
+     * Set user_type
+     *
+     * @param string $userType
+     */
+    public function setUserType($userType)
+    {
+        $this->user_type = $userType;
+    }
+
+    /**
+     * Get user_type
+     *
+     * @return string 
+     */
+    public function getUserType()
+    {
+        return $this->user_type;
+    }
+
+    /**
      * Add sites
      *
-     * @param Zeega\DataBundle\Entity\UsersSites $sites
+     * @param Zeega\DataBundle\Entity\Site $sites
      */
-    public function addUsersSites(\Zeega\DataBundle\Entity\UsersSites $sites)
+    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
     {
         $this->sites[] = $sites;
     }
@@ -153,40 +179,5 @@ class User extends BaseUser
     public function getSites()
     {
         return $this->sites;
-    }
-    /**
-     * @var datetime $user_type
-     */
-    private $user_type;
-
-
-    /**
-     * Set user_type
-     *
-     * @param datetime $userType
-     */
-    public function setUserType($userType)
-    {
-        $this->user_type = $userType;
-    }
-
-    /**
-     * Get user_type
-     *
-     * @return datetime 
-     */
-    public function getUserType()
-    {
-        return $this->user_type;
-    }
-
-    /**
-     * Add sites
-     *
-     * @param Zeega\DataBundle\Entity\UserSites $sites
-     */
-    public function addUserSites(\Zeega\DataBundle\Entity\UserSites $sites)
-    {
-        $this->sites[] = $sites;
     }
 }
