@@ -21,8 +21,13 @@
 
 
 .zicon-image{background-position:-20px 0}
-.zicon-video{background-position:-40px 0}
-.zicon-geo{background-position:-60px 0}
+.zicon-video,
+.zicon-youtube,
+.zicon-vimeo
+{background-position:-40px 0}
+.zicon-geo,
+.zicon-mapbox
+{background-position:-60px 0}
 .zicon-text{background-position:-80px 0}
 .zicon-audio{background-position:-100px 0}
 .zicon-link{background-position:-120px 0}
@@ -64,3 +69,28 @@
 	background-repeat: no-repeat;
 	background-position:-60px -120px;
 }
+
+.filter-list{ z-index:100 }
+
+
+/*********************
+
+BOOTSTRAP OVERRIDES
+
+*********************/
+img{ max-width:none }
+
+.navbar .nav > li > a:hover,
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active,
+.btn-group .btn.active
+{ text-shadow: 0 0 6px whiteSmoke }
+
+.navbar-fixed-top .container,
+.navbar-fixed-bottom .container
+{ width:1000px }
+
+.add-on { color:#444 }
+
+.nav-pills>li>a{ background-color:#444 }

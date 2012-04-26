@@ -5,7 +5,7 @@
 		layerType : 'Geo',
 
 		defaultAttributes : {
-			'title' : 'Map Layer',
+			'title' : 'Streetview Layer',
 			'height' : 100,
 			'width' : 100,
 			'lat' : 42.3735626,

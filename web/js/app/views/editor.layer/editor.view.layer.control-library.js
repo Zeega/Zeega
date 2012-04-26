@@ -802,7 +802,7 @@
 			zoomControl: true,
 			mapTypeControl: true,
 			scaleControl: false,
-			streetViewControl: true,
+			streetViewControl: false,
 			overviewMapControl: false
 		},
 		
@@ -843,11 +843,18 @@
 					zoomControl: this.settings.zoomControl,
 					mapTypeControl: this.settings.mapTypeControl,
 					scaleControl: this.settings.scaleControl,
-					streetViewControl: this.settings.streetView,
+					streetViewControl: false,
 					overviewMapControl: this.settings.overviewMapControl
 				};
 				this.map = new google.maps.Map( $(this.el).find( '.google-map' )[0], mapOptions);
-			
+				this.marker = new google.maps.Marker({
+					  position: center,
+					  map: this.map,
+					  
+
+				  });
+				this.marker.setDraggable(true);
+				/*
 				if( this.model.get('attr').type == "streetview" )
 				{
 					var pov = {
@@ -859,7 +866,7 @@
 					this.map.getStreetView().setPov( pov );
 					this.map.getStreetView().setVisible( true );
 				}
-			
+				*/
 				this.initMapListeners();
 				this.initGeoCoder();
 				
@@ -894,6 +901,7 @@
 					if( _this.map.getStreetView().getVisible() ) _this.map.getStreetView().setVisible( false );
 					var center = results[0].geometry.location;
 					_this.map.setCenter( center );
+					_this.marker.setPosition(center);
 					_this.model.update({ title : location });
 				}
 				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
@@ -906,14 +914,32 @@
 		{
 			var _this = this;
 			google.maps.event.addListener( this.map, 'idle', function(){
+				/*
 				var newCenter = _this.map.getCenter();
 				console.log('map is idle now')
+				
 				_this.model.update({
 					lat : newCenter.lat(),
 					lng : newCenter.lng()
 				})
 				_this.model.trigger('update');
+				*/
 			});
+			
+			 google.maps.event.addListener(this.marker, 'dragend', function(){
+			 
+			 	var newCenter = _this.marker.getPosition();
+				console.log('map is idle now')
+				
+				_this.model.update({
+					lat : newCenter.lat(),
+					lng : newCenter.lng()
+				})
+				_this.model.trigger('update');
+			 
+			 
+			 });
+
 
 			google.maps.event.addListener(this.map, 'maptypeid_changed', function(){
 				console.log('the maps type has changed')

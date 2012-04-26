@@ -69,6 +69,13 @@ ul,li
 	
 *******************************************/
 
+#browser-search
+{
+	width: 66%;
+	float:left
+}
+#browser-search .visual_search{ margin-top:0 }
+
 .browser-searchbar
 {
 	width: 345px;
@@ -88,6 +95,7 @@ float: right;
 
 .collections-title-overlay
 {
+	overflow:hidden;
 	background-color: rgba(0, 0, 0, 0.5);
 	position: absolute;
 	bottom: 5px;
@@ -891,35 +899,6 @@ body
 	height:1em;
 	width:690px;
 }
-
-/*******************************
-
-	BOOTSTRAP OVERRIDES
-	
-*******************************/
-
-.navbar .nav > li > a:hover,
-.btn-group .btn:hover,
-.btn-group .btn:focus,
-.btn-group .btn:active,
-.btn-group .btn.active
-{ text-shadow: 0 0 6px whiteSmoke }
-
-.navbar-fixed-top .container,
-.navbar-fixed-bottom .container
-{ width:1000px }
-
-
-/* this should be removed with next version */
-.add-on {
-color:#444;
-}
-
-.nav-pills>li>a
-{
-	background-color:#444;
-}
-
 
 /*******************************
 

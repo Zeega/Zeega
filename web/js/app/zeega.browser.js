@@ -90,6 +90,17 @@ this.zeegaBrowser = {
 		this.doSearch();
 	},
 	
+	searchDatabase : function( query, reset)
+	{
+		
+		console.log( query )
+		this.items.collection.search.set(query, reset);
+		
+		var theItems = this.items;
+		this.items.collection.fetch();
+		
+	},
+	
 	doSearch : function(addToExistingCollection)
 	{
 		if (!addToExistingCollection)
@@ -150,7 +161,7 @@ this.zeegaBrowser = {
 							});
 		}
 		
-		if ($('#database-search-text').val().indexOf("search ") < 0)
+		if ($('#database-search-text').val()&&$('#database-search-text').val().indexOf("search ") < 0)
 			this.items.collection.search.set({ q: $('#database-search-text').val() });
 		else
 			this.items.collection.search.set({ q: null });
