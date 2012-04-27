@@ -28,8 +28,14 @@ class EditorController extends Controller
 	{
 		$user = $this->get('security.context')->getToken()->getUser();
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
-		
+
 		$projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
+		
+		$session = $this->getRequest()->getSession();
+
+        // store an attribute for reuse during a later user request
+        $session->set('site', $site);
+
 		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 

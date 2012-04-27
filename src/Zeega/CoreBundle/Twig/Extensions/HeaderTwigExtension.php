@@ -14,10 +14,11 @@ class HeaderTwigExtension extends \Twig_Extension
 {
 	protected $doctrine;
 
-	public function __construct($doctrine, $securityContext)
+	public function __construct($doctrine, $securityContext, $session)
 	{
         $this->doctrine = $doctrine;
 		$this->securityContext = $securityContext;
+		$this->session = $session;
     }
 
     public function getGlobals()
@@ -29,17 +30,18 @@ class HeaderTwigExtension extends \Twig_Extension
     		if(isset($user) && $user != "anon.")
     		{
     		    $sites = $user->getSites();
-        		$site = $sites[0];
+    		    $session = $this->session;
+        		$currentSite = $session->get('site');
 
         		$projects = $this->doctrine
         						 ->getRepository('ZeegaDataBundle:Project')
-        						 ->findProjectsBySiteAndUser($site->getId(),$user->getId());
+        						 ->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
 
                 return array(
-                    'site' => $site,
+                    'site' => $currentSite,
                     'sites' => $sites,
-        			'title'=>$site->getTitle(),
-        			'short'=>$site->getShort(),
+        			'title'=>$currentSite->getTitle(),
+        			'short'=>$currentSite->getShort(),
         			'num_sites'=>count($sites),
         			'user_id' => $user->getId(),
         			'myprojects'=> $projects,

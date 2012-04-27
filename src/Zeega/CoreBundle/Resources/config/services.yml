@@ -12,5 +12,6 @@ services:
         arguments:
               doctrine: "@doctrine"
               security: "@security.context"
+              session: "@session"
         tags:
             - { name: twig.extension }
