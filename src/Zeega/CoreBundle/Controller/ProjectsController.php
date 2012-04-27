@@ -14,13 +14,6 @@ use Zeega\DataBundle\Entity\User;
 
 class ProjectsController extends Controller
 {
-	 // `post_project`   [POST] /projects
-    public function postProjectAction()
-    {
-
-        
-    }
-
 	// `get_project`     [GET] /projects/{project_id}
     public function getProjectAction($project_id)
     {
@@ -104,11 +97,9 @@ class ProjectsController extends Controller
         				->find($sequences[$i]['id']);
         				
         		$layers=$sequence->getLayers()->toArray();
-        			foreach($layers as $layer){
-        				$l=$this->getDoctrine()
-        					->getRepository('ZeegaDataBundle:Layer')
-        					->findLayerById($layer->getId());
-        				$output[]=$l[0];
+        		foreach($layers as $layer)
+        		{
+        				$output[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         		}
         		
         		$sequences[$i]['layers']=$output;

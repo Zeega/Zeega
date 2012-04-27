@@ -95,6 +95,7 @@ float: right;
 
 .collections-title-overlay
 {
+	overflow:hidden;
 	background-color: rgba(0, 0, 0, 0.5);
 	position: absolute;
 	bottom: 5px;

@@ -2,7 +2,7 @@
 Zeega\DataBundle\Entity\Layer:
    type: entity
    table: layer
-   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   repositoryClass: Zeega\DataBundle\Repository\LayerRepository
    manyToOne:
     item:
      targetEntity: Zeega\DataBundle\Entity\Item

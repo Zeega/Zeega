@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use FOS\UserBundle\Model\UserInterface;
+use Zeega\DataBundle\Entity\UserSites;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller managing the registration
@@ -33,11 +35,23 @@ class RegistrationController extends Controller
         $form = $this->container->get('fos_user.registration.form');
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
-
         $process = $formHandler->process($confirmationEnabled);
+        
+        
         if ($process) {
             $user = $form->getData();
-			
+            
+            $sites = $user->getSites();
+            $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+            
+            if(!$sites->contains($site))
+            {
+                $em = $this->getDoctrine()->getEntityManager();
+                $user->addSite($site);
+                $em->persist($user);
+                $em->flush();
+            }
+            
             if ($confirmationEnabled) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $sequence = 'fos_user_registration_check_email';
@@ -84,61 +98,6 @@ class RegistrationController extends Controller
         ));
     }
 
-    /**
-     * Receive the confirmation token from user email provider, login the user
-     */
-    public function confirmAction($token)
-    {
-        $user = $this->container->get('fos_user.user_manager')->findUserByConfirmationToken($token);
-
-        if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
-        }
-
-        $user->setConfirmationToken(null);
-        $user->setEnabled(true);
-        $user->setLastLogin(new \DateTime());
-
-        $this->container->get('fos_user.user_manager')->updateUser($user);
-        $this->authenticateUser($user);
-
-        return new RedirectResponse($this->container->get('sequencer')->generate('fos_user_registration_confirmed'));
-    }
-
-    /**
-     * Tell the user his account is now confirmed
-     */
-    public function confirmedAction()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
-            'user' => $user,
-        ));
-    }
-
-    /**
-     * Authenticate a user with Symfony Security
-     *
-     * @param \FOS\UserBundle\Model\UserInterface $user
-     */
-    protected function authenticateUser(UserInterface $user)
-    {
-        try {
-            $this->container->get('fos_user.user_checker')->checkPostAuth($user);
-        } catch (AccountStatusException $e) {
-            // Don't authenticate locked, disabled or expired users
-            return;
-        }
-
-        $providerKey = $this->container->getParameter('fos_user.firewall_name');
-        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-
-        $this->container->get('security.context')->setToken($token);
-    }
 
     protected function setFlash($action, $value)
     {

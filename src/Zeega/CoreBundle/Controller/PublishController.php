@@ -20,18 +20,21 @@ class PublishController extends Controller
 
     	$layerList = $frame->getLayers();
         $layers = array();
+        
         if(isset($layerList))
         {
-    	foreach($layerList as $layer_id)
-    	{
-    	    $l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findLayerById($layer_id);
-
-    	    if(count($l) > 0) 
-    	        $layers[] = $l[0];
-    	}
-	}
-	else
-	    $layers = array();
+    	    foreach($layerList as $layer_id)
+    	    {
+    	        if(isset($layer_id))
+    	        {
+    	            $layers[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer_id);
+    	        }
+    	    }
+	    }
+	    else
+	    {
+	        $layers = array();
+	    }
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
 					'frameId'=> $frame->getId(),
 					'frame'=>ResponseHelper::serializeEntityToJson($frame),
