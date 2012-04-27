@@ -1,0 +1,24 @@
+{
+    "sequence" : 
+	{
+		"id" : {{ sequence.id }},
+		"title" : "{{ sequence.title }}",
+		"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+		"frames" : {{frames | json_encode | raw}},
+		"layers" :
+		[
+			{% for layer in layers %}
+				{
+					"id" : {{ layer.getId}},
+					"type" : {{ layer.getType | json_encode | raw}},
+					"text" : {{ layer.getText | json_encode | raw}},
+					"attr" : {{ layer.getAttr | json_encode | raw}}
+				}
+
+				{%- if loop.index0 < layers|length - 1 -%}
+				,
+				{%- endif -%}
+	        {% endfor %}
+		]
+	 }
+}
