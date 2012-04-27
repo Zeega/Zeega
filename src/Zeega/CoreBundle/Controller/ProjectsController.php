@@ -11,6 +11,7 @@ use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ProjectsController extends Controller
 {
@@ -153,6 +154,7 @@ class ProjectsController extends Controller
 		$em->persist($sequence);
 		$em->persist($frame);
 		$em->flush();
-    	return new Response("Success");
+		return ResponseHelper::encodeAndGetJsonResponse($sequence);
+    	//return new Response("Success");
    }
 }

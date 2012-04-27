@@ -22,9 +22,22 @@
 
 			this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
+
+			this.attachTabView();
 			
 			this.updateFrameOrder(false);
 			this.trigger('ready');
+		},
+		
+		attachTabView : function()
+		{
+			this.view = new Sequence.Views.SequenceTabs({model:this});
+			this.on('sync', this.refreshView, this);
+		},
+		
+		refreshView : function()
+		{
+			this.view.render();
 		},
 		
 		createFrames : function( frames )

@@ -47,7 +47,8 @@
 		},
 		
 		events : {
-			'click .delete-link' : 'deleteLink'
+			'click .delete-link' : 'deleteLink',
+			'mousedown .show-controls' : 'showControls'
 		},
 		
 		deleteLink : function(e)
@@ -57,6 +58,11 @@
 				this.model.trigger('editor_removeLayerFromFrame', this.model);
 				this.remove();
 			}
+		},
+		
+		showControls : function(e)
+		{
+			
 		},
 		
 		onLayerEnter : function()
@@ -72,9 +78,9 @@
 			this.$el.prepend('<i class="icon-remove delete-link"></i>');
 			
 			
-			this.$el.append('<i class="icon-remove delete-link"></i>');
+			//this.$el.append('<i class="icon-edit show-controls"></i>');
 			
-			/*
+			
 			this.$el.resizable({
 				stop: function(e,ui)
 				{
@@ -85,7 +91,7 @@
 					})
 				}
 			})
-			*/
+			
 		}
 		
 		

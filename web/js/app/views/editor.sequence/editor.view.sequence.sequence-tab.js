@@ -8,15 +8,26 @@
 		
 		initialize : function()
 		{
-			this.inFocus = this.options.active;
+			this.model.on('focus',this.onFocus, this);
+			this.model.on('blur',this.onBlur, this);
 		},
 		
 		render: function()
 		{
-			var active = this.inFocus ? 'active' : '';
-			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title'), active: active}) ).addClass(active)
+			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title') || '...'}) );
 			
 			return this;
+		},
+		
+		onFocus : function()
+		{
+			this.inFocus = true;
+			this.$el.addClass('active')
+		},
+		onBlur : function()
+		{
+			this.inFocus = false;
+			this.$el.removeClass('active')
 		},
 	
 		events : {
