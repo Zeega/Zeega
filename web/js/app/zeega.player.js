@@ -471,13 +471,13 @@ var Player2 = Backbone.View.extend({
 	fadeOutOverlays : function( _this )
 	{
 		_this.overlaysHidden = true;
-		
+/*		
 		$('.player-overlay').fadeOut('slow');
 		$('.preview-nav').fadeOut('slow');
 		
 		$('#citation').animate({ height : '24px' });
 		$('.citation-content').hide();
-		
+*/		
 	},
 	
 	initListeners : function()
@@ -803,16 +803,14 @@ var Player2 = Backbone.View.extend({
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
 				"<div class='arrow-background'></div>"+
-					"<img  height='75' width='35' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
-				"</div>"+
-				"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>"+
-					"<div class='arrow-background'></div>"+
-					"<img height='75' width='35' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
-				"</div>"+
-				"<div id='preview-media'></div>"+
-				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>"+
+				"<img class='player-arrow arrow-left' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
 			"</div>"+
-		"";
+			"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>"+
+				"<div class='arrow-background'></div>"+
+				"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
+			"</div>"+
+			"<div id='preview-media'></div>"+
+				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
 		
 		return html;
 	}
