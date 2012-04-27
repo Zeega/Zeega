@@ -239,6 +239,6 @@ class SequencesController extends Controller
 		$em->flush();
     	$output = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         
-    	return new Response(json_encode($output));
+    	return ResponseHelper::encodeAndGetJsonResponse($output);
     } // `post_sequence_layers`   [POST] /sequences/{sequence_id}/layers
 }
