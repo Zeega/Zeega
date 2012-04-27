@@ -1708,6 +1708,14 @@ default-layer-control
 	top:12px;
 }
 
+.player-arrow
+{
+	height: 15%;
+	max-height: 75px;
+	max-width: 35px;
+	margin: 0 10px;
+}
+
 #citation
 {
 	background:rgba(0,0,0,0.4);
