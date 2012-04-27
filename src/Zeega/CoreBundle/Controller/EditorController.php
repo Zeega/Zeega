@@ -40,7 +40,14 @@ class EditorController extends Controller
     {
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
-		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>$site->getShort()),array());
+        if(isset($site))
+        {
+            return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>$site->getShort()),array());
+        }
+		else
+		{
+		    return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
+		}
     }
 
 	public function siteAction($short)
