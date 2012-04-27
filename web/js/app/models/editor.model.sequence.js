@@ -4,7 +4,7 @@
 		
 		url : function()
 		{
-			if ( this.isNew() ) return zeega.app.url_prefix + 'sequences';
+			if ( this.isNew() ) return zeega.app.url_prefix + 'projects/'+ zeega.app.project.id +'/sequences';
 			return zeega.app.url_prefix+'sequences/' + this.id;
 		},
 				
@@ -14,9 +14,12 @@
 			this.unset('frames',['silent'])
 			this.unset('layers',['silent'])
 			
-			this.createFrames( attributes.frames );
-			this.createLayers( attributes.layers );
-			
+			if(attributes)
+			{
+				this.createFrames( attributes.frames );
+				this.createLayers( attributes.layers );
+			}
+
 			this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 			

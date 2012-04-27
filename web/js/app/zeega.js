@@ -232,8 +232,11 @@ this.zeega = {
 		{
 			console.log('create and go to new sequence')
 			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model();
+			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id });
+			console.log(this)
 			console.log(sequence)
+			sequence.save();
+			this.project.sequences.add(sequence)
 			
 		}
 		else

@@ -127,7 +127,14 @@ class ProjectsController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+		$sequenceCount = 0;
+		$projectSequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findSequencesByProject($project_id);
 
+		if(isset($projectSequences))
+		{
+			return new Response(var_dump($projectSequences));
+			$sequenceCount = $projectSequences->length();
+		}
 		$sequence = new Sequence();
 		
 		$frame = new Frame();
