@@ -19,40 +19,45 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends Controller
 {
-    public function homeAction(){
-    	
-		$user = $this->get('security.context')->getToken()->getUser();
-  
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
-
-		$site=$sites[0];
-		$url=$this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true);
-
-		return $this->redirect($this->generateUrl('ZeegaCoreBundle_site',array('short'=>$site['short']),true),302);    
-	}
+    public function updateaaaaAction()
+    {
+        $users = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findAll();
+        $homeSite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        
+        foreach($users as $user)
+        {
+            $userSites = $user->getSites();
+            if(!$userSites->contains($homeSite))
+            {
+                $em = $this->getDoctrine()->getEntityManager();
+                $user->addSite($homeSite);
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+    }
+    public function homeAction()
+    {
+		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
+    }
 
 	public function siteAction($short)
 	{
-	
 		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $this->getRequest()->getSession();
-	
-		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findSiteByShort($short,$user->getId());
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 
 		$projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
-	    
-		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array(
-			'allprojects'   => $projects,
-			'page'=>'site',
-		));
+		
+		$session = $this->getRequest()->getSession();
+
+        // store an attribute for reuse during a later user request
+        $session->set('site', $site);
+
+		return $this->render('ZeegaCoreBundle:Editor:site.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 
 	public function browserAction($short)
 	{
-		$user = $this->get('security.context')->getToken()->getUser();
-		
 		return $this->render('ZeegaCoreBundle:Editor:browser.html.twig', array('page'=>'editor'));
 	} 
 	
@@ -60,9 +65,7 @@ class EditorController extends Controller
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
 		
-		$site=$this->getDoctrine()
-						 ->getRepository('ZeegaDataBundle:Site')
-						 ->findSiteByShort($short,$user->getId());
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 		$sequences = $this->getDoctrine()
 					   ->getRepository('ZeegaDataBundle:Sequence')
 					   ->findSequencesByProject($id);
@@ -71,7 +74,7 @@ class EditorController extends Controller
 						->getRepository('ZeegaDataBundle:Project')
 						->findOneById($id);
 		$projectLayers =  $this->getDoctrine()
-							   ->getRepository('ZeegaDataBundle:Project')
+							   ->getRepository('ZeegaDataBundle:Layer')
 							   ->findLayersByProject($id);
 		$sequence = $sequences[0];
 		
@@ -93,6 +96,7 @@ class EditorController extends Controller
 		
 		$params["r_itemswithcollections"] = 0;
 		$params["r_items"] = 1;
+		$params["user"] = -1;
 		
 		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
@@ -118,10 +122,6 @@ class EditorController extends Controller
 	public function faqAction()
 	{
 	    $user = $this->get('security.context')->getToken()->getUser();
-
-		$sites=$this->getDoctrine()
-					->getRepository('ZeegaDataBundle:Site')
-					->findSitesByUser($user->getId());
 
 		return $this->render('ZeegaCoreBundle:Editor:faq.html.twig', array('page'=>'faq'));
     } 

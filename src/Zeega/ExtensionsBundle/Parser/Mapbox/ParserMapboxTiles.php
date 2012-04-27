@@ -12,6 +12,7 @@ class ParserMapBoxTiles extends ParserAbstract
 {
     public function load($url, $parameters = null)
     {
+    	
         $regexMatches = $parameters["regex_matches"];
         $itemId = $regexMatches[1]; // bam
 
@@ -22,8 +23,10 @@ class ParserMapBoxTiles extends ParserAbstract
 		// read feed into SimpleXML object
 		$entry = json_decode(file_get_contents(($originalUrl)));
 	
+		
+	    
 		$item= new Item();
-
+		
 		$item->setUri((string)$entry->id);
 		$item->setTitle((string)$entry->name);
 		$item->setAttributionUri((string)$entry->webpage);
@@ -52,7 +55,7 @@ class ParserMapBoxTiles extends ParserAbstract
 		$item->setThumbnailUrl($thumbnailUrl);
 		
 		$item->setThumbnailUrl($thumbnailUrl);
-	
+		
 		return $this->returnResponse($item, true, false);
 		
 	}

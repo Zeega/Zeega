@@ -2,7 +2,7 @@
 Zeega\DataBundle\Entity\Frame:
    type: entity
    table: frame
-   repositoryClass: Zeega\DataBundle\Repository\EditorRepository
+   repositoryClass: Zeega\DataBundle\Repository\FrameRepository
    manyToOne:
     sequence:
      targetEntity: Sequence

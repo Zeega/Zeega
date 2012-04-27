@@ -161,7 +161,7 @@ this.zeegaBrowser = {
 							});
 		}
 		
-		if ($('#database-search-text').val().indexOf("search ") < 0)
+		if ($('#database-search-text').val()&&$('#database-search-text').val().indexOf("search ") < 0)
 			this.items.collection.search.set({ q: $('#database-search-text').val() });
 		else
 			this.items.collection.search.set({ q: null });
