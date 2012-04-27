@@ -21,6 +21,8 @@ this.zeega = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
+	busy : false,
+	hold : null,
 	
 	//sequenceID : 1,
 	currentFrame : null,
@@ -203,6 +205,42 @@ this.zeega = {
 		}
 	},
 	
+	
+	makeConnection : function(action)
+	{
+		console.log('make connection: '+ action)
+		switch(action)
+		{
+			case 'newFrame':
+				this.hold = this.addLayer( { type : 'Link' } );
+				
+				break;
+			case 'existingFrame':
+			
+				break;
+			case 'advanced':
+				
+				break;
+		}
+		this.busy = true;
+	},
+	
+	confirmConnection : function(action)
+	{
+		console.log('confirm connection: '+ action)
+		if(action == 'ok')
+		{
+			console.log('create and go to new sequence')
+		}
+		else
+		{
+			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
+			this.hold.destroy();
+		}
+		this.hold = null;
+		this.busy = false;
+	},
+	
 	setAdvanceValues : function()
 	{
 		//update the auto advance tray
@@ -244,107 +282,117 @@ this.zeega = {
 
 	addFrame : function( num )
 	{
-		var _this = this
-		var n = num || 1;
-		var Frame = zeega.module('frame');
-		
-		for( var i = 0 ; i < n ; i++ )
+		if( !this.busy )
 		{
-			var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
-			console.log('new frame!!!')
-			console.log( this.currentSequence.get('attr').persistLayers )
-			console.log(layers)
+			var _this = this
+			var n = num || 1;
+			var Frame = zeega.module('frame');
+		
+			for( var i = 0 ; i < n ; i++ )
+			{
+				var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
+				console.log('new frame!!!')
+				console.log( this.currentSequence.get('attr').persistLayers )
+				console.log(layers)
 			
-			var newFrame = new Frame.Model();
-			newFrame.set({'layers' : layers},{'silent':true});
-			console.log(newFrame)
+				var newFrame = new Frame.Model();
+				newFrame.set({'layers' : layers},{'silent':true});
+				console.log(newFrame)
 			
-			newFrame.save({},{
-				success : function()
-				{
-					console.log(newFrame)
-					newFrame.render();
+				newFrame.save({},{
+					success : function()
+					{
+						console.log(newFrame)
+						newFrame.render();
 					
-					newFrame.trigger('refresh_view');
-					_this.currentSequence.trigger('updateFrameOrder');
-					newFrame.trigger('updateThumb');
-					_this.currentSequence.frames.add( newFrame );
-					_this.loadFrame( newFrame );
-				}
-			});
+						newFrame.trigger('refresh_view');
+						_this.currentSequence.trigger('updateFrameOrder');
+						newFrame.trigger('updateThumb');
+						_this.currentSequence.frames.add( newFrame );
+						_this.loadFrame( newFrame );
+					}
+				});
 			
+			}
 		}
 	},
 	
 	duplicateFrame : function( frameModel )
 	{
-		this.currentSequence.duplicateFrame( frameModel )
+		if(!this.busy) this.currentSequence.duplicateFrame( frameModel )
 	},
 	
 	addLayer : function( args )
 	{
-		console.log('ADD LAYER')
+		if(!this.busy)
+		{
+			console.log('ADD LAYER')
 
+			var _this = this;
+			args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
+			console.log('show layer? '+ args.show() )
 
-		var _this = this;
-		args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
-		console.log('show layer? '+ args.show() )
-
-		console.log(args)
-		this.currentSequence.layers.addNewLayer( args )
+			console.log(args)
+			return this.currentSequence.layers.addNewLayer( args )
+		}
 	},
 	
 	continueLayerToNextFrame : function( layerID )
 	{
-		console.log( 'copy layer to next frame!: '+ layerID );
-		console.log(parseInt(layerID))
-		var nextFrame = this.getRightFrame();
-		
-		if( nextFrame != this.currentFrame )
+		if(!this.busy)
 		{
-			if(nextFrame.get('layers')) nextFrame.get('layers').push(parseInt(layerID));
-			else nextFrame.set('layers',[parseInt(layerID)],{silent:true});
-			nextFrame.save();
-		}
+			console.log( 'copy layer to next frame!: '+ layerID );
+			console.log(parseInt(layerID))
+			var nextFrame = this.getRightFrame();
 		
+			if( nextFrame != this.currentFrame )
+			{
+				if(nextFrame.get('layers')) nextFrame.get('layers').push(parseInt(layerID));
+				else nextFrame.set('layers',[parseInt(layerID)],{silent:true});
+				nextFrame.save();
+			}
+		}
 	},
 	
 	continueOnAllFrames : function( layerModel )
 	{
-		console.log('zeega continue on all');
+		if(!this.busy)
+		{
+			console.log('zeega continue on all');
 		
-		var layerID = parseInt(layerModel.id);
-		//get persistent layers
-		var persistentLayers = this.currentSequence.get('attr').persistLayers;
-		// if they do not exist
-		if( _.isUndefined(persistentLayers) )
-		{
-			persistentLayers = [ layerID ];
-			this.addPersistenceToFrames( layerID );
-		}
-		else
-		{
-			//check to see if it's already in there
-			if( _.include(persistentLayers, layerID ) )
+			var layerID = parseInt(layerModel.id);
+			//get persistent layers
+			var persistentLayers = this.currentSequence.get('attr').persistLayers;
+			// if they do not exist
+			if( _.isUndefined(persistentLayers) )
 			{
-				//remove persistence
-				persistentLayers = _.without( layerID );
-				if(persistentLayers.length == 0 ) persistentLayers = [false];
-				this.removePersistenceFromFrames( layerID );
+				persistentLayers = [ layerID ];
+				this.addPersistenceToFrames( layerID );
 			}
 			else
 			{
-				//add persistence
-				persistentLayers.push( layerID );
-				this.addPersistenceToFrames( layerID );
+				//check to see if it's already in there
+				if( _.include(persistentLayers, layerID ) )
+				{
+					//remove persistence
+					persistentLayers = _.without( layerID );
+					if(persistentLayers.length == 0 ) persistentLayers = [false];
+					this.removePersistenceFromFrames( layerID );
+				}
+				else
+				{
+					//add persistence
+					persistentLayers.push( layerID );
+					this.addPersistenceToFrames( layerID );
+				}
 			}
+		
+			var attr = this.currentSequence.get('attr') || {};
+			_.extend( attr , { persistLayers : _.compact(persistentLayers) });
+		
+			this.currentSequence.set({ 'attr': attr });
+			this.currentSequence.save();
 		}
-		
-		var attr = this.currentSequence.get('attr') || {};
-		_.extend( attr , { persistLayers : _.compact(persistentLayers) });
-		
-		this.currentSequence.set({ 'attr': attr });
-		this.currentSequence.save();
 		
 	},
 	

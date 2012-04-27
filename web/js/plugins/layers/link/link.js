@@ -7,19 +7,16 @@
 
 	Layer.Link = Layer.Model.extend({
 
-		layerType : 'Rectangle',
+		layerType : 'Link',
 		
 		defaultAttributes : {
-			'title' : 'Color Layer',
-			'url' : null,
-			'backgroundColor': '#ff00ff',
-			'left' : 0,
-			'top' : 0,
-			'height' : 100,
-			'width' : 100,
-			'opacity':.75,
-			
-			linkable : true
+			'title' : 'Link Layer',
+			'to_frame' : null,
+			'from_frame': null,
+			'left' : 25,
+			'top' : 25,
+			'height' : 50,
+			'width' : 50,
 		}	
 		
 	});
@@ -28,48 +25,8 @@
 		
 		render : function()
 		{
-			var color = new Layer.Views.Lib.ColorPicker({
-				property : 'backgroundColor',
-				color : this.attr.backgroundColor,
-				model: this.model,
-				label : 'Color'
-			});
-			
-			var widthSlider = new Layer.Views.Lib.Slider({
-				property : 'width',
-				model: this.model,
-				label : 'Width',
-				suffix : '%',
-				min : 1,
-				max : 200,
-			});
-			
-			var heightSlider = new Layer.Views.Lib.Slider({
-				property : 'height',
-				model: this.model,
-				label : 'Height',
-				suffix : '%',
-				min : 1,
-				max : 200,
-			});
-			
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : 0,
-				max : 1,
-			});
-			
-			this.controls
-				.append( color.getControl() )
-				.append( opacitySlider.getControl() )
-				.append( widthSlider.getControl() )
-				.append( heightSlider.getControl() );
-			
+			$(this.el).remove();
 			return this;
-		
 		}
 		
 	});
@@ -78,16 +35,35 @@
 		
 		render : function()
 		{
+			var _this = this;
 			var style = {
-				'backgroundColor' : this.attr.backgroundColor,
-				'height' : this.model.get('attr').height +'%'
+				'height' : this.model.get('attr').height +'%',
 			}
-
 			$(this.el).css( style );
 			
 			this.model.trigger('ready',this.model.id)
 			
 			return this;
+		},
+		
+		onLayerEnter : function()
+		{
+			var _this = this;
+			var style = {
+				'border' : '2px dashed red'
+			}
+
+			$(this.el).css( style );
+			this.$el.resizable({
+				stop: function(e,ui)
+				{
+					console.log('save this bad boy')
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			})
 		}
 		
 		

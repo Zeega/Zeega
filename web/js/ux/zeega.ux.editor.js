@@ -88,11 +88,13 @@ function initUX(){
 	
 	$('.VS-icon.VS-icon-search').click(function(){
 		console.log('open filter dialog')
-		$('.filter-list').show();
+		$('.filter-list').show('fast');
+		/*
 		$('body').click(function(){
 			$('.filter-list').hide();
 			$('body').unbind('click');
 		})
+		*/
 	})
 	//when a filter is selected via dropdown
 	$('.filter-list a').click(function(e){
@@ -110,7 +112,29 @@ function initUX(){
 		return false;
 	})
 	
-}
+	//// non-linear links
+	//// connections
+	
+	$('#make-connection .action').click(function(e){
+		if( !$(this).hasClass('disabled') )
+		{
+			$(this).closest('div').removeClass('open');
+			$('#make-connection button').addClass('disabled');
+			$('#connection-confirm').show();
+			zeega.app.makeConnection( $(this).data('action') );
+		}
+		return false;
+	})
+	
+	$('#connection-confirm button').click(function(){
+		$('#make-connection button').removeClass('disabled');
+		$('#connection-confirm').hide();
+		zeega.app.confirmConnection( $(this).data('action') );
+	})
+	
+	
+	
+} //end ready()
 
 /*
 // filter database by type

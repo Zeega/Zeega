@@ -930,48 +930,6 @@ body
 .expandable{ cursor:pointer }
 
 
-/*
-.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
-*/
-
-
-/********************************
-
-	DROPDOWN MENUS
-
-**********************************/
-
-.menu-toggle
-{
-	position:relative;
-	top:4px;
-}
-.menu-items
-{
-	color:#444;
-	display:none;
-	background:rgba(255,255,255,0.9);
-	position:absolute;
-	padding:6px;
-	border-radius:6px;
-	box-shadow:6px 6px 6px rgba(0,0,0,0.5);
-}
-.menu-items.open { display:inline; z-index:10 }
-.menu-items .menu-title { color: #444 }
-.menu-items .divider { border-bottom:1px solid #ddd }
-
-/*		quirks for the search bar dropdown	*/
-#search-filter { float :left }
-#search-filter .zicon-searchdropdown { position:relative;top:4px;}
-
-/*		quirks for browser		*/
-.collections-menu{position:absolute;top:0;right:0;}
-.collections-menu .menu-items{ top: 0;right:0;}
-.browser-results-collection .menu-items a:hover{
-	color:#666 !important;
-}
 /*******************************
 
 	panels
@@ -1158,6 +1116,15 @@ body
 .layer-uber-controls, .layer-drag-handle span { float:left }
 
 .standard-layer-controls label {width:100%;}
+
+
+/******************************
+
+	CONNECTIONS
+	
+*******************************/
+
+#connection-confirm{ margin-left:10px;}
 
 
 /******************************

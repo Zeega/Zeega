@@ -30,7 +30,7 @@
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
-				
+				return newLayer;
 			}
 			else
 			{
@@ -46,12 +46,8 @@
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
+				return newLayer;
 			}
-			console.log(newLayer)
-			
-			
-			
-			
 		},
 		
 		saveLayer : function(layerModel, frame)

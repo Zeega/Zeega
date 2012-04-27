@@ -34,6 +34,16 @@
 			var Sequence = zeega.module("sequence");
 			
 			this.sequences = new Sequence.Collection( sequences );
+			this.sequenceViews = [];
+			//make sequence views
+			console.log('	MAKE SEQUENCE VIEWS')
+			console.log(Sequence)
+			$('#sequence-tabs').empty();
+			_.each( _.toArray(this.sequences), function(sequence, i){
+				var sequenceView = new Sequence.Views.SequenceTabs({model:sequence, active: i==0 ? true : false });
+				$('#sequence-tabs').append( sequenceView.render().el );
+				_this.sequenceViews.push(sequenceView);
+			})
 
 			zeega.app.currentSequence = this.sequences.at(0);
 		},
