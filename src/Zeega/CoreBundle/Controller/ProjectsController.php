@@ -139,12 +139,15 @@ class ProjectsController extends Controller
 		if($request->request->get('frame_id')) 
 		{
 		    $frameId = $request->request->get('frame_id');
-		    $previousframe = $em->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+		    $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+		    $frame->setLayers($previousframe->getLayers());
 		    
-		    if(isset($previousFrame))
-		    {
-		        $frame->setLayers($previousFrame->getLayers());
-		    }
+		    $layers_frame = $frame->getLayers();
+    		foreach($layers_frame as $layer)
+    		{
+    			$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer);
+    			$sequence->addLayer($l);
+    		}
     	}
 
 		$sequence->setProject($project);
@@ -154,7 +157,24 @@ class ProjectsController extends Controller
 		$em->persist($sequence);
 		$em->persist($frame);
 		$em->flush();
-		return ResponseHelper::encodeAndGetJsonResponse($sequence);
+		
+		$layers = array();
+		// auch - should work for now, but won't scale for sure
+		$sequenceId = $sequence->getId();
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($project_id);
+		$sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
+
+		$layers = array();			
+		$layers_seq = $sequence->getLayers()->toArray();
+		foreach($layers_seq as $layer)
+		{
+			$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+			array_push($layers, $l);
+		}
+		
+		$sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+		//return ResponseHelper::encodeAndGetJsonResponse($sequence);
     	//return new Response("Success");
    }
 }

@@ -16,4 +16,18 @@ class LayerRepository extends EntityRepository
  					->getQuery()
  					->getArrayResult();
 	}
+	
+	public function findLayersBySequenceId($sequenceId)
+    {
+		return $this->getEntityManager()
+        			->createQueryBuilder()
+        			->add('select', 'u.id,l')
+        			->add('from', 'ZeegaDataBundle:Layer l')
+					->innerJoin('l.sequences', 'u')
+					->where('u.id = :sequenceId')
+			        ->setParameters(array('sequenceId'=>$sequenceId))
+ 					->getQuery()
+ 					->getArrayResult();
+	}
+    
 }
