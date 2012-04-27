@@ -19,6 +19,23 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends Controller
 {
+    public function updateaaaaAction()
+    {
+        $users = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findAll();
+        $homeSite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        
+        foreach($users as $user)
+        {
+            $userSites = $user->getSites();
+            if(!$userSites->contains($homeSite))
+            {
+                $em = $this->getDoctrine()->getEntityManager();
+                $user->addSite($homeSite);
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+    }
     public function homeAction()
     {
 		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
