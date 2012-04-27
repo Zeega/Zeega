@@ -124,38 +124,33 @@ class ProjectsController extends Controller
 
     public function postProjectSequencesAction($project_id)
     {
-    	
-		
-		
-		$em=$this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+
 		$sequence = new Sequence();
+		
 		$frame = new Frame();
 		$frame->setSequence($sequence);
-		$project->setSite($site);
-		$project->addUsers($user);
-		$sequence->setProject($project);
 		
+		if($request->request->get('frame_id')) 
+		{
+		    $frameId = $request->request->get('frame_id');
+		    $previousframe = $em->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+		    
+		    if(isset($previousFrame))
+		    {
+		        $frame->setLayers($previousFrame->getLayers());
+		    }
+    	}
+
+		$sequence->setProject($project);
 		$sequence->setTitle('Untitled Project '.$project_id);
-		$project->setTitle('Untitled Project '.$project_id);
-		/*
-		$sequence->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		*/
-		$em=$this->getDoctrine()->getEntityManager();
+
+		$em = $this->getDoctrine()->getEntityManager();
 		$em->persist($sequence);
-		$em->persist($project);
 		$em->persist($frame);
 		$em->flush();
     	return new Response("Success");
-   
-
-    
-    
-   
-}
-
-	
-
+   }
 }
