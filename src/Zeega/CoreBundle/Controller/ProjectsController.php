@@ -14,6 +14,13 @@ use Zeega\DataBundle\Entity\User;
 
 class ProjectsController extends Controller
 {
+	 // `post_project`   [POST] /projects
+    public function postProjectAction()
+    {
+
+        
+    }
+
 	// `get_project`     [GET] /projects/{project_id}
     public function getProjectAction($project_id)
     {
@@ -74,7 +81,7 @@ class ProjectsController extends Controller
     		$project=$projects[0];
     
     		$sequences=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Frame')
+        				->getRepository('ZeegaDataBundle:Sequence')
         				->findSequencesByProject($project_id);
         				
         	for($i=0;$i<sizeof($sequences);$i++){
@@ -97,9 +104,11 @@ class ProjectsController extends Controller
         				->find($sequences[$i]['id']);
         				
         		$layers=$sequence->getLayers()->toArray();
-        		foreach($layers as $layer)
-        		{
-        				$output[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+        			foreach($layers as $layer){
+        				$l=$this->getDoctrine()
+        					->getRepository('ZeegaDataBundle:Layer')
+        					->findLayerById($layer->getId());
+        				$output[]=$l[0];
         		}
         		
         		$sequences[$i]['layers']=$output;
@@ -118,14 +127,9 @@ class ProjectsController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
-		$sequenceCount = 0;
-		$projectSequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findSequencesByProject($project_id);
-
-		if(isset($projectSequences))
-		{
-			return new Response(var_dump($projectSequences));
-			$sequenceCount = $projectSequences->length();
-		}
+		$sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
+		$sequenceIndex = $sequenceCount + 1;
+		
 		$sequence = new Sequence();
 		
 		$frame = new Frame();
@@ -143,7 +147,7 @@ class ProjectsController extends Controller
     	}
 
 		$sequence->setProject($project);
-		$sequence->setTitle('Untitled Project '.$project_id);
+		$sequence->setTitle('Sequence '.$sequenceIndex);
 
 		$em = $this->getDoctrine()->getEntityManager();
 		$em->persist($sequence);

@@ -72,6 +72,9 @@
 			this.$el.prepend('<i class="icon-remove delete-link"></i>');
 			
 			
+			this.$el.append('<i class="icon-remove delete-link"></i>');
+			
+			/*
 			this.$el.resizable({
 				stop: function(e,ui)
 				{
@@ -82,6 +85,7 @@
 					})
 				}
 			})
+			*/
 		}
 		
 		
