@@ -231,6 +231,10 @@ this.zeega = {
 		if(action == 'ok')
 		{
 			console.log('create and go to new sequence')
+			var Sequence = zeega.module("sequence");
+			var sequence = new Sequence.Model();
+			console.log(sequence)
+			
 		}
 		else
 		{

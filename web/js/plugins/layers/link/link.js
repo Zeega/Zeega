@@ -46,14 +46,32 @@
 			return this;
 		},
 		
+		events : {
+			'click .delete-link' : 'deleteLink'
+		},
+		
+		deleteLink : function(e)
+		{
+			if( confirm('delete link?') )
+			{
+				this.model.trigger('editor_removeLayerFromFrame', this.model);
+				this.remove();
+			}
+		},
+		
 		onLayerEnter : function()
 		{
 			var _this = this;
 			var style = {
-				'border' : '2px dashed red'
+				'border' : '2px dashed red',
+				'border-radius' : '6px'
 			}
 
-			$(this.el).css( style );
+			this.$el.css( style );
+			
+			this.$el.prepend('<i class="icon-remove delete-link"></i>');
+			
+			
 			this.$el.resizable({
 				stop: function(e,ui)
 				{
