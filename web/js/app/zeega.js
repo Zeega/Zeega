@@ -110,6 +110,16 @@ this.zeega = {
 		Backbone.history.start();
 	},
 	
+	goToSequence : function(sequenceID, frameID)
+	{
+		this.cleanWorkspace();
+		this.currentSequence = this.project.sequences.get(sequenceID);
+		if(frameID) this.currentFrame = this.currentSequence.frames.get(frameID);
+		else this.currentFrame = this.currentSequence.frames.at(0);
+		this.loadFrame(this.currentFrame);
+		console.log('current sequence id: '+ this.currentSequence.id +' currentFrame: '+this.currentFrame.id)
+	},
+	
 	goToFrame : function(frameId)
 	{
 		console.log('GO TO FRAME: '+frameId)
@@ -449,7 +459,7 @@ this.zeega = {
 	// returns the order that the frame appears in the sequence
 	getFrameIndex : function( frame )
 	{
-		if( _.isNumber( frame ) ) frameId = frame;				//tests if it's a number id
+		if( _.isNumber( frame ) ) frameId = frame;	//tests if it's a number id
 		else if( _.isString( frame ) ) frameId = parseInt(frame);		//tests if it's a string id
 		else if( _.isNumber( frame.id ) ) frameId = frame.id;	//assumes it must be a model
 		else return false;
@@ -459,12 +469,16 @@ this.zeega = {
 	
 	cleanWorkspace : function()
 	{
-		// remove all visible layers
-		_.each( this.currentSequence.layers.visible, function(layerModel){
-			layerModel.visual.remove();
-			layerModel.controls.remove();
-			layerModel.trigger('editor_layerExit');
-		})
+		console.log(this.currentSequence.layers)
+		if(this.currentSequence.layers.visible)
+		{
+			// remove all visible layers
+			_.each( this.currentSequence.layers.visible, function(layerModel){
+				if(layerModel.visual) layerModel.visual.remove();
+				if(layerModel.controls) layerModel.controls.remove();
+				layerModel.trigger('editor_layerExit');
+			})
+		}
 		// clear out the visible array
 		this.currentSequence.layers.visible = [];
 	},

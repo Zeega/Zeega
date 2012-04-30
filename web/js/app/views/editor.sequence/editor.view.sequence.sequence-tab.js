@@ -42,6 +42,7 @@
 			if( !this.inFocus )
 			{
 				console.log('switch sequence tabs')
+				zeega.app.goToSequence(this.model.id)
 			}
 			console.log('sequence tab clicked')
 			return false;
