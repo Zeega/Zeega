@@ -122,13 +122,18 @@ class ItemsController extends Controller
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
 
 	    $item = new Item();
-       	
-		$sites = $user->getSites();
-		$firstSite = $sites[0];
-		
-		$item->setSite($firstSite);		
-
+	    
+       	$session = $this->getRequest()->getSession();
+       	$site = $session->get('site');
+        if(isset($site))
+        {
+            $sites = $user->getSites();
+    		$site = $sites[0];
+		}
+        
+		$item->setSite($site);		
         $item->setTitle($this->getRequest()->request->get('title'));
+        $item->setDescription($this->getRequest()->request->get('description'));
 		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));
         $item->setDateCreated(new \DateTime("now"));
@@ -158,7 +163,7 @@ class ItemsController extends Controller
             {
                 $childItem = new Item();
 
-        		$childItem->setSite($firstSite);		
+        		$childItem->setSite($site);		
                 $childItem->setTitle($child['title']);
         		$childItem->setDescription($child['description']);
                 $childItem->setMediaType($child['media_type']);

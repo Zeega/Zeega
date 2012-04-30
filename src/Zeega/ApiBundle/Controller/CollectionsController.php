@@ -331,6 +331,7 @@ class CollectionsController extends Controller
         $collection->setUri('http://zeega.org');
         $collection->setDescription($description);
         $collection->setText($text);
+        
         if(isset($attribution_url))
             $collection->setAttributionUri($attribution_url);
         else
@@ -343,6 +344,16 @@ class CollectionsController extends Controller
         $collection->setMediaCreatorUsername($user->getUsername());
         $collection->setMediaCreatorRealname($user->getDisplayName());
         $collection->setTitle($title);
+        
+        $session = $this->getRequest()->getSession();
+        $site = $session->get('site');
+        if(isset($site))
+        {
+            $sites = $user->getSites();
+    		$site = $sites[0];
+		}
+        
+		$collection->setSite($site);
         
         if (isset($new_items) && !isset($collection_id))
         {
