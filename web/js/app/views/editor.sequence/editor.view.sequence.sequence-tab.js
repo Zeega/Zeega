@@ -14,6 +14,8 @@
 		
 		render: function()
 		{
+			console.log('seq render')
+			console.log(this.model)
 			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title') || '...'}) );
 			
 			return this;

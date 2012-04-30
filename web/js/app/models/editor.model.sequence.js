@@ -37,6 +37,7 @@
 		
 		refreshView : function()
 		{
+			console.log('refresh view!!!')
 			this.view.render();
 		},
 		

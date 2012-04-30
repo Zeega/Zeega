@@ -12,12 +12,17 @@
 		defaultAttributes : {
 			'title' : 'Link Layer',
 			'to_frame' : null,
-			'from_frame': null,
+			'from_frame' : null,
 			'left' : 25,
 			'top' : 25,
 			'height' : 50,
-			'width' : 50,
-		}	
+			'width' : 50
+		},
+		
+		init : function()
+		{
+			if( this.isNew() ) this.get('attr').from_frame = zeega.app.currentFrame.id;
+		}
 		
 	});
 	

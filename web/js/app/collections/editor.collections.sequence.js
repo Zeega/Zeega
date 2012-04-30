@@ -3,9 +3,7 @@
 	Sequence.Collection = Backbone.Collection.extend({
 		
 		model : Sequence.Model,
-		
-		views : [],
-		
+				
 		initialize : function()
 		{
 			//make sequence views

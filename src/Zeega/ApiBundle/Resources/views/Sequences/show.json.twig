@@ -1,6 +1,4 @@
 {
-    "sequence" : 
-	{
 		"id" : {{ sequence.id }},
 		"title" : "{{ sequence.title }}",
 		"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
@@ -20,5 +18,4 @@
 				{%- endif -%}
 	        {% endfor %}
 		]
-	 }
 }
