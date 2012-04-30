@@ -120,6 +120,8 @@
 		{
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
+			console.log('on layer enter')
+			console.log(this.model)
 		},
 		
 		private_onLayerExit : function()
@@ -180,6 +182,8 @@
 		
 		private_onPlay : function( z )
 		{
+			console.log('player play')
+			console.log(this.model)
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
 			this.onPlay();

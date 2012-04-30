@@ -34,7 +34,7 @@ class ProjectsController extends Controller
 			$sequenceId = $sequence->getId();
 			$frames[$sequenceId] = $this->getDoctrine()
 									    ->getRepository('ZeegaDataBundle:Frame')
-										->findFramesBySequenceId($project->getId());
+										->findFramesBySequenceId($sequence->getId());
 			
 			$sequence = $this->getDoctrine()
 						     ->getRepository('ZeegaDataBundle:Sequence')

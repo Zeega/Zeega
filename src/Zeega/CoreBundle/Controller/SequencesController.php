@@ -157,10 +157,7 @@ class SequencesController extends Controller
 			$em->persist($sequence);
 			$em->persist($frame);
 			$em->flush();
-			$output=$this->getDoctrine()
-			->getRepository('ZeegaDataBundle:Frame')
-			->findOneById($frame->getId());
-			return ResponseHelper::encodeAndGetJsonResponse($output);
+			return ResponseHelper::encodeAndGetJsonResponse($frame);
 		}
 		else
 		{
@@ -174,11 +171,7 @@ class SequencesController extends Controller
 			$em->persist($frame);
 			$em->flush();
 			
-			$output=$this->getDoctrine()
-				         ->getRepository('ZeegaDataBundle:Frame')
-				         ->findOneById($frame->getId());
-				         
-			return  ResponseHelper::encodeAndGetJsonResponse($output);
+			return  ResponseHelper::encodeAndGetJsonResponse($frame);
 		}
     
     
