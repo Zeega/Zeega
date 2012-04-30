@@ -1,4 +1,4 @@
-
+.well{ background-color: #555 }
 .ingest-info
 {
 	padding: 8px 19px;
@@ -64,12 +64,12 @@
 	position:relative; width:250px; float:right;
 }
 #widget-added-text{
-	margin-left: 2em;
+	margin-top: 2em;
 	font-weight:normal;
 	display:none;
 }
 .widget-creator-added{
-	font-size:10px;
+	font-size:0.9em;
 }
 #results-count{
 	font-size:16px;
