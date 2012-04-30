@@ -22,6 +22,7 @@ $(document).ready(function(){
 			drawLayerThumbnail( layer );
 		else if( layer.type == 'Rectangle' ) drawRectangle( layer ); // this is a bandaid
 		else if(layer.type == 'Text') drawText(layer);
+		else if(layer.type == 'Geo') drawStreetView(layer);
 	})
 	
 	
@@ -75,3 +76,28 @@ function drawText( layer )
 	$('#zeega-player').append(visual);
 	
 }
+
+function drawStreetView(layer)
+{
+	var s = 'http://maps.googleapis.com/maps/api/streetview?size=400x400&location='+ layer.attr.lat +','+ layer.attr.lng +'&fov=90&heading='+ layer.attr.heading +'&pitch='+ layer.attr.pitch +'&sensor=false';
+	var visual = $('<img src="'+ s +'"/>').css({
+		'position':'absolute',
+		'left':layer.attr.left+'%',
+		'top':layer.attr.top+'%',
+		'width':layer.attr.width+'%',
+		'height':layer.attr.height+'%',
+		'opacity':layer.attr.opacity
+	});
+	$('#zeega-player').append(visual);
+	
+}
+
+
+
+
+
+
+
+
+
+
