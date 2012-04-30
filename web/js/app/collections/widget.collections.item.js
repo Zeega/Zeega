@@ -30,7 +30,8 @@
 			}
 			else
 			{
-				$(this.el).html('<li class="alert alert-error">No results :(</li>')
+				//$(this.el).html('<li class="alert alert-error">No results :(</li>')
+				$(this.el).empty();
 			}
 			
 			$(this.el).fadeTo(100,1);
