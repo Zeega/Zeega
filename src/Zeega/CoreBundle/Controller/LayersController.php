@@ -12,8 +12,68 @@ use Zeega\DataBundle\Entity\User;
 class LayersController extends Controller
 {
     
-     public function getLayersAction()
-    {} // `get_layers`    [GET] /Layers
+    public function getLayersAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $layers = $em->getRepository('ZeegaDataBundle:Layer')->findAll();
+        
+        foreach($layers as $layer)
+        {
+            $attributes = $layer->getAttr();
+            
+            if(isset($attributes["volume"]) &&  intval($attributes["volume"]) > 0)
+            {
+                $attributes["volume"] =  intval($attributes["volume"]) / 100;
+                $layer->setAttr($attributes);
+                $em->persist($layer);
+            }
+            
+            if(isset($attributes["in"]))
+            {
+                $attributes["cue_in"] = $attributes["in"];
+                unset($attributes["in"]);
+                $layer->setAttr($attributes);
+                $em->persist($layer);
+            }
+
+            if(isset($attributes["out"]))
+            {
+                $attributes["cue_out"] = $attributes["out"];
+                unset($attributes["out"]);
+                $layer->setAttr($attributes);
+                $em->persist($layer);
+            }
+        }
+        $em->flush();
+        
+        /*
+        $em = $this->getDoctrine()->getEntityManager();
+        $frames = $em->getRepository('ZeegaDataBundle:Frame')->findAll();
+        
+        foreach($frames as $frame)
+        {
+            $attributes = $frame->getAttr();
+            
+            if(isset($attributes["advance"]))
+            {
+                if(intval($attributes["advance"]) > 0  && intval($attributes["advance"]) < 500)
+                {
+                    $attributes["advance"] =  intval($attributes["advance"]) * 1000;
+                    $frame->setAttr($attributes);
+                    $em->persist($frame);
+                }
+                else if(intval($attributes["advance"]) == -1000)
+                {
+                    $attributes["advance"] =  -1;
+                    $frame->setAttr($attributes);
+                    $em->persist($frame);
+                }
+            }
+        }
+        $em->flush();
+        */
+    } // `get_layers`    [GET] /Layers
 
 
 

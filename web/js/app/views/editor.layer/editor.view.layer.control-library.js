@@ -598,7 +598,7 @@
 		{
 			var _this = this;
 			
-			console.log(this.model.video)
+			//console.log(this.model.video)
 			
 			this.model.video.pop.listen('pause',function(){
 				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
@@ -675,7 +675,7 @@
 				}
 			});
 			
-			console.log(this.model);
+			//console.log(this.model);
 			
 		
 			this.$el.find('.plyr-cuein-scrubber').draggable({
