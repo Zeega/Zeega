@@ -121,7 +121,6 @@ display:none;
 
 #browser-results-items, #browser-results-collections{
 	min-height:200px !important;
-	max-height:350px !important;
 	overflow:auto !important;
 	margin:0;
 }
