@@ -13,6 +13,8 @@ $(document).ready(function(){
 	var frameData = $.parseJSON(frameJSON);
 	var layersData = $.parseJSON(layersJSON);
 
+	console.log(layersData)
+
 	_.each( frameData.layers, function(layerID){
 		var layer = _.find( layersData, function(layer){ return layer.id == layerID });
 		

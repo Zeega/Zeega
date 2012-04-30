@@ -902,7 +902,13 @@
 					var center = results[0].geometry.location;
 					_this.map.setCenter( center );
 					_this.marker.setPosition(center);
-					_this.model.update({ title : location });
+					_this.model.update({
+						title : location,
+						lat : center.lat(),
+						lng : center.lng()
+					});
+					_this.model.trigger('update');
+					console.log('new geocoded location')
 				}
 				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
 			});
