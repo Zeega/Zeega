@@ -26,7 +26,7 @@
 			var media_type = this.model.get('media_type');
 			// move to events (didn't work for me)
 			this.$el.find('#add-item').click(function(){
-			    $('#item-add .pill-buttons-widget').fadeOut();
+			    $(this).fadeOut();
 
 			    if(media_type == 'Collection')
 			    {
