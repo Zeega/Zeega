@@ -45,23 +45,21 @@ function initUX(){
 		callbacks : {
 			search : function(query, searchCollection)
 			{
-				console.log(query)
-
+				console.log('	search')
 				var s = {};
-				var multipleFilters = false;
+				var filtered = false;
 				_.each( _.toArray( searchCollection ), function(facet){
 					console.log(facet)
 					
 					if( facet.get('category') == 'filter' )
 					{
-						if(multipleFilters) facet.destroy();
+						if(filtered) facet.destroy();
 						else s.contentType = facet.get('value');
-						multipleFilters = true;
+						filtered = true;
 					}
 					if( facet.get('category') == 'text' ) s.query = facet.get('value');
-					
 				})
-				console.log(s)
+				visualSearch.searchBox.renderFacets();
 				zeega.app.searchDatabase( s , true );
 			},
 			facetMatches : function(callback)
@@ -96,9 +94,17 @@ function initUX(){
 			$('body').unbind('click');
 		})
 	})
+	//when a filter is selected via dropdown
 	$('.filter-list a').click(function(e){
-		visualSearch.searchBox.addFacet('filter',$(this).data('searchFilter'));
-		visualSearch.options.callbacks.search();
+		
+		var model = new VS.model.SearchFacet({
+	      category : 'filter',
+	      value    : $(this).data('searchFilter'),
+	      app      : visualSearch.searchBox.app
+		});
+		visualSearch.searchQuery.add(model, {at:0});
+		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
+		
 		$('.filter-list').hide();
 		e.stopPropagation();
 		return false;
@@ -384,8 +390,8 @@ $('#new-layer-list a').click(function(){
 
 	$('#advance-controls input').change(function(){
 		var attr = zeega.app.currentFrame.get('attr');
-		if(attr) attr.advance = parseInt($(this).val()*1000);
-		else attr = {'advance': parseInt($(this).val()*1000)}
+		if(attr) attr.advance = $(this).val() != -1 ? parseInt($(this).val()*1000) : -1;
+		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1};
 		
 		zeega.app.currentFrame.set({'attr':attr});
 		zeega.app.currentFrame.save();
