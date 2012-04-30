@@ -11,34 +11,15 @@ use Zeega\DataBundle\Entity\User;
 
 class LayersController extends Controller
 {
-    
-     public function getLayersAction()
-    {} // `get_layers`    [GET] /Layers
-
-
-
-    public function postLayersAction()
-    {
-    	
- 
-    } // `post_layers`   [POST] /Layers
-
-
-
-
     public function getLayerAction($layer_id)
     {
-    	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Layer')
-        ->findLayerById($layer_id)));
+    	return new Response(json_encode($this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer_id)));
     
     } // `get_layer`     [GET] /Layers/{layer_id}
 
 
-
     public function putLayerAction($layer_id)
     {
-    	
     	$em = $this->getDoctrine()->getEntityManager();
      	
     	$layer= $em->getRepository('ZeegaDataBundle:Layer')->find($layer_id);
@@ -52,17 +33,9 @@ class LayersController extends Controller
     	
 		$em->persist($layer);
 		$em->flush();
-    	$output=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Layer')
-        ->findLayerById($layer->getId());
-        
+    	$output=$this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         
     	return new Response(json_encode($output[0]));
-    	
-    	
-    
-    
-    
     } // `put_layer`     [PUT] /layers/{layer_id}
 
 

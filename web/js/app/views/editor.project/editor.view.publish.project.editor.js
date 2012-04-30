@@ -143,7 +143,9 @@
 		var html =	//Step 1
 					'<div id="publish-project-modal-step1">'+
 						'<div class="modal-header">'+
-							'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
+							'<button data-dismiss="modal" class="close">&times;</button>'+
+						
+							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
 							'<h3>Before you share your project, make sure everything looks good!</h3>'+
 						'</div>'+
 
@@ -161,7 +163,7 @@
 							//'<div id="preview-images"><%= imageHTML %></div>'+
 
 							'<div class="publish-footer">'+
-								'<a href="#" id="looks-good" class="btn secondary">looks good</a>'+
+								'<button id="looks-good" class="btn btn-success secondary">looks good <i class="icon-circle-arrow-right icon-white"></i></button>'+
 							'</div>'+
 								
 						'</div>'+
@@ -170,7 +172,8 @@
 					//Step 2
 					'<div id="publish-project-modal-step2" style="display:none">'+
 						'<div class="modal-header">'+
-							'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
+							'<button data-dismiss="modal" class="close">&times;</button>'+
+							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
 							'<h3>You\'re ready to publish <span style="color:#F15A29"><%= title %></span>!</h3>'+
 							'<p>As you edit in the future this project will be automatically updated.</p>'+
 						'</div>'+
@@ -180,17 +183,18 @@
 							'<div class="publish-left-column">'+
 								'<label for="project-title">Share your project</label>'+
 								'<div id="publish-social-media">'+
+									/*
 									//FACEBOOK
 									'<span class="publish-social-media">'+
 									'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px; float:left" allowTransparency="true"></iframe>'+
 									'</span>'+
-									
+									*/
 									//TWITTER
 									'<span class="publish-social-media">'+
 									'<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%=projectlink %>" data-text="Zeega Project: <%=title %>">Tweet</a>'+
 									'<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>'+
 									'</span>'+
-
+/*
 									//TUMBLR
 									'<span class="publish-social-media">'+
 									'<span id="tumblr_button_abc123"></span>'+
@@ -224,6 +228,7 @@
 									  '})();'+
 									'</script>'+
 									'</span>'+
+*/
 								'</div>'+
 
 								//END SOCIAL MEDIA INTEGRATION
@@ -246,7 +251,8 @@
 								'<div class="publish-preview"><%= iframeHTML %></div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
-								'<a href="#" id="publish-back" class="btn secondary">Back</a>'+
+								'<button id="publish-back" class="btn secondary"><i class="icon-circle-arrow-left"></i> Back</button>'+
+								'<button class="btn secondary pull-right" data-dismiss="modal" ><i class="icon-ok-circle"></i> Done</button>'+
 							'</div>'+
 						'</div>'+
 					'</div>';

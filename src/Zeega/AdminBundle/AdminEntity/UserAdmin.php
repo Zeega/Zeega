@@ -47,6 +47,7 @@ class UserAdmin extends Admin
             ->addIdentifier('username')
 			->add('display_name')
 			->add('email')
+			->add('last_login','datetime')
         ;
     }
 

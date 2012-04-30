@@ -360,7 +360,7 @@ class ItemRepository extends EntityRepository
 			   ->getArrayResult();
     }
 
-    public function findUserCollections($userId)
+    public function findUserCollections($userId,$siteId)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -370,8 +370,10 @@ class ItemRepository extends EntityRepository
 		   ->where('i.user_id = :user_id')
 		   ->andwhere('i.media_type = :media_type')
 		   ->andwhere('i.enabled = true')
+		   ->andwhere('i.site_id = :site_id')
 		   ->setParameter('user_id',$userId)
-		   ->setParameter('media_type','Collection');
+		   ->setParameter('media_type','Collection')
+		   ->setParameter('site_id',$siteId);
 
             // execute the query
         return $qb->getQuery()->getArrayResult();

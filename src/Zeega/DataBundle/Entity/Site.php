@@ -41,8 +41,8 @@ class Site
 
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->date_created = new \DateTime();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

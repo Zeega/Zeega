@@ -12,6 +12,7 @@
 		events : {
 			'click .fancybox-more-button' : 'more',
 			'click .fancybox-less-button' : 'less',
+			'click .close':function(){jQuery.fancybox.close();}
 		},
 		beforeClose: function(){
 		},
@@ -241,7 +242,7 @@
 		getTemplate : function()
 		{
 
-			var html =		'<div class="fancybox-close-button"><a title="Close" href="javascript:$.fancybox.close();"><a class="close">&times;</a></a></div>'+
+			var html =		'<div class="fancybox-close-button"><a title="Close" href="#""><a class="close">&times;</a></a></div>'+
 							'<div class="fancybox-media-wrapper">'+
 							'<div class="fancybox-left-column">' +
 								'<div class="fancybox-media-item media-item"></div>'+

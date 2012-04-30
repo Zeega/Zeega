@@ -8,15 +8,17 @@ use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
+use Symfony\Component\HttpFoundation\Response;
 
 class HeaderTwigExtension extends \Twig_Extension
 {
 	protected $doctrine;
 
-	public function __construct($doctrine, $securityContext)
+	public function __construct($doctrine, $securityContext, $session)
 	{
         $this->doctrine = $doctrine;
 		$this->securityContext = $securityContext;
+		$this->session = $session;
     }
 
     public function getGlobals()
@@ -27,18 +29,19 @@ class HeaderTwigExtension extends \Twig_Extension
             $user = $this->securityContext->getToken()->getUser();
     		if(isset($user) && $user != "anon.")
     		{
-    		    $sites = $this->doctrine->getRepository('ZeegaDataBundle:Site')->findSiteByUser($user->getId());
-        		$site = $sites[0];
+    		    $sites = $user->getSites();
+    		    $session = $this->session;
+        		$currentSite = $session->get('site');
 
         		$projects = $this->doctrine
         						 ->getRepository('ZeegaDataBundle:Project')
-        						 ->findProjectsBySiteAndUser($site->getId(),$user->getId());
+        						 ->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
 
                 return array(
-                    'site' => $site,
+                    'site' => $currentSite,
                     'sites' => $sites,
-        			'title'=>$site->getTitle(),
-        			'short'=>$site->getShort(),
+        			'title'=>$currentSite->getTitle(),
+        			'short'=>$currentSite->getShort(),
         			'num_sites'=>count($sites),
         			'user_id' => $user->getId(),
         			'myprojects'=> $projects,

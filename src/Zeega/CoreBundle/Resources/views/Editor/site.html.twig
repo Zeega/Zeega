@@ -49,7 +49,11 @@
 			
 			
 			<div id="projects-lists" style="margin-top: 50px;">
-				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div><div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; margin-left: 15px;">All Projects</div><br><br>
+				<div id='my-projects' class="item-title projects" style="font-size: 16px; color:white; ">My Projects</div>
+				{% if is_granted('ROLE_ADMIN') %}
+				<div id='all-projects' class="item-title projects" style="font-size: 16px;color:white; opacity:0.6; cursor:pointer; margin-left: 15px;">All Projects</div>
+				{% endif %}
+				<br><br>
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}

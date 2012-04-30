@@ -14,28 +14,6 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 class SequencesController extends Controller
 {
     
-      public function getSequencesAction()
-    {
-
-    /*
-    	$sequence= new Sequence();
-    	
-    	
-    	$sequence->setTitle('Untitled');
-		$em=$this->getDoctrine()->getEntityManager();
-		$em->persist($sequence);
-		$em->flush();
-    	return new Response(json_encode($this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Sequence')
-        ->findSequenceById($sequence->getId())));
-       */
-    
-    
-    
-    } // `get_sequences`    [GET] /sequences
-
-
-
     public function postSequencesAction()
     {
     	$em=$this->getDoctrine()->getEntityManager();
@@ -49,9 +27,7 @@ class SequencesController extends Controller
     	else $sequence->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
     	$em->persist($sequence);
     	$em->flush();
-		$output=$this->getDoctrine()
-			->getRepository('ZeegaDataBundle:Frame')
-			->findSequenceById($sequence->getId());
+		$output=$this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findOneById($sequence->getId());
 			
 		return new Response(json_encode($output[0]));
         
@@ -60,9 +36,7 @@ class SequencesController extends Controller
 
     public function getSequenceAction($sequence_id)
     {
-    	$sequences=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Sequence')
-        ->findSequenceById($sequence_id);
+    	$sequences=$this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findOneById($sequence_id);
     	
 		//removes falsy values from the return
 		for($i = 0 ; $i < count($sequences) ; $i++)
@@ -221,17 +195,13 @@ class SequencesController extends Controller
         				->getRepository('ZeegaDataBundle:Sequence')
         				->find($sequence_id);
         				
-        if($sequence){
-        
+        if($sequence)
+        {
         	$layers=$sequence->getLayers()->toArray();
-        	foreach($layers as $layer){
-        	
-        	$l=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Layer')
-        				->findLayerById($layer->getId());
-        	$output[]=$l[0];
+        	foreach($layers as $layer)
+        	{
+        	    $output[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         	}
-        
         }
         
 		return new Response(json_encode($output));
@@ -267,18 +237,8 @@ class SequencesController extends Controller
 		$em->persist($layer);
 		$em->persist($sequence);
 		$em->flush();
-    	$output=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Layer')
-        ->findLayerById($layer->getId());
+    	$output = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         
-        
-    	return new Response(json_encode($output[0]));
-    
-    
-    
+    	return ResponseHelper::encodeAndGetJsonResponse($output);
     } // `post_sequence_layers`   [POST] /sequences/{sequence_id}/layers
-
-	
-	
-
 }

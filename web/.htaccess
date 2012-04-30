@@ -4,3 +4,11 @@
     RewriteRule ^(.*)$ app_dev.php [QSA,L]
 </IfModule>
 
+# Maintenance redirect - needs to be adjusted with the correct root folder and ip
+#Options +FollowSymlinks
+#    RewriteEngine on
+#    RewriteCond %{REQUEST_URI} !/zeega/web/maintenance.html$           # redirect all requests except this
+#    RewriteCond %{REQUEST_URI} !/zeega/web/images/zeegaAlpha.png$      # redirect all requests except this
+#    RewriteCond %{REMOTE_HOST} !^127.0.0.1                             # don't redirect requests from this IP address
+
+#    RewriteRule $ /zeega/web/maintenance.html [R=302,L]                # target file

@@ -69,6 +69,13 @@ ul,li
 	
 *******************************************/
 
+#browser-search
+{
+	width: 66%;
+	float:left
+}
+#browser-search .visual_search{ margin-top:0 }
+
 .browser-searchbar
 {
 	width: 345px;
@@ -88,6 +95,7 @@ float: right;
 
 .collections-title-overlay
 {
+	overflow:hidden;
 	background-color: rgba(0, 0, 0, 0.5);
 	position: absolute;
 	bottom: 5px;
@@ -113,7 +121,6 @@ display:none;
 
 #browser-results-items, #browser-results-collections{
 	min-height:200px !important;
-	max-height:350px !important;
 	overflow:auto !important;
 	margin:0;
 }
@@ -891,35 +898,6 @@ body
 	height:1em;
 	width:690px;
 }
-
-/*******************************
-
-	BOOTSTRAP OVERRIDES
-	
-*******************************/
-
-.navbar .nav > li > a:hover,
-.btn-group .btn:hover,
-.btn-group .btn:focus,
-.btn-group .btn:active,
-.btn-group .btn.active
-{ text-shadow: 0 0 6px whiteSmoke }
-
-.navbar-fixed-top .container,
-.navbar-fixed-bottom .container
-{ width:1000px }
-
-
-/* this should be removed with next version */
-.add-on {
-color:#444;
-}
-
-.nav-pills>li>a
-{
-	background-color:#444;
-}
-
 
 /*******************************
 
@@ -1727,6 +1705,14 @@ default-layer-control
 	position:absolute;
 	right:12px;
 	top:12px;
+}
+
+.player-arrow
+{
+	height: 15%;
+	max-height: 75px;
+	max-width: 35px;
+	margin: 0 10px;
 }
 
 #citation

@@ -87,12 +87,13 @@ class FramesController extends Controller
         	
         	$layerList=$frame->getLayers();
         	
-        	foreach($layerList as $layer_id){
-        	
-        	$l=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Layer')
-        				->findLayerById($layer_id);
-        	if(count($l) > 0) $layers[]=$l[0];
+        	foreach($layerList as $layer_id)
+        	{
+        	    $l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer_id);
+        	    if(count($l) > 0) 
+        	    {
+        	        $layers[]=$l[0];
+        	    }
         	}
     		return new Response(json_encode($layers));
     } 

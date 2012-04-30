@@ -1,35 +1,42 @@
 # src/Zeega/UserBundle/Resources/config/doctrine/User.orm.yml
 Zeega\DataBundle\Entity\User:
-   type: entity
-   table: zuser
-   id:
-       id:
-           type: integer
-           generator: { strategy: AUTO }
-   manyToMany:
-      sites:
-        targetEntity: Zeega\DataBundle\Entity\Site
-        inversedBy: users
-        joinTable:
-          name: users_sites
-          inverseJoinColumns:
-            site_id:
-              referencedColumnName: id
-          joinColumns:
-            user_id:
-              referencedColumnName: id
-   fields:
-       display_name:
-           type: string
-           length: 255
-           nullable: true
-       bio:
-           type: text
-           nullable: true
-       thumb_url:
-           type: string
-           length: 255
-           nullable: true
-       created_at:
-           type: datetime
-           nullable: true
+    type: entity
+    table: zuser
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    manyToMany:
+       sites:
+         targetEntity: Zeega\DataBundle\Entity\Site
+         inversedBy: users
+         joinTable:
+           name: users_sites
+           inverseJoinColumns:
+             site_id:
+               referencedColumnName: id
+           joinColumns:
+             user_id:
+               referencedColumnName: id
+    fields:
+        display_name:
+            type: string
+            length: 255
+            nullable: true
+        bio:
+            type: text
+            nullable: true
+        thumb_url:
+            type: string
+            length: 255
+            nullable: true
+        created_at:
+            type: datetime
+            nullable: true
+        user_type:
+            type: string
+            length: 50
+            nullable: true
+    indexes:
+        user_type_index:
+            columns: [user_type]      
