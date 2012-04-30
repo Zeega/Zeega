@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class LayersController extends Controller
 {
@@ -98,9 +99,9 @@ class LayersController extends Controller
     	
 		$em->persist($layer);
 		$em->flush();
-    	$output=$this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+    	//$output=$this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
         
-    	return new Response(json_encode($output[0]));
+    	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `put_layer`     [PUT] /layers/{layer_id}
 
 

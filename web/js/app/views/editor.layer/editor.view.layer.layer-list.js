@@ -46,8 +46,8 @@
 		
 		initListeners : function()
 		{
-			this.model.on('change:attr', this.updateViewInPlace, this);
-			
+			this.model.on('update', this.updateViewInPlace, this);
+			this.model.on('all', function(e){console.log(e)})
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -181,7 +181,9 @@
 		
 		updateViewInPlace : function()
 		{
+			console.log('re render')
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
+			
 		},
 		
 		/*******************

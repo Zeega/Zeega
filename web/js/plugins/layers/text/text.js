@@ -176,10 +176,10 @@
 			
 			var clean = this.cleanString( str );
 			
-			this.model.update( {
-				content : str,
-				title : clean
-			} );
+			this.model.update({
+				'content' : str,
+				'title' : clean
+			});
 		}, 1000),
 		
 		cleanString : function(str)
