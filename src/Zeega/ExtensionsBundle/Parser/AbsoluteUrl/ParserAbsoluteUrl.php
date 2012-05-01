@@ -9,6 +9,7 @@ use Zeega\DataBundle\Entity\Item;
 use \DateTime;
 use SimpleXMLElement;
 
+
 class ParserAbsoluteUrl extends ParserAbstract
 {
 	public function load($url, $parameters = null)
@@ -62,8 +63,8 @@ class ParserAbsoluteUrl extends ParserAbstract
 		$item->setChildItemsCount(0);
 
 		if($contentType=='Image') $item->setThumbnailUrl($itemUrl);
-		elseif($contentType=='Audio') $item->setThumbnailUrl('../images/templates/audio.jpg');
-		elseif($contentType=='Video') $item->setThumbnailUrl('../images/templates/video.jpg');
+		elseif($contentType=='Audio') $item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/audio.jpg');
+		elseif($contentType=='Video') $item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/video.jpg');
 
 		return $this->returnResponse($item, true, false);
 	}
