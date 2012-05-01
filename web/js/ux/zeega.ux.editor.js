@@ -415,7 +415,7 @@ $('#new-layer-list a').click(function(){
 	$('#advance-controls input').change(function(){
 		var attr = zeega.app.currentFrame.get('attr');
 		if(attr) attr.advance = $(this).val() != -1 ? parseInt($(this).val()*1000) : -1;
-		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1}
+		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1};
 		
 		zeega.app.currentFrame.set({'attr':attr});
 		zeega.app.currentFrame.save();

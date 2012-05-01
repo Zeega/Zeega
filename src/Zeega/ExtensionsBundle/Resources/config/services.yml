@@ -1,10 +1,18 @@
 parameters:
 #    zeega_extensions.example.class: Zeega\ExtensionsBundle\Example
     zeega_parser.class:      Zeega\ExtensionsBundle\Parser\ParserService
+    zeega_parser_absolute.class:      Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl
     
 services:
     zeega_parser:
         class: %zeega_parser.class%
+        arguments: 
+            hostname: %hostname%
+            directory: %directory%
+        
+    zeega_parser_absolute:
+        class: %zeega_parser_absolute.class%
+
 #    zeega_extensions.example:
 #        class: %zeega_extensions.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
