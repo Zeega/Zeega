@@ -106,7 +106,7 @@
 				success : function( savedFrame )
 				{
 					console.log('frame saved and is a duplicate')
-					
+					console.log(savedFrame)
 					_this.insertFrameView( savedFrame , dupeModel.frameIndex );
 				
 					//clone layers and place them into the layer array

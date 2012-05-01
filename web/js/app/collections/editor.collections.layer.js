@@ -75,8 +75,10 @@
 		{
 			var oldLayer = this.get(oldLayerID);
 			var dupeLayer = oldLayer.clone();
+			dupeLayer.generateNewViews();
 			dupeLayer.set('id', newLayerID );
 			this.add(dupeLayer);
+			oldLayer.save()
 		},
 		
 		addLayerToFrame : function(frame,layer)
