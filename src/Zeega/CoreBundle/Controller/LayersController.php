@@ -47,7 +47,7 @@ class LayersController extends Controller
             }
         }
         $em->flush();
-        */
+        
         
         $em = $this->getDoctrine()->getEntityManager();
         $frames = $em->getRepository('ZeegaDataBundle:Frame')->findAll();
@@ -73,7 +73,7 @@ class LayersController extends Controller
             }
         }
         $em->flush();
-        
+        */
     } // `get_layers`    [GET] /Layers
 
 
