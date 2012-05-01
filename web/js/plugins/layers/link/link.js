@@ -72,30 +72,34 @@
 		
 		onLayerEnter : function()
 		{
-			var _this = this;
-			var style = {
-				'border' : '2px dashed red',
-				'border-radius' : '6px'
-			}
-
-			this.$el.css( style );
 			
-			this.$el.prepend('<i class="icon-remove delete-link"></i>');
-			
-			
-			//this.$el.append('<i class="icon-edit show-controls"></i>');
-			
-			
-			this.$el.resizable({
-				stop: function(e,ui)
-				{
-					console.log('save this bad boy')
-					_this.model.update({
-						'width' : $(this).width() / $(this).parent().width() * 100,
-						'height' : $(this).height() / $(this).parent().height() * 100
-					})
+			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
+			{
+				var _this = this;
+				var style = {
+					'border' : '2px dashed red',
+					'border-radius' : '6px'
 				}
-			})
+
+				this.$el.css( style );
+
+				this.$el.find('.icon-remove').remove();
+				this.$el.prepend('<i class="icon-remove delete-link"></i>');
+			
+				//this.$el.append('<i class="icon-edit show-controls"></i>');
+			
+			
+				this.$el.resizable({
+					stop: function(e,ui)
+					{
+						console.log('save this bad boy')
+						_this.model.update({
+							'width' : $(this).width() / $(this).parent().width() * 100,
+							'height' : $(this).height() / $(this).parent().height() * 100
+						})
+					}
+				})
+			}
 			
 		}
 		

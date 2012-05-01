@@ -113,10 +113,21 @@ this.zeega = {
 	goToSequence : function(sequenceID, frameID)
 	{
 		this.cleanWorkspace();
+		this.currentSequence.trigger('blur');
 		this.currentSequence = this.project.sequences.get(sequenceID);
-		if(frameID) this.currentFrame = this.currentSequence.frames.get(frameID);
-		else this.currentFrame = this.currentSequence.frames.at(0);
-		this.loadFrame(this.currentFrame);
+		this.currentSequence.trigger('focus');
+		
+
+		
+		console.log('current sequence')
+		console.log(this.currentSequence )
+		this.renderSequenceFrames();
+		
+		var nextFrame = frameID ? this.currentSequence.frames.get(frameID) : this.currentSequence.frames.at(0);
+		console.log('next frame')
+		console.log(nextFrame)
+		this.loadFrame(nextFrame);
+		
 		console.log('current sequence id: '+ this.currentSequence.id +' currentFrame: '+this.currentFrame.id)
 	},
 	
@@ -153,6 +164,9 @@ this.zeega = {
 	
 	renderSequenceFrames : function()
 	{
+		//this is ugly
+		$('#frame-list').empty();
+		
 		_.each( _.toArray(this.currentSequence.frames), function(frame){
 			frame.render();
 		})
@@ -170,6 +184,7 @@ this.zeega = {
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
 				
 				var layerModel = _this.currentSequence.layers.get(layerID);
+				console.log(layerModel)
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerRender', i)
 			})
@@ -240,14 +255,20 @@ this.zeega = {
 		console.log('confirm connection: '+ action)
 		if(action == 'ok')
 		{
+			var _this = this;
 			console.log('create and go to new sequence')
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id });
-			console.log(this)
-			console.log(sequence)
-			sequence.save();
-			this.project.sequences.add(sequence)
-			
+
+			sequence.save({},{
+				success : function()
+				{
+					sequence.createCollections();
+					sequence.trigger('sync');
+					_this.goToSequence(sequence.id);
+				}
+			});
+			this.project.sequences.add(sequence);
 		}
 		else
 		{

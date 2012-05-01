@@ -14,12 +14,8 @@
 			this.unset('frames',['silent'])
 			this.unset('layers',['silent'])
 			
-			if(attributes)
-			{
-				this.createFrames( attributes.frames );
-				this.createLayers( attributes.layers );
-			}
-
+			this.createCollections(attributes);
+			
 			this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 
@@ -27,6 +23,22 @@
 			
 			this.updateFrameOrder(false);
 			this.trigger('ready');
+		},
+		
+		createCollections : function(attributes)
+		{
+			console.log('SEQ')
+			console.log(this)
+			console.log(this.get('frames'))
+			console.log(this.get('layers'))
+			
+			if(attributes)
+			{
+				this.createFrames( attributes.frames );
+				this.createLayers( attributes.layers );
+			}
+			if( this.get('frames') ) this.createFrames( this.get('frames'));
+			if( this.get('layers') ) this.createLayers( this.get('layers'));
 		},
 		
 		attachTabView : function()
