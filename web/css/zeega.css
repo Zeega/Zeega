@@ -123,6 +123,7 @@ display:none;
 	min-height:200px !important;
 	overflow:auto !important;
 	margin:0;
+	max-height: 395px;
 }
 #browser-my-collections-label p{
 	color:#FFF;

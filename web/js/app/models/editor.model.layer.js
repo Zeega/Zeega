@@ -58,6 +58,17 @@
 			else console.log('MISSING LAYER TYPE')
 		},
 		
+		generateNewViews : function()
+		{
+			if( !_.isNull( this.layerType ) )
+			{
+				//create visual view
+				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
+				//create control view
+				if( !this.player ) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
+			}
+		},
+		
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
 		

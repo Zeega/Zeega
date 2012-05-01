@@ -439,7 +439,12 @@ $('#new-layer-list a').click(function(){
 		//localStorage.setObject( frameID , storage );
 	})
 	
-	
+	$('#database-item-list').scroll(function(){
+		if( $('#database-item-list').scrollTop() == $('#database-item-list')[0].scrollHeight - $('#database-item-list').innerHeight() )
+		{
+			zeega.app.itemCollection.getNextPage();
+		}
+	})
 	
 	/*****  		CRITICAL		*******/
 	
