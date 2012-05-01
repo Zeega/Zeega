@@ -43,7 +43,7 @@ ZeegaCoreBundle_embed:
     defaults: { _controller:  ZeegaCoreBundle:Embed:index }
 
 ZeegaCoreBundle_badbrowser:
-    pattern: /bad/browser
+    pattern: /browser/notsupported
     defaults: { _controller:  ZeegaCoreBundle:BadBrowser:index }
 
 ZeegaCoreBundle_frame_publish:

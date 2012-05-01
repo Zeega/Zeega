@@ -9,12 +9,6 @@
 {% block body %}
 	<div id="widget-wrapper" data-id="{{widget_id}}"> 
 		<div id="item-view">
-			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" src="http://farm3.staticflickr.com/2037/2163470598_fb7571cdab_s.jpg" class="item-image" />
-			<div style="clear:both;">&nbsp;</div>
-			<span id="widget-title">&nbsp;</span></br>
-			<span id="widget-creator">&nbsp;</span></br>
-			<div id="description" style="display:none; height:400px;">
-				<p id="widget-description" class="widget-textbox" >description</p>
 <!--
 	<div id="widget-wrapper" style="margin-top:20px; color:white; font-size:14px;"> 
 	<h>We cannot detect the media you are trying to add to Zeega. Drag the item from the page to the space below and we'll see if we can make it work.</h>
@@ -29,7 +23,9 @@
 -->
 			</div>
 		</div>
-		<div id='message' style="color: red;">{{urlmessage}}</div>
+		<div style="margin-bottom:100px; color: white; font-size: 11pt; padding:20px;">
+			We cannot seem to add this media to Zeega. Is it possible that you've made it private? Currently, Zeega supports public files on YouTube, Flickr, SoundCloud, Vimeo and URLs that end in .jpg, .gif, .png, .mp3 and .mp4.</div>
+		
 	</div><!--#widget-wrapper-->
 	
 {% endblock %}
