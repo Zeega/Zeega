@@ -106,16 +106,13 @@ img{ max-width:none }
 
 .nav-pills>li>a{ background-color:#444 }
 
-.dropdown-menu
-{
-	color:#444;
-	font-size:12px;
-}
 /* bootstrap menu scroll and arrow fix */
 .dropdown-menu {
 	max-height: 400px;
 	overflow: hidden;
 	overflow-y: auto;
+	color:#444;
+	font-size:12px;
 }
 a.dropdown-toggle {
 	position: relative;
