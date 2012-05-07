@@ -182,7 +182,7 @@ this.zeega = {
 			var _this = this;
 			console.log(_this.currentSequence.layers)
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
-				
+				console.log('layer id: '+ layerID)
 				var layerModel = _this.currentSequence.layers.get(layerID);
 				console.log(layerModel)
 				if(_.isUndefined(layerModel)) console.log('layer missing')

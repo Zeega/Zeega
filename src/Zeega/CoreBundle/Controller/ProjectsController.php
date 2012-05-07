@@ -161,7 +161,7 @@ class ProjectsController extends Controller
 		$layers = array();
 		// auch - should work for now, but won't scale for sure
 		$sequenceId = $sequence->getId();
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($project_id);
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
 		$sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
 
 		$layers = array();			
