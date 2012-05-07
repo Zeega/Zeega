@@ -27,11 +27,12 @@ function initHeaderUX(){
 
 	$('.add-media a').click(function(){
 		console.log('add media clicked')
-		$('#add-media').fadeIn('fast');
-		$('body').bind('click',function(){
-			$('#add-media').fadeOut();
-			$(this).unbind();
+		
+		$('#add-media').toggleClass('show');
+		$('body').on('click',function(){
+			$('#add-media').removeClass('show');
 		});
+
 		return false;
 	});
 	
