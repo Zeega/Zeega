@@ -42,16 +42,7 @@ class RegistrationController extends Controller
             $user = $form->getData();
             
             $sites = $user->getSites();
-            $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
-            
-            if(!$sites->contains($site))
-            {
-                $em = $this->getDoctrine()->getEntityManager();
-                $user->addSite($site);
-                $em->persist($user);
-                $em->flush();
-            }
-            
+
             if ($confirmationEnabled) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $sequence = 'fos_user_registration_check_email';

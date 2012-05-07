@@ -57,7 +57,3 @@ ZeegaCoreBundle_project_publish:
 ZeegaCoreBundle_collection_publish:
     pattern: /collection/{id}/view
     defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
-    
-ZeegaCoreBundle_updateusers:
-    pattern: /update/updateusers
-    defaults: { _controller:  ZeegaCoreBundle:Editor:updateaaaa }
