@@ -228,4 +228,54 @@ class Project
     {
         return $this->tags;
     }
+    /**
+     * @var string $authors
+     */
+    private $authors;
+
+    /**
+     * @var string $cover_image
+     */
+    private $cover_image;
+
+
+    /**
+     * Set authors
+     *
+     * @param string $authors
+     */
+    public function setAuthors($authors)
+    {
+        $this->authors = $authors;
+    }
+
+    /**
+     * Get authors
+     *
+     * @return string 
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
+
+    /**
+     * Set cover_image
+     *
+     * @param string $coverImage
+     */
+    public function setCoverImage($coverImage)
+    {
+        $this->cover_image = $coverImage;
+    }
+
+    /**
+     * Get cover_image
+     *
+     * @return string 
+     */
+    public function getCoverImage()
+    {
+        return $this->cover_image;
+    }
 }
