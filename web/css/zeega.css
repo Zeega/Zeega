@@ -121,7 +121,6 @@ display:none;
 
 #browser-results-items, #browser-results-collections{
 	min-height:200px !important;
-	max-height:350px !important;
 	overflow:auto !important;
 	margin:0;
 }
@@ -1683,6 +1682,14 @@ default-layer-control
 	position:absolute;
 	right:12px;
 	top:12px;
+}
+
+.player-arrow
+{
+	height: 15%;
+	max-height: 75px;
+	max-width: 35px;
+	margin: 0 10px;
 }
 
 #citation
