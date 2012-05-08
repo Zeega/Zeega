@@ -179,4 +179,14 @@ class Frame
     {
         return $this->sequence;
     }
+
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Entity\Layer $layers
+     */
+    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
+    {
+        $this->layers[] = $layers;
+    }
 }

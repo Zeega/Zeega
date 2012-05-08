@@ -153,4 +153,29 @@ class Layer
     {
         return $this->sequences;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Frame
+     */
+    private $frames;
+
+
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Entity\Frame $frames
+     */
+    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
+    {
+        $this->frames[] = $frames;
+    }
+
+    /**
+     * Get frames
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getFrames()
+    {
+        return $this->frames;
+    }
 }
