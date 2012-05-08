@@ -41,4 +41,8 @@ Zeega\DataBundle\Entity\Frame:
         enabled:
             type: boolean
             nullable: true
+        sequence_id:
+            type: integer
+            associationKey: true
+        
  

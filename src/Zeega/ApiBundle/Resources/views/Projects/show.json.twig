@@ -9,35 +9,53 @@
 		"enabled" : {{ project.getEnabled() | default("") | json_encode | raw}},
 		"published" : {{ project.getPublished() | default("") | json_encode | raw}},
 		"sequences" : [
-			{% if sequences is defined and sequences is not empty %}
-				{% set len = sequences|length - 1 -%}
-	
-				{% for sequence in sequences %}	
-				{
-					"id" : {{ sequence.id }},
-					"title" : "{{ sequence.title }}",
-					"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
-					"frames" : {{frames[sequence.id] | json_encode | raw}},
-					"layers" :
-					[
-						{% for layer in layers[sequence.id] %}
-							{
-								"id" : {{ layer.id}},
-								"type" : {{ layer.type | json_encode | raw}},
-								"text" : {{ layer.text | json_encode | raw}},
-								"attr" : {{ layer.attr | json_encode | raw}}
-							}
-
-							{%- if loop.index0 < layers[sequence.id]|length - 1 -%}
-							,
-							{%- endif -%}
-				        {% endfor %}
-					]
-				}
-				{%- if loop.index0 < sequences|length - 1 -%}
+		    {% for sequence in sequences %}	
+			{
+				"id" : {{ sequence.id }},
+				"title" : "{{ sequence.title }}",
+				"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+				"frames" : 
+				[
+				{% for frame in frames[sequence.id] -%}	
+					{{frame["id"]}}
+				{%- if loop.index0 < frames[sequence.id]|length - 1 -%}
 				,
-				{%- endif -%}			
+				{%- endif -%}
 				{% endfor %}
-			{% endif %}		]		
+				]
+			}
+			{%- if loop.index0 < sequences|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		],
+		"frames" : [
+			{% for frame in allFrames %}
+			{	
+				"id" : {{ frame.id | json_encode | raw}},
+				"sequence_id" : {{ frame.sequenceId | json_encode | raw}},
+				"sequence_index" : {{ frame.sequenceIndex | json_encode | raw}},
+				"attr" : {{ frame.attr | json_encode | raw}},
+				"thumbnail_url" : {{ frame.thumbnailUrl | json_encode | raw}}
+			}	
+			{%- if loop.index0 < allFrames|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		],
+		"layers" : [
+			{% for layers in allFrames %}
+			{	
+				"id" : {{ frame.id | json_encode | raw}},
+				"sequence_id" : {{ frame.sequenceId | json_encode | raw}},
+				"sequence_index" : {{ frame.sequenceIndex | json_encode | raw}},
+				"attr" : {{ frame.attr | json_encode | raw}},
+				"thumbnail_url" : {{ frame.thumbnailUrl | json_encode | raw}}
+			}	
+			{%- if loop.index0 < allFrames|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		],
 	 }
 }

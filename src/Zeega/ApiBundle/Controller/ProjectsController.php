@@ -15,34 +15,26 @@ class ProjectsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
-	
+		// very inefficient method
+		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor
+		
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
+		$allFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findByProjectId($id);
 		
 		$frames = array();
 		$layers = array();
-		// auch - should work for now, but won't scale for sure
+		
 		foreach($sequences as $sequence)
 		{
-			$frames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy("sequence_id" => $sequence->getId());
-			
-			$sequence = $this->getDoctrine()
-						     ->getRepository('ZeegaDataBundle:Sequence')
-							 ->find($sequence->getId());
-
-			$layers[$sequenceId] = array();			
-			$layers_seq = $sequence->getLayers()->toArray();
-			foreach($layers_seq as $layer)
-			{
-				$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
-				array_push($layers[$sequenceId], $l);
-			}
+			$sequenceId = $sequence->getId();
+			$frames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
 		}
 		
 		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
-			'sequences' => $sequences, 'frames' => $frames, 'layers' => $layers));
+			'sequences' => $sequences, 'frames' => $frames, 'layers' => $layers, 'allFrames' => $allFrames));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
