@@ -19,25 +19,61 @@ class ParserTumblr extends ParserAbstract
         $apiCallUrl = "http://api.tumblr.com/v2/blog/" . $blogHostname . "/posts?api_key=" . $apiKey . "&id=" . $postId;
         $results_str = file_get_contents(($apiCallUrl));
         $results_json = json_decode($results_str);
+        #print(var_dump($results_json));
         if($results_json->meta->status == 200){
 			$item = new Item();
         	$currentPost = $results_json -> response -> posts[0];
         	switch($currentPost -> type){
         		case "photo":
-                    $altSizes = $currentPost -> photos[0] -> alt_sizes;
-                    $img75px = end($altSizes);
-		    		$item->setUri($currentPost -> photos[0] -> original_size -> url);
-		    		$item->setMediaType('Image');
-		    		$item->setLayerType('Image');
-		    		$item->setTitle($currentPost -> caption);
-		    		$item->setAttributionUri($currentPost -> source_url);
-		    		$item->setChildItemsCount(0);
-		    		$item->setMediaDateCreated(new DateTime($currentPost -> date));
+                    $photoArray = $currentPost -> photos;
                     $item->setArchive('Tumblr');
+                    $item->setAttributionUri($url);
+                    $item->setChildItemsCount(count($photoArray)-1);
                     $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     $item->setMediaCreatorRealname('Unknown');
-                    $item->setThumbnailUrl($img75px -> url);
+                    $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setTags($currentPost -> tags);
+                    $item->setTitle(strip_tags($currentPost -> caption));
+                    if(count($photoArray) == 1){
+                        $altSizes = $currentPost -> photos[0] -> alt_sizes;
+                        $img75px = end($altSizes);
+                        $item->setMediaType('Image');
+                        $item->setLayerType('Image');
+                        $item->setThumbnailUrl($img75px -> url);
+                        $item->setUri($currentPost -> photos[0] -> original_size -> url);
+                        $item->setTitle(strip_tags($currentPost -> caption));
+                        $item->setMediaDateCreated(new DateTime($currentPost -> date));
+                        $item->setAttributionUri($currentPost -> photos[0] -> original_size -> url);
+                        $item->setChildItemsCount(0);
+                        $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
+                        $item->setMediaCreatorRealname('Unknown');
+                        $item->setTags($currentPost -> tags);
+                    }else{
+                        $item->setMediaType('Collection');
+                        $item->setLayerType('Collection');
+                        for($pi=0; $pi < count($photoArray); $pi++){
+                            $photoItem = $photoArray[$pi];
+                            #print(var_dump($photoItem));
+                            #print("***");
+                            #print($photoItem -> original_size -> url);
+                            $altSizes = $photoItem -> alt_sizes;
+                            $img75px = end($altSizes);
+                            $childItem = new Item();
+                            $childItem->setMediaType('Image');
+                            $childItem->setLayerType('Image');
+                            $childItem->setThumbnailUrl($img75px -> url);
+                            $childItem->setUri($photoItem -> original_size -> url);
+                            $childItem->setTitle(strip_tags($currentPost -> caption));
+                            $childItem->setMediaDateCreated(new DateTime($currentPost -> date));
+                            $childItem->setAttributionUri($photoItem -> original_size -> url);
+                            #$childItem->setAttributionUri($currentPost -> source_url);
+                            $childItem->setChildItemsCount(0);
+                            $childItem->setMediaCreatorUsername($results_json -> response -> blog -> name);
+                            $childItem->setMediaCreatorRealname('Unknown');
+                            $childItem->setTags($currentPost -> tags);
+                            $item->addItem($childItem);
+                        }
+                    }
         			break;
                 case "video": # not finished
                     die("Video postings not yet supported.");
