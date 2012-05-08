@@ -159,13 +159,15 @@
 		openMenu : function()
 		{
 			var _this = this;
-			var menu = this.$el.find('.menu').show();
-			$('body').click(function(){ _this.closeMenu() })
+			
+			this.$el.find('.menu').toggleClass('show');
+			
+			$('body').click(function(){ _this.closeMenu() });
+			
 		},
 		closeMenu : function()
 		{
-			$('body').unbind('click');
-			this.$el.find('.menu').hide();
+			$('.browser-results-collection .menu').removeClass('show')
 		},
 		
 		menuItemClicked : function( e )
@@ -246,7 +248,6 @@
 						'<div class="well menu">'+
 							'<ul class="nav nav-list">'+
 								'<li><a href="#" data-action="settings">settings</a></li>'+
-						//		'<li><a href="#" data-action="open-in-editor">open in editor</a></li>'+ 
 							'</ul>'+
 						'</div>'+
 						'<div class="collections-title-overlay">'+

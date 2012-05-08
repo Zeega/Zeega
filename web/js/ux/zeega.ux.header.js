@@ -23,22 +23,11 @@ function initHeaderUX(){
 	
 	// FAKE STUFF
 
-	
-
 	$('.add-media a').click(function(){
-		console.log('add media clicked')
-		
 		$('#add-media').toggleClass('show');
 		$('body').on('click',function(){
 			$('#add-media').removeClass('show');
 		});
-		/*
-		$('#add-media').fadeIn('fast');
-		$('body').on('click',function(){
-			$('#add-media').fadeOut();
-			//$('body').off('click');
-		});
-		*/
 		return false;
 	});
 	
