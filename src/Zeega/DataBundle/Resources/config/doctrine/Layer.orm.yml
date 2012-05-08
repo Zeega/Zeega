@@ -9,9 +9,6 @@ Zeega\DataBundle\Entity\Layer:
         project:
             targetEntity: Zeega\DataBundle\Entity\Project
     manyToMany:
-        sequences:
-            targetEntity: Zeega\DataBundle\Entity\Sequence
-            mappedBy: layers
         frames:
             targetEntity: Zeega\DataBundle\Entity\Frame
             mappedBy: layers

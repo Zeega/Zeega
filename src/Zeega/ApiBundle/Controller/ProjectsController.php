@@ -18,23 +18,15 @@ class ProjectsController extends Controller
 	
 		$user = $this->get('security.context')->getToken()->getUser();
 
-		$sequences = $this->getDoctrine()
-						  ->getRepository('ZeegaDataBundle:Sequence')
-						  ->findSequencesByProject($id);
-
-		$project = $this->getDoctrine()
-						->getRepository('ZeegaDataBundle:Project')
-						->findOneById($id);
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
 		
 		$frames = array();
 		$layers = array();
 		// auch - should work for now, but won't scale for sure
 		foreach($sequences as $sequence)
 		{
-			$sequenceId = $sequence->getId();
-			$frames[$sequenceId] = $this->getDoctrine()
-									    ->getRepository('ZeegaDataBundle:Frame')
-										->findFramesBySequenceId($project->getId());
+			$frames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy("sequence_id" => $sequence->getId());
 			
 			$sequence = $this->getDoctrine()
 						     ->getRepository('ZeegaDataBundle:Sequence')
