@@ -46,6 +46,28 @@
 				this.render();
 			}
 		},
+		
+		getNextPage :function()
+		{
+			if(this.collectionFull != true)
+			{
+				console.log('add more!!!')
+				var _this = this;
+				this.collection.page++;
+				this.collection.fetch({
+					add:true,
+					success: function(c)
+					{
+						_this._childViews = [];
+						$(_this.el).empty();
+						_this.render();
+					
+						if(_this.collection.totalItemsCount == _this.collection.length)
+							_this.collectionFull = true;
+					}
+				});
+			}
+		},
 
 		append : function(items)
 		{

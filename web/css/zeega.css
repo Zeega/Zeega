@@ -119,10 +119,16 @@ background-color: rgba(255, 255, 255, 0.9);
 display:none;
 }
 
+.browser-results-collection .show
+{
+display:block;
+}
+
 #browser-results-items, #browser-results-collections{
 	min-height:200px !important;
 	overflow:auto !important;
 	margin:0;
+	max-height: 395px;
 }
 #browser-my-collections-label p{
 	color:#FFF;

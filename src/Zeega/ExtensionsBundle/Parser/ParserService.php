@@ -14,6 +14,13 @@ use \ReflectionMethod;
  */
 class ParserService
 {
+	public function __construct($hostname, $directory)
+    {
+        $this->hostname = $hostname;
+        $this->directory = $directory;
+    }
+
+    
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
      *
@@ -60,9 +67,11 @@ class ParserService
     		    }
     		}
 	    }
-	    
+		$parameters = array();
+	    $parameters["hostname"] = $this->hostname;
+		$parameters["directory"] = $this->directory;
 	    $parser = new ParserAbsoluteUrl;
-        return $parser->load($url);
+        return $parser->load($url,$parameters);
 	}
 	
 	// ------------------- private methods

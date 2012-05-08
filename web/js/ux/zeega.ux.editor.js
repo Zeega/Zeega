@@ -390,8 +390,8 @@ $('#new-layer-list a').click(function(){
 
 	$('#advance-controls input').change(function(){
 		var attr = zeega.app.currentFrame.get('attr');
-		if(attr) attr.advance = parseInt($(this).val()*1000);
-		else attr = {'advance': parseInt($(this).val()*1000)}
+		if(attr) attr.advance = $(this).val() != -1 ? parseInt($(this).val()*1000) : -1;
+		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1};
 		
 		zeega.app.currentFrame.set({'attr':attr});
 		zeega.app.currentFrame.save();
@@ -439,7 +439,12 @@ $('#new-layer-list a').click(function(){
 		//localStorage.setObject( frameID , storage );
 	})
 	
-	
+	$('#database-item-list').scroll(function(){
+		if( $('#database-item-list').scrollTop() == $('#database-item-list')[0].scrollHeight - $('#database-item-list').innerHeight() )
+		{
+			zeega.app.itemCollection.getNextPage();
+		}
+	})
 	
 	/*****  		CRITICAL		*******/
 	

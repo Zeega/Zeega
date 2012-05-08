@@ -56,53 +56,57 @@ class WidgetController extends Controller
 		
 		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
-
+		
 		if(isset($parserResponse))
 		{
-			$isUrlValid = $parserResponse["request"]["success"];
-			$isUrlCollection = $parserResponse["request"]["is_set"];
-			$message = $parserResponse["request"]["message"];
-			$items = $parserResponse["items"];
-            
-			if($isUrlValid && count($items) > 0)
+			// quick fix - try / catch will be removed
+			try
 			{
+				$isUrlValid = $parserResponse["request"]["success"];
+				$isUrlCollection = $parserResponse["request"]["is_set"];
+				$message = $parserResponse["request"]["message"];
+				$items = $parserResponse["items"];
+            
+				if($isUrlValid && count($items) > 0)
+				{
 			    
-			    $parsedItem = $items[0];
-				// check if the item exists on the database	
-        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
+				    $parsedItem = $items[0];
+					// check if the item exists on the database	
+	        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
                 
-        		if(isset($item))
-        		{
-        		 	// item was imported before
-        			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
-        				'displayname' => $user->getDisplayname(),
-        				'media_type' => $item->getMediaType(),
-        				'widget_id'=>$widgetId,
-        				'item' => ResponseHelper::serializeEntityToJson($item),
-        				'mycollection'=>$mycollection,
-        			));
-        		}
-				else if($isUrlCollection)
-				{
-					return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
-						'displayname' => $user->getDisplayname(),
-						'widget_id'=>$widgetId,
-						'item'=>json_encode($parsedItem), 
-						'mycollection'=>$mycollection,
-						'child_items_count'=>$parsedItem["child_items_count"],
-					));						
-				}
-				else
-				{
-					return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
-						'displayname' => $user->getDisplayname(),
-						'widget_id'=>$widgetId,
-						'item'=>json_encode($parsedItem), 
-						'mycollection'=>$mycollection,
-					));
+	        		if(isset($item))
+	        		{
+	        		 	// item was imported before
+	        			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
+	        				'displayname' => $user->getDisplayname(),
+	        				'media_type' => $item->getMediaType(),
+	        				'widget_id'=>$widgetId,
+	        				'item' => ResponseHelper::serializeEntityToJson($item),
+	        				'mycollection'=>$mycollection,
+	        			));
+	        		}
+					else if($isUrlCollection)
+					{
+						return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
+							'displayname' => $user->getDisplayname(),
+							'widget_id'=>$widgetId,
+							'item'=>json_encode($parsedItem), 
+							'mycollection'=>$mycollection,
+							'child_items_count'=>$parsedItem["child_items_count"],
+						));						
+					}
+					else
+					{
+						return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
+							'displayname' => $user->getDisplayname(),
+							'widget_id'=>$widgetId,
+							'item'=>json_encode($parsedItem), 
+							'mycollection'=>$mycollection,
+						));
+					}
 				}
 			}
-			else
+			catch(Exception $e)
 			{
 				return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
@@ -114,5 +118,14 @@ class WidgetController extends Controller
 				));
 			}
 		}
+		
+		return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
+			'displayname' => $user->getDisplayname(),
+			'widget_id'=>$widgetId,
+			'item'=>json_encode($items), 
+			'mycollection'=>$mycollection,
+			'urlmessage' => $message,
+			'url'=> $itemUrl,
+		));
 	}	
 }

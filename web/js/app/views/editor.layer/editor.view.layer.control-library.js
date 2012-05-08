@@ -598,7 +598,7 @@
 		{
 			var _this = this;
 			
-			console.log(this.model.video)
+			//console.log(this.model.video)
 			
 			this.model.video.pop.listen('pause',function(){
 				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
@@ -675,7 +675,7 @@
 				}
 			});
 			
-			console.log(this.model);
+			//console.log(this.model);
 			
 		
 			this.$el.find('.plyr-cuein-scrubber').draggable({
@@ -902,7 +902,13 @@
 					var center = results[0].geometry.location;
 					_this.map.setCenter( center );
 					_this.marker.setPosition(center);
-					_this.model.update({ title : location });
+					_this.model.update({
+						title : location,
+						lat : center.lat(),
+						lng : center.lng()
+					});
+					_this.model.trigger('update');
+					console.log('new geocoded location')
 				}
 				else alert("Geocoder failed at address look for "+ input.val()+": " + status);
 			});
