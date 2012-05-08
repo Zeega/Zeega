@@ -14,8 +14,6 @@
 		
 		render: function()
 		{
-			console.log('seq render')
-			console.log(this.model)
 			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title') || '...'}) );
 			
 			return this;
@@ -41,7 +39,6 @@
 		{
 			if( !this.inFocus )
 			{
-				console.log('switch sequence tabs')
 				zeega.app.goToSequence(this.model.id)
 			}
 			console.log('sequence tab clicked')
@@ -50,7 +47,6 @@
 		
 		editSequence : function(e)
 		{
-			console.log('edit Sequence')
 			e.stopPropagation();
 			return false;
 		},
@@ -58,10 +54,7 @@
 		getTemplate : function()
 		{
 			var html = 
-			
 				'<a href="#"><%= title %></a>';
-				//'<a href="#"><%= title %> <i class="icon-edit edit-sequence"></i></a>';
-				
 			return html;
 		}
 	

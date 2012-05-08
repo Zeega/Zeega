@@ -10,35 +10,13 @@
 				
 		initialize : function( attributes )
 		{
-			console.log('sequence init')
-			this.unset('frames',['silent'])
-			this.unset('layers',['silent'])
-			
-			this.createCollections(attributes);
-			
-			this.layers.on('add', this.onLayerAdded, this);
+			//this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 
 			this.attachTabView();
 			
-			this.updateFrameOrder(false);
+			//this.updateFrameOrder(false);
 			this.trigger('ready');
-		},
-		
-		createCollections : function(attributes)
-		{
-			console.log('SEQ')
-			console.log(this)
-			console.log(this.get('frames'))
-			console.log(this.get('layers'))
-			
-			if(attributes)
-			{
-				this.createFrames( attributes.frames );
-				this.createLayers( attributes.layers );
-			}
-			if( this.get('frames') ) this.createFrames( this.get('frames'));
-			if( this.get('layers') ) this.createLayers( this.get('layers'));
 		},
 		
 		attachTabView : function()
@@ -52,7 +30,7 @@
 			console.log('refresh view!!!')
 			this.view.render();
 		},
-		
+/*		
 		createFrames : function( frames )
 		{
 			var Frames = zeega.module("frame");
@@ -146,7 +124,7 @@
 			
 			this.frames.add( dupeModel );
 		},
-		
+*/		
 		insertFrameView : function( frame, index )
 		{
 				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );

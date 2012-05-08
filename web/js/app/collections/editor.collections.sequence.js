@@ -14,7 +14,6 @@
 		
 		render : function()
 		{
-			console.log(this);
 			_.each( _.toArray(this), function(sequence, i){
 				$('#sequence-tabs').append( sequence.view.render().el );
 			})
@@ -23,8 +22,6 @@
 		
 		drawSequenceTab : function( model )
 		{
-			console.log('draw sequence tab')
-			console.log(model)
 			_.each( _.toArray(this), function(sequence){
 				sequence.trigger('blur')
 			})

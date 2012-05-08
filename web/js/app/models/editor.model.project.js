@@ -10,10 +10,42 @@
 		initialize : function( attributes )
 		{
 			_.defaults( this.get('attr'), this.default_attr );
-			this.unset('sequences',['silent'])
-			this.createSequences( attributes.sequences );
+			
+			//remove dupe data from the attributes
+			this.unset('sequences',['silent']);
+			this.unset('frames',['silent']);
+			this.unset('layers',['silent']);
+			
+			this.createLayerCollection(attributes.layers);
+			this.createFrameCollection(attributes.frames);
+			this.createSequenceCollection( attributes.sequences );
+			
+			console.log('init PROJECT')
+			console.log(this)
 		},
 
+		/*	create collections	*/
+
+		createLayerCollection : function( layers )
+		{
+			var Layers = zeega.module('layer');
+			this.layers = new Layers.MasterCollection( layers );
+		},
+		createFrameCollection : function( frames )
+		{
+			var Frames = zeega.module('frame');
+			this.frames = new Frames.Collection( frames );
+		},
+		createSequenceCollection : function( sequences )
+		{
+			var Sequence = zeega.module("sequence");
+			this.sequences = new Sequence.Collection( sequences );
+			this.sequences.render();
+			zeega.app.currentSequence = this.sequences.at(0);
+		},
+		
+		/*	end create collections	*/
+		
 		loadProject : function()
 		{
 			// make view for project here //
@@ -26,17 +58,6 @@
 			// publishing view for project //
 			this.view = new Project.Views.Publish({model:this});
 			this.view.render();
-			
-		},
-		createSequences : function( sequences )
-		{
-			var _this = this;
-			var Sequence = zeega.module("sequence");
-			this.sequences = new Sequence.Collection( sequences );
-			this.sequences.render();
-			console.log(this.sequences)
-
-			zeega.app.currentSequence = this.sequences.at(0);
 		},
 		
 		update : function( newAttr, silent )

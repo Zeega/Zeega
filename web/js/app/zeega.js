@@ -58,7 +58,6 @@ this.zeega = {
 		var Items = zeega.module("items");
 		
 		console.log($.parseJSON(projectJSON))
-		console.log( $.parseJSON(collectionsJSON))
 		
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		
@@ -136,7 +135,8 @@ this.zeega = {
 		console.log('GO TO FRAME: '+frameId)
 		if( _.isUndefined(frameId)||frameId=="undefined" )
 		{
-			this.currentFrame = this.currentSequence.frames.at(0);
+			console.log(this.currentSequence)
+			this.currentFrame = this.project.frames.get( this.currentSequence.get('frames')[0] );
 			this.loadFrame( this.currentFrame );
 		}
 		else this.loadFrame( this.currentSequence.frames.get( frameId ) );
@@ -170,7 +170,7 @@ this.zeega = {
 		_.each( _.toArray(this.currentSequence.frames), function(frame){
 			frame.render();
 		})
-		this.currentSequence.updateFrameOrder(false);
+		//this.currentSequence.updateFrameOrder(false);
 	},
 	
 	renderFrame : function(frame)
@@ -193,13 +193,11 @@ this.zeega = {
 	
 	unrenderFrame : function ( frame )
 	{
-		console.log('	unrender frame')
 		if(frame)
 		{
 			var _this = this;
 			_.each( frame.get('layers'), function(layerID){
-			
-				var layerModel = _this.currentSequence.layers.get(layerID);
+				var layerModel = _this.project.layers.get(layerID);
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerUnrender')
 			})
