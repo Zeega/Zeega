@@ -6,6 +6,8 @@ Zeega\DataBundle\Entity\Layer:
     manyToOne:
         item:
             targetEntity: Zeega\DataBundle\Entity\Item
+        project:
+            targetEntity: Zeega\DataBundle\Entity\Project
     manyToMany:
         sequences:
             targetEntity: Zeega\DataBundle\Entity\Sequence
@@ -13,7 +15,6 @@ Zeega\DataBundle\Entity\Layer:
         frames:
             targetEntity: Zeega\DataBundle\Entity\Frame
             mappedBy: layers
-        
     id:
         id:
             type: bigint
@@ -30,4 +31,4 @@ Zeega\DataBundle\Entity\Layer:
         attr:
             type: array
             nullable: true
- 
+        

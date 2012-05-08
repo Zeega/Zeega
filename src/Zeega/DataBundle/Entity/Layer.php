@@ -178,4 +178,29 @@ class Layer
     {
         return $this->frames;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Project
+     */
+    private $project;
+
+
+    /**
+     * Set project
+     *
+     * @param Zeega\DataBundle\Entity\Project $project
+     */
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project = $project;
+    }
+
+    /**
+     * Get project
+     *
+     * @return Zeega\DataBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
 }
