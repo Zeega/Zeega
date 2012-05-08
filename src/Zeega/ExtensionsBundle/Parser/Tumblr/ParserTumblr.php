@@ -22,7 +22,6 @@ class ParserTumblr extends ParserAbstract
         if($results_json->meta->status == 200){
 			$item = new Item();
         	$currentPost = $results_json -> response -> posts[0];
-            print($currentPost -> type);
         	switch($currentPost -> type){
         		case "photo":
                     $altSizes = $currentPost -> photos[0] -> alt_sizes;
@@ -53,7 +52,7 @@ class ParserTumblr extends ParserAbstract
                     $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
                 case "audio": # not finished
-                    die("Video postings not yet supported.");
+                    die("Audio postings not yet supported.");
                     $item->setUri($currentPost -> audio_url);
                     $item->setMediaType('Audio');
                     $item->setLayerType('Audio');
@@ -65,7 +64,7 @@ class ParserTumblr extends ParserAbstract
                     $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
                 case "text": # not finished
-                    die("Video postings not yet supported.");
+                    die("Text postings not yet supported.");
                     $item->setUri($currentPost -> body);
                     $item->setMediaType('tumblr_text');
                     $item->setLayerType('Text');
@@ -78,7 +77,7 @@ class ParserTumblr extends ParserAbstract
                     $item->setTags($currentPost -> tags);
                     break;
                 case "quote": # not finished
-                    die("Video postings not yet supported.");
+                    die("Quote postings not yet supported.");
                     $item->setUri($currentPost -> photos[0] -> original_size -> url);
                     $item->setMediaType('tumblr_quote');
                     $item->setLayerType('Text');
@@ -90,8 +89,6 @@ class ParserTumblr extends ParserAbstract
                     $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
 		     }
-
-    		#print(var_dump($item));
         }else{
         	die("Failed to retrieve url " . $apiCallUrl);
         };
