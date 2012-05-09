@@ -60,16 +60,14 @@ this.zeega = {
 		console.log($.parseJSON(projectJSON))
 		
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
-		
-		this.project = new Project.Model($.parseJSON(projectJSON).project);
-		
-		this.project.on('ready',function(){ _this.startEditor() })
-		this.project.loadProject();
 		this.itemCollection = new Items.ViewCollection();
 		
+		// initializes project
+		this.project = new Project.Model($.parseJSON(projectJSON).project);
+		this.project.on('ready',function(){ _this.startEditor() })
+		this.project.loadProject();
 		
 		console.log(this.project)
-		
 	},
 	
 	loadCollectionsDropdown : function( collections )
@@ -88,7 +86,6 @@ this.zeega = {
 		
 		this.renderSequenceFrames();
 		this.startRouter();
-		
 	},
 	
 	startRouter: function()
@@ -116,8 +113,6 @@ this.zeega = {
 		this.currentSequence = this.project.sequences.get(sequenceID);
 		this.currentSequence.trigger('focus');
 		
-
-		
 		console.log('current sequence')
 		console.log(this.currentSequence )
 		this.renderSequenceFrames();
@@ -130,24 +125,25 @@ this.zeega = {
 		console.log('current sequence id: '+ this.currentSequence.id +' currentFrame: '+this.currentFrame.id)
 	},
 	
-	goToFrame : function(frameId)
+	goToFrame : function( frameId )
 	{
 		console.log('GO TO FRAME: '+frameId)
 		if( _.isUndefined(frameId)||frameId=="undefined" )
 		{
-			console.log(this.currentSequence)
 			this.currentFrame = this.project.frames.get( this.currentSequence.get('frames')[0] );
 			this.loadFrame( this.currentFrame );
 		}
-		else this.loadFrame( this.currentSequence.frames.get( frameId ) );
+		else this.loadFrame( this.project.frames.get( frameId ) );
 	},
 
 	loadFrame : function( frame )
 	{
+		console.log('load frame')
+		console.log(frame)
 		var _this = this;
 		this.unrenderFrame( this.currentFrame );
 		
-		this.cleanWorkspace();
+		//this.cleanWorkspace();
 		
 		if(this.currentFrame) this.currentFrame.trigger('blur');
 		this.currentFrame = frame;
@@ -164,11 +160,11 @@ this.zeega = {
 	
 	renderSequenceFrames : function()
 	{
+		var _this = this;
 		//this is ugly
 		$('#frame-list').empty();
-		
-		_.each( _.toArray(this.currentSequence.frames), function(frame){
-			frame.render();
+		_.each( this.currentSequence.get('frames'), function(frameID){
+			_this.project.frames.get(frameID).render();
 		})
 		//this.currentSequence.updateFrameOrder(false);
 	},
@@ -178,12 +174,10 @@ this.zeega = {
 		if(frame)
 		{
 			console.log('render frame id: '+ frame.id)
-			console.log( frame.get('layers'))
 			var _this = this;
-			console.log(_this.currentSequence.layers)
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
-				console.log('layer id: '+ layerID)
-				var layerModel = _this.currentSequence.layers.get(layerID);
+				console.log('RENDER layer id: '+ layerID)
+				var layerModel = _this.project.layers.get(layerID);
 				console.log(layerModel)
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerRender', i)
@@ -202,6 +196,22 @@ this.zeega = {
 				else layerModel.trigger('editor_layerUnrender')
 			})
 		}
+	},
+	
+	cleanWorkspace : function()
+	{
+		console.log(this.currentSequence.layers)
+		if(this.currentSequence.layers.visible)
+		{
+			// remove all visible layers
+			_.each( this.currentSequence.layers.visible, function(layerModel){
+				if(layerModel.visual) layerModel.visual.remove();
+				if(layerModel.controls) layerModel.controls.remove();
+				layerModel.trigger('editor_layerExit');
+			})
+		}
+		// clear out the visible array
+		this.currentSequence.layers.visible = [];
 	},
 	
 	restorePanelStates : function()
@@ -484,22 +494,6 @@ this.zeega = {
 		else return false;
 
 		return _.indexOf( this.sequence.get('framesOrder') , frameId );
-	},
-	
-	cleanWorkspace : function()
-	{
-		console.log(this.currentSequence.layers)
-		if(this.currentSequence.layers.visible)
-		{
-			// remove all visible layers
-			_.each( this.currentSequence.layers.visible, function(layerModel){
-				if(layerModel.visual) layerModel.visual.remove();
-				if(layerModel.controls) layerModel.controls.remove();
-				layerModel.trigger('editor_layerExit');
-			})
-		}
-		// clear out the visible array
-		this.currentSequence.layers.visible = [];
 	},
 
 	previewSequence : function()

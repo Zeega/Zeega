@@ -2,8 +2,7 @@
 
 	Project.Model = Backbone.Model.extend({
 		
-		default_attr : {
-		},
+		default_attr : {},
 		
 		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
 		
@@ -28,8 +27,31 @@
 
 		createLayerCollection : function( layers )
 		{
-			var Layers = zeega.module('layer');
-			this.layers = new Layers.MasterCollection( layers );
+			//var Layers = zeega.module('layer');
+			//this.layers = new Layers.MasterCollection( layers );
+			
+			var _this = this;
+			var Layers = zeega.module("layer");
+			
+			/*
+			var addListeners = function(layer)
+			{
+				layer.on('editor_removeLayerFromFrame', _this.removeLayerFromFrame, _this);
+				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
+				layer.on('persist', _this.updatePersistLayer, _this);
+			};
+			*/
+			
+			// generate layer models from layers
+			var layerModelArray = [];
+			_.each( layers, function(layer){
+				var newLayer = new Layers[ layer.type ](layer);
+				//addListeners(newLayer);
+				layerModelArray.push( newLayer );
+			});
+			
+			
+			this.layers = new Layers.MasterCollection( layerModelArray );
 		},
 		createFrameCollection : function( frames )
 		{

@@ -87,11 +87,6 @@
 			else this.editorWindow.append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
-			//add to the layer.visible array which keeps track of all visible layers
-			// we cannot count on the layer having the best/latest info on it's own layers in the editor
-			zeega.app.currentSequence.layers.visible.push( this )
-			
-			
 			this.trigger('editor_rendered editor_layerEnter');
 		},
 		
