@@ -2,42 +2,64 @@
 	"project":
 	 {
 		"id" : {{ project.getId() }},
-		"title" : {{ project.getTitle() | default("") | json_encode | raw}},
-		"attr" : {{ project.getAttr() | default({ }) | json_encode | raw}},
+		"title" : {{ project.getTitle() | default(null) | json_encode | raw}},
 		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
-                "tags" : {{ project.getTags() | default("") | json_encode | raw}},
-		"enabled" : {{ project.getEnabled() | default("") | json_encode | raw}},
-		"published" : {{ project.getPublished() | default("") | json_encode | raw}},
+        "tags" : {{ project.getTags() | default(null) | json_encode | raw}},
+		"authors" : {{ project.getAuthors() | default(null) | json_encode | raw}},
+		"cover_image" : {{ project.getCoverImage() | default(null) | json_encode | raw}},
+		"enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
+		"published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 		"sequences" : [
-			{% if sequences is defined and sequences is not empty %}
-				{% set len = sequences|length - 1 -%}
-	
-				{% for sequence in sequences %}	
-				{
-					"id" : {{ sequence.id }},
-					"title" : "{{ sequence.title }}",
-					"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
-					"frames" : {{frames[sequence.id] | json_encode | raw}},
-					"layers" :
-					[
-						{% for layer in layers[sequence.id] %}
-							{
-								"id" : {{ layer.id}},
-								"type" : {{ layer.type | json_encode | raw}},
-								"text" : {{ layer.text | json_encode | raw}},
-								"attr" : {{ layer.attr | json_encode | raw}}
-							}
-
-							{%- if loop.index0 < layers[sequence.id]|length - 1 -%}
-							,
-							{%- endif -%}
-				        {% endfor %}
-					]
-				}
-				{%- if loop.index0 < sequences|length - 1 -%}
+		    {% for sequence in sequences %}	
+			{
+				"id" : {{ sequence.id }},
+				"title" : "{{ sequence.title }}",
+				"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+				"frames" : 
+				[
+				{% for frame in sequence_frames[sequence.id] -%}	
+					{{frame["id"]}}
+				{%- if loop.index0 < sequence_frames[sequence.id]|length - 1 -%}
 				,
-				{%- endif -%}			
+				{%- endif -%}
 				{% endfor %}
-			{% endif %}		]		
+				]
+			}
+			{%- if loop.index0 < sequences|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		],
+		"frames" : [
+			{% for frame in frames %}
+			{	
+				"id" : {{ frame.id | json_encode | raw}},
+				"sequence_id" : {{ frame.sequenceId | json_encode | raw}},
+				"sequence_index" : {{ frame.sequenceIndex | json_encode | raw}},
+				"attr" : {{ frame.attr | json_encode | raw}},
+				"thumbnail_url" : {{ frame.thumbnailUrl | json_encode | raw}},
+				"layers" : 
+				[
+				{% for layer in frame.layers -%}	
+					{{layer.getId()}}
+				{%- if loop.index0 < frame.layers |length - 1 -%}
+				,
+				{%- endif -%}
+				{% endfor %}
+				]
+			}	
+			{%- if loop.index0 < frames|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		],
+		"layers" : [
+			{% for layer in layers %}
+				{{ layer | json_encode_entity | raw}}
+			{%- if loop.index0 < layers|length - 1 -%}
+			,
+			{%- endif -%}			
+			{% endfor %}
+		]
 	 }
 }

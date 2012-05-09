@@ -20,11 +20,6 @@ class Frame
     private $sequence_index;
 
     /**
-     * @var array $layers
-     */
-    private $layers;
-
-    /**
      * @var array $attr
      */
     private $attr;
@@ -40,12 +35,23 @@ class Frame
     private $enabled;
 
     /**
+     * @var integer $sequence_id
+     */
+    private $sequence_id;
+
+    /**
      * @var Zeega\DataBundle\Entity\Sequence
      */
     private $sequence;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Layer
+     */
+    private $layers;
+
     public function __construct()
     {
+        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created_at = new \DateTime();
         $this->thumbnail_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
     }
@@ -78,26 +84,6 @@ class Frame
     public function getSequenceIndex()
     {
         return $this->sequence_index;
-    }
-
-    /**
-     * Set layers
-     *
-     * @param array $layers
-     */
-    public function setLayers($layers)
-    {
-        $this->layers = $layers;
-    }
-
-    /**
-     * Get layers
-     *
-     * @return array 
-     */
-    public function getLayers()
-    {
-        return $this->layers;
     }
 
     /**
@@ -161,6 +147,26 @@ class Frame
     }
 
     /**
+     * Set sequence_id
+     *
+     * @param integer $sequenceId
+     */
+    public function setSequenceId($sequenceId)
+    {
+        $this->sequence_id = $sequenceId;
+    }
+
+    /**
+     * Get sequence_id
+     *
+     * @return integer 
+     */
+    public function getSequenceId()
+    {
+        return $this->sequence_id;
+    }
+
+    /**
      * Set sequence
      *
      * @param Zeega\DataBundle\Entity\Sequence $sequence
@@ -178,5 +184,25 @@ class Frame
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Entity\Layer $layers
+     */
+    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
+    {
+        $this->layers[] = $layers;
+    }
+
+    /**
+     * Get layers
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLayers()
+    {
+        return $this->layers;
     }
 }

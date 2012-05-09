@@ -153,4 +153,79 @@ class Layer
     {
         return $this->sequences;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Frame
+     */
+    private $frames;
+
+
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Entity\Frame $frames
+     */
+    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
+    {
+        $this->frames[] = $frames;
+    }
+
+    /**
+     * Get frames
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getFrames()
+    {
+        return $this->frames;
+    }
+    /**
+     * @var Zeega\DataBundle\Entity\Project
+     */
+    private $project;
+
+
+    /**
+     * Set project
+     *
+     * @param Zeega\DataBundle\Entity\Project $project
+     */
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project = $project;
+    }
+
+    /**
+     * Get project
+     *
+     * @return Zeega\DataBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+    /**
+     * @var integer $project_id
+     */
+    private $project_id;
+
+
+    /**
+     * Set project_id
+     *
+     * @param integer $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->project_id = $projectId;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProjectId()
+    {
+        return $this->project_id;
+    }
 }

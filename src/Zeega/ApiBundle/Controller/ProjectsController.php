@@ -15,42 +15,26 @@ class ProjectsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
-	
+		// very inefficient method
+		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
+		
 		$user = $this->get('security.context')->getToken()->getUser();
 
-		$sequences = $this->getDoctrine()
-						  ->getRepository('ZeegaDataBundle:Sequence')
-						  ->findSequencesByProject($id);
-
-		$project = $this->getDoctrine()
-						->getRepository('ZeegaDataBundle:Project')
-						->findOneById($id);
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findByProjectId($id);
+		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
 		
-		$frames = array();
-		$layers = array();
-		// auch - should work for now, but won't scale for sure
+		$sequenceFrames = array();
+		
 		foreach($sequences as $sequence)
 		{
 			$sequenceId = $sequence->getId();
-			$frames[$sequenceId] = $this->getDoctrine()
-									    ->getRepository('ZeegaDataBundle:Frame')
-										->findFramesBySequenceId($sequence->getId());
-			
-			$sequence = $this->getDoctrine()
-						     ->getRepository('ZeegaDataBundle:Sequence')
-							 ->find($sequence->getId());
-
-			$layers[$sequenceId] = array();			
-			$layers_seq = $sequence->getLayers()->toArray();
-			foreach($layers_seq as $layer)
-			{
-				$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
-				array_push($layers[$sequenceId], $l);
-			}
+			$sequenceFrames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
 		}
 		
 		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
-			'sequences' => $sequences, 'frames' => $frames, 'layers' => $layers));
+			'sequences' => $sequences, 'sequence_frames' => $sequenceFrames, 'layers' => $layers, 'frames' => $frames));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
@@ -71,12 +55,14 @@ class ProjectsController extends Controller
         }
 
 		$title = $request_data->get('title');
-		$attr = $request_data->get('attr');
         $tags = $request_data->get('tags');
+        $coverImage = $request_data->get('cover_image');
+        $authors = $request_data->get('authors');
 		$published = $request_data->get('published');
         
 		if(isset($title)) $project->setTitle($title);
-		if(isset($attr)) $project->setAttr($attr);
+		if(isset($authors)) $project->setAuthors($authors);
+		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
 
