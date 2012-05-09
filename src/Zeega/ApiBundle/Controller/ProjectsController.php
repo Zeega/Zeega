@@ -55,12 +55,14 @@ class ProjectsController extends Controller
         }
 
 		$title = $request_data->get('title');
-		$attr = $request_data->get('attr');
         $tags = $request_data->get('tags');
+        $coverImage = $request_data->get('cover_image');
+        $authors = $request_data->get('authors');
 		$published = $request_data->get('published');
         
 		if(isset($title)) $project->setTitle($title);
-		if(isset($attr)) $project->setAttr($attr);
+		if(isset($authors)) $project->setAuthors($authors);
+		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
 
