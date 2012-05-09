@@ -203,4 +203,29 @@ class Layer
     {
         return $this->project;
     }
+    /**
+     * @var integer $project_id
+     */
+    private $project_id;
+
+
+    /**
+     * Set project_id
+     *
+     * @param integer $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->project_id = $projectId;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProjectId()
+    {
+        return $this->project_id;
+    }
 }

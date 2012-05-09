@@ -16,25 +16,25 @@ class ProjectsController extends Controller
     public function getProjectAction($id)
     {	
 		// very inefficient method
-		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor
+		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-		$allFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findByProjectId($id);
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findByProjectId($id);
+		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
 		
-		$frames = array();
-		$layers = array();
+		$sequenceFrames = array();
 		
 		foreach($sequences as $sequence)
 		{
 			$sequenceId = $sequence->getId();
-			$frames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
+			$sequenceFrames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
 		}
 		
 		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
-			'sequences' => $sequences, 'frames' => $frames, 'layers' => $layers, 'allFrames' => $allFrames));
+			'sequences' => $sequences, 'sequence_frames' => $sequenceFrames, 'layers' => $layers, 'frames' => $frames));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 

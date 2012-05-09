@@ -28,4 +28,8 @@ Zeega\DataBundle\Entity\Layer:
         attr:
             type: array
             nullable: true
+        project_id:
+            type: integer
+            associationKey: true
+        
         
