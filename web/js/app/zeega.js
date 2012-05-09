@@ -108,7 +108,7 @@ this.zeega = {
 	
 	goToSequence : function(sequenceID, frameID)
 	{
-		this.cleanWorkspace();
+		this.unrenderFrame(this.currentFrame);
 		this.currentSequence.trigger('blur');
 		this.currentSequence = this.project.sequences.get(sequenceID);
 		this.currentSequence.trigger('focus');
@@ -117,7 +117,7 @@ this.zeega = {
 		console.log(this.currentSequence )
 		this.renderSequenceFrames();
 		
-		var nextFrame = frameID ? this.currentSequence.frames.get(frameID) : this.currentSequence.frames.at(0);
+		var nextFrame = frameID ? this.project.frames.get(frameID) : this.project.frames.get( this.currentSequence.get('frames')[0] );
 		console.log('next frame')
 		console.log(nextFrame)
 		this.loadFrame(nextFrame);
@@ -143,8 +143,6 @@ this.zeega = {
 		var _this = this;
 		this.unrenderFrame( this.currentFrame );
 		
-		//this.cleanWorkspace();
-		
 		if(this.currentFrame) this.currentFrame.trigger('blur');
 		this.currentFrame = frame;
 
@@ -160,6 +158,7 @@ this.zeega = {
 	
 	renderSequenceFrames : function()
 	{
+		console.log('render sequence frames!!!')
 		var _this = this;
 		//this is ugly
 		$('#frame-list').empty();
@@ -193,27 +192,17 @@ this.zeega = {
 			_.each( frame.get('layers'), function(layerID){
 				var layerModel = _this.project.layers.get(layerID);
 				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else layerModel.trigger('editor_layerUnrender')
+				else
+				{
+					if(layerModel.visual) layerModel.visual.remove();
+					if(layerModel.controls) layerModel.controls.remove();
+					layerModel.trigger('editor_layerExit');
+//					layerModel.trigger('editor_layerUnrender');
+				}
 			})
 		}
 	},
-	
-	cleanWorkspace : function()
-	{
-		console.log(this.currentSequence.layers)
-		if(this.currentSequence.layers.visible)
-		{
-			// remove all visible layers
-			_.each( this.currentSequence.layers.visible, function(layerModel){
-				if(layerModel.visual) layerModel.visual.remove();
-				if(layerModel.controls) layerModel.controls.remove();
-				layerModel.trigger('editor_layerExit');
-			})
-		}
-		// clear out the visible array
-		this.currentSequence.layers.visible = [];
-	},
-	
+
 	restorePanelStates : function()
 	{
 		//show/hide editor panels
