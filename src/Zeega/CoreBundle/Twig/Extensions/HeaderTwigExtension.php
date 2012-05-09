@@ -30,12 +30,16 @@ class HeaderTwigExtension extends \Twig_Extension
     		if(isset($user) && $user != "anon.")
     		{
     		    $sites = $user->getSites();
+    		    
     		    $session = $this->session;
         		$currentSite = $session->get('site');
+                
+                if(!isset($currentSite))
+                {
+            	    $currentSite = $sites[0];
+                }
 
-        		$projects = $this->doctrine
-        						 ->getRepository('ZeegaDataBundle:Project')
-        						 ->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
+        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
 
                 return array(
                     'site' => $currentSite,

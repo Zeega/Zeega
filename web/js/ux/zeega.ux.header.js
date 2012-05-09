@@ -26,12 +26,15 @@ function initHeaderUX(){
 	
 
 	$('.add-media a').click(function(){
-			$('#add-media').toggleClass('show');
-			$('body').on('click',function(){
-				$('#add-media').removeClass('show');
-			});
-			return false;
+		console.log('add media clicked')
+		
+		$('#add-media').toggleClass('show');
+		$('body').on('click',function(){
+			$('#add-media').removeClass('show');
 		});
+
+		return false;
+	});
 	
 	$('.new-project').click(function(){
 		$.ajax({

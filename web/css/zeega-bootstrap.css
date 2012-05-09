@@ -28,6 +28,7 @@
 .zicon-geo,
 .zicon-mapbox
 {background-position:-60px 0}
+.zicon-geo{background-position:-60px 0}
 .zicon-text{background-position:-80px 0}
 .zicon-audio{background-position:-100px 0}
 .zicon-link{background-position:-120px 0}
@@ -35,39 +36,49 @@
 .zicon-volume-off{background-position:-160px -50px}
 .zicon-trash-closed{background-position:-180px 0}
 .zicon-trash-open{background-position:-0px -20px}
-.zicon-add-media{background-position:-100px -100px}
-.zicon-add-user{background-position:-60px -100px}
-.zicon-user{background-position:-40px -100px}
+.zicon-add-media{background-position:-60px -100px}
+.zicon-add-user{background-position:-20px -100px}
+.zicon-user{background-position:0 -100px}
 .zicon-new-document{background-position:-40px -80px}
-.zicon-preview{background-position:-140px -100px}
-.zicon-share{background-position:-120px -100px}
+.zicon-preview{background-position:-100px -100px}
+.zicon-share{background-position:-80px -100px}
 .zicon-info{background-position:-60px -40px}
 .zicon-help{background-position:-80px -40px}
-.zicon-bold{background-position:-160px -100px}
-.zicon-italic{background-position:-180px -100px}
-.zicon-underline{background-position:0 -120px}
-.zicon-cancel{background-position:-20px -120px}
-.zicon-close{background-position:-40px -120px}
-.zicon-resize{background-position:-60px -120px}
+.zicon-bold{background-position:-120px -100px}
+.zicon-italic{background-position:-140px -100px}
+.zicon-underline{background-position:-160px -100px}
+.zicon-cancel{background-position:-180px -100px}
+.zicon-close{background-position:0 -120px}
+.zicon-resize{background-position:-20px -120px}
+.zicon-non-linear-link{background-position:-40px -120px}
+.zicon-old-document{background-position:-20px -80px}
+.zicon-new-frame{background-position:-80px -120px}
+.zicon-old-frame{background-position:-60px -120px}
+.zicon-options{background-position:-20px -60px}
 
-.zicon-search-dropdown
+
+[class^="zicon-"].small
 {
-	background-position:-0px -20px;
-	background-position: -0px -101px;
-	width: 30px;
+	width: 15px;
+	height: 15px;
+	background-image: url('../images/zicons-darkgrey-15.png');
 }
+.zicon-new-frame.small{background-position:-60px -90px}
+.zicon-old-frame.small{background-position:-45px -90px}
+.zicon-options.small{background-position:-15px -45px}
+
 
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
 {
 	display: inline-block;
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 	vertical-align: text-top;
-	background-image: url('../images/zicons-darkgrey-20.png');
+	background-image: url('../images/zicons-darkgrey-15.png');
 	background-position: 0px 0px;
 	background-repeat: no-repeat;
-	background-position:-60px -120px;
+	background-position:-15px -90px;
 }
 
 .filter-list{ z-index:100 }
@@ -100,6 +111,8 @@ img{ max-width:none }
 	max-height: 400px;
 	overflow: hidden;
 	overflow-y: auto;
+	color:#444;
+	font-size:12px; 
 }
 a.dropdown-toggle {
 	position: relative;

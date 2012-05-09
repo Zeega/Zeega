@@ -19,35 +19,28 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends Controller
 {
-    public function updateaaaaAction()
-    {
-        $users = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findAll();
-        $homeSite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
-        
-        foreach($users as $user)
-        {
-            $userSites = $user->getSites();
-            if(!$userSites->contains($homeSite))
-            {
-                $em = $this->getDoctrine()->getEntityManager();
-                $user->addSite($homeSite);
-                $em->persist($user);
-                $em->flush();
-            }
-        }
-    }
     public function homeAction()
     {
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
+        
         if(isset($site))
         {
             return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>$site->getShort()),array());
         }
 		else
 		{
-		    return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
+		    $user = $this->get('security.context')->getToken()->getUser();
+    		$sites = $user->getSites();
+    		
+    		if(isset($sites) && count($sites) > 0)
+    		{
+    		    return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>$sites[0]->getShort()),array());
+    		}
 		}
+		
+		// by default go home - this should never happen
+		//return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
     }
 
 	public function siteAction($short)
@@ -55,8 +48,13 @@ class EditorController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 
-		$projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
-		
+        if(!isset($site))
+        {
+            $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        }
+        
+        $projects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsBySite($site->getId());
+
 		$session = $this->getRequest()->getSession();
 
         // store an attribute for reuse during a later user request
