@@ -347,7 +347,7 @@ class CollectionsController extends Controller
         
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
-        if(isset($site))
+        if(!isset($site))
         {
             $sites = $user->getSites();
     		$site = $sites[0];
