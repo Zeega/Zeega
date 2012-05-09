@@ -2,7 +2,9 @@
 
 	Project.Model = Backbone.Model.extend({
 		
-		default_attr : {},
+		defaults : {
+			'cover_image' : 'http://dev.zeega.org/joseph/web/images/default_cover.png'
+		},
 		
 		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
 		
