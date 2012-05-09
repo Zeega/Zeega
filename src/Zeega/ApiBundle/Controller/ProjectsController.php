@@ -73,4 +73,29 @@ class ProjectsController extends Controller
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
         return ResponseHelper::compressTwigAndGetJsonResponse($projectView);       
     }
+    
+    public function postProjectLayersAction($projectId)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+    	
+    	$layer= new Layer();
+    	$layer->setProject($project);
+		$request = $this->getRequest();
+    	
+    	if($request->request->get('item_id'))
+    	{
+    	    $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
+			$layer->setItem($item);
+		}
+		
+		if($request->request->get("type")) $layer->setType($request->request->get("type"));   	
+    	if($request->request->get('text')) $layer->setText($request->request->get('text'));
+		if($request->request->get('attr')) $layer->setAttr($request->request->get('attr'));
+    	
+		$em->persist($layer);
+		$em->flush();
+        
+    	return ResponseHelper::encodeAndGetJsonResponse($layer);
+    } // `post_sequence_layers`   [POST] /sequences
 }
