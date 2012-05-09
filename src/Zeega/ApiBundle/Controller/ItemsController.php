@@ -124,17 +124,13 @@ class ItemsController extends Controller
 	    $item = new Item();
 	    
        	$session = $this->getRequest()->getSession();
-       	$site = $session->get('site');
-        if(!isset($site))
-        {
-            $sites = $user->getSites();
-    		$site = $sites[0];
-		}
+
+		$sites = $user->getSites();
+		$site = $sites[0];
         
 		$item->setSite($site);		
         $item->setTitle($this->getRequest()->request->get('title'));
         $item->setDescription($this->getRequest()->request->get('description'));
-		$item->setDescription($this->getRequest()->request->get('description'));
         $item->setMediaType($this->getRequest()->request->get('media_type'));
         $item->setDateCreated(new \DateTime("now"));
 		$item->setArchive($this->getRequest()->request->get('archive'));

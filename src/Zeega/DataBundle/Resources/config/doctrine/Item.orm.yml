@@ -26,6 +26,7 @@ Zeega\DataBundle\Entity\Item:
     manyToOne:
         site:
             targetEntity: Zeega\DataBundle\Entity\Site
+            cascade: ["persist"]
         user:
             targetEntity: Zeega\DataBundle\Entity\User
     id:
