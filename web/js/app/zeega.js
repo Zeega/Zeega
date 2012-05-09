@@ -368,7 +368,7 @@ this.zeega = {
 			console.log('show layer? '+ args.show() )
 
 			console.log(args)
-			return this.currentSequence.layers.addNewLayer( args )
+			return this.project.layers.addNewLayer( args )
 		}
 	},
 	

@@ -20,7 +20,7 @@
 		
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.currentSequence.id +'/layers';
+			if( this.isNew() ) return zeega.app.url_prefix + 'project/'+ zeega.app.project.id +'/layers';
 			else return zeega.app.url_prefix + "layers/" + this.id;
 		},
 		
