@@ -113,7 +113,6 @@ var Player2 = Backbone.View.extend({
 			}
 			
 		});
-
 		this.router = new Router();
 		Backbone.history.start();
 	},
