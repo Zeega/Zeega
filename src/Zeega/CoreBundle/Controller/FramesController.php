@@ -9,6 +9,7 @@ use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Doctrine\ORM\PersistentCollection;
 
 class FramesController extends Controller
 {
@@ -54,11 +55,11 @@ class FramesController extends Controller
 		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
 		if($request->request->get('layers')) 
 		{
-		    $currLayers = (array)$frame->getLayers();
+		    $currLayers = $frame->getLayers();
 		    foreach($request->request->get('layers') as $layer)
 		    {
-		        $layer = $em->getRepository('ZeegaDataBundle:Layer')->find($layer);
-			if(!in_array($layer, $currLayers))
+				$layer = $em->getRepository('ZeegaDataBundle:Layer')->find($layer);
+			if(!array_key_exists($layer->getId(), $currLayers))
 		            $frame->addLayer($layer);
 		    }
 		}
