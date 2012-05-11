@@ -21,6 +21,10 @@
 			this.createFrameCollection(attributes.frames);
 			this.createSequenceCollection( attributes.sequences );
 			
+			
+			this.layers.on('add', this.onAddLayer, this);
+			this.frames.on('add', this.onAddFrame, this);
+			
 			console.log('init PROJECT')
 			console.log(this)
 		},
@@ -39,11 +43,7 @@
 			var layerModelArray = [];
 			_.each( layers, function(layer){
 				var newLayer = new Layers[ layer.type ](layer);
-				
-				newLayer.on('editor_removeLayerFromFrame', _this.removeLayerFromFrame, _this);
-				//newLayer.on('copyToNext', _this.continueLayerToNextFrame, _this);
-				//newLayer.on('persist', _this.updatePersistLayer, _this);
-				
+				_this.initLayerListeners( newLayer );
 				layerModelArray.push( newLayer );
 			});
 			
@@ -63,6 +63,24 @@
 		},
 		
 		/*	end create collections	*/
+		
+		initLayerListeners : function( layerModel )
+		{
+			layerModel.on('editor_removeLayerFromFrame', this.removeLayerFromFrame, this);
+			//layerModel.on('copyToNext', this.continueLayerToNextFrame, this);
+			//layerModel.on('persist', this.updatePersistLayer, this);
+		},
+		
+		onAddLayer : function( layer )
+		{
+			this.initLayerListeners( layer );
+		},
+		
+		onAddFrame : function( frame )
+		{
+			console.log('added frame')
+			console.log(frame)
+		},
 		
 		removeLayerFromFrame : function( model )
 		{
