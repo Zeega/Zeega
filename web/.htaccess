@@ -7,8 +7,11 @@
 # Maintenance redirect - needs to be adjusted with the correct root folder and ip
 #Options +FollowSymlinks
 #    RewriteEngine on
-#    RewriteCond %{REQUEST_URI} !/zeega/web/maintenance.html$           # redirect all requests except this
-#    RewriteCond %{REQUEST_URI} !/zeega/web/images/zeegaAlpha.png$      # redirect all requests except this
-#    RewriteCond %{REMOTE_HOST} !^127.0.0.1                             # don't redirect requests from this IP address
+    # redirect all requests except these
 
-#    RewriteRule $ /zeega/web/maintenance.html [R=302,L]                # target file
+#    RewriteCond %{REQUEST_URI} !/maintenance.html$      
+#    RewriteCond %{REQUEST_URI} !/images/zeegaAlpha.png$
+    # don't redirect requests from this IP address
+#    RewriteCond %{REMOTE_HOST} !^67.186.132.2
+
+#    RewriteRule $ /maintenance.html [R=302,L]
