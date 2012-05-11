@@ -30,7 +30,6 @@
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
 			
-			
 			this.on('editor_layerRender', this.renderLayerInEditor, this );
 			this.on('editor_destroyLayer editor_layerUnrender', this.unrenderLayerFromEditor, this);
 			

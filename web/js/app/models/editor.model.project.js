@@ -35,23 +35,17 @@
 			var _this = this;
 			var Layers = zeega.module("layer");
 			
-			/*
-			var addListeners = function(layer)
-			{
-				layer.on('editor_removeLayerFromFrame', _this.removeLayerFromFrame, _this);
-				layer.on('copyToNext', _this.continueLayerToNextFrame, _this);
-				layer.on('persist', _this.updatePersistLayer, _this);
-			};
-			*/
-			
 			// generate layer models from layers
 			var layerModelArray = [];
 			_.each( layers, function(layer){
 				var newLayer = new Layers[ layer.type ](layer);
-				//addListeners(newLayer);
+				
+				newLayer.on('editor_removeLayerFromFrame', _this.removeLayerFromFrame, _this);
+				//newLayer.on('copyToNext', _this.continueLayerToNextFrame, _this);
+				//newLayer.on('persist', _this.updatePersistLayer, _this);
+				
 				layerModelArray.push( newLayer );
 			});
-			
 			
 			this.layers = new Layers.MasterCollection( layerModelArray );
 		},
@@ -69,6 +63,48 @@
 		},
 		
 		/*	end create collections	*/
+		
+		removeLayerFromFrame : function( model )
+		{
+			// if layer is persistent then remove ALL instances from frames
+			if( _.include( this.get('persistLayers'), parseInt(model.id) ) )
+			{
+				_.each( _.toArray( this.frames.collection ), function(frame){
+					var newLayers = _.without( frame.get('layers'), parseInt(model.id) );
+					if( newLayers.length == 0 ) newLayers = [false];
+					frame.set( 'layers' , newLayers );
+					frame.save();
+				});
+				var newPersistLayers = _.without( this.get('persistLayers'), parseInt(model.id) );
+				if( newPersistLayers.length == 0 ) newPersistLayers = [false];
+				this.set( 'persistLayers', newPersistLayers );
+				this.save();
+				model.destroy();
+			}
+			else
+			{
+				//remove from the current frame layer array
+				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
+				if( layerArray.length == 0 ) layerArray = [false];
+				
+				console.log(layerArray)
+				
+				zeega.app.currentFrame.set('layers',layerArray);
+				//zeega.app.currentFrame.save();
+				this.destroyOrphanLayers();
+			}
+		},
+		
+		destroyOrphanLayers : function()
+		{
+			var _this = this;
+			var layersInCollection = _.map( this.layers.pluck('id'), function(id){return parseInt(id)}); // all layers including orphans
+			var layersInFrames = _.flatten( this.frames.pluck('layers') ); // layers in use
+			var orphanLayerIDs = _.difference( layersInCollection, layersInFrames ); // layers to be nuked
+			_.each( orphanLayerIDs, function(orphanID){
+				_this.layers.get( orphanID ).destroy();
+			});
+		},
 		
 		loadProject : function()
 		{
