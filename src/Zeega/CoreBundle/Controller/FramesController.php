@@ -59,8 +59,11 @@ class FramesController extends Controller
 		    foreach($request->request->get('layers') as $layer)
 		    {
 				$layer = $em->getRepository('ZeegaDataBundle:Layer')->find($layer);
-			if(!array_key_exists($layer->getId(), $currLayers))
+				
+			    if(!$currLayers->contains($layer))
+			    {
 		            $frame->addLayer($layer);
+		        }
 		    }
 		}
 		
