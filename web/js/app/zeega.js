@@ -341,9 +341,9 @@ this.zeega = {
 						newFrame.render();
 					
 						newFrame.trigger('refresh_view');
-						_this.currentSequence.trigger('updateFrameOrder');
+						//_this.currentSequence.trigger('updateFrameOrder');
 						newFrame.trigger('updateThumb');
-						_this.currentSequence.frames.add( newFrame );
+						_this.project.frames.add( newFrame );
 						_this.loadFrame( newFrame );
 					}
 				});

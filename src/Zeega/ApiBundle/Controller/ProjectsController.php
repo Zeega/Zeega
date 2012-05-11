@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\DataBundle\Entity\Layer;
 
 class ProjectsController extends Controller
 {
