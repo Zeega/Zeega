@@ -21,7 +21,7 @@ var Player2 = Backbone.View.extend({
 	initialize: function(container,apiplayer){
 	
 		this.model= new Backbone.Model();
-		this.container=container;
+		this.container = container;
 		this.generateBackbone();
 		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
 		if( _.isUndefined(apiplayer) ) this.apiplayer = false;	
@@ -30,9 +30,7 @@ var Player2 = Backbone.View.extend({
 	},
 	
 	loadProject : function( data, options )
-	
 	{
-
 		this.render();
 		
 		this.data = data;
@@ -410,8 +408,6 @@ var Player2 = Backbone.View.extend({
 		else{
 			var viewWidth = window.innerWidth;
 			var viewHeight = window.innerHeight;
-			console.log(window.height);
-		
 		}
 
 		
@@ -596,7 +592,12 @@ var Player2 = Backbone.View.extend({
 	parseData : function( data )
 	{
 		// make sequence collection
-		this.sequences = new this.Sequences( data.project.sequences )
+		this.sequences = new this.Sequences( data.sequences );
+		this.frames = new this.LoadingCollection( data.frames );
+		this.layers = new this.LoadingCollection( data.layers );
+		console.log('	data parsed')
+		console.log(this)
+		
 		this.model.trigger('sequences_loaded');
 	},
 	
@@ -720,6 +721,7 @@ var Player2 = Backbone.View.extend({
 			parseData : function()
 			{
 				var __this = this;
+/*
 				//generate frames & layers collections
 				this.frames = new LoadingCollection( this.get('frames') );
 				
@@ -728,13 +730,13 @@ var Player2 = Backbone.View.extend({
 					var c = _.isNull(frame.get('layers')) ? 0 : frame.get('layers').length;
 					frame.loader = new loaderView({count: c });
 				})
-				
+*/				
 				/***************
 				
 				added loader view to each frame model
 				
 				**************/
-				
+/*				
 				var Layer = zeega.module('layer');
 				var layerArray = [];
 				_.each( this.get('layers'), function( layerData ){
@@ -747,7 +749,8 @@ var Player2 = Backbone.View.extend({
 				this.layers.on( 'ready', this.updateFrameStatus, this );
 				
 				this.unset('frames');
-				this.unset('layers')
+				this.unset('layers');
+*/
 			},
 			
 			updateFrameStatus : function( layerID )

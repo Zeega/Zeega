@@ -493,13 +493,12 @@ this.zeega = {
 
 		this.exportProject();
 
-		/*
-		this.cleanWorkspace();
+		
+		//this.cleanWorkspace();
 
 		this.player = new Player2($('body'));
-		
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
-		*/
+		
 	},
 	
 	restoreFromPreview : function()
@@ -511,18 +510,16 @@ this.zeega = {
 	exportProject : function( string )
 	{
 		console.log('-- EXPORT --');
-
-		console.log( this.project.toJSON() )
 		
 		var projectObject = this.project.toJSON();
-		var framesObject = {frames:this.project.frames.toJSON()};
-		var layersObject = {layers:this.project.layers.toJSON()};
+		var stuff = {
+			sequences : this.project.sequences.toJSON(),
+			frames:this.project.frames.toJSON(),
+			layers:this.project.layers.toJSON()
+		}
 		
-		console.log(projectObject);
-		console.log(framesObject);
-		console.log(layersObject);
+		_.extend(projectObject,stuff);
 		
-		_.extend(projectObject,framesObject,layersObject);
 		console.log(projectObject);
 		
 /*
@@ -546,14 +543,12 @@ this.zeega = {
 			'title' : this.project.get('title'),
 			'sequences' : sequences
 		};
-
 		var exportObject = { 'project' : project };
 		console.log(exportObject)
-
-		if(string) return JSON.stringify(exportObject);
-		else return exportObject;
-		
 */
+
+		if(string) return JSON.stringify(projectObject);
+		else return projectObject;
 	},	
 
 	getLeftFrame : function()
