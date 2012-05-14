@@ -10,26 +10,26 @@ Zeega\DataBundle\Entity\Frame:
                 sequence_id:
                     referencedColumnName: id
                     onDelete: CASCADE
-    manyToMany:
-        layers:
-            targetEntity: Zeega\DataBundle\Entity\Layer
-            inversedBy: frames
-            joinTable:
-                name: frames_layers
-                inverseJoinColumns:
-                    layer_id:
-                        referencedColumnName: id
-                joinColumns:
-                    frame_id:
-                        referencedColumnName: id
+        project:
+            targetEntity: Project
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+
     id:
         id:
             type: integer
             generator: { strategy: AUTO }
     fields:
-        sequence_index:
+        sequence_id:
             type: integer
-            length: 2
+            associationKey: true
+        project_id:
+            type: integer
+            associationKey: true
+        layers:
+            type: array
             nullable: true
         attr:
             type: array
@@ -41,8 +41,4 @@ Zeega\DataBundle\Entity\Frame:
         enabled:
             type: boolean
             nullable: true
-        sequence_id:
-            type: integer
-            associationKey: true
-        
  

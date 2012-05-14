@@ -15,9 +15,19 @@ class Frame
     private $id;
 
     /**
-     * @var integer $sequence_index
+     * @var integer $sequence_id
      */
-    private $sequence_index;
+    private $sequence_id;
+
+    /**
+     * @var integer $project_id
+     */
+    private $project_id;
+
+    /**
+     * @var array $layers
+     */
+    private $layers;
 
     /**
      * @var array $attr
@@ -35,27 +45,16 @@ class Frame
     private $enabled;
 
     /**
-     * @var integer $sequence_id
-     */
-    private $sequence_id;
-
-    /**
      * @var Zeega\DataBundle\Entity\Sequence
      */
     private $sequence;
 
     /**
-     * @var Zeega\DataBundle\Entity\Layer
+     * @var Zeega\DataBundle\Entity\Project
      */
-    private $layers;
+    private $project;
 
-    public function __construct()
-    {
-        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->created_at = new \DateTime();
-        $this->thumbnail_url = "http://mlhplayground.org/gamma-james/images/thumb.png";
-    }
-    
+
     /**
      * Get id
      *
@@ -67,23 +66,63 @@ class Frame
     }
 
     /**
-     * Set sequence_index
+     * Set sequence_id
      *
-     * @param integer $sequenceIndex
+     * @param integer $sequenceId
      */
-    public function setSequenceIndex($sequenceIndex)
+    public function setSequenceId($sequenceId)
     {
-        $this->sequence_index = $sequenceIndex;
+        $this->sequence_id = $sequenceId;
     }
 
     /**
-     * Get sequence_index
+     * Get sequence_id
      *
      * @return integer 
      */
-    public function getSequenceIndex()
+    public function getSequenceId()
     {
-        return $this->sequence_index;
+        return $this->sequence_id;
+    }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->project_id = $projectId;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProjectId()
+    {
+        return $this->project_id;
+    }
+
+    /**
+     * Set layers
+     *
+     * @param array $layers
+     */
+    public function setLayers($layers)
+    {
+        $this->layers = $layers;
+    }
+
+    /**
+     * Get layers
+     *
+     * @return array 
+     */
+    public function getLayers()
+    {
+        return $this->layers;
     }
 
     /**
@@ -147,26 +186,6 @@ class Frame
     }
 
     /**
-     * Set sequence_id
-     *
-     * @param integer $sequenceId
-     */
-    public function setSequenceId($sequenceId)
-    {
-        $this->sequence_id = $sequenceId;
-    }
-
-    /**
-     * Get sequence_id
-     *
-     * @return integer 
-     */
-    public function getSequenceId()
-    {
-        return $this->sequence_id;
-    }
-
-    /**
      * Set sequence
      *
      * @param Zeega\DataBundle\Entity\Sequence $sequence
@@ -187,22 +206,22 @@ class Frame
     }
 
     /**
-     * Add layers
+     * Set project
      *
-     * @param Zeega\DataBundle\Entity\Layer $layers
+     * @param Zeega\DataBundle\Entity\Project $project
      */
-    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
     {
-        $this->layers[] = $layers;
+        $this->project = $project;
     }
 
     /**
-     * Get layers
+     * Get project
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Zeega\DataBundle\Entity\Project 
      */
-    public function getLayers()
+    public function getProject()
     {
-        return $this->layers;
+        return $this->project;
     }
 }

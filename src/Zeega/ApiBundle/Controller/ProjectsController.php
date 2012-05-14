@@ -10,6 +10,7 @@ use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Layer;
+use Zeega\DataBundle\Entity\Frame;
 
 class ProjectsController extends Controller
 {
@@ -52,7 +53,7 @@ class ProjectsController extends Controller
 
         if (!$project) 
         {
-            throw $this->createNotFoundException('Unable to find the Item with the id ' + $projectId);
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
 		$title = $request_data->get('title');
@@ -98,5 +99,30 @@ class ProjectsController extends Controller
 		$em->flush();
         
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
+    } // `post_sequence_layers`   [POST] /sequences
+
+    public function postProjectSequencesFramesAction($projectId,$sequenceId)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+     	$sequence = $em->getRepository('ZeegaDataBundle:Sequence')->find($sequenceId);
+     	
+    	$frame = new Frame();
+    	$frame->setProject($project);
+    	$frame->setSequence($sequence);
+        $frame->setEnabled(true);
+
+		$request = $this->getRequest();
+    	
+   		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
+   		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
+   		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
+
+   		$em->persist($frame);
+   		$em->flush();
+        
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+
+    	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
 }
