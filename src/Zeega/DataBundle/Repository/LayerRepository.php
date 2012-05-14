@@ -30,4 +30,16 @@ class LayerRepository extends EntityRepository
  					->getArrayResult();
 	}
     
+    public function findByMultipleIds($layers)
+    {
+		return $this->getEntityManager()
+        			->createQueryBuilder()
+        			->add('select', 'l')
+        			->from('ZeegaDataBundle:Layer', 'l')
+					->where('l.id in (:layers)')
+					->setParameters(array('layers'=>$layers))
+ 					->getQuery()
+ 					->getResult();
+	}
+	
 }

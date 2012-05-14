@@ -31,5 +31,3 @@ Zeega\DataBundle\Entity\Layer:
         project_id:
             type: integer
             associationKey: true
-        
-        

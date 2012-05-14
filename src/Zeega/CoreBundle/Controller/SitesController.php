@@ -89,6 +89,7 @@ class SitesController extends Controller
 		$sequence = new Sequence();
 		$frame = new Frame();
 		$frame->setSequence($sequence);
+		$frame->setProject($project);
 		$project->setSite($site);
 		$project->addUser($user);
 		$sequence->setProject($project);
@@ -101,47 +102,4 @@ class SitesController extends Controller
 		$em->flush();
 		return new Response($project->getId());
     }
-    
-        
-    /*
-
-	// `put_site`     [PUT] /sites/{site_id}
-    public function putSiteAction($site_id)
-    {
-    	$request = $this->getRequest();
-      	$em =$this->getDoctrine()->getEntityManager();
-     	$site= $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneById($site_id);
-    	if($request->request->get('title'))$site->setTitle($request->request->get('title'));
-		$em->flush();
-    	return new Response('SUCCESS',200);
-    } 
-
-
-	// `delete_site`  [DELETE] /sites/{site_id}
-    public function deleteSiteAction($site_id)
-    {
-    
-    	$em = $this->getDoctrine()->getEntityManager();
-     	$site= $em->getRepository('ZeegaDataBundle:Site')->find($site_id);
-    
-    	$em->remove($site);
-    	$em->flush();
-    	return new Response('SUCCESS',200);
-    
-    
-    } 
-
-	// `get_site_sequences`    [GET] /sites/{site_id}/sequences
-    public function getSiteSequencesAction($site_id)
-    {
-    		
-    		return new Response(json_encode($this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Frame')
-        				->findSequencesBySiteId($site_id)));
-    
-    } 
-
-	*/
-	
-
 }

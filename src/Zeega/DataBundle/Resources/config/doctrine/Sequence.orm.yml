@@ -16,13 +16,13 @@ Zeega\DataBundle\Entity\Sequence:
             type: integer
             generator: { strategy: AUTO }
     fields:
+        project_id:
+            type: integer
+            associationKey: true
         title:
             type: string
             length: 255
         attr:
             type: array
             nullable: true
-        project_id:
-            type: integer
-            associationKey: true
  

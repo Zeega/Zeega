@@ -2,11 +2,11 @@
 	"project":
 	 {
 		"id" : {{ project.getId() }},
-		"title" : {{ project.getTitle() | default(null) | json_encode | raw}},
+		"title" : {{ project.getTitle() | default("") | json_encode | raw}},
 		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
-        "tags" : {{ project.getTags() | default(null) | json_encode | raw}},
-		"authors" : {{ project.getAuthors() | default(null) | json_encode | raw}},
-		"cover_image" : {{ project.getCoverImage() | default(null) | json_encode | raw}},
+        "tags" : {{ project.getTags() | default("") | json_encode | raw}},
+		"authors" : {{ project.getAuthors() | default("") | json_encode | raw}},
+		"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
 		"enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
 		"published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 		"sequences" : [
@@ -34,10 +34,8 @@
 			{% for frame in frames %}
 			{	
 				"id" : {{ frame.id | json_encode | raw}},
-				"sequence_id" : {{ frame.sequenceId | json_encode | raw}},
-				"sequence_index" : {{ frame.sequenceIndex | json_encode | raw}},
-				"attr" : {{ frame.attr | json_encode | raw}},
-				"thumbnail_url" : {{ frame.thumbnailUrl | json_encode | raw}},
+				"attr" : {{ frame.attr | default("") | json_encode | raw}},
+				"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
 				"layers" : 
 				[
 				{% for layer in frame.layers -%}	
@@ -53,13 +51,13 @@
 			{%- endif -%}			
 			{% endfor %}
 		],
-		"layers" : [
+		"layers":[
 			{% for layer in layers %}
-				{{ layer | json_encode_entity | raw}}
-			{%- if loop.index0 < layers|length - 1 -%}
-			,
-			{%- endif -%}			
-			{% endfor %}
+				{% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %}	
+				{%- if loop.index0 < layers|length - 1 -%}
+				,
+				{%- endif -%}
+		    {% endfor %}
 		]
 	 }
 }

@@ -1,4 +1,3 @@
-# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
 Zeega\DataBundle\Entity\Frame:
     type: entity
     table: frame
@@ -8,6 +7,12 @@ Zeega\DataBundle\Entity\Frame:
             targetEntity: Sequence
             joinColumns:
                 sequence_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+        project:
+            targetEntity: Project
+            joinColumns:
+                project_id:
                     referencedColumnName: id
                     onDelete: CASCADE
     manyToMany:
@@ -27,10 +32,12 @@ Zeega\DataBundle\Entity\Frame:
             type: integer
             generator: { strategy: AUTO }
     fields:
-        sequence_index:
+        sequence_id:
             type: integer
-            length: 2
-            nullable: true
+            associationKey: true
+        project_id:
+            type: integer
+            associationKey: true
         attr:
             type: array
             nullable: true
@@ -41,8 +48,5 @@ Zeega\DataBundle\Entity\Frame:
         enabled:
             type: boolean
             nullable: true
-        sequence_id:
-            type: integer
-            associationKey: true
-        
+
  

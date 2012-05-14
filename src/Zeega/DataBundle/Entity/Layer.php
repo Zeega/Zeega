@@ -15,6 +15,11 @@ class Layer
     private $id;
 
     /**
+     * @var integer $project_id
+     */
+    private $project_id;
+
+    /**
      * @var string $type
      */
     private $type;
@@ -35,15 +40,11 @@ class Layer
     private $item;
 
     /**
-     * @var Zeega\DataBundle\Entity\Sequence
+     * @var Zeega\DataBundle\Entity\Project
      */
-    private $sequences;
+    private $project;
 
-    public function __construct()
-    {
-        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Get id
      *
@@ -52,6 +53,26 @@ class Layer
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->project_id = $projectId;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProjectId()
+    {
+        return $this->project_id;
     }
 
     /**
@@ -135,56 +156,6 @@ class Layer
     }
 
     /**
-     * Add sequences
-     *
-     * @param Zeega\DataBundle\Entity\Sequence $sequences
-     */
-    public function addSequence(\Zeega\DataBundle\Entity\Sequence $sequences)
-    {
-        $this->sequences[] = $sequences;
-    }
-
-    /**
-     * Get sequences
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSequences()
-    {
-        return $this->sequences;
-    }
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $frames;
-
-
-    /**
-     * Add frames
-     *
-     * @param Zeega\DataBundle\Entity\Frame $frames
-     */
-    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
-    {
-        $this->frames[] = $frames;
-    }
-
-    /**
-     * Get frames
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getFrames()
-    {
-        return $this->frames;
-    }
-    /**
-     * @var Zeega\DataBundle\Entity\Project
-     */
-    private $project;
-
-
-    /**
      * Set project
      *
      * @param Zeega\DataBundle\Entity\Project $project
@@ -204,28 +175,32 @@ class Layer
         return $this->project;
     }
     /**
-     * @var integer $project_id
+     * @var Zeega\DataBundle\Entity\Frame
      */
-    private $project_id;
+    private $frames;
 
-
-    /**
-     * Set project_id
-     *
-     * @param integer $projectId
-     */
-    public function setProjectId($projectId)
+    public function __construct()
     {
-        $this->project_id = $projectId;
+        $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Entity\Frame $frames
+     */
+    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
+    {
+        $this->frames[] = $frames;
     }
 
     /**
-     * Get project_id
+     * Get frames
      *
-     * @return integer 
+     * @return Doctrine\Common\Collections\Collection 
      */
-    public function getProjectId()
+    public function getFrames()
     {
-        return $this->project_id;
+        return $this->frames;
     }
 }

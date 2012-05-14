@@ -12,19 +12,6 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class LayersController extends Controller
 {
-    public function getLayersAction()
-    {
-    } // `get_layers`    [GET] /Layers
-
-
-
-    public function postLayersAction()
-    {
-    	
- 
-    } // `post_layers`   [POST] /Layers
-
-
     public function putLayerAction($layer_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
