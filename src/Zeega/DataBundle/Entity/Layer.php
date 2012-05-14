@@ -174,4 +174,33 @@ class Layer
     {
         return $this->project;
     }
+    /**
+     * @var Zeega\DataBundle\Entity\Frame
+     */
+    private $frames;
+
+    public function __construct()
+    {
+        $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Entity\Frame $frames
+     */
+    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
+    {
+        $this->frames[] = $frames;
+    }
+
+    /**
+     * Get frames
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getFrames()
+    {
+        return $this->frames;
+    }
 }

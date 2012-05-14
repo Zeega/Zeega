@@ -25,11 +25,6 @@ class Frame
     private $project_id;
 
     /**
-     * @var array $layers
-     */
-    private $layers;
-
-    /**
      * @var array $attr
      */
     private $attr;
@@ -54,7 +49,16 @@ class Frame
      */
     private $project;
 
+    /**
+     * @var Zeega\DataBundle\Entity\Layer
+     */
+    private $layers;
 
+    public function __construct()
+    {
+        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -103,26 +107,6 @@ class Frame
     public function getProjectId()
     {
         return $this->project_id;
-    }
-
-    /**
-     * Set layers
-     *
-     * @param array $layers
-     */
-    public function setLayers($layers)
-    {
-        $this->layers = $layers;
-    }
-
-    /**
-     * Get layers
-     *
-     * @return array 
-     */
-    public function getLayers()
-    {
-        return $this->layers;
     }
 
     /**
@@ -223,5 +207,25 @@ class Frame
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Entity\Layer $layers
+     */
+    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
+    {
+        $this->layers[] = $layers;
+    }
+
+    /**
+     * Get layers
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLayers()
+    {
+        return $this->layers;
     }
 }

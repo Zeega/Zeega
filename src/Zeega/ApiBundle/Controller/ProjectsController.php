@@ -24,7 +24,7 @@ class ProjectsController extends Controller
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findByProjectId($id);
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
 		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
 		
 		$sequenceFrames = array();
@@ -115,7 +115,6 @@ class ProjectsController extends Controller
 		$request = $this->getRequest();
     	
    		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-   		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
    		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 
    		$em->persist($frame);

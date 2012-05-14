@@ -15,6 +15,16 @@ class Sequence
     private $id;
 
     /**
+     * @var integer $project_id
+     */
+    private $project_id;
+
+    /**
+     * @var string $frames
+     */
+    private $frames;
+
+    /**
      * @var string $title
      */
     private $title;
@@ -29,16 +39,7 @@ class Sequence
      */
     private $project;
 
-    /**
-     * @var Zeega\DataBundle\Entity\Layer
-     */
-    private $layers;
 
-    public function __construct()
-    {
-        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Get id
      *
@@ -47,6 +48,46 @@ class Sequence
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $projectId
+     */
+    public function setProjectId($projectId)
+    {
+        $this->project_id = $projectId;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProjectId()
+    {
+        return $this->project_id;
+    }
+
+    /**
+     * Set frames
+     *
+     * @param string $frames
+     */
+    public function setFrames($frames)
+    {
+        $this->frames = $frames;
+    }
+
+    /**
+     * Get frames
+     *
+     * @return string 
+     */
+    public function getFrames()
+    {
+        return $this->frames;
     }
 
     /**
@@ -107,50 +148,5 @@ class Sequence
     public function getProject()
     {
         return $this->project;
-    }
-
-    /**
-     * Add layers
-     *
-     * @param Zeega\DataBundle\Entity\Layer $layers
-     */
-    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
-    {
-        $this->layers[] = $layers;
-    }
-
-    /**
-     * Get layers
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getLayers()
-    {
-        return $this->layers;
-    }
-    /**
-     * @var integer $project_id
-     */
-    private $project_id;
-
-
-    /**
-     * Set project_id
-     *
-     * @param integer $projectId
-     */
-    public function setProjectId($projectId)
-    {
-        $this->project_id = $projectId;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProjectId()
-    {
-        return $this->project_id;
     }
 }

@@ -89,6 +89,7 @@ class SitesController extends Controller
 		$sequence = new Sequence();
 		$frame = new Frame();
 		$frame->setSequence($sequence);
+		$frame->setProject($project);
 		$project->setSite($site);
 		$project->addUser($user);
 		$sequence->setProject($project);

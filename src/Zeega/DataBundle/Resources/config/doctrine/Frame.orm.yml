@@ -1,4 +1,3 @@
-# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
 Zeega\DataBundle\Entity\Frame:
     type: entity
     table: frame
@@ -16,7 +15,18 @@ Zeega\DataBundle\Entity\Frame:
                 project_id:
                     referencedColumnName: id
                     onDelete: CASCADE
-
+    manyToMany:
+        layers:
+            targetEntity: Zeega\DataBundle\Entity\Layer
+            inversedBy: frames
+            joinTable:
+                name: frames_layers
+                inverseJoinColumns:
+                    layer_id:
+                        referencedColumnName: id
+                joinColumns:
+                    frame_id:
+                        referencedColumnName: id
     id:
         id:
             type: integer
@@ -28,9 +38,6 @@ Zeega\DataBundle\Entity\Frame:
         project_id:
             type: integer
             associationKey: true
-        layers:
-            type: array
-            nullable: true
         attr:
             type: array
             nullable: true
@@ -41,4 +48,5 @@ Zeega\DataBundle\Entity\Frame:
         enabled:
             type: boolean
             nullable: true
+
  

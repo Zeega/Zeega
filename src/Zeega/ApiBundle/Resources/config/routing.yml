@@ -18,3 +18,8 @@ items:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\ItemsController
+    
+api_frames:
+    type:     rest
+    prefix:   api
+    resource: Zeega\ApiBundle\Controller\FramesController

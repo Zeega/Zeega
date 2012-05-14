@@ -5,7 +5,7 @@
 {% macro show(item) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
-		"id" : {{ item.id is empty ? "null" : item.id }},
+		"id" : {{ item.id is empty ? "" : item.id }},
 		"title" : {{ item.title | json_encode | raw}},
 		"description" : {{ item.description | default("") | json_encode | raw}},
 		"text" : {{ item.text | default("") | json_encode | raw}},
