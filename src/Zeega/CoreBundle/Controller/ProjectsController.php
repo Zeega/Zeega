@@ -15,13 +15,6 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ProjectsController extends Controller
 {
-	 // `post_project`   [POST] /projects
-    public function postProjectAction()
-    {
-
-        
-    }
-
 	// `get_project`     [GET] /projects/{project_id}
     public function getProjectAction($project_id)
     {

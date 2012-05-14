@@ -13,27 +13,6 @@ use Doctrine\ORM\PersistentCollection;
 
 class FramesController extends Controller
 {
-    
-   
-    
-     public function getFramesAction()
-    {
-    
-
-    
-    } // `get_frames`    [GET] /frames
-
-
-
-    public function postFramesAction()
-    {
-    
-    
-    	
-        
-    } // `post_frames`   [POST] /frames
-
- 
     public function getFrameAction($frame_id)
     {
     
