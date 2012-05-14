@@ -18,12 +18,12 @@ class PublishController extends Controller
     {
         $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
 
-    	$layerList = $frame->getLayers();
+    	$layerList = $frame->getLayers()->toArray();
     
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
 					'frameId'=> $frame->getId(),
 					'frame'=>ResponseHelper::serializeEntityToJson($frame),
-					'layers'=>ResponseHelper::serializeEntityToJson($frame->getLayers())
+					'layers'=>ResponseHelper::serializeEntityToJson($layerList)
 				));
      }
      

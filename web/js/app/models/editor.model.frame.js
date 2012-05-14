@@ -59,6 +59,7 @@
 		{
 			if(!this.isNew())
 			{
+				console.log('SAVE FRAME: '+ this.id)
 				this.save();
 				this.updateThumb();
 			}

@@ -76,9 +76,7 @@
 				return false;
 			})
 		
-			$(this.el).find('.menu-items a').click(function(){
-
-				event.stopPropagation();
+			$(this.el).find('.nav-list a').click(function(){
 			
 				switch($(this).data('action'))
 				{
@@ -97,6 +95,8 @@
 					default:
 						console.log('not recognized')
 				}
+				event.stopPropagation();
+				
 				return false;
 			})
 		
@@ -138,8 +138,6 @@
 		openDropdown : function()
 		{
 			$(this.el).find('.menu').show();
-			
-
 			event.stopPropagation();
 		},
 	
