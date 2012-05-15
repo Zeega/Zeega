@@ -346,14 +346,21 @@ class CollectionsController extends Controller
         $collection->setTitle($title);
         
         $session = $this->getRequest()->getSession();
+        
         $site = $session->get('site');
-        if(!isset($site))
+        if(isset($site))
         {
-            $sites = $user->getSites();
+            $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
+		}
+	
+		if(!isset($site))
+		{
+		    $sites = $user->getSites();
     		$site = $sites[0];
 		}
-        
-		$collection->setSite($site);
+		
+        //return new Response(var_dump($site->getId()));
+        $collection->setSite($site);
         
         if (isset($new_items) && !isset($collection_id))
         {
