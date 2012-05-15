@@ -228,4 +228,29 @@ class Frame
     {
         return $this->layers;
     }
+    /**
+     * @var integer $sequence_index
+     */
+    private $sequence_index;
+
+
+    /**
+     * Set sequence_index
+     *
+     * @param integer $sequenceIndex
+     */
+    public function setSequenceIndex($sequenceIndex)
+    {
+        $this->sequence_index = $sequenceIndex;
+    }
+
+    /**
+     * Get sequence_index
+     *
+     * @return integer 
+     */
+    public function getSequenceIndex()
+    {
+        return $this->sequence_index;
+    }
 }

@@ -122,9 +122,9 @@ class WidgetController extends Controller
 		return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,
-			'item'=>json_encode($items), 
+			'item'=>json_encode(array()), 
 			'mycollection'=>$mycollection,
-			'urlmessage' => $message,
+			'urlmessage' => '',
 			'url'=> $itemUrl,
 		));
 	}	

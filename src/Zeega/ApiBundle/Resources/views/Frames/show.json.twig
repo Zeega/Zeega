@@ -5,7 +5,7 @@
 		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},
 		"layers":[
 		{% for layer in frame.getLayers %}
-			{% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %}	
+			{{layer.getId()}}
 			{%- if loop.index0 < frame.getLayers|length - 1 -%}
 			,
 			{%- endif -%}

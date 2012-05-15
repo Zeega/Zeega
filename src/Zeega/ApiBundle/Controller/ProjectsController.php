@@ -104,24 +104,59 @@ class ProjectsController extends Controller
     public function postProjectSequencesFramesAction($projectId,$sequenceId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
      	$sequence = $em->getRepository('ZeegaDataBundle:Sequence')->find($sequenceId);
      	
-    	$frame = new Frame();
+     	$frame = new Frame();
     	$frame->setProject($project);
     	$frame->setSequence($sequence);
-        $frame->setEnabled(true);
+     	
+     	$request = $this->getRequest();
+     	
+     	if($request->request->get('duplicate_id'))
+        {
+            $original_frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($request->request->get('duplicate_id'));
 
-		$request = $this->getRequest();
-    	
-   		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-   		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
-
-   		$em->persist($frame);
-   		$em->flush();
+            if($original_frame->getThumbnailUrl()) $frame->setThumbnailUrl($original_frame->getThumbnailUrl());
+            if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
         
+            $original_layers = $original_frame->getLayers();
+            
+            if($original_layers)
+            {
+                foreach($original_layers as $original_layer)
+                {
+                    $frame->addLayer($original_layer);
+                }
+                $em->persist($frame);
+                $em->flush();
+            }
+        }
+        else
+        {
+            $currFrames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence_id"=>$sequenceId));
+
+        	$frame = new Frame();
+        	$frame->setProject($project);
+        	$frame->setSequence($sequence);
+        	$frame->setSequenceIndex(count($currFrames));
+            $frame->setEnabled(true);
+
+
+
+    		$request = $this->getRequest();
+
+       		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
+       		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
+
+       		$em->persist($frame);
+       		$em->flush();
+
+        }
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
+        
+     	
     } // `post_sequence_layers`   [POST] /sequences
 }

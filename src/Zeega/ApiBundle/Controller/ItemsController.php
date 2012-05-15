@@ -125,8 +125,17 @@ class ItemsController extends Controller
 	    
        	$session = $this->getRequest()->getSession();
 
-		$sites = $user->getSites();
-		$site = $sites[0];
+		$site = $session->get('site');
+        if(isset($site))
+        {
+            $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
+		}
+	
+		if(!isset($site))
+		{
+		    $sites = $user->getSites();
+    		$site = $sites[0];
+		}
         
 		$item->setSite($site);		
         $item->setTitle($this->getRequest()->request->get('title'));
