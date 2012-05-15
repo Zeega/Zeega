@@ -104,7 +104,7 @@
 			console.log(_.compact(layerOrder))
 			//set the layerOrder array inside the frame
 			frame.set({'layers': _.compact(layerOrder) });
-			//frame.save();
+			frame.save();
 		},
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },

@@ -12,7 +12,6 @@
 function initUX(){
 	initHeaderUX();
 
-
 //		POPOVERS		//
 	$('.info').popover({
 		'delayIn' : 0
@@ -359,10 +358,7 @@ $('#new-layer-list a').click(function(){
 		}
 	});
 	
-	
-	
 
-	
 	//hide layer content initially
 	$(".layer-list a:first").click(function(){
 		console.log('sortable layers');
@@ -387,7 +383,7 @@ $('#new-layer-list a').click(function(){
 		tolerance: 'pointer',
 		distance: 10,
 		
-		stop : function(){ zeega.app.currentSequence.updateFrameOrder() }
+		stop : function(){ zeega.app.updateFrameOrder() }
 	});
 	
 	$( "#layers-list-visual" )

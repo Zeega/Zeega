@@ -82,6 +82,53 @@
 			console.log(frame)
 		},
 		
+		duplicateFrame : function( frameModel )
+		{
+			console.log('	DUPLICATE FRAME')
+			var _this = this;
+			var dupeModel = frameModel.clone();
+			
+			dupeModel.set( 'duplicate_id' , parseInt(frameModel.id) );
+			dupeModel.oldLayerIDs = frameModel.get('layers');
+			dupeModel.frameIndex = _.indexOf( this.get('framesOrder'), frameModel.id );
+			dupeModel.dupe = true;
+			dupeModel.set('id',null);
+			
+			dupeModel.save({},{
+				success : function( savedFrame )
+				{
+					console.log('frame saved and is a duplicate')
+					console.log(savedFrame)
+					_this.insertFrameView( savedFrame , dupeModel.frameIndex );
+				
+					//zeega.app.currentSequence.get('frames');
+				
+					//clone layers and place them into the layer array
+					_.each( savedFrame.oldLayerIDs , function(layerID, i){
+
+						//if layer is persistent
+						//replace frameIndex the id with the persistent id
+
+						var persistLayers = _this.get('attr').persistLayers;
+
+						if( _.include( persistLayers, parseInt(layerID) ) )
+						{
+							var layerOrder = savedFrame.get('layers');
+							layerOrder[i] = String(layerID);
+							savedFrame.set({layers:layerOrder})
+						}
+						else
+						{
+							_this.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
+						}
+					})
+					//resave the frame after being updated with persistent frame ids
+				}
+			});
+			
+			this.frames.add( dupeModel );
+		},
+		
 		removeLayerFromFrame : function( model )
 		{
 			// if layer is persistent then remove ALL instances from frames

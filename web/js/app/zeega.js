@@ -352,9 +352,21 @@ this.zeega = {
 		}
 	},
 	
+	updateFrameOrder : function( save )
+	{
+		console.log('	UPDATE FRAME ORDER')
+		this.currentSequence.updateFrameOrder();
+		/*
+		this.frames.trigger('resort',frameIDArray);
+		var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+		this.set( { framesOrder: frameIDArray } );
+		if( save != false ) this.save();
+		*/
+	},
+	
 	duplicateFrame : function( frameModel )
 	{
-		if(!this.busy) this.currentSequence.duplicateFrame( frameModel )
+		if(!this.busy) this.project.duplicateFrame( frameModel );
 	},
 	
 	addLayer : function( args )
