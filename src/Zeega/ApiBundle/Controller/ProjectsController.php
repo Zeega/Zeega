@@ -107,10 +107,15 @@ class ProjectsController extends Controller
      	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
      	$sequence = $em->getRepository('ZeegaDataBundle:Sequence')->find($sequenceId);
      	
+     	$currFrames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence_id"=>$sequenceId));
+     	
     	$frame = new Frame();
     	$frame->setProject($project);
     	$frame->setSequence($sequence);
+    	$frame->setSequenceIndex(count($currFrames));
         $frame->setEnabled(true);
+        
+        
 
 		$request = $this->getRequest();
     	

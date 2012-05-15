@@ -66,7 +66,7 @@ class SequencesController extends Controller
 
         if($request->request->get('frames'))
         {
-            $frames = $request->request->get('framesOrder');
+            $frames = $request->request->get('frames');
             $i = 0;
             $s = count($frames);
             foreach($frames as $frameId)
