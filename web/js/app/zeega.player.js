@@ -134,7 +134,7 @@ var Player2 = Backbone.View.extend({
 		var frameOrder = this.currentSequence.get('frames') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
 		this.currentSequence.set('frames',frameOrder);
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
-
+		console.log(frameOrder)
 		//see if frame's layers are preloaded // starting with the currentFrame
 		//look ahead 2 and behind 2 // include current frame also
 		
@@ -208,7 +208,7 @@ var Player2 = Backbone.View.extend({
 		
 		var removeLayers = _.difference(oldLayers, newLayers);
 		_.each( removeLayers, function( layerID ){
-			_this.currentSequence.layers.get( layerID ).trigger('player_exit')
+			_this.layers.get( layerID ).trigger('player_exit')
 		})
 	},
 	
@@ -272,11 +272,11 @@ var Player2 = Backbone.View.extend({
 	getLeft : function( step )
 	{
 		if( _.isUndefined( step ) ) step = 1;
-		var frameOrder = this.currentSequence.get('frameOrder');
+		var frameOrder = this.currentSequence.get('frames');
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
 				
 		if( index - step < 0 ) return false;
-		else return this.currentSequence.frames.get( frameOrder[index-step] );
+		else return this.frames.get( frameOrder[index-step] );
 	},
 	
 	getRight : function( step )
@@ -286,7 +286,7 @@ var Player2 = Backbone.View.extend({
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
 		
 		if( index+1 + step > frameOrder.length ) return false;
-		else return this.currentSequence.frames.get( frameOrder[index+step] );
+		else return this.frames.get( frameOrder[index+step] );
 	},
 	
 	updateCitations : function()
