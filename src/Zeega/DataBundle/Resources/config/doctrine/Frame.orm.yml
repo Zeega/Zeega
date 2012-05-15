@@ -35,6 +35,10 @@ Zeega\DataBundle\Entity\Frame:
         sequence_id:
             type: integer
             associationKey: true
+        sequence_index:
+            type: integer
+            length: 2
+            nullable: true
         project_id:
             type: integer
             associationKey: true
