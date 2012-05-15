@@ -18,8 +18,8 @@ var Player2 = Backbone.View.extend({
 	zeega : true,
 	
 	
-	initialize: function(container,apiplayer){
-	
+	initialize: function(container,apiplayer)
+	{
 		this.model= new Backbone.Model();
 		this.container = container;
 		this.generateBackbone();
@@ -448,7 +448,7 @@ var Player2 = Backbone.View.extend({
 		var leftFrame = this.getLeft();
 		var rightFrame = this.getRight();
 		
-		if( this.currentSequence.frames.length == 1 )
+		if( this.frames.length == 1 )
 		{
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
@@ -607,7 +607,8 @@ var Player2 = Backbone.View.extend({
 	
 	setCurrentFrame : function( id )
 	{
-		this.currentFrame = this.currentSequence.frames.get(id)
+		console.log(this)
+		this.currentFrame = this.frames.get(id)
 	},
 	
 	setCurrentLayers : function()
@@ -616,7 +617,7 @@ var Player2 = Backbone.View.extend({
 		var _this = this;
 		var layers = [];
 		_.each( this.currentFrame.get('layers'), function(layerID){
-			layers.push( _this.currentSequence.layers.get(layerID) )
+			layers.push( _this.layers.get(layerID) )
 		});
 		var CurrentLayers = Backbone.Collection.extend();
 		this.currentLayers = new CurrentLayers(layers)
@@ -679,7 +680,7 @@ var Player2 = Backbone.View.extend({
 			}
 		})
 		
-		var LoadingCollection = Backbone.Collection.extend({
+		this.LoadingCollection = Backbone.Collection.extend({
 			
 			loading : [],
 			ready : [],

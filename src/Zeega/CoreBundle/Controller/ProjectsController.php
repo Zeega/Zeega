@@ -121,6 +121,7 @@ class ProjectsController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+		
 		$sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
 		$sequenceIndex = $sequenceCount + 1;
 		
@@ -128,21 +129,37 @@ class ProjectsController extends Controller
 		
 		$frame = new Frame();
 		$frame->setSequence($sequence);
-		
+		$frame->setProject($project);
+
 		if($request->request->get('frame_id')) 
 		{
 		    $frameId = $request->request->get('frame_id');
 		    $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
-		    $frame->setLayers($previousframe->getLayers());
 		    
+		    $previousFrameLayers = $previousframe->getLayers();
+			foreach($previousFrameLayers as $layer)
+			{
+				if(isset($layer))
+				{
+					if(!isset($currLayers) || !$currLayers->contains($layer))
+					{
+						$layer->setProject($project);
+						$frame->addLayer($layer);
+					}
+				}
+			}
+
+		    //$frame->setLayers($previousframe->getLayers());
+		    /*
 		    $layers_frame = $frame->getLayers();
     		foreach($layers_frame as $layer)
     		{
     			$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer);
     			$sequence->addLayer($l);
     		}
+    		*/
     	}
-
+    	
 		$sequence->setProject($project);
 		$sequence->setTitle('Sequence '.$sequenceIndex);
 
@@ -156,14 +173,8 @@ class ProjectsController extends Controller
 		$sequenceId = $sequence->getId();
 		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
 		$sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
-
-		$layers = array();			
-		$layers_seq = $sequence->getLayers()->toArray();
-		foreach($layers_seq as $layer)
-		{
-			$l = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
-			array_push($layers, $l);
-		}
+		
+        $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array('project_id' => $project_id));
 		
 		$sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
         return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);

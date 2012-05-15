@@ -28,7 +28,21 @@ class FramesController extends Controller
        	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
 
    		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-   		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
+   		if($request->request->get('layers'))
+		{
+			$currLayers = $frame->getLayers();
+			foreach($request->request->get('layers') as $layer)
+			{
+				$layer = $em->getRepository('ZeegaDataBundle:Layer')->find($layer);
+				if(isset($layer))
+				{
+					if(!isset($currLayers) || !$currLayers->contains($layer))
+					{
+						$frame->addLayer($layer);
+					}
+				}
+			}
+		}
    		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 
    		$em->persist($frame);

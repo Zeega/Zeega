@@ -15,12 +15,12 @@
 		url : function()
 		{
 			if( this.isNew() ) {
-				console.log('FRAME URL ' + zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames');
-				return zeega.app.url_prefix+'sequences/'+ zeega.app.currentSequence.id +'/frames';
+				console.log('FRAME URL ' + zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames');
+				return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
 				}
 			else {
-				console.log('FRAME URL ' + zeega.app.url_prefix + 'frames/'+ this.id);
-				return zeega.app.url_prefix + 'frames/'+ this.id;
+				console.log('FRAME URL ' + zeega.app.url_prefix + 'api/frames/'+ this.id);
+				return zeega.app.url_prefix + 'api/frames/'+ this.id;
 			}
 		},
 	
@@ -35,8 +35,7 @@
 			//this.on('focus', this.render, this );
 			//this.on('blur', this.unrender, this );
 
-			this.on('change:layers', this.onLayersUpdate, this );
-			this.on('updateThumb', this.updateThumb, this );
+			this.on('update_thumb', this.updateThumb, this );
 			
 			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }});
 			
@@ -53,16 +52,6 @@
 		unrender : function()
 		{
 			this.frameTarget.append( this.view.remove() )
-		},
-		
-		onLayersUpdate : function()
-		{
-			if(!this.isNew())
-			{
-				console.log('SAVE FRAME: '+ this.id)
-				this.save();
-				this.updateThumb();
-			}
 		},
 		
 		//update the frame thumbnail
@@ -94,7 +83,7 @@
 					this.terminate();
 				}, false);
 			
-				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'frames/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/frames/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
 			
 			}
 		},
