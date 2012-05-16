@@ -23,20 +23,35 @@ class FramesController extends Controller
 
     public function putFrameAction($frame_id)
     {
-        $em=$this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getEntityManager();
        	$request = $this->getRequest();
-       	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
+       	$frame = $em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
 
    		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-   		if($request->request->get('layers'))
+   		// temp fix - the add/delete needs to be refactored and moved to new methods a frames/id/layers 
+		if($request->request->get('layers'))
 		{
-			$currLayers = $frame->getLayers();
+			$currLayers = $frame->getLayers()->toArray();
 			$newLayers = $em->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($request->request->get('layers'));
+			if(!is_array($newLayers))
+				$newLayers = $newLayers->toArray();
 			
-			$currLayers = $currLayers->toArray();
-			//$newLayers = $newLayers->toArray();
-			$mergedLayers = new \Doctrine\Common\Collections\ArrayCollection(array_merge($currLayers, $newLayers));
+			if(!isset($currLayers)) $currLayers = array();
+				
+			$layersToDelete = array_diff($currLayers, $newLayers);
+			foreach($layersToDelete as $layer)
+			{
+				unset($currLayers,$layer);
+			}
+			if(!isset($currLayers)) $currLayers = array();
 			
+			$layersToAdd = array_diff($newLayers,$currLayers);
+			foreach($layersToAdd as $layer)
+			{
+				array_push($currLayers,$layer);
+			}
+
+			$mergedLayers = new \Doctrine\Common\Collections\ArrayCollection($currLayers);
 			$frame->setLayers($mergedLayers);
 		}
    		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));

@@ -203,4 +203,9 @@ class Layer
     {
         return $this->frames;
     }
+
+	public function __toString()
+	{
+	    return strval($this->id);
+	}
 }
