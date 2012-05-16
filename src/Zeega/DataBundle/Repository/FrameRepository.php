@@ -17,7 +17,7 @@ class FrameRepository extends EntityRepository
                     ->orderBy('n.sequence_index','ASC')
              		->setParameter('id',$id)
              		->getQuery()
-             		->getArrayResult();
+             		->getResult();
     }
 	
 	public function findByProjectId($id)
