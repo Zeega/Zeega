@@ -13,15 +13,45 @@
 
 return array(
     'home' => array(
-    	'//web/js/lib/jquery/ui/js/jquery-ui.min.js',
-    	'//web/js/loaders/main.site.js',
-		'//web/js/lib/order.js', 
-		'//web/js/lib/require-jquery.js',
-		'//web/js/lib/jquery/ui/js/jquery-ui.min.js', 
-		'//web/js/lib/bootstrap.js', 
-		'//web/js/ux/zeega.ux.header.js', 
+		'//web/js/ux/zeega.ux.header.js',
 		'//web/js/ux/zeega.ux.site.js'
 	),
+    'browser' => array(
+		'//web/js/lib/jquery.tagsinput.min.js', 
+		'//web/js/lib/leaflet/leaflet.js',
+		'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
+		'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js',
+		'//web/js/lib/fancybox/jquery.fancybox.js', 
+		'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
+		'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js'
+	),
+    'editor' => array(
+		'//web/js/lib/swfobject.js',
+		'//web/js/ux/zeega.ux.header.js',
+		'//web/js/ux/zeega.ux.editor.js',
+		'//web/js/ux/layer-controls.js',
+		'//web/js/helpers/zeega.helpers.js',
+		'//web/js/app/zeega.js',
+		'//web/js/app/zeega.player.js',
+		'//web/js/lib/farbtastic/farbtastic.js',
+		'//web/js/app/index.js',
+	),
+    // 'js' => array('//js/file1.js', '//js/file2.js'),
+    // 'css' => array('//css/file1.css', '//css/file2.css'),
+);
+
+/*
+
+    'home' => array(
+		'//web/js/lib/require-jquery.js',
+		'//web/js/loaders/main.site.js',
+		'//web/js/lib/order.js',
+		'//web/js/lib/jquery/ui/js/jquery-ui.min.js',
+		'//web/js/lib/bootstrap.js',
+		'//web/js/ux/zeega.ux.header.js',
+		'//web/js/ux/zeega.ux.site.js'
+	),
+
     'browser' => array(
     	'//web/js/loaders/browser.js', 
 		'//web/js/lib/order.js', 
@@ -77,10 +107,8 @@ return array(
 		'//web/js/lib/leaflet/leaflet.js', 
 		'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
 		'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js', 
-		'//web/js/lib/fancybox/jquery.fancybox.js', 
-		'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
-		'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js'
 	),
+
     'editor' => array(
     	'//web/js/loaders/editor.js',
 		'//web/js/lib/order.js',
@@ -136,10 +164,4 @@ return array(
 		'//web/js/lib/require.js',
 		'//web/js/lib/jquery.tagsinput.min.js'
 	),
-    // 'js' => array('//js/file1.js', '//js/file2.js'),
-    // 'css' => array('//css/file1.css', '//css/file2.css'),
-);
-
-
-
-
+*/

@@ -23,7 +23,7 @@ var loadFiles = [
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!lib/spin',
-	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
+	//'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!lib/jquery/ui/js/jquery-ui.min',
 	'order!lib/bootstrap',
 	'order!lib/visualsearch',
@@ -31,14 +31,14 @@ var loadFiles = [
 	
 	//custom
 
-	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.browser',
-	'order!helpers/zeega.extends',
-	'order!helpers/zeega.helpers',
+	//'order!ux/zeega.ux.header',
+	//'order!ux/zeega.ux.browser',
+	//'order!helpers/zeega.extends',
+	//'order!helpers/zeega.helpers',
 
 	//core
 	//'order!app/zeega',
-	'order!app/zeega.browser',
+	//'order!app/zeega.browser',
 	
 	//plugins
 	'order!lib/jquery/plugins/spin',
@@ -55,7 +55,7 @@ var loadFiles = [
 	'order!plugins/players/plyr',
 	
 	//custom
-	'order!lib/filamentslider/selectToUISlider.jQuery',
+	//'order!lib/filamentslider/selectToUISlider.jQuery',
 	'order!lib/jcarousel/jquery.jcarousel',
 	'order!lib/jcarousel/jcarousel.zeega',
 	
@@ -78,7 +78,7 @@ var loadFiles = [
 	'order!app/views/browser.fancybox/browser.view.fancybox.tweet',
 	'order!app/views/browser.fancybox/browser.view.fancybox.soundcloud',
 	'order!app/views/browser.fancybox/browser.view.fancybox.video',
-		'order!app/views/browser.fancybox/browser.view.fancybox.mapbox',
+	'order!app/views/browser.fancybox/browser.view.fancybox.mapbox',
 	'order!app/views/browser.fancybox/browser.view.fancybox.youtube',
 	'order!app/views/browser.map/browser.view.map.fancybox',
 	'order!app/views/browser.tag/browser.view.tag.fancybox',

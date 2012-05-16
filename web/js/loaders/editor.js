@@ -23,12 +23,10 @@ var loadFiles = [
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
-
 	'order!lib/jquery/ui/js/jquery-ui.min',
 	'order!lib/spin',
 	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
 	'order!lib/visualsearch',
-	
 	'order!lib/leaflet/leaflet',
 
 	//custom
@@ -52,8 +50,6 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/popcorn_flash',
 	'order!lib/bootstrap',
-	
-	
 	'order!plugins/players/plyr',
 
 //models
@@ -78,34 +74,18 @@ var loadFiles = [
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 
-	//mvc
-	//'order!backbone/models/tag',
-
-	//layers
-	//'order!plugins/layers/geo/geo',
+//mvc
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',
 	'order!plugins/layers/geo/geo',
-	
 	'order!plugins/layers/image/image',
 	'order!plugins/layers/mapbox/mapbox',
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/googlebook/googlebook',
-	
-
-
-	//'order!plugins/layers/documentcloud/documentcloud',
 	'order!plugins/layers/rectangle/rectangle',
-	//'order!plugins/layers/website/website',
 
-	//players
-	
-	//'order!players/zeega.player.rdio',
-	//'order!players/zeega.player.rdio.token',
-	
-	
+//players
 	'order!app/index'
-	
 
 	];
 
