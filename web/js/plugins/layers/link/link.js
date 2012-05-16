@@ -100,7 +100,8 @@
 				var _this = this;
 				var style = {
 					'border' : '2px dashed red',
-					'border-radius' : '6px'
+					'border-radius' : '6px',
+					'z-index' : 100
 				}
 
 				this.$el.css( style );
