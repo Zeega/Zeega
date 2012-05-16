@@ -218,7 +218,17 @@ class Frame
     {
         $this->layers[] = $layers;
     }
-
+    
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Entity\Layer $layers
+     */
+    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
+    {
+        $this->layers = $layers;
+    }
+    
     /**
      * Get layers
      *

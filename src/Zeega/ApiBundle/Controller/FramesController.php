@@ -31,17 +31,13 @@ class FramesController extends Controller
    		if($request->request->get('layers'))
 		{
 			$currLayers = $frame->getLayers();
-			foreach($request->request->get('layers') as $layer)
-			{
-				$layer = $em->getRepository('ZeegaDataBundle:Layer')->find($layer);
-				if(isset($layer))
-				{
-					if(!isset($currLayers) || !$currLayers->contains($layer))
-					{
-						$frame->addLayer($layer);
-					}
-				}
-			}
+			$newLayers = $em->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($request->request->get('layers'));
+			
+			$currLayers = $currLayers->toArray();
+			//$newLayers = $newLayers->toArray();
+			$mergedLayers = new \Doctrine\Common\Collections\ArrayCollection(array_merge($currLayers, $newLayers));
+			
+			$frame->setLayers($mergedLayers);
 		}
    		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 
