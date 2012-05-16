@@ -11,6 +11,8 @@
 		
 		defaultAttributes : {
 			'title' : 'Link Layer',
+			'to_sequence' : null,
+			'from_sequence' : null,
 			'to_frame' : null,
 			'from_frame' : null,
 			'left' : 25,
@@ -21,7 +23,18 @@
 		
 		init : function()
 		{
-			if( this.isNew() ) this.get('attr').from_frame = zeega.app.currentFrame.id;
+			if( this.isNew() )
+			{
+				this.get('attr').from_frame = zeega.app.currentFrame.id;
+				this.get('attr').from_sequence = zeega.app.currentSequence.id;
+			}
+		},
+		
+		setToFrame : function(sequenceID, frameID)
+		{
+			this.get('attr').to_sequence = sequenceID;
+			this.get('attr').to_frame = frameID;
+			this.save();
 		}
 		
 	});
@@ -43,6 +56,7 @@
 			var _this = this;
 			var style = {
 				'height' : this.model.get('attr').height +'%',
+				'cursor' : 'pointer'
 			}
 			$(this.el).css( style );
 			
@@ -52,8 +66,16 @@
 		},
 		
 		events : {
+			'click' : 'goToFrame',
 			'click .delete-link' : 'deleteLink',
 			'mousedown .show-controls' : 'showControls'
+		},
+		
+		goToFrame : function()
+		{
+			console.log('go to the new Sequence!!!');
+			console.log(this.model)
+			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
 		},
 		
 		deleteLink : function(e)

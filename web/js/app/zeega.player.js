@@ -97,13 +97,13 @@ var Player2 = Backbone.View.extend({
 			
 			routes: {
 				"" : 'goToCurrentFrame',
-				"player/frame/:frameID"	: "goToFrame",
+				"player/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
 			},
 			
-			goToFrame : function( frameID )
+			goToSequenceFrame : function( sequenceID, frameID )
 			{
-				_this.currentFrame = _this.currentSequence.frames.get(frameID);
-				_this.goToFrame( _this.currentFrame );
+				console.log('go to sequence frame router::')
+				_this.goToSequenceFrame(sequenceID,frameID)
 			},
 			goToCurrentFrame : function()
 			{
@@ -188,6 +188,13 @@ var Player2 = Backbone.View.extend({
 		layer.trigger('player_preload');
 	},
 	
+	goToSequenceFrame : function(sequenceID,frameID)
+	{
+		this.currentSequence = this.sequences.get(sequenceID);
+		//this.currentFrame = this.frames.get(frameID);
+		this.goToFrame(this.frames.get(frameID))
+	},
+	
 	goToFrame : function( frame )
 	{
 		this.clearStage( frame );
@@ -195,7 +202,7 @@ var Player2 = Backbone.View.extend({
 		if( frame.status == 'ready') this.renderFrame(frame.id )
 		else frame.on('ready', this.renderFrame, this );
 
-		this.router.navigate('player/frame/'+ frame.id, {silent:true});
+		this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
 
 		this.loadAhead();
 	},

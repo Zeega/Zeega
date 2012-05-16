@@ -94,12 +94,17 @@ this.zeega = {
 		var Router = Backbone.Router.extend({
 			routes: {
 				""						: 'goToFrame',
-				"editor/frame/:frameID"	: "goToFrame",
-				"player/frame/:frameID"	: "checkPlayer"
+				"editor/sequence/:sequenceID/frame/:frameID"	: "goToFrame",
+				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
 			},
-			goToFrame : function( frameID ){ _this.goToFrame( frameID ) },
+			goToFrame : function( sequenceID,frameID ){ _this.goToFrame( frameID ) },
 			
-			checkPlayer : function( frameID ){ if( !_this.previewMode ) _this.goToFrame( frameID ) }
+			checkPlayer : function( sequenceID,frameID )
+			{
+				console.log('player navigate')
+				if( !_this.previewMode ) _this.goToFrame( frameID )
+				else _this.player.goToSequenceFrame(sequenceID,frameID);
+			}
 		});
 
 		this.router = new Router();
@@ -149,7 +154,7 @@ this.zeega = {
 		this.currentFrame.trigger('focus');
 		this.renderFrame( this.currentFrame );
 		
-		this.router.navigate('editor/frame/'+ frame.id, {silent:true});
+		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 
 		this.restorePanelStates();
 		this.setAdvanceValues();
@@ -260,10 +265,14 @@ this.zeega = {
 			sequence.save({},{
 				success : function()
 				{
+					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.project.frames.add(sequence.get('frames'))
 					//sequence.createCollections();
 					sequence.trigger('sync');
 					_this.goToSequence(sequence.id);
+					
+					this.hold = null;
+					this.busy = false;
 				}
 			});
 			this.project.sequences.add(sequence);
@@ -272,9 +281,9 @@ this.zeega = {
 		{
 			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
 			this.hold.destroy();
-		}
-		this.hold = null;
-		this.busy = false;
+			this.hold = null;
+			this.busy = false;		}
+
 	},
 	
 	setAdvanceValues : function()
