@@ -260,7 +260,8 @@ this.zeega = {
 			sequence.save({},{
 				success : function()
 				{
-					sequence.createCollections();
+					_this.project.frames.add(sequence.get('frames'))
+					//sequence.createCollections();
 					sequence.trigger('sync');
 					_this.goToSequence(sequence.id);
 				}
