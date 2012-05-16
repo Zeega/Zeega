@@ -198,8 +198,7 @@
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
-			'mouseleave .delete-layer'	: 'onLayerTrashLeave',
-
+			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
 		},
 		
 		// the events end users have access to

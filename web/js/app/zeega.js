@@ -260,7 +260,8 @@ this.zeega = {
 			sequence.save({},{
 				success : function()
 				{
-					sequence.createCollections();
+					_this.project.frames.add(sequence.get('frames'))
+					//sequence.createCollections();
 					sequence.trigger('sync');
 					_this.goToSequence(sequence.id);
 				}
@@ -394,8 +395,8 @@ this.zeega = {
 		
 			if( nextFrame != this.currentFrame )
 			{
-				if(nextFrame.get('layers')) nextFrame.get('layers').push(parseInt(layerID));
-				else nextFrame.set('layers',[parseInt(layerID)],{silent:true});
+				if(nextFrame.get('layers')) nextFrame.get('layers').push( parseInt(layerID) );
+				else nextFrame.set('layers',[ parseInt(layerID) ],{silent:true});
 				nextFrame.save();
 			}
 		}
@@ -565,21 +566,22 @@ this.zeega = {
 
 	getLeftFrame : function()
 	{
-		var frameOrder = this.currentSequence.get('framesOrder') || this.currentSequence.frames.pluck('id');
+		var frameOrder = this.currentSequence.get('frames');
 		
 		console.log('getLeft frame ----')
 		console.log(this.currentSequence)
 		console.log(frameOrder)
 		
 		var currentFrameIndex = _.indexOf( frameOrder, parseInt(this.currentFrame.id) );
-		if( currentFrameIndex ) return this.currentSequence.frames.get( frameOrder[ currentFrameIndex-1 ] );
-		else return this.currentSequence.frames.get( frameOrder[1] );
+		if( currentFrameIndex ) return this.frames.get( frameOrder[ currentFrameIndex-1 ] );
+		else return this.frames.get( frameOrder[1] );
 	},
 
 	getRightFrame : function()
 	{
-		var currentFrameIndex = _.indexOf( this.currentSequence.get('framesOrder'), this.currentFrame.id );
-		if(currentFrameIndex < _.size( this.currentSequence.frames )-1 ) return this.currentSequence.frames.at( currentFrameIndex + 1 );
+		console.log(this)
+		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), this.currentFrame.id );
+		if(currentFrameIndex < this.currentSequence.get('frames').length - 1 ) return this.project.frames.get( this.currentSequence.get('frames')[0] + 1 );
 		else return false;
 	},
 

@@ -134,6 +134,7 @@
 			// if layer is persistent then remove ALL instances from frames
 			if( _.include( this.get('persistLayers'), parseInt(model.id) ) )
 			{
+				console.log('remove persistant layer')
 				_.each( _.toArray( this.frames.collection ), function(frame){
 					var newLayers = _.without( frame.get('layers'), parseInt(model.id) );
 					if( newLayers.length == 0 ) newLayers = [false];
@@ -148,6 +149,7 @@
 			}
 			else
 			{
+				console.log('remove single layer')
 				//remove from the current frame layer array
 				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
 				if( layerArray.length == 0 ) layerArray = [false];
@@ -155,7 +157,10 @@
 				console.log(layerArray)
 				
 				zeega.app.currentFrame.set('layers',layerArray);
-				//zeega.app.currentFrame.save();
+				zeega.app.currentFrame.save();
+				console.log(zeega.app.currentFrame.get('layers'))
+				console.log( zeega.app.currentFrame );
+				
 				this.destroyOrphanLayers();
 			}
 		},
