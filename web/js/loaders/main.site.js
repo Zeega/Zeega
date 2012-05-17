@@ -24,8 +24,8 @@ var loadFiles = [
 	//'order!lib/underscore',
 	//'order!lib/backbone',
 	
-	'order!lib/jquery/ui/js/jquery-ui.min',
-	'order!lib/bootstrap',
+	//'order!lib/jquery/ui/js/jquery-ui.min',
+	//'order!lib/bootstrap',
 	
 	//custom
 	//'order!ux/zeega.ux.header',
@@ -42,5 +42,4 @@ var loadFiles = [
 
 require(loadFiles, function($) {
     initUX();
-	
 });

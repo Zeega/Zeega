@@ -13,17 +13,171 @@
 
 return array(
     'home' => array(
+		'//web/js/lib/jquery/ui/js/jquery-ui.min.js',
+		'//web/js/lib/bootstrap.js',
 		'//web/js/ux/zeega.ux.header.js',
 		'//web/js/ux/zeega.ux.site.js'
 	),
-    'browser' => array(
-		'//web/js/lib/jquery.tagsinput.min.js', 
-		'//web/js/lib/leaflet/leaflet.js',
-		'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
+    'browser1' => array(
+		'//web/js/lib/underscore.js',
+		'//web/js/lib/backbone.js',
+		//'//web/js/lib/spin.js',
+		'//web/js/lib/swfobject.js', 
+		//'//web/js/lib/jquery/ui/js/jquery-ui.min.js',
+		'//web/js/lib/bootstrap.js',
+		//'//web/js/lib/visualsearch.js',
+		
+
+		'//web/js/lib/fancybox/jquery.fancybox.js',
+		//'//web/js/lib/fancybox/jquery.fancybox.pack.js',
+		'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js',
+
+		'//web/js/lib/fancybox/jquery.easing-1.3.pack.js',
 		'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js',
-		'//web/js/lib/fancybox/jquery.fancybox.js', 
-		'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
-		'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js'
+		'//web/js/lib/leaflet/leaflet.js',
+		'//web/js/lib/jquery.tagsinput.min.js',
+
+		//plugins
+		//'//web/js/lib/jquery/plugins/spin.js',
+		'//web/js/lib/jquery/plugins/jeditable.min.js',
+		'//web/js/lib/jquery/plugins/jquery-cycle.js',
+		'//web/js/lib/jquery/plugins/jquery.paging.js',
+		'//web/js/lib/jquery/plugins/colorpicker/js/colorpicker.js',
+		'//web/js/lib/jquery/plugins/jquerygetUrlParam.js',
+		'//web/js/lib/jquery/plugins/jqueryjson.js',
+		'//web/js/lib/jquery/plugins/jquerycookie.js',
+		'//web/js/lib/jquery/plugins/jquerytmpl.js',
+		//'//web/js/lib/jquery/plugins/twitter-bootstrap.js',
+		'//web/js/lib/popcorn_flash.js',
+		'//web/js/plugins/players/plyr.js',
+
+
+		//core
+		'//web/js/app/zeega.js',
+		'//web/js/app/zeega.browser.js',
+		//custom
+
+		//'//web/js/ux/zeega.ux.header.js',
+		//'//web/js/ux/zeega.ux.browser.js',
+		//'//web/js/helpers/zeega.extends.js',
+		//'//web/js/helpers/zeega.helpers.js',
+
+		
+		//custom
+		//'//web/js/lib/filamentslider/selectToUISlider.jQuery.js',
+		//'//web/js/lib/jcarousel/jquery.jcarousel.js',
+		//'//web/js/lib/jcarousel/jcarousel.zeega.js',
+		
+		//mvc
+		//'//web/js/app/models/browser.model.collection.js',
+		//'//web/js/app/models/browser.model.search.js',
+		//'//web/js/app/models/browser.model.item.js',
+
+		//'//web/js/app/collections/browser.collections.collection.js',
+		//'//web/js/app/collections/browser.collections.item.js',
+
+
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox._fancybox.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.audio.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.document-cloud.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.image.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.default.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.tweet.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.soundcloud.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.video.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.mapbox.js',
+		//'//web/js/app/views/browser.fancybox/browser.view.fancybox.youtube.js',
+		//'//web/js/app/views/browser.map/browser.view.map.fancybox.js',
+		//'//web/js/app/views/browser.tag/browser.view.tag.fancybox.js',
+
+		//'//web/js/lib/jquery.tagsinput.min.js', 
+		//'//web/js/lib/leaflet/leaflet.js',
+		//'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
+		//'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js',
+		//'//web/js/lib/fancybox/jquery.fancybox.js', 
+		//'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
+		//'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js',
+
+		//'//web/js/app/index.browser.js'
+
+	),
+    'browser2' => array(
+    	//'//web/js/lib/underscore.js',
+		//'//web/js/lib/backbone.js',
+		//'//web/js/lib/spin.js',
+		//'//web/js/lib/swfobject.js', 
+		//'//web/js/lib/jquery/ui/js/jquery-ui.min.js',
+		//'//web/js/lib/bootstrap.js',
+		//'//web/js/lib/visualsearch.js',
+		
+		//custom
+
+		//'//web/js/ux/zeega.ux.header.js',
+		//'//web/js/ux/zeega.ux.browser.js',
+		//'//web/js/helpers/zeega.extends.js',
+		//'//web/js/helpers/zeega.helpers.js',
+
+		//core
+		//'//web/js/app/zeega.js',
+		//'//web/js/app/zeega.browser.js',
+		
+		//plugins
+		/*
+		'//web/js/lib/jquery/plugins/spin.js',
+		'//web/js/lib/jquery/plugins/jeditable.min.js',
+		'//web/js/lib/jquery/plugins/jquery-cycle.js',
+		'//web/js/lib/jquery/plugins/jquery.paging.js',
+		'//web/js/lib/jquery/plugins/colorpicker/js/colorpicker.js',
+		'//web/js/lib/jquery/plugins/jquerygetUrlParam.js',
+		'//web/js/lib/jquery/plugins/jqueryjson.js',
+		'//web/js/lib/jquery/plugins/jquerycookie.js',
+		'//web/js/lib/jquery/plugins/jquerytmpl.js',
+		'//web/js/lib/jquery/plugins/twitter-bootstrap.js',
+		'//web/js/lib/popcorn_flash.js',
+		'//web/js/plugins/players/plyr.js',
+		*/
+		//custom
+		'//web/js/lib/filamentslider/selectToUISlider.jQuery.js',
+		//'//web/js/lib/jcarousel/jquery.jcarousel.js',
+		//'//web/js/lib/jcarousel/jcarousel.zeega.js',
+		
+		//mvc
+		//'//web/js/app/models/browser.model.collection.js',
+		//'//web/js/app/models/browser.model.search.js',
+		//'//web/js/app/models/browser.model.item.js',
+
+		//'//web/js/app/collections/browser.collections.collection.js',
+		//'//web/js/app/collections/browser.collections.item.js',
+
+
+		//'//web/js/lib/jquery.tagsinput.min.js', 
+		//'//web/js/lib/leaflet/leaflet.js',
+		//'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
+		//'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js',
+		//'//web/js/lib/fancybox/jquery.fancybox.js', 
+		//'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
+		//'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js',
+
+		//'//web/js/app/collections/browser.collections.collection.js', 
+		//'//web/js/app/collections/browser.collections.item.js', 
+		//'//web/js/app/views/browser.item/browser.view.item.item-tray.js', 
+		//'//web/js/app/views/browser.collection/browser.view.collection.my-collection-drawer.js', 
+
+
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox._fancybox.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.audio.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.document-cloud.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.image.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.default.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.tweet.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.soundcloud.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.video.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.mapbox.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.youtube.js',
+		'//web/js/app/views/browser.map/browser.view.map.fancybox.js',
+		'//web/js/app/views/browser.tag/browser.view.tag.fancybox.js',
+
+		'//web/js/app/index.browser.js'
 	),
     'editor' => array(
 		'//web/js/lib/swfobject.js',
@@ -164,4 +318,37 @@ return array(
 		'//web/js/lib/require.js',
 		'//web/js/lib/jquery.tagsinput.min.js'
 	),
+
+
+    'browser' => array(
+
+		'//web/js/lib/jquery.tagsinput.min.js', 
+		'//web/js/lib/leaflet/leaflet.js',
+		'//web/js/lib/fancybox/jquery.easing-1.3.pack.js', 
+		'//web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js',
+		'//web/js/lib/fancybox/jquery.fancybox.js', 
+		'//web/js/lib/fancybox/jquery.fancybox.pack.js', 
+		'//web/js/lib/fancybox/helpers/jquery.fancybox-buttons.js',
+
+		//'//web/js/app/collections/browser.collections.collection.js', 
+		//'//web/js/app/collections/browser.collections.item.js', 
+		'//web/js/app/views/browser.item/browser.view.item.item-tray.js', 
+		'//web/js/app/views/browser.collection/browser.view.collection.my-collection-drawer.js', 
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox._fancybox.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.audio.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.document-cloud.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.image.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.default.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.tweet.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.soundcloud.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.video.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.mapbox.js',
+		'//web/js/app/views/browser.fancybox/browser.view.fancybox.youtube.js',
+		'//web/js/app/views/browser.map/browser.view.map.fancybox.js',
+		'//web/js/app/views/browser.tag/browser.view.tag.fancybox.js',
+
+		'//web/js/app/index.browser.js'
+	),
+
+
 */
