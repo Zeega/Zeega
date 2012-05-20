@@ -243,10 +243,6 @@
 			</div>
 		</div> <!-- modal -->
 		
-		
-		
-		
-		
 		<div id="frame-item-template" class="">
 			<div class='frame-overlay'>
 				<div class='frame-update-overlay'></div>
@@ -263,9 +259,8 @@
 			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 			<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
 
-			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
-
-			<script src="/min/g=editor"></script>
+			<!-- <script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>-->
+			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('/web/js_min/editor.js') }}"></script>
 
 			<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
 

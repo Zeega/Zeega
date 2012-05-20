@@ -9,92 +9,84 @@
 
 *********************************************/
 require.config({
-	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/.js',
 	paths : {
-		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order.js',
 		'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
 	}
 })
 
-var loadFiles = [
-	//'jquery',
 
+// /min/g=editor
 
-	//libraries
-	'order!lib/underscore',
-	'order!lib/backbone',
-	'order!lib/jquery/ui/js/jquery-ui.min',
-	'order!lib/spin',
-	'order!lib/swfobject', // sfwobject should probably be somewhere else. helpers? plugins?
-	'order!lib/visualsearch',
-	'order!lib/leaflet/leaflet',
+//  js/lib/jquery.tagsinput.min.js
 
-	//custom
-	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.editor',
-	'order!ux/layer-controls',
-	'order!helpers/zeega.extends',
-	'order!helpers/zeega.helpers',
-
-	//core
-	'order!app/zeega',
-    'order!app/zeega.player',
-
-	//plugins
-	'order!lib/jquery/plugins/spin',
-	'order!lib/jquery/plugins/jeditable.min',
-	'order!lib/jquery/plugins/jquery-cycle',
-	'order!lib/farbtastic/farbtastic',
-	'order!lib/jquery/plugins/jquerygetUrlParam',
-	'order!lib/jquery/plugins/jqueryjson',
-	'order!lib/jquery/plugins/jquerycookie',
-	'order!lib/popcorn_flash',
-	'order!lib/bootstrap',
-	'order!plugins/players/plyr',
-
-//models
-	'order!app/models/editor.model.project',
-	'order!app/models/editor.model.sequence',
-	'order!app/models/editor.model.item',
-	'order!app/models/editor.model.frame',
-	'order!app/models/editor.model.layer',
-
-//collections
-	'order!app/collections/editor.collections.sequence',
-	'order!app/collections/editor.collections.item',
-	'order!app/collections/editor.collections.frame',
-	'order!app/collections/editor.collections.layer',
-
-//views
-	'order!app/views/editor.project/editor.view.project.editor',
-	'order!app/views/editor.project/editor.view.publish.project.editor',
-	'order!app/views/editor.item/editor.view.item.database-tray',
-	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
-	'order!app/views/editor.layer/editor.view.layer.control-library',
-	'order!app/views/editor.layer/editor.view.layer.layer-list',
-	'order!app/views/editor.layer/editor.view.layer.visual-editor',
-
-//mvc
-	'order!plugins/layers/video/video',
-	'order!plugins/layers/audio/audio',
-	'order!plugins/layers/geo/geo',
-	'order!plugins/layers/image/image',
-	'order!plugins/layers/mapbox/mapbox',
-	'order!plugins/layers/text/text',
-	'order!plugins/layers/googlebook/googlebook',
-	'order!plugins/layers/rectangle/rectangle',
-
-//players
-	'order!app/index'
-
-	];
-
-require(loadFiles, function(jquery)
-{
-    console.log('ALL JS LOADED')
-
-	//once the files have been loaded do this
-	var sequence = $('#sequence-id').val();
-	//zeega.app.init();
-	initUX();
+require(
+	[
+		//'jquery.js',
+		//libraries
+		'web/js/lib/underscore.js',
+		'web/js/lib/backbone.js',
+		'web/js/lib/jquery/ui/js/jquery-ui.min.js',
+		'web/js/lib/spin.js',
+		'web/js/lib/swfobject.js', // sfwobject should probably be somewhere else. helpers? plugins?
+		'web/js/lib/visualsearch.js',
+		'web/js/lib/leaflet/leaflet.js',
+		//custom
+		'web/js/ux/zeega.ux.header.js',
+		'web/js/ux/zeega.ux.editor.js',
+		'web/js/ux/layer-controls.js',
+		'web/js/helpers/zeega.extends.js',
+		'web/js/helpers/zeega.helpers.js',
+		//core
+		'web/js/app/zeega.js',
+	    'web/js/app/zeega.player.js',
+		//plugins
+		'web/js/lib/jquery/plugins/spin.js',
+		'web/js/lib/jquery/plugins/jeditable.min.js',
+		'web/js/lib/jquery/plugins/jquery-cycle.js',
+		'web/js/lib/farbtastic/farbtastic.js',
+		'web/js/lib/jquery/plugins/jquerygetUrlParam.js',
+		'web/js/lib/jquery/plugins/jqueryjson.js',
+		'web/js/lib/jquery/plugins/jquerycookie.js',
+		'web/js/lib/popcorn_flash.js',
+		'web/js/lib/bootstrap.js',
+		'web/js/plugins/players/plyr.js',
+		//models
+		'web/js/app/models/editor.model.project.js',
+		'web/js/app/models/editor.model.sequence.js',
+		'web/js/app/models/editor.model.item.js',
+		'web/js/app/models/editor.model.frame.js',
+		'web/js/app/models/editor.model.layer.js',
+		//collections
+		'web/js/app/collections/editor.collections.sequence.js',
+		'web/js/app/collections/editor.collections.item.js',
+		'web/js/app/collections/editor.collections.frame.js',
+		'web/js/app/collections/editor.collections.layer.js',
+		//views
+		'web/js/app/views/editor.project/editor.view.project.editor.js',
+		'web/js/app/views/editor.project/editor.view.publish.project.editor.js',
+		'web/js/app/views/editor.item/editor.view.item.database-tray.js',
+		'web/js/app/views/editor.frame/editor.view.frame.frame-sequence.js',
+		'web/js/app/views/editor.layer/editor.view.layer.control-library.js',
+		'web/js/app/views/editor.layer/editor.view.layer.layer-list.js',
+		'web/js/app/views/editor.layer/editor.view.layer.visual-editor.js',
+		//mvc
+		//layers
+		'web/js/plugins/layers/video/video.js',
+		'web/js/plugins/layers/audio/audio.js',
+		'web/js/plugins/layers/geo/geo.js',
+		'web/js/plugins/layers/image/image.js',
+		'web/js/plugins/layers/mapbox/mapbox.js',
+		'web/js/plugins/layers/text/text.js',
+		'web/js/plugins/layers/googlebook/googlebook.js',
+		'web/js/plugins/layers/rectangle/rectangle.js',
+		'web/js/app/index.js'
+	],
+	function(jquery) {
+	    console.log('ALL JS LOADED')
+		//once the files have been loaded do this
+		var sequence = $('#sequence-id').val();
+		//zeega.app.init();
+		initUX();
 });

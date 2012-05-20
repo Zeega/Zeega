@@ -1,0 +1,14 @@
+
+button.aloha-button-wai-lang { background: url(../img/button.png) no-repeat 0px 0px !important; }
+button.aloha-button-wai-lang-remove { background: url(../img/remove-button.png) no-repeat 0px 0px !important; }
+.x-combo-list-item .img-item {
+	height: 18px;
+}
+.x-combo-list-item img {
+	
+	margin: 3px 5px 0px 2px;
+}
+.x-combo-list-item .label-item {
+	display: inline;
+	font-weight: bold;
+}
