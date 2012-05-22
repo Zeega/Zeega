@@ -92,6 +92,7 @@ class SearchController extends Controller
             }
         }
         if(isset($collection_id)) $query->createFilterQuery('parent_id')->setQuery("parent_item: $collection_id");
+        if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
