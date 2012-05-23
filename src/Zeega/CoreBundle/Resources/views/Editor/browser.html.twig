@@ -230,10 +230,14 @@
 {% endblock %}
 
 {% block scripts %}
-				<!-- SCRIPTS -->
+	<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<!--<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>-->
+
+	<!-- to load single aggregated JS library --> 
 		<script data-main="{{ asset('/web/js_min/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+
+	<!-- to load JS libraries separately -->
+		<!--<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>-->
 
 		<!-- Leaflet CSS --> 
 		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
