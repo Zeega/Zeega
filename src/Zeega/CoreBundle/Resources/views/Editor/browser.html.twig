@@ -234,10 +234,10 @@
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		{% if app.environment == 'dev' %}
 		<!-- to load JS libraries separately -->
-			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/browser.js') }}"></script>
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/browser.js') }}"></script>
 		{% else %}
 			<!-- to load single aggregated JS library --> 
-			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js_min/browser.js') }}"></script>
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/browser.js') }}"></script>
 		{% endif %}
 
 		<!-- Leaflet CSS --> 
