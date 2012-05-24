@@ -259,10 +259,13 @@
 			<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 			<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
 			
+			{% if app.environment == 'dev' %}
 			<!-- to load JS libraries separately -->
-			<!-- <script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>-->
-			<!-- to load single aggregated JS library --> 
-			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('/web/js_min/editor.js') }}"></script>
+				<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
+			{% else %}
+				<!-- to load single aggregated JS library --> 
+				<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js_min/editor.js') }}"></script>
+			{% endif %}
 
 			<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
 
