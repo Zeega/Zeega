@@ -8,6 +8,7 @@
 
 
 *********************************************/
+
 require.config({
 	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
 	paths : {
@@ -22,12 +23,13 @@ var loadFiles = [
 	//libraries
 	//'order!lib/underscore',
 	//'order!lib/backbone',
-	'order!lib/jquery/ui/js/jquery-ui.min',
-	'order!lib/bootstrap',
+	
+	//'order!lib/jquery/ui/js/jquery-ui.min',
+	//'order!lib/bootstrap',
 	
 	//custom
-	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.site',
+	//'order!ux/zeega.ux.header',
+	//'order!ux/zeega.ux.site',
 
 	
 	//plugins
@@ -40,5 +42,4 @@ var loadFiles = [
 
 require(loadFiles, function($) {
     initUX();
-	
 });

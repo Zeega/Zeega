@@ -227,42 +227,43 @@
 
          <!-- /TEMPLATES -->
 
-         
-
 {% endblock %}
 
-
-
-
 {% block scripts %}
-				<!-- SCRIPTS -->
+	<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+
+	<!-- to load single aggregated JS library --> 
+		<script data-main="{{ asset('/web/js_min/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+
+	<!-- to load JS libraries separately -->
+		<!--<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>-->
+
 		<!-- Leaflet CSS --> 
 		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
 		
 		
-		<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
+		<!-- <script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script> -->
 		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jquery.tagsinput.css')}}" />
 		
 		
 		<!-- Leaflet JavaScript -->
-		<script src="{{ asset('js/lib/leaflet/leaflet.js')}}"></script>
+		<!-- <script src="{{ asset('js/lib/leaflet/leaflet.js')}}"></script> -->
 		
 		<!-- FANCYBOX -->
 		<!-- Optionaly include easing and/or mousewheel plugins -->
-		<script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.easing-1.3.pack.js')}}"></script>
-		<script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js')}}"></script>
+		<!-- <script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.easing-1.3.pack.js')}}"></script> -->
+		<!-- <script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.mousewheel-3.0.6.pack.js')}}"></script> -->
 
 		<!-- Add fancyBox -->
 		<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('js/lib/fancybox/jquery.fancybox.css')}}" type="text/css" media="screen" />
 		<link rel="stylesheet" href="{{ asset('js/lib/fancybox/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
 
-		<script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.fancybox.js')}}"></script>
-		<script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.fancybox.pack.js')}}"></script>
-		<script type="text/javascript" src="{{ asset('js/lib/fancybox/helpers/jquery.fancybox-buttons.js')}}"></script>
+		<!-- <script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.fancybox.js')}}"></script> -->
+		<!-- <script type="text/javascript" src="{{ asset('js/lib/fancybox/jquery.fancybox.pack.js')}}"></script> -->
+		<!-- <script type="text/javascript" src="{{ asset('js/lib/fancybox/helpers/jquery.fancybox-buttons.js')}}"></script> -->
 
 		<!-- JCarousel -->
 		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jcarousel/skins/zeega/skin.css')}}" />
