@@ -232,7 +232,7 @@
 {% block scripts %}
 	<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		{% if app.environment == 'prod' %}
+		{% if app.environment == 'dev' %}
 		<!-- to load JS libraries separately -->
 			<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/browser.js') }}"></script>
 		{% else %}
