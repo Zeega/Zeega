@@ -2,4 +2,5 @@ _assetic:
   type:     assetic  
   resource: .
   
-
+_main:
+    resource: routing.yml
