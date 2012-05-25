@@ -1,9 +1,7 @@
 (example changelog - not being used yet)
 
-Zeega Alpha 0.5 2012-02-06
+Zeega Alpha 0.77: 2012-05-25
 ---------------------------------------
-* API
-	- added this
-	- removed that
-* UX
-	- added this
+* JavaScript
+        - added script minifier
+	- all Zeega scripts are now being compressed when Symfony is in production mode
