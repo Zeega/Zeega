@@ -4,6 +4,7 @@ Zeega\DataBundle\Entity\Frame:
     repositoryClass: Zeega\DataBundle\Repository\FrameRepository
     manyToOne:
         sequence:
+            cascade: [delete]
             targetEntity: Sequence
             joinColumns:
                 sequence_id:
@@ -17,6 +18,7 @@ Zeega\DataBundle\Entity\Frame:
                     onDelete: CASCADE
     manyToMany:
         layers:
+            cascade: [delete]
             targetEntity: Zeega\DataBundle\Entity\Layer
             inversedBy: frames
             joinTable:

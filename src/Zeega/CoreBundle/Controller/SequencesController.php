@@ -92,7 +92,10 @@ class SequencesController extends Controller
     
     	$em = $this->getDoctrine()->getEntityManager();
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
-    	$em->remove($sequence);
+    	$frames = $sequence->getFrames();
+        $em->remove($frames);
+        $em->flush(); 
+        $em->remove($sequence);
     	$em->flush();
     	return new Response('SUCCESS',200);
     

@@ -94,10 +94,15 @@ this.zeega = {
 		var Router = Backbone.Router.extend({
 			routes: {
 				""						: 'goToFrame',
-				"editor/sequence/:sequenceID/frame/:frameID"	: "goToFrame",
+				"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
 				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
 			},
-			goToFrame : function( sequenceID,frameID ){ _this.goToFrame( frameID ) },
+			
+			goToSequenceFrame : function( sequenceID,frameID )
+			{
+				_this.goToSequence( sequenceID );
+				_this.goToFrame( frameID );
+			},
 			
 			checkPlayer : function( sequenceID,frameID )
 			{
@@ -266,8 +271,6 @@ this.zeega = {
 				success : function()
 				{
 					_this.busy = false;
-					console.log('new sequence saved')
-					console.log(_this)
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.project.frames.add(sequence.get('frames'))
 					//sequence.createCollections();
@@ -285,8 +288,43 @@ this.zeega = {
 			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
 			this.hold.destroy();
 			this.hold = null;
-			this.busy = false;		}
+			this.busy = false;
+		}
 
+	},
+	
+	deleteSequence : function(sequenceID)
+	{
+		// look through all layers referenced in sequence
+		// find all link layers
+		// delete all referenced link layers
+		// delete sequence
+		
+		console.log('-- delete the sequence --')
+		var _this = this;
+		var sequence = this.project.sequences.get(sequenceID);
+		var layers = [];
+		_.each( sequence.get('frames'), function(frameID){
+			var frame = _this.project.frames.get(frameID);
+			layers = _.union(layers,frame.get('layers'));
+		});
+		console.log('layers:')
+		_.each(layers, function(layerID){
+			var layer = _this.project.layers.get(layerID);
+			if(layer.get('type')=='Link')
+			{
+				var attr = layer.get('attr');
+				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
+				{
+					layer.destroy();
+				}
+
+			}
+		});
+		sequence.destroy();
+		// if sequence is in view, then load the first sequence
+		
+		return false;
 	},
 	
 	setAdvanceValues : function()
@@ -387,7 +425,7 @@ this.zeega = {
 		if(!this.busy)
 		{
 			console.log('ADD LAYER')
-
+console.log(args)
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )
