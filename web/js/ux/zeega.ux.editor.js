@@ -23,6 +23,10 @@ function initUX(){
 	});
 	*/
 	
+	$('body').click(function(){
+		$('.menu').addClass('hide')
+	})
+	
 	
 	$('#sequence-cover-image').droppable({
 
