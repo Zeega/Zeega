@@ -303,6 +303,9 @@ this.zeega = {
 	{
 		var _this = this;
 		var sequence = this.project.sequences.get(sequenceID);
+
+		if(this.currentSequence.id == sequenceID) this.router.navigate('',{trigger:true});
+
 		var layers = [];
 		_.each( sequence.get('frames'), function(frameID){
 			var frame = _this.project.frames.get(frameID);
