@@ -54,11 +54,17 @@
 		render : function()
 		{
 			var _this = this;
+			
+			
+			
 			var style = {
 				'height' : this.model.get('attr').height +'%',
-				'cursor' : 'pointer'
+				'cursor' : 'pointer',
+				'border' : '2px dashed red',
+				'border-radius' : '6px',
+				'z-index' : 100
 			}
-			$(this.el).css( style );
+			$(this.el).html( this.getTemplate() ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
 			
@@ -66,16 +72,17 @@
 		},
 		
 		events : {
-			'click' : 'goToFrame',
+			'click .go-to-sequence' : 'goToSequenceFrame',
 			'click .delete-link' : 'deleteLink',
 			'mousedown .show-controls' : 'showControls'
 		},
 		
-		goToFrame : function()
+		goToSequenceFrame : function()
 		{
 			console.log('go to the new Sequence!!!');
 			console.log(this.model)
-			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			if(zeega.app.previewMode) zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
 		},
 		
 		deleteLink : function(e)
@@ -98,20 +105,8 @@
 			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
 			{
 				var _this = this;
-				var style = {
-					'border' : '2px dashed red',
-					'border-radius' : '6px',
-					'z-index' : 100
-				}
 
-				this.$el.css( style );
-
-				this.$el.find('.icon-remove').remove();
-				this.$el.prepend('<i class="icon-remove delete-link"></i>');
-			
-				//this.$el.append('<i class="icon-edit show-controls"></i>');
-			
-			
+				this.delegateEvents();
 				this.$el.resizable({
 					stop: function(e,ui)
 					{
@@ -124,6 +119,16 @@
 				})
 			}
 			
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+				'<i class="icon-remove delete-link"></i>'+
+				'<i class="icon-share go-to-sequence"></i>';
+			
+			return html;
 		}
 		
 		
