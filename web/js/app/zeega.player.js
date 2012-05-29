@@ -16,7 +16,7 @@ var Player2 = Backbone.View.extend({
 	overlaysHidden : false,
 	viewportRatio : 1.5,
 	zeega : true,
-	
+	apiplayer : false,
 	
 	initialize: function(container,apiplayer)
 	{
@@ -24,24 +24,35 @@ var Player2 = Backbone.View.extend({
 		this.container = container;
 		this.generateBackbone();
 		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
-		if( _.isUndefined(apiplayer) ) this.apiplayer = false;	
-		else apiplayer=true;
+		if(!_.isUndefined(apiplayer)) this.apiplayer = apiplayer;
 		console.log(this.apiplayer);
 	},
 	
 	loadProject : function( data, options )
 	{
+		console.log('load project')
+		console.log(data)
+		console.log(options)
+		
 		this.render();
 		
 		this.data = data;
 		this.parseData( data );
 		
-		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.project.sequences[0].id : options.sequenceID;
-		var f = ( _.isUndefined(options) || _.isUndefined(options.frameID) ) ? _.find(data.project.sequences, function(seq){return seq.id == s }).frames[0].id : options.frameID;
+		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.sequences[0].id : options.sequenceID;
+		var f = ( _.isUndefined(options) || _.isUndefined(options.frameID) ) ? _.find(data.sequences, function(seq){return seq.id == s }).frames[0] : options.frameID;
+		
+		console.log(s)
+		console.log(f)
 		
 		this.setCurrentSequence( s );
 		this.setCurrentFrame( f );
 		this.setCurrentLayers();
+		
+		console.log(this.currentSequence)
+		console.log(this.currentFrame)
+		
+		
 		
 		//this.goToFrame( this.currentFrame );
 		if( _.isUndefined(zeega.app.router) )
@@ -117,7 +128,7 @@ var Player2 = Backbone.View.extend({
 	
 	updateTitle : function()
 	{
-		$('title').html(this.data.project.title)
+		$('title').html(this.data.title)
 	},
 	
 	/*****************************
@@ -621,7 +632,9 @@ var Player2 = Backbone.View.extend({
 		
 		this.layers.on( 'ready', this.updateFrameStatus, this );
 		
-		console.log('	data parsed')
+		console.log('--raw data')
+		console.log(data)
+		console.log('--project data')
 		console.log(this)
 		
 		this.model.trigger('sequences_loaded');
@@ -629,13 +642,18 @@ var Player2 = Backbone.View.extend({
 	
 	setCurrentSequence : function( id )
 	{
+		console.log('setCurrentSequence: '+id)
+		console.log(this.sequences)
 		this.currentSequence = this.sequences.get(id);
+		console.log(this.currentSequence)
 	},
 	
 	setCurrentFrame : function( id )
 	{
-		console.log(this)
+		console.log('setCurrentFrame: '+ id)
+		console.log(this.frames)
 		this.currentFrame = this.frames.get(id)
+		console.log(this.currentFrame)
 	},
 	
 	setCurrentLayers : function()
@@ -643,6 +661,7 @@ var Player2 = Backbone.View.extend({
 		// set collection of current layers
 		var _this = this;
 		var layers = [];
+		console.log(this)
 		_.each( this.currentFrame.get('layers'), function(layerID){
 			layers.push( _this.layers.get(layerID) )
 		});

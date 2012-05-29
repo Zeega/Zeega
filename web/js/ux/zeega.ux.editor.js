@@ -477,6 +477,8 @@ $('#new-layer-list a').click(function(){
 		//this happens when you drop a database item onto a frame
 		drop : function( event, ui )
 			{
+				console.log('item dropped onto workspace')
+				console.log(zeega.app.draggedItem)
 				ui.draggable.draggable('option','revert',false);
 				zeega.app.addLayer({ item : zeega.app.draggedItem })
 			}

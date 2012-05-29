@@ -13,9 +13,11 @@
 
 			var imageHTML = '';
 
-			var frames = this.model.sequences.at(0).frames.models;
+			console.log(this.model)
+
+			var frames = this.model.frames.models;
 			
-			var attr = this.model.get('attr') == "" ? new Object() : this.model.get('attr');
+			var attr = _.isUndefined(this.model.get('attr')) ? {} : this.model.get('attr');
 
 			//maybe don't need frame id there if just need img src
 			for(var i=0;i<frames.length;i++){
@@ -25,15 +27,12 @@
 								'" id="'+ frame.id +'" src="' + frame.get('thumbnail_url')+ '"></a>';
 				
 			}
-
 			
 			var projectlink = zeega.app.url_prefix + this.model.id;
 			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
-
 			var blanks = {
-				
 				title : this.model.get('title'),
 				author : attr.author,
 				imageHTML : imageHTML,
@@ -44,7 +43,6 @@
 				iframeHTML : this.iframeHTML,
 				randId : this.elemId,
 				tags : this.model.get('tags'),
-
 			};
 			var template = _.template( this.getTemplate() );
 

@@ -265,6 +265,9 @@ this.zeega = {
 			sequence.save({},{
 				success : function()
 				{
+					_this.busy = false;
+					console.log('new sequence saved')
+					console.log(_this)
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.project.frames.add(sequence.get('frames'))
 					//sequence.createCollections();

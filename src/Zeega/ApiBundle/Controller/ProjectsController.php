@@ -72,8 +72,9 @@ class ProjectsController extends Controller
         $em->persist($project);
         $em->flush();
         
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
-        return ResponseHelper::compressTwigAndGetJsonResponse($projectView);       
+        //$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        //return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
+        return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));       
     }
     
     public function postProjectLayersAction($projectId)
