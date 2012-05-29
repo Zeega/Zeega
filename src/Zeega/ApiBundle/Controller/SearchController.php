@@ -62,12 +62,12 @@ class SearchController extends Controller
 		 	$q = str_replace("tag:".$matches[1], "", $q);
 		 	$tags = "tag_name:" . str_replace(","," tag_name:",$matches[1]);
 		}
+		
 	    // ----------- build the search query
         $client = $this->get("solarium.client");
-
+		
+		// set limits and page
         $query = $client->createSelect();
-        //return new Response(var_dump($query));
-        // pagination and limit
         $query->setRows($limit);
         $query->setStart($limit * $page);
         
@@ -91,8 +91,18 @@ class SearchController extends Controller
                 $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
             }
         }
+        
         if(isset($collection_id)) $query->createFilterQuery('parent_id')->setQuery("parent_item: $collection_id");
+           
+	    //  filter results for the logged user
+		if(isset($userId) && $userId == -1) 
+		{
+			$user = $this->get('security.context')->getToken()->getUser();
+			$userId = $user->getId();
+		}
+	
         if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
+		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
@@ -110,7 +120,7 @@ class SearchController extends Controller
         $facets = $resultset->getFacetSet();
         
         $results["items"] = $groups->getGroup('media_type:*');
-        //$results["collections"] = $groups->getGroup('media_type:Collection');
+        $results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
 
         $tags = $facets->getFacet('tags');
