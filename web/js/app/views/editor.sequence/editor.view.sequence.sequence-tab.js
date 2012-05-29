@@ -101,7 +101,7 @@
 		{
 			var html =
 			
-				'<a href="#" class="sequence-tab-link"><%= title %></a>'+
+				'<a href="#" class="sequence-tab-link"><%= title %></a> '+
 				"<a href='#' class='menu-toggle'><b class='caret'></b></a>"+
 				"<div class='well menu hide'>"+
 					"<ul class='nav nav-list'>"+

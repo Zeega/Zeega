@@ -93,9 +93,15 @@ this.zeega = {
 		var _this = this;
 		var Router = Backbone.Router.extend({
 			routes: {
-				""						: 'goToFrame',
+				""						: 'nullLoad',
 				"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
 				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
+			},
+			
+			nullLoad : function()
+			{
+				_this.goToSequence( _this.project.sequences.at(0).id )
+				_this.goToFrame( _this.project.sequences.at(0).get('frames')[0] );
 			},
 			
 			goToSequenceFrame : function( sequenceID,frameID )
@@ -295,12 +301,6 @@ this.zeega = {
 	
 	deleteSequence : function(sequenceID)
 	{
-		// look through all layers referenced in sequence
-		// find all link layers
-		// delete all referenced link layers
-		// delete sequence
-		
-		console.log('-- delete the sequence --')
 		var _this = this;
 		var sequence = this.project.sequences.get(sequenceID);
 		var layers = [];
@@ -308,17 +308,13 @@ this.zeega = {
 			var frame = _this.project.frames.get(frameID);
 			layers = _.union(layers,frame.get('layers'));
 		});
-		console.log('layers:')
 		_.each(layers, function(layerID){
 			var layer = _this.project.layers.get(layerID);
 			if(layer.get('type')=='Link')
 			{
 				var attr = layer.get('attr');
 				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
-				{
 					layer.destroy();
-				}
-
 			}
 		});
 		sequence.destroy();
@@ -425,7 +421,6 @@ this.zeega = {
 		if(!this.busy)
 		{
 			console.log('ADD LAYER')
-console.log(args)
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )

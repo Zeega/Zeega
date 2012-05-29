@@ -186,7 +186,6 @@ a.dropdown-toggle::after {
 }
 #sequence-tabs>li.active{background-color:#555;}
 #sequence-tabs>li .sequence-tab-link:link{color:#F15A29;}
-#sequence-tabs>li .menu-toggle{float:right;}
 #sequence-tabs>li.active .caret{border-top:4px solid black;}
 #sequence-tabs>li .caret
 {

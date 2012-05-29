@@ -18,7 +18,6 @@ Zeega\DataBundle\Entity\Frame:
                     onDelete: CASCADE
     manyToMany:
         layers:
-            cascade: [delete]
             targetEntity: Zeega\DataBundle\Entity\Layer
             inversedBy: frames
             joinTable:
@@ -29,6 +28,7 @@ Zeega\DataBundle\Entity\Frame:
                 joinColumns:
                     frame_id:
                         referencedColumnName: id
+                        onDelete: CASCADE
     id:
         id:
             type: integer
