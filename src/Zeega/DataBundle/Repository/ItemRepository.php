@@ -5,7 +5,10 @@ namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections;
+use Doctrine\DBAL\Types\BigIntType;
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateInterval;
+
 
 use DateTime;
 
@@ -359,24 +362,90 @@ class ItemRepository extends EntityRepository
 			   ->setMaxResults(15)
 			   ->getArrayResult();
     }
+	
+	public function findUserCollections($userId,$siteId)
+ 	{
+ 		$rsm = new ResultSetMapping;
+		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
+		$rsm->addFieldResult('i', 'id', 'id');
+		$rsm->addFieldResult('i', 'title', 'title');
 
-    public function findUserCollections($userId,$siteId)
-    {
+		$queryString = "SELECT id,title
+						FROM item where media_type = 'Collection' AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id 
+						ORDER BY id DESC LIMIT :limit OFFSET :offset";
+						
+		$queryString = str_replace("\r\n","",$queryString);
+
+		$query = $this->getEntityManager()->createNativeQuery($queryString, $rsm);
+
+		$query->setParameter('limit', 100);
+		$query->setParameter('offset', 0);
+		$query->setParameter('site_id', $siteId);
+		$query->setParameter('user_id', $userId);
+
+		return $query->getArrayResult();
+	}
+	
+    public function findByUserSiteMediatype($userId,$siteId,$mediaType)
+ 	{
+ 		$rsm = new ResultSetMapping;
+		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
+		$rsm->addFieldResult('i', 'id', 'id');
+		$rsm->addFieldResult('i', 'site_id', 'site_id');
+		/*
+		$rsm->addFieldResult('i', 'user_id', 'user_id');
+		$rsm->addFieldResult('i', 'title', 'title');
+		$rsm->addFieldResult('i', 'description', 'description');
+		$rsm->addFieldResult('i', 'text', 'text');
+		$rsm->addFieldResult('i', 'uri', 'uri');
+		$rsm->addFieldResult('i', 'attribution_uri', 'attribution_uri');
+		$rsm->addFieldResult('i', 'date_created', 'date_created');
+		$rsm->addFieldResult('i', 'archive', 'archive');
+		$rsm->addFieldResult('i', 'media_type', 'media_type');
+		$rsm->addFieldResult('i', 'layer_type', 'layer_type');
+		$rsm->addFieldResult('i', 'thumbnail_url', 'thumbnail_url');
+		$rsm->addFieldResult('i', 'child_items_count', 'child_items_count');
+		$rsm->addFieldResult('i', 'media_geo_latitude', 'media_geo_latitude');
+		$rsm->addFieldResult('i', 'media_geo_longitude', 'media_geo_longitude');
+		$rsm->addFieldResult('i', 'location', 'location');
+		$rsm->addFieldResult('i', 'media_date_created', 'media_date_created');
+		$rsm->addFieldResult('i', 'media_creator_username', 'media_creator_username');
+		$rsm->addFieldResult('i', 'media_creator_realname', 'media_creator_realname');
+		$rsm->addFieldResult('i', 'tags', 'tags');
+		*/
+		$queryString = "SELECT id,site_id FROM item where media_type::VARCHAR(20) = :media_type::VARCHAR(20) AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id ORDER BY id DESC LIMIT :limit OFFSET :offset";
+						
+		$queryString = str_replace("\r\n","",$queryString);
+
+		$query = $this->getEntityManager()->createNativeQuery($queryString, $rsm);
+		$query->setParameter('limit', 100);
+		$query->setParameter('offset', 0);
+		$query->setParameter('site_id', $siteId, \PDO::PARAM_INT);
+		$query->setParameter('user_id', $userId, \PDO::PARAM_INT);
+		$query->setParameter('media_type', $mediaType, \PDO::PARAM_STR);
+		//return $query->getSQL();
+		
+		return $query->getArrayResult();
+	    /*    
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-            // search query
-    	$qb->select('i.id, i.title')
+		// search query
+    	$qb->select('i')
     	   ->from('ZeegaDataBundle:Item', 'i')
 		   ->where('i.user_id = :user_id')
 		   ->andwhere('i.media_type = :media_type')
 		   ->andwhere('i.enabled = true')
 		   ->andwhere('i.site_id = :site_id')
-		   ->setParameter('user_id',$userId)
-		   ->setParameter('media_type','Collection')
-		   ->setParameter('site_id',$siteId);
-
-            // execute the query
+		   ->setParameter('user_id',$userId,'bigint')
+		   ->setParameter('media_type','Collection','string')
+		   ->setParameter('site_id',$siteId, 'integer')
+		   ->orderBy('i.id','DESC')
+		   ->setMaxResults(100)
+       	   ->setFirstResult(0);
+		  	
+		// execute the query
         return $qb->getQuery()->getArrayResult();
+        */
     }
 }
 
