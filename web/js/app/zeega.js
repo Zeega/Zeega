@@ -556,13 +556,35 @@ this.zeega = {
 	},
 	
 	
-	updateLayerOrder : function( layerIDArray, frame )
+	updateLayerOrder : function( frame )
 	{
-		var frameToUpdate = frame || this.currentFrame;
-		layerIDs = layerIDArray.reverse();
+		console.log('updateLayerOrder')
+		var frame = frame || this.currentFrame;
+		
+		var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
+		var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
+		
+		
+		console.log(linkOrder)
+		console.log(layerOrder)
+
+		var order = linkOrder.concat(layerOrder).reverse();
+		
+		console.log(order)
 		// updates z-index of divs in workspace
-		_.each(layerIDs, function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
-		frameToUpdate.set({'layers':layerIDs})
+		_.each( order , function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
+		
+		
+		frame.set({'layers': _.compact(order) });
+		
+		frame.save({},{
+			success : function()
+			{
+				console.log('frame saved')
+				console.log(frame)
+			}
+		})
+		
 	},
 
 	// returns the order that the frame appears in the sequence
@@ -584,7 +606,6 @@ this.zeega = {
 
 		this.exportProject();
 
-		
 		//this.cleanWorkspace();
 
 		this.player = new Player2($('body'));

@@ -84,12 +84,8 @@
 		addLayerToFrame : function(frame,layer)
 		{
 			console.log('	ADD LAYER TO FRAME')
-			console.log(frame)
-			console.log(layer)
-			console.log(zeega.app.currentSequence)
-			
-			//console.log(layer)
-			
+			layer.trigger('update');
+			/*
 			var layerOrder = [ parseInt( layer.id ) ];
 			if( frame.get('layers') )
 			{
@@ -100,8 +96,8 @@
 			}
 			console.log('frame order')
 			console.log(frame)
-			zeega.app.updateLayerOrder(layerOrder.reverse(), frame);
-			console.log(_.compact(layerOrder))
+			*/
+			zeega.app.updateLayerOrder( frame );
 			//set the layerOrder array inside the frame
 			frame.set({'layers': _.compact(layerOrder) });
 			frame.save();

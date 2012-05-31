@@ -402,12 +402,34 @@ $('#new-layer-list a').click(function(){
 			//resort the layers in the workspace too
 			update : function()
 			{
-				//get layer ids as ints
-				var layerIDs = _.map( $(this).sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-				zeega.app.updateLayerOrder(layerIDs);
+				zeega.app.updateLayerOrder();
 			}
 		});
 	$( "#sortable-layers" ).disableSelection();
+	
+	$('#links-list').sortable({
+		//define a grip handle for sorting
+		handle: '.layer-drag-handle',
+		cursor : 'move',
+		axis:'y',
+		containment: '#sidebar',
+		cursorAt : {top:1,left:1},
+		placeholder: "ui-state-highlight",
+	
+		//resort the layers in the workspace too
+		update : function()
+		{
+			console.log('link sort update')
+			zeega.app.updateLayerOrder();
+			/*
+			//get layer ids as ints
+			var layerIDs = _.map( $(this).sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+			zeega.app.updateLayerOrder(layerIDs);
+			*/
+		}
+	})
+	
+	
 	
 
 	$('#advance-controls input').change(function(){

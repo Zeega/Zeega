@@ -16,8 +16,8 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
-			this.$el.attr( 'id', 'layer-'+ this.model.id )
-			
+			this.$el.attr( 'id', 'layer-'+ this.model.id );
+			this.$el.attr('data-id',this.model.id);
 			//this.drawDefaultControls();
 			
 			
@@ -181,6 +181,7 @@
 		updateViewInPlace : function()
 		{
 			console.log('re render')
+			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 			
 		},
