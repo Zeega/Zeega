@@ -26,13 +26,6 @@
 		
 		init : function(options)
 		{
-			console.log('init link layer!!!')
-			console.log(this)
-			if( this.isNew() )
-			{
-				this.get('attr').from_frame = zeega.app.currentFrame.id;
-				this.get('attr').from_sequence = zeega.app.currentSequence.id;
-			}
 			
 		},
 		
@@ -74,8 +67,6 @@
 		render : function()
 		{
 			var _this = this;
-			
-			
 			
 			var style = {
 				'height' : this.model.get('attr').height +'%',

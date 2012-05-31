@@ -21,11 +21,10 @@ class PublishController extends Controller
     	$layerList = $frame->getLayers();
 
         $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame));
-        
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
 					'frameId'=> $frame->getId(),
 					'frame'=>$frameTemplate,
-					'layers'=>ResponseHelper::serializeEntityToJson($frame->getLayers())
+					'layers'=>$frame->getLayers()
     				));
      }
      

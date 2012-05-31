@@ -251,7 +251,13 @@ this.zeega = {
 		{
 			case 'newFrame':
 			console.log('make new sequence')
-				this.hold = this.addLayer( { type : 'Link' } );
+				this.hold = this.addLayer({
+					type : 'Link',
+					options : {
+						from_sequence : this.currentSequence.id,
+						from_frame : this.currentFrame.id
+					}
+				});
 				console.log(this.hold)
 				$('#connection-confirm').show();
 				$('#make-connection button').addClass('disabled');
