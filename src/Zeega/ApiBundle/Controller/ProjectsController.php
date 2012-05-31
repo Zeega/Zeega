@@ -120,18 +120,7 @@ class ProjectsController extends Controller
 
             if($original_frame->getThumbnailUrl()) $frame->setThumbnailUrl($original_frame->getThumbnailUrl());
             if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
-        
-            $original_layers = $original_frame->getLayers();
-            
-            if($original_layers)
-            {
-                foreach($original_layers as $original_layer)
-                {
-                    $frame->addLayer($original_layer);
-                }
-                $em->persist($frame);
-                $em->flush();
-            }
+            if($original_frame->getLayers()) $frame->setLayers($original_frame->getLayers());
         }
         else
         {
@@ -143,18 +132,18 @@ class ProjectsController extends Controller
         	$frame->setSequenceIndex(count($currFrames));
             $frame->setEnabled(true);
 
-
-
     		$request = $this->getRequest();
 
        		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
        		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
-
-       		$em->persist($frame);
-       		$em->flush();
-
+       		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
         }
-        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+        
+   		$em->persist($frame);
+   		$em->flush();
+        
+        $frameLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($frame->getLayers());
+    	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
         

@@ -8,11 +8,6 @@ Zeega\DataBundle\Entity\Layer:
             targetEntity: Zeega\DataBundle\Entity\Item
         project:
             targetEntity: Zeega\DataBundle\Entity\Project
-    manyToMany:
-        frames:
-            cascade: [delete]
-            targetEntity: Zeega\DataBundle\Entity\Frame
-            mappedBy: layers
     id:
         id:
             type: bigint

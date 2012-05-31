@@ -39,7 +39,7 @@
 				"layers" : 
 				[
 				{% for layer in frame.layers -%}	
-					{{layer.getId()}}
+					{{layer}}
 				{%- if loop.index0 < frame.layers |length - 1 -%}
 				,
 				{%- endif -%}

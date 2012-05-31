@@ -20,6 +20,16 @@ class Frame
     private $sequence_id;
 
     /**
+     * @var integer $sequence_index
+     */
+    private $sequence_index;
+
+    /**
+     * @var array $layers
+     */
+    private $layers;
+
+    /**
      * @var integer $project_id
      */
     private $project_id;
@@ -49,16 +59,7 @@ class Frame
      */
     private $project;
 
-    /**
-     * @var Zeega\DataBundle\Entity\Layer
-     */
-    private $layers;
 
-    public function __construct()
-    {
-        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Get id
      *
@@ -87,6 +88,46 @@ class Frame
     public function getSequenceId()
     {
         return $this->sequence_id;
+    }
+
+    /**
+     * Set sequence_index
+     *
+     * @param integer $sequenceIndex
+     */
+    public function setSequenceIndex($sequenceIndex)
+    {
+        $this->sequence_index = $sequenceIndex;
+    }
+
+    /**
+     * Get sequence_index
+     *
+     * @return integer 
+     */
+    public function getSequenceIndex()
+    {
+        return $this->sequence_index;
+    }
+
+    /**
+     * Set layers
+     *
+     * @param array $layers
+     */
+    public function setLayers($layers)
+    {
+        $this->layers = $layers;
+    }
+
+    /**
+     * Get layers
+     *
+     * @return array 
+     */
+    public function getLayers()
+    {
+        return $this->layers;
     }
 
     /**
@@ -207,60 +248,5 @@ class Frame
     public function getProject()
     {
         return $this->project;
-    }
-
-    /**
-     * Add layers
-     *
-     * @param Zeega\DataBundle\Entity\Layer $layers
-     */
-    public function addLayer(\Zeega\DataBundle\Entity\Layer $layers)
-    {
-        $this->layers[] = $layers;
-    }
-    
-    /**
-     * Add layers
-     *
-     * @param Zeega\DataBundle\Entity\Layer $layers
-     */
-    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
-    {
-        $this->layers = $layers;
-    }
-    
-    /**
-     * Get layers
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getLayers()
-    {
-        return $this->layers;
-    }
-    /**
-     * @var integer $sequence_index
-     */
-    private $sequence_index;
-
-
-    /**
-     * Set sequence_index
-     *
-     * @param integer $sequenceIndex
-     */
-    public function setSequenceIndex($sequenceIndex)
-    {
-        $this->sequence_index = $sequenceIndex;
-    }
-
-    /**
-     * Get sequence_index
-     *
-     * @return integer 
-     */
-    public function getSequenceIndex()
-    {
-        return $this->sequence_index;
     }
 }

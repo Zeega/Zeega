@@ -16,8 +16,8 @@ class FramesController extends Controller
     public function getFrameAction($frame_id)
     {
     	$frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findOneById($frame_id);
-    	//return new Response(json_encode($frame));
-    	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+    	$frameLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($frame->getLayers());
+    	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `get_frame`     [GET] /frames/{frame_id}
 
@@ -28,38 +28,14 @@ class FramesController extends Controller
        	$frame = $em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
 
    		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-   		// temp fix - the add/delete needs to be refactored and moved to new methods a frames/id/layers 
-		if($request->request->get('layers'))
-		{
-			$currLayers = $frame->getLayers()->toArray();
-			$newLayers = $em->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($request->request->get('layers'));
-			if(!is_array($newLayers))
-				$newLayers = $newLayers->toArray();
-			
-			if(!isset($currLayers)) $currLayers = array();
-				
-			$layersToDelete = array_diff($currLayers, $newLayers);
-			foreach($layersToDelete as $layer)
-			{
-				unset($currLayers,$layer);
-			}
-			if(!isset($currLayers)) $currLayers = array();
-			
-			$layersToAdd = array_diff($newLayers,$currLayers);
-			foreach($layersToAdd as $layer)
-			{
-				array_push($currLayers,$layer);
-			}
-
-			$mergedLayers = new \Doctrine\Common\Collections\ArrayCollection($currLayers);
-			$frame->setLayers($mergedLayers);
-		}
+		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
    		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
 
    		$em->persist($frame);
    		$em->flush();
 
-   		$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+    	$frameLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($frame->getLayers());
+    	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
    	}   // `put_frame`     [PUT] /frames/{frame_id}
 
@@ -83,7 +59,7 @@ class FramesController extends Controller
         
         if(isset($frame))
         {
-            $layerList = $frame->getLayers()->toArray();
+            $layerList = $frame->getLayers();
         
             if(is_array($layerList) && count($layerList) > 0)
             {

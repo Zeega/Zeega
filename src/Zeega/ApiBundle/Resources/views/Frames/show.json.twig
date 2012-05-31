@@ -4,7 +4,7 @@
 		"attr" : {{frame.attr | default([ ]) | json_encode | raw}},
 		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},
 		"layers":[
-		{% for layer in frame.getLayers %}
+		{% for layer in layers %}
 			{{layer.getId()}}
 			{%- if loop.index0 < frame.getLayers|length - 1 -%}
 			,

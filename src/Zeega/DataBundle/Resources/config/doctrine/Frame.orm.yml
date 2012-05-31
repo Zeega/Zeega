@@ -16,21 +16,6 @@ Zeega\DataBundle\Entity\Frame:
                 project_id:
                     referencedColumnName: id
                     onDelete: CASCADE
-    manyToMany:
-        layers:
-            cascade: [delete]
-            targetEntity: Zeega\DataBundle\Entity\Layer
-            inversedBy: frames
-            joinTable:
-                name: frames_layers
-                inverseJoinColumns:
-                    layer_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-                joinColumns:
-                    frame_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
     id:
         id:
             type: integer
@@ -42,6 +27,9 @@ Zeega\DataBundle\Entity\Frame:
         sequence_index:
             type: integer
             length: 2
+            nullable: true
+        layers:
+            type: array
             nullable: true
         project_id:
             type: integer
