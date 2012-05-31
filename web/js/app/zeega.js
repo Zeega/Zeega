@@ -560,31 +560,14 @@ this.zeega = {
 	{
 		console.log('updateLayerOrder')
 		var frame = frame || this.currentFrame;
-		
 		var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
 		var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
-		
-		
-		console.log(linkOrder)
-		console.log(layerOrder)
-
 		var order = linkOrder.concat(layerOrder).reverse();
 		
-		console.log(order)
 		// updates z-index of divs in workspace
 		_.each( order , function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
-		
-		
-		frame.set({'layers': _.compact(order) });
-		
-		frame.save({},{
-			success : function()
-			{
-				console.log('frame saved')
-				console.log(frame)
-			}
-		})
-		
+
+		frame.save({'layers': _.compact(order) })
 	},
 
 	// returns the order that the frame appears in the sequence

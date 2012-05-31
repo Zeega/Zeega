@@ -85,22 +85,7 @@
 		{
 			console.log('	ADD LAYER TO FRAME')
 			layer.trigger('update');
-			/*
-			var layerOrder = [ parseInt( layer.id ) ];
-			if( frame.get('layers') )
-			{
-				//if the layer array already exists eliminate false values if they exist
-				layerOrder = frame.get('layers');
-				//add the layer id to the layer order array
-				layerOrder.push( parseInt( layer.id ) );
-			}
-			console.log('frame order')
-			console.log(frame)
-			*/
 			zeega.app.updateLayerOrder( frame );
-			//set the layerOrder array inside the frame
-			frame.set({'layers': _.compact(layerOrder) });
-			frame.save();
 		},
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },
