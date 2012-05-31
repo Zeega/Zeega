@@ -24,7 +24,7 @@
 
 				console.log('add non item layer type: '+args.type);
 
-				var newLayer = new Layer[args.type]({attr:{}});
+				var newLayer = new Layer[args.type]({attr:args.options});
 				console.log( new Layer[args.type] )
 				console.log(newLayer)
 				this.add( newLayer );

@@ -6,6 +6,7 @@
 		player : false,
 		displayCitation: true,
 		visualLoaded : false,
+		defaultControls : true,
 		
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),
@@ -50,7 +51,7 @@
 				this.visual = new Layer.Views.Visual[this.layerType]({model:this});
 				
 				//create control view
-				if( !this.player && this.get('type') != 'Link' ) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
+				if( !this.player ) this.controls = new Layer.Views.Controls[this.layerType]({model:this})
 			
 				this.init();
 			}

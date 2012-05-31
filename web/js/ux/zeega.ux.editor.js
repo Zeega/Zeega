@@ -122,8 +122,6 @@ function initUX(){
 		if( !$(this).hasClass('disabled') )
 		{
 			$(this).closest('div').removeClass('open');
-			$('#make-connection button').addClass('disabled');
-			$('#connection-confirm').show();
 			zeega.app.makeConnection( $(this).data('action') );
 		}
 		return false;

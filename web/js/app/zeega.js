@@ -250,10 +250,18 @@ this.zeega = {
 		switch(action)
 		{
 			case 'newFrame':
+			console.log('make new sequence')
 				this.hold = this.addLayer( { type : 'Link' } );
-				
+				console.log(this.hold)
+				$('#connection-confirm').show();
+				$('#make-connection button').addClass('disabled');
 				break;
 			case 'existingFrame':
+			console.log('link to existing')
+				var Modal = zeega.module('modal');
+				var linkModal = new Modal.Views.LinkExisting();
+				$('body').append(linkModal.render().el);
+				linkModal.show();
 			
 				break;
 			case 'advanced':
@@ -261,6 +269,22 @@ this.zeega = {
 				break;
 		}
 		this.busy = true;
+	},
+	
+	connectToSequenceFrame : function( sequenceID, frameID )
+	{
+		console.log('connectToSequenceFrame ' + sequenceID +' '+ frameID)
+		this.busy = false;
+		this.addLayer({
+			type : 'Link',
+			options : {
+				to_sequence : sequenceID,
+				to_frame : frameID
+			}
+			
+		});
+		console.log(this)
+
 	},
 	
 	confirmConnection : function(action)
@@ -425,7 +449,7 @@ this.zeega = {
 		{
 			console.log('ADD LAYER')
 			var _this = this;
-			args = _.defaults( args, { frame : _this.currentFrame, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
+			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )
 			args.frame.trigger('update_thumb');
 			console.log(args)
@@ -582,31 +606,6 @@ this.zeega = {
 		_.extend(projectObject,stuff);
 		
 		console.log(projectObject);
-		
-/*
-		var order = _.map( this.currentSequence.get('framesOrder'), function(num){ return parseInt(num) });
-		
-		var frames = this.currentSequence.frames.toJSON();
-		_.each( frames, function(frame){ frame.layers = _.compact(frame.layers) })
-		
-		var layers = this.currentSequence.layers.toJSON();
-		_.each(layers, function(layer){ layer.id = parseInt(layer.id) });
-		
-		var sequences = [{
-			'id' : parseInt( this.currentSequence.id ),
-			'frameOrder' : order,
-			'frames' : frames,
-			'layers' : layers //$.parseJSON( JSON.stringify(this.sequence.layers) )
-		}];
-
-		var project = {
-			'id' : parseInt(this.project.id),
-			'title' : this.project.get('title'),
-			'sequences' : sequences
-		};
-		var exportObject = { 'project' : project };
-		console.log(exportObject)
-*/
 
 		if(string) return JSON.stringify(projectObject);
 		else return projectObject;

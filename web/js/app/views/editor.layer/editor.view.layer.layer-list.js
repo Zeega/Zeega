@@ -106,7 +106,7 @@
 		private_onLayerEnter : function()
 		{
 			console.log('	LAYER LIST enter')
-			this.drawDefaultControls();
+			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
 			this.onLayerEnter();
 		},

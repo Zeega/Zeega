@@ -8,6 +8,9 @@
 	Layer.Link = Layer.Model.extend({
 
 		layerType : 'Link',
+		layerPanel : $('#links-list'),
+		defaultControls : false,
+		
 		
 		defaultAttributes : {
 			'title' : 'Link Layer',
@@ -21,19 +24,23 @@
 			'width' : 50
 		},
 		
-		init : function()
+		init : function(options)
 		{
+			console.log('init link layer!!!')
+			console.log(this)
 			if( this.isNew() )
 			{
 				this.get('attr').from_frame = zeega.app.currentFrame.id;
 				this.get('attr').from_sequence = zeega.app.currentSequence.id;
 			}
+			
 		},
 		
 		setToFrame : function(sequenceID, frameID)
 		{
 			this.get('attr').to_sequence = sequenceID;
 			this.get('attr').to_frame = frameID;
+			this.get('attr').title = 'Link to sequence '+sequenceID;
 			this.save();
 		}
 		
@@ -43,8 +50,21 @@
 		
 		render : function()
 		{
-			$(this.el).remove();
+			/*
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
+				label : 'Opacity',
+				step : 0.01,
+				min : .05,
+				max : 1,
+			});
+			
+			$(this.controls).append( opacitySlider.getControl() );
+			*/
+			
 			return this;
+		
 		}
 		
 	});

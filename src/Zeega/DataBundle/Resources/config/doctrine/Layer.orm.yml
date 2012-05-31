@@ -10,6 +10,7 @@ Zeega\DataBundle\Entity\Layer:
             targetEntity: Zeega\DataBundle\Entity\Project
     manyToMany:
         frames:
+            cascade: [delete]
             targetEntity: Zeega\DataBundle\Entity\Frame
             mappedBy: layers
     id:
