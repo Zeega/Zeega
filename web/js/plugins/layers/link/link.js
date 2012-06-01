@@ -91,7 +91,8 @@
 			}
 			else
 			{
-				$(this.el).addClass('go-to-sequence')
+				this.delegateEvents({'click':'goClick'})
+				//$(this.el).addClass('go-to-sequence')
 			}
 
 			
@@ -106,6 +107,11 @@
 			'click .go-to-sequence' : 'goToSequenceFrame',
 			'click .delete-link' : 'deleteLink',
 			'mousedown .show-controls' : 'showControls'
+		},
+		
+		goClick : function()
+		{
+			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
 		},
 		
 		goToSequenceFrame : function()
