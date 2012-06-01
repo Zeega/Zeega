@@ -347,7 +347,7 @@ class ItemRepository extends EntityRepository
     		   ->getArrayResult();
     }
      
-    public function findUserItems($id)
+    public function findUserItems($id,$limit,$offset)
     {
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
@@ -356,10 +356,12 @@ class ItemRepository extends EntityRepository
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->andwhere('i.enabled = true')
+			   ->andwhere("i.media_type <> 'Collection'")
 			   ->setParameter('id',$id)
-			    ->orderBy('i.id','DESC')
+			   ->orderBy('i.id','DESC')
 			   ->getQuery()
-			   ->setMaxResults(15)
+			   ->setMaxResults($limit)
+			   ->setFirstResult($offset)
 			   ->getArrayResult();
     }
 	
@@ -386,66 +388,30 @@ class ItemRepository extends EntityRepository
 		return $query->getArrayResult();
 	}
 	
-    public function findByUserSiteMediatype($userId,$siteId,$mediaType)
+	
+    public function findCollections($userId,$siteId,$limit,$offset)
  	{
- 		$rsm = new ResultSetMapping;
-		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
-		$rsm->addFieldResult('i', 'id', 'id');
-		$rsm->addFieldResult('i', 'site_id', 'site_id');
-		/*
-		$rsm->addFieldResult('i', 'user_id', 'user_id');
-		$rsm->addFieldResult('i', 'title', 'title');
-		$rsm->addFieldResult('i', 'description', 'description');
-		$rsm->addFieldResult('i', 'text', 'text');
-		$rsm->addFieldResult('i', 'uri', 'uri');
-		$rsm->addFieldResult('i', 'attribution_uri', 'attribution_uri');
-		$rsm->addFieldResult('i', 'date_created', 'date_created');
-		$rsm->addFieldResult('i', 'archive', 'archive');
-		$rsm->addFieldResult('i', 'media_type', 'media_type');
-		$rsm->addFieldResult('i', 'layer_type', 'layer_type');
-		$rsm->addFieldResult('i', 'thumbnail_url', 'thumbnail_url');
-		$rsm->addFieldResult('i', 'child_items_count', 'child_items_count');
-		$rsm->addFieldResult('i', 'media_geo_latitude', 'media_geo_latitude');
-		$rsm->addFieldResult('i', 'media_geo_longitude', 'media_geo_longitude');
-		$rsm->addFieldResult('i', 'location', 'location');
-		$rsm->addFieldResult('i', 'media_date_created', 'media_date_created');
-		$rsm->addFieldResult('i', 'media_creator_username', 'media_creator_username');
-		$rsm->addFieldResult('i', 'media_creator_realname', 'media_creator_realname');
-		$rsm->addFieldResult('i', 'tags', 'tags');
-		*/
-		$queryString = "SELECT id,site_id FROM item where media_type::VARCHAR(20) = :media_type::VARCHAR(20) AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id ORDER BY id DESC LIMIT :limit OFFSET :offset";
-						
-		$queryString = str_replace("\r\n","",$queryString);
+ 		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+ 		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
 
-		$query = $this->getEntityManager()->createNativeQuery($queryString, $rsm);
-		$query->setParameter('limit', 100);
-		$query->setParameter('offset', 0);
-		$query->setParameter('site_id', $siteId, \PDO::PARAM_INT);
-		$query->setParameter('user_id', $userId, \PDO::PARAM_INT);
-		$query->setParameter('media_type', $mediaType, \PDO::PARAM_STR);
-		//return $query->getSQL();
-		
-		return $query->getArrayResult();
-	    /*    
         $qb = $this->getEntityManager()->createQueryBuilder();
 
 		// search query
     	$qb->select('i')
     	   ->from('ZeegaDataBundle:Item', 'i')
 		   ->where('i.user_id = :user_id')
-		   ->andwhere('i.media_type = :media_type')
+		   ->andwhere("i.media_type = 'Collection'")
 		   ->andwhere('i.enabled = true')
 		   ->andwhere('i.site_id = :site_id')
-		   ->setParameter('user_id',$userId,'bigint')
-		   ->setParameter('media_type','Collection','string')
-		   ->setParameter('site_id',$siteId, 'integer')
+		   ->setParameter('user_id',$userId)
+		   ->setParameter('site_id',$siteId)
 		   ->orderBy('i.id','DESC')
 		   ->setMaxResults(100)
        	   ->setFirstResult(0);
 		  	
 		// execute the query
         return $qb->getQuery()->getArrayResult();
-        */
+        
     }
 }
 
