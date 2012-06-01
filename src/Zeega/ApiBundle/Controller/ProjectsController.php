@@ -116,11 +116,13 @@ class ProjectsController extends Controller
      	
      	if($request->request->get('duplicate_id'))
         {
+            $layersToPersist = $request->request->get('layers_to_persist');
             $original_frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($request->request->get('duplicate_id'));
 
             if($original_frame->getThumbnailUrl()) $frame->setThumbnailUrl($original_frame->getThumbnailUrl());
             if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
-            if($original_frame->getLayers()) $frame->setLayers($original_frame->getLayers());
+            //if($original_frame->getLayers()) $frame->setLayers($original_frame->getLayers());
+            if(isset($layersToPersist)) $frame->setLayers($layersToPersist);
         }
         else
         {

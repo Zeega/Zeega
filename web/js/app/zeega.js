@@ -250,6 +250,8 @@ this.zeega = {
 		switch(action)
 		{
 			case 'newFrame':
+			var _this = this;
+
 			console.log('make new sequence')
 				this.hold = this.addLayer({
 					type : 'Link',
@@ -262,8 +264,9 @@ this.zeega = {
 				$('#connection-confirm').show();
 				$('#make-connection button').addClass('disabled');
 				break;
+			
 			case 'existingFrame':
-			console.log('link to existing')
+				console.log('link to existing')
 				var Modal = zeega.module('modal');
 				var linkModal = new Modal.Views.LinkExisting();
 				$('body').append(linkModal.render().el);
@@ -300,12 +303,21 @@ this.zeega = {
 		{
 			var _this = this;
 			console.log('create and go to new sequence')
+			
+			var layersToPersist = [this.hold.id];
+			var frameLayers = _.each( this.currentFrame.get('layers'), function(layerID){
+				var layer = _this.project.layers.get(layerID);
+				if( layer.get('type') == 'Audio' ) layersToPersist.push(layerID);
+			})
+			
 			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id });
+			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
 
 			sequence.save({},{
 				success : function()
 				{
+					console.log('sequence saved')
+					console.log(sequence)
 					_this.busy = false;
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.hold.visual.render();
@@ -319,6 +331,7 @@ this.zeega = {
 				}
 			});
 			this.project.sequences.add(sequence);
+
 		}
 		else
 		{
