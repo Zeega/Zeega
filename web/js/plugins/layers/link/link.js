@@ -41,6 +41,15 @@
 	
 	Layer.Views.Controls.Link = Layer.Views.Controls.extend({
 		
+		onLayerEnter : function()
+		{
+			if(this.model.get('attr').to_frame == zeega.app.currentFrame.id)
+			{
+				console.log('dont draw layer list')
+				this.remove();
+			}
+		},
+		
 		render : function()
 		{
 			/*
@@ -95,7 +104,7 @@
 				//$(this.el).addClass('go-to-sequence')
 			}
 
-			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) $(this.el).empty().attr('style','');
+			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) this.remove();
 			else $(this.el).html( this.getTemplate() ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
