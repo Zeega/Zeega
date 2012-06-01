@@ -82,7 +82,7 @@
 				'z-index' : 100
 			}
 			
-			if(!zeega.app.previewMode)
+			if(!zeega.app.previewMode )
 			{
 				_.extend( style, {
 					'border' : '2px dashed red',
@@ -95,8 +95,8 @@
 				//$(this.el).addClass('go-to-sequence')
 			}
 
-			
-			$(this.el).html( this.getTemplate() ).css( style );
+			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) $(this.el).empty().attr('style','');
+			else $(this.el).html( this.getTemplate() ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
 			
@@ -138,6 +138,7 @@
 		
 		onLayerEnter : function()
 		{
+			this.render();
 			this.delegateEvents();
 			
 			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
