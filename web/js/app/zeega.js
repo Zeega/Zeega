@@ -308,6 +308,7 @@ this.zeega = {
 				{
 					_this.busy = false;
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
+					_this.hold.visual.render();
 					_this.project.frames.add(sequence.get('frames'))
 					//sequence.createCollections();
 					sequence.trigger('sync');

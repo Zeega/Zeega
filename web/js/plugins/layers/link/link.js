@@ -64,17 +64,37 @@
 
 	Layer.Views.Visual.Link = Layer.Views.Visual.extend({
 		
+		preview : false,
+		
+		init : function()
+		{
+			this.preview = zeega.app.previewMode;
+		},
+		
 		render : function()
 		{
 			var _this = this;
 			
+			
 			var style = {
 				'height' : this.model.get('attr').height +'%',
 				'cursor' : 'pointer',
-				'border' : '2px dashed red',
-				'border-radius' : '6px',
 				'z-index' : 100
 			}
+			
+			if(!zeega.app.previewMode)
+			{
+				_.extend( style, {
+					'border' : '2px dashed red',
+					'border-radius' : '6px'
+				})
+			}
+			else
+			{
+				$(this.el).addClass('go-to-sequence')
+			}
+
+			
 			$(this.el).html( this.getTemplate() ).css( style );
 			
 			this.model.trigger('ready',this.model.id)
@@ -112,6 +132,7 @@
 		
 		onLayerEnter : function()
 		{
+			this.delegateEvents();
 			
 			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
 			{
@@ -134,11 +155,11 @@
 		
 		getTemplate : function()
 		{
-			var html =
+			var html = '';
 			
-				'<i class="icon-remove delete-link"></i>'+
-				'<i class="icon-share go-to-sequence"></i>';
-			
+				if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
+				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
+				
 			return html;
 		}
 		
