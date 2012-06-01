@@ -5,7 +5,10 @@ namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections;
+use Doctrine\DBAL\Types\BigIntType;
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateInterval;
+
 
 use DateTime;
 
@@ -344,7 +347,7 @@ class ItemRepository extends EntityRepository
     		   ->getArrayResult();
     }
      
-    public function findUserItems($id)
+    public function findUserItems($id,$limit,$offset)
     {
      	return $this->getEntityManager()
 			   ->createQueryBuilder()
@@ -353,30 +356,62 @@ class ItemRepository extends EntityRepository
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->andwhere('i.enabled = true')
+			   ->andwhere("i.media_type <> 'Collection'")
 			   ->setParameter('id',$id)
-			    ->orderBy('i.id','DESC')
+			   ->orderBy('i.id','DESC')
 			   ->getQuery()
-			   ->setMaxResults(15)
+			   ->setMaxResults($limit)
+			   ->setFirstResult($offset)
 			   ->getArrayResult();
     }
+	
+	public function findUserCollections($userId,$siteId)
+ 	{
+ 		$rsm = new ResultSetMapping;
+		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
+		$rsm->addFieldResult('i', 'id', 'id');
+		$rsm->addFieldResult('i', 'title', 'title');
 
-    public function findUserCollections($userId,$siteId)
-    {
+		$queryString = "SELECT id,title
+						FROM item where media_type = 'Collection' AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id 
+						ORDER BY id DESC LIMIT :limit OFFSET :offset";
+						
+		$queryString = str_replace("\r\n","",$queryString);
+
+		$query = $this->getEntityManager()->createNativeQuery($queryString, $rsm);
+
+		$query->setParameter('limit', 100);
+		$query->setParameter('offset', 0);
+		$query->setParameter('site_id', $siteId);
+		$query->setParameter('user_id', $userId);
+
+		return $query->getArrayResult();
+	}
+	
+	
+    public function findCollections($userId,$siteId,$limit,$offset)
+ 	{
+ 		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+ 		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-            // search query
-    	$qb->select('i.id, i.title')
+		// search query
+    	$qb->select('i')
     	   ->from('ZeegaDataBundle:Item', 'i')
 		   ->where('i.user_id = :user_id')
-		   ->andwhere('i.media_type = :media_type')
+		   ->andwhere("i.media_type = 'Collection'")
 		   ->andwhere('i.enabled = true')
 		   ->andwhere('i.site_id = :site_id')
 		   ->setParameter('user_id',$userId)
-		   ->setParameter('media_type','Collection')
-		   ->setParameter('site_id',$siteId);
-
-            // execute the query
+		   ->setParameter('site_id',$siteId)
+		   ->orderBy('i.id','DESC')
+		   ->setMaxResults(100)
+       	   ->setFirstResult(0);
+		  	
+		// execute the query
         return $qb->getQuery()->getArrayResult();
+        
     }
 }
 
