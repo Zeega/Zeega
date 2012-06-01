@@ -347,9 +347,9 @@ class ItemRepository extends EntityRepository
     		   ->getArrayResult();
     }
      
-    public function findUserItems($id,$limit,$offset)
+    public function findUserItems($userId,$siteId,$limit,$offset)
     {
-     	return $this->getEntityManager()
+     	$qb = $this->getEntityManager()
 			   ->createQueryBuilder()
 			   ->add('select', 'i.id,i.title,i.thumbnail_url')
 			   ->add('from', ' ZeegaDataBundle:Item i')
@@ -357,12 +357,16 @@ class ItemRepository extends EntityRepository
 			   ->andwhere('u.id = :id')
 			   ->andwhere('i.enabled = true')
 			   ->andwhere("i.media_type <> 'Collection'")
-			   ->setParameter('id',$id)
+			   ->setParameter('id',$userId)
 			   ->orderBy('i.id','DESC')
-			   ->getQuery()
 			   ->setMaxResults($limit)
-			   ->setFirstResult($offset)
-			   ->getArrayResult();
+			   ->setFirstResult($offset);
+		if(isset($siteId))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+		}
+				   
+		return $qb->getQuery()->getArrayResult();
     }
 	
 	public function findUserCollections($userId,$siteId)
@@ -402,13 +406,16 @@ class ItemRepository extends EntityRepository
 		   ->where('i.user_id = :user_id')
 		   ->andwhere("i.media_type = 'Collection'")
 		   ->andwhere('i.enabled = true')
-		   ->andwhere('i.site_id = :site_id')
 		   ->setParameter('user_id',$userId)
-		   ->setParameter('site_id',$siteId)
 		   ->orderBy('i.id','DESC')
 		   ->setMaxResults(100)
        	   ->setFirstResult(0);
-		  	
+		
+		if(isset($siteId))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+		}
+				  	
 		// execute the query
         return $qb->getQuery()->getArrayResult();
         
