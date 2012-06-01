@@ -11,6 +11,8 @@
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),
 		
+		layerColor : [ 'red','blue','yellow','green' ],
+		
 		defaults : {
 			attr : {},
 			linkable: true,

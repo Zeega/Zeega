@@ -760,6 +760,7 @@ var Player2 = Backbone.View.extend({
 				var model = this.get(id);
 				if( model.status != 'loading' && model.status != 'ready')
 				{
+					console.log('model: '+ id +' is loading…')
 					model.status = 'loading';
 					this.loading.push(id)
 				}
@@ -769,6 +770,7 @@ var Player2 = Backbone.View.extend({
 				var model = this.get(id);
 				if( model.status != 'ready' )
 				{
+					console.log('model: '+ id +' is loaded…')
 					this.loading = _.without(this.loading,id);
 					model.status = 'ready';
 					this.ready.push(id);

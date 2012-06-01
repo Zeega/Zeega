@@ -43,6 +43,7 @@
 		
 		onLayerEnter : function()
 		{
+			$(this.el).find('.zicon-link').css({'background-color': this.model.layerColor[( this.model.layerIndex % this.model.layerColor.length )] })
 			if(this.model.get('attr').to_frame == zeega.app.currentFrame.id)
 			{
 				console.log('dont draw layer list')
@@ -52,6 +53,7 @@
 		
 		render : function()
 		{
+			
 			/*
 			var opacitySlider = new Layer.Views.Lib.Slider({
 				property : 'opacity',
@@ -94,7 +96,7 @@
 			if(!zeega.app.previewMode )
 			{
 				_.extend( style, {
-					'border' : '2px dashed red',
+					'border' : '2px dashed '+ this.model.layerColor[( this.model.layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
 			}

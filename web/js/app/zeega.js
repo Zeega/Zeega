@@ -188,11 +188,16 @@ this.zeega = {
 	{
 		if(frame)
 		{
+			var layerIndex = 0;
 			console.log('render frame id: '+ frame.id)
 			var _this = this;
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
 				console.log('RENDER layer id: '+ layerID)
 				var layerModel = _this.project.layers.get(layerID);
+
+				layerModel.layerIndex = layerIndex;
+				layerIndex++;
+				
 				console.log(layerModel)
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerRender', i)
