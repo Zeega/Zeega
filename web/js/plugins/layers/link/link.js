@@ -43,7 +43,9 @@
 		
 		onLayerEnter : function()
 		{
-			$(this.el).find('.zicon-link').css({'background-color': this.model.layerColor[( this.model.layerIndex % this.model.layerColor.length )] })
+			var layerIndex = this.model.layerIndex || this.model.layerColor.length;
+			
+			$(this.el).find('.zicon-link').css({'background-color': this.model.layerColor[( layerIndex % this.model.layerColor.length )] })
 			if(this.model.get('attr').to_frame == zeega.app.currentFrame.id)
 			{
 				console.log('dont draw layer list')
@@ -95,8 +97,13 @@
 			
 			if(!zeega.app.previewMode )
 			{
+				
+				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
+				
+				console.log('layer indicies: '+ layerIndex +' : '+ this.model.layerColor.length +' : '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )])
+				
 				_.extend( style, {
-					'border' : '2px dashed '+ this.model.layerColor[( this.model.layerIndex % this.model.layerColor.length )],
+					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
 			}
@@ -105,6 +112,8 @@
 				this.delegateEvents({'click':'goClick'})
 				//$(this.el).addClass('go-to-sequence')
 			}
+			
+			console.log(style);
 
 			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) this.remove();
 			else $(this.el).html( this.getTemplate() ).css( style );
