@@ -444,6 +444,9 @@ this.zeega = {
 						newFrame.trigger('updateThumb');
 						_this.project.frames.add( newFrame );
 						_this.loadFrame( newFrame );
+						
+						_this.currentSequence.get('frames').push(newFrame.id);
+						
 					}
 				});
 			
