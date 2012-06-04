@@ -292,10 +292,11 @@ this.zeega = {
 		this.addLayer({
 			type : 'Link',
 			options : {
+				from_sequence : this.currentSequence.id,
+				from_frame : this.currentFrame.id,
 				to_sequence : sequenceID,
 				to_frame : frameID
 			}
-			
 		});
 		console.log(this)
 
