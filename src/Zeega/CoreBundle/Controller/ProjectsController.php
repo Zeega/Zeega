@@ -130,8 +130,13 @@ class ProjectsController extends Controller
 		$frame = new Frame();
 		$frame->setSequence($sequence);
 		$frame->setProject($project);
-
-		if($request->request->get('frame_id')) 
+                
+                if($request->request->get('layers_to_persist'))
+                {
+                    $layersToPersist = $request->request->get('layers_to_persist');
+                    $frame->setLayers($layersToPersist);
+                }  
+		else if($request->request->get('frame_id')) 
 		{
 		    $frameId = $request->request->get('frame_id');
 		    $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);

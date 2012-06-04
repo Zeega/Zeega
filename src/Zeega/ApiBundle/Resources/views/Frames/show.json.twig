@@ -3,12 +3,5 @@
 		"project_id" : {{frame.getProject.id | default([ ]) | json_encode | raw}},
 		"attr" : {{frame.attr | default([ ]) | json_encode | raw}},
 		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},
-		"layers":[
-		{% for layer in layers %}
-			{{layer.getId()}}
-			{%- if loop.index0 < frame.getLayers|length - 1 -%}
-			,
-			{%- endif -%}
-	    {% endfor %}
-		]
+		"layers": {{frame.getLayers | json_encode | raw}}
 }
