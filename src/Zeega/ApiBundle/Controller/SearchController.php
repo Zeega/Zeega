@@ -348,14 +348,20 @@ class SearchController extends Controller
 		$returnItems = $request->query->get('r_items');
 		$returnCollections = $request->query->get('r_collections');
 		
-		if(isset($userId) && $userId == -1) $userId = $user->getId();
-		
+		if(isset($userId) && $userId == -1 && $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+			$userId = $user->getId();
+		}
 		$results = array();
 		
 		if($returnCollections)
 		{
-	    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,$siteId,100,0);
-	    	$results['collections'] = $collections;
+			if(isset($userId) && $userId != -1)
+		    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,$siteId,100,0);
+		    else
+				$collections = array();		    		
+
+		    $results['collections'] = $collections;
 		}
 		
 		if($returnItems)
