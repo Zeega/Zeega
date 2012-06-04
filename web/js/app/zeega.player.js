@@ -725,7 +725,14 @@ var Player2 = Backbone.View.extend({
 			{
 				console.log('	render loader!!!!!')
 				$(this.el).css('z-index',100000)
-				if(this.model.get('layers').length>0) $(this.el).append( _.template(this.getTemplate(), this.model.attributes) )
+				if(this.model.get('layers').length>0)
+				{
+					$(this.el).append( _.template(this.getTemplate(), this.model.attributes) );
+					$(this.el).find('.progress')
+						.stop()
+						.animate({width : 0.25/this.model.get('layers').length * 100 +'%' },200)
+						.animate({width : 0.75/this.model.get('layers').length * 100 +'%' },100000)
+				}
 				
 				return this;
 			},
@@ -735,9 +742,11 @@ var Player2 = Backbone.View.extend({
 				var _this = this;
 				this.loadedCount++;
 				$(this.el).find('.loaded-count').html( this.loadedCount );
-				$(this.el).find('.progress').css({ width : this.loadedCount/this.model.get('layers').length * 100 +'%' })
-				
-				console.log('increment loader '+ this.model.get('layers').length +" "+ this.loadedCount)
+				//$(this.el).find('.progress').css({ width : this.loadedCount/this.model.get('layers').length * 100 +'%' })
+				$(this.el).find('.progress')
+					.stop()
+					.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
+					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
 				
 				if(this.model.get('layers').length == this.loadedCount)
 					$(this.el).fadeOut('slow', function(){ _this.remove() });
