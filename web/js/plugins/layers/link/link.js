@@ -100,8 +100,6 @@
 				
 				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
 				
-				console.log('layer indicies: '+ layerIndex +' : '+ this.model.layerColor.length +' : '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )])
-				
 				_.extend( style, {
 					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'

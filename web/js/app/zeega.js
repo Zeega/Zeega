@@ -112,8 +112,7 @@ this.zeega = {
 			
 			checkPlayer : function( sequenceID,frameID )
 			{
-				console.log('player navigate')
-				if( !_this.previewMode ) _this.goToFrame( frameID )
+				if( !_this.previewMode ) this.goToSequenceFrame(sequenceID,frameID);
 				else _this.player.goToSequenceFrame(sequenceID,frameID);
 			}
 		});
@@ -129,21 +128,14 @@ this.zeega = {
 		this.currentSequence = this.project.sequences.get(sequenceID);
 		this.currentSequence.trigger('focus');
 		
-		console.log('current sequence')
-		console.log(this.currentSequence )
 		this.renderSequenceFrames();
 		
 		var nextFrame = frameID ? this.project.frames.get(frameID) : this.project.frames.get( this.currentSequence.get('frames')[0] );
-		console.log('next frame')
-		console.log(nextFrame)
 		this.loadFrame(nextFrame);
-		
-		console.log('current sequence id: '+ this.currentSequence.id +' currentFrame: '+this.currentFrame.id)
 	},
 	
 	goToFrame : function( frameId )
 	{
-		console.log('GO TO FRAME: '+frameId)
 		if( _.isUndefined(frameId)||frameId=="undefined" )
 		{
 			this.currentFrame = this.project.frames.get( this.currentSequence.get('frames')[0] );
@@ -154,8 +146,6 @@ this.zeega = {
 
 	loadFrame : function( frame )
 	{
-		console.log('load frame')
-		console.log(frame)
 		var _this = this;
 		this.unrenderFrame( this.currentFrame );
 		
@@ -174,7 +164,6 @@ this.zeega = {
 	
 	renderSequenceFrames : function()
 	{
-		console.log('render sequence frames!!!')
 		var _this = this;
 		//this is ugly
 		$('#frame-list').empty();
@@ -189,16 +178,13 @@ this.zeega = {
 		if(frame)
 		{
 			var layerIndex = 0;
-			console.log('render frame id: '+ frame.id)
 			var _this = this;
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
-				console.log('RENDER layer id: '+ layerID)
 				var layerModel = _this.project.layers.get(layerID);
 
 				layerModel.layerIndex = layerIndex;
 				layerIndex++;
 				
-				console.log(layerModel)
 				if(_.isUndefined(layerModel)) console.log('layer missing')
 				else layerModel.trigger('editor_layerRender', i)
 			})
