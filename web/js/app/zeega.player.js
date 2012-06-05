@@ -87,14 +87,8 @@ var Player2 = Backbone.View.extend({
 				"player/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
 			},
 			
-			goToSequenceFrame : function( sequenceID, frameID )
-			{
-				_this.goToSequenceFrame(sequenceID,frameID)
-			},
-			goToCurrentFrame : function()
-			{
-				_this.goToFrame( _this.currentFrame ) 
-			}
+			goToSequenceFrame : function( sequenceID, frameID ){ _this.goToSequenceFrame(sequenceID,frameID) },
+			goToCurrentFrame : function(){ _this.goToFrame( _this.currentFrame ) }
 			
 		});
 		this.router = new Router();
