@@ -17,6 +17,7 @@ class ItemRepository extends EntityRepository
     private function buildSearchQuery($qb, $query)
     {
         $qb->andwhere('i.enabled = true');
+        $qb->andwhere('i.indexed = false');
         
 		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
@@ -190,8 +191,27 @@ class ItemRepository extends EntityRepository
         if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
             return $qb->getQuery()->getArrayResult();
         else
-            return $qb->getQuery()->execute();
+            return $qb->getQuery()->getResult();
     }
+    
+    //  api/search
+    public function searchItemsId($query)
+    {   
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+    
+        // search query
+        $qb->select('i.id')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->orderBy('i.id','DESC')
+       		->setMaxResults($query['limit'])
+       		->setFirstResult($query['limit'] * $query['page']);
+        
+        $qb = $this->buildSearchQuery($qb, $query);
+        
+        return $qb->getQuery()->getArrayResult();
+    }
+    
 
     //  api/search
     public function searchItemsByTimeDistribution($query)
