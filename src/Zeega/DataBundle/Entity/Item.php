@@ -808,6 +808,7 @@ class Item
      */
     public function onPreUpdate()
     {
-        // Add your code here
+        $this->indexed = false;
+        $this->date_updated = date('Y-m-d H:m:s');;
     }
 }
