@@ -120,8 +120,6 @@
 		{
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
-			console.log('on layer enter')
-			console.log(this.model)
 		},
 		
 		private_onLayerExit : function()
@@ -149,8 +147,6 @@
 				
 				start : function(e,ui)
 				{
-					console.log( 'actual width: '+ $(this).width() )
-					console.log( 'width: '+ $(this).css('width') )
 				},
 				
 				stop : function(e,ui)
@@ -182,8 +178,6 @@
 		
 		private_onPlay : function( z )
 		{
-			console.log('player play')
-			console.log(this.model)
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
 			this.onPlay();
@@ -230,7 +224,6 @@
 		
 		moveOffStage :function()
 		{
-			console.log('MOVE OFF STAGE: '+ this.model.id)
 			$(this.el).css({
 				'top' : '-1000%',
 				'left' : '-1000%'

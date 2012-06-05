@@ -48,29 +48,13 @@
 			$(this.el).find('.zicon-link').css({'background-color': this.model.layerColor[( layerIndex % this.model.layerColor.length )] })
 			if(this.model.get('attr').to_frame == zeega.app.currentFrame.id)
 			{
-				console.log('dont draw layer list')
 				this.remove();
 			}
 		},
 		
 		render : function()
 		{
-			
-			/*
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : .05,
-				max : 1,
-			});
-			
-			$(this.controls).append( opacitySlider.getControl() );
-			*/
-			
 			return this;
-		
 		}
 		
 	});
@@ -111,8 +95,6 @@
 				//$(this.el).addClass('go-to-sequence')
 			}
 			
-			console.log(style);
-
 			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) this.remove();
 			else $(this.el).html( this.getTemplate() ).css( style );
 			
@@ -129,14 +111,11 @@
 		
 		goClick : function()
 		{
-			console.log('clicked on link. go to sequence: '+this.model.get('attr').to_sequence +' & frame: '+ this.model.get('attr').to_frame)
 			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
 		},
 		
 		goToSequenceFrame : function()
 		{
-			console.log('go to the new Sequence!!!');
-			console.log(this.model)
 			if(zeega.app.previewMode) zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
 			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
 		},
@@ -169,7 +148,6 @@
 				this.$el.resizable({
 					stop: function(e,ui)
 					{
-						console.log('save this bad boy')
 						_this.model.update({
 							'width' : $(this).width() / $(this).parent().width() * 100,
 							'height' : $(this).height() / $(this).parent().height() * 100
@@ -182,7 +160,6 @@
 		
 		onPlay : function()
 		{
-			console.log('	&&&&&& layer: '+ this.model.id +' PLAY!!')
 			this.render();
 			this.delegateEvents({'click':'goClick'})
 			this.$el.css('background','red')
