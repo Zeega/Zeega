@@ -19,7 +19,7 @@ class SearchController extends Controller
 		$returnItems = $request->query->get('r_items');
 		$returnCollections = $request->query->get('r_collections');
 		$returnItemsWithCollections = $request->query->get('r_itemswithcollections');
-
+        
 		/**
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
@@ -31,27 +31,41 @@ class SearchController extends Controller
 		    $newItemsFromDb = $this->searchWithDoctrine();
 		    $newItemsFromDbId = array();
 		    
-		    foreach($newItemsFromDb as $newItem)
+		    if(count($newItemsFromDb) > 0)
 		    {
-		        array_push($newItem,$newItemsFromDbId);
+		        foreach($newItemsFromDb as $newItem)
+    		    {
+    		        array_push($newItem,$newItemsFromDbId);
+    		    }
 		    }
 		    
-		    $solrItems = $this->searchWithSolr($newItemsFromDbId);
+		    $solrItems = $this->searchWithSolr();
+		    if(count($newItemsFromDbId) > 0)
+		    {
+		        $solrItems = $this->searchWithSolr($newItemsFromDbId);
+		    }
+		    else
+		    {
+		        $solrItems = $this->searchWithSolr();
+		    }
+		    
             
-            if($returnItems) 
+            if(array_key_exists("items",$newItemsFromDb)) 
             {
                 $dbItems = $newItemsFromDb["items"];
             }
-            else if($returnCollections)
+            else if(array_key_exists("collections",$newItemsFromDb))
             {
                 $dbItems = $newItemsFromDb["collections"];
             }
-            else 
+            else if(array_key_exists("items_and_collections",$newItemsFromDb))
             {
                 $dbItems = $newItemsFromDb["items_and_collections"];
             }
+		    //return new Response(var_dump($dbItems));
             
 		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
+		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 		}
 		else
         {
@@ -250,7 +264,6 @@ class SearchController extends Controller
 		$query["returnTime"]    = $request->query->get('r_time');   				//  bool
 		$query["returnItems"]   = $request->query->get('r_items');   				//  bool
 		$query["returnCollections"]   = $request->query->get('r_collections');   	//  bool
-		$query["returnTags"]   = $request->query->get('r_tags');   	//  bool
 		$query["returnCollectionsWithItems"] = $request->query->get('r_itemswithcollections'); //  bool
 		$query["returnCounts"] = $request->query->get('r_counts'); //  bool
 
@@ -259,7 +272,7 @@ class SearchController extends Controller
 		if(!isset($query['returnItems']))           		$query['returnItems'] = 0;
 		if(!isset($query['returnTime']))           			$query['returnTime'] = 0;
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
-		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 0;
+		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
 		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
 		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 0;
 		if(!isset($query['page']))                  		$query['page'] = 0;
