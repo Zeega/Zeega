@@ -45,6 +45,7 @@ security:
         - { path: ^/api/projects, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/collections, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/tags, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }

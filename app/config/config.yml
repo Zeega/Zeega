@@ -17,7 +17,7 @@ framework:
         default_locale: %locale%
         auto_start: true
         lifetime: 72000
-
+        storage_id:     session.storage.pdo
 parameters:
     pdo.db_options:
         db_table:    session

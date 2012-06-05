@@ -196,47 +196,54 @@ class CollectionsController extends Controller
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putCollectionsItemsAction($project_id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('ZeegaDataBundle:Item')->find($project_id);
-
-        if (!$entity) 
-        {
-            throw $this->createNotFoundException('Unable to find Collection entity.');
+    	if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    	{
+			$em = $this->getDoctrine()->getEntityManager();
+	
+			$entity = $em->getRepository('ZeegaDataBundle:Item')->find($project_id);
+	
+			if (!$entity) 
+			{
+				throw $this->createNotFoundException('Unable to find Collection entity.');
+			}
+			
+			$items_list = $this->getRequest()->request->get('newItemIDS');
+	
+			//Screen item list for duplicates
+	
+			$childItems=$entity->getChildItems();
+			foreach($childItems as $childItem){
+				$existing_items[]=$childItem->getId();
+			}
+			if(isset($existing_items))
+				$items_list=array_diff($items_list,$existing_items);
+	
+			// this is terrible...
+			foreach($items_list as $item)
+			{
+				$child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
+	
+				if (!$child_entity) 
+				{
+					throw $this->createNotFoundException('Unable to find Item entity.');
+				}    
+				
+				$entity->addItem($child_entity);            
+			}
+			$count=$entity->getChildItemsCount() + count($items_list);
+			$entity->setChildItemsCount($count);
+			
+			$em = $this->getDoctrine()->getEntityManager();
+			$em->persist($entity);
+			$em->flush();
+			
+			$itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
+			return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
         }
-        
-        $items_list = $this->getRequest()->request->get('newItemIDS');
-
-		//Screen item list for duplicates
-
-		$childItems=$entity->getChildItems();
-		foreach($childItems as $childItem){
-			$existing_items[]=$childItem->getId();
-		}
-		if(isset($existing_items))
-			$items_list=array_diff($items_list,$existing_items);
-
-        // this is terrible...
-        foreach($items_list as $item)
+        else
         {
-            $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
-
-            if (!$child_entity) 
-            {
-                throw $this->createNotFoundException('Unable to find Item entity.');
-            }    
-            
-            $entity->addItem($child_entity);            
+        	return new Response("Unauthorized", 401);
         }
-        $count=$entity->getChildItemsCount() + count($items_list);
-        $entity->setChildItemsCount($count);
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($entity);
-        $em->flush();
-        
-        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
 
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
