@@ -235,7 +235,6 @@ class CollectionsController extends Controller
         $count=$entity->getChildItemsCount() + count($items_list);
         $entity->setChildItemsCount($count);
         
-        $em = $this->getDoctrine()->getEntityManager();
         $em->persist($entity);
         $em->flush();
         
