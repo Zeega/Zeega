@@ -112,6 +112,7 @@ this.zeega = {
 			
 			checkPlayer : function( sequenceID,frameID )
 			{
+				console.log('zeega check player router')
 				if( !_this.previewMode ) this.goToSequenceFrame(sequenceID,frameID);
 				else _this.player.goToSequenceFrame(sequenceID,frameID);
 			}

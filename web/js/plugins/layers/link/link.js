@@ -129,6 +129,7 @@
 		
 		goClick : function()
 		{
+			console.log('clicked on link. go to sequence: '+this.model.get('attr').to_sequence +' & frame: '+ this.model.get('attr').to_frame)
 			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
 		},
 		
@@ -159,6 +160,7 @@
 			this.render();
 			this.delegateEvents();
 			
+			
 			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
 			{
 				var _this = this;
@@ -176,6 +178,14 @@
 				})
 			}
 			
+		},
+		
+		onPlay : function()
+		{
+			console.log('	&&&&&& layer: '+ this.model.id +' PLAY!!')
+			this.render();
+			this.delegateEvents({'click':'goClick'})
+			this.$el.css('background','red')
 		},
 		
 		getTemplate : function()
