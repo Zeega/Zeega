@@ -75,23 +75,7 @@ class ItemRepository extends EntityRepository
 
       	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
 		}
-		
-		if(isset($query['tags']))
-      	{
-			 $qb->innerjoin('i.tags', 'it')
-			    ->innerjoin('it.tag','t')
-                ->andWhere('t.id IN (?5)')
-                ->setParameter(5, $query['tags']);
-		}
-		
-		if(isset($query['tagsName']))
-      	{
-			 $qb->innerjoin('i.tags', 'it')
-			    ->innerjoin('it.tag','t')
-                ->andWhere('t.name IN (:tags_name)')
-                ->setParameter('tags_name', $query['tagsName']);
-		}
-		
+
 		if(isset($query['earliestDate']))
       	{
 			 $qb->andWhere('i.media_date_created >= ?6')

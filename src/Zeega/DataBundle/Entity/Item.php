@@ -172,7 +172,7 @@ class Item
     public function __construct()
     {
         $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -799,8 +799,7 @@ class Item
      */
     public function onPrePersist()
     {
-       $this->indexed = false;
-       $this->date_updated = date('Y-m-d H:m:s');;
+       $this->setIndexed(false);
     }
 
     /**
@@ -808,7 +807,6 @@ class Item
      */
     public function onPreUpdate()
     {
-        $this->indexed = false;
-        $this->date_updated = date('Y-m-d H:m:s');;
+        $this->setIndexed(false);
     }
 }

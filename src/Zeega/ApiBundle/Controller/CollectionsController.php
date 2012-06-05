@@ -210,9 +210,11 @@ class CollectionsController extends Controller
 		//Screen item list for duplicates
 
 		$childItems=$entity->getChildItems();
-		foreach($childItems as $childItem){
+		foreach($childItems as $childItem)
+		{
 			$existing_items[]=$childItem->getId();
 		}
+		
 		if(isset($existing_items))
 			$items_list=array_diff($items_list,$existing_items);
 
@@ -226,7 +228,9 @@ class CollectionsController extends Controller
                 throw $this->createNotFoundException('Unable to find Item entity.');
             }    
             
-            $entity->addItem($child_entity);            
+            $child_entity->setIndexed = false;
+            $em->persist($child_entity);
+            $entity->addItem($child_entity);
         }
         $count=$entity->getChildItemsCount() + count($items_list);
         $entity->setChildItemsCount($count);
