@@ -221,3 +221,8 @@ a.dropdown-toggle::after {
 .frame-choose-list li.selected{outline:2px solid red;}
 
 i.go-to-sequence{float:right;}
+
+#preview-media .layer-link
+{
+	border-radius:40px;
+}
