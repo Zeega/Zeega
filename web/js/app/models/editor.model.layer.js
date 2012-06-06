@@ -137,7 +137,7 @@
 		// triggers ready for the player
 		preload : function()
 		{
-			$('#zeega-player').trigger('ready',{'id':this.model.id});
+			$('#zeega-player').trigger('ready',{'id':this.id});
 		},
 
 		// player :: puts the visual element offscreen

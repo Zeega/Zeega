@@ -92,14 +92,10 @@
 			else
 			{
 				this.delegateEvents({'click':'goClick'})
-				//$(this.el).addClass('go-to-sequence')
 			}
 			
-			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id ) this.remove();
-			else $(this.el).html( this.getTemplate() ).css( style );
-			
-			this.model.trigger('ready',this.model.id)
-			
+			$(this.el).html( this.getTemplate() ).css( style );
+
 			return this;
 		},
 		
@@ -162,7 +158,6 @@
 		{
 			this.render();
 			this.delegateEvents({'click':'goClick'})
-			this.$el.css('background','red')
 		},
 		
 		getTemplate : function()

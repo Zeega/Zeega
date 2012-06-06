@@ -90,6 +90,7 @@
 		onPreload : function()
 		{
 			var _this = this;
+			this.render();
 			if(this.attr.link)
 			{
 				
@@ -171,6 +172,7 @@
 		
 		private_onPreload : function()
 		{
+			this.render();
 			this.onPreload();
 			this.model.rendered = true;
 			//this.moveOffStage();
