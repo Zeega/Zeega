@@ -159,7 +159,10 @@ class CollectionsController extends Controller
         $item->setChildItemsCount(0);
         $item->setMediaCreatorUsername($user->getUsername());
         $item->setMediaCreatorRealname($user->getDisplayName());
-        
+        $item->setArchive('Zeega');
+        $item->setEnabled(true);
+        $item->setPublished(false);
+	$item->setIndexed(false);
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();

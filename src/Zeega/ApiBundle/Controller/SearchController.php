@@ -19,44 +19,54 @@ class SearchController extends Controller
 		$returnItems = $request->query->get('r_items');
 		$returnCollections = $request->query->get('r_collections');
 		$returnItemsWithCollections = $request->query->get('r_itemswithcollections');
+		$collectionId = $request->query->get('collection');
         
 		/**
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
         $solrEnabled = $this->container->getParameter('solr_enabled');
-		
+
 		if($solrEnabled)
 		{
-		    $newItemsFromDb = $this->searchWithDoctrine();
-		    //return new Response(var_dump($newItemsFromDb));
-		    $newItemsFromDbId = array();
-		    
-		    if(count($newItemsFromDb) > 0)
-		    {
-		        foreach($newItemsFromDb as $newItem)
-    		    {
-    		        array_push($newItemsFromDbId,$newItem[0]->getId());
-    		    }
-    		    $newItemsFromDbId = implode(",", $newItemsFromDbId);
-		    }
+			if(isset($collectionId))
+			{
+				$newItemsFromDb = $this->searchWithDoctrine();
+				$newItemsFromDbId = array();
+				
+				if(array_key_exists("items",$newItemsFromDb)) 
+				{
+					$dbItems = $newItemsFromDb["items"];
+				}
+				else if(array_key_exists("collections",$newItemsFromDb))
+				{
+					$dbItems = $newItemsFromDb["collections"];
+				}
+				else if(array_key_exists("items_and_collections",$newItemsFromDb))
+				{
+					$dbItems = $newItemsFromDb["items_and_collections"];
+				}
+				if(count($dbItems) > 0)
+				{
+					foreach($dbItems as $newItem)
+					{
+						array_push($newItemsFromDbId,$newItem->getId());
+					}
+					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
+				}
 			
-			$solrItems = $this->searchWithSolr($newItemsFromDbId);
-			
-            if(array_key_exists("items",$newItemsFromDb)) 
-            {
-                $dbItems = $newItemsFromDb["items"];
-            }
-            else if(array_key_exists("collections",$newItemsFromDb))
-            {
-                $dbItems = $newItemsFromDb["collections"];
-            }
-            else if(array_key_exists("items_and_collections",$newItemsFromDb))
-            {
-                $dbItems = $newItemsFromDb["items_and_collections"];
-            }
-		    //return new Response(var_dump($dbItems));
-            
+				$solrItems = $this->searchWithSolr($newItemsFromDbId);
+			}
+			else if(isset($returnCollections))
+			{
+				return $this->searchWithDoctrineAndGetResponse();
+			}
+			else
+			{
+				$dbItems = array();
+				$solrItems = $this->searchWithSolr();
+			}
+			            
 		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
 		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 		}
@@ -111,10 +121,10 @@ class SearchController extends Controller
         
         // check if there is a query string
         if(isset($q) and $q != '')                          $query->setQuery($q);
-        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
+        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
         if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
-        if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id: $notInId");
+        if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
@@ -131,7 +141,7 @@ class SearchController extends Controller
             }
         }
         
-        if(isset($collection_id)) $query->createFilterQuery('parent_id')->setQuery("parent_item: $collection_id");
+        if(isset($collection_id)) $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
            
 	    //  filter results for the logged user
 		if(isset($userId) && $userId == -1) 
@@ -181,7 +191,7 @@ class SearchController extends Controller
     
     private function searchWithDoctrineAndGetResponse()
     {
-        return ResponseHelper::getJsonResponse($this->searchWithDoctrine());
+        return ResponseHelper::getJsonResponse($this->searchWithDoctrine(false,true));
     }
     
 	/**
