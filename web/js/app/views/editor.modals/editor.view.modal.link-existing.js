@@ -42,6 +42,7 @@
 		hide : function()
 		{
 			this.$el.modal('hide');
+			zeega.app.busy = false;
 		},
 		
 		events : {
@@ -89,7 +90,7 @@
 			
 			'<div class="modal" id="sequence-modal">'+
 				'<div class="modal-header">'+
-					'<button class="close" data-dismiss="modal">×</button>'+
+					'<button class="close">×</button>'+
 					
 				'</div>'+
 				'<div class="modal-body">'+
@@ -99,7 +100,7 @@
 					'<ul class="frame-choose-list unstyled"></ul>'+
 				'</div>'+
 				'<div class="modal-footer">'+
-					'<a href="#" class="btn" data-dismiss="modal">Close</a>'+
+					'<a href="#" class="btn close" >Close</a>'+
 					'<a href="#" class="btn disabled">Save changes</a>'+
 				'</div>'+
 			'</div>';
