@@ -93,7 +93,7 @@ class SitesController extends Controller
 		$project->setSite($site);
 		$project->addUser($user);
 		$sequence->setProject($project);
-		$sequence->setTitle($title);
+		$sequence->setTitle('Intro Sequence');
 		$project->setTitle($title);
 		$em=$this->getDoctrine()->getEntityManager();
 		$em->persist($sequence);
