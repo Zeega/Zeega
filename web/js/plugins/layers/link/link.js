@@ -92,9 +92,13 @@
 			else
 			{
 				this.delegateEvents({'click':'goClick'})
+				//$(this.el).addClass('go-to-sequence')
 			}
 			
 			$(this.el).html( this.getTemplate() ).css( style );
+
+			// if the editor is active, the remove the layer if it shouldn't be shown
+			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 
 			return this;
 		},
