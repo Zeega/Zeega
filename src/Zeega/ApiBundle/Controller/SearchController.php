@@ -29,27 +29,20 @@ class SearchController extends Controller
 		if($solrEnabled)
 		{
 		    $newItemsFromDb = $this->searchWithDoctrine();
+		    //return new Response(var_dump($newItemsFromDb));
 		    $newItemsFromDbId = array();
 		    
 		    if(count($newItemsFromDb) > 0)
 		    {
 		        foreach($newItemsFromDb as $newItem)
     		    {
-    		        array_push($newItem,$newItemsFromDbId);
+    		        array_push($newItemsFromDbId,$newItem[0]->getId());
     		    }
+    		    $newItemsFromDbId = implode(",", $newItemsFromDbId);
 		    }
-		    
-		    $solrItems = $this->searchWithSolr();
-		    if(count($newItemsFromDbId) > 0)
-		    {
-		        $solrItems = $this->searchWithSolr($newItemsFromDbId);
-		    }
-		    else
-		    {
-		        $solrItems = $this->searchWithSolr();
-		    }
-		    
-            
+			
+			$solrItems = $this->searchWithSolr($newItemsFromDbId);
+			
             if(array_key_exists("items",$newItemsFromDb)) 
             {
                 $dbItems = $newItemsFromDb["items"];
@@ -121,7 +114,7 @@ class SearchController extends Controller
         if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
         if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
-        if(isset($notInId))									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
+        if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id: $notInId");
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
@@ -272,10 +265,11 @@ class SearchController extends Controller
 		if(!isset($query['returnItems']))           		$query['returnItems'] = 0;
 		if(!isset($query['returnTime']))           			$query['returnTime'] = 0;
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
-		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
+		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 0;
 		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
 		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 0;
 		if(!isset($query['page']))                  		$query['page'] = 0;
+		if($query['page'] > 0)                  		    $query['page'] = $query['page'] - 1;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
 		if($query['limit'] > 100) 	                		$query['limit'] = 100;
 	    

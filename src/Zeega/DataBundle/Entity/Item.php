@@ -799,7 +799,6 @@ class Item
      */
     public function onPrePersist()
     {
-       $this->setIndexed(false);
     }
 
     /**
@@ -807,6 +806,5 @@ class Item
      */
     public function onPreUpdate()
     {
-        $this->setIndexed(false);
     }
 }

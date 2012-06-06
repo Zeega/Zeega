@@ -4,6 +4,16 @@
 	"{{ res_type}}":
 	{% if res_docs|length > 0 %}
 	[
+			{% for item in new_items %}
+
+				{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}	
+				{%- if loop.index0 < new_items|length - 1 -%}
+				,
+				{%- endif -%}
+		    {% endfor %}
+			{%- if new_items|length > 0 and res_docs|length > 0 %}
+			,
+			{% endif %}
 		{%- for doc in res_docs -%}
 		{
 			{%- set doc_fields = doc.getFields() -%}

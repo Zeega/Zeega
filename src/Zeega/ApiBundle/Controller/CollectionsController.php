@@ -217,23 +217,21 @@ class CollectionsController extends Controller
 			}
 			if(isset($existing_items))
 				$items_list=array_diff($items_list,$existing_items);
-	
+
 			// this is terrible...
 			foreach($items_list as $item)
 			{
-				$child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
-	
+				$child_entity = $em->getRepository('ZeegaDataBundle:Item')->findOneById($item);
 				if (!$child_entity) 
 				{
 					throw $this->createNotFoundException('Unable to find Item entity.');
-				}    
-				
-				$entity->addItem($child_entity);            
+				}  
+				$child_entity->setIndexed(False);
+				$entity->addItem($child_entity); 
 			}
 			$count=$entity->getChildItemsCount() + count($items_list);
 			$entity->setChildItemsCount($count);
 			
-			$em = $this->getDoctrine()->getEntityManager();
 			$em->persist($entity);
 			$em->flush();
 			
@@ -244,6 +242,7 @@ class CollectionsController extends Controller
         {
         	return new Response("Unauthorized", 401);
         }
+        
     }
 
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
