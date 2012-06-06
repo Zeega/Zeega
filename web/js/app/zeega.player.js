@@ -284,7 +284,6 @@ var Player2 = Backbone.View.extend({
 		if( _.isUndefined( step ) ) step = 1;
 		var frameOrder = this.currentSequence.get('frames');
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
-		
 		if( index+1 + step > frameOrder.length ) return false;
 		else return this.frames.get( frameOrder[index+step] );
 	},

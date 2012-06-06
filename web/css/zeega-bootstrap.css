@@ -208,6 +208,16 @@ a.dropdown-toggle::after {
 	margin: 0 5px 5px 0;
 }
 
+.frame-thumb-no-choose-icon
+{
+	height:50px;
+	width:50px;
+	background:black;
+	float:left;
+	margin: 0 5px 5px 0;
+	opacity:0.25;
+}
+
 .frame-choose-list li.selected{outline:2px solid red;}
 
 i.go-to-sequence{float:right;}

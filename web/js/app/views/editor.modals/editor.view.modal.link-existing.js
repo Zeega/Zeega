@@ -24,7 +24,9 @@
 			})
 			
 			_.each( zeega.app.project.sequences.at(0).get('frames'), function(frameID){
-				$(_this.el).find('.frame-choose-list').append('<li class="frame-thumb-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
+				if(zeega.app.currentFrame.id == frameID)
+					$(_this.el).find('.frame-choose-list').append('<li class="frame-thumb-no-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
+				else $(_this.el).find('.frame-choose-list').append('<li class="frame-thumb-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
 			});
 			
 			this.targetSequence = zeega.app.project.sequences.at(0).id;
