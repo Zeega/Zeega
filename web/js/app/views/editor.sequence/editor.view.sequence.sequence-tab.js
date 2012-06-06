@@ -71,8 +71,16 @@
 			if( !this.loadedModal )
 			{
 				$('body').append( _.template(this.getModalTemplate(),this.model.attributes) );
+				$('#sequence-modal-'+_this.model.id+' input').focus();
 				$('#sequence-modal-'+this.model.id+' .save').click(function(){
 					_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
+				})
+				$('#sequence-modal-'+_this.model.id+' input').keypress(function(e){
+					if(e.which == 13)
+					{
+						_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
+						$('#sequence-modal-'+_this.model.id).modal('hide')
+					}
 				})
 			}
 			$('#sequence-modal-'+this.model.id).modal('show')
