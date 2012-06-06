@@ -194,7 +194,6 @@ class ItemsController extends Controller
     }
 
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
-   
     public function deleteItemTagsAction($itemId, $tagName)
     {
         $user = $this->get('security.context')->getToken()->getUser();

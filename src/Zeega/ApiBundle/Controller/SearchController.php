@@ -13,27 +13,25 @@ class SearchController extends Controller
 {
     public function searchAction()
     {
-    	$request = $this->getRequest();
-		
-		$query = $request->query->get('q');
-		$returnItems = $request->query->get('r_items');
-		$returnCollections = $request->query->get('r_collections');
-		$returnItemsWithCollections = $request->query->get('r_itemswithcollections');
-		$collectionId = $request->query->get('collection');
-        
 		/**
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
+
+    	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
+		$collectionId = $request->query->get('collection');
 
 		if($solrEnabled)
 		{
 			if(isset($collectionId))
 			{
+			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
+			    // send db query to doctrine
 				$newItemsFromDb = $this->searchWithDoctrine();
 				$newItemsFromDbId = array();
 				
+				// get the results from the DB
 				if(array_key_exists("items",$newItemsFromDb)) 
 				{
 					$dbItems = $newItemsFromDb["items"];
@@ -46,6 +44,8 @@ class SearchController extends Controller
 				{
 					$dbItems = $newItemsFromDb["items_and_collections"];
 				}
+				
+				// create a list of items that have to be excluded from the SOLR query because they come from the database
 				if(count($dbItems) > 0)
 				{
 					foreach($dbItems as $newItem)
@@ -54,11 +54,13 @@ class SearchController extends Controller
 					}
 					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
 				}
-			
+			    
+			    // do a SOLR query
 				$solrItems = $this->searchWithSolr($newItemsFromDbId);
 			}
 			else if(isset($returnCollections))
 			{
+			    // if we only want to collections ()
 				return $this->searchWithDoctrineAndGetResponse();
 			}
 			else
