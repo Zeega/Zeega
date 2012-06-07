@@ -620,7 +620,7 @@ var Player2 = Backbone.View.extend({
 			var frameLayers = frame.get('layers');
 			var readyLayers = __this.layers.ready;
 
-			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded();
+			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID );
 			if( _.difference(frameLayers,readyLayers).length == 0 )
 			{
 				frame.trigger('ready', frame.id);
@@ -644,50 +644,81 @@ var Player2 = Backbone.View.extend({
 		
 		var loaderView = Backbone.View.extend({
 			
-			className : 'load-wrapper',
+			className : 'progress-bar',
 			loadedCount : 0,
 			
 			initialize : function(){},
 			
 			render : function()
 			{
+				var _view = this;
 				$(this.el).css('z-index',100000)
 				if(this.model.get('layers').length>0)
 				{
-					$(this.el).append( _.template(this.getTemplate(), this.model.attributes) );
-					$(this.el).find('.progress')
+					
+					$(this.el).append( _.template(this.getTemplate(), _this.data) );
+					
+					this.$el.find('.progress-types ul').empty();
+					_.each(this.model.get('layers'), function(layerID){
+						var layer = _this.layers.get(layerID);
+						console.log(layer)
+						
+						if( layer.get('type') != 'Link' )
+						{
+							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zicon-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
+						}
+					})
+					
+					$(this.el).find('.bar')
 						.stop()
 						.animate({width : 0.25/this.model.get('layers').length * 100 +'%' },200)
 						.animate({width : 0.75/this.model.get('layers').length * 100 +'%' },100000)
+					
 				}
 				
 				return this;
 			},
 			
-			incrementLoaded : function( layerModel )
+			incrementLoaded : function( layerID )
 			{
 				var _this = this;
 				this.loadedCount++;
-				$(this.el).find('.loaded-count').html( this.loadedCount );
-				$(this.el).find('.progress')
+				console.log(layerID)
+				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('zicon-white');
+				
+				//$(this.el).find('.loaded-count').html( this.loadedCount );
+				
+				$(this.el).find('.bar')
 					.stop()
 					.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
 					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
 				
 				if(this.model.get('layers').length == this.loadedCount)
-					$(this.el).fadeOut('slow', function(){ _this.remove() });
-
+					$(this.el).fadeOut('fast', function(){ _this.remove() });
+				
 			},
 			
 			getTemplate : function()
 			{
 				html =
 				
+					"<div class='progress-head'>"+
+						"<h3 class='estimate'>This project should last</h3>"+
+						"<h3 class='time'><%= estimated_time %></h3>"+
+					"</div>"+
+					"<div class='progress progress-striped active progress-danger'>"+
+						"<div class='bar' style='width:0'></div>"+
+					"</div>"+
+					"<div class='progress-types'>"+
+						"<ul></ul>"+
+					"</div>";
+				
+				/*
 					'<div class="loader">'+
 						'<div class="progress"></div>'+
 					'</div>'+
 					'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= layers.length %></span> items</div>';
-				
+				*/
 				return html;
 			}
 		})

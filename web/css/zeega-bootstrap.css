@@ -18,6 +18,7 @@
 [class^="zicon-"].raise-up{ vertical-align:text-bottom }
 
 [class^="zicon-"].orange{ background-image: url('../images/zicons-orange-20.png') }
+[class^="zicon-"].zicon-white{ background-image: url('../images/zicons-white-20.png') }
 
 
 .zicon-image{background-position:-20px 0}
@@ -55,7 +56,6 @@
 .zicon-new-frame{background-position:-80px -120px}
 .zicon-old-frame{background-position:-60px -120px}
 .zicon-options{background-position:-20px -60px}
-
 
 [class^="zicon-"].small
 {
@@ -225,4 +225,26 @@ i.go-to-sequence{float:right;}
 #preview-media .layer-link
 {
 	border-radius:40px;
+}
+
+.progress-bar
+{
+	position:absolute;
+	top:100px;
+	left:100px;
+	margin: 50px auto 0;
+	width:50%;
+}
+.progress-bar h3{color:white; letter-spacing:1px;}
+.progress-bar .estimate{ font-weight:100 }
+.progress-bar .progress-types ul
+{
+	padding:0;
+	margin:0;
+}
+.progress-bar .progress-types ul li
+{
+	float:left;
+	list-style:none;
+	margin-right:5px;
 }

@@ -51,7 +51,7 @@ Zeega\DataBundle\Entity\Project:
             nullable: true
         estimated_time:
             type: string
-            length: 20
+            length: 140
             nullable: true        
     indexes:
              project_enabled_index:
