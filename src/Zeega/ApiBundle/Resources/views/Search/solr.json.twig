@@ -53,10 +53,7 @@
 
 		],
 		"returned_{{res_type}}_count": {{res_docs|length}},
-		"{{res_type}}_count": {{res_docs.getNumFound}}
-		{%- if loop.index0 < res_docs|length - 1%}
-		,
-		{%- endif -%}
+		"{{res_type}}_count": {{res_docs.getNumFound}},
 		{% else %}
 			{% if res_type == 'items'%}
 			    [

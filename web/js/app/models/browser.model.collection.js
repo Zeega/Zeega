@@ -35,7 +35,7 @@
 			}
 			else
 			{
-				url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"+this.id;
+				url = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"+this.id+"/items";
 			}
 			//console.log("Final URL is " + url);
 			return url; 

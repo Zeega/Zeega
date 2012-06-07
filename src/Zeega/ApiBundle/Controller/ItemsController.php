@@ -111,6 +111,35 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
     
+    
+    // get_collection_items GET /api/collections/{id}/items.{_format}
+    public function getItemItemsAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $query = array();
+        $request = $this->getRequest();
+
+        $query["collection_id"] = $id;
+        $query["page"] = $request->query->get('page'); // string
+        $query["limit"] = $request->query->get('limit'); // string
+
+        // set defaults for missing parameters
+        if(!isset($query['page'])) $query['page'] = 0;
+        if(!isset($query['limit'])) $query['limit'] = 100;
+        if($query['limit'] > 100) $query['limit'] = 100;
+
+        $queryResults = $this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Item')
+        ->searchCollectionItems($query);	
+
+        // populate the results object
+        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);	
+
+        $itemsView = $this->renderView('ZeegaApiBundle:Items:items.json.twig', array('items' => $queryResults, 'collection_id' => $id, 'items_count' => $resultsCount));
+
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+    }
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
      * - Path: GET items/parser
@@ -251,6 +280,48 @@ class ItemsController extends Controller
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
+    
+    // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    public function putItemItemsAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $newItems = $this->getRequest()->request->get('new_items');        
+
+        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+
+        if(isset($newItems))
+        {
+            if (isset($newItems))
+            {
+                $item->setChildItemsCount(count($newItems));
+                $first = True;
+                foreach($newItems as $newItem)
+                {
+                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+
+                    if (!$childItem) 
+                    {
+                        throw $this->createNotFoundException('Unable to find Item entity.');
+                    }    
+
+                    $item->addItem($childItem);
+                    if($first == True)
+                    {
+                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
+                        $first = False;
+                    }
+                }
+            }
+        }
+
+        $em->persist($item);
+        $em->flush();
+
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+    }
+	
    
     // get_collection_project GET    /api/collections/{id}/project.{_format}
     public function getItemProjectAction($id)
