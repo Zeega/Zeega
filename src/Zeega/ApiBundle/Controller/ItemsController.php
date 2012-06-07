@@ -13,6 +13,43 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 class ItemsController extends Controller
 {
     
+    //  get_collections GET    /api/items.{_format}
+    public function getItemsFilterAction()
+    {
+        $request = $this->getRequest();
+        
+		$page  = $request->query->get('page');          //  string
+		$limit = $request->query->get('limit');         //  string
+		$user = $request->query->get('user');           //  string
+		$content = $request->query->get('content');     //  string
+		$site = $request->query->get('site');     //  string
+		
+		$query = array();
+		if(!isset($page))                   $query['page'] = 0;
+		if(!isset($limit))                  $query['limit'] = 100;
+		if(isset($content))                 $query['media_type'] = $content;
+		if(isset($site))                    $query['site'] = $site;
+		
+        if(isset($user))
+        {
+            if($user == -1) 
+    		{
+    			$user = $this->get('security.context')->getToken()->getUser();
+    			$query['user'] = $user;
+    		}
+            else
+            {
+                $query['user'] = $user;
+            }
+        }
+         //  execute the query
+ 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);								
+        //return new Response(var_dump($queryResults));
+        
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+    }
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
@@ -54,37 +91,7 @@ class ItemsController extends Controller
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
-    //  get_collections GET    /api/items.{_format}
-    public function getItemsFilterAction()
-    {
-        $request = $this->getRequest();
-        
-		$page  = $request->query->get('page');          //  string
-		$limit = $request->query->get('limit');         //  string
-		$user = $request->query->get('user');           //  string
-		$content = $request->query->get('content');     //  string
-		
-		$query = array();
-		if(!isset($query['page']))          $query['page'] = 0;
-        //  set defaults for missing parameters  
-		
-		if(!isset($query['limit']))         $query['limit'] = 100;
-		if($query['limit'] > 100) 	        $query['limit'] = 100;
-        
-         //  execute the query
- 		$queryResults = $this->getDoctrine()
- 					         ->getRepository('ZeegaDataBundle:Item')
- 					         ->findBy($query);								
-		//return new Response(var_dum$queryResults);
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
-        
-		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-		//$response = new Response($itemsView);
-     	//$response->headers->set('Content-Type', 'text');
-        //return $response;
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
+    
     
     
     

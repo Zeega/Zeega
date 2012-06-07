@@ -397,6 +397,68 @@ class ItemRepository extends EntityRepository
 	}
 	
 	
+	public function findItems($query,$returnTotalItems = false)
+	{
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qbCount = $this->getEntityManager()->createQueryBuilder();
+
+	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
+    
+        if(isset($query["user"]))
+        {
+            $qb->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qbCount->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+        }
+        
+        if(isset($query["site"]))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
+			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
+		}
+		
+        if(isset($query["content"]))
+        {
+            // there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+            // the percentage of collection is likely to be small and the Postgres query scheduler does not handle this well - should be fixed on PostgreSQL 9.2
+     		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
+
+            if(strtoupper($query["content"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+                $qbCount->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["content"]);
+                $qbCount->andwhere("i.media_type = 'Collection'");
+            }
+        }
+        
+		if(isset($siteId))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+		}
+
+	    $results = array();
+	    $results["items"] = $qb->getQuery()->getResult();
+		
+		if(isset($returnTotalItems))
+		{
+		    if(count($results["items"]) == $query["limit"])
+		    {
+		        $qbCount->select('COUNT(i.id)')->from('ZeegaDataBundle:Item', 'i');
+    		    $results["total_items"] = intval($qbCount->getQuery()->getSingleScalarResult());
+		    }
+		    else
+		    {
+		        $results["total_items"] = count($results["items"]);
+		    }
+		}		  	
+        return $results;
+	}
+	
+	
     public function findCollections($userId,$siteId,$limit,$offset)
  	{
  		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
