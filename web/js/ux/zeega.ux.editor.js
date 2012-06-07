@@ -289,17 +289,8 @@ $('#new-layer-list a').click(function(){
 	
 	//publish button
 	$('#publish-project').click(function(){
-		
 		//Uncomment to activate publish modal
-		zeega.app.project.loadPublishProject();
-		/*
-		$('#share-project-modal').modal('show');
-
-		$('#share-project-modal').find('.close-modal').mousedown(function(){
-			$('#share-project-modal').modal('hide');
-			return false;
-		})
-		*/
+		zeega.app.shareProject();
 		return false;
 	});
 	

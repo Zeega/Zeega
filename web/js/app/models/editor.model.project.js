@@ -186,7 +186,8 @@
 		loadPublishProject : function()
 		{
 			// publishing view for project //
-			this.view = new Project.Views.Publish({model:this});
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.ShareProject({ model:this });
 			this.view.render();
 		},
 		

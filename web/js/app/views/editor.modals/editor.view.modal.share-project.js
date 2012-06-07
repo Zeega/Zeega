@@ -1,8 +1,7 @@
-(function(Project) {
-
+(function(Modal) {
 	
-	Project.Views.Publish = Backbone.View.extend({
-
+	Modal.Views.ShareProject = Backbone.View.extend({
+		
 		el : $('#publish-project-modal'),
 		
 		render: function()
@@ -259,4 +258,4 @@
 	},
 });
 	
-})(zeega.module("project"));
+})(zeega.module("modal"));

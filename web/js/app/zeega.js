@@ -794,7 +794,15 @@ console.log( helpOrderArray[this.helpCounter-1] )
 			this.project.update({'cover_image':obj.item.get('uri')})
 			
 		}
-	}
+	},
+	
+	shareProject : function()
+	{
+		// publishing view for project //
+		var Modal = zeega.module('modal');
+		this.view = new Modal.Views.ShareProject({ model:this.project });
+		this.view.render();
+	},
 
 	
 	
