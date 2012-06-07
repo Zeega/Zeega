@@ -33,7 +33,6 @@ var loadFiles = [
 
 	//custom
 	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
 	'order!helpers/zeega.extends',
 	'order!helpers/zeega.helpers',
@@ -118,5 +117,4 @@ require(loadFiles, function(jquery)
 	//once the files have been loaded do this
 	var sequence = $('#sequence-id').val();
 	//zeega.app.init();
-	initUX();
 });
