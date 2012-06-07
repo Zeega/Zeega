@@ -49,7 +49,10 @@ Zeega\DataBundle\Entity\Project:
             type: string
             length: 255
             nullable: true
-                
+        estimated_time:
+            type: string
+            length: 20
+            nullable: true        
     indexes:
              project_enabled_index:
                  columns: [enabled]

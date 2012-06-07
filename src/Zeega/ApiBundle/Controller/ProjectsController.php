@@ -61,12 +61,13 @@ class ProjectsController extends Controller
         $coverImage = $request_data->get('cover_image');
         $authors = $request_data->get('authors');
 		$published = $request_data->get('published');
-        
+        $estimatedTime = $request_data->get('estimated_time');        
 		if(isset($title)) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
 		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
+        if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($project);

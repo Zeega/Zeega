@@ -278,4 +278,29 @@ class Project
     {
         return $this->cover_image;
     }
+    /**
+     * @var string $estimated_time
+     */
+    private $estimated_time;
+
+
+    /**
+     * Set estimated_time
+     *
+     * @param string $estimatedTime
+     */
+    public function setEstimatedTime($estimatedTime)
+    {
+        $this->estimated_time = $estimatedTime;
+    }
+
+    /**
+     * Get estimated_time
+     *
+     * @return string 
+     */
+    public function getEstimatedTime()
+    {
+        return $this->estimated_time;
+    }
 }
