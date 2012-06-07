@@ -430,7 +430,25 @@ class ItemRepository extends EntityRepository
             else
             {
                 $qb->andwhere("i.media_type = :content")->setParameter('content',$query["content"]);
-                $qbCount->andwhere("i.media_type = 'Collection'");
+                $qbCount->andwhere("i.media_type = :content")->setParameter('content',$query["content"]);
+            }
+        }
+        
+        if(isset($query["exclude_content"]))
+        {
+            // there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+            // the percentage of collection is likely to be small and the Postgres query scheduler does not handle this well - should be fixed on PostgreSQL 9.2
+     		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
+
+            if(strtoupper($query["exclude_content"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type <> 'Collection'");
+                $qbCount->andwhere("i.media_type <> 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type <> :exclude_content")->setParameter('exclude_content',$query["exclude_content"]);
+                $qbCount->andwhere("i.media_type <> :exclude_content")->setParameter('exclude_content',$query["exclude_content"]);
             }
         }
         
@@ -439,7 +457,7 @@ class ItemRepository extends EntityRepository
 			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
 			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
 		}
-
+        //return $qb->getQuery();
 	    $results = array();
 	    $results["items"] = $qb->getQuery()->getResult();
 		

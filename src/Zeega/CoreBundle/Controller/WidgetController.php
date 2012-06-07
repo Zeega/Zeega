@@ -48,7 +48,7 @@ class WidgetController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		// get user items and sites
-		$mycollection = $this->forward('ZeegaApiBundle:Search:search', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
+		$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array("limit" => 15, "user" => $user->getId()))->getContent();
 		$sites = $user->getSites();
 		
 		$widgetId = $request->query->get('widget-id');

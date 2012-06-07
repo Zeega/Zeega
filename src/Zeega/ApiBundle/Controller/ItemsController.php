@@ -12,7 +12,6 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
-    
     //  get_collections GET    /api/items.{_format}
     public function getItemsFilterAction()
     {
@@ -23,11 +22,13 @@ class ItemsController extends Controller
 		$user = $request->query->get('user');           //  string
 		$content = $request->query->get('content');     //  string
 		$site = $request->query->get('site');     //  string
+		$excludeContent = $request->query->get('exclude_content');     //  string
 		
 		$query = array();
 		if(!isset($page))                   $query['page'] = 0;
 		if(!isset($limit))                  $query['limit'] = 100;
-		if(isset($content))                 $query['media_type'] = $content;
+		if(isset($content))                 $query['content'] = $content;
+		if(isset($excludeContent))          $query['exclude_content'] = $excludeContent;
 		if(isset($site))                    $query['site'] = $site;
 		
         if(isset($user))
@@ -35,17 +36,21 @@ class ItemsController extends Controller
             if($user == -1) 
     		{
     			$user = $this->get('security.context')->getToken()->getUser();
-    			$query['user'] = $user;
+    			$query['user'] = $user->getId();
     		}
             else
             {
-                $query['user'] = $user;
+                $query['user'] = $user->getId();
             }
         }
          //  execute the query
  		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);								
-        //return new Response(var_dump($queryResults));
-        
+        /*
+        $logger = $this->get('logger');
+        $logger->err(implode(",",$queryResults->getParameters()));
+        $logger->err($queryResults->getSQL());
+        */
+        //return null;
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
@@ -90,10 +95,6 @@ class ItemsController extends Controller
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
-    
-    
-    
-    
     
     // get_item_tags GET    /api/collections/{collectionId}/tags.{_format}
     public function getItemTagsAction($itemId)
