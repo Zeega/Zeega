@@ -28,7 +28,6 @@
 		{
 			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
-
 						+ "r_items=" + this.get("r_items") + "&"
 						+ "r_itemswithcollections=" + this.get("r_itemswithcollections") + "&"
 						+ (sessionStorage.getItem('site') != null ? "site=" + sessionStorage.getItem('site') : "")
@@ -36,7 +35,6 @@
 						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
-						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
 						+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")

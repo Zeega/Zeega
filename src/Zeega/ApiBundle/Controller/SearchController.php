@@ -1,6 +1,16 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
+
 use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +19,13 @@ use Zeega\CoreBundle\Helpers\Utils;
 
 use DateTime;
 
+/**
+* The SearchController handles database search requests made through the API.
+* 
+*
+* @author James Burns <james@zeega.org>
+* @author Luis Filipe Brandao <filipe@zeega.org>
+*/
 class SearchController extends Controller
 {
     public function searchAction()
@@ -21,7 +38,8 @@ class SearchController extends Controller
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
-
+        $returnCollections   = $request->query->get('r_collections');
+        
 		if($solrEnabled)
 		{
 			if(isset($collectionId))
