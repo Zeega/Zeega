@@ -71,7 +71,6 @@ class SearchController extends Controller
 						array_push($newItemsFromDbId,$newItem->getId());
 					}
 					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
-					//return new Response($newItemsFromDbId);
 				}
 			    //return new Response()
 			    // do a SOLR query
@@ -114,6 +113,7 @@ class SearchController extends Controller
 		$geoLocated = $request->query->get('geo_located'); 
 		
 	    if(!isset($page))               $page = 0;
+	    if($page > 0)                   $page = $page - 1;
 		if(!isset($limit))              $limit = 100;
 		if($limit > 100)                $limit = 100;
 		if(isset($contentType))         $contentType = ucfirst($contentType);
@@ -179,6 +179,7 @@ class SearchController extends Controller
         $groupComponent->addQuery('media_type:*');
         // maximum number of items per group
         $groupComponent->setLimit($limit);
+        $groupComponent->setOffset($page * $limit);
         
         $facetComponent = $query->getFacetSet();
         $facetComponent->createFacetField('tags')->setField('tags')->setLimit(5)->setMinCount(1);
