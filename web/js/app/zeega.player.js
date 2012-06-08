@@ -665,7 +665,7 @@ var Player2 = Backbone.View.extend({
 						
 						if( layer.get('type') != 'Link' )
 						{
-							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zicon-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
+							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
 						}
 					})
 					
@@ -684,7 +684,7 @@ var Player2 = Backbone.View.extend({
 				var _this = this;
 				this.loadedCount++;
 				console.log(layerID)
-				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('zicon-white');
+				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
 				
 				//$(this.el).find('.loaded-count').html( this.loadedCount );
 				
@@ -692,10 +692,10 @@ var Player2 = Backbone.View.extend({
 					.stop()
 					.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
 					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
-				
+				/*
 				if(this.model.get('layers').length == this.loadedCount)
 					$(this.el).fadeOut('fast', function(){ _this.remove() });
-				
+				*/
 			},
 			
 			getTemplate : function()
