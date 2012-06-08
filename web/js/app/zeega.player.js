@@ -143,7 +143,14 @@ var Player2 = Backbone.View.extend({
 			var _this = this;
 			console.log('frame needs a little bit more to load…')
 			frame.on('ready', function(){
-				if( !_this.has_played ) _this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 2000);
+				if( !_this.has_played )
+				{
+					setTimeout( function(){
+						frame.loader.fadeOut();
+						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
+					}, 2000);
+					
+				}
 			});
 		}
 		//update the url
@@ -701,8 +708,15 @@ var Player2 = Backbone.View.extend({
 					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
 				
 				if(this.model.get('layers').length == this.loadedCount)
-					$(this.el).fadeOut('show', function(){ _this.remove() });
-				
+				{
+					if( _this.has_played ) this.fadeOut();
+				}
+			},
+			
+			fadeOut : function()
+			{
+				var _view = this;
+				$(this.el).fadeOut('show', function(){ _view.remove() });
 			},
 			
 			getTemplate : function()
