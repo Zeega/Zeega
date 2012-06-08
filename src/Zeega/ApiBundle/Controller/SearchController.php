@@ -71,8 +71,9 @@ class SearchController extends Controller
 						array_push($newItemsFromDbId,$newItem->getId());
 					}
 					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
+					//return new Response($newItemsFromDbId);
 				}
-			    
+			    //return new Response()
 			    // do a SOLR query
 				$solrItems = $this->searchWithSolr($newItemsFromDbId);
 			}

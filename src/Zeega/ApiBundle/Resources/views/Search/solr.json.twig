@@ -52,7 +52,7 @@
 			{%- endfor -%}
 
 		],
-		"returned_{{res_type}}_count": {{res_docs|length}},
+		"returned_{{res_type}}_count": {{res_docs|length + new_items|length}},
 		"{{res_type}}_count": {{res_docs.getNumFound}},
 		{% else %}
 			{% if res_type == 'items'%}
@@ -70,8 +70,8 @@
 			{% else %}
 			[],
 			{% endif %}
-			"returned_{{res_type}}_count": 0,
-			"{{res_type}}_count": 0,
+			"returned_{{res_type}}_count": {{new_items|length}},
+			"{{res_type}}_count": {{new_items|length}},
 		{% endif %}	
 	{%- endfor -%}
 "tags":

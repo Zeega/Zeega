@@ -305,8 +305,12 @@ class ItemsController extends Controller
                     {
                         throw $this->createNotFoundException('Unable to find Item entity.');
                     }    
-
+                    
+                    $childItem->setDateUpdated(new \DateTime("now"));
+                    $childItem->setIndexed(false);
+                    $item->setIndexed(false);
                     $item->addItem($childItem);
+                    
                     if($first == True)
                     {
                         $item->setThumbnailUrl($childItem->getThumbnailUrl());
