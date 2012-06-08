@@ -228,6 +228,7 @@ class ItemsController extends Controller
         $requestData = $this->getRequest()->request;      
 	    
 	    $item = $this->populateItemWithRequestData($requestData);
+	    //return $item;
 
         $em->persist($item);
         $em->flush();
@@ -408,11 +409,16 @@ class ItemsController extends Controller
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
         }
+        else
+        {
+            $item->setDateCreated(new \DateTime("now"));
+            $item->setChildItemsCount(0);
+        }
         
         $item->setUser($user);
         $item->setSite($site);
-        $item->setDateCreated(new \DateTime("now"));
         $item->setDateUpdated(new \DateTime("now"));
+        
         
         if(isset($title)) $item->setTitle($title);
         if(isset($description)) $item->setDescription($description);
@@ -424,7 +430,18 @@ class ItemsController extends Controller
         if(isset($thumbnailUrl)) $item->setThumbnailUrl($thumbnailUrl);
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
-        if(isset($mediaDateCreated)) $item->setMediaDateCreated($mediaDateCreated);
+        
+        if(isset($mediaDateCreated)) 
+        {
+            $parsedDate = strtotime($mediaDateCreated);
+            if($parsedDate)
+            {
+                $d = date("Y-m-d h:i:s",$parsedDate);
+                $item->setMediaDateCreated(new \DateTime($d));
+            }
+        }
+       
+        
         if(isset($mediaCreatorUsername))
         {
             $item->setMediaCreatorUsername($mediaCreatorUsername);
