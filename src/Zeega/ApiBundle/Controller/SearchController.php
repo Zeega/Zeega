@@ -299,7 +299,7 @@ class SearchController extends Controller
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
 		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 0;
 		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
-		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 0;
+		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 1;
 		if(!isset($query['page']))                  		$query['page'] = 0;
 		if($query['page'] > 0)                  		    $query['page'] = $query['page'] - 1;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
