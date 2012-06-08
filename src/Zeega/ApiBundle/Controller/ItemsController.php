@@ -420,10 +420,9 @@ class ItemsController extends Controller
         }
         
         $item->setUser($user);
-        $item->setSite($site);
         $item->setDateUpdated(new \DateTime("now"));
         
-        
+        if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
         if(isset($description)) $item->setDescription($description);
         if(isset($text)) $item->setText($text);
@@ -484,7 +483,9 @@ class ItemsController extends Controller
                 {
                     throw $this->createNotFoundException('Unable to find Item entity.');
                 }    
-
+                $childItem->setDateUpdated(new \DateTime("now"));
+                $childItem->setIndexed(false);
+                
                 $item->addItem($childItem);
                 if($first == True)
                 {
