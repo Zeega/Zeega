@@ -108,7 +108,7 @@ class SearchController extends Controller
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
 		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = "tag_name:" . str_replace(","," tag_name:",$matches[1]);
+		 	$tags = "tags:" . str_replace(","," tags:",$matches[1]);
 		}
 		
 	    // ----------- build the search query
