@@ -409,9 +409,9 @@ class ItemsController extends Controller
 		}
 		
         $item = new Item();
-        if(isset($itemId))
+        if(isset($id))
         {
-            $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+            $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
         }
         else
         {
@@ -444,7 +444,6 @@ class ItemsController extends Controller
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
-       
         
         if(isset($mediaCreatorUsername))
         {
