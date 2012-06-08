@@ -11,7 +11,10 @@
 ---------------------------------------------*/
 
 var Player2 = Backbone.View.extend({
-		
+	
+	MINIMUM_LOAD : 3000,
+	
+	has_started : false,
 	loadAheadDistance : 2,
 	overlaysHidden : false,
 	viewportRatio : 1.5,
@@ -48,6 +51,7 @@ var Player2 = Backbone.View.extend({
 		this.setCurrentFrame( f );
 		//this.setCurrentLayers();
 
+		
 		
 		if( _.isUndefined(zeega.app.router) )
 		{
@@ -136,8 +140,11 @@ var Player2 = Backbone.View.extend({
 		// if the frame is not loaded yet, then apply a listener for when it is ready and THEN render the frame to the player
 		else
 		{
+			var _this = this;
 			console.log('frame needs a little bit more to load…')
-			frame.on('ready', this.renderFrame, this );
+			frame.on('ready', function(){
+				if( !_this.has_played ) _this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 2000);
+			});
 		}
 		//update the url
 		this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
@@ -692,10 +699,10 @@ var Player2 = Backbone.View.extend({
 					.stop()
 					.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
 					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
-				/*
+				
 				if(this.model.get('layers').length == this.loadedCount)
-					$(this.el).fadeOut('fast', function(){ _this.remove() });
-				*/
+					$(this.el).fadeOut('show', function(){ _this.remove() });
+				
 			},
 			
 			getTemplate : function()
