@@ -8,7 +8,7 @@
 		"authors" : {{ project.getAuthors() | default("") | json_encode | raw}},
 		"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
 		"enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
-	        "estimated_time" : {{ project.getEstimatedTime() | default(false) | json_encode | raw}},
+	        "estimated_time" : {{ project.getEstimatedTime() | default("Some time") | json_encode | raw}},
            	"published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 		"sequences" : [
 		    {% for sequence in sequences %}	
