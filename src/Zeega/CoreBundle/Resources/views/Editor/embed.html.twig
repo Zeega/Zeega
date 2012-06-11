@@ -3,8 +3,8 @@
 	<head>
 		<style type="text/css">
 			html {
-				{% if project.getAttr().cover_image is defined %}
-				background: url({{project.getAttr().cover_image}}) no-repeat center center fixed;
+				{% if project.getCoverImage() is defined %}
+				background: url({{project.getCoverImage()}}) no-repeat center center fixed;
 				{% else %}
 				background: url({{asset('images/default_cover.png')}}) no-repeat center center fixed;
 				{% endif %}
@@ -62,7 +62,7 @@
 		<a href="{{hostname}}{{directory}}project/{{projectId}}/view" target= "_blank"></a>
 		<div id="text">
 			<h1>{{project.getTitle()}}</h1>
-			{% if project.getAttr().author is defined %}<h2>{{project.getAttr().author}}</h2>{% endif %}
+			{% if project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>{% endif %}
 		</div>
 	</body>
 </html>
