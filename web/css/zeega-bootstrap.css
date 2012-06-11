@@ -289,3 +289,15 @@ i.go-to-sequence{float:right;}
 	list-style:none;
 	margin-right:5px;
 }
+
+.bug-report
+{
+	padding:5px;
+	width:400px;
+}
+
+.bug-report input,
+.bug-report textarea
+{
+	width:390px;
+}
