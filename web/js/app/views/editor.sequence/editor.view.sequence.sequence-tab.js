@@ -16,7 +16,6 @@
 		render: function()
 		{
 			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title') || '...'}) );
-			
 			return this;
 		},
 		
@@ -32,9 +31,8 @@
 		},
 	
 		events : {
-			'click' : 'closeDropdown',
+			'click .menu-toggler' : 'toggleDropdown',
 			'click .sequence-tab-link' : 'goToSequence',
-			'click .menu-toggle' : 'toggleDropdown',
 			'click .rename-sequence' : 'renameSequence',
 			'click .delete-sequence' : 'deleteSequence'
 		},
@@ -46,15 +44,12 @@
 				zeega.app.goToSequence(this.model.id)
 			}
 			this.closeDropdown();
-			console.log('sequence tab clicked')
 			return false;
 		},
 		
 		toggleDropdown : function(e)
 		{
-			
 			this.$el.find('.menu').toggleClass('hide')
-			
 			return false;
 		},
 		
@@ -65,8 +60,6 @@
 		
 		renameSequence : function()
 		{
-			console.log('rename the sequence')
-			
 			var _this = this;
 			if( !this.loadedModal )
 			{
@@ -110,7 +103,7 @@
 			var html =
 			
 				'<a href="#" class="sequence-tab-link"><%= title %></a> '+
-				"<a href='#' class='menu-toggle'><b class='caret'></b></a>"+
+				"<a href='#' class='menu-toggler'><b class='caret'></b></a>"+
 				"<div class='well menu hide'>"+
 					"<ul class='nav nav-list'>"+
 						"<li><a href='#' class='rename-sequence'>rename</a></li>"+
