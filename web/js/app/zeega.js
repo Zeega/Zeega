@@ -791,7 +791,7 @@ console.log( helpOrderArray[this.helpCounter-1] )
 			console.log( 'we can make something out of this' )
 			$('#sequence-cover-image').css('background-image' , 'url("'+ obj.item.get('uri') +'")' );
 			console.log(this)
-			this.project.update({'cover_image':obj.item.get('uri')})
+			this.project.set({'cover_image':obj.item.get('uri')})
 			
 		}
 	},
