@@ -37,6 +37,11 @@ Zeega\DataBundle\Entity\User:
             type: string
             length: 50
             nullable: true
+        location:
+            type: string
+            length: 140
+            nullable: true
+
     indexes:
         user_type_index:
             columns: [user_type]      

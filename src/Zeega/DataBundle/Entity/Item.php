@@ -807,4 +807,29 @@ class Item
     public function onPreUpdate()
     {
     }
+    /**
+     * @var geometry $geo_latlng
+     */
+    private $geo_latlng;
+
+
+    /**
+     * Set geo_latlng
+     *
+     * @param geometry $geoLatlng
+     */
+    public function setGeoLatlng(\geometry $geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return geometry 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
+    }
 }

@@ -23,11 +23,49 @@ class UsersController extends Controller
     public function getUserAction($id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
+        $loggedUser = $this->get('security.context')->getToken()->getUser();
         
         $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
-        $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user));
+        
+		if(isset($loggedUser) || $loggedUser->getId() == $id)
+		{
+			$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
+		}
+		else
+		{
+			$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
+		}
         
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
-
  	}
+ 	
+ 	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
+    public function putUsersAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+		$loggedUser = $this->get('security.context')->getToken()->getUser();
+		
+		if(!isset($loggedUser) || $loggedUser->getId() != $id)
+		{
+			return new Response("Unauthorized", 401);
+		}
+				
+    	$bio = $this->getRequest()->request->get('bio');
+    	$displayName = $this->getRequest()->request->get('display_name');
+    	$thumbUrl = $this->getRequest()->request->get('thumbnail_url');
+    	$location = $this->getRequest()->request->get('location');
+    	
+    	$user = $em->getRepository('ZeegaDataBundle:User')->find($id);
+    	if(isset($bio)) $user->setBio($site); 
+    	if(isset($displayName)) $user->setDisplayName($displayName);
+    	if(isset($thumbUrl)) $user->setThumbUrl($thumbUrl);
+    	if(isset($location)) $user->setLocation($location);
+    	
+    	$em->persist($user);
+        $em->flush();
+		
+		$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+    }
  }

@@ -134,6 +134,9 @@ Zeega\DataBundle\Entity\Item:
         indexed:
             type: boolean
             nullable: true
+        geo_latlng:
+            type: string
+            nullable: true
         
     indexes:
         media_date_created_index:
@@ -150,3 +153,7 @@ Zeega\DataBundle\Entity\Item:
             columns: [site_id]
         item_enabled_index:
             columns: [enabled]
+        item_text_index:
+            columns: [text]
+        item_description_index:
+            columns: [description]
