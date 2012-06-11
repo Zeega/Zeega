@@ -16,7 +16,7 @@ class Version20120516180717 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql");
         
         $this->addSql("DROP TABLE sequences_layers");
-        $this->addSql("ALTER TABLE frame ADD project_id INT NOT NULL, DROP layers, CHANGE sequence_id sequence_id INT NOT NULL");
+        $this->addSql("ALTER TABLE frame ADD project_id INT NOT NULL, CHANGE sequence_id sequence_id INT NOT NULL");
         $this->addSql("CREATE INDEX IDX_B5F83CCD166D1F9C ON frame (project_id)");
         $this->addSql("ALTER TABLE layer CHANGE project_id project_id INT NOT NULL");
         $this->addSql("ALTER TABLE sequence CHANGE project_id project_id INT NOT NULL");
