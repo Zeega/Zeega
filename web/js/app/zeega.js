@@ -314,7 +314,8 @@ this.zeega = {
 					_this.busy = false;
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.hold.visual.render();
-					_this.project.frames.add(sequence.get('frames'))
+					_this.project.frames.add(sequence.get('frames'));
+					sequence.set('frames', [ sequence.get('frames')[0].id ]);
 					//sequence.createCollections();
 					sequence.trigger('sync');
 					_this.goToSequence(sequence.id);
@@ -446,12 +447,6 @@ this.zeega = {
 	{
 		console.log('	UPDATE FRAME ORDER')
 		this.currentSequence.updateFrameOrder();
-		/*
-		this.frames.trigger('resort',frameIDArray);
-		var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-		this.set( { framesOrder: frameIDArray } );
-		if( save != false ) this.save();
-		*/
 	},
 	
 	duplicateFrame : function( frameModel )

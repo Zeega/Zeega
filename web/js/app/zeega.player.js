@@ -295,11 +295,22 @@ var Player2 = Backbone.View.extend({
 	
 	getRight : function( step )
 	{
-		if( _.isUndefined( step ) ) step = 1;
+		step = step || 1;
 		var frameOrder = this.currentSequence.get('frames');
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
+		
+		console.log('GET RIGHT----frame order')
+		console.log(frameOrder)
+		console.log(this.currentFrame.id)
+		console.log(index)
+		console.log( this.frames.get( frameOrder[index+step] ) )
+		
+		return this.frames.get( frameOrder[index+step] ) || false;
+		
+		/*
 		if( index+1 + step > frameOrder.length ) return false;
 		else return this.frames.get( frameOrder[index+step] );
+		*/
 	},
 	
 	updateCitations : function()
