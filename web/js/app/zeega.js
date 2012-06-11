@@ -477,11 +477,8 @@ this.zeega = {
 	{
 		if(!this.busy)
 		{
-			console.log( 'copy layer to next frame!: '+ layerID );
-			console.log(parseInt(layerID))
 			var nextFrame = this.getRightFrame();
-		
-			if( nextFrame != this.currentFrame )
+			if( nextFrame != false && nextFrame != this.currentFrame )
 			{
 				if(nextFrame.get('layers')) nextFrame.get('layers').push( parseInt(layerID) );
 				else nextFrame.set('layers',[ parseInt(layerID) ],{silent:true});
@@ -633,23 +630,14 @@ this.zeega = {
 
 	getLeftFrame : function()
 	{
-		var frameOrder = this.currentSequence.get('frames');
-		
-		console.log('getLeft frame ----')
-		console.log(this.currentSequence)
-		console.log(frameOrder)
-		
-		var currentFrameIndex = _.indexOf( frameOrder, parseInt(this.currentFrame.id) );
-		if( currentFrameIndex ) return this.frames.get( frameOrder[ currentFrameIndex-1 ] );
-		else return this.frames.get( frameOrder[1] );
+		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
+		return this.frames.get( frameOrder[ currentFrameIndex-1 ] ) || this.frames.get( frameOrder[1] );
 	},
 
 	getRightFrame : function()
 	{
-		console.log(this)
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), this.currentFrame.id );
-		if(currentFrameIndex < this.currentSequence.get('frames').length - 1 ) return this.project.frames.get( this.currentSequence.get('frames')[0] + 1 );
-		else return false;
+		return this.project.frames.get( this.currentSequence.get('frames')[currentFrameIndex+1] ) || false;
 	},
 
 	loadLeftFrame : function()
