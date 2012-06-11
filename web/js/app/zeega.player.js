@@ -456,7 +456,7 @@ var Player2 = Backbone.View.extend({
 		var leftFrame = this.getLeft();
 		var rightFrame = this.getRight();
 		
-		if( this.frames.length == 1 )
+		if( this.currentSequence.get('frames').length < 2 )
 		{
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
