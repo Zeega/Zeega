@@ -677,7 +677,7 @@ var Player2 = Backbone.View.extend({
 						var layer = _this.layers.get(layerID);
 						console.log(layer)
 						
-						if( layer.get('type') != 'Link' )
+						if( layer.get('type') != 'Link' && !_.isUndefined(layer.get('attr').archive) )
 						{
 							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
 						}
