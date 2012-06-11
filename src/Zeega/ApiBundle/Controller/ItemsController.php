@@ -285,46 +285,54 @@ class ItemsController extends Controller
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putItemItemsAction($itemId)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    	{
 
-        $newItems = $this->getRequest()->request->get('new_items');        
-
-        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-
-        if(isset($newItems))
+			$em = $this->getDoctrine()->getEntityManager();
+	
+			$newItems = $this->getRequest()->request->get('new_items');        
+	
+			$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+	
+			if(isset($newItems))
+			{
+				if (isset($newItems))
+				{
+					$item->setChildItemsCount(count($newItems));
+					$first = True;
+					foreach($newItems as $newItem)
+					{
+						$childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+	
+						if (!$childItem) 
+						{
+							throw $this->createNotFoundException('Unable to find Item entity.');
+						}    
+						
+						$childItem->setDateUpdated(new \DateTime("now"));
+						$childItem->setIndexed(false);
+						$item->setIndexed(false);
+						$item->addItem($childItem);
+						
+						if($first == True)
+						{
+							$item->setThumbnailUrl($childItem->getThumbnailUrl());
+							$first = False;
+						}
+					}
+				}
+			}
+	
+			$em->persist($item);
+			$em->flush();
+	
+			$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+			return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+		}
+		else
         {
-            if (isset($newItems))
-            {
-                $item->setChildItemsCount(count($newItems));
-                $first = True;
-                foreach($newItems as $newItem)
-                {
-                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
-
-                    if (!$childItem) 
-                    {
-                        throw $this->createNotFoundException('Unable to find Item entity.');
-                    }    
-                    
-                    $childItem->setDateUpdated(new \DateTime("now"));
-                    $childItem->setIndexed(false);
-                    $item->setIndexed(false);
-                    $item->addItem($childItem);
-                    
-                    if($first == True)
-                    {
-                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
-                        $first = False;
-                    }
-                }
-            }
+        	return new Response("Unauthorized", 401);
         }
-
-        $em->persist($item);
-        $em->flush();
-
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
 	
    
