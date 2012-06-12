@@ -146,7 +146,7 @@ var Player2 = Backbone.View.extend({
 				if( !_this.has_played )
 				{
 					setTimeout( function(){
-						//frame.loader.fadeOut();
+						frame.loader.fadeOut();
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
 					}, 2000);
 					
@@ -726,7 +726,7 @@ var Player2 = Backbone.View.extend({
 				html =
 				
 					"<div class='progress-head'>"+
-						"<h3 class='estimate'>Estimate load time. . .</h3>"+
+						"<h3 class='estimate'>Estimated load time. . .</h3>"+
 						"<h3 class='time'><%= estimated_time %></h3>"+
 					"</div>"+
 					"<div class='progress progress-striped active progress-danger'>"+
