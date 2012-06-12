@@ -69,6 +69,7 @@ require(
 		'web/js/app/views/editor.layer/editor.view.layer.control-library.js',
 		'web/js/app/views/editor.layer/editor.view.layer.layer-list.js',
 		'web/js/app/views/editor.layer/editor.view.layer.visual-editor.js',
+		'web/js/app/views/editor.modals/editor.view.modal.share-project',
 		//mvc
 		//layers
 		'web/js/plugins/layers/video/video.js',
@@ -86,5 +87,4 @@ require(
 		//once the files have been loaded do this
 		var sequence = $('#sequence-id').val();
 		//zeega.app.init();
-		initUX();
 });
