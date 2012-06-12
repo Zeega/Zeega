@@ -2,6 +2,10 @@
 
 	Sequence.Model = Backbone.Model.extend({
 		
+		defaults :{
+			attr : {}
+		},
+		
 		url : function()
 		{
 			if ( this.isNew() ) return zeega.app.url_prefix + 'projects/'+ zeega.app.project.id +'/sequences';

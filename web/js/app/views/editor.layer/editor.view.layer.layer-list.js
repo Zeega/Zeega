@@ -60,6 +60,7 @@
 				this.model.on('editor_layerExit', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+				this.model.on('editor_removeLayerFromFrame', this.private_onRemoveLayerFromFrame, this);
 			}
 		},
 		
@@ -118,6 +119,11 @@
 			this.$el.find('#controls').empty();
 			//this.remove();
 			this.onLayerExit();
+		},
+		
+		private_onRemoveLayerFromFrame : function()
+		{
+			this.remove();
 		},
 		
 		private_onControlsOpen : function()

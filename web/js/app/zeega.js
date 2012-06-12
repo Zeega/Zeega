@@ -450,7 +450,53 @@ this.zeega = {
 	
 	duplicateFrame : function( frameModel )
 	{
-		if(!this.busy) this.project.duplicateFrame( frameModel );
+		//if(!this.busy) this.project.duplicateFrame( frameModel );
+		if(!this.busy)
+		{
+			console.log('	DUPLICATE FRAME')
+			console.log(frameModel)
+			var _this = this;
+			var dupeModel = frameModel.clone();
+			
+			dupeModel.set( 'duplicate_id' , parseInt(frameModel.id) );
+			dupeModel.oldLayerIDs = frameModel.get('layers');
+			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
+			dupeModel.dupe = true;
+			dupeModel.set('id',null);
+			
+			dupeModel.save({},{
+				success : function( savedFrame )
+				{
+					console.log('frame saved and is a duplicate')
+					console.log(savedFrame)
+					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
+				
+					//zeega.app.currentSequence.get('frames');
+				
+					//clone layers and place them into the layer array
+					_.each( savedFrame.oldLayerIDs , function(layerID, i){
+
+						//if layer is persistent
+						//replace frameIndex the id with the persistent id
+						var persistLayers = _this.currentSequence.get('attr').persistLayers;
+						if( _.include( persistLayers, parseInt(layerID) ) )
+						{
+							var layerOrder = savedFrame.get('layers');
+							layerOrder[i] = String(layerID);
+							savedFrame.set({layers:layerOrder})
+						}
+						else
+						{
+							_this.project.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
+						}
+					})
+					//resave the frame after being updated with persistent frame ids
+				}
+			});
+			
+			this.project.frames.add( dupeModel );
+			
+		} //busy
 	},
 	
 	addLayer : function( args )
