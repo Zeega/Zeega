@@ -265,7 +265,12 @@ this.zeega = {
 			
 				break;
 			case 'advanced':
-				
+				console.log('link with advanced options!');
+				var Modal = zeega.module('modal');
+				var advancedModal = new Modal.Views.LinkAdvanced();
+				console.log(advancedModal)
+				$('body').append(advancedModal.render().el);
+				advancedModal.show();
 				break;
 		}
 		this.busy = true;
