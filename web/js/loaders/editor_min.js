@@ -34,7 +34,6 @@ require(
 		'web/js/lib/leaflet/leaflet.js',
 		//custom
 		'web/js/ux/zeega.ux.header.js',
-		'web/js/ux/zeega.ux.editor.js',
 		'web/js/ux/layer-controls.js',
 		'web/js/helpers/zeega.extends.js',
 		'web/js/helpers/zeega.helpers.js',
@@ -65,7 +64,6 @@ require(
 		'web/js/app/collections/editor.collections.layer.js',
 		//views
 		'web/js/app/views/editor.project/editor.view.project.editor.js',
-		'web/js/app/views/editor.project/editor.view.publish.project.editor.js',
 		'web/js/app/views/editor.item/editor.view.item.database-tray.js',
 		'web/js/app/views/editor.frame/editor.view.frame.frame-sequence.js',
 		'web/js/app/views/editor.layer/editor.view.layer.control-library.js',
