@@ -3,7 +3,7 @@
 	Project.Model = Backbone.Model.extend({
 		
 		defaults : {
-			'cover_image' : 'http://dev.zeega.org/joseph/web/images/default_cover.png',
+			'cover_image' : 'images/default_cover.png',
 			'estimated_time' : 'the time it takes to eat a sandwhich',
 			'author' : ''
 		},

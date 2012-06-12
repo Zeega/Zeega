@@ -6,8 +6,10 @@
 		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
         "tags" : {{ project.getTags() | default("") | json_encode | raw}},
 		"authors" : {{ project.getAuthors() | default("") | json_encode | raw}},
-		"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
-		"enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
+                {% if project.getCoverImage is not empty %}
+		    "cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
+		{% endif %}
+                "enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
 	        "estimated_time" : {{ project.getEstimatedTime() | default("Some time") | json_encode | raw}},
            	"published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 		"sequences" : [

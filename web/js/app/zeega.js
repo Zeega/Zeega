@@ -45,7 +45,6 @@ this.zeega = {
 	init : function()
 	{
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
-
 		this.loadModules();
 		this.isLoaded = true
 		//this.initStartHelp(); //broken. fix!

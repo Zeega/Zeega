@@ -22,8 +22,7 @@
 			});
 
 			//display the cover image
-			console.log('cover image: '+ this.model.get('cover_image') )
-			$('#sequence-cover-image').css({'background-image' : 'url("'+ this.model.get('cover_image') +'")'})
+			$('#sequence-cover-image').css({'background-image' : 'url("'+ zeega.app.url_prefix+this.model.get('cover_image') +'")'})
 
 			console.log('cover image: '+ this.model.get('cover_image'))
 
