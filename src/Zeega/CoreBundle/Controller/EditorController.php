@@ -73,16 +73,12 @@ class EditorController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
-		$sequences = $this->getDoctrine()
-					   ->getRepository('ZeegaDataBundle:Sequence')
-					   ->findSequencesByProject($id);
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
 					
-		$project = $this->getDoctrine()
-						->getRepository('ZeegaDataBundle:Project')
-						->findOneById($id);
-		$projectLayers =  $this->getDoctrine()
-							   ->getRepository('ZeegaDataBundle:Layer')
-							   ->findLayersByProject($id);
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+
+		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+
 		$sequence = $sequences[0];
 		
 		// create project from collections browser

@@ -1,8 +1,7 @@
-(function(Project) {
-
+(function(Modal) {
 	
-	Project.Views.Publish = Backbone.View.extend({
-
+	Modal.Views.ShareProject = Backbone.View.extend({
+		
 		el : $('#publish-project-modal'),
 		
 		render: function()
@@ -13,9 +12,11 @@
 
 			var imageHTML = '';
 
-			var frames = this.model.sequences.at(0).frames.models;
+			console.log(this.model)
+
+			var frames = this.model.frames.models;
 			
-			var attr = this.model.get('attr') == "" ? new Object() : this.model.get('attr');
+			var attr = _.isUndefined(this.model.get('attr')) ? {} : this.model.get('attr');
 
 			//maybe don't need frame id there if just need img src
 			for(var i=0;i<frames.length;i++){
@@ -25,17 +26,14 @@
 								'" id="'+ frame.id +'" src="' + frame.get('thumbnail_url')+ '"></a>';
 				
 			}
-
 			
 			var projectlink = zeega.app.url_prefix + this.model.id;
 			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
-
 			var blanks = {
-				
-				title : this.model.get('title'),
-				author : attr.author,
+				//title : this.model.get('title'),
+				//author : attr.author,
 				imageHTML : imageHTML,
 				projectlink 	: 	projectlink,
 				uriEncodedProjectlink : encodeURIComponent(projectlink),
@@ -43,12 +41,14 @@
 				iframeEmbed : iframeEmbed,
 				iframeHTML : this.iframeHTML,
 				randId : this.elemId,
-				tags : this.model.get('tags'),
-
+				//tags : this.model.get('tags'),
 			};
-			var template = _.template( this.getTemplate() );
+			//var template = _.template( this.getTemplate() );
 
-			$(this.el).html( template( blanks ) );
+			console.log(this)
+			console.log( _.extend(this.model.attributes,blanks) )
+
+			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.attributes,blanks) ) );
 
 			$(this.el).find('.tagsedit').empty().tagsInput({
 				'interactive':true,
@@ -78,14 +78,16 @@
 			$(this.el).find('#looks-good').mouseup(function(){
 
 				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
-				attr.author = $('#publish-project-author').val();
 				_this.model.save({	
 							'title': $('#publish-project-title').val(),
-							'attr': attr,
+							//'attr': attr,
 							'published':true,
+							'author' : $('#publish-project-author').val(),
+							'estimated_time' : $('#publish-project-estimated-time').val()
 				},
 				{
 					success : function(model, response){
+						console.log(_this.model)
 						$(_this.el).find('#publish-project-modal-step1').hide();
 						$(_this.el).find('#publish-project-modal-step2').show();
 					},
@@ -155,6 +157,9 @@
 
 							'<label for="publish-project-author">Author(s)</label>'+
 							'<input type="text" id="publish-project-author" value="<%= author %>"/>'+
+
+							'<label for="publish-project-estimated-time">Estimated Time</label>'+
+							'<input type="text" id="publish-project-estimated-time" value="<%= estimated_time %>"/>'+
 
 							'<label for="tags">Tags</label>'+
 							'<div class="tags"><input name="tags" class="tagsedit" id="<%=randId%>" value="<%=tags%>" /></div>'+
@@ -261,4 +266,4 @@
 	},
 });
 	
-})(zeega.module("project"));
+})(zeega.module("modal"));

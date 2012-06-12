@@ -1,7 +1,10 @@
-(example changelog - not being used yet)
-
-Zeega Alpha 0.77: 2012-05-25
+Zeega Alpha 0.75 2012-02-06
 ---------------------------------------
 * JavaScript
         - added script minifier
 	- all Zeega scripts are now being compressed when Symfony is in production mode
+
+Zeega Alpha 0.75 2012-12-06
+---------------------------------------
+* Feature
+        - added support for multilinear projects

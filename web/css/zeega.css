@@ -936,48 +936,6 @@ body
 .expandable{ cursor:pointer }
 
 
-/*
-.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
-*/
-
-
-/********************************
-
-	DROPDOWN MENUS
-
-**********************************/
-
-.menu-toggle
-{
-	position:relative;
-	top:4px;
-}
-.menu-items
-{
-	color:#444;
-	display:none;
-	background:rgba(255,255,255,0.9);
-	position:absolute;
-	padding:6px;
-	border-radius:6px;
-	box-shadow:6px 6px 6px rgba(0,0,0,0.5);
-}
-.menu-items.open { display:inline; z-index:10 }
-.menu-items .menu-title { color: #444 }
-.menu-items .divider { border-bottom:1px solid #ddd }
-
-/*		quirks for the search bar dropdown	*/
-#search-filter { float :left }
-#search-filter .zicon-searchdropdown { position:relative;top:4px;}
-
-/*		quirks for browser		*/
-.collections-menu{position:absolute;top:0;right:0;}
-.collections-menu .menu-items{ top: 0;right:0;}
-.browser-results-collection .menu-items a:hover{
-	color:#666 !important;
-}
 /*******************************
 
 	panels
@@ -1027,7 +985,6 @@ body
 
 .panel-head+div { margin:6px 0 }
 
-.panel-head li{color:rgba(255,255,255,0.65)}
 .panel.raised .panel-head
 {
 	-webkit-border-radius: 6px;
@@ -1169,6 +1126,15 @@ body
 
 /******************************
 
+	CONNECTIONS
+	
+*******************************/
+
+#connection-confirm{ margin-left:10px;}
+
+
+/******************************
+
 	FRAMES
 	
 *******************************/
@@ -1217,12 +1183,23 @@ body
 	padding:10px 17px;
 }
 
+#sequence-tabs
+{
+	margin:0;
+}
+
+#sequence-tabs.nav-tabs>li>a
+{
+	padding-top:2px;
+	padding-bottom:2px;
+}
+
 #frame-drawer, #browser-my-collections
 {
 	white-space:nowrap;
 	background:#eee;
 	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
-	border-radius: 6px;
+	border-radius: 0 0 6px 6px;
 	
 	box-shadow : none;
 	-webkit-transition: box-shadow .25s linear;
@@ -1966,56 +1943,6 @@ td+td
 	
 ****************************/
 
-.load-wrapper
-{
-	position:absolute;
-	top:150px;
-	color:#aaa;
-	width:100%;
-}
-
-.loader
-{
-
-	width:100%;
-	height:2px;
-	background:rgba(255,255,255,.25);
-}
-
-.progress
-{
-	background:red;
-	width:0%;
-	height:100%;
-	box-shadow: 0 0 10px white;
-}
-
-
-/*
-#loading-container
-{
-	height:2px;
-	width:100%;
-	border:1px solid #333;
-	position:absolute;
-	top:15%;
-	
-	z-index:999;
-}
-
-#progress-bar
-{
-	background:red;
-	height:100%;
-	width:0;
-}
-
-#layer-status ul li
-{
-	color: white;
-	margin-left: 10px;
-}
-*/
 .ghost-frame
 {
 }
@@ -2337,7 +2264,8 @@ z-index:22;
 
 }
 
-.bar{
+.timeline-drag-bar
+{
 
 width:10px;
 height:3px;

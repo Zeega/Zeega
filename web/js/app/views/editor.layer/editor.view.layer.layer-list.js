@@ -16,8 +16,8 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
-			this.$el.attr( 'id', 'layer-'+ this.model.id )
-			
+			this.$el.attr( 'id', 'layer-'+ this.model.id );
+			this.$el.attr('data-id',this.model.id);
 			//this.drawDefaultControls();
 			
 			
@@ -106,7 +106,7 @@
 		private_onLayerEnter : function()
 		{
 			console.log('	LAYER LIST enter')
-			this.drawDefaultControls();
+			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
 			this.onLayerEnter();
 		},
@@ -181,6 +181,7 @@
 		updateViewInPlace : function()
 		{
 			console.log('re render')
+			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 			
 		},
@@ -198,8 +199,7 @@
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
-			'mouseleave .delete-layer'	: 'onLayerTrashLeave',
-
+			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
 		},
 		
 		// the events end users have access to

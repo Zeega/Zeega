@@ -24,13 +24,13 @@
 
 				console.log('add non item layer type: '+args.type);
 
-				var newLayer = new Layer[args.type]({attr:{}});
+				var newLayer = new Layer[args.type]({attr:args.options});
 				console.log( new Layer[args.type] )
 				console.log(newLayer)
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
-				
+				return newLayer;
 			}
 			else
 			{
@@ -46,12 +46,8 @@
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
+				return newLayer;
 			}
-			console.log(newLayer)
-			
-			
-			
-			
 		},
 		
 		saveLayer : function(layerModel, frame)
@@ -88,21 +84,8 @@
 		addLayerToFrame : function(frame,layer)
 		{
 			console.log('	ADD LAYER TO FRAME')
-			console.log(zeega.app.currentSequence)
-			//console.log(layer)
-			
-			var layerOrder = [ parseInt( layer.id ) ];
-			if( frame.get('layers') )
-			{
-				//if the layer array already exists eliminate false values if they exist
-				layerOrder = frame.get('layers');
-				//add the layer id to the layer order array
-				layerOrder.push( parseInt( layer.id ) );
-			}
-			zeega.app.updateLayerOrder(layerOrder.reverse(), frame);
-			//set the layerOrder array inside the frame
-			frame.set({'layers': _.compact(layerOrder) });
-			frame.save();
+			layer.trigger('update');
+			zeega.app.updateLayerOrder( frame );
 		},
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },

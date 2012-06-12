@@ -162,7 +162,7 @@ var BrowserDetect = {
 		
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
-  
+
 	<div id='add-media'>
 			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
 
@@ -284,6 +284,23 @@ var BrowserDetect = {
 							</ul>
 							
 							<ul class="nav pull-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-warning'></i> Report a Bug<b class="caret"></b></a>
+									<ul class="dropdown-menu bug-report">
+										<li>
+											<div><label>You can help us track down problems by sending us a brief description of what's wrong:</label></div>
+											<textarea rows='3'></textarea>
+											<p><i class='icon-ok-sign'></i> a link to the current view will be included automatically</p>
+										</li>
+										<li>
+											<label>Your email (optional):</label>
+											<input type='text'/>
+										</li>
+										<li>
+											<button class='btn btn-success submit-bug'>submit</button>
+										</li>
+									</ul>
+								</li>
 								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a></li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
@@ -293,8 +310,7 @@ var BrowserDetect = {
 									</ul>
 								</li>
 							</ul>
-							
-							
+
 						</div>
 					</div>
 				</div>
