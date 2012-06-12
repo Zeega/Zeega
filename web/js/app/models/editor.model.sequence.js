@@ -7,9 +7,15 @@
 			if ( this.isNew() ) return zeega.app.url_prefix + 'projects/'+ zeega.app.project.id +'/sequences';
 			return zeega.app.url_prefix+'sequences/' + this.id;
 		},
+		
+		defaultAttr : {
+			persistLayers : []
+		},
 				
 		initialize : function( attributes )
 		{
+			this.set({ 'attr' : _.defaults(this.get('attr'),this.defaultAttr) })
+			
 			//this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 

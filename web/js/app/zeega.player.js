@@ -146,7 +146,7 @@ var Player2 = Backbone.View.extend({
 				if( !_this.has_played )
 				{
 					setTimeout( function(){
-						frame.loader.fadeOut();
+						//frame.loader.fadeOut();
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
 					}, 2000);
 					
@@ -298,19 +298,8 @@ var Player2 = Backbone.View.extend({
 		step = step || 1;
 		var frameOrder = this.currentSequence.get('frames');
 		var index = _.indexOf( frameOrder, this.currentFrame.id );
-		
-		console.log('GET RIGHT----frame order')
-		console.log(frameOrder)
-		console.log(this.currentFrame.id)
-		console.log(index)
-		console.log( this.frames.get( frameOrder[index+step] ) )
-		
+
 		return this.frames.get( frameOrder[index+step] ) || false;
-		
-		/*
-		if( index+1 + step > frameOrder.length ) return false;
-		else return this.frames.get( frameOrder[index+step] );
-		*/
 	},
 	
 	updateCitations : function()
@@ -687,9 +676,11 @@ var Player2 = Backbone.View.extend({
 					_.each(this.model.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
 						console.log(layer)
+						console.log('load layer type: '+ layer.get('type'))
 						
-						if( layer.get('type') != 'Link' && !_.isUndefined(layer.get('attr').archive) )
+						if( layer.get('type') != 'Link' && (layer.get('type') == 'Geo' || !_.isUndefined(layer.get('attr').archive) ) )
 						{
+							console.log('load layer type: '+ layer.get('type'))
 							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
 						}
 					})
