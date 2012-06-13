@@ -290,41 +290,54 @@ class ItemsController extends Controller
 
 			$em = $this->getDoctrine()->getEntityManager();
 	
-			$newItems = $this->getRequest()->request->get('new_items');        
+			$newItems = $this->getRequest()->request->get('new_items');
+			$itemsToRemove = $this->getRequest()->request->get('items_to_remove');   
 	
 			$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 	
-			if(isset($newItems))
+			if (isset($newItems))
 			{
-				if (isset($newItems))
+				$item->setChildItemsCount(count($newItems));
+				$first = True;
+				foreach($newItems as $newItem)
 				{
-					$item->setChildItemsCount(count($newItems));
-					$first = True;
-					foreach($newItems as $newItem)
+					$childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+
+					if (!$childItem) 
 					{
-						$childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
-	
-						if (!$childItem) 
-						{
-							throw $this->createNotFoundException('Unable to find Item entity.');
-						}    
-						
-						$childItem->setDateUpdated(new \DateTime("now"));
-						$childItem->setIndexed(false);
-						$item->setIndexed(false);
-						$item->addItem($childItem);
-						
-						if($first == True)
-						{
-							$item->setThumbnailUrl($childItem->getThumbnailUrl());
-							$first = False;
-						}
+						throw $this->createNotFoundException('Unable to find Item entity.');
+					}    
+					
+					$childItem->setDateUpdated(new \DateTime("now"));
+					$childItem->setIndexed(false);
+					$item->setIndexed(false);
+					$item->addItem($childItem);
+					
+					if($first == True)
+					{
+						$item->setThumbnailUrl($childItem->getThumbnailUrl());
+						$first = False;
 					}
 				}
 			}
+			
 	
 			$em->persist($item);
 			$em->flush();
+        	
+			if(isset($itemsToRemove))
+			{
+			    foreach($itemsToRemove as $itemToRemoveId)
+				{
+				    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
+				    if (isset($childItem)) 
+    				{
+    					$item->getChildItems()->removeElement($childItem);
+    				}
+			    }
+			    $item->setChildItemsCount($item->getChildItems()->count());
+                $em->flush();
+			}
 	
 			$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 			return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
