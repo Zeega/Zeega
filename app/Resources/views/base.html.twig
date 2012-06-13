@@ -287,20 +287,29 @@ var BrowserDetect = {
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-warning'></i> Report a Bug<b class="caret"></b></a>
 									<ul class="dropdown-menu bug-report">
-										<li>
+										<li class='bug-unsubmitted'>
 											<div><label>You can help us track down problems by sending us a brief description of what's wrong:</label></div>
-											<textarea rows='3'></textarea>
+											<textarea class='bug-description' rows='3'></textarea>
 											<p><i class='icon-ok-sign'></i> a link to the current view will be included automatically</p>
 										</li>
-										<li>
+										<li class='bug-unsubmitted' >
 											<label>Your email (optional):</label>
-											<input type='text'/>
+											<input class='bug-email' type='text'></input>
 										</li>
-										<li>
+										<li class='bug-unsubmitted'>
 											<button class='btn btn-success submit-bug'>submit</button>
 										</li>
+										<li class='bug-submitted'>
+											<h2>Thanks for your feedback!!</h2>
+											<h3 style='padding-left:80px'>-- the Zeega team</h3>
+											<br>
+										</li>
+										<li class='bug-submitted'>
+											<button class='btn btn-success close-bug '>close</button>
+										</li>
+										
 									</ul>
-								</li>
+							</li>
 								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a></li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
