@@ -62,6 +62,7 @@
 					console.log('SAVED NEW LAYER')
 					console.log(savedLayer)
 					savedLayer.trigger('refresh_view');
+					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
 				}
 			});
