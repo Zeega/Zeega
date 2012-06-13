@@ -498,11 +498,22 @@ this.zeega = {
 			var _this = this;
 			var dupeModel = frameModel.clone();
 			
-			dupeModel.set( 'duplicate_id' , parseInt(frameModel.id) );
+			console.log(''+ frameModel.get('layers'))
+			//remove link layers because it doesn't make sense to dupe those
+			var layersToDupe = [];
+			_.each( frameModel.get('layers'), function(layerID){
+				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') layersToDupe.push( layerID);
+			})
+			console.log(layersToDupe)
+			dupeModel.set({
+				'layers' : layersToDupe,
+				'duplicate_id' : parseInt(frameModel.id),
+				'id' : null
+			})
+			
 			dupeModel.oldLayerIDs = frameModel.get('layers');
 			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
 			dupeModel.dupe = true;
-			dupeModel.set('id',null);
 			
 			dupeModel.save({},{
 				success : function( savedFrame )
