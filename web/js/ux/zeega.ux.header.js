@@ -41,7 +41,7 @@ function initHeaderUX(){
 		
 		});
 		
-		bug.url="http://dev.zeega.org/bugs/report.php";
+		bug.url="http://alpha.zeega.org/bugs/report.php";
 		bug.save();
 		$('.bug-description').attr('value','');
 		$('.bug-unsubmitted').fadeOut('fast',function(){
