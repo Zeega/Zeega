@@ -120,10 +120,30 @@ class ProjectsController extends Controller
             $layersToPersist = $request->request->get('layers_to_persist');
             $original_frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($request->request->get('duplicate_id'));
 
+			if($request->request->get('layers'))
+			{
+				$original_layers = $request->request->get('layers');
+        		foreach($original_layers as $original_layer_id)
+        		{
+       	 				$layer= new Layer();
+    					$layer->setProject($project);
+        				$original_layer=$this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->find($original_layer_id);
+        				
+						if($original_layer->getItem()) $layer->setItem($original_layer->getItem());
+						if($original_layer->getType()) $layer->setType($original_layer->getType());
+						if($original_layer->getText()) $layer->setText($original_layer->getText());
+						if($original_layer->getAttr()) $layer->setAttr($original_layer->getAttr());
+						
+						$em->persist($layer);
+						$em->flush();
+        				$frame_layers[]=$layer->getId();	
+        		}
+        		$frame->setLayers($frame_layers);
+			}
             if($original_frame->getThumbnailUrl()) $frame->setThumbnailUrl($original_frame->getThumbnailUrl());
             if($original_frame->getAttr()) $frame->setAttr($original_frame->getAttr());
             //if($original_frame->getLayers()) $frame->setLayers($original_frame->getLayers());
-            if(isset($layersToPersist)) $frame->setLayers($layersToPersist);
+            //if(isset($layersToPersist)) $frame->setLayers($layersToPersist);
         }
         else
         {
@@ -140,6 +160,7 @@ class ProjectsController extends Controller
        		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
        		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
        		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
+                if($request->request->get('layers_to_persist')) $frame->setLayers($request->request->get('layers_to_persist'));
         }
         
    		$em->persist($frame);

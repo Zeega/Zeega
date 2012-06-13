@@ -241,9 +241,9 @@ this.zeega = {
 		switch(action)
 		{
 			case 'newFrame':
-			var _this = this;
+				var _this = this;
 
-			console.log('make new sequence')
+				console.log('make new sequence')
 				this.hold = this.addLayer({
 					type : 'Link',
 					options : {
@@ -254,6 +254,7 @@ this.zeega = {
 				console.log(this.hold)
 				$('#connection-confirm').show();
 				$('#make-connection button').addClass('disabled');
+				this.busy = true;
 				break;
 			
 			case 'existingFrame':
@@ -265,10 +266,14 @@ this.zeega = {
 			
 				break;
 			case 'advanced':
-				
+				console.log('link with advanced options!');
+				var Modal = zeega.module('modal');
+				var advancedModal = new Modal.Views.LinkAdvanced();
+				console.log(advancedModal)
+				$('body').append(advancedModal.render().el);
+				advancedModal.show();
 				break;
 		}
-		this.busy = true;
 	},
 	
 	connectToSequenceFrame : function( sequenceID, frameID )
@@ -286,6 +291,41 @@ this.zeega = {
 		});
 		console.log(this)
 
+	},
+	
+	connectToAdvanced : function( layerArray )
+	{
+		var _this = this;
+		
+		var hold = this.addLayer({
+			type : 'Link',
+			options : {
+				from_sequence : this.currentSequence.id,
+				from_frame : this.currentFrame.id
+			}
+		});
+		
+		hold.on('layer_saved', function(){
+			hold.off('layer_saved');
+			var layersToPersist = _.union( layerArray, [hold.id] );
+
+			var Sequence = zeega.module("sequence");
+			var sequence = new Sequence.Model({ 'frame_id' : _this.currentFrame.id, 'layers_to_persist' : layersToPersist });
+
+			sequence.save({},{
+				success : function()
+				{
+					hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
+					hold.visual.render();
+					_this.project.frames.add(sequence.get('frames'));
+					sequence.set('frames', [ sequence.get('frames')[0].id ]);
+					sequence.trigger('sync');
+					_this.goToSequence(sequence.id);
+					_this.busy = false;
+				}
+			});
+			_this.project.sequences.add(sequence);
+		})
 	},
 	
 	confirmConnection : function(action)
@@ -450,7 +490,64 @@ this.zeega = {
 	
 	duplicateFrame : function( frameModel )
 	{
-		if(!this.busy) this.project.duplicateFrame( frameModel );
+		//if(!this.busy) this.project.duplicateFrame( frameModel );
+		if(!this.busy)
+		{
+			console.log('	DUPLICATE FRAME')
+			console.log(frameModel)
+			var _this = this;
+			var dupeModel = frameModel.clone();
+			
+			console.log(''+ frameModel.get('layers'))
+			//remove link layers because it doesn't make sense to dupe those
+			var layersToDupe = [];
+			_.each( frameModel.get('layers'), function(layerID){
+				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') layersToDupe.push( layerID);
+			})
+			console.log(layersToDupe)
+			dupeModel.set({
+				'layers' : layersToDupe,
+				'duplicate_id' : parseInt(frameModel.id),
+				'id' : null
+			})
+			
+			dupeModel.oldLayerIDs = frameModel.get('layers');
+			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
+			dupeModel.dupe = true;
+			
+			dupeModel.save({},{
+				success : function( savedFrame )
+				{
+					console.log('frame saved and is a duplicate')
+					console.log(savedFrame)
+					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
+				
+					//zeega.app.currentSequence.get('frames');
+				
+					//clone layers and place them into the layer array
+					_.each( savedFrame.oldLayerIDs , function(layerID, i){
+
+						//if layer is persistent
+						//replace frameIndex the id with the persistent id
+						var persistLayers = _this.currentSequence.get('attr').persistLayers;
+						if( _.include( persistLayers, parseInt(layerID) ) )
+						{
+							var layerOrder = savedFrame.get('layers');
+							layerOrder[i] = String(layerID);
+							savedFrame.set({layers:layerOrder})
+						}
+						else
+						{
+							_this.project.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
+						}
+					})
+					//resave the frame after being updated with persistent frame ids
+				}
+			});
+			
+			this.project.frames.add( dupeModel );
+			
+		} //busy
 	},
 	
 	addLayer : function( args )
