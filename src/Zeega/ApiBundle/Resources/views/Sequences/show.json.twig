@@ -1,13 +1,21 @@
 {
 		"id" : {{ sequence.id }},
 		"title" : "{{ sequence.title }}",
-		"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+                {% if sequence.attr is not empty %} 
+		    "attr" : {{sequence.attr | json_encode | raw}},
+                {% else %}
+                    "attr" : {},
+                {% endif %}
 		"frames" : 
 		[
 		{% for frame in frames %}
 		{	
 			"id" : {{ frame.id | json_encode | raw}},
-			"attr" : {{ frame.attr | default("") | json_encode | raw}},
+                        {% if frame.attr is not empty %}
+			     "attr" : {{ frame.attr | json_encode | raw}},
+                        {% else %}
+                             "attr" : {},
+                        {% endif %}
 			"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
 			"layers" : 
 			[

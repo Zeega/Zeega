@@ -20,15 +20,17 @@
 		{
 			this.set({ 'attr' : _.defaults(this.get('attr'),this.defaultAttr) })
 			
-			//this.layers.on('add', this.onLayerAdded, this);
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
-
+			this.on('sync', this.checkAttr, this);
 			this.attachTabView();
 			
-			//this.updateFrameOrder(false);
 			this.trigger('ready');
 		},
 		
+		checkAttr : function()
+		{
+			if( _.isUndefined(this.get('attr').persistlayers) ) this.get('attr').persistLayers = [];
+		},
 		attachTabView : function()
 		{
 			this.view = new Sequence.Views.SequenceTabs({model:this});

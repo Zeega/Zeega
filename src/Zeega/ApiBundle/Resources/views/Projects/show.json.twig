@@ -17,7 +17,7 @@
 			{
 				"id" : {{ sequence.id }},
 				"title" : "{{ sequence.title }}",
-				"attr" : {{sequence.attr | default([ ]) | json_encode | raw}},
+				"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 				"frames" : 
 				[
 				{% for frame in sequence_frames[sequence.id] -%}	
@@ -37,7 +37,7 @@
 			{% for frame in frames %}
 			{	
 				"id" : {{ frame.id | json_encode | raw}},
-				"attr" : {{ frame.attr | default("") | json_encode | raw}},
+				"attr" : {{ frame.attr | default({}) | json_encode | raw}},
 				"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
 				"layers" : 
 				[

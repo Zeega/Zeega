@@ -242,7 +242,6 @@ this.zeega = {
 		{
 			case 'newFrame':
 				var _this = this;
-				this.busy = true;
 
 				console.log('make new sequence')
 				this.hold = this.addLayer({
@@ -255,6 +254,7 @@ this.zeega = {
 				console.log(this.hold)
 				$('#connection-confirm').show();
 				$('#make-connection button').addClass('disabled');
+				this.busy = true;
 				break;
 			
 			case 'existingFrame':
