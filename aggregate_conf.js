@@ -12,6 +12,12 @@ module.exports = {
 		    input: 'web/js/loaders/browser_min.js',
 		    output: 'web/js_min/browser.js',
 		    message:"Don't forget to check the JS paths in /src/Zeega/CoreBundle/Resources/views/Editor/browser.html.twig"
-		}
+		},
+		{
+		    input: 'web/js/loaders/standalone-player_min.js',
+		    output: 'web/js_min/standalone-player.js',
+		    message:"Don't forget to check the JS paths in /src/Zeega/CoreBundle/Resources/views/Editor/player.html.twig"
+		},
+
 	]
 }
