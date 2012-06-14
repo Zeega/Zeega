@@ -7,10 +7,7 @@
 
 		el : $('#publish-project-modal'),
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render: function()
 		{

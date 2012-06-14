@@ -62,8 +62,8 @@
 		
 		selectFrame : function(e)
 		{
-			$(e.target).toggleClass('selected')
-			
+			$(e.target).toggleClass('selected');
+			return false;
 		},
 	
 		getTemplate : function()

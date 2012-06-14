@@ -15,6 +15,7 @@
 		},
 		
 		init : function(){},
+		
 		getControl : function()
 		{
 			this.render();
