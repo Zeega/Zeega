@@ -49,6 +49,7 @@ require(
 	'web/js/plugins/layers/text/text',
 	'web/js/plugins/layers/googlebook/googlebook',
 	'web/js/plugins/layers/link/link',
+        'web/js/plugins/layers/rectangle/rectangle',
 	//'web/js/plugins/layers/documentcloud/documentcloud',
 	
 	
