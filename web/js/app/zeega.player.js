@@ -133,8 +133,6 @@ var Player2 = Backbone.View.extend({
 		//if the frame is already loaded, then render the frame to the player!
 		if( frame.status == 'ready')
 		{
-			console.log('frame is just ready to play. go do it!')
-			console.log(frame)
 			this.renderFrame(frame.id );
 		}
 		// if the frame is not loaded yet, then apply a listener for when it is ready and THEN render the frame to the player
@@ -150,6 +148,10 @@ var Player2 = Backbone.View.extend({
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
 					}, 2000);
 					
+				}
+				else
+				{
+					_this.renderFrame( frame.id);
 				}
 			});
 		}
@@ -196,6 +198,7 @@ var Player2 = Backbone.View.extend({
 	
 	loadAhead : function()
 	{
+		console.log('LOAD AHEAD ON SEQUENCE: '+ this.currentSequence.id )
 		//find the frame you're coming from and where it is in the order
 		var frameOrder = this.currentSequence.get('frames') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
 		this.currentSequence.set('frames',frameOrder);
@@ -700,10 +703,7 @@ var Player2 = Backbone.View.extend({
 			{
 				var _this = this;
 				this.loadedCount++;
-				console.log(layerID)
 				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
-				
-				//$(this.el).find('.loaded-count').html( this.loadedCount );
 				
 				$(this.el).find('.bar')
 					.stop()
