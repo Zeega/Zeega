@@ -11,10 +11,30 @@
 <div id="faq" style='color:white; padding:10px;'> 
 
 
-<div class="item-title" style="font-size: 24px; ">FAQ</div>
+<h1>FAQ</h1>
 
 
-			<div class="clear" style="clear: both;"></div>
+<ul id='faq-list' class='unstyled'>
+
+	<li>
+		<div class="expander"><h3><a href='#'>this is the first FAQ question</a></h3></div>
+		<div class="faq-content">
+			<p class="">this is the faq answer</p>
+		</div>
+	</li>
+	<li>
+		<div class="expander"><h3><a href='#'>this is the second FAQ question</a></h3></div>
+		<div class="faq-content">
+			<p class="">this is the faq answer</p>
+		</div>
+	</li>
+
+</ul>
+
+
+
+
+
 
 <div style="color: #65CAFC; font-size: 24px;">How do I add media to Zeega?</div>
 
@@ -97,5 +117,6 @@ Zeega is an intentional misspelling of Dziga Vertov, one of our favorite media a
 
 {% endblock %}				
 {% block scripts %}
-      <script data-main="{{ asset('js/main.faq.js') }}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/main.faq.js') }}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
 {% endblock %}

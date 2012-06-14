@@ -310,3 +310,18 @@ i.go-to-sequence{float:right;}
 {
 	width:390px;
 }
+
+/****************
+
+	   FAQ
+	
+*****************/
+.faq-content{ display:none }
+#faq-list>li
+{
+	margin-bottom:5px;
+	padding: 5px 10px;
+	border-radius:5px;
+}
+#faq-list li:nth-child(odd){ background-color: rgba(255,255,255,0.25);}
+#faq-list li:nth-child(even){ background-color: rgba(255,255,255,0.125);}
