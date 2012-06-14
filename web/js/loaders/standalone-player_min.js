@@ -8,15 +8,16 @@
 
 *********************************************/
 require.config({
-	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/.js',
 	paths : {
-		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
+		'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order.js',
 		'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
 	}
 })
 
-var loadFiles = [
-	'jquery',
+require(
+	[
+	//'jquery',
 	
 	//'web/js/lib/jquery/ui/js/jquery-ui-1.8.17',
 	
@@ -55,17 +56,10 @@ var loadFiles = [
 	//'web/js/plugins/players/zeega.player.youtube',	
 	       
 	'web/js/plugins/players/plyr'
-	];
+	],
+	function(jquery) {
+		zeega.app.init()
 
-require(loadFiles, function($) {
-	zeega.app.init()
-
-	var frameID = window.location.hash.substr(15);
-	console.log(frameID)
-	//this url needs to change
-	
-	/*
-	if(sessionStorage.getItem('projectId')>0) $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){ Player.init(data,null,frameID) });
-	else $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/collections/'+sessionStorage.getItem('collectionId')+'/project',function(data){ Player.init(data,null,frameID) });
-	*/
+		var frameID = window.location.hash.substr(15);
+		console.log(frameID)
 });
