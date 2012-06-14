@@ -138,12 +138,9 @@
 		{
 			this.render();
 			this.delegateEvents();
-			
-			
 			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
 			{
 				var _this = this;
-
 				this.delegateEvents();
 				this.$el.resizable({
 					stop: function(e,ui)
@@ -161,6 +158,8 @@
 		onPlay : function()
 		{
 			this.render();
+			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
+				this.moveOffStage()
 			this.delegateEvents({'click':'goClick'})
 		},
 		

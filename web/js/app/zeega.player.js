@@ -169,6 +169,7 @@ var Player2 = Backbone.View.extend({
 			var _this = this;
 			var oldLayers = this.currentFrame.get('layers');
 			var newLayers = frame.get('layers');
+			
 			//remove only the non-common layers. This allows for seamless persistence of layers
 			var removeLayers = _.difference(oldLayers, newLayers);
 			_.each( removeLayers, function( layerID ){
@@ -182,13 +183,13 @@ var Player2 = Backbone.View.extend({
 		var _this = this;
 		var frame = this.frames.get(id);
 		frame.off('ready', this.renderFrame);
+		this.currentFrame = frame;
 
 		_.each( frame.get('layers'), function(layerID,i){
 			_this.layers.get( layerID ).trigger('player_play',i+1);
 		})
 		
 		this.setAdvance( frame.get('attr').advance )
-		this.currentFrame = frame;
 		this.updateCitations();
 		this.updateArrows();
 	},
