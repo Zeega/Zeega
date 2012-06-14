@@ -605,9 +605,6 @@ var Player2 = Backbone.View.extend({
 		
 		var Layer = zeega.module('layer');
 		
-		console.log(this)
-		console.log(LAYER)
-		
 		var layerArray = [];
 		_.each( data.layers, function( layerData ){
 			var layer = new Layer[layerData.type]( layerData, {player:true} );

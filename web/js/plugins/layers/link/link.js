@@ -88,6 +88,9 @@
 					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
+
+				// if the editor is active, the remove the layer if it shouldn't be shown
+				if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 			}
 			else
 			{
@@ -96,9 +99,6 @@
 			}
 			
 			$(this.el).html( this.getTemplate() ).css( style ).addClass('linked-layer');
-
-			// if the editor is active, the remove the layer if it shouldn't be shown
-			if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 
 			return this;
 		},
