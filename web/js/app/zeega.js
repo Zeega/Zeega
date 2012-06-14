@@ -564,6 +564,11 @@ this.zeega = {
 		}
 	},
 	
+	continueLayer : function(layerID)
+	{
+		console.log('continue layer: '+layerID)
+	},
+	
 	continueLayerToNextFrame : function( layerID )
 	{
 		if(!this.busy)

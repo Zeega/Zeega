@@ -133,8 +133,6 @@ var Player2 = Backbone.View.extend({
 		//if the frame is already loaded, then render the frame to the player!
 		if( frame.status == 'ready')
 		{
-			console.log('frame is just ready to play. go do it!')
-			console.log(frame)
 			this.renderFrame(frame.id );
 		}
 		// if the frame is not loaded yet, then apply a listener for when it is ready and THEN render the frame to the player
@@ -150,6 +148,10 @@ var Player2 = Backbone.View.extend({
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
 					}, 2000);
 					
+				}
+				else
+				{
+					_this.renderFrame( frame.id);
 				}
 			});
 		}
@@ -169,6 +171,7 @@ var Player2 = Backbone.View.extend({
 			var _this = this;
 			var oldLayers = this.currentFrame.get('layers');
 			var newLayers = frame.get('layers');
+			
 			//remove only the non-common layers. This allows for seamless persistence of layers
 			var removeLayers = _.difference(oldLayers, newLayers);
 			_.each( removeLayers, function( layerID ){
@@ -182,19 +185,20 @@ var Player2 = Backbone.View.extend({
 		var _this = this;
 		var frame = this.frames.get(id);
 		frame.off('ready', this.renderFrame);
+		this.currentFrame = frame;
 
 		_.each( frame.get('layers'), function(layerID,i){
 			_this.layers.get( layerID ).trigger('player_play',i+1);
 		})
 		
 		this.setAdvance( frame.get('attr').advance )
-		this.currentFrame = frame;
 		this.updateCitations();
 		this.updateArrows();
 	},
 	
 	loadAhead : function()
 	{
+		console.log('LOAD AHEAD ON SEQUENCE: '+ this.currentSequence.id )
 		//find the frame you're coming from and where it is in the order
 		var frameOrder = this.currentSequence.get('frames') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
 		this.currentSequence.set('frames',frameOrder);
@@ -600,6 +604,7 @@ var Player2 = Backbone.View.extend({
 		this.sequences = new this.Sequences( data.sequences );
 		
 		var Layer = zeega.module('layer');
+		
 		var layerArray = [];
 		_.each( data.layers, function( layerData ){
 			var layer = new Layer[layerData.type]( layerData, {player:true} );
@@ -699,10 +704,7 @@ var Player2 = Backbone.View.extend({
 			{
 				var _this = this;
 				this.loadedCount++;
-				console.log(layerID)
 				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
-				
-				//$(this.el).find('.loaded-count').html( this.loadedCount );
 				
 				$(this.el).find('.bar')
 					.stop()
