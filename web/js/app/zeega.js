@@ -566,7 +566,11 @@ this.zeega = {
 	
 	continueLayer : function(layerID)
 	{
-		console.log('continue layer: '+layerID)
+		console.log('continue layer: '+layerID);
+		var Modal = zeega.module('modal');
+		var linkModal = new Modal.Views.ContinueLayer();
+		$('body').append(linkModal.render().el);
+		linkModal.show();
 	},
 	
 	continueLayerToNextFrame : function( layerID )
