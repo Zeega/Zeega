@@ -16,9 +16,11 @@
 			console.log('modal render!!!')
 			$(this.el).html( this.getTemplate() );
 			
+			
 			if(zeega.app.currentFrame.get('layers').length < 1 ) $(_this.el).find('.layer-list-checkboxes').append('there are no layers on this frame to continue. Press the "Make New Sequence" button to continue with a blank sequence.')
 			_.each( zeega.app.currentFrame.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
+				var count = 0;
 				if(layer.get('type') == 'Link' &&  layer.get('attr').from_frame == zeega.app.currentFrame.id)
 				{
 					console.log('this frame has links!!')
@@ -26,7 +28,9 @@
 					console.log(frame)
 					var optionString = "<li data-id='"+frame.id+"'><a href='#'><img src='"+ frame.get('thumbnail_url')+"'/></a></li>";
 					$(_this.el).find('.layer-list-checkboxes').append(optionString)
+					count++;
 				}
+				if(count == 0) $(_this.el).find('#linked-frames-selector').remove();
 			})
 
 			return this;
@@ -92,9 +96,9 @@
 					'<label class="checkbox"><input id="continue-next-frame" type="checkbox" value="next_frame"> next frame</label>'+
 					'<label class="checkbox"><input id="continue-sequence" type="checkbox" value="sequence"> this sequence</label>'+
 					
-					'linked frames</br>'+
+					'<div id="linked-frames-selector">linked frames</br>'+
 					
-					'<ul class="layer-list-checkboxes unstyled"></ul>'+
+					'<ul class="layer-list-checkboxes unstyled"></ul></div>'+
 				'</div>'+
 				'<div class="modal-footer">'+
 					'<a href="#" class="btn close" >Cancel</a>'+
