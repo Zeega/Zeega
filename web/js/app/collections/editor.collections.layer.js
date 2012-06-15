@@ -63,7 +63,6 @@
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
-					layerModel.trigger('update');
 					frame.trigger('update_thumb');
 				}
 			});
@@ -93,6 +92,7 @@
 				frame.save();
 				console.log(frame)
 			}
+			layer.trigger('update');
 			zeega.app.updateLayerOrder( frame );
 		},
 		

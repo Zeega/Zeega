@@ -557,6 +557,8 @@ this.zeega = {
 			console.log('ADD LAYER')
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
+			console.log('show layer? '+ args.show() )
+			//args.frame.trigger('update_thumb');
 			console.log(args)
 			return this.project.layers.addNewLayer( args )
 		}

@@ -249,7 +249,8 @@ a.dropdown-toggle::after {
 	padding:5px 0;
 }
 
-.frame-thumb-choose-icon
+.frame-thumb-choose-icon,
+.layer-list-checkboxes>li
 {
 	height:50px;
 	width:50px;
@@ -258,8 +259,11 @@ a.dropdown-toggle::after {
 	margin: 0 5px 5px 0;
 }
 
-.frame-thumb-no-choose-icon,
-.layer-list-checkboxes>li
+.frame-thumb-choose-icon img,
+.layer-list-checkboxes>li img
+{height:50px;width:50px;}
+
+.frame-thumb-no-choose-icon
 {
 	height:50px;
 	width:50px;
