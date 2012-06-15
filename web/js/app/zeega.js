@@ -568,7 +568,7 @@ this.zeega = {
 	{
 		console.log('continue layer: '+layerID);
 		var Modal = zeega.module('modal');
-		var linkModal = new Modal.Views.ContinueLayer();
+		var linkModal = new Modal.Views.ContinueLayer({ model:this.project.layers.get(layerID)});
 		$('body').append(linkModal.render().el);
 		linkModal.show();
 	},
@@ -587,11 +587,11 @@ this.zeega = {
 		}
 	},
 	
-	continueOnAllFrames : function( layerModel )
+	continueOnAllFrames : function( layerID )
 	{
 		if(!this.busy)
 		{
-			var layerID = parseInt(layerModel.id);
+			var layerModel = this.project.layers.get(layerID)
 			//get persistent layers
 			var attr = this.currentSequence.get('attr');
 			
@@ -599,12 +599,14 @@ this.zeega = {
 			if( _.include(attr.persistLayers, layerID ) )
 			{
 				//remove persistence
+				console.log('remove persistence')
 				attr.persistLayers = _.without( attr.persistLayers, layerID );
 				if(attr.persistLayers.length == 0 ) attr.persistLayers = [false];
 				this.removePersistenceFromFrames( layerID );
 			}
 			else
 			{
+				console.log('add persistence')
 				//add persistence
 				attr.persistLayers.push( layerID );
 				this.addPersistenceToFrames( layerID );
@@ -623,7 +625,7 @@ this.zeega = {
 		// add this layer to each frame in the sequence
 		_.each( this.currentSequence.get('frames'), function(frameID){
 			var frame = _this.project.frames.get( frameID );
-			var layerArray = frame.get('layers');
+			var layerArray = frame.get('layers') || [];
 			layerArray.push(layerID)
 			frame.save({ layers : _.compact(_.uniq(layerArray)) })
 		})
