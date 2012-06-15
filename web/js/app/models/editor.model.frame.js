@@ -30,6 +30,7 @@
 			this.updating = false
 			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			console.log('frame model',this);
 			this.view = new Frame.Views.FrameSequence({ model : this })
 			
