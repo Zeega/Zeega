@@ -64,6 +64,7 @@
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
+					frame.trigger('update_thumb');
 				}
 			});
 		},
