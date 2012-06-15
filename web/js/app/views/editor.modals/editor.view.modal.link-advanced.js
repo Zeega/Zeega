@@ -21,7 +21,7 @@
 				var layer = zeega.app.project.layers.get(layerID);
 				if(layer.get('type') != 'Link')
 				{
-					var optionString = "<li><label class='checkbox'><input type='checkbox' value='"+ layer.id +"'> <i class='zicon-"+ layer.get('type') +"'></i> "+layer.get('attr').title +"</label></li>";
+					var optionString = "<li><label class='checkbox'><input type='checkbox' value='"+ layer.id +"'> <i class='zicon-"+ layer.get('type').toLowerCase() +"'></i> "+layer.get('attr').title +"</label></li>";
 					$(_this.el).find('.layer-checkbox-list').append(optionString)
 				}
 			})
