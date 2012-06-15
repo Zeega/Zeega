@@ -18,6 +18,7 @@
 				
 		initialize : function( attributes )
 		{
+			this.checkAttr();
 			this.set({ 'attr' : _.defaults(this.get('attr'),this.defaultAttr) })
 			
 			this.on('updateFrameOrder',this.updateFrameOrder,this);

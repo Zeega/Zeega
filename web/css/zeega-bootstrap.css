@@ -56,7 +56,7 @@
 .zicon-new-frame{background-position:-80px -120px}
 .zicon-old-frame{background-position:-60px -120px}
 .zicon-options{background-position:-20px -60px}
-.zicon-warning{background-position:0 -60px}
+.zicon-warning{background-position:-100px -120px}
 
 [class^="zicon-"].small
 {
@@ -249,7 +249,8 @@ a.dropdown-toggle::after {
 	padding:5px 0;
 }
 
-.frame-thumb-choose-icon
+.frame-thumb-choose-icon,
+.layer-list-checkboxes>li
 {
 	height:50px;
 	width:50px;
@@ -257,6 +258,10 @@ a.dropdown-toggle::after {
 	float:left;
 	margin: 0 5px 5px 0;
 }
+
+.frame-thumb-choose-icon img,
+.layer-list-checkboxes>li img
+{height:50px;width:50px;}
 
 .frame-thumb-no-choose-icon
 {
@@ -268,7 +273,8 @@ a.dropdown-toggle::after {
 	opacity:0.25;
 }
 
-.frame-choose-list li.selected{outline:2px solid red;}
+.frame-choose-list li.selected,
+.layer-list-checkboxes>li.selected{outline:2px solid red;}
 
 i.go-to-sequence{float:right;}
 

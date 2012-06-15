@@ -51,7 +51,6 @@ var loadFiles = [
         'order!plugins/layers/rectangle/rectangle',
 	//'order!plugins/layers/documentcloud/documentcloud',
 	
-	
 	//'order!plugins/players/zeega.player.video',
 	//'order!plugins/players/zeega.player.youtube',	
 	       

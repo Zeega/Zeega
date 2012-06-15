@@ -685,10 +685,11 @@ var Player2 = Backbone.View.extend({
 						console.log(layer)
 						console.log('load layer type: '+ layer.get('type'))
 						
-						if( layer.get('type') != 'Link' && (layer.get('type') == 'Geo' || !_.isUndefined(layer.get('attr').archive) ) )
+						if( layer.get('type') != 'Link' )
 						{
-							console.log('load layer type: '+ layer.get('type'))
-							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ layer.get('attr').archive.toLowerCase() +'"></i></li>')
+							var itemType = ( layer.get('attr').archive ) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+							console.log(itemType)
+							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ itemType +'"></i></li>')
 						}
 					})
 					
@@ -730,7 +731,7 @@ var Player2 = Backbone.View.extend({
 				html =
 				
 					"<div class='progress-head'>"+
-						"<h3 class='estimate'>Estimated load time. . .</h3>"+
+						"<h3 class='estimate'>Estimated time to experience this project. . .</h3>"+
 						"<h3 class='time'><%= estimated_time %></h3>"+
 					"</div>"+
 					"<div class='progress progress-striped active progress-danger'>"+

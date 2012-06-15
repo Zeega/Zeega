@@ -15,6 +15,7 @@
 		},
 		
 		init : function(){},
+		
 		getControl : function()
 		{
 			this.render();
@@ -63,7 +64,7 @@
 
 		render : function()
 		{
-			var button = '<button class="btn" style="width:100%">Continue Frame</button>'
+			var button = '<button class="btn" style="width:100%">Continue Layer</button>'
 			$(this.el).append( button );
 		},
 		

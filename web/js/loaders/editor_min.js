@@ -80,6 +80,7 @@ require(
 		'web/js/app/views/editor.modals/editor.view.modal.link-existing',
 		'web/js/app/views/editor.modals/editor.view.modal.link-advanced',
 		'web/js/app/views/editor.modals/editor.view.modal.share-project',
+		'web/js/app/views/editor.modals/editor.view.modal.continue-layer',
 		
 		//mvc
 		//layers

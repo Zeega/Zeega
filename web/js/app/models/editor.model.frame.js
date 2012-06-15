@@ -7,6 +7,7 @@
 		defaults : {
 			"name" : "Untitled",
 			'layers' : [],
+			"thumbnail_url" : '../../../images/thumb.png',
 			"attr" : {
 				"advance": 0
 			}
@@ -29,7 +30,8 @@
 			this.updating = false
 			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
-			
+			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
+			console.log('frame model',this);
 			this.view = new Frame.Views.FrameSequence({ model : this })
 			
 			//this.on('focus', this.render, this );
@@ -37,7 +39,7 @@
 
 			this.on('update_thumb', this.updateThumb, this );
 			
-			if(!this.get('attr')) this.set({'attr':{ 'advance':0 }});
+
 			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
@@ -76,6 +78,7 @@
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
+						console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
 					}

@@ -55,6 +55,7 @@
 						frame : _this.model
 					})
 					
+					console.log('add layer:',zeega.app.draggedItem, _this.model)
 					//zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
 				}
 			});

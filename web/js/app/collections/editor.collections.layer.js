@@ -36,7 +36,6 @@
 			{
 				//media item layer
 				console.log( args.item.get('layer_type'))
-	
 				
 				var newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
@@ -64,6 +63,7 @@
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
+					frame.trigger('update_thumb');
 				}
 			});
 		},
@@ -85,6 +85,13 @@
 		addLayerToFrame : function(frame,layer)
 		{
 			console.log('	ADD LAYER TO FRAME')
+			if(frame.id != zeega.app.currentFrame)
+			{
+				if(frame.get('layers')) frame.get('layers').push(layer.id);
+				else frame.set('layers',[layer.id]);
+				frame.save();
+				console.log(frame)
+			}
 			layer.trigger('update');
 			zeega.app.updateLayerOrder( frame );
 		},
