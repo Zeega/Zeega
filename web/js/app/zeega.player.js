@@ -50,8 +50,6 @@ var Player2 = Backbone.View.extend({
 		this.setCurrentSequence( s );
 		this.setCurrentFrame( f );
 		//this.setCurrentLayers();
-
-		
 		
 		if( _.isUndefined(zeega.app.router) )
 		{
@@ -141,6 +139,8 @@ var Player2 = Backbone.View.extend({
 			var _this = this;
 			console.log('frame needs a little bit more to load…')
 			frame.on('ready', function(){
+				frame.off('ready');
+				
 				if( !_this.has_played )
 				{
 					setTimeout( function(){
@@ -166,6 +166,7 @@ var Player2 = Backbone.View.extend({
 	*/
 	clearStage : function( frame )
 	{
+		console.log('clear stage!!')
 		if(this.currentFrame.id != frame.id)
 		{
 			var _this = this;
@@ -174,7 +175,9 @@ var Player2 = Backbone.View.extend({
 			
 			//remove only the non-common layers. This allows for seamless persistence of layers
 			var removeLayers = _.difference(oldLayers, newLayers);
+			
 			_.each( removeLayers, function( layerID ){
+				console.log('remove layer: '+layerID, _this.layers.get( layerID ))
 				_this.layers.get( layerID ).trigger('player_exit')
 			})
 		}
@@ -184,10 +187,10 @@ var Player2 = Backbone.View.extend({
 	{
 		var _this = this;
 		var frame = this.frames.get(id);
-		frame.off('ready', this.renderFrame);
 		this.currentFrame = frame;
 
 		_.each( frame.get('layers'), function(layerID,i){
+			console.log(layerID)
 			_this.layers.get( layerID ).trigger('player_play',i+1);
 		})
 		
@@ -604,7 +607,6 @@ var Player2 = Backbone.View.extend({
 		this.sequences = new this.Sequences( data.sequences );
 		
 		var Layer = zeega.module('layer');
-		
 		var layerArray = [];
 		_.each( data.layers, function( layerData ){
 			var layer = new Layer[layerData.type]( layerData, {player:true} );
