@@ -375,12 +375,12 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['type']=='Audio'||$item['type']=='Video'||$item['type']=='Image'){
+         	if($item['media_type']=='Audio'||$item['media_type']=='Video'||$item['media_type']=='Image' ){
 				$i++;
 				
 				$frameOrder[]=$i;
 				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['source'],"text"=>null,"zindex"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri'],"left"=>0,"top"=>0,"height"=>100,"width"=>100,"opacity"=>1,"aspect"=>1.33,"volume"=>50,"in"=>0,"out"=>0));
+				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
          	}
          }
          
@@ -423,7 +423,7 @@ class ItemsController extends Controller
             $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
 		}
 	
-		if(!isset($site))
+		if(!isset($site) && isset($user))
 		{
 		    $sites = $user->getSites();
     		$site = $sites[0];
