@@ -1104,6 +1104,7 @@ body
 	cursor:pointer;
 	white-space : nowrap;
 	text-shadow : 0 1px 1px rgba(25, 25, 25, 0.75);
+	min-height:20px;
 }
 
 .layer-drag-handle
