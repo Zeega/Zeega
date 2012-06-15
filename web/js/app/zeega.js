@@ -337,10 +337,6 @@ this.zeega = {
 			console.log('create and go to new sequence')
 			
 			var layersToPersist = [this.hold.id];
-			var frameLayers = _.each( this.currentFrame.get('layers'), function(layerID){
-				var layer = _this.project.layers.get(layerID);
-				if( layer.get('type') == 'Audio' ) layersToPersist.push(layerID);
-			})
 			
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
