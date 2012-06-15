@@ -76,7 +76,7 @@
 		
 		selectFrame : function(e)
 		{
-			$(e.target).toggleClass('selected');
+			$(e.target).closest('li').toggleClass('selected');
 			return false;
 		},
 	
@@ -102,7 +102,7 @@
 				'</div>'+
 				'<div class="modal-footer">'+
 					'<a href="#" class="btn close" >Cancel</a>'+
-					'<a href="#" class="btn btn-success pull-right save">Go</a>'+
+					'<a href="#" class="btn btn-success pull-right save">OK</a>'+
 				'</div>'+
 			'</div>';
 			
