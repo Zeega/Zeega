@@ -56,11 +56,9 @@ class WidgetController extends Controller
 		
 		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
-		error_log("widgetController 0 " . $parserResponse, 0);
 		if(isset($parserResponse))
 		{
 			// quick fix - try / catch will be removed
-			error_log("widgetController 1", 0);
 			try
 			{
 				$isUrlValid = $parserResponse["request"]["success"];
@@ -70,14 +68,12 @@ class WidgetController extends Controller
             
 				if($isUrlValid && count($items) > 0)
 				{
-			    	error_log("widgetController 3", 0);
 				    $parsedItem = $items[0];
 					// check if the item exists on the database	
 	        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
                 
 	        		if(isset($item))
 	        		{
-	        			error_log("widgetController 4", 0);
 	        		 	// item was imported before
 	        			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
 	        				'displayname' => $user->getDisplayname(),
@@ -89,7 +85,6 @@ class WidgetController extends Controller
 	        		}
 					else if($isUrlCollection)
 					{
-						error_log("widgetController 5", 0);
 						return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
@@ -100,7 +95,6 @@ class WidgetController extends Controller
 					}
 					else
 					{	
-						error_log("widgetController 6", 0);
 						return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
@@ -112,7 +106,6 @@ class WidgetController extends Controller
 			}
 			catch(Exception $e)
 			{
-				error_log(7, 0);
 				return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'widget_id'=>$widgetId,

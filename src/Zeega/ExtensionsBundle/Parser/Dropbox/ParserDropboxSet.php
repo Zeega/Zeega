@@ -19,14 +19,12 @@ class ParserDropboxSet extends ParserAbstract
 	
 	function __construct() 
 	{
-		error_log("ParserDropboxSet construct", 0);
 		$this->itemParser = new ParserDropboxItem();
 	}
 	
 	public function load($url, $parameters = null)
     {
 		
-		error_log("ParserDropboxSet load 0", 0);
 
 		require_once('../vendor/dropbox/bootstrap.php');
 		//require_once('bootstrap.php');
@@ -60,7 +58,6 @@ class ParserDropboxSet extends ParserAbstract
 			$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $fileData, "username" => $dropboxUser));
 			$collection->addItem($item["items"]);
 		}
-		error_log("ParserDropboxSet end", 0);
 		return parent::returnResponse($collection, true, true);
 	}
 }

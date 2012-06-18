@@ -15,7 +15,6 @@ class ParserDropboxItem extends ParserAbstract
 	
 	public function load($mediaUrl, $parameters = null)
     {
-		error_log("ParserDropboxItem load 0", 0);
 		
 		//require_once('../vendor/dropbox/bootstrap.php');
 		//require_once('bootstrap.php');
@@ -66,7 +65,6 @@ class ParserDropboxItem extends ParserAbstract
 		$pos += strlen($header);
 		$redirect_url = substr($response, $pos, strpos($response, "\r\n", $pos)-$pos) . "?dl=1";
 		
-		error_log("ParserDropboxItem " . $redirect_url,0); 
 
 		if($media_type == false){ // if this is not a supported media type
 			return $this->returnResponse(null, false, false);
