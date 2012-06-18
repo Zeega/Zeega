@@ -33,7 +33,6 @@ var loadFiles = [
 
 	//custom
 	'order!ux/zeega.ux.header',
-	'order!ux/zeega.ux.editor',
 	'order!ux/layer-controls',
 	'order!helpers/zeega.extends',
 	'order!helpers/zeega.helpers',
@@ -53,7 +52,6 @@ var loadFiles = [
 	'order!lib/popcorn_flash',
 	'order!lib/bootstrap',
 	
-	
 	'order!plugins/players/plyr',
 
 //models
@@ -71,12 +69,16 @@ var loadFiles = [
 
 //views
 	'order!app/views/editor.project/editor.view.project.editor',
-	'order!app/views/editor.project/editor.view.publish.project.editor',
+	'order!app/views/editor.sequence/editor.view.sequence.sequence-tab',
 	'order!app/views/editor.item/editor.view.item.database-tray',
 	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
 	'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
+	'order!app/views/editor.modals/editor.view.modal.link-existing',
+	'order!app/views/editor.modals/editor.view.modal.link-advanced',
+	'order!app/views/editor.modals/editor.view.modal.share-project',
+	'order!app/views/editor.modals/editor.view.modal.continue-layer',
 
 	//mvc
 	//'order!backbone/models/tag',
@@ -91,6 +93,7 @@ var loadFiles = [
 	'order!plugins/layers/mapbox/mapbox',
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/googlebook/googlebook',
+	'order!plugins/layers/link/link',
 	
 
 
@@ -116,5 +119,4 @@ require(loadFiles, function(jquery)
 	//once the files have been loaded do this
 	var sequence = $('#sequence-id').val();
 	//zeega.app.init();
-	initUX();
 });

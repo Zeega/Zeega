@@ -90,6 +90,7 @@
 		onPreload : function()
 		{
 			var _this = this;
+			this.render();
 			if(this.attr.link)
 			{
 				
@@ -120,8 +121,6 @@
 		{
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
-			console.log('on layer enter')
-			console.log(this.model)
 		},
 		
 		private_onLayerExit : function()
@@ -149,8 +148,6 @@
 				
 				start : function(e,ui)
 				{
-					console.log( 'actual width: '+ $(this).width() )
-					console.log( 'width: '+ $(this).css('width') )
 				},
 				
 				stop : function(e,ui)
@@ -175,6 +172,7 @@
 		
 		private_onPreload : function()
 		{
+			this.render();
 			this.onPreload();
 			this.model.rendered = true;
 			//this.moveOffStage();
@@ -182,15 +180,13 @@
 		
 		private_onPlay : function( z )
 		{
-			console.log('player play')
-			console.log(this.model)
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
 			this.onPlay();
 			this.model.inFocus = true;
 			
 			//make the linked layers blink on entrance
-			if(this.attr.link)
+			if(this.attr.link || this.model.get('type') == 'Link')
 			{
 				var _this = this;
 				setTimeout( function(){ $(_this.el).addClass('link-blink') }, 250 );
@@ -230,7 +226,6 @@
 		
 		moveOffStage :function()
 		{
-			console.log('MOVE OFF STAGE: '+ this.model.id)
 			$(this.el).css({
 				'top' : '-1000%',
 				'left' : '-1000%'

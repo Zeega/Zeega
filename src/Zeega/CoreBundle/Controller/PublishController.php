@@ -17,29 +17,14 @@ class PublishController extends Controller
     public function frameAction($id)
     {
         $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
-
-    	$layerList = $frame->getLayers();
-        $layers = array();
-        
-        if(isset($layerList))
-        {
-    	    foreach($layerList as $layer_id)
-    	    {
-    	        if(isset($layer_id))
-    	        {
-    	            $layers[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer_id);
-    	        }
-    	    }
-	    }
-	    else
-	    {
-	        $layers = array();
-	    }
+        $layersId = $frame->getLayers();
+            $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($layersId);
+        $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame, 'layers'=>$layers));
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
 					'frameId'=> $frame->getId(),
-					'frame'=>ResponseHelper::serializeEntityToJson($frame),
+					'frame'=>$frameTemplate,
 					'layers'=>$layers
-				));
+    				));
      }
      
      public function projectAction($id)

@@ -62,28 +62,25 @@ class SequencesController extends Controller
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
     	if($request->request->get('title'))$sequence->setTitle($request->request->get('title'));
     	if($request->request->get('attr'))$sequence->setAttr($request->request->get('attr'));
-		$em->flush();
-		
-		if($request->request->get('framesOrder')){
+    	$em->flush();
 
-		$frames=$request->request->get('framesOrder');
-
-		$i=0;
-		$s=count($frames);
-		foreach($frames as $frameId){
-			
-			$frame=$em->getRepository('ZeegaDataBundle:Frame')
-        		->find($frameId);
-        		
-        		
-        	$frame->setSequenceIndex($i);
-        	$em->persist($frame);
-			$i++;
-		}
-		
+        if($request->request->get('frames'))
+        {
+            $frames = $request->request->get('frames');
+            $i = 0;
+            $s = count($frames);
+            foreach($frames as $frameId)
+            {
+                $frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+                $frame->setSequenceIndex($i);
+                $em->persist($frame);
+                $i++;
+            }
+            $em->flush();
+        }
+        
+		$em->persist($sequence);
 		$em->flush();
-		
-		}
 		
     	return new Response('SUCCESS',200);
     } // `put_sequence`     [PUT] /sequences/{sequence_id}
@@ -95,7 +92,7 @@ class SequencesController extends Controller
     
     	$em = $this->getDoctrine()->getEntityManager();
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
-    	$em->remove($sequence);
+        $em->remove($sequence);
     	$em->flush();
     	return new Response('SUCCESS',200);
     

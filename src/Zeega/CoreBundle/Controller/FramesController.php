@@ -9,30 +9,10 @@ use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Doctrine\ORM\PersistentCollection;
 
 class FramesController extends Controller
 {
-    
-   
-    
-     public function getFramesAction()
-    {
-    
-
-    
-    } // `get_frames`    [GET] /frames
-
-
-
-    public function postFramesAction()
-    {
-    
-    
-    	
-        
-    } // `post_frames`   [POST] /frames
-
- 
     public function getFrameAction($frame_id)
     {
     
@@ -47,19 +27,19 @@ class FramesController extends Controller
 
     public function putFrameAction($frame_id)
     {
-    	$em=$this->getDoctrine()->getEntityManager();
-    	$request = $this->getRequest();
-    	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
-    	
-		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
-		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
-		
-		$em->persist($frame);
-		$em->flush();
-		
-		return ResponseHelper::encodeAndGetJsonResponse($em->getRepository('ZeegaDataBundle:Frame')->findById($frame_id));        
-    } // `put_frame`     [PUT] /frames/{frame_id}
+        $em=$this->getDoctrine()->getEntityManager();
+       	$request = $this->getRequest();
+       	$frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
+
+   		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
+   		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
+   		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
+
+   		$em->persist($frame);
+   		$em->flush();
+
+   		return ResponseHelper::encodeAndGetJsonResponse($em->getRepository('ZeegaDataBundle:Frame')->findById($frame_id));        
+   	}   // `put_frame`     [PUT] /frames/{frame_id}
 
 
 

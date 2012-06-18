@@ -87,7 +87,7 @@ class CollectionsController extends Controller
 				$i++;
 				
 				$frameOrder[]=$i;
-				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$frames[]=array( "id"=>$i,"layers"=>array($i),"attr"=>array("advance"=>0));
 				$layers[]=array("id"=>$i,"type"=>$item['source'],"text"=>null,"zindex"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri'],"left"=>0,"top"=>0,"height"=>100,"width"=>100,"opacity"=>1,"aspect"=>1.33,"volume"=>50,"in"=>0,"out"=>0));
          	}
          }
@@ -159,10 +159,7 @@ class CollectionsController extends Controller
         $item->setChildItemsCount(0);
         $item->setMediaCreatorUsername($user->getUsername());
         $item->setMediaCreatorRealname($user->getDisplayName());
-        $item->setArchive('Zeega');
-        $item->setEnabled(true);
-        $item->setPublished(false);
-	$item->setIndexed(false);
+        
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();
@@ -199,53 +196,47 @@ class CollectionsController extends Controller
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putCollectionsItemsAction($project_id)
     {
-    	if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
-    	{
-			$em = $this->getDoctrine()->getEntityManager();
-	
-			$entity = $em->getRepository('ZeegaDataBundle:Item')->find($project_id);
-	
-			if (!$entity) 
-			{
-				throw $this->createNotFoundException('Unable to find Collection entity.');
-			}
-			
-			$items_list = $this->getRequest()->request->get('newItemIDS');
-	
-			//Screen item list for duplicates
-	
-			$childItems=$entity->getChildItems();
-			foreach($childItems as $childItem){
-				$existing_items[]=$childItem->getId();
-			}
-			if(isset($existing_items))
-				$items_list=array_diff($items_list,$existing_items);
+        $em = $this->getDoctrine()->getEntityManager();
 
-			// this is terrible...
-			foreach($items_list as $item)
-			{
-				$child_entity = $em->getRepository('ZeegaDataBundle:Item')->findOneById($item);
-				if (!$child_entity) 
-				{
-					throw $this->createNotFoundException('Unable to find Item entity.');
-				}  
-				$child_entity->setIndexed(False);
-				$entity->addItem($child_entity); 
-			}
-			$count=$entity->getChildItemsCount() + count($items_list);
-			$entity->setChildItemsCount($count);
-			
-			$em->persist($entity);
-			$em->flush();
-			
-			$itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
-			return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
-        }
-        else
+        $entity = $em->getRepository('ZeegaDataBundle:Item')->find($project_id);
+
+        if (!$entity) 
         {
-        	return new Response("Unauthorized", 401);
+            throw $this->createNotFoundException('Unable to find Collection entity.');
         }
         
+        $items_list = $this->getRequest()->request->get('newItemIDS');
+
+		//Screen item list for duplicates
+
+		$childItems=$entity->getChildItems();
+		foreach($childItems as $childItem){
+			$existing_items[]=$childItem->getId();
+		}
+		if(isset($existing_items))
+			$items_list=array_diff($items_list,$existing_items);
+
+        // this is terrible...
+        foreach($items_list as $item)
+        {
+            $child_entity = $em->getRepository('ZeegaDataBundle:Item')->find($item);
+
+            if (!$child_entity) 
+            {
+                throw $this->createNotFoundException('Unable to find Item entity.');
+            }    
+            
+            $entity->addItem($child_entity);            
+        }
+        $count=$entity->getChildItemsCount() + count($items_list);
+        $entity->setChildItemsCount($count);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($entity);
+        $em->flush();
+        
+        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $entity));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
     }
 
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}

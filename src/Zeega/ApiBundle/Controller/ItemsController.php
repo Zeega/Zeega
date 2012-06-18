@@ -85,6 +85,16 @@ class ItemsController extends Controller
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
+
+    // get_item_tags GET /api/items/{itemId}/tags.{_format}
+    public function getItemCollectionsAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
+		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
+		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
     
 	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
@@ -144,7 +154,6 @@ class ItemsController extends Controller
 		$item->setAttributes($this->getRequest()->request->get('attributes'));
         $item->setEnabled(true);
         $item->setPublished(true);
-        $item->setIndexed(false);
         $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
         $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
         
@@ -249,9 +258,8 @@ class ItemsController extends Controller
 		if(isset($description)) $item->setDescription($description);
 		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
 		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
-		//if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
-		//if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
-
+		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
+		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
         if(isset($tags)) $item->setTags($tags);
 
         $em = $this->getDoctrine()->getEntityManager();

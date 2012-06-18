@@ -16,8 +16,8 @@
 			this.setBaseTemplate();
 			
 			this.controls = this.$el.find('#controls');
-			this.$el.attr( 'id', 'layer-'+ this.model.id )
-			
+			this.$el.attr( 'id', 'layer-'+ this.model.id );
+			this.$el.attr('data-id',this.model.id);
 			//this.drawDefaultControls();
 			
 			
@@ -31,12 +31,16 @@
 			var persistentLayers = ( zeega.app.currentSequence.get('attr') ) ? zeega.app.currentSequence.get('attr').persistLayers : {};
 			var isActive = _.include(persistentLayers, parseInt(this.model.id) );
 			
+			var continueLayer = new Layer.Views.Lib.ContinueLayer({ model: this.model });
+
+/*
 			var continueToNext = new Layer.Views.Lib.ContinueToNextFrame({ model: this.model });
 			var continueOnAll = new Layer.Views.Lib.ContinueOnAllFrames({ model: this.model, active : isActive });
+*/
 			
 			$(this.el).find('.default-layer-controls')
-				.append( continueOnAll.getControl() )
-				.append( continueToNext.getControl() );
+				.append( continueLayer.getControl() );
+				//.append( continueToNext.getControl() );
 			if( this.model.get('attr').linkable )
 			{
 				var link = new Layer.Views.Lib.Link({ model: this.model });
@@ -60,6 +64,7 @@
 				this.model.on('editor_layerExit', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+				this.model.on('editor_removeLayerFromFrame', this.private_onRemoveLayerFromFrame, this);
 			}
 		},
 		
@@ -106,7 +111,7 @@
 		private_onLayerEnter : function()
 		{
 			console.log('	LAYER LIST enter')
-			this.drawDefaultControls();
+			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
 			this.onLayerEnter();
 		},
@@ -118,6 +123,11 @@
 			this.$el.find('#controls').empty();
 			//this.remove();
 			this.onLayerExit();
+		},
+		
+		private_onRemoveLayerFromFrame : function()
+		{
+			this.remove();
 		},
 		
 		private_onControlsOpen : function()
@@ -181,6 +191,7 @@
 		updateViewInPlace : function()
 		{
 			console.log('re render')
+			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 			
 		},
@@ -198,8 +209,7 @@
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
-			'mouseleave .delete-layer'	: 'onLayerTrashLeave',
-
+			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
 		},
 		
 		// the events end users have access to

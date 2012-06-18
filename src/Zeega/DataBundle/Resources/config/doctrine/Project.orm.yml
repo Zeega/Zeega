@@ -32,9 +32,6 @@ Zeega\DataBundle\Entity\Project:
         date_created:
             type: datetime
             nullable: false
-        attr:
-            type: array
-            nullable: true
         tags:
             type: array
             nullable: true        
@@ -44,6 +41,18 @@ Zeega\DataBundle\Entity\Project:
         published:
             type: boolean
             nullable: false
+        authors:
+            type: string
+            length: 255
+            nullable: true
+        cover_image:
+            type: string
+            length: 255
+            nullable: true
+        estimated_time:
+            type: string
+            length: 140
+            nullable: true        
     indexes:
              project_enabled_index:
                  columns: [enabled]
