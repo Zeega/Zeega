@@ -30,7 +30,7 @@
 				"thumbnail_url": {{ doc_fields.thumbnail_url | default("") | json_encode | raw}},
 				"child_items_count": {{ doc_fields.child_items_count }},
 				"media_creator_username": {{ doc_fields.media_creator_username | json_encode | raw}},
-				"media_creator_realname": {{ doc_fields.media_creator_username | json_encode | raw}},
+				"media_creator_realname": {{ doc_fields.media_creator_realname | default("") | json_encode | raw}},
 				"archive": "{{ doc_fields.archive }}",
 				{%- if doc_fields.media_date_created is defined -%}
 					"media_date_created" : "{{doc_fields.media_date_created}}",

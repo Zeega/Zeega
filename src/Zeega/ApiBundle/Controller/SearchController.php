@@ -105,6 +105,7 @@ class SearchController extends Controller
 		$limit = $request->query->get('limit');     //  string
 	    $q = $request->query->get('q');
 	    $userId = $request->query->get('user');                 //  int
+	    $username = $request->query->get('username');                 //  int
 		$siteId = $request->query->get('site');                 //  int
 		$contentType = $request->query->get('content');         //  string
 		$collection_id  = $request->query->get('collection');   //  string
@@ -172,6 +173,7 @@ class SearchController extends Controller
 		}
 	
         if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
+        if(isset($username)) $query->createFilterQuery('username')->setQuery("username: $username");
 		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
