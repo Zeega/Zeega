@@ -130,7 +130,7 @@ class SearchController extends Controller
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
 		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = "tags:" . str_replace(","," tags:",$matches[1]);
+		 	$tags = "tags_i:" . str_replace(","," tags_i:",$matches[1]);
 		}
 		
 	    // ----------- build the search query
@@ -173,7 +173,7 @@ class SearchController extends Controller
 		}
 	
         if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
-        if(isset($username)) $query->createFilterQuery('username')->setQuery("username: $username");
+        if(isset($username)) $query->createFilterQuery('username')->setQuery("username_i: $username");
 		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
@@ -184,7 +184,7 @@ class SearchController extends Controller
         $groupComponent->setOffset($page * $limit);
         
         $facetComponent = $query->getFacetSet();
-        $facetComponent->createFacetField('tags')->setField('tags')->setLimit(5)->setMinCount(1);
+        $facetComponent->createFacetField('tags')->setField('tags_i')->setLimit(5)->setMinCount(1);
 
         // run the query
         $resultset = $client->select($query);
