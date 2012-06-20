@@ -130,7 +130,7 @@ class SearchController extends Controller
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
 		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = "tags_i:" . str_replace(","," tags_i:",$matches[1]);
+		 	$tags = "(" . str_replace(",", " OR", $matches[1]) . ")";
 		}
 		
 	    // ----------- build the search query
@@ -141,12 +141,31 @@ class SearchController extends Controller
         $query->setRows($limit);
         $query->setStart($limit * $page);
         
+        $queryString = '';
         // check if there is a query string
-        if(isset($q) and $q != '')                          $query->setQuery($q);
+        if(isset($q) and $q != '')                          
+        {
+            $queryString = "text:$q";
+        }
+        
+        if(isset($tags) and $tags != '')                          
+        {
+            if($queryString != '')
+            {
+                $queryString = $queryString . " AND ";
+            }
+            $queryString = $queryString . "tags_i:$tags";
+        }
+        
+        if(isset($queryString) && $queryString != '')
+        {
+            $query->setQuery($queryString);
+        }
+        
         if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
-        if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
+        if(isset($collection_id))                           $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
@@ -163,7 +182,7 @@ class SearchController extends Controller
             }
         }
         
-        if(isset($collection_id)) $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
+        
            
 	    //  filter results for the logged user
 		if(isset($userId) && $userId == -1) 
