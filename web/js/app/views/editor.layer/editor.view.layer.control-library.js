@@ -248,7 +248,9 @@
 		{
 			var _this = this;
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.defaults( this.model.attributes, this.defaults )));
+			
+			console.log('settings', _.defaults( this.model.attributes, this.defaults ) );
 			
 			//slider stuff here
 			this.$el.find('.control-slider').slider({
@@ -287,7 +289,8 @@
 			var html = ''+
 			
 					"<div class='control-name'><%= label %></div>"+
-					"<div class='control-slider'></div>";
+					"<div class='control-slider'></div>"+
+					"<input type='text' class='input-mini' value='<%= value %>'/>";
 			
 			return html;
 		}
