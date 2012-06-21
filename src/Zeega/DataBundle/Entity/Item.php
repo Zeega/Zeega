@@ -140,6 +140,16 @@ class Item
     private $published;
 
     /**
+     * @var boolean $indexed
+     */
+    private $indexed;
+
+    /**
+     * @var string $geo_latlng
+     */
+    private $geo_latlng;
+
+    /**
      * @var Zeega\DataBundle\Entity\Site
      */
     private $site;
@@ -676,6 +686,46 @@ class Item
     }
 
     /**
+     * Set indexed
+     *
+     * @param boolean $indexed
+     */
+    public function setIndexed($indexed)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return boolean 
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set geo_latlng
+     *
+     * @param string $geoLatlng
+     */
+    public function setGeoLatlng($geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return string 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
+    }
+
+    /**
      * Set site
      *
      * @param Zeega\DataBundle\Entity\Site $site
@@ -751,39 +801,54 @@ class Item
     {
         // Add your code here
     }
-<<<<<<< HEAD
-
     /**
-     * @ORM\preUpdate
+     * @var datetime $date_updated
      */
-    public function onPreUpdate()
-    {
-    }
-    /**
-     * @var geometry $geo_latlng
-     */
-    private $geo_latlng;
+    private $date_updated;
 
 
     /**
-     * Set geo_latlng
+     * Set date_updated
      *
-     * @param geometry $geoLatlng
+     * @param datetime $dateUpdated
      */
-    public function setGeoLatlng(\geometry $geoLatlng)
+    public function setDateUpdated($dateUpdated)
     {
-        $this->geo_latlng = $geoLatlng;
+        $this->date_updated = $dateUpdated;
     }
 
     /**
-     * Get geo_latlng
+     * Get date_updated
      *
-     * @return geometry 
+     * @return datetime 
      */
-    public function getGeoLatlng()
+    public function getDateUpdated()
     {
-        return $this->geo_latlng;
+        return $this->date_updated;
     }
-=======
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
+    /**
+     * @var string $id_at_source
+     */
+    private $id_at_source;
+
+
+    /**
+     * Set id_at_source
+     *
+     * @param string $idAtSource
+     */
+    public function setIdAtSource($idAtSource)
+    {
+        $this->id_at_source = $idAtSource;
+    }
+
+    /**
+     * Get id_at_source
+     *
+     * @return string 
+     */
+    public function getIdAtSource()
+    {
+        return $this->id_at_source;
+    }
 }

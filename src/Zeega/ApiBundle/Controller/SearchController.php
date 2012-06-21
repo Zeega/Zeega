@@ -33,7 +33,6 @@ class SearchController extends Controller
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
-<<<<<<< HEAD
 
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
@@ -89,13 +88,6 @@ class SearchController extends Controller
 			            
 		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
 		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-=======
-        $solr_enabled = $this->container->getParameter('solr_enabled');
-		
-		if($solr_enabled)
-		{
-			return $this->searchWithSolr();
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
 		}
 		else
         {
@@ -151,7 +143,6 @@ class SearchController extends Controller
         
         $queryString = '';
         // check if there is a query string
-<<<<<<< HEAD
         if(isset($q) and $q != '')                          
         {
             $queryString = "text:$q";
@@ -175,12 +166,6 @@ class SearchController extends Controller
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
         if(isset($collection_id))                           $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
-=======
-        if(isset($q) and $q != '')                          $query->setQuery($q);
-        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
-        if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
-        if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
@@ -197,8 +182,6 @@ class SearchController extends Controller
             }
         }
         
-<<<<<<< HEAD
-        
            
 	    //  filter results for the logged user
 		if(isset($userId) && $userId == -1) 
@@ -209,9 +192,7 @@ class SearchController extends Controller
 	
         if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
         if(isset($username)) $query->createFilterQuery('username')->setQuery("username_i: $username");
-		
-=======
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
+        
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
@@ -333,10 +314,7 @@ class SearchController extends Controller
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
 		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
 		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
-<<<<<<< HEAD
 		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 1;
-=======
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
 		if(!isset($query['page']))                  		$query['page'] = 0;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
 		if($query['limit'] > 100) 	                		$query['limit'] = 100;

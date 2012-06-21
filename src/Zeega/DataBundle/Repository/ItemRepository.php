@@ -6,7 +6,7 @@ namespace Zeega\DataBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections;
 use DateInterval;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateTime;
 
 class ItemRepository extends EntityRepository

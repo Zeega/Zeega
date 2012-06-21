@@ -67,7 +67,8 @@ doctrine:
         user:     %database_user%
         password: %database_password%
         charset:  utf8
-
+        mapping_types:
+            geometry: string  
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true

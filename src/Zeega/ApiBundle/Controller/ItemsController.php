@@ -283,32 +283,6 @@ class ItemsController extends Controller
         $requestData = $this->getRequest()->request;        
         
 	    $item = $this->populateItemWithRequestData($requestData);
-
-<<<<<<< HEAD
-=======
-        if (!$item) 
-        {
-            throw $this->createNotFoundException('Unable to find the Item with the id ' + $item_id);
-        }
-
-		$title = $request_data->get('title');
-		$description = $request_data->get('description');
-        $tags = $request_data->get('tags');
-		$creator_username = $request_data->get('media_creator_username');
-		$creator_realname = $request_data->get('media_creator_realname');
-		$media_geo_latitude = $request_data->get('media_geo_latitude');
-		$media_geo_longitude = $request_data->get('media_geo_longitude');
-        
-		if(isset($title)) $item->setTitle($title);
-		if(isset($description)) $item->setDescription($description);
-		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
-		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
-		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
-		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
-        if(isset($tags)) $item->setTags($tags);
-
-        $em = $this->getDoctrine()->getEntityManager();
->>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
         $em->persist($item);
         $em->flush();
 

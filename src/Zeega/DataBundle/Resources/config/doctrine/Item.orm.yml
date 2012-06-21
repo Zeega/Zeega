@@ -61,6 +61,9 @@ Zeega\DataBundle\Entity\Item:
         date_created:
             type: datetime
             nullable: true
+        date_updated:
+            type: datetime
+            nullable: true
         archive:
             type: string
             length: 50
@@ -120,6 +123,10 @@ Zeega\DataBundle\Entity\Item:
             nullable: true
         tags:
             type: array
+            nullable: true
+        id_at_source:
+            type: string
+            length: 50
             nullable: true
         enabled:
             type: boolean
