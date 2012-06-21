@@ -383,7 +383,8 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['media_type']=='Audio'||$item['media_type']=='Video'||$item['media_type']=='Image' ){
+         	if($item['media_type']=='Audio'||$item['media_type']=='Video'||$item['media_type']=='Image' )
+         	{
 				$i++;
 				
 				$frameOrder[]=$i;
@@ -392,7 +393,13 @@ class ItemsController extends Controller
          	}
          }
          
-         $project=array	("id"=>1,"title"=>"Collection","sequences"=>array(array('id'=>1,'frameOrder'=>$frameOrder,"title"=>'none', 'frames'=>$frames,'layers'=>$layers,'attr'=>array("persistLayers"=>array()))));
+         $project = array("id"=>1,
+                          "title"=>"Collection",
+                          "estimated_time"=>"Some time", 
+                          "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
+                          'frames'=>$frames,
+                          'layers'=>$layers
+                          );
          return new Response(json_encode(array('project'=>$project)));
     }
     
