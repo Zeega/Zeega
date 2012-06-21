@@ -15,7 +15,6 @@ use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
-use Zeega\CoreBundle\Helpers\Utils;
 
 use DateTime;
 
@@ -34,6 +33,7 @@ class SearchController extends Controller
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
+<<<<<<< HEAD
 
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
@@ -89,14 +89,21 @@ class SearchController extends Controller
 			            
 		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
 		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+=======
+        $solr_enabled = $this->container->getParameter('solr_enabled');
+		
+		if($solr_enabled)
+		{
+			return $this->searchWithSolr();
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
 		}
 		else
         {
-			return $this->searchWithDoctrineAndGetResponse();
+			return $this->searchWithDoctrine();
 		}
     }
     
-    private function searchWithSolr($notInId = null)
+    private function searchWithSolr()
     {	
         $request = $this->getRequest();
         
@@ -135,14 +142,16 @@ class SearchController extends Controller
 		
 	    // ----------- build the search query
         $client = $this->get("solarium.client");
-		
-		// set limits and page
+
         $query = $client->createSelect();
+        //return new Response(var_dump($query));
+        // pagination and limit
         $query->setRows($limit);
         $query->setStart($limit * $page);
         
         $queryString = '';
         // check if there is a query string
+<<<<<<< HEAD
         if(isset($q) and $q != '')                          
         {
             $queryString = "text:$q";
@@ -166,6 +175,12 @@ class SearchController extends Controller
         if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
         if(isset($collection_id))                           $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
+=======
+        if(isset($q) and $q != '')                          $query->setQuery($q);
+        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type: $contentType");
+        if(isset($tags))                                    $query->createFilterQuery('tags')->setQuery($tags);
+        if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
         
         if(isset($minDateTimestamp) || isset($maxDateTimestamp))
         {
@@ -182,6 +197,7 @@ class SearchController extends Controller
             }
         }
         
+<<<<<<< HEAD
         
            
 	    //  filter results for the logged user
@@ -194,6 +210,8 @@ class SearchController extends Controller
         if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
         if(isset($username)) $query->createFilterQuery('username')->setQuery("username_i: $username");
 		
+=======
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
@@ -211,8 +229,8 @@ class SearchController extends Controller
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
         
-        $results["items"] = $groups->getGroup('media_type:*');
-        $results["collections"] = $groups->getGroup('media_type:Collection');
+        $results["items"] = $groups->getGroup('-media_type:Collection');
+        //$results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
 
         $tags = $facets->getFacet('tags');
@@ -226,15 +244,9 @@ class SearchController extends Controller
         	}
         }
         
-        return array("items"=>$results,"tags"=>$tagsArray);
         // render the results
-		//$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
-        //return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
-    
-    private function searchWithDoctrineAndGetResponse()
-    {
-        return ResponseHelper::getJsonResponse($this->searchWithDoctrine(false,true));
+		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
 	/**
@@ -243,7 +255,7 @@ class SearchController extends Controller
 	 * the database queries generated by Doctrine are not optimal.
 	 *
      */
-    private function searchWithDoctrine($returnIdsOnly = false, $arrayResults = false)
+    private function searchWithDoctrine()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         if($user == "anon.")
@@ -309,20 +321,23 @@ class SearchController extends Controller
 		$query["returnMap"]     = $request->query->get('r_map');    				//  bool
 		$query["returnTime"]    = $request->query->get('r_time');   				//  bool
 		$query["returnItems"]   = $request->query->get('r_items');   				//  bool
+		$query["returnItems"]   = $request->query->get('r_items');   				//  bool
 		$query["returnCollections"]   = $request->query->get('r_collections');   	//  bool
+		$query["returnTags"]   = $request->query->get('r_tags');   	//  bool
 		$query["returnCollectionsWithItems"] = $request->query->get('r_itemswithcollections'); //  bool
-		$query["returnCounts"] = $request->query->get('r_counts'); //  bool
 
 		//  set defaults for missing parameters  
 		if(!isset($query['returnCollections']))     		$query['returnCollections'] = 0;		
 		if(!isset($query['returnItems']))           		$query['returnItems'] = 0;
 		if(!isset($query['returnTime']))           			$query['returnTime'] = 0;
 		if(!isset($query['returnMap']))             		$query['returnMap'] = 0;
-		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 0;
+		if(!isset($query['returnCollectionsWithItems'])) 	$query['returnCollectionsWithItems'] = 1;
 		if(!isset($query['returnTags'])) 					$query['returnTags'] = 0;
+<<<<<<< HEAD
 		if(!isset($query['returnCounts'])) 					$query['returnCounts'] = 1;
+=======
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
 		if(!isset($query['page']))                  		$query['page'] = 0;
-		if($query['page'] > 0)                  		    $query['page'] = $query['page'] - 1;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
 		if($query['limit'] > 100) 	                		$query['limit'] = 100;
 	    
@@ -348,30 +363,19 @@ class SearchController extends Controller
 		// prepare an array for the results
         $results = array();
 		
-		$query["arrayResults"] = $arrayResults;
+		$query["arrayResults"] = true;
 		
 		// regular search - return items and/or collections
 		if($query['returnCollections'] || $query['returnItems'] || $query['returnCollectionsWithItems'])
 		{
 			if($query['returnCollectionsWithItems'])
 			{
-			    if($returnIdsOnly)
-                {
-                    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItemsId($query);
-                }
-                else
-                {
-                    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
-                } 
+			     $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
     		    
 				// return collections mixed with items
 				 $results['items_and_collections'] = $queryResults;
-				 
-				 if($query['returnCounts'])
-				 {
-	                 $results['items_and_collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItemsAndCollections($query);
-	                 $results['returned_items_and_collections_count'] = sizeof($queryResults);
-	             }
+				 $results['returned_items_and_collections_count'] = sizeof($queryResults);
+	             $results['items_and_collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItemsAndCollections($query);
 			}
 			
 			if($query['returnCollections'] || $query['returnItems'])
@@ -381,22 +385,11 @@ class SearchController extends Controller
 	            if($query['returnItems'] == 1)
 	            {
 	                $query["notContentType"] = 'Collection';
-	                if($returnIdsOnly)
-	                {
-	                    $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItemsId($query);
-	                }
-	                else
-	                {
-	                    $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
-	                }
+	                $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
    			     
 	                $results['items'] = $items;
-					
-   				    if($query['returnCounts'])
-   				    {
-	                    $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);
-	                    $results['returned_items_count'] = sizeof($items);
-	                }
+					$results['returned_items_count'] = sizeof($items);
+	                $results['items_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);
 	            }
 
 	            if($query['returnCollections'] == 1)
@@ -404,23 +397,12 @@ class SearchController extends Controller
 	                $query["notContentType"] = null;
 	                $query["contentType"] = 'Collection';
 	                
-	                if($returnIdsOnly)
-	                {
-	                    $collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItemsId($query);
-	                }
-	                else
-	                {
-	                    $collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
-	                }
+	                $collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
    			     
 	                $results['collections'] = $collections;
-					
-					if($query['returnCounts'])
-					{
-	                    $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
-	                    $results['returned_collections_count'] = sizeof($collections);
-	                }
-           	    }
+					$results['returned_collections_count'] = sizeof($collections);
+	                $results['collections_count'] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalCollections($query);
+           	}
 			}
 	    }
 		
@@ -438,47 +420,6 @@ class SearchController extends Controller
 		    $results['tags'] = $queryResults;
 	    }
 
-        // return the results
-        return $results;
-    }
-    
-    	/**
-     * Action triggered by a search query through the API. 
-     * Should be handled with care - it's by no means optimized to handle large databases and
-	 * the database queries generated by Doctrine are not optimal.
-	 *
-     */
-    private function searchItemsWithDoctrine()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-	    $request = $this->getRequest();
-	    $userId = $request->query->get('user');      //  int
-		$siteId = $request->query->get('site'); //  int
-
-		$returnItems = $request->query->get('r_items');
-		$returnCollections = $request->query->get('r_collections');
-		
-		if(isset($userId) && $userId == -1 && $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
-		{
-			$userId = $user->getId();
-		}
-		$results = array();
-		
-		if($returnCollections)
-		{
-			if(isset($userId) && $userId != -1)
-		    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,$siteId,100,0);
-		    else
-				$collections = array();		    		
-
-		    $results['collections'] = $collections;
-		}
-		
-		if($returnItems)
-		{
-	    	$items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItems($userId,$siteId,100,0);
-	    	$results['items'] = $items;
-		}
 		$response = ResponseHelper::getJsonResponse($results);
         
         // return the results

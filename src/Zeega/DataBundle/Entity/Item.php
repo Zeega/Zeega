@@ -55,11 +55,6 @@ class Item
     private $date_created;
 
     /**
-     * @var datetime $date_updated
-     */
-    private $date_updated;
-
-    /**
      * @var string $archive
      */
     private $archive;
@@ -145,11 +140,6 @@ class Item
     private $published;
 
     /**
-     * @var boolean $indexed
-     */
-    private $indexed;
-
-    /**
      * @var Zeega\DataBundle\Entity\Site
      */
     private $site;
@@ -172,7 +162,7 @@ class Item
     public function __construct()
     {
         $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -343,26 +333,6 @@ class Item
     public function getDateCreated()
     {
         return $this->date_created;
-    }
-
-    /**
-     * Set date_updated
-     *
-     * @param datetime $dateUpdated
-     */
-    public function setDateUpdated($dateUpdated)
-    {
-        $this->date_updated = $dateUpdated;
-    }
-
-    /**
-     * Get date_updated
-     *
-     * @return datetime 
-     */
-    public function getDateUpdated()
-    {
-        return $this->date_updated;
     }
 
     /**
@@ -706,26 +676,6 @@ class Item
     }
 
     /**
-     * Set indexed
-     *
-     * @param boolean $indexed
-     */
-    public function setIndexed($indexed)
-    {
-        $this->indexed = $indexed;
-    }
-
-    /**
-     * Get indexed
-     *
-     * @return boolean 
-     */
-    public function getIndexed()
-    {
-        return $this->indexed;
-    }
-
-    /**
      * Set site
      *
      * @param Zeega\DataBundle\Entity\Site $site
@@ -799,7 +749,9 @@ class Item
      */
     public function onPrePersist()
     {
+        // Add your code here
     }
+<<<<<<< HEAD
 
     /**
      * @ORM\preUpdate
@@ -832,4 +784,6 @@ class Item
     {
         return $this->geo_latlng;
     }
+=======
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
 }

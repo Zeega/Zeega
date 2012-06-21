@@ -110,6 +110,16 @@ class ItemsController extends Controller
             
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
+
+    // get_item_tags GET /api/items/{itemId}/tags.{_format}
+    public function getItemCollectionsAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
+		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
+		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
     
     
     // get_collection_items GET /api/collections/{id}/items.{_format}
@@ -223,7 +233,6 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $user = $this->get('security.context')->getToken()->getUser();
         
         $requestData = $this->getRequest()->request;      
 	    
@@ -275,6 +284,31 @@ class ItemsController extends Controller
         
 	    $item = $this->populateItemWithRequestData($requestData);
 
+<<<<<<< HEAD
+=======
+        if (!$item) 
+        {
+            throw $this->createNotFoundException('Unable to find the Item with the id ' + $item_id);
+        }
+
+		$title = $request_data->get('title');
+		$description = $request_data->get('description');
+        $tags = $request_data->get('tags');
+		$creator_username = $request_data->get('media_creator_username');
+		$creator_realname = $request_data->get('media_creator_realname');
+		$media_geo_latitude = $request_data->get('media_geo_latitude');
+		$media_geo_longitude = $request_data->get('media_geo_longitude');
+        
+		if(isset($title)) $item->setTitle($title);
+		if(isset($description)) $item->setDescription($description);
+		if(isset($creator_username)) $item->setMediaCreatorUsername($creator_username);
+		if(isset($creator_realname)) $item->setMediaCreatorRealname($creator_realname);
+		if(isset($media_geo_latitude)) $item->setMediaGeoLatitude($media_geo_latitude);
+		if(isset($media_geo_longitude)) $item->setMediaGeoLongitude($media_geo_longitude);
+        if(isset($tags)) $item->setTags($tags);
+
+        $em = $this->getDoctrine()->getEntityManager();
+>>>>>>> 99b0a2ad463b852f82c263fe5acecf389a40a586
         $em->persist($item);
         $em->flush();
 

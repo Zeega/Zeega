@@ -55,6 +55,7 @@
 						frame : _this.model
 					})
 					
+					console.log('add layer:',zeega.app.draggedItem, _this.model)
 					//zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
 				}
 			});
@@ -76,9 +77,7 @@
 				return false;
 			})
 		
-			$(this.el).find('.menu-items a').click(function(){
-
-				event.stopPropagation();
+			$(this.el).find('.nav-list a').click(function(){
 			
 				switch($(this).data('action'))
 				{
@@ -97,6 +96,8 @@
 					default:
 						console.log('not recognized')
 				}
+				event.stopPropagation();
+				
 				return false;
 			})
 		
@@ -112,6 +113,7 @@
 				function()
 				{
 					$(this).find('.menu-toggle').hide();
+					$(this).find('.menu').hide();
 				}
 			
 			);
@@ -120,7 +122,8 @@
 		},
 	
 		events : {
-			'mouseover'		: 'showGear'
+			'mouseover'		: 'showGear',
+			'click .menu-toggle' : 'openDropdown'
 		},
 		
 		refreshView : function()
@@ -135,17 +138,7 @@
 	
 		openDropdown : function()
 		{
-			if( $(this.el).find('.menu-items').is(':hidden') )
-			{
-				$(this.el).find('.zicon-edit').addClass('zicon-close');
-				$(this.el).find('.menu-items').addClass('open');
-			}
-			else
-			{
-				$(this.el).find('.zicon-edit').removeClass('zicon-close');
-				$(this.el).find('.menu-items').removeClass('open');
-			}
-
+			$(this.el).find('.menu').show();
 			event.stopPropagation();
 		},
 	
@@ -182,9 +175,9 @@
 			
 				"<li id='frame-thumb-<%= frameID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 					"<div class='frame-update-overlay'></div>"+
-					"<div class='frame-menu hidden'>"+
-						"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
-						"<ul class='unstyled menu-items'>"+
+					"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
+					"<div class='well menu'>"+
+						"<ul class='nav nav-list'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
 							"<li><a href='#' data-action='delete'>Delete Frame</a></li>"+
 						"</ul>"+

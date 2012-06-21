@@ -1,35 +1,48 @@
-# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
 Zeega\DataBundle\Entity\Frame:
-   type: entity
-   table: frame
-   repositoryClass: Zeega\DataBundle\Repository\FrameRepository
-   manyToOne:
-    sequence:
-     targetEntity: Sequence
-     joinColumns:
-       sequence_id:
-        referencedColumnName: id
-        onDelete: CASCADE
-   id:
+    type: entity
+    table: frame
+    repositoryClass: Zeega\DataBundle\Repository\FrameRepository
+    manyToOne:
+        sequence:
+            cascade: [delete]
+            targetEntity: Sequence
+            joinColumns:
+                sequence_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+        project:
+            targetEntity: Project
+            joinColumns:
+                project_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
     id:
-     type: integer
-     generator: { strategy: AUTO }
-   fields:
-    sequence_index:
-     type: integer
-     length: 2
-     nullable: true
-    layers:
-     type: array
-     nullable: true
-    attr:
-     type: array
-     nullable: true
-    thumbnail_url:
-     type: string
-     length: 101
-     nullable: true
-    enabled:
-     type: boolean
-     nullable: true
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        sequence_id:
+            type: integer
+            associationKey: true
+        sequence_index:
+            type: integer
+            length: 2
+            nullable: true
+        layers:
+            type: array
+            nullable: true
+        project_id:
+            type: integer
+            associationKey: true
+        attr:
+            type: array
+            nullable: true
+        thumbnail_url:
+            type: string
+            length: 101
+            nullable: true
+        enabled:
+            type: boolean
+            nullable: true
+
  

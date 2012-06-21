@@ -11,6 +11,7 @@ use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
+use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ProjectsController extends Controller
 {
@@ -74,7 +75,7 @@ class ProjectsController extends Controller
     		$project=$projects[0];
     
     		$sequences=$this->getDoctrine()
-        				->getRepository('ZeegaDataBundle:Frame')
+        				->getRepository('ZeegaDataBundle:Sequence')
         				->findSequencesByProject($project_id);
         				
         	for($i=0;$i<sizeof($sequences);$i++){
@@ -97,9 +98,11 @@ class ProjectsController extends Controller
         				->find($sequences[$i]['id']);
         				
         		$layers=$sequence->getLayers()->toArray();
-        		foreach($layers as $layer)
-        		{
-        				$output[] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+        			foreach($layers as $layer){
+        				$l=$this->getDoctrine()
+        					->getRepository('ZeegaDataBundle:Layer')
+        					->findLayerById($layer->getId());
+        				$output[]=$l[0];
         		}
         		
         		$sequences[$i]['layers']=$output;
@@ -115,38 +118,50 @@ class ProjectsController extends Controller
 
     public function postProjectSequencesAction($project_id)
     {
-    	
-		
-		
-		$em=$this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+		
+		$sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
+		$sequenceIndex = $sequenceCount + 1;
+		
 		$sequence = new Sequence();
+		
 		$frame = new Frame();
 		$frame->setSequence($sequence);
-		$project->setSite($site);
-		$project->addUsers($user);
+		$frame->setProject($project);
+                
+                if($request->request->get('layers_to_persist'))
+                {
+                    $layersToPersist = $request->request->get('layers_to_persist');
+                    $frame->setLayers($layersToPersist);
+                }  
+		else if($request->request->get('frame_id')) 
+		{
+		    $frameId = $request->request->get('frame_id');
+		    $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+		    
+		    $previousFrameLayers = $previousframe->getLayers();
+        	$frame->setLayers($previousFrameLayers);
+    	}
+    	
 		$sequence->setProject($project);
-		
-		$sequence->setTitle('Untitled Project '.$project_id);
-		$project->setTitle('Untitled Project '.$project_id);
-		/*
-		$sequence->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		$project->setTitle('Untitled: '.date('l F j, Y h:i:s A'));
-		*/
-		$em=$this->getDoctrine()->getEntityManager();
+		$sequence->setTitle('Sequence '.$sequenceIndex);
+
+		$em = $this->getDoctrine()->getEntityManager();
 		$em->persist($sequence);
-		$em->persist($project);
 		$em->persist($frame);
 		$em->flush();
-    	return new Response("Success");
-   
-
-    
-    
-   
-}
-
-	
-
+		
+		$layers = array();
+		// auch - should work for now, but won't scale for sure
+		$sequenceId = $sequence->getId();
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
+		$sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
+		
+		$layers = array();
+		
+		$sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+   }
 }

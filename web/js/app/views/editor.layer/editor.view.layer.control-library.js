@@ -15,6 +15,7 @@
 		},
 		
 		init : function(){},
+		
 		getControl : function()
 		{
 			this.render();
@@ -56,6 +57,28 @@
 	DEFAULT CONTROLS
 	
 ****************************/
+
+	Layer.Views.Lib.ContinueLayer = Layer.Views.Lib.extend({
+
+		className : 'control continue-layer',
+
+		render : function()
+		{
+			var button = '<button class="btn" style="width:100%">Continue Layer</button>'
+			$(this.el).append( button );
+		},
+		
+		events : {
+			'click' : 'continueLayer'
+		},
+		
+		continueLayer : function()
+		{
+			this.$el.find('button').effect('highlight',{},2000);
+			zeega.app.continueLayer( this.model.id )
+		}
+		
+	});
 
 	Layer.Views.Lib.ContinueToNextFrame = Layer.Views.Lib.extend({
 

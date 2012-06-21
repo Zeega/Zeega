@@ -13,12 +13,15 @@ $(document).ready(function(){
 	var frameData = $.parseJSON(frameJSON);
 	var layersData = $.parseJSON(layersJSON);
 
+	console.log(frameJSON)
+	console.log(layersJSON)
+	console.log(frameData)
 	console.log(layersData)
 
 	_.each( frameData.layers, function(layerID){
 		var layer = _.find( layersData, function(layer){ return layer.id == layerID });
 		
-		if( !_.isUndefined( layer.attr.thumbnail_url) && layer.attr.thumbnail_url != '' && layer.type != 'Audio' )
+		if( !_.isUndefined( layer.attr.thumbnail_url) && layer.attr.thumbnail_url != '' && layer.type != 'Audio' && layer.type != 'Link' )
 			drawLayerThumbnail( layer );
 		else if( layer.type == 'Rectangle' ) drawRectangle( layer ); // this is a bandaid
 		else if(layer.type == 'Text') drawText(layer);
