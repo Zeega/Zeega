@@ -226,9 +226,8 @@ class SearchController extends Controller
         }
         
         // render the results
-		$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
+		return array("items"=>$results,"tags"=>$tagsArray);    
+	}
     
 	/**
      * Action triggered by a search query through the API. 
