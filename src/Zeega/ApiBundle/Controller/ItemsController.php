@@ -220,6 +220,7 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
+        $item->setDateUpdated(new \DateTime("now"));
 
         $em->flush();
 
@@ -266,6 +267,7 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
+                $item->setDateUpdated(new \DateTime("now"));
                 $em->persist($item);
                 $em->flush();
             }
@@ -306,6 +308,7 @@ class ItemsController extends Controller
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
+				$item->setDateUpdated(new \DateTime("now"));
 				$first = True;
 				foreach($newItems as $newItem)
 				{
@@ -344,6 +347,7 @@ class ItemsController extends Controller
     				}
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
+			    $item->setDateUpdated(new \DateTime("now"));
                 $em->flush();
 			}
 	

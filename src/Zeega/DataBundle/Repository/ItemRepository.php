@@ -65,11 +65,16 @@ class ItemRepository extends EntityRepository
       	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
 		}
 		
-        if(isset($query['contentType']))
+        if(isset($query["contentType"]))
       	{
-      	    $content_type = strtoupper($query['contentType']);
-
-      	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
+			if(strtoupper($query["contentType"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["contentType"]);
+            }
 		}
 		
 		if(isset($query['tags']))

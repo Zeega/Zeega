@@ -37,8 +37,10 @@ class SearchController extends Controller
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
-        $returnCollections   = $request->query->get('r_collections');
-        
+        $returnItems   = $request->query->get('r_items');
+		$returnCollections   = $request->query->get('r_collections');
+		$returnItemsWithCollections   = $request->query->get('r_itemswithcollections'); 
+		
 		if($solrEnabled)
 		{
 			if(isset($collectionId))
@@ -75,9 +77,8 @@ class SearchController extends Controller
 			    // do a SOLR query
 				$solrItems = $this->searchWithSolr($newItemsFromDbId);
 			}
-			else if(isset($returnCollections))
+			if(isset($returnCollections) && !isset($returnItems) && !isset($returnItemsWithCollections))
 			{
-			    // if we only want to collections ()
 				return $this->searchWithDoctrineAndGetResponse();
 			}
 			else
@@ -91,7 +92,7 @@ class SearchController extends Controller
 		}
 		else
         {
-			return $this->searchWithDoctrine();
+			return $this->searchWithDoctrineAndGetResponse();
 		}
     }
     
@@ -464,8 +465,11 @@ class SearchController extends Controller
 		if($returnCollections)
 		{
 			if(isset($userId) && $userId != -1)
+			{
 		    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,$siteId,100,0);
-		    else
+				return new Response(var_dump($collections));
+		    }
+			else
 				$collections = array();		    		
 
 		    $results['collections'] = $collections;
