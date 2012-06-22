@@ -43,7 +43,7 @@ this.zeega = {
 		console.log(this.data)
 		
 		this.player = new Player2($('body'));
-		this.player.loadProject(this.data);
+		this.player.loadProject( this.data.project );
 		
 		//$('body').append( this.player.render().el );
 	}

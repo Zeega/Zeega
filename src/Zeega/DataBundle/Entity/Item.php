@@ -55,11 +55,6 @@ class Item
     private $date_created;
 
     /**
-     * @var datetime $date_updated
-     */
-    private $date_updated;
-
-    /**
      * @var string $archive
      */
     private $archive;
@@ -150,6 +145,11 @@ class Item
     private $indexed;
 
     /**
+     * @var string $geo_latlng
+     */
+    private $geo_latlng;
+
+    /**
      * @var Zeega\DataBundle\Entity\Site
      */
     private $site;
@@ -172,7 +172,7 @@ class Item
     public function __construct()
     {
         $this->child_items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->parent_items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -343,26 +343,6 @@ class Item
     public function getDateCreated()
     {
         return $this->date_created;
-    }
-
-    /**
-     * Set date_updated
-     *
-     * @param datetime $dateUpdated
-     */
-    public function setDateUpdated($dateUpdated)
-    {
-        $this->date_updated = $dateUpdated;
-    }
-
-    /**
-     * Get date_updated
-     *
-     * @return datetime 
-     */
-    public function getDateUpdated()
-    {
-        return $this->date_updated;
     }
 
     /**
@@ -726,6 +706,26 @@ class Item
     }
 
     /**
+     * Set geo_latlng
+     *
+     * @param string $geoLatlng
+     */
+    public function setGeoLatlng($geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return string 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
+    }
+
+    /**
      * Set site
      *
      * @param Zeega\DataBundle\Entity\Site $site
@@ -799,37 +799,56 @@ class Item
      */
     public function onPrePersist()
     {
-    }
-
-    /**
-     * @ORM\preUpdate
-     */
-    public function onPreUpdate()
-    {
+        // Add your code here
     }
     /**
-     * @var geometry $geo_latlng
+     * @var datetime $date_updated
      */
-    private $geo_latlng;
+    private $date_updated;
 
 
     /**
-     * Set geo_latlng
+     * Set date_updated
      *
-     * @param geometry $geoLatlng
+     * @param datetime $dateUpdated
      */
-    public function setGeoLatlng(\geometry $geoLatlng)
+    public function setDateUpdated($dateUpdated)
     {
-        $this->geo_latlng = $geoLatlng;
+        $this->date_updated = $dateUpdated;
     }
 
     /**
-     * Get geo_latlng
+     * Get date_updated
      *
-     * @return geometry 
+     * @return datetime 
      */
-    public function getGeoLatlng()
+    public function getDateUpdated()
     {
-        return $this->geo_latlng;
+        return $this->date_updated;
+    }
+    /**
+     * @var string $id_at_source
+     */
+    private $id_at_source;
+
+
+    /**
+     * Set id_at_source
+     *
+     * @param string $idAtSource
+     */
+    public function setIdAtSource($idAtSource)
+    {
+        $this->id_at_source = $idAtSource;
+    }
+
+    /**
+     * Get id_at_source
+     *
+     * @return string 
+     */
+    public function getIdAtSource()
+    {
+        return $this->id_at_source;
     }
 }

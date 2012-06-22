@@ -24,19 +24,18 @@
 
 				console.log('add non item layer type: '+args.type);
 
-				var newLayer = new Layer[args.type]({attr:{}});
+				var newLayer = new Layer[args.type]({attr:args.options});
 				console.log( new Layer[args.type] )
 				console.log(newLayer)
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
-				
+				return newLayer;
 			}
 			else
 			{
 				//media item layer
-				console.log( args.item.get('layer_type'))
-	
+				console.log(Layer, args.item.get('layer_type') )
 				
 				var newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),
@@ -46,12 +45,8 @@
 				this.add( newLayer );
 				if( args.show() ) newLayer.trigger('editor_layerRender');
 				this.saveLayer(newLayer, args.frame);
+				return newLayer;
 			}
-			console.log(newLayer)
-			
-			
-			
-			
 		},
 		
 		saveLayer : function(layerModel, frame)
@@ -66,7 +61,9 @@
 					console.log('SAVED NEW LAYER')
 					console.log(savedLayer)
 					savedLayer.trigger('refresh_view');
+					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
+					frame.trigger('update_thumb');
 				}
 			});
 		},
@@ -88,21 +85,15 @@
 		addLayerToFrame : function(frame,layer)
 		{
 			console.log('	ADD LAYER TO FRAME')
-			console.log(zeega.app.currentSequence)
-			//console.log(layer)
-			
-			var layerOrder = [ parseInt( layer.id ) ];
-			if( frame.get('layers') )
+			if(frame.id != zeega.app.currentFrame)
 			{
-				//if the layer array already exists eliminate false values if they exist
-				layerOrder = frame.get('layers');
-				//add the layer id to the layer order array
-				layerOrder.push( parseInt( layer.id ) );
+				if(frame.get('layers')) frame.get('layers').push(layer.id);
+				else frame.set('layers',[layer.id]);
+				frame.save();
+				console.log(frame)
 			}
-			zeega.app.updateLayerOrder(layerOrder.reverse(), frame);
-			//set the layerOrder array inside the frame
-			frame.set({'layers': _.compact(layerOrder) });
-			frame.save();
+			layer.trigger('update');
+			zeega.app.updateLayerOrder( frame );
 		},
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },

@@ -12,19 +12,6 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class LayersController extends Controller
 {
-    public function getLayersAction()
-    {
-    } // `get_layers`    [GET] /Layers
-
-
-
-    public function postLayersAction()
-    {
-    	
- 
-    } // `post_layers`   [POST] /Layers
-
-
     public function putLayerAction($layer_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
@@ -49,7 +36,7 @@ class LayersController extends Controller
     public function deleteLayerAction($layer_id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-     	$layer= $em->getRepository('ZeegaDataBundle:Layer')->find($layer_id);
+     	$layer= $em->getRepository('ZeegaDataBundle:Layer')->findOneBy(array("id" => $layer_id));
     	$em->remove($layer);
     	$em->flush();
     	return new Response('SUCCESS',200);

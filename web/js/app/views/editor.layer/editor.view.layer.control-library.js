@@ -15,6 +15,7 @@
 		},
 		
 		init : function(){},
+		
 		getControl : function()
 		{
 			this.render();
@@ -56,6 +57,28 @@
 	DEFAULT CONTROLS
 	
 ****************************/
+
+	Layer.Views.Lib.ContinueLayer = Layer.Views.Lib.extend({
+
+		className : 'control continue-layer',
+
+		render : function()
+		{
+			var button = '<button class="btn" style="width:100%">Continue Layer</button>'
+			$(this.el).append( button );
+		},
+		
+		events : {
+			'click' : 'continueLayer'
+		},
+		
+		continueLayer : function()
+		{
+			this.$el.find('button').effect('highlight',{},2000);
+			zeega.app.continueLayer( this.model.id )
+		}
+		
+	});
 
 	Layer.Views.Lib.ContinueToNextFrame = Layer.Views.Lib.extend({
 
@@ -225,7 +248,9 @@
 		{
 			var _this = this;
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.defaults( this.model.attributes, this.defaults )));
+			
+			console.log('settings', _.defaults( this.model.attributes, this.defaults ) );
 			
 			//slider stuff here
 			this.$el.find('.control-slider').slider({
@@ -264,7 +289,8 @@
 			var html = ''+
 			
 					"<div class='control-name'><%= label %></div>"+
-					"<div class='control-slider'></div>";
+					"<div class='control-slider'></div>"+
+					"<input type='text' class='input-mini' value='<%= value %>'/>";
 			
 			return html;
 		}
@@ -384,7 +410,8 @@
 		},
 		
 		events : {
-			'click .font-list a' : 'changeFont'
+			'click .font-list a' : 'changeFont',
+			'click .size-list a' : 'changeSize'
 		},
 		
 		changeFont : function( ui )
@@ -393,6 +420,14 @@
 			this.model.visual.$el.find('.style-font-family').contents().unwrap();
 			this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
 			this.saveContent();
+			return false;
+		},
+		
+		changeSize : function( e )
+		{
+			this.$el.find('.open').removeClass('open');
+			this.model.visual.$el.css( 'fontSize', $(e.target).data('fontSize')+'%' );
+			this.model.update({ fontSize : $(e.target).data('fontSize') });
 			return false;
 		},
 		
@@ -406,7 +441,7 @@
 		{
 			var html =
 			
-			'<div class="btn-group">'+
+			'<div class="clearfix"><div class="btn-group pull-left">'+
 				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Fonts'+
 					'<span class="caret"></span>'+
 				'</a>'+
@@ -419,7 +454,23 @@
 					'<li style="font-family:\'Trocchi\'"><a href="#" data-font-family="Trocchi">Trocchi</a></li>'+
 					'<li style="font-family:\'Pontano Sans\'"><a href="#" data-font-family="Pontano Sans">Pontano Sans</a></li>'+
 				'</ul>'+
-			'</div>';
+			'</div>'+
+			
+			'<div class="btn-group pull-left">'+
+				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Size'+
+					'<span class="caret"></span>'+
+				'</a>'+
+				'<ul class="dropdown-menu size-list">'+
+					'<li><a href="#" data-font-size="100">8</a></li>'+
+					'<li><a href="#" data-font-size="125">10</a></li>'+
+					'<li><a href="#" data-font-size="150">12</a></li>'+
+					'<li><a href="#" data-font-size="175">14</a></li>'+
+					'<li><a href="#" data-font-size="200">18</a></li>'+
+					'<li><a href="#" data-font-size="250">24</a></li>'+
+					'<li><a href="#" data-font-size="500">48</a></li>'+
+					'<li><a href="#" data-font-size="700">72</a></li>'+
+				'</ul>'+
+			'</div></div>';
 					
 			return html;
 		}

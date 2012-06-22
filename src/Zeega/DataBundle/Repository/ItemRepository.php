@@ -5,11 +5,8 @@ namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections;
-use Doctrine\DBAL\Types\BigIntType;
-use Doctrine\ORM\Query\ResultSetMapping;
 use DateInterval;
-
-
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateTime;
 
 class ItemRepository extends EntityRepository
@@ -17,7 +14,6 @@ class ItemRepository extends EntityRepository
     private function buildSearchQuery($qb, $query)
     {
         $qb->andwhere('i.enabled = true');
-        $qb->andwhere('i.indexed = false');
         
 		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
@@ -69,13 +65,34 @@ class ItemRepository extends EntityRepository
       	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
 		}
 		
-        if(isset($query['contentType']))
+        if(isset($query["contentType"]))
       	{
-      	    $content_type = strtoupper($query['contentType']);
-
-      	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
+			if(strtoupper($query["contentType"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["contentType"]);
+            }
 		}
-
+		
+		if(isset($query['tags']))
+      	{
+			 $qb->innerjoin('i.tags', 'it')
+			    ->innerjoin('it.tag','t')
+                ->andWhere('t.id IN (?5)')
+                ->setParameter(5, $query['tags']);
+		}
+		
+		if(isset($query['tagsName']))
+      	{
+			 $qb->innerjoin('i.tags', 'it')
+			    ->innerjoin('it.tag','t')
+                ->andWhere('t.name IN (:tags_name)')
+                ->setParameter('tags_name', $query['tagsName']);
+		}
+		
 		if(isset($query['earliestDate']))
       	{
 			 $qb->andWhere('i.media_date_created >= ?6')
@@ -175,27 +192,8 @@ class ItemRepository extends EntityRepository
         if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
             return $qb->getQuery()->getArrayResult();
         else
-            return $qb->getQuery()->getResult();
+            return $qb->getQuery()->execute();
     }
-    
-    //  api/search
-    public function searchItemsId($query)
-    {   
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
-    
-        // search query
-        $qb->select('i.id')
-            ->from('ZeegaDataBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
-       		->setMaxResults($query['limit'])
-       		->setFirstResult($query['limit'] * $query['page']);
-        
-        $qb = $this->buildSearchQuery($qb, $query);
-        
-        return $qb->getQuery()->getArrayResult();
-    }
-    
 
     //  api/search
     public function searchItemsByTimeDistribution($query)
@@ -351,26 +349,20 @@ class ItemRepository extends EntityRepository
     		   ->getArrayResult();
     }
      
-    public function findUserItems($userId,$siteId,$limit,$offset)
+    public function findUserItems($id)
     {
-     	$qb = $this->getEntityManager()
+     	return $this->getEntityManager()
 			   ->createQueryBuilder()
 			   ->add('select', 'i.id,i.title,i.thumbnail_url')
 			   ->add('from', ' ZeegaDataBundle:Item i')
 			   ->innerJoin('i.user', 'u')
 			   ->andwhere('u.id = :id')
 			   ->andwhere('i.enabled = true')
-			   ->andwhere("i.media_type <> 'Collection'")
-			   ->setParameter('id',$userId)
-			   ->orderBy('i.id','DESC')
-			   ->setMaxResults($limit)
-			   ->setFirstResult($offset);
-		if(isset($siteId))
-		{
-			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
-		}
-				   
-		return $qb->getQuery()->getArrayResult();
+			   ->setParameter('id',$id)
+			    ->orderBy('i.id','DESC')
+			   ->getQuery()
+			   ->setMaxResults(15)
+			   ->getArrayResult();
     }
 	
 	public function findUserCollections($userId,$siteId)
@@ -481,28 +473,21 @@ class ItemRepository extends EntityRepository
  	{
  		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
  		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
-
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-		// search query
-    	$qb->select('i')
+            // search query
+    	$qb->select('i.id, i.title')
     	   ->from('ZeegaDataBundle:Item', 'i')
 		   ->where('i.user_id = :user_id')
-		   ->andwhere("i.media_type = 'Collection'")
+		   ->andwhere('i.media_type = :media_type')
 		   ->andwhere('i.enabled = true')
+		   ->andwhere('i.site_id = :site_id')
 		   ->setParameter('user_id',$userId)
-		   ->orderBy('i.id','DESC')
-		   ->setMaxResults(100)
-       	   ->setFirstResult(0);
-		
-		if(isset($siteId))
-		{
-			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
-		}
-				  	
-		// execute the query
+		   ->setParameter('media_type','Collection')
+		   ->setParameter('site_id',$siteId);
+
+            // execute the query
         return $qb->getQuery()->getArrayResult();
-        
     }
 }
 

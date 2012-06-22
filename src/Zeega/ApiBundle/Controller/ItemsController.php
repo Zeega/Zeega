@@ -110,6 +110,16 @@ class ItemsController extends Controller
             
         return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
     }
+
+    // get_item_tags GET /api/items/{itemId}/tags.{_format}
+    public function getItemCollectionsAction($itemId)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
+		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
+		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
     
     
     // get_collection_items GET /api/collections/{id}/items.{_format}
@@ -210,6 +220,7 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
+        $item->setDateUpdated(new \DateTime("now"));
 
         $em->flush();
 
@@ -223,7 +234,6 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $user = $this->get('security.context')->getToken()->getUser();
         
         $requestData = $this->getRequest()->request;      
 	    
@@ -257,6 +267,7 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
+                $item->setDateUpdated(new \DateTime("now"));
                 $em->persist($item);
                 $em->flush();
             }
@@ -274,7 +285,6 @@ class ItemsController extends Controller
         $requestData = $this->getRequest()->request;        
         
 	    $item = $this->populateItemWithRequestData($requestData);
-
         $em->persist($item);
         $em->flush();
 
@@ -298,6 +308,7 @@ class ItemsController extends Controller
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
+				$item->setDateUpdated(new \DateTime("now"));
 				$first = True;
 				foreach($newItems as $newItem)
 				{
@@ -336,6 +347,7 @@ class ItemsController extends Controller
     				}
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
+			    $item->setDateUpdated(new \DateTime("now"));
                 $em->flush();
 			}
 	
@@ -375,16 +387,23 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['media_type']=='Audio'||$item['media_type']=='Video'||$item['media_type']=='Image' ){
+         	if($item['media_type']!='Collection' )
+         	{
 				$i++;
 				
 				$frameOrder[]=$i;
 				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
+				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
          	}
          }
          
-         $project=array	("id"=>1,"title"=>"Collection","sequences"=>array(array('id'=>1,'frameOrder'=>$frameOrder,"title"=>'none', 'frames'=>$frames,'layers'=>$layers,'attr'=>array("persistLayers"=>array()))));
+         $project = array("id"=>1,
+                          "title"=>"Collection",
+                          "estimated_time"=>"Some time", 
+                          "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
+                          'frames'=>$frames,
+                          'layers'=>$layers
+                          );
          return new Response(json_encode(array('project'=>$project)));
     }
     

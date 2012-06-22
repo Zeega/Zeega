@@ -1,0 +1,7 @@
+{
+		"id" : {{ frame.getId }},
+		"project_id" : {{frame.getProject.id | default([ ]) | json_encode | raw}},
+		"attr" : {{frame.attr | default([ ]) | json_encode | raw}},
+		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},
+		"layers": {{frame.getLayers | json_encode | raw}}
+}

@@ -16,5 +16,18 @@ class SequenceRepository extends EntityRepository
 			   ->setParameter('id',$id)
 			   ->getQuery()->execute();
    	 
+   	 }
+   	 
+   	 public function findSequencesCountByProject($id)
+   	 {
+   	     $query = $this->getEntityManager()
+     			 	->createQueryBuilder()
+     				->add('select', 'COUNT(r.id)')
+     			   ->add('from', ' ZeegaDataBundle:Sequence r')
+     			   ->join('r.project','p')
+     			   ->add('where', 'p.id = :id')
+     			   ->setParameter('id',$id)
+     			   ->getQuery();
+		 return $query->getSingleScalarResult();
    	 } 
 }

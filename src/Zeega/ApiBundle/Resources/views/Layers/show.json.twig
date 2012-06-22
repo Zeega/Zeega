@@ -1,0 +1,6 @@
+{
+		"id" : {{ layer.getId }},
+		"type" : {{layer.getType | default("") | json_encode | raw}},
+		"project_id" : {{ layer.getProjectId | default("") | json_encode | raw}},
+		"attr" : {{layer.attr | default([ ]) | json_encode | raw}}
+}

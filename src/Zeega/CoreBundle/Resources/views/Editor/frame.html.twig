@@ -34,7 +34,17 @@
 		-->
 		<script type="text/javascript" language="Javascript">
 			var frameJSON = "{{ frame | e('js') }}";
-			var layersJSON = "{{ layers | json_encode_entity | e('js') }}";
+			{%set content%}
+                            [
+                            {% for layer in layers %}
+				{% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %}	
+				{%- if loop.index0 < layers|length - 1 -%}
+				,
+				{%- endif -%}
+		            {% endfor %}
+                            ]
+                        {% endset %}
+                        var layersJSON = "{{content | e('js')}}";
 		</script>
 		<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/underscore.js')}}"></script>	

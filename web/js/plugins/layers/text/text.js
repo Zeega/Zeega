@@ -56,6 +56,7 @@
 				opacity : true
 			});
 			
+			/*
 			var sizeSlider = new Layer.Views.Lib.Slider({
 				property : 'fontSize',
 				model: this.model,
@@ -65,7 +66,7 @@
 				max : 1000,
 				
 			});
-			
+			*/
 			
 			var textStyles = new Layer.Views.Lib.TextStyles({
 				model : this.model
@@ -78,8 +79,7 @@
 			this.controls
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
-				.append( color.getControl() )
-				.append( sizeSlider.getControl() );
+				.append( color.getControl() );
 			
 			return this;
 		}

@@ -6,10 +6,6 @@ sequences:
   type:     rest
   resource: Zeega\CoreBundle\Controller\SequencesController
 
-frames:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\FramesController
-
 layers:
   type:     rest
   resource: Zeega\CoreBundle\Controller\LayersController

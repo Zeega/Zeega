@@ -5,7 +5,6 @@ Zeega\DataBundle\Entity\Item:
     repositoryClass: Zeega\DataBundle\Repository\ItemRepository
     lifecycleCallbacks:
        prePersist: [onPrePersist]
-       preUpdate: [onPreUpdate]
     manyToMany:
         child_items: 
             targetEntity: Item
@@ -125,6 +124,10 @@ Zeega\DataBundle\Entity\Item:
         tags:
             type: array
             nullable: true
+        id_at_source:
+            type: string
+            length: 50
+            nullable: true
         enabled:
             type: boolean
             nullable: false
@@ -145,10 +148,6 @@ Zeega\DataBundle\Entity\Item:
             columns: [media_date_created_end]      
         item_type_index:
             columns: [layer_type]
-        media_type_index:
-            columns: [media_type]
-        item_indexed_index:
-            columns: [indexed]        
         site_id_index:
             columns: [site_id]
         item_enabled_index:

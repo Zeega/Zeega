@@ -1213,6 +1213,8 @@ var requirejs, require, define;
             },
 
             require: function (deps, callback, relModuleMap) {
+                //console.log(arguments.callee.caller)
+                //console.log(deps, callback, relModuleMap)
                 var moduleName, fullName, moduleMap;
                 if (typeof deps === "string") {
                     if (isFunction(callback)) {
