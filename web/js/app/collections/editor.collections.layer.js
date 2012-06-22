@@ -35,7 +35,7 @@
 			else
 			{
 				//media item layer
-				console.log( args.item.get('layer_type'))
+				console.log(Layer, args.item.get('layer_type') )
 				
 				var newLayer = new Layer[args.item.get('layer_type')]({
 					type: args.item.get('layer_type'),

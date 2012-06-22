@@ -91,13 +91,15 @@
 .zitem-picasa{background-position:-450px 0;}
 .zitem-audio{background-position:-500px 0;}
 .zitem-geo{background-position:-550px 0;}
-.zitem-image{background-position:-600px 0;}
+.zitem-image,.zitem-website{background-position:-600px 0;}
 .zitem-video{background-position:-650px 0;}
 .zitem-dropbox{background-position:-700px 0;}
 .zitem-soundcloud{background-position:-750px 0;}
 .zitem-mapbox{background-position:-800px 0;}
 .zitem-absolute{background-position:-850px 0;}
 .zitem-internetarchive{background-position:-900px 0;}
+.zitem-documentcloud{background-position:-950px 0;}
+.zitem-testimonial{background-position:-1000px 0;}
 
 .loaded.zitem-flickr{background-position:0 -50px;}
 .loaded.zitem-vimeo{background-position:-50px -50px;}
@@ -111,13 +113,15 @@
 .loaded.zitem-picasa{background-position:-450px -50px;}
 .loaded.zitem-audio{background-position:-500px -50px;}
 .loaded.zitem-geo{background-position:-550px -50px;}
-.loaded.zitem-image{background-position:-600px -50px;}
+.loaded.zitem-image,.loaded.zitem-website{background-position:-600px -50px;}
 .loaded.zitem-video{background-position:-650px -50px;}
 .loaded.zitem-dropbox{background-position:-700px -50px;}
 .loaded.zitem-soundcloud{background-position:-750px -50px;}
 .loaded.zitem-mapbox{background-position:-800px -50px;}
 .loaded.zitem-absolute{background-position:-850px -50px;}
 .loaded.zitem-internetarchive{background-position:-900px -50px;}
+.loaded.zitem-documentcloud{background-position:-950px -50px;}
+.loaded.zitem-testimonial{background-position:-1000px -50px;}
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
 {
