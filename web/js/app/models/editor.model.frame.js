@@ -56,6 +56,19 @@
 			this.frameTarget.append( this.view.remove() )
 		},
 		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			if( _.isArray(this.get('attr')) ) this.set('attr',{});
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
+		
 		//update the frame thumbnail
 		updateThumb : function()
 		{

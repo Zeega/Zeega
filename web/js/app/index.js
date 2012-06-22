@@ -399,28 +399,15 @@ jQuery(function($)
 		}
 	})
 
-
-
-
 	$('#advance-controls input').change(function(){
-		var attr = zeega.app.currentFrame.get('attr');
-		if(attr) attr.advance = $(this).val() != -1 ? parseInt($(this).val()*1000) : -1;
-		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1};
+		console.log(this,$(this).val());
+		var a = $(this).val();
+		
+		a = a != -1 ? parseInt( a*1000 ) : -1;
 
-		zeega.app.currentFrame.set({'attr':attr});
-		zeega.app.currentFrame.save();
+		console.log('advance',a)
+		zeega.app.currentFrame.update({'advance':a});
 	});
-
-	$('#frame-advance-random input').change(function(){
-
-		var attr = Zeega.currentFrame.get('attr');
-		if( $(this).is(':checked') ) attr.advanceRandom = true;
-		else attr.advanceRandom = false;
-
-		Zeega.currentFrame.set({'attr':attr});
-		Zeega.currentFrame.save();
-	});
-
 
 	//expands the Zeega editor panels	
 	$('.expandable .panel-head').click(function(){
