@@ -104,7 +104,6 @@
 
 			$(this.el).css( cssObj );
 			
-			//this.model.trigger( 'ready' , { 'id' : this.model.id } );
 			this.model.trigger('ready',this.model.id)
 			
 			return this;
