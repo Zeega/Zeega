@@ -65,7 +65,7 @@ class SearchController extends Controller
 				}
 				
 				// create a list of items that have to be excluded from the SOLR query because they come from the database
-				if(count($dbItems) > 0)
+				if(isset($dbItems) && count($dbItems) > 0)
 				{
 					foreach($dbItems as $newItem)
 					{
