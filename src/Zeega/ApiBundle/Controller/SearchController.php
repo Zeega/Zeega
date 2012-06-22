@@ -39,7 +39,9 @@ class SearchController extends Controller
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
         $returnCollections   = $request->query->get('r_collections');
-        
+        $returnItems = $request->query->get('r_items');
+        $returnCollectionsWithItems = $request->query->get('r_itemswithcollections');
+
 		if($solrEnabled)
 		{
 			if(isset($collectionId))
@@ -76,7 +78,7 @@ class SearchController extends Controller
 			    // do a SOLR query
 				$solrItems = $this->searchWithSolr($newItemsFromDbId);
 			}
-			else if(isset($returnCollections))
+			else if(isset($returnCollections) && !isset($returnItems) && !isset($returnCollectionsWithItems))
 			{
 			    // if we only want to collections ()
 				return $this->searchWithDoctrineAndGetResponse();

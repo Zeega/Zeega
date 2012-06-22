@@ -205,4 +205,54 @@ class User extends BaseUser
     {
         return $this->location;
     }
+    /**
+     * @var float $location_latitude
+     */
+    private $location_latitude;
+
+    /**
+     * @var float $location_longitude
+     */
+    private $location_longitude;
+
+
+    /**
+     * Set location_latitude
+     *
+     * @param float $locationLatitude
+     */
+    public function setLocationLatitude($locationLatitude)
+    {
+        $this->location_latitude = $locationLatitude;
+    }
+
+    /**
+     * Get location_latitude
+     *
+     * @return float 
+     */
+    public function getLocationLatitude()
+    {
+        return $this->location_latitude;
+    }
+
+    /**
+     * Set location_longitude
+     *
+     * @param float $locationLongitude
+     */
+    public function setLocationLongitude($locationLongitude)
+    {
+        $this->location_longitude = $locationLongitude;
+    }
+
+    /**
+     * Get location_longitude
+     *
+     * @return float 
+     */
+    public function getLocationLongitude()
+    {
+        return $this->location_longitude;
+    }
 }
