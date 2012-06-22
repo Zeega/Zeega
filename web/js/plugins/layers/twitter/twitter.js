@@ -9,13 +9,13 @@
 		defaultAttributes: {
 			'title' :'Twitter Layer',
 			'content' : 'Text',
-			'left' :35,
+			'left' :0,
 			'top' :25, 
 			'color' : '#ffffff',
 			'opacity' : 0.9,
 			'fontSize' : 200,
 			'overflow' : 'visible',
-			'width' : 25,
+			'width' : 100,
 			//'height' : 10,
 			
 			linkable : true
