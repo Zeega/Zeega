@@ -383,13 +383,13 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['media_type']=='Audio'||$item['media_type']=='Video'||$item['media_type']=='Image' )
+         	if($item['media_type']!='Collection' )
          	{
 				$i++;
 				
 				$frameOrder[]=$i;
 				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>null,"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
+				$layers[]=array("id"=>$i,"description"=>$item['description'],"title"=>$item['title'],"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
          	}
          }
          
