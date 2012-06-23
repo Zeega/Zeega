@@ -129,7 +129,7 @@ class SearchController extends Controller
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
 		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = "(" . str_replace(",", " OR", $matches[1]) . ")";
+		 	$tags = str_replace(",", " OR", $matches[1]);
 		}
 		
 	    // ----------- build the search query
@@ -144,16 +144,18 @@ class SearchController extends Controller
         // check if there is a query string
         if(isset($q) and $q != '')                          
         {
+        	$q = ResponseHelper::escapeSolrQuery($q);
             $queryString = "text:$q";
         }
         
         if(isset($tags) and $tags != '')                          
         {
+        	$tags = ResponseHelper::escapeSolrQuery($tags);
             if($queryString != '')
             {
                 $queryString = $queryString . " AND ";
             }
-            $queryString = $queryString . "tags_i:$tags";
+            $queryString = $queryString . "tags_i:($tags)";
         }
         
         if(isset($queryString) && $queryString != '')
