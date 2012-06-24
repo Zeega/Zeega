@@ -194,7 +194,24 @@ class ItemRepository extends EntityRepository
         else
             return $qb->getQuery()->execute();
     }
-
+	
+	//  api/search
+    public function findByIdWithUser($id)
+    {   
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+    
+        // search query
+        $qb->select('i,u.display_name')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->innerjoin('i.user', 'u')
+            ->orderBy('i.id','DESC')
+       		->where('i.id = :id')
+       		->setParameter('id', $id);
+        
+    	return $qb->getQuery()->execute();
+    }
+	
     //  api/search
     public function searchItemsByTimeDistribution($query)
     {

@@ -45,7 +45,7 @@ class SearchController extends Controller
 			{
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
 			    // send db query to doctrine
-				$newItemsFromDb = $this->searchWithDoctrine();
+				return $this->searchWithDoctrineAndGetResponse();
 				$newItemsFromDbId = array();
 				
 				// get the results from the DB
@@ -63,13 +63,17 @@ class SearchController extends Controller
 				}
 				
 				// create a list of items that have to be excluded from the SOLR query because they come from the database
-				if(count($dbItems) > 0)
+				if(isset($dbItems) && count($dbItems) > 0)
 				{
 					foreach($dbItems as $newItem)
 					{
 						array_push($newItemsFromDbId,$newItem->getId());
 					}
 					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
+				}
+				else
+				{
+					$dbItems = array();
 				}
 			    //return new Response()
 			    // do a SOLR query
@@ -192,8 +196,18 @@ class SearchController extends Controller
 			$userId = $user->getId();
 		}
 	
-        if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
-        if(isset($username)) $query->createFilterQuery('username')->setQuery("username_i: $username");
+        if(isset($userId))
+        {
+        	$userId = ResponseHelper::escapeSolrQuery($userId);
+        	$query->createFilterQuery('user_id')->setQuery("user_id: $userId");
+        }
+        
+        if(isset($username)) 
+        {
+        	$username = ResponseHelper::escapeSolrQuery($username);
+	        $query->createFilterQuery('username')->setQuery("username_i: $username");
+        }
+        
 		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
@@ -235,6 +249,7 @@ class SearchController extends Controller
     
     private function searchWithDoctrineAndGetResponse()
     {
+    	//return new Response(var_dump($this->searchWithDoctrine(false,true)));
         return ResponseHelper::getJsonResponse($this->searchWithDoctrine(false,true));
     }
     
