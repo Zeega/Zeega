@@ -33,7 +33,10 @@ class SearchController extends Controller
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
-
+		
+		$user = $this->get('security.context')->getToken()->getUser();
+		$isAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
+		
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
@@ -91,7 +94,7 @@ class SearchController extends Controller
 				$solrItems = $this->searchWithSolr();
 			}
 			            
-		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
+		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"], 'user'=>$user, 'userIsAdmin'=>$isAdmin));
 		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 		}
 		else
@@ -187,8 +190,6 @@ class SearchController extends Controller
                 $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
             }
         }
-        
-        
            
 	    //  filter results for the logged user
 		if(isset($userId) && $userId == -1) 
