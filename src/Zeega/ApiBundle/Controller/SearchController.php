@@ -104,6 +104,7 @@ class SearchController extends Controller
 		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
 		$geoLocated = $request->query->get('geo_located'); 
 		$returnCollections = $request->query->get('r_collections');   	//  bool
+		$returnItemsAndCollections = $request->query->get('r_items_and_collections');   	//  bool
 	
 	    if(!isset($page))               $page = 0;
 	    if($page > 0)                   $page = $page - 1;
@@ -193,7 +194,7 @@ class SearchController extends Controller
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
-        //$groupComponent->addQuery('media_type:*');
+        $groupComponent->addQuery('media_type:*');
         // maximum number of items per group
         $groupComponent->setLimit($limit);
         $groupComponent->setOffset($page * $limit);
@@ -207,9 +208,9 @@ class SearchController extends Controller
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
         
-        $results["items"] = $groups->getGroup('-media_type:Collection');
+        $results["items"] = $groups->getGroup('media_type:*');
         if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
-        //$results["items_and_collections"] = $groups->getGroup('media_type:*');
+        if(isset($returnItemsAndCollections)) $results["items_and_collections"] = $groups->getGroup('media_type:*');
 
         $tags = $facets->getFacet('tags');
         $tagsArray = array(); 

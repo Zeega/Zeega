@@ -33,7 +33,7 @@ class UsersController extends Controller
         {
 			$user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
 			
-			if(isset($loggedUser) && $loggedUser->getId() == $user->getId())
+			if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
 			{
 				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
 			}
