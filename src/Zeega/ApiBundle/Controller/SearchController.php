@@ -42,10 +42,11 @@ class SearchController extends Controller
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
         $returnCollections   = $request->query->get('r_collections');
-        
+        $returnItems = $request->query->get('r_items');   				//  bool
+		
 		if($solrEnabled)
 		{
-			if(isset($collectionId) || isset($returnCollections))
+			if(isset($collectionId) || ((isset($returnCollections) && $returnCollections == 1) && (!isset($returnItems) || $returnItems == 0)))
 			{
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
 			    // send db query to doctrine
