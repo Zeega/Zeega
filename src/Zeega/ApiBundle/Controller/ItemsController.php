@@ -60,7 +60,7 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);

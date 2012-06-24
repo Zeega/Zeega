@@ -448,12 +448,6 @@ class SearchController extends Controller
 													   "max_date" => $queryResults["max_date"], "time_intervals" => sizeof($queryResults["results"]));
 	    }
 	
-		if($query['returnTags'])
-		{
-		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getQueryTags($query);
-		    $results['tags'] = $queryResults;
-	    }
-
         // return the results
         return $results;
     }
