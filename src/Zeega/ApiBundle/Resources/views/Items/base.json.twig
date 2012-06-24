@@ -1,8 +1,8 @@
 {# Template to render items recursively. #}
 
-{{ _self.show(item) }} 	{# Render the first item by making a call to the show(item) macro#}
+{{ _self.show(item,userIsAdmin) }} 	{# Render the first item by making a call to the show(item) macro#}
 
-{% macro show(item) %}	{# Item rendering macro/function #}
+{% macro show(item,userIsAdmin) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
 		"id" : {{ item.id | default("") | json_encode | raw }},
@@ -39,7 +39,13 @@
 	        {% endfor %}
 		],
 		"tags":
-			{{ item.tags | default([ ]) | json_encode | raw}}
+			{{ item.tags | default([ ]) | json_encode | raw}},
+		{%- if (user.id is defined and user.id == doc_fields.user_id) or (userIsAdmin) -%}
+			"editable" : true
+		{%- else -%}
+			"editable" : false
+		{%- endif -%}
+
 	}
 	{% else %}
 		{}

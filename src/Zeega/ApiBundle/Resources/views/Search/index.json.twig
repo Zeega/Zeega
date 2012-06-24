@@ -1,0 +1,19 @@
+{% set value = 'no spaces' %}
+{
+	{%- for res_type,new_items in results -%}
+	 "{{ res_type}}":
+	    [
+		{% if new_items|length > 0 %}
+		
+		{% for item in new_items %}
+			{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'userIsAdmin': userIsAdmin} %}	
+			{%- if loop.index0 < new_items|length - 1 -%}
+			,
+			{%- endif -%}
+		{% endfor %}
+		{%- endif -%}
+		],
+		"returned_{{res_type}}_count": {{counts.count}},
+		"{{res_type}}_count": {{counts.returned_count}}
+	{% endfor %}
+}

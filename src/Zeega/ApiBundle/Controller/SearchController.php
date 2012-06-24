@@ -36,7 +36,8 @@ class SearchController extends Controller
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 		$isAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
-		
+		$isAdmin = (isset($isAdmin) && (strtolower($isAdmin) === "true" || $isAdmin === true)) ? true : false;
+    	
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
@@ -44,49 +45,32 @@ class SearchController extends Controller
         
 		if($solrEnabled)
 		{
-			if(isset($collectionId))
+			if(isset($collectionId) || isset($returnCollections))
 			{
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
 			    // send db query to doctrine
-				return $this->searchWithDoctrineAndGetResponse();
+
+				$dbItems = $this->searchWithDoctrine();
 				
-				$newItemsFromDbId = array();
+				$items = array();
+				$counts = array();
 				
 				// get the results from the DB
-				if(array_key_exists("items",$newItemsFromDb)) 
+				if(array_key_exists("items",$dbItems)) 
 				{
-					$dbItems = $newItemsFromDb["items"];
+					$items["items"] = $dbItems["items"];
+					$counts["count"] = $dbItems["items_count"];
+					$counts["returned_count"] = $dbItems["returned_items_count"];
 				}
-				else if(array_key_exists("collections",$newItemsFromDb))
+				if(array_key_exists("collections",$dbItems)) 
 				{
-					$dbItems = $newItemsFromDb["collections"];
-				}
-				else if(array_key_exists("items_and_collections",$newItemsFromDb))
-				{
-					$dbItems = $newItemsFromDb["items_and_collections"];
+					$items["collections"] = $dbItems["collections"];
+					$counts["count"] = $dbItems["collections_count"];
+					$counts["returned_count"] = $dbItems["returned_collections_count"];
 				}
 				
-				// create a list of items that have to be excluded from the SOLR query because they come from the database
-				if(isset($dbItems) && count($dbItems) > 0)
-				{
-					foreach($dbItems as $newItem)
-					{
-						array_push($newItemsFromDbId,$newItem->getId());
-					}
-					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
-				}
-				else
-				{
-					$dbItems = array();
-				}
-			    //return new Response()
-			    // do a SOLR query
-				$solrItems = $this->searchWithSolr($newItemsFromDbId);
-			}
-			else if(isset($returnCollections))
-			{
-			    // if we only want to collections ()
-				return $this->searchWithDoctrineAndGetResponse();
+				$itemsView = $this->renderView('ZeegaApiBundle:Search:index.json.twig', array('results'=> $items, 'counts' => $counts, 'user'=>$user, 'userIsAdmin'=>$isAdmin));
+		    	return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 			}
 			else
 			{
@@ -119,7 +103,8 @@ class SearchController extends Controller
 		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
 		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
 		$geoLocated = $request->query->get('geo_located'); 
-		
+		$returnCollections = $request->query->get('r_collections');   	//  bool
+	
 	    if(!isset($page))               $page = 0;
 	    if($page > 0)                   $page = $page - 1;
 		if(!isset($limit))              $limit = 100;
@@ -229,7 +214,7 @@ class SearchController extends Controller
         $facets = $resultset->getFacetSet();
         
         $results["items"] = $groups->getGroup('media_type:*');
-        $results["collections"] = $groups->getGroup('media_type:Collection');
+        if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
 
         $tags = $facets->getFacet('tags');

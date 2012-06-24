@@ -47,7 +47,7 @@
 				"tags" : {{doc_fields.tags_i | default("") | json_encode | raw}},
 				"media_geo_latitude": {{ doc_fields.media_geo_latitude | default("null")}},
 				"media_geo_longitude": {{ doc_fields.media_geo_longitude | default("null")}},
-				{%- if (user.id is defined and  user.id == doc_fields.user_id) or userIsAdmin -%}
+				{%- if (user.id is defined and  user.id == doc_fields.user_id) or (userIsAdmin is defined and userIsAdmin) -%}
 					"editable" : true
 				{%- else -%}
 					"editable" : false
