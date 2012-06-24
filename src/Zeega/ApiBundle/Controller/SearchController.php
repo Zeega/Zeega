@@ -193,7 +193,7 @@ class SearchController extends Controller
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
-        $groupComponent->addQuery('media_type:*');
+        //$groupComponent->addQuery('media_type:*');
         // maximum number of items per group
         $groupComponent->setLimit($limit);
         $groupComponent->setOffset($page * $limit);
