@@ -7,8 +7,8 @@
 	{
 		"id" : {{ item.id | default("") | json_encode | raw }},
 		"site_id" : {{ item.siteid | default("") | json_encode | raw }},
-    	"user_id" : {{ item.userid | default("") | json_encode | raw }},
-        "username" : {{ item.username | default("") | json_encode | raw }},
+    	"user_id" : {{ item.user.id | default("") | json_encode | raw }},
+        "username" : {{ item.user.username | default("") | json_encode | raw }},
         "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
         "title" : {{ item.title | json_encode | raw}},
         "description" : {{ item.description | default("") | json_encode | raw}},
