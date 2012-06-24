@@ -40,7 +40,7 @@ class EditorController extends Controller
 		}
 		
 		// by default go home - this should never happen
-		//return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
+		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
     }
 
 	public function siteAction($short)
