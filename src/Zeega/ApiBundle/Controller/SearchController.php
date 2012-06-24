@@ -97,7 +97,6 @@ class SearchController extends Controller
 		$limit = $request->query->get('limit');     //  string
 	    $q = $request->query->get('q');
 	    $userId = $request->query->get('user');                 //  int
-	    $username = $request->query->get('username');                 //  int
 		$siteId = $request->query->get('site');                 //  int
 		$contentType = $request->query->get('content');         //  string
 		$collection_id  = $request->query->get('collection');   //  string
@@ -190,12 +189,6 @@ class SearchController extends Controller
         	$query->createFilterQuery('user_id')->setQuery("user_id: $userId");
         }
         
-        if(isset($username)) 
-        {
-        	$username = ResponseHelper::escapeSolrQuery($username);
-	        $query->createFilterQuery('username')->setQuery("username_i: $username");
-        }
-        
 		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
@@ -214,7 +207,7 @@ class SearchController extends Controller
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
         
-        $results["items"] = $groups->getGroup('media_type:*');
+        $results["items"] = $groups->getGroup('-media_type:Collection');
         if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
         //$results["items_and_collections"] = $groups->getGroup('media_type:*');
 
