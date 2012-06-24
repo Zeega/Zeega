@@ -46,6 +46,7 @@ class SearchController extends Controller
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
 			    // send db query to doctrine
 				return $this->searchWithDoctrineAndGetResponse();
+				
 				$newItemsFromDbId = array();
 				
 				// get the results from the DB

@@ -25,17 +25,23 @@ class UsersController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
         
-        $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
-        
-		if(isset($loggedUser) || $loggedUser->getId() == $id)
-		{
-			$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
-		}
-		else
-		{
-			$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
-		}
-        
+        if($id == -1)
+        {
+        	$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $loggedUser, 'editable' => true));
+        }
+        else
+        {
+			$user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
+			
+			if(isset($loggedUser) || $loggedUser->getId() == $id)
+			{
+				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
+			}
+			else
+			{
+				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
+			}
+        }
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
  	}
  	
