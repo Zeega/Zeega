@@ -6,7 +6,7 @@
 		{% if new_items|length > 0 %}
 		
 		{% for item in new_items %}
-			{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'userIsAdmin': userIsAdmin} %}	
+			{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'userIsAdmin': userIsAdmin, 'user': user} %}	
 			{%- if loop.index0 < new_items|length - 1 -%}
 			,
 			{%- endif -%}

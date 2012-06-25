@@ -60,8 +60,12 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
+        $user = $this->get('security.context')->getToken()->getUser();
+		$userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
+		$userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
+    	
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'userIsAdmin' => $userIsAdmin));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
@@ -449,6 +453,7 @@ class ItemsController extends Controller
 		}
 		
         $item = new Item();
+
         if(isset($id))
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
@@ -457,9 +462,9 @@ class ItemsController extends Controller
         {
             $item->setDateCreated(new \DateTime("now"));
             $item->setChildItemsCount(0);
+            $item->setUser($user);
         }
         
-        $item->setUser($user);
         $item->setDateUpdated(new \DateTime("now"));
         
         if(isset($site)) $item->setSite($site); 
