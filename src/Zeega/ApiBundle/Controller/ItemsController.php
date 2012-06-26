@@ -305,8 +305,10 @@ class ItemsController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 	
 			$newItems = $this->getRequest()->request->get('new_items');
-			$itemsToRemove = $this->getRequest()->request->get('items_to_remove');   
-	
+			$itemsToRemoveString = $this->getRequest()->request->get('items_to_remove');   
+			$itemsToRemove = array();
+			$itemsToRemove = explode(",",$itemsToRemoveString);
+			
 			$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 	
 			if (isset($newItems))
@@ -344,9 +346,11 @@ class ItemsController extends Controller
 			{
 			    foreach($itemsToRemove as $itemToRemoveId)
 				{
+					
 				    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
 				    if (isset($childItem)) 
     				{
+    					
     					$item->getChildItems()->removeElement($childItem);
     				}
 			    }

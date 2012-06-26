@@ -60,7 +60,6 @@ class UsersController extends Controller
     	$displayName = $this->getRequest()->request->get('display_name');
     	$thumbUrl = $this->getRequest()->request->get('thumbnail_url');
     	$location = $this->getRequest()->request->get('location');
-    	$createdAt = $this->getRequest()->request->get('created_at');
     	$locationLatitude = $this->getRequest()->request->get('location_latitude');
     	$locationLongitude = $this->getRequest()->request->get('location_longitude');
     	
@@ -69,14 +68,13 @@ class UsersController extends Controller
     	if(isset($displayName)) $user->setDisplayName($displayName);
     	if(isset($thumbUrl)) $user->setThumbUrl($thumbUrl);
     	if(isset($location)) $user->setLocation($location);
-    	if(isset($createdAt)) $user->setCreatedAt($createdAt);
     	if(isset($locationLatitude)) $user->setLocationLatitude($locationLatitude);
     	if(isset($locationLongitude)) $user->setLocationLongitude($locationLongitude);
     	
     	$em->persist($user);
         $em->flush();
 		
-		$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user));
+		$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
     }

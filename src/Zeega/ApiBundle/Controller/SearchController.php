@@ -103,8 +103,9 @@ class SearchController extends Controller
 		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
 		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
 		$geoLocated = $request->query->get('geo_located'); 
+		$returnItems = $request->query->get('r_items');   	//  bool
 		$returnCollections = $request->query->get('r_collections');   	//  bool
-		$returnItemsAndCollections = $request->query->get('r_items_and_collections');   	//  bool
+		$returnItemsAndCollections = $request->query->get('r_itemswithcollections');   	//  bool
 	
 	    if(!isset($page))               $page = 0;
 	    if($page > 0)                   $page = $page - 1;
@@ -208,7 +209,7 @@ class SearchController extends Controller
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
         
-        $results["items"] = $groups->getGroup('media_type:*');
+        if(isset($returnItems)) $results["items"] = $groups->getGroup('-media_type:Collection');
         if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
         if(isset($returnItemsAndCollections)) $results["items_and_collections"] = $groups->getGroup('media_type:*');
 
@@ -217,7 +218,7 @@ class SearchController extends Controller
   
         foreach ($tags as $tag_name => $tag_count)
         {
-        	if($tag_count > 0)
+        	if($tag_count > 0 && $tag_name != "N;" && !strpos("s:0", $tag_name))
         	{
         		$tagsArray[$tag_name] = $tag_count;
         	}
