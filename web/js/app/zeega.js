@@ -576,9 +576,15 @@ this.zeega = {
 			var nextFrame = this.getRightFrame();
 			if( nextFrame != false && nextFrame != this.currentFrame )
 			{
-				if(nextFrame.get('layers')) nextFrame.get('layers').push( parseInt(layerID) );
-				else nextFrame.set('layers',[ parseInt(layerID) ],{silent:true});
-				nextFrame.save();
+				var layers = [];
+				if(nextFrame.get('layers'))
+				{
+					var l = _.compact(nextFrame.get('layers'));
+					l.push( parseInt(layerID) );
+					layers = l;
+				}
+				else layers = [ parseInt(layerID) ];
+				nextFrame.save({ layers : layers });
 			}
 		}
 	},
@@ -607,10 +613,8 @@ this.zeega = {
 				attr.persistLayers.push( layerID );
 				this.addPersistenceToFrames( layerID );
 			}
-
-			this.currentSequence.set({ 'attr': attr });
-			this.currentSequence.save();
-
+			
+			this.currentSequence.save({ 'attr': attr });
 		} // busy
 		
 	},
