@@ -143,6 +143,13 @@ class SearchController extends Controller
             $queryString = "text:$q";
         }
         
+		// add Published filter
+		if($queryString != '')
+        {
+            $queryString = $queryString . " AND ";
+        }
+        $queryString = $queryString . "published:true AND enabled:true";
+
         if(isset($tags) and $tags != '')                          
         {
         	$tags = ResponseHelper::escapeSolrQuery($tags);
@@ -218,21 +225,17 @@ class SearchController extends Controller
   
         foreach ($tags as $tag_name => $tag_count)
         {
-        	if($tag_count > 0 && $tag_name != "N;" && !strpos("s:0", $tag_name))
+        	if($tag_count > 0 && $tag_name != "N;") // temp fix
         	{
         		$tagsArray[$tag_name] = $tag_count;
         	}
         }
         
         return array("items"=>$results,"tags"=>$tagsArray);
-        // render the results
-		//$itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('results' => $results, 'tags' => $tagsArray));
-        //return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
     private function searchWithDoctrineAndGetResponse()
     {
-    	//return new Response(var_dump($this->searchWithDoctrine(false,true)));
         return ResponseHelper::getJsonResponse($this->searchWithDoctrine(false,true));
     }
     
