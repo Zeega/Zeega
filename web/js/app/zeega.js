@@ -691,13 +691,18 @@ this.zeega = {
 		console.log('-- EXPORT --');
 		
 		var projectObject = this.project.toJSON();
-		var stuff = {
+
+		//eliminate falsy values from the frames.layers array
+		var f = this.project.frames.toJSON();
+		_.each( f, function(frame){ frame.layers = _.compact(frame.layers) })
+		
+		var sfl = {
 			sequences : this.project.sequences.toJSON(),
-			frames:this.project.frames.toJSON(),
-			layers:this.project.layers.toJSON()
+			frames : f,
+			layers : this.project.layers.toJSON()
 		}
 		
-		_.extend(projectObject,stuff);
+		_.extend(projectObject,sfl);
 		
 		console.log(projectObject);
 
