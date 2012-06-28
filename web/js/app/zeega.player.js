@@ -236,10 +236,10 @@ var Player2 = Backbone.View.extend({
 		_.each(frame.links, function(frameID){
 			linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
 		})
-		console.log('preload layers: '+ _.union(linkedFrameLayers,frame.get('layers')) );
+		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
-			if( layer.status != 'loading' && frame.status != 'ready' )
+			if( layer.status != 'loading' && layer.status != 'ready' )
 			{
 				_this.preloadLayer( layer )
 			}
@@ -249,6 +249,7 @@ var Player2 = Backbone.View.extend({
 	
 	preloadLayer : function( layer )
 	{
+		console.log('preload layer:', layer.id, layer, ''+layer.status);
 		layer.trigger('loading', layer.id)
 		this.$el.find('#preview-media').append( layer.visual.render().el );
 		layer.trigger('player_preload');
