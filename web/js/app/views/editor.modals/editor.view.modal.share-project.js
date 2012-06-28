@@ -26,8 +26,8 @@
 								'" id="'+ frame.id +'" src="' + frame.get('thumbnail_url')+ '"></a>';
 				
 			}
-			
-			var projectlink = zeega.app.url_prefix + this.model.id;
+			//http://dev.zeega.org/joseph/web/project/ID/view
+			var projectlink = zeega.app.url_prefix + 'project/'+ this.model.id +'/view';
 			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
