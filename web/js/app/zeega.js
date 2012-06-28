@@ -449,7 +449,6 @@ this.zeega = {
 			for( var i = 0 ; i < n ; i++ )
 			{
 				var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
-				console.log('new frame!!! with persistent layers:', this.currentSequence, layers)
 			
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
