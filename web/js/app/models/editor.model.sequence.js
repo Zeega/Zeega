@@ -19,7 +19,8 @@
 		initialize : function( attributes )
 		{
 			this.checkAttr();
-			this.set({ 'attr' : _.defaults(this.get('attr'),this.defaultAttr) })
+			console.log(''+this.get('attr').persistLayers)
+			console.log('is the attr an object?', this.get('attr') ,_.isArray(this.get('attr')), this);
 			
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 			this.on('sync', this.checkAttr, this);
@@ -30,7 +31,7 @@
 		
 		checkAttr : function()
 		{
-			if( _.isUndefined(this.get('attr').persistlayers) ) this.get('attr').persistLayers = [];
+			if( _.isArray(this.get('attr')) ) this.set({ attr : this.defaultAttr });
 		},
 		attachTabView : function()
 		{
@@ -92,7 +93,19 @@
 			}
 			//this.set('attr',attr);
 			//this.save();
-		}
+		},
+		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
 		
 	});
 
