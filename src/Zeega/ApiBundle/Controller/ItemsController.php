@@ -442,6 +442,7 @@ class ItemsController extends Controller
         $attributes = $request_data->get('attributes');
         $newItems = $request_data->get('new_items');
         $tags = $request_data->get('tags');
+		$published = $request_data->get('published');
         
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
@@ -515,9 +516,9 @@ class ItemsController extends Controller
         if(isset($license)) $item->setLicense($license);
         if(isset($attributes)) $item->setAttributes($attributes);
         if(isset($tags)) $item->setTags($tags);
+		if(isset($published)) $item->setPublished($published);
         
         $item->setEnabled(true);
-        $item->setPublished(true);
         $item->setIndexed(false);
         
         if (isset($newItems))

@@ -51,7 +51,8 @@
 					"editable" : true
 				{%- else -%}
 					"editable" : false
-				{%- endif -%}
+				{%- endif -%},
+				"published" : {{ doc_fields.published | default(false) | json_encode | raw}}
 			}
 			{%- if loop.index0 < res_docs|length - 1 -%}
 			,

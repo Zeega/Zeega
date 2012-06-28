@@ -48,8 +48,8 @@
 			"editable" : true
 		{%- else -%}
 			"editable" : false
-		{%- endif -%}
-
+		{%- endif -%},
+		"published" : {{ item.published | default(false) | json_encode | raw}}
 	}
 	{% else %}
 		{}
