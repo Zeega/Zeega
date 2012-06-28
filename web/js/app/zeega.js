@@ -580,7 +580,7 @@ this.zeega = {
 				if(nextFrame.get('layers'))
 				{
 					var l = _.compact(nextFrame.get('layers'));
-					l.push( parseInt(layerID) );
+					l.unshift( parseInt(layerID) );
 					layers = l;
 				}
 				else layers = [ parseInt(layerID) ];
@@ -610,7 +610,7 @@ this.zeega = {
 			{
 				console.log('add persistence')
 				//add persistence
-				attr.persistLayers.push( layerID );
+				attr.persistLayers.unshift( layerID );
 				this.addPersistenceToFrames( layerID );
 			}
 			
