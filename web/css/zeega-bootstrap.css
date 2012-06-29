@@ -335,3 +335,23 @@ i.go-to-sequence{float:right;}
 }
 #faq-list li:nth-child(odd){ background-color: rgba(255,255,255,0.25);}
 #faq-list li:nth-child(even){ background-color: rgba(255,255,255,0.125);}
+
+
+/**************************************
+
+	jquery ui overrides
+
+***************************************/
+
+.ui-slider-range
+{
+	background : red;
+	box-shadow : inset 1px 1px 3px;
+}
+.ui-slider .ui-slider-handle
+{
+	height:10px;
+	width:10px;
+	border-radius:10px;
+	top:-5px;
+}
