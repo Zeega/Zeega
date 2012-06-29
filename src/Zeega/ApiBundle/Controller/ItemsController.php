@@ -106,91 +106,139 @@ class ItemsController extends Controller
 
 	// post_collections POST   /api/collections.{_format}
     public function postItemsAction()
-    {
+    {   
+        // get user name
         $user = $this->get('security.context')->getToken()->getUser();
+        // get referent to doctrine entity manager
         $em = $this->getDoctrine()->getEntityManager();
+        // get attribution url for collection
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
-
+        // create new Item instance
 	    $item = new Item();
-	    
+	    // get reference to session
        	$session = $this->getRequest()->getSession();
 
-		$site = $session->get('site');
+        $existingCollection = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("title" => $this->getRequest()->request->get('title'), "enabled" => 1));
+
+        $site = $session->get('site');
         if(isset($site))
         {
             $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
-		}
-	
-		if(!isset($site))
-		{
-		    $sites = $user->getSites();
-    		$site = $sites[0];
-		}
-        
-		$item->setSite($site);		
-        $item->setTitle($this->getRequest()->request->get('title'));
-        $item->setDescription($this->getRequest()->request->get('description'));
-        $item->setMediaType($this->getRequest()->request->get('media_type'));
-        $item->setDateCreated(new \DateTime("now"));
-		$item->setArchive($this->getRequest()->request->get('archive'));
-        $item->setLayerType($this->getRequest()->request->get('layer_type'));
-        $item->setUser($user);
-        $item->setUri($this->getRequest()->request->get('uri'));
-        $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
-		$item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
-		$item->setMediaGeoLatitude($this->getRequest()->request->get('media_geo_latitude'));
-		$item->setMediaGeoLongitude($this->getRequest()->request->get('media_geo_longitude'));
-		$item->setTags($this->getRequest()->request->get('tags'));
-		$item->setAttributes($this->getRequest()->request->get('attributes'));
-        $item->setEnabled(true);
-        $item->setPublished(true);
-        $item->setIndexed(false);
-        $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
-        $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
-        
-		$childItems = $this->getRequest()->request->get('child_items');
-		
-		if(isset($childItems))
-		{
-		    if(isset($childItems) && count($childItems) > 100)
-		        $childItems = array_slice($childItems,0,10);
-		    
-		    foreach($childItems as $child)
+        }
+        if(!isset($site))
+        {
+            $sites = $user->getSites();
+            $site = $sites[0];
+        }
+        if( !is_null($existingCollection)){ // if this collection already exists
+            $childItems = $this->getRequest()->request->get('child_items');
+            if(isset($childItems))
             {
-                $childItem = new Item();
+                if(isset($childItems) && count($childItems) > 100)
+                    $childItems = array_slice($childItems,0,100);
+                foreach($childItems as $child)
+                {
+                    // check if Item already exists
+                    $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $child['attribution_uri'], "enabled" => 1));
+                    if(!is_null($existingItem)){ // if this is new, add to collection
+                        $childItem = new Item();
+                        $childItem->setSite($site);     
+                        $childItem->setTitle($child['title']);
+                        $childItem->setDescription($child['description']);
+                        $childItem->setMediaType($child['media_type']);
+                        $childItem->setDateCreated(new \DateTime("now"));
+                        $childItem->setArchive($child['archive']);
+                        $childItem->setLayerType($child['layer_type']);
+                        $childItem->setUser($user);
+                        $childItem->setUri($child['uri']);
+                        $childItem->setAttributionUri($child['attribution_uri']);
+                        $childItem->setThumbnailUrl($child['thumbnail_url']);
+                        $childItem->setEnabled(true);
+                        $childItem->setPublished(true);
+                        $childItem->setChildItemsCount(0);
+                        $childItem->setMediaCreatorUsername($child['media_creator_username']);
+                        $childItem->setMediaCreatorRealname($child['media_creator_realname']);
+                        $childItem->setTags($child['tags']);
+                        $em->persist($childItem);
+                        $em->flush();
 
-        		$childItem->setSite($site);		
-                $childItem->setTitle($child['title']);
-        		$childItem->setDescription($child['description']);
-                $childItem->setMediaType($child['media_type']);
-                $childItem->setDateCreated(new \DateTime("now"));
-        		$childItem->setArchive($child['archive']);
-                $childItem->setLayerType($child['layer_type']);
-                $childItem->setUser($user);
-                $childItem->setUri($child['uri']);
-                $childItem->setAttributionUri($child['attribution_uri']);
-        		$childItem->setThumbnailUrl($child['thumbnail_url']);
-                $childItem->setEnabled(true);
-                $childItem->setPublished(true);
-                $childItem->setChildItemsCount(0);
-                $childItem->setMediaCreatorUsername($child['media_creator_username']);
-                $childItem->setMediaCreatorRealname($child['media_creator_realname']);
-                $childItem->setTags($child['tags']);
-                
-                $item->addItem($childItem);
+                        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $childItem));
+                        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+                    }
+                }
             }
-            $item->setChildItemsCount(count($childItems));
-		}
-		else
-		{
-		    $item->setChildItemsCount(0);
-		}
+        }else{ // if this collection does not exits
+            // $site ??
+            $site = $session->get('site');
+            if(isset($site))
+            {
+                $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
+            }
+            if(!isset($site))
+            {
+                $sites = $user->getSites();
+                $site = $sites[0];
+            }
+            $item->setSite($site);      
+            $item->setTitle($this->getRequest()->request->get('title'));
+            $item->setDescription($this->getRequest()->request->get('description'));
+            $item->setMediaType($this->getRequest()->request->get('media_type'));
+            $item->setDateCreated(new \DateTime("now"));
+            $item->setArchive($this->getRequest()->request->get('archive'));
+            $item->setLayerType($this->getRequest()->request->get('layer_type'));
+            $item->setUser($user);
+            $item->setUri($this->getRequest()->request->get('uri'));
+            $item->setAttributionUri($this->getRequest()->request->get('attribution_uri'));
+            $item->setThumbnailUrl($this->getRequest()->request->get('thumbnail_url'));
+            $item->setMediaGeoLatitude($this->getRequest()->request->get('media_geo_latitude'));
+            $item->setMediaGeoLongitude($this->getRequest()->request->get('media_geo_longitude'));
+            $item->setTags($this->getRequest()->request->get('tags'));
+            $item->setAttributes($this->getRequest()->request->get('attributes'));
+            $item->setEnabled(true);
+            $item->setPublished(true);
+            $item->setIndexed(false);
+            $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
+            $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
+            $childItems = $this->getRequest()->request->get('child_items');
+            if(isset($childItems))
+            {
+                if(isset($childItems) && count($childItems) > 100)
+                    $childItems = array_slice($childItems,0,100);
+                
+                foreach($childItems as $child)
+                {
+                    $childItem = new Item();
+                    $childItem->setSite($site);     
+                    $childItem->setTitle($child['title']);
+                    $childItem->setDescription($child['description']);
+                    $childItem->setMediaType($child['media_type']);
+                    $childItem->setDateCreated(new \DateTime("now"));
+                    $childItem->setArchive($child['archive']);
+                    $childItem->setLayerType($child['layer_type']);
+                    $childItem->setUser($user);
+                    $childItem->setUri($child['uri']);
+                    $childItem->setAttributionUri($child['attribution_uri']);
+                    $childItem->setThumbnailUrl($child['thumbnail_url']);
+                    $childItem->setEnabled(true);
+                    $childItem->setPublished(true);
+                    $childItem->setChildItemsCount(0);
+                    $childItem->setMediaCreatorUsername($child['media_creator_username']);
+                    $childItem->setMediaCreatorRealname($child['media_creator_realname']);
+                    $childItem->setTags($child['tags']);
+                    $item->addItem($childItem);
+                }
+                $item->setChildItemsCount(count($childItems));
+            }
+            else
+            {
+                $item->setChildItemsCount(0);
+            }
+            $em->persist($item);
+            $em->flush();
 
-        $em->persist($item);
-        $em->flush();
-        
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+            return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        }
     }
 
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}

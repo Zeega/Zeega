@@ -16,51 +16,77 @@ class ParserDropboxSet extends ParserAbstract
 			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
 	
 	private $itemParser;
+
+	private $dropboxUserName = "";
+	//private $ItemCount =  0;
 	
 	function __construct() 
 	{
-		error_log("ParserDropboxSet construct", 0);
 		$this->itemParser = new ParserDropboxItem();
 	}
-	
+
+	public function prepThumbFolder($dropbox)
+	{
+    	$folderMetaData = $dropbox->metaData("/");
+    	$folderItems = $folderMetaData["body"]->contents;
+    	$found = 0;
+		foreach ($folderItems as $folderItem){
+			$filename = $folderItem->path;
+			if($filename == "/__thumbnails__"){
+				$found = 1;
+			}
+		}
+		if($found == 1){
+			$delete_response = $dropbox->delete("/__thumbnails__");
+		}
+		$dropbox->create("/__thumbnails__");
+	}
+
+
+	public function loadFolder($path, $dropbox, $collection, $dropboxUser, $itemCount)
+    {
+    	$folderMetaData = $dropbox->metaData($path);
+    	$folderItems = $folderMetaData["body"]->contents;
+		foreach ($folderItems as $folderItem){
+			if($folderItem->is_dir){ // if this path is a directory
+				if($folderItem->path == "__thumbnails__"){ // and it's not the thumbnails directory
+					continue;
+				}
+				$this->loadFolder($folderItem->path, $dropbox, $collection, $dropboxUser, $itemCount); // recurse function
+				continue;
+			}else{
+				$filename = $folderItem->path;
+				$mediaData = $dropbox->shares($filename);
+				$mediaUrl = $mediaData["body"]->url;
+				$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
+				$collection->addItem($item["items"]);
+				$itemCount++;
+				$collection->setChildItemsCount($itemCount);
+			}
+		}
+		return $itemCount;
+    }
+
 	public function load($url, $parameters = null)
     {
-		
-		error_log("ParserDropboxSet load 0", 0);
-
 		require_once('../vendor/dropbox/bootstrap.php');
-		//require_once('bootstrap.php');
-
 		$accountInfo = $dropbox->accountInfo();
 		$dropboxUser = $accountInfo["body"]->display_name;
-		$metaData = $dropbox->metaData('/');
-		$fileArray = $metaData["body"]->contents;
-
-        //$loadCollectionItems = $parameters["load_child_items"];
-        //$regexMatches = $parameters["regex_matches"];
-	    
 		$collection = new Item();
 		$collection->setTitle("Dropbox");
 		$collection->setDescription("test collection for Dropbox");
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Dropbox');
 		$collection->setAttributionUri($url);
-        $collection->setChildItemsCount(count($fileArray));
 		$collection->setMediaCreatorUsername($dropboxUser);
         $collection->setMediaCreatorRealname($dropboxUser);
 		$collection->setMediaDateCreated(new \DateTime());
-		
 		$collection->setUri($url);
-		
-		foreach ($fileArray as $fileData){
-			$filename = $fileData->path;
-			$mediaData = $dropbox->shares($filename);
-			$mediaUrl = $mediaData["body"]->url;
 
-			$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $fileData, "username" => $dropboxUser));
-			$collection->addItem($item["items"]);
-		}
-		error_log("ParserDropboxSet end", 0);
+		$itemCount = 0;
+
+		$this->prepThumbFolder($dropbox);
+		$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
 		return parent::returnResponse($collection, true, true);
 	}
 }
