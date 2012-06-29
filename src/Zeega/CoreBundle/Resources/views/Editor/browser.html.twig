@@ -227,28 +227,30 @@
 
          <!-- /TEMPLATES -->
 
-         
-
 {% endblock %}
 
-
-
-
 {% block scripts %}
-				<!-- SCRIPTS -->
+	<!-- SCRIPTS -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script data-main="{{ asset('js/loaders/browser.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+		{% if app.environment == 'dev' %}
+		<!-- to load JS libraries separately -->
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/browser.js') }}"></script>
+		{% else %}
+			<!-- to load single aggregated JS library --> 
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/browser.js') }}"></script>
+		{% endif %}
+
 		<!-- Leaflet CSS --> 
 		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
 		
 		
-		<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
+		<!-- <script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script> -->
 		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jquery.tagsinput.css')}}" />
 		
 		
 		<!-- Leaflet JavaScript -->
-		<script src="{{ asset('js/lib/leaflet/leaflet.js')}}"></script>
+		<!-- <script src="{{ asset('js/lib/leaflet/leaflet.js')}}"></script> -->
 		
 		<!-- FANCYBOX -->
 		<!-- Optionaly include easing and/or mousewheel plugins -->

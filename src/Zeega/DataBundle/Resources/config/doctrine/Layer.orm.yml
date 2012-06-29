@@ -1,29 +1,29 @@
 # src/Zeega/EditorBundle/Resources/config/doctrine/Layer.orm.yml
 Zeega\DataBundle\Entity\Layer:
-   type: entity
-   table: layer
-   repositoryClass: Zeega\DataBundle\Repository\LayerRepository
-   manyToOne:
-    item:
-     targetEntity: Zeega\DataBundle\Entity\Item
-   manyToMany:
-    sequences:
-     targetEntity: Zeega\DataBundle\Entity\Sequence
-     mappedBy: layers
-   id:
+    type: entity
+    table: layer
+    repositoryClass: Zeega\DataBundle\Repository\LayerRepository
+    manyToOne:
+        item:
+            targetEntity: Zeega\DataBundle\Entity\Item
+        project:
+            targetEntity: Zeega\DataBundle\Entity\Project
     id:
-     type: bigint
-     generator: { strategy: AUTO }
-   fields:
-    type:
-     type: string
-     length: 50
-     nullable: true
-    text:
-     type: string
-     length: 1000
-     nullable: true
-    attr:
-     type: array
-     nullable: true
- 
+        id:
+            type: bigint
+            generator: { strategy: AUTO }
+    fields:
+        type:
+            type: string
+            length: 50
+            nullable: true
+        text:
+            type: string
+            length: 1000
+            nullable: true
+        attr:
+            type: array
+            nullable: true
+        project_id:
+            type: integer
+            associationKey: true

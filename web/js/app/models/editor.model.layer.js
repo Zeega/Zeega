@@ -6,9 +6,12 @@
 		player : false,
 		displayCitation: true,
 		visualLoaded : false,
+		defaultControls : true,
 		
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),
+		
+		layerColor : [ 'red','blue','yellow','green' ],
 		
 		defaults : {
 			attr : {},
@@ -20,7 +23,7 @@
 		
 		url : function()
 		{
-			if( this.isNew() ) return zeega.app.url_prefix + 'sequences/'+ zeega.app.currentSequence.id +'/layers';
+			if( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/layers';
 			else return zeega.app.url_prefix + "layers/" + this.id;
 		},
 		
@@ -29,7 +32,6 @@
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
-			
 			
 			this.on('editor_layerRender', this.renderLayerInEditor, this );
 			this.on('editor_destroyLayer editor_layerUnrender', this.unrenderLayerFromEditor, this);
@@ -87,11 +89,6 @@
 			else this.editorWindow.append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
-			//add to the layer.visible array which keeps track of all visible layers
-			// we cannot count on the layer having the best/latest info on it's own layers in the editor
-			zeega.app.currentSequence.layers.visible.push( this )
-			
-			
 			this.trigger('editor_rendered editor_layerEnter');
 		},
 		
@@ -105,7 +102,7 @@
 		{
 			console.log('	refresh view')
 			this.visual.$el.attr('id','layer-visual-'+this.id)
-			this.controls.$el.attr('id','layer-'+this.id)
+			if(this.controls) this.controls.$el.attr('id','layer-'+this.id)
 		},
 
 		update : function( newAttr, silent )
@@ -140,7 +137,7 @@
 		// triggers ready for the player
 		preload : function()
 		{
-			$('#zeega-player').trigger('ready',{'id':this.model.id});
+			$('#zeega-player').trigger('ready',{'id':this.id});
 		},
 
 		// player :: puts the visual element offscreen

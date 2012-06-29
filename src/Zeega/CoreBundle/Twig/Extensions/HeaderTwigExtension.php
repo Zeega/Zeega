@@ -26,11 +26,9 @@ class HeaderTwigExtension extends \Twig_Extension
         $securityToken = $this->securityContext->getToken();
         if(isset($securityToken))
         {
-            //$user = $this->securityContext->getToken()->getUser();
-            if( $this->securityContext->isGranted('IS_AUTHENTICATED_FULLY') )    		
-//if(isset($user) && $user != "anon.")
+            $user = $this->securityContext->getToken()->getUser();
+    		if(isset($user) && $user != "anon.")
     		{
-                    $user = $this->securityContext->getToken()->getUser();
     		    $sites = $user->getSites();
     		    
     		    $session = $this->session;
@@ -40,8 +38,7 @@ class HeaderTwigExtension extends \Twig_Extension
                 {
             	    $currentSite = $sites[0];
                 }
-                if(isset($currentSite))
-                {   
+
         		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
 
                 return array(
@@ -55,8 +52,8 @@ class HeaderTwigExtension extends \Twig_Extension
         			'displayname' => $user->getDisplayName(),
         			);
     		}
-               } 
         }
+
         return array(
             'site' => -1,
 			'title' => 'Unknown',
