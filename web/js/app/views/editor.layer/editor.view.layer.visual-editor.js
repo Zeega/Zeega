@@ -93,7 +93,6 @@
 			this.render();
 			if(this.attr.link)
 			{
-				
 				$(this.el).click(function(){
 					window.location = 'http://'+ _this.attr.link
 				})

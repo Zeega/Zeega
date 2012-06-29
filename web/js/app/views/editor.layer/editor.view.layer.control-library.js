@@ -174,7 +174,10 @@
 		updateLink : function()
 		{
 			this.$el.find('input').unbind('keypress');
-			var fieldValue = this.$el.find('input').val();
+			var fieldValue = this.$el.find('input').val().replace('http://','');
+			
+			
+			
 			if( fieldValue != this.model.get('attr').link )
 			{
 				this.$el.find('input, .add-on').effect('highlight',{},2000);
