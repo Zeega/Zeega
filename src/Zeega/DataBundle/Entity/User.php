@@ -255,4 +255,29 @@ class User extends BaseUser
     {
         return $this->location_longitude;
     }
+    /**
+     * @var string $profile_image
+     */
+    private $profile_image;
+
+
+    /**
+     * Set profile_image
+     *
+     * @param string $profileImage
+     */
+    public function setProfileImage($profileImage)
+    {
+        $this->profile_image = $profileImage;
+    }
+
+    /**
+     * Get profile_image
+     *
+     * @return string 
+     */
+    public function getProfileImage()
+    {
+        return $this->profile_image;
+    }
 }

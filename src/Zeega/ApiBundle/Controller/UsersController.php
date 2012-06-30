@@ -78,4 +78,72 @@ class UsersController extends Controller
         
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
     }
+    
+    public function postUserProfileimageAction($id)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$loggedUser = $this->get('security.context')->getToken()->getUser();
+		
+		if(!isset($loggedUser) || $loggedUser->getId() != $id)
+		{
+			return new Response("Unauthorized", 401);
+		}
+		
+		$files = $this->getRequest()->files;
+		
+		if(isset($files))
+		{
+			$imageFile = $files->get('imagefile');
+			
+			if(isset($imageFile))
+			{
+				$mimeType = $imageFile->getClientMimeType();
+				$fileSize = $imageFile->getClientSize();
+				$maxFileSize = $imageFile->getMaxFilesize();
+				
+				if($fileSize > $maxFileSize)
+				{
+					return new Response("{status: 'There was an error uploading your image. Please try to upload a smaller image.'}"); 
+				}
+				
+				if($mimeType != "image/png")
+				{
+					return new Response("{status: 'The file you are trying to upload is not a valid image'}"); 
+				}
+
+				$imageName = uniqid() . ".jpg";
+				$imagePath = $this->container->getParameter('web_directory') . $this->container->getParameter('directory') . "content/users/profileimages/";
+				$imageTempPath = $this->container->getParameter('web_directory') . $this->container->getParameter('directory') . "content/tmp/";
+				$imageWebPath = $this->container->getParameter('hostname') . $this->container->getParameter('directory') . "content/users/profileimages/";
+				
+				$imageFile->move($imageTempPath, $imageFile->getClientOriginalName());
+				$square = new \Imagick($imageTempPath . $imageFile->getClientOriginalName());
+				
+				if($square->getImageWidth() > $square->getImageHeight())
+				{
+					$x=(int) floor(($square->getImageWidth()-$square->getImageHeight())/2);
+					$h=$square->getImageHeight();
+					$square->chopImage($x, 0, 0, 0);
+					$square->chopImage($x, 0, $h, 0);
+				}	 
+				else{
+					$y=(int) floor(($square->getImageHeight()-$square->getImageWidth())/2);
+					$w=$square->getImageWidth();
+					$square->chopImage(0, $y, 0, 0);
+					$square->chopImage(0, $y, 0, $w);
+				}
+				$square->thumbnailImage(144,0);
+				$square->writeImage($imagePath . $imageName);
+				
+				$user = $em->getRepository('ZeegaDataBundle:User')->find($id);
+				$user->setThumbUrl($imageWebPath . $imageName);
+				$em->persist($user);
+		        $em->flush();
+		        
+		        $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));
+		        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+			}
+		}
+		
+	}
  }
