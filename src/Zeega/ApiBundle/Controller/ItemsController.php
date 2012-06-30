@@ -224,7 +224,9 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
-        $item->setDateUpdated(new \DateTime("now"));
+        $dateUpdated = new \DateTime("now");
+        $dateUpdated->add(new \DateInterval('PT2M'));
+        $item->setDateUpdated($dateUpdated);
 
         $em->flush();
 
@@ -271,7 +273,10 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
-                $item->setDateUpdated(new \DateTime("now"));
+                $dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+                
+                $item->setDateUpdated($dateUpdated);
                 $em->persist($item);
                 $em->flush();
             }
@@ -305,16 +310,23 @@ class ItemsController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 	
 			$newItems = $this->getRequest()->request->get('new_items');
-			$itemsToRemoveString = $this->getRequest()->request->get('items_to_remove');   
-			$itemsToRemove = array();
-			$itemsToRemove = explode(",",$itemsToRemoveString);
-			
+			$itemsToRemoveString = $this->getRequest()->request->get('items_to_remove'); 
+			if(isset($itemsToRemoveString))
+			{  
+				$itemsToRemove = array();
+				$itemsToRemove = explode(",",$itemsToRemoveString);
+			}
+					
 			$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 	
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
-				$item->setDateUpdated(new \DateTime("now"));
+				$dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+				
+				$item->setDateUpdated($dateUpdated);
+		
 				$first = True;
 				foreach($newItems as $newItem)
 				{
@@ -346,7 +358,6 @@ class ItemsController extends Controller
 			{
 			    foreach($itemsToRemove as $itemToRemoveId)
 				{
-					
 				    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
 				    if (isset($childItem)) 
     				{
@@ -355,7 +366,11 @@ class ItemsController extends Controller
     				}
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
-			    $item->setDateUpdated(new \DateTime("now"));
+		
+			    $dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+			    $item->setDateUpdated($dateUpdated);
+        
                 $em->flush();
 			}
 	
@@ -470,7 +485,9 @@ class ItemsController extends Controller
             $item->setUser($user);
         }
         
-        $item->setDateUpdated(new \DateTime("now"));
+        $dateUpdated = new \DateTime("now");
+        $dateUpdated->add(new \DateInterval('PT2M'));
+        $item->setDateUpdated($dateUpdated);
         
         if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
@@ -521,6 +538,9 @@ class ItemsController extends Controller
         $item->setEnabled(true);
         $item->setIndexed(false);
         
+        $dateUpdated = new \DateTime("now");
+		$dateUpdated->add(new \DateInterval('PT2M'));    
+        
         if (isset($newItems))
         {
             $item->setChildItemsCount(count($newItems));
@@ -532,8 +552,8 @@ class ItemsController extends Controller
                 if (!$childItem) 
                 {
                     throw $this->createNotFoundException('Unable to find Item entity.');
-                }    
-                $childItem->setDateUpdated(new \DateTime("now"));
+                }
+                $childItem->setDateUpdated($dateUpdated);
                 $childItem->setIndexed(false);
                 
                 $item->addItem($childItem);
