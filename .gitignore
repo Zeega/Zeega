@@ -9,6 +9,8 @@
 /web/content/images/thumbs/*
 /web/content/images/frames/*
 /web/content/items/*
+/web/content/users/profilesimages/*
+/web/content/tmp/*
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
 Libraries/
