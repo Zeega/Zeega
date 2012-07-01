@@ -112,8 +112,8 @@ class UsersController extends Controller
 				}
 
 				$imageName = uniqid() . ".jpg";
-				$imagePath = $this->container->getParameter('web_directory') . $this->container->getParameter('directory') . "content/users/profileimages/";
-				$imageTempPath = $this->container->getParameter('web_directory') . $this->container->getParameter('directory') . "content/tmp/";
+				$imagePath = $this->container->getParameter('path') . "/users/profileimages/";
+				$imageTempPath = $this->container->getParameter('path')  . "/tmp/";
 				$imageWebPath = $this->container->getParameter('hostname') . $this->container->getParameter('directory') . "content/users/profileimages/";
 				
 				$imageFile->move($imageTempPath, $imageFile->getClientOriginalName());
