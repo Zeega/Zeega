@@ -328,6 +328,8 @@ class ItemsController extends Controller
 				$item->setDateUpdated($dateUpdated);
 		
 				$first = True;
+				$thumbnailUrl = $item->getThumbnailUrl();
+				
 				foreach($newItems as $newItem)
 				{
 					$childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
@@ -342,7 +344,9 @@ class ItemsController extends Controller
 					$item->setIndexed(false);
 					$item->addItem($childItem);
 					
-					if($first == True)
+					
+					
+					if($first == True && !isset($thumbnailUrl))
 					{
 						$item->setThumbnailUrl($childItem->getThumbnailUrl());
 						$first = False;
@@ -465,11 +469,17 @@ class ItemsController extends Controller
         {
             $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
 		}
-	
-		if(!isset($site) && isset($user))
-		{
-		    $sites = $user->getSites();
-    		$site = $sites[0];
+		
+		if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    	{
+			if(!isset($site) && isset($user))
+			{
+		    	$sites = $user->getSites();
+		    	if(isset($sites))
+		    	{
+	    			$site = $sites[0];
+	    		}
+			}
 		}
 		
         $item = new Item();

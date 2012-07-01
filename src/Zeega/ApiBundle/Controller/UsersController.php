@@ -106,7 +106,7 @@ class UsersController extends Controller
 					return new Response("{status: 'There was an error uploading your image. Please try to upload a smaller image.'}"); 
 				}
 				
-				if($mimeType != "image/png")
+				if($mimeType != "image/png" && $mimeType != 'image/jpeg')
 				{
 					return new Response("{status: 'The file you are trying to upload is not a valid image'}"); 
 				}
@@ -140,8 +140,8 @@ class UsersController extends Controller
 				$em->persist($user);
 		        $em->flush();
 		        
-		        $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));
-		        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+		        $imageWebPath = $imageWebPath . $imageName;
+		        return new Response("{status: 'Success', thumbnail_url: '$imageWebPath'}"); 
 			}
 		}
 		
