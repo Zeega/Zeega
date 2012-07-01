@@ -225,7 +225,7 @@ class SearchController extends Controller
   
         foreach ($tags as $tag_name => $tag_count)
         {
-        	if($tag_count > 0 && $tag_name != "N;") // temp fix
+        	if($tag_count > 0 && $tag_name != "N;" && $tag_name != 's:0:"";') // temp fix
         	{
         		$tagsArray[$tag_name] = $tag_count;
         	}
