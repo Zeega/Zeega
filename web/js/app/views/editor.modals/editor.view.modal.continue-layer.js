@@ -3,10 +3,7 @@
 	
 	Modal.Views.ContinueLayer = Backbone.View.extend({
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render: function()
 		{
