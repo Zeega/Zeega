@@ -576,9 +576,15 @@ this.zeega = {
 			var nextFrame = this.getRightFrame();
 			if( nextFrame != false && nextFrame != this.currentFrame )
 			{
-				if(nextFrame.get('layers')) nextFrame.get('layers').push( parseInt(layerID) );
-				else nextFrame.set('layers',[ parseInt(layerID) ],{silent:true});
-				nextFrame.save();
+				var layers = [];
+				if(nextFrame.get('layers'))
+				{
+					var l = _.compact(nextFrame.get('layers'));
+					l.unshift( parseInt(layerID) );
+					layers = l;
+				}
+				else layers = [ parseInt(layerID) ];
+				nextFrame.save({ layers : layers });
 			}
 		}
 	},
@@ -589,8 +595,8 @@ this.zeega = {
 		{
 			var layerModel = this.project.layers.get(layerID)
 			//get persistent layers
-			var attr = this.currentSequence.get('attr');
-			
+			var attr = _.isObject(this.currentSequence.get('attr')) ? this.currentSequence.get('attr') : {persistLayers:[]} ;
+
 			// check to see if the layer is already persistent
 			if( _.include(attr.persistLayers, layerID ) )
 			{
@@ -604,13 +610,11 @@ this.zeega = {
 			{
 				console.log('add persistence')
 				//add persistence
-				attr.persistLayers.push( layerID );
+				attr.persistLayers.unshift( layerID );
 				this.addPersistenceToFrames( layerID );
 			}
-
-			this.currentSequence.set({ 'attr': attr });
-			this.currentSequence.save();
-
+			this.currentSequence.save({ 'attr': attr });
+			console.log('save current sequence', attr, this.currentSequence)
 		} // busy
 		
 	},
