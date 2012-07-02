@@ -2,13 +2,8 @@
 
 	
 	Modal.Views.LinkAdvanced = Backbone.View.extend({
-
-		className : 'modal',
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render: function()
 		{
