@@ -414,7 +414,7 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['media_type']!='Collection' )
+         	if($item['media_type']!='Collection' && $item['media_type']!='Pdf' )
          	{
 				$i++;
 				
