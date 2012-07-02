@@ -59,7 +59,7 @@ this.zeega = {
 		console.log($.parseJSON(projectJSON))
 		
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
-		this.itemCollection = new Items.ViewCollection();
+		this.itemCollection = new Items.Collection();
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
