@@ -314,70 +314,56 @@ var Player2 = Backbone.View.extend({
 	{
 		var _this = this;
 		var Citation = Backbone.View.extend({
+			
 			tagName : 'li',
-			className : 'clearfix',
+			
 			render : function()
 			{
-				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) )
+				this.model.get('attr').description = $(this.model.get('attr').description).text(); //escape html so it doesn't kill the css!!!
+				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) ).attr('id','player-citation-'+ this.model.id);
+				console.log(this.$el.html())
 			},
 			
 			events : {
-				'click' : 'expandCitation',
-				//'mouseout' : 'closeCitation'
+				'mouseover .citation-icon' : 'onMouseover',
+				'mouseout .citation-icon' : 'onMouseout'
 			},
 			
-			expandCitation : function(e)
+			onMouseover : function()
 			{
-				e.stopPropagation();
-				$('#citation').animate({ height : '100px' })
-				
-				this.closeOtherCitations();
-				
-				if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show();
-				else 
-				{
-					this.$el.find('.citation-content').hide();
-					this.closeCitationBar();
-				}
+				this.$el.find('.citation-icon i').addClass('loaded');
+				this.$el.find('.player-citation-bubble').show();
 			},
 			
-			closeOtherCitations : function()
+			onMouseout : function()
 			{
-				var _this = this;
-				_.each( $('.citation-content'), function(c){
-					if( $(c).is(':visible') && c != _this.$el.find('.citation-content')[0] ) $(c).hide();
-				})
-			},
-			
-			closeCitation : function()
-			{
-				if(this.$el.find('.citation-content').is(':visible')  ) this.$el.find('.citation-content').hide();
-			},
-			
-			expandCitationBar : function()
-			{
-				$('#citation').animate({ height : '100px' })
-			},
-
-			closeCitationBar : function()
-			{
-				$('#citation').animate({ height : '24px' })
+				this.$el.find('.citation-icon i').removeClass('loaded');
+				this.$el.find('.player-citation-bubble').hide();
 			},
 			
 			getTemplate : function()
 			{
+				
 				var html =
 
-					'<div class="citation-tab">'+
-						'<i class="zicon-<%= type.toLowerCase() %>"></i>'+
-					'</div>'+
-					'<div class="citation-content" style="display:none">'+
-						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
-						'<div class="citation-body">'+
-							'<div class="citation-title"><%= attr.title %></div>'+
-							'<div class="citation-metadata"><a href="<%= attr.attribution_uri %>" target="blank">Link to original</a></div>'+
-						'</div>'+
-					'</div>';
+					"<div class='player-citation-bubble clearfix hide'>"+
+						"<div class='player-citation-content'>"+
+							"<h3><%= attr.title %></h3>"+
+							"<div class='content'><span class='citation-subhead'>DESCRIPTION:</span> <%= attr.description %></div>"+
+							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>"+
+							"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
+
+						if( !_.isNull( this.model.get('attr').media_geo_longitude ) )
+						{
+							html += "<div class='location-created'><span class='citation-subhead'>LOCATION:</span> <%= attr.media_geo_longitude %>, <%= attr.media_geo_latitude %></div>";
+						}
+						html +=
+							"<div class='trackback'><span class='citation-subhead'>click below to view original</span></div>"+
+						"</div>"+
+						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
+					"</div>"+
+					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30'></i></a>";
+					
 				return html;
 			}
 		});
@@ -385,12 +371,15 @@ var Player2 = Backbone.View.extend({
 		this.$el.find('#citation ul').empty();
 		_.each( this.currentFrame.get('layers'), function(layerID){
 			var layer = _this.layers.get( layerID );
+			console.log('look at each citation!!!', layer)
 			
 			if( !layer.citation && layer.displayCitation ) layer.citation = new Citation({model:layer});
 			
 			if( layer.citation )
 			{
 				layer.citation.render();
+				layer.citation.delegateEvents();
+				console.log('draw layer citation', layer, layer.citation.el )
 				_this.$el.find('#citation ul').append( layer.citation.el );
 			}
 		})
@@ -877,7 +866,7 @@ var Player2 = Backbone.View.extend({
 				"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
 			"</div>"+
 			"<div id='preview-media'></div>"+
-				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
+				"<div id='citation' class='player-overlay'><ul class='citation-list unstyled'></ul></div>";
 		
 		return html;
 	}
