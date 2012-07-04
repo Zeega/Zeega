@@ -15,14 +15,18 @@ class ParserDropboxSet extends ParserAbstract
 			Commons','Attribution-NonCommercial-NoDerivs Creative Commons','Attribution Creative Commons',
 			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
 	
-	private $itemParser;
+	//private $itemParser;
 
 	private $dropboxUserName = "";
-	//private $ItemCount =  0;
+
+	private $defaultIconAudio = "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1";
+	private $defaultIconVideo = "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1";
+	private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
+	private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
 	
 	function __construct() 
 	{
-		$this->itemParser = new ParserDropboxItem();
+		//$this->itemParser = new ParserDropboxItem();
 	}
 
 	public function prepThumbFolder($dropbox)
@@ -32,16 +36,30 @@ class ParserDropboxSet extends ParserAbstract
     	$found = 0;
 		foreach ($folderItems as $folderItem){
 			$filename = $folderItem->path;
-			if($filename == "/__thumbnails__"){
+			if($filename == "/__zeegaThumbnails__"){
 				$found = 1;
 			}
 		}
 		if($found == 1){
-			$delete_response = $dropbox->delete("/__thumbnails__");
+			$delete_response = $dropbox->delete("/__zeegaThumbnails__");
 		}
-		$dropbox->create("/__thumbnails__");
+		$dropbox->create("/__zeegaThumbnails__");
 	}
 
+	public function fetchRedirectURL($url1)
+	{  // fetch redirected URL
+		$ch = curl_init($url1);
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$header = "location: ";
+		$pos = strpos($response, $header);
+		$pos += strlen($header);
+		$url2 = substr($response, $pos, strpos($response, "\r\n", $pos)-$pos) . "?dl=1";
+		return $url2;
+	}
 
 	public function loadFolder($path, $dropbox, $collection, $dropboxUser, $itemCount)
     {
@@ -49,7 +67,10 @@ class ParserDropboxSet extends ParserAbstract
     	$folderItems = $folderMetaData["body"]->contents;
 		foreach ($folderItems as $folderItem){
 			if($folderItem->is_dir){ // if this path is a directory
-				if($folderItem->path == "__thumbnails__"){ // and it's not the thumbnails directory
+				if($folderItem->path == "/__zeegaThumbnails__"){ // and it's not the thumbnails directory
+					continue;
+				}
+				if($folderItem->path == "/__ZeegaDefaultThumbnails__"){ // and it's not the default thumbnails directory
 					continue;
 				}
 				$this->loadFolder($folderItem->path, $dropbox, $collection, $dropboxUser, $itemCount); // recurse function
@@ -58,7 +79,18 @@ class ParserDropboxSet extends ParserAbstract
 				$filename = $folderItem->path;
 				$mediaData = $dropbox->shares($filename);
 				$mediaUrl = $mediaData["body"]->url;
-				$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
+    			//error_log("ParserDropboxSet ---> 0 " . $mediaUrl, 0);
+				$item = $this->loadItem($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
+				
+				//error_log(json_encode($item), 0);
+				// set collection thumbnail
+				if ($item["items"]->getMediaType() == "Image") {
+					//error_log("ParserDropboxSet 1", 0);
+					$collection->setThumbnailUrl( $item["items"]->getThumbnailUrl() );
+					//error_log("ParserDropboxSet 2", 0);
+				}
+				//error_log("ParserDropboxSet 3", 0);
+				//$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
 				$collection->addItem($item["items"]);
 				$itemCount++;
 				$collection->setChildItemsCount($itemCount);
@@ -66,6 +98,117 @@ class ParserDropboxSet extends ParserAbstract
 		}
 		return $itemCount;
     }
+
+
+	public function loadItem($mediaUrl, $parameters = null)
+    {
+		$fileData = $parameters["fileData"];
+		$username = $parameters["username"];
+		$filename = $parameters["filename"];
+		$dropbox = $parameters["dropbox"];
+
+		error_log(" mime_type: " . $fileData->mime_type, 0);
+		switch ($fileData->mime_type) {
+		    case "image/gif":
+		        $media_type = "Image";
+		        $layer_type = "Image";
+		        break;
+		    case "image/jpeg":
+		        $media_type = "Image";
+		        $layer_type = "Image";
+		        break;
+		    case "image/png":
+		        $media_type = "Image";
+		        $layer_type = "Image";
+		        break;
+		    case "text/plain":
+		        $media_type = "Text";
+		        $layer_type = "Text";
+		        break;
+		    case "video/mp4":
+		        $media_type = "Video";
+		        $layer_type = "Video";
+		        break;
+		    case "audio/mp4":
+		        $media_type = "Audio";
+		        $layer_type = "Audio";
+		        break;
+		    case "audio/mp3":
+		        $media_type = "Audio";
+		        $layer_type = "Audio";
+		        break;
+		    case "audio/mpeg":
+		        $media_type = "Audio";
+		        $layer_type = "Audio";
+		        break;
+		    default:
+				$item = new Item();
+		    	return $this->returnResponse($item, true, false);
+		        //$media_type = false;
+		        //$layer_type = false;
+		        break;
+		}
+
+		/*
+		Appending "?dl=1" to the permanent URL makes it directly downloadable (as opposed to embedded in Dropbox's viewer)
+		But the /shares API call gives us a short URL that redirects at Dropbox.
+		So to get a stable, direct URL, we have to pre-fetch the long post-redirect URL and append "?dl=1"
+		*/
+		$redirect_url = $this->fetchRedirectURL($mediaUrl);
+
+		if($media_type == false){ // if this is not a supported media type
+			return $this->returnResponse(null, false, false);
+		}
+		$item = new Item();
+		$tags = array();
+
+		$item->setTitle($mediaUrl);
+		$item->setTags($tags); 
+		$item->setAttributionUri($redirect_url);
+
+		error_log(" mediaType: " . $media_type, 0);
+
+		switch ($media_type){
+			case "Image":
+				//$item->setThumbnailUrl( "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1" );
+				$thumbnailData = $dropbox->thumbnails($filename);
+				$thumbnailData_path = $thumbnailData['meta']->path;
+				$pinfo = pathinfo($thumbnailData_path);
+				$newPath = "/__zeegaThumbnails__/" . $pinfo["basename"];
+				$dropbox->copy($thumbnailData_path, $newPath);
+				$thumbData = $dropbox->shares($newPath);
+				$thumbUrl = $thumbData["body"]->url;
+				$redirect_url = $this->fetchRedirectURL($thumbUrl);
+				$item->setThumbnailUrl( $redirect_url );
+				break;
+			case "Text":
+				$item->setThumbnailUrl( "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1" );
+				//$item->setThumbnailUrl( $this->$defaultIconText );
+				break;
+			case "Video":
+				$item->setThumbnailUrl( "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1" );
+				//$item->setThumbnailUrl( $this->$defaultIconVideo );
+				break;
+			case "Audio":
+				$item->setThumbnailUrl( "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1" );
+				//$item->setThumbnailUrl( $this->$defaultIconAudio );
+				break;
+		}
+
+		$item->setLicense('All Rights Reserved');
+		$item->setUri($redirect_url);
+		$item->setChildItemsCount(0);
+
+		$item->setMediaCreatorUsername($username);
+		$item->setMediaCreatorRealname($username);
+
+		$item->setArchive('Dropbox'); 
+		$item->setMediaType($media_type);
+		$item->setLayerType($layer_type);
+
+		return $this->returnResponse($item, true, false);
+    }
+
 
 	public function load($url, $parameters = null)
     {

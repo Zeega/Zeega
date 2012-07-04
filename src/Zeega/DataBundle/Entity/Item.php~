@@ -751,4 +751,11 @@ class Item
     {
         // Add your code here
     }
+
+    /**
+     * @ORM\preUpdate
+     */
+    public function onPreUpdate()
+    {
+    }
 }

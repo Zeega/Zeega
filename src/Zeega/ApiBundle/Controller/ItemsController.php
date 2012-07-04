@@ -206,7 +206,7 @@ class ItemsController extends Controller
             $item->setAttributes($this->getRequest()->request->get('attributes'));
             $item->setEnabled(true);
             $item->setPublished(true);
-            $item->setIndexed(false);
+            //$item->setIndexed(false);
             $item->setMediaCreatorUsername($this->getRequest()->request->get('media_creator_username'));
             $item->setMediaCreatorRealname($this->getRequest()->request->get('media_creator_realname'));
             $childItems = $this->getRequest()->request->get('child_items');
