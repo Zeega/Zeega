@@ -1,0 +1,12 @@
+{
+	"id" : {{ user.getId }},
+	"bio" : {{ user.getBio | json_encode | raw}},
+	"display_name" : {{ user.getDisplayName | json_encode | raw}},
+	"thumbnail_url" : {{ user.getThumbUrl | json_encode | raw}},
+	"location" : {{ user.getLocation | json_encode | raw}},
+	"created_at" : {{ user.getCreatedAt.date | json_encode | raw}},
+	"locationLatitude" : {{ user.getLocationLatitude | json_encode | raw}},
+	"locationLongitude" : {{ user.getLocationLongitude | json_encode | raw}},
+	"editable" : {{ editable | json_encode | raw}},
+	"profile_image" : {{ user.profile_image | default(null) | json_encode | raw}}
+}

@@ -1,7 +1,11 @@
 {
 "items":
 [
-	{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}
+	{% if userIsAdmin is defined and user is defined %}
+		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'userIsAdmin': userIsAdmin, 'user': user} %}
+	{% else %}
+		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}
+	{% endif %}
 ],
 	"request":
 		{% if request is defined %}

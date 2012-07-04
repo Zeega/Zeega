@@ -193,7 +193,7 @@ this.zeegaBrowser = {
 	},
 	deleteCollection : function(collectionID){
 		
-		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"
+		var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
 						+ collectionID;
 		var theCollection = zeegaBrowser.app.myCollections.collection.get(collectionID);
 
@@ -375,7 +375,7 @@ this.zeegaBrowser = {
 				var theImageEl = $(this).closest(".browser-results-image");
 				var itemID = theImageEl.find('a:first').attr("id");
 				var theItem = zeegaBrowser.app.searchItemsView.collection.get(itemID);
-				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/collections/"+collectionID+"/items/"+itemID;
+				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"+collectionID+"/items/"+itemID;
 				
 				//This item is currently the thumbnail cover for the collection
 				//gotta flag it to be changed once item is removed

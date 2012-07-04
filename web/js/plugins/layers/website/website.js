@@ -58,8 +58,8 @@
 		render : function()
 		{
 			var iframe = $('<iframe>')
-				.attr('src', this.attr.url)
-				.css({'width':'100%','height':'100%','border':'none'});
+				.attr('src', this.attr.uri)
+				.css({'background-color':'white','width':'100%','height':'100%','border':'none'});
 
 			$(this.el).html( iframe );
 						

@@ -180,4 +180,104 @@ class User extends BaseUser
     {
         return $this->sites;
     }
+    /**
+     * @var string $location
+     */
+    private $location;
+
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+    /**
+     * @var float $location_latitude
+     */
+    private $location_latitude;
+
+    /**
+     * @var float $location_longitude
+     */
+    private $location_longitude;
+
+
+    /**
+     * Set location_latitude
+     *
+     * @param float $locationLatitude
+     */
+    public function setLocationLatitude($locationLatitude)
+    {
+        $this->location_latitude = $locationLatitude;
+    }
+
+    /**
+     * Get location_latitude
+     *
+     * @return float 
+     */
+    public function getLocationLatitude()
+    {
+        return $this->location_latitude;
+    }
+
+    /**
+     * Set location_longitude
+     *
+     * @param float $locationLongitude
+     */
+    public function setLocationLongitude($locationLongitude)
+    {
+        $this->location_longitude = $locationLongitude;
+    }
+
+    /**
+     * Get location_longitude
+     *
+     * @return float 
+     */
+    public function getLocationLongitude()
+    {
+        return $this->location_longitude;
+    }
+    /**
+     * @var string $profile_image
+     */
+    private $profile_image;
+
+
+    /**
+     * Set profile_image
+     *
+     * @param string $profileImage
+     */
+    public function setProfileImage($profileImage)
+    {
+        $this->profile_image = $profileImage;
+    }
+
+    /**
+     * Get profile_image
+     *
+     * @return string 
+     */
+    public function getProfileImage()
+    {
+        return $this->profile_image;
+    }
 }

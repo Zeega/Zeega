@@ -36,7 +36,17 @@ class ParserYoutubeVideo extends ParserAbstract
 		
 		$item->setUri($itemId);
 		$item->setTitle($entry["title"]["\$t"]);
+		$description = $entry["media\$group"]["media\$description"]["\$t"];
+		
 		$item->setDescription($entry["media\$group"]["media\$description"]["\$t"]);
+		if(isset($description))
+		{
+		    if(strlen($description) > 500 )
+		    {
+		        $description = substr($description, 0, 500);
+		    }
+		    $item->setDescription($description);
+		}
 		$item->setAttributionUri($entry["media\$group"]["media\$player"]["url"]);
 		$item->setMediaDateCreated($entry["published"]["\$t"]);
 		$item->setDateCreated(new \DateTime("now"));
@@ -51,10 +61,11 @@ class ParserYoutubeVideo extends ParserAbstract
 		    $itemTags = array();
 		    foreach($categories as $cat)
 			{
-			    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#playlist")
+			    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#playlist" && $cat["term"] != "http://gdata.youtube.com/schemas/2007#video")
 			    {
                     array_push($itemTags, $cat["term"]);
 			    }
+			    
 			}
 			$item->setTags($itemTags);
 		}

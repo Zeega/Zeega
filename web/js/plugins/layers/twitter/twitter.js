@@ -1,50 +1,29 @@
 (function(Layer){
 
-	Layer.Text = Layer.Model.extend({
+	Layer.Tweet = Layer.Model.extend({
 
-		layerType : 'Text',
-		displayCitation : false,
+		layerType : 'Tweet',
+		displayCitation : true,
 		linkable : true,
 		
 		defaultAttributes: {
-			'title' :'Text Layer',
+			'title' :'Twitter Layer',
 			'content' : 'Text',
 			'left' :0,
-			'top' :0,
+			'top' :25, 
 			'color' : '#ffffff',
 			'opacity' : 0.9,
 			'fontSize' : 200,
 			'overflow' : 'visible',
-			'width' : 25,
+			'width' : 100,
 			//'height' : 10,
 			
 			linkable : true
-		},
-		
-		updateContentInPlace : function()
-		{
-			this.visual.updateContentInPlace();
-		},
-
-		preload : function( target )
-		{
-			
-		},
-	
-		play : function( z )
-		{
-			
-		},
-
-		stash : function()
-		{
-			this.display.css({'top':"-1000%",'left':"-1000%"});
 		}
-	
 		
 	});
 	
-	Layer.Views.Controls.Text = Layer.Views.Controls.extend({
+	Layer.Views.Controls.Tweet = Layer.Views.Controls.extend({
 		
 		render : function()
 		{
@@ -55,18 +34,6 @@
 				label : 'Text Color',
 				opacity : true
 			});
-			
-			/*
-			var sizeSlider = new Layer.Views.Lib.Slider({
-				property : 'fontSize',
-				model: this.model,
-				label : 'Font Size',
-				suffix : '%',
-				min : 100,
-				max : 1000,
-				
-			});
-			*/
 			
 			var textStyles = new Layer.Views.Lib.TextStyles({
 				model : this.model
@@ -86,7 +53,7 @@
 		
 	});
 
-	Layer.Views.Visual.Text = Layer.Views.Visual.extend({
+	Layer.Views.Visual.Tweet = Layer.Views.Visual.extend({
 		
 		draggable : true,
 		
@@ -132,31 +99,6 @@
 		{
 			var _this = this;
 			
-			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
-			
-			this.$el.find('#zedit-target').keyup(function(e){
-				if(e.which == 27){ $(this).blur() }
-				
-				_this.lazySave();
-			})
-			.bind('paste', function(e){
-				console.log('content pasted in!')
-				_this.lazySave();
-			});
-			
-			this.$el.click(function(){
-				_this.$el.find('#zedit-target').focus();
-				_this.$el.draggable('option','disabled', true);
-				_this.$el.addClass('text-editing').removeClass('text-non-editing');
-				
-				
-				
-			}).focusout(function(){
-				_this.$el.draggable('option','disabled', false);
-				_this.$el.removeClass('text-editing').addClass('text-non-editing');
-				_this.lazySave();
-			})
-			
 			$(this.el).resizable({
 				stop : function(e,ui)
 				{
@@ -166,37 +108,13 @@
 					})
 				}
 			});
-			
-			
-		},
-		
-		lazySave : _.debounce( function(){
-			
-			var str = this.$el.find('#zedit-target').html();
-			
-			var clean = this.cleanString( str );
-			
-			this.model.update({
-				'content' : str,
-				'title' : clean
-			});
-		}, 1000),
-		
-		cleanString : function(str)
-		{
-			return str.replace(/(<([^>]+)>)/ig, "");
-		},
-		
-		updateContentInPlace : function()
-		{
-			$(this.el).find('#zedit-target').html(this.model.get('attr').content );
 		},
 		
 		getTemplate : function()
 		{
 			var html = 
 			
-					'<div id="zedit-target" class="inner" contenteditable="<%= contentEditable %>" ><%= content %></div>';
+					'<div id="zedit-target" class="inner"  ><%= description %></div>';
 			
 			return html;
 		}

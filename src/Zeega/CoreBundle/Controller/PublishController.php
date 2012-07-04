@@ -38,9 +38,11 @@ class PublishController extends Controller
      
      
       public function collectionAction($id){
+        $projectData = $this->forward('ZeegaApiBundle:Items:getItemProject', array("id" => $id))->getContent();
+        
      	return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
      		'projectId'=>0,
-     		'collectionId'=>$id,
+     		'project_data'=>$projectData,
      	
      	));
      

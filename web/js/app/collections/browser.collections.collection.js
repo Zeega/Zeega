@@ -20,11 +20,6 @@
 		
 		removeCollection : function(m)
 		{
-			/*
-			console.log(this._views);
-			console.log(m);
-			console.log(this._views[m.id]);
-			*/
 			var oldView = this._views[m.id];
 			var carouselIdx = $(oldView.el).attr('jcarouselindex');
 
@@ -111,12 +106,12 @@
 		
 		url : function()
 		{
-			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?user=-1&site="+sessionStorage.getItem('siteid')+"&r_items=0&r_collections=1&r_itemswithcollections=0"
+			return sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/filter?content=Collection&user=-1&site="+sessionStorage.getItem('siteid');
 		},
 	
 		parse: function(data)
 		{
-			return data.collections;
+			return data.items;
 		},
 	
 		comparator : function(myCollection)

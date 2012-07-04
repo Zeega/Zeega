@@ -40,7 +40,7 @@ class EditorController extends Controller
 		}
 		
 		// by default go home - this should never happen
-		//return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
+		return $this->forward('ZeegaCoreBundle:Editor:site',array('short'=>'home'),array());
     }
 
 	public function siteAction($short)
@@ -97,15 +97,14 @@ class EditorController extends Controller
 			$collection_id = -1;
 		}
 		
-		$params["r_itemswithcollections"] = 0;
-		$params["r_items"] = 1;
+		$params["exclude_content"] = "Collection";
 		$params["user"] = -1;
+		$params["site"] = $site->getId();
 		
-		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+		$items = $this->forward('ZeegaApiBundle:Items:getItemsFilter', $params)->getContent();
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
 		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId(), $site->getId());
-		//return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id));
 		
 		return $this->render('ZeegaCoreBundle:Editor:editor.html.twig', array(
 				'projecttitle'   => $project->getTitle(),

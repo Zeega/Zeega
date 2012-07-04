@@ -140,6 +140,16 @@ class Item
     private $published;
 
     /**
+     * @var boolean $indexed
+     */
+    private $indexed;
+
+    /**
+     * @var string $geo_latlng
+     */
+    private $geo_latlng;
+
+    /**
      * @var Zeega\DataBundle\Entity\Site
      */
     private $site;
@@ -673,6 +683,46 @@ class Item
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set indexed
+     *
+     * @param boolean $indexed
+     */
+    public function setIndexed($indexed)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return boolean 
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set geo_latlng
+     *
+     * @param string $geoLatlng
+     */
+    public function setGeoLatlng($geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return string 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
     }
 
     /**

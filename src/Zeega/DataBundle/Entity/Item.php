@@ -140,6 +140,16 @@ class Item
     private $published;
 
     /**
+     * @var boolean $indexed
+     */
+    private $indexed;
+
+    /**
+     * @var string $geo_latlng
+     */
+    private $geo_latlng;
+
+    /**
      * @var Zeega\DataBundle\Entity\Site
      */
     private $site;
@@ -676,6 +686,46 @@ class Item
     }
 
     /**
+     * Set indexed
+     *
+     * @param boolean $indexed
+     */
+    public function setIndexed($indexed)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return boolean 
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set geo_latlng
+     *
+     * @param string $geoLatlng
+     */
+    public function setGeoLatlng($geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return string 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
+    }
+
+    /**
      * Set site
      *
      * @param Zeega\DataBundle\Entity\Site $site
@@ -750,5 +800,55 @@ class Item
     public function onPrePersist()
     {
         // Add your code here
+    }
+    /**
+     * @var datetime $date_updated
+     */
+    private $date_updated;
+
+
+    /**
+     * Set date_updated
+     *
+     * @param datetime $dateUpdated
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->date_updated = $dateUpdated;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return datetime 
+     */
+    public function getDateUpdated()
+    {
+        return $this->date_updated;
+    }
+    /**
+     * @var string $id_at_source
+     */
+    private $id_at_source;
+
+
+    /**
+     * Set id_at_source
+     *
+     * @param string $idAtSource
+     */
+    public function setIdAtSource($idAtSource)
+    {
+        $this->id_at_source = $idAtSource;
+    }
+
+    /**
+     * Get id_at_source
+     *
+     * @return string 
+     */
+    public function getIdAtSource()
+    {
+        return $this->id_at_source;
     }
 }

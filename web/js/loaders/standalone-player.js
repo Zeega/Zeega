@@ -48,8 +48,11 @@ var loadFiles = [
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/googlebook/googlebook',
 	'order!plugins/layers/link/link',
-        'order!plugins/layers/rectangle/rectangle',
-	//'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/rectangle/rectangle',
+	'order!plugins/layers/website/website',
+	'order!plugins/layers/twitter/twitter',
+	'order!plugins/layers/testimonial/testimonial',
 	
 	//'order!plugins/players/zeega.player.video',
 	//'order!plugins/players/zeega.player.youtube',	
@@ -59,13 +62,5 @@ var loadFiles = [
 
 require(loadFiles, function($) {
 	zeega.app.init()
-
 	var frameID = window.location.hash.substr(15);
-	console.log(frameID)
-	//this url needs to change
-	
-	/*
-	if(sessionStorage.getItem('projectId')>0) $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){ Player.init(data,null,frameID) });
-	else $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/collections/'+sessionStorage.getItem('collectionId')+'/project',function(data){ Player.init(data,null,frameID) });
-	*/
 });

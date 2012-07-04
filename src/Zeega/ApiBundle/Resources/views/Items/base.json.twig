@@ -1,13 +1,21 @@
 {# Template to render items recursively. #}
 
-{{ _self.show(item) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% if userIsAdmin is defined %}
+	{{ _self.show(item,userIsAdmin,user) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% else %}
+	{{ _self.show(item) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% endif %}
 
-{% macro show(item) %}	{# Item rendering macro/function #}
+{% macro show(item,userIsAdmin,user) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
 		"id" : {{ item.id | default("") | json_encode | raw }},
-		"title" : {{ item.title | json_encode | raw}},
-		"description" : {{ item.description | default("") | json_encode | raw}},
+		"site_id" : {{ item.siteid | default("") | json_encode | raw }},
+    	"user_id" : {{ item.user.id | default("") | json_encode | raw }},
+        "username" : {{ item.user.username | default("") | json_encode | raw }},
+        "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
+        "title" : {{ item.title | json_encode | raw}},
+        "description" : {{ item.description | default("") | json_encode | raw}},
 		"text" : {{ item.text | default("") | json_encode | raw}},
 		"uri" : "{{ item.uri }}",
 		"attribution_uri" : "{{ item.attributionuri }}",
@@ -16,10 +24,10 @@
 		"layer_type" : "{{ item.layertype }}",
 		"archive" : "{{ item.archive }}",
 		"thumbnail_url" : {{ item.thumbnailurl | json_encode | raw}},
-		"media_geo_latitude" : "{{ item.mediageolatitude }}",
-		"media_geo_longitude" : "{{ item.mediageolongitude }}",
-		"media_date_created" :"{{ item.mediadatecreated is empty ? "" : item.mediadatecreated | date("m/d/Y") }}",
-		"media_date_created_end" :"{{ item.mediadatecreatedend is empty ? "" : item.mediadatecreatedend | date("m/d/Y") }}",
+		"media_geo_latitude" : {{ item.mediageolatitude | json_encode | raw}},
+		"media_geo_longitude" : {{ item.mediageolongitude | json_encode | raw}},
+		"media_date_created" : {{ item.mediadatecreated is empty ? "null": item.mediadatecreated | date("m/d/Y") | json_encode | raw }},
+		"media_date_created_end" : {{ item.mediadatecreatedend is empty ? "null" : item.mediadatecreatedend | date("m/d/Y") | json_encode | raw}},
 		"media_creator_username" : "{{ item.mediacreatorusername }}",
 		"media_creator_realname" : "{{ item.mediacreatorrealname }}",
 		"child_items_count" : {{ item.childitemscount | default(0) }},
@@ -35,7 +43,13 @@
 	        {% endfor %}
 		],
 		"tags":
-			{{ item.tags | default([ ]) | json_encode | raw}}
+			{{ item.tags | default([ ]) | json_encode | raw}},
+		{%- if (user.id is defined and user.id == item.userid) or (userIsAdmin is defined and userIsAdmin) -%}
+			"editable" : true
+		{%- else -%}
+			"editable" : false
+		{%- endif -%},
+		"published" : {{ item.published | default(false) | json_encode | raw}}
 	}
 	{% else %}
 		{}

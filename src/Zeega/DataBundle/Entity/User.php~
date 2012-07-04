@@ -180,4 +180,29 @@ class User extends BaseUser
     {
         return $this->sites;
     }
+    /**
+     * @var string $location
+     */
+    private $location;
+
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
 }

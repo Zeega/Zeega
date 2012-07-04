@@ -8,11 +8,6 @@ global_search:
     pattern: /api/search.{_format}
     defaults: { _controller: ZeegaApiBundle:Search:search, _format: json}
     requirements: { _format: (xml|json), _method: GET }
-    
-collections:
-    type:     rest
-    prefix:   api
-    resource: Zeega\ApiBundle\Controller\CollectionsController
 
 items:
     type:     rest
@@ -23,3 +18,8 @@ api_frames:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\FramesController
+
+api_users:
+    type: rest
+    prefix: api
+    resource: Zeega\ApiBundle\Controller\UsersController

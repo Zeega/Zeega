@@ -1,7 +1,7 @@
 {
 	"project":
 	 {
-		"id" : {{ project.getId() }},
+		"id" : {{ project.getId() | default("") }},
 		"title" : {{ project.getTitle() | default("") | json_encode | raw}},
 		"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
         "tags" : {{ project.getTags() | default("") | json_encode | raw}},
@@ -15,8 +15,8 @@
 		"sequences" : [
 		    {% for sequence in sequences %}	
 			{
-				"id" : {{ sequence.id }},
-				"title" : "{{ sequence.title }}",
+				"id" : {{ sequence.id | default("") }},
+				"title" : "{{ sequence.title | default("") }}",
 				"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 				"frames" : 
 				[
