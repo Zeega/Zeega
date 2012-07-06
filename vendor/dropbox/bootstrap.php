@@ -24,10 +24,8 @@ ini_set('html_errors', 'On');
 spl_autoload_register(function($class){
 	$class = str_replace('\\', '/', $class);
 	if(substr_count($class, "Dropbox") > 0){
-		error_log("bootstrap class +++" . $class, 0);
 		require_once($class . '.php');
 	}else{
-		error_log("bootstrap class ---" . $class, 0);
 	}
 	
 	//require_once('../' . $class . '.php');

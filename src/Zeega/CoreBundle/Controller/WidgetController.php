@@ -71,9 +71,9 @@ class WidgetController extends Controller
 				    $parsedItem = $items[0];
 					// check if the item exists on the database	
 	        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
-                
+                	
 	        		if(isset($item))
-	        		{
+	        		{// item was imported before
 						if($isUrlCollection){
 							return $this->render('ZeegaCoreBundle:Widget:batchUpdate.widget.html.twig', array(
 								'displayname' => $user->getDisplayname(),
@@ -134,7 +134,6 @@ class WidgetController extends Controller
 				));
 			}
 		}
-		
 		return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,

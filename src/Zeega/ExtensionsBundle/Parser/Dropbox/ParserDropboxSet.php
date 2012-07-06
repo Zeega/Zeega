@@ -79,18 +79,19 @@ class ParserDropboxSet extends ParserAbstract
 				$filename = $folderItem->path;
 				$mediaData = $dropbox->shares($filename);
 				$mediaUrl = $mediaData["body"]->url;
-    			//error_log("ParserDropboxSet ---> 0 " . $mediaUrl, 0);
+
+
+				//$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
+
+
+
+
 				$item = $this->loadItem($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
-				
-				//error_log(json_encode($item), 0);
-				// set collection thumbnail
+				// this is a hack, more efficient to apply only once
+				// does not cover the case where folder contains no images
 				if ($item["items"]->getMediaType() == "Image") {
-					//error_log("ParserDropboxSet 1", 0);
 					$collection->setThumbnailUrl( $item["items"]->getThumbnailUrl() );
-					//error_log("ParserDropboxSet 2", 0);
 				}
-				//error_log("ParserDropboxSet 3", 0);
-				//$item = $this->itemParser->load($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
 				$collection->addItem($item["items"]);
 				$itemCount++;
 				$collection->setChildItemsCount($itemCount);
@@ -107,7 +108,6 @@ class ParserDropboxSet extends ParserAbstract
 		$filename = $parameters["filename"];
 		$dropbox = $parameters["dropbox"];
 
-		error_log(" mime_type: " . $fileData->mime_type, 0);
 		switch ($fileData->mime_type) {
 		    case "image/gif":
 		        $media_type = "Image";
@@ -162,11 +162,9 @@ class ParserDropboxSet extends ParserAbstract
 		$item = new Item();
 		$tags = array();
 
-		$item->setTitle($mediaUrl);
+		$item->setTitle($fileData->path);
 		$item->setTags($tags); 
 		$item->setAttributionUri($redirect_url);
-
-		error_log(" mediaType: " . $media_type, 0);
 
 		switch ($media_type){
 			case "Image":
@@ -186,15 +184,14 @@ class ParserDropboxSet extends ParserAbstract
 				//$item->setThumbnailUrl( $this->$defaultIconText );
 				break;
 			case "Video":
-				$item->setThumbnailUrl( "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1" );
-				//$item->setThumbnailUrl( $this->$defaultIconVideo );
+				$item->setThumbnailUrl( "https://dl.dropbox.com/s/q5et7g8raziwkpk/video.jpg?dl=1" );
+				//$item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/video.jpg');
 				break;
 			case "Audio":
-				$item->setThumbnailUrl( "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1" );
-				//$item->setThumbnailUrl( $this->$defaultIconAudio );
+				$item->setThumbnailUrl( "https://dl.dropbox.com/sh/3ykw078h8sr8veh/CD0Fy8pB8T/audio.jpg?dl=1" );
+				//$item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/audio.jpg');
 				break;
 		}
-
 		$item->setLicense('All Rights Reserved');
 		$item->setUri($redirect_url);
 		$item->setChildItemsCount(0);
@@ -215,6 +212,7 @@ class ParserDropboxSet extends ParserAbstract
 		require_once('../vendor/dropbox/bootstrap.php');
 		$accountInfo = $dropbox->accountInfo();
 		$dropboxUser = $accountInfo["body"]->display_name;
+		// if collection exists
 		$collection = new Item();
 		$collection->setTitle("Dropbox");
 		$collection->setDescription("test collection for Dropbox");

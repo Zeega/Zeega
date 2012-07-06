@@ -84,15 +84,10 @@ class ParserDropboxItem extends ParserAbstract
 		$item->setAttributionUri($redirect_url);
 
 		$thumbnailData = $dropbox->thumbnails($filename);
-    	//error_log("ParserDropboxItem---> 1", 0);
-		//error_log("THUMBNAIL DATA =>",0); 
 		$thumbnailData_path = $thumbnailData['meta']->path;
-    	//error_log("ParserDropboxItem---> 2", 0);
 		$pinfo = pathinfo($thumbnailData_path);
-    	//error_log("ParserDropboxItem---> 3", 0);
 		$newPath = "/__zeegaThumbnails__/" . $pinfo["basename"];
 		$dropbox->copy($thumbnailData_path, $newPath);
-    	//error_log("ParserDropboxItem---> 5", 0);
 		
 		$thumbData = $dropbox->shares($newPath);
 		$thumbUrl = $thumbData["body"]->url;

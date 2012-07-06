@@ -61,7 +61,6 @@ class ParserService
 
     				// use reflection to get the parser class
                     $parserMethod = new ReflectionMethod($parserClass, 'load'); // reflection is slow, but it's probably ok here
-                    
                     // call the load method
     				return $parserMethod->invokeArgs(new $parserClass, array($url,$parameters));
     		    }

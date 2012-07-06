@@ -150,7 +150,7 @@ class ItemsController extends Controller
                 {
                     // check if Item already exists
                     $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $child['attribution_uri'], "enabled" => 1));
-                    if(!is_null($existingItem)){ // if this is new, add to collection
+                    if(count($existingItem) == 0){ // if this is new, add to collection
                         $childItem = new Item();
                         $childItem->setSite($site);     
                         $childItem->setTitle($child['title']);
@@ -169,11 +169,13 @@ class ItemsController extends Controller
                         $childItem->setMediaCreatorUsername($child['media_creator_username']);
                         $childItem->setMediaCreatorRealname($child['media_creator_realname']);
                         $childItem->setTags($child['tags']);
+
+                        //$existingCollection->addItem($childItem);
                         $em->persist($childItem);
                         $em->flush();
 
                         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $childItem));
-                        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+                        //return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
                     }
                 }
             }
