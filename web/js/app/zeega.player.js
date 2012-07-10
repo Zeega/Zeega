@@ -374,7 +374,6 @@ var Player2 = Backbone.View.extend({
 		this.$el.find('#citation ul').empty();
 		_.each( this.currentFrame.get('layers'), function(layerID){
 			var layer = _this.layers.get( layerID );
-			console.log('look at each citation!!!', layer)
 			
 			if( !layer.citation && layer.displayCitation ) layer.citation = new Citation({model:layer});
 			
@@ -382,7 +381,6 @@ var Player2 = Backbone.View.extend({
 			{
 				layer.citation.render();
 				layer.citation.delegateEvents();
-				console.log('draw layer citation', layer, layer.citation.el )
 				_this.$el.find('#citation ul').append( layer.citation.el );
 			}
 		})
