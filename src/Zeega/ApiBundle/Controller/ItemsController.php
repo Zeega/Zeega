@@ -23,13 +23,20 @@ class ItemsController extends Controller
 		$content = $request->query->get('content');     //  string
 		$site = $request->query->get('site');     //  string
 		$excludeContent = $request->query->get('exclude_content');     //  string
+		$loadChildItems = $request->query->get('load_children');     //  string
 		
 		$query = array();
-		if(!isset($page))                   $query['page'] = 0;
-		if(!isset($limit))                  $query['limit'] = 100;
+
+		if(isset($page))                    $query['page'] = $page;
+		if(isset($limit))                   $query['limit'] = $limit;
+		if(isset($loadChildItems))          $query['load_children'] = $loadChildItems;
 		if(isset($content))                 $query['content'] = $content;
 		if(isset($excludeContent))          $query['exclude_content'] = $excludeContent;
 		if(isset($site))                    $query['site'] = $site;
+
+		if(!isset($page))                   $query['page'] = 0;
+		if(!isset($limit))                  $query['limit'] = 100;
+		if(!isset($loadChildItems))         $query['load_children'] = false;
 		
         if(isset($user))
         {
@@ -44,15 +51,9 @@ class ItemsController extends Controller
             }
         }
          //  execute the query
- 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);								
-        /*
-        $logger = $this->get('logger');
-        $logger->err(implode(",",$queryResults->getParameters()));
-        $logger->err($queryResults->getSQL());
-        */
-        //return null;
-		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));
-        
+ 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);
+ 		
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));        
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     // get_collection GET    /api/item/{id}.{_format}
@@ -65,7 +66,7 @@ class ItemsController extends Controller
 		$userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
     	
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'userIsAdmin' => $userIsAdmin));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }

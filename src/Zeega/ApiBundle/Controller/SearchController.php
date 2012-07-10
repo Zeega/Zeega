@@ -248,11 +248,6 @@ class SearchController extends Controller
     private function searchWithDoctrine($returnIdsOnly = false, $arrayResults = false)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user == "anon.")
-        {
-            $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaDataBundle:User')->find(1);
-        }
         
 	    $request = $this->getRequest();
 
