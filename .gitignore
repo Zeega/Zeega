@@ -19,3 +19,4 @@ jda_data.*
 !.gitignore
 app/phpunit.xml
 /web/.htaccess
+/web/js_min/*
