@@ -8,8 +8,9 @@ var Path = require('path'),
 				name:config.convert[ci].input,
 				out:config.convert[ci].output,	
 			};
-			convertProfile.baseUrl = '.';
+			convertProfile.baseUrl  = '.';
 			convertProfile.optimize = uglify;
+
 			var startTime = Date.now();
 			console.log("Starting", (config.uglify)?"compressed (slow)":"loose (fast)" ,"aggregation ", parseInt(ci)+1, "of", config.convert.length)
 			console.log("  ", config.convert[ci].input, "->", config.convert[ci].output)

@@ -15,11 +15,8 @@ require.config({
 	}
 })
 
-var loadFiles = [
-	'jquery',
-	
-	//'order!lib/jquery/ui/js/jquery-ui-1.8.17',
-	
+require(
+	[
 	'order!lib/underscore',
 	'order!lib/backbone',
 	
@@ -58,9 +55,10 @@ var loadFiles = [
 	//'order!plugins/players/zeega.player.youtube',	
 	       
 	'order!plugins/players/plyr'
-	];
+	],
+	function(jquery) {
+		zeega.app.init()
 
-require(loadFiles, function($) {
-	zeega.app.init()
-	var frameID = window.location.hash.substr(15);
+		var frameID = window.location.hash.substr(15);
+		console.log(frameID)
 });

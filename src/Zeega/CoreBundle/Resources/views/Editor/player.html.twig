@@ -149,7 +149,7 @@ var BrowserDetect = {
 	</script>
 	{% if app.environment == 'dev' %}
 	<!-- to load JS libraries separately -->
-		<script src="{{ asset('js/lib/require-jquery.js')}}" data-main="{{ asset('js/loaders/standalone-player.js')}}"></script>
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/standalone-player.js')}}"></script>
 	{% else %}
 		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/standalone-player.js') }}"></script>
 		<!-- to load single aggregated JS library --> 

@@ -289,10 +289,10 @@
 			
 			{% if app.environment == 'dev' %}
 			<!-- to load JS libraries separately -->
-				<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
+				<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
 			{% else %}
 				<!-- to load single aggregated JS library --> 
-				<script src="{{ asset('js/lib/require.js') }}" data-main="{{ asset('js_min/editor.js') }}"></script>
+				<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/editor.js') }}"></script>
 			{% endif %}
 
 			<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
