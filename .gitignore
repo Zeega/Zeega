@@ -18,3 +18,4 @@ Libraries/
 jda_data.*
 !.gitignore
 app/phpunit.xml
+/web/.htaccess
