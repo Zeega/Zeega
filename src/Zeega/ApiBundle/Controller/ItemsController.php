@@ -345,19 +345,17 @@ class ItemsController extends Controller
 					$item->setIndexed(false);
 					$item->addItem($childItem);
 					
-					
-					
 					if($first == True && !isset($thumbnailUrl))
 					{
 						$item->setThumbnailUrl($childItem->getThumbnailUrl());
 						$first = False;
 					}
 				}
+				$item->setChildItemsCount($item->getChildItems()->count());
+
+    			$em->persist($item);
+    			$em->flush();
 			}
-			
-	
-			$em->persist($item);
-			$em->flush();
         	
 			if(isset($itemsToRemove))
 			{
