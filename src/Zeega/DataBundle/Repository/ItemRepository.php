@@ -65,11 +65,16 @@ class ItemRepository extends EntityRepository
       	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
 		}
 		
-        if(isset($query['contentType']))
+        if(isset($query["contentType"]))
       	{
-      	    $content_type = strtoupper($query['contentType']);
-
-      	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
+			if(strtoupper($query["contentType"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["contentType"]);
+            }
 		}
 		
 		if(isset($query['tags']))
@@ -155,20 +160,6 @@ class ItemRepository extends EntityRepository
 		return intval($qb->getQuery()->getSingleScalarResult());
 	}
 	
-	public function getQueryTags($query)
-	{
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('tg.name,tg.id,COUNT(tg.id) as occurrences')
-           ->from('ZeegaDataBundle:Tag', 'tg')
-           ->innerjoin('tg.item', 'tgit')
-		   ->innerjoin('tgit.item', 'i')
-		   ->setMaxResults(5)
-		   ->groupBy('tg')
-		   ->orderBy('occurrences','DESC');
-		$qb = $this->buildSearchQuery($qb, $query);
-		return $qb->getQuery()->getArrayResult();
-	}
-
     //  api/search
     public function searchItems($query)
     {   
@@ -189,7 +180,29 @@ class ItemRepository extends EntityRepository
         else
             return $qb->getQuery()->execute();
     }
-
+	
+	//  api/search
+    public function findOneByIdWithUser($id)
+    {   
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+    
+        // search query
+        $qb->select('i,u.display_name')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->innerjoin('i.user', 'u')
+            ->orderBy('i.id','DESC')
+       		->where('i.id = :id')
+       		->setParameter('id', $id);
+        
+    	$res = $qb->getQuery()->getSingleResult();
+    	if(isset($res) && count($res) > 0)
+    	{
+    		return $res[0];
+    	}
+    	return $res;
+    }
+	
     //  api/search
     public function searchItemsByTimeDistribution($query)
     {
@@ -299,51 +312,6 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
-    //  api/collections/{col_id}
-    public function searchCollectionById($id)
-    {
-     	return $this->getEntityManager()
-				    ->createQueryBuilder()
-				    ->add('select', 'i')
-			        ->add('from', ' ZeegaDataBundle:Item i')
-			        ->andwhere('i.id = :id')
-			        ->andwhere("i.media_type = 'Collection'")
-			        ->andwhere("i.enabled = true")
-			        ->setParameter('id',$id)
-			        ->getQuery()
-			        ->getArrayResult();
-    }
-    
-    //  api/collections/{col_id}
-    public function searchItemsByTags($query)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-		
-		// search query
-		$qb->select('i')
-		   ->from('ZeegaDataBundle:Item', 'i')
-	       ->orderBy('i.id','DESC')
-	       ->setMaxResults($query['limit'])
-	       ->setFirstResult($query['limit'] * $query['page']);
-
-		$qb = $this->buildSearchQuery($qb, $query);
-		
-		return $qb->getQuery()->getResult();
-    }
-    
-    public function findItemById($id)
-    {
-        return $this->getEntityManager()
-    			->createQueryBuilder()
-    			->add('select', 'i')
-    		   ->add('from', ' ZeegaDataBundle:Item i')
-    		   ->andwhere('i.id = :id')
-    		   ->andwhere('i.enabled = true')
-    		   ->setParameter('id',$id)
-    		   ->getQuery()
-    		   ->getArrayResult();
-    }
-     
     public function findUserItems($id)
     {
      	return $this->getEntityManager()
@@ -388,13 +356,13 @@ class ItemRepository extends EntityRepository
 	{
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qbCount = $this->getEntityManager()->createQueryBuilder();
-
-	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
-    
+        
+	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->where('i.enabled = true')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
+        
         if(isset($query["user"]))
         {
-            $qb->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
-            $qbCount->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qb->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qbCount->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
         }
         
         if(isset($query["site"]))

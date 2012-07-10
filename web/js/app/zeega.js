@@ -593,7 +593,7 @@ this.zeega = {
 			var layerModel = this.project.layers.get(layerID)
 			//get persistent layers
 			var attr = _.isObject(this.currentSequence.get('attr')) ? this.currentSequence.get('attr') : {persistLayers:[]} ;
-			
+
 			// check to see if the layer is already persistent
 			if( _.include(attr.persistLayers, layerID ) )
 			{

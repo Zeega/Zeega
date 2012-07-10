@@ -15,7 +15,7 @@ use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
-
+use Zeega\CoreBundle\Helpers\Utils;
 use DateTime;
 
 /**
@@ -33,52 +33,45 @@ class SearchController extends Controller
 		* Work in progres - both responses need to be optimized 
 		* and should be similar but aren't yet.
 		*/
-
+		
+		$user = $this->get('security.context')->getToken()->getUser();
+		$isAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
+		$isAdmin = (isset($isAdmin) && (strtolower($isAdmin) === "true" || $isAdmin === true)) ? true : false;
+    	
     	$request = $this->getRequest();
         $solrEnabled = $this->container->getParameter('solr_enabled');
 		$collectionId = $request->query->get('collection');
         $returnCollections   = $request->query->get('r_collections');
-        
+        $returnItems = $request->query->get('r_items');   				//  bool
+		
 		if($solrEnabled)
 		{
-			if(isset($collectionId))
+			if(isset($collectionId) || ((isset($returnCollections) && $returnCollections == 1) && (!isset($returnItems) || $returnItems == 0)))
 			{
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
 			    // send db query to doctrine
-				$newItemsFromDb = $this->searchWithDoctrine();
-				$newItemsFromDbId = array();
+
+				$dbItems = $this->searchWithDoctrine();
+				
+				$items = array();
+				$counts = array();
 				
 				// get the results from the DB
-				if(array_key_exists("items",$newItemsFromDb)) 
+				if(array_key_exists("items",$dbItems)) 
 				{
-					$dbItems = $newItemsFromDb["items"];
+					$items["items"] = $dbItems["items"];
+					$counts["count"] = $dbItems["items_count"];
+					$counts["returned_count"] = $dbItems["returned_items_count"];
 				}
-				else if(array_key_exists("collections",$newItemsFromDb))
+				if(array_key_exists("collections",$dbItems)) 
 				{
-					$dbItems = $newItemsFromDb["collections"];
-				}
-				else if(array_key_exists("items_and_collections",$newItemsFromDb))
-				{
-					$dbItems = $newItemsFromDb["items_and_collections"];
+					$items["collections"] = $dbItems["collections"];
+					$counts["count"] = $dbItems["collections_count"];
+					$counts["returned_count"] = $dbItems["returned_collections_count"];
 				}
 				
-				// create a list of items that have to be excluded from the SOLR query because they come from the database
-				if(count($dbItems) > 0)
-				{
-					foreach($dbItems as $newItem)
-					{
-						array_push($newItemsFromDbId,$newItem->getId());
-					}
-					$newItemsFromDbId = implode(" OR ", $newItemsFromDbId);
-				}
-			    //return new Response()
-			    // do a SOLR query
-				$solrItems = $this->searchWithSolr($newItemsFromDbId);
-			}
-			else if(isset($returnCollections))
-			{
-			    // if we only want to collections ()
-				return $this->searchWithDoctrineAndGetResponse();
+				$itemsView = $this->renderView('ZeegaApiBundle:Search:index.json.twig', array('results'=> $items, 'counts' => $counts, 'user'=>$user, 'userIsAdmin'=>$isAdmin));
+		    	return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 			}
 			else
 			{
@@ -86,16 +79,16 @@ class SearchController extends Controller
 				$solrItems = $this->searchWithSolr();
 			}
 			            
-		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"]));
+		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"], 'user'=>$user, 'userIsAdmin'=>$isAdmin));
 		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
 		}
 		else
         {
-			return $this->searchWithDoctrine();
+			return $this->searchWithDoctrineAndGetResponse();
 		}
     }
     
-    private function searchWithSolr()
+    private function searchWithSolr($notInId = null)
     {	
         $request = $this->getRequest();
         
@@ -104,14 +97,16 @@ class SearchController extends Controller
 		$limit = $request->query->get('limit');     //  string
 	    $q = $request->query->get('q');
 	    $userId = $request->query->get('user');                 //  int
-	    $username = $request->query->get('username');                 //  int
 		$siteId = $request->query->get('site');                 //  int
 		$contentType = $request->query->get('content');         //  string
 		$collection_id  = $request->query->get('collection');   //  string
 		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
 		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
 		$geoLocated = $request->query->get('geo_located'); 
-		
+		$returnItems = $request->query->get('r_items');   	//  bool
+		$returnCollections = $request->query->get('r_collections');   	//  bool
+		$returnItemsAndCollections = $request->query->get('r_itemswithcollections');   	//  bool
+	
 	    if(!isset($page))               $page = 0;
 	    if($page > 0)                   $page = $page - 1;
 		if(!isset($limit))              $limit = 100;
@@ -129,15 +124,14 @@ class SearchController extends Controller
 		if(preg_match('/tag\:(.*)/', $q, $matches))
 		{
 		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = "(" . str_replace(",", " OR", $matches[1]) . ")";
+		 	$tags = str_replace(",", " OR", $matches[1]);
 		}
 		
 	    // ----------- build the search query
         $client = $this->get("solarium.client");
-
+		
+		// set limits and page
         $query = $client->createSelect();
-        //return new Response(var_dump($query));
-        // pagination and limit
         $query->setRows($limit);
         $query->setStart($limit * $page);
         
@@ -145,16 +139,25 @@ class SearchController extends Controller
         // check if there is a query string
         if(isset($q) and $q != '')                          
         {
+        	$q = ResponseHelper::escapeSolrQuery($q);
             $queryString = "text:$q";
         }
         
+		// add Published filter
+		if($queryString != '')
+        {
+            $queryString = $queryString . " AND ";
+        }
+        $queryString = $queryString . "published:true AND enabled:true";
+
         if(isset($tags) and $tags != '')                          
         {
+        	$tags = ResponseHelper::escapeSolrQuery($tags);
             if($queryString != '')
             {
                 $queryString = $queryString . " AND ";
             }
-            $queryString = $queryString . "tags_i:$tags";
+            $queryString = $queryString . "tags_i:($tags)";
         }
         
         if(isset($queryString) && $queryString != '')
@@ -181,7 +184,6 @@ class SearchController extends Controller
                 $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
             }
         }
-        
            
 	    //  filter results for the logged user
 		if(isset($userId) && $userId == -1) 
@@ -190,9 +192,13 @@ class SearchController extends Controller
 			$userId = $user->getId();
 		}
 	
-        if(isset($userId)) $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
-        if(isset($username)) $query->createFilterQuery('username')->setQuery("username_i: $username");
+        if(isset($userId))
+        {
+        	$userId = ResponseHelper::escapeSolrQuery($userId);
+        	$query->createFilterQuery('user_id')->setQuery("user_id: $userId");
+        }
         
+		
         $groupComponent = $query->getGrouping();
         $groupComponent->addQuery('-media_type:Collection');
         $groupComponent->addQuery('media_type:Collection');
@@ -210,24 +216,23 @@ class SearchController extends Controller
         $groups = $resultset->getGrouping();
         $facets = $resultset->getFacetSet();
         
-        $results["items"] = $groups->getGroup('-media_type:Collection');
-        //$results["collections"] = $groups->getGroup('media_type:Collection');
-        //$results["items_and_collections"] = $groups->getGroup('media_type:*');
+        if(isset($returnItems)) $results["items"] = $groups->getGroup('-media_type:Collection');
+        if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
+        if(isset($returnItemsAndCollections)) $results["items_and_collections"] = $groups->getGroup('media_type:*');
 
         $tags = $facets->getFacet('tags');
         $tagsArray = array(); 
   
         foreach ($tags as $tag_name => $tag_count)
         {
-        	if($tag_count > 0)
+        	if($tag_count > 0 && $tag_name != "N;" && $tag_name != 's:0:"";') // temp fix
         	{
         		$tagsArray[$tag_name] = $tag_count;
         	}
         }
         
-        // render the results
-		return array("items"=>$results,"tags"=>$tagsArray);    
-	}
+        return array("items"=>$results,"tags"=>$tagsArray);
+    }
     
     private function searchWithDoctrineAndGetResponse()
     {
@@ -243,11 +248,6 @@ class SearchController extends Controller
     private function searchWithDoctrine($returnIdsOnly = false, $arrayResults = false)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        if($user == "anon.")
-        {
-            $em = $this->getDoctrine()->getEntityManager();
-            $user = $em->getRepository('ZeegaDataBundle:User')->find(1);
-        }
         
 	    $request = $this->getRequest();
 
@@ -429,12 +429,6 @@ class SearchController extends Controller
 													   "max_date" => $queryResults["max_date"], "time_intervals" => sizeof($queryResults["results"]));
 	    }
 	
-		if($query['returnTags'])
-		{
-		    $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getQueryTags($query);
-		    $results['tags'] = $queryResults;
-	    }
-
         // return the results
         return $results;
     }

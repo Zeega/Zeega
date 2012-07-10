@@ -18,3 +18,8 @@ api_frames:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\FramesController
+
+api_users:
+    type: rest
+    prefix: api
+    resource: Zeega\ApiBundle\Controller\UsersController

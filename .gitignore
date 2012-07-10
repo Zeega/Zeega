@@ -9,6 +9,8 @@
 /web/content/images/thumbs/*
 /web/content/images/frames/*
 /web/content/items/*
+/web/content/users/profileimages/*
+/web/content/tmp/*
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
 Libraries/
@@ -16,3 +18,4 @@ Libraries/
 jda_data.*
 !.gitignore
 app/phpunit.xml
+/web/.htaccess

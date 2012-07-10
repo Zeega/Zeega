@@ -23,13 +23,20 @@ class ItemsController extends Controller
 		$content = $request->query->get('content');     //  string
 		$site = $request->query->get('site');     //  string
 		$excludeContent = $request->query->get('exclude_content');     //  string
+		$loadChildItems = $request->query->get('load_children');     //  string
 		
 		$query = array();
-		if(!isset($page))                   $query['page'] = 0;
-		if(!isset($limit))                  $query['limit'] = 100;
+
+		if(isset($page))                    $query['page'] = $page;
+		if(isset($limit))                   $query['limit'] = $limit;
+		if(isset($loadChildItems))          $query['load_children'] = $loadChildItems;
 		if(isset($content))                 $query['content'] = $content;
 		if(isset($excludeContent))          $query['exclude_content'] = $excludeContent;
 		if(isset($site))                    $query['site'] = $site;
+
+		if(!isset($page))                   $query['page'] = 0;
+		if(!isset($limit))                  $query['limit'] = 100;
+		if(!isset($loadChildItems))         $query['load_children'] = false;
 		
         if(isset($user))
         {
@@ -44,15 +51,9 @@ class ItemsController extends Controller
             }
         }
          //  execute the query
- 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);								
-        /*
-        $logger = $this->get('logger');
-        $logger->err(implode(",",$queryResults->getParameters()));
-        $logger->err($queryResults->getSQL());
-        */
-        //return null;
-		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));
-        
+ 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);
+ 		
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));        
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     // get_collection GET    /api/item/{id}.{_format}
@@ -60,8 +61,12 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+        $user = $this->get('security.context')->getToken()->getUser();
+		$userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
+		$userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
+    	
+        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
@@ -220,6 +225,9 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
+        $dateUpdated = new \DateTime("now");
+        $dateUpdated->add(new \DateInterval('PT2M'));
+        $item->setDateUpdated($dateUpdated);
 
         $em->flush();
 
@@ -266,6 +274,10 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
+                $dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+                
+                $item->setDateUpdated($dateUpdated);
                 $em->persist($item);
                 $em->flush();
             }
@@ -299,14 +311,26 @@ class ItemsController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 	
 			$newItems = $this->getRequest()->request->get('new_items');
-			$itemsToRemove = $this->getRequest()->request->get('items_to_remove');   
-	
+			$itemsToRemoveString = $this->getRequest()->request->get('items_to_remove'); 
+			if(isset($itemsToRemoveString))
+			{  
+				$itemsToRemove = array();
+				$itemsToRemove = explode(",",$itemsToRemoveString);
+			}
+					
 			$item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
 	
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
+				$dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+				
+				$item->setDateUpdated($dateUpdated);
+		
 				$first = True;
+				$thumbnailUrl = $item->getThumbnailUrl();
+				
 				foreach($newItems as $newItem)
 				{
 					$childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
@@ -321,17 +345,17 @@ class ItemsController extends Controller
 					$item->setIndexed(false);
 					$item->addItem($childItem);
 					
-					if($first == True)
+					if($first == True && !isset($thumbnailUrl))
 					{
 						$item->setThumbnailUrl($childItem->getThumbnailUrl());
 						$first = False;
 					}
 				}
+				$item->setChildItemsCount($item->getChildItems()->count());
+
+    			$em->persist($item);
+    			$em->flush();
 			}
-			
-	
-			$em->persist($item);
-			$em->flush();
         	
 			if(isset($itemsToRemove))
 			{
@@ -340,10 +364,16 @@ class ItemsController extends Controller
 				    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
 				    if (isset($childItem)) 
     				{
+    					
     					$item->getChildItems()->removeElement($childItem);
     				}
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
+		
+			    $dateUpdated = new \DateTime("now");
+		        $dateUpdated->add(new \DateInterval('PT2M'));
+			    $item->setDateUpdated($dateUpdated);
+        
                 $em->flush();
 			}
 	
@@ -383,13 +413,13 @@ class ItemsController extends Controller
          $frames=array();
          $layers=array();
          foreach($queryResults as $item){
-         	if($item['media_type']!='Collection' )
+         	if($item['media_type']!='Collection' && $item['media_type']!='Pdf' )
          	{
 				$i++;
 				
 				$frameOrder[]=$i;
 				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"description"=>$item['description'],"title"=>$item['title'],"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_url"=>$item['attribution_uri']));
+				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_uri"=>$item['attribution_uri']));
          	}
          }
          
@@ -430,6 +460,7 @@ class ItemsController extends Controller
         $attributes = $request_data->get('attributes');
         $newItems = $request_data->get('new_items');
         $tags = $request_data->get('tags');
+		$published = $request_data->get('published');
         
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
@@ -437,14 +468,21 @@ class ItemsController extends Controller
         {
             $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
 		}
-	
-		if(!isset($site) && isset($user))
-		{
-		    $sites = $user->getSites();
-    		$site = $sites[0];
+		
+		if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    	{
+			if(!isset($site) && isset($user))
+			{
+		    	$sites = $user->getSites();
+		    	if(isset($sites))
+		    	{
+	    			$site = $sites[0];
+	    		}
+			}
 		}
 		
         $item = new Item();
+
         if(isset($id))
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
@@ -453,10 +491,12 @@ class ItemsController extends Controller
         {
             $item->setDateCreated(new \DateTime("now"));
             $item->setChildItemsCount(0);
+            $item->setUser($user);
         }
         
-        $item->setUser($user);
-        $item->setDateUpdated(new \DateTime("now"));
+        $dateUpdated = new \DateTime("now");
+        $dateUpdated->add(new \DateInterval('PT2M'));
+        $item->setDateUpdated($dateUpdated);
         
         if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
@@ -502,10 +542,13 @@ class ItemsController extends Controller
         if(isset($license)) $item->setLicense($license);
         if(isset($attributes)) $item->setAttributes($attributes);
         if(isset($tags)) $item->setTags($tags);
+		if(isset($published)) $item->setPublished($published);
         
         $item->setEnabled(true);
-        $item->setPublished(true);
         $item->setIndexed(false);
+        
+        $dateUpdated = new \DateTime("now");
+		$dateUpdated->add(new \DateInterval('PT2M'));    
         
         if (isset($newItems))
         {
@@ -518,8 +561,8 @@ class ItemsController extends Controller
                 if (!$childItem) 
                 {
                     throw $this->createNotFoundException('Unable to find Item entity.');
-                }    
-                $childItem->setDateUpdated(new \DateTime("now"));
+                }
+                $childItem->setDateUpdated($dateUpdated);
                 $childItem->setIndexed(false);
                 
                 $item->addItem($childItem);

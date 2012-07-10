@@ -49,8 +49,11 @@ require(
 	'web/js/plugins/layers/text/text',
 	'web/js/plugins/layers/googlebook/googlebook',
 	'web/js/plugins/layers/link/link',
-        'web/js/plugins/layers/rectangle/rectangle',
-	//'web/js/plugins/layers/documentcloud/documentcloud',
+    'web/js/plugins/layers/rectangle/rectangle',
+	'web/js/plugins/layers/website/website',
+	'web/js/plugins/layers/twitter/twitter',
+	'web/js/plugins/layers/testimonial/testimonial',
+	'web/js/plugins/layers/documentcloud/documentcloud',
 	
 	
 	//'web/js/plugins/players/zeega.player.video',
