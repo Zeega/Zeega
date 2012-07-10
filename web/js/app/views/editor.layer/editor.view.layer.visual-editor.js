@@ -108,7 +108,8 @@
 		{
 			this.$el.empty()
 				.css({
-					'background-color' : 'rgba(255,0,0,0.25)'
+					'background-color' : 'rgba(255,0,0,0.25)',
+					'min-height' : '25px'
 				});
 				return this;
 		},
