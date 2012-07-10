@@ -46,6 +46,7 @@
 				this.model.on('player_play', this.private_onPlay, this);
 				this.model.on('player_exit', this.private_onExit, this);
 				this.model.on('player_unrender', this.private_onUnrender, this);
+				this.model.on('error', this.private_renderError, this);
 			}
 			else
 			{
@@ -101,6 +102,15 @@
 			}
 			
 			this.model.trigger('ready',this.model.id)
+		},
+		
+		private_renderError : function()
+		{
+			this.$el.empty()
+				.css({
+					'background-color' : 'rgba(255,0,0,0.25)'
+				});
+				return this;
 		},
 		
 		onPlay : function(){},
@@ -171,17 +181,29 @@
 		
 		private_onPreload : function()
 		{
+			var _this = this;
+			
 			this.render();
 			this.onPreload();
 			this.model.rendered = true;
-			//this.moveOffStage();
+			
+			if(this.timer) clearTimeout(this.timer);
+			this.timer = setTimeout(function(){
+				if(_this.model.status != 'ready')
+				{
+					console.log('ERROR: LAYER TIMEOUT!! '+_this.model.id)
+					_this.model.status = 'error'
+					_this.model.trigger('error', _this.model.id)
+				}
+				else console.log('no error! loaded normally!!')
+			},7500)
 		},
 		
 		private_onPlay : function( z )
 		{
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
-			this.onPlay();
+			if(this.model.status != 'error' ) this.onPlay();
 			this.model.inFocus = true;
 			
 			//make the linked layers blink on entrance

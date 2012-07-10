@@ -185,16 +185,20 @@ var Player2 = Backbone.View.extend({
 	
 	renderFrame : function( id )
 	{
+		console.log('	RENDER FRAME ()', id)
 		var _this = this;
 		var frame = this.frames.get(id);
 		this.currentFrame = frame;
+		console.log('	1',id)
 
 		_.each( frame.get('layers'), function(layerID,i){
 			console.log(layerID)
 			_this.layers.get( layerID ).trigger('player_play',i+1);
 		})
+		console.log('	2', id)
 		
 		this.setAdvance( frame.get('attr').advance )
+		console.log('	3', id)
 		this.updateCitations();
 		this.updateArrows();
 	},
@@ -239,7 +243,7 @@ var Player2 = Backbone.View.extend({
 		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
-			if( layer.status != 'loading' && layer.status != 'ready' )
+			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
 			{
 				_this.preloadLayer( layer )
 			}
@@ -312,6 +316,7 @@ var Player2 = Backbone.View.extend({
 	
 	updateCitations : function()
 	{
+		console.log('	UPDATE CITATIONS ()',this.currentFrame)
 		var _this = this;
 		var Citation = Backbone.View.extend({
 			
@@ -607,7 +612,8 @@ var Player2 = Backbone.View.extend({
 		this.layers = new this.LayerCollection( layerArray );
 		this.frames = new this.FrameCollection( data.frames );
 		this.frames.addFrameLoadersAndConnections();
-		this.layers.on( 'ready', this.updateFrameStatus, this );
+		this.layers.on( 'ready error', this.updateFrameStatus, this );
+		//this.layers.on( 'error', this.updateFrameStatusError, this );
 
 		this.model.trigger('sequences_loaded');
 	},
@@ -630,15 +636,17 @@ var Player2 = Backbone.View.extend({
 		_.each( _.toArray(this.frames), function(frame){
 			var frameLayers = frame.get('layers');
 			var readyLayers = __this.layers.ready;
+			var errorLayers = __this.layers.error
 
 			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID );
-			if( _.difference(frameLayers,readyLayers).length == 0 )
+			if( _.difference(frameLayers, readyLayers, errorLayers ).length == 0 )
 			{
+				console.log('frame is ready to play!!! '+frame.id)
 				frame.trigger('ready', frame.id);
 			}
 		})
 	},
-	
+
 	/*****************************
 	
 	BACKBONERS
@@ -745,11 +753,13 @@ var Player2 = Backbone.View.extend({
 			
 			loading : [],
 			ready : [],
+			error : [],
 			
 			initialize : function()
 			{
 				this.on('loading', this.updateLoadingStatus, this);
 				this.on('ready', this.updateReadyStatus, this);
+				this.on('error', this.updateErrorStatus, this);
 			},
 			updateLoadingStatus : function( id )
 			{
@@ -772,6 +782,16 @@ var Player2 = Backbone.View.extend({
 					this.ready.push(id);
 					//console.log('update ready status of: '+ id)
 					//console.log(this.ready)
+				}
+			},
+			updateErrorStatus : function( id )
+			{
+				var model = this.get(id);
+				if( model.status != 'loading' && model.status != 'ready')
+				{
+					this.loading = _.without(this.loading,id);
+					model.status = 'error';
+					this.error.push(id);
 				}
 			}
 			
