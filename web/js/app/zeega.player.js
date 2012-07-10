@@ -185,16 +185,20 @@ var Player2 = Backbone.View.extend({
 	
 	renderFrame : function( id )
 	{
+		console.log('	RENDER FRAME ()', id)
 		var _this = this;
 		var frame = this.frames.get(id);
 		this.currentFrame = frame;
+		console.log('	1',id)
 
 		_.each( frame.get('layers'), function(layerID,i){
 			console.log(layerID)
 			_this.layers.get( layerID ).trigger('player_play',i+1);
 		})
+		console.log('	2', id)
 		
 		this.setAdvance( frame.get('attr').advance )
+		console.log('	3', id)
 		this.updateCitations();
 		this.updateArrows();
 	},
@@ -239,7 +243,7 @@ var Player2 = Backbone.View.extend({
 		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
-			if( layer.status != 'loading' && layer.status != 'ready' )
+			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
 			{
 				_this.preloadLayer( layer )
 			}
@@ -314,70 +318,55 @@ var Player2 = Backbone.View.extend({
 	{
 		var _this = this;
 		var Citation = Backbone.View.extend({
+			
 			tagName : 'li',
-			className : 'clearfix',
+			
 			render : function()
 			{
-				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) )
+				this.model.get('attr').description = $(this.model.get('attr').description).text(); //escape html so it doesn't kill the css!!!
+				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) ).attr('id','player-citation-'+ this.model.id);
 			},
 			
 			events : {
-				'click' : 'expandCitation',
-				//'mouseout' : 'closeCitation'
+				'mouseover .citation-icon' : 'onMouseover',
+				'mouseout .citation-icon' : 'onMouseout'
 			},
 			
-			expandCitation : function(e)
+			onMouseover : function()
 			{
-				e.stopPropagation();
-				$('#citation').animate({ height : '100px' })
-				
-				this.closeOtherCitations();
-				
-				if(this.$el.find('.citation-content').is(':hidden') ) this.$el.find('.citation-content').show();
-				else 
-				{
-					this.$el.find('.citation-content').hide();
-					this.closeCitationBar();
-				}
+				this.$el.find('.citation-icon i').addClass('loaded');
+				this.$el.find('.player-citation-bubble').show();
 			},
 			
-			closeOtherCitations : function()
+			onMouseout : function()
 			{
-				var _this = this;
-				_.each( $('.citation-content'), function(c){
-					if( $(c).is(':visible') && c != _this.$el.find('.citation-content')[0] ) $(c).hide();
-				})
-			},
-			
-			closeCitation : function()
-			{
-				if(this.$el.find('.citation-content').is(':visible')  ) this.$el.find('.citation-content').hide();
-			},
-			
-			expandCitationBar : function()
-			{
-				$('#citation').animate({ height : '100px' })
-			},
-
-			closeCitationBar : function()
-			{
-				$('#citation').animate({ height : '24px' })
+				this.$el.find('.citation-icon i').removeClass('loaded');
+				this.$el.find('.player-citation-bubble').hide();
 			},
 			
 			getTemplate : function()
 			{
+				
 				var html =
 
-					'<div class="citation-tab">'+
-						'<i class="zicon-<%= type.toLowerCase() %>"></i>'+
-					'</div>'+
-					'<div class="citation-content" style="display:none">'+
-						'<div class="citation-thumb"><img width="100%" height="100%" src="<%= attr.thumbnail_url %>"/></div>'+
-						'<div class="citation-body">'+
-							'<div class="citation-title"><%= attr.title %></div>'+
-							'<div class="citation-metadata"><a href="<%= attr.attribution_uri %>" target="blank">Link to original</a></div>'+
-						'</div>'+
-					'</div>';
+					"<div class='player-citation-bubble clearfix hide'>"+
+						"<div class='player-citation-content'>"+
+							"<h3><%= attr.title %></h3>"+
+							"<div class='content'><span class='citation-subhead'>DESCRIPTION:</span> <%= attr.description %></div>"+
+							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>"+
+							"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
+
+						if( !_.isNull( this.model.get('attr').media_geo_longitude ) )
+						{
+							html += "<div class='location-created'><span class='citation-subhead'>LOCATION:</span> <%= attr.media_geo_longitude %>, <%= attr.media_geo_latitude %></div>";
+						}
+						html +=
+							"<div class='trackback'><span class='citation-subhead'>click below to view original</span></div>"+
+						"</div>"+
+						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
+					"</div>"+
+					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30'></i></a>";
+					
 				return html;
 			}
 		});
@@ -391,6 +380,7 @@ var Player2 = Backbone.View.extend({
 			if( layer.citation )
 			{
 				layer.citation.render();
+				layer.citation.delegateEvents();
 				_this.$el.find('#citation ul').append( layer.citation.el );
 			}
 		})
@@ -618,7 +608,8 @@ var Player2 = Backbone.View.extend({
 		this.layers = new this.LayerCollection( layerArray );
 		this.frames = new this.FrameCollection( data.frames );
 		this.frames.addFrameLoadersAndConnections();
-		this.layers.on( 'ready', this.updateFrameStatus, this );
+		this.layers.on( 'ready error', this.updateFrameStatus, this );
+		//this.layers.on( 'error', this.updateFrameStatusError, this );
 
 		this.model.trigger('sequences_loaded');
 	},
@@ -641,15 +632,17 @@ var Player2 = Backbone.View.extend({
 		_.each( _.toArray(this.frames), function(frame){
 			var frameLayers = frame.get('layers');
 			var readyLayers = __this.layers.ready;
+			var errorLayers = __this.layers.error
 
 			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID );
-			if( _.difference(frameLayers,readyLayers).length == 0 )
+			if( _.difference(frameLayers, readyLayers, errorLayers ).length == 0 )
 			{
+				console.log('frame is ready to play!!! '+frame.id)
 				frame.trigger('ready', frame.id);
 			}
 		})
 	},
-	
+
 	/*****************************
 	
 	BACKBONERS
@@ -756,11 +749,13 @@ var Player2 = Backbone.View.extend({
 			
 			loading : [],
 			ready : [],
+			error : [],
 			
 			initialize : function()
 			{
 				this.on('loading', this.updateLoadingStatus, this);
 				this.on('ready', this.updateReadyStatus, this);
+				this.on('error', this.updateErrorStatus, this);
 			},
 			updateLoadingStatus : function( id )
 			{
@@ -783,6 +778,16 @@ var Player2 = Backbone.View.extend({
 					this.ready.push(id);
 					//console.log('update ready status of: '+ id)
 					//console.log(this.ready)
+				}
+			},
+			updateErrorStatus : function( id )
+			{
+				var model = this.get(id);
+				if( model.status != 'loading' && model.status != 'ready')
+				{
+					this.loading = _.without(this.loading,id);
+					model.status = 'error';
+					this.error.push(id);
 				}
 			}
 			
@@ -877,7 +882,7 @@ var Player2 = Backbone.View.extend({
 				"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
 			"</div>"+
 			"<div id='preview-media'></div>"+
-				"<div id='citation' class='player-overlay'><ul class='clearfix'></ul></div>";
+				"<div id='citation' class='player-overlay'><ul class='citation-list unstyled'></ul></div>";
 		
 		return html;
 	}

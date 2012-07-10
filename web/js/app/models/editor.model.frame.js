@@ -106,7 +106,6 @@
 		
 		validate : function( attrs )
 		{
-			console.log('VALIDATE LAYER ARRAY',attrs.layers+'');
 			
 			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
 			{
