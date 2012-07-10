@@ -174,7 +174,27 @@
 .zitem-30.loaded.zitem-documentcloud{background-position:-570px -30px;}
 .zitem-30.loaded.zitem-testimonial{background-position:-600px -30px;}
 
-
+.zitem-30.error.zitem-flickr{background-position:0 -60px;}
+.zitem-30.error.zitem-vimeo{background-position:-30px -60px;}
+.zitem-30.error.zitem-youtube{background-position:-60px -60px;}
+.zitem-30.error.zitem-twitter{background-position:-90px -60px;}
+.zitem-30.error.zitem-facebook{background-position:-120px -60px;}
+.zitem-30.error.zitem-google{background-position:-150px -60px;}
+.zitem-30.error.zitem-lastfm{background-position:-180px -60px;}
+.zitem-30.error.zitem-tumblr{background-position:-210px -60px;}
+.zitem-30.error.zitem-rss{background-position:-240px -60px;}
+.zitem-30.error.zitem-picasa{background-position:-270px -60px;}
+.zitem-30.error.zitem-audio{background-position:-300px -60px;}
+.zitem-30.error.zitem-geo{background-position:-330px -60px;}
+.zitem-30.error.zitem-image{background-position:-360px -60px;}
+.zitem-30.error.zitem-video{background-position:-390px -60px;}
+.zitem-30.error.zitem-dropbox{background-position:-420px -60px;}
+.zitem-30.error.zitem-soundcloud{background-position:-450px -60px;}
+.zitem-30.error.zitem-mapbox{background-position:-480px -60px;}
+.zitem-30.error.zitem-absolute{background-position:-510px -60px;}
+.zitem-30.error.zitem-internetarchive{background-position:-540px -60px;}
+.zitem-30.error.zitem-documentcloud{background-position:-570px -60px;}
+.zitem-30.error.zitem-testimonial{background-position:-600px -60px;}
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
 {

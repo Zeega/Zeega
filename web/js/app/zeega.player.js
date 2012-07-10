@@ -323,8 +323,9 @@ var Player2 = Backbone.View.extend({
 			
 			render : function()
 			{
+				var error = this.model.status == 'error' ? 'error' : '';
 				this.model.get('attr').description = $(this.model.get('attr').description).text(); //escape html so it doesn't kill the css!!!
-				$(this.el).html( _.template(this.getTemplate(),this.model.attributes ) ).attr('id','player-citation-'+ this.model.id);
+				$(this.el).html( _.template(this.getTemplate(), _.extend(this.model.attributes,{error:error}) ) ).attr('id','player-citation-'+ this.model.id);
 			},
 			
 			events : {
@@ -334,7 +335,7 @@ var Player2 = Backbone.View.extend({
 			
 			onMouseover : function()
 			{
-				this.$el.find('.citation-icon i').addClass('loaded');
+				if(this.model.status != 'error') this.$el.find('.citation-icon i').addClass('loaded');
 				this.$el.find('.player-citation-bubble').show();
 			},
 			
@@ -365,7 +366,7 @@ var Player2 = Backbone.View.extend({
 						"</div>"+
 						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
 					"</div>"+
-					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30'></i></a>";
+					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
 					
 				return html;
 			}
@@ -634,7 +635,7 @@ var Player2 = Backbone.View.extend({
 			var readyLayers = __this.layers.ready;
 			var errorLayers = __this.layers.error
 
-			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID );
+			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID, __this.layers.get(layerID).status );
 			if( _.difference(frameLayers, readyLayers, errorLayers ).length == 0 )
 			{
 				console.log('frame is ready to play!!! '+frame.id)
@@ -697,11 +698,12 @@ var Player2 = Backbone.View.extend({
 				return this;
 			},
 			
-			incrementLoaded : function( layerID )
+			incrementLoaded : function( layerID, status )
 			{
 				var _this = this;
 				this.loadedCount++;
-				this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
+				if(status != 'error') this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
+				else this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('error');
 				
 				$(this.el).find('.bar')
 					.stop()
