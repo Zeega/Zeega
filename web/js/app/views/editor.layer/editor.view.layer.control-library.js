@@ -174,7 +174,10 @@
 		updateLink : function()
 		{
 			this.$el.find('input').unbind('keypress');
-			var fieldValue = this.$el.find('input').val();
+			var fieldValue = this.$el.find('input').val().replace('http://','');
+			
+			
+			
 			if( fieldValue != this.model.get('attr').link )
 			{
 				this.$el.find('input, .add-on').effect('highlight',{},2000);
@@ -244,39 +247,67 @@
 			slide : null
 		},
 		
+		events : {
+			'focus .slider-num-input' : 'onInputFocus',
+			'keypress .slider-num-input' : 'onKeypress'
+		},
+		
+		onInputFocus : function()
+		{
+		},
+		
 		render : function()
 		{
 			var _this = this;
 			
-			this.$el.append( _.template( this.getTemplate(), _.defaults( this.model.attributes, this.defaults )));
-			
-			console.log('settings', _.defaults( this.model.attributes, this.defaults ) );
-			
+			var uiValue = ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value;
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{uiValue:uiValue}) ));
+
 			//slider stuff here
 			this.$el.find('.control-slider').slider({
+				range : 'min',
 				min : this.settings.min,
 				max : this.settings.max,
-				value : ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value,
+				value : uiValue,
 				step : this.settings.step,
 				slide : function(e, ui)
 				{
-					if( _this.settings.css )
-						_this.model.visual.$el.css( _this.settings.property, ui.value + _this.settings.suffix );
-						
+					_this.updateSliderInput(ui.value);
+					_this.updateVisualElement( ui.value );
+					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
 				},
 				stop : function(e,ui)
 				{
-					if(_this.settings.save)
-					{
-						var attr = {};
-						attr[_this.settings.property] = ui.value;
-						_this.model.update( attr )
-					}
+					_this.saveValue(ui.value)
+				},
+				change : function(e,ui)
+				{
+					_this.updateVisualElement( ui.value );
+					_this.updateSliderInput(ui.value);
+					_this.saveValue(ui.value)
 				}
 			});
 			
+			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+			
 			return this;
+		},
+		
+		updateVisualElement : function(value)
+		{
+			if( this.settings.css )
+				this.model.visual.$el.css( this.settings.property, value + this.settings.suffix );
+		},
+		
+		updateSliderInput : function(value)
+		{
+			this.$el.find('.slider-num-input').html(value).css({'left': this.$el.find('a.ui-slider-handle').css('left') });
+		},
+		
+		insertNumberField : function()
+		{
+			this.$el.find('.control-slider').prepend()
 		},
 		
 		getValue : function()
@@ -284,13 +315,47 @@
 			return this.$el.find('.control-slider').slider('option','value');
 		},
 		
+		onKeypress : function(e)
+		{
+			console.log(e.which)
+			if( e.which == 13 )
+			{
+				this.updateFromInput();
+				return false;
+			}
+			else if( e.which > 44 && e.which < 58){}
+			else return false;
+		},
+		
+		updateFromInput : function()
+		{
+			var newValue = parseFloat( this.$el.find('.slider-num-input').text() );
+			console.log(' new value', newValue )
+			this.$el.find('.slider-num-input').blur();
+			this.$el.find('.control-slider').slider('value', newValue);
+			
+			//this.saveValue(newValue)
+		},
+		
+		saveValue : function(value)
+		{
+			console.log('save',value)
+			if(this.settings.save)
+			{
+				var attr = {};
+				attr[this.settings.property] = value;
+				this.model.update( attr )
+			}
+		},
+		
 		getTemplate : function()
 		{
 			var html = ''+
 			
 					"<div class='control-name'><%= label %></div>"+
-					"<div class='control-slider'></div>"+
-					"<input type='text' class='input-mini' value='<%= value %>'/>";
+					"<div class='slider-num-input' contenteditable='true' style='margin-bottom:5px;position:relative;display:inline-block'><%= uiValue %></div>"+
+					"<div class='control-slider'></div>";
+					//d"<input type='text' class='input-mini' value='<%= uiValue %>'/>";
 			
 			return html;
 		}

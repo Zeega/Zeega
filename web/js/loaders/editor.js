@@ -49,6 +49,7 @@ require(
 	'order!lib/jquery/plugins/jquerycookie',
 	'order!lib/popcorn_flash',
 	'order!lib/bootstrap',
+	//'order!lib/jslider/jquery.slider.min',
 	
 	'order!plugins/players/plyr',
 

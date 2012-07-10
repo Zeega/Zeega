@@ -56,6 +56,19 @@
 			this.frameTarget.append( this.view.remove() )
 		},
 		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			if( _.isArray(this.get('attr')) ) this.set('attr',{});
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
+		
 		//update the frame thumbnail
 		updateThumb : function()
 		{
@@ -93,14 +106,11 @@
 		
 		validate : function( attrs )
 		{
-			console.log('VALIDATE LAYER ARRAY',attrs.layers+'');
-
 			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
 			{
 				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');
 				return 'layer array update error!';
 			}
-
 		}
 	
 

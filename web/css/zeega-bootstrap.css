@@ -96,7 +96,7 @@
 .zitem-dropbox{background-position:-700px 0;}
 .zitem-soundcloud{background-position:-750px 0;}
 .zitem-mapbox{background-position:-800px 0;}
-.zitem-absolute,,.zitem-internet{background-position:-850px 0;}
+.zitem-absolute,.zitem-internet{background-position:-850px 0;}
 .zitem-internetarchive{background-position:-900px 0;}
 .zitem-documentcloud{background-position:-950px 0;}
 .zitem-testimonial{background-position:-1000px 0;}
@@ -122,6 +122,79 @@
 .loaded.zitem-internetarchive{background-position:-900px -50px;}
 .loaded.zitem-documentcloud{background-position:-950px -50px;}
 .loaded.zitem-testimonial{background-position:-1000px -50px;}
+
+[class^="zitem-"].zitem-30
+{
+	width: 30px;
+	height: 30px;
+	background-image: url('../images/zicons-itemType-30.png');
+}
+
+.zitem-30.zitem-flickr{background-position:0 0;}
+.zitem-30.zitem-vimeo{background-position:-30px 0;}
+.zitem-30.zitem-youtube{background-position:-60px 0;}
+.zitem-30.zitem-twitter{background-position:-90px 0;}
+.zitem-30.zitem-facebook{background-position:-120px 0;}
+.zitem-30.zitem-google{background-position:-150px 0;}
+.zitem-30.zitem-lastfm{background-position:-180px 0;}
+.zitem-30.zitem-tumblr{background-position:-210px 0;}
+.zitem-30.zitem-rss{background-position:-240px 0;}
+.zitem-30.zitem-picasa{background-position:-270px 0;}
+.zitem-30.zitem-audio{background-position:-300px 0;}
+.zitem-30.zitem-geo{background-position:-330px 0;}
+.zitem-30.zitem-image{background-position:-360px 0;}
+.zitem-30.zitem-video{background-position:-390px 0;}
+.zitem-30.zitem-dropbox{background-position:-420px 0;}
+.zitem-30.zitem-soundcloud{background-position:-450px 0;}
+.zitem-30.zitem-mapbox{background-position:-480px 0;}
+.zitem-30.zitem-absolute{background-position:-510px 0;}
+.zitem-30.zitem-internetarchive{background-position:-540px 0;}
+.zitem-30.zitem-documentcloud{background-position:-570px 0;}
+.zitem-30.zitem-testimonial{background-position:-600px 0;}
+
+.zitem-30.loaded.zitem-flickr{background-position:0 -30px;}
+.zitem-30.loaded.zitem-vimeo{background-position:-30px -30px;}
+.zitem-30.loaded.zitem-youtube{background-position:-60px -30px;}
+.zitem-30.loaded.zitem-twitter{background-position:-90px -30px;}
+.zitem-30.loaded.zitem-facebook{background-position:-120px -30px;}
+.zitem-30.loaded.zitem-google{background-position:-150px -30px;}
+.zitem-30.loaded.zitem-lastfm{background-position:-180px -30px;}
+.zitem-30.loaded.zitem-tumblr{background-position:-210px -30px;}
+.zitem-30.loaded.zitem-rss{background-position:-240px -30px;}
+.zitem-30.loaded.zitem-picasa{background-position:-270px -30px;}
+.zitem-30.loaded.zitem-audio{background-position:-300px -30px;}
+.zitem-30.loaded.zitem-geo{background-position:-330px -30px;}
+.zitem-30.loaded.zitem-image{background-position:-360px -30px;}
+.zitem-30.loaded.zitem-video{background-position:-390px -30px;}
+.zitem-30.loaded.zitem-dropbox{background-position:-420px -30px;}
+.zitem-30.loaded.zitem-soundcloud{background-position:-450px -30px;}
+.zitem-30.loaded.zitem-mapbox{background-position:-480px -30px;}
+.zitem-30.loaded.zitem-absolute{background-position:-510px -30px;}
+.zitem-30.loaded.zitem-internetarchive{background-position:-540px -30px;}
+.zitem-30.loaded.zitem-documentcloud{background-position:-570px -30px;}
+.zitem-30.loaded.zitem-testimonial{background-position:-600px -30px;}
+
+.zitem-30.error.zitem-flickr{background-position:0 -60px;}
+.zitem-30.error.zitem-vimeo{background-position:-30px -60px;}
+.zitem-30.error.zitem-youtube{background-position:-60px -60px;}
+.zitem-30.error.zitem-twitter{background-position:-90px -60px;}
+.zitem-30.error.zitem-facebook{background-position:-120px -60px;}
+.zitem-30.error.zitem-google{background-position:-150px -60px;}
+.zitem-30.error.zitem-lastfm{background-position:-180px -60px;}
+.zitem-30.error.zitem-tumblr{background-position:-210px -60px;}
+.zitem-30.error.zitem-rss{background-position:-240px -60px;}
+.zitem-30.error.zitem-picasa{background-position:-270px -60px;}
+.zitem-30.error.zitem-audio{background-position:-300px -60px;}
+.zitem-30.error.zitem-geo{background-position:-330px -60px;}
+.zitem-30.error.zitem-image{background-position:-360px -60px;}
+.zitem-30.error.zitem-video{background-position:-390px -60px;}
+.zitem-30.error.zitem-dropbox{background-position:-420px -60px;}
+.zitem-30.error.zitem-soundcloud{background-position:-450px -60px;}
+.zitem-30.error.zitem-mapbox{background-position:-480px -60px;}
+.zitem-30.error.zitem-absolute{background-position:-510px -60px;}
+.zitem-30.error.zitem-internetarchive{background-position:-540px -60px;}
+.zitem-30.error.zitem-documentcloud{background-position:-570px -60px;}
+.zitem-30.error.zitem-testimonial{background-position:-600px -60px;}
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
 {
@@ -335,3 +408,78 @@ i.go-to-sequence{float:right;}
 }
 #faq-list li:nth-child(odd){ background-color: rgba(255,255,255,0.25);}
 #faq-list li:nth-child(even){ background-color: rgba(255,255,255,0.125);}
+
+
+/**************************************
+
+	jquery ui overrides
+
+***************************************/
+
+.ui-slider-range
+{
+	background : red;
+	box-shadow : inset 1px 1px 3px;
+}
+.ui-slider .ui-slider-handle
+{
+	height:10px;
+	width:10px;
+	border-radius:10px;
+	top:-5px;
+}
+
+
+/**************************************
+
+	CITATIONS
+	
+***************************************/
+
+.citation-list
+{
+	position:absolute;
+	z-index:1000;
+	bottom:0;
+	padding:10px;
+}
+.citation-list>li
+{
+	margin-right:2px;
+	display:inline-block;
+}
+
+.player-citation-bubble
+{
+	color:#fff;
+	padding:10px;
+	background:rgba(0,0,0,0.75);
+	position:absolute;
+	bottom:55px;
+	width:310px;
+	border-radius: 5px;
+}
+.player-citation-bubble:after {
+   content: "";
+   position: absolute;
+   top: 100%;
+   left: 5px;
+   border-top: 10px solid black;
+   border-top-color: rgba(0, 0, 0, 0.75); 
+   border-left: 10px solid transparent;
+   border-right: 10px solid transparent; 
+}
+.player-citation-content
+{
+	float:left;
+	width:190px;
+	text-align:justify;
+	text-justify:newspaper;
+	overflow:hidden;
+}
+.player-citation-thumb{float:right;}
+.citation-subhead
+{
+	color: #bbb;
+	font-size:10px;
+}

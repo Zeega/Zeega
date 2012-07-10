@@ -59,7 +59,7 @@ this.zeega = {
 		console.log($.parseJSON(projectJSON))
 		
 		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
-		this.itemCollection = new Items.ViewCollection();
+		this.itemCollection = new Items.Collection();
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
@@ -449,9 +449,6 @@ this.zeega = {
 			for( var i = 0 ; i < n ; i++ )
 			{
 				var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
-				console.log('new frame!!!')
-				console.log( this.currentSequence.get('attr').persistLayers )
-				console.log(layers)
 			
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
@@ -694,13 +691,18 @@ this.zeega = {
 		console.log('-- EXPORT --');
 		
 		var projectObject = this.project.toJSON();
-		var stuff = {
+
+		//eliminate falsy values from the frames.layers array
+		var f = this.project.frames.toJSON();
+		_.each( f, function(frame){ frame.layers = _.compact(frame.layers) })
+		
+		var sfl = {
 			sequences : this.project.sequences.toJSON(),
-			frames:this.project.frames.toJSON(),
-			layers:this.project.layers.toJSON()
+			frames : f,
+			layers : this.project.layers.toJSON()
 		}
 		
-		_.extend(projectObject,stuff);
+		_.extend(projectObject,sfl);
 		
 		console.log(projectObject);
 
@@ -855,12 +857,8 @@ console.log( helpOrderArray[this.helpCounter-1] )
 	{
 		if(obj.item.get('layer_type') == 'Image')
 		{
-			console.log(obj)
-			console.log( 'we can make something out of this' )
 			$('#sequence-cover-image').css('background-image' , 'url("'+ obj.item.get('uri') +'")' );
-			console.log(this)
-			this.project.set({'cover_image':obj.item.get('uri')})
-			
+			this.project.save({'cover_image':obj.item.get('uri')})
 		}
 	},
 	
