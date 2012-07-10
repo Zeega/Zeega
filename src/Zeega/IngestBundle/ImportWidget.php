@@ -247,10 +247,15 @@ class ImportWidget
 		else $tags='';
 		if (isset($mdata->title)&&isset($mdata->title[0]))$item->setTitle((string)$mdata->title[0]);
 	
+	
+		
+	
 		if(!$item->getTitle()){return false;}
 	
 		$item->setDescription((string)$mdata->description[0]);
 		$item->setDescription(str_replace('<br />','',$item->getDescription()));
+		
+		
 		$metadata->setThumbnailUrl(urldecode($misc->image));
 		
 		if(isset($mdata->creator)){
@@ -272,12 +277,17 @@ class ImportWidget
 	
 		if($type=='movingImage'||$type=='movies'){	
 			$index=0;
+			$thumbindex=0;
 			$format="mp4";
 			for($i=0;$i<sizeof($fileKeys);$i++){
-			if(strstr($fileKeys[$i],$format)&&$index==0) {
-				$index=$i;
-				
-				}
+			if(strstr($fileKeys[$i],$format)&&$index==0) { $index=$i;}
+			
+			if(strstr($fileKeys[$i],'jpg')) { 
+			
+				$thumbindex++;
+				if($thumbindex==2) $metadata->setThumbnailUrl($newUrl.$fileKeys[$i]);
+			
+			}
 			}
 			$item->setType('Video');
 			$item->setSource('Video');

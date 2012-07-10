@@ -66,7 +66,7 @@ class WidgetController extends Controller
 			if($attr&&isset($attr['tags'])) $tags=$attr['tags'];
 			else $tags=false;
 			
-		 if($tags&&count($tags)>0){
+		 if($tags&&count($tags)>1){
 		 	foreach($tags as $tagName){
 				$tag = $em->getRepository('ZeegaIngestBundle:Tag')->findOneByName($tagName);
 				
@@ -80,16 +80,22 @@ class WidgetController extends Controller
 				}
 				
 				// can't get EAGER loading for the item tags - this is a workaround
-				$itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->searchItemTags($item->getId());
-			
-				$item_tag = new ItemTags;
-				$item_tag->setItem($item);
-				$item_tag->setTag($tag);
-				$item_tag->setTagDateCreated(new \DateTime("now"));
-				$item_tag->setTagDateCreated(new \DateTime("now"));
-	
-				$em->persist($item_tag);
-				$em->flush();
+				$itemTags = $itemTags = $em->getRepository('ZeegaIngestBundle:ItemTags')->findByItem($item->getId());
+				$tags = array();
+				if(count($itemTags)>0){
+					foreach($itemTags as $t)
+					{
+						array_push($tags, $t->getTag()->getId());
+					}
+				}
+				if(!in_array($tag->getId(),$tags)){
+					$item_tag = new ItemTags;
+					$item_tag->setItem($item);
+					$item_tag->setTag($tag);
+					$item_tag->setTagDateCreated(new \DateTime("now"));
+					$em->persist($item_tag);
+					$em->flush();
+				}
 			}
 		 }
 			
