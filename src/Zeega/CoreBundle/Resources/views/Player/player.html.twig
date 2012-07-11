@@ -141,7 +141,7 @@ var BrowserDetect = {
 
 };
 		BrowserDetect.init();
-		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_badbrowser') }}";
+		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
 
 		
 		
