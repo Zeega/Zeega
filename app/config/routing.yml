@@ -58,11 +58,5 @@ api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
     type: rest
 
-ingest:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_ingest.yml"
-
-editor:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_editor.yml"
-    
 admin:
     resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
