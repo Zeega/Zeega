@@ -1,3 +1,7 @@
+ZeegaDiscoveryBundle:
+    resource: "@ZeegaDiscoveryBundle/Resources/config/routing.yml"
+    prefix:   /
+
 ZeegaDataBundle:
     resource: "@ZeegaDataBundle/Resources/config/routing.yml"
     prefix:   /
