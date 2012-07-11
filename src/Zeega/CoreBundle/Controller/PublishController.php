@@ -31,7 +31,7 @@ class PublishController extends Controller
     {
         $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 
-        return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
+        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
             'projectId'=>$id,
             'project_data' => $projectData
      	));
@@ -41,7 +41,7 @@ class PublishController extends Controller
     {
         $projectData = $this->forward('ZeegaApiBundle:Items:getItemProject', array("id" => $id))->getContent();
         
-        return $this->render('ZeegaCoreBundle:Editor:player.html.twig', array(
+        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
             'projectId'=>0,
             'project_data'=>$projectData,
         ));
@@ -51,7 +51,7 @@ class PublishController extends Controller
     {
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 
-        return $this->render('ZeegaCoreBundle:Editor:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
+        return $this->render('ZeegaCoreBundle:Core:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
   	}
 }
 
