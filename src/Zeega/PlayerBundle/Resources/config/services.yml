@@ -1,0 +1,7 @@
+parameters:
+#    zeega_player.example.class: Zeega\PlayerBundle\Example
+
+services:
+#    zeega_player.example:
+#        class: %zeega_player.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

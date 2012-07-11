@@ -38,6 +38,8 @@ class AppKernel extends Kernel
             new Zeega\DiscoveryBundle\ZeegaDiscoveryBundle(),
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new Zeega\CommunityBundle\ZeegaCommunityBundle(),
+            new Zeega\BookmarkletBundle\ZeegaBookmarkletBundle(),
+            new Zeega\PlayerBundle\ZeegaPlayerBundle(),
         );
 
 

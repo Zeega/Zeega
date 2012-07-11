@@ -1,3 +1,11 @@
+ZeegaPlayerBundle:
+    resource: "@ZeegaPlayerBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaBookmarkletBundle:
+    resource: "@ZeegaBookmarkletBundle/Resources/config/routing.yml"
+    prefix:   /
+
 ZeegaCommunityBundle:
     resource: "@ZeegaCommunityBundle/Resources/config/routing.yml"
     prefix:   /
