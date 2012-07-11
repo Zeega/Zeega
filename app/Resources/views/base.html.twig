@@ -153,7 +153,7 @@ var BrowserDetect = {
 };
 		/*
 		BrowserDetect.init();
-		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_badbrowser') }}";
+		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
 */
 		
 		</script>
@@ -249,9 +249,9 @@ var BrowserDetect = {
 								<!--
 								{% endif %}
 								-->
-								
-								<li><a href="{{ path('ZeegaCoreBundle_browser', {'short': site.short }) }}">Library</a></li>
-								
+								<!--
+								<li><a href="{{ path('ZeegaDiscoveryBundle_library', {'short': site.short }) }}">Library</a></li>
+								-->
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 										Projects

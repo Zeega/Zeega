@@ -25,22 +25,18 @@ ZeegaCoreBundle_site:
 ZeegaCoreBundle_editor:
     pattern: /site/{short}/project/{id}
     defaults: { _controller:  ZeegaCoreBundle:Editor:editor }
-    
-ZeegaCoreBundle_browser:
-    pattern: /site/{short}/browser
-    defaults: { _controller:  ZeegaCoreBundle:Editor:browser }
 
 ZeegaCoreBundle_faq:
     pattern: /faq
-    defaults: { _controller:  ZeegaCoreBundle:Editor:faq }
+    defaults: { _controller:  ZeegaCoreBundle:Core:faq }
     
 ZeegaCoreBundle_embed:
     pattern: /{id}
     defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
 
-ZeegaCoreBundle_badbrowser:
+ZeegaCoreBundle_unsupportedBrowser:
     pattern: /browser/notsupported
-    defaults: { _controller:  ZeegaCoreBundle:BadBrowser:index }
+    defaults: { _controller:  ZeegaCoreBundle:Core:unsupportedBrowser }
 
 ZeegaCoreBundle_frame_publish:
     pattern: /frame/{id}/view

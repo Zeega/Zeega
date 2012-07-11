@@ -60,7 +60,7 @@ class EditorController extends Controller
         // store an attribute for reuse during a later user request
         $session->set('site', $site);
 
-		return $this->render('ZeegaEditorBundle:Editor:site.html.twig', array('allprojects' => $projects, 'page'=>'site',));
+		return $this->render('ZeegaEditorBundle:Editor:home.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 	
 	public function editorAction($short,$id)
@@ -115,11 +115,4 @@ class EditorController extends Controller
 				'user_collections' => $userCollections,
 			));
 	} 
-	
-	public function faqAction()
-	{
-	    $user = $this->get('security.context')->getToken()->getUser();
-
-		return $this->render('ZeegaCoreBundle:Editor:faq.html.twig', array('page'=>'faq'));
-    } 
 }
