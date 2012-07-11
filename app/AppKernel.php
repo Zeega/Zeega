@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Zeega\DiscoveryBundle\ZeegaDiscoveryBundle(),
+            new Zeega\EditorBundle\ZeegaEditorBundle(),
         );
 
 
