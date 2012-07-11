@@ -32,18 +32,62 @@ class UsersController extends Controller
         else
         {
 			$user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
-			
-			if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
+			if(!isset($user))
 			{
-				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
+			    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig');
 			}
 			else
 			{
-				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
-			}
+			    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
+    			{
+    				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
+    			}
+    			else
+    			{
+    				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
+    			}
+    		}
         }
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
  	}
+ 	
+    public function getUserProjectsAction($id)
+    {
+        $request = $this->getRequest();
+        $limit = $request->query->get('limit');         //  string
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $loggedUser = $this->get('security.context')->getToken()->getUser();
+        
+        if($id == -1)
+        {
+            $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($loggedUser->getId(), $limit);
+        	$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $loggedUser, 'editable' => true, 'projects' => $projects));
+        }
+        else
+        {
+			$user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
+			if(!isset($user))
+			{
+			    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig');
+			}
+			else
+			{
+                $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit);
+			
+			    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
+			    {
+				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true, 'projects' => $projects));
+			    }
+			    else
+			    {
+				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false, 'projects' => $projects));
+			    }
+			}
+        }
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+    }
  	
  	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putUsersAction($id)
