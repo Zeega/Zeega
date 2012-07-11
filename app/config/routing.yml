@@ -1,3 +1,7 @@
+ZeegaCommunityBundle:
+    resource: "@ZeegaCommunityBundle/Resources/config/routing.yml"
+    prefix:   /
+
 ZeegaEditorBundle:
     resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
     prefix:   /

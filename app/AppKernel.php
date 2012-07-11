@@ -37,6 +37,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Zeega\DiscoveryBundle\ZeegaDiscoveryBundle(),
             new Zeega\EditorBundle\ZeegaEditorBundle(),
+            new Zeega\CommunityBundle\ZeegaCommunityBundle(),
         );
 
 
