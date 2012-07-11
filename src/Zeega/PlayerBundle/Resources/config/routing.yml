@@ -1,3 +1,0 @@
-ZeegaPlayerBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ZeegaPlayerBundle:Default:index }

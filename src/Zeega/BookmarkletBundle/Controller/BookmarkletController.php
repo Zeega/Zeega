@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\CoreBundle\Controller;
+namespace Zeega\BookmarkletBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ use Imagick;
 use DateTime;
 use SimpleXMLElement;
 
-class WidgetController extends Controller
+class BookmarkletController extends Controller
 {
    	public function persistAction()
 	{
@@ -77,7 +77,7 @@ class WidgetController extends Controller
 	        		if(isset($item))
 	        		{
 	        		 	// item was imported before
-	        			return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
+	        			return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
 	        				'displayname' => $user->getDisplayname(),
 	        				'media_type' => $item->getMediaType(),
 	        				'widget_id'=>$widgetId,
@@ -87,7 +87,7 @@ class WidgetController extends Controller
 	        		}
 					else if($isUrlCollection)
 					{
-						return $this->render('ZeegaCoreBundle:Widget:batch.widget.html.twig', array(
+						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
 							'item'=>json_encode($parsedItem), 
@@ -97,7 +97,7 @@ class WidgetController extends Controller
 					}
 					else
 					{
-						return $this->render('ZeegaCoreBundle:Widget:single.widget.html.twig', array(
+						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:single.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
 							'item'=>json_encode($parsedItem), 
@@ -108,7 +108,7 @@ class WidgetController extends Controller
 			}
 			catch(Exception $e)
 			{
-				return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
+				return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 					'displayname' => $user->getDisplayname(),
 					'widget_id'=>$widgetId,
 					'item'=>json_encode($items), 
@@ -119,7 +119,7 @@ class WidgetController extends Controller
 			}
 		}
 		
-		return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
+		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,
 			'item'=>json_encode(array()), 

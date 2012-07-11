@@ -1,3 +1,8 @@
-ZeegaBookmarkletBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ZeegaBookmarkletBundle:Default:index }
+ZeegaBookmarkletBundle_persist:
+    pattern: /widget/persist
+    defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:persist }
+
+ZeegaBookmarkletBundle_widget:
+    pattern: /widget/
+    defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:open }
+    
