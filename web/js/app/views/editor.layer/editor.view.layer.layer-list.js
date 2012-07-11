@@ -326,7 +326,7 @@
 								'<i class="zicon-trash-closed delete-layer"></i>'+
 							'</div>'+
 							'<div class="layer-drag-handle">'+
-								'<span class="zicon zicon-vert-drag"></span>'+
+								'<i class="zicon-vert-drag"></i>'+
 							'</div>'+
 						'</div>'+
 						'<div class="layer-content inset-tray dark tray closed">'+
