@@ -2,19 +2,354 @@
 
 {% extends '::base.html.twig' %}
 
-{% block title %}<title></title>{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 
-{#%  block stylesheets %#}
-{#% endblock %#}
+{%  block stylesheets %}
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://farm5.staticflickr.com/4096/4827587717_c362a1b42e_b.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		}
+	
+	</style>
+	
+	<link rel="stylesheet" href="{{ asset('css/civic-center-bootstrap.css') }}" type="text/css" media="screen" /> <!-- Including Bootstrap and our styles -->
+	<link rel="stylesheet" href="{{ asset('css/zeega.community.css') }}" type="text/css" media="screen" /> <!-- Including Bootstrap and our styles -->
+	
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 
-{% block scripts %}
-	<!--
-	<script data-main="{{ asset('js/loaders/about') }}" src="{{ asset('js/lib/require/require-1.0.5.js') }}"></script>
-	--> 
+	
+	
 {% endblock %}
 
-{% block content %}
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/dashboard') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#add-media').hide();
+		});
+	</script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Header & Nav Begins -->
+	<div class="container header new-section">
+	
+		<div class="row">
+		
+			<div class="span6">
+				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
+				<div class="strapline">
+				Remake The Internet
+				</div>
+			</div>
+			
+			<div class="span8">
+				<div class="navigation">	
+					<div>
+						<p><a href="">About</a><a href="">SignUp</a><a href="">Login</a></p>
+					</div>
+				</div>
+			</div>
+	
+		</div>
+	
+	</div>
+	<!-- Header & Nav Ends -->
+	
+	<!-- Getting Started Card Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14  author-profile">
+			
+				<div class="row">
+		
+					<div class="span6 author-photo">
+					
+						<h3>Getting Started</h3>
+						<div style="margin-bottom: 10px;margin-left: 10px;padding: 5px;width: 365px;height: 165px;border: 1px solid #666;text-align: center;">
+						<img src="{{ asset('images/play-button.png') }}" style="position:relative !important; top:30px">
+						</div>
+						<div class="gradient">
+						</div>
+					
+					</div>
+					
+					<div class="span6 author-bio">
+					
+						<div>
+							
+							
+							<div>
+								<p class="card"> 1- 2- 3- HOW TO GET STARTED INFO</p>
+							</div>
+						</div>
+						
+						
+						
+						<div class="shadow">
+						</div>
+					
+					</div>
+					<div class="span2 author-bio">
+					
+						<div>
+							
+							
+							<div>
+								<p class="card"> Check out these templates</p>
+							</div>
+						</div>
+						
+						
+						
+						<div class="shadow">
+						</div>
+					
+					</div>
+					
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Getting Started Card Ends -->
+	<!-- Author Card Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14 author-profile" style="height:auto">
+			
+				<div id="dashboard-profile" class="row"  >
+		
+					
+					
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Author Card Ends -->
+	
+	
+	<!-- Author's Latest Zeegas Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14" style="position:relative">
+			
+				<h2 class="section-title">Your Latest Zeegas</h2>
+				<a class="btn btn-info btn-large pull-right" href="." style="top: -34px;right: 0;position: absolute; height: auto;width: auto;">Start a new project</a>
+			
+			</div>
+		
+		</div>
+		
+		<div class="row">
+		
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+				
+					<a href="">
+					<div class="span3 project-image">
+						<img src="{{ asset('images/project-image.jpg') }}" alt="project-image" width="190" height="190">
+						<div class="gradient">
+						</div>
+						<img src="{{ asset('images/play-button.png') }}">
+					</div>
+					</a>
+					
+					<div class="span4 project-info">
+						<div>
+							<h4><a href="">Critical Dose</a></h4>
+							<h6>March 22, 2012</h6>
+							<p class="card">The recent i-dosing rage is built on a discovery of Heinrich Wilhelm Dove in 1839. The entire concept revolves around an oddity where one tone is played in the right ear and a slightly different tone is played in the left ear.</p>
+						</div>
+						<div class="shadow">
+						</div>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+				
+					<a href="">
+					<div class="span3 project-image">
+						<img src="http://2.bp.blogspot.com/_NcltTYF_OXc/SlbAcAQJx7I/AAAAAAAAADw/SxCTmf-7LCg/s320/The+National+Botanic+Garden+of+Wales.jpg" alt="project-image" width="190" height="190">
+						<div class="gradient">
+						</div>
+						<img src="{{ asset('images/play-button.png') }}">
+					</div>
+					</a>
+					
+					<div class="span4 project-info">
+						<div>
+							<h4><a href="">Going Geodesic</a></h4>
+							<h6>March 22, 2012</h6>
+							<p class="card">Punk rope is a unique blend of recess and boot camp.Learn about the classes and how you can start punk roping at home in the following interview with Punk Rope founder and exercise innovator, Tim Haft!</p>
+						</div>
+						<div class="shadow">
+						</div>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+				
+					<a href="">
+					<div class="span3 project-image">
+						<img src="https://lh5.googleusercontent.com/-0tAzk56Z0ns/TYu_6R1MLlI/AAAAAAAAFQE/JgsyQNRWZDU/a_190x190.jpg" alt="project-image" width="190" height="190">
+						<div class="gradient">
+						</div>
+						<img src="{{ asset('images/play-button.png') }}">
+					</div>
+					</a>
+					
+					<div class="span4 project-info">
+						<div>
+							<h4><a href="">Westboro Baptist</a></h4>
+							<h6>March 22, 2012</h6>
+							<p class="card">The recent i-dosing rage is built on a discovery of Heinrich Wilhelm Dove in 1839. The entire concept revolves around an oddity where one tone is played in the right ear and a slightly different tone is played in the left ear.</p>
+						</div>
+						<div class="shadow">
+						</div>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+				
+					<a href="">
+					<div class="span3 project-image">
+						<img src="http://gardencentretv.co.uk/wordpress1/wp-content/uploads/2011/02/Johnson_Broad_Bean_Valenciana.jpg" alt="project-image" width="190" height="190">
+						<div class="gradient">
+						</div>
+						<img src="{{ asset('images/play-button.png') }}">
+					</div>
+					</a>
+					
+					<div class="span4 project-info">
+						<div>
+							<h4><a href="">Bionic Gardening</a></h4>
+							<h6>March 22, 2012</h6>
+							<p class="card">The recent i-dosing rage is built on a discovery of Heinrich Wilhelm Dove in 1839. The entire concept revolves around an oddity where one tone is played in the right ear and a slightly different tone is played in the left ear.</p>
+						</div>
+						<div class="shadow">
+						</div>
+					</div>
+				
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+		
+		</div>
+	
+	</div>
+	
+	<!-- Author's Latest Zeegas Ends -->
+	
+	
+	<!-- Footer Begins -->
+	
+	<div class="footer">
+	
+		<div class="container">
+		
+			<div class="row">
+			
+			<div class="span5">
+				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
+				<div class="strapline">
+				Remake The Internet
+				</div>
+				<p><small>Zeega is a non-profit dedicated to inventing new forms of interactive storytelling. We are passionate about beautiful, surprising, immersive digital experiences that foster curiosity and enrich understanding of the world around us.</small></p>
+				<p><small>
+					Send us a message: <a href="mailto:info@zeega.org">info@zeega.org</a><br>
+					Maybe tweet us: <a href="http://www.twitter.com/zeega">@zeega</a><br>
+					Or send a package: 364a Broadway, Cambridge MA 02139
+				</small></p>
+			</div>
+			
+			<div class="footer-navigation span3 offset6">
+				<div>
+					<p><a href="">Home</a></p>
+					<p><a href="">About</a></p>
+					<p><a href="">Signup</a></p>
+					<p><a href="">Login</a></p>
+				</div>
+			</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Footer Ends -->
+
 
 
 {% endblock %}
