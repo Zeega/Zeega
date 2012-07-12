@@ -1,0 +1,19 @@
+ZeegaCommunityBundle_about:
+    pattern:  /community/about
+    defaults: { _controller: ZeegaCommunityBundle:Community:about }
+
+ZeegaCommunityBundle_author:
+    pattern:  /community/author
+    defaults: { _controller: ZeegaCommunityBundle:Community:author }
+
+ZeegaCommunityBundle_home:
+    pattern:  /community/home
+    defaults: { _controller: ZeegaCommunityBundle:Community:home }
+
+ZeegaCommunityBundle_topics:
+    pattern:  /community/topics
+    defaults: { _controller: ZeegaCommunityBundle:Community:topics }
+    
+ZeegaCommunityBundle_dashboard:
+    pattern:  /community/dashboard
+    defaults: { _controller: ZeegaCommunityBundle:Community:dashboard }

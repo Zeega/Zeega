@@ -1,0 +1,3 @@
+ZeegaDiscoveryBundle_library:
+    pattern: /site/{short}/library
+    defaults: { _controller:  ZeegaDiscoveryBundle:Discovery:library }

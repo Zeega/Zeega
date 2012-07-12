@@ -1,21 +1,3 @@
-ZeegaDataBundle:
-    resource: "@ZeegaDataBundle/Resources/config/routing.yml"
-    prefix:   /
-
-ZeegaCoreBundle:
-    resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
-    prefix:   /
-
-ZeegaAdminBundle:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
-    prefix:   /
-
-# Internal routing configuration to handle ESI
-#_internal:
-#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
-#   prefix:   /_internal
-
-
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -42,12 +24,38 @@ api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
     type: rest
 
-ingest:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_ingest.yml"
-
-editor:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_editor.yml"
-    
-
 admin:
     resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+
+ZeegaBookmarkletBundle:
+    resource: "@ZeegaBookmarkletBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaCommunityBundle:
+    resource: "@ZeegaCommunityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaEditorBundle:
+    resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaDiscoveryBundle:
+    resource: "@ZeegaDiscoveryBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaDataBundle:
+    resource: "@ZeegaDataBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaCoreBundle:
+    resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaAdminBundle:
+    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# Internal routing configuration to handle ESI
+#_internal:
+#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#   prefix:   /_internal

@@ -16,10 +16,8 @@ require.config({
 	}
 })
 
-var loadFiles = [
-	//'jquery',
-
-
+require(
+	[
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
@@ -110,13 +108,10 @@ var loadFiles = [
 	'order!app/index'
 	
 
-	];
-
-require(loadFiles, function(jquery)
-{
-    console.log('ALL JS LOADED')
-
-	//once the files have been loaded do this
-	var sequence = $('#sequence-id').val();
-	//zeega.app.init();
+	],
+	function(jquery) {
+	    console.log('ALL JS LOADED')
+		//once the files have been loaded do this
+		var sequence = $('#sequence-id').val();
+		//zeega.app.init();
 });
