@@ -30,6 +30,7 @@ var loadFiles = [
 	'order!lib/visualsearch',
 	
 	'order!lib/leaflet/leaflet',
+	'order!lib/dropbox',
 
 	//custom
 	'order!ux/zeega.ux.header',
@@ -79,6 +80,8 @@ var loadFiles = [
 	'order!app/views/editor.modals/editor.view.modal.link-advanced',
 	'order!app/views/editor.modals/editor.view.modal.share-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	//mvc
 	//'order!backbone/models/tag',

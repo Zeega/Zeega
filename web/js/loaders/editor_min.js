@@ -32,6 +32,7 @@ require(
 		'web/js/lib/visualsearch.js',
 		
 		'web/js/lib/leaflet/leaflet.js',
+		'web/js/lib/dropbox.js',
 		
 		//custom
 		'web/js/ux/zeega.ux.header.js',
@@ -81,6 +82,8 @@ require(
 		'web/js/app/views/editor.modals/editor.view.modal.link-advanced',
 		'web/js/app/views/editor.modals/editor.view.modal.share-project',
 		'web/js/app/views/editor.modals/editor.view.modal.continue-layer',
+		'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox',
+		'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 		
 		//mvc
 		//layers

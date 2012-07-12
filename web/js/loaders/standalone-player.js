@@ -22,6 +22,7 @@ var loadFiles = [
 	
 	'order!lib/underscore',
 	'order!lib/backbone',
+	'order!lib/dropbox',
 	
 	'order!lib/leaflet/leaflet',
 	
@@ -39,6 +40,8 @@ var loadFiles = [
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 	'order!app/models/editor.model.layer',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',

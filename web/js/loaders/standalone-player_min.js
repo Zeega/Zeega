@@ -23,6 +23,7 @@ require(
 	
 	'web/js/lib/underscore',
 	'web/js/lib/backbone',
+	'web/js/lib/dropbox', // probably not needed for standalone player
 	
 	'web/js/lib/leaflet/leaflet',
 	
@@ -40,6 +41,8 @@ require(
 	'web/js/app/views/editor.layer/editor.view.layer.layer-list',
 	'web/js/app/views/editor.layer/editor.view.layer.visual-editor',
 	'web/js/app/models/editor.model.layer',
+	'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	'web/js/plugins/layers/video/video',
 	'web/js/plugins/layers/audio/audio',

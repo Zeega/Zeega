@@ -37,6 +37,7 @@ require(
 		'web/js/lib/fancybox/jquery.mousewheel-3.0.6.pack',
 		'web/js/lib/leaflet/leaflet',
 		'web/js/lib/jquery.tagsinput.min',
+		'web/js/lib/dropbox',
 		//plugins
 		'web/js/lib/jquery/plugins/spin',
 		'web/js/lib/jquery/plugins/jeditable.min',
@@ -82,7 +83,9 @@ require(
 		'web/js/app/views/browser.fancybox/browser.view.fancybox.youtube',
 		'web/js/app/views/browser.map/browser.view.map.fancybox',
 		'web/js/app/views/browser.tag/browser.view.tag.fancybox',
-		'web/js/app/index.browser'
+		'web/js/app/index.browser',
+		'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox',
+		'web/js/app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	], 
 	function($) {
 		console.log('files loaded')
