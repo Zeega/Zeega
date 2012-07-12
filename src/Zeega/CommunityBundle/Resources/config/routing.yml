@@ -13,3 +13,7 @@ ZeegaCommunityBundle_home:
 ZeegaCommunityBundle_topics:
     pattern:  /community/topics
     defaults: { _controller: ZeegaCommunityBundle:Community:topics }
+    
+ZeegaCommunityBundle_dashboard:
+    pattern:  /community/dashboard
+    defaults: { _controller: ZeegaCommunityBundle:Community:dashboard }

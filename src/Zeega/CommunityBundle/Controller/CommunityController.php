@@ -27,4 +27,9 @@ class CommunityController extends Controller
         return $this->render('ZeegaCommunityBundle:Topics:topics.html.twig');
     }
     
+    public function dashboardAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Dashboard:dashboard.html.twig');
+    }
+    
 }
