@@ -9,7 +9,7 @@
 	"locationLatitude" : {{ user.getLocationLatitude | json_encode | raw}},
 	"locationLongitude" : {{ user.getLocationLongitude | json_encode | raw}},
 	"editable" : {{ editable | json_encode | raw}},
-	"profile_image" : {{ user.profile_image | default(null) | json_encode | raw}}
+	"background_image_url" : {{ user.getBackgroundImageUrl | default("") | json_encode | raw}}
 	
 	{% if projects is defined %}
 	,"projects":

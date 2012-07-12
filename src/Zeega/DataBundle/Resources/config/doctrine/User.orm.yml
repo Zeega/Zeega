@@ -49,6 +49,11 @@ Zeega\DataBundle\Entity\User:
             type: float
             length: 10
             nullable: true
+        background_image_url:
+            type: string
+            length: 255
+            nullable: true
+            
     indexes:
         user_type_index:
             columns: [user_type]      
