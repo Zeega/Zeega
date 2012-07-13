@@ -24,7 +24,7 @@
 		url : function()
 		{
 			if( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/layers';
-			else return zeega.app.url_prefix + "layers/" + this.id;
+			else return zeega.app.url_prefix + "api/layers/" + this.id;
 		},
 		
 		initialize: function(attributes,options)

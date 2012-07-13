@@ -8,8 +8,8 @@
 		
 		url : function()
 		{
-			if ( this.isNew() ) return zeega.app.url_prefix + 'projects/'+ zeega.app.project.id +'/sequences';
-			return zeega.app.url_prefix+'sequences/' + this.id;
+			if ( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/sequences';
+			return zeega.app.url_prefix+'api/sequences/' + this.id;
 		},
 		
 		defaultAttr : {
