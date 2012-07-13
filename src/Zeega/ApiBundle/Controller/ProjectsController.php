@@ -68,7 +68,9 @@ class ProjectsController extends Controller
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
         if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
-
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($project);
         $em->flush();
@@ -82,7 +84,8 @@ class ProjectsController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
      	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
-    	
+    	$project->setDateUpdated(new \DateTime("now"));
+
     	$layer= new Layer();
     	$layer->setProject($project);
 		$request = $this->getRequest();
@@ -163,6 +166,9 @@ class ProjectsController extends Controller
                 if($request->request->get('layers_to_persist')) $frame->setLayers($request->request->get('layers_to_persist'));
         }
         
+        $project->setDateUpdated(new \DateTime("now"));
+        
+   		$em->persist($project);
    		$em->persist($frame);
    		$em->flush();
         

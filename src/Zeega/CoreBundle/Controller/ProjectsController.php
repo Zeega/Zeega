@@ -35,6 +35,7 @@ class ProjectsController extends Controller
       	$em =$this->getDoctrine()->getEntityManager();
      	$project= $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($project_id);
     	if($request->request->get('title'))$project->setTitle($request->request->get('title'));
+    	$project->setDateUpdated(new \DateTime("now"));
 		$em->flush();
     	return new Response('SUCCESS',200);
     } 
@@ -121,6 +122,7 @@ class ProjectsController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$request = $this->getRequest();
 		$project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+		$project->setDateUpdated(new \DateTime("now"));
 		
 		$sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
 		$sequenceIndex = $sequenceCount + 1;
@@ -149,6 +151,7 @@ class ProjectsController extends Controller
 		$sequence->setTitle('Sequence '.$sequenceIndex);
 
 		$em = $this->getDoctrine()->getEntityManager();
+		$em->persist($project);
 		$em->persist($sequence);
 		$em->persist($frame);
 		$em->flush();
