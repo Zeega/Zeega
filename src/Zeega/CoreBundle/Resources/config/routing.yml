@@ -1,7 +1,3 @@
-sequences:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\SequencesController
-
 layers:
   type:     rest
   resource: Zeega\CoreBundle\Controller\LayersController
