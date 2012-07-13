@@ -1,7 +1,3 @@
-layers:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\LayersController
-
 sites:
   type:     rest
   resource: Zeega\CoreBundle\Controller\SitesController
