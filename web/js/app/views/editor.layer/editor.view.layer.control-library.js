@@ -277,10 +277,6 @@
 					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
 				},
-				stop : function(e,ui)
-				{
-					_this.saveValue(ui.value)
-				},
 				change : function(e,ui)
 				{
 					_this.updateVisualElement( ui.value );
