@@ -136,6 +136,7 @@
 		
 		render : function()
 		{
+			if(this.model.get('attr').dissolve ||true) $(this.el).css({opacity:0});
 			var img = $('<img>')
 				.attr('id', 'video-player-'+ this.model.id)
 				.attr('src', this.attr.thumbnail_url)
@@ -212,7 +213,9 @@
 		
 		onTimeUpdate : function(){
 			
-				
+			
+			
+			//Cue Out
 			if( this.model.get('attr').cue_out != 0 && this.model.video.currentTime() > this.model.get('attr').cue_out )
 			{
 				this.model.video.currentTime( this.model.get('attr').cue_in );
@@ -220,21 +223,57 @@
 				this.model.trigger('playback_ended');
 				console.log('playback ended');
 			}
+			
+			
+			
+			//Fades
+			
+			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
+			else var out = this.model.get('attr').cue_out;
 			var t = this.model.video.currentTime();
-			var f = parseFloat(this.model.get('attr').cue_in)+parseFloat(this.model.get('attr').fade_in);		
-			if(this.model.get('attr').cue_out==0) var g = this.model.video.duration()-parseFloat(this.model.get('attr').fade_out);
-			else var g = this.model.get('attr').cue_out-parseFloat(this.model.get('attr').fade_out);
+			var f = parseFloat(this.model.get('attr').cue_in)+parseFloat(this.model.get('attr').fade_in);
+			var g = out-parseFloat(this.model.get('attr').fade_out);
 			
 			if(this.model.get('attr').fade_in>0 && t<f){
+				
+				//console.log("fading in");
 				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
 				this.model.video.volume(vol);
 			}
-			
-			
 			else if(this.model.get('attr').fade_out>0 && t>g){
+			
+				//console.log("fading out");
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
 				this.model.video.volume(vol);
-			}		
+			}
+			else if(Math.abs(this.model.get('attr').volume-this.model.video.volume())>.01){
+				this.model.video.volume(this.model.get('attr').volume);
+				
+			}
+			else console.log('all is good',this.model.video.volume())
+			
+			//Dissolve
+			
+			/*
+			
+			if(this.model.get('attr').dissolve||true){
+			
+				if(this.model.video.currentTime()-this.model.get('attr').cue_in<1.0){
+					var op = parseFloat(this.model.video.currentTime()-this.model.get('attr').cue_in);
+					this.$el.css({opacity:op});
+				}
+				
+				else if(out-this.model.video.currentTime()<1.0){
+					var op = Math.max(0,parseFloat(out-this.model.video.currentTime()));
+					this.$el.css({opacity:op});
+				}
+			
+			}
+			
+			*/
+			
+			
+			
 		},
 		
 		onPlay : function()
@@ -249,6 +288,7 @@
 		
 		onUnrender : function()
 		{
+			
 			this.model.video.pause();
 			Popcorn.destroy(this.model.video);	
 

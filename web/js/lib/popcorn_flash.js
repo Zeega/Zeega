@@ -9693,7 +9693,7 @@ Popcorn.player( "youtube", {
 
           if ( !media.paused ) {
 
-            currentTime = media.youtubeObject.getCurrentTime();
+            if( media.youtubeObject.getCurrentTime) currentTime = media.youtubeObject.getCurrentTime();
             media.dispatchEvent( "timeupdate" );
             setTimeout( timeupdate, 10 );
           }
@@ -9789,20 +9789,20 @@ Popcorn.player( "youtube", {
           set: function( val ) {
 			//console.log(media.youtubeObject.getVolume());
 			//console.log(val);
-			
-            if ( media.youtubeObject.getVolume() / 100 !== val ) {
-
-              media.youtubeObject.setVolume( val * 100 );
-              //console.log(val*100);
-              lastVolume = media.youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
-            }
-
+			if( media.youtubeObject.getVolume){
+				if ( media.youtubeObject.getVolume() / 100 !== val ) {
+	
+				  media.youtubeObject.setVolume( val * 100 );
+				  //console.log(val*100);
+				  lastVolume = media.youtubeObject.getVolume();
+				  media.dispatchEvent( "volumechange" );
+				}
+			}
             return media.youtubeObject.getVolume() / 100;
           },
           get: function() {
 
-            return media.youtubeObject.getVolume() / 100;
+              if( media.youtubeObject.getVolume) return media.youtubeObject.getVolume() / 100;
           }
         });
 		
