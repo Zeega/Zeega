@@ -24,9 +24,63 @@
 	
 	</style>
 	
-	<link rel="stylesheet" href="{{ asset('css/civic-center-bootstrap.css') }}" type="text/css" media="screen" /> <!-- Including Bootstrap and our styles -->
+	<!--<link rel="stylesheet" href="{{ asset('css/civic-center-bootstrap.css') }}" type="text/css" media="screen" /> <!-- Including Bootstrap and our styles 
 	<link rel="stylesheet" href="{{ asset('css/zeega.community.css') }}" type="text/css" media="screen" /> <!-- Including Bootstrap and our styles -->
 	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/variables.less')}}">
+	
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/accordion.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/alerts.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/button-groups.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/buttons.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/carousel.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/close.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/code.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/component-animations.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/dropdowns.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/forms.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/grid.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/hero-unit.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/labels-badges.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/layouts.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/mixins.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/modals.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/navbar.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/navs.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/pager.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/pagination.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/popovers.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/progress-bars.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/reset.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive-1200px-min.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive-767px-max.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive-768px-979px-min.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive-navbar.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive-utilities.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/responsive.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/scaffolding.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/sprites.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/tables.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/thumbnails.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/tooltip.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/type.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/utilities.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/wells.less')}}">
+
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/style.less')}}">
+
+	<!-- custom less from civic center -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/variables.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/buttons.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/forms.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/scaffolding.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/type.less')}}">
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/custom/style.less')}}">
+			
+
+
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 
@@ -38,11 +92,8 @@
 
 	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script data-main="{{ asset('js/loaders/dashboard') }}" src="{{ asset('js/lib/require.js') }}"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#add-media').hide();
-		});
-	</script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
 	
 	
 {% endblock %}
