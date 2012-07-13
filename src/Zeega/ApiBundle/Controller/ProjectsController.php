@@ -41,6 +41,18 @@ class ProjectsController extends Controller
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
     
+    // `delete_project`  [DELETE] /projects/{project_id}
+    public function deleteProjectAction($project_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+    	$project->setEnabled(false);
+
+    	$em->flush();
+    	return new Response('SUCCESS',200);
+    }
+    
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putProjectsAction($projectId)
     {

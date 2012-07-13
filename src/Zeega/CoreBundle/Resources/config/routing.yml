@@ -1,7 +1,3 @@
-projects:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\ProjectsController
-
 sequences:
   type:     rest
   resource: Zeega\CoreBundle\Controller\SequencesController
