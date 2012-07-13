@@ -303,4 +303,29 @@ class Project
     {
         return $this->estimated_time;
     }
+    /**
+     * @var datetime $date_updated
+     */
+    private $date_updated;
+
+
+    /**
+     * Set date_updated
+     *
+     * @param datetime $dateUpdated
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->date_updated = $dateUpdated;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return datetime 
+     */
+    public function getDateUpdated()
+    {
+        return $this->date_updated;
+    }
 }

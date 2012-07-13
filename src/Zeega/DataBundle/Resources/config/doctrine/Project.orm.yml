@@ -53,7 +53,13 @@ Zeega\DataBundle\Entity\Project:
             type: string
             length: 140
             nullable: true        
+        date_updated:
+            type: datetime
+            nullable: true
+        
     indexes:
-             project_enabled_index:
-                 columns: [enabled]
+        project_enabled_index:
+            columns: [enabled]
+        project_date_updated:
+            columns: [date_updated]
  

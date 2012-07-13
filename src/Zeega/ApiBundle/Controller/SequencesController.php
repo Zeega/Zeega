@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\CoreBundle\Controller;
+namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +13,7 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class SequencesController extends Controller
 {
-    
+    /* TEMP - moved from Core and needs to be refactored */
     public function postSequencesAction()
     {
     	$em=$this->getDoctrine()->getEntityManager();
