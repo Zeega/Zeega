@@ -199,7 +199,8 @@
 		onPreload : function()
 		{
 			var _this=this;
-			this.model.video.on('timeupdate', function(){_this.onTimeUpdate()}, this )
+			this.model.video.on('timeupdate', function(){_this.onTimeUpdate()}, this );
+			this.model.video.on('ended', function(){_this.onEnded()}, this )
 
 			if( !this.model.loaded ){
 				this.model.video.placeVideo( this.$el );
@@ -210,6 +211,15 @@
 				this.model.video.pause();
 			}
 		},
+		onEnded : function(){
+		
+			
+				
+				
+				
+		
+		},
+		
 		
 		onTimeUpdate : function(){
 			
