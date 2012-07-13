@@ -1,0 +1,53 @@
+/**************************************
+
+	CITATIONS
+	
+***************************************/
+
+.citation-list
+{
+	position:absolute;
+	z-index:1000;
+	bottom:0;
+	padding:10px;
+}
+.citation-list>li
+{
+	margin-right:2px;
+	display:inline-block;
+}
+
+.player-citation-bubble
+{
+	color:#fff;
+	padding:10px;
+	background:rgba(0,0,0,0.75);
+	position:absolute;
+	bottom:55px;
+	width:310px;
+	border-radius: 5px;
+}
+.player-citation-bubble:after {
+   content: "";
+   position: absolute;
+   top: 100%;
+   left: 5px;
+   border-top: 10px solid black;
+   border-top-color: rgba(0, 0, 0, 0.75); 
+   border-left: 10px solid transparent;
+   border-right: 10px solid transparent; 
+}
+.player-citation-content
+{
+	float:left;
+	width:190px;
+	text-align:justify;
+	text-justify:newspaper;
+	overflow:hidden;
+}
+.player-citation-thumb{float:right;}
+.citation-subhead
+{
+	color: #bbb;
+	font-size:10px;
+}
