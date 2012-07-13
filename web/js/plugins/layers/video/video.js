@@ -114,14 +114,24 @@
 				max : 1,
 			});
 			
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Dissolve'
+			});
+			
+			var audioLabel = new Layer.Views.Lib.SectionLabel({label:'Audio'})
+			
 			this.controls
 				.append( playbackControls.getControl() )
-				.append( volumeSlider.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
+				.append( opacitySlider.getControl() )
+				.append( audioLabel.getControl() )
+				.append( volumeSlider.getControl() )
 				.append( fadeInSlider.getControl() )
 				.append( fadeOutSlider.getControl() )
-				.append( opacitySlider.getControl() );
+				.append( dissolveCheck.getControl() );
 			
 			return this;
 		
