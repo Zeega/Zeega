@@ -50,9 +50,6 @@ require(
 	'order!plugins/layers/website/website',
 	'order!plugins/layers/twitter/twitter',
 	'order!plugins/layers/testimonial/testimonial',
-	
-	//'order!plugins/players/zeega.player.video',
-	//'order!plugins/players/zeega.player.youtube',	
 	       
 	'order!plugins/players/plyr'
 	],

@@ -9787,13 +9787,13 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "volume", {
           set: function( val ) {
-			console.log(media.youtubeObject.getVolume());
-			console.log(val);
+			//console.log(media.youtubeObject.getVolume());
+			//console.log(val);
 			
             if ( media.youtubeObject.getVolume() / 100 !== val ) {
 
               media.youtubeObject.setVolume( val * 100 );
-              console.log(val*100);
+              //console.log(val*100);
               lastVolume = media.youtubeObject.getVolume();
               media.dispatchEvent( "volumechange" );
             }
@@ -9835,10 +9835,10 @@ Popcorn.player( "youtube", {
       // setting youtube player's height and width, default to 560 x 315
       width = media.style.width ? ""+media.offsetWidth : "560";
       height = media.style.height ? ""+media.offsetHeight : "315";
-		console.log(youtubeId);
+		//console.log(youtubeId);
       swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+container.id, 
 				   container.id, '100%', '100%', "8", null, flashvars, params, attributes);
-    console.log(container.id);
+    //console.log(container.id);
     	
     
     };
