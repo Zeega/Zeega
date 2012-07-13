@@ -240,11 +240,9 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        
         $requestData = $this->getRequest()->request;      
 	    
 	    $item = $this->populateItemWithRequestData($requestData);
-	    //return $item;
 
         $em->persist($item);
         $em->flush();
@@ -306,7 +304,6 @@ class ItemsController extends Controller
     {
         if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
     	{
-
 			$em = $this->getDoctrine()->getEntityManager();
 	
 			$newItems = $this->getRequest()->request->get('new_items');
@@ -434,7 +431,7 @@ class ItemsController extends Controller
     
    
     // Private methods     
-    private function populateItemWithRequestData($request_data)
+    private function populateItemWithRequestData($request_data, $persistChildItems = false)
     {   
         $em = $this->getDoctrine()->getEntityManager(); 
         $user = $this->get('security.context')->getToken()->getUser();
@@ -555,20 +552,60 @@ class ItemsController extends Controller
             $first = True;
             foreach($newItems as $newItem)
             {
-                $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+                if(!is_array($newItem))
+                {
+                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
 
-                if (!$childItem) 
-                {
-                    throw $this->createNotFoundException('Unable to find Item entity.');
-                }
-                $childItem->setDateUpdated($dateUpdated);
-                $childItem->setIndexed(false);
+                    if (!$childItem) 
+                    {
+                        throw $this->createNotFoundException('Unable to find Item entity.');
+                    }
+                    $childItem->setDateUpdated($dateUpdated);
+                    $childItem->setIndexed(false);
                 
-                $item->addItem($childItem);
-                if($first == True)
+                    $item->addItem($childItem);
+
+                    if($first == True)
+                    {
+                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
+                        $first = False;
+                    }
+                }
+                else
                 {
-                    $item->setThumbnailUrl($childItem->getThumbnailUrl());
-                    $first = False;
+                    $childItem = new Item();
+                    
+            		$childItem->setSite($site);		
+                    $childItem->setTitle($newItem['title']);
+            		$childItem->setDescription($newItem['description']);
+                    $childItem->setMediaType($newItem['media_type']);
+                    $childItem->setDateCreated(new \DateTime("now"));
+            		$childItem->setArchive($newItem['archive']);
+                    $childItem->setLayerType($newItem['layer_type']);
+                    $childItem->setUser($user);
+                    $childItem->setUri($newItem['uri']);
+                    $childItem->setAttributionUri($newItem['attribution_uri']);
+            		$childItem->setThumbnailUrl($newItem['thumbnail_url']);
+                    $childItem->setEnabled(true);
+                    $childItem->setPublished(true);
+                    $childItem->setChildItemsCount(0);
+                    $childItem->setMediaCreatorUsername($newItem['media_creator_username']);
+                    $childItem->setMediaCreatorRealname($newItem['media_creator_realname']);
+                    $childItem->setTags($newItem['tags']);
+                    if(isset($newItem['media_geo_latitude'])) $childItem->setMediaGeoLatitude($newItem['media_geo_latitude']);
+                    if(isset($newItem['media_geo_longitude'])) $childItem->setMediaGeoLongitude($newItem['media_geo_longitude']);
+                    $mediaDateCreated = $newItem['media_date_created'];
+                    if(isset($mediaDateCreated)) 
+                    {
+                        $parsedDate = strtotime($mediaDateCreated);
+                        if($parsedDate)
+                        {
+                            $d = date("Y-m-d h:i:s",$parsedDate);
+                            $childItem->setMediaDateCreated(new \DateTime($d));
+                        }
+                    }
+                    
+                    $item->addItem($childItem);
                 }
             }
         }

@@ -31,7 +31,8 @@ class BookmarkletController extends Controller
 
 	        if(isset($itemWithChildren))
 	        {
-	            $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);
+	            $request->request->set('new_items', $itemWithChildren["items"][0]["child_items"]);
+	            $newItems = $request->request->get('new_items');
 	        }
 	    }
 	    
