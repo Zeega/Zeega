@@ -11,6 +11,7 @@ use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Frame;
+use Zeega\DataBundle\Entity\Sequence;
 
 class ProjectsController extends Controller
 {
@@ -117,7 +118,58 @@ class ProjectsController extends Controller
         
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers`   [POST] /sequences
+    
+    public function postProjectSequencesAction($project_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        $project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        
+        $sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
+        $sequenceIndex = $sequenceCount + 1;
 
+        $sequence = new Sequence();
+
+        $frame = new Frame();
+        $frame->setSequence($sequence);
+        $frame->setProject($project);
+
+        if($request->request->get('layers_to_persist'))
+        {
+            $layersToPersist = $request->request->get('layers_to_persist');
+            $frame->setLayers($layersToPersist);
+        }
+        else if($request->request->get('frame_id'))
+        {
+            $frameId = $request->request->get('frame_id');
+            $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+
+            $previousFrameLayers = $previousframe->getLayers();
+            $frame->setLayers($previousFrameLayers);
+        }
+
+        $sequence->setProject($project);
+        $sequence->setTitle('Sequence '.$sequenceIndex);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($sequence);
+        $em->persist($frame);
+        $em->flush();
+
+        $layers = array();
+        // auch - should work for now, but won't scale for sure
+        $sequenceId = $sequence->getId();
+        $frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
+        $sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
+
+        $layers = array();
+
+        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+    }
+    
     public function postProjectSequencesFramesAction($projectId,$sequenceId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
