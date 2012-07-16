@@ -180,4 +180,29 @@ class User extends BaseUser
     {
         return $this->sites;
     }
+    /**
+     * @var string $dropbox_delta
+     */
+    private $dropbox_delta;
+
+
+    /**
+     * Set dropbox_delta
+     *
+     * @param string $dropboxDelta
+     */
+    public function setDropboxDelta($dropboxDelta)
+    {
+        $this->dropbox_delta = $dropboxDelta;
+    }
+
+    /**
+     * Get dropbox_delta
+     *
+     * @return string 
+     */
+    public function getDropboxDelta()
+    {
+        return $this->dropbox_delta;
+    }
 }
