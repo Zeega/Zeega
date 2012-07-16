@@ -202,7 +202,7 @@ var BrowserDetect = {
 							
 							<ul class="nav">
 								
-							{% if site%}
+							
 								<!--
 								{% if num_sites > 1 %}
 								<li class="dropdown">
@@ -220,9 +220,14 @@ var BrowserDetect = {
 								<!--
 								{% else %}
 								-->
+
+								<!-- HOME LINK
 								<li class="">
 									<a href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}">{{title}}</a>
 								</li>
+									END HOME -->
+
+
 								<!--
 								{% endif %}
 								-->
@@ -236,12 +241,25 @@ var BrowserDetect = {
 									</a>
 									<ul class="dropdown-menu">
 										
-										<li><a href="#">New Project</a></li>
+										<li><a href="#">Mission</a></li>
+										<li><a href="#">Productions</a></li>
+										<li><a href="#">Engine</a></li>
+										<li><a href="#">Team</a></li>
+										<li><a href="#">Contact</a></li>
 										<li class="divider"></li>
+										<li><a href="#">Terms of Service</a></li>
+										<li><a href="#">Privacy Policy</a></li>
 										
 										
 									</ul>
 								</li>
+								
+								{% if is_granted('ROLE_ADMIN') %}
+								<li><a href="{{ path('fos_user_registration_register') }}"><i class='zicon-add-user'></i> Register User</a></li>
+								{% endif %}
+							</ul>
+							
+							<ul class="nav pull-right">
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 										Projects
@@ -260,21 +278,12 @@ var BrowserDetect = {
 										
 									</ul>
 								</li><!-- project .dropdown -->
-								<li class="divider-vertical"></li>
-								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
-							
-							{% else %} 
-								<li class="divider-vertical"></li>
-								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
 								
-							{% endif %} 
-							
-								{% if is_granted('ROLE_ADMIN') %}
-								<li><a href="{{ path('fos_user_registration_register') }}"><i class='zicon-add-user'></i> Register User</a></li>
-								{% endif %}
-							</ul>
-							
-							<ul class="nav pull-right">
+								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
+								<li class="divider-vertical"></li>
+								
+								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a>
+								</li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-warning'></i> Report a Bug<b class="caret"></b></a>
 									<ul class="dropdown-menu bug-report">
@@ -301,7 +310,6 @@ var BrowserDetect = {
 										
 									</ul>
 							</li>
-								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a></li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
 									<ul class="dropdown-menu">
