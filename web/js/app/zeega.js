@@ -76,7 +76,7 @@ this.zeega = {
 		})
 	},
 	
-	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
 	refreshDatabase : function(){ this.itemCollection.refresh() },
 
 	startEditor : function()

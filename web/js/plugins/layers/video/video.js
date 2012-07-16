@@ -110,7 +110,7 @@
 				model: this.model,
 				label : 'Opacity',
 				step : 0.01,
-				min : .05,
+				min : 0,
 				max : 1,
 			});
 			

@@ -72,12 +72,6 @@ jQuery(function($)
 	$('.VS-icon.VS-icon-search').click(function(){
 		console.log('open filter dialog')
 		$('.filter-list').show('fast');
-		/*
-		$('body').click(function(){
-			$('.filter-list').hide();
-			$('body').unbind('click');
-		})
-		*/
 	})
 	//when a filter is selected via dropdown
 	$('.filter-list a').click(function(e){
@@ -91,6 +85,7 @@ jQuery(function($)
 		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
 		
 		$('.filter-list').hide();
+		console.log('search filter', visualSearch, model)
 		e.stopPropagation();
 		return false;
 	})

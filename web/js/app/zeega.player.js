@@ -677,10 +677,9 @@ var Player2 = Backbone.View.extend({
 					this.$el.find('.progress-types ul').empty();
 					_.each(this.model.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
-						console.log(layer)
-						console.log('load layer type: '+ layer.get('type'))
+						console.log('loader layer',layer, layer.displayCitation)
 						
-						if( layer.get('type') != 'Link' )
+						if( layer.displayCitation != false && layer.get('type') != 'Link' )
 						{
 							var itemType = ( layer.get('attr').archive ) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
 							console.log(itemType)
@@ -870,7 +869,7 @@ var Player2 = Backbone.View.extend({
 			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
 		
 		if(this.zeega) html +=
-			"<div id='preview-close' class='player-overlay'><a href='#'><span class='zicon orange zicon-close' ></span></a></div>";
+			"<div id='preview-close' class='player-overlay'><a class='close' href='#'>&times;</a></div>";
 		
 		
 		html +=
