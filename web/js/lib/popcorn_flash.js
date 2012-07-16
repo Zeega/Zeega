@@ -9911,7 +9911,7 @@ Popcorn.player( "flashvideo", {
 		flashvideoObject = document.getElementById (container.id);
 		
 		onLoading[container.id] = function (value){
-			
+			console.log('on loading',value);
 			if(value==2) media.duration = flashvideoObject.sendToFlash('getEndTime','');
 			else if(value==3){
 				
@@ -9943,12 +9943,13 @@ Popcorn.player( "flashvideo", {
 				
 				Popcorn.player.defineProperty( media, "currentTime", {
 					set: function( val ) {
-				
+						console.log('setting current time to',val);
 						// make sure val is a number
 						currentTime = seekTime = +val;
 						seeking = true;
 						media.dispatchEvent( "seeked" );
 						media.dispatchEvent( "timeupdate" );
+						console.log('setting current time to',currentTime);
 						flashvideoObject.sendToFlash('seek',currentTime);
 						return currentTime;
 					},
@@ -9957,26 +9958,22 @@ Popcorn.player( "flashvideo", {
 					}
         		});
 
-        /*
+        
 
         Popcorn.player.defineProperty( media, "volume", {
           set: function( val ) {
-
-            if ( youtubeObject.getVolume() / 100 !== val ) {
-
-              youtubeObject.setVolume( val * 100 );
-              lastVolume = youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
-            }
-
-            return youtubeObject.getVolume() / 100;
+	
+			
+			if(val !=flashvideoObject.getVolume())flashvideoObject.sendToFlash('setVolume',val);
+			return flashvideoObject.getVolume();
+            
           },
           get: function() {
 
-            return youtubeObject.getVolume() / 100;
+            return flashvideoObject.getVolume();
           }
         });
-		*/
+	
 		
 			media.readyState = 4;
 			media.dispatchEvent( "canplaythrough" );
@@ -10050,7 +10047,7 @@ Popcorn.player( "flashvideo", {
 
       src = /(http.*)/.exec( media.src )[ 1 ];
      
-      swfobject.embedSWF("MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
+      swfobject.embedSWF(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+"MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
 	  
 	  
      
