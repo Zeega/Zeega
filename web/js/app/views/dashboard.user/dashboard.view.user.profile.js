@@ -28,7 +28,7 @@
 			/***************************************************************************
 				BG image with one in user profile
 			***************************************************************************/
-			if (!_.isUndefined(this.model.get("background_image_url"))){
+			if (!_.isUndefined(this.model.get("background_image_url")) && this.model.get('background_image_url') != '' ){
 				$('html').css('background-image', 'url('+ this.model.get("background_image_url")+')');
 			}
 
