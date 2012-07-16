@@ -28,8 +28,8 @@
 			/***************************************************************************
 				BG image with one in user profile
 			***************************************************************************/
-			if (!_.isUndefined(this.model.profile_image)){
-				$('html').css('background-image', 'url('+ this.model.profile_image+')');
+			if (!_.isUndefined(this.model.get("background_image_url"))){
+				$('html').css('background-image', 'url('+ this.model.get("background_image_url")+')');
 			}
 
 			/***************************************************************************
@@ -40,7 +40,7 @@
 
 			
 			var joinDate=new Date(blanks['created_at']);
-			blanks['join_date'] = joinDate.getMonth() + " " + joinDate.getFullYear();
+			blanks['join_date'] = joinDate.getMonthAbbreviation() + " " + joinDate.getFullYear();
 
 			$(this.el).html( _.template( template, blanks ) );
 
@@ -49,6 +49,7 @@
 			$('#user-image-upload-file, #user-image-upload-background').change(function(){
 				
 				_this.fileUpload($(this).attr('id'));
+
 				
 			})
 			
@@ -71,7 +72,7 @@
 				'display_name' : $(this.el).find('.dashboard-name').text(),
 				'bio' : $(this.el).find('.dashboard-bio').text().substring(0,250),
 				'thumbnail_url' : $(this.el).find('.dashboard-profile-photo').attr('src'),
-				'profile_image' : backgroundImageURL,
+				'background_image_url' : backgroundImageURL,
 				 
 				
 			})
@@ -120,6 +121,7 @@
 		error: callback function when the ajax failed
 */
 			var _this = this;
+
 			if (elementIDName == "user-image-upload-file"){
 				$('.dashboard-profile-photo').fadeTo(500,0.5);
 				//$('.profile-image-wrapper').spin('tiny');
@@ -188,11 +190,11 @@
 		
 		getTemplate : function()
 		{
-			html = 	'<div class="span6 author-photo dashboard-photo" style="height:auto">'+
+			html = 	'<div class="span3 author-photo dashboard-photo">'+
 						'<div class="profile-image-wrapper">'+
-							'<img src="<%= thumbnail_url %>" alt="author-photo" width="162" height="162" class="dashboard-profile-photo">'+
+							'<img src="<%= thumbnail_url %>" alt="author-photo" width="100%" height="100%" class="dashboard-profile-photo">'+
 						'</div>'+
-						'<div class="gradient">'+
+						'<div class="gradient" style="height:100%">'+
 						'</div>'+
 					
 					'</div>'+
@@ -200,25 +202,30 @@
 					'<div class="span8 author-bio" style="height:auto">'+
 					
 						'<div>'+
-							'<h3 class="dashboard-name"><%= display_name%></h3>'+
-							'<a class="edit pull-right" href="">Edit</a>'+
+							
+							'<h3 class="dashboard-name pull-left"><%= display_name%></h3>'+
+							'<a class="btn btn-mini edit" href="." style="">Edit info</a>'+
+							
 
-							'<h6>Authored 5 projects since joining on <%= join_date %></h6>'+
+							'<h6>Authored 5 projects since joining in <%= join_date %></h6>'+
 							'<div>'+
 								'<p class="card dashboard-bio"><%= bio %></p>'+
-								'<div class="user-image-upload hide">update your profile picture <input id="user-image-upload-file" type="file" size="40" name="imagefile"></input></div>'+
-								'<div class="user-image-upload hide" >update your background profile picture <input id="user-image-upload-background" type="file" size="40" name="imagefile"></input></div>'+
-								'<div class="btn-group save-data">'+
+								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
+								'<div class="user-image-upload card hide"  style="clear:both"><label class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>'+
+								'<div class="btn-group save-data" style="clear:both;margin-bottom:20px">'+
 									'<button class="btn btn-success btn-mini save hide">save</button>'+
 									'<button class="btn btn-mini cancel hide">cancel</button>'+
 								'</div>'+
 								
 							'</div>'+
 						'</div>'+	
-						'<div class="shadow">'+
+						'<div class="shadow" style="height:162px">'+
 						'</div>'+
 					
-					'</div>';
+					'</div>'+
+					'<div class="span3">'+
+						'<a class="btn btn-info pull-right" href=".">Start a new project</a>'+
+					 '</div>';
 			
 			return html;
 		},

@@ -44,23 +44,11 @@ select,
 textarea {
   #font > .shorthand(@baseFontSize,normal,@baseLineHeight); // Set size, weight, line-height here
 }
-input,
-button,
-select,
-textarea {
-  font-family: @altFontFamily; // And only set font-family here for those that need it (note the missing label element)
-  font-size: 22px;
-}
+
 
 .longform	{
 			font-size: @baseFontSize;
 			}
-
-// Identify controls by their labels
-label {
-  display: block;
-  margin-bottom: 5px;
-}
 
 // Form controls
 // -------------------------
