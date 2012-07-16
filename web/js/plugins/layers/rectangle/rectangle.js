@@ -14,6 +14,8 @@
 	Layer.Rectangle = Layer.Model.extend({
 
 		layerType : 'Rectangle',
+		displayCitation : false,
+		linkable : true,
 		
 		defaultAttributes : {
 			'title' : 'Color Layer',
