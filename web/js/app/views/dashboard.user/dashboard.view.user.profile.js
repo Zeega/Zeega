@@ -24,8 +24,13 @@
 		render: function(done)
 		{
 			var _this = this;
-
 			
+			/***************************************************************************
+				BG image with one in user profile
+			***************************************************************************/
+			if (!_.isUndefined(this.model.profile_image)){
+				$('html').css('background-image', 'url('+ this.model.profile_image+')');
+			}
 
 			/***************************************************************************
 				Put template together
@@ -41,10 +46,10 @@
 
 			
 			
-			$('#user-image-upload-file').change(function(){
+			$('#user-image-upload-file, #user-image-upload-background').change(function(){
 				
-				//_this.fileUpload($(this).attr('id'));
-				_this.fileUpload();
+				_this.fileUpload($(this).attr('id'));
+				
 			})
 			
 
@@ -60,12 +65,14 @@
 		saveFields : function()
 		{
 			$(this.el).find('.dashboard-bio').text($(this.el).find('.dashboard-bio').text().substring(0,250));
+			var backgroundImageURL = $('html').css('background-image').replace('url(','').replace(')','');
 			this.model.save({
 				
 				'display_name' : $(this.el).find('.dashboard-name').text(),
 				'bio' : $(this.el).find('.dashboard-bio').text().substring(0,250),
 				'thumbnail_url' : $(this.el).find('.dashboard-profile-photo').attr('src'),
-				//background url updating 
+				'profile_image' : backgroundImageURL,
+				 
 				
 			})
 		},
@@ -101,7 +108,7 @@
 			return false
 		},
 		
-		fileUpload : function()
+		fileUpload : function(elementIDName)
 		{
 /*
 		prepareing ajax file upload
@@ -113,29 +120,33 @@
 		error: callback function when the ajax failed
 */
 			var _this = this;
-			
-			$('.dashboard-profile-photo').fadeTo(500,0.5);
-			//$('.profile-image-wrapper').spin('tiny');
-			
+			if (elementIDName == "user-image-upload-file"){
+				$('.dashboard-profile-photo').fadeTo(500,0.5);
+				//$('.profile-image-wrapper').spin('tiny');
+			} 
 			jQuery.handleError=function(a,b,c,d)
 			{
 				console.log('ERROR UPLOADING',a,b,c,d)
-				$('.dashboard-profile-photo').fadeTo(500,1);
-				//$('.profile-image-wrapper').spin(false)
+				if (elementIDName == "user-image-upload-file"){
+					$('.dashboard-profile-photo').fadeTo(500,1);
+					//$('.profile-image-wrapper').spin(false)
+				}
 				
-				$('#user-image-upload-file').change(function(){
+				
+				$('#' + elementIDName).change(function(){
 					console.log('upload image some more!!!!!')
-					_this.fileUpload();
+					_this.fileUpload(elementIDName);
 				})
 				
 			};
-						
+		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
+		 						"http://dev.zeega.org/static/community/scripts/user_profile.php?id="+this.model.id :
+		 						"http://dev.zeega.org/static/community/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
-				//user_bg.php
-				url:"http://dev.zeega.org/static/community/scripts/user_profile.php?id="+this.model.id,
-				//url:sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/users/'+this.model.id+'/profileimage', 
+		
+				url:phpFileURL,		
 				secureuri:false,
-				fileElementId:'user-image-upload-file',
+				fileElementId:elementIDName,
 				dataType: 'json',
 				success: function (data, status)
 				{
@@ -146,14 +157,18 @@
 					else
 					{
 						//TODO get model & update thumbnail_url property
-						$('.dashboard-profile-photo')
-							.attr('src',data.thumbnail_url)
-							.fadeTo(500,1);
-						//$('.profile-image-wrapper').spin(false);
+						if (elementIDName == "user-image-upload-file"){
+							$('.dashboard-profile-photo')
+								.attr('src',data.thumbnail_url)
+								.fadeTo(500,1);
+							//$('.profile-image-wrapper').spin(false);
+						}else{
+							$('html').css('background-image', 'url('+ data.thumbnail_url+')');
+						}
 						
-						$('#user-image-upload-file').change(function(){
-							console.log('upload image again!!!!!!')
-							_this.fileUpload();
+						$('#' + elementIDName).change(function(){
+							console.log('upload image some more!!!!!')
+							_this.fileUpload(elementIDName);
 						})
 						
 					}
@@ -173,9 +188,9 @@
 		
 		getTemplate : function()
 		{
-			html = 	'<div class="span6 author-photo" style="height:auto">'+
+			html = 	'<div class="span6 author-photo dashboard-photo" style="height:auto">'+
 						'<div class="profile-image-wrapper">'+
-							'<img src="<%= thumbnail_url %>" alt="author-photo" width="400" height="225" class="dashboard-profile-photo">'+
+							'<img src="<%= thumbnail_url %>" alt="author-photo" width="162" height="162" class="dashboard-profile-photo">'+
 						'</div>'+
 						'<div class="gradient">'+
 						'</div>'+
@@ -192,7 +207,7 @@
 							'<div>'+
 								'<p class="card dashboard-bio"><%= bio %></p>'+
 								'<div class="user-image-upload hide">update your profile picture <input id="user-image-upload-file" type="file" size="40" name="imagefile"></input></div>'+
-								//'<div class="user-image-upload hide" >update your background profile picture <input id="user-image-upload-background" type="file" size="40" name="imagefile"></input></div>'+
+								'<div class="user-image-upload hide" >update your background profile picture <input id="user-image-upload-background" type="file" size="40" name="imagefile"></input></div>'+
 								'<div class="btn-group save-data">'+
 									'<button class="btn btn-success btn-mini save hide">save</button>'+
 									'<button class="btn btn-mini cancel hide">cancel</button>'+
