@@ -184,50 +184,7 @@ var BrowserDetect = {
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
 
-	<div id='add-media'>
-			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
-
-			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
-						
-				<div id="book-one" style="float: left;">
-					<img src="{{ asset('images/chrome-logo.gif') }}" style="margin-left: 25px;"/>
-					<br>
-					<br>
-					Access Zeega from the<br>
-					<a href="http://google.com/chrome" target="_blank">latest Chrome browser</a>
-				</div>
-				
-				<div id="book-two" style="float: left; margin-left: 20px;">
-					<img src="{{ asset('images/view-bookmarks.gif') }}" style="margin-left: 25px; margin-top: 25px;"/>
-					<br><br><br>
-					<span style="display: block; margin-left: 55px; margin-top: 2px;">
-						Under the view menu, select<br>
-						"Always show Bookmarks Bar"
-					</span>
-				</div>
-				
-				<div id="book-three" style="float: left; margin-left: 30px;">
-					<a href="javascript:(function()%7Bvar%20head=document.getElementsByTagName('body')%5B0%5D,script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='{{hostname}}{{directory}}js/widget/zeega.bookmarklet.js?'%20+%20Math.floor(Math.random()*99999);head.appendChild(script);%7D)();%20void%200"><img src="{{ asset('images/drag-zeega.gif') }}" style="margin-left: 25px; margin-top: 0px;" alt="Add to Zeega"/></a>
-					<br>
-					<span style="display: block; margin-left: 5px; margin-top: 10px;">
-						Drag this icon to the<br>
-						Bookmarks Bar within<br>
-						the browser
-					</span>
-
-				</div>
-				
-				<div id="book-four" style="float: left; margin-left: 30px;">
-					<img src="{{ asset('images/bookmark-confirm.gif') }}" style="margin-left: 35px; margin-top: 13px;"/>
-					<br>
-					<span style="display: block; margin-left: 17px; margin-top: 10px;">
-						"Add to Zeega" will now appear in your Bookmarks<br> Bar. As you find media across the web, click this<br> to open the bookmarklet plugin.
-					</span>
-
-				</div>
-				
-			<div class="clear" style="clear: both;"></div>
-			</div><!--#add-media-->
+	
  	
     	
     	{% block header %}
@@ -272,6 +229,19 @@ var BrowserDetect = {
 								<!--
 								<li><a href="{{ path('ZeegaDiscoveryBundle_library', {'short': site.short }) }}">Library</a></li>
 								-->
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										About
+										<b class="caret"></b>
+									</a>
+									<ul class="dropdown-menu">
+										
+										<li><a href="#">New Project</a></li>
+										<li class="divider"></li>
+										
+										
+									</ul>
+								</li>
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 										Projects
@@ -349,8 +319,51 @@ var BrowserDetect = {
     			
 				
 			{% endblock %}
-		
+			<!-- ADD MEDIA modal window -->
+			<div class="modal hide" id='add-media'>
+			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
 
+			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
+						
+				<div id="book-one" style="float: left;">
+					<img src="{{ asset('images/chrome-logo.gif') }}" style="margin-left: 25px;"/>
+					<br>
+					<br>
+					Access Zeega from the<br>
+					<a href="http://google.com/chrome" target="_blank">latest Chrome browser</a>
+				</div>
+				
+				<div id="book-two" style="float: left; margin-left: 20px;">
+					<img src="{{ asset('images/view-bookmarks.gif') }}" style="margin-left: 25px; margin-top: 25px;"/>
+					<br><br><br>
+					<span style="display: block; margin-left: 55px; margin-top: 2px;">
+						Under the view menu, select<br>
+						"Always show Bookmarks Bar"
+					</span>
+				</div>
+				
+				<div id="book-three" style="float: left; margin-left: 30px;">
+					<a href="javascript:(function()%7Bvar%20head=document.getElementsByTagName('body')%5B0%5D,script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='{{hostname}}{{directory}}js/widget/zeega.bookmarklet.js?'%20+%20Math.floor(Math.random()*99999);head.appendChild(script);%7D)();%20void%200"><img src="{{ asset('images/drag-zeega.gif') }}" style="margin-left: 25px; margin-top: 0px;" alt="Add to Zeega"/></a>
+					<br>
+					<span style="display: block; margin-left: 5px; margin-top: 10px;">
+						Drag this icon to the<br>
+						Bookmarks Bar within<br>
+						the browser
+					</span>
+
+				</div>
+				
+				<div id="book-four" style="float: left; margin-left: 30px;">
+					<img src="{{ asset('images/bookmark-confirm.gif') }}" style="margin-left: 35px; margin-top: 13px;"/>
+					<br>
+					<span style="display: block; margin-left: 17px; margin-top: 10px;">
+						"Add to Zeega" will now appear in your Bookmarks<br> Bar. As you find media across the web, click this<br> to open the bookmarklet plugin.
+					</span>
+
+				</div>
+				
+			<div class="clear" style="clear: both;"></div>
+			</div><!--#add-media-->
 			<div id="editor" class='clearfix'>
 				
 				{% block body %}{% endblock %}

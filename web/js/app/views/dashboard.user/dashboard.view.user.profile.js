@@ -207,7 +207,7 @@
 							'<a class="btn btn-mini edit" href="." style="">Edit info</a>'+
 							
 
-							'<h6>Authored 5 projects since joining in <%= join_date %></h6>'+
+							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
 							'<div>'+
 								'<p class="card dashboard-bio"><%= bio %></p>'+
 								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
