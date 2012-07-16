@@ -158,6 +158,18 @@
     target=bundles/FOS/RestBundle
 
 ; ---------------------------------------------
+; RabbitMQ (queue)
+; ---------------------------------------------
+
+[RabbitMqBundle]
+	git=http://github.com/videlalvaro/RabbitMqBundle.git
+	target=/bundles/OldSound/RabbitMqBundle
+
+[php-amqplib]
+	git=http://github.com/videlalvaro/php-amqplib.git
+	target=videlalvaro/php-amqplib
+
+; ---------------------------------------------
 ; other bundles
 ; ---------------------------------------------
 

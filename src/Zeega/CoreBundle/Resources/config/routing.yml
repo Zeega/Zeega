@@ -1,3 +1,7 @@
+ZeegaCoreBundle_celery:
+  pattern: /celery/queue
+  defaults: { _controller: ZeegaCoreBundle:Celery:queue }
+
 sites:
   type:     rest
   resource: Zeega\CoreBundle\Controller\SitesController

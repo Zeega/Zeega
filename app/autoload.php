@@ -29,6 +29,8 @@ $loader->registerNamespaces(array(
     'Nelmio'                        => __DIR__.'/../vendor/bundles',
     'Doctrine\\Common\\DataFixtures' => __DIR__.'/../vendor/doctrine-fixtures/lib',
     'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
+    'OldSound'         => __DIR__.'/../vendor/bundles',
+    'PhpAmqpLib'       => __DIR__.'/../vendor/videlalvaro/php-amqplib',    
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
