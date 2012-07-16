@@ -677,10 +677,9 @@ var Player2 = Backbone.View.extend({
 					this.$el.find('.progress-types ul').empty();
 					_.each(this.model.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
-						console.log(layer)
-						console.log('load layer type: '+ layer.get('type'))
+						console.log('loader layer',layer, layer.displayCitation)
 						
-						if( layer.get('type') != 'Link' )
+						if( layer.displayCitation != false && layer.get('type') != 'Link' )
 						{
 							var itemType = ( layer.get('attr').archive ) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
 							console.log(itemType)
