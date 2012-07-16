@@ -284,7 +284,7 @@
 		{
 			html = 
 			
-			"<form class='form-inline'>"+
+			"<form class='form-inline' style='height:0px'>"+
 				"<label class='checkbox'><input type='checkbox' <%= check %>> <%= label %></label>"+
 			"</form>";
 			
@@ -415,8 +415,8 @@
 		{
 			var html = ''+
 			
-					"<div class='control-name' style='float:left;position:relative;top:15px;width:25%'><%= label %></div>"+
-					"<div style='float:left;width:70%;padding-right:5%'>"+
+					"<div class='control-name' style='float:left;position:relative;top:15px;width:35%'><%= label %></div>"+
+					"<div style='float:left;width:60%;padding-right:5%'>"+
 						"<div class='slider-num-input' contenteditable='true' style='margin-bottom:5px;position:relative;display:inline-block'><%= uiValue %></div>"+
 						"<div class='control-slider'></div>"+
 					"</div>";

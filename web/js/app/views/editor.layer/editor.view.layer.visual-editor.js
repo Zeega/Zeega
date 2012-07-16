@@ -19,8 +19,7 @@
 			
 			this.attr = this.model.get('attr')
 			
-			if(this.attr.dissolve||true) var op=.01;
-			else var op = this.model.get('attr').opacity;
+			
 			
 			$(this.el).css({
 				'position' : 'absolute',
@@ -208,7 +207,7 @@
 			
 			if(!this.onStage){
 				this.onStage=true;
-				if(this.attr.dissolve||true) $(this.el).clearQueue().css({opacity:.01});
+				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
 			}
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
@@ -216,7 +215,7 @@
 			this.model.inFocus = true;
 			
 			//dissolve
-			if(this.attr.dissolve||true) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
+			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
 					
 			
 			//make the linked layers blink on entrance

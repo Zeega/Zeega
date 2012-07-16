@@ -67,7 +67,7 @@
 			var fadeInSlider = new Layer.Views.Lib.Slider({
 				property : 'fade_in',
 				model: this.model,
-				label : 'Fade In',
+				label : 'Fade In (sec)',
 				min : 0,
 				max :5,
 				step : 0.1,
@@ -78,7 +78,7 @@
 			var fadeOutSlider = new Layer.Views.Lib.Slider({
 				property : 'fade_out',
 				model: this.model,
-				label : 'Fade Out',
+				label : 'Fade Out (sec)',
 				min : 0,
 				max : 5,
 				step : 0.1,
@@ -124,14 +124,15 @@
 			
 			this.controls
 				.append( playbackControls.getControl() )
+				.append( dissolveCheck.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
 				.append( opacitySlider.getControl() )
 				.append( audioLabel.getControl() )
 				.append( volumeSlider.getControl() )
 				.append( fadeInSlider.getControl() )
-				.append( fadeOutSlider.getControl() )
-				.append( dissolveCheck.getControl() );
+				.append( fadeOutSlider.getControl() );
+				
 			
 			return this;
 		
@@ -146,7 +147,7 @@
 		
 		render : function()
 		{
-			if(this.model.get('attr').dissolve ||true) $(this.el).css({opacity:0});
+			
 			var img = $('<img>')
 				.attr('id', 'video-player-'+ this.model.id)
 				.attr('src', this.attr.thumbnail_url)
@@ -270,7 +271,7 @@
 				this.model.video.volume(this.model.get('attr').volume);
 				
 			}
-			else console.log('all is good',this.model.video.volume())
+			
 			
 			//Dissolve
 			

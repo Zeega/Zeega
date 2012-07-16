@@ -16,6 +16,8 @@
 			'volume' : 0.5,
 			'cue_in'  : 0,
 			'cue_out' : 0,
+			'fade_in'  : 0,
+			'fade_out' : 0,
 			'opacity':1,
 			'dimension':1.5,
 			'citation':true,
@@ -41,10 +43,34 @@
 					step : 0.01,
 					css : false
 				});
+				
+							
+			var fadeInSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_in',
+				model: this.model,
+				label : 'Fade In (sec)',
+				min : 0,
+				max :5,
+				step : 0.1,
+				css : false
+			});
+			
+			
+			var fadeOutSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_out',
+				model: this.model,
+				label : 'Fade Out (sec)',
+				min : 0,
+				max : 5,
+				step : 0.1,
+				css : false
+			});
 
 				this.controls
 					.append( playbackControls.getControl() )
-					.append( volumeSlider.getControl() );
+					.append( volumeSlider.getControl() )
+					.append( fadeInSlider.getControl() )
+					.append( fadeOutSlider.getControl() );
 					
 				return this;
 
