@@ -9891,7 +9891,7 @@ Popcorn.player( "flashvideo", {
         lastVolume = 100;
 
     container.id = media.id + Popcorn.guid();
-
+	media.waiting =true;
     media.appendChild( container );
 
     var flashvideoInit = function() {
@@ -9913,7 +9913,9 @@ Popcorn.player( "flashvideo", {
 		onLoading[container.id] = function (value){
 			console.log('on loading',value);
 			if(value==2) media.duration = flashvideoObject.sendToFlash('getEndTime','');
-			else if(value==3){
+			else if(value==3&&media.waiting){
+				media.waiting=false;
+				
 				
 				var timeupdate = function() {
 				
@@ -9943,15 +9945,17 @@ Popcorn.player( "flashvideo", {
 				
 				Popcorn.player.defineProperty( media, "currentTime", {
 					set: function( val ) {
-						console.log('setting current time to',val);
+						
+						//console.log('setting current time to',val);
+						
 						// make sure val is a number
 						currentTime = seekTime = +val;
 						seeking = true;
 						media.dispatchEvent( "seeked" );
 						media.dispatchEvent( "timeupdate" );
-						console.log('setting current time to',currentTime);
 						flashvideoObject.sendToFlash('seek',currentTime);
 						return currentTime;
+						
 					},
 					get: function() {
 						return currentTime;
@@ -9960,19 +9964,19 @@ Popcorn.player( "flashvideo", {
 
         
 
-        Popcorn.player.defineProperty( media, "volume", {
-          set: function( val ) {
+			Popcorn.player.defineProperty( media, "volume", {
+			  set: function( val ) {
+		
+				
+				if(val !=flashvideoObject.getVolume())flashvideoObject.sendToFlash('setVolume',val);
+				return flashvideoObject.getVolume();
+				
+			  },
+			  get: function() {
 	
-			
-			if(val !=flashvideoObject.getVolume())flashvideoObject.sendToFlash('setVolume',val);
-			return flashvideoObject.getVolume();
-            
-          },
-          get: function() {
-
-            return flashvideoObject.getVolume();
-          }
-        });
+				return flashvideoObject.getVolume();
+			  }
+			});
 	
 		
 			media.readyState = 4;
@@ -9984,9 +9988,10 @@ Popcorn.player( "flashvideo", {
 	
 			media.dispatchEvent( "loadeddata" );
       	}
+      	
 		};
 		
-		/*
+		
 		onStateChange[container.id] = function (playerId, value){
 				
 				switch(value){
@@ -10003,7 +10008,7 @@ Popcorn.player( "flashvideo", {
 				  		console.log("onLoading - " + value);
 				}
 		}
-		*/
+
 		onError[container.id] = function (playerId, value){
 				
 				switch(value){
@@ -10023,7 +10028,7 @@ Popcorn.player( "flashvideo", {
 		//flashvideoObject.addEventListener( "onError", "onError." + container.id );
 		
 		console.log('player '+ container.id + ' has loaded');
-		flashvideoObject.sendToFlash("load", src+',0');	
+		flashvideoObject.sendToFlash("load", src+','+options.cue_in);	
 	
 		
         

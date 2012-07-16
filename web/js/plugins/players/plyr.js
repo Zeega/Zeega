@@ -149,7 +149,7 @@ var Plyr2 = Backbone.Model.extend({
 					});
 					break;
 				case 'flashvideo':
-					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('uri') );
+					this.pop = Popcorn.flashvideo('#zvideo-'+ this.id, this.get('uri'),{volume:this.get('volume'), cue_in:this.get('cue_in')}  );
 					this.pop.listen('loadeddata',function(){
 						_this.pop.volume(_this.get('volume'));
 						_this.trigger('video_canPlay');
