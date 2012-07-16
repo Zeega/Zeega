@@ -689,7 +689,6 @@
 		initWheel : function()
 		{
 			var _this = this;
-			console.log('pull up color wheel!')
 			this.$el.find('.close').show();
 			
 			if( this.wheelLoaded != true )

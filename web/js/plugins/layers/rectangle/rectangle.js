@@ -87,7 +87,7 @@
 		render : function()
 		{
 			var style = {
-				'backgroundColor' : this.attr.backgroundColor,
+				'backgroundColor' : this.model.get('attr').backgroundColor,
 				'height' : this.model.get('attr').height +'%'
 			}
 
