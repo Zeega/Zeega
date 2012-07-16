@@ -1,3 +1,15 @@
+api_layers:
+    type: rest
+    resource: Zeega\ApiBundle\Controller\LayersController
+    name_prefix: api_
+    prefix:   api    
+
+api_sequences:
+    type: rest
+    resource: Zeega\ApiBundle\Controller\SequencesController
+    name_prefix: api_
+    prefix:   api    
+
 api_projects:
     type: rest
     resource: Zeega\ApiBundle\Controller\ProjectsController

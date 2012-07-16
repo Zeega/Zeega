@@ -21,7 +21,7 @@ $(document).ready(function() {
 		var id =$(this).data('id'); 
 		$('.project-'+id).fadeOut(); 
 		$.ajax({
-				url: window.URL_PREFIX+'projects/'+id,
+				url: window.URL_PREFIX+'/api/projects/'+id,
 				type: 'DELETE',
 				success: function(){
 				console.log('done');

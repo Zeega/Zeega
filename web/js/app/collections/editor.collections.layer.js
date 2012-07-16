@@ -84,14 +84,14 @@
 		
 		addLayerToFrame : function(frame,layer)
 		{
-			console.log('	ADD LAYER TO FRAME')
-			if(frame.id != zeega.app.currentFrame)
+			var layerArray = [];
+			if(frame.get('layers'))
 			{
-				if(frame.get('layers')) frame.get('layers').push(layer.id);
-				else frame.set('layers',[layer.id]);
-				frame.save();
-				console.log(frame)
+				layerArray = frame.get('layers');
+				layerArray.push(layer.id);
 			}
+			else layerArray = [layer.id];
+			frame.save({'layers': _.compact(layerArray)});
 			layer.trigger('update');
 			zeega.app.updateLayerOrder( frame );
 		},

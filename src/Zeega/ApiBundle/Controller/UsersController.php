@@ -106,6 +106,7 @@ class UsersController extends Controller
     	$location = $this->getRequest()->request->get('location');
     	$locationLatitude = $this->getRequest()->request->get('location_latitude');
     	$locationLongitude = $this->getRequest()->request->get('location_longitude');
+    	$backgroundImageUrl = $this->getRequest()->request->get('background_image_url');
     	
     	$user = $em->getRepository('ZeegaDataBundle:User')->find($id);
     	if(isset($bio)) $user->setBio($bio); 
@@ -114,6 +115,7 @@ class UsersController extends Controller
     	if(isset($location)) $user->setLocation($location);
     	if(isset($locationLatitude)) $user->setLocationLatitude($locationLatitude);
     	if(isset($locationLongitude)) $user->setLocationLongitude($locationLongitude);
+    	if(isset($backgroundImageUrl)) $user->setBackgroundImageUrl($backgroundImageUrl);
     	
     	$em->persist($user);
         $em->flush();

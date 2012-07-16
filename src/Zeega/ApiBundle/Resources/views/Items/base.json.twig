@@ -6,7 +6,7 @@
 {% if user_is_admin is defined %}
 	{{ _self.show(item,user_is_admin,user,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
 {% else %}
-	{{ _self.show(item,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
+	{{ _self.show(item,null,null,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
 {% endif %}
 
 {% macro show(item,user_is_admin,user,load_children) %}	{# Item rendering macro/function #}
@@ -17,11 +17,11 @@
     	"user_id" : {{ item.user.id | default("") | json_encode | raw }},
         "username" : {{ item.user.username | default("") | json_encode | raw }},
         "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
-        "title" : {{ item.title | json_encode | raw}},
+        "title" : {{ item.title | default("") | json_encode | raw}},
         "description" : {{ item.description | default("") | json_encode | raw}},
 		"text" : {{ item.text | default("") | json_encode | raw}},
-		"uri" : "{{ item.uri }}",
-		"attribution_uri" : "{{ item.attributionuri }}",
+		"uri" : {{ item.uri | default("") | json_encode | raw}},
+		"attribution_uri" : {{ item.attributionuri | default("") | json_encode | raw}},
 		"date_created" : "{{ item.datecreated | date("Y-m-d") }}",
 		"media_type" : "{{ item.mediatype }}",
 		"layer_type" : "{{ item.layertype }}",
