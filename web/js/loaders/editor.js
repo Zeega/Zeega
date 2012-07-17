@@ -79,6 +79,22 @@ require(
 	'order!app/views/editor.modals/editor.view.modal.share-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
 
+//fancybox views
+	'order!app/views/editor.fancybox/editor.view.fancybox._fancybox',
+	'order!app/views/editor.fancybox/editor.view.fancybox.audio',
+	'order!app/views/editor.fancybox/editor.view.fancybox.default',
+	'order!app/views/editor.fancybox/editor.view.fancybox.document-cloud',
+	'order!app/views/editor.fancybox/editor.view.fancybox.image',
+	'order!app/views/editor.fancybox/editor.view.fancybox.mapbox',
+	'order!app/views/editor.fancybox/editor.view.fancybox.soundcloud',
+	'order!app/views/editor.fancybox/editor.view.fancybox.testimonial',
+	'order!app/views/editor.fancybox/editor.view.fancybox.tweet',
+	'order!app/views/editor.fancybox/editor.view.fancybox.video',
+	'order!app/views/editor.fancybox/editor.view.fancybox.website',
+	
+
+
+
 	//mvc
 	//'order!backbone/models/tag',
 
