@@ -23,7 +23,7 @@ class User extends BaseUser
     /**
      * @var text $bio
      */
-    protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
+    protected $bio ="";
 
     /**
      * @var string $thumb_url
