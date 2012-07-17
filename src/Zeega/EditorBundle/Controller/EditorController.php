@@ -92,11 +92,12 @@ class EditorController extends Controller
 			$collection_id = -1;
 		}
 		
-		$params["exclude_content"] = "Collection";
+		$params["r_items"] = 1;
 		$params["user"] = -1;
 		$params["site"] = $site->getId();
 		
-		$items = $this->forward('ZeegaApiBundle:Items:getItemsFilter', $params)->getContent();
+		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
 		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId(), $site->getId());
