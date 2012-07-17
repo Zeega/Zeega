@@ -204,7 +204,11 @@
 						'<div>'+
 							
 							'<h3 class="dashboard-name pull-left"><%= display_name%></h3>'+
-							'<a class="btn btn-mini edit" href="." style="">Edit info</a>'+
+							'<a class="btn btn-mini btn-inverse edit" href="." style="margin-top: 10px;margin-left: 8px;"><i class="icon-pencil icon-white"></i> edit</a>'+
+							'<div class="btn-group save-data" >'+
+									'<button class="btn btn-inverse btn-mini save hide" style="margin-top: 10px;margin-left:8px">save</button>'+
+									'<button class="btn btn-mini cancel hide" style="margin-top: 10px">cancel</button>'+
+								'</div>'+
 							
 
 							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
@@ -212,10 +216,7 @@
 								'<p class="card dashboard-bio"><%= bio %></p>'+
 								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
 								'<div class="user-image-upload card hide"  style="clear:both"><label class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>'+
-								'<div class="btn-group save-data" style="clear:both;margin-bottom:20px">'+
-									'<button class="btn btn-success btn-mini save hide">save</button>'+
-									'<button class="btn btn-mini cancel hide">cancel</button>'+
-								'</div>'+
+								
 								
 							'</div>'+
 						'</div>'+	
