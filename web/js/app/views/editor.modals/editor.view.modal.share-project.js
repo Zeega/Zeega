@@ -141,6 +141,7 @@
 	getTemplate : function()
 	{
 
+		console.log(this)
 
 		var html =	//Step 1
 					'<div id="publish-project-modal-step1">'+
@@ -253,7 +254,10 @@
 									'<input type="text" id="publish-height" value=""/>'+
 								'</div>'+
 								'<label for="publish-preview">Preview</label>'+
-								'<div class="publish-preview"><%= iframeHTML %></div>'+
+								'<div class="publish-preview" style="background-image:url(<%= cover_image %>);background-size:100%">'+
+									//<div></div>
+									//<div></div>
+								'</div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
 								'<button id="publish-back" class="btn secondary"><i class="icon-circle-arrow-left"></i> Back</button>'+
