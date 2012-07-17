@@ -14,6 +14,8 @@
 	Layer.Rectangle = Layer.Model.extend({
 
 		layerType : 'Rectangle',
+		displayCitation : false,
+		linkable : true,
 		
 		defaultAttributes : {
 			'title' : 'Color Layer',
@@ -85,7 +87,7 @@
 		render : function()
 		{
 			var style = {
-				'backgroundColor' : this.attr.backgroundColor,
+				'backgroundColor' : this.model.get('attr').backgroundColor,
 				'height' : this.model.get('attr').height +'%'
 			}
 
