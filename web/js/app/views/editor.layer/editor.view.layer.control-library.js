@@ -649,7 +649,7 @@
 				});
 			}
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{'color':this.model.get('attr')[this.settings.property]}) ));
 			
 			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
