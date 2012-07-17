@@ -4,6 +4,7 @@ namespace Zeega\ExtensionsBundle\Parser\Dropbox;
 
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Entity\User;
 //use Dropbox;
 
 use \DateTime;
@@ -11,6 +12,11 @@ use \DateTime;
 
 class ParserDropboxSet extends ParserAbstract
 {
+
+	public function __construct()
+	{
+    }
+
 	private static $license=array('','Attribution-NonCommercial-ShareAlike Creative Commons','Attribution-NonCommercial Creative 		
 			Commons','Attribution-NonCommercial-NoDerivs Creative Commons','Attribution Creative Commons',
 			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
@@ -24,10 +30,6 @@ class ParserDropboxSet extends ParserAbstract
 	private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
 	private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
 	
-	function __construct() 
-	{
-		//$this->itemParser = new ParserDropboxItem();
-	}
 
 	public function prepThumbFolder($dropbox)
 	{
@@ -44,6 +46,14 @@ class ParserDropboxSet extends ParserAbstract
 			$delete_response = $dropbox->delete("/__zeegaThumbnails__");
 		}
 		$dropbox->create("/__zeegaThumbnails__");
+	}
+
+	public function fetchDeltas()
+	{
+		// fetch last cursor from DB
+
+
+
 	}
 
 	public function fetchRedirectURL($url1)
@@ -209,6 +219,11 @@ class ParserDropboxSet extends ParserAbstract
 
 	public function load($url, $parameters = null)
     {
+		$user = $parameters["user"];
+        $this->user = $user;
+        //$user = $this->securityContext->getToken()->getUser();
+        $loadCollectionItems = $parameters["load_child_items"];
+        error_log("ParserDropboxSet " . $loadCollectionItems, 0);
 		require_once('../vendor/dropbox/bootstrap.php');
 		$accountInfo = $dropbox->accountInfo();
 		$dropboxUser = $accountInfo["body"]->display_name;

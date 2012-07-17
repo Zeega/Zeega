@@ -16,3 +16,5 @@ Libraries/
 jda_data.*
 !.gitignore
 
+*.sublime-project
+*.sublime-workspace

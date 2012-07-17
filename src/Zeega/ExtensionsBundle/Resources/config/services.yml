@@ -9,6 +9,7 @@ services:
         arguments: 
             hostname: %hostname%
             directory: %directory%
+            security: "@security.context"
         
     zeega_parser_absolute:
         class: %zeega_parser_absolute.class%

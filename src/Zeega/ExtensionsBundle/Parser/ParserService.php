@@ -3,6 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser;
 
 use Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
+use Zeega\DataBundle\Entity\Site;
+use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Symfony\Component\Yaml\Parser;
@@ -14,10 +16,11 @@ use \ReflectionMethod;
  */
 class ParserService
 {
-	public function __construct($hostname, $directory)
+	public function __construct($hostname, $directory, $securityContext)
     {
         $this->hostname = $hostname;
         $this->directory = $directory;
+		$this->securityContext = $securityContext;
     }
 
     
@@ -54,8 +57,10 @@ class ParserService
     			    }
     				
     				// add the regex matches to the parameters
+    				$user = $this->securityContext->getToken()->getUser();
     				$parameters["regex_matches"] = $matches;
     				$parameters["load_child_items"] = $loadChildItems;
+    				$parameters["user"] = $user;
 
     				$parserClass = $parserConfig["parser_class"];
 
