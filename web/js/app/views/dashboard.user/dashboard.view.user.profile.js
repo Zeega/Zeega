@@ -124,14 +124,14 @@
 
 			if (elementIDName == "user-image-upload-file"){
 				$('.dashboard-profile-photo').fadeTo(500,0.5);
-				//$('.profile-image-wrapper').spin('tiny');
+				$('.profile-image-wrapper').spin('tiny');
 			} 
 			jQuery.handleError=function(a,b,c,d)
 			{
 				console.log('ERROR UPLOADING',a,b,c,d)
 				if (elementIDName == "user-image-upload-file"){
 					$('.dashboard-profile-photo').fadeTo(500,1);
-					//$('.profile-image-wrapper').spin(false)
+					$('.profile-image-wrapper').spin(false)
 				}
 				
 				
@@ -163,7 +163,7 @@
 							$('.dashboard-profile-photo')
 								.attr('src',data.thumbnail_url)
 								.fadeTo(500,1);
-							//$('.profile-image-wrapper').spin(false);
+							$('.profile-image-wrapper').spin(false);
 						}else{
 							$('html').css('background-image', 'url('+ data.thumbnail_url+')');
 						}
@@ -208,7 +208,7 @@
 							'<div class="btn-group save-data" >'+
 									'<button class="btn btn-inverse btn-mini save hide" style="margin-top: 10px;margin-left:8px">save</button>'+
 									'<button class="btn btn-mini cancel hide" style="margin-top: 10px">cancel</button>'+
-								'</div>'+
+							'</div>'+
 							
 
 							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+

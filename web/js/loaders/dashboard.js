@@ -22,7 +22,8 @@ require(
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!lib/bootstrap',
-	'order!lib/spin',	
+	'order!lib/spin',
+	'order!lib/spin-jquery',	
 	'order!lib/ajaxfileuploader/ajaxfileupload',
 
 	//core
