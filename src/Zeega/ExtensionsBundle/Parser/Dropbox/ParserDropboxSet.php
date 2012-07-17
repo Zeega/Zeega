@@ -48,12 +48,19 @@ class ParserDropboxSet extends ParserAbstract
 		$dropbox->create("/__zeegaThumbnails__");
 	}
 
-	public function fetchDeltas()
+	public function checkForDeltas($dropbox)
 	{
 		// fetch last cursor from DB
+        $dbCursor = $this->user->getDropboxDelta();
+        $deltas = $dropbox->delta($dbCursor);
+        $deltas_body = $deltas["body"];
+        $deltas_cursor = $deltas_body->cursor;
+        $deltas_entries = $deltas_body->entries;
 
+        $deltas_entries_count = count($deltas_entries);
+        $deltas_reset = $deltas_body->reset;
 
-
+        return $deltas_entries_count;
 	}
 
 	public function fetchRedirectURL($url1)
@@ -219,15 +226,20 @@ class ParserDropboxSet extends ParserAbstract
 
 	public function load($url, $parameters = null)
     {
+        //error_log("ParserDropboxSet ZERO parse", 0);
+		require_once('../vendor/dropbox/bootstrap.php');
+        //$this->dropbox = $dropbox;
+
 		$user = $parameters["user"];
         $this->user = $user;
-        //$user = $this->securityContext->getToken()->getUser();
-        $loadCollectionItems = $parameters["load_child_items"];
-        error_log("ParserDropboxSet " . $loadCollectionItems, 0);
-		require_once('../vendor/dropbox/bootstrap.php');
+        //error_log("---------->", $dbCursor);
+
 		$accountInfo = $dropbox->accountInfo();
 		$dropboxUser = $accountInfo["body"]->display_name;
-		// if collection exists
+		$this->dropboxUser = $dropboxUser;
+
+        $loadCollectionItems = $parameters["load_child_items"];
+
 		$collection = new Item();
 		$collection->setTitle("Dropbox");
 		$collection->setDescription("test collection for Dropbox");
@@ -238,11 +250,21 @@ class ParserDropboxSet extends ParserAbstract
         $collection->setMediaCreatorRealname($dropboxUser);
 		$collection->setMediaDateCreated(new \DateTime());
 		$collection->setUri($url);
-
 		$itemCount = 0;
 
-		$this->prepThumbFolder($dropbox);
-		$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
-		return parent::returnResponse($collection, true, true);
+        if($loadCollectionItems){
+        	//error_log("ParserDropboxSet 2nd parse", 0);
+			// if collection exists
+			$this->prepThumbFolder($dropbox);
+			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			return parent::returnResponse($collection, true, true);
+        }else{
+        	//error_log("ParserDropboxSet 1st parse", 0);
+        	$deltaCount = $this->checkForDeltas($dropbox);
+        	error_log("ParserDropboxSet deltas " . $deltaCount, 0);
+			$collection->setChildItemsCount($deltaCount);
+			//$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $deltaCount);
+			return parent::returnResponse($collection, true, true);
+	    }
 	}
 }
