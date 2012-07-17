@@ -16,9 +16,8 @@ require.config({
 		}
 })
 
-var loadFiles = [
-	'jquery',
-
+require(
+	[
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
@@ -111,14 +110,9 @@ var loadFiles = [
 	'order!app/index.browser'
 	
 
-	];
-
-require(loadFiles, function($) {
-    
-	console.log('loaded')
-	//ZeegaBrowser.init();
-	
-	
-	initUX();
-	
-});
+    ], 
+	function($) {
+		console.log('files loaded')
+		initUX();
+	}
+);

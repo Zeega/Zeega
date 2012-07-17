@@ -22,21 +22,6 @@ jQuery(function($)
 		$('.menu').addClass('hide')
 	})
 	
-	
-	$('#sequence-cover-image').droppable({
-
-		accept : '.database-asset-list',
-		hoverClass : 'workspace-item-hover',
-		tolerance : 'pointer',
-
-		//this happens when you drop a database item onto a frame
-		drop : function( event, ui )
-			{
-				ui.draggable.draggable('option','revert',false);
-				zeega.app.editCoverImage({ item : zeega.app.draggedItem })
-			}
-	});
-	
 	var visualSearch = VS.init({
 		container : $('.visual_search'),
 		query     : '',
@@ -87,12 +72,6 @@ jQuery(function($)
 	$('.VS-icon.VS-icon-search').click(function(){
 		console.log('open filter dialog')
 		$('.filter-list').show('fast');
-		/*
-		$('body').click(function(){
-			$('.filter-list').hide();
-			$('body').unbind('click');
-		})
-		*/
 	})
 	//when a filter is selected via dropdown
 	$('.filter-list a').click(function(e){
@@ -106,6 +85,7 @@ jQuery(function($)
 		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
 		
 		$('.filter-list').hide();
+		console.log('search filter', visualSearch, model)
 		e.stopPropagation();
 		return false;
 	})
@@ -399,28 +379,15 @@ jQuery(function($)
 		}
 	})
 
-
-
-
 	$('#advance-controls input').change(function(){
-		var attr = zeega.app.currentFrame.get('attr');
-		if(attr) attr.advance = $(this).val() != -1 ? parseInt($(this).val()*1000) : -1;
-		else attr = {'advance': $(this).val() != -1 ? parseInt($(this).val()*1000) : -1};
+		console.log(this,$(this).val());
+		var a = $(this).val();
+		
+		a = a != -1 ? parseInt( a*1000 ) : -1;
 
-		zeega.app.currentFrame.set({'attr':attr});
-		zeega.app.currentFrame.save();
+		console.log('advance',a)
+		zeega.app.currentFrame.update({'advance':a});
 	});
-
-	$('#frame-advance-random input').change(function(){
-
-		var attr = Zeega.currentFrame.get('attr');
-		if( $(this).is(':checked') ) attr.advanceRandom = true;
-		else attr.advanceRandom = false;
-
-		Zeega.currentFrame.set({'attr':attr});
-		Zeega.currentFrame.save();
-	});
-
 
 	//expands the Zeega editor panels	
 	$('.expandable .panel-head').click(function(){

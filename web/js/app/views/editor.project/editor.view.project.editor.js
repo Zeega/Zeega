@@ -22,9 +22,23 @@
 			});
 
 			//display the cover image
-			$('#sequence-cover-image').css({'background-image' : 'url("'+ zeega.app.url_prefix+this.model.get('cover_image') +'")'})
+			$('#sequence-cover-image').css({'background-image' : 'url("'+ this.model.get('cover_image') +'")'})
 
 			console.log('cover image: '+ this.model.get('cover_image'))
+			
+			$('#sequence-cover-image').droppable({
+
+				accept : '.database-asset-list',
+				hoverClass : 'workspace-item-hover',
+				tolerance : 'pointer',
+
+				//this happens when you drop a database item onto a frame
+				drop : function( event, ui )
+				{
+					ui.draggable.draggable('option','revert',false);
+					zeega.app.editCoverImage({ item : zeega.app.draggedItem })
+				}
+			});
 
 			return this;
 		},

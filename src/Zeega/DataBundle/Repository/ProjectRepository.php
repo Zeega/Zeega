@@ -39,4 +39,21 @@ class ProjectRepository extends EntityRepository
 				    
 		return $query->getArrayResult();
      }
+     
+     public function findProjectsByUser($userId,$limit)
+     {
+      	$query= $this->getEntityManager()
+ 				     ->createQueryBuilder()
+ 				     ->add('select', 'p')
+ 			   	     ->add('from', 'ZeegaDataBundle:Project p')
+ 			         ->join('p.users', 'u')
+ 			         ->add('where', 'u.id = :userId')
+ 			         ->andwhere('p.enabled = true')
+ 			         ->setParameters(array('userId'=>$userId))
+ 				     ->orderBy('p.id','DESC')
+ 				     ->setMaxResults($limit)
+ 				     ->getQuery();
+
+ 		return $query->getResult();
+      }
 }

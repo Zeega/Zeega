@@ -9693,7 +9693,7 @@ Popcorn.player( "youtube", {
 
           if ( !media.paused ) {
 
-            currentTime = media.youtubeObject.getCurrentTime();
+            if( media.youtubeObject.getCurrentTime) currentTime = media.youtubeObject.getCurrentTime();
             media.dispatchEvent( "timeupdate" );
             setTimeout( timeupdate, 10 );
           }
@@ -9787,22 +9787,22 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "volume", {
           set: function( val ) {
-			console.log(media.youtubeObject.getVolume());
-			console.log(val);
-			
-            if ( media.youtubeObject.getVolume() / 100 !== val ) {
-
-              media.youtubeObject.setVolume( val * 100 );
-              console.log(val*100);
-              lastVolume = media.youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
-            }
-
+			//console.log(media.youtubeObject.getVolume());
+			//console.log(val);
+			if( media.youtubeObject.getVolume){
+				if ( media.youtubeObject.getVolume() / 100 !== val ) {
+	
+				  media.youtubeObject.setVolume( val * 100 );
+				  //console.log(val*100);
+				  lastVolume = media.youtubeObject.getVolume();
+				  media.dispatchEvent( "volumechange" );
+				}
+			}
             return media.youtubeObject.getVolume() / 100;
           },
           get: function() {
 
-            return media.youtubeObject.getVolume() / 100;
+              if( media.youtubeObject.getVolume) return media.youtubeObject.getVolume() / 100;
           }
         });
 		
@@ -9835,10 +9835,10 @@ Popcorn.player( "youtube", {
       // setting youtube player's height and width, default to 560 x 315
       width = media.style.width ? ""+media.offsetWidth : "560";
       height = media.style.height ? ""+media.offsetHeight : "315";
-		console.log(youtubeId);
+		//console.log(youtubeId);
       swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+container.id, 
 				   container.id, '100%', '100%', "8", null, flashvars, params, attributes);
-    console.log(container.id);
+    //console.log(container.id);
     	
     
     };
@@ -9891,7 +9891,7 @@ Popcorn.player( "flashvideo", {
         lastVolume = 100;
 
     container.id = media.id + Popcorn.guid();
-
+	media.waiting =true;
     media.appendChild( container );
 
     var flashvideoInit = function() {
@@ -9911,9 +9911,11 @@ Popcorn.player( "flashvideo", {
 		flashvideoObject = document.getElementById (container.id);
 		
 		onLoading[container.id] = function (value){
-			
+			console.log('on loading',value);
 			if(value==2) media.duration = flashvideoObject.sendToFlash('getEndTime','');
-			else if(value==3){
+			else if(value==3&&media.waiting){
+				media.waiting=false;
+				
 				
 				var timeupdate = function() {
 				
@@ -9943,7 +9945,9 @@ Popcorn.player( "flashvideo", {
 				
 				Popcorn.player.defineProperty( media, "currentTime", {
 					set: function( val ) {
-				
+						
+						//console.log('setting current time to',val);
+						
 						// make sure val is a number
 						currentTime = seekTime = +val;
 						seeking = true;
@@ -9951,32 +9955,29 @@ Popcorn.player( "flashvideo", {
 						media.dispatchEvent( "timeupdate" );
 						flashvideoObject.sendToFlash('seek',currentTime);
 						return currentTime;
+						
 					},
 					get: function() {
 						return currentTime;
 					}
         		});
 
-        /*
+        
 
-        Popcorn.player.defineProperty( media, "volume", {
-          set: function( val ) {
-
-            if ( youtubeObject.getVolume() / 100 !== val ) {
-
-              youtubeObject.setVolume( val * 100 );
-              lastVolume = youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
-            }
-
-            return youtubeObject.getVolume() / 100;
-          },
-          get: function() {
-
-            return youtubeObject.getVolume() / 100;
-          }
-        });
-		*/
+			Popcorn.player.defineProperty( media, "volume", {
+			  set: function( val ) {
+		
+				
+				if(val !=flashvideoObject.getVolume())flashvideoObject.sendToFlash('setVolume',val);
+				return flashvideoObject.getVolume();
+				
+			  },
+			  get: function() {
+	
+				return flashvideoObject.getVolume();
+			  }
+			});
+	
 		
 			media.readyState = 4;
 			media.dispatchEvent( "canplaythrough" );
@@ -9987,9 +9988,10 @@ Popcorn.player( "flashvideo", {
 	
 			media.dispatchEvent( "loadeddata" );
       	}
+      	
 		};
 		
-		/*
+		
 		onStateChange[container.id] = function (playerId, value){
 				
 				switch(value){
@@ -10006,7 +10008,7 @@ Popcorn.player( "flashvideo", {
 				  		console.log("onLoading - " + value);
 				}
 		}
-		*/
+
 		onError[container.id] = function (playerId, value){
 				
 				switch(value){
@@ -10026,7 +10028,7 @@ Popcorn.player( "flashvideo", {
 		//flashvideoObject.addEventListener( "onError", "onError." + container.id );
 		
 		console.log('player '+ container.id + ' has loaded');
-		flashvideoObject.sendToFlash("load", src+',0');	
+		flashvideoObject.sendToFlash("load", src+','+options.cue_in);	
 	
 		
         
@@ -10050,7 +10052,7 @@ Popcorn.player( "flashvideo", {
 
       src = /(http.*)/.exec( media.src )[ 1 ];
      
-      swfobject.embedSWF("MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
+      swfobject.embedSWF(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+"MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
 	  
 	  
      

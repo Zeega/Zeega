@@ -195,12 +195,12 @@ class ItemRepository extends EntityRepository
        		->where('i.id = :id')
        		->setParameter('id', $id);
         
-    	$res = $qb->getQuery()->getSingleResult();
+    	$res = $qb->getQuery()->getResult();
     	if(isset($res) && count($res) > 0)
     	{
-    		return $res[0];
+    		return $res[0][0];
     	}
-    	return $res;
+    	return null;
     }
 	
     //  api/search
@@ -356,13 +356,13 @@ class ItemRepository extends EntityRepository
 	{
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qbCount = $this->getEntityManager()->createQueryBuilder();
-
-	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
-    
+        
+	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->where('i.enabled = true')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
+        
         if(isset($query["user"]))
         {
-            $qb->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
-            $qbCount->where('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qb->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qbCount->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
         }
         
         if(isset($query["site"]))

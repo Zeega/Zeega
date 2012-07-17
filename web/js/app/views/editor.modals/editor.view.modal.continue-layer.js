@@ -2,13 +2,8 @@
 
 	
 	Modal.Views.ContinueLayer = Backbone.View.extend({
-
-		className : 'modal',
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render: function()
 		{
@@ -44,7 +39,9 @@
 		hide : function()
 		{
 			this.$el.modal('hide');
+			this.remove();
 			zeega.app.busy = false;
+			return false;
 		},
 		
 		events : {

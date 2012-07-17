@@ -8,7 +8,6 @@
 		{
 			//make sequence views
 			$('#sequence-tabs').empty();
-
 			this.on('add', this.drawSequenceTab, this)
 		},
 		

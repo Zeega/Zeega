@@ -12,6 +12,37 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ItemsController extends Controller
 {
+    /**
+     * Parses a url and creates a Zeega item if the url is valid and supported.
+     * - Path: GET items/parser
+     * - Query string parameters:
+     *     - url -  URL to be parsed
+     *     - Boolean  $loadChildItems  If true the child item of the item will be loaded. Should be used for large collections if only the collection description is wanted.
+	 * @return Array|response
+     */    
+    public function getItemsParserAction()
+    {
+        $request = $this->getRequest();
+    	$url  = $request->query->get('url');
+
+    	if(!isset($url))
+    	{
+    	    $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
+    	}
+    	else
+    	{    	    
+        	$loadChildren = $request->query->get('load_children');
+        	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
+            $parser = $this->get('zeega_parser');
+		
+    		// parse the url with the ExtensionsBundle\Parser\ParserService
+    		$response = $parser->load($url, $loadChildren);
+    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+	    }
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+    
     //  get_collections GET    /api/items.{_format}
     public function getItemsFilterAction()
     {
@@ -23,13 +54,20 @@ class ItemsController extends Controller
 		$content = $request->query->get('content');     //  string
 		$site = $request->query->get('site');     //  string
 		$excludeContent = $request->query->get('exclude_content');     //  string
+		$loadChildItems = $request->query->get('load_children');     //  string
 		
 		$query = array();
-		if(!isset($page))                   $query['page'] = 0;
-		if(!isset($limit))                  $query['limit'] = 100;
+
+		if(isset($page))                    $query['page'] = $page;
+		if(isset($limit))                   $query['limit'] = $limit;
+		if(isset($loadChildItems))          $query['load_children'] = $loadChildItems;
 		if(isset($content))                 $query['content'] = $content;
 		if(isset($excludeContent))          $query['exclude_content'] = $excludeContent;
 		if(isset($site))                    $query['site'] = $site;
+
+		if(!isset($page))                   $query['page'] = 0;
+		if(!isset($limit))                  $query['limit'] = 100;
+		if(!isset($loadChildItems))         $query['load_children'] = false;
 		
         if(isset($user))
         {
@@ -44,15 +82,9 @@ class ItemsController extends Controller
             }
         }
          //  execute the query
- 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);								
-        /*
-        $logger = $this->get('logger');
-        $logger->err(implode(",",$queryResults->getParameters()));
-        $logger->err($queryResults->getSQL());
-        */
-        //return null;
-		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));
-        
+ 		$queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);
+ 		
+		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));        
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     // get_collection GET    /api/item/{id}.{_format}
@@ -65,7 +97,7 @@ class ItemsController extends Controller
 		$userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
     	
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'userIsAdmin' => $userIsAdmin));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
@@ -154,38 +186,6 @@ class ItemsController extends Controller
 
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
-    /**
-     * Parses a url and creates a Zeega item if the url is valid and supported.
-     * - Path: GET items/parser
-     * - Query string parameters:
-     *     - url -  URL to be parsed
-     *     - Boolean  $loadChildItems  If true the child item of the item will be loaded. Should be used for large collections if only the collection description is wanted.
-	 * @return Array|response
-     */    
-    public function getItemsParserAction()
-    {
-        $request = $this->getRequest();
-    	$url  = $request->query->get('url');
-    	
-    	if(!isset($url))
-    	{
-    	    $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-    	}
-    	else
-    	{    	    
-        	$loadChildren = $request->query->get('load_children');
-        	$loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
-
-            $parser = $this->get('zeega_parser');
-		
-    		// parse the url with the ExtensionsBundle\Parser\ParserService
-    		$response = $parser->load($url, $loadChildren);
-
-    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"]));
-	    }
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
-    }
 
 	// delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
@@ -240,11 +240,9 @@ class ItemsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         
-        
         $requestData = $this->getRequest()->request;      
 	    
 	    $item = $this->populateItemWithRequestData($requestData);
-	    //return $item;
 
         $em->persist($item);
         $em->flush();
@@ -306,7 +304,6 @@ class ItemsController extends Controller
     {
         if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
     	{
-
 			$em = $this->getDoctrine()->getEntityManager();
 	
 			$newItems = $this->getRequest()->request->get('new_items');
@@ -344,19 +341,17 @@ class ItemsController extends Controller
 					$item->setIndexed(false);
 					$item->addItem($childItem);
 					
-					
-					
 					if($first == True && !isset($thumbnailUrl))
 					{
 						$item->setThumbnailUrl($childItem->getThumbnailUrl());
 						$first = False;
 					}
 				}
+				$item->setChildItemsCount($item->getChildItems()->count());
+
+    			$em->persist($item);
+    			$em->flush();
 			}
-			
-	
-			$em->persist($item);
-			$em->flush();
         	
 			if(isset($itemsToRemove))
 			{
@@ -436,7 +431,7 @@ class ItemsController extends Controller
     
    
     // Private methods     
-    private function populateItemWithRequestData($request_data)
+    private function populateItemWithRequestData($request_data, $persistChildItems = false)
     {   
         $em = $this->getDoctrine()->getEntityManager(); 
         $user = $this->get('security.context')->getToken()->getUser();
@@ -557,20 +552,60 @@ class ItemsController extends Controller
             $first = True;
             foreach($newItems as $newItem)
             {
-                $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+                if(!is_array($newItem))
+                {
+                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
 
-                if (!$childItem) 
-                {
-                    throw $this->createNotFoundException('Unable to find Item entity.');
-                }
-                $childItem->setDateUpdated($dateUpdated);
-                $childItem->setIndexed(false);
+                    if (!$childItem) 
+                    {
+                        throw $this->createNotFoundException('Unable to find Item entity.');
+                    }
+                    $childItem->setDateUpdated($dateUpdated);
+                    $childItem->setIndexed(false);
                 
-                $item->addItem($childItem);
-                if($first == True)
+                    $item->addItem($childItem);
+
+                    if($first == True)
+                    {
+                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
+                        $first = False;
+                    }
+                }
+                else
                 {
-                    $item->setThumbnailUrl($childItem->getThumbnailUrl());
-                    $first = False;
+                    $childItem = new Item();
+                    
+            		$childItem->setSite($site);		
+                    $childItem->setTitle($newItem['title']);
+            		$childItem->setDescription($newItem['description']);
+                    $childItem->setMediaType($newItem['media_type']);
+                    $childItem->setDateCreated(new \DateTime("now"));
+            		$childItem->setArchive($newItem['archive']);
+                    $childItem->setLayerType($newItem['layer_type']);
+                    $childItem->setUser($user);
+                    $childItem->setUri($newItem['uri']);
+                    $childItem->setAttributionUri($newItem['attribution_uri']);
+            		$childItem->setThumbnailUrl($newItem['thumbnail_url']);
+                    $childItem->setEnabled(true);
+                    $childItem->setPublished(true);
+                    $childItem->setChildItemsCount(0);
+                    $childItem->setMediaCreatorUsername($newItem['media_creator_username']);
+                    $childItem->setMediaCreatorRealname($newItem['media_creator_realname']);
+                    $childItem->setTags($newItem['tags']);
+                    if(isset($newItem['media_geo_latitude'])) $childItem->setMediaGeoLatitude($newItem['media_geo_latitude']);
+                    if(isset($newItem['media_geo_longitude'])) $childItem->setMediaGeoLongitude($newItem['media_geo_longitude']);
+                    $mediaDateCreated = $newItem['media_date_created'];
+                    if(isset($mediaDateCreated)) 
+                    {
+                        $parsedDate = strtotime($mediaDateCreated);
+                        if($parsedDate)
+                        {
+                            $d = date("Y-m-d h:i:s",$parsedDate);
+                            $childItem->setMediaDateCreated(new \DateTime($d));
+                        }
+                    }
+                    
+                    $item->addItem($childItem);
                 }
             }
         }

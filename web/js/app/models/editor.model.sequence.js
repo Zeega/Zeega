@@ -8,8 +8,8 @@
 		
 		url : function()
 		{
-			if ( this.isNew() ) return zeega.app.url_prefix + 'projects/'+ zeega.app.project.id +'/sequences';
-			return zeega.app.url_prefix+'sequences/' + this.id;
+			if ( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/sequences';
+			return zeega.app.url_prefix+'api/sequences/' + this.id;
 		},
 		
 		defaultAttr : {
@@ -19,8 +19,6 @@
 		initialize : function( attributes )
 		{
 			this.checkAttr();
-			this.set({ 'attr' : _.defaults(this.get('attr'),this.defaultAttr) })
-			
 			this.on('updateFrameOrder',this.updateFrameOrder,this);
 			this.on('sync', this.checkAttr, this);
 			this.attachTabView();
@@ -30,7 +28,7 @@
 		
 		checkAttr : function()
 		{
-			if( _.isUndefined(this.get('attr').persistlayers) ) this.get('attr').persistLayers = [];
+			if( _.isArray(this.get('attr')) ) this.set({ attr : this.defaultAttr });
 		},
 		attachTabView : function()
 		{
@@ -92,7 +90,19 @@
 			}
 			//this.set('attr',attr);
 			//this.save();
-		}
+		},
+		
+		update : function( newAttr, silent )
+		{
+			var _this = this;
+			_.extend( this.get('attr'), newAttr );
+			if( !silent )
+			{
+				this.save({},{
+					success : function(){ _this.trigger('update') }
+				});
+			}
+		},
 		
 	});
 

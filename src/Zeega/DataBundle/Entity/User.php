@@ -280,4 +280,29 @@ class User extends BaseUser
     {
         return $this->profile_image;
     }
+    /**
+     * @var string $background_image_url
+     */
+    private $background_image_url;
+
+
+    /**
+     * Set background_image_url
+     *
+     * @param string $backgroundImageUrl
+     */
+    public function setBackgroundImageUrl($backgroundImageUrl)
+    {
+        $this->background_image_url = $backgroundImageUrl;
+    }
+
+    /**
+     * Get background_image_url
+     *
+     * @return string 
+     */
+    public function getBackgroundImageUrl()
+    {
+        return $this->background_image_url;
+    }
 }

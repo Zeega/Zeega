@@ -18,16 +18,16 @@
 <!-- css imports -->
 			<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
 			<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
-			<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
 			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
-			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/zeega.css')}}" />
+			<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
 <!-- end css imports -->
 			
 			
 		{% endblock %}
-
+		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
@@ -151,9 +151,10 @@ var BrowserDetect = {
 	]
 
 };
+		/*
 		BrowserDetect.init();
-		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_badbrowser') }}";
-
+		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
+*/
 		
 		</script>
 		
@@ -248,9 +249,9 @@ var BrowserDetect = {
 								<!--
 								{% endif %}
 								-->
-								
-								<li><a href="{{ path('ZeegaCoreBundle_browser', {'short': site.short }) }}">Library</a></li>
-								
+								<!--
+								<li><a href="{{ path('ZeegaDiscoveryBundle_library', {'short': site.short }) }}">Library</a></li>
+								-->
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 										Projects

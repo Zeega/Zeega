@@ -1,12 +1,15 @@
 {# Template to render items recursively. #}
-
-{% if userIsAdmin is defined %}
-	{{ _self.show(item,userIsAdmin,user) }} 	{# Render the first item by making a call to the show(item) macro#}
-{% else %}
-	{{ _self.show(item) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% if load_children is not defined %}
+	{% set load_children = false %}
 {% endif %}
 
-{% macro show(item,userIsAdmin,user) %}	{# Item rendering macro/function #}
+{% if user_is_admin is defined %}
+	{{ _self.show(item,user_is_admin,user,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% else %}
+	{{ _self.show(item,null,null,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
+{% endif %}
+
+{% macro show(item,user_is_admin,user,load_children) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
 		"id" : {{ item.id | default("") | json_encode | raw }},
@@ -14,11 +17,11 @@
     	"user_id" : {{ item.user.id | default("") | json_encode | raw }},
         "username" : {{ item.user.username | default("") | json_encode | raw }},
         "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
-        "title" : {{ item.title | json_encode | raw}},
+        "title" : {{ item.title | default("") | json_encode | raw}},
         "description" : {{ item.description | default("") | json_encode | raw}},
 		"text" : {{ item.text | default("") | json_encode | raw}},
-		"uri" : "{{ item.uri }}",
-		"attribution_uri" : "{{ item.attributionuri }}",
+		"uri" : {{ item.uri | default("") | json_encode | raw}},
+		"attribution_uri" : {{ item.attributionuri | default("") | json_encode | raw}},
 		"date_created" : "{{ item.datecreated | date("Y-m-d") }}",
 		"media_type" : "{{ item.mediatype }}",
 		"layer_type" : "{{ item.layertype }}",
@@ -34,17 +37,19 @@
 		"attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
 		"child_items":
 		[
-			{% for child in item.childitems %}
-				{# Item is a collection. Render the children by recursively calling the macro #}
-	            {{ _self.show(child) }}
-				{%- if loop.index0 < item.childitems|length - 1 -%}
-				,
-				{%- endif -%}
-	        {% endfor %}
+			{%- if (load_children is defined and load_children == true) -%}
+				{% for child in item.childitems %}
+					{# Item is a collection. Render the children by recursively calling the macro #}
+		            {{ _self.show(child) }}
+					{%- if loop.index0 < item.childitems|length - 1 -%}
+					,
+					{%- endif -%}
+		        {% endfor %}
+			{%- endif -%}
 		],
 		"tags":
 			{{ item.tags | default([ ]) | json_encode | raw}},
-		{%- if (user.id is defined and user.id == item.userid) or (userIsAdmin is defined and userIsAdmin) -%}
+		{%- if (user.id is defined and user.id == item.userid) or (user_is_admin is defined and user_is_admin) -%}
 			"editable" : true
 		{%- else -%}
 			"editable" : false

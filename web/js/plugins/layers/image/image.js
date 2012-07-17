@@ -65,6 +65,18 @@
 			$(this.el).html( img );
 						
 			return this;
+		},
+		
+		onPreload : function()
+		{
+			var _this = this;
+			this.$el.find('img').load(function(){
+				_this.model.trigger('ready',_this.model.id);
+			})
+			.error(function(){
+				_this.model.status = 'error';
+				_this.model.trigger('load_error',_this.model.id);
+			});
 		}
 	});
 

@@ -1,81 +1,33 @@
 (function(Items) {
 
-	Items.ViewCollection = Backbone.View.extend({
+	Items.Collection = Backbone.Collection.extend({
 
-		el : $('#database-item-list'),
-
-		initialize : function()
+		page : 0,
+		totalItemsCount : 0,
+		
+		_views : [],
+		target : $('#database-item-list'),
+		
+		searchObject : {},
+		
+		base : function()
 		{
-			this.collection = new Items.Collection();
-			this.collection.on('reset',this.reset,this);
-			this._childViews = [];
-			
-			$(this.el).spin('small');
-			this.render();
+			return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page
 		},
 		
-		render : function()
+		url: function()
 		{
-			var _this = this;
-			this._isRendered = true;
-			
-			if(this.collection.length)
+			var url = this.base();
+			if( !_.isUndefined(this.searchObject.query) ) url += '&q=' + this.searchObject.query;
+			if( !_.isUndefined(this.searchObject.contentType) ) url += '&content=' + this.searchObject.contentType;
+			if( !_.isUndefined(this.searchObject.collectionID) && this.searchObject.collectionID != 'all' )
 			{
-				_.each( _.toArray(this.collection), function(itemModel){
-					var itemView = new Items.Views.List({model:itemModel});
-					_this._childViews.push( itemView );
-					$(_this.el).append( itemView.render().el );
-				})
+			    url += '&collection=' + this.searchObject.collectionID;
+			    // hammering - collection filtering should not be done by user_id nor site_id
+			    url = url.replace("&user=-1","");
+			    url = url.replace("&site="+sessionStorage.getItem('siteid'),"");
 			}
-			else
-			{
-				$(this.el).html('<li class="alert alert-error">No results :(</li>')
-			}
-			
-			$(this.el).fadeTo(100,1);
-			$(this.el).spin(false);
-			return this;
-		},
-		
-		reset : function()
-		{
-			if ( this._isRendered )
-			{
-				$(this.el).empty();
-				this._childViews = [];
-				this.render();
-			}
-		},
-		
-		getNextPage :function()
-		{
-			if(this.collectionFull != true)
-			{
-				console.log('add more!!!')
-				var _this = this;
-				this.collection.page++;
-				this.collection.fetch({
-					add:true,
-					success: function(c)
-					{
-						_this._childViews = [];
-						$(_this.el).empty();
-						_this.render();
-					
-						if(_this.collection.totalItemsCount == _this.collection.length)
-							_this.collectionFull = true;
-					}
-				});
-			}
-		},
-
-		append : function(items)
-		{
-			items.each(this.add);
-			items.bind('add',this.add)
-			//this.render();
-
-			insertPager( _.size(this._itemViews), Database.page );
+			return url;
 		},
 		
 		search : function(search,reset)
@@ -84,44 +36,26 @@
 			$(this.el).fadeTo(1000,0.5);
 			$(this.el).spin('small');
 			
-			this.collection.setSearch(search,reset);
-			this.collection.fetch();
+			this.setSearch(search,reset);
+			this.fetch({
+				success : function(collection,response)
+				{
+					_this.target.fadeTo(1000,1).spin(false).empty();
+					_this.renderCollection();
+				}
+			})
 		},
-		
-		refresh : function()
-		{
-			$(this.el).fadeTo(1000,0.5);
-			$(this.el).spin('small');
-			this.collection.fetch();
-		},
-		
-		getSearch : function(){ return this.collection.search }
-
-
-
-	});
-
-	Items.Collection = Backbone.Collection.extend({
-
-		page : 0,
-		totalItemsCount : 0,
-		
-		base : function()
-		{
-			return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page
-		},
-		
-		search : {},
 
 		initialize : function()
 		{
+			this.target.spin('small');
 			if( itemsJSON )
 			{
-
 				//get bootstrapped data if it exists
 				var itemsBS = jQuery.parseJSON(itemsJSON);
 				this.totalItemsCount = itemsBS.items_count;
 				this.reset( itemsBS.items );
+				this.target.spin(false);
 			}
 			else
 			{
@@ -129,27 +63,36 @@
 				console.log( 'items NOT bootstrapped. Do search. ')
 				this.fetch();
 			}
+			this.renderCollection();
 		},
 		
-		url: function()
+		renderCollection : function()
 		{
-			var url = this.base();
-			if( !_.isUndefined(this.search.query) ) url += '&q=' + this.search.query;
-			if( !_.isUndefined(this.search.contentType) ) url += '&content=' + this.search.contentType;
-			if( !_.isUndefined(this.search.collectionID) && this.search.collectionID != 'all' )
-			{
-			    url += '&collection=' + this.search.collectionID;
-			    // hammering - collection filtering should not be done by user_id nor site_id
-			    url = url.replace("&user=-1","");
-			    url = url.replace("&site="+sessionStorage.getItem('siteid'),"");
-			}
-			return url;
+			var _this = this;
+			_.each( _.toArray(this), function(itemModel){
+				var itemView = new Items.Views.List({model:itemModel});
+				_this._views.push( itemView );
+				_this.target.append( itemView.render().el );
+			})
+		},
+		
+		refresh : function()
+		{
+			var _this = this;
+			this.target.fadeTo(1000,0.5).spin('small');
+			this.fetch({
+				success : function(collection,response)
+				{
+					_this.target.fadeTo(1000,1).spin(false).empty();
+					_this.renderCollection();
+				}
+			})
 		},
 		
 		setSearch : function(search, reset)
 		{
-			if(reset) this.search = search;
-			else _.extend(this.search,search)
+			if(reset) this.searchObject = search;
+			else _.extend(this.searchObject,search);
 		},
 
 		parse : function(response)
@@ -157,8 +100,6 @@
 			this.totalItemsCount = response.items_count;
 			return response.items;
 		}
-
-
 	});
 
 })(zeega.module("items"));
