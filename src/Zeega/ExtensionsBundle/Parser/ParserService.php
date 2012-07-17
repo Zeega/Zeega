@@ -16,11 +16,12 @@ use \ReflectionMethod;
  */
 class ParserService
 {
-	public function __construct($hostname, $directory, $securityContext)
+	public function __construct($hostname, $directory, $securityContext, $doctrine)
     {
         $this->hostname = $hostname;
         $this->directory = $directory;
 		$this->securityContext = $securityContext;
+		$this->doctrine = $doctrine;
     }
 
     
@@ -58,9 +59,14 @@ class ParserService
     				
     				// add the regex matches to the parameters
     				$user = $this->securityContext->getToken()->getUser();
+	        		$em=$this->doctrine->getEntityManager();
+    				$userTable = $em->getRepository('ZeegaDataBundle:User')->findOneById($user->getId());
+
     				$parameters["regex_matches"] = $matches;
     				$parameters["load_child_items"] = $loadChildItems;
     				$parameters["user"] = $user;
+    				$parameters["userTable"] = $userTable;
+    				$parameters["entityManager"] = $em;
 
     				$parserClass = $parserConfig["parser_class"];
 

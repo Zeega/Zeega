@@ -10,6 +10,7 @@ services:
             hostname: %hostname%
             directory: %directory%
             security: "@security.context"
+            doctrine: "@doctrine"
         
     zeega_parser_absolute:
         class: %zeega_parser_absolute.class%

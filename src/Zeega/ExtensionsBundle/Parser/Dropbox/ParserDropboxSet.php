@@ -48,7 +48,7 @@ class ParserDropboxSet extends ParserAbstract
 		$dropbox->create("/__zeegaThumbnails__");
 	}
 
-	public function checkForDeltas($dropbox)
+	public function checkForDeltas($dropbox, $em, $userTable)
 	{
 		// fetch last cursor from DB
 		$dbCursor = $this->user->getDropboxDelta();
@@ -58,6 +58,9 @@ class ParserDropboxSet extends ParserAbstract
 		$deltas_cursor = $deltas_body->cursor;
 		//error_log("ParserDropboxSet deltas_cursor " . $deltas_cursor, 0);
 		$this->user->setDropboxDelta($deltas_cursor);
+
+    	$em->persist($userTable);
+
 		$deltas_entries = $deltas_body->entries;
 		$deltas_entries_count = count($deltas_entries);
 		$deltas_reset = $deltas_body->reset;
@@ -226,6 +229,11 @@ class ParserDropboxSet extends ParserAbstract
         //$this->dropbox = $dropbox;
 
 		$user = $parameters["user"];
+		$userTable = $parameters["userTable"];
+
+		//error_log($user->getId(), 0);
+
+		$em = $parameters["entityManager"];
         $this->user = $user;
 
 		$accountInfo = $dropbox->accountInfo();
@@ -252,7 +260,7 @@ class ParserDropboxSet extends ParserAbstract
 			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
 			return parent::returnResponse($collection, true, true);
         }else{
-        	$deltaCount = $this->checkForDeltas($dropbox);
+        	$deltaCount = $this->checkForDeltas($dropbox, $em, $userTable);
         	//error_log("ParserDropboxSet deltas " . $deltaCount, 0);
 			$collection->setChildItemsCount($deltaCount);
 			//$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $deltaCount);
