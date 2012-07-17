@@ -236,7 +236,7 @@ class Project
     /**
      * @var string $cover_image
      */
-    private $cover_image;
+    private $cover_image = "http://static.zeega.org/community/templates/default_project_cover.png";
 
 
     /**
