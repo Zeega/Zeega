@@ -254,8 +254,8 @@
 									'<input type="text" id="publish-height" value=""/>'+
 								'</div>'+
 								'<label for="publish-preview">Preview</label>'+
-								'<div class="publish-preview" style="background-image:url(<%= cover_image %>);background-size:100%">'+
-									//<div></div>
+								'<div class="publish-preview" style="background-image:url(<%= cover_image %>);background-size:100%;position:relative">'+
+									'<div style="position:absolute;bottom:0;color:white;padding:10px;font-size:18px"><%= title %></div>'+
 									//<div></div>
 								'</div>'+
 							'</div>'+
