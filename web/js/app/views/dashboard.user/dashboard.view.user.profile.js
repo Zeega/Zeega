@@ -203,13 +203,14 @@
 					
 						'<div>'+
 							
-							'<h3 class="dashboard-name pull-left"><%= display_name%></h3>'+
-							'<a class="btn btn-mini btn-inverse edit" href="." style="margin-top: 10px;margin-left: 8px;"><i class="icon-pencil icon-white"></i> edit</a>'+
-							'<div class="btn-group save-data" >'+
-									'<button class="btn btn-inverse btn-mini save hide" style="margin-top: 10px;margin-left:8px">save</button>'+
-									'<button class="btn btn-mini cancel hide" style="margin-top: 10px">cancel</button>'+
+							'<h3 class="dashboard-name" style="width:300px"><%= display_name%></h3>'+
+							'<div style="position:relative">'+
+								'<a class="btn btn-mini btn-inverse edit" href="." style="margin-top: 10px;margin-left: 8px;position:absolute;top:-41px;left:300px"><i class="icon-pencil icon-white"></i> edit</a>'+
+								'<div class="btn-group save-data" style="position:absolute;top:-41px;left:300px">'+
+										'<button class="btn btn-inverse btn-mini save hide" style="margin-top: 10px;margin-left:8px">save</button>'+
+										'<button class="btn btn-mini cancel hide" style="margin-top: 10px">cancel</button>'+
+								'</div>'+
 							'</div>'+
-							
 
 							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
 							'<div style="margin-bottom:20px">'+
