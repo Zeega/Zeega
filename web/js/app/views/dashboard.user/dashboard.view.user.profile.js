@@ -212,10 +212,10 @@
 							
 
 							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
-							'<div>'+
+							'<div style="margin-bottom:20px">'+
 								'<p class="card dashboard-bio"><%= bio %></p>'+
-								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
-								'<div class="user-image-upload card hide"  style="clear:both"><label class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>'+
+								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file" style="display:inline">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
+								'<div class="user-image-upload card hide"  style="clear:both"><label style="display:inline" class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>'+
 								
 								
 							'</div>'+

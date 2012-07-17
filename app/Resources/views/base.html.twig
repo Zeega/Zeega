@@ -22,26 +22,7 @@
 			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 
-			<!--
-			<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
-			-->
-			
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/navbar.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/citations.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/controls.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/database.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/fonts.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/frames.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/layers.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/mediaplayer.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/overrides.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/panels.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/player.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/project.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/sharemodal.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/sprites.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/utility.less')}}">
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/workspace.less')}}">
+
 <!-- end css imports -->
 			
 			
@@ -203,37 +184,7 @@ var BrowserDetect = {
 							<ul class="nav">
 								
 							
-								<!--
-								{% if num_sites > 1 %}
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{title}}<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-										{% for p in sites %}
-											<li>
-												<a href="{{ path('ZeegaCoreBundle_site', {'short': p.short }) }}">{{p.title}}</a>
-											</li>
-										{% endfor %}
-									</ul>
-								</li>
-								-->
-								<!-- sites .dropdown -->
-								<!--
-								{% else %}
-								-->
-
-								<!-- HOME LINK
-								<li class="">
-									<a href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}">{{title}}</a>
-								</li>
-									END HOME -->
-
-
-								<!--
-								{% endif %}
-								-->
-								<!--
-								<li><a href="{{ path('ZeegaDiscoveryBundle_library', {'short': site.short }) }}">Library</a></li>
-								-->
+								
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 										About
@@ -254,9 +205,13 @@ var BrowserDetect = {
 									</ul>
 								</li>
 								
+								<!-- REGISTER USER - now is public
+
 								{% if is_granted('ROLE_ADMIN') %}
 								<li><a href="{{ path('fos_user_registration_register') }}"><i class='zicon-add-user'></i> Register User</a></li>
 								{% endif %}
+
+								-->
 							</ul>
 							
 							<ul class="nav pull-right">
