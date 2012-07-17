@@ -14,7 +14,7 @@
 		{
 			_.defaults( this.get('attr'), this.default_attr );
 			
-			if( !_.isUndefined(this.get('cover_image')) || this.get('cover_image') == '' )
+			if( _.isUndefined(this.get('cover_image')) || this.get('cover_image') == '' )
 				this.set('cover_image','../../../images/default_cover.png')
 			
 			//remove dupe data from the attributes
