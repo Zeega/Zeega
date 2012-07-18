@@ -16,6 +16,7 @@
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 			
 <!-- css imports -->
+			
 			<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
 			<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
 			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
@@ -256,7 +257,7 @@ var BrowserDetect = {
 										</li>
 										<li class='bug-submitted'>
 											<h2>Thanks for your feedback!!</h2>
-											<h3 style='padding-left:80px'>-- the Zeega team</h3>
+											<h3 style='padding-left:80px'>the Zeega team</h3>
 											<br>
 										</li>
 										<li class='bug-submitted'>
@@ -284,9 +285,9 @@ var BrowserDetect = {
 			{% endblock %}
 			<!-- ADD MEDIA modal window -->
 			<div class="modal hide" id='add-media'>
-			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
-
-			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
+			<!--<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>-->
+			<button class="close" style="position: relative;top: -18px;right: -9px;">&times;</button>
+			<h2 style="margin-bottom:25px">To install the Zeega bookmarklet, follow the directions below:</h2>
 						
 				<div id="book-one" style="float: left;">
 					<img src="{{ asset('images/chrome-logo.gif') }}" style="margin-left: 25px;"/>

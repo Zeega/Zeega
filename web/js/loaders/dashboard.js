@@ -33,6 +33,7 @@ require(
 	'order!app/models/dashboard.model.user',
 	'order!app/views/dashboard.user/dashboard.view.user.profile',
 	
+	'order!ux/zeega.ux.header',
 	'order!app/index.dashboard'
     ], 
 	function($) {
