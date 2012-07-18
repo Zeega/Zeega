@@ -152,7 +152,5 @@ Zeega\DataBundle\Entity\Item:
             columns: [site_id]
         item_enabled_index:
             columns: [enabled]
-        item_text_index:
-            columns: [text]
         item_description_index:
             columns: [description]

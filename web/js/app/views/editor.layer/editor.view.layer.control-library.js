@@ -1,3 +1,14 @@
+/****************************
+
+a note on this.settings:
+
+DO NOT use this.settings to read in any dynamically updated content. It won't work
+
+Use this.model.get('attr')[my_setting] instead!!!
+
+*****************************/
+
+
 (function(Layer){
 
 	Layer.Views.Lib = Backbone.View.extend({
@@ -8,10 +19,13 @@
 			$(this.el).addClass('control');
 			this.init();
 			
-			this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
-			this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
-			this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-			this.model.on('editor_layerExit', this.private_onLayerExit, this);
+			if(this.model)
+			{
+				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
+				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerExit', this.private_onLayerExit, this);
+			}
 		},
 		
 		init : function(){},
@@ -225,10 +239,74 @@
 		}
 		
 	});
+	
+	Layer.Views.Lib.SectionLabel = Layer.Views.Lib.extend({
+		
+		className : 'section-head',
+		
+		defaults : {
+			label : 'Section'
+		},
+		
+		render : function()
+		{
+			$(this.el).html( this.settings.label ).css({
+				'text-align':'center',
+				'font-weight':'bold',
+				'font-size':'16px'
+			});
+			return this;
+		}
+		
+	});
+
+	Layer.Views.Lib.Checkbox = Layer.Views.Lib.extend({
+		
+		defaults : {
+			label : 'Checkbox',
+			value : false,
+			save : true,
+		},
+		
+		render : function()
+		{
+			var _this = this;
+			var check = '';
+			if(this.model.get('attr')[this.settings.property]) check = 'checked';
+			$(this.el).append( _.template( this.getTemplate(), _.extend(this.settings,{check:check}) ) );
+			var count = 0;
+			this.$el.find('input').change(function(){
+				_this.saveValue( $(this).is(':checked') )
+			})
+			return this;
+		},
+		
+		saveValue : function(value)
+		{
+			if(this.settings.save)
+			{
+				var attr = {};
+				attr[this.settings.property] = value;
+				this.model.update( attr )
+			}
+		},
+		
+		getTemplate : function()
+		{
+			html = 
+			
+			"<form class='form-inline' style='height:0px'>"+
+				"<label class='checkbox'><input type='checkbox' <%= check %>> <%= label %></label>"+
+			"</form>";
+			
+			return html;
+		}
+		
+	});
 
 	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
 		
-		className : 'control control-slider',
+		className : 'control control-slider clearfix',
 		
 		defaults : {
 			label : 'control',
@@ -243,6 +321,12 @@
 			scaleValue : false,
 			callback : false,
 			save : true,
+			
+			
+			onSlide : function(){},
+			onChange : function(){},
+			onStart : function(){},
+			onStop : function(){},
 			
 			slide : null
 		},
@@ -270,23 +354,30 @@
 				max : this.settings.max,
 				value : uiValue,
 				step : this.settings.step,
+				start : function(e,ui)
+				{
+					_this.settings.onStart();
+				},
 				slide : function(e, ui)
 				{
 					_this.updateSliderInput(ui.value);
 					_this.updateVisualElement( ui.value );
 					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
-				},
-				stop : function(e,ui)
-				{
-					_this.saveValue(ui.value)
+					 _this.settings.onSlide();
 				},
 				change : function(e,ui)
 				{
 					_this.updateVisualElement( ui.value );
 					_this.updateSliderInput(ui.value);
 					_this.saveValue(ui.value)
+					_this.settings.onChange();
+				},
+				stop : function(e,ui)
+				{
+					_this.settings.onStop();
 				}
+				
 			});
 			
 			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
@@ -352,10 +443,11 @@
 		{
 			var html = ''+
 			
-					"<div class='control-name'><%= label %></div>"+
-					"<div class='slider-num-input' contenteditable='true' style='margin-bottom:5px;position:relative;display:inline-block'><%= uiValue %></div>"+
-					"<div class='control-slider'></div>";
-					//d"<input type='text' class='input-mini' value='<%= uiValue %>'/>";
+					"<div class='control-name' style='float:left;position:relative;top:15px;width:35%'><%= label %></div>"+
+					"<div style='float:left;width:60%;padding-right:5%'>"+
+						"<div class='slider-num-input' contenteditable='true' style='margin-bottom:5px;position:relative;display:inline-block'><%= uiValue %></div>"+
+						"<div class='control-slider'></div>"+
+					"</div>";
 			
 			return html;
 		}
@@ -585,7 +677,7 @@
 				});
 			}
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{'color':this.model.get('attr')[this.settings.property]}) ));
 			
 			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
@@ -625,7 +717,6 @@
 		initWheel : function()
 		{
 			var _this = this;
-			console.log('pull up color wheel!')
 			this.$el.find('.close').show();
 			
 			if( this.wheelLoaded != true )

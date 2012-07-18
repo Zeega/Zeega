@@ -195,12 +195,12 @@ class ItemRepository extends EntityRepository
        		->where('i.id = :id')
        		->setParameter('id', $id);
         
-    	$res = $qb->getQuery()->getSingleResult();
+    	$res = $qb->getQuery()->getResult();
     	if(isset($res) && count($res) > 0)
     	{
-    		return $res[0];
+    		return $res[0][0];
     	}
-    	return $res;
+    	return null;
     }
 	
     //  api/search

@@ -4,6 +4,8 @@
 		
 		className : 'visual-element',
 		
+		LAYER_TIMEOUT : 30000,
+		
 		layerClassName : '',
 		
 		draggable : true,
@@ -18,6 +20,8 @@
 			this.initListeners();
 			
 			this.attr = this.model.get('attr')
+			
+			
 			
 			$(this.el).css({
 				'position' : 'absolute',
@@ -39,7 +43,7 @@
 		
 		initListeners : function()
 		{
-//editor_removeLayerFromFrame
+			//editor_removeLayerFromFrame
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
@@ -197,15 +201,24 @@
 					_this.model.trigger('error', _this.model.id)
 				}
 				else console.log('no error! loaded normally!!')
-			},7500)
+			},this.LAYER_TIMEOUT)
 		},
 		
 		private_onPlay : function( z )
 		{
+			
+			if(!this.onStage){
+				this.onStage=true;
+				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
+			}
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
 			if(this.model.status != 'error' ) this.onPlay();
 			this.model.inFocus = true;
+			
+			//dissolve
+			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
+					
 			
 			//make the linked layers blink on entrance
 			if(this.attr.link || this.model.get('type') == 'Link')
@@ -219,6 +232,7 @@
 		private_onExit : function()
 		{
 			this.moveOffStage();
+			this.onStage=false;
 			this.onExit();
 			this.model.inFocus = false;
 		},

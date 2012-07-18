@@ -28,7 +28,8 @@
 			}
 			//http://dev.zeega.org/joseph/web/project/ID/view
 			var projectlink = zeega.app.url_prefix + 'project/'+ this.model.id +'/view';
-			this.iframeHTML = '<iframe src="'+ projectlink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			var iframeLink = zeega.app.url_prefix +this.model.id;
+			this.iframeHTML = '<iframe src="'+ iframeLink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
 			var blanks = {
@@ -141,6 +142,7 @@
 	getTemplate : function()
 	{
 
+		console.log(this)
 
 		var html =	//Step 1
 					'<div id="publish-project-modal-step1">'+
@@ -253,7 +255,10 @@
 									'<input type="text" id="publish-height" value=""/>'+
 								'</div>'+
 								'<label for="publish-preview">Preview</label>'+
-								'<div class="publish-preview"><%= iframeHTML %></div>'+
+								'<div class="publish-preview" style="background-image:url(<%= cover_image %>);background-size:100%;position:relative">'+
+									'<div style="position:absolute;bottom:0;color:white;padding:10px;font-size:18px"><%= title %></div>'+
+									//<div></div>
+								'</div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
 								'<button id="publish-back" class="btn secondary"><i class="icon-circle-arrow-left"></i> Back</button>'+

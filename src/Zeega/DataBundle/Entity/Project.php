@@ -236,7 +236,7 @@ class Project
     /**
      * @var string $cover_image
      */
-    private $cover_image;
+    private $cover_image = "http://static.zeega.org/community/templates/default_project_cover.png";
 
 
     /**
@@ -302,5 +302,30 @@ class Project
     public function getEstimatedTime()
     {
         return $this->estimated_time;
+    }
+    /**
+     * @var datetime $date_updated
+     */
+    private $date_updated;
+
+
+    /**
+     * Set date_updated
+     *
+     * @param datetime $dateUpdated
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->date_updated = $dateUpdated;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return datetime 
+     */
+    public function getDateUpdated()
+    {
+        return $this->date_updated;
     }
 }

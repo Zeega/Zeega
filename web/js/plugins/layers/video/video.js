@@ -1,4 +1,4 @@
-(function(Layer){
+		(function(Layer){
 
 
 
@@ -17,6 +17,9 @@
 			'volume' : 0.5,
 			'cue_in'  : 0,
 			'cue_out' : 0,
+			'fade_in' : 0,
+			'fade_out' : 0,
+			'dissolve': false,
 			'opacity':1,
 			'dimension':1.5,
 			'citation':true,
@@ -26,13 +29,15 @@
 		{
 			console.log(this.get('attr'));
 			console.log(this);
-			//if( _.isUndefined(this.get('attr').attribution_uri)) this.set({attribution_uri:this.get('attribution_url')});
+			
 			this.video = new Plyr2({
 				url : this.get('attr').attribution_uri,
 				uri : this.get('attr').uri,
 				id : this.id,
 				cue_in  : this.get('attr').cue_in,
 				cue_out : this.get('attr').cue_out,
+				fade_in  : this.get('attr').fade_in,
+				fade_out : this.get('attr').fade_out,
 				volume : this.get('attr').volume,
 			})
 		}
@@ -48,6 +53,12 @@
 				model : this.model
 			});
 			
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var volumeSlider = new Layer.Views.Lib.Slider({
 				property : 'volume',
 				model: this.model,
@@ -58,6 +69,30 @@
 				css : false
 			});
 			
+			
+			var fadeInSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_in',
+				model: this.model,
+				label : 'Fade In (sec)',
+				min : 0,
+				max :5,
+				step : 0.1,
+				css : false
+			});
+			
+			
+			var fadeOutSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_out',
+				model: this.model,
+				label : 'Fade Out (sec)',
+				min : 0,
+				max : 5,
+				step : 0.1,
+				css : false
+			});
+			
+			
+			
 			var widthSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
 				model: this.model,
@@ -65,6 +100,15 @@
 				suffix : '%',
 				min : 1,
 				max : 200,
+				
+				onStart : function()
+				{
+					this.model.visual.$el.addClass('editing-layer');
+				},
+				onStop : function()
+				{
+					this.model.visual.$el.removeClass('editing-layer')
+				}
 			});
 			
 			var heightSlider = new Layer.Views.Lib.Slider({
@@ -74,6 +118,14 @@
 				suffix : '%',
 				min : 1,
 				max : 200,
+				onStart : function()
+				{
+					this.model.visual.$el.addClass('editing-layer');
+				},
+				onStop : function()
+				{
+					this.model.visual.$el.removeClass('editing-layer')
+				}
 			});
 			
 			var opacitySlider = new Layer.Views.Lib.Slider({
@@ -81,16 +133,23 @@
 				model: this.model,
 				label : 'Opacity',
 				step : 0.01,
-				min : .05,
+				min : 0,
 				max : 1,
 			});
 			
+			var audioLabel = new Layer.Views.Lib.SectionLabel({label:'Audio'})
+			
 			this.controls
 				.append( playbackControls.getControl() )
-				.append( volumeSlider.getControl() )
+				.append( dissolveCheck.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
-				.append( opacitySlider.getControl() );
+				.append( opacitySlider.getControl() )
+				.append( audioLabel.getControl() )
+				.append( volumeSlider.getControl() )
+				.append( fadeInSlider.getControl() )
+				.append( fadeOutSlider.getControl() );
+				
 			
 			return this;
 		
@@ -105,14 +164,13 @@
 		
 		render : function()
 		{
+			
 			var img = $('<img>')
 				.attr('id', 'video-player-'+ this.model.id)
 				.attr('src', this.attr.thumbnail_url)
 				.css({'width':'100%'});
 
 			$(this.el).html( img ).css('height', this.attr.height+'%');
-			
-			//this.model.trigger('ready',this.model.id)
 			
 			return this;
 		},
@@ -154,7 +212,7 @@
 			}
 			else
 			{
-				this.model.video.pop.pause();
+				this.model.video.pause();
 			}
 			
 		
@@ -163,37 +221,97 @@
 		
 		onControlsClosed : function()
 		{
-			this.model.video.pop.pause();
+			this.model.video.pause();
 		},
 		
 		onPreload : function()
 		{
-			this.model.video.on('timeupdate', function(){ 
-				if(Math.abs(_this.model.video.pop.volume()-_this.model.get('attr').volume)>.01)_this.model.video.pop.volume(_this.model.get('attr').volume);
-				
-				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
-				{
-					
-					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
-					_this.model.video.pop.pause();
-					_this.model.trigger('playback_ended');
-					console.log('playback ended');
-				}
-				
-			}, this )
-			
-			
-			var _this = this;
-			if( !this.model.loaded )
-			{
+			var _this=this;
+			this.model.video.on('timeupdate', function(){_this.onTimeUpdate()}, this );
+			this.model.video.on('ended', function(){_this.onEnded()}, this )
+
+			if( !this.model.loaded ){
 				this.model.video.placeVideo( this.$el );
 				this.model.video.on('video_canPlay', function(){console.log('video ready player'); _this.model.trigger('ready', _this.model.id ) }, this )
 				this.model.loaded = true;
 			}
-			else
-			{
-				this.model.video.pop.pause();
+			else{
+				this.model.video.pause();
 			}
+		},
+		onEnded : function(){
+		
+			
+				
+				
+				
+		
+		},
+		
+		
+		onTimeUpdate : function(){
+			
+			
+			
+			//Cue Out
+			if( this.model.get('attr').cue_out != 0 && this.model.video.currentTime() > this.model.get('attr').cue_out )
+			{
+				this.model.video.currentTime( this.model.get('attr').cue_in );
+				this.model.video.pause();
+				this.model.trigger('playback_ended');
+				console.log('playback ended');
+			}
+			
+			
+			
+			//Fades
+			
+			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
+			else var out = this.model.get('attr').cue_out;
+			var t = this.model.video.currentTime();
+			var f = parseFloat(this.model.get('attr').cue_in)+parseFloat(this.model.get('attr').fade_in);
+			var g = out-parseFloat(this.model.get('attr').fade_out);
+			
+			if(this.model.get('attr').fade_in>0 && t<f){
+				
+				//console.log("fading in");
+				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
+				this.model.video.volume(vol);
+			}
+			else if(this.model.get('attr').fade_out>0 && t>g){
+			
+				//console.log("fading out");
+				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
+				this.model.video.volume(vol);
+			}
+			else if(Math.abs(this.model.get('attr').volume-this.model.video.volume())>.01){
+				this.model.video.volume(this.model.get('attr').volume);
+				
+			}
+			
+			
+			//Dissolve
+			
+			/*
+			
+			if(this.model.get('attr').dissolve||true){
+			
+				if(this.model.video.currentTime()-this.model.get('attr').cue_in<1.0){
+					var op = parseFloat(this.model.video.currentTime()-this.model.get('attr').cue_in);
+					this.$el.css({opacity:op});
+				}
+				
+				else if(out-this.model.video.currentTime()<1.0){
+					var op = Math.max(0,parseFloat(out-this.model.video.currentTime()));
+					this.$el.css({opacity:op});
+				}
+			
+			}
+			
+			*/
+			
+			
+			
 		},
 		
 		onPlay : function()
@@ -208,8 +326,9 @@
 		
 		onUnrender : function()
 		{
+			
 			this.model.video.pause();
-			//Popcorn.destroy(this.model.video.pop);	
+			Popcorn.destroy(this.model.video);	
 
 		}
 		

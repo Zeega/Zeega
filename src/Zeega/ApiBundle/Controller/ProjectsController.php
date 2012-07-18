@@ -11,6 +11,7 @@ use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Frame;
+use Zeega\DataBundle\Entity\Sequence;
 
 class ProjectsController extends Controller
 {
@@ -41,6 +42,18 @@ class ProjectsController extends Controller
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
     
+    // `delete_project`  [DELETE] /projects/{project_id}
+    public function deleteProjectAction($project_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+    	$project->setEnabled(false);
+
+    	$em->flush();
+    	return new Response('SUCCESS',200);
+    }
+    
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putProjectsAction($projectId)
     {
@@ -68,7 +81,9 @@ class ProjectsController extends Controller
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
         if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
-
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($project);
         $em->flush();
@@ -82,7 +97,8 @@ class ProjectsController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
      	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
-    	
+    	$project->setDateUpdated(new \DateTime("now"));
+
     	$layer= new Layer();
     	$layer->setProject($project);
 		$request = $this->getRequest();
@@ -102,7 +118,58 @@ class ProjectsController extends Controller
         
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers`   [POST] /sequences
+    
+    public function postProjectSequencesAction($project_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        $project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        
+        $sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
+        $sequenceIndex = $sequenceCount + 1;
 
+        $sequence = new Sequence();
+
+        $frame = new Frame();
+        $frame->setSequence($sequence);
+        $frame->setProject($project);
+
+        if($request->request->get('layers_to_persist'))
+        {
+            $layersToPersist = $request->request->get('layers_to_persist');
+            $frame->setLayers($layersToPersist);
+        }
+        else if($request->request->get('frame_id'))
+        {
+            $frameId = $request->request->get('frame_id');
+            $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+
+            $previousFrameLayers = $previousframe->getLayers();
+            $frame->setLayers($previousFrameLayers);
+        }
+
+        $sequence->setProject($project);
+        $sequence->setTitle('Sequence '.$sequenceIndex);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($sequence);
+        $em->persist($frame);
+        $em->flush();
+
+        $layers = array();
+        // auch - should work for now, but won't scale for sure
+        $sequenceId = $sequence->getId();
+        $frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
+        $sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
+
+        $layers = array();
+
+        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+    }
+    
     public function postProjectSequencesFramesAction($projectId,$sequenceId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
@@ -163,6 +230,9 @@ class ProjectsController extends Controller
                 if($request->request->get('layers_to_persist')) $frame->setLayers($request->request->get('layers_to_persist'));
         }
         
+        $project->setDateUpdated(new \DateTime("now"));
+        
+   		$em->persist($project);
    		$em->persist($frame);
    		$em->flush();
         

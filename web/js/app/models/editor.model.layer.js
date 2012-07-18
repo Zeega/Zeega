@@ -24,7 +24,7 @@
 		url : function()
 		{
 			if( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/layers';
-			else return zeega.app.url_prefix + "layers/" + this.id;
+			else return zeega.app.url_prefix + "api/layers/" + this.id;
 		},
 		
 		initialize: function(attributes,options)
@@ -100,7 +100,6 @@
 		
 		refreshView : function()
 		{
-			console.log('	refresh view')
 			this.visual.$el.attr('id','layer-visual-'+this.id)
 			if(this.controls) this.controls.$el.attr('id','layer-'+this.id)
 		},
@@ -108,7 +107,7 @@
 		update : function( newAttr, silent )
 		{
 			var _this = this;
-			_.extend( this.get('attr'), newAttr );
+			this.set( 'attr' , _.extend( this.get('attr'), newAttr ) );
 			if( !silent )
 			{
 				this.save({},{
