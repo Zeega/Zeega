@@ -53,6 +53,12 @@
 				model : this.model
 			});
 			
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var volumeSlider = new Layer.Views.Lib.Slider({
 				property : 'volume',
 				model: this.model,
@@ -118,6 +124,7 @@
 			
 			this.controls
 				.append( playbackControls.getControl() )
+				.append( dissolveCheck.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
 				.append( opacitySlider.getControl() )

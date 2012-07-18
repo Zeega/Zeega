@@ -36,6 +36,12 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'backgroundColor',
 				color : this.attr.backgroundColor,
@@ -71,6 +77,7 @@
 			});
 			
 			this.controls
+				.append( dissolveCheck.getControl() )
 				.append( color.getControl() )
 				.append( opacitySlider.getControl() )
 				.append( widthSlider.getControl() )

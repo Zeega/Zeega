@@ -27,6 +27,12 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
 				color : this.model.get('attr').color,
@@ -44,6 +50,7 @@
 			})
 			
 			this.controls
+				.append( dissolveCheck.getControl() )
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
 				.append( color.getControl() );
