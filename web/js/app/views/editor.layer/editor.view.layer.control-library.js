@@ -1,3 +1,14 @@
+/****************************
+
+a note on this.settings:
+
+DO NOT use this.settings to read in any dynamically updated content. It won't work
+
+Use this.model.get('attr')[my_setting] instead!!!
+
+*****************************/
+
+
 (function(Layer){
 
 	Layer.Views.Lib = Backbone.View.extend({
@@ -261,8 +272,8 @@
 		{
 			var _this = this;
 			var check = '';
-			if(this.settings.value) check = 'checked';
-			$(this.el).append( _.template(this.getTemplate(), _.extend(this.settings,{check:check}) ) );
+			if(this.model.get('attr')[this.settings.property]) check = 'checked';
+			$(this.el).append( _.template( this.getTemplate(), _.extend(this.settings,{check:check}) ) );
 			var count = 0;
 			this.$el.find('input').change(function(){
 				_this.saveValue( $(this).is(':checked') )
