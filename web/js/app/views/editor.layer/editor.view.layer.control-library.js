@@ -322,6 +322,12 @@ Use this.model.get('attr')[my_setting] instead!!!
 			callback : false,
 			save : true,
 			
+			
+			onSlide : function(){},
+			onChange : function(){},
+			onStart : function(){},
+			onStop : function(){},
+			
 			slide : null
 		},
 		
@@ -348,19 +354,30 @@ Use this.model.get('attr')[my_setting] instead!!!
 				max : this.settings.max,
 				value : uiValue,
 				step : this.settings.step,
+				start : function(e,ui)
+				{
+					_this.settings.onStart();
+				},
 				slide : function(e, ui)
 				{
 					_this.updateSliderInput(ui.value);
 					_this.updateVisualElement( ui.value );
 					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
+					 _this.settings.onSlide();
 				},
 				change : function(e,ui)
 				{
 					_this.updateVisualElement( ui.value );
 					_this.updateSliderInput(ui.value);
 					_this.saveValue(ui.value)
+					_this.settings.onChange();
+				},
+				stop : function(e,ui)
+				{
+					_this.settings.onStop();
 				}
+				
 			});
 			
 			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });

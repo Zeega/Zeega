@@ -100,6 +100,15 @@
 				suffix : '%',
 				min : 1,
 				max : 200,
+				
+				onStart : function()
+				{
+					this.model.visual.$el.addClass('editing-layer');
+				},
+				onStop : function()
+				{
+					this.model.visual.$el.removeClass('editing-layer')
+				}
 			});
 			
 			var heightSlider = new Layer.Views.Lib.Slider({
@@ -109,6 +118,14 @@
 				suffix : '%',
 				min : 1,
 				max : 200,
+				onStart : function()
+				{
+					this.model.visual.$el.addClass('editing-layer');
+				},
+				onStop : function()
+				{
+					this.model.visual.$el.removeClass('editing-layer')
+				}
 			});
 			
 			var opacitySlider = new Layer.Views.Lib.Slider({

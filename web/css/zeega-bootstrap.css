@@ -1,3 +1,18 @@
+.visual-element
+{
+	outline : 2px solid transparent;
+	-webkit-transition: outline .25s linear;
+	transition: outline .25 linear;
+}
+.editing-layer
+{
+	outline : 2px solid yellow;
+	-webkit-transition: outline .25s linear;
+	transition: outline .25 linear;
+}
+
+
+
 @import url(http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy|Poiret+One|Trocchi|Pontano+Sans);
 
 .font-sorts-mill-goudy{font-family: 'Sorts Mill Goudy', serif;}
