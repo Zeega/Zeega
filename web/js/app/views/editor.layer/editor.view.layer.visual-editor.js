@@ -4,6 +4,8 @@
 		
 		className : 'visual-element',
 		
+		LAYER_TIMEOUT : 30000,
+		
 		layerClassName : '',
 		
 		draggable : true,
@@ -199,7 +201,7 @@
 					_this.model.trigger('error', _this.model.id)
 				}
 				else console.log('no error! loaded normally!!')
-			},7500)
+			},this.LAYER_TIMEOUT)
 		},
 		
 		private_onPlay : function( z )
