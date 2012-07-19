@@ -29,24 +29,6 @@ class ParserDropboxSet extends ParserAbstract
 	private $defaultIconVideo = "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1";
 	private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
 	private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
-	
-
-	public function prepThumbFolder($dropbox)
-	{
-    	$folderMetaData = $dropbox->metaData("/");
-    	$folderItems = $folderMetaData["body"]->contents;
-    	$found = 0;
-		foreach ($folderItems as $folderItem){
-			$filename = $folderItem->path;
-			if($filename == "/__zeegaThumbnails__"){
-				$found = 1;
-			}
-		}
-		if($found == 1){
-			$delete_response = $dropbox->delete("/__zeegaThumbnails__");
-		}
-		$dropbox->create("/__zeegaThumbnails__");
-	}
 
 	public function checkForDeltas($dropbox, $em)
 	{
@@ -208,33 +190,6 @@ class ParserDropboxSet extends ParserAbstract
 		$item->setTitle($fileData->path);
 		$item->setTags($tags); 
 		$item->setAttributionUri($redirect_url);
-		/*
-		switch ($media_type){
-			case "Image":
-				$thumbnailData = $dropbox->thumbnails($filename); // 
-				$thumbnailData_path = $thumbnailData['meta']->path;
-				$pinfo = pathinfo($thumbnailData_path);
-				$newPath = "/__zeegaThumbnails__/" . $pinfo["basename"];
-				$dropbox->copy($thumbnailData_path, $newPath);
-				$thumbData = $dropbox->shares($newPath);
-				$thumbUrl = $thumbData["body"]->url;
-				$redirect_url = $this->fetchRedirectURL($thumbUrl);
-				$item->setThumbnailUrl( $redirect_url );
-				break;
-			case "Text":
-				$item->setThumbnailUrl( "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1" );
-				//$item->setThumbnailUrl( $this->$defaultIconText );
-				break;
-			case "Video":
-				$item->setThumbnailUrl( "https://dl.dropbox.com/s/q5et7g8raziwkpk/video.jpg?dl=1" );
-				//$item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/video.jpg');
-				break;
-			case "Audio":
-				$item->setThumbnailUrl( "https://dl.dropbox.com/sh/3ykw078h8sr8veh/CD0Fy8pB8T/audio.jpg?dl=1" );
-				//$item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/audio.jpg');
-				break;
-		}
-		*/
 		$item->setLicense('All Rights Reserved');
 		$item->setUri($redirect_url);
 		$item->setChildItemsCount(0);
@@ -281,7 +236,6 @@ class ParserDropboxSet extends ParserAbstract
 
         if($loadCollectionItems){
 			// if collection exists
-			//$this->prepThumbFolder($dropbox);
 			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
 			$this->setDeltaCursor($dropbox, $em);
 			return parent::returnResponse($collection, true, true);

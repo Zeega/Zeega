@@ -174,13 +174,14 @@ class ItemsController extends Controller
                         $childItem->setMediaCreatorRealname($child['media_creator_realname']);
                         $childItem->setTags($child['tags']);
 
-                        //$existingCollection->addItem($childItem);
                         $em->persist($childItem);
                         $em->flush();
                         $itemId = $childItem->getId();
                         $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=" . $itemId . "&url=" . $child['uri'];
                         $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
                         
+                        $existingCollection->addItem($childItem);
+
                         if(isset($zeegaThumbnail))
                         {
                             $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
