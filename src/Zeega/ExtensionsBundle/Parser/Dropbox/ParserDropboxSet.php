@@ -55,17 +55,44 @@ class ParserDropboxSet extends ParserAbstract
 		$deltas = $dropbox->delta($dbCursor);
 		$deltas_body = $deltas["body"];
 		$deltas_cursor = $deltas_body->cursor;
-
+		//error_log(json_encode($deltas), 0);
 		$userTable = $em->getRepository('ZeegaDataBundle:User')->findOneById($this->user->getId());
-		$this->user->setDropboxDelta($deltas_cursor);
 		//$this->user->setDropboxDelta($deltas_cursor);
     	$em->persist($this->user);
     	$em->flush();
 
 		$deltas_entries = $deltas_body->entries;
-		$deltas_entries_count = count($deltas_entries);
-		$deltas_reset = $deltas_body->reset;
+		$deltas_entries_count = 0;
+		$mime_types = array("image/jpg","image/jpeg","image/png","image/gif","text/plain","audio/mpeg","audio/vorbis","audio/ogg","audio/mp4","video/mp4","video/quicktime","video/mpeg","video/H264","video/H261","video/H263","video/H263-1998","video/H263-2000","video/H264-RCDO","video/H264-SVC","video/DV");
+		foreach ($deltas_entries as $key => $entry) {
+			$entry_data = $entry[1];
+			// skip entries signifying deletes
+			if( is_null($entry_data)){
+				continue;
+			}
+			// skip directories
+			if($entry_data->is_dir){
+				continue;
+			}
+			// skip entries that don't match accepted mime types
+			$entry_mime_type = $entry_data->mime_type;
+			if (!in_array($entry_mime_type, $mime_types)) {
+				continue;
+			}
+			$deltas_entries_count++;
+		}
         return $deltas_entries_count;
+	}
+	public function setDeltaCursor($dropbox, $em)
+	{
+		// fetch last cursor from DB
+		$dbCursor = $this->user->getDropboxDelta();
+		$deltas = $dropbox->delta($dbCursor);
+		$deltas_body = $deltas["body"];
+		$deltas_cursor = $deltas_body->cursor;
+		$this->user->setDropboxDelta($deltas_cursor);
+    	$em->persist($this->user);
+    	$em->flush();
 	}
 
 	public function fetchRedirectURL($url1)
@@ -181,11 +208,10 @@ class ParserDropboxSet extends ParserAbstract
 		$item->setTitle($fileData->path);
 		$item->setTags($tags); 
 		$item->setAttributionUri($redirect_url);
-
+		/*
 		switch ($media_type){
 			case "Image":
-				//$item->setThumbnailUrl( "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1" );
-				$thumbnailData = $dropbox->thumbnails($filename);
+				$thumbnailData = $dropbox->thumbnails($filename); // 
 				$thumbnailData_path = $thumbnailData['meta']->path;
 				$pinfo = pathinfo($thumbnailData_path);
 				$newPath = "/__zeegaThumbnails__/" . $pinfo["basename"];
@@ -208,6 +234,7 @@ class ParserDropboxSet extends ParserAbstract
 				//$item->setThumbnailUrl($parameters['hostname'].$parameters['directory'].'images/templates/audio.jpg');
 				break;
 		}
+		*/
 		$item->setLicense('All Rights Reserved');
 		$item->setUri($redirect_url);
 		$item->setChildItemsCount(0);
@@ -254,14 +281,14 @@ class ParserDropboxSet extends ParserAbstract
 
         if($loadCollectionItems){
 			// if collection exists
-			$this->prepThumbFolder($dropbox);
+			//$this->prepThumbFolder($dropbox);
 			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			$this->setDeltaCursor($dropbox, $em);
 			return parent::returnResponse($collection, true, true);
         }else{
         	$deltaCount = $this->checkForDeltas($dropbox, $em);
         	//error_log("ParserDropboxSet deltas " . $deltaCount, 0);
 			$collection->setChildItemsCount($deltaCount);
-			//$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $deltaCount);
 			return parent::returnResponse($collection, true, true);
 	    }
 	}

@@ -121,10 +121,14 @@ class ItemsController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         // get referent to doctrine entity manager
         $em = $this->getDoctrine()->getEntityManager();
+        // get request data
+        $requestData = $this->getRequest()->request;
+        // create Item instance from request data
+        $item = $this->populateItemWithRequestData($requestData);
         // get attribution url for collection
 		$attributionUri = $this->getRequest()->request->get('attribution_uri');
         // create new Item instance
-	    $item = new Item();
+	    // $item = new Item();
 	    // get reference to session
        	$session = $this->getRequest()->getSession();
 
@@ -162,7 +166,7 @@ class ItemsController extends Controller
                         $childItem->setUser($user);
                         $childItem->setUri($child['uri']);
                         $childItem->setAttributionUri($child['attribution_uri']);
-                        $childItem->setThumbnailUrl($child['thumbnail_url']);
+                        //$childItem->setThumbnailUrl($child['thumbnail_url']);
                         $childItem->setEnabled(true);
                         $childItem->setPublished(true);
                         $childItem->setChildItemsCount(0);
@@ -173,13 +177,22 @@ class ItemsController extends Controller
                         //$existingCollection->addItem($childItem);
                         $em->persist($childItem);
                         $em->flush();
-
+                        $itemId = $childItem->getId();
+                        $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=" . $itemId . "&url=" . $child['uri'];
+                        $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
+                        
+                        if(isset($zeegaThumbnail))
+                        {
+                            $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                            $em->persist($childItem);
+                            $em->flush();
+                        }
                         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $childItem));
                         //return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
                     }
                 }
             }
-        }else{ // if this collection does not exits
+        }else{ // if this collection does not exist
             // $site ??
             $site = $session->get('site');
             if(isset($site))
@@ -230,7 +243,7 @@ class ItemsController extends Controller
                     $childItem->setUser($user);
                     $childItem->setUri($child['uri']);
                     $childItem->setAttributionUri($child['attribution_uri']);
-                    $childItem->setThumbnailUrl($child['thumbnail_url']);
+                    //$childItem->setThumbnailUrl($child['thumbnail_url']);
                     $childItem->setEnabled(true);
                     $childItem->setPublished(true);
                     $childItem->setChildItemsCount(0);
@@ -238,6 +251,19 @@ class ItemsController extends Controller
                     $childItem->setMediaCreatorRealname($child['media_creator_realname']);
                     $childItem->setTags($child['tags']);
                     $item->addItem($childItem);
+
+                    $em->persist($childItem);
+                    $em->flush();
+
+                    $itemId = $childItem->getId();
+                    $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=" . $itemId . "&url=" . $child['uri'];
+                    $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
+                    if(isset($zeegaThumbnail))
+                    {
+                        $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                        $em->persist($childItem);
+                        $em->flush();
+                    }
                 }
                 $item->setChildItemsCount(count($childItems));
             }
@@ -247,6 +273,17 @@ class ItemsController extends Controller
             }
             $em->persist($item);
             $em->flush();
+
+            $itemId = $item->getId();
+            $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=" . $itemId . "&url=" . $child['uri'];
+            $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
+
+            if(isset($zeegaThumbnail))
+            {
+                $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                $em->persist($item);
+                $em->flush();
+            }
 
             $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
             return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
@@ -334,8 +371,8 @@ class ItemsController extends Controller
 		$title = $request_data->get('description');
 		
 
-        $item = new Item();
-        $item->setMediaType('Collection');
+        $collection = new Item();
+        $collection->setMediaType('Collection');
         $collection->setLayerType('Collection');
         $collection->setUri('http://zeega.org');
         $collection->setAttributionUri("http://zeega.org");
