@@ -224,7 +224,7 @@ class ParserDropboxSet extends ParserAbstract
 
 		$collection = new Item();
 		$collection->setTitle("Dropbox");
-		$collection->setDescription("test collection for Dropbox");
+		$collection->setDescription("Media from Dropbox");
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Dropbox');
 		$collection->setAttributionUri($url);
