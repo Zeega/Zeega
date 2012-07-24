@@ -1,1 +1,102 @@
-.itemviewer{background:black}
+.item-viewer
+{
+	position:fixed;
+	top:0;
+	left:0;
+	background-color:rgba(0,0,0,0.5);
+	height:100%;
+	width:100%;
+	z-index:10000;
+	
+	.container
+	{
+		position:relative;
+		top:10%;
+		height:550px;
+	}
+	.viewer-item-title{ padding:10px;}
+	.item-viewer-content
+	{
+		background:white;
+		border-radius:3px;
+		position:relative;
+	}
+	.row, .row>div{height:100%}
+	.primary-close
+	{
+		position:absolute;
+		right:10px;
+		top:5px;
+	}
+	//.inner-content{ padding:10px }
+	.arrow
+	{
+		width:25px;
+		position:relative;
+		top:45%;
+	}
+	.arrow-left
+	{
+		float:right;
+		-webkit-transform: rotate(180deg);
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+	}
+	#detail-toggle,
+	.item-viewer-footer
+	{
+		position:absolute;
+		bottom:0;
+		padding:10px;
+		.details{ text-align:center; }
+	}
+	.item-viewer-footer{ width:100% }
+	
+	#item-media-target{ text-align:center }
+	
+	.less-view
+	{
+		#item-media-target{ height:400px; }
+	}
+	.more-view
+	{
+		#item-media-target{ height:200px; }
+	}
+	
+	.padded-content{ padding:10px; }
+	
+	.default-preview{ color:#ccc; }
+	
+	.leaflet-map
+	{
+		height:200px;
+		
+		.leaflet-map-control-custom
+		{
+			margin-top:5px;
+			i
+			{
+				position:relative;
+				top:2px;
+				left:2px;
+			}
+		}
+		.map-search-input
+		{
+			position:absolute;
+			z-index:1;
+			bottom:0;
+			left:10px
+		}
+	}
+	
+	.item-description-text
+	{
+		height:200px;
+		margin-bottom:10px;
+		overflow:auto;
+	}
+	.editing-field{ background: #ccffff }
+	
+}

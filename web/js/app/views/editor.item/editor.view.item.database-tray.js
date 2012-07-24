@@ -86,14 +86,14 @@
 		},
 
 		events: {
-			//"click" : "previewItem"
+			"click" : "previewItem"
 			//'dblclick' : "doubleClick",
 		},
 
 		//item events
 		previewItem: function()
 		{
-
+			this.model.trigger('preview_item',this.model.id)
 		},
 
 		getTemplate : function()

@@ -70,6 +70,7 @@ require(
 	'order!app/views/editor.project/editor.view.project.editor',
 	'order!app/views/editor.sequence/editor.view.sequence.sequence-tab',
 	'order!app/views/editor.item/editor.view.item.database-tray',
+	'order!app/views/editor.item/editor.view.item.viewer',
 	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
 	'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
@@ -78,19 +79,7 @@ require(
 	'order!app/views/editor.modals/editor.view.modal.link-advanced',
 	'order!app/views/editor.modals/editor.view.modal.share-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
-
-//fancybox views
-	'order!app/views/editor.fancybox/editor.view.fancybox._fancybox',
-	'order!app/views/editor.fancybox/editor.view.fancybox.audio',
-	'order!app/views/editor.fancybox/editor.view.fancybox.default',
-	'order!app/views/editor.fancybox/editor.view.fancybox.document-cloud',
-	'order!app/views/editor.fancybox/editor.view.fancybox.image',
-	'order!app/views/editor.fancybox/editor.view.fancybox.mapbox',
-	'order!app/views/editor.fancybox/editor.view.fancybox.soundcloud',
-	'order!app/views/editor.fancybox/editor.view.fancybox.testimonial',
-	'order!app/views/editor.fancybox/editor.view.fancybox.tweet',
-	'order!app/views/editor.fancybox/editor.view.fancybox.video',
-	'order!app/views/editor.fancybox/editor.view.fancybox.website',
+	'order!app/views/editor.common/editor.view.common.leaflet-map',
 	
 
 
