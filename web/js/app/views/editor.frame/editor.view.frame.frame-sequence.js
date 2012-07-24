@@ -175,7 +175,7 @@
 			
 				"<li id='frame-thumb-<%= frameID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 					"<div class='frame-update-overlay'></div>"+
-					"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
+					"<div style='width:0px;'><a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a></div>"+
 					"<div class='well menu'>"+
 						"<ul class='nav nav-list'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
