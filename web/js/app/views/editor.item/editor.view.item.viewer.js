@@ -169,6 +169,8 @@
 		
 		initialize : function()
 		{
+			console.log('item model',this.model)
+			
 			this.model.on('toggle_detail', this.toggleDetail, this)
 		},
 		
@@ -203,8 +205,10 @@
 			this.mapView = new Items.Views.Common.LeafletMap({model:this.model});
 			this.$el.find('.item-map').html( this.mapView.render().el );
 			
+			//draw tags view
+			this.tagsView = new Items.Views.Common.TagDisplay({model:this.model});
+			this.$el.find('.item-tags').html( this.tagsView.render().el );
 			
-			//console.log($('<div>').append(this.$el.clone()).html() +'')
 			
 			return this;
 		},
@@ -242,6 +246,8 @@
 			this.$el.find('.edit-item-metadata').hide();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').show();
 			
+			this.tagsView.enterEditMode();
+			
 			return false;
 		},
 		
@@ -263,6 +269,8 @@
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',false).removeClass('editing-field');
 			this.$el.find('.edit-item-metadata').show();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').hide();
+			this.tagsView.exitEditMode();
+			
 		},
 		
 		cancelItemEdit : function()
@@ -294,7 +302,7 @@
 				"</div>"+
 				"<div class='row <%= moreClass %> more-info'>"+
 					"<div class='span4'>"+
-						"<div class='padded-content'>"+
+						"<div class='padded-content clearfix'>"+
 							"<div><strong>Created By:</strong> <%= media_creator_realname %></div>"+
 							"<div><strong>Created On:</strong> <%= date_created.date %></div>"+
 							"<div><a href='<%= attribution_uri %>' target='blank'>View Source <i class='icon-share'></i></a></div>"+
@@ -331,7 +339,6 @@
 		className : 'default-preview',
 		render : function()
 		{
-			console.log(this.model)
 			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
 			return this;
 		},
@@ -363,7 +370,6 @@
 		
 		render : function()
 		{
-			console.log('render youtube')
 			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
 			return this;
 		},
@@ -374,6 +380,11 @@
 			return html;
 		}
 
+	})
+	
+	Items.Views.Viewer.Soundcloud = Backbone.View.extend({
+		
+		
 	})
 	
 })(zeega.module("items"));

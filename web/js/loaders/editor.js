@@ -80,6 +80,7 @@ require(
 	'order!app/views/editor.modals/editor.view.modal.share-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
 	'order!app/views/editor.common/editor.view.common.leaflet-map',
+	'order!app/views/editor.common/editor.view.common.tag-display-edit',
 	
 
 
