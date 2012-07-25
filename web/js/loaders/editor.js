@@ -77,6 +77,7 @@ require(
 	'order!app/views/editor.modals/editor.view.modal.link-existing',
 	'order!app/views/editor.modals/editor.view.modal.link-advanced',
 	'order!app/views/editor.modals/editor.view.modal.share-project',
+	'order!app/views/editor.modals/editor.view.modal.publish-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
 
 //fancybox views

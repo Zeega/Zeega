@@ -76,36 +76,9 @@
 				$('#publish-customize-size').fadeToggle();
 				return false;
 			});
-			$(this.el).find('#looks-good').mouseup(function(){
 
-				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
-				_this.model.save({	
-							'title': $('#publish-project-title').val(),
-							//'attr': attr,
-							'published':true,
-							'author' : $('#publish-project-author').val(),
-							'estimated_time' : $('#publish-project-estimated-time').val()
-				},
-				{
-					success : function(model, response){
-						console.log(_this.model)
-						$(_this.el).find('#publish-project-modal-step1').hide();
-						$(_this.el).find('#publish-project-modal-step2').show();
-					},
-					error : function(model, response){
-						console.log('error publishing project');
-						console.log(model);
-					},
-				});
-				
-				return false;
-			});
-			$(this.el).find('#publish-back').mouseup(function(){
+			$(_this.el).find('#publish-project-modal-step2').show();
 
-				$(_this.el).find('#publish-project-modal-step2').hide();
-				$(_this.el).find('#publish-project-modal-step1').show();
-				return false;
-			});
 			$(this.el).find('#publish-width, #publish-height').blur(
 				function(e){
 					var iframeElem = null;
@@ -145,38 +118,6 @@
 		console.log(this)
 
 		var html =	//Step 1
-					'<div id="publish-project-modal-step1">'+
-						'<div class="modal-header">'+
-							'<button data-dismiss="modal" class="close">&times;</button>'+
-						
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>Before you share your project, make sure everything looks good!</h3>'+
-						'</div>'+
-
-						'<div class="modal-body clearfix">'+
-							'<label for="publish-project-title">Title</label>'+
-							'<input type="text" id="publish-project-title" value="<%= title %>"/>'+
-
-							'<label for="publish-project-author">Author(s)</label>'+
-							'<input type="text" id="publish-project-author" value="<%= author %>"/>'+
-
-							'<label for="publish-project-estimated-time">Estimated Time</label>'+
-							'<input type="text" id="publish-project-estimated-time" value="<%= estimated_time %>"/>'+
-
-							'<label for="tags">Tags</label>'+
-							'<div class="tags"><input name="tags" class="tagsedit" id="<%=randId%>" value="<%=tags%>" /></div>'+
-
-							//'<label for="preview-images">Choose an image to represent your project</label>'+
-							//'<div id="preview-images"><%= imageHTML %></div>'+
-
-							'<div class="publish-footer">'+
-								'<button id="looks-good" class="btn btn-success secondary">looks good <i class="icon-circle-arrow-right icon-white"></i></button>'+
-							'</div>'+
-								
-						'</div>'+
-					'</div>'+ 
-					
-					//Step 2
 					'<div id="publish-project-modal-step2" style="display:none">'+
 						'<div class="modal-header">'+
 							'<button data-dismiss="modal" class="close">&times;</button>'+

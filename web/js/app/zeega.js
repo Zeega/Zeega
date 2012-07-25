@@ -872,6 +872,14 @@ console.log( helpOrderArray[this.helpCounter-1] )
 		this.view.render();
 	},
 
+	publishProject : function()
+	{
+		// publishing view for project //
+		var Modal = zeega.module('modal');
+		this.view = new Modal.Views.PublishProject({ model:this.project });
+		this.view.render();
+	},
+
 	
 	
 	

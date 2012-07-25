@@ -247,9 +247,15 @@ jQuery(function($)
 	});
 
 	//publish button
-	$('#publish-project').click(function(){
+	$('#share-project').click(function(){
 		//Uncomment to activate publish modal
 		zeega.app.shareProject();
+		return false;
+	});
+	//share button
+	$('#publish-project').click(function(){
+		//Uncomment to activate publish modal
+		zeega.app.publishProject();
 		return false;
 	});
 

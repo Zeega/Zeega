@@ -328,4 +328,79 @@ class Project
     {
         return $this->date_updated;
     }
+    /**
+     * @var string $item_id
+     */
+    private $item_id;
+
+
+    /**
+     * Set item_id
+     *
+     * @param string $itemId
+     */
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
+    }
+
+    /**
+     * Get item_id
+     *
+     * @return string 
+     */
+    public function getItemId()
+    {
+        return $this->item_id;
+    }
+    /**
+     * @var string $description
+     */
+    private $description;
+
+    /**
+     * @var string $location
+     */
+    private $location;
+
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
 }
