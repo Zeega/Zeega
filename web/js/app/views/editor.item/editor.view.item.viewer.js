@@ -6,7 +6,7 @@
 		tagName : 'div',
 		className : 'item-viewer ',
 		
-		state : 'less',
+		state : 'more',
 
 		initialize : function()
 		{
@@ -41,8 +41,6 @@
 		render : function()
 		{
 			this.$el.html( _.template(this.getTemplate(), this.inFocus.attributes ) );
-			this.renderItemView();
-			
 			return this;
 		},
 		
@@ -150,9 +148,9 @@
 						"<div class='span10 item-viewer-content'>"+
 							"<a class='close primary-close' href='#'>&times;</a>"+
 
-							"<div class='inner-content less-view'></div>"+
+							"<div class='inner-content more-view'></div>"+
 
-							"<a href='#' id='detail-toggle' class='less-detail'><i class='icon-plus-sign'></i> More Detail</a>"+
+							"<a href='#' id='detail-toggle' class='more-detail'><i class='icon-minus-sign'></i> Less Detail</a>"+
 							
 						"</div>"+
 						"<div class='span1 go-right'><a href='#'><img class='arrow arrow-right' src='../../../images/arrow.png'/></a></div>"+
@@ -166,6 +164,8 @@
 	Items.Views.ViewerContent = Backbone.View.extend({
 		
 		className : 'viewer-item',
+		
+		editing : false,
 		
 		initialize : function()
 		{
@@ -194,21 +194,24 @@
 			
 			this.$el.html( _.template(this.getTemplate(), _.extend(this.model.attributes,opts)) );
 			
-			console.log(this.model.get('layer_type'),'mediatype', this.model, Items)
-			
 			// draw media view
 			if( Items.Views.Viewer[this.model.get('layer_type')] ) var mediaView = new Items.Views.Viewer[this.model.get('layer_type')]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
 			this.$el.find('#item-media-target .padded-content').html( mediaView.render().el )
+			
 			//draw map view
-			this.mapView = new Items.Views.Common.LeafletMap({model:this.model, attributes:{id:'map-'+this.model.id}});
+			this.mapView = new Items.Views.Common.LeafletMap({model:this.model});
 			this.$el.find('.item-map').html( this.mapView.render().el );
+			
+			
+			//console.log($('<div>').append(this.$el.clone()).html() +'')
 			
 			return this;
 		},
 		
 		toggleDetail : function(state)
 		{
+			if(this.editing = true) this.cancelItemEdit();
 			if(state == 'more')
 			{
 				this.$el.find('#item-media-target').removeClass('span10').addClass('span4');
@@ -234,6 +237,7 @@
 		
 		editItemMetadata : function()
 		{
+			this.editing = true;
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field').focus();
 			this.$el.find('.edit-item-metadata').hide();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').show();
@@ -245,6 +249,12 @@
 		{
 			this.exitEditMode();
 			// the save the model
+			this.model.save({
+				description : this.$el.find('.item-description-text').text(),
+				title : this.$el.find('.viewer-item-title .inner').text()
+			})
+			
+			
 			return false;
 		},
 		
@@ -257,8 +267,10 @@
 		
 		cancelItemEdit : function()
 		{
+			this.editing = false;
 			this.exitEditMode();
-			//this.render();
+			this.$el.find('.item-description-text').text(this.model.get('description'));
+			this.$el.find('.viewer-item-title .inner').text(this.model.get('title'));
 		},
 		
 		getTemplate : function()

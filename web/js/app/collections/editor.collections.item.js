@@ -72,11 +72,9 @@
 		
 		previewItem : function(itemID)
 		{
-			console.log('view item::::',itemID)
-			
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
 			$('body').append(viewer.render().el);
-			
+			viewer.renderItemView();
 		},
 		
 		renderCollection : function()

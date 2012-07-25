@@ -68,7 +68,19 @@
 	
 	.default-preview{ color:#ccc; }
 	
-	.leaflet-map
+	.item-map
+	{
+		position:relative;
+		
+		.geolocator
+		{
+			position:absolute;
+			bottom:5px;
+			left:20px;
+		}
+	}
+	
+	.leaflet-map .item-map
 	{
 		height:200px;
 		
@@ -82,13 +94,6 @@
 				left:2px;
 			}
 		}
-		.map-search-input
-		{
-			position:absolute;
-			z-index:1;
-			bottom:0;
-			left:10px
-		}
 	}
 	
 	.item-description-text
@@ -97,6 +102,9 @@
 		margin-bottom:10px;
 		overflow:auto;
 	}
+	
+	.edit-item-metadata{opacity:0.3}
+	.edit-item-metadata:hover{opacity:1}
 	.editing-field{ background: #ccffff }
 	
 }
