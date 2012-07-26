@@ -1,80 +1,344 @@
+(function(Player) {
 
+	Player.Views = Player.Views || {};
 
+	Player.Views.Player = Backbone.View.extend({
+		
+		className : 'media-player-container',
+		
+		defaults : {
+			control_mode : 'standard', // standard / editor / none
+			autoplay : true,
+			cue_in : 0,
+			cue_out : 150,
+			volume : .5,
+			fade_in :0,
+			fade_out : 0,
+		},
+		
+		initialize : function(options)
+		{
+			console.log('new player init', this)
+			if(!_.isUndefined(this.model))
+			{
+				//if there is a model then figure out what kind it is
+				if( !_.isUndefined(this.model.get('uri')) )
+				{
+					// it must be from an item
+					this.format = this.getFormat(this.model.get('uri'));
+					this.settings = _.defaults( this.model.attributes, this.defaults );
+				}
+				else if( this.model.get('attr') && this.model.get('attr').uri )
+				{
+					//it must be from a layer
+					console.log('this media is from a layer')
+				}
+				else
+				{
+					console.log('I dont know what kind of media this is :(');
+				}
+			}
+			
+			this.model.on('pause_play', this.playPause, this);
+			
+		},
+		
+		render : function()
+		{
+			// choose which template to use
+			var format = this.templates[this.format] ? this.format : 'default';
+			this.$el.html( _.template( this.templates[format](), this.model.toJSON() ));
+			if( this.settings.control_mode == 'standard' )
+			{
+				this.controls = new Player.Views.Player.Controls.Standard({model:this.model});
+				this.$el.append( this.controls.render().el );
+			}
+			else if( this.settings.control_mode == 'editor' )
+			{
+				this.controls = new Player.Views.Player.Controls.Editor({model:this.model});
+				this.$el.append( this.controls.render().el );
+			}
+			return this;
+		},
+		
+		placePlayer : function()
+		{
+			if( !this.isVideoLoaded)
+			{
+				var _this = this;
 
+				switch( this.format )
+				{
+					case 'html5':
+						this.useHTML5();
+						break;
+					case 'flashvideo':
+						this.useFlash();
+						break;
+					case 'youtube':
+						this.useYoutube();
+						break;
+					case 'vimeo':
+						this.useVimeo();
+						break;
+					default:
+						console.log('none set');
+				}
 
-/*******************************************
+				this.popcorn.listen('timeupdate', function(){
+					_this.trigger('timeupdate');
+					_this.trigger('timeupdate_controls');
+				});
 
-	OOP SUGAR FUNCTIONS
-	helping to simplify extending classes
+				this.isVideoLoaded = true;
+			}
+		},
+		
+		initPopcornEvents : function()
+		{
+			/*
+			if(this.popcorn)
+			{
+				var _this = this;
+				this.popcorn.listen('ended',function(){ _this.model.trigger('ended') })
+				this.popcorn.listen('canplay',function(){ _this.model.trigger('canplay') })
+			}
+			*/
+		},
+		
+		addPopcornToControls : function()
+		{
+			if(this.controls && this.popcorn ) this.controls.addPopcorn( this.popcorn )
+		},
+		
+		useHTML5 : function()
+		{
+			var _this = this;
+			this.popcorn = Popcorn('#media-player-html5-'+ this.model.id);
+			this.addPopcornToControls();
+			this.setVolume(0);
+			this.popcorn.listen( 'canplay', function(){
+				console.log('popcorn can play!!!!')
+				//this.play();
+				//if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume ); // commented out temporarily
+				if( _this.settings.cue_in != 0 )
+				{
+					this.listen('seeked',function(){ _this.model.trigger('video_canPlay', this.model.id) });
+					_this.setCurrentTime( _this.settings.cue_in );
+					console.log( 'seeking to: ' +_this.settings.cue_in );
+				}
+				else _this.trigger('video_canPlay');
+			});
+		},
+		useFlash : function()
+		{
+			this.popcorn = Popcorn.flashvideo('#media-player-'+ this.model.id, this.get('uri'),{volume:this.get('volume'), cue_in:this.get('cue_in')}  );
+			this.popcorn.listen('loadeddata',function(){
+				_this.popcorn.volume(_this.get('volume'));
+				_this.trigger('video_canPlay');
+				_this.popcorn.currentTime(_this.get('cue_in'));
+			});
+		},
+		useYoutube : function()
+		{
+			console.log(_this.get('volume'));
+			this.popcorn = Popcorn.youtube('#media-player-'+ this.model.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
+			this.popcorn.listen('canplaythrough',function(){
+				console.log(_this.get('volume'));
+				_this.popcorn.play();
+				_this.popcorn.pause();
+				if(_this.get('fade_in')==0) _this.popcorn.volume(_this.get('volume'));
+				console.log( _this.get('control_mode'));
+				_this.trigger('video_canPlay');
+			});
+		},
+		useVimeo : function()
+		{
+			this.popcorn = Popcorn.vimeo('#media-player-'+ this.model.id, this.get('url') );
+			this.popcorn.listen('loadeddata',function(){
+				_this.trigger('video_canPlay');
+				_this.popcorn.currentTime(_this.get('cue_in'));
+			});
+		},
+		
+		// getters && setters //
+		
+		setVolume : function(vol)
+		{
+			// constrain volume to 0 < v < 1
+			var volume = vol < 0 ? 0 : vol;
+			var volume = vol > 1 ? 1 : vol;
+			if( _.isNumber(vol) ) this.popcorn.volume( volume );
+		},
+		getVolume : function(){ return this.popcorn.volume() },
 
+		setCurrentTime : function(t){ if( _.isNumber(t) )  this.popcorn.currentTime(t) },
+		getCurrentTime : function(){ return this.popcorn.currentTime() },
 
-	Simple JavaScript Inheritance
-	By John Resig http://ejohn.org/
-	MIT Licensed.
+		getDuration: function(){ return this.popcorn.duration() },
+
+		play : function(){ if( this.popcorn && this.popcorn.paused() ) this.popcorn.play() },
+		pause : function(){ if( this.popcorn && !this.popcorn.paused() ) this.popcorn.pause() },
+		playPause : function()
+		{
+			if(this.popcorn)
+			{
+				if(this.popcorn.paused()) this.popcorn.play();
+				else this.popcorn.pause();
+			}
+		},
+		
+		removePlayer : function()
+		{
+			if(this.popcorn) this.popcorn.destroy();
+		},
+		
+		getFormat : function(url)
+		{
+			//separated to make it easier to isolate and update this list
+			var format = '';
+			if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
+			else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
+			else format = 'html5';
+			//Force flash for html5 in Firefox browser
+			if( navigator.userAgent.split(' ')[navigator.userAgent.split(' ').length-1].split('/')[0] == 'Firefox' && format=='html5' ) format='flashvideo';
+			return format;
+		},
+		
+		
+		templates : {
+			
+			html5 : function()
+			{
+				html =
+				"<div id='media-player-<%= id %>' class='media-container'><video id='media-player-html5-<%= id %>' class='media-element' src='<%= uri %>'></video></div>";
+				return html;
+			},
+
+			default : function()
+			{
+				html =
+				"<div id='media-player-<%= id %>' class='media-container'></div>";
+				return html;
+			}
+			
+		}
+		
+	})
 	
-	http://ejohn.org/blog/simple-javascript-inheritance/
+	Player.Views.Player.Controls = Player.Views.Player.Controls || {};
+	
+	Player.Views.Player.Controls.Standard = Backbone.View.extend({
+		
+		className : 'controls controls-standard',
+		
+		initialize : function()
+		{
+			this.model.on('all',function(e){console.log('control event',e)})
+			this.model.on('ended',this.onEnded,this)
+		},
+		
+		addPopcorn : function(pop)
+		{
+			this.popcorn = pop;
+			this.initPopcornEvents();
+		},
+		
+		initPopcornEvents : function()
+		{
+			var _this = this;
+			this.popcorn.listen('canplay',function(){ _this.onCanPlay() })
+			this.popcorn.listen('ended',function(){ _this.onEnded() })
+			this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() })
+			//this.popcorn.listen('progress',function(){ console.log( 'buffered',_this.popcorn.buffered(), _this.popcorn.buffered().end(0) ) })
+		},
+		
+		render : function()
+		{
+			this.$el.html( this.getTemplate() );
+			return this;
+		},
+		
+		events : {
+			'click .pause-play' : 'playPause'
+		},
+		
+		onCanPlay : function()
+		{
+			this.updateDuration();
+			this.updatePlayPauseIcon();
+		},
+		
+		updateDuration : function()
+		{
+			this.$el.find('.media-time-duration').html( convertTime(this.popcorn.duration()) );
+		},
+		updateElapsed : function()
+		{
+			var elapsed = this.popcorn.currentTime();
+			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
+			this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+		},
+		
+		playPause : function()
+		{
+			if(this.popcorn)
+			{
+				if(this.popcorn.paused()) this.popcorn.play();
+				else this.popcorn.pause();
+				this.updatePlayPauseIcon();
+			}
+			return false;
+		},
+		
+		updatePlayPauseIcon : function()
+		{
+			if(this.popcorn)
+			{
+				console.log(this.popcorn.paused() )
+				if( this.popcorn.paused() ) this.$el.find('.pause-play i').addClass('icon-pause').removeClass('icon-play');
+				else this.$el.find('.pause-play i').removeClass('icon-pause').addClass('icon-play');
+			}
+		},
+		
+		onEnded : function()
+		{
+			this.$el.find('.pause-play i').addClass('icon-play').removeClass('icon-pause');
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			"<div class='player-control-inner'>"+
+				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
+				"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
+				"<div class='pull-right'><span class='media-time-elapsed'></span> / <span class='media-time-duration'></span></div>"+
+			"</div>";
+			
+			return html;
+		}
+	})
+	
+	Player.Views.Player.Controls.Editor = Backbone.View.extend({
+		
+		className : 'controls controls-editor',
+		
+		initialize : function()
+		{
+			console.log('init editor media controls')
+		}
+	})
 
-********************************************/
+})(zeega.module("player"));
 
 
-(function(){
-  var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
-  // The base Class implementation (does nothing)
-  this.Class = function(){};
-  
-  // Create a new Class that inherits from this class
-  Class.extend = function(prop) {
-    var _super = this.prototype;
-    
-    // Instantiate a base class (but only create the instance,
-    // don't run the init constructor)
-    initializing = true;
-    var prototype = new this();
-    initializing = false;
-    
-    // Copy the properties over onto the new prototype
-    for (var name in prop) {
-      // Check if we're overwriting an existing function
-      prototype[name] = typeof prop[name] == "function" && 
-        typeof _super[name] == "function" && fnTest.test(prop[name]) ?
-        (function(name, fn){
-          return function() {
-            var tmp = this._super;
-            
-            // Add a new ._super() method that is the same method
-            // but on the super-class
-            this._super = _super[name];
-            
-            // The method only need to be bound temporarily, so we
-            // remove it when we're done executing
-            var ret = fn.apply(this, arguments);        
-            this._super = tmp;
-            
-            return ret;
-          };
-        })(name, prop[name]) :
-        prop[name];
-    }
-    
-    // The dummy class constructor
-    function Class() {
-      // All construction is actually done in the init method
-      if ( !initializing && this.init )
-        this.init.apply(this, arguments);
-    }
-    
-    // Populate our constructed prototype object
-    Class.prototype = prototype;
-    
-    // Enforce the constructor to be what we expect
-    Class.prototype.constructor = Class;
 
-    // And make this class extendable
-    Class.extend = arguments.callee;
-    
-    return Class;
-  };
-})();
+
+
+
+
+
+
 
 
 var Plyr2 = Backbone.Model.extend({
@@ -202,7 +466,6 @@ var Plyr2 = Backbone.Model.extend({
 			
 			initialize : function()
 			{
-				
 				this.render();
 			},
 			
@@ -572,13 +835,3 @@ var Plyr = Class.extend({
 	
 	}
 });
-
-function convertTime(seconds,tenths){
-	
-	var m=Math.floor(seconds/60);
-	if(tenths&&1==0)var s=Math.floor(seconds%600)/10.0;
-	else var s=Math.floor(seconds%60)
-	if(s<10) s="0"+s;
-	return m+":"+s;
-}
-

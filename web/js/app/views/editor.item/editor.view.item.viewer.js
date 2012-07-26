@@ -434,6 +434,47 @@
 			return this;
 		},
 		
+		//happens after the view is rendered. so we know when the player is in the dom
+		afterRender : function()
+		{
+			if( !this.isRendered == true )
+			{
+				this.$el.empty();
+				var Player = zeega.module('player');
+				
+				this.player = new Player.Views.Player({
+					model:this.model
+				});
+				this.$el.html(this.player.render().el);
+				this.player.placePlayer();
+				
+				console.log('player',this.player);
+				
+				this.isRendered = true;
+			}
+		},
+		
+		getTemplate : function()
+		{
+			html = this.model.get('title');
+			return html;
+		}
+	})
+	
+	/*
+	Items.Views.Viewer.Video = Backbone.View.extend({
+		
+		initialize : function()
+		{
+			this.model.on('after_render', this.afterRender,this);
+		},
+
+		render : function()
+		{
+			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
+			return this;
+		},
+		
 		afterRender : function()
 		{
 			if( !this.isRendered == true )
@@ -450,6 +491,7 @@
 			return html;
 		}
 	})
+	*/
 
 	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
 	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
