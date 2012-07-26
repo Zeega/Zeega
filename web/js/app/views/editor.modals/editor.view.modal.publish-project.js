@@ -84,14 +84,16 @@
 							'description': $('#publish-project-description').val(),
 							//'attr': attr,
 							'published':true,
-							'author' : $('#publish-project-author').val(),
+							'authors' : $('#publish-project-author').val(),
+							'location' : $('#publish-project-location').val(),
 							'estimated_time' : $('#publish-project-estimated-time').val()
 				},
 				{
 					success : function(model, response){
 						console.log(_this.model)
 						$(_this.el).find('#publish-project-modal-step1').hide();
-						$(_this.el).find('#publish-project-modal-step2').show();
+						zeega.app.shareProject();
+						//$(_this.el).find('#publish-project-modal-step2').show();
 					},
 					error : function(model, response){
 						console.log('error publishing project');
@@ -161,7 +163,7 @@
 							'</p>'+
 							'<p class="twocolumn-pair">'+
 							'<label for="publish-project-description" class="twocolumn-label">Description</label>'+
-							'<textarea id="publish-project-description" class="twocolumn-field"> <%= title %> </textarea>'+
+							'<textarea id="publish-project-description" class="twocolumn-field"> <%= description %> </textarea>'+
 							'</p>'+
 							'<p class="twocolumn-pair">'+
 							'<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
@@ -173,7 +175,7 @@
 							'</p>'+
 							'<p class="twocolumn-pair">'+
 							'<label for="publish-project-location" class="twocolumn-label">Location</label>'+
-							'<input type="text" id="publish-project-location" class="twocolumn-field" value="<%= title %>"/>'+
+							'<input type="text" id="publish-project-location" class="twocolumn-field" value="<%= location %>"/>'+
 							'</p>'+
 							'<p class="twocolumn-pair">'+
 							'<label for="tags" class="twocolumn-label">Tags</label>'+
@@ -183,7 +185,7 @@
 							//'<div id="preview-images"><%= imageHTML %></div>'+
 
 							'<div class="publish-footer">'+
-								'<button id="looks-good" class="btn btn-success secondary">looks good <i class="icon-circle-arrow-right icon-white"></i></button>'+
+								'<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Publish <i class="icon-circle-arrow-right icon-white"></i></button>'+
 							'</div>'+
 								
 						'</div>'+

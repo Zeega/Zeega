@@ -30,7 +30,8 @@ Zeega\DataBundle\Entity\Project:
             length: 255
             nullable: true
         title:
-            type: integer
+            type: string
+            length: 255
             nullable: true
         description:
             type: string

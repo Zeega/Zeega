@@ -932,7 +932,7 @@ body
 #sequence-title input
 {
 	height:1em;
-	width:650px;
+	width:550px;
 }
 
 /*******************************
@@ -1533,7 +1533,7 @@ default-layer-control
 {
 	float:left;
 	font-size:2.5em;
-	width:660px;
+	width:560px;
 	border:1px dotted #666;
 	-webkit-transition: border .25s linear;
 	height: 1.3em;

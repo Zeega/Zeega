@@ -202,7 +202,6 @@
 								'</div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
-								'<button id="publish-back" class="btn secondary"><i class="icon-circle-arrow-left"></i> Back</button>'+
 								'<button class="btn secondary pull-right" data-dismiss="modal" ><i class="icon-ok-circle"></i> Done</button>'+
 							'</div>'+
 						'</div>'+
