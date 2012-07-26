@@ -34,7 +34,6 @@
 			{
 				this.$el.html("<div id='map-"+ this.model.id +"' class='item-map'></div><div class='geolocator hide'><input type='text' class='map-search-input span3' placeholder='search locations'/></div>")
 			}
-			//console.log($('<div>').append(this.$el.find('.item-map').clone()).html() +'')
 			
 			return this;
 		},
@@ -57,7 +56,6 @@
 		
 		renderMap : function()
 		{
-			console.log('render map!!!','map-'+this.model.id )
 			this.map = new L.Map('map-'+this.model.id);
 			this.tiles = new L.TileLayer(this.mapTileURL, {
 				maxZoom: 18,

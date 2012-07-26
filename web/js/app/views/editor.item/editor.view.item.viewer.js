@@ -12,7 +12,6 @@
 		{
 			var ids = this.collection.pluck('id');
 			this.index = _.indexOf( ids, this.options.start)
-			//this.switchItem();
 			this.inFocus = this.collection.at(this.index)
 			this.updateArrows();
 			
@@ -35,6 +34,7 @@
 		{
 			this.inFocus = this.collection.at(this.index)
 			this.renderItemView();
+			this.inFocus.trigger('after_render');
 			this.updateArrows();
 		},
 
@@ -49,6 +49,7 @@
 			var itemView = new Items.Views.ViewerContent({model:this.inFocus,state:this.state});
 			this.$el.find('.inner-content').html( itemView.render().el );
 			if(this.state == 'more' && itemView.mapView.isGeoLocated ) itemView.mapView.renderMap();
+			this.inFocus.trigger('after_render');
 		},
 
 		events : {
@@ -197,8 +198,12 @@
 			this.$el.html( _.template(this.getTemplate(), _.extend(this.model.attributes,opts)) );
 			
 			// draw media view
-			if( Items.Views.Viewer[this.model.get('layer_type')] ) var mediaView = new Items.Views.Viewer[this.model.get('layer_type')]({model:this.model});
+			
+			var itemClass = this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'archive.org' ? this.model.get('media_type') : this.model.get('archive');
+			
+			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
+			console.log('type:',this.model.get('archive'), this.model, itemClass, mediaView);
 			this.$el.find('#item-media-target .padded-content').html( mediaView.render().el )
 			
 			//draw map view
@@ -290,7 +295,7 @@
 				"<div class='row'>"+
 					
 					"<div class='<%= mediaSpan %>' id='item-media-target'>"+
-						"<div class='padded-content'></div>"+ //media goes here
+						"<div class='padded-content' id='item-media-<%= id %>'></div>"+ //media goes here
 					"</div>"+
 					
 					"<div class='span6 <%= moreClass %> more-info'>"+
@@ -365,6 +370,7 @@
 		}
 
 	})
+	Items.Views.Viewer.Flickr = Items.Views.Viewer.Image.extend();
 	
 	Items.Views.Viewer.Youtube = Backbone.View.extend({
 		
@@ -382,10 +388,70 @@
 
 	})
 	
-	Items.Views.Viewer.Soundcloud = Backbone.View.extend({
+	Items.Views.Viewer.Vimeo = Backbone.View.extend({
+	
+		render : function()
+		{
+			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
+			return this;
+		},
+
+		getTemplate : function()
+		{
+			html = '<iframe src="http://player.vimeo.com/video/<%= uri %>" width="100%" height="100%" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			return html;
+		}
 		
-		
+	
 	})
+
+	Items.Views.Viewer.SoundCloud = Backbone.View.extend({
+		
+		render : function()
+		{
+			this.model.set('soundcloud_url', this.model.get('uri').replace( /\/stream(.*)/ ,'' ));
+			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
+			return this;
+		},
+
+		getTemplate : function()
+		{
+			html = '<iframe width="100%" height="166" scrolling="no" frameborder="no" src="http://w.soundcloud.com/player/?url=<%= soundcloud_url %>&show_artwork=true"></iframe>';
+			return html;
+		}
+	})
+	
+	Items.Views.Viewer.Audio = Backbone.View.extend({
+		
+		initialize : function()
+		{
+			this.model.on('after_render', this.afterRender,this);
+		},
+
+		render : function()
+		{
+			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
+			return this;
+		},
+		
+		afterRender : function()
+		{
+			if( !this.isRendered == true )
+			{
+				this.$el.empty();
+				this.player = new Plyr('item-media-'+this.model.id,{url:this.model.get('uri')});
+				this.isRendered = true;
+			}
+		},
+		
+		getTemplate : function()
+		{
+			html = this.model.get('title');
+			return html;
+		}
+	})
+	
+	//Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
 	
 })(zeega.module("items"));
 
