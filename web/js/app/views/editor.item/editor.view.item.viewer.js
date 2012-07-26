@@ -199,7 +199,7 @@
 			
 			// draw media view
 			
-			var itemClass = this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'archive.org' ? this.model.get('media_type') : this.model.get('archive');
+			var itemClass = this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive' ? this.model.get('media_type') : this.model.get('archive');
 			
 			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
@@ -421,7 +421,7 @@
 		}
 	})
 	
-	Items.Views.Viewer.Audio = Backbone.View.extend({
+	Items.Views.Viewer.Video = Backbone.View.extend({
 		
 		initialize : function()
 		{
@@ -450,8 +450,9 @@
 			return html;
 		}
 	})
-	
-	//Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
+
+	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
+	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
 	
 })(zeega.module("items"));
 
