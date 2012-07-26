@@ -506,6 +506,7 @@ class ItemsController extends Controller
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
         
+/*
         if(isset($mediaDateCreated)) 
         {
             $parsedDate = strtotime($mediaDateCreated);
@@ -515,7 +516,7 @@ class ItemsController extends Controller
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
-        
+*/        
         if(isset($mediaCreatorUsername))
         {
             $item->setMediaCreatorUsername($mediaCreatorUsername);

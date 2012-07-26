@@ -1,0 +1,152 @@
+/**********************************************
+
+	SPRITES
+	
+***********************************************/
+
+@image-folder: '../../../images';
+
+[class^="zicon-"]
+{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: text-top;
+	background-image: url('@{image-folder}/zicons-darkgrey-20.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	&.raise-up{ vertical-align:text-bottom }
+	&.orange{ background-image: url('@{image-folder}/zicons-orange-20.png') }
+	&.zicon-white{ background-image: url('@{image-folder}/zicons-white-20.png') }
+	
+	&.small
+	{
+		width: 15px;
+		height: 15px;
+		background-image: url('@{image-folder}/zicons-darkgrey-15.png');
+	}
+}
+
+.zicon-mixin(@xpos,@ypos)
+{
+	background-position: (@xpos*-20px)	(@ypos*-20px);
+}
+
+.zicon-image			{ .zicon-mixin( 1,0 ) }
+.zicon-video			{ .zicon-mixin( 2,0 ) }
+.zicon-youtube			{ .zicon-mixin( 2,0 ) }
+.zicon-vimeo			{ .zicon-mixin( 2,0 ) }
+.zicon-geo				{ .zicon-mixin( 3,0 ) }
+.zicon-mapbox			{ .zicon-mixin( 3,0 ) }
+.zicon-text				{ .zicon-mixin( 4,0 ) }
+.zicon-audio			{ .zicon-mixin( 5,0 ) }
+.zicon-link				{ .zicon-mixin( 6,0 ) }
+.zicon-volume-high		{ .zicon-mixin( 7,0 ) }
+.zicon-volume-off		{ .zicon-mixin( 8,0 ) }
+.zicon-trash-closed		{ .zicon-mixin( 9,0 ) }
+.zicon-trash-open		{ .zicon-mixin( 0,1 ) }
+.zicon-add-media		{ .zicon-mixin( 3,5 ) }
+.zicon-add-user			{ .zicon-mixin( 1,5 ) }
+.zicon-user				{ .zicon-mixin( 0,5 ) }
+.zicon-new-document		{ .zicon-mixin( 2,4 ) }
+.zicon-preview			{ .zicon-mixin( 5,5 ) }
+.zicon-share			{ .zicon-mixin( 4,5 ) }
+.zicon-info				{ .zicon-mixin( 3,2 ) }
+.zicon-help				{ .zicon-mixin( 4,2 ) }
+.zicon-bold				{ .zicon-mixin( 6,5 ) }
+.zicon-italic			{ .zicon-mixin( 7,5 ) }
+.zicon-underline		{ .zicon-mixin( 8,5 ) }
+.zicon-cancel			{ .zicon-mixin( 9,5 ) }
+.zicon-close			{ .zicon-mixin( 0,6 ) }
+.zicon-resize			{ .zicon-mixin( 1,6 ) }
+.zicon-non-linear-link	{ .zicon-mixin( 2,6 ) }
+.zicon-old-document		{ .zicon-mixin( 2,4 ) }
+.zicon-new-frame		{ .zicon-mixin( 4,6 ) }
+.zicon-old-frame		{ .zicon-mixin( 3,6 ) }
+.zicon-options			{ .zicon-mixin( 1,3 ) }
+.zicon-warning			{ .zicon-mixin( 5,6 ) }
+.zicon-grid				{ .zicon-mixin( 6,1 ) }
+.zicon-list				{ .zicon-mixin( 5,1 ) }
+.zicon-advance			{ .zicon-mixin( 5,2 ) }
+//.zicon-expand			{ .zicon-mixin( , ) }
+//.zicon-collapse			{ .zicon-mixin( , ) }
+.zicon-play				{ .zicon-mixin( 6,2 ) }
+.zicon-edit				{ .zicon-mixin( 9,3 ) }
+.zicon-refresh			{ .zicon-mixin( 6,3 ) }
+.zicon-search			{ .zicon-mixin( 6,4 ) }
+.zicon-visible			{ .zicon-mixin( 4,1 ) }
+.zicon-item				{ .zicon-mixin( 0,0 ) }
+.zicon-settings			{ .zicon-mixin( 1,3 ) }
+.zicon-gear				{ .zicon-mixin( 7,3 ) }
+.zicon-vert-drag		{ .zicon-mixin( 1,1 ) }
+.zicon-close			{ .zicon-mixin( 7,1 ) }
+
+
+.zicon-new-frame.small	{ background-position: -60px	-90px }
+.zicon-old-frame.small	{ background-position: -45px	-90px }
+.zicon-options.small	{ background-position: -15px	-45px }
+
+[class^="zitem-"]
+{
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	vertical-align: text-top;
+	background-image: url('@{image-folder}/zicons-itemType-50.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	
+	&.zitem-30
+	{
+		width: 30px;
+		height: 30px;
+		background-image: url('@{image-folder}/zicons-itemType-30.png');
+	}
+}
+
+.zitem-mixin(@position)
+{
+						background-position: (@position*-50px)	(0);
+	&.loaded { 			background-position: (@position*-50px)	(-50px)	}
+	&.zitem-30
+	{
+						background-position: (@position*-30px)	(0);
+		&.loaded {		background-position: (@position*-30px)	(-30px)	}
+		&.error {		background-position: (@position*-30px)	(-60px)	}
+	}
+}
+
+.zitem-flickr				{ .zitem-mixin(0) }
+.zitem-vimeo				{ .zitem-mixin(1) }
+.zitem-youtube				{ .zitem-mixin(2) }
+.zitem-twitter				{ .zitem-mixin(3) }
+.zitem-facebook				{ .zitem-mixin(4) }
+.zitem-google				{ .zitem-mixin(5) }
+.zitem-lastfm				{ .zitem-mixin(6) }
+.zitem-tumblr				{ .zitem-mixin(7) }
+.zitem-rss					{ .zitem-mixin(8) }
+.zitem-picasa				{ .zitem-mixin(9) }
+.zitem-audio				{ .zitem-mixin(10) }
+.zitem-geo					{ .zitem-mixin(11) }
+.zitem-image				{ .zitem-mixin(12) }
+.zitem-video				{ .zitem-mixin(13) }
+.zitem-dropbox				{ .zitem-mixin(14) }
+.zitem-soundcloud			{ .zitem-mixin(15) }
+.zitem-mapbox				{ .zitem-mixin(16) }
+.zitem-absolute				{ .zitem-mixin(17) }
+.zitem-internetarchive		{ .zitem-mixin(18) }
+.zitem-documentcloud		{ .zitem-mixin(19) }
+.zitem-testamonial			{ .zitem-mixin(20) }
+
+// jquery ui override
+.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se
+{
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	vertical-align: text-top;
+	background-image: url('@{image-folder}/zicons-darkgrey-15.png');
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	.zicon-resize;
+}
