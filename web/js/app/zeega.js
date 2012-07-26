@@ -453,23 +453,43 @@ this.zeega = {
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
 				console.log(newFrame)
-			
-				newFrame.save({},{
-					success : function()
-					{
-						console.log(newFrame)
-						newFrame.render();
-					
-						newFrame.trigger('refresh_view');
-						//_this.currentSequence.trigger('updateFrameOrder');
-						newFrame.trigger('updateThumb');
-						_this.project.frames.add( newFrame );
-						_this.loadFrame( newFrame );
+				newFrame.render();
+				
+				if(i>0){
+					console.log("not loading frame for later",i);
+					newFrame.save({},{
+						success : function()
+						{
+							//console.log(newFrame)
+							//newFrame.render();
 						
-						_this.currentSequence.get('frames').push(newFrame.id);
-						
-					}
-				});
+							newFrame.trigger('refresh_view');
+							//_this.currentSequence.trigger('updateFrameOrder');
+							newFrame.trigger('updateThumb');
+							_this.project.frames.add( newFrame );
+							//_this.loadFrame( newFrame );
+							
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
+						}
+					});
+				}
+				else{
+					console.log("loading frame for first",i);
+					newFrame.save({},{
+						success : function()
+						{
+							//console.log(newFrame)
+							newFrame.trigger('refresh_view');
+							newFrame.trigger('updateThumb');
+							_this.project.frames.add( newFrame );
+							_this.loadFrame( newFrame );
+							
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
+						}
+					});
+				}
 			
 			}
 		}
