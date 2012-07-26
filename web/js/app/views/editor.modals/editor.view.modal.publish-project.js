@@ -90,8 +90,8 @@
 				},
 				{
 					success : function(model, response){
-						console.log(_this.model)
-						$(_this.el).find('#publish-project-modal-step1').hide();
+						//console.log(_this.model)
+						//$(_this.el).find('#publish-project-modal-step1').hide();
 						zeega.app.shareProject();
 						//$(_this.el).find('#publish-project-modal-step2').show();
 					},

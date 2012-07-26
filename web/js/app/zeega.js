@@ -880,6 +880,7 @@ console.log( helpOrderArray[this.helpCounter-1] )
 		if(this.project.get("item_id"))
 		{
 			this.project.save();
+			zeega.app.setButtonStates();
 		}else{
 			// publishing view for project //
 			var Modal = zeega.module('modal');

@@ -69,9 +69,12 @@ class ProjectsController extends Controller
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
-        
+        error_log("getItemId",0);
+        error_log($project->getItemId(),0);
+
         if (is_null($project->getItemId()))
         {
+            error_log("getItemId was null",0);
             // create new item
             // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
             $user = $this->get('security.context')->getToken()->getUser();
@@ -90,10 +93,15 @@ class ProjectsController extends Controller
             $item->setMediaType("project");
             $item->setLayerType("project");
             $item->setArchive("zeega");
+            $item->setMediaCreatorUsername("");
+            $item->setPublished(1);
+            //$item->setIndexed(false);
             
             $item->setEnabled(true);
-            //$item->setIndexed(false);
+            $em->persist($item);
+            $em->flush();
         }else{
+            error_log("getItemId was not null",0);
             // fetch associated item
             $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
         }
@@ -117,6 +125,10 @@ class ProjectsController extends Controller
         if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
+
+
+        error_log("final item_id",0);
+        error_log($item->getId(),0);
 
         $project->setItemId($item->getId());
 
