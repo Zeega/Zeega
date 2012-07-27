@@ -8,6 +8,8 @@
 		
 		defaults : {
 			control_mode : 'standard', // standard / editor / none
+			control_fade : true,
+			
 			autoplay : true,
 			cue_in : 0,
 			cue_out : 150,
@@ -58,6 +60,7 @@
 				this.controls = new Player.Views.Player.Controls.Editor({model:this.model});
 				this.$el.append( this.controls.render().el );
 			}
+			
 			return this;
 		},
 		
@@ -91,6 +94,9 @@
 				});
 
 				this.isVideoLoaded = true;
+				
+				this.$el.spin('tiny');
+				
 			}
 		},
 		
@@ -118,8 +124,8 @@
 			this.addPopcornToControls();
 			this.setVolume(0);
 			this.popcorn.listen( 'canplay', function(){
-				console.log('popcorn can play!!!!')
-				//this.play();
+				_this.$el.spin(false);
+
 				//if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume ); // commented out temporarily
 				if( _this.settings.cue_in != 0 )
 				{
@@ -230,6 +236,8 @@
 	
 	Player.Views.Player.Controls.Standard = Backbone.View.extend({
 		
+		isSeeking : false,
+		
 		className : 'controls controls-standard',
 		
 		initialize : function()
@@ -247,9 +255,11 @@
 		initPopcornEvents : function()
 		{
 			var _this = this;
-			this.popcorn.listen('canplay',function(){ _this.onCanPlay() })
-			this.popcorn.listen('ended',function(){ _this.onEnded() })
-			this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() })
+			this.popcorn.listen('canplay',function(){ _this.onCanPlay() });
+			this.popcorn.listen('ended',function(){ _this.onEnded() });
+			this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
+			this.popcorn.listen('playing',function(){ _this.onPlaying() });
+			this.popcorn.listen('pause',function(){ _this.onPause() });
 			//this.popcorn.listen('progress',function(){ console.log( 'buffered',_this.popcorn.buffered(), _this.popcorn.buffered().end(0) ) })
 		},
 		
@@ -260,7 +270,9 @@
 		},
 		
 		events : {
-			'click .pause-play' : 'playPause'
+			'click .pause-play' : 'playPause',
+			'mouseover' : 'onMouseover',
+			'mousedown .progress-outer' : 'scrub',
 		},
 		
 		onCanPlay : function()
@@ -277,7 +289,40 @@
 		{
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
-			this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+			if( !this.isSeeking) this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+		},
+		
+		scrub : function(e)
+		{
+			var _this = this;
+			this.isSeeking = true;
+			_this.$el.find('.progress-elapsed').css({
+				width : ((e.pageX - this.$el.find('.progress-outer').offset().left) / this.$el.find('.progress-outer').width() * 100) +"%"
+			})
+			$(window).mousemove(function(evt){
+				_this.$el.find('.progress-elapsed').css({
+					width : ((evt.pageX-_this.$el.find('.progress-outer').offset().left) / _this.$el.find('.progress-outer').width() * 100) +"%"
+				})
+			})
+			
+			$(window).mouseup(function(e){ _this.seek(e) })
+		},
+		seek : function(e)
+		{
+			var duration = this.popcorn.duration();
+			var wasPlaying = !this.popcorn.paused();
+			this.isSeeking = false;
+
+			$(window).unbind('mouseup');
+			$(window).unbind('mousemove');
+			
+			var newPos = this.$el.find('.progress-elapsed').width() / this.$el.find('.progress-outer').width() * duration;
+			newPos = newPos < 0 ? 0 : newPos;
+			newPos = newPos > duration ? duration : newPos;
+			
+			if(wasPlaying) this.popcorn.pause();
+			this.popcorn.currentTime(newPos);
+			if(wasPlaying) this.popcorn.play();
 		},
 		
 		playPause : function()
@@ -295,10 +340,50 @@
 		{
 			if(this.popcorn)
 			{
-				console.log(this.popcorn.paused() )
-				if( this.popcorn.paused() ) this.$el.find('.pause-play i').addClass('icon-pause').removeClass('icon-play');
+				if( !this.popcorn.paused() ) this.$el.find('.pause-play i').addClass('icon-pause').removeClass('icon-play');
 				else this.$el.find('.pause-play i').removeClass('icon-pause').addClass('icon-play');
 			}
+		},
+		
+		onPlaying : function()
+		{
+			// fade out after play
+			if( this.model.get('control_fade') ){ this.setFadeTimeout() }
+		},
+		
+		setFadeTimeout : function()
+		{
+			var _this = this;
+			this.timer = setTimeout( function(){
+				_this.fadeOutControls();
+				clearTimeout(_this.timer);
+			}, 3500);
+		},
+		
+		onMouseover : function()
+		{
+			if(this.model.get('control_fade') && !this.popcorn.paused() )
+			{
+				if(this.timer) clearTimeout( this.timer );
+				this.fadeInControls();
+				this.setFadeTimeout();
+			}
+		},
+		
+		fadeOutControls : function()
+		{
+			if(this.$el.find('.player-control-inner').is(':visible') && !this.popcorn.paused()) this.$el.find('.player-control-inner').fadeOut('slow')
+		},
+		fadeInControls : function()
+		{
+			if(this.$el.find('.player-control-inner').is(':hidden')) this.$el.find('.player-control-inner').fadeIn('fast')
+		},
+		
+		onPause : function()
+		{
+			if(this.timer) clearTimeout( this.timer );
+			// make sure  controls are visible
+			this.fadeInControls();
 		},
 		
 		onEnded : function()
@@ -311,8 +396,10 @@
 			var html =
 			"<div class='player-control-inner'>"+
 				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
-				"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
-				"<div class='pull-right'><span class='media-time-elapsed'></span> / <span class='media-time-duration'></span></div>"+
+				"<div class='control-panel-inner'>"+
+					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
+					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'></span></div>"+
+				"</div>"+
 			"</div>";
 			
 			return html;
