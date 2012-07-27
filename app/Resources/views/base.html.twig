@@ -34,9 +34,12 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-			{% if site %}
-				sessionStorage.setItem('siteid','{{site.getId()}}');
-			{% endif %}
+		
+
+
+
+
+
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
@@ -160,7 +163,8 @@ var BrowserDetect = {
 		
 		</script>
 		
-				{% block head %}
+		
+		{% block head %}
 		{% endblock %}
 		
     </head>
@@ -168,12 +172,11 @@ var BrowserDetect = {
 
 	
  	
+    	<div id="wrapper">
     	
     	{% block header %}
-
-    	<div id="wrapper" >
-
-			<header>
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+					<header>
 				<div class="navbar navbar-fixed-top">
 					<div class="navbar-inner">
 						<div class="container">
@@ -279,10 +282,11 @@ var BrowserDetect = {
 					</div>
 				</div>
 			</header>
-    			
-    			
-				
-			{% endblock %}
+    			{% endif %}
+		{% endblock %}
+		
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		
 			<!-- ADD MEDIA modal window -->
 			<div class="modal hide" id='add-media'>
 			<!--<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>-->
@@ -328,6 +332,37 @@ var BrowserDetect = {
 				
 			<div class="clear" style="clear: both;"></div>
 			</div><!--#add-media-->
+			
+		{% else %}
+		
+			<!-- Header & Nav Begins -->
+	<div class="container header new-section">
+	
+		<div class="row">
+		
+			<div class="span6">
+				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
+				<div class="strapline">
+				Remake The Internet
+				</div>
+			</div>
+			
+			<div class="span8">
+				<div class="navigation">	
+					<div>
+						<p><a href="">About</a><a href="">SignUp</a><a href="">Login</a></p>
+					</div>
+				</div>
+			</div>
+	
+		</div>
+	
+	</div>
+	<!-- Header & Nav Ends -->
+			
+		{% endif %}	
+			
+			
 			<div id="editor" class='clearfix'>
 				
 				{% block body %}{% endblock %}

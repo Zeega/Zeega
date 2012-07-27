@@ -27,9 +27,15 @@ class CommunityController extends Controller
         return $this->render('ZeegaCommunityBundle:Topics:topics.html.twig');
     }
     
-    public function dashboardAction()
+    public function userAction($id=null)
     {
-        return $this->render('ZeegaCommunityBundle:Dashboard:dashboard.html.twig');
+        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user_id'=>$id));
+    }
+    
+    public function dashboardAction($id=null)
+    {
+    	return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>null)), 301);
+       
     }
     
 }

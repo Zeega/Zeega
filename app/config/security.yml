@@ -38,7 +38,6 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/register/confirmed, role: ROLE_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
@@ -50,6 +49,9 @@ security:
         - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/community/user, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/community/dashboard, role: ROLE_USER }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/browser/notsupported, role: IS_AUTHENTICATED_ANONYMOUSLY }
