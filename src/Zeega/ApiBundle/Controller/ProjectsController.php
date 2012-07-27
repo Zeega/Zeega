@@ -18,6 +18,8 @@ class ProjectsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
+
+        error_log("getProjectAction", 0);
 		// very inefficient method
 		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
 		
@@ -68,13 +70,8 @@ class ProjectsController extends Controller
         {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
-
-        error_log("getItemId",0);
-        error_log($project->getItemId(),0);
-
-        if (is_null($project->getItemId()))
+        if (is_null($project->getItemId())) // if this project has not been published.  Should use 'published' field as determinant, but it's set to true by default
         {
-            error_log("getItemId was null",0);
             // create new item
             // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
             $user = $this->get('security.context')->getToken()->getUser();
@@ -93,17 +90,18 @@ class ProjectsController extends Controller
             $item->setMediaType("project");
             $item->setLayerType("project");
             $item->setArchive("zeega");
-            $item->setMediaCreatorUsername("");
+            $item->setMediaCreatorUsername($user->getUsername());
             $item->setPublished(1);
             //$item->setIndexed(false);
             
             $item->setEnabled(true);
             $em->persist($item);
             $em->flush();
-        }else{
-            error_log("getItemId was not null",0);
+        }else{ // if this project has been published
+            error_log("getItemId was " . $project->getItemId(),0);
             // fetch associated item
-            $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
+            $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
+            //$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($request->request->get('item_id'));
         }
         // create json item for project
         // update item.text with json
@@ -117,6 +115,8 @@ class ProjectsController extends Controller
         $estimatedTime = $request_data->get('estimated_time'); 
         $location = $request_data->get('location');
         $description = $request_data->get('description');
+
+
 		if(isset($title)) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
 		if(isset($coverImage)) $project->setCoverImage($coverImage);
@@ -126,21 +126,22 @@ class ProjectsController extends Controller
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
 
-
-        error_log("final item_id",0);
-        error_log($item->getId(),0);
-
         $project->setItemId($item->getId());
-
         $project->setDateUpdated(new \DateTime("now"));
         
-        $em = $this->getDoctrine()->getEntityManager();
+        //$em = $this->getDoctrine()->getEntityManager();
         $em->persist($project);
         $em->flush();
-        
-        //$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
-        //return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
-        return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));       
+
+        $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+        $project_json = $project_http->getContent();
+
+        //$item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
+        //$em = $this->getDoctrine()->getEntityManager();
+        $item->setText($project_json);
+        $em->persist($item);
+        $em->flush();
+        return $project_http;
     }
     
     public function postProjectLayersAction($projectId)
@@ -155,7 +156,7 @@ class ProjectsController extends Controller
     	
     	if($request->request->get('item_id'))
     	{
-    	    $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
+    	    $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($request->request->get('item_id'));
 			$layer->setItem($item);
 		}
 		
