@@ -8,10 +8,13 @@
 .media-player-container
 {
 	position:relative;
+	overflow:hidden;
 	
 	.media-element
 	{
 		width:100%;
+		
+		&.media-type-Audio{ height: 0 }
 	}
 	
 	.controls
@@ -30,6 +33,19 @@
 			background-color : rgba(0, 0, 0, 0.75);
 		}
 		
+		&.controls-simple
+		{
+			.player-control-inner
+			{
+				width:auto;
+				height:18px;
+				left: 45%;
+				top: 45%;
+				padding: 4px 10px;
+				border-radius: 5px;
+			}
+		}
+		
 		.control-panel-inner{ padding : 0 5px }
 		
 		.progress-outer
@@ -37,7 +53,6 @@
 			background-color:rgba(255,255,255,0.5);
 			height:6px;
 			position:relative;
-			overflow:hidden;
 			.progress-elapsed
 			{
 				height:100%;
@@ -45,6 +60,83 @@
 				background-color:rgba(255,0,0,0.8);
 			}
 		}
+		
+		.crop-outer
+		{
+			position:absolute;
+			z-index:5;
+			width:100%
+		}
+		.crop-marker
+		{
+			position:absolute;
+			//width:1px;
+			//height:100%;
+			
+			.crop-hash
+			{
+				width: 2px;
+				bottom: 12px;
+				position: absolute;
+				height: 7px;
+			}
+			.crop-time
+			{
+				position:relative;
+				top:-27px;
+				background:rgba(0,0,0,0.75);
+			}
+			
+			&.crop-marker-left
+			{
+				left:0;
+				text-align:left;
+				
+				.crop-hash
+				{
+					position:absolute;
+					background-color:green;
+				}
+				.crop-arrow
+				{
+					position:absolute;
+					top:-7px;
+					width:0;
+					height:0;
+					border-right : 8px solid transparent;
+					border-top:8px solid green;
+				}
+			}
+			&.crop-marker-right
+			{
+				left: 100px;
+				text-align:right;
+				
+				.crop-hash
+				{
+					position:absolute;
+					background-color:red;
+				}
+				.crop-arrow
+				{
+					position:absolute;
+					top:-7px;
+					right: 0;
+					width:0;
+					height:0;
+					border-left : 8px solid transparent;
+					border-top:8px solid red;
+				}
+				.crop-time
+				{
+					float:right;
+					right:0;
+					text-align:right
+				}
+			}
+		}
+		
+		
 	}
 	
 	

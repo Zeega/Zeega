@@ -7,10 +7,10 @@
 		className : 'media-player-container',
 		
 		defaults : {
-			control_mode : 'standard', // standard / editor / none
+			control_mode : 'editor', // none / simple / standard / editor
 			control_fade : true,
 			
-			autoplay : true,
+			autoplay : false,
 			cue_in : 0,
 			cue_out : 150,
 			volume : .5,
@@ -50,16 +50,11 @@
 			// choose which template to use
 			var format = this.templates[this.format] ? this.format : 'default';
 			this.$el.html( _.template( this.templates[format](), this.model.toJSON() ));
-			if( this.settings.control_mode == 'standard' )
-			{
-				this.controls = new Player.Views.Player.Controls.Standard({model:this.model});
-				this.$el.append( this.controls.render().el );
-			}
-			else if( this.settings.control_mode == 'editor' )
-			{
-				this.controls = new Player.Views.Player.Controls.Editor({model:this.model});
-				this.$el.append( this.controls.render().el );
-			}
+
+			console.log('controls type', this.settings.control_mode)
+
+			this.controls = new Player.Views.Player.Controls[this.settings.control_mode]({model:this.model});
+			this.$el.append( this.controls.render().el );
 			
 			return this;
 		},
@@ -88,33 +83,30 @@
 						console.log('none set');
 				}
 
+				this.initPopcornEvents();
+				
 				this.popcorn.listen('timeupdate', function(){
 					_this.trigger('timeupdate');
 					_this.trigger('timeupdate_controls');
 				});
 
 				this.isVideoLoaded = true;
-				
 				this.$el.spin('tiny');
-				
 			}
 		},
 		
 		initPopcornEvents : function()
 		{
-			/*
 			if(this.popcorn)
 			{
 				var _this = this;
-				this.popcorn.listen('ended',function(){ _this.model.trigger('ended') })
-				this.popcorn.listen('canplay',function(){ _this.model.trigger('canplay') })
+				this.popcorn.listen('canplay',function(){ _this.onCanplay() })
 			}
-			*/
 		},
 		
 		addPopcornToControls : function()
 		{
-			if(this.controls && this.popcorn ) this.controls.addPopcorn( this.popcorn )
+			if(this.controls && this.popcorn && this.settings.control_mode != 'none' ) this.controls.addPopcorn( this.popcorn )
 		},
 		
 		useHTML5 : function()
@@ -167,6 +159,11 @@
 			});
 		},
 		
+		onCanplay : function()
+		{
+			if(this.settings.autoplay && this.popcorn) this.popcorn.play();
+		},
+		
 		// getters && setters //
 		
 		setVolume : function(vol)
@@ -217,7 +214,7 @@
 			html5 : function()
 			{
 				html =
-				"<div id='media-player-<%= id %>' class='media-container'><video id='media-player-html5-<%= id %>' class='media-element' src='<%= uri %>'></video></div>";
+				"<div id='media-player-<%= id %>' class='media-container'><video id='media-player-html5-<%= id %>' class='media-element media-type-<%= media_type %>' src='<%= uri %>'></video></div>";
 				return html;
 			},
 
@@ -234,17 +231,133 @@
 	
 	Player.Views.Player.Controls = Player.Views.Player.Controls || {};
 	
-	Player.Views.Player.Controls.Standard = Backbone.View.extend({
+	Player.Views.Player.Controls.none = Backbone.View.extend({
+		className : 'controls controls-none',
+	})
+	
+	Player.Views.Player.Controls.simple = Player.Views.Player.Controls.none.extend({
+		
+		className : 'controls controls-simple',
+		
+		addPopcorn : function(pop)
+		{
+			this.popcorn = pop;
+			this.initPopcornEvents();
+		},
+		
+		initPopcornEvents : function()
+		{
+			var _this = this;
+			this.popcorn.listen('canplay',function(){ _this.onCanPlay() });
+			this.popcorn.listen('ended',function(){ _this.onEnded() });
+			this.popcorn.listen('playing',function(){ _this.onPlaying() });
+			this.popcorn.listen('pause',function(){ _this.onPause() });
+		},
+		
+		render : function()
+		{
+			this.$el.html( this.getTemplate() );
+			return this;
+		},
+		
+		events : {
+			'click' : 'playPause',
+			'mouseover' : 'onMouseover',
+			'mouseout' : 'onMouseout',
+		},
+		
+		onCanPlay : function()
+		{
+			this.updatePlayPauseIcon();
+		},
+		
+		playPause : function()
+		{
+			if(this.popcorn)
+			{
+				if(this.popcorn.paused()) this.popcorn.play();
+				else this.popcorn.pause();
+				this.updatePlayPauseIcon();
+			}
+			return false;
+		},
+		
+		updatePlayPauseIcon : function()
+		{
+			if(this.popcorn)
+			{
+				if( !this.popcorn.paused() ) this.$el.find('.pause-play i').addClass('icon-pause').removeClass('icon-play');
+				else this.$el.find('.pause-play i').removeClass('icon-pause').addClass('icon-play');
+			}
+		},
+		
+		onPlaying : function()
+		{
+			// fade out after play
+			if( this.model.get('control_fade') ){ this.setFadeTimeout() };
+			this.updatePlayPauseIcon();
+		},
+		
+		setFadeTimeout : function()
+		{
+			var _this = this;
+			if(this.timer) clearTimeout(_this.timer);
+			this.timer = setTimeout( function(){
+				_this.fadeOutControls();
+				clearTimeout(_this.timer);
+			}, 3500);
+		},
+		
+		onMouseover : function()
+		{
+			if(this.model.get('control_fade') && !this.popcorn.paused() )
+			{
+				if(this.timer) clearTimeout( this.timer );
+				this.fadeInControls();
+			}
+		},
+		onMouseout : function()
+		{
+			if(this.model.get('control_fade') && !this.popcorn.paused() )
+				this.setFadeTimeout();
+		},
+		
+		fadeOutControls : function()
+		{
+			if(this.$el.find('.player-control-inner').is(':visible') && !this.popcorn.paused()) this.$el.find('.player-control-inner').fadeOut('slow')
+		},
+		fadeInControls : function()
+		{
+			if(this.$el.find('.player-control-inner').is(':hidden')) this.$el.find('.player-control-inner').fadeIn('fast')
+		},
+		
+		onPause : function()
+		{
+			if(this.timer) clearTimeout( this.timer );
+			// make sure  controls are visible
+			this.fadeInControls();
+		},
+		
+		onEnded : function()
+		{
+			this.$el.find('.pause-play i').addClass('icon-play').removeClass('icon-pause');
+		},
+		
+		getTemplate : function()
+		{
+			var html =
+			
+			"<div class='player-control-inner'><a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a></div>";
+			
+			return html;
+		}
+	})
+	
+	Player.Views.Player.Controls.standard = Player.Views.Player.Controls.simple.extend({
 		
 		isSeeking : false,
 		
 		className : 'controls controls-standard',
-		
-		initialize : function()
-		{
-			this.model.on('all',function(e){console.log('control event',e)})
-			this.model.on('ended',this.onEnded,this)
-		},
 		
 		addPopcorn : function(pop)
 		{
@@ -263,15 +376,10 @@
 			//this.popcorn.listen('progress',function(){ console.log( 'buffered',_this.popcorn.buffered(), _this.popcorn.buffered().end(0) ) })
 		},
 		
-		render : function()
-		{
-			this.$el.html( this.getTemplate() );
-			return this;
-		},
-		
 		events : {
 			'click .pause-play' : 'playPause',
 			'mouseover' : 'onMouseover',
+			'mouseout' : 'onMouseout',
 			'mousedown .progress-outer' : 'scrub',
 		},
 		
@@ -325,71 +433,6 @@
 			if(wasPlaying) this.popcorn.play();
 		},
 		
-		playPause : function()
-		{
-			if(this.popcorn)
-			{
-				if(this.popcorn.paused()) this.popcorn.play();
-				else this.popcorn.pause();
-				this.updatePlayPauseIcon();
-			}
-			return false;
-		},
-		
-		updatePlayPauseIcon : function()
-		{
-			if(this.popcorn)
-			{
-				if( !this.popcorn.paused() ) this.$el.find('.pause-play i').addClass('icon-pause').removeClass('icon-play');
-				else this.$el.find('.pause-play i').removeClass('icon-pause').addClass('icon-play');
-			}
-		},
-		
-		onPlaying : function()
-		{
-			// fade out after play
-			if( this.model.get('control_fade') ){ this.setFadeTimeout() }
-		},
-		
-		setFadeTimeout : function()
-		{
-			var _this = this;
-			this.timer = setTimeout( function(){
-				_this.fadeOutControls();
-				clearTimeout(_this.timer);
-			}, 3500);
-		},
-		
-		onMouseover : function()
-		{
-			if(this.model.get('control_fade') && !this.popcorn.paused() )
-			{
-				if(this.timer) clearTimeout( this.timer );
-				this.fadeInControls();
-				this.setFadeTimeout();
-			}
-		},
-		
-		fadeOutControls : function()
-		{
-			if(this.$el.find('.player-control-inner').is(':visible') && !this.popcorn.paused()) this.$el.find('.player-control-inner').fadeOut('slow')
-		},
-		fadeInControls : function()
-		{
-			if(this.$el.find('.player-control-inner').is(':hidden')) this.$el.find('.player-control-inner').fadeIn('fast')
-		},
-		
-		onPause : function()
-		{
-			if(this.timer) clearTimeout( this.timer );
-			// make sure  controls are visible
-			this.fadeInControls();
-		},
-		
-		onEnded : function()
-		{
-			this.$el.find('.pause-play i').addClass('icon-play').removeClass('icon-pause');
-		},
 		
 		getTemplate : function()
 		{
@@ -398,7 +441,7 @@
 				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
 				"<div class='control-panel-inner'>"+
 					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
-					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'></span></div>"+
+					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'>0:00</span></div>"+
 				"</div>"+
 			"</div>";
 			
@@ -406,13 +449,132 @@
 		}
 	})
 	
-	Player.Views.Player.Controls.Editor = Backbone.View.extend({
+	Player.Views.Player.Controls.editor = Player.Views.Player.Controls.standard.extend({
 		
 		className : 'controls controls-editor',
 		
-		initialize : function()
+		initPopcornEvents : function()
 		{
-			console.log('init editor media controls')
+			var _this = this;
+			this.popcorn.listen('canplay',function(){ _this.onCanPlay() });
+			this.popcorn.listen('ended',function(){ _this.onEnded() });
+			this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
+			this.popcorn.listen('playing',function(){ _this.onPlaying() });
+			this.popcorn.listen('pause',function(){ _this.onPause() });
+			//this.popcorn.listen('progress',function(){ console.log( 'buffered',_this.popcorn.buffered(), _this.popcorn.buffered().end(0) ) })
+		},
+		
+		events : {
+			'click .pause-play' : 'playPause',
+			'mouseover' : 'onMouseover',
+			'mouseout' : 'onMouseout',
+			'mousedown .progress-outer' : 'scrub',
+		},
+		
+		onCanPlay : function()
+		{
+			this.updateDuration();
+			this.updatePlayPauseIcon();
+			
+			this.initCropTool();
+		},
+		
+		updateDuration : function()
+		{
+			this.$el.find('.media-time-duration').html( convertTime(this.popcorn.duration()) );
+		},
+		updateElapsed : function()
+		{
+			var elapsed = this.popcorn.currentTime();
+			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
+			if( !this.isSeeking) this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+		},
+		
+		initCropTool : function()
+		{
+			var _this = this;
+			this.$el.find('.crop-marker-left, .crop-marker-right').draggable({
+				axis : 'x',
+				containment : 'parent',
+				
+				drag : function(e,ui)
+				{
+					console.log('drag')
+					_this.onCropDrag(e,ui);
+				},
+				
+				stop : function(e,ui)
+				{
+					console.log('stopped dragging')
+					_this.onCropStop(e,ui);
+				}
+			})
+		},
+		
+		onCropDrag : function(e,ui)
+		{
+			
+		},
+		
+		onCropStop : function(e,ui)
+		{
+			
+		},
+		
+		scrub : function(e)
+		{
+			var _this = this;
+			this.isSeeking = true;
+			_this.$el.find('.progress-elapsed').css({
+				width : ((e.pageX - this.$el.find('.progress-outer').offset().left) / this.$el.find('.progress-outer').width() * 100) +"%"
+			})
+			$(window).mousemove(function(evt){
+				_this.$el.find('.progress-elapsed').css({
+					width : ((evt.pageX-_this.$el.find('.progress-outer').offset().left) / _this.$el.find('.progress-outer').width() * 100) +"%"
+				})
+			})
+			
+			$(window).mouseup(function(e){ _this.seek(e) })
+		},
+		seek : function(e)
+		{
+			var duration = this.popcorn.duration();
+			var wasPlaying = !this.popcorn.paused();
+			this.isSeeking = false;
+
+			$(window).unbind('mouseup');
+			$(window).unbind('mousemove');
+			
+			var newPos = this.$el.find('.progress-elapsed').width() / this.$el.find('.progress-outer').width() * duration;
+			newPos = newPos < 0 ? 0 : newPos;
+			newPos = newPos > duration ? duration : newPos;
+			
+			if(wasPlaying) this.popcorn.pause();
+			this.popcorn.currentTime(newPos);
+			if(wasPlaying) this.popcorn.play();
+		},
+		
+		
+		getTemplate : function()
+		{
+			var html =
+			"<div class='player-control-inner'>"+
+			
+				"<div class='crop-outer'>"+
+					"<div class='crop-marker crop-marker-left'><span class='crop-hash'></span><span class='crop-arrow'></span><span class='crop-time'>0:00</span></div>"+
+					"<div class='crop-marker crop-marker-right'><span class='crop-hash'></span><span class='crop-arrow'></span><span class='crop-time'>0:00</span></div>"+
+				"</div>"+
+				
+				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
+			
+				"<div class='control-panel-inner'>"+
+					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
+					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'>0:00</span></div>"+
+				"</div>"+
+			
+			"</div>";
+			
+			return html;
 		}
 	})
 
@@ -420,10 +582,26 @@
 
 
 
+/*************************************************************************************************************************************
+
+*
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+*
 
 
-
-
+*************************************************************************************************************************************/
 
 
 
