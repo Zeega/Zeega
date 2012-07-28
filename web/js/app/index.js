@@ -258,6 +258,12 @@ jQuery(function($)
 		zeega.app.publishProject();
 		return false;
 	});
+	//settings button
+	$('#settings-project').click(function(){
+		//Uncomment to activate publish modal
+		zeega.app.settingsProject();
+		return false;
+	});
 
 	$('#get-help').click(function(){
 		localStorage.help = true;

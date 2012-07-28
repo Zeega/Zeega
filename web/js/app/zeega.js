@@ -871,7 +871,6 @@ console.log( helpOrderArray[this.helpCounter-1] )
 	{
 		if(this.project.get("published"))
 		{
-			// publishing view for project //
 			var Modal = zeega.module('modal');
 			this.view = new Modal.Views.ShareProject({ model:this.project });
 			this.view.render();
@@ -884,12 +883,21 @@ console.log( helpOrderArray[this.helpCounter-1] )
 		{
 			this.project.save();
 		}else{
-			// publishing view for project //
 			var Modal = zeega.module('modal');
 			this.view = new Modal.Views.PublishProject({ model:this.project });
 			this.view.render();
 		}
 		zeega.app.setButtonStates();
+	},
+
+	settingsProject : function()
+	{
+		if(this.project.get("published"))
+		{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.PublishProject({ model:this.project });
+			this.view.render();
+		}
 	},
 	
 	setButtonStates : function()
@@ -900,9 +908,11 @@ console.log( helpOrderArray[this.helpCounter-1] )
 		// Publish button
 		if(this.project.get("published"))
 		{
+			$('#settings-project').show();
 			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
 			$('#share-project').css("color", "#fff");
 		}else{
+			$('#settings-project').hide();
 			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
 			$('#share-project').css("color", "#666");
 		}

@@ -57,7 +57,7 @@
 .zicon-user{background-position:0 -100px}
 .zicon-new-document{background-position:-40px -80px}
 .zicon-preview{background-position:-100px -100px}
-.zicon-publish{background-position:-100px -100px}
+.zicon-publish{background-position:-0px -80px}
 .zicon-share{background-position:-80px -100px}
 .zicon-info{background-position:-60px -40px}
 .zicon-help{background-position:-80px -40px}
@@ -73,6 +73,7 @@
 .zicon-old-frame{background-position:-60px -120px}
 .zicon-options{background-position:-20px -60px}
 .zicon-warning{background-position:-100px -120px}
+.zicon-settings{background-position:-140px -60px}
 
 [class^="zicon-"].small
 {
