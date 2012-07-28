@@ -462,6 +462,7 @@ jQuery(function($)
 		$('.database-asset').css('background','');
 	});
 
+	zeega.app.setButtonStates();
 
 
 });

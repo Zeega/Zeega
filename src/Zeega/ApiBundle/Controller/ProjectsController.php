@@ -64,13 +64,17 @@ class ProjectsController extends Controller
         $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
         
+
+        error_log("putProjectsAction",0);
+        error_log(json_encode($request_data),0);
+
 		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
         if (!$project) 
         {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
-        if (is_null($project->getItemId())) // if this project has not been published.  Should use 'published' field as determinant, but it's set to true by default
+        if (is_null($project->getItemId())) // if this project is represented in the item table
         {
             // create new item
             // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
@@ -97,7 +101,7 @@ class ProjectsController extends Controller
             $item->setEnabled(true);
             $em->persist($item);
             $em->flush();
-        }else{ // if this project has been published
+        }else{ // if this project is not represented in the item table
             error_log("getItemId was " . $project->getItemId(),0);
             // fetch associated item
             $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());

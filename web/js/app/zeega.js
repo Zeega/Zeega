@@ -66,7 +66,10 @@ this.zeega = {
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject();
 		
+		this.setButtonStates()
+
 		console.log("project data ", this.project);
+
 	},
 	
 	loadCollectionsDropdown : function( collections )
@@ -866,7 +869,7 @@ console.log( helpOrderArray[this.helpCounter-1] )
 	
 	shareProject : function()
 	{
-		if(this.project.get("item_id"))
+		if(this.project.get("published"))
 		{
 			// publishing view for project //
 			var Modal = zeega.module('modal');
@@ -877,10 +880,9 @@ console.log( helpOrderArray[this.helpCounter-1] )
 
 	publishProject : function()
 	{
-		if(this.project.get("item_id"))
+		if(this.project.get("published"))
 		{
 			this.project.save();
-			zeega.app.setButtonStates();
 		}else{
 			// publishing view for project //
 			var Modal = zeega.module('modal');
@@ -892,18 +894,16 @@ console.log( helpOrderArray[this.helpCounter-1] )
 	
 	setButtonStates : function()
 	{
+		console.log("setButtonStates", this.project)
+		console.log("setButtonStates", this.project.get("published"))
+
 		// Publish button
-		if(this.project.get("item_id"))
+		if(this.project.get("published"))
 		{
 			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
-		}else{
-			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
-		}
-		// Share button
-		if(this.project.get("item_id"))
-		{
 			$('#share-project').css("color", "#fff");
 		}else{
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
 			$('#share-project').css("color", "#666");
 		}
 	}

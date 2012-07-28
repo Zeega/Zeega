@@ -77,9 +77,9 @@
 				return false;
 			});
 			$(this.el).find('#looks-good').mouseup(function(){
-
+				console.log("mouseup");
 				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
-				_this.model.save({	
+				_this.model.save({
 							'title': $('#publish-project-title').val(),
 							'description': $('#publish-project-description').val(),
 							//'attr': attr,
@@ -92,7 +92,11 @@
 					success : function(model, response){
 						//console.log(_this.model)
 						//$(_this.el).find('#publish-project-modal-step1').hide();
+						console.log("success 1");
 						zeega.app.shareProject();
+						console.log("success 2");
+						zeega.app.setButtonStates();
+						console.log("success 3");
 						//$(_this.el).find('#publish-project-modal-step2').show();
 					},
 					error : function(model, response){
