@@ -3,7 +3,7 @@
 namespace Zeega\CommunityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class CommunityController extends Controller
 {
@@ -27,15 +27,22 @@ class CommunityController extends Controller
         return $this->render('ZeegaCommunityBundle:Topics:topics.html.twig');
     }
     
-    public function userAction($id=null)
+    public function userAction($id)
     {
-        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user_id'=>$id));
+        //$user = $this->forward('ZeegaApiBundle:Users:getUser', array('id'=>$id))->getContent();
+    	$projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+
+        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user_id'=>$id, 'user_projects' => $projects));
     }
     
-    public function dashboardAction($id=null)
+    public function dashboardAction()
     {
-    	return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>null)), 301);
-       
+    	//return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>null)), 301);       
+    	if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            $userId = $this->get('security.context')->getToken()->getUser()->getId();
+            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId)), 301);  
+        }        
     }
     public function privacyAction()
     {

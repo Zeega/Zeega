@@ -20,7 +20,7 @@ ZeegaCommunityBundle_user:
 
 ZeegaCommunityBundle_dashboard:
     pattern:  /community/dashboard
-    defaults: { _controller: ZeegaCommunityBundle:Community:user}
+    defaults: { _controller: ZeegaCommunityBundle:Community:dashboard}
 
 ZeegaCommunityBundle_productions:
     pattern:  /community/productions
