@@ -69,12 +69,8 @@ class ProjectsController extends Controller
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
-        error_log("getItemId",0);
-        error_log($project->getItemId(),0);
-
         if (is_null($project->getItemId()))
         {
-            error_log("getItemId was null",0);
             // create new item
             // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
             $user = $this->get('security.context')->getToken()->getUser();
@@ -101,7 +97,6 @@ class ProjectsController extends Controller
             $em->persist($item);
             $em->flush();
         }else{
-            error_log("getItemId was not null",0);
             // fetch associated item
             $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
         }
@@ -126,9 +121,6 @@ class ProjectsController extends Controller
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
 
-
-        error_log("final item_id",0);
-        error_log($item->getId(),0);
 
         $project->setItemId($item->getId());
 
