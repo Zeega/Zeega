@@ -136,12 +136,7 @@ class BookmarkletController extends Controller
 				));
 			}
 		}
-<<<<<<< HEAD:src/Zeega/BookmarkletBundle/Controller/BookmarkletController.php
-		
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
-=======
-		return $this->render('ZeegaCoreBundle:Widget:fail.widget.html.twig', array(
->>>>>>> dropbox:src/Zeega/CoreBundle/Controller/WidgetController.php
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,
 			'item'=>json_encode(array()), 

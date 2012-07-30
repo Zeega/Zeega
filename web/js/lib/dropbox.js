@@ -5,8 +5,7 @@ var dropbox = {
   sync:function(){
     var height = (window.innerHeight < 600)?window.innerHeight:600;
     var width = 1000;
-    var host = window.location.protocol + "//" + window.location.host;
-    var url = host + "/web/widget/?url=https%3A%2F%2Fwww.dropbox.com%2Fhome%2FApps%2FZeega";
+    var url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "widget/?url=https%3A%2F%2Fwww.dropbox.com%2Fhome%2FApps%2FZeega";
     var name = "OAuthWindow";
     var params = "width=" + width + ",height=" + height + ",status=no,resizable=no";
     dropbox.OAuthWindow =  window.open(url, name, params);

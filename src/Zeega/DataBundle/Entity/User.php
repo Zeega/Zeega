@@ -3,6 +3,7 @@
 namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * Zeega\DataBundle\Entity\User
@@ -13,62 +14,62 @@ use Doctrine\ORM\Mapping as ORM;
     /**
      * @var integer $id
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string $display_name
      */
-    private $display_name;
+    protected $display_name;
 
     /**
      * @var text $bio
      */
-    private $bio;
+    protected $bio;
 
     /**
      * @var string $thumb_url
      */
-    private $thumb_url;
+    protected $thumb_url;
 
     /**
      * @var datetime $created_at
      */
-    private $created_at;
+    protected $created_at;
 
     /**
      * @var string $user_type
      */
-    private $user_type;
+    protected $user_type;
 
     /**
      * @var string $location
      */
-    private $location;
+    protected $location;
 
     /**
      * @var float $location_latitude
      */
-    private $location_latitude;
+    protected $location_latitude;
 
     /**
      * @var float $location_longitude
      */
-    private $location_longitude;
+    protected $location_longitude;
 
     /**
      * @var string $background_image_url
      */
-    private $background_image_url;
+    protected $background_image_url;
 
     /**
      * @var string $dropbox_delta
      */
-    private $dropbox_delta;
+    protected $dropbox_delta;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
      */
-    private $sites;
+    protected $sites;
 
     public function __construct()
     {
