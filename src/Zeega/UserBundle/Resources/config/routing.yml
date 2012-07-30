@@ -12,3 +12,5 @@ _security_logout:
 admin_home:
     pattern:  /admin/
     defaults: { _controller:  ZeegaUserBundle:Admin:index }
+
+   

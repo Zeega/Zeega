@@ -37,5 +37,29 @@ class CommunityController extends Controller
     	return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>null)), 301);
        
     }
+    public function privacyAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Privacy:privacy.html.twig');
+    }
+    public function termsAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Terms:terms.html.twig');
+    }
+    public function productionsAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Productions:productions.html.twig');
+    }
+    public function engineAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Engine:engine.html.twig');
+    }
+    public function teamAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Team:team.html.twig');
+    }
+    public function contactAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Contact:contact.html.twig');
+    }
     
 }

@@ -1,20 +1,367 @@
-{# src/Zeega/CoreBundle/Resources/views/About/about.html.twig #}
+{# src/Zeega/CommunityBundle/Resources/views/Home/home.html.twig #}
 
 {% extends '::base.html.twig' %}
 
-{% block title %}<title></title>{% endblock %}
+{% block title %}Zeega{% endblock %}
 
 
-{#%  block stylesheets %#}
-{#% endblock %#}
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
-{% block scripts %}
-	<!--
-	<script data-main="{{ asset('js/loaders/about') }}" src="{{ asset('js/lib/require/require-1.0.5.js') }}"></script>
-	--> 
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://farm4.staticflickr.com/3265/3201369678_f290fd44be_o.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
 {% endblock %}
 
-{% block content %}
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Featured Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>Create Immersive Experiences</h1>
+				<h2>Join a community of makers and start experimenting now. <a href="">Ready to begin?</a></h2>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	<div class="container new-section">
+		
+		<div class="row">
+		
+			<!-- <div class="span14 new-section">
+		
+				<img src="http://www.placehold.it/960x400">
+		
+			</div> -->
+		
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+		
+		</div>
+	
+	</div>
+	
+	<!-- Featured Content Ends -->
+	
+	
+	<!-- Topics Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="span14">
+			
+				<h2 class="section-title">Featured Topics</h2>
+			
+			</div>
+	
+		</div>
+		
+		<div class="row">
+			
+			<a href="">
+			<div class="span7 topic-box">
+			
+				<img src="{{ asset('images/sports.jpg') }}" alt="science" width="470" height="100">
+				
+				<div class="content">
+					<div>	
+						<h1>Sports Montage</h1>
+					</div>
+				</div>
+				
+				<div class="shadow">
+				</div>
+			
+			</div>
+			</a>
+			
+			<a href="">
+			<div class="span7 topic-box">
+			
+				<img src="{{ asset('images/horror.jpg') }}" alt="america" width="470" height="100">
+				
+				<div class="content">
+					<div>	
+						<h1>Horror</h1>
+					</div>
+				</div>
+				
+				<div class="shadow">
+				</div>
+			
+			</div>
+			</a>
+			
+			<a href="">
+			<div class="span7 topic-box">
+			
+				<img src="{{ asset('images/urbanism.jpg') }}" alt="america" width="470" height="100">
+				
+				<div class="content">
+					<div>	
+						<h1>Urbanism</h1>
+					</div>
+				</div>
+				
+				<div class="shadow">
+				</div>
+			
+			</div>
+			</a>
+			
+			<a href="">
+			<div class="span7 topic-box">
+			
+				<img src="{{ asset('images/main-street.jpg') }}" alt="america" width="470" height="100">
+				
+				<div class="content">
+					<div>	
+						<h1>Mapping Main Street</h1>
+					</div>
+				</div>
+				
+				<div class="shadow">
+				</div>
+			
+			</div>
+			</a>
+		
+		</div>
+			
+	</div>
+	
+	<!-- Topics Ends -->
+	
+	
+	<!-- Special Project Separator Begins -->
+	
+	<div class="section-divider">
+	
+		<div class="shadow">
+		</div>
+		
+		<div class="content">
+	
+			<div class="container">
+			
+				<div class="row">
+		
+					<div class="span8 offset3">
+						
+						<h2>Zeega Productions is our digital imprint and collaborative R&amp;D division, a growing series of innovative storytelling projects that span the globe and uncover new perspectives on the human experience.</h2>
+				
+					</div>
+					
+					<div class="span3">
+					
+					</div>
+					
+				</div>
+		
+			</div>
+			
+			<div class="arrow-down"><div class="striped-arrow"></div></div>
+			
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Separator Ends -->
+	
+	
+	<!-- Special Project Begins -->
+	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
+	
+	<div class="special-project" style="background: url(http://scienceblogs.com/deanscorner/wp-content/blogs.dir/451/files/2012/04/i-8de5cc48290f7abdc412e4309ed9e0d4-ss-110311-japanquake-01_ss_full.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+	
+		<div class="special-gradient">
+		
+			<div class="container">
+			
+				<div class="row">
+				
+					<div class="span10">
+					
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h1><small>Collaborate, archive and reflect on major global events:</small><br><a href="">Digital Archive of Japan's 2011 Disaster</a></h1>
+							
+							</div>
+						</div>
+							
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Ends -->
+	
+	<div class="section-divider">
+			<div class="no-content">
+			</div>
+	</div>
+	
+	<!-- Special Project Begins -->
+	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
+	
+	<div class="special-project" style="background: url(http://farm5.staticflickr.com/4039/4491788278_c472878fa3_b.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+	
+		<div class="special-gradient">
+		
+			<div class="container">
+			
+				<div class="row">
+				
+					<div class="span10">
+					
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h1><small>Tour a neighborhood's cultural history with Jim Jarmusch:</small><br><a href="">East Village Poetry Walk</a></h1>
+								
+							</div>
+						</div>
+						
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Ends -->
 
 
 {% endblock %}

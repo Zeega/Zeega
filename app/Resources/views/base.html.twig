@@ -156,10 +156,12 @@ var BrowserDetect = {
 	]
 
 };
-		/*
+		
 		BrowserDetect.init();
-		if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
-*/
+		
+	   
+		 
+
 		
 		</script>
 		
@@ -176,6 +178,11 @@ var BrowserDetect = {
     	
     	{% block header %}
 				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+				<style type="text/css">
+					html { 
+						padding-top:60px;
+					}
+				</style>
 					<header>
 				<div class="navbar navbar-fixed-top">
 					<div class="navbar-inner">
@@ -341,7 +348,7 @@ var BrowserDetect = {
 		<div class="row">
 		
 			<div class="span6">
-				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
+				<a href="{{ path('ZeegaCommunityBundle_home')}}"><img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43"></a>
 				<div class="strapline">
 				Remake The Internet
 				</div>
@@ -350,7 +357,30 @@ var BrowserDetect = {
 			<div class="span8">
 				<div class="navigation">	
 					<div>
-						<p><a href="">About</a><a href="">SignUp</a><a href="">Login</a></p>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret" style="vertical-align:middle;border-top:4px solid #037FB3;opacity:1"></b></a>
+							<ul class="dropdown-menu-no-margins dropdown-menu">
+										
+										<li><a href="{{ path('ZeegaCommunityBundle_about')}}">Mission</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_engine')}}">Engine</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_team')}}">Team</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
+										<li class="divider"></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Service</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
+										
+										
+									</ul>
+							<a href="">SignUp</a><a href='{{ path('_security_logout')}}'>Login</a>
+
+
+
+
+
+
+
+
+
 					</div>
 				</div>
 			</div>
@@ -361,21 +391,77 @@ var BrowserDetect = {
 	<!-- Header & Nav Ends -->
 			
 		{% endif %}	
-			
-			
+			<div class="modal hide fade" id="unsupported-browser">
+				  <div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal">×</button>
+				    <h3>Please update your browser</h3>
+				  </div>
+				  <div class="modal-body">
+				    <p>Your browser is out of date and your experience is important to us. Please update your browser to ensure you can access all of Zeega's features.</p>
+				    <div class="pull-left" style="width:46%;padding:5px;background-color:#fad0d0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>You are using</h4><span id="unsupported-browser-data" style="font-size:11px;"></span></div>
+				    <div class="pull-left" style="width:46%;padding:5px;background-color:#d3fad0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>We support </h4><a href="http://www.google.com/chrome/"><div class="browser-logo-chrome"></div></a><div class="browser-logo-firefox"></div><div class="browser-logo-safari"></div><br/><span style="font-size:11px">Latest versions</span>
+
+				    </div>
+				  </div>
+				  
+			</div>
+		
 			<div id="editor" class='clearfix'>
 				
 				{% block body %}{% endblock %}
-		   
-				<div id="footer">
-					{% block footer %}
-						<div id="footerWrapper">
-							<div id="footer">
-						&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
+		   		
+		   		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		   			<!-- Logged-in Footer Begins -->
+					<div id="footer">
+						{% block footer %}
+							<div id="footerWrapper">
+								<div id="footer">
+							&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
+								</div>
 							</div>
+						{% endblock %}
+					</div>
+					<!-- Logged-in Footer Ends -->
+				{% else %}
+
+					<!-- Non-logged-in Footer Begins -->
+	
+					<div class="footer">
+					
+						<div class="container">
+						
+							<div class="row">
+							
+							<div class="span5">
+								<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
+								<div class="strapline">
+								Remake The Internet
+								</div>
+								<p><small>Zeega is a non-profit dedicated to inventing new forms of interactive storytelling. We are passionate about beautiful, surprising, immersive digital experiences that foster curiosity and enrich understanding of the world around us.</small></p>
+								<p><small>
+									Send us a message: <a href="mailto:info@zeega.org">info@zeega.org</a><br>
+									Maybe tweet us: <a href="http://www.twitter.com/zeega">@zeega</a><br>
+									Or send a package: 364a Broadway, Cambridge MA 02139
+								</small></p>
+							</div>
+							
+							<div class="footer-navigation span3 offset6">
+								<div>
+									<p><a href="{{ path('ZeegaCommunityBundle_home')}}">Home</a></p>
+									<p><a href="{{ path('ZeegaCommunityBundle_about')}}">About</a></p>
+									<p><a href="">Signup</a></p>
+									<p><a href="">Login</a></p>
+								</div>
+							</div>
+							
+							</div>
+						
 						</div>
-					{% endblock %}
-				</div>
+					
+					</div>
+					
+					<!-- Non-logged-in Footer Ends -->
+				{% endif %}	
 			 </div> <!-- #editor -->	
          </div> <!-- #wrapper -->
          

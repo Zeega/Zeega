@@ -10,8 +10,18 @@
 //	stuff that has to happen after the js fully loads
 function initHeaderUX(){
 		
-		
-			/************  BUG REPORT **********************/
+	/************  UNSUPPORTED BROWSER - todo - move to somewhere else so displays for non-logged in
+	header **********************/
+	if(BrowserDetect.browser!='Chromez'&&BrowserDetect.browser!='Safari') {
+	
+		console.log(BrowserDetect.browser)
+
+		$('#unsupported-browser-data').html('<div class="browser-logo-firefox"></div><br/>Version ' + BrowserDetect.version + ' of the browser '
+											+ BrowserDetect.browser + ' on ' + BrowserDetect.OS);
+		$('#unsupported-browser').modal();
+	}
+	
+	/************  BUG REPORT **********************/
 	
 	
 	$('.bug-report').click(function(e){e.stopPropagation();});
