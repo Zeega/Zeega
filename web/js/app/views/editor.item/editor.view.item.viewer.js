@@ -443,7 +443,8 @@
 				var Player = zeega.module('player');
 				
 				this.player = new Player.Views.Player({
-					model:this.model
+					model:this.model,
+					control_mode : 'editor'
 				});
 				this.$el.html(this.player.render().el);
 				this.player.placePlayer();

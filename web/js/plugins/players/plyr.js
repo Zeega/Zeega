@@ -12,7 +12,7 @@
 			
 			autoplay : false,
 			cue_in : 0,
-			cue_out : 150,
+			cue_out : null,
 			volume : .5,
 			fade_in :0,
 			fade_out : 0,
@@ -23,11 +23,13 @@
 			console.log('new player init', this)
 			if(!_.isUndefined(this.model))
 			{
+				_.extend( this.defaults, this.options );
 				//if there is a model then figure out what kind it is
 				if( !_.isUndefined(this.model.get('uri')) )
 				{
 					// it must be from an item
 					this.format = this.getFormat(this.model.get('uri'));
+					console.log('defaults', this.model.attributes,this.defaults)
 					this.settings = _.defaults( this.model.attributes, this.defaults );
 				}
 				else if( this.model.get('attr') && this.model.get('attr').uri )
@@ -100,7 +102,10 @@
 			if(this.popcorn)
 			{
 				var _this = this;
-				this.popcorn.listen('canplay',function(){ _this.onCanplay() })
+				this.popcorn.listen('canplay',function(){
+					_this.private_onCanPlay();
+					_this.onCanplay();
+				})
 			}
 		},
 		
@@ -158,7 +163,12 @@
 				_this.popcorn.currentTime(_this.get('cue_in'));
 			});
 		},
-		
+		private_onCanPlay : function()
+		{
+			this.model.set('duration', this.popcorn.duration() );
+			if( _.isNull(this.model.get('cue_out')) ) this.model.set('cue_out', this.popcorn.duration() );
+			
+		},
 		onCanplay : function()
 		{
 			if(this.settings.autoplay && this.popcorn) this.popcorn.play();
@@ -380,65 +390,77 @@
 			'click .pause-play' : 'playPause',
 			'mouseover' : 'onMouseover',
 			'mouseout' : 'onMouseout',
-			'mousedown .progress-outer' : 'scrub',
 		},
 		
 		onCanPlay : function()
 		{
 			this.updateDuration();
 			this.updatePlayPauseIcon();
+			
+			this.initScrubber();
+		},
+		
+		initScrubber : function()
+		{
+			var _this = this;
+			this.$el.find('.media-scrubber').slider({
+				range: 'min',
+				min: 0,
+				max : this.duration,
+				
+				slide : function(e,ui){ _this.scrub( ui.value ) },
+				stop : function(e,ui){ _this.seek(ui.value) }
+			})
 		},
 		
 		updateDuration : function()
 		{
-			this.$el.find('.media-time-duration').html( convertTime(this.popcorn.duration()) );
+			this.duration = this.popcorn.duration();
+			this.$el.find('.media-time-duration').html( convertTime(this.duration) );
 		},
 		updateElapsed : function()
 		{
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
-			if( !this.isSeeking) this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+			this.$el.find('.media-scrubber').slider('value', elapsed);//css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
 		},
 		
-		scrub : function(e)
+		scrub : function( time )
 		{
 			var _this = this;
 			this.isSeeking = true;
-			_this.$el.find('.progress-elapsed').css({
-				width : ((e.pageX - this.$el.find('.progress-outer').offset().left) / this.$el.find('.progress-outer').width() * 100) +"%"
-			})
-			$(window).mousemove(function(evt){
-				_this.$el.find('.progress-elapsed').css({
-					width : ((evt.pageX-_this.$el.find('.progress-outer').offset().left) / _this.$el.find('.progress-outer').width() * 100) +"%"
-				})
-			})
-			
-			$(window).mouseup(function(e){ _this.seek(e) })
-		},
-		seek : function(e)
-		{
-			var duration = this.popcorn.duration();
-			var wasPlaying = !this.popcorn.paused();
-			this.isSeeking = false;
 
-			$(window).unbind('mouseup');
-			$(window).unbind('mousemove');
+		},
+		seek : function( time )
+		{
+			console.log('media seek', time, this.model.get('cue_in'), this.model.get('cue_out'));
 			
-			var newPos = this.$el.find('.progress-elapsed').width() / this.$el.find('.progress-outer').width() * duration;
-			newPos = newPos < 0 ? 0 : newPos;
-			newPos = newPos > duration ? duration : newPos;
-			
+			if( time < this.model.get('cue_in') )
+			{
+				this.$el.find('.media-scrubber').slider('value',this.model.get('cue_in'));
+				time = this.model.get('cue_in');
+			}
+			else if( time > this.model.get('cue_out') )
+			{
+				this.$el.find('.media-scrubber').slider('value',this.model.get('cue_out'));
+				time = this.model.get('cue_out');
+			}
+			else
+			{
+				this.$el.find('.media-scrubber').slider('value',time);
+			}
+			console.log('adjusted seek',time)
+			var wasPlaying = !this.popcorn.paused();
 			if(wasPlaying) this.popcorn.pause();
-			this.popcorn.currentTime(newPos);
+			this.popcorn.currentTime(time);
 			if(wasPlaying) this.popcorn.play();
 		},
-		
 		
 		getTemplate : function()
 		{
 			var html =
 			"<div class='player-control-inner'>"+
-				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
+				"<div class='media-scrubber'></div>"+
 				"<div class='control-panel-inner'>"+
 					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
 					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'>0:00</span></div>"+
@@ -476,12 +498,14 @@
 			this.updateDuration();
 			this.updatePlayPauseIcon();
 			
+			this.initScrubber();
 			this.initCropTool();
 		},
 		
 		updateDuration : function()
 		{
-			this.$el.find('.media-time-duration').html( convertTime(this.popcorn.duration()) );
+			this.duration = this.popcorn.duration();
+			this.$el.find('.media-time-duration').html( convertTime(this.duration) );
 		},
 		updateElapsed : function()
 		{
@@ -493,65 +517,123 @@
 		initCropTool : function()
 		{
 			var _this = this;
-			this.$el.find('.crop-marker-left, .crop-marker-right').draggable({
-				axis : 'x',
-				containment : 'parent',
-				
-				drag : function(e,ui)
+			
+			this.$el.find('.crop-time-left .time').text( convertTime(this.model.get('cue_in')) );
+			this.$el.find('.crop-time-right .time').text( convertTime(this.model.get('cue_out') || this.duration ) );
+			
+			this.$el.find('.crop-slider').slider({
+				range:true,
+				min:0,
+				max:_this.duration,
+				values : [ _this.model.get('cue_in') , _this.model.get('cue_out') || _this.duration ],
+				slide : function(e,ui){ _this.onCropSlide(e,ui) },
+				stop : function(e,ui){ _this.onCropStop(e,ui) }
+			})
+			
+			this.$el.find('.crop-time-left .time').keypress(function(e){
+				if((e.which >= 48 && e.which <= 58) || e.which == 13)
 				{
-					console.log('drag')
-					_this.onCropDrag(e,ui);
-				},
-				
-				stop : function(e,ui)
-				{
-					console.log('stopped dragging')
-					_this.onCropStop(e,ui);
+					switch(e.which)
+					{
+						case 13:
+							var sec = _this.convertToSeconds($(this).text());
+						
+							if(sec != false)
+							{
+								_this.seek( sec );
+							
+								sec = sec < 0 ? 0 : sec;
+								sec = sec > _this.model.get('cue_out') ? _this.model.get('cue_out') : sec;
+								$(this).text( convertTime(sec) )
+								_this.$el.find('.crop-slider').slider('values',0, sec );
+								_this.model.save({ 'cue_in' : sec });
+							}
+							else
+							{
+								$(this).text( convertTime(_this.model.get('cue_in')) )
+							}
+							this.blur();
+							return false;
+							break;
+					}
 				}
+				else return false;
+			})
+			this.$el.find('.crop-time-right .time').keypress(function(e){
+				if((e.which >= 48 && e.which <= 58) || e.which == 13)
+				{
+					switch(e.which)
+					{
+						case 13:
+							var sec = _this.convertToSeconds( $(this).text() );
+						
+							if(sec != false)
+							{
+								sec = sec > _this.duration ? this.duration : sec;
+								sec = sec < _this.model.get('cue_in') ? _this.model.get('cue_in') : sec;
+								$(this).text( convertTime(sec) )
+								_this.$el.find('.crop-slider').slider('values',1, sec );
+								_this.model.save({ 'cue_out' : sec })
+							}
+							else
+							{
+								$(this).text( convertTime(_this.model.get('cue_out')) )
+							}
+							this.blur();
+							return false;
+							break;
+					}
+				}
+				else return false;
 			})
 		},
 		
-		onCropDrag : function(e,ui)
+		convertToSeconds : function( string )
 		{
+			var st = string.split(/:/);
+			var flag = false;
+			var sec = 0;
 			
+			_.each( st.reverse(), function(number,i){
+				if(number.length > 2)
+				{
+					flag = true;
+					return false;
+				}
+				else
+				{
+					var num = parseInt(number);
+					if( !_.isNumber(num) )
+					{
+						flag = true;
+						return false;
+					}
+					else
+					{
+						if(i) sec += num * i * 60;
+						else sec += num;
+					}
+				}
+			})
+			if( flag ) return false;
+			else return sec;
+		},
+		
+		onCropSlide : function(e,ui)
+		{
+			this.$el.find('.crop-time-left .time').html( convertTime(ui.values[0]) );
+			this.$el.find('.crop-time-right .time').html( convertTime(ui.values[1]) );
 		},
 		
 		onCropStop : function(e,ui)
 		{
-			
-		},
-		
-		scrub : function(e)
-		{
-			var _this = this;
-			this.isSeeking = true;
-			_this.$el.find('.progress-elapsed').css({
-				width : ((e.pageX - this.$el.find('.progress-outer').offset().left) / this.$el.find('.progress-outer').width() * 100) +"%"
-			})
-			$(window).mousemove(function(evt){
-				_this.$el.find('.progress-elapsed').css({
-					width : ((evt.pageX-_this.$el.find('.progress-outer').offset().left) / _this.$el.find('.progress-outer').width() * 100) +"%"
-				})
+			this.model.save({
+				'cue_in' : ui.values[0],
+				'cue_out' : ui.values[1]
 			})
 			
-			$(window).mouseup(function(e){ _this.seek(e) })
-		},
-		seek : function(e)
-		{
-			var duration = this.popcorn.duration();
-			var wasPlaying = !this.popcorn.paused();
-			this.isSeeking = false;
-
-			$(window).unbind('mouseup');
-			$(window).unbind('mousemove');
-			
-			var newPos = this.$el.find('.progress-elapsed').width() / this.$el.find('.progress-outer').width() * duration;
-			newPos = newPos < 0 ? 0 : newPos;
-			newPos = newPos > duration ? duration : newPos;
-			
-			if(wasPlaying) this.popcorn.pause();
-			this.popcorn.currentTime(newPos);
-			if(wasPlaying) this.popcorn.play();
+			this.popcorn.pause();
+			this.seek( ui.values[0] );
 		},
 		
 		
@@ -560,12 +642,12 @@
 			var html =
 			"<div class='player-control-inner'>"+
 			
-				"<div class='crop-outer'>"+
-					"<div class='crop-marker crop-marker-left'><span class='crop-hash'></span><span class='crop-arrow'></span><span class='crop-time'>0:00</span></div>"+
-					"<div class='crop-marker crop-marker-right'><span class='crop-hash'></span><span class='crop-arrow'></span><span class='crop-time'>0:00</span></div>"+
+				"<div class='crop-wrapper'>"+
+					"<div class='crop-time-values clearfix'><span class='crop-time-left'>in [<span class='time' contenteditable='true'>0:00</span>]</span><span class='crop-time-right'>out [<span class='time' contenteditable='true'>0:00</span>]</span></div>"+
+					"<div class='crop-slider'></div>"+
 				"</div>"+
 				
-				"<div class='progress-outer'><div class='progress-elapsed'></div></div>"+
+				"<div class='media-scrubber'></div>"+
 			
 				"<div class='control-panel-inner'>"+
 					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
