@@ -21,6 +21,7 @@ var loadFiles = [
 	'order!lib/backbone',
 	'order!jquery/ui/js/jquery-ui.min',
 	'order!lib/bootstrap',
+	'order!lib/dropbox',
 	
 	//custom
 
@@ -52,6 +53,8 @@ var loadFiles = [
 	'order!backbone/views/item-view',
 	'order!backbone/views/frame-view',
 	'order!backbone/views/layer-view',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	
 	//sequences
 	'order!backbone/sequences/sequences',

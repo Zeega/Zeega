@@ -117,6 +117,10 @@
     git=http://github.com/doctrine/DoctrineMigrationsBundle.git
     target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
     version=origin/2.0
+<<<<<<< HEAD
+=======
+
+>>>>>>> dropbox
 ; ---------------------------------------------
 ; solr related bundles
 ; ---------------------------------------------
@@ -140,7 +144,11 @@
     git=http://github.com/doctrine/DoctrineFixturesBundle.git
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
     version=origin/2.0
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> dropbox
 ; ---------------------------------------------
 ; FOSUserBundle
 ; ---------------------------------------------

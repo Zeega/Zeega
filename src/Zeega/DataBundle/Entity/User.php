@@ -3,47 +3,72 @@
 namespace Zeega\DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
  * Zeega\DataBundle\Entity\User
  */
-class User extends BaseUser
-{
+ 
+ class User extends BaseUser
+ {
     /**
      * @var integer $id
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string $display_name
      */
-    protected $display_name;
+    private $display_name;
 
     /**
      * @var text $bio
      */
-    protected $bio ="Zeega is better known by the pseudonym Dziga Vertov. Born Denis Abelevich Kaufman in 1896. Father was a librarian. In 1916, started one of the world's first ?Laboratories of Hearing? to experiment with sound as art. In the 1920s, Kaufman adopted the name 'Dziga Vertov', which translates loosely as 'spinning top' and also was chosen because it makes the 'z-z-z-z' sound when cranking a camera.";
+    private $bio;
 
     /**
      * @var string $thumb_url
      */
-    protected $thumb_url = "http://mlhplayground.org/gamma-james/images/vertov.jpeg";
+    private $thumb_url;
 
     /**
      * @var datetime $created_at
      */
-    protected $created_at;
+    private $created_at;
 
     /**
      * @var string $user_type
      */
-    protected $user_type;
+    private $user_type;
+
+    /**
+     * @var string $location
+     */
+    private $location;
+
+    /**
+     * @var float $location_latitude
+     */
+    private $location_latitude;
+
+    /**
+     * @var float $location_longitude
+     */
+    private $location_longitude;
+
+    /**
+     * @var string $background_image_url
+     */
+    private $background_image_url;
+
+    /**
+     * @var string $dropbox_delta
+     */
+    private $dropbox_delta;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
      */
-    protected $sites;
+    private $sites;
 
     public function __construct()
     {
@@ -162,31 +187,6 @@ class User extends BaseUser
     }
 
     /**
-     * Add sites
-     *
-     * @param Zeega\DataBundle\Entity\Site $sites
-     */
-    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
-    {
-        $this->sites[] = $sites;
-    }
-
-    /**
-     * Get sites
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSites()
-    {
-        return $this->sites;
-    }
-    /**
-     * @var string $location
-     */
-    private $location;
-
-
-    /**
      * Set location
      *
      * @param string $location
@@ -205,16 +205,6 @@ class User extends BaseUser
     {
         return $this->location;
     }
-    /**
-     * @var float $location_latitude
-     */
-    private $location_latitude;
-
-    /**
-     * @var float $location_longitude
-     */
-    private $location_longitude;
-
 
     /**
      * Set location_latitude
@@ -255,36 +245,6 @@ class User extends BaseUser
     {
         return $this->location_longitude;
     }
-    /**
-     * @var string $profile_image
-     */
-    private $profile_image;
-
-
-    /**
-     * Set profile_image
-     *
-     * @param string $profileImage
-     */
-    public function setProfileImage($profileImage)
-    {
-        $this->profile_image = $profileImage;
-    }
-
-    /**
-     * Get profile_image
-     *
-     * @return string 
-     */
-    public function getProfileImage()
-    {
-        return $this->profile_image;
-    }
-    /**
-     * @var string $background_image_url
-     */
-    private $background_image_url;
-
 
     /**
      * Set background_image_url
@@ -304,5 +264,45 @@ class User extends BaseUser
     public function getBackgroundImageUrl()
     {
         return $this->background_image_url;
+    }
+
+    /**
+     * Set dropbox_delta
+     *
+     * @param string $dropboxDelta
+     */
+    public function setDropboxDelta($dropboxDelta)
+    {
+        $this->dropbox_delta = $dropboxDelta;
+    }
+
+    /**
+     * Get dropbox_delta
+     *
+     * @return string 
+     */
+    public function getDropboxDelta()
+    {
+        return $this->dropbox_delta;
+    }
+
+    /**
+     * Add sites
+     *
+     * @param Zeega\DataBundle\Entity\Site $sites
+     */
+    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
+    {
+        $this->sites[] = $sites;
+    }
+
+    /**
+     * Get sites
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSites()
+    {
+        return $this->sites;
     }
 }

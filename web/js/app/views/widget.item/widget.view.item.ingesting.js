@@ -56,7 +56,7 @@
 				        $('#widget-creator-added-text').text(model.get("media_creator_username"));
 				        $('#widget-added-text').fadeIn();
 
-				 	    $('#message').html('Media successfully added to your Zeega Collection');
+				 	    $('#message').html('Media successfully added to your Zeega Collection.  Use this tool anytime to synchronize Zeega with media on other sites.');
 				 	    zeegaWidget.app.items.collection.add(item);
 				 	},
 				 	error: function(model, response){
