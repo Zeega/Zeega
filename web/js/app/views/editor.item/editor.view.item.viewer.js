@@ -444,7 +444,8 @@
 				
 				this.player = new Player.Views.Player({
 					model:this.model,
-					control_mode : 'editor'
+					control_mode : 'standard',
+					media_target : null
 				});
 				this.$el.html(this.player.render().el);
 				this.player.placePlayer();
@@ -461,38 +462,6 @@
 			return html;
 		}
 	})
-	
-	/*
-	Items.Views.Viewer.Video = Backbone.View.extend({
-		
-		initialize : function()
-		{
-			this.model.on('after_render', this.afterRender,this);
-		},
-
-		render : function()
-		{
-			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
-			return this;
-		},
-		
-		afterRender : function()
-		{
-			if( !this.isRendered == true )
-			{
-				this.$el.empty();
-				this.player = new Plyr('item-media-'+this.model.id,{url:this.model.get('uri')});
-				this.isRendered = true;
-			}
-		},
-		
-		getTemplate : function()
-		{
-			html = this.model.get('title');
-			return html;
-		}
-	})
-	*/
 
 	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
 	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()

@@ -1,10 +1,10 @@
-		(function(Layer){
-
-
+(function(Layer){
 
 	Layer.Video = Layer.Model.extend({
 			
 		layerType : 'Video',
+		
+		player_loaded : false,
 
 		defaultAttributes : 
 		{
@@ -16,7 +16,7 @@
 			'width' : 100,
 			'volume' : 0.5,
 			'cue_in'  : 0,
-			'cue_out' : 0,
+			'cue_out' : null,
 			'fade_in' : 0,
 			'fade_out' : 0,
 			'dissolve': false,
@@ -27,19 +27,18 @@
 
 		init : function()
 		{
-			console.log(this.get('attr'));
-			console.log(this);
-			
-			this.video = new Plyr2({
-				url : this.get('attr').attribution_uri,
-				uri : this.get('attr').uri,
-				id : this.id,
-				cue_in  : this.get('attr').cue_in,
-				cue_out : this.get('attr').cue_out,
-				fade_in  : this.get('attr').fade_in,
-				fade_out : this.get('attr').fade_out,
-				volume : this.get('attr').volume,
-			})
+			this.initPlayer()
+		},
+		
+		initPlayer : function()
+		{
+			var Player = zeega.module('player');
+			this.player = new Player.Views.Player({
+				model:this,
+				control_mode : 'editor',
+				media_target : '#layer-visual-'+this.id,
+				controls_target : '#media-controls-'+this.id,
+			});
 		}
 
 	});
@@ -49,7 +48,7 @@
 		render : function()
 		{
 			
-			var playbackControls = new Layer.Views.Lib.Playback({
+			var playbackControls = new Layer.Views.Lib.Target({
 				model : this.model
 			});
 			
@@ -69,7 +68,6 @@
 				css : false
 			});
 			
-			
 			var fadeInSlider = new Layer.Views.Lib.Slider({
 				property : 'fade_in',
 				model: this.model,
@@ -80,7 +78,6 @@
 				css : false
 			});
 			
-			
 			var fadeOutSlider = new Layer.Views.Lib.Slider({
 				property : 'fade_out',
 				model: this.model,
@@ -90,8 +87,6 @@
 				step : 0.1,
 				css : false
 			});
-			
-			
 			
 			var widthSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
@@ -179,40 +174,54 @@
 		onLayerEnter : function()
 		{
 			//if coming from another frame and the controls are open but the video isn't loaded
+			console.log('coming from another frame. is open?',this.model.controls.visible)
 			if( this.model.controls.visible == true )
 			{
-				this.$el.find('img').remove();
-				this.model.video.placeVideo( this.$el );
-				this.model.loaded = true;
+				console.log('inside;',this.$el, this.model.player, this.model.player_loaded )
+				
+				if( !this.model.player_loaded )
+				{
+					this.model.initPlayer();
+					this.$el.html(this.model.player.render().el);
+					this.model.player.placePlayer();
+				}
+				/*
+				
+*/
+				this.model.player_loaded = true;
 			
 			}
 		},
 		
 		onLayerExit : function()
 		{
-			if( this.model.video.isVideoLoaded )
+			
+			if( this.model.player_loaded )
 			{
-				this.model.video.destroy();
-			} 
-			this.model.loaded = false;
+				console.log('layer exit')
+				this.model.player.destroy();
+			}
+			this.model.player_loaded = false;
 			
 			//must call this if you extend onLayerExit
 			this.model.trigger('editor_readyToRemove')
+			
 		},
 		
 		onControlsOpen : function()
 		{
 			console.log('video controls open : visual')
 			var _this = this;
-			if( !this.model.loaded )
+			if( !this.model.player_loaded )
 			{
-					this.model.video.on('video_canPlay', function(){ _this.model.trigger('video_ready', _this.model.id ) }, this )
-					this.model.video.placeVideo( this.$el );
-					this.model.loaded = true;
+				this.$el.html(this.model.player.render().el);
+				this.model.player.placePlayer();
+				
+				this.model.player_loaded = true;
 			}
 			else
 			{
-				this.model.video.pause();
+				this.model.player.pause();
 			}
 			
 		
@@ -221,7 +230,7 @@
 		
 		onControlsClosed : function()
 		{
-			this.model.video.pause();
+			this.model.player.pause();
 		},
 		
 		onPreload : function()
@@ -239,15 +248,11 @@
 				this.model.video.pause();
 			}
 		},
-		onEnded : function(){
+		onEnded : function()
+		{
 		
-			
-				
-				
-				
 		
 		},
-		
 		
 		onTimeUpdate : function(){
 			

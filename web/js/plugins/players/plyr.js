@@ -7,8 +7,11 @@
 		className : 'media-player-container',
 		
 		defaults : {
-			control_mode : 'editor', // none / simple / standard / editor
+			control_mode : 'none', // none / simple / standard / editor
 			control_fade : true,
+			
+			media_target : null,
+			controls_target : null,
 			
 			autoplay : false,
 			cue_in : 0,
@@ -20,23 +23,24 @@
 		
 		initialize : function(options)
 		{
-			console.log('new player init', this)
+						
 			if(!_.isUndefined(this.model))
 			{
-				_.extend( this.defaults, this.options );
+				//_.extend( this.defaults, this.options );
 				//if there is a model then figure out what kind it is
 				if( !_.isUndefined(this.model.get('uri')) )
 				{
 					// it must be from an item
 					this.format = this.getFormat(this.model.get('uri'));
-					console.log('defaults', this.model.attributes,this.defaults)
-					this.settings = _.defaults( this.model.attributes, this.defaults );
-				}
+					this.settings = _.defaults( this.model.attributes, this.options , this.defaults);
+									}
 				else if( this.model.get('attr') && this.model.get('attr').uri )
 				{
 					//it must be from a layer
-					console.log('this media is from a layer')
-				}
+										this.format = this.getFormat(this.model.get('attr').uri);
+					this.settings = _.defaults( this.model.attributes.attr, this.options, this.defaults );
+					this.settings.id = this.model.id;
+									}
 				else
 				{
 					console.log('I dont know what kind of media this is :(');
@@ -51,12 +55,17 @@
 		{
 			// choose which template to use
 			var format = this.templates[this.format] ? this.format : 'default';
-			this.$el.html( _.template( this.templates[format](), this.model.toJSON() ));
-
-			console.log('controls type', this.settings.control_mode)
-
-			this.controls = new Player.Views.Player.Controls[this.settings.control_mode]({model:this.model});
-			this.$el.append( this.controls.render().el );
+			this.$el.html( _.template( this.templates[format](), this.settings ));
+			
+			
+			//attach controls. is this the right place?
+			this.controls = new Player.Views.Player.Controls[this.settings.control_mode]({
+				model:this.model,
+				detached_controls : !_.isNull(this.settings.controls_target)
+			});
+			//draw the controls
+			if( _.isNull(this.settings.controls_target) ) this.$el.append( this.controls.render().el );
+			else $( this.settings.controls_target ).html( this.controls.render().el )
 			
 			return this;
 		},
@@ -86,11 +95,6 @@
 				}
 
 				this.initPopcornEvents();
-				
-				this.popcorn.listen('timeupdate', function(){
-					_this.trigger('timeupdate');
-					_this.trigger('timeupdate_controls');
-				});
 
 				this.isVideoLoaded = true;
 				this.$el.spin('tiny');
@@ -103,7 +107,7 @@
 			{
 				var _this = this;
 				this.popcorn.listen('canplay',function(){
-					_this.private_onCanPlay();
+										_this.private_onCanPlay();
 					_this.onCanplay();
 				})
 			}
@@ -111,24 +115,27 @@
 		
 		addPopcornToControls : function()
 		{
-			if(this.controls && this.popcorn && this.settings.control_mode != 'none' ) this.controls.addPopcorn( this.popcorn )
+			if(this.controls && this.popcorn && this.settings.control_mode != 'none' )
+			{
+				this.controls.addPopcorn( this.popcorn );
+			}
 		},
 		
 		useHTML5 : function()
 		{
 			var _this = this;
-			this.popcorn = Popcorn('#media-player-html5-'+ this.model.id);
+			var target = '#media-player-html5-'+ this.model.id;
+						this.popcorn = Popcorn( target );
 			this.addPopcornToControls();
 			this.setVolume(0);
 			this.popcorn.listen( 'canplay', function(){
+				
 				_this.$el.spin(false);
-
-				//if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume ); // commented out temporarily
+				if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume );
 				if( _this.settings.cue_in != 0 )
 				{
-					this.listen('seeked',function(){ _this.model.trigger('video_canPlay', this.model.id) });
+					this.listen('seeked',function(){ _this.model.trigger('video_canPlay', _this.model.id) });
 					_this.setCurrentTime( _this.settings.cue_in );
-					console.log( 'seeking to: ' +_this.settings.cue_in );
 				}
 				else _this.trigger('video_canPlay');
 			});
@@ -144,14 +151,14 @@
 		},
 		useYoutube : function()
 		{
-			console.log(_this.get('volume'));
+			
 			this.popcorn = Popcorn.youtube('#media-player-'+ this.model.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
 			this.popcorn.listen('canplaythrough',function(){
-				console.log(_this.get('volume'));
+				
 				_this.popcorn.play();
 				_this.popcorn.pause();
 				if(_this.get('fade_in')==0) _this.popcorn.volume(_this.get('volume'));
-				console.log( _this.get('control_mode'));
+				
 				_this.trigger('video_canPlay');
 			});
 		},
@@ -201,8 +208,9 @@
 			}
 		},
 		
-		removePlayer : function()
+		destroy : function()
 		{
+			console.log('destroy popcorn')
 			if(this.popcorn) this.popcorn.destroy();
 		},
 		
@@ -239,15 +247,31 @@
 		
 	})
 	
+	
+	/*****************************
+	
+		CONTROLS
+		
+	*****************************/
+	
 	Player.Views.Player.Controls = Player.Views.Player.Controls || {};
 	
 	Player.Views.Player.Controls.none = Backbone.View.extend({
-		className : 'controls controls-none',
+		className : 'controls playback-controls controls-none',
+		
+		initialize : function()
+		{
+			console.log('controls init',this)
+			if(this.options.detached_controls) this.$el.addClass('playback-layer-controls')
+			this.init();
+		},
+		
+		init : function(){}
 	})
 	
 	Player.Views.Player.Controls.simple = Player.Views.Player.Controls.none.extend({
 		
-		className : 'controls controls-simple',
+		className : 'controls playback-controls controls-simple',
 		
 		addPopcorn : function(pop)
 		{
@@ -279,10 +303,18 @@
 		onCanPlay : function()
 		{
 			this.updatePlayPauseIcon();
+			this.updateCues();
+		},
+		
+		updateCues : function()
+		{
+			this.cueIn = this.item_mode ? this.model.get('cue_in') : this.model.get('attr').cue_in;
+			this.cueOut = (this.item_mode ? this.model.get('cue_out') : this.model.get('attr').cue_out) || this.duration;
 		},
 		
 		playPause : function()
 		{
+			
 			if(this.popcorn)
 			{
 				if(this.popcorn.paused()) this.popcorn.play();
@@ -367,7 +399,7 @@
 		
 		isSeeking : false,
 		
-		className : 'controls controls-standard',
+		className : 'controls playback-controls controls-standard',
 		
 		addPopcorn : function(pop)
 		{
@@ -395,6 +427,7 @@
 		onCanPlay : function()
 		{
 			this.updateDuration();
+			this.updateCues();
 			this.updatePlayPauseIcon();
 			
 			this.initScrubber();
@@ -422,7 +455,7 @@
 		{
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
-			this.$el.find('.media-scrubber').slider('value', elapsed);//css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+			this.$el.find('.media-scrubber').slider('value', elapsed);
 		},
 		
 		scrub : function( time )
@@ -433,23 +466,20 @@
 		},
 		seek : function( time )
 		{
-			console.log('media seek', time, this.model.get('cue_in'), this.model.get('cue_out'));
-			
-			if( time < this.model.get('cue_in') )
+			if( time < this.cueIn )
 			{
-				this.$el.find('.media-scrubber').slider('value',this.model.get('cue_in'));
-				time = this.model.get('cue_in');
+				this.$el.find('.media-scrubber').slider('value',this.cueIn);
+				time = this.cueIn;
 			}
-			else if( time > this.model.get('cue_out') )
+			else if( time > this.cueOut )
 			{
-				this.$el.find('.media-scrubber').slider('value',this.model.get('cue_out'));
-				time = this.model.get('cue_out');
+				this.$el.find('.media-scrubber').slider('value',this.cueOut);
+				time = this.cueOut;
 			}
 			else
 			{
 				this.$el.find('.media-scrubber').slider('value',time);
 			}
-			console.log('adjusted seek',time)
 			var wasPlaying = !this.popcorn.paused();
 			if(wasPlaying) this.popcorn.pause();
 			this.popcorn.currentTime(time);
@@ -473,7 +503,14 @@
 	
 	Player.Views.Player.Controls.editor = Player.Views.Player.Controls.standard.extend({
 		
-		className : 'controls controls-editor',
+		className : 'controls playback-controls controls-editor',
+		
+		item_mode : false,
+		
+		init : function()
+		{
+			if(this.model.get('uri')) this.item_mode = true;
+		},
 		
 		initPopcornEvents : function()
 		{
@@ -496,6 +533,7 @@
 		onCanPlay : function()
 		{
 			this.updateDuration();
+			this.updateCues();
 			this.updatePlayPauseIcon();
 			
 			this.initScrubber();
@@ -511,21 +549,25 @@
 		{
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
-			if( !this.isSeeking) this.$el.find('.progress-elapsed').css({'width': (100 * elapsed/this.popcorn.duration()) +'%'})
+			this.$el.find('.media-scrubber').slider('value', elapsed);
+			if(elapsed >= this.cueOut) this.popcorn.pause();
 		},
 		
 		initCropTool : function()
 		{
 			var _this = this;
 			
-			this.$el.find('.crop-time-left .time').text( convertTime(this.model.get('cue_in')) );
-			this.$el.find('.crop-time-right .time').text( convertTime(this.model.get('cue_out') || this.duration ) );
+			//this.cueIn = this.item_mode ? this.model.get('cue_in') : this.model.get('attr').cue_in;
+			//this.cueOut = (this.item_mode ? this.model.get('cue_out') : this.model.get('attr').cue_out) || this.duration;
+			
+			this.$el.find('.crop-time-left .time').text( convertTime( this.cueIn ) );
+			this.$el.find('.crop-time-right .time').text( convertTime( this.cueOut ) );
 			
 			this.$el.find('.crop-slider').slider({
 				range:true,
 				min:0,
 				max:_this.duration,
-				values : [ _this.model.get('cue_in') , _this.model.get('cue_out') || _this.duration ],
+				values : [ _this.cueIn , _this.cueOut ],
 				slide : function(e,ui){ _this.onCropSlide(e,ui) },
 				stop : function(e,ui){ _this.onCropStop(e,ui) }
 			})
@@ -546,7 +588,7 @@
 								sec = sec > _this.model.get('cue_out') ? _this.model.get('cue_out') : sec;
 								$(this).text( convertTime(sec) )
 								_this.$el.find('.crop-slider').slider('values',0, sec );
-								_this.model.save({ 'cue_in' : sec });
+								_this.model.update({ 'cue_in' : sec })
 							}
 							else
 							{
@@ -573,7 +615,7 @@
 								sec = sec < _this.model.get('cue_in') ? _this.model.get('cue_in') : sec;
 								$(this).text( convertTime(sec) )
 								_this.$el.find('.crop-slider').slider('values',1, sec );
-								_this.model.save({ 'cue_out' : sec })
+								_this.model.update({ 'cue_out' : sec });
 							}
 							else
 							{
@@ -627,15 +669,20 @@
 		
 		onCropStop : function(e,ui)
 		{
-			this.model.save({
-				'cue_in' : ui.values[0],
-				'cue_out' : ui.values[1]
-			})
+			this.cueIn = ui.values[0];
+			this.cueOut = ui.values[1];
 			
+			if( !this.item_mode)
+			{
+				this.model.update({
+					'cue_in' : ui.values[0],
+					'cue_out' : ui.values[1]
+				})
+			}
+
 			this.popcorn.pause();
 			this.seek( ui.values[0] );
 		},
-		
 		
 		getTemplate : function()
 		{
@@ -708,7 +755,6 @@ var Plyr2 = Backbone.Model.extend({
 	{
 		//set video format type
 		this.set(options);
-		console.log(this);
 		this.set( 'format', this.getFormat(this.get('url')) );
 	},
 	
@@ -748,7 +794,6 @@ var Plyr2 = Backbone.Model.extend({
 							});
 						
 							_this.pop.currentTime(_this.get('cue_in'));
-							console.log('seeking to: ' +_this.get('cue_in'));
 						
 						}
 						else _this.trigger('video_canPlay');
@@ -768,15 +813,13 @@ var Plyr2 = Backbone.Model.extend({
 					});
 					break;
 				case 'youtube':
-					console.log(_this.get('volume'));
+					
 					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
 					this.pop.listen('canplaythrough',function(){
-						console.log(_this.get('volume'));
-						_this.pop.play();
+												_this.pop.play();
 						_this.pop.pause();
 						if(_this.get('fade_in')==0) _this.pop.volume(_this.get('volume'));
-						console.log( _this.get('control_mode'));
-						_this.trigger('video_canPlay');
+												_this.trigger('video_canPlay');
 					});
 					break;
 				case 'vimeo':
