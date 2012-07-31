@@ -25,10 +25,10 @@ class ParserDropboxSet extends ParserAbstract
 
 	private $dropboxUserName = "";
 
-	private $defaultIconAudio = "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1";
-	private $defaultIconVideo = "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1";
-	private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
-	private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
+	//private $defaultIconAudio = "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1";
+	//private $defaultIconVideo = "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1";
+	//private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
+	//private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
 
 	public function checkForDeltas($dropbox, $em)
 	{
@@ -91,18 +91,35 @@ class ParserDropboxSet extends ParserAbstract
 		return $url2;
 	}
 
+	public function setCollectionThumbnail($path, $dropbox, $collection, $dropboxUser, $itemCount)
+	{
+    	$folderMetaData = $dropbox->metaData($path);
+    	$folderItems = $folderMetaData["body"]->contents;
+		$mime_types = array("image/jpg","image/jpeg","image/png","image/gif"); // using only thumbs for image types, until thumbnail server returns  useful thumbs for every type
+		foreach ($folderItems as $folderItem){
+			if($folderItem->is_dir){ // if this path is a directory
+				$this->loadFolder($folderItem->path, $dropbox, $collection, $dropboxUser, $itemCount); // recurse function
+				continue;
+			}else{
+				if (!in_array($folderItem->mime_type, $mime_types)) {
+					continue;
+				}
+				$filename = $folderItem->path;
+				$mediaData = $dropbox->shares($filename);
+				$mediaUrl = $mediaData["body"]->url;
+				$redirect_url = $this->fetchRedirectURL($mediaUrl);	
+				$collection->setThumbnailUrl( $redirect_url );
+				break;
+			}
+		}
+	}
+
 	public function loadFolder($path, $dropbox, $collection, $dropboxUser, $itemCount)
     {
     	$folderMetaData = $dropbox->metaData($path);
     	$folderItems = $folderMetaData["body"]->contents;
 		foreach ($folderItems as $folderItem){
 			if($folderItem->is_dir){ // if this path is a directory
-				if($folderItem->path == "/__zeegaThumbnails__"){ // and it's not the thumbnails directory
-					continue;
-				}
-				if($folderItem->path == "/__ZeegaDefaultThumbnails__"){ // and it's not the default thumbnails directory
-					continue;
-				}
 				$this->loadFolder($folderItem->path, $dropbox, $collection, $dropboxUser, $itemCount); // recurse function
 				continue;
 			}else{
@@ -236,9 +253,11 @@ class ParserDropboxSet extends ParserAbstract
 			// if collection exists
 			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
 			$this->setDeltaCursor($dropbox, $em);
+			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
         }else{
         	$deltaCount = $this->checkForDeltas($dropbox, $em);
 			$collection->setChildItemsCount($deltaCount);
+			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
 	    }
 	    return parent::returnResponse($collection, true, true);
 	}
