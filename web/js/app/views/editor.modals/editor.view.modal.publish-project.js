@@ -76,7 +76,8 @@
 				$('#publish-customize-size').fadeToggle();
 				return false;
 			});
-			$(this.el).find('#looks-good').mouseup(function(){
+			$(this.el).find('#looks-good').click(function(){
+				$(_this.el).find('#looks-good').html('Publishing...');
 				console.log("mouseup");
 				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
 				_this.model.save({
@@ -177,10 +178,14 @@
 							'<label for="publish-project-estimated-time" class="twocolumn-label">Estimated Time</label>'+
 							'<input type="text" id="publish-project-estimated-time" class="twocolumn-field" value="<%= estimated_time %>"/>'+
 							'</p>'+
+							
+							/*
 							'<p class="twocolumn-pair">'+
 							'<label for="publish-project-location" class="twocolumn-label">Location</label>'+
 							'<input type="text" id="publish-project-location" class="twocolumn-field" value="<%= location %>"/>'+
 							'</p>'+
+							*/
+							
 							'<p class="twocolumn-pair">'+
 							'<label for="tags" class="twocolumn-label">Tags</label>'+
 							'<input name="tags" class="tagsedit twocolumn-field" id="<%=randId%>" value="<%=tags%>" />'+
