@@ -90,17 +90,22 @@ class ProjectsController extends Controller
 
             $item->setDateUpdated($dateUpdated);
             $item->setUri($projectId);
-            $item->setAttributionUri("http://beta.zeega.org/item_id");
+           
             $item->setMediaType("project");
             $item->setLayerType("project");
             $item->setArchive("zeega");
             $item->setMediaCreatorUsername($user->getUsername());
             $item->setPublished(1);
             //$item->setIndexed(false);
-            
+            $item->setAttributionUri("http://beta.zeega.org/");
             $item->setEnabled(true);
             $em->persist($item);
             $em->flush();
+            
+            $item->setAttributionUri("http://beta.zeega.org/".$item->getId());
+            $em->persist($item);
+            $em->flush();
+            
         }else{ // if this project is not represented in the item table
             error_log("getItemId was " . $project->getItemId(),0);
             // fetch associated item
