@@ -10,9 +10,9 @@ ZeegaCommunityBundle_home:
     pattern:  /community/
     defaults: { _controller: ZeegaCommunityBundle:Community:home }
 
-ZeegaCommunityBundle_topics:
-    pattern:  /community/topics
-    defaults: { _controller: ZeegaCommunityBundle:Community:topics }
+ZeegaCommunityBundle_topic:
+    pattern:  /community/topic/{id}
+    defaults: { _controller: ZeegaCommunityBundle:Community:topic }
     
 ZeegaCommunityBundle_user:
     pattern:  /community/user/{id}
@@ -40,4 +40,9 @@ ZeegaCommunityBundle_terms:
 ZeegaCommunityBundle_privacy:
     pattern:  /community/privacy
     defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
+ZeegaCommunityBundle_notfound:
+    pattern:  /community/notfound
+    defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
+
+
 

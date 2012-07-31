@@ -7,6 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CommunityController extends Controller
 {
+    public function notfoundAction()
+    {
+        return $this->render('ZeegaCommunityBundle:Notfound:notfound.html.twig');
+    }
+
     public function aboutAction()
     {
         return $this->render('ZeegaCommunityBundle:About:about.html.twig');
@@ -22,9 +27,9 @@ class CommunityController extends Controller
         return $this->render('ZeegaCommunityBundle:Home:home.html.twig');
     }
     
-    public function topicsAction()
+    public function topicAction()
     {
-        return $this->render('ZeegaCommunityBundle:Topics:topics.html.twig');
+        return $this->render('ZeegaCommunityBundle:Topic:topic.html.twig');
     }
     
     public function userAction($id)
