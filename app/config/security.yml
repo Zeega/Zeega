@@ -49,8 +49,8 @@ security:
         - { path: ^/routes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/community, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/community/dashboard, role: ROLE_USER }
+        - { path: ^/community, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
