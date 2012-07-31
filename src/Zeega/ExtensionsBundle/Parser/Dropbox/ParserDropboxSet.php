@@ -202,8 +202,18 @@ class ParserDropboxSet extends ParserAbstract
 		}
 		$item = new Item();
 		$tags = array();
-
-		$item->setTitle($fileData->path);
+		
+        $filePath = $fileData->path;
+        
+        $filePath = preg_replace("/\//","",$fileData->path,1);  // remove leading slash
+        
+        $pos = strrpos($filePath,".");                         // remove file extension 
+        if ($pos !== false) 
+        { 
+            $filePath = substr($filePath, 0, $pos);
+        }
+        
+		$item->setTitle($filePath);
 		$item->setTags($tags); 
 		$item->setAttributionUri($redirect_url);
 		$item->setLicense('All Rights Reserved');
