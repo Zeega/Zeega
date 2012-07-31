@@ -22,6 +22,10 @@
 			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
 			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+			
+			<!-- TODO: import the below COMMON file in every other bootstrap.less file and take the reference
+				out of the twig -->
+			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/common/style.less')}}">
 
 
 <!-- end css imports -->
@@ -47,6 +51,7 @@ var BrowserDetect = {
 			|| this.searchVersion(navigator.appVersion)
 			|| "an unknown version";
 		this.OS = this.searchString(this.dataOS) || "an unknown OS";
+		this.isMobile = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
 	},
 	searchString: function (data) {
 		for (var i=0;i<data.length;i++)	{
@@ -399,7 +404,7 @@ var BrowserDetect = {
 				  <div class="modal-body">
 				    <p>Your browser is out of date and your experience is important to us. Please update your browser to ensure you can access all of Zeega's features.</p>
 				    <div class="pull-left" style="width:46%;padding:5px;background-color:#fad0d0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>You are using</h4><span id="unsupported-browser-data" style="font-size:11px;"></span></div>
-				    <div class="pull-left" style="width:46%;padding:5px;background-color:#d3fad0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>We support </h4><a href="http://www.google.com/chrome/"><div class="browser-logo-chrome"></div></a><div class="browser-logo-firefox"></div><div class="browser-logo-safari"></div><br/><span style="font-size:11px">Latest versions</span>
+				    <div class="pull-left" style="width:46%;padding:5px;background-color:#d3fad0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>We support </h4><a href="http://www.google.com/chrome/"><div class="browser-logo-chrome"></div></a><a href="http://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CG8QFjAA&url=http%3A%2F%2Fwww.mozilla.org%2Fen-US%2Ffirefox%2Fnew%2F&ei=q_MXUNe1BMa30QGmkoD4DQ&usg=AFQjCNHXR7GrDNHIc3plcSvQSx_ByCacYQ"><div class="browser-logo-firefox"></div></a><a href=""><div class="browser-logo-safari"></div></a><a href="http://www.microsoft.com/IE9"><div class="browser-logo-ie"></div></a><br/><span style="font-size:11px">Latest versions</span>
 
 				    </div>
 				  </div>
