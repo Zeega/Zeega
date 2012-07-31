@@ -185,9 +185,7 @@
 					this.$el.html(this.model.player.render().el);
 					this.model.player.placePlayer();
 				}
-				/*
-				
-*/
+
 				this.model.player_loaded = true;
 			
 			}
@@ -198,7 +196,6 @@
 			
 			if( this.model.player_loaded )
 			{
-				console.log('layer exit')
 				this.model.player.destroy();
 			}
 			this.model.player_loaded = false;
@@ -214,6 +211,7 @@
 			var _this = this;
 			if( !this.model.player_loaded )
 			{
+				this.model.initPlayer();
 				this.$el.html(this.model.player.render().el);
 				this.model.player.placePlayer();
 				
