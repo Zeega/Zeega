@@ -55,6 +55,7 @@
 		{
 			// choose which template to use
 			var format = this.templates[this.format] ? this.format : 'default';
+			console.log('template', _.template( this.templates[format](), this.settings ))
 			this.$el.html( _.template( this.templates[format](), this.settings ));
 			
 			
@@ -72,10 +73,11 @@
 		
 		placePlayer : function()
 		{
+			console.log('place player')
 			if( !this.isVideoLoaded)
 			{
 				var _this = this;
-
+				console.log('format',this.format)
 				switch( this.format )
 				{
 					case 'html5':
@@ -107,7 +109,7 @@
 			{
 				var _this = this;
 				this.popcorn.listen('canplay',function(){
-										_this.private_onCanPlay();
+					_this.private_onCanPlay();
 					_this.onCanplay();
 				})
 			}
@@ -123,9 +125,11 @@
 		
 		useHTML5 : function()
 		{
+			console.log('add html5 popcorn, target', '#media-player-html5-'+ this.model.id, $('#media-player-html5-'+ this.model.id) )
 			var _this = this;
 			var target = '#media-player-html5-'+ this.model.id;
-						this.popcorn = Popcorn( target );
+			this.popcorn = Popcorn( target );
+			console.log('popcorn',this.popcorn)
 			this.addPopcornToControls();
 			this.setVolume(0);
 			this.popcorn.listen( 'canplay', function(){
@@ -134,10 +138,17 @@
 				if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume );
 				if( _this.settings.cue_in != 0 )
 				{
-					this.listen('seeked',function(){ _this.model.trigger('video_canPlay', _this.model.id) });
+					this.listen('seeked',function(){
+						_this.model.can_play = true;
+						_this.model.trigger('video_canPlay', _this.model.id);
+					});
 					_this.setCurrentTime( _this.settings.cue_in );
 				}
-				else _this.trigger('video_canPlay');
+				else
+				{
+					_this.model.can_play = true;
+					_this.trigger('video_canPlay');
+				}
 			});
 		},
 		useFlash : function()
@@ -210,7 +221,6 @@
 		
 		destroy : function()
 		{
-			console.log('destroy popcorn')
 			if(this.popcorn) this.popcorn.destroy();
 		},
 		
@@ -258,11 +268,13 @@
 	
 	Player.Views.Player.Controls.none = Backbone.View.extend({
 		className : 'controls playback-controls controls-none',
+		item_mode : false,
 		
 		initialize : function()
 		{
 			console.log('controls init',this)
 			if(this.options.detached_controls) this.$el.addClass('playback-layer-controls')
+			if(this.model.get('uri')) this.item_mode = true;
 			this.init();
 		},
 		
@@ -308,8 +320,9 @@
 		
 		updateCues : function()
 		{
-			this.cueIn = this.item_mode ? this.model.get('cue_in') : this.model.get('attr').cue_in;
-			this.cueOut = (this.item_mode ? this.model.get('cue_out') : this.model.get('attr').cue_out) || this.duration;
+			console.log('update cues',this, this.item_mode, this.model.get('cue_in') )
+			this.cueIn = this.item_mode == true ? this.model.get('cue_in') : this.model.get('attr').cue_in;
+			this.cueOut = (this.item_mode == true ? this.model.get('cue_out') : this.model.get('attr').cue_out) || this.duration;
 		},
 		
 		playPause : function()
@@ -504,13 +517,6 @@
 	Player.Views.Player.Controls.editor = Player.Views.Player.Controls.standard.extend({
 		
 		className : 'controls playback-controls controls-editor',
-		
-		item_mode : false,
-		
-		init : function()
-		{
-			if(this.model.get('uri')) this.item_mode = true;
-		},
 		
 		initPopcornEvents : function()
 		{

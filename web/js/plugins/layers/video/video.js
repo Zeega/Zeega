@@ -39,6 +39,16 @@
 				media_target : '#layer-visual-'+this.id,
 				controls_target : '#media-controls-'+this.id,
 			});
+		},
+		
+		initPlayerPlayer : function()
+		{
+			var Player = zeega.module('player');
+			this.player = new Player.Views.Player({
+				model:this,
+				control_mode : 'none',
+				media_target : '#layer-visual-'+this.id
+			});
 		}
 
 	});
@@ -214,6 +224,7 @@
 				this.model.initPlayer();
 				this.$el.html(this.model.player.render().el);
 				this.model.player.placePlayer();
+				console.log('on controls open',this, this.model.player)
 				
 				this.model.player_loaded = true;
 			}
@@ -233,18 +244,34 @@
 		
 		onPreload : function()
 		{
-			var _this=this;
-			this.model.video.on('timeupdate', function(){_this.onTimeUpdate()}, this );
-			this.model.video.on('ended', function(){_this.onEnded()}, this )
+			var _this = this;
+			
+			if( !this.model.player_loaded )
+			{
+				//if(this.model.player) this.model.player.destroy();
+				this.model.initPlayerPlayer();
 
-			if( !this.model.loaded ){
-				this.model.video.placeVideo( this.$el );
-				this.model.video.on('video_canPlay', function(){console.log('video ready player'); _this.model.trigger('ready', _this.model.id ) }, this )
-				this.model.loaded = true;
+				this.$el.html( this.model.player.render().el );
+				this.model.player.placePlayer();
+
+				
+				if(this.model.can_play != true)
+				{
+					this.model.player.popcorn.listen('canplay', function(){
+						console.log('video ready player');
+						_this.model.trigger('ready', _this.model.id ) ;
+					})
+				}
+				else _this.model.trigger('ready', _this.model.id );
+				
+				this.model.player_loaded = true;
 			}
 			else{
-				this.model.video.pause();
+				this.model.player.pause();
 			}
+			this.model.player.popcorn.listen('timeupdate', function(){_this.onTimeUpdate()});
+			this.model.player.popcorn.listen('ended', function(){_this.onEnded()})
+
 		},
 		onEnded : function()
 		{
@@ -252,10 +279,9 @@
 		
 		},
 		
-		onTimeUpdate : function(){
-			
-			
-			
+		onTimeUpdate : function()
+		{
+			/*
 			//Cue Out
 			if( this.model.get('attr').cue_out != 0 && this.model.video.currentTime() > this.model.get('attr').cue_out )
 			{
@@ -291,7 +317,7 @@
 				this.model.video.volume(this.model.get('attr').volume);
 				
 			}
-			
+			*/
 			
 			//Dissolve
 			
@@ -319,20 +345,19 @@
 		
 		onPlay : function()
 		{
-			this.model.video.play();
+			this.model.player.play();
 		},
 		
 		onExit : function()
 		{
-			this.model.video.pause();
+			this.model.player.pause();
 		},
 		
 		onUnrender : function()
 		{
 			
-			this.model.video.pause();
-			Popcorn.destroy(this.model.video);	
-
+			this.model.player.pause();
+			this.model.destroy();	
 		}
 		
 	});

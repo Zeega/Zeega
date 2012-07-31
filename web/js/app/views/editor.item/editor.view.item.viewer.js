@@ -135,6 +135,7 @@
 		{
 			var _this = this;
 			this.endEvents();
+			
 			// do other cleanup stuff first?
 			this.$el.fadeOut('fast',function(){_this.remove()});
 		},
