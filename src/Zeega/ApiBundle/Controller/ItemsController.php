@@ -252,7 +252,7 @@ class ItemsController extends Controller
         {
             $itemId = $item->getId();
         
-            $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$newItem['media_type'];
+            $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$item->getMediaType();
             $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
 
             if(isset($zeegaThumbnail))
@@ -499,9 +499,9 @@ class ItemsController extends Controller
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
         }
-        else if(isset($title))
+        else if(isset($attributionUri))
         {
-            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("title" => $title, "enabled" => 1));
+            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $attributionUri, "enabled" => 1, "user_id" => $user->getId()));
         }
         
         if(!isset($item))
@@ -602,7 +602,7 @@ class ItemsController extends Controller
                 {
                     if($checkForDuplicateItems)
                     {
-                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $newItem['attribution_uri'], "enabled" => 1));
+                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $newItem['attribution_uri'], "enabled" => 1, "user_id" => $user->getId()));
                         if(isset($existingItem) && count($existingItem) > 0)
                         {
                             // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
