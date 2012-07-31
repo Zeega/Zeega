@@ -50,8 +50,8 @@ var loadFiles = [
 	//mvc
 	//'order!backbone/models/tag',
 	'order!app/models/widget.model.item',
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	'order!app/collections/widget.collections.item',
 

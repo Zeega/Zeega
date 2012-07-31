@@ -32,8 +32,8 @@ var loadFiles = [
 	'order!ux/zeega.ux.site',
 
 	//mvc
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	
 	//plugins
 	//'order!lib/jquery/plugins/jeditable.min',

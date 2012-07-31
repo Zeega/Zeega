@@ -37,8 +37,8 @@ var loadFiles = [
 	'order!lib/bootstrap',
 	
 	//mvc
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	
 	//sequences

@@ -45,8 +45,8 @@ var loadFiles = [
 	'order!plugins/players/zeega.player.video',
 	'order!plugins/players/zeega.player.youtube',	
 	
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
-	'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	       
 	'order!app/player'
 	];
