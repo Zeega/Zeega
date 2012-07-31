@@ -31,7 +31,10 @@ require(
 	
 	//mvc
 	'order!app/models/dashboard.model.user',
+	'order!app/models/dashboard.model.project',
+	'order!app/collections/dashboard.collections.project',
 	'order!app/views/dashboard.user/dashboard.view.user.profile',
+	'order!app/views/dashboard.project/dashboard.view.project',
 	
 	'order!ux/zeega.ux.header',
 	'order!app/index.dashboard'

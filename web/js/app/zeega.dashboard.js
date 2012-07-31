@@ -25,17 +25,16 @@ this.zeegaDashboard = {
 
 		var Dashboard = zeegaDashboard.module("dashboard");
 		
-		var user = new Dashboard.Users.Model().fetch(
-			{
-				success : function(model, response){
-					_this.profilePage = new Dashboard.Users.Views.ProfilePage({model:model}).render();
-					
-				},
-				error : function(){
-					console.log("Error getting user information for profile.");
-				}
-			}
-		);
+		this.editable = $.parseJSON(userProjectsJSON).editable;
+
+		//Load user info from JSON variable in page
+		var user = new Dashboard.Users.Model($.parseJSON(userProjectsJSON));
+		this.profilePage = new Dashboard.Users.Views.ProfilePage({model:user}).render();
+
+		var projects = new Dashboard.Project.Collection($.parseJSON(userProjectsJSON).projects);
+		this.projectsView = new Dashboard.ProjectCollectionView({collection:projects}).render();
+
+		
 		
 	},
 	
