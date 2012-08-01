@@ -23,42 +23,6 @@
             </option>
         </constraint>
 		
-		<property name="displayName">
-            <constraint name="NotBlank">
-                <option name="message">fos_user.display_name.blank</option>
-                <option name="groups">
-                    <value>Profile</value>
-					<value>ZeegaRegistration</value>
-                </option>
-            </constraint>
-        </property>
-
-        <property name="username">
-            <constraint name="NotBlank">
-                <option name="message">fos_user.username.blank</option>
-                <option name="groups">
-                    <value>Profile</value>
-					<value>ZeegaRegistration</value>
-                </option>
-            </constraint>
-            <constraint name="MinLength">
-                <option name="limit">2</option>
-                <option name="message">fos_user.username.short</option>
-                <option name="groups">
-                    <value>Profile</value>
-					<value>ZeegaRegistration</value>
-                </option>
-            </constraint>
-            <constraint name="MaxLength">
-                <option name="limit">255</option>
-                <option name="message">fos_user.username.long</option>
-                <option name="groups">
-                    <value>Profile</value>
-					<value>ZeegaRegistration</value>
-                </option>
-            </constraint>
-        </property>
-
         <property name="email">
             <constraint name="NotBlank">
                 <option name="message">fos_user.email.blank</option>
