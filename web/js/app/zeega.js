@@ -28,7 +28,9 @@ this.zeega = {
 	currentFrame : null,
 	thumbnailUpdates : true,
 	previewMode:false,
-
+	
+	updated:false,
+	
 	helpCounter: 0,
 
 	maxFramesPerSequence : 0, // 0 = no limit
@@ -67,9 +69,18 @@ this.zeega = {
 		this.project.loadProject();
 		
 		this.setButtonStates()
-
+		this.setProjectListeners();
 		console.log("project data ", this.project);
 
+	},
+	setProjectListeners : function (){
+	
+		var _this=this;
+		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
+	
 	},
 	
 	loadCollectionsDropdown : function( collections )
@@ -879,15 +890,27 @@ console.log( helpOrderArray[this.helpCounter-1] )
 
 	publishProject : function()
 	{
-		if(this.project.get("published"))
-		{
-			this.project.save();
+		console.log(this.updated);
+		if(this.project.get("published")){
+			if(this.project.get('date_updated')!=this.project.get('date_published')||this.updated)
+			{
+				this.updated=false;
+				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publishing...");
+				this.project.save({'publish_update':1},{
+					success:function(model,response){
+						zeega.app.project.set({'publish_update':0,'date_published':response.project.date_published,'date_updated':response.project.date_updated});
+						console.log(model,response);
+						zeega.app.setButtonStates();
+					
+					}
+				});
+			}
 		}else{
 			var Modal = zeega.module('modal');
 			this.view = new Modal.Views.PublishProject({ model:this.project });
 			this.view.render();
 		}
-		zeega.app.setButtonStates();
+		
 	},
 
 	settingsProject : function()
@@ -902,15 +925,18 @@ console.log( helpOrderArray[this.helpCounter-1] )
 	
 	setButtonStates : function()
 	{
-		console.log("setButtonStates", this.project)
-		console.log("setButtonStates", this.project.get("published"))
+		//console.log("setButtonStates", this.project)
+		//console.log("setButtonStates", this.project.get("published"))
 
 		// Publish button
 		if(this.project.get("published"))
 		{
 			$('#settings-project').show();
-			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
 			$('#share-project').css("color", "#fff");
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
+			if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
+			else $('#publish-project').css("color", "#666");
+			console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
 		}else{
 			$('#settings-project').hide();
 			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");

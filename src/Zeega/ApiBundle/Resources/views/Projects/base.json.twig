@@ -1,7 +1,9 @@
 {
 	"id" : {{ project.getId() | default("") }},
 	"title" : {{ project.getTitle() | default("") | json_encode | raw}},
-	"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y") }}",
+	"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
+	"date_updated" : "{{ project.getDateUpdated() is empty ? "" : project.getDateUpdated()  | date("U") }}",
+	"date_published" : "{{ project.getDatePublished() is empty ? "" : project.getDatePublished()  | date("U") }}",
       "tags" : {{ project.getTags() | default("") | json_encode | raw}},
 	"authors" : {{ project.getAuthors() | default("") | json_encode | raw}},
               {% if project.getCoverImage is not empty %}

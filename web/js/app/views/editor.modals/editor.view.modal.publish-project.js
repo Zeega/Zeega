@@ -83,7 +83,7 @@
 				_this.model.save({
 							'title': $('#publish-project-title').val(),
 							'description': $('#publish-project-description').val(),
-							//'attr': attr,
+							'publish_update':1,
 							'published':true,
 							'authors' : $('#publish-project-author').val(),
 							'location' : $('#publish-project-location').val(),
@@ -92,7 +92,8 @@
 				{
 					success : function(model, response){
 						//console.log(_this.model)
-						//$(_this.el).find('#publish-project-modal-step1').hide();
+						zeega.app.project.set({'item_id':response.project.item_id,'publish_update':0,'date_published':response.project.date_published,'date_updated':response.project.date_updated});
+						$('#sequence-title').html(response.project.title);
 						console.log("success 1");
 						zeega.app.shareProject();
 						console.log("success 2");

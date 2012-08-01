@@ -112,7 +112,7 @@ class ProjectsController extends Controller
 
 		
 		
-		if((isset($publishUpdate)&&$publishUpdate)||true){
+		if((isset($publishUpdate)&&$publishUpdate)){
 			
 			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
         	if (is_null($project->getItemId())) // if this project is represented in the item table
