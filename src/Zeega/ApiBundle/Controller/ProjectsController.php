@@ -70,48 +70,12 @@ class ProjectsController extends Controller
 
 		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
-        if (!$project) 
-        {
+        if (!$project)  {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
-        if (is_null($project->getItemId())) // if this project is represented in the item table
-        {
-            // create new item
-            // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
-            $user = $this->get('security.context')->getToken()->getUser();
-            
-            $item = new Item();
-            $item->setDateCreated(new \DateTime("now"));
-            $item->setChildItemsCount(0);
-            $item->setUser($user);
-            
-            $dateUpdated = new \DateTime("now");
-            $dateUpdated->add(new \DateInterval('PT2M'));
-
-            $item->setDateUpdated($dateUpdated);
-            $item->setUri($projectId);
-           
-            $item->setMediaType("project");
-            $item->setLayerType("project");
-            $item->setArchive("zeega");
-            $item->setMediaCreatorUsername($user->getUsername());
-            $item->setPublished(1);
-            //$item->setIndexed(false);
-            $item->setAttributionUri("http://beta.zeega.org/");
-            $item->setEnabled(true);
-            $em->persist($item);
-            $em->flush();
-            
-            $item->setAttributionUri("http://beta.zeega.org/".$item->getId());
-            $em->persist($item);
-            $em->flush();
-            
-        }else{ // if this project is not represented in the item table
-            error_log("getItemId was " . $project->getItemId(),0);
-            // fetch associated item
-            $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
-            //$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($request->request->get('item_id'));
-        }
+        
+        
+      
         // create json item for project
         // update item.text with json
 
@@ -124,6 +88,9 @@ class ProjectsController extends Controller
         $estimatedTime = $request_data->get('estimated_time'); 
         $location = $request_data->get('location');
         $description = $request_data->get('description');
+		
+		//
+		$publishUpdate = $request_data->get('publish_update');
 
 
 		if(isset($title)) $project->setTitle($title);
@@ -135,21 +102,72 @@ class ProjectsController extends Controller
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
 
-        $project->setItemId($item->getId());
+      
         $project->setDateUpdated(new \DateTime("now"));
         
-        //$em = $this->getDoctrine()->getEntityManager();
+ 
         $em->persist($project);
         $em->flush();
 
-        $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-        $project_json = $project_http->getContent();
 
-        //$item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
-        //$em = $this->getDoctrine()->getEntityManager();
-        $item->setText($project_json);
-        $em->persist($item);
-        $em->flush();
+		
+		
+		if((isset($publishUpdate)&&$publishUpdate)||true){
+			
+			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+        	if (is_null($project->getItemId())) // if this project is represented in the item table
+       		{
+				// create new item
+				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
+				$user = $this->get('security.context')->getToken()->getUser();
+				
+				$item = new Item();
+				$item->setDateCreated(new \DateTime("now"));
+				$item->setChildItemsCount(0);
+				$item->setUser($user);
+				
+				$dateUpdated = new \DateTime("now");
+				$dateUpdated->add(new \DateInterval('PT2M'));
+	
+				$item->setDateUpdated($dateUpdated);
+				$item->setUri($projectId);
+			   
+				$item->setMediaType("project");
+				$item->setLayerType("project");
+				$item->setArchive("zeega");
+				$item->setMediaCreatorUsername($user->getUsername());
+				$item->setPublished(1);
+				//$item->setIndexed(false);
+				$item->setAttributionUri("http://beta.zeega.org/");
+				$item->setEnabled(true);
+				$em->persist($item);
+				$em->flush();
+				
+				$item->setAttributionUri("http://beta.zeega.org/".$item->getId());
+				$em->persist($item);
+				$em->flush();
+				
+				$project->setItemId($item->getId());
+				$em->persist($project);
+				$em->flush();
+            
+       		}else{ // if this project is not represented in the item table
+				error_log("getItemId was " . $project->getItemId(),0);
+				// fetch associated item
+				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
+			}
+        
+        
+			$item->setMediaCreatorRealname($project->getAuthors());
+			$item->setThumbnailUrl($project->getCoverImage());
+			$item->setTitle($project->getTitle());
+			$project_json = $project_http->getContent();
+			$item->setText($project_json);
+			$em->persist($item);
+			$em->flush();
+        }
+        
+        $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
         return $project_http;
     }
     
