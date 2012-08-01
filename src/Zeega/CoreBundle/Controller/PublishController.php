@@ -29,11 +29,17 @@ class PublishController extends Controller
      
     public function projectAction($id)
     {
-        $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-
-        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
+       
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+		if(is_object($project)&&$project->getMediaType()=='project') $projectData=$project->getText();
+		
+		//Fallback for existing links
+		else $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+       
+       
+       	return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
             'projectId'=>$id,
-            'project_data' => $projectData
+            'project_data' => $projectData,
      	));
     }
      
@@ -49,8 +55,9 @@ class PublishController extends Controller
      
     public function embedAction ($id)
     {
-        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-
+        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+		if(is_object($project)&&$project->getMediaType()=='project'){}
+		else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         return $this->render('ZeegaCoreBundle:Core:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
   	}
 }
