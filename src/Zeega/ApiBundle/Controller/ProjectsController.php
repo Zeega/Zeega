@@ -63,10 +63,6 @@ class ProjectsController extends Controller
 
         $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
-        
-
-        error_log("putProjectsAction",0);
-        error_log(json_encode($request_data),0);
 
 		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
@@ -79,6 +75,7 @@ class ProjectsController extends Controller
         // create json item for project
         // update item.text with json
 
+
         // update date_published
 		$title = $request_data->get('title');
         $tags = $request_data->get('tags');
@@ -88,9 +85,12 @@ class ProjectsController extends Controller
         $estimatedTime = $request_data->get('estimated_time'); 
         $location = $request_data->get('location');
         $description = $request_data->get('description');
+
 		
 		//
 		$publishUpdate = $request_data->get('publish_update');
+
+
 
 
 		if(isset($title)) $project->setTitle($title);
@@ -102,7 +102,7 @@ class ProjectsController extends Controller
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
 
-      
+
         $project->setDateUpdated(new \DateTime("now"));
         
  
@@ -115,7 +115,7 @@ class ProjectsController extends Controller
 		if((isset($publishUpdate)&&$publishUpdate)){
 			
 			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-        	if (is_null($project->getItemId())) // if this project is represented in the item table
+        	if (is_null($project->getItemId())) // if this project is not represented in the item table
        		{
 				// create new item
 				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
@@ -152,8 +152,8 @@ class ProjectsController extends Controller
 				$em->persist($project);
 				$em->flush();
             
-       		}else{ // if this project is not represented in the item table
-				error_log("getItemId was " . $project->getItemId(),0);
+       		}else{ // if this project is represented in the item table
+				
 				// fetch associated item
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
 				

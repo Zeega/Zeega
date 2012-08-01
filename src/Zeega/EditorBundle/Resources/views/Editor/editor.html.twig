@@ -10,12 +10,13 @@
 			<input id="project-id" type="hidden" value="{{projectid}}"/>
 		
 		
-			<div id="sequence-header" class='clearfix'>
+			<div id="project-header" class='clearfix'>
 				
-				<div id='sequence-cover-image'></div>
+				<div id='project-cover-image'></div>
 				
-				<div id='sequence-title'>{{projecttitle}}</div>
+				<div id='project-title'>{{projecttitle}}</div>
 					
+
 				<div id='sequence-actions' class="btn-group pull-right">
 					 <button id='settings-project' class="btn btn-inverse"><i class='zicon-settings raise-up'></i></button>
 				  <button id='publish-project' class="btn btn-inverse"><i class='zicon-publish raise-up'></i> Publish</button>
@@ -27,7 +28,7 @@
 
 			<a href="http://#"></a>
 
-				<ul id='sequence-tabs' class="clearfix">
+				<ul id='sequence-tabs' class="clearfix unstyled">
 					<li class="active"><a href="#">&nbsp;</a></li>
 				</ul>
 				
@@ -160,8 +161,8 @@
 									  <option value="all">My Collections</option>
 									</select>
 									
-									<a href='#' id='grid-view'><span class='zicon zicon-grid orange'></span></a>
-									<a href='#' id='list-view'><span class='zicon zicon-list'></span></a>
+									<a href='#' id='grid-view'><i class='zicon-grid orange'></i></a>
+									<a href='#' id='list-view'><i class='zicon-list'></i></a>
 
 								</div><!-- db-nav-controls -->
 							
@@ -187,7 +188,6 @@
 						<div id='visual-editor-wrapper' class='wrapper panel'>
 							
 							<div id='visualeditor-view-bar' class='panel-head'>
-
 								
 								<div id='make-connection' class="btn-group pull-left">
 									<button data-action='newFrame' class="btn btn-inverse action" href='#'><img src='{{ asset('images/multi-linear.png') }}' height='15px'/></button>

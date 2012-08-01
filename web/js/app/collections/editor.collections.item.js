@@ -2,6 +2,8 @@
 
 	Items.Collection = Backbone.Collection.extend({
 
+
+		model: Items.Model,
 		page : 0,
 		totalItemsCount : 0,
 		
@@ -64,6 +66,15 @@
 				this.fetch();
 			}
 			this.renderCollection();
+			
+			this.on('preview_item',this.previewItem,this);
+		},
+		
+		previewItem : function(itemID)
+		{
+			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
+			$('body').append(viewer.render().el);
+			viewer.renderItemView();
 		},
 		
 		renderCollection : function()

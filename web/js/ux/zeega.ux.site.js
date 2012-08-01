@@ -23,7 +23,7 @@ $(document).ready(function() {
 		var id =$(this).data('id'); 
 		$('.project-'+id).fadeOut(); 
 		$.ajax({
-				url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'projects/'+id,
+				url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'api/projects/'+id,
 				type: 'DELETE',
 				success: function(){
 				console.log('done');
