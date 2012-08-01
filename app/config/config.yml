@@ -124,6 +124,7 @@ fos_user:
     registration:
         form:
             type: zeega_user_registration
+            validation_groups: [ZeegaRegistration]
     resetting:
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig

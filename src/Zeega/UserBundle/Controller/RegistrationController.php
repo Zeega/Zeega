@@ -41,8 +41,6 @@ class RegistrationController extends Controller
         if ($process) {
             $user = $form->getData();
             
-            $sites = $user->getSites();
-
             if ($confirmationEnabled) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $sequence = 'fos_user_registration_check_email';
@@ -55,20 +53,7 @@ class RegistrationController extends Controller
 		
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
             'form' => $form->createView(),
-            'theme' => $this->container->getParameter('fos_user.template.theme'),
-			'email' => $user->getEmail(),
-			'user_id' => $user->getId(),
-			'displayname' => $user->getDisplayName(),
-			'userrole' => $user->getRoles(),
-			'bio'=>$user->getBio(),
-			'thumb'=>$user->getThumbUrl(),
-			'title'=>'',
-			'page'=>'home',
-			'projectsMenu'=>true,
-			'myprojects'=>false,
-			'site' => false,					
-			'sites'=>false,
-        ));
+            'theme' => $this->container->getParameter('fos_user.template.theme')));
     }
 
     /**

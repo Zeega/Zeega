@@ -4,6 +4,8 @@ fos_user:
         blank: Please enter a username
         short: The username is too short
         long: The username is too long
+    display_name:
+        blank: Please enter your name
     email:
         already_used: The email is already used
         blank: Please enter an email

@@ -96,156 +96,83 @@
 		
 			<div class="span7">
 			
-				<form class="form-vertical" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-				  <fieldset>
-				  
-				    <div class="control-group">			
-			
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="fos_user_registration_form_display_name"><h4>Name</h4></label>
+				{% for key, message in app.session.getFlashes() %}
+				<div class="{{ key }}">
+				    {{ message|trans({}, 'FOSUserBundle') }}
+				</div>
+				{% endfor %}
 
+				<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+					<fieldset>
+						<div class="control-group">			
+					    {{ form_errors(form) }}
+						<div class="row">
+					    	<div class="span3">
+						    {{ form_label(form.display_name,'Name',{ 'attr': {'class': 'control-label'} }) }}
 							</div>
-				    
 							<div class="span4">
-							
 								<div class="required"></div>
-								
 								<div class="controls">
-									<input type="text" id="fos_user_registration_form_display_name" name="fos_user_registration_form[display_name]" class="input-xlarge-custom" id="firstname" required="required" maxlength="255">
-									
-								</div>				    
-							
+						    		{{ form_errors(form.display_name) }}
+						    		{{ form_widget(form.display_name, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
 							</div>
-							
 						</div>
-						
-						<!-- Row Ends -->		
-						
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
+						<div class="row">
 					    	<div class="span3">
-				
-						    	<label class="control-label" for="fos_user_registration_form[username]"><h4>Email</h4></label>
-
+						    	{{ form_label(form.email,'Email') }}
 							</div>
-				    
 							<div class="span4">
-							
-								<div class="required"></div>
-								
+								<div class="required"></div>			
 								<div class="controls">
-									<input type="text" class="input-xlarge-custom"  id="fos_user_registration_form_username" name="fos_user_registration_form[username]" required="required" maxlength="255" pattern=".{2,255}">
-
-								</div>				    
-							
+						    		{{ form_errors(form.email) }}
+						    		{{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
 							</div>
-							
 						</div>
-						
-						<!-- Row Ends -->
-						
-
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
+						<div class="row">
 					    	<div class="span3">
-				
-						    	<label class="control-label" for="confirm-email"><h4>Confirm Email</h4></label>
-
+						    	{{ form_label(form.idea,'Your Idea') }}
+								<p class="sidebar">
+									Already have something in mind? Tell us a little more, we'd love to hear about it.
+								</p>
 							</div>
-				    
 							<div class="span4">
-							
-								<div class="required"></div>
-								
-								<div class="controls">
-									<input type="text" class="input-xlarge-custom"  id="fos_user_registration_form_username_confirm" name="fos_user_registration_form[username_confirm]" required="required" maxlength="255" pattern=".{2,255}">
-								</div>				    
-							
+								<div class="controls">						
+						    		{{ form_errors(form.idea) }}
+						    		{{ form_widget(form.idea, { 'attr': {'class': 'input-xlarge-custom', 'rows': 5} }) }}
+								</div>
 							</div>
-							
 						</div>
-						
-						<!-- Row Ends -->
-						
-					
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
-						    	
-						    	<p class="sidebar">
-						    	Already have something in mind? Tell us a little more, we'd love to hear about it.
-						    	</p>
-
+						<div class="row">
+							<div class="span3">
+								<label class="control-label" for="youridea"></label>
 							</div>
-				    
 							<div class="span4">
-								
-								<div class="controls">
-									<textarea type="text" class="input-xlarge-custom longform" id="youridea" rows="5"></textarea>
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->
-						<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="youridea"></label>
-						    	
-						    	
-
-							</div>
-				    
-							<div class="span4">
-								
 								<div class="controls">
 									<input type="checkbox" class="pull-left" style="margin-right:8px"> <p class="sidebar">I've read and agree to Zeega's terms of use.</p>
-								</div>				    
-							
+								</div>				   
 							</div>
-							
 						</div>
-						
-						<!-- Row Ends -->
-						
+					    {{ form_rest(form) }}
 
-						
-						<!-- Row Begins -->
-						
-						<div class="row">
-						
+					    <div class="row">
 							<div class="span4 offset3">
-							
-								<button type="submit" class="btn btn-success btn-custom"><h4>{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</h4></button>
-							
+								<button type="submit" class="btn btn-success btn-custom"><h4>Register</h4></button>
 							</div>
-							
-						</div>	
-						
-						
-
-												
-				    </div>
-				    
-				  </fieldset>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+							</div>
+							<div class="span4">
+								<div class="controls">
+						    		{{ form_errors(form.plainPassword) }}
+						    		{{ form_widget(form.plainPassword) }}
+								</div>
+							</div>
+						</div>
+					 </div>
+				</fieldset>
 				</form>
 			
 			</div>
@@ -311,19 +238,5 @@
 	</div>
 	
 	<!-- Footer Ends -->
-<!--
-{% for key, message in app.session.getFlashes() %}
-<div class="{{ key }}">
-    {{ message|trans({}, 'FOSUserBundle') }}
-</div>
-{% endfor %}
-
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
-    </div>
-</form>
--->
 {% endblock %}	
 

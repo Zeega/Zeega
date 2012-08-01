@@ -53,7 +53,10 @@ Zeega\DataBundle\Entity\User:
             type: string
             length: 255
             nullable: true
-            
+        idea:
+            type: text
+            nullable: true
+        
     indexes:
         user_type_index:
             columns: [user_type]      
