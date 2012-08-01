@@ -6,7 +6,7 @@ ZeegaEditorBundle_site:
     pattern: /site/{short}
     defaults: { _controller:  ZeegaEditorBundle:Editor:site }
 
-ZeegaEditorBundle_editor_new:
+ZeegaEditorBundle_new:
     pattern: /site/{short}/project/new
     defaults: { _controller:  ZeegaEditorBundle:Editor:new }
 

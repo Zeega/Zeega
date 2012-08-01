@@ -1,18 +1,6 @@
 sites:
   type:     rest
   resource: Zeega\CoreBundle\Controller\SitesController
-  
-ZeegaCoreBundle_home:
-    pattern: /
-    defaults: { _controller:  ZeegaCoreBundle:Editor:home }
-
-ZeegaCoreBundle_site:
-    pattern: /site/{short}
-    defaults: { _controller:  ZeegaCoreBundle:Editor:site }
-
-ZeegaCoreBundle_editor:
-    pattern: /site/{short}/project/{id}
-    defaults: { _controller:  ZeegaCoreBundle:Editor:editor }
 
 ZeegaCoreBundle_faq:
     pattern: /faq

@@ -63,6 +63,18 @@ class EditorController extends Controller
 		return $this->render('ZeegaEditorBundle:Editor:home.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 	
+	public function newAction($short)
+	{
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
+		if(!isset($site)) $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        
+        $projectId = $this->forward('ZeegaCoreBundle:Sites:postSiteProject', array("site_id" => $site->getId()))->getContent();
+        
+        
+        return $this->redirect($this->generateUrl('ZeegaEditorBundle_editor',array('id'=>$projectId, 'short'=>$short)), 301);  
+        
+	}
+	
 	public function editorAction($short,$id)
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();

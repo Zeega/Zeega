@@ -239,7 +239,7 @@ var BrowserDetect = {
 					<div class="navbar-inner">
 						<div class="container">
 							
-							<a class="brand" href="{{path('ZeegaCoreBundle_home')}}">
+							<a class="brand" href="{{path('ZeegaEditorBundle_home')}}">
 								<img src="{{ asset('images/zeega-logo-header.png') }}"/>
 							</a>
 							
@@ -264,7 +264,7 @@ var BrowserDetect = {
 								{% else %}
 								-->
 								<li class="">
-									<a href="{{ path('ZeegaCoreBundle_site', {'short': site.short }) }}">{{title}}</a>
+									<a href="{{ path('ZeegaEditorBundle_site', {'short': site.short }) }}">{{title}}</a>
 								</li>
 								<!--
 								{% endif %}
@@ -279,12 +279,12 @@ var BrowserDetect = {
 									</a>
 									<ul class="dropdown-menu">
 										
-										<li><a class="new-project" href="#"><i class='zicon-new-document'></i> New Project</a></li>
+										<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='zicon-new-document'></i> New Project</a></li>
 										<li class="divider"></li>
 										
 										{% for project in myprojects %}
 										<li>
-											<a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a>
+											<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a>
 										</li>
 										{% endfor %}
 										
