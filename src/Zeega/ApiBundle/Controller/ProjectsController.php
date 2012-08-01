@@ -148,6 +148,7 @@ class ProjectsController extends Controller
 				$em->flush();
 				
 				$project->setItemId($item->getId());
+				$project->setDatePublished($project->getDateUpdated());
 				$em->persist($project);
 				$em->flush();
             
@@ -155,6 +156,11 @@ class ProjectsController extends Controller
 				error_log("getItemId was " . $project->getItemId(),0);
 				// fetch associated item
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
+				
+				
+				$project->setDatePublished($project->getDateUpdated());
+				$em->persist($project);
+				$em->flush();
 			}
         
         
@@ -165,6 +171,7 @@ class ProjectsController extends Controller
 			$item->setText($project_json);
 			$em->persist($item);
 			$em->flush();
+			
         }
         
         $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));

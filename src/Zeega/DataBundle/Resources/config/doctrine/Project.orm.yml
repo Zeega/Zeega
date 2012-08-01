@@ -68,6 +68,9 @@ Zeega\DataBundle\Entity\Project:
         date_updated:
             type: datetime
             nullable: true
+        date_published:
+            type: datetime
+            nullable: true
         
     indexes:
         project_enabled_index:
