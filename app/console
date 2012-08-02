@@ -17,7 +17,7 @@ $input = new ArgvInput();
 $env = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
 $debug = !$input->hasParameterOption(array('--no-debug', ''));
 
-var_dump($input);
+//var_dump($input);
 
 $kernel = new AppKernel($env, $debug);
 $application = new Application($kernel);
