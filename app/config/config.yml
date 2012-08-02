@@ -123,8 +123,10 @@ fos_user:
         sender_name: Zeega
     registration:
         form:
+            handler: zeega_user.form.handler.registration
             type: zeega_user_registration
             validation_groups: [ZeegaRegistration]
+            
     resetting:
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig

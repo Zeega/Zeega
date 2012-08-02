@@ -10,7 +10,7 @@
             <option name="property">usernameCanonical</option>
             <option name="message">fos_user.username.already_used</option>
             <option name="groups">
-                <value>Profile</value>
+                <value>ZeegaRegistration</value>
             </option>
         </constraint>
 
@@ -18,7 +18,7 @@
             <option name="property">emailCanonical</option>
             <option name="message">fos_user.email.already_used</option>
             <option name="groups">
-                <value>Registration</value>
+                <value>ZeegaRegistration</value>
                 <value>Profile</value>
             </option>
         </constraint>
@@ -57,17 +57,17 @@
         <property name="name">
             <constraint name="NotBlank">
                 <option name="message">fos_user.group.blank</option>
-                <option name="groups">Registration</option>
+                <option name="groups">ZeegaRegistration</option>
             </constraint>
             <constraint name="MinLength">
                 <option name="limit">2</option>
                 <option name="message">fos_user.group.short</option>
-                <option name="groups">Registration</option>
+                <option name="groups">ZeegaRegistration</option>
             </constraint>
             <constraint name="MaxLength">
                 <option name="limit">255</option>
                 <option name="message">fos_user.group.long</option>
-                <option name="groups">Registration</option>
+                <option name="groups">ZeegaRegistration</option>
             </constraint>
         </property>
     </class>
