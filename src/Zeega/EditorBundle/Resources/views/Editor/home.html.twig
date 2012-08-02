@@ -61,7 +61,7 @@
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>
