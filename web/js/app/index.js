@@ -246,31 +246,6 @@ jQuery(function($)
 		}
 	});
 
-	//publish button
-	$('#share-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.shareProject();
-		return false;
-	});
-	//share button
-	$('#publish-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.publishProject();
-		return false;
-	});
-	//settings button
-	$('#settings-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.settingsProject();
-		return false;
-	});
-
-	$('#get-help').click(function(){
-		localStorage.help = true;
-		zeega.app.initStartHelp();
-	})
-
-
 	$('.menu-toggle').click(function(){
 
 		var menu = $(this).next();
