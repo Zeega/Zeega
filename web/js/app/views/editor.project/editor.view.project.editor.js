@@ -7,6 +7,12 @@
 		
 		isRendered : false,
 
+		initialize : function()
+		{
+			//automatically re-render the view if the title or cover image are changed/updated
+			this.model.on('change:title change:cover_image', this.render, this)
+		},
+
 		render: function()
 		{
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
@@ -16,23 +22,8 @@
 			return this;
 		},
 		
-		
-		events : {
-			'keypress #project-title' : 'onTitleKeypress',
-			'blur #project-title' : 'saveTitle'
-		},
-		
-		onTitleKeypress : function(e)
-		{
-			var _this = this;
-			if(e.which==13)
-			{
-				e.preventDefault();
-				this.$el.find('#project-title').blur();
-				_this.saveTitle();
-				return false
-			}
-		},
+		// called from the project model.loadProject
+		renderToTarget : function(){ $(this.target).html( this.render().el ) },
 		
 		initEvents : function()
 		{
@@ -52,8 +43,22 @@
 			});
 		},
 		
-		// called from the project model.loadProject
-		renderToTarget : function(){ $(this.target).html( this.render().el ) },
+		events : {
+			'keypress #project-title' : 'onTitleKeypress',
+			'blur #project-title' : 'saveTitle'
+		},
+		
+		onTitleKeypress : function(e)
+		{
+			var _this = this;
+			if(e.which==13)
+			{
+				e.preventDefault();
+				this.$el.find('#project-title').blur();
+				_this.saveTitle();
+				return false		
+			}
+		},
 		
 		saveTitle : function()
 		{
