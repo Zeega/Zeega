@@ -74,7 +74,7 @@
 			{
 				var t = this.$el.find('#project-title').text() == '' ? 'untitled' : this.$el.find('#project-title').text();
 				this.$el.find('#project-title').effect('highlight',{},2000);
-				this.model.save({ 'title' : t });
+				this.model.save({ 'title' : t },{silent:true});
 			}
 		},
 		
