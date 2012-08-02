@@ -3,7 +3,8 @@
 	// This will fetch the tutorial template and render it.
 	Project.Views.Editor = Backbone.View.extend({
 
-		target : '#project-header',
+		//target : '#project-header',
+		id : 'project-header',
 		
 		isRendered : false,
 
@@ -23,7 +24,7 @@
 		},
 		
 		// called from the project model.loadProject
-		renderToTarget : function(){ $(this.target).html( this.render().el ) },
+		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
 		
 		//initialize events that cannot be set in events:{}
 		initEvents : function()
