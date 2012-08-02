@@ -30,7 +30,7 @@ require(
 	
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
-	'order!lib/popcorn_flash',
+	'order!lib/popcorn-flash',
 	
 	//'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
