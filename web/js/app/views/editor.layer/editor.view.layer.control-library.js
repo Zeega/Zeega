@@ -361,8 +361,10 @@ Use this.model.get('attr')[my_setting] instead!!!
 					_this.updateSliderInput(ui.value);
 					_this.updateVisualElement( ui.value );
 					
+					_this.value = ui.value;
+					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
-					 _this.settings.onSlide();
+					_this.settings.onSlide();
 				},
 				change : function(e,ui)
 				{

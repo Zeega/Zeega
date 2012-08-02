@@ -31,16 +31,16 @@
 				if( !_.isUndefined(this.model.get('uri')) )
 				{
 					// it must be from an item
-					this.format = this.getFormat(this.model.get('uri'));
-					this.settings = _.defaults( this.model.attributes, this.options , this.defaults);
-									}
+					this.format = this.getFormat(this.model.get('attribution_uri'));
+					this.settings = _.defaults( _.extend(this.model.attributes.attr, this.options) , this.defaults);
+				}
 				else if( this.model.get('attr') && this.model.get('attr').uri )
 				{
 					//it must be from a layer
-										this.format = this.getFormat(this.model.get('attr').uri);
-					this.settings = _.defaults( this.model.attributes.attr, this.options, this.defaults );
+					this.format = this.getFormat(this.model.get('attr').attribution_uri);
+					this.settings = _.defaults( _.extend(this.model.attributes.attr, this.options), this.defaults );
 					this.settings.id = this.model.id;
-									}
+				}
 				else
 				{
 					console.log('I dont know what kind of media this is :(');
@@ -53,10 +53,13 @@
 		
 		render : function()
 		{
+			this.$el.css({ 'width':'100%', 'height':'100%'}); // move this to the CSS !!!  .media-player-container{ height, width}
 			// choose which template to use
 			var format = this.templates[this.format] ? this.format : 'default';
 			console.log('template', _.template( this.templates[format](), this.settings ))
 			this.$el.html( _.template( this.templates[format](), this.settings ));
+			
+			
 			
 			
 			//attach controls. is this the right place?
@@ -67,13 +70,12 @@
 			//draw the controls
 			if( _.isNull(this.settings.controls_target) ) this.$el.append( this.controls.render().el );
 			else $( this.settings.controls_target ).html( this.controls.render().el )
-			
+			console.log('## controls', this.settings.controls_target, this, this.controls, this.controls.el)
 			return this;
 		},
 		
 		placePlayer : function()
 		{
-			console.log('place player')
 			if( !this.isVideoLoaded)
 			{
 				var _this = this;
@@ -81,7 +83,8 @@
 				switch( this.format )
 				{
 					case 'html5':
-						this.useHTML5();
+						if (BrowserDetect.browser == 'Firefox') this.useFlash();
+						else this.useHTML5();
 						break;
 					case 'flashvideo':
 						this.useFlash();
@@ -128,10 +131,11 @@
 			console.log('add html5 popcorn, target', '#media-player-html5-'+ this.model.id, $('#media-player-html5-'+ this.model.id) )
 			var _this = this;
 			var target = '#media-player-html5-'+ this.model.id;
+			
 			this.popcorn = Popcorn( target );
-			console.log('popcorn',this.popcorn)
 			this.addPopcornToControls();
 			this.setVolume(0);
+			
 			this.popcorn.listen( 'canplay', function(){
 				
 				_this.$el.spin(false);
@@ -140,39 +144,62 @@
 				{
 					this.listen('seeked',function(){
 						_this.model.can_play = true;
-						_this.model.trigger('video_canPlay', _this.model.id);
+						_this.model.trigger('ready', _this.model.id ) ;
 					});
 					_this.setCurrentTime( _this.settings.cue_in );
 				}
 				else
 				{
 					_this.model.can_play = true;
-					_this.trigger('video_canPlay');
+					_this.model.trigger('ready', _this.model.id ) ;
 				}
-			});
-		},
-		useFlash : function()
-		{
-			this.popcorn = Popcorn.flashvideo('#media-player-'+ this.model.id, this.get('uri'),{volume:this.get('volume'), cue_in:this.get('cue_in')}  );
-			this.popcorn.listen('loadeddata',function(){
-				_this.popcorn.volume(_this.get('volume'));
-				_this.trigger('video_canPlay');
-				_this.popcorn.currentTime(_this.get('cue_in'));
 			});
 		},
 		useYoutube : function()
 		{
+			console.log('add YOUTUBE to this shizzzz', this.model)
 			
-			this.popcorn = Popcorn.youtube('#media-player-'+ this.model.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
+			var _this = this;
+			var target = '#media-player-'+ this.model.id;
+			var src = this.model.get('attr').attribution_uri;
+			
+			//this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
+			
+			this.popcorn = Popcorn.youtube( target, src, {volume:_this.settings.volume * 100, cue_in:_this.settings.cue_in} );
+			this.addPopcornToControls();
+			this.setVolume(0);
+
 			this.popcorn.listen('canplaythrough',function(){
+				_this.$el.spin(false);
+				
+				_this.model.can_play = true;
+				_this.model.trigger('ready', _this.model.id ) ;
 				
 				_this.popcorn.play();
 				_this.popcorn.pause();
-				if(_this.get('fade_in')==0) _this.popcorn.volume(_this.get('volume'));
 				
-				_this.trigger('video_canPlay');
+				if(_this.model.get('attr').fade_in==0) _this.volume(_this.model.get('attr').volume);
+			});
+			
+		},
+		useFlash : function()
+		{
+			var _this = this;
+			var target = '#media-player-'+ this.model.id;
+			var src = this.model.get('attr').uri;
+			
+			this.popcorn = Popcorn.flashvideo( target, src, {volume:_this.settings.volume, cue_in:_this.settings.cue_in} );
+			
+			this.popcorn.listen('loadeddata',function(){
+				_this.$el.spin(false);
+				
+				_this.model.can_play = true;
+				_this.model.trigger('ready', _this.model.id ) ;
+				
+				if(_this.model.get('attr').fade_in==0) _this.volume(_this.model.get('attr').volume);
 			});
 		},
+
 		useVimeo : function()
 		{
 			this.popcorn = Popcorn.vimeo('#media-player-'+ this.model.id, this.get('url') );
@@ -208,10 +235,11 @@
 
 		getDuration: function(){ return this.popcorn.duration() },
 
-		play : function(){ if( this.popcorn && this.popcorn.paused() ) this.popcorn.play() },
+		play : function(){ console.log('##		play'); if( this.popcorn && this.popcorn.paused() ) this.popcorn.play() },
 		pause : function(){ if( this.popcorn && !this.popcorn.paused() ) this.popcorn.pause() },
 		playPause : function()
 		{
+			console.log('##		playpause')
 			if(this.popcorn)
 			{
 				if(this.popcorn.paused()) this.popcorn.play();
@@ -221,11 +249,19 @@
 		
 		destroy : function()
 		{
-			if(this.popcorn) this.popcorn.destroy();
+			if(this.popcorn)
+			{
+				console.log('##		destroy',this.popcorn, this.el)
+				this.popcorn.pause();
+				
+				Popcorn.destroy( this.popcorn );
+				//this.popcorn.destroy();
+			}
 		},
 		
 		getFormat : function(url)
 		{
+			console.log('get format',url)
 			//separated to make it easier to isolate and update this list
 			var format = '';
 			if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
@@ -243,6 +279,13 @@
 			{
 				html =
 				"<div id='media-player-<%= id %>' class='media-container'><video id='media-player-html5-<%= id %>' class='media-element media-type-<%= media_type %>' src='<%= uri %>'></video></div>";
+				return html;
+			},
+			
+			flashvideo : function()
+			{
+				html =
+				"<div id='media-player-<%= id %>' class='media-container' style='width:100%;height:100%;'></div>";
 				return html;
 			},
 
@@ -295,6 +338,7 @@
 		{
 			var _this = this;
 			this.popcorn.listen('canplay',function(){ _this.onCanPlay() });
+			this.popcorn.listen('canplaythrough',function(){ _this.onCanPlay() });
 			this.popcorn.listen('ended',function(){ _this.onEnded() });
 			this.popcorn.listen('playing',function(){ _this.onPlaying() });
 			this.popcorn.listen('pause',function(){ _this.onPause() });
@@ -466,6 +510,7 @@
 		},
 		updateElapsed : function()
 		{
+			console.log('update elapsed', this.popcorn.currentTime())
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
 			this.$el.find('.media-scrubber').slider('value', elapsed);
@@ -479,6 +524,10 @@
 		},
 		seek : function( time )
 		{
+			console.log('## seek to: ',time, this.cueIn,this.cueOut)
+			var wasPlaying = !this.popcorn.paused();
+			if(wasPlaying) this.popcorn.pause();
+
 			if( time < this.cueIn )
 			{
 				this.$el.find('.media-scrubber').slider('value',this.cueIn);
@@ -493,8 +542,9 @@
 			{
 				this.$el.find('.media-scrubber').slider('value',time);
 			}
-			var wasPlaying = !this.popcorn.paused();
-			if(wasPlaying) this.popcorn.pause();
+			
+			console.log('## seek to: ',time, 'was playing?',!this.popcorn.paused())
+
 			this.popcorn.currentTime(time);
 			if(wasPlaying) this.popcorn.play();
 		},
@@ -522,6 +572,7 @@
 		{
 			var _this = this;
 			this.popcorn.listen('canplay',function(){ _this.onCanPlay() });
+			this.popcorn.listen('canplaythrough',function(){ _this.onCanPlay() });
 			this.popcorn.listen('ended',function(){ _this.onEnded() });
 			this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
 			this.popcorn.listen('playing',function(){ _this.onPlaying() });
@@ -553,6 +604,7 @@
 		},
 		updateElapsed : function()
 		{
+			console.log('updated elapsed editor')
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
 			this.$el.find('.media-scrubber').slider('value', elapsed);
@@ -578,27 +630,29 @@
 				stop : function(e,ui){ _this.onCropStop(e,ui) }
 			})
 			
-			this.$el.find('.crop-time-left .time').keypress(function(e){
+			this.$el.find('.crop-time-left .time').unbind('keypress').keypress(function(e){
 				if((e.which >= 48 && e.which <= 58) || e.which == 13)
 				{
 					switch(e.which)
 					{
 						case 13:
 							var sec = _this.convertToSeconds($(this).text());
-						
-							if(sec != false)
+							console.log('seconds', sec)
+							if(sec === false)
 							{
-								_this.seek( sec );
+								$(this).text( convertTime(_this.model.get('cue_in')) )
 							
+							}
+							else
+							{
+
 								sec = sec < 0 ? 0 : sec;
 								sec = sec > _this.model.get('cue_out') ? _this.model.get('cue_out') : sec;
 								$(this).text( convertTime(sec) )
 								_this.$el.find('.crop-slider').slider('values',0, sec );
+								_this.cueIn =sec;
 								_this.model.update({ 'cue_in' : sec })
-							}
-							else
-							{
-								$(this).text( convertTime(_this.model.get('cue_in')) )
+								_this.seek( sec );
 							}
 							this.blur();
 							return false;
@@ -607,7 +661,7 @@
 				}
 				else return false;
 			})
-			this.$el.find('.crop-time-right .time').keypress(function(e){
+			this.$el.find('.crop-time-right .time').unbind('keypress').keypress(function(e){
 				if((e.which >= 48 && e.which <= 58) || e.which == 13)
 				{
 					switch(e.which)
@@ -615,17 +669,19 @@
 						case 13:
 							var sec = _this.convertToSeconds( $(this).text() );
 						
-							if(sec != false)
+							if(sec === false)
 							{
-								sec = sec > _this.duration ? this.duration : sec;
-								sec = sec < _this.model.get('cue_in') ? _this.model.get('cue_in') : sec;
-								$(this).text( convertTime(sec) )
-								_this.$el.find('.crop-slider').slider('values',1, sec );
-								_this.model.update({ 'cue_out' : sec });
+								$(this).text( convertTime(_this.model.get('cue_out')) )
 							}
 							else
 							{
-								$(this).text( convertTime(_this.model.get('cue_out')) )
+								sec = sec > _this.duration ? _this.duration : sec;
+								sec = sec < _this.model.get('cue_in') ? _this.model.get('cue_in') : sec;
+								$(this).text( convertTime(sec) )
+								_this.$el.find('.crop-slider').slider('values',1, sec );
+								_this.cueOut = sec;
+								_this.seek( Math.max(sec-5,_this.cueIn) );
+								_this.model.update({ 'cue_out' : sec });
 							}
 							this.blur();
 							return false;
@@ -822,10 +878,10 @@ var Plyr2 = Backbone.Model.extend({
 					
 					this.pop = Popcorn.youtube('#zvideo-'+ this.id, this.get('url'),{volume:this.get('volume'), cue_in:this.get('cue_in')} );
 					this.pop.listen('canplaythrough',function(){
-												_this.pop.play();
+						_this.pop.play();
 						_this.pop.pause();
 						if(_this.get('fade_in')==0) _this.pop.volume(_this.get('volume'));
-												_this.trigger('video_canPlay');
+						_this.trigger('video_canPlay');
 					});
 					break;
 				case 'vimeo':

@@ -32,22 +32,25 @@
 		
 		initPlayer : function()
 		{
+			var ct = '#media-controls-'+this.id;
+			console.log('init editor player', ct)
 			var Player = zeega.module('player');
 			this.player = new Player.Views.Player({
 				model:this,
 				control_mode : 'editor',
 				media_target : '#layer-visual-'+this.id,
-				controls_target : '#media-controls-'+this.id,
+				controls_target : ct
 			});
 		},
 		
 		initPlayerPlayer : function()
 		{
+			console.log('init player player')
 			var Player = zeega.module('player');
 			this.player = new Player.Views.Player({
 				model:this,
 				control_mode : 'none',
-				media_target : '#layer-visual-'+this.id
+				media_target : '#layer-visual-'+ this.id
 			});
 		}
 
@@ -57,7 +60,7 @@
 				
 		render : function()
 		{
-			
+			var _this = this;
 			var playbackControls = new Layer.Views.Lib.Target({
 				model : this.model
 			});
@@ -75,7 +78,11 @@
 				min : 0,
 				max : 1,
 				step : 0.01,
-				css : false
+				css : false,
+				onSlide : function()
+				{
+					this.model.player.popcorn.volume( volumeSlider.getValue() )
+				}
 			});
 			
 			var fadeInSlider = new Layer.Views.Lib.Slider({
@@ -253,24 +260,42 @@
 
 				this.$el.html( this.model.player.render().el );
 				this.model.player.placePlayer();
-
 				
+				//this.model.player.popcorn.listen('ended', function(){_this.onEnded()})
+/*
+				console.log('on preload',this.model)
 				if(this.model.can_play != true)
 				{
+					console.log('this thing cant play yet. wait')
 					this.model.player.popcorn.listen('canplay', function(){
-						console.log('video ready player');
+						console.log('##		video ready player', _this.model.id);
+						_this.model.trigger('ready', _this.model.id ) ;
+					})
+					this.model.player.popcorn.listen('canplaythrough', function(){
+						console.log('##		video ready player through', _this.model.id);
 						_this.model.trigger('ready', _this.model.id ) ;
 					})
 				}
-				else _this.model.trigger('ready', _this.model.id );
+				else
+				{
+					console.log('play that thing!!')
+					this.model.trigger('ready', _this.model.id );
+				}
+				
+				*/
 				
 				this.model.player_loaded = true;
 			}
-			else{
+			else
+			{
 				this.model.player.pause();
 			}
-			this.model.player.popcorn.listen('timeupdate', function(){_this.onTimeUpdate()});
-			this.model.player.popcorn.listen('ended', function(){_this.onEnded()})
+			console.log('set listeners', this)
+			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
+			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
+			
+			
+			
 
 		},
 		onEnded : function()
@@ -281,43 +306,47 @@
 		
 		onTimeUpdate : function()
 		{
-			/*
+			
+			console.log('on time update', this.model.player.popcorn.currentTime() )
 			//Cue Out
-			if( this.model.get('attr').cue_out != 0 && this.model.video.currentTime() > this.model.get('attr').cue_out )
+			
+			
+			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
 			{
-				this.model.video.currentTime( this.model.get('attr').cue_in );
-				this.model.video.pause();
+				
+				this.model.player.popcorn.currentTime( this.model.get('attr').cue_in );
+				this.model.player.popcorn.pause();
 				this.model.trigger('playback_ended');
 				console.log('playback ended');
 			}
-			
-			
 			
 			//Fades
 			
 			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
 			else var out = this.model.get('attr').cue_out;
-			var t = this.model.video.currentTime();
+			var t = this.model.player.popcorn.currentTime();
 			var f = parseFloat(this.model.get('attr').cue_in)+parseFloat(this.model.get('attr').fade_in);
 			var g = out-parseFloat(this.model.get('attr').fade_out);
 			
-			if(this.model.get('attr').fade_in>0 && t<f){
-				
+			
+			if(this.model.get('attr').fade_in>0 && t<f)
+			{
 				//console.log("fading in");
 				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
-				this.model.video.volume(vol);
+				this.model.player.popcorn.volume(vol);
 			}
-			else if(this.model.get('attr').fade_out>0 && t>g){
 			
+			else if(this.model.get('attr').fade_out>0 && t>g)
+			{
 				//console.log("fading out");
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
-				this.model.video.volume(vol);
+				this.model.player.popcorn.volume(vol);
 			}
-			else if(Math.abs(this.model.get('attr').volume-this.model.video.volume())>.01){
-				this.model.video.volume(this.model.get('attr').volume);
-				
+			else if(Math.abs(this.model.get('attr').volume-this.model.player.popcorn.volume())>.01)
+			{
+				this.model.player.popcorn.volume(this.model.get('attr').volume);
 			}
-			*/
+			
 			
 			//Dissolve
 			
