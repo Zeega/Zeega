@@ -25,6 +25,7 @@
 		// called from the project model.loadProject
 		renderToTarget : function(){ $(this.target).html( this.render().el ) },
 		
+		//initialize events that cannot be set in events:{}
 		initEvents : function()
 		{
 			var _this = this;
@@ -37,8 +38,14 @@
 				//this happens when you drop a database item onto a frame
 				drop : function( event, ui )
 				{
-					ui.draggable.draggable('option','revert',false);
-					_this.saveCoverImage( zeega.app.draggedItem )
+					//make sure the dropped item is a valid image
+					var item = zeega.app.draggedItem;
+					if(item.get('layer_type') == 'Image')
+					{
+						ui.draggable.draggable('option','revert',false);
+						_this.saveCoverImage( zeega.app.draggedItem.get('uri') )
+					}
+					
 				}
 			});
 		},
@@ -47,7 +54,8 @@
 			'keypress #project-title' : 'onTitleKeypress',
 			'blur #project-title' : 'saveTitle'
 		},
-		
+
+		//the callback when text is being entered into the title field
 		onTitleKeypress : function(e)
 		{
 			var _this = this;
@@ -66,18 +74,11 @@
 			{
 				var t = this.$el.find('#project-title').text() == '' ? 'untitled' : this.$el.find('#project-title').text();
 				this.$el.find('#project-title').effect('highlight',{},2000);
-				this.model.save({ 'title' : t });
+				this.model.save({ 'title' : t },{silent:true});
 			}
 		},
 		
-		saveCoverImage : function( item )
-		{
-			if(item.get('layer_type') == 'Image')
-			{
-				this.$el.find('#project-cover-image').css('background-image' , 'url("'+ item.get('uri') +'")' );
-				this.model.save({ 'cover_image' : item.get('uri') })
-			}
-		},
+		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
 		
 		getTemplate : function()
 		{

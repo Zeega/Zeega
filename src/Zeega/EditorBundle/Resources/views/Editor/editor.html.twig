@@ -9,23 +9,7 @@
 			<input id="sequence-id" type="hidden" value="{{sequence.id}}"/>
 			<input id="project-id" type="hidden" value="{{projectid}}"/>
 		
-		
-			<div id="project-header" class='clearfix'>
-				
-				<!--
-				<div id='project-cover-image'></div>
-				
-				<div id='project-title'>{{projecttitle}}</div>
-					
-
-				<div id='sequence-actions' class="btn-group pull-right">
-					 <button id='settings-project' class="btn btn-inverse"><i class='zicon-settings raise-up'></i></button>
-				  <button id='publish-project' class="btn btn-inverse"><i class='zicon-publish raise-up'></i> Publish</button>
-				  <button id='share-project' class="btn btn-inverse"><i class='zicon-share raise-up'></i> Share</button>
-				  <button id='preview' class="btn btn-inverse"><i class='zicon-preview raise-up'></i> Preview</button>
-				</div>
-				-->
-			</div>
+			<div id="project-header" class='clearfix'></div>
 
 			<a href="http://#"></a>
 
@@ -89,7 +73,7 @@
 							
 						</div><!-- #layer-panel -->
 						
-
+<!--
 						<div id='transition-panel' class='panel tray expandable raised'>
 
 							<div class='panel-head'>
@@ -120,10 +104,10 @@
 										</label>
 									</li>
 								</ul>
-							</div><!-- panel-content -->
+							</div>
 							
-						</div><!-- #transition-panel -->
-						
+						</div>
+-->						
 						
 						
 						<div id='database-panel' class='panel tray expandable raised'
@@ -172,10 +156,6 @@
 							</div><!-- database -->
 						
 						</div><!-- #database-panel -->
-						
-						
-						
-						
 
 						</div>
 						
@@ -183,8 +163,11 @@
 
 					</div> <!-- sidebar -->
 					
+					<div id='workspace-wrapper'></div>
+					
 					
 					<div id='workspace-wrapper'>
+						
 						<div id='edit-panel'></div>
 						<div id='visual-editor-wrapper' class='wrapper panel'>
 							
@@ -192,9 +175,7 @@
 								
 								<div id='make-connection' class="btn-group pull-left">
 									<button data-action='newFrame' class="btn btn-inverse action" href='#'><img src='{{ asset('images/multi-linear.png') }}' height='15px'/></button>
-									<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-											<span class="caret"></span>
-									</button>
+									<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li><a data-action='newFrame' class='action' href='#'><i class='zicon-new-frame small'></i>  New Frame</a></li>
 										<li><a data-action='existingFrame' class='action' href='#'><i class='zicon-old-frame small'></i>  Existing Frame</a></li>
@@ -202,6 +183,7 @@
 										<li><a data-action='advanced' class='action' href='#'><i class='zicon-options small'></i>  Advanced</a></li>
 									</ul>
 								</div>
+								
 								<div id='connection-confirm' class='pull-left hidden'>
 									<button data-action='cancel' class='btn btn-danger btn-small'>Cancel</button>
 									<button data-action='ok' class='btn btn-success btn-small'>OK</button>
@@ -222,9 +204,9 @@
 							</div>
 							
 						</div>
-						
-						
 					</div>
+					
+					
 				</div>
 
 			

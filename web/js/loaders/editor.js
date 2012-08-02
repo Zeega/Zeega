@@ -71,6 +71,7 @@ require(
 	'order!app/views/editor.sequence/editor.view.sequence.sequence-tab',
 	'order!app/views/editor.item/editor.view.item.database-tray',
 	'order!app/views/editor.item/editor.view.item.viewer',
+	'order!app/views/editor.frame/editor.view.frame.editor-workspace',
 	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
 	'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
