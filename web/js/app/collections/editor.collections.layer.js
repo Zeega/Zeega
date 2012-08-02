@@ -51,21 +51,21 @@
 		
 		saveLayer : function(layerModel, frame)
 		{
-			console.log('SAVE NEW LAYER')
-			console.log('save to: '+ layerModel.url() )
-			
 			var _this = this;
+			
+			//remove model from layerModel.attr
+			layerModel.attributes.attr.model = null;
+			
 			layerModel.save({},{
 				success : function( savedLayer )
 				{
-					console.log('SAVED NEW LAYER')
-					console.log(savedLayer)
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
 					frame.trigger('update_thumb');
 				}
 			});
+			
 		},
 		
 		/*

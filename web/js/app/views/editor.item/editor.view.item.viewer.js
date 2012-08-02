@@ -135,6 +135,7 @@
 		{
 			var _this = this;
 			this.endEvents();
+			
 			// do other cleanup stuff first?
 			this.$el.fadeOut('fast',function(){_this.remove()});
 		},
@@ -434,12 +435,24 @@
 			return this;
 		},
 		
+		//happens after the view is rendered. so we know when the player is in the dom
 		afterRender : function()
 		{
 			if( !this.isRendered == true )
 			{
 				this.$el.empty();
-				this.player = new Plyr('item-media-'+this.model.id,{url:this.model.get('uri')});
+				var Player = zeega.module('player');
+				
+				this.player = new Player.Views.Player({
+					model:this.model,
+					control_mode : 'standard',
+					media_target : null
+				});
+				this.$el.html(this.player.render().el);
+				this.player.placePlayer();
+				
+				console.log('player',this.player);
+				
 				this.isRendered = true;
 			}
 		},

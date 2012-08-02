@@ -107,12 +107,16 @@
 		update : function( newAttr, silent )
 		{
 			var _this = this;
-			this.set( 'attr' , _.extend( this.get('attr'), newAttr ) );
+			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
+			this.set( 'attr' , a );
 			if( !silent )
 			{
+
 				this.save({},{
 					success : function(){ _this.trigger('update') }
 				});
+				
+				
 			}
 		},
 
