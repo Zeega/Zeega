@@ -3,7 +3,6 @@
 	// This will fetch the tutorial template and render it.
 	Project.Views.Editor = Backbone.View.extend({
 
-		//target : '#project-header',
 		id : 'project-header',
 		
 		isRendered : false,
