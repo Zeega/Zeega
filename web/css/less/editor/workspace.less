@@ -4,48 +4,41 @@
 	
 *******************************/
 
-#workspace-wrapper
+#workspace
 {
 	width:704px;
 	float:right;
-	position:relative;
-}
-
-#workspace-wrapper #workspace-outer-wrapper
-{
-	width:704px;
-	height:469px;
-	margin: 6px 0;
-	border: 1px dotted #444;
-}
-
-#workspace-wrapper #workspace-outer-wrapper #visual-editor-workspace
-{
-	height:100%;
-	width:704px;
-	background:#000;
-	overflow:hidden;
-	position:relative;
-	margin:0 auto;
-}
-
-#workspace-wrapper #workspace-outer-wrapper #visual-editor-workspace.workspace-item-hover{ outline:2px solid yellow }
-
-.text-editing{ border:1px dotted red }
-.text-non-editing{ border:1px dotted white }
-.layer-text #zedit-target:focus{ outline :none }
-
-.visual-element
-{
-	outline : 2px solid transparent;
-	-webkit-transition: outline .25s linear;
-	transition: outline .25 linear;
-}
-.editing-layer
-{
-	outline : 2px solid yellow;
-	-webkit-transition: outline .25s linear;
-	transition: outline .25 linear;
+	
+	
+	#visual-editor-workspace
+	{
+		width:100%;
+		height:469px;
+		background:#000;
+		overflow:hidden;
+		position:relative;
+		&.workspace-item-hover{ outline:2px solid yellow }
+	}
+	
+	
+	//needed?
+	.text-editing{ border:1px dotted red }
+	.text-non-editing{ border:1px dotted white }
+	.layer-text #zedit-target:focus{ outline :none }
+	/*
+	.visual-element
+	{
+		outline : 2px solid transparent;
+		-webkit-transition: outline .25s linear;
+		transition: outline .25 linear;
+	}
+	.editing-layer
+	{
+		outline : 2px solid yellow;
+		-webkit-transition: outline .25s linear;
+		transition: outline .25 linear;
+	}
+	*/
 }
 
 /************* end workspace styles ****************/

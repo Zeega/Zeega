@@ -439,36 +439,5 @@ jQuery(function($)
 		}
 	})
 
-	/*****  		CRITICAL		*******/
-
-	//enable the workspace as a valid drop location for DB items
-	$('#visual-editor-workspace').droppable({
-		accept : '.database-asset-list',
-		hoverClass : 'workspace-item-hover',
-		tolerance : 'pointer',
-
-		//this happens when you drop a database item onto a frame
-		drop : function( event, ui )
-			{
-				ui.draggable.draggable('option','revert',false);
-				zeega.app.addLayer({ item : zeega.app.draggedItem })
-			}
-	});
-
-	// FAKE STUFF
-	$('#css-change').toggle(function(){
-		$('body').css('background','#fff');
-		$('#sequence-header').css('color','#444');
-		$('#frame-drawer').css('background','#fff');
-		$('.database-asset').css('background','#fff');
-	},function(){
-		$('body').css('background','');
-		$('#sequence-header').css('color','');
-		$('#frame-drawer').css('background','');
-		$('.database-asset').css('background','');
-	});
-
-
-
 
 });

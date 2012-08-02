@@ -13,7 +13,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 	Frame.Views.EditorWorkspace = Backbone.View.extend({
 
-		id : 'workspace-wrapper',
+		id : 'workspace',
+		className : 'clearfix',
+		
+		isRendered : false,
 		
 		initialize : function()
 		{
@@ -23,21 +26,33 @@ the frame's layers. It also includes common frame functions like adding sequence
 		render : function()
 		{
 			this.$el.html( this.getTemplate() );
+			this.initEvents();
 			return this;
 		},
 		
-		renderToTarget : function()
+		initEvents : function()
 		{
-			console.log('render to target', this.render().el )
-			$('#'+this.id).replaceWith( this.render().el )
+			//enable the workspace as a valid drop location for DB items
+			$(this.el).find('#visual-editor-workspace').droppable({
+				accept : '.database-asset-list',
+				hoverClass : 'workspace-item-hover',
+				tolerance : 'pointer',
+
+				//this happens when you drop a database item onto a frame
+				drop : function( event, ui )
+				{
+					ui.draggable.draggable('option','revert',false);
+					zeega.app.addLayer({ item : zeega.app.draggedItem })
+				}
+			});
 		},
+		
+		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
 		
 		getTemplate : function()
 		{
 			var html = 
 			
-				"<div id='edit-panel'></div>"+
-				"<div id='visual-editor-wrapper' class='wrapper panel'>"+
 					
 					"<div id='visualeditor-view-bar' class='panel-head'>"+
 						
@@ -57,25 +72,50 @@ the frame's layers. It also includes common frame functions like adding sequence
 							"<button data-action='ok' class='btn btn-success btn-small'>OK</button>"+
 						"</div>"+
 						
-						"<i class='zicon-info info'"+
-							"data-placement = 'left'"+
-							"data-original-title='The Visual Editor Window'"+
-							"data-content='This is where you can drop and arrange visual media. You can click the bar to close or expand the workspace.'"+
-						"></i>"+
+						"<div class='advance-controls'>advance controls</div>"+
 					"</div>"+
 					
-					"<div id='workspace-outer-wrapper' class='clearfix'>"+
-						"<div id='visual-editor-workspace' class='workspace clearfix'"+
-							"title='Create a Project!'"+
-							"data-content='All projects consists of frames. You can add layers to frames by dragging media to this area.'"+
-						"></div>"+
-					"</div>"+
+					"<div id='visual-editor-workspace' class='workspace clearfix'></div>";
 					
-				"</div>";
 
 			return html;
 		}
 	
 	});
+	
+	Frame.Views.ConnectionControls = Backbone.View.extend({
+		
+		render : function()
+		{
+			
+		},
+		
+		getTemplate : function()
+		{
+			html = '';
+			
+			
+			return html;
+		}
+		
+	})
+	
+	Frame.Views.AdvanceControls = Backbone.View.extend({
+		
+		render : function()
+		{
+			
+		},
+		
+		getTemplate : function()
+		{
+			html = '';
+			
+			
+			return html;
+		}
+		
+	})
+	
 
 })(zeega.module("frame"));
