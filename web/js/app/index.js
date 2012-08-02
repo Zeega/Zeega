@@ -246,31 +246,6 @@ jQuery(function($)
 		}
 	});
 
-	//publish button
-	$('#share-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.shareProject();
-		return false;
-	});
-	//share button
-	$('#publish-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.publishProject();
-		return false;
-	});
-	//settings button
-	$('#settings-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.settingsProject();
-		return false;
-	});
-
-	$('#get-help').click(function(){
-		localStorage.help = true;
-		zeega.app.initStartHelp();
-	})
-
-
 	$('.menu-toggle').click(function(){
 
 		var menu = $(this).next();
@@ -438,37 +413,6 @@ jQuery(function($)
 			zeega.app.itemCollection.getNextPage();
 		}
 	})
-
-	/*****  		CRITICAL		*******/
-
-	//enable the workspace as a valid drop location for DB items
-	$('#visual-editor-workspace').droppable({
-		accept : '.database-asset-list',
-		hoverClass : 'workspace-item-hover',
-		tolerance : 'pointer',
-
-		//this happens when you drop a database item onto a frame
-		drop : function( event, ui )
-			{
-				ui.draggable.draggable('option','revert',false);
-				zeega.app.addLayer({ item : zeega.app.draggedItem })
-			}
-	});
-
-	// FAKE STUFF
-	$('#css-change').toggle(function(){
-		$('body').css('background','#fff');
-		$('#sequence-header').css('color','#444');
-		$('#frame-drawer').css('background','#fff');
-		$('.database-asset').css('background','#fff');
-	},function(){
-		$('body').css('background','');
-		$('#sequence-header').css('color','');
-		$('#frame-drawer').css('background','');
-		$('.database-asset').css('background','');
-	});
-
-
 
 
 });

@@ -3,7 +3,7 @@
 	// This will fetch the tutorial template and render it.
 	Project.Views.Editor = Backbone.View.extend({
 
-		target : '#project-header',
+		id : 'project-header',
 		
 		isRendered : false,
 
@@ -17,13 +17,13 @@
 		{
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
 
-			if(!this.isRendered) this.initEvents();
-			this.isRendered = true;
+			this.initEvents();
+			
 			return this;
 		},
 		
 		// called from the project model.loadProject
-		renderToTarget : function(){ $(this.target).html( this.render().el ) },
+		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
 		
 		//initialize events that cannot be set in events:{}
 		initEvents : function()
@@ -52,7 +52,13 @@
 		
 		events : {
 			'keypress #project-title' : 'onTitleKeypress',
-			'blur #project-title' : 'saveTitle'
+			'blur #project-title' : 'saveTitle',
+			
+			'click #share-project' : 'clickShare',
+			'click #publish-project' : 'clickPublish',
+			'click #settings-project' : 'clickSettings',
+			'click #preview' : 'clickPreview'
+			
 		},
 
 		//the callback when text is being entered into the title field
@@ -79,6 +85,31 @@
 		},
 		
 		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
+		
+		clickShare : function()
+		{
+			zeega.app.shareProject();
+			return false;
+		},
+		
+		clickPublish : function()
+		{
+			zeega.app.publishProject();
+			return false;
+		},
+		
+		clickSettings : function()
+		{
+			zeega.app.settingsProject();
+			return false;
+		},
+		
+		clickPreview : function()
+		{
+			zeega.app.previewSequence();
+			return false;
+		},
+		
 		
 		getTemplate : function()
 		{
