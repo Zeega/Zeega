@@ -8,6 +8,16 @@
 {
 	width:704px;
 	float:right;
+	color:#eee;
+	
+	.top-bar
+	{
+		margin-bottom: 10px;
+		.advance-controls
+		{
+			float:right
+		}
+	}
 	
 	
 	#visual-editor-workspace
@@ -20,12 +30,12 @@
 		&.workspace-item-hover{ outline:2px solid yellow }
 	}
 	
-	
 	//needed?
 	.text-editing{ border:1px dotted red }
 	.text-non-editing{ border:1px dotted white }
 	.layer-text #zedit-target:focus{ outline :none }
-	/*
+	
+	// for highlighting layers as their properties are changing
 	.visual-element
 	{
 		outline : 2px solid transparent;
@@ -38,7 +48,7 @@
 		-webkit-transition: outline .25s linear;
 		transition: outline .25 linear;
 	}
-	*/
+	
 }
 
 /************* end workspace styles ****************/

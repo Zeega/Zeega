@@ -54,7 +54,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var html = 
 			
 					
-					"<div id='visualeditor-view-bar' class='panel-head'>"+
+					"<div class='top-bar clearfix'>"+
 						
 						"<div id='make-connection' class='btn-group pull-left'>"+
 							"<button data-action='newFrame' class='btn btn-inverse action' href='#'><img src='../../../images/multi-linear.png' height='15px'/></button>"+
