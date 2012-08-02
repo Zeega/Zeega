@@ -185,7 +185,7 @@
 		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
-			this.view.render();
+			this.view.renderToTarget();
 			this.trigger('ready')
 		},
 		loadPublishProject : function()

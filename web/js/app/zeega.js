@@ -73,6 +73,9 @@ this.zeega = {
 		console.log("project data ", this.project);
 
 	},
+	
+	// listens to things saving to update the button states
+	
 	setProjectListeners : function (){
 	
 		var _this=this;
@@ -97,8 +100,14 @@ this.zeega = {
 	{
 		console.log('editor started')
 		
+		this.renderProject();
 		this.renderSequenceFrames();
 		this.startRouter();
+	},
+	
+	renderProject : function()
+	{
+		
 	},
 	
 	startRouter: function()
@@ -888,6 +897,8 @@ console.log( helpOrderArray[this.helpCounter-1] )
 
 	},
 	
+/*
+//moved to project view
 	editCoverImage : function(obj)
 	{
 		if(obj.item.get('layer_type') == 'Image')
@@ -896,7 +907,7 @@ console.log( helpOrderArray[this.helpCounter-1] )
 			this.project.save({'cover_image':obj.item.get('uri')})
 		}
 	},
-	
+*/	
 	shareProject : function()
 	{
 		if(this.project.get("published"))
