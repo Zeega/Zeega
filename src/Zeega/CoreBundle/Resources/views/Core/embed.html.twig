@@ -2,7 +2,26 @@
 <html>
 	<head>
 		<title>{{project.getTitle()}}</title> 
-		<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/images.ico')}}"> 
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{project.getTitle()}}"/>
+   		<meta property="og:type" content="movie"/>
+   		<meta property="og:url" content="{{hostname}}{{directory}}{{projectId}}"/>
+   
+	   
+    	
+    	{% if project.getThumbnailUrl() is defined %}
+			<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+		{% elseif project.getCoverImage() is defined %}
+			<meta property="og:image" content="{{project.getCoverImage()}}"/>
+		{% else %}
+			<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+		{% endif %}
+				
+				
+    
+    
 		<style type="text/css">
 			body {margin:0px}
 			html {
