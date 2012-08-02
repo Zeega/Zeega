@@ -126,6 +126,8 @@ fos_user:
             handler: zeega_user.form.handler.registration
             type: zeega_user_registration
             validation_groups: [ZeegaRegistration]
+        confirmation:
+            enabled:    true
             
     resetting:
         email:

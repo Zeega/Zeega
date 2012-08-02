@@ -28,13 +28,17 @@ class RegistrationController extends BaseController
             {
                 $sequence = 'fos_user_registration_confirmed';
             }
-
-            $this->setFlash('fos_user_success', 'registration.flash.user_created');
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register_success.html.'.$this->getEngine(), array('user'=>$user));
         }
 		
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
             'form' => $form->createView(),
             'theme' => $this->container->getParameter('fos_user.template.theme')));
+    }
+    
+    public function successAction()
+    {
+	    return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register_success.html.'.$this->getEngine(), array());
     }
 
     /**
@@ -61,10 +65,6 @@ class RegistrationController extends BaseController
     public function confirmedAction()
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
             'user' => $user,
         ));
