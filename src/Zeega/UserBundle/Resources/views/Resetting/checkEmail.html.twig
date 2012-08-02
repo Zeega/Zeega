@@ -1,5 +1,44 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% block stylesheets %}
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+	
+	<!-- DEV ONLY This block is for less to clear its stupid cache. Take out in production -->
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<!-- end DEV ONLY -->
+
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://farm4.staticflickr.com/3155/2910519886_a67ce605e5_o.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		}
+	
+	</style>
+
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+{% endblock stylesheets %}
+
 {% block fos_user_content %}
 <p>
 {{ 'resetting.check_email'|trans({'%email%': email}, 'FOSUserBundle') }}

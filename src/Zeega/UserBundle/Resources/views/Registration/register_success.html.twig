@@ -2,7 +2,7 @@
 
 
 
-{% block head %}
+{% block stylesheets %}
 	<script type="text/javascript">
 		window.localStorage.clear();
 	</script>
@@ -39,40 +39,11 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
 	
-{% endblock head %}
+{% endblock stylesheets %}
 
 {% block body %}
 	{% block fos_user_content %}
 
-<!-- Background Color Div - creates the transparent layer over the background image -->
-	<div id="background-color">
-	</div>
-	<!-- Background Color Div ends -->
-	
-	<!-- Header & Nav Begins -->
-	<div class="container header new-section">
-	
-		<div class="row">
-		
-			<div class="span6">
-				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
-				<div class="strapline">
-				Remake The Internet
-				</div>
-			</div>
-			
-			<div class="span8">
-				<div class="navigation">	
-					<div>
-						<p><a href="">About</a><a href="">SignUp</a><a href="">Login</a></p>
-					</div>
-				</div>
-			</div>
-	
-		</div>
-	
-	</div>
-	<!-- Header & Nav Ends -->
 	<!-- Page Intro Begins -->
 	
 	<div class="container new-section">
@@ -96,41 +67,6 @@
 	
 	<!-- Page Intro Ends -->
 	
-	<!-- Footer Begins -->
-	
-	<div class="footer">
-	
-		<div class="container">
-		
-			<div class="row">
-			
-			<div class="span5">
-				<img src="{{asset('images/zeega-logo.png')}}" alt="zeega-logo" width="134" height="43">
-				<div class="strapline">
-				Remake The Internet
-				</div>
-				<p><small>Zeega is a non-profit dedicated to inventing new forms of interactive storytelling. We are passionate about beautiful, surprising, immersive digital experiences that foster curiosity and enrich understanding of the world around us.</small></p>
-				<p><small>
-					Send us a message: <a href="mailto:info@zeega.org">info@zeega.org</a><br>
-					Maybe tweet us: <a href="http://www.twitter.com/zeega">@zeega</a><br>
-					Or send a package: 364a Broadway, Cambridge MA 02139
-				</small></p>
-			</div>
-			
-			<div class="footer-navigation span3 offset6">
-				<div>
-					<p><a href="http://www.zeega.org">Home</a></p>
-					<p><a href="">About</a></p>
-					<p><a href="">Signup</a></p>
-					<p><a href="">Login</a></p>
-				</div>
-			</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
 	{% endblock fos_user_content %}
 	
 {% endblock %}	
