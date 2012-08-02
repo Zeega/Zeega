@@ -60,7 +60,7 @@
 			'click #preview' : 'clickPreview'
 			
 		},
-		
+
 		//the callback when text is being entered into the title field
 		onTitleKeypress : function(e)
 		{

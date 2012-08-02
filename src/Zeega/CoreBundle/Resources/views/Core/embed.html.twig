@@ -2,7 +2,57 @@
 <html>
 	<head>
 		<title>{{project.getTitle()}}</title> 
-		<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+		
+		
+		<!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{project.getTitle()}}"/>
+		<meta property="og:description" content="{{project.getDescription()}}"/>
+   		<meta property="og:type" content="movie"/>
+   		<meta property="og:url" content="{{hostname}}{{directory}}{{projectId}}"/>
+    	{% if project.getThumbnailUrl() is defined %}
+			<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+		{% elseif project.getCoverImage() is defined %}
+			<meta property="og:image" content="{{project.getCoverImage()}}"/>
+		{% else %}
+			<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+		{% endif %}
+				
+		<!-- END FB -->		
+    	<script>
+    	var zeegaEmbed = {
+    	
+    		loaded:false,
+    		requestFS:function(){
+    			if(!this.loaded){
+    				var docElm= document.createElement('iframe');
+    				docElm.setAttribute('id','zeega-player');
+    				document.getElementById('zeega-embed').appendChild(docElm);
+    			}
+    			else{
+    				docElm=document.getElementById('zeega-player');
+    			}
+    			
+    			docElm.setAttribute('src','{{hostname}}{{directory}}project/{{projectId}}/view');
+					
+				if (docElm.requestFullscreen) docElm.requestFullscreen();
+				else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
+				else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
+				else{
+					document.getElementById('zeega-link').setAttribute('href','{{hostname}}{{directory}}project/{{projectId}}/view');
+					document.getElementById('zeega-link').setAttribute('target','blank');
+					document.getElementById('zeega-link').setAttribute('onclick','');
+				
+				}
+    		},
+    		
+    	}
+    	
+
+    	</script>
+    
 		<style type="text/css">
 			body {margin:0px}
 			html {
@@ -25,12 +75,13 @@
 			h2 {font-size:12px; padding:10px;}
 			#text{width:100%;background-color:rgba(0,0,0,.5); position: absolute; bottom: 10%; }
 			a{ width:100%; height:100%; z-index:1000; position:absolute;background:url({{ asset('images/embed_play.png')}}) center center no-repeat; background-size:12%;}
-
+			#zeega-player{width:0px; height:0px;}
 		</style>	
 	</head>
 
-	<body>
-		<a href="{{hostname}}{{directory}}project/{{projectId}}/view" target= "_blank"></a>
+	<body id="zeega-embed" >
+		
+		<a id="zeega-link" href="#" onclick="javascript:zeegaEmbed.requestFS()" ></a>
 		<div id="text">
 			<h1>{{project.getTitle()}}</h1>
 			{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
