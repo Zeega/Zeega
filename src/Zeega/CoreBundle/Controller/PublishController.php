@@ -38,7 +38,7 @@ class PublishController extends Controller
        
        
        	return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
-            'projectId'=>$id,
+       		'project'=>$project,
             'project_data' => $projectData,
      	));
     }

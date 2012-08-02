@@ -165,6 +165,7 @@ class ProjectsController extends Controller
         
         
 			$item->setMediaCreatorRealname($project->getAuthors());
+			$item->setDescription($project->getDescription());
 			$item->setThumbnailUrl($project->getCoverImage());
 			$item->setTitle($project->getTitle());
 			$project_json = $project_http->getContent();
