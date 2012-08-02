@@ -99,15 +99,20 @@ this.zeega = {
 	startEditor : function()
 	{
 		console.log('editor started')
+		this.renderWorkspace();
 		
-		this.renderProject();
 		this.renderSequenceFrames();
+		
 		this.startRouter();
 	},
 	
-	renderProject : function()
+	
+	//this is temporary. should be moved to the frame model/view
+	renderWorkspace : function()
 	{
-		
+		var Frame = zeega.module('frame');
+		this.workspaceView = new Frame.Views.EditorWorkspace();
+		this.workspaceView.renderToTarget();
 	},
 	
 	startRouter: function()
@@ -203,6 +208,7 @@ this.zeega = {
 			var layerIndex = 0;
 			var _this = this;
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
+				console.log('##		render frame layer', layerID)
 				var layerModel = _this.project.layers.get(layerID);
 
 				layerModel.layerIndex = layerIndex;
