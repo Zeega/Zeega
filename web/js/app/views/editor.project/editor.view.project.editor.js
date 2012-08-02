@@ -7,6 +7,12 @@
 		
 		isRendered : false,
 
+		initialize : function()
+		{
+			//automatically re-render the view if the title or cover image are changed/updated
+			this.model.on('change:title change:cover_image', this.render, this)
+		},
+
 		render: function()
 		{
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
@@ -16,24 +22,10 @@
 			return this;
 		},
 		
+		// called from the project model.loadProject
+		renderToTarget : function(){ $(this.target).html( this.render().el ) },
 		
-		events : {
-			'keypress #project-title' : 'onTitleKeypress',
-			'blur #project-title' : 'saveTitle'
-		},
-		
-		onTitleKeypress : function(e)
-		{
-			var _this = this;
-			if(e.which==13)
-			{
-				e.preventDefault();
-				this.$el.find('#project-title').blur();
-				_this.saveTitle();
-				return false
-			}
-		},
-		
+		//initialize events that cannot be set in events:{}
 		initEvents : function()
 		{
 			var _this = this;
@@ -46,14 +38,35 @@
 				//this happens when you drop a database item onto a frame
 				drop : function( event, ui )
 				{
-					ui.draggable.draggable('option','revert',false);
-					_this.saveCoverImage( zeega.app.draggedItem )
+					//make sure the dropped item is a valid image
+					var item = zeega.app.draggedItem;
+					if(item.get('layer_type') == 'Image')
+					{
+						ui.draggable.draggable('option','revert',false);
+						_this.saveCoverImage( zeega.app.draggedItem.get('uri') )
+					}
+					
 				}
 			});
 		},
 		
-		// called from the project model.loadProject
-		renderToTarget : function(){ $(this.target).html( this.render().el ) },
+		events : {
+			'keypress #project-title' : 'onTitleKeypress',
+			'blur #project-title' : 'saveTitle'
+		},
+		
+		//the callback when text is being entered into the title field
+		onTitleKeypress : function(e)
+		{
+			var _this = this;
+			if(e.which==13)
+			{
+				e.preventDefault();
+				this.$el.find('#project-title').blur();
+				_this.saveTitle();
+				return false		
+			}
+		},
 		
 		saveTitle : function()
 		{
@@ -65,14 +78,7 @@
 			}
 		},
 		
-		saveCoverImage : function( item )
-		{
-			if(item.get('layer_type') == 'Image')
-			{
-				this.$el.find('#project-cover-image').css('background-image' , 'url("'+ item.get('uri') +'")' );
-				this.model.save({ 'cover_image' : item.get('uri') })
-			}
-		},
+		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
 		
 		getTemplate : function()
 		{
