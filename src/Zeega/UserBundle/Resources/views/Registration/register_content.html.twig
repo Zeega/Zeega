@@ -108,7 +108,7 @@
 					    {{ form_errors(form) }}
 						<div class="row">
 					    	<div class="span3">
-						    {{ form_label(form.display_name,'Name',{ 'attr': {'class': 'control-label'} }) }}
+								<label class="control-label" for="youridea"><h4>Name</h4></label>
 							</div>
 							<div class="span4">
 								<div class="required"></div>
@@ -120,7 +120,7 @@
 						</div>
 						<div class="row">
 					    	<div class="span3">
-						    	{{ form_label(form.email,'Email') }}
+						    	<label class="control-label" for="youridea"><h4>Email</h4></label>
 							</div>
 							<div class="span4">
 								<div class="required"></div>			
@@ -132,7 +132,7 @@
 						</div>
 						<div class="row">
 					    	<div class="span3">
-						    	{{ form_label(form.idea,'Your Idea') }}
+						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
 								<p class="sidebar">
 									Already have something in mind? Tell us a little more, we'd love to hear about it.
 								</p>
@@ -150,7 +150,9 @@
 							</div>
 							<div class="span4">
 								<div class="controls">
-									<input type="checkbox" class="pull-left" style="margin-right:8px"> <p class="sidebar">I've read and agree to Zeega's terms of use.</p>
+									{{ form_errors(form.locked) }}
+									{{ form_widget(form.locked, { 'attr': {'class': 'pull-left', 'style' : 'margin-right:8px'} }) }}
+									<p class="sidebar">{{ form.locked.vars.label }}</p>
 								</div>				   
 							</div>
 						</div>

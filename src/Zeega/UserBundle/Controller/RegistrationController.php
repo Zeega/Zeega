@@ -1,33 +1,11 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Zeega\UserBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use FOS\UserBundle\Model\UserInterface;
-use Zeega\DataBundle\Entity\UserSites;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\UserBundle\Controller\RegistrationController as BaseController;
 
-/**
- * Controller managing the registration
- *
- * @author Thibault Duplessis <thibault.duplessis@gmail.com>
- * @author Christophe Coevoet <stof@notk.org>
- */
-class RegistrationController extends Controller
+class RegistrationController extends BaseController
 {
     public function registerAction()
     {
@@ -35,16 +13,19 @@ class RegistrationController extends Controller
         $form = $this->container->get('fos_user.registration.form');
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
+
         $process = $formHandler->process($confirmationEnabled);
-        
-        
-        if ($process) {
+        if ($process) 
+        {
             $user = $form->getData();
             
-            if ($confirmationEnabled) {
+            if ($confirmationEnabled) 
+            {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $sequence = 'fos_user_registration_check_email';
-            } else {
+            } 
+            else 
+            {
                 $sequence = 'fos_user_registration_confirmed';
             }
 
@@ -87,16 +68,5 @@ class RegistrationController extends Controller
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
             'user' => $user,
         ));
-    }
-    
-
-    protected function setFlash($action, $value)
-    {
-        $this->container->get('session')->setFlash($action, $value);
-    }
-
-    protected function getEngine()
-    {
-        return $this->container->getParameter('fos_user.template.engine');
     }
 }

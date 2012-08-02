@@ -13,8 +13,11 @@ class RegistrationFormType extends BaseType
             ->add('display_name')
             ->add('email', 'email')
             ->add('idea')
-            ->add('plainPassword', 'hidden');
-        
+            ->add('plainPassword', 'hidden')
+            ->add('locked', 'checkbox', array(
+                'label'     => "I've read and agree to Zeega's terms of use.",
+                'required'  => true,
+            ));
     }
 
     public function geSite()
