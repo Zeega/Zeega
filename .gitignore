@@ -1,3 +1,4 @@
+/web/.htaccess
 /web/bundles/
 /app/bootstrap*
 /app/cache/*

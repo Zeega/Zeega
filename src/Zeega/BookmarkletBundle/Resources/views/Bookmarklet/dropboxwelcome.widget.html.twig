@@ -9,41 +9,29 @@
 {% block body %}
 
 	<div id="widget-wrapper" data-id="{{widget_id}}"> 
-		<div id="results-count">Welcome to DB!!</div>
+			
+			
+		<h3>You've now connected Dropbox and Zeega!</h3><br>
 		
-		<div id="item-view">
-			<img style="border: solid 1px white; max-width:150px; max-height:150px;" id="item-image" class="item-image" />
-			<div id="item-add" class="add-button">
-				<button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Add Items as Collection</button>
+		When you go to your Dropbox account (either online or from your desktop), you'll notice a new folder. Inside "Apps," there is now "Zeega."<br><br>
 
-				<div id="widget-added-text">
-					<span class="widget-title-added">Title: <span id="widget-title-added-text">hello</span></span><br/>
-					<span class="widget-creator-added">Creator: <span id="widget-creator-added-text">b</span></span>
-				</div>
-			</div>
-			
-			<div style="clear:both;">&nbsp;</div>
-			<div id="message"></div>
-			
-			
-			<div id="widget-title" class='well ingest-info'>&nbsp;</div>
-			<div id="widget-creator" class='well ingest-info'>&nbsp;</div>
-			
-			<a href="." id="btn-more">view more</a>
-			<a href="." id="btn-less" style="display:none">view less</a>
-			<div id="description">
-				<p id="widget-description" class="widget-textbox" >description</p>
-			</div>
-		</div>
+		<img src="{{ asset('images/faq/DropboxZeegaApp.jpg')}}" alt="DropboxZeegaApp"><br><br>
+
+		After you add files to this "Zeega" folder, you can sync with Dropbox to use them within Zeega. To sync, click the "Sync with Dropbox" button within the project editor.<br><br> 
+
+		Currently supported file types:<br><br>
+
+.jpg<br>
+.gif<br>
+.png<br>
+.mp3<br>
+.mp4<br><br>
+
+For video compression, we suggest <a href="http://www.squared5.com/" target="_blank">MPEG Streamclip</a>. It's free and great. Good for Macs and PCs. Recommended settings:<br><br>
+
+Video: H264 & 5000kbps<br>
+Audio: AAC  320kbps 44.1 kHz<br>
 		
 	</div><!--#widget-wrapper-->
 {% endblock %}		
  
-{% block scripts %}
-	<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
-	<script type="text/javascript" language="Javascript">
-		//bootstrapping data
-		var itemJSON = "{{item|e('js')}}";
-		var itemCollectionJSON = "{{mycollection|e('js')}}";
-	</script>	
-{% endblock %}
