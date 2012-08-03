@@ -15,7 +15,20 @@
 		margin-bottom: 10px;
 		.advance-controls
 		{
-			float:right
+			float:right;
+			a
+			{
+				opacity:0.25;
+				&.active{ opacity:1 }
+			}
+		
+			input
+			{
+				width:35px;
+				font-size:17px;
+				&.disabled{ opacity: 0.25 }
+			}
+			
 		}
 	}
 	
