@@ -1,47 +1,47 @@
 ZeegaCommunityBundle_about:
-    pattern:  /community/about
+    pattern:  /about
     defaults: { _controller: ZeegaCommunityBundle:Community:about }
 
 ZeegaCommunityBundle_author:
-    pattern:  /community/author
+    pattern:  /author
     defaults: { _controller: ZeegaCommunityBundle:Community:author }
 
 ZeegaCommunityBundle_home:
-    pattern:  /community/
+    pattern:  /
     defaults: { _controller: ZeegaCommunityBundle:Community:home }
 
 ZeegaCommunityBundle_topic:
-    pattern:  /community/topic/{id}
+    pattern:  /topic/{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:topic }
     
 ZeegaCommunityBundle_user:
-    pattern:  /community/user/{id}
+    pattern:  /user/{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:user }
 
 ZeegaCommunityBundle_dashboard:
-    pattern:  /community/dashboard
+    pattern:  /dashboard
     defaults: { _controller: ZeegaCommunityBundle:Community:dashboard}
 
 ZeegaCommunityBundle_productions:
-    pattern:  /community/productions
+    pattern:  /productions
     defaults: { _controller: ZeegaCommunityBundle:Community:productions}
 ZeegaCommunityBundle_engine:
-    pattern:  /community/engine
+    pattern:  /engine
     defaults: { _controller: ZeegaCommunityBundle:Community:engine}
 ZeegaCommunityBundle_team:
-    pattern:  /community/team
+    pattern:  /team
     defaults: { _controller: ZeegaCommunityBundle:Community:team}
 ZeegaCommunityBundle_contact:
-    pattern:  /community/contact
+    pattern:  /contact
     defaults: { _controller: ZeegaCommunityBundle:Community:contact}
 ZeegaCommunityBundle_terms:
-    pattern:  /community/terms
+    pattern:  /terms
     defaults: { _controller: ZeegaCommunityBundle:Community:terms}
 ZeegaCommunityBundle_privacy:
-    pattern:  /community/privacy
+    pattern:  /privacy
     defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
 ZeegaCommunityBundle_notfound:
-    pattern:  /community/notfound
+    pattern:  /notfound
     defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
 
 
