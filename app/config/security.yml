@@ -38,7 +38,8 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register/confirmed, role: ROLE_ADMIN }
+        - { path: ^/register/confirmed, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
