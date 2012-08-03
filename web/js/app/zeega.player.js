@@ -862,7 +862,7 @@ var Player2 = Backbone.View.extend({
 		
 			"<div class='player-header'>"+
 				
-				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='../../../images/z-logo-128.png' height='60px' /></a>";
+				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
 				
 			if(this.zeega) html +=
 				"<a class='close pull-right' href='#' >&times;</a>";
