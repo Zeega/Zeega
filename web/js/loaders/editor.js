@@ -28,6 +28,7 @@ require(
 	'order!lib/visualsearch',
 	
 	'order!lib/leaflet/leaflet',
+	'order!lib/dropbox',
 
 	//custom
 	'order!ux/zeega.ux.header',
@@ -84,8 +85,8 @@ require(
 	'order!app/views/editor.common/editor.view.common.leaflet-map',
 	'order!app/views/editor.common/editor.view.common.tag-display-edit',
 	
-
-
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	//mvc
 	//'order!backbone/models/tag',

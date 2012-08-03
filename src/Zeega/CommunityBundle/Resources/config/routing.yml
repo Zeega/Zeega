@@ -7,13 +7,42 @@ ZeegaCommunityBundle_author:
     defaults: { _controller: ZeegaCommunityBundle:Community:author }
 
 ZeegaCommunityBundle_home:
-    pattern:  /community/home
+    pattern:  /community/
     defaults: { _controller: ZeegaCommunityBundle:Community:home }
 
-ZeegaCommunityBundle_topics:
-    pattern:  /community/topics
-    defaults: { _controller: ZeegaCommunityBundle:Community:topics }
+ZeegaCommunityBundle_topic:
+    pattern:  /community/topic/{id}
+    defaults: { _controller: ZeegaCommunityBundle:Community:topic }
     
+ZeegaCommunityBundle_user:
+    pattern:  /community/user/{id}
+    defaults: { _controller: ZeegaCommunityBundle:Community:user }
+
 ZeegaCommunityBundle_dashboard:
     pattern:  /community/dashboard
-    defaults: { _controller: ZeegaCommunityBundle:Community:dashboard }
+    defaults: { _controller: ZeegaCommunityBundle:Community:dashboard}
+
+ZeegaCommunityBundle_productions:
+    pattern:  /community/productions
+    defaults: { _controller: ZeegaCommunityBundle:Community:productions}
+ZeegaCommunityBundle_engine:
+    pattern:  /community/engine
+    defaults: { _controller: ZeegaCommunityBundle:Community:engine}
+ZeegaCommunityBundle_team:
+    pattern:  /community/team
+    defaults: { _controller: ZeegaCommunityBundle:Community:team}
+ZeegaCommunityBundle_contact:
+    pattern:  /community/contact
+    defaults: { _controller: ZeegaCommunityBundle:Community:contact}
+ZeegaCommunityBundle_terms:
+    pattern:  /community/terms
+    defaults: { _controller: ZeegaCommunityBundle:Community:terms}
+ZeegaCommunityBundle_privacy:
+    pattern:  /community/privacy
+    defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
+ZeegaCommunityBundle_notfound:
+    pattern:  /community/notfound
+    defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
+
+
+

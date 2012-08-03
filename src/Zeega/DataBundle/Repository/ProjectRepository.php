@@ -40,20 +40,23 @@ class ProjectRepository extends EntityRepository
 		return $query->getArrayResult();
      }
      
-     public function findProjectsByUser($userId,$limit)
+     public function findProjectsByUser($userId,$limit,$published = null)
      {
-      	$query= $this->getEntityManager()
- 				     ->createQueryBuilder()
- 				     ->add('select', 'p')
- 			   	     ->add('from', 'ZeegaDataBundle:Project p')
- 			         ->join('p.users', 'u')
- 			         ->add('where', 'u.id = :userId')
- 			         ->andwhere('p.enabled = true')
- 			         ->setParameters(array('userId'=>$userId))
- 				     ->orderBy('p.id','DESC')
- 				     ->setMaxResults($limit)
- 				     ->getQuery();
+          $qb = $this->getEntityManager()->createQueryBuilder();
+      	  $qb->add('select', 'p')
+ 			 ->add('from', 'ZeegaDataBundle:Project p')
+             ->join('p.users', 'u')
+             ->add('where', 'u.id = :userId')
+             ->setParameters(array('userId'=>$userId))
+             ->andwhere('p.enabled = true')
+             ->orderBy('p.id','DESC')
+             ->setMaxResults($limit);
+ 				       
+ 		if(isset($published))
+ 		{
+ 	        $qb->andwhere('p.published = :published')->setParameters(array('published' => $published));
+ 		}
 
- 		return $query->getResult();
+ 		return $qb->getQuery()->getResult();
       }
 }

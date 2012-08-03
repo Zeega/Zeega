@@ -69,9 +69,7 @@ class ProjectsController extends Controller
         if (!$project)  {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
-        
-        
-      
+
         // create json item for project
         // update item.text with json
 

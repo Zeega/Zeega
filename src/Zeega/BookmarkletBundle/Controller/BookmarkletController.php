@@ -57,7 +57,6 @@ class BookmarkletController extends Controller
 		
 		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
-		
 		if(isset($parserResponse))
 		{
 			// quick fix - try / catch will be removed
@@ -70,31 +69,61 @@ class BookmarkletController extends Controller
             
 				if($isUrlValid && count($items) > 0)
 				{
-			    
 				    $parsedItem = $items[0];
 					// check if the item exists on the database	
 	        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
-                
+                	
 	        		if(isset($item))
 	        		{
+	        		    // item was imported before
+						if($isUrlCollection){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batchUpdate.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));						
+						}
+						else
+						{	
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:singleUpdate.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+							));
+						}
 	        		 	// item was imported before
-	        			return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
-	        				'displayname' => $user->getDisplayname(),
-	        				'media_type' => $item->getMediaType(),
-	        				'widget_id'=>$widgetId,
-	        				'item' => ResponseHelper::serializeEntityToJson($item),
-	        				'mycollection'=>$mycollection,
-	        			));
+	        			//return $this->render('ZeegaCoreBundle:Widget:duplicate.widget.html.twig', array(
+	        			//	'displayname' => $user->getDisplayname(),
+	        			//	'media_type' => $item->getMediaType(),
+	        			//	'widget_id'=>$widgetId,
+	        			//	'item' => ResponseHelper::serializeEntityToJson($item),
+	        			//	'mycollection'=>$mycollection,
+	        			//));
 	        		}
 					else if($isUrlCollection)
 					{
-						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'mycollection'=>$mycollection,
-							'child_items_count'=>$parsedItem["child_items_count"],
-						));						
+						if($parsedItem["child_items_count"]==0&&$parsedItem["layer_type"]=="Dropbox"){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));	
+						
+						}
+						else{
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));						
+						}
 					}
 					else
 					{
@@ -119,7 +148,6 @@ class BookmarkletController extends Controller
 				));
 			}
 		}
-		
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,

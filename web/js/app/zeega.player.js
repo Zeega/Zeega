@@ -67,11 +67,22 @@ var Player2 = Backbone.View.extend({
 		
 	},
 	
+
 	closePlayer : function()
 	{
 		console.log('##		close player');
 		
 		var _this = this;
+		
+		if (document.exitFullscreen) {
+		document.exitFullscreen();
+		}
+		else if (document.mozCancelFullScreen) {
+		document.mozCancelFullScreen();
+		}
+		else if (document.webkitCancelFullScreen) {
+		document.webkitCancelFullScreen();
+		}
 		
 		//unhide editor
 		$('#wrapper').show();
@@ -402,7 +413,7 @@ var Player2 = Backbone.View.extend({
 		})
 	},
 	
-	
+
 	/*****************************
 	
 	VIEW FUNCTIONS
@@ -858,15 +869,12 @@ var Player2 = Backbone.View.extend({
 		console.log('temp', that)
 		html =
 		
-		"<div id='zeega-player'>"+
-		
-			"<div class='player-header'>"+
-				
-				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
-				
-			if(this.zeega) html +=
-				"<a class='close pull-right' href='#' >&times;</a>";
 
+		"<div id='zeega-player'>"+
+			"<div class='player-header'>"+
+				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
+			if(this.zeega||true) html +=
+				"<a id='preview-close' class='close pull-right' href='#' >&times;</a>";
 
 		html +=
 				//"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+

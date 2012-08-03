@@ -19,10 +19,7 @@
 		render: function()
 		{
 			var blanks = {
-				src : this.model.get('thumbnail_url'),
-				title : this.model.get('title'),
-				link : this.model.get('uri'),
-				id 	: this.model.get('id'),
+				
 			};
 
 			//use template to clone the database items into

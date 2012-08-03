@@ -7,6 +7,9 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: zeega_user_registration}
-#    zeega_user.example:
-#        class: %zeega_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    zeega_user.form.handler.registration:
+        class: Zeega\UserBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer"]
+        scope: request
+        public: false
+        

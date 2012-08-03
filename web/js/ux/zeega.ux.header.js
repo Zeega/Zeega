@@ -10,8 +10,37 @@
 //	stuff that has to happen after the js fully loads
 function initHeaderUX(){
 		
-		
-			/************  BUG REPORT **********************/
+	/************  
+	UNSUPPORTED BROWSER - todo - move to somewhere else so displays for non-logged in
+	header too 
+	
+	IF COMMUNITY PAGES - let in most everyone, test to see who NOT to let in, right now just IE
+
+	IF EDITOR - let in Chrome & Safari only, no mobile
+	*************/
+	if (window.location.href.indexOf('community') >= 0){
+		if(BrowserDetect.browser == 'explorer' && BrowserDetect.version < 9) {
+
+			$('#unsupported-browser-data').html('<div class="browser-logo-'+BrowserDetect.browser.toLowerCase() +'"></div><br/>Version ' + BrowserDetect.version + ' of the browser '
+												+ BrowserDetect.browser + ' on ' + BrowserDetect.OS);
+			$('#unsupported-browser').modal();
+		}
+	} else {
+
+		//Send mobile devices to custom page
+		if (BrowserDetect.isMobile){
+			//TODO
+		}
+		else if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') {
+
+			$('#unsupported-browser-data').html('<div class="browser-logo-'+BrowserDetect.browser.toLowerCase() +'"></div><br/>Version ' + BrowserDetect.version + ' of the browser '
+												+ BrowserDetect.browser + ' on ' + BrowserDetect.OS);
+			$('#unsupported-browser').modal();
+		}
+
+	}
+	
+	/************  BUG REPORT **********************/
 	
 	
 	$('.bug-report').click(function(e){e.stopPropagation();});
