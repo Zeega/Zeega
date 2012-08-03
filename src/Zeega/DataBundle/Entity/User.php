@@ -306,4 +306,29 @@ use FOS\UserBundle\Entity\User as BaseUser;
     {
         return $this->sites;
     }
+    /**
+     * @var text $idea
+     */
+    private $idea;
+
+
+    /**
+     * Set idea
+     *
+     * @param text $idea
+     */
+    public function setIdea($idea)
+    {
+        $this->idea = $idea;
+    }
+
+    /**
+     * Get idea
+     *
+     * @return text 
+     */
+    public function getIdea()
+    {
+        return $this->idea;
+    }
 }

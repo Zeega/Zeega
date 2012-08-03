@@ -1,5 +1,5 @@
 
-{% block head %}
+{% block stylesheets %}
 	<script type="text/javascript">
 		window.localStorage.clear();
 	</script>
@@ -36,41 +36,11 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
 	
-{% endblock head %}
+{% endblock stylesheets %}
 
 {% block body %}
 
 
-<!-- Background Color Div - creates the transparent layer over the background image -->
-	<div id="background-color">
-	</div>
-	<!-- Background Color Div ends -->
-	
-	<!-- Header & Nav Begins -->
-	<div class="container header new-section">
-	
-		<div class="row">
-		
-			<div class="span6">
-				<img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43">
-				<div class="strapline">
-				Remake The Internet
-				</div>
-			</div>
-			
-			<div class="span8">
-				<div class="navigation">	
-					<div>
-						<p><a href="">About</a><a href="">SignUp</a><a href="">Login</a></p>
-					</div>
-				</div>
-			</div>
-	
-		</div>
-	
-	</div>
-	<!-- Header & Nav Ends -->
-	<!-- Page Intro Begins -->
 	
 	<div class="container new-section">
 	
@@ -96,156 +66,85 @@
 		
 			<div class="span7">
 			
-				<form class="form-vertical" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-				  <fieldset>
-				  
-				    <div class="control-group">			
-			
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="fos_user_registration_form_display_name"><h4>Name</h4></label>
+				{% for key, message in app.session.getFlashes() %}
+				<div class="{{ key }}">
+				    {{ message|trans({}, 'FOSUserBundle') }}
+				</div>
+				{% endfor %}
 
-							</div>
-				    
-							<div class="span4">
-							
-								<div class="required"></div>
-								
-								<div class="controls">
-									<input type="text" id="fos_user_registration_form_display_name" name="fos_user_registration_form[display_name]" class="input-xlarge-custom" id="firstname" required="required" maxlength="255">
-									
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->		
-						
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="fos_user_registration_form[username]"><h4>Email</h4></label>
-
-							</div>
-				    
-							<div class="span4">
-							
-								<div class="required"></div>
-								
-								<div class="controls">
-									<input type="text" class="input-xlarge-custom"  id="fos_user_registration_form_username" name="fos_user_registration_form[username]" required="required" maxlength="255" pattern=".{2,255}">
-
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->
-						
-
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="confirm-email"><h4>Confirm Email</h4></label>
-
-							</div>
-				    
-							<div class="span4">
-							
-								<div class="required"></div>
-								
-								<div class="controls">
-									<input type="text" class="input-xlarge-custom"  id="fos_user_registration_form_username_confirm" name="fos_user_registration_form[username_confirm]" required="required" maxlength="255" pattern=".{2,255}">
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->
-						
-					
-				    	<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
-						    	
-						    	<p class="sidebar">
-						    	Already have something in mind? Tell us a little more, we'd love to hear about it.
-						    	</p>
-
-							</div>
-				    
-							<div class="span4">
-								
-								<div class="controls">
-									<textarea type="text" class="input-xlarge-custom longform" id="youridea" rows="5"></textarea>
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->
-						<!-- Row Begins -->
-				    	
-				    	<div class="row">
-				
-					    	<div class="span3">
-				
-						    	<label class="control-label" for="youridea"></label>
-						    	
-						    	
-
-							</div>
-				    
-							<div class="span4">
-								
-								<div class="controls">
-									<input type="checkbox" class="pull-left" style="margin-right:8px"> <p class="sidebar">I've read and agree to Zeega's terms of use.</p>
-								</div>				    
-							
-							</div>
-							
-						</div>
-						
-						<!-- Row Ends -->
-						
-
-						
-						<!-- Row Begins -->
-						
+				<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+					<fieldset>
+						<div class="control-group">			
+					    {{ form_errors(form) }}
 						<div class="row">
-						
-							<div class="span4 offset3">
-							
-								<button type="submit" class="btn btn-success btn-custom"><h4>{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</h4></button>
-							
+					    	<div class="span3">
+								<label class="control-label" for="youridea"><h4>Name</h4></label>
 							</div>
-							
-						</div>	
-						
-						
+							<div class="span4">
+								<div class="required"></div>
+								<div class="controls">
+						    		{{ form_errors(form.display_name) }}
+						    		{{ form_widget(form.display_name, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Email</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+						    		{{ form_errors(form.email) }}
+						    		{{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
+								<p class="sidebar">
+									Already have something in mind? Tell us a little more, we'd love to hear about it.
+								</p>
+							</div>
+							<div class="span4">
+								<div class="controls">						
+						    		{{ form_errors(form.idea) }}
+						    		{{ form_widget(form.idea, { 'attr': {'class': 'input-xlarge-custom', 'rows': 5} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span3">
+								<label class="control-label" for="youridea"></label>
+							</div>
+							<div class="span4">
+								<div class="controls">
+									{{ form_errors(form.locked) }}
+									{{ form_widget(form.locked, { 'attr': {'class': 'pull-left', 'style' : 'margin-right:8px'} }) }}
+									<p class="sidebar">{{ form.locked.vars.label }}</p>
+								</div>				   
+							</div>
+						</div>
+					    {{ form_rest(form) }}
 
-												
-				    </div>
-				    
-				  </fieldset>
+					    <div class="row">
+							<div class="span4 offset3">
+								<button type="submit" class="btn btn-success btn-custom"><h4>Register</h4></button>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+							</div>
+							<div class="span4">
+								<div class="controls">
+						    		{{ form_errors(form.plainPassword) }}
+						    		{{ form_widget(form.plainPassword) }}
+								</div>
+							</div>
+						</div>
+					 </div>
+				</fieldset>
 				</form>
 			
 			</div>
@@ -266,64 +165,5 @@
 	
 	<!-- Page Content Ends -->
 	
-	
-	
-	
-	
-	
-	
-
-	
-	<!-- Footer Begins -->
-	
-	<div class="footer">
-	
-		<div class="container">
-		
-			<div class="row">
-			
-			<div class="span5">
-				<img src="{{asset('images/zeega-logo.png')}}" alt="zeega-logo" width="134" height="43">
-				<div class="strapline">
-				Remake The Internet
-				</div>
-				<p><small>Zeega is a non-profit dedicated to inventing new forms of interactive storytelling. We are passionate about beautiful, surprising, immersive digital experiences that foster curiosity and enrich understanding of the world around us.</small></p>
-				<p><small>
-					Send us a message: <a href="mailto:info@zeega.org">info@zeega.org</a><br>
-					Maybe tweet us: <a href="http://www.twitter.com/zeega">@zeega</a><br>
-					Or send a package: 364a Broadway, Cambridge MA 02139
-				</small></p>
-			</div>
-			
-			<div class="footer-navigation span3 offset6">
-				<div>
-					<p><a href="http://www.zeega.org">Home</a></p>
-					<p><a href="">About</a></p>
-					<p><a href="">Signup</a></p>
-					<p><a href="">Login</a></p>
-				</div>
-			</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Footer Ends -->
-<!--
-{% for key, message in app.session.getFlashes() %}
-<div class="{{ key }}">
-    {{ message|trans({}, 'FOSUserBundle') }}
-</div>
-{% endfor %}
-
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
-    </div>
-</form>
--->
 {% endblock %}	
 

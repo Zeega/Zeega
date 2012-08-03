@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+    <class name="FOS\UserBundle\Model\User">
+
+        <constraint name="FOS\UserBundle\Validator\Unique">
+            <option name="property">usernameCanonical</option>
+            <option name="message">fos_user.username.already_used</option>
+            <option name="groups">
+                <value>ZeegaRegistration</value>
+            </option>
+        </constraint>
+
+        <constraint name="FOS\UserBundle\Validator\Unique">
+            <option name="property">emailCanonical</option>
+            <option name="message">fos_user.email.already_used</option>
+            <option name="groups">
+                <value>ZeegaRegistration</value>
+                <value>Profile</value>
+            </option>
+        </constraint>
+		
+        <property name="email">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.email.blank</option>
+                <option name="groups">
+					<value>ZeegaRegistration</value>
+                </option>
+            </constraint>
+            <constraint name="MinLength">
+                <option name="limit">2</option>
+                <option name="message">fos_user.email.short</option>
+                <option name="groups">
+					<value>ZeegaRegistration</value>
+				</option>
+            </constraint>
+            <constraint name="MaxLength">
+                <option name="limit">254</option>
+                <option name="message">fos_user.email.long</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                </option>
+            </constraint>
+            <constraint name="Email">
+                <option name="message">fos_user.email.invalid</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                </option>
+            </constraint>
+        </property>
+    </class>
+
+    <class name="FOS\UserBundle\Model\Group">
+        <property name="name">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.group.blank</option>
+                <option name="groups">ZeegaRegistration</option>
+            </constraint>
+            <constraint name="MinLength">
+                <option name="limit">2</option>
+                <option name="message">fos_user.group.short</option>
+                <option name="groups">ZeegaRegistration</option>
+            </constraint>
+            <constraint name="MaxLength">
+                <option name="limit">255</option>
+                <option name="message">fos_user.group.long</option>
+                <option name="groups">ZeegaRegistration</option>
+            </constraint>
+        </property>
+    </class>
+
+</constraint-mapping>

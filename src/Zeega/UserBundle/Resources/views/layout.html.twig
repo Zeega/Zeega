@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8" />
-		{% block head %}{% endblock head %}
-		
-    </head>
-    <body>
-	    <div>
-	        {% block fos_user_content %}
-            {% endblock fos_user_content %}
-        </div>
-    </body>
-</html>
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block body %}
+        {% block fos_user_content %}
+		{% endblock fos_user_content %}
+{% endblock body %}
