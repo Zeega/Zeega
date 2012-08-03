@@ -20,8 +20,14 @@
 			this.$el.attr('data-id',this.model.id);
 			//this.drawDefaultControls();
 			
-			
 			this.init();
+		},
+		
+		render : function()
+		{
+			this.$el
+			
+			return this;
 		},
 		
 		drawDefaultControls : function()
