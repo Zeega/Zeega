@@ -29,7 +29,7 @@ var Player2 = Backbone.View.extend({
 		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
 		if(!_.isUndefined(apiplayer)) this.apiplayer = apiplayer;
 		var _this=this;
-		this.fsCheck=setInterval(function(){if(_this.container.width()==0) _this.closePlayer();},500);
+		if( !this.zeega ) this.fsCheck=setInterval(function(){if(_this.container.width()==0) _this.closePlayer();},500);
 	},
 	
 	loadProject : function( data, options )
@@ -37,7 +37,6 @@ var Player2 = Backbone.View.extend({
 		//draw player to page
 		this.container.prepend( this.render().el );
 		//hide the editor underneath to prevent scrolling
-		$('#wrapper').hide();
 		$(this.el).fadeIn();
 
 		this.initListeners();
@@ -66,6 +65,29 @@ var Player2 = Backbone.View.extend({
 			this.goToFrame( this.currentFrame )
 		}
 		
+	},
+	
+	closePlayer : function()
+	{
+		console.log('##		close player');
+		
+		var _this = this;
+		
+		//unhide editor
+		$('#wrapper').show();
+
+		this.unsetListeners();
+		
+		_.each( _.toArray( this.currentSequence.layers ), function(layer){
+			if( layer.rendered ) layer.trigger('player_unrender')
+		});
+		
+		
+		// remove the player div
+		this.$el.fadeOut( 450, function(){ $(this).remove() });
+
+		if(this.zeega) zeega.app.restoreFromPreview();
+		return false;
 	},
 	
 	loadProjectById : function(projectId, options)
@@ -389,26 +411,6 @@ var Player2 = Backbone.View.extend({
 		})
 	},
 	
-	closePlayer : function()
-	{
-		var _this = this;
-		
-		//unhide editor
-		$('#wrapper').show();
-
-		this.unsetListeners();
-		_.each( _.toArray( this.currentSequence.layers ), function(layer){
-			if( layer.rendered ) layer.trigger('player_unrender')
-		});
-		
-		if(this.zeega) zeega.app.restoreFromPreview();//zeega.app.previewMode = false;
-		
-		// remove the player div
-		this.$el.fadeOut( 450, function(){ $(this).remove() });
-	},
-	
-	
-	
 	
 	/*****************************
 	
@@ -571,23 +573,8 @@ var Player2 = Backbone.View.extend({
 		'click #preview-left' : 'goLeft',
 		'click #preview-right' : 'goRight',
 		'click #preview-close' : 'closePlayer',
-		//'mouseover #citation' : 'expandCitationBar',
-		//'mouseout #citation'	: "closeCitationBar", 
 	},
-	
-	/*
-	expandCitationBar : function()
-	{
-		this.$el.find('#citation').animate({ height : '100px' })
-	},
-	
-	closeCitationBar : function()
-	{
-		_.delay(function(){ $('#citation').animate({ height : '20px' }) }, 2000);
-		//closeOpenCitationTabs();
-		
-	},
-	*/
+
 	
 	/*****************************
 	

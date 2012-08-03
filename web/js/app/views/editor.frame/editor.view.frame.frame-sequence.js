@@ -10,8 +10,18 @@
 			this.model.on('refresh_view', this.refreshView, this);
 		},
 		
-		focus : function(){ $(this.el).addClass('active-frame'), this.model.inFocus = true },
-		blur : function(){ $(this.el).removeClass('active-frame'), this.model.inFocus = false },
+		focus : function()
+		{
+			console.log('~~		focus:', this.model.id)
+			$(this.el).addClass('active-frame');
+			this.model.inFocus = true;
+		},
+		blur : function()
+		{
+			console.log('~~		blur:', this.model.id)
+			$(this.el).removeClass('active-frame');
+			this.model.inFocus = false
+		},
 	
 		render: function()
 		{

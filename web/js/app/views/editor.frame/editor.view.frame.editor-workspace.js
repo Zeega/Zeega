@@ -29,13 +29,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return this;
 		},
 
-		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		renderToTarget : function(){ $('#'+this.id).html( this.render().el ) },
 		
 		renderToEditor : function()
 		{
 			this.workspace = new Frame.Views.VisualWorkspace({model:this.model});
 			this.renderToTarget();
-			this.$el.find('#visual-editor-workspace').replaceWith( this.workspace.render().el );
+			this.$el.find('#visual-editor-workspace').html( this.workspace.render().el );
+			console.log('render to workspace',this.workspace.el);
 			this.initEvents();
 		},
 		removeFromEditor : function()
@@ -161,12 +162,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		initialize : function()
 		{
-			this.layers = _.map( this.model.get('layers'), function(layerID){ return zeega.app.project.layers.get(layerID) });
 		},
 		
 		render : function()
 		{
 			var _this = this;
+			this.layers = _.map( this.model.get('layers'), function(layerID){ return zeega.app.project.layers.get(layerID) });
 			//render each layer into the workspace
 			_.each( this.layers, function(layer){
 				_this.$el.append( layer.visual.render().el );

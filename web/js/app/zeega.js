@@ -177,6 +177,7 @@ this.zeega = {
 		//make sure we're not trying to load the same frame again!
 		if( !this.currentFrame || this.currentFrame.id != frame.id )
 		{
+			console.log('laod frame')
 			var _this = this;
 		
 			if(this.currentFrame)
@@ -191,6 +192,14 @@ this.zeega = {
 			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 		}
 
+	},
+	
+	returnToFrame : function()
+	{
+		console.log('return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
+		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
+		this.currentFrame.renderWorkspace();
+		this.currentFrame.trigger('focus'); // should be unneeded
 	},
 	
 	renderSequenceFrames : function()
@@ -687,7 +696,11 @@ this.zeega = {
 		var _this = this;
 		this.previewMode = true;
 		this.exportProject();
-		this.unrenderFrame( this.currentFrame );
+		
+		$('#wrapper').hide();
+		
+		this.currentFrame.removeWorkspace();
+		
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
 		$('body').css({'background':'#000'});
@@ -695,9 +708,11 @@ this.zeega = {
 	
 	restoreFromPreview : function()
 	{
+		$('#wrapper').show();
+		
 		this.previewMode = false;
 		$('body').css({'background':'#333'});
-		this.renderFrame( this.currentFrame );
+		this.returnToFrame();
 	},
 
 	exportProject : function( string )
@@ -753,119 +768,6 @@ this.zeega = {
 		this.project.save();
 	},
 
-	initStartHelp : function()
-	{
-		
-		
-		if(localStorage.help != 'false' && this.helpCounter == 0)
-		{
-			//init the popovers
-			$('#visual-editor-workspace').popover({
-				trigger: 'manual',
-				//html:true,
-				//placement:'above',
-				//offset:'-250',
-				//content : 'tester'
-				//template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			
-			/*
-			$('#database-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'right',
-				//offset:'-250',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#new-layer-tray').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#layer-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#frame-drawer').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#preview').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-*/
-			this.displayStartHelp();
-		}
-		
-	},
-
-	displayStartHelp : function()
-	{
-		var _this = this;
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			/*
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-			*/
-		];
-		
-		console.log('	HELPPPPPPP')
-		console.log(helpOrderArray[0]);
-		console.log(this.helpCounter)
-		console.log( $('#'+helpOrderArray[_this.helpCounter]) )
-
-		if(_this.helpCounter > 0 )
-		{
-			$('#'+helpOrderArray[_this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-		}
-		if(_this.helpCounter >= helpOrderArray.length )
-		{
-			console.log('end of line')
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-			this.turnOffHelp();
-			return false;
-		}
-
-		$('#'+helpOrderArray[_this.helpCounter]).popover('show');
-		$('#'+helpOrderArray[_this.helpCounter]).css('box-shadow', '0 0 18px orange');
-
-		this.helpCounter++;
-
-	},
-
-	turnOffHelp : function()
-	{
-		console.log('turn off help windows')
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-		];
-		localStorage.help = false;
-
-console.log( helpOrderArray[this.helpCounter-1] )
-
-			$('#'+helpOrderArray[this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[this.helpCounter-1]).css('box-shadow', '');
-			this.helpCounter = 0;
-
-	},
 	
 	shareProject : function()
 	{
