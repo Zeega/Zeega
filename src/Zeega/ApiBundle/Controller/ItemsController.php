@@ -156,8 +156,7 @@ class ItemsController extends Controller
 		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
 		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-    
-    
+        
     // get_collection_items GET /api/collections/{id}/items.{_format}
     public function getItemItemsAction($id)
     {
@@ -247,7 +246,25 @@ class ItemsController extends Controller
         $em->persist($item);
         $em->flush();
         
+        // create a thumbnail
+        $itemMediaType = $item->getMediaType();
+        if($itemMediaType != 'Collection')
+        {
+            $itemId = $item->getId();
+        
+            $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$item->getMediaType();
+            $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
+
+            if(isset($zeegaThumbnail))
+            {
+                $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                $em->persist($item);
+                $em->flush();
+            }
+        }
+        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
     
@@ -454,7 +471,6 @@ class ItemsController extends Controller
         $location = $request_data->get('location');
         $license = $request_data->get('license');
         $attributes = $request_data->get('attributes');
-        $newItems = $request_data->get('new_items');
         $tags = $request_data->get('tags');
 		$published = $request_data->get('published');
         
@@ -476,22 +492,28 @@ class ItemsController extends Controller
 	    		}
 			}
 		}
-		
-        $item = new Item();
 
+        $checkForDuplicateItems = true;
+        
         if(isset($id))
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
         }
-        else
+        else if(isset($attributionUri))
         {
+            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $attributionUri, "enabled" => 1, "user_id" => $user->getId()));
+        }
+        
+        if(!isset($item))
+        {
+            $item = new Item();
             $item->setDateCreated(new \DateTime("now"));
             $item->setChildItemsCount(0);
             $item->setUser($user);
+            $checkForDuplicateItems = false;
         }
         
         $dateUpdated = new \DateTime("now");
-        $dateUpdated->add(new \DateInterval('PT2M'));
         $item->setDateUpdated($dateUpdated);
         
         if(isset($site)) $item->setSite($site); 
@@ -506,7 +528,6 @@ class ItemsController extends Controller
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
         
-/*
         if(isset($mediaDateCreated)) 
         {
             $parsedDate = strtotime($mediaDateCreated);
@@ -516,7 +537,7 @@ class ItemsController extends Controller
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
-*/        
+
         if(isset($mediaCreatorUsername))
         {
             $item->setMediaCreatorUsername($mediaCreatorUsername);
@@ -544,12 +565,17 @@ class ItemsController extends Controller
         $item->setEnabled(true);
         $item->setIndexed(false);
         
-        $dateUpdated = new \DateTime("now");
-		$dateUpdated->add(new \DateInterval('PT2M'));    
+        // new items from the variable "new_items" - used when adding new items to a collection
+        $newItems = $request_data->get('new_items');
+        $childItems = $request_data->get('child_items');
+        
+        if(!isset($newItems) && isset($childItems))
+        {
+            $newItems = $childItems;
+        }
         
         if (isset($newItems))
         {
-            $item->setChildItemsCount(count($newItems));
             $first = True;
             foreach($newItems as $newItem)
             {
@@ -574,6 +600,16 @@ class ItemsController extends Controller
                 }
                 else
                 {
+                    if($checkForDuplicateItems)
+                    {
+                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $newItem['attribution_uri'], "enabled" => 1, "user_id" => $user->getId()));
+                        if(isset($existingItem) && count($existingItem) > 0)
+                        {
+                            // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
+                            continue;
+                        }
+                    }
+                    
                     $childItem = new Item();
                     
             		$childItem->setSite($site);		
@@ -605,10 +641,30 @@ class ItemsController extends Controller
                             $childItem->setMediaDateCreated(new \DateTime($d));
                         }
                     }
-                    
                     $item->addItem($childItem);
+                    
+                    // persist the child item, get the id and generate a thumbnail
+                    $em->persist($childItem);
+                    $em->flush();
+                    $itemId = $childItem->getId();
+                    $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
+                    $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
+                    
+                    if(isset($zeegaThumbnail))
+                    {
+                        $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                        $em->persist($childItem);
+                        $em->flush();
+                        
+                        if($first == True)
+                        {
+                            $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                            $first = False;
+                        }
+                    }
                 }
             }
+            $item->setChildItemsCount(count($newItems));
         }
         
         return $item;

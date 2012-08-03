@@ -17,6 +17,7 @@ var loadFiles = [
 	'order!lib/backbone',
 	'order!lib/jquery/ui/js/jquery-ui.min',
 	'order!lib/bootstrap',
+	'order!lib/dropbox',
 	
 	//custom
 	'order!ux/zeega.ux.header',
@@ -28,6 +29,10 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquery-cycle',
 	'order!lib/jquery/plugins/jquery.paging',
 	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+
+	// views
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	];
 

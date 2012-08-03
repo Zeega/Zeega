@@ -20,3 +20,5 @@ jda_data.*
 app/phpunit.xml
 /web/.htaccess
 /web/js_min/*
+*.sublime-project
+*.sublime-workspace

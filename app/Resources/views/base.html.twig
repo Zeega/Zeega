@@ -294,7 +294,6 @@ var BrowserDetect = {
 										<li class='bug-unsubmitted' >
 											<label>Your email (optional):</label>
 											<input class='bug-email' type='text'></input>
-										</li>
 										<li class='bug-unsubmitted'>
 											<button class='btn btn-success submit-bug'>submit</button>
 										</li>
@@ -312,12 +311,15 @@ var BrowserDetect = {
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
 									<ul class="dropdown-menu">
+
 										<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}">User Profile</a></li>
+
+										<li><a href="javascript:dropbox.sync()">Sync With Dropbox</a></li>
+
 										<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
 									</ul>
 								</li>
 							</ul>
-
 						</div>
 					</div>
 				</div>

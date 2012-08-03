@@ -25,11 +25,15 @@ var loadFiles = [
 	'order!lib/backbone',
 	'order!lib/jquery/ui/js/jquery-ui.min',
 	'order!lib/bootstrap',
+	'order!lib/dropbox',
 	
 	//custom
 	'order!ux/zeega.ux.header',
 	'order!ux/zeega.ux.site',
 
+	//mvc
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	
 	//plugins
 	//'order!lib/jquery/plugins/jeditable.min',
