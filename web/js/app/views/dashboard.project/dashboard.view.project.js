@@ -1,4 +1,4 @@
-(function(Dashboard) {
+	(function(Dashboard) {
 
 	Dashboard.Projects = Dashboard.Projects || {};
 	Dashboard.Projects.Views = Dashboard.Projects || {};
@@ -7,12 +7,15 @@
 		
 		className : 'project-card span7',
 		
+		loaded:false,
 		
 		events: {
 			
 			/*'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',*/
+			
+			'click .zeega-link':'requestFS'
 		},
 		
 		initialize: function () {
@@ -35,6 +38,31 @@
 
 			return this;
 		},
+		
+    	requestFS:function(){
+    			console.log('hellow');
+    			if(!this.loaded){
+    				this.loaded=true;
+    				var docElm= document.createElement('iframe');
+    				docElm.setAttribute('id','zeega-player');
+    				document.getElementById('zeega-embed').appendChild(docElm);
+    			}
+    			else{
+    				docElm=document.getElementById('zeega-player');
+    			}
+    			
+    			docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'project/'+this.model.id+'/view');
+					
+				if (docElm.requestFullscreen) docElm.requestFullscreen();
+				else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
+				else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
+				else{
+					document.getElementById('zeega-link').setAttribute('href',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'project/'+this.model.id+'/view');
+					document.getElementById('zeega-link').setAttribute('target','blank');
+					document.getElementById('zeega-link').setAttribute('onclick','');
+				
+				}
+    		},
 	
 		
 		getTemplate : function()
@@ -44,7 +72,7 @@
 						'<div class="row">'+
 						
 							
-							'<div class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">';
+							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">';
 								if (zeegaDashboard.app.editable){ html+=
 								'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'site/home/project/'+ this.model.id+'" style="top:0;left:400px"><i class="icon-pencil icon-white"></i> edit</a>';
 								}
@@ -53,7 +81,7 @@
 										'<h4><%= title %></h4>'+
 										'<h6><%= date_created %></h6>'+
 									'</div>'+
-									'<a href="'+sessionStorage.getItem('hostname')+'project/'+this.model.id+'/view">'+
+									'<a class="zeega-link" href="#">'+
 										'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 									'</a>'+
 								'</div>'+
