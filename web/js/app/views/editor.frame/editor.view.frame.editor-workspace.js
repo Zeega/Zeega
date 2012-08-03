@@ -66,16 +66,22 @@ the frame's layers. It also includes common frame functions like adding sequence
 		events : {
 			'click .advance-click' : 'selectAdvanceClick',
 			'click .advance-time' : 'selectAdvanceTime',
+			'click input' : 'selectAdvanceTime',
 			'keypress input' : 'onAdvanceKeypress'
+		},
+		
+		clickInput : function()
+		{
+			console.log('!!		input clicked')
 		},
 		
 		selectAdvanceClick : function()
 		{
 			this.$el.find('.advance-click').addClass('active');
 			this.$el.find('.advance-time').removeClass('active');
-			this.$el.find('input').addClass('disabled').attr('disabled','true').val('');
+			this.$el.find('input').addClass('disabled').val('');
 			
-			this.saveAdvance( 1 );
+			this.saveAdvance( 0 );
 			
 			return false;
 		},
@@ -84,7 +90,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			this.$el.find('.advance-click').removeClass('active');
 			this.$el.find('.advance-time').addClass('active');
-			this.$el.find('input').removeClass('disabled').removeAttr('disabled').focus();
+			this.$el.find('input').removeClass('disabled').focus();
 			return false;
 		},
 		
@@ -141,7 +147,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 							{
 								html +=
 								"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a>|<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-								"<input type='text' class='disabled' placeholder='sec' disabled='true'/>";
+								"<input type='text' class='disabled' placeholder='sec'/>";
 							}
 							html +=
 						"</div>"+
