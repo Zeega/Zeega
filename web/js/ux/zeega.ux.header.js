@@ -79,21 +79,7 @@ function initHeaderUX(){
 	
 	});
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
    	//dropdown menu
     $('.drop-down').click(function(){
 		if( $(this).hasClass('open') ) $(this).removeClass('open');
@@ -107,11 +93,12 @@ function initHeaderUX(){
 	
 	// FAKE STUFF
 
-	$('.add-media a').click(function(){
-		$('#add-media').toggleClass('show');
+	$('.add-media').click(function(){
+		$('#add-media').modal();
+		/*$('#add-media').toggleClass('show');
 		$('body').on('click',function(){
 			$('#add-media').removeClass('show');
-		});
+		});*/
 		return false;
 	});
 	
