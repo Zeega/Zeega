@@ -391,6 +391,15 @@ var Player2 = Backbone.View.extend({
 	
 	closePlayer : function()
 	{
+		if (document.exitFullscreen) {
+		document.exitFullscreen();
+		}
+		else if (document.mozCancelFullScreen) {
+		document.mozCancelFullScreen();
+		}
+		else if (document.webkitCancelFullScreen) {
+		document.webkitCancelFullScreen();
+		}
 		var _this = this;
 		
 		//unhide editor
@@ -870,7 +879,7 @@ var Player2 = Backbone.View.extend({
 		"<div id='zeega-player'>";
 			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
 		
-		if(this.zeega) html +=
+		if(this.zeega||true) html +=
 			"<div id='preview-close' class='player-overlay'><a class='close' href='#' style='opacity:.75'>&times;</a></div>";
 		
 		
