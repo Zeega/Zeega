@@ -25,7 +25,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		render : function()
 		{
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
-			this.initEvents();
 			this.delegateEvents();
 			return this;
 		},
@@ -37,6 +36,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var workspace = new Frame.Views.VisualWorkspace({model:this.model});
 			this.renderToTarget();
 			this.$el.find('#visual-editor-workspace').replaceWith( workspace.render().el );
+			this.initEvents();
 		},
 		removeFromEditor : function()
 		{
