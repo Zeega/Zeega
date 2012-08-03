@@ -105,13 +105,25 @@ class BookmarkletController extends Controller
 	        		}
 					else if($isUrlCollection)
 					{
-						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'mycollection'=>$mycollection,
-							'child_items_count'=>$parsedItem["child_items_count"],
-						));						
+						if($parsedItem["child_items_count"]==0&&$parsedItem["layer_type"]=="Dropbox"){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));	
+						
+						}
+						else{
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));						
+						}
 					}
 					else
 					{
