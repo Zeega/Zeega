@@ -48,6 +48,13 @@
 			this.editorWorkspace.removeFromEditor()
 			this.editorLayerList.removeFromEditor();
 		},
+		
+		renderLayerToWorkspace : function( newLayer )
+		{
+			console.log('##		render layer to workspace', newLayer);
+			this.editorLayerList.addLayer( newLayer );
+			this.editorWorkspace.addLayer( newLayer );
+		},
 	
 		render : function()
 		{

@@ -3,49 +3,46 @@
 	Layer.Views.Controls = Backbone.View.extend({
 		
 		tagName : 'li',
-		
 		className : 'editor-layer',
 		
 		initialize : function()
 		{
+			this.controls = $('<div>');
 			this.initListeners();
-			
 			this.attr = this.model.get('attr')
-			
 			_.extend( this.events, this.eventTriggers );
-			this.setBaseTemplate();
-			
-			this.controls = this.$el.find('#controls');
-			this.$el.attr( 'id', 'layer-'+ this.model.id );
-			this.$el.attr('data-id',this.model.id);
-			//this.drawDefaultControls();
-			
 			this.init();
 		},
 		
-		render : function()
+		render : function(){ /* this is overridden by individual controls*/ },
+		
+		renderControls : function()
 		{
-			this.$el
-			
+			this.$el.attr( 'id', 'layer-'+ this.model.id );
+			this.$el.attr('data-id',this.model.id);
+			this.setBaseTemplate();
+			this.controls = $('<div>');
+			this.$el.find('#controls').html(this.render().controls);
+			this.drawDefaultControls();
 			return this;
 		},
 		
 		drawDefaultControls : function()
 		{
-			$(this.el).find('.default-layer-controls').empty();
+			this.$el.find('.default-layer-controls').empty();
 
 			var persistentLayers = ( zeega.app.currentSequence.get('attr') ) ? zeega.app.currentSequence.get('attr').persistLayers : {};
 			var isActive = _.include(persistentLayers, parseInt(this.model.id) );
 			
 			var continueLayer = new Layer.Views.Lib.ContinueLayer({ model: this.model });
 			
-			$(this.el).find('.default-layer-controls')
+			this.$el.find('.default-layer-controls')
 				.append( continueLayer.getControl() );
 				//.append( continueToNext.getControl() );
 			if( this.model.get('attr').linkable )
 			{
 				var link = new Layer.Views.Lib.Link({ model: this.model });
-				$(this.el).find('.default-layer-controls').append( link.getControl() );
+				this.$el.find('.default-layer-controls').append( link.getControl() );
 			}
 		},
 		
@@ -287,7 +284,6 @@
 		
 		setBaseTemplate : function()
 		{
-			var title = this.model.get('attr').title;
 			var persist = '';
 			/*
 			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
@@ -304,13 +300,13 @@
 			var blanks = {
 				id : 'layer-edit-'+this.model.id,
 				type : this.model.get('type').toLowerCase(),
-				layerName : title,
+				title : this.model.get('attr').title,
 				persist : persist,
 				show_link : showLink,
 				link_to : linkURL
 			}
 
-			$(this.el).append( _.template( this.getBaseTemplate(), blanks ) )
+			this.$el.html( _.template( this.getBaseTemplate(), blanks ) )
 		},
 		
 		getBaseTemplate : function()
@@ -322,7 +318,7 @@
 								'<i class="zicon-<%= type %> orange"></i>'+
 								//'<span class="asset-type-icon orange zicon"></span>'+
 							'</div>'+
-							'<div class="layer-title"><%= layerName %></div>'+
+							'<div class="layer-title"><%= title %></div>'+
 							'<div class="layer-uber-controls">'+
 								'<i class="zicon-trash-closed delete-layer"></i>'+
 							'</div>'+
@@ -331,6 +327,7 @@
 							'</div>'+
 						'</div>'+
 						'<div class="layer-content inset-tray dark tray closed">'+
+						
 							'<div id="controls" class="clearfix"></div>'+
 
 							'<div class="default-layer-controls clearfix"></div>'+ //standard layer controls

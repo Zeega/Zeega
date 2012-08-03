@@ -78,6 +78,8 @@
 		
 		onControlsClosed : function(){},
 		
+		
+		/*
 		renderLayerInEditor : function( i )
 		{
 			this.visual.render().$el.css('zIndex',i+1);
@@ -97,6 +99,8 @@
 			if( this.hasChanged() ) this.save();
 			this.trigger('editor_layerExit')
 		},
+		
+		*/
 		
 		refreshView : function()
 		{

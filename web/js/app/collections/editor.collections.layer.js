@@ -43,7 +43,12 @@
 				});
 			
 				this.add( newLayer );
-				if( args.show() ) newLayer.trigger('editor_layerRender');
+				if( args.show() )
+				{
+					console.log('##		render to workspace', args, newLayer)
+					args.frame.renderLayerToWorkspace( newLayer );
+					//newLayer.trigger('editor_layerRender');
+				}
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;
 			}

@@ -44,10 +44,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 			// call cleanup actions on frame layers if they exist
 		},
 		
+		addLayer : function( layer )
+		{
+			this.$el.find('#visual-editor-workspace').append( layer.visual.render().el );
+			layer.visual.makeDraggable(); 
+		},
+		
 		initEvents : function()
 		{
 			//enable the workspace as a valid drop location for DB items
-			$(this.el).find('#visual-editor-workspace').droppable({
+			this.$el.find('#visual-editor-workspace').droppable({
 				accept : '.database-asset-list',
 				hoverClass : 'workspace-item-hover',
 				tolerance : 'pointer',
@@ -198,14 +204,19 @@ the frame's layers. It also includes common frame functions like adding sequence
 			
 			//render each layer into the workspace
 			_.each( this.layers, function(layer){
-				layer.controls.$el.find('#controls').empty(); // this should take care of itself. not here!
-				_this.$el.append( layer.controls.render().el );
+				_this.$el.prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			})
 			return this;
 		},
 		
 		renderToEditor : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		
+		addLayer : function( layer )
+		{
+			this.$el.prepend( layer.controls.renderControls().el );
+		},
+		
 		removeFromEditor : function()
 		{
 			//this.undelegateEvents()
