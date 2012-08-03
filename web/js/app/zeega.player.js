@@ -289,20 +289,11 @@ var Player2 = Backbone.View.extend({
 		
 		if(this.t) clearTimeout( this.t )
 		
-		if(adv == -1) //manual control
-		{
-			//do nothing
-		}
-		else if(adv == 0) //after playback - default
-		{
-			_.each( _.toArray( this.currentLayers), function(layer){
-				layer.on('playback_ended',function(){ _this.goRight() })
-			})
-		}
-		else if(adv > 0) //after n seconds
+		if(adv > 0) //after n seconds
 		{
 			adv = adv < 1 ? 1 : adv;
 			this.t = setTimeout( function(){ _this.goRight() },adv )
+			
 		}
 	},
 	
@@ -442,7 +433,7 @@ var Player2 = Backbone.View.extend({
 		}
 		
 		//constrain proportions in player
-		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
+		$(this.el).attr('id','preview-wrapper').append( this.getTemplate( this ) );
 		$(this.el).find('#preview-media').css( cssObj );
 		
 		return this;
@@ -456,21 +447,33 @@ var Player2 = Backbone.View.extend({
 	
 	updateArrows : function()
 	{
-		var leftFrame = this.getLeft();
-		var rightFrame = this.getRight();
 		
-		if( this.currentSequence.get('frames').length < 2 )
+		//prevent arrows from being shown on timed layers
+		if( this.currentFrame.get('attr').advance <= 0 )
 		{
+			console.log('~~		update arrows show hide')
+			var leftFrame = this.getLeft();
+			var rightFrame = this.getRight();
+		
+			if( this.currentSequence.get('frames').length < 2 )
+			{
+				this.$el.find('#preview-left').hide();
+				this.$el.find('#preview-right').hide();
+			}
+			else if( !this.overlaysHidden )
+			{
+				if( !leftFrame ) this.$el.find('#preview-left').fadeOut();
+				else if( this.$el.find('#preview-left').is(':hidden') ) this.$el.find('#preview-left').fadeIn();
+
+		 		if( !rightFrame ) this.$el.find('#preview-right').fadeOut();
+				else if( this.$el.find('#preview-right').is(':hidden') ) this.$el.find('#preview-right').fadeIn();
+			}
+		}
+		else
+		{
+			console.log('~~		update arrows hide')
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
-		}
-		else if( !this.overlaysHidden )
-		{
-			if( !leftFrame ) this.$el.find('#preview-left').fadeOut();
-			else if( this.$el.find('#preview-left').is(':hidden') ) this.$el.find('#preview-left').fadeIn();
-
-	 		if( !rightFrame ) this.$el.find('#preview-right').fadeOut();
-			else if( this.$el.find('#preview-right').is(':hidden') ) this.$el.find('#preview-right').fadeIn();
 		}
 		
 	},
@@ -850,18 +853,25 @@ var Player2 = Backbone.View.extend({
 	
 	*****************************/
 	
-	getTemplate : function()
+	getTemplate : function( that )
 	{
+		console.log('temp', that)
 		html =
 		
-		"<div id='zeega-player'>";
-			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
+		"<div id='zeega-player'>"+
 		
-		if(this.zeega) html +=
-			"<div id='preview-close' class='player-overlay'><a class='close' href='#' style='opacity:.75'>&times;</a></div>";
-		
-		
+			"<div class='player-header'>"+
+				
+				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='../../../images/z-logo-128.png' height='60px' /></a>";
+				
+			if(this.zeega) html +=
+				"<a class='close pull-right' href='#' >&times;</a>";
+
+
 		html +=
+				"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"' class='share-facebook pull-right'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
+			"</div>"+
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
 				"<div class='arrow-background'></div>"+

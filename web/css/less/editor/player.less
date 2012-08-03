@@ -4,6 +4,11 @@
 	
 ******************************/
 
+
+
+
+
+
 #preview-wrapper
 {
 	width:100%;
@@ -15,6 +20,32 @@
 	left:0;
 	display:none;
 	z-index:10000;
+	
+	
+	.player-header
+	{
+		
+		position:absolute;
+		width:100%;
+		z-index:100;
+		a
+		{
+			z-index:1000;
+			padding:10px 10px 0 0;
+			color:orange;
+			opacity:0.75;
+			
+			&:first-child{ padding-left:10px}
+		}
+
+		.player-logo
+		{
+			position:absolute;
+		}
+	}
+	
+	
+	
 }
 
 #preview-wrapper #preview-media
@@ -34,12 +65,7 @@
 
 #preview-wrapper .player-overlay{ z-index : 1000 }
 
-#preview-wrapper #preview-close
-{
-	position:absolute;
-	right:12px;
-	top:12px;
-}
+
 
 #preview-wrapper .player-arrow
 {
