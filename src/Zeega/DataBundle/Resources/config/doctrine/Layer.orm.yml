@@ -27,3 +27,6 @@ Zeega\DataBundle\Entity\Layer:
         project_id:
             type: integer
             associationKey: true
+        enabled:
+            type: boolean
+            nullable: true
