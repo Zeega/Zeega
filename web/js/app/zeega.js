@@ -190,18 +190,6 @@ this.zeega = {
 
 			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 		}
-		/*
-		this.unrenderFrame( this.currentFrame );
-		
-		if(this.currentFrame) this.currentFrame.trigger('blur');
-		this.currentFrame = frame;
-
-		this.currentFrame.trigger('focus');
-		this.renderFrame( this.currentFrame );
-		*/
-
-		//this.restorePanelStates();
-		//this.setAdvanceValues();
 
 	},
 	
@@ -441,45 +429,6 @@ this.zeega = {
 		// if sequence is in view, then load the first sequence
 		
 		return false;
-	},
-	
-	setAdvanceValues : function()
-	{
-		//update the auto advance tray
-		//make sure the attribute exists
-		var adv = false;
-		if( !_.isNull(this.currentFrame.get('attr')) && !_.isNull( this.currentFrame.get('attr').advance ) )
-			adv = this.currentFrame.get('attr').advance;
-
-		var advanceControls = $('#advance-controls');
-
-		if(adv > 0)
-		{
-			//after time in seconds
-			advanceControls.find('input[id="time"]').prop('checked', true );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-			$('#advance-time').val(adv/1000);
-		}
-		else if( adv == -1 )
-		{
-			//manual
-
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', true );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-
-			$('#advance-time').val(10);
-
-		//if the attr doesn't exist, then give it default values
-		}
-		else if( !adv )
-		{
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', true );
-			$('#advance-time').val(10);
-		}
 	},
 
 	addFrame : function( num )
