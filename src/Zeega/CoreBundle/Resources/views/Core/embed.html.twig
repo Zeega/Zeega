@@ -27,6 +27,7 @@
     		loaded:false,
     		requestFS:function(){
     			if(!this.loaded){
+    				this.loaded=true;
     				var docElm= document.createElement('iframe');
     				docElm.setAttribute('id','zeega-player');
     				document.getElementById('zeega-embed').appendChild(docElm);
@@ -75,7 +76,7 @@
 			h2 {font-size:12px; padding:10px;}
 			#text{width:100%;background-color:rgba(0,0,0,.5); position: absolute; bottom: 10%; }
 			a{ width:100%; height:100%; z-index:1000; position:absolute;background:url({{ asset('images/embed_play.png')}}) center center no-repeat; background-size:12%;}
-			#zeega-player{width:0px; height:0px;}
+			#zeega-player{width:0px; height:0px; border:transparent;}
 		</style>	
 	</head>
 
