@@ -15,14 +15,8 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) {
-				console.log('FRAME URL ' + zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames');
-				return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
-				}
-			else {
-				console.log('FRAME URL ' + zeega.app.url_prefix + 'api/frames/'+ this.id);
-				return zeega.app.url_prefix + 'api/frames/'+ this.id;
-			}
+			if( this.isNew() )return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
+			else return zeega.app.url_prefix + 'api/frames/'+ this.id;
 		},
 	
 		initialize : function()
@@ -31,32 +25,43 @@
 			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
-			this.view = new Frame.Views.FrameSequence({ model : this })
 			
-			//this.on('focus', this.render, this );
-			//this.on('blur', this.unrender, this );
-
+			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
+			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
+			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			
 			this.on('update_thumb', this.updateThumb, this );
-			
-
 			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 		},
-	
+		
+		// adds the frame workspace view to the editor
+		renderWorkspace : function()
+		{
+			this.editorWorkspace.renderToEditor();
+			this.editorLayerList.renderToEditor();
+		},
+		// removes the frame workspace view to the editor
+		removeWorkspace : function()
+		{
+			this.editorWorkspace.removeFromEditor()
+			this.editorLayerList.removeFromEditor();
+		},
 	
 		render : function()
 		{
-			this.frameTarget.append( this.view.render().el )
+			this.frameTarget.append( this.sequenceFrameView.render().el )
 		},
 		
 		unrender : function()
 		{
-			this.frameTarget.append( this.view.remove() )
+			this.frameTarget.append( this.sequenceFrameView.remove() )
 		},
 		
 		update : function( newAttr, silent )
 		{
+			console.log('update', this)
 			var _this = this;
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
 			_.extend( this.get('attr'), newAttr );

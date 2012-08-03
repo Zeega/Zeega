@@ -24,12 +24,25 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
-			this.$el.html( this.getTemplate() );
+			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
 			this.initEvents();
+			this.delegateEvents();
 			return this;
 		},
 
 		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		
+		renderToEditor : function()
+		{
+			var workspace = new Frame.Views.VisualWorkspace({model:this.model});
+			this.renderToTarget();
+			this.$el.find('#visual-editor-workspace').replaceWith( workspace.render().el );
+		},
+		removeFromEditor : function()
+		{
+			this.undelegateEvents();
+			// call cleanup actions on frame layers if they exist
+		},
 		
 		initEvents : function()
 		{
@@ -60,7 +73,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.$el.find('.advance-time').removeClass('active');
 			this.$el.find('input').addClass('disabled').attr('disabled','true').val('');
 			
-			this.saveAdvance( -1 );
+			this.saveAdvance( 1 );
 			
 			return false;
 		},
@@ -86,14 +99,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		saveAdvance : function( time )
 		{
-			console.log('save advance', time, zeega.app.currentFrame);
-			zeega.app.currentFrame.save({ advance : time })
+			//make sure the value is an actual number before saving
+			var time = parseFloat(time);
+			if(_.isNumber(time)) this.model.update({ 'advance' : time });
 		},
 		
 		getTemplate : function()
 		{
 			var html = 
-			
 					
 					"<div class='top-bar clearfix'>"+
 						
@@ -114,9 +127,21 @@ the frame's layers. It also includes common frame functions like adding sequence
 						"</div>"+
 						
 						"<div class='advance-controls'>"+
-							"Frame Advance: "+
-							"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a>/<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-							"<input type='text' class='disabled' placeholder='sec' disabled='true'/>"+
+							"Frame Advance: ";
+							
+							if(this.model.get('attr').advance > 0)
+							{
+								html +=
+								"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a>/<a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  "+
+								"<input type='text' placeholder='sec' value='<%= attr.advance %>'/>";
+							}
+							else
+							{
+								html +=
+								"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a>/<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  "+
+								"<input type='text' class='disabled' placeholder='sec' disabled='true'/>";
+							}
+							html +=
 						"</div>"+
 					"</div>"+
 					
@@ -127,40 +152,65 @@ the frame's layers. It also includes common frame functions like adding sequence
 		}
 	
 	});
+
 	
-	Frame.Views.ConnectionControls = Backbone.View.extend({
+	Frame.Views.VisualWorkspace = Backbone.View.extend({
+		
+		id : 'visual-editor-workspace',
+		
+		initialize : function()
+		{
+			this.layers = _.map( this.model.get('layers'), function(layerID){ return zeega.app.project.layers.get(layerID) });
+		},
 		
 		render : function()
 		{
-			
+			var _this = this;
+			//render each layer into the workspace
+			_.each( this.layers, function(layer){
+				_this.$el.append( layer.visual.render().el );
+				layer.visual.makeDraggable(); //this should not be here. find a way to put this in the layer model
+			})
+			return this;
 		},
 		
-		getTemplate : function()
-		{
-			html = '';
-			
-			
-			return html;
-		}
+		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) }
+		
 		
 	})
 	
-	Frame.Views.AdvanceControls = Backbone.View.extend({
+	//move this elsewhere
+	Frame.Views.EditorLayerList = Backbone.View.extend({
+		
+		tagName : 'ul',
+		id : 'layers-list-visual',
+		className : 'unstyled',
+		
+		initialize : function()
+		{
+		},
 		
 		render : function()
 		{
+			var _this = this;
+			// do this every time?
+			this.layers = _.map( this.model.get('layers'), function(layerID){ return zeega.app.project.layers.get(layerID) });
 			
+			//render each layer into the workspace
+			_.each( this.layers, function(layer){
+				layer.controls.$el.find('#controls').empty(); // this should take care of itself. not here!
+				_this.$el.append( layer.controls.render().el );
+				layer.controls.delegateEvents();
+			})
+			return this;
 		},
 		
-		getTemplate : function()
+		renderToEditor : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		removeFromEditor : function()
 		{
-			html = '';
-			
-			
-			return html;
+			//this.undelegateEvents()
 		}
 		
 	})
-	
 
 })(zeega.module("frame"));

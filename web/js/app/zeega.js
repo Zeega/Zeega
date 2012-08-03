@@ -99,7 +99,7 @@ this.zeega = {
 	startEditor : function()
 	{
 		console.log('editor started')
-		this.renderWorkspace();
+		//this.renderWorkspace();
 		
 		this.renderSequenceFrames();
 		
@@ -174,7 +174,23 @@ this.zeega = {
 
 	loadFrame : function( frame )
 	{
-		var _this = this;
+		//make sure we're not trying to load the same frame again!
+		if( !this.currentFrame || this.currentFrame.id != frame.id )
+		{
+			var _this = this;
+		
+			if(this.currentFrame)
+			{
+				this.currentFrame.removeWorkspace();
+				this.currentFrame.trigger('blur'); // should be unneeded
+			}
+			frame.renderWorkspace();
+			this.currentFrame = frame;
+			this.currentFrame.trigger('focus'); // should be unneeded
+
+			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
+		}
+		/*
 		this.unrenderFrame( this.currentFrame );
 		
 		if(this.currentFrame) this.currentFrame.trigger('blur');
@@ -182,11 +198,10 @@ this.zeega = {
 
 		this.currentFrame.trigger('focus');
 		this.renderFrame( this.currentFrame );
-		
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
+		*/
 
-		this.restorePanelStates();
-		this.setAdvanceValues();
+		//this.restorePanelStates();
+		//this.setAdvanceValues();
 
 	},
 	
