@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
     <head>
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
@@ -27,18 +27,10 @@
 			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 			
-			<!-- TODO: import the below COMMON file in every other bootstrap.less file and take the reference
-				out of the twig -->
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/common/style.less')}}">
-
-
-			<!--
-			<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
-			-->
-			
 			<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
 			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/editor/bootstrap.less')}}">
-
+			<!-- Including Google's Font -->
+			<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 <!-- end css imports -->
 			
 			
@@ -200,7 +192,7 @@ var BrowserDetect = {
 		{% endblock %}
 		
     </head>
-  <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
+  <body   {% block headerfix %} style="padding-top:10px;position:relative;min-height:100%" {% endblock %}> 
 
 	
  	
@@ -233,14 +225,14 @@ var BrowserDetect = {
 									</a>
 									<ul class="dropdown-menu">
 										
-										<li><a href="#">Mission</a></li>
-										<li><a href="#">Productions</a></li>
-										<li><a href="#">Engine</a></li>
-										<li><a href="#">Team</a></li>
-										<li><a href="#">Contact</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_about')}}">Mission</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
 										<li class="divider"></li>
-										<li><a href="#">Terms of Use</a></li>
-										<li><a href="#">Privacy Policy</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
 										
 										
 									</ul>
@@ -278,7 +270,7 @@ var BrowserDetect = {
 									</ul>
 								</li><!-- project .dropdown -->
 								
-								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
+								<li class='item'><a href="#" class="add-media"><i class='zicon-add-media'></i> Add Media</a></li>
 								<li class="divider-vertical"></li>
 								
 								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a>
@@ -332,7 +324,7 @@ var BrowserDetect = {
 			<!-- ADD MEDIA modal window -->
 			<div class="modal hide" id='add-media'>
 			<!--<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>-->
-			<button class="close" style="position: relative;top: -18px;right: -9px;">&times;</button>
+			<button class="close"  data-dismiss="modal" style="position: relative;top: -18px;right: -9px;">&times;</button>
 			<h2 style="margin-bottom:25px">To install the Zeega bookmarklet, follow the directions below:</h2>
 						
 				<div id="book-one" style="float: left;">
@@ -437,15 +429,19 @@ var BrowserDetect = {
 				
 				{% block body %}{% endblock %}
 		   		
-				{% block footer %}
+				
+         	</div> <!-- #editor -->	
+         </div> <!-- #wrapper -->
+         {% block footer %}
 		   		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 		   			<!-- Logged-in Footer Begins -->
 					<div id="footer">
 		
-							<div id="footerWrapper">
-								<div id="footer">
-							&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
-								</div>
+							<div class="navbar navbar-fixed-bottom" style="position:relative">
+ <div class="navbar-inner">
+    <div class="container">
+							<h5>&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.org">info [at] zeega.org</a></h5>
+	</div></div>
 							</div>
 					</div>
 					<!-- Logged-in Footer Ends -->
@@ -489,8 +485,7 @@ var BrowserDetect = {
 					
 					<!-- Non-logged-in Footer Ends -->
 				{% endif %}	
-			 </div> <!-- #editor -->	
-         </div> <!-- #wrapper -->
+			 
          {% endblock footer %}
          {% block extras %}
          

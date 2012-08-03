@@ -32,7 +32,7 @@ require(
 	//'order!app/views/dashboard.user/dashboard.view.user.profile',
 	
 	'order!ux/zeega.ux.header',
-	//'order!app/index.dashboard'
+	'order!app/index.home'
     ], 
 	function($) {
 		console.log('files loaded')
