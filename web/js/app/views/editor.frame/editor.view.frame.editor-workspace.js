@@ -33,21 +33,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		renderToEditor : function()
 		{
-			var workspace = new Frame.Views.VisualWorkspace({model:this.model});
+			this.workspace = new Frame.Views.VisualWorkspace({model:this.model});
 			this.renderToTarget();
-			this.$el.find('#visual-editor-workspace').replaceWith( workspace.render().el );
+			this.$el.find('#visual-editor-workspace').replaceWith( this.workspace.render().el );
 			this.initEvents();
 		},
 		removeFromEditor : function()
 		{
 			this.undelegateEvents();
 			// call cleanup actions on frame layers if they exist
-		},
-		
-		addLayer : function( layer )
-		{
-			this.$el.find('#visual-editor-workspace').append( layer.visual.render().el );
-			layer.visual.makeDraggable(); 
+			this.workspace.removeAllLayers();
 		},
 		
 		initEvents : function()
@@ -180,7 +175,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return this;
 		},
 		
-		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) }
+		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		
+		addLayer : function( layer )
+		{
+			this.$el.append( layer.visual.render().el );
+			layer.visual.makeDraggable(); 
+		},
+		
+		removeAllLayers : function()
+		{
+			_.each( this.layers, function(layer){
+				layer.visual.private_onLayerExit();
+			})
+		}
 		
 		
 	})

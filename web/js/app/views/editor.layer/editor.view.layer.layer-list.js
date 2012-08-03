@@ -56,14 +56,6 @@
 				this.model.on('player_exit', this.private_onExit, this);
 				this.model.on('player_unrender', this.private_onUnrender, this);
 			}
-			else
-			{
-				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-				this.model.on('editor_layerExit', this.private_onLayerExit, this);
-				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
-				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
-				this.model.on('editor_removeLayerFromFrame', this.private_onRemoveLayerFromFrame, this);
-			}
 		},
 		
 		init : function(){},

@@ -36,6 +36,17 @@
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 		},
 		
+		render : function()
+		{
+			this.frameTarget.append( this.sequenceFrameView.render().el )
+		},
+		
+		unrender : function()
+		{
+			this.frameTarget.append( this.sequenceFrameView.remove() )
+		},
+		
+		
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
@@ -49,21 +60,12 @@
 			this.editorLayerList.removeFromEditor();
 		},
 		
+		
+		// adds a new layer to the workspace without disturbing existing layers
 		renderLayerToWorkspace : function( newLayer )
 		{
-			console.log('##		render layer to workspace', newLayer);
 			this.editorLayerList.addLayer( newLayer );
-			this.editorWorkspace.addLayer( newLayer );
-		},
-	
-		render : function()
-		{
-			this.frameTarget.append( this.sequenceFrameView.render().el )
-		},
-		
-		unrender : function()
-		{
-			this.frameTarget.append( this.sequenceFrameView.remove() )
+			this.editorWorkspace.workspace.addLayer( newLayer );
 		},
 		
 		update : function( newAttr, silent )
