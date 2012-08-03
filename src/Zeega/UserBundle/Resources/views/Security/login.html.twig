@@ -3,101 +3,110 @@
 {% block head %}
 	<title>Zeega Alpha</title>
 	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+	
+	<!-- DEV ONLY This block is for less to clear its stupid cache. Take out in production -->
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<!-- end DEV ONLY -->
 
 	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://25.media.tumblr.com/tumblr_lo2v0zBrJI1qg39ewo1_500.gif) no-repeat center center fixed;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		}
+	
+	</style>
+	
 
-	body {margin: 0px; padding: 0px; background-color: red; font-family: Helvetica, Sans Serif; color: white; }
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
 
-	#main {margin: 0 auto; width: 400px; text-align: center; margin-top: 40px;} 
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
 
-	div.box {
-		background: transparent;
-		position:relative;
-		top:20px;
-		float: left;
-		text-align: center;	
-	}
-
-	div.box .input_text {
-	padding:10px 10px;
-	width:375px;
-	background:#870000;
-	border-bottom: 1px double #870000;
-	border-top: 1px double #870000;
-	border-left:1px double #870000;
-	border-right:1px double #870000;
-	color: white;
-	font-size: 18px;
-	}
-
-	div.box .button
-	{
-	margin:0 0 10px 0;
-	padding:4px 7px;
-	background:#870000;
-	border:0px;
-	position: relative;
-	float: left;
-	width:100px;
-	color: red;
-
-	}
-
-	div.box .button:hover
-	{
-
-	cursor: pointer;
-	color: white;
-
-	}
-
-	label {
-
-	display: block;
-	font-variant: small-caps;
-	margin-top: 10px;
-	font-weight: bold;
-	text-align: left;
-	font-size: 14px;
-
-	}
-
-	input:-webkit-autofill {
-
-	background:#870000 !important;
-
-	}
-
-</style>
 
 {% endblock head%}
 
 {% block fos_user_content %}
-	<div id="main">
-		<img src="{{asset('images/zeegaAlpha.png')}}" /><br>
-		<span style="font-size: 14px; color: white; opacity: .6; text-align: right; display: block;">alpha</span>
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	
+	<!-- Page Content Begins -->
+	
+	<div class="container sign-in">
+	
+		<div class="row">
+		
+			<div class="span6 offset4">
+				
+				<div>
+					<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
+					<img src="images/zeega-logo-large.png" alt="zeega-logo-large" width="251" height="79">
+					</a>
+				
+					<h2>Remake the Internet</h2>
+				</div>
+				
+				<h2>Hello, hello and welcome back!</h2>
 
-    	{% if error %}
-	        <div class="error">{{ error.message }}</div>
-	    {% endif %}
+				{% if error %}
+			        <div class="error">{{ error.message }}</div>
+			    {% endif %}
+				
+				<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
+				  <fieldset>
+				  	<div class="control-group">	
+				
+				  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
+				  		
+						<div class="controls">
+							<input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge">
+						</div>
+						
+				  		<h4>{{ 'Password'|trans({}, 'FOSUserBundle') }}</h4>
+				  		
+						<div class="controls" style="margin-bottom:0">
+							<input  type="password" id="password" name="_password" class="input-xlarge">
+						</div>
+						
+						<div class="pull-right">
+							<a href="." class="sidebar">Forgot password?</a>
+						</div>
+						
+						<div>
+						<button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
+						</div>
 
-		<form action="{{ path("fos_user_security_check") }}" method="post">
-			<div class="box">
-		    	<label for="username">{{ 'Username'|trans({}, 'FOSUserBundle') }}</label>
-			    <input type="text" id="username" name="_username" value="{{ last_username }}" class="input_text" />
-
-			    <label for="password">{{ 'Password'|trans({}, 'FOSUserBundle') }}</label>
-			    <input type="password" id="password" name="_password" class="input_text" />
-				<!--
-			    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-			    <label for="remember_me">{{ 'Remember me'|trans({}, 'FOSUserBundle') }}</label>
-				-->	
-				<br><br>
-		    	<input type="submit" id="_submit" name="_submit" value="{{ 'submit'|trans({}, 'FOSUserBundle') }}" class="button"/>
-				<br><br>
+						
+				  	</div>
+				  </fieldset>
+				</form>
+			
 			</div>
-		</form>
-	</div> <!--#main-->
+			
+			<div class="span4">
+			</div>
+		
+		</div>
+	
+	</div>
 
 {% endblock fos_user_content %}
 

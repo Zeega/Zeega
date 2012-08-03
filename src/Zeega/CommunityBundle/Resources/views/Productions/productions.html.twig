@@ -1,0 +1,206 @@
+{# src/Zeega/CommunityBundle/Resources/views/Productions/productions.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega{% endblock %}
+
+
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://25.media.tumblr.com/tumblr_m4yj6w8x261qg39ewo1_500.gif) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color-lightest">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Page Intro Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>PRODUCTIONS</h1>
+				
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+			
+			<!-- Main Column Begins -->
+					
+			<div class="span14 article">
+			
+				<h2>Zeega Productions is a growing series of innovative storytelling projects that span the globe and uncover new perspectives on the human experience. Some works are co-productions with leading partners in the radio, film, journalism and interactive worlds; others are lead by Zeega's internal team.</h2>
+				
+				</div>
+		</div>
+	</div>
+	
+	<!-- Page Intro Ends -->
+	
+	<!-- Special Project Separator Begins -->
+	
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<div class="section-divider">
+	
+		<div class="shadow">
+		</div>
+		
+		<div class="content">
+	
+			<div class="container">
+			
+				<div class="row">
+		
+					<div class="span8 offset3">
+						
+						<h2></h2>
+				
+					</div>
+					
+					<div class="span3">
+					
+					</div>
+					
+				</div>
+		
+			</div>
+			
+			<div class="arrow-down"><div class="striped-arrow"></div></div>
+			
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Separator Ends -->
+	
+	
+	<!-- Special Project Begins -->
+	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
+	
+	<div class="special-project" style="background: url(http://scienceblogs.com/deanscorner/wp-content/blogs.dir/451/files/2012/04/i-8de5cc48290f7abdc412e4309ed9e0d4-ss-110311-japanquake-01_ss_full.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+	
+		<div class="special-gradient">
+		
+			<div class="container">
+			
+				<div class="row">
+				
+					<div class="span10">
+					
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h1><small>Collaborate, archive and reflect on major global events:</small><br><a href="">Digital Archive of Japan's 2011 Disaster</a></h1>
+							
+							</div>
+						</div>
+							
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Ends -->
+	
+	<div class="section-divider">
+			<div class="no-content">
+			</div>
+	</div>
+	
+	<!-- Special Project Begins -->
+	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
+	
+	<div class="special-project" style="background: url(http://farm5.staticflickr.com/4039/4491788278_c472878fa3_b.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+	
+		<div class="special-gradient">
+		
+			<div class="container">
+			
+				<div class="row">
+				
+					<div class="span10">
+					
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h1><small>Tour a neighborhood's cultural history with Jim Jarmusch:</small><br><a href="">East Village Poetry Walk</a></h1>
+								
+							</div>
+						</div>
+						
+					</div>
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Ends -->
+
+
+
+{% endblock %}

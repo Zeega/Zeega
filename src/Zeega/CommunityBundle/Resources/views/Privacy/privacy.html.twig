@@ -1,0 +1,183 @@
+{# src/Zeega/CommunityBundle/Resources/views/Privacy/privacy.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega{% endblock %}
+
+
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://24.media.tumblr.com/tumblr_lhr18sydzO1qg39ewo1_r1_500.gif) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color-lighter">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>PRIVACY POLICY</h1>
+				
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Intro Ends -->
+	
+	
+	<!-- Page Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+								
+			<div class="span14 article">
+			
+				<h2>Zeega is committed to preserving your privacy. This privacy policy discloses how Zeega uses and collects information through the Services. Zeega reserves the right to modify this privacy policy at anytime at its discretion. If Zeega does make changes to this privacy policy, Zeega will update this page accordingly. Please check this page periodically for any changes. Unless otherwise defined in this privacy policy, terms used in this privacy policy have the same meanings as in the Zeega Terms of Use, accessible at <a href="http://beta.zeega.org/terms">http://beta.zeega.org/terms</a>.
+				</h2>
+				
+				</div>
+		</div>
+	</div>
+	
+	
+	<!-- Special Project Separator Begins -->
+	
+	<br><br><br><br><br><br><br><br>
+	<div class="section-divider">
+	
+		<div class="shadow">
+		</div>
+		
+		<div class="content">
+	
+			<div class="container">
+			
+				<div class="row">
+		
+					<div class="span8 offset3">
+						
+						<h2></h2>
+				
+					</div>
+					
+					<div class="span3">
+					
+					</div>
+					
+				</div>
+		
+			</div>
+			
+			<div class="arrow-down"><div class="striped-arrow"></div></div>
+			
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Separator Ends -->
+	
+		
+	<div class="special-team" style="background: url(http://24.media.tumblr.com/tumblr_lkjxqndZ9p1qg39ewo1_500.gif) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+			
+	<div class="container new-section">
+	
+		<div class="row">
+			
+			<!-- Main Column Begins -->
+					
+			<div class="span14 article">
+
+				<br><br>
+				
+				<div class="dark-background">
+<h3>1.	Information that Zeega Collects</h3><br>
+<b>1.1.	Usage Data</b><br>
+As with most services, Zeega may collect certain information when you use the Services, even when you are not logged in. Zeega collects this information when you access the Services, including when you set up accounts, upload information, or browse, read, or download information from the Services. This information may include, but is not limited to, your IP address, URL request, browser type, and the date and time of a request. Zeega may use cookies or other automated mechanisms to collect this information and may collect this information on an aggregate or individual basis. Cookies are small text files that the Services can send to your browser for storage on your computer. They make use of the Services easier by saving your status and preferences and refreshing them every time you use the Services. For instance, to facilitate registration and login functions, Zeega may use cookies to recognize when you return to the Services so that you do not have to resubmit your logon credentials. In order to clear this logon information, for example if using a public terminal, you should log out of your account. While many browsers allow you to change your settings in order to refuse cookies or to be alerted when cookies are being sent, Zeega recommends that you leave cookies enabled, as disabling cookies will prevent you from logging into your account and interfere with some functionality of the Services.<br><br>
+
+<b>1.2.	Personally Identifiable Information</b><br><br>
+In order to access certain parts of the Services, Zeega may require you to provide personally identifiable information, such as your name and email address, in order to create a personal profile and access certain parts of the Services. Zeega uses this information to manage your account, communicate with you, and provide the Services to you.
+
+<b>1.3.	User Content that You Post to the Services</b><br>
+You may also post or link to User Content to the Services at your discretion. User Content that you post or provide through the Services is publicly available and can be viewed by other Users and may appear in search results on third-party search engines. Zeega recommends that you do not post or link to any personally identifiable information, such as your address, social security number or other personal information, as that information will be publicly displayed and may be seen by other Users.<br><br>    
+
+<h3>2.	How Zeega Uses the Information It Collects</h3>
+Zeega uses the information that it collects to deliver and improve the Services, administer mailing lists and online communities, and other activities related to the provision of the Services. Zeega may publish or make certain information collected through the Services publicly available, but will not make your email or other personally identifiable information public without your consent. Zeega may retain all data and content collected through the Services for restorative, archival, or research purposes. Editing or deleting your User Content will alter the public availability of the User Content, but may not permanently delete the content from the Services.<br><br>
+
+<h3>3.	Disclosure of Information to Third Parties</h3>
+Zeega may share the information it collects with its Third-Party Service providers or partners for research purposes or as necessary to provide or improve the Services. In the event that Zeega is required by law to disclose any information related to your account, Zeega will use reasonable efforts to provide you with notice of the request by email, unless Zeega is prohibited by law from doing so.<br><br>
+
+<h3>4.	Miscellaneous</h3><br>
+<b>4.1.	Children’s Privacy</b><br>
+The Services are intended for adults. Zeega will not knowingly collect personal information from children under 13 years of age. If Zeega discovers it has collected personally identifying information from a child under the age of 13, Zeega will delete this information from its records as soon as possible. If you are a parent or legal guardian of a child under age 13 who you believe has submitted personal information to the Services, please contact Zeega immediately at privacy@zeega.org.<br><br>
+
+<b>4.2.	Security</b><br>
+Zeega has taken efforts to put security measures in place to protect information and data that is collected through the Services. However, Zeega cannot guarantee or warrant that any information collected through the Services will remain confidential, and many functions of the Services are intended to make information and content publicly available. You are responsible for setting and maintaining the security of your password. Zeega may not keep a copy of your password, so please safeguard the password associated with your account and do not share your password with third parties.<br><br>
+
+<b>4.3.	Third-Party Services</b><br>
+Certain functions of the Services may allow link you to or provide you access to Third-Party Services. As further discussed in the <a href="http://beta.zeega.org/terms">Terms of Use</a>, Zeega is not responsible for the privacy practices of those third parties. You are responsible for reading the privacy policies of any Third-Party Services you choose to access, visit or link to through your use of the Services. <br><br>
+
+<b>Questions?</b><br>
+If you have questions about this privacy policy, please contact Zeega privacy[at]zeega.org.<br><br>
+
+Last modified on July 18, 2012.
+
+				</div><!--dark-background-->
+			</div><!--span14-->
+		</div><!--row-->
+	</div><!--container-->
+	</div><!--specialt-team-->
+
+
+{% endblock %}

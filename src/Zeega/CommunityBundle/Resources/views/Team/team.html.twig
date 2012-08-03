@@ -1,0 +1,378 @@
+{# src/Zeega/CommunityBundle/Resources/views/Team/team.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega{% endblock %}
+
+
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+
+	<script type="text/javascript">
+		window.localStorage.clear();
+	</script>
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://25.media.tumblr.com/tumblr_m7lp93myfe1qg39ewo1_500.gif) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<div class="gifcredit"><a href="http://gifmovie.tumblr.com" target="_blank">gifmovie.tumblr.com</a></div>
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color-lighter">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Page Intro Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>Team</h1>
+				
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Intro Ends -->
+	
+	<!-- Page Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+								
+			<div class="span14 article">
+			
+				<h2>The Zeega Team is built on the principle that innovation in storytelling requires deep integration of editorial, design and technology perspectives throughout the creative process.<br><br>
+				
+				Currently, we are nine folks with wildly diverse backgrounds, from documentary to economics, from music to architecture, from urban design to artificial intelligence.<br><br>
+				</h2>
+				
+				</div>
+		</div>
+	</div>
+	
+	
+	<!-- Special Project Separator Begins -->
+	
+	<br><br><br><br><br><br><br><br><br>
+	<div class="section-divider">
+	
+		<div class="shadow">
+		</div>
+		
+		<div class="content">
+	
+			<div class="container">
+			
+				<div class="row">
+		
+					<div class="span8 offset3">
+						
+						<h2></h2>
+				
+					</div>
+					
+					<div class="span3">
+					
+					</div>
+					
+				</div>
+		
+			</div>
+			
+			<div class="arrow-down"><div class="striped-arrow"></div></div>
+			
+		</div>
+	
+	</div>
+	
+	<!-- Special Project Separator Ends -->
+	
+		
+	<div class="special-team" style="background: url(http://25.media.tumblr.com/tumblr_lqnmif9Ehg1qg39ewo1_500.gif) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+			
+	<div class="container new-section">
+	
+		<div class="row">
+			
+			<!-- Main Column Begins -->
+					
+			<div class="span14 article">
+
+				<br><br>
+				
+				<div class="dark-background">
+
+				<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/kara.jpg') }}" />
+					<span class="identity">@karaoehler<br>
+					kara[at]zeega.org
+					</span>
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Kara Oehler</span> is Zeega's Editor-in-Chief. She is a Peabody award-winning audio documentarian, and her work has aired on shows such as RadioLab, Hearing Voices, Studio 360, and been exhibited at venues such as MoMA. She is a <a href="http://www.radcliffe.edu/fellowships/fellows_2012koehler.aspx" target="_blank">Radcliffe/Film Study Center Fellow</a> at Harvard University and a Rockefeller Fellow with <a href="http://www.usafellows.org/" target="_blank">United States Artists</a>. She is also co-creator of the interactive documentary <a href="http://yellowarrow.net/v3/projects_cop.html" target="_blank">Capitol of Punk</a>. More at: <a href="http://karaoehler.com" target="_blank">karaoehler.com</a>
+					</div>
+					<div class="clear">
+					</div>
+					</div>	
+				</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/james.jpg') }}" />
+					<a href="http://twitter.com/@jameburn" target="_blank">@jameburn</a><br>
+					james[at]zeega.org
+					</span>
+					</div>
+					<div class="bioNew">
+					<span class="bioName">James Burns</span> is Zeega's Chief Creative Technologist. He is a media artist and hacker, who built the API-driven website Mapping Main Street, constructing a system that automatically interrelates media feeds from across the web into thematic and geographic pathways. He holds a PhD in Economics from Harvard University. More at <a href="http://matroidblues.com" target="_blank">www.matroidblues.com</a> 
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+
+				</div>
+
+				<div class="dark-background">
+
+					</a><div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/jesseNew.jpg') }}" />
+					<span class="identity">@jshapins<br>
+					jesse[at]zeega.org
+					</span>
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Jesse Shapins</span> is Zeega's Chief Strategy Architect. He is a documentary artist, media theorist and social entrepreneur whose work has been featured in <i>The New York Times</i>, <i>Metropolis</i>, and <i>Wired</i>, and been exhibited at MoMA, among other venues. He is on the faculty of architecture at the Harvard Graduate School of Design and is co-creator of <a href="http://yellowarrow.net" target="_blank">Yellow Arrow</a>, the groundbreaking platform for location-based storytelling, among other projects. More at: <a href="http://jesseshapins.net">www.jesseshapins.net</a>
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+
+				</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/lindsey.jpg') }}" />
+					<span class="identity">
+					lindsey[at]zeega.org
+					</span></div>
+					<div class="bioNew">
+					<span class="bioName">Lindsey Wagner</span> is Zeega's Director of Projects + User Experience. She is an artist who loves working with others to produce inspiring and valuable experiences. Previously, she worked in a Los Angeles woodshop before founding a user experience design division at a leading interactive agency, responsible for projects such as <a href="http://www.mfa.org/">MFA.org</a>. She frequently curates late-night bikes around Boston.
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+
+				</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/joseph.jpg') }}" />
+					<span class="identity">
+					@jbergen<br>
+					joseph[at]zeega.org
+					</span>
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Joseph Bergen</span> is Zeega's Lead Interaction Designer/Developer. He is an engineer and designer whose interests revolve around technology, data, and art in relation to physical place. A self-taught programmer, he enjoys the challenge presented by large, complex, and dynamic data sets and teasing out otherwise hidden relationships with interactive visualizations. His work has been featured on FastCoDesign, the Wall Street Journal blog, and visualizing.org and has received top awards from Google. More at: <a href="http://www.josephbergen.com" target="_blank">www.josephbergen.com</a>
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+				</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/filipe.jpg') }}" />
+					<span class="identity">
+					@luisfbrandao<br>
+					filipe[at]zeega.org
+					</span>
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Lu&iacute;s Filipe Brand&atilde;o</span> is Zeega's Lead Database Designer/Developer. He is a software engineer specialized in machine learning. He recently moved to Cambridge from Amsterdam, where he completed his MSc. in Artificial Intelligence. Previously, he has worked as a programmer for Textkernel and the Berkman Center at Harvard through the Google Summer of Code program, among others, as well as developed an interactive installation for Mediamatic, a media arts institute in Amsterdam. More at <a href="http://www.luisbrandao.info">www.luisbrandao.info</a>
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+
+
+					
+					</div>
+					
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/AndyBio.jpg') }}" />
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Andy Cavatorta</span> is a Creative Technologist at Zeega. He is a roboticist, artist, musician, and filmmaker. He was at MIT's Media Lab from 2007 to 2010. Recently, he's been making musical robots for Bj&ouml;rk, such as <a href="http://andycavatorta.com/2011/07/02/gravity-harps/" target="_blank">the gravity harp</a>.  
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+					
+					</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/kanarinka.jpg') }}" />
+
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Catherine D'Ignazio</span>, a.k.a. kanarinka is a Creative Technologist at Zeega. She is an artist, software developer and educator. She founded the Institute for Infinitely Small Things and leads the Experimental Geography Research Cluster at RISD's Digital+Media program. Her artwork has been exhibited at the ICA Boston, Eyebeam, MASSMoCA, and the Western Front among other locations. More at: <a href="http://www.kanarinka.com">www.kanarinka.com</a>
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+					
+				</div>
+
+				<div class="dark-background">
+
+					<div class="bioWrapper">
+					<div class="bioPhoto">
+					<img src="{{ asset('images/about/todd.jpg') }}" />
+
+					</div>
+					<div class="bioNew">
+					<span class="bioName">Todd Elfman</span> is Zeega's Strategic Innovation Associate. 
+					</div>
+					<div class="clear">
+					</div>
+					</div>
+					
+				</div>
+
+				<div class="dark-background">
+
+					<h3>Board of Directors</h3><br>
+					
+					<a href="http://cyber.law.harvard.edu/people/cmaclay" target="_blank">Colin Maclay (Chair)</a><br>
+					Berkman Center for Internet and Society
+					<span class="break"></span> 
+
+					<a href="https://twitter.com/#!/jakeshapiro">Jake Shapiro</a><br>
+					PRX
+					<span class="break"></span> 
+
+					
+					<a href="http://www.knightfoundation.org/staff/benoit-wirz/">Benoit Wirz</a><br>
+					Knight Foundation
+					<span class="break"></span> 
+					
+				</div>
+
+				<div class="dark-background">
+
+					<h3>Advisory Council</h3><br>
+					
+				<a href="http://www.uniondocs.org/people/christopher/" target="_blank">Christopher Allen</a><br /> 
+				<small>UnionDocs</small> 
+				<span class="break"></span> 
+				<a href="http://cyber.law.harvard.edu/teaching/cyberlawclinic" target="_blank">Christopher Bavitz</a><br /> 
+				<small>Harvard Law School Cyberlaw Clinic</small><br> 
+				<a href="http://www.knightfoundation.org/staff/john-bracken/" target="_blank">John Bracken</a><br /> 
+				<small>Knight Foundation</small> 	<span class="break"></span> 
+				<a href="http://sel.fas.harvard.edu/" target="_blank">Lucien Castaing-Taylor</a><br /> 
+				<small>Sensory Ethnography Lab and Film Study Center</small> 
+				<span class="break"></span> 
+				<a href="http://atg.fas.harvard.edu/icb/icb.do?keyword=atg&pageid=icb.page333414" target="_blank">Phil Desenne</a><br /> 
+				<small>Interactive Design and Development, Harvard ATG</small>
+				<span class="break"></span> 
+				<a href="http://brianhouse.net/about/" target="_blank">Brian House</a><br /> 
+				<small>R&D, New York Times Company</small>
+				<span class="break"></span> 
+				<a href="http://www.spatialinformationdesignlab.org/people.php?id=10" target="_blank">Laura Kurgan</a><br /> 
+				<small>Spatial Information Design Lab (SIDL), Columbia University GSAPP</small>
+				<span class="break"></span> 
+				<a href="http://www.airmedia.org/" target="_blank">Sue Schardt</a><br /> 
+				<small>Association of Independents in Radio (AIR)</small><br /> 
+				<a href="http://www.propublica.org/site/author/paul_kiel" target="_blank">Jeffrey Schnapp</a><br /> 
+				<small>metaLAB (at) Harvard</small><br />
+				<span class="break"></span> 
+				<a href="http://www.hugovanvuuren.com/" target="_blank">W. Hugo Van Vuuren</a><br /></span> 
+				<small>xFund; Artscience Labs</small><br /> 
+				<span class="break"></span> 
+				<a href="http://www.gsd.harvard.edu/loeb_library/" target="_blank">Ann Whiteside</a><br /></span> 
+				<small>Frances Loeb Library, Graduate School of Design</small><br />
+					
+				</div>
+
+				<div class="dark-background">
+
+					<h3>Special Thanks</h3><br>
+					
+				Our work would not be possible without the exceptional support and generosity of so many people and organizations. We would like to especially thank: David Ardia, Amar Ashar, Allison Austin, Matthew Battles, Annie Berman, Ben Berman, Jeremy Blatter, Eve Blau, Dan Borelli, Svetlana Boym, Emma Brenner-Malin, Sophy Burns, Giuliana Bruno, Philip Cartelli, Stephanie Chang, Daniel Collis-Puro, Margaret Crawford, Louisa Denison, Sebastian Diaz, Judith Donath, Barbara Elfman, Helen Fu, Daniel Garber, Benjamin Gaydos, Jeff Goldenson, Daniel Goldhaber, Barrett Golding, Ann Heppermann, Steve Holmgren, Paul Hunter, Kimberley Isbell, Daniel Jamous, Allison K. Jones, Sue Kriegsman, Michael Kugler, Daniele Ledda, Nancy Levinson, Will Martin, Shannon Mattern, Laura Mayer, Michael Maness, Peter McMurray, Ashley Merchant, Ann Moss, Anh-Thu Ngo, Cameron, Eric, Ian and Kathy Oehler, Ashley Panzera, Kyle Parry, Andrew Parsons, Mayur Patel, Souvik Paul, Antoine Picon, R. Gerard Pietrusko, Joana Pimenta, Lily Pollans, Julia Rooney, Lizzie Rose, Jerry Shapins, Joshua Gen Solondz, Chris Sopher, Mary Spidle, Laurie Sumiye, Rebecca Tabasky, Daniel Terna, Thacher Tiffany, Katie Vale, Benjamen Walker, David Weinberger, Matt White, Rosa White, Ben Wirz, Julia Yezbick, Seth Young and Matthew Yoka.
+					
+				</div>
+				
+				</div> <!-- Main Column Ends -->
+		</div> <!--row-->
+	</div><!--new-container-section-->		
+		
+		</div>
+	
+	
+	<!-- Page Content Ends -->
+
+
+{% endblock %}
