@@ -100,7 +100,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		saveAdvance : function( time )
 		{
 			//make sure the value is an actual number before saving
-			var time = parseFloat(time);
+			var time = parseFloat(time*1000);
 			if(_.isNumber(time)) this.model.update({ 'advance' : time });
 		},
 		
@@ -133,7 +133,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 							{
 								html +=
 								"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a>|<a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-								"<input type='text' placeholder='sec' value='<%= attr.advance %>'/>";
+								"<input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/>";
 							}
 							else
 							{
