@@ -63,6 +63,18 @@ class EditorController extends Controller
 		return $this->render('ZeegaEditorBundle:Editor:home.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 	
+	public function newAction($short)
+	{
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
+		if(!isset($site)) $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        
+        $projectId = $this->forward('ZeegaCoreBundle:Sites:postSiteProject', array("site_id" => $site->getId()))->getContent();
+        
+        
+        return $this->redirect($this->generateUrl('ZeegaEditorBundle_editor',array('id'=>$projectId, 'short'=>$short)), 301);  
+        
+	}
+	
 	public function editorAction($short,$id)
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
@@ -92,11 +104,12 @@ class EditorController extends Controller
 			$collection_id = -1;
 		}
 		
-		$params["exclude_content"] = "Collection";
+		$params["r_items"] = 1;
 		$params["user"] = -1;
 		$params["site"] = $site->getId();
 		
-		$items = $this->forward('ZeegaApiBundle:Items:getItemsFilter', $params)->getContent();
+		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
 		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId(), $site->getId());

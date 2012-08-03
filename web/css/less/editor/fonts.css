@@ -1,0 +1,24 @@
+/*********************************************
+
+	FONTS
+	
+***********************************************/
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat Regular'), local('Montserrat-Regular'), url('http://themes.googleusercontent.com/font?kit=zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0') format('woff');
+}
+
+#sequence-title, #sequence-title input  { font-family: 'Montserrat', sans-serif }
+
+@import url(http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy|Poiret+One|Trocchi|Pontano+Sans);
+
+.font-sorts-mill-goudy{font-family: 'Sorts Mill Goudy', serif;}
+.font-poiret-one{ font-family: 'Poiret One', cursive; }
+.font-trocchi{ font-family: 'Trocchi', serif;}
+.font-pontano-sans{font-family: 'Pontano Sans', sans-serif;}
+
+
+/**************** end fonts *******************/

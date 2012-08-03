@@ -28,7 +28,9 @@ this.zeega = {
 	currentFrame : null,
 	thumbnailUpdates : true,
 	previewMode:false,
-
+	
+	updated:false,
+	
 	helpCounter: 0,
 
 	maxFramesPerSequence : 0, // 0 = no limit
@@ -66,7 +68,22 @@ this.zeega = {
 		this.project.on('ready',function(){ _this.startEditor() })
 		this.project.loadProject();
 		
-		console.log(this.project)
+		this.setButtonStates()
+		this.setProjectListeners();
+		console.log("project data ", this.project);
+
+	},
+	
+	// listens to things saving to update the button states
+	
+	setProjectListeners : function (){
+	
+		var _this=this;
+		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
+	
 	},
 	
 	loadCollectionsDropdown : function( collections )
@@ -76,15 +93,26 @@ this.zeega = {
 		})
 	},
 	
-	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
 	refreshDatabase : function(){ this.itemCollection.refresh() },
 
 	startEditor : function()
 	{
 		console.log('editor started')
+		this.renderWorkspace();
 		
 		this.renderSequenceFrames();
+		
 		this.startRouter();
+	},
+	
+	
+	//this is temporary. should be moved to the frame model/view
+	renderWorkspace : function()
+	{
+		var Frame = zeega.module('frame');
+		this.workspaceView = new Frame.Views.EditorWorkspace();
+		this.workspaceView.renderToTarget();
 	},
 	
 	startRouter: function()
@@ -180,6 +208,7 @@ this.zeega = {
 			var layerIndex = 0;
 			var _this = this;
 			_.each( _.compact( frame.get('layers') ), function(layerID, i){
+				console.log('##		render frame layer', layerID)
 				var layerModel = _this.project.layers.get(layerID);
 
 				layerModel.layerIndex = layerIndex;
@@ -453,23 +482,43 @@ this.zeega = {
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
 				console.log(newFrame)
-			
-				newFrame.save({},{
-					success : function()
-					{
-						console.log(newFrame)
-						newFrame.render();
-					
-						newFrame.trigger('refresh_view');
-						//_this.currentSequence.trigger('updateFrameOrder');
-						newFrame.trigger('updateThumb');
-						_this.project.frames.add( newFrame );
-						_this.loadFrame( newFrame );
+				newFrame.render();
+				
+				if(i>0){
+					console.log("not loading frame for later",i);
+					newFrame.save({},{
+						success : function()
+						{
+							//console.log(newFrame)
+							//newFrame.render();
 						
-						_this.currentSequence.get('frames').push(newFrame.id);
-						
-					}
-				});
+							newFrame.trigger('refresh_view');
+							//_this.currentSequence.trigger('updateFrameOrder');
+							newFrame.trigger('updateThumb');
+							_this.project.frames.add( newFrame );
+							//_this.loadFrame( newFrame );
+							
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
+						}
+					});
+				}
+				else{
+					console.log("loading frame for first",i);
+					newFrame.save({},{
+						success : function()
+						{
+							//console.log(newFrame)
+							newFrame.trigger('refresh_view');
+							newFrame.trigger('updateThumb');
+							_this.project.frames.add( newFrame );
+							_this.loadFrame( newFrame );
+							
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
+						}
+					});
+				}
 			
 			}
 		}
@@ -854,25 +903,72 @@ console.log( helpOrderArray[this.helpCounter-1] )
 
 	},
 	
-	editCoverImage : function(obj)
+	shareProject : function()
 	{
-		if(obj.item.get('layer_type') == 'Image')
+		if(this.project.get("published"))
 		{
-			$('#sequence-cover-image').css('background-image' , 'url("'+ obj.item.get('uri') +'")' );
-			this.project.save({'cover_image':obj.item.get('uri')})
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.ShareProject({ model:this.project });
+			this.view.render();
+		}
+	},
+
+	publishProject : function()
+	{
+		console.log(this.updated);
+		if(this.project.get("published")){
+			if(this.project.get('date_updated')!=this.project.get('date_published')||this.updated)
+			{
+				this.updated=false;
+				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publishing...");
+				this.project.save({'publish_update':1},{
+					success:function(model,response){
+						zeega.app.project.set({'publish_update':0,'date_published':response.project.date_published,'date_updated':response.project.date_updated});
+						console.log(model,response);
+						zeega.app.setButtonStates();
+					
+					}
+				});
+			}
+		}else{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.PublishProject({ model:this.project });
+			this.view.render();
+		}
+		
+	},
+
+	settingsProject : function()
+	{
+		if(this.project.get("published"))
+		{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.PublishProject({ model:this.project });
+			this.view.render();
 		}
 	},
 	
-	shareProject : function()
+	setButtonStates : function()
 	{
-		// publishing view for project //
-		var Modal = zeega.module('modal');
-		this.view = new Modal.Views.ShareProject({ model:this.project });
-		this.view.render();
-	},
+		//console.log("setButtonStates", this.project)
+		//console.log("setButtonStates", this.project.get("published"))
 
-	
-	
+		// Publish button
+		if(this.project.get("published"))
+		{
+			$('#settings-project').show();
+			$('#share-project').css("color", "#fff");
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
+			if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
+			else $('#publish-project').css("color", "#666");
+			console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
+		}else{
+			$('#settings-project').hide();
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
+			$('#share-project').css("color", "#666");
+		}
+	}
+
 	
 }, Backbone.Events)
 

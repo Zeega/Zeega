@@ -27,6 +27,13 @@ class Project
     /**
      * @var array $attr
      */
+     
+    private $date_published;
+
+    /**
+     * @var array $attr
+     */
+     
     private $attr;
 
     /**
@@ -236,7 +243,7 @@ class Project
     /**
      * @var string $cover_image
      */
-    private $cover_image;
+    private $cover_image = "http://static.zeega.org/community/templates/default_project_cover.png";
 
 
     /**
@@ -327,5 +334,104 @@ class Project
     public function getDateUpdated()
     {
         return $this->date_updated;
+    }
+    
+    
+        /**
+     * Get date_published
+     *
+     * @return datetime 
+     */
+    public function getDatePublished()
+    {
+        return $this->date_published;
+    }
+    
+    
+        /**
+     * Set date_published
+     *
+     * @param datetime $datePublished
+     */
+    public function setDatePublished($datePublished)
+    {
+        $this->date_published = $datePublished;
+    }
+    
+    
+    /**
+     * @var string $item_id
+     */
+    private $item_id;
+
+
+    /**
+     * Set item_id
+     *
+     * @param string $itemId
+     */
+    public function setItemId($itemId)
+    {
+        $this->item_id = $itemId;
+    }
+
+    /**
+     * Get item_id
+     *
+     * @return string 
+     */
+    public function getItemId()
+    {
+        return $this->item_id;
+    }
+    /**
+     * @var string $description
+     */
+    private $description;
+
+    /**
+     * @var string $location
+     */
+    private $location;
+
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

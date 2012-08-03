@@ -14,6 +14,9 @@
 		{
 			_.defaults( this.get('attr'), this.default_attr );
 			
+			if( _.isUndefined(this.get('cover_image')) || this.get('cover_image') == '' )
+				this.set('cover_image','../../../images/default_cover.png')
+			
 			//remove dupe data from the attributes
 			this.unset('sequences',['silent']);
 			this.unset('frames',['silent']);
@@ -182,7 +185,7 @@
 		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
-			this.view.render();
+			this.view.renderToTarget();
 			this.trigger('ready')
 		},
 		loadPublishProject : function()

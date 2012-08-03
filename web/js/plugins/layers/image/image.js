@@ -24,6 +24,11 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
 
 			var scaleSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
@@ -43,7 +48,9 @@
 				max : 1,
 			});
 			
-			$(this.controls).append( scaleSlider.getControl() )
+			$(this.controls)
+				.append( dissolveCheck.getControl() )
+				.append( scaleSlider.getControl() )
 				.append( opacitySlider.getControl() );
 			
 			return this;
