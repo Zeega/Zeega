@@ -279,6 +279,7 @@ this.zeega = {
 	makeConnection : function(action)
 	{
 		console.log('make connection: '+ action)
+		
 		switch(action)
 		{
 			case 'newFrame':
@@ -315,6 +316,7 @@ this.zeega = {
 				advancedModal.show();
 				break;
 		}
+		
 	},
 	
 	connectToSequenceFrame : function( sequenceID, frameID )

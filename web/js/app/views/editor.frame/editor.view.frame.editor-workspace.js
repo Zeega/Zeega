@@ -67,7 +67,9 @@ the frame's layers. It also includes common frame functions like adding sequence
 			'click .advance-click' : 'selectAdvanceClick',
 			'click .advance-time' : 'selectAdvanceTime',
 			'click input' : 'selectAdvanceTime',
-			'keypress input' : 'onAdvanceKeypress'
+			'keypress input' : 'onAdvanceKeypress',
+			'click #make-connection .action' : 'makeConnection',
+			
 		},
 		
 		clickInput : function()
@@ -112,6 +114,28 @@ the frame's layers. It also includes common frame functions like adding sequence
 			if(_.isNumber(time)) this.model.update({ 'advance' : time });
 		},
 		
+		//// non-linear links //// connections
+
+		makeConnection : function( e )
+		{
+			if( !$(e.target).hasClass('disabled') )
+			{
+				$(e.target).closest('div').removeClass('open');
+				zeega.app.makeConnection( $(e.target).closest('a').data('action') );
+			}
+			return false;
+		},
+
+		confirmConnection : function(e)
+		{
+			console.log('confirm connection', e.target)
+			this.$el.find('#make-connection button').removeClass('disabled');
+			this.$el.find('#connection-confirm').hide();
+			zeega.app.confirmConnection( $(e.target).data('action') );
+			return false;
+		},
+		
+		
 		getTemplate : function()
 		{
 			var html = 
@@ -119,8 +143,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 					"<div class='top-bar clearfix'>"+
 						
 						"<div id='make-connection' class='btn-group pull-left'>"+
-							"<button data-action='newFrame' class='btn btn-inverse action' href='#'><img src='../../../images/multi-linear.png' height='15px'/></button>"+
-							"<button class='btn btn-inverse dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>"+
+							"<a data-action='newFrame' class='btn btn-inverse action' href='#'><img src='../../../images/multi-linear.png' height='15px'/></a>"+
+							"<a class='btn btn-inverse dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></a>"+
 							"<ul class='dropdown-menu'>"+
 								"<li><a data-action='newFrame' class='action' href='#'><i class='zicon-new-frame small'></i>  New Frame</a></li>"+
 								"<li><a data-action='existingFrame' class='action' href='#'><i class='zicon-old-frame small'></i>  Existing Frame</a></li>"+
@@ -222,7 +246,31 @@ the frame's layers. It also includes common frame functions like adding sequence
 				_this.$el.prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			})
+			
+			this.makeSortable();
+			
 			return this;
+		},
+		
+		makeSortable : function()
+		{
+			this.$el.sortable({
+				//define a grip handle for sorting
+				handle: '.layer-drag-handle',
+				cursor : 'move',
+				axis:'y',
+				containment: '#sidebar',
+				cursorAt : {top:1,left:1},
+				placeholder: "ui-state-highlight",
+
+				//resort the layers in the workspace too
+				update : function()
+				{
+					console.log('sort update')
+					zeega.app.updateLayerOrder();
+				}
+			});
+			$( "#sortable-layers" ).disableSelection();
 		},
 		
 		renderToEditor : function(){ $('#'+this.id).replaceWith( this.render().el ) },

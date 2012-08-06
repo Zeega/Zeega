@@ -11,13 +11,7 @@ jQuery(function($)
 	$('.info').popover({
 		'delayIn' : 0
 	});
-	/*
-	$('.database-asset-list').popover({
-		'delayIn' : 1,
-		'placement' : 'right'
-	});
-	*/
-	
+
 	$('body').click(function(){
 		$('.menu').addClass('hide')
 	})
@@ -90,23 +84,7 @@ jQuery(function($)
 		return false;
 	})
 	
-	//// non-linear links
-	//// connections
 	
-	$('#make-connection .action').click(function(e){
-		if( !$(this).hasClass('disabled') )
-		{
-			$(this).closest('div').removeClass('open');
-			zeega.app.makeConnection( $(this).data('action') );
-		}
-		return false;
-	})
-	
-	$('#connection-confirm button').click(function(){
-		$('#make-connection button').removeClass('disabled');
-		$('#connection-confirm').hide();
-		zeega.app.confirmConnection( $(this).data('action') );
-	})
 	
 	
 	$('#database-collection-filter').change(function(){
@@ -143,29 +121,6 @@ jQuery(function($)
 	$('#project-settings').click(function(){
 		projectSettings();
 	})
-
-	$('#ratio-list a').click(function(){
-		changeAspectRatio( $(this).data('ratio-id') );
-		return false;
-	})
-
-	function changeAspectRatio( ratioID )
-	{
-		switch( ratioID )
-		{
-			case 0:
-				$('#visual-editor-workspace').css('width','704px')
-				break;
-
-			case 1:
-				$('#visual-editor-workspace').css('width','625px')
-				break;
-
-			default:
-				console.log('goDefault')
-		}
-	}
-
 
 	function projectSettings()
 	{
@@ -321,25 +276,6 @@ jQuery(function($)
 
 		stop : function(){ zeega.app.updateFrameOrder() }
 	});
-
-	$( "#layers-list-visual" )
-		.sortable({
-
-			//define a grip handle for sorting
-			handle: '.layer-drag-handle',
-			cursor : 'move',
-			axis:'y',
-			containment: '#sidebar',
-			cursorAt : {top:1,left:1},
-			placeholder: "ui-state-highlight",
-
-			//resort the layers in the workspace too
-			update : function()
-			{
-				zeega.app.updateLayerOrder();
-			}
-		});
-	$( "#sortable-layers" ).disableSelection();
 
 	$('#links-list').sortable({
 		//define a grip handle for sorting
