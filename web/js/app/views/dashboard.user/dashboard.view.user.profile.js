@@ -86,6 +86,7 @@
 		},
 		cancelEdits : function()
 		{
+			this.render();
 			this.turnOffEditMode();
 		},
 		
@@ -148,8 +149,8 @@
 				
 			};
 		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
-		 						"http://dev.zeega.org/static/community/scripts/user_profile.php?id="+this.model.id :
-		 						"http://dev.zeega.org/static/community/scripts/user_bg.php?id="+this.model.id;
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
 		
 				url:phpFileURL,		

@@ -29,6 +29,7 @@
 			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
 			
 			this.on('update_thumb', this.updateThumb, this );
 			
@@ -52,12 +53,14 @@
 		{
 			this.editorWorkspace.renderToEditor();
 			this.editorLayerList.renderToEditor();
+			this.editorLinkLayerList.renderToEditor();
 		},
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
 			this.editorWorkspace.removeFromEditor()
 			this.editorLayerList.removeFromEditor();
+			this.editorLinkLayerList.removeFromEditor();
 		},
 		
 		
@@ -112,7 +115,7 @@
 					this.terminate();
 				}, false);
 			
-				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/frames/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
 		},
