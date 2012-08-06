@@ -149,8 +149,8 @@
     target=bundles/JMS/SerializerBundle
 
 [FOSRest]
-    git=git://github.com/FriendsOfSymfony/FOSRest.git
-    target=fos/FOS/Rest
+    git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
+    target=bundles/FOS/RestBundle
 
 [FOSUserBundle]
     git=git://github.com/FriendsOfSymfony/FOSUserBundle.git

@@ -60,6 +60,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 					zeega.app.addLayer({ item : zeega.app.draggedItem })
 				}
 			});
+			this.$el.find('.advance-click').tooltip({
+				title:'advance frame by click or arrow keys',
+				placement:'bottom'
+			});
+			this.$el.find('.advance-time').tooltip({
+				title:'advance frame by time only',
+				placement:'bottom'
+			});
 		},
 		
 		events : {
@@ -72,10 +80,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			
 		},
 		
-		clickInput : function()
-		{
-			console.log('!!		input clicked')
-		},
+		
 		
 		selectAdvanceClick : function()
 		{
@@ -125,16 +130,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			}
 			return false;
 		},
-/*
-		confirmConnection : function(e)
-		{
-			console.log('confirm connection', e.target)
-			this.$el.find('#make-connection button').removeClass('disabled');
-			this.$el.find('#connection-confirm').hide();
-			zeega.app.confirmConnection( $(e.target).data('action') );
-			return false;
-		},
-*/		
 		
 		getTemplate : function()
 		{
