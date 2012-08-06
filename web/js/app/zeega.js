@@ -393,6 +393,7 @@ this.zeega = {
 				_this.project.frames.add(sequence.get('frames'));
 				sequence.set('frames', [ sequence.get('frames')[0].id ]);
 				sequence.trigger('sync');
+				_this.goToSequence(sequence.id);
 				
 				this.hold = null;
 				this.busy = false;
@@ -417,7 +418,7 @@ this.zeega = {
 		console.log( 'layers:',layers)
 		_.each( layers, function(layerID){
 			var layer = _this.project.layers.get(layerID);
-			if(layer && layer.get('type')=='Link')
+			if( layer && layer.get('type') == 'Link' )
 			{
 				var attr = layer.get('attr');
 				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
