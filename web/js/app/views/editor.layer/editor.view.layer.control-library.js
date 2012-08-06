@@ -206,7 +206,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 				'<div class="input-prepend">'+
 					'<span class="add-on">http://</span>'+
 					'<input class="span2" type="text" placeholder="www.example.com" value="<%= link %>">'+
-					'<a href="#" class="remove-link">&times;</span>'
+					'<a href="#" class="remove-link close">&times;</span>'
 				'</div>';
 				
 			return html;
