@@ -108,7 +108,8 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    encryption: %mailer_encryption%    
+    encryption: %mailer_encryption%
+    delivery_address: filipe@zeega.org
 
 jms_security_extra:
     secure_controllers:  true
