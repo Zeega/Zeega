@@ -86,6 +86,7 @@
 		},
 		cancelEdits : function()
 		{
+			this.render();
 			this.turnOffEditMode();
 		},
 		
