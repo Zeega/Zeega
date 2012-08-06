@@ -27,7 +27,11 @@
 				var newLayer = new Layer[args.type]({attr:args.options});
 				console.log('new layers',newLayer,args, args.show() )
 				this.add( newLayer );
-				if( args.show() ) newLayer.trigger('editor_layerRender');
+				if( args.show() )
+				{
+					console.log('##		render to workspace', args, newLayer)
+					args.frame.renderLayerToWorkspace( newLayer );
+				}
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;
 			}
@@ -46,7 +50,6 @@
 				{
 					console.log('##		render to workspace', args, newLayer)
 					args.frame.renderLayerToWorkspace( newLayer );
-					//newLayer.trigger('editor_layerRender');
 				}
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;

@@ -266,7 +266,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 				//resort the layers in the workspace too
 				update : function()
 				{
-					console.log('sort update')
 					zeega.app.updateLayerOrder();
 				}
 			});
