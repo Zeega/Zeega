@@ -41,15 +41,14 @@
 		
     	requestFS:function(){
     			console.log('hellow');
-    			if(!this.loaded){
-    				this.loaded=true;
-    				var docElm= document.createElement('iframe');
-    				docElm.setAttribute('id','zeega-player');
-    				document.getElementById('zeega-embed').appendChild(docElm);
-    			}
-    			else{
-    				docElm=document.getElementById('zeega-player');
-    			}
+    			$('#zeega-player-'+this.model.id).remove();
+				var docElm= document.createElement('iframe');
+				docElm.setAttribute('id','zeega-player-'+this.model.id);
+				document.getElementById('zeega-embed').appendChild(docElm);
+				$(docElm).css({width:'0px',height:'0px'});
+    			
+    		
+    			
     			
     			docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'project/'+this.model.id+'/view');
 					

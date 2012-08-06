@@ -29,7 +29,7 @@ var Player2 = Backbone.View.extend({
 		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
 		if(!_.isUndefined(apiplayer)) this.apiplayer = apiplayer;
 		var _this=this;
-		if(!this.zeega)this.fsCheck=setInterval(function(){ if(_this.container.width()==300) _this.closePlayer();},500);
+		if(!this.zeega)this.fsCheck=setInterval(function(){if(_this.container.width()==0) _this.closePlayer();},500);
 	},
 	
 	loadProject : function( data, options )
@@ -71,7 +71,7 @@ var Player2 = Backbone.View.extend({
 	closePlayer : function()
 	{
 		console.log('##		close player');
-		
+		if(!this.zeega) clearInterval(this.fsCheck);
 		var _this = this;
 		
 		if (document.exitFullscreen) {
