@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
     <head>
+       	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
+       	<title>{% block title %}Zeega Alpha{% endblock %}</title>
+         
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>{% block title %}Zeega Alpha{% endblock %}</title>
+        
+        
+        
+         
+         {% block fbshare %}
+         
+         
+         <!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="Zeega"/>
+		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
+   		<meta property="og:type" content="website"/>
+   		<meta property="og:url" content="{{hostname}}"/>
+    	<meta property="og:image" content="{{hostname}}{{ asset('images/z-logo-fb.png')}}"/>
+						
+		<!-- END FB -->	
+		
+         
+         {% endblock %}
          
          
          {% block stylesheets %}
-            <link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-			<meta name="robots" content="noindex,follow">
-			<meta name="description" content="">
-			<meta name="keywords" content="">
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 			
 <!-- css imports -->
 
