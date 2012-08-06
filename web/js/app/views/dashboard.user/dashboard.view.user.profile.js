@@ -13,6 +13,7 @@
 			'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',
+			'user-new-project':'newProject',
 		},
 		
 		initialize: function () {
@@ -79,7 +80,10 @@
 				
 			})
 		},
+		newProject : function(){
+			$('.new-project').trigger('click');
 		
+		},
 		cancelEdits : function()
 		{
 			this.turnOffEditMode();
@@ -234,7 +238,7 @@
 					'</div>'+
 					'<div class="span3">';
 						if (zeegaDashboard.app.editable){ html+=
-						'<a class="btn btn-info pull-right" href=".">Start a new project</a>';
+						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
 					 html+='</div>';
 			
