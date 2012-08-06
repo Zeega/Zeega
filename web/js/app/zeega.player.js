@@ -224,16 +224,12 @@ var Player2 = Backbone.View.extend({
 		var _this = this;
 		var frame = this.frames.get(id);
 		this.currentFrame = frame;
-		console.log('	1',id)
-
 		_.each( frame.get('layers'), function(layerID,i){
-			console.log(layerID)
-			_this.layers.get( layerID ).trigger('player_play',i+1);
+			var layer = _this.layers.get( layerID );
+			if( layer.get('type') == 'Link' && _.isUndefined(_this.frames.get( layer.get('attr').to_frame )) ) return false;
+			else _this.layers.get( layerID ).trigger('player_play',i+1);
 		})
-		console.log('	2', id)
-		
 		this.setAdvance( frame.get('attr').advance )
-		console.log('	3', id)
 		this.updateCitations();
 		this.updateArrows();
 	},
@@ -273,11 +269,13 @@ var Player2 = Backbone.View.extend({
 		
 		var linkedFrameLayers = [];
 		_.each(frame.links, function(frameID){
-			linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
+			var frame = _this.frames.get(frameID);
+			if( frame ) linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
 		})
 		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
+		
 			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
 			{
 				_this.preloadLayer( layer )
