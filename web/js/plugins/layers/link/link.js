@@ -26,6 +26,14 @@
 		
 		init : function(options)
 		{
+			console.log('init link layer', this)
+			//check to see if link layer is broken
+			var a = this.get('attr');
+			if( !_.isNull(a.from_frame) || !_.isNull(a.from_sequencee) || !_.isNull(a.to_frame) || !_.isNull(a.to_sequence) )
+			{
+				console.log('link layer is broken! delete meeee!')
+				this.destroy();
+			}
 			
 		},
 		

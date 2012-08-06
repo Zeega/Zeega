@@ -69,6 +69,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			'click input' : 'selectAdvanceTime',
 			'keypress input' : 'onAdvanceKeypress',
 			'click #make-connection .action' : 'makeConnection',
+			'click #connection-confirm button' : 'confirmConnection',
 			
 		},
 		
@@ -197,9 +198,22 @@ the frame's layers. It also includes common frame functions like adding sequence
 		render : function()
 		{
 			var _this = this;
-			this.layers = _.map( this.model.get('layers'), function(layerID){ return zeega.app.project.layers.get(layerID) });
+			this.layers = _.map( this.model.get('layers'), function(layerID){
+				var layer = zeega.app.project.layers.get(layerID);
+				if( _.isUndefined( layer ))
+				{
+					// deal with layers that don't exist anymore
+					var l = _.without( _this.model.get('layers'), layerID );
+					_this.model.save({ 'layers' : l });
+					return null;
+				}
+				else
+				{
+					return layer
+				}
+			});
 			//render each layer into the workspace
-			_.each( this.layers, function(layer){
+			_.each( _.compact(this.layers), function(layer){
 				_this.$el.append( layer.visual.render().el );
 				layer.visual.makeDraggable(); //this should not be here. find a way to put this in the layer model
 			})
