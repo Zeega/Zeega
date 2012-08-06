@@ -279,6 +279,7 @@ this.zeega = {
 	makeConnection : function(action)
 	{
 		console.log('make connection: '+ action)
+		
 		switch(action)
 		{
 			case 'newFrame':
@@ -292,10 +293,12 @@ this.zeega = {
 						from_frame : this.currentFrame.id
 					}
 				});
-				console.log(this.hold)
-				$('#connection-confirm').show();
-				$('#make-connection button').addClass('disabled');
-				this.busy = true;
+				
+				//trigger the creation of a new sequence
+				if(this.hold.isNew()) this.hold.on('layer_saved',function(){ _this.confirmConnection() })
+				else this.confirmConnection();
+				//this.busy = true;
+				//this.confirmConnection();
 				break;
 			
 			case 'existingFrame':
@@ -315,6 +318,7 @@ this.zeega = {
 				advancedModal.show();
 				break;
 		}
+		
 	},
 	
 	connectToSequenceFrame : function( sequenceID, frameID )
@@ -369,47 +373,33 @@ this.zeega = {
 		})
 	},
 	
-	confirmConnection : function(action)
+	confirmConnection : function()
 	{
-		console.log('confirm connection: '+ action)
-		if(action == 'ok')
-		{
-			var _this = this;
-			console.log('create and go to new sequence')
-			
-			var layersToPersist = [this.hold.id];
-			
-			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
 
-			sequence.save({},{
-				success : function()
-				{
-					console.log('sequence saved')
-					console.log(sequence)
-					_this.busy = false;
-					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-					_this.hold.visual.render();
-					_this.project.frames.add(sequence.get('frames'));
-					sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					//sequence.createCollections();
-					sequence.trigger('sync');
-					_this.goToSequence(sequence.id);
-					
-					this.hold = null;
-					this.busy = false;
-				}
-			});
-			this.project.sequences.add(sequence);
+		var _this = this;		
+		var layersToPersist = [this.hold.id];
+		var Sequence = zeega.module("sequence");
+		var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
 
-		}
-		else
-		{
-			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
-			this.hold.destroy();
-			this.hold = null;
-			this.busy = false;
-		}
+		console.log('create and go to new sequence', this.currentFrame.id, layersToPersist)
+
+		sequence.save({},{
+			success : function()
+			{
+				console.log('sequence saved', sequence)
+				_this.busy = false;
+				_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
+				_this.hold.visual.render();
+				_this.project.frames.add(sequence.get('frames'));
+				sequence.set('frames', [ sequence.get('frames')[0].id ]);
+				sequence.trigger('sync');
+				_this.goToSequence(sequence.id);
+				
+				this.hold = null;
+				this.busy = false;
+			}
+		});
+		this.project.sequences.add(sequence);
 
 	},
 	
@@ -425,9 +415,10 @@ this.zeega = {
 			var frame = _this.project.frames.get(frameID);
 			layers = _.union(layers,frame.get('layers'));
 		});
-		_.each(layers, function(layerID){
+		console.log( 'layers:',layers)
+		_.each( layers, function(layerID){
 			var layer = _this.project.layers.get(layerID);
-			if(layer.get('type')=='Link')
+			if( layer && layer.get('type') == 'Link' )
 			{
 				var attr = layer.get('attr');
 				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
@@ -573,7 +564,7 @@ this.zeega = {
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )
-			//args.frame.trigger('update_thumb');
+			args.frame.trigger('update_thumb');
 			console.log(args)
 			return this.project.layers.addNewLayer( args )
 		}

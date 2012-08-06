@@ -25,10 +25,13 @@
 				console.log('add non item layer type: '+args.type);
 
 				var newLayer = new Layer[args.type]({attr:args.options});
-				console.log( new Layer[args.type] )
-				console.log(newLayer)
+				console.log('new layers',newLayer,args, args.show() )
 				this.add( newLayer );
-				if( args.show() ) newLayer.trigger('editor_layerRender');
+				if( args.show() )
+				{
+					console.log('##		render to workspace', args, newLayer)
+					args.frame.renderLayerToWorkspace( newLayer );
+				}
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;
 			}
@@ -47,7 +50,6 @@
 				{
 					console.log('##		render to workspace', args, newLayer)
 					args.frame.renderLayerToWorkspace( newLayer );
-					//newLayer.trigger('editor_layerRender');
 				}
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;
@@ -57,13 +59,14 @@
 		saveLayer : function(layerModel, frame)
 		{
 			var _this = this;
-			
+			console.log('save layer', layerModel, frame)
 			//remove model from layerModel.attr
 			layerModel.attributes.attr.model = null;
-			
+			console.log('save layer', layerModel)
 			layerModel.save({},{
 				success : function( savedLayer )
 				{
+					console.log('layermodel saved', savedLayer)
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
 					_this.addLayerToFrame( frame, savedLayer );
