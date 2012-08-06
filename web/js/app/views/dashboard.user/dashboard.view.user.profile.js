@@ -149,7 +149,7 @@
 			};
 		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
 		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
-		 						sessionStorage.getItem('hostname')+"scripts/user_bg.php?id="+this.model.id;
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
 		
 				url:phpFileURL,		
