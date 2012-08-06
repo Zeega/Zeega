@@ -2,8 +2,29 @@
 
 {% extends '::base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+	{% block title %}{{user.getDisplayName()}}{% endblock %}
 
+		
+		
+         {% block fbshare %}
+         
+         
+         <!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{ user.getDisplayName()}}'s Zeega Page"/>
+		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
+   		<meta property="og:type" content="movie"/>
+   		<meta property="og:url" content="{{hostname}}{{directory}}user/{{user.getId()}}"/>
+   		<meta property="og:image" content="{{ user.getThumbUrl()}}"/>
+    	
+						
+		<!-- END FB -->	
+		
+         
+         {% endblock %}
+         
+         
 
 {%  block stylesheets %}
 	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
@@ -165,39 +186,6 @@
 		</div>
 		
 		<div class="row" id="zeega-user-projects">
-			
-			<!-- Individual Project Card Begins -->
-		
-			<!--<div class="span7 project-card">
-			
-				<div class="row">
-				
-					<a href="">
-					<div class="span3 project-image">
-						<img src="http://2.bp.blogspot.com/_NcltTYF_OXc/SlbAcAQJx7I/AAAAAAAAADw/SxCTmf-7LCg/s320/The+National+Botanic+Garden+of+Wales.jpg" alt="project-image" width="190" height="190">
-						<div class="gradient">
-						</div>
-						<img src="{{ asset('images/play-button.png') }}">
-					</div>
-					</a>
-					
-					<div class="span4 project-info">
-						<div>
-							<h4><a href="">Going Geodesic</a></h4>
-							<h6>March 22, 2012</h6>
-							<p class="card">Punk rope is a unique blend of recess and boot camp.Learn about the classes and how you can start punk roping at home in the following interview with Punk Rope founder and exercise innovator, Tim Haft!</p>
-						</div>
-						<div class="shadow">
-						</div>
-					</div>
-				
-				</div>
-			
-			</div>-->
-			
-			<!-- Individual Project Card Ends -->
-			
-			
 		
 		</div>
 	

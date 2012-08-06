@@ -34,10 +34,11 @@ class CommunityController extends Controller
     
     public function userAction($id)
     {
-        //$user = $this->forward('ZeegaApiBundle:Users:getUser', array('id'=>$id))->getContent();
+        $user = $this->getDoctrine()->getEntityManager()->getRepository('ZeegaDataBundle:User')->findOneById($id);
+    	
     	$projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
 
-        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user_id'=>$id, 'user_projects' => $projects));
+        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user'=>$user, 'user_projects' => $projects));
     }
     
     public function dashboardAction()
