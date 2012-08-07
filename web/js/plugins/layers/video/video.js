@@ -190,36 +190,23 @@
 		
 		onLayerEnter : function()
 		{
-			//if coming from another frame and the controls are open but the video isn't loaded
-			console.log('coming from another frame. is open?',this.model.controls.visible)
-			if( this.model.controls.visible == true )
+			if( !this.model.player_loaded )
 			{
-				console.log('inside;',this.$el, this.model.player, this.model.player_loaded )
-				
-				if( !this.model.player_loaded )
-				{
-					this.model.initPlayer();
-					this.$el.html(this.model.player.render().el);
-					this.model.player.placePlayer();
-				}
-
-				this.model.player_loaded = true;
-			
+				this.model.initPlayer();
+				this.$el.html(this.model.player.render().el);
+				this.model.player.placePlayer();
 			}
+			this.model.player_loaded = true;
 		},
 		
 		onLayerExit : function()
 		{
 			
-			if( this.model.player_loaded )
-			{
-				this.model.player.destroy();
-			}
+			if( this.model.player_loaded ) this.model.player.destroy();
 			this.model.player_loaded = false;
 			
 			//must call this if you extend onLayerExit
 			this.model.trigger('editor_readyToRemove')
-			
 		},
 		
 		onControlsOpen : function()

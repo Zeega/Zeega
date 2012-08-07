@@ -102,6 +102,7 @@
 		{
 			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
+			console.log('++		private on layer enter')
 			this.onLayerEnter();
 		},
 		

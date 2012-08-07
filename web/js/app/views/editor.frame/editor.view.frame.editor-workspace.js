@@ -199,7 +199,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 				else return layer
 			});
 			//render each layer into the workspace
-			this.layers = _.compact(this.layers);
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.append( layer.visual.render().el );
 				layer.visual.private_onLayerEnter();
@@ -207,7 +206,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return this;
 		},
 		
-		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		renderToTarget : function()
+		{
+			console.log('workspace render', this.layers)
+			$('#'+this.id).replaceWith( this.render().el );
+			_.each( _.compact(this.layers), function(layer){
+				console.log('render', layer)
+				layer.visual.private_onLayerEnter();
+			})
+		},
 		
 		addLayer : function( layer )
 		{
@@ -217,7 +224,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		removeAllLayers : function()
 		{
-			_.each( this.layers, function(layer){
+			_.each( _.compact(this.layers), function(layer){
 				layer.visual.private_onLayerExit();
 			})
 		}
@@ -287,11 +294,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		removeFromEditor : function()
 		{
-			
-			_.each( _.compact(this.layers), function(layer){
-				layer.controls.private_onLayerExit();
-			})
-			
 			this.$el.empty();
 			//this.undelegateEvents()
 		}
@@ -349,12 +351,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		},
 		
 		renderToEditor : function(){ $( this.target ).html( this.render().el ) },
-		removeFromEditor : function()
-		{
-			_.each( _.compact(this.layers), function(layer){
-				layer.controls.private_onLayerExit();
-			})
-		}
+		removeFromEditor : function(){}
 		
 	})
 	
