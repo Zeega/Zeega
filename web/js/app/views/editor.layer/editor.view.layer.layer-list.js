@@ -181,6 +181,7 @@
 		updateViewInPlace : function()
 		{
 			console.log('re render')
+			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 			
@@ -210,6 +211,7 @@
 			if( confirm('Delete Layer?') )
 			{
 				this.model.trigger('editor_removeLayerFromFrame', this.model);
+				zeega.app.currentFrame.trigger('update_thumb');
 				this.remove();
 			}
 		},
