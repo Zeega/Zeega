@@ -195,7 +195,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.layers = _.map( this.model.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
 				//do not include layer if it's a link in the destination frame
-				if( (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id )|| _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
+				if( _.isUndefined(layer) || (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id )|| _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
 				else return layer
 			});
 			//render each layer into the workspace
@@ -244,7 +244,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			// do this every time?
 			this.layers = _.map( this.model.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
-				if( layer.get('type') != 'Link' ) return zeega.app.project.layers.get(layerID);
+				if( layer && layer.get('type') != 'Link' ) return zeega.app.project.layers.get(layerID);
 				else return null;
 			});
 			console.log(this.layers)
@@ -310,11 +310,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			var _this = this;
 			// do this every time?
+			console.log( 'layerssss',this.model.get('layers'))
 			this.layers = _.map( this.model.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
 				//single out only link layers on source frames
-				if( (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id )|| _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
-				else return null;
+				if( _.isUndefined(layer) || (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id ) || _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
+				else return layer;
 			});
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){

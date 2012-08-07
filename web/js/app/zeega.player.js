@@ -275,7 +275,6 @@ var Player2 = Backbone.View.extend({
 		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
-		
 			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
 			{
 				_this.preloadLayer( layer )
@@ -609,11 +608,33 @@ var Player2 = Backbone.View.extend({
 		
 		this.layers = new this.LayerCollection( layerArray );
 		this.frames = new this.FrameCollection( data.frames );
+		
+		this.verifyData();
+		
 		this.frames.addFrameLoadersAndConnections();
 		this.layers.on( 'ready error', this.updateFrameStatus, this );
 		//this.layers.on( 'error', this.updateFrameStatusError, this );
 
 		this.model.trigger('sequences_loaded');
+	},
+	
+	verifyData : function()
+	{
+		var _this = this;
+		_.each( _.toArray(this.sequences), function(sequence){
+			_.each( sequence.get('frames'), function(frameid){
+				var frame = _this.frames.get(frameid);
+				if( _.isUndefined(frame) ) sequence.set({'frames':_.without(sequence.get('frames'),frameid)});
+				else
+				{
+					_.each( frame.get('layers'), function(layerid){
+						var layer = _this.layers.get(layerid);
+						if( _.isUndefined(layer) ) frame.set({'layers':_.without(frame.get('layers'),layerid)});
+					})
+				}
+				
+			})
+		})
 	},
 	
 	setCurrentSequence : function( id )
@@ -805,7 +826,7 @@ var Player2 = Backbone.View.extend({
 					var links = [];
 					_.each( frame.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
-						if(layer.get('type')=='Link' && layer.get('attr').from_frame == frame.id)
+						if( layer && layer.get('type')=='Link' && layer.get('attr').from_frame == frame.id)
 							links.push( layer.get('attr').to_frame )
 					})
 					//console.log(links)
