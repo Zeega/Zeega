@@ -1,56 +1,11 @@
 {# src/Zeega/CommunityBundle/Resources/views/Engine/engine.html.twig #}
 
-{% extends '::base.html.twig' %}
+{% extends 'ZeegaCommunityBundle:About:about_base.html.twig' %}
 
-{% block title %}Zeega{% endblock %}
+{% block title %}Engine{% endblock %}
 
 
-{%  block stylesheets %}
-	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
-
-	<script type="text/javascript">
-		window.localStorage.clear();
-	</script>
-	<style type="text/css">
-	
-		/*
-			Background image code lives here, not in CSS, because this is specific to each page
-			and could be made dynamic too (i.e. randomly picking a different image each load)
-			quite easily. Exposing the code here should be helpful.
-		*/
-	
-		html { 
-		background: url(http://24.media.tumblr.com/tumblr_m1bxv28kHl1qg39ewo1_500.gif) no-repeat center center fixed; 
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		
-		}
-		
-	
-	</style>
-	
-	
-	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-
-	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-
-	
-	
-{% endblock %}
-
-{% block scripts %}
-
-	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
-	
-	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
-	
-	
-{% endblock %}
+{% block backgroundurl %}http://24.media.tumblr.com/tumblr_m1bxv28kHl1qg39ewo1_500.gif{% endblock%}
 
 {% block body %}
 <div class="gifcredit"><a href="http://gifmovie.tumblr.com" target="_blank">gifmovie.tumblr.com</a></div>
