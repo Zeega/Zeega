@@ -5,31 +5,49 @@ namespace Zeega\AdminBundle\Controller;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserAdminController extends Controller
 {
     public function batchActionActivate(ProxyQueryInterface $selectedModelQuery)
     {
-        $selectedModels = $selectedModelQuery->execute();
+        $users = $selectedModelQuery->execute();
+        $modelManager = $this->admin->getModelManager();
         
-        // do the merge work here
-
+        $hostname = $this->container->getParameter('hostname');
+        $hostDirectory = $this->container->getParameter('directory');
+        
         try 
         {
-            foreach ($selectedModels as $selectedModel) 
+            foreach ($users as $user) 
             {
-                return new Response(var_dump($selectedModel->getId()));
-                $modelManager->delete($selectedModel);
-            }
+                $user->setEnabled(true);
+                $user->setLocked(false);
+                if (null === $user->getConfirmationToken()) {
+                    $user->generateConfirmationToken();
+                }
+                $user->setPasswordRequestedAt(new \DateTime('now'));
+                $modelManager->update($user);
+                
+                $activationUrl = $hostname . $hostDirectory ."resetting/reset/" . $user->getConfirmationToken();
 
-            $modelManager->update($selectedModel);
+                $message = \Swift_Message::newInstance()
+                        ->setSubject('Welcome to Zeega!')
+                        ->setFrom('noreply@zeega.org')
+                        ->setTo($user->getEmail())
+                        ->setBody($this->renderView('ZeegaAdminBundle:Users:account_activated.txt.twig', array('username' => $user->getDisplayName(), 'activationURL' => $activationUrl)))
+                    ;
+                $this->get('mailer')->send($message);
+            }
         } 
         catch (\Exception $e) 
         {
             $this->get('session')->setFlash('sonata_flash_error', 'flash_batch_merge_error');
             return new RedirectResponse($this->admin->generateUrl('list',$this->admin->getFilterParameters()));
         }
-
+        
+        
+            
         $this->get('session')->setFlash('sonata_flash_success', 'flash_batch_merge_success');
 
         return new RedirectResponse($this->admin->generateUrl('list',$this->admin->getFilterParameters()));
