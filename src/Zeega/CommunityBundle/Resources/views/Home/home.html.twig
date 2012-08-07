@@ -72,7 +72,7 @@
 			<div class="page-intro span11">
 			
 				<h1>Create Immersive Experiences</h1>
-				<h2>Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="">Ready to begin?</a> {% endif %} </h2>
+				<h2>Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2>
 			
 			</div>
 		
