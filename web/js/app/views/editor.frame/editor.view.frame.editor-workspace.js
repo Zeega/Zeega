@@ -202,7 +202,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.layers = _.compact(this.layers);
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.append( layer.visual.render().el );
-				layer.visual.makeDraggable(); //this should not be here. find a way to put this in the layer model
+				layer.visual.private_onLayerEnter(); //this should not be here. find a way to put this in the layer model
 			})
 			return this;
 		},
@@ -212,7 +212,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		addLayer : function( layer )
 		{
 			this.$el.append( layer.visual.render().el );
-			layer.visual.makeDraggable(); 
+			layer.visual.private_onLayerEnter(); 
 		},
 		
 		removeAllLayers : function()

@@ -145,22 +145,16 @@
 		
 		onLayerEnter : function()
 		{
-			this.render();
-			this.delegateEvents();
-			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
-			{
-				var _this = this;
-				this.delegateEvents();
-				this.$el.resizable({
-					stop: function(e,ui)
-					{
-						_this.model.update({
-							'width' : $(this).width() / $(this).parent().width() * 100,
-							'height' : $(this).height() / $(this).parent().height() * 100
-						})
-					}
-				})
-			}
+			var _this = this;
+			this.$el.resizable({
+				stop: function(e,ui)
+				{
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			})
 			
 		},
 		
