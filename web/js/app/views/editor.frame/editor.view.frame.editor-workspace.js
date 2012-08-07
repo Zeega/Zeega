@@ -287,6 +287,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		removeFromEditor : function()
 		{
+			
+			_.each( _.compact(this.layers), function(layer){
+				layer.controls.private_onLayerExit();
+			})
+			
 			this.$el.empty();
 			//this.undelegateEvents()
 		}
@@ -344,7 +349,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 		},
 		
 		renderToEditor : function(){ $( this.target ).html( this.render().el ) },
-		removeFromEditor : function(){}
+		removeFromEditor : function()
+		{
+			_.each( _.compact(this.layers), function(layer){
+				layer.controls.private_onLayerExit();
+			})
+		}
 		
 	})
 	

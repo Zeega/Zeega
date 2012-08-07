@@ -51,16 +51,18 @@
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
+			console.log('##		render workspace', this.id)
 			this.editorWorkspace.renderToEditor();
-			this.editorLayerList.renderToEditor();
 			this.editorLinkLayerList.renderToEditor();
+			this.editorLayerList.renderToEditor();
 		},
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
+			console.log('##		unrender workspace', this.id)
 			this.editorWorkspace.removeFromEditor()
-			this.editorLayerList.removeFromEditor();
 			this.editorLinkLayerList.removeFromEditor();
+			this.editorLayerList.removeFromEditor();
 		},
 		
 		

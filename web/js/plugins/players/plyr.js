@@ -135,9 +135,9 @@
 			this.popcorn = Popcorn( target );
 			this.addPopcornToControls();
 			this.setVolume(0);
-			
+		
 			this.popcorn.listen( 'canplay', function(){
-				
+			
 				_this.$el.spin(false);
 				if( _this.settings.fade_in == 0 ) _this.setVolume( _this.settings.volume );
 				if( _this.settings.cue_in != 0 )

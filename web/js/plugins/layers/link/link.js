@@ -26,7 +26,6 @@
 		
 		init : function(options)
 		{
-			console.log('init link layer', this)
 			//check to see if link layer is broken
 			/*
 			var a = this.get('attr');

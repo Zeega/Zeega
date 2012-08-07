@@ -255,34 +255,11 @@
 			
 			if( !this.model.player_loaded )
 			{
-				//if(this.model.player) this.model.player.destroy();
 				this.model.initPlayerPlayer();
 
 				this.$el.html( this.model.player.render().el );
 				this.model.player.placePlayer();
 				
-				//this.model.player.popcorn.listen('ended', function(){_this.onEnded()})
-/*
-				console.log('on preload',this.model)
-				if(this.model.can_play != true)
-				{
-					console.log('this thing cant play yet. wait')
-					this.model.player.popcorn.listen('canplay', function(){
-						console.log('##		video ready player', _this.model.id);
-						_this.model.trigger('ready', _this.model.id ) ;
-					})
-					this.model.player.popcorn.listen('canplaythrough', function(){
-						console.log('##		video ready player through', _this.model.id);
-						_this.model.trigger('ready', _this.model.id ) ;
-					})
-				}
-				else
-				{
-					console.log('play that thing!!')
-					this.model.trigger('ready', _this.model.id );
-				}
-				
-				*/
 				
 				this.model.player_loaded = true;
 			}
@@ -290,13 +267,7 @@
 			{
 				this.model.player.pause();
 			}
-			console.log('set listeners', this)
-			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
-			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
 			
-			
-			
-
 		},
 		onEnded : function()
 		{
@@ -306,14 +277,8 @@
 		
 		onTimeUpdate : function()
 		{
-			
-			console.log('on time update', this.model.player.popcorn.currentTime() )
-			//Cue Out
-			
-			
 			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
 			{
-				
 				this.model.player.popcorn.currentTime( this.model.get('attr').cue_in );
 				this.model.player.popcorn.pause();
 				this.model.trigger('playback_ended');
