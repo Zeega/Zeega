@@ -313,8 +313,8 @@ this.zeega = {
 				console.log('link with advanced options!');
 				var Modal = zeega.module('modal');
 				var advancedModal = new Modal.Views.LinkAdvanced();
-				console.log(advancedModal)
 				$('body').append(advancedModal.render().el);
+				console.log('advance modal',advancedModal,advanceModal.el)
 				advancedModal.show();
 				break;
 		}
