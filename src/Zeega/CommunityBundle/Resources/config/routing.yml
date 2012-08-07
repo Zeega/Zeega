@@ -1,6 +1,6 @@
 ZeegaCommunityBundle_about:
-    pattern:  /about
-    defaults: { _controller: ZeegaCommunityBundle:Community:about }
+    pattern:  /mission
+    defaults: { _controller: ZeegaCommunityBundle:Community:mission }
 
 ZeegaCommunityBundle_author:
     pattern:  /author

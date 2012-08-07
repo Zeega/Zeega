@@ -23,7 +23,7 @@ this.zeegaDashboard = {
 	{
 		var _this = this;
 		
-		
+		/*
 		var Dashboard = zeegaDashboard.module("dashboard");
 		
 		this.editable = false;
@@ -40,7 +40,7 @@ this.zeegaDashboard = {
 		
 		console.log(Dashboard);
 		this.projectsView = new Dashboard.ProjectCollectionView({collection:projects}).render();
-		
+		*/
 		
 		
 	},
