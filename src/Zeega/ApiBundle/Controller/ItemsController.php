@@ -78,7 +78,7 @@ class ItemsController extends Controller
     		}
             else
             {
-                $query['user'] = $user->getId();
+                $query['user'] = $user;
             }
         }
          //  execute the query
