@@ -16,6 +16,7 @@ jQuery(function($)
 		$('.menu').addClass('hide')
 	})
 	
+	console.log('==		search stuffz')
 	var visualSearch = VS.init({
 		container : $('.visual_search'),
 		query     : '',
@@ -61,6 +62,7 @@ jQuery(function($)
 			}
 		}
 	});
+	console.log('search stuffz', visualSearch)
 	
 	
 	$('.VS-icon.VS-icon-search').click(function(){
