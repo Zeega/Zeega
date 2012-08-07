@@ -128,7 +128,7 @@
 		
 		useHTML5 : function()
 		{
-			console.log('add html5 popcorn, target', '#media-player-html5-'+ this.model.id, $('#media-player-html5-'+ this.model.id) )
+			console.log('add html5 popcorn, target', this, '#media-player-html5-'+ this.model.id, $('#media-player-html5-'+ this.model.id) )
 			var _this = this;
 			var target = '#media-player-html5-'+ this.model.id;
 			

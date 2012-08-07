@@ -201,17 +201,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.append( layer.visual.render().el );
-				layer.visual.private_onLayerEnter();
 			})
 			return this;
 		},
 		
 		renderToTarget : function()
 		{
-			console.log('workspace render', this.layers)
 			$('#'+this.id).replaceWith( this.render().el );
 			_.each( _.compact(this.layers), function(layer){
-				console.log('render', layer)
 				layer.visual.private_onLayerEnter();
 			})
 		},
@@ -219,7 +216,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 		addLayer : function( layer )
 		{
 			this.$el.append( layer.visual.render().el );
-			layer.visual.private_onLayerEnter(); 
+			if(layer.isNew()) layer.on('layer_saved',function(e){ layer.visual.private_onLayerEnter() })
+			else layer.visual.private_onLayerEnter();
 		},
 		
 		removeAllLayers : function()
