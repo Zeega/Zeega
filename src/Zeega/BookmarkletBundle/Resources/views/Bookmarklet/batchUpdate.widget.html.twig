@@ -52,10 +52,11 @@
 {% endblock %}		
  
 {% block scripts %}
-	<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
 	<script type="text/javascript" language="Javascript">
 		//bootstrapping data
 		var itemJSON = "{{item|e('js')}}";
 		var itemCollectionJSON = "{{mycollection|e('js')}}";
 	</script>	
+	<script data-main="{{ asset('js/loaders/widget.js')}}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+	
 {% endblock %}
