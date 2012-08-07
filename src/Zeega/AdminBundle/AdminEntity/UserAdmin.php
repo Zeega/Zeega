@@ -59,4 +59,17 @@ class UserAdmin extends Admin
             ->end()
         ;
     }
+    
+    public function getBatchActions()
+    {
+        // retrieve the default (currently only the delete action) actions
+        $actions = parent::getBatchActions();
+
+        $actions['activate'] = array(
+                'label'            => 'Activate Users',
+                'ask_confirmation' => true
+            );
+
+        return $actions;
+    }
 }
