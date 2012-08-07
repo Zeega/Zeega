@@ -199,26 +199,32 @@ the frame's layers. It also includes common frame functions like adding sequence
 				else return layer
 			});
 			//render each layer into the workspace
-			this.layers = _.compact(this.layers);
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.append( layer.visual.render().el );
-				layer.visual.makeDraggable(); //this should not be here. find a way to put this in the layer model
+				layer.visual.private_onLayerEnter();
 			})
 			return this;
 		},
 		
-		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
+		renderToTarget : function()
+		{
+			console.log('workspace render', this.layers)
+			$('#'+this.id).replaceWith( this.render().el );
+			_.each( _.compact(this.layers), function(layer){
+				console.log('render', layer)
+				layer.visual.private_onLayerEnter();
+			})
+		},
 		
 		addLayer : function( layer )
 		{
 			this.$el.append( layer.visual.render().el );
-			layer.visual.makeDraggable(); 
+			layer.visual.private_onLayerEnter(); 
 		},
 		
 		removeAllLayers : function()
 		{
-			console.log(this.layers)
-			_.each( this.layers, function(layer){
+			_.each( _.compact(this.layers), function(layer){
 				layer.visual.private_onLayerExit();
 			})
 		}
@@ -244,10 +250,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 			// do this every time?
 			this.layers = _.map( this.model.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
-				if( layer && layer.get('type') != 'Link' ) return zeega.app.project.layers.get(layerID);
+				if( !_.isUndefined(layer) && layer.get('type') != 'Link' ) return layer;
 				else return null;
 			});
-			console.log(this.layers)
+			console.log('editor layer list', this.layers)
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );
@@ -310,13 +316,13 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			var _this = this;
 			// do this every time?
-			console.log( 'layerssss',this.model.get('layers'))
 			this.layers = _.map( this.model.get('layers'), function(layerID){
 				var layer = zeega.app.project.layers.get(layerID);
 				//single out only link layers on source frames
-				if( _.isUndefined(layer) || (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id ) || _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
-				else return layer;
+				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) ) return layer;
+				else return null;
 			});
+			console.log( 'layerssss',this.model.get('layers'),this.layers)
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );

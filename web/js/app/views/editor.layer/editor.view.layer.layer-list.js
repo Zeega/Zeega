@@ -100,18 +100,16 @@
 		
 		private_onLayerEnter : function()
 		{
-			console.log('	LAYER LIST enter')
 			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
+			console.log('++		private on layer enter')
 			this.onLayerEnter();
 		},
 		
 		private_onLayerExit : function()
 		{
-			console.log('	LAYER LIST EXIT')
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
-			//this.remove();
 			this.onLayerExit();
 		},
 		
@@ -228,8 +226,6 @@
 						_this.model.trigger('editor_controlsOpen');
 						$(this).removeClass('closed');
 				});
-				
-				this.visible = true;
 			}
 			else
 			{
@@ -239,8 +235,6 @@
 						$(this).addClass('closed');
 						_this.model.trigger('editor_controlsClosed');
 				});
-				
-				this.visible = false;
 			}
 			return false;
 		},
