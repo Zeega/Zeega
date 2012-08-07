@@ -30,11 +30,11 @@
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
-			
-			this.on('update_thumb', this.updateThumb, this );
-			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
+			this.on('update_thumb', this.updateFrameThumb, this );
+			
+			
 		},
 		
 		render : function()

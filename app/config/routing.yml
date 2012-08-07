@@ -2,6 +2,10 @@ ZeegaUserBundle:
     resource: "@ZeegaUserBundle/Resources/config/routing.yml"
     prefix:   /
 
+ZeegaAdminBundle:
+    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
 api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
     type: rest
@@ -33,9 +37,6 @@ ZeegaCoreBundle:
     resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
     prefix:   /
 
-ZeegaAdminBundle:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
-    prefix:   /
 
 # Internal routing configuration to handle ESI
 #_internal:

@@ -58,7 +58,7 @@
 				property : 'color',
 				color : this.model.get('attr').color,
 				model: this.model,
-				label : 'Text Color',
+				label : '',
 				opacity : true
 			});
 			

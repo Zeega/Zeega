@@ -9,7 +9,6 @@ class RegistrationController extends BaseController
 {
     public function registerAction()
     {
-		$user = $this->container->get('security.context')->getToken()->getUser();
         $form = $this->container->get('fos_user.registration.form');
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
