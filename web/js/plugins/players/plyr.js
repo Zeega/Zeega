@@ -238,8 +238,12 @@
 		private_onTimeUpdate : function()
 		{
 			// pause if player gets to the cue out point
-			//console.log('timeupdate', )
-			//if( !_.isNull(this.settings.cue_out) && this.popcorn.duration() >= this.settings.cue_out ) this.pause();
+			//console.log('timeupdate', this.settings.cue_out,this.popcorn.duration())
+			if( !_.isNull(this.settings.cue_out) && this.popcorn.getCurrentTime() >= this.settings.cue_out )
+			{
+				console.log('~~		cue out!!');
+				this.pause();
+			}
 		},
 
 		getDuration: function(){ return this.popcorn.duration() },

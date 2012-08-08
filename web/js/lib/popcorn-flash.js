@@ -9670,8 +9670,8 @@ Popcorn.player( "youtube", {
 				currentTime = media.youtubeObject.getCurrentTime();
 				media.dispatchEvent( "timeupdate" );
 				!media.paused && media.pause();
-				console.log('setting the volume');
-            	console.log(options.volume);
+				//console.log('setting the volume');
+            	//console.log(options.volume);
 				media.youtubeObject.setVolume(options.volume);
             }
 				
