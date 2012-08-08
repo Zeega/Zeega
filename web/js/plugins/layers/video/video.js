@@ -260,9 +260,9 @@
 		{
 			//Fades
 			
-			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
+			if(this.model.get('attr').cue_out==0) var out = this.model.player.getDuration();
 			else var out = this.model.get('attr').cue_out;
-			var t = this.model.player.popcorn.currentTime();
+			var t = this.model.player.getCurrentTime();
 			var f = parseFloat(this.model.get('attr').cue_in)+parseFloat(this.model.get('attr').fade_in);
 			var g = out-parseFloat(this.model.get('attr').fade_out);
 			
@@ -280,7 +280,7 @@
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
 				this.model.player.setVolume(vol);
 			}
-			else if(Math.abs(this.model.get('attr').volume-this.model.player.popcorn.volume())>.01)
+			else if(Math.abs(this.model.get('attr').volume-this.model.player.getVolume())>.01)
 			{
 				this.model.player.setVolume(this.model.get('attr').volume);
 			}

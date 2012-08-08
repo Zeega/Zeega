@@ -80,7 +80,7 @@ class BookmarkletController extends Controller
 				
 				
 				
-				if($parsedItem["layer_type"]=="Dropbox"&&!isset($item)){
+				if($parsedItem["layer_type"]=="Dropbox"&&!isset($item)&&$parsedItem["child_items_count"]==0){
 					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
 						'widget_id'=>$widgetId,

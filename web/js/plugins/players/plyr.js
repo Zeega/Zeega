@@ -32,7 +32,7 @@
 				{
 					// it must be from an item
 					this.format = this.getFormat(this.model.get('attribution_uri'));
-					this.settings = _.defaults( _.extend(this.model.attributes.attr, this.options) , this.defaults);
+					this.settings = _.defaults( _.extend(this.model.attributes, this.options) , this.defaults);
 				}
 				else if( this.model.get('attr') && this.model.get('attr').uri )
 				{
