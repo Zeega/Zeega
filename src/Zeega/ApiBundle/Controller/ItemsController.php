@@ -247,7 +247,7 @@ class ItemsController extends Controller
         $em->flush();
         
         // create a thumbnail
-        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()));
+        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()));
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
@@ -633,7 +633,7 @@ class ItemsController extends Controller
                     $em->persist($childItem);
                     $em->flush();
                     
-			        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()));
+			        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $childItem->getId()));
                 }
             }
             $item->setChildItemsCount(count($newItems));
