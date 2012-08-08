@@ -75,6 +75,9 @@ class BookmarkletController extends Controller
 				if(isset($item)) $update = 1;
 				else $update =0;
 				
+				
+				
+				
 				if($parsedItem["layer_type"]=="Dropbox"&&!$update){
 					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
@@ -84,8 +87,14 @@ class BookmarkletController extends Controller
 						'child_items_count'=>$parsedItem["child_items_count"],
 					));	
 				}
-			
-				
+				elseif($parsedItem["layer_type"]!="Dropbox"&&$update){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>$item, 
+								'update'=>$update,
+							));	
+				}
 				else{
 					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', array(
 						'displayname' => $user->getDisplayname(),
