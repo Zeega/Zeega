@@ -259,7 +259,7 @@
 		onTimeUpdate : function()
 		{
 			
-			/*
+			
 			// fix this
 			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
 			{
@@ -268,7 +268,7 @@
 				this.model.trigger('playback_ended');
 				console.log('playback ended');
 			}
-			*/
+			
 			//Fades
 			
 			
