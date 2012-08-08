@@ -247,20 +247,13 @@ class ItemsController extends Controller
         $em->flush();
         
         // create a thumbnail
-        $itemMediaType = $item->getMediaType();
-        if($itemMediaType != 'Collection')
+        $zeegaThumbnail = $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $itemId = $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()))->getContent();
+        
+        if(isset($zeegaThumbnail) && isset($zeegaThumbnail["thumbnail_url"]))
         {
-            $itemId = $item->getId();
-            $host = $this->container->getParameter('hostname');
-            $thumbnailServerUrl =  $host . "static/scripts/item.php?id=$itemId&url=".$item->getUri().'&type='.$item->getMediaType();
-            $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
-
-            if(isset($zeegaThumbnail))
-            {
-                $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
-                $em->persist($item);
-                $em->flush();
-            }
+            $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+            $em->persist($item);
+            $em->flush();
         }
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
@@ -646,22 +639,21 @@ class ItemsController extends Controller
                     // persist the child item, get the id and generate a thumbnail
                     $em->persist($childItem);
                     $em->flush();
-                    $itemId = $childItem->getId();
-                    $thumbnailServerUrl = $host . "static/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
-
-                    $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
                     
-                    if(isset($zeegaThumbnail))
+                    $zeegaThumbnail = $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $itemId = $childItem->getId()), array("media_type" => $childItem->getMediaType(), "uri" => $childItem->getUri()))->getContent();
+
+                    if(isset($zeegaThumbnail) && isset($zeegaThumbnail["thumbnail_url"]))
                     {
                         $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
-                        $em->persist($childItem);
+                        $em->persist($item);
                         $em->flush();
-                        
+
                         if($first == True)
                         {
                             $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
                             $first = False;
                         }
+                        
                     }
                 }
             }
