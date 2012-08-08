@@ -125,7 +125,9 @@
 								<div class="controls">
 									{{ form_errors(form.locked) }}
 									{{ form_widget(form.locked, { 'attr': {'class': 'pull-left', 'style' : 'margin-right:8px'} }) }}
-									<p class="sidebar">{{ form.locked.vars.label }}</p>
+									<p class="sidebar">
+									I have read and agreed to <a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a>.
+									</p>
 								</div>				   
 							</div>
 						</div>
