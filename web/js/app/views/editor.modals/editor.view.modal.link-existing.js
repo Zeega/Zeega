@@ -92,9 +92,9 @@
 					
 				'</div>'+
 				'<div class="modal-body">'+
-					'<h3>1. Choose Sequence:</h3>'+
+					'<h4>1. Choose Sequence:</h4>'+
 					'<select class="sequence-choose-select"></select>'+
-					'<h3>2. Choose Frame:</h3>'+
+					'<h4>2. Choose Frame:</h4>'+
 					'<ul class="frame-choose-list unstyled clearfix"></ul>'+
 				'</div>'+
 				'<div class="modal-footer">'+
