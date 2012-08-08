@@ -258,19 +258,7 @@
 		
 		onTimeUpdate : function()
 		{
-			
-			
-			// fix this
-			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
-			{
-				this.model.player.popcorn.currentTime( this.model.get('attr').cue_in );
-				this.model.player.popcorn.pause();
-				this.model.trigger('playback_ended');
-				console.log('playback ended');
-			}
-			
 			//Fades
-			
 			
 			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
 			else var out = this.model.get('attr').cue_out;
