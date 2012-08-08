@@ -95,10 +95,13 @@
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>';
 								
-								if (zeegaDashboard.app.editable){ html+=
-								'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'site/home/project/'+ this.model.id+'" style="top:0;left:400px"><i class="icon-pencil icon-white"></i> edit</a>'+
-								'<a class="btn btn-mini btn-danger community-edit-button project-delete" href="#" style="top:0;left:340px"><i class="icon-remove-circle icon-white"></i> delete</a>';
-								
+								if (zeegaDashboard.app.editable)
+								{
+									html+=
+								'<div class="admin-actions btn-group">'+
+									'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'site/home/project/'+ this.model.id+'"><i class="icon-pencil icon-white"></i> edit</a>'+
+									'<a class="btn btn-mini btn-danger community-edit-button project-delete" href="#" ><i class="icon-remove-circle icon-white"></i> delete</a>'+
+								'</div>';
 								}
 								html+='<div style="padding:10px 0 0 10px;margin-top:106px;height:60px;background-color:rgba(0,0,0,0.3);">'+
 									'<div class="pull-left" style="margin-right:20px">'+
