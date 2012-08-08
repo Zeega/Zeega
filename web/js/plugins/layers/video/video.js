@@ -239,6 +239,8 @@
 				this.$el.html( this.model.player.render().el );
 				this.model.player.placePlayer();
 				
+				var _this = this;
+				this.model.player.popcorn.listen('timeupdate',function(){ _this.onTimeUpdate() })
 				
 				this.model.player_loaded = true;
 			}
@@ -256,6 +258,11 @@
 		
 		onTimeUpdate : function()
 		{
+			
+			console.log('onTimeUpdate')
+			
+			/*
+			// fix this
 			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
 			{
 				this.model.player.popcorn.currentTime( this.model.get('attr').cue_in );
@@ -263,7 +270,7 @@
 				this.model.trigger('playback_ended');
 				console.log('playback ended');
 			}
-			
+			*/
 			//Fades
 			
 			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
@@ -277,18 +284,18 @@
 			{
 				//console.log("fading in");
 				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
-				this.model.player.popcorn.volume(vol);
+				this.model.player.setVolume(vol);
 			}
 			
 			else if(this.model.get('attr').fade_out>0 && t>g)
 			{
 				//console.log("fading out");
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
-				this.model.player.popcorn.volume(vol);
+				this.model.player.setVolume(vol);
 			}
 			else if(Math.abs(this.model.get('attr').volume-this.model.player.popcorn.volume())>.01)
 			{
-				this.model.player.popcorn.volume(this.model.get('attr').volume);
+				this.model.player.setVolume(this.model.get('attr').volume);
 			}
 			
 			

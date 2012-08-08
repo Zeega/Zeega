@@ -12,7 +12,7 @@
 
 var Player2 = Backbone.View.extend({
 	
-	MINIMUM_LOAD : 3000,
+	MINIMUM_LOAD : 1,
 	
 	has_started : false,
 	loadAheadDistance : 2,
@@ -181,7 +181,7 @@ var Player2 = Backbone.View.extend({
 					setTimeout( function(){
 						frame.loader.fadeOut();
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
-					}, 2000);
+					}, this.MINIMUM_LOAD);
 					
 				}
 				else
