@@ -16,8 +16,8 @@ require.config({
 		}
 })
 
-var loadFiles = [
-	'jquery',
+require(
+	[
 	
 	//libraries
 	'order!lib/underscore',
@@ -57,11 +57,8 @@ var loadFiles = [
 
 	//'order!app/views/widget.item/widget.view.item.collection',
 	'order!app/views/widget.item/widget.view.item.ingesting',
-	
-];
 
-require(loadFiles, function($) 
-{
-	zeegaWidget.app.init();
-	//initUX();	
+	],
+	function(jquery) {
+	    zeegaWidget.app.init();
 });
