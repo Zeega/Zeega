@@ -13,6 +13,7 @@
 			'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',
+			'user-new-project':'newProject',
 		},
 		
 		initialize: function () {
@@ -79,9 +80,13 @@
 				
 			})
 		},
+		newProject : function(){
+			$('.new-project').trigger('click');
 		
+		},
 		cancelEdits : function()
 		{
+			this.render();
 			this.turnOffEditMode();
 		},
 		
@@ -144,8 +149,8 @@
 				
 			};
 		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
-		 						"http://dev.zeega.org/static/community/scripts/user_profile.php?id="+this.model.id :
-		 						"http://dev.zeega.org/static/community/scripts/user_bg.php?id="+this.model.id;
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
 		
 				url:phpFileURL,		
@@ -234,7 +239,7 @@
 					'</div>'+
 					'<div class="span3">';
 						if (zeegaDashboard.app.editable){ html+=
-						'<a class="btn btn-info pull-right" href=".">Start a new project</a>';
+						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
 					 html+='</div>';
 			

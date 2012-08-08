@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
     <head>
+       	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
+       	<title>{% block title %}Zeega Alpha{% endblock %}</title>
+         
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>{% block title %}Zeega Alpha{% endblock %}</title>
+        
+        
+        
+         
+         {% block fbshare %}
+         
+         
+         <!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="Zeega"/>
+		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
+   		<meta property="og:type" content="website"/>
+   		<meta property="og:url" content="{{hostname}}"/>
+    	<meta property="og:image" content="{{hostname}}{{ asset('images/z-logo-fb.png')}}"/>
+						
+		<!-- END FB -->	
+		
+         
+         {% endblock %}
          
          
          {% block stylesheets %}
-            <link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-			<meta name="robots" content="noindex,follow">
-			<meta name="description" content="">
-			<meta name="keywords" content="">
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 			
 <!-- css imports -->
 
@@ -27,18 +44,10 @@
 			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
 			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 			
-			<!-- TODO: import the below COMMON file in every other bootstrap.less file and take the reference
-				out of the twig -->
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/common/style.less')}}">
-
-
-			<!--
-			<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
-			-->
-			
 			<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
 			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/editor/bootstrap.less')}}">
-
+			<!-- Including Google's Font -->
+			<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 <!-- end css imports -->
 			
 			
@@ -200,7 +209,7 @@ var BrowserDetect = {
 		{% endblock %}
 		
     </head>
-  <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
+  <body> 
 
 	
  	
@@ -208,17 +217,13 @@ var BrowserDetect = {
     	
     	{% block header %}
 				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-				<style type="text/css">
-					html { 
-						padding-top:60px;
-					}
-				</style>
+
 					<header>
 				<div class="navbar navbar-fixed-top">
 					<div class="navbar-inner">
 						<div class="container">
 							
-							<a class="brand" href="{{path('ZeegaEditorBundle_home')}}">
+							<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
 								<img src="{{ asset('images/zeega-logo-header.png') }}"/>
 							</a>
 							
@@ -233,25 +238,28 @@ var BrowserDetect = {
 									</a>
 									<ul class="dropdown-menu">
 										
-										<li><a href="#">Mission</a></li>
-										<li><a href="#">Productions</a></li>
-										<li><a href="#">Engine</a></li>
-										<li><a href="#">Team</a></li>
-										<li><a href="#">Contact</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_about')}}">Mission</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
 										<li class="divider"></li>
-										<li><a href="#">Terms of Use</a></li>
-										<li><a href="#">Privacy Policy</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
 										
 										
 									</ul>
 								</li>
-
+								{% if is_granted('ROLE_ADMIN') %}
+									<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li><br>
+								{% endif %}
+								
 						
-							
+								<!--
 								<li class="">
 									<a href="{{ path('ZeegaEditorBundle_site', {'short': site.short }) }}">{{title}}</a>
 								</li>
-								
+								-->				
 
 							
 
@@ -278,13 +286,12 @@ var BrowserDetect = {
 									</ul>
 								</li><!-- project .dropdown -->
 								
-								<li class='item add-media'><a href="#"><i class='zicon-add-media'></i> Add Media</a></li>
 								<li class="divider-vertical"></li>
 								
 								<li><a href="{{ path('ZeegaCoreBundle_faq')}}">FAQ</a>
 								</li>
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-warning'></i> Report a Bug<b class="caret"></b></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Report a Bug<b class="caret"></b></a>
 									<ul class="dropdown-menu bug-report">
 										<li class='bug-unsubmitted'>
 											<div><label>Zeega is an experimental beast. We need your help to make it better! Let us know if something is misbehaving by sending us a brief description of what's wrong:</label></div>
@@ -309,13 +316,10 @@ var BrowserDetect = {
 									</ul>
 							</li>
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='zicon-user'></i> {{displayname}}<b class="caret"></b></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='icon-user icon-white'></i> {{displayname}}<b class="caret"></b></a>
 									<ul class="dropdown-menu">
 
 										<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}">User Profile</a></li>
-
-										<li><a href="javascript:dropbox.sync()">Sync With Dropbox</a></li>
-
 										<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
 									</ul>
 								</li>
@@ -328,52 +332,6 @@ var BrowserDetect = {
 		
 		
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		
-			<!-- ADD MEDIA modal window -->
-			<div class="modal hide" id='add-media'>
-			<!--<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>-->
-			<button class="close" style="position: relative;top: -18px;right: -9px;">&times;</button>
-			<h2 style="margin-bottom:25px">To install the Zeega bookmarklet, follow the directions below:</h2>
-						
-				<div id="book-one" style="float: left;">
-					<img src="{{ asset('images/chrome-logo.gif') }}" style="margin-left: 25px;"/>
-					<br>
-					<br>
-					Access Zeega from the<br>
-					<a href="http://google.com/chrome" target="_blank">latest Chrome browser</a>
-				</div>
-				
-				<div id="book-two" style="float: left; margin-left: 20px;">
-					<img src="{{ asset('images/view-bookmarks.gif') }}" style="margin-left: 25px; margin-top: 25px;"/>
-					<br><br><br>
-					<span style="display: block; margin-left: 55px; margin-top: 2px;">
-						Under the view menu, select<br>
-						"Always show Bookmarks Bar"
-					</span>
-				</div>
-				
-				<div id="book-three" style="float: left; margin-left: 30px;">
-					<a href="javascript:(function()%7Bvar%20head=document.getElementsByTagName('body')%5B0%5D,script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='{{hostname}}{{directory}}js/widget/zeega.bookmarklet.js?'%20+%20Math.floor(Math.random()*99999);head.appendChild(script);%7D)();%20void%200"><img src="{{ asset('images/drag-zeega.gif') }}" style="margin-left: 25px; margin-top: 0px;" alt="Add to Zeega"/></a>
-					<br>
-					<span style="display: block; margin-left: 5px; margin-top: 10px;">
-						Drag this icon to the<br>
-						Bookmarks Bar within<br>
-						the browser
-					</span>
-
-				</div>
-				
-				<div id="book-four" style="float: left; margin-left: 30px;">
-					<img src="{{ asset('images/bookmark-confirm.gif') }}" style="margin-left: 35px; margin-top: 13px;"/>
-					<br>
-					<span style="display: block; margin-left: 17px; margin-top: 10px;">
-						"Add to Zeega" will now appear in your Bookmarks<br> Bar. As you find media across the web, click this<br> to open the bookmarklet plugin.
-					</span>
-
-				</div>
-				
-			<div class="clear" style="clear: both;"></div>
-			</div><!--#add-media-->
 			
 		{% else %}
 		
@@ -406,7 +364,7 @@ var BrowserDetect = {
 										
 										
 									</ul>
-							<a href="{{path('fos_user_registration_register')}}">SignUp</a><a href='{{path('fos_user_security_login')}}'>Login</a>
+							<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
 					</div>
 				</div>
 			</div>
@@ -437,15 +395,19 @@ var BrowserDetect = {
 				
 				{% block body %}{% endblock %}
 		   		
-				{% block footer %}
+				
+         	</div> <!-- #editor -->	
+         </div> <!-- #wrapper -->
+         {% block footer %}
 		   		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 		   			<!-- Logged-in Footer Begins -->
 					<div id="footer">
 		
-							<div id="footerWrapper">
-								<div id="footer">
-							&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
-								</div>
+							<div class="navbar navbar-fixed-bottom" style="position:relative">
+ <div class="navbar-inner">
+    <div class="container">
+							<h5> <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.org">info [at] zeega.org</a></h5>
+	</div></div>
 							</div>
 					</div>
 					<!-- Logged-in Footer Ends -->
@@ -476,8 +438,8 @@ var BrowserDetect = {
 								<div>
 									<p><a href="{{ path('ZeegaCommunityBundle_home')}}">Home</a></p>
 									<p><a href="{{ path('ZeegaCommunityBundle_about')}}">About</a></p>
-									<p><a href="">Signup</a></p>
-									<p><a href="">Login</a></p>
+									<p><a href="{{ path('fos_user_registration_register')}}">Sign Up</a></p>
+									<p><a href="{{ path('_security_login')}}">Login</a></p>
 								</div>
 							</div>
 							
@@ -489,8 +451,7 @@ var BrowserDetect = {
 					
 					<!-- Non-logged-in Footer Ends -->
 				{% endif %}	
-			 </div> <!-- #editor -->	
-         </div> <!-- #wrapper -->
+			 
          {% endblock footer %}
          {% block extras %}
          

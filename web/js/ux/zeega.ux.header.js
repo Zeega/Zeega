@@ -79,21 +79,7 @@ function initHeaderUX(){
 	
 	});
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
    	//dropdown menu
     $('.drop-down').click(function(){
 		if( $(this).hasClass('open') ) $(this).removeClass('open');
@@ -105,15 +91,7 @@ function initHeaderUX(){
 		}
 	});
 	
-	// FAKE STUFF
 
-	$('.add-media a').click(function(){
-		$('#add-media').toggleClass('show');
-		$('body').on('click',function(){
-			$('#add-media').removeClass('show');
-		});
-		return false;
-	});
 	
 	
 	$('#book-three').find('a').attr('href',"javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.id='zeegabm';script.type='text/javascript';script.src='" + sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')  + "js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0");

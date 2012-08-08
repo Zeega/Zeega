@@ -3,6 +3,7 @@
 	Layer.Video = Layer.Model.extend({
 			
 		layerType : 'Video',
+		draggable : true,
 		
 		player_loaded : false,
 
@@ -188,38 +189,16 @@
 		},
 		
 		
-		onLayerEnter : function()
-		{
-			//if coming from another frame and the controls are open but the video isn't loaded
-			console.log('coming from another frame. is open?',this.model.controls.visible)
-			if( this.model.controls.visible == true )
-			{
-				console.log('inside;',this.$el, this.model.player, this.model.player_loaded )
-				
-				if( !this.model.player_loaded )
-				{
-					this.model.initPlayer();
-					this.$el.html(this.model.player.render().el);
-					this.model.player.placePlayer();
-				}
-
-				this.model.player_loaded = true;
-			
-			}
-		},
+		onLayerEnter : function(){},
 		
 		onLayerExit : function()
 		{
-			
-			if( this.model.player_loaded )
-			{
-				this.model.player.destroy();
-			}
+			console.log('@@@		on layer exit')
+			if( this.model.player_loaded ) this.model.player.destroy();
 			this.model.player_loaded = false;
 			
 			//must call this if you extend onLayerExit
 			this.model.trigger('editor_readyToRemove')
-			
 		},
 		
 		onControlsOpen : function()
@@ -255,34 +234,13 @@
 			
 			if( !this.model.player_loaded )
 			{
-				//if(this.model.player) this.model.player.destroy();
 				this.model.initPlayerPlayer();
 
 				this.$el.html( this.model.player.render().el );
 				this.model.player.placePlayer();
 				
-				//this.model.player.popcorn.listen('ended', function(){_this.onEnded()})
-/*
-				console.log('on preload',this.model)
-				if(this.model.can_play != true)
-				{
-					console.log('this thing cant play yet. wait')
-					this.model.player.popcorn.listen('canplay', function(){
-						console.log('##		video ready player', _this.model.id);
-						_this.model.trigger('ready', _this.model.id ) ;
-					})
-					this.model.player.popcorn.listen('canplaythrough', function(){
-						console.log('##		video ready player through', _this.model.id);
-						_this.model.trigger('ready', _this.model.id ) ;
-					})
-				}
-				else
-				{
-					console.log('play that thing!!')
-					this.model.trigger('ready', _this.model.id );
-				}
-				
-				*/
+				var _this = this;
+				this.model.player.popcorn.listen('timeupdate',function(){ _this.onTimeUpdate() })
 				
 				this.model.player_loaded = true;
 			}
@@ -290,13 +248,7 @@
 			{
 				this.model.player.pause();
 			}
-			console.log('set listeners', this)
-			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
-			//this.popcorn.listen('timeupdate',function(){ _this.updateElapsed() });
 			
-			
-			
-
 		},
 		onEnded : function()
 		{
@@ -307,19 +259,18 @@
 		onTimeUpdate : function()
 		{
 			
-			console.log('on time update', this.model.player.popcorn.currentTime() )
-			//Cue Out
+			console.log('onTimeUpdate')
 			
-			
+			/*
+			// fix this
 			if( this.model.get('attr').cue_out != 0 && this.model.player.popcorn.currentTime() > this.model.get('attr').cue_out )
 			{
-				
 				this.model.player.popcorn.currentTime( this.model.get('attr').cue_in );
 				this.model.player.popcorn.pause();
 				this.model.trigger('playback_ended');
 				console.log('playback ended');
 			}
-			
+			*/
 			//Fades
 			
 			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
@@ -333,18 +284,18 @@
 			{
 				//console.log("fading in");
 				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
-				this.model.player.popcorn.volume(vol);
+				this.model.player.setVolume(vol);
 			}
 			
 			else if(this.model.get('attr').fade_out>0 && t>g)
 			{
 				//console.log("fading out");
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
-				this.model.player.popcorn.volume(vol);
+				this.model.player.setVolume(vol);
 			}
 			else if(Math.abs(this.model.get('attr').volume-this.model.player.popcorn.volume())>.01)
 			{
-				this.model.player.popcorn.volume(this.model.get('attr').volume);
+				this.model.player.setVolume(this.model.get('attr').volume);
 			}
 			
 			

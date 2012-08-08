@@ -7,16 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CommunityController extends Controller
 {
-    public function notfoundAction()
-    {
-        return $this->render('ZeegaCommunityBundle:Notfound:notfound.html.twig');
-    }
-
-    public function aboutAction()
-    {
-        return $this->render('ZeegaCommunityBundle:About:about.html.twig');
-    }
-    
     public function authorAction()
     {
         return $this->render('ZeegaCommunityBundle:Author:author.html.twig');
@@ -24,7 +14,8 @@ class CommunityController extends Controller
     
     public function homeAction()
     {
-        return $this->render('ZeegaCommunityBundle:Home:home.html.twig');
+    	$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 36136))->getContent();
+        return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('projects' => $projects));
     }
     
     public function topicAction()
@@ -34,44 +25,50 @@ class CommunityController extends Controller
     
     public function userAction($id)
     {
-        //$user = $this->forward('ZeegaApiBundle:Users:getUser', array('id'=>$id))->getContent();
+        $user = $this->getDoctrine()->getEntityManager()->getRepository('ZeegaDataBundle:User')->findOneById($id);
+    	
     	$projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
 
-        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user_id'=>$id, 'user_projects' => $projects));
+        return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user'=>$user, 'user_projects' => $projects));
     }
     
     public function dashboardAction()
-    {
-    	//return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>null)), 301);       
+    {      
     	if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
             $userId = $this->get('security.context')->getToken()->getUser()->getId();
             return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId)), 301);  
         }        
     }
+    
+    public function missionAction()
+    {
+        return $this->render('ZeegaCommunityBundle:About:mission.html.twig');
+    }
+    
     public function privacyAction()
     {
-        return $this->render('ZeegaCommunityBundle:Privacy:privacy.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:privacy.html.twig');
     }
     public function termsAction()
     {
-        return $this->render('ZeegaCommunityBundle:Terms:terms.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:terms.html.twig');
     }
     public function productionsAction()
     {
-        return $this->render('ZeegaCommunityBundle:Productions:productions.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:productions.html.twig');
     }
     public function engineAction()
     {
-        return $this->render('ZeegaCommunityBundle:Engine:engine.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:engine.html.twig');
     }
     public function teamAction()
     {
-        return $this->render('ZeegaCommunityBundle:Team:team.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:team.html.twig');
     }
     public function contactAction()
     {
-        return $this->render('ZeegaCommunityBundle:Contact:contact.html.twig');
+        return $this->render('ZeegaCommunityBundle:About:contact.html.twig');
     }
     
 }

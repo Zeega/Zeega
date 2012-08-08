@@ -78,7 +78,7 @@ class ItemsController extends Controller
     		}
             else
             {
-                $query['user'] = $user->getId();
+                $query['user'] = $user;
             }
         }
          //  execute the query
@@ -252,7 +252,8 @@ class ItemsController extends Controller
         {
             $itemId = $item->getId();
         
-            $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$item->getMediaType();
+            $thumbnailServerUrl = "http://static.zeega.org/dev/static/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$item->getMediaType();
+            error_log("thumb url 1 " . $thumbnailServerUrl, 0);
             $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
 
             if(isset($zeegaThumbnail))
@@ -647,7 +648,8 @@ class ItemsController extends Controller
                     $em->persist($childItem);
                     $em->flush();
                     $itemId = $childItem->getId();
-                    $thumbnailServerUrl = "http://dev.zeega.org/static/dev/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
+                    $thumbnailServerUrl = "http://static.zeega.org/dev/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
+                    error_log("thumb url 2 " . $thumbnailServerUrl, 0);
                     $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
                     
                     if(isset($zeegaThumbnail))

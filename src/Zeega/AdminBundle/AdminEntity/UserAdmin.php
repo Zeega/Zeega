@@ -13,6 +13,7 @@ class UserAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
 		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin');
+        
         $formMapper
             ->add('username')
 			->add('display_name')
@@ -48,6 +49,7 @@ class UserAdmin extends Admin
 			->add('display_name')
 			->add('email')
 			->add('last_login','datetime')
+			->add('locked')
         ;
     }
 
@@ -58,5 +60,18 @@ class UserAdmin extends Admin
                 ->assertMaxLength(array('limit' => 32))
             ->end()
         ;
+    }
+    
+    public function getBatchActions()
+    {
+        // retrieve the default (currently only the delete action) actions
+        $actions = parent::getBatchActions();
+
+        $actions['activate'] = array(
+                'label'            => 'Activate Users',
+                'ask_confirmation' => true
+            );
+
+        return $actions;
     }
 }

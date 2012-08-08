@@ -48,7 +48,12 @@
 	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
 	
 	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
-	
+	{% if projects is defined %}
+		<script type="text/javascript" language="Javascript">
+			//bootstrapping data
+			var projectsJSON = "{{ projects | e('js') }}";
+		</script>
+	{% endif %}
 	
 {% endblock %}
 
@@ -67,7 +72,7 @@
 			<div class="page-intro span11">
 			
 				<h1>Create Immersive Experiences</h1>
-				<h2>Join a community of makers and start experimenting now. <a href="">Ready to begin?</a></h2>
+				<h2>Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2>
 			
 			</div>
 		
@@ -85,77 +90,8 @@
 			
 			</div>
 		
-			<!-- Individual Project Card Begins -->
-		
-			<div class="span7 project-card">
-			
-				<div class="row">
-					<a href="">
-						<div class="span7 project-image">
-							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							<div class="gradient" style="top:-197px;">
-							</div>
-						</div>
-					</a>
-				</div>
-			
+			<div id="zeega-user-projects">
 			</div>
-			
-			<!-- Individual Project Card Ends -->
-			
-			<!-- Individual Project Card Begins -->
-		
-			<div class="span7 project-card">
-			
-				<div class="row">
-					<a href="">
-						<div class="span7 project-image">
-							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							<div class="gradient" style="top:-197px;">
-							</div>
-						</div>
-					</a>
-				</div>
-			
-			</div>
-			
-			<!-- Individual Project Card Ends -->
-			
-			<!-- Individual Project Card Begins -->
-		
-			<div class="span7 project-card">
-			
-				<div class="row">
-					<a href="">
-						<div class="span7 project-image">
-							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							<div class="gradient" style="top:-197px;">
-							</div>
-						</div>
-					</a>
-				</div>
-			
-			</div>
-			
-			<!-- Individual Project Card Ends -->
-			
-			<!-- Individual Project Card Begins -->
-		
-			<div class="span7 project-card">
-			
-				<div class="row">
-					<a href="">
-						<div class="span7 project-image">
-							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							<div class="gradient" style="top:-197px;">
-							</div>
-						</div>
-					</a>
-				</div>
-			
-			</div>
-			
-			<!-- Individual Project Card Ends -->
 			
 		
 		</div>

@@ -54,7 +54,7 @@
 			}
 			else
 			{
-				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerEnter editor_layerRender', this.private_onLayerEnter, this);
 				this.model.on('editor_layerExit editor_removeLayerFromFrame', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
@@ -133,6 +133,7 @@
 		
 		private_onLayerEnter : function()
 		{
+			console.log('	@@@		on layer enter')
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
 		},

@@ -12,7 +12,6 @@
 		render: function()
 		{
 			var _this = this;
-			console.log('modal render!!!')
 			$(this.el).html( this.getTemplate() );
 			
 			//fill options for selecting a sequence
@@ -87,16 +86,16 @@
 
 			var html =
 			
-			'<div class="modal" id="sequence-modal">'+
-				'<div class="modal-header">'+
+			'<div class="" id="sequence-modal">'+
+				'<div class="modal-header clearfix">'+
 					'<button class="close">×</button>'+
 					
 				'</div>'+
 				'<div class="modal-body">'+
-					'<h3>1. Choose Sequence:</h3>'+
+					'<h4>1. Choose Sequence:</h4>'+
 					'<select class="sequence-choose-select"></select>'+
-					'<h3>2. Choose Frame:</h3>'+
-					'<ul class="frame-choose-list unstyled"></ul>'+
+					'<h4>2. Choose Frame:</h4>'+
+					'<ul class="frame-choose-list unstyled clearfix"></ul>'+
 				'</div>'+
 				'<div class="modal-footer">'+
 					'<a href="#" class="btn close" >Close</a>'+

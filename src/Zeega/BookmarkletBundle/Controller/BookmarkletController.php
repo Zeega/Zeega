@@ -49,7 +49,8 @@ class BookmarkletController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		// get user items and sites
-		$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array("limit" => 15, "user" => $user->getId()))->getContent();
+		$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
+		
 		$sites = $user->getSites();
 		
 		$widgetId = $request->query->get('widget-id');
@@ -77,13 +78,25 @@ class BookmarkletController extends Controller
 	        		{
 	        		    // item was imported before
 						if($isUrlCollection){
-							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batchUpdate.widget.html.twig', array(
+							if($parsedItem["child_items_count"]==0&&$parsedItem["layer_type"]=="Dropbox"){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'mycollection'=>$mycollection,
+								'child_items_count'=>$parsedItem["child_items_count"],
+							));	
+						
+						}
+						else{
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
 								'displayname' => $user->getDisplayname(),
 								'widget_id'=>$widgetId,
 								'item'=>json_encode($parsedItem), 
 								'mycollection'=>$mycollection,
 								'child_items_count'=>$parsedItem["child_items_count"],
 							));						
+						}
 						}
 						else
 						{	

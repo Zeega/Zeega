@@ -99,7 +99,7 @@ this.zeega = {
 	startEditor : function()
 	{
 		console.log('editor started')
-		this.renderWorkspace();
+		//this.renderWorkspace();
 		
 		this.renderSequenceFrames();
 		
@@ -174,20 +174,32 @@ this.zeega = {
 
 	loadFrame : function( frame )
 	{
-		var _this = this;
-		this.unrenderFrame( this.currentFrame );
+		//make sure we're not trying to load the same frame again!
+		if( !this.currentFrame || this.currentFrame.id != frame.id )
+		{
+			console.log('laod frame')
+			var _this = this;
 		
-		if(this.currentFrame) this.currentFrame.trigger('blur');
-		this.currentFrame = frame;
+			if(this.currentFrame)
+			{
+				this.currentFrame.removeWorkspace();
+				this.currentFrame.trigger('blur'); // should be unneeded
+			}
+			frame.renderWorkspace();
+			this.currentFrame = frame;
+			this.currentFrame.trigger('focus'); // should be unneeded
 
-		this.currentFrame.trigger('focus');
-		this.renderFrame( this.currentFrame );
-		
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
+			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
+		}
 
-		this.restorePanelStates();
-		this.setAdvanceValues();
-
+	},
+	
+	returnToFrame : function()
+	{
+		console.log('return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
+		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
+		this.currentFrame.renderWorkspace();
+		this.currentFrame.trigger('focus'); // should be unneeded
 	},
 	
 	renderSequenceFrames : function()
@@ -267,6 +279,7 @@ this.zeega = {
 	makeConnection : function(action)
 	{
 		console.log('make connection: '+ action)
+		
 		switch(action)
 		{
 			case 'newFrame':
@@ -280,10 +293,12 @@ this.zeega = {
 						from_frame : this.currentFrame.id
 					}
 				});
-				console.log(this.hold)
-				$('#connection-confirm').show();
-				$('#make-connection button').addClass('disabled');
-				this.busy = true;
+				
+				//trigger the creation of a new sequence
+				if(this.hold.isNew()) this.hold.on('layer_saved',function(){ _this.confirmConnection() })
+				else this.confirmConnection();
+				//this.busy = true;
+				//this.confirmConnection();
 				break;
 			
 			case 'existingFrame':
@@ -298,11 +313,12 @@ this.zeega = {
 				console.log('link with advanced options!');
 				var Modal = zeega.module('modal');
 				var advancedModal = new Modal.Views.LinkAdvanced();
-				console.log(advancedModal)
 				$('body').append(advancedModal.render().el);
+				console.log('advance modal',advancedModal,advanceModal.el)
 				advancedModal.show();
 				break;
 		}
+		
 	},
 	
 	connectToSequenceFrame : function( sequenceID, frameID )
@@ -357,47 +373,33 @@ this.zeega = {
 		})
 	},
 	
-	confirmConnection : function(action)
+	confirmConnection : function()
 	{
-		console.log('confirm connection: '+ action)
-		if(action == 'ok')
-		{
-			var _this = this;
-			console.log('create and go to new sequence')
-			
-			var layersToPersist = [this.hold.id];
-			
-			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
 
-			sequence.save({},{
-				success : function()
-				{
-					console.log('sequence saved')
-					console.log(sequence)
-					_this.busy = false;
-					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-					_this.hold.visual.render();
-					_this.project.frames.add(sequence.get('frames'));
-					sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					//sequence.createCollections();
-					sequence.trigger('sync');
-					_this.goToSequence(sequence.id);
-					
-					this.hold = null;
-					this.busy = false;
-				}
-			});
-			this.project.sequences.add(sequence);
+		var _this = this;		
+		var layersToPersist = [this.hold.id];
+		var Sequence = zeega.module("sequence");
+		var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
 
-		}
-		else
-		{
-			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
-			this.hold.destroy();
-			this.hold = null;
-			this.busy = false;
-		}
+		console.log('create and go to new sequence', this.currentFrame.id, layersToPersist)
+
+		sequence.save({},{
+			success : function()
+			{
+				console.log('sequence saved', sequence)
+				_this.busy = false;
+				_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
+				_this.hold.visual.render();
+				_this.project.frames.add(sequence.get('frames'));
+				sequence.set('frames', [ sequence.get('frames')[0].id ]);
+				sequence.trigger('sync');
+				_this.goToSequence(sequence.id);
+				
+				this.hold = null;
+				this.busy = false;
+			}
+		});
+		this.project.sequences.add(sequence);
 
 	},
 	
@@ -413,9 +415,10 @@ this.zeega = {
 			var frame = _this.project.frames.get(frameID);
 			layers = _.union(layers,frame.get('layers'));
 		});
-		_.each(layers, function(layerID){
+		console.log( 'layers:',layers)
+		_.each( layers, function(layerID){
 			var layer = _this.project.layers.get(layerID);
-			if(layer.get('type')=='Link')
+			if( layer && layer.get('type') == 'Link' )
 			{
 				var attr = layer.get('attr');
 				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
@@ -426,45 +429,6 @@ this.zeega = {
 		// if sequence is in view, then load the first sequence
 		
 		return false;
-	},
-	
-	setAdvanceValues : function()
-	{
-		//update the auto advance tray
-		//make sure the attribute exists
-		var adv = false;
-		if( !_.isNull(this.currentFrame.get('attr')) && !_.isNull( this.currentFrame.get('attr').advance ) )
-			adv = this.currentFrame.get('attr').advance;
-
-		var advanceControls = $('#advance-controls');
-
-		if(adv > 0)
-		{
-			//after time in seconds
-			advanceControls.find('input[id="time"]').prop('checked', true );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-			$('#advance-time').val(adv/1000);
-		}
-		else if( adv == -1 )
-		{
-			//manual
-
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', true );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-
-			$('#advance-time').val(10);
-
-		//if the attr doesn't exist, then give it default values
-		}
-		else if( !adv )
-		{
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', true );
-			$('#advance-time').val(10);
-		}
 	},
 
 	addFrame : function( num )
@@ -600,7 +564,7 @@ this.zeega = {
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )
-			//args.frame.trigger('update_thumb');
+			args.frame.trigger('update_thumb');
 			console.log(args)
 			return this.project.layers.addNewLayer( args )
 		}
@@ -723,7 +687,11 @@ this.zeega = {
 		var _this = this;
 		this.previewMode = true;
 		this.exportProject();
-		this.unrenderFrame( this.currentFrame );
+		
+		$('#wrapper').hide();
+		
+		this.currentFrame.removeWorkspace();
+		
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
 		$('body').css({'background':'#000'});
@@ -731,9 +699,11 @@ this.zeega = {
 	
 	restoreFromPreview : function()
 	{
+		$('#wrapper').show();
+		
 		this.previewMode = false;
 		$('body').css({'background':'#333'});
-		this.renderFrame( this.currentFrame );
+		this.returnToFrame();
 	},
 
 	exportProject : function( string )
@@ -789,119 +759,6 @@ this.zeega = {
 		this.project.save();
 	},
 
-	initStartHelp : function()
-	{
-		
-		
-		if(localStorage.help != 'false' && this.helpCounter == 0)
-		{
-			//init the popovers
-			$('#visual-editor-workspace').popover({
-				trigger: 'manual',
-				//html:true,
-				//placement:'above',
-				//offset:'-250',
-				//content : 'tester'
-				//template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			
-			/*
-			$('#database-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'right',
-				//offset:'-250',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#new-layer-tray').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#layer-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#frame-drawer').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#preview').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-*/
-			this.displayStartHelp();
-		}
-		
-	},
-
-	displayStartHelp : function()
-	{
-		var _this = this;
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			/*
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-			*/
-		];
-		
-		console.log('	HELPPPPPPP')
-		console.log(helpOrderArray[0]);
-		console.log(this.helpCounter)
-		console.log( $('#'+helpOrderArray[_this.helpCounter]) )
-
-		if(_this.helpCounter > 0 )
-		{
-			$('#'+helpOrderArray[_this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-		}
-		if(_this.helpCounter >= helpOrderArray.length )
-		{
-			console.log('end of line')
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-			this.turnOffHelp();
-			return false;
-		}
-
-		$('#'+helpOrderArray[_this.helpCounter]).popover('show');
-		$('#'+helpOrderArray[_this.helpCounter]).css('box-shadow', '0 0 18px orange');
-
-		this.helpCounter++;
-
-	},
-
-	turnOffHelp : function()
-	{
-		console.log('turn off help windows')
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-		];
-		localStorage.help = false;
-
-console.log( helpOrderArray[this.helpCounter-1] )
-
-			$('#'+helpOrderArray[this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[this.helpCounter-1]).css('box-shadow', '');
-			this.helpCounter = 0;
-
-	},
 	
 	shareProject : function()
 	{
