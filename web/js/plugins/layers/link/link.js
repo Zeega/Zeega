@@ -169,7 +169,7 @@
 		{
 			var html = '';
 			
-				if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
+				//if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 				
 			return html;
