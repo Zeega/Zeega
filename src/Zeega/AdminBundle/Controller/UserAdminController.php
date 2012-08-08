@@ -21,34 +21,38 @@ class UserAdminController extends Controller
         {
             foreach ($users as $user) 
             {
-                $user->setEnabled(true);
-                $user->setLocked(false);
-                if (null === $user->getConfirmationToken()) {
-                    $user->generateConfirmationToken();
-                }
-                $user->setPasswordRequestedAt(new \DateTime('now'));
-                $modelManager->update($user);
+                $userIsLocked = $user->isLocked();
+                if($userIsLocked == true)
+                {
+                    $user->setEnabled(true);
+                    $user->setLocked(false);
+                    if (null === $user->getConfirmationToken()) {
+                        $user->generateConfirmationToken();
+                    }
+                    $user->setPasswordRequestedAt(new \DateTime('now'));
+                    $modelManager->update($user);
                 
-                $activationUrl = $hostname . $hostDirectory ."resetting/reset/" . $user->getConfirmationToken();
+                    $activationUrl = $hostname . $hostDirectory ."resetting/reset/" . $user->getConfirmationToken();
 
-                $message = \Swift_Message::newInstance()
-                        ->setSubject('Welcome to Zeega!')
-                        ->setFrom('noreply@zeega.org')
-                        ->setTo($user->getEmail())
-                        ->setBody($this->renderView('ZeegaAdminBundle:Users:account_activated.txt.twig', array('username' => $user->getDisplayName(), 'activationURL' => $activationUrl)))
-                    ;
-                $this->get('mailer')->send($message);
+                    $message = \Swift_Message::newInstance()
+                            ->setSubject('Welcome to Zeega!')
+                            ->setFrom('noreply@zeega.org')
+                            ->setTo($user->getEmail())
+                            ->setBody($this->renderView('ZeegaAdminBundle:Users:account_activated.txt.twig', array('username' => $user->getDisplayName(), 'activationURL' => $activationUrl)))
+                        ;
+                    $this->get('mailer')->send($message);
+                }
             }
         } 
         catch (\Exception $e) 
         {
-            $this->get('session')->setFlash('sonata_flash_error', 'flash_batch_merge_error');
+            $this->get('session')->setFlash('sonata_flash_error', 'Something went wrong...');
             return new RedirectResponse($this->admin->generateUrl('list',$this->admin->getFilterParameters()));
         }
         
         
             
-        $this->get('session')->setFlash('sonata_flash_success', 'flash_batch_merge_success');
+        $this->get('session')->setFlash('sonata_flash_success', 'The users were activated successfully.');
 
         return new RedirectResponse($this->admin->generateUrl('list',$this->admin->getFilterParameters()));
     }

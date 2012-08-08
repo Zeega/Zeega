@@ -24,17 +24,11 @@
 			</div>
 		</div>
 		<div style="margin-bottom:100px; color: white; font-size: 11pt; padding:20px;">
-			We cannot seem to add this media to Zeega. Is it possible that you've made it private? Currently, Zeega supports public files on YouTube, Flickr, SoundCloud, Vimeo, Tumblr, Dropbox and URLs that end in .jpg, .gif, .png, .mp3 and .mp4.</div>
+			<p>We cannot seem to add this media to Zeega. Is it possible that you've made it private?</p>
+			<p>Currently, Zeega supports public files on YouTube, Flickr, SoundCloud, Vimeo, Tumblr, Dropbox and URLs that end in .jpg, .gif, .png, .mp3 and .mp4.</p>
+		</div>
 		
 	</div><!--#widget-wrapper-->
 	
 {% endblock %}
-	
-{% block scripts %}
-	<script data-main="{{ asset('js/main.widget.js')}}" src="{{ asset('js/libraries/require-jquery.js')}}"></script>
-	<script type="text/javascript" language="Javascript">
-		//bootstrapping data
-		var itemJSON = "{{item|e('js')}}";
-		var itemCollectionJSON = "{{mycollection|e('js')}}";
-	</script>	
-{% endblock %}
+{% block scripts %}{% endblock %}

@@ -16,8 +16,8 @@ require.config({
 		}
 })
 
-var loadFiles = [
-	'jquery',
+require(
+	[
 	
 	//libraries
 	'order!lib/underscore',
@@ -35,9 +35,9 @@ var loadFiles = [
 	//plugins
 	'order!lib/jquery/plugins/spin',
 	'order!lib/jquery/plugins/jeditable.min',
-	'order!lib/jquery/plugins/jquery-cycle',
-	'order!lib/jquery/plugins/jquery.paging',
-	'order!lib/jquery/plugins/colorpicker/js/colorpicker',
+	//'order!lib/jquery/plugins/jquery-cycle',
+	//'order!lib/jquery/plugins/jquery.paging',
+	//'order!lib/jquery/plugins/colorpicker/js/colorpicker',
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
@@ -45,7 +45,7 @@ var loadFiles = [
 	'order!lib/jquery/plugins/twitter-bootstrap',
 	
 	//custom
-	'order!lib/filamentslider/selectToUISlider.jQuery',
+	//'order!lib/filamentslider/selectToUISlider.jQuery',
 	
 	//mvc
 	//'order!backbone/models/tag',
@@ -55,13 +55,10 @@ var loadFiles = [
 
 	'order!app/collections/widget.collections.item',
 
-	'order!app/views/widget.item/widget.view.item.collection',
+	//'order!app/views/widget.item/widget.view.item.collection',
 	'order!app/views/widget.item/widget.view.item.ingesting',
-	
-];
 
-require(loadFiles, function($) 
-{
-	zeegaWidget.app.init();
-	//initUX();	
+	],
+	function(jquery) {
+	    zeegaWidget.app.init();
 });
