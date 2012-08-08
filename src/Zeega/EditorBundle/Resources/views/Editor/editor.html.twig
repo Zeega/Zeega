@@ -56,7 +56,7 @@
 						>
 							<div class='panel-head title'>
 								Edit Layers
-								<i class='zicon-info info'
+								<i class='icon-info-sign icon-white info'
 									data-placement = "right"
 									data-original-title='Layers'
 									data-content='This is where your media layers Appear. You can reorder and change their properties.'
@@ -76,7 +76,7 @@
 							<div class='panel-head'>
 								<div>
 									Add Media
-									<i class='zicon-info info'
+									<i class='icon-info-sign icon-white info'
 										data-placement = "right"
 										data-original-title='Items Database'
 										data-content='This is where you can search items from your collections.'
@@ -103,8 +103,10 @@
 									<a href='#' id='grid-view'><i class='zicon-grid orange'></i></a>
 									<a href='#' id='list-view'><i class='zicon-list'></i></a>
 									
-									<a href='#' id='add-media-button'><i class='zicon-add-media'></i></a>
-									<a href="javascript:dropbox.sync()" id='sync-dropbox'><i class='zicon-sync-dropbox'></i></a>
+									<div class='pull-right'>
+										<a href='#' id='add-media-button'><i class='zicon-add-media'></i></a>
+										<a href="javascript:dropbox.sync()" id='sync-dropbox'><i class='zicon-sync-dropbox'></i></a>
+									</div>
 								</div><!-- db-nav-controls -->
 							
 								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
@@ -181,7 +183,7 @@
 	
 	<!-- Add media modal -->
 	<div id='add-media'>
-			<span class="zicon orange zicon-close" style="position: absolute; right: 5px; top: 5px;"></span>
+			<a class="close" href="#" data-dismiss="modal" >&times;</a>
 
 			To install the Zeega bookmarklet, follow the directions below:<br><br><br>
 						

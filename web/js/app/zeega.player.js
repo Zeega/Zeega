@@ -583,7 +583,7 @@ var Player2 = Backbone.View.extend({
 	events : {
 		'click #preview-left' : 'goLeft',
 		'click #preview-right' : 'goRight',
-		'click #preview-close' : 'closePlayer',
+		'click #preview-close' : 'closePlayer'
 	},
 
 	
@@ -890,15 +890,18 @@ var Player2 = Backbone.View.extend({
 		
 
 		"<div id='zeega-player'>"+
-			"<div class='player-header'>"+
-				"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
+			"<div class='player-header'>";
+				//"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
 			if(this.zeega||true) html +=
-				"<a id='preview-close' class='close pull-right' href='#' >&times;</a>";
+				"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
 
 		html +=
 				//"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
 				//"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + that.data.project.id +"' class='share-facebook pull-right'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
 			"</div>"+
+			
+			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 loaded'></i></a></div>"+
+			
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
 				"<div class='arrow-background'></div>"+

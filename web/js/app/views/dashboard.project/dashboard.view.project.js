@@ -89,10 +89,15 @@
 						'<div class="row">'+
 						
 							
-							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">';
+							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">'+
+							
+								'<a class="zeega-link" href="#">'+
+									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
+								'</a>';
+								
 								if (zeegaDashboard.app.editable){ html+=
 								'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'site/home/project/'+ this.model.id+'" style="top:0;left:400px"><i class="icon-pencil icon-white"></i> edit</a>'+
-								'<a class="btn btn-mini btn-danger community-edit-button project-delete" href="#" style="top:0;left:340px">X delete</a>';
+								'<a class="btn btn-mini btn-danger community-edit-button project-delete" href="#" style="top:0;left:340px"><i class="icon-remove-circle icon-white"></i> delete</a>';
 								
 								}
 								html+='<div style="padding:10px 0 0 10px;margin-top:106px;height:60px;background-color:rgba(0,0,0,0.3);">'+
@@ -100,9 +105,7 @@
 										'<h4><%= title %></h4>'+
 										'<h6><%= date_created %></h6>'+
 									'</div>'+
-									'<a class="zeega-link" href="#">'+
-										'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
-									'</a>'+
+									
 								'</div>'+
 								'<div class="gradient" style="top:-176px;"></div>'+
 							'</div>'+
