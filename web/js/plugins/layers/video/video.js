@@ -3,6 +3,7 @@
 	Layer.Video = Layer.Model.extend({
 			
 		layerType : 'Video',
+		draggable : true,
 		
 		player_loaded : false,
 
@@ -188,20 +189,11 @@
 		},
 		
 		
-		onLayerEnter : function()
-		{
-			if( !this.model.player_loaded )
-			{
-				this.model.initPlayer();
-				this.$el.html(this.model.player.render().el);
-				this.model.player.placePlayer();
-			}
-			this.model.player_loaded = true;
-		},
+		onLayerEnter : function(){},
 		
 		onLayerExit : function()
 		{
-			
+			console.log('@@@		on layer exit')
 			if( this.model.player_loaded ) this.model.player.destroy();
 			this.model.player_loaded = false;
 			
