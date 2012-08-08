@@ -260,10 +260,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if( !_.isUndefined(layer) && layer.get('type') != 'Link' ) return layer;
 				else return null;
 			});
-			//render each layer into the workspace
-			
 
-			
 			this.makeSortable();
 			
 			return this;
