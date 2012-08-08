@@ -455,9 +455,8 @@ var Player2 = Backbone.View.extend({
 	
 	updateArrows : function()
 	{
-		
 		//prevent arrows from being shown on timed layers
-		if( this.currentFrame.get('attr').advance <= 0 )
+		if( _.isUndefined(this.currentFrame.get('attr').advance) || this.currentFrame.get('attr').advance <= 0 )
 		{
 			console.log('~~		update arrows show hide')
 			var leftFrame = this.getLeft();
