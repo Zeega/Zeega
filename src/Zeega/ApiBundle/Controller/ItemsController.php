@@ -251,9 +251,8 @@ class ItemsController extends Controller
         if($itemMediaType != 'Collection')
         {
             $itemId = $item->getId();
-        
-            $thumbnailServerUrl = "http://static.zeega.org/dev/static/scripts/item.php?id=".$itemId."&url=".$item->getUri()."&type=".$item->getMediaType();
-            error_log("thumb url 1 " . $thumbnailServerUrl, 0);
+            $host = $this->container->getParameter('hostname');
+            $thumbnailServerUrl =  $host . "static/scripts/item.php?id=$itemId&url=".$item->getUri().'&type='.$item->getMediaType();
             $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
 
             if(isset($zeegaThumbnail))
@@ -648,8 +647,8 @@ class ItemsController extends Controller
                     $em->persist($childItem);
                     $em->flush();
                     $itemId = $childItem->getId();
-                    $thumbnailServerUrl = "http://static.zeega.org/dev/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
-                    error_log("thumb url 2 " . $thumbnailServerUrl, 0);
+                    $thumbnailServerUrl = $host . "static/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
+
                     $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
                     
                     if(isset($zeegaThumbnail))
