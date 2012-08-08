@@ -395,6 +395,7 @@
 			// fade out after play
 			if( this.model.get('control_fade') ){ this.setFadeTimeout() };
 			this.updatePlayPauseIcon();
+			this.updatePlayPauseIcon();
 		},
 		
 		setFadeTimeout : function()
@@ -435,6 +436,7 @@
 			if(this.timer) clearTimeout( this.timer );
 			// make sure  controls are visible
 			this.fadeInControls();
+			this.updatePlayPauseIcon();
 		},
 		
 		onEnded : function()
@@ -759,7 +761,7 @@
 				"<div class='media-scrubber'></div>"+
 			
 				"<div class='control-panel-inner'>"+
-					"<a href='#' class='pause-play pull-left'><i class='icon-pause icon-white'></i></a>"+
+					"<a href='#' class='pause-play pull-left'><i class='icon-play icon-white'></i></a>"+
 					"<div class='pull-right'><span class='media-time-elapsed'>0:00</span> / <span class='media-time-duration'>0:00</span></div>"+
 				"</div>"+
 			
