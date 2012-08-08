@@ -694,15 +694,16 @@ this.zeega = {
 		
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
-		$('body').css({'background':'#000'});
+		
+		
+		$('body').addClass('preview-mode');
 	},
 	
 	restoreFromPreview : function()
 	{
 		$('#wrapper').show();
-		
 		this.previewMode = false;
-		$('body').css({'background':'#333'});
+		$('body').removeClass('preview-mode');
 		this.returnToFrame();
 	},
 
