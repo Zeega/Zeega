@@ -151,7 +151,7 @@ this.zeega = {
 	
 	goToSequence : function(sequenceID, frameID)
 	{
-		this.unrenderFrame(this.currentFrame);
+		//this.unrenderFrame(this.currentFrame);
 		this.currentSequence.trigger('blur');
 		this.currentSequence = this.project.sequences.get(sequenceID);
 		this.currentSequence.trigger('focus');
@@ -177,17 +177,16 @@ this.zeega = {
 		//make sure we're not trying to load the same frame again!
 		if( !this.currentFrame || this.currentFrame.id != frame.id )
 		{
-			console.log('laod frame')
 			var _this = this;
 		
 			if(this.currentFrame)
 			{
 				this.currentFrame.removeWorkspace();
-				this.currentFrame.trigger('blur'); // should be unneeded
+				this.currentFrame.trigger('blur');
 			}
 			frame.renderWorkspace();
 			this.currentFrame = frame;
-			this.currentFrame.trigger('focus'); // should be unneeded
+			this.currentFrame.trigger('focus');
 
 			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 		}
@@ -196,10 +195,12 @@ this.zeega = {
 	
 	returnToFrame : function()
 	{
-		console.log('return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
+		console.log('~~		return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
+		
 		this.currentFrame.renderWorkspace();
-		this.currentFrame.trigger('focus'); // should be unneeded
+		//this.currentFrame.trigger('focus');
+		
+		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
 	},
 	
 	renderSequenceFrames : function()
@@ -212,70 +213,7 @@ this.zeega = {
 		})
 		//this.currentSequence.updateFrameOrder(false);
 	},
-	
-	renderFrame : function(frame)
-	{
-		if(frame)
-		{
-			var layerIndex = 0;
-			var _this = this;
-			_.each( _.compact( frame.get('layers') ), function(layerID, i){
-				console.log('##		render frame layer', layerID)
-				var layerModel = _this.project.layers.get(layerID);
 
-				layerModel.layerIndex = layerIndex;
-				layerIndex++;
-				
-				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else layerModel.trigger('editor_layerRender', i)
-			})
-		}
-	},
-	
-	unrenderFrame : function ( frame )
-	{
-		if(frame)
-		{
-			var _this = this;
-			_.each( frame.get('layers'), function(layerID){
-				var layerModel = _this.project.layers.get(layerID);
-				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else
-				{
-					if(layerModel.visual) layerModel.visual.remove();
-					if(layerModel.controls) layerModel.controls.remove();
-					layerModel.trigger('editor_layerExit');
-//					layerModel.trigger('editor_layerUnrender');
-				}
-			})
-		}
-	},
-
-	restorePanelStates : function()
-	{
-		//show/hide editor panels
-		// what should happen to panels which haven't been set?
-		//right now they inherit the last frame's state
-		var storage = localStorage.getObject( this.currentFrame.id );
-		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
-		{
-			//go through each saved state
-			_.each( storage.panelStates , function(closed, panel){
-				var dom = $( '#' +panel+ '-view-bar' );
-				var expander = $(dom).next('div');
-				if( closed && expander.is(':visible') )
-				{
-					expander.hide('blind',{'direction':'vertical'});
-					$(dom).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
-				}else if( !closed && expander.is(':hidden') ){
-					expander.show('blind',{'direction':'vertical'});
-					$(dom).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
-				}
-			})
-		}
-	},
-	
-	
 	makeConnection : function(action)
 	{
 		console.log('make connection: '+ action)
@@ -694,7 +632,6 @@ this.zeega = {
 		
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
-		
 		
 		$('body').addClass('preview-mode');
 	},

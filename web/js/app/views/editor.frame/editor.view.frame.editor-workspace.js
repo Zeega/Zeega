@@ -261,10 +261,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				else return null;
 			});
 			//render each layer into the workspace
-			_.each( _.compact(this.layers), function(layer){
-				_this.$el.prepend( layer.controls.renderControls().el );
-				layer.controls.delegateEvents();
-			})
+			
+
 			
 			this.makeSortable();
 			
@@ -291,7 +289,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 			$( "#sortable-layers" ).disableSelection();
 		},
 		
-		renderToEditor : function(){ $( this.target ).html( this.render().el ) },
+		renderToEditor : function()
+		{
+			var _this = this;
+			$( this.target ).html( this.render().el );
+			_.each( _.compact(this.layers), function(layer){
+				_this.$el.prepend( layer.controls.renderControls().el );
+				layer.controls.delegateEvents();
+			})
+		},
 		
 		addLayer : function( layer )
 		{
