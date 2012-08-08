@@ -900,7 +900,7 @@ var Player2 = Backbone.View.extend({
 				//"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + that.data.project.id +"' class='share-facebook pull-right'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
 			"</div>"+
 			
-			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 loaded'></i></a></div>"+
+			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
 			
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
