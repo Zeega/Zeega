@@ -247,14 +247,7 @@ class ItemsController extends Controller
         $em->flush();
         
         // create a thumbnail
-        $zeegaThumbnail = $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $itemId = $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()))->getContent();
-        
-        if(isset($zeegaThumbnail) && isset($zeegaThumbnail["thumbnail_url"]))
-        {
-            $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
-            $em->persist($item);
-            $em->flush();
-        }
+        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()));
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
@@ -640,21 +633,7 @@ class ItemsController extends Controller
                     $em->persist($childItem);
                     $em->flush();
                     
-                    $zeegaThumbnail = $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $itemId = $childItem->getId()), array("media_type" => $childItem->getMediaType(), "uri" => $childItem->getUri()))->getContent();
-
-                    if(isset($zeegaThumbnail) && isset($zeegaThumbnail["thumbnail_url"]))
-                    {
-                        $childItem->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
-                        $em->persist($item);
-                        $em->flush();
-
-                        if($first == True)
-                        {
-                            $item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
-                            $first = False;
-                        }
-                        
-                    }
+			        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()), array("media_type" => $item->getMediaType(), "uri" => $item->getUri()));
                 }
             }
             $item->setChildItemsCount(count($newItems));

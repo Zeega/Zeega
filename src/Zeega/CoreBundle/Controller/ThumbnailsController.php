@@ -15,29 +15,44 @@ class ThumbnailsController extends Controller
     public function getItemThumbnailAction($itemId)
     {
         try
-        {      
-            $request = $this->getRequest();
-        	$itemUri = $request->query->get('uri');
-        	$itemMediaType  = $request->query->get('media_type');
-        
-            if(!isset($itemUri) || !isset($itemMediaType))
+        {     
+	        $em = $this->getDoctrine()->getEntityManager();
+	        $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+            
+            if(null === $item)
             {
-                return ResponseHelper::getJsonResponse(array(
-                    "status" => "Invalid request. Please ensure that you are sending correct values for the media_image and media_type.",
-                    "request" => array("item_id" => $itemId, "uri" => $itemUri, "media_type" => $itemMediaType)
+            	return ResponseHelper::getJsonResponse(array(
+                    "status" => "Invalid request. The item doesn't exist",
+                    "request" => array("item_id" => $itemId)
                     ));
             }
+            
+        	$itemUri = $item->getUri();
+        	$itemMediaType  = $item->getMediaType();
+        	$itemThumbnail  = $item->getThumbnailUrl();
         
             if($itemMediaType != 'Collection')
             {
-                if($itemMediaType != 'Image' && isset($itemUri))
+                if($itemMediaType != 'Image' && isset($itemThumbnail))
                 {
                     $itemMediaType = 'Image';
+                    $itemUri = $itemThumbnail;
                 }
             
                 $host = $this->container->getParameter('hostname');
                 $thumbnailServerUrl =  $host . "static/scripts/item.php?id=$itemId&url=".$itemUri.'&type='.$itemMediaType;
-                return json_decode(file_get_contents($thumbnailServerUrl),true);
+            	$thumbnailJSON = file_get_contents($thumbnailServerUrl);
+            	
+            	$zeegaThumbnail = json_decode($thumbnailJSON,true);
+            	
+                if(isset($zeegaThumbnail) && isset($zeegaThumbnail["thumbnail_url"]))
+                {
+                	$item->setThumbnailUrl($zeegaThumbnail["thumbnail_url"]);
+                	$em->persist($item);
+                    $em->flush();
+                        
+                }
+                return new Response($thumbnailJSON);
             }
         }
         catch(Exception $e)
