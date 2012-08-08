@@ -271,7 +271,7 @@
 			*/
 			//Fades
 			
-			/*
+			
 			if(this.model.get('attr').cue_out==0) var out = this.model.video.duration();
 			else var out = this.model.get('attr').cue_out;
 			var t = this.model.player.popcorn.currentTime();
@@ -296,7 +296,7 @@
 			{
 				this.model.player.setVolume(this.model.get('attr').volume);
 			}
-			*/
+			
 			
 			//Dissolve
 			
