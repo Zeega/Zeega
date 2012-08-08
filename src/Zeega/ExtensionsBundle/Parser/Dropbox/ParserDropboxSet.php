@@ -263,11 +263,13 @@ class ParserDropboxSet extends ParserAbstract
 			// if collection exists
 			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
 			$this->setDeltaCursor($dropbox, $em);
-			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			//$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			$collection->setThumbnailUrl("../images/templates/dropbox.png");
         }else{
         	$deltaCount = $this->checkForDeltas($dropbox, $em);
 			$collection->setChildItemsCount($deltaCount);
 			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			$collection->setThumbnailUrl("../images/templates/dropbox.png");
 	    }
 	    return parent::returnResponse($collection, true, true);
 	}
