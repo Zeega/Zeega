@@ -1,6 +1,10 @@
 sites:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\SitesController
+    type:     rest
+    resource: Zeega\CoreBundle\Controller\SitesController
+
+ZeegaCoreBundle_thumbnails:
+    type:     rest
+    resource: Zeega\CoreBundle\Controller\ThumbnailsController
 
 ZeegaCoreBundle_faq:
     pattern: /faq
