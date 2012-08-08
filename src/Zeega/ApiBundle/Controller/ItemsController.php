@@ -647,6 +647,7 @@ class ItemsController extends Controller
                     $em->persist($childItem);
                     $em->flush();
                     $itemId = $childItem->getId();
+                    $host = $this->container->getParameter('hostname');
                     $thumbnailServerUrl = $host . "static/scripts/item.php?id=".$itemId."&url=".$newItem['uri']."&type=".$newItem['media_type'];
 
                     $zeegaThumbnail = json_decode(file_get_contents($thumbnailServerUrl),true);
