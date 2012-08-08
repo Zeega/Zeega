@@ -106,6 +106,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 				    z-index: -1;
 					}
 					
+#background-color-home	{ // One use only big background color of slighlty transparent black
+				    position: fixed;
+				    top: 0;
+				    left: 0;
+				    right: 0;
+				    bottom: 0;
+				    width: 100%;
+				    background-color: rgba(0,0,0,0.6); // Tune the transparency here
+				    z-index: -1;
+					}
+					
 #background-color-lighter	{ // One use only big background color of slighlty transparent black
 				    position: fixed;
 				    top: 0;
@@ -311,7 +322,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 						.shadow		{
 									width: 100%;
 									.bottom-shadow;
-									height: 20px;
+									height: 0px;
 									}
 						.content	{
 									text-shadow:2px 2px 10px @grayLight;
@@ -333,6 +344,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 						}
 						
 
+.home-color		{ // One use only big background color of slighlty transparent black
+				    position: relative;
+				    top: 0;
+				    left: 0;
+				    right: 0;
+				    bottom: 0;
+				    width: 100%;
+				    background-color: rgba(0,0,0,0.9); // Tune the transparency here
+				    z-index: -1;
+					}
+					
 .special-project	{
 					.valign {.align-it;}
 					width: 100%;
@@ -348,7 +370,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', e
 							}
 					}
 				
-.special-team	{
+#background-color	{ // One use only big background color of slighlty transparent black
+				    position: fixed;
+				    top: 0;
+				    left: 0;
+				    right: 0;
+				    bottom: 0;
+				    width: 100%;
+				    background-color: rgba(0,0,0,0.7); // Tune the transparency here
+				    z-index: -1;
+					}
+					
+	.special-team	{
 					.valign {.align-it;}
 					width: 100%;
 					height: 100%;
