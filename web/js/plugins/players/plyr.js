@@ -115,6 +115,8 @@
 					_this.private_onCanPlay();
 					_this.onCanplay();
 				})
+				
+				this.popcorn.listen('timeupdate',function(){ _this.private_onTimeUpdate() })
 			}
 		},
 		
@@ -232,6 +234,13 @@
 
 		setCurrentTime : function(t){ if( _.isNumber(t) )  this.popcorn.currentTime(t) },
 		getCurrentTime : function(){ return this.popcorn.currentTime() },
+
+		private_onTimeUpdate : function()
+		{
+			// pause if player gets to the cue out point
+			//console.log('timeupdate', )
+			//if( !_.isNull(this.settings.cue_out) && this.popcorn.duration() >= this.settings.cue_out ) this.pause();
+		},
 
 		getDuration: function(){ return this.popcorn.duration() },
 
@@ -606,7 +615,6 @@
 		},
 		updateElapsed : function()
 		{
-			console.log('updated elapsed editor')
 			var elapsed = this.popcorn.currentTime();
 			this.$el.find('.media-time-elapsed').html( convertTime( elapsed ) );
 			this.$el.find('.media-scrubber').slider('value', elapsed);
