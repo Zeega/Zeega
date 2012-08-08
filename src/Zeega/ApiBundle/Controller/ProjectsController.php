@@ -18,8 +18,6 @@ class ProjectsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
-
-        error_log("getProjectAction", 0);
 		// very inefficient method
 		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
 		
