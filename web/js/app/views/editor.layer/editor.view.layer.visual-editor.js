@@ -133,6 +133,7 @@
 		
 		private_onLayerEnter : function()
 		{
+			console.log('	@@@		on layer enter')
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
 		},

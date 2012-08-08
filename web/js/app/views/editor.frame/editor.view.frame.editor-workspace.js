@@ -36,6 +36,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.workspace = new Frame.Views.VisualWorkspace({model:this.model});
 			this.renderToTarget();
 			this.$el.find('#visual-editor-workspace').html( this.workspace.render().el );
+			this.workspace.onLayerEnter();
 			this.initEvents();
 		},
 		removeFromEditor : function()
@@ -208,15 +209,23 @@ the frame's layers. It also includes common frame functions like adding sequence
 		renderToTarget : function()
 		{
 			$('#'+this.id).replaceWith( this.render().el );
+		},
+		
+		onLayerEnter : function()
+		{
 			_.each( _.compact(this.layers), function(layer){
 				layer.visual.private_onLayerEnter();
 			})
 		},
 		
+		
 		addLayer : function( layer )
 		{
-			this.$el.append( layer.visual.render().el );
-			if(layer.isNew()) layer.on('layer_saved',function(e){ layer.visual.private_onLayerEnter() })
+			var _this = this;
+			if(layer.isNew()) layer.on('layer_saved',function(e){
+				_this.$el.append( layer.visual.render().el );
+				layer.visual.private_onLayerEnter();
+			})
 			else layer.visual.private_onLayerEnter();
 		},
 		
@@ -251,7 +260,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if( !_.isUndefined(layer) && layer.get('type') != 'Link' ) return layer;
 				else return null;
 			});
-			console.log('editor layer list', this.layers)
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );
@@ -287,11 +295,21 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		addLayer : function( layer )
 		{
-			this.$el.prepend( layer.controls.renderControls().el );
+			var _this = this;
+			if(layer.isNew()) layer.on('layer_saved',function(e){
+				_this.$el.prepend( layer.controls.renderControls().el );
+				layer.controls.private_onLayerEnter();
+			
+			})
+			else layer.controls.private_onLayerEnter();
+			
 		},
 		
 		removeFromEditor : function()
 		{
+			_.each( _.compact(this.layers), function(layer){
+				layer.controls.private_onLayerExit();
+			})
 			this.$el.empty();
 			//this.undelegateEvents()
 		}

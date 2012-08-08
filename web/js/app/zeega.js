@@ -393,7 +393,7 @@ this.zeega = {
 				_this.project.frames.add(sequence.get('frames'));
 				sequence.set('frames', [ sequence.get('frames')[0].id ]);
 				sequence.trigger('sync');
-				//_this.goToSequence(sequence.id);
+				_this.goToSequence(sequence.id);
 				
 				this.hold = null;
 				this.busy = false;
