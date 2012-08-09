@@ -155,7 +155,7 @@
 					})
 				}
 			})
-			
+			this.delegateEvents();
 		},
 		
 		onPlay : function()
