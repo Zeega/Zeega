@@ -12,7 +12,7 @@
 
 var Player2 = Backbone.View.extend({
 	
-	MINIMUM_LOAD : 1,
+	MINIMUM_LOAD : 100,
 	
 	has_started : false,
 	loadAheadDistance : 2,
