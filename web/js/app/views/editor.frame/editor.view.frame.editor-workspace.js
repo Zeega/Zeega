@@ -41,6 +41,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 		},
 		removeFromEditor : function()
 		{
+			this.saveAdvance( this.$el.find('input').val() );
+			
 			this.undelegateEvents();
 			// call cleanup actions on frame layers if they exist
 			this.workspace.removeAllLayers();
@@ -106,7 +108,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			if(e.which == 13)
 			{
-				//console.log('save this shizz', $(e.target).val() );
 				this.saveAdvance( $(e.target).val() );
 				this.$el.find('input').animate('highlight',{},'1500').blur();
 				return false;
@@ -117,7 +118,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			//make sure the value is an actual number before saving
 			var time = parseFloat(time*1000);
-			if(_.isNumber(time)) this.model.update({ 'advance' : time });
+			if(_.isNumber(time) && this.model.get('attr').advance != time ) this.model.update({ 'advance' : time });
 		},
 		
 		//// non-linear links //// connections
