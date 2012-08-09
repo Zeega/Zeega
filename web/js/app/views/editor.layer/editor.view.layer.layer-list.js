@@ -23,7 +23,7 @@
 			this.setBaseTemplate();
 			this.controls = $('<div>');
 			this.$el.find('#controls').html(this.render().controls);
-			if(this.defaultControls) this.drawDefaultControls();
+			this.drawDefaultControls();
 			return this;
 		},
 		
