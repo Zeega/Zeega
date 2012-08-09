@@ -34,6 +34,7 @@ var Player2 = Backbone.View.extend({
 	
 	loadProject : function( data, options )
 	{
+		this.data = data;
 		//draw player to page
 		this.container.prepend( this.render().el );
 		//hide the editor underneath to prevent scrolling
@@ -42,7 +43,6 @@ var Player2 = Backbone.View.extend({
 		this.initListeners();
 		
 		//this.render();
-		this.data = data;
 		this.parseData( data );
 		
 		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.sequences[0].id : options.sequenceID;
@@ -451,7 +451,10 @@ var Player2 = Backbone.View.extend({
 		}
 		
 		//constrain proportions in player
-		$(this.el).attr('id','preview-wrapper').append( this.getTemplate( this ) );
+		
+		console.log('this',this)
+		
+		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
 		$(this.el).find('#preview-media').css( cssObj );
 		
 		return this;
@@ -892,12 +895,9 @@ var Player2 = Backbone.View.extend({
 	
 	*****************************/
 	
-	getTemplate : function( that )
+	getTemplate : function()
 	{
-		console.log('temp', that)
 		html =
-		
-
 		"<div id='zeega-player'>"+
 			"<div class='player-header'>";
 				//"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
@@ -905,8 +905,8 @@ var Player2 = Backbone.View.extend({
 				"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
 
 		html +=
-				//"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-				//"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + that.data.project.id +"' class='share-facebook pull-right'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
+				"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
 			"</div>"+
 			
 			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
