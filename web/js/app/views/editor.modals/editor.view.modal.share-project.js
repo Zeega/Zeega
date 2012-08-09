@@ -127,20 +127,31 @@
 						'<div class="modal-body clearfix">'+
 
 							'<div class="publish-left-column">'+
-								'<label for="project-title">Share your project</label>'+
+								'<label for="project-title">Social Media</label>'+
 								'<div id="publish-social-media">'+
 									/*
 									//FACEBOOK
 									'<span class="publish-social-media">'+
 									'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px; float:left" allowTransparency="true"></iframe>'+
 									'</span>'+
-									*/
-									//TWITTER
+								
 									'<span class="publish-social-media">'+
 									'<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%=projectlink %>" data-text="Zeega Project: <%=title %>">Tweet</a>'+
 									'<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>'+
 									'</span>'+
-/*
+									
+										*/
+									//TWITTER
+									'<span class="publish-social-media">'+
+									'<a href="https://twitter.com/intent/tweet?original_referer=http://dev.zeega.org/joseph/web/1243&amp;text=Zeega%20Project%3A%20Pointed News&amp;url=http://dev.zeega.org/joseph/web/1243" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
+									'</span>'+
+									
+									//FB
+									
+									'<span class="publish-social-media">'+
+									'<a href="http://www.facebook.com/sharer.php?u=<%=projectlink %>" class="share-facebook pull-left" target="blank"><i class="zitem-facebook zitem-30 loaded"></i></a>'+
+									'</span><br><br>'+
+/*					
 									//TUMBLR
 									'<span class="publish-social-media">'+
 									'<span id="tumblr_button_abc123"></span>'+
@@ -179,7 +190,7 @@
 
 								//END SOCIAL MEDIA INTEGRATION
 
-								'<label for="project-link">Or copy this link</label>'+
+								'<label for="project-link">Link to your project</label>'+
 								'<input type="text" id="project-link" value="<%= projectlink %>"/>'+
 
 							'</div>'+
