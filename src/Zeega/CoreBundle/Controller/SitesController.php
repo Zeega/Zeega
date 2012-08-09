@@ -82,6 +82,7 @@ class SitesController extends Controller
     	$project->setDateCreated(new \DateTime("now"));
     	$project->setEnabled(true);
     	$project->setPublished(false);
+    	$project->setAuthors($user->getDisplayName());
 
 		//$project->setAttr(array('cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png'));
     	$project->setAttr(array('author'=>$user->getDisplayName(), 'cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png' ));

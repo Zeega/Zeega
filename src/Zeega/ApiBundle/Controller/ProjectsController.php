@@ -89,7 +89,7 @@ class ProjectsController extends Controller
 
 
 
-		if(isset($title)) $project->setTitle($title);
+		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
 		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);
