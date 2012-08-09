@@ -23,7 +23,7 @@
 			this.setBaseTemplate();
 			this.controls = $('<div>');
 			this.$el.find('#controls').html(this.render().controls);
-			this.drawDefaultControls();
+			if(this.defaultControls) this.drawDefaultControls();
 			return this;
 		},
 		
@@ -217,24 +217,27 @@
 		//	open/close and expanding layer items
 		expand : function()
 		{
-			var _this = this;
-			if( $(this.el).find('.layer-content').is(':hidden') )
+			if(this.model.hasControls)
 			{
-				//show layer controls
-				$(this.el).find('.layer-content')
-					.show('blind',{'direction':'vertical'},function(){
-						_this.model.trigger('editor_controlsOpen');
-						$(this).removeClass('closed');
-				});
-			}
-			else
-			{
-				//hide layer controls
-				$(this.el).find('.layer-content')
-					.hide('blind',{'direction':'vertical'},function(){
-						$(this).addClass('closed');
-						_this.model.trigger('editor_controlsClosed');
-				});
+				var _this = this;
+				if( $(this.el).find('.layer-content').is(':hidden') )
+				{
+					//show layer controls
+					$(this.el).find('.layer-content')
+						.show('blind',{'direction':'vertical'},function(){
+							_this.model.trigger('editor_controlsOpen');
+							$(this).removeClass('closed');
+					});
+				}
+				else
+				{
+					//hide layer controls
+					$(this.el).find('.layer-content')
+						.hide('blind',{'direction':'vertical'},function(){
+							$(this).addClass('closed');
+							_this.model.trigger('editor_controlsClosed');
+					});
+				}
 			}
 			return false;
 		},

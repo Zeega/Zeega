@@ -257,7 +257,8 @@ var Player2 = Backbone.View.extend({
 			{
 				var frameID = frameOrder[tryIndex];
 				var frame = this.frames.get( frameID );
-				this.preloadFrame( frame );
+				
+				if( frame.status != 'loading' && frame.status != 'ready' ) this.preloadFrame( frame );
 			}	
 		}
 	},
@@ -265,20 +266,24 @@ var Player2 = Backbone.View.extend({
 	preloadFrame : function( frame )
 	{
 		var _this = this;
+		frame.trigger('loading', frame.id);
 		
 		if(this.currentFrame == frame) $('#zeega-player').prepend( frame.loader.render().el );
 		
 		var linkedFrameLayers = [];
 		
-		
-		
 		_.each(frame.links, function(frameID){
 			var f = _this.frames.get(frameID);
+			
+			//preload frame
+			if( f.status != 'loading' && frame.status != 'ready' ) _this.preloadFrame( f );
+			
 			if( f )
 			{
 				linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
 				f.trigger('loading', frame.id);
 			}
+			
 		})
 		
 		//console.log('preload layers: ',_.union(frame.get('layers')), 'from frame', frame );
@@ -290,7 +295,6 @@ var Player2 = Backbone.View.extend({
 				_this.preloadLayer( layer )
 			}
 		});
-		frame.trigger('loading', frame.id);
 	},
 	
 	preloadLayer : function( layer )
@@ -907,12 +911,17 @@ var Player2 = Backbone.View.extend({
 			if(this.zeega||true) html +=
 				"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
 
-		html +=
-				"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.user_id +"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
+			if( !this.zeega )
+			{
+				html +=
+				"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"&text=Zeega%20Project%3A%20"+ this.data.title +"&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+			}
+			html +=
+			
 			"</div>"+
 			
-			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
+			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ this.data.user_id +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
 			
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
