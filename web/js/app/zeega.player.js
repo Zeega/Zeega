@@ -358,9 +358,12 @@ var Player2 = Backbone.View.extend({
 			
 			render : function()
 			{
+				
 				var error = this.model.status == 'error' ? 'error' : '';
 				this.model.get('attr').description = $(this.model.get('attr').description).text(); //escape html so it doesn't kill the css!!!
-				$(this.el).html( _.template(this.getTemplate(), _.extend(this.model.attributes,{error:error}) ) ).attr('id','player-citation-'+ this.model.id);
+				$(this.el).html( _.template(this.getTemplate(), _.extend(this.model.toJSON(),{error:error}) ) ).attr('id','player-citation-'+ this.model.id);
+				
+				return this;
 			},
 			
 			events : {
@@ -402,7 +405,7 @@ var Player2 = Backbone.View.extend({
 						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
 					"</div>";
 				if(this.model.get('attr').archive =="Dropbox")	html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.media_type.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
-				else html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
+				else html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<% if( !_.isUndefined(attr.archive) ){ %><%= attr.archive.toLowerCase() %><% } %> zitem-30 <%= error %>'></i></a>";
 					
 				return html;
 			}
@@ -474,7 +477,7 @@ var Player2 = Backbone.View.extend({
 		//prevent arrows from being shown on timed layers
 		if( _.isUndefined(this.currentFrame.get('attr').advance) || this.currentFrame.get('attr').advance <= 0 )
 		{
-			
+			console.log('@@		non timed layer. arrows normal')
 			var leftFrame = this.getLeft();
 			var rightFrame = this.getRight();
 		
@@ -494,6 +497,7 @@ var Player2 = Backbone.View.extend({
 		}
 		else
 		{
+			console.log('@@		timed layer. no arrows')
 			
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
