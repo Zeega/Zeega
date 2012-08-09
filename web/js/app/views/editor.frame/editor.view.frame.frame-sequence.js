@@ -95,7 +95,9 @@
 						if(confirm('Delete Frame?'))
 						{
 							$(_this.el).remove();
-							_this.model.destroy();
+							
+							zeega.app.currentSequence.destroyFrame( _this.model );
+							//_this.model.destroy();
 						}
 						break;
 				
