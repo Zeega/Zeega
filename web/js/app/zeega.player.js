@@ -716,7 +716,8 @@ var Player2 = Backbone.View.extend({
 						
 						if( layer.displayCitation != false && layer.get('type') != 'Link' )
 						{
-							var itemType = ( layer.get('attr').archive!="Dropbox") ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+							if(layer.get('attr').archive=="Dropbox") var itemType = layer.get('type').toLowerCase();
+							else var itemType = ( layer.get('attr').archive) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
 							
 							console.log(itemType)
 							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ itemType +'"></i></li>')
