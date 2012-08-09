@@ -377,8 +377,8 @@ var Player2 = Backbone.View.extend({
 						"<div class='player-citation-content'>"+
 							"<h3><%= attr.title %></h3>"+
 							"<div class='content'><span class='citation-subhead'>DESCRIPTION:</span> <%= attr.description %></div>"+
-							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>"+
-							"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
+							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>";
+							//"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
 
 						if( !_.isNull( this.model.get('attr').media_geo_longitude ) )
 						{
