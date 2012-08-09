@@ -351,7 +351,7 @@ jQuery(function($)
 		
 
 	$('#add-media-button').click(function(){
-		console.log('show add media');
+
 		$('#add-media').modal();
 		return false;
 	});
