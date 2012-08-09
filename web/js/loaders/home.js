@@ -31,7 +31,7 @@ require(
 	
 	//mvc
 	//'order!app/models/dashboard.model.user',
-		'order!app/models/dashboard.model.project',
+	'order!app/models/dashboard.model.project',
 	'order!app/collections/dashboard.collections.project',
 	'order!app/views/dashboard.project/dashboard.view.project',
 	

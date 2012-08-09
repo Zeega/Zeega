@@ -44,8 +44,13 @@
 
 {% block scripts %}
 
-	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	{% if app.environment == 'dev' %}
+	<!-- to load JS libraries separately -->
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/home.js') }}"></script>
+	{% else %}
+		<!-- to load single aggregated JS library --> 
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/home.js') }}"></script>
+	{% endif %}
 	
 	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
 	{% if projects is defined %}
@@ -100,565 +105,70 @@
 	
 	<!-- Featured Content Ends -->
 	
-	
 
+	<br><br><br><br><br><br><br><br><br><br><br>
+
+	
 	<!-- Special Project Separator Begins -->
 	
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	
-	<div class="section-divider">
+	<div id ="home-cards" ></div>
+	<script>
 	
-		<div class="shadow">
-		</div>
+	var homeCards =[
+		{
+			url:"{{asset("images/home/home_edit.jpg")}}",
+			title:"EDIT WITH DRAG-AND-DROP EASE",
+			subtitle: "Zeega enables anyone to anyone to experiment with the web as a creative medium. No programming knowledge required : )",
+			seperator: "Zeega is an open-source, HTML5 platform for inventing new forms of interactive storytelling."
+		},
+		{
+			url:"{{asset("images/home/home_addmedia.jpg")}}",
+			title:"USE ANY MEDIA YOU WANT",
+			subtitle: "Currently liberated APIs include Dropbox, YouTube, Flickr, SoundCloud, Archive.org, Tumblr and Mapbox.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_expression.jpg")}}",
+			title:"FREEDOM OF EXPRESSION",
+			subtitle: "Set timings. Add text. Use street view. Layer media.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_interface.jpg")}}",
+			title:"INVENT YOUR OWN INTERFACE",
+			subtitle: "Turn any part of an image or video into a link.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_credit.jpg")}}",
+			title:"CREDIT EVERYONE",
+			subtitle: "All media is properly cited to its original author and tracked back to its source location.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_share.jpg")}}",
+			title:"SHARE FULL-SCREEN EXPERIENCES",
+			subtitle: "You can embed your Zeega on any site and it automatically opens in full-screen.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_dziga.jpg")}}",
+			title:"AND THE NAME...",
+			subtitle: "One of our favorite films is <a href='http://www.youtube.com/watch?v=op2sOtF113M&feature=watch-now-button&wide=1' target='_blank'>Man with a Movie Camera</a>, made in 1929 by Dziga Vertov. We changed the spelling slightly.",
+			seperator: ""
+		},
+		{
+			url:"",
+			title:"A CULTURE OF EXPERIMENTATION",
+			subtitle: " of artists, filmmakers, journalists, designers and other makers passionate about inventing a new medium together.",
+			seperator: ""
+		}
 		
-		<div class="content">
 	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2>Zeega is an open-source, HTML5 platform for inventing new forms of interactive storytelling.</h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
+	]
 	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_edit.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>EDIT WITH DRAG-AND-DROP EASE</h1>
-								<h2>Zeega enables anyone to anyone to experiment with the web as a creative medium. No programming knowledge required : )</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_addmedia.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>USE ANY MEDIA YOU WANT</h1>
-								<h2>Currently liberated APIs include Dropbox, YouTube, Flickr, SoundCloud, Archive.org, Tumblr and Mapbox.</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_expression.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>FREEDOM OF EXPRESSION</h1>
-								<h2>Set timings. Add text. Use street view. Layer media.</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_interface.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>INVENT YOUR OWN INTERFACE</h1>
-								<h2>Turn any part of an image or video into a link.</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_credit.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>CREDIT EVERYONE</h1>
-								<h2>All media is properly cited to its original author and tracked back to its source location. </h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_share.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>SHARE FULL-SCREEN EXPERIENCES</h1>
-								<h2>You can embed your Zeega on any site and it automatically opens in full-screen.</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/home_dziga.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>AND THE NAME...</h1>
-								<h2>One of our favorite films is <a href="http://www.youtube.com/watch?v=op2sOtF113M&feature=watch-now-button&wide=1" target="_blank">Man with a Movie Camera</a>, made in 1929 by Dziga Vertov. We changed the spelling slightly.</h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2></h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Separator Ends -->
-	
-	
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/home/zeegaHome01.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign">
-							<div class="valign-content">	
-					
-								<h1>A CULTURE OF EXPERIMENTATION</h1>
-								<h2>{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Join the Zeega community</a> {% endif %}  of artists, filmmakers, journalists, designers and other makers passionate about inventing a new medium together. </h2>
-
-							</div>
-						</div>
-							
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->	
-	
-
+	</script>
 
 
 {% endblock %}
