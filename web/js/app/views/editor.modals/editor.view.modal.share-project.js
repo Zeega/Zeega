@@ -121,9 +121,7 @@
 					'<div id="publish-project-modal-step2" style="display:none">'+
 						'<div class="modal-header">'+
 							'<button data-dismiss="modal" class="close">&times;</button>'+
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>You\'re ready to publish <span style="color:#F15A29"><%= title %></span>!</h3>'+
-							'<p>As you edit in the future this project will be automatically updated.</p>'+
+							'<h3>Share <span style="color:#F15A29"><%= title %></span> with the universe!</h3>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix">'+

@@ -157,9 +157,7 @@
 					'<div id="publish-project-modal-step1">'+
 						'<div class="modal-header">'+
 							'<button data-dismiss="modal" class="close">&times;</button>'+
-						
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>Before you share your project, make sure everything looks good!</h3>'+
+							'<h3>Project Settings</h3>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix twocolumn-rows">'+
