@@ -66,9 +66,9 @@ class UserAdmin extends Admin
     {
         // retrieve the default (currently only the delete action) actions
         $actions = parent::getBatchActions();
-
+        unset($actions['delete']);
         $actions['activate'] = array(
-                'label'            => 'Activate Users',
+                'label'            => 'Activate Users (sends an activation email to selected users)',
                 'ask_confirmation' => true
             );
 
