@@ -77,7 +77,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			'click input' : 'selectAdvanceTime',
 			'keypress input' : 'onAdvanceKeypress',
 			'click #make-connection .action' : 'makeConnection',
-			//'click #connection-confirm button' : 'confirmConnection',
+			'click #connection-confirm button' : 'confirmConnection',
 			
 		},
 		
@@ -122,13 +122,18 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		//// non-linear links //// connections
 
+		confirmConnection : function(e)
+		{
+			$('#connection-confirm').hide();
+			zeega.app.confirmConnection();
+			return false;
+		},
+
 		makeConnection : function( e )
 		{
-			if( !$(e.target).hasClass('disabled') )
-			{
-				$(e.target).closest('div').removeClass('open');
-				zeega.app.makeConnection( $(e.target).closest('a').data('action') );
-			}
+
+			$(e.target).closest('div').removeClass('open');
+			zeega.app.makeConnection( $(e.target).closest('a').data('action') );
 			return false;
 		},
 		
@@ -148,12 +153,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 								"<li><a data-action='advanced' class='action' href='#'><i class='zicon-options small'></i>  Advanced</a></li>"+
 							"</ul>"+
 						"</div>"+
-/*						
-						"<div id='connection-confirm' class='pull-left hidden'>"+
-							"<button data-action='cancel' class='btn btn-danger btn-small'>Cancel</button>"+
+						
+						"<div id='connection-confirm' class='pull-left hide'>"+
+							//"<button data-action='cancel' class='btn btn-danger btn-small'>Cancel</button>"+
 							"<button data-action='ok' class='btn btn-success btn-small'>OK</button>"+
 						"</div>"+
-*/						
+						
 						"<div class='advance-controls'>"+
 							"<div>Frame Advance</div>";
 							
