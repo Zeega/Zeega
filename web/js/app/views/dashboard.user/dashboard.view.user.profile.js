@@ -41,10 +41,18 @@
 			var template = this.getTemplate();
 			var blanks = this.model.attributes;
 
-			
+			console.log(blanks);
 			var joinDate=new Date(blanks['created_at']);
+			
 			blanks['join_date'] = joinDate.getMonthAbbreviation() + " " + joinDate.getFullYear();
-
+			
+			blanks['num_projects'] = blanks['projects'].length;
+			
+			if(blanks['num_projects'] == 1)
+			    blanks['num_projects'] = blanks['num_projects'] + " project";
+			else
+			    blanks['num_projects'] = blanks['num_projects'] + " projects";
+            
 			$(this.el).html( _.template( template, blanks ) );
 
 			
@@ -222,7 +230,7 @@
 							}
 
 							html+=
-							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
+							'<h6 style="clear:both; color:#DDD;">Authored <%= num_projects %> since joining in <%= join_date %></h6>'+
 							'<div style="margin-bottom:20px">'+
 								'<p class="card dashboard-bio"><%= bio %></p>';
 								if (zeegaDashboard.app.editable){ html+=
