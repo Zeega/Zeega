@@ -388,8 +388,9 @@ var Player2 = Backbone.View.extend({
 							"<div class='trackback'><span class='citation-subhead'>click below to view original</span></div>"+
 						"</div>"+
 						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
-					"</div>"+
-					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
+					"</div>";
+				if(this.model.get('attr').archive =="Dropbox")	html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.media_type.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
+				else html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
 					
 				return html;
 			}
@@ -702,7 +703,8 @@ var Player2 = Backbone.View.extend({
 						
 						if( layer.displayCitation != false && layer.get('type') != 'Link' )
 						{
-							var itemType = ( layer.get('attr').archive ) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+							var itemType = ( layer.get('attr').archive!="Dropbox") ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+							
 							console.log(itemType)
 							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ itemType +'"></i></li>')
 						}
