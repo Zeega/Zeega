@@ -257,7 +257,8 @@ var Player2 = Backbone.View.extend({
 			{
 				var frameID = frameOrder[tryIndex];
 				var frame = this.frames.get( frameID );
-				this.preloadFrame( frame );
+				
+				if( frame.status != 'loading' && frame.status != 'ready' ) this.preloadFrame( frame );
 			}	
 		}
 	},
@@ -265,20 +266,24 @@ var Player2 = Backbone.View.extend({
 	preloadFrame : function( frame )
 	{
 		var _this = this;
+		frame.trigger('loading', frame.id);
 		
 		if(this.currentFrame == frame) $('#zeega-player').prepend( frame.loader.render().el );
 		
 		var linkedFrameLayers = [];
 		
-		
-		
 		_.each(frame.links, function(frameID){
 			var f = _this.frames.get(frameID);
+			
+			//preload frame
+			if( f.status != 'loading' && frame.status != 'ready' ) _this.preloadFrame( f );
+			/*
 			if( f )
 			{
 				linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
 				f.trigger('loading', frame.id);
 			}
+			*/
 		})
 		
 		//console.log('preload layers: ',_.union(frame.get('layers')), 'from frame', frame );
@@ -290,7 +295,6 @@ var Player2 = Backbone.View.extend({
 				_this.preloadLayer( layer )
 			}
 		});
-		frame.trigger('loading', frame.id);
 	},
 	
 	preloadLayer : function( layer )
