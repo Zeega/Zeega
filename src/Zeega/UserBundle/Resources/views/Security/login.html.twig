@@ -53,61 +53,50 @@
 	
 	<div class="container sign-in">
 	
-		<div class="row">
+		<div class='sign-in-head'>
+			<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
+			<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
+			</a>
 		
-			<div class="span6 offset4">
-				
-				<div>
-					<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-					<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
-					</a>
-				
-					<h2>Remake the Internet</h2>
+			<h2>Remake the Internet</h2>
+		</div>
+		
+		<h2>Hello, hello and welcome back!</h2>
+
+		{% if error %}
+	        <div class="error">{{ error }}</div>
+	    {% endif %}
+		
+		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
+		  <fieldset>
+		  	<div class="control-group">	
+		
+		  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
+		  		
+				<div class="controls">
+					<input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge" style='width:100%'>
 				</div>
 				
-				<h2>Hello, hello and welcome back!</h2>
-
-				{% if error %}
-			        <div class="error">{{ error }}</div>
-			    {% endif %}
+		  		<h4>{{ 'Password'|trans({}, 'FOSUserBundle') }}</h4>
+		  		
+				<div class="controls" style="margin-bottom:0">
+					<input  type="password" id="password" name="_password" class="input-xlarge" style='width:100%'>
+				</div>
 				
-				<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
-				  <fieldset>
-				  	<div class="control-group">	
+				<div class="pull-right">
+
+					<a href="{{path("fos_user_resetting_request")}}" class="sidebar">Forgot password?</a>
+
+				</div>
 				
-				  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
-				  		
-						<div class="controls">
-							<input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge">
-						</div>
-						
-				  		<h4>{{ 'Password'|trans({}, 'FOSUserBundle') }}</h4>
-				  		
-						<div class="controls" style="margin-bottom:0">
-							<input  type="password" id="password" name="_password" class="input-xlarge">
-						</div>
-						
-						<div class="pull-right">
+				<div>
+				<button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
+				</div>
 
-							<a href="{{path("fos_user_resetting_request")}}" class="sidebar">Forgot password?</a>
-
-						</div>
-						
-						<div>
-						<button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
-						</div>
-
-						
-				  	</div>
-				  </fieldset>
-				</form>
-			
-			</div>
-			
-			<div class="span4">
-			</div>
-		
-		</div>
+				
+		  	</div>
+		  </fieldset>
+		</form>
 	
 	</div>
 
