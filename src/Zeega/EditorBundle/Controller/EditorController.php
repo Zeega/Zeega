@@ -1,7 +1,8 @@
 <?php
 namespace Zeega\EditorBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Zeega\CoreBundle\Controller\BaseController as Controller;
+
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
@@ -79,10 +80,14 @@ class EditorController extends Controller
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
 		
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		$projectOwners = $project->getUsers();
+		
+		$this->authorize($projectOwners[0]->getId());
+		
+		
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-					
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 
 		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
 

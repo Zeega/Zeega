@@ -8,15 +8,44 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * Controller is a simple implementation of a Controller.
+ * Controller is a simple implementation of a Controller based on the Symfony base controller.
  *
- * It provides methods to common features needed in controllers.
+ * It provides methods to common features needed in Zeega controllers.
  *
  */
 class BaseController extends ContainerAware
 {
+    /**
+     * Checks the logged user id matches the userId parameters and throws a not authorized
+     * exception if the user is not authorized to access the resource.
+     *
+     * @param string  $userId     The target user id
+     *
+     * @return boolean Authorized / not authorized
+     */
+    protected function authorize($userId)
+    {
+        if(null === $userId)
+        {
+            throw new \BadFunctionCallException('The userId parameter cannot be null');
+        }
+        
+        if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') )
+        {
+            $loggedUserId = $this->container->get('security.context')->getToken()->getUser()->getId();
+            
+            if($loggedUserId == $userId)
+            {
+                return;
+            }
+        }
+
+        throw new AccessDeniedException();
+    }
+    
     /**
      * Generates a URL from the given parameters.
      *
