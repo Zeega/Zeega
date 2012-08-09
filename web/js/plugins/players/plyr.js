@@ -238,6 +238,9 @@
 		private_onTimeUpdate : function()
 		{
 			// pause if player gets to the cue out point
+			
+			if(this.settings.cue_out == 0) this.settings.cue_out = this.getDuration();
+			
 			if( !_.isNull(this.settings.cue_out) && this.popcorn.currentTime() >= this.settings.cue_out )
 			{
 				this.pause();
