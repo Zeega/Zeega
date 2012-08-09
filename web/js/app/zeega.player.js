@@ -34,6 +34,7 @@ var Player2 = Backbone.View.extend({
 	
 	loadProject : function( data, options )
 	{
+		this.data = data;
 		//draw player to page
 		this.container.prepend( this.render().el );
 		//hide the editor underneath to prevent scrolling
@@ -42,7 +43,6 @@ var Player2 = Backbone.View.extend({
 		this.initListeners();
 		
 		//this.render();
-		this.data = data;
 		this.parseData( data );
 		
 		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.sequences[0].id : options.sequenceID;
@@ -161,6 +161,9 @@ var Player2 = Backbone.View.extend({
 	
 	goToFrame : function( frame )
 	{
+		console.log('$$		go to frame', frame.id)
+		this.loadAhead();
+		
 		this.clearStage( frame );
 		
 		//if the frame is already loaded, then render the frame to the player!
@@ -191,9 +194,9 @@ var Player2 = Backbone.View.extend({
 			});
 		}
 		//update the url
-		this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
+		//this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
 		//load the frames around the frame in question
-		this.loadAhead();
+		console.log('$$		go to frame END', frame.id)
 	},
 	
 	/*
@@ -236,7 +239,8 @@ var Player2 = Backbone.View.extend({
 	
 	loadAhead : function()
 	{
-		console.log('LOAD AHEAD ON SEQUENCE: '+ this.currentSequence.id )
+		console.log('$$		LOAD AHEAD ON SEQUENCE: '+ this.currentSequence.id );
+		
 		//find the frame you're coming from and where it is in the order
 		var frameOrder = this.currentSequence.get('frames') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
 		this.currentSequence.set('frames',frameOrder);
@@ -253,10 +257,7 @@ var Player2 = Backbone.View.extend({
 			{
 				var frameID = frameOrder[tryIndex];
 				var frame = this.frames.get( frameID );
-				if( frame.status != 'loading' && frame.status != 'ready' )
-				{
-					this.preloadFrame( frame );
-				}
+				this.preloadFrame( frame );
 			}	
 		}
 	},
@@ -268,11 +269,20 @@ var Player2 = Backbone.View.extend({
 		if(this.currentFrame == frame) $('#zeega-player').prepend( frame.loader.render().el );
 		
 		var linkedFrameLayers = [];
+		
+		
+		
 		_.each(frame.links, function(frameID){
-			var frame = _this.frames.get(frameID);
-			if( frame ) linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
+			var f = _this.frames.get(frameID);
+			if( f )
+			{
+				linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
+				f.trigger('loading', frame.id);
+			}
 		})
-		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
+		
+		//console.log('preload layers: ',_.union(frame.get('layers')), 'from frame', frame );
+		
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
 			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
@@ -442,7 +452,10 @@ var Player2 = Backbone.View.extend({
 		}
 		
 		//constrain proportions in player
-		$(this.el).attr('id','preview-wrapper').append( this.getTemplate( this ) );
+		
+		console.log('this',this)
+		
+		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
 		$(this.el).find('#preview-media').css( cssObj );
 		
 		return this;
@@ -884,12 +897,9 @@ var Player2 = Backbone.View.extend({
 	
 	*****************************/
 	
-	getTemplate : function( that )
+	getTemplate : function()
 	{
-		console.log('temp', that)
 		html =
-		
-
 		"<div id='zeega-player'>"+
 			"<div class='player-header'>";
 				//"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
@@ -897,8 +907,8 @@ var Player2 = Backbone.View.extend({
 				"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
 
 		html +=
-				//"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-				//"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + that.data.project.id +"' class='share-facebook pull-right'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
+				"<a href='#' class='share-twitter pull-right'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.user_id +"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>"+
 			"</div>"+
 			
 			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ 36 +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+

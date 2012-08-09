@@ -102,6 +102,8 @@ this.zeega = {
 		//this.renderWorkspace();
 		
 		this.renderSequenceFrames();
+		$('#frame-list').sortable(); // why would I put this here -joseph
+		this.currentSequence.updateFrameOrder();
 		
 		this.startRouter();
 	},
@@ -184,6 +186,7 @@ this.zeega = {
 				this.currentFrame.removeWorkspace();
 				this.currentFrame.trigger('blur');
 			}
+			console.log(frame)
 			frame.renderWorkspace();
 			this.currentFrame = frame;
 			this.currentFrame.trigger('focus');
@@ -384,7 +387,7 @@ this.zeega = {
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
 				console.log(newFrame)
-				newFrame.render();
+				this.loadFrame(newFrame);//newFrame.render();
 				
 				if(i>0){
 					console.log("not loading frame for later",i);
@@ -402,6 +405,8 @@ this.zeega = {
 							
 							_this.currentSequence.get('frames').push(newFrame.id);
 							
+							console.log('new frame saved', _this.currentSequence)
+							_this.loadFrame( newFrame.id )
 						}
 					});
 				}
@@ -410,14 +415,12 @@ this.zeega = {
 					newFrame.save({},{
 						success : function()
 						{
-							//console.log(newFrame)
+							$('#frame-list').append(newFrame.sequenceFrameView.render().el);
 							newFrame.trigger('refresh_view');
 							newFrame.trigger('updateThumb');
 							_this.project.frames.add( newFrame );
 							_this.loadFrame( newFrame );
-							
-							_this.currentSequence.get('frames').push(newFrame.id);
-							
+							newFrame.trigger('focus');
 						}
 					});
 				}
@@ -671,7 +674,7 @@ this.zeega = {
 	getLeftFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
-		return this.frames.get( frameOrder[ currentFrameIndex-1 ] ) || this.frames.get( frameOrder[1] );
+		return this.project.frames.get( this.currentSequence.get('frames')[ currentFrameIndex-1 ] ) || this.currentSequence.get('frames')[ 0 ];
 	},
 
 	getRightFrame : function()
