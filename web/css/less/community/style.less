@@ -679,36 +679,30 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#75000000', e
 				
 				}
 				
-.sign-in		{
-				margin-top: 5%;
-				.span6 	{
-						&> div:first-child		{
-												h2	{
-													margin-top: @xs-margin;
-													margin-bottom: 0;
-													color: @grayLight;
-													}
-												padding-bottom: @s-margin;
-												border-bottom: @gray;
-												border-bottom-style: solid;
-												border-bottom-width: thin;
-												margin-bottom: @s-margin;
-												}
-						h2	{
-							margin-bottom: @m-margin;
-							}
-						h4	{
-							margin-bottom: @s-margin;
-							}
-						.input-xlarge	{
-										width: 390px;
-										}
-						.controls	{
-									margin-bottom: @r-margin;
-									}
-									
-						}
-				}
+.sign-in
+{
+	margin-top: 5%;
+	width:50%;
+	.sign-in-head
+	{
+		padding-bottom: @s-margin;
+		border-bottom: @gray;
+		border-bottom-style: solid;
+		border-bottom-width: thin;
+		margin-bottom: @s-margin;
+		h2
+		{
+			margin-top: @xs-margin;
+			margin-bottom: 0;
+			color: @grayLight;
+		}
+	}
+	h4{ margin-bottom:10px }
+	
+	input{ padding: 4px 0 }
+	
+	.input-xlarge{ width: 390px }
+}
 				
 // Experimental UI Cards
 
