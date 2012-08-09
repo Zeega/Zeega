@@ -277,13 +277,13 @@ var Player2 = Backbone.View.extend({
 			
 			//preload frame
 			if( f.status != 'loading' && frame.status != 'ready' ) _this.preloadFrame( f );
-			/*
+			
 			if( f )
 			{
 				linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
 				f.trigger('loading', frame.id);
 			}
-			*/
+			
 		})
 		
 		//console.log('preload layers: ',_.union(frame.get('layers')), 'from frame', frame );
