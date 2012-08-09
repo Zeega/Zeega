@@ -7,6 +7,7 @@
 		displayCitation: true,
 		visualLoaded : false,
 		defaultControls : true,
+		hasControls :true,
 		
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),

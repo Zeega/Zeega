@@ -17,14 +17,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		isRendered : false,
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render : function()
 		{
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
+			
+			this.advanceControls = new Frame.Views.FrameAdvanceControls({model:this.model});
+			this.$el.find('.advance-controls').replaceWith( this.advanceControls.render().el );
+			
 			this.delegateEvents();
 			return this;
 		},
@@ -41,6 +42,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		},
 		removeFromEditor : function()
 		{
+			this.advanceControls.removeFromEditor()
 			this.undelegateEvents();
 			// call cleanup actions on frame layers if they exist
 			this.workspace.removeAllLayers();
@@ -61,74 +63,26 @@ the frame's layers. It also includes common frame functions like adding sequence
 					zeega.app.addLayer({ item : zeega.app.draggedItem })
 				}
 			});
-			this.$el.find('.advance-click').tooltip({
-				title:'advance frame by click or arrow keys',
-				placement:'bottom'
-			});
-			this.$el.find('.advance-time').tooltip({
-				title:'advance frame by time only',
-				placement:'bottom'
-			});
 		},
 		
 		events : {
-			'click .advance-click' : 'selectAdvanceClick',
-			'click .advance-time' : 'selectAdvanceTime',
-			'click input' : 'selectAdvanceTime',
-			'keypress input' : 'onAdvanceKeypress',
 			'click #make-connection .action' : 'makeConnection',
-			//'click #connection-confirm button' : 'confirmConnection',
-			
-		},
-		
-		
-		
-		selectAdvanceClick : function()
-		{
-			this.$el.find('.advance-click').addClass('active');
-			this.$el.find('.advance-time').removeClass('active');
-			this.$el.find('input').addClass('disabled').val('');
-			
-			this.saveAdvance( 0 );
-			
-			return false;
-		},
-		
-		selectAdvanceTime : function()
-		{
-			this.$el.find('.advance-click').removeClass('active');
-			this.$el.find('.advance-time').addClass('active');
-			this.$el.find('input').removeClass('disabled').focus();
-			return false;
-		},
-		
-		onAdvanceKeypress : function(e)
-		{
-			if(e.which == 13)
-			{
-				//console.log('save this shizz', $(e.target).val() );
-				this.saveAdvance( $(e.target).val() );
-				this.$el.find('input').animate('highlight',{},'1500').blur();
-				return false;
-			}
-		},
-		
-		saveAdvance : function( time )
-		{
-			//make sure the value is an actual number before saving
-			var time = parseFloat(time*1000);
-			if(_.isNumber(time)) this.model.update({ 'advance' : time });
+			'click #connection-confirm button' : 'confirmConnection',
 		},
 		
 		//// non-linear links //// connections
+		confirmConnection : function(e)
+		{
+			$('#connection-confirm').hide();
+			zeega.app.confirmConnection();
+			return false;
+		},
 
 		makeConnection : function( e )
 		{
-			if( !$(e.target).hasClass('disabled') )
-			{
-				$(e.target).closest('div').removeClass('open');
-				zeega.app.makeConnection( $(e.target).closest('a').data('action') );
-			}
+
+			$(e.target).closest('div').removeClass('open');
+			zeega.app.makeConnection( $(e.target).closest('a').data('action') );
 			return false;
 		},
 		
@@ -148,29 +102,9 @@ the frame's layers. It also includes common frame functions like adding sequence
 								"<li><a data-action='advanced' class='action' href='#'><i class='zicon-options small'></i>  Advanced</a></li>"+
 							"</ul>"+
 						"</div>"+
-/*						
-						"<div id='connection-confirm' class='pull-left hidden'>"+
-							"<button data-action='cancel' class='btn btn-danger btn-small'>Cancel</button>"+
-							"<button data-action='ok' class='btn btn-success btn-small'>OK</button>"+
-						"</div>"+
-*/						
-						"<div class='advance-controls'>"+
-							"<div>Frame Advance</div>";
-							
-							if(this.model.get('attr').advance > 0)
-							{
-								html +=
-								"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a>|<a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-								"<input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/>";
-							}
-							else
-							{
-								html +=
-								"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a>|<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-								"<input type='text' class='disabled' placeholder='sec'/>";
-							}
-							html +=
-						"</div>"+
+						
+						"<div id='connection-confirm' class='pull-left hide'><button data-action='ok' class='btn btn-success btn-small'>OK</button></div>"+
+						"<div class='advance-controls'></div>"+
 					"</div>"+
 					
 					"<div id='visual-editor-workspace' class='workspace clearfix'></div>";
@@ -235,9 +169,105 @@ the frame's layers. It also includes common frame functions like adding sequence
 				layer.visual.private_onLayerExit();
 			})
 		}
+	})
+
+
+	Frame.Views.FrameAdvanceControls = Backbone.View.extend({
 		
+		className : 'advance-controls',
+		
+		initialize : function(){},
+		
+		render : function()
+		{
+			var _this = this;
+			
+			this.$el.html( _.template(this.getTemplate(),this.model.toJSON()) );
+			
+			this.$el.find('.advance-click').tooltip({
+				title:'advance frame by click or arrow keys',
+				placement:'bottom'
+			});
+			this.$el.find('.advance-time').tooltip({
+				title:'advance frame by time only',
+				placement:'bottom'
+			});
+			
+			return this;
+		},
+
+		removeFromEditor : function()
+		{
+			this.saveAdvance( this.$el.find('input').val() );
+		},
+
+		events : {
+			'click .advance-click' : 'selectAdvanceClick',
+			'click .advance-time' : 'selectAdvanceTime',
+			'click input' : 'selectAdvanceTime',
+			'keypress input' : 'onAdvanceKeypress'
+		},
+
+		selectAdvanceClick : function()
+		{
+			this.$el.find('.advance-click').addClass('active');
+			this.$el.find('.advance-time').removeClass('active');
+			this.$el.find('input').addClass('disabled').val('');
+			
+			this.saveAdvance( 0 );
+			return false;
+		},
+		
+		selectAdvanceTime : function()
+		{
+			this.$el.find('.advance-click').removeClass('active');
+			this.$el.find('.advance-time').addClass('active');
+			this.$el.find('input').removeClass('disabled').focus();
+			return false;
+		},
+		
+		onAdvanceKeypress : function(e)
+		{
+			if(e.which == 13)
+			{
+				this.saveAdvance( $(e.target).val() );
+				this.$el.find('input').animate('highlight',{},'1500').blur();
+				return false;
+			}
+		},
+		
+		saveAdvance : function( time )
+		{
+			//make sure the value is an actual number before saving and that it's not saving dupe data
+			var time = parseFloat(time*1000);
+			if(_.isNumber(time) && this.model.get('attr').advance != time ) this.model.update({ 'advance' : time });
+		},
+		
+		getTemplate : function()
+		{
+			var html = 
+
+				"<div>Frame Advance</div>";
+				
+				if(this.model.get('attr').advance > 0)
+				{
+					html +=
+					"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span>"+
+					"<a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  <input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/>";
+				}
+				else
+				{
+					html +=
+					"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span>"+
+					"<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  <input type='text' class='disabled' placeholder='sec'/>";
+				}
+					
+			return html;
+		}
 		
 	})
+
+
 	
 	//move this elsewhere
 	Frame.Views.EditorLayerList = Backbone.View.extend({
@@ -345,7 +375,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );
-				layer.controls.delegateEvents();
 			})
 			
 			this.makeSortable();

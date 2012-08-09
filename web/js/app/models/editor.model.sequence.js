@@ -46,7 +46,6 @@
 		{
 			//this.frames.trigger('resort',frameIDArray);
 			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			console.log(frameIDArray)
 			this.set( { frames : frameIDArray } );
 			if( save != false ) this.save();
 		},
@@ -62,9 +61,19 @@
 		
 		destroyFrame : function( frameModel )
 		{
-			console.log('destroy frame:')
+			console.log('destroy frame:', frameModel,this);
+			
+			if( this.get('frames').length <= 1 )
+			{
+				// this happens when there will be no more frames in the sequence
+				// prevent from not having any frames!!
+				zeega.app.addFrame();
+			}
+			frameModel.destroy();
+			
 			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
 			this.updateFrameOrder();
+			
 		},
 		
 		updatePersistLayer : function( modelID )

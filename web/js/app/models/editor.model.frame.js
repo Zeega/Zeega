@@ -78,7 +78,8 @@
 			console.log('update', this)
 			var _this = this;
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
-			_.extend( this.get('attr'), newAttr );
+			var a = _.extend( this.get('attr'), newAttr );
+			this.set('attr',a);
 			if( !silent )
 			{
 				this.save({},{

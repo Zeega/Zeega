@@ -9,7 +9,10 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
+		hasControls : false,
 		defaultControls : false,
+		displayCitation : false,
+		
 		
 		
 		defaultAttributes : {
@@ -154,7 +157,7 @@
 					})
 				}
 			})
-			
+			this.delegateEvents();
 		},
 		
 		onPlay : function()

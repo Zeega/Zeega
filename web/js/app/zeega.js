@@ -102,6 +102,8 @@ this.zeega = {
 		//this.renderWorkspace();
 		
 		this.renderSequenceFrames();
+		$('#frame-list').sortable(); // why would I put this here -joseph
+		this.currentSequence.updateFrameOrder();
 		
 		this.startRouter();
 	},
@@ -184,6 +186,7 @@ this.zeega = {
 				this.currentFrame.removeWorkspace();
 				this.currentFrame.trigger('blur');
 			}
+			console.log(frame)
 			frame.renderWorkspace();
 			this.currentFrame = frame;
 			this.currentFrame.trigger('focus');
@@ -232,15 +235,18 @@ this.zeega = {
 					}
 				});
 				
+				$('#connection-confirm').show();
+				
+				/*
 				//trigger the creation of a new sequence
 				if(this.hold.isNew()) this.hold.on('layer_saved',function(){ _this.confirmConnection() })
 				else this.confirmConnection();
 				//this.busy = true;
 				//this.confirmConnection();
+				*/
 				break;
 			
 			case 'existingFrame':
-				console.log('link to existing')
 				var Modal = zeega.module('modal');
 				var linkModal = new Modal.Views.LinkExisting();
 				$('body').append(linkModal.render().el);
@@ -248,11 +254,9 @@ this.zeega = {
 			
 				break;
 			case 'advanced':
-				console.log('link with advanced options!');
 				var Modal = zeega.module('modal');
 				var advancedModal = new Modal.Views.LinkAdvanced();
 				$('body').append(advancedModal.render().el);
-				console.log('advance modal',advancedModal,advanceModal.el)
 				advancedModal.show();
 				break;
 		}
@@ -384,7 +388,7 @@ this.zeega = {
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
 				console.log(newFrame)
-				newFrame.render();
+				this.loadFrame(newFrame);//newFrame.render();
 				
 				if(i>0){
 					console.log("not loading frame for later",i);
@@ -402,6 +406,8 @@ this.zeega = {
 							
 							_this.currentSequence.get('frames').push(newFrame.id);
 							
+							console.log('new frame saved', _this.currentSequence)
+							_this.loadFrame( newFrame.id )
 						}
 					});
 				}
@@ -410,14 +416,14 @@ this.zeega = {
 					newFrame.save({},{
 						success : function()
 						{
-							//console.log(newFrame)
+							$('#frame-list').append(newFrame.sequenceFrameView.render().el);
 							newFrame.trigger('refresh_view');
 							newFrame.trigger('updateThumb');
-							_this.project.frames.add( newFrame );
-							_this.loadFrame( newFrame );
-							
 							_this.currentSequence.get('frames').push(newFrame.id);
 							
+							_this.project.frames.add( newFrame );
+							_this.loadFrame( newFrame );
+							newFrame.trigger('focus');
 						}
 					});
 				}
@@ -671,7 +677,7 @@ this.zeega = {
 	getLeftFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
-		return this.frames.get( frameOrder[ currentFrameIndex-1 ] ) || this.frames.get( frameOrder[1] );
+		return this.project.frames.get( this.currentSequence.get('frames')[ currentFrameIndex-1 ] ) || this.currentSequence.get('frames')[ 0 ];
 	},
 
 	getRightFrame : function()
