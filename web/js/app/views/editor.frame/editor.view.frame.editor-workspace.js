@@ -24,7 +24,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
 			
 			this.advanceControls = new Frame.Views.FrameAdvanceControls({model:this.model});
-			this.$el.find('.advance-controls').append( this.advanceControls.render().el );
+			this.$el.find('.advance-controls').replaceWith( this.advanceControls.render().el );
 			
 			this.delegateEvents();
 			return this;
@@ -62,14 +62,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 					ui.draggable.draggable('option','revert',false);
 					zeega.app.addLayer({ item : zeega.app.draggedItem })
 				}
-			});
-			this.$el.find('.advance-click').tooltip({
-				title:'advance frame by click or arrow keys',
-				placement:'bottom'
-			});
-			this.$el.find('.advance-time').tooltip({
-				title:'advance frame by time only',
-				placement:'bottom'
 			});
 		},
 		
@@ -192,6 +184,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 			
 			this.$el.html( _.template(this.getTemplate(),this.model.toJSON()) );
 			
+			this.$el.find('.advance-click').tooltip({
+				title:'advance frame by click or arrow keys',
+				placement:'bottom'
+			});
+			this.$el.find('.advance-time').tooltip({
+				title:'advance frame by time only',
+				placement:'bottom'
+			});
+			
 			return this;
 		},
 
@@ -251,19 +252,18 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if(this.model.get('attr').advance > 0)
 				{
 					html +=
-					"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span><a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-					"<input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/>";
+					"<a href='#' class='advance-click'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span>"+
+					"<a href='#' class='advance-time active'><i class='zicon-time zicon-white raise-up'></i></a>  <input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/>";
 				}
 				else
 				{
 					html +=
-					"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span><a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  "+
-					"<input type='text' class='disabled' placeholder='sec'/>";
+					"<a href='#' class='advance-click active'><i class='zicon-click zicon-white raise-up'></i></a><span class='dim'>|</span>"+
+					"<a href='#' class='advance-time'><i class='zicon-time zicon-white raise-up'></i></a>  <input type='text' class='disabled' placeholder='sec'/>";
 				}
 					
 			return html;
 		}
-		
 		
 	})
 
