@@ -418,6 +418,8 @@ this.zeega = {
 							$('#frame-list').append(newFrame.sequenceFrameView.render().el);
 							newFrame.trigger('refresh_view');
 							newFrame.trigger('updateThumb');
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
 							_this.project.frames.add( newFrame );
 							_this.loadFrame( newFrame );
 							newFrame.trigger('focus');
