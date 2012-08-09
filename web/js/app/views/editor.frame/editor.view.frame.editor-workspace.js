@@ -345,7 +345,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );
-				layer.controls.delegateEvents();
 			})
 			
 			this.makeSortable();
