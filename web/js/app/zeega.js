@@ -235,15 +235,18 @@ this.zeega = {
 					}
 				});
 				
+				$('#connection-confirm').show();
+				
+				/*
 				//trigger the creation of a new sequence
 				if(this.hold.isNew()) this.hold.on('layer_saved',function(){ _this.confirmConnection() })
 				else this.confirmConnection();
 				//this.busy = true;
 				//this.confirmConnection();
+				*/
 				break;
 			
 			case 'existingFrame':
-				console.log('link to existing')
 				var Modal = zeega.module('modal');
 				var linkModal = new Modal.Views.LinkExisting();
 				$('body').append(linkModal.render().el);
@@ -251,11 +254,9 @@ this.zeega = {
 			
 				break;
 			case 'advanced':
-				console.log('link with advanced options!');
 				var Modal = zeega.module('modal');
 				var advancedModal = new Modal.Views.LinkAdvanced();
 				$('body').append(advancedModal.render().el);
-				console.log('advance modal',advancedModal,advanceModal.el)
 				advancedModal.show();
 				break;
 		}
@@ -418,6 +419,8 @@ this.zeega = {
 							$('#frame-list').append(newFrame.sequenceFrameView.render().el);
 							newFrame.trigger('refresh_view');
 							newFrame.trigger('updateThumb');
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
 							_this.project.frames.add( newFrame );
 							_this.loadFrame( newFrame );
 							newFrame.trigger('focus');
