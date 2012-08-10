@@ -35,8 +35,13 @@
 	<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
 	-->
 	
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/player/bootstrap.less')}}">
-	<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/player/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
 	
 	<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
    

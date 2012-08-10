@@ -8,9 +8,6 @@
 {%  block stylesheets %}
 	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
-	<script type="text/javascript">
-		window.localStorage.clear();
-	</script>
 	<style type="text/css">
 	
 		/*
@@ -33,7 +30,14 @@
 	
 	
 	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
 
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
@@ -52,7 +56,7 @@
 		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/home.js') }}"></script>
 	{% endif %}
 	
-	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
 	{% if projects is defined %}
 		<script type="text/javascript" language="Javascript">
 			//bootstrapping data
@@ -76,8 +80,8 @@
 	
 			<div class="page-intro span11">
 			
-				<h1>Create Immersive Experiences</h1>
-				<h2>Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2>
+				<h1>Remake the Internet</h1>
+				<h2>Zeega is an open-source, HTML5 platform for inventing new forms of interactive storytelling. Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2>
 			
 			</div>
 		
@@ -106,7 +110,7 @@
 	<!-- Featured Content Ends -->
 	
 
-	<br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 	
 	<!-- Special Project Separator Begins -->
@@ -120,7 +124,7 @@
 			url:"{{asset("images/home/home_edit.jpg")}}",
 			title:"EDIT WITH DRAG-AND-DROP EASE",
 			subtitle: "Zeega enables anyone to anyone to experiment with the web as a creative medium. No programming knowledge required : )",
-			seperator: "Zeega is an open-source, HTML5 platform for inventing new forms of interactive storytelling."
+			seperator: "Scroll down to learn more"
 		},
 		{
 			url:"{{asset("images/home/home_addmedia.jpg")}}",

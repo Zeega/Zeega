@@ -70,5 +70,9 @@ class CommunityController extends Controller
     {
         return $this->render('ZeegaCommunityBundle:About:contact.html.twig');
     }
+    public function newsAction()
+    {
+        return $this->render('ZeegaCommunityBundle:About:news.html.twig');
+    }
     
 }

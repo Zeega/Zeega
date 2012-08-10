@@ -58,11 +58,11 @@ zeega.parsers:
             regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#"
             is_set: false
             parser_class: Zeega\ExtensionsBundle\Parser\Mapbox\ParserMapboxTiles
-    vimeo.com:
-        item_parser:
-            regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
-            is_set: false
-            parser_class: Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo
+    #vimeo.com:
+       # item_parser:
+         #   regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
+         #   is_set: false
+         #   parser_class: Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo
     archive.org:
         item_parser:
             regex: /http:\/\/(?:www\.)?archive.org\/details.*/
