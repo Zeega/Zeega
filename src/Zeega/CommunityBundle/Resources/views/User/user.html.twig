@@ -28,10 +28,6 @@
 
 {%  block stylesheets %}
 	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
-
-	<script type="text/javascript">
-		window.localStorage.clear();
-	</script>
 	<style type="text/css">
 	
 		/*
@@ -53,9 +49,14 @@
 	</style>
 	
 	
-	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 

@@ -21,8 +21,8 @@
 			
 			_.each( zeega.app.project.sequences.at(0).get('frames'), function(frameID){
 				if(zeega.app.currentFrame.id == frameID)
-					$(_this.el).find('.frame-choose-list').append('<li class="frame-thumb-no-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
-				else $(_this.el).find('.frame-choose-list').append('<li class="frame-thumb-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
+					_this.$el.find('.frame-choose-list').append('<li class="frame-thumb-no-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
+				else _this.$el.find('.frame-choose-list').append('<li class="frame-thumb-choose-icon" data-id="'+ frameID +'"><img src="'+ zeega.app.project.frames.get(frameID).get('thumbnail_url') +'"/></li>')
 			});
 			
 			this.targetSequence = zeega.app.project.sequences.at(0).id;
@@ -75,8 +75,11 @@
 		
 		makeConnection : function()
 		{
+			console.log('make connection!!!',this.targetSequence,this.targetFrame)
 			this.hide();
-			zeega.app.connectToSequenceFrame(this.targetSequence,this.targetFrame);
+			
+			this.model.trigger('connectToSequenceFrame',this.targetSequence,this.targetFrame);
+			//zeega.app.connectToSequenceFrame(this.targetSequence,this.targetFrame);
 			return false;
 		},
 	
