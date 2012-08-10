@@ -276,6 +276,7 @@
 		
 		editItemMetadata : function()
 		{
+			$('#item-delete').hide();
 			this.editing = true;
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field').focus();
 			this.$el.find('.edit-item-metadata').hide();
@@ -301,6 +302,7 @@
 		
 		exitEditMode : function()
 		{
+			$('#item-delete').show();
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',false).removeClass('editing-field');
 			this.$el.find('.edit-item-metadata').show();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').hide();
