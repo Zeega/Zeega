@@ -21,6 +21,7 @@ var loadFiles = [
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!jquery/ui/js/jquery-ui.min',
+	'order!lib/dropbox',
 	
 	//custom
 	'order!ux/zeega.ux.header',
@@ -36,6 +37,8 @@ var loadFiles = [
 	'order!lib/bootstrap',
 	
 	//mvc
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	
 	//sequences

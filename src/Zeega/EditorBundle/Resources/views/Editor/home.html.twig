@@ -40,7 +40,7 @@
 				<span class="intro-actions-text" style="font-size: 12px; color: #6c6c6c; line-height: .5;">Use media collected to create your own interactive project.</span>
 				<br><br><br>
 				<ul class="nav nav-pills">
-					<li><a class="new-project" href="#" style="font-size: 12px;">Create New Project</a></li>
+					<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}" style="font-size: 12px;">Create New Project</a></li>
 				</ul>
 				</div>
 				<div id="edit-image" style="float: left; margin-left: 0px;"><img src="{{ asset('images/edit-graphic.gif') }}" /></div>
@@ -61,7 +61,7 @@
 				<div id="my-projects-container" class="projects-container my-projects-container" style="margin-left:-27px;">
 					<ul>
 						{% for project in myprojects %}
-							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaCoreBundle_editor', { 'id': project.id,'short': site.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
+							<li class='project-{{project.id}}' style="margin-bottom: 5px; padding: 5px; background-color: #444; border-radius: 3px;"><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}" class="white">{{project.title}}</a> <span class="timeStamp"></span> <a class='project-delete' style="color:red; float: right;" data-id="{{project.id}}" href="#">delete</a></li><div style="clear: both;"></div>
 						{% endfor %}
 					</ul>
 				</div>

@@ -19,6 +19,7 @@ require(
 	[
 	'order!lib/underscore',
 	'order!lib/backbone',
+	'order!lib/dropbox',
 	
 	'order!lib/leaflet/leaflet',
 	
@@ -30,12 +31,14 @@ require(
 	
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
-	'order!lib/popcorn_flash',
+	'order!lib/popcorn-flash',
 	
 	//'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 	'order!app/models/editor.model.layer',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',

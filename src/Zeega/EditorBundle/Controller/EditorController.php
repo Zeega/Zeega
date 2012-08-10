@@ -1,7 +1,8 @@
 <?php
 namespace Zeega\EditorBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Zeega\CoreBundle\Controller\BaseController as Controller;
+
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
@@ -63,14 +64,30 @@ class EditorController extends Controller
 		return $this->render('ZeegaEditorBundle:Editor:home.html.twig', array('allprojects' => $projects, 'page'=>'site',));
 	}
 	
+	public function newAction($short)
+	{
+		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
+		if(!isset($site)) $site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+        
+        $projectId = $this->forward('ZeegaCoreBundle:Sites:postSiteProject', array("site_id" => $site->getId()))->getContent();
+        
+        
+        return $this->redirect($this->generateUrl('ZeegaEditorBundle_editor',array('id'=>$projectId, 'short'=>$short)), 301);  
+        
+	}
+	
 	public function editorAction($short,$id)
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
 		
+		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		$projectOwners = $project->getUsers();
+		
+		$this->authorize($projectOwners[0]->getId());
+		
+		
 		$site = $this->getDoctrine()->getRepository('ZeegaDataBundle:Site')->findOneByShort($short);
 		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-					
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 
 		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
 

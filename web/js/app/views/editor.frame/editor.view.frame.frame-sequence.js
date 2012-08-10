@@ -10,8 +10,18 @@
 			this.model.on('refresh_view', this.refreshView, this);
 		},
 		
-		focus : function(){ $(this.el).addClass('active-frame'), this.model.inFocus = true },
-		blur : function(){ $(this.el).removeClass('active-frame'), this.model.inFocus = false },
+		focus : function()
+		{
+			console.log('~~		focus:', this.model.id)
+			$(this.el).addClass('active-frame');
+			this.model.inFocus = true;
+		},
+		blur : function()
+		{
+			console.log('~~		blur:', this.model.id)
+			$(this.el).removeClass('active-frame');
+			this.model.inFocus = false
+		},
 	
 		render: function()
 		{
@@ -85,7 +95,9 @@
 						if(confirm('Delete Frame?'))
 						{
 							$(_this.el).remove();
-							_this.model.destroy();
+							
+							zeega.app.currentSequence.destroyFrame( _this.model );
+							//_this.model.destroy();
 						}
 						break;
 				
@@ -175,7 +187,7 @@
 			
 				"<li id='frame-thumb-<%= frameID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 					"<div class='frame-update-overlay'></div>"+
-					"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
+					"<div style='width:0px;'><a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a></div>"+
 					"<div class='well menu'>"+
 						"<ul class='nav nav-list'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+

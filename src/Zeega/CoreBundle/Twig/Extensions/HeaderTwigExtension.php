@@ -57,7 +57,7 @@ class HeaderTwigExtension extends \Twig_Extension
         }
 
         return array(
-            'site' => -1,
+            'site' => null,
 			'title' => 'Unknown',
 			'short' => 'Unknown',
 			'num_sites' => 0,

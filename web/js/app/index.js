@@ -11,17 +11,12 @@ jQuery(function($)
 	$('.info').popover({
 		'delayIn' : 0
 	});
-	/*
-	$('.database-asset-list').popover({
-		'delayIn' : 1,
-		'placement' : 'right'
-	});
-	*/
-	
+
 	$('body').click(function(){
 		$('.menu').addClass('hide')
 	})
 	
+	console.log('==		search stuffz')
 	var visualSearch = VS.init({
 		container : $('.visual_search'),
 		query     : '',
@@ -67,6 +62,7 @@ jQuery(function($)
 			}
 		}
 	});
+	console.log('search stuffz', visualSearch)
 	
 	
 	$('.VS-icon.VS-icon-search').click(function(){
@@ -90,23 +86,7 @@ jQuery(function($)
 		return false;
 	})
 	
-	//// non-linear links
-	//// connections
 	
-	$('#make-connection .action').click(function(e){
-		if( !$(this).hasClass('disabled') )
-		{
-			$(this).closest('div').removeClass('open');
-			zeega.app.makeConnection( $(this).data('action') );
-		}
-		return false;
-	})
-	
-	$('#connection-confirm button').click(function(){
-		$('#make-connection button').removeClass('disabled');
-		$('#connection-confirm').hide();
-		zeega.app.confirmConnection( $(this).data('action') );
-	})
 	
 	
 	$('#database-collection-filter').change(function(){
@@ -121,10 +101,7 @@ jQuery(function($)
 		return false;
 	});
 
-	$('#preview').click(function(){
-		zeega.app.previewSequence();
-		return false;
-	});
+
 
 	$('#list-view').click(function(){
 		console.log('goto list view');
@@ -146,29 +123,6 @@ jQuery(function($)
 	$('#project-settings').click(function(){
 		projectSettings();
 	})
-
-	$('#ratio-list a').click(function(){
-		changeAspectRatio( $(this).data('ratio-id') );
-		return false;
-	})
-
-	function changeAspectRatio( ratioID )
-	{
-		switch( ratioID )
-		{
-			case 0:
-				$('#visual-editor-workspace').css('width','704px')
-				break;
-
-			case 1:
-				$('#visual-editor-workspace').css('width','625px')
-				break;
-
-			default:
-				console.log('goDefault')
-		}
-	}
-
 
 	function projectSettings()
 	{
@@ -245,19 +199,6 @@ jQuery(function($)
 			_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
 		}
 	});
-
-	//publish button
-	$('#publish-project').click(function(){
-		//Uncomment to activate publish modal
-		zeega.app.shareProject();
-		return false;
-	});
-
-	$('#get-help').click(function(){
-		localStorage.help = true;
-		zeega.app.initStartHelp();
-	})
-
 
 	$('.menu-toggle').click(function(){
 
@@ -338,25 +279,6 @@ jQuery(function($)
 		stop : function(){ zeega.app.updateFrameOrder() }
 	});
 
-	$( "#layers-list-visual" )
-		.sortable({
-
-			//define a grip handle for sorting
-			handle: '.layer-drag-handle',
-			cursor : 'move',
-			axis:'y',
-			containment: '#sidebar',
-			cursorAt : {top:1,left:1},
-			placeholder: "ui-state-highlight",
-
-			//resort the layers in the workspace too
-			update : function()
-			{
-				zeega.app.updateLayerOrder();
-			}
-		});
-	$( "#sortable-layers" ).disableSelection();
-
 	$('#links-list').sortable({
 		//define a grip handle for sorting
 		handle: '.layer-drag-handle',
@@ -426,36 +348,12 @@ jQuery(function($)
 			zeega.app.itemCollection.getNextPage();
 		}
 	})
+		
 
-	/*****  		CRITICAL		*******/
+	$('#add-media-button').click(function(){
 
-	//enable the workspace as a valid drop location for DB items
-	$('#visual-editor-workspace').droppable({
-		accept : '.database-asset-list',
-		hoverClass : 'workspace-item-hover',
-		tolerance : 'pointer',
-
-		//this happens when you drop a database item onto a frame
-		drop : function( event, ui )
-			{
-				ui.draggable.draggable('option','revert',false);
-				zeega.app.addLayer({ item : zeega.app.draggedItem })
-			}
+		$('#add-media').modal();
+		return false;
 	});
-
-	// FAKE STUFF
-	$('#css-change').toggle(function(){
-		$('body').css('background','#fff');
-		$('#sequence-header').css('color','#444');
-		$('#frame-drawer').css('background','#fff');
-		$('.database-asset').css('background','#fff');
-	},function(){
-		$('body').css('background','');
-		$('#sequence-header').css('color','');
-		$('#frame-drawer').css('background','');
-		$('.database-asset').css('background','');
-	});
-
-
 
 });

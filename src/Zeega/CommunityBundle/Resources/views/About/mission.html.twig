@@ -1,0 +1,175 @@
+{# src/Zeega/CommunityBundle/Resources/views/About/about.html.twig #}
+
+{% extends 'ZeegaCommunityBundle:About:about_base.html.twig' %}
+
+{% block title %}Mission{% endblock %}
+{% block backgroundurl %}{{ asset('images/about/about_mwmc.gif')}}{% endblock%}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Page Intro Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>MISSION</h1>
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Intro Ends -->
+	
+	
+	<!-- Page Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+			
+			<!-- Main Column Begins -->
+					
+			<div class="span9 article">
+				<h2>The Internet is a wild place. We like that. Too often, though, it’s overwhelming. And full of too many choices.<br><br> 
+				Little by little, we want to help remake the Internet. To make it a more beautiful place. To make the web’s wilds accessible to anyone for new forms of creative expression.<br><br>
+				Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web.<br><br>
+				Built within the Symfony PHP framework and using JS libraries such as Backbone and Popcorn, Zeega runs on its own API, making for simple customization and data access. Take a peek on <a href="https://github.com/Zeega/Zeega-Core" target="_blank">Github</a>
+				</h2>
+				
+
+			</div>
+			
+			<!-- Main Column Ends -->
+			
+			
+			<!-- Sidebar Begins -->
+			
+			<div class="span4 offset1">
+			
+				<!-- Sign Up Button Begins -->
+				<a href="{{path('fos_user_registration_register')}}">
+				<div class="go-button new-section">
+
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h4>
+								Sign Up For Zeega</a>
+								</h4>
+							
+							</div>
+						</div>
+
+				</div>
+				</a>
+				<!-- Sign Up Button Ends -->
+				
+				<!-- Sidebar Productions Begins -->
+				<div class="sidebar-module new-section">
+				
+					<div class="sidebar-button">
+	
+							<div class="valign">
+								<div class="valign-content">	
+						
+									<h4>Productions</h4>
+								
+								
+								</div>
+							</div>
+	
+					</div>
+					
+					<p class="sidebar">
+						<a href="{{ path('ZeegaCommunityBundle_productions')}}">Zeega Productions</a> is a growing series of innovative storytelling projects that span the globe and uncover new perspectives on the human experience. Some works are co-productions with leading partners in the radio, film, journalism and interactive worlds; others are lead by Zeega's internal team.
+					</p>
+				
+				</div>
+				<!-- Sidebar Meet The Team Ends -->
+				
+				<!-- Sidebar Meet The Team Begins -->
+				<div class="sidebar-module new-section">
+				
+					<div class="sidebar-button">
+	
+							<div class="valign">
+								<div class="valign-content">	
+						
+									<h4>Meet The Team</h4>
+								
+								
+								</div>
+							</div>
+	
+					</div>
+					
+					<p class="sidebar">
+						<a href="{{ path('ZeegaCommunityBundle_team')}}">The Zeega Team</a> is built on the principle that innovation in storytelling requires deep integration of editorial, design and technology perspectives throughout the creative process. Say hi to the folks.
+					</p>
+				
+				</div>
+				<!-- Sidebar Meet The Team Ends -->
+				
+				<!-- Sidebar Enquiries Begins -->
+				<div class="sidebar-module new-section">
+				
+					<div class="sidebar-button">
+	
+							<div class="valign">
+								<div class="valign-content">	
+						
+									<h4>Ask a Question</h4>
+								
+								
+								</div>
+							</div>
+	
+					</div>
+					
+					<p class="sidebar">General inquiries: <a href="mailto: info@zeega.org">info@zeega.org</a></p>
+					<p class="sidebar">Press inquiries: <a href="mailto: press@zeega.org">press@zeega.org</a></p>
+				
+				</div>
+				<!-- Sidebar Enquiries Ends -->
+				
+				<!-- Sidebar Links Begins -->
+				<div class="sidebar-module new-section">
+				
+					<div class="sidebar-button">
+	
+							<div class="valign">
+								<div class="valign-content">	
+						
+									<h4>Elsewhere</h4>
+								
+								</div>
+							</div>
+	
+					</div>
+					
+					<p class="sidebar"><a href="http://twitter.com/Zeega"><img src="{{ asset('images/social-icons/twitter.png') }}" alt="twitter" width="20" height="20">Follow us on Twitter</a></p>
+					<p class="sidebar"><a href="https://www.facebook.com/pages/Zeega/242930292457056"><img src="{{ asset('images/social-icons/facebook.png') }}" alt="facebook" width="20" height="20">Follow us on Facebook</a></p>
+				
+				</div>
+				<!-- Sidebar LINKS Ends -->
+			
+			</div>
+			
+			<!-- Sidebar Ends -->
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Content Ends -->
+
+
+{% endblock %}

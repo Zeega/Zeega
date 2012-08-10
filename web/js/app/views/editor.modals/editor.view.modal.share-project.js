@@ -27,8 +27,8 @@
 				
 			}
 			//http://dev.zeega.org/joseph/web/project/ID/view
-			var projectlink = zeega.app.url_prefix + 'project/'+ this.model.id +'/view';
-			var iframeLink = zeega.app.url_prefix +this.model.id;
+			var projectlink = zeega.app.url_prefix +this.model.get('item_id');
+			var iframeLink = zeega.app.url_prefix +this.model.get('item_id');
 			this.iframeHTML = '<iframe src="'+ iframeLink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
@@ -76,36 +76,9 @@
 				$('#publish-customize-size').fadeToggle();
 				return false;
 			});
-			$(this.el).find('#looks-good').mouseup(function(){
 
-				attr.project_thumbnail = $('#preview-images .publish-image-select').attr('src');
-				_this.model.save({	
-							'title': $('#publish-project-title').val(),
-							//'attr': attr,
-							'published':true,
-							'author' : $('#publish-project-author').val(),
-							'estimated_time' : $('#publish-project-estimated-time').val()
-				},
-				{
-					success : function(model, response){
-						console.log(_this.model)
-						$(_this.el).find('#publish-project-modal-step1').hide();
-						$(_this.el).find('#publish-project-modal-step2').show();
-					},
-					error : function(model, response){
-						console.log('error publishing project');
-						console.log(model);
-					},
-				});
-				
-				return false;
-			});
-			$(this.el).find('#publish-back').mouseup(function(){
+			$(_this.el).find('#publish-project-modal-step2').show();
 
-				$(_this.el).find('#publish-project-modal-step2').hide();
-				$(_this.el).find('#publish-project-modal-step1').show();
-				return false;
-			});
 			$(this.el).find('#publish-width, #publish-height').blur(
 				function(e){
 					var iframeElem = null;
@@ -145,63 +118,40 @@
 		console.log(this)
 
 		var html =	//Step 1
-					'<div id="publish-project-modal-step1">'+
-						'<div class="modal-header">'+
-							'<button data-dismiss="modal" class="close">&times;</button>'+
-						
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>Before you share your project, make sure everything looks good!</h3>'+
-						'</div>'+
-
-						'<div class="modal-body clearfix">'+
-							'<label for="publish-project-title">Title</label>'+
-							'<input type="text" id="publish-project-title" value="<%= title %>"/>'+
-
-							'<label for="publish-project-author">Author(s)</label>'+
-							'<input type="text" id="publish-project-author" value="<%= author %>"/>'+
-
-							'<label for="publish-project-estimated-time">Estimated Time</label>'+
-							'<input type="text" id="publish-project-estimated-time" value="<%= estimated_time %>"/>'+
-
-							'<label for="tags">Tags</label>'+
-							'<div class="tags"><input name="tags" class="tagsedit" id="<%=randId%>" value="<%=tags%>" /></div>'+
-
-							//'<label for="preview-images">Choose an image to represent your project</label>'+
-							//'<div id="preview-images"><%= imageHTML %></div>'+
-
-							'<div class="publish-footer">'+
-								'<button id="looks-good" class="btn btn-success secondary">looks good <i class="icon-circle-arrow-right icon-white"></i></button>'+
-							'</div>'+
-								
-						'</div>'+
-					'</div>'+ 
-					
-					//Step 2
 					'<div id="publish-project-modal-step2" style="display:none">'+
 						'<div class="modal-header">'+
 							'<button data-dismiss="modal" class="close">&times;</button>'+
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>You\'re ready to publish <span style="color:#F15A29"><%= title %></span>!</h3>'+
-							'<p>As you edit in the future this project will be automatically updated.</p>'+
+							'<h3>Share <span style="color:#F15A29"><%= title %></span> with the universe!</h3>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix">'+
 
 							'<div class="publish-left-column">'+
-								'<label for="project-title">Share your project</label>'+
+								'<label for="project-title">Social Media</label>'+
 								'<div id="publish-social-media">'+
 									/*
 									//FACEBOOK
 									'<span class="publish-social-media">'+
 									'<iframe src="//www.facebook.com/plugins/like.php?href=<%= uriEncodedProjectlink %>&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px; float:left" allowTransparency="true"></iframe>'+
 									'</span>'+
-									*/
-									//TWITTER
+								
 									'<span class="publish-social-media">'+
 									'<a href="https://twitter.com/share" class="twitter-share-button" data-url="<%=projectlink %>" data-text="Zeega Project: <%=title %>">Tweet</a>'+
 									'<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>'+
 									'</span>'+
-/*
+									
+										*/
+									//TWITTER
+									'<span class="publish-social-media">'+
+									'<a href="https://twitter.com/intent/tweet?original_referer=<%=projectlink %>&amp;text=Zeega%20Project%3A%20Pointed News&amp;url=<%=projectlink %>" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
+									'</span>'+
+									
+									//FB
+									
+									'<span class="publish-social-media">'+
+									'<a href="http://www.facebook.com/sharer.php?u=<%=projectlink %>" class="share-facebook pull-left" target="blank"><i class="zitem-facebook zitem-30 loaded"></i></a>'+
+									'</span><br><br>'+
+/*					
 									//TUMBLR
 									'<span class="publish-social-media">'+
 									'<span id="tumblr_button_abc123"></span>'+
@@ -240,7 +190,7 @@
 
 								//END SOCIAL MEDIA INTEGRATION
 
-								'<label for="project-link">Or copy this link</label>'+
+								'<label for="project-link">Link to your project</label>'+
 								'<input type="text" id="project-link" value="<%= projectlink %>"/>'+
 
 							'</div>'+
@@ -261,7 +211,6 @@
 								'</div>'+
 							'</div>'+
 							'<div class="publish-footer">'+
-								'<button id="publish-back" class="btn secondary"><i class="icon-circle-arrow-left"></i> Back</button>'+
 								'<button class="btn secondary pull-right" data-dismiss="modal" ><i class="icon-ok-circle"></i> Done</button>'+
 							'</div>'+
 						'</div>'+

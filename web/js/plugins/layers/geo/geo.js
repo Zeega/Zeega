@@ -124,7 +124,7 @@
 				});
 
 			$(this.el).html( map ).css({height:this.attr.height+'%'});
-			
+			console.log('@@		streetview render')
 						
 			return this;
 		},
@@ -147,44 +147,37 @@
 		
 		onLayerEnter : function()
 		{
+			console.log('##		geo layer enter', $(this.el).find('.gmap-container')[0], $( $(this.el).find('.gmap-container')[0]).is(':visible')+'' )
+
+			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
+
+			var mapOptions = {
+				
+				addressControl : false,
+				addressControlOptions : false,
+				clickToGo : true,
+				disableDoubleClickZoom : false,
+				enableCloseButton : false,
+				imageDateControl : false,
+				linksControl : false,
+				panControl : true,
+				panControlOptions : true,
+				//pano : '',
+				position : center,
+				visible :true,
+				zoomControl :true,
+				zoomControlOptions :true,
+				
+				pov : {
+						'heading' : this.model.get('attr').heading,
+						'pitch' : this.model.get('attr').pitch,
+						'zoom' : this.model.get('attr').streetZoom,
+				}
+			};
+			console.log('##		map options', mapOptions)
 			
-			if( !this.isLoaded )
-			{
-				console.log('geo layer enter')
-
-				var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
-
-				var mapOptions = {
-					
-					addressControl : false,
-					addressControlOptions : false,
-					clickToGo : true,
-					disableDoubleClickZoom : false,
-					enableCloseButton : false,
-					imageDateControl : false,
-					linksControl : false,
-					panControl : true,
-					panControlOptions : true,
-					//pano : '',
-					position : center,
-					visible :true,
-					zoomControl :true,
-					zoomControlOptions :true,
-					
-					pov : {
-							'heading' : this.model.get('attr').heading,
-							'pitch' : this.model.get('attr').pitch,
-							'zoom' : this.model.get('attr').streetZoom,
-					}
-					
-				};
-				
-				this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('.gmap-container')[0], mapOptions);
-				
-				this.initMapListeners();
-				
-				this.isLoaded = true;
-			}
+			this.streetview = new google.maps.StreetViewPanorama( $(this.el).find('.gmap-container')[0], mapOptions);
+			this.initMapListeners();
 		},
 		
 		initMapListeners : function()
@@ -223,9 +216,9 @@
 		onLayerExit : function()
 		{
 			//this destroys the map every time the frame is changed. there is probably a better way to do this
-			this.map = {};
-			$(this.el).find('.gmap-container').hide();
-			this.isLoaded = false;
+			this.map = null;
+			$(this.el).find('.gmap-container').remove();
+			console.log('on layer exit streetview',this, this.map)
 		},
 		
 		onPreload : function()

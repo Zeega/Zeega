@@ -3,43 +3,46 @@
 	Layer.Views.Controls = Backbone.View.extend({
 		
 		tagName : 'li',
-		
 		className : 'editor-layer',
 		
 		initialize : function()
 		{
+			this.controls = $('<div>');
 			this.initListeners();
-			
 			this.attr = this.model.get('attr')
-			
 			_.extend( this.events, this.eventTriggers );
-			this.setBaseTemplate();
-			
-			this.controls = this.$el.find('#controls');
+			this.init();
+		},
+		
+		render : function(){ /* this is overridden by individual controls*/ },
+		
+		renderControls : function()
+		{
 			this.$el.attr( 'id', 'layer-'+ this.model.id );
 			this.$el.attr('data-id',this.model.id);
-			//this.drawDefaultControls();
-			
-			
-			this.init();
+			this.setBaseTemplate();
+			this.controls = $('<div>');
+			this.$el.find('#controls').html(this.render().controls);
+			this.drawDefaultControls();
+			return this;
 		},
 		
 		drawDefaultControls : function()
 		{
-			$(this.el).find('.default-layer-controls').empty();
+			this.$el.find('.default-layer-controls').empty();
 
 			var persistentLayers = ( zeega.app.currentSequence.get('attr') ) ? zeega.app.currentSequence.get('attr').persistLayers : {};
 			var isActive = _.include(persistentLayers, parseInt(this.model.id) );
 			
 			var continueLayer = new Layer.Views.Lib.ContinueLayer({ model: this.model });
 			
-			$(this.el).find('.default-layer-controls')
+			this.$el.find('.default-layer-controls')
 				.append( continueLayer.getControl() );
 				//.append( continueToNext.getControl() );
 			if( this.model.get('attr').linkable )
 			{
 				var link = new Layer.Views.Lib.Link({ model: this.model });
-				$(this.el).find('.default-layer-controls').append( link.getControl() );
+				this.$el.find('.default-layer-controls').append( link.getControl() );
 			}
 		},
 		
@@ -52,14 +55,6 @@
 				this.model.on('player_play', this.private_onPlay, this);
 				this.model.on('player_exit', this.private_onExit, this);
 				this.model.on('player_unrender', this.private_onUnrender, this);
-			}
-			else
-			{
-				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-				this.model.on('editor_layerExit', this.private_onLayerExit, this);
-				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
-				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
-				this.model.on('editor_removeLayerFromFrame', this.private_onRemoveLayerFromFrame, this);
 			}
 		},
 		
@@ -105,18 +100,16 @@
 		
 		private_onLayerEnter : function()
 		{
-			console.log('	LAYER LIST enter')
 			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
+			console.log('++		private on layer enter')
 			this.onLayerEnter();
 		},
 		
 		private_onLayerExit : function()
 		{
-			console.log('	LAYER LIST EXIT')
 			this.undelegateEvents();
 			this.$el.find('#controls').empty();
-			//this.remove();
 			this.onLayerExit();
 		},
 		
@@ -186,6 +179,7 @@
 		updateViewInPlace : function()
 		{
 			console.log('re render')
+			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title)
 			
@@ -215,6 +209,7 @@
 			if( confirm('Delete Layer?') )
 			{
 				this.model.trigger('editor_removeLayerFromFrame', this.model);
+				zeega.app.currentFrame.trigger('update_thumb');
 				this.remove();
 			}
 		},
@@ -222,28 +217,27 @@
 		//	open/close and expanding layer items
 		expand : function()
 		{
-			var _this = this;
-			if( $(this.el).find('.layer-content').is(':hidden') )
+			if(this.model.hasControls)
 			{
-				//show layer controls
-				$(this.el).find('.layer-content')
-					.show('blind',{'direction':'vertical'},function(){
-						_this.model.trigger('editor_controlsOpen');
-						$(this).removeClass('closed');
-				});
-				
-				this.visible = true;
-			}
-			else
-			{
-				//hide layer controls
-				$(this.el).find('.layer-content')
-					.hide('blind',{'direction':'vertical'},function(){
-						$(this).addClass('closed');
-						_this.model.trigger('editor_controlsClosed');
-				});
-				
-				this.visible = false;
+				var _this = this;
+				if( $(this.el).find('.layer-content').is(':hidden') )
+				{
+					//show layer controls
+					$(this.el).find('.layer-content')
+						.show('blind',{'direction':'vertical'},function(){
+							_this.model.trigger('editor_controlsOpen');
+							$(this).removeClass('closed');
+					});
+				}
+				else
+				{
+					//hide layer controls
+					$(this.el).find('.layer-content')
+						.hide('blind',{'direction':'vertical'},function(){
+							$(this).addClass('closed');
+							_this.model.trigger('editor_controlsClosed');
+					});
+				}
 			}
 			return false;
 		},
@@ -281,7 +275,6 @@
 		
 		setBaseTemplate : function()
 		{
-			var title = this.model.get('attr').title;
 			var persist = '';
 			/*
 			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
@@ -298,13 +291,13 @@
 			var blanks = {
 				id : 'layer-edit-'+this.model.id,
 				type : this.model.get('type').toLowerCase(),
-				layerName : title,
+				title : this.model.get('attr').title,
 				persist : persist,
 				show_link : showLink,
 				link_to : linkURL
 			}
 
-			$(this.el).append( _.template( this.getBaseTemplate(), blanks ) )
+			this.$el.html( _.template( this.getBaseTemplate(), blanks ) )
 		},
 		
 		getBaseTemplate : function()
@@ -316,15 +309,16 @@
 								'<i class="zicon-<%= type %> orange"></i>'+
 								//'<span class="asset-type-icon orange zicon"></span>'+
 							'</div>'+
-							'<div class="layer-title"><%= layerName %></div>'+
+							'<div class="layer-title"><%= title %></div>'+
 							'<div class="layer-uber-controls">'+
 								'<i class="zicon-trash-closed delete-layer"></i>'+
 							'</div>'+
 							'<div class="layer-drag-handle">'+
-								'<span class="zicon zicon-vert-drag"></span>'+
+								'<i class="zicon-vert-drag"></i>'+
 							'</div>'+
 						'</div>'+
 						'<div class="layer-content inset-tray dark tray closed">'+
+						
 							'<div id="controls" class="clearfix"></div>'+
 
 							'<div class="default-layer-controls clearfix"></div>'+ //standard layer controls

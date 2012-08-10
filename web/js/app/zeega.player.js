@@ -12,7 +12,7 @@
 
 var Player2 = Backbone.View.extend({
 	
-	MINIMUM_LOAD : 3000,
+	MINIMUM_LOAD : 100,
 	
 	has_started : false,
 	loadAheadDistance : 2,
@@ -28,20 +28,21 @@ var Player2 = Backbone.View.extend({
 		this.generateBackbone();
 		if( _.isUndefined(zeega.app.router) ) this.zeega = false;
 		if(!_.isUndefined(apiplayer)) this.apiplayer = apiplayer;
+		var _this=this;
+		if(!this.zeega)this.fsCheck=setInterval(function(){if(_this.container.width()==0) _this.closePlayer();},500);
 	},
 	
 	loadProject : function( data, options )
 	{
+		this.data = data;
 		//draw player to page
 		this.container.prepend( this.render().el );
 		//hide the editor underneath to prevent scrolling
-		$('#wrapper').hide();
 		$(this.el).fadeIn();
 
 		this.initListeners();
 		
 		//this.render();
-		this.data = data;
 		this.parseData( data );
 		
 		var s = ( _.isUndefined(options) || _.isUndefined(options.sequenceID) ) ? data.sequences[0].id : options.sequenceID;
@@ -64,6 +65,39 @@ var Player2 = Backbone.View.extend({
 			this.goToFrame( this.currentFrame )
 		}
 		
+	},
+	
+
+	closePlayer : function()
+	{
+		if(!this.zeega) clearInterval(this.fsCheck);
+		var _this = this;
+		
+		if (document.exitFullscreen) {
+		document.exitFullscreen();
+		}
+		else if (document.mozCancelFullScreen) {
+		document.mozCancelFullScreen();
+		}
+		else if (document.webkitCancelFullScreen) {
+		document.webkitCancelFullScreen();
+		}
+		
+		//unhide editor
+		$('#wrapper').show();
+
+		this.unsetListeners();
+		
+		_.each( _.toArray( this.currentSequence.layers ), function(layer){
+			if( layer.rendered ) layer.trigger('player_unrender')
+		});
+		
+		
+		// remove the player div
+		this.$el.fadeOut( 450, function(){ $(this).remove() });
+
+		if(this.zeega) zeega.app.restoreFromPreview();
+		return false;
 	},
 	
 	loadProjectById : function(projectId, options)
@@ -126,6 +160,8 @@ var Player2 = Backbone.View.extend({
 	
 	goToFrame : function( frame )
 	{
+		this.loadAhead();
+		
 		this.clearStage( frame );
 		
 		//if the frame is already loaded, then render the frame to the player!
@@ -137,7 +173,7 @@ var Player2 = Backbone.View.extend({
 		else
 		{
 			var _this = this;
-			console.log('frame needs a little bit more to load…')
+			
 			frame.on('ready', function(){
 				frame.off('ready');
 				
@@ -146,7 +182,7 @@ var Player2 = Backbone.View.extend({
 					setTimeout( function(){
 						frame.loader.fadeOut();
 						_this.startTimer = setTimeout( function(){ _this.renderFrame( frame.id); _this.has_played = true; }, 1000);
-					}, 2000);
+					}, this.MINIMUM_LOAD);
 					
 				}
 				else
@@ -156,9 +192,9 @@ var Player2 = Backbone.View.extend({
 			});
 		}
 		//update the url
-		this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
+		//this.router.navigate('player/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id);
 		//load the frames around the frame in question
-		this.loadAhead();
+		
 	},
 	
 	/*
@@ -166,7 +202,7 @@ var Player2 = Backbone.View.extend({
 	*/
 	clearStage : function( frame )
 	{
-		console.log('clear stage!!')
+		
 		if(this.currentFrame.id != frame.id)
 		{
 			var _this = this;
@@ -177,7 +213,7 @@ var Player2 = Backbone.View.extend({
 			var removeLayers = _.difference(oldLayers, newLayers);
 			
 			_.each( removeLayers, function( layerID ){
-				console.log('remove layer: '+layerID, _this.layers.get( layerID ))
+				
 				_this.layers.get( layerID ).trigger('player_exit')
 			})
 		}
@@ -185,27 +221,24 @@ var Player2 = Backbone.View.extend({
 	
 	renderFrame : function( id )
 	{
-		console.log('	RENDER FRAME ()', id)
+		
 		var _this = this;
 		var frame = this.frames.get(id);
 		this.currentFrame = frame;
-		console.log('	1',id)
-
 		_.each( frame.get('layers'), function(layerID,i){
-			console.log(layerID)
-			_this.layers.get( layerID ).trigger('player_play',i+1);
+			var layer = _this.layers.get( layerID );
+			if( layer.get('type') == 'Link' && _.isUndefined(_this.frames.get( layer.get('attr').to_frame )) ) return false;
+			else _this.layers.get( layerID ).trigger('player_play',i+1);
 		})
-		console.log('	2', id)
-		
 		this.setAdvance( frame.get('attr').advance )
-		console.log('	3', id)
 		this.updateCitations();
 		this.updateArrows();
 	},
 	
 	loadAhead : function()
 	{
-		console.log('LOAD AHEAD ON SEQUENCE: '+ this.currentSequence.id )
+		
+		
 		//find the frame you're coming from and where it is in the order
 		var frameOrder = this.currentSequence.get('frames') || _.pluck( _.toArray(this.currentSequence.frames), 'id' );
 		this.currentSequence.set('frames',frameOrder);
@@ -222,10 +255,8 @@ var Player2 = Backbone.View.extend({
 			{
 				var frameID = frameOrder[tryIndex];
 				var frame = this.frames.get( frameID );
-				if( frame.status != 'loading' && frame.status != 'ready' )
-				{
-					this.preloadFrame( frame );
-				}
+				
+				if( frame.status != 'loading' && frame.status != 'ready' ) this.preloadFrame( frame );
 			}	
 		}
 	},
@@ -233,14 +264,28 @@ var Player2 = Backbone.View.extend({
 	preloadFrame : function( frame )
 	{
 		var _this = this;
+		frame.trigger('loading', frame.id);
 		
 		if(this.currentFrame == frame) $('#zeega-player').prepend( frame.loader.render().el );
 		
 		var linkedFrameLayers = [];
+		
 		_.each(frame.links, function(frameID){
-			linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
+			var f = _this.frames.get(frameID);
+			
+			//preload frame
+			if( f.status != 'loading' && frame.status != 'ready' ) _this.preloadFrame( f );
+			
+			if( f )
+			{
+				linkedFrameLayers = _.union( _this.frames.get(frameID).get('layers'), linkedFrameLayers );
+				f.trigger('loading', frame.id);
+			}
+			
 		})
-		console.log('preload layers: ',_.union(linkedFrameLayers,frame.get('layers')), 'from frame', frame );
+		
+		//
+		
 		_.each( _.union(linkedFrameLayers,frame.get('layers')), function(layerID){
 			var layer = _this.layers.get( layerID );
 			if( layer.status != 'loading' && layer.status != 'ready' && layer.status != 'error' )
@@ -248,12 +293,11 @@ var Player2 = Backbone.View.extend({
 				_this.preloadLayer( layer )
 			}
 		});
-		frame.trigger('loading', frame.id);
 	},
 	
 	preloadLayer : function( layer )
 	{
-		console.log('preload layer:', layer.id, layer, ''+layer.status);
+		
 		layer.trigger('loading', layer.id)
 		this.$el.find('#preview-media').append( layer.visual.render().el );
 		layer.trigger('player_preload');
@@ -265,20 +309,11 @@ var Player2 = Backbone.View.extend({
 		
 		if(this.t) clearTimeout( this.t )
 		
-		if(adv == -1) //manual control
-		{
-			//do nothing
-		}
-		else if(adv == 0) //after playback - default
-		{
-			_.each( _.toArray( this.currentLayers), function(layer){
-				layer.on('playback_ended',function(){ _this.goRight() })
-			})
-		}
-		else if(adv > 0) //after n seconds
+		if(adv > 0) //after n seconds
 		{
 			adv = adv < 1 ? 1 : adv;
 			this.t = setTimeout( function(){ _this.goRight() },adv )
+			
 		}
 	},
 	
@@ -323,9 +358,12 @@ var Player2 = Backbone.View.extend({
 			
 			render : function()
 			{
+				
 				var error = this.model.status == 'error' ? 'error' : '';
 				this.model.get('attr').description = $(this.model.get('attr').description).text(); //escape html so it doesn't kill the css!!!
-				$(this.el).html( _.template(this.getTemplate(), _.extend(this.model.attributes,{error:error}) ) ).attr('id','player-citation-'+ this.model.id);
+				$(this.el).html( _.template(this.getTemplate(), _.extend(this.model.toJSON(),{error:error}) ) ).attr('id','player-citation-'+ this.model.id);
+				
+				return this;
 			},
 			
 			events : {
@@ -354,8 +392,8 @@ var Player2 = Backbone.View.extend({
 						"<div class='player-citation-content'>"+
 							"<h3><%= attr.title %></h3>"+
 							"<div class='content'><span class='citation-subhead'>DESCRIPTION:</span> <%= attr.description %></div>"+
-							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>"+
-							"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
+							"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>";
+							//"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
 
 						if( !_.isNull( this.model.get('attr').media_geo_longitude ) )
 						{
@@ -365,8 +403,9 @@ var Player2 = Backbone.View.extend({
 							"<div class='trackback'><span class='citation-subhead'>click below to view original</span></div>"+
 						"</div>"+
 						"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
-					"</div>"+
-					"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.archive.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
+					"</div>";
+				if(this.model.get('attr').archive =="Dropbox")	html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.media_type.toLowerCase() %> zitem-30 <%= error %>'></i></a>";
+				else html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<% if( !_.isUndefined(attr.archive) ){ %><%= attr.archive.toLowerCase() %><% } %> zitem-30 <%= error %>'></i></a>";
 					
 				return html;
 			}
@@ -387,27 +426,7 @@ var Player2 = Backbone.View.extend({
 		})
 	},
 	
-	closePlayer : function()
-	{
-		var _this = this;
-		
-		//unhide editor
-		$('#wrapper').show();
 
-		this.unsetListeners();
-		_.each( _.toArray( this.currentSequence.layers ), function(layer){
-			if( layer.rendered ) layer.trigger('player_unrender')
-		});
-		
-		if(this.zeega) zeega.app.restoreFromPreview();//zeega.app.previewMode = false;
-		
-		// remove the player div
-		this.$el.fadeOut( 450, function(){ $(this).remove() });
-	},
-	
-	
-	
-	
 	/*****************************
 	
 	VIEW FUNCTIONS
@@ -438,6 +457,9 @@ var Player2 = Backbone.View.extend({
 		}
 		
 		//constrain proportions in player
+		
+		
+		
 		$(this.el).attr('id','preview-wrapper').append( this.getTemplate() );
 		$(this.el).find('#preview-media').css( cssObj );
 		
@@ -452,21 +474,33 @@ var Player2 = Backbone.View.extend({
 	
 	updateArrows : function()
 	{
-		var leftFrame = this.getLeft();
-		var rightFrame = this.getRight();
-		
-		if( this.currentSequence.get('frames').length < 2 )
+		//prevent arrows from being shown on timed layers
+		if( _.isUndefined(this.currentFrame.get('attr').advance) || this.currentFrame.get('attr').advance <= 0 )
 		{
+			console.log('@@		non timed layer. arrows normal')
+			var leftFrame = this.getLeft();
+			var rightFrame = this.getRight();
+		
+			if( this.currentSequence.get('frames').length < 2 )
+			{
+				this.$el.find('#preview-left').hide();
+				this.$el.find('#preview-right').hide();
+			}
+			else if( !this.overlaysHidden )
+			{
+				if( !leftFrame ) this.$el.find('#preview-left').fadeOut();
+				else if( this.$el.find('#preview-left').is(':hidden') ) this.$el.find('#preview-left').fadeIn();
+
+		 		if( !rightFrame ) this.$el.find('#preview-right').fadeOut();
+				else if( this.$el.find('#preview-right').is(':hidden') ) this.$el.find('#preview-right').fadeIn();
+			}
+		}
+		else
+		{
+			console.log('@@		timed layer. no arrows')
+			
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
-		}
-		else if( !this.overlaysHidden )
-		{
-			if( !leftFrame ) this.$el.find('#preview-left').fadeOut();
-			else if( this.$el.find('#preview-left').is(':hidden') ) this.$el.find('#preview-left').fadeIn();
-
-	 		if( !rightFrame ) this.$el.find('#preview-right').fadeOut();
-			else if( this.$el.find('#preview-right').is(':hidden') ) this.$el.find('#preview-right').fadeIn();
 		}
 		
 	},
@@ -568,24 +602,9 @@ var Player2 = Backbone.View.extend({
 	events : {
 		'click #preview-left' : 'goLeft',
 		'click #preview-right' : 'goRight',
-		'click #preview-close' : 'closePlayer',
-		//'mouseover #citation' : 'expandCitationBar',
-		//'mouseout #citation'	: "closeCitationBar", 
+		'click #preview-close' : 'closePlayer'
 	},
-	
-	/*
-	expandCitationBar : function()
-	{
-		this.$el.find('#citation').animate({ height : '100px' })
-	},
-	
-	closeCitationBar : function()
-	{
-		_.delay(function(){ $('#citation').animate({ height : '20px' }) }, 2000);
-		//closeOpenCitationTabs();
-		
-	},
-	*/
+
 	
 	/*****************************
 	
@@ -608,11 +627,33 @@ var Player2 = Backbone.View.extend({
 		
 		this.layers = new this.LayerCollection( layerArray );
 		this.frames = new this.FrameCollection( data.frames );
+		
+		this.verifyData();
+		
 		this.frames.addFrameLoadersAndConnections();
 		this.layers.on( 'ready error', this.updateFrameStatus, this );
 		//this.layers.on( 'error', this.updateFrameStatusError, this );
 
 		this.model.trigger('sequences_loaded');
+	},
+	
+	verifyData : function()
+	{
+		var _this = this;
+		_.each( _.toArray(this.sequences), function(sequence){
+			_.each( sequence.get('frames'), function(frameid){
+				var frame = _this.frames.get(frameid);
+				if( _.isUndefined(frame) ) sequence.set({'frames':_.without(sequence.get('frames'),frameid)});
+				else
+				{
+					_.each( frame.get('layers'), function(layerid){
+						var layer = _this.layers.get(layerid);
+						if( _.isUndefined(layer) ) frame.set({'layers':_.without(frame.get('layers'),layerid)});
+					})
+				}
+				
+			})
+		})
 	},
 	
 	setCurrentSequence : function( id )
@@ -638,7 +679,7 @@ var Player2 = Backbone.View.extend({
 			if(_.include( frameLayers, layerID) ) frame.loader.incrementLoaded( layerID, __this.layers.get(layerID).status );
 			if( _.difference(frameLayers, readyLayers, errorLayers ).length == 0 )
 			{
-				console.log('frame is ready to play!!! '+frame.id)
+				
 				frame.trigger('ready', frame.id);
 			}
 		})
@@ -677,12 +718,14 @@ var Player2 = Backbone.View.extend({
 					this.$el.find('.progress-types ul').empty();
 					_.each(this.model.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
-						console.log('loader layer',layer, layer.displayCitation)
+						
 						
 						if( layer.displayCitation != false && layer.get('type') != 'Link' )
 						{
-							var itemType = ( layer.get('attr').archive ) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
-							console.log(itemType)
+							if(layer.get('attr').archive=="Dropbox") var itemType = layer.get('type').toLowerCase();
+							else var itemType = ( layer.get('attr').archive) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+							
+							
 							_view.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ itemType +'"></i></li>')
 						}
 					})
@@ -709,10 +752,7 @@ var Player2 = Backbone.View.extend({
 					.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
 					.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
 				
-				if(this.model.get('layers').length == this.loadedCount)
-				{
-					if( _this.has_played ) this.fadeOut();
-				}
+				if(this.model.get('layers').length == this.loadedCount) this.fadeOut();
 			},
 			
 			fadeOut : function()
@@ -765,8 +805,8 @@ var Player2 = Backbone.View.extend({
 				{
 					model.status = 'loading';
 					this.loading.push(id)
-					//console.log('update loading status of: '+ id)
-					//console.log(this.loading)
+					//
+					//
 				}
 			},
 			updateReadyStatus : function( id )
@@ -777,8 +817,8 @@ var Player2 = Backbone.View.extend({
 					this.loading = _.without(this.loading,id);
 					model.status = 'ready';
 					this.ready.push(id);
-					//console.log('update ready status of: '+ id)
-					//console.log(this.ready)
+					//
+					//
 				}
 			},
 			updateErrorStatus : function( id )
@@ -804,10 +844,10 @@ var Player2 = Backbone.View.extend({
 					var links = [];
 					_.each( frame.get('layers'), function(layerID){
 						var layer = _this.layers.get(layerID);
-						if(layer.get('type')=='Link' && layer.get('attr').from_frame == frame.id)
+						if( layer && layer.get('type')=='Link' && layer.get('attr').from_frame == frame.id)
 							links.push( layer.get('attr').to_frame )
 					})
-					//console.log(links)
+					//
 					frame.links = links;
 				})
 			}
@@ -864,15 +904,24 @@ var Player2 = Backbone.View.extend({
 	getTemplate : function()
 	{
 		html =
-		
-		"<div id='zeega-player'>";
-			//"<div id='preview-logo' class='player-overlay'><a href='http://www.zeega.org/' target='blank'><img src='"+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +"images/z-logo-128.png'height='60px'/></a></div>";
-		
-		if(this.zeega) html +=
-			"<div id='preview-close' class='player-overlay'><a class='close' href='#' style='opacity:.75'>&times;</a></div>";
-		
-		
-		html +=
+		"<div id='zeega-player'>"+
+			"<div class='player-header'>";
+				//"<a href='http://www.zeega.org/' target='blank' class='player-logo'><img src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+"images/z-logo-128.png' height='60px' /></a>";
+			if(this.zeega||true) html +=
+				"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
+
+			if( !this.zeega )
+			{
+				html +=
+				"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"&text=Zeega%20Project%3A%20"+ this.data.title +"&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+				"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.data.id +"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+			}
+			html +=
+			
+			"</div>"+
+			
+			"<div class='player-zeega-icon'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/"+ this.data.user_id +"' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
+			
 		
 			"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
 				"<div class='arrow-background'></div>"+

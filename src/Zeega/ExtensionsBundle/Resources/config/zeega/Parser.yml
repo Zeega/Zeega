@@ -14,6 +14,18 @@ zeega.parsers:
             regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#"
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet
+
+    dropbox.com:
+        set_parser:
+            regex: /https?:\/\/(?:www\.)?www.dropbox.com\/home\/Apps\/Zeega/
+            #regex: "#https?://(?:www\.)?dropbox\.com/home/Public"
+            is_set: true
+            parser_class: Zeega\ExtensionsBundle\Parser\Dropbox\ParserDropboxSet
+        #item_parser:
+            #regex: /https?:\/\/(?:www\.)?dropbox.com\/sh\/([a-zA-Z0-9\-_]+).([a-zA-Z0-9\-_]+)/
+            #is_set: true
+            #parser_class: Zeega\ExtensionsBundle\Parser\Dropbox\ParserDropboxItem
+
     youtube.com:
         item_parser:
             regex: /http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/
@@ -46,11 +58,11 @@ zeega.parsers:
             regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#"
             is_set: false
             parser_class: Zeega\ExtensionsBundle\Parser\Mapbox\ParserMapboxTiles
-    vimeo.com:
-        item_parser:
-            regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
-            is_set: false
-            parser_class: Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo
+    #vimeo.com:
+       # item_parser:
+         #   regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
+         #   is_set: false
+         #   parser_class: Zeega\ExtensionsBundle\Parser\Vimeo\ParserVimeoVideo
     archive.org:
         item_parser:
             regex: /http:\/\/(?:www\.)?archive.org\/details.*/

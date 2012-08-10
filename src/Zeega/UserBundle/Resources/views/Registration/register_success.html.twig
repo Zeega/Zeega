@@ -1,0 +1,68 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+
+
+{% block stylesheets %}
+	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+	
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url({{ asset('images/register_success.gif')}}) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		}
+	
+	</style>
+
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+{% endblock stylesheets %}
+
+{% block body %}
+	{% block fos_user_content %}
+
+	<!-- Page Intro Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11" style="margin-bottom:100px">
+				
+				<h2>Thanks for dropping us a line. We will let you know as soon as your invite is ready. Email us at info@zeega.org with your questions and ideas in the meantime.</h2>
+			
+				
+
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Intro Ends -->
+	
+	{% endblock fos_user_content %}
+	
+{% endblock %}	
+
+
+

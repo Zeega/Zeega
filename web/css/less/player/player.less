@@ -1,0 +1,131 @@
+/******************************
+
+	PREVIEW WINDOW
+	
+******************************/
+
+#preview-wrapper
+{
+	width:100%;
+	height:100%;
+	background:#000000;
+	overflow:hidden;
+	position:absolute;
+	top:0;
+	left:0;
+	display:none;
+	z-index:10000;
+	
+	
+	.player-header
+	{
+		
+		position:absolute;
+		width:100%;
+		z-index:100;
+		a
+		{
+			z-index:1000;
+			padding:10px 10px 0 0;
+			color:orange;
+			opacity:0.75;
+			
+			&:first-child{ padding-left:10px}
+		}
+	}
+	
+	
+	.player-zeega-icon
+	{
+		position:fixed;
+		right:10px;
+		bottom:10px;
+		z-index:1000;
+		opacity:0.75;
+		
+		&:hover{ opacity:1 }
+	}
+	
+	
+}
+
+
+
+.linked-layer{cursor:pointer;}
+.linked-layer>:first-child{ margin-bottom:-4px; }
+.linked-layer
+{
+	box-shadow: 0 0 12px transparent;
+	-webkit-transition: box-shadow .5s linear;
+}
+.linked-layer:hover
+{
+	box-shadow: 0 0 12px white;
+	-webkit-transition: box-shadow .25s linear;
+}
+.link-blink
+{
+	box-shadow: 0 0 24px white;
+	-webkit-transition: box-shadow 1s linear;
+}
+
+
+
+
+#preview-wrapper #preview-media
+{
+
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+#preview-wrapper #preview-logo
+{
+	opacity:0.5;
+	position:absolute;
+	padding:6px;
+}
+
+#preview-wrapper .player-overlay{ z-index : 1000 }
+
+
+
+#preview-wrapper .player-arrow
+{
+	height: 15%;
+	max-height: 75px;
+	max-width: 35px;
+	margin: 0 10px;
+}
+
+#preview-wrapper .preview-nav{ z-index:1000 }
+
+#preview-wrapper .preview-nav-arrow
+{
+	position:absolute;
+	top:50%;
+	padding:10px;
+	margin:10px;
+	opacity:0.4;
+	-webkit-border-radius: 8px;
+}
+
+#preview-wrapper .preview-nav-arrow:hover
+{
+	opacity:1;
+	background:rgba(255,0,0,.25);
+}
+
+#preview-wrapper #preview-right{ right:0 }
+
+#preview-wrapper #preview-left
+{
+	left:0;
+	float:left;
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+}
+
+
+/************* end preview window styles ****************/

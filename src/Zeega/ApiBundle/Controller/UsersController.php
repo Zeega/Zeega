@@ -73,14 +73,14 @@ class UsersController extends Controller
 			}
 			else
 			{
-                $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit);
-			
 			    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
 			    {
+			        $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit);
 				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true, 'projects' => $projects));
 			    }
 			    else
 			    {
+			        $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit, true);
 				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false, 'projects' => $projects));
 			    }
 			}
