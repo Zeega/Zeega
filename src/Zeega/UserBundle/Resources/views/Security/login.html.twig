@@ -61,10 +61,9 @@
 			<h2>Remake the Internet</h2>
 		</div>
 		
-		<h2>Hello, hello and welcome back!</h2>
-
+		<h2 class='message'>Hello, hello and welcome back!</h2>
 		{% if error %}
-	        <div class="error">{{ error }}</div>
+	        <div class="error" style="color:red">{{ error }}</div>
 	    {% endif %}
 		
 		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">

@@ -40,6 +40,24 @@ ZeegaCommunityBundle_terms:
 ZeegaCommunityBundle_privacy:
     pattern:  /privacy
     defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
+ZeegaCommunityBundle_news:
+    pattern:  /news
+    defaults: { _controller: ZeegaCommunityBundle:Community:news}
+
+
+ZeegaCommunityBundle_legacynews:
+    pattern:  /news.php
+    defaults: { _controller: ZeegaCommunityBundle:Community:legacynews}    
+ZeegaCommunityBundle_legacyhappenings:
+    pattern:  /happenings/
+    defaults: { _controller: ZeegaCommunityBundle:Community:legacyhappenings}    
+ZeegaCommunityBundle_legacyengine:
+    pattern:  /engine.php
+    defaults: { _controller: ZeegaCommunityBundle:Community:legacyengine}  
+ZeegaCommunityBundle_legacyteam:
+    pattern:  /team.php
+    defaults: { _controller: ZeegaCommunityBundle:Community:legacyteam}  
+
 ZeegaCommunityBundle_notfound:
     pattern:  /notfound
     defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
