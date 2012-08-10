@@ -42,17 +42,11 @@
 	
 	<div class="container sign-in">
 	
-		<div class="row">
-		
-			<div class="span6 offset4">
-				<div>
-					<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-					<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
-					</a>
-				
+				<div class='sign-in-head'>
+					<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}"><img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79"></a>
 					<h2>Remake the Internet</h2>
 				</div>
-				<h2>Forgot your password? It's ok.</h2>
+				<h2 class='message'>Forgot your password? It's ok.</h2>
 				<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request form-vertical">
 				    <div>
 				        {% if invalid_username is defined %}
@@ -60,7 +54,7 @@
 				        {% endif %}
 				        <h4>{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</h4>
 				        <div class="controls" style="margin-bottom:0">
-				        	<input type="text" id="username" name="username" class="input-xlarge"/>
+				        	<input type="text" id="username" name="username" class="input-xlarge" style='width:100%'/>
 				    	</div>
 				    </div>
 				    <div>
@@ -68,13 +62,6 @@
 				        <!--<input class="btn btn-success btn-custom" type="submit" value="{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}" />-->
 				    </div>
 				</form>
-			
-			</div>
-			
-			<div class="span4">
-			</div>
-		
-		</div>
 	
 	</div>
 
