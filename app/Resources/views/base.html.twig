@@ -86,7 +86,7 @@
 			{% if site  %} sessionStorage.setItem('siteid','{{site.getId()}}'); {% endif %}
 			
 			
-
+{% block browser_detection %}
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
@@ -206,7 +206,7 @@ var BrowserDetect = {
 };
 		
 		BrowserDetect.init();
-
+{% endblock browser_detection %}
 	//	if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
 		
 		</script>
