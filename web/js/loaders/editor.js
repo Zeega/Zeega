@@ -70,6 +70,7 @@ require(
 //views
 	'order!app/views/editor.project/editor.view.project.editor',
 	'order!app/views/editor.sequence/editor.view.sequence.sequence-tab',
+	'order!app/views/editor.sequence/editor.view.sequence.frame-list',
 	'order!app/views/editor.item/editor.view.item.database-tray',
 	'order!app/views/editor.item/editor.view.item.viewer',
 	'order!app/views/editor.frame/editor.view.frame.editor-workspace',
