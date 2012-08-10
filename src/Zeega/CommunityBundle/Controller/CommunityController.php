@@ -83,7 +83,7 @@ class CommunityController extends Controller
     }
 	public function legacyhappeningsAction()
     {
-         return $this->redirect($this->generateUrl('ZeegaCommunityBundle_mission'), 301);  
+         return $this->redirect($this->generateUrl('ZeegaCommunityBundle_about'), 301);  
     }
     public function legacyteamAction()
     {
