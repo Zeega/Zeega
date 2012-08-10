@@ -62,9 +62,9 @@
 		</div>
 		
 		<h2>Hello, hello and welcome back!</h2>
-
+		<br>
 		{% if error %}
-	        <div class="error">{{ error }}</div>
+	        <div class="error" style="color:red">{{ error }}</div>
 	    {% endif %}
 		
 		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">

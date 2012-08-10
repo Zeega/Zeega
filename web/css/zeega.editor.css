@@ -999,6 +999,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .layer-content .control{padding:6px 0;}
 .layer-content .farbtastic{margin:0 auto;}
 .layer-content .link-controls input{width:195px;}
+.VS-search .search_input input{border:none;}
 .filter-list{z-index:100;}
 #item-view-bar div{float:none;margin-bottom:6px;}
 .visual_search{margin-top:10px;}
