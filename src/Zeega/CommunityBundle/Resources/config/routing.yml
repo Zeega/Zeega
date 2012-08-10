@@ -40,6 +40,9 @@ ZeegaCommunityBundle_terms:
 ZeegaCommunityBundle_privacy:
     pattern:  /privacy
     defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
+ZeegaCommunityBundle_privacy:
+    pattern:  /news
+    defaults: { _controller: ZeegaCommunityBundle:Community:news}
 ZeegaCommunityBundle_notfound:
     pattern:  /notfound
     defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
