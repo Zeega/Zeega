@@ -1104,13 +1104,12 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .control-group .row{margin-bottom:20px;}
 .control-group .span4{position:relative;}
 .control-group .span4 .required{position:absolute;right:-15px;top:12px;border-radius:50%;width:8px;height:8px;background-color:#ff6666;}
-.sign-in{margin-top:5%;}
-.sign-in .span6>div:first-child{padding-bottom:10px;border-bottom:#555555;border-bottom-style:solid;border-bottom-width:thin;margin-bottom:10px;}
-.sign-in .span6>div:first-child h2{margin-top:5px;margin-bottom:0;color:#999999;}
-.sign-in .span6 h2{margin-bottom:40px;}
-.sign-in .span6 h4{margin-bottom:10px;}
-.sign-in .span6 .input-xlarge{width:390px;}
-.sign-in .span6 .controls{margin-bottom:20px;}
+.sign-in{margin-top:5%;width:50%;}
+.sign-in .sign-in-head{padding-bottom:10px;border-bottom:#555555;border-bottom-style:solid;border-bottom-width:thin;margin-bottom:10px;}
+.sign-in .sign-in-head h2{margin-top:5px;margin-bottom:0;color:#999999;}
+.sign-in h4{margin-bottom:10px;}
+.sign-in input{padding:4px 0;}
+.sign-in .input-xlarge{width:390px;}
 .card-instructions{height:300px;background-color:#eeeeee;background:-moz-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(204, 204, 204, 0.8)), color-stop(21%, rgba(204, 204, 204, 0.8)), color-stop(100%, rgba(255, 255, 255, 0.8)));background:-webkit-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-o-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-ms-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:radial-gradient(ellipse at center, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#cccccccc', endColorstr='#ccffffff', GradientType=1);}
 .card-instructions>div:last-child{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;padding-top:10px;padding-left:10px;}
 .card-instructions>div:last-child h6{margin-top:5px;}
