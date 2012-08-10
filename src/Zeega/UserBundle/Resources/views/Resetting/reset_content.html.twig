@@ -43,48 +43,36 @@
 <!-- Page Content Begins -->
 	
 	<div class="container sign-in">
-	
-		<div class="row">
 		
-			<div class="span6 offset4">
-				<div>
-					<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-					<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
-					</a>
-				
-					<h2>Remake the Internet</h2>
-				</div>
-				<h2>Change your password here</h2>
-				
-
-				{% form_theme form theme %}
-				<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset form-vertical" >
-				    {{ form_errors(form) }}
-					
-					
-					{% for passwordField in form.new %}
-					    <div class="form-field controls"  style="margin-bottom:0">
-					    	
-							<!-- the two lines below render the label (e.g. New Password) and the text box; changing the class changes the CSS class -->
-					        <h4>{{ form_label(passwordField, null, { 'attr': {'class': 'form-label'} }) }}</h4>
-					        {{ form_widget(passwordField, { 'attr': {'class': 'form-input input-xlarge'} }) }}
-					    </div>
-					{% endfor %}
-					
-					{{ form_rest(form) }}
-					
-					<div>
-				        
-				        <button type="submit" class="btn btn-success btn-custom" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}"><h4>Submit</h4></button>
-				    </div>
-				</form>
-			
-			</div>
-			
-			<div class="span4">
-			</div>
+		<div class='sign-in-head'>
+			<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
+			<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
+			</a>
 		
+			<h2>Remake the Internet</h2>
 		</div>
+		<h2 class='message'>Change your password here</h2>
+		
+		{% form_theme form theme %}
+		<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset form-vertical" >
+		    {{ form_errors(form) }}
+			
+			{% for passwordField in form.new %}
+			    <div class="form-field controls"  style="margin-bottom:0">
+			    	
+					<!-- the two lines below render the label (e.g. New Password) and the text box; changing the class changes the CSS class -->
+			        <h4>{{ form_label(passwordField, null, { 'attr': {'class': 'form-label'} }) }}</h4>
+			        {{ form_widget(passwordField, { 'attr': {'class': 'form-input input-xlarge'} }) }}
+			    </div>
+			{% endfor %}
+			
+			{{ form_rest(form) }}
+			
+			<div>
+		        
+		        <button type="submit" class="btn btn-success btn-custom" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}"><h4>Submit</h4></button>
+		    </div>
+		</form>
 	
 	</div>
 
