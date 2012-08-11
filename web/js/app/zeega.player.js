@@ -477,7 +477,6 @@ var Player2 = Backbone.View.extend({
 		//prevent arrows from being shown on timed layers
 		if( _.isUndefined(this.currentFrame.get('attr').advance) || this.currentFrame.get('attr').advance <= 0 )
 		{
-			console.log('@@		non timed layer. arrows normal')
 			var leftFrame = this.getLeft();
 			var rightFrame = this.getRight();
 		
@@ -497,8 +496,6 @@ var Player2 = Backbone.View.extend({
 		}
 		else
 		{
-			console.log('@@		timed layer. no arrows')
-			
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
 		}
