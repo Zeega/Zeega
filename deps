@@ -155,11 +155,11 @@
 [FOSRestBundle]
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
     target=bundles/FOS/RestBundle
-    
+
 [FOSUserBundle]
     git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
     target=bundles/FOS/UserBundle
-    version=1.2.4
+    version=v1.2.4
 
 ; ---------------------------------------------
 ; other bundles
