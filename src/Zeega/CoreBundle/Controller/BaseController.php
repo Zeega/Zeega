@@ -37,7 +37,7 @@ class BaseController extends ContainerAware
         {
             $loggedUserId = $this->container->get('security.context')->getToken()->getUser()->getId();
             
-            if($loggedUserId == $userId)
+            if($loggedUserId == $userId || $this->container->get('security.context')->isGranted('ROLE_ADMIN'))
             {
                 return;
             }
