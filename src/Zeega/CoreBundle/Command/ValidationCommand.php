@@ -13,95 +13,87 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-use Zeega\CoreBundle\Generator\ParserGenerator;
-use Zeega\CoreBundle\Generator\Generator;
-
-class ParserCommand extends ContainerAwareCommand
+class ValidationCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('zeega:parser')
-            ->setDescription('Greet someone')
-            //->addArgument('name', InputArgument::OPTIONAL, 'Who do you want to greet?')
-            ->addOption('yell', null, InputOption::VALUE_NONE, 'If set, the task will yell in uppercase letters')
-            ->setDefinition(array(
-                new InputOption('namespace', '', InputOption::VALUE_REQUIRED, 'The namespace of the bundle to create'),
-                new InputOption('dir', '', InputOption::VALUE_REQUIRED, 'The directory where to create the bundle'),
-                new InputOption('bundle-name', '', InputOption::VALUE_REQUIRED, 'The optional bundle name'),
-                new InputOption('format', '', InputOption::VALUE_REQUIRED, 'Use the format for configuration files (php, xml, yml, or annotation)', 'annotation'),
-                new InputOption('structure', '', InputOption::VALUE_NONE, 'Whether to generate the whole directory structure')))
-            ->setHelp(<<<EOT
-The <info>generate:bundle</info> command helps you generates new bundles.
-
-By default, the command interacts with the developer to tweak the generation.
-Any passed option will be used as a default value for the interaction
-(<comment>--namespace</comment> is the only one needed if you follow the
-conventions):
-
-<info>php app/console generate:bundle --namespace=Acme/BlogBundle</info>
-
-Note that you can use <comment>/</comment> instead of <comment>\\</comment> for the namespace delimiter to avoid any
-problem.
-
-If you want to disable any user interaction, use <comment>--no-interaction</comment> but don't forget to pass all needed options:
-
-<info>php app/console generate:bundle --namespace=Acme/BlogBundle --dir=src [--bundle-name=...] --no-interaction</info>
-
-Note that the bundle namespace must end with "Bundle".
-EOT
-                )
-            
-        ;
+            ->setName('zeega:project:validation')
+            ->setDescription('Validates projects data')
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Set this parameter to execute this action')
+            ->setHelp("Help");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $generator = new ParserGenerator($this->getContainer()->get('filesystem'), __DIR__.'/../Resources/templates/generator');
+        ini_set('memory_limit', '-1');
+
         $dialog = $this->getHelperSet()->get('dialog');
         
         $style = new OutputFormatterStyle();
-        $style->setBackground('blue');
+        $style->setBackground('red');
         $output->getFormatter()->setStyle('header', $style);
-        
+        $output->getFormatter()->setStyle('dialog', $style);
+
         $style = new OutputFormatterStyle();
         $style->setForeground('yellow');
         $output->getFormatter()->setStyle('ask', $style);
         
-        $output->writeln(array(
-            '',
-            '<header>                                   </header>',
-            '<header> Welcome to Zeega parser generator </header>',
-            '<header>                                   </header>',
-            ''
-            ));
+        if ($input->getOption('force')) 
+        {
+            try 
+            {
+                $em = $this->getContainer()->get('doctrine')->getEntityManager();
+                
+                $projects = $em->getRepository('ZeegaDataBundle:Project')->findAll();
 
-        // service name
-        $service = $dialog->ask($output, '<ask>Please enter the name of your service (i.e. Soundcloud): </ask>', '');
-        
-        // class name
-        $class = $dialog->ask($output, '<ask>Please name your parser class: </ask>', '');
-
-        $namespace = "Zeega\ExtensionsBundle\Parser\\$service";
-        
-        // target dir
-        $dir = $input->getOption('dir') ?: dirname($this->getContainer()->getParameter('kernel.root_dir'))."/src/Zeega/ExtensionsBundle/Parser/$service";
-        $output->writeln(array(
-            '',
-            'The bundle can be generated anywhere. The suggested default directory uses',
-            'the standard conventions.',
-            '',
-        ));
-        $dir = $dialog->ask($output, "<ask>Default directory [$dir]: </ask>", $dir);
-
-        $output->writeln(array(
-            '',
-            "Writting the parser file at <ask>$dir/$class.php</ask>",
-            '',
-        ));
-        
-        //$generator = $this->getGenerator();
-        $generator->generate($namespace, $class, $service, $dir);
-        
+                foreach($projects as $project)
+                {
+                    $id = $project->getId();
+                    $frames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
+                    foreach($frames as $frame)
+                    {
+                        $frameId = $frame->getId();
+                        $frameLayers = $frame->getLayers();
+                        if(is_array($frameLayers))
+                        {
+                            foreach($frameLayers as $layerId)
+                            {
+                                if(isset($layerId) && !empty($layerId))
+                                {
+                                    $layer = $em->getRepository('ZeegaDataBundle:Layer')->findOneById($layerId);
+                                
+                                    if(!isset($layer))
+                                    {
+                                        echo "Problem in project $id - frame $frameId contains undefined layer $layerId \n";
+                                    }   
+                                }                        
+                            }    
+                        }
+                    }
+            
+                    $layers = $em->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+                }
+            } catch (\Exception $e) 
+            {
+                $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            }
+        } else {
+            $output->writeln('');
+            $output->writeln('<info>Zeega Project Validation Tool (a.k.a. the hammer)</info>');
+            $output->writeln('');
+            $output->writeln('This operation checks all existing projects for errors and when executed with the option --fix removes from frames layers that');
+            $output->writeln('do not exist anymore. For efficiency the relation frames <-> layers is not normalized on the database so this might happen.');
+            $output->writeln('');
+            $output->writeln('This is a temporary fix to address this issue.');
+            $output->writeln('');
+            $output->writeln('<error>ATTENTION:</error>');
+            $output->writeln('<error>This operation should not be executed in a production environment.      </error>');
+            $output->writeln('<error>Running it with the --fix option makes irreversible changes to Projects!</error>');
+            $output->writeln('');
+            $output->writeln('Please run the operation with --force to execute');
+            $output->writeln('');
+            
+        }       
     }
 }
