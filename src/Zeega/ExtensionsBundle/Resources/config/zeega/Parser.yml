@@ -15,16 +15,21 @@ zeega.parsers:
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet
 
+    facebook.com:
+        item_parser:
+            regex: /http:\/\/(?:www\.)?facebook.com\/photo.php\?fbid=([0-9]+)&set=([a-zA-Z0-9]+).([0-9]+).([0-9]+).([0-9]+)*/
+            is_set: false
+            parser_class: Zeega\ExtensionsBundle\Parser\Facebook\ParserFacebookPhoto
+        set_parser:
+            regex: /http:\/\/(?:www\.)?facebook.com\/media\/set\/\?set=([a-zA-Z0-9]+).([0-9]+).([0-9]+).([0-9]+)*/
+            is_set: true
+            parser_class: Zeega\ExtensionsBundle\Parser\Facebook\ParserFacebookSet
+
     dropbox.com:
         set_parser:
             regex: /https?:\/\/(?:www\.)?www.dropbox.com\/home\/Apps\/Zeega/
-            #regex: "#https?://(?:www\.)?dropbox\.com/home/Public"
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Dropbox\ParserDropboxSet
-        #item_parser:
-            #regex: /https?:\/\/(?:www\.)?dropbox.com\/sh\/([a-zA-Z0-9\-_]+).([a-zA-Z0-9\-_]+)/
-            #is_set: true
-            #parser_class: Zeega\ExtensionsBundle\Parser\Dropbox\ParserDropboxItem
 
     youtube.com:
         item_parser:
