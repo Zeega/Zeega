@@ -149,9 +149,13 @@
     target=bundles/JMS/SerializerBundle
 
 [FOSRest]
+    git=git://github.com/FriendsOfSymfony/FOSRest.git
+    target=fos/FOS/Rest
+
+[FOSRestBundle]
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
     target=bundles/FOS/RestBundle
-
+    
 [FOSUserBundle]
     git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
     target=bundles/FOS/UserBundle
@@ -161,11 +165,6 @@
 ; other bundles
 ; ---------------------------------------------
 
-
-[FOSUserBundle]
-    git=git://github.com/FriendsOfSymfony/FOSUserBundle.git
-    target=bundles/FOS/UserBundle
-    version=1.2.0
 
 [WebProfilerExtraBundle]
 	git=http://github.com/Elao/WebProfilerExtraBundle.git
