@@ -21,6 +21,7 @@ class ValidationCommand extends ContainerAwareCommand
             ->setName('zeega:project:validation')
             ->setDescription('Validates projects data')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Set this parameter to execute this action')
+            ->addOption('fix', null, InputOption::VALUE_NONE, 'Set this parameter fix the project data')
             ->setHelp("Help");
     }
 
@@ -39,6 +40,7 @@ class ValidationCommand extends ContainerAwareCommand
         $style->setForeground('yellow');
         $output->getFormatter()->setStyle('ask', $style);
         
+        
         if ($input->getOption('force')) 
         {
             try 
@@ -49,15 +51,18 @@ class ValidationCommand extends ContainerAwareCommand
 
                 foreach($projects as $project)
                 {
+                    // check / delete dead layers
                     $id = $project->getId();
                     $frames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
                     foreach($frames as $frame)
                     {
                         $frameId = $frame->getId();
                         $frameLayers = $frame->getLayers();
+                        $updateLayers = false;
+
                         if(is_array($frameLayers))
                         {
-                            foreach($frameLayers as $layerId)
+                            foreach($frameLayers as $key => $layerId)
                             {
                                 if(isset($layerId) && !empty($layerId))
                                 {
@@ -66,13 +71,48 @@ class ValidationCommand extends ContainerAwareCommand
                                     if(!isset($layer))
                                     {
                                         echo "Problem in project $id - frame $frameId contains undefined layer $layerId \n";
-                                    }   
+                                        if ($input->getOption('fix')) 
+                                        {
+                                            $updateLayers = true;
+                                            echo "Deleting layer $layerId from frame $frameId \n";
+                                            unset($frameLayers[$key]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        $layerAttributes = $layer->getAttr();
+                                        if(isset($layerAttributes) && isset($layerAttributes["to_sequence"]))
+                                        {
+                                            $targetSequenceId = $layerAttributes["to_sequence"];
+                                            $sequence = $em->getRepository('ZeegaDataBundle:Sequence')->findOneById($targetSequenceId);
+
+                                            if(!isset($sequence))
+                                            {
+                                                echo "Problem in project $id - layer $layerId links to undefined sequence $targetSequenceId \n";
+                                                if ($input->getOption('fix')) 
+                                                {
+                                                    echo "Deleting layer $layerId from frame $frameId \n";
+                                                    $em->remove($layer);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }                        
-                            }    
+                            }
+                        }
+
+                        if($updateLayers === true)
+                        {
+                            $frame->setLayers($frameLayers);
+                            $em->persist($frame);
                         }
                     }
-            
-                    $layers = $em->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+                }
+
+                if ($input->getOption('fix')) 
+                {
+                    echo "Commiting changes to the database";
+                    $em->flush();
                 }
             } catch (\Exception $e) 
             {
