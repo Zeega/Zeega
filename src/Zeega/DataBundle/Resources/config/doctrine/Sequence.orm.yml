@@ -25,4 +25,6 @@ Zeega\DataBundle\Entity\Sequence:
         attr:
             type: array
             nullable: true
- 
+        enabled:
+            type: boolean
+            nullable: true

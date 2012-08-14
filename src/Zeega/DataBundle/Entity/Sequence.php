@@ -149,4 +149,29 @@ class Sequence
     {
         return $this->project;
     }
+    /**
+     * @var boolean $enabled
+     */
+    private $enabled;
+
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 }
