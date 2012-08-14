@@ -1,139 +1,106 @@
 (function(Sequence){
 
-	Sequence.Views.SequenceTabs = Backbone.View.extend({
+	Sequence.Views.SequenceFrameDrawer = Backbone.View.extend({
 		
-		tagName : 'li',
-		
-		inFocus : false,
+		id : 'frame-drawer',
 		
 		initialize : function()
 		{
-			this.model.on('focus',this.onFocus, this);
-			this.model.on('blur',this.onBlur, this);
-			this.model.on('change:title', this.render, this);
+			this.model.on('all',function(e){console.log('sequence event', e)})
 		},
 		
 		render: function()
 		{
-			$(this.el).html( _.template(this.getTemplate(),{title:this.model.get('title') || '...'}) );
+			console.log('##		render() sequence')
+			var _this = this;
+			this.$el.html( this.getTemplate() );
+			
+			_.each( this.model.get('frames'), function(frameID){
+				var frame = zeega.app.project.frames.get(frameID);
+				console.log('##		render frame', frame)
+				_this.$el.find('.frame-list').append( frame.sequenceFrameView.render().el)
+			});
+			
+			this.initEvents();
+			
 			return this;
 		},
 		
-		onFocus : function()
+		renderToTarget : function()
 		{
-			this.inFocus = true;
-			this.$el.addClass('active')
-		},
-		onBlur : function()
-		{
-			this.inFocus = false;
-			this.$el.removeClass('active')
-		},
-	
-		events : {
-			'click .menu-toggler' : 'toggleDropdown',
-			'click .sequence-tab-link' : 'goToSequence',
-			'click .rename-sequence' : 'renameSequence',
-			'click .delete-sequence' : 'deleteSequence'
-		},
-	
-		goToSequence : function(e)
-		{
-			if( !this.inFocus )
-			{
-				zeega.app.goToSequence(this.model.id)
-			}
-			this.closeDropdown();
-			return false;
+			console.log('##		render sequence to target')
+			$('#'+ this.id).replaceWith( this.render().el );
 		},
 		
-		toggleDropdown : function(e)
-		{
-			this.$el.find('.menu').toggleClass('hide')
-			return false;
-		},
-		
-		closeDropdown : function()
-		{
-			this.$el.find('.menu').addClass('hide')
-		},
-		
-		renameSequence : function()
+		initEvents : function()
 		{
 			var _this = this;
-			if( !this.loadedModal )
-			{
-				$('body').append( _.template(this.getModalTemplate(),this.model.attributes) );
-				$('#sequence-modal-'+_this.model.id+' input').focus();
-				$('#sequence-modal-'+this.model.id+' .save').click(function(){
-					_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
-				})
-				$('#sequence-modal-'+_this.model.id+' input').keypress(function(e){
-					if(e.which == 13)
-					{
-						_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
-						$('#sequence-modal-'+_this.model.id).modal('hide')
-					}
-				})
-			}
-			$('#sequence-modal-'+this.model.id).modal('show')
+			//frame tray sortable and sorting events
+			this.$el.find('.frame-list').sortable({  
+				//axis : 'x',
+				containment: '#frame-drawer',
+				forceHelperSize : true,
+				placeholder: "frame-thumb ui-state-highlight",
+				forcePlaceholderSize:true,
+				forceHelperSize:true,
+				tolerance: 'pointer',
+				distance: 10,
 
-			this.closeDropdown();
-			this.loadedModal = true;
-			return false;
-		},
-		
-		deleteSequence : function()
-		{
-			if( confirm('Delete sequence: "'+ this.model.get('title') +'"\n\nThis will also delete all incoming and outgoing connections to this sequence!') )
-			{
-				this.remove();
-				zeega.app.deleteSequence(this.model.id);
-				this.closeDropdown();
-			}
-			else
-			{
-				this.closeDropdown();
-			}
-			return false;
-		},
-	
-		getTemplate : function()
-		{
-			var html =
+				stop : function(){ _this.updateFrameOrder() }
+			});
 			
-				'<a href="#" class="sequence-tab-link"><%= title %></a> '+
-				"<a href='#' class='menu-toggler'><b class='caret'></b></a>"+
-				"<div class='well menu hide'>"+
-					"<ul class='nav nav-list'>"+
-						"<li><a href='#' class='rename-sequence'>rename</a></li>"+
-						"<li><a href='#' class='delete-sequence'>delete</a></li>"+
-					"</ul>"+
-				"</div>";
-				
-				
-			return html;
+			this.$el.find('#add-frame').draggable({
+				axis:'x',
+				revert:true,
+
+				start : function(e,ui)
+				{
+					this.num= Math.floor( ui.position.left / 55 );
+					//console.log(this.num);
+				},
+				containment : 'parent',
+				helper :function(){ return $('<div>') },
+
+				drag : function(e,ui)
+				{
+					//console.log('moved'+ ui.position.left)
+					var temp = Math.floor( ui.position.left / 55 );
+					if(this.num != temp)
+					{
+						var _this = this;
+						$('.ghost-frame').remove();
+						_.times(temp-this.num, function(){
+							$('#frame-drawer ul').append( $('<li class="frame-thumb ghost-frame">') );
+						})
+					}
+				},
+
+				stop : function(e,ui)
+				{
+					$('.ghost-frame').remove();
+					_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
+				}
+			})
+			.click(function(){
+				zeega.app.addFrame();
+				return false;
+			});
+			
 		},
 		
-		getModalTemplate : function()
+		updateFrameOrder : function()
+		{
+			var frameIDArray = _.map( this.$el.find('.frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+			this.model.save({'frames': frameIDArray});
+		},
+		
+		getTemplate : function()
 		{
 			var html = 
 			
-				'<div class="modal" id="sequence-modal-<%= id %>">'+
-					'<div class="modal-header">'+
-						'<button class="close" data-dismiss="modal">×</button>'+
-						'<h3>Rename Sequence</h3>'+
-					'</div>'+
-					'<div class="modal-body">'+
-						'<input type="text" class="input-xlarge sequence-title" value="<%= title %>">'+
-					'</div>'+
-					'<div class="modal-footer">'+
-						'<a href="#" class="btn" data-dismiss="modal">Close</a>'+
-						'<a href="#" class="btn btn-primary save" data-dismiss="modal">Save changes</a>'+
-					'</div>'+
-				'</div>';
-				
-			
+				"<ul class='frame-list unstyled'></ul>"+
+				"<a href='#' id='add-frame'><img src='../../../images/addframe.png' height='25' width='25'/></a>";
+
 			return html;
 		}
 	

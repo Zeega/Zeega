@@ -13,47 +13,59 @@
 	FRAMES
 	
 *******************************/
-.frame-thumb
-{
-	height:50px;
-	width:50px;
-	background:#ccc;
-	cursor:move;
-	box-shadow : 0 0 12px #333;
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25 linear;
-	border-radius:3px;
-}
-.frame-thumb.active-frame
-{
-	box-shadow: 0 0 12px yellow;
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25 linear;
-}
-
-.frame-thumb.frame-item-hover
-{
-	box-shadow : 0 0 12px white;
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25s linear;
-}
-
-#frame-list
-{
-	margin-left: -5px;
-	height: 50px;
-	display:inline;
-}
-#frame-list>li{ margin-left : 12px  }
-#frame-list>li:nth-child(16n+1){ margin-left : 0  }
-#frame-list li {margin-bottom:12px;}
 
 
-#add-frame
+#frame-drawer
 {
-	float:left;
-	padding:10px 17px;
+	.frame-list
+	{
+		display : inline-block;
+		
+		.frame-thumb
+		{
+			height:50px;
+			width:50px;
+			background:#ccc;
+			cursor:move;
+			box-shadow : 0 0 12px #333;
+			-webkit-transition: box-shadow .25s linear;
+			transition: color .25 linear;
+			border-radius:3px;
+		
+			display:inline-block;
+			margin-left:5px;
+		
+			&.active-frame
+			{
+				box-shadow: 0 0 12px yellow;
+				-webkit-transition: box-shadow .25s linear;
+				transition: color .25 linear;
+			}
+			&:hover
+			{
+				box-shadow : 0 0 12px white;
+				-webkit-transition: box-shadow .25s linear;
+				transition: color .25s linear;
+			}
+		
+			&:first-child{ margin-left : 0 }
+			
+			.menu-toggle{ float:left }
+		}
+	}
+	
+	#add-frame
+	{
+		display:inline-block;
+		position: relative;
+		left: 5px;
+		top: -20px;
+	}
+	
 }
+
+
+
 
 #sequence-tabs
 {

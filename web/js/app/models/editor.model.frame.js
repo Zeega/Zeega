@@ -37,17 +37,6 @@
 			
 		},
 		
-		render : function()
-		{
-			this.frameTarget.append( this.sequenceFrameView.render().el )
-		},
-		
-		unrender : function()
-		{
-			this.frameTarget.append( this.sequenceFrameView.remove() )
-		},
-		
-		
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{

@@ -30,8 +30,7 @@
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
 			
-			console.log('init PROJECT')
-			console.log(this)
+			console.log('init PROJECT', this, attributes)
 		},
 
 		/*	create collections	*/
@@ -58,6 +57,7 @@
 		{
 			var Frames = zeega.module('frame');
 			this.frames = new Frames.Collection( frames );
+			console.log('create frame collection', frames, this.frames)
 		},
 		createSequenceCollection : function( sequences )
 		{

@@ -101,9 +101,9 @@ this.zeega = {
 		console.log('editor started')
 		//this.renderWorkspace();
 		
-		this.renderSequenceFrames();
-		$('#frame-list').sortable(); // why would I put this here -joseph
-		this.currentSequence.updateFrameOrder();
+		//this.renderSequenceFrames();
+		//$('#frame-list').sortable(); // why would I put this here -joseph
+		//this.currentSequence.updateFrameOrder();
 		
 		this.startRouter();
 	},
@@ -130,7 +130,7 @@ this.zeega = {
 			nullLoad : function()
 			{
 				_this.goToSequence( _this.project.sequences.at(0).id )
-				_this.goToFrame( _this.project.sequences.at(0).get('frames')[0] );
+				//_this.goToFrame( _this.project.sequences.at(0).get('frames')[0] );
 			},
 			
 			goToSequenceFrame : function( sequenceID,frameID )
@@ -153,12 +153,16 @@ this.zeega = {
 	
 	goToSequence : function(sequenceID, frameID)
 	{
+		console.log('goToSequence', sequenceID, this.project.sequences.get(sequenceID), frameID, this.project.frames.get( this.currentSequence.get('frames')[0]) )
 		//this.unrenderFrame(this.currentFrame);
 		this.currentSequence.trigger('blur');
 		this.currentSequence = this.project.sequences.get(sequenceID);
 		this.currentSequence.trigger('focus');
 		
-		this.renderSequenceFrames();
+		
+		this.currentSequence.renderSequenceFrames();
+		
+		//this.renderSequenceFrames(this.currentSequence);
 		
 		var nextFrame = frameID ? this.project.frames.get(frameID) : this.project.frames.get( this.currentSequence.get('frames')[0] );
 		this.loadFrame(nextFrame);
@@ -205,9 +209,16 @@ this.zeega = {
 		
 		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
 	},
-	
-	renderSequenceFrames : function()
+
+/*	
+	renderSequenceFrames : function(sequence)
 	{
+		console.log('render sequence frames', sequence);
+		
+		
+		var Sequence = zeega.module('sequence');
+		var sequenceView = new Sequence.Views.SequenceFrameDrawer
+		
 		var _this = this;
 		//this is ugly
 		$('#frame-list').empty();
@@ -216,6 +227,7 @@ this.zeega = {
 		})
 		//this.currentSequence.updateFrameOrder(false);
 	},
+*/
 	
 	deleteSequence : function(sequenceID)
 	{
@@ -262,7 +274,9 @@ this.zeega = {
 				console.log(newFrame)
 				this.loadFrame(newFrame);//newFrame.render();
 				
-				if(i>0){
+				if(i>0)
+				{
+					// if more than one frame is being created
 					console.log("not loading frame for later",i);
 					newFrame.save({},{
 						success : function()
@@ -283,17 +297,21 @@ this.zeega = {
 						}
 					});
 				}
-				else{
+				else
+				{
+					// if more ONLY one frame is being created
 					console.log("loading frame for first",i);
 					newFrame.save({},{
 						success : function()
 						{
-							$('#frame-list').append(newFrame.sequenceFrameView.render().el);
-							newFrame.trigger('refresh_view');
-							newFrame.trigger('updateThumb');
-							_this.currentSequence.get('frames').push(newFrame.id);
-							
 							_this.project.frames.add( newFrame );
+							_this.currentSequence.addFrame( newFrame );
+							
+							//$('#frame-list').append(newFrame.sequenceFrameView.render().el);
+							//newFrame.trigger('refresh_view');
+							//newFrame.trigger('updateThumb');
+							//_this.currentSequence.get('frames').push(newFrame.id);
+							
 							_this.loadFrame( newFrame );
 							newFrame.trigger('focus');
 						}
@@ -560,8 +578,7 @@ this.zeega = {
 
 	loadLeftFrame : function()
 	{
-		console.log('load left ----')
-		console.log( this.getLeftFrame() )
+		console.log('##		load left ----', this.getLeftFrame())
 		this.loadFrame( this.getLeftFrame() )
 	},
 	

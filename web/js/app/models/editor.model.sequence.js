@@ -19,9 +19,12 @@
 		initialize : function( attributes )
 		{
 			this.checkAttr();
-			this.on('updateFrameOrder',this.updateFrameOrder,this);
+			
+			this.tabView = new Sequence.Views.SequenceTabs({model:this});
+			this.sequenceFrameView = new Sequence.Views.SequenceFrameDrawer({model:this})
+			
+			this.on('sync', this.refreshView, this);
 			this.on('sync', this.checkAttr, this);
-			this.attachTabView();
 			
 			this.trigger('ready');
 		},
@@ -30,27 +33,30 @@
 		{
 			if( _.isArray(this.get('attr')) ) this.set({ attr : this.defaultAttr });
 		},
-		attachTabView : function()
-		{
-			this.view = new Sequence.Views.SequenceTabs({model:this});
-			this.on('sync', this.refreshView, this);
-		},
 		
 		refreshView : function()
 		{
 			console.log('refresh view!!!')
-			this.view.render();
+			this.tabView.render();
+		},
+		
+		
+		renderSequenceFrames : function()
+		{
+			console.log('##		render sequence frames')
+			this.sequenceFrameView.renderToTarget();
+		},
+		
+		addFrame : function( frame )
+		{
+			var frameArray = this.get('frames');
+			frameArray.push( frame.id );
+			this.set('frames',frameArray);
+			console.log('##		add frame',frame, frameArray)
+			this.sequenceFrameView.render();
 		},
 
-		updateFrameOrder : function( save )
-		{
-			//this.frames.trigger('resort',frameIDArray);
-			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			this.set( { frames : frameIDArray } );
-			if( save != false ) this.save();
-		},
-		
-		
+//redo this vvvv
 		insertFrameView : function( frame, index )
 		{
 				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );
@@ -62,18 +68,19 @@
 		destroyFrame : function( frameModel )
 		{
 			console.log('destroy frame:', frameModel,this);
-			
-			if( this.get('frames').length <= 1 )
-			{
-				// this happens when there will be no more frames in the sequence
-				// prevent from not having any frames!!
-				zeega.app.addFrame();
-			}
-			frameModel.destroy();
-			
 			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
-			this.updateFrameOrder();
 			
+			var frameOrder = _.without( this.get('frames'), frameModel.id );
+			this.save({ frames: frameOrder});
+			this.sequenceFrameView.render();
+			
+			// this happens when there will be no more frames in the sequence
+			// prevent from not having any frames!!			
+			if( this.get('frames').length <= 1 ) zeega.app.addFrame();
+			
+			zeega.app.currentFrame.trigger('focus');
+			
+			frameModel.destroy();
 		},
 		
 		updatePersistLayer : function( modelID )

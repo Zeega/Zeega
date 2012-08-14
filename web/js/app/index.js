@@ -95,14 +95,6 @@ jQuery(function($)
 		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
 	});
 
-
-	$('#add-node-button').click(function(){
-		zeega.app.addFrame();
-		return false;
-	});
-
-
-
 	$('#list-view').click(function(){
 		console.log('goto list view');
 		$('#grid-view .zicon').removeClass('orange');
@@ -161,44 +153,6 @@ jQuery(function($)
 	})
 
 
-
-	$('#add-frame').draggable({
-		axis:'x',
-		revert:true,
-
-		start : function(e,ui)
-		{
-			this.num= Math.floor( ui.position.left / 55 );
-			//console.log(this.num);
-		},
-		containment : 'parent',
-		helper :function() {
-			return $('<div>');
-		},
-
-		drag : function(e,ui)
-		{
-			//console.log('moved'+ ui.position.left)
-			var temp = Math.floor( ui.position.left / 55 );
-			if(this.num != temp)
-			{
-				var _this = this;
-				$('.ghost-frame').remove();
-				_.times(temp-this.num, function(){
-					$('#frame-drawer ul').append( $('<li class="frame-thumb ghost-frame">') );
-
-				})
-			}
-			//this.num = temp;
-
-		},
-
-		stop : function(e,ui)
-		{
-			$('.ghost-frame').remove();
-			_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
-		}
-	});
 
 	$('.menu-toggle').click(function(){
 
@@ -265,20 +219,6 @@ jQuery(function($)
 		}
 	});
 
-	//frame tray sortable and sorting events
-	$('#frame-list').sortable({  
-		//axis : 'x',
-		containment: '#frame-drawer',
-		forceHelperSize : true,
-		placeholder: "frame-thumb ui-state-highlight",
-		forcePlaceholderSize:true,
-		forceHelperSize:true,
-		tolerance: 'pointer',
-		distance: 10,
-
-		stop : function(){ zeega.app.updateFrameOrder() }
-	});
-
 	$('#links-list').sortable({
 		//define a grip handle for sorting
 		handle: '.layer-drag-handle',
@@ -301,46 +241,6 @@ jQuery(function($)
 		}
 	})
 
-	$('#advance-controls input').change(function(){
-		console.log(this,$(this).val());
-		var a = $(this).val();
-		
-		a = a != -1 ? parseInt( a*1000 ) : -1;
-
-		console.log('advance',a)
-		zeega.app.currentFrame.update({'advance':a});
-	});
-
-	//expands the Zeega editor panels	
-	$('.expandable .panel-head').click(function(){
-
-	//removed the ability to store the panel states for now
-		//get the current Frame ID
-		//var frameID = Zeega.currentFrame.id;
-		//var domID = $(this).attr('id').split('-',1)[0];
-
-		//var storage = localStorage.getObject( frameID );
-		//var panelStates = {};
-		//if( _.isNull( storage ) ) storage = {};
-		//if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) ) panelStates = storage.panelStates;
-
-		var content = $(this).next('div');
-		if( content.is(':visible'))
-		{
-			//hide
-			//eval( 'var state = {"'+ domID +'":true}');
-			//_.extend( panelStates , state );
-			content.hide('blind',{'direction':'vertical'});
-		}else{
-			//show
-			//eval( 'var state = {"'+ domID +'":false}');
-			//_.extend( panelStates , state );
-			content.show('blind',{'direction':'vertical'})	
-		}
-		//set as property to read in on reload
-		//_.extend( storage, {panelStates:panelStates} )
-		//localStorage.setObject( frameID , storage );
-	})
 
 	$('#database-item-list').scroll(function(){
 		if( $('#database-item-list').scrollTop() == $('#database-item-list')[0].scrollHeight - $('#database-item-list').innerHeight() )
