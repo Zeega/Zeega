@@ -30,3 +30,6 @@ Zeega\DataBundle\Entity\Layer:
         enabled:
             type: boolean
             nullable: true
+    indexes:
+        layer_enabled:
+            columns: [enabled]
