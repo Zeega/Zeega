@@ -48,6 +48,7 @@ class UserAdmin extends Admin
             ->addIdentifier('username')
 			->add('display_name')
 			->add('email')
+            ->add('created_at','datetime')
 			->add('last_login','datetime')
 			->add('locked')
         ;

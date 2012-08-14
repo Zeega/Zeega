@@ -24,6 +24,7 @@ class RegistrationFormHandler extends BaseHandler
 		$user->setPlainPassword(mt_rand());
 		$user->setLocked(true);
 		$user->setEnabled(false);
+        $user->setCreatedAt(new \DateTime('now'));
 		
 		$em = $this->container->get('doctrine')->getEntityManager();
         

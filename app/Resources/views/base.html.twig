@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
     <head>
        	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-       	<title>{% block title %}Zeega Beta{% endblock %}</title>
+       	<title>Zeega::{% block title %}Beta{% endblock %}</title>
          
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
@@ -86,7 +86,7 @@
 			{% if site  %} sessionStorage.setItem('siteid','{{site.getId()}}'); {% endif %}
 			
 			
-
+{% block browser_detection %}
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
@@ -206,7 +206,7 @@ var BrowserDetect = {
 };
 		
 		BrowserDetect.init();
-
+{% endblock browser_detection %}
 	//	if(BrowserDetect.browser!='Chrome'&&BrowserDetect.browser!='Safari') window.location = "{{ path('ZeegaCoreBundle_unsupportedBrowser') }}";
 		
 		</script>
@@ -250,6 +250,7 @@ var BrowserDetect = {
 										<!--<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 										<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
 										<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
+										<li><a href="{{path('ZeegaCommunityBundle_news')}}">News</a></li>
 										<li class="divider"></li>
 										<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 										<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
@@ -363,6 +364,7 @@ var BrowserDetect = {
 										<!--<li><a href="{{ path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 										<li><a href="{{ path('ZeegaCommunityBundle_team')}}">Team</a></li>
 										<li><a href="{{ path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
+										<li><a href="{{ path('ZeegaCommunityBundle_news')}}">News</a></li>
 										<li class="divider"></li>
 										<li><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 										<li><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>

@@ -25,7 +25,7 @@ function initHeaderUX(){
 												+ BrowserDetect.browser + ' on ' + BrowserDetect.OS);
 			$('#unsupported-browser').modal();
 		}
-	} else {
+	} else if (typeof BrowserDetect !== 'undefined') {
 
 		//Send mobile devices to custom page
 		if (BrowserDetect.isMobile){

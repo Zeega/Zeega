@@ -35,8 +35,6 @@ this.zeegaDashboard = {
 			{
 				var _this=this;
 				_.each(homeCards,function(card){
-					console.log(card);
-					console.log(_.template(_this.getTemplate(), card ));
 					_this.$el.append( _.template(_this.getTemplate(), card ) );
 				});
 				return this;

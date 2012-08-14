@@ -75,4 +75,26 @@ class CommunityController extends Controller
         return $this->render('ZeegaCommunityBundle:About:news.html.twig');
     }
     
+    
+    //LEGACY REROUTING –– TO BE MOVED
+    public function legacynewsAction()
+    {
+       return $this->redirect($this->generateUrl('ZeegaCommunityBundle_news'), 301);  
+    }
+	public function legacyhappeningsAction()
+    {
+         return $this->redirect($this->generateUrl('ZeegaCommunityBundle_about'), 301);  
+    }
+    public function legacyteamAction()
+    {
+        return $this->redirect($this->generateUrl('ZeegaCommunityBundle_team'), 301);  
+    }
+        public function legacyengineAction()
+    {
+       return $this->redirect($this->generateUrl('ZeegaCommunityBundle_engine'), 301);  
+    }
+    
+    
+    
+    
 }
