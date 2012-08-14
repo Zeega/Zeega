@@ -1,8 +1,8 @@
-.well{ background-color: #555 }
+.well{ background-color: transparent }
 .ingest-info
 {
 	padding: 8px 19px;
-	background:#555;
+	border: transparent;
 	margin-bottom:3px;
 }
 
@@ -38,13 +38,17 @@
 	overflow: auto;
 }
 
-#message{
+.widget-message {
+
 	font-style: italic;
 	color: #F15A29;
 }
+#message{
+
+	display:none;
+}
 
 #description{
-	display:none;
 	height:200px;
 }
 #widget-description

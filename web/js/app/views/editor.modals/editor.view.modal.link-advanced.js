@@ -8,7 +8,6 @@
 		render: function()
 		{
 			var _this = this;
-			console.log('modal render!!!')
 			$(this.el).html( this.getTemplate() );
 			
 			if(zeega.app.currentFrame.get('layers').length < 1 ) $(_this.el).find('.layer-checkbox-list').append('there are no layers on this frame to continue. Press the "Make New Sequence" button to continue with a blank sequence.')
@@ -17,7 +16,7 @@
 				if(layer.get('type') != 'Link')
 				{
 					var optionString = "<li><label class='checkbox'><input type='checkbox' value='"+ layer.id +"'> <i class='zicon-"+ layer.get('type').toLowerCase() +"'></i> "+layer.get('attr').title +"</label></li>";
-					$(_this.el).find('.layer-checkbox-list').append(optionString)
+					_this.$el.find('.layer-checkbox-list').append(optionString)
 				}
 			})
 
@@ -47,8 +46,9 @@
 		{
 			this.hide();
 			var checked = $(this.el).find('.layer-checkbox-list input:checked');
-			var selectedLayers = _.map( checked, function(input){ return parseInt( $(input).val() ) })
-			zeega.app.connectToAdvanced(_.union([],selectedLayers))
+			var selectedLayers = _.map( checked, function(input){ return parseInt( $(input).val() ) });
+			
+			this.model.trigger('connectToAdvanced', _.union([],selectedLayers) );
 			
 			return false;
 		},

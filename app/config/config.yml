@@ -14,7 +14,7 @@ framework:
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     translator: { fallback: en }
     session:
-        domain: ~
+        domain: %session_domain%
         default_locale: %locale%
         auto_start:     true
         lifetime:       72000
@@ -108,7 +108,7 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    encryption: %mailer_encryption%    
+    encryption: %mailer_encryption%
 
 jms_security_extra:
     secure_controllers:  true

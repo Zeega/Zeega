@@ -1,37 +1,42 @@
-var less = require('less')
-    ,fs = require('fs');
-
-process.chdir('../../web/css/less/editor/');
-console.log('New directory: ' + process.cwd());
-
-var parser = new(less.Parser)({
-    paths: ['.'], // Specify search paths for @import directives
-    filename: 'bootstrap.less' // Specify a filename, for better error messages
-});
-
-var currentDirectory = fs.readdirSync('.').filter(function(path){ return /\.less/.test(path); });
-
-for(var i = 0; i <= currentDirectory.length; i++) 
-{
-    var lessFileName = currentDirectory[i];
-    
-    if (typeof lessFileName != 'undefined')
+var less = require('less'),
+    fs = require('fs'),
+    compile = function()
     {
-        var cssFileName = lessFileName.replace(/\.less/g,".css");
+        console.log("-------");
+        console.log("Converting less files to css");
+        var	config = [
+            			{
+                		    input: 'web/css/less/editor/',
+                		    output: '../../zeega.editor.css'
+                		},
+                		{
+                		    input: '../community/',
+                		    output: '../../zeega.community.css'
+                		},
+                		{
+                		    input: '../player/',
+                		    output: '../../zeega.player.css'
+                		},
+                	];
+        
+        config.forEach(function(config) {
+            var inputDirectory = config.input;
+            var outputFile = config.output;
 
-        console.log("Writing " + lessFileName + " to " + cssFileName);
-
-        fs.readFile('bootstrap.less',function(error,data){
+            process.chdir(inputDirectory);
+            var data = fs.readFileSync('bootstrap.less','utf8');
             data = data.toString();
+            
             less.render(data, function (e, css) {
-
+                var parser = new(less.Parser)({});
                 parser.parse(css, function (e, tree) {
-                    console.log(tree.toCSS({ compress: true })); // Minify CSS output
-                    fs.writeFile('../../bootstrap.css', tree, function(err){
-                        console.log('done');
-                    });
+                    fs.writeFileSync(outputFile, tree.toCSS({ compress: true }),'utf8');
+                    console.log(outputFile);
                 });
             });
+          
         });
-    }    
-}
+    }
+    
+
+exports.run = compile;

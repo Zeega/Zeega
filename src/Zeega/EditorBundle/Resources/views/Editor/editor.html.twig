@@ -2,7 +2,7 @@
 
 {% extends '::base.html.twig' %}
 
-{% block title %}Zeega Alpha{% endblock %}
+{% block title %}Editor{% endblock %}
 {% block headerfix %} {% endblock %}
 {% block body %}
  
@@ -45,9 +45,7 @@
 						<div id='link-panel' class='panel flat'>
 							<div class='panel-head title'>Edit Links</div>
 							
-							<div id='layers'>
-								<ul id="links-list" class='unstyled'></ul>
-							</div> <!-- layers -->
+							<div id='link-list-container'></div> <!-- layers -->
 							
 						</div><!-- #layer-panel -->
 					
@@ -58,56 +56,16 @@
 						>
 							<div class='panel-head title'>
 								Edit Layers
-								<i class='zicon-info info'
+								<i class='icon-info-sign icon-white info'
 									data-placement = "right"
 									data-original-title='Layers'
 									data-content='This is where your media layers Appear. You can reorder and change their properties.'
 								></i>
 							</div>
 							
-							<div id='layers'>
-
-								<ul id="layers-list-visual" class='unstyled'></ul>
-
-							</div> <!-- layers -->
+							<div id='layers-list-container'></div> <!-- layers -->
 							
 						</div><!-- #layer-panel -->
-						
-<!--
-						<div id='transition-panel' class='panel tray expandable raised'>
-
-							<div class='panel-head'>
-								Edit Transitions
-								<i class='zicon-info info'
-									data-placement = "right"
-									data-original-title='Transitions'
-									data-content='This is where you edit the way this frame transitions to the next frame.'
-								></i>
-							</div>
-
-							<div class="panel-content inset-tray hidden">
-								
-								<ul id='advance-controls' class='unstyled'>
-									<li>
-										<label class="radio">
-											<input type="radio" name='optionsRadio' id='playback' value='0'> After playback
-										</label>
-									</li>
-									<li>
-										<label class="radio">
-											<input type="radio" name='optionsRadio' value='-1' id='manual'> Manually
-										</label>
-									</li>
-									<li>
-										<label class="radio">
-											<input type="radio" name='optionsRadio' value='10' id='time'> After <input id='advance-time' class='span1' type='text' name='time' value='10' size='3'/> seconds
-										</label>
-									</li>
-								</ul>
-							</div>
-							
-						</div>
--->						
 						
 						
 						<div id='database-panel' class='panel tray expandable raised'
@@ -118,7 +76,7 @@
 							<div class='panel-head'>
 								<div>
 									Add Media
-									<i class='zicon-info info'
+									<i class='icon-info-sign icon-white info'
 										data-placement = "right"
 										data-original-title='Items Database'
 										data-content='This is where you can search items from your collections.'
@@ -142,13 +100,13 @@
 							<div class='panel-content'>
 								<div id="db-nav-controls">
 									
-									<select id='database-collection-filter' class=''>
-									  <option value="all">My Collections</option>
-									</select>
-									
 									<a href='#' id='grid-view'><i class='zicon-grid orange'></i></a>
 									<a href='#' id='list-view'><i class='zicon-list'></i></a>
-
+									
+									<div class='pull-right'>
+										<a href='#' id='add-media-button'><i class='zicon-add-media'></i></a>
+										<a href="javascript:dropbox.sync()" id='sync-dropbox'><i class='zicon-sync-dropbox'></i></a>
+									</div>
 								</div><!-- db-nav-controls -->
 							
 								<input id="collection-id" type="hidden" value="{{collection_id}}"/>
@@ -222,6 +180,12 @@
 			<a href='#' class='delete-frame hidden'>&times;</a>
 		</div>
 	</div>
+	
+
+
+	
+	
+	
 {% endblock %}
 
 {% block scripts %}

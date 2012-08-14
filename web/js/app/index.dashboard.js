@@ -6,7 +6,7 @@ Date.prototype.getMonthAbbreviation = function() {
 jQuery(function($)
 {
 	// Shorthand the application namespace
-	var Dashboard = zeegaDashboard.app;
-	Dashboard.init();
+	var ZeegaDashboard = zeegaDashboard.app;
+	ZeegaDashboard.init();
 	initHeaderUX();
 });

@@ -157,28 +157,24 @@
 					'<div id="publish-project-modal-step1">'+
 						'<div class="modal-header">'+
 							'<button data-dismiss="modal" class="close">&times;</button>'+
-						
-							//'<a href="#" id="close-modal" class="btn secondary close-modal">x</a>'+
-							'<h3>Before you share your project, make sure everything looks good!</h3>'+
+							'<h3>Project Settings</h3>'+
 						'</div>'+
 
 						'<div class="modal-body clearfix twocolumn-rows">'+
-							'<p class="twocolumn-pair">'+
-							'<label for="publish-project-title" class="twocolumn-label">Title</label>'+
-							'<input type="text" id="publish-project-title" class="twocolumn-field" value="<%= title %>"/>'+
-							'</p>'+
-							'<p class="twocolumn-pair">'+
+							
+							
+							'<label for="publish-project-title" class="">Title</label>'+
+							'<input type="text" id="publish-project-title" class="twocolumn-field span6" value="<%= title %>"/>'+
+							
+							
 							'<label for="publish-project-description" class="twocolumn-label">Description</label>'+
-							'<textarea id="publish-project-description" class="twocolumn-field"> <%= description %> </textarea>'+
-							'</p>'+
-							'<p class="twocolumn-pair">'+
+							'<textarea id="publish-project-description" class="twocolumn-field span6"> <%= description %> </textarea>'+
+						
 							'<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
-							'<input type="text" id="publish-project-author" class="twocolumn-field" value="<%= author %>"/>'+
-							'</p>'+
-							'<p class="twocolumn-pair">'+
+							'<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= author %>"/>'+
+							
 							'<label for="publish-project-estimated-time" class="twocolumn-label">Estimated Time</label>'+
-							'<input type="text" id="publish-project-estimated-time" class="twocolumn-field" value="<%= estimated_time %>"/>'+
-							'</p>'+
+							'<input type="text" id="publish-project-estimated-time" class="twocolumn-field span6" value="<%= estimated_time %>"/>'+
 							
 							/*
 							'<p class="twocolumn-pair">'+
@@ -187,10 +183,9 @@
 							'</p>'+
 							*/
 							
-							'<p class="twocolumn-pair">'+
 							'<label for="tags" class="twocolumn-label">Tags</label>'+
-							'<input name="tags" class="tagsedit twocolumn-field" id="<%=randId%>" value="<%=tags%>" />'+
-							'</p>'+
+							'<input name="tags" class="tagsedit twocolumn-field span6" id="<%=randId%>" value="<%=tags%>" />'+
+
 							//'<label for="preview-images">Choose an image to represent your project</label>'+
 							//'<div id="preview-images"><%= imageHTML %></div>'+
 

@@ -13,6 +13,7 @@
 			'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',
+			'user-new-project':'newProject',
 		},
 		
 		initialize: function () {
@@ -40,10 +41,18 @@
 			var template = this.getTemplate();
 			var blanks = this.model.attributes;
 
-			
+			console.log(blanks);
 			var joinDate=new Date(blanks['created_at']);
+			
 			blanks['join_date'] = joinDate.getMonthAbbreviation() + " " + joinDate.getFullYear();
-
+			
+			blanks['num_projects'] = blanks['projects'].length;
+			
+			if(blanks['num_projects'] == 1)
+			    blanks['num_projects'] = blanks['num_projects'] + " project";
+			else
+			    blanks['num_projects'] = blanks['num_projects'] + " projects";
+            
 			$(this.el).html( _.template( template, blanks ) );
 
 			
@@ -79,9 +88,13 @@
 				
 			})
 		},
+		newProject : function(){
+			$('.new-project').trigger('click');
 		
+		},
 		cancelEdits : function()
 		{
+			this.render();
 			this.turnOffEditMode();
 		},
 		
@@ -144,8 +157,8 @@
 				
 			};
 		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
-		 						"http://dev.zeega.org/static/community/scripts/user_profile.php?id="+this.model.id :
-		 						"http://dev.zeega.org/static/community/scripts/user_bg.php?id="+this.model.id;
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
+		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
 		
 				url:phpFileURL,		
@@ -217,7 +230,7 @@
 							}
 
 							html+=
-							'<h6 style="clear:both">Authored 5 projects since joining in <%= join_date %></h6>'+
+							'<h6 style="clear:both; color:#DDD;">Authored <%= num_projects %> since joining in <%= join_date %></h6>'+
 							'<div style="margin-bottom:20px">'+
 								'<p class="card dashboard-bio"><%= bio %></p>';
 								if (zeegaDashboard.app.editable){ html+=
@@ -234,7 +247,7 @@
 					'</div>'+
 					'<div class="span3">';
 						if (zeegaDashboard.app.editable){ html+=
-						'<a class="btn btn-info pull-right" href=".">Start a new project</a>';
+						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
 					 html+='</div>';
 			

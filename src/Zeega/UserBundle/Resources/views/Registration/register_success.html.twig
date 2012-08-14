@@ -3,18 +3,8 @@
 
 
 {% block stylesheets %}
-	<script type="text/javascript">
-		window.localStorage.clear();
-	</script>
-	
 	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
 	
-	<!-- DEV ONLY This block is for less to clear its stupid cache. Take out in production -->
-	<script type="text/javascript">
-		window.localStorage.clear();
-	</script>
-	<!-- end DEV ONLY -->
-
 	<style type="text/css">
 	
 		/*
@@ -24,7 +14,7 @@
 		*/
 	
 		html { 
-		background: url(http://farm4.staticflickr.com/3155/2910519886_a67ce605e5_o.jpg) no-repeat center center fixed; 
+		background: url({{ asset('images/register_success.gif')}}) no-repeat center center fixed; 
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -33,7 +23,13 @@
 	
 	</style>
 
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
 
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
@@ -54,10 +50,7 @@
 				
 				<h2>Thanks for dropping us a line. We will let you know as soon as your invite is ready. Email us at info@zeega.org with your questions and ideas in the meantime.</h2>
 			
-				<h4 style="margin-top:30px;margin-bottom:30px">Want to do something now? Here are some suggestions:</h4>
-				<button class="btn btn-info btn-large" style="margin-right:50px">Watch a featured Zeega</button>
-				<button class="btn btn-info btn-large" style="margin-right:50px">Do another cool thing</button>
-				<button class="btn btn-info btn-large">Oh! Another cool thing</button>
+				
 
 			</div>
 		

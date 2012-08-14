@@ -56,7 +56,8 @@
 				//init the dragged item variable
 				start : function(){
 					$(this).draggable('option','revert',true);
-
+					console.log('drag started', _this.model, $('#project-cover-image'))
+					if(_this.model.get('layer_type') == 'Image') $('#project-cover-image').addClass('target-focus');
 					$('#visual-editor-workspace').addClass('target-focus');
 					$('#frame-drawer').addClass('target-focus');
 
@@ -66,6 +67,7 @@
 				/**	stuff _this happens when the user drags the item into a frame **/	
 
 				stop : function(){
+					$('#project-cover-image').removeClass('target-focus');
 					$('#visual-editor-workspace').removeClass('target-focus');
 					$('#frame-drawer').removeClass('target-focus');
 

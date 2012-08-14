@@ -18,8 +18,6 @@ class ProjectsController extends Controller
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
-
-        error_log("getProjectAction", 0);
 		// very inefficient method
 		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
 		
@@ -91,7 +89,7 @@ class ProjectsController extends Controller
 
 
 
-		if(isset($title)) $project->setTitle($title);
+		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
 		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);

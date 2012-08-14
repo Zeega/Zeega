@@ -27,6 +27,13 @@ class Project
     /**
      * @var array $attr
      */
+     
+    private $date_published;
+
+    /**
+     * @var array $attr
+     */
+     
     private $attr;
 
     /**
@@ -328,6 +335,30 @@ class Project
     {
         return $this->date_updated;
     }
+    
+    
+        /**
+     * Get date_published
+     *
+     * @return datetime 
+     */
+    public function getDatePublished()
+    {
+        return $this->date_published;
+    }
+    
+    
+        /**
+     * Set date_published
+     *
+     * @param datetime $datePublished
+     */
+    public function setDatePublished($datePublished)
+    {
+        $this->date_published = $datePublished;
+    }
+    
+    
     /**
      * @var string $item_id
      */

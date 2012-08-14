@@ -56,7 +56,8 @@
 			'click .close' : 'closeViewer',
 			'click .go-left' : 'goLeft',
 			'click .go-right' : 'goRight',
-			'click #detail-toggle' : 'toggleDetail'
+			'click #detail-toggle' : 'toggleDetail',
+			'click #item-delete':'delete'
 		},
 		
 		toggleDetail : function()
@@ -119,6 +120,33 @@
 			return false;
 		},
 		
+		delete : function()
+		{
+			if(confirm('delete this item?')){
+				var _this=this;
+				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
+									+ this.inFocus.id;
+	
+				//DESTROYYYYYYYY
+				this.inFocus.destroy({	
+									url : deleteURL,
+									success: function(model, response)
+									{ 
+										console.log("Deleted item " + _this.inFocus.id);	
+	
+										_this.goRight();
+	
+									},
+									error: function(model, response)
+									{
+										console.log("Error deleting item " +  _this.inFocus.id);		
+										console.log(response);
+									}
+								});
+			}
+			return false;
+		},
+		
 		updateArrows : function()
 		{
 			if(this.index == 0) this.$el.find('.arrow-left').fadeOut();
@@ -153,6 +181,7 @@
 							"<div class='inner-content more-view'></div>"+
 
 							"<a href='#' id='detail-toggle' class='more-detail'><i class='icon-minus-sign'></i> Less Detail</a>"+
+							"<a href='#' id='item-delete'>Delete</a>"+
 							
 						"</div>"+
 						"<div class='span1 go-right'><a href='#'><img class='arrow arrow-right' src='../../../images/arrow.png'/></a></div>"+
@@ -200,7 +229,7 @@
 			
 			// draw media view
 			
-			var itemClass = this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive' ? this.model.get('media_type') : this.model.get('archive');
+			var itemClass = (this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
 			
 			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
@@ -247,6 +276,7 @@
 		
 		editItemMetadata : function()
 		{
+			$('#item-delete').hide();
 			this.editing = true;
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field').focus();
 			this.$el.find('.edit-item-metadata').hide();
@@ -272,6 +302,7 @@
 		
 		exitEditMode : function()
 		{
+			$('#item-delete').show();
 			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',false).removeClass('editing-field');
 			this.$el.find('.edit-item-metadata').show();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').hide();
