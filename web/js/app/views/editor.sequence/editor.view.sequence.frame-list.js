@@ -11,13 +11,11 @@
 		
 		render: function()
 		{
-			console.log('##		render() sequence')
 			var _this = this;
 			this.$el.html( this.getTemplate() );
 			
 			_.each( this.model.get('frames'), function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
-				console.log('##		render frame', frame)
 				_this.$el.find('.frame-list').append( frame.sequenceFrameView.render().el)
 			});
 			
@@ -28,7 +26,6 @@
 		
 		renderToTarget : function()
 		{
-			console.log('##		render sequence to target')
 			$('#'+ this.id).replaceWith( this.render().el );
 		},
 		
