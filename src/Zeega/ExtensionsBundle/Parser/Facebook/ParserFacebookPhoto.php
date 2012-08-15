@@ -17,7 +17,7 @@ class ParserFacebookPhoto extends ParserAbstract
 	public function load($url, $parameters = null)
     {
 
-	    error_log(json_encode($parameters["regex_matches"][1]), 0);
+	    //error_log(json_encode($parameters["regex_matches"][1]), 0);
 		require_once('../vendor/facebook/facebook.php');
 		$facebook = new \Facebook(array(
 		  'appId'  => '459848834048078',
@@ -46,7 +46,7 @@ class ParserFacebookPhoto extends ParserAbstract
 		  error_log($loginUrl,0);
 		}
 		*/
-	    error_log("-----------------------1>", 0);
+	    //error_log("-----------------------1>", 0);
 	    $fbid = $parameters["regex_matches"][1];
 		$access_token = "AAAGiOuZAnYE4BAIJBv0GvLucABvc4aw6doHtpdPmzClZByAnr2kuiHFOD9IISZBXtYruOUWhcF1X3oobZA7brLTgPZCZClEBZC4dlO2u7uQ4QZDZD";
         $photoQueryUrl = 'https://graph.facebook.com/' . $fbid . '?method=GET&metadata=true&format=json&access_token=' . $access_token; 
@@ -55,9 +55,9 @@ class ParserFacebookPhoto extends ParserAbstract
 
         $photoData = json_decode($photoQueryResult);
 
-	    error_log("-----------------------4>", 0);
-	    error_log($photoData->created_time, 0);
-	    error_log("-----------------------5>", 0);
+	    //error_log("-----------------------4>", 0);
+	    //error_log($photoData->created_time, 0);
+	    //error_log("-----------------------5>", 0);
 		if(!$photoQueryError){
 			$item = new Item();
 			$tags = array();
@@ -81,17 +81,14 @@ class ParserFacebookPhoto extends ParserAbstract
 				$item->setMediaGeoLongitude($photoData->place->location->longitude);
 			}
 			// tags might exist
-
-
-            //$item->setTags($tags);
+			if(array_key_exists("tags", $photoData)){
+				// loop through $photoData->tags;
+				//$item->setTags($tags);
+			}
 			return $this->returnResponse($item, true, false);
 		}
 		else{
 			return $this->returnResponse(null, false, false);
 		}
-
-
-
-
 	}
 }
