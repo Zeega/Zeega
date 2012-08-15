@@ -10,6 +10,577 @@
 
 ---------------------------------------------*/
 
+// This contains the module definition factory function, application state,
+// events, and the router.
+this.zeegaPlayer = {
+	// break up logical components of code into modules.
+	module: function()
+	{
+		// Internal module cache.
+		var modules = {};
+		// Create a new module reference scaffold or load an existing module.
+		return function(name) 
+		{
+			// If this module has already been created, return it.
+			if (modules[name]) return modules[name];
+			// Create a module and save it under this name
+			return modules[name] = { Views: {} };
+		};
+	}(),
+
+  // Keep active application instances namespaced under an app object.
+  app: _.extend({
+	
+	zeega : true,
+	
+	initialize : function( data, initialState )
+	{
+		this.parseProject(data);
+		
+		var frameID = initialState.frameID || this.project.sequences.at(0).frames.at(0).id;
+		this.project.goToFrame( frameID )
+	},
+	
+	parseProject : function(data)
+	{
+		this.data = data;
+		var Player = zeegaPlayer.module('player');
+		this.project = new Player.ProjectModel( data );
+		this.project.load();
+		console.log('$$		project parsed', this, this.project);
+	},
+	
+	exit : function()
+	{
+		if(!this.zeega) clearInterval(this.fsCheck);
+		var _this = this;
+
+		if(document.exitFullscreen)				document.exitFullscreen();
+		else if (document.mozCancelFullScreen)		document.mozCancelFullScreen();
+		else if (document.webkitCancelFullScreen)	document.webkitCancelFullScreen();
+
+		// remove the player div
+		this.playerView.$el.fadeOut( 450, function(){ $(this.playerView).remove() });
+
+		if(this.zeega) zeega.app.restoreFromPreview();
+		return false;
+	},
+	
+	
+	
+}, Backbone.Events)
+
+
+};
+
+
+(function(Player){
+
+	/*		MODELS		*/
+
+	Player.ProjectModel = Backbone.Model.extend({
+		
+		editor : true,
+		
+		initialize : function()
+		{
+			this.layers = new Player.LayerCollection( this.get('layers') );
+			this.frames = new Player.FrameCollection( this.get('frames') );
+			this.sequences = new Player.SequenceCollection( this.get('sequences') );
+			this.unset('sequences');
+			this.unset('frames');
+			this.unset('layers');
+			
+			this.renderPlayer();
+		},
+		
+		load : function()
+		{
+			//	call the verify functions on the sequences and frames to make sure there is no bad data
+			this.sequences.load();
+			this.frames.load();
+		},
+		
+		renderPlayer : function()
+		{
+			var Player = zeegaPlayer.module('player');
+			this.playerView = new Player.View({model:this});
+			$('body').prepend( this.playerView.render().el );
+		},
+		
+		goToFrame : function( frameID )
+		{
+			this.currentFrame = this.frames.get(frameID);
+			console.log('$$		go to frame',frameID, this.currentFrame)
+			this.currentFrame.render();
+		},
+		
+		goLeft : function()
+		{
+			console.log('$$		go left')
+		},
+		
+		goRight : function()
+		{
+			console.log('$$		go right')
+		}
+		
+	});
+	
+	
+	
+	Player.SequenceModel = Backbone.Model.extend({
+		
+		initialize : function()
+		{
+		},
+		
+		load : function()
+		{
+			var _this = this;
+			this.verify();
+			var frameModels = _.map( this.get('frames'), function(frameID){
+				var frame = zeegaPlayer.app.project.frames.get(frameID);
+				
+				var index = _.indexOf( _this.get('frames'), frameID );
+				
+				var before = index > 0 ? _this.get('frames')[index-1] : null;
+				var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
+				
+				frame.setPosition(index, before, after);
+				return frame;
+			});
+			this.frames = new Player.FrameCollection( frameModels );
+		},
+		
+		verify : function()
+		{
+			//	make sure all referenced frames are valid
+			var brokenFrames = _.map( this.get('frames'), function(frameID){ 
+				if( _.isUndefined( zeegaPlayer.app.project.frames.get(frameID) ) ) return frameID;
+			});
+			if( _.compact(brokenFrames).length )
+			{
+				var frameArray = _.without( this.get('frames'), _.compact(brokenFrames) );
+				this.set('frames', frameArray)
+			}
+		}
+	});
+	
+	
+	
+	Player.FrameModel = Backbone.Model.extend({
+		
+		load : function()
+		{
+			this.verify();
+			var layerModels = _.map( this.get('layers'), function(layerID){ return zeegaPlayer.app.project.layers.get(layerID) });
+			this.layers = new Player.LayerCollection( layerModels );
+
+			// determine and store connected and linked frames
+			this.getLinks();
+			// determine and store arrow state for frame (l, r, lr, none)
+			this.setArrowState();
+			
+			// make and store loader view
+			// make and store citations
+			this.setViews();
+
+			// determine and store persistent layers in and out of linked frames
+		},
+		
+		verify : function()
+		{
+			//	make sure all referenced layers are valid
+			var brokenLayers = _.map( this.get('layers'), function(layerID){
+				var layer= zeegaPlayer.app.project.layers.get(layerID);
+				
+				// remove missing layers and link layers with bad data
+				if( _.isUndefined( layer ) ) return layerID;
+				else if( layer.get('type') == 'Link')
+				{
+					var fromFrame = layer.get('attr').from_frame;
+					var toFrame = layer.get('attr').to_frame;
+					if( _.isUndefined( fromFrame ) && _.isUndefined( toFrame ) ) return layerID;
+					else if( _.isUndefined( zeegaPlayer.app.project.frames.get(fromFrame)) || _.isUndefined( zeegaPlayer.app.project.frames.get(toFrame)) ) return layerID;
+				}
+			});
+			if( _.compact(brokenLayers).length )
+			{
+				var frameArray = _.without( this.get('frames'), _.compact(brokenLayers) );
+				this.set('layers', frameArray)
+			}
+		},
+		
+		setPosition : function(index, before,after)
+		{
+			console.log('$$		set position',index,before,after)
+			this.index = index;
+			this.before = before;
+			this.after = after;
+		},
+		
+		getLinks : function()
+		{
+			var _this = this;
+			this.linksOut = [];
+			this.linksIn = [];
+			_.each( _.toArray( this.layers ), function(layer){
+				if( layer.get('type') == 'Link' && !_.isUndefined(layer.get('attr').from_frame) && !_.isUndefined(layer.get('attr').to_frame)  )
+				{
+					if( layer.get('attr').from_frame == _this.id ) _this.linksOut.push( layer.get('attr').to_frame );
+					else if( layer.get('attr').to_frame == _this.id ) _this.linksIn.push( layer.get('attr').from_frame );
+				}
+			})
+			console.log('$$		links', this.linksOut, this.linksIn)
+		},
+		
+		setArrowState : function()
+		{
+			if( this.get('advance') > 0 ) this.arrowState = 'none'; // if auto advance is selected
+			else
+			{
+				if( _.isNull(this.before) && _.isNull(this.after) ) this.arrowState = 'none'; // if only frame in the sequence
+				else if( _.isNull(this.before) ) this.arrowState = 'r'; // if no frame before
+				else if( _.isNull(this.after) ) this.arrowState = 'l'; // if no frame after
+				else this.arrowState = 'lr';
+			}
+		},
+		
+		setViews : function()
+		{
+			this.citationView = new Player.CitationTrayView({model:this});
+			this.loaderView = new Player.LoaderView({model:this});
+		},
+		
+		render : function()
+		{
+			// display citations
+			console.log('$$		render frame model', this);
+			$('#citation-tray').html( this.citationView.render().el );
+			
+			// update arrows
+			// draw layer media
+		}
+	});
+	
+	
+	
+	/*		COLLECTIONS		*/
+
+	Player.SequenceCollection = Backbone.Collection.extend({
+		model : Player.SequenceModel,
+		
+		load : function(){ _.each( _.toArray(this), function(sequence){ sequence.load() }) }
+	});
+	
+	
+	
+	Player.FrameCollection = Backbone.Collection.extend({
+		model : Player.FrameModel,
+		
+		load : function(){ _.each( _.toArray(this), function(frame){ frame.load() }) }
+	});
+
+
+
+	Player.LayerCollection = Backbone.Collection.extend({
+		
+	});
+
+
+
+	/*		VIEWS		*/
+
+	Player.View = Backbone.View.extend({
+		
+		overlaysVisible : true,
+		
+		id : 'zeega-player',
+		
+		render : function()
+		{
+			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
+			this.initEvents();
+			return this;
+		},
+		
+		initEvents : function()
+		{
+			var _this = this;
+			$(window).bind( 'keydown', function(e){
+			    switch(e.which)
+				{
+					case 27:
+						if(_this.model.editor) _this.exit(); //don't close if standalone player
+						break;
+					case 8:
+						if(_this.model.editor) _this.exit(); //don't close if standalone player
+						break;
+					case 37:
+						_this.goLeft();
+						break;
+					case 39:
+						_this.goRight();
+						break;
+					case 32:
+						_this.playPause();
+						break;
+				}
+			});
+
+			if(!this.apiplayer)
+			{
+				//resize player on window resize
+				window.onresize = function(event)
+				{
+					//resize ##zeega-player
+					var viewWidth = window.innerWidth;
+					var viewHeight = window.innerHeight;
+
+					var cssObj = {};
+					if( viewWidth / viewHeight > _this.viewportRatio )
+					{
+						cssObj.height = viewHeight +'px';
+						cssObj.width = viewHeight * _this.viewportRatio +'px'
+					}else{
+						cssObj.height = viewWidth / _this.viewportRatio +'px';
+						cssObj.width = viewWidth +'px'
+					}
+
+					//constrain proportions in player
+					_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
+				}
+			}
+
+			//	fadeout overlays after mouse inactivity
+			var fadeOutOverlays = _.debounce(function(){_this.fadeOutOverlays()},5000);
+			//hide all controls and citation
+			onmousemove = function()
+			{
+				if( _this.overlaysVisible ) fadeOutOverlays( _this );
+				else _this.fadeInOverlays();
+			}
+			
+		},
+		
+		fadeOutOverlays : function()
+		{
+			this.overlaysVisible = false;
+			this.$el.find('.player-overlay').fadeOut('slow');
+		},
+		
+		fadeInOverlays : function()
+		{
+			this.overlaysVisible = true;
+			this.$el.find('.player-overlay').fadeIn('fast');
+		},
+		
+
+		unsetListeners : function()
+		{
+			$(window).unbind( 'keydown' ); //remove keylistener
+			onmousemove = null;
+		},
+		
+		events : {
+			'click #preview-close' : 'exit',
+			'click #preview-left' : 'goLeft',
+			'click #preview-right' : 'goRight',
+		},
+		
+		exit : function()
+		{
+			this.unsetListeners();
+			zeegaPlayer.app.exit();
+			return false;
+		},
+		
+		goLeft : function()
+		{
+			console.log('$$		go left')
+			this.model.goLeft();
+		},
+		goRight : function()
+		{
+			console.log('$$		go right')
+			this.model.goRight();
+		},
+		
+		getTemplate : function()
+		{
+			html =
+			
+				"<div class='player-header player-overlay'>";
+				if(this.zeega||true) html +=
+					"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
+
+				if( !this.zeega )
+				{
+					html +=
+					"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %>&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+					"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+				}
+				html +=
+
+				"</div>"+
+
+				"<div class='player-zeega-icon player-overlay'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/<%= user_id %>' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
+
+				"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
+					"<div class='arrow-background'></div>"+
+					"<img class='player-arrow arrow-left' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
+				"</div>"+
+				"<div id='preview-right' class='hidden preview-nav-arrow preview-nav'>"+
+					"<div class='arrow-background'></div>"+
+					"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
+				"</div>"+
+				"<div id='preview-media'></div>"+
+				"<div id='citation-tray' class='player-overlay'></div>";
+
+			return html;
+		}
+	});
+
+
+
+	Player.FrameView = Backbone.View.extend({
+		
+	});
+	
+	
+	
+	Player.CitationTrayView = Backbone.View.extend({
+		tagName : 'ul',
+		className : 'citation-list',
+		
+		render : function()
+		{
+			var _this = this;
+			_.each( _.toArray(this.model.layers), function(layer){
+				var citation = new Player.CitationView({model:layer});
+				_this.$el.append( citation.render().el );
+				console.log('$$		layer citations', layer)
+			})
+			
+			return this;
+		}
+		
+	});
+	
+
+	Player.CitationView = Backbone.View.extend({
+		
+		render : function()
+		{
+			
+			// need to add error state for icons!!
+			this.$el.html( _.template( this.getTemplate(),this.model.toJSON()) );
+			return this;
+		},
+		
+		events : {
+			'mouseover .citation-icon' : 'onMouseover',
+			'mouseout .citation-icon' : 'onMouseout'
+		},
+		
+		onMouseover : function()
+		{
+			if(this.model.status != 'error') this.$el.find('.citation-icon i').addClass('loaded');
+			this.$el.find('.player-citation-bubble').show();
+		},
+		
+		onMouseout : function()
+		{
+			this.$el.find('.citation-icon i').removeClass('loaded');
+			this.$el.find('.player-citation-bubble').hide();
+		},
+		
+		getTemplate : function()
+		{
+			
+			var html =
+
+				"<div class='player-citation-bubble clearfix hide'>"+
+					"<div class='player-citation-content'>"+
+						"<h3><%= attr.title %></h3>"+
+						"<div class='content'><span class='citation-subhead'>DESCRIPTION:</span> <%= attr.description %></div>"+
+						"<div class='creator'><span class='citation-subhead'>CREATED BY:</span> <%= attr.media_creator_realname %></div>";
+						//"<div class='date-created'><span class='citation-subhead'>CREATED ON:</span> <%= attr.date_created %></div>";
+
+					if( !_.isNull( this.model.get('attr').media_geo_longitude ) )
+					{
+						html += "<div class='location-created'><span class='citation-subhead'>LOCATION:</span> <%= attr.media_geo_longitude %>, <%= attr.media_geo_latitude %></div>";
+					}
+					html +=
+						"<div class='trackback'><span class='citation-subhead'>click below to view original</span></div>"+
+					"</div>"+
+					"<div class='player-citation-thumb'><img src='<%= attr.thumbnail_url %>' height='100px' width='100px'/></div>"+
+				"</div>";
+			if(this.model.get('attr').archive =="Dropbox")	html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<%= attr.media_type.toLowerCase() %> zitem-30'></i></a>";
+			else if(!_.isUndefined(this.model.get('attr').archive )) html+=	"<a href='<%= attr.attribution_uri %>' class='citation-icon' target='blank'><i class='zitem-<% if( !_.isUndefined(attr.archive) ){ %><%= attr.archive.toLowerCase() %><% } %> zitem-30'></i></a>";
+				
+			return html;
+		}
+	});
+	
+	
+	
+	Player.LoaderView = Backbone.View.extend({
+		
+		getTemplate : function()
+		{
+			html =
+			
+				"<div class='progress-head'>"+
+					"<h3 class='estimate'>Estimated time to experience this project. . .</h3>"+
+					"<h3 class='time'><%= estimated_time %></h3>"+
+				"</div>"+
+				"<div class='progress progress-striped active progress-danger'>"+
+					"<div class='bar' style='width:0'></div>"+
+				"</div>"+
+				"<div class='progress-types'>"+
+					"<ul></ul>"+
+				"</div>";
+			
+			/*
+				'<div class="loader">'+
+					'<div class="progress"></div>'+
+				'</div>'+
+				'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= layers.length %></span> items</div>';
+			*/
+			return html;
+		}
+	});
+
+})(zeegaPlayer.module("player"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var Player2 = Backbone.View.extend({
 	
 	MINIMUM_LOAD : 100,
@@ -477,6 +1048,7 @@ var Player2 = Backbone.View.extend({
 		//prevent arrows from being shown on timed layers
 		if( _.isUndefined(this.currentFrame.get('attr').advance) || this.currentFrame.get('attr').advance <= 0 )
 		{
+			console.log('@@		non timed layer. arrows normal')
 			var leftFrame = this.getLeft();
 			var rightFrame = this.getRight();
 		
@@ -496,6 +1068,8 @@ var Player2 = Backbone.View.extend({
 		}
 		else
 		{
+			console.log('@@		timed layer. no arrows')
+			
 			this.$el.find('#preview-left').hide();
 			this.$el.find('#preview-right').hide();
 		}

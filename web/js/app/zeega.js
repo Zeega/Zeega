@@ -204,31 +204,13 @@ this.zeega = {
 	{
 		console.log('~~		return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
 		
+		$('#wrapper').show();
 		this.currentFrame.renderWorkspace();
 		//this.currentFrame.trigger('focus');
 		
 		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
 	},
 
-/*	
-	renderSequenceFrames : function(sequence)
-	{
-		console.log('render sequence frames', sequence);
-		
-		
-		var Sequence = zeega.module('sequence');
-		var sequenceView = new Sequence.Views.SequenceFrameDrawer
-		
-		var _this = this;
-		//this is ugly
-		$('#frame-list').empty();
-		_.each( this.currentSequence.get('frames'), function(frameID){
-			_this.project.frames.get(frameID).render();
-		})
-		//this.currentSequence.updateFrameOrder(false);
-	},
-*/
-	
 	deleteSequence : function(sequenceID)
 	{
 		var _this = this;
@@ -526,8 +508,14 @@ this.zeega = {
 		
 		this.currentFrame.removeWorkspace();
 		
+		
+		this.Player = zeegaPlayer.app;
+		this.Player.initialize( this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
+		
+		/*
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
+		*/
 		
 		$('body').addClass('preview-mode');
 	},
