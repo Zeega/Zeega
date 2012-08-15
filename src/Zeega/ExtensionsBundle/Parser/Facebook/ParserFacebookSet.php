@@ -7,6 +7,8 @@ use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
 
+require '../../../../../vendor/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
 class ParserFacebookSet extends ParserAbstract
 {
 	private static $license=array('','Attribution-NonCommercial-ShareAlike Creative Commons','Attribution-NonCommercial Creative 		
@@ -24,6 +26,7 @@ class ParserFacebookSet extends ParserAbstract
     {
 
 	    error_log("----------------------->", 0);
+	    error_log(dirname(__FILE__), 0);
 	    error_log(json_encode($parameters), 0);
 		//return parent::returnResponse($collection, true, true);
 	}
