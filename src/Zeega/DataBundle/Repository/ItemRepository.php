@@ -62,7 +62,7 @@ class ItemRepository extends EntityRepository
       	{
       	    $content_type = strtoupper($query['notContentType']);
 
-      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
+      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', ucfirst($query['notContentType']));
 		}
 		
         if(isset($query["contentType"]))
@@ -73,7 +73,7 @@ class ItemRepository extends EntityRepository
             }
             else
             {
-                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["contentType"]);
+                $qb->andwhere("i.media_type = :content")->setParameter('content',ucfirst($query["contentType"]));
             }
 		}
 		
