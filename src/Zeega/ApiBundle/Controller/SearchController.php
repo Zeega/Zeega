@@ -106,6 +106,7 @@ class SearchController extends Controller
 		$returnItems = $request->query->get('r_items');   	//  bool
 		$returnCollections = $request->query->get('r_collections');   	//  bool
 		$returnItemsAndCollections = $request->query->get('r_itemswithcollections');   	//  bool
+        $sort = $request->query->get('sort');
 	
 	    if(!isset($page))               $page = 0;
 	    if($page > 0)                   $page = $page - 1;
@@ -134,7 +135,19 @@ class SearchController extends Controller
         $query = $client->createSelect();
         $query->setRows($limit);
         $query->setStart($limit * $page);
-        
+
+        if(isset($sort))
+        {
+            if($sort == 'date-desc')
+            {
+                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_DESC);    
+            }
+            else if($sort == 'date-asc')
+            {
+                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_ASC);       
+            }
+        }
+
         $queryString = '';
         // check if there is a query string
         if(isset($q) and $q != '')                          
