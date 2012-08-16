@@ -152,7 +152,7 @@ class Sequence
     /**
      * @var boolean $enabled
      */
-    private $enabled;
+    private $enabled = true;
 
 
     /**

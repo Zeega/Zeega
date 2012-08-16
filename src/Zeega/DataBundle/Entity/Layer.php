@@ -211,7 +211,7 @@ class Layer
     /**
      * @var boolean $enabled
      */
-    private $enabled;
+    private $enabled = true;
 
 
     /**
