@@ -68,19 +68,18 @@
 		destroyFrame : function( frameModel )
 		{
 			console.log('destroy frame:', frameModel,this);
-			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
-			
+			var index = _.indexOf( this.get('frames'), frameModel.id );
 			var frameOrder = _.without( this.get('frames'), frameModel.id );
 			this.save({ frames: frameOrder});
 			this.sequenceFrameView.render();
-			
+
 			// this happens when there will be no more frames in the sequence
 			// prevent from not having any frames!!			
-			if( this.get('frames').length <= 1 ) zeega.app.addFrame();
-			
-			zeega.app.currentFrame.trigger('focus');
-			
+			if( frameOrder.length == 0 ) zeega.app.addFrame();
+			else zeega.app.loadLeftFrame();
+
 			frameModel.destroy();
+
 		},
 		
 		updatePersistLayer : function( modelID )

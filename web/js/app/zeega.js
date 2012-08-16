@@ -567,7 +567,8 @@ this.zeega = {
 	getLeftFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
-		return this.project.frames.get( this.currentSequence.get('frames')[ currentFrameIndex-1 ] ) || this.currentSequence.get('frames')[ 0 ];
+		var frameID =  this.currentSequence.get('frames')[ currentFrameIndex-1 ] || this.currentSequence.get('frames')[ 0 ];
+		return this.project.frames.get( frameID );
 	},
 
 	getRightFrame : function()
