@@ -62,7 +62,7 @@ class ItemRepository extends EntityRepository
       	{
       	    $content_type = strtoupper($query['notContentType']);
 
-      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
+      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', ucfirst($query['notContentType']));
 		}
 		
         if(isset($query["contentType"]))
@@ -73,7 +73,7 @@ class ItemRepository extends EntityRepository
             }
             else
             {
-                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["contentType"]);
+                $qb->andwhere("i.media_type = :content")->setParameter('content',ucfirst($query["contentType"]));
             }
 		}
 		
@@ -169,10 +169,30 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
+        if(isset($query['sort']))
+      	{
+	      	$sort = $query['sort'];
+      	 	if($sort == 'date-desc')
+            {
+                $qb->orderBy('i.media_date_created','DESC')->groupBy("i.id");
+            }
+            else if($sort == 'date-asc')
+            {
+                $qb->orderBy('i.media_date_created','ASC')->groupBy("i.id");
+            }
+			else
+			{
+				$qb->orderBy('i.id','DESC');
+			}
+		}
+		else
+		{
+			$qb->orderBy('i.id','DESC');
+		}
+
         $qb = $this->buildSearchQuery($qb, $query);
         
         if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
