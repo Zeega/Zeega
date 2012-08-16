@@ -34,17 +34,17 @@
 			var _this = this;
 			//frame tray sortable and sorting events
 			this.$el.find('.frame-list').sortable({  
-				//axis : 'x',
+				
+				axis : 'x',
 				containment: '#frame-drawer',
-				forceHelperSize : true,
 				placeholder: "frame-thumb ui-state-highlight",
 				forcePlaceholderSize:true,
-				forceHelperSize:true,
 				tolerance: 'pointer',
 				distance: 10,
 
 				stop : function(){ _this.updateFrameOrder() }
 			});
+			this.$el.find('.frame-list').disableSelection();
 			
 			this.$el.find('#add-frame').draggable({
 				axis:'x',
