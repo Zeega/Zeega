@@ -92,7 +92,8 @@ class SequencesController extends Controller
     
     	$em = $this->getDoctrine()->getEntityManager();
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
-        $em->remove($sequence);
+        $sequence->setEnabled(false);
+        $em->persist($sequence);
     	$em->flush();
     	return new Response('SUCCESS',200);
     

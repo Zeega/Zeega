@@ -38,11 +38,14 @@ class LayersController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
      	$layer= $em->getRepository('ZeegaDataBundle:Layer')->findOneBy(array("id" => $layer_id));
-    	$em->remove($layer);
-    	$em->flush();
+     	
+     	if(isset($layer))
+     	{
+     	    $layer->setEnabled(false);
+     	    $em->flush();
+     	}
+
     	return new Response('SUCCESS',200);
-    
-    
     } // `delete_layer`  [DELETE] /layers/{layer_id}
 
     public function getLayerItemAction($layer_id)

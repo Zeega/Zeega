@@ -45,4 +45,6 @@ Zeega\DataBundle\Entity\Frame:
             type: boolean
             nullable: true
 
- 
+    indexes:
+        frame_enabled:
+            columns: [enabled]
