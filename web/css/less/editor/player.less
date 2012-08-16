@@ -45,7 +45,49 @@
 		&:hover{ opacity:1 }
 	}
 	
+	.player-arrow
+	{
+		height: 15%;
+		max-height: 75px;
+		max-width: 35px;
+		margin: 0 10px;
+	}
+	.preview-nav-arrow
+	{
+		position:absolute;
+		top:50%;
+		padding:10px;
+		margin:10px;
+		opacity:0.4;
+		-webkit-border-radius: 8px;
+	}
+	.preview-nav-arrow:hover
+	{
+		opacity:1;
+		background:rgba(255,0,0,.25);
+	}
 	
+	#preview-right{ right:0 }
+	#preview-left
+	{
+		left:0;
+		float:left;
+		-webkit-transform: rotate(180deg);
+		-moz-transform: rotate(180deg);
+	}
+	
+	
+	#preview-media
+	{
+
+		position: relative;
+		overflow: hidden;
+		margin: 0 auto;
+	}
+
+
+	.player-overlay{ z-index : 1000 }
+
 }
 
 
@@ -71,60 +113,6 @@
 
 
 
-#preview-wrapper #preview-media
-{
-
-	position: relative;
-	overflow: hidden;
-	margin: 0 auto;
-}
-
-#preview-wrapper #preview-logo
-{
-	opacity:0.5;
-	position:absolute;
-	padding:6px;
-}
-
-#preview-wrapper .player-overlay{ z-index : 1000 }
-
-
-
-#preview-wrapper .player-arrow
-{
-	height: 15%;
-	max-height: 75px;
-	max-width: 35px;
-	margin: 0 10px;
-}
-
-#preview-wrapper .preview-nav{ z-index:1000 }
-
-#preview-wrapper .preview-nav-arrow
-{
-	position:absolute;
-	top:50%;
-	padding:10px;
-	margin:10px;
-	opacity:0.4;
-	-webkit-border-radius: 8px;
-}
-
-#preview-wrapper .preview-nav-arrow:hover
-{
-	opacity:1;
-	background:rgba(255,0,0,.25);
-}
-
-#preview-wrapper #preview-right{ right:0 }
-
-#preview-wrapper #preview-left
-{
-	left:0;
-	float:left;
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-}
 
 
 /************* end preview window styles ****************/

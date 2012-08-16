@@ -60,7 +60,7 @@ this.zeegaPlayer = {
 		else if (document.webkitCancelFullScreen)	document.webkitCancelFullScreen();
 
 		// remove the player div
-		this.playerView.$el.fadeOut( 450, function(){ $(this.playerView).remove() });
+		this.project.unrenderPlayer();
 
 		if(this.zeega) zeega.app.restoreFromPreview();
 		return false;
@@ -81,6 +81,8 @@ this.zeegaPlayer = {
 	Player.ProjectModel = Backbone.Model.extend({
 		
 		editor : true,
+		PRELOAD_ON_SEQUENCE : 2, // will preload n frames ahead/behind
+		PRELOAD_ON_LINK : 1, // will preload linked frames
 		
 		initialize : function()
 		{
@@ -108,21 +110,84 @@ this.zeegaPlayer = {
 			$('body').prepend( this.playerView.render().el );
 		},
 		
+		unrenderPlayer : function()
+		{
+			var _this = this;
+			this.playerView.$el.fadeOut( 450, function(){ _this.playerView.remove() });
+		},
+		
 		goToFrame : function( frameID )
 		{
 			this.currentFrame = this.frames.get(frameID);
 			console.log('$$		go to frame',frameID, this.currentFrame)
+			
+			this.preloadFrames();
+			
+			/*
+			// move to after frame is preloaded
 			this.currentFrame.render();
+			this.setFrameAdvance();
+			*/
 		},
+		
+		preloadFrames : function()
+		{
+			var _this = this;
+			var framesToPreload = [this.currentFrame.id];
+			var targetArray = [this.currentFrame.id];
+			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
+			{
+				_.each( targetArray, function(frameID){
+					var before = _this.frames.get(frameID).before;
+					var after = _this.frames.get(frameID).after;
+					var linksOut = _this.frames.get(frameID).linksOut;
+					// not preloading links in for now because there's no way to get to those frames
+					
+					framesToPreload = _.union(framesToPreload,[after,before],linksOut);
+					
+					targetArray = _.compact([before,after]);
+				})
+			}
+			framesToPreload = _.compact( _.uniq(framesToPreload) );
+			
+			console.log('$$		preload frames array', framesToPreload);
+			
+			_.each( framesToPreload, function(frameID){
+				var frame = _this.frames.get(frameID);
+				if(frame.status == 'waiting') frame.preload();
+			})
+		},
+		
+		
 		
 		goLeft : function()
 		{
 			console.log('$$		go left')
+			if( this.currentFrame.before ) this.goToFrame( this.currentFrame.before );
 		},
 		
 		goRight : function()
 		{
 			console.log('$$		go right')
+			if( this.currentFrame.after ) this.goToFrame( this.currentFrame.after );
+		},
+		
+		setFrameAdvance : function()
+		{
+
+			console.log('$$		set frame advance', this.currentFrame)
+			if(this.timer) clearTimeout( this.t )
+			var adv = this.currentFrame.get('attr').advance;
+			if( adv > 0) //after n milliseconds
+			{
+				var _this = this;
+				this.timer = setTimeout( function(){ _this.goRight() },adv )
+			}
+		},
+		
+		cancelFrameAdvance : function()
+		{
+			if(this.timer) clearTimeout( this.t );
 		}
 		
 	});
@@ -171,6 +236,29 @@ this.zeegaPlayer = {
 	
 	Player.FrameModel = Backbone.Model.extend({
 		
+		status : 'waiting',
+		
+		initialize : function()
+		{
+			this.on('layer_ready', this.onLayerLoaded, this);
+		},
+		
+		preload : function()
+		{
+			this.status = 'loading';
+			console.log('$$		preloading frame',this)
+			// preload layers
+			_.each( _.toArray(this.layers), function(layer){
+				console.log('$$		preloading layer',layer.id)
+				//if(layer.status == 'waiting') layer.preload();
+			})
+		},
+		
+		onLayerLoaded : function()
+		{
+			
+		},
+		
 		load : function()
 		{
 			this.verify();
@@ -214,7 +302,6 @@ this.zeegaPlayer = {
 		
 		setPosition : function(index, before,after)
 		{
-			console.log('$$		set position',index,before,after)
 			this.index = index;
 			this.before = before;
 			this.after = after;
@@ -232,12 +319,11 @@ this.zeegaPlayer = {
 					else if( layer.get('attr').to_frame == _this.id ) _this.linksIn.push( layer.get('attr').from_frame );
 				}
 			})
-			console.log('$$		links', this.linksOut, this.linksIn)
 		},
 		
 		setArrowState : function()
 		{
-			if( this.get('advance') > 0 ) this.arrowState = 'none'; // if auto advance is selected
+			if( this.get('attr').advance > 0 ) this.arrowState = 'none'; // if auto advance is selected
 			else
 			{
 				if( _.isNull(this.before) && _.isNull(this.after) ) this.arrowState = 'none'; // if only frame in the sequence
@@ -256,12 +342,38 @@ this.zeegaPlayer = {
 		render : function()
 		{
 			// display citations
-			console.log('$$		render frame model', this);
 			$('#citation-tray').html( this.citationView.render().el );
 			
 			// update arrows
+			this.updateArrows();
+			
 			// draw layer media
-		}
+		},
+		
+		updateArrows : function()
+		{
+			switch(this.arrowState)
+			{
+				case 'none':
+					if( $('#preview-left').is(':visible') ) $('#preview-left').fadeOut('fast');
+					if( $('#preview-right').is(':visible') ) $('#preview-right').fadeOut('fast');
+					break;
+				case 'r':
+					if( $('#preview-left').is(':visible') ) $('#preview-left').fadeOut('fast');
+					if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn('fast');
+					break;
+				case 'l':
+					if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn('fast');
+					if( $('#preview-right').is(':visible') ) $('#preview-right').fadeOut('fast');
+					break;
+				case 'lr':
+					if( $('#preview-left').is(':hidden') ) $('#preview-left').fadeIn('fast');
+					if( $('#preview-right').is(':hidden') ) $('#preview-right').fadeIn('fast');
+					break;
+			}
+		},
+		
+		
 	});
 	
 	
@@ -396,16 +508,8 @@ this.zeegaPlayer = {
 			return false;
 		},
 		
-		goLeft : function()
-		{
-			console.log('$$		go left')
-			this.model.goLeft();
-		},
-		goRight : function()
-		{
-			console.log('$$		go right')
-			this.model.goRight();
-		},
+		goLeft : function(){ this.model.goLeft() },
+		goRight : function(){ this.model.goRight() },
 		
 		getTemplate : function()
 		{
@@ -457,10 +561,10 @@ this.zeegaPlayer = {
 		render : function()
 		{
 			var _this = this;
+			this.$el.empty();
 			_.each( _.toArray(this.model.layers), function(layer){
 				var citation = new Player.CitationView({model:layer});
 				_this.$el.append( citation.render().el );
-				console.log('$$		layer citations', layer)
 			})
 			
 			return this;
