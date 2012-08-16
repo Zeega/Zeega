@@ -46,7 +46,8 @@ class FramesController extends Controller
      	
      	if(isset($frame))
      	{
-     	    $layer->setEnabled(false);
+     	    $frame->setEnabled(false);
+     	    $em->persist($frame);
      	    $em->flush();
      	}
 
