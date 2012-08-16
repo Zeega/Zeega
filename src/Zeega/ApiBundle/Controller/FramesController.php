@@ -46,11 +46,11 @@ class FramesController extends Controller
      	
      	if(isset($frame))
      	{
-    	    $em->remove($frame);
-    	    $em->flush();
-        }
-    	
-    	return new Response('SUCCESS',200);
+     	    $layer->setEnabled(false);
+     	    $em->flush();
+     	}
+
+    	return new Response('SUCCESS',200);     	
     } 
 
 	public function getFrameLayersAction($frame_id)
