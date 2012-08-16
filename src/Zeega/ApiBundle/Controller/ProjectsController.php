@@ -24,9 +24,9 @@ class ProjectsController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
-		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id, "enabled" => true));
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id, "enabled" => true));
+		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id, "enabled" => true));
 		
 		$sequenceFrames = array();
 		
