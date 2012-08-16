@@ -342,7 +342,6 @@ this.zeega = {
 				{
 					console.log('frame saved and is a duplicate')
 					console.log(savedFrame)
-					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
 				
 					//zeega.app.currentSequence.get('frames');
 				
@@ -364,10 +363,13 @@ this.zeega = {
 						}
 					})
 					//resave the frame after being updated with persistent frame ids
+
+					_this.project.frames.add( savedFrame );
+					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
+					
 				}
 			});
 			
-			this.project.frames.add( dupeModel );
 			
 		} //busy
 	},
@@ -555,7 +557,8 @@ this.zeega = {
 	getLeftFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
-		return this.project.frames.get( this.currentSequence.get('frames')[ currentFrameIndex-1 ] ) || this.currentSequence.get('frames')[ 0 ];
+		var frameID =  this.currentSequence.get('frames')[ currentFrameIndex-1 ] || this.currentSequence.get('frames')[ 0 ];
+		return this.project.frames.get( frameID );
 	},
 
 	getRightFrame : function()

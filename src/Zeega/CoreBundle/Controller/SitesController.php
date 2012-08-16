@@ -91,10 +91,12 @@ class SitesController extends Controller
 		$frame = new Frame();
 		$frame->setSequence($sequence);
 		$frame->setProject($project);
+        $frame->setEnabled(true);
 		$project->setSite($site);
 		$project->addUser($user);
 		$sequence->setProject($project);
 		$sequence->setTitle('Intro Sequence');
+        $sequence->setEnabled(true);
 		$project->setTitle($title);
 		$em=$this->getDoctrine()->getEntityManager();
 		$em->persist($sequence);

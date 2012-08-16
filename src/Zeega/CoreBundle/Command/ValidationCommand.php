@@ -53,7 +53,7 @@ class ValidationCommand extends ContainerAwareCommand
                 {
                     // check / delete dead layers
                     $id = $project->getId();
-                    $frames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
+                    $frames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id, "enabled" => true));
                     foreach($frames as $frame)
                     {
                         $frameId = $frame->getId();
@@ -66,7 +66,7 @@ class ValidationCommand extends ContainerAwareCommand
                             {
                                 if(isset($layerId) && !empty($layerId))
                                 {
-                                    $layer = $em->getRepository('ZeegaDataBundle:Layer')->findOneById($layerId);
+                                    $layer = $em->getRepository('ZeegaDataBundle:Layer')->findOneBy(array("id" => $layerId, "enabled" => true));
                                 
                                     if(!isset($layer))
                                     {
@@ -84,7 +84,7 @@ class ValidationCommand extends ContainerAwareCommand
                                         if(isset($layerAttributes) && isset($layerAttributes["to_sequence"]))
                                         {
                                             $targetSequenceId = $layerAttributes["to_sequence"];
-                                            $sequence = $em->getRepository('ZeegaDataBundle:Sequence')->findOneById($targetSequenceId);
+                                            $sequence = $em->getRepository('ZeegaDataBundle:Sequence')->findOneBy(array("id" => $targetSequenceId, "enabled" => true));
 
                                             if(!isset($sequence))
                                             {
@@ -92,7 +92,7 @@ class ValidationCommand extends ContainerAwareCommand
                                                 if ($input->getOption('fix')) 
                                                 {
                                                     echo "Deleting layer $layerId from frame $frameId \n";
-                                                    $em->remove($layer);
+                                                    $layer->setEnabled(false);
                                                 }
                                             }
                                         }
