@@ -59,10 +59,15 @@
 //redo this vvvv
 		insertFrameView : function( frame, index )
 		{
-				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );
-				else $('#frame-list').children('li:eq('+index+')').after( frame.render() );
-				
-				this.updateFrameOrder();
+			console.log('$$		insert frame view', this, frame, index)
+			var frameArray = this.get('frames');
+			console.log(frameArray)
+			var index  = index || frameArray.length;
+			frameArray.splice(index,0,frame.id);
+			console.log(frameArray)
+			this.set('frames',frameArray);
+
+			this.sequenceFrameView.render();
 		},
 		
 		destroyFrame : function( frameModel )

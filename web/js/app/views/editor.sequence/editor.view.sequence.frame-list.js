@@ -13,9 +13,10 @@
 		{
 			var _this = this;
 			this.$el.html( this.getTemplate() );
-			
+			console.log('$$		frame drawer render', this)
 			_.each( this.model.get('frames'), function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
+				console.log('$$		frame', frame)
 				_this.$el.find('.frame-list').append( frame.sequenceFrameView.render().el)
 			});
 			
