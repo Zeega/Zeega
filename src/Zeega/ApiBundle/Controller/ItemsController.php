@@ -472,10 +472,15 @@ class ItemsController extends Controller
 			if(!isset($site) && isset($user))
 			{
 		    	$sites = $user->getSites();
-		    	if(isset($sites))
+		    	if(isset($sites) && count($sites) > 0)
 		    	{
 	    			$site = $sites[0];
+
 	    		}
+                else
+                {
+                    $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+                }
 			}
 		}
 

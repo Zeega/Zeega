@@ -309,6 +309,9 @@ class SearchController extends Controller
             $query["earliestDate"]->setTimestamp($earliestDate);
         }
         
+        //
+        $query["sort"] = $request->query->get('sort');
+        
         if(isset($latestDate))
         {
             $query["latestDate"] = new DateTime();
