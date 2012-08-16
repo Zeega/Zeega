@@ -59,28 +59,32 @@
 //redo this vvvv
 		insertFrameView : function( frame, index )
 		{
-				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );
-				else $('#frame-list').children('li:eq('+index+')').after( frame.render() );
-				
-				this.updateFrameOrder();
+			console.log('$$		insert frame view', this, frame, index)
+			var frameArray = this.get('frames');
+			console.log(frameArray)
+			var index  = index || frameArray.length;
+			frameArray.splice(index,0,frame.id);
+			console.log(frameArray)
+			this.set('frames',frameArray);
+
+			this.sequenceFrameView.render();
 		},
 		
 		destroyFrame : function( frameModel )
 		{
 			console.log('destroy frame:', frameModel,this);
-			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
-			
+			var index = _.indexOf( this.get('frames'), frameModel.id );
 			var frameOrder = _.without( this.get('frames'), frameModel.id );
 			this.save({ frames: frameOrder});
 			this.sequenceFrameView.render();
-			
+
 			// this happens when there will be no more frames in the sequence
 			// prevent from not having any frames!!			
-			if( this.get('frames').length <= 1 ) zeega.app.addFrame();
-			
-			zeega.app.currentFrame.trigger('focus');
-			
+			if( frameOrder.length == 0 ) zeega.app.addFrame();
+			else zeega.app.loadLeftFrame();
+
 			frameModel.destroy();
+
 		},
 		
 		updatePersistLayer : function( modelID )
