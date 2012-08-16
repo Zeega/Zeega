@@ -122,12 +122,12 @@
 		
 		goClick : function()
 		{
-			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			zeegaPlayer.app.project.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		goToSequenceFrame : function()
 		{
-			if(zeega.app.previewMode) zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			if(zeega.app.previewMode) zeega.app.project.goToFrame(this.model.get('attr').to_frame);
 			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
 		},
 		
@@ -163,8 +163,10 @@
 		onPlay : function()
 		{
 			this.render();
+			/*
 			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
 				this.moveOffStage()
+			*/
 			this.delegateEvents({'click':'goClick'})
 		},
 		

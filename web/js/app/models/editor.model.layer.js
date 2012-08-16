@@ -2,6 +2,8 @@
 
 	Layer.Model = Backbone.Model.extend({
 		
+		status : 'waiting',
+
 		showControls : true,
 		player : false,
 		displayCitation: true,

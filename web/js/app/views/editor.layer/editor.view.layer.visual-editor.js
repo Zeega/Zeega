@@ -201,13 +201,12 @@
 					_this.model.status = 'error'
 					_this.model.trigger('error', _this.model.id)
 				}
-				else console.log('no error! loaded normally!!')
+				//else console.log('no error! loaded normally!!')
 			},this.LAYER_TIMEOUT)
 		},
 		
 		private_onPlay : function( z )
 		{
-			
 			if(!this.onStage){
 				this.onStage=true;
 				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});

@@ -312,6 +312,7 @@
 		
 		onPlay : function()
 		{
+			console.log('@@		video layer on play')
 			this.model.player.play();
 		},
 		

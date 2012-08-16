@@ -30,22 +30,17 @@ this.zeega = {
 	{
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
-		this.loadModules();
 		this.isLoaded = true
-		//this.initStartHelp(); //broken. fix!
+		this.initZeegaPlayer();
 	},
 	
-	loadModules : function()
+
+	initZeegaPlayer : function()
 	{
-		console.log('load modules')
-		
 		this.data = $.parseJSON(projectJSON);
-		console.log(this.data)
-		
-		this.player = new Player2($('body'));
-		this.player.loadProject( this.data.project );
-		
-		//$('body').append( this.player.render().el );
+		console.log('##		standalone data', this.data)
+		this.Player = zeegaPlayer.app;
+		this.Player.initialize( this.data.project )
 	}
 	
 	

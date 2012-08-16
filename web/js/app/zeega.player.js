@@ -37,7 +37,9 @@ this.zeegaPlayer = {
 	{
 		this.parseProject(data);
 		
-		var frameID = initialState.frameID || this.project.sequences.at(0).frames.at(0).id;
+		var frameID = this.project.sequences.at(0).frames.at(0).id;
+		if( _.isUndefined(initialState.frameID) )
+		var frameID = initialState.frameID ? initialState.frameID : 
 		this.project.goToFrame( frameID )
 	},
 	
@@ -81,12 +83,19 @@ this.zeegaPlayer = {
 	Player.ProjectModel = Backbone.Model.extend({
 		
 		editor : true,
-		PRELOAD_ON_SEQUENCE : 2, // will preload n frames ahead/behind
-		PRELOAD_ON_LINK : 1, // will preload linked frames
+		PRELOAD_ON_SEQUENCE : 2, // will preload n frames ahead/behind in sequence
 		
 		initialize : function()
 		{
-			this.layers = new Player.LayerCollection( this.get('layers') );
+			var Layer = zeega.module('layer');
+			var layerArray = [];
+			_.each( this.get('layers'), function( layerData ){
+				var layer = new Layer[layerData.type]( layerData, {player:true} );
+				layer.id = parseInt(layer.id);
+				layerArray.push( layer );
+			});
+
+			this.layers = new Player.LayerCollection( layerArray );
 			this.frames = new Player.FrameCollection( this.get('frames') );
 			this.sequences = new Player.SequenceCollection( this.get('sequences') );
 			this.unset('sequences');
@@ -94,6 +103,8 @@ this.zeegaPlayer = {
 			this.unset('layers');
 			
 			this.renderPlayer();
+
+			console.log('$$		inited', this, this.layers)
 		},
 		
 		load : function()
@@ -118,47 +129,36 @@ this.zeegaPlayer = {
 		
 		goToFrame : function( frameID )
 		{
+			this.cancelFrameAdvance();
+			if(this.currentFrame) this.currentFrame.unrender();
+
 			this.currentFrame = this.frames.get(frameID);
 			console.log('$$		go to frame',frameID, this.currentFrame)
-			
-			this.preloadFrames();
-			
-			/*
-			// move to after frame is preloaded
-			this.currentFrame.render();
-			this.setFrameAdvance();
-			*/
+
+			if(this.currentFrame.status == 'waiting')
+			{
+				this.currentFrame.on('ready',this.renderFrame, this);
+				this.preloadFrames();
+			}
+			else if( this.currentFrame.status == 'ready' ) this.renderFrame();
 		},
 		
 		preloadFrames : function()
 		{
 			var _this = this;
-			var framesToPreload = [this.currentFrame.id];
-			var targetArray = [this.currentFrame.id];
-			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
-			{
-				_.each( targetArray, function(frameID){
-					var before = _this.frames.get(frameID).before;
-					var after = _this.frames.get(frameID).after;
-					var linksOut = _this.frames.get(frameID).linksOut;
-					// not preloading links in for now because there's no way to get to those frames
-					
-					framesToPreload = _.union(framesToPreload,[after,before],linksOut);
-					
-					targetArray = _.compact([before,after]);
-				})
-			}
-			framesToPreload = _.compact( _.uniq(framesToPreload) );
-			
-			console.log('$$		preload frames array', framesToPreload);
-			
-			_.each( framesToPreload, function(frameID){
+			_.each( this.currentFrame.framesToPreload, function(frameID){
 				var frame = _this.frames.get(frameID);
 				if(frame.status == 'waiting') frame.preload();
 			})
 		},
 		
-		
+		renderFrame : function(id)
+		{
+			console.log('$$		render frame', id)
+			var frame = id ? this.frames.get(id) : this.currentFrame;
+			frame.render();
+			this.setFrameAdvance( id );
+		},
 		
 		goLeft : function()
 		{
@@ -172,12 +172,12 @@ this.zeegaPlayer = {
 			if( this.currentFrame.after ) this.goToFrame( this.currentFrame.after );
 		},
 		
-		setFrameAdvance : function()
+		setFrameAdvance : function( id )
 		{
+			var frame = id ? this.frames.get(id) : this.currentFrame;
 
-			console.log('$$		set frame advance', this.currentFrame)
 			if(this.timer) clearTimeout( this.t )
-			var adv = this.currentFrame.get('attr').advance;
+			var adv = frame.get('attr').advance;
 			if( adv > 0) //after n milliseconds
 			{
 				var _this = this;
@@ -187,7 +187,7 @@ this.zeegaPlayer = {
 		
 		cancelFrameAdvance : function()
 		{
-			if(this.timer) clearTimeout( this.t );
+			if(this.timer) clearTimeout( this.timer );
 		}
 		
 	});
@@ -236,6 +236,7 @@ this.zeegaPlayer = {
 	
 	Player.FrameModel = Backbone.Model.extend({
 		
+		PRELOAD_ON_SEQUENCE : 2,
 		status : 'waiting',
 		
 		initialize : function()
@@ -245,18 +246,77 @@ this.zeegaPlayer = {
 		
 		preload : function()
 		{
+			var _this = this;
 			this.status = 'loading';
-			console.log('$$		preloading frame',this)
+
 			// preload layers
 			_.each( _.toArray(this.layers), function(layer){
-				console.log('$$		preloading layer',layer.id)
-				//if(layer.status == 'waiting') layer.preload();
+				if(layer.status == 'waiting')
+				{
+					console.log('$$		actually preloading layer',layer)
+					$('#preview-media').append( layer.visual.render().el );
+					layer.on('ready', _this.onLayerReady, _this);
+					layer.on('error', _this.onLayerError, _this);
+
+					layer.status = 'loading';
+					layer.trigger('player_preload');
+				}
 			})
 		},
 		
-		onLayerLoaded : function()
+		onLayerReady : function(id)
 		{
+			console.log('$$		on layer ready', id);
+			var layer = this.layers.get(id);
+			layer.off('ready');
+			layer.status = 'ready'; // move this to the layer model?
+			if( this.isFrameLoaded() ) this.onFrameLoaded();
+		},
+
+		onLayerError : function(id)
+		{
+			console.log('$$		on layer error', id);
+			var layer = this.layers.get(id);
+			layer.off('error');
+			layer.status = 'error'; // move this to the layer model?
+			if( this.isFrameLoaded() ) this.onFrameLoaded();
+		},
+
+		onFrameLoaded : function()
+		{
+			console.log('$$		frame is loaded', this.id)
+			this.status = 'ready';
+			this.trigger('ready',this.id);
+		},
+
+		isFrameLoaded : function()
+		{
+			var statusArray = _.map(_.toArray(this.layers),function(layer){ return layer.status });
+			if( _.include(statusArray,'loading') || _.include(statusArray,'waiting') ) return false;
+			else return true;
+		},
+
+		render : function()
+		{
+				console.log('$$		frame is rendering', this.id)
+
+			// display citations
+			$('#citation-tray').html( this.citationView.render().el );
 			
+			// update arrows
+			this.updateArrows();
+			
+			// draw layer media
+			_.each( _.toArray(this.layers), function(layer){
+				layer.trigger('player_play');
+			})
+		},
+
+		unrender : function()
+		{
+			_.each( _.toArray(this.layers), function(layer){
+				layer.trigger('player_exit');
+			})
 		},
 		
 		load : function()
@@ -265,11 +325,13 @@ this.zeegaPlayer = {
 			var layerModels = _.map( this.get('layers'), function(layerID){ return zeegaPlayer.app.project.layers.get(layerID) });
 			this.layers = new Player.LayerCollection( layerModels );
 
+			if( this.layers.length == 0 ) this.status = 'ready';
+
 			// determine and store connected and linked frames
 			this.getLinks();
 			// determine and store arrow state for frame (l, r, lr, none)
 			this.setArrowState();
-			
+
 			// make and store loader view
 			// make and store citations
 			this.setViews();
@@ -306,6 +368,25 @@ this.zeegaPlayer = {
 			this.before = before;
 			this.after = after;
 		},
+
+		setFramesToPreload : function()
+		{
+			var _this = this;
+			this.framesToPreload = [this.id];
+			var targetArray = [this.id];
+			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
+			{
+				_.each( targetArray, function(frameID){
+					var before = zeegaPlayer.app.project.frames.get(frameID).before;
+					var after = zeegaPlayer.app.project.frames.get(frameID).after;
+					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;
+					// not preloading links in for now because there's no way to get to those frames
+					targetArray = _.compact([before,after]);
+					_this.framesToPreload = _.union(_this.framesToPreload,targetArray,linksOut);
+				})
+			}
+			this.framesToPreload = _.uniq(this.framesToPreload);
+		},
 		
 		getLinks : function()
 		{
@@ -337,17 +418,6 @@ this.zeegaPlayer = {
 		{
 			this.citationView = new Player.CitationTrayView({model:this});
 			this.loaderView = new Player.LoaderView({model:this});
-		},
-		
-		render : function()
-		{
-			// display citations
-			$('#citation-tray').html( this.citationView.render().el );
-			
-			// update arrows
-			this.updateArrows();
-			
-			// draw layer media
 		},
 		
 		updateArrows : function()
@@ -391,14 +461,16 @@ this.zeegaPlayer = {
 	Player.FrameCollection = Backbone.Collection.extend({
 		model : Player.FrameModel,
 		
-		load : function(){ _.each( _.toArray(this), function(frame){ frame.load() }) }
+		load : function()
+		{
+			_.each( _.toArray(this), function(frame){ frame.load() });
+			_.each( _.toArray(this), function(frame){ frame.setFramesToPreload() });
+		}
 	});
 
 
 
-	Player.LayerCollection = Backbone.Collection.extend({
-		
-	});
+	Player.LayerCollection = Backbone.Collection.extend({});
 
 
 
@@ -407,12 +479,33 @@ this.zeegaPlayer = {
 	Player.View = Backbone.View.extend({
 		
 		overlaysVisible : true,
-		
+		viewportRatio : 1.5,
+
 		id : 'zeega-player',
 		
 		render : function()
 		{
+			console.log('##		render', this)
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
+
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > this.viewportRatio )
+			{
+				cssObj.height = viewHeight +'px';
+				cssObj.width = viewHeight * this.viewportRatio +'px'
+			}
+			else
+			{
+				cssObj.height = viewWidth / this.viewportRatio +'px';
+				cssObj.width = viewWidth +'px'
+			}
+
+			//constrain proportions in player
+			this.$el.find('#preview-media').css( cssObj );
+
 			this.initEvents();
 			return this;
 		},
@@ -441,28 +534,26 @@ this.zeegaPlayer = {
 				}
 			});
 
-			if(!this.apiplayer)
+
+			//resize player on window resize
+			window.onresize = function(event)
 			{
-				//resize player on window resize
-				window.onresize = function(event)
+				//resize ##zeega-player
+				var viewWidth = window.innerWidth;
+				var viewHeight = window.innerHeight;
+
+				var cssObj = {};
+				if( viewWidth / viewHeight > _this.viewportRatio )
 				{
-					//resize ##zeega-player
-					var viewWidth = window.innerWidth;
-					var viewHeight = window.innerHeight;
-
-					var cssObj = {};
-					if( viewWidth / viewHeight > _this.viewportRatio )
-					{
-						cssObj.height = viewHeight +'px';
-						cssObj.width = viewHeight * _this.viewportRatio +'px'
-					}else{
-						cssObj.height = viewWidth / _this.viewportRatio +'px';
-						cssObj.width = viewWidth +'px'
-					}
-
-					//constrain proportions in player
-					_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
+					cssObj.height = viewHeight +'px';
+					cssObj.width = viewHeight * _this.viewportRatio +'px'
+				}else{
+					cssObj.height = viewWidth / _this.viewportRatio +'px';
+					cssObj.width = viewWidth +'px'
 				}
+
+				//constrain proportions in player
+				_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
 			}
 
 			//	fadeout overlays after mouse inactivity
@@ -575,6 +666,8 @@ this.zeegaPlayer = {
 
 	Player.CitationView = Backbone.View.extend({
 		
+		tagName : 'li',
+
 		render : function()
 		{
 			
