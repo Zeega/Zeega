@@ -38,8 +38,8 @@ this.zeegaPlayer = {
 		this.parseProject(data);
 		
 		var frameID = this.project.sequences.at(0).frames.at(0).id;
-		if( _.isUndefined(initialState.frameID) )
-		var frameID = initialState.frameID ? initialState.frameID : 
+		if( _.isUndefined(initialState.frameID) ) initialState.frameID;
+
 		this.project.goToFrame( frameID )
 	},
 	
