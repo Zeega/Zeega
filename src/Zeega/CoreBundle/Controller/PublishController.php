@@ -29,7 +29,7 @@ class PublishController extends Controller
         $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($layersId);
         $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame, 'layers'=>$layers));
 
-     	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
+     	return $this->render('ZeegaCoreBundle:Publish:frame.html.twig', array(
 			'frameId'=> $frame->getId(),
 			'frame'=>$frameTemplate,
 			'layers'=>$layers
