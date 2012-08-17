@@ -481,7 +481,7 @@ class ItemsController extends Controller
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
         }
-        else if(isset($attributionUri))
+        else if(isset($attributionUri) && $attributionUri != 'default')
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $attributionUri, "enabled" => 1, "user_id" => $user->getId()));
         }
