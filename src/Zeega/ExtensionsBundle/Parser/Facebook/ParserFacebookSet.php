@@ -46,14 +46,15 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		$albumQueryError = 0; // replace with real tests for error later.  first check catches HTTP error.  
-		if($albumQueryError){
-			return $this->returnResponse(null, false, false);
+		// check if response is false
+		if($albumData==false){
+			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this media.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		$albumQueryError = 0; // replace with real tests for error later.  second check catches JSON error msg.  
-		if($albumQueryError){
-			return $this->returnResponse(null, false, false);
+		// check for FB error message
+		if(array_key_exists("error",$albumData)){
+			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
+
         // get album cover image
         $coverImageId = $albumData['cover_photo'];
 		$coverData = $facebook->api(
@@ -64,14 +65,15 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		$coverQueryError = 0; // replace with real tests for error later.  first check catches HTTP error.  
-		if($coverQueryError){
-			return $this->returnResponse(null, false, false);
+		// check if response is false
+		if($coverData==false){
+			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this album's cover image.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		$coverQueryError = 0; // replace with real tests for error later.  second check catches JSON error msg.
-		if($coverQueryError){
-			return $this->returnResponse(null, false, false);
+		// check for FB error message
+		if(array_key_exists("error",$coverData)){
+			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
+
         // get album photos
         $photoQueryUrl = $albumId . '/photos';
 		$photoData = $facebook->api(
@@ -82,14 +84,16 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		$photoQueryError = 0; // replace with real tests for error later.  first check catches HTTP error.  
-		if($photoQueryError){
-			return $this->returnResponse(null, false, false);
+
+		// check if response is false
+		if($photoData==false){
+			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add one or more of these photos.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		$photoQueryError = 0; // replace with real tests for error later.  second check catches JSON error msg.
-		if($photoQueryError){
-			return $this->returnResponse(null, false, false);
+		// check for FB error message
+		if(array_key_exists("error",$photoData)){
+			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
+
 
 		// create collection and metadata
 		$collection = new Item();

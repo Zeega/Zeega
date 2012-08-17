@@ -16,7 +16,6 @@ class ParserFacebookPhoto extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
-		
 		require_once('../vendor/facebook/facebook.php');
 		
 		$facebook = new \Facebook(array(
@@ -35,7 +34,6 @@ class ParserFacebookPhoto extends ParserAbstract
 			return $this->returnResponse($item, true, false);
 	    	
 		}
-
 	    $fbid = $parameters["regex_matches"][1];
 		$photoData = $facebook->api(
 			$fbid,
@@ -45,37 +43,50 @@ class ParserFacebookPhoto extends ParserAbstract
               'format' => 'json',
             )
 		);
-		$photoQueryError = 0; // replace with real tests for error later.  for now, proceed as if everything's great.
-		if(!$photoQueryError){
-			$item = new Item();
-			$tags = array();
-
-			$item->setArchive('Facebook'); 
-			$item->setMediaType('Image');
-			$item->setLayerType('Image');
-			$item->setChildItemsCount(0);
-
+		// check if response is false
+		if($photoData==false){
+			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this media.  The owner of the image can resolve this by changing the image's privacy settings.");
+		}
+		// check for FB error message
+		if(array_key_exists("error",$photoData)){
+			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
+		}
+		// do FB permissions matter for static image URLs?
+		// if so, we'll need to http get the image and verify the HTTP response 
+		$item = new Item();
+		$tags = array();
+		$item->setArchive('Facebook'); 
+		$item->setMediaType('Image');
+		$item->setLayerType('Image');
+		$item->setChildItemsCount(0);
+		$item->setLicense('All Rights Reserved'); // todo: what are the proper permissions here?
+		if(array_key_exists("name",$photoData)){
 			$item->setTitle($photoData["name"]);
+		}
+		if(array_key_exists("source",$photoData)){
 			$item->setUri($photoData["source"]);
+		}
+		if(array_key_exists("picture",$photoData)){
 			$item->setThumbnailUrl($photoData["picture"]);
+		}
+		if(array_key_exists("link",$photoData)){
 			$item->setAttributionUri($photoData["link"]);
+		}
+		if(array_key_exists("from",$photoData)){
 			$item->setMediaCreatorUsername($photoData["from"]["name"]);
-			$item->setLicense('All Rights Reserved');
+		}
+		if(array_key_exists("created_time",$photoData)){
 			$item->setMediaDateCreated(new DateTime($photoData['created_time']));
-			// lat/lon might exist
-			if(array_key_exists("place", $photoData)){
-				$item->setMediaGeoLatitude($photoData['place']['location']['latitude']);
-				$item->setMediaGeoLongitude($photoData['place']['location']['longitude']);
-			}
-			// tags might exist
-			if(array_key_exists("tags", $photoData)){
-				// loop through $photoData->tags;
-				//$item->setTags($tags);
-			}
-			return $this->returnResponse($item, true, false);
 		}
-		else{
-			return $this->returnResponse(null, false, false);
+		if(array_key_exists("place",$photoData)){
+			$item->setMediaGeoLatitude($photoData['place']['location']['latitude']);
+			$item->setMediaGeoLongitude($photoData['place']['location']['longitude']);
 		}
+		// tags might exist
+		if(array_key_exists("tags", $photoData)){
+			// loop through $photoData->tags;
+			//$item->setTags($tags);
+		}
+		return $this->returnResponse($item, true, false);
 	}
 }
