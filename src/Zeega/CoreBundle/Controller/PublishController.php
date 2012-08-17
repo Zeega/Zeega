@@ -30,26 +30,30 @@ class PublishController extends Controller
         $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame, 'layers'=>$layers));
 
      	return $this->render('ZeegaCoreBundle:Editor:frame.html.twig', array(
-					'frameId'=> $frame->getId(),
-					'frame'=>$frameTemplate,
-					'layers'=>$layers
+			'frameId'=> $frame->getId(),
+			'frame'=>$frameTemplate,
+			'layers'=>$layers
     	));
-     }
+    }
      
     public function projectAction($id)
     {
        
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-		if(is_object($project)&&$project->getMediaType()=='project') $projectData=$project->getText();
-		
-		//Fallback for existing links
-		else $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-       
-       
-       	return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
-       		'project'=>$project,
+    	$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+    	
+        if(is_object($project)&&$project->getMediaType()=='project') 
+        {
+            $projectData=$project->getText();
+        }    	
+    	else  //Fallback for existing links
+        {
+            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+        }
+
+        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
+           	'project'=>$project,
             'project_data' => $projectData,
-     	));
+        ));
     }
      
     public function collectionAction($id)
