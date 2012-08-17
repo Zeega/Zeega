@@ -208,6 +208,7 @@ class ItemsController extends Controller
         }
         
         $item->setEnabled(false);
+        $item->setDateUpdated(new \DateTime("now"));
     	$em->flush();
     	
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
@@ -233,9 +234,7 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
-        $dateUpdated = new \DateTime("now");
-        $dateUpdated->add(new \DateInterval('PT2M'));
-        $item->setDateUpdated($dateUpdated);
+        $item->setDateUpdated(new \DateTime("now"));
 
         $em->flush();
 
@@ -284,10 +283,7 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
-                $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-                
-                $item->setDateUpdated($dateUpdated);
+                $item->setDateUpdated(new \DateTime("now"));
                 $em->persist($item);
                 $em->flush();
             }
@@ -332,10 +328,7 @@ class ItemsController extends Controller
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
-				$dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-				
-				$item->setDateUpdated($dateUpdated);
+				$item->setDateUpdated(new \DateTime("now"));
 		
 				$first = True;
 				$thumbnailUrl = $item->getThumbnailUrl();
@@ -379,9 +372,7 @@ class ItemsController extends Controller
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
 		
-			    $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-			    $item->setDateUpdated($dateUpdated);
+			    $item->setDateUpdated(new \DateTime("now"));
         
                 $em->flush();
 			}

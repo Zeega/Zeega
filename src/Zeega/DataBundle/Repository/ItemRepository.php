@@ -169,6 +169,7 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
+            ->where('i.enabled = true')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
