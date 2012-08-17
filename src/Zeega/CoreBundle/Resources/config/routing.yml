@@ -1,7 +1,3 @@
-sites:
-    type:     rest
-    resource: Zeega\CoreBundle\Controller\SitesController
-
 ZeegaCoreBundle_thumbnails:
     type:     rest
     resource: Zeega\CoreBundle\Controller\ThumbnailsController
