@@ -44,7 +44,8 @@ var bm = new bookmarklet({
         			'position':'fixed',
         			'right': 0,
         			'top':0,
-        			'background-color':'#333',
+        			'background-image':'url("http://zeega.org/images/zeega_clear2.png")',
+        			'background-size':'100% 100%',
         			'width':0,
         			'height':'100%',
         			'opacity':1,
@@ -88,20 +89,19 @@ var bm = new bookmarklet({
         			'right':15,
         			'top' :10,
         			'background-color':'transparent',
-        			'color':'red',
         			'cursor':'pointer',
         			'font-weight':'bold',
         			'z-index':60000,
         			'opacity':1,
-        		}).attr('id','zeega-close').html('<a class="close" style="font-size:24px">&times;</a>');
+        		}).attr('id','zeega-close').html('<span class="zeega-close" style="color:red;font-size:24px">&times;</span>');
 			
-        		overlay.append(cover);
+        		//overlay.append(cover);
         		overlay.append(highlight);
         		overlay.append(close);
 				
         		$('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/widget?url="+this.url+"' />").animate({
         		        'width': 470 }, 500, function() {
-        			        $('#zeega-cover').fadeOut('slow');
+        			        //$('#zeega-cover').fadeOut('slow');
         		});
 		
         		$('#zeega-overlay').droppable({
