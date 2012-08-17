@@ -76,7 +76,10 @@ class ParserFlickrPhoto extends ParserAbstract
 
 			if($info['owner']['username']) $item->setMediaCreatorUsername($info['owner']['username']);
 			else $item->setMediaCreatorUsername($info['owner']['realname']);
-			$item->setMediaCreatorRealname($info['owner']['realname']);
+			if($info['owner']['realname']) $item->setMediaCreatorRealname($info['owner']['realname']);
+			else $item->setMediaCreatorRealname( $item->getMediaCreatorUsername());
+			
+			
 			$attr['creator_nsid']=$info['owner']['nsid'];
 			$item->setTitle($info['title']);
 
