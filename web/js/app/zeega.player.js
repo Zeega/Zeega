@@ -131,34 +131,46 @@ this.zeegaPlayer = {
 		goToFrame : function( frameID )
 		{
 			this.cancelFrameAdvance();
-			if(this.currentFrame) this.currentFrame.unrender();
+			if(this.currentFrame) this.currentFrame.unrender( frameID );
 
-			this.currentFrame = this.frames.get(frameID);
-			console.log('$$		go to frame',frameID, this.currentFrame)
-
-			if(this.currentFrame.status == 'waiting')
+			var frame = this.frames.get(frameID);
+			console.log('%%		frame staged', frame)
+			
+			if(frame.status == 'waiting')
 			{
-				this.currentFrame.on('ready',this.renderFrame, this);
-				this.preloadFrames();
+				frame.on('ready',this.renderFrame, this);
+				this.preloadFrames(frame);
 			}
-			else if( this.currentFrame.status == 'ready' ) this.renderFrame();
+			else if( frame.status = 'ready')
+			{
+				this.renderFrame( frameID );
+			}
+			else if(frame.status == 'loading' && frame.isFrameLoaded())
+			{
+				frame.onFrameLoaded();
+				this.renderFrame( frameID );
+			}
+			
+
+			this.currentFrame = frame;
 		},
 		
-		preloadFrames : function()
+		preloadFrames : function(fr)
 		{
 			var _this = this;
-			_.each( this.currentFrame.framesToPreload, function(frameID){
+			_.each( fr.framesToPreload, function(frameID){
 				var frame = _this.frames.get(frameID);
 				if(frame.status == 'waiting') frame.preload();
 			})
 		},
 		
-		renderFrame : function(id)
+		renderFrame : function(frameID)
 		{
-			console.log('$$		render frame', id)
-			var frame = id ? this.frames.get(id) : this.currentFrame;
-			frame.render();
-			this.setFrameAdvance( id );
+			var frame = this.frames.get(frameID);
+			var fromFrameID = this.currentFrame ? this.currentFrame.id : frameID;
+			console.log('**		render frame', frameID, fromFrameID)
+			frame.render( fromFrameID );
+			this.setFrameAdvance( frameID );
 		},
 		
 		goLeft : function()
@@ -169,7 +181,7 @@ this.zeegaPlayer = {
 		
 		goRight : function()
 		{
-			console.log('$$		go right')
+			console.log('$$		go right', this.currentFrame.id+' - ', this.currentFrame.after+'')
 			if( this.currentFrame.after ) this.goToFrame( this.currentFrame.after );
 		},
 		
@@ -297,25 +309,36 @@ this.zeegaPlayer = {
 			else return true;
 		},
 
-		render : function()
+		render : function( fromFrameID )
 		{
+			console.log('%%		frame render. from frame:',fromFrameID)
+			var _this = this;
 			// display citations
 			$('#citation-tray').html( this.citationView.render().el );
 			
 			// update arrows
 			this.updateArrows();
 			
-			// draw layer media
-			_.each( _.toArray(this.layers), function(layer){
-				console.log('$$		trigger layer to play', layer.id, layer)
-				layer.trigger('player_play');
+			var layersToRender = _.without( this.get('layers'), this.commonLayers[fromFrameID] );
+			console.log('$$		frames to render', layersToRender, this.commonLayers[fromFrameID])
+
+			// draw and update layer media
+			_.each( this.get('layers'), function(layerID,z){
+				var layer = _this.layers.get(layerID)
+				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );
+				else layer.trigger('player_play', z );
 			})
+
 		},
 
-		unrender : function()
+		unrender : function( toFrameID )
 		{
-			_.each( _.toArray(this.layers), function(layer){
-				layer.trigger('player_exit');
+			var _this = this;
+			var layersToUnrender = _.without( this.get('layers'), this.commonLayers[toFrameID] );
+			console.log('%%		on frame unrender', layersToUnrender);
+			_.each( layersToUnrender, function(layerID){
+				_this.layers.get( layerID ).trigger('player_exit');
+				console.log('%%		on layer unrender', layerID);
 			})
 		},
 		
@@ -380,12 +403,26 @@ this.zeegaPlayer = {
 					var before = zeegaPlayer.app.project.frames.get(frameID).before;
 					var after = zeegaPlayer.app.project.frames.get(frameID).after;
 					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;
-					// not preloading links in for now because there's no way to get to those frames
+					var linksIn = zeegaPlayer.app.project.frames.get(frameID).linksIn;
+
 					targetArray = _.compact([before,after]);
-					_this.framesToPreload = _.union(_this.framesToPreload,targetArray,linksOut);
+					_this.framesToPreload = _.union(_this.framesToPreload,targetArray,linksOut, linksIn);
 				})
 			}
 			this.framesToPreload = _.uniq(this.framesToPreload);
+
+			this.setCommonLayers();
+		},
+
+		// pre-determine common layers between this frame an all connected frames
+		setCommonLayers : function()
+		{
+			var _this = this;
+			this.commonLayers = {};
+			_.each( this.framesToPreload, function(frameID){
+				if( _this.id != frameID)
+					_this.commonLayers[frameID] = _.intersection( zeegaPlayer.app.project.frames.get(frameID).get('layers'), _this.get('layers') );
+			})
 		},
 		
 		getLinks : function()

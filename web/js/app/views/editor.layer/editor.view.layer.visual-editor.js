@@ -206,15 +206,16 @@
 		
 		private_onPlay : function( z )
 		{
-			
 			if(!this.onStage){
 				this.onStage=true;
 				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
 			}
-			
 			this.moveOnStage();
+
 			if(z) this.updateZIndex( z )
+
 			if(this.model.status != 'error' ) this.onPlay();
+
 			this.model.inFocus = true;
 			
 			//dissolve
