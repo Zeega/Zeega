@@ -35,12 +35,13 @@ this.zeegaPlayer = {
 	
 	initialize : function( data, initialState )
 	{
-		this.parseProject(data);
-		
-		var frameID = this.project.sequences.at(0).frames.at(0).id;
-		if( _.isUndefined(initialState.frameID) ) initialState.frameID;
+		var initial = initialState || {};
 
-		this.project.goToFrame( frameID )
+		this.parseProject(data);
+
+		_.defaults( initial, {frameID:this.project.sequences.at(0).frames.at(0).id})
+		console.log('%%		start player at', initial)
+		this.project.goToFrame( initial.frameID );
 	},
 	
 	parseProject : function(data)
@@ -298,8 +299,6 @@ this.zeegaPlayer = {
 
 		render : function()
 		{
-				console.log('$$		frame is rendering', this.id)
-
 			// display citations
 			$('#citation-tray').html( this.citationView.render().el );
 			
@@ -308,6 +307,7 @@ this.zeegaPlayer = {
 			
 			// draw layer media
 			_.each( _.toArray(this.layers), function(layer){
+				console.log('$$		trigger layer to play', layer.id, layer)
 				layer.trigger('player_play');
 			})
 		},
@@ -1085,7 +1085,11 @@ var Player2 = Backbone.View.extend({
 		}
 	},
 	
-	
+	playPause : function()
+	{
+		// should pause 
+	},
+
 	goLeft : function()
 	{
 		var frame = this.getLeft();

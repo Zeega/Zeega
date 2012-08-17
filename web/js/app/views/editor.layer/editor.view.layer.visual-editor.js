@@ -133,7 +133,6 @@
 		
 		private_onLayerEnter : function()
 		{
-			console.log('	@@@		on layer enter')
 			if(this.draggable) this.makeDraggable();
 			this.onLayerEnter();
 		},
@@ -207,10 +206,12 @@
 		
 		private_onPlay : function( z )
 		{
+			
 			if(!this.onStage){
 				this.onStage=true;
 				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
 			}
+			
 			this.moveOnStage();
 			if(z) this.updateZIndex( z )
 			if(this.model.status != 'error' ) this.onPlay();
@@ -218,7 +219,6 @@
 			
 			//dissolve
 			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
-					
 			
 			//make the linked layers blink on entrance
 			if(this.attr.link || this.model.get('type') == 'Link')

@@ -175,10 +175,11 @@
 				_this.$el.spin(false);
 				
 				_this.model.can_play = true;
-				_this.model.trigger('ready', _this.model.id ) ;
 				
 				_this.popcorn.play();
 				_this.popcorn.pause();
+
+				_this.model.trigger('ready', _this.model.id ) ;
 				
 				if(_this.model.get('attr').fade_in==0) _this.volume(_this.model.get('attr').volume);
 			});

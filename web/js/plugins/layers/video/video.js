@@ -269,14 +269,12 @@
 			
 			if(this.model.get('attr').fade_in>0 && t<f)
 			{
-				//console.log("fading in");
 				var vol =this.model.get('attr').volume*(1.0-((f-t)/this.model.get('attr').fade_in)*((f-t)/this.model.get('attr').fade_in));
 				this.model.player.setVolume(vol);
 			}
 			
 			else if(this.model.get('attr').fade_out>0 && t>g)
 			{
-				//console.log("fading out");
 				var vol =this.model.get('attr').volume*(1.0-((t-g)/this.model.get('attr').fade_out))*(1.0-((t-g)/this.model.get('attr').fade_out));
 				this.model.player.setVolume(vol);
 			}
@@ -312,7 +310,7 @@
 		
 		onPlay : function()
 		{
-			console.log('@@		video layer on play')
+			var _this = this;
 			this.model.player.play();
 		},
 		
