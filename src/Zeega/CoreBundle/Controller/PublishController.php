@@ -5,6 +5,7 @@ namespace Zeega\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
+use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
@@ -46,9 +47,9 @@ class PublishController extends Controller
     public function collectionAction($id)
     {
         $projectData = $this->forward('ZeegaApiBundle:Items:getItemProject', array("id" => $id))->getContent();
-        
+        $project = new Project();
         return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
-            'projectId'=>0,
+            'project'=>$project,
             'project_data'=>$projectData,
         ));
     }
