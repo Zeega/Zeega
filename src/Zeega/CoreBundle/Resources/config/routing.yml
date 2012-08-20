@@ -26,7 +26,7 @@ ZeegaCoreBundle_embed:
     pattern: /{id}/embed
     defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
 
-ZeegaCoreBundle_embed:
+ZeegaCoreBundle_project_main:
     pattern: /{id}
     defaults: { _controller:  ZeegaCoreBundle:Publish:project }
 
