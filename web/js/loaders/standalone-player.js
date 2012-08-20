@@ -29,6 +29,7 @@ require(
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	
+	'order!lib/imagesloaded/jquery.imagesloaded',
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
 	'order!lib/popcorn-flash',
