@@ -242,10 +242,13 @@ this.zeegaPlayer = {
 			if( adv > 0) //after n milliseconds
 			{
 				var _this = this;
+				this.autoAdvance = true;
 				this.elapsedTime = 0;
 				this.timerStarted = new Date(); 
 				this.timer = setTimeout( function(){ _this.goRight() },adv )
 			}
+			else this.autoAdvance = false;
+
 		},
 		
 		cancelFrameAdvance : function()
@@ -624,10 +627,10 @@ this.zeegaPlayer = {
 						if(_this.model.editor) _this.exit(); //don't close if standalone player
 						break;
 					case 37:
-						_this.goLeft();
+						if( _this.model.autoAdvance != true ) _this.goLeft();
 						break;
 					case 39:
-						_this.goRight();
+						if( _this.model.autoAdvance != true ) _this.goRight();
 						break;
 					case 32:
 						_this.playPause();
