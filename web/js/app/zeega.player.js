@@ -106,7 +106,6 @@ this.zeegaPlayer = {
 			
 			this.renderPlayer();
 
-			console.log('$$		inited', this, this.layers)
 		},
 		
 		load : function()
@@ -135,7 +134,6 @@ this.zeegaPlayer = {
 			if(this.currentFrame) this.currentFrame.unrender( frameID );
 
 			var frame = this.frames.get(frameID);
-			console.log('%%		frame staged', frame)
 			
 			if(frame.status == 'waiting')
 			{
@@ -170,20 +168,17 @@ this.zeegaPlayer = {
 		{
 			var frame = this.frames.get(frameID);
 			var fromFrameID = this.currentFrame ? this.currentFrame.id : frameID;
-			console.log('**		render frame', frameID, fromFrameID)
 			frame.render( fromFrameID );
 			this.setFrameAdvance( frameID );
 		},
 		
 		goLeft : function()
 		{
-			console.log('$$		go left')
 			if( this.currentFrame.before ) this.goToFrame( this.currentFrame.before );
 		},
 		
 		goRight : function()
 		{
-			console.log('$$		go right', this.currentFrame.id+' - ', this.currentFrame.after+'')
 			if( this.currentFrame.after ) this.goToFrame( this.currentFrame.after );
 		},
 		
@@ -268,7 +263,6 @@ this.zeegaPlayer = {
 			_.each( _.toArray(this.layers), function(layer){
 				if(layer.status == 'waiting')
 				{
-					console.log('$$		actually preloading layer',layer)
 					$('#preview-media').append( layer.visual.render().el );
 					layer.on('ready', _this.onLayerReady, _this);
 					layer.on('error', _this.onLayerError, _this);
@@ -281,7 +275,6 @@ this.zeegaPlayer = {
 		
 		onLayerReady : function(id)
 		{
-			console.log('$$		on layer ready', id);
 			var layer = this.layers.get(id);
 			layer.off('ready');
 			layer.status = 'ready'; // move this to the layer model?
@@ -293,7 +286,6 @@ this.zeegaPlayer = {
 
 		onLayerError : function(id)
 		{
-			console.log('$$		on layer error', id);
 			var layer = this.layers.get(id);
 			layer.off('error');
 
@@ -305,7 +297,6 @@ this.zeegaPlayer = {
 
 		onFrameLoaded : function()
 		{
-			console.log('$$		frame is loaded', this.id)
 			this.status = 'ready';
 			this.trigger('ready',this.id);
 		},
@@ -319,7 +310,6 @@ this.zeegaPlayer = {
 
 		render : function( fromFrameID )
 		{
-			console.log('%%		frame render. from frame:',fromFrameID)
 			var _this = this;
 			// display citations
 			$('#citation-tray').html( this.citationView.render().el );
@@ -328,7 +318,6 @@ this.zeegaPlayer = {
 			this.updateArrows();
 			
 			var layersToRender = _.without( this.get('layers'), this.commonLayers[fromFrameID] );
-			console.log('$$		frames to render', layersToRender, this.commonLayers[fromFrameID])
 
 			// draw and update layer media
 			_.each( this.get('layers'), function(layerID,z){
@@ -343,10 +332,8 @@ this.zeegaPlayer = {
 		{
 			var _this = this;
 			var layersToUnrender = _.without( this.get('layers'), this.commonLayers[toFrameID] );
-			console.log('%%		on frame unrender', layersToUnrender);
 			_.each( layersToUnrender, function(layerID){
 				_this.layers.get( layerID ).trigger('player_exit');
-				console.log('%%		on layer unrender', layerID);
 			})
 		},
 
@@ -535,7 +522,6 @@ this.zeegaPlayer = {
 		
 		render : function()
 		{
-			console.log('##		render', this)
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
 
 			var viewWidth = window.innerWidth;
