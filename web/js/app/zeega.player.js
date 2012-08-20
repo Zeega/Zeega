@@ -808,8 +808,8 @@ this.zeegaPlayer = {
 		
 		fadeOut : function()
 		{
-			var _view = this;
-			$(this.el).fadeOut('slow', function(){ _view.remove() });
+			var _this = this;
+			$(this.el).fadeOut('slow', function(){ _this.remove() });
 		},
 
 		getTemplate : function()
