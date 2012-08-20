@@ -41,7 +41,6 @@ this.zeegaPlayer = {
 		this.parseProject(data);
 		_.defaults( initial, { frameID:this.project.sequences.at(0).frames.at(0).id, mode: 'standalone' })
 
-		console.log('%%%% initial', initial, this)
 		console.log('%%		start player at', initial)
 
 		this.project.renderPlayer();
@@ -752,7 +751,6 @@ this.zeegaPlayer = {
 
 		getTemplate : function()
 		{
-				console.log('%%%%		mode', zeegaPlayer.app.mode)
 			html =
 
 				"<div class='player-header player-overlay'>";
