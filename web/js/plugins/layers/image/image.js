@@ -67,6 +67,7 @@
 		{
 			var img = $('<img>')
 				.attr('src', this.attr.uri)
+				.attr('src', 'dong.png')
 				.css({'width':'100%'});
 
 			$(this.el).html( img );
@@ -77,13 +78,15 @@
 		onPreload : function()
 		{
 			var _this = this;
-			this.$el.find('img').load(function(){
+
+			var img = this.$el.imagesLoaded();
+			img.done(function(){
 				_this.model.trigger('ready',_this.model.id);
-			})
-			.error(function(){
-				_this.model.status = 'error';
-				_this.model.trigger('load_error',_this.model.id);
 			});
+			img.fail(function(){
+				_this.model.trigger('error',_this.model.id);
+			});
+
 		}
 	});
 

@@ -41,7 +41,7 @@ require(
     'order!app/zeega.player',
 
 	//plugins
-	'order!lib/imagesloaded/jquery.imagesloaded.js',
+	'order!lib/imagesloaded/jquery.imagesloaded',
 	'order!lib/jquery/plugins/spin',
 	'order!lib/jquery/plugins/jeditable.min',
 	'order!lib/jquery/plugins/jquery-cycle',
