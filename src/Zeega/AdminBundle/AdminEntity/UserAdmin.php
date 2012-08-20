@@ -21,7 +21,7 @@ class UserAdmin extends Admin
 			->add('thumb_url')
 			->add('email')
 			->add('email')
-			->add('sites', 'entity', array('class' => 'Zeega\DataBundle\Entity\Site', 'multiple' => true, 'property' => 'short'))
+            ->add('sites', 'entity', array('class' => 'Zeega\DataBundle\Entity\Site', 'multiple' => true, 'property' => 'short'))
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
     }
@@ -51,6 +51,7 @@ class UserAdmin extends Admin
             ->add('created_at','datetime')
 			->add('last_login','datetime')
 			->add('locked')
+            ->add('idea')
         ;
     }
 
