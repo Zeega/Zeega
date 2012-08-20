@@ -68,13 +68,13 @@
     		
     			
     			
-    			docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'project/'+this.model.id+'/view');
+    			docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +this.model.id);
 					
 				if (docElm.requestFullscreen) docElm.requestFullscreen();
 				else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
 				else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
 				else{
-					document.getElementById('zeega-link').setAttribute('href',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'project/'+this.model.id+'/view');
+					document.getElementById('zeega-link').setAttribute('href',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +this.model.id);
 					document.getElementById('zeega-link').setAttribute('target','blank');
 					document.getElementById('zeega-link').setAttribute('onclick','');
 				

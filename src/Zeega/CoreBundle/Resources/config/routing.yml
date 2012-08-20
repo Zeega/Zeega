@@ -23,7 +23,11 @@ ZeegaCoreBundle_collection_publish:
     defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
     
 ZeegaCoreBundle_embed:
-    pattern: /{id}
+    pattern: /{id}/embed
     defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
+
+ZeegaCoreBundle_embed:
+    pattern: /{id}
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
 
     
