@@ -115,14 +115,16 @@ class ParserFacebookSet extends ParserAbstract
 			$item->setMediaType('Image');
 			$item->setLayerType('Image');
 			$item->setChildItemsCount(0);
+			$item->setLicense('All Rights Reserved');// todo: what are the proper permissions here?
 
-			$item->setTitle($photoData['name']);
-			//$item->setDescription($photoData['name']);
+			if(array_key_exists("name",$photoData)){
+				$item->setTitle($photoData["name"]);
+			}
+
 			$item->setUri($photoData['source']);
 			$item->setThumbnailUrl($photoData['picture']);
 			$item->setAttributionUri($photoData['link']);
 			$item->setMediaCreatorUsername($photoData['from']['name']);
-			$item->setLicense('All Rights Reserved');
 			$item->setMediaDateCreated(new DateTime($photoData['created_time']));
 			// lat/lon might exist
 			if(array_key_exists("place", $photoData)){
@@ -133,6 +135,33 @@ class ParserFacebookSet extends ParserAbstract
 			if(array_key_exists("tags", $photoData)){
 				// loop through $photoData['tags'];
 				//$item->setTags($tags);
+			}
+			if(array_key_exists("source",$photoData)){
+				$item->setUri($photoData["source"]);
+			}
+			if(array_key_exists("picture",$photoData)){
+				$item->setThumbnailUrl($photoData["picture"]);
+			}
+			if(array_key_exists("link",$photoData)){
+				$item->setAttributionUri($photoData["link"]);
+			}
+			if(array_key_exists("from",$photoData)){
+				$item->setMediaCreatorUsername($photoData["from"]["name"]);
+			}
+			if(array_key_exists("created_time",$photoData)){
+				$item->setMediaDateCreated(new DateTime($photoData['created_time']));
+			}
+			if(array_key_exists("place",$photoData)){
+				$item->setMediaGeoLatitude($photoData['place']['location']['latitude']);
+				$item->setMediaGeoLongitude($photoData['place']['location']['longitude']);
+			}
+			// tags might exist
+			if(array_key_exists("tags", $photoData)){
+				$tags = array();
+				foreach($photoData['tags']['data'] as $fb_tag){
+					array_push($tags, $fb_tag['name']);
+				}
+				$item->setTags($tags);
 			}
 	    	$collection->addItem($item);
     	}

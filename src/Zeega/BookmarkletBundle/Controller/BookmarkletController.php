@@ -65,7 +65,6 @@ class BookmarkletController extends Controller
 			$isUrlCollection = $parserResponse["request"]["is_set"];
 			$message = $parserResponse["request"]["message"];
 			$items = $parserResponse["items"];
-		
 			if($isUrlValid && count($items) > 0)
 			{	
 				$parsedItem = $items[0];
@@ -157,7 +156,6 @@ class BookmarkletController extends Controller
 					);						
 				}
 			}
-	
 		}
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),

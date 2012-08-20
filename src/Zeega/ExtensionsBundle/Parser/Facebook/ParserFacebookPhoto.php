@@ -31,7 +31,7 @@ class ParserFacebookPhoto extends ParserAbstract
 	    	
 			$item->setChildItemsCount(-1);
 	    	
-			return $this->returnResponse($item, true, false);
+			return $this->returnResponse($item, true, false, "You do not appear to be signed into Facebook.");
 	    	
 		}
 	    $fbid = $parameters["regex_matches"][1];
@@ -84,8 +84,11 @@ class ParserFacebookPhoto extends ParserAbstract
 		}
 		// tags might exist
 		if(array_key_exists("tags", $photoData)){
-			// loop through $photoData->tags;
-			//$item->setTags($tags);
+			$tags = array();
+			foreach($photoData['tags']['data'] as $fb_tag){
+				array_push($tags, $fb_tag['name']);
+			}
+			$item->setTags($tags);
 		}
 		return $this->returnResponse($item, true, false);
 	}
