@@ -26,6 +26,7 @@
     	
     		loaded:false,
     		requestFS:function(){
+				return true;
     			if(!this.loaded){
     				this.loaded=true;
     				var docElm= document.createElement('iframe');
@@ -82,7 +83,7 @@
 
 	<body id="zeega-embed" >
 		
-		<a id="zeega-link" href="#" onclick="javascript:zeegaEmbed.requestFS()" ></a>
+		<a id="zeega-link" href="{{hostname}}{{directory}}project/{{projectId}}/view" onclick="javascript:zeegaEmbed.requestFS()" ></a>
 		<div id="text">
 			<h1>{{project.getTitle()}}</h1>
 			{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>

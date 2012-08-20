@@ -512,7 +512,7 @@ this.zeega = {
 		
 		
 		this.Player = zeegaPlayer.app;
-		this.Player.initialize( this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } )
+		this.Player.initialize( this.exportProject(), {mode: 'editor', frameID : parseInt(this.currentFrame.id) } )
 		
 		/*
 		this.player = new Player2($('body'));

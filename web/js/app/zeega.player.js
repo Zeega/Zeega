@@ -31,16 +31,22 @@ this.zeegaPlayer = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
-	zeega : true,
+	mode : 'standalone',
 	
 	initialize : function( data, initialState )
 	{
 		var initial = initialState || {};
+		this.mode = initial.mode;
 
 		this.parseProject(data);
+		_.defaults( initial, { frameID:this.project.sequences.at(0).frames.at(0).id, mode: 'standalone' })
 
-		_.defaults( initial, {frameID:this.project.sequences.at(0).frames.at(0).id})
+		console.log('%%%% initial', initial, this)
 		console.log('%%		start player at', initial)
+
+		this.project.renderPlayer();
+
+
 		//this.startRouter();
 		this.project.goToFrame( initial.frameID );
 	},
@@ -56,8 +62,9 @@ this.zeegaPlayer = {
 	
 	exit : function()
 	{
-		if(!this.zeega) clearInterval(this.fsCheck);
 		var _this = this;
+
+		if( this.mode != 'editor') clearInterval(this.fsCheck);
 
 		if(document.exitFullscreen)				document.exitFullscreen();
 		else if (document.mozCancelFullScreen)		document.mozCancelFullScreen();
@@ -66,7 +73,7 @@ this.zeegaPlayer = {
 		// remove the player div
 		this.project.unrenderPlayer();
 
-		if(this.zeega) zeega.app.restoreFromPreview();
+		if(this.mode == 'editor') zeega.app.restoreFromPreview();
 		return false;
 	},
 
@@ -126,8 +133,6 @@ this.zeegaPlayer = {
 			this.unset('frames');
 			this.unset('layers');
 			
-			this.renderPlayer();
-
 		},
 		
 		load : function()
@@ -147,6 +152,7 @@ this.zeegaPlayer = {
 		unrenderPlayer : function()
 		{
 			var _this = this;
+			this.currentFrame.unrender();
 			this.playerView.$el.fadeOut( 450, function(){ _this.playerView.remove() });
 		},
 		
@@ -583,6 +589,7 @@ this.zeegaPlayer = {
 
 	Player.View = Backbone.View.extend({
 		
+		isFullscreen : false,
 		overlaysVisible : true,
 		viewportRatio : 1.5,
 
@@ -694,11 +701,14 @@ this.zeegaPlayer = {
 			'click #preview-close' : 'exit',
 			'click #preview-left' : 'goLeft',
 			'click #preview-right' : 'goRight',
+
+			'click .fullscreen' : 'toggleFullscreen',
 		},
 		
 		exit : function()
 		{
 			this.unsetListeners();
+			if(this.isFullscreen) this.leaveFullscreen();
 			zeegaPlayer.app.exit();
 			return false;
 		},
@@ -711,15 +721,48 @@ this.zeegaPlayer = {
 			this.model.playPause();
 		},
 
+		toggleFullscreen : function()
+		{
+			if(this.isFullscreen) this.leaveFullscreen();
+			else this.goFullscreen();
+			return false;
+		},
+
+		goFullscreen : function()
+		{
+			this.isFullscreen = true;
+			docElm = document.getElementById('zeega-player');
+					
+			if (docElm.requestFullscreen) docElm.requestFullscreen();
+			else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
+			else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
+
+			this.$el.find('.zicon-go-fullscreen').removeClass('zicon-go-fullscreen').addClass('zicon-exit-fullscreen');
+		},
+
+		leaveFullscreen : function()
+		{
+			this.isFullscreen = false;
+			if (document.exitFullscreen) 				document.exitFullscreen();
+			else if (document.mozCancelFullScreen) 		document.mozCancelFullScreen();
+			else if (document.webkitCancelFullScreen) 	document.webkitCancelFullScreen();
+
+			this.$el.find('.zicon-exit-fullscreen').removeClass('zicon-exit-fullscreen').addClass('zicon-go-fullscreen');
+		},
+
 		getTemplate : function()
 		{
+				console.log('%%%%		mode', zeegaPlayer.app.mode)
 			html =
-			
+
 				"<div class='player-header player-overlay'>";
-				if(this.zeega||true) html +=
+				if( zeegaPlayer.app.mode != 'standalone' ) html +=
 					"<a id='preview-close' class='close pull-right' href='' >&times;</a>";
 
-				if( !this.zeega )
+				if( zeegaPlayer.app.mode != 'embed' ) html +=
+					"<a href='#' class='fullscreen pull-right' target='blank'><i class='zicon-go-fullscreen'></i></a>";
+
+				if( zeegaPlayer.app.mode != 'editor' )
 				{
 					html +=
 					"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %>&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
