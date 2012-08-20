@@ -67,7 +67,6 @@
 		{
 			var img = $('<img>')
 				.attr('src', this.attr.uri)
-				.attr('src', 'dong.png')
 				.css({'width':'100%'});
 
 			$(this.el).html( img );
