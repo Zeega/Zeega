@@ -85,7 +85,8 @@ this.zeegaPlayer = {
 		
 		editor : true,
 		PRELOAD_ON_SEQUENCE : 2, // will preload n frames ahead/behind in sequence
-		
+		DELAY_AFTER_LOAD : 1000,
+
 		initialize : function()
 		{
 			var Layer = zeega.module('layer');
@@ -139,13 +140,14 @@ this.zeegaPlayer = {
 			if(frame.status == 'waiting')
 			{
 				frame.on('ready',this.renderFrame, this);
+				frame.renderLoader();
 				this.preloadFrames(frame);
 			}
 			else if( frame.status = 'ready')
 			{
 				this.renderFrame( frameID );
 			}
-			else if(frame.status == 'loading' && frame.isFrameLoaded())
+			else if(frame.status == 'loading' && frame.isLoaded())
 			{
 				frame.onFrameLoaded();
 				this.renderFrame( frameID );
@@ -283,7 +285,10 @@ this.zeegaPlayer = {
 			var layer = this.layers.get(id);
 			layer.off('ready');
 			layer.status = 'ready'; // move this to the layer model?
-			if( this.isFrameLoaded() ) this.onFrameLoaded();
+
+			this.loaderView.onLayerUpdate( id, 'ready' );
+
+			if( this.isLoaded() ) this.onFrameLoaded();
 		},
 
 		onLayerError : function(id)
@@ -291,8 +296,11 @@ this.zeegaPlayer = {
 			console.log('$$		on layer error', id);
 			var layer = this.layers.get(id);
 			layer.off('error');
+
+			this.loaderView.onLayerUpdate( id, 'error' );
+
 			layer.status = 'error'; // move this to the layer model?
-			if( this.isFrameLoaded() ) this.onFrameLoaded();
+			if( this.isLoaded() ) this.onFrameLoaded();
 		},
 
 		onFrameLoaded : function()
@@ -302,7 +310,7 @@ this.zeegaPlayer = {
 			this.trigger('ready',this.id);
 		},
 
-		isFrameLoaded : function()
+		isLoaded : function()
 		{
 			var statusArray = _.map(_.toArray(this.layers),function(layer){ return layer.status });
 			if( _.include(statusArray,'loading') || _.include(statusArray,'waiting') ) return false;
@@ -340,6 +348,11 @@ this.zeegaPlayer = {
 				_this.layers.get( layerID ).trigger('player_exit');
 				console.log('%%		on layer unrender', layerID);
 			})
+		},
+
+		renderLoader : function()
+		{
+			$('#loader-tray').html( this.loaderView.render().el );
 		},
 		
 		load : function()
@@ -668,6 +681,7 @@ this.zeegaPlayer = {
 					"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
 				"</div>"+
 				"<div id='preview-media'></div>"+
+				"<div id='loader-tray' class=''></div>";
 				"<div id='citation-tray' class='player-overlay'></div>";
 
 			return html;
@@ -762,6 +776,56 @@ this.zeegaPlayer = {
 	
 	Player.LoaderView = Backbone.View.extend({
 		
+		className : 'progress-bar',
+		loadedCount : 0,
+
+		render : function()
+		{
+			var _this = this;
+			this.$el.html( _.template(this.getTemplate(), zeegaPlayer.app.project.toJSON() ) );
+
+			this.$el.find('.progress-types ul').empty();
+			_.each( _.toArray(this.model.layers), function(layer){
+				
+				if( layer.displayCitation != false && layer.get('type') != 'Link' )
+				{
+					if(layer.get('attr').archive=="Dropbox") var itemType = layer.get('type').toLowerCase();
+					else var itemType = ( layer.get('attr').archive) ? layer.get('attr').archive.toLowerCase() : layer.get('type').toLowerCase();
+					
+					_this.$el.find('.progress-types ul').append('<li class="layer-load-icon-'+ layer.id +'"><i class="zitem-'+ itemType +'"></i></li>')
+				}
+			})
+
+			this.$el.find('.bar')
+				.stop()
+				.animate({width : 0.25/this.model.get('layers').length * 100 +'%' },200)
+				.animate({width : 0.75/this.model.get('layers').length * 100 +'%' },100000)
+
+			return this;
+		},
+		
+		onLayerUpdate : function( layerID, status )
+		{
+			var _this = this;
+			
+			this.loadedCount++;
+			if(status == 'ready') this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('loaded');
+			else this.$el.find('.layer-load-icon-'+ layerID +' i').addClass('error');
+			
+			$(this.el).find('.bar')
+				.stop()
+				.animate({width : this.loadedCount/this.model.get('layers').length * 100 +'%' },2000)
+				.animate({width : this.loadedCount*1.5/this.model.get('layers').length * 100 +'%' },100000);
+			
+			if(this.model.isLoaded() ) this.fadeOut();
+		},
+		
+		fadeOut : function()
+		{
+			var _view = this;
+			$(this.el).fadeOut('slow', function(){ _view.remove() });
+		},
+
 		getTemplate : function()
 		{
 			html =
@@ -777,12 +841,6 @@ this.zeegaPlayer = {
 					"<ul></ul>"+
 				"</div>";
 			
-			/*
-				'<div class="loader">'+
-					'<div class="progress"></div>'+
-				'</div>'+
-				'<div class="loader-text">loaded <span class="loaded-count">0</span> out of <span class="total-count"><%= layers.length %></span> items</div>';
-			*/
 			return html;
 		}
 	});
