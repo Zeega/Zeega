@@ -27,7 +27,6 @@
     		loaded : false,
     		requestFS : function()
 			{
-				return true;
     			if(!this.loaded)
 				{
     				this.loaded = true;
@@ -44,7 +43,7 @@
 				else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
 				else
 				{
-					document.getElementById('zeega-link').setAttribute('href','{{hostname}}{{directory}}project/{{projectId}}/view');
+					document.getElementById('zeega-link').setAttribute('href','{{hostname}}{{directory}}{{projectId}}');
 					document.getElementById('zeega-link').setAttribute('target','blank');
 					document.getElementById('zeega-link').setAttribute('onclick','');
 				}
