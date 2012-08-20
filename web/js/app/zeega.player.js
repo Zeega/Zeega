@@ -41,6 +41,7 @@ this.zeegaPlayer = {
 
 		_.defaults( initial, {frameID:this.project.sequences.at(0).frames.at(0).id})
 		console.log('%%		start player at', initial)
+		this.startRouter();
 		this.project.goToFrame( initial.frameID );
 	},
 	
@@ -67,6 +68,27 @@ this.zeegaPlayer = {
 
 		if(this.zeega) zeega.app.restoreFromPreview();
 		return false;
+	},
+
+	startRouter: function()
+	{
+		var _this = this;
+		Backbone.history.stop();
+		var Router = Backbone.Router.extend({
+
+			routes : {
+				'/frame/:frameID/player' : 'goToFrame'
+			},
+
+			goToFrame : function( frameID )
+			{
+				console.log('$$		go to frame in router', frameID)
+				_this.project.goToFrame(frameID)
+			}
+
+		});
+		this.router = new Router();
+		Backbone.history.start();
 	},
 	
 	
@@ -130,6 +152,7 @@ this.zeegaPlayer = {
 		
 		goToFrame : function( frameID )
 		{
+			console.log('$$		go to frame:',frameID)
 			this.cancelFrameAdvance();
 			if(this.currentFrame) this.currentFrame.unrender( frameID );
 
@@ -152,6 +175,7 @@ this.zeegaPlayer = {
 			}
 			
 
+			//zeegaPlayer.app.router.navigate('/frame/'+ frameID +'/player' );
 			this.currentFrame = frame;
 		},
 		
