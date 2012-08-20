@@ -14,7 +14,7 @@ var less = require('less'),
                 		    output: '../../zeega.community.css'
                 		},
                 		{
-                		    input: '../player/',
+                		    input: '../standalone_player/',
                 		    output: '../../zeega.player.css'
                 		},
                 	];
