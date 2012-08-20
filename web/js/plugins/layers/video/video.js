@@ -310,8 +310,12 @@
 		
 		onPlay : function()
 		{
-			var _this = this;
 			this.model.player.play();
+		},
+
+		onPause : function()
+		{
+			this.model.player.pause();
 		},
 		
 		onExit : function()

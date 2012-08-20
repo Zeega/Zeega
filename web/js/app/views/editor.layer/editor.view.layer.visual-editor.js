@@ -117,6 +117,23 @@
 				});
 				return this;
 		},
+
+		playPause : function()
+		{
+			console.log('$$		play pause status', this.isPlaying)
+			if( this.isPlaying )
+			{
+				this.isPlaying = false;
+				this.onPause();
+			}
+			else
+			{
+				this.isPlaying = true;
+				this.onPlay()
+			}
+		},
+
+		onPause : function(){},
 		
 		onPlay : function(){},
 		
@@ -206,7 +223,9 @@
 		
 		private_onPlay : function( z )
 		{
-			if(!this.onStage){
+			this.isPlaying = true;
+			if(!this.onStage)
+			{
 				this.onStage=true;
 				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
 			}
@@ -232,6 +251,7 @@
 		
 		private_onExit : function()
 		{
+			this.isPlaying = false;
 			this.moveOffStage();
 			this.onStage=false;
 			this.onExit();

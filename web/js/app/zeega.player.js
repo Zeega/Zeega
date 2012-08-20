@@ -41,7 +41,7 @@ this.zeegaPlayer = {
 
 		_.defaults( initial, {frameID:this.project.sequences.at(0).frames.at(0).id})
 		console.log('%%		start player at', initial)
-		this.startRouter();
+		//this.startRouter();
 		this.project.goToFrame( initial.frameID );
 	},
 	
@@ -205,6 +205,33 @@ this.zeegaPlayer = {
 		{
 			if( this.currentFrame.after ) this.goToFrame( this.currentFrame.after );
 		},
+
+		/*
+			play and pause layer media
+			also will pick up and reset the timer for layers that have advance attributes set.
+		*/
+		playPause : function()
+		{
+			if( this.timer )
+			{
+				var _this = this;
+				if(this.currentFrame.isPlaying)
+				{
+
+					this.cancelFrameAdvance();
+					var now = new Date();
+					var et = new Date( now - this.timerStarted );
+					this.elapsedTime += et.getTime();
+				}
+				else
+				{
+					var remainingTime = this.currentFrame.get('attr').advance - this.elapsedTime;
+					this.timerStarted = new Date(); 
+					this.timer = setTimeout( function(){ _this.goRight() },remainingTime )
+				}
+			}
+			this.currentFrame.playPause();
+		},
 		
 		setFrameAdvance : function( id )
 		{
@@ -215,6 +242,8 @@ this.zeegaPlayer = {
 			if( adv > 0) //after n milliseconds
 			{
 				var _this = this;
+				this.elapsedTime = 0;
+				this.timerStarted = new Date(); 
 				this.timer = setTimeout( function(){ _this.goRight() },adv )
 			}
 		},
@@ -325,6 +354,14 @@ this.zeegaPlayer = {
 			this.trigger('ready',this.id);
 		},
 
+		playPause : function()
+		{
+			this.isPlaying = !this.isPlaying;
+			_.each( _.toArray(this.layers), function(layer){
+				layer.visual.playPause();
+			})
+		},
+
 		isLoaded : function()
 		{
 			var statusArray = _.map(_.toArray(this.layers),function(layer){ return layer.status });
@@ -335,6 +372,8 @@ this.zeegaPlayer = {
 		render : function( fromFrameID )
 		{
 			var _this = this;
+			this.isPlaying = true;
+
 			// display citations
 			$('#citation-tray').html( this.citationView.render().el );
 			
@@ -355,6 +394,8 @@ this.zeegaPlayer = {
 		unrender : function( toFrameID )
 		{
 			var _this = this;
+			this.isPlaying = false;
+
 			var layersToUnrender = _.without( this.get('layers'), this.commonLayers[toFrameID] );
 			_.each( layersToUnrender, function(layerID){
 				_this.layers.get( layerID ).trigger('player_exit');
@@ -662,6 +703,11 @@ this.zeegaPlayer = {
 		goLeft : function(){ this.model.goLeft() },
 		goRight : function(){ this.model.goRight() },
 		
+		playPause : function()
+		{
+			this.model.playPause();
+		},
+
 		getTemplate : function()
 		{
 			html =
