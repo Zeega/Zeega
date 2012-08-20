@@ -34,11 +34,11 @@ class CommunityController extends Controller
     
     public function dashboardAction()
     {      
-    	if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
+    	//if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+        //{
             $userId = $this->get('security.context')->getToken()->getUser()->getId();
             return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId)), 301);  
-        }        
+        //}        
     }
     
     public function missionAction()

@@ -1,4 +1,14 @@
 <?php
+
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -198,6 +208,7 @@ class ItemsController extends Controller
         }
         
         $item->setEnabled(false);
+        $item->setDateUpdated(new \DateTime("now"));
     	$em->flush();
     	
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
@@ -223,9 +234,7 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
-        $dateUpdated = new \DateTime("now");
-        $dateUpdated->add(new \DateInterval('PT2M'));
-        $item->setDateUpdated($dateUpdated);
+        $item->setDateUpdated(new \DateTime("now"));
 
         $em->flush();
 
@@ -274,10 +283,7 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
-                $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-                
-                $item->setDateUpdated($dateUpdated);
+                $item->setDateUpdated(new \DateTime("now"));
                 $em->persist($item);
                 $em->flush();
             }
@@ -322,10 +328,7 @@ class ItemsController extends Controller
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
-				$dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-				
-				$item->setDateUpdated($dateUpdated);
+				$item->setDateUpdated(new \DateTime("now"));
 		
 				$first = True;
 				$thumbnailUrl = $item->getThumbnailUrl();
@@ -369,9 +372,7 @@ class ItemsController extends Controller
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
 		
-			    $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-			    $item->setDateUpdated($dateUpdated);
+			    $item->setDateUpdated(new \DateTime("now"));
         
                 $em->flush();
 			}
@@ -472,10 +473,15 @@ class ItemsController extends Controller
 			if(!isset($site) && isset($user))
 			{
 		    	$sites = $user->getSites();
-		    	if(isset($sites))
+		    	if(isset($sites) && count($sites) > 0)
 		    	{
 	    			$site = $sites[0];
+
 	    		}
+                else
+                {
+                    $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+                }
 			}
 		}
 

@@ -215,7 +215,7 @@ class ParserDropboxSet extends ParserAbstract
         
 		$item->setTitle($filePath);
 		$item->setTags($tags); 
-		$item->setAttributionUri($redirect_url);
+		$item->setAttributionUri($mediaUrl);
 		$item->setLicense('All Rights Reserved');
 		$item->setUri($redirect_url);
 		$item->setChildItemsCount(0);

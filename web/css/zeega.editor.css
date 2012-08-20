@@ -1055,14 +1055,13 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .item-viewer .edit-item-metadata:hover{opacity:1;}
 .item-viewer .editing-field{background:#ccffff;}
 #connection-confirm{margin-left:10px;}
-.frame-thumb{height:50px;width:50px;background:#ccc;cursor:move;box-shadow:0 0 12px #333;-webkit-transition:box-shadow 0.25s linear;transition:color .25 linear;border-radius:3px;}
-.frame-thumb.active-frame{box-shadow:0 0 12px yellow;-webkit-transition:box-shadow 0.25s linear;transition:color .25 linear;}
-.frame-thumb.frame-item-hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;transition:color .25s linear;}
-#frame-list{margin-left:-5px;height:50px;display:inline;}
-#frame-list>li{margin-left:12px;}
-#frame-list>li:nth-child(16n+1){margin-left:0;}
-#frame-list li{margin-bottom:12px;}
-#add-frame{float:left;padding:10px 17px;}
+#frame-drawer .frame-list{display:inline-block;}
+#frame-drawer .frame-list .frame-thumb{height:50px;width:50px;background:#ccc;cursor:move;box-shadow:0 0 12px #333;-webkit-transition:box-shadow 0.25s linear;transition:color .25 linear;border-radius:3px;display:inline-block;margin-left:5px;}
+#frame-drawer .frame-list .frame-thumb.active-frame{box-shadow:0 0 12px yellow;-webkit-transition:box-shadow 0.25s linear;transition:color .25 linear;}
+#frame-drawer .frame-list .frame-thumb:hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;transition:color .25s linear;}
+#frame-drawer .frame-list .frame-thumb:first-child{margin-left:0;}
+#frame-drawer .frame-list .frame-thumb .menu-toggle{float:left;}
+#frame-drawer #add-frame{display:inline-block;position:relative;left:5px;top:-20px;}
 #sequence-tabs{margin:0;}
 #sequence-tabs.nav-tabs>li>a{padding-top:2px;padding-bottom:2px;}
 #frame-drawer,#browser-my-collections{white-space:nowrap;background:#eee;background:-webkit-gradient(linear, left top, left bottom, from(#555555), to(#666666));border-radius:0 0 6px 6px;box-shadow:none;-webkit-transition:box-shadow 0.25s linear;transition:color .25s linear;margin-bottom:6px;padding:12px 12px 0 12px;overflow:hidden;}

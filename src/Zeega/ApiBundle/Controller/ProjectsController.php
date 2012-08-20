@@ -1,4 +1,14 @@
 <?php
+
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,6 +22,7 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Sequence;
+use Zeega\DataBundle\Entity\Project;
 
 class ProjectsController extends Controller
 {
@@ -322,7 +333,50 @@ class ProjectsController extends Controller
     	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
-        
-     	
     } // `post_sequence_layers`   [POST] /sequences
+
+     // `post_site`   [POST] site/{site_id}/project
+    public function postProjectAction($site_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
+        
+        if($request->request->get('title'))$title=$request->request->get('title');
+        if($request->request->get('collection_id'))
+        {
+            $session = $this->getRequest()->getSession();
+            $session->set("collection_id", $request->request->get('collection_id'));
+        } 
+        
+        else $title='Untitled Project';
+        $site=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Site')
+        ->find($site_id);
+        $project= new Project();
+        $project->setDateCreated(new \DateTime("now"));
+        $project->setEnabled(true);
+        $project->setPublished(false);
+        $project->setAuthors($user->getDisplayName());
+
+        //$project->setAttr(array('cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png'));
+        $project->setAttr(array('author'=>$user->getDisplayName(), 'cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png' ));
+        
+        $sequence = new Sequence();
+        $frame = new Frame();
+        $frame->setSequence($sequence);
+        $frame->setProject($project);
+        $frame->setEnabled(true);
+        $project->setSite($site);
+        $project->addUser($user);
+        $sequence->setProject($project);
+        $sequence->setTitle('Intro Sequence');
+        $sequence->setEnabled(true);
+        $project->setTitle($title);
+        $em=$this->getDoctrine()->getEntityManager();
+        $em->persist($sequence);
+        $em->persist($project);
+        $em->persist($frame);
+        $em->flush();
+        return new Response($project->getId());
+    }
 }
