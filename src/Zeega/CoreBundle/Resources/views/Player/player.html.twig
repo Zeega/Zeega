@@ -189,40 +189,6 @@ var BrowserDetect = {
 </head>
 
 <body>
-
-
-
-	<script type="text/javascript" language="Javascript">
-		$('.citation-tab').click(function(){
-			
-			$('#citation').animate({ height : '100px' })
-			
-			closeOpenCitationTabs();
-			
-			$(this).closest('li').find('.citation-content').fadeIn();
-		})
-		
-
-		$('#citation').mouseleave(function(){
-			closeCitationBar();
-		})
-		
-		function closeCitationBar()
-		{
-			$('#citation').animate({ height : '20px' })
-			//$('#hide-citation').fadeOut();
-			closeOpenCitationTabs();
-		}
-		
-		function closeOpenCitationTabs()
-		{
-			$('.citation-tab').closest('ul').children('li').each(function(i,el){
-				if($(el).find('.citation-content').is(':visible')) $(el).find('.citation-content').hide();
-			})	
-		}
-
-
-	</script> 
 	
 	<script type="text/javascript" language="Javascript">
 		//bootstrapping data

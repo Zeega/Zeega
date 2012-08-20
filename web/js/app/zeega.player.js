@@ -783,7 +783,7 @@ this.zeegaPlayer = {
 					"<img class='player-arrow arrow-right' src='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'images/mediaPlayerArrow_shadow.png' +"'>"+
 				"</div>"+
 				"<div id='preview-media'></div>"+
-				"<div id='loader-tray' class=''></div>";
+				"<div id='loader-tray' class=''></div>"+
 				"<div id='citation-tray' class='player-overlay'></div>";
 
 			return html;
