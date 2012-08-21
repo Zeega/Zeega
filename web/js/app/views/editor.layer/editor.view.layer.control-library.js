@@ -855,6 +855,16 @@ Use this.model.get('attr')[my_setting] instead!!!
 					this.map.getStreetView().setVisible( true );
 				}
 				*/
+				
+				
+				  var streetViewLayer = new google.maps.ImageMapType({
+					getTileUrl : function(coord, zoom) {
+					  return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
+					},
+					tileSize: new google.maps.Size(256, 256)
+				  });
+				  
+				this.map.overlayMapTypes.insertAt(0, streetViewLayer);  
 				this.initMapListeners();
 				this.initGeoCoder();
 				
