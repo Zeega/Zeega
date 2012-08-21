@@ -22,6 +22,7 @@
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
+			window.onblur(window.focus());
 		</script>
 				{% if app.environment == 'prod' %}
 			<script type="text/javascript">
