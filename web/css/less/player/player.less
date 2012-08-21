@@ -86,7 +86,29 @@
 		margin: 0 auto;
 	}
 	
-	.progress-bar{ z-index: 1001 }
+	.progress-bar
+	{
+		z-index: 1001;
+		position:absolute;
+		top:100px;
+		left:100px;
+		margin: 50px auto 0;
+		width:50%;
+	}
+	.progress-bar h3{color:white; letter-spacing:1px;}
+	.progress-bar .estimate{ font-weight:100 }
+	.progress-bar .progress-types ul
+	{
+		padding:0;
+		margin:0;
+	}
+	.progress-bar .progress-types ul li
+	{
+		float:left;
+		list-style:none;
+		margin-right:5px;
+	}
+	
 	.player-overlay{ z-index : 1000 }
 
 }
