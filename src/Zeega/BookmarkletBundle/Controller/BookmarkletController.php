@@ -88,14 +88,13 @@ class BookmarkletController extends Controller
 				}
 				if($parsedItem["archive"]=="Facebook"){
 					if($parsedItem["child_items_count"]==-1){ // no access token.  overloading child_items_count is a hack.  Find cleaner way soon.
-						header('X-Frame-Options: ZeegaIsAwesome'); 
+						//header('X-Frame-Options: Allow'); 
 						$requirePath = __DIR__ . '/../../../../vendor/facebook/facebook.php';
 						require_once $requirePath;
 						$facebook = new \Facebook(array(
 						  'appId'  => '459848834048078',
 						  'secret' => 'f5b344b91bff03ace4df454e35fca4e4',
 						));
-						header('X-Frame-Options: ZeegaIsAwesome'); 
 						$loginUrlParams = array(
 						'scope'   => 'user_photos,friends_photos',
 						'display' => 'popup'
