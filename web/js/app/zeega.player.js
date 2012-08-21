@@ -451,6 +451,7 @@ this.zeegaPlayer = {
 				var frameArray = _.without( this.get('frames'), _.compact(brokenLayers) );
 				this.set('layers', frameArray)
 			}
+			this.set('layers', _.uniq(this.get('layers'))); 
 		},
 		
 		setPosition : function(index, before,after)
