@@ -836,6 +836,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .zicon-click{background-position:-120px -120px;}
 .zicon-sync-dropbox{background-position:-40px -60px;}
 .zicon-add-media{background-position:-40px -100px;}
+.zicon-go-fullscreen{background-position:-140px -120px;}
+.zicon-exit-fullscreen{background-position:-160px -120px;}
 .zicon-new-frame.small{background-position:-150px;}
 .zicon-old-frame.small{background-position:-135px;}
 .zicon-options.small{background-position:-60px;}
@@ -965,6 +967,29 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #footer a{color:#037FB3;text-decoration:none;}
 #footer a:hover{color:#04a3e5;-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-ms-transition:all 0.2s ease;-o-transition:all 0.2s ease;}
 #footer .navbar-inner{background-image:none;box-shadow:none;background:transparent;}
+#zeega-player{width:100%;height:100%;background:#000000;overflow:hidden;position:absolute;top:0;left:0;z-index:10000;}
+#zeega-player .player-header{position:absolute;width:100%;z-index:100;}
+#zeega-player .player-header a{z-index:1000;padding:10px 10px 0 0;color:orange;opacity:0.75;}
+#zeega-player .player-header a:first-child{padding-left:10px;}
+#zeega-player .player-zeega-icon{position:fixed;right:10px;bottom:10px;z-index:1000;opacity:0.75;}
+#zeega-player .player-zeega-icon:hover{opacity:1;}
+#zeega-player .player-arrow{height:15%;max-height:75px;max-width:35px;margin:0 10px;}
+#zeega-player .preview-nav-arrow{z-index:10000;position:absolute;top:50%;padding:10px;margin:10px;opacity:0.4;-webkit-border-radius:8px;}
+#zeega-player .preview-nav-arrow:hover{opacity:1;background:rgba(255, 0, 0, 0.25);}
+#zeega-player #preview-right{right:0;}
+#zeega-player #preview-left{left:0;float:left;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);}
+#zeega-player #preview-media{position:relative;overflow:hidden;margin:0 auto;}
+#zeega-player .progress-bar{z-index:1001;position:absolute;top:100px;left:100px;margin:50px auto 0;width:50%;}
+#zeega-player .progress-bar h3{color:white;letter-spacing:1px;}
+#zeega-player .progress-bar .estimate{font-weight:100;}
+#zeega-player .progress-bar .progress-types ul{padding:0;margin:0;}
+#zeega-player .progress-bar .progress-types ul li{float:left;list-style:none;margin-right:5px;}
+#zeega-player .player-overlay{z-index:1000;}
+.linked-layer{cursor:pointer;}
+.linked-layer>:first-child{margin-bottom:-4px;}
+.linked-layer{box-shadow:0 0 12px transparent;-webkit-transition:box-shadow 0.5s linear;}
+.linked-layer:hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;}
+.link-blink{box-shadow:0 0 24px white;-webkit-transition:box-shadow 1s linear;}
 @font-face{font-family:'Montserrat';font-style:normal;font-weight:400;src:local('Montserrat Regular'),local('Montserrat-Regular'),url('http://themes.googleusercontent.com/font?kit=zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0') format('woff');}@font-face{font-family:'Trocchi';font-style:normal;font-weight:400;src:local('Trocchi'),url(http://themes.googleusercontent.com/static/fonts/trocchi/v1/FxnVMeU6MpRiIW8IbIEcBwLUuEpTyoUstqEm5AMlJo4.woff) format('woff');}@font-face{font-family:'Sorts Mill Goudy';font-style:normal;font-weight:400;src:local('Sorts Mill Goudy Regular'),local('SortsMillGoudy-Regular'),url(http://themes.googleusercontent.com/static/fonts/sortsmillgoudy/v3/JzRrPKdwEnE8F1TDmDLMUtsZ51dqzBwIdH2JuTl9mv4.woff) format('woff');}@font-face{font-family:'Pontano Sans';font-style:normal;font-weight:400;src:local('Pontano Sans'),local('PontanoSans-Regular'),url(http://themes.googleusercontent.com/static/fonts/pontanosans/v1/gTHiwyxi6S7iiHpqAoiE3KRDOzjiPcYnFooOUGCOsRk.woff) format('woff');}@font-face{font-family:'Poiret One';font-style:normal;font-weight:400;src:local('Poiret One'),local('PoiretOne-Regular'),url(http://themes.googleusercontent.com/static/fonts/poiretone/v1/HrI4ZJpJ3Fh0wa5ofYMK8b3hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');}.citation-list{position:absolute;z-index:1000;bottom:0;padding:10px;}
 .citation-list>li{margin-right:2px;display:inline-block;}
 .player-citation-bubble{color:#fff;padding:10px;background:rgba(0, 0, 0, 0.75);position:absolute;bottom:55px;width:310px;border-radius:5px;}
@@ -974,26 +999,6 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .citation-subhead{color:#bbb;font-size:10px;}
 .modal .modal-body{max-height:500px;}
 .modal .frame-choose-list li img{height:100%;width:100%;}
-#preview-wrapper{width:100%;height:100%;background:#000000;overflow:hidden;position:absolute;top:0;left:0;display:none;z-index:10000;}
-#preview-wrapper .player-header{position:absolute;width:100%;z-index:100;}
-#preview-wrapper .player-header a{z-index:1000;padding:10px 10px 0 0;color:orange;opacity:0.75;}
-#preview-wrapper .player-header a:first-child{padding-left:10px;}
-#preview-wrapper .player-zeega-icon{position:fixed;right:10px;bottom:10px;z-index:1000;opacity:0.75;}
-#preview-wrapper .player-zeega-icon:hover{opacity:1;}
-.linked-layer{cursor:pointer;}
-.linked-layer>:first-child{margin-bottom:-4px;}
-.linked-layer{box-shadow:0 0 12px transparent;-webkit-transition:box-shadow 0.5s linear;}
-.linked-layer:hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;}
-.link-blink{box-shadow:0 0 24px white;-webkit-transition:box-shadow 1s linear;}
-#preview-wrapper #preview-media{position:relative;overflow:hidden;margin:0 auto;}
-#preview-wrapper #preview-logo{opacity:0.5;position:absolute;padding:6px;}
-#preview-wrapper .player-overlay{z-index:1000;}
-#preview-wrapper .player-arrow{height:15%;max-height:75px;max-width:35px;margin:0 10px;}
-#preview-wrapper .preview-nav{z-index:1000;}
-#preview-wrapper .preview-nav-arrow{position:absolute;top:50%;padding:10px;margin:10px;opacity:0.4;-webkit-border-radius:8px;}
-#preview-wrapper .preview-nav-arrow:hover{opacity:1;background:rgba(255, 0, 0, 0.25);}
-#preview-wrapper #preview-right{right:0;}
-#preview-wrapper #preview-left{left:0;float:left;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);}
 #publish-project-modal-step1 label{font-weight:bold;}
 #publish-project-modal-step1 .tagsinput{height:150px;}
 .publish-preview{height:150px;border:1px solid #ccc;width:100% !important;overflow:hidden;}
