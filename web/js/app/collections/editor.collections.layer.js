@@ -69,7 +69,11 @@
 					console.log('layermodel saved', savedLayer)
 					savedLayer.trigger('refresh_view');
 					savedLayer.trigger('layer_saved');
-					_this.addLayerToFrame( frame, savedLayer );
+					
+					//_this.addLayerToFrame( frame, savedLayer );
+					console.log('$$		layer saved', frame,savedLayer)
+					frame.layers.push(savedLayer);
+
 					frame.trigger('update_thumb');
 				}
 			});
@@ -90,6 +94,7 @@
 			oldLayer.save()
 		},
 		
+		/*
 		addLayerToFrame : function(frame,layer)
 		{
 			var layerArray = [];
@@ -103,6 +108,7 @@
 			layer.trigger('update');
 			zeega.app.updateLayerOrder( frame );
 		},
+		*/
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },
 		

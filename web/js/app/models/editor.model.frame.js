@@ -52,7 +52,13 @@
 		initLayerCollection : function()
 		{
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
-			this.layerCollection = new Frame.LayerCollection( layerArray );
+			this.layers = new Frame.LayerCollection( layerArray );
+			this.layers.on('add', this.addLayer, this);
+		},
+
+		addLayer : function( layer )
+		{
+			console.log('add layer to frame', this, layer)
 		},
 		
 		// adds the frame workspace view to the editor
