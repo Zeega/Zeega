@@ -23,6 +23,8 @@ class ParserFacebookSet extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
+    	error_log("ParserFacebookSet 0");
+
 		require_once('../vendor/facebook/facebook.php');
 
 		$facebook = new \Facebook(array(
@@ -36,6 +38,7 @@ class ParserFacebookSet extends ParserAbstract
 			$item->setChildItemsCount(-1);
 			return $this->returnResponse($item, true, false);
 		}
+		error_log("ParserFacebookSet 1");
 	    $albumId = $parameters["regex_matches"][2]; // album id
 
 		$albumData = $facebook->api(
@@ -46,15 +49,17 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
+		error_log("ParserFacebookSet 2");
 		// check if response is false
 		if($albumData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this media.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
+		error_log("ParserFacebookSet 3");
 		// check for FB error message
 		if(array_key_exists("error",$albumData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-
+		error_log("ParserFacebookSet 4");
         // get album cover image
         $coverImageId = $albumData['cover_photo'];
 		$coverData = $facebook->api(
@@ -65,15 +70,17 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
+		error_log("ParserFacebookSet 5");
 		// check if response is false
 		if($coverData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this album's cover image.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
+		error_log("ParserFacebookSet 6");
 		// check for FB error message
 		if(array_key_exists("error",$coverData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-
+		error_log("ParserFacebookSet 7");
         // get album photos
         $photoQueryUrl = $albumId . '/photos';
 		$photoData = $facebook->api(
@@ -84,16 +91,17 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-
+		error_log("ParserFacebookSet 8");
 		// check if response is false
 		if($photoData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add one or more of these photos.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
+		error_log("ParserFacebookSet 9");
 		// check for FB error message
 		if(array_key_exists("error",$photoData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-
+		error_log("ParserFacebookSet 10");
 
 		// create collection and metadata
 		$collection = new Item();
@@ -102,12 +110,15 @@ class ParserFacebookSet extends ParserAbstract
 		$collection->setTitle($albumData['name']);
 		//$collection->setDescription();
 		$collection->setAttributionUri($albumData['link']);
-        $collection->setChildItemsCount($albumData['count']);
+        //$collection->setChildItemsCount($albumData['count']);
 		$collection->setMediaCreatorUsername($albumData['from']['name']);
         $collection->setMediaCreatorRealname($albumData['from']['name']);
 		$collection->setMediaDateCreated($albumData['created_time']);
 		$collection->setThumbnailUrl($coverData['picture']);
+		$itemCount = 0;
+		error_log("ParserFacebookSet 11");
     	foreach($photoData['data'] as $photoData){
+    		error_log("ParserFacebookSet 12");
 			$item = new Item();
 			$tags = array();
 
@@ -163,8 +174,16 @@ class ParserFacebookSet extends ParserAbstract
 				}
 				$item->setTags($tags);
 			}
-	    	$collection->addItem($item);
+			error_log("ParserFacebookSet 13");
+			$processeditem = $this->returnResponse($item, true, false);
+
+			$itemCount++;
+			$collection->setChildItemsCount($itemCount);
+
+			$collection->addItem($processeditem["items"]);
+			error_log("ParserFacebookSet 14 " . $itemCount);
     	}
-		return parent::returnResponse($collection, true, true);
+    	error_log("ParserFacebookSet 15");
+		return $this->returnResponse($collection, true, true);
 	}
 }
