@@ -114,7 +114,6 @@ this.zeega = {
 		// render the frame workspace
 		if( _.isNull(this.currentFrame) || this.currentFrame != frame )
 		{
-			console.log('$$		render frame', frame)
 			this.loadFrame( frame );
 			this.currentFrame = frame;
 		}
@@ -123,15 +122,12 @@ this.zeega = {
 	
 	goToSequence : function(sequenceID, frameID)
 	{
+		// go to the first frame in the sequence
 		var frame = frameID || this.project.sequences.get(sequenceID).get('frames')[0];
 		this.currentSequence.trigger('blur');
 		this.goToFrame( frame );
 		this.currentSequence.trigger('focus');
 	},
-
-	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
-	refreshDatabase : function(){ this.itemCollection.refresh() },
-
 
 	loadFrame : function( frame )
 	{
@@ -151,6 +147,9 @@ this.zeega = {
 		}
 
 	},
+
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
+	refreshDatabase : function(){ this.itemCollection.refresh() },
 	
 	returnToFrame : function()
 	{
