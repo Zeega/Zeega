@@ -57,7 +57,6 @@
 		{
 			var Frames = zeega.module('frame');
 			this.frames = new Frames.Collection( frames );
-			console.log('create frame collection', frames, this.frames)
 		},
 		createSequenceCollection : function( sequences )
 		{
@@ -83,13 +82,11 @@
 		
 		onAddFrame : function( frame )
 		{
-			console.log('added frame')
-			console.log(frame)
+
 		},
 		
 		duplicateFrame : function( frameModel )
 		{
-			console.log('	DUPLICATE FRAME')
 			var _this = this;
 			var dupeModel = frameModel.clone();
 			
@@ -102,8 +99,6 @@
 			dupeModel.save({},{
 				success : function( savedFrame )
 				{
-					console.log('frame saved and is a duplicate')
-					console.log(savedFrame)
 					_this.insertFrameView( savedFrame , dupeModel.frameIndex );
 				
 					//zeega.app.currentSequence.get('frames');
@@ -139,7 +134,6 @@
 			// if layer is persistent then remove ALL instances from frames
 			if( _.include( this.get('persistLayers'), parseInt(model.id) ) )
 			{
-				console.log('remove persistant layer')
 				_.each( _.toArray( this.frames.collection ), function(frame){
 					var newLayers = _.without( frame.get('layers'), parseInt(model.id) );
 					if( newLayers.length == 0 ) newLayers = [false];
@@ -154,17 +148,13 @@
 			}
 			else
 			{
-				console.log('remove single layer')
 				//remove from the current frame layer array
 				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
 				if( layerArray.length == 0 ) layerArray = [false];
 				
-				console.log(layerArray)
 				
 				zeega.app.currentFrame.set('layers',layerArray);
 				zeega.app.currentFrame.save();
-				console.log(zeega.app.currentFrame.get('layers'))
-				console.log( zeega.app.currentFrame );
 				
 				this.destroyOrphanLayers();
 			}

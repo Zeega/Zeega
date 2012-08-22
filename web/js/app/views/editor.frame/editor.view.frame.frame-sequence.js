@@ -12,13 +12,11 @@
 		
 		focus : function()
 		{
-			console.log('~~		focus:', this.model.id)
 			$(this.el).addClass('active-frame');
 			this.model.inFocus = true;
 		},
 		blur : function()
 		{
-			console.log('~~		blur:', this.model.id)
 			$(this.el).removeClass('active-frame');
 			this.model.inFocus = false
 		},
@@ -65,8 +63,6 @@
 						frame : _this.model
 					})
 					
-					console.log('add layer:',zeega.app.draggedItem, _this.model)
-					//zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
 				}
 			});
 
@@ -145,7 +141,6 @@
 	
 		showGear : function()
 		{
-			console.log('hover')
 		},
 	
 		openDropdown : function()
@@ -156,7 +151,6 @@
 	
 		goToFrame : function()
 		{
-			console.log('go to frame: '+ this.model.id)
 			zeega.app.loadFrame(this.model);
 			return false;
 		},
