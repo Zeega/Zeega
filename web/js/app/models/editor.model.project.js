@@ -22,15 +22,27 @@
 			this.unset('frames',['silent']);
 			this.unset('layers',['silent']);
 			
-			this.createLayerCollection(attributes.layers);
-			this.createFrameCollection(attributes.frames);
-			this.createSequenceCollection( attributes.sequences );
-			
+			this.preloadCollections(attributes);
+
 			
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
 			
 			console.log('init PROJECT', this, attributes)
+		},
+
+		preloadCollections : function(attributes)
+		{
+			this.createLayerCollection(attributes.layers);
+			this.createFrameCollection(attributes.frames);
+			this.createSequenceCollection( attributes.sequences );
+		},
+
+		completeCollections : function()
+		{
+			// calls the collection functions that need to have the project loaded first
+			this.frames.each(function(frame){ frame.complete() });
+			this.sequences.each(function(sequence){ sequence.complete() });
 		},
 
 		/*	create collections	*/
@@ -63,7 +75,7 @@
 			var Sequence = zeega.module("sequence");
 			this.sequences = new Sequence.Collection( sequences );
 			this.sequences.render();
-			zeega.app.currentSequence = this.sequences.at(0);
+			//zeega.app.currentSequence = this.sequences.at(0);
 		},
 		
 		/*	end create collections	*/
@@ -176,7 +188,6 @@
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
 			this.view.renderToTarget();
-			this.trigger('ready')
 		},
 		loadPublishProject : function()
 		{

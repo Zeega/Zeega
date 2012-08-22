@@ -1,5 +1,11 @@
 (function(Sequence){
 
+	Sequence.FrameCollection = Backbone.Collection.extend({
+		initialize : function()
+		{
+		}
+	})
+
 	Sequence.Model = Backbone.Model.extend({
 		
 		defaults :{
@@ -28,6 +34,17 @@
 			
 			this.trigger('ready');
 		},
+
+		complete : function()
+		{
+			var _this = this;
+			var frameArray = this.get('frames').map(function(frameID){
+				var frame = zeega.app.project.frames.get(frameID);
+				frame.sequenceID = _this.id;
+				return frame;
+			});
+			this.frameCollection = new Sequence.FrameCollection(frameArray);
+		},
 		
 		checkAttr : function()
 		{
@@ -42,6 +59,7 @@
 		
 		renderSequenceFrames : function()
 		{
+			console.log('$$		render seq frames')
 			this.sequenceFrameView.renderToTarget();
 		},
 		
