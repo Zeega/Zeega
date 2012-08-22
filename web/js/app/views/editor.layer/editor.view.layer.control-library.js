@@ -624,8 +624,12 @@ Use this.model.get('attr')[my_setting] instead!!!
 					'<li><a href="#" data-font-size="175">14</a></li>'+
 					'<li><a href="#" data-font-size="200">18</a></li>'+
 					'<li><a href="#" data-font-size="250">24</a></li>'+
+					'<li><a href="#" data-font-size="375">36</a></li>'+
 					'<li><a href="#" data-font-size="500">48</a></li>'+
-					'<li><a href="#" data-font-size="700">72</a></li>'+
+					'<li><a href="#" data-font-size="800">72</a></li>'+
+					'<li><a href="#" data-font-size="1600">144</a></li>'+
+					'<li><a href="#" data-font-size="2400">200</a></li>'+
+					'<li><a href="#" data-font-size="3600">300</a></li>'+
 				'</ul>'+
 			'</div></div>';
 					
