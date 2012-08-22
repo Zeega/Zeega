@@ -123,8 +123,8 @@ this.zeega = {
 		var Router = Backbone.Router.extend({
 			routes: {
 				""						: 'nullLoad',
-				"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
-				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
+				//"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
+				//"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
 			},
 			
 			nullLoad : function()
@@ -195,7 +195,7 @@ this.zeega = {
 			this.currentFrame = frame;
 			this.currentFrame.trigger('focus');
 
-			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
+			//this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 		}
 
 	},
@@ -208,7 +208,7 @@ this.zeega = {
 		this.currentFrame.renderWorkspace();
 		//this.currentFrame.trigger('focus');
 		
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
+		//this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
 	},
 
 	deleteSequence : function(sequenceID)
@@ -216,7 +216,7 @@ this.zeega = {
 		var _this = this;
 		var sequence = this.project.sequences.get(sequenceID);
 
-		if(this.currentSequence.id == sequenceID) this.router.navigate('',{trigger:true});
+		if(this.currentSequence.id == sequenceID) //this.router.navigate('',{trigger:true});
 
 		var layers = [];
 		_.each( sequence.get('frames'), function(frameID){
