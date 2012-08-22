@@ -162,7 +162,6 @@ this.zeegaPlayer = {
 			{
 				frame.on('ready',this.renderFrame, this);
 				frame.renderLoader();
-				this.preloadFrames(frame);
 			}
 			else if( frame.status = 'ready')
 			{
@@ -174,6 +173,7 @@ this.zeegaPlayer = {
 				this.renderFrame( frameID );
 			}
 			
+			this.preloadFrames(frame);
 
 			if(zeegaPlayer.app.mode != 'editor') zeegaPlayer.app.router.navigate('frame/'+ frameID );
 			this.currentFrame = frame;
