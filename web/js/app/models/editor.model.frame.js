@@ -53,14 +53,19 @@
 		{
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
 			this.layers = new Frame.LayerCollection( layerArray );
-			this.layers.on('add', this.addLayer, this);
+			this.layers.on('add', this.updateLayerOrder, this);
+			this.layers.on('remove', this.updateLayerOrder, this);
 		},
 
-		addLayer : function( layer )
+		// updates the layer order when a layer is added or removed
+		updateLayerOrder : function()
 		{
-			console.log('add layer to frame', this, layer)
+			var layerOrder = this.layers.pluck('id');
+			console.log('$$		layer order', layerOrder);
+			if(layerOrder.length == 0) layerOrder = [false];
+			this.save('layers',layerOrder);
 		},
-		
+
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{

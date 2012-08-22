@@ -233,30 +233,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
-			var _this = this;
-			this.layers = _.map( this.model.get('layers'), function(layerID){
-				var layer = zeega.app.project.layers.get(layerID);
-				//do not include layer if it's a link in the destination frame
-				if( _.isUndefined(layer) || (layer.get('type') == 'Link' && layer.get('attr').to_frame == _this.model.id )|| _.isUndefined( zeega.app.project.frames.get( layer.get('attr').to_frame ) ) ) return null;
-				else return layer
-			});
 			//render each layer into the workspace
-			_.each( _.compact(this.layers), function(layer){
-				_this.$el.append( layer.visual.render().el );
-			})
+			var _this = this;
+			this.model.layers.each(function(layer){ _this.$el.append( layer.visual.render().el ) });
 			return this;
 		},
 		
 		renderToTarget : function()
 		{
-			$('#'+this.id).replaceWith( this.render().el );
+			$('#'+this.id).replaceWith( this.render().el )
 		},
 		
 		onLayerEnter : function()
 		{
-			_.each( _.compact(this.layers), function(layer){
-				layer.visual.private_onLayerEnter();
-			})
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerEnter() })
 		},
 		
 		
