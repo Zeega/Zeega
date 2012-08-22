@@ -65,19 +65,18 @@ this.zeega = {
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
-		this.project.on('ready',function(){ _this.startEditor() })
+		
+		this.project.on('ready',function(){ _this.startEditor() });
 		this.project.loadProject();
 		
 		this.setButtonStates()
 		this.setProjectListeners();
 		console.log("project data ", this.project);
-
 	},
 	
 	// listens to things saving to update the button states
-	
-	setProjectListeners : function (){
-	
+	setProjectListeners : function()
+	{
 		var _this=this;
 		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
