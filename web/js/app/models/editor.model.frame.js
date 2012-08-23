@@ -41,7 +41,6 @@
 			this.layers = new Frame.LayerCollection( layerArray );
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
-			this.layers.on('all', function(e){ console.log('%%		layers all:',e)});
 
 			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
