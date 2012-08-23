@@ -23,7 +23,6 @@ class ParserFacebookSet extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
-    	error_log("ParserFacebookSet 0");
 
 		require_once('../vendor/facebook/facebook.php');
 
@@ -38,7 +37,6 @@ class ParserFacebookSet extends ParserAbstract
 			$item->setChildItemsCount(-1);
 			return $this->returnResponse($item, true, false);
 		}
-		error_log("ParserFacebookSet 1");
 	    $albumId = $parameters["regex_matches"][2]; // album id
 
 		$albumData = $facebook->api(
@@ -49,17 +47,14 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		error_log("ParserFacebookSet 2");
 		// check if response is false
 		if($albumData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this media.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		error_log("ParserFacebookSet 3");
 		// check for FB error message
 		if(array_key_exists("error",$albumData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-		error_log("ParserFacebookSet 4");
         // get album cover image
         $coverImageId = $albumData['cover_photo'];
 		$coverData = $facebook->api(
@@ -70,17 +65,14 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		error_log("ParserFacebookSet 5");
 		// check if response is false
 		if($coverData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add this album's cover image.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		error_log("ParserFacebookSet 6");
 		// check for FB error message
 		if(array_key_exists("error",$coverData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-		error_log("ParserFacebookSet 7");
         // get album photos
         $photoQueryUrl = $albumId . '/photos';
 		$photoData = $facebook->api(
@@ -91,17 +83,14 @@ class ParserFacebookSet extends ParserAbstract
               'format' => 'json',
             )
 		);
-		error_log("ParserFacebookSet 8");
 		// check if response is false
 		if($photoData==false){
 			return $this->returnResponse(null, false, false, "You do not have Facebook Permissions to add one or more of these photos.  The owner of the album can resolve this by changing the album's privacy settings.");
 		}
-		error_log("ParserFacebookSet 9");
 		// check for FB error message
 		if(array_key_exists("error",$photoData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
-		error_log("ParserFacebookSet 10");
 
 		// create collection and metadata
 		$collection = new Item();
@@ -109,16 +98,14 @@ class ParserFacebookSet extends ParserAbstract
 	    $collection->setLayerType('Facebook');
 		$collection->setTitle($albumData['name']);
 		//$collection->setDescription();
-		$collection->setAttributionUri($albumData['link']);
+		$collection->setAttributionUri($url);
         //$collection->setChildItemsCount($albumData['count']);
 		$collection->setMediaCreatorUsername($albumData['from']['name']);
         $collection->setMediaCreatorRealname($albumData['from']['name']);
 		$collection->setMediaDateCreated($albumData['created_time']);
 		$collection->setThumbnailUrl($coverData['picture']);
 		$itemCount = 0;
-		error_log("ParserFacebookSet 11");
     	foreach($photoData['data'] as $photoData){
-    		error_log("ParserFacebookSet 12");
 			$item = new Item();
 			$tags = array();
 
@@ -128,24 +115,20 @@ class ParserFacebookSet extends ParserAbstract
 			$item->setChildItemsCount(0);
 			$item->setLicense('All Rights Reserved');// todo: what are the proper permissions here?
 
+
+
+			
+
+
+
 			if(array_key_exists("name",$photoData)){
 				$item->setTitle($photoData["name"]);
 			}
 
-			$item->setUri($photoData['source']);
-			$item->setThumbnailUrl($photoData['picture']);
-			$item->setAttributionUri($photoData['link']);
-			$item->setMediaCreatorUsername($photoData['from']['name']);
-			$item->setMediaDateCreated(new DateTime($photoData['created_time']));
 			// lat/lon might exist
 			if(array_key_exists("place", $photoData)){
 				$item->setMediaGeoLatitude($photoData['place']['location']['latitude']);
 				$item->setMediaGeoLongitude($photoData['place']['location']['longitude']);
-			}
-			// tags might exist
-			if(array_key_exists("tags", $photoData)){
-				// loop through $photoData['tags'];
-				//$item->setTags($tags);
 			}
 			if(array_key_exists("source",$photoData)){
 				$item->setUri($photoData["source"]);
@@ -158,14 +141,12 @@ class ParserFacebookSet extends ParserAbstract
 			}
 			if(array_key_exists("from",$photoData)){
 				$item->setMediaCreatorUsername($photoData["from"]["name"]);
+				$item->setMediaCreatorRealname($photoData["from"]["name"]);
 			}
 			if(array_key_exists("created_time",$photoData)){
 				$item->setMediaDateCreated(new DateTime($photoData['created_time']));
 			}
-			if(array_key_exists("place",$photoData)){
-				$item->setMediaGeoLatitude($photoData['place']['location']['latitude']);
-				$item->setMediaGeoLongitude($photoData['place']['location']['longitude']);
-			}
+
 			// tags might exist
 			if(array_key_exists("tags", $photoData)){
 				$tags = array();
@@ -174,16 +155,13 @@ class ParserFacebookSet extends ParserAbstract
 				}
 				$item->setTags($tags);
 			}
-			error_log("ParserFacebookSet 13");
 			$processeditem = $this->returnResponse($item, true, false);
 
 			$itemCount++;
 			$collection->setChildItemsCount($itemCount);
 
 			$collection->addItem($processeditem["items"]);
-			error_log("ParserFacebookSet 14 " . $itemCount);
     	}
-    	error_log("ParserFacebookSet 15");
 		return $this->returnResponse($collection, true, true);
 	}
 }

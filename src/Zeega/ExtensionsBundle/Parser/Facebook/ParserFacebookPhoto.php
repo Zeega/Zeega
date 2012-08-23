@@ -70,7 +70,7 @@ class ParserFacebookPhoto extends ParserAbstract
 			$item->setThumbnailUrl($photoData["picture"]);
 		}
 		if(array_key_exists("link",$photoData)){
-			$item->setAttributionUri($photoData["link"]);
+			$item->setAttributionUri($url);
 		}
 		if(array_key_exists("from",$photoData)){
 			$item->setMediaCreatorUsername($photoData["from"]["name"]);
