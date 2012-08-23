@@ -7,6 +7,13 @@ jQuery(function($)
 
 	initHeaderUX();
 
+	
+	//detect when zeega comes back in focus and refresh the database
+	window.addEventListener('focus', function(){
+		zeega.app.refreshDatabase();
+	});
+
+
 //		POPOVERS		//
 	$('.info').popover({
 		'delayIn' : 0
@@ -175,10 +182,7 @@ jQuery(function($)
 	    zeega.app.refreshDatabase();
 	});
 
-	//detect when zeega comes back in focus and refresh the database
-	window.addEventListener('focus', function(){
-		zeega.app.refreshDatabase();
-	});
+
 
 	$('#database-search-text').keypress(function(e){
 		var keycode = e.which;
@@ -193,19 +197,6 @@ jQuery(function($)
 
 		}else{
 			return true;
-		}
-	});
-
-
-	//hide layer content initially
-	$(".layer-list a:first").click(function(){
-		$('#sortable-layers li').children('div').hide('fast');
-		if($(this).closest('li').children('div').is(":visible")){
-			$(this).closest('li').children('div').hide('fast');
-			return false;
-		}else{
-			$(this).closest('li').children('div').show('fast');
-			return false;
 		}
 	});
 

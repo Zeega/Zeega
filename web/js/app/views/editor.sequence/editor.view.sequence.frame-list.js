@@ -53,7 +53,7 @@
 
 				start : function(e,ui)
 				{
-					this.num= Math.floor( ui.position.left / 55 );
+					this.num = Math.floor( ui.position.left / 55 );
 				},
 				containment : 'parent',
 				helper :function(){ return $('<div>') },
@@ -74,7 +74,8 @@
 				stop : function(e,ui)
 				{
 					$('.ghost-frame').remove();
-					_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
+					var frameCount = Math.floor( ui.position.left/55-this.num );
+					_this.model.addFrames( frameCount );
 				}
 			})
 			.click(function(){

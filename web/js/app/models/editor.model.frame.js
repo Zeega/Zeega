@@ -35,6 +35,10 @@
 			this.on('update_thumb', this.updateFrameThumb, this );
 		},
 
+		/*
+			must be called after the model is created and after the project is fully loaded/parsed
+		*/
+
 		complete : function()
 		{
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
@@ -48,7 +52,10 @@
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
 		},
 
-		// updates the layer order when a layer is added, removed, or moved
+		/*
+			updates the layer order when a layer is added, removed, or moved
+		*/
+
 		updateLayerOrder : function()
 		{
 			var layerOrder = this.layers.pluck('id');
@@ -57,7 +64,10 @@
 			this.updateThumb();
 		},
 
-		// relies on the frame actually being rendered in the dom to work
+		/*
+			relies on the frame actually being rendered in the dom to work
+		*/
+		
 		sortLayers : function( layerIDArray )
 		{
 			var _this = this;

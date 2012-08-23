@@ -67,20 +67,19 @@
 			var n = num || 1;
 			var Frame = zeega.module('frame');
 
-			for( var i = 0 ; i < n ; i++ )
-			{
+			_.times( n, function(){
 				var newFrame = new Frame.Model();
 				newFrame.save({
-					'layers' : this.get('persistent_layers')
+					'layers' : _this.get('persistent_layers')
 					},{
 					success : function()
 					{
-						zeega.project.frames.add( newFrame );
+						newFrame.complete();
+						zeega.app.project.frames.add( newFrame );
 						_this.frames.push( newFrame );
 					}
 				});
-
-			}
+			})
 		},
 
 		onAddFrame : function( frame )
