@@ -187,6 +187,13 @@ this.zeega = {
 		return false;
 	},
 
+
+	addFrame : function( num )
+	{
+		this.currentSequence.addFrames( num );
+	},
+
+/*
 	addFrame : function( num )
 	{
 		if( !this.busy )
@@ -251,12 +258,16 @@ this.zeega = {
 			}
 		}
 	},
-	
+*/
+
+/*
 	updateFrameOrder : function( save )
 	{
 		console.log('	UPDATE FRAME ORDER')
 		this.currentSequence.updateFrameOrder();
 	},
+*/
+
 	
 	duplicateFrame : function( frameModel )
 	{
@@ -321,16 +332,23 @@ this.zeega = {
 			
 		} //busy
 	},
-	
+
+	/*
+		Launches the continue layer modal
+	*/
+
 	continueLayer : function(layerID)
 	{
-		console.log('continue layer: '+layerID);
 		var Modal = zeega.module('modal');
 		var linkModal = new Modal.Views.ContinueLayer({ model:this.project.layers.get(layerID)});
 		$('body').append(linkModal.render().el);
 		linkModal.show();
 	},
 	
+	/*
+		Continues the selected layer to the next frame if there is one
+	*/
+
 	continueLayerToNextFrame : function( layerID )
 	{
 		var nextFrame = this.getRightFrame();
@@ -338,61 +356,14 @@ this.zeega = {
 		if( nextFrame != false && nextFrame != this.currentFrame ) nextFrame.layers.unshift( layer );
 	},
 	
+	/*
+		continues the selected layer to the entire sequence
+	*/
+
 	continueOnAllFrames : function( layerID )
 	{
-		if(!this.busy)
-		{
-			var layerModel = this.project.layers.get(layerID)
-			//get persistent layers
-			var attr = _.isObject(this.currentSequence.get('attr')) ? this.currentSequence.get('attr') : {persistLayers:[]} ;
-
-			// check to see if the layer is already persistent
-			if( _.include(attr.persistLayers, layerID ) )
-			{
-				//remove persistence
-				console.log('remove persistence')
-				attr.persistLayers = _.without( attr.persistLayers, layerID );
-				if(attr.persistLayers.length == 0 ) attr.persistLayers = [false];
-				this.removePersistenceFromFrames( layerID );
-			}
-			else
-			{
-				console.log('add persistence')
-				//add persistence
-				attr.persistLayers.unshift( layerID );
-				this.addPersistenceToFrames( layerID );
-			}
-			this.currentSequence.save({ 'attr': attr });
-			console.log('save current sequence', attr, this.currentSequence)
-		} // busy
-		
-	},
-	
-	addPersistenceToFrames : function( layerID )
-	{
-		var _this = this;
-		// add this layer to each frame in the sequence
-		_.each( this.currentSequence.get('frames'), function(frameID){
-			var frame = _this.project.frames.get( frameID );
-			var layerArray = frame.get('layers') || [];
-			layerArray.push(layerID)
-			frame.save({ layers : _.compact(_.uniq(layerArray)) })
-		})
-	},
-	removePersistenceFromFrames : function( layerID )
-	{
-		var _this = this;
-		// add this layer to each frame in the sequence
-		_.each( this.currentSequence.get('frames') , function(frameID){
-			var frame = _this.project.frames.get( frameID );
-			if( _.include(frame.get('layers'), layerID ) && frameID != _this.currentFrame.id )
-			{
-				//remove from frame
-				var layers = _.without( frame.get('layers'), layerID );
-				if( layers.length == 0 ) layers = [false];
-				frame.save({ layers : layers });
-			}
-		})
+		var layer = this.project.layers.get(layerID);
+		this.currentSequence.addPersistentLayer( layer );
 	},
 
 	// returns the order that the frame appears in the sequence

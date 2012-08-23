@@ -25,6 +25,7 @@
 			"id" : {{ sequence.id | default("") }},
 			"title" : "{{ sequence.title | default("") }}",
 			"attr" : {{sequence.attr | default({}) | json_encode | raw}},
+			"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
 			"frames" : 
 			[
 			{% for frame in sequence_frames[sequence.id] -%}	

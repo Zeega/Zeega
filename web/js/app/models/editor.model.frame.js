@@ -54,7 +54,6 @@
 			var layerOrder = this.layers.pluck('id');
 			if(layerOrder.length == 0) layerOrder = [false];
 			this.save('layers',layerOrder);
-			console.log('$$		update order', this, layerOrder)
 			this.updateThumb();
 		},
 
