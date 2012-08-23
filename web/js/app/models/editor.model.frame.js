@@ -41,6 +41,7 @@
 			this.layers = new Frame.LayerCollection( layerArray );
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
+			this.layers.on('all', function(e){ console.log('%%		layers all:',e)});
 
 			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
@@ -54,6 +55,7 @@
 			var layerOrder = this.layers.pluck('id');
 			if(layerOrder.length == 0) layerOrder = [false];
 			this.save('layers',layerOrder);
+			console.log('$$		update order', this, layerOrder)
 			this.updateThumb();
 		},
 
@@ -70,6 +72,9 @@
 			this.updateLayerOrder();
 		},
 
+		/*
+			creates a new layer from an item model and adds it to the frame
+		*/
 
 		addItemLayer : function( itemModel )
 		{
@@ -89,18 +94,27 @@
 			})
 		},
 
+		/*
+			creates a new layer from a type and adds it to the frame
+		*/
+
 		addLayerByType : function( type )
 		{
 			var _this = this;
 			var Layer = zeega.module('layer');
 			var newLayer = new Layer[type]();
-			newLayer.save({},{
-				success : function()
-				{
-					_this.layers.push( newLayer );
-					zeega.app.project.layers.add( newLayer );
-				}
-			})
+
+			if( newLayer )
+			{
+				newLayer.save({},{
+					success : function()
+					{
+						_this.layers.push( newLayer );
+						zeega.app.project.layers.add( newLayer );
+					}
+				})
+			}
+			else console.log('!!		no such layer type!');
 		},
 
 		// adds the frame workspace view to the editor

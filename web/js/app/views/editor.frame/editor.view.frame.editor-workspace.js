@@ -259,12 +259,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		onAddLayer : function( layer )
 		{
-			this.$el.append( layer.visual.render().el )
+			if(zeega.app.currentFrame == this.model) this.$el.append( layer.visual.render().el )
 		},
 
 		onRemoveLayer : function( layer )
 		{
-			layer.visual.private_onLayerExit()
+			if(zeega.app.currentFrame == this.model) layer.visual.private_onLayerExit()
 		},
 
 		removeAllLayers : function()
@@ -431,14 +431,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		onAddLayer : function( layer )
 		{
-			this.$el.prepend( layer.controls.renderControls().el );
-			layer.controls.delegateEvents();
+			if(zeega.app.currentFrame == this.model)
+			{
+				this.$el.prepend( layer.controls.renderControls().el );
+				layer.controls.delegateEvents();
+			}
 		},
 
 		onRemoveLayer : function( layer )
 		{
-			layer.controls.private_onLayerExit();
-			layer.controls.remove();
+			if(zeega.app.currentFrame == this.model)
+			{
+				layer.controls.private_onLayerExit();
+				layer.controls.remove();
+			}
 		},
 		
 		removeFromEditor : function()
