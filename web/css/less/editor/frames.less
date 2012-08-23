@@ -20,6 +20,7 @@
 	.frame-list
 	{
 		display : inline-block;
+		position:relative;
 		
 		.frame-thumb
 		{
@@ -49,6 +50,8 @@
 			}
 		
 			&:first-child{ margin-left : 0 }
+			
+			.menu{ z-index: 100 }
 			
 			.menu-toggle{ float:left }
 		}

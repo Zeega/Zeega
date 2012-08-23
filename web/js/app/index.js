@@ -16,7 +16,6 @@ jQuery(function($)
 		$('.menu').addClass('hide')
 	})
 	
-	console.log('==		search stuffz')
 	var visualSearch = VS.init({
 		container : $('.visual_search'),
 		query     : '',
@@ -62,11 +61,9 @@ jQuery(function($)
 			}
 		}
 	});
-	console.log('search stuffz', visualSearch)
 	
 	
 	$('.VS-icon.VS-icon-search').click(function(){
-		console.log('open filter dialog')
 		$('.filter-list').show('fast');
 	})
 	//when a filter is selected via dropdown
@@ -81,7 +78,6 @@ jQuery(function($)
 		visualSearch.options.callbacks.search( null, visualSearch.searchQuery);
 		
 		$('.filter-list').hide();
-		console.log('search filter', visualSearch, model)
 		e.stopPropagation();
 		return false;
 	})
@@ -91,12 +87,10 @@ jQuery(function($)
 	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
-		console.log('search collection: '+ $(this).val());
 		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
 	});
 
 	$('#list-view').click(function(){
-		console.log('goto list view');
 		$('#grid-view .zicon').removeClass('orange');
 		$(this).find('.zicon').addClass('orange');
 		$('#database-item-list').addClass('list-view').removeClass('grid-view');
@@ -104,7 +98,6 @@ jQuery(function($)
 	})
 
 	$('#grid-view').click(function(){
-		console.log('goto grid view');
 		$('#list-view .zicon').removeClass('orange');
 		$(this).find('.zicon').addClass('orange');
 		$('#database-item-list').removeClass('list-view').addClass('grid-view');
@@ -188,7 +181,6 @@ jQuery(function($)
 	/*
 	window.addEventListener('focus', function(){
 		zeega.app.refreshDatabase();
-		console.log('refreshing database from zeega.ux.editor line 260');
 	});
 	*/
 	$('#database-search-text').keypress(function(e){
@@ -210,7 +202,6 @@ jQuery(function($)
 
 	//hide layer content initially
 	$(".layer-list a:first").click(function(){
-		console.log('sortable layers');
 		$('#sortable-layers li').children('div').hide('fast');
 		if($(this).closest('li').children('div').is(":visible")){
 			$(this).closest('li').children('div').hide('fast');
@@ -233,13 +224,7 @@ jQuery(function($)
 		//resort the layers in the workspace too
 		update : function()
 		{
-			console.log('link sort update')
 			zeega.app.updateLayerOrder();
-			/*
-			//get layer ids as ints
-			var layerIDs = _.map( $(this).sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			zeega.app.updateLayerOrder(layerIDs);
-			*/
 		}
 	})
 

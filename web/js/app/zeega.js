@@ -21,6 +21,10 @@ this.zeega = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
+
+	currentFrame : null,
+	currentSequence : null,
+
 	busy : false,
 	hold : null,
 	
@@ -60,25 +64,25 @@ this.zeega = {
 		
 		console.log($.parseJSON(projectJSON))
 		
-		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		this.itemCollection = new Items.Collection();
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
-		this.project.on('ready',function(){ _this.startEditor() })
+		this.project.completeCollections();
+
 		this.project.loadProject();
 		
-		this.setButtonStates()
+		this.setButtonStates();
 		this.setProjectListeners();
 		console.log("project data ", this.project);
 
+		this.startEditor();
 	},
 	
 	// listens to things saving to update the button states
-	
-	setProjectListeners : function (){
-	
-		var _this=this;
+	setProjectListeners : function()
+	{
+		var _this = this;
 		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
@@ -86,96 +90,43 @@ this.zeega = {
 	
 	},
 	
-	loadCollectionsDropdown : function( collections )
-	{
-		_.each( collections, function( collection ){
-			$('#database-collection-filter').append('<option value="'+ collection.id +'">'+ collection.title +'</option>')
-		})
-	},
-	
-	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
-	refreshDatabase : function(){ this.itemCollection.refresh() },
-
 	startEditor : function()
 	{
 		console.log('editor started')
-		//this.renderWorkspace();
-		
-		//this.renderSequenceFrames();
-		//$('#frame-list').sortable(); // why would I put this here -joseph
-		//this.currentSequence.updateFrameOrder();
-		
-		this.startRouter();
+		//always start the editor at sequence 0, frame 0
+		var startFrameID = this.project.sequences.at(0).get('frames')[0];
+		this.goToFrame(startFrameID);
 	},
-	
-	
-	//this is temporary. should be moved to the frame model/view
-	renderWorkspace : function()
-	{
-		var Frame = zeega.module('frame');
-		this.workspaceView = new Frame.Views.EditorWorkspace();
-		this.workspaceView.renderToTarget();
-	},
-	
-	startRouter: function()
-	{
-		var _this = this;
-		var Router = Backbone.Router.extend({
-			routes: {
-				""						: 'nullLoad',
-				"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
-				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
-			},
-			
-			nullLoad : function()
-			{
-				_this.goToSequence( _this.project.sequences.at(0).id )
-				//_this.goToFrame( _this.project.sequences.at(0).get('frames')[0] );
-			},
-			
-			goToSequenceFrame : function( sequenceID,frameID )
-			{
-				_this.goToSequence( sequenceID );
-				_this.goToFrame( frameID );
-			},
-			
-			checkPlayer : function( sequenceID,frameID )
-			{
-				console.log('zeega check player router')
-				if( !_this.previewMode ) this.goToSequenceFrame(sequenceID,frameID);
-				else _this.player.goToSequenceFrame(sequenceID,frameID);
-			}
-		});
 
-		this.router = new Router();
-		Backbone.history.start();
+	goToFrame : function( f )
+	{
+		if( _.isNumber(f) ) var frame = this.project.frames.get(f);
+		else var frame = f;
+
+		// if the frame's sequence isn't rendered, then render it
+		if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
+		{
+			var sequence = this.project.sequences.get( frame.sequenceID )
+			sequence.renderSequenceFrames();
+			this.currentSequence = sequence;
+		}
+
+		// render the frame workspace
+		if( _.isNull(this.currentFrame) || this.currentFrame != frame )
+		{
+			this.loadFrame( frame );
+			this.currentFrame = frame;
+		}
+
 	},
 	
 	goToSequence : function(sequenceID, frameID)
 	{
-		console.log('goToSequence', sequenceID, this.project.sequences.get(sequenceID), frameID, this.project.frames.get( this.currentSequence.get('frames')[0]) )
-		//this.unrenderFrame(this.currentFrame);
+		// go to the first frame in the sequence
+		var frame = frameID || this.project.sequences.get(sequenceID).get('frames')[0];
 		this.currentSequence.trigger('blur');
-		this.currentSequence = this.project.sequences.get(sequenceID);
+		this.goToFrame( frame );
 		this.currentSequence.trigger('focus');
-		
-		
-		this.currentSequence.renderSequenceFrames();
-		
-		//this.renderSequenceFrames(this.currentSequence);
-		
-		var nextFrame = frameID ? this.project.frames.get(frameID) : this.project.frames.get( this.currentSequence.get('frames')[0] );
-		this.loadFrame(nextFrame);
-	},
-	
-	goToFrame : function( frameId )
-	{
-		if( _.isUndefined(frameId)||frameId=="undefined" )
-		{
-			this.currentFrame = this.project.frames.get( this.currentSequence.get('frames')[0] );
-			this.loadFrame( this.currentFrame );
-		}
-		else this.loadFrame( this.project.frames.get( frameId ) );
 	},
 
 	loadFrame : function( frame )
@@ -190,15 +141,15 @@ this.zeega = {
 				this.currentFrame.removeWorkspace();
 				this.currentFrame.trigger('blur');
 			}
-			console.log(frame)
 			frame.renderWorkspace();
 			this.currentFrame = frame;
 			this.currentFrame.trigger('focus');
-
-			this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
 		}
 
 	},
+
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
+	refreshDatabase : function(){ this.itemCollection.refresh() },
 	
 	returnToFrame : function()
 	{
@@ -208,15 +159,12 @@ this.zeega = {
 		this.currentFrame.renderWorkspace();
 		//this.currentFrame.trigger('focus');
 		
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ this.currentFrame.id, {silent:true});
 	},
 
 	deleteSequence : function(sequenceID)
 	{
 		var _this = this;
 		var sequence = this.project.sequences.get(sequenceID);
-
-		if(this.currentSequence.id == sequenceID) this.router.navigate('',{trigger:true});
 
 		var layers = [];
 		_.each( sequence.get('frames'), function(frameID){
