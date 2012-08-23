@@ -1,5 +1,11 @@
 (function(Sequence){
 
+	Sequence.FrameCollection = Backbone.Collection.extend({
+		initialize : function()
+		{
+		}
+	})
+
 	Sequence.Model = Backbone.Model.extend({
 		
 		defaults :{
@@ -28,6 +34,17 @@
 			
 			this.trigger('ready');
 		},
+
+		complete : function()
+		{
+			var _this = this;
+			var frameArray = this.get('frames').map(function(frameID){
+				var frame = zeega.app.project.frames.get(frameID);
+				frame.sequenceID = _this.id;
+				return frame;
+			});
+			this.frameCollection = new Sequence.FrameCollection(frameArray);
+		},
 		
 		checkAttr : function()
 		{
@@ -36,14 +53,13 @@
 		
 		refreshView : function()
 		{
-			console.log('refresh view!!!')
 			this.tabView.render();
 		},
 		
 		
 		renderSequenceFrames : function()
 		{
-			console.log('##		render sequence frames')
+			console.log('$$		render seq frames')
 			this.sequenceFrameView.renderToTarget();
 		},
 		
@@ -52,19 +68,15 @@
 			var frameArray = this.get('frames');
 			frameArray.push( frame.id );
 			this.set('frames',frameArray);
-			console.log('##		add frame',frame, frameArray)
 			this.sequenceFrameView.render();
 		},
 
 //redo this vvvv
 		insertFrameView : function( frame, index )
 		{
-			console.log('$$		insert frame view', this, frame, index)
 			var frameArray = this.get('frames');
-			console.log(frameArray)
 			var index  = index || frameArray.length;
 			frameArray.splice(index,0,frame.id);
-			console.log(frameArray)
 			this.set('frames',frameArray);
 
 			this.sequenceFrameView.render();
@@ -72,7 +84,6 @@
 		
 		destroyFrame : function( frameModel )
 		{
-			console.log('destroy frame:', frameModel,this);
 			var index = _.indexOf( this.get('frames'), frameModel.id );
 			var frameOrder = _.without( this.get('frames'), frameModel.id );
 			this.save({ frames: frameOrder});
@@ -89,7 +100,6 @@
 		
 		updatePersistLayer : function( modelID )
 		{
-			console.log('persist this layer')
 			
 			this.set('attr',{persistLayers: [parseInt(modelID)] })
 			this.save();
@@ -99,17 +109,12 @@
 			if( _.include( attr.persistLayers, parseInt(modelID) ) ) 
 			{
 				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(modelID))})
-				//this.frames.removePersistence( parseInt(model.id) );
 			}
 			else
 			{
 				if(attr.persistLayers) attr = _.extend( attr, { persistLayers: _.compact(attr.persistLayers.push(parseInt(modelID))) });
 				else attr.persistLayers = [ parseInt(modelID) ];
-				console.log(attr)
-				//this.frames.addPersistence( parseInt(model.id) );
 			}
-			//this.set('attr',attr);
-			//this.save();
 		},
 		
 		update : function( newAttr, silent )
