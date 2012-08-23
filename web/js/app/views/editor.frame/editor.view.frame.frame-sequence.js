@@ -40,7 +40,6 @@
 
 			this.makeDroppable();
 
-
 			$(this.el).hover(function(){
 				$(_this.el).find('.frame-menu').show();
 			},function(){
@@ -106,10 +105,11 @@
 
 		makeDroppable : function()
 		{
+			console.log('%%		make droppable')
 			//frame droppable stuff
 			var _this = this;
 			this.$el.droppable({
-				accept : '.database-asset-list',
+				//accept : '.database-asset-list',
 				hoverClass : 'frame-item-hover',
 				tolerance : 'pointer',
 
@@ -127,7 +127,7 @@
 				{
 					$('#frame-drawer').removeClass('hover');
 					ui.draggable.draggable('option','revert',false);
-
+					console.log('$$		item drop', zeega.app.draggedItem, _this.model)
 					_this.model.addItemLayer( zeega.app.draggedItem )
 				}
 			});

@@ -140,8 +140,7 @@ jQuery(function($)
 	}
 
 	$('#new-layer-list a').click(function(){
-		zeega.app.addLayer( { type : $(this).data('type') } );
-		//addLayer( $(this).data('type') );
+		zeega.app.currentFrame.addLayerByType( $(this).data('type') );
 		return false;
 	})
 
@@ -209,22 +208,6 @@ jQuery(function($)
 			return false;
 		}
 	});
-
-	$('#links-list').sortable({
-		//define a grip handle for sorting
-		handle: '.layer-drag-handle',
-		cursor : 'move',
-		axis:'y',
-		containment: '#sidebar',
-		cursorAt : {top:1,left:1},
-		placeholder: "ui-state-highlight",
-
-		//resort the layers in the workspace too
-		update : function()
-		{
-			zeega.app.updateLayerOrder();
-		}
-	})
 
 
 	$('#database-item-list').scroll(function(){

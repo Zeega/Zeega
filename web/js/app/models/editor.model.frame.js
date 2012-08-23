@@ -73,12 +73,35 @@
 
 		addItemLayer : function( itemModel )
 		{
-
+			var _this = this;
+			var Layer = zeega.module('layer');
+			// make a new layer // this could be more elegant // shouldnt' dump attributes into model!
+			var newLayer = new Layer[itemModel.get('layer_type')]({
+					type: itemModel.get('layer_type'),
+					attr: itemModel.attributes
+				});
+			newLayer.save({},{
+				success : function()
+				{
+					_this.layers.push( newLayer );
+					zeega.app.project.layers.add( newLayer );
+				}
+			})
 		},
-		
 
-
-
+		addLayerByType : function( type )
+		{
+			var _this = this;
+			var Layer = zeega.module('layer');
+			var newLayer = new Layer[type]();
+			newLayer.save({},{
+				success : function()
+				{
+					_this.layers.push( newLayer );
+					zeega.app.project.layers.add( newLayer );
+				}
+			})
+		},
 
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()

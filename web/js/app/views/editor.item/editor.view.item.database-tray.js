@@ -56,7 +56,6 @@
 				//init the dragged item variable
 				start : function(){
 					$(this).draggable('option','revert',true);
-					console.log('drag started', _this.model, $('#project-cover-image'))
 					if(_this.model.get('layer_type') == 'Image') $('#project-cover-image').addClass('target-focus');
 					$('#visual-editor-workspace').addClass('target-focus');
 					$('#frame-drawer').addClass('target-focus');

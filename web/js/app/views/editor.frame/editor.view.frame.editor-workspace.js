@@ -56,6 +56,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		initEvents : function()
 		{
 			//enable the workspace as a valid drop location for DB items
+			var _this = this;
 			this.$el.find('#visual-editor-workspace').droppable({
 				accept : '.database-asset-list',
 				hoverClass : 'workspace-item-hover',
@@ -65,7 +66,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				drop : function( event, ui )
 				{
 					ui.draggable.draggable('option','revert',false);
-					zeega.app.addLayer({ item : zeega.app.draggedItem })
+					_this.model.addItemLayer( zeega.app.draggedItem );
 				}
 			});
 		},
