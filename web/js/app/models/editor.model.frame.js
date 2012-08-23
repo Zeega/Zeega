@@ -1,5 +1,11 @@
 (function(Frame){
 
+	Frame.LayerCollection = Backbone.Collection.extend({
+		initialize : function()
+		{
+		}
+	})
+
 	Frame.Model = Backbone.Model.extend({
 		
 		frameTarget : $('#frame-list'),
@@ -20,27 +26,38 @@
 		},
 	
 		initialize : function()
-		{	
-			this.updating = false
+		{
+			this.updating = false;
 			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			
 			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
+
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 			this.on('update_thumb', this.updateFrameThumb, this );
-			
-			
+
+		},
+
+		complete : function()
+		{
+			this.initLayerCollection();
+		},
+
+		initLayerCollection : function()
+		{
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
+			this.layerCollection = new Frame.LayerCollection( layerArray );
 		},
 		
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
-			console.log('##		render workspace', this.id)
 			this.editorWorkspace.renderToEditor();
 			this.editorLinkLayerList.renderToEditor();
 			this.editorLayerList.renderToEditor();
@@ -48,7 +65,6 @@
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
-			console.log('##		unrender workspace', this.id)
 			this.editorWorkspace.removeFromEditor()
 			this.editorLinkLayerList.removeFromEditor();
 			this.editorLayerList.removeFromEditor();
@@ -64,7 +80,6 @@
 		
 		update : function( newAttr, silent )
 		{
-			console.log('update', this)
 			var _this = this;
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
 			var a = _.extend( this.get('attr'), newAttr );
@@ -82,8 +97,6 @@
 		{
 			
 			// single frame url: frame
-			console.log('SAVE FRAME')
-			console.log(this)
 			var _this = this;
 						
 			if( this.updating != true && zeega.app.thumbnailUpdates )

@@ -120,7 +120,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		connectToSequenceFrame : function( sequenceID, frameID )
 		{
-			console.log('connectToSequenceFrame' + sequenceID +' '+ frameID)
 			zeega.app.addLayer({
 				type : 'Link',
 				options : {
@@ -465,7 +464,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		initialize : function()
 		{
-			console.log('editor link list', this)
 		},
 		
 		render : function()
@@ -478,7 +476,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) ) return layer;
 				else return null;
 			});
-			console.log( 'layerssss',this.model.get('layers'),this.layers)
 			//render each layer into the workspace
 			_.each( _.compact(this.layers), function(layer){
 				_this.$el.prepend( layer.controls.renderControls().el );
