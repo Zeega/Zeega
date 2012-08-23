@@ -33,7 +33,9 @@ this.zeega.discovery = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
-	apiLocation : sessionStorage.getItem("hostname")+sessionStorage.getItem("directory"),
+	//apiLocation : sessionStorage.getItem("hostname")+sessionStorage.getItem("directory"),
+	
+	apiLocation : ' http://dev.zeega.org/filipe/web/',
 	currentView : 'list',
 	resultsPerPage : 100,
 	
@@ -170,7 +172,7 @@ this.zeega.discovery = {
 							this.filterModel = new Items.Model({id:sessionStorage.getItem('filterId')});
 							this.filterModel.fetch({
 								success : function(model, response){
-									_this.resultsView.collectionFilter = new Items.Views.CollectionPage({model:model});
+									_this.resultsView.collectionFilter = new Items.Views.CollectionDetails({model:model});
 									if (!_.isUndefined(_this.searchObject.view_type)) _this.switchViewTo(_this.searchObject.view_type,true) ;
 									else _this.search(_this.searchObject);
 								},

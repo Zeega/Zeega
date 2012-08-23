@@ -46,9 +46,10 @@ require (
 		
 			
 			//views
-			'order!app/views/discovery.items/discovery.view.item.collection-page',
+			'order!app/views/discovery.items/discovery.view.item.collection-details',
 			'order!app/views/discovery.items/discovery.view.item.thumb',
 			'order!app/views/discovery.items/discovery.view.item.list',
+			'order!app/views/discovery.items/discovery.view.item.publish-settings',
 			
 			'order!app/views/editor.common/editor.view.common.leaflet-map',
 			'order!app/views/editor.common/editor.view.common.tag-display-edit',
@@ -62,8 +63,6 @@ require (
 		
 		
 			'order!app/views/discovery.users/discovery.view.user.user-page',
-			
-			'order!app/views/discovery.modals/discovery.view.modal.archive-settings',
 			
 				//custom
 			'order!helpers/utils',

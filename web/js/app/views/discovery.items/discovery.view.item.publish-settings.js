@@ -1,11 +1,9 @@
-(function(Discovery) {
+(function(Items) {
 
 
-
-	Discovery.Modals = Discovery.Modals || {};
-	Discovery.Modals.Views = Discovery.Modals || {};
+	Items.Views = Items.Views || {};
 	
-	Discovery.Modals.Views.ArchiveSettings = Backbone.View.extend({
+	Items.Views.PublishSettings = Backbone.View.extend({
 		
 		events: {
 			'click .close' : 'hide',
@@ -86,4 +84,4 @@
 
 	});
 
-})(zeega.module("discovery"));
+})(zeega.module("items"));

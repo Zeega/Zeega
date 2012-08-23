@@ -53,7 +53,7 @@ jQuery(function($)
   //View buttons toggle
   $("#zeega-view-buttons button").tooltip({'placement':'bottom', delay: { show: 600, hide: 100 }});
   
-  $('#zeega-view-buttons a').click(function(){ zeega.discovery.app.switchViewTo( $(this).data('goto-view') , true); return false; });
+  $('#zeega-view-buttons a').click(function(){ zeega.discovery.app.switchViewTo( $(this).data('goto-view') , false); return false; });
 
   $('#zeega-search-help').popover({'title':l.jda_searching,'placement':'bottom'});
 
