@@ -33,7 +33,6 @@
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 			this.on('update_thumb', this.updateFrameThumb, this );
-
 		},
 
 		complete : function()
@@ -48,19 +47,7 @@
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
 		},
-/*
-		onLayerAdd : function( layer )
-		{
-			this.renderLayerToWorkspace(layer);
-			this.updateLayerOrder();
-		},
 
-		onLayerRemove : function( layer )
-		{
-			this.unrenderLayerFromWorkspace(layer);
-			this.updateLayerOrder();
-		},
-*/
 		// updates the layer order when a layer is added, removed, or moved
 		updateLayerOrder : function()
 		{
@@ -83,6 +70,16 @@
 			this.updateLayerOrder();
 		},
 
+
+		addItemLayer : function( itemModel )
+		{
+
+		},
+		
+
+
+
+
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
@@ -98,18 +95,6 @@
 			this.editorLayerList.removeFromEditor();
 		},
 		
-/*		
-		// adds a new layer to the workspace without disturbing existing layers
-		renderLayerToWorkspace : function( newLayer )
-		{
-			this.editorLayerList.addLayer( newLayer );
-			this.editorWorkspace.workspace.addLayer( newLayer );
-		},
-		unrenderLayerFromWorkspace : function( layer )
-		{
-			layer.removeFromView
-		},
-*/		
 		update : function( newAttr, silent )
 		{
 			var _this = this;

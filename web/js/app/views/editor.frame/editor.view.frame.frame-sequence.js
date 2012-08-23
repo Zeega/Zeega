@@ -38,33 +38,8 @@
 		
 			this.el = $( template(blanks) );
 
-			//frame droppable stuff
-			$(this.el).droppable({
-				accept : '.database-asset-list',
-				hoverClass : 'frame-item-hover',
-				tolerance : 'pointer',
+			this.makeDroppable();
 
-				over : function(event, ui)
-				{
-					$('#frame-drawer').addClass('hover');
-				},
-				out : function(event, ui)
-				{
-					$('#frame-drawer').removeClass('hover');
-				},
-
-				//this happens when you drop a database item onto a frame
-				drop : function( event, ui )
-				{
-					$('#frame-drawer').removeClass('hover');
-					ui.draggable.draggable('option','revert',false);
-					zeega.app.addLayer({
-						item : zeega.app.draggedItem,
-						frame : _this.model
-					})
-					
-				}
-			});
 
 			$(this.el).hover(function(){
 				$(_this.el).find('.frame-menu').show();
@@ -127,6 +102,35 @@
 			);
 			
 			return this;
+		},
+
+		makeDroppable : function()
+		{
+			//frame droppable stuff
+			var _this = this;
+			this.$el.droppable({
+				accept : '.database-asset-list',
+				hoverClass : 'frame-item-hover',
+				tolerance : 'pointer',
+
+				over : function(event, ui)
+				{
+					$('#frame-drawer').addClass('hover');
+				},
+				out : function(event, ui)
+				{
+					$('#frame-drawer').removeClass('hover');
+				},
+
+				//this happens when you drop a database item onto a frame
+				drop : function( event, ui )
+				{
+					$('#frame-drawer').removeClass('hover');
+					ui.draggable.draggable('option','revert',false);
+
+					_this.model.addItemLayer( zeega.app.draggedItem )
+				}
+			});
 		},
 	
 		events : {
