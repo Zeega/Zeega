@@ -347,22 +347,9 @@ this.zeega = {
 	
 	continueLayerToNextFrame : function( layerID )
 	{
-		if(!this.busy)
-		{
-			var nextFrame = this.getRightFrame();
-			if( nextFrame != false && nextFrame != this.currentFrame )
-			{
-				var layers = [];
-				if(nextFrame.get('layers'))
-				{
-					var l = _.compact(nextFrame.get('layers'));
-					l.unshift( parseInt(layerID) );
-					layers = l;
-				}
-				else layers = [ parseInt(layerID) ];
-				nextFrame.save({ layers : layers });
-			}
-		}
+		var nextFrame = this.getRightFrame();
+		var layer = this.project.layers.get(layerID);
+		if( nextFrame != false && nextFrame != this.currentFrame ) nextFrame.layers.unshift( layer );
 	},
 	
 	continueOnAllFrames : function( layerID )
@@ -421,20 +408,6 @@ this.zeega = {
 			}
 		})
 	},
-	
-	updateLayerOrder : function( frame )
-	{
-		console.log('updateLayerOrder')
-		var frame = frame || this.currentFrame;
-		var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
-		var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
-		var order = linkOrder.concat(layerOrder).reverse();
-		
-		// updates z-index of divs in workspace
-		_.each( order , function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
-
-		frame.save({'layers': _.compact(order) })
-	},
 
 	// returns the order that the frame appears in the sequence
 	getFrameIndex : function( frame )
@@ -461,11 +434,6 @@ this.zeega = {
 		
 		this.Player = zeegaPlayer.app;
 		this.Player.initialize( this.exportProject(), {mode: 'editor', frameID : parseInt(this.currentFrame.id) } )
-		
-		/*
-		this.player = new Player2($('body'));
-		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
-		*/
 		
 		$('body').addClass('preview-mode');
 	},

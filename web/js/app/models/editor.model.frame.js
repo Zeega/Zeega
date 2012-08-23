@@ -1,9 +1,9 @@
 (function(Frame){
 
 	Frame.LayerCollection = Backbone.Collection.extend({
-		initialize : function()
-		{
-		}
+
+		comparator : function( layer ){ return layer.layerIndex }
+	
 	})
 
 	Frame.Model = Backbone.Model.extend({
@@ -27,17 +27,9 @@
 	
 		initialize : function()
 		{
-			this.updating = false;
-			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
-
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			
-			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
-			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
-			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
-			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
-
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 			this.on('update_thumb', this.updateFrameThumb, this );
@@ -46,24 +38,49 @@
 
 		complete : function()
 		{
-			this.initLayerCollection();
-		},
-
-		initLayerCollection : function()
-		{
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
 			this.layers = new Frame.LayerCollection( layerArray );
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
+
+			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
+			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
+			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
+		},
+/*
+		onLayerAdd : function( layer )
+		{
+			this.renderLayerToWorkspace(layer);
+			this.updateLayerOrder();
 		},
 
-		// updates the layer order when a layer is added or removed
+		onLayerRemove : function( layer )
+		{
+			this.unrenderLayerFromWorkspace(layer);
+			this.updateLayerOrder();
+		},
+*/
+		// updates the layer order when a layer is added, removed, or moved
 		updateLayerOrder : function()
 		{
 			var layerOrder = this.layers.pluck('id');
-			console.log('$$		layer order', layerOrder);
 			if(layerOrder.length == 0) layerOrder = [false];
 			this.save('layers',layerOrder);
+			this.updateThumb();
+		},
+
+		// relies on the frame actually being rendered in the dom to work
+		sortLayers : function( layerIDArray )
+		{
+			var _this = this;
+			_.each(layerIDArray, function(layerID, i){
+				var layer = _this.layers.get(layerID);
+				$('#layer-visual-'+ layer.id).css('z-index', i);
+				layer.layerIndex = i;
+			})
+			this.layers.sort();
+			this.updateLayerOrder();
 		},
 
 		// adds the frame workspace view to the editor
@@ -81,14 +98,18 @@
 			this.editorLayerList.removeFromEditor();
 		},
 		
-		
+/*		
 		// adds a new layer to the workspace without disturbing existing layers
 		renderLayerToWorkspace : function( newLayer )
 		{
 			this.editorLayerList.addLayer( newLayer );
 			this.editorWorkspace.workspace.addLayer( newLayer );
 		},
-		
+		unrenderLayerFromWorkspace : function( layer )
+		{
+			layer.removeFromView
+		},
+*/		
 		update : function( newAttr, silent )
 		{
 			var _this = this;

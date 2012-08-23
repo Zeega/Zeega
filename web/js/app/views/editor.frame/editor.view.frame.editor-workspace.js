@@ -11,6 +11,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 (function(Frame){
 
+
+	/*
+		the wrapper view for the visual workspace
+	*/
+
 	Frame.Views.EditorWorkspace = Backbone.View.extend({
 
 		id : 'workspace',
@@ -229,6 +234,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		initialize : function()
 		{
+			this.model.layers.on('add', this.onAddLayer, this );
+			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},
 		
 		render : function()
@@ -249,22 +256,19 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.layers.each(function(layer){ layer.visual.private_onLayerEnter() })
 		},
 		
-		
-		addLayer : function( layer )
+		onAddLayer : function( layer )
 		{
-			var _this = this;
-			if(layer.isNew()) layer.on('layer_saved',function(e){
-				_this.$el.append( layer.visual.render().el );
-				layer.visual.private_onLayerEnter();
-			})
-			else layer.visual.private_onLayerEnter();
+			this.$el.append( layer.visual.render().el )
 		},
-		
+
+		onRemoveLayer : function( layer )
+		{
+			layer.visual.private_onLayerExit()
+		},
+
 		removeAllLayers : function()
 		{
-			_.each( _.compact(this.layers), function(layer){
-				layer.visual.private_onLayerExit();
-			})
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit() })
 		}
 	})
 	
@@ -372,28 +376,23 @@ the frame's layers. It also includes common frame functions like adding sequence
 		id : 'layers-list-visual',
 		target : '#layers-list-container',
 		className : 'unstyled',
-		
+
 		initialize : function()
 		{
+			console.log(this)
+			this.model.layers.on('add', this.onAddLayer, this );
+			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},
 		
 		render : function()
 		{
-			var _this = this;
-			// do this every time?
-			this.layers = _.map( this.model.get('layers'), function(layerID){
-				var layer = zeega.app.project.layers.get(layerID);
-				if( !_.isUndefined(layer) && layer.get('type') != 'Link' ) return layer;
-				else return null;
-			});
-
 			this.makeSortable();
-			
 			return this;
 		},
 		
 		makeSortable : function()
 		{
+			var _this = this;
 			this.$el.sortable({
 				//define a grip handle for sorting
 				handle: '.layer-drag-handle',
@@ -406,7 +405,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 				//resort the layers in the workspace too
 				update : function()
 				{
-					zeega.app.updateLayerOrder();
+					var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
+					var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
+					var order = linkOrder.concat(layerOrder).reverse();
+					_this.model.sortLayers( order );
 				}
 			});
 			$( "#sortable-layers" ).disableSelection();
@@ -416,31 +418,32 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			var _this = this;
 			$( this.target ).html( this.render().el );
-			_.each( _.compact(this.layers), function(layer){
-				_this.$el.prepend( layer.controls.renderControls().el );
-				layer.controls.delegateEvents();
+
+			this.model.layers.each(function(layer){
+				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
+				{
+					_this.$el.prepend( layer.controls.renderControls().el );
+					layer.controls.delegateEvents();
+				}
 			})
 		},
-		
-		addLayer : function( layer )
+
+		onAddLayer : function( layer )
 		{
-			var _this = this;
-			if(layer.isNew()) layer.on('layer_saved',function(e){
-				_this.$el.prepend( layer.controls.renderControls().el );
-				layer.controls.private_onLayerEnter();
-			
-			})
-			else layer.controls.private_onLayerEnter();
-			
+			this.$el.prepend( layer.controls.renderControls().el );
+			layer.controls.delegateEvents();
+		},
+
+		onRemoveLayer : function( layer )
+		{
+			layer.controls.private_onLayerExit();
+			layer.controls.remove();
 		},
 		
 		removeFromEditor : function()
 		{
-			_.each( _.compact(this.layers), function(layer){
-				layer.controls.private_onLayerExit();
-			})
+			this.model.layers.each(function(layer){ layer.controls.private_onLayerExit() });
 			this.$el.empty();
-			//this.undelegateEvents()
 		}
 		
 	})
@@ -452,32 +455,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 		target : '#link-list-container',
 		className : 'unstyled',
 		
-		initialize : function()
-		{
-		},
-		
 		render : function()
 		{
 			var _this = this;
-			// do this every time?
-			this.layers = _.map( this.model.get('layers'), function(layerID){
-				var layer = zeega.app.project.layers.get(layerID);
-				//single out only link layers on source frames
-				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) ) return layer;
-				else return null;
-			});
-			//render each layer into the workspace
-			_.each( _.compact(this.layers), function(layer){
-				_this.$el.prepend( layer.controls.renderControls().el );
+			this.model.layers.each(function(layer){
+				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) )
+					_this.$el.prepend( layer.controls.renderControls().el );
 			})
-			
 			this.makeSortable();
-			
 			return this;
 		},
 		
 		makeSortable : function()
 		{
+			var _this = this;
 			this.$el.sortable({
 				//define a grip handle for sorting
 				handle: '.layer-drag-handle',
@@ -487,7 +478,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				cursorAt : {top:1,left:1},
 				placeholder: "ui-state-highlight",
 				//resort the layers in the workspace too
-				update : function(){ zeega.app.updateLayerOrder() }
+				update : function(){ _this.model.updateLayerOrder() }
 			});
 			$( "#sortable-layers" ).disableSelection();
 		},

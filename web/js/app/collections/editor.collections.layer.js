@@ -46,11 +46,13 @@
 				});
 			
 				this.add( newLayer );
+				/*
 				if( args.show() )
 				{
 					console.log('##		render to workspace', args, newLayer)
 					args.frame.renderLayerToWorkspace( newLayer );
 				}
+				*/
 				this.saveLayer(newLayer, args.frame);
 				return newLayer;
 			}
@@ -63,18 +65,11 @@
 			//remove model from layerModel.attr
 			layerModel.attributes.attr.model = null;
 			console.log('save layer', layerModel)
+			
 			layerModel.save({},{
 				success : function( savedLayer )
 				{
-					console.log('layermodel saved', savedLayer)
-					savedLayer.trigger('refresh_view');
-					savedLayer.trigger('layer_saved');
-					
-					//_this.addLayerToFrame( frame, savedLayer );
-					console.log('$$		layer saved', frame,savedLayer)
 					frame.layers.push(savedLayer);
-
-					frame.trigger('update_thumb');
 				}
 			});
 			
