@@ -2,21 +2,9 @@ ZeegaCoreBundle_celery:
   pattern: /celery/queue
   defaults: { _controller: ZeegaCoreBundle:Celery:queue }
 
-sites:
-  type:     rest
-  resource: Zeega\CoreBundle\Controller\SitesController
-  
-ZeegaCoreBundle_home:
-    pattern: /
-    defaults: { _controller:  ZeegaCoreBundle:Editor:home }
-
-ZeegaCoreBundle_site:
-    pattern: /site/{short}
-    defaults: { _controller:  ZeegaCoreBundle:Editor:site }
-
-ZeegaCoreBundle_editor:
-    pattern: /site/{short}/project/{id}
-    defaults: { _controller:  ZeegaCoreBundle:Editor:editor }
+ZeegaCoreBundle_thumbnails:
+    type:     rest
+    resource: Zeega\CoreBundle\Controller\ThumbnailsController
 
 ZeegaCoreBundle_faq:
     pattern: /faq
@@ -39,7 +27,11 @@ ZeegaCoreBundle_collection_publish:
     defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
     
 ZeegaCoreBundle_embed:
-    pattern: /{id}
+    pattern: /{id}/embed
     defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
+
+ZeegaCoreBundle_project_main:
+    pattern: /{id}
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
 
     

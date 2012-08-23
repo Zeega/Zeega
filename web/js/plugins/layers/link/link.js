@@ -9,7 +9,10 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
+		hasControls : false,
 		defaultControls : false,
+		displayCitation : false,
+		
 		
 		
 		defaultAttributes : {
@@ -26,7 +29,15 @@
 		
 		init : function(options)
 		{
-			
+			//check to see if link layer is broken
+			/*
+			var a = this.get('attr');
+			if( !_.isNull(a.from_frame) || !_.isNull(a.from_sequencee) || !_.isNull(a.to_frame) || !_.isNull(a.to_sequence) )
+			{
+				console.log('link layer is broken! delete meeee!')
+				this.destroy();
+			}
+			*/
 		},
 		
 		setToFrame : function(sequenceID, frameID)
@@ -90,7 +101,7 @@
 				})
 
 				// if the editor is active, the remove the layer if it shouldn't be shown
-				if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
+				//if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 			}
 			else
 			{
@@ -111,12 +122,12 @@
 		
 		goClick : function()
 		{
-			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			zeegaPlayer.app.project.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		goToSequenceFrame : function()
 		{
-			if(zeega.app.previewMode) zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			if(zeega.app.previewMode) zeega.app.project.goToFrame(this.model.get('attr').to_frame);
 			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
 		},
 		
@@ -136,30 +147,26 @@
 		
 		onLayerEnter : function()
 		{
-			this.render();
+			var _this = this;
+			this.$el.resizable({
+				stop: function(e,ui)
+				{
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			})
 			this.delegateEvents();
-			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
-			{
-				var _this = this;
-				this.delegateEvents();
-				this.$el.resizable({
-					stop: function(e,ui)
-					{
-						_this.model.update({
-							'width' : $(this).width() / $(this).parent().width() * 100,
-							'height' : $(this).height() / $(this).parent().height() * 100
-						})
-					}
-				})
-			}
-			
 		},
 		
 		onPlay : function()
 		{
 			this.render();
+			/*
 			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
 				this.moveOffStage()
+			*/
 			this.delegateEvents({'click':'goClick'})
 		},
 		
@@ -167,7 +174,7 @@
 		{
 			var html = '';
 			
-				if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
+				//if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 				
 			return html;

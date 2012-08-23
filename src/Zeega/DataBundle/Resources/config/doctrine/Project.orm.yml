@@ -25,13 +25,22 @@ Zeega\DataBundle\Entity\Project:
             type: integer
             generator: { strategy: AUTO }
     fields:
+        item_id:
+            type: string
+            length: 255
+            nullable: true
         title:
             type: string
             length: 255
             nullable: true
-        date_created:
-            type: datetime
-            nullable: false
+        description:
+            type: string
+            length: 1024
+            nullable: true
+        location:
+            type: string
+            length: 255
+            nullable: true
         tags:
             type: array
             nullable: true        
@@ -52,8 +61,14 @@ Zeega\DataBundle\Entity\Project:
         estimated_time:
             type: string
             length: 140
-            nullable: true        
+            nullable: true  
+        date_created:
+            type: datetime
+            nullable: false      
         date_updated:
+            type: datetime
+            nullable: true
+        date_published:
             type: datetime
             nullable: true
         

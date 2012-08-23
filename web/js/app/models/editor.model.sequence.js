@@ -1,5 +1,11 @@
 (function(Sequence){
 
+	Sequence.FrameCollection = Backbone.Collection.extend({
+		initialize : function()
+		{
+		}
+	})
+
 	Sequence.Model = Backbone.Model.extend({
 		
 		defaults :{
@@ -19,57 +25,81 @@
 		initialize : function( attributes )
 		{
 			this.checkAttr();
-			this.on('updateFrameOrder',this.updateFrameOrder,this);
+			
+			this.tabView = new Sequence.Views.SequenceTabs({model:this});
+			this.sequenceFrameView = new Sequence.Views.SequenceFrameDrawer({model:this})
+			
+			this.on('sync', this.refreshView, this);
 			this.on('sync', this.checkAttr, this);
-			this.attachTabView();
 			
 			this.trigger('ready');
+		},
+
+		complete : function()
+		{
+			var _this = this;
+			var frameArray = this.get('frames').map(function(frameID){
+				var frame = zeega.app.project.frames.get(frameID);
+				frame.sequenceID = _this.id;
+				return frame;
+			});
+			this.frameCollection = new Sequence.FrameCollection(frameArray);
 		},
 		
 		checkAttr : function()
 		{
 			if( _.isArray(this.get('attr')) ) this.set({ attr : this.defaultAttr });
 		},
-		attachTabView : function()
-		{
-			this.view = new Sequence.Views.SequenceTabs({model:this});
-			this.on('sync', this.refreshView, this);
-		},
 		
 		refreshView : function()
 		{
-			console.log('refresh view!!!')
-			this.view.render();
+			this.tabView.render();
+		},
+		
+		
+		renderSequenceFrames : function()
+		{
+			console.log('$$		render seq frames')
+			this.sequenceFrameView.renderToTarget();
+		},
+		
+		addFrame : function( frame )
+		{
+			var frameArray = this.get('frames');
+			frameArray.push( frame.id );
+			this.set('frames',frameArray);
+			this.sequenceFrameView.render();
 		},
 
-		updateFrameOrder : function( save )
-		{
-			//this.frames.trigger('resort',frameIDArray);
-			var frameIDArray = _.map( $('#frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			console.log(frameIDArray)
-			this.set( { frames : frameIDArray } );
-			if( save != false ) this.save();
-		},
-		
-		
+//redo this vvvv
 		insertFrameView : function( frame, index )
 		{
-				if( _.isUndefined(index) ) $('#frame-list').append( frame.render() );
-				else $('#frame-list').children('li:eq('+index+')').after( frame.render() );
-				
-				this.updateFrameOrder();
+			var frameArray = this.get('frames');
+			var index  = index || frameArray.length;
+			frameArray.splice(index,0,frame.id);
+			this.set('frames',frameArray);
+
+			this.sequenceFrameView.render();
 		},
 		
 		destroyFrame : function( frameModel )
 		{
-			console.log('destroy frame:')
-			if( zeega.app.currentFrame == frameModel ) zeega.app.loadLeftFrame()
-			this.updateFrameOrder();
+			var index = _.indexOf( this.get('frames'), frameModel.id );
+			var frameOrder = _.without( this.get('frames'), frameModel.id );
+			this.save({ frames: frameOrder});
+			this.sequenceFrameView.render();
+
+			// this happens when there will be no more frames in the sequence
+			// prevent from not having any frames!!			
+			if( frameOrder.length == 0 ) zeega.app.addFrame();
+			else zeega.app.loadLeftFrame();
+
+			frameModel.destroy();
+
 		},
 		
 		updatePersistLayer : function( modelID )
 		{
-			console.log('persist this layer')
 			
 			this.set('attr',{persistLayers: [parseInt(modelID)] })
 			this.save();
@@ -79,17 +109,12 @@
 			if( _.include( attr.persistLayers, parseInt(modelID) ) ) 
 			{
 				attr = _.extend( attr, {persistLayers: _.without(attr.persistLayers, parseInt(modelID))})
-				//this.frames.removePersistence( parseInt(model.id) );
 			}
 			else
 			{
 				if(attr.persistLayers) attr = _.extend( attr, { persistLayers: _.compact(attr.persistLayers.push(parseInt(modelID))) });
 				else attr.persistLayers = [ parseInt(modelID) ];
-				console.log(attr)
-				//this.frames.addPersistence( parseInt(model.id) );
 			}
-			//this.set('attr',attr);
-			//this.save();
 		},
 		
 		update : function( newAttr, silent )

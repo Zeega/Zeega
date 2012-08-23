@@ -154,3 +154,5 @@ Zeega\DataBundle\Entity\Item:
             columns: [enabled]
         item_description_index:
             columns: [description]
+        item_attribution_uri_index:
+            columns: [attribution_uri]

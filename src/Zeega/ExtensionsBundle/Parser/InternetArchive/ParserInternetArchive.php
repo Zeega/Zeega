@@ -45,8 +45,10 @@ class ParserInternetArchive extends ParserAbstract
 		//if(!$item->getTitle()){return false;}
 	
 	    $item->setAttributionUri($originalUrl);
-		$item->setDescription($mdata["description"][0]);
-		$item->setDescription(str_replace('<br />','',$item->getDescription()));
+		if(isset($mdata["description"][0])){
+			$item->setDescription($mdata["description"][0]);
+			$item->setDescription(str_replace('<br />','',$item->getDescription()));
+		}
 		$item->setChildItemsCount(0);
 		$item->setThumbnailUrl(urldecode($misc["image"]));
 		

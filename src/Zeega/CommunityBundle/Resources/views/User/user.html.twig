@@ -1,0 +1,204 @@
+{# src/Zeega/CommunityBundle/Resources/views/Community/user.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+	{% block title %}{{user.getDisplayName()}}{% endblock %}
+
+		
+		
+         {% block fbshare %}
+         
+         
+         <!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{ user.getDisplayName()}}'s Zeega Page"/>
+		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
+   		<meta property="og:type" content="movie"/>
+   		<meta property="og:url" content="{{hostname}}{{directory}}user/{{user.getId()}}"/>
+   		<meta property="og:image" content="{{ user.getThumbUrl()}}"/>
+    	
+						
+		<!-- END FB -->	
+		
+         
+         {% endblock %}
+         
+         
+{% block browser_detection %}
+{% endblock browser_detection %}
+
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/user') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	{% if user_projects is defined %}
+		<script type="text/javascript" language="Javascript">
+			//bootstrapping data
+			var userProjectsJSON = "{{ user_projects | e('js') }}";
+		</script>
+	{% endif %}
+{% endblock %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Getting Started Card Begins -->
+	<!-- Commented out until content exists
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14  author-profile">
+			
+				<div class="row">
+		
+					<div class="span6 author-photo">
+					
+						<h3>Getting Started</h3>
+						<div style="margin-bottom: 10px;margin-left: 10px;padding: 5px;width: 365px;height: 165px;border: 1px solid #666;text-align: center;">
+						<img src="{{ asset('images/play-button.png') }}" style="position:relative !important; top:30px">
+						</div>
+						<div class="gradient hide">
+						</div>
+					
+					</div>
+					
+					<div class="span6 author-bio">
+					
+						<div>
+							
+							
+							<div>
+								<p class="card"> 1- 2- 3- HOW TO GET STARTED INFO</p>
+							</div>
+						</div>
+						
+						
+						
+						<div class="shadow">
+						</div>
+					
+					</div>
+					<div class="span2 author-bio">
+					
+						<div>
+							
+							
+							<div>
+								<p class="card"> Check out these templates</p>
+							</div>
+						</div>
+						
+						
+						
+						<div class="shadow">
+						</div>
+					
+					</div>
+					
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	-->
+	<!-- Getting Started Card Ends -->
+	<!-- Author Card Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14 author-profile" style="height:auto">
+			
+				<div id="dashboard-profile" class="row"  >
+		
+					
+					
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Author Card Ends -->
+	
+	
+	<!-- Author's Latest Zeegas Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14" style="position:relative">
+			
+				<h2 class="section-title">Your Latest Zeegas</h2>
+				
+			
+			</div>
+		
+		</div>
+		
+		<div class="row" id="zeega-user-projects">
+		
+		</div>
+	
+	</div>
+	
+	<!-- Author's Latest Zeegas Ends -->
+	
+	
+	
+
+
+
+{% endblock %}

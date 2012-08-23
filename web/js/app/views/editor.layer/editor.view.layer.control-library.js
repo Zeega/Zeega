@@ -1,3 +1,14 @@
+/****************************
+
+a note on this.settings:
+
+DO NOT use this.settings to read in any dynamically updated content. It won't work
+
+Use this.model.get('attr')[my_setting] instead!!!
+
+*****************************/
+
+
 (function(Layer){
 
 	Layer.Views.Lib = Backbone.View.extend({
@@ -195,7 +206,7 @@
 				'<div class="input-prepend">'+
 					'<span class="add-on">http://</span>'+
 					'<input class="span2" type="text" placeholder="www.example.com" value="<%= link %>">'+
-					'<a href="#" class="remove-link">&times;</span>'
+					'<a href="#" class="remove-link close">&times;</span>'
 				'</div>';
 				
 			return html;
@@ -218,13 +229,11 @@
 		},
 		
 		init : function( args )
-		{
-			this.className = this.settings.className;
-		},
+		{},
 		
 		render : function()
 		{
-			$(this.el).attr('id', this.settings.idName);
+			$(this.el).attr('id', 'media-controls-'+this.model.id);
 		}
 		
 	});
@@ -261,8 +270,8 @@
 		{
 			var _this = this;
 			var check = '';
-			if(this.settings.value) check = 'checked';
-			$(this.el).append( _.template(this.getTemplate(), _.extend(this.settings,{check:check}) ) );
+			if(this.model.get('attr')[this.settings.property]) check = 'checked';
+			$(this.el).append( _.template( this.getTemplate(), _.extend(this.settings,{check:check}) ) );
 			var count = 0;
 			this.$el.find('input').change(function(){
 				_this.saveValue( $(this).is(':checked') )
@@ -311,6 +320,12 @@
 			callback : false,
 			save : true,
 			
+			
+			onSlide : function(){},
+			onChange : function(){},
+			onStart : function(){},
+			onStop : function(){},
+			
 			slide : null
 		},
 		
@@ -337,19 +352,32 @@
 				max : this.settings.max,
 				value : uiValue,
 				step : this.settings.step,
+				start : function(e,ui)
+				{
+					_this.settings.onStart();
+				},
 				slide : function(e, ui)
 				{
 					_this.updateSliderInput(ui.value);
 					_this.updateVisualElement( ui.value );
 					
+					_this.value = ui.value;
+					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
+					_this.settings.onSlide();
 				},
 				change : function(e,ui)
 				{
 					_this.updateVisualElement( ui.value );
 					_this.updateSliderInput(ui.value);
 					_this.saveValue(ui.value)
+					_this.settings.onChange();
+				},
+				stop : function(e,ui)
+				{
+					_this.settings.onStop();
 				}
+				
 			});
 			
 			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
@@ -596,8 +624,12 @@
 					'<li><a href="#" data-font-size="175">14</a></li>'+
 					'<li><a href="#" data-font-size="200">18</a></li>'+
 					'<li><a href="#" data-font-size="250">24</a></li>'+
+					'<li><a href="#" data-font-size="375">36</a></li>'+
 					'<li><a href="#" data-font-size="500">48</a></li>'+
-					'<li><a href="#" data-font-size="700">72</a></li>'+
+					'<li><a href="#" data-font-size="800">72</a></li>'+
+					'<li><a href="#" data-font-size="1600">144</a></li>'+
+					'<li><a href="#" data-font-size="2400">200</a></li>'+
+					'<li><a href="#" data-font-size="3600">300</a></li>'+
 				'</ul>'+
 			'</div></div>';
 					
@@ -649,7 +681,7 @@
 				});
 			}
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{'color':this.model.get('attr')[this.settings.property]}) ));
 			
 			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
@@ -689,7 +721,6 @@
 		initWheel : function()
 		{
 			var _this = this;
-			console.log('pull up color wheel!')
 			this.$el.find('.close').show();
 			
 			if( this.wheelLoaded != true )
@@ -744,225 +775,6 @@
 			return html;
 		}
 	});
-
-
-	// depends on popcorn.js
-	Layer.Views.Lib.Playback = Layer.Views.Lib.extend({
-		
-		className : 'control control-playback plyr-controls-wrapper',
-		
-		defaults : {},
-		
-		init : function()
-		{
-			this.model.on('video_ready', this.onVideoReady, this);
-		},
-		
-		render : function()
-		{
-			var _this = this;
-			
-			this.$el.append( this.getTemplate() ).attr('id','plyr-editor');
-			
-			return this;
-		},
-		
-		onVideoReady : function()
-		{
-			this.delegateEvents();
-			this.initPopcornEvents();
-			this.initScrubbers();
-		},
-		
-		initPopcornEvents : function()
-		{
-			var _this = this;
-			
-			//console.log(this.model.video)
-			
-			this.model.video.pop.listen('pause',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
-			});
-			
-			this.model.video.pop.listen('play',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
-			});
-			
-			
-			
-			
-			this.model.video.on('timeupdate_controls', function(){
-
-				if(Math.abs(_this.model.video.pop.volume()-_this.model.get('attr').volume)>.01)_this.model.video.pop.volume(_this.model.get('attr').volume);
-
-				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
-				{
-					
-					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
-					_this.model.video.pop.pause();
-				}
-				else if(_this.model.video.pop.currentTime() < _this.model.get('attr').cue_in )
-				{
-					
-					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
-					_this.model.video.pop.pause();
-				}
-				
-				var left = parseFloat( _this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
-				_this.$el.find('.plyr-scrubber').css({ 'left' : left+'%' });
-				_this.$el.find('.plyr-time').html( convertTime( _this.model.video.pop.currentTime() )+' / '+convertTime( _this.model.video.pop.duration() ) );
-				_this.$el.find('.plyr-time-bar').css({ 'width' : left+'%' });
-
-			});
-			
-			this.model.video.pop.listen('seeking',function(){});
-			this.model.video.pop.listen('seeked',function(){});
-			this.model.video.pop.listen('ended',function(){
-				//this.currentTime(0);
-			});
-			this.model.video.pop.listen('loadeddata',function(){});
-		},
-		
-		initScrubbers : function()
-		{
-			var _this = this;
-			this.$el.find('.plyr-scrubber').draggable({
-				
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					var newTime = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-time').html( convertTime(newTime)+' / '+convertTime(_this.model.video.pop.duration()));
-				},
-				
-				stop: function(event, ui)
-				{
-					var newTime = Math.floor(parseFloat(_this.$el.find('.plyr-scrubber').css('left'))*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));
-					if( newTime < _this.model.get('attr').cue_in ) newTime = _this.model.get('attr').cue_in;
-					else if( newTime > _this.model.get('attr').cue_out && parseFloat(_this.model.get('attr').cue_out)>0) newTime = Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0);
-				
-					_this.model.video.pop.trigger('timeupdate');
-					_this.model.video.pop.currentTime( newTime );
-					
-					//_this.pop.play();
-				}
-			});
-			
-			//console.log(this.model);
-			
-		
-			this.$el.find('.plyr-cuein-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				drag:function(event, ui)
-				{
-					_this.model.get('attr').cue_in = Math.floor( parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cuein-time').html( convertTime(_this.model.get('attr').cue_in,true) );
-				},
-				
-				stop: function(event, ui)
-				{
-					
-					_this.$el.find('.plyr-cuein-bar').css({'width':_this.$el.find('.plyr-cuein-scrubber').css('left')});
-					console.log(Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
-					_this.model.video.pop.currentTime( Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
-
-					var left = parseFloat( _this.model.video.pop.currentTime() ) / parseFloat( _this.model.video.pop.duration() ) * 100;
-					_this.$el.find('.plyr-scrubber').css({'left':left+'%'});
-					_this.$el.find('.plyr-time').html(convertTime(_this.model.video.pop.currentTime())+' / '+convertTime(_this.model.video.pop.duration()));
-					_this.$el.find('.plyr-time-bar').css({'width':left+'%'});
-					
-					_this.model.update({'cue_in' : _this.model.get('attr').cue_in });
-				}
-			});
-			   this.$el.find('.plyr-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			
-				this.$el.find('.plyr-cuein-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			if(parseFloat(this.model.get('attr').cue_out)>0)this.$el.find('.plyr-cueout-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_out )* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			this.$el.find('.plyr-cueout-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					_this.model.get('attr').cue_out = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration() / parseFloat( _this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cueout-time').html(convertTime( _this.model.get('attr').cue_out,true));
-				},
-				
-				stop: function(event, ui)
-				{
-					_this.$el.find('.plyr-cueout-bar').css({'width':parseInt(_this.$el.find('.plyr-timeline').width())-parseInt(_this.$el.find('.plyr-cueout-scrubber').css('left'))});
-					_this.model.video.pop.currentTime(Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0));
-				
-					_this.model.update({'cue_out' : _this.model.get('attr').cue_out });
-				}
-			});
-		},
-		
-		events : {
-			
-			'click .plyr-button' : 'playPause'
-			
-		},
-		
-		playPause : function()
-		{
-			console.log( 'volume: '+ this.model.get('attr').volume )
-			this.model.video.pop.volume( this.model.get('attr').volume );
-			if ( this.model.video.pop.paused() ) this.model.video.pop.play();
-			else this.model.video.pop.pause();
-		},
-		
-		getTemplate : function()
-		{
-			var html = 
-			
-			'<div class="plyr-time-wrapper">'+
-				'<div class="plyr-cuein-time"></div>'+
-				'<div class="plyr-cueout-time"></div>'+
-			'</div>'+
-			'<div class="plyr-timeline-wrapper">'+
-				'<div class="plyr-button-wrapper">'+
-					'<div class="plyr-button plyr-play"></div>'+
-				'</div>'+
-				'<div class="plyr-timeline">'+
-					'<div class="plyr-cuein-bar plyr-bar"></div>'+
-					'<div class="plyr-time-bar plyr-bar"></div>'+
-					'<div class="plyr-cueout-bar plyr-bar"></div>'+
-					'<div class="plyr-cuein-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down-green"></div>'+
-					'</div>'+
-					'<div class="plyr-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-hanging-box"></div>'+
-					'</div>'+
-					'<div class="plyr-cueout-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down"></div>'+
-					'</div>'+
-				'</div>'+
-			'</div>'+
-			'<div class="plyr-time-wrapper">'+
-				'<span class="plyr-time"></span>'+
-			'</div>';
-			
-			return html;
-		}
-	});
-	
 	
 	Layer.Views.Lib.GoogleMaps = Layer.Views.Lib.extend({
 		
@@ -1047,6 +859,16 @@
 					this.map.getStreetView().setVisible( true );
 				}
 				*/
+				
+				
+				  var streetViewLayer = new google.maps.ImageMapType({
+					getTileUrl : function(coord, zoom) {
+					  return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
+					},
+					tileSize: new google.maps.Size(256, 256)
+				  });
+				  
+				this.map.overlayMapTypes.insertAt(0, streetViewLayer);  
 				this.initMapListeners();
 				this.initGeoCoder();
 				

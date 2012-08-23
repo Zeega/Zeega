@@ -21,6 +21,10 @@ this.zeega = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
+
+	currentFrame : null,
+	currentSequence : null,
+
 	busy : false,
 	hold : null,
 	
@@ -28,7 +32,9 @@ this.zeega = {
 	currentFrame : null,
 	thumbnailUpdates : true,
 	previewMode:false,
-
+	
+	updated:false,
+	
 	helpCounter: 0,
 
 	maxFramesPerSequence : 0, // 0 = no limit
@@ -58,335 +64,117 @@ this.zeega = {
 		
 		console.log($.parseJSON(projectJSON))
 		
-		this.loadCollectionsDropdown( $.parseJSON(collectionsJSON) );
 		this.itemCollection = new Items.Collection();
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
-		this.project.on('ready',function(){ _this.startEditor() })
+		this.project.completeCollections();
+
 		this.project.loadProject();
 		
-		console.log(this.project)
-	},
-	
-	loadCollectionsDropdown : function( collections )
-	{
-		_.each( collections, function( collection ){
-			$('#database-collection-filter').append('<option value="'+ collection.id +'">'+ collection.title +'</option>')
-		})
-	},
-	
-	searchDatabase : function( search, reset ){ this.itemCollection.search(search,reset) },
-	refreshDatabase : function(){ this.itemCollection.refresh() },
+		this.setButtonStates();
+		this.setProjectListeners();
+		console.log("project data ", this.project);
 
+		this.startEditor();
+	},
+	
+	// listens to things saving to update the button states
+	setProjectListeners : function()
+	{
+		var _this = this;
+		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
+		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
+	
+	},
+	
 	startEditor : function()
 	{
 		console.log('editor started')
-		
-		this.renderSequenceFrames();
-		this.startRouter();
+		//always start the editor at sequence 0, frame 0
+		var startFrameID = this.project.sequences.at(0).get('frames')[0];
+		this.goToFrame(startFrameID);
 	},
-	
-	startRouter: function()
-	{
-		var _this = this;
-		var Router = Backbone.Router.extend({
-			routes: {
-				""						: 'nullLoad',
-				"editor/sequence/:sequenceID/frame/:frameID"	: "goToSequenceFrame",
-				"player/sequence/:sequenceID/frame/:frameID"	: "checkPlayer"
-			},
-			
-			nullLoad : function()
-			{
-				_this.goToSequence( _this.project.sequences.at(0).id )
-				_this.goToFrame( _this.project.sequences.at(0).get('frames')[0] );
-			},
-			
-			goToSequenceFrame : function( sequenceID,frameID )
-			{
-				_this.goToSequence( sequenceID );
-				_this.goToFrame( frameID );
-			},
-			
-			checkPlayer : function( sequenceID,frameID )
-			{
-				console.log('zeega check player router')
-				if( !_this.previewMode ) this.goToSequenceFrame(sequenceID,frameID);
-				else _this.player.goToSequenceFrame(sequenceID,frameID);
-			}
-		});
 
-		this.router = new Router();
-		Backbone.history.start();
+	goToFrame : function( f )
+	{
+		if( _.isNumber(f) ) var frame = this.project.frames.get(f);
+		else var frame = f;
+
+		// if the frame's sequence isn't rendered, then render it
+		if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
+		{
+			var sequence = this.project.sequences.get( frame.sequenceID )
+			sequence.renderSequenceFrames();
+			this.currentSequence = sequence;
+		}
+
+		// render the frame workspace
+		if( _.isNull(this.currentFrame) || this.currentFrame != frame )
+		{
+			this.loadFrame( frame );
+			this.currentFrame = frame;
+		}
+
 	},
 	
 	goToSequence : function(sequenceID, frameID)
 	{
-		this.unrenderFrame(this.currentFrame);
+		// go to the first frame in the sequence
+		var frame = frameID || this.project.sequences.get(sequenceID).get('frames')[0];
 		this.currentSequence.trigger('blur');
-		this.currentSequence = this.project.sequences.get(sequenceID);
+		this.goToFrame( frame );
 		this.currentSequence.trigger('focus');
-		
-		this.renderSequenceFrames();
-		
-		var nextFrame = frameID ? this.project.frames.get(frameID) : this.project.frames.get( this.currentSequence.get('frames')[0] );
-		this.loadFrame(nextFrame);
-	},
-	
-	goToFrame : function( frameId )
-	{
-		if( _.isUndefined(frameId)||frameId=="undefined" )
-		{
-			this.currentFrame = this.project.frames.get( this.currentSequence.get('frames')[0] );
-			this.loadFrame( this.currentFrame );
-		}
-		else this.loadFrame( this.project.frames.get( frameId ) );
 	},
 
 	loadFrame : function( frame )
 	{
-		var _this = this;
-		this.unrenderFrame( this.currentFrame );
-		
-		if(this.currentFrame) this.currentFrame.trigger('blur');
-		this.currentFrame = frame;
-
-		this.currentFrame.trigger('focus');
-		this.renderFrame( this.currentFrame );
-		
-		this.router.navigate('editor/sequence/'+ this.currentSequence.id +'/frame/'+ frame.id, {silent:true});
-
-		this.restorePanelStates();
-		this.setAdvanceValues();
-
-	},
-	
-	renderSequenceFrames : function()
-	{
-		var _this = this;
-		//this is ugly
-		$('#frame-list').empty();
-		_.each( this.currentSequence.get('frames'), function(frameID){
-			_this.project.frames.get(frameID).render();
-		})
-		//this.currentSequence.updateFrameOrder(false);
-	},
-	
-	renderFrame : function(frame)
-	{
-		if(frame)
-		{
-			var layerIndex = 0;
-			var _this = this;
-			_.each( _.compact( frame.get('layers') ), function(layerID, i){
-				var layerModel = _this.project.layers.get(layerID);
-
-				layerModel.layerIndex = layerIndex;
-				layerIndex++;
-				
-				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else layerModel.trigger('editor_layerRender', i)
-			})
-		}
-	},
-	
-	unrenderFrame : function ( frame )
-	{
-		if(frame)
+		//make sure we're not trying to load the same frame again!
+		if( !this.currentFrame || this.currentFrame.id != frame.id )
 		{
 			var _this = this;
-			_.each( frame.get('layers'), function(layerID){
-				var layerModel = _this.project.layers.get(layerID);
-				if(_.isUndefined(layerModel)) console.log('layer missing')
-				else
-				{
-					if(layerModel.visual) layerModel.visual.remove();
-					if(layerModel.controls) layerModel.controls.remove();
-					layerModel.trigger('editor_layerExit');
-//					layerModel.trigger('editor_layerUnrender');
-				}
-			})
-		}
-	},
-
-	restorePanelStates : function()
-	{
-		//show/hide editor panels
-		// what should happen to panels which haven't been set?
-		//right now they inherit the last frame's state
-		var storage = localStorage.getObject( this.currentFrame.id );
-		if( !_.isNull( storage ) && !_.isUndefined( storage.panelStates ) )
-		{
-			//go through each saved state
-			_.each( storage.panelStates , function(closed, panel){
-				var dom = $( '#' +panel+ '-view-bar' );
-				var expander = $(dom).next('div');
-				if( closed && expander.is(':visible') )
-				{
-					expander.hide('blind',{'direction':'vertical'});
-					$(dom).find('.expander').removeClass('zicon-collapse').addClass('zicon-expand');
-				}else if( !closed && expander.is(':hidden') ){
-					expander.show('blind',{'direction':'vertical'});
-					$(dom).find('.expander').addClass('zicon-collapse').removeClass('zicon-expand');
-				}
-			})
-		}
-	},
-	
-	
-	makeConnection : function(action)
-	{
-		console.log('make connection: '+ action)
-		switch(action)
-		{
-			case 'newFrame':
-				var _this = this;
-
-				console.log('make new sequence')
-				this.hold = this.addLayer({
-					type : 'Link',
-					options : {
-						from_sequence : this.currentSequence.id,
-						from_frame : this.currentFrame.id
-					}
-				});
-				console.log(this.hold)
-				$('#connection-confirm').show();
-				$('#make-connection button').addClass('disabled');
-				this.busy = true;
-				break;
-			
-			case 'existingFrame':
-				console.log('link to existing')
-				var Modal = zeega.module('modal');
-				var linkModal = new Modal.Views.LinkExisting();
-				$('body').append(linkModal.render().el);
-				linkModal.show();
-			
-				break;
-			case 'advanced':
-				console.log('link with advanced options!');
-				var Modal = zeega.module('modal');
-				var advancedModal = new Modal.Views.LinkAdvanced();
-				console.log(advancedModal)
-				$('body').append(advancedModal.render().el);
-				advancedModal.show();
-				break;
-		}
-	},
-	
-	connectToSequenceFrame : function( sequenceID, frameID )
-	{
-		console.log('connectToSequenceFrame ' + sequenceID +' '+ frameID)
-		this.busy = false;
-		this.addLayer({
-			type : 'Link',
-			options : {
-				from_sequence : this.currentSequence.id,
-				from_frame : this.currentFrame.id,
-				to_sequence : sequenceID,
-				to_frame : frameID
+		
+			if(this.currentFrame)
+			{
+				this.currentFrame.removeWorkspace();
+				this.currentFrame.trigger('blur');
 			}
-		});
-		console.log(this)
-
-	},
-	
-	connectToAdvanced : function( layerArray )
-	{
-		var _this = this;
-		
-		var hold = this.addLayer({
-			type : 'Link',
-			options : {
-				from_sequence : this.currentSequence.id,
-				from_frame : this.currentFrame.id
-			}
-		});
-		
-		hold.on('layer_saved', function(){
-			hold.off('layer_saved');
-			var layersToPersist = _.union( layerArray, [hold.id] );
-
-			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : _this.currentFrame.id, 'layers_to_persist' : layersToPersist });
-
-			sequence.save({},{
-				success : function()
-				{
-					hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-					hold.visual.render();
-					_this.project.frames.add(sequence.get('frames'));
-					sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					sequence.trigger('sync');
-					_this.goToSequence(sequence.id);
-					_this.busy = false;
-				}
-			});
-			_this.project.sequences.add(sequence);
-		})
-	},
-	
-	confirmConnection : function(action)
-	{
-		console.log('confirm connection: '+ action)
-		if(action == 'ok')
-		{
-			var _this = this;
-			console.log('create and go to new sequence')
-			
-			var layersToPersist = [this.hold.id];
-			
-			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : this.currentFrame.id, 'layers_to_persist' : layersToPersist });
-
-			sequence.save({},{
-				success : function()
-				{
-					console.log('sequence saved')
-					console.log(sequence)
-					_this.busy = false;
-					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-					_this.hold.visual.render();
-					_this.project.frames.add(sequence.get('frames'));
-					sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					//sequence.createCollections();
-					sequence.trigger('sync');
-					_this.goToSequence(sequence.id);
-					
-					this.hold = null;
-					this.busy = false;
-				}
-			});
-			this.project.sequences.add(sequence);
-
-		}
-		else
-		{
-			this.hold.trigger('editor_removeLayerFromFrame', this.hold);
-			this.hold.destroy();
-			this.hold = null;
-			this.busy = false;
+			frame.renderWorkspace();
+			this.currentFrame = frame;
+			this.currentFrame.trigger('focus');
 		}
 
 	},
+
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
+	refreshDatabase : function(){ this.itemCollection.refresh() },
 	
+	returnToFrame : function()
+	{
+		console.log('~~		return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
+		
+		$('#wrapper').show();
+		this.currentFrame.renderWorkspace();
+		//this.currentFrame.trigger('focus');
+		
+	},
+
 	deleteSequence : function(sequenceID)
 	{
 		var _this = this;
 		var sequence = this.project.sequences.get(sequenceID);
-
-		if(this.currentSequence.id == sequenceID) this.router.navigate('',{trigger:true});
 
 		var layers = [];
 		_.each( sequence.get('frames'), function(frameID){
 			var frame = _this.project.frames.get(frameID);
 			layers = _.union(layers,frame.get('layers'));
 		});
-		_.each(layers, function(layerID){
+		console.log( 'layers:',layers)
+		_.each( layers, function(layerID){
 			var layer = _this.project.layers.get(layerID);
-			if(layer.get('type')=='Link')
+			if( layer && layer.get('type') == 'Link' )
 			{
 				var attr = layer.get('attr');
 				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
@@ -397,45 +185,6 @@ this.zeega = {
 		// if sequence is in view, then load the first sequence
 		
 		return false;
-	},
-	
-	setAdvanceValues : function()
-	{
-		//update the auto advance tray
-		//make sure the attribute exists
-		var adv = false;
-		if( !_.isNull(this.currentFrame.get('attr')) && !_.isNull( this.currentFrame.get('attr').advance ) )
-			adv = this.currentFrame.get('attr').advance;
-
-		var advanceControls = $('#advance-controls');
-
-		if(adv > 0)
-		{
-			//after time in seconds
-			advanceControls.find('input[id="time"]').prop('checked', true );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-			$('#advance-time').val(adv/1000);
-		}
-		else if( adv == -1 )
-		{
-			//manual
-
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', true );
-			advanceControls.find('input[id="playback"]').prop('checked', false );
-
-			$('#advance-time').val(10);
-
-		//if the attr doesn't exist, then give it default values
-		}
-		else if( !adv )
-		{
-			advanceControls.find('input[id="time"]').prop('checked', false );
-			advanceControls.find('input[id="manual"]').prop('checked', false );
-			advanceControls.find('input[id="playback"]').prop('checked', true );
-			$('#advance-time').val(10);
-		}
 	},
 
 	addFrame : function( num )
@@ -453,23 +202,51 @@ this.zeega = {
 				var newFrame = new Frame.Model();
 				newFrame.set({'layers' : layers},{'silent':true});
 				console.log(newFrame)
-			
-				newFrame.save({},{
-					success : function()
-					{
-						console.log(newFrame)
-						newFrame.render();
-					
-						newFrame.trigger('refresh_view');
-						//_this.currentSequence.trigger('updateFrameOrder');
-						newFrame.trigger('updateThumb');
-						_this.project.frames.add( newFrame );
-						_this.loadFrame( newFrame );
+				this.loadFrame(newFrame);//newFrame.render();
+				
+				if(i>0)
+				{
+					// if more than one frame is being created
+					console.log("not loading frame for later",i);
+					newFrame.save({},{
+						success : function()
+						{
+							//console.log(newFrame)
+							//newFrame.render();
 						
-						_this.currentSequence.get('frames').push(newFrame.id);
-						
-					}
-				});
+							newFrame.trigger('refresh_view');
+							//_this.currentSequence.trigger('updateFrameOrder');
+							newFrame.trigger('updateThumb');
+							_this.project.frames.add( newFrame );
+							//_this.loadFrame( newFrame );
+							
+							_this.currentSequence.get('frames').push(newFrame.id);
+							
+							console.log('new frame saved', _this.currentSequence)
+							_this.loadFrame( newFrame.id )
+						}
+					});
+				}
+				else
+				{
+					// if more ONLY one frame is being created
+					console.log("loading frame for first",i);
+					newFrame.save({},{
+						success : function()
+						{
+							_this.project.frames.add( newFrame );
+							_this.currentSequence.addFrame( newFrame );
+							
+							//$('#frame-list').append(newFrame.sequenceFrameView.render().el);
+							//newFrame.trigger('refresh_view');
+							//newFrame.trigger('updateThumb');
+							//_this.currentSequence.get('frames').push(newFrame.id);
+							
+							_this.loadFrame( newFrame );
+							newFrame.trigger('focus');
+						}
+					});
+				}
 			
 			}
 		}
@@ -513,7 +290,6 @@ this.zeega = {
 				{
 					console.log('frame saved and is a duplicate')
 					console.log(savedFrame)
-					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
 				
 					//zeega.app.currentSequence.get('frames');
 				
@@ -535,10 +311,13 @@ this.zeega = {
 						}
 					})
 					//resave the frame after being updated with persistent frame ids
+
+					_this.project.frames.add( savedFrame );
+					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
+					
 				}
 			});
 			
-			this.project.frames.add( dupeModel );
 			
 		} //busy
 	},
@@ -551,7 +330,7 @@ this.zeega = {
 			var _this = this;
 			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
 			console.log('show layer? '+ args.show() )
-			//args.frame.trigger('update_thumb');
+			args.frame.trigger('update_thumb');
 			console.log(args)
 			return this.project.layers.addNewLayer( args )
 		}
@@ -674,18 +453,29 @@ this.zeega = {
 		var _this = this;
 		this.previewMode = true;
 		this.exportProject();
-		this.unrenderFrame( this.currentFrame );
+		
+		$('#wrapper').hide();
+		
+		this.currentFrame.removeWorkspace();
+		
+		
+		this.Player = zeegaPlayer.app;
+		this.Player.initialize( this.exportProject(), {mode: 'editor', frameID : parseInt(this.currentFrame.id) } )
+		
+		/*
 		this.player = new Player2($('body'));
 		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
-		console.log('update background color')
-		$('body').css({'background':'#000'});
+		*/
+		
+		$('body').addClass('preview-mode');
 	},
 	
 	restoreFromPreview : function()
 	{
+		$('#wrapper').show();
 		this.previewMode = false;
-		$('body').css({'background':'#333'});
-		this.renderFrame( this.currentFrame );
+		$('body').removeClass('preview-mode');
+		this.returnToFrame();
 	},
 
 	exportProject : function( string )
@@ -715,7 +505,8 @@ this.zeega = {
 	getLeftFrame : function()
 	{
 		var currentFrameIndex = _.indexOf( this.currentSequence.get('frames'), parseInt(this.currentFrame.id) );
-		return this.frames.get( frameOrder[ currentFrameIndex-1 ] ) || this.frames.get( frameOrder[1] );
+		var frameID =  this.currentSequence.get('frames')[ currentFrameIndex-1 ] || this.currentSequence.get('frames')[ 0 ];
+		return this.project.frames.get( frameID );
 	},
 
 	getRightFrame : function()
@@ -726,8 +517,7 @@ this.zeega = {
 
 	loadLeftFrame : function()
 	{
-		console.log('load left ----')
-		console.log( this.getLeftFrame() )
+		console.log('##		load left ----', this.getLeftFrame())
 		this.loadFrame( this.getLeftFrame() )
 	},
 	
@@ -741,139 +531,73 @@ this.zeega = {
 		this.project.save();
 	},
 
-	initStartHelp : function()
-	{
-		
-		
-		if(localStorage.help != 'false' && this.helpCounter == 0)
-		{
-			//init the popovers
-			$('#visual-editor-workspace').popover({
-				trigger: 'manual',
-				//html:true,
-				//placement:'above',
-				//offset:'-250',
-				//content : 'tester'
-				//template: '<div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			
-			/*
-			$('#database-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'right',
-				//offset:'-250',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#new-layer-tray').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#layer-panel').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'above',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#frame-drawer').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-			$('#preview').popover({
-				trigger: 'manual',
-				html:true,
-				placement:'below',
-				template: '<div class="arrow"></div><div class="inner help"><h3 class="title"></h3><div class="content"><p></p></div><div class="help-controls"><a href="#" onclick="zeega.app.turnOffHelp();return false">close</a><a class="btn success" href="#" onClick="zeega.app.displayStartHelp();return false;">next</a></div></div>'
-			});
-*/
-			this.displayStartHelp();
-		}
-		
-	},
-
-	displayStartHelp : function()
-	{
-		var _this = this;
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			/*
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-			*/
-		];
-		
-		console.log('	HELPPPPPPP')
-		console.log(helpOrderArray[0]);
-		console.log(this.helpCounter)
-		console.log( $('#'+helpOrderArray[_this.helpCounter]) )
-
-		if(_this.helpCounter > 0 )
-		{
-			$('#'+helpOrderArray[_this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-		}
-		if(_this.helpCounter >= helpOrderArray.length )
-		{
-			console.log('end of line')
-			$('#'+helpOrderArray[_this.helpCounter-1]).css('box-shadow', '');
-			this.turnOffHelp();
-			return false;
-		}
-
-		$('#'+helpOrderArray[_this.helpCounter]).popover('show');
-		$('#'+helpOrderArray[_this.helpCounter]).css('box-shadow', '0 0 18px orange');
-
-		this.helpCounter++;
-
-	},
-
-	turnOffHelp : function()
-	{
-		console.log('turn off help windows')
-		var helpOrderArray = [
-			'visual-editor-workspace',
-			'database-panel',
-			'new-layer-tray',
-			'layer-panel',
-			'frame-drawer',
-			'preview'
-		];
-		localStorage.help = false;
-
-console.log( helpOrderArray[this.helpCounter-1] )
-
-			$('#'+helpOrderArray[this.helpCounter-1]).popover('hide');
-			$('#'+helpOrderArray[this.helpCounter-1]).css('box-shadow', '');
-			this.helpCounter = 0;
-
-	},
-	
-	editCoverImage : function(obj)
-	{
-		if(obj.item.get('layer_type') == 'Image')
-		{
-			$('#sequence-cover-image').css('background-image' , 'url("'+ obj.item.get('uri') +'")' );
-			this.project.save({'cover_image':obj.item.get('uri')})
-		}
-	},
 	
 	shareProject : function()
 	{
-		// publishing view for project //
-		var Modal = zeega.module('modal');
-		this.view = new Modal.Views.ShareProject({ model:this.project });
-		this.view.render();
+		if(this.project.get("published"))
+		{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.ShareProject({ model:this.project });
+			this.view.render();
+		}
 	},
 
+	publishProject : function()
+	{
+		console.log(this.updated);
+		if(this.project.get("published")){
+			if(this.project.get('date_updated')!=this.project.get('date_published')||this.updated)
+			{
+				this.updated=false;
+				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publishing...");
+				this.project.save({'publish_update':1},{
+					success:function(model,response){
+						zeega.app.project.set({'publish_update':0,'date_published':response.project.date_published,'date_updated':response.project.date_updated});
+						console.log(model,response);
+						zeega.app.setButtonStates();
+					
+					}
+				});
+			}
+		}else{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.PublishProject({ model:this.project });
+			this.view.render();
+		}
+		
+	},
+
+	settingsProject : function()
+	{
+		if(this.project.get("published"))
+		{
+			var Modal = zeega.module('modal');
+			this.view = new Modal.Views.PublishProject({ model:this.project });
+			this.view.render();
+		}
+	},
 	
-	
+	setButtonStates : function()
+	{
+		//console.log("setButtonStates", this.project)
+		//console.log("setButtonStates", this.project.get("published"))
+
+		// Publish button
+		if(this.project.get("published"))
+		{
+			$('#settings-project').show();
+			$('#share-project').css("color", "#fff");
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
+			if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
+			else $('#publish-project').css("color", "#666");
+			console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
+		}else{
+			$('#settings-project').hide();
+			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
+			$('#share-project').css("color", "#666");
+		}
+	}
+
 	
 }, Backbone.Events)
 

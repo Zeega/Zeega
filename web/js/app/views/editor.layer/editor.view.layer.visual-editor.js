@@ -4,6 +4,8 @@
 		
 		className : 'visual-element',
 		
+		LAYER_TIMEOUT : 30000,
+		
 		layerClassName : '',
 		
 		draggable : true,
@@ -52,7 +54,7 @@
 			}
 			else
 			{
-				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerEnter editor_layerRender', this.private_onLayerEnter, this);
 				this.model.on('editor_layerExit editor_removeLayerFromFrame', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
@@ -115,6 +117,23 @@
 				});
 				return this;
 		},
+
+		playPause : function()
+		{
+			console.log('$$		play pause status', this.isPlaying)
+			if( this.isPlaying )
+			{
+				this.isPlaying = false;
+				this.onPause();
+			}
+			else
+			{
+				this.isPlaying = true;
+				this.onPlay()
+			}
+		},
+
+		onPause : function(){},
 		
 		onPlay : function(){},
 		
@@ -198,25 +217,28 @@
 					_this.model.status = 'error'
 					_this.model.trigger('error', _this.model.id)
 				}
-				else console.log('no error! loaded normally!!')
-			},7500)
+				//else console.log('no error! loaded normally!!')
+			},this.LAYER_TIMEOUT)
 		},
 		
 		private_onPlay : function( z )
 		{
-			
-			if(!this.onStage){
+			this.isPlaying = true;
+			if(!this.onStage)
+			{
 				this.onStage=true;
 				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
 			}
 			this.moveOnStage();
+
 			if(z) this.updateZIndex( z )
+
 			if(this.model.status != 'error' ) this.onPlay();
+
 			this.model.inFocus = true;
 			
 			//dissolve
 			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
-					
 			
 			//make the linked layers blink on entrance
 			if(this.attr.link || this.model.get('type') == 'Link')
@@ -229,6 +251,7 @@
 		
 		private_onExit : function()
 		{
+			this.isPlaying = false;
 			this.moveOffStage();
 			this.onStage=false;
 			this.onExit();

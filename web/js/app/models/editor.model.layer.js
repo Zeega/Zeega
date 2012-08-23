@@ -2,11 +2,14 @@
 
 	Layer.Model = Backbone.Model.extend({
 		
+		status : 'waiting',
+
 		showControls : true,
 		player : false,
 		displayCitation: true,
 		visualLoaded : false,
 		defaultControls : true,
+		hasControls :true,
 		
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),
@@ -78,15 +81,17 @@
 		
 		onControlsClosed : function(){},
 		
+		
+		/*
 		renderLayerInEditor : function( i )
 		{
 			this.visual.render().$el.css('zIndex',i+1);
 			if(this.isNew()) 
 			{
 				this.visual.render().$el.css('zIndex',1000);
-				this.editorWindow.append( this.visual.el );
+				$('#visual-editor-workspace').append( this.visual.el );
 			}
-			else this.editorWindow.append( this.visual.render().el );
+			else $('#visual-editor-workspace').append( this.visual.render().el );
 			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
 			
 			this.trigger('editor_rendered editor_layerEnter');
@@ -98,9 +103,10 @@
 			this.trigger('editor_layerExit')
 		},
 		
+		*/
+		
 		refreshView : function()
 		{
-			console.log('	refresh view')
 			this.visual.$el.attr('id','layer-visual-'+this.id)
 			if(this.controls) this.controls.$el.attr('id','layer-'+this.id)
 		},
@@ -108,12 +114,16 @@
 		update : function( newAttr, silent )
 		{
 			var _this = this;
-			_.extend( this.get('attr'), newAttr );
+			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
+			this.set( 'attr' , a );
 			if( !silent )
 			{
+
 				this.save({},{
 					success : function(){ _this.trigger('update') }
 				});
+				
+				
 			}
 		},
 

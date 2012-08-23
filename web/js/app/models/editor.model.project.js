@@ -14,21 +14,35 @@
 		{
 			_.defaults( this.get('attr'), this.default_attr );
 			
+			if( _.isUndefined(this.get('cover_image')) || this.get('cover_image') == '' )
+				this.set('cover_image','../../../images/default_cover.png')
+			
 			//remove dupe data from the attributes
 			this.unset('sequences',['silent']);
 			this.unset('frames',['silent']);
 			this.unset('layers',['silent']);
 			
-			this.createLayerCollection(attributes.layers);
-			this.createFrameCollection(attributes.frames);
-			this.createSequenceCollection( attributes.sequences );
-			
+			this.preloadCollections(attributes);
+
 			
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
 			
-			console.log('init PROJECT')
-			console.log(this)
+			console.log('init PROJECT', this, attributes)
+		},
+
+		preloadCollections : function(attributes)
+		{
+			this.createLayerCollection(attributes.layers);
+			this.createFrameCollection(attributes.frames);
+			this.createSequenceCollection( attributes.sequences );
+		},
+
+		completeCollections : function()
+		{
+			// calls the collection functions that need to have the project loaded first
+			this.frames.each(function(frame){ frame.complete() });
+			this.sequences.each(function(sequence){ sequence.complete() });
 		},
 
 		/*	create collections	*/
@@ -61,7 +75,7 @@
 			var Sequence = zeega.module("sequence");
 			this.sequences = new Sequence.Collection( sequences );
 			this.sequences.render();
-			zeega.app.currentSequence = this.sequences.at(0);
+			//zeega.app.currentSequence = this.sequences.at(0);
 		},
 		
 		/*	end create collections	*/
@@ -80,13 +94,11 @@
 		
 		onAddFrame : function( frame )
 		{
-			console.log('added frame')
-			console.log(frame)
+
 		},
 		
 		duplicateFrame : function( frameModel )
 		{
-			console.log('	DUPLICATE FRAME')
 			var _this = this;
 			var dupeModel = frameModel.clone();
 			
@@ -99,8 +111,6 @@
 			dupeModel.save({},{
 				success : function( savedFrame )
 				{
-					console.log('frame saved and is a duplicate')
-					console.log(savedFrame)
 					_this.insertFrameView( savedFrame , dupeModel.frameIndex );
 				
 					//zeega.app.currentSequence.get('frames');
@@ -136,7 +146,6 @@
 			// if layer is persistent then remove ALL instances from frames
 			if( _.include( this.get('persistLayers'), parseInt(model.id) ) )
 			{
-				console.log('remove persistant layer')
 				_.each( _.toArray( this.frames.collection ), function(frame){
 					var newLayers = _.without( frame.get('layers'), parseInt(model.id) );
 					if( newLayers.length == 0 ) newLayers = [false];
@@ -151,17 +160,13 @@
 			}
 			else
 			{
-				console.log('remove single layer')
 				//remove from the current frame layer array
 				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
 				if( layerArray.length == 0 ) layerArray = [false];
 				
-				console.log(layerArray)
 				
 				zeega.app.currentFrame.set('layers',layerArray);
 				zeega.app.currentFrame.save();
-				console.log(zeega.app.currentFrame.get('layers'))
-				console.log( zeega.app.currentFrame );
 				
 				this.destroyOrphanLayers();
 			}
@@ -182,8 +187,7 @@
 		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
-			this.view.render();
-			this.trigger('ready')
+			this.view.renderToTarget();
 		},
 		loadPublishProject : function()
 		{

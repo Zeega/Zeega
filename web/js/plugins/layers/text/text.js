@@ -9,11 +9,11 @@
 		defaultAttributes: {
 			'title' :'Text Layer',
 			'content' : 'Text',
-			'left' :0,
-			'top' :0,
+			'left' :30,
+			'top' :40,
 			'color' : '#ffffff',
-			'opacity' : 0.9,
-			'fontSize' : 200,
+			'opacity' : 1,
+			'fontSize' : 500,
 			'overflow' : 'visible',
 			'width' : 25,
 			//'height' : 10,
@@ -48,11 +48,17 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
 				color : this.model.get('attr').color,
 				model: this.model,
-				label : 'Text Color',
+				label : '',
 				opacity : true
 			});
 			
@@ -77,6 +83,7 @@
 			})
 			
 			this.controls
+				.append( dissolveCheck.getControl() )
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
 				.append( color.getControl() );

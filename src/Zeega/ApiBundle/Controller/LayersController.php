@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,11 +47,14 @@ class LayersController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
      	$layer= $em->getRepository('ZeegaDataBundle:Layer')->findOneBy(array("id" => $layer_id));
-    	$em->remove($layer);
-    	$em->flush();
+     	
+     	if(isset($layer))
+     	{
+     	    $layer->setEnabled(false);
+     	    $em->flush();
+     	}
+
     	return new Response('SUCCESS',200);
-    
-    
     } // `delete_layer`  [DELETE] /layers/{layer_id}
 
     public function getLayerItemAction($layer_id)

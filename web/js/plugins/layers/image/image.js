@@ -24,6 +24,11 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
 
 			var scaleSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
@@ -43,7 +48,9 @@
 				max : 1,
 			});
 			
-			$(this.controls).append( scaleSlider.getControl() )
+			$(this.controls)
+				.append( dissolveCheck.getControl() )
+				.append( scaleSlider.getControl() )
 				.append( opacitySlider.getControl() );
 			
 			return this;
@@ -70,13 +77,15 @@
 		onPreload : function()
 		{
 			var _this = this;
-			this.$el.find('img').load(function(){
+
+			var img = this.$el.imagesLoaded();
+			img.done(function(){
 				_this.model.trigger('ready',_this.model.id);
-			})
-			.error(function(){
-				_this.model.status = 'error';
-				_this.model.trigger('load_error',_this.model.id);
 			});
+			img.fail(function(){
+				_this.model.trigger('error',_this.model.id);
+			});
+
 		}
 	});
 

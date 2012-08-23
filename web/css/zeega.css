@@ -2634,16 +2634,15 @@ clear: both;
 
 
 
-footer {
-
+footer
+{
+	width: 100%;
 	padding: 5px;
 	font-size: 12px;
-	text-align: right;
+	text-align: center;
 	color: #666;
 	bottom: 0;
-	position:relative;
-	top: 20px;
-	clear:both;
+	position:fixed;
 }
 
 #footer a {
@@ -2999,3 +2998,4 @@ END VIDEO STYLES
 .clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
+

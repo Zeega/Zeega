@@ -10,8 +10,16 @@
 			this.model.on('refresh_view', this.refreshView, this);
 		},
 		
-		focus : function(){ $(this.el).addClass('active-frame'), this.model.inFocus = true },
-		blur : function(){ $(this.el).removeClass('active-frame'), this.model.inFocus = false },
+		focus : function()
+		{
+			$(this.el).addClass('active-frame');
+			this.model.inFocus = true;
+		},
+		blur : function()
+		{
+			$(this.el).removeClass('active-frame');
+			this.model.inFocus = false
+		},
 	
 		render: function()
 		{
@@ -55,8 +63,6 @@
 						frame : _this.model
 					})
 					
-					console.log('add layer:',zeega.app.draggedItem, _this.model)
-					//zeega.app.createLayerFromItem( zeega.app.draggedItem, _this.model );
 				}
 			});
 
@@ -85,7 +91,9 @@
 						if(confirm('Delete Frame?'))
 						{
 							$(_this.el).remove();
-							_this.model.destroy();
+							
+							zeega.app.currentSequence.destroyFrame( _this.model );
+							//_this.model.destroy();
 						}
 						break;
 				
@@ -133,7 +141,6 @@
 	
 		showGear : function()
 		{
-			console.log('hover')
 		},
 	
 		openDropdown : function()
@@ -144,7 +151,6 @@
 	
 		goToFrame : function()
 		{
-			console.log('go to frame: '+ this.model.id)
 			zeega.app.loadFrame(this.model);
 			return false;
 		},
@@ -175,7 +181,7 @@
 			
 				"<li id='frame-thumb-<%= frameID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
 					"<div class='frame-update-overlay'></div>"+
-					"<a href='#' class='menu-toggle'><span class='zicon zicon-gear orange'></span></a>"+
+					"<div style='width:0px;'><a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a></div>"+
 					"<div class='well menu'>"+
 						"<ul class='nav nav-list'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+

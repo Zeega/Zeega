@@ -15,7 +15,7 @@
 			'width' : 100,
 			'volume' : 0.5,
 			'cue_in'  : 0,
-			'cue_out' : 0,
+			'cue_out' : null,
 			'fade_in'  : 0,
 			'fade_out' : 0,
 			'opacity':1,
@@ -30,7 +30,7 @@
 			render : function()
 			{
 
-				var playbackControls = new Layer.Views.Lib.Playback({
+				var playbackControls = new Layer.Views.Lib.Target({
 					model : this.model
 				});
 
@@ -79,17 +79,12 @@
 	});
 	
 	Layer.Views.Visual.Audio = Layer.Views.Visual.Video.extend({
-		
 		draggable : false,
 		linkable : false,
-		
-		render : function()
-		{
-			return this;
-		},
-
-		
+		render : function(){ return this },
 	});
+
+
 /*
 	Layer.Audio = Layer.Model.extend({
 			
@@ -122,7 +117,9 @@
 		}
 
 	});
-	
+*/
+
+/*
 	Layer.Views.Controls.Audio = Layer.Views.Controls.extend({
 				
 		render : function()
@@ -151,7 +148,8 @@
 		}
 	
 	});
-
+*/
+/*
 	Layer.Views.Visual.Audio = Layer.Views.Visual.extend({
 		
 		draggable : true,
@@ -165,10 +163,20 @@
 		onLayerEnter : function()
 		{
 			//if coming from another frame and the controls are open but the video isn't loaded
+			console.log('coming from another frame. is open?',this.model.controls.visible)
 			if( this.model.controls.visible == true )
 			{
-				this.model.video.placeVideo( this.$el );
-				this.model.loaded = true;
+				console.log('inside;',this.$el, this.model.player, this.model.player_loaded )
+				
+				if( !this.model.player_loaded )
+				{
+					this.model.initPlayer();
+					this.$el.html(this.model.player.render().el);
+					this.model.player.placePlayer();
+				}
+
+				this.model.player_loaded = true;
+			
 			}
 		},
 		
@@ -243,4 +251,5 @@
 		
 	});
 */
+
 })(zeega.module("layer"));

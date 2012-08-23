@@ -1,5 +1,11 @@
 (function(Frame){
 
+	Frame.LayerCollection = Backbone.Collection.extend({
+		initialize : function()
+		{
+		}
+	})
+
 	Frame.Model = Backbone.Model.extend({
 		
 		frameTarget : $('#frame-list'),
@@ -15,52 +21,69 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) {
-				console.log('FRAME URL ' + zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames');
-				return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
-				}
-			else {
-				console.log('FRAME URL ' + zeega.app.url_prefix + 'api/frames/'+ this.id);
-				return zeega.app.url_prefix + 'api/frames/'+ this.id;
-			}
+			if( this.isNew() )return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
+			else return zeega.app.url_prefix + 'api/frames/'+ this.id;
 		},
 	
 		initialize : function()
-		{	
-			this.updating = false
+		{
+			this.updating = false;
 			
 			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
-			console.log('frame model',this);
-			this.view = new Frame.Views.FrameSequence({ model : this })
 			
-			//this.on('focus', this.render, this );
-			//this.on('blur', this.unrender, this );
+			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
+			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
+			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
 
-			this.on('update_thumb', this.updateThumb, this );
-			
-
-			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
+			this.on('update_thumb', this.updateFrameThumb, this );
+
 		},
-	
-	
-		render : function()
+
+		complete : function()
 		{
-			this.frameTarget.append( this.view.render().el )
+			this.initLayerCollection();
+		},
+
+		initLayerCollection : function()
+		{
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
+			this.layerCollection = new Frame.LayerCollection( layerArray );
 		},
 		
-		unrender : function()
+		// adds the frame workspace view to the editor
+		renderWorkspace : function()
 		{
-			this.frameTarget.append( this.view.remove() )
+			this.editorWorkspace.renderToEditor();
+			this.editorLinkLayerList.renderToEditor();
+			this.editorLayerList.renderToEditor();
+		},
+		// removes the frame workspace view to the editor
+		removeWorkspace : function()
+		{
+			this.editorWorkspace.removeFromEditor()
+			this.editorLinkLayerList.removeFromEditor();
+			this.editorLayerList.removeFromEditor();
+		},
+		
+		
+		// adds a new layer to the workspace without disturbing existing layers
+		renderLayerToWorkspace : function( newLayer )
+		{
+			this.editorLayerList.addLayer( newLayer );
+			this.editorWorkspace.workspace.addLayer( newLayer );
 		},
 		
 		update : function( newAttr, silent )
 		{
 			var _this = this;
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
-			_.extend( this.get('attr'), newAttr );
+			var a = _.extend( this.get('attr'), newAttr );
+			this.set('attr',a);
 			if( !silent )
 			{
 				this.save({},{
@@ -74,8 +97,6 @@
 		{
 			
 			// single frame url: frame
-			console.log('SAVE FRAME')
-			console.log(this)
 			var _this = this;
 						
 			if( this.updating != true && zeega.app.thumbnailUpdates )
@@ -91,6 +112,7 @@
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
+						_this.save();
 						console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
@@ -99,7 +121,7 @@
 					this.terminate();
 				}, false);
 			
-				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/frames/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
 		},

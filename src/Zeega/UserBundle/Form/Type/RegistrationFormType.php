@@ -9,15 +9,15 @@ class RegistrationFormType extends BaseType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin');
-		
-        // add your custom field
-        $builder->add('display_name');
-		$builder->add('bio');
-		$builder->add('thumb_url');
-		$builder->add('sites', 'entity', array('class' => 'Zeega\DataBundle\Entity\Site', 'multiple' => true, 'property' => 'short'));
-		$builder->add('roles', 'choice', array('choices' => $roles,'multiple' => true));
+        $builder
+            ->add('display_name',null, array('required' => true))
+            ->add('email', 'email')
+            ->add('idea')
+            ->add('plainPassword', 'hidden')
+            ->add('locked', 'checkbox', array(
+                'label'     => "I've read and agree to Zeega's terms of use.",
+                'required'  => true,
+            ));
     }
 
     public function geSite()

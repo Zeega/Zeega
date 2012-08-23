@@ -31,6 +31,7 @@ $loader->registerNamespaces(array(
     'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
     'OldSound'         => __DIR__.'/../vendor/bundles',
     'PhpAmqpLib'       => __DIR__.'/../vendor/videlalvaro/php-amqplib',    
+    'Dropbox'   => __DIR__.'/../vendor/Dropbox',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
@@ -56,6 +57,4 @@ AnnotationRegistry::registerFile(__DIR__.'/../vendor/doctrine/lib/Doctrine/ORM/M
 
 // Swiftmailer needs a special autoloader to allow
 // the lazy loading of the init file (which is expensive)
-require_once __DIR__.'/../vendor/swiftmailer/lib/classes/Swift.php';
-Swift::registerAutoload(__DIR__.'/../vendor/swiftmailer/lib/swift_init.php');
-
+require __DIR__.'/../vendor/swiftmailer/lib/swift_required.php';

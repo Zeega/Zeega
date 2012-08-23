@@ -47,7 +47,7 @@ class Frame
     /**
      * @var boolean $enabled
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var Zeega\DataBundle\Entity\Sequence

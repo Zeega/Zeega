@@ -4,7 +4,7 @@ parameters:
 services:
     zeega.admin.user:
         class: Zeega\AdminBundle\AdminEntity\UserAdmin
-        arguments: [null, Zeega\DataBundle\Entity\User, SonataAdminBundle:CRUD]
+        arguments: [null, Zeega\DataBundle\Entity\User, ZeegaAdminBundle:UserAdmin]
         tags:
             - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
     zeega.admin.site:

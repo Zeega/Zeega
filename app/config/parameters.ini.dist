@@ -2,29 +2,38 @@
 ; by enclosing the key with % (like %database_user%)
 ; Comments start with ';', as in php.ini
 [parameters]
-    database_driver   = pdo_mysql
+    database_driver   = pdo_mysql                       ; database settings - http://symfony.com/doc/current/book/doctrine.html
     database_host     = 
     database_name     = 
     database_user     = 
     database_password =
-	database_type     = pgsql
+	database_type     = pgsql                           ; database type (hack for the session) - pgsql for postgres and mysql for mysql
 
-    mailer_transport  = smtp
+    mailer_transport  = smtp                            ; mailer settings - http://symfony.com/doc/current/cookbook/email/email.html
     mailer_host       = localhost
     mailer_user       =
     mailer_password   =
 	mailer_encryption = ssl
 
-    locale            = en
+    locale            = en                              ; default language
 
-    secret            = 
+    secret            =                                 ; http://symfony.com/doc/current/reference/configuration/framework.html#secret
 
-    hostname          = http://alpha.zeega.org/
-    directory         = test/web/
-    path			  = /var/www/web/
-	web_directory     = /var/www/
+    hostname          = http://alpha.zeega.org/         ; host of this instance (e.g if running this instance from http://alpha.zeega.org/test/web, the host should be http://alpha.zeega.org)
+    directory         = test/web/                       ; web path of this instance (e.g if running this instance from http://alpha.zeega.org/test/web, the directory should be test/web)
+    path			  = /var/www/web/                   ; local path on the file system to this instance (?)
+	web_directory     = /var/www/                       ; local path on the file system to this instance (?)
 
-	solr_enabled	  = false
-	solr_host         = localhost
-    solr_port         = 8080
-    solr_path         = /solr
+	solr_enabled	  = false                           ; enable / disable solr
+	solr_host         = localhost                       ; host of the solr instance
+    solr_port         = 8080                            ; port of the solr instance
+    solr_path         = /solr                           ; web path to the solr instance
+
+    google_id         =                                 ; google id for analytics
+    google_secret     =                                 ; google secret for analytics
+
+    rabbitmq_host     =                                 ; rabbitmq settings (under development)
+    rabbitmq_port     =
+    rabbitmq_vhost    =
+    rabbitmq_user     =
+    rabbitmq_password =

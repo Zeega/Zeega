@@ -14,7 +14,7 @@
 		render : function()
 		{
 			_.each( _.toArray(this), function(sequence, i){
-				$('#sequence-tabs').append( sequence.view.render().el );
+				$('#sequence-tabs').append( sequence.tabView.render().el );
 			})
 			this.at(0).trigger('focus');
 		},
@@ -24,7 +24,7 @@
 			_.each( _.toArray(this), function(sequence){
 				sequence.trigger('blur')
 			})
-			$('#sequence-tabs').append( model.view.render().el );
+			$('#sequence-tabs').append( model.tabView.render().el );
 			model.trigger('focus');
 		}
 

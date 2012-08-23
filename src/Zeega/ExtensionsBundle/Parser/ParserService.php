@@ -3,6 +3,8 @@
 namespace Zeega\ExtensionsBundle\Parser;
 
 use Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
+use Zeega\DataBundle\Entity\Site;
+use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 use Symfony\Component\Yaml\Parser;
@@ -14,10 +16,12 @@ use \ReflectionMethod;
  */
 class ParserService
 {
-	public function __construct($hostname, $directory)
+	public function __construct($hostname, $directory, $securityContext, $doctrine)
     {
         $this->hostname = $hostname;
         $this->directory = $directory;
+		$this->securityContext = $securityContext;
+		$this->doctrine = $doctrine;
     }
 
     
@@ -54,14 +58,20 @@ class ParserService
     			    }
     				
     				// add the regex matches to the parameters
+    				$user = $this->securityContext->getToken()->getUser();
+	        		$em=$this->doctrine->getEntityManager();
+    				//$userTable = $em->getRepository('ZeegaDataBundle:User')->findOneById($user->getId());
+
     				$parameters["regex_matches"] = $matches;
     				$parameters["load_child_items"] = $loadChildItems;
+    				$parameters["user"] = $user;
+    				//$parameters["userTable"] = $userTable;
+    				$parameters["entityManager"] = $em;
 
     				$parserClass = $parserConfig["parser_class"];
 
     				// use reflection to get the parser class
                     $parserMethod = new ReflectionMethod($parserClass, 'load'); // reflection is slow, but it's probably ok here
-                    
                     // call the load method
     				return $parserMethod->invokeArgs(new $parserClass, array($url,$parameters));
     		    }

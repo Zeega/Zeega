@@ -1,20 +1,182 @@
-{# src/Zeega/CoreBundle/Resources/views/About/about.html.twig #}
+{# src/Zeega/CommunityBundle/Resources/views/Home/home.html.twig #}
 
 {% extends '::base.html.twig' %}
 
-{% block title %}<title></title>{% endblock %}
+{% block title %}Home{% endblock %}
 
 
-{#%  block stylesheets %#}
-{#% endblock %#}
+{%  block stylesheets %}
+	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
-{% block scripts %}
-	<!--
-	<script data-main="{{ asset('js/loaders/about') }}" src="{{ asset('js/lib/require/require-1.0.5.js') }}"></script>
-	--> 
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://24.media.tumblr.com/tumblr_lkmrriDOck1qg39ewo1_500.gif) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
 {% endblock %}
 
-{% block content %}
+{% block scripts %}
+
+	{% if app.environment == 'dev' %}
+	<!-- to load JS libraries separately -->
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/home.js') }}"></script>
+	{% else %}
+		<!-- to load single aggregated JS library --> 
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/home.js') }}"></script>
+	{% endif %}
+	
+	
+	{% if projects is defined %}
+		<script type="text/javascript" language="Javascript">
+			//bootstrapping data
+			var projectsJSON = "{{ projects | e('js') }}";
+		</script>
+	{% endif %}
+	
+{% endblock %}
+
+
+{% block browser_detection %}
+{% endblock browser_detection %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color-home">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Featured Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>Remake the Internet</h1>
+				<h2>Zeega is an open-source, HTML5 platform for inventing new forms of interactive storytelling. Join a community of makers and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2>
+			
+			</div>
+		
+		</div>
+		
+	</div>
+	
+	<!--<div class="container new-section">
+		
+		<div class="row">
+		
+			<div class="span14">
+			
+				<h2 class="section-title">Featured Zeegas</h2>
+			
+			</div>
+		
+			<div id="zeega-user-projects">
+			</div>
+			
+		
+		</div>
+	
+	</div>-->
+	
+	<!-- Featured Content Ends -->
+	
+
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+	
+	<!-- Special Project Separator Begins -->
+	
+	
+	<div id ="home-cards" ></div>
+	<script>
+	
+	var homeCards =[
+		{
+			url:"{{asset("images/home/home_edit.jpg")}}",
+			title:"EDIT WITH DRAG-AND-DROP EASE",
+			subtitle: "Zeega enables anyone to experiment with the web as a creative medium. No programming knowledge required : )",
+			seperator: "Scroll down to learn more"
+		},
+		{
+			url:"{{asset("images/home/home_addmedia.jpg")}}",
+			title:"USE ANY MEDIA YOU WANT",
+			subtitle: "Currently liberated APIs include Dropbox, YouTube, Flickr, SoundCloud, Archive.org, Tumblr and Mapbox.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_expression.jpg")}}",
+			title:"FREEDOM OF EXPRESSION",
+			subtitle: "Set timings. Add text. Use street view. Layer media.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_interface.jpg")}}",
+			title:"INVENT YOUR OWN INTERFACE",
+			subtitle: "Turn any part of an image or video into a link.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_credit.jpg")}}",
+			title:"CREDIT EVERYONE",
+			subtitle: "All media is properly cited to its original author and tracked back to its source location.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_share.jpg")}}",
+			title:"SHARE FULL-SCREEN EXPERIENCES",
+			subtitle: "You can embed your Zeega on any site and it automatically opens in full-screen.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_dziga.jpg")}}",
+			title:"AND THE NAME...",
+			subtitle: "One of our favorite films is <a href='http://www.youtube.com/watch?v=op2sOtF113M&feature=watch-now-button&wide=1' target='_blank'>Man with a Movie Camera</a>, made in 1929 by Dziga Vertov. We changed the spelling slightly.",
+			seperator: ""
+		},
+		{
+			url:"",
+			title:"A CULTURE OF EXPERIMENTATION",
+			subtitle: "Zeega is a community of artists, filmmakers, journalists, designers and other makers passionate about inventing a new medium together.",
+			seperator: ""
+		}
+		
+	
+	]
+	
+	</script>
 
 
 {% endblock %}

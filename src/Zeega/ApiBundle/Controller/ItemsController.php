@@ -1,4 +1,14 @@
 <?php
+
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,7 +88,7 @@ class ItemsController extends Controller
     		}
             else
             {
-                $query['user'] = $user->getId();
+                $query['user'] = $user;
             }
         }
          //  execute the query
@@ -156,8 +166,7 @@ class ItemsController extends Controller
 		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
 		return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
-    
-    
+        
     // get_collection_items GET /api/collections/{id}/items.{_format}
     public function getItemItemsAction($id)
     {
@@ -199,6 +208,7 @@ class ItemsController extends Controller
         }
         
         $item->setEnabled(false);
+        $item->setDateUpdated(new \DateTime("now"));
     	$em->flush();
     	
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
@@ -224,9 +234,7 @@ class ItemsController extends Controller
 
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
-        $dateUpdated = new \DateTime("now");
-        $dateUpdated->add(new \DateInterval('PT2M'));
-        $item->setDateUpdated($dateUpdated);
+        $item->setDateUpdated(new \DateTime("now"));
 
         $em->flush();
 
@@ -247,7 +255,11 @@ class ItemsController extends Controller
         $em->persist($item);
         $em->flush();
         
+        // create a thumbnail
+        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()));
+        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
     
@@ -271,10 +283,7 @@ class ItemsController extends Controller
             {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
-                $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-                
-                $item->setDateUpdated($dateUpdated);
+                $item->setDateUpdated(new \DateTime("now"));
                 $em->persist($item);
                 $em->flush();
             }
@@ -319,10 +328,7 @@ class ItemsController extends Controller
 			if (isset($newItems))
 			{
 				$item->setChildItemsCount(count($newItems));
-				$dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-				
-				$item->setDateUpdated($dateUpdated);
+				$item->setDateUpdated(new \DateTime("now"));
 		
 				$first = True;
 				$thumbnailUrl = $item->getThumbnailUrl();
@@ -366,9 +372,7 @@ class ItemsController extends Controller
 			    }
 			    $item->setChildItemsCount($item->getChildItems()->count());
 		
-			    $dateUpdated = new \DateTime("now");
-		        $dateUpdated->add(new \DateInterval('PT2M'));
-			    $item->setDateUpdated($dateUpdated);
+			    $item->setDateUpdated(new \DateTime("now"));
         
                 $em->flush();
 			}
@@ -454,7 +458,6 @@ class ItemsController extends Controller
         $location = $request_data->get('location');
         $license = $request_data->get('license');
         $attributes = $request_data->get('attributes');
-        $newItems = $request_data->get('new_items');
         $tags = $request_data->get('tags');
 		$published = $request_data->get('published');
         
@@ -470,28 +473,39 @@ class ItemsController extends Controller
 			if(!isset($site) && isset($user))
 			{
 		    	$sites = $user->getSites();
-		    	if(isset($sites))
+		    	if(isset($sites) && count($sites) > 0)
 		    	{
 	    			$site = $sites[0];
+
 	    		}
+                else
+                {
+                    $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
+                }
 			}
 		}
-		
-        $item = new Item();
 
+        $checkForDuplicateItems = true;
+        
         if(isset($id))
         {
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
         }
-        else
+        else if(isset($attributionUri))
         {
+            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $attributionUri, "enabled" => 1, "user_id" => $user->getId()));
+        }
+        
+        if(!isset($item))
+        {
+            $item = new Item();
             $item->setDateCreated(new \DateTime("now"));
             $item->setChildItemsCount(0);
             $item->setUser($user);
+            $checkForDuplicateItems = false;
         }
         
         $dateUpdated = new \DateTime("now");
-        $dateUpdated->add(new \DateInterval('PT2M'));
         $item->setDateUpdated($dateUpdated);
         
         if(isset($site)) $item->setSite($site); 
@@ -515,7 +529,7 @@ class ItemsController extends Controller
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
-        
+
         if(isset($mediaCreatorUsername))
         {
             $item->setMediaCreatorUsername($mediaCreatorUsername);
@@ -543,12 +557,17 @@ class ItemsController extends Controller
         $item->setEnabled(true);
         $item->setIndexed(false);
         
-        $dateUpdated = new \DateTime("now");
-		$dateUpdated->add(new \DateInterval('PT2M'));    
+        // new items from the variable "new_items" - used when adding new items to a collection
+        $newItems = $request_data->get('new_items');
+        $childItems = $request_data->get('child_items');
+        
+        if(!isset($newItems) && isset($childItems))
+        {
+            $newItems = $childItems;
+        }
         
         if (isset($newItems))
         {
-            $item->setChildItemsCount(count($newItems));
             $first = True;
             foreach($newItems as $newItem)
             {
@@ -573,6 +592,16 @@ class ItemsController extends Controller
                 }
                 else
                 {
+                    if($checkForDuplicateItems)
+                    {
+                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $newItem['attribution_uri'], "enabled" => 1, "user_id" => $user->getId()));
+                        if(isset($existingItem) && count($existingItem) > 0)
+                        {
+                            // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
+                            continue;
+                        }
+                    }
+                    
                     $childItem = new Item();
                     
             		$childItem->setSite($site);		
@@ -604,10 +633,16 @@ class ItemsController extends Controller
                             $childItem->setMediaDateCreated(new \DateTime($d));
                         }
                     }
-                    
                     $item->addItem($childItem);
+                    
+                    // persist the child item, get the id and generate a thumbnail
+                    $em->persist($childItem);
+                    $em->flush();
+                    
+			        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $childItem->getId()));
                 }
             }
+            $item->setChildItemsCount(count($newItems));
         }
         
         return $item;

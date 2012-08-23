@@ -49,7 +49,8 @@ class BookmarkletController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		// get user items and sites
-		$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array("limit" => 15, "user" => $user->getId()))->getContent();
+		//$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
+		
 		$sites = $user->getSites();
 		
 		$widgetId = $request->query->get('widget-id');
@@ -57,75 +58,66 @@ class BookmarkletController extends Controller
 		
 		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
-		
+		$message = "Parser did not respond";
 		if(isset($parserResponse))
 		{
-			// quick fix - try / catch will be removed
-			try
-			{
-				$isUrlValid = $parserResponse["request"]["success"];
-				$isUrlCollection = $parserResponse["request"]["is_set"];
-				$message = $parserResponse["request"]["message"];
-				$items = $parserResponse["items"];
-            
-				if($isUrlValid && count($items) > 0)
-				{
-			    
-				    $parsedItem = $items[0];
-					// check if the item exists on the database	
-	        		$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
-                
-	        		if(isset($item))
-	        		{
-	        		 	// item was imported before
-	        			return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
-	        				'displayname' => $user->getDisplayname(),
-	        				'media_type' => $item->getMediaType(),
-	        				'widget_id'=>$widgetId,
-	        				'item' => ResponseHelper::serializeEntityToJson($item),
-	        				'mycollection'=>$mycollection,
-	        			));
-	        		}
-					else if($isUrlCollection)
-					{
-						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:batch.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'mycollection'=>$mycollection,
-							'child_items_count'=>$parsedItem["child_items_count"],
-						));						
-					}
-					else
-					{
-						return $this->render('ZeegaBookmarkletBundle:Bookmarklet:single.widget.html.twig', array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'mycollection'=>$mycollection,
-						));
-					}
-				}
-			}
-			catch(Exception $e)
-			{
-				return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
-					'displayname' => $user->getDisplayname(),
-					'widget_id'=>$widgetId,
-					'item'=>json_encode($items), 
-					'mycollection'=>$mycollection,
-					'urlmessage' => $message,
-					'url'=> $itemUrl,
-				));
-			}
-		}
+			
+			$isUrlValid = $parserResponse["request"]["success"];
+			$isUrlCollection = $parserResponse["request"]["is_set"];
+			$message = $parserResponse["request"]["message"];
+			$items = $parserResponse["items"];
 		
+			if($isUrlValid && count($items) > 0)
+			{
+				$parsedItem = $items[0];
+				
+				// check if the item exists on the database	
+				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user_id"=>$user->getId(),"attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
+				
+				if(isset($item)) $update = 1;
+				else $update =0;
+				
+				
+				
+				
+				if($parsedItem["layer_type"]=="Dropbox"&&!isset($item)&&$parsedItem["child_items_count"]==0){
+					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
+						'displayname' => $user->getDisplayname(),
+						'widget_id'=>$widgetId,
+						'item'=>json_encode($parsedItem), 
+						'update'=>$update,
+						'child_items_count'=>$parsedItem["child_items_count"],
+					));	
+				}
+				elseif($parsedItem["layer_type"]!="Dropbox"&&$update){
+							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>$item, 
+								'update'=>$update,
+							));	
+				}
+				else{
+					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', array(
+						'displayname' => $user->getDisplayname(),
+						'widget_id'=>$widgetId,
+						'item'=>json_encode($parsedItem), 
+						'update'=>$update,
+						'archive'=>$parsedItem["layer_type"],
+						'thumbnail_url'=>$parsedItem["thumbnail_url"],
+						'child_items_count'=>$parsedItem["child_items_count"],
+					));						
+				}
+
+			}
+	
+	
+		}
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
 			'widget_id'=>$widgetId,
 			'item'=>json_encode(array()), 
-			'mycollection'=>$mycollection,
-			'urlmessage' => '',
+			'urlmessage' => $message,
 			'url'=> $itemUrl,
 		));
 	}	

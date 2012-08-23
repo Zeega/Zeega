@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -92,7 +101,8 @@ class SequencesController extends Controller
     
     	$em = $this->getDoctrine()->getEntityManager();
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
-        $em->remove($sequence);
+        $sequence->setEnabled(false);
+        $em->persist($sequence);
     	$em->flush();
     	return new Response('SUCCESS',200);
     
