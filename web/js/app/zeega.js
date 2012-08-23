@@ -103,6 +103,8 @@ this.zeega = {
 		if( _.isNumber(f) ) var frame = this.project.frames.get(f);
 		else var frame = f;
 
+		console.log('$$		go to frame', frame)
+
 		// if the frame's sequence isn't rendered, then render it
 		if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
 		{
@@ -142,8 +144,8 @@ this.zeega = {
 				this.currentFrame.trigger('blur');
 			}
 			frame.renderWorkspace();
+			frame.trigger('focus');
 			this.currentFrame = frame;
-			this.currentFrame.trigger('focus');
 		}
 
 	},

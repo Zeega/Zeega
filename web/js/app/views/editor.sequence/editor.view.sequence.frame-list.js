@@ -79,7 +79,7 @@
 				}
 			})
 			.click(function(){
-				zeega.app.addFrame();
+				_this.model.addFrames( 1 );
 				return false;
 			});
 			

@@ -46,7 +46,14 @@
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
 
-			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
+			this.sequenceFrameView = new Frame.Views.FrameSequence({
+				model:this,
+				attributes : {
+					id:'frame-thumb-'+ this.id,
+					'data-id' : this.id,
+					style:'background-image:url('+ this.get('thumbnail_url') +')'
+				}
+			});
 			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
@@ -67,7 +74,7 @@
 		/*
 			relies on the frame actually being rendered in the dom to work
 		*/
-		
+
 		sortLayers : function( layerIDArray )
 		{
 			var _this = this;

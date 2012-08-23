@@ -2,17 +2,25 @@
 
 	Frame.Views.FrameSequence = Backbone.View.extend({
 		
+		tagName : 'li',
+		className : 'frame-thumb',
+
 		initialize : function()
 		{
+			var _this = this;
 			this.model.on( 'change:thumbnail_url', this.onNewThumb, this );
 			this.model.on('focus', this.focus, this );
 			this.model.on('blur', this.blur, this );
 			this.model.on('refresh_view', this.refreshView, this);
+
+			this.model.on( 'thumbUpdateFail', function(){
+				_this.$el.find('.frame-update-overlay').hide()
+			});
 		},
 		
 		focus : function()
 		{
-			$(this.el).addClass('active-frame');
+			this.$el.addClass('active-frame');
 			this.model.inFocus = true;
 		},
 		blur : function()
@@ -24,51 +32,36 @@
 		render: function()
 		{
 			var _this = this;
-	
-			this.model.on( 'thumbUpdateFail', function(){
-				console.log('thumb fail');
-				$(_this.el).find('.frame-update-overlay').hide()
-			});
-	
-			var blanks = {
-				frameID : this.model.id,
-				thumbURL : this.model.get('thumbnail_url')
-			}
-			var template = _.template( this.getTemplate() );
-		
-			this.el = $( template(blanks) );
+
+			this.$el.html( this.getTemplate() );
 
 			this.makeDroppable();
 
-			$(this.el).hover(function(){
+			this.$el.hover(function(){
 				$(_this.el).find('.frame-menu').show();
 			},function(){
 				$(_this.el).find('.menu-items').removeClass('open');
 				$(_this.el).find('.frame-menu').hide();
 			})
 
-			$(this.el).click(function(){
+
+			this.$el.click(function(){
 				_this.goToFrame();
 				return false;
 			})
 		
-			$(this.el).find('.menu-toggle').click(function(){
+			this.$el.find('.menu-toggle').click(function(){
 				_this.openDropdown();
 				return false;
 			})
 		
-			$(this.el).find('.nav-list a').click(function(){
+			this.$el.find('.nav-list a').click(function(){
 			
 				switch($(this).data('action'))
 				{
 					case 'delete':
 						if(confirm('Delete Frame?'))
-						{
-							$(_this.el).remove();
-							
-							zeega.app.currentSequence.destroyFrame( _this.model );
-							//_this.model.destroy();
-						}
+							zeega.app.project.sequences.get(_this.model.sequenceID).frames.remove( _this.model );
 						break;
 				
 					case 'duplicate':
@@ -84,7 +77,7 @@
 			})
 		
 			//enable the hover when dragging DB items	
-			$(this.el).hover(
+			this.$el.hover(
 				//mouseover
 				function()
 				{
@@ -138,13 +131,14 @@
 			'click .menu-toggle' : 'openDropdown'
 		},
 		
+		showGear : function()
+		{
+
+		},
+
 		refreshView : function()
 		{
 			$(this.el).attr('id', 'frame-thumb-'+this.model.id)
-		},
-	
-		showGear : function()
-		{
 		},
 	
 		openDropdown : function()
@@ -183,16 +177,14 @@
 		{
 			var html = 
 			
-				"<li id='frame-thumb-<%= frameID %>' class='frame-thumb' style='background-image:url(\"<%= thumbURL %>\")'>"+
-					"<div class='frame-update-overlay'></div>"+
 					"<div style='width:0px;'><a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a></div>"+
+					"<div class='frame-update-overlay'></div>"+
 					"<div class='well menu'>"+
 						"<ul class='nav nav-list'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
 							"<li><a href='#' data-action='delete'>Delete Frame</a></li>"+
 						"</ul>"+
-					"</div>"+
-				"</li>";
+					"</div>";
 
 			return html;
 		}

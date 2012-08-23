@@ -60,23 +60,24 @@
 			this.sequenceFrameView.renderToTarget();
 		},
 
-
 		addFrames : function(num)
 		{
 			var _this = this;
 			var n = num || 1;
 			var Frame = zeega.module('frame');
 
-			_.times( n, function(){
+			_.times( n, function(i){
 				var newFrame = new Frame.Model();
 				newFrame.save({
 					'layers' : _this.get('persistent_layers')
 					},{
 					success : function()
 					{
-						newFrame.complete();
+						newFrame.complete(); // complete the collections inside the frame
+						newFrame.sequenceID = _this.id; // add the sequence id to the frame
 						zeega.app.project.frames.add( newFrame );
 						_this.frames.push( newFrame );
+						if( i == n-1 ) zeega.app.loadFrame( newFrame );
 					}
 				});
 			})
@@ -85,11 +86,25 @@
 		onAddFrame : function( frame )
 		{
 			this.sequenceFrameView.render();
+			this.updateFrameOrder();
 		},
 
-		onRemoveFrame : function( frame )
+		onRemoveFrame : function( frame, frames, options )
 		{
+			console.log('$$		on remove frame',frame, frames, options);
+
+			if( frame == zeega.app.currentFrame )
+			{
+				var newFrameIndex = options.index < 1 ? 0 : options.index - 1;
+				console.log('%%		new frame index', newFrameIndex)
+				if( frames.length > 0 ) zeega.app.loadFrame( frames.at( newFrameIndex ) );
+				else this.addFrames(1);
+			}
+
+			frame.destroy(); // <---------------------- remove this when api updates
 			this.sequenceFrameView.render();
+			this.updateFrameOrder();
+
 		},
 
 		onFrameReorder : function( frameIDArray )
@@ -108,81 +123,10 @@
 			var frameOrder = this.frames.pluck('id');
 			if(frameOrder.length == 0) frameOrder = [false];
 			this.save('frames',frameOrder);
-			console.log('$$		update frame order', this, frameOrder)
 		},
-
-/*
-var _this = this
-			var n = num || 1;
-			var Frame = zeega.module('frame');
-		
-			for( var i = 0 ; i < n ; i++ )
-			{
-				var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
-			
-				var newFrame = new Frame.Model();
-				newFrame.set({'layers' : layers},{'silent':true});
-				console.log(newFrame)
-				this.loadFrame(newFrame);//newFrame.render();
-				
-				if(i>0)
-				{
-					// if more than one frame is being created
-					console.log("not loading frame for later",i);
-					newFrame.save({},{
-						success : function()
-						{
-							//console.log(newFrame)
-							//newFrame.render();
-						
-							newFrame.trigger('refresh_view');
-							//_this.currentSequence.trigger('updateFrameOrder');
-							newFrame.trigger('updateThumb');
-							_this.project.frames.add( newFrame );
-							//_this.loadFrame( newFrame );
-							
-							_this.currentSequence.get('frames').push(newFrame.id);
-							
-							console.log('new frame saved', _this.currentSequence)
-							_this.loadFrame( newFrame.id )
-						}
-					});
-				}
-				else
-				{
-					// if more ONLY one frame is being created
-					console.log("loading frame for first",i);
-					newFrame.save({},{
-						success : function()
-						{
-							_this.project.frames.add( newFrame );
-							_this.currentSequence.addFrame( newFrame );
-							
-							//$('#frame-list').append(newFrame.sequenceFrameView.render().el);
-							//newFrame.trigger('refresh_view');
-							//newFrame.trigger('updateThumb');
-							//_this.currentSequence.get('frames').push(newFrame.id);
-							
-							_this.loadFrame( newFrame );
-							newFrame.trigger('focus');
-						}
-					});
-				}
-			
-			}
-*/
-
 
 
 /*
-
-		addFrame : function( frame )
-		{
-			var frameArray = this.get('frames');
-			frameArray.push( frame.id );
-			this.set('frames',frameArray);
-			this.sequenceFrameView.render();
-		},
 
 //redo this vvvv
 		insertFrameView : function( frame, index )
