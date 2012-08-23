@@ -259,7 +259,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		onAddLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model) this.$el.append( layer.visual.render().el )
+			if(zeega.app.currentFrame == this.model)
+			{
+				this.$el.append( layer.visual.render().el );
+				layer.visual.private_onLayerEnter();
+			}
 		},
 
 		onRemoveLayer : function( layer )
