@@ -25,6 +25,31 @@ var bm = new bookmarklet({
     {
         
     	var zeegaBM = {
+            specialCases:{
+                facebook:{
+                    window_ref:null,
+                    interval_ref:null,
+                    launchPopupWindow:function(localUrlPrefix, target_url){
+                        var popupTop_px =  window.outerHeight-window.innerHeight;
+                        popupTop_px += (window.hasOwnProperty('screenTop'))?window.screenTop:window.screenY
+                        var windowWidth = 460;
+                        var popupLeft_px = window.outerWidth - windowWidth - 25;
+                        popupLeft_px += (window.hasOwnProperty('screenLeft'))?window.screenLeft:window.screenX
+                        var popupHeight_px = (window.innerHeight-40);
+                        var zbm_url = localUrlPrefix + "/widget?url=" + target_url;
+                        var zbm_specs = "top=" + popupTop_px + ", left=" + popupLeft_px + ", height=" + popupHeight_px + ",width=460,location=0, menubar=0, status=0, toolbar=0";
+                        zeegaBM.specialCases.facebook.window_ref = window.open(zbm_url, "ZeegaBookmarklet", zbm_specs); 
+                    },
+                    watchPopup:function(){
+                        zeegaBM.specialCases.facebook.interval_ref = window.setInterval(zeegaBM.specialCases.facebook._watchPopup, 1);
+
+                    },
+                    _watchPopup:function(){
+                        console.log(zeegaBM.specialCases.facebook.window_ref);
+                    }
+
+                }
+            },
 	        init: function(){
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
 	            var script = document.getElementById('zeegabm');
@@ -43,6 +68,9 @@ var bm = new bookmarklet({
 
                 // big fork for Facebook:
                 if(window.location.host.indexOf('facebook')>-1){ // if facebook or other OAuth source, use popup
+                    
+                    zeegaBM.specialCases.facebook.launchPopupWindow(localUrlPrefix, this.url);
+                    /*
                     var popupTop_px =  window.outerHeight-window.innerHeight;
                     popupTop_px += (window.hasOwnProperty('screenTop'))?window.screenTop:window.screenY
                     var windowWidth = 460;
@@ -52,6 +80,7 @@ var bm = new bookmarklet({
                     var zbm_url = localUrlPrefix + "/widget?url="+this.url;
                     var zbm_specs = "top=" + popupTop_px + ", left=" + popupLeft_px + ", height=" + popupHeight_px + ",width=460,location=0, menubar=0, status=0, toolbar=0";
                     this.zbm_window = window.open(zbm_url, "ZeegaBookmarklet", zbm_specs); 
+                    */
                 }else{ // use iFrame
                     $('#zeega-overlay').remove();
                 

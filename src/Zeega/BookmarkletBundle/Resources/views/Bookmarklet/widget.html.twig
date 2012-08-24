@@ -29,14 +29,14 @@
 			<div id="item-add" class="add-button">
 				
 				
-				{% if archive == 'Dropbox' %}  {% if child_items_count != 0 %}  <button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i>Add Dropbox Media  </i></button>{% endif %}
-				{% elseif update == '1' %} <button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Update Media </button>
-				{% elseif update == '1' %} <button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Update Media </button>
-				{% else %} <button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Add to My Media </button>
+				{% if archive == 'Dropbox' %}  
+					{% if child_items_count != 0 %}  <button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i>Add Dropbox Media  </i></button>{% endif %}
+				{% elseif update == '1' %} 
+					<button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Update Media </button>
+				{% else %} 
+					<button id="add-item" class='btn btn-success'><i class="icon-inbox icon-white"></i> Add to My Media </button>
 				{% endif %}
 				
-				
-
 			</div>
 			</div>
 			<div style="clear:both;">&nbsp;</div>
