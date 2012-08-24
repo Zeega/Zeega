@@ -153,7 +153,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-
 		connectToSequenceFrame : function( sequenceID, frameID )
 		{
 			var attr = {
@@ -173,16 +172,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			var _this = this;
 
-			this.hold = zeega.app.addLayer({
-				type : 'Link',
-				options : {
-					from_sequence : zeega.app.currentSequence.id,
-					from_frame : this.model.id
-				}
-			});
+			var fromInfo = {
+				from_sequence : zeega.app.currentSequence.id,
+				from_frame : _this.model.id
+			};
 
-			this.hold.on('layer_saved', function(){
-				_this.hold.off('layer_saved');
+			this.hold = this.model.addLayerByType('Link', fromInfo );
+
+			this.hold.on('sync', function(){
+				_this.hold.off('sync');
 				var layersToPersist = _.union( layerArray, [_this.hold.id] );
 
 				var Sequence = zeega.module("sequence");
@@ -191,16 +189,17 @@ the frame's layers. It also includes common frame functions like adding sequence
 				sequence.save({},{
 					success : function()
 					{
-						_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-						_this.hold.visual.render();
-						zeega.app.project.frames.add(sequence.get('frames'));
-						sequence.set('frames', [ sequence.get('frames')[0].id ]);
-						sequence.trigger('sync');
-						zeega.app.goToSequence(sequence.id);
-						_this.busy = false;
+						sequence.onSaveNew();
+						var info = {
+							to_sequence : sequence.id,
+							to_frame : sequence.get('frames')[0]
+						}
+						_this.hold.update(info)
+						zeega.app.project.sequences.add(sequence);
+
+						this.hold = null;
 					}
 				});
-				zeega.app.project.sequences.add(sequence);
 			})
 			
 			this.model.off('connectToAdvanced');
@@ -252,7 +251,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.model.layers.each(function(layer){
-				if( layer.get('attr').from_frame == _this.model.id ) _this.$el.append( layer.visual.render().el );
+				if( layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.model.id ) _this.$el.append( layer.visual.render().el );
 			});
 			return this;
 		},
