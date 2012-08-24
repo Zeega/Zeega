@@ -99,7 +99,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 							_this.$el.find('.connection-confirm').show()
 						});
 					}
-					else console.log('hold is old');this.$el.find('.connection-confirm').show();
+					else this.$el.find('.connection-confirm').show();
 					break;
 				case 'existingFrame':
 					var Modal = zeega.module('modal');
@@ -137,22 +137,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 			sequence.save({},{
 				success : function()
 				{
-					//sequence.complete();
-					console.log('$$		seq saved', sequence)
+					sequence.onSaveNew();
 					_this.hold.update({
 						to_sequence : sequence.id,
 						to_frame : sequence.get('frames')[0].id
 					})
 					zeega.app.project.sequences.add(sequence);
-					//_this.hold.visual.render();
-					//zeega.app.project.frames.add(sequence.get('frames'));
-					//sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					//zeega.app.goToSequence(sequence.id);
 
 					this.hold = null;
 				}
 			});
-
 			return false;
 		},
 

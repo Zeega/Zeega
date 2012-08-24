@@ -1,4 +1,4 @@
-(function(Sequence){
+ (function(Sequence){
 
 	Sequence.FrameCollection = Backbone.Collection.extend({
 		initialize : function()
@@ -22,27 +22,24 @@
 				
 		initialize : function( attributes )
 		{
-			//if this is a new sequence
-			if( !_.isArray(this.get('frames')) )
-			{
-				var Frame = zeega.module('frame');
-
-				var frames = _.map( this.get('frames'), function(frame){
-					return new Frame.Model(frame);
-				});
-				console.log('$$		 this sis a new sequence, parse it!', this)
-				this.set('frames', _.pluck(frames,'id') );
-				zeega.app.project.frames.add( frames );
-				this.complete();
-			}
-
 			this.tabView = new Sequence.Views.SequenceTabs({model:this});
 			this.sequenceFrameView = new Sequence.Views.SequenceFrameDrawer({model:this})
+		},
 
-			this.on('sync', this.refreshView, this);
-			this.on('sync', this.checkAttr, this);
-			
-			this.trigger('ready');
+		onSaveNew : function()
+		{
+			var _this = this;
+			var Frame = zeega.module('frame');
+			var frameData = this.get('frames');
+			var frames = _.map( this.get('frames'), function(frame){
+				var frameModel = new Frame.Model(frame);
+				frameModel.sequenceID = _this.id;
+				frameModel.complete();
+				return frameModel;
+			});
+			this.set('frames', _.pluck(frames,'id') );
+			zeega.app.project.frames.add( frames, {silent:true} );
+			this.complete();
 		},
 
 		complete : function()

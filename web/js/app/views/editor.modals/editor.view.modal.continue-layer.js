@@ -42,7 +42,6 @@
 			'click .save' : 'continueLayer',
 			'click .layer-list-checkboxes li' : 'selectFrame',
 		},
-
 		
 		continueLayer : function()
 		{
@@ -70,7 +69,6 @@
 	
 		getTemplate : function()
 		{
-
 
 			var html =
 			
