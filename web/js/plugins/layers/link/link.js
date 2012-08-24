@@ -56,6 +56,7 @@
 		init : function()
 		{
 			this.preview = zeega.app.previewMode;
+			this.model.on('update', this.render, this);
 		},
 		
 		render : function()
@@ -71,21 +72,16 @@
 			
 			if(!zeega.app.previewMode )
 			{
-				
 				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
 				
 				_.extend( style, {
 					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
-
-				// if the editor is active, the remove the layer if it shouldn't be shown
-				//if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 			}
 			else
 			{
 				this.delegateEvents({'click':'goClick'})
-				//$(this.el).addClass('go-to-sequence')
 			}
 			
 			$(this.el).html( this.getTemplate() ).css( style ).addClass('linked-layer');
@@ -142,10 +138,6 @@
 		onPlay : function()
 		{
 			this.render();
-			/*
-			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
-				this.moveOffStage()
-			*/
 			this.delegateEvents({'click':'goClick'})
 		},
 		
@@ -153,7 +145,6 @@
 		{
 			var html = '';
 			
-				//if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 				
 			return html;
