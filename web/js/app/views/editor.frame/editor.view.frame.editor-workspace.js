@@ -507,7 +507,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var _this = this;
 			this.model.layers.each(function(layer){
 				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) )
+				{
 					_this.$el.prepend( layer.controls.renderControls().el );
+					layer.controls.delegateEvents();
+				}
+
 			})
 			this.makeSortable();
 			return this;
