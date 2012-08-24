@@ -25,27 +25,6 @@
 			'top' : 25,
 			'height' : 50,
 			'width' : 50
-		},
-		
-		init : function(options)
-		{
-			//check to see if link layer is broken
-			/*
-			var a = this.get('attr');
-			if( !_.isNull(a.from_frame) || !_.isNull(a.from_sequencee) || !_.isNull(a.to_frame) || !_.isNull(a.to_sequence) )
-			{
-				console.log('link layer is broken! delete meeee!')
-				this.destroy();
-			}
-			*/
-		},
-		
-		setToFrame : function(sequenceID, frameID)
-		{
-			this.get('attr').to_sequence = sequenceID;
-			this.get('attr').to_frame = frameID;
-			this.get('attr').title = 'Link to sequence '+sequenceID;
-			this.save();
 		}
 		
 	});
@@ -77,6 +56,7 @@
 		init : function()
 		{
 			this.preview = zeega.app.previewMode;
+			this.model.on('update', this.render, this);
 		},
 		
 		render : function()
@@ -92,21 +72,16 @@
 			
 			if(!zeega.app.previewMode )
 			{
-				
 				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
 				
 				_.extend( style, {
 					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
-
-				// if the editor is active, the remove the layer if it shouldn't be shown
-				//if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 			}
 			else
 			{
 				this.delegateEvents({'click':'goClick'})
-				//$(this.el).addClass('go-to-sequence')
 			}
 			
 			$(this.el).html( this.getTemplate() ).css( style ).addClass('linked-layer');
@@ -128,7 +103,7 @@
 		goToSequenceFrame : function()
 		{
 			if(zeega.app.previewMode) zeega.app.project.goToFrame(this.model.get('attr').to_frame);
-			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
+			else zeega.app.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		deleteLink : function(e)
@@ -163,10 +138,6 @@
 		onPlay : function()
 		{
 			this.render();
-			/*
-			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
-				this.moveOffStage()
-			*/
 			this.delegateEvents({'click':'goClick'})
 		},
 		
@@ -174,7 +145,6 @@
 		{
 			var html = '';
 			
-				//if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 				
 			return html;

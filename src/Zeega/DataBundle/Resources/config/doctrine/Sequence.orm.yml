@@ -28,7 +28,9 @@ Zeega\DataBundle\Entity\Sequence:
         enabled:
             type: boolean
             nullable: true
-
+        persistent_layers:
+            type: array
+            nullable: true
     indexes:
         sequence_enabled:
             columns: [enabled]

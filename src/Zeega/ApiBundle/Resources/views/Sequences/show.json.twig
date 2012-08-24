@@ -1,51 +1,56 @@
 {
-		"id" : {{ sequence.id }},
-		"title" : "{{ sequence.title }}",
-                {% if sequence.attr is not empty %} 
-		    "attr" : {{sequence.attr | json_encode | raw}},
-                {% else %}
-                    "attr" : {},
-                {% endif %}
-		"frames" : 
+	"id" : {{ sequence.id }},
+	"title" : "{{ sequence.title }}",
+    {% if sequence.attr is not empty %} 
+	 	"attr" : {{sequence.attr | json_encode | raw}},
+	{% else %}
+		"attr" : {},
+	{% endif %}
+	{% if sequence.persistentLayers is not empty %} 
+	 	"persistent_layers" : {{sequence.persistentLayers | json_encode | raw}},
+	{% else %}
+		"persistent_layers" : [],
+	{% endif %}
+	"frames" : 
+	[
+	{% for frame in frames %}
+	{	
+		"id" : {{ frame.id | json_encode | raw}},
+		{% if frame.attr is not empty %}
+			"attr" : {{ frame.attr | json_encode | raw}},
+		{% else %}
+			"attr" : {},
+		{% endif %}
+		"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
+		"layers" : 
 		[
-		{% for frame in frames %}
-		{	
-			"id" : {{ frame.id | json_encode | raw}},
-                        {% if frame.attr is not empty %}
-			     "attr" : {{ frame.attr | json_encode | raw}},
-                        {% else %}
-                             "attr" : {},
-                        {% endif %}
-			"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
-			"layers" : 
-			[
-			{% for layer in frame.layers -%}	
-				{{layer}}
-			{%- if loop.index0 < frame.layers |length - 1 -%}
+		{% for layer in frame.layers -%}	
+			{{layer}}
+		{%- if loop.index0 < frame.layers |length - 1 -%}
+		,
+		{%- endif -%}
+		{% endfor %}
+		]
+	}	
+	{%- if loop.index0 < frames|length - 1 -%}
+	,
+	{%- endif -%}			
+	{% endfor %}
+	],
+	
+	"layers" :
+	[
+		{% for layer in layers %}
+			{
+				"id" : {{ layer.getId}},
+				"type" : {{ layer.getType | json_encode | raw}},
+				"text" : {{ layer.getText | json_encode | raw}},
+				"attr" : {{ layer.getAttr | json_encode | raw}}
+			}
+
+			{%- if loop.index0 < layers|length - 1 -%}
 			,
 			{%- endif -%}
-			{% endfor %}
-			]
-		}	
-		{%- if loop.index0 < frames|length - 1 -%}
-		,
-		{%- endif -%}			
-		{% endfor %}
-		],
-		
-		"layers" :
-		[
-			{% for layer in layers %}
-				{
-					"id" : {{ layer.getId}},
-					"type" : {{ layer.getType | json_encode | raw}},
-					"text" : {{ layer.getText | json_encode | raw}},
-					"attr" : {{ layer.getAttr | json_encode | raw}}
-				}
-
-				{%- if loop.index0 < layers|length - 1 -%}
-				,
-				{%- endif -%}
-	        {% endfor %}
-		]
+        {% endfor %}
+	]
 }
