@@ -272,9 +272,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
-			//render each layer into the workspace
+			//render each layer into the workspace // except links
 			var _this = this;
-			this.model.layers.each(function(layer){ _this.$el.append( layer.visual.render().el ) });
+			this.model.layers.each(function(layer){
+				if( layer.get('attr').from_frame == _this.model.id ) _this.$el.append( layer.visual.render().el );
+			});
 			return this;
 		},
 		
