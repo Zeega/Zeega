@@ -9,10 +9,10 @@
 
 *********************************************/
 require.config({
-	baseUrl : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/',
+	baseUrl : sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/',
 	paths : {
-			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
-			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
+			'order' :  sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/lib/text'
 		}
 })
 
@@ -20,6 +20,7 @@ require(
 	[
 	
 	//libraries
+	'order!lib/jquery/ui/js/jquery-1.5.1.min',
 	'order!lib/underscore',
 	'order!lib/backbone',
 	'order!lib/spin',
