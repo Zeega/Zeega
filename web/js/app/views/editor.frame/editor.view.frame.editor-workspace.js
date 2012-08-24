@@ -138,10 +138,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 				success : function()
 				{
 					sequence.onSaveNew();
-					_this.hold.update({
+					var info = {
 						to_sequence : sequence.id,
-						to_frame : sequence.get('frames')[0].id
-					})
+						to_frame : sequence.get('frames')[0]
+					}
+					console.log('$$		info', info, sequence)
+					_this.hold.update(info)
 					zeega.app.project.sequences.add(sequence);
 
 					this.hold = null;

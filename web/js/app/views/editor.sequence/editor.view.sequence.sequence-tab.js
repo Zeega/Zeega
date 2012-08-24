@@ -82,19 +82,17 @@
 		
 		deleteSequence : function()
 		{
-			console.log('delete sequence!!', this.model)
-			/*
 			if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
 			{
-				//this.remove();
-				//zeega.app.project.sequences.remove(this.model);
-				//this.closeDropdown();
+				this.remove();
+				zeega.app.project.sequences.remove(this.model);
+				this.closeDropdown();
 			}
 			else
 			{
 				this.closeDropdown();
 			}
-			*/
+			
 			return false;
 		},
 	

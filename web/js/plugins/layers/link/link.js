@@ -107,7 +107,7 @@
 		goToSequenceFrame : function()
 		{
 			if(zeega.app.previewMode) zeega.app.project.goToFrame(this.model.get('attr').to_frame);
-			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
+			else zeega.app.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		deleteLink : function(e)

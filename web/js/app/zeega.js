@@ -110,7 +110,9 @@ this.zeega = {
 		{
 			var sequence = this.project.sequences.get( frame.sequenceID );
 			console.log('$$		seq', this.project.sequences, sequence, frame, frame.sequenceID)
-			sequence.renderSequenceFrames(); //<----------------- breaks here
+			sequence.renderSequenceFrames();
+			if(this.currentSequence) this.currentSequence.trigger('blur');
+			sequence.trigger('focus');
 			this.currentSequence = sequence;
 		}
 
