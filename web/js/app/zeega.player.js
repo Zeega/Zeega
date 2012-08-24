@@ -276,7 +276,18 @@ this.zeegaPlayer = {
 				var index = _.indexOf( _this.get('frames'), frameID );
 				
 				var before = index > 0 ? _this.get('frames')[index-1] : null;
-				var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
+
+				var after = null;
+				if( index + 1 < _this.get('frames').length )
+				{
+					after = _this.get('frames')[index+1]
+				}
+				else if( index + 1 >= _this.get('frames').length && frame.get('attr').advance > 0 )
+				{
+					after = _this.get('frames')[0];
+				}
+
+				//var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
 				
 				frame.setPosition(index, before, after);
 				return frame;
