@@ -125,7 +125,7 @@
 
 			if( newLayer )
 			{
-				newLayer.save( attributes, {
+				newLayer.save( {attr: _.extend(newLayer.get('attr'),attributes) }, {
 					success : function()
 					{
 						_this.layers.push( newLayer );

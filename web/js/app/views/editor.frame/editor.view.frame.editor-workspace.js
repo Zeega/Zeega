@@ -85,12 +85,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 			{
 				case 'newFrame':
 					var _this = this;
-					this.hold = this.model.addLayerByType('Link',
-						{
-							from_sequence : zeega.app.currentSequence.id,
-							from_frame : _this.model.id
-						}
-					);
+					var fromInfo = {
+						from_sequence : zeega.app.currentSequence.id,
+						from_frame : _this.model.id
+					}
+
+					this.hold = this.model.addLayerByType('Link', fromInfo );
 					
 					if(this.hold.isNew())
 					{
@@ -465,7 +465,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		onAddLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model)
+			if(zeega.app.currentFrame == this.model && layer.get('type') != 'Link')
 			{
 				this.$el.prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
@@ -496,6 +496,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		target : '#link-list-container',
 		className : 'unstyled',
 		
+		initialize : function()
+		{
+			this.model.layers.on('add', this.onAddLayer, this );
+		},
+
 		render : function()
 		{
 			var _this = this;
@@ -524,6 +529,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 			$( "#sortable-layers" ).disableSelection();
 		},
 		
+
+		onAddLayer : function( layer )
+		{
+			if(zeega.app.currentFrame == this.model && layer.get('type') == 'Link')
+			{
+				this.$el.prepend( layer.controls.renderControls().el );
+				layer.controls.delegateEvents();
+			}
+		},
+
 		renderToEditor : function(){ $( this.target ).html( this.render().el ) },
 		removeFromEditor : function(){}
 		

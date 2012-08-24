@@ -100,15 +100,14 @@
 		{
 			var _this = this;
 			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
+			console.log('$$		update attr', newAttr, a)
 			this.set( 'attr' , a );
-			if( !silent )
+			if( silent != true )
 			{
-
 				this.save({},{
 					success : function(){ _this.trigger('update') }
 				});
-				
-				
+				console.log('$$		on layer update', this)
 			}
 		},
 

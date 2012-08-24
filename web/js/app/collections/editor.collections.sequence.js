@@ -42,6 +42,8 @@
 				_.each( linkLayers, function(layer){
 					var from = layer.get('attr').from_frame;
 					var to = layer.get('attr').to_frame;
+					console.log('$$		remove from frames', layer, to, from, zeega.app.project.frames.get(to), zeega.app.project.frames.get(from))
+
 					if(to) zeega.app.project.frames.get(to).layers.remove(layer)
 					if(from) zeega.app.project.frames.get(from).layers.remove(layer)
 				})

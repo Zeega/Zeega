@@ -253,13 +253,8 @@ duplicateFrame : function( frameModel )
 		update : function( newAttr, silent )
 		{
 			var _this = this;
-			_.extend( this.get('attr'), newAttr );
-			if( !silent )
-			{
-				this.save({},{
-					success : function(){ _this.trigger('update') }
-				});
-			}
+			this.set({ attr: _.extend( this.get('attr'), newAttr ) });
+			if( silent != true ) this.save();
 		},
 		
 	});
