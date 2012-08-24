@@ -55,14 +55,22 @@
 		
 		init : function()
 		{
+			var _this = this;
 			this.preview = zeega.app.previewMode;
-			this.model.on('update', this.render, this);
+			this.model.on('update_link', this.onUpdate, this);
+		},
+
+		onUpdate : function()
+		{
+			console.log('$$		on link update');
+			this.$el.html( this.getTemplate() );
+			this.delegateEvents();
 		},
 		
 		render : function()
 		{
 			var _this = this;
-			
+			console.log('$$		render link', this)
 			
 			var style = {
 				'height' : this.model.get('attr').height +'%',
@@ -122,6 +130,7 @@
 		
 		onLayerEnter : function()
 		{
+			console.log('$$		on update', this, this.$el)
 			var _this = this;
 			this.$el.resizable({
 				stop: function(e,ui)

@@ -115,15 +115,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 						this.model.on('connectToSequenceFrame', this.connectToSequenceFrame,this );
 						
 						break;
-					case 'advanced':
-						var Modal = zeega.module('modal');
-						this.advancedModal = new Modal.Views.LinkAdvanced({model:this.model});
-						$('body').append( this.advancedModal.render().el );
-						this.advancedModal.show();
-						
-						this.model.on('connectToAdvanced', this.connectToAdvanced, this );
-						
-						break;
 				}
 			}
 			
@@ -151,6 +142,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 						to_frame : sequence.get('frames')[0]
 					}
 					_this.hold.update(info)
+					_this.hold.trigger('update_link')
 					zeega.app.project.sequences.add(sequence);
 
 					this.hold = null;
@@ -179,44 +171,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.off('connectToSequenceFrame');
 		},
 
-		connectToAdvanced : function( layerArray )
-		{
-			var _this = this;
-
-			var fromInfo = {
-				from_sequence : zeega.app.currentSequence.id,
-				from_frame : _this.model.id
-			};
-
-			this.hold = this.model.addLayerByType('Link', fromInfo );
-
-			this.hold.on('sync', function(){
-				_this.hold.off('sync');
-				var layersToPersist = _.union( layerArray, [_this.hold.id] );
-
-				var Sequence = zeega.module("sequence");
-				var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : layersToPersist });
-
-				sequence.save({},{
-					success : function()
-					{
-						sequence.onSaveNew();
-						var info = {
-							to_sequence : sequence.id,
-							to_frame : sequence.get('frames')[0]
-						}
-						_this.hold.update(info)
-						zeega.app.project.sequences.add(sequence);
-
-						this.hold = null;
-					}
-				});
-			})
-			this.busy = false;
-			this.$el.find('.make-connection>a').removeClass('disabled');
-			this.model.off('connectToAdvanced');
-		},
-
 		cancelConnection : function()
 		{
 			this.hold = null;
@@ -234,10 +188,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 							"<a data-action='newFrame' class='btn btn-inverse action' href='#'><img src='../../../images/multi-linear.png' height='15px'/></a>"+
 							"<a class='btn btn-inverse dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></a>"+
 							"<ul class='dropdown-menu'>"+
-								"<li><a data-action='newFrame' class='action' href='#'><i class='zicon-new-frame small'></i>  New Frame</a></li>"+
-								"<li><a data-action='existingFrame' class='action' href='#'><i class='zicon-old-frame small'></i>  Existing Frame</a></li>"+
-								"<li class='divider'></li>"+
-								"<li><a data-action='advanced' class='action' href='#'><i class='zicon-options small'></i>  Advanced</a></li>"+
+								"<li><a data-action='newFrame' class='action' href='#'><i class='zicon-new-frame small'></i>  Link to New Frame</a></li>"+
+								"<li><a data-action='existingFrame' class='action' href='#'><i class='zicon-old-frame small'></i>  Link to Existing Frame</a></li>"+
 							"</ul>"+
 						"</div>"+
 						"<button data-action='ok' class='connection-confirm btn btn-success btn-small hide pull-left'>OK</button>"+

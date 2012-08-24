@@ -276,7 +276,18 @@ this.zeegaPlayer = {
 				var index = _.indexOf( _this.get('frames'), frameID );
 				
 				var before = index > 0 ? _this.get('frames')[index-1] : null;
-				var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
+
+				var after = null;
+				if( index + 1 < _this.get('frames').length )
+				{
+					after = _this.get('frames')[index+1]
+				}
+				else if( index + 1 >= _this.get('frames').length && frame.get('attr').advance > 0 )
+				{
+					after = _this.get('frames')[0];
+				}
+
+				//var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
 				
 				frame.setPosition(index, before, after);
 				return frame;
@@ -490,7 +501,7 @@ this.zeegaPlayer = {
 			this.commonLayers = {};
 			_.each( this.framesToPreload, function(frameID){
 				if( _this.id != frameID)
-					_this.commonLayers[frameID] = _.intersection( zeegaPlayer.app.project.frames.get(frameID).get('layers'), _this.get('layers') );
+					_this.commonLayers[frameID] = _.intersection( _this.get('layers'), zeegaPlayer.app.project.frames.get(frameID).get('layers') );
 			})
 		},
 		
@@ -499,11 +510,18 @@ this.zeegaPlayer = {
 			var _this = this;
 			this.linksOut = [];
 			this.linksIn = [];
-			_.each( _.toArray( this.layers ), function(layer){
+			this.layers.each(function(layer){
 				if( layer.get('type') == 'Link' && !_.isUndefined(layer.get('attr').from_frame) && !_.isUndefined(layer.get('attr').to_frame)  )
 				{
 					if( layer.get('attr').from_frame == _this.id ) _this.linksOut.push( layer.get('attr').to_frame );
-					else if( layer.get('attr').to_frame == _this.id ) _this.linksIn.push( layer.get('attr').from_frame );
+					else if( layer.get('attr').to_frame == _this.id )
+					{
+						// remove from this layer's link array too
+						var layerArray = _this.get('layers');
+						_this.set({layers: _.without(layerArray,layer.id)});
+						_this.layers.remove(layer);
+						_this.linksIn.push( layer.get('attr').from_frame );
+					}
 				}
 			})
 		},

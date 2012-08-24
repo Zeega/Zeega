@@ -96,6 +96,18 @@ this.zeega = {
 		//always start the editor at sequence 0, frame 0
 		var startFrameID = this.project.sequences.at(0).get('frames')[0];
 		this.goToFrame(startFrameID);
+
+/*
+// router disabled for now
+		var Router = Backbone.Router.extend({
+			routes : {
+				'frame/:frameID' : 'goToFrame'
+			},
+			goToFrame : function( frameID ){ _this.project.goToFrame(frameID) }
+		});
+		this.router = new Router();
+		Backbone.history.start();
+*/
 	},
 
 	goToFrame : function( f )

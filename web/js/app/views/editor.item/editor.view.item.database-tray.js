@@ -61,6 +61,7 @@
 					$('#frame-drawer').addClass('target-focus');
 
 					zeega.app.draggedItem = _this.model;
+					console.log('$$		started dragging item', _this.model)
 				},
 
 				/**	stuff _this happens when the user drags the item into a frame **/	

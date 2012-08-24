@@ -99,7 +99,7 @@
 			// make a new layer // this could be more elegant // shouldnt' dump attributes into model!
 			var newLayer = new Layer[itemModel.get('layer_type')]({
 					type: itemModel.get('layer_type'),
-					attr: itemModel.attributes
+					attr: itemModel.toJSON()
 				});
 			newLayer.save({},{
 				success : function()

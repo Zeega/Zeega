@@ -59,7 +59,8 @@
 					$('#frame-drawer').removeClass('hover');
 					ui.draggable.draggable('option','revert',false);
 					console.log('$$		item drop', zeega.app.draggedItem, _this.model)
-					_this.model.addItemLayer( zeega.app.draggedItem )
+					zeega.app.draggedItem.set(model,null);
+					_this.model.addItemLayer( zeega.app.draggedItem );
 				}
 			});
 		},
