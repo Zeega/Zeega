@@ -105,29 +105,34 @@
 				{
 					_this.layers.push( newLayer );
 					zeega.app.project.layers.add( newLayer );
+					newLayer.trigger('sync');
 				}
 			})
+			return newLayer;
 		},
 
 		/*
 			creates a new layer from a type and adds it to the frame
 		*/
 
-		addLayerByType : function( type )
+		addLayerByType : function( type, a )
 		{
 			var _this = this;
+			var attributes = a || {};
 			var Layer = zeega.module('layer');
 			var newLayer = new Layer[type]();
 
 			if( newLayer )
 			{
-				newLayer.save({},{
+				newLayer.save( attributes, {
 					success : function()
 					{
 						_this.layers.push( newLayer );
 						zeega.app.project.layers.add( newLayer );
+						newLayer.trigger('sync');
 					}
 				})
+				return newLayer;
 			}
 			else console.log('!!		no such layer type!');
 		},

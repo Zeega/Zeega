@@ -21,11 +21,7 @@
 		
 		drawSequenceTab : function( model )
 		{
-			_.each( _.toArray(this), function(sequence){
-				sequence.trigger('blur')
-			})
 			$('#sequence-tabs').append( model.tabView.render().el );
-			model.trigger('focus');
 		}
 
 	})

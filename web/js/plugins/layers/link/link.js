@@ -25,27 +25,6 @@
 			'top' : 25,
 			'height' : 50,
 			'width' : 50
-		},
-		
-		init : function(options)
-		{
-			//check to see if link layer is broken
-			/*
-			var a = this.get('attr');
-			if( !_.isNull(a.from_frame) || !_.isNull(a.from_sequencee) || !_.isNull(a.to_frame) || !_.isNull(a.to_sequence) )
-			{
-				console.log('link layer is broken! delete meeee!')
-				this.destroy();
-			}
-			*/
-		},
-		
-		setToFrame : function(sequenceID, frameID)
-		{
-			this.get('attr').to_sequence = sequenceID;
-			this.get('attr').to_frame = frameID;
-			this.get('attr').title = 'Link to sequence '+sequenceID;
-			this.save();
 		}
 		
 	});

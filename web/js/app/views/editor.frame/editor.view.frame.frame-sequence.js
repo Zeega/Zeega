@@ -85,7 +85,7 @@
 					break;
 				
 				case 'duplicate':
-					zeega.app.duplicateFrame( _this.model );
+					zeega.app.currentSequence.duplicateFrame( this.model );
 					break;
 					
 				default:

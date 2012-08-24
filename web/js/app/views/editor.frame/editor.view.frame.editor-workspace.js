@@ -78,20 +78,28 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		onClickConnection : function(e)
 		{
+			var _this = this;
 			$(e.target).closest('div').removeClass('open');
 			
 			switch($(e.target).closest('a').data('action'))
 			{
 				case 'newFrame':
 					var _this = this;
-					this.hold = zeega.app.addLayer({
-						type : 'Link',
-						options : {
+					this.hold = this.model.addLayerByType('Link',
+						{
 							from_sequence : zeega.app.currentSequence.id,
 							from_frame : _this.model.id
 						}
-					});
-					this.$el.find('.connection-confirm').show();
+					);
+					
+					if(this.hold.isNew())
+					{
+						this.hold.on('sync', function(){
+							_this.hold.off('sync');
+							_this.$el.find('.connection-confirm').show()
+						});
+					}
+					else console.log('hold is old');this.$el.find('.connection-confirm').show();
 					break;
 				case 'existingFrame':
 					var Modal = zeega.module('modal');
@@ -119,10 +127,35 @@ the frame's layers. It also includes common frame functions like adding sequence
 		//// non-linear links //// connections
 		confirmConnection : function(e)
 		{
+			console.log('$$		confirm connection', this, this.hold)
+			var _this = this;
+			var Sequence = zeega.module("sequence");
+			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : [this.hold.id] });
+
 			this.$el.find('.connection-confirm').hide();
-			this.confirmConnection();
+
+			sequence.save({},{
+				success : function()
+				{
+					//sequence.complete();
+					console.log('$$		seq saved', sequence)
+					_this.hold.update({
+						to_sequence : sequence.id,
+						to_frame : sequence.get('frames')[0].id
+					})
+					zeega.app.project.sequences.add(sequence);
+					//_this.hold.visual.render();
+					//zeega.app.project.frames.add(sequence.get('frames'));
+					//sequence.set('frames', [ sequence.get('frames')[0].id ]);
+					//zeega.app.goToSequence(sequence.id);
+
+					this.hold = null;
+				}
+			});
+
 			return false;
 		},
+
 
 		connectToSequenceFrame : function( sequenceID, frameID )
 		{
@@ -175,10 +208,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.off('connectToAdvanced');
 		},
 
-		confirmConnection : function()
+/*
+		finishConnection : function()
 		{
 
-			var _this = this;		
+			var _this = this;
 			var layersToPersist = [this.hold.id];
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : layersToPersist });
@@ -188,16 +222,17 @@ the frame's layers. It also includes common frame functions like adding sequence
 				{
 					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
 					_this.hold.visual.render();
-					zeega.app.project.frames.add(sequence.get('frames'));
-					sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					sequence.trigger('sync');
-					zeega.app.goToSequence(sequence.id);
+					//zeega.app.project.frames.add(sequence.get('frames'));
+					//sequence.set('frames', [ sequence.get('frames')[0].id ]);
+					//zeega.app.goToSequence(sequence.id);
 
 					this.hold = null;
 				}
 			});
 			zeega.app.project.sequences.add(sequence);
 		},
+
+*/
 		
 		getTemplate : function()
 		{

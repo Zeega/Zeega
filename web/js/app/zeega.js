@@ -108,8 +108,9 @@ this.zeega = {
 		// if the frame's sequence isn't rendered, then render it
 		if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
 		{
-			var sequence = this.project.sequences.get( frame.sequenceID )
-			sequence.renderSequenceFrames();
+			var sequence = this.project.sequences.get( frame.sequenceID );
+			console.log('$$		seq', this.project.sequences, sequence, frame, frame.sequenceID)
+			sequence.renderSequenceFrames(); //<----------------- breaks here
 			this.currentSequence = sequence;
 		}
 
@@ -187,70 +188,6 @@ this.zeega = {
 		// if sequence is in view, then load the first sequence
 		
 		return false;
-	},
-
-	duplicateFrame : function( frameModel )
-	{
-		//if(!this.busy) this.project.duplicateFrame( frameModel );
-		if(!this.busy)
-		{
-			console.log('	DUPLICATE FRAME')
-			console.log(frameModel)
-			var _this = this;
-			var dupeModel = frameModel.clone();
-			
-			console.log(''+ frameModel.get('layers'))
-			//remove link layers because it doesn't make sense to dupe those
-			var layersToDupe = [];
-			_.each( frameModel.get('layers'), function(layerID){
-				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') layersToDupe.push( layerID);
-			})
-			console.log(layersToDupe)
-			dupeModel.set({
-				'layers' : layersToDupe,
-				'duplicate_id' : parseInt(frameModel.id),
-				'id' : null
-			})
-			
-			dupeModel.oldLayerIDs = frameModel.get('layers');
-			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
-			dupeModel.dupe = true;
-			
-			dupeModel.save({},{
-				success : function( savedFrame )
-				{
-					console.log('frame saved and is a duplicate')
-					console.log(savedFrame)
-				
-					//zeega.app.currentSequence.get('frames');
-				
-					//clone layers and place them into the layer array
-					_.each( savedFrame.oldLayerIDs , function(layerID, i){
-
-						//if layer is persistent
-						//replace frameIndex the id with the persistent id
-						var persistLayers = _this.currentSequence.get('attr').persistLayers;
-						if( _.include( persistLayers, parseInt(layerID) ) )
-						{
-							var layerOrder = savedFrame.get('layers');
-							layerOrder[i] = String(layerID);
-							savedFrame.set({layers:layerOrder})
-						}
-						else
-						{
-							_this.project.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
-						}
-					})
-					//resave the frame after being updated with persistent frame ids
-
-					_this.project.frames.add( savedFrame );
-					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
-					
-				}
-			});
-			
-			
-		} //busy
 	},
 
 	/*
