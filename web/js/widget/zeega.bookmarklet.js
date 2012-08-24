@@ -17,8 +17,8 @@ bookmarklet = function(opts){
 
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 var bm = new bookmarklet({
-    css : ['http:///core.zeega.org/Libraries/css/style.css'],
-    js  : ['http://core.zeega.org/Libraries/js/jquery-ui.min.js'],    
+    css : [],
+    js  : ['//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js'],    
 //	jqpath : 'myCustomjQueryPath.js', <-- option to include your own path to jquery
     
     ready : function()
@@ -176,7 +176,7 @@ function fullFunc(a) {
             }).appendTo("head")
         })
     }
-    a.jqpath = a.jqpath || "http://code.jquery.com/jquery-1.6.4.js";
+    a.jqpath = a.jqpath || "//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js";
     (function (b) {
         var c = document.createElement("script");
         c.type = "text/javascript";
