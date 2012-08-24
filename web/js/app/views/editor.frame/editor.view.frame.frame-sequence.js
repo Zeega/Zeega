@@ -24,7 +24,7 @@
 		},
 		blur : function()
 		{
-			$(this.el).removeClass('active-frame');
+			this.$el.removeClass('active-frame');
 			this.model.inFocus = false;
 		},
 	
@@ -69,6 +69,12 @@
 			'click .frame-action-menu a' : 'frameAction'
 		},
 
+		goToFrame : function()
+		{
+			zeega.app.loadFrame(this.model);
+			return false;
+		},
+
 		frameAction : function(e)
 		{
 			switch($(e.target).data('action'))
@@ -85,12 +91,6 @@
 				default:
 					console.log('not recognized')
 			}
-			return false;
-		},
-	
-		goToFrame : function()
-		{
-			zeega.app.loadFrame(this.model);
 			return false;
 		},
 	
