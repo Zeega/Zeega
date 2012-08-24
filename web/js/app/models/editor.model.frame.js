@@ -27,7 +27,7 @@
 	
 		initialize : function()
 		{
-			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+			if( this.get('layers') ) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			
 			//this is the function that only calls updateThumb once after n miliseconds
@@ -41,6 +41,7 @@
 
 		complete : function()
 		{
+			if( !this.get('layers') ) this.set({ layers:[] });
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
 			this.layers = new Frame.LayerCollection( layerArray );
 			this.layers.on('add', this.updateLayerOrder, this);

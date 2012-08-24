@@ -39,10 +39,7 @@
 	
 		goToSequence : function(e)
 		{
-			if( !this.inFocus )
-			{
-				zeega.app.goToSequence(this.model.id)
-			}
+			if( !this.inFocus ) zeega.app.goToSequence(this.model.id)
 			this.closeDropdown();
 			return false;
 		},
@@ -85,16 +82,19 @@
 		
 		deleteSequence : function()
 		{
-			if( confirm('Delete sequence: "'+ this.model.get('title') +'"\n\nThis will also delete all incoming and outgoing connections to this sequence!') )
+			console.log('delete sequence!!', this.model)
+			/*
+			if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
 			{
-				this.remove();
-				zeega.app.deleteSequence(this.model.id);
-				this.closeDropdown();
+				//this.remove();
+				//zeega.app.project.sequences.remove(this.model);
+				//this.closeDropdown();
 			}
 			else
 			{
 				this.closeDropdown();
 			}
+			*/
 			return false;
 		},
 	

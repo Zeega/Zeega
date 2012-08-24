@@ -413,7 +413,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		initialize : function()
 		{
-			console.log(this)
 			this.model.layers.on('add', this.onAddLayer, this );
 			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},

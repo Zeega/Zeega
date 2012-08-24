@@ -75,6 +75,7 @@
 			var Sequence = zeega.module("sequence");
 			this.sequences = new Sequence.Collection( sequences );
 			this.sequences.render();
+			this.sequences.at(0).trigger('focus');
 			//zeega.app.currentSequence = this.sequences.at(0);
 		},
 		

@@ -164,32 +164,6 @@ this.zeega = {
 		
 	},
 
-	deleteSequence : function(sequenceID)
-	{
-		var _this = this;
-		var sequence = this.project.sequences.get(sequenceID);
-
-		var layers = [];
-		_.each( sequence.get('frames'), function(frameID){
-			var frame = _this.project.frames.get(frameID);
-			layers = _.union(layers,frame.get('layers'));
-		});
-		console.log( 'layers:',layers)
-		_.each( layers, function(layerID){
-			var layer = _this.project.layers.get(layerID);
-			if( layer && layer.get('type') == 'Link' )
-			{
-				var attr = layer.get('attr');
-				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
-					layer.destroy();
-			}
-		});
-		sequence.destroy();
-		// if sequence is in view, then load the first sequence
-		
-		return false;
-	},
-
 	/*
 		Launches the continue layer modal
 	*/
