@@ -83,6 +83,7 @@ class BookmarkletController extends Controller
 							'item'=>json_encode($parsedItem), 
 							'update'=>$update,
 							'child_items_count'=>$parsedItem["child_items_count"],
+							'archive'=>$parsedItem["archive"],
 						)
 					);	
 				}
@@ -107,6 +108,7 @@ class BookmarkletController extends Controller
 								'widget_id'=>$widgetId,
 								'item'=>json_encode($parsedItem), 
 								'update'=>$update,
+								'archive'=>$parsedItem["archive"],
 								'child_items_count'=>$parsedItem["child_items_count"],
 								'login_url' => $loginUrl,
 							)
@@ -135,6 +137,7 @@ class BookmarkletController extends Controller
 							'widget_id'=>$widgetId,
 							'item'=>$item, 
 							'update'=>$update,
+							'archive'=>$parsedItem["archive"],
 						)
 					);	
 				}
@@ -162,6 +165,7 @@ class BookmarkletController extends Controller
 			'item'=>json_encode(array()), 
 			'urlmessage' => $message,
 			'url'=> $itemUrl,
+			'archive'=>"",
 		));
 	}	
 }
