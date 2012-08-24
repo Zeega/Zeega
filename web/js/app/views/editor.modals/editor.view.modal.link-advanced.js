@@ -30,6 +30,7 @@
 		
 		hide : function()
 		{
+			this.model.trigger('cancel_connection');
 			this.$el.modal('hide');
 			zeega.app.busy = false;
 			this.remove();

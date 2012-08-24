@@ -78,47 +78,53 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		onClickConnection : function(e)
 		{
-			var _this = this;
-			$(e.target).closest('div').removeClass('open');
-			var _this = this;
-			
-			switch($(e.target).closest('a').data('action'))
+			if(this.busy != true)
 			{
-				case 'newFrame':
-					var fromInfo = {
-						from_sequence : zeega.app.currentSequence.id,
-						from_frame : _this.model.id
-					}
+				var _this = this;
+				$(e.target).closest('div').removeClass('open');
+				this.$el.find('.make-connection>a').addClass('disabled');
+				this.model.on('cancel_connection', this.cancelConnection, this);
 
-					this.hold = this.model.addLayerByType('Link', fromInfo );
-					
-					if(this.hold.isNew())
-					{
-						this.hold.on('sync', function(){
-							_this.hold.off('sync');
-							_this.$el.find('.connection-confirm').show()
-						});
-					}
-					else this.$el.find('.connection-confirm').show();
-					break;
-				case 'existingFrame':
-					var Modal = zeega.module('modal');
-					this.linkModal = new Modal.Views.LinkExisting({model:this.model});
-					$('body').append( this.linkModal.render().el);
-					this.linkModal.show();
-					
-					this.model.on('connectToSequenceFrame', this.connectToSequenceFrame,this );
-					
-					break;
-				case 'advanced':
-					var Modal = zeega.module('modal');
-					this.advancedModal = new Modal.Views.LinkAdvanced({model:this.model});
-					$('body').append( this.advancedModal.render().el );
-					this.advancedModal.show();
-					
-					this.model.on('connectToAdvanced', this.connectToAdvanced, this );
-					
-					break;
+				this.busy = true;
+
+				switch($(e.target).closest('a').data('action'))
+				{
+					case 'newFrame':
+						var fromInfo = {
+							from_sequence : zeega.app.currentSequence.id,
+							from_frame : _this.model.id
+						}
+
+						this.hold = this.model.addLayerByType('Link', fromInfo );
+						
+						if(this.hold.isNew())
+						{
+							this.hold.on('sync', function(){
+								_this.hold.off('sync');
+								_this.$el.find('.connection-confirm').show()
+							});
+						}
+						else this.$el.find('.connection-confirm').show();
+						break;
+					case 'existingFrame':
+						var Modal = zeega.module('modal');
+						this.linkModal = new Modal.Views.LinkExisting({model:this.model});
+						$('body').append( this.linkModal.render().el);
+						this.linkModal.show();
+						
+						this.model.on('connectToSequenceFrame', this.connectToSequenceFrame,this );
+						
+						break;
+					case 'advanced':
+						var Modal = zeega.module('modal');
+						this.advancedModal = new Modal.Views.LinkAdvanced({model:this.model});
+						$('body').append( this.advancedModal.render().el );
+						this.advancedModal.show();
+						
+						this.model.on('connectToAdvanced', this.connectToAdvanced, this );
+						
+						break;
+				}
 			}
 			
 			return false;
@@ -150,6 +156,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 					this.hold = null;
 				}
 			});
+
+			this.busy = false;
+			this.$el.find('.make-connection>a').removeClass('disabled');
+
 			return false;
 		},
 
@@ -164,7 +174,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var hold = this.model.addLayerByType('Link', attr );
 			
 			zeega.app.project.frames.get(attr.to_frame).layers.push(hold);
-
+			this.busy = false;
+			this.$el.find('.make-connection>a').removeClass('disabled');
 			this.model.off('connectToSequenceFrame');
 		},
 
@@ -201,10 +212,17 @@ the frame's layers. It also includes common frame functions like adding sequence
 					}
 				});
 			})
-			
+			this.busy = false;
+			this.$el.find('.make-connection>a').removeClass('disabled');
 			this.model.off('connectToAdvanced');
 		},
 
+		cancelConnection : function()
+		{
+			this.hold = null;
+			this.busy = false;
+			this.$el.find('.make-connection>a').removeClass('disabled');
+		},
 		
 		getTemplate : function()
 		{
