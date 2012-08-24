@@ -6,17 +6,14 @@
 		
 		initialize : function()
 		{
-			this.model.on('all',function(e){console.log('sequence event', e)})
 		},
 		
 		render: function()
 		{
 			var _this = this;
 			this.$el.html( this.getTemplate() );
-			console.log('$$		frame drawer render', this)
 			_.each( this.model.get('frames'), function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
-				console.log('$$		frame', frame)
 				_this.$el.find('.frame-list').append( frame.sequenceFrameView.render().el)
 			});
 			
@@ -54,14 +51,12 @@
 				start : function(e,ui)
 				{
 					this.num= Math.floor( ui.position.left / 55 );
-					//console.log(this.num);
 				},
 				containment : 'parent',
 				helper :function(){ return $('<div>') },
 
 				drag : function(e,ui)
 				{
-					//console.log('moved'+ ui.position.left)
 					var temp = Math.floor( ui.position.left / 55 );
 					if(this.num != temp)
 					{
