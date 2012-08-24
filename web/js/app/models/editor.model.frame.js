@@ -66,9 +66,9 @@
 
 		updateLayerOrder : function()
 		{
-			var layerOrder = this.layers.pluck('id');
+			var layerOrder = _.compact(this.layers.pluck('id'));
 			if(layerOrder.length == 0) layerOrder = [false];
-			this.save('layers',layerOrder);
+			this.save('layers', layerOrder);
 			this.updateThumb();
 		},
 
