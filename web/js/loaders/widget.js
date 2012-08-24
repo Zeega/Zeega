@@ -9,10 +9,10 @@
 
 *********************************************/
 require.config({
-	baseUrl : "https://dev.zeega.org/" + sessionStorage.getItem('directory')+'js/',
+	baseUrl : sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/',
 	paths : {
-			'order' :  "https://dev.zeega.org/" + sessionStorage.getItem('directory')+'js/lib/order',
-			'text' : "https://dev.zeega.org/" + sessionStorage.getItem('directory')+'js/lib/text'
+			'order' :  sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/lib/order',
+			'text' : sessionStorage.getItem('hostname') +  sessionStorage.getItem('directory')+'js/lib/text'
 		}
 })
 

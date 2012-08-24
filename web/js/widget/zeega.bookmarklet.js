@@ -15,15 +15,32 @@ bookmarklet = function(opts){
     fullFunc(opts)
 };
 
+getZeegaHost = function()
+{
+
+    var script = document.getElementById('zeegabm');
+                
+    var srcUrlIdx = script.src.indexOf("/web/");
+    var localUrlPrefix;
+    
+    if(srcUrlIdx == -1){
+        srcUrlIdx = script.src.indexOf("/js/widget/");
+        localUrlPrefix = script.src.substring(0,srcUrlIdx);
+    }
+    else{
+        localUrlPrefix = script.src.substring(0,srcUrlIdx) + "/web";
+    }
+    return localUrlPrefix;
+
+};
+
 // These are the styles, scripts and callbacks we include in our bookmarklet:
 var bm = new bookmarklet({
-    css : [],
+    css : [getZeegaHost() + "/css/zeega.widget.css"],
     js  : ['//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js'],    
 //	jqpath : 'myCustomjQueryPath.js', <-- option to include your own path to jquery
-    
     ready : function()
     {
-        
     	var zeegaBM = {
             specialCases:{
                 facebook:{
@@ -52,36 +69,22 @@ var bm = new bookmarklet({
             },
 	        init: function(){
 	            /* DYNAMIC URL FOR THE BOOKMARKLET - TEMPORARY - CREATE A GLOBAL METHOD OR VARIABLE FOR THIS */
-	            var script = document.getElementById('zeegabm');
+                var script = document.getElementById('zeegabm');
 	            
 	            var srcUrlIdx = script.src.indexOf("/web/");
-	            var localUrlPrefix;
-	
-				if(srcUrlIdx == -1){
-	            	srcUrlIdx = script.src.indexOf("/js/widget/");
-	            	localUrlPrefix = script.src.substring(0,srcUrlIdx);
-	            }
-	            else{
-	            	localUrlPrefix = script.src.substring(0,srcUrlIdx) + "/web";
-	            }
+	            var localUrlPrefix = getZeegaHost();
+	           
                 this.url=encodeURIComponent(window.location.href);
 
                 // big fork for Facebook:
-                if(window.location.host.indexOf('facebook')>-1){ // if facebook or other OAuth source, use popup
-                    
+                if(window.location.host.indexOf('facebook')>-1)
+                { 
+                    // if facebook or other OAuth source, use popup
                     zeegaBM.specialCases.facebook.launchPopupWindow(localUrlPrefix, this.url);
-                    /*
-                    var popupTop_px =  window.outerHeight-window.innerHeight;
-                    popupTop_px += (window.hasOwnProperty('screenTop'))?window.screenTop:window.screenY
-                    var windowWidth = 460;
-                    var popupLeft_px = window.outerWidth - windowWidth - 25;
-                    popupLeft_px += (window.hasOwnProperty('screenLeft'))?window.screenLeft:window.screenX
-                    var popupHeight_px = (window.innerHeight-40);
-                    var zbm_url = localUrlPrefix + "/widget?url="+this.url;
-                    var zbm_specs = "top=" + popupTop_px + ", left=" + popupLeft_px + ", height=" + popupHeight_px + ",width=460,location=0, menubar=0, status=0, toolbar=0";
-                    this.zbm_window = window.open(zbm_url, "ZeegaBookmarklet", zbm_specs); 
-                    */
-                }else{ // use iFrame
+                }
+                else
+                { 
+                    // use iFrame
                     $('#zeega-overlay').remove();
                 
                     var overlay=$('<div>').css({
