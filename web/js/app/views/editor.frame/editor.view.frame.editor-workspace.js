@@ -80,11 +80,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			var _this = this;
 			$(e.target).closest('div').removeClass('open');
+			var _this = this;
 			
 			switch($(e.target).closest('a').data('action'))
 			{
 				case 'newFrame':
-					var _this = this;
 					var fromInfo = {
 						from_sequence : zeega.app.currentSequence.id,
 						from_frame : _this.model.id
@@ -124,10 +124,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 		
-		//// non-linear links //// connections
+		/*
+			make a connection to a new sequence
+		*/
+
 		confirmConnection : function(e)
 		{
-			console.log('$$		confirm connection', this, this.hold)
 			var _this = this;
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : [this.hold.id] });
@@ -154,15 +156,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		connectToSequenceFrame : function( sequenceID, frameID )
 		{
-			zeega.app.addLayer({
-				type : 'Link',
-				options : {
-					from_sequence : zeega.app.currentSequence.id,
-					from_frame : this.model.id,
-					to_sequence : sequenceID,
-					to_frame : frameID
-				}
-			});
+			var attr = {
+				from_sequence : zeega.app.currentSequence.id,
+				from_frame : this.model.id,
+				to_sequence : sequenceID,
+				to_frame : frameID
+			};
+			var hold = this.model.addLayerByType('Link', attr );
+			
+			zeega.app.project.frames.get(attr.to_frame).layers.push(hold);
+
 			this.model.off('connectToSequenceFrame');
 		},
 
@@ -203,31 +206,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.off('connectToAdvanced');
 		},
 
-/*
-		finishConnection : function()
-		{
-
-			var _this = this;
-			var layersToPersist = [this.hold.id];
-			var Sequence = zeega.module("sequence");
-			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : layersToPersist });
-
-			sequence.save({},{
-				success : function()
-				{
-					_this.hold.setToFrame( sequence.id, sequence.get('frames')[0].id );
-					_this.hold.visual.render();
-					//zeega.app.project.frames.add(sequence.get('frames'));
-					//sequence.set('frames', [ sequence.get('frames')[0].id ]);
-					//zeega.app.goToSequence(sequence.id);
-
-					this.hold = null;
-				}
-			});
-			zeega.app.project.sequences.add(sequence);
-		},
-
-*/
 		
 		getTemplate : function()
 		{
@@ -511,7 +489,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 					_this.$el.prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
-
 			})
 			this.makeSortable();
 			return this;
