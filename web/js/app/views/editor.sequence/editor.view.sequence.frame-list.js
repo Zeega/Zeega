@@ -12,11 +12,10 @@
 		{
 			var _this = this;
 			this.$el.html( this.getTemplate() );
-			_.each( this.model.get('frames'), function(frameID){
-				var frame = zeega.app.project.frames.get(frameID);
+
+			this.model.frames.each(function(frame){
 				_this.$el.find('.frame-list').append( frame.sequenceFrameView.render().el)
-			});
-			
+			})
 			this.initEvents();
 			
 			return this;
@@ -40,7 +39,11 @@
 				tolerance: 'pointer',
 				distance: 10,
 
-				stop : function(){ _this.updateFrameOrder() }
+				stop : function()
+				{
+					var frameIDArray = _.map( _this.$el.find('.frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+					_this.model.onFrameReorder( frameIDArray );
+				}
 			});
 			this.$el.find('.frame-list').disableSelection();
 			
@@ -50,7 +53,7 @@
 
 				start : function(e,ui)
 				{
-					this.num= Math.floor( ui.position.left / 55 );
+					this.num = Math.floor( ui.position.left / 55 );
 				},
 				containment : 'parent',
 				helper :function(){ return $('<div>') },
@@ -71,21 +74,17 @@
 				stop : function(e,ui)
 				{
 					$('.ghost-frame').remove();
-					_.times( Math.floor( ui.position.left/55-this.num ), function(){ zeega.app.addFrame() });
+					var frameCount = Math.floor( ui.position.left/55-this.num );
+					_this.model.addFrames( frameCount );
 				}
 			})
 			.click(function(){
-				zeega.app.addFrame();
+				_this.model.addFrames( 1 );
 				return false;
 			});
 			
 		},
 		
-		updateFrameOrder : function()
-		{
-			var frameIDArray = _.map( this.$el.find('.frame-list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
-			this.model.save({'frames': frameIDArray});
-		},
 		
 		getTemplate : function()
 		{

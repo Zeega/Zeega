@@ -12,7 +12,7 @@
 		render: function()
 		{
 			var _this = this;
-			$(this.el).html( this.getTemplate() );
+			this.$el.html( this.getTemplate() );
 			
 			//fill options for selecting a sequence
 			_.each( _.toArray(zeega.app.project.sequences), function(sequence){
@@ -30,15 +30,12 @@
 			return this;
 		},
 		
-		show : function()
-		{
-			this.$el.modal('show');
-		},
+		show : function(){ this.$el.modal('show') },
 		
 		hide : function()
 		{
+			this.model.trigger('cancel_connection');
 			this.$el.modal('hide');
-			zeega.app.busy = false;
 			this.remove();
 			return false;
 		},

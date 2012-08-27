@@ -7,6 +7,13 @@ jQuery(function($)
 
 	initHeaderUX();
 
+	
+	//detect when zeega comes back in focus and refresh the database
+	window.addEventListener('focus', function(){
+		zeega.app.refreshDatabase();
+	});
+
+
 //		POPOVERS		//
 	$('.info').popover({
 		'delayIn' : 0
@@ -140,8 +147,7 @@ jQuery(function($)
 	}
 
 	$('#new-layer-list a').click(function(){
-		zeega.app.addLayer( { type : $(this).data('type') } );
-		//addLayer( $(this).data('type') );
+		zeega.app.currentFrame.addLayerByType( $(this).data('type') );
 		return false;
 	})
 
@@ -176,10 +182,7 @@ jQuery(function($)
 	    zeega.app.refreshDatabase();
 	});
 
-	//detect when zeega comes back in focus and refresh the database
-	window.addEventListener('focus', function(){
-		zeega.app.refreshDatabase();
-	});
+
 
 	$('#database-search-text').keypress(function(e){
 		var keycode = e.which;
@@ -196,35 +199,6 @@ jQuery(function($)
 			return true;
 		}
 	});
-
-
-	//hide layer content initially
-	$(".layer-list a:first").click(function(){
-		$('#sortable-layers li').children('div').hide('fast');
-		if($(this).closest('li').children('div').is(":visible")){
-			$(this).closest('li').children('div').hide('fast');
-			return false;
-		}else{
-			$(this).closest('li').children('div').show('fast');
-			return false;
-		}
-	});
-
-	$('#links-list').sortable({
-		//define a grip handle for sorting
-		handle: '.layer-drag-handle',
-		cursor : 'move',
-		axis:'y',
-		containment: '#sidebar',
-		cursorAt : {top:1,left:1},
-		placeholder: "ui-state-highlight",
-
-		//resort the layers in the workspace too
-		update : function()
-		{
-			zeega.app.updateLayerOrder();
-		}
-	})
 
 
 	$('#database-item-list').scroll(function(){
