@@ -51,9 +51,21 @@ this.zeega = {
 	init : function()
 	{
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
+		
+
+		this.activateWorkspace();
+
+		this.updateWorkspaceScale();
+
 		this.loadModules();
 		this.isLoaded = true
 		//this.initStartHelp(); //broken. fix!
+	},
+
+	activateWorkspace : function()
+	{
+		var Main = zeega.module('main');
+		this.workspace = new Main.Views.Framework();
 	},
 	
 	loadModules : function()
@@ -88,6 +100,24 @@ this.zeega = {
 		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
 	
+	},
+
+	updateWorkspaceScale : function()
+	{
+		var padding = 20;
+		var windowHeight = $('#zeega-edit-column').height();
+		var navHeight = $('#zeega-project-nav').height();
+		var navWidth = $('#zeega-project-nav').width();
+
+		var maxHeight = windowHeight - navHeight - 2*padding;
+		var maxWidth = navWidth - 2*padding;
+
+		//height is constraining
+		if( maxWidth / maxHeight > 4/3 )
+			$('#zeega-frame-workspace').css({width:(maxHeight*4/3)+'px',height:maxHeight+'px'});
+		//width is constraining
+		else $('#zeega-frame-workspace').css({width:maxWidth+'px',height:(maxWidth*3/4)+'px'});
+
 	},
 	
 	startEditor : function()

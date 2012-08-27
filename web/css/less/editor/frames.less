@@ -1,147 +1,44 @@
 /******************************
 
-	CONNECTIONS
-	
-*******************************/
-
-#connection-confirm{ margin-left:10px;}
-
-
-/************* end connection styles ****************/
-/******************************
-
 	FRAMES
 	
 *******************************/
 
-
-#frame-drawer
+#zeega-project-frame-list
 {
-	.frame-list
+
+	height:70px;
+	background: rgba(0, 0, 0, 0.2);
+
+	&>ul
 	{
-		display : inline-block;
-		position:relative;
-		
-		.frame-thumb
+		margin:0;
+		list-style:none;
+		white-space: nowrap;
+		overflow:auto;
+
+		&>li
 		{
-			height:50px;
-			width:50px;
-			background:#ccc;
-			cursor:move;
-			box-shadow : 0 0 12px #333;
-			-webkit-transition: box-shadow .25s linear;
-			transition: color .25 linear;
-			border-radius:3px;
-		
-			display:inline-block;
-			margin-left:5px;
-		
-			&.active-frame
+			display: inline-block;
+			height: 60px;
+			width: 80px;
+			padding: 5px;
+
+			.active{ background-color:rgba(255,255,255,0.25) }
+
+			&:first-child{ margin-left:5px }
+			a
 			{
-				box-shadow: 0 0 12px yellow;
-				-webkit-transition: box-shadow .25s linear;
-				transition: color .25 linear;
+				display:block;
+				width:100%;
+				height:100%;
+				background-color:black;
+
 			}
-			&:hover
-			{
-				box-shadow : 0 0 12px white;
-				-webkit-transition: box-shadow .25s linear;
-				transition: color .25s linear;
-			}
-		
-			&:first-child{ margin-left : 0 }
-			
-// should this be a mixin?
-
-			&:hover .menu{ display:block }
-			.menu
-			{
-				position:absolute;
-				margin:0;
-				z-index: 100;
-				display:none;
-
-				.menu-toggle
-				{
-					position:absolute;
-				}
-
-				.frame-action-menu
-				{
-					position:absolute;
-					margin:0;
-					list-style:none;
-					background: rgba(255,255,255,0.9);
-					padding: 5px 10px;
-					display: none;
-
-				}
-				&:hover .frame-action-menu{ display:block }
-				
-			}
-			
-			
 		}
 	}
-	
-	#add-frame
-	{
-		display:inline-block;
-		position: relative;
-		left: 5px;
-		top: -20px;
-		padding-right:200px;
-	}
-	
+
 }
 
-
-#frame-drawer, #browser-my-collections
-{
-	white-space:nowrap;
-	background:#eee;
-	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#666));
-	border-radius: 0 0 6px 6px;
-	
-	box-shadow : none;
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25s linear;
-	
-	
-	margin-bottom:6px;
-	padding:12px 12px 0 12px;
-	overflow-y:hidden;
-}
-
-#frame-drawer.target-focus
-{
-	box-shadow : inset 0 0 12px rgba(255,255,255,0.5);
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25s linear;
-}
-#frame-drawer.hover
-{ 
-	box-shadow : inset 0 0 12px rgba(136,182,49,0.9);
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25s linear;
-}
-
-#visual-editor-workspace.target-focus
-{
-	box-shadow : 0 0 12px rgba(255,255,255,0.75);
-	-webkit-transition: box-shadow .25s linear;
-	transition: color .25s linear;
-}
-
-
-.frame-update-overlay
-{
-	display:none;
-	background-image:url('../../../images/stripes.png');
-	height:50px;
-	width:50px;
-	opacity: 0.6;
-	position:absolute;
-}
 
 /************* end frame styles ****************/
