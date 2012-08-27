@@ -413,7 +413,8 @@ var BrowserDetect = {
 							<div class="navbar navbar-fixed-bottom" style="position:relative">
  <div class="navbar-inner">
     <div class="container">
-							<h5> <a href="http://zeega.org" target="_blank">Zeega</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.org">info [at] zeega.org</a></h5>
+							<h5> <a href="http://zeega.org" target="_blank">Zeega</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.org">info [at] zeega.org</a> | <a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a> | <a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a>
+</h5>
 	</div></div>
 							</div>
 					</div>
@@ -496,6 +497,8 @@ var BrowserDetect = {
 									<p><a href="{{ path('ZeegaCommunityBundle_about')}}">About</a></p>
 									<p><a href="{{ path('fos_user_registration_register')}}">Sign Up</a></p>
 									<p><a href="{{ path('_security_login')}}">Login</a></p>
+									<p><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></p>
+									<p><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></p>
 								</div>
 							</div>
 							
