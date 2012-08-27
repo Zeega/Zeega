@@ -66,7 +66,8 @@
 
 		updateLayerOrder : function()
 		{
-			var layerOrder = _.compact(this.layers.pluck('id'));
+			var layerOrder = this.layers.map(function(layer){ return parseInt(layer.id) });
+			var layerOrder = _.compact( layerOrder );
 			if(layerOrder.length == 0) layerOrder = [false];
 			this.save('layers', layerOrder);
 			this.updateThumb();
@@ -203,6 +204,7 @@
 		
 		validate : function( attrs )
 		{
+
 			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
 			{
 				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');

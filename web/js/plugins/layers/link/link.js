@@ -62,7 +62,6 @@
 
 		onUpdate : function()
 		{
-			console.log('$$		on link update');
 			this.$el.html( this.getTemplate() );
 			this.delegateEvents();
 		},
@@ -70,7 +69,6 @@
 		render : function()
 		{
 			var _this = this;
-			console.log('$$		render link', this)
 			
 			var style = {
 				'height' : this.model.get('attr').height +'%',
@@ -130,7 +128,6 @@
 		
 		onLayerEnter : function()
 		{
-			console.log('$$		on update', this, this.$el)
 			var _this = this;
 			this.$el.resizable({
 				stop: function(e,ui)
