@@ -31,7 +31,7 @@
 		render: function()
 		{
 			this.$el.html( this.getTemplate() );
-			this.makeDroppable();
+			//this.makeDroppable();
 			this.delegateEvents();
 			return this;
 		},
