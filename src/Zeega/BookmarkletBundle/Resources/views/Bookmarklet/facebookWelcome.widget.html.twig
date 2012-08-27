@@ -1,0 +1,24 @@
+
+
+{# src/Zeega/\CoreBundle\/Resources/views/Widget/facebookWelcome.widget.html.twig #}
+
+{% extends '::widget.base.html.twig' %}
+
+{% block title %}Zeega Alpha {% endblock %}
+
+{% block body %}
+
+	<div id="widget-wrapper" data-id="{{widget_id}}" class='well'> 
+
+        To add Facebook photos to Zeega, you must
+        <br>
+        <a href="{{login_url}}">Connect with Facebook</a>
+		
+	</div>
+
+
+{% endblock %}		
+ 
+
+{% block scripts %}
+{% endblock %}
