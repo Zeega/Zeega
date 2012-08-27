@@ -27,8 +27,8 @@
 				
 			}
 			//http://dev.zeega.org/joseph/web/project/ID/view
-			var projectlink = zeega.app.url_prefix +this.model.get('item_id');
-			var iframeLink = zeega.app.url_prefix +this.model.get('item_id')+"/embed";
+			var projectlink = 'http:'+zeega.app.url_prefix +this.model.get('item_id');
+			var iframeLink = 'http:'+zeega.app.url_prefix +this.model.get('item_id')+"/embed";
 			this.iframeHTML = '<iframe src="'+ iframeLink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
