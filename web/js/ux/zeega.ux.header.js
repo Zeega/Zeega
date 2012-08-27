@@ -69,7 +69,7 @@ function initHeaderUX(){
 		
 		});
 		
-		if(!_.isUndefined(BrowserDetect)){
+		if(!_.isUndefined(window.BrowserDetect)){
 		
 			bug.browser=BrowserDetect.browser;
 			bug.version=BrowserDetect.version;
