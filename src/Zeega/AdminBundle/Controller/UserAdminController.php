@@ -36,7 +36,7 @@ class UserAdminController extends Controller
 
                     $message = \Swift_Message::newInstance()
                             ->setSubject('Welcome to Zeega!')
-                            ->setFrom('noreply@zeega.org')
+                            ->setFrom(array('noreply@zeega.org'=>'Zeega'))
                             ->setTo($user->getEmail())
                             ->setBody($this->renderView('ZeegaAdminBundle:Users:account_activated.txt.twig', array('username' => $user->getDisplayName(), 'activationURL' => $activationUrl)))
                         ;

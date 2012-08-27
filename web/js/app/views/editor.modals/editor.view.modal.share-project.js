@@ -143,7 +143,7 @@
 										*/
 									//TWITTER
 									'<span class="publish-social-media">'+
-									'<a href="https://twitter.com/intent/tweet?original_referer=<%=projectlink %>&amp;text=Zeega%20Project%3A%20Pointed News&amp;url=<%=projectlink %>" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
+									'<a href="https://twitter.com/intent/tweet?original_referer=<%=projectlink %>&amp;text=Zeega%20Project%3A%20<%=uriEncodedTitle%>&amp;url=<%=projectlink %>" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
 									'</span>'+
 									
 									//FB

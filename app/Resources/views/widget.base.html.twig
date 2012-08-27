@@ -22,6 +22,27 @@
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
+
+			// following purpose (though not the code) should be moved to widget.view.item.ingesting.js.  Inferring data state from HTML state is bad jQuery pattern
+			var watchForCloseInterval = null;
+			var successCount = 0;
+			function watchForClose(){
+				if(window.name=="ZeegaBookmarklet"){
+					watchForCloseInterval = setInterval(_watchForClose, 1000);
+				}
+			}
+			function _watchForClose(){
+				var message_div = document.getElementById("message");
+				if (message_div) {
+					if(message_div.style.display == "block"){
+						successCount++;
+						if (successCount >= 4){
+							window.close();
+						}
+					}
+				}
+			}
+			watchForClose();
 		</script>
 				{% if app.environment == 'prod' %}
 			<script type="text/javascript">

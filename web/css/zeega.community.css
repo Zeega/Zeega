@@ -844,6 +844,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .zicon-click{background-position:-120px -120px;}
 .zicon-sync-dropbox{background-position:-40px -60px;}
 .zicon-add-media{background-position:-40px -100px;}
+.zicon-go-fullscreen{background-position:-140px -120px;}
+.zicon-exit-fullscreen{background-position:-160px -120px;}
 .zicon-new-frame.small{background-position:-150px;}
 .zicon-old-frame.small{background-position:-135px;}
 .zicon-options.small{background-position:-60px;}
