@@ -57,18 +57,25 @@ function initHeaderUX(){
 	
 	$('.submit-bug').click(function(){
 		
+
+		
 		var bug = new Backbone.Model({
 		
 			url:window.location.href,
 			hash: window.location.hash.substr(1),
 			description: $('.bug-description').val(),
 			email: $('.bug-email').val(),
-			browser: BrowserDetect.browser,
-			version: BrowserDetect.version,
-			os:BrowserDetect.OS,
 			login:sessionStorage.getItem('user')
 		
 		});
+		
+		if(!_.isUndefined(BrowserDetect)){
+		
+			bug.browser=BrowserDetect.browser;
+			bug.version=BrowserDetect.version;
+			bug.os=BrowserDetect.OS;
+		
+		}
 		
 		bug.url = sessionStorage.getItem("hostname") + sessionStorage.getItem("directory") + "bugs/report.php";
 		bug.save();
