@@ -149,9 +149,7 @@
 			
 			//this is kind of a hack - give all thumbnails same height
 			//to fix floaty issues
-			if(zeega.discovery.app.currentView == 'thumb'){
-				$(this.el).find('li').css('height','170px');
-			} 
+	
 
 
 			this.updateResultsCounts();

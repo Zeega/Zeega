@@ -186,7 +186,7 @@
 					'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
 					//'<input class="jda-item-checkbox" type="checkbox">'+
 					'<button class="btn btn-danger btn-mini remove-item hide jda-delete-collection">x &nbsp;<%=delete_text%></button>'+
-				'</a><p class="jda-thumbnail-caption" style="max-width:<%=thumbnail_width%>px;text-align:center;font-size:12px;font-weight:bold"><%=title%></p>';
+				'</a>';
 
 			
 			return html;
@@ -201,7 +201,7 @@
 					'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+	
 					
 					'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
-				'</a><p class="jda-thumbnail-caption" style="max-width:<%=thumbnail_width%>px;"><%=title%></p>';
+				'</a>';
 
 			
 			return html;
@@ -216,7 +216,7 @@
 					'<i class="jda-icon-testimonial"></i>'+	
 					
 					'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
-				'</a><p class="jda-thumbnail-caption" style="max-width:<%=thumbnail_width%>px"><%=description%></p>';
+				'</a>';
 
 			
 			return html;
@@ -232,7 +232,7 @@
 					'<span style="position:absolute;top:<%=position_tweet_handle%>;right:9%;max-width:85%;overflow:hidden;line-height:18px;color:#444;font-size:12px">@<%=media_creator_username%></span>'+
 					
 					'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
-				'</a><p class="jda-thumbnail-caption" style="max-width:<%=thumbnail_width%>px"><%=description%></p>';
+				'</a>';
 
 			
 			return html;
