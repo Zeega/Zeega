@@ -146,13 +146,6 @@ jQuery(function($)
 
 	}
 
-	$('#new-layer-list a').click(function(){
-		zeega.app.currentFrame.addLayerByType( $(this).data('type') );
-		return false;
-	})
-
-
-
 	$('.menu-toggle').click(function(){
 
 		var menu = $(this).next();

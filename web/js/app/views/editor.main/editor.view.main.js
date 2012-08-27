@@ -12,12 +12,12 @@
 		},
 
 		events : {
-			'click a' : 'tester'
+			'click #zeega-add-item-type a' : 'addItemType'
 		},
 
-		tester : function()
+		addItemType : function(e)
 		{
-			console.log('tester!!!');
+			zeega.app.currentFrame.addLayerByType( $(e.target).closest('a').data('layer_type') );
 			return false;
 		}
 
