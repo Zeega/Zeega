@@ -27,8 +27,8 @@
 				
 			}
 			//http://dev.zeega.org/joseph/web/project/ID/view
-			var projectlink = zeega.app.url_prefix +this.model.get('item_id');
-			var iframeLink = zeega.app.url_prefix +this.model.get('item_id')+"/embed";
+			var projectlink = 'http:'+zeega.app.url_prefix +this.model.get('item_id');
+			var iframeLink = 'http:'+zeega.app.url_prefix +this.model.get('item_id')+"/embed";
 			this.iframeHTML = '<iframe src="'+ iframeLink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
@@ -143,7 +143,7 @@
 										*/
 									//TWITTER
 									'<span class="publish-social-media">'+
-									'<a href="https://twitter.com/intent/tweet?original_referer=<%=projectlink %>&amp;text=Zeega%20Project%3A%20<%=uriEncodedTitle%>&amp;url=<%=projectlink %>" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
+									'<a href="https://twitter.com/intent/tweet?original_referer=<%=projectlink %>&amp;text=Zeega%20Project%3A%20Pointed News&amp;url=<%=projectlink %>" class="share-twitter pull-left" target="blank"><i class="zitem-twitter zitem-30 loaded"></i></a>'+
 									'</span>'+
 									
 									//FB
