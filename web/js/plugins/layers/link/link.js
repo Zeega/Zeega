@@ -128,6 +128,7 @@
 		
 		onLayerEnter : function()
 		{
+			console.log ("ONLAYERENTER ______ ADDING RESIZABILITY");
 			var _this = this;
 			this.$el.resizable({
 				stop: function(e,ui)
