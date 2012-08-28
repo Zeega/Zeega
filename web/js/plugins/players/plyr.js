@@ -23,23 +23,26 @@
 		
 		initialize : function(options)
 		{
-						
+			
 			if(!_.isUndefined(this.model))
 			{
 				//_.extend( this.defaults, this.options );
 				//if there is a model then figure out what kind it is
+				var cloneAttr = _.extend({},this.model.toJSON());
 				if( !_.isUndefined(this.model.get('uri')) )
 				{
 					// it must be from an item
-					this.format = this.getFormat(this.model.get('attribution_uri'));
-					this.settings = _.defaults( _.extend(this.model.attributes, this.options) , this.defaults);
+					this.format = this.getFormat(cloneAttr.attribution_uri);
+					this.settings = _.defaults( _.extend(cloneAttr, this.options) , this.defaults);
+					this.settings.model = null;
 				}
-				else if( this.model.get('attr') && this.model.get('attr').uri )
+				else if( cloneAttr.attr && cloneAttr.attr.uri )
 				{
 					//it must be from a layer
-					this.format = this.getFormat(this.model.get('attr').attribution_uri);
-					this.settings = _.defaults( _.extend(this.model.attributes.attr, this.options), this.defaults );
+					this.format = this.getFormat(cloneAttr.attr.attribution_uri);
+					this.settings = _.defaults( _.extend(cloneAttr.attr, this.options), this.defaults );
 					this.settings.id = this.model.id;
+					this.settings.model = null;
 				}
 				else
 				{
