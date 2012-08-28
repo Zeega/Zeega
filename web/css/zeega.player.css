@@ -985,10 +985,6 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-player .progress-bar .progress-types ul{padding:0;margin:0;}
 #zeega-player .progress-bar .progress-types ul li{float:left;list-style:none;margin-right:5px;}
 #zeega-player .player-overlay{z-index:1000;}
-.media-player-container{position:relative;}
-.media-player-container .media-element{width:100%;}
-.media-player-container .media-element.media-type-Audio{height:0;}
-.media-player-container video{height:100%;}
 .linked-layer{cursor:pointer;}
 .linked-layer>:first-child{margin-bottom:-4px;}
 .linked-layer{box-shadow:0 0 12px transparent;-webkit-transition:box-shadow 0.5s linear;}
