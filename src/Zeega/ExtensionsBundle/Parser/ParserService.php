@@ -32,10 +32,10 @@ class ParserService
      * @param Boolean  $loadChildItems  If true the child item of the item will be loaded. Should be used for large collections if only the collection description is wanted.
 	 * @return Array|response
      */
-	public function load($url, $loadChildItems = false)
+	public function load($url, $loadChildItems = false, $userId = -1)
 	{
 	    $domainName = self::getDomainFromUrl($url);
-	    $config = self::loadConfig($url);
+        $config = self::loadConfig($url);
 	    
 	    // check if this domain is supported
 	    if(array_key_exists($domainName, $config["zeega.parsers"]))
@@ -47,6 +47,8 @@ class ParserService
     		{
     			if (preg_match($parserConfig["regex"], $url, $matches)) 
     			{
+                    $em = $this->doctrine->getEntityManager();
+                    
     			    // we have a match - let's check if there are extra parameters defined in the config file
     			    if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0)
     			    {
@@ -57,15 +59,20 @@ class ParserService
     			        $parameters = array();
     			    }
     				
-    				// add the regex matches to the parameters
-    				$user = $this->securityContext->getToken()->getUser();
-	        		$em=$this->doctrine->getEntityManager();
-    				//$userTable = $em->getRepository('ZeegaDataBundle:User')->findOneById($user->getId());
+                    if($userId != -1)
+                    {
+                        $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
+                    }
+                    else
+                    {
+                        $user = $this->securityContext->getToken()->getUser();    
+                    }
+
+	        		
 
     				$parameters["regex_matches"] = $matches;
     				$parameters["load_child_items"] = $loadChildItems;
     				$parameters["user"] = $user;
-    				//$parameters["userTable"] = $userTable;
     				$parameters["entityManager"] = $em;
 
     				$parserClass = $parserConfig["parser_class"];
