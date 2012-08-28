@@ -24,8 +24,13 @@
 			</div>
 		</div>
 		<div style="margin-bottom:100px; color: white; font-size: 11pt; padding:20px;">
+		{% if urlmessage == "" %}
 			<p>We cannot seem to add this media to Zeega. Is it possible that you've made it private?</p>
 			<p>Currently, Zeega supports public files on YouTube, Flickr, SoundCloud, Tumblr, Dropbox and URLs that end in .jpg, .gif, .png, .mp3 and .mp4.</p>
+		{% else %}
+			<p>We cannot seem to add this media to Zeega. </p>
+			<p>{{urlmessage}}</p>
+		{% endif %}
 		</div>
 		
 	</div><!--#widget-wrapper-->

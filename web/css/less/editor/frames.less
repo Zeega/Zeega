@@ -51,9 +51,36 @@
 		
 			&:first-child{ margin-left : 0 }
 			
-			.menu{ z-index: 100 }
+// should this be a mixin?
+
+			&:hover .menu{ display:block }
+			.menu
+			{
+				position:absolute;
+				margin:0;
+				z-index: 100;
+				display:none;
+
+				.menu-toggle
+				{
+					position:absolute;
+				}
+
+				.frame-action-menu
+				{
+					position:absolute;
+					margin:0;
+					list-style:none;
+					background: rgba(255,255,255,0.9);
+					padding: 5px 10px;
+					display: none;
+
+				}
+				&:hover .frame-action-menu{ display:block }
+				
+			}
 			
-			.menu-toggle{ float:left }
+			
 		}
 	}
 	
@@ -68,19 +95,6 @@
 	
 }
 
-
-
-
-#sequence-tabs
-{
-	margin:0;
-}
-
-#sequence-tabs.nav-tabs>li>a
-{
-	padding-top:2px;
-	padding-bottom:2px;
-}
 
 #frame-drawer, #browser-my-collections
 {

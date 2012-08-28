@@ -208,9 +208,9 @@
 		{
 			if( confirm('Delete Layer?') )
 			{
-				this.model.trigger('editor_removeLayerFromFrame', this.model);
-				zeega.app.currentFrame.trigger('update_thumb');
-				this.remove();
+				//this.model.trigger('editor_removeLayerFromFrame', this.model);
+				zeega.app.currentFrame.layers.remove( this.model );
+				//this.remove();
 			}
 		},
 

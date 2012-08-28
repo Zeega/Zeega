@@ -76,34 +76,19 @@
 		
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
+
+
+		removeFromView : function()
+		{
+			console.log('$$		remove from view', this);
+			
+		},
+
+
 		
 		onControlsOpen : function(){},
 		
 		onControlsClosed : function(){},
-		
-		
-		/*
-		renderLayerInEditor : function( i )
-		{
-			this.visual.render().$el.css('zIndex',i+1);
-			if(this.isNew()) 
-			{
-				this.visual.render().$el.css('zIndex',1000);
-				$('#visual-editor-workspace').append( this.visual.el );
-			}
-			else $('#visual-editor-workspace').append( this.visual.render().el );
-			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
-			
-			this.trigger('editor_rendered editor_layerEnter');
-		},
-		
-		unrenderLayerFromEditor : function()
-		{
-			if( this.hasChanged() ) this.save();
-			this.trigger('editor_layerExit')
-		},
-		
-		*/
 		
 		refreshView : function()
 		{
@@ -113,18 +98,10 @@
 
 		update : function( newAttr, silent )
 		{
-			var _this = this;
 			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
 			this.set( 'attr' , a );
-			if( !silent )
-			{
-
-				this.save({},{
-					success : function(){ _this.trigger('update') }
-				});
-				
-				
-			}
+			if( silent != true ) this.save();
+			this.trigger('update');
 		},
 
 		// draws the thumb?
@@ -180,6 +157,8 @@
 		//remove formatting from titles (esp important for text layer!)
 		validate : function(attrs)
 		{
+			if( !_.isNumber(attrs.id) ) attrs.id = parseInt( attrs.id);
+			if(attrs.attr.model != null ) attrs.attr.model = null;
 			if( attrs.title ) attrs.title = attrs.title.replace(/(<([^>]+)>)/ig, "");
 		}
 	

@@ -96,6 +96,18 @@ this.zeega = {
 		//always start the editor at sequence 0, frame 0
 		var startFrameID = this.project.sequences.at(0).get('frames')[0];
 		this.goToFrame(startFrameID);
+
+/*
+// router disabled for now
+		var Router = Backbone.Router.extend({
+			routes : {
+				'frame/:frameID' : 'goToFrame'
+			},
+			goToFrame : function( frameID ){ _this.project.goToFrame(frameID) }
+		});
+		this.router = new Router();
+		Backbone.history.start();
+*/
 	},
 
 	goToFrame : function( f )
@@ -103,11 +115,15 @@ this.zeega = {
 		if( _.isNumber(f) ) var frame = this.project.frames.get(f);
 		else var frame = f;
 
+		console.log('$$		go to frame', frame)
+
 		// if the frame's sequence isn't rendered, then render it
 		if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
 		{
-			var sequence = this.project.sequences.get( frame.sequenceID )
+			var sequence = this.project.sequences.get( frame.sequenceID );
 			sequence.renderSequenceFrames();
+			if(this.currentSequence) this.currentSequence.trigger('blur');
+			sequence.trigger('focus');
 			this.currentSequence = sequence;
 		}
 
@@ -142,8 +158,8 @@ this.zeega = {
 				this.currentFrame.trigger('blur');
 			}
 			frame.renderWorkspace();
+			frame.trigger('focus');
 			this.currentFrame = frame;
-			this.currentFrame.trigger('focus');
 		}
 
 	},
@@ -161,279 +177,37 @@ this.zeega = {
 		
 	},
 
-	deleteSequence : function(sequenceID)
-	{
-		var _this = this;
-		var sequence = this.project.sequences.get(sequenceID);
+	/*
+		Launches the continue layer modal
+	*/
 
-		var layers = [];
-		_.each( sequence.get('frames'), function(frameID){
-			var frame = _this.project.frames.get(frameID);
-			layers = _.union(layers,frame.get('layers'));
-		});
-		console.log( 'layers:',layers)
-		_.each( layers, function(layerID){
-			var layer = _this.project.layers.get(layerID);
-			if( layer && layer.get('type') == 'Link' )
-			{
-				var attr = layer.get('attr');
-				if( attr.from_sequence == sequenceID || attr.to_sequence == sequenceID )
-					layer.destroy();
-			}
-		});
-		sequence.destroy();
-		// if sequence is in view, then load the first sequence
-		
-		return false;
-	},
-
-	addFrame : function( num )
-	{
-		if( !this.busy )
-		{
-			var _this = this
-			var n = num || 1;
-			var Frame = zeega.module('frame');
-		
-			for( var i = 0 ; i < n ; i++ )
-			{
-				var layers = _.compact( this.currentSequence.get('attr').persistLayers ) || [];
-			
-				var newFrame = new Frame.Model();
-				newFrame.set({'layers' : layers},{'silent':true});
-				console.log(newFrame)
-				this.loadFrame(newFrame);//newFrame.render();
-				
-				if(i>0)
-				{
-					// if more than one frame is being created
-					console.log("not loading frame for later",i);
-					newFrame.save({},{
-						success : function()
-						{
-							//console.log(newFrame)
-							//newFrame.render();
-						
-							newFrame.trigger('refresh_view');
-							//_this.currentSequence.trigger('updateFrameOrder');
-							newFrame.trigger('updateThumb');
-							_this.project.frames.add( newFrame );
-							//_this.loadFrame( newFrame );
-							
-							_this.currentSequence.get('frames').push(newFrame.id);
-							
-							console.log('new frame saved', _this.currentSequence)
-							_this.loadFrame( newFrame.id )
-						}
-					});
-				}
-				else
-				{
-					// if more ONLY one frame is being created
-					console.log("loading frame for first",i);
-					newFrame.save({},{
-						success : function()
-						{
-							_this.project.frames.add( newFrame );
-							_this.currentSequence.addFrame( newFrame );
-							
-							//$('#frame-list').append(newFrame.sequenceFrameView.render().el);
-							//newFrame.trigger('refresh_view');
-							//newFrame.trigger('updateThumb');
-							//_this.currentSequence.get('frames').push(newFrame.id);
-							
-							_this.loadFrame( newFrame );
-							newFrame.trigger('focus');
-						}
-					});
-				}
-			
-			}
-		}
-	},
-	
-	updateFrameOrder : function( save )
-	{
-		console.log('	UPDATE FRAME ORDER')
-		this.currentSequence.updateFrameOrder();
-	},
-	
-	duplicateFrame : function( frameModel )
-	{
-		//if(!this.busy) this.project.duplicateFrame( frameModel );
-		if(!this.busy)
-		{
-			console.log('	DUPLICATE FRAME')
-			console.log(frameModel)
-			var _this = this;
-			var dupeModel = frameModel.clone();
-			
-			console.log(''+ frameModel.get('layers'))
-			//remove link layers because it doesn't make sense to dupe those
-			var layersToDupe = [];
-			_.each( frameModel.get('layers'), function(layerID){
-				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') layersToDupe.push( layerID);
-			})
-			console.log(layersToDupe)
-			dupeModel.set({
-				'layers' : layersToDupe,
-				'duplicate_id' : parseInt(frameModel.id),
-				'id' : null
-			})
-			
-			dupeModel.oldLayerIDs = frameModel.get('layers');
-			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
-			dupeModel.dupe = true;
-			
-			dupeModel.save({},{
-				success : function( savedFrame )
-				{
-					console.log('frame saved and is a duplicate')
-					console.log(savedFrame)
-				
-					//zeega.app.currentSequence.get('frames');
-				
-					//clone layers and place them into the layer array
-					_.each( savedFrame.oldLayerIDs , function(layerID, i){
-
-						//if layer is persistent
-						//replace frameIndex the id with the persistent id
-						var persistLayers = _this.currentSequence.get('attr').persistLayers;
-						if( _.include( persistLayers, parseInt(layerID) ) )
-						{
-							var layerOrder = savedFrame.get('layers');
-							layerOrder[i] = String(layerID);
-							savedFrame.set({layers:layerOrder})
-						}
-						else
-						{
-							_this.project.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
-						}
-					})
-					//resave the frame after being updated with persistent frame ids
-
-					_this.project.frames.add( savedFrame );
-					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
-					
-				}
-			});
-			
-			
-		} //busy
-	},
-	
-	addLayer : function( args )
-	{
-		if(!this.busy)
-		{
-			console.log('ADD LAYER')
-			var _this = this;
-			args = _.defaults( args, { frame : _this.currentFrame, options : {}, show : function(){ return (_this.currentFrame.id == args.frame.id)? true : false } } );
-			console.log('show layer? '+ args.show() )
-			args.frame.trigger('update_thumb');
-			console.log(args)
-			return this.project.layers.addNewLayer( args )
-		}
-	},
-	
 	continueLayer : function(layerID)
 	{
-		console.log('continue layer: '+layerID);
 		var Modal = zeega.module('modal');
 		var linkModal = new Modal.Views.ContinueLayer({ model:this.project.layers.get(layerID)});
 		$('body').append(linkModal.render().el);
 		linkModal.show();
 	},
 	
+	/*
+		Continues the selected layer to the next frame if there is one
+	*/
+
 	continueLayerToNextFrame : function( layerID )
 	{
-		if(!this.busy)
-		{
-			var nextFrame = this.getRightFrame();
-			if( nextFrame != false && nextFrame != this.currentFrame )
-			{
-				var layers = [];
-				if(nextFrame.get('layers'))
-				{
-					var l = _.compact(nextFrame.get('layers'));
-					l.unshift( parseInt(layerID) );
-					layers = l;
-				}
-				else layers = [ parseInt(layerID) ];
-				nextFrame.save({ layers : layers });
-			}
-		}
+		var nextFrame = this.getRightFrame();
+		var layer = this.project.layers.get(layerID);
+		if( nextFrame != false && nextFrame != this.currentFrame ) nextFrame.layers.unshift( layer );
 	},
 	
+	/*
+		continues the selected layer to the entire sequence
+	*/
+
 	continueOnAllFrames : function( layerID )
 	{
-		if(!this.busy)
-		{
-			var layerModel = this.project.layers.get(layerID)
-			//get persistent layers
-			var attr = _.isObject(this.currentSequence.get('attr')) ? this.currentSequence.get('attr') : {persistLayers:[]} ;
-
-			// check to see if the layer is already persistent
-			if( _.include(attr.persistLayers, layerID ) )
-			{
-				//remove persistence
-				console.log('remove persistence')
-				attr.persistLayers = _.without( attr.persistLayers, layerID );
-				if(attr.persistLayers.length == 0 ) attr.persistLayers = [false];
-				this.removePersistenceFromFrames( layerID );
-			}
-			else
-			{
-				console.log('add persistence')
-				//add persistence
-				attr.persistLayers.unshift( layerID );
-				this.addPersistenceToFrames( layerID );
-			}
-			this.currentSequence.save({ 'attr': attr });
-			console.log('save current sequence', attr, this.currentSequence)
-		} // busy
-		
-	},
-	
-	addPersistenceToFrames : function( layerID )
-	{
-		var _this = this;
-		// add this layer to each frame in the sequence
-		_.each( this.currentSequence.get('frames'), function(frameID){
-			var frame = _this.project.frames.get( frameID );
-			var layerArray = frame.get('layers') || [];
-			layerArray.push(layerID)
-			frame.save({ layers : _.compact(_.uniq(layerArray)) })
-		})
-	},
-	removePersistenceFromFrames : function( layerID )
-	{
-		var _this = this;
-		// add this layer to each frame in the sequence
-		_.each( this.currentSequence.get('frames') , function(frameID){
-			var frame = _this.project.frames.get( frameID );
-			if( _.include(frame.get('layers'), layerID ) && frameID != _this.currentFrame.id )
-			{
-				//remove from frame
-				var layers = _.without( frame.get('layers'), layerID );
-				if( layers.length == 0 ) layers = [false];
-				frame.save({ layers : layers });
-			}
-		})
-	},
-	
-	updateLayerOrder : function( frame )
-	{
-		console.log('updateLayerOrder')
-		var frame = frame || this.currentFrame;
-		var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
-		var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
-		var order = linkOrder.concat(layerOrder).reverse();
-		
-		// updates z-index of divs in workspace
-		_.each( order , function(id, i){ $('#layer-visual-'+id).css('z-index', i) });
-
-		frame.save({'layers': _.compact(order) })
+		var layer = this.project.layers.get(layerID);
+		this.currentSequence.addPersistentLayer( layer );
 	},
 
 	// returns the order that the frame appears in the sequence
@@ -461,11 +235,6 @@ this.zeega = {
 		
 		this.Player = zeegaPlayer.app;
 		this.Player.initialize( this.exportProject(), {mode: 'editor', frameID : parseInt(this.currentFrame.id) } )
-		
-		/*
-		this.player = new Player2($('body'));
-		this.player.loadProject(this.exportProject(), {sequenceID: parseInt(this.currentSequence.id), frameID : parseInt(this.currentFrame.id) } );
-		*/
 		
 		$('body').addClass('preview-mode');
 	},
