@@ -15,13 +15,20 @@
 		},
 
 		events : {
-			'click #zeega-add-item-type a' : 'addItemType'
+			'click #zeega-add-item-type a' : 'addItemType',
+			'click #database-tray-toggle' : 'toggleDatabaseSize'
 		},
 
 		addItemType : function(e)
 		{
 			zeega.app.currentFrame.addLayerByType( $(e.target).closest('a').data('layer_type') );
 			return false;
+		},
+
+		toggleDatabaseSize : function()
+		{
+			if( $('.database-tray').is(':visible')) $('.database-tray').hide();
+			else $('.database-tray').show();
 		},
 
 		updateWorkspaceScale : function()
