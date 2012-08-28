@@ -102,15 +102,18 @@
 					type: itemModel.get('layer_type'),
 					attr: itemModel.toJSON()
 				});
-			newLayer.save({},{
-				success : function()
-				{
-					_this.layers.push( newLayer );
-					zeega.app.project.layers.add( newLayer );
-					newLayer.trigger('sync');
-				}
-			})
+			newLayer.on('sync', this.onFirstLayerSave, this);
+			newLayer.save();
+			
 			return newLayer;
+		},
+
+		onFirstLayerSave : function( layer )
+		{
+			console.log('$$		on first layer save', layer)
+			zeega.app.project.layers.add( layer );
+			this.layers.push( layer );
+			layer.off('sync',this.onFirstLayerSave);
 		},
 
 		/*
@@ -160,12 +163,7 @@
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
 			var a = _.extend( this.get('attr'), newAttr );
 			this.set('attr',a);
-			if( !silent )
-			{
-				this.save({},{
-					success : function(){ _this.trigger('update') }
-				});
-			}
+			if( !silent ) this.save();
 		},
 		
 		//update the frame thumbnail
