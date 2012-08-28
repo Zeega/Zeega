@@ -201,17 +201,7 @@
 				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
-		},
-		
-		validate : function( attrs )
-		{
-			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
-			{
-				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');
-				return 'layer array update error!';
-			}
 		}
-	
 
 	});
 

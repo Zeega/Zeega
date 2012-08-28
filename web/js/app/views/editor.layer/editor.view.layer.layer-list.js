@@ -271,6 +271,8 @@
 				link_to : linkURL
 			}
 
+			this.$el.addClass('layer-type-'+ this.model.get('type').toLowerCase());
+
 			this.$el.html( _.template( this.getBaseTemplate(), blanks ) )
 		},
 		

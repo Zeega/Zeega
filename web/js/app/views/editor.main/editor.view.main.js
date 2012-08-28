@@ -16,7 +16,8 @@
 
 		events : {
 			'click #zeega-add-item-type a' : 'addItemType',
-			'click #database-tray-toggle' : 'toggleDatabaseSize'
+			'click #database-tray-toggle' : 'toggleDatabaseSize',
+			'click #zoom-interface' : 'toggleInterfaceTitles'
 		},
 
 		addItemType : function(e)
@@ -27,8 +28,24 @@
 
 		toggleDatabaseSize : function()
 		{
-			if( $('.database-tray').is(':visible')) $('.database-tray').hide();
-			else $('.database-tray').show();
+			if( $('.database-tray').is(':visible'))
+			{
+				$('#database-tray-toggle .menu-verbose-title').html('show');
+				$('#database-tray-toggle i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
+				$('.database-tray').hide();
+			}
+			else
+			{
+				$('#database-tray-toggle .menu-verbose-title').html('hide');
+				$('#database-tray-toggle i').addClass('icon-chevron-down').removeClass('icon-chevron-up');
+				$('.database-tray').show();
+			}
+		},
+
+		toggleInterfaceTitles : function()
+		{
+			if( $('#zeega-editor-main').hasClass('small-menus')) $('#zeega-editor-main').removeClass('small-menus');
+			else $('#zeega-editor-main').addClass('small-menus');
 		},
 
 		updateWorkspaceScale : function()
@@ -45,10 +62,7 @@
 			var newWidth = ( maxWidth / maxHeight > 4/3 ) ? maxHeight*4/3 : maxWidth;
 			var newLeft = (navWidth - newWidth) / 2;
 
-			console.log('winH', windowHeight, 'navH',navHeight,'navWidth',navWidth,'maxH',maxHeight,'maxWidth',maxWidth,'newH',newHeight,'newW',newWidth)
-
 			$('#zeega-frame-workspace').animate({left: newLeft +'px',width:newWidth +'px',height:newHeight +'px'});
-
 		},
 
 		

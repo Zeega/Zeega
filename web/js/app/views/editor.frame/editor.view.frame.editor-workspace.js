@@ -488,23 +488,24 @@ the frame's layers. It also includes common frame functions like adding sequence
 	
 	Frame.Views.EditorLinkLayerList = Backbone.View.extend({
 		
-		tagName : 'ul',
-		id : 'links-list',
-		target : '#link-list-container',
-		className : 'unstyled',
+
+		target : '#zeega-link-list',
 		
 		initialize : function()
 		{
+			this.setElement( $(this.target) );
 			this.model.layers.on('add', this.onAddLayer, this );
 		},
 
 		render : function()
 		{
+			console.log('$$		render link layers', this)
 			var _this = this;
+			this.$el.html('<ul class="list">');
 			this.model.layers.each(function(layer){
 				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) )
 				{
-					_this.$el.prepend( layer.controls.renderControls().el );
+					_this.$el.find('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
 			})
@@ -529,7 +530,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 			$( "#sortable-layers" ).disableSelection();
 		},
 		
-
 		onAddLayer : function( layer )
 		{
 			if(zeega.app.currentFrame == this.model && layer.get('type') == 'Link')
@@ -537,10 +537,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				this.$el.prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			}
-		},
-
-		renderToEditor : function(){ $( this.target ).html( this.render().el ) },
-		removeFromEditor : function(){}
+		}
 		
 	})
 	
