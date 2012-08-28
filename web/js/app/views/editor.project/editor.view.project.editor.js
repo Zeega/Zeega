@@ -9,6 +9,7 @@
 
 		initialize : function()
 		{
+			this.setElement( $('#zeega-project-info') );
 			//automatically re-render the view if the title or cover image are changed/updated
 			this.model.on('change:title change:cover_image', this.render, this)
 		},
@@ -17,18 +18,16 @@
 		{
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
 
-			this.initEvents();
+			//this.initEvents();
 			
 			return this;
 		},
-		
-		// called from the project model.loadProject
-		renderToTarget : function(){ $('#'+this.id).replaceWith( this.render().el ) },
 		
 		//initialize events that cannot be set in events:{}
 		initEvents : function()
 		{
 			var _this = this;
+
 			this.$el.find('#project-cover-image').droppable({
 
 				accept : '.database-asset-list',
@@ -51,14 +50,13 @@
 		},
 		
 		events : {
-			'keypress #project-title' : 'onTitleKeypress',
-			'blur #project-title' : 'saveTitle',
+			'keypress #zeega-project-title' : 'onTitleKeypress',
+			'blur #zeega-project-title' : 'saveTitle',
 			
-			'click #share-project' : 'clickShare',
-			'click #publish-project' : 'clickPublish',
-			'click #settings-project' : 'clickSettings',
-			'click #preview' : 'clickPreview'
-			
+			'click #project-share' : 'clickShare',
+			'click #project-publish' : 'clickPublish',
+			'click #project-options' : 'clickSettings',
+			'click #project-preview' : 'clickPreview'
 		},
 
 		//the callback when text is being entered into the title field
@@ -68,19 +66,19 @@
 			if(e.which==13)
 			{
 				e.preventDefault();
-				this.$el.find('#project-title').blur();
-				_this.saveTitle();
+				this.$el.find('#zeega-project-title').blur();
+				this.saveTitle();
 				return false		
 			}
 		},
 		
 		saveTitle : function()
 		{
-			if(this.$el.find('#project-title').text() != this.model.get('title'))
+			if(this.$el.find('#zeega-project-title').text() != this.model.get('title'))
 			{
-				var t = this.$el.find('#project-title').text() == '' ? 'untitled' : this.$el.find('#project-title').text();
-				this.$el.find('#project-title').effect('highlight',{},2000);
-				this.model.save({ 'title' : t },{silent:true});
+				var t = this.$el.find('#zeega-project-title').text() == '' ? 'untitled' : this.$el.find('#zeega-project-title').text();
+				//this.$el.find('#zeega-project-title').effect('highlight',{},2000);
+				this.model.save({ 'title' : t });
 			}
 		},
 		
@@ -115,14 +113,14 @@
 		{
 			var html = 
 			
-			"<div id='project-cover-image' style='background-image:url(<%= cover_image %>)'></div>"+
-			"<div id='project-title' contenteditable='true' ><%= title %></div>"+
-
-			"<div id='sequence-actions' class='btn-group pull-right'>"+
-				"<button id='settings-project' class='btn btn-inverse'><i class='zicon-settings raise-up'></i></button>"+
-				"<button id='publish-project' class='btn btn-inverse'><i class='zicon-publish raise-up'></i> Publish</button>"+
-				"<button id='share-project' class='btn btn-inverse'><i class='zicon-share raise-up'></i> Share</button>"+
-				"<button id='preview' class='btn btn-inverse'><i class='zicon-preview raise-up'></i> Preview</button>"+
+			"<div id='zeega-project-title' contenteditable='true'><%= title %></div>"+
+			"<div class='menu-bar clearfix' >"+
+				"<ul class='pull-right'>"+
+					"<li><a id='project-options' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
+					"<li><a id='project-publish' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
+					"<li><a id='project-share' href='#'><div class='menu-verbose-title'>share</div><i class='icon-envelope icon-white'></i></a></li>"+
+					"<li><a id='project-preview' href='#'><div class='menu-verbose-title'>preview</div><i class='icon-play icon-white'></i></a></li>"+
+				"</ul>"+
 			"</div>";
 			
 			return html;

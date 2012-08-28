@@ -27,8 +27,21 @@
 			
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
+
+			this.on('change', this.showSaveIndicator, this);
+			this.on('sync', this.hideSaveIndicator, this);
 			
 			console.log('init PROJECT', this, attributes)
+		},
+
+		showSaveIndicator : function()
+		{
+			$('#save-indicator').spin('tiny')
+		},
+
+		hideSaveIndicator : function()
+		{
+			$('#save-indicator').spin(false)
 		},
 
 		preloadCollections : function(attributes)
@@ -74,7 +87,8 @@
 		{
 			var Sequence = zeega.module("sequence");
 			this.sequences = new Sequence.Collection( sequences );
-			this.sequences.render();
+			this.sequences.sequenceTrayView.render();
+
 			this.sequences.at(0).trigger('focus');
 			//zeega.app.currentSequence = this.sequences.at(0);
 		},
@@ -188,7 +202,7 @@
 		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
-			this.view.renderToTarget();
+			this.view.render();
 		},
 		loadPublishProject : function()
 		{

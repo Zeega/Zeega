@@ -71,7 +71,7 @@
 		
 		renderSequenceFrames : function()
 		{
-			this.sequenceFrameView.renderToTarget();
+			this.sequenceFrameView.render();
 		},
 
 		addFrames : function(num)

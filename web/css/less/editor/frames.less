@@ -7,38 +7,118 @@
 #zeega-project-frame-list
 {
 
-	height:70px;
+	height:75px;
 	background: rgba(0, 0, 0, 0.2);
+	position: relative;
+
+	ul{ margin:0;list-style: none }
 
 	&>ul
 	{
-		margin:0;
-		list-style:none;
 		white-space: nowrap;
 		overflow:auto;
+		height:100%;
 
 		&>li
 		{
 			display: inline-block;
+			position: relative;
 			height: 60px;
 			width: 80px;
 			padding: 5px;
 
-			.active{ background-color:rgba(255,255,255,0.25) }
+			&.active-frame{ background-color:#777 }
 
 			&:first-child{ margin-left:5px }
-			a
+			&>a
 			{
 				display:block;
 				width:100%;
 				height:100%;
 				background-color:black;
+			}
 
+			.flag-menu
+			{
+				top:5px;
+				left:5px;
+			}
+			&:hover .flag-menu{ display:block }
+			
+
+		}
+	}
+
+	#zeega-add-frame
+	{
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+
+		a
+		{
+			height: 100%;
+			position: relative;
+			background: rgba(255, 255, 255, 0.1);
+			font-weight: bold;
+			font-size: 40px;
+			display: block;
+			vertical-align: middle;
+			line-height: 58px;
+			padding: 0 10px;
+			&:hover
+			{
+				color:#ddd;
+				background:rgba(255, 255, 255, 0.25);
 			}
 		}
 	}
 
 }
+
+#zeega-project-frame-detail-bar
+{
+
+	position: relative;
+	top: -5px;
+	border-top: 5px solid #777;
+}
+
+.flag-menu
+{
+	position:absolute;
+	top:0;
+	left:0;
+	margin:0;
+	z-index: 100;
+	display:none;
+
+	.menu-toggle{ position:absolute }
+
+	.frame-action-menu
+	{
+		position:absolute;
+		margin:0;
+		list-style:none;
+		background: rgba(255,255,255,0.9);
+		padding: 5px 10px;
+		display: none;
+
+		a
+		{
+			font-size:11px;
+			text-transform: uppercase;
+			font-weight:bold;
+			background:transparent;
+			white-space: nowrap;
+		}
+		a:link,a:visited,a:active{ color:#666 }
+		a:hover{ color:orangered; }
+	}
+	&:hover .frame-action-menu{ display:block }
+
+} // menu
 
 
 /************* end frame styles ****************/

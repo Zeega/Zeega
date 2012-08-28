@@ -1,5 +1,22 @@
 (function(Items) {
 
+	Items.Model = Backbone.Model.extend({
+		defaults : {
+			title : 'Untitled'
+		},
+
+		url: function()
+		{
+			return sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/" + this.id;
+		},
+
+		initialize : function()
+		{
+			this.databaseView = new Items.Views.List({model:this});
+		}
+	});
+
+
 	Items.Collection = Backbone.Collection.extend({
 
 
@@ -31,6 +48,15 @@
 			}
 			return url;
 		},
+
+		initialize : function()
+		{
+			this.itemCollectionView = new Items.Views.ItemTrayCollectionView({collection:this});
+			//this.itemCollectionView.render();
+			console.log('$$		items', this)
+
+			this.on('preview_item',this.previewItem,this); // move this
+		},
 		
 		search : function(search,reset)
 		{
@@ -47,29 +73,8 @@
 				}
 			})
 		},
-
-		initialize : function()
-		{
-			this.target.spin('small');
-			if( itemsJSON )
-			{
-				//get bootstrapped data if it exists
-				var itemsBS = jQuery.parseJSON(itemsJSON);
-				this.totalItemsCount = itemsBS.items_count;
-				this.reset( itemsBS.items );
-				this.target.spin(false);
-			}
-			else
-			{
-				//if bootstrap doesn't exist, then default to a search
-				console.log( 'items NOT bootstrapped. Do search. ')
-				this.fetch();
-			}
-			this.renderCollection();
-			
-			this.on('preview_item',this.previewItem,this);
-		},
 		
+		///// move this ////////////
 		previewItem : function(itemID)
 		{
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});

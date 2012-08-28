@@ -3,7 +3,7 @@
 	Layer.Views.Controls = Backbone.View.extend({
 		
 		tagName : 'li',
-		className : 'editor-layer',
+		className : 'layer-list-item',
 		
 		initialize : function()
 		{
@@ -193,12 +193,14 @@
 		
 		events : {
 			'click .delete-layer'		: 'delete',
-			'click .layer-title'		: 'expand',
+			'click'		: 'expand',
+			/*
 			'click .layer-icon'			: 'hideShow',
 			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
 			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
 			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
 			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
+			*/
 		},
 		
 		// the events end users have access to
@@ -218,30 +220,12 @@
 		expand : function()
 		{
 			if(this.model.hasControls)
-			{
-				var _this = this;
-				if( $(this.el).find('.layer-content').is(':hidden') )
-				{
-					//show layer controls
-					$(this.el).find('.layer-content')
-						.show('blind',{'direction':'vertical'},function(){
-							_this.model.trigger('editor_controlsOpen');
-							$(this).removeClass('closed');
-					});
-				}
-				else
-				{
-					//hide layer controls
-					$(this.el).find('.layer-content')
-						.hide('blind',{'direction':'vertical'},function(){
-							$(this).addClass('closed');
-							_this.model.trigger('editor_controlsClosed');
-					});
-				}
-			}
+				this.$el.toggleClass('layer-open');
 			return false;
 		},
 
+
+/*
 		hideShow : function()
 		{
 			//set the visible in editor to the opposite of what it is currently
@@ -262,17 +246,7 @@
 		{
 			$(this.el).find('.asset-type-icon').removeClass('zicon-visible')
 		},
-
-		onLayerTrashEnter : function()
-		{
-			$(this.el).find('.delete-layer').addClass('orange zicon-trash-open')
-		},
-
-		onLayerTrashLeave : function()
-		{
-			$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
-		},
-		
+*/		
 		setBaseTemplate : function()
 		{
 			var persist = '';
@@ -304,27 +278,20 @@
 		{
 			var html =
 
-						'<div class="layer-uber-bar clearfix">'+
-							'<div class="layer-icon">'+
-								'<i class="zicon-<%= type %> orange"></i>'+
-								//'<span class="asset-type-icon orange zicon"></span>'+
-							'</div>'+
-							'<div class="layer-title"><%= title %></div>'+
-							'<div class="layer-uber-controls">'+
-								'<i class="zicon-trash-closed delete-layer"></i>'+
-							'</div>'+
-							'<div class="layer-drag-handle">'+
-								'<i class="zicon-vert-drag"></i>'+
-							'</div>'+
-						'</div>'+
-						'<div class="layer-content inset-tray dark tray closed">'+
-						
-							'<div id="controls" class="clearfix"></div>'+
+				"<div class='layer-super'>"+
+					"<a href='#'><i class='icon-thumbs-up icon-white'></i></a>"+
+					"<span class='layer-title'>  <%= title %></span>"+
+					"<span class='pull-right'>"+
+						"<a class='delete-layer' href='#'><i class='icon-trash icon-white'></i></a>"+
+						"<a class='sort-handle' href='#'><i class='icon-minus icon-white'></i></a>"+
+					"</span>"+
+				"</div>"+
+				"<div class='layer-control-drawer'>"+
+					'<div id="controls" class="clearfix"></div>'+
+					'<div class="default-layer-controls clearfix"></div>'+
+				"</div>";
 
-							'<div class="default-layer-controls clearfix"></div>'+ //standard layer controls
-						'</div>';
-
-						return html;
+				return html;
 		}
 		
 	});

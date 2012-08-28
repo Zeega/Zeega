@@ -7,27 +7,11 @@
 		initialize : function()
 		{
 			this.on('remove',this.onRemove, this);
-			//make sequence views
-			$('#sequence-tabs').empty();
-			this.on('add', this.drawSequenceTab, this)
-		},
-		
-		render : function()
-		{
-			_.each( _.toArray(this), function(sequence, i){
-				$('#sequence-tabs').append( sequence.tabView.render().el );
-			})
-			//this.at(0).trigger('focus');
-		},
-		
-		drawSequenceTab : function( model )
-		{
-			$('#sequence-tabs').append( model.tabView.render().el );
+			this.sequenceTrayView = new Sequence.Views.SequenceTray({collection:this});
 		},
 
 		onRemove : function( model )
 		{
-			this.render();
 
 			//destroy all link layers going into the sequence
 			console.log('##		seq', model)
@@ -50,7 +34,6 @@
 			})
 
 			model.destroy();
-			// if sequence is in view, then load the first sequence
 			
 			return false;
 		},

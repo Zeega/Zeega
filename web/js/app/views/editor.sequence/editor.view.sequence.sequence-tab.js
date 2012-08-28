@@ -1,5 +1,41 @@
 (function(Sequence){
 
+//collection view
+	Sequence.Views.SequenceTray = Backbone.View.extend({
+		
+		target : '#zeega-project-sequence-list',
+
+		initialize : function()
+		{
+			this.setElement( $(this.target) );
+			this.collection.on('add', this.addSequence, this);
+			this.collection.on('remove', this.render, this);
+		},
+
+		render : function()
+		{
+			var _this = this;
+			this.$el.html('<ul class="list">')
+			console.log('$$		collection list', this, this.collection.length+'')
+			this.collection.each(function(sequence, i){
+				console.log('$$		seq',sequence, i)
+				_this.$el.find('.list').append( sequence.tabView.render().el );
+			})
+			return this;
+		},
+
+		addSequence : function( seq )
+		{
+			this.$el.append( seq.tabView.render().el );
+		},
+		
+		drawSequenceTab : function( model )
+		{
+			$('#sequence-tabs').append( model.tabView.render().el );
+		},
+	})
+
+// model view
 	Sequence.Views.SequenceTabs = Backbone.View.extend({
 		
 		tagName : 'li',
@@ -101,13 +137,13 @@
 			var html =
 			
 				'<a href="#" class="sequence-tab-link"><%= title %></a> '+
-				"<a href='#' class='menu-toggler'><b class='caret'></b></a>"+
-				"<div class='well menu hide'>"+
-					"<ul class='nav nav-list'>"+
-						"<li><a href='#' class='rename-sequence'>rename</a></li>"+
-						"<li><a href='#' class='delete-sequence'>delete</a></li>"+
+				"<ul class='flag-menu'>"+
+					"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
+					"<ul class='frame-action-menu'>"+
+						"<li><a href='#' data-action='rename'>Rename Sequence</a></li>"+
+						"<li><a href='#' data-action='delete'>Delete Sequence</a></li>"+
 					"</ul>"+
-				"</div>";
+				"</ul>";
 				
 				
 			return html;

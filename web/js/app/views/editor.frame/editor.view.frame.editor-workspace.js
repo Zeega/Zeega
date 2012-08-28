@@ -40,8 +40,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		renderToEditor : function()
 		{
 			this.workspace = new Frame.Views.VisualWorkspace({model:this.model});
+
+			this.workspace.render();
+
 			this.renderToTarget();
-			this.$el.find('#visual-editor-workspace').html( this.workspace.render().el );
+			//this.$el.find('#visual-editor-workspace').html( this.workspace.render().el );
 			this.workspace.onLayerEnter();
 			this.initEvents();
 		},
@@ -205,30 +208,86 @@ the frame's layers. It also includes common frame functions like adding sequence
 	
 	});
 
+	Frame.Views.DetailBar = Backbone.View.extend({
+
+		target : '#zeega-project-frame-detail-bar',
+
+		initialize : function()
+		{
+			this.setElement( $(this.target) );
+		},
+
+		render : function()
+		{
+			this.$el.html( _.template(this.getTemplate(),this.model.toJSON()));
+			return this;
+		},
+
+		getTemplate : function()
+		{
+			var html = 
+
+				"<ul class='pull-left'>"+
+
+					"<li><a href='#'><i class='icon-leaf icon-white'></i></a></li>"+
+					"<li><a href='#'><i class='icon-plane icon-white'></i></a></li>"+
+					"<li class='spacer'></li>"+
+					"<li><a href='#'><i class='icon-file icon-white'></i></a></li>"+
+
+				"</ul>";
+
+			return html;
+		}
+
+	})
+
+
+
 	
 	Frame.Views.VisualWorkspace = Backbone.View.extend({
 		
-		id : 'visual-editor-workspace',
+		//id : 'visual-editor-workspace',
+		target : '#zeega-frame-workspace',
 		
 		initialize : function()
 		{
+			this.setElement( $(this.target) );
 			this.model.layers.on('add', this.onAddLayer, this );
 			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},
 		
 		render : function()
 		{
+			console.log('##		render the workspace', this)
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.model.layers.each(function(layer){
 				if( layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.model.id ) _this.$el.append( layer.visual.render().el );
 			});
+			this.makeDroppable();
 			return this;
 		},
-		
-		renderToTarget : function()
+
+		makeDroppable : function()
 		{
-			$('#'+this.id).replaceWith( this.render().el )
+			var _this = this;
+			this.$el.droppable({
+				accept : '.database-asset-list',
+				hoverClass : 'workspace-item-hover',
+				tolerance : 'pointer',
+
+				//this happens when you drop a database item onto a frame
+				drop : function( event, ui )
+				{
+					ui.draggable.draggable('option','revert',false);
+					_this.model.addItemLayer( zeega.app.draggedItem );
+				}
+			});
+		},
+
+		unrender : function()
+		{
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit() })
 		},
 		
 		onLayerEnter : function()
@@ -248,11 +307,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		onRemoveLayer : function( layer )
 		{
 			if(zeega.app.currentFrame == this.model) layer.visual.private_onLayerExit()
-		},
-
-		removeAllLayers : function()
-		{
-			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit() })
 		}
 	})
 	
@@ -356,19 +410,28 @@ the frame's layers. It also includes common frame functions like adding sequence
 	//move this elsewhere
 	Frame.Views.EditorLayerList = Backbone.View.extend({
 		
-		tagName : 'ul',
-		id : 'layers-list-visual',
-		target : '#layers-list-container',
-		className : 'unstyled',
+//		tagName : 'ul',
+		target : '#zeega-layer-list',
 
 		initialize : function()
 		{
+			this.setElement( $(this.target) );
 			this.model.layers.on('add', this.onAddLayer, this );
 			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},
 		
 		render : function()
 		{
+			var _this = this;
+
+			this.$el.html('<ul class="list">');
+			this.model.layers.each(function(layer){
+				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
+				{
+					_this.$el.find('.list').prepend( layer.controls.renderControls().el );
+					layer.controls.delegateEvents();
+				}
+			})
 			this.makeSortable();
 			return this;
 		},
@@ -396,26 +459,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 			});
 			$( "#sortable-layers" ).disableSelection();
 		},
-		
-		renderToEditor : function()
-		{
-			var _this = this;
-			$( this.target ).html( this.render().el );
-
-			this.model.layers.each(function(layer){
-				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
-				{
-					_this.$el.prepend( layer.controls.renderControls().el );
-					layer.controls.delegateEvents();
-				}
-			})
-		},
 
 		onAddLayer : function( layer )
 		{
 			if(zeega.app.currentFrame == this.model && layer.get('type') != 'Link')
 			{
-				this.$el.prepend( layer.controls.renderControls().el );
+				this.$el.find('.list').prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			}
 		},

@@ -55,8 +55,6 @@ this.zeega = {
 
 		this.activateWorkspace();
 
-		this.updateWorkspaceScale();
-
 		this.loadModules();
 		this.isLoaded = true
 		//this.initStartHelp(); //broken. fix!
@@ -76,7 +74,10 @@ this.zeega = {
 		
 		console.log($.parseJSON(projectJSON))
 		
-		this.itemCollection = new Items.Collection();
+		var itemsBS = jQuery.parseJSON(itemsJSON);
+		//this.totalItemsCount = itemsBS.items_count;
+		this.itemCollection = new Items.Collection(itemsBS.items);
+		this.itemCollection.itemCollectionView.render();
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
@@ -101,32 +102,17 @@ this.zeega = {
 		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
 	
 	},
-
-	updateWorkspaceScale : function()
-	{
-		var padding = 20;
-		var windowHeight = $('#zeega-edit-column').height();
-		var navHeight = $('#zeega-project-nav').height();
-		var navWidth = $('#zeega-project-nav').width();
-
-		var maxHeight = windowHeight - navHeight - 2*padding;
-		var maxWidth = navWidth - 2*padding;
-
-		//height is constraining
-		if( maxWidth / maxHeight > 4/3 )
-			$('#zeega-frame-workspace').css({width:(maxHeight*4/3)+'px',height:maxHeight+'px'});
-		//width is constraining
-		else $('#zeega-frame-workspace').css({width:maxWidth+'px',height:(maxWidth*3/4)+'px'});
-
-	},
 	
 	startEditor : function()
 	{
 		console.log('editor started')
+
 		//always start the editor at sequence 0, frame 0
 		var startFrameID = this.project.sequences.at(0).get('frames')[0];
 		this.goToFrame(startFrameID);
 
+		// resize edit window!!
+		this.workspace.updateWorkspaceScale();
 /*
 // router disabled for now
 		var Router = Backbone.Router.extend({

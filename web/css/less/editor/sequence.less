@@ -4,15 +4,38 @@
 	
 ******************************/
 
-#sequence-tabs
+#zeega-project-sequence-list
 {
-	margin:0;
+	background: rgba(0, 0, 0, 0.2);
 
-	.menu
+	&>ul.list
 	{
-		z-index: 10;
+		margin:0;
+		list-style:none;
+
+		&>li
+		{
+			float:left;
+
+			&.active>a{ background-color: #777 }
+
+			&>a
+			{
+				display:block;
+				height:25px;
+				padding: 7px 12px;
+				background-color: rgba(0, 0, 0, 0.2);
+				border-right: 1px solid #222;
+				text-transform:uppercase;
+				font-weight: bold;
+				font-size: 11px;
+			}
+
+			&:hover .flag-menu{ display:block }
+
+		}
 	}
 }
 
 
-/************* end modal styles ****************/
+/************* end sequence styles ****************/
