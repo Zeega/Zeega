@@ -97,14 +97,9 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 						this.hold = this.model.addLayerByType('Link', fromInfo );
 						
-						if(this.hold.isNew())
-						{
-							this.hold.on('sync', function(){
-								_this.hold.off('sync');
-								_this.$el.find('.connection-confirm').show()
-							});
-						}
-						else this.$el.find('.connection-confirm').show();
+						if(this.hold.isNew()) this.hold.on('sync', this.showConnectionConfirm, this);
+						else this.showConnectionConfirm();
+
 						break;
 					case 'existingFrame':
 						var Modal = zeega.module('modal');
@@ -120,6 +115,18 @@ the frame's layers. It also includes common frame functions like adding sequence
 			
 			return false;
 		},
+
+		showConnectionConfirm : function()
+		{
+			console.log('%%		show connection confirm')
+			this.hold.off('sync', this.showConnectionConfirm);
+			this.$el.find('.connection-confirm').show();
+		},
+
+		hideConnectionConfirm : function()
+		{
+			this.$el.find('.connection-confirm').hide()
+		},
 		
 		/*
 			make a connection to a new sequence
@@ -131,7 +138,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : [this.hold.id] });
 
-			this.$el.find('.connection-confirm').hide();
+			this.hideConnectionConfirm();
+//			this.$el.find('.connection-confirm').hide();
 
 			sequence.save({},{
 				success : function()
@@ -240,8 +248,11 @@ the frame's layers. It also includes common frame functions like adding sequence
 		{
 			if(zeega.app.currentFrame == this.model)
 			{
+				console.log('$$		before append layer', this.model, layer)
 				this.$el.append( layer.visual.render().el );
+				console.log('$$		after append layer', this.model, layer)
 				layer.visual.private_onLayerEnter();
+				console.log('$$		after layer on enter', this.model, layer)
 			}
 		},
 

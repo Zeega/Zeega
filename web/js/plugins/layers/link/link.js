@@ -57,13 +57,15 @@
 		{
 			var _this = this;
 			this.preview = zeega.app.previewMode;
-			this.model.on('update_link', this.onUpdate, this);
+			this.model.on('updateLink', this.onUpdate, this);
 		},
 
 		onUpdate : function()
 		{
+			console.log('%%		link layer on update')
+			//this.render();
 			this.$el.html( this.getTemplate() );
-			this.delegateEvents();
+			this.onLayerEnter();
 		},
 		
 		render : function()
