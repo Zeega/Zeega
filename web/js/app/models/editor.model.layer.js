@@ -32,6 +32,7 @@
 		
 		initialize: function(attributes,options)
 		{
+			console.log('$$		init layer', attributes, options, this)
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
