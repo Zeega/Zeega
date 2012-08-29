@@ -69,8 +69,8 @@
 		events : {
 			'click .menu-toggler' : 'toggleDropdown',
 			'click .sequence-tab-link' : 'goToSequence',
-			'click .rename-sequence' : 'renameSequence',
-			'click .delete-sequence' : 'deleteSequence'
+			'click .sequence-rename' : 'renameSequence',
+			'click .sequence-delete' : 'deleteSequence'
 		},
 	
 		goToSequence : function(e)
@@ -93,6 +93,7 @@
 		
 		renameSequence : function()
 		{
+			console.log('$$		rename sequence', this)
 			var _this = this;
 			if( !this.loadedModal )
 			{
@@ -140,8 +141,8 @@
 				"<ul class='flag-menu'>"+
 					"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
 					"<ul class='frame-action-menu'>"+
-						"<li><a href='#' data-action='rename'>Rename Sequence</a></li>"+
-						"<li><a href='#' data-action='delete'>Delete Sequence</a></li>"+
+						"<li><a class='sequence-rename' href='#' data-action='rename'>Rename Sequence</a></li>"+
+						"<li><a class='sequence-delete' href='#' data-action='delete'>Delete Sequence</a></li>"+
 					"</ul>"+
 				"</ul>";
 				

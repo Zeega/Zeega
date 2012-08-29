@@ -261,9 +261,17 @@ the frame's layers. It also includes common frame functions like adding sequence
 			console.log('##		render the workspace', this)
 			//render each layer into the workspace // except links
 			var _this = this;
-			this.model.layers.each(function(layer){
-				if( layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.model.id ) _this.$el.append( layer.visual.render().el );
+
+			var layersToRender = this.model.layers.filter(function(layer){
+				if( layer.get('type') != 'Link' ) return true;
+				if( layer.get('attr').from_frame == _this.model.id ) return true;
+			})
+
+			_.each( layersToRender, function(layer){
+				_this.$el.append( layer.visual.render().el );
 			});
+
+			this.onLayerEnter();
 			this.makeDroppable();
 			return this;
 		},
