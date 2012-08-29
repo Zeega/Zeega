@@ -16,9 +16,7 @@
 		{
 			var _this = this;
 			this.$el.html('<ul class="list">')
-			console.log('$$		collection list', this, this.collection.length+'')
 			this.collection.each(function(sequence, i){
-				console.log('$$		seq',sequence, i)
 				_this.$el.find('.list').append( sequence.tabView.render().el );
 			})
 			return this;
@@ -93,7 +91,6 @@
 		
 		renameSequence : function()
 		{
-			console.log('$$		rename sequence', this)
 			var _this = this;
 			if( !this.loadedModal )
 			{

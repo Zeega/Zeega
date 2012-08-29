@@ -258,7 +258,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
-			console.log('##		render the workspace', this)
 			//render each layer into the workspace // except links
 			var _this = this;
 
@@ -502,7 +501,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		render : function()
 		{
-			console.log('$$		render link layers', this)
 			var _this = this;
 			this.$el.html('<ul class="list">');
 			this.model.layers.each(function(layer){

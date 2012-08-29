@@ -204,6 +204,8 @@
 			this.view = new Project.Views.Editor({model:this});
 			this.view.render();
 		},
+
+		/*
 		loadPublishProject : function()
 		{
 			// publishing view for project //
@@ -211,6 +213,71 @@
 			this.view = new Modal.Views.ShareProject({ model:this });
 			this.view.render();
 		},
+		*/
+
+		publishProject : function()
+		{
+			console.log(this.updated);
+			if(this.get("published"))
+			{
+				if(this.get('date_updated') != this.get('date_published') || this.updated )
+				{
+					this.updated = false;
+					this.on('sync', this.onProjectPublish, this);
+					this.save({'publish_update':1});
+				}
+			}
+			else
+			{
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.PublishProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+			}
+		},
+
+		onProjectPublish : function( model, response)
+		{
+			console.log('$$		on project publish', model, response, this.project)
+			this.off('sync', this.onProjectPublish);
+			this.shareProject();
+			/*
+			this.project.set({
+				'publish_update':0,
+				'date_published':response.project.date_published,
+				'date_updated':response.project.date_updated
+			});
+	*/
+		},
+
+		shareProject : function()
+		{
+			if(this.get("published"))
+			{
+				console.log('$$		share project', this)
+				
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.ShareProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+				
+			}
+		},
+
+		settingsProject : function()
+		{
+			if(this.get("published"))
+			{
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.PublishProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+			}
+		},
+
+
+
+
 		
 		update : function( newAttr, silent )
 		{

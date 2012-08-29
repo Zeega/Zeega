@@ -277,7 +277,6 @@
 		
 		getFormat : function(url)
 		{
-			console.log('get format',url)
 			//separated to make it easier to isolate and update this list
 			var format = '';
 			if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'

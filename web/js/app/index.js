@@ -13,12 +13,7 @@ jQuery(function($)
 		zeega.app.refreshDatabase();
 	});
 
-
-//		POPOVERS		//
-	$('.info').popover({
-		'delayIn' : 0
-	});
-
+/*
 	$('body').click(function(){
 		$('.menu').addClass('hide')
 	})
@@ -68,8 +63,8 @@ jQuery(function($)
 			}
 		}
 	});
-	
-	
+*/
+/*
 	$('.VS-icon.VS-icon-search').click(function(){
 		$('.filter-list').show('fast');
 	})
@@ -89,32 +84,17 @@ jQuery(function($)
 		return false;
 	})
 	
-	
-	
-	
 	$('#database-collection-filter').change(function(){
 		$('#database-search-filter').val('all');
 		zeega.app.searchDatabase( {collectionID: $(this).val()}, false );
 	});
+*/
 
-	$('#list-view').click(function(){
-		$('#grid-view .zicon').removeClass('orange');
-		$(this).find('.zicon').addClass('orange');
-		$('#database-item-list').addClass('list-view').removeClass('grid-view');
-		return false;
-	})
-
-	$('#grid-view').click(function(){
-		$('#list-view .zicon').removeClass('orange');
-		$(this).find('.zicon').addClass('orange');
-		$('#database-item-list').removeClass('list-view').addClass('grid-view');
-		return false;
-	})
-
-
+/*
 	$('#project-settings').click(function(){
 		projectSettings();
 	})
+
 
 	function projectSettings()
 	{
@@ -145,37 +125,16 @@ jQuery(function($)
 		return false;
 
 	}
-
-	$('.menu-toggle').click(function(){
-
-		var menu = $(this).next();
-
-		if( menu.hasClass('open') ) menu.removeClass('open');
-		else menu.addClass('open');
-		return false;
-		//event.stopPropagation();
-	});
-
-
-
-	//clear menus on click
-	$('html').bind("click", clearMenus);
-
+*/
+/*
 	$('.visual_search').click(function(event){
 		event.stopPropagation();
 	});
-
-	function clearMenus()
-	{
-		$('.menu-items').removeClass('open');
-	}
 
 
 	$('#refresh-database').click(function(){
 	    zeega.app.refreshDatabase();
 	});
-
-
 
 	$('#database-search-text').keypress(function(e){
 		var keycode = e.which;
@@ -200,12 +159,6 @@ jQuery(function($)
 			zeega.app.itemCollection.getNextPage();
 		}
 	})
-		
-
-	$('#add-media-button').click(function(){
-
-		$('#add-media').modal();
-		return false;
-	});
+*/
 
 });

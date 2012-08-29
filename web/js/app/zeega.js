@@ -85,7 +85,6 @@ this.zeega = {
 
 		this.project.loadProject();
 		
-		this.setButtonStates();
 		this.setProjectListeners();
 		console.log("project data ", this.project);
 
@@ -95,12 +94,13 @@ this.zeega = {
 	// listens to things saving to update the button states
 	setProjectListeners : function()
 	{
+		/*
 		var _this = this;
 		this.project.on('sync',function(){console.log('project_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.layers.on('sync',function(){console.log('layer_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.sequences.on('sync',function(){console.log('sequence_sync');zeega.app.updated=true;_this.setButtonStates()});
 		this.project.frames.on('sync',function(){console.log('frame_sync');zeega.app.updated=true;_this.setButtonStates()});
-	
+		*/
 	},
 	
 	startEditor : function()
@@ -240,7 +240,6 @@ this.zeega = {
 
 	previewSequence : function()
 	{
-		console.log('preview the sequence')
 		var _this = this;
 		this.previewMode = true;
 		this.exportProject();
@@ -266,8 +265,6 @@ this.zeega = {
 
 	exportProject : function( string )
 	{
-		console.log('-- EXPORT --');
-		
 		var projectObject = this.project.toJSON();
 
 		//eliminate falsy values from the frames.layers array
@@ -282,7 +279,7 @@ this.zeega = {
 		
 		_.extend(projectObject,sfl);
 		
-		console.log(projectObject);
+		console.log('EXPORT -- ',projectObject);
 
 		if(string) return JSON.stringify(projectObject);
 		else return projectObject;
@@ -303,86 +300,10 @@ this.zeega = {
 
 	loadLeftFrame : function()
 	{
-		console.log('##		load left ----', this.getLeftFrame())
 		this.loadFrame( this.getLeftFrame() )
 	},
 	
 	loadRightFrame : function(){ this.loadFrame( this.getRightFrame() ) },
-
-	udpateAspectRatio : function( ratioID )
-	{
-		console.log('changeAspectRatio to: '+ ratioID)
-		console.log(this.project)
-		this.project.set({'attr':{'ratio':ratioID}});
-		this.project.save();
-	},
-
-	
-	shareProject : function()
-	{
-		if(this.project.get("published"))
-		{
-			var Modal = zeega.module('modal');
-			this.view = new Modal.Views.ShareProject({ model:this.project });
-			this.view.render();
-		}
-	},
-
-	publishProject : function()
-	{
-		console.log(this.updated);
-		if(this.project.get("published")){
-			if(this.project.get('date_updated')!=this.project.get('date_published')||this.updated)
-			{
-				this.updated=false;
-				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publishing...");
-				this.project.save({'publish_update':1},{
-					success:function(model,response){
-						zeega.app.project.set({'publish_update':0,'date_published':response.project.date_published,'date_updated':response.project.date_updated});
-						console.log(model,response);
-						zeega.app.setButtonStates();
-					
-					}
-				});
-			}
-		}else{
-			var Modal = zeega.module('modal');
-			this.view = new Modal.Views.PublishProject({ model:this.project });
-			this.view.render();
-		}
-		
-	},
-
-	settingsProject : function()
-	{
-		if(this.project.get("published"))
-		{
-			var Modal = zeega.module('modal');
-			this.view = new Modal.Views.PublishProject({ model:this.project });
-			this.view.render();
-		}
-	},
-	
-	setButtonStates : function()
-	{
-		//console.log("setButtonStates", this.project)
-		//console.log("setButtonStates", this.project.get("published"))
-
-		// Publish button
-		if(this.project.get("published"))
-		{
-			$('#settings-project').show();
-			$('#share-project').css("color", "#fff");
-			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
-			if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
-			else $('#publish-project').css("color", "#666");
-			console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
-		}else{
-			$('#settings-project').hide();
-			$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
-			$('#share-project').css("color", "#666");
-		}
-	}
 
 	
 }, Backbone.Events)

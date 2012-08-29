@@ -18,7 +18,8 @@
 		{
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
 
-			//this.initEvents();
+			this.projectButtons = new Project.Views.Editor.ProjectButtons({model:this.model});
+			this.$el.find('#project-actions').html( this.projectButtons.render().el );
 			
 			return this;
 		},
@@ -51,12 +52,7 @@
 		
 		events : {
 			'keypress #zeega-project-title' : 'onTitleKeypress',
-			'blur #zeega-project-title' : 'saveTitle',
-			
-			'click #project-share' : 'clickShare',
-			'click #project-publish' : 'clickPublish',
-			'click #project-options' : 'clickSettings',
-			'click #project-preview' : 'clickPreview'
+			'blur #zeega-project-title' : 'saveTitle'
 		},
 
 		//the callback when text is being entered into the title field
@@ -84,28 +80,88 @@
 		
 		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
 		
+		getTemplate : function()
+		{
+			var html = 
+			
+			"<div id='zeega-project-title' contenteditable='true'><%= title %></div>"+
+			"<div id='project-actions' class='menu-bar clearfix' ></div>";
+			
+			return html;
+		}
+	});
+
+	Project.Views.Editor.ProjectButtons = Backbone.View.extend({
+
+		tagName : 'ul',
+		className : 'pull-right',
+
+		initialize : function()
+		{
+			this.model.on('change', this.render, this);
+		},
+
+		render : function()
+		{
+			console.log('##		render project buttons')
+			var classes = {
+				options_class : this.model.get('published') ? '': 'disabled',
+				publish_class : this.model.get('published') ? 'disabled' : '',
+				share_class : ''
+			}
+
+			this.$el.html( _.template( this.getTemplate(), classes ) );
+			return this;
+		},
+
+		events : {
+			'click #project-share' : 'clickShare',
+			'click #project-publish' : 'clickPublish',
+			'click #project-options' : 'clickSettings',
+			'click #project-preview' : 'clickPreview'
+		},
+
 		clickShare : function()
 		{
-			zeega.app.shareProject();
+			this.model.shareProject();
 			return false;
 		},
 		
 		clickPublish : function()
 		{
-			zeega.app.publishProject();
+			this.model.publishProject();
 			return false;
 		},
 		
 		clickSettings : function()
 		{
-			zeega.app.settingsProject();
+			this.model.settingsProject();
 			return false;
 		},
 		
 		clickPreview : function()
 		{
-			zeega.app.previewSequence();
+			this.model.previewSequence();
 			return false;
+		},
+
+		setButtonStates : function()
+		{
+
+			// Publish button
+			if(this.project.get("published"))
+			{
+				$('#settings-project').show();
+				$('#share-project').css("color", "#fff");
+				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
+				if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
+				else $('#publish-project').css("color", "#666");
+				console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
+			}else{
+				$('#settings-project').hide();
+				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
+				$('#share-project').css("color", "#666");
+			}
 		},
 		
 		
@@ -113,18 +169,14 @@
 		{
 			var html = 
 			
-			"<div id='zeega-project-title' contenteditable='true'><%= title %></div>"+
-			"<div class='menu-bar clearfix' >"+
-				"<ul class='pull-right'>"+
-					"<li><a id='project-options' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
-					"<li><a id='project-publish' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
-					"<li><a id='project-share' href='#'><div class='menu-verbose-title'>share</div><i class='icon-envelope icon-white'></i></a></li>"+
-					"<li><a id='project-preview' href='#'><div class='menu-verbose-title'>preview</div><i class='icon-play icon-white'></i></a></li>"+
-				"</ul>"+
-			"</div>";
+					"<li><a id='project-options' class='<%= options_class %>' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
+					"<li><a id='project-publish' class='<%= publish_class %>' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
+					"<li><a id='project-share' class='<%= share_class %>' href='#'><div class='menu-verbose-title'>share</div><i class='icon-envelope icon-white'></i></a></li>"+
+					"<li><a id='project-preview' href='#'><div class='menu-verbose-title'>preview</div><i class='icon-play icon-white'></i></a></li>";
 			
 			return html;
 		}
-	});
+
+	})
 	
 })(zeega.module("project"));
