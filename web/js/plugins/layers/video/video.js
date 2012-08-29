@@ -188,7 +188,6 @@
 			return this;
 		},
 		
-		
 		onLayerEnter : function(){},
 		
 		onLayerExit : function()

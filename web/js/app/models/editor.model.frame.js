@@ -78,6 +78,7 @@
 
 		sortLayers : function( layerIDArray )
 		{
+			console.log('##		sort layers', layerIDArray)
 			var _this = this;
 			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
@@ -151,7 +152,7 @@
 		{
 			//this.editorWorkspace.removeFromEditor()
 			this.visualWorkspace.unrender();
-			this.editorLinkLayerList.removeFromEditor();
+			//this.editorLinkLayerList.removeFromEditor();
 			this.editorLayerList.removeFromEditor();
 		},
 		

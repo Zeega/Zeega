@@ -113,6 +113,7 @@ this.zeega = {
 
 		// resize edit window!!
 		this.workspace.updateWorkspaceScale();
+		this.workspace.updateLayerListsContainerHeight();
 /*
 // router disabled for now
 		var Router = Backbone.Router.extend({

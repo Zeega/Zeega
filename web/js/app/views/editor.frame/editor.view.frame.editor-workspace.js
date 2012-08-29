@@ -439,25 +439,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 		makeSortable : function()
 		{
 			var _this = this;
-			this.$el.sortable({
-				//define a grip handle for sorting
-				handle: '.layer-drag-handle',
+			this.$el.find('.list').sortable({
 				cursor : 'move',
 				axis:'y',
-				containment: '#sidebar',
-				cursorAt : {top:1,left:1},
-				placeholder: "ui-state-highlight",
-
-				//resort the layers in the workspace too
+				containment: 'parent',
+				tolerance: 'pointer',
 				update : function()
 				{
-					var linkOrder = _.map( $('#links-list>li'), function(layer){ return $(layer).data('id') });
-					var layerOrder = _.map( $('#layers-list-visual>li'), function(layer){ return $(layer).data('id') });
+					var linkOrder = _.map( _this.$el.find('.list>li'), function(layer){ return $(layer).data('id') });
+					var layerOrder = _.map( _this.$el.find('.list>li'), function(layer){ return $(layer).data('id') });
 					var order = linkOrder.concat(layerOrder).reverse();
 					_this.model.sortLayers( order );
 				}
 			});
-			$( "#sortable-layers" ).disableSelection();
+			this.$el.find('.list').disableSelection();
 		},
 
 		onAddLayer : function( layer )
@@ -516,18 +511,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 		makeSortable : function()
 		{
 			var _this = this;
-			this.$el.sortable({
-				//define a grip handle for sorting
-				handle: '.layer-drag-handle',
+			this.$el.find('.list').sortable({
+
 				cursor : 'move',
 				axis:'y',
-				containment: '#sidebar',
+				containment: 'parent',
 				cursorAt : {top:1,left:1},
-				placeholder: "ui-state-highlight",
-				//resort the layers in the workspace too
+				tolerance: 'pointer',
 				update : function(){ _this.model.updateLayerOrder() }
 			});
-			$( "#sortable-layers" ).disableSelection();
+			this.$el.find('.list').disableSelection();
 		},
 		
 		onAddLayer : function( layer )

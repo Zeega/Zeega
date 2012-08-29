@@ -194,13 +194,7 @@
 		events : {
 			'click .delete-layer'		: 'delete',
 			'click'		: 'expand',
-			/*
-			'click .layer-icon'			: 'hideShow',
-			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
-			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
-			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
-			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
-			*/
+
 		},
 		
 		// the events end users have access to
@@ -220,33 +214,28 @@
 		expand : function()
 		{
 			if(this.model.hasControls)
-				this.$el.toggleClass('layer-open');
+			{
+				if(this.$el.hasClass('layer-open') )
+				{
+					this.$el.removeClass('layer-open');
+					this.model.trigger('editor_controlsClosed');
+				}
+				else
+				{
+					var _this = this;
+					$('.layer-open').each(function(){
+						var layerID = $(this).data('id');
+						zeega.app.project.layers.get(layerID).trigger('editor_controlsClosed');
+					})
+					$('.layer-open').removeClass('layer-open');
+					this.$el.addClass('layer-open');
+					this.model.trigger('editor_controlsOpen');
+				}
+
+			}
 			return false;
 		},
 
-
-/*
-		hideShow : function()
-		{
-			//set the visible in editor to the opposite of what it is currently
-			var visible = !this.model.get('visibleineditor');
-			this.model.set({'visibleineditor': visible });
-
-			//change the color of the layer icon so it's apparent on/off
-			if( visible ) $(this.el).find('.asset-type-icon').addClass('orange');
-			else $(this.el).find('.asset-type-icon').removeClass('orange');
-		},
-
-		onLayerIconEnter : function()
-		{
-			$(this.el).find('.asset-type-icon').addClass('zicon-visible')
-		},
-
-		onLayerIconLeave : function()
-		{
-			$(this.el).find('.asset-type-icon').removeClass('zicon-visible')
-		},
-*/		
 		setBaseTemplate : function()
 		{
 			var persist = '';

@@ -8,9 +8,13 @@
 
 		initialize : function()
 		{
+			var _this = this;
 			this.setElement( $(this.target) );
 
-			var resizeWindow = _.debounce(this.updateWorkspaceScale, 750);
+			var resizeWindow = _.debounce(function(){
+				_this.updateWorkspaceScale();
+				_this.updateLayerListsContainerHeight();
+			}, 750);
 			$(window).resize(resizeWindow);
 		},
 
@@ -40,6 +44,7 @@
 				$('#database-tray-toggle i').addClass('icon-chevron-down').removeClass('icon-chevron-up');
 				$('.database-tray').show();
 			}
+			this.updateLayerListsContainerHeight();
 		},
 
 		toggleInterfaceTitles : function()
@@ -64,6 +69,14 @@
 
 			$('#zeega-frame-workspace').animate({left: newLeft +'px',width:newWidth +'px',height:newHeight +'px'});
 		},
+
+		updateLayerListsContainerHeight : function()
+		{
+			var windowHeight = $('#zeega-edit-column').height();
+			var usedAbove = $('.layer-lists-container').offset().top;
+			var usedBelow = $('#zeega-item-database').height();
+			$('.layer-lists-container').css('height',windowHeight-usedAbove-usedBelow);
+		}
 
 		
 });
