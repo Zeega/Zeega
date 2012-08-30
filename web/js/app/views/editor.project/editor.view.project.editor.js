@@ -99,6 +99,7 @@
 		initialize : function()
 		{
 			this.model.on('change', this.render, this);
+			this.model.on('update_buttons', this.render, this);
 		},
 
 		render : function()
