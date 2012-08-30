@@ -60,38 +60,31 @@ class ParserDropboxSet extends ParserAbstract
 	{
 		// fetch last cursor from DB
 		$dbCursor = $this->user->getDropboxDelta();
-		if(isset($dbCursor))
-		{
-			$deltas = $dropbox->delta($dbCursor);
-			$deltas_body = $deltas["body"];
-			$deltas_cursor = $deltas_body->cursor;
-			
-			$deltas_entries = $deltas_body->entries;
-			$deltas_entries_count = 0;
-			$mime_types = array("image/jpg","image/jpeg","image/png","image/gif","text/plain","audio/mpeg","audio/vorbis","audio/ogg","audio/mp4","video/mp4","video/quicktime","video/mpeg","video/H264","video/H261","video/H263","video/H263-1998","video/H263-2000","video/H264-RCDO","video/H264-SVC","video/DV");
-			foreach ($deltas_entries as $key => $entry) {
-				$entry_data = $entry[1];
-				// skip entries signifying deletes
-				if( is_null($entry_data)){
-					continue;
-				}
-				// skip directories
-				if($entry_data->is_dir){
-					continue;
-				}
-				// skip entries that don't match accepted mime types
-				$entry_mime_type = $entry_data->mime_type;
-				if (!in_array($entry_mime_type, $mime_types)) {
-					continue;
-				}
-				$deltas_entries_count++;
+		$deltas = $dropbox->delta($dbCursor);
+		$deltas_body = $deltas["body"];
+		$deltas_cursor = $deltas_body->cursor;
+		
+		$deltas_entries = $deltas_body->entries;
+		$deltas_entries_count = 0;
+		$mime_types = array("image/jpg","image/jpeg","image/png","image/gif","text/plain","audio/mpeg","audio/vorbis","audio/ogg","audio/mp4","video/mp4","video/quicktime","video/mpeg","video/H264","video/H261","video/H263","video/H263-1998","video/H263-2000","video/H264-RCDO","video/H264-SVC","video/DV");
+		foreach ($deltas_entries as $key => $entry) {
+			$entry_data = $entry[1];
+			// skip entries signifying deletes
+			if( is_null($entry_data)){
+				continue;
 			}
-	        return $deltas_entries_count;
+			// skip directories
+			if($entry_data->is_dir){
+				continue;
+			}
+			// skip entries that don't match accepted mime types
+			$entry_mime_type = $entry_data->mime_type;
+			if (!in_array($entry_mime_type, $mime_types)) {
+				continue;
+			}
+			$deltas_entries_count++;
 		}
-		else
-		{
-			return 0;
-		}
+        return $deltas_entries_count;
 	}
 	
 	private function setDeltaCursor($dropbox, $em)

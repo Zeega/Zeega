@@ -85,7 +85,7 @@ class BookmarkletController extends Controller
 				
 				if($parsedItem["archive"] == "Dropbox")
 				{					
-					if(!$update)
+					if(!$update && $parsedItem["child_items_count"]==0)
 					{
 						// Dropbox - welcome screen for the initial connection with dropbox
 
