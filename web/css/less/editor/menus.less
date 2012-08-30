@@ -14,24 +14,20 @@ MENUS
 	.menu-verbose-title{ font-size:11px }
 	.disabled{ opacity: 0.5 }
 	
-	&>ul
+	ul
 	{
 		margin:0;
 		list-style: none;
+	}
 
+	&>ul
+	{
 		&>li
 		{
 			float:left;
 			text-align: center;
 			
 			&:first-child>a{ border-left : none }
-			
-			&.spacer
-			{
-				width:10px;
-				height:1px;
-				&+li{ border-left: 1px solid #444 }
-			}
 
 			&>a
 			{
@@ -60,6 +56,49 @@ MENUS
 			&>a{ padding: 5px 15px }
 		}
 	}
+
+	.menu-dropdown
+	{
+		&>a
+		{
+			display: block;
+			padding: 5px 7px;
+			border-left : 1px solid #333 ;
+		}
+		&>ul
+		{
+			position: absolute;
+			background: white;
+			color: black;
+			text-align: left;
+			text-transform: uppercase;
+			font-weight:bold;
+			font-size: 11px;
+			padding: 5px 10px;
+			display:none;
+			max-height:75%;
+			overflow: auto;
+			box-shadow: 5px 5px 10px #111;
+
+			a:link,a:visited,a:active{ color:#333 }
+			a:hover{ color: orangered }
+
+		}
+
+		.divider
+		{
+			border-top: 1px solid #AAA;
+			margin: 10px 0;
+		}
+
+		&:hover>ul
+		{
+			display: block;
+			z-index:100;
+		}
+	}
+
+
 }
 
 .zeega-list-header
