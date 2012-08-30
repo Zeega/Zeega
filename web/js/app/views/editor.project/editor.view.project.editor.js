@@ -9,13 +9,14 @@
 
 		initialize : function()
 		{
-			this.setElement( $('#zeega-project-info') );
 			//automatically re-render the view if the title or cover image are changed/updated
 			this.model.on('change:title change:cover_image', this.render, this)
 		},
 
 		render: function()
 		{
+			this.setElement( $('#zeega-project-info') );
+
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
 
 			this.projectButtons = new Project.Views.Editor.ProjectButtons({model:this.model});
@@ -98,7 +99,7 @@
 
 		initialize : function()
 		{
-			this.model.on('change', this.render, this);
+			//this.model.on('change', this.render, this);
 			this.model.on('update_buttons', this.render, this);
 		},
 

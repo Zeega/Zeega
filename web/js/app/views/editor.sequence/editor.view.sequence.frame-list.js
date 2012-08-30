@@ -4,14 +4,10 @@
 		
 		target : '#zeega-project-frame-list',
 
-		initialize : function()
-		{
-			this.setElement( $(this.target) );
-		},
-		
 		render: function()
 		{
 			var _this = this;
+			this.setElement( $(this.target) );
 			this.$el.html( this.getTemplate() );
 
 			this.model.frames.each(function(frame){
@@ -51,7 +47,6 @@
 
 		addFrame : function()
 		{
-			console.log('$$		add frames', this)
 			this.model.addFrames( 1 );
 			return false;
 		},

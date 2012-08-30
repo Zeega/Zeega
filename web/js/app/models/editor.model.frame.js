@@ -78,7 +78,6 @@
 
 		sortLayers : function( layerIDArray )
 		{
-			console.log('##		sort layers', layerIDArray)
 			var _this = this;
 			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
@@ -126,17 +125,18 @@
 
 			if( newLayer )
 			{
-				newLayer.save( {attr: _.extend(newLayer.get('attr'),attributes) }, {
-					success : function()
-					{
-						_this.layers.push( newLayer );
-						zeega.app.project.layers.add( newLayer );
-						newLayer.trigger('sync');
-					}
-				})
+				newLayer.on('sync', this.onNewLayerSave, this );
+				newLayer.save({ attr : _.extend(newLayer.get('attr'),attributes) })
 				return newLayer;
 			}
 			else console.log('!!		no such layer type!');
+		},
+
+		onNewLayerSave : function( layer )
+		{
+			layer.off('sync', this.onNewLayerSave);
+			this.layers.push( layer );
+			zeega.app.project.layers.add( layer );
 		},
 
 		// adds the frame workspace view to the editor
@@ -150,7 +150,7 @@
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
-			//this.editorWorkspace.removeFromEditor()
+			this.detailsBar.onExit();
 			this.visualWorkspace.unrender();
 			//this.editorLinkLayerList.removeFromEditor();
 			this.editorLayerList.removeFromEditor();
@@ -186,7 +186,7 @@
 				var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			
 				worker.addEventListener('message', function(e) {
-					console.log(e)
+					//console.log(e)
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});

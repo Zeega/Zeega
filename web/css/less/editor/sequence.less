@@ -12,10 +12,12 @@
 	{
 		margin:0;
 		list-style:none;
+		white-space: nowrap;
+		overflow:auto;
 
 		&>li
 		{
-			float:left;
+			display: inline-block;
 			position:relative;
 
 			&.active>a{ background-color: #777 }

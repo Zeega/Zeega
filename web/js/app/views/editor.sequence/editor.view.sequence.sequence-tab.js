@@ -7,7 +7,6 @@
 
 		initialize : function()
 		{
-			this.setElement( $(this.target) );
 			this.collection.on('add', this.addSequence, this);
 			this.collection.on('remove', this.render, this);
 		},
@@ -15,6 +14,7 @@
 		render : function()
 		{
 			var _this = this;
+			this.setElement( $(this.target) );
 			this.$el.html('<ul class="list">')
 			this.collection.each(function(sequence, i){
 				_this.$el.find('.list').append( sequence.tabView.render().el );
@@ -24,13 +24,8 @@
 
 		addSequence : function( seq )
 		{
-			this.$el.append( seq.tabView.render().el );
-		},
-		
-		drawSequenceTab : function( model )
-		{
-			$('#sequence-tabs').append( model.tabView.render().el );
-		},
+			this.$el.find('.list').append( seq.tabView.render().el );
+		}
 	})
 
 // model view
