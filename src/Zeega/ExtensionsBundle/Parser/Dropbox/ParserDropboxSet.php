@@ -5,66 +5,96 @@ namespace Zeega\ExtensionsBundle\Parser\Dropbox;
 use Zeega\CoreBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\User;
-//use Dropbox;
 
 use \DateTime;
-//require_once('../vendor/dropbox/bootstrap.php');
 
 class ParserDropboxSet extends ParserAbstract
 {
+	public function load($url, $parameters = null)
+    {
+		require_once('../vendor/dropbox/bootstrap.php');
 
-	public function __construct()
-	{
-    }
+		$user = $parameters["user"];
 
-	private static $license=array('','Attribution-NonCommercial-ShareAlike Creative Commons','Attribution-NonCommercial Creative 		
-			Commons','Attribution-NonCommercial-NoDerivs Creative Commons','Attribution Creative Commons',
-			'Attribution-ShareAlike Creative Commons','Attribution-NoDerivs Creative Commons','No known copyright restrictions');
-	
-	//private $itemParser;
+		$em = $parameters["entityManager"];
+        $this->user = $user;
 
-	private $dropboxUserName = "";
+		$accountInfo = $dropbox->accountInfo();
+		$dropboxUser = $accountInfo["body"]->display_name;
+		$this->dropboxUser = $dropboxUser;
 
-	//private $defaultIconAudio = "https://dl.dropbox.com/s/3xhxfzt9j5gsx3i/Audio.png?dl=1";
-	//private $defaultIconVideo = "https://www.dropbox.com/s/r7m0030a5xepbgx/Video.png?dl=1";
-	//private $defaultIconText = "https://www.dropbox.com/s/anv1gqdkc96ek5c/Text.png?dl=1";
-	//private $defaultIconImage = "https://dl.dropbox.com/s/1mttjeg2dluzl0i/Image.png?dl=1";
+        $loadCollectionItems = $parameters["load_child_items"];
 
-	public function checkForDeltas($dropbox, $em)
+		$collection = new Item();
+		$collection->setTitle("Dropbox");
+		$collection->setDescription("Media from Dropbox");
+		$collection->setMediaType('Collection');
+	    $collection->setLayerType('Dropbox');
+	    $collection->setArchive('Dropbox');
+		$collection->setAttributionUri($url);
+		$collection->setMediaCreatorUsername($dropboxUser);
+        $collection->setMediaCreatorRealname($dropboxUser);
+		$collection->setMediaDateCreated(new \DateTime());
+		$collection->setUri($url);
+		$itemCount = 0;
+
+        if($loadCollectionItems)
+        {
+			// if collection exists
+			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			$this->setDeltaCursor($dropbox, $em);
+			$collection->setThumbnailUrl("../images/templates/dropbox.png");
+        }
+        else
+        {
+        	$deltaCount = $this->checkForDeltas($dropbox, $em);
+			$collection->setChildItemsCount($deltaCount);
+			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
+			$collection->setThumbnailUrl("../images/templates/dropbox.png");
+	    }
+	    return parent::returnResponse($collection, true, true);
+	}
+
+
+	private function checkForDeltas($dropbox, $em)
 	{
 		// fetch last cursor from DB
 		$dbCursor = $this->user->getDropboxDelta();
-		$deltas = $dropbox->delta($dbCursor);
-		$deltas_body = $deltas["body"];
-		$deltas_cursor = $deltas_body->cursor;
-		$userTable = $em->getRepository('ZeegaDataBundle:User')->findOneById($this->user->getId());
-		//$this->user->setDropboxDelta($deltas_cursor);
-    	$em->persist($this->user);
-    	$em->flush();
-
-		$deltas_entries = $deltas_body->entries;
-		$deltas_entries_count = 0;
-		$mime_types = array("image/jpg","image/jpeg","image/png","image/gif","text/plain","audio/mpeg","audio/vorbis","audio/ogg","audio/mp4","video/mp4","video/quicktime","video/mpeg","video/H264","video/H261","video/H263","video/H263-1998","video/H263-2000","video/H264-RCDO","video/H264-SVC","video/DV");
-		foreach ($deltas_entries as $key => $entry) {
-			$entry_data = $entry[1];
-			// skip entries signifying deletes
-			if( is_null($entry_data)){
-				continue;
+		if(isset($dbCursor))
+		{
+			$deltas = $dropbox->delta($dbCursor);
+			$deltas_body = $deltas["body"];
+			$deltas_cursor = $deltas_body->cursor;
+			
+			$deltas_entries = $deltas_body->entries;
+			$deltas_entries_count = 0;
+			$mime_types = array("image/jpg","image/jpeg","image/png","image/gif","text/plain","audio/mpeg","audio/vorbis","audio/ogg","audio/mp4","video/mp4","video/quicktime","video/mpeg","video/H264","video/H261","video/H263","video/H263-1998","video/H263-2000","video/H264-RCDO","video/H264-SVC","video/DV");
+			foreach ($deltas_entries as $key => $entry) {
+				$entry_data = $entry[1];
+				// skip entries signifying deletes
+				if( is_null($entry_data)){
+					continue;
+				}
+				// skip directories
+				if($entry_data->is_dir){
+					continue;
+				}
+				// skip entries that don't match accepted mime types
+				$entry_mime_type = $entry_data->mime_type;
+				if (!in_array($entry_mime_type, $mime_types)) {
+					continue;
+				}
+				$deltas_entries_count++;
 			}
-			// skip directories
-			if($entry_data->is_dir){
-				continue;
-			}
-			// skip entries that don't match accepted mime types
-			$entry_mime_type = $entry_data->mime_type;
-			if (!in_array($entry_mime_type, $mime_types)) {
-				continue;
-			}
-			$deltas_entries_count++;
+	        return $deltas_entries_count;
 		}
-        return $deltas_entries_count;
+		else
+		{
+			return 0;
+		}
 	}
-	public function setDeltaCursor($dropbox, $em)
+	
+	private function setDeltaCursor($dropbox, $em)
 	{
 		// fetch last cursor from DB
 		$dbCursor = $this->user->getDropboxDelta();
@@ -76,7 +106,7 @@ class ParserDropboxSet extends ParserAbstract
     	$em->flush();
 	}
 
-	public function fetchRedirectURL($url1)
+	private function fetchRedirectURL($url1)
 	{  // fetch redirected URL
 		$ch = curl_init($url1);
 		curl_setopt($ch, CURLOPT_HEADER, true);
@@ -91,7 +121,7 @@ class ParserDropboxSet extends ParserAbstract
 		return $url2;
 	}
 
-	public function setCollectionThumbnail($path, $dropbox, $collection, $dropboxUser, $itemCount)
+	private function setCollectionThumbnail($path, $dropbox, $collection, $dropboxUser, $itemCount)
 	{
     	$folderMetaData = $dropbox->metaData($path);
     	$folderItems = $folderMetaData["body"]->contents;
@@ -114,7 +144,7 @@ class ParserDropboxSet extends ParserAbstract
 		}
 	}
 
-	public function loadFolder($path, $dropbox, $collection, $dropboxUser, $itemCount)
+	private function loadFolder($path, $dropbox, $collection, $dropboxUser, $itemCount)
     {
     	$folderMetaData = $dropbox->metaData($path);
     	$folderItems = $folderMetaData["body"]->contents;
@@ -141,8 +171,7 @@ class ParserDropboxSet extends ParserAbstract
 		return $itemCount;
     }
 
-
-	public function loadItem($mediaUrl, $parameters = null)
+	private function loadItem($mediaUrl, $parameters = null)
     {
 		$fileData = $parameters["fileData"];
 		$username = $parameters["username"];
@@ -229,48 +258,4 @@ class ParserDropboxSet extends ParserAbstract
 
 		return $this->returnResponse($item, true, false);
     }
-
-
-	public function load($url, $parameters = null)
-    {
-		require_once('../vendor/dropbox/bootstrap.php');
-        //$this->dropbox = $dropbox;
-
-		$user = $parameters["user"];
-
-		$em = $parameters["entityManager"];
-        $this->user = $user;
-
-		$accountInfo = $dropbox->accountInfo();
-		$dropboxUser = $accountInfo["body"]->display_name;
-		$this->dropboxUser = $dropboxUser;
-
-        $loadCollectionItems = $parameters["load_child_items"];
-
-		$collection = new Item();
-		$collection->setTitle("Dropbox");
-		$collection->setDescription("Media from Dropbox");
-		$collection->setMediaType('Collection');
-	    $collection->setLayerType('Dropbox');
-		$collection->setAttributionUri($url);
-		$collection->setMediaCreatorUsername($dropboxUser);
-        $collection->setMediaCreatorRealname($dropboxUser);
-		$collection->setMediaDateCreated(new \DateTime());
-		$collection->setUri($url);
-		$itemCount = 0;
-
-        if($loadCollectionItems){
-			// if collection exists
-			$this->loadFolder('/', $dropbox, $collection, $dropboxUser, $itemCount);
-			$this->setDeltaCursor($dropbox, $em);
-			//$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
-			$collection->setThumbnailUrl("../images/templates/dropbox.png");
-        }else{
-        	$deltaCount = $this->checkForDeltas($dropbox, $em);
-			$collection->setChildItemsCount($deltaCount);
-			$this->setCollectionThumbnail('/', $dropbox, $collection, $dropboxUser, $itemCount);
-			$collection->setThumbnailUrl("../images/templates/dropbox.png");
-	    }
-	    return parent::returnResponse($collection, true, true);
-	}
 }
