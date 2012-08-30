@@ -15,3 +15,9 @@ services:
               session: "@session"
         tags:
             - { name: twig.extension }
+    zeega_queue:
+        class: Zeega\CoreBundle\Service\QueueingService
+        arguments: 
+            security: "@security.context"
+            doctrine: "@doctrine"
+            rabbitmq: "@old_sound_rabbit_mq.celery_task_producer"

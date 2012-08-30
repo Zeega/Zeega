@@ -12,10 +12,14 @@ class CeleryController extends Controller
 {
     public function queueAction()
 	{
-	    $id = uniqid();
-	    $msg = array("id" => $id,  "task" => "tasks.add", "args" => array(1,2));
-        $this->get('old_sound_rabbit_mq.celery_task_producer')->publish(json_encode($msg), 'celery');
-        return $id;
+        $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
+
+        if(False !== $isQueueingEnabled)
+        {
+            $queue = $this->get('zeega_queue');
+            $taskId = $queue->enqueueTask("tasks.add",array(1,2));
+            return new Response($taskId);
+        }
     }
     
     public function statusAction($id)
