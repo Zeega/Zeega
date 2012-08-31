@@ -29,21 +29,8 @@
 			
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
-
-			this.on('change', this.showSaveIndicator, this);
-			this.on('sync', this.hideSaveIndicator, this);
 			
 			console.log('init PROJECT', this, attributes)
-		},
-
-		showSaveIndicator : function()
-		{
-			$('#save-indicator').spin('tiny')
-		},
-
-		hideSaveIndicator : function()
-		{
-			$('#save-indicator').spin(false)
 		},
 
 		preloadCollections : function(attributes)

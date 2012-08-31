@@ -32,11 +32,14 @@
 			var _this = this;
 			this.model.off('ready', this.initEvents);
 
+			this.model.frames.on('change',this.showSaveIndicator, this );
+			this.model.layers.on('change',this.showSaveIndicator, this );
+			this.model.sequences.on('change',this.showSaveIndicator, this );
+			this.on('change',this.showSaveIndicator, this );
+
 			this.model.frames.on('sync',this.onProjectChange, this );
 			this.model.layers.on('sync',this.onProjectChange, this );
 			this.model.sequences.on('sync',this.onProjectChange, this );
-			console.log(this.model.sequences,this)
-			this.model.sequences.on('all',function(e){console.log('~~		e:',e)})
 			this.on('sync',this.onProjectChange, this );
 
 			/*
@@ -62,10 +65,20 @@
 			*/
 		},
 
+		showSaveIndicator : function()
+		{
+			$('#save-indicator').spin('tiny')
+		},
+
+		hideSaveIndicator : function()
+		{
+			$('#save-indicator').spin(false)
+		},
+
 		onProjectChange : function()
 		{
 			this.model.updated = true;
-			console.log('@@		onproject change. updated? ', this.model.updated)
+			this.hideSaveIndicator();
 			this.projectButtons.render();
 		},
 		
