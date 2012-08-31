@@ -135,11 +135,11 @@
 
 		render : function()
 		{
-			console.log('##		render project buttons')
+			console.log('$$		pub', this)
 			var classes = {
 				options_class : this.model.get('published') ? '': 'disabled',
-				publish_class : this.model.updated ? '' : 'disabled',
-				share_class : ''
+				publish_class : this.model.updated || this.model.get('date_updated') != this.model.get('date_published') ? '' : 'disabled',
+				share_class : this.model.get('published') ? '' : 'disabled'
 			}
 
 			this.$el.html( _.template( this.getTemplate(), classes ) );
@@ -176,26 +176,6 @@
 			this.model.previewSequence();
 			return false;
 		},
-
-		setButtonStates : function()
-		{
-
-			// Publish button
-			if(this.project.get("published"))
-			{
-				$('#settings-project').show();
-				$('#share-project').css("color", "#fff");
-				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish Update");
-				if(this.project.get('date_updated')!=this.project.get('date_published')||zeega.app.updated)$('#publish-project').css("color", "#fff");
-				else $('#publish-project').css("color", "#666");
-				console.log("dates:",this.project.get('date_updated'),this.project.get('date_published'));
-			}else{
-				$('#settings-project').hide();
-				$('#publish-project').html("<i class='zicon-publish raise-up'></i> Publish");
-				$('#share-project').css("color", "#666");
-			}
-		},
-		
 		
 		getTemplate : function()
 		{
