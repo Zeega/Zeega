@@ -52,8 +52,6 @@
 			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page;
 			var queryTemplate = '<% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
-
-			console.log('query string:', url, this.search)
 			return url;
 		},
 
@@ -72,16 +70,7 @@
 		
 		onSearch : function()
 		{
-			console.log('##		on search', this)
 			this.fetch();
-		},
-
-		onSearchSuccess : function(collection)
-		{
-			console.log('##		on search success', this)
-
-			//this.target.fadeTo(1000,1).spin(false).empty();
-			//this.renderCollection();
 		},
 		
 		refresh : function(){ this.fetch() },

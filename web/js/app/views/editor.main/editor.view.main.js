@@ -17,6 +17,9 @@
 			}, 750);
 			$(window).resize(resizeWindow);
 
+				//detect when zeega comes back in focus and refresh the database
+			window.addEventListener('focus', function(){ zeega.app.refreshDatabase() });
+
 			$('#search-input').keyup(function(e){
 				switch(e.which)
 				{
@@ -67,8 +70,6 @@
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}
-
-			console.log('$$		filter',e, e.target, $(e.target).data('filter'))
 		},
 
 		addItemType : function(e)
