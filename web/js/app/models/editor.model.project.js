@@ -2,6 +2,8 @@
 
 	Project.Model = Backbone.Model.extend({
 		
+		updated : false,
+
 		defaults : {
 			'cover_image' : 'images/default_cover.png',
 			'estimated_time' : 'the time it takes to eat a sandwhich',
@@ -225,6 +227,7 @@
 					this.updated = false;
 					this.on('sync', this.onProjectPublish, this);
 					this.save({'publish_update':1});
+					console.log('already published. published again')
 				}
 			}
 			else
@@ -233,6 +236,7 @@
 				var view = new Modal.Views.PublishProject({ model:this });
 				$('body').prepend( view.render().el );
 				view.show();
+				console.log('newly publishded good job')
 			}
 		},
 
@@ -240,14 +244,8 @@
 		{
 			console.log('$$		on project publish', model, response, this.project)
 			this.off('sync', this.onProjectPublish);
-			this.shareProject();
-			/*
-			this.project.set({
-				'publish_update':0,
-				'date_published':response.project.date_published,
-				'date_updated':response.project.date_updated
-			});
-	*/
+			this.set({'publish_update':0});
+			this.trigger('update_buttons');
 		},
 
 		shareProject : function()

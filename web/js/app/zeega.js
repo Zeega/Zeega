@@ -90,37 +90,9 @@ this.zeega = {
 		this.project.completeCollections();
 
 		this.project.loadProject();
-		
-		this.setProjectListeners();
+		this.project.trigger('ready');
+
 		console.log("!!		project initialized: ", this.project);
-	},
-	
-	// listens to things saving to update the button states
-	setProjectListeners : function()
-	{
-		
-		var _this = this;
-		this.project.on('sync',function(){
-			console.log('project_sync');
-			_this.projectupdated=true;
-			_this.project.trigger('update_buttons')
-		});
-		this.project.layers.on('sync',function(){
-			console.log('layer_sync');
-			_this.projectupdated=true;
-			_this.project.trigger('update_buttons')
-		});
-		this.project.sequences.on('sync',function(){
-			console.log('sequence_sync');
-			_this.projectupdated=true;
-			_this.project.trigger('update_buttons')
-		});
-		this.project.frames.on('sync',function(){
-			console.log('frame_sync');
-			_this.projectupdated=true;
-			_this.project.trigger('update_buttons')
-		});
-		
 	},
 	
 	startEditor : function()

@@ -7,25 +7,7 @@
 
 		render: function()
 		{
-			//http://dev.zeega.org/joseph/web/project/ID/view
-			// why do these live here ?? MOVE!!
-/*
-			var projectlink = zeega.app.url_prefix + 'project/'+ this.model.id +'/view';
-			var iframeLink = zeega.app.url_prefix +this.model.id;
-			this.iframeHTML = '<iframe src="'+ iframeLink +'" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-			var iframeEmbed = this.convertHTML(this.iframeHTML);
 
-			var blanks = {
-				title : this.model.get('title'),
-				author : attr.author,
-				projectlink 	: 	projectlink,
-				uriEncodedProjectlink : encodeURIComponent(projectlink),
-				uriEncodedTitle : encodeURIComponent(this.model.get("title")),
-				iframeEmbed : iframeEmbed,
-				iframeHTML : this.iframeHTML,
-				tags : this.model.get('tags'),
-			};
-*/
 			this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
 
 			return this;
@@ -62,24 +44,10 @@
 		{
 			console.log('$$		on publish success', model, response, this.model, zeega.app.project)
 			this.model.off('sync', this.onPublishSuccess);
-			/*
-			this.model.set({
-				item_id : response.project.item_id,
-				publish_update : 0,
-				date_published : response.project.date_published,
-				date_updated : response.project.date_updated
-			});
-*/
-			//zeega.app.shareProject();
+			this.model.updated = false;
 			this.hide();
+			this.model.shareProject();
 		},
-
-/*
-		convertHTML : function(str)
-		{
-			return str.replace(/</gi, "&lt;").replace(/>/gi, "&gt;").replace(/"/gi, "&quot;");
-		},
-*/
 
 		getTemplate : function()
 		{

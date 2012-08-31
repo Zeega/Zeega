@@ -10,7 +10,8 @@
 		initialize : function()
 		{
 			//automatically re-render the view if the title or cover image are changed/updated
-			this.model.on('change:title change:cover_image', this.render, this)
+			this.model.on('change:title change:cover_image', this.render, this);
+			this.model.on('ready', this.initEvents, this);
 		},
 
 		render: function()
@@ -29,7 +30,16 @@
 		initEvents : function()
 		{
 			var _this = this;
+			this.model.off('ready', this.initEvents);
 
+			this.model.frames.on('sync',this.onProjectChange, this );
+			this.model.layers.on('sync',this.onProjectChange, this );
+			this.model.sequences.on('sync',this.onProjectChange, this );
+			console.log(this.model.sequences,this)
+			this.model.sequences.on('all',function(e){console.log('~~		e:',e)})
+			this.on('sync',this.onProjectChange, this );
+
+			/*
 			this.$el.find('#project-cover-image').droppable({
 
 				accept : '.database-asset-list',
@@ -49,6 +59,14 @@
 					
 				}
 			});
+			*/
+		},
+
+		onProjectChange : function()
+		{
+			this.model.updated = true;
+			console.log('@@		onproject change. updated? ', this.model.updated)
+			this.projectButtons.render();
 		},
 		
 		events : {
@@ -99,7 +117,6 @@
 
 		initialize : function()
 		{
-			//this.model.on('change', this.render, this);
 			this.model.on('update_buttons', this.render, this);
 		},
 
@@ -108,7 +125,7 @@
 			console.log('##		render project buttons')
 			var classes = {
 				options_class : this.model.get('published') ? '': 'disabled',
-				publish_class : this.model.get('published') ? 'disabled' : '',
+				publish_class : this.model.updated ? '' : 'disabled',
 				share_class : ''
 			}
 
