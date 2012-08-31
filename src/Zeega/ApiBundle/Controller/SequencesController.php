@@ -45,21 +45,16 @@ class SequencesController extends Controller
 
     public function getSequenceAction($sequence_id)
     {
-    	$sequences=$this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findOneById($sequence_id);
+    	$sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findOneById($sequence_id);
     	
-		//removes falsy values from the return
-		for($i = 0 ; $i < count($sequences) ; $i++)
-		{
-			foreach($sequences[0] as $key => $value)
-			{
-				if( is_null( $value )) unset($sequences[$i][$key]);
-				
-			}
-		}
-		
-		return new Response(json_encode($sequences[0]));
+    	if(isset($sequence))
+    	{
+    	    $sequenceFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequence->getId());
+            $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames' => $sequenceFrames));
+            return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+    	}
         
-    
+        return new Response("{}");
     } // `get_sequence`     [GET] /sequences/{sequence_id}
 
 
@@ -92,7 +87,10 @@ class SequencesController extends Controller
 		$em->persist($sequence);
 		$em->flush();
 		
-    	return new Response('SUCCESS',200);
+		$sequenceFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequence_id);		
+    	$sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames' => $sequenceFrames));
+
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
     } // `put_sequence`     [PUT] /sequences/{sequence_id}
 
 
