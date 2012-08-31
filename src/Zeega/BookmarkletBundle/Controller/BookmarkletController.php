@@ -58,36 +58,54 @@ class BookmarkletController extends Controller
 		
 		$parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
-		$message = "Parser did not respond";
+		$message = "Something went wrong";
+		
 		if(isset($parserResponse))
 		{
 			$isUrlValid = $parserResponse["request"]["success"];
 			$isUrlCollection = $parserResponse["request"]["is_set"];
 			$message = $parserResponse["request"]["message"];
 			$items = $parserResponse["items"];
+			
 			if($isUrlValid && count($items) > 0)
 			{	
 				$parsedItem = $items[0];
 				
 				// check if the item exists on the database	
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user_id"=>$user->getId(),"attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
-				if(isset($item)) $update = 1;
-				else $update =0;
-				// if Dropbox and no items found
-				if($parsedItem["archive"]=="Dropbox"&&!isset($item)&&$parsedItem["child_items_count"]==0){
-					return $this->render(
-						'ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', 
-						array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'update'=>$update,
-							'child_items_count'=>$parsedItem["child_items_count"],
-							'archive'=>$parsedItem["archive"],
-						)
-					);	
+				
+				if(isset($item))
+				{
+					$update = 1;
+				} 
+				else
+				{
+					$update = 0;
+				}	
+				
+				if($parsedItem["archive"] == "Dropbox")
+				{					
+					if(!$update && $parsedItem["child_items_count"]==0)
+					{
+						// Dropbox - welcome screen for the initial connection with dropbox
+
+						return $this->render(
+							'ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', 
+							array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'update'=>$update,
+								'child_items_count'=>$parsedItem["child_items_count"],
+								'archive'=>$parsedItem["archive"],
+							)
+						);
+					}
 				}
-				if($parsedItem["archive"]=="Facebook"){
+				else if($parsedItem["archive"] == "Facebook")
+				{
+					// Facebook - needs to be loaded in a pop-up
+
 					if($parsedItem["child_items_count"]==-1){ // no access token.  overloading child_items_count is a hack.  Find cleaner way soon.
 						//header('X-Frame-Options: Allow'); 
 						$requirePath = __DIR__ . '/../../../../vendor/facebook/facebook.php';
@@ -128,11 +146,10 @@ class BookmarkletController extends Controller
 						);	
 					}
 				}
-				// if Dropbox and duplicate items found
-				elseif($parsedItem["archive"]!="Dropbox"&&$update){
+				else if($update)
+				{
 					return $this->render(
-						'ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', 
-						array(
+						'ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
 							'displayname' => $user->getDisplayname(),
 							'widget_id'=>$widgetId,
 							'item'=>$item, 
@@ -141,22 +158,19 @@ class BookmarkletController extends Controller
 						)
 					);	
 				}
+
 				// for all other cases
-				else 
-				{
-					return $this->render(
-						'ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', 
-						array(
-							'displayname' => $user->getDisplayname(),
-							'widget_id'=>$widgetId,
-							'item'=>json_encode($parsedItem), 
-							'update'=>$update,
-							'archive'=>$parsedItem["archive"],
-							'thumbnail_url'=>$parsedItem["thumbnail_url"],
-							'child_items_count'=>$parsedItem["child_items_count"],
-						)
-					);						
-				}
+				return $this->render(
+					'ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', array(
+						'displayname' => $user->getDisplayname(),
+						'widget_id'=>$widgetId,
+						'item'=>json_encode($parsedItem), 
+						'update'=>$update,
+						'archive'=>$parsedItem["archive"],
+						'thumbnail_url'=>$parsedItem["thumbnail_url"],
+						'child_items_count'=>$parsedItem["child_items_count"],
+					)
+				);						
 			}
 		}
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
