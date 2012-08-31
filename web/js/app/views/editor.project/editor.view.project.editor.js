@@ -135,7 +135,6 @@
 
 		render : function()
 		{
-			console.log('$$		pub', this)
 			var classes = {
 				options_class : this.model.get('published') ? '': 'disabled',
 				publish_class : this.model.updated || this.model.get('date_updated') != this.model.get('date_published') ? '' : 'disabled',
@@ -153,27 +152,27 @@
 			'click #project-preview' : 'clickPreview'
 		},
 
-		clickShare : function()
+		clickShare : function(e)
 		{
-			this.model.shareProject();
+			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.shareProject();
 			return false;
 		},
 		
-		clickPublish : function()
+		clickPublish : function(e)
 		{
-			this.model.publishProject();
+			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.publishProject(e);
 			return false;
 		},
 		
-		clickSettings : function()
+		clickSettings : function(e)
 		{
-			this.model.settingsProject();
+			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.settingsProject();
 			return false;
 		},
 		
-		clickPreview : function()
+		clickPreview : function(e)
 		{
-			this.model.previewSequence();
+			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.previewSequence();
 			return false;
 		},
 		
