@@ -52,13 +52,12 @@ this.zeega = {
 	{
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
-		this.activateWorkspace();
-
 		this.initDatabase();
 		this.initProject();
 
 		this.isLoaded = true;
-		
+
+		this.activateWorkspace();
 		this.startEditor();
 	},
 

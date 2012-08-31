@@ -28,6 +28,8 @@
 						break;
 				}
 			})
+
+			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
 		},
 
 		events : {
@@ -50,17 +52,18 @@
 
 		filterDatabase : function(e)
 		{
+			var _this = this;
 			var contentFilter = $(e.target).data('filter');
 
 			if( contentFilter != 'reset' )
 			{
 				$('#database-flash').html('filtered by: '+ contentFilter );
-				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500);
+				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() });
 				zeega.app.items.search.reset().set('content',contentFilter);
 			}
 			else
 			{
-				$('#database-flash').hide('blind',{direction:'vertical'},500);
+				$('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}
