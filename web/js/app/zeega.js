@@ -103,6 +103,7 @@ this.zeega = {
 		this.goToFrame(startFrameID);
 
 		// resize edit window!!
+		this.workspace.toggleColumnSize();
 		this.workspace.updateWorkspaceScale();
 		this.workspace.updateLayerListsContainerHeight();
 /*

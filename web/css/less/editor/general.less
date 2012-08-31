@@ -4,6 +4,8 @@
 	
 ***********************************************/
 
+
+
 a:link,
 a:visited,
 a:active
@@ -34,6 +36,16 @@ html
 	overflow:hidden;
 
 	&.small-menus .menu-verbose-title{ display: none }
+
+	&.wide-view
+	{
+		#zeega-action-column{ width: 430px }
+		#zeega-edit-column
+		{
+			width: -webkit-calc(100% - 430px);
+			left:430px;
+		}
+	}
 
 }
 

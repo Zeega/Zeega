@@ -12,6 +12,7 @@
 			this.setElement( $(this.target) );
 
 			var resizeWindow = _.debounce(function(){
+				_this.toggleColumnSize();
 				_this.updateWorkspaceScale();
 				_this.updateLayerListsContainerHeight();
 			}, 750);
@@ -99,6 +100,20 @@
 		{
 			if( $('#zeega-editor-main').hasClass('small-menus')) $('#zeega-editor-main').removeClass('small-menus');
 			else $('#zeega-editor-main').addClass('small-menus');
+		},
+
+		toggleColumnSize : function()
+		{
+			if(window.innerWidth > 1200)
+			{
+				$('#zeega-editor-main').addClass('wide-view');
+				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 430px)')
+			}
+			else
+			{
+				$('#zeega-editor-main').removeClass('wide-view');
+				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 300px)')
+			}
 		},
 
 		updateWorkspaceScale : function()
