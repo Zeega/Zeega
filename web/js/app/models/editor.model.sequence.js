@@ -137,7 +137,7 @@
 		{
 			var frameOrder = this.frames.pluck('id');
 			if(frameOrder.length == 0) frameOrder = [false];
-			this.save('frames',frameOrder);
+			this.save({'frames':frameOrder});
 		},
 
 		duplicateFrame : function( frame )

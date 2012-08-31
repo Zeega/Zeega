@@ -103,6 +103,7 @@
 			this.set( 'attr' , a );
 			if( silent != true ) this.save();
 			this.trigger('update');
+			this.trigger('change');
 		},
 
 		// draws the thumb?
