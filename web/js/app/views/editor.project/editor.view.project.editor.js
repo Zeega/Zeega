@@ -42,27 +42,6 @@
 			this.model.sequences.on('sync',this.onProjectChange, this );
 			this.on('sync',this.onProjectChange, this );
 
-			/*
-			this.$el.find('#project-cover-image').droppable({
-
-				accept : '.database-asset-list',
-				hoverClass : 'workspace-item-hover',
-				tolerance : 'pointer',
-
-				//this happens when you drop a database item onto a frame
-				drop : function( event, ui )
-				{
-					//make sure the dropped item is a valid image
-					var item = zeega.app.draggedItem;
-					if(item.get('layer_type') == 'Image')
-					{
-						ui.draggable.draggable('option','revert',false);
-						_this.saveCoverImage( zeega.app.draggedItem.get('uri') )
-					}
-					
-				}
-			});
-			*/
 		},
 
 		showSaveIndicator : function()
@@ -110,8 +89,6 @@
 			}
 		},
 		
-		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
-		
 		getTemplate : function()
 		{
 			var html = 
@@ -135,13 +112,36 @@
 
 		render : function()
 		{
+			var _this = this;
 			var classes = {
 				options_class : this.model.get('published') ? '': 'disabled',
 				publish_class : this.model.updated || this.model.get('date_updated') != this.model.get('date_published') ? '' : 'disabled',
 				share_class : this.model.get('published') ? '' : 'disabled'
 			}
 
-			this.$el.html( _.template( this.getTemplate(), classes ) );
+			this.$el.html( _.template( this.getTemplate(), _.extend(classes, this.model.toJSON()) ) );
+
+
+			this.$el.find('#project-cover-image').droppable({
+
+				accept : '.database-asset-list',
+				hoverClass : 'workspace-item-hover',
+				tolerance : 'pointer',
+
+				//this happens when you drop a database item onto a frame
+				drop : function( event, ui )
+				{
+					//make sure the dropped item is a valid image
+					var item = zeega.app.draggedItem;
+					if(item.get('layer_type') == 'Image')
+					{
+						ui.draggable.draggable('option','revert',false);
+						_this.saveCoverImage( zeega.app.draggedItem.get('uri') )
+					}
+
+				}
+			});
+
 			return this;
 		},
 
@@ -149,8 +149,13 @@
 			'click #project-share' : 'clickShare',
 			'click #project-publish' : 'clickPublish',
 			'click #project-options' : 'clickSettings',
-			'click #project-preview' : 'clickPreview'
+			'click #project-preview' : 'clickPreview',
+			'click #project-cover-image' : 'clickCoverImage'
 		},
+
+		clickCoverImage : function(){ return false },
+
+		saveCoverImage : function( uri ){ this.model.save({ 'cover_image' : uri }) },
 
 		clickShare : function(e)
 		{
@@ -179,11 +184,11 @@
 		getTemplate : function()
 		{
 			var html = 
-					"<li><a id='project-cover-image' href='#'></a></li>"+
+					"<li><a id='project-cover-image' href='#' style='background:url(<%= cover_image %>);background-size:100% 100%'></a></li>"+
 			
 					"<li><a id='project-options' class='<%= options_class %>' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
 					"<li><a id='project-publish' class='<%= publish_class %>' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
-					"<li><a id='project-share' class='<%= share_class %>' href='#'><div class='menu-verbose-title'>share</div><i class='icon-envelope icon-white'></i></a></li>"+
+					"<li><a id='project-share' class='<%= share_class %>' href='#'><div class='menu-verbose-title'>share</div><i class='icon-gift icon-white'></i></a></li>"+
 					"<li><a id='project-preview' href='#'><div class='menu-verbose-title'>preview</div><i class='icon-play icon-white'></i></a></li>";
 			
 			return html;

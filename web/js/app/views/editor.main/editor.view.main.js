@@ -34,6 +34,9 @@
 			})
 
 			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
+
+			
+
 		},
 
 		events : {
