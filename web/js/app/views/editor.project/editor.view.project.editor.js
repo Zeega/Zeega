@@ -179,6 +179,7 @@
 		getTemplate : function()
 		{
 			var html = 
+					"<li><a id='project-cover-image' href='#'></a></li>"+
 			
 					"<li><a id='project-options' class='<%= options_class %>' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
 					"<li><a id='project-publish' class='<%= publish_class %>' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
