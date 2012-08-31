@@ -178,7 +178,7 @@
 		
 		clickPreview : function(e)
 		{
-			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.previewSequence();
+			if( !$(e.target).closest('a').hasClass('disabled') ) zeega.app.previewSequence();
 			return false;
 		},
 		
