@@ -125,7 +125,8 @@
 			this.$el.find('#project-cover-image').droppable({
 
 				accept : '.database-asset-list',
-				hoverClass : 'workspace-item-hover',
+				//activeClass : 'cover-image-accept',
+				//hoverClass : 'cover-image-hover',
 				tolerance : 'pointer',
 
 				//this happens when you drop a database item onto a frame
