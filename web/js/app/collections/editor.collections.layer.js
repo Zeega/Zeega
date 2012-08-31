@@ -19,6 +19,7 @@
 		{
 			var oldLayer = this.get(oldLayerID);
 			var dupeLayer = oldLayer.clone();
+			console.log('$$		dupe layer', oldLayerID, newLayerID, oldLayer, dupeLayer)
 			dupeLayer.generateNewViews();
 			dupeLayer.set('id', newLayerID );
 			this.add(dupeLayer);

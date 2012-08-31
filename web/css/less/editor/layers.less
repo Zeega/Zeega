@@ -4,50 +4,76 @@
 	
 *******************************/
 
-#layers-list-visual>li
+#zeega-add-item-type{ border-top: 2px solid orangeRed }
+
+.layer-lists-container{ overflow:auto }
+
+.layer-list
 {
-	min-height:25px;
-	background:#555;
-	margin:1px 0;
-	padding: 6px;
-	-webkit-border-radius: 6px;
-	-webkit-box-shadow : inset 3px 3px 3px #666;
+	margin-top:5px;
+	background: url('@{image-folder}/paper-dark.png');
+
+	&>ul
+	{
+		margin:0;
+		list-style: none;
+	}
 }
 
-.layer-icon
+li.layer-list-item
 {
-	width:25px;
-	float:left;
+	padding: 5px 10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	-webkit-transition: background-color .25s linear;
+	margin-bottom:1px;
+	color: #DDD;
+	border-radius:0 2px 2px 0;
+
+	.layer-title
+	{
+		display: inline-block;
+		width: 218px;
+		white-space: nowrap;
+		overflow: hidden;
+		margin-left:5px;
+		font-weight: bold;
+		font-size: 11px;
+	}
+
+	&:hover
+	{
+		background-color:rgba(255,255,255,0.25);
+		-webkit-transition: background-color .25s linear;
+	}
 }
 
-.layer-title
+li.layer-type-link
 {
-	color: #ddd;
-	font-weight: bold;
-	width: 172px;
-	overflow:hidden;
-	float:left;
-	cursor:pointer;
-	white-space : nowrap;
-	text-shadow : 0 1px 1px rgba(25, 25, 25, 0.75);
-	min-height:20px;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-top: 1px solid #222;
+	border-bottom: 1px solid #222;
 }
 
-.layer-drag-handle
+
+
+
+.layer-control-drawer
 {
-	width:40px;
-	float: right;
-	cursor:move;
+	background-color: rgba(0, 0, 0, 0.2);
+	padding: 10px 2px;
+	border-radius: 3px;
+	margin-top: 10px;
+	box-shadow: 0 0 20px #222 inset;
+	display:none;
 }
 
-.copy-to-next
+li.layer-open
 {
-	clear:both;
+	margin:5px 0;
+	.layer-control-drawer{ display:block }
 }
 
-.layer-uber-bar div { padding : 3px }
-.layer-uber-controls, .layer-drag-handle span { float:left }
 
-.standard-layer-controls label {width:100%;}
+
 
 /************* end layer styles ****************/

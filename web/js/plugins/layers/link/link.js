@@ -62,8 +62,6 @@
 
 		onUpdate : function()
 		{
-			console.log('%%		link layer on update')
-			//this.render();
 			this.$el.html( this.getTemplate() );
 			this.onLayerEnter();
 		},
@@ -130,7 +128,6 @@
 		
 		onLayerEnter : function()
 		{
-			console.log ("ONLAYERENTER ______ ADDING RESIZABILITY");
 			var _this = this;
 			this.$el.resizable({
 				stop: function(e,ui)

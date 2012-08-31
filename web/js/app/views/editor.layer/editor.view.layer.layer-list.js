@@ -3,7 +3,7 @@
 	Layer.Views.Controls = Backbone.View.extend({
 		
 		tagName : 'li',
-		className : 'editor-layer',
+		className : 'layer-list-item',
 		
 		initialize : function()
 		{
@@ -193,12 +193,8 @@
 		
 		events : {
 			'click .delete-layer'		: 'delete',
-			'click .layer-title'		: 'expand',
-			'click .layer-icon'			: 'hideShow',
-			'mouseenter .layer-icon'	: 'onLayerIconEnter', 
-			'mouseleave .layer-icon'	: 'onLayerIconLeave', 
-			'mouseenter .delete-layer'	: 'onLayerTrashEnter', 
-			'mouseleave .delete-layer'	: 'onLayerTrashLeave'
+			'click'		: 'expand',
+
 		},
 		
 		// the events end users have access to
@@ -219,60 +215,27 @@
 		{
 			if(this.model.hasControls)
 			{
-				var _this = this;
-				if( $(this.el).find('.layer-content').is(':hidden') )
+				if(this.$el.hasClass('layer-open') )
 				{
-					//show layer controls
-					$(this.el).find('.layer-content')
-						.show('blind',{'direction':'vertical'},function(){
-							_this.model.trigger('editor_controlsOpen');
-							$(this).removeClass('closed');
-					});
+					this.$el.removeClass('layer-open');
+					this.model.trigger('editor_controlsClosed');
 				}
 				else
 				{
-					//hide layer controls
-					$(this.el).find('.layer-content')
-						.hide('blind',{'direction':'vertical'},function(){
-							$(this).addClass('closed');
-							_this.model.trigger('editor_controlsClosed');
-					});
+					var _this = this;
+					$('.layer-open').each(function(){
+						var layerID = $(this).data('id');
+						zeega.app.project.layers.get(layerID).trigger('editor_controlsClosed');
+					})
+					$('.layer-open').removeClass('layer-open');
+					this.$el.addClass('layer-open');
+					this.model.trigger('editor_controlsOpen');
 				}
+
 			}
 			return false;
 		},
 
-		hideShow : function()
-		{
-			//set the visible in editor to the opposite of what it is currently
-			var visible = !this.model.get('visibleineditor');
-			this.model.set({'visibleineditor': visible });
-
-			//change the color of the layer icon so it's apparent on/off
-			if( visible ) $(this.el).find('.asset-type-icon').addClass('orange');
-			else $(this.el).find('.asset-type-icon').removeClass('orange');
-		},
-
-		onLayerIconEnter : function()
-		{
-			$(this.el).find('.asset-type-icon').addClass('zicon-visible')
-		},
-
-		onLayerIconLeave : function()
-		{
-			$(this.el).find('.asset-type-icon').removeClass('zicon-visible')
-		},
-
-		onLayerTrashEnter : function()
-		{
-			$(this.el).find('.delete-layer').addClass('orange zicon-trash-open')
-		},
-
-		onLayerTrashLeave : function()
-		{
-			$(this.el).find('.delete-layer').removeClass('orange zicon-trash-open')
-		},
-		
 		setBaseTemplate : function()
 		{
 			var persist = '';
@@ -297,6 +260,8 @@
 				link_to : linkURL
 			}
 
+			this.$el.addClass('layer-type-'+ this.model.get('type').toLowerCase());
+
 			this.$el.html( _.template( this.getBaseTemplate(), blanks ) )
 		},
 		
@@ -304,27 +269,20 @@
 		{
 			var html =
 
-						'<div class="layer-uber-bar clearfix">'+
-							'<div class="layer-icon">'+
-								'<i class="zicon-<%= type %> orange"></i>'+
-								//'<span class="asset-type-icon orange zicon"></span>'+
-							'</div>'+
-							'<div class="layer-title"><%= title %></div>'+
-							'<div class="layer-uber-controls">'+
-								'<i class="zicon-trash-closed delete-layer"></i>'+
-							'</div>'+
-							'<div class="layer-drag-handle">'+
-								'<i class="zicon-vert-drag"></i>'+
-							'</div>'+
-						'</div>'+
-						'<div class="layer-content inset-tray dark tray closed">'+
-						
-							'<div id="controls" class="clearfix"></div>'+
+				"<div class='layer-super'>"+
+					"<a href='#'><i class='icon-thumbs-up icon-white'></i></a>"+
+					"<span class='layer-title'>  <%= title %></span>"+
+					"<span class='pull-right'>"+
+						"<a class='delete-layer' href='#'><i class='icon-trash icon-white'></i></a>"+
+						"<a class='sort-handle' href='#'><i class='icon-minus icon-white'></i></a>"+
+					"</span>"+
+				"</div>"+
+				"<div class='layer-control-drawer'>"+
+					'<div id="controls" class="clearfix"></div>'+
+					'<div class="default-layer-controls clearfix"></div>'+
+				"</div>";
 
-							'<div class="default-layer-controls clearfix"></div>'+ //standard layer controls
-						'</div>';
-
-						return html;
+				return html;
 		}
 		
 	});

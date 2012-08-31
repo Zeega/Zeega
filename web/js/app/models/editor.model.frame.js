@@ -51,11 +51,11 @@
 				model:this,
 				attributes : {
 					id:'frame-thumb-'+ this.id,
-					'data-id' : this.id,
-					style:'background-image:url('+ this.get('thumbnail_url') +')'
+					'data-id' : this.id
 				}
 			});
-			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
+			this.detailsBar = new Frame.Views.DetailBar({model:this});
+			this.visualWorkspace = new Frame.Views.VisualWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
 		},
@@ -129,31 +129,34 @@
 
 			if( newLayer )
 			{
-				newLayer.save( {attr: _.extend(newLayer.get('attr'),attributes) }, {
-					success : function()
-					{
-						_this.layers.push( newLayer );
-						zeega.app.project.layers.add( newLayer );
-						newLayer.trigger('sync');
-					}
-				})
+				newLayer.on('sync', this.onNewLayerSave, this );
+				newLayer.save({ attr : _.extend(newLayer.get('attr'),attributes) })
 				return newLayer;
 			}
 			else console.log('!!		no such layer type!');
 		},
 
+		onNewLayerSave : function( layer )
+		{
+			layer.off('sync', this.onNewLayerSave);
+			this.layers.push( layer );
+			zeega.app.project.layers.add( layer );
+		},
+
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
-			this.editorWorkspace.renderToEditor();
-			this.editorLinkLayerList.renderToEditor();
-			this.editorLayerList.renderToEditor();
+			this.detailsBar.render();
+			this.visualWorkspace.render();
+			this.editorLinkLayerList.render();
+			this.editorLayerList.render();
 		},
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
-			this.editorWorkspace.removeFromEditor()
-			this.editorLinkLayerList.removeFromEditor();
+			this.detailsBar.onExit();
+			this.visualWorkspace.unrender();
+			//this.editorLinkLayerList.removeFromEditor();
 			this.editorLayerList.removeFromEditor();
 		},
 		
@@ -182,7 +185,7 @@
 				var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			
 				worker.addEventListener('message', function(e) {
-					console.log(e)
+					//console.log(e)
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
@@ -198,18 +201,7 @@
 				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
-		},
-		
-		validate : function( attrs )
-		{
-
-			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
-			{
-				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');
-				return 'layer array update error!';
-			}
 		}
-	
 
 	});
 

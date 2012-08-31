@@ -86,6 +86,7 @@ require(
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
 	'order!app/views/editor.common/editor.view.common.leaflet-map',
 	'order!app/views/editor.common/editor.view.common.tag-display-edit',
+	'order!app/views/editor.main/editor.view.main',
 	
 	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
 	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
