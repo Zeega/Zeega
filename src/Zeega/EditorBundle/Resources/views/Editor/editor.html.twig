@@ -78,11 +78,26 @@
 				<div class='database-tray'>
 					<div class='menu-bar menu-dark clearfix' >
 						<ul class='pull-left'>
-							<li><a href='#'><div class='menu-verbose-title'>media types</div><i class='icon-picture icon-white'></i></a></li>
+							<li>
+								<ul class='menu-dropdown'>
+									<a href='#' class='menu-toggle'><div class='menu-verbose-title'>filters</div><i class='icon-filter icon-white'></i></a>
+									<ul id='filter-action-menu'>
+										<li><a href="#" data-filter='all'><i class='icon-globe'></i> All</a></li>
+										<li><a href="#" data-filter='audio'><i class='icon-bullhorn'></i> Audio</a></li>
+										<li><a href="#" data-filter='image'><i class='icon-picture'></i> Image</a></li>
+										<li><a href="#" data-filter='video'><i class='icon-film'></i> Video</a></li>
+										<li class='divider'></li>
+										<li><a href="#" data-filter='reset'><i class='icon-backward'></i> Clear Filters</a></li>
+
+									</ul>
+								</ul>
+
+							</li>
 						</ul>
-						<input class='pull-right' type='text' placeholder='search'/>
+						<input id='search-input' class='pull-right' type='text' placeholder='search'/>
 					</div>
 
+					<div id='database-flash' class='alert alert-info hide'></div>
 					<div id='zeega-item-database-list'></div>
 
 				</div><!-- database tray -->

@@ -16,98 +16,82 @@
 		}
 	});
 
+	Items.SearchModel = Backbone.Model.extend({
+		defaults : {
+			query : '',
+			page : 0,
+			content : '',
+			collection : '',
+			user : '1',
+			site : sessionStorage.getItem('siteid')
+		},
+
+		initialize : function(){ this.on('change', this.onChange, this ) },
+
+// this.items.search.reset().set({q:'foo'})
+		
+		onChange : function(){ this.trigger('search') },
+
+		reset : function( options )
+		{
+			var options = _.extend({silent:true}, options);
+			this.set(this.defaults,options);
+			return this;
+		}
+	})
+
 
 	Items.Collection = Backbone.Collection.extend({
-
 
 		model: Items.Model,
 		page : 0,
 		totalItemsCount : 0,
-		
-		_views : [],
-		target : $('#database-item-list'),
-		
-		searchObject : {},
-		
-		base : function()
-		{
-			return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page
-		},
-		
+
 		url: function()
 		{
-			var url = this.base();
-			if( !_.isUndefined(this.searchObject.query) ) url += '&q=' + this.searchObject.query;
-			if( !_.isUndefined(this.searchObject.contentType) ) url += '&content=' + this.searchObject.contentType;
-			if( !_.isUndefined(this.searchObject.collectionID) && this.searchObject.collectionID != 'all' )
-			{
-			    url += '&collection=' + this.searchObject.collectionID;
-			    // hammering - collection filtering should not be done by user_id nor site_id
-			    url = url.replace("&user=-1","");
-			    url = url.replace("&site="+sessionStorage.getItem('siteid'),"");
-			}
+			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page;
+			var queryTemplate = '<% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
+			var url = base + _.template( queryTemplate, this.search.toJSON() );
+
+			console.log('query string:', url, this.search)
 			return url;
 		},
 
 		initialize : function()
 		{
 			this.itemCollectionView = new Items.Views.ItemTrayCollectionView({collection:this});
-			//this.itemCollectionView.render();
-			console.log('$$		items', this)
+
+			this.search = new Items.SearchModel();
+			this.search.on('search', this.onSearch, this );
+			this.on('reset', this.onSearchSuccess, this);
+
+//this.search.reset().set({query:'new'});
 
 			this.on('preview_item',this.previewItem,this); // move this
 		},
 		
-		search : function(search,reset)
+		onSearch : function()
 		{
-			var _this = this;
-			$(this.el).fadeTo(1000,0.5);
-			$(this.el).spin('small');
-			
-			this.setSearch(search,reset);
-			this.fetch({
-				success : function(collection,response)
-				{
-					_this.target.fadeTo(1000,1).spin(false).empty();
-					_this.renderCollection();
-				}
-			})
+			console.log('##		on search', this)
+			this.fetch();
+		},
+
+		onSearchSuccess : function(collection)
+		{
+			console.log('##		on search success', this)
+
+			//this.target.fadeTo(1000,1).spin(false).empty();
+			//this.renderCollection();
 		},
 		
+		refresh : function(){ this.fetch() },
+
 		///// move this ////////////
 		previewItem : function(itemID)
 		{
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
 			$('body').append(viewer.render().el);
 			viewer.renderItemView();
-		},
-		
-		renderCollection : function()
-		{
-			var _this = this;
-			_.each( _.toArray(this), function(itemModel){
-				var itemView = new Items.Views.List({model:itemModel});
-				_this._views.push( itemView );
-				_this.target.append( itemView.render().el );
-			})
-		},
-		
-		refresh : function()
-		{
-			var _this = this;
-			this.fetch({
-				success : function(collection,response)
-				{
-					_this.target.empty();
-					_this.renderCollection();
-				}
-			})
-		},
-		
-		setSearch : function(search, reset)
-		{
-			if(reset) this.searchObject = search;
-			else _.extend(this.searchObject,search);
 		},
 
 		parse : function(response)

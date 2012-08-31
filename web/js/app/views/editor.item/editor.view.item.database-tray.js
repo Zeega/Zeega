@@ -6,12 +6,13 @@
 
 		initialize : function()
 		{
-			this.setElement($(this.target));
+			this.collection.on('reset', this.render, this);
 		},
 
 		render : function()
 		{
 			var _this = this;
+			this.setElement($(this.target));
 			this.$el.html('<ul class="list">');
 			this.collection.each(function(item){
 				_this.$el.find('.list').append( item.databaseView.render().el );

@@ -51,13 +51,15 @@ this.zeega = {
 	init : function()
 	{
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
-		
 
 		this.activateWorkspace();
 
-		this.loadModules();
-		this.isLoaded = true
-		//this.initStartHelp(); //broken. fix!
+		this.initDatabase();
+		this.initProject();
+
+		this.isLoaded = true;
+		
+		this.startEditor();
 	},
 
 	activateWorkspace : function()
@@ -65,19 +67,23 @@ this.zeega = {
 		var Main = zeega.module('main');
 		this.workspace = new Main.Views.Framework();
 	},
-	
-	loadModules : function()
+
+	initDatabase : function()
 	{
-		var _this = this;
-		var Project = zeega.module("project");
 		var Items = zeega.module("items");
 		
-		console.log($.parseJSON(projectJSON))
+		console.log('!!		database items: ',$.parseJSON(projectJSON))
 		
 		var itemsBS = jQuery.parseJSON(itemsJSON);
-		//this.totalItemsCount = itemsBS.items_count;
-		this.itemCollection = new Items.Collection(itemsBS.items);
-		this.itemCollection.itemCollectionView.render();
+		this.totalItemsCount = itemsBS.items_count;
+		this.items = new Items.Collection(itemsBS.items);
+		
+		this.items.itemCollectionView.render();
+	},
+
+	initProject : function()
+	{
+		var Project = zeega.module("project");
 		
 		// initializes project
 		this.project = new Project.Model($.parseJSON(projectJSON).project);
@@ -86,9 +92,7 @@ this.zeega = {
 		this.project.loadProject();
 		
 		this.setProjectListeners();
-		console.log("project data ", this.project);
-
-		this.startEditor();
+		console.log("!!		project initialized: ", this.project);
 	},
 	
 	// listens to things saving to update the button states
@@ -197,9 +201,9 @@ this.zeega = {
 
 	},
 
-	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.itemCollection.search(search,reset) },
-	refreshDatabase : function(){ this.itemCollection.refresh() },
-	
+	searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.items.search(search,reset) },
+	refreshDatabase : function(){ this.items.refresh() },
+
 	returnToFrame : function()
 	{
 		console.log('~~		return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
