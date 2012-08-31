@@ -397,6 +397,7 @@ this.zeegaPlayer = {
 			var layersToRender = _.without( this.get('layers'), this.commonLayers[fromFrameID] );
 
 			// draw and update layer media
+			console.log('$$		zeega player', zeegaPlayer.app)
 			_.each( this.get('layers'), function(layerID,z){
 				var layer = _this.layers.get(layerID)
 				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );

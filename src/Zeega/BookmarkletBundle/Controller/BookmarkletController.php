@@ -61,57 +61,103 @@ class BookmarkletController extends Controller
 		$message = "Parser did not respond";
 		if(isset($parserResponse))
 		{
-			
 			$isUrlValid = $parserResponse["request"]["success"];
 			$isUrlCollection = $parserResponse["request"]["is_set"];
 			$message = $parserResponse["request"]["message"];
 			$items = $parserResponse["items"];
-		
 			if($isUrlValid && count($items) > 0)
-			{
+			{	
 				$parsedItem = $items[0];
 				
 				// check if the item exists on the database	
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user_id"=>$user->getId(),"attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
-				
 				if(isset($item)) $update = 1;
 				else $update =0;
-				
-				
-				
-				
-				if($parsedItem["layer_type"]=="Dropbox"&&!isset($item)&&$parsedItem["child_items_count"]==0){
-					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', array(
-						'displayname' => $user->getDisplayname(),
-						'widget_id'=>$widgetId,
-						'item'=>json_encode($parsedItem), 
-						'update'=>$update,
-						'child_items_count'=>$parsedItem["child_items_count"],
-					));	
+				// if Dropbox and no items found
+				if($parsedItem["archive"]=="Dropbox"&&!isset($item)&&$parsedItem["child_items_count"]==0){
+					return $this->render(
+						'ZeegaBookmarkletBundle:Bookmarklet:dropboxwelcome.widget.html.twig', 
+						array(
+							'displayname' => $user->getDisplayname(),
+							'widget_id'=>$widgetId,
+							'item'=>json_encode($parsedItem), 
+							'update'=>$update,
+							'child_items_count'=>$parsedItem["child_items_count"],
+							'archive'=>$parsedItem["archive"],
+						)
+					);	
 				}
-				elseif($parsedItem["layer_type"]!="Dropbox"&&$update){
-							return $this->render('ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', array(
+				if($parsedItem["archive"]=="Facebook"){
+					if($parsedItem["child_items_count"]==-1){ // no access token.  overloading child_items_count is a hack.  Find cleaner way soon.
+						//header('X-Frame-Options: Allow'); 
+						$requirePath = __DIR__ . '/../../../../vendor/facebook/facebook.php';
+						require_once $requirePath;
+						$facebook = new \Facebook(array(
+						  'appId'  => '459848834048078',
+						  'secret' => 'f5b344b91bff03ace4df454e35fca4e4',
+						));
+						$loginUrlParams = array(
+						'scope'   => 'user_photos,friends_photos',
+						'display' => 'popup'
+						);
+						$loginUrl = $facebook->getLoginUrl($loginUrlParams);
+						return $this->render(
+							'ZeegaBookmarkletBundle:Bookmarklet:facebookWelcome.widget.html.twig', 
+							array(
 								'displayname' => $user->getDisplayname(),
 								'widget_id'=>$widgetId,
-								'item'=>$item, 
+								'item'=>json_encode($parsedItem), 
 								'update'=>$update,
-							));	
+								'archive'=>$parsedItem["archive"],
+								'child_items_count'=>$parsedItem["child_items_count"],
+								'login_url' => $loginUrl,
+							)
+						);	
+					}else{ // access token
+						return $this->render(
+							'ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', 
+							array(
+								'displayname' => $user->getDisplayname(),
+								'widget_id'=>$widgetId,
+								'item'=>json_encode($parsedItem), 
+								'update'=>$update,
+								'archive'=>$parsedItem["archive"],
+								'thumbnail_url'=>$parsedItem["thumbnail_url"],	
+								'child_items_count'=>$parsedItem["child_items_count"],
+							)
+						);	
+					}
 				}
-				else{
-					return $this->render('ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', array(
-						'displayname' => $user->getDisplayname(),
-						'widget_id'=>$widgetId,
-						'item'=>json_encode($parsedItem), 
-						'update'=>$update,
-						'archive'=>$parsedItem["layer_type"],
-						'thumbnail_url'=>$parsedItem["thumbnail_url"],
-						'child_items_count'=>$parsedItem["child_items_count"],
-					));						
+				// if Dropbox and duplicate items found
+				elseif($parsedItem["archive"]!="Dropbox"&&$update){
+					return $this->render(
+						'ZeegaBookmarkletBundle:Bookmarklet:duplicate.widget.html.twig', 
+						array(
+							'displayname' => $user->getDisplayname(),
+							'widget_id'=>$widgetId,
+							'item'=>$item, 
+							'update'=>$update,
+							'archive'=>$parsedItem["archive"],
+						)
+					);	
 				}
-
+				// for all other cases
+				else 
+				{
+					return $this->render(
+						'ZeegaBookmarkletBundle:Bookmarklet:widget.html.twig', 
+						array(
+							'displayname' => $user->getDisplayname(),
+							'widget_id'=>$widgetId,
+							'item'=>json_encode($parsedItem), 
+							'update'=>$update,
+							'archive'=>$parsedItem["archive"],
+							'thumbnail_url'=>$parsedItem["thumbnail_url"],
+							'child_items_count'=>$parsedItem["child_items_count"],
+						)
+					);						
+				}
 			}
-	
-	
 		}
 		return $this->render('ZeegaBookmarkletBundle:Bookmarklet:fail.widget.html.twig', array(
 			'displayname' => $user->getDisplayname(),
@@ -119,6 +165,7 @@ class BookmarkletController extends Controller
 			'item'=>json_encode(array()), 
 			'urlmessage' => $message,
 			'url'=> $itemUrl,
+			'archive'=>"",
 		));
 	}	
 }

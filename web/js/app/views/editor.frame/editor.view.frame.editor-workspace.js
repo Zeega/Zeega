@@ -79,6 +79,18 @@ the frame's layers. It also includes common frame functions like adding sequence
 			} //busy
 			return false;
 		},
+
+		showConnectionConfirm : function()
+		{
+			console.log('%%		show connection confirm')
+			this.hold.off('sync', this.showConnectionConfirm);
+			this.$el.find('.connection-confirm').show();
+		},
+
+		hideConnectionConfirm : function()
+		{
+			this.$el.find('.connection-confirm').hide()
+		},
 		
 		/*
 			make a connection to a new sequence

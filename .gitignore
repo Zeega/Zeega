@@ -23,3 +23,9 @@ app/phpunit.xml
 /web/js_min/*
 *.sublime-project
 *.sublime-workspace
+<<<<<<< HEAD
+web/images/
+web/bugs/
+web/apc.php
+lib.zeega.org/
+*.sh

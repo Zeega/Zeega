@@ -32,6 +32,7 @@
 		
 		initialize: function(attributes,options)
 		{
+			console.log('$$		init layer', attributes, options, this)
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
@@ -157,6 +158,7 @@
 		//remove formatting from titles (esp important for text layer!)
 		validate : function(attrs)
 		{
+			if( !_.isNumber(attrs.id) ) attrs.id = parseInt( attrs.id);
 			if(attrs.attr.model != null ) attrs.attr.model = null;
 			if( attrs.title ) attrs.title = attrs.title.replace(/(<([^>]+)>)/ig, "");
 		}
