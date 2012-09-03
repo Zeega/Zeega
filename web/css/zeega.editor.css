@@ -1054,7 +1054,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-project-frame-list{height:75px;background:rgba(0, 0, 0, 0.2);position:relative;}
 #zeega-project-frame-list ul{margin:0;list-style:none;}
 #zeega-project-frame-list>ul{white-space:nowrap;overflow:auto;height:100%;}
-#zeega-project-frame-list>ul>li{display:inline-block;position:relative;height:60px;width:80px;padding:5px;}
+#zeega-project-frame-list>ul>li{display:inline-block;position:relative;height:60px;width:80px;padding:5px;background-size:100% 100%;}
 #zeega-project-frame-list>ul>li.active-frame{background-color:#777777;}
 #zeega-project-frame-list>ul>li:first-child{margin-left:5px;}
 #zeega-project-frame-list>ul>li>a{display:block;width:100%;height:100%;background-color:black;}
