@@ -166,7 +166,7 @@
 ; ---------------------------------------------
 
 [RabbitMqBundle]
-	git=http://github.com/videlalvaro/RabbitMqBundle.git
+	git=git://github.com/luisbrandao/RabbitMqBundle.git
 	target=/bundles/OldSound/RabbitMqBundle
 
 [php-amqplib]
