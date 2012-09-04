@@ -24,7 +24,7 @@ class QueueingService
         return $id;
         */
         $msg = array("id" => uniqid(),  "task" => $task, "args" => $taskArguments);
-        $id = $this->rabbitmq->publish(json_encode($msg), 'celery');
+        $id = $this->rabbitmq->publish(json_encode($msg), 'celery',  array('content_type' => 'application/json', 'delivery_mode' => 2));
         return $id;
     }
 }

@@ -17,7 +17,7 @@ class CeleryController extends Controller
         if(False !== $isQueueingEnabled)
         {
             $queue = $this->get('zeega_queue');
-            $taskId = $queue->enqueueTask("tasks.add",array(1,2));
+            $taskId = $queue->enqueueTask("zeega.tasks.add",array(1,2));
             return new Response($taskId);
         }
     }
