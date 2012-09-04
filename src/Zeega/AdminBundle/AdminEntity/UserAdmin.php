@@ -30,7 +30,8 @@ class UserAdmin extends Admin
     {
         $datagridMapper
             ->add('username')
-
+            ->add('locked')
+            ->add('display_name')
         ;
     }
     
