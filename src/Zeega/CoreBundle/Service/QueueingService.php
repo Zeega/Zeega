@@ -15,7 +15,7 @@ class QueueingService
         $this->rabbitmq = $rabbitmq;
     }
 
-    public function enqueueTask($task, $taskArguments)
+    public function enqueueTask($task, $taskArguments, $taskIdPrefix = null)
 	{
         /*
 	    $id = uniqid();
@@ -23,8 +23,11 @@ class QueueingService
         $this->get('old_sound_rabbit_mq.celery_task_producer')->publish(json_encode($msg), 'celery');
         return $id;
         */
-        $msg = array("id" => uniqid(),  "task" => $task, "args" => $taskArguments);
-        $id = $this->rabbitmq->publish(json_encode($msg), 'celery',  array('content_type' => 'application/json', 'delivery_mode' => 2));
-        return $id;
+        $taskId = $taskIdPrefix . uniqid();
+        
+        $msg = array("id" => $taskId,  "task" => $task, "args" => $taskArguments);
+        $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), 'celery',  array('content_type' => 'application/json', 'delivery_mode' => 2));
+        
+        return $taskId;
     }
 }
