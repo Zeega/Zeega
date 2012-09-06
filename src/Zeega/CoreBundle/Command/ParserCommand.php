@@ -25,6 +25,7 @@ class ParserCommand extends ContainerAwareCommand
              ->setDescription('Bulk data parser')
              ->addOption('url', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
+             ->addOption('task_id', null, InputOption::VALUE_REQUIRED, 'Task id')
              ->addOption('force', null, InputOption::VALUE_NONE, 'Set this parameter to execute this action')
              ->setHelp("Help");
     }
@@ -33,7 +34,8 @@ class ParserCommand extends ContainerAwareCommand
     {
         $url = $input->getOption('url');
         $userId = $input->getOption('user');
-
+        $taskId = $input->getOption('task_id');
+        
         if(null === $url || null === $userId)
         {
             $output->writeln('');
@@ -48,7 +50,10 @@ class ParserCommand extends ContainerAwareCommand
             $parserResponse = $parser->load($url, $loadChildren, $userId);
             if(isset($parserResponse["items"]))
             {
-                $output->writeln(ResponseHelper::serializeEntityToJson($parserResponse["items"]));    
+                $items = ResponseHelper::serializeEntityToJson($parserResponse["items"]);
+                $filePath = "$taskId.json";
+                file_put_contents($filePath, $items);
+                $output->writeln($filePath);    
             }
         }
     }
