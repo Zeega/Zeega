@@ -32,8 +32,7 @@
 		
 		initialize: function(attributes,options)
 		{
-			console.log('$$		init layer', attributes, options, this, this.defaultAttributes)
-			//this.defaultAttributes = this.defaultAttributes;
+
 			if( this.isNew() ) this.set('attr', this.defaultAttributes );
 			if(attributes && attributes.type)
 			{
@@ -43,8 +42,6 @@
 			{
 				this.set('attr', _.defaults(attributes.attr,this.defaultAttributes))
 			}
-
-
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
