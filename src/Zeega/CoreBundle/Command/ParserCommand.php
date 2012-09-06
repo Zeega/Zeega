@@ -36,7 +36,7 @@ class ParserCommand extends ContainerAwareCommand
         $userId = $input->getOption('user');
         $taskId = $input->getOption('task_id');
         
-        if(null === $url || null === $userId)
+        if(null === $url || null === $userId || null === $taskId)
         {
             $output->writeln('');
             $output->writeln('Please run the operation with the --url and --userId options to execute');
@@ -53,7 +53,7 @@ class ParserCommand extends ContainerAwareCommand
                 $items = ResponseHelper::serializeEntityToJson($parserResponse["items"]);
                 $filePath = "$taskId.json";
                 file_put_contents($filePath, $items);
-                $output->writeln($filePath);    
+                $output->write($filePath);    
             }
         }
     }
