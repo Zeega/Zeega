@@ -193,7 +193,7 @@
 		
 		events : {
 			'click .delete-layer'		: 'delete',
-			'click'		: 'expand',
+			'click .layer-super'		: 'expand',
 
 		},
 		

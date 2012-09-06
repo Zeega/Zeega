@@ -126,11 +126,11 @@
 			var attributes = a || {};
 			var Layer = zeega.module('layer');
 			var newLayer = new Layer[type]();
-
+			console.log('nn		new Layer', newLayer, type, a, attributes, new Layer[type]() )
 			if( newLayer )
 			{
 				newLayer.on('sync', this.onNewLayerSave, this );
-				newLayer.save({ attr : _.extend(newLayer.get('attr'),attributes) })
+				newLayer.save({ attr : _.extend({},newLayer.get('attr'),attributes) })
 				return newLayer;
 			}
 			else console.log('!!		no such layer type!');

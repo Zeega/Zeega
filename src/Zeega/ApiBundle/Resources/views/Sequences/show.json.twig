@@ -5,11 +5,13 @@
 	"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
 	"frames" : 
 	[
-	{% for frame in sequence_frames -%}	
+	{%- if sequence_frames is defined -%}
+        {%- for frame in sequence_frames -%}	
 		{{frame.id}}
 	{%- if loop.index0 < sequence_frames|length - 1 -%}
 	,
-	{%- endif -%}
+        {%- endif -%}
 	{% endfor %}
+        {%- endif -%}
 	]
 }

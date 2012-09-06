@@ -67,8 +67,7 @@ class SequencesController extends Controller
     	if($request->request->get('title'))$sequence->setTitle($request->request->get('title'));
     	if($request->request->get('attr'))$sequence->setAttr($request->request->get('attr'));
         if($request->request->get('persistent_layers'))$sequence->setPersistentLayers($request->request->get('persistent_layers'));
-    	$em->flush();
-
+    	
         if($request->request->get('frames'))
         {
             $frames = $request->request->get('frames');
@@ -81,7 +80,6 @@ class SequencesController extends Controller
                 $em->persist($frame);
                 $i++;
             }
-            $em->flush();
         }
         
 		$em->persist($sequence);

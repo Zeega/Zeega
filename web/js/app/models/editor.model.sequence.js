@@ -31,8 +31,9 @@
 			var _this = this;
 			var Frame = zeega.module('frame');
 			var frameData = this.get('frames');
-			var frames = _.map( this.get('frames'), function(frame){
-				var frameModel = new Frame.Model(frame);
+			var frames = _.map( this.get('frames'), function(frameID){
+				var frameModel = new Frame.Model();
+				frameModel.id = frameID;
 				frameModel.sequenceID = _this.id;
 				frameModel.complete();
 				return frameModel;
@@ -51,7 +52,6 @@
 			})
 			var col = Backbone.Collection.extend();
 			this.persistentLayers = new col( persistentLayers );
-
 			// make frame collection
 			var frameArray = this.get('frames').map(function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);

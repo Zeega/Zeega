@@ -259,7 +259,7 @@ class ProjectsController extends Controller
 
         $layers = array();
 
-        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames' =>$frames, 'layers' =>$layers));
         return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
     }
     
