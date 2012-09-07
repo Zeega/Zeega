@@ -6,17 +6,16 @@ imports:
 framework:
     #esi:             ~
     secret:          %secret%
-    charset:         UTF-8
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     translator: { fallback: en }
+    default_locale: %locale%
+    trust_proxy_headers: false # change if the application is behind a proxy
     session:
         domain: ~
-        default_locale: %locale%
-        auto_start:     true
         lifetime:       72000
         storage_id:     session.storage.pdo
 
@@ -49,6 +48,7 @@ twig:
 
 # Assetic Configuration
 assetic:
+    bundles: []
     debug:          %kernel.debug%
     use_controller: false
     filters:
@@ -104,6 +104,7 @@ sonata_block:
 
 # Swiftmailer Configuration
 swiftmailer:
+    spool: { type: memory }
     transport: %mailer_transport%
     host:      %mailer_host%
     username:  %mailer_user%
