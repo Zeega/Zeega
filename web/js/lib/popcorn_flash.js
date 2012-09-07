@@ -7110,9 +7110,9 @@ document.addEventListener( "click", function( event ) {
         // automatically clears the word based on time
         setTimeout( function() {
 
-		      options.word.style.opacity = 0;
+          options.word.style.opacity = 0;
         // ensures at least one second exists, because the fade animation is 1 second
-		    }, ( ( (options.end - options.start) - 1 ) || 1 ) * 1000 );
+        }, ( ( (options.end - options.start) - 1 ) || 1 ) * 1000 );
       },
       end: function( event, options ){
 
@@ -9572,7 +9572,7 @@ onYouTubePlayerReady = function( containerId ) {
   onYouTubePlayerReady[ containerId ] && onYouTubePlayerReady[ containerId ]();
 };
 
-stateChangeEventHandler = new Array();
+stateChangeEventHandler = {};
 onErrorEventHandler  = new Array();
 
 Popcorn.player( "youtube", {
@@ -9592,10 +9592,16 @@ Popcorn.player( "youtube", {
         lastVolume = 0;
 
     container.id = media.id + Popcorn.guid();
-	youtubeId = Popcorn.guid();
-	media.youtubeId=Popcorn.guid();
+  youtubeId = Popcorn.guid();
+
+ var guid = '';
+ _.each(Popcorn.guid().toString().split(''), function(num){
+    guid += 'abcdefghijklmnopqrstuvwxyz'[num]
+ })
+  media.youtubeId = guid;//Math.floor( Math.random()*1000).toString(16);
+  
     media.appendChild( container );
-	media.canPlay=0;
+  media.canPlay=0;
     var youtubeInit = function() {
 
       var flashvars,
@@ -9606,75 +9612,75 @@ Popcorn.player( "youtube", {
           height,
           query;
           canPlay=0;
-		
+    
       // expose a callback to this scope, that is called from the global callback youtube calls
       onYouTubePlayerReady[ container.id ] = function() {
-		
+    
         media.youtubeObject = document.getElementById( container.id );
 
         // more youtube callback nonsense
        stateChangeEventHandler[media.youtubeId] = function( state ) {
-	
-		// console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
+  
+    // console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
           // playing is state 1
           // paused is state 2
           
           
           if ( state === 1&&media.canPlay==0) {
-          	
-          	media.canPlay=1;
-          	media.pause();
-          	media.readyState = 4;
-          	media.duration = media.youtubeObject.getDuration();
-			
-			media.dispatchEvent( "canplaythrough" );
-			media.dispatchEvent( "load" );
-			
-			media.dispatchEvent( "durationchange" );
-			//volumeupdate();
-	
-			media.dispatchEvent( "loadeddata" );
+            
+            media.canPlay=1;
+            media.pause();
+            media.readyState = 4;
+            media.duration = media.youtubeObject.getDuration();
+      
+      media.dispatchEvent( "canplaythrough" );
+      media.dispatchEvent( "load" );
+      
+      media.dispatchEvent( "durationchange" );
+      //volumeupdate();
+  
+      media.dispatchEvent( "loadeddata" );
           
           } else if(state===1){
-		
+    
             media.paused && media.play();
           // youtube fires paused events while seeking
           // this is the only way to get seeking events
           } else if ( state === 2 ) {
-			
+      
             // silly logic forced on me by the youtube API
             // calling youtube.seekTo triggers multiple events
             // with the second events getCurrentTime being the old time
             if ( seeking && seekTime === currentTime && Math.abs(parseFloat(seekTime) - parseFloat(media.youtubeObject.getCurrentTime()))>2 ) {
 
-              	media.youtubeObject.seekTo( currentTime );
+                media.youtubeObject.seekTo( currentTime );
               
               return;
             }
             else if(seeking && seekTime === currentTime && Math.abs(parseFloat(seekTime) - parseFloat(media.youtubeObject.getCurrentTime()))<2 ) {
    
-            	seeking=false;
-            	delay=true;	
-            	currentTime = media.youtubeObject.getCurrentTime();
-				media.dispatchEvent( "timeupdate" );
-				!media.paused && media.pause();
-				return
+              seeking=false;
+              delay=true; 
+              currentTime = media.youtubeObject.getCurrentTime();
+        media.dispatchEvent( "timeupdate" );
+        !media.paused && media.pause();
+        return
             }
             
             if(delay){
-            	delay=false;
-            	return;
-            	}
+              delay=false;
+              return;
+              }
             else{
-            	
-				currentTime = media.youtubeObject.getCurrentTime();
-				media.dispatchEvent( "timeupdate" );
-				!media.paused && media.pause();
-				console.log('setting the volume');
-            	console.log(options.volume);
-				media.youtubeObject.setVolume(options.volume);
+              
+        currentTime = media.youtubeObject.getCurrentTime();
+        media.dispatchEvent( "timeupdate" );
+        !media.paused && media.pause();
+        //console.log('setting the volume');
+              //console.log(options.volume);
+        media.youtubeObject.setVolume(options.volume);
             }
-				
+        
           }
         };
 
@@ -9683,9 +9689,9 @@ Popcorn.player( "youtube", {
             media.dispatchEvent( "error" );
           }
         };
-
+        var fxnStr = "stateChangeEventHandler."+ media.youtubeId;
         // youtube requires callbacks to be a string to a function path from the global scope
-        media.youtubeObject.addEventListener( "onStateChange", "stateChangeEventHandler["+ media.youtubeId+"]" );
+        media.youtubeObject.addEventListener( "onStateChange", fxnStr );
 
         media.youtubeObject.addEventListener( "onError", "onErrorEventHandler[" + media.youtubeId+']');
 
@@ -9693,15 +9699,15 @@ Popcorn.player( "youtube", {
 
           if ( !media.paused ) {
 
-            currentTime = media.youtubeObject.getCurrentTime();
+            if( media.youtubeObject.getCurrentTime) currentTime = media.youtubeObject.getCurrentTime();
             media.dispatchEvent( "timeupdate" );
             setTimeout( timeupdate, 10 );
           }
         };
 
         var volumeupdate = function() {
-	
-		if(media&&media.youtubeObject&&media.youtubeObject.isMuted()){	
+  
+    if(media&&media.youtubeObject&&media.youtubeObject.isMuted()){  
           if ( lastMuted !== media.youtubeObject.isMuted() ) {
 
             lastMuted = media.youtubeObject.isMuted();
@@ -9741,7 +9747,7 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "currentTime", {
           set: function( val ) {
-			if(val!=0||options.cue_in==0){
+      if(val!=0||options.cue_in==0){
             // make sure val is a number
             currentTime = seekTime = +val;
             seeking = true;
@@ -9750,7 +9756,7 @@ Popcorn.player( "youtube", {
             media.youtubeObject.seekTo( currentTime );
             }
             else if(val==0&&options.cue_in==0){
-            	 media.dispatchEvent( "timeupdate" );
+               media.dispatchEvent( "timeupdate" );
             }
             return currentTime;
           },
@@ -9787,41 +9793,41 @@ Popcorn.player( "youtube", {
 
         Popcorn.player.defineProperty( media, "volume", {
           set: function( val ) {
-			console.log(media.youtubeObject.getVolume());
-			console.log(val);
-			
-            if ( media.youtubeObject.getVolume() / 100 !== val ) {
-
-              media.youtubeObject.setVolume( val * 100 );
-              console.log(val*100);
-              lastVolume = media.youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
-            }
-
+      //console.log(media.youtubeObject.getVolume());
+      //console.log(val);
+      if( media.youtubeObject.getVolume){
+        if ( media.youtubeObject.getVolume() / 100 !== val ) {
+  
+          media.youtubeObject.setVolume( val * 100 );
+          //console.log(val*100);
+          lastVolume = media.youtubeObject.getVolume();
+          media.dispatchEvent( "volumechange" );
+        }
+      }
             return media.youtubeObject.getVolume() / 100;
           },
           get: function() {
 
-            return media.youtubeObject.getVolume() / 100;
+              if( media.youtubeObject.getVolume) return media.youtubeObject.getVolume() / 100;
           }
         });
-		
-		media.youtubeObject.loadVideoById(src,options.cue_in);
+    
+    media.youtubeObject.loadVideoById(src,options.cue_in);
         
       };
 
       options.controls = +options.controls === 0 || +options.controls === 1 ? options.controls : 1;
       options.annotations = +options.annotations === 1 || +options.annotations === 3 ? options.annotations : 1;
-	options.cue_in=options.cue_in||0
-	options.volume=options.volume||1
+  options.cue_in=options.cue_in||0
+  options.volume=options.volume||1
      
      flashvars = {
         playerapiid: container.id
       };
 
       params = {
-       	wmode: "opaque", 
-       	disablekb: "1" ,
+        wmode: "opaque", 
+        disablekb: "1" ,
         allowScriptAccess: "always"
       };
 
@@ -9835,11 +9841,11 @@ Popcorn.player( "youtube", {
       // setting youtube player's height and width, default to 560 x 315
       width = media.style.width ? ""+media.offsetWidth : "560";
       height = media.style.height ? ""+media.offsetHeight : "315";
-		console.log(youtubeId);
+    //console.log(youtubeId);
       swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&version=3&key=AI39si7oX_eCGjrxs2lil28MMQdXn-ZWhzku8fGsRVhju-pziYgmI3EOt0o4GmEl00vGXsA_OGGEKwX-xAM0a5Gbsr8zgrGpyg&playerapiid="+container.id, 
-				   container.id, '100%', '100%', "8", null, flashvars, params, attributes);
-    console.log(container.id);
-    	
+           container.id, '100%', '100%', "8", null, flashvars, params, attributes);
+    //console.log(container.id);
+      
     
     };
 
@@ -9858,19 +9864,19 @@ Popcorn.player( "youtube", {
 
 
 var onPlayerLoaded = function( containerId ) {
-	onPlayerLoaded[ containerId ] && onPlayerLoaded[ containerId ]();
+  onPlayerLoaded[ containerId ] && onPlayerLoaded[ containerId ]();
 };
 
 var onLoading= function( containerId, value ) {
-	onLoading[ containerId ] && onLoading[ containerId ](value);
+  onLoading[ containerId ] && onLoading[ containerId ](value);
 };
 
 var onStateChange= function( containerId, eventid, eventvalue ) {
-	onStateChange[ containerId ] && onStateChange[ containerId ](eventid, eventvalue);
+  onStateChange[ containerId ] && onStateChange[ containerId ](eventid, eventvalue);
 };
 
 var onError= function( containerId, value ) {
-	onError[ containerId ] && onError[ containerId ](value);
+  onError[ containerId ] && onError[ containerId ](value);
 };
 
 
@@ -9891,7 +9897,7 @@ Popcorn.player( "flashvideo", {
         lastVolume = 100;
 
     container.id = media.id + Popcorn.guid();
-
+  media.waiting =true;
     media.appendChild( container );
 
     var flashvideoInit = function() {
@@ -9907,128 +9913,130 @@ Popcorn.player( "flashvideo", {
       // expose a callback to this scope, that is called from the global callback youtube calls
       onPlayerLoaded[ container.id ] = function() {
 
-      	console.log('player '+ container.id + ' has loaded');
-		flashvideoObject = document.getElementById (container.id);
-		
-		onLoading[container.id] = function (value){
-			
-			if(value==2) media.duration = flashvideoObject.sendToFlash('getEndTime','');
-			else if(value==3){
-				
-				var timeupdate = function() {
-				
-						if ( !media.paused ) {
-							currentTime = flashvideoObject.sendToFlash('getCurrentTime','');
-							media.dispatchEvent( "timeupdate" );
-							setTimeout( timeupdate, 10 );
-						}
-				};
-				timeupdate();
-				media.play = function() {				
-					media.paused = false;
-					media.dispatchEvent( "play" );
-					
-					media.dispatchEvent( "playing" );
-					timeupdate();
-					flashvideoObject.sendToFlash('play','');
-				};
-				
-				media.pause = function() {
-					if ( !media.paused ) {	
-						media.paused = true;
-						media.dispatchEvent( "pause" );
-						flashvideoObject.sendToFlash('pause','');
-					}
-				};
-				
-				Popcorn.player.defineProperty( media, "currentTime", {
-					set: function( val ) {
-				
-						// make sure val is a number
-						currentTime = seekTime = +val;
-						seeking = true;
-						media.dispatchEvent( "seeked" );
-						media.dispatchEvent( "timeupdate" );
-						flashvideoObject.sendToFlash('seek',currentTime);
-						return currentTime;
-					},
-					get: function() {
-						return currentTime;
-					}
-        		});
-
-        /*
-
-        Popcorn.player.defineProperty( media, "volume", {
-          set: function( val ) {
-
-            if ( youtubeObject.getVolume() / 100 !== val ) {
-
-              youtubeObject.setVolume( val * 100 );
-              lastVolume = youtubeObject.getVolume();
-              media.dispatchEvent( "volumechange" );
+        console.log('player '+ container.id + ' has loaded');
+    flashvideoObject = document.getElementById (container.id);
+    
+    onLoading[container.id] = function (value){
+      console.log('on loading',value);
+      if(value==2) media.duration = flashvideoObject.sendToFlash('getEndTime','');
+      else if(value==3&&media.waiting){
+        media.waiting=false;
+        
+        
+        var timeupdate = function() {
+        
+            if ( !media.paused ) {
+              currentTime = flashvideoObject.sendToFlash('getCurrentTime','');
+              media.dispatchEvent( "timeupdate" );
+              setTimeout( timeupdate, 10 );
             }
-
-            return youtubeObject.getVolume() / 100;
+        };
+        timeupdate();
+        media.play = function() {       
+          media.paused = false;
+          media.dispatchEvent( "play" );
+          
+          media.dispatchEvent( "playing" );
+          timeupdate();
+          flashvideoObject.sendToFlash('play','');
+        };
+        
+        media.pause = function() {
+          if ( !media.paused ) {  
+            media.paused = true;
+            media.dispatchEvent( "pause" );
+            flashvideoObject.sendToFlash('pause','');
+          }
+        };
+        
+        Popcorn.player.defineProperty( media, "currentTime", {
+          set: function( val ) {
+            
+            //console.log('setting current time to',val);
+            
+            // make sure val is a number
+            currentTime = seekTime = +val;
+            seeking = true;
+            media.dispatchEvent( "seeked" );
+            media.dispatchEvent( "timeupdate" );
+            flashvideoObject.sendToFlash('seek',currentTime);
+            return currentTime;
+            
           },
           get: function() {
-
-            return youtubeObject.getVolume() / 100;
+            return currentTime;
           }
-        });
-		*/
-		
-			media.readyState = 4;
-			media.dispatchEvent( "canplaythrough" );
-			media.dispatchEvent( "load" );
-			media.duration = flashvideoObject.sendToFlash('getEndTime','');
-			media.dispatchEvent( "durationchange" );
-		   
-	
-			media.dispatchEvent( "loadeddata" );
-      	}
-		};
-		
-		/*
-		onStateChange[container.id] = function (playerId, value){
-				
-				switch(value){
-					case 1: // player loaded
-						console.log("onLoading - player loaded "+playerId);
-				  		break;
-					case 2: // metadata loaded
-				  		console.log("onLoading - metadata loaded "+playerId);
-				  		break;
-				  	case 3: // metadata loaded
-				  		console.log("onLoading - can play "+playerId);
-				  		break;
-				  	default:
-				  		console.log("onLoading - " + value);
-				}
-		}
-		*/
-		onError[container.id] = function (playerId, value){
-				
-				switch(value){
-					case 1: // player loaded
-						console.log("onError - failed to load file");
-				  		break;
-					case 2: // metadata loaded
-				  			console.log("onError - wrong url or invalid file");
-				  		break;
-				}
-		}
-		var fun = "onLoading." + container.id;
-		
-		//Do we need these for any reason?
-		//flashvideoObject.addEventListener( "onLoading", "onLoading." + container.id );
-		//flashvideoObject.addEventListener( "onStateChange", "onStateChange." + container.id );
-		//flashvideoObject.addEventListener( "onError", "onError." + container.id );
-		
-		console.log('player '+ container.id + ' has loaded');
-		flashvideoObject.sendToFlash("load", src+',0');	
-	
-		
+            });
+
+        
+
+      Popcorn.player.defineProperty( media, "volume", {
+        set: function( val ) {
+    
+        
+        if(val !=flashvideoObject.getVolume())flashvideoObject.sendToFlash('setVolume',val);
+        return flashvideoObject.getVolume();
+        
+        },
+        get: function() {
+  
+        return flashvideoObject.getVolume();
+        }
+      });
+  
+    
+      media.readyState = 4;
+      media.dispatchEvent( "canplaythrough" );
+      media.dispatchEvent( "load" );
+      media.duration = flashvideoObject.sendToFlash('getEndTime','');
+      media.dispatchEvent( "durationchange" );
+       
+  
+      media.dispatchEvent( "loadeddata" );
+        }
+        
+    };
+    
+    
+    onStateChange[container.id] = function (playerId, value){
+        
+        switch(value){
+          case 1: // player loaded
+            console.log("onLoading - player loaded "+playerId);
+              break;
+          case 2: // metadata loaded
+              console.log("onLoading - metadata loaded "+playerId);
+              break;
+            case 3: // metadata loaded
+              console.log("onLoading - can play "+playerId);
+              break;
+            default:
+              console.log("onLoading - " + value);
+        }
+    }
+
+    onError[container.id] = function (playerId, value){
+        
+        switch(value){
+          case 1: // player loaded
+            console.log("onError - failed to load file");
+              break;
+          case 2: // metadata loaded
+                console.log("onError - wrong url or invalid file");
+              break;
+        }
+    }
+    var fun = "onLoading." + container.id;
+    
+    //Do we need these for any reason?
+    //flashvideoObject.addEventListener( "onLoading", "onLoading." + container.id );
+    //flashvideoObject.addEventListener( "onStateChange", "onStateChange." + container.id );
+    //flashvideoObject.addEventListener( "onError", "onError." + container.id );
+    
+    console.log('player '+ container.id + ' has loaded');
+    flashvideoObject.sendToFlash("load", src+','+options.cue_in); 
+  
+    
         
       
       };
@@ -10050,9 +10058,9 @@ Popcorn.player( "flashvideo", {
 
       src = /(http.*)/.exec( media.src )[ 1 ];
      
-      swfobject.embedSWF("MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
-	  
-	  
+      swfobject.embedSWF(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+"MediaPlayer.swf", container.id, "100%", "100%", "9.0.0", false, flashvars, params, attributes);
+    
+    
      
     };
 
