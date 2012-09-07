@@ -48,11 +48,14 @@ class ParserCommand extends ContainerAwareCommand
 
             $parser = $this->getContainer()->get('zeega_parser');
             $parserResponse = $parser->load($url, $loadChildren, $userId);
+
             if(isset($parserResponse["items"]))
             {
-                $items = ResponseHelper::serializeEntityToJson($parserResponse["items"]);
+                
+                //$items = ResponseHelper::serializeEntityToJson($parserResponse["items"]);
                 $filePath = "$taskId.json";
-                file_put_contents($filePath, $items);
+                $temaplate = $this->getContainer()->get('templating')->render("ZeegaApiBundle:Items:show.json.twig",array("item"=>$parserResponse["items"], "load_children" =>true));
+                file_put_contents($filePath, $temaplate);
                 $output->write($filePath);    
             }
         }

@@ -47,9 +47,10 @@ class PersistCommand extends ContainerAwareCommand
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
 
             $item = json_decode(file_get_contents($filePath),true);
-            
+            $item = $item["items"][0]; // hammer
+
             $item = self::parseItem($item, $user);
-            
+
             $em->persist($item);
             $em->flush($item);
 
@@ -73,18 +74,16 @@ class PersistCommand extends ContainerAwareCommand
         $mediaCreatorUsername = $itemArray['media_creator_username'];
         $mediaCreatorRealname = $itemArray['media_creator_realname'];
         $archive = $itemArray['archive'];
-        $location = $itemArray['location'];
-        $license = $itemArray['license'];
         $attributes = $itemArray['attributes'];
         $tags = $itemArray['tags'];
         $published = $itemArray['published'];
+        $childItems = $itemArray['child_items'];
             
         $item = new Item();
         $item->setDateCreated(new \DateTime("now"));
         $item->setDateUpdated(new \DateTime("now"));
         $item->setChildItemsCount(0);
         $item->setUser($user);
-        $item->setSiteId(1);
         
         if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
@@ -100,7 +99,7 @@ class PersistCommand extends ContainerAwareCommand
         
         if(isset($mediaDateCreated)) 
         {
-            $parsedDate = strtotime(implode(" ",$mediaDateCreated));
+            $parsedDate = strtotime($mediaDateCreated);
             if($parsedDate)
             {
                 $d = date("Y-m-d h:i:s",$parsedDate);
@@ -119,8 +118,8 @@ class PersistCommand extends ContainerAwareCommand
         }
             
         if(isset($archive)) $item->setArchive($archive);
-        if(isset($location)) $item->setLocation($location);
-        if(isset($license)) $item->setLicense($license);
+        if(isset($itemArray['location'])) $item->setLocation($itemArray['location']);
+        if(isset($itemArray['license'])) $item->setLicense($itemArray['license']);
         if(isset($attributes)) $item->setAttributes($attributes);
         if(isset($tags)) $item->setTags($tags);
         if(isset($published)) $item->setPublished($published);
@@ -129,6 +128,18 @@ class PersistCommand extends ContainerAwareCommand
         $item->setIndexed(false);
         $item->setPublished(false);
         
+        if(isset($itemArray["child_items"]))
+        {
+            foreach($itemArray["child_items"] as $child_item)
+            {
+                $child = self::parseItem($child_item, $user);
+                if(isset($child))
+                {
+                    $item->addItem($child);    
+                }
+            }
+        }
+
         return $item;
     }
 }
