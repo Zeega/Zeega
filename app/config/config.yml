@@ -67,7 +67,8 @@ doctrine:
         user:     %database_user%
         password: %database_password%
         charset:  utf8
-
+        mapping_types:
+            geometry: string  
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
@@ -107,7 +108,7 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    encryption: %mailer_encryption%    
+    encryption: %mailer_encryption%
 
 jms_security_extra:
     secure_controllers:  true
@@ -122,11 +123,18 @@ fos_user:
         sender_name: Zeega
     registration:
         form:
+            handler: zeega_user.form.handler.registration
             type: zeega_user_registration
+            validation_groups: [ZeegaRegistration]
+        confirmation:
+            enabled:    true
+
     resetting:
+        form:
+            handler: zeega_user.form.handler.resetting
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig
-            
+
 nelmio_solarium:
     adapter:
         class: Solarium_Client_Adapter_Http

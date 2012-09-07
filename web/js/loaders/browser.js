@@ -16,9 +16,8 @@ require.config({
 		}
 })
 
-var loadFiles = [
-	'jquery',
-
+require(
+	[
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
@@ -27,6 +26,7 @@ var loadFiles = [
 	'order!lib/jquery/ui/js/jquery-ui.min',
 	'order!lib/bootstrap',
 	'order!lib/visualsearch',
+	'order!lib/dropbox',
 	
 	
 	//custom
@@ -82,6 +82,8 @@ var loadFiles = [
 	'order!app/views/browser.fancybox/browser.view.fancybox.youtube',
 	'order!app/views/browser.map/browser.view.map.fancybox',
 	'order!app/views/browser.tag/browser.view.tag.fancybox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	
 	
 	/*
@@ -111,14 +113,9 @@ var loadFiles = [
 	'order!app/index.browser'
 	
 
-	];
-
-require(loadFiles, function($) {
-    
-	console.log('loaded')
-	//ZeegaBrowser.init();
-	
-	
-	initUX();
-	
-});
+    ], 
+	function($) {
+		console.log('files loaded')
+		initUX();
+	}
+);

@@ -38,9 +38,16 @@ class ParserDocumentCloud extends ParserAbstract
 		$item->setAttributionUri($originalUrl);
 		$item->setChildItemsCount(0);
 		
-		$item->setDescription($document["description"]);
-	
-	
+		$description = $document["description"];
+		if(isset($description))
+		{
+		    if(strlen($description) > 500 )
+		    {
+		        $description = substr($description, 0, 500);
+		    }
+		    $item->setDescription($description);
+		}
+			
 		$image = $document["resources"]["page"]["image"];
 		$image=str_replace('{page}','1',$image);
 		$image=str_replace('{size}','small',$image);

@@ -1,0 +1,285 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+ 
+		
+				<div id="browser">
+				<!-- BEGIN BROWSER BODY CODE HERE -->
+
+				<div id="browser-my-collections-wrapper">
+					<div id="browser-my-collections-label">
+						<p>My Collections <span id="browser-my-collections-count"></span></p>
+					</div>
+					<div id="browser-my-collections">
+						<div id="browser-create-new-collection">
+							<div class="browser-my-new-collection">
+								<p>Drag media to create a new collection</p>
+							</div>
+						</div>
+						<!--
+						<div class="browser-loading"><img src="{{asset('images/loading.gif')}}"></div>
+						-->
+						<ul id="browser-my-collections-drawer" class="jcarousel-skin-zeega"></ul>
+					</div>
+				</div>
+				
+				<div id="browser-toggles">
+					<div id="">
+						<ul class='nav nav-tabs'>
+							<li class="active"><a data-media="all" href='#'>The Library</a></li>
+							<li><a data-media="mine" href='#'>My Stuff</a></li>
+							<li id="browser-collection-filter-tab" style="display:none">
+								<a data-media='filter' href='#' id="browser-collection-filter-tab-text">A Collection</a>
+							</li>
+						</ul>
+					</div>
+					
+					<div style="clear:both"></div>
+				</div>
+				
+				
+				<div id="browser-search-filter-toggle">
+					
+					<div id='browser-search'>
+						<div class="visual_search"></div>
+					
+						<div class='well filter-list hidden'>
+							<ul class="nav nav-list">
+								<li class="nav-header">Filter Media By</li>
+								<li><a data-search-filter='all' href='#'>All</a></li>
+								<li><a data-search-filter='audio' href='#'>Audio</a></li>
+								<li><a data-search-filter='image' href='#'>Images</a></li>
+								<li><a data-search-filter='video' href='#'>Video</a></li>
+							</ul>
+						</div>
+					</div>
+<!--
+					<div id="searchbar">
+						<div id='search-filter'>
+								<a class='menu-toggle' href='#'><i class='zicon-search-dropdown'></i></a>
+								<ul class='unstyled menu-items'>
+									<li class='menu-title'>Filter by Format</li>
+									<li class='divider'></li>
+									<li><a data-search-filter='all' href='#'>All</a></li>
+									<li><a data-search-filter='audio' href='#'>Audio</a></li>
+									<li><a data-search-filter='image' href='#'>Images</a></li>
+									<li><a data-search-filter='video' href='#'>Video</a></li>
+								</ul>
+						</div>
+						
+						<input id='database-search-text' type='text' name='database-search' placeholder='search the library'/>
+					</div>
+-->
+
+					<span id="browser-item-count"></span><!-- searchbar -->
+					
+					<!--
+					<div id="searchbar" class="browser-searchbar">
+						<input id="database-search-text" type="text" name="database-search" value="search my stuff" style="color: rgb(68, 68, 68); ">
+						<span><select id="database-search-filter" class="" style='width:98px'>
+							  <option value="all">all formats</option>
+							  <option value="image">images</option>
+							  <option value="video">video</option>
+							  <option value="audio">audio</option>
+							  
+							</select></span>
+					</div>
+					-->
+					
+					
+					<!--<div id="browser-toggle-items-vs-collections">View: <span id="browser-collection-count" class="browser-unselected-toggle" style="background-color: #555 !important;">collections</span> | <span id="browser-item-count" class="browser-selected-toggle" style="background-color: #555 !important;">items</span> </div>-->
+
+					<!--<a href="." id="browser-open-in-editor">open in editor</a><a href="." id="browser-open-timeline">Open Timeline</a><a href="." id="browser-close-timeline">Close Timeline</a> -->
+					<!-- <div style="clear:both;padding-bottom:4px;"></div>-->
+					
+				</div>
+				
+				<div id="browser-results">
+					
+					<div id="browser-results-wrapper">
+						<div id ="browser-right-sidebar">
+							
+							<div id="browser-time-filter">
+							
+							</div>
+						</div>
+						
+						
+						<!--
+						<div class="browser-loading"><img src="{{asset('images/loading.gif')}}"></div>
+						-->
+						<div id="browser-no-results-my-media-message">You don't currently have any media. Want to <a class='add-media' href="#">add some</a>?</div>
+						<div id="browser-no-items-results-message">Sorry, no items found.</div>
+						<div id="browser-no-collections-results-message">Sorry, no collections found.</div>
+						<ul id="browser-results-items">
+							<li id="browser-view-more-item-results"><a href="." class="browser-load-more-results">Load more results</a></li>
+						</ul>
+						<ul id="browser-results-collections">
+							<li id="browser-view-more-collection-results"><a href="." class="browser-load-more-results">Load more results</a></li>
+						</ul>
+						
+					</div>
+				 	
+				 	
+				</div>
+				
+				
+				<!-- END BROWSER BODY CODE HERE -->
+		   
+			<br><br><br>
+			
+
+				
+			 </div> <!-- #browser -->	
+
+			
+
+
+
+{% endblock %}
+
+{% block extras %}
+         <!-- TEMPLATES -->
+         <div id='templates' class='hidden'>
+	
+			<div id="collection-settings-modal" class='modal hidden' >
+				<div class="modal-header">
+					<button class="close">&times;</button>
+					<h3><span class="collection-modal-title"></span> </h3>
+				</div>
+				<!--<div class="modal-body clearfix"></div>-->
+				<div class="modal-footer">
+					<span class='admin-submit'>
+						
+						<button class='btn' id="collection-modal-rename-link">rename collection</button>
+						<button class='btn btn-danger' id='collection-modal-delete'>delete collection</button>
+						<!--<a href='#' class='close'>close</a>-->
+						<!--<a href='#' id='save-collection' class='btn success'>save</a>-->
+					</span>
+				</div>
+			</div> <!-- modal -->
+	
+	
+	
+	
+	
+	
+         	<div id="browser-time-filter-template">
+         		<form>
+				<p>Timeline <span class="browser-time-filter-value"></span></p>
+						
+					<select name="valueAA" id="valueAA-template"></select>
+			
+					<select name="valueBB" id="valueBB-template"></select>
+				
+				</form>
+				<table class="browser-time-bins">
+					
+					
+					<thead>
+						<tr>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							<th class="browser-time-bins-range" scope="col"></th>
+							
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							<td class="browser-time-bins-results"></td>
+							
+							
+							
+						</tr>
+						
+					</tbody>
+				</table>
+         	</div>
+
+			<div id="share-collection-modal" class='modal hidden' >
+			<div class="modal-header">
+				<a href='#' class='close'>x</a>
+				<h3>Share Your Collection</h3>
+			</div>
+			<div class="modal-body clearfix">
+				
+			</div>
+			<div class="modal-footer">
+				<span class='admin-submit'>
+					<br />
+					<a href='#' id='close-modal' class='btn secondary close-modal'>close</a>
+				</span>
+			</div>
+		</div> <!-- modal -->
+		
+         </div>
+
+         <!-- /TEMPLATES -->
+
+{% endblock %}
+
+{% block scripts %}
+	<!-- SCRIPTS -->
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		{% if app.environment == 'dev' %}
+		<!-- to load JS libraries separately -->
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/browser.js') }}"></script>
+		{% else %}
+			<!-- to load single aggregated JS library --> 
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/browser.js') }}"></script>
+		{% endif %}
+
+		<!-- Leaflet CSS --> 
+		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="{{ asset('libraries/leaflet/leaflet.ie.css')}}" /><![endif]-->
+		
+		
+		<!-- <script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script> -->
+		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jquery.tagsinput.css')}}" />
+		
+		
+		<!-- Leaflet JavaScript -->
+		<!-- <script src="{{ asset('js/lib/leaflet/leaflet.js')}}"></script> -->
+		
+		<!-- FANCYBOX -->
+		<!-- Optionaly include easing and/or mousewheel plugins -->
+	
+		<script type="text/javascript" src="{{ asset('js/lib/fancybox/lib/jquery.mousewheel-3.0.6.pack.js')}}"></script>
+
+		<!-- Add fancyBox -->
+		<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" type="text/css" media="screen" />
+		<link rel="stylesheet" href="{{ asset('js/lib/fancybox/source/jquery.fancybox.css')}}" type="text/css" media="screen" />
+		<link rel="stylesheet" href="{{ asset('js/lib/fancybox/source/helpers/jquery.fancybox-buttons.css')}}" type="text/css" media="screen" />
+
+		<script type="text/javascript" src="{{ asset('js/lib/fancybox/source/jquery.fancybox.js')}}"></script>
+		<script type="text/javascript" src="{{ asset('js/lib/fancybox/source/jquery.fancybox.pack.js')}}"></script>
+		<script type="text/javascript" src="{{ asset('js/lib/fancybox/source/helpers/jquery.fancybox-buttons.js')}}"></script>
+
+		<!-- JCarousel -->
+		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jcarousel/skins/zeega/skin.css')}}" />
+		<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
+		<!-- Filament slider for timeline -->
+	
+		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/filamentslider/css/ui.slider.extras.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/filamentslider/css/jquery-ui-1.8.16.custom.css')}}" />
+			
+			
+		<script>
+		sessionStorage.setItem('siteId','{{site.id}}');
+		sessionStorage.setItem('siteShort','{{site.short}}');
+		
+		//bootstrapping data
+		</script>	
+			
+{% endblock %}

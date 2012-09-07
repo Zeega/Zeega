@@ -1084,7 +1084,6 @@ body
 	margin:1px 0;
 	padding: 6px;
 	-webkit-border-radius: 6px;
-	overflow:hidden;
 	-webkit-box-shadow : inset 3px 3px 3px #666;
 }
 
@@ -1698,89 +1697,6 @@ default-layer-control
 	max-width: 35px;
 	margin: 0 10px;
 }
-
-#citation
-{
-	background:rgba(0,0,0,0.4);
-	position:absolute;
-	bottom:0;
-	left:0;
-	width:100%;
-	height:24px;
-	overflow:hidden;
-	z-index:10001;
-}
-#citation ul
-{
-	height:100%;
-	float:left;
-}
-#citation ul li
-{
-	float:left;
-	background:rgba(0,0,0,0.4);
-	margin:1px;
-	padding:2px;
-	height: 100%;
-}
-.citation-tab
-{
-	width:16px;
-	height:100%;
-	float:left;
-	cursor:pointer;
-}
-
-
-.citation-title
-{
-	clear:both;
-	margin-bottom:12px;
-	margin-right:6px;
-	color:rgba(255,255,255, 0.75);
-	height: 37px;
-	width: 100%;
-	text-align:justify;
-	overflow:hidden;
-}
-
-.citation-body
-{	
-	font-size:11px;
-	float:right;
-	width:168px;
-	margin-right:6px;
-	
-}
-.citation-thumb
-{
-	height:60px;
-	width:60px;
-	background:blue;
-	float:left;
-	margin-bottom:6px;
-	margin-left:6px;
-}
-.citation-content
-{			
-	margin-top:21px;
-	width:250px;
-	hieght:100px;
-	float:left;
-}
-.citation-metadata
-{
-	
-	
-	width: 100%;
-	text-align:left;
-	
-}
-#hide-citation
-{
-	float:left;
-}
-
 
 /*******************************
 
@@ -2718,16 +2634,15 @@ clear: both;
 
 
 
-footer {
-
+footer
+{
+	width: 100%;
 	padding: 5px;
 	font-size: 12px;
-	text-align: right;
+	text-align: center;
 	color: #666;
 	bottom: 0;
-	position:relative;
-	top: 20px;
-	clear:both;
+	position:fixed;
 }
 
 #footer a {
@@ -2768,7 +2683,7 @@ Media Player and Controls
 
 	position: relative;
 	border: 1px dotted #999;
-	height: 165px;
+	height: 120px;
 	width: 266px;
 	/*display:none;*/
 }
@@ -3083,3 +2998,4 @@ END VIDEO STYLES
 .clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
+

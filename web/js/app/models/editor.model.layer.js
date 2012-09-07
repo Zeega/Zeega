@@ -2,11 +2,14 @@
 
 	Layer.Model = Backbone.Model.extend({
 		
+		status : 'waiting',
+
 		showControls : true,
 		player : false,
 		displayCitation: true,
 		visualLoaded : false,
 		defaultControls : true,
+		hasControls :true,
 		
 		editorWindow : $('#visual-editor-workspace'),
 		layerPanel : $('#layers-list-visual'),
@@ -24,11 +27,12 @@
 		url : function()
 		{
 			if( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/layers';
-			else return zeega.app.url_prefix + "layers/" + this.id;
+			else return zeega.app.url_prefix + "api/layers/" + this.id;
 		},
 		
 		initialize: function(attributes,options)
 		{
+			console.log('$$		init layer', attributes, options, this)
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
@@ -73,48 +77,32 @@
 		
 		//called at the end of initialize. we don't want to override it
 		init : function(){},
+
+
+		removeFromView : function()
+		{
+			console.log('$$		remove from view', this);
+			
+		},
+
+
 		
 		onControlsOpen : function(){},
 		
 		onControlsClosed : function(){},
 		
-		renderLayerInEditor : function( i )
-		{
-			this.visual.render().$el.css('zIndex',i+1);
-			if(this.isNew()) 
-			{
-				this.visual.render().$el.css('zIndex',1000);
-				this.editorWindow.append( this.visual.el );
-			}
-			else this.editorWindow.append( this.visual.render().el );
-			if(this.controls) this.layerPanel.prepend( this.controls.render().el );
-			
-			this.trigger('editor_rendered editor_layerEnter');
-		},
-		
-		unrenderLayerFromEditor : function()
-		{
-			if( this.hasChanged() ) this.save();
-			this.trigger('editor_layerExit')
-		},
-		
 		refreshView : function()
 		{
-			console.log('	refresh view')
 			this.visual.$el.attr('id','layer-visual-'+this.id)
 			if(this.controls) this.controls.$el.attr('id','layer-'+this.id)
 		},
 
 		update : function( newAttr, silent )
 		{
-			var _this = this;
-			_.extend( this.get('attr'), newAttr );
-			if( !silent )
-			{
-				this.save({},{
-					success : function(){ _this.trigger('update') }
-				});
-			}
+			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
+			this.set( 'attr' , a );
+			if( silent != true ) this.save();
+			this.trigger('update');
 		},
 
 		// draws the thumb?
@@ -170,6 +158,8 @@
 		//remove formatting from titles (esp important for text layer!)
 		validate : function(attrs)
 		{
+			if( !_.isNumber(attrs.id) ) attrs.id = parseInt( attrs.id);
+			if(attrs.attr.model != null ) attrs.attr.model = null;
 			if( attrs.title ) attrs.title = attrs.title.replace(/(<([^>]+)>)/ig, "");
 		}
 	

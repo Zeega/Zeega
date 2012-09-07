@@ -56,16 +56,18 @@
 				//init the dragged item variable
 				start : function(){
 					$(this).draggable('option','revert',true);
-
+					if(_this.model.get('layer_type') == 'Image') $('#project-cover-image').addClass('target-focus');
 					$('#visual-editor-workspace').addClass('target-focus');
 					$('#frame-drawer').addClass('target-focus');
 
 					zeega.app.draggedItem = _this.model;
+					console.log('$$		started dragging item', _this.model)
 				},
 
 				/**	stuff _this happens when the user drags the item into a frame **/	
 
 				stop : function(){
+					$('#project-cover-image').removeClass('target-focus');
 					$('#visual-editor-workspace').removeClass('target-focus');
 					$('#frame-drawer').removeClass('target-focus');
 
@@ -86,14 +88,14 @@
 		},
 
 		events: {
-			//"click" : "previewItem"
+			"click" : "previewItem"
 			//'dblclick' : "doubleClick",
 		},
 
 		//item events
 		previewItem: function()
 		{
-
+			this.model.trigger('preview_item',this.model.id)
 		},
 
 		getTemplate : function()

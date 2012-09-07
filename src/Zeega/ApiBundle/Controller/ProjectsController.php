@@ -1,4 +1,14 @@
 <?php
+
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +21,8 @@ use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Frame;
+use Zeega\DataBundle\Entity\Sequence;
+use Zeega\DataBundle\Entity\Project;
 
 class ProjectsController extends Controller
 {
@@ -23,9 +35,9 @@ class ProjectsController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id));
-		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id, "enabled" => true));
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id, "enabled" => true));
+		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id, "enabled" => true));
 		
 		$sequenceFrames = array();
 		
@@ -41,6 +53,18 @@ class ProjectsController extends Controller
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
     
+    // `delete_project`  [DELETE] /projects/{project_id}
+    public function deleteProjectAction($project_id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+    	$project->setEnabled(false);
+
+    	$em->flush();
+    	return new Response('SUCCESS',200);
+    }
+    
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putProjectsAction($projectId)
     {
@@ -48,48 +72,133 @@ class ProjectsController extends Controller
 
         $request = $this->getRequest();
         $request_data = $this->getRequest()->request;        
-        
+
 		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
-        if (!$project) 
-        {
+        if (!$project)  {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
+        // create json item for project
+        // update item.text with json
+
+
+        // update date_published
 		$title = $request_data->get('title');
         $tags = $request_data->get('tags');
         $coverImage = $request_data->get('cover_image');
         $authors = $request_data->get('authors');
 		$published = $request_data->get('published');
-        $estimatedTime = $request_data->get('estimated_time');        
-		if(isset($title)) $project->setTitle($title);
+        $estimatedTime = $request_data->get('estimated_time'); 
+        $location = $request_data->get('location');
+        $description = $request_data->get('description');
+
+		
+		//
+		$publishUpdate = $request_data->get('publish_update');
+
+
+
+
+		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
 		if(isset($coverImage)) $project->setCoverImage($coverImage);
 		if(isset($tags)) $project->setTags($tags);
 		if(isset($published)) $project->setPublished($published);
         if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
+        if(isset($location)) $project->setLocation($location);
+        if(isset($description)) $project->setDescription($description);
 
-        $em = $this->getDoctrine()->getEntityManager();
+
+        $project->setDateUpdated(new \DateTime("now"));
+        
+ 
         $em->persist($project);
         $em->flush();
+
+
+		
+		
+		if((isset($publishUpdate)&&$publishUpdate)){
+			
+			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+        	if (is_null($project->getItemId())) // if this project is not represented in the item table
+       		{
+				// create new item
+				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
+				$user = $this->get('security.context')->getToken()->getUser();
+				
+				$item = new Item();
+				$item->setDateCreated(new \DateTime("now"));
+				$item->setChildItemsCount(0);
+				$item->setUser($user);
+				
+				$dateUpdated = new \DateTime("now");
+				$dateUpdated->add(new \DateInterval('PT2M'));
+	
+				$item->setDateUpdated($dateUpdated);
+				$item->setUri($projectId);
+			   
+				$item->setMediaType("project");
+				$item->setLayerType("project");
+				$item->setArchive("zeega");
+				$item->setMediaCreatorUsername($user->getUsername());
+				$item->setPublished(1);
+				//$item->setIndexed(false);
+				$item->setAttributionUri("http://beta.zeega.org/");
+				$item->setEnabled(true);
+				$em->persist($item);
+				$em->flush();
+				
+				$item->setAttributionUri("http://beta.zeega.org/".$item->getId());
+				$em->persist($item);
+				$em->flush();
+				
+				$project->setItemId($item->getId());
+				$project->setDatePublished($project->getDateUpdated());
+				$em->persist($project);
+				$em->flush();
+            
+       		}else{ // if this project is represented in the item table
+				
+				// fetch associated item
+				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
+				
+				
+				$project->setDatePublished($project->getDateUpdated());
+				$em->persist($project);
+				$em->flush();
+			}
         
-        //$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
-        //return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
-        return $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));       
+        
+			$item->setMediaCreatorRealname($project->getAuthors());
+			$item->setDescription($project->getDescription());
+			$item->setThumbnailUrl($project->getCoverImage());
+			$item->setTitle($project->getTitle());
+			$project_json = $project_http->getContent();
+			$item->setText($project_json);
+			$em->persist($item);
+			$em->flush();
+			
+        }
+        
+        $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+        return $project_http;
     }
     
     public function postProjectLayersAction($projectId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
      	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
-    	
+    	$project->setDateUpdated(new \DateTime("now"));
+
     	$layer= new Layer();
     	$layer->setProject($project);
 		$request = $this->getRequest();
     	
     	if($request->request->get('item_id'))
     	{
-    	    $item = $this->getDoctrine()->getRepository('ZeegaItemBundle:Item')->find($request->request->get('item_id'));
+    	    $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($request->request->get('item_id'));
 			$layer->setItem($item);
 		}
 		
@@ -102,7 +211,58 @@ class ProjectsController extends Controller
         
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers`   [POST] /sequences
+    
+    public function postProjectSequencesAction($project_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $request = $this->getRequest();
+        $project= $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        
+        $sequenceCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findSequencesCountByProject($project_id);
+        $sequenceIndex = $sequenceCount + 1;
 
+        $sequence = new Sequence();
+
+        $frame = new Frame();
+        $frame->setSequence($sequence);
+        $frame->setProject($project);
+
+        if($request->request->get('layers_to_persist'))
+        {
+            $layersToPersist = $request->request->get('layers_to_persist');
+            $frame->setLayers($layersToPersist);
+        }
+        else if($request->request->get('frame_id'))
+        {
+            $frameId = $request->request->get('frame_id');
+            $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
+
+            $previousFrameLayers = $previousframe->getLayers();
+            $frame->setLayers($previousFrameLayers);
+        }
+
+        $sequence->setProject($project);
+        $sequence->setTitle('Sequence '.$sequenceIndex);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($sequence);
+        $em->persist($frame);
+        $em->flush();
+
+        $layers = array();
+        // auch - should work for now, but won't scale for sure
+        $sequenceId = $sequence->getId();
+        $frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
+        $sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
+
+        $layers = array();
+
+        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'frames' =>$frames, 'layers' =>$layers));
+        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
+    }
+    
     public function postProjectSequencesFramesAction($projectId,$sequenceId)
     {
     	$em = $this->getDoctrine()->getEntityManager();
@@ -163,6 +323,9 @@ class ProjectsController extends Controller
                 if($request->request->get('layers_to_persist')) $frame->setLayers($request->request->get('layers_to_persist'));
         }
         
+        $project->setDateUpdated(new \DateTime("now"));
+        
+   		$em->persist($project);
    		$em->persist($frame);
    		$em->flush();
         
@@ -170,7 +333,50 @@ class ProjectsController extends Controller
     	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
-        
-     	
     } // `post_sequence_layers`   [POST] /sequences
+
+     // `post_site`   [POST] site/{site_id}/project
+    public function postProjectAction($site_id)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $request = $this->getRequest();
+        
+        if($request->request->get('title'))$title=$request->request->get('title');
+        if($request->request->get('collection_id'))
+        {
+            $session = $this->getRequest()->getSession();
+            $session->set("collection_id", $request->request->get('collection_id'));
+        } 
+        
+        else $title='Untitled Project';
+        $site=$this->getDoctrine()
+        ->getRepository('ZeegaDataBundle:Site')
+        ->find($site_id);
+        $project= new Project();
+        $project->setDateCreated(new \DateTime("now"));
+        $project->setEnabled(true);
+        $project->setPublished(false);
+        $project->setAuthors($user->getDisplayName());
+
+        //$project->setAttr(array('cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png'));
+        $project->setAttr(array('author'=>$user->getDisplayName(), 'cover_image'=>'http://dev.zeega.org/joseph/web/images/default_cover.png' ));
+        
+        $sequence = new Sequence();
+        $frame = new Frame();
+        $frame->setSequence($sequence);
+        $frame->setProject($project);
+        $frame->setEnabled(true);
+        $project->setSite($site);
+        $project->addUser($user);
+        $sequence->setProject($project);
+        $sequence->setTitle('Intro Sequence');
+        $sequence->setEnabled(true);
+        $project->setTitle($title);
+        $em=$this->getDoctrine()->getEntityManager();
+        $em->persist($sequence);
+        $em->persist($project);
+        $em->persist($frame);
+        $em->flush();
+        return new Response($project->getId());
+    }
 }

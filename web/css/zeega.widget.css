@@ -1,8 +1,8 @@
-.well{ background-color: #555 }
+.well{ background-color: transparent }
 .ingest-info
 {
 	padding: 8px 19px;
-	background:#555;
+	border: transparent;
 	margin-bottom:3px;
 }
 
@@ -38,13 +38,17 @@
 	overflow: auto;
 }
 
-#message{
+.widget-message {
+
 	font-style: italic;
 	color: #F15A29;
 }
+#message{
+
+	display:none;
+}
 
 #description{
-	display:none;
 	height:200px;
 }
 #widget-description
@@ -75,4 +79,16 @@
 	font-size:16px;
 	font-weight:normal;
 	margin-bottom:5px;
+}
+
+#zeega-overlay{
+	position:fixed;
+	right: 0;
+	top:0;
+	background-color:#333;
+	width:0;
+	height:150px;
+	opacity:.9;
+	z-index:500000;
+	border-radius-left:5px;
 }

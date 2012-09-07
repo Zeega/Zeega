@@ -1,3 +1,34 @@
+ZeegaUserBundle:
+    resource: "@ZeegaUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaAdminBundle:
+    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+api:
+    resource: "@ZeegaApiBundle/Resources/config/routing.yml"
+    type: rest
+
+admin:
+    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+
+ZeegaBookmarkletBundle:
+    resource: "@ZeegaBookmarkletBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaCommunityBundle:
+    resource: "@ZeegaCommunityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaEditorBundle:
+    resource: "@ZeegaEditorBundle/Resources/config/routing.yml"
+    prefix:   /
+
+ZeegaDiscoveryBundle:
+    resource: "@ZeegaDiscoveryBundle/Resources/config/routing.yml"
+    prefix:   /
+
 ZeegaDataBundle:
     resource: "@ZeegaDataBundle/Resources/config/routing.yml"
     prefix:   /
@@ -6,48 +37,8 @@ ZeegaCoreBundle:
     resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
     prefix:   /
 
-ZeegaAdminBundle:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
-    prefix:   /
 
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
 #   prefix:   /_internal
-
-
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-
-fos_user_profile:
-    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix: /profile
-
-fos_user_register:
-    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /register
-
-fos_user_resetting:
-    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
-    prefix: /resetting
-
-fos_user_change_password:
-    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /profile
-
-_security_logout:
-    pattern:  /logout    
-
-api:
-    resource: "@ZeegaApiBundle/Resources/config/routing.yml"
-    type: rest
-
-ingest:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_ingest.yml"
-
-editor:
-    resource: "@ZeegaCoreBundle/Resources/config/routing_editor.yml"
-    
-
-admin:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"

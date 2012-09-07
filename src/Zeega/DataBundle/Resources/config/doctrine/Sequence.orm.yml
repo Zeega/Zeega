@@ -25,4 +25,12 @@ Zeega\DataBundle\Entity\Sequence:
         attr:
             type: array
             nullable: true
- 
+        enabled:
+            type: boolean
+            nullable: true
+        persistent_layers:
+            type: array
+            nullable: true
+    indexes:
+        sequence_enabled:
+            columns: [enabled]

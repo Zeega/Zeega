@@ -1,0 +1,26 @@
+{
+	{% if user is defined %}
+	"id" : {{ user.getId }},
+	"bio" : {{ user.getBio | json_encode | raw}},
+	"display_name" : {{ user.getDisplayName | json_encode | raw}},
+	"thumbnail_url" : {{ user.getThumbUrl | json_encode | raw}},
+	"location" : {{ user.getLocation | json_encode | raw}},
+	"created_at" : "{{ user.getCreatedAt | date("Y-m-d") }}",
+	"locationLatitude" : {{ user.getLocationLatitude | json_encode | raw}},
+	"locationLongitude" : {{ user.getLocationLongitude | json_encode | raw}},
+	"editable" : {{ editable | json_encode | raw}},
+	"background_image_url" : {{ user.getBackgroundImageUrl | default("") | json_encode | raw}}
+	
+	{% if projects is defined %}
+	,"projects":
+	[
+		{% for project in projects %}
+			{% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %}	
+			{%- if loop.index0 < projects|length - 1 -%}
+			,
+			{%- endif -%}
+	    {% endfor %}
+	]
+	{% endif %}
+	{% endif %}
+}

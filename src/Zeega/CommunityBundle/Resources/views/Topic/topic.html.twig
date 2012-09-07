@@ -1,0 +1,275 @@
+{# src/Zeega/CommunityBundle/Resources/views/About/about.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega{% endblock %}
+
+
+{%  block stylesheets %}
+	<!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url(http://farm3.staticflickr.com/2755/4412911353_43f6449f07_b.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block browser_detection %}
+{% endblock browser_detection %}
+
+{% block body %}
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	
+	<!-- Topic Header Begins -->
+	
+	<div class="topic-header new-section" style="background: url(http://farm1.staticflickr.com/5/5943352_05088aa184_b.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;	">
+	
+		<div class="container">
+		
+			<div class="row">
+			
+				<div class="span11">
+				
+					<div class="copy">
+					
+						<div class="valign-content">
+	
+							<h1>Urbanism</h1>
+							<h2>Explore urbanism and the built environment. From city dwellers and situationism to civic engagement and architecture.</h2>
+			
+			
+							<h6><a href="http://www.flickr.com/photos/pmorgan/5943352/in/photostream/">Photograph: Dense Cities by PMorgan on Flickr</a></h6>
+	
+						</div>
+	
+					</div>
+	
+				</div>
+				
+			</div>
+	
+		</div>
+				
+		<div class="dark-layer">
+		</div>
+		
+		
+		<div class="shadow">
+		</div>
+		
+	
+	</div>
+	
+	<!-- Topic Header Ends -->
+	
+	
+	<!-- Author's Latest Zeegas Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14">
+			
+				<h2 class="section-title">Zeegas about Urbanism</h2>
+			
+			</div>
+		
+		</div>
+		
+		<div class="row">
+		
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+			
+			<!-- Individual Project Card Begins -->
+		
+			<div class="span7 project-card">
+			
+				<div class="row">
+					<a href="">
+						<div class="span7 project-image">
+							<iframe src="http://alpha.zeega.org/1221" width="100%" height="100%" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+							<div class="gradient" style="top:-197px;">
+							</div>
+						</div>
+					</a>
+				</div>
+			
+			</div>
+			
+			<!-- Individual Project Card Ends -->
+		
+		</div>
+	
+	</div>
+	
+	<!-- Author's Latest Zeegas Ends -->
+
+{% endblock %}

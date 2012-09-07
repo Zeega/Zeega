@@ -1,0 +1,83 @@
+// Identify controls by their labels
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/*
+CATHERINE - Commenting this out - not sure if it'll be a problem later...
+input,
+button,
+select,
+textarea {
+  font-family: @altFontFamily; // And only set font-family here for those that need it (note the missing label element)
+  font-size: 22px;
+}
+*/
+.longform
+{
+	font-size: @baseFontSize;
+}
+
+// Form controls
+// -------------------------
+
+// Shared size and type resets
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input-custom
+{
+  font-size: 22px;
+  color: @white;
+}
+
+// Everything else
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input-custom
+{
+  border: 1px solid @grayDark;
+  // Focus state
+  &:focus {
+  	background-color: @grayLight;
+  }
+}
+
+.input-xlarge-custom     { width: 250px; }
+
+// Horizontal-specific styles
+// --------------------------
+
+.form-horizontal-custom {
+  // Move over all input controls and content
+  .controls {
+    margin-left: 0;
+  }
+}

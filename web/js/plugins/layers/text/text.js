@@ -9,11 +9,11 @@
 		defaultAttributes: {
 			'title' :'Text Layer',
 			'content' : 'Text',
-			'left' :0,
-			'top' :0,
+			'left' :30,
+			'top' :40,
 			'color' : '#ffffff',
-			'opacity' : 0.9,
-			'fontSize' : 200,
+			'opacity' : 1,
+			'fontSize' : 500,
 			'overflow' : 'visible',
 			'width' : 25,
 			//'height' : 10,
@@ -48,14 +48,21 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			var color = new Layer.Views.Lib.ColorPicker({
 				property : 'color',
 				color : this.model.get('attr').color,
 				model: this.model,
-				label : 'Text Color',
+				label : '',
 				opacity : true
 			});
 			
+			/*
 			var sizeSlider = new Layer.Views.Lib.Slider({
 				property : 'fontSize',
 				model: this.model,
@@ -65,7 +72,7 @@
 				max : 1000,
 				
 			});
-			
+			*/
 			
 			var textStyles = new Layer.Views.Lib.TextStyles({
 				model : this.model
@@ -76,10 +83,10 @@
 			})
 			
 			this.controls
+				.append( dissolveCheck.getControl() )
 				.append( textStyles.getControl() )
 				.append( fontChooser.getControl() )
-				.append( color.getControl() )
-				.append( sizeSlider.getControl() );
+				.append( color.getControl() );
 			
 			return this;
 		}

@@ -1,3 +1,14 @@
+/****************************
+
+a note on this.settings:
+
+DO NOT use this.settings to read in any dynamically updated content. It won't work
+
+Use this.model.get('attr')[my_setting] instead!!!
+
+*****************************/
+
+
 (function(Layer){
 
 	Layer.Views.Lib = Backbone.View.extend({
@@ -8,10 +19,13 @@
 			$(this.el).addClass('control');
 			this.init();
 			
-			this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
-			this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
-			this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
-			this.model.on('editor_layerExit', this.private_onLayerExit, this);
+			if(this.model)
+			{
+				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
+				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
+				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerExit', this.private_onLayerExit, this);
+			}
 		},
 		
 		init : function(){},
@@ -174,7 +188,10 @@
 		updateLink : function()
 		{
 			this.$el.find('input').unbind('keypress');
-			var fieldValue = this.$el.find('input').val();
+			var fieldValue = this.$el.find('input').val().replace('http://','');
+			
+			
+			
 			if( fieldValue != this.model.get('attr').link )
 			{
 				this.$el.find('input, .add-on').effect('highlight',{},2000);
@@ -189,7 +206,7 @@
 				'<div class="input-prepend">'+
 					'<span class="add-on">http://</span>'+
 					'<input class="span2" type="text" placeholder="www.example.com" value="<%= link %>">'+
-					'<a href="#" class="remove-link">&times;</span>'
+					'<a href="#" class="remove-link close">&times;</span>'
 				'</div>';
 				
 			return html;
@@ -212,20 +229,82 @@
 		},
 		
 		init : function( args )
+		{},
+		
+		render : function()
 		{
-			this.className = this.settings.className;
+			$(this.el).attr('id', 'media-controls-'+this.model.id);
+		}
+		
+	});
+	
+	Layer.Views.Lib.SectionLabel = Layer.Views.Lib.extend({
+		
+		className : 'section-head',
+		
+		defaults : {
+			label : 'Section'
 		},
 		
 		render : function()
 		{
-			$(this.el).attr('id', this.settings.idName);
+			$(this.el).html( this.settings.label ).css({
+				'text-align':'center',
+				'font-weight':'bold',
+				'font-size':'16px'
+			});
+			return this;
+		}
+		
+	});
+
+	Layer.Views.Lib.Checkbox = Layer.Views.Lib.extend({
+		
+		defaults : {
+			label : 'Checkbox',
+			value : false,
+			save : true,
+		},
+		
+		render : function()
+		{
+			var _this = this;
+			var check = '';
+			if(this.model.get('attr')[this.settings.property]) check = 'checked';
+			$(this.el).append( _.template( this.getTemplate(), _.extend(this.settings,{check:check}) ) );
+			var count = 0;
+			this.$el.find('input').change(function(){
+				_this.saveValue( $(this).is(':checked') )
+			})
+			return this;
+		},
+		
+		saveValue : function(value)
+		{
+			if(this.settings.save)
+			{
+				var attr = {};
+				attr[this.settings.property] = value;
+				this.model.update( attr )
+			}
+		},
+		
+		getTemplate : function()
+		{
+			html = 
+			
+			"<form class='form-inline' style='height:0px'>"+
+				"<label class='checkbox'><input type='checkbox' <%= check %>> <%= label %></label>"+
+			"</form>";
+			
+			return html;
 		}
 		
 	});
 
 	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
 		
-		className : 'control control-slider',
+		className : 'control control-slider clearfix',
 		
 		defaults : {
 			label : 'control',
@@ -241,40 +320,85 @@
 			callback : false,
 			save : true,
 			
+			
+			onSlide : function(){},
+			onChange : function(){},
+			onStart : function(){},
+			onStop : function(){},
+			
 			slide : null
+		},
+		
+		events : {
+			'focus .slider-num-input' : 'onInputFocus',
+			'keypress .slider-num-input' : 'onKeypress'
+		},
+		
+		onInputFocus : function()
+		{
 		},
 		
 		render : function()
 		{
 			var _this = this;
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
-			
+			var uiValue = ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value;
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{uiValue:uiValue}) ));
+
 			//slider stuff here
 			this.$el.find('.control-slider').slider({
+				range : 'min',
 				min : this.settings.min,
 				max : this.settings.max,
-				value : ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value,
+				value : uiValue,
 				step : this.settings.step,
+				start : function(e,ui)
+				{
+					_this.settings.onStart();
+				},
 				slide : function(e, ui)
 				{
-					if( _this.settings.css )
-						_this.model.visual.$el.css( _this.settings.property, ui.value + _this.settings.suffix );
-						
+					_this.updateSliderInput(ui.value);
+					_this.updateVisualElement( ui.value );
+					
+					_this.value = ui.value;
+					
 					if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
+					_this.settings.onSlide();
+				},
+				change : function(e,ui)
+				{
+					_this.updateVisualElement( ui.value );
+					_this.updateSliderInput(ui.value);
+					_this.saveValue(ui.value)
+					_this.settings.onChange();
 				},
 				stop : function(e,ui)
 				{
-					if(_this.settings.save)
-					{
-						var attr = {};
-						attr[_this.settings.property] = ui.value;
-						_this.model.update( attr )
-					}
+					_this.settings.onStop();
 				}
+				
 			});
 			
+			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+			
 			return this;
+		},
+		
+		updateVisualElement : function(value)
+		{
+			if( this.settings.css )
+				this.model.visual.$el.css( this.settings.property, value + this.settings.suffix );
+		},
+		
+		updateSliderInput : function(value)
+		{
+			this.$el.find('.slider-num-input').html(value).css({'left': this.$el.find('a.ui-slider-handle').css('left') });
+		},
+		
+		insertNumberField : function()
+		{
+			this.$el.find('.control-slider').prepend()
 		},
 		
 		getValue : function()
@@ -282,12 +406,48 @@
 			return this.$el.find('.control-slider').slider('option','value');
 		},
 		
+		onKeypress : function(e)
+		{
+			console.log(e.which)
+			if( e.which == 13 )
+			{
+				this.updateFromInput();
+				return false;
+			}
+			else if( e.which > 44 && e.which < 58){}
+			else return false;
+		},
+		
+		updateFromInput : function()
+		{
+			var newValue = parseFloat( this.$el.find('.slider-num-input').text() );
+			console.log(' new value', newValue )
+			this.$el.find('.slider-num-input').blur();
+			this.$el.find('.control-slider').slider('value', newValue);
+			
+			//this.saveValue(newValue)
+		},
+		
+		saveValue : function(value)
+		{
+			console.log('save',value)
+			if(this.settings.save)
+			{
+				var attr = {};
+				attr[this.settings.property] = value;
+				this.model.update( attr )
+			}
+		},
+		
 		getTemplate : function()
 		{
 			var html = ''+
 			
-					"<div class='control-name'><%= label %></div>"+
-					"<div class='control-slider'></div>";
+					"<div class='control-name' style='float:left;position:relative;top:15px;width:35%'><%= label %></div>"+
+					"<div style='float:left;width:60%;padding-right:5%'>"+
+						"<div class='slider-num-input' contenteditable='true' style='margin-bottom:5px;position:relative;display:inline-block'><%= uiValue %></div>"+
+						"<div class='control-slider'></div>"+
+					"</div>";
 			
 			return html;
 		}
@@ -407,7 +567,8 @@
 		},
 		
 		events : {
-			'click .font-list a' : 'changeFont'
+			'click .font-list a' : 'changeFont',
+			'click .size-list a' : 'changeSize'
 		},
 		
 		changeFont : function( ui )
@@ -416,6 +577,14 @@
 			this.model.visual.$el.find('.style-font-family').contents().unwrap();
 			this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
 			this.saveContent();
+			return false;
+		},
+		
+		changeSize : function( e )
+		{
+			this.$el.find('.open').removeClass('open');
+			this.model.visual.$el.css( 'fontSize', $(e.target).data('fontSize')+'%' );
+			this.model.update({ fontSize : $(e.target).data('fontSize') });
 			return false;
 		},
 		
@@ -429,7 +598,7 @@
 		{
 			var html =
 			
-			'<div class="btn-group">'+
+			'<div class="clearfix"><div class="btn-group pull-left">'+
 				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Fonts'+
 					'<span class="caret"></span>'+
 				'</a>'+
@@ -442,7 +611,27 @@
 					'<li style="font-family:\'Trocchi\'"><a href="#" data-font-family="Trocchi">Trocchi</a></li>'+
 					'<li style="font-family:\'Pontano Sans\'"><a href="#" data-font-family="Pontano Sans">Pontano Sans</a></li>'+
 				'</ul>'+
-			'</div>';
+			'</div>'+
+			
+			'<div class="btn-group pull-left">'+
+				'<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Size'+
+					'<span class="caret"></span>'+
+				'</a>'+
+				'<ul class="dropdown-menu size-list">'+
+					'<li><a href="#" data-font-size="100">8</a></li>'+
+					'<li><a href="#" data-font-size="125">10</a></li>'+
+					'<li><a href="#" data-font-size="150">12</a></li>'+
+					'<li><a href="#" data-font-size="175">14</a></li>'+
+					'<li><a href="#" data-font-size="200">18</a></li>'+
+					'<li><a href="#" data-font-size="250">24</a></li>'+
+					'<li><a href="#" data-font-size="375">36</a></li>'+
+					'<li><a href="#" data-font-size="500">48</a></li>'+
+					'<li><a href="#" data-font-size="800">72</a></li>'+
+					'<li><a href="#" data-font-size="1600">144</a></li>'+
+					'<li><a href="#" data-font-size="2400">200</a></li>'+
+					'<li><a href="#" data-font-size="3600">300</a></li>'+
+				'</ul>'+
+			'</div></div>';
 					
 			return html;
 		}
@@ -492,7 +681,7 @@
 				});
 			}
 			
-			this.$el.append( _.template( this.getTemplate(), this.settings ));
+			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{'color':this.model.get('attr')[this.settings.property]}) ));
 			
 			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
 			
@@ -532,7 +721,6 @@
 		initWheel : function()
 		{
 			var _this = this;
-			console.log('pull up color wheel!')
 			this.$el.find('.close').show();
 			
 			if( this.wheelLoaded != true )
@@ -587,225 +775,6 @@
 			return html;
 		}
 	});
-
-
-	// depends on popcorn.js
-	Layer.Views.Lib.Playback = Layer.Views.Lib.extend({
-		
-		className : 'control control-playback plyr-controls-wrapper',
-		
-		defaults : {},
-		
-		init : function()
-		{
-			this.model.on('video_ready', this.onVideoReady, this);
-		},
-		
-		render : function()
-		{
-			var _this = this;
-			
-			this.$el.append( this.getTemplate() ).attr('id','plyr-editor');
-			
-			return this;
-		},
-		
-		onVideoReady : function()
-		{
-			this.delegateEvents();
-			this.initPopcornEvents();
-			this.initScrubbers();
-		},
-		
-		initPopcornEvents : function()
-		{
-			var _this = this;
-			
-			//console.log(this.model.video)
-			
-			this.model.video.pop.listen('pause',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-pause').addClass('plyr-play');
-			});
-			
-			this.model.video.pop.listen('play',function(){
-				_this.$el.find('.plyr-button').removeClass('plyr-play').addClass('plyr-pause');
-			});
-			
-			
-			
-			
-			this.model.video.on('timeupdate_controls', function(){
-
-				if(Math.abs(_this.model.video.pop.volume()-_this.model.get('attr').volume)>.01)_this.model.video.pop.volume(_this.model.get('attr').volume);
-
-				if( _this.model.get('attr').cue_out != 0 && _this.model.video.pop.currentTime() > _this.model.get('attr').cue_out )
-				{
-					
-					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
-					_this.model.video.pop.pause();
-				}
-				else if(_this.model.video.pop.currentTime() < _this.model.get('attr').cue_in )
-				{
-					
-					_this.model.video.pop.currentTime( _this.model.get('attr').cue_in );
-					_this.model.video.pop.pause();
-				}
-				
-				var left = parseFloat( _this.model.video.pop.currentTime()) / parseFloat( _this.model.video.pop.duration() ) * 100;
-				_this.$el.find('.plyr-scrubber').css({ 'left' : left+'%' });
-				_this.$el.find('.plyr-time').html( convertTime( _this.model.video.pop.currentTime() )+' / '+convertTime( _this.model.video.pop.duration() ) );
-				_this.$el.find('.plyr-time-bar').css({ 'width' : left+'%' });
-
-			});
-			
-			this.model.video.pop.listen('seeking',function(){});
-			this.model.video.pop.listen('seeked',function(){});
-			this.model.video.pop.listen('ended',function(){
-				//this.currentTime(0);
-			});
-			this.model.video.pop.listen('loadeddata',function(){});
-		},
-		
-		initScrubbers : function()
-		{
-			var _this = this;
-			this.$el.find('.plyr-scrubber').draggable({
-				
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					var newTime = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-time').html( convertTime(newTime)+' / '+convertTime(_this.model.video.pop.duration()));
-				},
-				
-				stop: function(event, ui)
-				{
-					var newTime = Math.floor(parseFloat(_this.$el.find('.plyr-scrubber').css('left'))*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));
-					if( newTime < _this.model.get('attr').cue_in ) newTime = _this.model.get('attr').cue_in;
-					else if( newTime > _this.model.get('attr').cue_out && parseFloat(_this.model.get('attr').cue_out)>0) newTime = Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0);
-				
-					_this.model.video.pop.trigger('timeupdate');
-					_this.model.video.pop.currentTime( newTime );
-					
-					//_this.pop.play();
-				}
-			});
-			
-			//console.log(this.model);
-			
-		
-			this.$el.find('.plyr-cuein-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				drag:function(event, ui)
-				{
-					_this.model.get('attr').cue_in = Math.floor( parseFloat(ui.position.left)*_this.model.video.pop.duration()/parseFloat(_this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cuein-time').html( convertTime(_this.model.get('attr').cue_in,true) );
-				},
-				
-				stop: function(event, ui)
-				{
-					
-					_this.$el.find('.plyr-cuein-bar').css({'width':_this.$el.find('.plyr-cuein-scrubber').css('left')});
-					console.log(Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
-					_this.model.video.pop.currentTime( Math.floor(parseFloat(ui.position.left) * _this.model.video.pop.duration() / parseFloat(_this.$el.find('.plyr-timeline').width())));
-
-					var left = parseFloat( _this.model.video.pop.currentTime() ) / parseFloat( _this.model.video.pop.duration() ) * 100;
-					_this.$el.find('.plyr-scrubber').css({'left':left+'%'});
-					_this.$el.find('.plyr-time').html(convertTime(_this.model.video.pop.currentTime())+' / '+convertTime(_this.model.video.pop.duration()));
-					_this.$el.find('.plyr-time-bar').css({'width':left+'%'});
-					
-					_this.model.update({'cue_in' : _this.model.get('attr').cue_in });
-				}
-			});
-			   this.$el.find('.plyr-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			
-				this.$el.find('.plyr-cuein-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_in)* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			if(parseFloat(this.model.get('attr').cue_out)>0)this.$el.find('.plyr-cueout-scrubber').css({'left': Math.floor(parseFloat(this.model.get('attr').cue_out )* parseFloat( this.$el.find('.plyr-timeline').width())/parseFloat(this.model.video.pop.duration() ))});
-			this.$el.find('.plyr-cueout-scrubber').draggable({
-				axis:'x',
-				containment: 'parent',
-				
-				start:function()
-				{
-					_this.model.video.pop.pause();
-				},
-				
-				drag:function(event, ui)
-				{
-					_this.model.get('attr').cue_out = Math.floor(parseFloat(ui.position.left)*_this.model.video.pop.duration() / parseFloat( _this.$el.find('.plyr-timeline').width()));	
-					_this.$el.find('.plyr-cueout-time').html(convertTime( _this.model.get('attr').cue_out,true));
-				},
-				
-				stop: function(event, ui)
-				{
-					_this.$el.find('.plyr-cueout-bar').css({'width':parseInt(_this.$el.find('.plyr-timeline').width())-parseInt(_this.$el.find('.plyr-cueout-scrubber').css('left'))});
-					_this.model.video.pop.currentTime(Math.max(parseFloat(_this.model.get('attr').cue_in), parseFloat(_this.model.get('attr').cue_out)-5.0));
-				
-					_this.model.update({'cue_out' : _this.model.get('attr').cue_out });
-				}
-			});
-		},
-		
-		events : {
-			
-			'click .plyr-button' : 'playPause'
-			
-		},
-		
-		playPause : function()
-		{
-			console.log( 'volume: '+ this.model.get('attr').volume )
-			this.model.video.pop.volume( this.model.get('attr').volume );
-			if ( this.model.video.pop.paused() ) this.model.video.pop.play();
-			else this.model.video.pop.pause();
-		},
-		
-		getTemplate : function()
-		{
-			var html = 
-			
-			'<div class="plyr-time-wrapper">'+
-				'<div class="plyr-cuein-time"></div>'+
-				'<div class="plyr-cueout-time"></div>'+
-			'</div>'+
-			'<div class="plyr-timeline-wrapper">'+
-				'<div class="plyr-button-wrapper">'+
-					'<div class="plyr-button plyr-play"></div>'+
-				'</div>'+
-				'<div class="plyr-timeline">'+
-					'<div class="plyr-cuein-bar plyr-bar"></div>'+
-					'<div class="plyr-time-bar plyr-bar"></div>'+
-					'<div class="plyr-cueout-bar plyr-bar"></div>'+
-					'<div class="plyr-cuein-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down-green"></div>'+
-					'</div>'+
-					'<div class="plyr-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-hanging-box"></div>'+
-					'</div>'+
-					'<div class="plyr-cueout-scrubber plyr-edit-scrubber">'+
-						'<div class="plyr-scrubber-select"></div>'+
-						'<div class="plyr-arrow-down"></div>'+
-					'</div>'+
-				'</div>'+
-			'</div>'+
-			'<div class="plyr-time-wrapper">'+
-				'<span class="plyr-time"></span>'+
-			'</div>';
-			
-			return html;
-		}
-	});
-	
 	
 	Layer.Views.Lib.GoogleMaps = Layer.Views.Lib.extend({
 		
@@ -890,6 +859,16 @@
 					this.map.getStreetView().setVisible( true );
 				}
 				*/
+				
+				
+				  var streetViewLayer = new google.maps.ImageMapType({
+					getTileUrl : function(coord, zoom) {
+					  return "http://www.google.com/cbk?output=overlay&zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&cb_client=api";
+					},
+					tileSize: new google.maps.Size(256, 256)
+				  });
+				  
+				this.map.overlayMapTypes.insertAt(0, streetViewLayer);  
 				this.initMapListeners();
 				this.initGeoCoder();
 				

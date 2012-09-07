@@ -6,7 +6,7 @@ namespace Zeega\DataBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections;
 use DateInterval;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 use DateTime;
 
 class ItemRepository extends EntityRepository
@@ -62,14 +62,19 @@ class ItemRepository extends EntityRepository
       	{
       	    $content_type = strtoupper($query['notContentType']);
 
-      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $query['notContentType']);
+      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', ucfirst($query['notContentType']));
 		}
 		
-        if(isset($query['contentType']))
+        if(isset($query["contentType"]))
       	{
-      	    $content_type = strtoupper($query['contentType']);
-
-      	  	$qb->andWhere('i.media_type = ?4')->setParameter(4, $query['contentType']);
+			if(strtoupper($query["contentType"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',ucfirst($query["contentType"]));
+            }
 		}
 		
 		if(isset($query['tags']))
@@ -155,20 +160,6 @@ class ItemRepository extends EntityRepository
 		return intval($qb->getQuery()->getSingleScalarResult());
 	}
 	
-	public function getQueryTags($query)
-	{
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('tg.name,tg.id,COUNT(tg.id) as occurrences')
-           ->from('ZeegaDataBundle:Tag', 'tg')
-           ->innerjoin('tg.item', 'tgit')
-		   ->innerjoin('tgit.item', 'i')
-		   ->setMaxResults(5)
-		   ->groupBy('tg')
-		   ->orderBy('occurrences','DESC');
-		$qb = $this->buildSearchQuery($qb, $query);
-		return $qb->getQuery()->getArrayResult();
-	}
-
     //  api/search
     public function searchItems($query)
     {   
@@ -178,10 +169,31 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
-            ->orderBy('i.id','DESC')
+            ->where('i.enabled = true')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
+        if(isset($query['sort']))
+      	{
+	      	$sort = $query['sort'];
+      	 	if($sort == 'date-desc')
+            {
+                $qb->orderBy('i.media_date_created','DESC')->groupBy("i.id");
+            }
+            else if($sort == 'date-asc')
+            {
+                $qb->orderBy('i.media_date_created','ASC')->groupBy("i.id");
+            }
+			else
+			{
+				$qb->orderBy('i.id','DESC');
+			}
+		}
+		else
+		{
+			$qb->orderBy('i.id','DESC');
+		}
+
         $qb = $this->buildSearchQuery($qb, $query);
         
         if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
@@ -189,7 +201,29 @@ class ItemRepository extends EntityRepository
         else
             return $qb->getQuery()->execute();
     }
-
+	
+	//  api/search
+    public function findOneByIdWithUser($id)
+    {   
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+    
+        // search query
+        $qb->select('i,u.display_name')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->innerjoin('i.user', 'u')
+            ->orderBy('i.id','DESC')
+       		->where('i.id = :id')
+       		->setParameter('id', $id);
+        
+    	$res = $qb->getQuery()->getResult();
+    	if(isset($res) && count($res) > 0)
+    	{
+    		return $res[0][0];
+    	}
+    	return null;
+    }
+	
     //  api/search
     public function searchItemsByTimeDistribution($query)
     {
@@ -299,51 +333,6 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
-    //  api/collections/{col_id}
-    public function searchCollectionById($id)
-    {
-     	return $this->getEntityManager()
-				    ->createQueryBuilder()
-				    ->add('select', 'i')
-			        ->add('from', ' ZeegaDataBundle:Item i')
-			        ->andwhere('i.id = :id')
-			        ->andwhere("i.media_type = 'Collection'")
-			        ->andwhere("i.enabled = true")
-			        ->setParameter('id',$id)
-			        ->getQuery()
-			        ->getArrayResult();
-    }
-    
-    //  api/collections/{col_id}
-    public function searchItemsByTags($query)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-		
-		// search query
-		$qb->select('i')
-		   ->from('ZeegaDataBundle:Item', 'i')
-	       ->orderBy('i.id','DESC')
-	       ->setMaxResults($query['limit'])
-	       ->setFirstResult($query['limit'] * $query['page']);
-
-		$qb = $this->buildSearchQuery($qb, $query);
-		
-		return $qb->getQuery()->getResult();
-    }
-    
-    public function findItemById($id)
-    {
-        return $this->getEntityManager()
-    			->createQueryBuilder()
-    			->add('select', 'i')
-    		   ->add('from', ' ZeegaDataBundle:Item i')
-    		   ->andwhere('i.id = :id')
-    		   ->andwhere('i.enabled = true')
-    		   ->setParameter('id',$id)
-    		   ->getQuery()
-    		   ->getArrayResult();
-    }
-     
     public function findUserItems($id)
     {
      	return $this->getEntityManager()
@@ -359,9 +348,115 @@ class ItemRepository extends EntityRepository
 			   ->setMaxResults(15)
 			   ->getArrayResult();
     }
+	
+	public function findUserCollections($userId,$siteId)
+ 	{
+ 		$rsm = new ResultSetMapping;
+		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
+		$rsm->addFieldResult('i', 'id', 'id');
+		$rsm->addFieldResult('i', 'title', 'title');
 
-    public function findUserCollections($userId,$siteId)
-    {
+		$queryString = "SELECT id,title
+						FROM item where media_type = 'Collection' AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id 
+						ORDER BY id DESC LIMIT :limit OFFSET :offset";
+						
+		$queryString = str_replace("\r\n","",$queryString);
+
+		$query = $this->getEntityManager()->createNativeQuery($queryString, $rsm);
+
+		$query->setParameter('limit', 100);
+		$query->setParameter('offset', 0);
+		$query->setParameter('site_id', $siteId);
+		$query->setParameter('user_id', $userId);
+
+		return $query->getArrayResult();
+	}
+	
+	
+	public function findItems($query,$returnTotalItems = false)
+	{
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qbCount = $this->getEntityManager()->createQueryBuilder();
+        
+	    $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->where('i.enabled = true')->orderBy('i.id','DESC')->setMaxResults($query["limit"])->setFirstResult($query["page"]);
+        
+        if(isset($query["user"]))
+        {
+            $qb->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+            $qbCount->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
+        }
+        
+        if(isset($query["site"]))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
+			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
+		}
+		
+        if(isset($query["content"]))
+        {
+            // there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+            // the percentage of collection is likely to be small and the Postgres query scheduler does not handle this well - should be fixed on PostgreSQL 9.2
+     		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
+
+            if(strtoupper($query["content"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type = 'Collection'");
+                $qbCount->andwhere("i.media_type = 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type = :content")->setParameter('content',$query["content"]);
+                $qbCount->andwhere("i.media_type = :content")->setParameter('content',$query["content"]);
+            }
+        }
+        
+        if(isset($query["exclude_content"]))
+        {
+            // there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+            // the percentage of collection is likely to be small and the Postgres query scheduler does not handle this well - should be fixed on PostgreSQL 9.2
+     		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
+
+            if(strtoupper($query["exclude_content"]) == 'COLLECTION')
+            {
+                $qb->andwhere("i.media_type <> 'Collection'");
+                $qbCount->andwhere("i.media_type <> 'Collection'");
+            }
+            else
+            {
+                $qb->andwhere("i.media_type <> :exclude_content")->setParameter('exclude_content',$query["exclude_content"]);
+                $qbCount->andwhere("i.media_type <> :exclude_content")->setParameter('exclude_content',$query["exclude_content"]);
+            }
+        }
+        
+		if(isset($siteId))
+		{
+			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
+		}
+        //return $qb->getQuery();
+	    $results = array();
+	    $results["items"] = $qb->getQuery()->getResult();
+		
+		if(isset($returnTotalItems))
+		{
+		    if(count($results["items"]) == $query["limit"])
+		    {
+		        $qbCount->select('COUNT(i.id)')->from('ZeegaDataBundle:Item', 'i');
+    		    $results["total_items"] = intval($qbCount->getQuery()->getSingleScalarResult());
+		    }
+		    else
+		    {
+		        $results["total_items"] = count($results["items"]);
+		    }
+		}		  	
+        return $results;
+	}
+	
+	
+    public function findCollections($userId,$siteId,$limit,$offset)
+ 	{
+ 		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
+ 		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
         $qb = $this->getEntityManager()->createQueryBuilder();
 
             // search query

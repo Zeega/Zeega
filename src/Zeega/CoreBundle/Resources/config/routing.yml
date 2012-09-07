@@ -1,3 +1,33 @@
-ZeegaCoreBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ZeegaCoreBundle:Default:index }
+ZeegaCoreBundle_thumbnails:
+    type:     rest
+    resource: Zeega\CoreBundle\Controller\ThumbnailsController
+
+ZeegaCoreBundle_faq:
+    pattern: /faq
+    defaults: { _controller:  ZeegaCoreBundle:Core:faq }
+    
+ZeegaCoreBundle_unsupportedBrowser:
+    pattern: /browser/notsupported
+    defaults: { _controller:  ZeegaCoreBundle:Core:unsupportedBrowser }
+
+ZeegaCoreBundle_frame_publish:
+    pattern: /frame/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:frame }
+
+ZeegaCoreBundle_project_publish:
+    pattern: /project/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
+
+ZeegaCoreBundle_collection_publish:
+    pattern: /collection/{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
+    
+ZeegaCoreBundle_embed:
+    pattern: /{id}/embed
+    defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
+
+ZeegaCoreBundle_project_main:
+    pattern: /{id}
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
+
+    

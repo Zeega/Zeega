@@ -1,5 +1,11 @@
 (function(Frame){
 
+	Frame.LayerCollection = Backbone.Collection.extend({
+
+		comparator : function( layer ){ return layer.layerIndex }
+	
+	})
+
 	Frame.Model = Backbone.Model.extend({
 		
 		frameTarget : $('#frame-list'),
@@ -15,45 +21,149 @@
 	
 		url : function()
 		{
-			if( this.isNew() ) {
-				console.log('FRAME URL ' + zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames');
-				return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
-				}
-			else {
-				console.log('FRAME URL ' + zeega.app.url_prefix + 'api/frames/'+ this.id);
-				return zeega.app.url_prefix + 'api/frames/'+ this.id;
-			}
+			if( this.isNew() )return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
+			else return zeega.app.url_prefix + 'api/frames/'+ this.id;
 		},
 	
 		initialize : function()
-		{	
-			this.updating = false
-			
-			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+		{
+			if( this.get('layers') ) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
-			console.log('frame model',this);
-			this.view = new Frame.Views.FrameSequence({ model : this })
-			
-			//this.on('focus', this.render, this );
-			//this.on('blur', this.unrender, this );
-
-			this.on('update_thumb', this.updateThumb, this );
-			
-
 			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
+			this.on('update_thumb', this.updateFrameThumb, this );
 		},
-	
-	
-		render : function()
+
+		/*
+			must be called after the model is created and after the project is fully loaded/parsed
+		*/
+
+		complete : function()
 		{
-			this.frameTarget.append( this.view.render().el )
+			if( !this.get('layers') ) this.set({ layers:[] });
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
+			this.layers = new Frame.LayerCollection( layerArray );
+			this.layers.on('add', this.updateLayerOrder, this);
+			this.layers.on('remove', this.updateLayerOrder, this);
+
+			this.sequenceFrameView = new Frame.Views.FrameSequence({
+				model:this,
+				attributes : {
+					id:'frame-thumb-'+ this.id,
+					'data-id' : this.id,
+					style:'background-image:url('+ this.get('thumbnail_url') +')'
+				}
+			});
+			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
+			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
+		},
+
+		/*
+			updates the layer order when a layer is added, removed, or moved
+		*/
+
+		updateLayerOrder : function()
+		{
+			var layerOrder = this.layers.map(function(layer){ return parseInt(layer.id) });
+			var layerOrder = _.compact( layerOrder );
+			if(layerOrder.length == 0) layerOrder = [false];
+			this.save('layers', layerOrder);
+			this.updateThumb();
+		},
+
+		/*
+			relies on the frame actually being rendered in the dom to work
+		*/
+
+		sortLayers : function( layerIDArray )
+		{
+			var _this = this;
+			_.each(layerIDArray, function(layerID, i){
+				var layer = _this.layers.get(layerID);
+				$('#layer-visual-'+ layer.id).css('z-index', i);
+				layer.layerIndex = i;
+			})
+			this.layers.sort();
+			this.updateLayerOrder();
+		},
+
+		/*
+			creates a new layer from an item model and adds it to the frame
+		*/
+
+		addItemLayer : function( itemModel )
+		{
+			var _this = this;
+			var Layer = zeega.module('layer');
+			// make a new layer // this could be more elegant // shouldnt' dump attributes into model!
+			var newLayer = new Layer[itemModel.get('layer_type')]({
+					type: itemModel.get('layer_type'),
+					attr: itemModel.toJSON()
+				});
+			newLayer.on('sync', this.onFirstLayerSave, this);
+			newLayer.save();
+			
+			return newLayer;
+		},
+
+		onFirstLayerSave : function( layer )
+		{
+			console.log('$$		on first layer save', layer)
+			zeega.app.project.layers.add( layer );
+			this.layers.push( layer );
+			layer.off('sync',this.onFirstLayerSave);
+		},
+
+		/*
+			creates a new layer from a type and adds it to the frame
+		*/
+
+		addLayerByType : function( type, a )
+		{
+			var _this = this;
+			var attributes = a || {};
+			var Layer = zeega.module('layer');
+			var newLayer = new Layer[type]();
+
+			if( newLayer )
+			{
+				newLayer.save( {attr: _.extend(newLayer.get('attr'),attributes) }, {
+					success : function()
+					{
+						_this.layers.push( newLayer );
+						zeega.app.project.layers.add( newLayer );
+						newLayer.trigger('sync');
+					}
+				})
+				return newLayer;
+			}
+			else console.log('!!		no such layer type!');
+		},
+
+		// adds the frame workspace view to the editor
+		renderWorkspace : function()
+		{
+			this.editorWorkspace.renderToEditor();
+			this.editorLinkLayerList.renderToEditor();
+			this.editorLayerList.renderToEditor();
+		},
+		// removes the frame workspace view to the editor
+		removeWorkspace : function()
+		{
+			this.editorWorkspace.removeFromEditor()
+			this.editorLinkLayerList.removeFromEditor();
+			this.editorLayerList.removeFromEditor();
 		},
 		
-		unrender : function()
+		update : function( newAttr, silent )
 		{
-			this.frameTarget.append( this.view.remove() )
+			var _this = this;
+			if( _.isArray(this.get('attr')) ) this.set('attr',{});
+			var a = _.extend( this.get('attr'), newAttr );
+			this.set('attr',a);
+			if( !silent ) this.save();
 		},
 		
 		//update the frame thumbnail
@@ -61,8 +171,6 @@
 		{
 			
 			// single frame url: frame
-			console.log('SAVE FRAME')
-			console.log(this)
 			var _this = this;
 						
 			if( this.updating != true && zeega.app.thumbnailUpdates )
@@ -78,6 +186,7 @@
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
+						_this.save();
 						console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
@@ -86,10 +195,20 @@
 					this.terminate();
 				}, false);
 			
-				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/frames/'+this.get('id')+'/thumbnail'}); // Send data to our worker.
+				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
 		},
+		
+		validate : function( attrs )
+		{
+
+			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
+			{
+				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');
+				return 'layer array update error!';
+			}
+		}
 	
 
 	});

@@ -5,7 +5,7 @@
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>{% block title %}Zeega Alpha{% endblock %}</title>
+        <title>{% block title %}Zeega Beta{% endblock %}</title>
         {% block stylesheets %}
             <link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
 			<meta name="robots" content="noindex,follow">
@@ -22,14 +22,47 @@
 		<script> 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
+
+			// following purpose (though not the code) should be moved to widget.view.item.ingesting.js.  Inferring data state from HTML state is bad jQuery pattern
+			var watchForCloseInterval = null;
+			var successCount = 0;
+			function watchForClose(){
+				if(window.name=="ZeegaBookmarklet"){
+					watchForCloseInterval = setInterval(_watchForClose, 1000);
+				}
+			}
+			function _watchForClose(){
+				var message_div = document.getElementById("message");
+				if (message_div) {
+					if(message_div.style.display == "block"){
+						successCount++;
+						if (successCount >= 4){
+							window.close();
+						}
+					}
+				}
+			}
+			watchForClose();
 		</script>
-		
+				{% if app.environment == 'prod' %}
+			<script type="text/javascript">
+	
+				  var _gaq = _gaq || [];
+				  _gaq.push(['_setAccount', 'UA-33491977-1']);
+				  _gaq.push(['_trackPageview']);
+				
+				  (function() {
+					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				  })();
+	
+			</script>
+		{% endif %}
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 
   
-  <div id='add-media' style='border: solid 1px black; display:none; padding: 20px; background:white; font-size:16px; color:gray; position:absolute; z-index:100000; left:35%;top:10%; width:30%;'>  <h1> Drag this <a href="javascript:(function(){var head=document.getElementsByTagName('body')[0],script=document.createElement('script');script.type='text/javascript';script.src='{{hostname}}/web/js/widget/zeega.bookmarklet.js?' + Math.floor(Math.random()*99999);head.appendChild(script);})(); void 0" >Z</a> to your browser's bookmark bar and then simply click on the link whenever you come across media that you would like to add to your project. </h1></div>
   
-   	{% block header %}
    		
 		<header>
 			<div class="navbar navbar-fixed-top">
@@ -56,76 +89,18 @@
 		
 
    		<div id="wrapper" style="width:450px; height: 100%;">
-			<div id="header" style="top:-20px;width:430px;">
-				
-				<div id="header-nav" >
-				
-				</div> <!-- #headerLoggedInWrapper -->
-<!--
-					<div id="header-title">
-						<ul>
-						
-							
-								<li><a class="dark"><img src="{{ asset('images/zeega-logo-header.png')}}" style="margin-top: -4px; margin-left:-20px;"></a></li>
-								<li class='drop-down clearfix '>
-									
-									<a   href="#"> {playground.title}</a>
-									<ul class='drop-down-menu'>
-											<li><a href="#">Projects</a></li>
-									</ul>
-									
-									
-									
-								</li>
-						
-						</ul>
-						
-						
-						
-					</div>
-			
-
-					<div id="header-nav" >
-		
-						<ul>
-												
-							<li >
-								Logged in as <a href='#' >{{displayname}}</a>
-							</li>
-						</ul>
-					</div> <!-- #headerLoggedInWrapper -->
 	
-			</div> <!-- #header -->	
-	{% endblock %}
-			<div id="editor" >
+		
 				
 				{% block body %}{% endblock %}
-		   		<div id="item-view"></div>
-				<div id="collection-wrapper" style="margin-top:20px; color: white; font-size:14px;"> 
-					<div  style="clear: both; border-top:dotted 1px red;  margin-top:20px;  margin-bottom:20px; margin-right:25px; width:100%; height:0px;"></div> 
-					<b>My Zeega Collection</b>
-					<div id="collection" style="margin-top:20px; width:426px;"> 
-						<!--
-						{% for item in mycollection %}
-							<img style="border: solid 1px white;" title="{{item.title}}" src="{{item.thumbnail_url}}" width="80px" height="80px"/>
-						{% endfor %}
-						-->
-					</div>
-				</div>
-				
-				<br><br>
+		
 
-				<div id="footer">
-					{% block footer %}
-						<div id="footerWrapper">
-							<div id="footer">
-						&copy; <a href="http://zeega.org" target="_blank">Zeega.org</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a>
-							</div>
-						</div>
-					{% endblock %}
-				</div>
-			 </div> <!-- #editor -->	
-         </div> <!-- #wrapper -->
+					
+		</div> <!-- #wrapper -->
+		
+		<footer style="position:fixed; bottom: 0px;">
+			<div>&copy; <a href="http://zeega.org" target="_blank">Zeega</a> {{ "now"|date("Y")}} * <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License</a></div>
+		</footer>
          
 	{% block extras %}{% endblock %}
          

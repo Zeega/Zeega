@@ -37,6 +37,30 @@ Zeega\DataBundle\Entity\User:
             type: string
             length: 50
             nullable: true
+        location:
+            type: string
+            length: 140
+            nullable: true
+        location_latitude:
+            type: float
+            length: 10
+            nullable: true
+        location_longitude:
+            type: float
+            length: 10
+            nullable: true
+        background_image_url:
+            type: string
+            length: 255
+            nullable: true
+        dropbox_delta:
+            type: string
+            length: 255
+            nullable: true
+        idea:
+            type: text
+            nullable: true
+        
     indexes:
         user_type_index:
-            columns: [user_type]      
+            columns: [user_type]

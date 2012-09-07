@@ -1,3 +1,4 @@
+/web/.htaccess
 /web/bundles/
 /app/bootstrap*
 /app/cache/*
@@ -9,10 +10,24 @@
 /web/content/images/thumbs/*
 /web/content/images/frames/*
 /web/content/items/*
+/web/content/users/profileimages/*
+/web/content/tmp/*
 /web/js/widget/zeega.bookmarklet.js
 /web/js/players/zeega.rdio.token.js
 Libraries/
 .DS_Store
 jda_data.*
 !.gitignore
+app/phpunit.xml
+/web/.htaccess
+/web/js_min/*
+*.sublime-project
+*.sublime-workspace
+<<<<<<< HEAD
+web/images/
+web/bugs/
+web/apc.php
+lib.zeega.org/
+*.sh
+web/google25c12ddd28dc266e.html
 

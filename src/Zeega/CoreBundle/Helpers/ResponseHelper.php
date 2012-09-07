@@ -49,4 +49,12 @@ class ResponseHelper
         $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
         return $serializer->serialize($entity, 'json');
     }
+    
+    static public function escapeSolrQuery($query)
+    {
+    	// ref http://e-mats.org/2010/01/escaping-characters-in-a-solr-query-solr-url/
+		$match = array('\\', '+', '-', '&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', '"', ';', ' ');
+		$replace = array('\\\\', '\\+', '\\-', '\\&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;', '\\ ');
+		return str_replace($match, $replace, $query);
+    }
 }

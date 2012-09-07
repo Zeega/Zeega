@@ -27,6 +27,7 @@ var loadFiles = [
 	
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
+	'order!lib/dropbox',
 	
 	
 	'order!app/_layer',
@@ -43,6 +44,9 @@ var loadFiles = [
 	
 	'order!plugins/players/zeega.player.video',
 	'order!plugins/players/zeega.player.youtube',	
+	
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 	       
 	'order!app/player'
 	];

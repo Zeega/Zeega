@@ -34,7 +34,7 @@ this.zeegaWidget = {
 		init : function()
 		{
 			var Items = zeegaWidget.module('items');
-			this.items = new Items.MasterCollection();
+			//this.items = new Items.MasterCollection();
 			var itemBS = jQuery.parseJSON(itemJSON);
 			var newItem = new Items.Model( itemBS );
 			var newItemView = new Items.Views.Ingesting({ model : newItem } )

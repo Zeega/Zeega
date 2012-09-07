@@ -9,7 +9,10 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
+		hasControls : false,
 		defaultControls : false,
+		displayCitation : false,
+		
 		
 		
 		defaultAttributes : {
@@ -22,19 +25,6 @@
 			'top' : 25,
 			'height' : 50,
 			'width' : 50
-		},
-		
-		init : function(options)
-		{
-			
-		},
-		
-		setToFrame : function(sequenceID, frameID)
-		{
-			this.get('attr').to_sequence = sequenceID;
-			this.get('attr').to_frame = frameID;
-			this.get('attr').title = 'Link to sequence '+sequenceID;
-			this.save();
 		}
 		
 	});
@@ -65,13 +55,22 @@
 		
 		init : function()
 		{
+			var _this = this;
 			this.preview = zeega.app.previewMode;
+			this.model.on('updateLink', this.onUpdate, this);
+		},
+
+		onUpdate : function()
+		{
+			console.log('%%		link layer on update')
+			//this.render();
+			this.$el.html( this.getTemplate() );
+			this.onLayerEnter();
 		},
 		
 		render : function()
 		{
 			var _this = this;
-			
 			
 			var style = {
 				'height' : this.model.get('attr').height +'%',
@@ -81,21 +80,16 @@
 			
 			if(!zeega.app.previewMode )
 			{
-				
 				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
 				
 				_.extend( style, {
 					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
 					'border-radius' : '6px'
 				})
-
-				// if the editor is active, the remove the layer if it shouldn't be shown
-				if( this.model.get('attr').to_frame == zeega.app.currentFrame.id && !zeega.app.previewMode ) this.remove();
 			}
 			else
 			{
 				this.delegateEvents({'click':'goClick'})
-				//$(this.el).addClass('go-to-sequence')
 			}
 			
 			$(this.el).html( this.getTemplate() ).css( style ).addClass('linked-layer');
@@ -111,13 +105,13 @@
 		
 		goClick : function()
 		{
-			zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
+			zeegaPlayer.app.project.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		goToSequenceFrame : function()
 		{
-			if(zeega.app.previewMode) zeega.app.player.goToSequenceFrame(this.model.get('attr').to_sequence, this.model.get('attr').to_frame);
-			else zeega.app.router.navigate("editor/sequence/"+this.model.get('attr').to_sequence+"/frame/"+this.model.get('attr').to_frame,{trigger:true})
+			if(zeega.app.previewMode) zeega.app.project.goToFrame(this.model.get('attr').to_frame);
+			else zeega.app.goToFrame(this.model.get('attr').to_frame);
 		},
 		
 		deleteLink : function(e)
@@ -136,30 +130,23 @@
 		
 		onLayerEnter : function()
 		{
-			this.render();
+			console.log ("ONLAYERENTER ______ ADDING RESIZABILITY");
+			var _this = this;
+			this.$el.resizable({
+				stop: function(e,ui)
+				{
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			})
 			this.delegateEvents();
-			if(this.model.get('attr').from_frame == zeega.app.currentFrame.id)
-			{
-				var _this = this;
-				this.delegateEvents();
-				this.$el.resizable({
-					stop: function(e,ui)
-					{
-						_this.model.update({
-							'width' : $(this).width() / $(this).parent().width() * 100,
-							'height' : $(this).height() / $(this).parent().height() * 100
-						})
-					}
-				})
-			}
-			
 		},
 		
 		onPlay : function()
 		{
 			this.render();
-			if(this.model.get('attr').to_frame == zeega.app.player.currentFrame.id)
-				this.moveOffStage()
 			this.delegateEvents({'click':'goClick'})
 		},
 		
@@ -167,7 +154,6 @@
 		{
 			var html = '';
 			
-				if(!this.preview) html += '<i class="icon-remove delete-link"></i>';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 				
 			return html;

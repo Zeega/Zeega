@@ -1,53 +1,164 @@
-{% extends '::base.html.twig' %}
 
-{% block head %}
-	<style type="text/css">	
-	.fos_user_registration_register label {
-		display: block;
-		color: white;
-		font-variant: small-caps;
-		margin-top: 10px;
-		font-weight: bold;
-		text-align: left;
-		font-size: 14px;
-
-	}
-	.fos_user_registration_register ul li
-	{
-		color: red;
-		margin-left: 100px;
-	}
-	#password-change
-	{
-		clear;
-	}
-	#password-change-button
-	{
-		margin-left:0;
-	}
-	.fos_user_success
-	{
-		color: red;
-	}
+{% block stylesheets %}	
+	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+	
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url({{asset("images/registration/register.gif")}}) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		}
+	
 	</style>
-{% endblock head %}
+
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+{% endblock stylesheets %}
 
 {% block body %}
-<br/>
-<div style="font-size: 16px; color: red;">Create new user</div>
+<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color-lightest">
+	</div>
+	<!-- Background Color Div ends -->
 
-<br/>
-{% for key, message in app.session.getFlashes() %}
-<div class="{{ key }}">
-    {{ message|trans({}, 'FOSUserBundle') }}
-</div>
-{% endfor %}
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			<div class="page-intro span11">
+			
+				<h1>Sign Up For A Zeega Invite</h1>
+				<h2>Got an idea? Tell us a little bit about what you’ve got in mind and we’ll add your name to the list. As soon as a spot opens, we’ll invite you in.</h2>
+			
+			</div>
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Intro Ends -->
+	<!-- Page Content Begins -->
+	
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span7">
+			
+				{% for key, message in app.session.getFlashes() %}
+				<div class="{{ key }}">
+				    {{ message|trans({}, 'FOSUserBundle') }}
+				</div>
+				{% endfor %}
 
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
-    </div>
-</form>
+				<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+					<fieldset>
+						<div class="control-group">			
+					    {{ form_errors(form) }}
+						<div class="row">
+					    	<div class="span3">
+								<label class="control-label" for="youridea"><h4>Name</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>
+								<div class="controls">
+						    		{{ form_errors(form.display_name) }}
+						    		{{ form_widget(form.display_name, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Email</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+						    		{{ form_errors(form.email) }}
+						    		{{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
+								<p class="sidebar">
+									Already have something in mind? Tell us a little more, we'd love to hear about it.
+								</p>
+							</div>
+							<div class="span4">
+								<div class="controls">						
+						    		{{ form_errors(form.idea) }}
+						    		{{ form_widget(form.idea, { 'attr': {'class': 'input-xlarge-custom', 'rows': 5} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span3">
+								<label class="control-label" for="youridea"></label>
+							</div>
+							<div class="span4">
+								<div class="controls">
+									{{ form_errors(form.locked) }}
+									{{ form_widget(form.locked, { 'attr': {'class': 'pull-left', 'style' : 'margin-right:8px'} }) }}
+									<p class="sidebar">
+									I have read and agreed to <a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a>.
+									</p>
+								</div>				   
+							</div>
+						</div>
+					    {{ form_rest(form) }}
+
+					    <div class="row">
+							<div class="span4 offset3">
+								<button type="submit" class="btn btn-success btn-custom"><h4>Register</h4></button>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+							</div>
+							<div class="span4">
+								<div class="controls">
+						    		{{ form_errors(form.plainPassword) }}
+						    		{{ form_widget(form.plainPassword) }}
+								</div>
+							</div>
+						</div>
+					 </div>
+				</fieldset>
+				</form>
+			
+			</div>
+			
+			<!-- Form Ends -->
+			
+			
+		
+		</div>
+	
+	</div>
+	
+	<!-- Page Content Ends -->
+	
 {% endblock %}	
 

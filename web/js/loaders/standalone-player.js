@@ -15,13 +15,11 @@ require.config({
 	}
 })
 
-var loadFiles = [
-	'jquery',
-	
-	//'order!lib/jquery/ui/js/jquery-ui-1.8.17',
-	
+require(
+	[
 	'order!lib/underscore',
 	'order!lib/backbone',
+	'order!lib/dropbox',
 	
 	'order!lib/leaflet/leaflet',
 	
@@ -31,14 +29,17 @@ var loadFiles = [
 	'order!helpers/zeega.helpers',
 	'order!helpers/zeega.extends',
 	
+	'order!lib/imagesloaded/jquery.imagesloaded',
 	'order!lib/spin',
 	'order!lib/jquery/plugins/spin',
-	'order!lib/popcorn_flash',
+	'order!lib/popcorn-flash',
 	
 	//'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
 	'order!app/views/editor.layer/editor.view.layer.visual-editor',
 	'order!app/models/editor.model.layer',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	'order!plugins/layers/video/video',
 	'order!plugins/layers/audio/audio',
@@ -48,24 +49,17 @@ var loadFiles = [
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/googlebook/googlebook',
 	'order!plugins/layers/link/link',
-        'order!plugins/layers/rectangle/rectangle',
-	//'order!plugins/layers/documentcloud/documentcloud',
-	
-	//'order!plugins/players/zeega.player.video',
-	//'order!plugins/players/zeega.player.youtube',	
+	'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/rectangle/rectangle',
+	'order!plugins/layers/website/website',
+	'order!plugins/layers/twitter/twitter',
+	'order!plugins/layers/testimonial/testimonial',
 	       
 	'order!plugins/players/plyr'
-	];
+	],
+	function(jquery) {
+		zeega.app.init()
 
-require(loadFiles, function($) {
-	zeega.app.init()
-
-	var frameID = window.location.hash.substr(15);
-	console.log(frameID)
-	//this url needs to change
-	
-	/*
-	if(sessionStorage.getItem('projectId')>0) $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'projects/'+sessionStorage.getItem('projectId')+'/all',function(data){ Player.init(data,null,frameID) });
-	else $.get(sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'api/collections/'+sessionStorage.getItem('collectionId')+'/project',function(data){ Player.init(data,null,frameID) });
-	*/
+		var frameID = window.location.hash.substr(15);
+		console.log(frameID)
 });

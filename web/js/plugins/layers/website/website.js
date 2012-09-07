@@ -22,6 +22,11 @@
 		
 		render : function()
 		{
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
 			
 			var scaleSlider = new Layer.Views.Lib.Slider({
 				property : 'width',
@@ -41,7 +46,9 @@
 				max : 1,
 			});
 			
-			this.controls.append( scaleSlider.getControl() )
+			this.controls
+				.append(dissolveCheck.getControl() )
+				.append( scaleSlider.getControl() )
 				.append( opacitySlider.getControl() );
 			
 			return this;
@@ -58,8 +65,8 @@
 		render : function()
 		{
 			var iframe = $('<iframe>')
-				.attr('src', this.attr.url)
-				.css({'width':'100%','height':'100%','border':'none'});
+				.attr('src', this.attr.uri)
+				.css({'background-color':'white','width':'100%','height':'100%','border':'none'});
 
 			$(this.el).html( iframe );
 						

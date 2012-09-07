@@ -38,24 +38,26 @@ class HeaderTwigExtension extends \Twig_Extension
                 {
             	    $currentSite = $sites[0];
                 }
+				if(isset($currentSite))
+				{
+	        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
 
-        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
-
-                return array(
-                    'site' => $currentSite,
-                    'sites' => $sites,
-        			'title'=>$currentSite->getTitle(),
-        			'short'=>$currentSite->getShort(),
-        			'num_sites'=>count($sites),
-        			'user_id' => $user->getId(),
-        			'myprojects'=> $projects,
-        			'displayname' => $user->getDisplayName(),
+    	            return array(
+        	            'site' => $currentSite,
+            	        'sites' => $sites,
+        				'title'=>$currentSite->getTitle(),
+        				'short'=>$currentSite->getShort(),
+        				'num_sites'=>count($sites),
+        				'user_id' => $user->getId(),
+        				'myprojects'=> $projects,
+        				'displayname' => $user->getDisplayName(),
         			);
+        		}
     		}
         }
 
         return array(
-            'site' => -1,
+            'site' => null,
 			'title' => 'Unknown',
 			'short' => 'Unknown',
 			'num_sites' => 0,

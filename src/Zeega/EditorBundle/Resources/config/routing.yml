@@ -1,0 +1,11 @@
+ZeegaEditorBundle_site:
+    pattern: /site/{short}
+    defaults: { _controller:  ZeegaEditorBundle:Editor:site }
+
+ZeegaEditorBundle_new:
+    pattern: /site/{short}/project/new
+    defaults: { _controller:  ZeegaEditorBundle:Editor:new }
+
+ZeegaEditorBundle_editor:
+    pattern: /site/{short}/project/{id}
+    defaults: { _controller:  ZeegaEditorBundle:Editor:editor }

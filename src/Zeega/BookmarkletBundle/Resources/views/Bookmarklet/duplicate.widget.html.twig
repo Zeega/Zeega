@@ -1,0 +1,32 @@
+{# src/Zeega/\CoreBundle\/Resources/views/Widget/duplicate.widget.html.twig #}
+
+{% extends '::widget.base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+{% block body %}
+
+	<div id="widget-wrapper" data-id="{{widget_id}}" class='well'> 
+		<h3>You've already added this {{item.getMediaType()}} to Zeega!</h3>
+		<br/>
+		<div id="item-view">
+			<img src="{{item.getThumbnailUrl()}}" style="max-width:150px; max-height:150px;" id="item-image" class="item-image" />
+			
+			<div style="clear:both;">&nbsp;</div>
+			
+			<h3>Title:</h3>
+			<div id="widget-title" class='ingest-info'>{{item.getTitle()}}</div>
+			<h3>Author:</h3>
+			<div id="widget-creator" class='ingest-info'>{{item.getTitle()}}</div>
+			<h3>Description:</h3>
+			<div id="description">
+					<p id="widget-description" class="widget-textbox ingest-info" >{{item.getDescription()}}</p>
+			</div>
+		</div>
+		
+	</div><!--#widget-wrapper-->
+{% endblock %}	
+
+
+
+

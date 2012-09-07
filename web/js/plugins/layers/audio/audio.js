@@ -15,7 +15,9 @@
 			'width' : 100,
 			'volume' : 0.5,
 			'cue_in'  : 0,
-			'cue_out' : 0,
+			'cue_out' : null,
+			'fade_in'  : 0,
+			'fade_out' : 0,
 			'opacity':1,
 			'dimension':1.5,
 			'citation':true,
@@ -28,7 +30,7 @@
 			render : function()
 			{
 
-				var playbackControls = new Layer.Views.Lib.Playback({
+				var playbackControls = new Layer.Views.Lib.Target({
 					model : this.model
 				});
 
@@ -41,10 +43,34 @@
 					step : 0.01,
 					css : false
 				});
+				
+							
+			var fadeInSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_in',
+				model: this.model,
+				label : 'Fade In (sec)',
+				min : 0,
+				max :5,
+				step : 0.1,
+				css : false
+			});
+			
+			
+			var fadeOutSlider = new Layer.Views.Lib.Slider({
+				property : 'fade_out',
+				model: this.model,
+				label : 'Fade Out (sec)',
+				min : 0,
+				max : 5,
+				step : 0.1,
+				css : false
+			});
 
 				this.controls
 					.append( playbackControls.getControl() )
-					.append( volumeSlider.getControl() );
+					.append( volumeSlider.getControl() )
+					.append( fadeInSlider.getControl() )
+					.append( fadeOutSlider.getControl() );
 					
 				return this;
 
@@ -53,17 +79,12 @@
 	});
 	
 	Layer.Views.Visual.Audio = Layer.Views.Visual.Video.extend({
-		
 		draggable : false,
 		linkable : false,
-		
-		render : function()
-		{
-			return this;
-		},
-
-		
+		render : function(){ return this },
 	});
+
+
 /*
 	Layer.Audio = Layer.Model.extend({
 			
@@ -96,7 +117,9 @@
 		}
 
 	});
-	
+*/
+
+/*
 	Layer.Views.Controls.Audio = Layer.Views.Controls.extend({
 				
 		render : function()
@@ -125,7 +148,8 @@
 		}
 	
 	});
-
+*/
+/*
 	Layer.Views.Visual.Audio = Layer.Views.Visual.extend({
 		
 		draggable : true,
@@ -139,10 +163,20 @@
 		onLayerEnter : function()
 		{
 			//if coming from another frame and the controls are open but the video isn't loaded
+			console.log('coming from another frame. is open?',this.model.controls.visible)
 			if( this.model.controls.visible == true )
 			{
-				this.model.video.placeVideo( this.$el );
-				this.model.loaded = true;
+				console.log('inside;',this.$el, this.model.player, this.model.player_loaded )
+				
+				if( !this.model.player_loaded )
+				{
+					this.model.initPlayer();
+					this.$el.html(this.model.player.render().el);
+					this.model.player.placePlayer();
+				}
+
+				this.model.player_loaded = true;
+			
 			}
 		},
 		
@@ -217,4 +251,5 @@
 		
 	});
 */
+
 })(zeega.module("layer"));

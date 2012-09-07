@@ -126,6 +126,7 @@
 										  });
 
 									model.set({'child_items_count':response.items[0].child_items_count});
+									model.set({'new_items':null});
 									//
 									zeegaBrowser.app.draggedItem = null;
 

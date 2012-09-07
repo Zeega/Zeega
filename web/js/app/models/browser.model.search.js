@@ -28,7 +28,6 @@
 		{
 			var isTimeSearch = this.get("dtstart") != 0 && this.get("dtend") != 0;
 			var finalURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/search?site="+sessionStorage.getItem('siteid')+"&" 
-
 						+ "r_items=" + this.get("r_items") + "&"
 						+ "r_itemswithcollections=" + this.get("r_itemswithcollections") + "&"
 						+ (sessionStorage.getItem('site') != null ? "site=" + sessionStorage.getItem('site') : "")
@@ -36,7 +35,6 @@
 						+ (this.get("q") != null ? "q=" + encodeURIComponent(this.get("q")) + "&" : "")
 						+ (this.get("user") == -1 ? "user=" + this.get("user") + "&" : "")
 						+ (this.get("content") != null ? "content=" + this.get("content") + "&": "")
-						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (this.get("collection") != null ? "collection=" + this.get("collection") + "&": "")
 						+ (isTimeSearch ? "dtstart=" + this.get("dtstart") + "&": "")
 						+ (isTimeSearch ? "dtend=" + this.get("dtend") + "&": "")
@@ -48,83 +46,6 @@
 			return finalURL;
 
 		}
-
-		
-
-/*
-		parse: function(data)
-		{
-			var items = this.get("itemsCollection");
-			var colls = this.get("collectionsCollection");
-			var timeBins = this.get("timeBinsCollection");
-
-			//Only reset items and collections if we are on page 1
-			//Otherwise we want to add to the results because the user has loaded more results
-			if (this.get("page") == 1)
-			{
-				items.reset();
-				colls.reset();
-			}
-			timeBins.reset();	
-		
-			if (data == null || data['items_count'] ==null)
-			{
-				console.log('No search items returned. Something is null man.');
-			}
-			else
-			{
-				console.log('returned ' + data['returned_items_and_collections_count'] + ' out of ' + data['items_and_collections_count'] + ' total items and collections');
-				console.log('returned ' + data['returned_items_count'] + ' out of ' + data['items_count'] + ' total items');
-				console.log('returned ' + data['returned_collections_count'] + ' out of ' + data['collections_count'] +' total collections');
-			}
-
-			//Assemble item and collection data into objects
-			if (data['items_and_collections'] != null){
-				this.get("itemsCollection").totalItemsCount = data['items_and_collections_count'];
-				_.each(data['items_and_collections'], function(item){
-					var type = item['type'];
-					if (type == "Collection"){
-						this.get("itemsCollection").add(new BrowserCollection(item));
-					}else {
-						this.get("itemsCollection").add(new Item(item));
-					}
-				}, this);
-			}
-*/
-			//	Assemble item data into BrowserItems
-			/* THIS IS FOR WHEN ITEMS AND COLLECTIONS COME BACK SEPARATELY WHICH IS NOT THE CASE RIGHT NOW
-			if (data['items'] != null){
-				this.get("itemsCollection").totalItemsCount = data['items_count'];
-				_.each(data['items'], function(item){
-					var type = item['content_type'];
-				
-					this.get("itemsCollection").add(new Item(item));
-				}, this);
-			}
-			//Assemble collection data into BrowserCollections
-			if (data['collections'] != null){
-				this.get("collectionsCollection").totalCollectionsCount = data['collections_count'];
-				_.each(data['collections'], function(collection){
-			
-				
-					this.get("collectionsCollection").add(new BrowserCollection(collection));
-				}, this);
-
-			}*/
-/*
-			//Assemble time bin data into TimeBinCollection
-			if (data['time_distribution'] != null){
-				_.each(data['time_distribution'], function(timeBin){
-			
-				
-					this.get("timeBinsCollection").add(new BrowserTimeBin(timeBin));
-				}, this);
-				this.get("timeBinsCollection").min_date = data['time_distribution_info']['min_date'];
-				this.get("timeBinsCollection").max_date = data['time_distribution_info']['max_date'];
-			}
-		
-		}
-*/
 	});
 	
 })(zeegaBrowser.module("items"));

@@ -2,36 +2,24 @@
 
 	
 	Modal.Views.ContinueLayer = Backbone.View.extend({
-
-		className : 'modal',
 		
-		initialize : function()
-		{
-			
-		},
+		initialize : function(){},
 		
 		render: function()
 		{
 			var _this = this;
-			console.log('modal render!!!')
 			$(this.el).html( this.getTemplate() );
 			
-			console.log(zeega.app.currentFrame.get('layers'))
-			var count = 0;
-			_.each( zeega.app.currentFrame.get('layers'), function(layerID){
-				var layer = zeega.app.project.layers.get(layerID);
-				console.log(layer);
-				if(layer.get('type') == 'Link' &&  layer.get('attr').from_frame == zeega.app.currentFrame.id)
-				{
-					console.log('this frame has links!!')
-					var frame = zeega.app.project.frames.get(layer.get('attr').to_frame);
-					console.log(frame)
-					var optionString = "<li data-id='"+frame.id+"'><a href='#'><img src='"+ frame.get('thumbnail_url')+"' height:'50px' width='50px'/></a></li>";
-					$(_this.el).find('.layer-list-checkboxes').append(optionString);
-					count++;
-				}
-			})
-			if(count == 0) $(_this.el).find('#linked-frames-selector').remove();
+			// filter for only outgoing link layers
+			var linkLayers = zeega.app.currentFrame.layers.filter(function(layer){
+				return layer.get('type')==='Link' && (layer.get('attr').from_frame == zeega.app.currentFrame.id)
+			});
+			_.each(linkLayers, function(layer){
+				var frame = zeega.app.project.frames.get(layer.get('attr').to_frame);
+				var optionString = "<li data-id='"+frame.id+"'><a href='#'><img src='"+ frame.get('thumbnail_url')+"' height:'50px' width='50px'/></a></li>";
+				_this.$el.find('.layer-list-checkboxes').append(optionString);
+			});
+			if(!linkLayers.length) $(_this.el).find('#linked-frames-selector').remove();
 
 			return this;
 		},
@@ -44,25 +32,24 @@
 		hide : function()
 		{
 			this.$el.modal('hide');
+			this.remove();
 			zeega.app.busy = false;
+			return false;
 		},
 		
 		events : {
 			'click .close' : 'hide',
-			'click .save' : 'makeConnection',
+			'click .save' : 'continueLayer',
 			'click .layer-list-checkboxes li' : 'selectFrame',
 		},
-
 		
-		makeConnection : function()
+		continueLayer : function()
 		{
-			this.hide();
 			var _this = this;
-			_.each( $(this.el).find('.layer-list-checkboxes li.selected'), function(frame){
-				var frame = zeega.app.project.frames.get( $(frame).data('id') );
-				var framelayers = frame.get('layers');
-				framelayers.push(_this.model.id);
-				frame.save({ layers : framelayers });
+			this.hide();
+			_.each( $(this.el).find('.layer-list-checkboxes li.selected'), function(frameEl){
+				var frame = zeega.app.project.frames.get( $(frameEl).data('id') );
+				frame.layers.unshift( _this.model );
 			})
 			if( $(this.el).find('#continue-sequence').is(':checked') )
 			{
@@ -82,7 +69,6 @@
 	
 		getTemplate : function()
 		{
-
 
 			var html =
 			

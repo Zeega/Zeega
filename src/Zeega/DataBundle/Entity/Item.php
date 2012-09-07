@@ -55,6 +55,11 @@ class Item
     private $date_created;
 
     /**
+     * @var datetime $date_updated
+     */
+    private $date_updated;
+
+    /**
      * @var string $archive
      */
     private $archive;
@@ -130,6 +135,11 @@ class Item
     private $tags;
 
     /**
+     * @var string $id_at_source
+     */
+    private $id_at_source;
+
+    /**
      * @var boolean $enabled
      */
     private $enabled;
@@ -138,6 +148,16 @@ class Item
      * @var boolean $published
      */
     private $published;
+
+    /**
+     * @var boolean $indexed
+     */
+    private $indexed;
+
+    /**
+     * @var string $geo_latlng
+     */
+    private $geo_latlng;
 
     /**
      * @var Zeega\DataBundle\Entity\Site
@@ -333,6 +353,26 @@ class Item
     public function getDateCreated()
     {
         return $this->date_created;
+    }
+
+    /**
+     * Set date_updated
+     *
+     * @param datetime $dateUpdated
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->date_updated = $dateUpdated;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return datetime 
+     */
+    public function getDateUpdated()
+    {
+        return $this->date_updated;
     }
 
     /**
@@ -636,6 +676,26 @@ class Item
     }
 
     /**
+     * Set id_at_source
+     *
+     * @param string $idAtSource
+     */
+    public function setIdAtSource($idAtSource)
+    {
+        $this->id_at_source = $idAtSource;
+    }
+
+    /**
+     * Get id_at_source
+     *
+     * @return string 
+     */
+    public function getIdAtSource()
+    {
+        return $this->id_at_source;
+    }
+
+    /**
      * Set enabled
      *
      * @param boolean $enabled
@@ -673,6 +733,46 @@ class Item
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set indexed
+     *
+     * @param boolean $indexed
+     */
+    public function setIndexed($indexed)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return boolean 
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set geo_latlng
+     *
+     * @param string $geoLatlng
+     */
+    public function setGeoLatlng($geoLatlng)
+    {
+        $this->geo_latlng = $geoLatlng;
+    }
+
+    /**
+     * Get geo_latlng
+     *
+     * @return string 
+     */
+    public function getGeoLatlng()
+    {
+        return $this->geo_latlng;
     }
 
     /**

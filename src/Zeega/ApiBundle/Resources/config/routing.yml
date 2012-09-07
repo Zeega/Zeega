@@ -1,3 +1,15 @@
+api_layers:
+    type: rest
+    resource: Zeega\ApiBundle\Controller\LayersController
+    name_prefix: api_
+    prefix:   api    
+
+api_sequences:
+    type: rest
+    resource: Zeega\ApiBundle\Controller\SequencesController
+    name_prefix: api_
+    prefix:   api    
+
 api_projects:
     type: rest
     resource: Zeega\ApiBundle\Controller\ProjectsController
@@ -8,11 +20,6 @@ global_search:
     pattern: /api/search.{_format}
     defaults: { _controller: ZeegaApiBundle:Search:search, _format: json}
     requirements: { _format: (xml|json), _method: GET }
-    
-collections:
-    type:     rest
-    prefix:   api
-    resource: Zeega\ApiBundle\Controller\CollectionsController
 
 items:
     type:     rest
@@ -23,3 +30,8 @@ api_frames:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\FramesController
+
+api_users:
+    type: rest
+    prefix: api
+    resource: Zeega\ApiBundle\Controller\UsersController

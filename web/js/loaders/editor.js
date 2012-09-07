@@ -16,10 +16,8 @@ require.config({
 	}
 })
 
-var loadFiles = [
-	//'jquery',
-
-
+require(
+	[
 	//libraries
 	'order!lib/underscore',
 	'order!lib/backbone',
@@ -30,6 +28,7 @@ var loadFiles = [
 	'order!lib/visualsearch',
 	
 	'order!lib/leaflet/leaflet',
+	'order!lib/dropbox',
 
 	//custom
 	'order!ux/zeega.ux.header',
@@ -42,6 +41,7 @@ var loadFiles = [
     'order!app/zeega.player',
 
 	//plugins
+	'order!lib/imagesloaded/jquery.imagesloaded',
 	'order!lib/jquery/plugins/spin',
 	'order!lib/jquery/plugins/jeditable.min',
 	'order!lib/jquery/plugins/jquery-cycle',
@@ -49,8 +49,9 @@ var loadFiles = [
 	'order!lib/jquery/plugins/jquerygetUrlParam',
 	'order!lib/jquery/plugins/jqueryjson',
 	'order!lib/jquery/plugins/jquerycookie',
-	'order!lib/popcorn_flash',
+	'order!lib/popcorn-flash',
 	'order!lib/bootstrap',
+	//'order!lib/jslider/jquery.slider.min',
 	
 	'order!plugins/players/plyr',
 
@@ -70,7 +71,10 @@ var loadFiles = [
 //views
 	'order!app/views/editor.project/editor.view.project.editor',
 	'order!app/views/editor.sequence/editor.view.sequence.sequence-tab',
+	'order!app/views/editor.sequence/editor.view.sequence.frame-list',
 	'order!app/views/editor.item/editor.view.item.database-tray',
+	'order!app/views/editor.item/editor.view.item.viewer',
+	'order!app/views/editor.frame/editor.view.frame.editor-workspace',
 	'order!app/views/editor.frame/editor.view.frame.frame-sequence',
 	'order!app/views/editor.layer/editor.view.layer.control-library',
 	'order!app/views/editor.layer/editor.view.layer.layer-list',
@@ -78,7 +82,13 @@ var loadFiles = [
 	'order!app/views/editor.modals/editor.view.modal.link-existing',
 	'order!app/views/editor.modals/editor.view.modal.link-advanced',
 	'order!app/views/editor.modals/editor.view.modal.share-project',
+	'order!app/views/editor.modals/editor.view.modal.publish-project',
 	'order!app/views/editor.modals/editor.view.modal.continue-layer',
+	'order!app/views/editor.common/editor.view.common.leaflet-map',
+	'order!app/views/editor.common/editor.view.common.tag-display-edit',
+	
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox',
+	//'order!app/views/editor.modals/editor.view.modal.ingest-dropbox-iframe',
 
 	//mvc
 	//'order!backbone/models/tag',
@@ -94,12 +104,11 @@ var loadFiles = [
 	'order!plugins/layers/text/text',
 	'order!plugins/layers/googlebook/googlebook',
 	'order!plugins/layers/link/link',
-	
-
-
-	//'order!plugins/layers/documentcloud/documentcloud',
+	'order!plugins/layers/documentcloud/documentcloud',
 	'order!plugins/layers/rectangle/rectangle',
-	//'order!plugins/layers/website/website',
+	'order!plugins/layers/website/website',
+	'order!plugins/layers/twitter/twitter',
+	'order!plugins/layers/testimonial/testimonial',
 
 	//players
 	
@@ -110,13 +119,10 @@ var loadFiles = [
 	'order!app/index'
 	
 
-	];
-
-require(loadFiles, function(jquery)
-{
-    console.log('ALL JS LOADED')
-
-	//once the files have been loaded do this
-	var sequence = $('#sequence-id').val();
-	//zeega.app.init();
+	],
+	function(jquery) {
+	    console.log('ALL JS LOADED')
+		//once the files have been loaded do this
+		var sequence = $('#sequence-id').val();
+		//zeega.app.init();
 });

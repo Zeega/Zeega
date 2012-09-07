@@ -4,6 +4,8 @@
 		
 		className : 'visual-element',
 		
+		LAYER_TIMEOUT : 30000,
+		
 		layerClassName : '',
 		
 		draggable : true,
@@ -18,6 +20,8 @@
 			this.initListeners();
 			
 			this.attr = this.model.get('attr')
+			
+			
 			
 			$(this.el).css({
 				'position' : 'absolute',
@@ -39,17 +43,18 @@
 		
 		initListeners : function()
 		{
-//editor_removeLayerFromFrame
+			//editor_removeLayerFromFrame
 			if( this.model.player )
 			{
 				this.model.on('player_preload', this.private_onPreload, this);
 				this.model.on('player_play', this.private_onPlay, this);
 				this.model.on('player_exit', this.private_onExit, this);
 				this.model.on('player_unrender', this.private_onUnrender, this);
+				this.model.on('error', this.private_renderError, this);
 			}
 			else
 			{
-				this.model.on('editor_layerEnter', this.private_onLayerEnter, this);
+				this.model.on('editor_layerEnter editor_layerRender', this.private_onLayerEnter, this);
 				this.model.on('editor_layerExit editor_removeLayerFromFrame', this.private_onLayerExit, this);
 				this.model.on('editor_controlsOpen', this.private_onControlsOpen, this);
 				this.model.on('editor_controlsClosed', this.private_onControlsClosed, this);
@@ -93,7 +98,6 @@
 			this.render();
 			if(this.attr.link)
 			{
-				
 				$(this.el).click(function(){
 					window.location = 'http://'+ _this.attr.link
 				})
@@ -103,6 +107,33 @@
 			
 			this.model.trigger('ready',this.model.id)
 		},
+		
+		private_renderError : function()
+		{
+			this.$el.empty()
+				.css({
+					'background-color' : 'rgba(255,0,0,0.25)',
+					'min-height' : '25px'
+				});
+				return this;
+		},
+
+		playPause : function()
+		{
+			console.log('$$		play pause status', this.isPlaying)
+			if( this.isPlaying )
+			{
+				this.isPlaying = false;
+				this.onPause();
+			}
+			else
+			{
+				this.isPlaying = true;
+				this.onPlay()
+			}
+		},
+
+		onPause : function(){},
 		
 		onPlay : function(){},
 		
@@ -172,18 +203,42 @@
 		
 		private_onPreload : function()
 		{
+			var _this = this;
+			
 			this.render();
 			this.onPreload();
 			this.model.rendered = true;
-			//this.moveOffStage();
+			
+			if(this.timer) clearTimeout(this.timer);
+			this.timer = setTimeout(function(){
+				if(_this.model.status != 'ready')
+				{
+					console.log('ERROR: LAYER TIMEOUT!! '+_this.model.id)
+					_this.model.status = 'error'
+					_this.model.trigger('error', _this.model.id)
+				}
+				//else console.log('no error! loaded normally!!')
+			},this.LAYER_TIMEOUT)
 		},
 		
 		private_onPlay : function( z )
 		{
+			this.isPlaying = true;
+			if(!this.onStage)
+			{
+				this.onStage=true;
+				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
+			}
 			this.moveOnStage();
+
 			if(z) this.updateZIndex( z )
-			this.onPlay();
+
+			if(this.model.status != 'error' ) this.onPlay();
+
 			this.model.inFocus = true;
+			
+			//dissolve
+			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
 			
 			//make the linked layers blink on entrance
 			if(this.attr.link || this.model.get('type') == 'Link')
@@ -196,7 +251,9 @@
 		
 		private_onExit : function()
 		{
+			this.isPlaying = false;
 			this.moveOffStage();
+			this.onStage=false;
 			this.onExit();
 			this.model.inFocus = false;
 		},

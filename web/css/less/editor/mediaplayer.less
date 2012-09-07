@@ -1,0 +1,92 @@
+/******************************
+
+	MEDIA PLAYER
+	
+******************************/
+
+.playback-controls
+{
+	position : absolute;
+	top:0;
+	width : 100%;
+	height : 100%;
+	color:white;
+	
+	
+	&.playback-layer-controls
+	{
+		position : relative;
+		width : auto;
+		height : auto;
+		margin-bottom: 20px;
+		.player-control-inner
+		{
+			position : relative;
+			background-color : transparent;
+		}
+	}
+	
+	
+	.player-control-inner
+	{
+		position : absolute;
+		bottom : 0;
+		width : 100%;
+		background-color : rgba(0, 0, 0, 0.75);
+	}
+	
+	&.controls-simple
+	{
+		.player-control-inner
+		{
+			width:auto;
+			height:18px;
+			left: 45%;
+			top: 45%;
+			padding: 4px 10px;
+			border-radius: 5px;
+		}
+	}
+	
+	.control-panel-inner{ padding : 0 5px }
+	
+	.media-scrubber
+	{
+		height : 6px;
+	
+		.ui-slider-range{ background:red }
+		.ui-slider-handle
+		{
+			border:none;
+			width:0;
+			height:0
+		}
+	}
+	
+	.crop-wrapper
+	{
+		.crop-time-values
+		{
+			padding : 0 5px 10px;
+			.crop-time-left { float:left }
+			.crop-time-right{ float:right }
+		}
+		.crop-slider
+		{
+			background:transparent;
+			
+			.ui-slider-range{ background:yellow }
+			a{ background:yellow }
+			.ui-slider-handle
+			{
+				width:3px;
+				border:none;
+				height:16px;
+				box-shadow:none;
+			}
+		}
+	}
+
+	
+	
+}

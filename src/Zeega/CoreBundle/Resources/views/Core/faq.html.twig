@@ -1,0 +1,177 @@
+{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega Alpha{% endblock %}
+
+
+
+{% block body %}
+	
+<div id="faq" style='color:white; padding:10px;'> 
+
+
+	<h1>FAQ</h1>
+
+
+	<ul id='faq-list' class='unstyled'>
+
+		<li>
+			<div class="expander"><h3><a href='#'>How do I add media from across the web to Zeega?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">You can add images, videos, sounds and more from the web to Zeega with our bookmarklet plugin. First, click "Add Media" in the header for instructions. After the bookmarklet is installed, you will see "Add to Zeega" within your bookmarks bar. Once you're on a webpage where you can add media, you click on "Add to Zeega" within the bookmarks bar. You will then see the plugin animate from the right side of the browser with options to add an item.<br><br> Zeega only supports media hosted on external sources. (The question below describes how to use Dropbox for your own media in Zeega).</p>
+				
+<iframe src="http://player.vimeo.com/video/44061195?title=0&amp;byline=0&amp;portrait=0" width="950" height="594" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>			
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How do I add my own media to Zeega via Dropbox?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">In the editor, click the Dropbox box icon located below the search bar and above the media browser. First, you will be asked to login to Dropbox and to connect the Zeega app to your account. After this, you will have a "Zeega" folder inside your "Apps" folder on Dropbox. Simply upload media to this folder and when you want to use the new items in Zeega, click the Dropbox icon again within the editor to sync. Currently supported file types include: .jpg, .gif, .png, .mp3 and .mp4. For video compression, we suggest <a href="http://www.squared5.com/" target="_blank">MPEG Streamclip</a> (free and cross-platform). Recommended settings: Video: H264 &amp; 5000kbps / Audio: AAC  320kbps 44.1 kHz</p>
+				
+<iframe src="http://player.vimeo.com/video/47873864" width="950" height="594" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>			
+			</div>
+		</li>
+	
+		<li>
+			<div class="expander"><h3><a href='#'>How can I view media I've added to Zeega?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">Once you have added media, you can start creating a project! Your media is accessible in the editor's media tray.</p>
+
+<iframe src="http://player.vimeo.com/video/44062331?title=0&amp;byline=0&amp;portrait=0" width="950" height="594" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>		
+		
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>What sites does Zeega support?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">Currently, you can use the Zeega bookmarklet to add individual photos and sets from Flickr; individual videos and sets on YouTube; individual tracks and sets from SoundCloud; videos from Archive.org; image posts from Tumblr; maps from Mapbox; and any URL that ends in .jpg, .png, .mp4 or .mp3. </p>
+
+<iframe src="http://player.vimeo.com/video/44066547?title=0&amp;byline=0&amp;portrait=0" width="950" height="576" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>Can I add awesome .gifs from Tumblr?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">Yes! Check it out.</p>
+			
+<iframe src="http://player.vimeo.com/video/44063050?title=0&amp;byline=0&amp;portrait=0" width="950" height="594" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>			
+			
+			</div>
+		</li>
+
+
+		<li>
+			<div class="expander"><h3><a href='#'>How should I describe the elements of a Zeega project? What do you call this stuff?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">A Zeega is made up of frames and sequences. Each frame can have multiple layers. Layers can be media items such as photos or videos, or text or Google Street View. Frames can be linked together to create nonlinear narrative environments.</p>
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How can I use a soundtrack for my project?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">All layers can exist on one frame or continue on multiple frames, allowing for seamless, uninterrupted playback. For example, if you want to have the same music play underneath a full sequence, start by dragging an audio file to a frame. This will create a new audio layer. Open that layer and then click "Continue Layer." Select "This Sequence." Now that layer will play continuously under the entire sequence, so as you move from frame to frame, it will play uninterrupted.</p>
+				
+<iframe src="http://player.vimeo.com/video/48066301" width="950" height="594" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>			
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How can I create links between frames?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				You can turn any Zeega frame into an interface. The frame can consist of anything - images, video, streetview, etc. This allows you to create narrative environments, not just linear stories. In a sense, you can build full-scale websites, but with contextual, visual navigation.<br><br> 
+				
+				You'll notice an icon above the workspace that is a plus sign with a network of lines coming out of it. If you simply click it, it creates an adjustable bounding box on the frame. That box represents a part of the frame that will become a link to another frame in a new sequence. You can move/scale the box to select the specific part of a frame (e.g. the entrance of a facade). When you click the green "Ok" button above the workspace, a new sequence is created. That sequence works the same as the initial Intro Sequence. You can add media, add more frames, etc. You can also add more links, including links to existing frames (such as the first frame). Layers can continue across multiple sequences, allowing for continuos sound, if desired.				</p>
+
+			<iframe src="http://player.vimeo.com/video/44015735?title=0&amp;byline=0&amp;portrait=0" width="950" height="534" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+			
+			</div>
+		</li>
+		
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How can I share my Zeega?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				
+				You can share your Zeega as easily as a YouTube video. Before sharing, you should give it a cover image, a title and add metadata. Then you'll get a URL that you can pass on directly, or embed code that you can use in another site (e.g. WordPress).
+				
+				</p>
+
+<iframe src="http://player.vimeo.com/video/44064897?title=0&amp;byline=0&amp;portrait=0" width="950" height="576" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+			
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How can I add text?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				
+				You can easily add multiple text layers to a frame. For each layer, you can select a font, size, color and other stylings.
+				
+				</p>
+
+<iframe src="http://player.vimeo.com/video/44065651?title=0&amp;byline=0&amp;portrait=0" width="950" height="576" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+			
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>How can I add Google Street View?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				
+				Simply click the "Pin" icon and you'll get a Google Street View panorama in your frame. It's a normal layer, and you can control sizing, position, opacity, etc.
+				
+				</p>
+
+			
+			</div>
+		</li>
+		
+		
+		
+		<li>
+			<div class="expander"><h3><a href='#'>Something is not working, what should I do?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				
+1) Refresh your browser (command R).<br>
+2) If that doesn't work, clear your cache (command/shift/delete or "Clear Browsing Data" from the Chrome menu).<br>
+3) Use the "Report a Bug" link in the header! We'll do our best to fix the issue as soon as possible.<br>
+				</p>
+
+			
+			</div>
+		</li>
+		
+		<li>
+			<div class="expander"><h3><a href='#'>Where did the name Zeega come from?</a></h3></div>
+			<div class="faq-content hide">
+				<p class="">
+				
+Zeega is an intentional misspelling of Dziga Vertov, one of our favorite media artists. Born Denis Kaufman, Vertov chose to rename himself "dziga" because the word means spinning top in Russian and also makes the sound of a turning camera. Vertov is one of the pioneers of visionary, experimental media practice, starting a "Laboratory of Hearing" in 1918; founding a collaborative documentary team called the "Kinoks"; instigating public projections; and pioneering database-driven forms of documentary. He is most well-known for his groundbreaking 1927 film <a href="http://video.google.com/videoplay?docid=-2809965914189244913#" target="_blank" style="color: red;"><i>Man with a Movie Camera</i></a>. One of the best essays written on Vertov and <i>Man with a Movie Camera</i> is Annette Michelson's <a href="http://zeega.org/downloads/Michelson_EpistemologisttoMagician.pdf" target="_blank" style="color: red;">"From Magician to Epistemologist"</a> (1971), and Lucy Fischer has written on Vertov's radio work in her essay <a href="http://zeega.org/downloads/KinoEyetoRadioEye.pdf" style="color: red;">"Enthusiasm: From Kino-Eye to Radio-Eye"</a> (1977).
+
+</p>
+
+			
+			</div>
+		</li>
+		
+	</ul>
+
+</div> 
+ 
+
+{% endblock %}				
+{% block scripts %}
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/main.faq.js') }}" src="{{ asset('js/lib/require-jquery.js')}}"></script>
+{% endblock %}
