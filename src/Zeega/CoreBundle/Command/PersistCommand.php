@@ -47,11 +47,14 @@ class PersistCommand extends ContainerAwareCommand
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
 
             $item = json_decode(file_get_contents($filePath),true);
-            $item = $item["items"][0]; // hammer
+            $items = $item["items"]; // hammer
 
-            $item = self::parseItem($item, $user);
-
-            $em->persist($item);
+            foreach($items as $item)
+            {
+                $item = self::parseItem($item, $user);
+                $em->persist($item);
+            }
+            
             $em->flush($item);
 
             $output->writeln($item->getTitle());
