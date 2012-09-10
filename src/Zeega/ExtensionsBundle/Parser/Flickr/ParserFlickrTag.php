@@ -33,6 +33,10 @@ class ParserFlickrTag extends ParserAbstract
 
         $items = array();
 
+        if(true !== $loadCollectionItems) {
+            $searchParameters["per_page"] = 1;
+        }
+
         while(1) {
             $searchParameters["page"] = $currentPage;
             $searchResults =  $f->photos_search($searchParameters);
@@ -91,6 +95,10 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setChildItemsCount(0);
                 
                 array_push($items,$item);
+
+                if(true !== $loadCollectionItems) {
+                    return parent::returnResponse($items, true, true);
+                }
             }
 
             if(($currentPage++ > $pages) || $currentPage > 10) {

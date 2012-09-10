@@ -15,7 +15,7 @@ zeega.parsers:
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrSet
         tag_parser:
-            regex: "#https?://(?:www\.)?flickr\.com/photos/tags/([a-zA-Z0-9\-_]+)#"
+            regex: "#https?://(?:www\.)?flickr\.com/photos/.*/tags/([a-zA-Z0-9\-_]+)#"
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Flickr\ParserFlickrTag
 
