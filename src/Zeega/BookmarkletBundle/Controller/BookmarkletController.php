@@ -23,20 +23,26 @@ class BookmarkletController extends Controller
 	    $itemUrl = $request->request->get('attribution_uri');
 	    $mediaType = strtolower($request->request->get('media_type'));
 
-        // if it is a collection load the collection items
-	    if($mediaType == "collection")
-	    {
-	        $itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
-			$itemWithChildren = json_decode($itemWithChildren,true);
+	    $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
 
-	        if(isset($itemWithChildren))
-	        {
-	            $request->request->set('new_items', $itemWithChildren["items"][0]["child_items"]);
-	            $newItems = $request->request->get('new_items');
-	        }
-	    }
-	    
-	    return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
+        if(true === $isQueueingEnabled) {
+        	$user = $this->get('security.context')->getToken()->getUser();
+            $queue = $this->get('zeega_queue');
+            $taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"parser-");            
+            return new Response($taskId);
+        } else {        	
+		    if($mediaType == "collection") {
+		        $itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
+				$itemWithChildren = json_decode($itemWithChildren,true);
+
+		        if(isset($itemWithChildren)) {
+		            $request->request->set('new_items', $itemWithChildren["items"][0]["child_items"]);
+		            $newItems = $request->request->get('new_items');
+		        }
+		    }
+		    
+		    return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());	
+        }
 	}
 	
 	public function openAction()
