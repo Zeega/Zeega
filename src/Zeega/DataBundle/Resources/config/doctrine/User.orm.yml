@@ -60,7 +60,7 @@ Zeega\DataBundle\Entity\User:
         idea:
             type: text
             nullable: true
-        
+
     indexes:
         user_type_index:
             columns: [user_type]
