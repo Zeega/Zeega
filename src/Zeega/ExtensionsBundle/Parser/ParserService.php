@@ -23,7 +23,6 @@ class ParserService
 		$this->securityContext = $securityContext;
 		$this->doctrine = $doctrine;
     }
-
     
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
@@ -38,37 +37,26 @@ class ParserService
         $config = self::loadConfig($url);
 	    
 	    // check if this domain is supported
-	    if(array_key_exists($domainName, $config["zeega.parsers"]))
-	    {
+	    if(array_key_exists($domainName, $config["zeega.parsers"])) {
 	        // the domain is supported - load the parsers and check if there is a parser defined for $url
 	        $availableParsers = $config["zeega.parsers"][$domainName];
 	        
-	        foreach ($availableParsers as $parserName => $parserConfig)
-    		{
-    			if (preg_match($parserConfig["regex"], $url, $matches)) 
-    			{
+	        foreach ($availableParsers as $parserName => $parserConfig) {
+    			if (preg_match($parserConfig["regex"], $url, $matches)) {
                     $em = $this->doctrine->getEntityManager();
                     
     			    // we have a match - let's check if there are extra parameters defined in the config file
-    			    if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0)
-    			    {
+    			    if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0) {
     			        $parameters = $parserConfig["parameters"];
-    			    }
-    			    else
-    			    {
+    			    } else {
     			        $parameters = array();
     			    }
     				
-                    if($userId != -1)
-                    {
+                    if($userId != -1) {
                         $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
-                    }
-                    else
-                    {
+                    } else {
                         $user = $this->securityContext->getToken()->getUser();    
                     }
-
-	        		
 
     				$parameters["regex_matches"] = $matches;
     				$parameters["load_child_items"] = $loadChildItems;
@@ -79,15 +67,18 @@ class ParserService
 
     				// use reflection to get the parser class
                     $parserMethod = new ReflectionMethod($parserClass, 'load'); // reflection is slow, but it's probably ok here
+
                     // call the load method
     				return $parserMethod->invokeArgs(new $parserClass, array($url,$parameters));
     		    }
     		}
 	    }
+
 		$parameters = array();
 	    $parameters["hostname"] = $this->hostname;
 		$parameters["directory"] = $this->directory;
 	    $parser = new ParserAbsoluteUrl;
+
         return $parser->load($url,$parameters);
 	}
 	
@@ -101,8 +92,7 @@ class ParserService
 	    // remove subdomains if existing
 	    $hostComponents = explode(".", $host);
 	    
-	    if(count($hostComponents) > 2)
-	    {
+	    if(count($hostComponents) > 2) {
 	        $hostComponents = array_slice($hostComponents,count($hostComponents)-2,count($hostComponents));
 	    }
 	    
