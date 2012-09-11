@@ -9572,7 +9572,7 @@ onYouTubePlayerReady = function( containerId ) {
   onYouTubePlayerReady[ containerId ] && onYouTubePlayerReady[ containerId ]();
 };
 
-stateChangeEventHandler = new Array();
+stateChangeEventHandler = {};
 onErrorEventHandler  = new Array();
 
 Popcorn.player( "youtube", {
@@ -9593,7 +9593,13 @@ Popcorn.player( "youtube", {
 
     container.id = media.id + Popcorn.guid();
 	youtubeId = Popcorn.guid();
-	media.youtubeId=Popcorn.guid();
+
+ var guid = '';
+ _.each(Popcorn.guid().toString().split(''), function(num){
+    guid += 'abcdefghijklmnopqrstuvwxyz'[num]
+ })
+	media.youtubeId = guid;//Math.floor( Math.random()*1000).toString(16);
+  
     media.appendChild( container );
 	media.canPlay=0;
     var youtubeInit = function() {
@@ -9683,9 +9689,9 @@ Popcorn.player( "youtube", {
             media.dispatchEvent( "error" );
           }
         };
-
+        var fxnStr = "stateChangeEventHandler."+ media.youtubeId;
         // youtube requires callbacks to be a string to a function path from the global scope
-        media.youtubeObject.addEventListener( "onStateChange", "stateChangeEventHandler["+ media.youtubeId+"]" );
+        media.youtubeObject.addEventListener( "onStateChange", fxnStr );
 
         media.youtubeObject.addEventListener( "onError", "onErrorEventHandler[" + media.youtubeId+']');
 
