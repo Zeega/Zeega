@@ -22,7 +22,7 @@
 
 			model.frames.each(function(frame){
 				var linkLayers = frame.layers.where({ type : 'Link'});
-				console.log('$$		found link layers', linkLayers)
+				console.log('$$		found link layers', linkLayers, frame)
 				_.each( linkLayers, function(layer){
 					var from = layer.get('attr').from_frame;
 					var to = layer.get('attr').to_frame;

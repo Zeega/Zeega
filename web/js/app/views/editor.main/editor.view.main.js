@@ -44,7 +44,8 @@
 			'click #database-tray-toggle' : 'toggleDatabaseSize',
 			'click #zoom-interface' : 'toggleInterfaceTitles',
 			'blur #search-input' : 'onSearch',
-			'click #filter-action-menu a' : 'filterDatabase'
+			'click #filter-action-menu a' : 'filterDatabase',
+			'click #add-media-modal' : 'showAddMediaModal'
 		},
 
 		onSearch : function()
@@ -80,6 +81,14 @@
 		{
 			zeega.app.currentFrame.addLayerByType( $(e.target).closest('a').data('layer_type') );
 			return false;
+		},
+
+		showAddMediaModal : function()
+		{
+			var Modal = zeega.module('modal');
+			this.addMediaModal = new Modal.Views.AddMedia();
+			$('body').append( this.addMediaModal.render().el );
+			this.addMediaModal.show();
 		},
 
 		toggleDatabaseSize : function()
