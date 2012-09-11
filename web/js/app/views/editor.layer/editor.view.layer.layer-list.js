@@ -274,7 +274,6 @@
 					"<span class='layer-title'>  <%= title %></span>"+
 					"<span class='pull-right'>"+
 						"<a class='delete-layer' href='#'><i class='icon-trash icon-white'></i></a>"+
-						"<a class='sort-handle' href='#'><i class='icon-minus icon-white'></i></a>"+
 					"</span>"+
 				"</div>"+
 				"<div class='layer-control-drawer'>"+
