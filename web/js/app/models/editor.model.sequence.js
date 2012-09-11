@@ -73,6 +73,10 @@
 		{
 			this.sequenceFrameView.render();
 		},
+		unrenderSequenceFrames : function()
+		{
+			this.sequenceFrameView.remove();
+		},
 
 		addFrames : function(num)
 		{
@@ -82,18 +86,17 @@
 
 			_.times( n, function(i){
 				var newFrame = new Frame.Model();
-				newFrame.save({
-					'layers' : _this.get('persistent_layers')
-					},{
-					success : function()
-					{
+				newFrame.save({ 'layers' : _this.get('persistent_layers')})
+					.success(function(){
+						console.log('frame updated:', _this, newFrame, zeega.app)
 						newFrame.complete(); // complete the collections inside the frame
 						newFrame.sequenceID = _this.id; // add the sequence id to the frame
 						zeega.app.project.frames.add( newFrame );
 						_this.frames.push( newFrame );
 						if( i == n-1 ) zeega.app.loadFrame( newFrame );
-					}
-				});
+						newFrame.trigger('sync');
+					});
+				
 			})
 		},
 

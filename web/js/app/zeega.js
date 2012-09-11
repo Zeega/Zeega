@@ -83,9 +83,9 @@ this.zeega = {
 	initProject : function()
 	{
 		var Project = zeega.module("project");
-		
+		console.log('!!		projectJSON',$.parseJSON(projectJSON))
 		// initializes project
-		this.project = new Project.Model($.parseJSON(projectJSON).project);
+		this.project = new Project.Model($.parseJSON(projectJSON));
 		this.project.completeCollections();
 
 		this.project.loadProject();
