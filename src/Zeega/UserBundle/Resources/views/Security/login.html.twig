@@ -1,4 +1,4 @@
-{% extends 'ZeegaUserBundle::layout.html.twig' %}
+{% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block head %}
 	<title>Zeega Alpha</title>
@@ -69,7 +69,7 @@
 		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
 		  <fieldset>
 		  	<div class="control-group">	
-		
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 		  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
 		  		
 				<div class="controls">
