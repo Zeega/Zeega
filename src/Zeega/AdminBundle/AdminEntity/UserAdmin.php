@@ -21,7 +21,6 @@ class UserAdmin extends Admin
 			->add('thumb_url')
 			->add('email')
 			->add('email')
-            ->add('sites', 'entity', array('class' => 'Zeega\DataBundle\Entity\Site', 'multiple' => true, 'property' => 'short'))
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
     }
@@ -29,8 +28,10 @@ class UserAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
-
+            ->add('email')
+            ->add('display_name')
+            ->add('locked')            
+            ->add('lastLogin')
         ;
     }
     
@@ -49,7 +50,7 @@ class UserAdmin extends Admin
 			->add('display_name')
 			->add('email')
             ->add('created_at','datetime')
-			->add('last_login','datetime')
+			->add('lastLogin')
 			->add('locked')
             ->add('idea')
         ;
