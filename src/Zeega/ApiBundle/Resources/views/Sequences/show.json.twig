@@ -12,6 +12,13 @@
 	,
         {%- endif -%}
 	{% endfor %}
+        {%- elseif sequence_frames_complete is defined -%}
+        {%- for frame in sequence_frames_complete -%}   
+            {% include 'ZeegaApiBundle:Frames:show.json.twig' with {'frame': frame} %}  
+            {%- if loop.index0 < sequence_frames_complete|length - 1 -%}
+            ,
+            {%- endif -%}
+        {% endfor %}
         {%- endif -%}
 	]
 }
