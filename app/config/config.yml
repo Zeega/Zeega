@@ -15,9 +15,9 @@ framework:
     default_locale: %locale%
     trust_proxy_headers: false # change if the application is behind a proxy
     session:
-        domain: ~
-        lifetime:       72000
-        storage_id:     session.storage.pdo
+        cookie_domain: ~
+        cookie_lifetime:       72000
+        handler_id:     session.storage.pdo
 
 parameters:
     pdo.db_options:
@@ -34,8 +34,8 @@ services:
             - %database_user%
             - %database_password%
     session.storage.pdo:
-            class:     Symfony\Component\HttpFoundation\SessionStorage\PdoSessionStorage
-            arguments: [@pdo, %session.storage.options%, %pdo.db_options%]
+            class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+            arguments: [@pdo, %pdo.db_options%]
 
 # Twig Configuration
 twig:
@@ -73,35 +73,6 @@ doctrine:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
 
-# fos rest configuration
-fos_rest:
-    view:
-        formats:
-            json: true
-            rss: false
-            xml: false
-        templating_formats:
-            html: true
-        force_redirects:
-            html: true
-        failed_validation: HTTP_BAD_REQUEST
-        default_engine: twig
-
-# fos rest requirement
-sensio_framework_extra:
-    view:
-        annotations: false
-
-sonata_block:
-    default_contexts: [cms]
-    blocks:
-        sonata.admin.block.admin_list:
-            contexts:   [admin]
-
-        sonata.block.service.text:
-        sonata.block.service.action:
-        sonata.block.service.rss:
-
 # Swiftmailer Configuration
 swiftmailer:
     spool: { type: memory }
@@ -111,9 +82,6 @@ swiftmailer:
     password:  %mailer_password%
     encryption: %mailer_encryption%
 
-jms_security_extra:
-    secure_controllers:  true
-    secure_all_services: false
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
@@ -136,9 +104,17 @@ fos_user:
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig
 
-nelmio_solarium:
-    adapter:
-        class: Solarium_Client_Adapter_Http
-        host: %solr_host%
-        port: %solr_port%
-        path: %solr_path%
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.action:
+        sonata.block.service.rss:
+
+# fos rest requirement
+sensio_framework_extra:
+    view:
+        annotations: false

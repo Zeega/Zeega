@@ -13,45 +13,41 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle($this),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new Zeega\UserBundle\ZeegaUserBundle(),
-            new FOS\RestBundle\FOSRestBundle(),
-            new Zeega\ApiBundle\ZeegaApiBundle(),
-			new FOS\UserBundle\FOSUserBundle(),
-			new Sonata\AdminBundle\SonataAdminBundle(),
-			new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+
+            new FOS\UserBundle\FOSUserBundle(),                        
             new Sonata\BlockBundle\SonataBlockBundle(),
             new Sonata\CacheBundle\SonataCacheBundle(),
             new Sonata\jQueryBundle\SonatajQueryBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),            
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),      
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\SolariumBundle\NelmioSolariumBundle(),
+            
+            new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
             new Zeega\CoreBundle\ZeegaCoreBundle(),
             new Zeega\DataBundle\ZeegaDataBundle(),
-			new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
             new Zeega\ExtensionsBundle\ZeegaExtensionsBundle(),
-            new Nelmio\SolariumBundle\NelmioSolariumBundle(),
-            new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Zeega\DiscoveryBundle\ZeegaDiscoveryBundle(),
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new Zeega\CommunityBundle\ZeegaCommunityBundle(),
             new Zeega\BookmarkletBundle\ZeegaBookmarkletBundle(),
+            new Zeega\UserBundle\ZeegaUserBundle(),            
         );
 
-
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-      
-
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-            $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
-            $bundles[] = new Profiler\LiveBundle\ProfilerLiveBundle();
         }
 
         return $bundles;

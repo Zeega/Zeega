@@ -8,7 +8,7 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username
         in_memory:
             memory:
                 users:
@@ -22,7 +22,7 @@ security:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle
-                #csrf_provider: form.csrf_provider
+                csrf_provider: form.csrf_provider
                 default_target_path: /dashboard
                 use_forward: true
             logout:
