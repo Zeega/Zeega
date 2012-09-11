@@ -31,7 +31,6 @@ class UserAdmin extends Admin
             ->add('email')
             ->add('display_name')
             ->add('locked')            
-            ->add('lastLogin')
         ;
     }
     
