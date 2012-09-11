@@ -50,7 +50,7 @@
 
 		onSearch : function()
 		{
-			if( $('#search-input').val() != '' ) zeega.app.items.search.set({ query : $('#search-input').val() })
+			zeega.app.items.search.set({ query : $('#search-input').val() })
 		},
 
 		onSearchEscape : function()

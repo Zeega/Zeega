@@ -30,7 +30,12 @@
 
 // this.items.search.reset().set({q:'foo'})
 		
-		onChange : function(){ this.trigger('search') },
+		onChange : function()
+		{
+			console.log('$$		onchange', this)
+			if(this.get('query') == '') this.reset();
+			this.trigger('search');
+		},
 
 		reset : function( options )
 		{
