@@ -140,12 +140,6 @@
         {
             "package": "nelmio/solarium-bundle",
             "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
-        },
-        {
-            "package": "nelmio/solarium-bundle",
-            "version": "dev-master",
             "source-reference": "61b8a7f2b99edd13d90e377335f571607721a7f2",
             "commit-date": "1345050695"
         },
