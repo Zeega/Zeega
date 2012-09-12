@@ -30,13 +30,13 @@
 		{
 			this.$el.find('#looks-good').html('Publishing...');
 			var properties = {
-				title: this.$el.find('#publish-project-title').val(),
-				description : this.$el.find('#publish-project-description').val(),
+				title: this.$('#publish-project-title').val(),
+				description : this.$('#publish-project-description').val(),
 				publish_update:1,
 				published:true,
-				authors : this.$el.find('#publish-project-author').val(),
+				authors : this.$('#publish-project-author').val(),
 				//location : this.$el.find('#publish-project-location').val(),
-				estimated_time : this.$el.find('#publish-project-estimated-time').val()
+				estimated_time : this.$('#publish-project-estimated-time').val()
 			}
 
 			this.model.on('sync', this.onPublishSuccess, this);
@@ -72,7 +72,7 @@
 								'<textarea id="publish-project-description" class="twocolumn-field span6"> <%= description %> </textarea>'+
 							
 								'<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
-								'<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= author %>"/>'+
+								'<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= authors %>"/>'+
 								
 								'<label for="publish-project-estimated-time" class="twocolumn-label">Estimated Time</label>'+
 								'<input type="text" id="publish-project-estimated-time" class="twocolumn-field span6" value="<%= estimated_time %>"/>'+
@@ -85,7 +85,7 @@
 								*/
 								
 								'<label for="tags" class="twocolumn-label">Tags</label>'+
-								'<input name="tags" class="tagsedit twocolumn-field span6" id="" value="<%=tags%>" />'+
+								'<input name="tags" class="tagsedit twocolumn-field span6" id="" value="<%= tags %>" />'+
 
 								//'<label for="preview-images">Choose an image to represent your project</label>'+
 								//'<div id="preview-images"><%= imageHTML %></div>'+
