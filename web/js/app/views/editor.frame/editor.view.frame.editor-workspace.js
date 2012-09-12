@@ -270,6 +270,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				{
 					ui.draggable.draggable('option','revert',false);
 					_this.model.addItemLayer( zeega.app.draggedItem );
+					_this.model.trigger('layer_added')
 				}
 			});
 		},
@@ -319,7 +320,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.layers.each(function(layer){
 				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
 				{
-					_this.$el.find('.list').prepend( layer.controls.renderControls().el );
+					_this.$('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
 			})
@@ -353,6 +354,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				this.$el.find('.list').prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			}
+			this.closeAllLayers();
+
 		},
 
 		onRemoveLayer : function( layer )
@@ -362,6 +365,20 @@ the frame's layers. It also includes common frame functions like adding sequence
 				layer.controls.private_onLayerExit();
 				layer.controls.remove();
 			}
+		},
+
+		closeAllLayers : function()
+		{
+			this.model.layers.each(function(layer){
+				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
+				{
+					if( $('#layer-'+layer.id).hasClass('layer-open') )
+					{
+						layer.onControlsClosed();
+						$('#layer-'+layer.id).removeClass('layer-open');
+					}
+				}
+			})
 		},
 		
 		removeFromEditor : function()
