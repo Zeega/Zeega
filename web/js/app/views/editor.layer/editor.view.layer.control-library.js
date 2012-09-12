@@ -338,6 +338,9 @@ Use this.model.get('attr')[my_setting] instead!!!
 		{
 			this.$('.slider-num-input').focus();
 		},
+		onInputFocus : function()
+		{
+		},
 		
 		render : function()
 		{
