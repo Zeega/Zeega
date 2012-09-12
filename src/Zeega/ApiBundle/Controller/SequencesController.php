@@ -50,7 +50,7 @@ class SequencesController extends Controller
     	if(isset($sequence))
     	{
     	    $sequenceFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequence->getId());
-            $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames_complete' => $sequenceFrames));
+            $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames' => $sequenceFrames));
             return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
     	}
         
