@@ -5,6 +5,11 @@
 		//el : $('#publish-project-modal'),
 		className : 'modal',
 
+		initialize : function()
+		{
+			this.isPublished = this.model.get('published');
+		},
+
 		render: function()
 		{
 
@@ -46,7 +51,7 @@
 			this.model.off('sync', this.onPublishSuccess);
 			this.model.updated = false;
 			this.hide();
-			this.model.shareProject();
+			if(this.isPublished != true ) this.model.shareProject();
 		},
 
 		getTemplate : function()
