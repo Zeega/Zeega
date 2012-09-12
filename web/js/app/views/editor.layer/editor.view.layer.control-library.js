@@ -331,11 +331,12 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		events : {
 			'focus .slider-num-input' : 'onInputFocus',
-			'keypress .slider-num-input' : 'onKeypress'
+			'keypress .slider-num-input' : 'onKeypress',
+			'click .slider-num-input' : 'onInputClick'
 		},
-		
-		onInputFocus : function()
+		onInputClick : function()
 		{
+			this.$('.slider-num-input').focus();
 		},
 		
 		render : function()
