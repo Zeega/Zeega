@@ -7,12 +7,3 @@ services:
         arguments: [null, Zeega\DataBundle\Entity\User, ZeegaAdminBundle:UserAdmin]
         tags:
             - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
-    zeega.admin.site:
-        class: Zeega\AdminBundle\AdminEntity\SiteAdmin
-        arguments: [null, Zeega\DataBundle\Entity\Site, SonataAdminBundle:CRUD]
-        tags:
-            - { name: sonata.admin, alias: zeega_admin_site, manager_type: orm, group: General, label: Sites}
-
-#    zeega_user.example:
-#        class: %zeega_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
