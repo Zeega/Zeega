@@ -50,7 +50,13 @@
 
 		onSearch : function()
 		{
-			zeega.app.items.search.set({ query : $('#search-input').val() })
+			var _this = this;
+			if( $('#search-input').val() != '' ) zeega.app.items.search.set({ query : $('#search-input').val() });
+			else
+			{
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				zeega.app.items.search.reset({silent:false});
+			}
 		},
 
 		onSearchEscape : function()
@@ -67,11 +73,11 @@
 			{
 				$('#database-flash').html('filtered by: '+ contentFilter );
 				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() });
-				zeega.app.items.search.reset().set('content',contentFilter);
+				zeega.app.items.search.set('content',contentFilter);
 			}
 			else
 			{
-				$('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}

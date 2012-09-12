@@ -33,7 +33,7 @@
 		onChange : function()
 		{
 			console.log('$$		onchange', this)
-			if(this.get('query') == '') this.reset();
+			//if(this.get('query') == '') this.reset();
 			this.trigger('search');
 		},
 
