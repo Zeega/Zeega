@@ -62,7 +62,7 @@
 			var html = 
 			
 				"<ul class='list'></ul>"+
-				"<div id='zeega-add-frame'><a href='#'>+</a></div>";
+				"<div id='zeega-add-frame'><a href='#'><div class='menu-verbose-title'>add frame</div>+</a></div>";
 
 				//"<a href='#' id='add-frame'><img src='../../../images/addframe.png' height='25' width='25'/></a>";
 

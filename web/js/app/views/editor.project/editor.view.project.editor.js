@@ -186,10 +186,10 @@
 		{
 			var html = 
 					"<li><a id='project-cover-image' href='#' style='background:url(<%= cover_image %>);background-size:100% 100%'></a></li>"+
-			
 					"<li><a id='project-options' class='<%= options_class %>' href='#'><div class='menu-verbose-title'>options</div><i class='icon-tasks icon-white'></i></a></li>"+
 					"<li><a id='project-publish' class='<%= publish_class %>' href='#'><div class='menu-verbose-title'>publish</div><i class='icon-print icon-white'></i></a></li>"+
 					"<li><a id='project-share' class='<%= share_class %>' href='#'><div class='menu-verbose-title'>share</div><i class='icon-gift icon-white'></i></a></li>"+
+
 					"<li><a id='project-preview' href='#'><div class='menu-verbose-title'>preview</div><i class='icon-play icon-white'></i></a></li>";
 			
 			return html;
