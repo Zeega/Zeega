@@ -35,6 +35,7 @@
 				publish_update:1,
 				published:true,
 				authors : this.$('#publish-project-author').val(),
+				tags : this.$('#tag-input').val(),
 				//location : this.$el.find('#publish-project-location').val(),
 				estimated_time : this.$('#publish-project-estimated-time').val()
 			}
@@ -85,7 +86,7 @@
 								*/
 								
 								'<label for="tags" class="twocolumn-label">Tags</label>'+
-								'<input name="tags" class="tagsedit twocolumn-field span6" id="" value="<%= tags %>" />'+
+								'<input name="tags" class="tagsedit twocolumn-field span6" id="tag-input" value="<%= tags %>" />'+
 
 								//'<label for="preview-images">Choose an image to represent your project</label>'+
 								//'<div id="preview-images"><%= imageHTML %></div>'+
