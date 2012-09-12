@@ -7,25 +7,28 @@
 
 		initialize : function()
 		{
-			this.collection.on('add', this.addSequence, this);
+			this.collection.on('add', this.render, this);
 			this.collection.on('remove', this.render, this);
 		},
 
 		render : function()
 		{
+			console.log('ss 		sequence render', this)
 			var _this = this;
 			this.setElement( $(this.target) );
 			this.$el.html('<ul class="list">')
 			this.collection.each(function(sequence, i){
 				_this.$el.find('.list').append( sequence.tabView.render().el );
+				sequence.tabView.delegateEvents();
 			})
 			return this;
 		},
-
+/*
 		addSequence : function( seq )
 		{
 			this.$el.find('.list').append( seq.tabView.render().el );
 		}
+*/
 	})
 
 // model view

@@ -20,8 +20,7 @@
 							<a href='#' class='menu-toggle'><i class='icon-user icon-white'></i></a>
 							<ul class='user-action-menu'>
 								<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}" target='blank'>User Profile</a></li>
-								<li><a href='{{ path('ZeegaCoreBundle_faq')}}' target='blank' >FAQ</a></li>
-								<!-- <li><a id='report-bug'>Report a Bug</a></li> -->
+								<!--<li><a href='{{ path('ZeegaCoreBundle_faq')}}' target='blank' >FAQ</a></li>-->
 								<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
 							</ul>
 						</ul>
@@ -44,8 +43,10 @@
 
 					</li>
 
+					<li><a href='{{ path('ZeegaCoreBundle_faq')}}' target='blank' ><i class='icon-question-sign icon-white'></i></a></li>
+
 					<!--<li><a id='zoom-interface' href='#'><i class='icon-zoom-out icon-white'></i></a></li>-->
-					<li id='save-indicator'><a href='#'><i class='icon-blank'></i></a></li>
+					<li id='save-indicator' style='color:orangered'><a href='#'><i class='icon-blank'></i></a></li>
 				</ul>
 
 
@@ -73,6 +74,7 @@
 					<ul>
 						<li><a id='database-tray-toggle' href='#'><div class='menu-verbose-title'>hide</div><i class='icon-chevron-down icon-white'></i></a></li>
 						<li><a href="javascript:dropbox.sync()" id='sync-dropbox'><div class='menu-verbose-title'>dropbox</div><i class='icon-hdd icon-white'></i></a></li>
+						<li><a href="#" id='add-media-modal'><div class='menu-verbose-title'>get bookmarklet</div><i class='icon-plus-sign icon-white'></i></a></li>
 						<!--<li><a href='#'><div class='menu-verbose-title'>sync</div><i class='icon-refresh icon-white'></i></a></li>-->
 					</ul>
 					<div class='zeega-list-header'>MEDIA</div>
@@ -80,7 +82,7 @@
 
 				<div class='database-tray'>
 					<div class='menu-bar menu-dark clearfix' >
-						<ul class='pull-left'>
+						<ul class='pull-right'>
 							<li>
 								<ul class='menu-dropdown'>
 									<a href='#' class='menu-toggle'><div class='menu-verbose-title'>filters</div><i class='icon-filter icon-white'></i></a>
@@ -97,7 +99,7 @@
 
 							</li>
 						</ul>
-						<input id='search-input' class='pull-right' type='text' placeholder='search'/>
+						<input id='search-input' class='pull-left' style='margin-left:10px' type='text' placeholder='search'/>
 					</div>
 
 					<div id='database-flash' class='alert alert-info hide'></div>

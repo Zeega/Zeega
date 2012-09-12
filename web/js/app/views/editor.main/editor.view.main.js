@@ -33,6 +33,15 @@
 				}
 			})
 
+
+			$('#zeega-item-database-list').scroll(function(){
+				if( $(this).height() >= $(this).find('.list').height() + $(this).find('.list').position().top )
+				{
+					console.log('infinitescrolllll')
+					zeega.app.items.incrementPage();
+				}
+			})
+
 			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
 
 			
@@ -44,12 +53,19 @@
 			'click #database-tray-toggle' : 'toggleDatabaseSize',
 			'click #zoom-interface' : 'toggleInterfaceTitles',
 			'blur #search-input' : 'onSearch',
-			'click #filter-action-menu a' : 'filterDatabase'
+			'click #filter-action-menu a' : 'filterDatabase',
+			'click #add-media-modal' : 'showAddMediaModal'
 		},
 
 		onSearch : function()
 		{
-			if( $('#search-input').val() != '' ) zeega.app.items.search.set({ query : $('#search-input').val() })
+			var _this = this;
+			if( $('#search-input').val() != '' ) zeega.app.items.search.set({ query : $('#search-input').val() });
+			else
+			{
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				zeega.app.items.search.reset({silent:false});
+			}
 		},
 
 		onSearchEscape : function()
@@ -66,11 +82,11 @@
 			{
 				$('#database-flash').html('filtered by: '+ contentFilter );
 				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() });
-				zeega.app.items.search.reset().set('content',contentFilter);
+				zeega.app.items.search.set('content',contentFilter);
 			}
 			else
 			{
-				$('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}
@@ -80,6 +96,14 @@
 		{
 			zeega.app.currentFrame.addLayerByType( $(e.target).closest('a').data('layer_type') );
 			return false;
+		},
+
+		showAddMediaModal : function()
+		{
+			var Modal = zeega.module('modal');
+			this.addMediaModal = new Modal.Views.AddMedia();
+			$('body').append( this.addMediaModal.render().el );
+			this.addMediaModal.show();
 		},
 
 		toggleDatabaseSize : function()

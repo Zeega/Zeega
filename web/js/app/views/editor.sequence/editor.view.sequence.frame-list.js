@@ -4,6 +4,11 @@
 		
 		target : '#zeega-project-frame-list',
 
+		initialize : function()
+		{
+			this.model.on('blur', this.undelegateEvents, this );
+		},
+
 		render: function()
 		{
 			var _this = this;
