@@ -33,6 +33,15 @@
 				}
 			})
 
+
+			$('#zeega-item-database-list').scroll(function(){
+				if( $(this).height() >= $(this).find('.list').height() + $(this).find('.list').position().top )
+				{
+					console.log('infinitescrolllll')
+					zeega.app.items.incrementPage();
+				}
+			})
+
 			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
 
 			

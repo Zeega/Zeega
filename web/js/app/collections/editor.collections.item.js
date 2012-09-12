@@ -19,11 +19,12 @@
 	Items.SearchModel = Backbone.Model.extend({
 		defaults : {
 			query : '',
-			page : 0,
+			page : 1,
 			content : '',
 			collection : '',
 			user : '1',
-			site : sessionStorage.getItem('siteid')
+			site : sessionStorage.getItem('siteid'),
+			add : false
 		},
 
 		initialize : function(){ this.on('change', this.onChange, this ) },
@@ -49,13 +50,12 @@
 	Items.Collection = Backbone.Collection.extend({
 
 		model: Items.Model,
-		page : 0,
 		totalItemsCount : 0,
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page;
-			var queryTemplate = '<% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
+			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid');
+			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
 			return url;
 		},
@@ -75,9 +75,22 @@
 		
 		onSearch : function()
 		{
-			this.fetch();
+			var _this = this;
+			this.fetch({add: this.search.get('add')}).success(function(){
+				_this.trigger('reset');
+			});
 		},
 		
+		incrementPage : function()
+		{
+			if(this.length < this.totalItemsCount)
+			{
+				var pageNo = this.search.get('page');
+				pageNo++;
+				this.search.set({ page:pageNo, add:true });
+			}
+		},
+
 		refresh : function(){ this.fetch() },
 
 		///// move this ////////////

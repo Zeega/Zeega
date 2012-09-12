@@ -71,12 +71,11 @@ this.zeega = {
 	{
 		var Items = zeega.module("items");
 		
-		console.log('!!		database items: ',$.parseJSON(projectJSON))
+		console.log('!!		database items: ',$.parseJSON(itemsJSON))
 		
 		var itemsBS = jQuery.parseJSON(itemsJSON);
-		this.totalItemsCount = itemsBS.items_count;
 		this.items = new Items.Collection(itemsBS.items);
-		
+		this.items.totalItemsCount = itemsBS.items_count;
 		this.items.itemCollectionView.render();
 	},
 
