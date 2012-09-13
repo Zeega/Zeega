@@ -162,6 +162,18 @@
     version=v1.2.4
 
 ; ---------------------------------------------
+; RabbitMQ (queue)
+; ---------------------------------------------
+
+[RabbitMqBundle]
+	git=git://github.com/luisbrandao/RabbitMqBundle.git
+	target=/bundles/OldSound/RabbitMqBundle
+
+[php-amqplib]
+	git=http://github.com/videlalvaro/php-amqplib.git
+	target=videlalvaro/php-amqplib
+
+; ---------------------------------------------
 ; other bundles
 ; ---------------------------------------------
 

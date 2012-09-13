@@ -17,9 +17,16 @@
 	{% endif %}	
 ,
 "{% block countName %}items_count{% endblock %}":
-	{% if items_count is defined %}
-		{{ items_count }}
+{% if items_count is defined %}
+	{{ items_count }}
+{% else %}
+	0
+{% endif %}
+,
+"request":
+	{% if request is defined %}
+		{{ request | json_encode | raw}}
 	{% else %}
-		0
+	{}
 	{% endif %}
 }
