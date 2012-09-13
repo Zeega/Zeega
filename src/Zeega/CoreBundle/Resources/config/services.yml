@@ -21,3 +21,9 @@ services:
             security: "@security.context"
             doctrine: "@doctrine"
             rabbitmq: "@old_sound_rabbit_mq.celery_task_producer"
+    zeega_queue:
+        class: Zeega\CoreBundle\Listener\CoreResponseListener
+        arguments:
+            security: "@security.context"
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
