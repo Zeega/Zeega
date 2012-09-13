@@ -39,6 +39,7 @@ class AppKernel extends Kernel
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new Zeega\CommunityBundle\ZeegaCommunityBundle(),
             new Zeega\BookmarkletBundle\ZeegaBookmarkletBundle(),
+            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
         );
 
 
