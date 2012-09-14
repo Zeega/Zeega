@@ -46,6 +46,7 @@ this.zeegaPlayer = {
 		this.project.renderPlayer();
 
 		if(this.mode != 'editor') this.startRouter();
+		else this.project.goToFrame( initial.frameID );
 	},
 	
 	parseProject : function(data)
