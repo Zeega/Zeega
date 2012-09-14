@@ -493,6 +493,7 @@ this.zeegaPlayer = {
 			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
 			{
 				_.each( targetArray, function(frameID){
+					console.log('each', frameID,zeegaPlayer.app.project,zeegaPlayer.app.project.frames.get(frameID) )
 					var before = zeegaPlayer.app.project.frames.get(frameID).before;
 					var after = zeegaPlayer.app.project.frames.get(frameID).after;
 					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;

@@ -31,13 +31,15 @@
 			var _this = this;
 			var Frame = zeega.module('frame');
 			var frameData = this.get('frames');
-			var frames = _.map( this.get('frames'), function(frameID){
-				var frameModel = new Frame.Model();
-				frameModel.id = frameID;
+			var frames = _.map( this.get('frames'), function(frameJSON){
+				var frameModel = new Frame.Model(frameJSON);
+				//frameModel.id = frameID;
 				frameModel.sequenceID = _this.id;
 				frameModel.complete();
 				return frameModel;
 			});
+			frames = _.compact(frames);
+
 			this.set('frames', _.pluck(frames,'id') );
 			zeega.app.project.frames.add( frames, {silent:true} );
 			this.complete();
@@ -56,12 +58,10 @@
 			// if this is a new sequence the frames will come in as objects
 			if(  _.isObject( this.get('frames')[0] ) )
 			{
-
 				zeega.app.project.frames.add( this.get('frames'));
 
 				this.set('frames', _.pluck( this.get('frames'), 'id' ) );
 				console.log('--$$		new frames', this.get('frames'), this, zeega.app.project.frames )
-
 			}
 
 			var frameArray = this.get('frames').map(function(frameID){
