@@ -58,6 +58,8 @@
 			this.visualWorkspace = new Frame.Views.VisualWorkspace({model:this});
 			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
 			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
+
+			this.complete = true;
 		},
 
 		/*

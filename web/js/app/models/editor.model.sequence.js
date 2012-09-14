@@ -53,11 +53,28 @@
 			var col = Backbone.Collection.extend();
 			this.persistentLayers = new col( persistentLayers );
 			// make frame collection
+			// if this is a new sequence the frames will come in as objects
+			if(  _.isObject( this.get('frames')[0] ) )
+			{
+
+				zeega.app.project.frames.add( this.get('frames'));
+
+				this.set('frames', _.pluck( this.get('frames'), 'id' ) );
+				console.log('--$$		new frames', this.get('frames'), this, zeega.app.project.frames )
+
+			}
+
 			var frameArray = this.get('frames').map(function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
+				if(frame.complete != true) frame.complete();
 				frame.sequenceID = _this.id;
 				return frame;
 			});
+			
+
+
+
+			
 			this.frames = new Sequence.FrameCollection(frameArray);
 			this.frames.comparator = function( frame ){ return frame.frameIndex };
 			this.frames.on('add', this.onAddFrame, this);
