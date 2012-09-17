@@ -37,7 +37,7 @@ class CommunityController extends Controller
     	//if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
         //{
             $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId)), 301);  
+            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId),true), 301);  
         //}        
     }
     
