@@ -20,7 +20,7 @@ class RegistrationFormType extends BaseType
             ));
     }
 
-    public function geSite()
+    public function getName()
     {
         return 'zeega_user_registration';
     }
