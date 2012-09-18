@@ -29,7 +29,9 @@ class CoreResponseListener
         if(isset($token)) {
             $user = $token->getUser();
             if("anon." !== $user) {
-                $event->getResponse()->headers->set('zeega', 'authenticated');
+                $event->getResponse()->headers->set('zeega-auth', 1);
+            } else {
+                $event->getResponse()->headers->set('zeega-auth', 0);
             }            
         }
     }

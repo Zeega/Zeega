@@ -76,13 +76,12 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    spool: { type: memory }
     transport: %mailer_transport%
+    encryption: %mailer_encryption%
+    auth_mode:  login
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    encryption: %mailer_encryption%
-
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
