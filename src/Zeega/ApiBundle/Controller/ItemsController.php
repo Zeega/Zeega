@@ -418,7 +418,7 @@ class ItemsController extends Controller
 				$i++;
 				
 				$frameOrder[]=$i;
-				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$frames[]=array( "id"=>(int)$item['id'],"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
 				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_uri"=>$item['attribution_uri']));
          	}
          }
