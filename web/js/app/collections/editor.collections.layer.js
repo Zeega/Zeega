@@ -11,71 +11,6 @@
 
 		},
 		
-		addNewLayer : function( args )
-		{
-			var _this = this
-			//var newLayer;
-			console.log('ADD NEW LAYER')
-	
-			
-			//args = {item, type, frame}
-			if( _.isUndefined( args.item ) )
-			{
-
-				console.log('add non item layer type: '+args.type);
-
-				var newLayer = new Layer[args.type]({attr:args.options});
-				console.log('new layers',newLayer,args, args.show() )
-				this.add( newLayer );
-				if( args.show() )
-				{
-					console.log('##		render to workspace', args, newLayer)
-					args.frame.renderLayerToWorkspace( newLayer );
-				}
-				this.saveLayer(newLayer, args.frame);
-				return newLayer;
-			}
-			else
-			{
-				//media item layer
-				console.log(Layer, args.item.get('layer_type') )
-				
-				var newLayer = new Layer[args.item.get('layer_type')]({
-					type: args.item.get('layer_type'),
-					attr: args.item.attributes
-				});
-			
-				this.add( newLayer );
-				if( args.show() )
-				{
-					console.log('##		render to workspace', args, newLayer)
-					args.frame.renderLayerToWorkspace( newLayer );
-				}
-				this.saveLayer(newLayer, args.frame);
-				return newLayer;
-			}
-		},
-		
-		saveLayer : function(layerModel, frame)
-		{
-			var _this = this;
-			console.log('save layer', layerModel, frame)
-			//remove model from layerModel.attr
-			layerModel.attributes.attr.model = null;
-			console.log('save layer', layerModel)
-			layerModel.save({},{
-				success : function( savedLayer )
-				{
-					console.log('layermodel saved', savedLayer)
-					savedLayer.trigger('refresh_view');
-					savedLayer.trigger('layer_saved');
-					_this.addLayerToFrame( frame, savedLayer );
-					frame.trigger('update_thumb');
-				}
-			});
-			
-		},
-		
 		/*
 		adds an existing layer to the layer collection.
 		Duplicated layers do not need saving
@@ -84,24 +19,11 @@
 		{
 			var oldLayer = this.get(oldLayerID);
 			var dupeLayer = oldLayer.clone();
+			console.log('$$		dupe layer', oldLayerID, newLayerID, oldLayer, dupeLayer)
 			dupeLayer.generateNewViews();
 			dupeLayer.set('id', newLayerID );
 			this.add(dupeLayer);
 			oldLayer.save()
-		},
-		
-		addLayerToFrame : function(frame,layer)
-		{
-			var layerArray = [];
-			if(frame.get('layers'))
-			{
-				layerArray = frame.get('layers');
-				layerArray.push(layer.id);
-			}
-			else layerArray = [layer.id];
-			frame.save({'layers': _.compact(layerArray)});
-			layer.trigger('update');
-			zeega.app.updateLayerOrder( frame );
 		},
 		
 		removeLayer : function(layer){ this.removeLayerFromFrame(layer) },

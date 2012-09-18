@@ -1,4 +1,4 @@
-{% extends 'ZeegaUserBundle::layout.html.twig' %}
+{% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block head %}
 	<title>Zeega Alpha</title>
@@ -13,7 +13,7 @@
 		*/
 	
 		html { 
-		background: url(http://25.media.tumblr.com/tumblr_lo2v0zBrJI1qg39ewo1_500.gif) no-repeat center center fixed;
+		background: url({{asset("images/registration/login.gif")}}) no-repeat center center fixed;
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -23,7 +23,7 @@
 	</style>
 	
 
-	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+	<!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
 	{% if app.environment == 'dev' %}
 		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
 		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
@@ -32,8 +32,8 @@
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
 	{% endif %}
 
-	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
 	
 {% endblock head%}
@@ -69,7 +69,7 @@
 		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
 		  <fieldset>
 		  	<div class="control-group">	
-		
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 		  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
 		  		
 				<div class="controls">

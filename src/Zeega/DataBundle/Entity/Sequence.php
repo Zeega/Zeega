@@ -174,4 +174,29 @@ class Sequence
     {
         return $this->enabled;
     }
+    /**
+     * @var array $persistent_layers
+     */
+    private $persistent_layers;
+
+
+    /**
+     * Set persistent_layers
+     *
+     * @param array $persistentLayers
+     */
+    public function setPersistentLayers($persistentLayers)
+    {
+        $this->persistent_layers = $persistentLayers;
+    }
+
+    /**
+     * Get persistent_layers
+     *
+     * @return array 
+     */
+    public function getPersistentLayers()
+    {
+        return $this->persistent_layers;
+    }
 }

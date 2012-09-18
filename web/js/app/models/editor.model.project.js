@@ -2,6 +2,8 @@
 
 	Project.Model = Backbone.Model.extend({
 		
+		updated : false,
+
 		defaults : {
 			'cover_image' : 'images/default_cover.png',
 			'estimated_time' : 'the time it takes to eat a sandwhich',
@@ -74,7 +76,9 @@
 		{
 			var Sequence = zeega.module("sequence");
 			this.sequences = new Sequence.Collection( sequences );
-			this.sequences.render();
+			this.sequences.sequenceTrayView.render();
+
+			this.sequences.at(0).trigger('focus');
 			//zeega.app.currentSequence = this.sequences.at(0);
 		},
 		
@@ -187,8 +191,10 @@
 		{
 			// make view for project here //
 			this.view = new Project.Views.Editor({model:this});
-			this.view.renderToTarget();
+			this.view.render();
 		},
+
+		/*
 		loadPublishProject : function()
 		{
 			// publishing view for project //
@@ -196,6 +202,67 @@
 			this.view = new Modal.Views.ShareProject({ model:this });
 			this.view.render();
 		},
+		*/
+
+		publishProject : function()
+		{
+			console.log(this.updated);
+			if(this.get("published"))
+			{
+				if(this.get('date_updated') != this.get('date_published') || this.updated )
+				{
+					this.updated = false;
+					this.on('sync', this.onProjectPublish, this);
+					this.save({'publish_update':1});
+					console.log('already published. published again')
+				}
+			}
+			else
+			{
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.PublishProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+				console.log('newly publishded good job')
+			}
+		},
+
+		onProjectPublish : function( model, response)
+		{
+			console.log('$$		on project publish', model, response, this.project)
+			this.off('sync', this.onProjectPublish);
+			this.set({'publish_update':0});
+			this.trigger('update_buttons');
+		},
+
+		shareProject : function()
+		{
+			if(this.get("published"))
+			{
+				console.log('$$		share project', this)
+				
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.ShareProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+				
+			}
+		},
+
+		settingsProject : function()
+		{
+			if(this.get("published"))
+			{
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.PublishProject({ model:this });
+				$('body').prepend( view.render().el );
+				view.show();
+			}
+		},
+
+
+
+
 		
 		update : function( newAttr, silent )
 		{

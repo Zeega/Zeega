@@ -13,8 +13,6 @@ namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
@@ -48,9 +46,9 @@ class ThumbnailsController extends Controller
                     $itemMediaType = 'Image';
                     $itemUri = $itemThumbnail;
                 }
-            
+                
                 $host = $this->container->getParameter('hostname');
-                $thumbnailServerUrl =  $host . "static/scripts/item.php?id=$itemId&url=".$itemUri.'&type='.$itemMediaType;
+                $thumbnailServerUrl =  "http:" . $host . "static/scripts/item.php?id=$itemId&url=".$itemUri.'&type='.$itemMediaType;
             	$thumbnailJSON = file_get_contents($thumbnailServerUrl);
             	
             	$zeegaThumbnail = json_decode($thumbnailJSON,true);
@@ -63,6 +61,8 @@ class ThumbnailsController extends Controller
                         
                 }
                 return new Response($thumbnailJSON);
+                
+                //return new Response("https://dev.zeega.org/zeega/web/images/zeega-logo-header.png");
             }
         }
         catch(Exception $e)

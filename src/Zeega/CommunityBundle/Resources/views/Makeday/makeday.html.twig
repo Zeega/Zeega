@@ -1,0 +1,205 @@
+{# src/Zeega/CommunityBundle/Resources/views/Notfound/notfound.html.twig #}
+
+{% extends '::base.html.twig' %}
+
+{% block title %}Zeega{% endblock %}
+
+
+{%  block stylesheets %}
+	<!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+
+	<style type="text/css">
+	
+		/*
+			Background image code lives here, not in CSS, because this is specific to each page
+			and could be made dynamic too (i.e. randomly picking a different image each load)
+			quite easily. Exposing the code here should be helpful.
+		*/
+	
+		html { 
+		background: url({{ asset('images/about/makeday.gif')}}) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		
+		}
+		
+	
+	</style>
+	
+	
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
+	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+	
+	
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script data-main="{{ asset('js/loaders/makeday') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	
+	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+	
+	
+{% endblock %}
+
+{% block body %}
+<div class="gifcredit"><a href="http://gifmovie.tumblr.com" target="_blank">gifmovie.tumblr.com</a></div>
+
+	<!-- Background Color Div - creates the transparent layer over the background image -->
+	<div id="background-color">
+	</div>
+	<!-- Background Color Div ends -->
+	<!-- Page Intro Begins -->
+	
+	
+	
+	<div class="container new-section">
+	
+		<div class="row">
+	
+			
+		
+			<div class="span13">
+				
+				<div class="row">
+					<div class="span13 makeday-form">
+						<h1>Join us for a Zeega Make Day!</h1>
+					</div>
+					<div class="span13 hide makeday-thanks">
+						<h1>Thanks for your submission!</h1>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="span7 makeday-form">
+						<h2>Oct 27th Cambridge MA</h2>
+						<p style="font-size: 12px; line-height: 16px;">
+							Overall description of make day.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+							Sed vestibulum tellus a erat pharetra. Pellentesque a erat sem, et volutpat mauris. In nec 
+							tortor eu mauris condimentum cursus. Vivamus dapibus, dolor sed rutrum gravida.
+						</p>
+
+				<form class="form-vertical">
+					<fieldset>
+						<div class="control-group">			
+					    
+						<div class="row">
+					    	<div class="span3">
+								<label class="control-label" for="name"><h4>Name</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>
+								<div class="controls">
+						    		
+						    		<input type="text" id="makeday-name" name="name" required="required" maxlength="255"    class="input-xlarge-custom" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="email"><h4>Email</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+						    		
+						    		<input type="email" id="makeday-email" name="email" required="required"    class="input-xlarge-custom" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4 style="line-height:22px">What kind of project or work are you looking to make with Zeega?</h4></label>
+								<p class="sidebar">
+									
+								</p>
+							</div>
+							<div class="span4">
+								<div class="controls">						
+						    		
+						    		<textarea id="makeday-idea" name="idea"    class="input-xlarge-custom" rows="6"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span3">
+								<label class="control-label" for="youridea"></label>
+							</div>
+						</div>
+					  
+					    <div class="row">
+							<div class="span4 offset3">
+								<button id="makeday-submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+							</div>
+							<div class="span4">
+								<div class="controls">
+						    		
+						    		
+								</div>
+							</div>
+						</div>
+					 </div>
+				</fieldset>
+				</form>
+			
+			
+			
+			<!-- Form Ends -->
+						</div>
+					<div class="span7 hide makeday-thanks">
+						<h2>We'll be in touch shortly</h2>
+					</div>
+					<div class="span3 offset3">
+						<div class="row">
+							<h4>Location</h4>
+							<p style="font-size: 12px; line-height: 16px; padding-top:10px">
+							MIT OpenDoc Lab<br>
+							21 Ames Street<br>
+							Cambridge, MA 02139 USA<br>
+							<a href="https://maps.google.com/maps?hl=en&q=21+ames+street+cambridge+ma&ie=UTF-8&hq=&hnear=0x89e370af2bd7d569:0x241b0015fd22d0b5,21+Ames+St,+Cambridge,+MA+02142&gl=us&ei=UMNHULPgKcPb0QHFyoHQCA&ved=0CB4Q8gEwAA">map</a>
+							</p>
+						</div>
+						<br><br>
+						<div class="row">
+							<h4>Partners</h4>
+							<p style="font-size: 12px; line-height: 16px; padding-top:10px">
+							Tribeca New Media Fund<br>
+							MIT OpenDoc Lab<br>
+							</p>
+						</div>
+					
+						
+					</div>
+					
+				</div>
+			</div>
+			
+		
+		</div>
+	
+	</div>
+
+	
+	<!-- Page Intro Ends -->
+	
+	
+	
+
+
+{% endblock %}

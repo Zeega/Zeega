@@ -4,7 +4,6 @@ Zeega\DataBundle\Entity\Frame:
     repositoryClass: Zeega\DataBundle\Repository\FrameRepository
     manyToOne:
         sequence:
-            cascade: [delete]
             targetEntity: Sequence
             joinColumns:
                 sequence_id:

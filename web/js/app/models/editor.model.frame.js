@@ -1,9 +1,9 @@
 (function(Frame){
 
 	Frame.LayerCollection = Backbone.Collection.extend({
-		initialize : function()
-		{
-		}
+
+		comparator : function( layer ){ return layer.layerIndex }
+	
 	})
 
 	Frame.Model = Backbone.Model.extend({
@@ -27,55 +27,139 @@
 	
 		initialize : function()
 		{
-			this.updating = false;
-			
-			if(this.get('layers')) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
-
+			if( this.get('layers') ) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
 			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			
-			this.sequenceFrameView = new Frame.Views.FrameSequence({model:this});
-			this.editorWorkspace = new Frame.Views.EditorWorkspace({model:this});
-			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
-			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
-
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
 			this.on('update_thumb', this.updateFrameThumb, this );
-
 		},
+
+		/*
+			must be called after the model is created and after the project is fully loaded/parsed
+		*/
 
 		complete : function()
 		{
-			this.initLayerCollection();
+			if( !this.get('layers') ) this.set({ layers:[] });
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
+			this.layers = new Frame.LayerCollection( layerArray );
+			this.layers.on('add', this.updateLayerOrder, this);
+			this.layers.on('remove', this.updateLayerOrder, this);
+
+			this.sequenceFrameView = new Frame.Views.FrameSequence({
+				model:this,
+				attributes : {
+					id:'frame-thumb-'+ this.id,
+					'data-id' : this.id
+				}
+			});
+			this.detailsBar = new Frame.Views.DetailBar({model:this});
+			this.visualWorkspace = new Frame.Views.VisualWorkspace({model:this});
+			this.editorLayerList = new Frame.Views.EditorLayerList({model:this});
+			this.editorLinkLayerList = new Frame.Views.EditorLinkLayerList({model:this});
+
+			this.complete = true;
 		},
 
-		initLayerCollection : function()
+		/*
+			updates the layer order when a layer is added, removed, or moved
+		*/
+
+		updateLayerOrder : function()
 		{
-			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
-			this.layerCollection = new Frame.LayerCollection( layerArray );
+			var layerOrder = this.layers.map(function(layer){ return parseInt(layer.id) });
+			var layerOrder = _.compact( layerOrder );
+			if(layerOrder.length == 0) layerOrder = [false];
+			this.save('layers', layerOrder);
+			this.updateThumb();
 		},
-		
+
+		/*
+			relies on the frame actually being rendered in the dom to work
+		*/
+
+		sortLayers : function( layerIDArray )
+		{
+			var _this = this;
+			_.each(layerIDArray, function(layerID, i){
+				var layer = _this.layers.get(layerID);
+				$('#layer-visual-'+ layer.id).css('z-index', i);
+				layer.layerIndex = i;
+			})
+			this.layers.sort();
+			this.updateLayerOrder();
+		},
+
+		/*
+			creates a new layer from an item model and adds it to the frame
+		*/
+
+		addItemLayer : function( itemModel )
+		{
+			var _this = this;
+			var Layer = zeega.module('layer');
+			// make a new layer // this could be more elegant // shouldnt' dump attributes into model!
+			var newLayer = new Layer[itemModel.get('layer_type')]({
+					type: itemModel.get('layer_type'),
+					attr: itemModel.toJSON()
+				});
+			newLayer.on('sync', this.onFirstLayerSave, this);
+			newLayer.save();
+			
+			return newLayer;
+		},
+
+		onFirstLayerSave : function( layer )
+		{
+			console.log('$$		on first layer save', layer)
+			zeega.app.project.layers.add( layer );
+			this.layers.push( layer );
+			layer.off('sync',this.onFirstLayerSave);
+		},
+
+		/*
+			creates a new layer from a type and adds it to the frame
+		*/
+
+		addLayerByType : function( type, a )
+		{
+			var _this = this;
+			var attributes = a || {};
+			var Layer = zeega.module('layer');
+			var newLayer = new Layer[type]();
+			console.log('nn		new Layer', newLayer, type, a, attributes, new Layer[type]() )
+			if( newLayer )
+			{
+				newLayer.on('sync', this.onNewLayerSave, this );
+				newLayer.save({ attr : _.extend({},newLayer.get('attr'),attributes) })
+				return newLayer;
+			}
+			else console.log('!!		no such layer type!');
+		},
+
+		onNewLayerSave : function( layer )
+		{
+			layer.off('sync', this.onNewLayerSave);
+			this.layers.push( layer );
+			zeega.app.project.layers.add( layer );
+		},
+
 		// adds the frame workspace view to the editor
 		renderWorkspace : function()
 		{
-			this.editorWorkspace.renderToEditor();
-			this.editorLinkLayerList.renderToEditor();
-			this.editorLayerList.renderToEditor();
+			this.detailsBar.render();
+			this.visualWorkspace.render();
+			this.editorLinkLayerList.render();
+			this.editorLayerList.render();
 		},
 		// removes the frame workspace view to the editor
 		removeWorkspace : function()
 		{
-			this.editorWorkspace.removeFromEditor()
-			this.editorLinkLayerList.removeFromEditor();
+			this.detailsBar.onExit();
+			this.visualWorkspace.unrender();
+			//this.editorLinkLayerList.removeFromEditor();
 			this.editorLayerList.removeFromEditor();
-		},
-		
-		
-		// adds a new layer to the workspace without disturbing existing layers
-		renderLayerToWorkspace : function( newLayer )
-		{
-			this.editorLayerList.addLayer( newLayer );
-			this.editorWorkspace.workspace.addLayer( newLayer );
 		},
 		
 		update : function( newAttr, silent )
@@ -84,12 +168,7 @@
 			if( _.isArray(this.get('attr')) ) this.set('attr',{});
 			var a = _.extend( this.get('attr'), newAttr );
 			this.set('attr',a);
-			if( !silent )
-			{
-				this.save({},{
-					success : function(){ _this.trigger('update') }
-				});
-			}
+			if( !silent ) this.save();
 		},
 		
 		//update the frame thumbnail
@@ -108,7 +187,7 @@
 				var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			
 				worker.addEventListener('message', function(e) {
-					console.log(e)
+					//console.log(e)
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
@@ -124,17 +203,7 @@
 				worker.postMessage({'cmd': 'capture', 'msg': sessionStorage.getItem('hostname')+'static/scripts/frame.php?id='+this.get('id')}); // Send data to our worker.
 			
 			}
-		},
-		
-		validate : function( attrs )
-		{
-			if( !_.isNull(attrs.layers) && attrs.layers.length > 1 && _.include(attrs.layers,false))
-			{
-				alert('There was an error with your project :(/nplease email bugs@zeega.org and describe what you were doing that led to this error.\nPlease refresh your browser. Your last edit may not have saved. We apologize for the inconvenience.');
-				return 'layer array update error!';
-			}
 		}
-	
 
 	});
 

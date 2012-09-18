@@ -8,12 +8,12 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username
         in_memory:
-            users:
-                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
-
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -22,7 +22,7 @@ security:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle
-                #csrf_provider: form.csrf_provider
+                csrf_provider: form.csrf_provider
                 default_target_path: /dashboard
                 use_forward: true
             logout:
@@ -34,10 +34,10 @@ security:
             anonymous: ~
 
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
+        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
         - { path: ^/[0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register/confirmed, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -53,9 +53,10 @@ security:
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/dashboard, role: ROLE_USER }
-        - { path: ^/widget, role: ROLE_USER }
+        - { path: ^/widget, role: ROLE_USER, requires_channel: https }
+        - { path: ^/js/lib, role: ROLE_USER, requires_channel: https }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/browser/notsupported, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }

@@ -22,6 +22,7 @@ class ParserFlickrSet extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
+        require_once('../vendor/phpflickr/lib/Phpflickr/Phpflickr.php');
         $loadCollectionItems = $parameters["load_child_items"];
         $regexMatches = $parameters["regex_matches"];
 	    $setId = $regexMatches[1]; // bam
@@ -74,7 +75,7 @@ class ParserFlickrSet extends ParserAbstract
     			{
     				$item = $this->itemParser->load(null, array("photo_id" => $photo['id']));
     				if(isset($item))
-	    				$collection->addItem($item["items"]);
+	    				$collection->addItem($item["items"][0]);
     			}
     		}
 		}

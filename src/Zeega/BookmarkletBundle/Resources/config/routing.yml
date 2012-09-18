@@ -5,4 +5,17 @@ ZeegaBookmarkletBundle_persist:
 ZeegaBookmarkletBundle_widget:
     pattern: /widget/
     defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:open }
+    requirements:
+        _scheme:  https
+
+ZeegaBookmarkletBundle_widget_secure:
+    pattern: /secure/widget/
+    defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:open }
+    requirements:
+        _scheme:  https
     
+ZeegaBookmarkletBundle_persist_secure:
+    pattern: /secure/widget/persist
+    defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:persist }
+    requirements:
+        _scheme:  https

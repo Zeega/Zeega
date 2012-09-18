@@ -47,7 +47,8 @@ class ItemsController extends Controller
 		
     		// parse the url with the ExtensionsBundle\Parser\ParserService
     		$response = $parser->load($url, $loadChildren);
-    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+
+    		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
 	    }
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);

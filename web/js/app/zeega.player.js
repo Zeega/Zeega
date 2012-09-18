@@ -45,9 +45,8 @@ this.zeegaPlayer = {
 
 		this.project.renderPlayer();
 
-
 		if(this.mode != 'editor') this.startRouter();
-		this.project.goToFrame( initial.frameID );
+		else this.project.goToFrame( initial.frameID );
 	},
 	
 	parseProject : function(data)
@@ -72,20 +71,28 @@ this.zeegaPlayer = {
 		// remove the player div
 		this.project.unrenderPlayer();
 
-		if(this.mode == 'editor') zeega.app.restoreFromPreview();
+		if(this.mode == 'editor') zeega.app.restoreFromPreview( );
 		return false;
 	},
 
 	startRouter: function()
 	{
+		console.log('rr 		start router')
 		var _this = this;
 		var Router = Backbone.Router.extend({
 
 			routes : {
+				'' : 'goToFirstFrame',
 				'frame/:frameID' : 'goToFrame'
 			},
-
-			goToFrame : function( frameID ){ _this.project.goToFrame(frameID) }
+			goToFirstFrame : function()
+			{
+				_this.project.goToFrame( _this.project.sequences.at(0).frames.at(0).id );
+			},
+			goToFrame : function( frameID )
+			{
+				_this.project.goToFrame(frameID);
+			}
 
 		});
 		this.router = new Router();
@@ -150,6 +157,11 @@ this.zeegaPlayer = {
 			this.playerView.$el.fadeOut( 450, function(){ _this.playerView.remove() });
 		},
 		
+		navigateToFrame : function()
+		{
+
+		},
+
 		goToFrame : function( frameID )
 		{
 			console.log('$$		go to frame:',frameID)
@@ -276,7 +288,18 @@ this.zeegaPlayer = {
 				var index = _.indexOf( _this.get('frames'), frameID );
 				
 				var before = index > 0 ? _this.get('frames')[index-1] : null;
-				var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
+
+				var after = null;
+				if( index + 1 < _this.get('frames').length )
+				{
+					after = _this.get('frames')[index+1]
+				}
+				else if( index + 1 >= _this.get('frames').length && frame.get('attr').advance > 0 )
+				{
+					after = _this.get('frames')[0];
+				}
+
+				//var after = index+1 < _this.get('frames').length ? _this.get('frames')[index+1] : null;
 				
 				frame.setPosition(index, before, after);
 				return frame;
@@ -386,6 +409,7 @@ this.zeegaPlayer = {
 			var layersToRender = _.without( this.get('layers'), this.commonLayers[fromFrameID] );
 
 			// draw and update layer media
+			console.log('$$		zeega player', zeegaPlayer.app)
 			_.each( this.get('layers'), function(layerID,z){
 				var layer = _this.layers.get(layerID)
 				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );
@@ -469,6 +493,7 @@ this.zeegaPlayer = {
 			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
 			{
 				_.each( targetArray, function(frameID){
+					console.log('each', frameID,zeegaPlayer.app.project,zeegaPlayer.app.project.frames.get(frameID) )
 					var before = zeegaPlayer.app.project.frames.get(frameID).before;
 					var after = zeegaPlayer.app.project.frames.get(frameID).after;
 					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;
@@ -490,7 +515,7 @@ this.zeegaPlayer = {
 			this.commonLayers = {};
 			_.each( this.framesToPreload, function(frameID){
 				if( _this.id != frameID)
-					_this.commonLayers[frameID] = _.intersection( zeegaPlayer.app.project.frames.get(frameID).get('layers'), _this.get('layers') );
+					_this.commonLayers[frameID] = _.intersection( _this.get('layers'), zeegaPlayer.app.project.frames.get(frameID).get('layers') );
 			})
 		},
 		
@@ -499,11 +524,18 @@ this.zeegaPlayer = {
 			var _this = this;
 			this.linksOut = [];
 			this.linksIn = [];
-			_.each( _.toArray( this.layers ), function(layer){
+			this.layers.each(function(layer){
 				if( layer.get('type') == 'Link' && !_.isUndefined(layer.get('attr').from_frame) && !_.isUndefined(layer.get('attr').to_frame)  )
 				{
 					if( layer.get('attr').from_frame == _this.id ) _this.linksOut.push( layer.get('attr').to_frame );
-					else if( layer.get('attr').to_frame == _this.id ) _this.linksIn.push( layer.get('attr').from_frame );
+					else if( layer.get('attr').to_frame == _this.id )
+					{
+						// remove from this layer's link array too
+						var layerArray = _this.get('layers');
+						_this.set({layers: _.without(layerArray,layer.id)});
+						_this.layers.remove(layer);
+						_this.linksIn.push( layer.get('attr').from_frame );
+					}
 				}
 			})
 		},
@@ -586,7 +618,7 @@ this.zeegaPlayer = {
 		
 		isFullscreen : false,
 		overlaysVisible : true,
-		viewportRatio : 1.5,
+		viewportRatio : 1.33333,
 
 		id : 'zeega-player',
 		

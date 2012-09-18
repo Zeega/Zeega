@@ -229,7 +229,9 @@
 			
 			// draw media view
 			
-			var itemClass = (this.model.get('archive') == 'Facebook' ||this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+
+			var itemClass = (this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+
 			
 			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
