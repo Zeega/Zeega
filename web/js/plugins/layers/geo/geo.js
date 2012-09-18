@@ -111,7 +111,6 @@
 		{
 			console.log('	GEO INIT')
 			var _this = this;
-			this.model.on('update', this.updateVisual, this)
 		},
 		
 		render : function()
@@ -131,8 +130,6 @@
 		
 		updateVisual : function()
 		{
-			console.log('	update visual')
-			console.log(this)
 			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 			var pov = {
 					'heading' : this.model.get('attr').heading,
@@ -147,8 +144,6 @@
 		
 		onLayerEnter : function()
 		{
-			console.log('##		geo layer enter', $(this.el).find('.gmap-container')[0], $( $(this.el).find('.gmap-container')[0]).is(':visible')+'' )
-
 			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 
 			var mapOptions = {
