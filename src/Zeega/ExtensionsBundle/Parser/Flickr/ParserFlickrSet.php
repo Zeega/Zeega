@@ -75,7 +75,7 @@ class ParserFlickrSet extends ParserAbstract
     			{
     				$item = $this->itemParser->load(null, array("photo_id" => $photo['id']));
     				if(isset($item))
-	    				$collection->addItem($item["items"]);
+	    				$collection->addItem($item["items"][0]);
     			}
     		}
 		}
