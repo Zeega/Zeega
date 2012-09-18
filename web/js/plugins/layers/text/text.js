@@ -148,6 +148,10 @@
 			})
 			.bind('paste', function(e){
 				console.log('content pasted in!')
+
+				_this.$('#zedit-target').html( _this.$('#zedit-target').text() );
+
+
 				_this.lazySave();
 			});
 			
