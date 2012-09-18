@@ -618,7 +618,7 @@ this.zeegaPlayer = {
 		
 		isFullscreen : false,
 		overlaysVisible : true,
-		viewportRatio : 1.5,
+		viewportRatio : 1.33333,
 
 		id : 'zeega-player',
 		
