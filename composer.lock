@@ -146,8 +146,14 @@
         {
             "package": "monolog/monolog",
             "version": "dev-master",
-            "source-reference": "0f3dc95c4a0ed7d17bec237d07af3da6c0c1071a",
-            "commit-date": "1347363321"
+            "source-reference": "09b3a80cfaf3e323e348a5e817afeee98d5e6b48",
+            "commit-date": "1347983448"
+        },
+        {
+            "package": "nelmio/solarium-bundle",
+            "version": "dev-master",
+            "alias-pretty-version": "1.0.x-dev",
+            "alias-version": "1.0.9999999.9999999-dev"
         },
         {
             "package": "nelmio/solarium-bundle",
@@ -200,26 +206,26 @@
         {
             "package": "sonata-project/admin-bundle",
             "version": "dev-master",
-            "source-reference": "20d5e4a659bddb5fc0bcfc4755643dbc4e3f7ec1",
-            "commit-date": "1346456918"
+            "source-reference": "bad0e5f36b0bc5f5beb844c1c5de53cb03a4547d",
+            "commit-date": "1347921186"
         },
         {
             "package": "sonata-project/block-bundle",
             "version": "dev-master",
-            "source-reference": "61c35f215da477337b268840d193ead564f09881",
-            "commit-date": "1346371058"
+            "source-reference": "f74b0212211ba97555bbc98828e0f25b8c9c5d6d",
+            "commit-date": "1347982917"
         },
         {
             "package": "sonata-project/cache-bundle",
             "version": "dev-master",
-            "source-reference": "0f339c37e19d8cce728e74ee9da34a9e51d54a11",
-            "commit-date": "1346968445"
+            "source-reference": "398f988a49782d2c4b7fb7c2f4a487285221bdca",
+            "commit-date": "1347921664"
         },
         {
             "package": "sonata-project/doctrine-orm-admin-bundle",
             "version": "dev-master",
-            "source-reference": "8ed2a8dc982a3b8d24dcbc48d2c445088ef1db64",
-            "commit-date": "1346367584"
+            "source-reference": "fb32475840404f5436a965779208d982b084d85e",
+            "commit-date": "1347921212"
         },
         {
             "package": "sonata-project/exporter",
@@ -266,8 +272,8 @@
         {
             "package": "symfony/monolog-bundle",
             "version": "dev-master",
-            "source-reference": "b7318480e6f8bf5579d6b3cd856850302e7ba8d8",
-            "commit-date": "1347283885"
+            "source-reference": "e1acd0a0da661bdb0f5378a60226ae6e30ec55c6",
+            "commit-date": "1347983520"
         },
         {
             "package": "symfony/swiftmailer-bundle",
@@ -308,8 +314,8 @@
         {
             "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "c38e06ff4134820f5acca2b5b0a163251b053d89",
-            "commit-date": "1347806324"
+            "source-reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
+            "commit-date": "1347961095"
         }
     ],
     "packages-dev": null,

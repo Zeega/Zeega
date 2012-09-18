@@ -16,6 +16,7 @@
 			this.$el.html('<ul class="list">');
 			this.collection.each(function(item){
 				_this.$el.find('.list').append( item.databaseView.render().el );
+				item.databaseView.delegateEvents();
 			})
 			return this;
 		}
