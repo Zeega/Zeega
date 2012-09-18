@@ -61,9 +61,25 @@
 			}
 		},
 		
-		events : {},
+		events : {
+			'click' : 'onclick'
+		},
 		eventTriggers : {},
 		
+
+		onclick : function()
+		{
+
+			// tests to see if the layer is Text
+			// makes it possible to blur contenteditable by clicking on another layer
+			if(this.model.get('type') != 'Text' )
+			{
+				if( !$('#honeypot').length  )	var editableFix = $('<input id="honeypot" style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
+				$('#honeypot')[0].setSelectionRange(0, 0);
+				$('#honeypot')[0].blur();
+			}
+		},
+
 		init : function(){},
 		
 		/*******************
@@ -175,10 +191,12 @@
 		makeDraggable : function()
 		{
 			var _this = this;
+			
 			$(this.el).draggable({
 				
 				start : function(e,ui)
 				{
+					console.log('layer drag start')
 				},
 				
 				stop : function(e,ui)
@@ -200,6 +218,7 @@
 					})
 				}
 			});
+
 		},
 		
 		/*******************

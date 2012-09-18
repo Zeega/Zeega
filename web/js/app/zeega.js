@@ -50,6 +50,7 @@ this.zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
+
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
 		this.initDatabase();
