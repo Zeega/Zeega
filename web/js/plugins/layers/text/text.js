@@ -125,16 +125,31 @@
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
+				'overflow-y' : 'auto',
+				'overflow-x' : 'hidden',
+				'text-align' : 'left',
+				'direction' : 'rtl',
+				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
+				
 			}
 
-			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
+			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
 			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
 			this.model.trigger('ready',this.model.id)
+
+			this.model.on('update', this.onUpdate, this);
 			
 			return this;
 		},
 		
+		onUpdate : function()
+		{
+			this.$el.css({
+				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
+			})
+		},
+
 		onLayerEnter : function()
 		{
 			var _this = this;
@@ -168,7 +183,7 @@
 				_this.lazySave();
 			})
 			
-			$(this.el).resizable({
+			this.$el.resizable({
 				stop : function(e,ui)
 				{
 					$(this).css('height','');
@@ -176,6 +191,9 @@
 						'width' : $(this).width() / $(this).parent().width() * 100,
 					})
 				}
+			}).css({
+				'outline' : '1px dashed red'
+
 			});
 			
 			
