@@ -1,47 +1,191 @@
 {# src/Zeega/CoreBundle/Resources/views/Search/search.html.twig #}
 
-{% extends '::base.html.twig' %}
+{% extends '::editor.base.html.twig' %}
 
 {% block title %}<title>{% trans %}jda.home.title{% endtrans %}</title>{% endblock %}
 
 
 
-{% block stylesheets %}
 
-{% include "ZeegaDiscoveryBundle:Translations:translation.html.twig" %}
 
-	<!-- css imports -->
 
-			<!--
 
-			<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
-			-->
-			<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
-			<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
-			<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" />
-			<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
-			<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+
+{% block body %}
+
+<div id='zeega-editor-main'>
+
+		<div id='zeega-action-column'>
+			<div id='zeega-primary-nav' class='menu-bar menu-dark menu-tall'>
+				<ul>
+					<li class='menu-branding'><a href='{{path('ZeegaCommunityBundle_home')}}' class='zeega-primary-logo'><img src='{{ asset('images/zeega-logo-header.png') }}'/></a></li>
+				</ul>
+				<ul class='pull-right'>
+
+					<li>
+
+						<ul class='menu-dropdown'>
+							<a href='#' class='menu-toggle'><i class='icon-user icon-white'></i></a>
+							<ul class='user-action-menu'>
+								<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}" target='blank'>User Profile</a></li>
+								<!--<li><a href='{{ path('ZeegaCoreBundle_faq')}}' target='blank' >FAQ</a></li>-->
+								<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
+							</ul>
+						</ul>
+
+					</li>
+					
+					<li>
+
+						<ul class='menu-dropdown'>
+							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
+							<ul class='user-action-menu'>
+								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='icon-file'></i> New Project</a></li>
+								<li class="divider"></li>
+								{% for project in myprojects %}
+								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a></li>
+								{% endfor %}
+
+							</ul>
+						</ul>
+
+					</li>
+
+					<li><a href='{{ path('ZeegaCoreBundle_faq')}}' target='blank' ><i class='icon-question-sign icon-white'></i></a></li>
+
+					<!--<li><a id='zoom-interface' href='#'><i class='icon-zoom-out icon-white'></i></a></li>-->
+					<li id='save-indicator' style='color:orangered'><a href='#'><i class='icon-blank'></i></a></li>
+				</ul>
+
+
+			</div>
+
+			<div id='zeega-project-info'>
+				<div id="zeega-project-title">Media</div>
+				<div id="project-actions" class="menu-bar clearfix">
+					<ul class="pull-left">
+						<li><a id="project-options" class="" href="#"><div class="menu-verbose-title">Just Me</div><i class="icon-tasks icon-white"></i></a></li>
+						<li><a id="project-publish" class="" href="#"><div class="menu-verbose-title">The Universe</div><i class="icon-print icon-white"></i></a></li>
+					</ul>
+				</div>
+			</div>
 			
-			
-			{% if app.environment == 'dev' %}
-				<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/discovery/bootstrap.less')}}">
-				<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-				<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
-			{% else %}
-				<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.editor.css')}}">
-			{% endif %}
-			
-			<!-- Including Google's Font -->
-			<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-		<!-- end css imports -->
-			
+			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
 				
-</style>
+				<div class='zeega-list-header'>COLLECTIONS</div>
+			</div>
 
-<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
+			<div class='layer-lists-container'>
+				<div id='zeega-link-list' class='layer-list'></div>
+				<div id='zeega-layer-list' class='layer-list'></div>
+			</div>
+
+			<div id='zeega-item-database'>
+				
+				<div class='menu-bar  menu-dark' >
+			
+					<div class='zeega-list-header'>DYNAMIC COLLECTIONS</div>
+				</div>
+
+				<div class='database-tray'>
+					<div class='menu-bar menu-dark clearfix' >
+						<ul class='pull-right'>
+							<li>
+								<ul class='menu-dropdown'>
+									<a href='#' class='menu-toggle'><div class='menu-verbose-title'>filters</div><i class='icon-filter icon-white'></i></a>
+									<ul id='filter-action-menu'>
+										<li><a href="#" data-filter='all'><i class='icon-globe'></i> All</a></li>
+										<li><a href="#" data-filter='audio'><i class='icon-bullhorn'></i> Audio</a></li>
+										<li><a href="#" data-filter='image'><i class='icon-picture'></i> Image</a></li>
+										<li><a href="#" data-filter='video'><i class='icon-film'></i> Video</a></li>
+										<li class='divider'></li>
+										<li><a href="#" data-filter='reset'><i class='icon-backward'></i> Clear Filters</a></li>
+
+									</ul>
+								</ul>
+
+							</li>
+						</ul>
+						<input id='search-input' class='pull-left' style='margin-left:10px' type='text' placeholder='search'/>
+					</div>
+
+					<div id='database-flash' class='alert alert-info hide'></div>
+					<div id='zeega-item-database-list'></div>
+
+				</div><!-- database tray -->
+
+
+			</div><!-- zeega item database -->
+
+		</div><!-- zeega action column -->
+		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
+			<div class="container" style="width:98%">
+				<div id='zeega-project-nav'>
+				<div id='zeega-project-sequence-list' class='clearfix'>
+					<div class="btn-group" id="zeega-view-buttons">
+				<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
+				<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>	
+			<!--	<a data-goto-view='event'><button id="event-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.mapview{% endtrans %}" style="border-radius:0 4px 4px 0"><i class="icon-map-marker icon-white"></i></button></a> -->
+			</div>
+			<div id="jda-search-button-group" style="display:none">
+				<div id="search-bar" style="margin-right:5px">
+					<div id="zeega-visual-search-container" class="pull-left"></div>
+					<span id="select-wrap"><span id="select-wrap-text"  >All Formats</span><div class="arrow-down"></div>
+						<select id="zeega-content-type">
+							<option value="all">All Formats</option>
+							<option value="image">Image</option>
+							<option value="video">Video</option>
+							<option value="audio">Audio</option>
+							<option value="collection">Collection</option>
+						</select>
+					</span>
+				</div>
+				<a href="#" id="jda-go-button" class="btn btn-info btn-large">Go</a>
+			</div>
+				</div>
+				<div id='zeega-project-frame-list' class='clearfix'></div>
+				<div id='zeega-project-frame-detail-bar' class='menu-bar clearfix'></div>
+			</div>
+			</div>
+			<div id='frame-workspace-wrapper'>
+				<div id='zeega-frame-workspace'></div>
+			</div>
+		</div>
+
+	</div>
+
+    
+
+{% endblock %}
+
+
+
+
+		{% block stylesheets %}
+		
+		{% include "ZeegaDiscoveryBundle:Translations:translation.html.twig" %}
+		
+			<!-- css imports -->
+		
+					<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
+					<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
+					<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" />
+					<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
+					<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+					<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+			<!-- end css imports -->		
+					
+					{% if app.environment == 'dev' %}
+						<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/discovery/bootstrap.less')}}">
+						<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+						<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+					{% else %}
+						<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.editor.css')}}">
+					{% endif %}		
+			<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+				<!--[if lt IE 9]>
+				<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			 <![endif]-->
 
       {% endblock %}    
 
@@ -49,8 +193,6 @@
 
 
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
 			<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>
    			<script type="text/javascript" src="http://s3.documentcloud.org/viewer/loader.js"></script>
 			
@@ -62,233 +204,4 @@
 				<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/discovery.js') }}"></script>
 			{% endif %}
 
-      {% endblock %}
-
-
-
-
-
-      {% block body %}
-
-
-
-	<div id="zeega-view-navigation">
-		<div class="container" style="width:98%">
-			<div class="btn-group" id="zeega-view-buttons">
-				<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="{% trans %}jda.search.listview{% endtrans %}" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
-				<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.thumbnailview{% endtrans %}" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>	
-			<!--	<a data-goto-view='event'><button id="event-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.mapview{% endtrans %}" style="border-radius:0 4px 4px 0"><i class="icon-map-marker icon-white"></i></button></a> -->
-			</div>
-			<div id="jda-search-button-group" style="display:none">
-				<div id="search-bar" style="margin-right:5px">
-					<div id="zeega-visual-search-container" class="pull-left"></div>
-					<span id="select-wrap"><span id="select-wrap-text" {% if locale == 'ja' %} style="font-weight:normal"{% endif %} >{% trans %}jda.search.allformats{% endtrans %}</span><div class="arrow-down"></div>
-						<select id="zeega-content-type">
-							<option value="all">{% trans %}jda.search.allformats{% endtrans %}</option>
-							<option value="image">{% trans %}jda.search.image{% endtrans %}</option>
-							<option value="video">{% trans %}jda.search.video{% endtrans %}</option>
-							<option value="audio">{% trans %}jda.search.audio{% endtrans %}</option>
-							<option value="tweet">{% trans %}jda.search.tweet{% endtrans %}</option>
-							<option value="document">{% trans %}jda.search.document{% endtrans %}</option>
-							<option value="website">{% trans %}jda.search.website{% endtrans %}</option>
-							<option value="text">{% trans %}jda.search.testimonial{% endtrans %}</option>
-							<option value="collection">{% trans %}jda.search.collection{% endtrans %}</option>
-						</select>
-					</span>
-				</div>
-			<!--	<div id="remove-tag-alert">{% trans %}jda.search.removedFilter{% endtrans %} <strong><span id="removed-tag-name"></span></strong>. {% trans %}jda.search.unsupportedFilters{% endtrans %}</div> -->
-
-				<a href="#" id="jda-go-button" class="btn btn-info btn-large">{% trans %}jda.home.go{% endtrans %}</a>
-				<span class="badge badge-inverse" id="zeega-search-help" data-content='{% trans %}jda.search.tips1{% endtrans %}<br><br>{% trans %}jda.search.tips2{% endtrans %}<br><br>{% trans %}jda.search.tips3{% endtrans %}'>?</span>
-			</div>
-
-		</div>
-	</div><!-- end zeega-view-navigation -->
-
-     
-
-
-      <!-- ZEEGA MAIN CONTENT -->
-      <div id="zeega-main-content" >
-            
-            
-                {% block filter %}
-            
-       					<script>
-								sessionStorage.setItem('filterType','none');
-						
-						</script>
-               {% endblock %}
-
-            <div class="row-fluid">	
-				<div id="jda-left" class="span9">
-				<div id="loading">
-					<div id="spinner"></div>
-					<div id="spinner-text"><h3>{% trans %}jda.search.loadingmoreresults{% endtrans %}</h3></div>
-				</div>
-
-				<div class="tab-content">
-
-					  <!-- Results & Sort Dropdown -->
-
-					<div id="results-count-row" class="row-fluid">
-					  <div id="zeega-results-count" class="span4">
-					  	<span id="zeega-results-count-number"></span><span id="zeega-results-count-text">{% trans %}jda.search.items{% endtrans %}</span><br><span id="zeega-results-count-text-with-date">{% trans %}jda.search.withtimeplace{% endtrans %}</span>
-					  </div>
-					<div class="pull-right" style="margin-top:8px;">
-						<span id="sort-wrap">
-							<select id="zeega-sort" style="width:130px">
-								<option value="relevant">{% trans %}jda.search.relevant{% endtrans %}</option>
-								<option value="date-desc">{% trans %}jda.search.recent{% endtrans %}</option>
-								<option value="date-asc">{% trans %}jda.search.oldest{% endtrans %}</option>
-							</select>
-						</span>
-	
-					  </div>
-					</div> 
-					 
-					 
-					 <div id="jda-collection-editing-toolbar" class="hide pull-left">
-							<button class="btn btn-info btn-small" type="button"><input id="jda-collection-editing-toolbar-select-all" type="checkbox"></button>
-							<button class="btn btn-info btn-small"><i class="icon-plus icon-white"></i>Create new collection</button>
-							<button class="btn btn-info btn-small" type="button"><i class="icon-trash icon-white"></i> Delete</button>
-							<div class="btn-group" style="display: inline-block; top:11px">
-							  <a class="btn dropdown-toggle btn-info btn-small" data-toggle="dropdown" href="#">
-									<i class="icon-move icon-white"></i> Move to...
-									<span class="caret"></span>
-							  </a>
-							  <ul class="dropdown-menu">
-							</ul>
-					  </div>
-				</div>
-				
-
-					  <!-- MAP VIEW -->
-					  <div class="tab-pane" id="zeega-event-view">
-							 <div class="time-slider-wrapper">
-							  
-							  <div id="event-time-slider"></div>
-							  <div class="jda-map-loader pull-right"></div>
-							</div>
-							<div id='event-map'></div>
-							<div id="layer-control-drawer">
-								  <div id ="layer-control-drawer-tab">
-										<p><span id="layer-control-drawer-arrows">&laquo;</span><i class="jdicon-small-layers"></i></p>
-								  </div>
-								  <div id="layer-control">
-										<ul>
-											  <li><a href="#layer-checkboxes">{% trans %}jda.search.layers{% endtrans %}</a></li>
-											  <li><a href="#layer-legend">{% trans %}jda.search.legend{% endtrans %}</a></li>
-										</ul>
-										<div id='layer-checkboxes'>
-											 
-							  
-										</div>
-
-										<div id='layer-legend'>
-										</div>
-								  </div> <!-- layer control -->
-							</div> <!--layer-control-drawer -->
-					  </div>
-
-					  <!-- LIST VIEW -->
-					  <div class="tab-pane active" id="zeega-list-view">
-							<div class="jda-separate-collections-and-items" style="display:none">
-								  <h3 class="jda-results-collections-text">{% trans %}jda.search.collections{% endtrans %} (<span class="jda-results-collections-count"></span>)</h3>
-								  <table class="table" id='zeega-collections-list'>
-										<tbody>
-											  
-										</tbody>
-								  </table>
-								 <h3>{% trans %}jda.search.itemscontributed{% endtrans %} (<span class="jda-results-items-count"></span>)</h3>
-							</div>
-							<table class="table" id='zeega-items-list'>
-								  <tbody>
-										
-								  </tbody>
-							</table>
-					  </div>
-
-					  <!-- THUMBNAIL VIEW -->
-					  <div class="tab-pane" id="zeega-thumb-view" style="clear:both">
-							<div class="jda-separate-collections-and-items" style="display:none">
-								  <h3>Collections(<span class="jda-results-collections-count"></span>)</h3>
-								  <ul class="collections-thumbnails thumbnails unstyled" >
-								  </ul>
-								  <h3>Items(<span class="jda-results-items-count"></span>)</h3>
-							</div>
-							<ul id="zeega-items-thumbnails" class="thumbnails">
-							</ul>
-					  </div>
-				</div> <!--/tab-->
-		  </div><!--/span10-->
-				<div id="jda-right" class="span3">
-
-				<!-- MY COLLECTIONS -->
-				<div id="zeega-my-collections" class="pull-right">
-					  <div class="btn-group">
-							<button id="zeega-my-collections-active-collection" class="btn btn-large btn-inverse">{% trans %}jda.my.collection{% endtrans %}</button>
-							<button class="btn btn-large btn-inverse dropdown-toggle" data-toggle="dropdown" style="height:39px;border-radius:0">
-								  <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" style="width:100%;text-align:left">
-								  <li><a href="#"><i class="icon-plus"></i>{% trans %}jda.drag.createnewcollection{% endtrans %}</a></li>
-								  
-							</ul>
-					  </div>
-
-					  <div id="zeega-my-collections-items">
-					  		
-					  		<div id="zeega-my-collections-spinner"></div>
-							<i class="jdicon-drag" style="float:none;"></i> 
-							<p id="zeega-my-collections-drag-items-here">
-								 {% trans %}jda.drag.items{% endtrans %}
-							</p>
-							<span class="label label-success" id="zeega-my-collections-added">{% trans %}jda.drag.added{% endtrans %}</span>
-							<ul id="zeega-my-collections-items-thumbs" class="unstyled"></ul>
-							<span class="label label-info" id="zeega-my-collections-count-string" style="display:none">{% trans %}jda.drag.and{% endtrans %} <span id="zeega-my-collections-count"></span> {% trans %}jda.drag.moreitems{% endtrans %}</span>
-							<h4 id="zeega-my-collections-share-and-organize" style="display:none"><a href="#">{% trans %}jda.drag.gotocollection{% endtrans %}</a>
-							</h4>
-
-					  </div>
-
-					  <!-- RELATED TAGS -->
-					  <div id="jda-related-tags">
-							<h3 id="jda-related-tags-title">{% trans %}jda.search.relatedtags{% endtrans %}</h3>
-					  </div>
-				</div><!-- /span12 -->
-		  <!--</div> /row  -->
-
-
-	</div> <!-- /container -->
-			</div>
-
-           
-            <!-- MODAL WINDOW -->
-            <div class="modal fade" id="zeega-my-collections-create-account-modal">
-                  <div class="modal-header">
-                        <button class="close" data-dismiss="modal">×</button>
-                        <h3>To save your collection, sign in here or <a href="#">create an account</a></h3>
-                  </div>
-                  <div class="modal-body">
-                        <form class="well">
-                              <label>Email</label>
-                              <input type="text" class="span3" placeholder="Type something…">
-                              <span class="help-block">Forgot email?</span>
-
-                              <label>Password</label>
-                              <input type="text" class="span3" placeholder="Type something…">
-                              <span class="help-block">Forgot password?</span>
-
-                              <button type="submit" class="btn">Submit</button>
-                        </form>
-                  </div>
-                  <div class="modal-footer">
-                        <a href="#" class="btn btn-primary" data-dismiss="modal">Sign in</a>
-                  </div>
-            </div>
-      </div>
-
-    
-
-{% endblock %}
+		{% endblock %}
