@@ -58,20 +58,8 @@
         {
             "package": "friendsofsymfony/rest-bundle",
             "version": "dev-master",
-            "alias-pretty-version": "0.9.x-dev",
-            "alias-version": "0.9.9999999.9999999-dev"
-        },
-        {
-            "package": "friendsofsymfony/rest-bundle",
-            "version": "dev-master",
             "source-reference": "ee75db5cf924a4fee6c8b5b056c2bc0f81b15964",
             "commit-date": "1347411334"
-        },
-        {
-            "package": "friendsofsymfony/user-bundle",
-            "version": "dev-master",
-            "alias-pretty-version": "2.0.x-dev",
-            "alias-version": "2.0.9999999.9999999-dev"
         },
         {
             "package": "friendsofsymfony/user-bundle",
@@ -152,18 +140,6 @@
         {
             "package": "nelmio/solarium-bundle",
             "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
-        },
-        {
-            "package": "nelmio/solarium-bundle",
-            "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
-        },
-        {
-            "package": "nelmio/solarium-bundle",
-            "version": "dev-master",
             "source-reference": "61b8a7f2b99edd13d90e377335f571607721a7f2",
             "commit-date": "1345050695"
         },
@@ -196,12 +172,6 @@
             "version": "dev-master",
             "source-reference": "5c7afe1c4e104feb3761618dd54cf813beb4de5a",
             "commit-date": "1343376249"
-        },
-        {
-            "package": "sonata-project/admin-bundle",
-            "version": "dev-master",
-            "alias-pretty-version": "2.1.x-dev",
-            "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "sonata-project/admin-bundle",
@@ -290,8 +260,8 @@
         {
             "package": "symfony/symfony",
             "version": "2.1.x-dev",
-            "source-reference": "ff1b990075be41c0b85702f2c9bde988d30f4d6b",
-            "commit-date": "1347914517"
+            "source-reference": "5a4a73ef9461bab9c88335a0d7e3ece5850225ae",
+            "commit-date": "1347986688"
         },
         {
             "package": "twig/extensions",
