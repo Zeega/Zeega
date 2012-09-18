@@ -292,6 +292,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			if(zeega.app.currentFrame == this.model)
 			{
 				this.$el.append( layer.visual.render().el );
+				layer.visual.render().$el.css('z-index', this.model.layers.length)
 				layer.visual.private_onLayerEnter();
 			}
 		},
