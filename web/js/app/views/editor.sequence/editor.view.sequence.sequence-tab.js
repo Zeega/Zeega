@@ -114,15 +114,23 @@
 		
 		deleteSequence : function()
 		{
-			if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
+			if(zeega.app.project.sequences.length > 1 )
 			{
-				this.remove();
-				zeega.app.project.sequences.remove(this.model);
-				this.closeDropdown();
+
+				if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
+				{
+					this.remove();
+					zeega.app.project.sequences.remove(this.model);
+					this.closeDropdown();
+				}
+				else
+				{
+					this.closeDropdown();
+				}
 			}
 			else
 			{
-				this.closeDropdown();
+				alert('You cannot delete your last sequence!');
 			}
 			
 			return false;
