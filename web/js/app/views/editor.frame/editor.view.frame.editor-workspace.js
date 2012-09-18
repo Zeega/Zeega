@@ -249,7 +249,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if( layer.get('attr').from_frame == _this.model.id ) return true;
 			})
 
-			_.each( layersToRender, function(layer){
+			_.each( layersToRender, function(layer,i){
+				layer.visual.render().$el.css('z-index',i)
 				_this.$el.append( layer.visual.render().el );
 			});
 
