@@ -9,7 +9,7 @@ services:
             - { name: form.type, alias: zeega_user_registration}
     zeega_user.form.handler.registration:
         class: Zeega\UserBundle\Form\Handler\RegistrationFormHandler
-        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@service_container"]
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator", "@service_container"]
         scope: request
         public: false
     zeega_user.form.handler.resetting:

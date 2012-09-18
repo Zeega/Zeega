@@ -1020,7 +1020,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-item-database{position:absolute;width:100%;bottom:0;background:url('../../../images/paper-dark.png');border-top:2px solid orangeRed;}
 #zeega-item-database input{width:200px;margin:10px 5px 0 0;background-color:#ddd;}
 #zeega-item-database .alert{border-radius:0;margin:0;text-align:right;}
-#zeega-item-database-list{background-color:rgba(0, 0, 0, 0.75);min-height:150px;max-height:300px;overflow:auto;}
+#zeega-item-database-list{background-color:rgba(0, 0, 0, 0.75);min-height:150px;max-height:200px;overflow:auto;position:relative;}
 #zeega-item-database-list>ul{margin:0;list-style:none;overflow:auto;}
 #zeega-item-database-list>ul>li{padding:5px;float:left;}
 #zeega-item-database-list>ul>li>a{display:block;height:50px;width:50px;background:black;}
@@ -1060,8 +1060,9 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-project-frame-list>ul>li>a{display:block;width:100%;height:100%;background-color:black;box-shadow:0 0 20px #666;}
 #zeega-project-frame-list>ul>li .flag-menu{top:5px;left:5px;}
 #zeega-project-frame-list>ul>li:hover .flag-menu{display:block;}
-#zeega-project-frame-list #zeega-add-frame{position:absolute;top:0;right:0;height:100%;}
-#zeega-project-frame-list #zeega-add-frame a{height:100%;position:relative;background:rgba(255, 255, 255, 0.1);font-weight:bold;font-size:40px;display:block;vertical-align:middle;line-height:58px;padding:0 10px;}
+#zeega-project-frame-list #zeega-add-frame{position:absolute;top:0;right:0;height:100%;text-align:center;line-height:22px;}
+#zeega-project-frame-list #zeega-add-frame a{height:100%;position:relative;background:rgba(255, 255, 255, 0.1);font-weight:bold;font-size:40px;display:block;padding:0 10px;}
+#zeega-project-frame-list #zeega-add-frame a .menu-verbose-title{font-size:11px;font-weight:normal;}
 #zeega-project-frame-list #zeega-add-frame a:hover{color:#ddd;background:rgba(255, 255, 255, 0.25);}
 #zeega-project-frame-detail-bar{position:relative;top:-5px;border-top:5px solid #777;}
 #zeega-project-frame-detail-bar #link-confirm{color:#222;background:greenyellow;display:none;}
@@ -1078,6 +1079,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .layer-list{margin-top:5px;background:url('../../../images/paper-dark.png');}
 .layer-list>ul{margin:0;list-style:none;}
 li.layer-list-item{padding:5px 10px;background-color:rgba(255, 255, 255, 0.1);-webkit-transition:background-color 0.25s linear;margin-bottom:1px;color:#DDD;border-radius:0 2px 2px 0;}
+li.layer-list-item .layer-super{cursor:pointer;}
 li.layer-list-item .layer-title{display:inline-block;width:218px;white-space:nowrap;overflow:hidden;margin-left:5px;font-weight:bold;font-size:11px;}
 li.layer-list-item:hover{background-color:rgba(255, 255, 255, 0.25);-webkit-transition:background-color 0.25s linear;}
 li.layer-type-link{background-color:rgba(0, 0, 0, 0.1);border-top:1px solid #222;border-bottom:1px solid #222;}
@@ -1101,9 +1103,9 @@ li.layer-open .layer-control-drawer{display:block;}
 .playback-controls .crop-wrapper .crop-slider a{background:#ffff00;}
 .playback-controls .crop-wrapper .crop-slider .ui-slider-handle{width:3px;border:none;height:16px;box-shadow:none;}
 .modal .modal-body{max-height:500px;}
-.modal .frame-choose-list li{height:50px;width:66.66666666666667px;float:left;margin:0 10px 10px 0;}
-.modal .frame-choose-list li img{height:100%;width:100%;}
-.modal .frame-choose-list li.selected{outline:2px solid orangered;}
+.modal .frame-choose-list li,.modal .layer-list-checkboxes li{height:50px;width:66.66666666666667px;float:left;margin:0 10px 10px 0;}
+.modal .frame-choose-list li img,.modal .layer-list-checkboxes li img{height:100%;width:100%;}
+.modal .frame-choose-list li.selected,.modal .layer-list-checkboxes li.selected{outline:2px solid orangered;}
 .menu-bar{background-color:rgba(255, 255, 255, 0.25);*zoom:1;}
 .menu-bar:before,.menu-bar:after{display:table;content:"";}
 .menu-bar:after{clear:both;}
@@ -1118,7 +1120,6 @@ li.layer-open .layer-control-drawer{display:block;}
 .menu-bar>ul>li>a:hover{background-color:rgba(255, 255, 255, 0.1);background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0, 0, 0, 0.25)), to(#ff4500));}
 .menu-bar.menu-tall .menu-branding img{height:28px;}
 .menu-bar.menu-tall>ul>li{line-height:28px;}
-.menu-bar.menu-tall>ul>li>a{padding:5px 15px;}
 .menu-bar .menu-dropdown>a{display:block;padding:5px 7px;border-left:1px solid #333 ;}
 .menu-bar .menu-dropdown>ul{position:absolute;background:white;color:black;text-align:left;text-transform:uppercase;font-weight:bold;font-size:11px;padding:5px 10px;display:none;max-height:75%;overflow:auto;box-shadow:5px 5px 10px #111;white-space:nowrap;}
 .menu-bar .menu-dropdown>ul a:link,.menu-bar .menu-dropdown>ul a:visited,.menu-bar .menu-dropdown>ul a:active{color:#333333;}
@@ -1126,7 +1127,7 @@ li.layer-open .layer-control-drawer{display:block;}
 .menu-bar .menu-dropdown .divider{border-top:1px solid #AAA;margin:10px 0;}
 .menu-bar .menu-dropdown:hover>ul{display:block;z-index:100;}
 .zeega-list-header{color:orangered;padding:5px 10px;font-weight:bold;text-align:right;}
-#zeega-project-title{font-weight:bold;color:white;font-size:16px;padding:5px 10px;cursor:pointer;}
+#zeega-project-title{font-weight:bold;color:white;font-size:2em;padding:5px 10px;cursor:pointer;line-height:1em;}
 #zeega-project-title:hover{background-color:rgba(255, 255, 255, 0.2);}
 #zeega-project-title:focus{background-color:rgba(255, 0, 0, 0.2);}
 #save-indicator{color:#dddddd;}
@@ -1179,6 +1180,7 @@ a:link,a:visited,a:active{color:#bbbbbb;}
 a:hover{color:#ddd;text-decoration:none;}
 html{background:url('../../../images/paper-dark.png');}
 html .preview-mode{background-color:#000000;}
+body{background-color:transparent;}
 #zeega-editor-main{position:absolute;left:0;top:0;width:100%;height:100%;background-color:#333;background:url('../../../images/paper-dark.png');overflow:hidden;}
 #zeega-editor-main.small-menus .menu-verbose-title{display:none;}
 #zeega-editor-main.wide-view #zeega-action-column{width:430px;}

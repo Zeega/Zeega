@@ -91,149 +91,167 @@ class SearchController extends Controller
     private function searchWithSolr($notInId = null)
     {	
         $request = $this->getRequest();
-        
-	    // ----------- api global parameters
-		$page  = $request->query->get('page');      //  string
-		$limit = $request->query->get('limit');     //  string
-	    $q = $request->query->get('q');
-	    $userId = $request->query->get('user');                 //  int
-		$siteId = $request->query->get('site');                 //  int
-		$contentType = $request->query->get('content');         //  string
-		$collection_id  = $request->query->get('collection');   //  string
-		$minDateTimestamp = $request->query->get('min_date');            //  timestamp
-		$maxDateTimestamp = $request->query->get('max_date');            //  timestamp
-		$geoLocated = $request->query->get('geo_located'); 
-		$returnItems = $request->query->get('r_items');   	//  bool
-		$returnCollections = $request->query->get('r_collections');   	//  bool
-		$returnItemsAndCollections = $request->query->get('r_itemswithcollections');   	//  bool
-        $sort = $request->query->get('sort');
+
+	    $userId = $request->query->get('user');
+		$siteId = $request->query->get('site');
+		$collection_id  = $request->query->get('collection');
+		$minDateTimestamp = $request->query->get('min_date');
+		$maxDateTimestamp = $request->query->get('max_date');
 	
-	    if(!isset($page))               $page = 0;
-	    if($page > 0)                   $page = $page - 1;
-		if(!isset($limit))              $limit = 100;
-		if($limit > 100)                $limit = 100;
-		if(isset($contentType))         $contentType = ucfirst($contentType);
-		if(!isset($geoLocated))         
-		{
+		$sort = $request->query->get('sort');        
+	   
+        $page  = $request->query->get('page');                  //  result page
+	    if(!isset($page)) {
+            $page = 0;
+        }               
+	    
+        if($page > 0) {
+            $page = $page - 1;
+        }                   
+		
+        $limit = $request->query->get('limit');                 //  result limit
+        if(!isset($limit) || $limit > 100) {
+            $limit = 100;
+        }              
+		
+        $contentType = $request->query->get('content');         //  content-type filter
+        if(isset($contentType)) {
+            $contentType = ucfirst($contentType);
+        }
+
+        $geoLocated = $request->query->get('geo_located');      //  geo-located filter
+		if(!isset($geoLocated)) {
 			$geoLocated = 0;
-		}
-		else
-		{
+		} else {
 			$geoLocated = intval($geoLocated);
 		}
 		
-		if(preg_match('/tag\:(.*)/', $q, $matches))
-		{
-		 	$q = str_replace("tag:".$matches[1], "", $q);
-		 	$tags = str_replace(",", " OR", $matches[1]);
-		}
-		
-	    // ----------- build the search query
-        $client = $this->get("solarium.client");
-		
-		// set limits and page
-        $query = $client->createSelect();
+        $tags = $request->query->get('tags');                   //   query and tags
+        $q = $request->query->get('q');                        
+        
+        if(null !== $tags) {
+            $tags = str_replace(",", " OR ", $tags);
+            // do nothing. 10 points for bad programming
+        } else {
+            if(preg_match('/tag\:(.*)/', $q, $matches))
+            {
+                $q = str_replace("tag:".$matches[1], "", $q);
+                $tags = str_replace(",", " OR", $matches[1]);
+            } 
+        }
+        
+        $client = $this->get("solarium.client");                //   build the solr search query 
+				
+        $query = $client->createSelect();                       //   set the query limits and page
         $query->setRows($limit);
         $query->setStart($limit * $page);
 
-        if(isset($sort))
-        {
-            if($sort == 'date-desc')
-            {
+        if(isset($sort)) {
+            if($sort == 'date-desc') {
                 $query->addSort('media_date_created', \Solarium_Query_Select::SORT_DESC);    
-            }
-            else if($sort == 'date-asc')
-            {
+            } else if($sort == 'date-asc') {
                 $query->addSort('media_date_created', \Solarium_Query_Select::SORT_ASC);       
             }
         }
 
-        $queryString = '';
-        // check if there is a query string
-        if(isset($q) and $q != '')                          
-        {
+        $queryString = '';        
+        if(isset($q) and $q != '') {                           //   escape the text query and add it to the Solr query
         	$q = ResponseHelper::escapeSolrQuery($q);
             $queryString = "text:$q";
         }
         
-		// add Published filter
-		if($queryString != '')
-        {
+		
+		if($queryString != '') {                               //   add a Published filter to the query
             $queryString = $queryString . " AND ";
         }
         $queryString = $queryString . "published:true AND enabled:true";
 
-        if(isset($tags) and $tags != '')                          
-        {
+        if(isset($tags) and $tags != '') {                     //   escape the tags query
         	$tags = ResponseHelper::escapeSolrQuery($tags);
-            if($queryString != '')
-            {
+            
+            if($queryString != '') {
                 $queryString = $queryString . " AND ";
             }
-            $queryString = $queryString . "tags_i:($tags)";
+            
+            $queryString = $queryString . "tags_i:($tags)";    //  add the tags to the Solr query
         }
         
-        if(isset($queryString) && $queryString != '')
+        if(isset($queryString) && $queryString != '')          //  if the query is defined, send it to Solr
         {
             $query->setQuery($queryString);
         }
         
-        if(isset($contentType) and $contentType != 'All')   $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
-        if($geoLocated > 0)									$query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
-        if(isset($notInId))									$query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
-        if(isset($collection_id))                           $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
-        
-        if(isset($minDateTimestamp) || isset($maxDateTimestamp))
-        {
-            if(isset($minDateTimestamp) && isset($maxDateTimestamp))
-            {
-                $minDate = new DateTime();
-                $minDate->setTimestamp($minDateTimestamp);
-                $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
-                $maxDate = new DateTime();
-                $maxDate->setTimestamp($maxDateTimestamp);
-                $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
-                
-                $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
-            }
+        if(isset($contentType) and $contentType != 'All') {     // filter by content type
+            $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
+        }   
+            
+        if($geoLocated > 0) {                                   // return only geo-located items
+            $query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
-           
-	    //  filter results for the logged user
-		if(isset($userId) && $userId == -1) 
-		{
+
+        if(isset($notInId)) {                                   // exclude items by id
+            $query->createFilterQuery('not_id')->setQuery("-id:($notInId)");
+        }
+
+        if(isset($collection_id)) {                             // return only the items that belong to a collection
+            $query->createFilterQuery('parent_id')->setQuery("parent_item:$collection_id");
+        }
+                                                                                    
+        if(isset($minDateTimestamp) && isset($maxDateTimestamp)) {  // filter by time
+            $minDate = new DateTime();
+            $minDate->setTimestamp($minDateTimestamp);
+            $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
+            $maxDate = new DateTime();
+            $maxDate->setTimestamp($maxDateTimestamp);
+            $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
+            
+            $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
+        }
+           	    
+		if(isset($userId) && $userId == -1) {                  //  filter results for the logged user
 			$user = $this->get('security.context')->getToken()->getUser();
-			$userId = $user->getId();
+            if(null !== $user) {
+                $userId = $user->getId();    
+            }			
 		}
 	
-        if(isset($userId))
-        {
+        if(isset($userId)) {
         	$userId = ResponseHelper::escapeSolrQuery($userId);
         	$query->createFilterQuery('user_id')->setQuery("user_id: $userId");
         }
-        
-		
-        $groupComponent = $query->getGrouping();
-        $groupComponent->addQuery('-media_type:Collection');
-        $groupComponent->addQuery('media_type:Collection');
-        $groupComponent->addQuery('media_type:*');
-        // maximum number of items per group
-        $groupComponent->setLimit($limit);
+        		
+        $groupComponent = $query->getGrouping();               //   set result groups
+        $groupComponent->addQuery('-media_type:Collection');   //   items only
+        $groupComponent->addQuery('media_type:Collection');    //   collection only
+        $groupComponent->addQuery('media_type:*');             //   items and collections
+                                    
+        $groupComponent->setLimit($limit);                     //   maximum number of items per group
         $groupComponent->setOffset($page * $limit);
         
-        $facetComponent = $query->getFacetSet();
+        $facetComponent = $query->getFacetSet();               //   return highly ranked tags for the query
         $facetComponent->createFacetField('tags')->setField('tags_i')->setLimit(5)->setMinCount(1);
 
-        // run the query
-        $resultset = $client->select($query);
+        $resultset = $client->select($query);                  //   run the query
 
-        $groups = $resultset->getGrouping();
-        $facets = $resultset->getFacetSet();
+        $groups = $resultset->getGrouping();                   //   get result groups
+        $facets = $resultset->getFacetSet();        
+                
+        $returnItems = $request->query->get('r_items');
+        if(isset($returnItems)) {                              
+            $results["items"] = $groups->getGroup('-media_type:Collection');  
+        } 
         
-        if(isset($returnItems)) $results["items"] = $groups->getGroup('-media_type:Collection');
-        if(isset($returnCollections)) $results["collections"] = $groups->getGroup('media_type:Collection');
-        if(isset($returnItemsAndCollections)) $results["items_and_collections"] = $groups->getGroup('media_type:*');
+        $returnCollections = $request->query->get('r_collections');
+        if(isset($returnCollections)) {
+            $results["collections"] = $groups->getGroup('media_type:Collection');  
+        } 
 
-        $tags = $facets->getFacet('tags');
+        $returnItemsAndCollections = $request->query->get('r_itemswithcollections');
+        if(isset($returnItemsAndCollections)) {
+            $results["items_and_collections"] = $groups->getGroup('media_type:*');  
+        } 
+
+        $tags = $facets->getFacet('tags');                   //     get the tags results
         $tagsArray = array(); 
   
         foreach ($tags as $tag_name => $tag_count)
