@@ -125,15 +125,27 @@
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
+				/*
 				'overflow-y' : 'auto',
 				'overflow-x' : 'hidden',
 				'text-align' : 'left',
 				'direction' : 'rtl',
+				*/
 				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
+				'word-wrap': 'break-word'
 				
 			}
 
 			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
+
+			// get max height in px
+			console.log('max height', this.$el.height() )
+
+			this.$('#zedit-target').css({
+				'overflow-y' : 'auto',
+				'overflow-x' : 'hidden',
+			})
+
 			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
 			this.model.trigger('ready',this.model.id)
@@ -148,6 +160,12 @@
 			this.$el.css({
 				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
 			})
+			this.$('#zedit-target').css({
+				'height': this.$el.height() +'px'
+			})
+
+			console.log('on update', this.$el.height() )
+
 		},
 
 		onLayerEnter : function()
@@ -156,7 +174,7 @@
 			
 			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
 			
-			this.$el.find('#zedit-target').keyup(function(e){
+			this.$('#zedit-target').keyup(function(e){
 				if(e.which == 27){ $(this).blur() }
 				
 				_this.lazySave();
@@ -169,6 +187,10 @@
 
 				_this.lazySave();
 			});
+
+			this.$('#zedit-target').css({
+				'max-height': this.$el.height() +'px'
+			})
 			
 			this.$el.click(function(){
 				_this.$el.find('#zedit-target').focus();
