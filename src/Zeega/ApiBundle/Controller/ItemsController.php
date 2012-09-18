@@ -430,7 +430,7 @@ class ItemsController extends Controller
                           'frames'=>$frames,
                           'layers'=>$layers
                           );
-         return new Response(json_encode(array('project'=>$project)));
+         return new Response(json_encode($project));
     }
     
    
