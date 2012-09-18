@@ -248,6 +248,7 @@ this.zeega = {
 	
 	restoreFromPreview : function()
 	{
+		console.log('restore from preview')
 		$('#wrapper').show();
 		this.previewMode = false;
 		$('body').removeClass('preview-mode');

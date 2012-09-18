@@ -46,11 +46,11 @@ this.zeegaPlayer = {
 
 		this.project.renderPlayer();
 
-		if(this.mode != 'editor') this.startRouter();
+		if( this.mode != 'editor' ) this.startRouter();
 		else this.project.goToFrame( initial.frameID );
 
-		if(!this.mode != 'editor' ) this.fsCheck = setInterval(function(){
-			if( _this.project.playerView.$el.width() == 0 ) _this.exit();
+		if( this.mode != 'editor' ) this.fsCheck = setInterval(function(){
+			//if( _this.project.playerView.$el.width() == 0 ) _this.exit();
 		},500);
 	},
 	
@@ -69,7 +69,7 @@ this.zeegaPlayer = {
 
 		if( this.mode != 'editor') clearInterval(this.fsCheck);
 
-		if(document.exitFullscreen)				document.exitFullscreen();
+		if(document.exitFullscreen)					document.exitFullscreen();
 		else if (document.mozCancelFullScreen)		document.mozCancelFullScreen();
 		else if (document.webkitCancelFullScreen)	document.webkitCancelFullScreen();
 
@@ -82,7 +82,6 @@ this.zeegaPlayer = {
 
 	startRouter: function()
 	{
-		console.log('rr 		start router')
 		var _this = this;
 		var Router = Backbone.Router.extend({
 

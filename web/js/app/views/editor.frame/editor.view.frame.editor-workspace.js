@@ -240,6 +240,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
+			console.log('workspace render')
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.setElement( $(this.target) );

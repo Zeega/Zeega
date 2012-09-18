@@ -157,7 +157,13 @@
 			var newWidth = ( maxWidth / maxHeight > 4/3 ) ? maxHeight*4/3 : maxWidth;
 			var newLeft = (navWidth - newWidth) / 2;
 
-			$('#zeega-frame-workspace').animate({left: newLeft +'px',width:newWidth +'px',height:newHeight +'px'});
+			$('#zeega-frame-workspace').animate({
+				left: newLeft +'px',
+				width:newWidth +'px',
+				height:newHeight +'px',
+
+				'font-size': (newWidth/520) +'em'
+			});
 		},
 
 		updateLayerListsContainerHeight : function()

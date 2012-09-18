@@ -187,6 +187,13 @@
 					var topCent = ( ui.position.top / $(this).parent().height() ) * 100;
 					var leftCent = ( ui.position.left / $(this).parent().width() ) * 100;
 					
+					//change the dom element back to percentages
+
+					$(this).css({
+						top: topCent+'%',
+						left: leftCent+'%'
+					})
+
 					_this.model.update({
 						top: topCent,
 						left: leftCent
