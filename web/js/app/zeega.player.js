@@ -35,6 +35,7 @@ this.zeegaPlayer = {
 	
 	initialize : function( data, initialState )
 	{
+		var _this = this;
 		var initial = initialState || {};
 		this.mode = initial.mode;
 
@@ -47,6 +48,10 @@ this.zeegaPlayer = {
 
 		if(this.mode != 'editor') this.startRouter();
 		else this.project.goToFrame( initial.frameID );
+
+		if(!this.mode != 'editor' ) this.fsCheck = setInterval(function(){
+			if( _this.project.playerView.$el.width() == 0 ) _this.exit();
+		},500);
 	},
 	
 	parseProject : function(data)
@@ -791,8 +796,8 @@ this.zeegaPlayer = {
 				if( zeegaPlayer.app.mode != 'editor' )
 				{
 					html +=
-					"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %>&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-					"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+					"<a href='https://twitter.com/intent/tweet?original_referer=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %> &url=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+					"<a href='http://www.facebook.com/sharer.php?u=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
 				}
 				html +=
 

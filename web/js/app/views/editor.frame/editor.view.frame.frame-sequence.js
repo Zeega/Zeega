@@ -121,7 +121,7 @@
 			
 				
 				"<div class='frame-update-overlay'></div>"+
-				"<a href='#' class='frame-thumb' style='url(<%= thumbnail_url %>)'>"+
+				"<a href='#' class='frame-thumb' style='background:url(<%= thumbnail_url %>)'>"+
 					"<ul class='flag-menu'>"+
 						"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
 						"<ul class='frame-action-menu'>"+
