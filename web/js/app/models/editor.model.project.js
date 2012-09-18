@@ -259,10 +259,6 @@
 				view.show();
 			}
 		},
-
-
-
-
 		
 		update : function( newAttr, silent )
 		{

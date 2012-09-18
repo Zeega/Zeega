@@ -35,6 +35,7 @@ this.zeegaPlayer = {
 	
 	initialize : function( data, initialState )
 	{
+		var _this = this;
 		var initial = initialState || {};
 		this.mode = initial.mode;
 
@@ -47,6 +48,10 @@ this.zeegaPlayer = {
 
 		if(this.mode != 'editor') this.startRouter();
 		else this.project.goToFrame( initial.frameID );
+
+		if(!this.mode != 'editor' ) this.fsCheck = setInterval(function(){
+			if( _this.project.playerView.$el.width() == 0 ) _this.exit();
+		},500);
 	},
 	
 	parseProject : function(data)
