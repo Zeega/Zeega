@@ -417,9 +417,9 @@ class ItemsController extends Controller
          	if($item['media_type']!='Collection' && $item['media_type']!='Pdf' )
          	{
 				$i++;
-				
-				$frameOrder[]=$i;
-				$frames[]=array( "id"=>(int)$item['id'],"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$frameId = (int)$item['id'];
+				$frameOrder[]=$frameId;
+				$frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
 				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_uri"=>$item['attribution_uri']));
          	}
          }
