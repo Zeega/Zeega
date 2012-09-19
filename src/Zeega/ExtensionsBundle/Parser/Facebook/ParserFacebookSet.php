@@ -160,7 +160,7 @@ class ParserFacebookSet extends ParserAbstract
 			$itemCount++;
 			$collection->setChildItemsCount($itemCount);
 
-			$collection->addItem($processeditem["items"]);
+			$collection->addItem($processeditem["items"][0]);
     	}
 		return $this->returnResponse($collection, true, true);
 	}

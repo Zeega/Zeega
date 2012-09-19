@@ -966,7 +966,6 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .zitem-testamonial.zitem-30{background-position:-660px 0;}
 .zitem-testamonial.zitem-30.loaded{background-position:-660px -30px;}
 .zitem-testamonial.zitem-30.error{background-position:-660px -60px;}
-.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se{display:inline-block;width:15px;height:15px;vertical-align:text-top;background-image:url('../../../images/zicons-darkgrey-15.png');background-position:0px 0px;background-repeat:no-repeat;background-position:-20px -120px;}
 .navbar-inner{height:40px;}
 .navbar .nav>li>a:hover,.btn-group .btn:hover,.btn-group .btn:focus,.btn-group .btn:active,.btn-group .btn.active{text-shadow:0 0 6px whiteSmoke;}
 .navbar{font-size:13px;}

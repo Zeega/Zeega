@@ -31,12 +31,15 @@
 			var _this = this;
 			var Frame = zeega.module('frame');
 			var frameData = this.get('frames');
-			var frames = _.map( this.get('frames'), function(frame){
-				var frameModel = new Frame.Model(frame);
+			var frames = _.map( this.get('frames'), function(frameJSON){
+				var frameModel = new Frame.Model(frameJSON);
+				//frameModel.id = frameID;
 				frameModel.sequenceID = _this.id;
 				frameModel.complete();
 				return frameModel;
 			});
+			frames = _.compact(frames);
+
 			this.set('frames', _.pluck(frames,'id') );
 			zeega.app.project.frames.add( frames, {silent:true} );
 			this.complete();
@@ -51,13 +54,27 @@
 			})
 			var col = Backbone.Collection.extend();
 			this.persistentLayers = new col( persistentLayers );
-
 			// make frame collection
+			// if this is a new sequence the frames will come in as objects
+			if(  _.isObject( this.get('frames')[0] ) )
+			{
+				zeega.app.project.frames.add( this.get('frames'));
+
+				this.set('frames', _.pluck( this.get('frames'), 'id' ) );
+				console.log('--$$		new frames', this.get('frames'), this, zeega.app.project.frames )
+			}
+
 			var frameArray = this.get('frames').map(function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
+				if(frame.complete != true) frame.complete();
 				frame.sequenceID = _this.id;
 				return frame;
 			});
+			
+
+
+
+			
 			this.frames = new Sequence.FrameCollection(frameArray);
 			this.frames.comparator = function( frame ){ return frame.frameIndex };
 			this.frames.on('add', this.onAddFrame, this);
@@ -71,7 +88,11 @@
 		
 		renderSequenceFrames : function()
 		{
-			this.sequenceFrameView.renderToTarget();
+			this.sequenceFrameView.render();
+		},
+		unrenderSequenceFrames : function()
+		{
+			this.sequenceFrameView.remove();
 		},
 
 		addFrames : function(num)
@@ -82,23 +103,23 @@
 
 			_.times( n, function(i){
 				var newFrame = new Frame.Model();
-				newFrame.save({
-					'layers' : _this.get('persistent_layers')
-					},{
-					success : function()
-					{
+				newFrame.save({ 'layers' : _this.get('persistent_layers')})
+					.success(function(){
+						console.log('frame updated:', _this, newFrame, zeega.app)
 						newFrame.complete(); // complete the collections inside the frame
 						newFrame.sequenceID = _this.id; // add the sequence id to the frame
 						zeega.app.project.frames.add( newFrame );
 						_this.frames.push( newFrame );
 						if( i == n-1 ) zeega.app.loadFrame( newFrame );
-					}
-				});
+						newFrame.trigger('sync');
+					});
+				
 			})
 		},
 
 		onAddFrame : function( frame )
 		{
+			console.log('ff		on add frame',frame)
 			this.sequenceFrameView.render();
 			this.updateFrameOrder();
 		},
@@ -136,7 +157,7 @@
 		{
 			var frameOrder = this.frames.pluck('id');
 			if(frameOrder.length == 0) frameOrder = [false];
-			this.save('frames',frameOrder);
+			this.save({'frames':frameOrder});
 		},
 
 		duplicateFrame : function( frame )
@@ -153,73 +174,50 @@
 
 		},
 
-/*
-duplicateFrame : function( frameModel )
-	{
-		//if(!this.busy) this.project.duplicateFrame( frameModel );
-		if(!this.busy)
+		duplicateFrame : function( frameModel )
 		{
-			console.log('	DUPLICATE FRAME')
-			console.log(frameModel)
-			var _this = this;
 			var dupeModel = frameModel.clone();
 			
 			//remove link layers because it doesn't make sense to dupe those
-			var layersToDupe = [];
-			_.each( frameModel.get('layers'), function(layerID){
-				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') layersToDupe.push( layerID);
+			var layersToDupe = _.map( frameModel.get('layers'), function(layerID){
+				if(zeega.app.project.layers.get(layerID).get('type') != 'Link') return layerID;
 			})
-
-
-			console.log(layersToDupe)
 			dupeModel.set({
-				'layers' : layersToDupe,
+				'layers' : _.compact(layersToDupe),
 				'duplicate_id' : parseInt(frameModel.id),
 				'id' : null
 			})
 			
-			dupeModel.oldLayerIDs = frameModel.get('layers');
-			dupeModel.frameIndex = _.indexOf( this.currentSequence.get('frames'), frameModel.id );
-			dupeModel.dupe = true;
-			
-			dupeModel.save({},{
-				success : function( savedFrame )
+			dupeModel.oldLayerIDs = _.compact(layersToDupe);
+			dupeModel.frameIndex = _.indexOf( zeega.app.currentSequence.get('frames'), frameModel.id );
+			dupeModel.sequenceID = this.id;
+			dupeModel.on('sync', this.onDupeFrameSave, this);
+			dupeModel.save();
+		},
+
+		onDupeFrameSave : function( frame )
+		{
+			var _this = this;
+			frame.off('sync', this.onDupeFrameSave);
+			console.log('$$		on dupe save', frame)
+			//clone layers and place them into the layer array
+			var persistLayers = zeega.app.currentSequence.get('persistent_layers');
+			_.each( frame.oldLayerIDs , function(layerID, i){
+				//if layer is persistent
+				//replace frameIndex the id with the persistent id
+				if( _.include( persistLayers, parseInt(layerID) ) )
 				{
-					console.log('frame saved and is a duplicate')
-					console.log(savedFrame)
-				
-					//zeega.app.currentSequence.get('frames');
-				
-					//clone layers and place them into the layer array
-					_.each( savedFrame.oldLayerIDs , function(layerID, i){
-
-						//if layer is persistent
-						//replace frameIndex the id with the persistent id
-						var persistLayers = _this.currentSequence.get('attr').persistLayers;
-						if( _.include( persistLayers, parseInt(layerID) ) )
-						{
-							var layerOrder = savedFrame.get('layers');
-							layerOrder[i] = String(layerID);
-							savedFrame.set({layers:layerOrder})
-						}
-						else
-						{
-							_this.project.layers.duplicateLayer( layerID, savedFrame.get('layers')[i] );
-						}
-					})
-					//resave the frame after being updated with persistent frame ids
-
-					_this.project.frames.add( savedFrame );
-					_this.currentSequence.insertFrameView( savedFrame , dupeModel.frameIndex );
-					
+					var layerOrder = frame.get('layers');
+					layerOrder[i] = parseInt(layerID);
+					frame.set({layers:layerOrder});
 				}
-			});
-			
-			
-		} //busy
-	},
-	*/
-
+				else zeega.app.project.layers.duplicateLayer( layerID, frame.get('layers')[i] );
+			})
+			frame.complete();
+			//resave the frame after being updated with persistent frame ids
+			zeega.app.project.frames.add(frame);
+			this.frames.add( frame, {at:frame.frameIndex+1} );
+		},
 
 		addPersistentLayer : function( layer )
 		{

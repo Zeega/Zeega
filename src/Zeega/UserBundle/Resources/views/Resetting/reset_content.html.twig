@@ -20,7 +20,7 @@
 		*/
 	
 		html { 
-		background: url( '{{ asset('images/boy.gif') }}') no-repeat center center fixed;  
+		background: url( '{{ asset('images/registration/request.gif') }}') no-repeat center center fixed;  
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -53,7 +53,6 @@
 		</div>
 		<h2 class='message'>Change your password here</h2>
 		
-		{% form_theme form theme %}
 		<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset form-vertical" >
 		    {{ form_errors(form) }}
 			

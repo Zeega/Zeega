@@ -4,65 +4,16 @@
 	
 *******************************/
 
-#workspace
+#frame-workspace-wrapper{ position:relative }
+#zeega-frame-workspace
 {
-	width:704px;
-	float:right;
-	color:#eee;
-	
-	.top-bar
-	{
-		.advance-controls
-		{
-			float:right;
-			a
-			{
-				opacity:0.25;
-				&.active{ opacity:1 }
-			}
-		
-			input
-			{
-				width:35px;
-				font-size:17px;
-				&.disabled{ opacity: 0.25 }
-			}
-			
-		}
-	}
-	
-	
-	#visual-editor-workspace
-	{
-		width:100%;
-		height:469px;
-		background:#000;
-		overflow:hidden;
-		position:relative;
-		&.workspace-item-hover{ outline:2px solid yellow }
-	}
-	
-	//needed?
-	.text-editing{ border:1px dotted red }
-	.text-non-editing{ border:1px dotted white }
-	.layer-text #zedit-target:focus{ outline :none }
-	
-	// for highlighting layers as their properties are changing
-	.visual-element
-	{
-		outline : 2px solid transparent;
-		-webkit-transition: outline .25s linear;
-		transition: outline .25 linear;
-	}
-	.editing-layer
-	{
-		outline : 2px solid yellow;
-		-webkit-transition: outline .25s linear;
-		transition: outline .25 linear;
-	}
-	
-
-	.layer-link{ background-color: rgba(255,255,255,0.25)}
+	position:absolute;
+	overflow:hidden;
+	left:10px;
+	background:black;
+	height: 400px;
+	width: 700px;
+	margin: 20px auto;
 }
 
 

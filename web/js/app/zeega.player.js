@@ -35,6 +35,7 @@ this.zeegaPlayer = {
 	
 	initialize : function( data, initialState )
 	{
+		var _this = this;
 		var initial = initialState || {};
 		this.mode = initial.mode;
 
@@ -45,9 +46,12 @@ this.zeegaPlayer = {
 
 		this.project.renderPlayer();
 
+		if( this.mode != 'editor' ) this.startRouter();
+		else this.project.goToFrame( initial.frameID );
 
-		if(this.mode != 'editor') this.startRouter();
-		this.project.goToFrame( initial.frameID );
+		if( this.mode != 'editor' ) this.fsCheck = setInterval(function(){
+			//if( _this.project.playerView.$el.width() == 0 ) _this.exit();
+		},500);
 	},
 	
 	parseProject : function(data)
@@ -65,14 +69,14 @@ this.zeegaPlayer = {
 
 		if( this.mode != 'editor') clearInterval(this.fsCheck);
 
-		if(document.exitFullscreen)				document.exitFullscreen();
+		if(document.exitFullscreen)					document.exitFullscreen();
 		else if (document.mozCancelFullScreen)		document.mozCancelFullScreen();
 		else if (document.webkitCancelFullScreen)	document.webkitCancelFullScreen();
 
 		// remove the player div
 		this.project.unrenderPlayer();
 
-		if(this.mode == 'editor') zeega.app.restoreFromPreview();
+		if(this.mode == 'editor') zeega.app.restoreFromPreview( );
 		return false;
 	},
 
@@ -82,10 +86,17 @@ this.zeegaPlayer = {
 		var Router = Backbone.Router.extend({
 
 			routes : {
+				'' : 'goToFirstFrame',
 				'frame/:frameID' : 'goToFrame'
 			},
-
-			goToFrame : function( frameID ){ _this.project.goToFrame(frameID) }
+			goToFirstFrame : function()
+			{
+				_this.project.goToFrame( _this.project.sequences.at(0).frames.at(0).id );
+			},
+			goToFrame : function( frameID )
+			{
+				_this.project.goToFrame(frameID);
+			}
 
 		});
 		this.router = new Router();
@@ -150,6 +161,11 @@ this.zeegaPlayer = {
 			this.playerView.$el.fadeOut( 450, function(){ _this.playerView.remove() });
 		},
 		
+		navigateToFrame : function()
+		{
+
+		},
+
 		goToFrame : function( frameID )
 		{
 			console.log('$$		go to frame:',frameID)
@@ -481,6 +497,7 @@ this.zeegaPlayer = {
 			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
 			{
 				_.each( targetArray, function(frameID){
+					console.log('each', frameID,zeegaPlayer.app.project,zeegaPlayer.app.project.frames.get(frameID) )
 					var before = zeegaPlayer.app.project.frames.get(frameID).before;
 					var after = zeegaPlayer.app.project.frames.get(frameID).after;
 					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;
@@ -605,7 +622,7 @@ this.zeegaPlayer = {
 		
 		isFullscreen : false,
 		overlaysVisible : true,
-		viewportRatio : 1.5,
+		viewportRatio : 1.33333,
 
 		id : 'zeega-player',
 		
@@ -613,23 +630,7 @@ this.zeegaPlayer = {
 		{
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
 
-			var viewWidth = window.innerWidth;
-			var viewHeight = window.innerHeight;
-
-			var cssObj = {};
-			if( viewWidth / viewHeight > this.viewportRatio )
-			{
-				cssObj.height = viewHeight +'px';
-				cssObj.width = viewHeight * this.viewportRatio +'px'
-			}
-			else
-			{
-				cssObj.height = viewWidth / this.viewportRatio +'px';
-				cssObj.width = viewWidth +'px'
-			}
-
-			//constrain proportions in player
-			this.$el.find('#preview-media').css( cssObj );
+			this.resizePlayer();
 
 			this.initEvents();
 			return this;
@@ -661,25 +662,7 @@ this.zeegaPlayer = {
 
 
 			//resize player on window resize
-			window.onresize = function(event)
-			{
-				//resize ##zeega-player
-				var viewWidth = window.innerWidth;
-				var viewHeight = window.innerHeight;
-
-				var cssObj = {};
-				if( viewWidth / viewHeight > _this.viewportRatio )
-				{
-					cssObj.height = viewHeight +'px';
-					cssObj.width = viewHeight * _this.viewportRatio +'px'
-				}else{
-					cssObj.height = viewWidth / _this.viewportRatio +'px';
-					cssObj.width = viewWidth +'px'
-				}
-
-				//constrain proportions in player
-				_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
-			}
+			window.onresize = function(event){ _this.resizePlayer(true) };
 
 			//	fadeout overlays after mouse inactivity
 			var fadeOutOverlays = _.debounce(function(){_this.fadeOutOverlays()},5000);
@@ -690,6 +673,33 @@ this.zeegaPlayer = {
 				else _this.fadeInOverlays();
 			}
 			
+		},
+
+		resizePlayer : function( animate )
+		{
+			var animate = animate || false;
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > this.viewportRatio )
+			{
+				cssObj = {
+					height : viewHeight +'px',
+					width : viewHeight * this.viewportRatio +'px',
+					'font-size' : (viewHeight * this.viewportRatio / 520 ) +'em'
+				}
+			}else{
+				cssObj = {
+					height : viewWidth / this.viewportRatio +'px',
+					width : viewWidth +'px',
+					'font-size' : (viewWidth/520) +'em'
+				}
+				
+			}
+			//constrain proportions in player
+			if(animate) this.$('#preview-media').clearQueue().animate( cssObj,500 );
+			else this.$('#preview-media').clearQueue().css( cssObj );
 		},
 		
 		fadeOutOverlays : function()
@@ -778,8 +788,8 @@ this.zeegaPlayer = {
 				if( zeegaPlayer.app.mode != 'editor' )
 				{
 					html +=
-					"<a href='https://twitter.com/intent/tweet?original_referer="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %>&url="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-					"<a href='http://www.facebook.com/sharer.php?u="+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+					"<a href='https://twitter.com/intent/tweet?original_referer=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %> &url=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+					"<a href='http://www.facebook.com/sharer.php?u=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
 				}
 				html +=
 

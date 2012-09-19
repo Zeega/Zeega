@@ -4,43 +4,75 @@
 	
 ***********************************************/
 
-body
+a:link,
+a:visited,
+a:active
+{ color:#bbb }
+
+a:hover
 {
+	color:#ddd;
+	text-decoration: none;
+}
+
+html
+{
+	background: url('@{image-folder}/paper-dark.png');
+
+	.preview-mode{ background-color:#000 }
+}
+
+body{ background-color:transparent}
+
+#zeega-editor-main
+{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
 	background-color:#333;
-	&.preview-mode{ background-color:#000 }
+	background: url('@{image-folder}/paper-dark.png');
+	overflow:hidden;
+
+	&.small-menus .menu-verbose-title{ display: none }
+
+	&.wide-view
+	{
+		#zeega-action-column{ width: 430px }
+		#zeega-edit-column
+		{
+			//width: -webkit-calc(100% - 430px); // doesn't work in less yet. mixed units
+			left:430px;
+		}
+	}
+
 }
 
-.dim{ opacity:0.5 }
-
-#wrapper
+#zeega-action-column
 {
-	position:relative;
-	width:1004px;
-	padding:0 10px;
-	margin:0 auto;
-	margin-top:45px;
+	position:fixed;
+	z-index:2;
+	width:300px;
+	height:100%;
+	min-height:600px;
+	background-color:rgba(255,255,255,0.1);
+	background: url('@{image-folder}/paper-dark.png');
+	box-shadow: 0px 0px 24px #222;
+	border-right:solid 1px #333;
 }
 
-#sidebar
+#zeega-edit-column
 {
-	width:294px;
-	min-height:394px;
-	float:left;
-	margin-right:6px;
+	position:absolute;
+	z-index:1;
+	top:0;
+	left:300px;
+	//width: -webkit-calc(100% - 300px); //doesn't work in less yet. mixed units
+	min-width:740px;
+	height:100%;
+	min-height:600px;
 }
 
-#edit-drawer{ float:left }
-#editor{ position:relative }
-
-
-/*******************************
-
-	LIST STYLES
-	
-*******************************/
-
-.horizontal-list>li{ float:left }
-.horizontal-list>li+li{ margin-left:6px }
-.expandable{ cursor:pointer }
 
 /************* end list styles ****************/

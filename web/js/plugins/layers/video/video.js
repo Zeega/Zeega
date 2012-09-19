@@ -34,7 +34,6 @@
 		initPlayer : function()
 		{
 			var ct = '#media-controls-'+this.id;
-			console.log('init editor player', ct)
 			var Player = zeega.module('player');
 			this.player = new Player.Views.Player({
 				model:this,
@@ -187,7 +186,6 @@
 			
 			return this;
 		},
-		
 		
 		onLayerEnter : function(){},
 		

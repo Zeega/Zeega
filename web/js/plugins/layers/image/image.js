@@ -63,13 +63,12 @@
 		
 		draggable : true,
 		
+		template : '<img src="<%= attr.uri %>" style="width:100%">',
+
 		render : function()
 		{
-			var img = $('<img>')
-				.attr('src', this.attr.uri)
-				.css({'width':'100%'});
-
-			$(this.el).html( img );
+			this.$el.html( _.template(this.template, this.model.toJSON() ) );
+			console.log('ii		image render', this)
 						
 			return this;
 		},

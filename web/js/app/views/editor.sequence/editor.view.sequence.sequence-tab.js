@@ -1,5 +1,37 @@
 (function(Sequence){
 
+//collection view
+	Sequence.Views.SequenceTray = Backbone.View.extend({
+		
+		target : '#zeega-project-sequence-list',
+
+		initialize : function()
+		{
+			this.collection.on('add', this.render, this);
+			this.collection.on('remove', this.render, this);
+		},
+
+		render : function()
+		{
+			console.log('ss 		sequence render', this)
+			var _this = this;
+			this.setElement( $(this.target) );
+			this.$el.html('<ul class="list">')
+			this.collection.each(function(sequence, i){
+				_this.$el.find('.list').append( sequence.tabView.render().el );
+				sequence.tabView.delegateEvents();
+			})
+			return this;
+		},
+/*
+		addSequence : function( seq )
+		{
+			this.$el.find('.list').append( seq.tabView.render().el );
+		}
+*/
+	})
+
+// model view
 	Sequence.Views.SequenceTabs = Backbone.View.extend({
 		
 		tagName : 'li',
@@ -33,8 +65,8 @@
 		events : {
 			'click .menu-toggler' : 'toggleDropdown',
 			'click .sequence-tab-link' : 'goToSequence',
-			'click .rename-sequence' : 'renameSequence',
-			'click .delete-sequence' : 'deleteSequence'
+			'click .sequence-rename' : 'renameSequence',
+			'click .sequence-delete' : 'deleteSequence'
 		},
 	
 		goToSequence : function(e)
@@ -82,15 +114,23 @@
 		
 		deleteSequence : function()
 		{
-			if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
+			if(zeega.app.project.sequences.length > 1 )
 			{
-				this.remove();
-				zeega.app.project.sequences.remove(this.model);
-				this.closeDropdown();
+
+				if( confirm('Delete sequence: "'+ this.model.get('title') +'"? This will also delete all incoming and outgoing connections to this sequence!') )
+				{
+					this.remove();
+					zeega.app.project.sequences.remove(this.model);
+					this.closeDropdown();
+				}
+				else
+				{
+					this.closeDropdown();
+				}
 			}
 			else
 			{
-				this.closeDropdown();
+				alert('You cannot delete your last sequence!');
 			}
 			
 			return false;
@@ -101,13 +141,13 @@
 			var html =
 			
 				'<a href="#" class="sequence-tab-link"><%= title %></a> '+
-				"<a href='#' class='menu-toggler'><b class='caret'></b></a>"+
-				"<div class='well menu hide'>"+
-					"<ul class='nav nav-list'>"+
-						"<li><a href='#' class='rename-sequence'>rename</a></li>"+
-						"<li><a href='#' class='delete-sequence'>delete</a></li>"+
+				"<ul class='flag-menu'>"+
+					"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
+					"<ul class='frame-action-menu'>"+
+						"<li><a class='sequence-rename' href='#' data-action='rename'>Rename Sequence</a></li>"+
+						"<li><a class='sequence-delete' href='#' data-action='delete'>Delete Sequence</a></li>"+
 					"</ul>"+
-				"</div>";
+				"</ul>";
 				
 				
 			return html;

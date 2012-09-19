@@ -40,7 +40,7 @@ this.zeega = {
 		this.data = $.parseJSON(projectJSON);
 		console.log('##		standalone data', this.data)
 		this.Player = zeegaPlayer.app;
-		this.Player.initialize( this.data.project, {mode:'standalone'} )
+		this.Player.initialize( this.data, {mode:'standalone'} )
 	}
 	
 	

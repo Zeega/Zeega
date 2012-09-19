@@ -32,19 +32,26 @@
 		
 		initialize: function(attributes,options)
 		{
-			console.log('$$		init layer', attributes, options, this)
+
+			if( this.isNew() ) this.set('attr', this.defaultAttributes );
+			if(attributes && attributes.type)
+			{
+				this.set('type', attributes.type)
+			}
+			if(attributes && attributes.attr)
+			{
+				this.set('attr', _.defaults(attributes.attr,this.defaultAttributes))
+			}
 			
 			this.on('ready', function(){ this.visualLoaded = true });
 			this.on('refresh_view', this.refreshView, this);
-			
 			this.on('editor_layerRender', this.renderLayerInEditor, this );
 			this.on('editor_destroyLayer editor_layerUnrender', this.unrenderLayerFromEditor, this);
-			
 			this.on('editor_controlsOpen', this.onControlsOpen, this);
 			this.on('editor_controlsClosed', this.onControlsClosed, this);
-			
 			this.on('editor_destroyLayer', this.unrenderLayerFromEditor, this);
 			
+			this.on('sync', this.refreshView, this);
 			
 			if( options ) _.extend(this,options);
 			
@@ -101,8 +108,9 @@
 		{
 			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
 			this.set( 'attr' , a );
-			if( silent != true ) this.save();
-			this.trigger('update');
+			this.save();
+			if( silent != true ) this.trigger('update');
+			this.trigger('change');
 		},
 
 		// draws the thumb?

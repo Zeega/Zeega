@@ -1,108 +1,104 @@
 (function(Items) {
 
-	Items.Collection = Backbone.Collection.extend({
-
-
-		model: Items.Model,
-		page : 0,
-		totalItemsCount : 0,
-		
-		_views : [],
-		target : $('#database-item-list'),
-		
-		searchObject : {},
-		
-		base : function()
-		{
-			return zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid')+"&page="+ this.page
+	Items.Model = Backbone.Model.extend({
+		defaults : {
+			title : 'Untitled'
 		},
-		
+
 		url: function()
 		{
-			var url = this.base();
-			if( !_.isUndefined(this.searchObject.query) ) url += '&q=' + this.searchObject.query;
-			if( !_.isUndefined(this.searchObject.contentType) ) url += '&content=' + this.searchObject.contentType;
-			if( !_.isUndefined(this.searchObject.collectionID) && this.searchObject.collectionID != 'all' )
-			{
-			    url += '&collection=' + this.searchObject.collectionID;
-			    // hammering - collection filtering should not be done by user_id nor site_id
-			    url = url.replace("&user=-1","");
-			    url = url.replace("&site="+sessionStorage.getItem('siteid'),"");
-			}
-			return url;
-		},
-		
-		search : function(search,reset)
-		{
-			var _this = this;
-			$(this.el).fadeTo(1000,0.5);
-			$(this.el).spin('small');
-			
-			this.setSearch(search,reset);
-			this.fetch({
-				success : function(collection,response)
-				{
-					_this.target.fadeTo(1000,1).spin(false).empty();
-					_this.renderCollection();
-				}
-			})
+			return sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "api/items/" + this.id;
 		},
 
 		initialize : function()
 		{
-			this.target.spin('small');
-			if( itemsJSON )
-			{
-				//get bootstrapped data if it exists
-				var itemsBS = jQuery.parseJSON(itemsJSON);
-				this.totalItemsCount = itemsBS.items_count;
-				this.reset( itemsBS.items );
-				this.target.spin(false);
-			}
-			else
-			{
-				//if bootstrap doesn't exist, then default to a search
-				console.log( 'items NOT bootstrapped. Do search. ')
-				this.fetch();
-			}
-			this.renderCollection();
-			
-			this.on('preview_item',this.previewItem,this);
+			this.databaseView = new Items.Views.List({model:this});
+		}
+	});
+
+	Items.SearchModel = Backbone.Model.extend({
+		defaults : {
+			query : '',
+			page : 1,
+			content : '',
+			collection : '',
+			user : '1',
+			site : sessionStorage.getItem('siteid'),
+			add : false
+		},
+
+		initialize : function(){ this.on('change', this.onChange, this ) },
+
+// this.items.search.reset().set({q:'foo'})
+		
+		onChange : function()
+		{
+			console.log('$$		onchange', this)
+			//if(this.get('query') == '') this.reset();
+			this.trigger('search');
+		},
+
+		reset : function( options )
+		{
+			var options = _.extend({silent:true}, options);
+			this.set(this.defaults,options);
+			return this;
+		}
+	})
+
+
+	Items.Collection = Backbone.Collection.extend({
+
+		model: Items.Model,
+		totalItemsCount : 0,
+
+		url: function()
+		{
+			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid');
+			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
+			var url = base + _.template( queryTemplate, this.search.toJSON() );
+			return url;
+		},
+
+		initialize : function()
+		{
+			this.itemCollectionView = new Items.Views.ItemTrayCollectionView({collection:this});
+
+			this.search = new Items.SearchModel();
+			this.search.on('search', this.onSearch, this );
+			this.on('reset', this.onSearchSuccess, this);
+
+//this.search.reset().set({query:'new'});
+
+			this.on('preview_item',this.previewItem,this); // move this
 		},
 		
+		onSearch : function()
+		{
+			var _this = this;
+			this.fetch({add: this.search.get('add')}).success(function(){
+				_this.trigger('reset');
+			});
+		},
+		
+		incrementPage : function()
+		{
+			if(this.length < this.totalItemsCount)
+			{
+				var pageNo = this.search.get('page');
+				pageNo++;
+				this.search.set({ page:pageNo, add:true });
+			}
+		},
+
+		refresh : function(){ this.fetch() },
+
+		///// move this ////////////
 		previewItem : function(itemID)
 		{
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
 			$('body').append(viewer.render().el);
 			viewer.renderItemView();
-		},
-		
-		renderCollection : function()
-		{
-			var _this = this;
-			_.each( _.toArray(this), function(itemModel){
-				var itemView = new Items.Views.List({model:itemModel});
-				_this._views.push( itemView );
-				_this.target.append( itemView.render().el );
-			})
-		},
-		
-		refresh : function()
-		{
-			var _this = this;
-			this.fetch({
-				success : function(collection,response)
-				{
-					_this.target.empty();
-					_this.renderCollection();
-				}
-			})
-		},
-		
-		setSearch : function(search, reset)
-		{
-			if(reset) this.searchObject = search;
-			else _.extend(this.searchObject,search);
 		},
 
 		parse : function(response)

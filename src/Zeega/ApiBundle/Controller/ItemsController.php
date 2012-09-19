@@ -47,7 +47,8 @@ class ItemsController extends Controller
 		
     		// parse the url with the ExtensionsBundle\Parser\ParserService
     		$response = $parser->load($url, $loadChildren);
-    		$itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+
+    		$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
 	    }
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
@@ -416,9 +417,9 @@ class ItemsController extends Controller
          	if($item['media_type']!='Collection' && $item['media_type']!='Pdf' )
          	{
 				$i++;
-				
-				$frameOrder[]=$i;
-				$frames[]=array( "id"=>$i,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$frameId = (int)$item['id'];
+				$frameOrder[]=$frameId;
+				$frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
 				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_uri"=>$item['attribution_uri']));
          	}
          }
@@ -430,7 +431,7 @@ class ItemsController extends Controller
                           'frames'=>$frames,
                           'layers'=>$layers
                           );
-         return new Response(json_encode(array('project'=>$project)));
+         return new Response(json_encode($project));
     }
     
    

@@ -153,10 +153,11 @@ class ParserDropboxSet extends ParserAbstract
 				$item = $this->loadItem($mediaUrl, array("dropbox" => $dropbox, "filename" => $filename, "fileData" => $folderItem, "username" => $dropboxUser));
 				// this is a hack, more efficient to apply only once
 				// does not cover the case where folder contains no images
-				if ($item["items"]->getMediaType() == "Image") {
-					$collection->setThumbnailUrl( $item["items"]->getThumbnailUrl() );
+				$item = $item["items"][0];
+				if ($item->getMediaType() == "Image") {
+					$collection->setThumbnailUrl( $item->getThumbnailUrl() );
 				}
-				$collection->addItem($item["items"]);
+				$collection->addItem($item);
 				$itemCount++;
 				$collection->setChildItemsCount($itemCount);
 			}

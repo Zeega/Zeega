@@ -30,8 +30,8 @@
 	
 		render: function()
 		{
-			this.$el.html( this.getTemplate() );
-			//this.makeDroppable();
+			this.$el.html( _.template(this.getTemplate(), this.model.toJSON() ) );
+			this.makeDroppable();
 			this.delegateEvents();
 			return this;
 		},
@@ -40,7 +40,7 @@
 		{
 			var _this = this;
 			this.$el.droppable({
-				//accept : '.database-asset-list',
+				accept : '.database-asset-list',
 				hoverClass : 'frame-item-hover',
 				tolerance : 'pointer',
 
@@ -101,16 +101,16 @@
 			//Update thumbnail in sequence display
 			if( this.$el.is(':visible '))
 			{
-				this.$el.fadeOut('fast',function(){
+				this.$el.find('.frame-thumb').fadeOut('fast',function(){
 					$(this)
 						.css('background-image','url("'+ _this.model.get('thumbnail_url') +'")')
 						.fadeIn('fast');
-					$(this).find('.frame-update-overlay').hide();
+					_this.$el.find('.frame-update-overlay').hide();
 				});
 			}
 			else
 			{
-				this.$el.css('background-image','url("'+ this.model.get('thumbnail_url') +'")');
+				this.$el.find('.frame-thumb').css('background-image','url("'+ this.model.get('thumbnail_url') +'")');
 				this.$el.find('.frame-update-overlay').hide();
 			}
 		},
@@ -119,15 +119,17 @@
 		{
 			var html = 
 			
-					"<ul class='menu'>"+
+				
+				"<div class='frame-update-overlay'></div>"+
+				"<a href='#' class='frame-thumb' style='background:url(<%= thumbnail_url %>)'>"+
+					"<ul class='flag-menu'>"+
 						"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
 						"<ul class='frame-action-menu'>"+
 							"<li><a href='#' data-action='duplicate'>Duplicate Frame</a></li>"+
 							"<li><a href='#' data-action='delete'>Delete Frame</a></li>"+
 						"</ul>"+
 					"</ul>"+
-					"<div class='frame-update-overlay'></div>";
-
+				"</a>";
 
 			return html;
 		}

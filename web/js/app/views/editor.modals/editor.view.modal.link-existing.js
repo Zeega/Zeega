@@ -4,10 +4,6 @@
 	Modal.Views.LinkExisting = Backbone.View.extend({
 
 		className : 'modal',
-
-		el : $('#publish-project-modal'),
-		
-		initialize : function(){},
 		
 		render: function()
 		{
@@ -72,11 +68,8 @@
 		
 		makeConnection : function()
 		{
-			console.log('make connection!!!',this.targetSequence,this.targetFrame)
 			this.hide();
-			
 			this.model.trigger('connectToSequenceFrame',this.targetSequence,this.targetFrame);
-			//zeega.app.connectToSequenceFrame(this.targetSequence,this.targetFrame);
 			return false;
 		},
 	
