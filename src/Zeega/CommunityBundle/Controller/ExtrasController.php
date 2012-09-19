@@ -9,6 +9,6 @@ class ExtrasController extends Controller
 {
     public function makedayAction()
     {
-        return $this->render('ZeegaCommunityBundle:Makeday:makeday.html.twig');
+        return $this->render('ZeegaCommunityBundle:Events:makeday.html.twig');
     }  
 }
