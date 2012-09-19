@@ -40,11 +40,7 @@
 						<ul class='menu-dropdown'>
 							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
 							<ul class='user-action-menu'>
-								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='icon-file'></i> New Project</a></li>
-								<li class="divider"></li>
-								{% for project in myprojects %}
-								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a></li>
-								{% endfor %}
+						
 
 							</ul>
 						</ul>
@@ -75,11 +71,10 @@
 				<div class='zeega-list-header'>COLLECTIONS</div>
 			</div>
 
-			<div class='layer-lists-container'>
-				<div id='zeega-link-list' class='layer-list'></div>
-				<div id='zeega-layer-list' class='layer-list'></div>
+			<div class='collection-lists-container'>
+				<div id='zeega-collection-list' class='collection-list'></div>
 			</div>
-
+			<!-- zeega item database
 			<div id='zeega-item-database'>
 				
 				<div class='menu-bar  menu-dark' >
@@ -112,10 +107,12 @@
 					<div id='database-flash' class='alert alert-info hide'></div>
 					<div id='zeega-item-database-list'></div>
 
-				</div><!-- database tray -->
+				</div>
 
 
-			</div><!-- zeega item database -->
+			</div> 
+			
+		-->
 
 		</div><!-- zeega action column -->
 		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
@@ -147,9 +144,13 @@
 				<div id='zeega-project-frame-detail-bar' class='menu-bar clearfix'></div>
 			</div>
 			</div>
-			<div id='frame-workspace-wrapper'>
-				<div id='zeega-frame-workspace'></div>
-			</div>
+			<div>	
+				<div id='zeega-results-wrapper'>
+					<div><ul id="results-thumbnail-wrapper" class="results-wrapper"></ul><div>
+					<div id="results-list-wrapper" class="results-wrapper"></div>
+					
+				</div>
+			</div>	
 		</div>
 
 	</div>

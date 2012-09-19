@@ -5,7 +5,7 @@
 	
 	Items.Collections.Views.Results = Backbone.View.extend({
 		
-		el : $('#zeega-items-list'),
+		el : $('#zeega-results-wrapper'),
 	
 		initialize : function(){
 			this.collection = new Items.Collection();
@@ -81,50 +81,10 @@
 			$("#zeega-results-count").hide();
 			
 			_this._isRendered = true;
-			if(zeega.discovery.app.currentView == 'thumb'){
-				this.el = '#zeega-items-thumbnails';
-			} else {
-				this.el = '#zeega-items-list';
-			}
 			
-			
-			//Display collections and items separately if this is not null
-			if (this.collection.collectionsCollection != null){
-				
-				this.collection.collectionsCollection.unbind().bind('remove', this.removeCollection, this);
-
-				if(zeega.discovery.app.currentView == 'thumb') $('.collections-thumbnails').empty();
-				else if(zeega.discovery.app.currentView == 'list') $('#zeega-collections-list').empty();
+			$('.results-wrapper').empty();
 				
 				
-				//Display collections
-				_.each( _.toArray(this.collection.collectionsCollection), function(item){
-					var itemView;
-					if(zeega.discovery.app.currentView == 'thumb'){
-						itemView = new Items.Views.Thumb({model:item});
-						$('.collections-thumbnails').append( itemView.render().el );
-						
-					} else{
-						
-						itemView = new Items.Views.List({model:item});
-						$('#zeega-collections-list').append( itemView.render().el );
-					}
-					
-					_this._collectionChildViews.push( itemView );
-					
-				})
-
-				$('.jda-separate-collections-and-items').show();
-				if (this.collection.collectionsCollection.length ==0){
-					$('.jda-separate-collections-and-items').find('.jda-results-collections-text').hide();
-				}
-				
-			} else {
-				$('#zeega-results-count-number').text(this.addCommas(this.collection.count)); 
-				$("#zeega-results-count").fadeTo(100,1);
-			}
-			
-			//Display items
 			
 			var q =0;
 			
@@ -140,7 +100,12 @@
 					}
 					
 					_this._childViews.push( itemView );
-					$(_this.el).append( itemView.render().el );
+					
+					console.log(zeega.discovery.app.currentView );
+					if(zeega.discovery.app.currentView == 'thumb') $('#results-thumbnail-wrapper').append(itemView.render().el);
+					else if(zeega.discovery.app.currentView == 'list') $('#results-list-wrapper').append(itemView.render().el);
+			
+			
 				}
 			})
 			
@@ -202,7 +167,6 @@
 		reset : function(){
 			if ( this._isRendered )
 			{
-				$(this.el).empty();
 				this._childViews = [];
 				//this.render();
 			}

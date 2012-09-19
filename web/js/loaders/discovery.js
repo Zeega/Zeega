@@ -46,16 +46,16 @@ require (
 		
 			
 			//views
+			'order!app/views/discovery.items/discovery.view.item.collection-list',
 			'order!app/views/discovery.items/discovery.view.item.collection-details',
 			'order!app/views/discovery.items/discovery.view.item.thumb',
 			'order!app/views/discovery.items/discovery.view.item.list',
 			'order!app/views/discovery.items/discovery.view.item.publish-settings',
 			
+			
 			'order!app/views/editor.common/editor.view.common.leaflet-map',
 			'order!app/views/editor.common/editor.view.common.tag-display-edit',
 			'order!app/views/editor.item/editor.view.item.viewer',
-			
-			//'order!app/views/discovery.items/discovery.view.item.map-popup',
 			
 			'order!app/views/discovery.collections/discovery.view.collection.results',
 			'order!app/views/discovery.collections/discovery.view.collection.my-collections-drawer',

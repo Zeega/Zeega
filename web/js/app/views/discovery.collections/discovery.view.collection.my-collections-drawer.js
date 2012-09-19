@@ -7,7 +7,7 @@
 	
 	Items.Collections.Views.MyCollectionsDrawer = Backbone.View.extend({
 		
-		el : $('#zeega-my-collections'),
+		el : $('#zeega-collection-list'),
 		
 		initialize : function(){
 			
@@ -41,8 +41,10 @@
 				if(item.get('title').length>25) var title = item.get('title').substr(0,23)+'...';
 				else var title = item.get('title');
 				
-				var itemView = '<li class="zeega-collection-list-item" id="'+id+'"><a href=".">'+title+'</a></li>';
-				$(_this.el).find('.dropdown-menu').append(itemView);
+				console.log(Items);
+				console.log(Items.Views.CollectionList);
+				var itemView = new Items.Views.CollectionList({model:item});
+				$(_this.el).append(itemView.render().el);
 				
 
 			});
