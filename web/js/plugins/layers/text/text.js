@@ -125,12 +125,7 @@
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
-				/*
-				'overflow-y' : 'auto',
-				'overflow-x' : 'hidden',
-				'text-align' : 'left',
-				'direction' : 'rtl',
-				*/
+
 				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
 				'word-wrap': 'break-word'
 				
@@ -139,12 +134,17 @@
 			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
 
 			// get max height in px
-			console.log('max height', this.$el.height() )
-
 			this.$('#zedit-target').css({
 				'overflow-y' : 'auto',
 				'overflow-x' : 'hidden',
 			})
+
+			var _this = this;
+			_.delay(function(){
+				_this.$('#zedit-target').css({
+				'height': _this.$el.height() +'px'
+			})
+			},1000)
 
 			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
@@ -157,22 +157,29 @@
 		
 		onUpdate : function()
 		{
+			var height = (100 - this.model.get('attr').top)/100 * $('#zeega-frame-workspace').height() - 1;
+
 			this.$el.css({
-				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
+				'max-height' : height +'px',
 			})
+			
+			this.$('#zedit-target').css({
+				'height': height +'px',
+			})
+
+		},
+
+		onPlay : function()
+		{
+			//adjusts the height in the player
 			this.$('#zedit-target').css({
 				'height': this.$el.height() +'px'
 			})
-
-			console.log('on update', this.$el.height() )
-
 		},
 
 		onLayerEnter : function()
 		{
 			var _this = this;
-			
-			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
 			
 			this.$('#zedit-target').keyup(function(e){
 				if(e.which == 27){ $(this).blur() }
@@ -180,17 +187,10 @@
 				_this.lazySave();
 			})
 			.bind('paste', function(e){
-				console.log('content pasted in!')
-
 				_this.$('#zedit-target').html( _this.$('#zedit-target').text() );
-
-
 				_this.lazySave();
 			});
 
-			this.$('#zedit-target').css({
-				'max-height': this.$el.height() +'px'
-			})
 			
 			this.$el.click(function(){
 				_this.$el.find('#zedit-target').focus();
