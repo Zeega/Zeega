@@ -111,6 +111,7 @@
 		{
 			console.log('	GEO INIT')
 			var _this = this;
+			this.model.on('update', this.updateVisual, this)
 		},
 		
 		render : function()
@@ -201,7 +202,7 @@
 						lat : _this.streetview.getPosition().lat(),
 						lng : _this.streetview.getPosition().lng()
 					
-					})
+					},true)
 				}
 				
 				
