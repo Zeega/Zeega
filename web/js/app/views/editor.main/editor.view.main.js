@@ -37,14 +37,11 @@
 			$('#zeega-item-database-list').scroll(function(){
 				if( $(this).height() >= $(this).find('.list').height() + $(this).find('.list').position().top )
 				{
-					console.log('infinitescrolllll')
 					zeega.app.items.incrementPage();
 				}
 			})
 
 			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
-
-			
 
 		},
 
@@ -157,7 +154,15 @@
 			var newWidth = ( maxWidth / maxHeight > 4/3 ) ? maxHeight*4/3 : maxWidth;
 			var newLeft = (navWidth - newWidth) / 2;
 
-			$('#zeega-frame-workspace').animate({left: newLeft +'px',width:newWidth +'px',height:newHeight +'px'});
+			var css = {
+				left: newLeft +'px',
+				width:newWidth +'px',
+				height:newHeight +'px',
+
+				'font-size': (newWidth/520) +'em'
+			}
+
+			$('#zeega-frame-workspace').animate(css);
 		},
 
 		updateLayerListsContainerHeight : function()

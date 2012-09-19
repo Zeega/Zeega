@@ -8,12 +8,12 @@
 			'title' : 'Streetview Layer',
 			'height' : 100,
 			'width' : 100,
-			'lat' : 42.3735626,
-			'lng' : -71.1189639,
+			'lat' : 42.373613,
+			'lng' : -71.119146,
 			'zoom' : 10,
 			'streetZoom' : 1,
-			'heading' : 0,
-			'pitch' : 0,
+			'heading' : -235,
+			'pitch' : 17.79,
 			'mapType' : 'satellite',
 			
 			'url' : '',
@@ -111,7 +111,6 @@
 		{
 			console.log('	GEO INIT')
 			var _this = this;
-			this.model.on('update', this.updateVisual, this)
 		},
 		
 		render : function()
@@ -131,8 +130,6 @@
 		
 		updateVisual : function()
 		{
-			console.log('	update visual')
-			console.log(this)
 			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 			var pov = {
 					'heading' : this.model.get('attr').heading,
@@ -147,8 +144,6 @@
 		
 		onLayerEnter : function()
 		{
-			console.log('##		geo layer enter', $(this.el).find('.gmap-container')[0], $( $(this.el).find('.gmap-container')[0]).is(':visible')+'' )
-
 			var center = new google.maps.LatLng( this.model.get('attr').lat, this.model.get('attr').lng);
 
 			var mapOptions = {

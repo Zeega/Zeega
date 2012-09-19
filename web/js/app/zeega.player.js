@@ -46,11 +46,11 @@ this.zeegaPlayer = {
 
 		this.project.renderPlayer();
 
-		if(this.mode != 'editor') this.startRouter();
+		if( this.mode != 'editor' ) this.startRouter();
 		else this.project.goToFrame( initial.frameID );
 
-		if(!this.mode != 'editor' ) this.fsCheck = setInterval(function(){
-			if( _this.project.playerView.$el.width() == 0 ) _this.exit();
+		if( this.mode != 'editor' ) this.fsCheck = setInterval(function(){
+			//if( _this.project.playerView.$el.width() == 0 ) _this.exit();
 		},500);
 	},
 	
@@ -69,7 +69,7 @@ this.zeegaPlayer = {
 
 		if( this.mode != 'editor') clearInterval(this.fsCheck);
 
-		if(document.exitFullscreen)				document.exitFullscreen();
+		if(document.exitFullscreen)					document.exitFullscreen();
 		else if (document.mozCancelFullScreen)		document.mozCancelFullScreen();
 		else if (document.webkitCancelFullScreen)	document.webkitCancelFullScreen();
 
@@ -82,7 +82,6 @@ this.zeegaPlayer = {
 
 	startRouter: function()
 	{
-		console.log('rr 		start router')
 		var _this = this;
 		var Router = Backbone.Router.extend({
 
@@ -631,23 +630,7 @@ this.zeegaPlayer = {
 		{
 			this.$el.html( _.template(this.getTemplate(), this.model.toJSON()) );
 
-			var viewWidth = window.innerWidth;
-			var viewHeight = window.innerHeight;
-
-			var cssObj = {};
-			if( viewWidth / viewHeight > this.viewportRatio )
-			{
-				cssObj.height = viewHeight +'px';
-				cssObj.width = viewHeight * this.viewportRatio +'px'
-			}
-			else
-			{
-				cssObj.height = viewWidth / this.viewportRatio +'px';
-				cssObj.width = viewWidth +'px'
-			}
-
-			//constrain proportions in player
-			this.$el.find('#preview-media').css( cssObj );
+			this.resizePlayer();
 
 			this.initEvents();
 			return this;
@@ -679,25 +662,7 @@ this.zeegaPlayer = {
 
 
 			//resize player on window resize
-			window.onresize = function(event)
-			{
-				//resize ##zeega-player
-				var viewWidth = window.innerWidth;
-				var viewHeight = window.innerHeight;
-
-				var cssObj = {};
-				if( viewWidth / viewHeight > _this.viewportRatio )
-				{
-					cssObj.height = viewHeight +'px';
-					cssObj.width = viewHeight * _this.viewportRatio +'px'
-				}else{
-					cssObj.height = viewWidth / _this.viewportRatio +'px';
-					cssObj.width = viewWidth +'px'
-				}
-
-				//constrain proportions in player
-				_this.$el.find('#preview-media').clearQueue().animate( cssObj,500 );
-			}
+			window.onresize = function(event){ _this.resizePlayer(true) };
 
 			//	fadeout overlays after mouse inactivity
 			var fadeOutOverlays = _.debounce(function(){_this.fadeOutOverlays()},5000);
@@ -708,6 +673,33 @@ this.zeegaPlayer = {
 				else _this.fadeInOverlays();
 			}
 			
+		},
+
+		resizePlayer : function( animate )
+		{
+			var animate = animate || false;
+			var viewWidth = window.innerWidth;
+			var viewHeight = window.innerHeight;
+
+			var cssObj = {};
+			if( viewWidth / viewHeight > this.viewportRatio )
+			{
+				cssObj = {
+					height : viewHeight +'px',
+					width : viewHeight * this.viewportRatio +'px',
+					'font-size' : (viewHeight * this.viewportRatio / 520 ) +'em'
+				}
+			}else{
+				cssObj = {
+					height : viewWidth / this.viewportRatio +'px',
+					width : viewWidth +'px',
+					'font-size' : (viewWidth/520) +'em'
+				}
+				
+			}
+			//constrain proportions in player
+			if(animate) this.$('#preview-media').clearQueue().animate( cssObj,500 );
+			else this.$('#preview-media').clearQueue().css( cssObj );
 		},
 		
 		fadeOutOverlays : function()
