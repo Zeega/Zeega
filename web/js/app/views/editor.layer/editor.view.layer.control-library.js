@@ -947,9 +947,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 					lat : newCenter.lat(),
 					lng : newCenter.lng()
 				})
-				_this.model.trigger('update');
-			 
-			 
+				//_this.model.trigger('update');
 			 });
 
 

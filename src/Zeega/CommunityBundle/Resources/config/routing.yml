@@ -64,6 +64,6 @@ ZeegaCommunityBundle_notfound:
 
 
 ZeegaCommunityBundle_makeday:
-    pattern:  /makeday
-    defaults: { _controller: ZeegaCommunityBundle:Extras:makeday}
+    pattern:  /events/tribecahacks
+    defaults: { _controller: ZeegaCommunityBundle:Events:tribecahacks}
 
