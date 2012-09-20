@@ -243,284 +243,274 @@
 		
 		
 	});
+	
+	Items.Views.DrawerView = Backbone.View.extend({
+		
+		tagName : 'ul',
+
+		initialize : function()
+		{
+			this.collection.on('reset', this.render, this);
+		},
+
+		render : function()
+		{
+			var _this = this;
+			this.$el.addClass('list');
+			this.collection.each(function(item){
+				_this.$el.append( new Items.Views.DrawerThumbView({model:item}).render().el );
+			})
+			return this;
+		}
+
+	})
+
+	Items.Views.DrawerThumbView = Backbone.View.extend({
+
+		tagName : 'li',
+		className : 'database-asset-list',
+
+		render: function()                 
+		{
+			this.$el.html( _.template(this.getTemplate(),this.model.toJSON() ));
+			this.makeDraggable();
+			return this;
+		},
+
+		makeDraggable : function()
+		{
+			var _this = this;
+			this.$el.draggable({
+				appendTo : 'body',
+				revert : true,
+				opacity : 0.75,
+				helper : function()
+				{
+					
+					var drag = $(this).find('img')
+						.clone()
+						.css({
+							'height':'75px',
+							'width':'75px',
+							'overflow':'hidden',
+							'background':'white',
+							'z-index':100
+						});
+					return drag;
+				},
+
+				start : function()
+				{
+					$(this).draggable('option','revert',true);
+					if(_this.model.get('layer_type') == 'Image') $('#project-cover-image').addClass('target-focus');
+
+					zeega.discovery.app.draggedItem = _this.model;
+				},
+				stop : function()
+				{
+					console.log('dragging		stop')
+				}
+			});
+		},
+
+		events: {
+			"click" : "previewItem"
+			//'dblclick' : "doubleClick",
+		},
+
+		//item events
+		previewItem: function()
+		{
+			this.model.trigger('preview_item',this.model.id)
+		},
+
+		getTemplate : function()
+		{
+			var html =
+
+				"<a href='#'><img src='<%= thumbnail_url %>'/></a>";
+
+			return html;
+		}
+	});
+	
 	Items.Views.CollectionList = Backbone.View.extend({
 		
 		tagName : 'li',
-		className : 'layer-list-item',
-		
+		className : 'collection-list-item',
+		loaded:false,
 		initialize : function()
 		{
-			this.controls = $('<div>');
-			this.initListeners();
-			this.attr = this.model.get('attr')
-			_.extend( this.events, this.eventTriggers );
-			this.init();
+			var _this=this;
+			this.model.bind('change',function(){
+			
+				if(_this.model.hasChanged('title')){
+					
+					_this.updateTitle();
+				}
+			
+			});
 		},
 		
-		render : function(){ /* this is overridden by individual controls*/ },
-		
-		renderControls : function()
+		render : function()
 		{
-			this.$el.attr( 'id', 'layer-'+ this.model.id );
-			this.$el.attr('data-id',this.model.id);
-			this.setBaseTemplate();
-			this.controls = $('<div>');
-			this.$el.find('#controls').html(this.render().controls);
-			this.drawDefaultControls();
+			
+			
+			var _this=this;
+			
+			
+			if(this.model.get('title').length>25) var title = this.model.get('title').substr(0,23)+'...';
+			else var title = this.model.get('title');
+				
+				
+			var blanks = {
+				id : 'collection-'+this.model.id,
+				title : title,
+				thumbnail_url : this.model.get('thumbnail_url'),
+			}
+			this.$el.html( _.template( this.getTemplate(), blanks ) );
+			
+
+			
+			$(this.el).droppable({
+			    accept : '.results-thumbnail',
+			    hoverClass : 'zeega-my-collections-items-dropping',
+			    tolerance : 'pointer',
+
+			    drop : function( event, ui ){
+			    	
+					$(_this.el).find('#zeega-my-collections-items').addClass('zeega-my-collections-items-dropping');
+					if(_this.loaded){
+					
+						_this.children.push(zeega.discovery.app.draggedItem);
+						_this.$el.find('#zeega-item-database-list').empty().append(new Items.Views.DrawerView({collection:_this.children}).render().el);
+					
+					}
+				
+					//_this.activeCollection.attributes.child_items.push(zeega.discovery.app.draggedItem.toJSON());
+					//_this.renderCollectionPreview(_this.activeCollection);
+					  
+					var itemId=zeega.discovery.app.draggedItem.id;
+					
+					_this.model.url=zeega.discovery.app.apiLocation + 'api/items/' + _this.model.id+'/items';
+			
+					
+					_this.model.save({new_items:[itemId ]},
+						{
+							success : function(model, response){ 
+								console.log(model,response,"success");
+								$(_this.el).find('#zeega-my-collections-items').removeClass('zeega-my-collections-items-dropping');
+							},
+							error : function(model, response){
+								console.log(response);
+
+							}
+						}
+					);
+
+					ui.draggable.draggable('option','revert',false);
+					
+			    }	
+			});	
 			return this;
 		},
-		
-		drawDefaultControls : function()
-		{
-			this.$el.find('.default-layer-controls').empty();
 
-			var persistentLayers = ( zeega.app.currentSequence.get('attr') ) ? zeega.app.currentSequence.get('attr').persistLayers : {};
-			var isActive = _.include(persistentLayers, parseInt(this.model.id) );
-			
-			var continueLayer = new Layer.Views.Lib.ContinueLayer({ model: this.model });
-			
-			this.$el.find('.default-layer-controls')
-				.append( continueLayer.getControl() );
-				//.append( continueToNext.getControl() );
-			if( this.model.get('attr').linkable )
-			{
-				var link = new Layer.Views.Lib.Link({ model: this.model });
-				this.$el.find('.default-layer-controls').append( link.getControl() );
-			}
+		updateTitle:function(){
+			if(this.model.get('title').length>25) var title = this.model.get('title').substr(0,23)+'...';
+			else var title = this.model.get('title');
+			this.$el.find('.collection-title').html(title);
+		
 		},
-		
-		initListeners : function()
-		{
-			this.model.on('update', this.updateViewInPlace, this);
-			if( this.model.player )
-			{
-				this.model.on('player_preload', this.private_onPreload, this);
-				this.model.on('player_play', this.private_onPlay, this);
-				this.model.on('player_exit', this.private_onExit, this);
-				this.model.on('player_unrender', this.private_onUnrender, this);
-			}
-		},
-		
-		init : function(){},
-		
-		/*******************
-		
-		PUBLIC EDITOR FUNCTIONS
-		
-		*******************/
-		
-		onLayerEnter : function(){},
-		
-		onLayerExit : function(){},
-		
-		onControlsOpen : function(){},
-		
-		onControlsClosed : function(){},
-		
-		// cleanupEditor : function(){},
-		
-		
-		/*******************
-		
-		PUBLIC PLAYER FUNCTIONS
-		
-		*******************/
-		
-		onPreload : function(){},
-		
-		onPlay : function(){},
-		
-		onExit : function(){},
-		
-		onUnrender : function(){},
-		
-		
-		/*******************
-		
-		PRIVATE EDITOR FUNCTIONS
-		
-		*******************/
-		
-		private_onLayerEnter : function()
-		{
-			if(this.model.defaultControls) this.drawDefaultControls();
-			this.delegateEvents();
-			console.log('++		private on layer enter')
-			this.onLayerEnter();
-		},
-		
-		private_onLayerExit : function()
-		{
-			this.undelegateEvents();
-			this.$el.find('#controls').empty();
-			this.onLayerExit();
-		},
-		
-		private_onRemoveLayerFromFrame : function()
-		{
-			this.remove();
-		},
-		
-		private_onControlsOpen : function()
-		{
-			this.onControlsOpen();
-		},
-		
-		private_onControlsClosed : function()
-		{
-			this.onControlsClosed();
-		},
-		
-		/*******************
-		
-		PRIVATE PLAYER FUNCTIONS
-		
-		*******************/
-		
-		private_onPreload : function()
-		{
-			this.onPreload();
-			this.moveOffStage();
-		},
-		
-		private_onPlay : function()
-		{
-			this.moveOnStage();
-			this.onPlay();
-		},
-		
-		private_onExit : function()
-		{
-			this.moveOffStage();
-			this.onExit();
-		},
-		
-		private_onUnrender : function()
-		{
-			this.remove();
-			this.onUnrender();
-		},
-		
-		////// HELPERS //////
-		
-		moveOnStage :function()
-		{
-			$(this.el).css({
-				'top' : this.attr.top +'%',
-				'left' : this.attr.left+'%'
-			});
-		},
-		
-		moveOffStage :function()
-		{
-			$(this.el).css({
-				'top' : '-1000%',
-				'left' : '-1000%'
-			});
-		},
-		
-		updateViewInPlace : function()
-		{
-			console.log('re render')
-			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
-			$(this.el).attr('data-id',this.model.id);
-			$(this.el).find('.layer-title').html(this.model.get('attr').title)
-			
-		},
-		
-		/*******************
-		
-			EVENTS
-		
-		*******************/
+
 		
 		events : {
-			'click .delete-layer'		: 'delete',
+			'click .delete-collection'		: 'delete',
 			'click .layer-super'		: 'expand',
+			'click .edit-item-metadata' : 'preview',
 
 		},
-		
-		// the events end users have access to
-		eventTriggers : {},
+
 		
 		delete : function()
 		{
-			if( confirm('Delete Layer?') )
+			if( confirm('Delete Collection?') )
 			{
-				//this.model.trigger('editor_removeLayerFromFrame', this.model);
-				zeega.app.currentFrame.layers.remove( this.model );
-				//this.remove();
-			}
-		},
-
-		//	open/close and expanding layer items
-		expand : function()
-		{
-			if(this.model.hasControls)
-			{
-				if(this.$el.hasClass('layer-open') )
-				{
-					this.$el.removeClass('layer-open');
-					this.model.trigger('editor_controlsClosed');
-				}
-				else
-				{
-					var _this = this;
-					$('.layer-open').each(function(){
-						var layerID = $(this).data('id');
-						zeega.app.project.layers.get(layerID).trigger('editor_controlsClosed');
-					})
-					$('.layer-open').removeClass('layer-open');
-					this.$el.addClass('layer-open');
-					this.model.trigger('editor_controlsOpen');
-				}
+					//KILL KILL
+				var _this=this;
+				this.model.destroy({success:function(model){
+						console.log('collection deleted');
+							_this.$el.fadeOut().remove();
+						},
+						error:function(){
+							alert('Unable to delete collection');
+						}
+				});
 
 			}
 			return false;
+				
+			
+			
 		},
 
-		setBaseTemplate : function()
+		//	open/close and expanding collection
+		expand : function()
 		{
-			var persist = '';
-			/*
-			if( zeega.app.project.sequences[0].get('attr') && zeega.app.project.sequences[0].get('attr').persistLayers && _.include( zeega.app.project.sequences[0].get('attr').persistLayers , _this.model.id ) )
-				persist = 'checked';
-			else persist = '';
-			*/
 			
-			var showLink = '';
-			if( _.isUndefined( this.model.get('attr').link_to ) || this.model.get('attr').link_to == '' )
-				showLink = 'hidden';
+			if(this.$el.hasClass('layer-open') )
+			{
+				this.$el.removeClass('layer-open');
+				this.model.trigger('editor_controlsClosed');
+			}
+			else
+			{
+				var _this = this;
+				$('.layer-open').removeClass('layer-open');
+				this.$el.addClass('layer-open');
+				
+				if(!this.loaded){
+					this.loaded=true;
+					this.model.fetch(
+				{
 
-			var linkURL = (showLink == '' ) ? this.model.get('attr').link_to : '';
-			
-			var blanks = {
-				id : 'layer-edit-'+this.model.id,
-				type : this.model.get('type').toLowerCase(),
-				title : this.model.get('attr').title,
-				persist : persist,
-				show_link : showLink,
-				link_to : linkURL
+					success : function(model, response)
+					{ 
+						_this.children=new Items.Collection(model.get('child_items'));
+						_this.$el.find('#zeega-item-database-list').append(new Items.Views.DrawerView({collection:_this.children}).render().el);
+					},
+					error : function(model, response)
+					{ 
+						console.log('Error getting active collection for collections drawer');
+					}
+				});
+				}
 			}
 
-			this.$el.addClass('layer-type-'+ this.model.get('type').toLowerCase());
-
-			this.$el.html( _.template( this.getBaseTemplate(), blanks ) )
+			
+			return false;
 		},
 		
-		getBaseTemplate : function()
+		preview :function()
+		{
+			this.model.trigger('preview_item',this.model.id);
+			return false;
+		},
+
+		
+		getTemplate : function()
 		{
 			var html =
 
 				"<div class='layer-super'>"+
-					"<a href='#'><i class='icon-thumbs-up icon-white'></i></a>"+
-					"<span class='layer-title'>  <%= title %></span>"+
+					"<a href='#'><img class='collection-list-thumb' src='<%= thumbnail_url %>'/></a>"+
+					"<span class='collection-title'>  <%= title %></span>"+
 					"<span class='pull-right'>"+
-						"<a class='delete-layer' href='#'><i class='icon-trash icon-white'></i></a>"+
+						"<a href='#' class='edit-item-metadata  more-info'><i class='icon-pencil'></i></a>"+
+						"<a class='delete-collection' href='#'><i class='icon-trash icon-white'></i></a>"+
 					"</span>"+
 				"</div>"+
-				"<div class='layer-control-drawer'>"+
-					'<div id="controls" class="clearfix"></div>'+
+				"<div class='layer-control-drawer collection'>"+
+					'<div id="controls" class="clearfix"><div id="zeega-item-database-list" class="collection"></div></div>'+
 					'<div class="default-layer-controls clearfix"></div>'+
 				"</div>";
 
@@ -528,5 +518,6 @@
 		}
 		
 	});
+	
 	
 })(zeega.module("items"));

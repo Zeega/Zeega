@@ -65,7 +65,7 @@ this.zeega.discovery = {
 		//load my collections drawer
 		var Items = zeega.module("items");
 		this.myCollectionsDrawer = new Items.Collections.Views.MyCollectionsDrawer();
-		this.myCollectionsDrawer.getCollectionList();
+
 		
 	
 	

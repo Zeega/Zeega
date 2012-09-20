@@ -46,6 +46,10 @@ require (
 		
 			
 			//views
+			
+		
+			
+			
 			'order!app/views/discovery.items/discovery.view.item.collection-list',
 			'order!app/views/discovery.items/discovery.view.item.collection-details',
 			'order!app/views/discovery.items/discovery.view.item.thumb',
