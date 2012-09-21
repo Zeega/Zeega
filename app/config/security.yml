@@ -53,6 +53,7 @@ security:
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/dashboard, role: ROLE_USER }
+        - { path: ^/library, role: ROLE_USER }
         - { path: ^/widget, role: ROLE_USER, requires_channel: https }
         - { path: ^/js/lib, role: ROLE_USER, requires_channel: https }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }

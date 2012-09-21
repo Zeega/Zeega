@@ -2,7 +2,7 @@
 
 {% extends '::editor.base.html.twig' %}
 
-{% block title %}<title>{% trans %}jda.home.title{% endtrans %}</title>{% endblock %}
+{% block title %}My Media{% endblock %}
 
 
 
@@ -40,7 +40,11 @@
 						<ul class='menu-dropdown'>
 							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
 							<ul class='user-action-menu'>
-						
+								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='icon-file'></i> New Project</a></li>
+								<li class="divider"></li>
+								{% for project in myprojects %}
+								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a></li>
+								{% endfor %}
 
 							</ul>
 						</ul>
@@ -57,7 +61,7 @@
 			</div>
 
 			<div id='zeega-project-info'>
-				<div id="zeega-project-title">Media Commons</div>
+				<div id="zeega-project-title">My Media</div>
 				<div id="project-actions" class="menu-bar clearfix">
 					<!--
 					<ul class="pull-left">
@@ -71,7 +75,7 @@
 			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
 				<ul>
 					<li><a href="#" id="create-collection" data-layer_type="Geo"><div class="menu-verbose-title">New</div><i class="icon-map-marker icon-white"></i></a></li>
-					<li><a href="#" id="create-query-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i class="icon-map-marker icon-white"></i></a></li>
+					<li><a href="#" id="create-dynamic-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i class="icon-map-marker icon-white"></i></a></li>
 				</ul>	
 				<div class='zeega-list-header'>COLLECTIONS</div>
 			</div>
@@ -134,7 +138,7 @@
 		
 			<!-- css imports -->
 		
-					<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
+					
 					<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
 					<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" />
 					<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
@@ -147,8 +151,11 @@
 						<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
 						<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
 					{% else %}
-						<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.editor.css')}}">
+						<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.discovery.css')}}">
 					{% endif %}		
+					
+					<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
+					
 			<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 				<!--[if lt IE 9]>
 				<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

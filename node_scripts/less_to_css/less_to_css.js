@@ -10,6 +10,10 @@ var less = require('less'),
                 		    output: '../../zeega.editor.css'
                 		},
                 		{
+                		    input: '../../less/discovery/',
+                		    output: '../../zeega.discovery.css'
+                		},
+                		{
                 		    input: '../community/',
                 		    output: '../../zeega.community.css'
                 		},

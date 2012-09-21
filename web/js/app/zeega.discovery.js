@@ -35,7 +35,7 @@ this.zeega.discovery = {
 	
 	//apiLocation : sessionStorage.getItem("hostname")+sessionStorage.getItem("directory"),
 	
-	apiLocation : ' http://dev.zeega.org/james/web/',
+	apiLocation : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory'),
 	currentView : 'list',
 	resultsPerPage : 100,
 	

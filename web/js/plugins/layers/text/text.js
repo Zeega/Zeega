@@ -125,31 +125,72 @@
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
+
+				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
+				'word-wrap': 'break-word'
+				
 			}
 
-			$(this.el).html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
+			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
+
+			// get max height in px
+			this.$('#zedit-target').css({
+				'overflow-y' : 'auto',
+				'overflow-x' : 'hidden',
+			})
+
+			var _this = this;
+			_.delay(function(){
+				_this.$('#zedit-target').css({
+				'height': _this.$el.height() +'px'
+			})
+			},1000)
+
 			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
 			this.model.trigger('ready',this.model.id)
+
+			this.model.on('update', this.onUpdate, this);
 			
 			return this;
 		},
 		
+		onUpdate : function()
+		{
+			var height = (100 - this.model.get('attr').top)/100 * $('#zeega-frame-workspace').height() - 1;
+
+			this.$el.css({
+				'max-height' : height +'px',
+			})
+			
+			this.$('#zedit-target').css({
+				'height': height +'px',
+			})
+
+		},
+
+		onPlay : function()
+		{
+			//adjusts the height in the player
+			this.$('#zedit-target').css({
+				'height': this.$el.height() +'px'
+			})
+		},
+
 		onLayerEnter : function()
 		{
 			var _this = this;
 			
-			//this.$el.css('width',_this.$el.find('#zedit-target').width()+'px');
-			
-			this.$el.find('#zedit-target').keyup(function(e){
+			this.$('#zedit-target').keyup(function(e){
 				if(e.which == 27){ $(this).blur() }
 				
 				_this.lazySave();
 			})
 			.bind('paste', function(e){
-				console.log('content pasted in!')
+				_this.$('#zedit-target').html( _this.$('#zedit-target').text() );
 				_this.lazySave();
 			});
+
 			
 			this.$el.click(function(){
 				_this.$el.find('#zedit-target').focus();
@@ -164,7 +205,7 @@
 				_this.lazySave();
 			})
 			
-			$(this.el).resizable({
+			this.$el.resizable({
 				stop : function(e,ui)
 				{
 					$(this).css('height','');
@@ -172,6 +213,9 @@
 						'width' : $(this).width() / $(this).parent().width() * 100,
 					})
 				}
+			}).css({
+				'outline' : '1px dashed red'
+
 			});
 			
 			

@@ -50,6 +50,7 @@ this.zeega = {
 	//this function is called once all the js files are sucessfully loaded
 	init : function()
 	{
+
 		this.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 
 		this.initDatabase();
@@ -248,6 +249,7 @@ this.zeega = {
 	
 	restoreFromPreview : function()
 	{
+		console.log('restore from preview')
 		$('#wrapper').show();
 		this.previewMode = false;
 		$('body').removeClass('preview-mode');
