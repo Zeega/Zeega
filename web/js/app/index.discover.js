@@ -86,6 +86,9 @@ jQuery(function($)
  
   
   //Infinite Scroll
+  
+  
+  /*
   zeega.discovery.app.killScroll = false; 
   $(window).scroll(function(){
     //don't execute if the app is loading, if it's too far down, or if the viewing the map event view
@@ -105,5 +108,5 @@ jQuery(function($)
       }
     }
   });
-
+	*/
 });

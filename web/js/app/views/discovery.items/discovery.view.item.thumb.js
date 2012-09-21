@@ -1,7 +1,7 @@
 (function(Items){
 
 	Items.Views = Items.Views || {};
-
+	
 	Items.Views.Thumb = Backbone.View.extend({
 		
 		tagName : 'li',
@@ -10,15 +10,18 @@
 			
 			
 		},
-				//item events
-		previewItem: function()
+		events : {
+    	
+    		'click':'previewItem'
+    	},
+    	previewItem: function()
 		{
-			this.model.trigger('preview_item',this.model.id)
+			this.model.trigger('preview_item',this.model.id);
+			return false;
 		},
 		 
 		initialize: function () {
 	        var _this=this;
-	        $(this.el).click(function(){_this.previewItem(); return false;});
 	        
 	        this.el.id = this.model.id;
 	        
@@ -44,9 +47,6 @@
 			else this.draggable=true;
 		
 	        this.model.set({thumbnail_width:this.options.thumbnail_width, thumbnail_height:this.options.thumbnail_height});
-
-	        //this is for fancy box to know to group these into a gallery
-	        $(this.el).attr("rel", "group");
 	        
     	},
 
@@ -115,17 +115,7 @@
 				$(this.el).find('img').addClass('jda-document-thumbnail');
 
 			}
-			if (this.model.get('media_type') == 'Collection')
-			{
-				this.draggable=false;
-				$(this.el).click(function(){ zeega.discovery.app.goToCollection(_this.model.id); return false;});
-				$(this.el).find('.zeega-collection').css({'width':this.options.thumbnail_width, 'height': this.options.thumbnail_height});
-				
-			} else{
-				//Turning this off because buggy
-				//$(this.el).popover({'title':this.model.get('title'), 'content':this.model.get('description'), 'delay':{ show: 2000, hide: 100 },'placement':'bottom'});
-			
-			}
+
 			
 			
 			if(this.draggable){
@@ -238,9 +228,300 @@
 			return html;
 			
 		}
+
 		
+	});
+	
+	Items.Views.List = Backbone.View.extend({
 		
+		tagName : 'tr',
+		className : 'list-media',
 		
+		initialize: function () {
+	        
+	        var _this=this;
+	        this.el.id = this.model.id; 
+      
+    	},
+		events : {
+    	
+    		'click':'previewItem'
+    	},
+    	previewItem: function()
+		{
+			this.model.trigger('preview_item',this.model.id);
+			return false;
+		},
+		 
+		render: function(done)
+		{
+			var _this = this;
+			
+			var template;
+			switch( this.model.get('media_type') )
+			{
+				case 'Image':
+					template = this.getImageTemplate();
+					break;
+				case 'Document':
+					template = this.getDefaultTemplate();
+					break;
+				case 'Website':
+					template = this.getWebsiteTemplate();
+					break;
+				case 'Tweet':
+					template = this.getTweetTemplate();
+					break;
+				case 'Text':
+					template = this.getTestimonialTemplate();
+					break;
+				case 'Video':
+					template = this.getDefaultTemplate();
+					break;
+				case 'Audio':
+					template = this.getDefaultTemplate();
+					break;
+				case 'PDF':
+					template = this.getDefaultTemplate();
+					break;
+				case 'Collection':
+					$(this.el).removeClass('list-fancymedia');
+					template = this.getCollectionTemplate();
+					break;
+				
+				default:
+					template = this.getDefaultTemplate();
+			}
+			
+			
+		
+			var blanks = this.model.attributes;
+			
+			if(_.isUndefined(this.model.get("display_name")))blanks.display_name="none";
+				
+			if (false&&!_.isUndefined(this.model.get("media_date_created"))&&!_.isNull(this.model.get("media_date_created"))){
+				blanks["media_date"] = new Date(this.model.get("media_date_created").replace(" ", "T"));
+				blanks["media_date"]=blanks["media_date"].format("mmmm dS, yyyy<br/>h:MM TT");
+			} else {
+				blanks["media_date"] = "n/a";
+			}
+			if (this.model.get("text") != null){
+				var excerpt = this.model.get("text").replace(/\r\n/gi, '<br/>');;
+				blanks["text"] = this.linkifyTweet(excerpt);
+
+			}
+			if (this.model.get("description") == null){
+				blanks["description"] = " ";
+			}
+			if (this.model.get("description") != null && this.model.get("description").length > 255){
+				blanks["description"] = this.model.get("description").substring(0,255) + "...";
+			} 
+			if (this.model.get("title") == null || this.model.get("title") == "none" || this.model.get("title") == ""){
+				blanks["title"] = "";
+			}
+
+			if (this.model.get("media_creator_realname") == null || this.model.get("media_creator_realname") == "" || this.model.get("media_creator_realname") == "Unknown" || this.model.get("media_creator_realname") == "unknown"){
+				blanks["author"] = this.model.get("media_creator_username");
+			} else {
+				blanks["author"] = this.model.get("media_creator_realname");	
+			}
+			if (this.model.get("media_type") == "Text" && this.model.get('description').length < this.model.get('text').length){
+				blanks["description"] = this.model.get('description') + '...';
+			}
+			
+			if (this.model.get("media_type") == "Website"){
+				var parts = this.model.get('attribution_uri').split('http');
+				blanks["original_url"] = "http"+parts[2];
+			}
+			
+			
+			$(this.el).html( _.template( template, blanks ) );
+			
+			
+			$(this.el).find('.zeega-item-thumbnail').append(new Items.Views.Thumb({model:this.model}).render().el);
+			
+			if (blanks["author"] == "") $(this.el).find('.jda-item-author').hide();
+
+			return this;
+		},
+		
+		/* formats tweet text, doesn't linkify bc tweet is already linked to fancybox */
+		linkifyTweet : function(tweet){
+
+			// urls
+			var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+	    	tweet = tweet.replace(exp,"<strong>$1</strong>"); 
+
+	    	// users
+	    	 tweet = tweet.replace(/(^|)@(\w+)/gi, function (s) {
+	        	return '<strong>' + s + '</strong>';
+	    	});
+
+	    	// tags
+	    	tweet = tweet.replace(/(^|)#(\w+)/gi, function (s) {
+	        	return '<strong>' + s + '</strong>';
+	     	});
+
+	    	return tweet;
+		},
+		
+		getImageTemplate : function()
+		{
+			html =
+
+
+			'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+			'</td>'+
+			'<td class="zeega-list-middle-column">'+
+				'<h3><%= title %></h3><p >by: <%= author %>'+
+				'<p class="jda-item-description"><%= description %></p>'+
+			'</td>'+
+			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+			
+
+			
+			return html;
+		},
+		getDefaultTemplate : function()
+		{
+			html =
+
+
+			'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+			'</td>'+
+			'<td class="zeega-list-middle-column">'+
+				'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
+				'<p class="jda-item-description"><%= description %></p>'+
+			'</td>'+
+			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+			'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+			
+
+			
+			return html;
+		},
+		getDocumentTemplate : function()
+		{
+			html = 
+			
+
+
+			'<td class="span2">'+
+				'<i class="jdicon-document"></i>'+
+				'<div class="item-author item-author-left"><%= author %></div>'+
+			'</td>'+
+			'<td class="jda-item-description">'+
+				'<div class="jda-item-title"><%= title %></div>'+
+				'<div><%= description %></div>'+
+			'</td>'+
+			'<td class="jda-item-date">'+
+				'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+
+			
+			return html;
+		},
+		getWebsiteTemplate : function()
+		{
+			html = 
+
+			'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+			'</td>'+
+			'<td class="zeega-list-middle-column">'+
+				'<h3><%= title %></h3>'+
+				'<p><%= original_url %></p>'+
+				'<p class="jda-item-description"><%= description %></p>'+
+			'</td>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
+				'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+			
+			
+			return html;
+		},
+		getTweetTemplate : function()
+		{
+			html = 
+
+			'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+			'</td>'+
+			'<td class="zeega-list-middle-column">'+
+				'<p class="jda-item-description"><%= text %></p>'+
+			'</td>'+
+			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+			
+			return html;
+		},
+		getTestimonialTemplate : function()
+		{
+			html = 
+			'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+			'</td>'+
+			'<td class="zeega-list-middle-column">'+
+				'<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
+				'<p class="jda-item-description"><%= description %></p>'+
+			'</td>'+
+			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+			'</td>';
+			return html;
+		},
+		
+	
+		
+		getCollectionTemplate : function()
+		{
+			html = 
+
+				'<td class="zeega-list-left-column">'+
+				'<div class="zeega-item-thumbnail"></div>'+
+				'</td>'+
+				'<td class="zeega-list-middle-column">'+
+					'<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
+					'<p class="jda-item-description"><%= description %></p>'+
+				'</td>'+
+				'<td class="zeega-list-right-column jda-item-date"><%= media_date %>'+
+					'<input class="jda-item-checkbox" type="checkbox">'+
+				'</td>';
+				
+
+
+			
+			return html;
+		},
+		getDefaultTemplate : function()
+		{
+			html = 
+			
+
+				'<td class="zeega-list-left-column">'+
+					'<div class="zeega-item-thumbnail"></div>'+
+				'</td>'+
+				'<td class="zeega-list-middle-column">'+
+					'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
+					'<p class="jda-item-description"><%= description %></p>'+
+				'</td>'+
+				'<td class="zeega-list-right-column jda-item-date">'+
+					'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+					'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+				'</td>';
+				
+
+			
+			return html;
+		}
 		
 	});
 	
@@ -334,7 +615,7 @@
 		}
 	});
 	
-	Items.Views.CollectionList = Backbone.View.extend({
+	Items.Views.CollectionListView = Backbone.View.extend({
 		
 		tagName : 'li',
 		className : 'collection-list-item',
@@ -350,6 +631,13 @@
 				}
 			
 			});
+		},
+		
+		events : {
+			'click .delete-collection'		: 'delete',
+			'click .layer-super'		: 'expand',
+			'click .edit-item-metadata' : 'preview',
+
 		},
 		
 		render : function()
@@ -376,25 +664,16 @@
 			    accept : '.results-thumbnail',
 			    hoverClass : 'zeega-my-collections-items-dropping',
 			    tolerance : 'pointer',
-
 			    drop : function( event, ui ){
 			    	
 					$(_this.el).find('#zeega-my-collections-items').addClass('zeega-my-collections-items-dropping');
 					if(_this.loaded){
-					
 						_this.children.push(zeega.discovery.app.draggedItem);
-						_this.$el.find('#zeega-item-database-list').empty().append(new Items.Views.DrawerView({collection:_this.children}).render().el);
-					
+						_this.$el.find('#zeega-item-database-list').find('ul').prepend(new Items.Views.DrawerThumbView({model:zeega.discovery.app.draggedItem}).render().el);
 					}
-				
-					//_this.activeCollection.attributes.child_items.push(zeega.discovery.app.draggedItem.toJSON());
-					//_this.renderCollectionPreview(_this.activeCollection);
 					  
 					var itemId=zeega.discovery.app.draggedItem.id;
-					
 					_this.model.url=zeega.discovery.app.apiLocation + 'api/items/' + _this.model.id+'/items';
-			
-					
 					_this.model.save({new_items:[itemId ]},
 						{
 							success : function(model, response){ 
@@ -423,12 +702,7 @@
 		},
 
 		
-		events : {
-			'click .delete-collection'		: 'delete',
-			'click .layer-super'		: 'expand',
-			'click .edit-item-metadata' : 'preview',
 
-		},
 
 		
 		delete : function()
@@ -518,6 +792,158 @@
 		}
 		
 	});
+	
+	
+	Items.Views.CollectionModal = Backbone.View.extend({
+		
+		initialize : function(){
+			_.extend(this,this.options);
+			this.attr={
+				
+			};
+		},
+		
+		render: function()
+		{
+			var _this = this;
+			$(this.el).html( this.getTemplate() );
+			return this;
+		},
+		
+		show : function()
+		{
+			this.$el.modal('show');
+		},
+		
+		hide : function()
+		{
+			this.$el.modal('hide');
+			this.remove();
+			return false;
+		},
+		
+		events : {
+			'click .close' : 'hide',
+			'click .btn-success' : 'parseInput',
+		},
+		
+		parseInput : function(){
+			
+			this.attr={
+				layer_type:"Query",
+				model_type:"Query"
+			};
+			_.extend(this.attr,{
+				title:this.$el.find('#collection-title').val(),
+				description:this.$('#collection-description').val(),
+				child_items:[],
+				new_items:[],
+				editable:true,
+			});
+			this.createCollection();
+		},
+		
+		createCollection : function()
+		{
+			this.hide();
+			var _this = this;
+			
+			var newCollection = new Items.Model(this.attr).save({},{
+				success:function(model,response){
+					_this.parentView.collection.add(model);
+					//_this.parentView.collection.reset();
+					console.log(_this.parentView.collection);
+					$(_this.parentView.el).prepend(new Items.Views.CollectionListView({model:model}).render().el);
+				}
+			});
+			return false;
+		},
+
+	
+		getTemplate : function()
+		{
+
+			var html =
+			
+			'<div class="modal" id="sequence-modal">'+
+				'<div class="modal-header">'+
+					'<button class="close">×</button>'+
+					'<h3>Create New Collection</h3>'+
+				'</div>'+
+				
+				'<div class="modal-body clearfix twocolumn-rows">'+
+					
+					'<label for="collection-title" class="">Title</label>'+
+					'<input type="text" id="collection-title" class="twocolumn-field span6" value=""/>'+
+					
+		
+					'<label for="collection-description" class="twocolumn-label">Description</label>'+
+					'<textarea id="collection-description" class="twocolumn-field span6"></textarea>'+
+					
+					'<br>'+
+
+
+					'<div class="query-collection-footer">'+
+						'<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Create <i class="icon-circle-arrow-right icon-white"></i></button>'+
+					'</div>'+
+				'</div>';
+			
+			return html
+		},
+});
+	
+	Items.Views.QueryCollectionModal = Items.Views.CollectionModal.extend({
+
+		parseInput : function(){
+			
+			this.attr={
+				layer_type:"Query",
+				media_type:"Query"
+			};
+			_.extend(this.attr,{
+				title:this.$el.find('#collection-title').val(),
+				description:this.$('#collection-description').val(),
+				child_items:[],
+				new_items:[],
+				editable:true,
+			});
+			this.createCollection();
+		},
+
+	
+		getTemplate : function(){
+
+			var html =
+			
+			'<div class="modal" id="sequence-modal">'+
+				'<div class="modal-header">'+
+					'<button class="close">×</button>'+
+					'<h3>Create A New Dynamic Collection</h3>'+
+				'</div>'+
+				
+				'<div class="modal-body clearfix twocolumn-rows">'+
+					
+					'<label for="collection-title" class="">Title</label>'+
+					'<input type="text" id="collection-title" class="twocolumn-field span6" value=""/>'+
+					
+					'<label for="tags" class="twocolumn-label">Tag</label>'+
+					'<input name="tags" class="tagsedit twocolumn-field span6" id="tag-input" value="" />'+
+					'<br>'+
+					
+					'<label for="collection-description" class="twocolumn-label">Description</label>'+
+					'<textarea id="collection-description" class="twocolumn-field span6"></textarea>'+
+					
+					'<br>'+
+
+
+					'<div class="query-collection-footer">'+
+						'<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Create <i class="icon-circle-arrow-right icon-white"></i></button>'+
+					'</div>'+
+				'</div>';
+			
+			return html
+		},
+});
 	
 	
 })(zeega.module("items"));

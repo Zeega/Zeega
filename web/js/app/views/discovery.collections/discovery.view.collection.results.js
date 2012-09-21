@@ -101,9 +101,8 @@
 					
 					_this._childViews.push( itemView );
 					
-					console.log(zeega.discovery.app.currentView );
-					if(zeega.discovery.app.currentView == 'thumb') $('#results-thumbnail-wrapper').append(itemView.render().el);
-					else if(zeega.discovery.app.currentView == 'list') $('#results-list-wrapper').append(itemView.render().el);
+					if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
+					else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
 			
 			
 				}

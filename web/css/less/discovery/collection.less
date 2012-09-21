@@ -1,4 +1,24 @@
 
+
+#zeega-list-view li{
+	list-style:none;
+}
+#zeega-list-view td{
+	position:relative;
+}
+#zeega-list-view .zeega-list-left-column{
+	width:100px;
+}
+#zeega-list-view .zeega-list-middle-column{
+	width:-webkit-calc(100% -  220px);
+	word-break:break-all;
+}
+#zeega-list-view .zeega-list-right-column{
+	width:115px;
+}
+
+
+
 .collection-head .cover-image
 {
 	background: repeat;
@@ -49,14 +69,20 @@
 
 
 .collection-lists-container {
-	height: 500px;
 	overflow:auto;
 }
 .collection-list-thumb {
 
-	width:30px;
-	height:30px;
+	width:24px;
+	height:18px;
 }
+
+.edit-item-metadata {
+	
+	padding-right:5px;
+
+}
+
 
 #zeega-item-database-list.collection{
 
@@ -88,7 +114,7 @@ li.collection-list-item
 	.collection-title
 	{
 		display: inline-block;
-		width: 218px;
+		width: 200px;
 		white-space: nowrap;
 		overflow: hidden;
 		margin-left:5px;

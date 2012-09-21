@@ -40,11 +40,12 @@
 			var _this = this;
 
 		
-			$('#new-collection').click(function(){_this.createNewCollection(); return false;});
+			$('#create-collection').click(function(){_this.createCollection(); return false;});
+			$('#create-query-collection').click(function(){_this.createQueryCollection(); return false;});
 		
 			
 			_.each( _.toArray(this.collection), function(item){
-				var itemView = new Items.Views.CollectionList({model:item});
+				var itemView = new Items.Views.CollectionListView({model:item});
 				$(_this.el).append(itemView.render().el);
 			});
 			
@@ -108,25 +109,20 @@
 			return this;
 		},
 	
-		createNewCollection : function(){
-			var _this=this;
-			var newCollection = new Items.Model({
-				title:"new collection "+Math.floor(Math.random()*1000),
-				child_items:[],
-				new_items:[],
-				editable:true,
-			});
-			
-			newCollection.save({},{
-				success:function(model,response){
-					_this.collection.add(model);
-					console.log(model);
-					$(_this.el).prepend(new Items.Views.CollectionList({model:model}).render().el);
-				}
-			});
-			
+	
+		createQueryCollection : function(){
+			var queryCollectionModal= new Items.Views.QueryCollectionModal({parentView:this});
+			$('body').append(queryCollectionModal.render().el);
+			queryCollectionModal.show();
+			return false;	
+		},
+		createCollection : function(){
+			var queryCollectionModal= new Items.Views.CollectionModal({parentView:this});
+			$('body').append(queryCollectionModal.render().el);
+			queryCollectionModal.show();
 			return false;	
 		}
+		
 
 	});
 })(zeega.module("items"));

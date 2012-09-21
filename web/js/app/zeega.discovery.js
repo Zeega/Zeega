@@ -135,9 +135,10 @@ this.zeega.discovery = {
 					//Update interface
 					
 					this.updateSearchUI(this.searchObject);
+					this.search(this.searchObject);
 					
 					//Load filter if nec, carry out search
-					
+					/*
 					if(sessionStorage.getItem('filterType')=='none'||!_.isUndefined(this.filterModel)) {
 					
 						if (!_.isUndefined(this.searchObject.view_type)) this.switchViewTo(this.searchObject.view_type,true) ;
@@ -185,7 +186,7 @@ this.zeega.discovery = {
 						
 						}
 					}
-				
+					*/
 	
 	
 	},
@@ -356,7 +357,8 @@ this.zeega.discovery = {
 	showListView : function(refresh){
 		console.log('switch to List view');
 
-	
+		$('#results-thumbnail-wrapper').hide();
+		$('#results-list-wrapper').show();
 	    
 		$('#zeega-view-buttons .btn').removeClass('active');
 		$('#list-button').addClass('active');
@@ -388,12 +390,14 @@ this.zeega.discovery = {
 	showThumbnailView : function(refresh){
 		
 		
-	
+		$('#results-list-wrapper').hide();
+		$('#results-thumbnail-wrapper').show();
 		$('#zeega-view-buttons .btn').removeClass('active');
 		$('#thumb-button').addClass('active');
 		
-		$('#jda-right').show();
+	
 		$('#event-time-slider').hide();
+		
 		$('#zeega-results-count').removeClass('zeega-results-count-event');
 		$('#zeega-results-count').css('left', 0);
 		$('#zeega-results-count').css('z-index', 0);

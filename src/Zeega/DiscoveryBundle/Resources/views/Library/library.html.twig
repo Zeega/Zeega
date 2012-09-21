@@ -57,7 +57,7 @@
 			</div>
 
 			<div id='zeega-project-info'>
-				<div id="zeega-project-title">Media</div>
+				<div id="zeega-project-title">Media Commons</div>
 				<div id="project-actions" class="menu-bar clearfix">
 					<!--
 					<ul class="pull-left">
@@ -70,92 +70,53 @@
 			
 			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
 				<ul>
-					<li><a href="#" id="new-collection" data-layer_type="Geo"><div class="menu-verbose-title">New Collection</div><i class="icon-map-marker icon-white"></i></a></li>
-
+					<li><a href="#" id="create-collection" data-layer_type="Geo"><div class="menu-verbose-title">New</div><i class="icon-map-marker icon-white"></i></a></li>
+					<li><a href="#" id="create-query-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i class="icon-map-marker icon-white"></i></a></li>
 				</ul>	
 				<div class='zeega-list-header'>COLLECTIONS</div>
 			</div>
 
-			<div class='collection-lists-container'>
+			<div class='collection-lists-container'  style="max-height:-webkit-calc(100% - 123px);">>
 				<div id='zeega-collection-list' class='collection-list'></div>
 			</div>
-			<!-- zeega item database
-			<div id='zeega-item-database'>
-				
-				<div class='menu-bar  menu-dark' >
-			
-					<div class='zeega-list-header'>DYNAMIC COLLECTIONS</div>
-				</div>
-
-				<div class='database-tray'>
-					<div class='menu-bar menu-dark clearfix' >
-						<ul class='pull-right'>
-							<li>
-								<ul class='menu-dropdown'>
-									<a href='#' class='menu-toggle'><div class='menu-verbose-title'>filters</div><i class='icon-filter icon-white'></i></a>
-									<ul id='filter-action-menu'>
-										<li><a href="#" data-filter='all'><i class='icon-globe'></i> All</a></li>
-										<li><a href="#" data-filter='audio'><i class='icon-bullhorn'></i> Audio</a></li>
-										<li><a href="#" data-filter='image'><i class='icon-picture'></i> Image</a></li>
-										<li><a href="#" data-filter='video'><i class='icon-film'></i> Video</a></li>
-										<li class='divider'></li>
-										<li><a href="#" data-filter='reset'><i class='icon-backward'></i> Clear Filters</a></li>
-
-									</ul>
-								</ul>
-
-							</li>
-						</ul>
-						<input id='search-input' class='pull-left' style='margin-left:10px' type='text' placeholder='search'/>
-					</div>
-
-					<div id='database-flash' class='alert alert-info hide'></div>
-					<div id='zeega-item-database-list'></div>
-
-				</div>
-
-
-			</div> 
-			
-		-->
 
 		</div><!-- zeega action column -->
 		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
-			<div class="container" style="width:98%">
-				<div id='zeega-project-nav'>
-				<div id='zeega-project-sequence-list' class='clearfix'>
-					<div class="btn-group" id="zeega-view-buttons">
-				<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
-				<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>	
-			<!--	<a data-goto-view='event'><button id="event-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.mapview{% endtrans %}" style="border-radius:0 4px 4px 0"><i class="icon-map-marker icon-white"></i></button></a> -->
-			</div>
-			<div id="jda-search-button-group" style="display:none">
-				<div id="search-bar" style="margin-right:5px">
-					<div id="zeega-visual-search-container" class="pull-left"></div>
-					<span id="select-wrap"><span id="select-wrap-text"  >All Formats</span><div class="arrow-down"></div>
-						<select id="zeega-content-type">
-							<option value="all">All Formats</option>
-							<option value="image">Image</option>
-							<option value="video">Video</option>
-							<option value="audio">Audio</option>
-							<option value="collection">Collection</option>
-						</select>
-					</span>
+			<div id="zeega-search-wrapper" class='clearfix'>
+				<div class="btn-group" id="zeega-view-buttons">
+					<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
+					<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>	
+					<!--	<a data-goto-view='event'><button id="event-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.mapview{% endtrans %}" style="border-radius:0 4px 4px 0"><i class="icon-map-marker icon-white"></i></button></a> -->
 				</div>
-				<a href="#" id="jda-go-button" class="btn btn-info btn-large">Go</a>
-			</div>
+				<div id="jda-search-button-group" style="display:none">
+					<div id="search-bar" style="margin-right:5px">
+						<div id="zeega-visual-search-container" class="pull-left"></div>
+						<span id="select-wrap">
+							<span id="select-wrap-text"  >All Formats</span>
+							<div class="arrow-down"></div>
+							<select id="zeega-content-type">
+								<option value="all">All Formats</option>
+								<option value="image">Image</option>
+								<option value="video">Video</option>
+								<option value="audio">Audio</option>
+								<option value="collection">Collection</option>
+							</select>
+						</span>
+					</div>
+					<a href="#" id="jda-go-button" class="btn btn-info btn-large">Go</a>
 				</div>
-				<div id='zeega-project-frame-list' class='clearfix'></div>
-				<div id='zeega-project-frame-detail-bar' class='menu-bar clearfix'></div>
 			</div>
-			</div>
-			<div>	
-				<div id='zeega-results-wrapper'>
-					<div><ul id="results-thumbnail-wrapper" class="results-wrapper"></ul><div>
-					<div id="results-list-wrapper" class="results-wrapper"></div>
-					
+		
+			<div id='zeega-results-wrapper' style="max-height:-webkit-calc(100% - 75px);">
+				<div id="results-thumbnail-wrapper">
+					<ul id="zeega-items-thumb" class="results-wrapper" ></ul>
 				</div>
-			</div>	
+				<div id="results-list-wrapper" >
+					<table id="zeega-items-list" class="table results-wrapper"></table>
+				</div>
+				
+			</div>
+
 		</div>
 
 	</div>
