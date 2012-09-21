@@ -373,7 +373,7 @@
 				'<h3><%= title %></h3><p >by: <%= author %>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -393,7 +393,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 			'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -416,7 +416,7 @@
 				'<div><%= description %></div>'+
 			'</td>'+
 			'<td class="jda-item-date">'+
-				' <%= date_created.date %>'+
+				''+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 
@@ -436,7 +436,7 @@
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
 			'<td class="zeega-list-right-column jda-item-date">'+
-				' <%= date_created.date %>'+
+				''+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -453,7 +453,7 @@
 			'<td class="zeega-list-middle-column">'+
 				'<p class="jda-item-description"><%= text %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -469,7 +469,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			return html;
@@ -488,7 +488,7 @@
 					'<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
-				'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+				'<td class="zeega-list-right-column jda-item-date">'+
 					''+
 				'</td>';
 				
@@ -510,7 +510,7 @@
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
 				'<td class="zeega-list-right-column jda-item-date">'+
-					' <%= date_created.date %>'+
+					''+
 					'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 				'</td>';
 				
@@ -782,6 +782,8 @@
 				
 				if(!this.loaded){
 					this.loaded=true;
+					if(this.model.get('layer_type')=='Dynamic') this.model.url=zeega.discovery.app.apiLocation+ 'api/items/'+this.model.id+'/items';
+					
 					this.model.fetch(
 				{
 
@@ -789,6 +791,7 @@
 					{ 
 						_this.children=new Items.Collection(model.get('child_items'));
 						_this.$el.find('#zeega-item-database-list').append(new Items.Views.DrawerView({collection:_this.children}).render().el);
+						_this.model.url=zeega.discovery.app.apiLocation+ 'api/items/'+this.model.id;
 					},
 					error : function(model, response)
 					{ 
