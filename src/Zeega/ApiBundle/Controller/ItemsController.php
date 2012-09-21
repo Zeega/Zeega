@@ -20,7 +20,9 @@ use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 
-class ItemsController extends Controller
+use Zeega\CoreBundle\Controller\BaseController;
+
+class ItemsController extends BaseController
 {
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
@@ -98,6 +100,7 @@ class ItemsController extends Controller
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));        
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
+
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
@@ -129,35 +132,21 @@ class ItemsController extends Controller
 		if($query['limit'] > 100) 	        $query['limit'] = 100;
         
          //  execute the query
- 		$queryResults = $this->getDoctrine()
- 					         ->getRepository('ZeegaDataBundle:Item')
- 					         ->searchItems($query);								
-		//return new Response(var_dum$queryResults);
-		$resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);				
+        if(isset($query)) {
+            $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+        }
+
+        $queryResults = $this->forward('ZeegaApiBundle:Search:searchAction');
+        return new Response(json_encode($queryResults));
+        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+		
+        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);
         
 		$itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-		//$response = new Response($itemsView);
-     	//$response->headers->set('Content-Type', 'text');
-        //return $response;
         
         return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
     
-    // get_item_tags GET    /api/collections/{collectionId}/tags.{_format}
-    public function getItemTagsAction($itemId)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneById($itemId);
-
-        $tags = $collection->getTags();
-        
-        $tagsView = $this->renderView('ZeegaApiBundle:Collections:tags.json.twig', 
-            array('tags' => $tags, 'item_id' => $itemId));
-            
-        return ResponseHelper::compressTwigAndGetJsonResponse($tagsView);
-    }
-
     // get_item_tags GET /api/items/{itemId}/tags.{_format}
     public function getItemCollectionsAction($itemId)
     {
@@ -185,9 +174,7 @@ class ItemsController extends Controller
         if(!isset($query['limit'])) $query['limit'] = 100;
         if($query['limit'] > 100) $query['limit'] = 100;
 
-        $queryResults = $this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Item')
-        ->searchCollectionItems($query);	
+        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);	
 
         // populate the results object
         $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);	
