@@ -166,6 +166,7 @@
 			
 			// do other cleanup stuff first?
 			this.$el.fadeOut('fast',function(){_this.remove()});
+			return false;
 		},
 
 		getTemplate : function()
