@@ -10,7 +10,7 @@ var less = require('less'),
                 		    output: '../../zeega.editor.css'
                 		},
                 		{
-                		    input: 'web/css/less/discovery/',
+                		    input: '../../less/discovery/',
                 		    output: '../../zeega.discovery.css'
                 		},
                 		{
