@@ -657,7 +657,8 @@
 				thumbnail_url : this.model.get('thumbnail_url'),
 			}
 			this.$el.html( _.template( this.getTemplate(), blanks ) );
-			
+			if(this.model.get('layer_type')=='Dynamic')this.$el.addClass('dynamic-collection');
+			else this.$el.addClass('static-collection');
 
 			
 			$(this.el).droppable({
@@ -830,8 +831,8 @@
 		parseInput : function(){
 			
 			this.attr={
-				layer_type:"Query",
-				model_type:"Query"
+				layer_type:"Collection",
+				model_type:"Collection"
 			};
 			_.extend(this.attr,{
 				title:this.$el.find('#collection-title').val(),
@@ -883,7 +884,7 @@
 					'<br>'+
 
 
-					'<div class="query-collection-footer">'+
+					'<div class="collection-footer">'+
 						'<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Create <i class="icon-circle-arrow-right icon-white"></i></button>'+
 					'</div>'+
 				'</div>';
@@ -892,21 +893,25 @@
 		},
 });
 	
-	Items.Views.QueryCollectionModal = Items.Views.CollectionModal.extend({
+	Items.Views.DynamicCollectionModal = Items.Views.CollectionModal.extend({
 
 		parseInput : function(){
 			
 			this.attr={
-				layer_type:"Query",
-				media_type:"Query"
+				layer_type:"Dynamic",
+				media_type:"Collection"
 			};
 			_.extend(this.attr,{
-				title:this.$el.find('#collection-title').val(),
+				title:this.$('#collection-title').val(),
 				description:this.$('#collection-description').val(),
+				attr:{
+					tags:this.$('#tag-input').val()
+				},
 				child_items:[],
 				new_items:[],
 				editable:true,
 			});
+			console.log(this.attr);
 			this.createCollection();
 		},
 
@@ -926,7 +931,7 @@
 					'<label for="collection-title" class="">Title</label>'+
 					'<input type="text" id="collection-title" class="twocolumn-field span6" value=""/>'+
 					
-					'<label for="tags" class="twocolumn-label">Tag</label>'+
+					'<label for="tags" class="twocolumn-label">Dynamic Query Tag</label>'+
 					'<input name="tags" class="tagsedit twocolumn-field span6" id="tag-input" value="" />'+
 					'<br>'+
 					
@@ -936,7 +941,7 @@
 					'<br>'+
 
 
-					'<div class="query-collection-footer">'+
+					'<div class="collection-footer">'+
 						'<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Create <i class="icon-circle-arrow-right icon-white"></i></button>'+
 					'</div>'+
 				'</div>';

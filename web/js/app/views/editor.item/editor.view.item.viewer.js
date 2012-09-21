@@ -174,7 +174,7 @@
 			
 				"<div class='container'>"+
 					"<div class='row'>"+
-						"<div class='span1 go-left'><a href='#'><img class='arrow arrow-left' src='../../../images/arrow.png'/></a></div>"+
+						"<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
 						"<div class='span10 item-viewer-content'>"+
 							"<a class='close primary-close' href='#'>&times;</a>"+
 
@@ -184,7 +184,7 @@
 							"<a href='#' id='item-delete'>Delete</a>"+
 							
 						"</div>"+
-						"<div class='span1 go-right'><a href='#'><img class='arrow arrow-right' src='../../../images/arrow.png'/></a></div>"+
+						"<div class='span1 go-right'><a href='#'><div class='arrow arrow-right'></div></a></div>"+
 					"</div>"+
 				"</div>";
 

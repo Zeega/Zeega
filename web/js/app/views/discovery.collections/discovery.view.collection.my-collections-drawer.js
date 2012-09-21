@@ -41,7 +41,7 @@
 
 		
 			$('#create-collection').click(function(){_this.createCollection(); return false;});
-			$('#create-query-collection').click(function(){_this.createQueryCollection(); return false;});
+			$('#create-dynamic-collection').click(function(){_this.createDynamicCollection(); return false;});
 		
 			
 			_.each( _.toArray(this.collection), function(item){
@@ -110,16 +110,16 @@
 		},
 	
 	
-		createQueryCollection : function(){
-			var queryCollectionModal= new Items.Views.QueryCollectionModal({parentView:this});
-			$('body').append(queryCollectionModal.render().el);
-			queryCollectionModal.show();
+		createDynamicCollection : function(){
+			var dynamicCollectionModal= new Items.Views.DynamicCollectionModal({parentView:this});
+			$('body').append(dynamicCollectionModal.render().el);
+			dynamicCollectionModal.show();
 			return false;	
 		},
 		createCollection : function(){
-			var queryCollectionModal= new Items.Views.CollectionModal({parentView:this});
-			$('body').append(queryCollectionModal.render().el);
-			queryCollectionModal.show();
+			var collectionModal= new Items.Views.CollectionModal({parentView:this});
+			$('body').append(collectionModal.render().el);
+			collectionModal.show();
 			return false;	
 		}
 		

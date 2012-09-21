@@ -21,6 +21,7 @@ class LibraryController extends Controller
 {
 	public function indexAction()
 	{
+
 		return $this->render('ZeegaDiscoveryBundle:Library:library.html.twig',array('locale'=>'en'));
 	}
 }

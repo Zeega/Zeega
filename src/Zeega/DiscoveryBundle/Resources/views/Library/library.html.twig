@@ -2,7 +2,7 @@
 
 {% extends '::editor.base.html.twig' %}
 
-{% block title %}<title>{% trans %}jda.home.title{% endtrans %}</title>{% endblock %}
+{% block title %}My Media{% endblock %}
 
 
 
@@ -40,7 +40,11 @@
 						<ul class='menu-dropdown'>
 							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
 							<ul class='user-action-menu'>
-						
+								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='icon-file'></i> New Project</a></li>
+								<li class="divider"></li>
+								{% for project in myprojects %}
+								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a></li>
+								{% endfor %}
 
 							</ul>
 						</ul>
@@ -57,7 +61,7 @@
 			</div>
 
 			<div id='zeega-project-info'>
-				<div id="zeega-project-title">Media Commons</div>
+				<div id="zeega-project-title">My Media</div>
 				<div id="project-actions" class="menu-bar clearfix">
 					<!--
 					<ul class="pull-left">
@@ -71,7 +75,7 @@
 			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
 				<ul>
 					<li><a href="#" id="create-collection" data-layer_type="Geo"><div class="menu-verbose-title">New</div><i class="icon-map-marker icon-white"></i></a></li>
-					<li><a href="#" id="create-query-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i class="icon-map-marker icon-white"></i></a></li>
+					<li><a href="#" id="create-dynamic-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i class="icon-map-marker icon-white"></i></a></li>
 				</ul>	
 				<div class='zeega-list-header'>COLLECTIONS</div>
 			</div>
