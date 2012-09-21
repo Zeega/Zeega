@@ -240,6 +240,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
+			console.log('workspace render')
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.setElement( $(this.target) );
@@ -248,7 +249,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				if( layer.get('attr').from_frame == _this.model.id ) return true;
 			})
 
-			_.each( layersToRender, function(layer){
+			_.each( layersToRender, function(layer,i){
+				layer.visual.render().$el.css('z-index',i)
 				_this.$el.append( layer.visual.render().el );
 			});
 
@@ -290,6 +292,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			if(zeega.app.currentFrame == this.model)
 			{
 				this.$el.append( layer.visual.render().el );
+				layer.visual.render().$el.css('z-index', this.model.layers.length)
 				layer.visual.private_onLayerEnter();
 			}
 		},

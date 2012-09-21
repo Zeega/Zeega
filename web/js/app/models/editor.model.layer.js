@@ -108,8 +108,8 @@
 		{
 			var a = _.extend( this.toJSON().attr, newAttr, {model:null} );
 			this.set( 'attr' , a );
-			if( silent != true ) this.save();
-			this.trigger('update');
+			this.save();
+			if( silent != true ) this.trigger('update');
 			this.trigger('change');
 		},
 

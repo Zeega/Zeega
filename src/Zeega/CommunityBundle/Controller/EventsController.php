@@ -5,10 +5,10 @@ namespace Zeega\CommunityBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExtrasController extends Controller
+class EventsController extends Controller
 {
-    public function makedayAction()
+    public function tribecahacksAction()
     {
-        return $this->render('ZeegaCommunityBundle:Makeday:makeday.html.twig');
+        return $this->render('ZeegaCommunityBundle:Events:tribecahacks.html.twig');
     }  
 }

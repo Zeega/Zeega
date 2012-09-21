@@ -417,10 +417,29 @@ class ItemsController extends Controller
          	if($item['media_type']!='Collection' && $item['media_type']!='Pdf' )
          	{
 				$i++;
-				
-				$frameOrder[]=$i;
-				$frames[]=array( "id"=>(int)$item['id'],"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],"attr"=>array("description"=>$item['description'],"title"=>$item['title'],"url"=>$item['uri'],"uri"=>$item['uri'],"thumbnail_url"=>$item['thumbnail_url'],"attribution_uri"=>$item['attribution_uri']));
+				$frameId = (int)$item['id'];
+				$frameOrder[]=$frameId;
+				$frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],
+                    "attr"=>array(
+                        "user_id"=>$item['user_id'],
+                        "description"=>$item['description'],
+                        "title"=>$item['title'],
+                        "uri"=>$item['uri'],
+                        "thumbnail_url"=>$item['thumbnail_url'],
+                        "attribution_uri"=>$item['attribution_uri'],
+                        "media_creator_username"=>$item['media_creator_username'],
+                        "media_creator_realname"=>$item['media_creator_realname'],
+                        "location"=>$item['location'],
+                        "media_date_created"=>$item['media_date_created'],
+                        "date_created"=>$item['date_created'],
+                        "tags"=>$item['tags'],
+                        "media_geo_latitude"=>$item['media_geo_latitude'],
+                        "media_geo_longitude"=>$item['media_geo_longitude'],
+                        "archive"=>$item['archive'],
+                        "media_type"=>$item['media_type'],
+                        "layer_type"=>$item['layer_type'] 
+                    ));
          	}
          }
          
@@ -429,7 +448,7 @@ class ItemsController extends Controller
                           "estimated_time"=>"Some time", 
                           "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
                           'frames'=>$frames,
-                          'layers'=>$layers
+                          'layers'=>$layers,
                           );
          return new Response(json_encode($project));
     }

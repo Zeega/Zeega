@@ -2,7 +2,7 @@
 
 {% extends '::base.html.twig' %}
 
-{% block title %}Zeega{% endblock %}
+{% block title %}Tribeca Hacks Cambridge{% endblock %}
 
 
 {%  block stylesheets %}
@@ -55,7 +55,6 @@
 {% endblock %}
 
 {% block body %}
-<div class="gifcredit"><a href="http://gifmovie.tumblr.com" target="_blank">gifmovie.tumblr.com</a></div>
 
 	<!-- Background Color Div - creates the transparent layer over the background image -->
 	<div id="background-color">
@@ -75,7 +74,7 @@
 				
 				<div class="row">
 					<div class="span13 makeday-form">
-						<h1>Join us for a Zeega Make Day!</h1>
+						<h1>TriBeca Hacks Cambridge:<br>Interactive Storytelling with Zeega</h1>
 					</div>
 					<div class="span13 hide makeday-thanks">
 						<h1>Thanks for your submission!</h1>
@@ -83,12 +82,25 @@
 					
 				</div>
 				<div class="row">
-					<div class="span7 makeday-form">
-						<h2>Oct 27th Cambridge MA</h2>
-						<p style="font-size: 12px; line-height: 16px;">
-							Overall description of make day.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-							Sed vestibulum tellus a erat pharetra. Pellentesque a erat sem, et volutpat mauris. In nec 
-							tortor eu mauris condimentum cursus. Vivamus dapibus, dolor sed rutrum gravida.
+					<div class="span9 makeday-form">
+						<h2>November 3rd, 2012</h2><br>
+						<p style="font-size: 16px; line-height: 20px;">
+							The Tribeca Film Institute is holding a series of national hackathon/workshop events designed to increase understanding and broaden participation in the field of interactive storytelling. These workshops give creative media artists the insight and skills to create robust interactive projects that effectively engage with audiences and the chance to experiment with new tools and technologies. They also showcase innovation in this field for artists, funders and the public. A primary goal of the workshops is to build new relationships between media artists, technologists and designers.<br><br>
+
+The first Tribeca Hacks workshop will be held in Cambridge in collaboration with Zeega, an open-source platform that came out of the idea that people should be able to make interactive stories on the internet without having to program. We don’t believe technical knowledge or budgets should be a constraint for exploring the creative possibilities of the web. Zeega’s team of journalists, documentary artists and interactive designers will share Zeega's latest tools and work with participants to create interactive experiences with original and web-based audio, photos, videos and text. <br><br>
+
+<h4 style="line-height: 1.3;">9 am = Coffee/breakfast<br>
+10 am = Start making<br>
+6 pm = Showcase of Day's Projects<br>
+8 pm = Dinner<br>
+9 pm = Party in Zeega's grotto
+</h4><br>
+
+<h4 style="line-height: 1.3;">
+Applications Due: October 22nd<br>
+Participants Notified: October 26th<br>
+</h4><br>
+
 						</p>
 
 				<form class="form-vertical">
@@ -121,15 +133,16 @@
 						</div>
 						<div class="row">
 					    	<div class="span3">
-						    	<label class="control-label" for="youridea"><h4 style="line-height:22px">What kind of project or work are you looking to make with Zeega?</h4></label>
+						    	<label class="control-label" for="youridea"><h4 style="line-height:22px">What project would you like to work on?</h4></label>
 								<p class="sidebar">
 									
 								</p>
 							</div>
 							<div class="span4">
-								<div class="controls">						
+									<div class="required"></div>			
+									<div class="controls">						
 						    		
-						    		<textarea id="makeday-idea" name="idea"    class="input-xlarge-custom" rows="6"></textarea>
+						    		<textarea id="makeday-idea" name="idea" required="required"  class="input-xlarge-custom" rows="6"></textarea>
 								</div>
 							</div>
 						</div>
@@ -158,18 +171,22 @@
 				</fieldset>
 				</form>
 			
-			
+			<p><i>The Tribeca Hacks program is supported by the National Endowment for the Arts, and made possible through leadership support from the Ford Foundation. Special thanks to MIT’s Open Documentary Lab, our fantastic hosts.</i></p>
 			
 			<!-- Form Ends -->
 						</div>
 					<div class="span7 hide makeday-thanks">
 						<h2>We'll be in touch shortly</h2>
 					</div>
-					<div class="span3 offset3">
+					
+					<div class="span3 offset1">
 						<div class="row">
-							<h4>Location</h4>
+
+
+							<h4 style="margin-top: 55px;">Details</h4>
 							<p style="font-size: 12px; line-height: 16px; padding-top:10px">
-							MIT OpenDoc Lab<br>
+							November 3rd, 2012<br>
+							MIT Open Documentary Lab<br>
 							21 Ames Street<br>
 							Cambridge, MA 02139 USA<br>
 							<a href="https://maps.google.com/maps?hl=en&q=21+ames+street+cambridge+ma&ie=UTF-8&hq=&hnear=0x89e370af2bd7d569:0x241b0015fd22d0b5,21+Ames+St,+Cambridge,+MA+02142&gl=us&ei=UMNHULPgKcPb0QHFyoHQCA&ved=0CB4Q8gEwAA">map</a>
@@ -179,8 +196,15 @@
 						<div class="row">
 							<h4>Partners</h4>
 							<p style="font-size: 12px; line-height: 16px; padding-top:10px">
-							Tribeca New Media Fund<br>
-							MIT OpenDoc Lab<br>
+							<a href="http://www.tribecafilminstitute.org/filmmakers/newmedia/" target="_blank">Tribeca Film Institute</a><br>
+							<a href="http://opendoclab.mit.edu/" target="_blank">MIT Open Documentary Lab</a><br>
+							</p>
+						</div>
+						<br><br>
+						<div class="row">
+							<h4>Questions?</h4>
+							<p style="font-size: 12px; line-height: 16px; padding-top:10px">
+							info@zeega.org<br>
 							</p>
 						</div>
 					
