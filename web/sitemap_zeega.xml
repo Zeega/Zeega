@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>http://zeega.org/</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/mission</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/productions</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/team</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/contact</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/news</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/terms</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/privacy</loc>
+  <changefreq>weekly</changefreq>
+</url>
+<url>
+  <loc>http://zeega.org/register/</loc>
+  <changefreq>weekly</changefreq>
+</url>
+</urlset>

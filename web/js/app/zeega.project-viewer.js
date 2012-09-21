@@ -38,6 +38,8 @@ this.zeega = {
 	initZeegaPlayer : function()
 	{
 		this.data = $.parseJSON(projectJSON);
+
+		this.data = this.data.project || this.data;
 		console.log('##		standalone data', this.data)
 		this.Player = zeegaPlayer.app;
 		this.Player.initialize( this.data, {mode:'standalone'} )
