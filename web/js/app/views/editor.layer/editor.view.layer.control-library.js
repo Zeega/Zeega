@@ -148,40 +148,6 @@ Use this.model.get('attr')[my_setting] instead!!!
 		}
 		
 	});
-
-	Layer.Views.Lib.LinkTypeSelect = Layer.Views.Lib.extend({
-		className : 'control link-type-select',
-		render : function()
-		{
-			this.$el.html(this.template());
-			this.$('select').val(this.model.get('attr').link_type);
-			return this;
-		},
-		events : {
-			'change select' : 'changeLinkType'
-		},
-
-		changeLinkType : function(e)
-		{
-			console.log('change link type', this.model, $(e.target), $(e.target).val());
-			this.model.update({ link_type : $(e.target).val() });
-
-		},
-
-		template : function()
-		{
-			var html =
-				'<select>'+
-					'<option value="rectangle">rectangle</option>'+
-					'<option value="arrow_left">arrow left</option>'+
-					'<option value="arrow_right">arrow right</option>'+
-					'<option value="arrow_up">arrow up</option>'+
-					'<option value="arrow_down">arrow down</option>'+
-				'</select>';
-
-			return html;
-		}
-	});
 	
 	Layer.Views.Lib.Link = Layer.Views.Lib.extend({
 
@@ -487,6 +453,87 @@ Use this.model.get('attr')[my_setting] instead!!!
 						"<div class='control-slider'></div>"+
 					"</div>";
 			
+			return html;
+		}
+	});
+	
+	Layer.Views.Lib.LinkTypeSelect = Layer.Views.Lib.extend({
+		className : 'control link-type-select',
+		render : function()
+		{
+			console.log('redner control', this)
+			this.$el.html( _.template(this.template(),this.settings));
+			this.$('select').val(this.model.get('attr').link_type);
+			return this;
+		},
+		events : {
+			'change select' : 'changeLinkType'
+		},
+
+		changeLinkType : function(e)
+		{
+			console.log('change link type', this.model, $(e.target), $(e.target).val());
+			this.model.update({ link_type : $(e.target).val() });
+
+		},
+
+		template : function()
+		{
+			var html =
+				"<div class='control-name'><%= label %></div>"+
+				'<select>'+
+					'<option value="rectangle">rectangle</option>'+
+					'<option value="arrow_left">arrow left</option>'+
+					'<option value="arrow_right">arrow right</option>'+
+					'<option value="arrow_up">arrow up</option>'+
+					'<option value="arrow_down">arrow down</option>'+
+				'</select>';
+
+			return html;
+		}
+	});
+
+	Layer.Views.Lib.Droppable = Layer.Views.Lib.extend({
+		className : 'control control-item-droppable',
+		render : function()
+		{
+			_.extend( this.settings, this.model.toJSON() );
+			this.$el.html( _.template(this.template(), this.settings ));
+			
+			this.makeDroppable();
+			
+			return this;
+		},
+
+		makeDroppable : function()
+		{
+			var _this = this;
+			this.$('.target').droppable({
+				accept : '.database-asset-list',
+				hoverClass : 'droppable-hover',
+
+				drop : function(e,ui)
+				{
+					ui.draggable.draggable('option','revert',false);
+					_this.onDrop( zeega.app.draggedItem );
+				}
+			})
+		},
+
+		onDrop : function(item)
+		{
+			var attr = {};
+			attr[this.settings.attribute] = item.toJSON();
+			this.model.update( attr );
+			this.render();
+		},
+
+		template : function()
+		{
+			var _this = this;
+			var html = "<div class='control-name'><%= label %></div>";
+			if( _.isUndefined( this.model.get('attr')[_this.settings.attribute] ) ) html += '<div class="target">Add Media</div>';
+			else html += '<div class="target" style="background:url(<%= attr[attribute].thumbnail_url %>)"></div>';
 			return html;
 		}
 	});
