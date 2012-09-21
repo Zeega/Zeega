@@ -1,0 +1,285 @@
+#zeega-view-navigation{
+	
+	background-color: #444;
+	padding:4px 0;
+	z-index:50;
+	position: fixed;
+	top: 40px;
+	width:100%;
+	min-width:900px;
+}
+
+#jda-home-search-div{
+	margin-left: 15px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	display:none;
+}
+
+
+#zeega-visual-search-container{
+	width:670px;
+
+}
+
+
+#zeega-view-buttons{
+	width: 108px;
+	float: left;
+	margin-right: 31px;
+	margin-top: 5px;
+}
+#zeega-view-navigation li{
+	padding:10px;
+	float:left;
+}
+#zeega-view-navigation form{
+	border:none;
+	margin:0;
+	background-color:transparent;
+}
+#zeega-search-help{
+	position: relative;
+	left: 5px;
+	background-color:#000;
+}
+
+#zeega-main-content
+{
+	position:relative;
+	top:50px;
+	margin: 0 20px;
+}
+#zeega-left-column{
+	/*this width gets set programmatically in search.ux.js file */
+	min-width:640px;
+	position: relative;
+}
+#zeega-right-column{
+	/* this position gets set programmatically in search.ux.js file and thereafter
+	in various filters */
+	position: fixed;
+	left: -webkit-calc(95% - 200px);
+	top: 115px;
+}
+.zeega-left-column-really-low{
+	top:222px !important;
+}
+.zeega-right-column-user-page{
+	top:300px !important;
+}
+.zeega-right-column-low{
+	top: 435px !important;
+}
+.zeega-right-column-really-low{
+	top: 483px !important;
+}
+#zeega-list-view li{
+	list-style:none;
+}
+#zeega-list-view td{
+	position:relative;
+}
+#zeega-list-view .zeega-list-left-column{
+	width:100px;
+}
+#zeega-list-view .zeega-list-middle-column{
+	width:-webkit-calc(100% -  220px);
+	word-break:break-all;
+}
+#zeega-list-view .zeega-list-right-column{
+	width:115px;
+}
+#zeega-my-collections{
+	
+	position: fixed;
+	top: 94px;
+	padding-top:6px;
+	right:20px;
+	width: 200px;
+	text-align: center;
+	border-radius: 4px;
+	margin-bottom:30px;
+	z-index:100;
+}
+
+#zeega-my-collections-spinner{
+	
+	position: absolute;
+	z-index: 2;
+	left: 100px;
+	top: 82px;
+}
+#zeega-my-collections-active-collection
+{
+	width: 165px;
+	height:39px;
+	font-weight: bold;
+	font-size: 14px;
+	border-radius:0;
+}
+
+#zeega-my-collections-items
+{
+	clear:both;
+	border: 1px solid #AAA;
+	border-radius: 0 0 4px 4px;
+	padding:2px;
+	background-color: #ddd;
+	-webkit-transition: background .25s linear;
+	transition: background .25 linear;
+}
+.zeega-my-collections-items-dropping{
+	background-color:#F0E68C !important;
+
+}
+#zeega-my-collections-items a.thumbnail{
+	margin:0 auto;
+	position:relative;
+	/*width: 120px;
+	position: relative;
+	left: 30px;*/
+}
+#zeega-my-collections-items p:hover{
+	outline: 1px dotted #08C;
+	background-color:#eee;
+}
+
+#zeega-my-collections p{
+	color:#666;
+	padding:14px;
+	font-size:0.9em;
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+}
+#zeega-my-collections-items-thumbs{
+	padding-top:5px;
+	padding-bottom:5px;
+}
+#zeega-my-collections-added{
+	display:none;
+	margin-bottom:10px;
+}
+#zeega-my-collections-share-and-organize{
+	padding:10px;
+}
+#zeega-results-count{
+	font-size: 18px;
+	margin-bottom:20px;
+	position: relative;
+	top: 13px;
+	z-index: 0;
+	left:0;
+}
+.zeega-results-count-event {
+	font-size: 12px !important;
+	width: 160px !important;
+	position: absolute !important;
+	color: whiteSmoke !important;
+	top: -13px !important;
+	z-index:2001 !important;
+}
+#zeega-results-count-text-with-date{
+	display:none;
+}
+#search-bar{
+	
+	opacity: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity=0);
+	padding: 0 !important;
+	float:left;
+}
+
+#search-bar h5
+{
+	line-height:18px;
+	height:44px;
+	color:rgba(255,255,255,0.85);
+}
+#search-bar select{
+	opacity: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity=0);
+	width:150px;
+}
+#search-bar option{
+	
+}
+#select-wrap {
+
+	height: 36px;
+	position: absolute;
+	top: 6px;
+	left: 630px;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #999;
+	width: 150px;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	font-variant: small-caps;
+	font-family:Arial,sans-serif;
+}
+#select-wrap-text{
+	position: absolute;
+	top: 6px;
+	left: 20px;
+}
+
+#zeega-items-thumbnails > li{
+	overflow: hidden;
+}
+.zeega-item-thumbnail{
+	position:relative;
+}
+/* 	
+	zeega-collection
+
+	for displaying a thumbnail on top of a stack of images.
+	Code from CSS3Stacks here: http://inspectelement.com/demos/css3/stacks/
+*/
+
+.zeega-collection { position: relative; z-index: 1; padding:0;border:0;width:160px;height:120px;margin:4px;}
+ 
+
+.zeega-collection img { max-width: 100%; height: auto; vertical-align: bottom; border: 10px solid #fff; border-radius: 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+ 
+.zeega-collection:before, .zeega-collection:after { content: ""; border-radius: 3px; width: 100%; height: 100%; position: absolute; border: 10px solid #fff; left: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -webkit-transition: 0.3s all ease-out;
+    -moz-transition: 0.3s all ease-out;
+    transition: 0.3s all ease-out;
+}
+.zeega-collection:before { top: 4px; z-index: -10; } /* 1st element in zeega-collection (behind image) */
+.zeega-collection:after { top: 8px; z-index: -20; } /* 2nd element in zeega-collection (behind image) */
+
+
+.zeega-collection.rotated-left:before {
+    -webkit-transform-origin: bottom left;
+    -moz-transform-origin: bottom left;
+    transform-origin: bottom left;
+    -webkit-transform: rotate(-3deg);
+    -moz-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+}
+.zeega-collection.rotated-left:after {
+    -webkit-transform-origin: bottom left;
+    -moz-transform-origin: bottom left;
+    transform-origin: bottom left;
+    -webkit-transform: rotate(-6deg);
+    -moz-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+}
