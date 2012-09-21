@@ -5,11 +5,7 @@
 	Items.Views.Thumb = Backbone.View.extend({
 		
 		tagName : 'li',
-		events: {
-			
-			
-			
-		},
+
 		events : {
     	
     		'click':'previewItem'
@@ -118,8 +114,8 @@
 
 			
 			
-			if(this.draggable){
-				$(this.el).draggable({
+			
+			$(this.el).draggable({
 
 			    cursor : 'move',
 			    cursorAt : { 
@@ -128,7 +124,6 @@
 				},
 			    appendTo : 'body',
 			    opacity : .8,
-
 			    helper : function(){
 			      var drag = $(this).find('a')
 			      .clone()
@@ -152,7 +147,7 @@
 			});
 				$(this.el).find(".jdicon-small-drag").tooltip({'title':'Drag to add to your collection','placement':'bottom', delay: { show: 600, hide: 100 }});
 				$(this.el).find(".label").tooltip({'placement':'bottom', delay: { show: 600, hide: 100 }});
-			}
+			
 			
 
 			//Replace broken thumbnail images with the media type icon
@@ -169,13 +164,10 @@
 		{
 			var html = 
 			
-				'<a href="#" class="thumbnail zeega-collection rotated-left">'+
-				//	'<i class="jdicon-small-drag" style="z-index:2"></i>'+
-				//	'<span class="label label-inverse" style="display:none;position: absolute;top: 91px;left:126px;z-index:2" rel="tooltip" title="Go to Collection View">'+
-				//	'<i class="icon-share-alt icon-white"></i></span>'+
-					'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
-					//'<input class="jda-item-checkbox" type="checkbox">'+
-					'<button class="btn btn-danger btn-mini remove-item hide jda-delete-collection">x &nbsp;<%=delete_text%></button>'+
+				'<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
+					'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+	
+					
+					'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
 				'</a>';
 
 			
@@ -340,6 +332,10 @@
 			
 			$(this.el).find('.zeega-item-thumbnail').append(new Items.Views.Thumb({model:this.model}).render().el);
 			
+			
+			
+			
+			
 			if (blanks["author"] == "") $(this.el).find('.jda-item-author').hide();
 
 			return this;
@@ -377,7 +373,7 @@
 				'<h3><%= title %></h3><p >by: <%= author %>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -397,7 +393,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
 			'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -420,7 +416,7 @@
 				'<div><%= description %></div>'+
 			'</td>'+
 			'<td class="jda-item-date">'+
-				'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				' <%= date_created.date %>'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 
@@ -440,7 +436,7 @@
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
 			'<td class="zeega-list-right-column jda-item-date">'+
-				'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+				' <%= date_created.date %>'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -457,7 +453,7 @@
 			'<td class="zeega-list-middle-column">'+
 				'<p class="jda-item-description"><%= text %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -473,7 +469,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"><%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			return html;
@@ -492,8 +488,8 @@
 					'<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
-				'<td class="zeega-list-right-column jda-item-date"><%= media_date %>'+
-					'<input class="jda-item-checkbox" type="checkbox">'+
+				'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+					''+
 				'</td>';
 				
 
@@ -514,7 +510,7 @@
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
 				'<td class="zeega-list-right-column jda-item-date">'+
-					'<%= media_date %><input class="jda-item-checkbox" type="checkbox">'+
+					' <%= date_created.date %>'+
 					'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 				'</td>';
 				
@@ -563,18 +559,19 @@
 			var _this = this;
 			this.$el.draggable({
 				appendTo : 'body',
-				revert : true,
-				opacity : 0.75,
+				cursorAt : { 
+					top : 5,
+					left :5
+				},
+				opacity : 1,
 				helper : function()
 				{
 					
 					var drag = $(this).find('img')
 						.clone()
 						.css({
-							'height':'75px',
-							'width':'75px',
-							'overflow':'hidden',
-							'background':'white',
+							'width':'36px',
+							'height':'27px',
 							'z-index':100
 						});
 					return drag;
@@ -583,20 +580,13 @@
 				start : function()
 				{
 					$(this).draggable('option','revert',true);
-					if(_this.model.get('layer_type') == 'Image') $('#project-cover-image').addClass('target-focus');
-
 					zeega.discovery.app.draggedItem = _this.model;
-				},
-				stop : function()
-				{
-					console.log('dragging		stop')
 				}
 			});
 		},
 
 		events: {
-			"click" : "previewItem"
-			//'dblclick' : "doubleClick",
+			"click .database-asset" : "previewItem"
 		},
 
 		//item events
@@ -609,7 +599,7 @@
 		{
 			var html =
 
-				"<a href='#'><img src='<%= thumbnail_url %>'/></a>";
+				"<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
 
 			return html;
 		}
@@ -637,9 +627,35 @@
 			'click .delete-collection'		: 'delete',
 			'click .layer-super'		: 'expand',
 			'click .edit-item-metadata' : 'preview',
-
+			'click .collection-remove-item':'removeItem'
 		},
-		
+		removeItem : function(event){
+
+			if(confirm('Remove item from collection?')){
+				var itemID = $(event.target).attr('id');
+				this.children.get(itemID).destroy();
+				$(event.target).closest('li').fadeOut().remove();
+				this.model.save({
+									items_to_remove:itemID
+																},
+				{
+					url:zeega.discovery.app.apiLocation + 'api/items/' + this.model.id+'/items',
+					success: function(model, response) { 
+						
+					},
+					error: function(model, response){
+	
+						console.log("Error updating item title.");
+						console.log(response);
+					}
+	
+				});
+			}			
+			
+			
+			
+			return false;
+		},
 		render : function()
 		{
 			
@@ -657,41 +673,65 @@
 				thumbnail_url : this.model.get('thumbnail_url'),
 			}
 			this.$el.html( _.template( this.getTemplate(), blanks ) );
-			if(this.model.get('layer_type')=='Dynamic')this.$el.addClass('dynamic-collection');
-			else this.$el.addClass('static-collection');
-
-			
-			$(this.el).droppable({
+			if(this.model.get('layer_type')=='Dynamic'){
+				this.$el.addClass('dynamic-collection');
+			}
+			else{
+				this.$el.addClass('static-collection');
+				this.$el.droppable({
 			    accept : '.results-thumbnail',
 			    hoverClass : 'zeega-my-collections-items-dropping',
 			    tolerance : 'pointer',
 			    drop : function( event, ui ){
 			    	
-					$(_this.el).find('#zeega-my-collections-items').addClass('zeega-my-collections-items-dropping');
-					if(_this.loaded){
-						_this.children.push(zeega.discovery.app.draggedItem);
-						_this.$el.find('#zeega-item-database-list').find('ul').prepend(new Items.Views.DrawerThumbView({model:zeega.discovery.app.draggedItem}).render().el);
-					}
-					  
-					var itemId=zeega.discovery.app.draggedItem.id;
-					_this.model.url=zeega.discovery.app.apiLocation + 'api/items/' + _this.model.id+'/items';
-					_this.model.save({new_items:[itemId ]},
-						{
-							success : function(model, response){ 
-								console.log(model,response,"success");
-								$(_this.el).find('#zeega-my-collections-items').removeClass('zeega-my-collections-items-dropping');
-							},
-							error : function(model, response){
-								console.log(response);
-
-							}
-						}
-					);
-
-					ui.draggable.draggable('option','revert',false);
+			    	ui.draggable.draggable('option','revert',false);
 					
+					$(_this.el).find('#zeega-my-collections-items').addClass('zeega-my-collections-items-dropping');
+					
+					//Check for duplicates
+					if(_this.loaded&&_.difference([zeega.discovery.app.draggedItem.id],_.pluck(_.toArray(_this.children),"id")).length==0 ) console.log('duplicate')
+					
+					else{
+						if(_this.loaded){
+							_this.children.push(zeega.discovery.app.draggedItem);
+							_this.$el.find('#zeega-item-database-list').find('ul').prepend(new Items.Views.DrawerThumbView({model:zeega.discovery.app.draggedItem}).render().el);
+						}
+						  
+						var itemId=zeega.discovery.app.draggedItem.id;
+						_this.model.url=zeega.discovery.app.apiLocation + 'api/items/' + _this.model.id+'/items';
+						_this.model.save({new_items:[itemId ]},
+							{
+								success : function(model, response){ 
+									console.log(model,response,"success");
+									$(_this.el).find('#zeega-my-collections-items').removeClass('zeega-my-collections-items-dropping');
+								},
+								error : function(model, response){
+									console.log(response);
+	
+								}
+							}
+						);
+					}
 			    }	
-			});	
+			});
+			}
+			
+			this.$el.find('#collection-list-thumb').droppable({
+				accept: '.database-asset-list',
+				hoverClass: 'collection-thumb-drop',
+				tolerance: 'pointer',
+				drop : function(event,ui){
+					ui.draggable.draggable('option','revert',false);
+					var src = $(ui.draggable).find('img').attr('src');
+					console.log(src);
+					_this.model.set({thumbnail_url:src}).save();
+					console.log(_this.model);
+					$(_this.$el.find('.collection-list-thumb')[0]).attr({'src':src});
+					return false;
+					
+				}
+			});
+		
 			return this;
 		},
 
@@ -702,10 +742,7 @@
 		
 		},
 
-		
 
-
-		
 		delete : function()
 		{
 			if( confirm('Delete Collection?') )
@@ -777,7 +814,7 @@
 			var html =
 
 				"<div class='layer-super'>"+
-					"<a href='#'><img class='collection-list-thumb' src='<%= thumbnail_url %>'/></a>"+
+					"<a id='collection-list-thumb' href='#'><img class='collection-list-thumb' src='<%= thumbnail_url %>'/></a>"+
 					"<span class='collection-title'>  <%= title %></span>"+
 					"<span class='pull-right'>"+
 						"<a href='#' class='edit-item-metadata  more-info'><i class='icon-pencil'></i></a>"+
@@ -793,8 +830,7 @@
 		}
 		
 	});
-	
-	
+
 	Items.Views.CollectionModal = Backbone.View.extend({
 		
 		initialize : function(){
