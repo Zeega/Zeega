@@ -9,7 +9,7 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
-		hasControls : false,
+		hasControls : true,
 		defaultControls : false,
 		displayCitation : false,
 		
@@ -31,21 +31,18 @@
 	
 	Layer.Views.Controls.Link = Layer.Views.Controls.extend({
 		
-		onLayerEnter : function()
-		{
-			var layerIndex = this.model.layerIndex || this.model.layerColor.length;
-			
-			$(this.el).find('.zicon-link').css({'background-color': this.model.layerColor[( layerIndex % this.model.layerColor.length )] })
-			if(this.model.get('attr').to_frame == zeega.app.currentFrame.id)
-			{
-				this.remove();
-			}
-		},
-		
 		render : function()
 		{
+			var linkTypeSelect = new Layer.Views.Lib.LinkTypeSelect({
+				model: this.model,
+				label : 'Link Type'
+			});
+			
+			$(this.controls).append( linkTypeSelect.getControl() );
+			
 			return this;
-		}
+		
+		},
 		
 	});
 
@@ -58,6 +55,7 @@
 			var _this = this;
 			this.preview = zeega.app.previewMode;
 			this.model.on('updateLink', this.onUpdate, this);
+			this.model.on('change', this.render, this);
 		},
 
 		onUpdate : function()
@@ -69,29 +67,33 @@
 		render : function()
 		{
 			var _this = this;
-			
 			var style = {
-				'height' : this.model.get('attr').height +'%',
+				'overflow' : 'visible',
 				'cursor' : 'pointer',
-				'z-index' : 100
+				'z-index' : 100,
+				'width' : 'auto'
 			}
-			
-			if(!zeega.app.previewMode )
-			{
-				var layerIndex = this.model.layerIndex || this.model.layerColor.length;
-				
-				_.extend( style, {
-					'border' : '2px dashed '+ this.model.layerColor[( layerIndex % this.model.layerColor.length )],
-					'border-radius' : '6px'
-				})
-			}
+			if( zeega.app.previewMode ) this.delegateEvents({'click':'goClick'});
+
+			if(this.model.get('attr').link_type == 'arrow_left')
+				this.$el.html( this.getTemplate_ArrowLeft() ).css( style );
+			else if(this.model.get('attr').link_type == 'arrow_right')
+				this.$el.html( this.getTemplate_ArrowRight() ).css( style );
+			else if(this.model.get('attr').link_type == 'arrow_up')
+				this.$el.html( this.getTemplate_ArrowUp() ).css( style );
 			else
 			{
-				this.delegateEvents({'click':'goClick'})
+				if(!zeega.app.previewMode )
+				{
+					_.extend( style, {
+						'height' : this.model.get('attr').height +'%',
+						'width' : this.model.get('attr').width +'%',
+						'border' : '2px dashed orangered',
+						'border-radius' : '6px'
+					})
+				}
+				this.$el.html( this.getTemplate_Rectangle() ).css( style ).addClass('linked-layer');
 			}
-			
-			$(this.el).html( this.getTemplate() ).css( style ).addClass('linked-layer');
-
 			return this;
 		},
 		
@@ -129,15 +131,18 @@
 		onLayerEnter : function()
 		{
 			var _this = this;
-			this.$el.resizable({
-				stop: function(e,ui)
-				{
-					_this.model.update({
-						'width' : $(this).width() / $(this).parent().width() * 100,
-						'height' : $(this).height() / $(this).parent().height() * 100
-					})
-				}
-			})
+			if(this.model.get('attr').link_type == 'Rectangle')
+			{
+				this.$el.resizable({
+					stop: function(e,ui)
+					{
+						_this.model.update({
+							'width' : $(this).width() / $(this).parent().width() * 100,
+							'height' : $(this).height() / $(this).parent().height() * 100
+						})
+					}
+				})
+			}
 			this.delegateEvents();
 		},
 		
@@ -147,13 +152,23 @@
 			this.delegateEvents({'click':'goClick'})
 		},
 		
-		getTemplate : function()
+		getTemplate_Rectangle : function()
 		{
 			var html = '';
-			
-				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
-				
+				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';		
 			return html;
+		},
+		getTemplate_ArrowRight : function()
+		{
+			return  '<img src="../../../images/link_arrow-right.png"/>';
+		},
+		getTemplate_ArrowLeft : function()
+		{
+			return  '<img src="../../../images/link_arrow-left.png"/>';
+		},
+		getTemplate_ArrowUp : function()
+		{
+			return  '<img src="../../../images/link_arrow-up.png"/>';
 		}
 		
 		

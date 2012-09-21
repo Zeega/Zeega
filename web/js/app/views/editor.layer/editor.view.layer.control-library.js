@@ -148,6 +148,38 @@ Use this.model.get('attr')[my_setting] instead!!!
 		}
 		
 	});
+
+	Layer.Views.Lib.LinkTypeSelect = Layer.Views.Lib.extend({
+		className : 'control link-type-select',
+		render : function()
+		{
+			this.$el.html(this.template());
+			return this;
+		},
+		events : {
+			'change select' : 'changeLinkType'
+		},
+
+		changeLinkType : function(e)
+		{
+			console.log('change link type', this.model, $(e.target), $(e.target).val());
+			this.model.update({ link_type : $(e.target).val() });
+
+		},
+
+		template : function()
+		{
+			var html =
+				'<select>'+
+					'<option value="rectangle">rectangle</option>'+
+					'<option value="arrow_left">arrow left</option>'+
+					'<option value="arrow_right">arrow right</option>'+
+					'<option value="arrow_up">arrow up</option>'+
+				'</select>';
+
+			return html;
+		}
+	});
 	
 	Layer.Views.Lib.Link = Layer.Views.Lib.extend({
 
