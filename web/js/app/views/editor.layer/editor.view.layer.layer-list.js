@@ -197,6 +197,7 @@
 		events : {
 			'click .delete-layer'		: 'delete',
 			'click .layer-super'		: 'expand',
+			'dblclick i'		: 'forceExpand',
 
 		},
 		
@@ -213,11 +214,12 @@
 			}
 		},
 
+		forceExpand : function(){ this.expand(true); },
 		//	open/close and expanding layer items
-		expand : function()
+		expand : function( force )
 		{
 			console.log('layer expand!!!', this)
-			if(this.model.hasControls)
+			if(this.model.hasControls || force==true )
 			{
 				if(this.$el.hasClass('layer-open') )
 				{

@@ -65,19 +65,45 @@
 		
 		template : '<a href="#"></a>',
 
+		init : function()
+		{
+			//this.model.on('all', function(e){console.log('e',e)})
+			this.model.on('update', this.onUpdate, this);
+		},
+
 		render : function()
 		{
 			this.$el.html( _.template(this.template, this.model.toJSON() ) )
 				.css({
-					height : this.model.get('attr').height +'%'
+					height : this.model.get('attr').height +'%',
+					'border' : 'none',
+					'border-radius' : '0',
 				});
 
 			if( this.model.get('attr').popup_target )
 			{
 				this.$('a').html('<img src="'+ this.model.get('attr').popup_target.uri  +'" height="100%" width="100%"/>');
 			}
+			else
+			{
+				
+				this.$el.css({
+					'height' : this.model.get('attr').height +'%',
+					'width' : this.model.get('attr').width +'%',
+					'border' : '2px dashed orangered',
+					'border-radius' : '6px',
+					'height' : '25%'
+				})
 
+			}
 			return this;
+		},
+
+		onUpdate : function()
+		{
+			this.$el.resizable('destroy');
+			this.render();
+			this.makeResizable();
 		},
 
 		makeResizable : function()
