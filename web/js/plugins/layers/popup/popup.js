@@ -13,7 +13,7 @@
 			'url' : 'none',
 			'left' : 0,
 			'top' : 0,
-			'height' : 'auto',
+			'height' : 25,
 			'width' : 25,
 			'opacity':1,
 			'citation':false,
@@ -77,6 +77,7 @@
 				.css({
 					height : this.model.get('attr').height +'%',
 					'border' : 'none',
+					'height' : this.model.get('attr').height +'%',
 					'border-radius' : '0',
 				});
 
@@ -88,7 +89,6 @@
 			{
 				
 				this.$el.css({
-					'height' : this.model.get('attr').height +'%',
 					'width' : this.model.get('attr').width +'%',
 					'border' : '2px dashed orangered',
 					'border-radius' : '6px',
