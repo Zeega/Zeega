@@ -71,8 +71,14 @@
 				'overflow' : 'visible',
 				'cursor' : 'pointer',
 				'z-index' : 100,
-				'width' : 'auto'
+				'width' : 'auto',
+				'height' : 'auto',
+				'border' : 'none',
+				'border-radius' : '0'
 			}
+
+			this.$el.removeClass('linked-layer');
+
 			if( zeega.app.previewMode ) this.delegateEvents({'click':'goClick'});
 
 			if(this.model.get('attr').link_type == 'arrow_left')
@@ -169,6 +175,10 @@
 		getTemplate_ArrowUp : function()
 		{
 			return  '<img src="../../../images/link_arrow-up.png"/>';
+		},
+		getTemplate_ArrowDown : function()
+		{
+			return  '<img src="../../../images/link_arrow-down.png"/>';
 		}
 		
 		

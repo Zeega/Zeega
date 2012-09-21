@@ -154,6 +154,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		render : function()
 		{
 			this.$el.html(this.template());
+			this.$('select').val(this.model.get('attr').link_type);
 			return this;
 		},
 		events : {
@@ -175,6 +176,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 					'<option value="arrow_left">arrow left</option>'+
 					'<option value="arrow_right">arrow right</option>'+
 					'<option value="arrow_up">arrow up</option>'+
+					'<option value="arrow_down">arrow down</option>'+
 				'</select>';
 
 			return html;
