@@ -9,7 +9,7 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
-		hasControls : true,
+		hasControls : false,
 		defaultControls : false,
 		displayCitation : false,
 		
