@@ -1016,6 +1016,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .layer-control-drawer .control{padding:6px 0;}
 .layer-control-drawer .farbtastic{margin:0 auto;}
 .layer-control-drawer .link-controls input{width:195px;}
+.layer-control-drawer .control-item-droppable .target{border:1px dashed orangered;border-radius:5px;color:#ddd;font-weight:bold;text-align:center;padding:25px;box-shadow:inset 0 0 20px black;background:url(../../../images/empty.png);background-size:100% 100%;}
+.layer-control-drawer .control-item-droppable .target.droppable-hover{box-shadow:inset 0 0 20px orangered;}
 #zeega-item-database{position:absolute;width:100%;bottom:0;background:url('../../../images/paper-dark.png');border-top:2px solid orangeRed;}
 #zeega-item-database input{width:200px;margin:10px 5px 0 0;background-color:#ddd;}
 #zeega-item-database .alert{border-radius:0;margin:0;text-align:right;}
@@ -1030,8 +1032,9 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .item-viewer .item-viewer-content{background:white;border-radius:3px;position:relative;}
 .item-viewer .row,.item-viewer .row>div{height:100%;}
 .item-viewer .primary-close{position:absolute;right:10px;top:5px;}
-.item-viewer .arrow{width:25px;position:relative;top:45%;}
+.item-viewer .arrow{position:relative;top:45%;background-image:url('../../../images/arrow.png');background-repeat:no-repeat;background-position:left center;background-size:50%;height:50px;width:50px;}
 .item-viewer .arrow-left{float:right;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);-o-transform:rotate(180deg);}
+.item-viewer .arrow-right{float:left;}
 .item-viewer #detail-toggle,.item-viewer .item-viewer-footer{position:absolute;bottom:0;padding:10px;}
 .item-viewer #detail-toggle .details,.item-viewer .item-viewer-footer .details{text-align:center;}
 .item-viewer .item-viewer-footer{width:100%;}
@@ -1085,6 +1088,7 @@ li.layer-type-link{background-color:rgba(0, 0, 0, 0.1);border-top:1px solid #222
 .layer-control-drawer{background-color:rgba(0, 0, 0, 0.2);padding:10px 2px;border-radius:3px;margin-top:10px;box-shadow:0 0 20px #222 inset;display:none;}
 li.layer-open{margin:5px 0;}
 li.layer-open .layer-control-drawer{display:block;}
+.popup-layer-modal{position:absolute;left:0;top:0;background:rgba(0, 0, 0, 0.85);height:100%;width:100%;z-index:1000000;}
 .playback-controls{position:absolute;top:0;width:100%;height:100%;color:white;}
 .playback-controls.playback-layer-controls{position:relative;width:auto;height:auto;margin-bottom:20px;}
 .playback-controls.playback-layer-controls .player-control-inner{position:relative;background-color:transparent;}
