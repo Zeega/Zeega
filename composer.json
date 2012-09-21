@@ -22,8 +22,7 @@
         "sonata-project/admin-bundle": "*",
         "sonata-project/doctrine-orm-admin-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "*",
-        "jms/serializer-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle": "dev-master",
         "nelmio/solarium-bundle": "dev-master"
     },
     "scripts": {
