@@ -85,19 +85,24 @@
 		
 		onKeypress : function(e)
 		{
-			switch(e.which)
-			{
-				case 27:
-					this.closeViewer();
-					break;
-				case 37:
-					this.goLeft();
-					break;
-				case 39:
-					this.goRight();
-					break;
-				default:
-					break;
+			if($(document.activeElement).attr('contenteditable')){
+				
+			}
+			else{
+				switch(e.which)
+				{
+					case 27:
+						this.closeViewer();
+						break;
+					case 37:
+						this.goLeft();
+						break;
+					case 39:
+						this.goRight();
+						break;
+					default:
+						break;
+				}
 			}
 		},
 		
