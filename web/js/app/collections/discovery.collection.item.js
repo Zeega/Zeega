@@ -6,6 +6,7 @@
 	Items.Collections.Static=Backbone.Collection.extend({
 		
 		model:Items.Model,
+		type:'static',
 		initialize: function(models,options){
 				_.extend(this,options);
 				this.on('preview_item',this.previewItem,this);
@@ -33,7 +34,11 @@
 	});
 	
 	
-	Items.Collections.Dynamic=Items.Collections.Static.extend({});
+	Items.Collections.Dynamic=Items.Collections.Static.extend({
+		type:'dynamic'
+	
+	
+	});
 	
 	
 	

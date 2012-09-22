@@ -535,7 +535,7 @@
 			var _this = this;
 			this.$el.addClass('list');
 			this.collection.each(function(item){
-				_this.$el.append( new Items.Views.DrawerThumbView({model:item}).render().el );
+				_this.$el.append( new Items.Views.DrawerThumbView({model:item,collection_type:this.collection.type}).render().el );
 			})
 			return this;
 		}
@@ -546,7 +546,10 @@
 
 		tagName : 'li',
 		className : 'database-asset-list',
-
+		initialize : function (){
+			_.extend(this,options);
+		
+		},
 		render: function()                 
 		{
 			this.$el.html( _.template(this.getTemplate(),this.model.toJSON() ));
@@ -598,10 +601,8 @@
 
 		getTemplate : function()
 		{
-			var html =
-
-				"<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
-
+			if(this.type=='static')	var html = "<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
+			else var html= "<a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
 			return html;
 		}
 	});
