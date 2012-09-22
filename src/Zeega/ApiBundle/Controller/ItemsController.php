@@ -179,18 +179,10 @@ class ItemsController extends Controller
                 $attributes["user"] = $item->getUserId();
 
                 return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 
-
             } else {
-                $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);    
-
-                // populate the results object
-                $resultsCount = $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1)); 
-
-                $itemsView = $this->renderView('ZeegaApiBundle:Items:items.json.twig', array('items' => $queryResults, 'collection_id' => $id, 'items_count' => $resultsCount));
+                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId())); 
             }
         }
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
