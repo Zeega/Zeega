@@ -946,7 +946,7 @@
 				description:this.$('#collection-description').val(),
 				attributes:{
 					tags:this.$('#tag-input').val(),
-					user:760,
+					user:"760",
 				},
 				child_items:[],
 				new_items:[],
