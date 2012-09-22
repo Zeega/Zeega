@@ -535,7 +535,7 @@
 			var _this = this;
 			this.$el.addClass('list');
 			this.collection.each(function(item){
-				_this.$el.append( new Items.Views.DrawerThumbView({model:item,collection_type:this.collection.type}).render().el );
+				_this.$el.append( new Items.Views.DrawerThumbView({model:item,collection_type:_this.collection.type}).render().el );
 			})
 			return this;
 		}

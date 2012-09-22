@@ -49,7 +49,6 @@
 		search : {	page:1,
 					r_itemswithcollections: 1,
 					r_tags:1,
-					user:-1,
 
 				},
 				
@@ -83,7 +82,7 @@
 			    if( !_.isUndefined(this.search.times.start) ) url += '&min_date=' + this.search.times.start;
 			    if( !_.isUndefined(this.search.times.end) ) url += '&max_date=' + this.search.times.end;
 	     	};
-	     	if( !_.isUndefined(this.search.user) && this.search.user!="") url += '&user=' + this.search.user;
+	     	url += '&user=-1';
 	     	//if( !_.isUndefined(this.search.user) && this.search.user>=-1&& this.search.user!="") url += '&user=' + this.search.user;
 	     	//if( !_.isUndefined(this.search.username) &&  !_.isNull(this.search.username) &this.search.username.length > 0) url += '&username=' + this.search.username;
 	     	if(zeega.discovery.app.currentView=='event') url+='&geo_located=1';
