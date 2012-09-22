@@ -166,7 +166,6 @@
 		makeResizable : function()
 		{
 			var _this = this;
-			console.log('link attr', this.model)
 			var linkType = this.model.get('attr').link_type;
 			if( linkType == 'Rectangle' || _.isUndefined(linkType))
 			{
