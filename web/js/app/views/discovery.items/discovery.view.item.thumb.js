@@ -944,6 +944,7 @@
 			_.extend(this.attr,{
 				title:this.$('#collection-title').val(),
 				description:this.$('#collection-description').val(),
+				published:true,
 				attributes:{
 					tags:this.$('#tag-input').val(),
 					user:"760",
