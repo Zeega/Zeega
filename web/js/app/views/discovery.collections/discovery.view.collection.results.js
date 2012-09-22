@@ -8,7 +8,7 @@
 		el : $('#zeega-results-wrapper'),
 	
 		initialize : function(){
-			this.collection = new Items.Collection();
+			this.collection = new Items.Collections.Search();
 			this.collection.on( 'reset', this.reset, this);
 			this._childViews = [];
 			this._collectionChildViews = [];

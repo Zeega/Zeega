@@ -1,6 +1,36 @@
 (function(Items) {
 
-	Items.Collection = Backbone.Collection.extend({
+	Items.Collections=Items.Collections||{};
+
+	
+	Items.Collections.Static=Backbone.Collection.extend({
+		
+		model:Items.Model,
+		initialize: function(models,options){
+				_.extend(this,options);
+				console.log(options,this,this.id);
+		},
+		url : function(){ 	
+			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id+'/items';
+			
+			return url;
+		},
+		parse : function(response)
+		{
+			if (response.items)
+				return response.items;
+			else 
+				return response;
+		},
+		
+	});
+	
+	
+	Items.Collections.Dynamic=Items.Collections.Static.extend({});
+	
+	
+	
+	Items.Collections.Search = Backbone.Collection.extend({
 		
 		model:Items.Model,
 		base : zeega.discovery.app.apiLocation + 'api/search?',
@@ -123,7 +153,6 @@
 	
 	});
 
-	Router = Backbone.Router.extend({ /* ... */ });
-
+	
 
 })(zeega.module("items"));

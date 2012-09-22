@@ -782,16 +782,17 @@
 				
 				if(!this.loaded){
 					this.loaded=true;
-					if(this.model.get('layer_type')=='Dynamic') this.model.url=zeega.discovery.app.apiLocation+ 'api/items/'+this.model.id+'/items';
+					if(this.model.get('layer_type')=='Dynamic') this.children=new Items.Collections.Dynamic([],{id:this.model.id});
+					else this.children =new Items.Collections.Static([],{id:this.model.id});
 					
-					this.model.fetch(
+			
+					this.children.fetch(
 				{
 
-					success : function(model, response)
+					success : function(collection, response)
 					{ 
-						_this.children=new Items.Collection(model.get('child_items'));
+						console.log(collection);
 						_this.$el.find('#zeega-item-database-list').append(new Items.Views.DrawerView({collection:_this.children}).render().el);
-						_this.model.url=zeega.discovery.app.apiLocation+ 'api/items/'+this.model.id;
 					},
 					error : function(model, response)
 					{ 
@@ -943,7 +944,7 @@
 			_.extend(this.attr,{
 				title:this.$('#collection-title').val(),
 				description:this.$('#collection-description').val(),
-				attr:{
+				attributes:{
 					tags:this.$('#tag-input').val()
 				},
 				child_items:[],

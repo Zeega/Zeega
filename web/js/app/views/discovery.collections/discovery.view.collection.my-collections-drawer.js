@@ -13,7 +13,7 @@
 			
 			$('#zeega-collection-list').spin(true);
 
-			this.collection = new Items.Collection();
+			this.collection = new Items.Collections.Search();
             this.collection.url=zeega.discovery.app.apiLocation + 'api/search?r_collections=1&user=-1';			
             this.collection.parse= function(data){ return data.collections;}
             this.collection.comparator = function(model) { return model.get('title');}
