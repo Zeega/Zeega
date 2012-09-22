@@ -535,7 +535,7 @@
 			var _this = this;
 			this.$el.addClass('list');
 			this.collection.each(function(item){
-				_this.$el.append( new Items.Views.DrawerThumbView({model:item,collection_type:_this.collection.type}).render().el );
+				_this.$el.append( new Items.Views.DrawerThumbView({model:item},{collection_type:_this.collection.type}).render().el );
 			})
 			return this;
 		}
@@ -546,7 +546,7 @@
 
 		tagName : 'li',
 		className : 'database-asset-list',
-		initialize : function (){
+		initialize : function (model,options){
 			_.extend(this,options);
 		
 		},
