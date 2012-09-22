@@ -98,6 +98,13 @@
 						'border-radius' : '6px'
 					})
 				}
+				else
+				{
+					_.extend( style, {
+						'height' : this.model.get('attr').height +'%',
+						'width' : this.model.get('attr').width +'%',
+					})
+				}
 				this.$el.html( this.getTemplate_Rectangle() ).css( style ).addClass('linked-layer');
 			}
 			return this;
