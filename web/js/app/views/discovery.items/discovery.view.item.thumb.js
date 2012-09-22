@@ -592,6 +592,7 @@
 		//item events
 		previewItem: function()
 		{
+			console.log('preview',this.model.id);
 			this.model.trigger('preview_item',this.model.id)
 		},
 
@@ -623,13 +624,16 @@
 			});
 		},
 		
-		events : {
+		events : 
+		{
 			'click .delete-collection'		: 'delete',
 			'click .layer-super'		: 'expand',
 			'click .edit-item-metadata' : 'preview',
 			'click .collection-remove-item':'removeItem'
 		},
-		removeItem : function(event){
+		
+		removeItem : function(event)
+		{
 
 			if(confirm('Remove item from collection?')){
 				var itemID = $(event.target).attr('id');
@@ -656,6 +660,7 @@
 			
 			return false;
 		},
+		
 		render : function()
 		{
 			
@@ -735,13 +740,13 @@
 			return this;
 		},
 
-		updateTitle:function(){
+		updateTitle:function()
+		{
 			if(this.model.get('title').length>25) var title = this.model.get('title').substr(0,23)+'...';
 			else var title = this.model.get('title');
 			this.$el.find('.collection-title').html(title);
 		
 		},
-
 
 		delete : function()
 		{
@@ -808,6 +813,7 @@
 		
 		preview :function()
 		{
+			
 			this.model.trigger('preview_item',this.model.id);
 			return false;
 		},
@@ -947,7 +953,6 @@
 				published:true,
 				attributes:{
 					tags:this.$('#tag-input').val(),
-					user:"760",
 				},
 				child_items:[],
 				new_items:[],
