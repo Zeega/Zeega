@@ -101,8 +101,10 @@ jQuery(function($)
                                    $(this).innerHeight()
                                    >= $(this)[0].scrollHeight)
                                 {
-                                  	zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.query.page+1;
-      							  	if(zeega.discovery.app.searchObject.page*100<zeega.discovery.app.resultsView.collection.items_count) zeega.discovery.app.search(zeega.discovery.app.searchObject,false);
+                                	if(zeega.discovery.app.resultsView.collection.query.page*100<zeega.discovery.app.resultsView.collection.count){
+                                		zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.query.page+1;
+      							  		zeega.discovery.app.search(zeega.discovery.app.searchObject,false);
+      							  	}
                                 }
                               });
 
