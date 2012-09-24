@@ -44,9 +44,14 @@ class SearchController extends Controller
         $returnCollections   = $request->query->get('r_collections');
         $returnItems = $request->query->get('r_items');   				//  bool
         $source = $request->query->get('data_source');                  //  bool
-		
-        $useSolr = true;
-        if($solrEnabled && null !== $source && $source === 'db') {
+	
+        if($solrEnabled) {
+            if(null !== $source && $source === 'db') {
+                $useSolr = false;
+            } else {
+                $useSolr = true;
+            }     
+        } else {	
             $useSolr = false;
         }
 
