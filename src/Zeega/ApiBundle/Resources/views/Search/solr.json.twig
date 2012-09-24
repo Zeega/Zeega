@@ -44,7 +44,15 @@
 				{%- else -%}
 					"media_date_created_end" : "2012-01-02T00:00:00",
 				{%- endif -%}
-				"attributes" : {{doc_fields.attributes | default("") | json_encode | raw}},
+				
+				{%- if doc_fields.attributes is defined -%}
+					"attributes" : 
+					{%- for attribute in doc_fields.attributes -%}
+						{{ attribute | default("") | json_encode | raw}},
+					{%- endfor -%}	
+				{%- else -%}
+					"attributes" : default(""),
+				{%- endif -%}
 				"tags" : {{doc_fields.tags_i | default("") | json_encode | raw}},
 				"media_geo_latitude": {{ doc_fields.media_geo_latitude | default("null")}},
 				"media_geo_longitude": {{ doc_fields.media_geo_longitude | default("null")}},
