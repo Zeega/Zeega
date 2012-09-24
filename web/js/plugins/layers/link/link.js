@@ -54,14 +54,15 @@
 		{
 			var _this = this;
 			this.preview = zeega.app.previewMode;
-			this.model.on('updateLink', this.onUpdate, this);
-			this.model.on('change', this.render, this);
+			//this.model.on('updateLink', this.onUpdate, this);
+			this.model.on('update', this.onUpdate, this);
 		},
 
 		onUpdate : function()
 		{
-			this.$el.html( this.getTemplate() );
-			this.onLayerEnter();
+			this.$el.resizable('destroy');
+			this.render();
+			this.makeResizable();
 		},
 		
 		render : function()
@@ -96,6 +97,13 @@
 						'width' : this.model.get('attr').width +'%',
 						'border' : '2px dashed orangered',
 						'border-radius' : '6px'
+					})
+				}
+				else
+				{
+					_.extend( style, {
+						'height' : this.model.get('attr').height +'%',
+						'width' : this.model.get('attr').width +'%',
 					})
 				}
 				this.$el.html( this.getTemplate_Rectangle() ).css( style ).addClass('linked-layer');
@@ -139,6 +147,7 @@
 			var _this = this;
 			if(this.model.get('attr').link_type == 'Rectangle')
 			{
+				this.$el.resizable('destroy');
 				this.$el.resizable({
 					stop: function(e,ui)
 					{
@@ -149,7 +158,31 @@
 					}
 				})
 			}
+
+			this.makeResizable();
 			this.delegateEvents();
+		},
+
+		makeResizable : function()
+		{
+			var _this = this;
+			var linkType = this.model.get('attr').link_type;
+			if( linkType == 'Rectangle' || _.isUndefined(linkType))
+			{
+
+				this.$el.resizable({
+					handles: 'all',
+					stop : function()
+					{
+						var attr = {
+							'width' : $(this).width() / $(this).parent().width() * 100,
+							'height' : $(this).height() / $(this).parent().height() * 100
+						};
+						console.log('save attr', attr);
+						_this.model.update(attr);
+					}
+				});
+			}
 		},
 		
 		onPlay : function()

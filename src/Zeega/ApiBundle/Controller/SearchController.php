@@ -43,9 +43,14 @@ class SearchController extends Controller
 		$collectionId = $request->query->get('collection');
         $returnCollections   = $request->query->get('r_collections');
         $returnItems = $request->query->get('r_items');   				//  bool
+        $source = $request->query->get('data_source');                  //  bool
 		
-		if($solrEnabled)
-		{
+        $useSolr = true;
+        if($solrEnabled && null !== $source && $source === 'db') {
+            $useSolr = false;
+        }
+
+		if(true === $useSolr) {
 			if(isset($collectionId) || ((isset($returnCollections) && $returnCollections == 1) && (!isset($returnItems) || $returnItems == 0)))
 			{
 			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
@@ -248,7 +253,7 @@ class SearchController extends Controller
 
         $returnItemsAndCollections = $request->query->get('r_itemswithcollections');
         if(isset($returnItemsAndCollections)) {
-            $results["items_and_collections"] = $groups->getGroup('media_type:*');  
+            $results["items"] = $groups->getGroup('media_type:*');  
         } 
 
         $tags = $facets->getFacet('tags');                   //     get the tags results

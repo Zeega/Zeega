@@ -175,7 +175,7 @@ class ItemsController extends Controller
         if(null !== $item) {
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $attributes = $item->getAttributes();
-                $attributes["r_items"] = 1;                
+                $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
 
                 return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 

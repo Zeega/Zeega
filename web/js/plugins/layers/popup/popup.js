@@ -87,13 +87,23 @@
 			}
 			else
 			{
-				
-				this.$el.css({
-					'width' : this.model.get('attr').width +'%',
-					'border' : '2px dashed orangered',
-					'border-radius' : '6px',
-					'height' : '25%'
-				})
+				if(!zeega.app.previewMode )
+				{
+					this.$el.css({
+						'width' : this.model.get('attr').width +'%',
+						'border' : '2px dashed orangered',
+						'border-radius' : '6px',
+						'height' : '25%'
+					})
+				}
+				else
+				{
+					this.$el.css({
+						'width' : this.model.get('attr').width +'%',
+						'border-radius' : '6px',
+						'height' : '25%'
+					})
+				}
 
 			}
 			return this;
