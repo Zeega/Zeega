@@ -33,12 +33,12 @@
 			var popupContentDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_content',
-				label : 'Media to Display in Frame'
+				label : 'Media to Display in Popup on Click'
 			});
 			var popupTargettDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_target',
-				label : 'Media to Display in Popup on Click'
+				label : 'Media to Display in Frame'
 			});
 			var opacitySlider = new Layer.Views.Lib.Slider({
 				property : 'opacity',
