@@ -74,7 +74,7 @@
 			{
 			
 				var tagArray = this.model.get('tags');
-				if(_.isNull(tagArray)) tagArray =[];
+				if(!_.isArray(tagArray)) tagArray =[];
 				tagArray.push(this.$el.find('.tag-input input').val())
 				this.model.save('tags',tagArray);
 				this.render();

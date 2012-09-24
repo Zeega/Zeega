@@ -123,35 +123,9 @@
 	
 		parse : function(response)
 		{
-		
-			console.log("zeegacollection.item", response);
 			this.tags=response.tags;
-			
-			if (this.query.r_collections && response.collections){
-				this.collectionsCollection = new Items.Collection(response.collections);
-				this.collectionsCount=response.collections_count;
-				
-			}else{
-				this.collectionsCollection = null;
-				this.collectionsCount=0;
-			}
-			
-			
-			if(this.query.r_itemswithcollections){
-				
-				this.count = response.items_and_collections_count
-				return response.items_and_collections;
-			}
-			else{
-		
-				this.count = response.items_count;
-				this.collectionsCount = response.collections_count;
-				return response.items;
-			}
-		
-		
-			
-			
+			this.count = response.items_count;
+			return response.items;
 			
 		},
 		

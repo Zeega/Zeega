@@ -788,6 +788,7 @@
 				
 				if(!this.loaded){
 					this.loaded=true;
+				}
 					if(this.model.get('layer_type')=='Dynamic') this.children=new Items.Collections.Dynamic([],{id:this.model.id});
 					else this.children =new Items.Collections.Static([],{id:this.model.id});
 					
@@ -798,14 +799,14 @@
 					success : function(collection, response)
 					{ 
 						console.log(collection);
-						_this.$el.find('#zeega-item-database-list').append(new Items.Views.DrawerView({collection:_this.children}).render().el);
+						_this.$el.find('#zeega-item-database-list').empty().append(new Items.Views.DrawerView({collection:_this.children}).render().el);
 					},
 					error : function(model, response)
 					{ 
 						console.log('Error getting active collection for collections drawer');
 					}
 				});
-				}
+				
 			}
 
 			

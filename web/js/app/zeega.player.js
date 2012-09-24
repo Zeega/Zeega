@@ -58,7 +58,6 @@ this.zeegaPlayer = {
 	{
 		this.data = data;
 		var Player = zeegaPlayer.module('player');
-		this.project = new Player.ProjectModel( data );
 		this.project.load();
 		console.log('$$		project parsed', this, this.project);
 	},
@@ -788,8 +787,8 @@ this.zeegaPlayer = {
 				if( zeegaPlayer.app.mode != 'editor' )
 				{
 					html +=
-					"<a href='https://twitter.com/intent/tweet?original_referer=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>&text=Zeega%20Project%3A%20<%= title %> &url=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
-					"<a href='http://www.facebook.com/sharer.php?u=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "<%= id %>' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+					"<a href='https://twitter.com/intent/tweet?original_referer=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +zeegaPlayer.app.project.get('item_id')+"&text=Zeega%20Project%3A%20<%= title %> &url=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +zeegaPlayer.app.project.get('item_id')+"' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
+					"<a href='http://www.facebook.com/sharer.php?u=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + zeegaPlayer.app.project.get('item_id')+"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
 				}
 				html +=
 
