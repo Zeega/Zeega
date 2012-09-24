@@ -33,25 +33,25 @@
 			var popupContentDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_content',
-				label : 'Media to Show'
+				label : 'Media to Display in Frame'
 			});
 			var popupTargettDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_target',
-				label : 'Media Target to Show'
+				label : 'Media to Display in Popup on Click'
 			});
 			var opacitySlider = new Layer.Views.Lib.Slider({
 				property : 'opacity',
 				model: this.model,
-				label : 'Target Opacity',
+				label : 'Opacity of Media Displayed in Frame',
 				step : 0.01,
 				min : 0,
 				max : 1,
 			});
 			
 			$(this.controls)
-				.append( popupContentDrop.getControl() )
 				.append( popupTargettDrop.getControl() )
+				.append( popupContentDrop.getControl() )
 				.append( opacitySlider.getControl() );
 			return this;
 		
