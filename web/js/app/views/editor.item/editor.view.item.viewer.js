@@ -85,19 +85,24 @@
 		
 		onKeypress : function(e)
 		{
-			switch(e.which)
-			{
-				case 27:
-					this.closeViewer();
-					break;
-				case 37:
-					this.goLeft();
-					break;
-				case 39:
-					this.goRight();
-					break;
-				default:
-					break;
+			if($(document.activeElement).attr('contenteditable')){
+				
+			}
+			else{
+				switch(e.which)
+				{
+					case 27:
+						this.closeViewer();
+						break;
+					case 37:
+						this.goLeft();
+						break;
+					case 39:
+						this.goRight();
+						break;
+					default:
+						break;
+				}
 			}
 		},
 		
@@ -166,6 +171,7 @@
 			
 			// do other cleanup stuff first?
 			this.$el.fadeOut('fast',function(){_this.remove()});
+			return false;
 		},
 
 		getTemplate : function()
@@ -174,7 +180,7 @@
 			
 				"<div class='container'>"+
 					"<div class='row'>"+
-						"<div class='span1 go-left'><a href='#'><img class='arrow arrow-left' src='../../../images/arrow.png'/></a></div>"+
+						"<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
 						"<div class='span10 item-viewer-content'>"+
 							"<a class='close primary-close' href='#'>&times;</a>"+
 
@@ -184,7 +190,7 @@
 							"<a href='#' id='item-delete'>Delete</a>"+
 							
 						"</div>"+
-						"<div class='span1 go-right'><a href='#'><img class='arrow arrow-right' src='../../../images/arrow.png'/></a></div>"+
+						"<div class='span1 go-right'><a href='#'><div class='arrow arrow-right'></div></a></div>"+
 					"</div>"+
 				"</div>";
 
@@ -229,7 +235,9 @@
 			
 			// draw media view
 			
+
 			var itemClass = (this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+
 			
 			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
 			else var mediaView = new Items.Views.Viewer.Default({model:this.model});

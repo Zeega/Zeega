@@ -1,0 +1,166 @@
+
+
+#zeega-list-view li{
+	list-style:none;
+}
+#zeega-list-view td{
+	position:relative;
+}
+#zeega-list-view .zeega-list-left-column{
+	width:100px;
+}
+#zeega-list-view .zeega-list-middle-column{
+	width:-webkit-calc(100% -  220px);
+	word-break:break-all;
+}
+#zeega-list-view .zeega-list-right-column{
+	width:115px;
+}
+
+
+
+.collection-head .cover-image
+{
+	background: repeat;
+	background-color: #ccc; 
+	height:200px;
+	position:relative;
+	margin-bottom:10px;
+}
+
+.collection-thumb-drop {
+	outline: 1px solid yellow;
+}
+.collection-remove-item {
+	
+	z-index: 10;
+	position: absolute;
+	background: transparent !important;
+	font-weight: bold;
+	padding-left: 2px;
+	line-height: 11px;
+	width:10px;
+	height:10px;
+	overflow:hidden;
+}
+
+
+
+
+
+.collection-head .cover-overlay
+{
+	background-color:rgba(255,255,255,0.75);
+	position:absolute;
+	bottom:0;
+	width:100%;
+	padding:10px;
+}
+.collection-head .cover-overlay h4
+{
+	font-weight:400;
+}
+.collection-description
+{
+	margin:10px 0;
+	font-weight:400;
+	padding: 2px 0 0 2px;
+}
+.collection-head .right-col
+{
+	font-size:10px;
+	width:200px
+}
+
+
+.collection-map
+{
+	height:200px;
+	width:200px
+}
+
+
+.left-col{float:left;}
+.right-col{float:right;}
+
+.collection-description
+{
+	min-height:20px;
+}
+
+
+.collection-lists-container {
+	overflow:auto;
+}
+.collection-list-thumb {
+
+	width:24px;
+	height:18px;
+}
+
+.edit-item-metadata {
+	
+	padding-right:5px;
+
+}
+
+
+#zeega-item-database-list.collection{
+
+	background:transparent;
+}
+
+.layer-control-drawer.collection{
+
+	padding:0px 0px;
+}
+
+.collection-list {
+	margin-top: 5px;
+	background: url('@{image-folder}/paper-dark.png');
+}
+
+li.static-collection {
+	background-color: rgba(255, 255, 255, 0.1);
+		&:hover
+	{
+		background-color:rgba(255,255,255,0.25);
+		-webkit-transition: background-color .25s linear;
+	}	
+}
+li.dynamic-collection { 
+	background-color: rgba(0, 255, 0, 0.4);
+		&:hover
+	{
+		background-color:rgba(0,255,0,0.7);
+		-webkit-transition: background-color .25s linear;
+	}	
+}
+li.collection-list-item
+{
+	padding: 5px 10px;
+	
+	-webkit-transition: background-color .25s linear;
+	margin-bottom:1px;
+	color: #DDD;
+	border-radius:0 2px 2px 0;
+	list-style:none;
+
+	
+	
+	.collection-super{ cursor: pointer; }
+	
+	.collection-title
+	{
+		display: inline-block;
+		width: 200px;
+		white-space: nowrap;
+		overflow: hidden;
+		margin-left:5px;
+		font-weight: bold;
+		font-size: 11px;
+	}
+
+
+}
+

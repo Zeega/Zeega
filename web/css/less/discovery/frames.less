@@ -1,0 +1,143 @@
+/******************************
+
+	FRAMES
+	
+*******************************/
+
+#zeega-project-frame-list
+{
+
+	height:75px;
+	background: rgba(0, 0, 0, 0.2);
+	position: relative;
+
+	ul{ margin:0;list-style: none }
+
+	&>ul
+	{
+		white-space: nowrap;
+		overflow:auto;
+		height:100%;
+
+		&>li
+		{
+			display: inline-block;
+			position: relative;
+			height: 60px;
+			width: 80px;
+			padding: 5px;
+			background-size: 100% 100%;
+
+			&.active-frame{ background-color:#777 }
+
+			&:first-child{ margin-left:5px }
+			&>a
+			{
+				display:block;
+				width:100%;
+				height:100%;
+				background-color:black;
+				box-shadow:0 0 20px #666;
+			}
+
+			.flag-menu
+			{
+				top:5px;
+				left:5px;
+			}
+			&:hover .flag-menu{ display:block }
+			
+
+		}
+	}
+
+	#zeega-add-frame
+	{
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		text-align: center;
+		line-height: 22px;
+
+		a
+		{
+			height: 100%;
+			position: relative;
+			background: rgba(255, 255, 255, 0.1);
+			font-weight: bold;
+			font-size: 40px;
+			display: block;
+			padding: 0 10px;
+			.menu-verbose-title{ font-size: 11px; font-weight: normal;}
+			&:hover
+			{
+				color:#ddd;
+				background:rgba(255, 255, 255, 0.25);
+			}
+		}
+	}
+
+}
+
+#zeega-project-frame-detail-bar
+{
+
+	position: relative;
+	top: -5px;
+	border-top: 5px solid #777;
+
+	#link-confirm
+	{
+		color:#222;
+		background:greenyellow;
+		display:none;
+	}
+
+	input
+	{
+		margin: 4px 10px 2px 2px;
+		border-radius: 0;
+		width: 50px;
+		height: 10px;
+	}
+
+}
+
+.flag-menu
+{
+	position:absolute;
+	top:0;
+	left:0;
+	margin:0;
+	z-index: 100;
+	display:none;
+
+	.menu-toggle{ position:absolute }
+
+	.frame-action-menu
+	{
+		position:absolute;
+		margin:0;
+		list-style:none;
+		background: rgba(255,255,255,0.9);
+		padding: 5px 10px;
+		display: none;
+
+		a
+		{
+			font-size:11px;
+			text-transform: uppercase;
+			font-weight:bold;
+			background:transparent;
+			white-space: nowrap;
+		}
+		a:link,a:visited,a:active{ color:#666 }
+		a:hover{ color:orangered; }
+	}
+	&:hover .frame-action-menu{ display:block }
+
+} // menu
+
+
+/************* end frame styles ****************/

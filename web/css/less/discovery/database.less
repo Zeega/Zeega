@@ -1,0 +1,71 @@
+/*******************************
+
+	database search box
+	
+*******************************/
+
+
+#zeega-item-database
+{
+	position:absolute;
+	width:100%;
+	bottom:0;
+	background: url('@{image-folder}/paper-dark.png');
+	border-top: 2px solid orangeRed;
+
+	input
+	{
+		width:200px;
+		margin :10px 5px 0 0;
+		background-color:#ddd;
+	}
+
+	.alert
+	{
+		border-radius:0;
+		margin:0;
+		text-align:right;
+	}
+}
+
+
+#zeega-item-database-list
+{
+	background-color:rgba(0, 0, 0, 0.75);
+	min-height:150px;
+	max-height:200px;
+	overflow:auto;
+	position: relative;
+
+	&>ul
+	{
+		margin:0;
+		list-style: none;
+		overflow: auto;
+
+		&>li
+		{
+			padding:5px;
+			float:left;
+
+			&>a
+			{
+				display:block;
+				height:50px;
+				width:50px;
+				background:black;
+
+				img
+				{
+					height:100%;
+					width:100%;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+/************* end search box styles ****************/

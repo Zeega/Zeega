@@ -72,7 +72,9 @@
 		{
 			if(e.which == 13)
 			{
+			
 				var tagArray = this.model.get('tags');
+				if(!_.isArray(tagArray)) tagArray =[];
 				tagArray.push(this.$el.find('.tag-input input').val())
 				this.model.save('tags',tagArray);
 				this.render();

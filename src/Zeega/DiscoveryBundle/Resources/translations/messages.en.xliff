@@ -1,0 +1,782 @@
+﻿<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>jda.home.featured</source>
+                <target>Featured Collections</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>jda.home.about.intro</source>
+                <target>The Digital Archive of Japan's 2011 Disasters</target>
+            </trans-unit>
+             <trans-unit id="3">
+                <source>jda.home.about</source>
+                <target>is an evolving, collaborative space for citizens, researchers and policy makers, and a site of shared memory for those most directly affected by these events.</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>jda.home.archive</source>
+                <target>In the Archive</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>jda.home.tags</source>
+                <target>Frequent Tags</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>jda.home.title</source>
+                <target> Digital Archive of Japan's 2011 Disasters</target>
+            </trans-unit> 
+            <trans-unit id="7">
+                <source>jda.home.more</source>
+                <target>more</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>jda.home.add</source>
+                <target>add to the archive</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>jda.home.search</source>
+                <target>search the archive</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>jda.home.logo</source>
+                <target>logo</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>jda.about.mission</source>
+                <target>The Digital Archive of Japan's 2011 Disasters' core missions</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>jda.about.one</source>
+                <target>to index, preserve and make widely accessible the digital records of the events of March 2011 and their aftermath</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>jda.about.two</source>
+                <target>to provide a public space of information sharing, collaboration and conversation for citizens, researchers and policy makers</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>jda.about.three</source>
+                <target>to serve as a site of shared memory for those most affected by these events and most concerned about their consequences</target>
+            </trans-unit>
+             <trans-unit id="15">
+                <source>jda.about.participate</source>
+                <target>Participate</target>
+            </trans-unit>   
+             <trans-unit id="16">
+                <source>jda.about.connect</source>
+                <target>Connect &amp; Explore</target>
+            </trans-unit>
+             <trans-unit id="17">
+                <source>jda.about.connectbody</source>
+                <target>The archive aims to foster new connections, both between items and among users. As they move from item to item and collection to collection users encounter an ever-expanding network of fellow archivists, from the major organization that submits thousands of location- and direction-tagged photographs to the fellow citizen who submits her family's testimonial to the historian who seeks to understand the interaction of public and private actors in the relief effort.</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>jda.about.participateone</source>
+                <target>Browse, annotate and visualize digital records</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>jda.about.participatetwo</source>
+                <target>Build and share collections</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>jda.about.participatethree</source>
+                <target>Contribute reports, photos, videos, links, etc.</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>jda.about.participatefour</source>
+                <target>Create and share narratives (in development)</target>
+            </trans-unit>
+             <trans-unit id="22">
+                <source>jda.search.allformats</source>
+                <target>all formats</target>
+            </trans-unit>
+             <trans-unit id="23">
+                <source>jda.search.image</source>
+                <target>image</target>
+            </trans-unit>            
+             <trans-unit id="24">
+                <source>jda.search.video</source>
+                <target>video</target>
+            </trans-unit>
+             <trans-unit id="25">
+                <source>jda.search.audio</source>
+                <target>audio</target>
+            </trans-unit>            
+             <trans-unit id="26">
+                <source>jda.search.tweet</source>
+                <target>tweet</target>
+            </trans-unit>
+             <trans-unit id="27">
+                <source>jda.search.document</source>
+                <target>document</target>
+            </trans-unit>
+             <trans-unit id="28">
+                <source>jda.search.website</source>
+                <target>website</target>
+            </trans-unit>   
+             <trans-unit id="29">
+                <source>jda.search.pdf</source>
+                <target>PDF</target>
+            </trans-unit>
+             <trans-unit id="30">
+                <source>jda.search.testimonial</source>
+                <target>testimonial</target>
+            </trans-unit>
+             <trans-unit id="31">
+                <source>jda.search.listview</source>
+                <target>List View</target>
+            </trans-unit>
+             <trans-unit id="32">
+                <source>jda.search.map</source>
+                <target>Map View</target>
+            </trans-unit>
+             <trans-unit id="33">
+                <source>jda.search.relatedtags</source>
+                <target>related tags</target>
+            </trans-unit>
+             <trans-unit id="34">
+                <source>jda.search.layers</source>
+                <target>Layers</target>
+            </trans-unit>
+             <trans-unit id="35">
+                <source>jda.search.legend</source>
+                <target>Legend</target>
+            </trans-unit>
+             <trans-unit id="36">
+                <source>jda.search.muncipaldistricts</source>
+                <target>Muncipal Districts</target>
+            </trans-unit>
+             <trans-unit id="37">
+                <source>jda.search.radiation</source>
+                <target>Radiation</target>
+            </trans-unit>
+             <trans-unit id="38">
+                <source>jda.search.casualties</source>
+                <target>Casualties</target>
+            </trans-unit>
+             <trans-unit id="39">
+                <source>jda.search.flooding</source>
+                <target>Flooding</target>
+            </trans-unit>
+             <trans-unit id="40">
+                <source>jda.search.shake</source>
+                <target>Shake</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>jda.header.about</source>
+                <target>About</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>jda.header.feedback</source>
+                <target>Feedback</target>
+            </trans-unit>           
+            <trans-unit id="43">
+                <source>jda.header.japanese</source>
+                <target>日本語</target>
+            </trans-unit>               
+            <trans-unit id="44">
+                <source>jda.header.english</source>
+                <target>English</target>
+            </trans-unit>                       
+            <trans-unit id="45">
+                <source>jda.home.partners</source>
+                <target>Partners</target>
+            </trans-unit>                       
+            <trans-unit id="46">
+                <source>jda.home.go</source>
+                <target>go</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>jda.about.paragraph1</source>
+                <target>Over the remainder of 2012 and into 2013 we will be introducing improvements in this beta version, with particular attention to the mapping feature and collection building, to enable users to create a range of presentations based on materials in their collections.  We very much welcome your suggestions and feedback.</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>jda.search.items</source>
+                <target> items</target>
+            </trans-unit>
+             <trans-unit id="49">
+                <source>jda.home.source</source>
+                <target>image source</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>jda.search.data</source>
+                <target>Layers</target>
+            </trans-unit>
+            <trans-unit id="51">
+                <source>jda.login.username</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="52">
+                <source>jda.login.password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="53">
+                <source>jda.login.partnerlogin</source>
+                <target>Partner Login</target>
+            </trans-unit>
+            <trans-unit id="54">
+                <source>jda.login.requestalogin</source>
+                <target>Request a login</target>
+            </trans-unit>
+            <trans-unit id="56">
+                <source>jda.header.signin</source>
+                <target>Sign in</target>
+            </trans-unit>
+            <trans-unit id="57">
+                <source>jda.login.subheader</source>
+                <target>The archive is currently in development and only available to partners.</target>
+            </trans-unit>
+            <trans-unit id="58">
+                <source>jda.login.button</source>
+                <target>Submit</target>
+            </trans-unit>
+            <trans-unit id="59">
+                <source>jda.header.alphadescription</source>
+                <target>This 'beta' version of the Digital Archive of Japan's 2011 Disasters is still a work in progress. We invite you to look around and see what's going on, but there will be a few bumps in the road. We're working every day to expand the functionality of the site and fix bugs. We hope you you are able to make use of the site and keep checking back!</target>
+            </trans-unit>
+             <trans-unit id="60">
+                <source>jda.header.aboutalpha</source>
+                <target>About Alpha</target>
+            </trans-unit>
+            <trans-unit id="61">
+                <source>jda.header.signout</source>
+                <target>Sign Out</target>
+            </trans-unit>
+            <trans-unit id="62">
+                <source>jda.advsearch.searchTerms</source>
+                <target>Search Terms:</target>
+            </trans-unit>
+            <trans-unit id="63">
+                <source>jda.advsearch.title</source>
+                <target>Advanced Search:</target>
+            </trans-unit>
+            <trans-unit id="64">
+                <source>jda.advsearch.video</source>
+                <target>Video</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>jda.advsearch.audio</source>
+                <target>Audio</target>
+            </trans-unit>
+            <trans-unit id="66">
+                <source>jda.advsearch.image</source>
+                <target>Image</target>
+            </trans-unit>
+            <trans-unit id="67">
+                <source>jda.advsearch.website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="68">
+                <source>jda.advsearch.tweet</source>
+                <target>Tweet</target>
+            </trans-unit>
+            <trans-unit id="69">
+                <source>jda.advsearch.document</source>
+                <target>Document</target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>jda.advsearch.all</source>
+                <target>All</target>
+            </trans-unit>
+            <trans-unit id="71">
+                <source>jda.advsearch.contentType</source>
+                <target>Content Type:</target>
+            </trans-unit>
+            <trans-unit id="72">
+                <source>jda.advsearch.user</source>
+                <target>User:</target>
+            </trans-unit>
+            <trans-unit id="73">
+                <source>jda.advsearch.allusers</source>
+                <target>All Users</target>
+            </trans-unit>
+            <trans-unit id="74">
+                <source>jda.advsearch.onlyCurrentUser</source>
+                <target>Only My Items</target>
+            </trans-unit>
+            <trans-unit id="75">
+                <source>jda.advsearch.tags</source>
+                <target>Tags:</target>
+            </trans-unit>
+            <trans-unit id="76">
+                <source>jda.advsearch.startDate</source>
+                <target>Start Date:</target>
+            </trans-unit>
+            <trans-unit id="77">
+                <source>jda.advsearch.endDate</source>
+                <target>End Date:</target>
+            </trans-unit>
+            <trans-unit id="78">
+                <source>jda.advsearch.incCollections</source>
+                <target>Include Collections?:</target>
+            </trans-unit>
+            <trans-unit id="79">
+                <source>jda.advsearch.noCollections</source>
+                <target>No Collections</target>
+            </trans-unit>
+            <trans-unit id="80">
+                <source>jda.advsearch.onlyCollections</source>
+                <target>Only Collections</target>
+            </trans-unit>
+            <trans-unit id="81">
+                <source>jda.advsearch.both</source>
+                <target>Both</target>
+            </trans-unit>
+            <trans-unit id="82">
+                <source>jda.advsearch.mapInstructions</source>
+                <target>Instructions</target>
+            </trans-unit>
+            <trans-unit id="83">
+                <source>jda.advsearch.mapInstructionsTxt</source>
+                <target>Hold Shift and Drag in order to create a box around the area you would like to search</target>
+            </trans-unit>
+            <trans-unit id="84">
+                <source>jda.header.explore</source>
+                <target>Explore</target>
+            </trans-unit>
+            <trans-unit id="85">
+                <source>jda.header.collections</source>
+                <target>Collections</target>
+            </trans-unit>
+            <trans-unit id="86">
+                <source>jda.header.participate</source>
+                <target>Participate</target>
+            </trans-unit>
+            <trans-unit id="87">
+                <source>jda.login.register</source>
+                <target>Create an account</target>
+            </trans-unit>
+            <trans-unit id="88">
+                <source>jda.login.savecollection</source>
+                <target>To save your collection,</target>
+            </trans-unit>
+            <trans-unit id="89">
+                <source>jda.register.header</source>
+                <target>Create an Account!</target>
+            </trans-unit>
+            <trans-unit id="90">
+                <source>jda.register.confirm</source>
+                <target>You've successfully registered!</target>
+            </trans-unit>
+            <trans-unit id="91">
+                <source>jda.register.login</source>
+                <target>You've successfully logged in!</target>
+            </trans-unit>
+            <trans-unit id="92">
+                <source>jda.about.mission</source>
+                <target>Mission</target>
+            </trans-unit>
+            <trans-unit id="93">
+                <source>jda.about.team</source>
+                <target>Team</target>
+            </trans-unit>
+            <trans-unit id="94">
+                <source>jda.about.news</source>
+                <target>News</target>
+            </trans-unit>
+            <trans-unit id="95">
+                <source>jda.about.faq</source>
+                <target>FAQ</target>
+            </trans-unit>
+            <trans-unit id="96">
+                <source>jda.about.terms</source>
+                <target>Terms</target>
+            </trans-unit>
+            <trans-unit id="97">
+                <source>jda.user.settings</source>
+                <target>Account Settings</target>
+            </trans-unit>
+            <trans-unit id="98">
+                <source>jda.user.profile</source>
+                <target>Profile Page</target>
+            </trans-unit>
+            <trans-unit id="99">
+                <source>jda.user.logout</source>
+                <target>Logout</target>
+            </trans-unit>
+            <trans-unit id="100">
+                <source>jda.header.signin</source>
+                <target>Sign In</target>
+            </trans-unit>
+            <trans-unit id="101">
+                <source>jda.login.header</source>
+                <target>Sign in or</target>
+            </trans-unit>
+            <trans-unit id="102">
+                <source>jda.login.forgot</source>
+                <target>forgot password?</target>
+            </trans-unit>
+            <trans-unit id="103">
+                <source>jda.login.back</source>
+                <target>Back</target>
+            </trans-unit>
+            <trans-unit id="104">
+                <source>jda.login.return</source>
+                <target>Return to login</target>
+            </trans-unit>
+            <trans-unit id="105">
+                <source>jda.login.confirm</source>
+                <target>you've successfully logged in!</target>
+            </trans-unit>
+            <trans-unit id="106">
+                <source>jda.header.me</source>
+                <target>Me</target>
+            </trans-unit>
+            <trans-unit id="107">
+                <source>jda.home.collection1</source>
+                <target>Minami Sanriku Fisheries</target>
+            </trans-unit>
+            <trans-unit id="108">
+                <source>jda.home.collection1text</source>
+                <target>This public collection assembles visual and textual records documenting the impacts of the March 11, 2011 disasters on fisheries and mariculture in Minami Sanriku-chō and nearby Kesennuma.</target>
+            </trans-unit>
+            <trans-unit id="109">
+                <source>jda.home.collection2</source>
+                <target>Rebuilding and Relocating</target>
+            </trans-unit>
+            <trans-unit id="110">
+                <source>jda.home.collection2text</source>
+                <target>This public collection features articles, plans, and images related to the pivotal discussions taking place among residents of disaster-stricken areas over their economic future and how to rebuild.</target>
+            </trans-unit>
+             <trans-unit id="111">
+                <source>jda.home.collection3</source>
+                <target>Fukushima and the Food Supply</target>
+            </trans-unit>
+            <trans-unit id="112">
+                <source>jda.home.collection3text</source>
+                <target>This public collection assembles records related to public concerns over radioactive food contamination and the future of regional agriculture since the 2011 Fukushima nuclear catastrophe.</target>
+            </trans-unit>
+             <trans-unit id="113">
+                <source>jda.accountsettings.header</source>
+                <target>Change your password</target>
+            </trans-unit>
+             <trans-unit id="114">
+                <source>jda.report.feedback</source>
+                <target>Give us feeback</target>
+            </trans-unit>
+            <trans-unit id="115">
+                <source>jda.report.bugintro</source>
+                <target>The website is still in beta and we need your help to make it better! Please share your feedback and if something is not working properly, please write us a brief description of what's wrong.  You can also reach us at info [at] jdarchive.org</target>
+            </trans-unit>
+             <trans-unit id="116">
+                <source>jda.report.buglinknote</source>
+                <target> a link to the current view will be included automatically</target>
+            </trans-unit>
+             <trans-unit id="117">
+                <source>jda.report.bugemail</source>
+                <target>Your email (optional)</target>
+            </trans-unit>
+            <trans-unit id="118">
+                <source>jda.sort.by</source>
+                <target>Sort By</target>
+            </trans-unit>
+              <trans-unit id="119">
+                <source>jda.search.recent</source>
+                <target>Recent</target>
+            </trans-unit>
+            <trans-unit id="120">
+                <source>jda.search.oldest</source>
+                <target>Oldest</target>
+            </trans-unit>
+            <trans-unit id="121">
+                <source>jda.search.collection</source>
+                <target>collection</target>
+            </trans-unit>
+            <trans-unit id="122">
+                <source>jda.search.collections</source>
+                <target>collections</target>
+            </trans-unit>
+              <trans-unit id="123">
+                <source>jda.my.collection</source>
+                <target>my collection</target>
+            </trans-unit>
+            <trans-unit id="124">
+                <source>jda.drag.items</source>
+                <target>Drag items here to add to your collection</target>
+            </trans-unit>
+            <trans-unit id="125">
+                <source>jda.drag.added</source>
+                <target>Added!</target>
+            </trans-unit>
+             <trans-unit id="126">
+                <source>jda.drag.shareorganize</source>
+                <target>Share and Organize</target>
+            </trans-unit>
+            <trans-unit id="127">
+                <source>jda.drag.and</source>
+                <target>and</target>
+            </trans-unit>
+     		 <trans-unit id="128">
+                <source>jda.drag.moreitems</source>
+                <target>more items</target>
+            </trans-unit>   
+            <trans-unit id="129">
+                <source>jda.drag.createnewcollection</source>
+                <target>Create A New Collection</target>
+            </trans-unit>   
+         	<trans-unit id="130">
+                <source>jda.advanced.search</source>
+                <target>Advanced Search</target>
+            </trans-unit>   
+            <trans-unit id="131">
+                <source>jda.search.withtimeplace</source>
+                <target>with time and place data</target>
+            </trans-unit> 
+			 <trans-unit id="132">
+                <source>jda.collection.goto</source>
+                <target>Go to Collection</target>
+            </trans-unit>  
+            <trans-unit id="133">
+                <source>jda.collection.save</source>
+                <target>Save Collection</target>
+            </trans-unit>
+         	 <trans-unit id="134">
+                <source>jda.collection.dragcover</source>
+                <target>Drag cover image here</target>
+            </trans-unit>    
+            <trans-unit id="135">
+                <source>jda.search.tips1</source>
+                <target>Enter your keyword search in the box to the left.
+                </target>
+            </trans-unit>
+             <trans-unit id="136">
+                <source>jda.search.tips2</source>
+                <target>To search only tags, begin your search with "t" and select "tag:"
+                </target>
+            </trans-unit>    
+             <trans-unit id="137">
+                <source>jda.search.tips3</source>
+                <target>To search by user, begin your search with "u" and select "user:"
+                </target>
+            </trans-unit>  
+              <trans-unit id="138">
+                <source>jda.about.paragraph2</source>
+                <target>This beta version of the Digital Archive of Japan's 2011 Disasters is the result of an ongoing global collaborative effort. Its ever-expanding content represents the contributions of an array of individuals and organizations variously affected by the unprecedented events of March 2011 and their aftermath. The development of the archive interface has been led by the Edwin O. Reischauer Institute at Harvard University in collaboration with metaLAB (at) Harvard, Harvard's Center for Geographic Analysis and Zeega.org, a non-profit creative technology company. This current version lays the groundwork for an ever-evolving and ultimately participatory archive. The interface is built using Zeega, an open-source platform that supports initaitives in crisis archiving, enabling anyone to create participatory projects that combine original content with photos, videos, text, audio, data feeds and maps via APIs from across the web.</target>
+            </trans-unit>
+             <trans-unit id="139">
+                <source>jda.about.archive</source>
+                <target>ABOUT THE JAPAN 2011 DISASTER ARCHIVE</target>
+            </trans-unit>
+            <trans-unit id="140">
+                <source>jda.search.itemscontributed</source>
+                <target>Items Contributed to the Archive</target>
+            </trans-unit>
+             <trans-unit id="141">
+                <source>jda.collection.confirmdelete</source>
+                <target>Are you sure you want to remove this item from the collection?</target>
+            </trans-unit>
+            <trans-unit id="142">
+                <source>jda.search.removedFilter</source>
+                <target>Removed filter</target>
+            </trans-unit>
+            <trans-unit id="143">
+                <source>jda.search.unsupportedFilters</source>
+                <target>Sorry, the map view doesn't support this yet.</target>
+            </trans-unit>
+            <trans-unit id="144">
+                <source>jda.search.loadingmoreresults</source>
+                <target>Loading more results...</target>
+            </trans-unit>
+        	<trans-unit id="145">
+                <source>jda.login.forgotpassword</source>
+                <target>Forgot Password</target>
+            </trans-unit>
+            <trans-unit id="146">
+                <source>jda.browser.modalheader</source>
+                <target>You are using an unsupported Browser</target>
+            </trans-unit>
+            <trans-unit id="147">
+                <source>jda.browser.modalbody</source>
+                <target>The Japan Digital Archive is currently optimized for the latest versions of Chrome, Internet Explorer, Firefox and Safari.  Please upgrade your browser to best experience the Japan Digital Archive</target>
+            </trans-unit>
+            <trans-unit id="148">
+                <source>jda.collection.play</source>
+                <target>Play collection in Zeega Player </target>
+            </trans-unit>
+            <trans-unit id="149">
+                <source>jda.collection.editdetails</source>
+                <target>edit collection details</target>
+            </trans-unit>
+             <trans-unit id="150">
+                <source>jda.collection.editarchive</source>
+                <target>edit archive settings</target>
+            </trans-unit>
+             <trans-unit id="151">
+                <source>jda.collection.description</source>
+                <target>Collection Description</target>
+            </trans-unit>
+             <trans-unit id="152">
+                <source>jda.collection.archive</source>
+                <target>Archive Settings</target>
+            </trans-unit>
+             <trans-unit id="153">
+                <source>jda.collection.public</source>
+                <target>Public</target>
+            </trans-unit>
+             <trans-unit id="154">
+                <source>jda.collection.limited</source>
+                <target>Limited</target>
+            </trans-unit>
+             <trans-unit id="155">
+                <source>jda.collection.archivenote</source>
+                <target>Note: it may take several minutes for the changes to take effect</target>
+            </trans-unit>
+             <trans-unit id="156">
+                <source>jda.collection.new</source>
+                <target>new collection</target>
+            </trans-unit>
+             <trans-unit id="157">
+                <source>jda.collection.createnew</source>
+                <target>Create A New Collection</target>
+            </trans-unit>
+             <trans-unit id="158">
+                <source>jda.save</source>
+                <target>Save</target>
+            </trans-unit>
+             <trans-unit id="159">
+                <source>jda.cancel</source>
+                <target>Cancel</target>
+            </trans-unit>
+            <trans-unit id="160">
+                <source>jda.collection.nolocation</source>
+                <target>No location information</target>
+            </trans-unit>
+            <trans-unit id="161">
+                <source>jda.collection.publiclabel</source>
+                <target>Anyone can view your collection. Your collection will appear in general archive searches.</target>
+            </trans-unit>
+            <trans-unit id="162">
+                <source>jda.collection.limitedlabel</source>
+                <target>Only those people with a link to your collection can view it. Your collection will not appear in general archive searches or on your public user page.</target>
+            </trans-unit>
+              <trans-unit id="163">
+                <source>jda.collection.publicdesc</source>
+                <target>Anyone can find this collection.</target>
+            </trans-unit>
+            <trans-unit id="164">
+                <source>jda.collection.limiteddesc</source>
+                <target>Will not show up in search results</target>
+            </trans-unit>
+              <trans-unit id="165">
+                <source>jda.collection.editdesc</source>
+                <target>Edit Collection Description</target>
+            </trans-unit>
+            <trans-unit id="166">
+                <source>jda.collection.editlocation</source>
+                <target>Edit Location</target>
+            </trans-unit>
+            <trans-unit id="167">
+                <source>jda.collection.remove</source>
+                <target>remove</target>
+            </trans-unit>
+            <trans-unit id="168">
+                <source>jda.searching</source>
+                <target>Searching</target>
+            </trans-unit>
+            <trans-unit id="169">
+                <source>jda.feedbackthanks</source>
+                <target>Thanks for your feedback！</target>
+            </trans-unit>
+            <trans-unit id="170">
+                <source>jda.close</source>
+                <target>Close</target>
+            </trans-unit>
+             <trans-unit id="171">
+                <source>jda.team</source>
+                <target>the jda team</target>
+            </trans-unit>
+            <trans-unit id="172">
+                <source>fancybox.addto</source>
+                <target>Add to</target>
+            </trans-unit>
+            <trans-unit id="173">
+                <source>fancybox.link</source>
+                <target>Link</target>
+            </trans-unit>
+            <trans-unit id="174">
+                <source>fancybox.more</source>
+                <target>VIEW MORE</target>
+            </trans-unit>
+            <trans-unit id="175">
+                <source>fancybox.less</source>
+                <target>VIEW LESS</target>
+            </trans-unit>
+            <trans-unit id="176">
+                <source>fancybox.source</source>
+                <target>View Source</target>
+            </trans-unit>
+            <trans-unit id="177">
+                <source>fancybox.description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="178">
+                <source>fancybox.map</source>
+                <target>Map</target>
+            </trans-unit>
+            <trans-unit id="179">
+                <source>fancybox.tags</source>
+                <target>Tags</target>
+            </trans-unit>
+            <trans-unit id="180">
+                <source>fancybox.addtag</source>
+                <target>add a tag</target>
+            </trans-unit>
+             <trans-unit id="181">
+                <source>jda.search.thumbnailview</source>
+                <target>Thumbnail View</target>
+            </trans-unit>
+            <trans-unit id="182">
+                <source>jda.collection.delete</source>
+                <target>Delete Collection</target>
+            </trans-unit>
+            <trans-unit id="183">
+                <source>fancybox.pdf</source>
+                <target>Click to download PDF</target>
+            </trans-unit>
+            <trans-unit id="184">
+                <source>jda.about.project</source>
+                <target>About the Archive</target>
+            </trans-unit>
+             <trans-unit id="185">
+                <source>jda.team.leader</source>
+                <target>This project is lead by the Reischauer Institute of Japanese Studies</target>
+            </trans-unit>
+            <trans-unit id="186">
+                <source>jda.team.additional</source>
+                <target>Reischauer Institute Faculty and Staff providing additional support</target>
+            </trans-unit>
+             <trans-unit id="187">
+                <source>jda.team.zeega</source>
+                <target>Interactive Design and Development by Zeega.org</target>
+            </trans-unit>
+            <trans-unit id="188">
+                <source>jda.team.interaction</source>
+                <target>Interaction Design</target>
+            </trans-unit>
+            <trans-unit id="189">
+                <source>jda.team.alumni</source>
+                <target>Team Alumni</target>
+            </trans-unit>
+            <trans-unit id="190">
+                <source>jda.team.inquiries</source>
+                <target>Please direct inquiries to </target>
+            </trans-unit>
+             <trans-unit id="191">
+                <source>jda.header.add</source>
+                <target>Add to the Archive</target>
+            </trans-unit>
+            <trans-unit id="192">
+                <source>jda.header.addwebsite</source>
+                <target>Add a Website</target>
+            </trans-unit>
+             <trans-unit id="193">     
+                <source>jda.header.addtestimonial</source>
+                <target>Add a Testimonial</target>
+			</trans-unit>
+             <trans-unit id="194"> 
+                <source>jda.search.relevant</source>
+                <target>Relevant</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
