@@ -393,6 +393,8 @@ class ItemsController extends Controller
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
 
+        $collection = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        
         $queryResults = $this->getDoctrine()
                              ->getRepository('ZeegaDataBundle:Item')
                              ->searchCollectionItems($query);
@@ -430,8 +432,8 @@ class ItemsController extends Controller
          	}
          }
          
-         $project = array("id"=>1,
-                          "title"=>"Collection",
+         $project = array("id"=>$collection->getId(),
+                          "title"=>$collection->getTitle(),
                           "estimated_time"=>"Some time", 
                           "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
                           'frames'=>$frames,
