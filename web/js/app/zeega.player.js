@@ -58,6 +58,7 @@ this.zeegaPlayer = {
 	{
 		this.data = data;
 		var Player = zeegaPlayer.module('player');
+		this.project = new Player.ProjectModel( data );
 		this.project.load();
 		console.log('$$		project parsed', this, this.project);
 	},
