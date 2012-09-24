@@ -1008,7 +1008,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-view-buttons{width:108px;float:left;margin-right:31px;margin-top:5px;}
 #zeega-search-wrapper{height:40px;padding:5px;}
 .VS-search .VS-search-box{-webkit-border-radius:6px !important;width:660px;background-color:white !important;border:1px solid #CCC !important;padding:4px;}
-.VS-search .VS-icon-search,.VS-search .VS-cancel-search-box{top:12px !important;}
+.VS-search .VS-icon-search{top:12px !important;padding-left:8px!important;width:5px !important;background-position:left center !important;}
+.VS-search .VS-cancel-search-box{top:12px !important;}
 .arrow-down{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #999;position:absolute;top:14px;left:117px;}
 #search-bar{opacity:0;-moz-opacity:0;filter:alpha(opacity=0);padding:0 !important;float:left;}
 #search-bar h5{line-height:18px;height:44px;color:rgba(255, 255, 255, 0.85);}
@@ -1187,6 +1188,8 @@ li.layer-open .layer-control-drawer{display:block;}
 #zeega-list-view .zeega-list-middle-column{width:-webkit-calc(-120%);word-break:break-all;}
 #zeega-list-view .zeega-list-right-column{width:115px;}
 .collection-head .cover-image{background:repeat;background-color:#ccc;height:200px;position:relative;margin-bottom:10px;}
+.collection-thumb-drop{outline:1px solid yellow;}
+.collection-remove-item{z-index:10;position:absolute;background:transparent !important;font-weight:bold;padding-left:2px;line-height:11px;width:10px;height:10px;overflow:hidden;}
 .collection-head .cover-overlay{background-color:rgba(255, 255, 255, 0.75);position:absolute;bottom:0;width:100%;padding:10px;}
 .collection-head .cover-overlay h4{font-weight:400;}
 .collection-description{margin:10px 0;font-weight:400;padding:2px 0 0 2px;}

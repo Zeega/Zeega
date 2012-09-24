@@ -848,6 +848,7 @@ this.zeegaPlayer = {
 		{
 			
 			// need to add error state for icons!!
+			console.log(this.model);
 			this.$el.html( _.template( this.getTemplate(),this.model.toJSON()) );
 			return this;
 		},

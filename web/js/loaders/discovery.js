@@ -66,7 +66,7 @@ require (
 			
 				//custom
 			'order!helpers/utils',
-			'order!app/index.discover',
+			'order!app/index.discovery',
 	
 	],function(){});
 

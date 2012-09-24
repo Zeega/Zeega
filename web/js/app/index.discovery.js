@@ -87,6 +87,28 @@ jQuery(function($)
   
   //Infinite Scroll
   
+  /*
+  $(window).scroll(function(event){
+  
+  	console.log(event.target);
+  
+  });
+  */
+  
+  $('#zeega-results-wrapper').bind('scroll', function()
+                              {
+                                if($(this).scrollTop() + 
+                                   $(this).innerHeight()
+                                   >= $(this)[0].scrollHeight)
+                                {
+                                	if(zeega.discovery.app.resultsView.collection.query.page*100<zeega.discovery.app.resultsView.collection.count){
+                                		zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.query.page+1;
+      							  		zeega.discovery.app.search(zeega.discovery.app.searchObject,false);
+      							  	}
+                                }
+                              });
+
+
   
   /*
   zeega.discovery.app.killScroll = false; 

@@ -373,7 +373,7 @@
 				'<h3><%= title %></h3><p >by: <%= author %>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -393,7 +393,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 			'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -416,7 +416,7 @@
 				'<div><%= description %></div>'+
 			'</td>'+
 			'<td class="jda-item-date">'+
-				' <%= date_created.date %>'+
+				''+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 
@@ -436,7 +436,7 @@
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
 			'<td class="zeega-list-right-column jda-item-date">'+
-				' <%= date_created.date %>'+
+				''+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -453,7 +453,7 @@
 			'<td class="zeega-list-middle-column">'+
 				'<p class="jda-item-description"><%= text %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			
@@ -469,7 +469,7 @@
 				'<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
 				'<p class="jda-item-description"><%= description %></p>'+
 			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+			'<td class="zeega-list-right-column jda-item-date">'+
 				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 			'</td>';
 			return html;
@@ -488,7 +488,7 @@
 					'<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
-				'<td class="zeega-list-right-column jda-item-date"> <%= date_created.date %>'+
+				'<td class="zeega-list-right-column jda-item-date">'+
 					''+
 				'</td>';
 				
@@ -510,7 +510,7 @@
 					'<p class="jda-item-description"><%= description %></p>'+
 				'</td>'+
 				'<td class="zeega-list-right-column jda-item-date">'+
-					' <%= date_created.date %>'+
+					''+
 					'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
 				'</td>';
 				
@@ -535,7 +535,7 @@
 			var _this = this;
 			this.$el.addClass('list');
 			this.collection.each(function(item){
-				_this.$el.append( new Items.Views.DrawerThumbView({model:item}).render().el );
+				_this.$el.append( new Items.Views.DrawerThumbView({model:item},{collection_type:_this.collection.type}).render().el );
 			})
 			return this;
 		}
@@ -546,7 +546,10 @@
 
 		tagName : 'li',
 		className : 'database-asset-list',
-
+		initialize : function (model,options){
+			_.extend(this,options);
+		
+		},
 		render: function()                 
 		{
 			this.$el.html( _.template(this.getTemplate(),this.model.toJSON() ));
@@ -592,15 +595,14 @@
 		//item events
 		previewItem: function()
 		{
+			console.log('preview',this.model.id);
 			this.model.trigger('preview_item',this.model.id)
 		},
 
 		getTemplate : function()
 		{
-			var html =
-
-				"<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
-
+			if(this.type=='static')	var html = "<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
+			else var html= "<a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
 			return html;
 		}
 	});
@@ -623,13 +625,16 @@
 			});
 		},
 		
-		events : {
+		events : 
+		{
 			'click .delete-collection'		: 'delete',
 			'click .layer-super'		: 'expand',
 			'click .edit-item-metadata' : 'preview',
 			'click .collection-remove-item':'removeItem'
 		},
-		removeItem : function(event){
+		
+		removeItem : function(event)
+		{
 
 			if(confirm('Remove item from collection?')){
 				var itemID = $(event.target).attr('id');
@@ -656,6 +661,7 @@
 			
 			return false;
 		},
+		
 		render : function()
 		{
 			
@@ -735,13 +741,13 @@
 			return this;
 		},
 
-		updateTitle:function(){
+		updateTitle:function()
+		{
 			if(this.model.get('title').length>25) var title = this.model.get('title').substr(0,23)+'...';
 			else var title = this.model.get('title');
 			this.$el.find('.collection-title').html(title);
 		
 		},
-
 
 		delete : function()
 		{
@@ -782,12 +788,16 @@
 				
 				if(!this.loaded){
 					this.loaded=true;
-					this.model.fetch(
+					if(this.model.get('layer_type')=='Dynamic') this.children=new Items.Collections.Dynamic([],{id:this.model.id});
+					else this.children =new Items.Collections.Static([],{id:this.model.id});
+					
+			
+					this.children.fetch(
 				{
 
-					success : function(model, response)
+					success : function(collection, response)
 					{ 
-						_this.children=new Items.Collection(model.get('child_items'));
+						console.log(collection);
 						_this.$el.find('#zeega-item-database-list').append(new Items.Views.DrawerView({collection:_this.children}).render().el);
 					},
 					error : function(model, response)
@@ -804,6 +814,7 @@
 		
 		preview :function()
 		{
+			
 			this.model.trigger('preview_item',this.model.id);
 			return false;
 		},
@@ -940,8 +951,9 @@
 			_.extend(this.attr,{
 				title:this.$('#collection-title').val(),
 				description:this.$('#collection-description').val(),
-				attr:{
-					tags:this.$('#tag-input').val()
+				published:true,
+				attributes:{
+					tags:this.$('#tag-input').val(),
 				},
 				child_items:[],
 				new_items:[],

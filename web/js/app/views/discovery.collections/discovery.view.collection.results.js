@@ -8,7 +8,7 @@
 		el : $('#zeega-results-wrapper'),
 	
 		initialize : function(){
-			this.collection = new Items.Collection();
+			this.collection = new Items.Collections.Search();
 			this.collection.on( 'reset', this.reset, this);
 			this._childViews = [];
 			this._collectionChildViews = [];
@@ -17,8 +17,18 @@
 			zeega.discovery.app.isLoading = true;
 
 			this.collection.bind('remove', this.remove, this);
-			
-			
+			this.collection.bind('add', this.add, this);	
+		},
+		
+		add : function(item){
+		
+			var itemView;
+			if(zeega.discovery.app.currentView == 'thumb') itemView = new Items.Views.Thumb({model:item});
+			else itemView = new Items.Views.List({model:item});
+			this._childViews.push( itemView );
+			if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
+			else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
+		
 		},
 		
 		remove : function(model){
@@ -82,30 +92,29 @@
 			
 			_this._isRendered = true;
 			
+			//if(this.collection.search.page==1)$('.results-wrapper').empty();
 			$('.results-wrapper').empty();
-				
+			if(zeega.discovery.app.currentView == 'thumb') $('#results-list-wrapper').hide();
+			else $('#results-thumbnail-wrapper').hide();
 				
 			
 			var q =0;
 			
 			_.each( _.toArray(this.collection), function(item){
-				q++;
-				if(q>(_this.collection.search.page-1)*100){
-					var itemView;
-					if(zeega.discovery.app.currentView == 'thumb'){
-						itemView = new Items.Views.Thumb({model:item});
-					} else{
-						
-						itemView = new Items.Views.List({model:item});
-					}
+				
+				var itemView;
+				if(zeega.discovery.app.currentView == 'thumb'){
+					itemView = new Items.Views.Thumb({model:item});
+				} else{
 					
-					_this._childViews.push( itemView );
-					
-					if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
-					else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
-			
-			
+					itemView = new Items.Views.List({model:item});
 				}
+				
+				_this._childViews.push( itemView );
+				
+				if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
+				else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
+
 			})
 			
 
@@ -188,7 +197,7 @@
 
 			$('#spinner').spin('large');
 
-			this.collection.setSearch(obj,reset);
+			this.collection.setQuery(obj,reset);
 	
 			
 			// fetch search collection for the list/thumb view
@@ -202,7 +211,7 @@
 
 					$('#zeega-results-count-number').html( _this.addCommas(response["items_count"]));
 					_this.renderTags(response.tags);
-					_this.render();
+					if(_this.collection.query.page==1)_this.render();
 					
 					if(_this.collection.length<parseInt(response["items_count"])) zeega.discovery.app.killScroll = false; //to activate infinite scroll again
 					else zeega.discovery.app.killScroll = true;
