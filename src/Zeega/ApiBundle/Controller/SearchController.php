@@ -253,7 +253,7 @@ class SearchController extends Controller
 
         $returnItemsAndCollections = $request->query->get('r_itemswithcollections');
         if(isset($returnItemsAndCollections)) {
-            $results["items_and_collections"] = $groups->getGroup('media_type:*');  
+            $results["items"] = $groups->getGroup('media_type:*');  
         } 
 
         $tags = $facets->getFacet('tags');                   //     get the tags results
