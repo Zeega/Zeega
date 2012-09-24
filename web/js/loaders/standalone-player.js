@@ -51,6 +51,7 @@ require(
 	'order!plugins/layers/link/link',
 	'order!plugins/layers/documentcloud/documentcloud',
 	'order!plugins/layers/rectangle/rectangle',
+	'order!plugins/layers/popup/popup',
 	'order!plugins/layers/website/website',
 	'order!plugins/layers/twitter/twitter',
 	'order!plugins/layers/testimonial/testimonial',
