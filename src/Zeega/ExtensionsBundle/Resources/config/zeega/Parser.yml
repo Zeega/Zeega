@@ -37,15 +37,15 @@ zeega.parsers:
 
     youtube.com:
         item_parser:
-            regex: /http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/
+            regex: /https?:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/
             is_set: false
             parser_class: Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubeVideo
         set_parser:
-            regex: /http:\/\/(?:www\.)?youtube.*list=([a-zA-Z0-9\-_]+)+/
+            regex: /https?:\/\/(?:www\.)?youtube.*list=([a-zA-Z0-9\-_]+)+/
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist
         set_parser2:
-            regex: /http:\/\/(?:www\.)?youtube.com\/p\/([a-zA-Z0-9\-_]+)/
+            regex: /https?:\/\/(?:www\.)?youtube.com\/p\/([a-zA-Z0-9\-_]+)/
             is_set: true
             parser_class: Zeega\ExtensionsBundle\Parser\Youtube\ParserYoutubePlaylist
     soundcloud.com: #order matters (last regex matches any soundlcoud url)

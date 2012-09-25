@@ -174,7 +174,7 @@ class SearchController extends Controller
 		if($queryString != '') {                               //   add a Published filter to the query
             $queryString = $queryString . " AND ";
         }
-        $queryString = $queryString . "published:true AND enabled:true";
+        $queryString = $queryString . "enabled:true";
 
         if(isset($tags) and $tags != '') {                     //   escape the tags query
         	$tags = ResponseHelper::escapeSolrQuery($tags);
