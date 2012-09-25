@@ -239,7 +239,7 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $requestData = $this->getRequest()->request;      
-        
+
         $item = $this->populateItemWithRequestData($requestData);
 
         $em->persist($item);
@@ -482,6 +482,7 @@ class ItemsController extends Controller
         $attributes = $request_data->get('attributes');
         $tags = $request_data->get('tags');
         $published = $request_data->get('published');
+        $user_id = $request_data->get('user_id');
         
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
@@ -505,8 +506,10 @@ class ItemsController extends Controller
                     $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
                 }
             }
+        } else if(isset($user_id) && $user_id == 760) {
+            $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($user_id);
         }
-
+        
         $checkForDuplicateItems = true;
         
         if(isset($id))
@@ -574,7 +577,11 @@ class ItemsController extends Controller
         if(isset($license)) $item->setLicense($license);
         if(isset($attributes)) $item->setAttributes($attributes);
         if(isset($tags)) $item->setTags($tags);
-        if(isset($published)) $item->setPublished($published);
+        if(isset($published)) {
+            $item->setPublished($published);  
+        } else {
+            $item->setPublished(false);  
+        }
         
         $item->setEnabled(true);
         $item->setIndexed(false);
