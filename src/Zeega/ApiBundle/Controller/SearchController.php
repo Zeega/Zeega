@@ -45,57 +45,57 @@ class SearchController extends Controller
         $returnItems = $request->query->get('r_items');   				//  bool
         $source = $request->query->get('data_source');                  //  bool
 	
-        if($solrEnabled) {
+         if($solrEnabled) {
             if(null !== $source && $source === 'db') {
                 $useSolr = false;
             } else {
                 $useSolr = true;
             }     
-        } else {	
+        } else {    
             $useSolr = false;
         }
 
-		if(true === $useSolr) {
-			if(isset($collectionId) || ((isset($returnCollections) && $returnCollections == 1) && (!isset($returnItems) || $returnItems == 0)))
-			{
-			    // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
-			    // send db query to doctrine
+        if(true === $useSolr) {
+            if(isset($collectionId) || ((isset($returnCollections) && $returnCollections == 1)))
+            {
+                // if we want to get the items of a Collection we need to do a hybrid search to get non indexed items from the database
+                // send db query to doctrine
 
-				$dbItems = $this->searchWithDoctrine();
-				
-				$items = array();
-				$counts = array();
-				
-				// get the results from the DB
-				if(array_key_exists("items",$dbItems)) 
-				{
-					$items["items"] = $dbItems["items"];
-					$counts["count"] = $dbItems["items_count"];
-					$counts["returned_count"] = $dbItems["returned_items_count"];
-				}
-				if(array_key_exists("collections",$dbItems)) 
-				{
-					$items["collections"] = $dbItems["collections"];
-					$counts["count"] = $dbItems["collections_count"];
-					$counts["returned_count"] = $dbItems["returned_collections_count"];
-				}
-				
-				$itemsView = $this->renderView('ZeegaApiBundle:Search:index.json.twig', array('results'=> $items, 'counts' => $counts, 'user'=>$user, 'userIsAdmin'=>$isAdmin));
-		    	return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-			}
-			else
-			{
-				$dbItems = array();
-				$solrItems = $this->searchWithSolr();
-			}
-			            
-		    $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"], 'user'=>$user, 'userIsAdmin'=>$isAdmin));
-		    return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-		}
-		else
+                $dbItems = $this->searchWithDoctrine();
+                
+                $items = array();
+                $counts = array();
+                
+                // get the results from the DB
+                if(array_key_exists("items",$dbItems)) 
+                {
+                    $items["items"] = $dbItems["items"];
+                    $counts["count"] = $dbItems["items_count"];
+                    $counts["returned_count"] = $dbItems["returned_items_count"];
+                }
+                if(array_key_exists("collections",$dbItems)) 
+                {
+                    $items["collections"] = $dbItems["collections"];
+                    $counts["count"] = $dbItems["collections_count"];
+                    $counts["returned_count"] = $dbItems["returned_collections_count"];
+                }
+                
+                $itemsView = $this->renderView('ZeegaApiBundle:Search:index.json.twig', array('results'=> $items, 'counts' => $counts, 'user'=>$user, 'userIsAdmin'=>$isAdmin));
+                return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+            }
+            else
+            {
+                $dbItems = array();
+                $solrItems = $this->searchWithSolr();
+            }
+                        
+            $itemsView = $this->renderView('ZeegaApiBundle:Search:solr.json.twig', array('new_items'=> $dbItems,'results' => $solrItems["items"], 'tags' => $solrItems["tags"], 'user'=>$user, 'userIsAdmin'=>$isAdmin));
+            return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+        }
+        else
         {
-			return $this->searchWithDoctrineAndGetResponse();
-		}
+            return $this->searchWithDoctrineAndGetResponse();
+        }
     }
     
     private function searchWithSolr($notInId = null)
@@ -247,19 +247,47 @@ class SearchController extends Controller
         $facets = $resultset->getFacetSet();        
                 
         $returnItems = $request->query->get('r_items');
+        $returnCollections = $request->query->get('r_collections');
+        $returnItemsAndCollections = $request->query->get('r_itemswithcollections');
+
+        $results["items"] = array();
+
         if(isset($returnItems)) {                              
             $results["items"] = $groups->getGroup('-media_type:Collection');  
-        } 
-        
-        $returnCollections = $request->query->get('r_collections');
-        if(isset($returnCollections)) {
-            $results["collections"] = $groups->getGroup('media_type:Collection');  
-        } 
-
-        $returnItemsAndCollections = $request->query->get('r_itemswithcollections');
-        if(isset($returnItemsAndCollections)) {
+        } else if(isset($returnCollections)) {
+            $results["items"] = $groups->getGroup('media_type:Collection');  
+        } else if(isset($returnItemsAndCollections)) {
             $results["items"] = $groups->getGroup('media_type:*');  
         } 
+
+        if(isset($returnCollections) || isset($returnItemsAndCollections)) {
+
+            $results["dynamic_queries_counts"] = array();
+
+            $dynamicQueriesCounts = array();
+            
+            foreach($results["items"] as $it) {
+                $itemFields = $it->getFields();
+
+                if($itemFields["media_type"] == 'Collection' && $itemFields["layer_type"] == 'Dynamic') {
+                    $queryString = $itemFields["attributes"];
+                    $queryString = implode(",", $queryString);
+
+                    $queryString = str_replace("=", ':(', $queryString);
+                    $queryString = str_replace("{", '', $queryString);
+                    $queryString = str_replace("}", ')', $queryString);
+                    $queryString = str_replace("tags", 'tags_i', $queryString);
+                           
+                    //var_dump($queryString);
+                    
+                    $countQuery = $client->createSelect();
+                    $countQuery->setQuery($queryString);
+                    $resultset = $client->select($countQuery);
+                
+                    $results["dynamic_queries_counts"][$itemFields["id"]] = $resultset->getNumFound(); 
+                }
+            }
+        }
 
         $tags = $facets->getFacet('tags');                   //     get the tags results
         $tagsArray = array(); 
@@ -271,7 +299,7 @@ class SearchController extends Controller
         		$tagsArray[$tag_name] = $tag_count;
         	}
         }
-        
+        //return var_dump($results);
         return array("items"=>$results,"tags"=>$tagsArray);
     }
     

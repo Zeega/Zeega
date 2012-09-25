@@ -1,6 +1,8 @@
 {% set value = 'no spaces' %}
 {
 	{%- for res_type,res_docs in results -%}
+		{% if res_type != "dynamic_queries_counts" %}
+		
 		"{{ res_type}}":
 		{% if res_docs|length > 0 %}
 		[
@@ -30,7 +32,7 @@
 				"media_type": "{{ doc_fields.media_type }}",
 				"layer_type": "{{ doc_fields.layer_type }}",
 				"thumbnail_url": {{ doc_fields.thumbnail_url | default("") | json_encode | raw}},
-				"child_items_count": {{ doc_fields.child_items_count }},
+				"child_items_count": {{ results["dynamic_queries_counts"][doc_fields.id] | default ("") | json_encode | raw}},
 				"media_creator_username": {{ doc_fields.media_creator_username | json_encode | raw}},
 				"media_creator_realname": {{ doc_fields.media_creator_realname | default("") | json_encode | raw}},
 				"archive": "{{ doc_fields.archive }}",
@@ -51,7 +53,7 @@
 						{{ attribute | default("") | json_encode | raw}},
 					{%- endfor -%}	
 				{%- else -%}
-					"attributes" : default(""),
+					"attributes" : "",
 				{%- endif -%}
 				"tags" : {{doc_fields.tags_i | default("") | json_encode | raw}},
 				"media_geo_latitude": {{ doc_fields.media_geo_latitude | default("null")}},
@@ -89,6 +91,7 @@
 			{% endif %}
 			"returned_{{res_type}}_count": {{new_items|length}},
 			"{{res_type}}_count": {{new_items|length}},
+		{% endif %}	
 		{% endif %}	
 	{%- endfor -%}
 "tags":
