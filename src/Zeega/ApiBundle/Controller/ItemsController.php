@@ -161,10 +161,9 @@ class ItemsController extends Controller
         $query = array();
         $request = $this->getRequest();
 
-        $query["collection_id"] = $id;
-        $query["page"] = $request->query->get('page'); // string
-        $query["limit"] = $request->query->get('limit'); // string
-
+        $page = $request->query->get('page'); // string
+        $limit = $request->query->get('limit'); // string
+        
         // set defaults for missing parameters
         if(!isset($query['page'])) $query['page'] = 0;
         if(!isset($query['limit'])) $query['limit'] = 100;
@@ -177,10 +176,12 @@ class ItemsController extends Controller
                 $attributes = $item->getAttributes();
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
+                $attributes["page"] = $page;
+                $attributes["limit"] = $limit;
 
                 return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 
             } else {
-                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId())); 
+                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId(), "page" => $page, "limit" => $limit)); 
             }
         }
     }
