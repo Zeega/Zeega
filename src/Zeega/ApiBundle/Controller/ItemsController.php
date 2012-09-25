@@ -393,53 +393,65 @@ class ItemsController extends Controller
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
 
-        $collection = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
         
-        $queryResults = $this->getDoctrine()
-                             ->getRepository('ZeegaDataBundle:Item')
-                             ->searchCollectionItems($query);
-         
-         $i=1;
-         $frameOrder=array();
-         $frames=array();
-         $layers=array();
-         foreach($queryResults as $item) {
-         	if($item['media_type']!='Collection' && $item['media_type']!='Pdf') {
-				$i++;
-				$frameId = (int)$item['id'];
-				$frameOrder[]=$frameId;
-				$frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],
-                    "attr"=>array(
-                        "user_id"=>$item['user_id'],
-                        "description"=>$item['description'],
-                        "title"=>$item['title'],
-                        "uri"=>$item['uri'],
-                        "thumbnail_url"=>$item['thumbnail_url'],
-                        "attribution_uri"=>$item['attribution_uri'],
-                        "media_creator_username"=>$item['media_creator_username'],
-                        "media_creator_realname"=>$item['media_creator_realname'],
-                        "location"=>$item['location'],
-                        "media_date_created"=>$item['media_date_created'],
-                        "date_created"=>$item['date_created'],
-                        "tags"=>$item['tags'],
-                        "media_geo_latitude"=>$item['media_geo_latitude'],
-                        "media_geo_longitude"=>$item['media_geo_longitude'],
-                        "archive"=>$item['archive'],
-                        "media_type"=>$item['media_type'],
-                        "layer_type"=>$item['layer_type'] 
-                    ));
-         	}
-         }
-         
-         $project = array("id"=>$collection->getId(),
-                          "title"=>$collection->getTitle(),
-                          "estimated_time"=>"Some time", 
-                          "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
-                          'frames'=>$frames,
-                          'layers'=>$layers,
-                          );
-         return new Response(json_encode($project));
+        //HAMMER
+        if(null !== $item) {
+            $i=1;
+            $frameOrder=array();
+            $frames=array();
+            $layers=array();
+
+            if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
+                $attributes = $item->getAttributes();
+                $attributes["r_itemswithcollections"] = 1;                
+                $attributes["user"] = $item->getUserId();
+
+                $queryResults = $this->forward('ZeegaApiBundle:Search:search', array(), $attributes)->getContent(); 
+                $queryResults = json_decode($queryResults,true);
+                $queryResults = $queryResults["items"];
+            } else {
+                $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
+            }
+
+            foreach($queryResults as $childItem) {
+                if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf') {
+                    $i++;
+                    $frameId = (int)$childItem['id'];
+                    $frameOrder[]=$frameId;
+                    $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+                    $layers[]=array("id"=>$i,"type"=>$childItem['layer_type'],"text"=>$childItem['text'],
+                        "attr"=>array(
+                            "user_id"=>$childItem['user_id'],
+                            "description"=>$childItem['description'],
+                            "title"=>$childItem['title'],
+                            "uri"=>$childItem['uri'],
+                            "thumbnail_url"=>$childItem['thumbnail_url'],
+                            "attribution_uri"=>$childItem['attribution_uri'],
+                            "media_creator_username"=>$childItem['media_creator_username'],
+                            "media_creator_realname"=>$childItem['media_creator_realname'],
+                            "media_date_created"=>$childItem['media_date_created'],
+                            "date_created"=>$childItem['date_created'],
+                            "tags"=>$childItem['tags'],
+                            "media_geo_latitude"=>$childItem['media_geo_latitude'],
+                            "media_geo_longitude"=>$childItem['media_geo_longitude'],
+                            "archive"=>$childItem['archive'],
+                            "media_type"=>$childItem['media_type'],
+                            "layer_type"=>$childItem['layer_type'] 
+                        ));
+                }
+            }               
+            
+
+            $project = array("id"=>$item->getId(),
+                  "title"=>$item->getTitle(),
+                  "estimated_time"=>"Some time", 
+                  "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
+                  'frames'=>$frames,
+                  'layers'=>$layers,
+                );
+            return ResponseHelper::getJsonResponse($project);
+        }
     }
     
    
