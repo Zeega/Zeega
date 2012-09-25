@@ -277,7 +277,8 @@ class SearchController extends Controller
                     $queryString = str_replace("{", '', $queryString);
                     $queryString = str_replace("}", ')', $queryString);
                     $queryString = str_replace("tags", 'tags_i', $queryString);
-                           
+                    $queryString = str_replace(",", " OR", $queryString);
+       
                     //var_dump($queryString);
                     
                     $countQuery = $client->createSelect();
