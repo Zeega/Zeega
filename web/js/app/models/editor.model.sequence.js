@@ -103,7 +103,12 @@
 
 			_.times( n, function(i){
 				var newFrame = new Frame.Model();
-				newFrame.save({ 'layers' : _this.get('persistent_layers')})
+
+				// data destroy bug potentially lives here!
+				// possible fix. not implemented for bugtesting
+				newFrame.save({ 'layers' : _.compact(_this.get('persistent_layers')) })
+
+				//newFrame.save({ 'layers' : _this.get('persistent_layers')})
 					.success(function(){
 						console.log('frame updated:', _this, newFrame, zeega.app)
 						newFrame.complete(); // complete the collections inside the frame
@@ -159,7 +164,7 @@
 			if(frameOrder.length == 0) frameOrder = [false];
 			this.save({'frames':frameOrder});
 		},
-
+/*
 		duplicateFrame : function( frame )
 		{
 			// determine orig frame position
@@ -173,7 +178,7 @@
 
 
 		},
-
+*/
 		duplicateFrame : function( frameModel )
 		{
 			var dupeModel = frameModel.clone();
@@ -243,7 +248,7 @@
 
 		updatePersistLayerArray : function()
 		{
-			var layerIDArray = this.persistentLayers.length ? this.persistentLayers.pluck('id') : [false];
+			var layerIDArray = this.persistentLayers.length ? _.compact( this.persistentLayers.pluck('id') ): [false];
 			this.save('persistent_layers', layerIDArray );
 		},
 
