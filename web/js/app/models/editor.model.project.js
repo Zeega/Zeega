@@ -101,6 +101,8 @@
 
 		},
 		
+		/*
+		// handled by the sequence model now
 		duplicateFrame : function( frameModel )
 		{
 			var _this = this;
@@ -144,6 +146,7 @@
 			
 			this.frames.add( dupeModel );
 		},
+		*/
 		
 		removeLayerFromFrame : function( model )
 		{

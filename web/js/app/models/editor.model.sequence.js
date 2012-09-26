@@ -159,7 +159,7 @@
 			if(frameOrder.length == 0) frameOrder = [false];
 			this.save({'frames':frameOrder});
 		},
-
+/*
 		duplicateFrame : function( frame )
 		{
 			// determine orig frame position
@@ -173,7 +173,7 @@
 
 
 		},
-
+*/
 		duplicateFrame : function( frameModel )
 		{
 			var dupeModel = frameModel.clone();
