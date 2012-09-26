@@ -248,7 +248,7 @@
 
 		updatePersistLayerArray : function()
 		{
-			var layerIDArray = this.persistentLayers.length ? this.persistentLayers.pluck('id') : [false];
+			var layerIDArray = this.persistentLayers.length ? _.compact( this.persistentLayers.pluck('id') ): [false];
 			this.save('persistent_layers', layerIDArray );
 		},
 
