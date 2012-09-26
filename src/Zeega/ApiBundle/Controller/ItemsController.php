@@ -161,10 +161,9 @@ class ItemsController extends Controller
         $query = array();
         $request = $this->getRequest();
 
-        $query["collection_id"] = $id;
-        $query["page"] = $request->query->get('page'); // string
-        $query["limit"] = $request->query->get('limit'); // string
-
+        $page = $request->query->get('page'); // string
+        $limit = $request->query->get('limit'); // string
+        
         // set defaults for missing parameters
         if(!isset($query['page'])) $query['page'] = 0;
         if(!isset($query['limit'])) $query['limit'] = 100;
@@ -177,10 +176,12 @@ class ItemsController extends Controller
                 $attributes = $item->getAttributes();
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
+                $attributes["page"] = $page;
+                $attributes["limit"] = $limit;
 
                 return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 
             } else {
-                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId())); 
+                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId(), "page" => $page, "limit" => $limit)); 
             }
         }
     }
@@ -238,7 +239,7 @@ class ItemsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $requestData = $this->getRequest()->request;      
-        
+
         $item = $this->populateItemWithRequestData($requestData);
 
         $em->persist($item);
@@ -393,51 +394,65 @@ class ItemsController extends Controller
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
 
-        $queryResults = $this->getDoctrine()
-                             ->getRepository('ZeegaDataBundle:Item')
-                             ->searchCollectionItems($query);
-         
-         $i=1;
-         $frameOrder=array();
-         $frames=array();
-         $layers=array();
-         foreach($queryResults as $item) {
-         	if($item['media_type']!='Collection' && $item['media_type']!='Pdf') {
-				$i++;
-				$frameId = (int)$item['id'];
-				$frameOrder[]=$frameId;
-				$frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-				$layers[]=array("id"=>$i,"type"=>$item['layer_type'],"text"=>$item['text'],
-                    "attr"=>array(
-                        "user_id"=>$item['user_id'],
-                        "description"=>$item['description'],
-                        "title"=>$item['title'],
-                        "uri"=>$item['uri'],
-                        "thumbnail_url"=>$item['thumbnail_url'],
-                        "attribution_uri"=>$item['attribution_uri'],
-                        "media_creator_username"=>$item['media_creator_username'],
-                        "media_creator_realname"=>$item['media_creator_realname'],
-                        "location"=>$item['location'],
-                        "media_date_created"=>$item['media_date_created'],
-                        "date_created"=>$item['date_created'],
-                        "tags"=>$item['tags'],
-                        "media_geo_latitude"=>$item['media_geo_latitude'],
-                        "media_geo_longitude"=>$item['media_geo_longitude'],
-                        "archive"=>$item['archive'],
-                        "media_type"=>$item['media_type'],
-                        "layer_type"=>$item['layer_type'] 
-                    ));
-         	}
-         }
-         
-         $project = array("id"=>1,
-                          "title"=>"Collection",
-                          "estimated_time"=>"Some time", 
-                          "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
-                          'frames'=>$frames,
-                          'layers'=>$layers,
-                          );
-         return new Response(json_encode($project));
+        $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        
+        //HAMMER
+        if(null !== $item) {
+            $i=1;
+            $frameOrder=array();
+            $frames=array();
+            $layers=array();
+
+            if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
+                $attributes = $item->getAttributes();
+                $attributes["r_itemswithcollections"] = 1;                
+                $attributes["user"] = $item->getUserId();
+
+                $queryResults = $this->forward('ZeegaApiBundle:Search:search', array(), $attributes)->getContent(); 
+                $queryResults = json_decode($queryResults,true);
+                $queryResults = $queryResults["items"];
+            } else {
+                $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
+            }
+
+            foreach($queryResults as $childItem) {
+                if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf') {
+                    $i++;
+                    $frameId = (int)$childItem['id'];
+                    $frameOrder[]=$frameId;
+                    $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
+                    $layers[]=array("id"=>$i,"type"=>$childItem['layer_type'],"text"=>$childItem['text'],
+                        "attr"=>array(
+                            "user_id"=>$childItem['user_id'],
+                            "description"=>$childItem['description'],
+                            "title"=>$childItem['title'],
+                            "uri"=>$childItem['uri'],
+                            "thumbnail_url"=>$childItem['thumbnail_url'],
+                            "attribution_uri"=>$childItem['attribution_uri'],
+                            "media_creator_username"=>$childItem['media_creator_username'],
+                            "media_creator_realname"=>$childItem['media_creator_realname'],
+                            "media_date_created"=>$childItem['media_date_created'],
+                            "date_created"=>$childItem['date_created'],
+                            "tags"=>$childItem['tags'],
+                            "media_geo_latitude"=>$childItem['media_geo_latitude'],
+                            "media_geo_longitude"=>$childItem['media_geo_longitude'],
+                            "archive"=>$childItem['archive'],
+                            "media_type"=>$childItem['media_type'],
+                            "layer_type"=>$childItem['layer_type'] 
+                        ));
+                }
+            }               
+            
+
+            $project = array("id"=>$item->getId(),
+                  "title"=>$item->getTitle(),
+                  "estimated_time"=>"Some time", 
+                  "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
+                  'frames'=>$frames,
+                  'layers'=>$layers,
+                );
+            return ResponseHelper::getJsonResponse($project);
+        }
     }
     
    
@@ -467,6 +482,7 @@ class ItemsController extends Controller
         $attributes = $request_data->get('attributes');
         $tags = $request_data->get('tags');
         $published = $request_data->get('published');
+        $user_id = $request_data->get('user_id');
         
         $session = $this->getRequest()->getSession();
         $site = $session->get('site');
@@ -490,8 +506,10 @@ class ItemsController extends Controller
                     $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
                 }
             }
+        } else if(isset($user_id) && $user_id == 760) {
+            $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($user_id);
         }
-
+        
         $checkForDuplicateItems = true;
         
         if(isset($id))
@@ -559,7 +577,11 @@ class ItemsController extends Controller
         if(isset($license)) $item->setLicense($license);
         if(isset($attributes)) $item->setAttributes($attributes);
         if(isset($tags)) $item->setTags($tags);
-        if(isset($published)) $item->setPublished($published);
+        if(isset($published)) {
+            $item->setPublished($published);  
+        } else {
+            $item->setPublished(false);  
+        }
         
         $item->setEnabled(true);
         $item->setIndexed(false);

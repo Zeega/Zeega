@@ -993,6 +993,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .linked-layer{box-shadow:0 0 12px transparent;-webkit-transition:box-shadow 0.5s linear;}
 .linked-layer:hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;}
 .link-blink{box-shadow:0 0 24px white;-webkit-transition:box-shadow 1s linear;}
+.popup-layer-modal{position:absolute;left:0;top:0;background:rgba(0, 0, 0, 0.75);height:100%;width:100%;z-index:1000000;}
 .citation-list{position:absolute;z-index:1000;bottom:0;padding:10px;}
 .citation-list>li{margin-right:2px;display:inline-block;}
 .player-citation-bubble{color:#fff;padding:10px;background:rgba(0, 0, 0, 0.75);position:absolute;bottom:55px;width:310px;border-radius:5px;}
