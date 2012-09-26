@@ -36,9 +36,27 @@ class FramesController extends Controller
        	$request = $this->getRequest();
        	$frame = $em->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
 
-   		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
-   		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
+        $thumbnailUrl = $request->request->get('thumbnail_url');
+        $layers = $request->request->get('layers');
+        $attr = $request->request->get('attr');
+
+   		if(isset($thumbnailUrl)) {
+            $frame->setThumbnailUrl($thumbnailUrl);  
+        } else {
+            $frame->setThumbnailUrl(NULL);  
+        }
+		
+        if(isset($layers)) {
+            $frame->setLayers(array_filter($layers));
+        } else {
+            $frame->setLayers(NULL);  
+        }
+
+   		if(isset($attr)) {
+            $frame->setAttr(array_filter($attr));  
+        } else {
+            $frame->setAttr(NULL);  
+        }
 
    		$em->persist($frame);
    		$em->flush();
@@ -67,23 +85,20 @@ class FramesController extends Controller
     {
         $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frame_id);
         
-        if(isset($frame))
-        {
+        if(isset($frame)) {
             $layerList = $frame->getLayers();
         
-            if(is_array($layerList) && count($layerList) > 0)
-            {
+            if(is_array($layerList) && count($layerList) > 0) {
                 $layerList = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($layerList);
             }
-        }
-        else
-        {
+        } else {
             $layerList = array();
         }
 
 		$frameView = $this->renderView('ZeegaApiBundle:Layers:index.json.twig', array('layers' => $layerList));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
+
     } 
     
     public function postFrameThumbnailAction($frame_id)

@@ -29,11 +29,21 @@ class LayersController extends Controller
     	$layer= $em->getRepository('ZeegaDataBundle:Layer')->find($layer_id);
     	
 		$request = $this->getRequest();
-    		
-    	if($request->request->get('text')) $layer->setText($request->request->get('text'));
-
-		if($request->request->get('attr')) $layer->setAttr($request->request->get('attr'));
     	
+        $text = $request->request->get('text');
+        $attributes = $request->request->get('attr');
+
+    	if(isset($text)) {
+            $layer->setText($text);
+        } else {
+            $layer->setText(NULL);  
+        }
+
+		if(isset($attributes)) {
+            $layer->setAttr(array_filter($attributes));  
+        } else {
+            $layer->setAttr(NULL);  
+        }
     	
 		$em->persist($layer);
 		$em->flush();
