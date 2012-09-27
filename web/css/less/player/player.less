@@ -136,11 +136,14 @@
 	box-shadow: 0 0 12px transparent;
 	-webkit-transition: box-shadow .5s linear;
 }
-.linked-layer:hover
+
+
+.linked-layer-glow:hover
 {
 	box-shadow: 0 0 12px white;
 	-webkit-transition: box-shadow .25s linear;
 }
+
 .link-blink
 {
 	box-shadow: 0 0 24px white;
@@ -157,6 +160,34 @@
 	height: 100%;
 	width: 100%;
 	z-index: 1000000;
+}
+
+
+.link-arrow-up
+{
+	background: url('@{image-folder}/link_arrow-up.png');
+}
+.link-arrow-right
+{
+	background: url('@{image-folder}/link_arrow-right.png');
+}
+
+.link-arrow-down
+{
+	background: url('@{image-folder}/link_arrow-down.png');
+}
+.link-arrow-left
+{
+	background: url('@{image-folder}/link_arrow-left.png');
+}
+
+.link-arrow-up,
+.link-arrow-right,
+.link-arrow-down,
+.link-arrow-left
+{
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 
