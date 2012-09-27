@@ -135,21 +135,19 @@
 		onLayerEnter : function()
 		{
 			var _this = this;
-			if(this.model.get('attr').link_type == 'Rectangle')
-			{
-				this.$el.resizable('destroy');
-				this.$el.resizable({
-					stop: function(e,ui)
-					{
-						_this.model.update({
-							'width' : $(this).width() / $(this).parent().width() * 100,
-							'height' : $(this).height() / $(this).parent().height() * 100
-						})
-					}
-				})
-			}
 
-			//this.makeResizable();
+			this.$el.resizable('destroy');
+			this.$el.resizable({
+				stop: function(e,ui)
+				{
+					_this.model.update({
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					})
+				}
+			})
+		
+			this.makeResizable();
 			this.delegateEvents();
 		},
 
@@ -157,22 +155,19 @@
 		{
 			var _this = this;
 			var linkType = this.model.get('attr').link_type;
-			if( linkType == 'Rectangle' || _.isUndefined(linkType))
-			{
 
-				this.$el.resizable({
-					handles: 'all',
-					stop : function()
-					{
-						var attr = {
-							'width' : $(this).width() / $(this).parent().width() * 100,
-							'height' : $(this).height() / $(this).parent().height() * 100
-						};
-						console.log('save attr', attr);
-						_this.model.update(attr);
-					}
-				});
-			}
+			this.$el.resizable({
+				handles: 'all',
+				stop : function()
+				{
+					var attr = {
+						'width' : $(this).width() / $(this).parent().width() * 100,
+						'height' : $(this).height() / $(this).parent().height() * 100
+					};
+					console.log('save attr', attr);
+					_this.model.update(attr);
+				}
+			});
 		},
 		
 		onPlay : function()
