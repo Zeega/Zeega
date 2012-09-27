@@ -362,6 +362,8 @@ class Item
      */
     public function setDateUpdated($dateUpdated)
     {
+        $dateUpdated = $dateUpdated;
+        $dateUpdated->add(new \DateInterval('PT5M'));
         $this->date_updated = $dateUpdated;
     }
 
