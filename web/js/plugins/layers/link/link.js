@@ -13,8 +13,6 @@
 		defaultControls : false,
 		displayCitation : false,
 		
-		
-		
 		defaultAttributes : {
 			'title' : 'Link Layer',
 			'to_sequence' : null,
@@ -75,7 +73,9 @@
 				'width' : 'auto',
 				'height' : 'auto',
 				'border' : 'none',
-				'border-radius' : '0'
+				'border-radius' : '0',
+				'height' : this.model.get('attr').height +'%',
+				'width' : this.model.get('attr').width +'%'
 			}
 
 			this.$el.removeClass('linked-layer');
@@ -83,31 +83,21 @@
 			if( zeega.app.previewMode ) this.delegateEvents({'click':'goClick'});
 
 			if(this.model.get('attr').link_type == 'arrow_left')
-				this.$el.html( this.getTemplate_ArrowLeft() ).css( style );
+				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-left');
 			else if(this.model.get('attr').link_type == 'arrow_right')
-				this.$el.html( this.getTemplate_ArrowRight() ).css( style );
+				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-right');
 			else if(this.model.get('attr').link_type == 'arrow_up')
-				this.$el.html( this.getTemplate_ArrowUp() ).css( style );
-			else
+				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-up');
+
+			if(!zeega.app.previewMode )
 			{
-				if(!zeega.app.previewMode )
-				{
-					_.extend( style, {
-						'height' : this.model.get('attr').height +'%',
-						'width' : this.model.get('attr').width +'%',
-						'border' : '2px dashed orangered',
-						'border-radius' : '6px'
-					})
-				}
-				else
-				{
-					_.extend( style, {
-						'height' : this.model.get('attr').height +'%',
-						'width' : this.model.get('attr').width +'%',
-					})
-				}
-				this.$el.html( this.getTemplate_Rectangle() ).css( style ).addClass('linked-layer');
+				_.extend( style, {
+					'border' : '2px dashed orangered',
+					'border-radius' : '6px'
+				})
 			}
+			
+			this.$el.html( this.getTemplate() ).css( style ).addClass('linked-layer');
 			return this;
 		},
 		
@@ -159,7 +149,7 @@
 				})
 			}
 
-			this.makeResizable();
+			//this.makeResizable();
 			this.delegateEvents();
 		},
 
@@ -191,27 +181,11 @@
 			this.delegateEvents({'click':'goClick'})
 		},
 		
-		getTemplate_Rectangle : function()
+		getTemplate : function()
 		{
 			var html = '';
 				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';		
 			return html;
-		},
-		getTemplate_ArrowRight : function()
-		{
-			return  '<img src="../../../images/link_arrow-right.png"/>';
-		},
-		getTemplate_ArrowLeft : function()
-		{
-			return  '<img src="../../../images/link_arrow-left.png"/>';
-		},
-		getTemplate_ArrowUp : function()
-		{
-			return  '<img src="../../../images/link_arrow-up.png"/>';
-		},
-		getTemplate_ArrowDown : function()
-		{
-			return  '<img src="../../../images/link_arrow-down.png"/>';
 		}
 		
 		
