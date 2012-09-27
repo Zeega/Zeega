@@ -135,7 +135,7 @@
 
 			// get max height in px
 			this.$('#zedit-target').css({
-				'overflow-y' : 'auto',
+				'overflow-y' : 'hidden',
 				'overflow-x' : 'hidden',
 			})
 
