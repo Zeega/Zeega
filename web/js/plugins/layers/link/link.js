@@ -22,7 +22,11 @@
 			'left' : 25,
 			'top' : 25,
 			'height' : 50,
-			'width' : 50
+			'width' : 50,
+			'opacity' : 1,
+			'opacity_hover' : 1,
+			'blink_on_start' : true,
+			'glow_on_hover' : true
 		}
 		
 	});
@@ -35,8 +39,42 @@
 				model: this.model,
 				label : 'Link Type'
 			});
+
+			var opacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity',
+				model: this.model,
+				label : 'Opacity',
+				step : 0.01,
+				min : 0,
+				max : 1,
+			});
+
+			var hoverOpacitySlider = new Layer.Views.Lib.Slider({
+				property : 'opacity_hover',
+				model: this.model,
+				label : 'Opacity on Hover',
+				step : 0.01,
+				min : 0,
+				max : 1,
+			});
+
+			var blinkOnStart = new Layer.Views.Lib.Checkbox({
+				property : 'blink_on_start',
+				model: this.model,
+				label : 'Blink layer when frame plays'
+			});
+
+			var glowOnHover = new Layer.Views.Lib.Checkbox({
+				property : 'glow_on_hover',
+				model: this.model,
+				label : 'Layer glows on hover'
+			});
 			
-			$(this.controls).append( linkTypeSelect.getControl() );
+			$(this.controls).append( linkTypeSelect.getControl() )
+				.append( opacitySlider.getControl() )
+				.append( hoverOpacitySlider.getControl() )
+				//.append( blinkOnStart.getControl() )
+				.append( glowOnHover.getControl() );
 			
 			return this;
 		
@@ -89,6 +127,8 @@
 			else if(this.model.get('attr').link_type == 'arrow_up')
 				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-up');
 
+			if( this.model.get('attr').glow_on_hover ) this.$el.addClass('linked-layer-glow');
+
 			if(!zeega.app.previewMode )
 			{
 				_.extend( style, {
@@ -97,6 +137,7 @@
 				})
 			}
 			
+			
 			this.$el.html( this.getTemplate() ).css( style ).addClass('linked-layer');
 			return this;
 		},
@@ -104,7 +145,19 @@
 		events : {
 			'click .go-to-sequence' : 'goToSequenceFrame',
 			'click .delete-link' : 'deleteLink',
-			'mousedown .show-controls' : 'showControls'
+			'mousedown .show-controls' : 'showControls',
+			'mouseover' : 'onMouseOver',
+			'mouseout' : 'onMouseOut'
+		},
+
+		onMouseOver : function()
+		{
+			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity_hover );
+		},
+
+		onMouseOut : function()
+		{
+			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity );
 		},
 		
 		goClick : function()
@@ -173,7 +226,11 @@
 		onPlay : function()
 		{
 			this.render();
-			this.delegateEvents({'click':'goClick'})
+			this.delegateEvents({
+				'click':'goClick',
+				'mouseover' : 'onMouseOver',
+				'mouseout' : 'onMouseOut'
+			})
 		},
 		
 		getTemplate : function()
