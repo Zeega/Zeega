@@ -165,15 +165,22 @@ class ItemsController extends Controller
         $limit = $request->query->get('limit'); // string
         
         // set defaults for missing parameters
-        if(!isset($query['page'])) $query['page'] = 0;
-        if(!isset($query['limit'])) $query['limit'] = 100;
-        if($query['limit'] > 100) $query['limit'] = 100;
+        if(!isset($page)) $page = 0;
+        if(!isset($query['limit'])) $limit = 100;
+        if($limit > 100) $limit = 100;
 
         $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
         
         if(null !== $item) {
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                $attributes = $item->getAttributes();
+                $itemAttributes = $item->getAttributes();
+
+                $attributes = array();
+
+                if(isset($itemAttributes["tags"])) {
+                    $attributes["tags"] = $itemAttributes["tags"];
+                }
+
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
                 $attributes["page"] = $page;
