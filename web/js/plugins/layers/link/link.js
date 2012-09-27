@@ -116,7 +116,9 @@
 				'width' : this.model.get('attr').width +'%'
 			}
 
-			this.$el.removeClass('linked-layer');
+			this.$el.removeClass('link-arrow-right link-arrow-down link-arrow-up link-arrow-left');
+
+
 
 			if( zeega.app.previewMode ) this.delegateEvents({'click':'goClick'});
 
