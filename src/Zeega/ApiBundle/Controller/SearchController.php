@@ -158,9 +158,9 @@ class SearchController extends Controller
 
         if(isset($sort)) {
             if($sort == 'date-desc') {
-                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_DESC);    
+                $query->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
             } else if($sort == 'date-asc') {
-                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_ASC);       
+                $query->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
             }
         }
 
@@ -270,7 +270,14 @@ class SearchController extends Controller
                 $itemFields = $it->getFields();
 
                 if($itemFields["media_type"] == 'Collection' && $itemFields["layer_type"] == 'Dynamic') {
-                    $queryString = $itemFields["attributes"];
+                    $itemAttributes = $itemFields["attributes"];
+
+                    $queryString = array();
+
+                    if(isset($itemAttributes["tags"])) {
+                        $queryString["tags"] = $itemAttributes["tags"];
+                    }
+
                     $queryString = implode(",", $queryString);
 
                     $queryString = str_replace("=", ':(', $queryString);
