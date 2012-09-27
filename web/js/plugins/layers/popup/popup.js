@@ -50,11 +50,18 @@
 				min : 0,
 				max : 1,
 			});
+
+			var playPausePlayer = new Layer.Views.Lib.Checkbox({
+				property : 'pauses_player',
+				model: this.model,
+				label : 'Pause player on popup open'
+			});
 			
 			$(this.controls)
 				.append( popupTargettDrop.getControl() )
 				.append( popupContentDrop.getControl() )
-				.append( opacitySlider.getControl() );
+				.append( opacitySlider.getControl() )
+				.append( playPausePlayer.getControl() );
 
 			return this;
 		
@@ -147,7 +154,7 @@
 			if( zeega.app.previewMode )
 			{
 				this.popup = new Layer.Views.Visual.Popup.Modal({model:this.model});
-				zeega.app.Player.project.playPause();
+				if(this.model.get('attr').pauses_player) zeega.app.Player.project.playPause();
 			}
 			return false;
 		},
@@ -238,7 +245,7 @@
 				this.player.pause();
 				this.player.destroy();
 			}
-			zeega.app.Player.project.playPause();
+			if(this.model.get('attr').pauses_player) zeega.app.Player.project.playPause();
 
 			this.remove();
 		},
