@@ -47,14 +47,14 @@ class ProjectRepository extends EntityRepository
  			 ->add('from', 'ZeegaDataBundle:Project p')
              ->join('p.users', 'u')
              ->add('where', 'u.id = :userId')
-             ->setParameters(array('userId'=>$userId))
+             ->setParameter('userId',$userId)
              ->andwhere('p.enabled = true')
              ->orderBy('p.id','DESC')
              ->setMaxResults($limit);
  				       
- 		if(isset($published))
+ 		if(null !== $published)
  		{
- 	        $qb->andwhere('p.published = :published')->setParameters(array('published' => $published));
+ 	        $qb->andwhere('p.published = :published')->setParameter('published', $published);
  		}
 
  		return $qb->getQuery()->getResult();
