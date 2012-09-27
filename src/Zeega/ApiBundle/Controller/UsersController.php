@@ -65,6 +65,10 @@ class UsersController extends Controller
     {
         $request = $this->getRequest();
         $limit = $request->query->get('limit');         //  string
+
+        if(!isset($limit) || !is_int($id) || $limit > 100) {
+            $limit = 100;    
+        }        
         
         $em = $this->getDoctrine()->getEntityManager();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
