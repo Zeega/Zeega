@@ -17,7 +17,8 @@
 			'width' : 25,
 			'opacity':1,
 			'citation':false,
-			'linkable' : false
+			'linkable' : false,
+			'pauses_player' : true
 		}
 
 	});
@@ -144,9 +145,10 @@
 			console.log('popup clicked');
 			//launch overlay
 			if( zeega.app.previewMode )
+			{
 				this.popup = new Layer.Views.Visual.Popup.Modal({model:this.model});
-
-
+				zeega.app.Player.project.playPause();
+			}
 			return false;
 		},
 
@@ -163,16 +165,6 @@
 		
 		onPreload : function()
 		{
-			
-/*
-			var img = this.$el.imagesLoaded();
-			img.done(function(){
-				_this.model.trigger('ready',_this.model.id);
-			});
-			img.fail(function(){
-				_this.model.trigger('error',_this.model.id);
-			});
-*/
 			this.model.trigger('ready',this.model.id);
 		}
 	});
@@ -246,6 +238,8 @@
 				this.player.pause();
 				this.player.destroy();
 			}
+			zeega.app.Player.project.playPause();
+
 			this.remove();
 		},
 
