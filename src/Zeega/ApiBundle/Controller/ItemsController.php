@@ -411,7 +411,14 @@ class ItemsController extends Controller
             $layers=array();
 
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                $attributes = $item->getAttributes();
+                $itemAttributes = $item->getAttributes();
+
+                $attributes = array();
+
+                if(isset($itemAttributes["tags"])) {
+                    $attributes["tags"] = $itemAttributes["tags"];
+                }
+
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
 
