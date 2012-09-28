@@ -40,7 +40,7 @@ class LayersController extends Controller
         }
 
 		if(isset($attributes)) {
-            $layer->setAttr(array_filter($attributes));  
+            $layer->setAttr($attributes);  
         } else {
             $layer->setAttr(NULL);  
         }

@@ -262,7 +262,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		defaults : {
 			label : 'Checkbox',
-			value : false,
+			value : 0,
 			save : true,
 		},
 		
