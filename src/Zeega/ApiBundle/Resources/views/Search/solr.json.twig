@@ -32,7 +32,7 @@
 				"media_type": "{{ doc_fields.media_type }}",
 				"layer_type": "{{ doc_fields.layer_type }}",
 				"thumbnail_url": {{ doc_fields.thumbnail_url | default("") | json_encode | raw}},
-				"child_items_count": {{ results["dynamic_queries_counts"][doc_fields.id] | default ("") | json_encode | raw}},
+				"child_items_count": {{ results["dynamic_queries_counts"][doc_fields.id] | default (0) | json_encode | raw}},
 				"media_creator_username": {{ doc_fields.media_creator_username | json_encode | raw}},
 				"media_creator_realname": {{ doc_fields.media_creator_realname | default("") | json_encode | raw}},
 				"archive": "{{ doc_fields.archive }}",
