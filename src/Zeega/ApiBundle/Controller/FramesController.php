@@ -53,7 +53,7 @@ class FramesController extends Controller
         }
 
    		if(isset($attr)) {
-            $frame->setAttr(array_filter($attr));  
+            $frame->setAttr($attr);  
         } else {
             $frame->setAttr(NULL);  
         }

@@ -17,7 +17,8 @@
 			'width' : 25,
 			'opacity':1,
 			'citation':false,
-			'linkable' : false
+			'linkable' : false,
+			'pauses_player' : true
 		}
 
 	});
@@ -49,11 +50,19 @@
 				min : 0,
 				max : 1,
 			});
+
+			var playPausePlayer = new Layer.Views.Lib.Checkbox({
+				property : 'pauses_player',
+				model: this.model,
+				label : 'Pause player on popup open'
+			});
 			
 			$(this.controls)
 				.append( popupTargettDrop.getControl() )
 				.append( popupContentDrop.getControl() )
-				.append( opacitySlider.getControl() );
+				.append( opacitySlider.getControl() )
+				.append( playPausePlayer.getControl() );
+
 			return this;
 		
 		}
@@ -94,7 +103,7 @@
 						'width' : this.model.get('attr').width +'%',
 						'border' : '2px dashed orangered',
 						'border-radius' : '6px',
-						'height' : '25%'
+						//'height' : '25%'
 					})
 				}
 				else
@@ -102,7 +111,7 @@
 					this.$el.css({
 						'width' : this.model.get('attr').width +'%',
 						'border-radius' : '6px',
-						'height' : '25%'
+						//'height' : '25%'
 					})
 				}
 
@@ -143,9 +152,10 @@
 			console.log('popup clicked');
 			//launch overlay
 			if( zeega.app.previewMode )
+			{
 				this.popup = new Layer.Views.Visual.Popup.Modal({model:this.model});
-
-
+				if(this.model.get('attr').pauses_player) zeega.app.Player.project.playPause();
+			}
 			return false;
 		},
 
@@ -162,16 +172,6 @@
 		
 		onPreload : function()
 		{
-			
-/*
-			var img = this.$el.imagesLoaded();
-			img.done(function(){
-				_this.model.trigger('ready',_this.model.id);
-			});
-			img.fail(function(){
-				_this.model.trigger('error',_this.model.id);
-			});
-*/
 			this.model.trigger('ready',this.model.id);
 		}
 	});
@@ -245,6 +245,8 @@
 				this.player.pause();
 				this.player.destroy();
 			}
+			if(this.model.get('attr').pauses_player) zeega.app.Player.project.playPause();
+
 			this.remove();
 		},
 
