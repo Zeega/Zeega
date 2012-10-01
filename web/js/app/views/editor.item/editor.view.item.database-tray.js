@@ -26,7 +26,7 @@
 	Items.Views.List = Backbone.View.extend({
 
 		tagName : 'li',
-		className : 'database-asset-list',
+		className : 'database-asset-list clearfix',
 
 		render: function()                 
 		{
@@ -86,7 +86,8 @@
 		{
 			var html =
 
-				"<a href='#'><img src='<%= thumbnail_url %>'/></a>";
+				"<a href='#'><img src='<%= thumbnail_url %>'/></a>"+
+				"<span class='database-item-title'><h5><%= title %></h5></span>";
 
 			return html;
 		}
