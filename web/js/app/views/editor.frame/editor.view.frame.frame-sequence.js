@@ -53,15 +53,15 @@
 					$('#frame-drawer').removeClass('hover');
 				},
 
-				//this happens when you drop a database item onto a frame
+								//this happens when you drop a database item onto a frame
 				drop : function( event, ui )
 				{
-					$('#frame-drawer').removeClass('hover');
 					ui.draggable.draggable('option','revert',false);
-					console.log('$$		item drop', zeega.app.draggedItem, _this.model)
-					zeega.app.draggedItem.set(model,null);
 					_this.model.addItemLayer( zeega.app.draggedItem );
+					_this.model.trigger('layer_added')
 				}
+				//this happens when you drop a database item onto a frame
+
 			});
 		},
 	
