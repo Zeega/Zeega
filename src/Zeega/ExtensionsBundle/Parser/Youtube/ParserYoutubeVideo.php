@@ -61,8 +61,8 @@ class ParserYoutubeVideo extends ParserAbstract
 		    $itemTags = array();
 		    foreach($categories as $cat)
 			{
-			    if($cat["term"] != "http://gdata.youtube.com/schemas/2007#playlist" && $cat["term"] != "http://gdata.youtube.com/schemas/2007#video")
-			    {
+			    if (strpos($cat["term"], 'gdata.youtube.com') === false) 
+				{
                     array_push($itemTags, $cat["term"]);
 			    }
 			    
