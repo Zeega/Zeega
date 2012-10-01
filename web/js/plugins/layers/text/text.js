@@ -133,11 +133,6 @@
 
 			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
 
-			// get max height in px
-			this.$('#zedit-target').css({
-				'overflow-y' : 'hidden',
-				'overflow-x' : 'hidden',
-			})
 
 			var _this = this;
 			_.delay(function(){
