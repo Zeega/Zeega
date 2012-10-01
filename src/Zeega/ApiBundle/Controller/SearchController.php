@@ -45,7 +45,7 @@ class SearchController extends Controller
         $returnItems = $request->query->get('r_items');   				//  bool
         $source = $request->query->get('data_source');                  //  bool
 	
-         if($solrEnabled) {
+        if($solrEnabled) {
             if(null !== $source && $source === 'db') {
                 $useSolr = false;
             } else {
@@ -158,9 +158,9 @@ class SearchController extends Controller
 
         if(isset($sort)) {
             if($sort == 'date-desc') {
-                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_DESC);    
+                $query->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
             } else if($sort == 'date-asc') {
-                $query->addSort('media_date_created', \Solarium_Query_Select::SORT_ASC);       
+                $query->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
             }
         }
 
@@ -260,7 +260,9 @@ class SearchController extends Controller
             $results["items"] = $groups->getGroup('media_type:*');  
         } 
 
-        if(isset($returnCollections) || isset($returnItemsAndCollections)) {
+        $r_counts = $request->query->get('r_counts');
+
+        if(isset($r_counts) && $r_counts == 1 && (isset($returnCollections) || isset($returnItemsAndCollections))) {
 
             $results["dynamic_queries_counts"] = array();
 
@@ -270,22 +272,34 @@ class SearchController extends Controller
                 $itemFields = $it->getFields();
 
                 if($itemFields["media_type"] == 'Collection' && $itemFields["layer_type"] == 'Dynamic') {
-                    $queryString = $itemFields["attributes"];
-                    $queryString = implode(",", $queryString);
+                    $itemAttributes = $itemFields["attributes"];
 
-                    $queryString = str_replace("=", ':(', $queryString);
-                    $queryString = str_replace("{", '', $queryString);
-                    $queryString = str_replace("}", ')', $queryString);
-                    $queryString = str_replace("tags", 'tags_i', $queryString);
-                    $queryString = str_replace(",", " OR", $queryString);
-       
-                    //var_dump($queryString);
+                    if(null !== $itemAttributes && is_array($itemAttributes) && count($itemAttributes) == 1) {
+                        $itemAttributes = unserialize($itemAttributes[0]);
+
+                        $queryString = array();
+
+                        if(isset($itemAttributes["tags"])) {
+                            $queryString["tags"] = $itemAttributes["tags"];
+                        }
+
+                        $queryString = implode(",", $queryString);
+
+                        $queryString = str_replace("=", ':(', $queryString);
+                        $queryString = str_replace("{", '', $queryString);
+                        $queryString = str_replace("}", ')', $queryString);
+                        $queryString = str_replace("tags", 'tags_i', $queryString);
+                        $queryString = str_replace(",", " OR", $queryString);
+           
+                        //var_dump($queryString);
+                        
+                        $countQuery = $client->createSelect();
+                        $countQuery->setQuery($queryString);
+                        $resultset = $client->select($countQuery);
                     
-                    $countQuery = $client->createSelect();
-                    $countQuery->setQuery($queryString);
-                    $resultset = $client->select($countQuery);
-                
-                    $results["dynamic_queries_counts"][$itemFields["id"]] = $resultset->getNumFound(); 
+                        $results["dynamic_queries_counts"][$itemFields["id"]] = $resultset->getNumFound(); 
+                    }
+                    
                 }
             }
         }

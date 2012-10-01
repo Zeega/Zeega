@@ -163,11 +163,15 @@ class ItemsController extends Controller
 
         $page = $request->query->get('page'); // string
         $limit = $request->query->get('limit'); // string
+        $returnCounts = $request->query->get('r_counts'); // string
         
         // set defaults for missing parameters
         if(!isset($page)) $page = 0;
         if(!isset($query['limit'])) $limit = 100;
         if($limit > 100) $limit = 100;
+        if(!isset($returnCounts)) {
+            $returnCounts = 0;
+        }
 
         $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
         
@@ -181,10 +185,15 @@ class ItemsController extends Controller
                     $attributes["tags"] = $itemAttributes["tags"];
                 }
 
+                if(isset($itemAttributes["tags"])) {
+                    $attributes["tags"] = $itemAttributes["tags"];
+                }
+
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
                 $attributes["page"] = $page;
                 $attributes["limit"] = $limit;
+                $attributes["r_counts"] = $returnCounts;
 
                 return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 
             } else {
@@ -411,7 +420,14 @@ class ItemsController extends Controller
             $layers=array();
 
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                $attributes = $item->getAttributes();
+                $itemAttributes = $item->getAttributes();
+
+                $attributes = array();
+
+                if(isset($itemAttributes["tags"])) {
+                    $attributes["tags"] = $itemAttributes["tags"];
+                }
+
                 $attributes["r_itemswithcollections"] = 1;                
                 $attributes["user"] = $item->getUserId();
 
