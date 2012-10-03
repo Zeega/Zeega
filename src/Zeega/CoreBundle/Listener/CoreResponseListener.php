@@ -29,9 +29,9 @@ class CoreResponseListener
         if(isset($token)) {
             $user = $token->getUser();
             if("anon." !== $user) {
-                $event->getResponse()->headers->set('zeega-auth', 1);
+                $event->getResponse()->headers->setCookie(new Cookie('zauth', '1'));
             } else {
-                $event->getResponse()->headers->set('zeega-auth', 0);
+                $event->getResponse()->headers->setCookie(new Cookie('zauth', '0'));
             }            
         }
     }
