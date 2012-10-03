@@ -46,6 +46,7 @@
 		},
 
 		events : {
+			'click #database-list-view-toggle' : 'toggleDatabaseListGrid',
 			'click #zeega-add-item-type a' : 'addItemType',
 			'click #database-tray-toggle' : 'toggleDatabaseSize',
 			'click #zoom-interface' : 'toggleInterfaceTitles',
@@ -68,6 +69,23 @@
 		onSearchEscape : function()
 		{
 			$('#search-input').val('').blur();
+		},
+
+		toggleDatabaseListGrid : function()
+		{
+			console.log('swap grid')
+			this.$('#zeega-item-database-list').toggleClass('grid-view').toggleClass('list-view');
+			if(this.$('#zeega-item-database-list').hasClass('list-view'))
+			{
+				this.$('#database-list-view-toggle .menu-verbose-title').html('Grid View');
+				this.$('#database-list-view-toggle i').removeClass('icon-th-list').addClass('icon-th');
+			}
+			else
+			{
+				this.$('#database-list-view-toggle .menu-verbose-title').html('List View');
+				this.$('#database-list-view-toggle i').addClass('icon-th-list').removeClass('icon-th');
+			}
+			return false;
 		},
 
 		filterDatabase : function(e)
