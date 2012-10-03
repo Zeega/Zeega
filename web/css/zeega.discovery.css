@@ -973,10 +973,10 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-player .player-zeega-icon{position:fixed;right:10px;bottom:10px;z-index:1000;opacity:0.75;}
 #zeega-player .player-zeega-icon:hover{opacity:1;}
 #zeega-player .player-arrow{height:15%;max-height:75px;max-width:35px;margin:0 10px;}
-#zeega-player .preview-nav-arrow{z-index:10000;position:absolute;top:50%;padding:10px;margin:10px;opacity:0.4;-webkit-border-radius:8px;}
+#zeega-player .preview-nav-arrow{z-index:10000;position:absolute;top:50%;padding:10px;margin:10px;opacity:0.4;-webkit-border-radius:8px;-moz-border-radius:8px;-ms-border-radius:8px;}
 #zeega-player .preview-nav-arrow:hover{opacity:1;background:rgba(255, 0, 0, 0.25);}
 #zeega-player #preview-right{right:0;}
-#zeega-player #preview-left{left:0;float:left;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);}
+#zeega-player #preview-left{left:0;float:left;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);}
 #zeega-player #preview-media{position:relative;overflow:hidden;margin:0 auto;}
 #zeega-player .progress-bar{z-index:1001;position:absolute;top:100px;left:100px;margin:50px auto 0;width:50%;}
 #zeega-player .progress-bar h3{color:white;letter-spacing:1px;}
