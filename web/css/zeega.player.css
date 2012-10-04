@@ -272,9 +272,9 @@ table .span21{float:none;width:1644px;margin-left:0;}
 table .span22{float:none;width:1724px;margin-left:0;}
 table .span23{float:none;width:1804px;margin-left:0;}
 table .span24{float:none;width:1884px;margin-left:0;}
-[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;*margin-right:.3em;line-height:14px;vertical-align:text-top;background-image:url("../../../images/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;}
+[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;*margin-right:.3em;line-height:14px;vertical-align:text-top;background-image:url("../images/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;}
 [class^="icon-"]:last-child,[class*=" icon-"]:last-child{*margin-left:0;}
-.icon-white{background-image:url("../../../images/glyphicons-halflings-white.png");}
+.icon-white{background-image:url("../images/glyphicons-halflings-white.png");}
 .icon-glass{background-position:0 0;}
 .icon-music{background-position:-24px 0;}
 .icon-search{background-position:-48px 0;}
@@ -782,11 +782,11 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .browser-logo-safari{background-position:-240px 0;}
 .browser-logo-explorer{background-position:-320px 0;}
 #wrapper{position:relative;margin-top:50px;}
-[class^="zicon-"]{display:inline-block;width:20px;height:20px;vertical-align:text-top;background-image:url('../../../images/zicons-darkgrey-20.png');background-position:0px 0px;background-repeat:no-repeat;}
+[class^="zicon-"]{display:inline-block;width:20px;height:20px;vertical-align:text-top;background-image:url('../images/zicons-darkgrey-20.png');background-position:0px 0px;background-repeat:no-repeat;}
 [class^="zicon-"].raise-up{vertical-align:text-bottom;}
-[class^="zicon-"].orange{background-image:url('../../../images/zicons-orange-20.png');}
-[class^="zicon-"].zicon-white{background-image:url('../../../images/zicons-white-20.png');}
-[class^="zicon-"].small{width:15px;height:15px;background-image:url('../../../images/zicons-darkgrey-15.png');}
+[class^="zicon-"].orange{background-image:url('../images/zicons-orange-20.png');}
+[class^="zicon-"].zicon-white{background-image:url('../images/zicons-white-20.png');}
+[class^="zicon-"].small{width:15px;height:15px;background-image:url('../images/zicons-darkgrey-15.png');}
 .zicon-image{background-position:-20px 0px;}
 .zicon-video{background-position:-40px 0px;}
 .zicon-youtube{background-position:-40px 0px;}
@@ -841,8 +841,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .zicon-new-frame.small{background-position:-150px;}
 .zicon-old-frame.small{background-position:-135px;}
 .zicon-options.small{background-position:-60px;}
-[class^="zitem-"]{display:inline-block;width:50px;height:50px;vertical-align:text-top;background-image:url('../../../images/zicons-itemType-50.png');background-position:0px 0px;background-repeat:no-repeat;}
-[class^="zitem-"].zitem-30{width:30px;height:30px;background-image:url('../../../images/zicons-itemType-30.png');}
+[class^="zitem-"]{display:inline-block;width:50px;height:50px;vertical-align:text-top;background-image:url('../images/zicons-itemType-50.png');background-position:0px 0px;background-repeat:no-repeat;}
+[class^="zitem-"].zitem-30{width:30px;height:30px;background-image:url('../images/zicons-itemType-30.png');}
 .zitem-zeega00{background-position:0px 0;}
 .zitem-zeega00.loaded{background-position:0px -50px;}
 .zitem-zeega00.zitem-30{background-position:0px 0;}
@@ -994,10 +994,10 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .linked-layer-glow:hover{box-shadow:0 0 12px white;-webkit-transition:box-shadow 0.25s linear;}
 .link-blink{box-shadow:0 0 24px white;-webkit-transition:box-shadow 1s linear;}
 .popup-layer-modal{position:absolute;left:0;top:0;background:rgba(0, 0, 0, 0.75);height:100%;width:100%;z-index:1000000;}
-.link-arrow-up{background:url('../../../images/link_arrow-up.png');}
-.link-arrow-right{background:url('../../../images/link_arrow-right.png');}
-.link-arrow-down{background:url('../../../images/link_arrow-down.png');}
-.link-arrow-left{background:url('../../../images/link_arrow-left.png');}
+.link-arrow-up{background:url('../images/link_arrow-up.png');}
+.link-arrow-right{background:url('../images/link_arrow-right.png');}
+.link-arrow-down{background:url('../images/link_arrow-down.png');}
+.link-arrow-left{background:url('../images/link_arrow-left.png');}
 .link-arrow-up,.link-arrow-right,.link-arrow-down,.link-arrow-left{background-repeat:no-repeat;background-position:center;}
 @font-face{font-family:'Montserrat';font-style:normal;font-weight:400;src:local('Montserrat Regular'),local('Montserrat-Regular'),url('http://themes.googleusercontent.com/font?kit=zhcz-_WihjSQC0oHJ9TCYL3hpw3pgy2gAi-Ip7WPMi0') format('woff');}@font-face{font-family:'Trocchi';font-style:normal;font-weight:400;src:local('Trocchi'),url(http://themes.googleusercontent.com/static/fonts/trocchi/v1/FxnVMeU6MpRiIW8IbIEcBwLUuEpTyoUstqEm5AMlJo4.woff) format('woff');}@font-face{font-family:'Sorts Mill Goudy';font-style:normal;font-weight:400;src:local('Sorts Mill Goudy Regular'),local('SortsMillGoudy-Regular'),url(http://themes.googleusercontent.com/static/fonts/sortsmillgoudy/v3/JzRrPKdwEnE8F1TDmDLMUtsZ51dqzBwIdH2JuTl9mv4.woff) format('woff');}@font-face{font-family:'Pontano Sans';font-style:normal;font-weight:400;src:local('Pontano Sans'),local('PontanoSans-Regular'),url(http://themes.googleusercontent.com/static/fonts/pontanosans/v1/gTHiwyxi6S7iiHpqAoiE3KRDOzjiPcYnFooOUGCOsRk.woff) format('woff');}@font-face{font-family:'Poiret One';font-style:normal;font-weight:400;src:local('Poiret One'),local('PoiretOne-Regular'),url(http://themes.googleusercontent.com/static/fonts/poiretone/v1/HrI4ZJpJ3Fh0wa5ofYMK8b3hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');}.citation-list{position:absolute;z-index:1000;bottom:0;padding:10px;}
 .citation-list>li{margin-right:2px;display:inline-block;}
