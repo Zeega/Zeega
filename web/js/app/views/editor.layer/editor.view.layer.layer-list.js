@@ -276,7 +276,7 @@
 			var html =
 
 				"<div class='layer-super'>"+
-					"<a href='#'><i class='icon-thumbs-up icon-white'></i></a>"+
+					"<a href='#'><i class='zicon-<%= type %> zicon-white'></i></a>"+
 					"<span class='layer-title'>  <%= title %></span>"+
 					"<span class='pull-right'>"+
 						"<a class='delete-layer' href='#'><i class='icon-trash icon-white'></i></a>"+
