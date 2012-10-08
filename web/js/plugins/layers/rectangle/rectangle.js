@@ -79,7 +79,7 @@
 			this.controls
 				.append( dissolveCheck.getControl() )
 				.append( color.getControl() )
-				//.append( opacitySlider.getControl() )
+				.append( opacitySlider.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() );
 			
