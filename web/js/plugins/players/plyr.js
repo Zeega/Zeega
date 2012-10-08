@@ -709,6 +709,9 @@
 				}
 				else return false;
 			})
+
+			//Temp fix, this should be removed
+			$('.time').mousedown(function(){$(this).focus();});
 		},
 		
 		convertToSeconds : function( string )
