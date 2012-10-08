@@ -7,6 +7,8 @@
 		hasControls : true,
 		defaultControls : false,
 		displayCitation : false,
+		visual : true,
+		scalable : true,
 
 		defaultAttributes : {
 			'title' : 'Popup Layer',
@@ -28,11 +30,6 @@
 		render : function()
 		{
 
-			var dissolveCheck = new Layer.Views.Lib.Checkbox({
-				property : 'dissolve',
-				model: this.model,
-				label : 'Fade In'
-			});
 			
 			// needs two droppables
 			// one for the popup item
@@ -48,14 +45,6 @@
 				label : 'Image Displayed in Frame'
 
 			});
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity of Media Displayed in Frame',
-				step : 0.01,
-				min : 0,
-				max : 1,
-			});
 
 			var playPausePlayer = new Layer.Views.Lib.Checkbox({
 				property : 'pauses_player',
@@ -64,10 +53,8 @@
 			});
 			
 			$(this.controls)
-				.append( dissolveCheck.getControl() )
 				.append( popupTargettDrop.getControl() )
 				.append( popupContentDrop.getControl() )
-				.append( opacitySlider.getControl() )
 				.append( playPausePlayer.getControl() );
 
 			return this;

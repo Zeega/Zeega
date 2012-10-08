@@ -4,8 +4,9 @@
 			
 		layerType : 'Video',
 		draggable : true,
-		
 		player_loaded : false,
+		scalable : false,
+		visual : true,
 
 		defaultAttributes : 
 		{
@@ -63,12 +64,6 @@
 			var _this = this;
 			var playbackControls = new Layer.Views.Lib.Target({
 				model : this.model
-			});
-			
-			var dissolveCheck = new Layer.Views.Lib.Checkbox({
-				property : 'dissolve',
-				model: this.model,
-				label : 'Fade In'
 			});
 			
 			var volumeSlider = new Layer.Views.Lib.Slider({
@@ -140,23 +135,12 @@
 				}
 			});
 			
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity',
-				step : 0.01,
-				min : 0,
-				max : 1,
-			});
-			
 			var audioLabel = new Layer.Views.Lib.SectionLabel({label:'Audio'})
 			
 			this.controls
 				.append( playbackControls.getControl() )
-				.append( dissolveCheck.getControl() )
 				.append( widthSlider.getControl() )
 				.append( heightSlider.getControl() )
-				.append( opacitySlider.getControl() )
 				.append( audioLabel.getControl() )
 				.append( volumeSlider.getControl() )
 				.append( fadeInSlider.getControl() )

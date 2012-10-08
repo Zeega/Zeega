@@ -14,7 +14,7 @@
 			this.init();
 		},
 		
-		render : function(){ /* this is overridden by individual controls*/ },
+		render : function(){ return this; /* this is overridden by individual controls*/ },
 		
 		renderControls : function()
 		{
@@ -29,6 +29,78 @@
 		
 		drawDefaultControls : function()
 		{
+			if(this.model.scalable){
+				if(this.model.fixedAspectRatio){
+					var scaleSlider = new Layer.Views.Lib.Slider({
+						property : 'width',
+						model: this.model,
+						label : 'Scale',
+						suffix : '%',
+						min : 1,
+						max : 200,
+					});
+					this.$el.find('#controls').append( scaleSlider.getControl() );
+				}
+				else{
+					var widthSlider = new Layer.Views.Lib.Slider({
+						property : 'width',
+						model: this.model,
+						label : 'Width',
+						suffix : '%',
+						min : 1,
+						max : 200,
+					});
+					var heightSlider = new Layer.Views.Lib.Slider({
+						property : 'height',
+						model: this.model,
+						label : 'Height',
+						suffix : '%',
+						min : 1,
+						max : 200,
+					});
+					this.$el.find('#controls').append( widthSlider.getControl() )
+										.append( heightSlider.getControl() );
+				}
+			}		
+			if(this.model.visual){
+			
+				var dissolveCheck = new Layer.Views.Lib.Checkbox({
+					property : 'dissolve',
+					model: this.model,
+					label : 'Fade In'
+				});
+	
+				var opacitySlider = new Layer.Views.Lib.Slider({
+					property : 'opacity',
+					model: this.model,
+					label : 'Opacity',
+					step : 0.01,
+					min : .05,
+					max : 1,
+				});
+				
+				var posXSlider = new Layer.Views.Lib.Slider({
+					property : 'top',
+					model: this.model,
+					label : 'Vertical Postion',
+					suffix : '%',
+					min : -100,
+					max : 100,
+				});
+				var posYSlider = new Layer.Views.Lib.Slider({
+					property : 'left',
+					model: this.model,
+					label : 'Horizontal Postion',
+					suffix : '%',
+					min : -100,
+					max : 100,
+				});
+				
+				this.$el.find('#controls').append( posYSlider.getControl() )
+											.append( posXSlider.getControl() )
+											.append( opacitySlider.getControl() )
+											.prepend( dissolveCheck.getControl() );
+			}
 			if(this.model.defaultControls!=false)
 			{
 				this.$el.find('.default-layer-controls').empty();
@@ -40,7 +112,6 @@
 				
 				this.$el.find('.default-layer-controls')
 					.append( continueLayer.getControl() );
-					//.append( continueToNext.getControl() );
 				if( this.model.get('attr').linkable )
 				{
 					var link = new Layer.Views.Lib.Link({ model: this.model });
