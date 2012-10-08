@@ -28,6 +28,12 @@
 		render : function()
 		{
 
+			var dissolveCheck = new Layer.Views.Lib.Checkbox({
+				property : 'dissolve',
+				model: this.model,
+				label : 'Fade In'
+			});
+			
 			// needs two droppables
 			// one for the popup item
 			// one for the trigger image
@@ -39,7 +45,7 @@
 			var popupTargettDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_target',
-				label : 'Media Displayed in Frame'
+				label : 'Image Displayed in Frame'
 
 			});
 			var opacitySlider = new Layer.Views.Lib.Slider({
@@ -58,6 +64,7 @@
 			});
 			
 			$(this.controls)
+				.append( dissolveCheck.getControl() )
 				.append( popupTargettDrop.getControl() )
 				.append( popupContentDrop.getControl() )
 				.append( opacitySlider.getControl() )
@@ -74,6 +81,22 @@
 		draggable : true,
 		
 		template : '<a href="#"></a>',
+		
+		events : {
+			'mouseover a':'mouseover',
+			'mouseout':'mouseout',
+		},
+		
+		mouseover : function(){
+			console.log('mouseover');
+		
+		},
+		mouseout : function(){
+		
+		console.log('mouseout');
+		},
+			
+		
 
 		init : function()
 		{
