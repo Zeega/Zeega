@@ -874,7 +874,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 			streetView : true,
 			searchBar : true,
 			disableDoubleClickZoom : true,
-
+			scrollwheel: false,
 			panControl: false,
 			zoomControl: true,
 			mapTypeControl: true,
@@ -921,6 +921,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 					mapTypeControl: this.settings.mapTypeControl,
 					scaleControl: this.settings.scaleControl,
 					streetViewControl: false,
+					scrollwheel: false,
 					overviewMapControl: this.settings.overviewMapControl
 				};
 				this.map = new google.maps.Map( $(this.el).find( '.google-map' )[0], mapOptions);
