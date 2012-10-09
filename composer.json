@@ -23,7 +23,8 @@
         "sonata-project/doctrine-orm-admin-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "dev-master",
-        "nelmio/solarium-bundle": "dev-master"
+        "nelmio/solarium-bundle": "dev-master",
+        "oldsound/rabbitmq-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
