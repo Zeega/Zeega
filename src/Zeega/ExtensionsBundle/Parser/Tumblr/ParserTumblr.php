@@ -23,17 +23,17 @@ class ParserTumblr extends ParserAbstract
         if($results_json->meta->status == 200){
 			$item = new Item();
         	$currentPost = $results_json -> response -> posts[0];
+			$item->setMediaCreatorUsername($results_json -> response -> blog -> name);
+			$item->setMediaCreatorRealname($results_json -> response -> blog -> name);
         	switch($currentPost -> type){
         		case "photo":
                     $photoArray = $currentPost -> photos;
                     $item->setArchive('Tumblr');
-                    $item->setAttributionUri($url);
+                    $item->setAttributionUri($currentPost->post_url);
                     $item->setChildItemsCount(count($photoArray)-1);
-                    $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
-                    $item->setMediaCreatorRealname('Unknown');
                     $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setTags($currentPost -> tags);
-                    $item->setTitle(strip_tags($currentPost -> caption));
+                    $item->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                     if(count($photoArray) == 1){
                         $altSizes = $currentPost -> photos[0] -> alt_sizes;
                         $img75px = end($altSizes);
@@ -41,12 +41,8 @@ class ParserTumblr extends ParserAbstract
                         $item->setLayerType('Image');
                         $item->setThumbnailUrl($img75px -> url);
                         $item->setUri($currentPost -> photos[0] -> original_size -> url);
-                        $item->setTitle(strip_tags($currentPost -> caption));
                         $item->setMediaDateCreated(new DateTime($currentPost -> date));
-                        $item->setAttributionUri($currentPost -> photos[0] -> original_size -> url);
                         $item->setChildItemsCount(0);
-                        $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
-                        $item->setMediaCreatorRealname('Unknown');
                         $item->setTags($currentPost -> tags);
                     }else{
                         $item->setMediaType('Collection');
@@ -63,13 +59,13 @@ class ParserTumblr extends ParserAbstract
                             $childItem->setLayerType('Image');
                             $childItem->setThumbnailUrl($img75px -> url);
                             $childItem->setUri($photoItem -> original_size -> url);
-                            $childItem->setTitle(strip_tags($currentPost -> caption));
+                            if(strlen($photoItem -> caption)>0) $childItem->setTitle(strip_tags($currentPost -> caption));
+                            else $childItem->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                             $childItem->setMediaDateCreated(new DateTime($currentPost -> date));
-                            $childItem->setAttributionUri($photoItem -> original_size -> url);
-                            #$childItem->setAttributionUri($currentPost -> source_url);
+                            $childItem->setAttributionUri($currentPost->post_url);
                             $childItem->setChildItemsCount(0);
                             $childItem->setMediaCreatorUsername($results_json -> response -> blog -> name);
-                            $childItem->setMediaCreatorRealname('Unknown');
+                            $childItem->setMediaCreatorRealname($results_json -> response -> blog -> name);
                             $childItem->setTags($currentPost -> tags);
                             $item->addItem($childItem);
                         }
@@ -80,36 +76,30 @@ class ParserTumblr extends ParserAbstract
                     $item->setUri($currentPost -> audio_url);
                     $item->setMediaType('Video');
                     $item->setLayerType('Video');
-                    $item->setTitle($currentPost -> caption);
-                    #$item->setAttributionUri($currentPost -> source_url);
+					$item->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                     $item->setChildItemsCount(0);
                     $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setArchive('Tumblr');
-                    $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
                 case "audio": # not finished
                     die("Audio postings not yet supported.");
                     $item->setUri($currentPost -> audio_url);
                     $item->setMediaType('Audio');
                     $item->setLayerType('Audio');
-                    $item->setTitle($currentPost -> caption);
-                    #$item->setAttributionUri($currentPost -> source_url);
+                    $item->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                     $item->setChildItemsCount(0);
                     $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setArchive('Tumblr');
-                    $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
                 case "text": # not finished
                     die("Text postings not yet supported.");
                     $item->setUri($currentPost -> body);
                     $item->setMediaType('tumblr_text');
                     $item->setLayerType('Text');
-                    $item->setTitle($currentPost -> title);
-                    $item->setAttributionUri($currentPost -> source_url);
+                    $item->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                     $item->setChildItemsCount(0);
                     $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setArchive('Tumblr');
-                    $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     $item->setTags($currentPost -> tags);
                     break;
                 case "quote": # not finished
@@ -117,12 +107,10 @@ class ParserTumblr extends ParserAbstract
                     $item->setUri($currentPost -> photos[0] -> original_size -> url);
                     $item->setMediaType('tumblr_quote');
                     $item->setLayerType('Text');
-                    $item->setTitle($currentPost -> caption);
-                    $item->setAttributionUri($currentPost -> source_url);
+                    $item->setTitle(ucwords(str_replace ( '-',' ', $currentPost->slug)));
                     $item->setChildItemsCount(0);
                     $item->setMediaDateCreated(new DateTime($currentPost -> date));
                     $item->setArchive('Tumblr');
-                    $item->setMediaCreatorUsername($results_json -> response -> blog -> name);
                     break;
 		     }
         }else{

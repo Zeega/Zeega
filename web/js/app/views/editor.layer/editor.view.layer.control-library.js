@@ -305,7 +305,6 @@ Use this.model.get('attr')[my_setting] instead!!!
 	Layer.Views.Lib.Slider = Layer.Views.Lib.extend({
 		
 		className : 'control control-slider clearfix',
-		
 		defaults : {
 			label : 'control',
 			min : 0,
@@ -344,7 +343,16 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		render : function()
 		{
+			
 			var _this = this;
+	
+			if(this.settings.property=="top"||this.settings.property=="left"){			
+				this.model.on('update',function(){
+					_this.$el.find('.control-slider').slider('option', {'value':_this.model.get('attr')[_this.settings.property]});
+					_this.$el.find('.slider-num-input').html(_this.model.get('attr')[_this.settings.property]).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+				});
+			}
+			
 			
 			var uiValue = ( !_.isUndefined(this.model.get('attr')[this.settings.property]) ) ? this.model.get('attr')[this.settings.property] : this.settings.value;
 			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{uiValue:uiValue}) ));
@@ -372,19 +380,23 @@ Use this.model.get('attr')[my_setting] instead!!!
 				},
 				change : function(e,ui)
 				{
-					_this.updateVisualElement( ui.value );
-					_this.updateSliderInput(ui.value);
-					_this.saveValue(ui.value)
-					_this.settings.onChange();
+					if(e.which==1){
+						_this.updateVisualElement( ui.value );
+						_this.updateSliderInput(ui.value);
+						_this.saveValue(ui.value)
+						_this.settings.onChange();
+					}
 				},
 				stop : function(e,ui)
 				{
-					_this.settings.onStop();
+					if(e.which==1)_this.settings.onStop();
 				}
 				
 			});
 			
 			this.$el.find('.slider-num-input').html(uiValue).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+			
+			
 			
 			return this;
 		},
@@ -874,7 +886,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 			streetView : true,
 			searchBar : true,
 			disableDoubleClickZoom : true,
-
+			scrollwheel: false,
 			panControl: false,
 			zoomControl: true,
 			mapTypeControl: true,
@@ -921,6 +933,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 					mapTypeControl: this.settings.mapTypeControl,
 					scaleControl: this.settings.scaleControl,
 					streetViewControl: false,
+					scrollwheel: false,
 					overviewMapControl: this.settings.overviewMapControl
 				};
 				this.map = new google.maps.Map( $(this.el).find( '.google-map' )[0], mapOptions);

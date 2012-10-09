@@ -96,7 +96,7 @@ class ParserFlickrTag extends ParserAbstract
                 
                 array_push($items,$item);
 
-                if(true !== $loadCollectionItems) {
+                if(true !== $loadCollectionItems) {                    
                     return parent::returnResponse($items, true, true);
                 }
             }

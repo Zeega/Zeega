@@ -9678,7 +9678,7 @@ Popcorn.player( "youtube", {
 				!media.paused && media.pause();
 				//console.log('setting the volume');
             	//console.log(options.volume);
-				media.youtubeObject.setVolume(options.volume);
+				if(options.volume>1)media.youtubeObject.setVolume(options.volume);
             }
 				
           }

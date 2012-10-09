@@ -7,6 +7,8 @@
 		hasControls : true,
 		defaultControls : false,
 		displayCitation : false,
+		visual : true,
+		scalable : true,
 
 		defaultAttributes : {
 			'title' : 'Popup Layer',
@@ -28,6 +30,7 @@
 		render : function()
 		{
 
+			
 			// needs two droppables
 			// one for the popup item
 			// one for the trigger image
@@ -39,16 +42,8 @@
 			var popupTargettDrop = new Layer.Views.Lib.Droppable({
 				model: this.model,
 				attribute: 'popup_target',
-				label : 'Media Displayed in Frame'
+				label : 'Image Displayed in Frame'
 
-			});
-			var opacitySlider = new Layer.Views.Lib.Slider({
-				property : 'opacity',
-				model: this.model,
-				label : 'Opacity of Media Displayed in Frame',
-				step : 0.01,
-				min : 0,
-				max : 1,
 			});
 
 			var playPausePlayer = new Layer.Views.Lib.Checkbox({
@@ -60,7 +55,6 @@
 			$(this.controls)
 				.append( popupTargettDrop.getControl() )
 				.append( popupContentDrop.getControl() )
-				.append( opacitySlider.getControl() )
 				.append( playPausePlayer.getControl() );
 
 			return this;
@@ -74,6 +68,22 @@
 		draggable : true,
 		
 		template : '<a href="#"></a>',
+		
+		events : {
+			'mouseover a':'mouseover',
+			'mouseout':'mouseout',
+		},
+		
+		mouseover : function(){
+			console.log('mouseover');
+		
+		},
+		mouseout : function(){
+		
+		console.log('mouseout');
+		},
+			
+		
 
 		init : function()
 		{
