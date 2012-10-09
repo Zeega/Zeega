@@ -1,5 +1,5 @@
 {
-    "hash": "eac5e9ccab14ad9e36896d3cbb43d96e",
+    "hash": "1fdf4567f6cfba0334c86f0a404c897b",
     "packages": [
         {
             "name": "doctrine/common",
@@ -25,7 +25,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -95,7 +95,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL": "lib/"
@@ -169,7 +169,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Bundle\\DoctrineBundle": ""
@@ -222,7 +222,6 @@
                 "symfony/framework-bundle": ">=2.1.0,<2.3-dev",
                 "doctrine/doctrine-bundle": "1.0.*"
             },
-            "time": "1349789824",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -253,7 +252,8 @@
                 "dbal",
                 "migrations",
                 "schema"
-            ]
+            ],
+            "time": "1349789824"
         },
         {
             "name": "doctrine/migrations",
@@ -343,7 +343,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\ORM": "lib/"
@@ -398,7 +398,6 @@
                 "php": ">=5.3.2",
                 "symfony/http-foundation": ">=2.0,<2.3-dev"
             },
-            "time": "1347135166",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -428,42 +427,40 @@
             "homepage": "http://friendsofsymfony.github.com",
             "keywords": [
                 "rest"
-            ]
+            ],
+            "time": "1347135166"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "dev-master",
+            "version": "0.9.0",
             "target-dir": "FOS/RestBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle",
-                "reference": "7dc85eb2ac086f98ff56a6af7a9f02d1bf7d951d"
+                "reference": "0.9.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/FriendsOfSymfony/FOSRestBundle/zipball/7dc85eb2ac086f98ff56a6af7a9f02d1bf7d951d",
-                "reference": "7dc85eb2ac086f98ff56a6af7a9f02d1bf7d951d",
+                "url": "https://github.com/FriendsOfSymfony/FOSRestBundle/zipball/0.9.0",
+                "reference": "0.9.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "jms/serializer-bundle": "0.9.*",
+                "friendsofsymfony/rest": ">=0.7.0,<0.9.0-dev",
                 "symfony/framework-bundle": ">=2.0,<2.3-dev",
-                "friendsofsymfony/rest": ">=0.7.0,<0.9.0-dev"
+                "sensio/framework-extra-bundle": ">=2.0,<2.3-dev",
+                "jms/serializer-bundle": "0.9.*"
             },
             "require-dev": {
                 "symfony/form": ">=2.0,<2.3-dev",
-                "symfony/yaml": ">=2.0,<2.3-dev",
-                "sensio/framework-extra-bundle": ">=2.0,<2.3-dev"
+                "symfony/yaml": ">=2.0,<2.3-dev"
             },
-            "suggest": {
-                "sensio/framework-extra-bundle": "Add support for route annotations"
-            },
-            "time": "1349279512",
+            "time": "2012-09-23 20:32:09",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.10.x-dev"
+                    "dev-master": "0.9.x-dev"
                 }
             },
             "installation-source": "source",
@@ -531,7 +528,7 @@
                     "dev-master": "2.0.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "FOS\\UserBundle": ""
@@ -582,7 +579,7 @@
             },
             "time": "2012-01-02 20:50:26",
             "type": "symfony-bundle",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\AopBundle": ""
@@ -668,7 +665,7 @@
             },
             "time": "2012-09-06 16:07:54",
             "type": "symfony-bundle",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\DiExtraBundle": ""
@@ -774,7 +771,7 @@
             },
             "time": "2012-09-06 16:12:03",
             "type": "symfony-bundle",
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\SecurityExtraBundle": ""
@@ -889,7 +886,6 @@
                 "silex/silex": "for the integration with your silex application",
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
             },
-            "time": "1339345240",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -924,7 +920,8 @@
             "keywords": [
                 "menu",
                 "tree"
-            ]
+            ],
+            "time": "1339345240"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1012,7 +1009,7 @@
                     "dev-master": "1.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Assetic": "src/"
@@ -1068,7 +1065,7 @@
                     "dev-master": "1.3.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Monolog": "src/"
@@ -1094,17 +1091,17 @@
         },
         {
             "name": "nelmio/solarium-bundle",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "target-dir": "Nelmio/SolariumBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioSolariumBundle",
-                "reference": "61b8a7f2b99edd13d90e377335f571607721a7f2"
+                "reference": "v1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/nelmio/NelmioSolariumBundle/zipball/61b8a7f2b99edd13d90e377335f571607721a7f2",
-                "reference": "61b8a7f2b99edd13d90e377335f571607721a7f2",
+                "url": "https://github.com/nelmio/NelmioSolariumBundle/zipball/v1.0.0",
+                "reference": "v1.0.0",
                 "shasum": ""
             },
             "require": {
@@ -1114,13 +1111,8 @@
             "require-dev": {
                 "symfony/yaml": "2.*"
             },
-            "time": "1345050695",
+            "time": "2012-07-31 11:54:55",
             "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
@@ -1148,6 +1140,51 @@
             ]
         },
         {
+            "name": "oldsound/rabbitmq-bundle",
+            "version": "dev-master",
+            "target-dir": "OldSound/RabbitMqBundle",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/videlalvaro/RabbitMqBundle.git",
+                "reference": "7825c18bdb32a023e339e0479fedc5c6cdc3acfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/videlalvaro/RabbitMqBundle/zipball/7825c18bdb32a023e339e0479fedc5c6cdc3acfc",
+                "reference": "7825c18bdb32a023e339e0479fedc5c6cdc3acfc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/framework-bundle": ">=2.0",
+                "videlalvaro/php-amqplib": "dev-master",
+                "symfony/yaml": ">=2.0"
+            },
+            "time": "1349628295",
+            "type": "symfony-bundle",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "OldSound\\RabbitMqBundle\\": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alvaro Videla"
+                }
+            ],
+            "description": "Integrates php-amqplib with Symfony2 and RabbitMq",
+            "keywords": [
+                "queue",
+                "Symfony2",
+                "rabbitmq",
+                "message"
+            ]
+        },
+        {
             "name": "sensio/distribution-bundle",
             "version": "v2.1.1",
             "target-dir": "Sensio/Bundle/DistributionBundle",
@@ -1172,7 +1209,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\DistributionBundle": ""
@@ -1219,7 +1256,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\FrameworkExtraBundle": ""
@@ -1270,7 +1307,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\GeneratorBundle": ""
@@ -1416,7 +1453,6 @@
                 "sonata-project/admin-bundle": "dev-master",
                 "sonata-project/cache-bundle": "dev-master"
             },
-            "time": "1349697892",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1443,7 +1479,8 @@
             "keywords": [
                 "sonata",
                 "block"
-            ]
+            ],
+            "time": "1349697892"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -1517,7 +1554,6 @@
             "suggest": {
                 "ext-curl": "*"
             },
-            "time": "1346967589",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1543,7 +1579,8 @@
                 "csv",
                 "client",
                 "export"
-            ]
+            ],
+            "time": "1346967589"
         },
         {
             "name": "sonata-project/jquery-bundle",
@@ -1564,7 +1601,6 @@
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "2.*"
             },
-            "time": "1346283282",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1591,7 +1627,8 @@
             "keywords": [
                 "jquery",
                 "sonata"
-            ]
+            ],
+            "time": "1346283282"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1617,7 +1654,7 @@
                     "dev-master": "4.2-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "files": [
                     "lib/swift_required.php"
@@ -1681,7 +1718,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\AsseticBundle": ""
@@ -1738,7 +1775,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\MonologBundle": ""
@@ -1792,7 +1829,7 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\SwiftmailerBundle": ""
@@ -1881,7 +1918,7 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -1931,7 +1968,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "lib/"
@@ -1978,7 +2015,7 @@
                     "dev-master": "1.9-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
@@ -2002,6 +2039,44 @@
             "keywords": [
                 "templating"
             ]
+        },
+        {
+            "name": "videlalvaro/php-amqplib",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/videlalvaro/php-amqplib.git",
+                "reference": "2eaea42796f1e917b9b4348a2cbb6a910bf3b023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/videlalvaro/php-amqplib/zipball/2eaea42796f1e917b9b4348a2cbb6a910bf3b023",
+                "reference": "2eaea42796f1e917b9b4348a2cbb6a910bf3b023",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "1349626926",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "PhpAmqpLib": ""
+                }
+            },
+            "authors": [
+                {
+                    "name": "Alvaro Videla"
+                }
+            ],
+            "description": "This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
+            "homepage": "https://github.com/videlalvaro/php-amqplib/",
+            "keywords": [
+                "queue",
+                "rabbitmq",
+                "message"
+            ]
         }
     ],
     "packages-dev": null,
@@ -2013,7 +2088,6 @@
         "sonata-project/admin-bundle": 20,
         "sonata-project/doctrine-orm-admin-bundle": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "friendsofsymfony/rest-bundle": 20,
-        "nelmio/solarium-bundle": 20
+        "oldsound/rabbitmq-bundle": 20
     }
 }
