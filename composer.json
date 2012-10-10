@@ -18,12 +18,13 @@
         "sensio/generator-bundle": "2.1.*",
         "jms/security-extra-bundle": "1.2.*",
         "jms/di-extra-bundle": "1.1.*",        
-        "friendsofsymfony/user-bundle": "*",
-        "sonata-project/admin-bundle": "*",
-        "sonata-project/doctrine-orm-admin-bundle": "*",
+        "friendsofsymfony/user-bundle": "1.3.0",
+        "sonata-project/admin-bundle": "dev-master",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "dev-master",
-        "nelmio/solarium-bundle": "dev-master"
+        "friendsofsymfony/rest-bundle": "0.9.0",
+        "nelmio/solarium-bundle": "1.0.0",
+        "oldsound/rabbitmq-bundle":"dev-master"
     },
     "scripts": {
         "post-install-cmd": [

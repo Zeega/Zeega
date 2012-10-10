@@ -11,6 +11,7 @@
 		layerPanel : $('#links-list'),
 		hasControls : false,
 		defaultControls : false,
+		scalable : true,
 		displayCitation : false,
 		
 		defaultAttributes : {
