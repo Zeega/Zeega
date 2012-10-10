@@ -15,7 +15,7 @@ class ParserFlickrPhoto extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
-        require_once('../vendor/phpflickr/lib/Phpflickr/Phpflickr.php');
+        require_once(__DIR__.'/../../../../../vendor/phpflickr/lib/Phpflickr/Phpflickr.php');
         if(isset($parameters["photo_id"]))
         {
             $itemId = $parameters["photo_id"];
