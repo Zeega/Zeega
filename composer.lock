@@ -25,7 +25,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -95,7 +95,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL": "lib/"
@@ -169,7 +169,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Bundle\\DoctrineBundle": ""
@@ -208,20 +208,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "b3ec793dc232fb19f025c3ffc9a0757471d78605"
+                "reference": "3792aa78445773387754c6853bbd7f4dcb31f486"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/DoctrineMigrationsBundle/zipball/b3ec793dc232fb19f025c3ffc9a0757471d78605",
-                "reference": "b3ec793dc232fb19f025c3ffc9a0757471d78605",
+                "url": "https://github.com/doctrine/DoctrineMigrationsBundle/zipball/3792aa78445773387754c6853bbd7f4dcb31f486",
+                "reference": "3792aa78445773387754c6853bbd7f4dcb31f486",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "doctrine/migrations": "*",
-                "symfony/framework-bundle": ">=2.1.0,<2.3-dev",
-                "doctrine/doctrine-bundle": "1.0.*"
+                "symfony/symfony": ">=2.0",
+                "doctrine/migrations": "*"
             },
+            "time": "1341472972",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -252,8 +252,7 @@
                 "dbal",
                 "migrations",
                 "schema"
-            ],
-            "time": "1349789824"
+            ]
         },
         {
             "name": "doctrine/migrations",
@@ -261,12 +260,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations",
-                "reference": "b38ddb190ec78d389b2c2de838b2a4d646ad1ce2"
+                "reference": "3dd738b2a709f4d5185c144292189c6e708ca37d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/migrations/zipball/b38ddb190ec78d389b2c2de838b2a4d646ad1ce2",
-                "reference": "b38ddb190ec78d389b2c2de838b2a4d646ad1ce2",
+                "url": "https://github.com/doctrine/migrations/zipball/3dd738b2a709f4d5185c144292189c6e708ca37d",
+                "reference": "3dd738b2a709f4d5185c144292189c6e708ca37d",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +279,7 @@
             "suggest": {
                 "symfony/console": "to run the migration from the console"
             },
-            "time": "1349435713",
+            "time": "1348090059",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -343,7 +342,7 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\ORM": "lib/"
@@ -398,6 +397,7 @@
                 "php": ">=5.3.2",
                 "symfony/http-foundation": ">=2.0,<2.3-dev"
             },
+            "time": "1347135166",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -427,8 +427,7 @@
             "homepage": "http://friendsofsymfony.github.com",
             "keywords": [
                 "rest"
-            ],
-            "time": "1347135166"
+            ]
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -528,7 +527,7 @@
                     "dev-master": "2.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "FOS\\UserBundle": ""
@@ -634,7 +633,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -665,7 +664,7 @@
             },
             "time": "2012-09-06 16:07:54",
             "type": "symfony-bundle",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "JMS\\DiExtraBundle": ""
@@ -721,7 +720,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -771,7 +770,7 @@
             },
             "time": "2012-09-06 16:12:03",
             "type": "symfony-bundle",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "JMS\\SecurityExtraBundle": ""
@@ -832,7 +831,7 @@
                     "dev-master": "0.9.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "JMS\\SerializerBundle": ""
@@ -845,7 +844,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -886,6 +885,7 @@
                 "silex/silex": "for the integration with your silex application",
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
             },
+            "time": "1339345240",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -920,8 +920,7 @@
             "keywords": [
                 "menu",
                 "tree"
-            ],
-            "time": "1339345240"
+            ]
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -959,7 +958,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -1009,7 +1008,7 @@
                     "dev-master": "1.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Assetic": "src/"
@@ -1065,7 +1064,7 @@
                     "dev-master": "1.3.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Monolog": "src/"
@@ -1209,7 +1208,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\DistributionBundle": ""
@@ -1256,7 +1255,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\FrameworkExtraBundle": ""
@@ -1307,7 +1306,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\GeneratorBundle": ""
@@ -1373,12 +1372,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "7d7aee76c6c141cc356492f79b4ab78a7269c335"
+                "reference": "26b304d92d5efebcbd0bda619a6e77d5ddd53640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sonata-project/SonataAdminBundle/zipball/7d7aee76c6c141cc356492f79b4ab78a7269c335",
-                "reference": "7d7aee76c6c141cc356492f79b4ab78a7269c335",
+                "url": "https://github.com/sonata-project/SonataAdminBundle/zipball/26b304d92d5efebcbd0bda619a6e77d5ddd53640",
+                "reference": "26b304d92d5efebcbd0bda619a6e77d5ddd53640",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1393,7 @@
                 "sonata-project/doctrine-orm-admin-bundle": "dev-master",
                 "sonata-project/intl-bundle": "dev-master"
             },
-            "time": "1348410160",
+            "time": "1348174970",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1437,22 +1436,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataBlockBundle",
-                "reference": "32676aa16164e39ea4b48d5deb3138a7119c9357"
+                "reference": "f74b0212211ba97555bbc98828e0f25b8c9c5d6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sonata-project/SonataBlockBundle/zipball/32676aa16164e39ea4b48d5deb3138a7119c9357",
-                "reference": "32676aa16164e39ea4b48d5deb3138a7119c9357",
+                "url": "https://github.com/sonata-project/SonataBlockBundle/zipball/f74b0212211ba97555bbc98828e0f25b8c9c5d6d",
+                "reference": "f74b0212211ba97555bbc98828e0f25b8c9c5d6d",
                 "shasum": ""
             },
-            "require-dev": {
-                "sonata-project/admin-bundle": "dev-master",
+            "require": {
                 "sonata-project/cache-bundle": "dev-master"
+            },
+            "require-dev": {
+                "sonata-project/admin-bundle": "dev-master"
             },
             "suggest": {
-                "sonata-project/admin-bundle": "dev-master",
-                "sonata-project/cache-bundle": "dev-master"
+                "sonata-project/admin-bundle": "dev-master"
             },
+            "time": "1347982917",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1479,8 +1480,61 @@
             "keywords": [
                 "sonata",
                 "block"
+            ]
+        },
+        {
+            "name": "sonata-project/cache-bundle",
+            "version": "dev-master",
+            "target-dir": "Sonata/CacheBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sonata-project/SonataCacheBundle",
+                "reference": "398f988a49782d2c4b7fb7c2f4a487285221bdca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/sonata-project/SonataCacheBundle/zipball/398f988a49782d2c4b7fb7c2f4a487285221bdca",
+                "reference": "398f988a49782d2c4b7fb7c2f4a487285221bdca",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/symfony": "2.1.*"
+            },
+            "require-dev": {
+                "doctrine/orm": ">=2.2.0"
+            },
+            "suggest": {
+                "doctrine/orm": ">=2.2.0",
+                "ext-apc": "*",
+                "ext-memcached": "*"
+            },
+            "time": "1347921664",
+            "type": "symfony-bundle",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Sonata\\CacheBundle": ""
+                }
+            },
+            "license": [
+                "MIT"
             ],
-            "time": "1349697892"
+            "authors": [
+                {
+                    "name": "Thomas Rabaix",
+                    "email": "thomas.rabaix@sonata-project.org",
+                    "homepage": "http://sonata-project.org"
+                },
+                {
+                    "name": "Sonata Community",
+                    "homepage": "https://github.com/sonata-project/SonataCacheBundle/contributors"
+                }
+            ],
+            "description": "This bundle provides caching services",
+            "homepage": "https://github.com/sonata-project/SonataCacheBundle",
+            "keywords": [
+                "cache block"
+            ]
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -1489,12 +1543,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "072d292b9a759cf7dd562a9bb9eba2f48c92d8c2"
+                "reference": "fb32475840404f5436a965779208d982b084d85e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/zipball/072d292b9a759cf7dd562a9bb9eba2f48c92d8c2",
-                "reference": "072d292b9a759cf7dd562a9bb9eba2f48c92d8c2",
+                "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/zipball/fb32475840404f5436a965779208d982b084d85e",
+                "reference": "fb32475840404f5436a965779208d982b084d85e",
                 "shasum": ""
             },
             "require": {
@@ -1502,7 +1556,7 @@
                 "doctrine/orm": ">=2.2,<2.4-dev",
                 "symfony/symfony": "2.1.*"
             },
-            "time": "1348476029",
+            "time": "1347921212",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1554,6 +1608,7 @@
             "suggest": {
                 "ext-curl": "*"
             },
+            "time": "1346967589",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1579,8 +1634,7 @@
                 "csv",
                 "client",
                 "export"
-            ],
-            "time": "1346967589"
+            ]
         },
         {
             "name": "sonata-project/jquery-bundle",
@@ -1601,6 +1655,7 @@
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "2.*"
             },
+            "time": "1346283282",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1627,8 +1682,7 @@
             "keywords": [
                 "jquery",
                 "sonata"
-            ],
-            "time": "1346283282"
+            ]
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1654,7 +1708,7 @@
                     "dev-master": "4.2-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "lib/swift_required.php"
@@ -1718,7 +1772,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\AsseticBundle": ""
@@ -1775,7 +1829,7 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\MonologBundle": ""
@@ -1829,7 +1883,7 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\SwiftmailerBundle": ""
@@ -1918,7 +1972,7 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -1968,7 +2022,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "lib/"
@@ -2015,7 +2069,7 @@
                     "dev-master": "1.9-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
