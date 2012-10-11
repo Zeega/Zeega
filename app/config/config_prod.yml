@@ -16,23 +16,11 @@ monolog:
         main:
             type:         fingers_crossed
             action_level: error
-            handler:      grouped
-        grouped:
-            type:    group
-            members: [streamed, buffered]
-        streamed:
+            handler:      nested
+        nested:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
-        buffered:
-            type:    buffer
-            handler: swift
-        swift:
-            type:       swift_mailer
-            from_email: error@zeega.org
-            to_email:   filipe@zeega.org
-            subject:    This is Zeega speaking
-            level:      debug
 
 assetic:
     use_controller: true
