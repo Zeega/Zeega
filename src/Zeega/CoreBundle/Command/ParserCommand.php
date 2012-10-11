@@ -25,8 +25,7 @@ class ParserCommand extends ContainerAwareCommand
              ->setDescription('Bulk data parser')
              ->addOption('url', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
-             ->addOption('task_id', null, InputOption::VALUE_REQUIRED, 'Task id')
-             ->addOption('force', null, InputOption::VALUE_NONE, 'Set this parameter to execute this action')
+             ->addOption('result_path', null, InputOption::VALUE_REQUIRED, 'Task id')
              ->setHelp("Help");
     }
 
@@ -34,12 +33,12 @@ class ParserCommand extends ContainerAwareCommand
     {
         $url = $input->getOption('url');
         $userId = $input->getOption('user');
-        $taskId = $input->getOption('task_id');
+        $resultPath = $input->getOption('result_path');
         
-        if(null === $url || null === $userId || null === $taskId)
+        if(null === $url || null === $userId || null === $resultPath)
         {
             $output->writeln('');
-            $output->writeln('Please run the operation with the --url and --userId options to execute');
+            $output->writeln('Please run this operation with the --url, --user and --result_path options.');
             $output->writeln('');
         }
         else
@@ -53,7 +52,7 @@ class ParserCommand extends ContainerAwareCommand
             {
                 
                 //$items = ResponseHelper::serializeEntityToJson($parserResponse["items"]);
-                $filePath = "$taskId.json";
+                $filePath = "$resultPath.json";
                 $temaplate = $this->getContainer()->get('templating')->render("ZeegaApiBundle:Items:index.json.twig",array("items"=>$parserResponse["items"], "load_children" =>true));
                 file_put_contents($filePath, $temaplate);
                 $output->write($filePath);    
