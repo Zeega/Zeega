@@ -25,19 +25,19 @@ class PersistCommand extends ContainerAwareCommand
         $this->setName('zeega:persist')
              ->setDescription('Bulk data parser')
              ->addOption('file_path', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
-             ->addOption('user_id', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
+             ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->setHelp("Help");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $filePath = $input->getOption('file_path');
-        $userId = $input->getOption('user_id');
+        $userId = $input->getOption('user');
         
         if(null === $filePath)
         {
             $output->writeln('');
-            $output->writeln('Please run the operation with the --file_path option to execute');
+            $output->writeln('Please run the operation with the --file_path and --user options to execute');
             $output->writeln('');
         }
         else
