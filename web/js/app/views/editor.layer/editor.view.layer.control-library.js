@@ -381,7 +381,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 				change : function(e,ui)
 				{
 					if(e.which==1){
-						_this.updateVisualElement( ui.value );
+						
 						_this.updateSliderInput(ui.value);
 						_this.saveValue(ui.value)
 						_this.settings.onChange();
@@ -441,7 +441,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 			this.$el.find('.slider-num-input').blur();
 			this.$el.find('.control-slider').slider('value', newValue);
 			
-			//this.saveValue(newValue)
+			this.saveValue(newValue)
 		},
 		
 		saveValue : function(value)
@@ -452,6 +452,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 				var attr = {};
 				attr[this.settings.property] = value;
 				this.model.update( attr )
+				this.updateVisualElement( value );
 			}
 		},
 		
