@@ -282,7 +282,7 @@
 		{
 			//separated to make it easier to isolate and update this list
 			var format = '';
-			if( url.match(/^http:\/\/(?:www\.)?youtube.com\/watch\?(?=.*v=\w+)(?:\S+)?$/) ) format = 'youtube'
+			if( url.match(/http:\/\/(?:youtu\.be\/|(?:[a-z]{2,3}\.)?youtube\.com\/watch(?:\?|#\!)v=)([\w-]{11}).*/gi) ) format = 'youtube'
 			else if ( url.match(/^http:\/\/(?:www\.)?vimeo.com\/(.*)/) ) format = 'vimeo'
 			else format = 'html5';
 			//Force flash for html5 in Firefox browser
