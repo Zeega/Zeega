@@ -17,12 +17,6 @@ class QueueingService
 
     public function enqueueTask($task, $taskArguments, $taskIdPrefix = null)
 	{
-        /*
-	    $id = uniqid();
-	    $msg = array("id" => $id,  "task" => "tasks.add", "args" => array(1,2));
-        $this->get('old_sound_rabbit_mq.celery_task_producer')->publish(json_encode($msg), 'celery');
-        return $id;
-        */
         $taskId = $taskIdPrefix . uniqid();
         
         $msg = array("id" => $taskId,  "task" => $task, "args" => $taskArguments);
