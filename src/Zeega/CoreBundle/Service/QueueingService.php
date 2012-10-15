@@ -15,10 +15,10 @@ class QueueingService
         $this->rabbitmq = $rabbitmq;
     }
 
-    public function enqueueTask($task, $taskArguments, $taskIdPrefix = null) {
+    public function enqueueTask($taskName, $taskArguments, $taskIdPrefix = null) {
 
-        if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {            
-            $user = $this->container->get('security.context')->getToken()->getUser();
+        if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {            
+            $user = $this->securityContext->getToken()->getUser();
             $currentTime = new \DateTime("now");
 
             // create a new task on the database for tracking purposes
@@ -28,13 +28,14 @@ class QueueingService
             $task->setDateCreated($currentTime);
             $task->setDateUpdated($currentTime);
             
+            $em = $this->doctrine->getEntityManager();
             $em->persist($task);
             $em->flush();                
 
             try {
                 // enqueue the task
-                $taskId = $task->getId();                
-                $msg = array("id" => $taskId,  "task" => $task, "args" => $taskArguments);
+                $taskId = "task-".$task->getId();                
+                $msg = array("id" => $taskId,  "task" => $taskName, "args" => $taskArguments);
                 $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), 'celery',  array('content_type' => 'application/json', 'delivery_mode' => 2));                
                 return $taskId;
             } catch (Exception $e) {

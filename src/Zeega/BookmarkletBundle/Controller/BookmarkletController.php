@@ -26,10 +26,10 @@ class BookmarkletController extends BaseController
 
 	    $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
 
-        if(true === $isQueueingEnabled) {
+        if(TRUE == $isQueueingEnabled) {
         	$user = $this->get('security.context')->getToken()->getUser();
             $queue = $this->get('zeega_queue');
-            $taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"parser-");            
+            $taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()));            
             return new Response($taskId);
         } else {        	
 		    if($mediaType == "collection") {
