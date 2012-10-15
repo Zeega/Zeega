@@ -24,7 +24,9 @@ use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
 
-class ProjectsController extends Controller
+use Zeega\CoreBundle\Controller\BaseController;
+
+class ProjectsController extends BaseController
 {
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)

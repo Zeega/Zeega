@@ -2,13 +2,12 @@
 //test
 namespace Zeega\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
 
+use Zeega\CoreBundle\Controller\BaseController;
 
-class CeleryController extends Controller
+class CeleryController extends BaseController
 {
     public function queueAction()
 	{

@@ -11,11 +11,12 @@ use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 use Imagick;
 use DateTime;
 use SimpleXMLElement;
 
-class BookmarkletController extends Controller
+class BookmarkletController extends BaseController
 {
    	public function persistAction()
 	{
