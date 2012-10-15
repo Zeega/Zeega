@@ -1,0 +1,34 @@
+Zeega\DataBundle\Entity\Schedule:
+    type: entity
+    table: schedule
+    manyToOne:
+        user:
+            targetEntity: Zeega\DataBundle\Entity\User
+    id:
+        id:
+            type: bigint
+            generator: { strategy: AUTO }
+    fields:
+        query:
+            type: string
+            length: 100
+            nullable: false
+        date_created:
+            type: datetime
+            nullable: false
+        date_updated:
+            type: datetime
+            nullable: false
+        status:
+            type: string
+            length: 10
+            nullable: false        
+        enabled:
+            type: boolean
+            nullable: false
+
+    indexes:
+        schedule_id:
+            columns: [id]
+        schedule_status:
+            columns: [status]

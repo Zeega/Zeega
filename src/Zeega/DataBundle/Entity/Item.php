@@ -853,4 +853,50 @@ class Item
     {
         // Add your code here
     }
+
+    /**
+     * Add child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $childItems
+     * @return Item
+     */
+    public function addChildItem(\Zeega\DataBundle\Entity\Item $childItems)
+    {
+        $this->child_items[] = $childItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $childItems
+     */
+    public function removeChildItem(\Zeega\DataBundle\Entity\Item $childItems)
+    {
+        $this->child_items->removeElement($childItems);
+    }
+
+    /**
+     * Add parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parentItems
+     * @return Item
+     */
+    public function addParentItem(\Zeega\DataBundle\Entity\Item $parentItems)
+    {
+        $this->parent_items[] = $parentItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parentItems
+     */
+    public function removeParentItem(\Zeega\DataBundle\Entity\Item $parentItems)
+    {
+        $this->parent_items->removeElement($parentItems);
+    }
 }

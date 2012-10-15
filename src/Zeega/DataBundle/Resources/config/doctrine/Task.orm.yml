@@ -1,0 +1,27 @@
+Zeega\DataBundle\Entity\Task:
+    type: entity
+    table: task
+    manyToOne:
+        user:
+            targetEntity: Zeega\DataBundle\Entity\User
+    id:
+        id:
+            type: bigint
+            generator: { strategy: AUTO }
+    fields:
+        status:
+            type: string
+            length: 10
+            nullable: false
+        date_created:
+            type: datetime
+            nullable: false
+        date_updated:
+            type: datetime
+            nullable: false
+    
+    indexes:
+        task_id:
+            columns: [id]
+        user_id_status:             # left-most rule should work here for mysql
+            columns: [user_id,status]

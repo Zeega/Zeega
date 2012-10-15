@@ -16,6 +16,7 @@
 /web/js/players/zeega.rdio.token.js
 Libraries/
 .DS_Store
+._.DS_Store
 jda_data.*
 !.gitignore
 app/phpunit.xml

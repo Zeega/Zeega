@@ -331,4 +331,14 @@ use FOS\UserBundle\Entity\User as BaseUser;
     {
         return $this->idea;
     }
+
+    /**
+     * Remove sites
+     *
+     * @param Zeega\DataBundle\Entity\Site $sites
+     */
+    public function removeSite(\Zeega\DataBundle\Entity\Site $sites)
+    {
+        $this->sites->removeElement($sites);
+    }
 }

@@ -154,4 +154,14 @@ class Site
     {
         return $this->users;
     }
+
+    /**
+     * Remove users
+     *
+     * @param Zeega\DataBundle\Entity\User $users
+     */
+    public function removeUser(\Zeega\DataBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }
