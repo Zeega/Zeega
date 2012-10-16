@@ -136,4 +136,32 @@ class Task
     {
         return $this->user;
     }
+    /**
+     * @var string $status_message
+     */
+    private $status_message;
+
+
+    /**
+     * Set status_message
+     *
+     * @param string $statusMessage
+     * @return Task
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->status_message = $statusMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get status_message
+     *
+     * @return string 
+     */
+    public function getStatusMessage()
+    {
+        return $this->status_message;
+    }
 }

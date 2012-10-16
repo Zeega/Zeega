@@ -13,13 +13,17 @@ Zeega\DataBundle\Entity\Task:
             type: string
             length: 10
             nullable: false
+        status_message:
+            type: string
+            length: 250
+            nullable: true
         date_created:
             type: datetime
             nullable: false
         date_updated:
             type: datetime
             nullable: false
-    
+        
     indexes:
         task_id:
             columns: [id]
