@@ -31,6 +31,8 @@ class PersistCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $logger = $this->getContainer()->get('logger');
+        $logger->info('We just got the logger');
         $filePath = $input->getOption('file_path');
         $userId = $input->getOption('user');
         
