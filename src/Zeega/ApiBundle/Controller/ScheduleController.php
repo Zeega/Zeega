@@ -26,14 +26,20 @@ class ScheduleController extends BaseController
     {
         $em = $this->getDoctrine()->getEntityManager();        
         $schedule = $em->getRepository('ZeegaDataBundle:Schedule')->findOneById($id);
-        $scheduleView = $this->renderView('ZeegaApiBundle:Schedule:show.json.twig', array('schedule' => $schedule));
-
+        if(null === $schedule) {
+            $scheduleView = $this->renderView('ZeegaApiBundle:Users:show.json.twig');
+        } else {
+            $scheduleUserId = $schedule->getUser()->getId();
+            parent::authorize($scheduleUserId); // check if the user can access this resource
+            $scheduleView = $this->renderView('ZeegaApiBundle:Schedule:show.json.twig', array('schedule' => $schedule));
+        }
         return ResponseHelper::compressTwigAndGetJsonResponse($scheduleView);
     }
 
     public function postScheduleAction()
     {
-        $id = $this->getRequest()->request->get('bio');
+        // parent::authorizeByRole('ROLE_ADMIN'); - authorization; change to SUPER_USER_ROLE or something similar
+
         $query = $this->getRequest()->request->get('query');
         $dateCreated = $this->getRequest()->request->get('date_created');
         $dateUpdated = $this->getRequest()->request->get('date_updated');
@@ -41,7 +47,6 @@ class ScheduleController extends BaseController
         $enabled = $this->getRequest()->request->get('enabled');
         
         $schedule = new Schedule();
-        $schedule->setBio($bio); 
         $schedule->setQuery($query); 
         $schedule->setDateCreated($dateCreated); 
         $schedule->setDateUpdated($dateUpdated); 
