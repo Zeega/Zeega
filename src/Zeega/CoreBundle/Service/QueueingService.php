@@ -15,7 +15,7 @@ class QueueingService
         $this->rabbitmq = $rabbitmq;
     }
 
-    public function enqueueTask($taskName, $taskArguments, $taskIdPrefix = null) {
+    public function enqueueTask($name, $arguments, $routingKey = 'celery', $prefix = null) {
 
         if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {            
             $user = $this->securityContext->getToken()->getUser();
@@ -34,14 +34,15 @@ class QueueingService
 
             try {
                 // enqueue the task
-                $taskId = "task-".$task->getId();                
-                $msg = array("id" => $taskId,  "task" => $taskName, "args" => $taskArguments);
-                $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), 'celery',  array('content_type' => 'application/json', 'delivery_mode' => 2));                
-                return $taskId;
+                $id = $routingKey . "." .$task->getId();
+                $msg = array("id" => $id,  "task" => $name, "args" => $arguments);  
+                $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), $id,  array('content_type' => 'application/json', 'delivery_mode' => 2));
+                return $id;
             } catch (Exception $e) {
-                $task->setStatus("error");
+                $task->setStatus("failed");
+                $task->setMessage("Error posting the task to the queue." . $e->getMessage());
                 $em->persist($task);
-                $em->flush();                                
+                $em->flush();
                 throw $e;
             }
         }
