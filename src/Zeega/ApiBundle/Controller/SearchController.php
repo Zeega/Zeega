@@ -140,10 +140,11 @@ class SearchController extends Controller
         $q = $request->query->get('q');                        
         
         if(null !== $tags) {
-            $tags = str_replace(",", " OR ", $tags);
-            // do nothing. 10 points for bad programming
+            if (strpos($tags,',') !== false) {   // legacy
+                $tags = str_replace(",", " OR ", $tags);
+            }
         } else {
-            if(preg_match('/tag\:(.*)/', $q, $matches))
+            if(preg_match('/tag\:(.*)/', $q, $matches)) // legacy
             {
                 $q = str_replace("tag:".$matches[1], "", $q);
                 $tags = str_replace(",", " OR", $matches[1]);
