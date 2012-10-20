@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.ini }
     - { resource: security.yml }
-    - { resource: @ZeegaExtensionsBundle/Resources/config/services.yml }
+    - { resource: @ZeegaIngestionBundle/Resources/config/services.yml }
 
 framework:
     #esi:             ~
