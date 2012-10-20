@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Parser\Tumblr;
+namespace Zeega\IngestionBundle\Parser\Tumblr;
 
-use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
+use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;

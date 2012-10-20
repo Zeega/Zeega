@@ -1,6 +1,6 @@
 parameters:
-    zeega_parser.class:      Zeega\ExtensionsBundle\Service\ParserService
-    zeega_parser_absolute.class:      Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl
+    zeega_parser.class:      Zeega\IngestionBundle\Service\ParserService
+    zeega_parser_absolute.class:      Zeega\IngestionBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl
     
 services:
     zeega_parser:

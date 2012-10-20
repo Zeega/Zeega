@@ -1,9 +1,9 @@
 <?php
 
-namespace Zeega\ExtensionsBundle;
+namespace Zeega\IngestionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ZeegaExtensionsBundle extends Bundle
+class ZeegaIngestionBundle extends Bundle
 {
 }

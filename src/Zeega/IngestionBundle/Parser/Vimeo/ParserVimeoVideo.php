@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Parser\Vimeo;
+namespace Zeega\IngestionBundle\Parser\Vimeo;
 
-use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
+use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;

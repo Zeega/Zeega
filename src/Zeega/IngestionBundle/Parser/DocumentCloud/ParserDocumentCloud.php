@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Parser\DocumentCloud;
+namespace Zeega\IngestionBundle\Parser\DocumentCloud;
 
-use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
+use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;

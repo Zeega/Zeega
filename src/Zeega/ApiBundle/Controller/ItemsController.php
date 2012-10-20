@@ -46,7 +46,7 @@ class ItemsController extends BaseController
             $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
             $parser = $this->get('zeega_parser');
         
-            // parse the url with the ExtensionsBundle\Parser\ParserService
+            // parse the url with the IngestionBundle\Parser\ParserService
             $response = $parser->load($url, $loadChildren);
 
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));

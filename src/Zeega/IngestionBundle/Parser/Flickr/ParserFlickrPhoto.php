@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Parser\Flickr;
+namespace Zeega\IngestionBundle\Parser\Flickr;
 
-use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
+use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;

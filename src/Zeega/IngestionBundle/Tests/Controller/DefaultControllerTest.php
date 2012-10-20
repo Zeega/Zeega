@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Tests\Controller;
+namespace Zeega\IngestionBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\Service;
+namespace Zeega\IngestionBundle\Service;
 
-use Zeega\ExtensionsBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
+use Zeega\IngestionBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Entity\Tag;

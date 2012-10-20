@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeega\ExtensionsBundle\DependencyInjection;
+namespace Zeega\IngestionBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
