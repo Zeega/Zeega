@@ -1,7 +1,6 @@
 <?php
 
-// src/Acme/DemoBundle/Command/GreetCommand.php
-namespace Zeega\CoreBundle\Command;
+namespace Zeega\IngestionBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,8 +12,6 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-use Zeega\CoreBundle\Generator\ParserGenerator;
-use Zeega\CoreBundle\Generator\Generator;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Item;
 
@@ -23,7 +20,7 @@ class PersistCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('zeega:persist')
-             ->setDescription('Bulk data parser')
+             ->setDescription('Persist a dataset in Zeega format')
              ->addOption('file_path', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->setHelp("Help");

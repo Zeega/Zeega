@@ -1,7 +1,6 @@
 <?php
 
-// src/Acme/DemoBundle/Command/GreetCommand.php
-namespace Zeega\CoreBundle\Command;
+namespace Zeega\IngestionBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,8 +12,6 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-use Zeega\CoreBundle\Generator\ParserGenerator;
-use Zeega\CoreBundle\Generator\Generator;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 
 class ParserCommand extends ContainerAwareCommand
@@ -22,7 +19,7 @@ class ParserCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('zeega:parser')
-             ->setDescription('Bulk data parser')
+             ->setDescription('Parses a URL in Zeega format')
              ->addOption('url', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('result_path', null, InputOption::VALUE_REQUIRED, 'Task id')
