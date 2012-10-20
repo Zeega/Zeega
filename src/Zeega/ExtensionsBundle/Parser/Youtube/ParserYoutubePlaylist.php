@@ -2,7 +2,7 @@
 
 namespace Zeega\ExtensionsBundle\Parser\Youtube;
 
-use Zeega\CoreBundle\Parser\Base\ParserAbstract;
+use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Item;
 
 use \DateTime;
