@@ -2,7 +2,7 @@
 
 namespace Zeega\ExtensionsBundle\Parser\AbsoluteUrl;
 
-use Zeega\CoreBundle\Parser\Base\ParserAbstract;
+use Zeega\ExtensionsBundle\Parser\Base\ParserAbstract;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
 
