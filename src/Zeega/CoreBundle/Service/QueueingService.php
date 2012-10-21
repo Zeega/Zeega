@@ -9,14 +9,15 @@ use Zeega\DataBundle\Entity\Task;
 
 class QueueingService
 {
-    public function __construct($securityContext, $doctrine, $rabbitmq) {
+    public function __construct($securityContext, $doctrine, $rabbitmq) 
+    {
         $this->securityContext = $securityContext;
         $this->doctrine = $doctrine;
         $this->rabbitmq = $rabbitmq;
     }
 
-    public function enqueueTask($name, $arguments, $routingKey = 'celery', $prefix = null) {
-
+    public function enqueueTask($name, $arguments, $routingKey = 'celery', $prefix = null) 
+    {
         if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {            
             $user = $this->securityContext->getToken()->getUser();
             $currentTime = new \DateTime("now");
@@ -45,6 +46,19 @@ class QueueingService
                 $em->flush();
                 throw $e;
             }
+        }
+    }
+
+    public function enqueueMessage($name, $arguments, $routingKey = 'celery', $prefix = null) 
+    {
+        try {
+            // enqueue the task
+            $id = $routingKey . "." .$task->getId();
+            $msg = array("id" => $id,  "task" => $name, "args" => $arguments);  
+            $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), $id,  array('content_type' => 'application/json', 'delivery_mode' => 2));
+            return $id;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 }
