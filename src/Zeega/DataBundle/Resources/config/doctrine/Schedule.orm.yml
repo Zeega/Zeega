@@ -17,7 +17,7 @@ Zeega\DataBundle\Entity\Schedule:
             type: string
             length: 100
             nullable: true
-        target_service:
+        archive:
             type: string
             length: 25
             nullable: false

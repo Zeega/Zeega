@@ -276,4 +276,32 @@ class Schedule
     {
         return $this->status_message;
     }
+    /**
+     * @var string $archive
+     */
+    private $archive;
+
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     * @return Schedule
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    
+        return $this;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
 }
