@@ -12,6 +12,14 @@ Zeega\DataBundle\Entity\Schedule:
         query:
             type: string
             length: 100
+            nullable: true
+        tags:
+            type: string
+            length: 100
+            nullable: true
+        target_service:
+            type: string
+            length: 25
             nullable: false
         date_created:
             type: datetime
@@ -23,6 +31,10 @@ Zeega\DataBundle\Entity\Schedule:
             type: string
             length: 10
             nullable: false        
+        status_message:
+            type: string
+            length: 255
+            nullable: false
         enabled:
             type: boolean
             nullable: false
@@ -32,3 +44,5 @@ Zeega\DataBundle\Entity\Schedule:
             columns: [id]
         schedule_status:
             columns: [status]
+        schedule_enabled:
+            columns: [enabled]

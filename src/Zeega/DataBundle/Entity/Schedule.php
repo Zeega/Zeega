@@ -192,4 +192,88 @@ class Schedule
     {
         return $this->user;
     }
+    /**
+     * @var string $tags
+     */
+    private $tags;
+
+    /**
+     * @var string $target_service
+     */
+    private $target_service;
+
+    /**
+     * @var string $status_message
+     */
+    private $status_message;
+
+
+    /**
+     * Set tags
+     *
+     * @param string $tags
+     * @return Schedule
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return string 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set target_service
+     *
+     * @param string $targetService
+     * @return Schedule
+     */
+    public function setTargetService($targetService)
+    {
+        $this->target_service = $targetService;
+    
+        return $this;
+    }
+
+    /**
+     * Get target_service
+     *
+     * @return string 
+     */
+    public function getTargetService()
+    {
+        return $this->target_service;
+    }
+
+    /**
+     * Set status_message
+     *
+     * @param string $statusMessage
+     * @return Schedule
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->status_message = $statusMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get status_message
+     *
+     * @return string 
+     */
+    public function getStatusMessage()
+    {
+        return $this->status_message;
+    }
 }
