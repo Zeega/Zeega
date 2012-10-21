@@ -899,4 +899,60 @@ class Item
     {
         $this->parent_items->removeElement($parentItems);
     }
+    /**
+     * @var string $ingested_by
+     */
+    private $ingested_by;
+
+    /**
+     * @var integer $duration
+     */
+    private $duration;
+
+
+    /**
+     * Set ingested_by
+     *
+     * @param string $ingestedBy
+     * @return Item
+     */
+    public function setIngestedBy($ingestedBy)
+    {
+        $this->ingested_by = $ingestedBy;
+    
+        return $this;
+    }
+
+    /**
+     * Get ingested_by
+     *
+     * @return string 
+     */
+    public function getIngestedBy()
+    {
+        return $this->ingested_by;
+    }
+
+    /**
+     * Set duration
+     *
+     * @param integer $duration
+     * @return Item
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    
+        return $this;
+    }
+
+    /**
+     * Get duration
+     *
+     * @return integer 
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
 }

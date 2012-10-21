@@ -34,7 +34,7 @@ Zeega\DataBundle\Entity\Schedule:
         status_message:
             type: string
             length: 255
-            nullable: false
+            nullable: true
         enabled:
             type: boolean
             nullable: false
