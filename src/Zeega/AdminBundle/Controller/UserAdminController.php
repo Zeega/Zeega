@@ -27,7 +27,8 @@ class UserAdminController extends Controller
                     $user->setEnabled(true);
                     $user->setLocked(false);
                     if (null === $user->getConfirmationToken()) {
-                        $user->generateConfirmationToken();
+                        $tokenGenerator = $this->container->get("fos_user.util.token_generator");
+                        $user->setConfirmationToken($tokenGenerator->generateToken());
                     }
                     $user->setPasswordRequestedAt(new \DateTime('now'));
                     $modelManager->update($user);
