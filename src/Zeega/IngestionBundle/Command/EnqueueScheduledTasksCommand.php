@@ -45,11 +45,13 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $queue = $this->getContainer()->get('zeega_queue');
                 $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);
 
+                $scheduledTask->setStatus('queued');
+                $em->persist($scheduledTask);
+                $em->flush();
+
             } catch(Doctrine\ORM\NoResultException $e) {
                 // no results; this is not really an error
             }
-            //TO-DO
-            //update status, error handling
         }
     }
 }

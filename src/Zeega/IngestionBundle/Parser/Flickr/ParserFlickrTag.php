@@ -15,36 +15,31 @@ class ParserFlickrTag extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
-        $loadCollectionItems = $parameters["load_child_items"];
         $flickrAuthenticationKey = $parameters["authentication_key"];
+        $loadCollectionItems = $parameters["load_child_items"];        
+        $deltaImport = $parameters["delta_import"];
         $tags = $parameters["tags"];
-        $latestItem = null;
+        $user = $parameters["user"];         
+        $originalItems = null;
+        $checkForDuplicates = FALSE;
 
         $searchParameters = array(
             "tags"=>$tags,            
             "tag_mode"=>"any", 
             "extras"=>"description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o", 
-            "page"=>1
+            "page"=>1,
+            "per_page"=>500
         );
 
-        if(array_key_exists("latest_item",$parameters)) {
-            $deltaImport = TRUE;
-            $latestItem = $parameters["latest_item"];
-            $searchParameters["per_page"] = 100;
-        } else {
-            $deltaImport = FALSE;
-            $searchParameters["per_page"] = 500;
-        }
-	    
-		$f = new \Phpflickr_Phpflickr($flickrAuthenticationKey);
-        
+        if(null !== $deltaImport) {
+            $em = $parameters["entityManager"]
+            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findIdByUserIngestedArchive($user->getId(), "scheduled_task", "Flickr");
+            $checkForDuplicates = TRUE;
+        } 
+
+		$f = new \Phpflickr_Phpflickr($flickrAuthenticationKey);        
         $currentPage = 1;
-
         $items = array();
-
-        if(true !== $loadCollectionItems) {
-            $searchParameters["per_page"] = 1;
-        }
 
         while(1) {
             $searchParameters["page"] = $currentPage;
@@ -103,14 +98,18 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setLayerType('Image');
                 $item->setChildItemsCount(0);
                 
-                array_push($items,$item);
+                if(TRUE === $checkForDuplicates) {
+                    if(FALSE === array_key_exists($item->getUri(), $originalItems)) {
+                        array_push($items,$item);
+                    }
+                }
 
                 if(true !== $loadCollectionItems) {                    
                     return parent::returnResponse($items, true, true);
                 }
             }
 
-            if(($currentPage++ > $pages) || $currentPage > 10 || $deltaImport === TRUE) {
+            if(($currentPage++ > $pages) || $currentPage > 10 || (null !== $deltaImport && "full" !== $deltaImport)) {
                 break;
             }
         }		

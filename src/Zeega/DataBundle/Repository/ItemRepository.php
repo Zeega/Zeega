@@ -493,4 +493,27 @@ class ItemRepository extends EntityRepository
         
         return $qb->getQuery()->getSingleResult();
     }
+
+    public function findIdByUserIngestedArchive($userId, $ingestedBy, $archive, $maxResults = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+    
+        // search query
+        $qb->select('i.id, i.uri, i.media_date_created')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->where('i.user_id = :user_id')
+            ->andWhere('i.ingested_by = :ingested_by')
+            ->andWhere('i.archive = :archive')
+            ->setParameter('user_id', $userId)
+            ->setParameter('archive', $archive)
+            ->setParameter('ingested_by', $ingestedBy)
+            ->orderBy('i.id','DESC');
+
+        if(null !== $maxResults && is_int($maxResults)) {
+            $qb->setMaxResults($maxResults);
+        }
+        
+        return $qb->getQuery()->getArrayResult();
+    }
 }

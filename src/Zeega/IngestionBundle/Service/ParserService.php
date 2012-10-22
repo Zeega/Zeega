@@ -76,7 +76,7 @@ class ParserService
         return $parser->load($url,$parameters);
 	}
 
-    public function loadById($domainName, $parserId, $loadChildItems = false, $userId = -1, $parameters = null)
+    public function loadById($domainName, $parserId, $loadChildItems = false, $userId = -1, $parameters = array())
     {
         $config = self::loadConfig($url);                                                                 // load the configfile from Resources/config/zeega/Parser.yml
                 
@@ -86,9 +86,7 @@ class ParserService
 
                 if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0) {        // we have a match - let's check if there are extra parameters defined in the config file
                     $parameters = array_merge($parameters, $parserConfig["parameters"]);
-                } else {
-                    $parameters = array();
-                }
+                } 
                 
                 if($userId != -1) {                                                                       // load the user if a user id was provided
                     $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);             
@@ -96,7 +94,6 @@ class ParserService
                     $user = $this->securityContext->getToken()->getUser();    
                 }
                                                                                                           // TO-DO: check for null user
-                $parameters["arguments"] = $arguments;                                                    // add the regex matches from above to the parameters array
                 $parameters["load_child_items"] = $loadChildItems;                                        // load a single item vs load all them (initial display vs ingestion)
                 $parameters["user"] = $user;                                                              // add the user to the parameters to avoid injecting it in all the parsers
                 $parameters["entityManager"] = $em;                                                       // add the em to the parameters to avoid injecting it in all the parsers
