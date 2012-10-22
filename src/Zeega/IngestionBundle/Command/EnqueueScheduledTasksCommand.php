@@ -27,21 +27,27 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
         
         $scheduledTasks = $em->getRepository('ZeegaDataBundle:Schedule')->findByStatus('ready');
 
+        $ingestedBy = 'scheduled_task';
+        $celeryTaskName = 'zeega.tasks.ingest_scheduled';
+        $celeryRoutingKey = 'schedule';
+
         foreach($scheduledTasks as $scheduledTask) {
             $userId = $scheduledTask->getUser()->getId();
             $archive = $scheduledTask->getArchive();
-            $ingestedBy = 'scheduled_task';
+            
             $latestUpdate = $scheduledTask->getDateUpdated();
             
-            $latestItem = $em->getRepository('ZeegaDataBundle:Item')->findOneByUserIngestedArchive($userId, $ingestedBy, $archive);            
+            try {
+                $latestItem = $em->getRepository('ZeegaDataBundle:Item')->findOneByUserIngestedArchive($userId, $ingestedBy, $archive);
+                
+                $message = array("latest_item" => $latestItem, "archive" => $archive);
+                
+                $queue = $this->getContainer()->get('zeega_queue');
+                $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);
 
-            if(null !== $latestItem) {
-                $latestItem = json_encode($latestItem);
+            } catch(Doctrine\ORM\NoResultException $e) {
+                // no results; this is not really an error
             }
-
-            $queue = $this->getContainer()->get('zeega_queue');
-            $taskId = $queue->enqueueTask("zeega.tasks.schedule",array($userId,$archive,$latestItem,$latestUpdate),"schedule");
-
             //TO-DO
             //update status, error handling
         }

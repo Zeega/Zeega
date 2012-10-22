@@ -56,16 +56,13 @@ class QueueingService
                 throw new \BadFunctionCallException('The msg parameter cannot be null.');
             }
 
-            if(TRUE !== is_array($msg)) {
-                throw new \BadFunctionCallException('The msg parameter needs to be an array.');   
-            }
-
             if(null === $taskName) {
                 throw new \BadFunctionCallException('The taskName parameter is mandatory.');
             }
 
-            $msg["task"] = $taskName;
-            $this->rabbitmq->publish(json_encode($msg), $routingKey,  array('content_type' => 'application/json', 'delivery_mode' => 2));
+            $amqpMessage = array("id" => uniqid(), "task" => $taskName, "kwargs" => $msg);
+
+            $this->rabbitmq->publish(json_encode($amqpMessage), $routingKey,  array('content_type' => 'application/json', 'delivery_mode' => 2));
         } catch (Exception $e) {
             throw $e;
         }
