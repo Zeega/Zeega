@@ -49,14 +49,23 @@ class QueueingService
         }
     }
 
-    public function enqueueMessage($name, $arguments, $routingKey = 'celery', $prefix = null) 
+    public function enqueueCeleryMessage($msg, $taskName, $routingKey = 'celery') 
     {
         try {
-            // enqueue the task
-            $id = $routingKey . "." .$task->getId();
-            $msg = array("id" => $id,  "task" => $name, "args" => $arguments);  
-            $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), $id,  array('content_type' => 'application/json', 'delivery_mode' => 2));
-            return $id;
+            if(null === $msg) {
+                throw new \BadFunctionCallException('The msg parameter cannot be null.');
+            }
+
+            if(TRUE !== is_array($msg)) {
+                throw new \BadFunctionCallException('The msg parameter needs to be an array.');   
+            }
+
+            if(null === $taskName) {
+                throw new \BadFunctionCallException('The taskName parameter is mandatory.');
+            }
+
+            $msg["task"] = $taskName;
+            $this->rabbitmq->publish(json_encode($msg), $routingKey,  array('content_type' => 'application/json', 'delivery_mode' => 2));
         } catch (Exception $e) {
             throw $e;
         }
