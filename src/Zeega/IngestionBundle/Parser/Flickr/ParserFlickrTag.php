@@ -16,19 +16,28 @@ class ParserFlickrTag extends ParserAbstract
 	public function load($url, $parameters = null)
     {
         $loadCollectionItems = $parameters["load_child_items"];
-        $regexMatches = $parameters["regex_matches"];
-	    $setId = $regexMatches[1]; // bam
-	    
-		$f = new \Phpflickr_Phpflickr('97ac5e379fbf4df38a357f9c0943e140');
-		
+        $flickrAuthenticationKey = $parameters["authentication_key"];
+        $tags = $parameters["tags"];
+        $latestItem = null;
+
         $searchParameters = array(
-            "tags"=>"planettakeout", 
-            "per_page" => 500, 
+            "tags"=>$tags,            
             "tag_mode"=>"any", 
             "extras"=>"description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o", 
             "page"=>1
-            );
+        );
 
+        if(array_key_exists("latest_item",$parameters)) {
+            $deltaImport = TRUE;
+            $latestItem = $parameters["latest_item"];
+            $searchParameters["per_page"] = 100;
+        } else {
+            $deltaImport = FALSE;
+            $searchParameters["per_page"] = 500;
+        }
+	    
+		$f = new \Phpflickr_Phpflickr($flickrAuthenticationKey);
+        
         $currentPage = 1;
 
         $items = array();
@@ -101,7 +110,7 @@ class ParserFlickrTag extends ParserAbstract
                 }
             }
 
-            if(($currentPage++ > $pages) || $currentPage > 10) {
+            if(($currentPage++ > $pages) || $currentPage > 10 || $deltaImport === TRUE) {
                 break;
             }
         }		

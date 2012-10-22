@@ -75,6 +75,46 @@ class ParserService
 
         return $parser->load($url,$parameters);
 	}
+
+    public function loadById($domainName, $parserId, $loadChildItems = false, $userId = -1, $parameters = null)
+    {
+        $config = self::loadConfig($url);                                                                 // load the configfile from Resources/config/zeega/Parser.yml
+                
+        if(array_key_exists($domainName, $config["zeega.parsers"])) {                                     // check if this domain is supported and exists on the config file            
+            if(array_key_exists($parserId, $config["zeega.parsers"][$domainName])) {
+                $parserConfig = $config["zeega.parsers"][$domainName][$parserId];
+
+                if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0) {        // we have a match - let's check if there are extra parameters defined in the config file
+                    $parameters = array_merge($parameters, $parserConfig["parameters"]);
+                } else {
+                    $parameters = array();
+                }
+                
+                if($userId != -1) {                                                                       // load the user if a user id was provided
+                    $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);             
+                } else {
+                    $user = $this->securityContext->getToken()->getUser();    
+                }
+                                                                                                          // TO-DO: check for null user
+                $parameters["arguments"] = $arguments;                                                    // add the regex matches from above to the parameters array
+                $parameters["load_child_items"] = $loadChildItems;                                        // load a single item vs load all them (initial display vs ingestion)
+                $parameters["user"] = $user;                                                              // add the user to the parameters to avoid injecting it in all the parsers
+                $parameters["entityManager"] = $em;                                                       // add the em to the parameters to avoid injecting it in all the parsers
+
+                $parserClass = $parserConfig["parser_class"];                                             // get the parser class name
+                $parserMethod = new ReflectionMethod($parserClass, 'load');                               // instantiate the parser class using reflection
+
+                return $parserMethod->invokeArgs(new $parserClass, array(null, $parameters));             // invoke the parser load method
+            }
+        }
+
+        $parameters = array();
+        $parameters["hostname"] = $this->hostname;
+        $parameters["directory"] = $this->directory;
+        $parser = new ParserAbsoluteUrl;
+
+        return $parser->load($url,$parameters);
+    }
 	
 	private function getDomainFromUrl($url)
 	{	                                                                                                           

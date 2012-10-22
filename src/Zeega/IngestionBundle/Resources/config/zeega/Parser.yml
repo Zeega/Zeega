@@ -1,4 +1,6 @@
-# src/Zeega/EditorBundle/Resources/config/doctrine/Frame.orm.yml
+imports:
+    - { resource: parameters.ini }
+
 zeega.parsers:
     google.com:
         item_parser:
@@ -10,15 +12,20 @@ zeega.parsers:
             regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#"
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Flickr\ParserFlickrPhoto
+            parameters:
+                authentication_key: %flickr_key%
         set_parser:
             regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/sets/([0-9]+)#"
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Flickr\ParserFlickrSet
+            parameters:
+                authentication_key: %flickr_key%
         tag_parser:
             regex: "#https?://(?:www\.)?flickr\.com/photos/.*/tags/([a-zA-Z0-9\-_]+)#"
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Flickr\ParserFlickrTag
-
+            parameters:
+                authentication_key: %flickr_key%
     facebook.com:
         item_parser:
             regex: /https?:\/\/(?:www\.)?facebook.com\/photo.php\?fbid=([0-9]+)&set=([a-zA-Z0-9]+).([0-9]+).([0-9]+).([0-9]+)*/
