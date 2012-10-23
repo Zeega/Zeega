@@ -18,11 +18,24 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
     {
         $this->setName('zeega:tasks:enqueue')
              ->setDescription('Enqueues for processing all ready tasks')
+             ->addOption('full_duplicate_scan', null, InputOption::VALUE_REQUIRED, 'Boolean. Detect duplicates on all the existing data.')
              ->setHelp("Help");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $duplicateScan = $input->getOption('full_duplicate_scan');
+
+        if(null == $duplicateScan) {
+            $output->writeln('Please run this operation with the --full_duplicate_scan option.');
+            return;
+        }
+
+        if('true' != $duplicateScan && 'false' != $duplicateScan) {
+            $output->writeln('The --full_duplicate_scan value has to be true or false.');
+            return;   
+        }
+
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         
         $scheduledTasks = $em->getRepository('ZeegaDataBundle:Schedule')->findByStatus('ready');
@@ -37,7 +50,8 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 
                 $message["domain"] = $parserId["domain"];                                               // create amqp message for rabbitmq + celery                
                 $message["parser_id"] = $parserId["parser_id"];
-                $message["task_configuration"] = array();                                               // kind of a hack to avoid serialization
+                $message["full_duplicate_scan"] = (bool)$duplicateScan;
+                $message["task_configuration"] = array();                                               // hack to avoid serialization
                 $message["task_configuration"]["tags"] = $scheduledTask->getTags();
                 $message["task_configuration"]["query"] = $scheduledTask->getQuery();
                 $message["task_configuration"]["archive"] = $scheduledTask->getArchive();
