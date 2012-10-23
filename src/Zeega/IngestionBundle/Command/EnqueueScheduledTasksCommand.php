@@ -32,20 +32,22 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
         $celeryRoutingKey = 'schedule';
 
         foreach($scheduledTasks as $scheduledTask) {
-            $userId = $scheduledTask->getUser()->getId();
-            $archive = $scheduledTask->getArchive();
-            
-            $latestUpdate = $scheduledTask->getDateUpdated();
-            
             try {
-                $latestItem = $em->getRepository('ZeegaDataBundle:Item')->findOneByUserIngestedArchive($userId, $ingestedBy, $archive);
+                $parserId = self::resolveParser($scheduledTask);                                        // find the parser for the scheduled task
                 
-                $message = array("latest_item" => $latestItem, "archive" => $archive);
+                $message["domain"] = $parserId["domain"];                                               // create amqp message for rabbitmq + celery                
+                $message["parser_id"] = $parserId["parser_id"];
+                $message["task_configuration"] = array();                                               // kind of a hack to avoid serialization
+                $message["task_configuration"]["tags"] = $scheduledTask->getTags();
+                $message["task_configuration"]["query"] = $scheduledTask->getQuery();
+                $message["task_configuration"]["archive"] = $scheduledTask->getArchive();
+                $message["task_configuration"]["date_updated"] = $scheduledTask->getDateUpdated();
                 
                 $queue = $this->getContainer()->get('zeega_queue');
-                $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);
+                $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);   // send the message to the queue
 
-                $scheduledTask->setStatus('queued');
+                $scheduledTask->setStatus('queued');                                                    // update the scheduled task status on Zeega
+                $scheduledTask->setDateUpdated(new \DateTime("now")); 
                 $em->persist($scheduledTask);
                 $em->flush();
 
@@ -53,5 +55,21 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 // no results; this is not really an error
             }
         }
+    }
+
+    private function resolveParser($scheduledTask) {
+        if(null === $scheduledTask) {
+            throw new \BadMethodCallException('The scheduledTask parameter cannot be null');
+        }
+
+        $tags = $scheduledTask->getTags();
+        $archive = $scheduledTask->getArchive();
+
+        if($archive == 'Flickr') {
+            if(null !== $tags) {
+                return array('domain' => 'flickr.com', 'parser_id' => 'tags_parser', 'tags' => $tags);
+            }
+        }
+        throw new \Exception("Cannot resolve a parser for $tags and $archive");
     }
 }
