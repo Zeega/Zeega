@@ -34,7 +34,7 @@ class ParserService
 	public function load($url, $loadChildItems = false, $userId = -1)
 	{
 	    $domainName = self::getDomainFromUrl($url);                                                           // get the domain name from the url
-        $config = self::loadConfig($url);                                                                     // load the configfile from Resources/config/zeega/Parser.yml
+        $config = self::loadConfig();                                                                         // load the configfile from Resources/config/zeega/Parser.yml
 	    	    
 	    if(array_key_exists($domainName, $config["zeega.parsers"])) {                                         // check if this domain is supported and exists on the config file	        
 	        $availableParsers = $config["zeega.parsers"][$domainName];                                        // the domain is supported - load the parsers and check if there is a parser defined this url
@@ -78,7 +78,7 @@ class ParserService
 
     public function loadById($domainName, $parserId, $loadChildItems = false, $userId = -1, $parameters = array())
     {
-        $config = self::loadConfig($url);                                                                 // load the configfile from Resources/config/zeega/Parser.yml
+        $config = self::loadConfig();                                                                     // load the configfile from Resources/config/zeega/Parser.yml
                 
         if(array_key_exists($domainName, $config["zeega.parsers"])) {                                     // check if this domain is supported and exists on the config file            
             if(array_key_exists($parserId, $config["zeega.parsers"][$domainName])) {
@@ -88,6 +88,8 @@ class ParserService
                     $parameters = array_merge($parameters, $parserConfig["parameters"]);
                 } 
                 
+                $em = $this->doctrine->getEntityManager();
+
                 if($userId != -1) {                                                                       // load the user if a user id was provided
                     $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);             
                 } else {

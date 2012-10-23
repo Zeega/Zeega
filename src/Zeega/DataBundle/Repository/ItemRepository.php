@@ -494,13 +494,13 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getSingleResult();
     }
 
-    public function findIdByUserIngestedArchive($userId, $ingestedBy, $archive, $maxResults = null)
+    public function findUriByUserIngestedArchive($userId, $ingestedBy, $archive, $maxResults = null)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i.id, i.uri, i.media_date_created')
+        $qb->select('i.attribution_uri')
             ->from('ZeegaDataBundle:Item', 'i')
             ->where('i.user_id = :user_id')
             ->andWhere('i.ingested_by = :ingested_by')
@@ -514,6 +514,15 @@ class ItemRepository extends EntityRepository
             $qb->setMaxResults($maxResults);
         }
         
-        return $qb->getQuery()->getArrayResult();
+        $doctrineResults = $qb->getQuery()->getResult();
+        
+        if(null !== $doctrineResults) {
+            // getting rid of the nested array hydrated by Doctrine; currently there's no way to avoid this without writing a new hydrator
+            $return = array();
+            array_walk_recursive($doctrineResults, function($a) use (&$return) { $return[] = $a; });
+            return array_flip($return);
+        } else {
+            return null;
+        }
     }
 }

@@ -15,9 +15,11 @@ class ParserFlickrTag extends ParserAbstract
 	
 	public function load($url, $parameters = null)
     {
+        require_once(__DIR__.'/../../../../../vendor/phpflickr/lib/Phpflickr/Phpflickr.php');
+
         $flickrAuthenticationKey = $parameters["authentication_key"];
         $loadCollectionItems = $parameters["load_child_items"];        
-        $deltaImport = $parameters["delta_import"];
+        $checkForDuplicates = $parameters["check_for_duplicates"];
         $tags = $parameters["tags"];
         $user = $parameters["user"];         
         $originalItems = null;
@@ -31,15 +33,20 @@ class ParserFlickrTag extends ParserAbstract
             "per_page"=>500
         );
 
-        if(null !== $deltaImport) {
-            $em = $parameters["entityManager"]
-            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findIdByUserIngestedArchive($user->getId(), "scheduled_task", "Flickr");
+        if(null !== $checkForDuplicates) {
+            $em = $parameters["entityManager"];
+            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserIngestedArchive($user->getId(), "scheduled_task", "Flickr");
+            var_dump($originalItems);
             $checkForDuplicates = TRUE;
+        } else {
+            $checkForDuplicates = FALSE;
         } 
 
-		$f = new \Phpflickr_Phpflickr($flickrAuthenticationKey);        
+		$f = new \Phpflickr_Phpflickr("97ac5e379fbf4df38a357f9c0943e140");
         $currentPage = 1;
         $items = array();
+
+        //var_dump($searchParameters);
 
         while(1) {
             $searchParameters["page"] = $currentPage;
@@ -86,7 +93,6 @@ class ParserFlickrTag extends ParserAbstract
                 } else {
                     $item->setUri($photo['url_s']);
                 }    
-
                 if(isset($photo["description"])) {
                     $item->setDescription($photo['description']);
                 } 
@@ -99,9 +105,14 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setChildItemsCount(0);
                 
                 if(TRUE === $checkForDuplicates) {
-                    if(FALSE === array_key_exists($item->getUri(), $originalItems)) {
+                    
+
+                    if(FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) {
+                        echo $item->getAttributionUri() . "\n";
                         array_push($items,$item);
                     }
+                } else {                    
+                    array_push($items,$item);                    
                 }
 
                 if(true !== $loadCollectionItems) {                    
@@ -109,7 +120,7 @@ class ParserFlickrTag extends ParserAbstract
                 }
             }
 
-            if(($currentPage++ > $pages) || $currentPage > 10 || (null !== $deltaImport && "full" !== $deltaImport)) {
+            if(($currentPage++ > $pages) || $currentPage > 10) {
                 break;
             }
         }		

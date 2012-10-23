@@ -23,6 +23,7 @@ class PersistCommand extends ContainerAwareCommand
              ->setDescription('Persist a dataset in Zeega format')
              ->addOption('file_path', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
+             ->addOption('ingestor', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->setHelp("Help");
     }
 
@@ -30,8 +31,9 @@ class PersistCommand extends ContainerAwareCommand
     {
         $filePath = $input->getOption('file_path');
         $userId = $input->getOption('user');
+        $ingestor = $input->getOption('ingestor');
         
-        if(null === $filePath)
+        if(null === $filePath || null === $userId || null === $ingestor)
         {
             $output->writeln('');
             $output->writeln('Please run the operation with the --file_path and --user options to execute');
@@ -48,7 +50,7 @@ class PersistCommand extends ContainerAwareCommand
 
             foreach($items as $item)
             {
-                $item = self::parseItem($item, $user);
+                $item = self::parseItem($item, $user, $ingestor);
                 $em->persist($item);
             }
             
@@ -58,7 +60,7 @@ class PersistCommand extends ContainerAwareCommand
         }
     }
 
-    private function parseItem($itemArray, $user)
+    private function parseItem($itemArray, $user, $ingestor)
     {
         $title = $itemArray['title'];
         $description = $itemArray['description'];
@@ -84,6 +86,7 @@ class PersistCommand extends ContainerAwareCommand
         $item->setDateUpdated(new \DateTime("now"));
         $item->setChildItemsCount(0);
         $item->setUser($user);
+        $item->setIngestedBy($ingestor);
         
         if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);

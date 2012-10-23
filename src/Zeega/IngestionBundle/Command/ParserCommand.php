@@ -20,8 +20,7 @@ class ParserCommand extends ContainerAwareCommand
     {
         $this->setName('zeega:parser')
              ->setDescription('Parses a URL in Zeega format')
-             ->addOption('url', null, InputOption::VALUE_OPTIONAL, 'Url of the item or collection to be ingested')
-             ->addOption('archive', null, InputOption::VALUE_OPTIONAL, 'Result file path')
+             ->addOption('url', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('result_path', null, InputOption::VALUE_REQUIRED, 'Task id')
              ->setHelp("Help");
@@ -31,30 +30,21 @@ class ParserCommand extends ContainerAwareCommand
     {
         $url = $input->getOption('url');
         $userId = $input->getOption('user');
-        $archive = $input->getOption('archive');
         $resultPath = $input->getOption('result_path');
         
-        if((null === $url && null === $archive) || null === $userId || null === $resultPath) {
-            $output->writeln('Please run this operation with the --url or --archive, and the --user and --result_path options.');
-        } else {
+        if(null === $url || null === $userId || null === $resultPath)
+        {
+            $output->writeln('');
+            $output->writeln('Please run this operation with the --url, --user and --result_path options.');
+            $output->writeln('');
+        }
+        else
+        {
             $loadChildren = true;
 
-            if(null !== $url) {
-                $parser = $this->getContainer()->get('zeega_parser');
-                $parserResponse = $parser->load($url, $loadChildren, $userId);
-            } else if(null !== $archive) {
-                $parser = $this->getContainer()->get('zeega_parser');
-                $domainName = "";
+            $parser = $this->getContainer()->get('zeega_parser');
+            $parserResponse = $parser->load($url, $loadChildren, $userId);
 
-                if("Flickr" == $archive) {
-                    $domainName = "flickr.com";
-                    
-                }
-
-                $parserResponse = $parser->loadById($domainName, $parserId, $loadChildItems = false, $userId = -1, $parameters = array())
-            }
-
-            
             if(isset($parserResponse["items"]))
             {
                 
