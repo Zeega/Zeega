@@ -18,17 +18,17 @@ class ParserFlickrTag extends ParserAbstract
         require_once(__DIR__.'/../../../../../vendor/phpflickr/lib/Phpflickr/Phpflickr.php');
 
         $flickrAuthenticationKey = $parameters["authentication_key"];
-        $loadCollectionItems = $parameters["load_child_items"];        
+        $loadCollectionItems = $parameters["load_child_items"];
         $checkForDuplicates = $parameters["check_for_duplicates"];
         $tags = $parameters["tags"];
-        $user = $parameters["user"];         
+        $user = $parameters["user"]; 
         $originalItems = null;
         $checkForDuplicates = FALSE;
 
         $searchParameters = array(
-            "tags"=>$tags,            
-            "tag_mode"=>"any", 
-            "extras"=>"description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o", 
+            "tags"=>$tags,
+            "tag_mode"=>"any",
+            "extras"=>"description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o",
             "page"=>1,
             "per_page"=>500
         );
