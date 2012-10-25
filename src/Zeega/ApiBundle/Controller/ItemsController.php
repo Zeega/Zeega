@@ -168,7 +168,6 @@ class ItemsController extends Controller
         // set defaults for missing parameters
         if(!isset($page)) $page = 0;
         if(!isset($limit)) $limit = 100;
-        if($limit > 100) $limit = 100;
         if(!isset($returnCounts)) {
             $returnCounts = 0;
         }

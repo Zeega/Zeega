@@ -120,8 +120,8 @@ class SearchController extends Controller
         }                   
 		
         $limit = $request->query->get('limit');                 //  result limit
-        if(!isset($limit) || $limit > 100) {
-            $limit = 100;
+        if(!isset($limit) || $limit > 500) {
+            $limit = 500;
         }              
 		
         $contentType = $request->query->get('content');         //  content-type filter
