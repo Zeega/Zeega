@@ -52,6 +52,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $message["parser_id"] = $parserId["parser_id"];
                 $message["full_duplicate_scan"] = (bool)$duplicateScan;
                 $message["task_configuration"] = array();                                               // hack to avoid serialization
+                $message["task_configuration"]["user"] = $scheduledTask->getUser()->getId();
                 $message["task_configuration"]["tags"] = $scheduledTask->getTags();
                 $message["task_configuration"]["query"] = $scheduledTask->getQuery();
                 $message["task_configuration"]["archive"] = $scheduledTask->getArchive();
@@ -60,7 +61,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $queue = $this->getContainer()->get('zeega_queue');
                 $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);   // send the message to the queue
 
-                $scheduledTask->setStatus('queued');                                                    // update the scheduled task status on Zeega
+                //$scheduledTask->setStatus('queued');                                                    // update the scheduled task status on Zeega
                 $scheduledTask->setDateUpdated(new \DateTime("now")); 
                 $em->persist($scheduledTask);
                 $em->flush();
@@ -81,7 +82,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
 
         if($archive == 'Flickr') {
             if(null !== $tags) {
-                return array('domain' => 'flickr.com', 'parser_id' => 'tags_parser', 'tags' => $tags);
+                return array('domain' => 'flickr.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
             }
         }
         throw new \Exception("Cannot resolve a parser for $tags and $archive");

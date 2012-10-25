@@ -55,6 +55,7 @@ class ParserFlickrTag extends ParserAbstract
             $pages = $searchResults['pages'];
 
             foreach($photos as $photo) {
+
                 $item = new Item();
                 $tags = array();
 
@@ -105,8 +106,6 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setChildItemsCount(0);
                 
                 if(TRUE === $checkForDuplicates) {
-                    
-
                     if(FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) {
                         echo $item->getAttributionUri() . "\n";
                         array_push($items,$item);

@@ -112,7 +112,7 @@ class ParserService
         $parameters["directory"] = $this->directory;
         $parser = new ParserAbsoluteUrl;
 
-        return $parser->load($url,$parameters);
+        return $parser->load(null,$parameters);
     }
 	
 	private function getDomainFromUrl($url)
