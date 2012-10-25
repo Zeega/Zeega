@@ -83,10 +83,15 @@ class HeaderTwigExtension extends \Twig_Extension
 
     public function unserializeArray($arrayObject)
     {
-    	if(isset($arrayObject))
-    		return unserialize($arrayObject);
-    	else 
-    		return array();
+    	if(isset($arrayObject)) {
+    	
+    		$arrayObject = unserialize($arrayObject);
+    		if(is_array($arrayObject)){
+    			return $arrayObject;	
+    		}
+    	}
+    	
+    	return array();
     }
 
 	
