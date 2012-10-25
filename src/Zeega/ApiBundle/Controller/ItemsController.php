@@ -406,6 +406,9 @@ class ItemsController extends Controller
         
         //  set defaults for missing parameters  
         if(!isset($query['page']))          $query['page'] = 0;
+        if($query['page'] > 0) {
+            $query['page'] = $query['page'] - 1;
+        }    
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
 
@@ -421,8 +424,8 @@ class ItemsController extends Controller
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
 
-                $attributes = array();
-
+                $attributes = $query;
+			
                 if(isset($itemAttributes["tags"])) {
                     $attributes["tags"] = $itemAttributes["tags"];
                 }
