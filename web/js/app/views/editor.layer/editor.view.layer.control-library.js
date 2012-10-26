@@ -88,6 +88,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		continueLayer : function()
 		{
+			console.log('clicking button');
 			this.$el.find('button').effect('highlight',{},2000);
 			zeega.app.continueLayer( this.model.id )
 		}
@@ -136,6 +137,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		continueOnAllFrames : function()
 		{
+			console.log('continuing on all frames button');
 			if( this.$el.find('button').hasClass('active') )
 				this.$el.find('button').removeClass('active btn-warning');
 			else
@@ -143,8 +145,15 @@ Use this.model.get('attr')[my_setting] instead!!!
 			
 			this.$el.find('button').effect('highlight',{},2000);
 			
+			
+			
+			
+					
+			
 			console.log( 'continue layer on all frames!: '+ this.model.id );
 			zeega.app.continueOnAllFrames( this.model );
+			
+			
 		}
 		
 	});
