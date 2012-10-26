@@ -27,7 +27,7 @@
 		{
 			var _this = this;
 			//frame tray sortable and sorting events
-			this.$el.find('.list').sortable({  
+			this.$el.find('.list').sortable({
 				
 				axis : 'x',
 				containment: 'parent',
@@ -38,7 +38,8 @@
 
 				stop : function()
 				{
-					var frameIDArray = _.map( _this.$el.find('.list').sortable('toArray') ,function(str){ return Math.floor(str.match(/([0-9])*$/g)[0]) });
+					var frameIDArray = _.map( _this.$('.list').children('.frame-thumb') ,function(el){ return parseInt($(el).data('id'),10); });
+					console.log('#####		frameID aray', frameIDArray);
 					_this.model.onFrameReorder( frameIDArray );
 				}
 			});
@@ -59,7 +60,7 @@
 		
 		getTemplate : function()
 		{
-			var html = 
+			var html =
 			
 				"<ul class='list'></ul>"+
 				"<div id='zeega-add-frame'><a href='#'><div class='menu-verbose-title'>add frame</div>+</a></div>";
