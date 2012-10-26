@@ -105,7 +105,8 @@ class ParserFacebookSet extends ParserAbstract
 		$collection->setMediaDateCreated($albumData['created_time']);
 		$collection->setThumbnailUrl($coverData['picture']);
 		$itemCount = 0;
-    	foreach($photoData['data'] as $photoData){
+
+		foreach($photoData['data'] as $photoData){
 			$item = new Item();
 			$tags = array();
 
@@ -115,14 +116,10 @@ class ParserFacebookSet extends ParserAbstract
 			$item->setChildItemsCount(0);
 			$item->setLicense('All Rights Reserved');// todo: what are the proper permissions here?
 
-
-
-			
-
-
-
-			if(array_key_exists("name",$photoData)){
-				$item->setTitle($photoData["name"]);
+			if(array_key_exists("from",$photoData)){
+				if(array_key_exists("name",$photoData["from"])){
+					$item->setTitle($photoData["from"]["name"]);
+				}
 			}
 
 			// lat/lon might exist
