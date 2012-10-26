@@ -278,8 +278,7 @@
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title);
 			if(this.model.get('persistent'))this.$el.addClass('persistent');
-			if(this.model.get('continues'))this.$el.addClass('continues');
-			
+			if(this.model.get('continues'))this.$el.addClass('continues');			
 		},
 		
 		/*******************
@@ -293,6 +292,19 @@
 			'click .layer-super'		: 'expand',
 			'dblclick i'		: 'forceExpand',
 
+			'mouseover' : 'onMouseover',
+			'mouseout' : 'onMouseout'
+
+		},
+
+		onMouseover : function()
+		{
+			if(this.model.get('type') == 'Link') this.model.visual.$el.addClass('link-controls-hover');
+		},
+
+		onMouseout : function()
+		{
+			if(this.model.get('type') == 'Link') this.model.visual.$el.removeClass('link-controls-hover');
 		},
 		
 		// the events end users have access to
