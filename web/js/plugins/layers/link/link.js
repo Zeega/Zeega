@@ -47,7 +47,7 @@
 				label : 'Opacity',
 				step : 0.01,
 				min : 0,
-				max : 1,
+				max : 1
 			});
 
 			var hoverOpacitySlider = new Layer.Views.Lib.Slider({
@@ -56,7 +56,7 @@
 				label : 'Opacity on Hover',
 				step : 0.01,
 				min : 0,
-				max : 1,
+				max : 1
 			});
 
 			var blinkOnStart = new Layer.Views.Lib.Checkbox({
@@ -71,8 +71,9 @@
 				label : 'Layer glows on hover'
 			});
 			
-			$(this.controls).append( linkTypeSelect.getControl() )
-				.append( opacitySlider.getControl() )
+			$(this.controls)
+				.append( linkTypeSelect.getControl() )
+				//.append( opacitySlider.getControl() )
 				.append( hoverOpacitySlider.getControl() )
 				//.append( blinkOnStart.getControl() )
 				.append( glowOnHover.getControl() );
