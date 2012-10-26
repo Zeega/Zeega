@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\IngestionBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -12,27 +21,38 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
+/**
+ * Send a message to RabbitMq for each scheduled task that is ready to be executed.
+ * Scheduled tasks are configured on the 'schedule' entity / database table.
+ *
+ */
 class EnqueueScheduledTasksCommand extends ContainerAwareCommand
 {
+    /**
+     * @see Command
+     */
     protected function configure()
     {
         $this->setName('zeega:tasks:enqueue')
-             ->setDescription('Enqueues for processing all ready tasks')
-             ->addOption('full_duplicate_scan', null, InputOption::VALUE_REQUIRED, 'Boolean. Detect duplicates on all the existing data.')
+             ->setDescription("Enqueues all tasks that are on the 'ready' status and changes their status to 'queued'")
+             ->addOption('full_duplicate_scan', null, InputOption::VALUE_REQUIRED, 'Boolean. If true, a check on all the user data will be made in order not to import duplicates')
              ->setHelp("Help");
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $duplicateScan = $input->getOption('full_duplicate_scan');
 
         if(null == $duplicateScan) {
-            $output->writeln('Please run this operation with the --full_duplicate_scan option.');
+            $output->writeln('<info>Please run this operation with the --full_duplicate_scan option.</info>');
             return;
         }
 
         if('true' != $duplicateScan && 'false' != $duplicateScan) {
-            $output->writeln('The --full_duplicate_scan value has to be true or false.');
+            $output->writeln('<error>The --full_duplicate_scan value has to be true or false.</error>');
             return;   
         }
 
@@ -71,6 +91,13 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * Resolves which parser should be used for the @scheduledTask
+     *
+     * @return Array Domain name, parser_id and tags list
+     *
+     * @throws \Exception If the parser cannot be resolved.
+     */
     private function resolveParser($scheduledTask) {
         if(null === $scheduledTask) {
             throw new \BadMethodCallException('The scheduledTask parameter cannot be null');
