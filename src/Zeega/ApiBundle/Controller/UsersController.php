@@ -19,8 +19,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 
-class UsersController extends Controller
+class UsersController extends BaseController
 {
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.

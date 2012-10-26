@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Helpers\Utils;
+use Zeega\CoreBundle\Controller\BaseController;
+
 use DateTime;
 
 /**
@@ -25,7 +27,7 @@ use DateTime;
 * @author James Burns <james@zeega.org>
 * @author Luis Filipe Brandao <filipe@zeega.org>
 */
-class SearchController extends Controller
+class SearchController extends BaseController
 {
     public function searchAction()
     {

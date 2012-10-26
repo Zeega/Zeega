@@ -853,4 +853,106 @@ class Item
     {
         // Add your code here
     }
+
+    /**
+     * Add child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $childItems
+     * @return Item
+     */
+    public function addChildItem(\Zeega\DataBundle\Entity\Item $childItems)
+    {
+        $this->child_items[] = $childItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $childItems
+     */
+    public function removeChildItem(\Zeega\DataBundle\Entity\Item $childItems)
+    {
+        $this->child_items->removeElement($childItems);
+    }
+
+    /**
+     * Add parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parentItems
+     * @return Item
+     */
+    public function addParentItem(\Zeega\DataBundle\Entity\Item $parentItems)
+    {
+        $this->parent_items[] = $parentItems;
+    
+        return $this;
+    }
+
+    /**
+     * Remove parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parentItems
+     */
+    public function removeParentItem(\Zeega\DataBundle\Entity\Item $parentItems)
+    {
+        $this->parent_items->removeElement($parentItems);
+    }
+    /**
+     * @var string $ingested_by
+     */
+    private $ingested_by;
+
+    /**
+     * @var integer $duration
+     */
+    private $duration;
+
+
+    /**
+     * Set ingested_by
+     *
+     * @param string $ingestedBy
+     * @return Item
+     */
+    public function setIngestedBy($ingestedBy)
+    {
+        $this->ingested_by = $ingestedBy;
+    
+        return $this;
+    }
+
+    /**
+     * Get ingested_by
+     *
+     * @return string 
+     */
+    public function getIngestedBy()
+    {
+        return $this->ingested_by;
+    }
+
+    /**
+     * Set duration
+     *
+     * @param integer $duration
+     * @return Item
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    
+        return $this;
+    }
+
+    /**
+     * Get duration
+     *
+     * @return integer 
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
 }

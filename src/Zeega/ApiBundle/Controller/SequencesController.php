@@ -19,8 +19,9 @@ use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 
-class SequencesController extends Controller
+class SequencesController extends BaseController
 {
     /* TEMP - moved from Core and needs to be refactored */
     public function postSequencesAction()

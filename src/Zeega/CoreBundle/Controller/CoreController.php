@@ -11,13 +11,12 @@
 
 namespace Zeega\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Zeega\CoreBundle\Controller\BaseController;
 
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
 
-class CoreController extends Controller
+class CoreController extends BaseController
 {
     
 	public function faqAction()

@@ -20,7 +20,9 @@ use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Doctrine\ORM\PersistentCollection;
 
-class FramesController extends Controller
+use Zeega\CoreBundle\Controller\BaseController;
+
+class FramesController extends BaseController
 {
     public function getFrameAction($frame_id)
     {

@@ -37,7 +37,7 @@ class AppKernel extends Kernel
             new Zeega\AdminBundle\ZeegaAdminBundle(),
             new Zeega\CoreBundle\ZeegaCoreBundle(),
             new Zeega\DataBundle\ZeegaDataBundle(),
-            new Zeega\ExtensionsBundle\ZeegaExtensionsBundle(),
+            new Zeega\IngestionBundle\ZeegaIngestionBundle(),
             new Zeega\DiscoveryBundle\ZeegaDiscoveryBundle(),
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new Zeega\CommunityBundle\ZeegaCommunityBundle(),

@@ -1,0 +1,15 @@
+parameters:
+    zeega_parser.class:      Zeega\IngestionBundle\Service\ParserService
+    zeega_parser_absolute.class:      Zeega\IngestionBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl
+    
+services:
+    zeega_parser:
+        class: %zeega_parser.class%
+        arguments: 
+            hostname: %hostname%
+            directory: %directory%
+            security: "@security.context"
+            doctrine: "@doctrine"
+        
+    zeega_parser_absolute:
+        class: %zeega_parser_absolute.class%

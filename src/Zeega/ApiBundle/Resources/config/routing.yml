@@ -35,3 +35,8 @@ api_users:
     type: rest
     prefix: api
     resource: Zeega\ApiBundle\Controller\UsersController
+
+api_schedule:
+    type: rest
+    prefix: api
+    resource: Zeega\ApiBundle\Controller\ScheduleController
