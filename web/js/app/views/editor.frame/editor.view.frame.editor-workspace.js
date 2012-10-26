@@ -120,8 +120,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				to_sequence : sequence.id,
 				to_frame : sequence.get('frames')[0]
 			}
-			this.hold.update(info)
-			this.hold.trigger('update_link')
+			this.hold.update(info);
+			this.hold.trigger('update_link');
 			zeega.app.project.sequences.add(sequence);
 
 			this.hold = null;
@@ -137,7 +137,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 			};
 			var hold = this.model.addLayerByType('Link', attr );
 			
-			zeega.app.project.frames.get(attr.to_frame).layers.push(hold);
+			var toFrame = zeega.app.project.frames.get(attr.to_frame);
+			toFrame.layers.push(hold);
+			
+			hold.on('sync', function(){ toFrame.updateLayerOrder(); });
 			this.busy = false;
 			this.$el.find('#link-new-sequence,#link-existing-sequence').removeClass('disabled');
 			this.model.off('connectToSequenceFrame');
