@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\IngestionBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -15,8 +24,15 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Item;
 
+/**
+ * Saves an item or a set of items on the database.
+ *
+ */
 class PersistCommand extends ContainerAwareCommand
 {
+    /**
+     * @see Command
+     */    
     protected function configure()
     {
         $this->setName('zeega:persist')
@@ -27,29 +43,25 @@ class PersistCommand extends ContainerAwareCommand
              ->setHelp("Help");
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $filePath = $input->getOption('file_path');
         $userId = $input->getOption('user');
         $ingestor = $input->getOption('ingestor');
         
-        if(null === $filePath || null === $userId || null === $ingestor)
-        {
-            $output->writeln('');
-            $output->writeln('Please run the operation with the --file_path and --user options to execute');
-            $output->writeln('');
-        }
-        else
-        {
+        if(null === $filePath || null === $userId || null === $ingestor) {
+            $output->writeln('<info>Please run the operation with the --file_path, --ingestor and --user options to execute</info>');
+        } else {
             $em = $this->getContainer()->get('doctrine')->getEntityManager();
-
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
 
             $item = json_decode(file_get_contents($filePath),true);
             $items = $item["items"]; // hammer
 
-            foreach($items as $item)
-            {
+            foreach($items as $item) {
                 $item = self::parseItem($item, $user, $ingestor);
                 $em->persist($item);
             }
@@ -60,6 +72,12 @@ class PersistCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * Parses an array into an item
+     *
+     * @return Item
+     * 
+     */
     private function parseItem($itemArray, $user, $ingestor)
     {
         $title = $itemArray['title'];
@@ -100,23 +118,19 @@ class PersistCommand extends ContainerAwareCommand
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
         
-        if(isset($mediaDateCreated)) 
-        {
+        if(isset($mediaDateCreated)) {
             $parsedDate = strtotime($mediaDateCreated);
-            if($parsedDate)
-            {
+            if($parsedDate) {
                 $d = date("Y-m-d h:i:s",$parsedDate);
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
 
-        if(isset($mediaCreatorUsername))
-        {
+        if(isset($mediaCreatorUsername)) {
             $item->setMediaCreatorUsername($mediaCreatorUsername);
         }
 
-        if(isset($mediaCreatorRealname))
-        {
+        if(isset($mediaCreatorRealname)) {
             $item->setMediaCreatorRealname($mediaCreatorRealname);
         }
             
@@ -131,13 +145,10 @@ class PersistCommand extends ContainerAwareCommand
         $item->setIndexed(false);
         $item->setPublished(false);
         
-        if(isset($itemArray["child_items"]))
-        {
-            foreach($itemArray["child_items"] as $child_item)
-            {
+        if(isset($itemArray["child_items"])) {
+            foreach($itemArray["child_items"] as $child_item) {
                 $child = self::parseItem($child_item, $user);
-                if(isset($child))
-                {
+                if(isset($child)) {
                     $item->addItem($child);    
                 }
             }

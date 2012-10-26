@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\IngestionBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -15,6 +24,10 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Item;
 
+/**
+ * Updates a scheduled task status
+ *
+ */
 class UpdateTaskCommand extends ContainerAwareCommand
 {
     protected function configure()
