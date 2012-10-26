@@ -52,6 +52,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $message["parser_id"] = $parserId["parser_id"];
                 $message["full_duplicate_scan"] = (bool)$duplicateScan;
                 $message["task_configuration"] = array();                                               // hack to avoid serialization
+                $message["task_configuration"]["id"] = $scheduledTask->getId();
                 $message["task_configuration"]["user"] = $scheduledTask->getUser()->getId();
                 $message["task_configuration"]["tags"] = $scheduledTask->getTags();
                 $message["task_configuration"]["query"] = $scheduledTask->getQuery();
@@ -61,7 +62,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $queue = $this->getContainer()->get('zeega_queue');
                 $taskId = $queue->enqueueCeleryMessage($message, $celeryTaskName, $celeryRoutingKey);   // send the message to the queue
 
-                //$scheduledTask->setStatus('queued');                                                    // update the scheduled task status on Zeega
+                $scheduledTask->setStatus('queued');                                                    // update the scheduled task status on Zeega
                 $scheduledTask->setDateUpdated(new \DateTime("now")); 
                 $em->persist($scheduledTask);
                 $em->flush();

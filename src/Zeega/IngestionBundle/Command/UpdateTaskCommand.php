@@ -23,6 +23,7 @@ class UpdateTaskCommand extends ContainerAwareCommand
              ->setDescription('Updates a task')
              ->addOption('task', null, InputOption::VALUE_REQUIRED, 'Task id')
              ->addOption('status', null, InputOption::VALUE_REQUIRED, 'New status')
+             ->addOption('status_message', null, InputOption::VALUE_OPTIONAL, 'Status message')
              ->setHelp("Help");
     }
 
@@ -33,7 +34,12 @@ class UpdateTaskCommand extends ContainerAwareCommand
         try {
             $taskId = $input->getOption('task');
             $newStatus = $input->getOption('status');
-            
+            $statusMessage = null;
+
+            if(null !== $input->getOption('status_message')) {
+                $statusMessage = $input->getOption('status_message');
+            }
+
             if(null === $taskId || null === $newStatus) {
                 $output->writeln('Please run this operation with the --task and --status options.');
             } else {
@@ -42,11 +48,14 @@ class UpdateTaskCommand extends ContainerAwareCommand
 
                 if(isset($task)) {
                     $task->setStatus($newStatus);
+                    $task->setStatusMessage($statusMessage);
+
                     $em->persist($task);
                     $em->flush($task);
+
+                    $output->writeln("Success");
                 }
             
-                $output->writeln("Success");
             }
         } catch (Exception $e) {
             $message = $e->getMessage();

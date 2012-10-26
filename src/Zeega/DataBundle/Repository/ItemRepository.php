@@ -494,7 +494,7 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getSingleResult();
     }
 
-    public function findUriByUserIngestedArchive($userId, $ingestedBy, $archive, $maxResults = null)
+    public function findUriByUserArchive($userId, $archive, $maxResults = null)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -503,11 +503,9 @@ class ItemRepository extends EntityRepository
         $qb->select('i.attribution_uri')
             ->from('ZeegaDataBundle:Item', 'i')
             ->where('i.user_id = :user_id')
-            ->andWhere('i.ingested_by = :ingested_by')
             ->andWhere('i.archive = :archive')
             ->setParameter('user_id', $userId)
             ->setParameter('archive', $archive)
-            ->setParameter('ingested_by', $ingestedBy)
             ->orderBy('i.id','DESC');
 
         if(null !== $maxResults && is_int($maxResults)) {
