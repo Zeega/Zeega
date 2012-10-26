@@ -213,7 +213,6 @@
 			var linkType = this.model.get('attr').link_type;
 
 			this.$el.resizable({
-				handles: 'all',
 				stop : function()
 				{
 					var attr = {
