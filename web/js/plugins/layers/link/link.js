@@ -130,6 +130,8 @@
 				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-right');
 			else if(this.model.get('attr').link_type == 'arrow_up')
 				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-up');
+			else if(this.model.get('attr').link_type == 'arrow_down')
+				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-down');
 
 			if( this.model.get('attr').glow_on_hover ) this.$el.addClass('linked-layer-glow');
 
