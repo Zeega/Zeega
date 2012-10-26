@@ -314,9 +314,19 @@
 		{
 			if( confirm('Delete Layer?') )
 			{
-				//this.model.trigger('editor_removeLayerFromFrame', this.model);
-				zeega.app.currentFrame.layers.remove( this.model );
-				//this.remove();
+				var _this = this;
+				if( _.contains(zeega.app.currentSequence.get('persistent_layers'),this.model.id) )
+				{
+					zeega.app.currentSequence.frames.each(function(frame){
+						frame.layers.remove(_this.model);
+					});
+
+					var rm = _.without(zeega.app.currentSequence.get('persistent_layers'), _this.model.id);
+					console.log('rm laer persist', rm, zeega.app.currentSequence);
+					zeega.app.currentSequence.save({'persistent_layers':rm});
+
+				}
+				else zeega.app.currentFrame.layers.remove( this.model );
 			}
 		},
 
