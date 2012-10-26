@@ -11,11 +11,12 @@ use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 use Imagick;
 use DateTime;
 use SimpleXMLElement;
 
-class BookmarkletController extends Controller
+class BookmarkletController extends BaseController
 {
    	public function persistAction()
 	{
@@ -25,10 +26,10 @@ class BookmarkletController extends Controller
 
 	    $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
 
-        if(true === $isQueueingEnabled) {
+        if(TRUE == $isQueueingEnabled) {
         	$user = $this->get('security.context')->getToken()->getUser();
             $queue = $this->get('zeega_queue');
-            $taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"parser-");            
+            $taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"ingestion");            
             return new Response($taskId);
         } else {        	
 		    if($mediaType == "collection") {

@@ -11,7 +11,6 @@
 
 namespace Zeega\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Project;
@@ -19,9 +18,9 @@ use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 
-
-class PublishController extends Controller
+class PublishController extends BaseController
 {
     public function frameAction($id)
     {
