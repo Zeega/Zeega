@@ -757,7 +757,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		defaults : {
 			property : 'backgroundColor',
-			color : '#FF0000',
+			color : '#FFFFFF',
 			save : true,
 			opacity: false,
 			opacityValue : 1,
