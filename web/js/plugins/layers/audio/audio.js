@@ -4,6 +4,7 @@
 	Layer.Audio = Layer.Video.extend({
 		
 		layerType : 'Audio',
+		hidden: true,
 
 		defaultAttributes : 
 		{

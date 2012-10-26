@@ -88,6 +88,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		continueLayer : function()
 		{
+			console.log('clicking button');
 			this.$el.find('button').effect('highlight',{},2000);
 			zeega.app.continueLayer( this.model.id )
 		}
@@ -136,6 +137,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		continueOnAllFrames : function()
 		{
+			console.log('continuing on all frames button');
 			if( this.$el.find('button').hasClass('active') )
 				this.$el.find('button').removeClass('active btn-warning');
 			else
@@ -143,8 +145,15 @@ Use this.model.get('attr')[my_setting] instead!!!
 			
 			this.$el.find('button').effect('highlight',{},2000);
 			
+			
+			
+			
+					
+			
 			console.log( 'continue layer on all frames!: '+ this.model.id );
 			zeega.app.continueOnAllFrames( this.model );
+			
+			
 		}
 		
 	});
@@ -367,6 +376,8 @@ Use this.model.get('attr')[my_setting] instead!!!
 				start : function(e,ui)
 				{
 					_this.settings.onStart();
+					$('#layer-visual-'+_this.model.id).css({'outline':'solid 3px yellow'});
+					
 				},
 				slide : function(e, ui)
 				{
@@ -386,10 +397,14 @@ Use this.model.get('attr')[my_setting] instead!!!
 						_this.saveValue(ui.value)
 						_this.settings.onChange();
 					}
+					
+					
 				},
 				stop : function(e,ui)
 				{
 					if(e.which==1)_this.settings.onStop();
+					$('#layer-visual-'+_this.model.id).css({'outline':'none'});
+					
 				}
 				
 			});
@@ -742,7 +757,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		defaults : {
 			property : 'backgroundColor',
-			color : '#ffffff',
+			color : '#FFFFFF',
 			save : true,
 			opacity: false,
 			opacityValue : 1,
@@ -863,11 +878,11 @@ Use this.model.get('attr')[my_setting] instead!!!
 			var html =
 			
 					"<div class='input-prepend input-append'>"+
-						"<span class='add-on'><%= label %></span>"+
-						"<input id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
-						"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
+						"<span class='control-name'>Color</span>"+
+						"<input  class='add-on color-box' style='margin-left:64px; border:none; text-transform:uppercase; background-color:<%= color %>' id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
+						//"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
 					"</div>"+
-					'<a class="close" style="display:none">&times;</a>'+
+					'<a class="close" style="display:none; color:white;">hide</a>'+
 					"<div class='control-colorpicker'></div>";
 			
 			return html;

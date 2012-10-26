@@ -28,6 +28,7 @@ li.layer-list-item
 	margin-bottom:1px;
 	color: #DDD;
 	border-radius:0 2px 2px 0;
+	border-left:7px solid transparent;
 
 	.layer-super{ cursor: pointer; }
 	
@@ -47,8 +48,14 @@ li.layer-list-item
 		background-color:rgba(255,255,255,0.25);
 		-webkit-transition: background-color .25s linear;
 	}
+	
 }
-
+li.layer-list-item.persistent{
+		border-left:7px solid yellow;
+}
+li.layer-list-item.continues{
+		border-left:7px solid;
+}
 li.layer-type-link
 {
 	background-color: rgba(0, 0, 0, 0.1);

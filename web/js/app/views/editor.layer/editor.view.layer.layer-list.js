@@ -18,6 +18,20 @@
 		
 		renderControls : function()
 		{
+			
+		
+			var _this=this;
+			var continues=0;
+			_.each(zeega.app.currentSequence.frames.models,function(model){
+			
+				if(_.indexOf(model.get('layers'),_this.model.id)>-1) continues++;
+				
+					
+			});
+			
+			if(this.model.get('attr').persistent)this.$el.addClass('persistent');
+			else if(continues>1)this.$el.addClass('continues');
+			
 			this.$el.attr( 'id', 'layer-'+ this.model.id );
 			this.$el.attr('data-id',this.model.id);
 			this.setBaseTemplate();
@@ -38,6 +52,7 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					this.$el.find('#controls').append( scaleSlider.getControl() );
 				}
@@ -49,6 +64,7 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					var heightSlider = new Layer.Views.Lib.Slider({
 						property : 'height',
@@ -57,13 +73,14 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					this.$el.find('#controls').append( widthSlider.getControl() )
 										.append( heightSlider.getControl() );
 				}
 			}		
-			if(this.model.visual){
-			
+			if(!this.model.hidden){
+				
 				var dissolveCheck = new Layer.Views.Lib.Checkbox({
 					property : 'dissolve',
 					model: this.model,
@@ -86,6 +103,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
+					step:.1
 				});
 				var posYSlider = new Layer.Views.Lib.Slider({
 					property : 'left',
@@ -94,9 +112,12 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
+					step:.1
 				});
+				var layoutLabel = new Layer.Views.Lib.SectionLabel({label:'Layout'});
 				
-				this.$el.find('#controls').append( posYSlider.getControl() )
+				this.$el.find('#controls').append( layoutLabel.getControl() )
+											.append( posYSlider.getControl() )
 											.append( posXSlider.getControl() )
 											.append( opacitySlider.getControl() )
 											.prepend( dissolveCheck.getControl() );
@@ -176,7 +197,7 @@
 		{
 			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
-			console.log('++		private on layer enter')
+			console.log('++		private on layer enter');
 			this.onLayerEnter();
 		},
 		
@@ -256,6 +277,8 @@
 			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title);
+			if(this.model.get('persistent'))this.$el.addClass('persistent');
+			if(this.model.get('continues'))this.$el.addClass('continues');
 			
 		},
 		
