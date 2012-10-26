@@ -757,7 +757,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		defaults : {
 			property : 'backgroundColor',
-			color : '#ffffff',
+			color : '#FF0000',
 			save : true,
 			opacity: false,
 			opacityValue : 1,
@@ -878,11 +878,11 @@ Use this.model.get('attr')[my_setting] instead!!!
 			var html =
 			
 					"<div class='input-prepend input-append'>"+
-						"<span class='add-on'><%= label %></span>"+
-						"<input id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
-						"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
+						"<span class='control-name'>Color</span>"+
+						"<input  class='add-on color-box' style='margin-left:64px; border:none; text-transform:uppercase; background-color:<%= color %>' id='prependedInput' class='span1' type='text' size='16' value='<%= color %>'/>"+
+						//"<span class='add-on color-box' style='background-color:<%= color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+
 					"</div>"+
-					'<a class="close" style="display:none">&times;</a>'+
+					'<a class="close" style="display:none; color:white;">hide</a>'+
 					"<div class='control-colorpicker'></div>";
 			
 			return html;
