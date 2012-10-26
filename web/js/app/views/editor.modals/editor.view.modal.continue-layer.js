@@ -68,7 +68,7 @@
 				var frame = zeega.app.project.frames.get( $(frameEl).data('id') );
 				frame.layers.unshift( _this.model );
 			})
-			if( $(this.el).find('#continue-sequence').is(':checked') && !this.model)
+			if( $(this.el).find('#continue-sequence').is(':checked') && _.isUndefined(this.model.get('attr').persistent))
 			{
 				this.model.update({'persistent':1});
 				$('#zeega-layer-list').find('#layer-'+this.model.id).addClass('persistent');
