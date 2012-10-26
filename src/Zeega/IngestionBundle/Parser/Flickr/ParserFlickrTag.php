@@ -36,7 +36,6 @@ class ParserFlickrTag extends ParserAbstract
         if(null !== $checkForDuplicates) {
             $em = $parameters["entityManager"];
             $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserIngestedArchive($user->getId(), "scheduled_task", "Flickr");
-            var_dump($originalItems);
             $checkForDuplicates = TRUE;
         } else {
             $checkForDuplicates = FALSE;
@@ -75,7 +74,7 @@ class ParserFlickrTag extends ParserAbstract
                 }   
                 
                 if(isset($photo['longitude'])) {
-                    $item->setMediaGeoLatitude($photo['longitude']); 
+                    $item->setMediaGeoLongitude($photo['longitude']); 
                 }  
                 
                 if(isset($photo['license'])) {
@@ -98,7 +97,7 @@ class ParserFlickrTag extends ParserAbstract
                 } 
                 
                 $item->setTitle($photo['title']);
-                $item->setAttributionUri("http://www.flickr.com/photos/".$photo["ownername"]."/".$photo["id"]);
+                $item->setAttributionUri("http://www.flickr.com/photos/".$photo["owner"]."/".$photo["id"]);
                 $item->setArchive('Flickr'); 
                 $item->setMediaType('Image');
                 $item->setLayerType('Image');
