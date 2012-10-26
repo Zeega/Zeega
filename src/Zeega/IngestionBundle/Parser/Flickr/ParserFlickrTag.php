@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\IngestionBundle\Parser\Flickr;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
@@ -19,11 +28,10 @@ class ParserFlickrTag extends ParserAbstract
 
         $flickrAuthenticationKey = $parameters["authentication_key"];
         $loadCollectionItems = $parameters["load_child_items"];
-        $checkForDuplicates = $parameters["check_for_duplicates"];
+        $checkForDuplicates = (bool) $parameters["check_for_duplicates"];
         $tags = $parameters["tags"];
         $user = $parameters["user"]; 
         $originalItems = null;
-        $checkForDuplicates = FALSE;
 
         $searchParameters = array(
             "tags"=>$tags,
@@ -33,10 +41,15 @@ class ParserFlickrTag extends ParserAbstract
             "per_page"=>500
         );
 
-        if(null !== $checkForDuplicates) {
+        if(FALSE !== $checkForDuplicates) {
             $em = $parameters["entityManager"];
-            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserIngestedArchive($user->getId(), "scheduled_task", "Flickr");
-            $checkForDuplicates = TRUE;
+            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserArchive($user->getId(), "Flickr");
+            
+            if(isset($originalItems)) {
+                $checkForDuplicates = TRUE;
+            } else {
+                $checkForDuplicates = FALSE;    
+            }
         } else {
             $checkForDuplicates = FALSE;
         } 
@@ -45,8 +58,6 @@ class ParserFlickrTag extends ParserAbstract
         $currentPage = 1;
         $items = array();
 
-        //var_dump($searchParameters);
-
         while(1) {
             $searchParameters["page"] = $currentPage;
             $searchResults =  $f->photos_search($searchParameters);
@@ -54,6 +65,7 @@ class ParserFlickrTag extends ParserAbstract
             $pages = $searchResults['pages'];
 
             foreach($photos as $photo) {
+
                 $item = new Item();
                 $tags = array();
 
@@ -102,12 +114,9 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setMediaType('Image');
                 $item->setLayerType('Image');
                 $item->setChildItemsCount(0);
-                
+                echo $originalItems;
                 if(TRUE === $checkForDuplicates) {
-                    
-
                     if(FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) {
-                        echo $item->getAttributionUri() . "\n";
                         array_push($items,$item);
                     }
                 } else {                    

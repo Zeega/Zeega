@@ -25,18 +25,18 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Item;
 
 /**
- * Updates a task status
+ * Updates a scheduled task status
  *
  */
-class UpdateTaskCommand extends ContainerAwareCommand
+class UpdateScheduledTaskCommand extends ContainerAwareCommand
 {
     /**
      * @see Command
-     */       
+     */        
     protected function configure()
     {
-        $this->setName('zeega:tasks:update')
-             ->setDescription('Updates a task')
+        $this->setName('zeega:tasks:update-scheduled')
+             ->setDescription('Updates a scheduled task')
              ->addOption('task', null, InputOption::VALUE_REQUIRED, 'Task id')
              ->addOption('status', null, InputOption::VALUE_REQUIRED, 'New status')
              ->addOption('status_message', null, InputOption::VALUE_OPTIONAL, 'Status message')
@@ -62,7 +62,8 @@ class UpdateTaskCommand extends ContainerAwareCommand
             if(null === $taskId || null === $newStatus) {
                 $output->writeln('Please run this operation with the --task and --status options.');
             } else {
-                $task = $em->getRepository('ZeegaDataBundle:Task')->findOneById($taskId);
+                
+                $task = $em->getRepository('ZeegaDataBundle:Schedule')->findOneById($taskId);
 
                 if(isset($task)) {
                     $task->setStatus($newStatus);
@@ -81,6 +82,5 @@ class UpdateTaskCommand extends ContainerAwareCommand
             $em->persist($task);
             $em->flush($task);
         }
-        
     }
 }

@@ -72,6 +72,8 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 $message["parser_id"] = $parserId["parser_id"];
                 $message["full_duplicate_scan"] = (bool)$duplicateScan;
                 $message["task_configuration"] = array();                                               // hack to avoid serialization
+                $message["task_configuration"]["id"] = $scheduledTask->getId();
+                $message["task_configuration"]["user"] = $scheduledTask->getUser()->getId();
                 $message["task_configuration"]["tags"] = $scheduledTask->getTags();
                 $message["task_configuration"]["query"] = $scheduledTask->getQuery();
                 $message["task_configuration"]["archive"] = $scheduledTask->getArchive();
@@ -108,7 +110,7 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
 
         if($archive == 'Flickr') {
             if(null !== $tags) {
-                return array('domain' => 'flickr.com', 'parser_id' => 'tags_parser', 'tags' => $tags);
+                return array('domain' => 'flickr.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
             }
         }
         throw new \Exception("Cannot resolve a parser for $tags and $archive");

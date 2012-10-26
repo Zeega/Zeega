@@ -37,8 +37,8 @@ class QueueingService
                 // enqueue the task
                 $id = $routingKey . "." .$task->getId();
                 $msg = array("id" => $id,  "task" => $name, "args" => $arguments);  
-                $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), $id,  array('content_type' => 'application/json', 'delivery_mode' => 2));
-                return $id;
+                $this->rabbitmq->publish(str_replace('\/','/',json_encode($msg)), $routingKey,  array('content_type' => 'application/json', 'delivery_mode' => 2));
+                return var_dump($msg);
             } catch (Exception $e) {
                 $task->setStatus("failed");
                 $task->setMessage("Error posting the task to the queue." . $e->getMessage());
