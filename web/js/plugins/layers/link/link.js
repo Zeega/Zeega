@@ -159,11 +159,14 @@
 		onMouseOver : function()
 		{
 			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity_hover );
+			console.log('link on mouse over', this);
+			this.model.controls.$el.addClass('on-hover');
 		},
 
 		onMouseOut : function()
 		{
 			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity );
+			this.model.controls.$el.removeClass('on-hover');
 		},
 		
 		goClick : function()

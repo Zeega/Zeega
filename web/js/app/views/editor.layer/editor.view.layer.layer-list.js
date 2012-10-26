@@ -255,7 +255,7 @@
 			console.log('re render')
 			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
 			$(this.el).attr('data-id',this.model.id);
-			$(this.el).find('.layer-title').html(this.model.get('attr').title)
+			$(this.el).find('.layer-title').html(this.model.get('attr').title);
 			
 		},
 		
@@ -270,6 +270,19 @@
 			'click .layer-super'		: 'expand',
 			'dblclick i'		: 'forceExpand',
 
+			'mouseover' : 'onMouseover',
+			'mouseout' : 'onMouseout'
+
+		},
+
+		onMouseover : function()
+		{
+			if(this.model.get('type') == 'Link') this.model.visual.$el.addClass('link-controls-hover');
+		},
+
+		onMouseout : function()
+		{
+			if(this.model.get('type') == 'Link') this.model.visual.$el.removeClass('link-controls-hover');
 		},
 		
 		// the events end users have access to
