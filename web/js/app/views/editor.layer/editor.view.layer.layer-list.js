@@ -52,6 +52,7 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					this.$el.find('#controls').append( scaleSlider.getControl() );
 				}
@@ -63,6 +64,7 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					var heightSlider = new Layer.Views.Lib.Slider({
 						property : 'height',
@@ -71,6 +73,7 @@
 						suffix : '%',
 						min : 1,
 						max : 200,
+						step:.1
 					});
 					this.$el.find('#controls').append( widthSlider.getControl() )
 										.append( heightSlider.getControl() );
@@ -100,6 +103,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
+					step:.1
 				});
 				var posYSlider = new Layer.Views.Lib.Slider({
 					property : 'left',
@@ -108,9 +112,12 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
+					step:.1
 				});
+				var layoutLabel = new Layer.Views.Lib.SectionLabel({label:'Layout'});
 				
-				this.$el.find('#controls').append( posYSlider.getControl() )
+				this.$el.find('#controls').append( layoutLabel.getControl() )
+											.append( posYSlider.getControl() )
 											.append( posXSlider.getControl() )
 											.append( opacitySlider.getControl() )
 											.prepend( dissolveCheck.getControl() );
@@ -190,7 +197,7 @@
 		{
 			if(this.model.defaultControls) this.drawDefaultControls();
 			this.delegateEvents();
-			console.log('++		private on layer enter')
+			console.log('++		private on layer enter');
 			this.onLayerEnter();
 		},
 		

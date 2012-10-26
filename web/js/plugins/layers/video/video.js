@@ -5,7 +5,7 @@
 		layerType : 'Video',
 		draggable : true,
 		player_loaded : false,
-		scalable : false,
+		scalable : true,
 		visual : true,
 
 		defaultAttributes : 
@@ -100,47 +100,12 @@
 				css : false
 			});
 			
-			var widthSlider = new Layer.Views.Lib.Slider({
-				property : 'width',
-				model: this.model,
-				label : 'Width',
-				suffix : '%',
-				min : 1,
-				max : 200,
-				
-				onStart : function()
-				{
-					this.model.visual.$el.addClass('editing-layer');
-				},
-				onStop : function()
-				{
-					this.model.visual.$el.removeClass('editing-layer')
-				}
-			});
 			
-			var heightSlider = new Layer.Views.Lib.Slider({
-				property : 'height',
-				model: this.model,
-				label : 'Height',
-				suffix : '%',
-				min : 1,
-				max : 200,
-				onStart : function()
-				{
-					this.model.visual.$el.addClass('editing-layer');
-				},
-				onStop : function()
-				{
-					this.model.visual.$el.removeClass('editing-layer')
-				}
-			});
 			
 			var audioLabel = new Layer.Views.Lib.SectionLabel({label:'Audio'})
 			
 			this.controls
 				.append( playbackControls.getControl() )
-				.append( widthSlider.getControl() )
-				.append( heightSlider.getControl() )
 				.append( audioLabel.getControl() )
 				.append( volumeSlider.getControl() )
 				.append( fadeInSlider.getControl() )
@@ -160,13 +125,23 @@
 		
 		render : function()
 		{
-			
+			/*
 			var img = $('<img>')
 				.attr('id', 'video-player-'+ this.model.id)
 				.attr('src', this.attr.thumbnail_url)
 				.css({'width':'100%'});
 
 			$(this.el).html( img ).css('height', this.attr.height+'%');
+			*/
+			$(this.el).html("").css({
+				'background':'url("'+this.attr.thumbnail_url+'") no-repeat center center fixed',
+				'-webkit-background-size': 'cover',
+				'-moz-background-size': 'cover',
+				'background-size': 'cover',
+				'height':this.attr.height+'%',
+				'background-attachment': 'scroll'
+			});
+			
 			
 			return this;
 		},

@@ -376,6 +376,8 @@ Use this.model.get('attr')[my_setting] instead!!!
 				start : function(e,ui)
 				{
 					_this.settings.onStart();
+					$('#layer-visual-'+_this.model.id).css({'outline':'solid 3px yellow'});
+					
 				},
 				slide : function(e, ui)
 				{
@@ -395,10 +397,14 @@ Use this.model.get('attr')[my_setting] instead!!!
 						_this.saveValue(ui.value)
 						_this.settings.onChange();
 					}
+					
+					
 				},
 				stop : function(e,ui)
 				{
 					if(e.which==1)_this.settings.onStop();
+					$('#layer-visual-'+_this.model.id).css({'outline':'none'});
+					
 				}
 				
 			});
