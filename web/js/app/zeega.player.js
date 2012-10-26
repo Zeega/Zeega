@@ -410,15 +410,18 @@ this.zeegaPlayer = {
 			// update arrows
 			this.updateArrows();
 			
-			var layersToRender = _.without( this.get('layers'), this.commonLayers[fromFrameID] );
-
+			var layersToRender = _.map(this.get('layers'), function(layerID){
+				var layer = _this.layers.get(layerID);
+				if(layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.id) return layerID;
+				else return false;
+			});
+			layersToRender = _.difference( _.compact(layersToRender),this.commonLayers[fromFrameID] );
 			// draw and update layer media
-			console.log('$$		zeega player', zeegaPlayer.app)
-			_.each( this.get('layers'), function(layerID,z){
-				var layer = _this.layers.get(layerID)
+			_.each( layersToRender, function(layerID,z){
+				var layer = _this.layers.get(layerID);
 				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );
 				else layer.trigger('player_play', z );
-			})
+			});
 
 		},
 
