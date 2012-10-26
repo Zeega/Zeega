@@ -61,6 +61,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 			$item->setLayerType('Youtube');
 			$item->setChildItemsCount(0);
 			$item->setThumbnailUrl($child["media\$group"]["media\$thumbnail"][0]["url"]);
+			$item->setArchive("Youtube");
 
 			$categories = $child["category"];
 	        if(isset($categories)) 
