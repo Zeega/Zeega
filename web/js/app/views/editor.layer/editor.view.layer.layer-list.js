@@ -18,6 +18,20 @@
 		
 		renderControls : function()
 		{
+			
+		
+			var _this=this;
+			var continues=0;
+			_.each(zeega.app.currentSequence.frames.models,function(model){
+			
+				if(_.indexOf(model.get('layers'),_this.model.id)>-1) continues++;
+				
+					
+			});
+			
+			if(this.model.get('attr').persistent)this.$el.addClass('persistent');
+			else if(continues>1)this.$el.addClass('continues');
+			
 			this.$el.attr( 'id', 'layer-'+ this.model.id );
 			this.$el.attr('data-id',this.model.id);
 			this.setBaseTemplate();
@@ -62,8 +76,8 @@
 										.append( heightSlider.getControl() );
 				}
 			}		
-			if(this.model.visual){
-			
+			if(!this.model.hidden){
+				
 				var dissolveCheck = new Layer.Views.Lib.Checkbox({
 					property : 'dissolve',
 					model: this.model,
@@ -255,7 +269,9 @@
 			console.log('re render')
 			if(!_.isUndefined(zeega.app.currentFrame))zeega.app.currentFrame.trigger('update_thumb');
 			$(this.el).attr('data-id',this.model.id);
-			$(this.el).find('.layer-title').html(this.model.get('attr').title)
+			$(this.el).find('.layer-title').html(this.model.get('attr').title);
+			if(this.model.get('persistent'))this.$el.addClass('persistent');
+			if(this.model.get('continues'))this.$el.addClass('continues');
 			
 		},
 		
