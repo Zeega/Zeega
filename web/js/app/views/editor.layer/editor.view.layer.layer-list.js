@@ -300,6 +300,7 @@
 					});
 
 					var rm = _.without(zeega.app.currentSequence.get('persistent_layers'), _this.model.id);
+					console.log('rm laer persist', rm, zeega.app.currentSequence);
 					zeega.app.currentSequence.save({'persistent_layers':rm});
 
 				}

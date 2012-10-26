@@ -64,17 +64,25 @@ class SequencesController extends Controller
     	$request = $this->getRequest();
       	$em = $this->getDoctrine()->getEntityManager();
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
-    	if($request->request->get('title'))$sequence->setTitle($request->request->get('title'));
-    	if($request->request->get('attr'))$sequence->setAttr($request->request->get('attr'));
-        if($request->request->get('persistent_layers'))$sequence->setPersistentLayers($request->request->get('persistent_layers'));
+
+    	if($request->request->has('title')) {
+            $sequence->setTitle($request->request->get('title'));
+        }
+
+    	if($request->request->has('attr')) {
+            $sequence->setAttr($request->request->get('attr'));
+        }
+            
+        if($request->request->has('persistent_layers')) {
+            $sequence->setPersistentLayers($request->request->get('persistent_layers'));
+        }
     	
-        if($request->request->get('frames'))
-        {
+        if($request->request->has('frames')) {
             $frames = $request->request->get('frames');
             $i = 0;
             $s = count($frames);
-            foreach($frames as $frameId)
-            {
+
+            foreach($frames as $frameId) {
                 $frame=$em->getRepository('ZeegaDataBundle:Frame')->find($frameId);
                 $frame->setSequenceIndex($i);
                 $em->persist($frame);
