@@ -138,11 +138,11 @@
 				'-webkit-background-size': 'cover',
 				'-moz-background-size': 'cover',
 				'background-size': 'cover',
-				'height':this.attr.height+'%',
+				'height':this.model.get('attr').height+'%',
 				'background-attachment': 'scroll'
 			});
 			
-			
+	
 			return this;
 		},
 		
