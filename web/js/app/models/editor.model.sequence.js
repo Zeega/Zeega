@@ -1,10 +1,6 @@
  (function(Sequence){
 
-	Sequence.FrameCollection = Backbone.Collection.extend({
-		initialize : function()
-		{
-		}
-	});
+	Sequence.FrameCollection = Backbone.Collection.extend({});
 
 	Sequence.Model = Backbone.Model.extend({
 		
@@ -61,7 +57,6 @@
 				zeega.app.project.frames.add( this.get('frames'));
 
 				this.set('frames', _.pluck( this.get('frames'), 'id' ) );
-				console.log('--$$		new frames', this.get('frames'), this, zeega.app.project.frames );
 			}
 
 			var frameArray = this.get('frames').map(function(frameID){
@@ -107,14 +102,11 @@
 
 				newFrame.save({ 'layers' : _.compact(_this.get('persistent_layers')) })
 					.success(function(){
-						console.log('frame updated:', _this, newFrame, zeega.app);
 						newFrame.complete(); // complete the collections inside the frame
 						newFrame.frameIndex = _this.frames.length;
 						newFrame.sequenceID = _this.id; // add the sequence id to the frame
 						zeega.app.project.frames.add( newFrame );
-					console.log('before push: ', _this.frames.pluck('id'), newFrame, _this.frames);
 						_this.frames.push( newFrame );
-					console.log('after push: ', _this.frames.pluck('id'));
 						if( i == n-1 ) zeega.app.loadFrame( newFrame );
 						newFrame.trigger('sync');
 					});
@@ -124,22 +116,16 @@
 
 		onAddFrame : function( frame )
 		{
-			console.log('before seq frame render: ', this.frames.pluck('id'));
-
 			this.sequenceFrameView.render();
-			console.log('after seq frame render: ', this.frames.pluck('id'));
 			this.updateFrameOrder();
-			console.log('after frame order: ', this.frames.pluck('id'));
 		},
 
 		onRemoveFrame : function( frame, frames, options )
 		{
-			console.log('$$		on remove frame',frame, frames, options);
 
 			if( frame == zeega.app.currentFrame )
 			{
 				var newFrameIndex = options.index < 1 ? 0 : options.index - 1;
-				console.log('%%		new frame index', newFrameIndex);
 				if( frames.length > 0 ) zeega.app.loadFrame( frames.at( newFrameIndex ) );
 				else this.addFrames(1);
 			}
