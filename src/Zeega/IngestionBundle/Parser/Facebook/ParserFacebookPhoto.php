@@ -51,6 +51,7 @@ class ParserFacebookPhoto extends ParserAbstract
 		if(array_key_exists("error",$photoData)){
 			return $this->returnResponse(null, false, false, "Facebook responded with this error message: " . $photoData['error']['message']);
 		}
+
 		// do FB permissions matter for static image URLs?
 		// if so, we'll need to http get the image and verify the HTTP response 
 		$item = new Item();
@@ -63,6 +64,14 @@ class ParserFacebookPhoto extends ParserAbstract
 		if(array_key_exists("name",$photoData)){
 			$item->setTitle($photoData["name"]);
 		}
+
+		if(array_key_exists("from",$photoData)){
+			if(array_key_exists("name",$photoData["from"])){
+				$item->setMediaCreatorRealname($photoData["from"]["name"]);
+				$item->setMediaCreatorUsername($photoData["from"]["name"]);
+			}
+		}
+
 		if(array_key_exists("source",$photoData)){
 			$item->setUri($photoData["source"]);
 		}
