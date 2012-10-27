@@ -9621,7 +9621,7 @@ Popcorn.player( "youtube", {
         // more youtube callback nonsense
        stateChangeEventHandler[media.youtubeId] = function( state ) {
 	
-	 console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
+	 	//console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
           // playing is state 1
           // paused is state 2
           
