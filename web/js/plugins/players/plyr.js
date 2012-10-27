@@ -175,7 +175,6 @@
 			this.setVolume(0);
 			
 			this.popcorn.listen('canplaythrough',function(){
-				console.log('$$$$$$$$$$$$$$$$$$$triggering canplaythrough yo');
 				_this.$el.spin(false);
 				
 				_this.model.can_play = true;
@@ -188,6 +187,12 @@
 				
 				
 				
+			});
+			
+			this.popcorn.listen('ended',function(){
+				if(_this.model.get('attr').loop==1){
+					_this.popcorn.currentTime( _this.settings.cue_in );
+				}
 			});
 			
 		},

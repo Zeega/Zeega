@@ -24,7 +24,7 @@
     return;
   }
 
-  var
+  
 
   AP = Array.prototype,
   OP = Object.prototype,
@@ -9621,7 +9621,7 @@ Popcorn.player( "youtube", {
         // more youtube callback nonsense
        stateChangeEventHandler[media.youtubeId] = function( state ) {
 	
-		// console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
+	 console.log('onstatechange: '+state+' : '+media.youtubeId+' and canplay '+media.canPlay);
           // playing is state 1
           // paused is state 2
           
@@ -9676,12 +9676,13 @@ Popcorn.player( "youtube", {
 				currentTime = media.youtubeObject.getCurrentTime();
 				media.dispatchEvent( "timeupdate" );
 				!media.paused && media.pause();
-				//console.log('setting the volume');
-            	//console.log(options.volume);
 				if(options.volume>1)media.youtubeObject.setVolume(options.volume);
             }
 				
           }
+          else if(state===0){
+          		media.dispatchEvent( "ended" );
+          }	
         };
 
         stateChangeEventHandler[Popcorn.guid()] = function( errorCode ) {
