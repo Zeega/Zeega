@@ -19,8 +19,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 
-class ItemsController extends Controller
+class ItemsController extends BaseController
 {
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
@@ -45,7 +46,7 @@ class ItemsController extends Controller
             $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
             $parser = $this->get('zeega_parser');
         
-            // parse the url with the ExtensionsBundle\Parser\ParserService
+            // parse the url with the IngestionBundle\Parser\ParserService
             $response = $parser->load($url, $loadChildren);
 
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));

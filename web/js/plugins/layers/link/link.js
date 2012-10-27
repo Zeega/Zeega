@@ -47,7 +47,7 @@
 				label : 'Opacity',
 				step : 0.01,
 				min : 0,
-				max : 1,
+				max : 1
 			});
 
 			var hoverOpacitySlider = new Layer.Views.Lib.Slider({
@@ -56,7 +56,7 @@
 				label : 'Opacity on Hover',
 				step : 0.01,
 				min : 0,
-				max : 1,
+				max : 1
 			});
 
 			var blinkOnStart = new Layer.Views.Lib.Checkbox({
@@ -71,8 +71,9 @@
 				label : 'Layer glows on hover'
 			});
 			
-			$(this.controls).append( linkTypeSelect.getControl() )
-				.append( opacitySlider.getControl() )
+			$(this.controls)
+				.append( linkTypeSelect.getControl() )
+				//.append( opacitySlider.getControl() )
 				.append( hoverOpacitySlider.getControl() )
 				//.append( blinkOnStart.getControl() )
 				.append( glowOnHover.getControl() );
@@ -129,6 +130,8 @@
 				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-right');
 			else if(this.model.get('attr').link_type == 'arrow_up')
 				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-up');
+			else if(this.model.get('attr').link_type == 'arrow_down')
+				this.$el.html( this.getTemplate() ).css( style ).addClass('link-arrow-down');
 
 			if( this.model.get('attr').glow_on_hover ) this.$el.addClass('linked-layer-glow');
 
@@ -156,11 +159,13 @@
 		onMouseOver : function()
 		{
 			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity_hover );
+			if(this.model.controls) this.model.controls.$el.addClass('on-hover');
 		},
 
 		onMouseOut : function()
 		{
 			this.$el.stop().fadeTo( 500, this.model.get('attr').opacity );
+			if(this.model.controls) this.model.controls.$el.removeClass('on-hover');
 		},
 		
 		goClick : function()
@@ -213,7 +218,6 @@
 			var linkType = this.model.get('attr').link_type;
 
 			this.$el.resizable({
-				handles: 'all',
 				stop : function()
 				{
 					var attr = {

@@ -1,10 +1,6 @@
  (function(Sequence){
 
-	Sequence.FrameCollection = Backbone.Collection.extend({
-		initialize : function()
-		{
-		}
-	})
+	Sequence.FrameCollection = Backbone.Collection.extend({});
 
 	Sequence.Model = Backbone.Model.extend({
 		
@@ -23,7 +19,7 @@
 		initialize : function( attributes )
 		{
 			this.tabView = new Sequence.Views.SequenceTabs({model:this});
-			this.sequenceFrameView = new Sequence.Views.SequenceFrameDrawer({model:this})
+			this.sequenceFrameView = new Sequence.Views.SequenceFrameDrawer({model:this});
 		},
 
 		onSaveNew : function()
@@ -50,8 +46,8 @@
 			var _this = this;
 			// make persistent layer collection
 			var persistentLayers = this.get('persistent_layers').map(function(layerID){
-				zeega.app.project.layers.get(layerID)
-			})
+				zeega.app.project.layers.get(layerID);
+			});
 			var col = Backbone.Collection.extend();
 			this.persistentLayers = new col( persistentLayers );
 			// make frame collection
@@ -61,22 +57,22 @@
 				zeega.app.project.frames.add( this.get('frames'));
 
 				this.set('frames', _.pluck( this.get('frames'), 'id' ) );
-				console.log('--$$		new frames', this.get('frames'), this, zeega.app.project.frames )
 			}
 
 			var frameArray = this.get('frames').map(function(frameID){
 				var frame = zeega.app.project.frames.get(frameID);
-				if(frame.complete != true) frame.complete();
+				if(frame.complete !== true) frame.complete();
 				frame.sequenceID = _this.id;
 				return frame;
 			});
 			
-
-
-
-			
 			this.frames = new Sequence.FrameCollection(frameArray);
-			this.frames.comparator = function( frame ){ return frame.frameIndex };
+
+			this.frames.each(function(frame, i){
+				frame.frameIndex = i;
+			});
+
+			this.frames.comparator = function( frame ){ return frame.frameIndex; };
 			this.frames.on('add', this.onAddFrame, this);
 			this.frames.on('remove', this.onRemoveFrame, this);
 		},
@@ -104,14 +100,10 @@
 			_.times( n, function(i){
 				var newFrame = new Frame.Model();
 
-				// data destroy bug potentially lives here!
-				// possible fix. not implemented for bugtesting
 				newFrame.save({ 'layers' : _.compact(_this.get('persistent_layers')) })
-
-				//newFrame.save({ 'layers' : _this.get('persistent_layers')})
 					.success(function(){
-						console.log('frame updated:', _this, newFrame, zeega.app)
 						newFrame.complete(); // complete the collections inside the frame
+						newFrame.frameIndex = _this.frames.length;
 						newFrame.sequenceID = _this.id; // add the sequence id to the frame
 						zeega.app.project.frames.add( newFrame );
 						_this.frames.push( newFrame );
@@ -119,27 +111,35 @@
 						newFrame.trigger('sync');
 					});
 				
-			})
+			});
 		},
 
 		onAddFrame : function( frame )
 		{
-			console.log('ff		on add frame',frame)
 			this.sequenceFrameView.render();
 			this.updateFrameOrder();
 		},
 
 		onRemoveFrame : function( frame, frames, options )
 		{
-			console.log('$$		on remove frame',frame, frames, options);
 
 			if( frame == zeega.app.currentFrame )
 			{
 				var newFrameIndex = options.index < 1 ? 0 : options.index - 1;
-				console.log('%%		new frame index', newFrameIndex)
 				if( frames.length > 0 ) zeega.app.loadFrame( frames.at( newFrameIndex ) );
 				else this.addFrames(1);
 			}
+			console.log('remove frame',frame);
+			var linkLayers = frame.layers.where({ type : 'Link'});
+			console.log('$$		found link layers', linkLayers, frame);
+			_.each( linkLayers, function(layer){
+				var from = layer.get('attr').from_frame;
+				var to = layer.get('attr').to_frame;
+				console.log('$$		remove from frames', layer, to, from, zeega.app.project.frames.get(to), zeega.app.project.frames.get(from));
+
+				if(to) zeega.app.project.frames.get(to).layers.remove(layer);
+				if(from) zeega.app.project.frames.get(from).layers.remove(layer);
+			});
 
 			frame.destroy(); // <---------------------- remove this when api updates
 			this.sequenceFrameView.render();
@@ -153,7 +153,7 @@
 			_.each(frameIDArray, function(frameID, i){
 				var frame = _this.frames.get(frameID);
 				frame.frameIndex = i;
-			})
+			});
 			this.frames.sort();
 			this.updateFrameOrder();
 		},
@@ -161,7 +161,7 @@
 		updateFrameOrder : function()
 		{
 			var frameOrder = this.frames.pluck('id');
-			if(frameOrder.length == 0) frameOrder = [false];
+			if(frameOrder.length === 0) frameOrder = [false];
 			this.save({'frames':frameOrder});
 		},
 /*

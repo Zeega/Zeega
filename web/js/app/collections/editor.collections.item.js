@@ -54,7 +54,7 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/search?r_items=1&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid');
+			var base = zeega.app.url_prefix + "api/search?r_items=1&sort=date-desc&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid');
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
 			

@@ -19,7 +19,9 @@ use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 
-class LayersController extends Controller
+use Zeega\CoreBundle\Controller\BaseController;
+
+class LayersController extends BaseController
 {
      /* TEMP - moved from Core and needs to be refactored */
     public function putLayerAction($layer_id)

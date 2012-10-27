@@ -11,14 +11,14 @@
 
 namespace Zeega\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\CoreBundle\Controller\BaseController;
 
-class ThumbnailsController extends Controller
+class ThumbnailsController extends BaseController
 {
     public function getItemThumbnailAction($itemId)
     {

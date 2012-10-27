@@ -434,4 +434,14 @@ class Project
     {
         return $this->location;
     }
+
+    /**
+     * Remove users
+     *
+     * @param Zeega\DataBundle\Entity\User $users
+     */
+    public function removeUser(\Zeega\DataBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }

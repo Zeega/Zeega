@@ -33,7 +33,6 @@ class BaseController extends ContainerAware
      *
      * @param string  $userId     The target user id
      *
-     * @return boolean Authorized / not authorized
      */
     protected function authorize($userId)
     {
@@ -47,6 +46,26 @@ class BaseController extends ContainerAware
             $loggedUserId = $this->container->get('security.context')->getToken()->getUser()->getId();
             
             if($loggedUserId == $userId || $this->container->get('security.context')->isGranted('ROLE_ADMIN'))
+            {
+                return;
+            }
+        }
+
+        throw new AccessDeniedException();
+    }
+
+    /**
+     * Checks the logged user belongs to a role and throws a not authorized
+     * exception if not.
+     *
+     * @param string  $role     The role name
+     *
+     */
+    protected function authorizeByRole($role)
+    {
+        if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') )
+        {
+            if($this->container->get('security.context')->isGranted($role))
             {
                 return;
             }

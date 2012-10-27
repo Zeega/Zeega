@@ -4,7 +4,7 @@
 
 		comparator : function( layer ){ return layer.layerIndex }
 	
-	})
+	});
 
 	Frame.Model = Backbone.Model.extend({
 		
@@ -42,8 +42,31 @@
 		complete : function()
 		{
 			if( !this.get('layers') ) this.set({ layers:[] });
-			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID) });
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID); });
+
+			var brokenLayers = [];
+			//validate link layers
+			_.each(layerArray, function(layer){
+				if(layer.get('type') == 'Link')
+				{
+						console.log('link layer broken', layer, layer.get('attr').to_frame,layer.get('attr').from_frame);
+					if( _.isNull(layer.get('attr').to_frame) || _.isNull(layer.get('attr').from_frame) || !zeega.app.project.frames.get(layer.get('attr').to_frame) || !zeega.app.project.frames.get(layer.get('attr').from_frame) )
+					{
+						console.log('link layer broken', layerArray, layer);
+						brokenLayers.push(layer);
+						//layer.save({type:'Ghost'});
+					}
+				}
+			});
+
 			this.layers = new Frame.LayerCollection( layerArray );
+			console.log('these are layers', this.layers);
+
+			if( brokenLayers.length )
+			{
+				this.layers.remove(brokenLayers);
+				this.updateLayerOrder();
+			}
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
 
@@ -68,10 +91,18 @@
 
 		updateLayerOrder : function()
 		{
-			var layerOrder = this.layers.map(function(layer){ return parseInt(layer.id) });
-			var layerOrder = _.compact( layerOrder );
-			if(layerOrder.length == 0) layerOrder = [false];
+			console.log('update layer order', this.id, this, this.layers.length +'');
+			var layerOrder = this.layers.map(function(layer){
+				console.log('---inside', layer.id, layer );
+				return parseInt(layer.id,10);
+			});
+			console.log('update layer order', layerOrder);
+
+			layerOrder = _.compact( layerOrder );
+			if(layerOrder.length === 0) layerOrder = [false];
+			console.log('update layer order', layerOrder);
 			this.save('layers', layerOrder);
+			console.log('$$$$ update layer order', this, layerOrder);
 			this.updateThumb();
 		},
 
@@ -112,7 +143,6 @@
 
 		onFirstLayerSave : function( layer )
 		{
-			console.log('$$		on first layer save', layer)
 			zeega.app.project.layers.add( layer );
 			this.layers.push( layer );
 			layer.off('sync',this.onFirstLayerSave);
@@ -128,7 +158,6 @@
 			var attributes = a || {};
 			var Layer = zeega.module('layer');
 			var newLayer = new Layer[type]();
-			console.log('nn		new Layer', newLayer, type, a, attributes, new Layer[type]() )
 			if( newLayer )
 			{
 				newLayer.on('sync', this.onNewLayerSave, this );

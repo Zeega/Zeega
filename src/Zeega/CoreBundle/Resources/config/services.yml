@@ -21,7 +21,7 @@ services:
             security: "@security.context"
             doctrine: "@doctrine"
             rabbitmq: "@old_sound_rabbit_mq.celery_task_producer"
-    zeega_queue:
+    zeega_response_listener:
         class: Zeega\CoreBundle\Listener\CoreResponseListener
         arguments:
             security: "@security.context"

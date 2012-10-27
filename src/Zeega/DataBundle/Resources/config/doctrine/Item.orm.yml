@@ -134,18 +134,23 @@ Zeega\DataBundle\Entity\Item:
         published:
             type: boolean
             nullable: false
-        indexed:
-            type: boolean
-            nullable: true
         geo_latlng:
             type: string
             nullable: true
-        
+        ingested_by: 
+            type: string
+            length: 15
+            nullable: true
+        duration:
+            type: integer
+            length: integer
+            nullable: true
+
     indexes:
         media_date_created_index:
-            columns: [media_date_created]      
+            columns: [media_date_created]
         media_date_created_end_index:
-            columns: [media_date_created_end]      
+            columns: [media_date_created_end]
         item_type_index:
             columns: [layer_type]
         site_id_index:
@@ -156,3 +161,5 @@ Zeega\DataBundle\Entity\Item:
             columns: [description]
         item_attribution_uri_index:
             columns: [attribution_uri]
+        item_ingested_by_index:
+            columns: [ingested_by]
