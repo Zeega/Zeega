@@ -173,8 +173,9 @@
 			this.popcorn = Popcorn.youtube( target, src, {volume:_this.settings.volume * 100, cue_in:_this.settings.cue_in} );
 			this.addPopcornToControls();
 			this.setVolume(0);
-
+			
 			this.popcorn.listen('canplaythrough',function(){
+				console.log('$$$$$$$$$$$$$$$$$$$triggering canplaythrough yo');
 				_this.$el.spin(false);
 				
 				_this.model.can_play = true;
@@ -183,8 +184,10 @@
 				_this.popcorn.pause();
 
 				_this.model.trigger('ready', _this.model.id ) ;
-				
 				if(_this.model.get('attr').fade_in==0) _this.volume(_this.model.get('attr').volume);
+				
+				
+				
 			});
 			
 		},
@@ -247,8 +250,9 @@
 			
 			if( !_.isNull(this.settings.cue_out) && this.popcorn.currentTime() >= this.settings.cue_out )
 			{
-				this.pause();
-				this.popcorn.currentTime( this.settings.cue_in )
+				if(this.model.get('attr').loop==1){}
+				else this.pause();
+				this.popcorn.currentTime( this.settings.cue_in );
 			}
 		},
 
