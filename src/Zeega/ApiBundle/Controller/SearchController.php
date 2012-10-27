@@ -164,6 +164,8 @@ class SearchController extends BaseController
                 $query->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
             } else if($sort == 'date-asc') {
                 $query->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
+            } else if($sort == 'id-desc') {
+                $query->addSort('id', \Solarium_Query_Select::SORT_DESC);
             }
         }
 
