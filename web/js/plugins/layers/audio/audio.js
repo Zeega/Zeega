@@ -66,8 +66,14 @@
 				step : 0.1,
 				css : false
 			});
+			var loopCheck = new Layer.Views.Lib.Checkbox({
+					property : 'loop',
+					model: this.model,
+					label : 'Loop'
+				});
 
 				this.controls
+					.append( loopCheck.getControl() )
 					.append( playbackControls.getControl() )
 					.append( volumeSlider.getControl() )
 					.append( fadeInSlider.getControl() )

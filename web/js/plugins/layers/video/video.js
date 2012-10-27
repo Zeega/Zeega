@@ -100,11 +100,17 @@
 				css : false
 			});
 			
+			var loopCheck = new Layer.Views.Lib.Checkbox({
+					property : 'loop',
+					model: this.model,
+					label : 'Loop'
+				});
 			
 			
 			var audioLabel = new Layer.Views.Lib.SectionLabel({label:'Audio'})
 			
 			this.controls
+				.append( loopCheck.getControl() )
 				.append( playbackControls.getControl() )
 				.append( audioLabel.getControl() )
 				.append( volumeSlider.getControl() )
