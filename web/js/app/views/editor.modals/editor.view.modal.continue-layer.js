@@ -73,7 +73,7 @@
 			if( $(this.el).find('#continue-sequence').is(':checked') )
 			{
 				this.model.update({'persistent':1});
-				$('#zeega-layer-list').find('#layer-'+this.model.id).addClass('persistent');
+				$('#zeega-layer-list').find('#layer-'+this.model.id).removeClass('continues').addClass('persistent');
 				zeega.app.continueOnAllFrames( this.model.id )
 				return false; // prevents activation of continue to next frame which would be redundant
 			}

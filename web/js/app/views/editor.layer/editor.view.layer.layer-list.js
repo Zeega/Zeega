@@ -315,7 +315,7 @@
 			if( confirm('Delete Layer?') )
 			{
 				var _this = this;
-				if( _.contains(zeega.app.currentSequence.get('persistent_layers'),this.model.id) )
+				if( _.contains(zeega.app.currentSequence.get('persistent_layers'),parseInt(this.model.id,10)) )
 				{
 					zeega.app.currentSequence.frames.each(function(frame){
 						frame.layers.remove(_this.model);
