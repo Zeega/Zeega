@@ -407,9 +407,6 @@ class ItemsController extends BaseController
         
         //  set defaults for missing parameters  
         if(!isset($query['page']))          $query['page'] = 0;
-        if($query['page'] > 0) {
-            $query['page'] = $query['page'] - 1;
-        }    
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
 
