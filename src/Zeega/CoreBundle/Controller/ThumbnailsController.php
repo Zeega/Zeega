@@ -20,6 +20,31 @@ use Zeega\CoreBundle\Controller\BaseController;
 
 class ThumbnailsController extends BaseController
 {
+    public function getUrlThumbnailAction($url, $mediaType)
+    {
+        try
+        {     
+            if($mediaType != 'Collection') {                
+                $host = $this->container->getParameter('hostname');
+                $thumbnailServerUrl =  "http:" . $host . "static/scripts/item.php?url=".$url.'&type='.$mediaType;
+                $thumbnailJSON = file_get_contents($thumbnailServerUrl);
+                
+                $zeegaThumbnail = json_decode($thumbnailJSON,true);
+                
+                return new Response($thumbnailJSON);
+            }
+        }
+        catch(Exception $e)
+        {
+            return ResponseHelper::getJsonResponse(array(
+                "status" => "Something went wrong. Please ensure that you are sending correct values for the media_image and media_type.",
+                "request" => array("url" => $url, "mediaType" => $mediaType),
+                "error" => $e->getMessage()
+                ));
+            
+        }
+    }
+
     public function getItemThumbnailAction($itemId)
     {
         try

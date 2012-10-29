@@ -114,7 +114,17 @@ class PersistCommand extends ContainerAwareCommand
         if(isset($attributionUri)) $item->setAttributionUri($attributionUri);
         if(isset($mediaType)) $item->setMediaType($mediaType);
         if(isset($layerType)) $item->setLayerType($layerType);
-        if(isset($thumbnailUrl)) $item->setThumbnailUrl($thumbnailUrl);
+        
+        $host = $this->getContainer()->getParameter('hostname');
+        $thumbnailServerUrl =  $host . "scripts/item.php?url=".$item->getUri().'&type='.$item->getMediaType();
+        $thumbnailJSON = file_get_contents($thumbnailServerUrl);
+
+        $thumbnailUrl = json_decode($thumbnailJSON,true);
+
+        if(isset($thumbnailUrl) && array_key_exists("thumbnail_url", $thumbnailUrl)) {
+            $item->setThumbnailUrl($thumbnailUrl["thumbnail_url"]);    
+        } 
+        
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
         
@@ -147,7 +157,7 @@ class PersistCommand extends ContainerAwareCommand
         
         if(isset($itemArray["child_items"])) {
             foreach($itemArray["child_items"] as $child_item) {
-                $child = self::parseItem($child_item, $user);
+                $child = self::parseItem($child_item, $user, $ingestor);
                 if(isset($child)) {
                     $item->addItem($child);    
                 }
