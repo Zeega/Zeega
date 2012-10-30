@@ -115,14 +115,15 @@ class PersistCommand extends ContainerAwareCommand
         if(isset($mediaType)) $item->setMediaType($mediaType);
         if(isset($layerType)) $item->setLayerType($layerType);
         
-        $host = $this->getContainer()->getParameter('hostname');
-        $thumbnailServerUrl =  $host . "scripts/item.php?url=".$item->getUri().'&type='.$item->getMediaType();
-        $thumbnailJSON = file_get_contents($thumbnailServerUrl);
-
-        $thumbnailUrl = json_decode($thumbnailJSON,true);
-
-        if(isset($thumbnailUrl) && array_key_exists("thumbnail_url", $thumbnailUrl)) {
-            $item->setThumbnailUrl($thumbnailUrl["thumbnail_url"]);    
+        if(isset($thumbnailUrl)) {
+            $item->setThumbnailUrl($thumbnailUrl);
+        } else {
+            $thumbnailService = $this->getContainer()->get('zeega_thumbnail');
+            $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+            
+            if(null !== $thumbnail) {
+                $item->setThumbnailUrl($thumbnail);
+            }    
         } 
         
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
