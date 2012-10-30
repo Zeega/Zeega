@@ -24,9 +24,6 @@ Zeega\DataBundle\Entity\Item:
             mappedBy: child_items
             cascade: ["persist"]
     manyToOne:
-        site:
-            targetEntity: Zeega\DataBundle\Entity\Site
-            cascade: ["persist"]
         user:
             targetEntity: Zeega\DataBundle\Entity\User
     id:
@@ -34,9 +31,6 @@ Zeega\DataBundle\Entity\Item:
             type: bigint
             generator: { strategy: AUTO }
     fields:
-        site_id:
-            type: integer
-            nullable: true            
         title:
             type: string
             length: 
@@ -153,8 +147,6 @@ Zeega\DataBundle\Entity\Item:
             columns: [media_date_created_end]
         item_type_index:
             columns: [layer_type]
-        site_id_index:
-            columns: [site_id]
         item_enabled_index:
             columns: [enabled]
         item_description_index:

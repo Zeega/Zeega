@@ -6,18 +6,6 @@ Zeega\DataBundle\Entity\User:
         id:
             type: integer
             generator: { strategy: AUTO }
-    manyToMany:
-       sites:
-         targetEntity: Zeega\DataBundle\Entity\Site
-         inversedBy: users
-         joinTable:
-           name: users_sites
-           inverseJoinColumns:
-             site_id:
-               referencedColumnName: id
-           joinColumns:
-             user_id:
-               referencedColumnName: id
     fields:
         display_name:
             type: string

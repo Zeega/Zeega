@@ -17,9 +17,6 @@ Zeega\DataBundle\Entity\Project:
                 inverseJoinColumns:
                     user_id:
                         referencedColumnName: id
-    manyToOne:
-        site:
-            targetEntity: Site
     id:
         id:
             type: integer
@@ -71,10 +68,9 @@ Zeega\DataBundle\Entity\Project:
         date_published:
             type: datetime
             nullable: true
-        
+
     indexes:
         project_enabled_index:
             columns: [enabled]
         project_date_updated:
             columns: [date_updated]
- 

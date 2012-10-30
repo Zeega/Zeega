@@ -1,4 +1,3 @@
-# src/Zeega/EditorBundle/Resources/config/doctrine/Site.orm.yml
 Zeega\DataBundle\Entity\Session:
     type: entity
     table: session
