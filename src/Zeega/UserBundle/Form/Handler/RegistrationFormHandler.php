@@ -30,10 +30,7 @@ class RegistrationFormHandler extends BaseHandler
         $user->setCreatedAt(new \DateTime('now'));
 		
 		$em = $this->container->get('doctrine')->getEntityManager();
-        
-        $site = $em->getRepository('ZeegaDataBundle:Site')->findOneById(1);
-		$user->addSite($site);
-		
+        		
         parent::onSuccess($user, $confirmation);
     }
 }

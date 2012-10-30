@@ -8,7 +8,6 @@ use Zeega\DataBundle\Entity\Media;
 use Zeega\DataBundle\Entity\Metadata;
 use Zeega\DataBundle\Entity\Tag;
 use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Site;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Controller\BaseController;
@@ -71,11 +70,6 @@ class BookmarkletController extends BaseController
         
         // get logged user
         $user = $this->get('security.context')->getToken()->getUser();
-        
-        // get user items and sites
-        //$mycollection = $this->forward('ZeegaApiBundle:Items:getItemsFilter', array(), array("limit" => 15, "user" => $user->getId()))->getContent();
-        
-        $sites = $user->getSites();
         
         $widgetId = $request->query->get('widget-id');
         $itemUrl = $request->query->get('url');

@@ -13,14 +13,6 @@ class LoadUserData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $site = new Site();
-        $site->setTitle('Home');
-        $site->setShort('home');
-        $site->setPublished(true);
-        $site->setDateCreated(new \DateTime("now"));
-
-        $manager->persist($site);
-        
         $userAdmin = new User();
         $userAdmin->setDisplayName('Admin');
         $userAdmin->setEmail('test@zeega.org');
@@ -29,7 +21,6 @@ class LoadUserData implements FixtureInterface
         $userAdmin->setPlainPassword(mt_rand());
         $userAdmin->setSuperAdmin(true);
         $userAdmin->setUserType("User");
-        $userAdmin->addSite($site);
 
         $manager->persist($userAdmin);
 
