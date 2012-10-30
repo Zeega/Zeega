@@ -37,3 +37,7 @@
     rabbitmq_vhost    =
     rabbitmq_user     =
     rabbitmq_password =
+
+    queueing_enabled  = false
+
+    static_host       = http://static.zeega.org/staging/
