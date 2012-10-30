@@ -2,11 +2,6 @@ parameters:
 #    zeega_core.example.class: Zeega\CoreBundle\Example
 
 services:
-    zeega_user.registration.form.type:
-        class: Zeega\UserBundle\Form\Type\RegistrationFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: zeega_user_registration }
     zeega.twig.extension.header:
         class: Zeega\CoreBundle\Twig\Extensions\HeaderTwigExtension
         arguments:
@@ -15,12 +10,20 @@ services:
               session: "@session"
         tags:
             - { name: twig.extension }
+
     zeega_queue:
         class: Zeega\CoreBundle\Service\QueueingService
         arguments: 
             security: "@security.context"
             doctrine: "@doctrine"
             rabbitmq: "@old_sound_rabbit_mq.celery_task_producer"
+
+    zeega_thumbnail:
+        class: Zeega\CoreBundle\Service\ThumbnailService
+        arguments: 
+            doctrine: "@doctrine"
+            service_container: "@service_container"
+
     zeega_response_listener:
         class: Zeega\CoreBundle\Listener\CoreResponseListener
         arguments:
