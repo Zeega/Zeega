@@ -8,9 +8,8 @@ use FOS\UserBundle\Entity\User as BaseUser;
 /**
  * Zeega\DataBundle\Entity\User
  */
- 
- class User extends BaseUser
- {
+class User extends BaseUser
+{
     /**
      * @var integer $id
      */
@@ -19,64 +18,59 @@ use FOS\UserBundle\Entity\User as BaseUser;
     /**
      * @var string $display_name
      */
-    protected $display_name;
+    private $display_name;
 
     /**
-     * @var text $bio
+     * @var string $bio
      */
-    protected $bio;
+    private $bio;
 
     /**
      * @var string $thumb_url
      */
-    protected $thumb_url;
+    private $thumb_url;
 
     /**
-     * @var datetime $created_at
+     * @var \DateTime $created_at
      */
-    protected $created_at;
+    private $created_at;
 
     /**
      * @var string $user_type
      */
-    protected $user_type;
+    private $user_type;
 
     /**
      * @var string $location
      */
-    protected $location;
+    private $location;
 
     /**
      * @var float $location_latitude
      */
-    protected $location_latitude;
+    private $location_latitude;
 
     /**
      * @var float $location_longitude
      */
-    protected $location_longitude;
+    private $location_longitude;
 
     /**
      * @var string $background_image_url
      */
-    protected $background_image_url;
+    private $background_image_url;
 
     /**
      * @var string $dropbox_delta
      */
-    protected $dropbox_delta;
+    private $dropbox_delta;
 
     /**
-     * @var Zeega\DataBundle\Entity\Site
+     * @var string $idea
      */
-    protected $sites;
+    private $idea;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->sites = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Get id
      *
@@ -91,10 +85,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set display_name
      *
      * @param string $displayName
+     * @return User
      */
     public function setDisplayName($displayName)
     {
         $this->display_name = $displayName;
+    
+        return $this;
     }
 
     /**
@@ -110,17 +107,20 @@ use FOS\UserBundle\Entity\User as BaseUser;
     /**
      * Set bio
      *
-     * @param text $bio
+     * @param string $bio
+     * @return User
      */
     public function setBio($bio)
     {
         $this->bio = $bio;
+    
+        return $this;
     }
 
     /**
      * Get bio
      *
-     * @return text 
+     * @return string 
      */
     public function getBio()
     {
@@ -131,10 +131,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set thumb_url
      *
      * @param string $thumbUrl
+     * @return User
      */
     public function setThumbUrl($thumbUrl)
     {
         $this->thumb_url = $thumbUrl;
+    
+        return $this;
     }
 
     /**
@@ -150,17 +153,20 @@ use FOS\UserBundle\Entity\User as BaseUser;
     /**
      * Set created_at
      *
-     * @param datetime $createdAt
+     * @param \DateTime $createdAt
+     * @return User
      */
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
+    
+        return $this;
     }
 
     /**
      * Get created_at
      *
-     * @return datetime 
+     * @return \DateTime 
      */
     public function getCreatedAt()
     {
@@ -171,10 +177,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set user_type
      *
      * @param string $userType
+     * @return User
      */
     public function setUserType($userType)
     {
         $this->user_type = $userType;
+    
+        return $this;
     }
 
     /**
@@ -191,10 +200,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set location
      *
      * @param string $location
+     * @return User
      */
     public function setLocation($location)
     {
         $this->location = $location;
+    
+        return $this;
     }
 
     /**
@@ -211,10 +223,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set location_latitude
      *
      * @param float $locationLatitude
+     * @return User
      */
     public function setLocationLatitude($locationLatitude)
     {
         $this->location_latitude = $locationLatitude;
+    
+        return $this;
     }
 
     /**
@@ -231,10 +246,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set location_longitude
      *
      * @param float $locationLongitude
+     * @return User
      */
     public function setLocationLongitude($locationLongitude)
     {
         $this->location_longitude = $locationLongitude;
+    
+        return $this;
     }
 
     /**
@@ -251,10 +269,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set background_image_url
      *
      * @param string $backgroundImageUrl
+     * @return User
      */
     public function setBackgroundImageUrl($backgroundImageUrl)
     {
         $this->background_image_url = $backgroundImageUrl;
+    
+        return $this;
     }
 
     /**
@@ -271,10 +292,13 @@ use FOS\UserBundle\Entity\User as BaseUser;
      * Set dropbox_delta
      *
      * @param string $dropboxDelta
+     * @return User
      */
     public function setDropboxDelta($dropboxDelta)
     {
         $this->dropbox_delta = $dropboxDelta;
+    
+        return $this;
     }
 
     /**
@@ -288,57 +312,25 @@ use FOS\UserBundle\Entity\User as BaseUser;
     }
 
     /**
-     * Add sites
-     *
-     * @param Zeega\DataBundle\Entity\Site $sites
-     */
-    public function addSite(\Zeega\DataBundle\Entity\Site $sites)
-    {
-        $this->sites[] = $sites;
-    }
-
-    /**
-     * Get sites
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSites()
-    {
-        return $this->sites;
-    }
-    /**
-     * @var text $idea
-     */
-    private $idea;
-
-
-    /**
      * Set idea
      *
-     * @param text $idea
+     * @param string $idea
+     * @return User
      */
     public function setIdea($idea)
     {
         $this->idea = $idea;
+    
+        return $this;
     }
 
     /**
      * Get idea
      *
-     * @return text 
+     * @return string 
      */
     public function getIdea()
     {
         return $this->idea;
-    }
-
-    /**
-     * Remove sites
-     *
-     * @param Zeega\DataBundle\Entity\Site $sites
-     */
-    public function removeSite(\Zeega\DataBundle\Entity\Site $sites)
-    {
-        $this->sites->removeElement($sites);
     }
 }

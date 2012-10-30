@@ -106,7 +106,6 @@ class PersistCommand extends ContainerAwareCommand
         $item->setUser($user);
         $item->setIngestedBy($ingestor);
         
-        if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
         if(isset($description)) $item->setDescription($description);
         if(isset($text)) $item->setText($text);
