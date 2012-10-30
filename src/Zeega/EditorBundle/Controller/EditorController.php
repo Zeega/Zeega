@@ -115,7 +115,7 @@ class EditorController extends BaseController
 
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
-		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId(), $site->getId());
+		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId());
 		
 		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
 				'projecttitle'   => $project->getTitle(),

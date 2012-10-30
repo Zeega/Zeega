@@ -105,7 +105,6 @@ class SearchController extends BaseController
         $request = $this->getRequest();
 
 	    $userId = $request->query->get('user');
-		$siteId = $request->query->get('site');
 		$collection_id  = $request->query->get('collection');
 		$minDateTimestamp = $request->query->get('min_date');
 		$maxDateTimestamp = $request->query->get('max_date');
@@ -348,7 +347,6 @@ class SearchController extends BaseController
         		
 		//  search specific parameters
 		$query["userId"]        = $request->query->get('user');      //  int
-		$query["siteId"]  = $request->query->get('site'); //  int
 		$query["queryString"]   = $request->query->get('q');         //  string
 		$query["contentType"]   = $request->query->get('content');   //  string
 		$query["collection_id"]  = $request->query->get('collection');//  string
@@ -536,7 +534,6 @@ class SearchController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
 	    $request = $this->getRequest();
 	    $userId = $request->query->get('user');      //  int
-		$siteId = $request->query->get('site'); //  int
 
 		$returnItems = $request->query->get('r_items');
 		$returnCollections = $request->query->get('r_collections');
@@ -550,7 +547,7 @@ class SearchController extends BaseController
 		if($returnCollections)
 		{
 			if(isset($userId) && $userId != -1)
-		    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,$siteId,100,0);
+		    	$collections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findCollections($userId,100,0);
 		    else
 				$collections = array();		    		
 
@@ -559,7 +556,7 @@ class SearchController extends BaseController
 		
 		if($returnItems)
 		{
-	    	$items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItems($userId,$siteId,100,0);
+	    	$items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserItems($userId,100,0);
 	    	$results['items'] = $items;
 		}
 		$response = ResponseHelper::getJsonResponse($results);

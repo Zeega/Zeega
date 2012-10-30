@@ -55,50 +55,6 @@ class ItemsController extends BaseController
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
     
-    //  get_collections GET    /api/items.{_format}
-    public function getItemsFilterAction()
-    {
-        $request = $this->getRequest();
-        
-        $page  = $request->query->get('page');          //  string
-        $limit = $request->query->get('limit');         //  string
-        $user = $request->query->get('user');           //  string
-        $content = $request->query->get('content');     //  string
-        $site = $request->query->get('site');     //  string
-        $excludeContent = $request->query->get('exclude_content');     //  string
-        $loadChildItems = $request->query->get('load_children');     //  string
-        
-        $query = array();
-
-        if(isset($page))                    $query['page'] = $page;
-        if(isset($limit))                   $query['limit'] = $limit;
-        if(isset($loadChildItems))          $query['load_children'] = $loadChildItems;
-        if(isset($content))                 $query['content'] = $content;
-        if(isset($excludeContent))          $query['exclude_content'] = $excludeContent;
-        if(isset($site))                    $query['site'] = $site;
-
-        if(!isset($page))                   $query['page'] = 0;
-        if(!isset($limit))                  $query['limit'] = 100;
-        if(!isset($loadChildItems))         $query['load_children'] = false;
-        
-        if(isset($user))
-        {
-            if($user == -1) 
-            {
-                $user = $this->get('security.context')->getToken()->getUser();
-                $query['user'] = $user->getId();
-            }
-            else
-            {
-                $query['user'] = $user;
-            }
-        }
-         //  execute the query
-        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findItems($query,false);
-        
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults["items"], 'items_count' => $queryResults["total_items"]));        
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
@@ -519,28 +475,8 @@ class ItemsController extends BaseController
         $user_id = $request_data->get('user_id');
         
         $session = $this->getRequest()->getSession();
-        $site = $session->get('site');
-        if(isset($site))
-        {
-            $site = $em->getRepository('ZeegaDataBundle:Site')->find($site->getId());
-        }
         
-        if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
-            if(!isset($site) && isset($user))
-            {
-                $sites = $user->getSites();
-                if(isset($sites) && count($sites) > 0)
-                {
-                    $site = $sites[0];
-
-                }
-                else
-                {
-                    $site = $em->getRepository('ZeegaDataBundle:Site')->findOneByShort('home');
-                }
-            }
-        } else if(isset($user_id) && $user_id == 760) {
+        if(isset($user_id) && $user_id == 760) {
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($user_id);
         }
         
@@ -567,7 +503,6 @@ class ItemsController extends BaseController
         $dateUpdated = new \DateTime("now");
         $item->setDateUpdated($dateUpdated);
         
-        if(isset($site)) $item->setSite($site); 
         if(isset($title)) $item->setTitle($title);
         if(isset($description)) $item->setDescription($description);
         if(isset($text)) $item->setText($text);
@@ -676,7 +611,6 @@ class ItemsController extends BaseController
                     
                     $childItem = new Item();
                     
-                    $childItem->setSite($site);     
                     $childItem->setTitle($newItem['title']);
                     $childItem->setDescription($newItem['description']);
                     $childItem->setMediaType($newItem['media_type']);

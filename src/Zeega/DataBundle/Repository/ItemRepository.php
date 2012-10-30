@@ -45,12 +45,6 @@ class ItemRepository extends EntityRepository
 			   ->setParameter(2,$query['userId']);
 		}
 		
-		if(isset($query['siteId']))
-      	{
-			$qb->andWhere('i.site_id = :site')
-			   ->setParameter('site',$query['siteId']);
-		}
-		
 		if(isset($query['collection_id']))
       	{
 			 $qb->innerjoin('i.parent_items', 'c')
@@ -349,7 +343,7 @@ class ItemRepository extends EntityRepository
 			   ->getArrayResult();
     }
 	
-	public function findUserCollections($userId,$siteId)
+	public function findUserCollections($userId)
  	{
  		$rsm = new ResultSetMapping;
 		$rsm->addEntityResult('ZeegaDataBundle:Item', 'i');
@@ -357,7 +351,7 @@ class ItemRepository extends EntityRepository
 		$rsm->addFieldResult('i', 'title', 'title');
 
 		$queryString = "SELECT id,title
-						FROM item where media_type = 'Collection' AND enabled = 'true' AND site_id = :site_id AND user_id = :user_id 
+						FROM item where media_type = 'Collection' AND enabled = 'true' AND user_id = :user_id 
 						ORDER BY id DESC LIMIT :limit OFFSET :offset";
 						
 		$queryString = str_replace("\r\n","",$queryString);
@@ -366,7 +360,6 @@ class ItemRepository extends EntityRepository
 
 		$query->setParameter('limit', 100);
 		$query->setParameter('offset', 0);
-		$query->setParameter('site_id', $siteId);
 		$query->setParameter('user_id', $userId);
 
 		return $query->getArrayResult();
@@ -386,12 +379,6 @@ class ItemRepository extends EntityRepository
             $qbCount->andwhere('i.user_id = :user_id')->setParameter('user_id',$query["user"]);
         }
         
-        if(isset($query["site"]))
-		{
-			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
-			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$query["site"]);
-		}
-		
         if(isset($query["content"]))
         {
             // there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
@@ -428,12 +415,6 @@ class ItemRepository extends EntityRepository
             }
         }
         
-		if(isset($siteId))
-		{
-			$qb->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
-			$qbCount->andwhere('i.site_id = :site_id')->setParameter('site_id',$siteId);
-		}
-        //return $qb->getQuery();
 	    $results = array();
 	    $results["items"] = $qb->getQuery()->getResult();
 		
@@ -453,7 +434,7 @@ class ItemRepository extends EntityRepository
 	}
 	
 	
-    public function findCollections($userId,$siteId,$limit,$offset)
+    public function findCollections($userId, $limit, $offset)
  	{
  		// there's a limitation on PostgreSQL 9.1 - the Collection parameter needs to remain hardcoded
  		// see http://stackoverflow.com/questions/10825444/postgres-query-is-very-slow-when-using-a-parameter-instead-of-an-hardcoded-strin/10828675#10828675
@@ -465,10 +446,8 @@ class ItemRepository extends EntityRepository
 		   ->where('i.user_id = :user_id')
 		   ->andwhere('i.media_type = :media_type')
 		   ->andwhere('i.enabled = true')
-		   ->andwhere('i.site_id = :site_id')
 		   ->setParameter('user_id',$userId)
-		   ->setParameter('media_type','Collection')
-		   ->setParameter('site_id',$siteId);
+		   ->setParameter('media_type','Collection');
 
             // execute the query
         return $qb->getQuery()->getArrayResult();
