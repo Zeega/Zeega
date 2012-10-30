@@ -83,8 +83,6 @@
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
 
-			{% if site  %} sessionStorage.setItem('siteid','{{site.getId()}}'); {% endif %}
-			
 			
 {% block browser_detection %}
 var BrowserDetect = {
@@ -263,16 +261,6 @@ var BrowserDetect = {
 									<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li><br>
 								{% endif %}
 								
-						
-								<!--
-								<li class="">
-									<a href="{{ path('ZeegaEditorBundle_site', {'short': site.short }) }}">{{title}}</a>
-								</li>
-								-->				
-
-							
-
-							
 							</ul>
 							
 							<ul class="nav pull-right">
@@ -283,12 +271,12 @@ var BrowserDetect = {
 									</a>
 									<ul class="dropdown-menu">
 										
-										<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='zicon-new-document'></i> New Project</a></li>
+										<li><a class="new-project" href="{{path('ZeegaEditorBundle_new')}}"><i class='zicon-new-document'></i> New Project</a></li>
 										<li class="divider"></li>
 										
 										{% for project in myprojects %}
 										<li>
-											<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a>
+											<a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id}) }}">{{project.title}}</a>
 										</li>
 										{% endfor %}
 										

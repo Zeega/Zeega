@@ -82,8 +82,6 @@
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
-
-			{% if site  %} sessionStorage.setItem('siteid','{{site.getId()}}'); {% endif %}
 			
 			
 {% block browser_detection %}

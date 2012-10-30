@@ -29,38 +29,21 @@ class HeaderTwigExtension extends \Twig_Extension
             $user = $this->securityContext->getToken()->getUser();
     		if(isset($user) && $user != "anon.")
     		{
-    		    $sites = $user->getSites();
-    		    
-    		    $session = $this->session;
-        		$currentSite = $session->get('site');
-                
-                if(!isset($currentSite))
-                {
-            	    $currentSite = $sites[0];
-                }
-				if(isset($currentSite))
-				{
-	        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsBySiteAndUser($currentSite->getId(),$user->getId());
+        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findByUser($user->getId());
 
-    	            return array(
-        	            'site' => $currentSite,
-            	        'sites' => $sites,
-        				'title'=>$currentSite->getTitle(),
-        				'short'=>$currentSite->getShort(),
-        				'num_sites'=>count($sites),
-        				'user_id' => $user->getId(),
-        				'myprojects'=> $projects,
-        				'displayname' => $user->getDisplayName(),
-        			);
-        		}
+	            return array(
+    				'title'=>$currentSite->getTitle(),
+    				'short'=>$currentSite->getShort(),
+    				'user_id' => $user->getId(),
+    				'myprojects'=> $projects,
+    				'displayname' => $user->getDisplayName(),
+    			);
     		}
         }
 
         return array(
-            'site' => null,
 			'title' => 'Unknown',
 			'short' => 'Unknown',
-			'num_sites' => 0,
 			'user_id' => -1,
 			'myprojects'=> 'Unknown',
 			'displayname' => 'Unknown'

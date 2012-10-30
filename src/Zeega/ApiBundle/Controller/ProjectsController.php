@@ -337,8 +337,7 @@ class ProjectsController extends BaseController
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
 
-     // `post_site`   [POST] site/{site_id}/project
-    public function postProjectAction($site_id)
+    public function postProjectAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
@@ -348,12 +347,10 @@ class ProjectsController extends BaseController
         {
             $session = $this->getRequest()->getSession();
             $session->set("collection_id", $request->request->get('collection_id'));
-        } 
+        } else {
+            $title='Untitled Project';    
+        }
         
-        else $title='Untitled Project';
-        $site=$this->getDoctrine()
-        ->getRepository('ZeegaDataBundle:Site')
-        ->find($site_id);
         $project= new Project();
         $project->setDateCreated(new \DateTime("now"));
         $project->setEnabled(true);
@@ -368,7 +365,6 @@ class ProjectsController extends BaseController
         $frame->setSequence($sequence);
         $frame->setProject($project);
         $frame->setEnabled(true);
-        $project->setSite($site);
         $project->addUser($user);
         $sequence->setProject($project);
         $sequence->setTitle('Intro Sequence');
