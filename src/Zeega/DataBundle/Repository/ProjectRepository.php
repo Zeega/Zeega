@@ -6,57 +6,25 @@ use Doctrine\ORM\EntityRepository;
 
 class ProjectRepository extends EntityRepository
 {
-    public function findProjectsBySite($id)
+    public function findProjectsByUser($userId,$limit = null,$published = null)
     {
-        $query= $this->getEntityManager()
-				     ->createQueryBuilder()
-				     ->add('select', 'p')
-		             ->add('from', ' ZeegaDataBundle:Project p')
-			         ->innerJoin('p.site', 'g')
-			         ->add('where', 'g.id = :id')
-			         ->andwhere('p.enabled = true')
-			         ->setParameter('id',$id)
-			         ->orderBy('p.id','DESC')
-			         ->getQuery();
-
-		return $query->getArrayResult();
-    }
-     
-    public function findProjectsBySiteAndUser($siteId,$userId)
-    {
-     	$query= $this->getEntityManager()
-				     ->createQueryBuilder()
-				     ->add('select', 'p')
-			   	     ->add('from', 'ZeegaDataBundle:Project p')
-			         ->innerJoin('p.site', 's')
-			         ->join('p.users', 'u')
-			         ->add('where', 'u.id = :userId')
-			         ->andWhere('s.id = :siteId')
-			         ->andwhere('p.enabled = true')
-			         ->setParameters(array('siteId'=>$siteId,'userId'=>$userId))
-				     ->orderBy('p.id','DESC')
-				     ->getQuery();
-				    
-		return $query->getArrayResult();
-     }
-     
-     public function findProjectsByUser($userId,$limit,$published = null)
-     {
-          $qb = $this->getEntityManager()->createQueryBuilder();
-      	  $qb->add('select', 'p')
- 			 ->add('from', 'ZeegaDataBundle:Project p')
-             ->join('p.users', 'u')
-             ->add('where', 'u.id = :userId')
-             ->setParameter('userId',$userId)
-             ->andwhere('p.enabled = true')
-             ->orderBy('p.id','DESC')
-             ->setMaxResults($limit);
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->add('select', 'p')
+			->add('from', 'ZeegaDataBundle:Project p')
+            ->join('p.users', 'u')
+            ->add('where', 'u.id = :userId')
+            ->setParameter('userId',$userId)
+            ->andwhere('p.enabled = true')
+            ->orderBy('p.id','DESC');
  				       
- 		if(null !== $published)
- 		{
+ 		if(null !== $published) {
  	        $qb->andwhere('p.published = :published')->setParameter('published', $published);
  		}
 
+        if(null !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
  		return $qb->getQuery()->getResult();
-      }
+    }
 }

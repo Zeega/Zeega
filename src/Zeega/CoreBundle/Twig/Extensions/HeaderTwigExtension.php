@@ -24,16 +24,15 @@ class HeaderTwigExtension extends \Twig_Extension
     public function getGlobals()
     {
         $securityToken = $this->securityContext->getToken();
+        
         if(isset($securityToken))
         {
             $user = $this->securityContext->getToken()->getUser();
-    		if(isset($user) && $user != "anon.")
-    		{
-        		$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findByUser($user->getId());
+    		if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+            {
+            	$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
 
 	            return array(
-    				'title'=>$currentSite->getTitle(),
-    				'short'=>$currentSite->getShort(),
     				'user_id' => $user->getId(),
     				'myprojects'=> $projects,
     				'displayname' => $user->getDisplayName(),
