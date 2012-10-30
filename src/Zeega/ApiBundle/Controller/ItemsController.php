@@ -258,6 +258,13 @@ class ItemsController extends BaseController
 
         $item = $this->populateItemWithRequestData($requestData);
 
+        $thumbnailService = $this->get('zeega_thumbnail');
+        $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+
+        if(null !== $thumbnail) {
+            $item->setThumbnailUrl($thumbnail);
+        }
+
         $em->persist($item);
         $em->flush();
         
@@ -486,6 +493,7 @@ class ItemsController extends BaseController
     private function populateItemWithRequestData($request_data, $persistChildItems = false)
     {   
         $em = $this->getDoctrine()->getEntityManager(); 
+        $thumbnailService = $this->get('zeega_thumbnail');
         $user = $this->get('security.context')->getToken()->getUser();
         
         $id = $request_data->get('id');
@@ -567,9 +575,18 @@ class ItemsController extends BaseController
         if(isset($attributionUri)) $item->setAttributionUri($attributionUri);
         if(isset($mediaType)) $item->setMediaType($mediaType);
         if(isset($layerType)) $item->setLayerType($layerType);
-        if(isset($thumbnailUrl)) $item->setThumbnailUrl($thumbnailUrl);
+        
         if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
+        
+        if(isset($thumbnailUrl)) {
+            $item->setThumbnailUrl($thumbnailUrl);  
+        } else {
+            $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+            if(null !== $thumbnail) {
+                $item->setThumbnailUrl($thumbnail);
+            }    
+        }
         
         if(isset($mediaDateCreated)) 
         {
@@ -688,13 +705,21 @@ class ItemsController extends BaseController
                             $childItem->setMediaDateCreated(new \DateTime($d));
                         }
                     }
-                    $item->addItem($childItem);
+
+                    if(isset($newItem['thumbnail_url'])) {
+                        $childItem->setThumbnailUrl($newItem['thumbnail_url']);
+                    } else {
+                        $thumbnail = $thumbnailService->getItemThumbnail($childItem->getUri(), $childItem->getMediaType());
+                        if(null !== $thumbnail) {
+                            $childItem->setThumbnailUrl($thumbnail);
+                        }    
+                    }                    
                     
+                    $item->addItem($childItem);
+                                        
                     // persist the child item, get the id and generate a thumbnail
                     $em->persist($childItem);
                     $em->flush();
-                    
-                    $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $childItem->getId()));
                 }
             }
             $item->setChildItemsCount(count($newItems));
