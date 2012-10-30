@@ -59,16 +59,18 @@
 		
     	playProject:function(){
     		
-    			$('#zeega-player-'+this.model.id).remove();
+    			//$('#zeega-player-'+this.model.id).remove();
 				var docElm= document.createElement('iframe');
 				docElm.setAttribute('id','zeega-player-'+this.model.id);
-				document.getElementById('zeega-embed').appendChild(docElm);
+				$(this.el).find('#embed-wrapper').empty().append(docElm);
 				$(docElm).css({width:'0px',height:'0px'});
     			
     		
-    			
-    			
-    			docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +this.model.id);
+    			if(_.isNull(this.model.get("item_id"))) {
+    				docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "project/" + this.model.id + "/preview");
+    			} else {
+    				docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get("item_id"));
+    			}
 					
 				if (docElm.requestFullscreen) docElm.requestFullscreen();
 				else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
@@ -111,6 +113,7 @@
 									
 								'</div>'+
 								'<div class="gradient" style="top:-176px;"></div>'+
+								'<div id="embed-wrapper"></div>'+
 							'</div>'+
 							
 							
