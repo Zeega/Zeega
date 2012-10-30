@@ -37,21 +37,30 @@ class PublishController extends BaseController
     }
      
     public function projectAction($id)
-    {
-       
+    {       
     	$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-    	
-        if(is_object($project)&&$project->getMediaType()=='project') 
-        {
-            $projectData=$project->getText();
-        }    	
-    	else  //Fallback for existing links
-        {
-            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+
+        if(null !== $project) {
+            if($project->getMediaType()=='project') {
+                $projectData = $project->getText();
+            } else {
+                $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();    
+            }
+        } else {
+            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+
+            if(null !== $project) {
+                $publishedProjectId = $project->getItemId();
+
+                if(null !== $publishedProjectId) {
+                    $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($publishedProjectId);
+                    $projectData = $project->getText();
+                }
+            }
         }
 
         return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
-           	'project'=>$project,
+            'project'=>$project,
             'project_data' => $projectData,
         ));
     }
