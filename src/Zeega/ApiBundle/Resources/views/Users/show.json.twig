@@ -15,7 +15,7 @@
 	,"projects":
 	[
 		{% for project in projects %}
-			{% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %}	
+			{% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project, 'editable': editable} %}	
 			{%- if loop.index0 < projects|length - 1 -%}
 			,
 			{%- endif -%}

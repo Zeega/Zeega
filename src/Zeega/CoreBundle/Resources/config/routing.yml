@@ -1,7 +1,3 @@
-ZeegaCoreBundle_celery:
-  pattern: /celery/queue
-  defaults: { _controller: ZeegaCoreBundle:Celery:queue }
-
 ZeegaCoreBundle_faq:
     pattern: /faq
     defaults: { _controller:  ZeegaCoreBundle:Core:faq }

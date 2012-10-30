@@ -14,7 +14,7 @@
     "estimated_time" : {{ project.getEstimatedTime() | default("Some time") | json_encode | raw}},
     "description" : {{ project.getDescription() | default("") | json_encode | raw}},
     "location" : {{ project.getLocation() | default("") | json_encode | raw}},
-    "item_id" : {{ project.getItemId() | default("") | json_encode | raw}},
+    "item_id" : {{ project.getItemId() | default("") }},
     "published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}}
 	{% if sequences is defined %}

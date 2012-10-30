@@ -99,7 +99,7 @@
 								{
 									html+=
 								'<div class="admin-actions btn-group">'+
-									'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'site/home/project/'+ this.model.id+'"><i class="icon-pencil icon-white"></i> edit</a>'+
+									'<a class="btn btn-mini btn-inverse edit community-edit-button" href="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'projects/'+ this.model.id+'"><i class="icon-pencil icon-white"></i> edit</a>'+
 									'<a class="btn btn-mini btn-danger community-edit-button project-delete" href="#" ><i class="icon-remove-circle icon-white"></i> delete</a>'+
 								'</div>';
 								}
