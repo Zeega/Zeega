@@ -52,12 +52,25 @@ class ItemRepository extends EntityRepository
                 ->setParameter(3, $query['collection_id']);
 		}
 		
-		if(isset($query['notContentType']))
-      	{
-      	    $content_type = strtoupper($query['notContentType']);
-
-      	  	$qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', ucfirst($query['notContentType']));
-		}
+		if(isset($query['notContentType'])) {
+            if(is_array($query['notContentType'])) {
+                $mediaTypesToExclude = $query['notContentType'];
+                
+                foreach($mediaTypesToExclude as $mediaType) {
+                    if("project" !== $mediaType) {
+                        $mediaType = ucfirst($mediaType);
+                    }
+                    $qb->andWhere("i.media_type <> :not_content_type_$mediaType")->setParameter("not_content_type_$mediaType", $mediaType);
+                }
+            } else {
+                $mediaType = $query['notContentType'];
+                if("project" !== $mediaType) {
+                    $mediaType = ucfirst($mediaType);
+                }
+                
+                $qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $mediaType);
+            }
+    	}
 		
         if(isset($query["contentType"]))
       	{

@@ -23,9 +23,6 @@ use DateTime;
 /**
 * The SearchController handles database search requests made through the API.
 * 
-*
-* @author James Burns <james@zeega.org>
-* @author Luis Filipe Brandao <filipe@zeega.org>
 */
 class SearchController extends BaseController
 {
@@ -197,7 +194,26 @@ class SearchController extends BaseController
         
         if(isset($contentType) and $contentType != 'All') {     // filter by content type
             $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
-        }   
+        }
+
+        if(isset($notContentType)) {
+            if(is_array($notContentType)) {
+                $mediaTypesToExclude = $notContentType;
+                
+                foreach($mediaTypesToExclude as $mediaType) {
+                    if("project" !== $mediaType) {
+                        $mediaType = ucfirst($mediaType);
+                    }
+                    $query->createFilterQuery("exclude_media_type_$mediaType")->setQuery("-media_type:$mediaType");
+                }
+            } else {
+                $mediaType = $notContentType;
+                if("project" !== $mediaType) {
+                    $mediaType = ucfirst($mediaType);
+                }
+                $query->createFilterQuery("exclude_media_type_$mediaType")->setQuery("-media_type:$mediaType");
+            }
+        }
             
         if($geoLocated > 0) {                                   // return only geo-located items
             $query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
@@ -467,7 +483,7 @@ class SearchController extends BaseController
 	            // populate the results object
 	            if($query['returnItems'] == 1)
 	            {
-	                $query["notContentType"] = 'Collection';
+	                $query["notContentType"] = array('Collection','project');
 	                if($returnIdsOnly)
 	                {
 	                    $items = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItemsId($query);
