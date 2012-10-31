@@ -314,7 +314,7 @@ class ItemsController extends BaseController
                     $childItem->setDateUpdated(new \DateTime("now"));
                     $childItem->setIndexed(false);
                     $item->setIndexed(false);
-                    $item->addItem($childItem);
+                    $item->addChildItem($childItem);
                     
                     if($first == True && !isset($thumbnailUrl))
                     {
@@ -589,7 +589,7 @@ class ItemsController extends BaseController
                     $childItem->setDateUpdated($dateUpdated);
                     $childItem->setIndexed(false);
                 
-                    $item->addItem($childItem);
+                    $item->addChildItem($childItem);
 
                     if($first == True)
                     {
@@ -649,7 +649,7 @@ class ItemsController extends BaseController
                         }    
                     }                    
                     
-                    $item->addItem($childItem);
+                    $item->addChildItem($childItem);
                                         
                     // persist the child item, get the id and generate a thumbnail
                     $em->persist($childItem);

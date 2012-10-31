@@ -88,7 +88,7 @@ class ParserSoundcloudSet extends ParserAbstract
                     	$childItem->setTags($tags);
             		}
             		
-    				$item->addItem($childItem);
+    				$item->addChildItem($childItem);
     			}
     		}
 		}

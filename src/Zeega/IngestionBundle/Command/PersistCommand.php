@@ -159,7 +159,7 @@ class PersistCommand extends ContainerAwareCommand
             foreach($itemArray["child_items"] as $child_item) {
                 $child = self::parseItem($child_item, $user, $ingestor);
                 if(isset($child)) {
-                    $item->addItem($child);    
+                    $item->addChildItem($child);    
                 }
             }
         }

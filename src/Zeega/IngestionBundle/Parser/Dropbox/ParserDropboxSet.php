@@ -157,7 +157,7 @@ class ParserDropboxSet extends ParserAbstract
 				if ($item->getMediaType() == "Image") {
 					$collection->setThumbnailUrl( $item->getThumbnailUrl() );
 				}
-				$collection->addItem($item);
+				$collection->addChildItem($item);
 				$itemCount++;
 				$collection->setChildItemsCount($itemCount);
 			}

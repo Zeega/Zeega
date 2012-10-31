@@ -67,7 +67,7 @@ class ParserTumblr extends ParserAbstract
                             $childItem->setMediaCreatorUsername($results_json -> response -> blog -> name);
                             $childItem->setMediaCreatorRealname($results_json -> response -> blog -> name);
                             $childItem->setTags($currentPost -> tags);
-                            $item->addItem($childItem);
+                            $item->addChildItem($childItem);
                         }
                     }
         			break;

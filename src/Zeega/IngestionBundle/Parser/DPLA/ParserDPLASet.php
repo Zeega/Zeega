@@ -65,7 +65,7 @@ class ParserDPLASet extends ParserAbstract
 				$childItem->setThumbnailUrl('http://dev.zeega.org/dpla/web/images/dpla.jpeg');
 				if(property_exists($entry, "dpla.description"))$childItem->setDescription((string)$entry->{"dpla.description"}[0]);
 				if(property_exists($entry, "dpla.subject"))$childItem->setTags((array)$entry->{"dpla.subject"});
-				$item->addItem($childItem);
+				$item->addChildItem($childItem);
 			}
 		}
 	

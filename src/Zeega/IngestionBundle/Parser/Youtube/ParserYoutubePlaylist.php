@@ -85,7 +85,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 			{
 				if($access["action"] == "embed" && $access["permission"] == "allowed")
 				{
-					$collection->addItem($item);
+					$collection->addChildItem($item);
 				}
 			}
 		}
