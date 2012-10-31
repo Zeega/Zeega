@@ -312,8 +312,6 @@ class ItemsController extends BaseController
                     }    
                     
                     $childItem->setDateUpdated(new \DateTime("now"));
-                    $childItem->setIndexed(false);
-                    $item->setIndexed(false);
                     $item->addItem($childItem);
                     
                     if($first == True && !isset($thumbnailUrl))
@@ -562,7 +560,6 @@ class ItemsController extends BaseController
         }
         
         $item->setEnabled(true);
-        $item->setIndexed(false);
         
         // new items from the variable "new_items" - used when adding new items to a collection
         $newItems = $request_data->get('new_items');
@@ -587,7 +584,6 @@ class ItemsController extends BaseController
                         throw $this->createNotFoundException('Unable to find Item entity.');
                     }
                     $childItem->setDateUpdated($dateUpdated);
-                    $childItem->setIndexed(false);
                 
                     $item->addItem($childItem);
 

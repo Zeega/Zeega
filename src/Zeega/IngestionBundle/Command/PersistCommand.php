@@ -152,7 +152,6 @@ class PersistCommand extends ContainerAwareCommand
         if(isset($published)) $item->setPublished($published);
         
         $item->setEnabled(true);
-        $item->setIndexed(false);
         $item->setPublished(false);
         
         if(isset($itemArray["child_items"])) {

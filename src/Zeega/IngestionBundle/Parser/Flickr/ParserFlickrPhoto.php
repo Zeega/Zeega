@@ -53,7 +53,7 @@ class ParserFlickrPhoto extends ParserAbstract
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
 			}	
 			//return $sizes;
-			//$item->setThumbnailUrl($sizes['Square']['source']);
+			$item->setThumbnailUrl($sizes['Square']['source']);
 
 			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
