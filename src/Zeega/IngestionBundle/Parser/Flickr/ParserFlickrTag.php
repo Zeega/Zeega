@@ -114,7 +114,6 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setMediaType('Image');
                 $item->setLayerType('Image');
                 $item->setChildItemsCount(0);
-                echo $originalItems;
                 if(TRUE === $checkForDuplicates) {
                     if(FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) {
                         array_push($items,$item);
