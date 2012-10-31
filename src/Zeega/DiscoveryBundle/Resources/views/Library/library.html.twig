@@ -40,10 +40,10 @@
 						<ul class='menu-dropdown'>
 							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
 							<ul class='user-action-menu'>
-								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new', { 'short': site.short })}}"><i class='icon-file'></i> New Project</a></li>
+								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new')}}"><i class='icon-file'></i> New Project</a></li>
 								<li class="divider"></li>
 								{% for project in myprojects %}
-								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id,'short': site.short }) }}">{{project.title}}</a></li>
+								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id }) }}">{{project.title}}</a></li>
 								{% endfor %}
 
 							</ul>
