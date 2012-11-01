@@ -63,21 +63,30 @@ class ParserFlickrSet extends ParserAbstract
 		
 		if($loadCollectionItems == true)
 		{
-		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,100);
-		 	$photos = $setPhotos['photoset']['photo'];
+            $page = 1;
 
-    		if($photos)
-    		{
-    			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
-    			$collection->setChildItemsCount(count($photos));
+            while(1) {
+    		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,500);
+    		 	$photos = $setPhotos['photoset']['photo'];
 
-    			foreach($photos as $photo)
-    			{
-    				$item = $this->itemParser->load(null, array("photo_id" => $photo['id']));
-    				if(isset($item))
-	    				$collection->addChildItem($item["items"][0]);
-    			}
-    		}
+        		if(null === $photos) {
+        			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
+        			$collection->setChildItemsCount(count($photos));
+
+        			foreach($photos as $photo)
+        			{
+        				$item = $this->itemParser->load(null, array("photo_id" => $photo['id']));
+        				if(isset($item))
+    	    				$collection->addChildItem($item["items"][0]);
+        			}
+        		} else {
+                    break;
+                }
+
+                if($page > 10) {
+                    break;
+                }
+            }
 		}
 		
 		return parent::returnResponse($collection, true, true);
