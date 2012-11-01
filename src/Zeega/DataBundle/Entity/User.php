@@ -28,7 +28,7 @@ class User extends BaseUser
     /**
      * @var string $thumb_url
      */
-    private $thumb_url;
+    private $thumb_url = "http://static.zeega.org/community/templates/default_profile.jpeg";
 
     /**
      * @var \DateTime $created_at
