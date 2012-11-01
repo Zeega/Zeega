@@ -214,13 +214,6 @@ class ItemsController extends BaseController
 
         $item = $this->populateItemWithRequestData($requestData);
 
-        $thumbnailService = $this->get('zeega_thumbnail');
-        $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
-
-        if(null !== $thumbnail) {
-            $item->setThumbnailUrl($thumbnail);
-        }
-
         $em->persist($item);
         $em->flush();
         
@@ -513,13 +506,14 @@ class ItemsController extends BaseController
         if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
         
         if(isset($thumbnailUrl)) {
-            $item->setThumbnailUrl($thumbnailUrl);  
+            $thumbnail = $thumbnailService->getItemThumbnail($thumbnailUrl, "Image");
         } else {
             $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
-            if(null !== $thumbnail) {
-                $item->setThumbnailUrl($thumbnail);
-            }    
         }
+
+        if(null !== $thumbnail) {
+            $item->setThumbnailUrl($thumbnail);
+        }    
         
         if(isset($mediaDateCreated)) 
         {
@@ -635,6 +629,16 @@ class ItemsController extends BaseController
                             $childItem->setMediaDateCreated(new \DateTime($d));
                         }
                     }
+
+                    if(isset($thumbnailUrl)) {
+                        $thumbnail = $thumbnailService->getItemThumbnail($thumbnailUrl, "Image");
+                    } else {
+                        $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+                    }
+
+                    if(null !== $thumbnail) {
+                        $item->setThumbnailUrl($thumbnail);
+                    }    
 
                     if(isset($newItem['thumbnail_url'])) {
                         $childItem->setThumbnailUrl($newItem['thumbnail_url']);

@@ -53,7 +53,7 @@ class ParserYoutubeVideo extends ParserAbstract
 		$item->setMediaType('Video');
 		$item->setLayerType('Youtube');
 		$item->setChildItemsCount(0);
-		$item->setThumbnailUrl($entry["media\$group"]["media\$thumbnail"][0]["url"]);
+		$item->setThumbnailUrl($entry["media\$group"]["media\$thumbnail"][2]["url"]);
 		
 		$categories = $entry["category"];
         if(isset($categories)) 
