@@ -146,7 +146,6 @@ class ProjectsController extends BaseController
 				$item->setArchive("zeega");
 				$item->setMediaCreatorUsername($user->getUsername());
 				$item->setPublished(1);
-				//$item->setIndexed(false);
 				$item->setAttributionUri("http://beta.zeega.org/");
 				$item->setEnabled(true);
 				$em->persist($item);

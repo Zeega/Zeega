@@ -28,18 +28,14 @@
 			this.$el.find('#add-item').click(function(){
 			    $(this).fadeOut();
 
+			    $('#begin-message').html("Adding media to Zeega.");
+			    var errorMessage = 'Unable to add Media to your Zeega Collection';
+
 			    if(media_type == 'Collection')
 			    {
-					$('#begin-message').html("Adding media to Zeega.")
-								 .append('<br />')
-								 .append('This might take a while if you are importing several items. You can close the Zeega bookmarklet and continue to browse the web while the items are being imported.')
-								 .append('<br />')
-								 .append('Currently, we only import the first 100 items of a set.').fadeIn('fast');
+					errorMessage = "Your media was added to Zeega and is being processed. It might take a few minutes before you can see it on the editor."
 				}
-				else
-				{
-					$('#begin-message').html("Adding media to Zeega.");
-				}
+
 				var itemType = item.get("media_type");
 				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
 				item.set({id : null});
@@ -58,7 +54,7 @@
 				 	    $('#message').fadeIn('fast');
 				 	},
 				 	error: function(model, response){
-	        		    $('#begin-message').html('Unable to add Media to your Zeega Collection').fadeIn();
+	        		    $('#begin-message').html(errorMessage).fadeIn();
 				 	}
 				});
 				console.log(zeegaWidget);
