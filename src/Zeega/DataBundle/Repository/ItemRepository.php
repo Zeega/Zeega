@@ -185,11 +185,11 @@ class ItemRepository extends EntityRepository
 	      	$sort = $query['sort'];
       	 	if($sort == 'date-desc')
             {
-                $qb->orderBy('i.media_date_created','DESC')->groupBy("i.id");
+                $qb->orderBy('i.date_created','DESC')->groupBy("i.id");
             }
             else if($sort == 'date-asc')
             {
-                $qb->orderBy('i.media_date_created','ASC')->groupBy("i.id");
+                $qb->orderBy('i.date_created','ASC')->groupBy("i.id");
             }
 			else
 			{
