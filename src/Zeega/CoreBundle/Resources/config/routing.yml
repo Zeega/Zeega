@@ -22,6 +22,10 @@ ZeegaCoreBundle_project_main:
     pattern: /{id}
     defaults: { _controller:  ZeegaCoreBundle:Publish:project }
 
+ZeegaCoreBundle_project_oldview:
+    pattern: /{id}/view
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
+
 ZeegaCoreBundle_project_preview:
     pattern: /projects/{id}/preview
     defaults: { _controller:  ZeegaCoreBundle:Publish:projectPreview }
