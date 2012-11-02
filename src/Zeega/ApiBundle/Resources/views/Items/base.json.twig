@@ -18,8 +18,12 @@
         "username" : {{ item.user.username | default("") | json_encode | raw }},
         "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
         "title" : {{ item.title | default("") | json_encode | raw}},
-        "description" : {{ item.description | default("") | json_encode | raw}},
-		"text" : {{ item.text | default("") | json_encode | raw}},
+        "description" : {{ item.description | default("") | json_encode | raw}},		
+		{% if item.text is defined and item.mediatype == 'project' %}
+			"text" : {{ item.text | raw}},
+		{% else %}
+			"text" : {{ item.text | default("") | json_encode | raw}},
+		{% endif %}
 		"uri" : {{ item.uri | default("") | json_encode | raw}},
 		"attribution_uri" : {{ item.attributionuri | default("") | json_encode | raw}},
 		"date_created" : "{{ item.datecreated | date("Y-m-d") }}",
