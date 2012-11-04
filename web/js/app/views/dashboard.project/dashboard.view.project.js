@@ -1,14 +1,11 @@
 	(function(Dashboard) {
 
 	Dashboard.Projects = Dashboard.Projects || {};
-	Dashboard.Projects.Views = Dashboard.Projects || {};
+	Dashboard.Projects.Views = Dashboard.Projects.Views || {};
 	
 	Dashboard.Projects.Views.Project = Backbone.View.extend({
 		
 		className : 'project-card span7',
-		
-		loaded:false,
-		
 		events: {
 			'click .project-delete':'deleteProject'
 		},
@@ -16,13 +13,9 @@
 		render: function(done)
 		{
 			var blanks = this.model.attributes;
-			if (blanks['cover_image'] === ""){
-				blanks['cover_image'] = 'http://static.zeega.org/community/templates/default_project_cover.png';
-			}
-			
+			if (blanks['cover_image'] === "")blanks['cover_image'] = 'http://static.zeega.org/community/templates/default_project_cover.png';
 			if(_.isNull(this.model.get('item_id'))) blanks['view_url']= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'projects/' +this.model.id + '/preview';
 			else blanks['view_url']=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('item_id') + '/view';
-
 
 			$(this.el).html( _.template( this.getTemplate(), blanks ) );
 
@@ -36,7 +29,6 @@
 						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'api/projects/'+this.model.id,
 						type: 'DELETE',
 						success: function(){
-						console.log('done');
 					}
 				});
 			}
