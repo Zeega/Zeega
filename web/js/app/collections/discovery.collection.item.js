@@ -11,16 +11,15 @@
 				_.extend(this,options);
 				this.on('preview_item',this.previewItem,this);
 		},
-		url : function(){ 	
+		url : function(){
 			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id+'/items';
-			
 			return url;
 		},
 		parse : function(response)
 		{
 			if (response.items)
 				return response.items;
-			else 
+			else
 				return response;
 		},
 		previewItem : function(itemID)
@@ -29,7 +28,7 @@
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
 			$('body').append(viewer.render().el);
 			viewer.renderItemView();
-		},
+		}
 		
 	});
 	
@@ -78,21 +77,21 @@
 			if( !_.isUndefined(this.query.r_itemswithcollections) ) url += '&r_itemswithcollections=' + this.query.r_itemswithcollections;
 			if( !_.isUndefined(this.query.r_collections) ) url += '&r_collections=' + this.query.r_collections;
 			if( !_.isUndefined(this.query.times)&&!_.isNull(this.query.times) ){
-			    if( !_.isUndefined(this.query.times.start) ) url += '&min_date=' + this.query.times.start;
-			    if( !_.isUndefined(this.query.times.end) ) url += '&max_date=' + this.query.times.end;
-	     	};
-	     	url += '&user=-1';
-	     	//if( !_.isUndefined(this.query.user) && this.query.user>=-1&& this.query.user!="") url += '&user=' + this.query.user;
-	     	//if( !_.isUndefined(this.query.username) &&  !_.isNull(this.query.username) &this.query.username.length > 0) url += '&username=' + this.query.username;
-	     	if(zeega.discovery.app.currentView=='event') url+='&geo_located=1';
-	    
+				if( !_.isUndefined(this.query.times.start) ) url += '&min_date=' + this.query.times.start;
+				if( !_.isUndefined(this.query.times.end) ) url += '&max_date=' + this.query.times.end;
+			}
+			url += '&user=-1';
+			//if( !_.isUndefined(this.query.user) && this.query.user>=-1&& this.query.user!="") url += '&user=' + this.query.user;
+			//if( !_.isUndefined(this.query.username) &&  !_.isNull(this.query.username) &this.query.username.length > 0) url += '&username=' + this.query.username;
+			if(zeega.discovery.app.currentView=='event') url+='&geo_located=1';
+
 			console.log('query url: '+ url);
 			return url;
 		},
 	
 		setQuery : function(obj, reset)
 		{
-			console.log('items.collection.setquery',this.query,obj)
+			console.log('items.collection.setquery',this.query,obj);
 			if(reset){
 				this.query = { r_tags:1,page:1,sort:"date-desc" };
 				if(_.isNumber(obj.collection)||_.isNumber(obj.user)) {
@@ -104,7 +103,7 @@
 				if(_.isNumber(obj.user)) this.query.r_collections=1;
 			}
 			
-			_.extend(this.query,obj)
+			_.extend(this.query,obj);
 			
 			console.log(zeega.discovery.app.currentView);
 			if(zeega.discovery.app.currentView=="event") console.log("Range slider values",$("#range-slider").slider( "option", "values" ));
@@ -120,8 +119,8 @@
 		parse : function(response)
 		{
 			this.tags=response.tags;
-			this.count = response.items_count;
-			return response.items;
+			this.count = response.items_and_collections_count;
+			return response.items_and_collections;
 			
 		},
 		
@@ -130,7 +129,7 @@
 			var viewer = new Items.Views.Viewer({collection:this,start:itemID});
 			$('body').append(viewer.render().el);
 			viewer.renderItemView();
-		},
+		}
 		
 	
 	});
