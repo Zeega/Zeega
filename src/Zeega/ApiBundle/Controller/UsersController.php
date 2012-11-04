@@ -93,6 +93,13 @@ class UsersController extends BaseController
 			        $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit);
 				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true, 'projects' => $projects));
 			    }
+			    
+			    else if($this->container->get('security.context')->isGranted('ROLE_ADMIN')) //Allow admin users to view all projects
+			    {
+			        $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit);
+				    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true, 'projects' => $projects));
+			    }
+			    
 			    else
 			    {
 			        $projects = $em->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId(), $limit, true);
