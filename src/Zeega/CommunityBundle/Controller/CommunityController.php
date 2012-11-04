@@ -74,6 +74,10 @@ class CommunityController extends Controller
     {
         return $this->render('ZeegaCommunityBundle:About:news.html.twig');
     }
+	public function featuresAction()
+	 {
+        return $this->render('ZeegaCommunityBundle:About:features.html.twig');
+    }
     
     
     //LEGACY REROUTING –– TO BE MOVED
