@@ -31,10 +31,11 @@ class BookmarkletController extends BaseController
         $request = $this->getRequest();
         $itemUrl = $request->request->get('attribution_uri');
         $mediaType = strtolower($request->request->get('media_type'));
+        $layerType = strtolower($request->request->get('layer_type'));
         $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
 
         if($mediaType == "collection") {
-        	if(TRUE == $isQueueingEnabled) {
+        	if(TRUE == $isQueueingEnabled && $layerType !== "dropbox" && $layerType !== "facebook") {
             	$user = $this->get('security.context')->getToken()->getUser();
             	$queue = $this->get('zeega_queue');
             	$taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"ingestion");            

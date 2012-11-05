@@ -47,7 +47,7 @@
 			var brokenLayers = [];
 			//validate link layers
 			_.each(layerArray, function(layer){
-				if(layer.get('type') == 'Link')
+				if(!_.isUndefined(layer) && layer.get('type') == 'Link')
 				{
 						console.log('link layer broken', layer, layer.get('attr').to_frame,layer.get('attr').from_frame);
 					if( _.isNull(layer.get('attr').to_frame) || _.isNull(layer.get('attr').from_frame) || !zeega.app.project.frames.get(layer.get('attr').to_frame) || !zeega.app.project.frames.get(layer.get('attr').from_frame) )
