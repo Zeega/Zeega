@@ -54,7 +54,7 @@ jQuery(function($)
   
   $('#zeega-view-buttons a').click(function(){ zeega.discovery.app.switchViewTo( $(this).data('goto-view') , false); return false; });
 
-  $('#zeega-search-help').popover({'title':l.jda_searching,'placement':'bottom'});
+ // $('#zeega-search-help').popover({'title':l.jda_searching,'placement':'bottom'});
 
   $('#zeega-content-type').change(function(){
     $('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
