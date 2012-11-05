@@ -12,9 +12,8 @@ class ParserYoutubeTag extends ParserAbstract
 {
 	public function load($url, $parameters = null)
 	{
-	    $regexMatches = $parameters["regex_matches"];
-	    $loadCollectionItems = $parameters["load_video_items"];
 	    $tags = $parameters["tags"];
+	    $user = $parameters["user"];
 	    $checkForDuplicates = (bool) $parameters["check_for_duplicates"];
 
 		$apiUrl = "https://gdata.youtube.com/feeds/api/videos?alt=json&v=2&category=$tags";
@@ -45,7 +44,7 @@ class ParserYoutubeTag extends ParserAbstract
 				if($access["action"] !== "embed" || $access["permission"] !== "allowed") {
 
 					if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($item->getAttributionUri(), $originalItems)) {
+                        if(TRUE === array_key_exists($video["media\$group"]["media\$player"]["url"], $originalItems)) {
                             break;
                         }
                     } 
@@ -56,11 +55,11 @@ class ParserYoutubeTag extends ParserAbstract
 					$item->setTitle($video["title"]["\$t"]);
 					$item->setDescription($video["media\$group"]["media\$description"]["\$t"]);
 					$item->setAttributionUri($video["media\$group"]["media\$player"]["url"]);
-					$item->setMediaDateCreated($entry["published"]["\$t"]);
+					$item->setMediaDateCreated($video["published"]["\$t"]);
 					$item->setDateCreated(new \DateTime("now"));
 					$item->setMediaType('Video');
 					$item->setLayerType('Youtube');
-					$item->setvideoItemsCount(0);
+					$item->setChildItemsCount(0);
 					$item->setThumbnailUrl($video["media\$group"]["media\$thumbnail"][2]["url"]);
 					$item->setArchive("Youtube");
 
