@@ -68,7 +68,7 @@ class ParserSoundcloudSet extends ParserAbstract
     				$childItem->setUri($childItemJson['stream_url']);
     				$childItem->setUri($childItem->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
     				$childItem->setAttributionUri($childItemJson['permalink_url']);
-    				$childItem->setDateCreated(new DateTime((string)$itemJson['created_at']));
+    				$childItem->setMediaDateCreated($itemJson['created_at']);
     				$childItem->setThumbnailUrl($childItemJson['waveform_url']);
     				$childItem->setChildItemsCount(0);
     				$childItem->setLicense($childItemJson['license']);

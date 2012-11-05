@@ -64,6 +64,10 @@ zeega.parsers:
             regex: /http:\/\/(?:www\.)?soundcloud.com.*/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudItem
+        tag_parser:
+            regex: /http:\/\/(?:www\.)?soundcloud.com/impossibleregex/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudTag
     dp.la:
         set_parser:
             regex: /http:\/\/(?:api\.)?dp.la\/.*/

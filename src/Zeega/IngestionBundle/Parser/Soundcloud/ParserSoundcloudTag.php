@@ -19,10 +19,6 @@ class ParserSoundcloudTag extends ParserAbstract
         $user = $parameters["user"]; 
         $originalItems = null;
 
-        $apiUrl = "http://api.soundcloud.com/tracks.json?tags=$tags&consumer_key=".self::$soundcloudConsumerKey;
-        $limit = 50;
-        $page = 1;
-
         if(FALSE !== $checkForDuplicates) {
             $em = $parameters["entityManager"];
             $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserArchive($user->getId(), "SoundCloud");
@@ -38,21 +34,28 @@ class ParserSoundcloudTag extends ParserAbstract
 
         $items = array();
 
+        $apiBaseUrl = "http://api.soundcloud.com/tracks.json?tags=$tags&consumer_key=".self::$soundcloudConsumerKey;
+        $limit = 50;
+        $page = 0;
+
+        
+
         while(1) {
             $offset = $limit * $page;
-            $apiUrl = $apiUrl . "&limit=$limit&offset=$offset";
+            $apiUrl = $apiBaseUrl . "&limit=$limit&offset=$offset";
 
             $itemsJson = file_get_contents($apiUrl,0,null,null);
-            $itemsJson = json_decode($apiUrl,true);
-
-            if(null !== $itemsJson && is_array($itemsJson)) {
+            $itemsJson = json_decode($itemsJson,true);
+            
+            if(null !== $itemsJson && is_array($itemsJson) && count($itemsJson) > 0) {
+                echo ($apiUrl). "\n";    
                 foreach($itemsJson as $itemJson) {
                     if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($item->getAttributionUri(), $originalItems)) {
+                        if(TRUE === array_key_exists($itemJson['permalink_url'], $originalItems)) {
                             continue;
                         }
                     } 
-
+                    
                     $item = new Item();
                     $item->setTitle($itemJson['title']);
                     $item->setDescription($itemJson['description']);
@@ -64,9 +67,9 @@ class ParserSoundcloudTag extends ParserAbstract
                     $item->setUri($itemJson['stream_url']);
                     $item->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
                     $item->setAttributionUri($itemJson['permalink_url']);
-                    $item->setDateCreated(new DateTime((string)$itemJson['created_at']));
+                    $item->setMediaDateCreated($itemJson['created_at']);
                     $item->setThumbnailUrl($itemJson['waveform_url']);
-                    $item->setitemsCount(0);
+                    $item->setChildItemsCount(0);
                     $item->setLicense($itemJson['license']);
                     
                     $tags = $itemJson["tag_list"];                            
@@ -90,6 +93,6 @@ class ParserSoundcloudTag extends ParserAbstract
             }
         }    
 
-        return $this->returnResponse($item, true, true);
+        return $this->returnResponse($items, true, true);
     }
 }
