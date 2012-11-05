@@ -21,7 +21,7 @@
 					
 					success : function(collection, response)
 					{
-						this.render();
+						_this.render();
 					},
 					error : function(collection, response)
 					{
