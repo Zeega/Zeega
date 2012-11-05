@@ -27,7 +27,7 @@
 		render: function(done)
 		{
 			var blanks = this.model.attributes;
-			blanks['view_url']=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('item_id') + '/view';
+			blanks['view_url']=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('id') + '/view';
 			$(this.el).html( _.template( this.getTemplate(), blanks ) );
 
 			return this;
