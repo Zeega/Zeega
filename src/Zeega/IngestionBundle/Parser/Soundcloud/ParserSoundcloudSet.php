@@ -58,7 +58,7 @@ class ParserSoundcloudSet extends ParserAbstract
     			{
     				$childItem = new Item();
 
-    				$childItem->setTitle($childItemJson['permalink']);
+    				$childItem->setTitle($childItemJson['title']);
     				$childItem->setDescription($childItemJson['description']);
     				$childItem->setMediaCreatorUsername($childItemJson['user']['username']);
     				$childItem->setMediaCreatorRealname($childItemJson['user']['username']);

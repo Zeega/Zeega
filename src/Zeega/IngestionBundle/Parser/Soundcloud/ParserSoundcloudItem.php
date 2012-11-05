@@ -40,7 +40,7 @@ class ParserSoundcloudItem extends ParserAbstract
         	$item->setTags($itemTags);
 		}
 
-		$item->setTitle($itemJson['permalink']);
+		$item->setTitle($itemJson['title']);
 
 		$item->setDescription($itemJson['description']);
 
