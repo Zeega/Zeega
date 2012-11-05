@@ -118,7 +118,11 @@ class SearchController extends BaseController
         }                   
 		
         $limit = $request->query->get('limit');                 //  result limit
-        if(!isset($limit) || $limit > 500) {
+        if(!isset($limit)) {
+            $limit = 100;
+        }
+            
+        if($limit > 500) {
             $limit = 500;
         }              
 		
@@ -427,7 +431,7 @@ class SearchController extends BaseController
 		if(!isset($query['page']))                  		$query['page'] = 0;
 		if($query['page'] > 0)                  		    $query['page'] = $query['page'] - 1;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
-		if($query['limit'] > 100) 	                		$query['limit'] = 100;
+		if($query['limit'] > 500) 	                		$query['limit'] = 500;
 	    
 	    if( !isset($query["geo"]["north"]) || !isset($query["geo"]["south"]) ||
 	        !isset($query["geo"]["east"]) || !isset($query["geo"]["west"]))
