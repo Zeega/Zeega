@@ -42,6 +42,12 @@ zeega.parsers:
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Dropbox\ParserDropboxSet
 
+    instagram.com:
+        tag_parser:
+            regex: /instagram-tag-parser/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Instagram\ParserInstagramTag
+
     youtube.com:
         item_parser:
             regex: /https?:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/
