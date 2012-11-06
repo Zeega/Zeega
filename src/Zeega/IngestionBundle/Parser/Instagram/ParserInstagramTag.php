@@ -41,14 +41,26 @@ class ParserInstagramTag extends ParserAbstract
                     $item->setArchive('Instagram');
                     $item->setUri($apiItem['images']['standard_resolution']['url']);
                     $item->setAttributionUri($apiItem['link']);
-                    $item->setMediaDateCreated(DateTime::createFromFormat('U', $apiItem['created_time']));
-                    
+                    $item->setMediaDateCreated(DateTime::createFromFormat('U', $apiItem['created_time']));                    
                     $item->setThumbnailUrl($apiItem['images']['thumbnail']['url']);
                     $item->setIdAtSource($apiItem['id']);
                     
                     $tags = $apiItem["tags"];                            
                     if(isset($tags)) {
                         $item->setTags($tags);
+                    }
+
+                    $location = $apiItem["location"];
+
+                    if(null !== $location && is_array($location)) {
+                    	if(array_key_exists("latitude", $location) && array_key_exists("longitude", $location)) {
+                    		$item->setMediaGeoLatitude($apiItem['location']['latitude']);
+                    		$item->setMediaGeoLongitude($apiItem['location']['longitude']);
+                    	}
+
+                    	if(array_key_exists("name", $location)) {
+                    		$item->setLocation($apiItem['location']['name']);	
+                    	}
                     }
 
                     array_push($items,$item);
