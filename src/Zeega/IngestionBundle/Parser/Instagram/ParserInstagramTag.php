@@ -20,11 +20,24 @@ class ParserInstagramTag extends ParserAbstract
         $user = $parameters["user"]; 
         $originalItems = null;
 
+        $items = array();
+
         $apiUrl = "https://api.instagram.com/v1/tags/$tags/media/recent?access_token=1907240.f59def8.6a53e4264d87413a8e8cd431430b6e94";
         
         $itemsJson = file_get_contents($apiUrl,0,null,null);
 
-        $items = array();
+        if(FALSE !== $checkForDuplicates) { // temp check for duplicates [with duplicated code]. transition to max_id / min_id later.
+            $em = $parameters["entityManager"];
+            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserArchive($user->getId(), "Instagram");
+            
+            if(isset($originalItems)) {
+                $checkForDuplicates = TRUE;
+            } else {
+                $checkForDuplicates = FALSE;    
+            }
+        } else {
+            $checkForDuplicates = FALSE;
+        } 
 
         if(null !== $itemsJson) {            
             $apiItems = json_decode($itemsJson,true);
@@ -32,6 +45,12 @@ class ParserInstagramTag extends ParserAbstract
             if(null !== $apiItems && is_array($apiItems) && array_key_exists("data", $apiItems)) {
 
                 foreach($apiItems["data"] as $apiItem) {
+                	if(TRUE === $checkForDuplicates) {
+                        if(TRUE === array_key_exists($apiItem['link'], $originalItems)) {
+                            continue;
+                        }
+                    } 
+
                     $item = new Item();
                     $item->setTitle($apiItem["caption"]["text"]);
                     $item->setMediaCreatorUsername($apiItem['user']['username']);
