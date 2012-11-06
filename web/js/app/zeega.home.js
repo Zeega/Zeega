@@ -43,13 +43,13 @@ this.zeega.home = {
 		});
 
 		_.each($('.zeega-section'),function(el){
-			console.log($(el).data('id'), 'is the data id');
+			
 			var projectCollection = new Home.Projects.Collection({id:$(el).data('id')});
 			
 			projectCollection.fetch({success:function(collection,response){
 				$(el).find('h2').html(collection.title);
 				_.each(projects.models,function(project){
-					console.log('parsing projects');
+					
 					var view = new Home.Projects.View({model:project});
 					$(el).find('.valign-content').append(view.render().el);
 		

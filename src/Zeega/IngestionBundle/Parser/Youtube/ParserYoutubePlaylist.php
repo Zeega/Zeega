@@ -55,7 +55,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 			$item->setTitle($child["title"]["\$t"]);
 			$item->setDescription($child["media\$group"]["media\$description"]["\$t"]);
 			$item->setAttributionUri($child["media\$group"]["media\$player"]["url"]);
-			$item->setMediaDateCreated($child["updated"]["\$t"]);
+			$item->setMediaDateCreated($child["published"]["\$t"]);
 			$item->setDateCreated(new \DateTime("now"));
 			$item->setMediaType('Video');
 			$item->setLayerType('Youtube');
@@ -77,7 +77,7 @@ class ParserYoutubePlaylist extends ParserAbstract
 				$item->setTags($itemTags);
 			}
 			$item->setMediaCreatorUsername($child["author"][0]["name"]["\$t"]);
-			$item->setMediaCreatorRealname('Unknown');
+			$item->setMediaCreatorRealname($child["author"][0]["name"]["\$t"]);
 			$item->setLicense($child["media\$group"]["media\$license"]["\$t"]);
 
 			$accessControl = $child["yt\$accessControl"];
