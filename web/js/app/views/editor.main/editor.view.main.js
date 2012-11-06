@@ -19,7 +19,7 @@
 			$(window).resize(resizeWindow);
 
 				//detect when zeega comes back in focus and refresh the database
-			window.addEventListener('focus', function(){ zeega.app.refreshDatabase() });
+			window.addEventListener('focus', function(){ zeega.app.refreshDatabase(); });
 
 			$('#search-input').keyup(function(e){
 				switch(e.which)
@@ -31,7 +31,7 @@
 						_this.onSearchEscape();
 						break;
 				}
-			})
+			});
 
 
 			$('#zeega-item-database-list').scroll(function(){
@@ -39,7 +39,7 @@
 				{
 					zeega.app.items.incrementPage();
 				}
-			})
+			});
 
 			zeega.app.items.on('reset', this.updateLayerListsContainerHeight, this);
 
@@ -58,10 +58,10 @@
 		onSearch : function()
 		{
 			var _this = this;
-			if( $('#search-input').val() != '' ) zeega.app.items.search.set({ query : $('#search-input').val() });
+			if( $('#search-input').val() !== '' ) zeega.app.items.search.set({ query : $('#search-input').val(), page:1,add:false });
 			else
 			{
-				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight(); } );
 				zeega.app.items.search.reset({silent:false});
 			}
 		},
@@ -73,7 +73,7 @@
 
 		toggleDatabaseListGrid : function()
 		{
-			console.log('swap grid')
+			console.log('swap grid');
 			this.$('#zeega-item-database-list').toggleClass('grid-view').toggleClass('list-view');
 			if(this.$('#zeega-item-database-list').hasClass('list-view'))
 			{
@@ -96,12 +96,12 @@
 			if( contentFilter != 'reset' )
 			{
 				$('#database-flash').html('filtered by: '+ contentFilter );
-				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() });
+				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight(); });
 				zeega.app.items.search.set('content',contentFilter);
 			}
 			else
 			{
-				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight() } );
+				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight(); } );
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}
@@ -149,12 +149,12 @@
 			if(window.innerWidth > 1200)
 			{
 				$('#zeega-editor-main').addClass('wide-view');
-				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 430px)')
+				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 430px)');
 			}
 			else
 			{
 				$('#zeega-editor-main').removeClass('wide-view');
-				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 300px)')
+				$('#zeega-edit-column').attr( 'style', 'width:-webkit-calc(100% - 300px)');
 			}
 		},
 
@@ -178,7 +178,7 @@
 				height:newHeight +'px',
 
 				'font-size': (newWidth/520) +'em'
-			}
+			};
 
 			$('#zeega-frame-workspace').animate(css);
 		},
