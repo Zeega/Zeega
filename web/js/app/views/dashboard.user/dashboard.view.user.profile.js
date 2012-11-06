@@ -13,7 +13,7 @@
 			'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',
-			'user-new-project':'newProject',
+			'user-new-project':'newProject'
 		},
 		
 		initialize: function () {
@@ -29,10 +29,10 @@
 			/***************************************************************************
 				BG image with one in user profile
 			***************************************************************************/
-			if (!_.isUndefined(this.model.get("background_image_url")) && this.model.get('background_image_url') != '' ){
+			if (!_.isUndefined(this.model.get("background_image_url")) && this.model.get('background_image_url') !=='' ){
 				$('html').css('background-image', 'url('+ this.model.get("background_image_url")+')');
 			} else{
-				$('html').css('background-image', 'url(http://farm5.staticflickr.com/4096/4827587717_c362a1b42e_b.jpg)');	
+				$('html').css('background-image', 'url(http://farm5.staticflickr.com/4096/4827587717_c362a1b42e_b.jpg)');
 			}
 
 			/***************************************************************************
@@ -49,10 +49,15 @@
 			blanks['num_projects'] = blanks['projects'].length;
 			
 			if(blanks['num_projects'] == 1)
-			    blanks['num_projects'] = blanks['num_projects'] + " project";
+				blanks['num_projects'] = blanks['num_projects'] + " project";
 			else
-			    blanks['num_projects'] = blanks['num_projects'] + " projects";
+				blanks['num_projects'] = blanks['num_projects'] + " projects";
             
+            //Should be fixed in database
+			if(_.isUndefined(blanks['thumbnail_url'])||_.isNull(blanks['thumbnail_url'])||blanks['thumbnail_url']==='')blanks['thumbnail_url']="../images/vertov.jpeg";
+			
+			
+			else console.log("there's image data!!!!",blanks);
 			$(this.el).html( _.template( template, blanks ) );
 
 			
@@ -62,7 +67,7 @@
 				_this.fileUpload($(this).attr('id'));
 
 				
-			})
+			});
 			
 
 			return this;
@@ -83,10 +88,10 @@
 				'display_name' : $(this.el).find('.dashboard-name').text(),
 				'bio' : $(this.el).find('.dashboard-bio').text().substring(0,250),
 				'thumbnail_url' : $(this.el).find('.dashboard-profile-photo').attr('src'),
-				'background_image_url' : backgroundImageURL,
+				'background_image_url' : backgroundImageURL
 				 
 				
-			})
+			});
 		},
 		newProject : function(){
 			$('.new-project').trigger('click');
@@ -110,7 +115,7 @@
 		},
 		editMetadata : function()
 		{
-			console.log('edit the metadata!')
+			console.log('edit the metadata!');
 			var _this  = this;
 			
 			this.$el.find('.user-image-upload, .save-data button').show();
@@ -121,7 +126,7 @@
 			
 			
 			
-			return false
+			return false;
 		},
 		
 		fileUpload : function(elementIDName)
@@ -140,28 +145,28 @@
 			if (elementIDName == "user-image-upload-file"){
 				$('.dashboard-profile-photo').fadeTo(500,0.5);
 				$('.profile-image-wrapper').spin('tiny');
-			} 
+			}
 			jQuery.handleError=function(a,b,c,d)
 			{
-				console.log('ERROR UPLOADING',a,b,c,d)
+				console.log('ERROR UPLOADING',a,b,c,d);
 				if (elementIDName == "user-image-upload-file"){
 					$('.dashboard-profile-photo').fadeTo(500,1);
-					$('.profile-image-wrapper').spin(false)
+					$('.profile-image-wrapper').spin(false);
 				}
-				
-				
+
+
 				$('#' + elementIDName).change(function(){
-					console.log('upload image some more!!!!!')
+					console.log('upload image some more!!!!!');
 					_this.fileUpload(elementIDName);
-				})
-				
+				});
+
 			};
-		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
-		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
-		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
+			var phpFileURL = elementIDName == "user-image-upload-file" ?
+			sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
+			sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
-		
-				url:phpFileURL,		
+
+			url:phpFileURL,
 				secureuri:false,
 				fileElementId:elementIDName,
 				dataType: 'json',
@@ -184,9 +189,9 @@
 						}
 						
 						$('#' + elementIDName).change(function(){
-							console.log('upload image some more!!!!!')
+							console.log('upload image some more!!!!!');
 							_this.fileUpload(elementIDName);
-						})
+						});
 						
 					}
 	
@@ -195,7 +200,7 @@
 				{
 					console.log('ERROR!!',e);
 				}
-			})
+			});
 			
 			return false;
 
@@ -205,11 +210,11 @@
 		
 		getTemplate : function()
 		{
-			html = 	'<div class="span3 author-photo dashboard-photo">'+
+			html = '<div class="span3 author-photo dashboard-photo">'+
 						'<div class="profile-image-wrapper">'+
 							'<img src="<%= thumbnail_url %>" alt="author-photo" width="100%" height="100%" class="dashboard-profile-photo">'+
 						'</div>'+
-						'<div class="gradient" style="height:100%">'+
+						'<div class="gradient" style="height:0px">'+
 						'</div>'+
 					
 					'</div>'+
@@ -240,7 +245,7 @@
 								
 							html+=
 							'</div>'+
-						'</div>'+	
+						'</div>'+
 						'<div class="shadow" style="height:162px">'+
 						'</div>'+
 					
@@ -249,10 +254,10 @@
 						if (zeegaDashboard.app.editable){ html+=
 						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
-					 html+='</div>';
+			html+='</div>';
 			
 			return html;
-		},
+		}
 		
 
 	});
