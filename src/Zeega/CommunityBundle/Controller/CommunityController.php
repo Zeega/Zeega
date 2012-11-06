@@ -14,7 +14,7 @@ class CommunityController extends Controller
     
     public function homeAction()
     {
-    	$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 36136))->getContent();
+    	$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 40861))->getContent();
         return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('projects' => $projects));
     }
     
@@ -73,6 +73,10 @@ class CommunityController extends Controller
     public function newsAction()
     {
         return $this->render('ZeegaCommunityBundle:About:news.html.twig');
+    }
+	public function featuresAction()
+	 {
+        return $this->render('ZeegaCommunityBundle:About:features.html.twig');
     }
     
     

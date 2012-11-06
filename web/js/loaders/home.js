@@ -14,7 +14,7 @@ require.config({
 			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
 			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
 		}
-})
+});
 
 require(
 	[
@@ -30,17 +30,14 @@ require(
 	'order!app/zeega.home',
 	
 	//mvc
-	//'order!app/models/dashboard.model.user',
-	'order!app/models/dashboard.model.project',
-	'order!app/collections/dashboard.collections.project',
-	'order!app/views/dashboard.project/dashboard.view.project',
+	'order!app/views/home.project/home.view.project',
 	
 	'order!ux/zeega.ux.header',
 
 	'order!app/index.home'
-    ], 
+    ],
 	function($) {
-		console.log('files loaded')
+		
 		
 	}
 );

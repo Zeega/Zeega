@@ -7,9 +7,8 @@ jQuery(function($)
 
 			loaded	: function(){},
 
-			search : function(){ 
-					 zeega.discovery.app.parseSearchUI() 
-				
+			search : function(){
+				zeega.discovery.app.parseSearchUI();
 			},
 
 			clearSearch : zeega.discovery.app.clearSearchFilters,
@@ -55,7 +54,7 @@ jQuery(function($)
   
   $('#zeega-view-buttons a').click(function(){ zeega.discovery.app.switchViewTo( $(this).data('goto-view') , false); return false; });
 
-  $('#zeega-search-help').popover({'title':l.jda_searching,'placement':'bottom'});
+ // $('#zeega-search-help').popover({'title':l.jda_searching,'placement':'bottom'});
 
   $('#zeega-content-type').change(function(){
     $('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
@@ -70,7 +69,7 @@ jQuery(function($)
   });
 
   $('#jda-go-button').click(function(){
-	  	var e = jQuery.Event("keydown");
+		var e = jQuery.Event("keydown");
 		e.which = 13;
 
 		//For whatever reason there are two ways of telling VS to search
@@ -80,55 +79,18 @@ jQuery(function($)
 		} else{
 			VisualSearch.searchBox.searchEvent(e);
 		}
-		
-  		return false;
-  	});
- 
-  
-  //Infinite Scroll
-  
-  /*
-  $(window).scroll(function(event){
-  
-  	console.log(event.target);
-  
-  });
-  */
+		return false;
+	});
+
   
   $('#zeega-results-wrapper').bind('scroll', function()
-                              {
-                                if($(this).scrollTop() + 
-                                   $(this).innerHeight()
-                                   >= $(this)[0].scrollHeight)
-                                {
-                                	if(zeega.discovery.app.resultsView.collection.query.page*100<zeega.discovery.app.resultsView.collection.count){
-                                		zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.query.page+1;
-      							  		zeega.discovery.app.search(zeega.discovery.app.searchObject,false);
-      							  	}
-                                }
-                              });
-
-
-  
-  /*
-  zeega.discovery.app.killScroll = false; 
-  $(window).scroll(function(){
-    //don't execute if the app is loading, if it's too far down, or if the viewing the map event view
-    if  (zeega.discovery.app.isLoading == false && $(window).scrollTop()+200 >= ($(document).height() - ($(window).height())) && zeega.discovery.app.currentView != 'event')
-    { 
-      if (zeega.discovery.app.killScroll == false) // Keeps the loader from fetching more than once.
-      {
-      	
-      	$('#spinner-text').fadeTo('fast',1);
-      	$('#jda-left').fadeTo('slow',0.8);
-        zeega.discovery.app.killScroll = true; // IMPORTANT - Set killScroll to true, to make sure we do not trigger this code again before it's done running.
-       
-        zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.search.page+1;
-        zeega.discovery.app.search(zeega.discovery.app.searchObject);
-       
-       // zeega.discovery.app.search({ page: zeega.discovery.app.resultsView.collection.search.page+1 });
-      }
-    }
-  });
-	*/
+	{
+		if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight)
+		{
+			if(zeega.discovery.app.resultsView.collection.query.page*100<zeega.discovery.app.resultsView.collection.count){
+				zeega.discovery.app.searchObject.page=zeega.discovery.app.resultsView.collection.query.page+1;
+				zeega.discovery.app.search(zeega.discovery.app.searchObject,false);
+			}
+		}
+	});
 });
