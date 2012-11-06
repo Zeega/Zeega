@@ -113,6 +113,24 @@ class EnqueueScheduledTasksCommand extends ContainerAwareCommand
                 return array('domain' => 'flickr.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
             }
         }
+        
+        if($archive == 'Instagram') {
+            if(null !== $tags) {
+                return array('domain' => 'instagram.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
+            }
+        }
+        
+        if($archive == 'SoundCloud') {
+            if(null !== $tags) {
+                return array('domain' => 'soundcloud.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
+            }
+        }
+
+        if($archive == 'YouTube') {
+            if(null !== $tags) {
+                return array('domain' => 'youtube.com', 'parser_id' => 'tag_parser', 'tags' => $tags);
+            }
+        }
         throw new \Exception("Cannot resolve a parser for $tags and $archive");
     }
 }
