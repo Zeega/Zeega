@@ -118,12 +118,16 @@ class SearchController extends BaseController
         }                   
 		
         $limit = $request->query->get('limit');                 //  result limit
-        if(!isset($limit) || $limit > 500) {
+        if(!isset($limit)) {
+            $limit = 100;
+        }
+
+        if($limit > 500) {
             $limit = 500;
         }              
 		
         $contentType = $request->query->get('content');         //  content-type filter
-        if(isset($contentType)) {
+        if(isset($contentType) && $contentType != "project") {
             $contentType = ucfirst($contentType);
         }
 
