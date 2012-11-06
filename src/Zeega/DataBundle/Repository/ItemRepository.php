@@ -13,8 +13,6 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
-        $qb->andwhere('i.enabled = true');
-        
 		// query string ANDs - works for now; low priority
         if(isset($query['queryString']))
         {
@@ -123,6 +121,16 @@ class ItemRepository extends EntityRepository
       	     $qb->andWhere($qb->expr()->between('i.media_geo_latitude', $query['geo']['south'], $query['geo']['north']))
 				->andWhere($qb->expr()->between('i.media_geo_longitude', $query['geo']['west'], $query['geo']['east']));
 		}
+
+        if(isset($query['enabled'])) {
+             $qb->andWhere('i.enabled = :enabled')
+                ->setParameter('enabled', $query['enabled']);
+        }
+
+        if(isset($query['published'])) {
+             $qb->andWhere('i.published = :published')
+                ->setParameter('published', $query['published']);
+        }
 		
 		return $qb;
     }
@@ -176,7 +184,6 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i')
             ->from('ZeegaDataBundle:Item', 'i')
-            ->where('i.enabled = true')
        		->setMaxResults($query['limit'])
        		->setFirstResult($query['limit'] * $query['page']);
         
