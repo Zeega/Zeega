@@ -25,7 +25,12 @@
                 "display_name" : {{ doc_fields.display_name | default("") | json_encode | raw }},
 				"title": {{ doc_fields.title_i | default("")| json_encode | raw}},
 				"description": {{- doc_fields.description_i| default("") | json_encode | raw -}},
-				"text": {{- doc_fields.text_i | default("") | json_encode | raw -}},
+				{% if doc_fields.text_i is defined and doc_fields.media_type == 'project' %}
+					"text" : {{ doc_fields.text_i | raw}},
+				{% else %}
+					"text": {{- doc_fields.text_i | default("") | json_encode | raw -}},
+				{% endif %}
+				
 				"uri": "{{ doc_fields.uri }}",
 				"attribution_uri": "{{ doc_fields.attribution_uri }}",
 				"date_created": "2012-01-02T00:00:00",

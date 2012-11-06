@@ -71,7 +71,7 @@ class ParserYoutubeVideo extends ParserAbstract
 		}
         
 		$item->setMediaCreatorUsername($entry["author"][0]["name"]["\$t"]);
-		$item->setMediaCreatorRealname('Unknown');
+		$item->setMediaCreatorRealname($entry["author"][0]["name"]["\$t"]);
 
 		// write metadata
 		$item->setArchive('Youtube');

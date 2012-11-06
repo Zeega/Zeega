@@ -55,6 +55,11 @@ zeega.parsers:
             regex: /https?:\/\/(?:www\.)?youtube.com\/p\/([a-zA-Z0-9\-_]+)/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Youtube\ParserYoutubePlaylist
+        tag_parser:
+            regex: /https?:\/\/(?:www\.)?youtubeeee.com\/p\/([a-zA-Z0-9\-_]+)/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Youtube\ParserYoutubeTag
+            
     soundcloud.com: #order matters (last regex matches any soundlcoud url)
         item_parser:
             regex: /http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/
@@ -64,6 +69,10 @@ zeega.parsers:
             regex: /http:\/\/(?:www\.)?soundcloud.com.*/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudItem
+        tag_parser:
+            regex: /http:\/\/(?:www\.)?soundcloud.com/impossibleregex/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudTag
     dp.la:
         set_parser:
             regex: /http:\/\/(?:api\.)?dp.la\/.*/

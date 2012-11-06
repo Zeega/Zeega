@@ -49,6 +49,7 @@ class EditorController extends BaseController
 		$params["r_items"] = 1;
 		$params["user"] = -1;
 	    $params["data_source"] = "db";
+	    $params["sort"] = "date-desc";
 	
 		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
 

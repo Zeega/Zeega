@@ -54,13 +54,18 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/search?r_items=1&sort=id-desc&r_itemswithcollections=0&user=-1&site="+sessionStorage.getItem('siteid');
+			var base = zeega.app.url_prefix + "api/search?r_items=1&sort=date-desc&user=-1";
+			console.log("CONSOLE " + this.search.query);
+			if(this.search.get('query') == '') {
+				base = base + "&data_source=db";
+			}
+			
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
 			
 			//temp fix until queuing is set up
 		
-			if(this.search.get('collection')==''&&this.search.get('page')==1&&this.search.get('query')==''&&this.search.get('content')=='') url = url+"&data_source=db";
+			//if(this.search.get('collection')==''&&this.search.get('page')==1&&this.search.get('query')==''&&this.search.get('content')=='') url = url+"&data_source=db";
 			
 			return url;
 		},

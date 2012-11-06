@@ -40,7 +40,7 @@ class ParserSoundcloudItem extends ParserAbstract
         	$item->setTags($itemTags);
 		}
 
-		$item->setTitle($itemJson['permalink']);
+		$item->setTitle($itemJson['title']);
 
 		$item->setDescription($itemJson['description']);
 
@@ -52,7 +52,7 @@ class ParserSoundcloudItem extends ParserAbstract
 		$item->setUri($itemJson['stream_url']);
 		$item->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
         $item->setAttributionUri($itemJson['permalink_url']);
-		$item->setDateCreated(new DateTime((string)$itemJson['created_at']));
+		$item->setMediaDateCreated($itemJson['created_at']);
 		$item->setThumbnailUrl($itemJson['waveform_url']);
 		$item->setChildItemsCount(0);
 
