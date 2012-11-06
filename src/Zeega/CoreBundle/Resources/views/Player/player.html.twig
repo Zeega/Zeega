@@ -1,97 +1,95 @@
 <!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
+	<head>
+		<meta charset="utf-8">
 
-	<title>{{project.getTitle()}}</title>
-	<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-	<meta name="robots" content="noindex,follow">
-	<meta name="description" content="">
-	<meta name="author" content="">
+		<title>{{project.getTitle()}}</title>
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+		<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-	<!-- FB -->
-	
-	<meta property="og:site_name" content="Zeega"/>
-	<meta property="og:title" content="{{project.getTitle()}}"/>
-	<meta property="og:description" content="{{project.getDescription()}}"/>
-	<meta property="og:type" content="movie"/>
-	<meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
-	{% if project.getThumbnailUrl() is defined %}
-	<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-	{% elseif project.getCoverImage() is defined %}
-	<meta property="og:image" content="{{project.getCoverImage()}}"/>
-	{% else %}
-	<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-	{% endif %}
+		<!-- FB -->
 		
-	<!-- END FB -->	
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{project.getTitle()}}"/>
+		<meta property="og:description" content="{{project.getDescription()}}"/>
+		<meta property="og:type" content="movie"/>
+		<meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
+		{% if project.getThumbnailUrl() is defined %}
+		<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+		{% elseif project.getCoverImage() is defined %}
+		<meta property="og:image" content="{{project.getCoverImage()}}"/>
+		{% else %}
+		<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+		{% endif %}
+			
+		<!-- END FB -->	
 
 
-	<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
-	
-	<!--
-	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
-	<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
-	<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
-	-->
-	
-	{% if app.environment == 'dev' %}
-		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/standalone_player/bootstrap.less')}}">
-		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
-	{% else %}
-		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.player.css')}}">
-	{% endif %}
-	
-	<!--
-	<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
-   -->
-
-	<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	<script> 
-		sessionStorage.setItem('directory', '{{directory}}');
-		sessionStorage.setItem('hostname','{{hostname}}');
-		sessionStorage.setItem('projectId','{{project.getId()}}');
+		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
 		
-	
-
-		//Google analytics
-
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-33491977-1']);
-		_gaq.push(['_setDomainName', '.zeega.org']); 
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-
-	</script>
-
-	{% if app.environment == 'dev' %}
-	<!-- to load JS libraries separately -->
-		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/standalone-player.js')}}"></script>
-	{% else %}
-		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/standalone-player.js') }}"></script>
-		<!-- to load single aggregated JS library --> 
-	{% endif %}
-	
-	
-	
-</head>
-
-<body>
-	
-	<script type="text/javascript" language="Javascript">
-		//bootstrapping data
-		var projectJSON = "{{ project_data|e('js') }}";
-		//console.log(itemsJSON)
-		//console.log(projectJSON)
+		<!--
+		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
+		<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
+		<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
+		-->
 		
-	</script>
+		{% if app.environment == 'dev' %}
+			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/standalone_player/bootstrap.less')}}">
+			<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+			<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+		{% else %}
+			<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.player.css')}}">
+		{% endif %}
+		
+		<!--
+		<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
+	   -->
 
-</body>
+		<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script> 
+
+			//session data
+
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+			sessionStorage.setItem('projectId','{{project.getId()}}');
+			
+		
+
+			//Google analytics
+
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33491977-1']);
+			_gaq.push(['_setDomainName', '.zeega.org']); 
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+
+			//Project data
+
+			var projectJSON = "{{ project_data|e('js') }}";
+
+		</script>
+
+		{% if app.environment == 'dev' %}
+		<!-- to load JS libraries separately -->
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/standalone-player.js')}}"></script>
+		{% else %}
+			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/standalone-player.js') }}"></script>
+			<!-- to load single aggregated JS library --> 
+		{% endif %}
+		
+		
+		
+	</head>
+
+	<body>
+	</body>
 </html>
