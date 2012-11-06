@@ -142,7 +142,6 @@
 		{
 			var html = '<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
 							'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
-							'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
 						'</a>';
 			return html;
 		},
@@ -152,7 +151,6 @@
 
 			var html = '<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
 							'<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
-							'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
 						'</a>';
 			return html;
 			
@@ -162,7 +160,6 @@
 
 			var html = '<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
 							'<i class="jda-icon-testimonial"></i>'+
-							'<button class="btn btn-danger btn-mini remove-item hide">x &nbsp;<%=remove_text%></button>'+
 						'</a>';
 
 			
@@ -239,7 +236,7 @@
 			} else {
 				blanks["media_date"] = "n/a";
 			}
-			if (!_.isNull(this.model.get("text"))&&!_.isUndefined(this.model.get("text"))){
+			if (!_.isObject(this.model.get("text"))&&!_.isNull(this.model.get("text"))&&!_.isUndefined(this.model.get("text"))){
 				var excerpt = this.model.get("text").replace(/\r\n/gi, '<br/>');
 			}
 			if (this.model.get("description") === null){
