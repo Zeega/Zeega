@@ -83,7 +83,7 @@ class ItemsController extends BaseController
     }
 
     //  get_collections GET    /api/items.{_format}
-    public function getItemsApprovedAction()
+    public function getItemsUnmoderatedAction()
     {
         $query = array();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -92,34 +92,8 @@ class ItemsController extends BaseController
         //  api global parameters
         $query["page"]  = $request->query->get('page');      //  string
         $query["limit"] = $request->query->get('limit');     //  string
-        $query["published"] = 2;
-        $query["userId"] = $user->getId();
-        $query["notContentType"] = array("project", "Collection");
-
-        //  set defaults for missing parameters  
-        if(!isset($query['page']))          $query['page'] = 0;
-        if(!isset($query['limit']))         $query['limit'] = 100;
-        
-        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);     
-
-        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);             
-        
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
-    }
-
-    //  get_collections GET    /api/items.{_format}
-    public function getItemsUnapprovedAction()
-    {
-        $query = array();
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $request = $this->getRequest();
-        //  api global parameters
-        $query["page"]  = $request->query->get('page');      //  string
-        $query["limit"] = $request->query->get('limit');     //  string
-        $query["published"] = 1;
+        $query["published"] = 0;
+        $query["enabled"] = True;
         $query["userId"] = $user->getId();
         $query["notContentType"] = array("project", "Collection");
                 
