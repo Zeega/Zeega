@@ -120,8 +120,8 @@
 		parse : function(response)
 		{
 			this.tags=response.tags;
-			this.count = response.items_and_collections_count;
-			return response.items_and_collections;
+			this.count = response.items_count;
+			return response.items;
 			
 		},
 		
