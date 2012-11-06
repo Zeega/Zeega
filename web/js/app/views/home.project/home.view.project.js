@@ -23,7 +23,13 @@
 	Home.Projects.View = Backbone.View.extend({
 		
 		className : 'project-card span7',
-		
+		events: {
+			'click':'openProject'
+		},
+
+		openProject:function(){
+			window.location=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('id') + '/view';
+		},
 		render: function(done)
 		{
 			var blanks = this.model.attributes;
@@ -35,21 +41,21 @@
 		getTemplate : function()
 		{
 			var html =
-						'<div class="row">'+
+						'<div class="row" style="cursor:pointer;">'+
 							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= thumbnail_url %>) no-repeat center center;background-size:cover">'+
 								'<a class="zeega-link" href="<%= view_url %>">'+
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>'+
-								'<div style="padding:10px 0 0 10px;margin-top:106px;height:60px;background-color:rgba(0,0,0,0.3);">'+
+								'<div style="padding:10px 0 0 10px;margin-top:126px;height:30px;background-color:rgba(0,0,0,0.3);">'+
 									'<div class="pull-left" style="margin-right:20px">'+
 										'<h4><%= title %></h4>'+
-										'<h6><%= date_created %></h6>'+
 									'</div>'+
 								'</div>'+
-								'<div class="gradient" style="top:-176px;"></div>'+
+								'<div class="gradient" style="top:-166px;"></div>'+
 								'<div id="embed-wrapper"></div>'+
 							'</div>'+
 						'</div>';
+					
 			return html;
 		}
 	});
