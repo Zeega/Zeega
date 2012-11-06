@@ -1,6 +1,7 @@
 (function(Dashboard) {
 
-	Dashboard.ProjectCollectionView = Backbone.View.extend({
+	Dashboard.Project=Dashboard.Project||{};
+	Dashboard.Project.CollectionView = Backbone.View.extend({
 
 		el : $('#zeega-user-projects'),
 
@@ -63,4 +64,4 @@
 	});
 
 
-})(zeegaDashboard.module("dashboard"));
+})(zeega.dashboard.module("dashboard"));

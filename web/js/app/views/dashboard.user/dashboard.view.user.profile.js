@@ -224,7 +224,7 @@
 						'<div>'+
 							
 							'<h3 class="dashboard-name" style="width:300px"><%= display_name%></h3>';
-							if (zeegaDashboard.app.editable){ html+=
+							if (zeega.dashboard.app.editable){ html+=
 							'<div style="position:relative">'+
 								'<a class="btn btn-mini btn-inverse edit community-edit-button" href="." style="top:-41px;left:300px"><i class="icon-pencil icon-white"></i> edit</a>'+
 								'<div class="btn-group save-data" style="position:absolute;top:-41px;left:300px">'+
@@ -238,7 +238,7 @@
 							'<h6 style="clear:both; color:#DDD;">Authored <%= num_projects %> since joining in <%= join_date %></h6>'+
 							'<div style="margin-bottom:20px">'+
 								'<p class="card dashboard-bio"><%= bio %></p>';
-								if (zeegaDashboard.app.editable){ html+=
+								if (zeega.dashboard.app.editable){ html+=
 								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file" style="display:inline">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
 								'<div class="user-image-upload card hide"  style="clear:both"><label style="display:inline" class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>';
 								}
@@ -251,7 +251,7 @@
 					
 					'</div>'+
 					'<div class="span3">';
-						if (zeegaDashboard.app.editable){ html+=
+						if (zeega.dashboard.app.editable){ html+=
 						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
 			html+='</div>';
@@ -262,4 +262,4 @@
 
 	});
 
-})(zeegaDashboard.module("dashboard"));
+})(zeega.dashboard.module("dashboard"));
