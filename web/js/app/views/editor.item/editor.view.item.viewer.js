@@ -11,8 +11,8 @@
 		initialize : function()
 		{
 			var ids = this.collection.pluck('id');
-			this.index = _.indexOf( ids, this.options.start)
-			this.inFocus = this.collection.at(this.index)
+			this.index = _.indexOf( ids, this.options.start);
+			this.inFocus = this.collection.at(this.index);
 			this.updateArrows();
 			
 			this.initEvents();
@@ -23,7 +23,7 @@
 			var _this = this;
 			$('body').keyup(function(e){
 				_this.onKeypress(e);
-			})
+			});
 		},
 		endEvents : function()
 		{
@@ -32,7 +32,7 @@
 		
 		switchItem : function()
 		{
-			this.inFocus = this.collection.at(this.index)
+			this.inFocus = this.collection.at(this.index);
 			this.renderItemView();
 			this.inFocus.trigger('after_render');
 			this.updateArrows();
@@ -57,7 +57,7 @@
 			'click .go-left' : 'goLeft',
 			'click .go-right' : 'goRight',
 			'click #detail-toggle' : 'toggleDetail',
-			'click #item-delete':'delete'
+			'click #item-delete':'deleteItem'
 		},
 		
 		toggleDetail : function()
@@ -76,7 +76,7 @@
 				//switch to less detail
 				this.inFocus.trigger('toggle_detail', 'less');
 				this.state = 'less';
-				toggle.addClass('less-detail').removeClass('more-detail').html('<i class="icon-plus-sign"></i> More Detail')
+				toggle.addClass('less-detail').removeClass('more-detail').html('<i class="icon-plus-sign"></i> More Detail');
 				this.$el.find('.inner-content').addClass('less-view').removeClass('more-view');
 				
 			}
@@ -125,26 +125,23 @@
 			return false;
 		},
 		
-		delete : function()
+		deleteItem : function()
 		{
 			if(confirm('delete this item?')){
 				var _this=this;
-				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/"
-									+ this.inFocus.id;
+				var deleteURL = sessionStorage.getItem('hostname')+sessionStorage.getItem('directory') + "api/items/" + this.inFocus.id;
 	
 				//DESTROYYYYYYYY
-				this.inFocus.destroy({	
+				this.inFocus.destroy({
 									url : deleteURL,
 									success: function(model, response)
-									{ 
-										console.log("Deleted item " + _this.inFocus.id);	
-	
+									{
+										console.log("Deleted item " + _this.inFocus.id);
 										_this.goRight();
-	
 									},
 									error: function(model, response)
 									{
-										console.log("Error deleting item " +  _this.inFocus.id);		
+										console.log("Error deleting item " +  _this.inFocus.id);
 										console.log(response);
 									}
 								});
@@ -154,7 +151,7 @@
 		
 		updateArrows : function()
 		{
-			if(this.index == 0) this.$el.find('.arrow-left').fadeOut();
+			if(this.index === 0) this.$el.find('.arrow-left').fadeOut();
 			else if(this.index == this.collection.length-1) this.$el.find('.arrow-right').fadeOut();
 			else
 			{
@@ -170,15 +167,13 @@
 			this.endEvents();
 			
 			// do other cleanup stuff first?
-			this.$el.fadeOut('fast',function(){_this.remove()});
+			this.$el.fadeOut('fast',function(){_this.remove();});
 			return false;
 		},
 
 		getTemplate : function()
 		{
-			var html = 
-			
-				"<div class='container'>"+
+			var html = "<div class='container'>"+
 					"<div class='row'>"+
 						"<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
 						"<div class='span10 item-viewer-content'>"+
@@ -206,9 +201,9 @@
 		
 		initialize : function()
 		{
-			console.log('item model',this.model)
+			console.log('item model',this.model);
 			
-			this.model.on('toggle_detail', this.toggleDetail, this)
+			this.model.on('toggle_detail', this.toggleDetail, this);
 		},
 		
 		render : function()
@@ -220,7 +215,7 @@
 					mediaSpan : 'span10',
 					moreClass : 'hide',
 					lessClass : ''
-				}
+				};
 			}
 			else
 			{
@@ -228,7 +223,7 @@
 					mediaSpan : 'span4',
 					moreClass : '',
 					lessClass : 'hide'
-				}
+				};
 			}
 			
 			this.$el.html( _.template(this.getTemplate(), _.extend(this.model.attributes,opts)) );
@@ -236,13 +231,15 @@
 			// draw media view
 			
 
-			var itemClass = (this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
-
+			var itemClass = (this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+			itemClass=itemClass[0].toUpperCase() + itemClass.slice(1);
+			var mediaView;
+			if( Items.Views.Viewer[itemClass] ) mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
+			else mediaView = new Items.Views.Viewer.Default({model:this.model});
 			
-			if( Items.Views.Viewer[itemClass] ) var mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
-			else var mediaView = new Items.Views.Viewer.Default({model:this.model});
-			console.log('type:',this.model.get('archive'), this.model, itemClass, mediaView);
-			this.$el.find('#item-media-target .padded-content').html( mediaView.render().el )
+			console.log('Media Viewer::',mediaView, itemClass);
+
+			this.$el.find('#item-media-target .padded-content').html( mediaView.render().el );
 			
 			//draw map view
 			this.mapView = new Items.Views.Common.LeafletMap({model:this.model});
@@ -258,7 +255,7 @@
 		
 		toggleDetail : function(state)
 		{
-			if(this.editing = true) this.cancelItemEdit();
+			if(this.editing === true) this.cancelItemEdit();
 			if(state == 'more')
 			{
 				this.$el.find('#item-media-target').removeClass('span10').addClass('span4');
@@ -302,7 +299,7 @@
 			this.model.save({
 				description : this.$el.find('.item-description-text').text(),
 				title : this.$el.find('.viewer-item-title .inner').text()
-			})
+			});
 			
 			
 			return false;
@@ -328,9 +325,7 @@
 		
 		getTemplate : function()
 		{
-			html = 
-			
-				"<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
+			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
 				
 				"<div class='row'>"+
 					
@@ -373,7 +368,7 @@
 				
 			return html;
 		}
-	})
+	});
 	
 	
 	//////////////////////////// item types
@@ -393,7 +388,7 @@
 			html = "<img src='<%= thumbnail_url %>' style='max-width: 100%;max-height: 100%;'/>";
 			return html;
 		}
-	})
+	});
 	
 	Items.Views.Viewer.Image = Backbone.View.extend({
 		
@@ -409,7 +404,29 @@
 			return html;
 		}
 
-	})
+	});
+
+	Items.Views.Viewer.Project = Backbone.View.extend({
+		
+		render : function()
+		{
+			this.$el.html( _.template( this.getTemplate(), this.model.attributes) );
+			return this;
+		},
+		
+		getTemplate : function()
+		{
+			html = '<div id="zeega-embed" style="height:200px; background:url(<%= thumbnail_url %>) no-repeat center center;background-size:cover">'+
+					'<a class="zeega-link" target="_blank" href="//alpha.zeega.org/<%= id %>/view" ><img class="pull-left" style="padding-top: 35%; padding-left: 37%;width:60px;position:relative;z-index:2" src="//alpha.zeega.org/images/embed_play.png"></a>'+
+					'</div>';
+			console.log(zeega);
+			return html;
+		}
+
+	});
+
+
+
 	Items.Views.Viewer.Flickr = Items.Views.Viewer.Image.extend();
 	
 	Items.Views.Viewer.Youtube = Backbone.View.extend({
@@ -426,7 +443,7 @@
 			return html;
 		}
 
-	})
+	});
 	
 	Items.Views.Viewer.Vimeo = Backbone.View.extend({
 	
@@ -443,7 +460,7 @@
 		}
 		
 	
-	})
+	});
 
 	Items.Views.Viewer.SoundCloud = Backbone.View.extend({
 		
@@ -459,7 +476,7 @@
 			html = '<iframe width="100%" height="166" scrolling="no" frameborder="no" src="http://w.soundcloud.com/player/?url=<%= soundcloud_url %>&show_artwork=true"></iframe>';
 			return html;
 		}
-	})
+	});
 	
 	Items.Views.Viewer.Video = Backbone.View.extend({
 		
@@ -477,7 +494,8 @@
 		//happens after the view is rendered. so we know when the player is in the dom
 		afterRender : function()
 		{
-			if( !this.isRendered == true )
+			if(this.isRendered===true){}
+			else
 			{
 				this.$el.empty();
 				var Player = zeega.module('player');
@@ -501,10 +519,10 @@
 			html = this.model.get('title');
 			return html;
 		}
-	})
+	});
 
-	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
-	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend()
+	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend();
+	Items.Views.Viewer.Audio = Items.Views.Viewer.Video.extend();
 	
 })(zeega.module("items"));
 

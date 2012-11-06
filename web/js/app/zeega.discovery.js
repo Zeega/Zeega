@@ -1,8 +1,8 @@
 //Adds a function to the javascript date object.
 //Didn't really know where to put this so I put it here...(Catherine)
 Date.prototype.getMonthAbbreviation = function() {
-   return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][this.getMonth()]; 
-}
+	return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][this.getMonth()];
+};
 
 
 this.zeega = this.zeega || {
@@ -14,7 +14,7 @@ this.zeega = this.zeega || {
 		var modules = {};
 
 		// Create a new module reference scaffold or load an existing module.
-		return function(name) 
+		return function(name)
 		{
 			// If this module has already been created, return it.
 			if (modules[name]) return modules[name];
@@ -22,9 +22,7 @@ this.zeega = this.zeega || {
 			// Create a module and save it under this name
 			return modules[name] = { Views: {} };
 		};
-	}(),
-
-
+	}()
 };
 
 this.zeega.discovery = {
@@ -33,7 +31,7 @@ this.zeega.discovery = {
   // Keep active application instances namespaced under an app object.
   app: _.extend({
 	
-	//apiLocation : sessionStorage.getItem("hostname")+sessionStorage.getItem("directory"),
+	
 	
 	apiLocation : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory'),
 	currentView : 'list',
@@ -47,12 +45,7 @@ this.zeega.discovery = {
 		
 		
 		this.resultsView = new Items.Collections.Views.Results();
-		
-		
-		//this.eventMap = new Views.EventMap();
-		
 		this.eventMap ={};
-		
 		this.initCollectionsDrawer();
 		
 		
@@ -65,9 +58,6 @@ this.zeega.discovery = {
 		//load my collections drawer
 		var Items = zeega.module("items");
 		this.myCollectionsDrawer = new Items.Collections.Views.MyCollectionsDrawer();
-
-		
-	
 	
 	},
 	startRouter: function(){
@@ -92,35 +82,35 @@ this.zeega.discovery = {
 	
 	
 	queryStringToHash: function (query) {
-	  var query_obj = {};
-	  var vars = query.split("&");
-	  for (var i=0;i<vars.length;i++) {
-		var pair = vars[i].split("=");
-		pair[0] = decodeURIComponent(pair[0]);
-		pair[1] = decodeURIComponent(pair[1]);
-			// If first entry with this name
-		if (typeof query_obj[pair[0]] === "undefined") {
-		  query_obj[pair[0]] = pair[1];
-			// If second entry with this name
-		} else if (typeof query_obj[pair[0]] === "string") {
-		  var arr = [ query_obj[pair[0]], pair[1] ];
-		  query_obj[pair[0]] = arr;
-			// If third or later entry with this name
-		} else {
-		  query_obj[pair[0]].push(pair[1]);
+		var query_obj = {};
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			pair[0] = decodeURIComponent(pair[0]);
+			pair[1] = decodeURIComponent(pair[1]);
+				// If first entry with this name
+			if (typeof query_obj[pair[0]] === "undefined") {
+				query_obj[pair[0]] = pair[1];
+				// If second entry with this name
+			} else if (typeof query_obj[pair[0]] === "string") {
+				var arr = [ query_obj[pair[0]], pair[1] ];
+				query_obj[pair[0]] = arr;
+				// If third or later entry with this name
+			} else {
+				query_obj[pair[0]].push(pair[1]);
+			}
 		}
-	  }
-	  
-	  //parse time slider properties
+
+		//parse time slider properties
 		query_obj.times = {};
-		if (query_obj.min_date != null){
+		if (query_obj.min_date !== null){
 			query_obj.times.start = query_obj.min_date;
 		}
-		if (query_obj.max_date != null){
+		if (query_obj.max_date !== null){
 			query_obj.times.end = query_obj.max_date;
 		}
-	  
-	  return query_obj;
+
+		return query_obj;
 	},
 	
 	parseURLHash  : function (query){
@@ -151,7 +141,7 @@ this.zeega.discovery = {
 						$('#event-button').hide();
 						
 						if(sessionStorage.getItem('filterType')=='user'){
-							this.filterType ="user";							
+							this.filterType ="user";
 							var Items = zeega.module("items");
 							this.filterModel = new Users.Model({id:sessionStorage.getItem('filterId')});
 							this.filterModel.fetch({
@@ -164,7 +154,7 @@ this.zeega.discovery = {
 									console.log('Failed to fetch the user object.');
 									
 								},
-							});					
+							});
 						}
 						else if(sessionStorage.getItem('filterType')=='collection'){
 							
@@ -203,7 +193,7 @@ this.zeega.discovery = {
 			switch ( facet.get('category') )
 			{
 				case 'text':
-					textQuery = (textQuery.length > 0) ? textQuery + " AND " + facet.get('value') : facet.get('value'); 
+					textQuery = (textQuery.length > 0) ? textQuery + " AND " + facet.get('value') : facet.get('value');
 					textQuery=textQuery.replace(/^#/, '');
 					break;
 				case 'tag':
@@ -234,11 +224,11 @@ this.zeega.discovery = {
 	
 	updateSearchUI : function(obj){
 	
-		console.log("zeega.discovery.app.updateSearchUI",obj);	
+		console.log("zeega.discovery.app.updateSearchUI",obj);
 	
 		VisualSearch.searchBox.disableFacets();
-	    VisualSearch.searchBox.value('');
-	  	VisualSearch.searchBox.flags.allSelected = false;
+		VisualSearch.searchBox.value('');
+		VisualSearch.searchBox.flags.allSelected = false;
 		var q = obj.q;
 		if (!_.isUndefined(q))
 		{
@@ -280,27 +270,25 @@ this.zeega.discovery = {
 	
 	updateURLHash : function(obj){
 		
-		 	var hash = '';      
-		 	if( !_.isUndefined(this.viewType)) hash += 'view_type=' + this.viewType + '&';
-		 	if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
-		 	if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
-		 	if( !_.isUndefined(obj.sort) )  hash += 'sort='+ obj.sort + '&';
-		 	if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
-		 	if( !_.isUndefined(obj.times)&&  !_.isNull(obj.times) )
-			{
-		 		if( !_.isUndefined(obj.times.start) ) hash += 'min_date='+ obj.times.start + '&';
-		 		if( !_.isUndefined(obj.times.end) ) hash += 'max_date='+ obj.times.end + '&';
-			}  
-	
-			console.log('zeega.discovery.app.updateURLHash',obj,hash);
-	 		zeega.discovery.app.router.navigate(hash,{trigger:false});
+		var hash ='';
+		if( !_.isUndefined(this.viewType)) hash += 'view_type=' + this.viewType + '&';
+		if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
+		if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
+		if( !_.isUndefined(obj.sort) )  hash += 'sort='+ obj.sort + '&';
+		if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
+		if( !_.isUndefined(obj.times)&&  !_.isNull(obj.times) )
+		{
+			if( !_.isUndefined(obj.times.start) ) hash += 'min_date='+ obj.times.start + '&';
+			if( !_.isUndefined(obj.times.end) ) hash += 'max_date='+ obj.times.end + '&';
+		}
+		console.log('zeega.discovery.app.updateURLHash',obj,hash);
+		zeega.discovery.app.router.navigate(hash,{trigger:false});
 	
 	},
 	
 	search : function(obj){
 	
-		console.log("zeega.discovery.app.search",obj);		
-		
+		console.log("zeega.discovery.app.search",obj);
 		if(!_.isUndefined(this.filterType)){
 			if(this.filterType=="user"){
 				obj.user= sessionStorage.getItem('filterId');
@@ -349,7 +337,6 @@ this.zeega.discovery = {
 				this.showThumbnailView(refresh);
 				break;
 			default:
-				console.log('view type not recognized')
 		}
 		
 	},
@@ -359,7 +346,6 @@ this.zeega.discovery = {
 
 		$('#results-thumbnail-wrapper').hide();
 		$('#results-list-wrapper').show();
-	    
 		$('#zeega-view-buttons .btn').removeClass('active');
 		$('#list-button').addClass('active');
 		
@@ -374,7 +360,7 @@ this.zeega.discovery = {
 
 		if(this.resultsView.updated)
 		{
-			console.log('render collection')
+			console.log('render collection');
 			this.resultsView.render();
 		}
 		this.viewType='list';
@@ -382,8 +368,7 @@ this.zeega.discovery = {
 			this.searchObject.times=null;
 			this.search(this.searchObject);
 		}
-	    
-	    this.updateURLHash(this.searchObject);
+		this.updateURLHash(this.searchObject);
 		
 	},
 	
@@ -406,7 +391,7 @@ this.zeega.discovery = {
 		
 		if(this.resultsView.updated)
 		{
-			console.log('render collection')
+			console.log('render collection');
 			this.resultsView.render();
 		}
 		this.viewType='thumb';
@@ -414,7 +399,7 @@ this.zeega.discovery = {
 			this.searchObject.times=null;
 			this.search(this.searchObject);
 		}
-	    this.updateURLHash(this.searchObject);
+		this.updateURLHash(this.searchObject);
 	},
 	
 	showEventView : function(refresh){
@@ -433,8 +418,7 @@ this.zeega.discovery = {
 		var removedFilters = "";
 		var _this = this;
 		_.each( VisualSearch.searchBox.facetViews, function( facet ){
-			if( facet.model.get('category') == 'tag' || facet.model.get('category') == 'collection' ||
-				facet.model.get('category') == 'user') 
+			if( facet.model.get('category') == 'tag' || facet.model.get('category') == 'collection' || facet.model.get('category') == 'user')
 			{
 				facet.model.set({'value': null });
 				facet.remove();
@@ -450,13 +434,12 @@ this.zeega.discovery = {
 				_this.removeFilter(facet.model.get('category'),_this.resultsView.getSearch());
 				
 			}
-			
-		})
+		});
 		if (removedFilters.length > 0){
 			$('#removed-tag-name').text(removedFilters);
 			$('#remove-tag-alert').show('slow');
 			setTimeout(function() {
-			  $('#remove-tag-alert').hide('slow');
+				$('#remove-tag-alert').hide('slow');
 			}, 5000);
 		}
 		
@@ -477,14 +460,14 @@ this.zeega.discovery = {
 	clearSearchFilters : function(doSearch){
 		console.log("zeega.discovery.app.clearSearchFilters", doSearch);
 
-    	$('#zeega-content-type').val("all");
-    	$('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
+		$('#zeega-content-type').val("all");
+		$('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
 
-    	//remove search box values
-    	VisualSearch.searchBox.disableFacets();
-	    VisualSearch.searchBox.value('');
-	  	VisualSearch.searchBox.flags.allSelected = false;
-	  	if(doSearch) this.search({ page:1,});
+		//remove search box values
+		VisualSearch.searchBox.disableFacets();
+		VisualSearch.searchBox.value('');
+		VisualSearch.searchBox.flags.allSelected = false;
+		if(doSearch) this.search({ page:1});
 	},
 	
 	goToCollection: function (id){
@@ -495,15 +478,10 @@ this.zeega.discovery = {
 	},
 	
 	goToUser: function (id){
-	
 		console.log('gotouser',id);
 		window.location=$('#zeega-main-content').data('user-link')+"/"+id;
 	
-	},
-		
-
-
-	
+	}
 
 }, Backbone.Events)
 

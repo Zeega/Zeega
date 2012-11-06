@@ -1,7 +1,7 @@
 
 jQuery(function($)
 {
-	var ZeegaHome = zeegaDashboard.app;
+	var ZeegaHome = zeega.home.app;
 	ZeegaHome.init();
 	initHeaderUX();
 });
