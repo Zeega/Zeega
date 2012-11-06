@@ -37,6 +37,7 @@
 		{
 			var opts = _.extend({silent:true}, options);
 			this.set(this.defaults,opts);
+			this.trigger('search');
 			return this;
 		}
 	});
