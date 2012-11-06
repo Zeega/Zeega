@@ -14,7 +14,7 @@ class CommunityController extends Controller
     
     public function homeAction()
     {
-    	$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 40861))->getContent();
+    	$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 50485))->getContent(); 
         return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('projects' => $projects));
     }
     
