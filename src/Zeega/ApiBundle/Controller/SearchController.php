@@ -196,6 +196,7 @@ class SearchController extends BaseController
             $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
         }
 
+        $notContentType = $request->query->get('exclude_content');
         if(isset($notContentType)) {
             if(is_array($notContentType)) {
                 $mediaTypesToExclude = $notContentType;
