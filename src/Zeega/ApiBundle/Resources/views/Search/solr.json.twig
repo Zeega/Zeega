@@ -26,7 +26,7 @@
 				"title": {{ doc_fields.title_i | default("")| json_encode | raw}},
 				"description": {{- doc_fields.description_i| default("") | json_encode | raw -}},
 				{% if doc_fields.text_i is defined and doc_fields.media_type == 'project' %}
-					"text" : {{ doc_fields.text_i | raw}},
+					"text" : "",
 				{% else %}
 					"text": {{- doc_fields.text_i | default("") | json_encode | raw -}},
 				{% endif %}

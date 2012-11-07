@@ -121,13 +121,13 @@ class SearchController extends BaseController
         if(!isset($limit)) {
             $limit = 100;
         }
-            
+
         if($limit > 500) {
             $limit = 500;
         }              
 		
         $contentType = $request->query->get('content');         //  content-type filter
-        if(isset($contentType)) {
+        if(isset($contentType) && $contentType != "project") {
             $contentType = ucfirst($contentType);
         }
 
@@ -200,6 +200,7 @@ class SearchController extends BaseController
             $query->createFilterQuery('media_type')->setQuery("media_type:$contentType");
         }
 
+        $notContentType = $request->query->get('exclude_content');
         if(isset($notContentType)) {
             if(is_array($notContentType)) {
                 $mediaTypesToExclude = $notContentType;

@@ -27,24 +27,20 @@
 			add : false
 		},
 
-		initialize : function(){ this.on('change', this.onChange, this ) },
-
-// this.items.search.reset().set({q:'foo'})
+		initialize : function(){ this.on('change', this.onChange, this ); },
 		
 		onChange : function()
 		{
-			console.log('$$		onchange', this)
-			//if(this.get('query') == '') this.reset();
 			this.trigger('search');
 		},
-
 		reset : function( options )
 		{
-			var options = _.extend({silent:true}, options);
-			this.set(this.defaults,options);
+			var opts = _.extend({silent:true}, options);
+			this.set(this.defaults,opts);
+			this.trigger('search');
 			return this;
 		}
-	})
+	});
 
 
 	Items.Collection = Backbone.Collection.extend({
@@ -54,15 +50,16 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/search?r_items=1&sort=date-desc&user=-1";
-			console.log("CONSOLE " + this.search.query);
-			if(this.search.get('query') == '') {
+			var base = zeega.app.url_prefix + "api/search?exclude_content=project&r_items=1&sort=date-desc&user=-1";
+		
+			if(this.search.get('query') === '') {
 				base = base + "&data_source=db";
 			}
 			
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
 			
+			console.log("search url",url);
 			//temp fix until queuing is set up
 		
 			//if(this.search.get('collection')==''&&this.search.get('page')==1&&this.search.get('query')==''&&this.search.get('content')=='') url = url+"&data_source=db";
@@ -73,13 +70,9 @@
 		initialize : function()
 		{
 			this.itemCollectionView = new Items.Views.ItemTrayCollectionView({collection:this});
-
 			this.search = new Items.SearchModel();
 			this.search.on('search', this.onSearch, this );
 			this.on('reset', this.onSearchSuccess, this);
-
-//this.search.reset().set({query:'new'});
-
 			this.on('preview_item',this.previewItem,this); // move this
 		},
 		
@@ -93,15 +86,17 @@
 		
 		incrementPage : function()
 		{
+			
 			if(this.length < this.totalItemsCount)
 			{
+
 				var pageNo = this.search.get('page');
 				pageNo++;
 				this.search.set({ page:pageNo, add:true });
 			}
 		},
 
-		refresh : function(){ this.fetch() },
+		refresh : function(){ this.fetch(); },
 
 		///// move this ////////////
 		previewItem : function(itemID)

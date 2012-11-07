@@ -1,99 +1,45 @@
 	(function(Dashboard) {
 
 	Dashboard.Projects = Dashboard.Projects || {};
-	Dashboard.Projects.Views = Dashboard.Projects || {};
+	Dashboard.Projects.Views = Dashboard.Projects.Views || {};
 	
 	Dashboard.Projects.Views.Project = Backbone.View.extend({
 		
 		className : 'project-card span7',
-		
-		loaded:false,
-		
 		events: {
-			
-			/*'click a.edit' : 'editMetadata',
-			'click button.save' : 'saveMetadata',
-			'click button.cancel' : 'cancelEdits',*/
-			
-			'click .zeega-link':'playProject',
-			'click .project-delete':'delete',
+			'click .project-delete':'deleteProject'
 		},
 		
-		initialize: function () {
+		render: function(done)
+		{
+			var blanks = this.model.attributes;
+			if (blanks['cover_image'] === "")blanks['cover_image'] = 'http://static.zeega.org/community/templates/default_project_cover.png';
+			if(_.isNull(this.model.get('item_id'))) blanks['view_url']= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'projects/' +this.model.id + '/preview';
+			else blanks['view_url']=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('item_id') + '/view';
 
+			$(this.el).html( _.template( this.getTemplate(), blanks ) );
+
+			return this;
 		},
-		
-		delete: function(){
+
+		deleteProject: function () {
 			if(confirm('Delete Project?')){
-				$(this.el).fadeOut(); 
+				$(this.el).fadeOut();
 				$.ajax({
 						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'api/projects/'+this.model.id,
 						type: 'DELETE',
 						success: function(){
-						console.log('done');
 					}
 				});
 			}
-			
 			return false;
-		
-		
 		},
-		render: function(done)
-		{
-			var _this = this;
-
-			/***************************************************************************
-				Put template together
-			***************************************************************************/
-			var template = this.getTemplate();
-			var blanks = this.model.attributes;
-			if (blanks['cover_image'] == ""){
-				blanks['cover_image'] = 'http://static.zeega.org/community/templates/default_project_cover.png';
-			}
-
-			$(this.el).html( _.template( template, blanks ) );
-
-			return this;
-		},
-		
-    	playProject:function(){
-    		
-    			//$('#zeega-player-'+this.model.id).remove();
-				var docElm= document.createElement('iframe');
-				docElm.setAttribute('id','zeega-player-'+this.model.id);
-				$(this.el).find('#embed-wrapper').empty().append(docElm);
-				$(docElm).css({width:'0px',height:'0px'});
-    			
-    		
-    			if(_.isNull(this.model.get("item_id"))) {
-    				docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + "projects/" + this.model.id + "/preview");
-    			} else {
-    				docElm.setAttribute('src',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get("item_id"));
-    			}
-					
-				if (docElm.requestFullscreen) docElm.requestFullscreen();
-				else if (docElm.mozRequestFullScreen) docElm.mozRequestFullScreen();
-				else if (docElm.webkitRequestFullScreen) docElm.webkitRequestFullScreen();
-				else{
-					document.getElementById('zeega-link').setAttribute('href',sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +this.model.id);
-					document.getElementById('zeega-link').setAttribute('target','blank');
-					document.getElementById('zeega-link').setAttribute('onclick','');
-				
-				}
-    		},
-	
-		
 		getTemplate : function()
 		{
-			html = 	
-			
+			var html =
 						'<div class="row">'+
-						
-							
 							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">'+
-							
-								'<a class="zeega-link" href="#">'+
+								'<a class="zeega-link" href="<%= view_url %>">'+
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>';
 								
@@ -115,15 +61,9 @@
 								'<div class="gradient" style="top:-176px;"></div>'+
 								'<div id="embed-wrapper"></div>'+
 							'</div>'+
-							
-							
-						
 						'</div>';
-			
 			return html;
-		},
-		
-
+		}
 	});
 
 })(zeegaDashboard.module("dashboard"));

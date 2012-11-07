@@ -69,11 +69,11 @@
 						'<label class="radio"><input name="set" type="radio" value="true" <%= public %>> <span class="label label-success">'+l.jda_collection_public+'</span>'+l.jda_collection_publiclabel+'</label>'+
 						'<label class="radio"><input name="set" type="radio" value="false" <%= private %>> <span class="label">'+l.jda_collection_limited+'</span>'+l.jda_collection_limitedlabel+'</label>'+
 					'</div>'+
-					l.jda_collection_archivenote+
+					'Note: it may take several minutes for the changes to take effect'+
 				'</div>'+
 				'<div class="modal-footer">'+
-					'<a href="#" class="btn close">'+l.jda_cancel+'</a>'+
-					'<a href="#" class="btn btn-success pull-right save">'+l.jda_save+'</a>'+
+					'<a href="#" class="btn close">Cancel</a>'+
+					'<a href="#" class="btn btn-success pull-right save">Save</a>'+
 				'</div>'+
 			'</div>';
 
