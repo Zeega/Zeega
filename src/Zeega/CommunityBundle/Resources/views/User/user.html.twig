@@ -173,7 +173,7 @@
 	<!-- Author Card Ends -->
 	
 
-	{% if is_granted('ROLE_PRO_USER') %}
+	{% if is_granted('ROLE_PRO_USER') and user.id == logged_user.id %}
 
 	<div class="container new-section">
 	

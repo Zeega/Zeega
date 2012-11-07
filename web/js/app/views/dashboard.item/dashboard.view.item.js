@@ -109,7 +109,8 @@
 		render: function()
 		{
 			var blanks = {
-				count:this.collection.length
+				count:this.collection.length,
+				total_count:this.collection.items_count
 			};
 			var _this=this;
 			$(this.el).html( _.template( this.getTemplate(), blanks ) );
@@ -130,7 +131,7 @@
 			var item = this.collection.get(item_id);
 
 			item.save({published:2});
-			$('.moderation-alert').text('Approved Item: '+item.get('title')).removeClass('reject').addClass('approve');
+			$('.moderation-alert').text('Approved: '+item.get('title').shorten(25)).removeClass('reject').addClass('approve');
 			_.delay(function(){$('.moderation-alert').removeClass('approve');},3000);
 			this.collection.remove(item);
 			this.approvedItems.add(item);
@@ -138,7 +139,7 @@
 		onItemRejected :function(item_id){
 			var item = this.collection.get(item_id);
 			item.destroy();
-			$('.moderation-alert').text('Deleted Item: '+item.get('title')).removeClass('approve').addClass('reject');
+			$('.moderation-alert').text('Deleted: '+item.get('title').shorten(25)).removeClass('approve').addClass('reject');
 			_.delay(function(){$('.moderation-alert').removeClass('reject');},3000);
 			this.rejectedItems.add(item);
 			
@@ -153,11 +154,15 @@
 				_this.approvedItems.add(item);
 			});
 			_this.collection.reset();
-			$(this.el).find('.item-info').fadeOut('fast',function(){
-				$(_this.el).find('.empty-status').fadeIn();
-			});
+			
 
 			$(this.el).find('ul').empty();
+			if(this.collection.returned_items_count<this.collection.items_count) this.refresh();
+			else{
+				$(this.el).find('.item-info').fadeOut('fast',function(){
+				$(_this.el).find('.empty-status').fadeIn();
+			});
+			}
 		},
 		refresh:function(){
 			this.collection.reset();
@@ -177,15 +182,14 @@
 					'<div class="span11">'+
 						'<div class="tagged-info">'+
 							'<span class="tag-name">#planettakeout</span> '+
-							//'<span class="from">from</span> <span class="zitem-flickr zitem-30"></span> <span class="zitem-vimeo zitem-30"></span>'+
 						'</div>'+
 					'</div>'+
 				'</div>'+
 
 				'<div class="row">'+
-					'<div class="span4">'+
+					'<div class="span7">'+
 						'<div class="approval-header item-info hidden">'+
-							'<span class="items-count"><%=count%> </span>items'+
+							'Viewing <span class="items-count"><%=count%> </span> of <span class="items-count"><%=total_count%> </span> items'+
 							'<button class="approve-all" href="#">Approve All</button>'+
 						'</div>'+
 						'<div class="approval-header empty-status hidden">'+
@@ -193,7 +197,7 @@
 							'<button class="refresh" href="#">Refresh</button>'+
 						'</div>'+
 					'</div>'+
-					'<div class="span7">'+
+					'<div class="span4">'+
 						'<div class="moderation-alert" >Added to your collections</div>'+
 					'</div>'+
 				'</div>'+
@@ -206,7 +210,6 @@
 		return html;
 		
 		}
-		
 	});
 
 	Dashboard.Items.Model = Backbone.Model.extend({
@@ -234,6 +237,9 @@
 			return url;
 		},
 		parse:function(response){
+			
+			this.items_count=response.items_count;
+			this.returned_items_count=response.returned_items_count;
 			return response.items;
 		}
 
