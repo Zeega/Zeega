@@ -1,7 +1,10 @@
 parameters:
-#    zeega_data.example.class: Zeega\DataBundle\Example
+    zeega_solr.class: Zeega\DataBundle\Service\SolrService
 
 services:
-#    zeega_data.example:
-#        class: %zeega_data.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    zeega_solr:
+        class: %zeega_solr.class%
+        arguments:
+            security: "@solarium.client"
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
