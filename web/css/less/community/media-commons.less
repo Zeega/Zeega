@@ -73,7 +73,29 @@
 .approval-header.hidden{
 		display:none;
 	}
+	
+	.moderation-alert {
+		color:white;
+		margin-top: 18px;
+		padding: 3px;
+		padding-left: 9px;
+		opacity:0;
+	}
+.moderation-alert.approve{
+	background-color:rgba(0, 255, 48, 0.75);
+	opacity:1;
+	transition: opacity 1s;
+	-moz-transition: opacity 1s; 
+	-webkit-transition: opacity 1s;
+}
 
+.moderation-alert.reject{
+	background-color:rgba(255, 72, 72, 0.75);
+	opacity:1;
+	transition: opacity 1s;
+	-moz-transition: opacity 1s; 
+	-webkit-transition: opacity 1s;
+}
 
 ul.media-assets {
 	list-style-type: none;

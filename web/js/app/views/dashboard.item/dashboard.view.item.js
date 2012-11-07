@@ -35,13 +35,13 @@
 		},
 		approveItem:function(){
 
-				$(this.el).animate({'opacity': '0', 'height': '0'}, 1000, 'linear', function(){
+				$(this.el).animate({'opacity': '0', 'height': '0'}, 500, 'linear', function(){
 					$(this).remove();
 				});
 				this.model.trigger('approved',this.model.id);
 		},
 		rejectItem:function(){
-				$(this.el).animate({'opacity': '0', 'height': '0'}, 1000, 'linear', function(){
+				$(this.el).animate({'opacity': '0', 'height': '0'}, 500, 'linear', function(){
 					$(this).remove();
 				});
 				this.model.trigger('rejected',this.model.id);
@@ -130,22 +130,23 @@
 			var item = this.collection.get(item_id);
 
 			item.save({published:2});
-			$('.alert').css({'background-color':'green'}).text('Approved Item: '+item.get('title')).stop().fadeIn(300).delay(1500).fadeOut(300);
+			$('.moderation-alert').text('Approved Item: '+item.get('title')).removeClass('reject').addClass('approve');
+			_.delay(function(){$('.moderation-alert').removeClass('approve');},3000);
 			this.collection.remove(item);
 			this.approvedItems.add(item);
 		},
 		onItemRejected :function(item_id){
 			var item = this.collection.get(item_id);
 			item.destroy();
-			$('.alert').css({'background-color':'red'}).text('Deleted Item: '+item.get('title')).stop().fadeIn(300).delay(1500).fadeOut(300);
-			this.collection.remove(item);
+			$('.moderation-alert').text('Deleted Item: '+item.get('title')).removeClass('approve').addClass('reject');
+			_.delay(function(){$('.moderation-alert').removeClass('reject');},3000);
 			this.rejectedItems.add(item);
 			
 		},
 		approveAll : function(){
 			var _this=this;
-			$('.alert').css({'background-color':'green'}).text('Approved '+this.collection.length+' Items').stop().fadeIn(300);
-			
+			$('.moderation-alert').text('Approved '+this.collection.length+' Items').removeClass('reject').addClass('approve');
+			_.delay(function(){$('.moderation-alert').removeClass('approve');},3000);
 			_.each(this.collection.models,function(item){
 				console.log(item);
 				item.save({published:2});
@@ -156,6 +157,7 @@
 				$(_this.el).find('.empty-status').fadeIn();
 			});
 
+			$(this.el).find('ul').empty();
 		},
 		refresh:function(){
 			this.collection.reset();
@@ -192,7 +194,7 @@
 						'</div>'+
 					'</div>'+
 					'<div class="span7">'+
-						'<div class="alert" style="display: none;">Added to your collections</div>'+
+						'<div class="moderation-alert" >Added to your collections</div>'+
 					'</div>'+
 				'</div>'+
 				'<ul class="media-assets">'+
