@@ -36,6 +36,28 @@ this.zeega.dashboard = {
 		
 		
 		
+		$('.community').click(function(){
+			$('.projects').removeClass('active');
+			$('.community').addClass('active');
+			$('#community-content').show();
+			$('#projects-content').hide();
+			
+		});
+		
+		$('.projects').click(function(){
+			$('.projects').addClass('active');
+			$('.community').removeClass('active');
+			$('#projects-content').show();
+			$('#community-content').hide();
+		
+		});
+		
+		
+		
+		
+		
+		
+		
 		this.editable = $.parseJSON(userProjectsJSON).editable;
 
 		zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
