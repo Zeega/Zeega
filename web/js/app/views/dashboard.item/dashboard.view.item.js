@@ -5,253 +5,223 @@
 	
 	Dashboard.Items.View =  Backbone.View.extend({
 		
-		tagName : 'tr',
-		className : 'list-media',
-		
-		initialize: function () {
-			var _this=this;
-			this.el.id = this.model.id;
-		},
-		events : {
-			'click':'previewItem'
-		},
-		previewItem: function()
-		{
-			this.model.trigger('preview_item',this.model.id);
-			return false;
-		},
-		 
-		render: function(done)
-		{
-			var _this = this;
-			
-			var template;
-			switch( this.model.get('media_type') )
-			{
-				case 'Image':
-					template = this.getImageTemplate();
-					break;
-				case 'Document':
-					template = this.getDefaultTemplate();
-					break;
-				case 'Website':
-					template = this.getWebsiteTemplate();
-					break;
-				case 'Text':
-					template = this.getTestimonialTemplate();
-					break;
-				case 'Video':
-					template = this.getDefaultTemplate();
-					break;
-				case 'Audio':
-					template = this.getDefaultTemplate();
-					break;
-				case 'PDF':
-					template = this.getDefaultTemplate();
-					break;
-				case 'Collection':
-					$(this.el).removeClass('list-fancymedia');
-					template = this.getCollectionTemplate();
-					break;
-				
-				default:
-					template = this.getDefaultTemplate();
-			}
-			
-			
-		
-			var blanks = this.model.attributes;
-			
-			if(_.isUndefined(this.model.get("display_name")))blanks.display_name="none";
-				
-			if (false&&!_.isUndefined(this.model.get("media_date_created"))&&!_.isNull(this.model.get("media_date_created"))){
-				blanks["media_date"] = new Date(this.model.get("media_date_created").replace(" ", "T"));
-				blanks["media_date"]=blanks["media_date"].format("mmmm dS, yyyy<br/>h:MM TT");
-			} else {
-				blanks["media_date"] = "n/a";
-			}
-			if (!_.isObject(this.model.get("text"))&&!_.isNull(this.model.get("text"))&&!_.isUndefined(this.model.get("text"))){
-				var excerpt = this.model.get("text").replace(/\r\n/gi, '<br/>');
-			}
-			if (this.model.get("description") === null){
-				blanks["description"] = " ";
-			}
-			if (this.model.get("description") !== null && this.model.get("description").length > 255){
-				blanks["description"] = this.model.get("description").substring(0,255) + "...";
-			}
-			if (this.model.get("title") === null || this.model.get("title") == "none" || this.model.get("title") === ""){
-				blanks["title"] = "";
-			}
+		tagName : 'li',
+		className : 'asset',
 
-			blanks["author"] = this.model.get("media_creator_username");
+		
+		initialize: function (options) {
+			_.extend(this,options);
 			
-			if (this.model.get("media_type") == "Text" && this.model.get('description').length < this.model.get('text').length){
-				blanks["description"] = this.model.get('description') + '...';
-			}
-			
-			if (this.model.get("media_type") == "Website"){
-				var parts = this.model.get('attribution_uri').split('http');
-				blanks["original_url"] = "http"+parts[2];
-			}
-			
-			
-			$(this.el).html( _.template( template, blanks ) );
-			
-			
-			$(this.el).find('.zeega-item-thumbnail').append(new Items.Views.Thumb({model:this.model}).render().el);
-			
+		},
+		events: {
+			'click .accept':'approveItem',
+			'click .reject':'rejectItem'
+		},
+
+		render: function()
+		{
+			var blanks = this.model.attributes;
+			var _this=this;
+			blanks['title']=blanks['title'].shorten(30);
+
+			$(this.el).html( _.template( this.getTemplate(), blanks ) );
+
+	
+			_.each(this.model.get('tags'), function(tag){
+				$(_this.el).find('.media-tags').append('<li>'+tag+'</li>');
+			});
+
 			return this;
 		},
+		approveItem:function(){
 
+				$(this.el).animate({'opacity': '0', 'height': '0'}, 1000, 'linear', function(){
+					$(this).remove();
+				});
+				this.model.trigger('approved',this.model.id);
+		},
+		rejectItem:function(){
+				$(this.el).animate({'opacity': '0', 'height': '0'}, 1000, 'linear', function(){
+					$(this).remove();
+				});
+				this.model.trigger('rejected',this.model.id);
+		},
+		getTemplate : function()
+		{
+			var html=
+			
+			'<div class="controls">'+
+							'<a class="accept" href="#">'+
+								'<i class="icon-ok"></i>'+
+							'</a>'+
+							'<a class="reject" href="#">'+
+								'<i class="icon-remove"></i>'+
+							'</a>'+
+						'</div>'+
+						'<div class="media-preview" >'+
+							'<img src="<%=thumbnail_url%>"/>'+
+						'</div>'+
+						'<div class="media-info">'+
+							'<h2><%= title %> </h2>'+
+							'<dl>'+
+								'<dt>Created by</dt>'+
+								'<dd><%= media_creator_username %></dd>'+
+								'<dt>Created on</dt>'+
+								'<dd><%=date_created %></dd>'+
+							'</dl>'+
+							'<p><%=description%></p>'+
+						'</div>'+
+						'<ul class="media-tags">'+
+						'</ul>';
+
+		return html;
 		
-		getImageTemplate : function()
-		{
-			html =
-
-
-			'<td class="zeega-list-left-column">'+
-				'<div class="zeega-item-thumbnail"></div>'+
-			'</td>'+
-			'<td class="zeega-list-middle-column">'+
-				'<h3><%= title %></h3><p >by: <%= author %>'+
-				'<p class="jda-item-description"><%= description %></p>'+
-			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date">'+
-				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-			'</td>';
-			
-
-			
-			return html;
-		},
-		getDefaultTemplate : function()
-		{
-			html =
-
-
-			'<td class="zeega-list-left-column">'+
-				'<div class="zeega-item-thumbnail"></div>'+
-			'</td>'+
-			'<td class="zeega-list-middle-column">'+
-				'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
-				'<p class="jda-item-description"><%= description %></p>'+
-			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date">'+
-			'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-			'</td>';
-			
-
-			
-			return html;
-		},
-		getDocumentTemplate : function()
-		{
-			html =
-			
-
-
-			'<td class="span2">'+
-				'<i class="jdicon-document"></i>'+
-				'<div class="item-author item-author-left"><%= author %></div>'+
-			'</td>'+
-			'<td class="jda-item-description">'+
-				'<div class="jda-item-title"><%= title %></div>'+
-				'<div><%= description %></div>'+
-			'</td>'+
-			'<td class="jda-item-date">'+
-				''+
-				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-			'</td>';
-
-			
-			return html;
-		},
-		getWebsiteTemplate : function()
-		{
-			html =
-
-			'<td class="zeega-list-left-column">'+
-				'<div class="zeega-item-thumbnail"></div>'+
-			'</td>'+
-			'<td class="zeega-list-middle-column">'+
-				'<h3><%= title %></h3>'+
-				'<p><%= original_url %></p>'+
-				'<p class="jda-item-description"><%= description %></p>'+
-			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date">'+
-				''+
-				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-			'</td>';
-			
-			
-			return html;
-		},
-
-		getTestimonialTemplate : function()
-		{
-			html =
-			'<td class="zeega-list-left-column">'+
-				'<div class="zeega-item-thumbnail"></div>'+
-			'</td>'+
-			'<td class="zeega-list-middle-column">'+
-				'<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
-				'<p class="jda-item-description"><%= description %></p>'+
-			'</td>'+
-			'<td class="zeega-list-right-column jda-item-date">'+
-				'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-			'</td>';
-			return html;
-		},
-		
-	
-		
-		getCollectionTemplate : function()
-		{
-			html =
-
-				'<td class="zeega-list-left-column">'+
-				'<div class="zeega-item-thumbnail"></div>'+
-				'</td>'+
-				'<td class="zeega-list-middle-column">'+
-					'<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
-					'<p class="jda-item-description"><%= description %></p>'+
-				'</td>'+
-				'<td class="zeega-list-right-column jda-item-date">'+
-					''+
-				'</td>';
-				
-
-
-			
-			return html;
-		},
-		getDefaultTemplate : function()
-		{
-			html =
-			
-
-				'<td class="zeega-list-left-column">'+
-					'<div class="zeega-item-thumbnail"></div>'+
-				'</td>'+
-				'<td class="zeega-list-middle-column">'+
-					'<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
-					'<p class="jda-item-description"><%= description %></p>'+
-				'</td>'+
-				'<td class="zeega-list-right-column jda-item-date">'+
-					''+
-					'<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-				'</td>';
-				
-
-			
-			return html;
 		}
 		
 	});
 
-	Dashboard.Items.Model = Backbone.Model.extend();
+	Dashboard.Items.CollectionView =  Backbone.View.extend({
+		
+		tagName : 'div',
+		className : 'row',
+
+		
+		initialize: function (options) {
+			_.extend(this,options);
+			this.approvedItems = new Dashboard.Items.Collection();
+			this.rejectedItems = new Dashboard.Items.Collection();
+			var _this=this;
+			
+			this.collection.on('remove',function(){
+				$(this.el).find('.items-count').html(this.collection.length+" ");
+			},this);
+
+
+
+
+
+		},
+		events: {
+			'click .approve-all':'approveAll',
+			'click .refresh':'refresh'
+		},
+
+		render: function()
+		{
+			var blanks = {
+				count:this.collection.length
+			};
+			var _this=this;
+			$(this.el).html( _.template( this.getTemplate(), blanks ) );
+
+			_.each(this.collection.models,function(item){
+				item.on('approved',_this.onItemApproved,_this);
+				item.on('rejected',_this.onItemRejected,_this);
+				var itemView = new Dashboard.Items.View({model:item});
+				$(_this.el).find('.media-assets').append(itemView.render().el);
+			});
+
+
+			if(this.collection.length===0) $(this.el).find('.empty-status').removeClass('hidden');
+			else $(this.el).find('.item-info').removeClass('hidden');
+			return this;
+		},
+		onItemApproved:function(item_id){
+			var item = this.collection.get(item_id);
+
+			item.save({published:2});
+			$('.alert').css({'background-color':'green'}).text('Approved Item: '+item.get('title')).stop().fadeIn(300).delay(1500).fadeOut(300);
+			this.collection.remove(item);
+			this.approvedItems.add(item);
+		},
+		onItemRejected :function(item_id){
+			var item = this.collection.get(item_id);
+			item.destroy();
+			$('.alert').css({'background-color':'red'}).text('Deleted Item: '+item.get('title')).stop().fadeIn(300).delay(1500).fadeOut(300);
+			this.collection.remove(item);
+			this.rejectedItems.add(item);
+			
+		},
+		approveAll : function(){
+			var _this=this;
+			$('.alert').css({'background-color':'green'}).text('Approved '+this.collection.length+' Items').stop().fadeIn(300);
+			
+			_.each(this.collection.models,function(item){
+				console.log(item);
+				item.save({published:2});
+				_this.approvedItems.add(item);
+			});
+			_this.collection.reset();
+			$(this.el).find('.item-info').fadeOut('fast',function(){
+				$(_this.el).find('.empty-status').fadeIn();
+			});
+
+		},
+		refresh:function(){
+			this.collection.reset();
+			var _this=this;
+			this.collection.fetch({success:function(){
+				_this.render();
+			}});
+		},
+
+
+		getTemplate : function()
+		{
+			var html=
+			'<div class="span11">'+
+				
+				'<div class="row">'+
+					'<div class="span11">'+
+						'<div class="tagged-info">'+
+							'<span class="tag-name">#planettakeout</span> '+
+							//'<span class="from">from</span> <span class="zitem-flickr zitem-30"></span> <span class="zitem-vimeo zitem-30"></span>'+
+						'</div>'+
+					'</div>'+
+				'</div>'+
+
+				'<div class="row">'+
+					'<div class="span4">'+
+						'<div class="approval-header item-info hidden">'+
+							'<span class="items-count"><%=count%> </span>items'+
+							'<button class="approve-all" href="#">Approve All</button>'+
+						'</div>'+
+						'<div class="approval-header empty-status hidden">'+
+							'<span class="empty-msg">No items to approve!</span>'+
+							'<button class="refresh" href="#">Refresh</button>'+
+						'</div>'+
+					'</div>'+
+					'<div class="span7">'+
+						'<div class="alert" style="display: none;">Added to your collections</div>'+
+					'</div>'+
+				'</div>'+
+				'<ul class="media-assets">'+
+				'</ul>'+
+			'</div>'+
+			'<div class="span3">'+
+			'</div>'+
+		'</div>';
+		return html;
+		
+		}
+		
+	});
+
+	Dashboard.Items.Model = Backbone.Model.extend({
+		initialize:function(){
+
+		},
+		url:function(){
+
+			var url = zeega.url_prefix+'api/items/'+this.id;
+			return url;
+		}
+
+	});
 
 	Dashboard.Items.Collection = Backbone.Collection.extend({
+		model:Dashboard.Items.Model,
+
 		initialize:function(options){
 			_.extend(this,options);
 		},

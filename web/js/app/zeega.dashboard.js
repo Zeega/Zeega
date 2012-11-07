@@ -27,10 +27,18 @@ this.zeega.dashboard = {
 
 		var Dashboard = zeega.dashboard.module("dashboard");
 		
+		String.prototype.shorten=function(max_length){
+			if(this.length>max_length){
+				return this.substr(0,max_length-3)+"...";
+			}
+			else return this;
+		};
+		
+		
+		
 		this.editable = $.parseJSON(userProjectsJSON).editable;
 
-		zeega.url_prefix = '//staging.zeega.org/';
-		//zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
+		zeega.url_prefix = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory');
 		
 		//Load user info from JSON variable in page
 		var user = new Dashboard.Users.Model($.parseJSON(userProjectsJSON));
@@ -40,7 +48,12 @@ this.zeega.dashboard = {
 		this.projectsView = new Dashboard.Project.CollectionView({collection:projects}).render();
 
 		var items = new Dashboard.Items.Collection({type:'unmoderated'});
-		items.fetch({success:function(collection,response){console.log(collection,response);}});
+		items.fetch({success:function(collection,response){
+		
+			_this.moderationView = new Dashboard.Items.CollectionView({collection:collection});
+			$('#community-content').append(_this.moderationView.render().el);
+			
+		}});
 		
 	},
 	
