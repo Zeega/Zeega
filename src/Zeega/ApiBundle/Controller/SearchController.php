@@ -374,7 +374,8 @@ class SearchController extends BaseController
 		$query["tags"]          = $request->query->get('tags');      //  string
 		$query["tagsName"]   = $request->query->get('tags_name');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
-		
+		$query["enabled"] = True;
+        
 		// Match tag type searches
 		$queryString = $query["queryString"];
 		
