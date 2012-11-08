@@ -43,7 +43,7 @@
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>';
 								
-								if (zeegaDashboard.app.editable)
+								if (zeega.dashboard.app.editable)
 								{
 									html+=
 								'<div class="admin-actions btn-group">'+
@@ -66,4 +66,4 @@
 		}
 	});
 
-})(zeegaDashboard.module("dashboard"));
+})(zeega.dashboard.module("dashboard"));
