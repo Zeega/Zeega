@@ -66,10 +66,10 @@ class ParserFlickrSet extends ParserAbstract
             $page = 1;
 
             while(1) {
-    		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,500);
+    		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,500,$page);
     		 	$photos = $setPhotos['photoset']['photo'];
 
-        		if(null === $photos) {
+        		if(null !== $photos) {
         			$ownerInfo = $f->people_getInfo($setInfo["owner"]);
         			$collection->setChildItemsCount(count($photos));
 
@@ -86,6 +86,8 @@ class ParserFlickrSet extends ParserAbstract
                 if($page > 10) {
                     break;
                 }
+		++$page; 
+                
             }
 		}
 		
