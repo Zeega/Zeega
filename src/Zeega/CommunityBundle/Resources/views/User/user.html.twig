@@ -172,9 +172,57 @@
 	
 	<!-- Author Card Ends -->
 	
+
+	{% if is_granted('ROLE_PRO_USER') and user.id == logged_user.id %}
+
+	<div class="container new-section">
+	
+		<div class="row">
+		
+			<div class="span14" style="position:relative">
+
+				<!-- begin new element: tabs -->
+				<ul class="nav nav-tabs">
+					<li class="active community"><a href="#">Community Contributions</a></li>
+					<li class="projects"><a href="#">Projects</a></li>
+				</ul>
+				<!-- end new element: tabs -->
+				
+			
+			</div>
+		
+		</div>
+
+		<div id="community-content">
+		</div>
+		<div id="projects-content" style="display:none;">
+			<div class="container new-section">
+	
+			<div class="row">
+			
+				<div class="span14" style="position:relative">
+				
+					<h2 class="section-title">Your Latest Zeegas</h2>
+					
+				
+						</div>
+					
+					</div>
+					
+					<div class="row" id="zeega-user-projects">
+					
+					</div>
+				
+			</div>
+
+		</div>
+		
+		
+	
+	</div>
 	
 	<!-- Author's Latest Zeegas Begins -->
-	
+	{% else %}
 	<div class="container new-section">
 	
 		<div class="row">
@@ -194,8 +242,9 @@
 	
 	</div>
 	
-	<!-- Author's Latest Zeegas Ends -->
+	 <!--Author's Latest Zeegas Ends -->
 	
+	{% endif %}
 	
 	
 
