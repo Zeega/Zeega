@@ -496,7 +496,7 @@
 		getTemplate : function()
 		{
 			var html ;
-			if(this.type=='static')	html = "<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
+			if(this.collection_type=='static')	html = "<div class='collection-remove-item'><a id='<%= id %>' href='#' >x</a></div><a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
 			else html= "<a class='database-asset' href='#'><img src='<%= thumbnail_url %>'/></a>";
 			return html;
 		}

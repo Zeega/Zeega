@@ -1038,7 +1038,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-item-database-list.list-view a{float:left;}
 #zeega-item-database-list.list-view .database-item-title{display:block;padding:15px;float:left;color:white;}
 #zeega-item-database-list.list-view .database-item-title h5{color:inherit;}
-.item-viewer{position:fixed;top:0;left:0;background-color:rgba(0, 0, 0, 0.5);height:100%;width:100%;z-index:10000;}
+.item-viewer{position:fixed;top:0;left:0;background-color:rgba(0, 0, 0, 0.5);height:100%;width:100%;z-index:10000;overflow:auto;}
 .item-viewer .container{position:relative;top:10%;height:550px;}
 .item-viewer .viewer-item-title{padding:10px;}
 .item-viewer .item-viewer-content{background:white;border-radius:3px;position:relative;}

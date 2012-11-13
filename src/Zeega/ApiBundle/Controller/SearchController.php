@@ -374,7 +374,8 @@ class SearchController extends BaseController
 		$query["tags"]          = $request->query->get('tags');      //  string
 		$query["tagsName"]   = $request->query->get('tags_name');      //  string
 		$query["dateIntervals"] = $request->query->get('dtintervals');     //  string
-		
+		$query["enabled"] = True;
+        
 		// Match tag type searches
 		$queryString = $query["queryString"];
 		
@@ -432,7 +433,7 @@ class SearchController extends BaseController
 		if(!isset($query['page']))                  		$query['page'] = 0;
 		if($query['page'] > 0)                  		    $query['page'] = $query['page'] - 1;
 		if(!isset($query['limit']))                 		$query['limit'] = 100;
-		if($query['limit'] > 100) 	                		$query['limit'] = 100;
+		if($query['limit'] > 500) 	                		$query['limit'] = 500;
 	    
 	    if( !isset($query["geo"]["north"]) || !isset($query["geo"]["south"]) ||
 	        !isset($query["geo"]["east"]) || !isset($query["geo"]["west"]))

@@ -522,7 +522,7 @@ class ItemsController extends BaseController
         
         $session = $this->getRequest()->getSession();
         
-        if(isset($user_id) && $user_id == 760) {
+        if(isset($user_id) && ($user_id == 760 || $user_id == 1311)) {
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($user_id);
         }
         

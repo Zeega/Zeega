@@ -12,15 +12,14 @@
 				this.on('preview_item',this.previewItem,this);
 		},
 		url : function(){
-			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id+'/items';
+			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id;
 			return url;
 		},
 		parse : function(response)
 		{
-			if (response.items)
-				return response.items;
-			else
-				return response;
+			console.log('parsing static collection');
+			return response.items[0].child_items;
+			
 		},
 		previewItem : function(itemID)
 		{
@@ -34,8 +33,18 @@
 	
 	
 	Items.Collections.Dynamic=Items.Collections.Static.extend({
-		type:'dynamic'
-	
+		type:'dynamic',
+		url : function(){
+			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id+'/items';
+			return url;
+		},
+		parse : function(response)
+		{
+			console.log('parsing dynamic collection');
+			return response.items;
+			
+		},
+		
 	
 	});
 	
