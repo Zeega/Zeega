@@ -27,6 +27,7 @@
 			'opacity' : 1,
 			'opacity_hover' : 1,
 			'blink_on_start' : true,
+			'glow_delay': 0,
 			'glow_on_hover' : true
 		}
 		
@@ -59,16 +60,25 @@
 				max : 1
 			});
 
+			var glowDelaySlider = new Layer.Views.Lib.Slider({
+				property : 'glow_delay',
+				model: this.model,
+				label : 'Link glow delay',
+				step : 0.1,
+				min : 0,
+				max : 5
+			});
+
 			var blinkOnStart = new Layer.Views.Lib.Checkbox({
 				property : 'blink_on_start',
 				model: this.model,
-				label : 'Blink layer when frame plays'
+				label : 'Link glows on frame load'
 			});
 
 			var glowOnHover = new Layer.Views.Lib.Checkbox({
 				property : 'glow_on_hover',
 				model: this.model,
-				label : 'Layer glows on hover'
+				label : 'Link glows on hover'
 			});
 			
 			$(this.controls)
@@ -76,6 +86,7 @@
 				//.append( opacitySlider.getControl() )
 				.append( hoverOpacitySlider.getControl() )
 				.append( blinkOnStart.getControl() )
+				.append( glowDelaySlider.getControl() )
 				.append( glowOnHover.getControl() );
 			
 			return this;
@@ -240,8 +251,8 @@
 			if(this.model.get('attr').blink_on_start)
 			{
 				var _this = this;
-				setTimeout( function(){ $(_this.el).addClass('link-blink'); }, 250 );
-				setTimeout( function(){ $(_this.el).removeClass('link-blink'); }, 2000 );
+				setTimeout( function(){ $(_this.el).addClass('link-blink'); }, 250+(this.model.get('attr').glow_delay*1000) );
+				setTimeout( function(){ $(_this.el).removeClass('link-blink'); }, 2000+(this.model.get('attr').glow_delay*1000) );
 			}
 		},
 		
