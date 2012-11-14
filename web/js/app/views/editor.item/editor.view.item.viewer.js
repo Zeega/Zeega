@@ -301,16 +301,17 @@
 			'click .unpublished':'unpublish'
 		},
 		
-		editItemMetadata : function()
+		editItemMetadata : function(e)
 		{
+			
 			$('#item-delete').hide();
 			this.editing = true;
-			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field').focus();
+			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field');
 			this.$el.find('.edit-item-metadata').hide();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').show();
 			
 			this.tagsView.enterEditMode();
-			
+		
 			return false;
 		},
 		
@@ -361,11 +362,11 @@
 		
 		getTemplate : function()
 		{
-			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
-				"<div id='supernervous' class='row more-info' >"+
-					"<div class='span4'>h"+
+			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
+				"<div class='row more-info' >"+
+					"<div class='span4' style='height:5px;'>"+
 					"</div>"+
-					"<div class='span6 access-level'>ACCESS: <span class='unpublished'>Just Me</span><span class='published'>The Universe</span>"+
+					"<div class='span6 access-level'><div style='padding-left:10px'><strong>Access:</strong> <span class='unpublished'>Just Me</span><span class='published'>The Universe</span></div>"+
 					"</div>"+
 				"</div>"+
 
@@ -389,14 +390,14 @@
 							"<div><strong>Created On:</strong> <%= date_created.date %></div>"+
 							"<div><a href='<%= attribution_uri %>' target='blank'>View Source <i class='icon-share'></i></a></div>"+
 							"<div>"+
-								"<div><strong>Tags:</strong> <a href='#' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
+								"<div><strong>Tags:</strong> <a href='#' id='edit-tags' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
 								"<div class='item-tags'></div>"+
 							"</div>"+
 						"</div>"+
 					"</div>"+
 					"<div class='span6'>"+
 						"<div class='padded-content'>"+
-							"<div><strong>Description:</strong> <a href='#' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
+							"<div><strong>Description:</strong> <a href='#' id='edit-description' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
 							"<div class='item-description-text'><%= description %></div>"+
 							"<button class='btn btn-mini pull-right hide cancel-item-metadata'>Cancel</button>"+
 							"<button class='btn btn-success btn-mini pull-right hide save-item-metadata'>Save Changes</button>"+
