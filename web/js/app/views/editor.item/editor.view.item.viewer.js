@@ -231,7 +231,7 @@
 			// draw media view
 			
 
-			var itemClass = (this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+			var itemClass = (this.model.get('archive') === '' || this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
 			itemClass=itemClass[0].toUpperCase() + itemClass.slice(1);
 			var mediaView;
 			if( Items.Views.Viewer[itemClass] ) mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
@@ -249,6 +249,12 @@
 			this.tagsView = new Items.Views.Common.TagDisplay({model:this.model});
 			this.$el.find('.item-tags').html( this.tagsView.render().el );
 			
+			if(this.model.get('published')==1){
+				this.$el.find('.unpublished').addClass('selected');
+			}
+			else if(this.model.get('published')==2){
+				this.$el.find('.published').addClass('selected');
+			}
 			
 			return this;
 		},
@@ -276,7 +282,9 @@
 		events : {
 			'click .edit-item-metadata' : 'editItemMetadata',
 			'click .save-item-metadata' : 'saveItemMetadata',
-			'click .cancel-item-metadata' : 'cancelItemEdit'
+			'click .cancel-item-metadata' : 'cancelItemEdit',
+			'click .published':'publish',
+			'click .unpublished':'unpublish'
 		},
 		
 		editItemMetadata : function()
@@ -314,7 +322,21 @@
 			this.tagsView.exitEditMode();
 			
 		},
-		
+
+		publish: function(){
+			console.log('publishing');
+			if(this.model.get('published')!=2) this.model.save({'published':2});
+			this.$el.find('.published').addClass('selected');
+			this.$el.find('.unpublished').removeClass('selected');
+
+		},
+		unpublish:function(){
+			console.log('unpublishing');
+			this.model.set({'published':1});
+			if(this.model.get('published')!=1) this.model.save({'published':1});
+			this.$el.find('.unpublished').addClass('selected');
+			this.$el.find('.published').removeClass('selected');
+		},
 		cancelItemEdit : function()
 		{
 			this.editing = false;
@@ -326,7 +348,13 @@
 		getTemplate : function()
 		{
 			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
-				
+				"<div id='supernervous' class='row more-info' >"+
+					"<div class='span4'>h"+
+					"</div>"+
+					"<div class='span6 access-level'>ACCESS: <span class='unpublished'>Just Me</span><span class='published'>The Universe</span>"+
+					"</div>"+
+				"</div>"+
+
 				"<div class='row'>"+
 					
 					"<div class='<%= mediaSpan %>' id='item-media-target'>"+

@@ -47,7 +47,7 @@ jQuery(function($)
 	ZeegaDiscovery.init();
 	
 	
- $("#jda-search-button-group,#search-bar").fadeTo('fast',1);
+  $("#jda-search-button-group,#search-bar").fadeTo('fast',1);
 
   //View buttons toggle
   $("#zeega-view-buttons button").tooltip({'placement':'bottom', delay: { show: 600, hide: 100 }});

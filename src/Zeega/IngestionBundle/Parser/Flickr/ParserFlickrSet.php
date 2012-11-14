@@ -66,7 +66,7 @@ class ParserFlickrSet extends ParserAbstract
             $page = 1;
 
             while(1) {
-    		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,500);
+    		 	$setPhotos = $f->photosets_getPhotos($setId,null,null,500,$page);
     		 	$photos = $setPhotos['photoset']['photo'];
 
         		if(null !== $photos) {
@@ -83,10 +83,11 @@ class ParserFlickrSet extends ParserAbstract
                     break;
                 }
 
-                if($page++ > 10) {
+                if($page > 10) {
                     break;
                 }
-
+		++$page; 
+                
             }
 		}
 		
