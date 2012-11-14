@@ -76,6 +76,7 @@
 		
 			var url = this.base;
 			if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += '&q=' + this.query.q.toString();
+			else url+='&sort=date-desc';
 			if( !_.isUndefined(this.query.viewType) ) url += '&view_type=' + this.query.viewType;
 			if( !_.isUndefined(this.query.content) ) url += '&content=' + this.query.content;
 			if( !_.isUndefined(this.query.sort) ) url += '&sort=' + this.query.sort;
