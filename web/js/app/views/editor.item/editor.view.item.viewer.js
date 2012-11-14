@@ -137,7 +137,21 @@
 									success: function(model, response)
 									{
 										console.log("Deleted item " + _this.inFocus.id);
-										_this.goRight();
+										console.log(_this.index);
+										if(_this.index < _this.collection.length )
+										{
+											_this.switchItem();
+										}
+										else if(_this.index>1){
+											_this.index--;
+											_this.switchItem();
+										}
+										else{
+											_this.closeViewer();
+										}
+
+
+										//_this.goRight();
 									},
 									error: function(model, response)
 									{
