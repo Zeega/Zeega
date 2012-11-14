@@ -19,7 +19,7 @@
 			
 			this.initListeners();
 			
-			this.attr = this.model.get('attr')
+			this.attr = this.model.get('attr');
 			
 			
 			
@@ -92,7 +92,7 @@
 		
 		onLayerExit : function()
 		{
-			this.model.trigger('editor_readyToRemove')
+			this.model.trigger('editor_readyToRemove');
 		},
 		
 		onControlsOpen : function(){},
@@ -115,13 +115,13 @@
 			if(this.attr.link)
 			{
 				$(this.el).click(function(){
-					window.location = 'http://'+ _this.attr.link
+					window.location = 'http://'+ _this.attr.link;
 				})
 				.addClass('linked-layer');
 
 			}
 			
-			this.model.trigger('ready',this.model.id)
+			this.model.trigger('ready',this.model.id);
 		},
 		
 		private_renderError : function()
@@ -136,7 +136,7 @@
 
 		playPause : function()
 		{
-			console.log('$$		play pause status', this.isPlaying)
+			console.log('$$		play pause status', this.isPlaying);
 			if( this.isPlaying )
 			{
 				this.isPlaying = false;
@@ -145,7 +145,7 @@
 			else
 			{
 				this.isPlaying = true;
-				this.onPlay()
+				this.onPlay();
 			}
 		},
 
@@ -172,7 +172,7 @@
 		
 		private_onLayerExit : function()
 		{
-			this.model.on('editor_readyToRemove', this.remove, this )
+			this.model.on('editor_readyToRemove', this.remove, this );
 			this.onLayerExit();
 		},
 		
@@ -196,7 +196,7 @@
 				
 				start : function(e,ui)
 				{
-					console.log('layer drag start')
+					console.log('layer drag start');
 				},
 				
 				stop : function(e,ui)
@@ -210,12 +210,12 @@
 					$(this).css({
 						top: topCent+'%',
 						left: leftCent+'%'
-					})
+					});
 
 					_this.model.update({
 						top: topCent,
 						left: leftCent
-					})
+					});
 					
 					
 					
@@ -242,12 +242,12 @@
 			this.timer = setTimeout(function(){
 				if(_this.model.status != 'ready')
 				{
-					console.log('ERROR: LAYER TIMEOUT!! '+_this.model.id)
-					_this.model.status = 'error'
-					_this.model.trigger('error', _this.model.id)
+					console.log('ERROR: LAYER TIMEOUT!! '+_this.model.id);
+					_this.model.status = 'error';
+					_this.model.trigger('error', _this.model.id);
 				}
 				//else console.log('no error! loaded normally!!')
-			},this.LAYER_TIMEOUT)
+			},this.LAYER_TIMEOUT);
 		},
 		
 		private_onPlay : function( z )
@@ -256,11 +256,11 @@
 			if(!this.onStage)
 			{
 				this.onStage=true;
-				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:.01});
+				if(this.attr.dissolve) $(this.el).clearQueue().css({opacity:0.01});
 			}
 			this.moveOnStage();
 
-			if(z) this.updateZIndex( z )
+			if(z) this.updateZIndex( z );
 
 			if(this.model.status != 'error' ) this.onPlay();
 
@@ -269,13 +269,6 @@
 			//dissolve
 			if(this.attr.dissolve) $(this.el).fadeTo(1000,this.model.get('attr').opacity);
 			
-			//make the linked layers blink on entrance
-			if(this.attr.link || this.model.get('type') == 'Link')
-			{
-				var _this = this;
-				setTimeout( function(){ $(_this.el).addClass('link-blink') }, 250 );
-				setTimeout( function(){ $(_this.el).removeClass('link-blink') }, 2000 );
-			}
 		},
 		
 		private_onExit : function()
@@ -307,7 +300,7 @@
 		
 		updateZIndex : function( z )
 		{
-			$(this.el).css('z-index', z)
+			$(this.el).css('z-index', z);
 		},
 		
 		moveOffStage :function()

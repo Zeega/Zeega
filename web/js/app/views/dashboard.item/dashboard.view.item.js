@@ -146,14 +146,14 @@
 			var item = this.collection.get(item_id);
 
 			item.save({published:2});
-			$('.moderation-alert').text('Approved: '+item.get('title').shorten(25)).removeClass('reject').addClass('approve');
+			$('.moderation-alert').text('Approved: '+item.get('title').shorten(50)).removeClass('reject').addClass('approve');
 			this.collection.remove(item);
 			this.approvedItems.add(item);
 		},
 		onItemRejected :function(item_id){
 			var item = this.collection.get(item_id);
 			item.destroy();
-			$('.moderation-alert').text('Deleted: '+item.get('title').shorten(25)).removeClass('approve').addClass('reject');
+			$('.moderation-alert').text('Deleted: '+item.get('title').shorten(50)).removeClass('approve').addClass('reject');
 			this.rejectedItems.add(item);
 			
 		},

@@ -41,7 +41,6 @@
 			var template = this.getTemplate();
 			var blanks = this.model.attributes;
 
-			console.log(blanks);
 			var joinDate=new Date(blanks['created_at']);
 			
 			blanks['join_date'] = joinDate.getMonthAbbreviation() + " " + joinDate.getFullYear();
@@ -57,7 +56,7 @@
 			if(_.isUndefined(blanks['thumbnail_url'])||_.isNull(blanks['thumbnail_url'])||blanks['thumbnail_url']==='')blanks['thumbnail_url']="../images/vertov.jpeg";
 			
 			
-			else console.log("there's image data!!!!",blanks);
+			
 			$(this.el).html( _.template( template, blanks ) );
 
 			
@@ -115,7 +114,7 @@
 		},
 		editMetadata : function()
 		{
-			console.log('edit the metadata!');
+			
 			var _this  = this;
 			
 			this.$el.find('.user-image-upload, .save-data button').show();
@@ -156,7 +155,7 @@
 
 
 				$('#' + elementIDName).change(function(){
-					console.log('upload image some more!!!!!');
+					
 					_this.fileUpload(elementIDName);
 				});
 
@@ -189,7 +188,7 @@
 						}
 						
 						$('#' + elementIDName).change(function(){
-							console.log('upload image some more!!!!!');
+							
 							_this.fileUpload(elementIDName);
 						});
 						

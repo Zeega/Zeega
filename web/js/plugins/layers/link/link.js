@@ -9,7 +9,7 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
-		hasControls : false,
+		hasControls : true,
 		defaultControls : false,
 		scalable : true,
 		displayCitation : false,
@@ -75,12 +75,12 @@
 				.append( linkTypeSelect.getControl() )
 				//.append( opacitySlider.getControl() )
 				.append( hoverOpacitySlider.getControl() )
-				//.append( blinkOnStart.getControl() )
+				.append( blinkOnStart.getControl() )
 				.append( glowOnHover.getControl() );
 			
 			return this;
 		
-		},
+		}
 		
 	});
 
@@ -110,13 +110,11 @@
 				'overflow' : 'visible',
 				'cursor' : 'pointer',
 				'z-index' : 100,
-				'width' : 'auto',
-				'height' : 'auto',
 				'border' : 'none',
 				'border-radius' : '0',
 				'height' : this.model.get('attr').height +'%',
 				'width' : this.model.get('attr').width +'%'
-			}
+			};
 
 			this.$el.removeClass('link-arrow-right link-arrow-down link-arrow-up link-arrow-left');
 
@@ -140,7 +138,7 @@
 				_.extend( style, {
 					'border' : '2px dashed orangered',
 					'border-radius' : '6px'
-				})
+				});
 			}
 			
 			
@@ -204,9 +202,9 @@
 					_this.model.update({
 						'width' : $(this).width() / $(this).parent().width() * 100,
 						'height' : $(this).height() / $(this).parent().height() * 100
-					})
+					});
 				}
-			})
+			});
 		
 			this.makeResizable();
 			this.delegateEvents();
@@ -237,13 +235,20 @@
 				'click':'goClick',
 				'mouseover' : 'onMouseOver',
 				'mouseout' : 'onMouseOut'
-			})
+			});
+						//make the linked layers blink on entrance
+			if(this.model.get('attr').blink_on_start)
+			{
+				var _this = this;
+				setTimeout( function(){ $(_this.el).addClass('link-blink'); }, 250 );
+				setTimeout( function(){ $(_this.el).removeClass('link-blink'); }, 2000 );
+			}
 		},
 		
 		getTemplate : function()
 		{
 			var html = '';
-				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';		
+				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 			return html;
 		}
 		
