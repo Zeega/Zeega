@@ -524,7 +524,8 @@
 		{
 			'click .delete-collection'		: 'deleteCollection',
 			'click .layer-super'		: 'expand',
-			'click .edit-item-metadata' : 'preview',
+			'click .view-collection-metadata' : 'preview',
+			'click .view-collection' : 'viewCollection',
 			'click .collection-remove-item':'removeItem'
 		},
 		
@@ -713,6 +714,10 @@
 			return false;
 		},
 
+		viewCollection: function(){
+			console.log('viewing collection');
+		},
+
 		
 		getTemplate : function()
 		{
@@ -722,7 +727,8 @@
 					"<a id='collection-list-thumb' href='#'><img class='collection-list-thumb' src='<%= thumbnail_url %>'/></a>"+
 					"<span class='collection-title'>  <%= title %></span>"+
 					"<span class='pull-right'>"+
-						"<a href='#' class='edit-item-metadata  more-info'><i class='icon-pencil'></i></a>"+
+						"<a href='#' class='view-collection-metadata'><i class='icon-pencil'></i></a>"+
+						"<a href='#' class='view-collection'><i class='icon-map-marker'></i></a>"+
 						"<a class='delete-collection' href='#'><i class='icon-trash icon-white'></i></a>"+
 					"</span>"+
 				"</div>"+
@@ -832,7 +838,8 @@
 			
 			return html;
 		}
-});
+	
+	});
 	
 	Items.Views.DynamicCollectionModal = Items.Views.CollectionModal.extend({
 
@@ -890,7 +897,8 @@
 			
 			return html;
 		}
-});
+	
+	});
 	
 	
 })(zeega.module("items"));

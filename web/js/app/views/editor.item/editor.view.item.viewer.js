@@ -137,7 +137,21 @@
 									success: function(model, response)
 									{
 										console.log("Deleted item " + _this.inFocus.id);
-										_this.goRight();
+										console.log(_this.index);
+										if(_this.index < _this.collection.length )
+										{
+											_this.switchItem();
+										}
+										else if(_this.index>1){
+											_this.index--;
+											_this.switchItem();
+										}
+										else{
+											_this.closeViewer();
+										}
+
+
+										//_this.goRight();
 									},
 									error: function(model, response)
 									{
@@ -231,7 +245,7 @@
 			// draw media view
 			
 
-			var itemClass = (this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+			var itemClass = (this.model.get('archive') === '' || this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
 			itemClass=itemClass[0].toUpperCase() + itemClass.slice(1);
 			var mediaView;
 			if( Items.Views.Viewer[itemClass] ) mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
@@ -249,6 +263,12 @@
 			this.tagsView = new Items.Views.Common.TagDisplay({model:this.model});
 			this.$el.find('.item-tags').html( this.tagsView.render().el );
 			
+			if(this.model.get('published')==1){
+				this.$el.find('.unpublished').addClass('selected');
+			}
+			else if(this.model.get('published')==2){
+				this.$el.find('.published').addClass('selected');
+			}
 			
 			return this;
 		},
@@ -276,19 +296,22 @@
 		events : {
 			'click .edit-item-metadata' : 'editItemMetadata',
 			'click .save-item-metadata' : 'saveItemMetadata',
-			'click .cancel-item-metadata' : 'cancelItemEdit'
+			'click .cancel-item-metadata' : 'cancelItemEdit',
+			'click .published':'publish',
+			'click .unpublished':'unpublish'
 		},
 		
-		editItemMetadata : function()
+		editItemMetadata : function(e)
 		{
+			
 			$('#item-delete').hide();
 			this.editing = true;
-			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field').focus();
+			this.$el.find('.viewer-item-title .inner, .item-description-text').attr('contenteditable',true).addClass('editing-field');
 			this.$el.find('.edit-item-metadata').hide();
 			this.$el.find('.save-item-metadata, .cancel-item-metadata').show();
 			
 			this.tagsView.enterEditMode();
-			
+		
 			return false;
 		},
 		
@@ -314,7 +337,20 @@
 			this.tagsView.exitEditMode();
 			
 		},
-		
+
+		publish: function(){
+			console.log('publishing');
+			if(this.model.get('published')!=2) this.model.save({'published':2});
+			this.$el.find('.published').addClass('selected');
+			this.$el.find('.unpublished').removeClass('selected');
+
+		},
+		unpublish:function(){
+			console.log('unpublishing');
+			if(this.model.get('published')!=1) this.model.save({'published':1});
+			this.$el.find('.unpublished').addClass('selected');
+			this.$el.find('.published').removeClass('selected');
+		},
 		cancelItemEdit : function()
 		{
 			this.editing = false;
@@ -325,8 +361,12 @@
 		
 		getTemplate : function()
 		{
-			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
-				
+			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
+				"<div class='row more-info' >"+
+					"<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong> <span class='unpublished'>Just Me</span><span class='published'>The Universe</span></div>"+
+					"</div>"+
+				"</div>"+
+
 				"<div class='row'>"+
 					
 					"<div class='<%= mediaSpan %>' id='item-media-target'>"+
@@ -347,14 +387,14 @@
 							"<div><strong>Created On:</strong> <%= date_created.date %></div>"+
 							"<div><a href='<%= attribution_uri %>' target='blank'>View Source <i class='icon-share'></i></a></div>"+
 							"<div>"+
-								"<div><strong>Tags:</strong> <a href='#' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
+								"<div><strong>Tags:</strong> <a href='#' id='edit-tags' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
 								"<div class='item-tags'></div>"+
 							"</div>"+
 						"</div>"+
 					"</div>"+
 					"<div class='span6'>"+
 						"<div class='padded-content'>"+
-							"<div><strong>Description:</strong> <a href='#' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
+							"<div><strong>Description:</strong> <a href='#' id='edit-description' class='edit-item-metadata'><i class='icon-pencil'></i></a></div>"+
 							"<div class='item-description-text'><%= description %></div>"+
 							"<button class='btn btn-mini pull-right hide cancel-item-metadata'>Cancel</button>"+
 							"<button class='btn btn-success btn-mini pull-right hide save-item-metadata'>Save Changes</button>"+

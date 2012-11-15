@@ -17,7 +17,7 @@
 			zeega.discovery.app.isLoading = true;
 
 			this.collection.bind('remove', this.remove, this);
-			this.collection.bind('add', this.add, this);	
+			this.collection.bind('add', this.add, this);
 		},
 		
 		add : function(item){
@@ -79,7 +79,7 @@
 			}
 			var itemsCount = this.collection.count;
 
-			if (collectionsCount !=null){
+			if (collectionsCount !==null){
 				$('.jda-results-collections-count').text( this.addCommas(collectionsCount));
 			}
 			$('.jda-results-items-count').text( this.addCommas(itemsCount));
@@ -115,7 +115,7 @@
 				if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
 				else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
 
-			})
+			});
 			
 
 			
@@ -157,7 +157,7 @@
 						zeega.discovery.app.parseSearchUI();
 						return false;
 					});
-				})
+				});
 				
 				$("#jda-related-tags-title").fadeTo(100,1);
 			}
@@ -213,7 +213,7 @@
 					_this.renderTags(response.tags);
 					if(_this.collection.query.page==1)_this.render();
 					
-					if(_this.collection.length<parseInt(response["items_count"])) zeega.discovery.app.killScroll = false; //to activate infinite scroll again
+					if(_this.collection.length<parseInt(response["items_count"],10)) zeega.discovery.app.killScroll = false; //to activate infinite scroll again
 					else zeega.discovery.app.killScroll = true;
 					$(_this.el).fadeTo(1000,1);
 					zeega.discovery.app.isLoading = false;	//to activate infinite scroll again
@@ -277,7 +277,7 @@
 					endDate = new Date(search.times.end*1000);
 					endString = endDate.format('yyyy-mm-dd HH:MM:ss');
 					cqlFilters.push("media_date_created <= '" + endString +"'");
-				}	
+				}
 			}
 
 			//Tags and Texts are stored in the q property
@@ -302,7 +302,7 @@
 				}
 			}
 			if( !_.isUndefined(search.content)&&search.content!="all" )
-			{  
+			{
 				var capitalizedContent =  search.content.charAt(0).toUpperCase() + search.content.slice(1);
 				cqlFilters.push("media_type='" + capitalizedContent + "'");
 			}

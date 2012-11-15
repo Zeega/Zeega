@@ -9,7 +9,7 @@
 
 		layerType : 'Link',
 		layerPanel : $('#links-list'),
-		hasControls : false,
+		hasControls : true,
 		defaultControls : false,
 		scalable : true,
 		displayCitation : false,
@@ -27,6 +27,7 @@
 			'opacity' : 1,
 			'opacity_hover' : 1,
 			'blink_on_start' : true,
+			'glow_delay': 0,
 			'glow_on_hover' : true
 		}
 		
@@ -59,28 +60,38 @@
 				max : 1
 			});
 
+			var glowDelaySlider = new Layer.Views.Lib.Slider({
+				property : 'glow_delay',
+				model: this.model,
+				label : 'Link glow delay',
+				step : 0.1,
+				min : 0,
+				max : 5
+			});
+
 			var blinkOnStart = new Layer.Views.Lib.Checkbox({
 				property : 'blink_on_start',
 				model: this.model,
-				label : 'Blink layer when frame plays'
+				label : 'Link glows on frame load'
 			});
 
 			var glowOnHover = new Layer.Views.Lib.Checkbox({
 				property : 'glow_on_hover',
 				model: this.model,
-				label : 'Layer glows on hover'
+				label : 'Link glows on hover'
 			});
 			
 			$(this.controls)
 				.append( linkTypeSelect.getControl() )
 				//.append( opacitySlider.getControl() )
 				.append( hoverOpacitySlider.getControl() )
-				//.append( blinkOnStart.getControl() )
+				.append( blinkOnStart.getControl() )
+				.append( glowDelaySlider.getControl() )
 				.append( glowOnHover.getControl() );
 			
 			return this;
 		
-		},
+		}
 		
 	});
 
@@ -110,13 +121,11 @@
 				'overflow' : 'visible',
 				'cursor' : 'pointer',
 				'z-index' : 100,
-				'width' : 'auto',
-				'height' : 'auto',
 				'border' : 'none',
 				'border-radius' : '0',
 				'height' : this.model.get('attr').height +'%',
 				'width' : this.model.get('attr').width +'%'
-			}
+			};
 
 			this.$el.removeClass('link-arrow-right link-arrow-down link-arrow-up link-arrow-left');
 
@@ -140,7 +149,7 @@
 				_.extend( style, {
 					'border' : '2px dashed orangered',
 					'border-radius' : '6px'
-				})
+				});
 			}
 			
 			
@@ -204,9 +213,9 @@
 					_this.model.update({
 						'width' : $(this).width() / $(this).parent().width() * 100,
 						'height' : $(this).height() / $(this).parent().height() * 100
-					})
+					});
 				}
-			})
+			});
 		
 			this.makeResizable();
 			this.delegateEvents();
@@ -237,13 +246,20 @@
 				'click':'goClick',
 				'mouseover' : 'onMouseOver',
 				'mouseout' : 'onMouseOut'
-			})
+			});
+						//make the linked layers blink on entrance
+			if(this.model.get('attr').blink_on_start)
+			{
+				var _this = this;
+				setTimeout( function(){ $(_this.el).addClass('link-blink'); }, 250+(this.model.get('attr').glow_delay*1000) );
+				setTimeout( function(){ $(_this.el).removeClass('link-blink'); }, 2000+(this.model.get('attr').glow_delay*1000) );
+			}
 		},
 		
 		getTemplate : function()
 		{
 			var html = '';
-				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';		
+				if( !this.preview && !_.isNull( this.model.get('attr').to_sequence ) ) html += '<i class="icon-share go-to-sequence"></i>';
 			return html;
 		}
 		

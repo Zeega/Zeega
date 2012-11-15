@@ -57,8 +57,10 @@
 	padding: 0 15px;
 	font-size: 120%;
 	vertical-align: middle;
-
-	.approve-all,.refresh{
+	.refresh{
+		cursor:pointer;
+	}
+	.approve-all{
 		background: rgba(0,255,48,0.75);
 		border: none;
 		vertical-align: middle;
@@ -169,6 +171,8 @@ ul.media-assets {
 			float: left;
 			margin-left: 12px;
 			width: 340px;
+			max-height: 160px;
+			overflow: hidden;
 
 			dl {
 				width: 200px;
