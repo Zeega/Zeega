@@ -347,7 +347,6 @@
 		},
 		unpublish:function(){
 			console.log('unpublishing');
-			this.model.set({'published':1});
 			if(this.model.get('published')!=1) this.model.save({'published':1});
 			this.$el.find('.unpublished').addClass('selected');
 			this.$el.find('.published').removeClass('selected');
@@ -364,9 +363,7 @@
 		{
 			html ="<h2 class='viewer-item-title'><span class='inner'><%= title %></span> <a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></h2>"+
 				"<div class='row more-info' >"+
-					"<div class='span4' style='height:5px;'>"+
-					"</div>"+
-					"<div class='span6 access-level'><div style='padding-left:10px'><strong>Access:</strong> <span class='unpublished'>Just Me</span><span class='published'>The Universe</span></div>"+
+					"<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong> <span class='unpublished'>Just Me</span><span class='published'>The Universe</span></div>"+
 					"</div>"+
 				"</div>"+
 
