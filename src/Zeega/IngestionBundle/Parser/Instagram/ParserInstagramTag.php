@@ -10,8 +10,6 @@ use \DateTime;
 
 class ParserInstagramTag extends ParserAbstract
 {
-    private static $soundcloudConsumerKey = 'lyCI2ejeGofrnVyfMI18VQ';
-    
     public function load($url, $parameters = null)
     {
         $loadCollectionItems = $parameters["load_child_items"];
