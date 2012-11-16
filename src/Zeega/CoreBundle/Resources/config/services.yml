@@ -30,3 +30,6 @@ services:
             security: "@security.context"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    zeega_query_parser:
+        class: Zeega\CoreBundle\Service\QueryParserService
