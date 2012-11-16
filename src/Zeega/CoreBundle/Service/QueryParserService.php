@@ -81,6 +81,12 @@ class QueryParserService
             $query["enabled"] = 1;
         }
 
+        if(isset($query["page"]) && $query["page"] > 0) {
+            $query["page"] = $query["page"] - 1;
+        } else {
+            $query["page"] = 0;
+        }
+
         return $query;
     }
 

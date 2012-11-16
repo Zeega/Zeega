@@ -16,26 +16,14 @@ class SolrService
             throw new \BadMethodCallException('The query parameter cannot be null.');
         }
 
-        if(is_array($query)) {
+        if(!is_array($query)) {
             throw new \BadMethodCallException('The query parameter has to be an Array.');
         }        
 
-        // defaults
-        $page = 0;
-        $limit = 100;
-        $enabled = True;
-        $maxItemsReturned = 500;
-
-        if(isset($query["page"]) && $query["page"] > 0) {
-            $page = $query["page"] - 1;
-        }
-
-        if(isset($query["limit"])) {           
-            $limit = ($query["limit"] > 500 ? 500 : $query["limit"]);
-        }
+        
     }
 
-     private function searchWithSolr($notInId = null)
+    private function searchWithSolr($notInId = null)
     {   
         $request = $this->getRequest();
 
