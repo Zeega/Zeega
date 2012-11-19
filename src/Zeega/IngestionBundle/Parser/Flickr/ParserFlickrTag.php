@@ -36,7 +36,7 @@ class ParserFlickrTag extends ParserAbstract
         $searchParameters = array(
             "tags"=>$tags,
             "tag_mode"=>"any",
-            "extras"=>"description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o",
+            "extras"=>"path_alias, description, license, date_upload, date_taken, owner_name, geo, tags, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o",
             "page"=>1,
             "per_page"=>500
         );
@@ -54,6 +54,7 @@ class ParserFlickrTag extends ParserAbstract
             $checkForDuplicates = FALSE;
         } 
 
+        echo $checkForDuplicates;
 		$f = new \Phpflickr_Phpflickr("97ac5e379fbf4df38a357f9c0943e140");
         $currentPage = 1;
         $items = array();
@@ -109,12 +110,14 @@ class ParserFlickrTag extends ParserAbstract
                 } 
                 
                 $item->setTitle($photo['title']);
-                $item->setAttributionUri("http://www.flickr.com/photos/".$photo["owner"]."/".$photo["id"]);
+                $item->setAttributionUri("http://www.flickr.com/photos/".$photo["pathalias"]."/".$photo["id"]."/");
+                
                 $item->setArchive('Flickr'); 
                 $item->setMediaType('Image');
                 $item->setLayerType('Image');
                 $item->setChildItemsCount(0);
                 if(TRUE === $checkForDuplicates) {
+                    echo $item->getAttributionUri();
                     if(FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) {
                         array_push($items,$item);
                     }
