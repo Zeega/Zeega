@@ -44,7 +44,7 @@ class ParserYoutubeTag extends ParserAbstract
 				if($access["action"] !== "embed" || $access["permission"] !== "allowed") {
 
 					if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($video["media\$group"]["media\$player"]["url"], $originalItems)) {
+                        if(TRUE === array_key_exists($video["media\$group"]["yt\$videoid"]["\$t"], $originalItems)) {
                             break;
                         }
                     } 

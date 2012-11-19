@@ -112,19 +112,14 @@ class ParserFlickrTag extends ParserAbstract
                 $item->setTitle($photo['title']);
 
                 $item->setAttributionUri("http://www.flickr.com/photos/".$photo["owner"]."/".$photo["id"]);
-                $altAttributionUri = "http://www.flickr.com/photos/".$photo["pathalias"]."/".$photo["id"];
 
                 $item->setArchive('Flickr'); 
                 $item->setMediaType('Image');
                 $item->setLayerType('Image');
                 $item->setChildItemsCount(0);
                 if(TRUE === $checkForDuplicates) {
-                    echo $item->getAttributionUri();
-                    if((FALSE === array_key_exists($item->getAttributionUri(), $originalItems)) &&
-                       (FALSE === array_key_exists($item->getAttributionUri()."/", $originalItems)) &&
-                       (FALSE === array_key_exists($altAttributionUri, $originalItems)) &&
-                       (FALSE === array_key_exists($altAttributionUri."/", $originalItems))) {
-                            array_push($items,$item);
+                    if(FALSE === array_key_exists($item->getUri(), $originalItems)) {
+                        array_push($items,$item);
                     }
                 } else {                    
                     array_push($items,$item);                    
