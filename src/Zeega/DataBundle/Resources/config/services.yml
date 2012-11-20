@@ -5,6 +5,4 @@ services:
     zeega_solr:
         class: %zeega_solr.class%
         arguments:
-            security: "@solarium.client"
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            solr: "@solarium.client"
