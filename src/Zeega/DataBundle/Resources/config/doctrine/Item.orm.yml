@@ -93,9 +93,6 @@ Zeega\DataBundle\Entity\Item:
         media_date_created:
             type: datetime
             nullable: true
-        media_date_created_end:
-            type: datetime
-            nullable: true        
         media_creator_username:
             type: string
             length: 80
@@ -143,8 +140,6 @@ Zeega\DataBundle\Entity\Item:
     indexes:
         media_date_created_index:
             columns: [media_date_created]
-        media_date_created_end_index:
-            columns: [media_date_created_end]
         item_type_index:
             columns: [layer_type]
         item_enabled_index:
@@ -153,5 +148,7 @@ Zeega\DataBundle\Entity\Item:
             columns: [description]
         item_attribution_uri_index:
             columns: [attribution_uri]
+        item_uri_index:
+            columns: [uri]
         item_ingested_by_index:
             columns: [ingested_by]
