@@ -23,6 +23,23 @@ use Zeega\CoreBundle\Controller\BaseController;
 
 class ItemsController extends BaseController
 {
+    public function getItemsSearchAction()
+    {
+        $queryParser = $this->get('zeega_query_parser');
+        $query = $queryParser->parseRequest($this->getRequest()->query);
+
+        $solr = $this->get('zeega_solr');
+        $results = $solr->search($query);
+
+        //echo '<pre>'; print_r($results); echo '</pre>';
+
+        //return new Response();
+
+        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results["items"], 'load_children' => false));
+
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+    }
+
     /**
      * Parses a url and creates a Zeega item if the url is valid and supported.
      * - Path: GET items/parser
@@ -52,7 +69,7 @@ class ItemsController extends BaseController
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
         }
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        return ResponseHelper::getJsonResponse($itemView);
     }
 
     //  get_collections GET    /api/items.{_format}
@@ -139,7 +156,8 @@ class ItemsController extends BaseController
         if(!isset($query['page']))          $query['page'] = 0;
         if(!isset($query['limit']))         $query['limit'] = 100;
         if($query['limit'] > 100)           $query['limit'] = 100;
-        
+        $query["arrayResults"] = true;
+
          //  execute the query
         $queryResults = $this->getDoctrine()
                              ->getRepository('ZeegaDataBundle:Item')
