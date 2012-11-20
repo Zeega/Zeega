@@ -87,7 +87,7 @@ class QueryParserService
         if(isset($query["page"]) && $query["page"] > 0) {
             $query["page"] = $query["page"] - 1;
         } else {
-            $query["page"] = 0;
+            $query["page"] = 1;
         }
 
         return $query;
