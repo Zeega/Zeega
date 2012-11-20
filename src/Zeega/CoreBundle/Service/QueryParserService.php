@@ -29,20 +29,23 @@ class QueryParserService
          *      - "tags:planettakeout pt -pt_map,type:image OR video -project,published:0,enabled:1";
          */
 
-        foreach($requestComponents as $requestKey => $requestValue) {
+        foreach($request as $requestKey => $requestValue) {
             if($requestKey === "q") {
                 // get the query components
                 $queryStringParameters = explode(",", $requestValue);
-
                 foreach($queryStringParameters as $parameter) {
                     $parameter = explode(":",$parameter);
         
                     if(isset($parameter) && is_array($parameter)) {
-                        $parameterName = $parameter[0];
-                        $parameterValue = $parameter[1];
-                        $parameterValue = self::parseParameterForSolr($parameterValue);
+                        if(count($parameter) == 2) {
+                            $parameterName = $parameter[0];
+                            $parameterValue = $parameter[1];
+                            $parameterValue = self::parseParameterForSolr($parameterValue);
 
-                        $query[$parameterName] = $parameterValue;
+                            $query[$parameterName] = $parameterValue;
+                        } else if(count($parameter) == 1) {
+                            $query["text"] = $parameter[0];
+                        }
                     }
                 }
             } else {
