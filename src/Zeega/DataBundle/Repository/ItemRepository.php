@@ -230,7 +230,7 @@ class ItemRepository extends EntityRepository
        		->where('i.id = :id')
        		->setParameter('id', $id);
         
-    	$res = $qb->getQuery()->getResult();
+    	$res = $qb->getQuery()->getArrayResult();
     	if(isset($res) && count($res) > 0)
     	{
     		return $res[0][0];
