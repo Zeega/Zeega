@@ -28,21 +28,21 @@ class SolrService
             throw new \BadMethodCallException('The query parameter must include a value for the page.');
         }                
         
-        $client = $this->get("solarium.client");
+        $client = $this->solr;
 
-        $query = $client->createSelect();
+        $solrQuery = $client->createSelect();
         
-        $query->setRows($query["page"]);
-        $query->setStart($query["limit"] * $query["page"]);
+        $solrQuery->setRows($query["limit"] * $query["page"]);
+        $solrQuery->setStart($query["page"]);
 
         // sort
         if(isset($query["sort"])) {
             if($query["sort"] == 'date-desc') {
-                $query->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
+                $solrQuery->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
             } else if($query["sort"] == 'date-asc') {
-                $query->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
+                $solrQuery->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
             } else if($query["sort"] == 'id-desc') {
-                $query->addSort('id', \Solarium_Query_Select::SORT_DESC);
+                $solrQuery->addSort('id', \Solarium_Query_Select::SORT_DESC);
             }
         }
 
@@ -60,22 +60,23 @@ class SolrService
             $queryString = $queryString . "tags_i:(".$query["tags"].")";
         }
         
+        //echo '<pre>'; print_r($queryString); echo '</pre>';
         if(isset($queryString) && $queryString != '') {
-            $query->setQuery($queryString);
+            $solrQuery->setQuery($queryString);
         }
         
         // media type
         if(isset($query["type"])) {
-            $query->createFilterQuery('media_type')->setQuery("media_type:(".$query["type"].")");
+            $solrQuery->createFilterQuery('media_type')->setQuery("media_type:(".$query["type"].")");
         }
 
         if(isset($query["geo"]) && $query["geo"] == 1) {
-            $query->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
+            $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
 
         // return only the items that belong to a collection
         if(isset($query["collection"])) {    
-            $query->createFilterQuery('parent_id')->setQuery("parent_item:".$query["collection"]);
+            $solrQuery->createFilterQuery('parent_id')->setQuery("parent_item:".$query["collection"]);
         }
                                                                                     
         if(isset($query["since"]) && isset($query["before"])) {
@@ -86,7 +87,7 @@ class SolrService
             $maxDate->setTimestamp($query["before"]);
             $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
             
-            $query->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
+            $solrQuery->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
         }
                 
         if(isset($userId) && $userId == -1) { // filter results for the logged user
@@ -98,18 +99,22 @@ class SolrService
 
         if(isset($userId)) {
             $userId = ResponseHelper::escapeSolrQuery($userId);
-            $query->createFilterQuery('user_id')->setQuery("user_id: $userId");
+            $solrQuery->createFilterQuery('user_id')->setQuery("user_id: $userId");
         }
         
         // return highly ranked tags for the query
-        $facetComponent = $query->getFacetSet();               
+        $facetComponent = $solrQuery->getFacetSet();               
         $facetComponent->createFacetField('tags')->setField('tags_i')->setLimit(5)->setMinCount(1);
 
         // run the query
-        $resultset = $client->select($query);
-                
-        $r_counts = $request->query->get('r_counts');
+        $resultset = $client->execute($solrQuery);
 
+        $responseData = $resultset->getData();
+
+        //echo '<pre>'; print_r($responseData["response"]["docs"]); echo '</pre>';
+
+        //echo '<pre>'; echo $resultset->getNumFound(); echo '</pre>';
+                
         // get the tags results
         $facets = $resultset->getFacetSet();
         $tags = $facets->getFacet('tags');                   
@@ -121,6 +126,6 @@ class SolrService
             }
         }
 
-        return array("items" => $results, "tags" => $tagsArray);
+        return array("items" => $responseData["response"]["docs"], "tags" => $tagsArray, "total_results" => $resultset->getNumFound());
     }
 }
