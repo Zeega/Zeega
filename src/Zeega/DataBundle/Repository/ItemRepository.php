@@ -210,10 +210,7 @@ class ItemRepository extends EntityRepository
 
         $qb = $this->buildSearchQuery($qb, $query);
         
-        if(isset($query["arrayResults"]) && $query["arrayResults"] === true)
-            return $qb->getQuery()->getArrayResult();
-        else
-            return $qb->getQuery()->execute();
+        return $qb->getQuery()->getArrayResult();
     }
 	
 	//  api/search

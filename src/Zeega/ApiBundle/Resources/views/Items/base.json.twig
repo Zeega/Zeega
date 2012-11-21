@@ -12,7 +12,7 @@
 {% macro show(item,user_is_admin,user,load_children) %}    {# Item rendering macro/function #}
     {% if item is not null %}
     {
-        "id" : {{ item.id | default("") | json_encode | raw }},
+        "id" : {{ item.id | default(null) }},
         "user_id" : {{ item.user.id | default("") | json_encode | raw }},
         "username" : {{ item.user.username | default("") | json_encode | raw }},
         "display_name" : {{ item.user.displayname | default("") | json_encode | raw }},
@@ -21,16 +21,16 @@
         "text" : {{ item.text | default("") | json_encode | raw}},
         "uri" : {{ item.uri | default("") | json_encode | raw}},
         "attribution_uri" : {{ item.attribution_uri | default("") | json_encode | raw}},
-        "date_created" : "{{ item.date_created | date("Y-m-d H:i:s") }}",
-        "media_type" : "{{ item.media_type }}",
-        "layer_type" : "{{ item.layer_type }}",
-        "archive" : "{{ item.archive }}",
+        "date_created" : "{{ item.date_created | default(null) | date("Y-m-d H:i:s") }}",
+        "media_type" : {{ item.media_type | default(null) | json_encode | raw }},
+        "layer_type" : {{ item.layer_type | default(null) | json_encode | raw }},
+        "archive" : {{ item.archive | default(null) | json_encode | raw }},
         "thumbnail_url" : {{ item.thumbnail_url | default(null) | json_encode | raw}},
         "media_geo_latitude" : {{ item.media_geo_latitude | default("") | json_encode | raw}},
         "media_geo_longitude" : {{ item.media_geo_longitude | default("") | json_encode | raw}},
         "media_date_created" : {{ item.media_date_created | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
-        "media_creator_username" : "{{ item.media_creator_username }}",
-        "media_creator_realname" : "{{ item.media_creator_realname }}",
+        "media_creator_username" : {{ item.media_creator_username | default(null) | json_encode | raw }},
+        "media_creator_realname" : {{ item.media_creator_realname | default(null) | json_encode | raw }},
         "child_items_count" : {{ item.childitemscount | default(0) }},
         "attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
         "child_items":

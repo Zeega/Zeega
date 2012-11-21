@@ -35,6 +35,10 @@ class SolrService
         $solrQuery->setRows($query["limit"] * $query["page"]);
         $solrQuery->setStart($query["page"]);
 
+        if(isset($query["fields"])) {
+            $solrQuery->setFields($query["fields"]);
+        }
+
         // sort
         if(isset($query["sort"])) {
             if($query["sort"] == 'date-desc') {

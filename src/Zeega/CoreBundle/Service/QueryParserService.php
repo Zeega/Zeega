@@ -48,6 +48,9 @@ class QueryParserService
                         }
                     }
                 }
+            } else if($requestKey === "fields") {
+                $requestValue = str_replace(' ','',$requestValue);
+                $query[$requestKey] = explode(",", $requestValue);
             } else {
                 $query[$requestKey] = $requestValue;
             }
@@ -82,6 +85,10 @@ class QueryParserService
 
         if(!isset($query["enabled"])) {
             $query["enabled"] = 1;
+        }
+
+        if(!isset($query["result_type"])) {
+            $query["result_type"] = "plain";
         }
 
         if(isset($query["page"]) && $query["page"] > 0) {

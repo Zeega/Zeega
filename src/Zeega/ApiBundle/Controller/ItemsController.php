@@ -25,17 +25,23 @@ class ItemsController extends BaseController
 {
     public function getItemsSearchAction()
     {
+        // parse the query
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
 
-        $solr = $this->get('zeega_solr');
-        $results = $solr->search($query);
+        if(isset($query["data_source"]) && $query["data_source"] == "db") {
+            $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);                      
+            $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);        
+        } else {
+            $solr = $this->get('zeega_solr');
+            $queryResults = $solr->search($query);
+            $results = $queryResults["items"];
+            $resultsCount = $queryResults["total_results"];
+        }
+        
+        $recursiveResults = $query["result_type"] == "recursive" ? true : false;
 
-        //echo '<pre>'; print_r($results); echo '</pre>';
-
-        //return new Response();
-
-        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results["items"], 'load_children' => false));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
 
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
