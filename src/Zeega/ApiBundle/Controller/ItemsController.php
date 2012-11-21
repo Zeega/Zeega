@@ -28,6 +28,8 @@ class ItemsController extends BaseController
         // parse the query
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
+        echo '<pre>'; print_r($query); echo '</pre>';
+        return new Response();
 
         if(isset($query["data_source"]) && $query["data_source"] == "db") {
             $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);                      
