@@ -1,11 +1,11 @@
 ![Zeega](https://raw.github.com/Zeega/Zeega-Core/master/web/images/zeega-logo-large.png)
 
-Zeega is an open-source HTML5 platform that is revolutionizing web publishing and interactive storytelling for a future beyond blogs. To read more about Zeega go to [zeega.com](http://zeega.com).
+Zeega is an open-source HTML5 platform revolutionizing web publishing and interactive storytelling for a future beyond blogs. To read more about Zeega go to [zeega.com](http://zeega.com).
 
 
 ## How to request access to Zeega
 
-Zeega is available on an invitation-only basis. Sign up for an invite here: [http://alpha.zeega.org/register/](http://alpha.zeega.org/register/).  
+A hosted version of Zeega is currently available on an invitation-only basis. Sign up for an invite here: [http://alpha.zeega.org/register/](http://alpha.zeega.org/register/).  
 
 
 ## For Developers
