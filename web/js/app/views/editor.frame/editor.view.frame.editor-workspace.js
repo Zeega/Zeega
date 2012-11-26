@@ -344,8 +344,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 				tolerance: 'pointer',
 				update : function()
 				{
-					var linkOrder = _.map( _this.$el.find('.list>li'), function(layer){ return $(layer).data('id') });
-					var layerOrder = _.map( _this.$el.find('.list>li'), function(layer){ return $(layer).data('id') });
+					var linkOrder = _.map( $('#zeega-link-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
+					var layerOrder = _.map( $('#zeega-layer-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
 					var order = linkOrder.concat(layerOrder).reverse();
 					_this.model.sortLayers( order );
 				}
