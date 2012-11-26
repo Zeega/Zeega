@@ -77,7 +77,7 @@ class ItemsController extends BaseController
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
         }
         
-        return ResponseHelper::getJsonResponse($itemView);
+        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 
     //  get_collections GET    /api/items.{_format}
@@ -285,21 +285,24 @@ class ItemsController extends BaseController
         return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
     }
 
-
-    // post_collections POST   /api/collections.{_format}
     public function postItemsAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $requestData = $this->getRequest()->request;
+        if($requestData->has('id') && $requestData->get('id') !== null && $requestData->get('child_items') && $requestData->get('child_items') !== null) {
+            $requestData->set('new_items', $requestData->get('child_items'));
+            $requestData->set('child_items', null);
+
+            return $this->forward('ZeegaApiBundle:Items:putItemItems', array("itemId"=>$requestData->get('id')), array());
+        }
+
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $itemService = $this->get('zeega.item');
+        $item = $itemService->parseItem($requestData->all(), $user);
         
-        $requestData = $this->getRequest()->request;      
-
-        $item = $this->populateItemWithRequestData($requestData);
-
+        $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();
-        
-        // create a thumbnail
-        $this->forward('ZeegaCoreBundle:Thumbnails:getItemThumbnail', array("itemId" => $item->getId()));
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
@@ -365,7 +368,7 @@ class ItemsController extends BaseController
                 $itemsToRemove = array();
                 $itemsToRemove = explode(",",$itemsToRemoveString);
             }
-                    
+            
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
     
             if (isset($newItems))
@@ -376,25 +379,30 @@ class ItemsController extends BaseController
                 $first = True;
                 $thumbnailUrl = $item->getThumbnailUrl();
                 
-                foreach($newItems as $newItem)
-                {
-                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+                $itemService = $this->get('zeega.item');
+                $user = $this->get('security.context')->getToken()->getUser();
 
-                    if (!$childItem) 
-                    {
-                        throw $this->createNotFoundException('Unable to find Item entity.');
-                    }    
-                    
-                    $childItem->setDateUpdated(new \DateTime("now"));
-                    $item->addChildItem($childItem);
-                    
-                    if($first == True && !isset($thumbnailUrl))
-                    {
-                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
-                        $first = False;
+                foreach($newItems as $newItem) {
+                    if(!is_array($newItem)) {    
+                        $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
+                        if (!$childItem) {
+                            throw $this->createNotFoundException('Unable to find Item entity.');
+                        }    
+                        
+                        $childItem->setDateUpdated(new \DateTime("now"));                        
+                    } else {
+                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("uri" => $newItem['uri'], "enabled" => 1, "user_id" => $user->getId()));
+                        if(isset($existingItem) && count($existingItem) > 0) {
+                            // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
+                            continue;
+                        } else {
+                            $childItem = $itemService->parseItem($newItem, $user);
+                            $item->addChildItem($childItem);
+                        }
                     }
                 }
-                $item->setChildItemsCount($item->getChildItems()->count());
+
+                $item->setChildItemsCount($item->getChildItems()->count() + count($newItems));
 
                 $em->persist($item);
                 $em->flush();
@@ -514,232 +522,5 @@ class ItemsController extends BaseController
                 );
             return ResponseHelper::getJsonResponse($project);
         }
-    }
-    
-   
-    // Private methods     
-    private function populateItemWithRequestData($request_data, $persistChildItems = false)
-    {   
-        $em = $this->getDoctrine()->getEntityManager(); 
-        $thumbnailService = $this->get('zeega_thumbnail');
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $id = $request_data->get('id');
-        $title = $request_data->get('title');
-        $description = $request_data->get('description');
-        $text = $request_data->get('text');
-        $uri = $request_data->get('uri');
-        $attributionUri = $request_data->get('attribution_uri');
-        $mediaType = $request_data->get('media_type');
-        $layerType = $request_data->get('layer_type');
-        $thumbnailUrl = $request_data->get('thumbnail_url');
-        $mediaGeoLatitude = $request_data->get('media_geo_latitude');
-        $mediaGeoLongitude = $request_data->get('media_geo_longitude');
-        $mediaDateCreated = $request_data->get('media_date_created');
-        $mediaCreatorUsername = $request_data->get('media_creator_username');
-        $mediaCreatorRealname = $request_data->get('media_creator_realname');
-        $archive = $request_data->get('archive');
-        $location = $request_data->get('location');
-        $license = $request_data->get('license');
-        $attributes = $request_data->get('attributes');
-        $tags = $request_data->get('tags');
-        $published = $request_data->get('published');
-        $user_id = $request_data->get('user_id');
-        
-        $session = $this->getRequest()->getSession();
-        
-        if(isset($user_id) && ($user_id == 760 || $user_id == 1311)) {
-            $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($user_id);
-        }
-        
-        $checkForDuplicateItems = true;
-        
-        if(isset($id))
-        {
-            $item = $em->getRepository('ZeegaDataBundle:Item')->find($id);
-        }
-        else if(isset($attributionUri) && $attributionUri != 'default')
-        {
-            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $attributionUri, "enabled" => 1, "user_id" => $user->getId()));
-        }
-        
-        if(!isset($item))
-        {
-            $item = new Item();
-            $item->setDateCreated(new \DateTime("now"));
-            $item->setChildItemsCount(0);
-            $item->setUser($user);
-            $checkForDuplicateItems = false;
-        }
-        
-        $dateUpdated = new \DateTime("now");
-        $item->setDateUpdated($dateUpdated);
-        
-        if(isset($title)) $item->setTitle($title);
-        if(isset($description)) $item->setDescription($description);
-        if(isset($text)) $item->setText($text);
-        if(isset($uri)) $item->setUri($uri);
-        if(isset($attributionUri)) $item->setAttributionUri($attributionUri);
-        if(isset($mediaType)) $item->setMediaType($mediaType);
-        if(isset($layerType)) $item->setLayerType($layerType);
-        
-        if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
-        if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
-        
-        if(isset($thumbnailUrl)) {
-            $thumbnail = $thumbnailService->getItemThumbnail($thumbnailUrl, "Image");
-        } else {
-            $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
-        }
-
-        if(null !== $thumbnail) {
-            $item->setThumbnailUrl($thumbnail);
-        }    
-        
-        if(isset($mediaDateCreated)) 
-        {
-            $parsedDate = strtotime($mediaDateCreated);
-            if($parsedDate)
-            {
-                $d = date("Y-m-d h:i:s",$parsedDate);
-                $item->setMediaDateCreated(new \DateTime($d));
-            }
-        }
-
-        if(isset($mediaCreatorUsername))
-        {
-            $item->setMediaCreatorUsername($mediaCreatorUsername);
-        }
-        else
-        {
-            $item->setMediaCreatorUsername($user->getUsername());
-        }
-        if(isset($mediaCreatorRealname))
-        {
-            $item->setMediaCreatorRealname($mediaCreatorRealname);
-        }
-        else
-        {
-            $item->setMediaCreatorRealname($user->getDisplayname());
-        }
-            
-        if(isset($archive)) $item->setArchive($archive);
-        if(isset($location)) $item->setLocation($location);
-        if(isset($license)) $item->setLicense($license);
-        if(isset($attributes)) $item->setAttributes($attributes);
-        if(isset($tags)) $item->setTags($tags);
-        if(isset($published)) {
-            $item->setPublished($published);  
-        } else {
-            $item->setPublished(false);  
-        }
-        
-        $item->setEnabled(true);
-        
-        // new items from the variable "new_items" - used when adding new items to a collection
-        $newItems = $request_data->get('new_items');
-        $childItems = $request_data->get('child_items');
-        
-        if(!isset($newItems) && isset($childItems))
-        {
-            $newItems = $childItems;
-        }
-        
-        if (isset($newItems))
-        {
-            $first = True;
-            foreach($newItems as $newItem)
-            {
-                if(!is_array($newItem))
-                {
-                    $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
-
-                    if (!$childItem) 
-                    {
-                        throw $this->createNotFoundException('Unable to find Item entity.');
-                    }
-                    $childItem->setDateUpdated($dateUpdated);
-                
-                    $item->addChildItem($childItem);
-
-                    if($first == True)
-                    {
-                        $item->setThumbnailUrl($childItem->getThumbnailUrl());
-                        $first = False;
-                    }
-                }
-                else
-                {
-                    if($checkForDuplicateItems)
-                    {
-                        $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("attribution_uri" => $newItem['attribution_uri'], "enabled" => 1, "user_id" => $user->getId()));
-                        if(isset($existingItem) && count($existingItem) > 0)
-                        {
-                            // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
-                            continue;
-                        }
-                    }
-                    
-                    $childItem = new Item();
-                    
-                    $childItem->setTitle($newItem['title']);
-                    $childItem->setDescription($newItem['description']);
-                    $childItem->setMediaType($newItem['media_type']);
-                    $childItem->setDateCreated(new \DateTime("now"));
-                    $childItem->setArchive($newItem['archive']);
-                    $childItem->setLayerType($newItem['layer_type']);
-                    $childItem->setUser($user);
-                    $childItem->setUri($newItem['uri']);
-                    $childItem->setAttributionUri($newItem['attribution_uri']);
-                    $childItem->setThumbnailUrl($newItem['thumbnail_url']);
-                    $childItem->setEnabled(true);
-                    $childItem->setPublished(true);
-                    $childItem->setChildItemsCount(0);
-                    $childItem->setMediaCreatorUsername($newItem['media_creator_username']);
-                    $childItem->setMediaCreatorRealname($newItem['media_creator_realname']);
-                    $childItem->setTags($newItem['tags']);
-                    if(isset($newItem['media_geo_latitude'])) $childItem->setMediaGeoLatitude($newItem['media_geo_latitude']);
-                    if(isset($newItem['media_geo_longitude'])) $childItem->setMediaGeoLongitude($newItem['media_geo_longitude']);
-                    $mediaDateCreated = $newItem['media_date_created'];
-                    if(isset($mediaDateCreated)) 
-                    {
-                        $parsedDate = strtotime($mediaDateCreated);
-                        if($parsedDate)
-                        {
-                            $d = date("Y-m-d h:i:s",$parsedDate);
-                            $childItem->setMediaDateCreated(new \DateTime($d));
-                        }
-                    }
-
-                    if(isset($thumbnailUrl)) {
-                        $thumbnail = $thumbnailService->getItemThumbnail($thumbnailUrl, "Image");
-                    } else {
-                        $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
-                    }
-
-                    if(null !== $thumbnail) {
-                        $item->setThumbnailUrl($thumbnail);
-                    }    
-
-                    if(isset($newItem['thumbnail_url'])) {
-                        $childItem->setThumbnailUrl($newItem['thumbnail_url']);
-                    } else {
-                        $thumbnail = $thumbnailService->getItemThumbnail($childItem->getUri(), $childItem->getMediaType());
-                        if(null !== $thumbnail) {
-                            $childItem->setThumbnailUrl($thumbnail);
-                        }    
-                    }                    
-                    
-                    $item->addChildItem($childItem);
-                                        
-                    // persist the child item, get the id and generate a thumbnail
-                    $em->persist($childItem);
-                    $em->flush();
-                }
-            }
-            $item->setChildItemsCount(count($newItems));
-        }
-        
-        return $item;
     }
 }

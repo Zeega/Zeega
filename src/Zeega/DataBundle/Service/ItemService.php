@@ -5,34 +5,13 @@ use Zeega\DataBundle\Entity\Item;
 
 class ItemService
 {
-    public function __construct($solr) 
+    public function __construct($itemService) 
     {
-        $this->solr = $solr;
+        $this->thumbnailService = $itemService;
     }
 
-    public function parseItem($itemArray, $user = null, $ingestor = null)
+    public function parseItem($itemArray, $user, $ingestor = null)
     {
-        $title = $itemArray['title'];
-        $description = $itemArray['description'];
-        $text = $itemArray['text'];
-        $uri = $itemArray['uri'];
-        $attributionUri = $itemArray['attribution_uri'];
-        $mediaType = $itemArray['media_type'];
-        $layerType = $itemArray['layer_type'];
-        $thumbnailUrl = $itemArray['thumbnail_url'];
-        $mediaGeoLatitude = $itemArray['media_geo_latitude'];
-        $mediaGeoLongitude = $itemArray['media_geo_longitude'];
-        $mediaDateCreated = $itemArray['media_date_created'];
-        $mediaCreatorUsername = $itemArray['media_creator_username'];
-        $mediaCreatorRealname = $itemArray['media_creator_realname'];
-        $archive = $itemArray['archive'];
-        $attributes = $itemArray['attributes'];
-        $tags = $itemArray['tags'];
-        $published = $itemArray['published'];
-        $childItems = $itemArray['child_items'];
-        
-        $checkForDuplicateItems = true;
-
         if(!isset($item)) {
             $item = new Item();    
             
@@ -42,6 +21,7 @@ class ItemService
             $item->setChildItemsCount(0);
             $item->setEnabled(true);
             $item->setPublished(false);
+            $item->setUser($user);
         }
         
         // parse the item        
@@ -49,69 +29,69 @@ class ItemService
             $item->setIngestedBy($ingestor);    
         }
 
-        if(isset($title)) {
-            $item->setTitle($title);  
+        if(isset($itemArray['title'])) {
+            $item->setTitle($itemArray['title']);  
         } 
         
-        if(isset($description)) {
-            $item->setDescription($description);
+        if(isset($itemArray['description'])) {
+            $item->setDescription($itemArray['description']);
         } 
 
-        if(isset($text)) {
-            $item->setText($text);  
+        if(isset($itemArray['text'])) {
+            $item->setText($itemArray['text']);  
         } 
 
-        if(isset($uri)) {
-            $item->setUri($uri);  
+        if(isset($itemArray['uri'])) {
+            $item->setUri($itemArray['uri']);  
         } 
         
-        if(isset($attributionUri)) {
-            $item->setAttributionUri($attributionUri);  
+        if(isset($itemArray['attribution_uri'])) {
+            $item->setAttributionUri($itemArray['attribution_uri']);  
         } 
 
-        if(isset($mediaType)) {
-            $item->setMediaType($mediaType);  
+        if(isset($itemArray['media_type'])) {
+            $item->setMediaType($itemArray['media_type']);  
         } 
 
-        if(isset($layerType)) {
-            $item->setLayerType($layerType);  
+        if(isset($itemArray['layer_type'])) {
+            $item->setLayerType($itemArray['layer_type']);  
         } 
         
-        if(isset($mediaGeoLatitude)) {
-            $item->setMediaGeoLatitude($mediaGeoLatitude);  
+        if(isset($itemArray['media_geo_latitude'])) {
+            $item->setMediaGeoLatitude($itemArray['media_geo_latitude']);  
         } 
-        if(isset($mediaGeoLongitude)) {
-            $item->setMediaGeoLongitude($mediaGeoLongitude);  
+        if(isset($itemArray['media_geo_longitude'])) {
+            $item->setMediaGeoLongitude($itemArray['media_geo_longitude']);  
         } 
 
-        if(isset($thumbnailUrl)) {
-            $thumbnail = $this->zeegaThumbnailService->getItemThumbnail($thumbnailUrl, "Image");
+        if(isset($itemArray['thumbnail_url'])) {
+            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], "Image");
         } else {
-            $thumbnail = $this->zeegaThumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
         } 
 
         if(null !== $thumbnail) {
             $item->setThumbnailUrl($thumbnail);
         }
 
-        if(isset($mediaDateCreated)) {
-            $parsedDate = strtotime($mediaDateCreated);
+        if(isset($itemArray['media_date_created'])) {
+            $parsedDate = strtotime($itemArray['media_date_created']);
             if($parsedDate) {
                 $d = date("Y-m-d h:i:s",$parsedDate);
                 $item->setMediaDateCreated(new \DateTime($d));
             }
         }
 
-        if(isset($mediaCreatorUsername)) {
-            $item->setMediaCreatorUsername($mediaCreatorUsername);
+        if(isset($itemArray['media_creator_username'])) {
+            $item->setMediaCreatorUsername($itemArray['media_creator_username']);
         }
 
-        if(isset($mediaCreatorRealname)) {
-            $item->setMediaCreatorRealname($mediaCreatorRealname);
+        if(isset($itemArray['media_creator_realname'])) {
+            $item->setMediaCreatorRealname($itemArray['media_creator_realname']);
         }
             
-        if(isset($archive)) {
-            $item->setArchive($archive);  
+        if(isset($itemArray['archive'])) {
+            $item->setArchive($itemArray['archive']);  
         } 
 
         if(isset($itemArray['location'])) {
@@ -122,17 +102,26 @@ class ItemService
             $item->setLicense($itemArray['license']);  
         } 
         
-        if(isset($attributes)) {
-            $item->setAttributes($attributes);  
+        if(isset($itemArray['attributes'])) {
+            $item->setAttributes($itemArray['attributes']);  
         } 
 
-        if(isset($tags)) {
-            $item->setTags($tags);  
+        if(isset($itemArray['tags'])) {
+            $item->setTags($itemArray['tags']);  
         } 
 
-        if(isset($published)) {
-            $item->setPublished($published);  
+        if(isset($itemArray['published'])) {
+            $item->setPublished($itemArray['published']);  
         } 
+
+        if(isset($itemArray["child_items"])) {
+            foreach($itemArray["child_items"] as $child_item) {
+                $child = self::parseItem($child_item, $user, $ingestor);
+                if(isset($child)) {
+                    $item->addChildItem($child);    
+                }
+            }
+        }
         
         return $item;
     }
