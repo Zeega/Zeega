@@ -12,7 +12,7 @@
 			this.collection.on( 'reset', this.reset, this);
 			this._childViews = [];
 			this._collectionChildViews = [];
-			$('#spinner').spin('large');
+		
 
 			zeega.discovery.app.isLoading = true;
 
@@ -116,56 +116,12 @@
 				else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
 
 			});
-			
-
-			
-			
-			//this is kind of a hack - give all thumbnails same height
-			//to fix floaty issues
-	
-
 
 			this.updateResultsCounts();
 			
 			$(this.el).show();
-
+			$('#zeega-results-wrapper').spin(false);
 			zeega.discovery.app.isLoading = false;
-	
-		
-			//Display related Tags
-			
-			if (!_.isUndefined(this.collection.tags) && this.collection.tags.length > 0 && zeega.discovery.app.currentView != 'event'){
-				$("#jda-related-tags button").remove();
-				_.each( _.toArray(this.collection.tags), function(tag){
-
-					var tagHTML ='<button class="btn btn-mini">'+tag.name+'</button> ';
-					
-					$("#jda-related-tags").append(tagHTML);
-					$("#jda-related-tags button").filter(":last").click(function(){
-						
-						
-						
-						
-						//clear all current search filters
-						zeega.discovery.app.clearSearchFilters(false);
-
-						//add only tag filter
-						VisualSearch.searchBox.addFacet('tag', tag.name, 0);
-						
-
-
-						zeega.discovery.app.parseSearchUI();
-						return false;
-					});
-				});
-				
-				$("#jda-related-tags-title").fadeTo(100,1);
-			}
-			else $("#jda-related-tags-title").fadeTo(1000,0);
-
-			$('#spinner').spin(false);
-			$('#spinner-text').fadeTo('slow',0);
-			$('#jda-left').fadeTo('slow',1);
 			return this;
 		},
 		
@@ -184,19 +140,14 @@
 		{
 		
 			console.log("zeega.discovery.app.resultsView.search",obj);
+			$('#zeega-results-wrapper').spin();
 			var _this = this;
 			
 			this.updated = true;
-			
-			$("#zeega-results-count").fadeTo(1000,0.5);
-
-			$("#related-tags-title:visible").fadeTo(1000,0.5);
-			//$(this.el).fadeTo(1000,0.5);
 			zeega.discovery.app.isLoading = true;
+			
+
 			if (obj.page == 1) $(this.el).hide();
-
-			$('#spinner').spin('large');
-
 			this.collection.setQuery(obj,reset);
 	
 			
@@ -241,7 +192,7 @@
 
 		},
 		clearTags : function(){
-			var currentQ = 	this.collection.search.q;
+			var currentQ = this.collection.search.q;
 			if (currentQ.indexOf("tag:") >= 0){
 				var newQ = currentQ.substring(0,currentQ.indexOf("tag:"));
 				this.collection.search.q = newQ;
