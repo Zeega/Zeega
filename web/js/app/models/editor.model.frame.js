@@ -108,14 +108,12 @@
 		sortLayers : function( layerIDArray )
 		{
 			var _this = this;
-
 			//remove layers not referenced from the collection
-			var brokenLayers = _.difference( this.layers.pluck('id'),layerIDArray );
+			var brokenLayers = _.difference( _.map(this.layers.pluck('id'),function(id){ parseInt(id,10);}),layerIDArray );
 			var brokenLayerModelArray = _.map(brokenLayers, function(layerID){
 				return _this.layers.get(layerID);
 			});
 			this.layers.remove(brokenLayerModelArray,{silent:true});
-
 
 			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
