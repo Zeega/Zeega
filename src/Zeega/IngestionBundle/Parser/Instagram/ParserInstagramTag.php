@@ -44,7 +44,7 @@ class ParserInstagramTag extends ParserAbstract
 
                 foreach($apiItems["data"] as $apiItem) {
                 	if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($apiItem['link'], $originalItems)) {
+                        if(TRUE === array_key_exists($apiItem['images']['standard_resolution']['url'], $originalItems)) {
                             continue;
                         }
                     } 
