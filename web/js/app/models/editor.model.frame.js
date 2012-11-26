@@ -91,18 +91,13 @@
 
 		updateLayerOrder : function()
 		{
-			console.log('update layer order', this.id, this, this.layers.length +'');
 			var layerOrder = this.layers.map(function(layer){
-				console.log('---inside', layer.id, layer );
 				return parseInt(layer.id,10);
 			});
-			console.log('update layer order', layerOrder);
 
 			layerOrder = _.compact( layerOrder );
 			if(layerOrder.length === 0) layerOrder = [false];
-			console.log('update layer order', layerOrder);
 			this.save('layers', layerOrder);
-			console.log('$$$$ update layer order', this, layerOrder);
 			this.updateThumb();
 		},
 
@@ -113,11 +108,20 @@
 		sortLayers : function( layerIDArray )
 		{
 			var _this = this;
+
+			//remove layers not referenced from the collection
+			var brokenLayers = _.difference( this.layers.pluck('id'),layerIDArray );
+			var brokenLayerModelArray = _.map(brokenLayers, function(layerID){
+				return _this.layers.get(layerID);
+			});
+			this.layers.remove(brokenLayerModelArray,{silent:true});
+
+
 			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
 				$('#layer-visual-'+ layer.id).css('z-index', i);
 				layer.layerIndex = i;
-			})
+			});
 			this.layers.sort();
 			this.updateLayerOrder();
 		},
