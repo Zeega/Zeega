@@ -195,7 +195,7 @@
 			.draggable( "option", "handle", ".drag-handle-"+this.model.id )
 			.css('max-height', (this.$el.parent().height()-15)+'px')
 			.addClass('editing')
-			.prepend('<div class="drag-handle drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></div>');
+			.prepend('<a class="drag-handle drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>');
 			
 			this.$('.inner').css('max-height', (this.$el.parent().height()-50)+'px');
 			
