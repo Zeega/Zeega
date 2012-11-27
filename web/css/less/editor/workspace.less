@@ -17,6 +17,66 @@
 }
 
 
+.layer-text.editing
+{
+
+	outline: 1px solid #444;
+
+	.ui-resizable-e
+	{
+		background: transparent;
+		height: 30px;
+		top: 46%;
+		border: 2px solid transparent;
+		right: -13px;
+	}
+
+	#zedit-target
+	{
+		outline: 1px solid #222;
+		margin: 5px;
+	}
+
+	.drag-handle
+	{
+		position: absolute;
+		top: -10px;
+		left: -10px;
+		background: #aaa;
+		opacity: 0.2;
+		border-radius: 3px;
+		height: 14px;
+		padding: 2px;
+	}
+
+	&:hover {
+
+		outline: 1px solid #aaa;
+
+		#zedit-target
+		{
+			outline: 1px solid #555;
+		}
+		.ui-resizable-e
+		{
+			background: yellow;
+			border: 2px solid orange;
+		}
+
+		.drag-handle
+		{
+			background: yellowGreen;
+			opacity:1;
+		}
+
+	}
+
+}
+
+
+
+
+
 
 
 /************* end workspace styles ****************/
