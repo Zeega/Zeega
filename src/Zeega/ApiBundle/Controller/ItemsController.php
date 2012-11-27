@@ -346,7 +346,11 @@ class ItemsController extends BaseController
         $request = $this->getRequest();
         $requestData = $this->getRequest()->request;        
         
-        $item = $this->populateItemWithRequestData($requestData);
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $itemService = $this->get('zeega.item');
+        $item = $itemService->parseItem($requestData->all(), $user);
+
         $em->persist($item);
         $em->flush();
 
