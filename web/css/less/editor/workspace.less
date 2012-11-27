@@ -37,20 +37,30 @@
 	#zedit-target
 	{
 		outline: 1px solid #222;
-		margin: 5px;
-		padding: .1em .1em 0.25em .1em;
+		padding-bottom: 0.25em;
 		overflow:hidden;
 	}
 
 	.drag-handle
 	{
 		position: absolute;
-		top: -10px;
-		left: -10px;
 		opacity: 0.2;
 		height: 18px;
 		padding: 4px;
 		cursor:move;
+
+		&.drag-handle-nw
+		{
+			top: -10px;
+			left: -10px;
+		}
+
+
+		&.drag-handle-se
+		{
+			bottom : -10px;
+			right: -10px;
+		}
 
 		.icon-area
 		{
