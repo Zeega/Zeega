@@ -120,51 +120,34 @@
 				'width' : this.model.get('attr').width+'%',
 				'overflow' : 'visible',
 				'line-height' : '100%',
-
-				'max-height' : '-webkit-calc( '+ (100 - this.model.get('attr').top) +'% - 1px )',
 				'word-wrap': 'break-word'
 				
-			}
+			};
 
 			this.$el.html( _.template( this.getTemplate(), _.extend(this.model.get('attr'), {contentEditable:!this.model.player} ) ) ).css( style );
 
 
 			var _this = this;
 			_.delay(function(){
-				_this.$('#zedit-target').css({
-				'height': _this.$el.height() +'px'
-			})
-			},1000)
+					_this.$('#zedit-target').css({
+					//'height': _this.$el.height() +'px'
+				});
+			},1000);
 
 			if(!this.model.player) $(this.el).addClass('text-non-editing');
 			
-			this.model.trigger('ready',this.model.id)
+			this.model.trigger('ready',this.model.id);
 
 			this.model.on('update', this.onUpdate, this);
 			
+			$('#zeega-frame-workspace').scroll(function(){ $(this).scrollTop(0); });
 			return this;
 		},
 		
 		onUpdate : function()
 		{
-			var height = (100 - this.model.get('attr').top)/100 * $('#zeega-frame-workspace').height() - 1;
-
-			this.$el.css({
-				'max-height' : height +'px',
-			})
 			
-			this.$('#zedit-target').css({
-				'height': height +'px',
-			})
-
-		},
-
-		onPlay : function()
-		{
-			//adjusts the height in the player
-			this.$('#zedit-target').css({
-				'height': this.$el.height() +'px'
-			})
+			
 		},
 
 		onLayerEnter : function()
@@ -172,7 +155,7 @@
 			var _this = this;
 			
 			this.$('#zedit-target').keyup(function(e){
-				if(e.which == 27){ $(this).blur() }
+				if(e.which == 27){ $(this).blur(); }
 				
 				_this.lazySave();
 			})
@@ -193,21 +176,28 @@
 				_this.$el.draggable('option','disabled', false);
 				_this.$el.removeClass('text-editing').addClass('text-non-editing');
 				_this.lazySave();
-			})
+			});
 			
 			this.$el.resizable({
+
+				'handles': 'e',
+				containment: "parent",
+
 				stop : function(e,ui)
 				{
 					$(this).css('height','');
 					_this.model.update({
-						'width' : $(this).width() / $(this).parent().width() * 100,
-					})
+						'width' : $(this).width() / $(this).parent().width() * 100
+					});
 				}
-			}).css({
-				'outline' : '1px dashed red'
-
-			});
+			})
+			.draggable( "option", "containment", "parent" )
+			.draggable( "option", "handle", ".drag-handle-"+this.model.id )
+			.css('max-height', (this.$el.parent().height()-15)+'px')
+			.addClass('editing')
+			.prepend('<a class="drag-handle drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>');
 			
+			this.$('.inner').css('max-height', (this.$el.parent().height()-50)+'px');
 			
 		},
 		
@@ -236,7 +226,6 @@
 		getTemplate : function()
 		{
 			var html = 
-			
 					'<div id="zedit-target" class="inner" contenteditable="<%= contentEditable %>" ><%= content %></div>';
 			
 			return html;
