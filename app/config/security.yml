@@ -29,9 +29,6 @@ security:
                 path:   /logout
                 target: /
             anonymous: ~
-        search:
-            pattern: ^/api/search
-            anonymous: ~
 
     access_control:
         #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
@@ -44,7 +41,6 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/api/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/projects, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/collections, role: IS_AUTHENTICATED_ANONYMOUSLY }
