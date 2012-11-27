@@ -15,6 +15,10 @@
 	width: 700px;
 	margin: 20px auto;
 }
+// hack to keep the scrollbar from showing up on the workspace
+#zeega-frame-workspace::-webkit-scrollbar { 
+    display: none; 
+}
 
 .layer-text.editing
 {
@@ -43,11 +47,18 @@
 		position: absolute;
 		top: -10px;
 		left: -10px;
-		background: #aaa;
-		opacity: 0.2;
-		border-radius: 3px;
-		height: 14px;
-		padding: 2px;
+		//opacity: 0.2;
+		height: 18px;
+		padding: 4px;
+
+		.icon-area
+		{
+			background:#aaa;
+			border-radius: 3px;
+			padding: 2px;
+		}
+
+		
 	}
 
 	&:hover {
@@ -66,13 +77,22 @@
 
 		.drag-handle
 		{
-			background: yellowGreen;
 			opacity:1;
+
+			.icon-area
+			{
+				background:yellowGreen;
+			}
+			&:hover .icon-area {
+				background: yellow;
+			}
 		}
 
 	}
 
 }
+
+
 
 
 

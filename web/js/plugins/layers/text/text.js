@@ -140,12 +140,14 @@
 
 			this.model.on('update', this.onUpdate, this);
 			
+			$('#zeega-frame-workspace').scroll(function(){ $(this).scrollTop(0); });
 			return this;
 		},
 		
 		onUpdate : function()
 		{
-
+			
+			
 		},
 
 		onLayerEnter : function()
@@ -193,7 +195,7 @@
 			.draggable( "option", "handle", ".drag-handle-"+this.model.id )
 			.css('max-height', (this.$el.parent().height()-15)+'px')
 			.addClass('editing')
-			.prepend('<div class="drag-handle drag-handle-'+ this.model.id +'"><i class="icon-move"></i></div>');
+			.prepend('<div class="drag-handle drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></div>');
 			
 			this.$('.inner').css('max-height', (this.$el.parent().height()-50)+'px');
 			
