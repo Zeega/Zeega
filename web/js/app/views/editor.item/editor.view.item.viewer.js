@@ -245,7 +245,7 @@
 			// draw media view
 			
 
-			var itemClass = (this.model.get('archive') === '' || this.model.get('archive') == 'zeega' || this.model.get('archive') == 'Facebook' || this.model.get('archive') == 'Dropbox' ||this.model.get('archive') == 'Absolute' || this.model.get('archive') == 'InternetArchive') ? this.model.get('media_type') : this.model.get('archive');
+			var itemClass = (this.model.get('archive') == 'Youtube' || this.model.get('archive') == 'Soundcloud') ? this.model.get('archive') :  this.model.get('media_type');
 			itemClass=itemClass[0].toUpperCase() + itemClass.slice(1);
 			var mediaView;
 			if( Items.Views.Viewer[itemClass] ) mediaView = new Items.Views.Viewer[itemClass]({model:this.model});

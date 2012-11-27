@@ -43,7 +43,7 @@
 			console.log('parsing dynamic collection');
 			return response.items;
 			
-		},
+		}
 		
 	
 	});
@@ -90,8 +90,8 @@
 				if( !_.isUndefined(this.query.times.start) ) url += '&min_date=' + this.query.times.start;
 				if( !_.isUndefined(this.query.times.end) ) url += '&max_date=' + this.query.times.end;
 			}
-			if( !_.isUndefined(this.query.content)&& this.query.content=='project'){}
-			else url += '&user=-1';
+			if( _.isUndefined(this.query.universe)||(!_.isUndefined(this.query.universe)&& this.query.universe!=1)){ url += '&user=-1';}
+
 			//if( !_.isUndefined(this.query.user) && this.query.user>=-1&& this.query.user!="") url += '&user=' + this.query.user;
 			//if( !_.isUndefined(this.query.username) &&  !_.isNull(this.query.username) &this.query.username.length > 0) url += '&username=' + this.query.username;
 			if(zeega.discovery.app.currentView=='event') url+='&geo_located=1';

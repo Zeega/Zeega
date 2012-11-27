@@ -3,13 +3,15 @@
 	{% set load_children = false %}
 {% endif %}
 
+{% set is_child = false %}
+
 {% if user_is_admin is defined %}
 	{{ _self.show(item,user_is_admin,user,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
 {% else %}
 	{{ _self.show(item,null,null,load_children) }} 	{# Render the first item by making a call to the show(item) macro#}
 {% endif %}
 
-{% macro show(item,user_is_admin,user,load_children) %}	{# Item rendering macro/function #}
+{% macro show(item,user_is_admin,user,load_children,is_child) %}	{# Item rendering macro/function #}
 	{% if item is not null %}
 	{
 		"id" : {{ item.id | default("") | json_encode | raw }},
@@ -20,7 +22,11 @@
         "title" : {{ item.title | default("") | json_encode | raw}},
         "description" : {{ item.description | default("") | json_encode | raw}},		
 		{% if item.text is defined and item.mediatype == 'project' %}
-			"text" : {{ item.text | raw}},
+			{% if (is_child is defined and is_child == true) %}
+				"text" : "",
+			{% else %}
+				"text" : {{ item.text | raw}},
+			{% endif %}
 		{% else %}
 			"text" : {{ item.text | default("") | json_encode | raw}},
 		{% endif %}
@@ -42,9 +48,10 @@
 		"child_items":
 		[
 			{%- if (load_children is defined and load_children == true) -%}
+			    {% set is_child = true %}
 				{% for child in item.childitems %}
 					{# Item is a collection. Render the children by recursively calling the macro #}
-		            {{ _self.show(child) }}
+		            {{ _self.show(child,user_is_admin,user,load_children,is_child) }}
 					{%- if loop.index0 < item.childitems|length - 1 -%}
 					,
 					{%- endif -%}
