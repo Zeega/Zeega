@@ -27,8 +27,6 @@ class ItemsController extends BaseController
         // parse the query
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
-        echo '<pre>'; print_r($query); echo '</pre>';
-        return new Response();
 
         if(isset($query["data_source"]) && $query["data_source"] == "db") {
             $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);                      
@@ -236,8 +234,7 @@ class ItemsController extends BaseController
         $em = $this->getDoctrine()->getEntityManager();
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
         
-        if (!$item) 
-        {
+        if (!$item) {
             throw $this->createNotFoundException('Unable to find a Collection with the id ' . $item_id);
         }
         
@@ -257,13 +254,11 @@ class ItemsController extends BaseController
         $item = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$itemId,"enabled"=>1));
         $childItem = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$childItemId,"enabled"=>1));
 
-        if (!$item) 
-        {
+        if (!$item) {
             throw $this->createNotFoundException("The item $item does not exist");
         }
 
-        if (!$childItem) 
-        {
+        if (!$childItem) {
             throw $this->createNotFoundException("The item $childItem does not exist");
         }
 
@@ -310,16 +305,13 @@ class ItemsController extends BaseController
 
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
            
-        if (!$item)
-        {
+        if (!$item) {
             throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
         }
 
         $tags = $item->getTags();
-        if(isset($tags))
-        {
-            if (in_array($tagName,$tags))
-            {
+        if(isset($tags)) {
+            if (in_array($tagName,$tags)) {
                 unset($tags["$tagName"]);
                 $item->setTags($tags);
                 $item->setDateUpdated(new \DateTime("now"));
@@ -361,16 +353,14 @@ class ItemsController extends BaseController
     
             $newItems = $this->getRequest()->request->get('new_items');
             $itemsToRemoveString = $this->getRequest()->request->get('items_to_remove'); 
-            if(isset($itemsToRemoveString))
-            {  
+            if(isset($itemsToRemoveString)) {  
                 $itemsToRemove = array();
                 $itemsToRemove = explode(",",$itemsToRemoveString);
             }
             
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
     
-            if (isset($newItems))
-            {
+            if (isset($newItems)) {
                 $item->setChildItemsCount(count($newItems));
                 $item->setDateUpdated(new \DateTime("now"));
         
@@ -406,14 +396,10 @@ class ItemsController extends BaseController
                 $em->flush();
             }
             
-            if(isset($itemsToRemove))
-            {
-                foreach($itemsToRemove as $itemToRemoveId)
-                {
+            if(isset($itemsToRemove)) {
+                foreach($itemsToRemove as $itemToRemoveId) {
                     $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
-                    if (isset($childItem)) 
-                    {
-                        
+                    if (isset($childItem))  {
                         $item->getChildItems()->removeElement($childItem);
                     }
                 }
@@ -467,7 +453,7 @@ class ItemsController extends BaseController
                 $itemAttributes = $item->getAttributes();
 
                 $attributes = $query;
-			
+            
                 if(isset($itemAttributes["tags"])) {
                     $attributes["tags"] = $itemAttributes["tags"];
                 }
