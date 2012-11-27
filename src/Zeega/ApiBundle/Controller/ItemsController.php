@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\Item;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
-use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Controller\BaseController;
 
 class ItemsController extends BaseController
@@ -45,7 +44,7 @@ class ItemsController extends BaseController
 
         $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
 
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        return new Response($itemsView);
     }
 
     /**
@@ -61,12 +60,9 @@ class ItemsController extends BaseController
         $request = $this->getRequest();
         $url  = $request->query->get('url');
 
-        if(!isset($url))
-        {
+        if(!isset($url)) {
             $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-        }
-        else
-        {           
+        } else {           
             $loadChildren = $request->query->get('load_children');
             $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
             $parser = $this->get('zeega_parser');
@@ -77,7 +73,7 @@ class ItemsController extends BaseController
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
         }
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        return new Response($itemsView);
     }
 
     //  get_collections GET    /api/items.{_format}
@@ -104,7 +100,7 @@ class ItemsController extends BaseController
         
         $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+        return new Response($itemsView);
     }
 
     //  get_collections GET    /api/items.{_format}
@@ -132,7 +128,7 @@ class ItemsController extends BaseController
         
         $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+        return new Response($itemsView);
     }
     
     // get_collection GET    /api/item/{id}.{_format}
@@ -147,7 +143,7 @@ class ItemsController extends BaseController
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        return new Response($itemsView);
     }
     
     //  get_collections GET    /api/items.{_format}
@@ -167,18 +163,12 @@ class ItemsController extends BaseController
         $query["arrayResults"] = true;
 
          //  execute the query
-        $queryResults = $this->getDoctrine()
-                             ->getRepository('ZeegaDataBundle:Item')
-                             ->searchItems($query);                             
-        //return new Response(var_dum$queryResults);
+        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);                             
         $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);             
         
         $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        //$response = new Response($itemsView);
-        //$response->headers->set('Content-Type', 'text');
-        //return $response;
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemsView);
+        return new Response($itemsView);
     }
 
     // get_item_tags GET /api/items/{itemId}/tags.{_format}
@@ -188,7 +178,8 @@ class ItemsController extends BaseController
 
         $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
         $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        
+        return new Response($itemsView);
     }
         
     // get_collection_items GET /api/collections/{id}/items.{_format}
@@ -255,7 +246,8 @@ class ItemsController extends BaseController
         $em->flush();
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);  
+        
+        return new Response($itemsView);
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
@@ -282,7 +274,8 @@ class ItemsController extends BaseController
         $em->flush();
 
         $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $item));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        
+        return new Response($itemsView);
     }
 
     public function postItemsAction()
@@ -306,7 +299,7 @@ class ItemsController extends BaseController
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);
+        return new Response($itemsView);
     }
     
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
@@ -335,7 +328,7 @@ class ItemsController extends BaseController
             }
         }
 
-        return ResponseHelper::encodeAndGetJsonResponse($item);
+        return new Response($itemsView);
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
@@ -355,7 +348,8 @@ class ItemsController extends BaseController
         $em->flush();
 
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-        return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+        
+        return new Response($itemsView);
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
@@ -431,7 +425,7 @@ class ItemsController extends BaseController
             }
     
             $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-            return ResponseHelper::compressTwigAndGetJsonResponse($itemView);       
+            return new Response($itemsView);
         }
         else
         {
@@ -524,7 +518,7 @@ class ItemsController extends BaseController
                   'frames'=>$frames,
                   'layers'=>$layers,
                 );
-            return ResponseHelper::getJsonResponse($project);
+        return new Response(json_encode($project));
         }
     }
 }

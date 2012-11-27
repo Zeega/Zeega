@@ -16,16 +16,11 @@ api_projects:
     name_prefix: api_
     prefix:   api    
 
-global_search:
-    pattern: /api/search.{_format}
-    defaults: { _controller: ZeegaApiBundle:Search:search, _format: json}
-    requirements: { _format: (xml|json), _method: GET }
-
 items:
     type:     rest
     prefix:   api
     resource: Zeega\ApiBundle\Controller\ItemsController
-    
+
 api_frames:
     type:     rest
     prefix:   api
