@@ -191,13 +191,10 @@
 					});
 				}
 			})
-			.draggable( "option", "containment", "parent" )
 			.draggable( "option", "handle", ".drag-handle-"+this.model.id )
-			.css('max-height', (this.$el.parent().height()-15)+'px')
 			.addClass('editing')
-			.prepend('<a class="drag-handle drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>');
-			
-			this.$('.inner').css('max-height', (this.$el.parent().height()-50)+'px');
+			.prepend('<a class="drag-handle drag-handle-nw drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>')
+			.prepend('<a class="drag-handle drag-handle-se drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>');
 			
 		},
 		
@@ -226,7 +223,7 @@
 		getTemplate : function()
 		{
 			var html = 
-					'<div id="zedit-target" class="inner" contenteditable="<%= contentEditable %>" ><%= content %></div>';
+					'<div id="zedit-target" class="inner _loc_target" contenteditable="<%= contentEditable %>" ><%= content %></div>';
 			
 			return html;
 		}
