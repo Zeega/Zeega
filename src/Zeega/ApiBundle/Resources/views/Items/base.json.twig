@@ -32,7 +32,11 @@
         "media_creator_username" : {{ item.mediacreatorusername | default(null) | json_encode | raw }},
         "media_creator_realname" : {{ item.mediacreatorrealname | default(null) | json_encode | raw }},
         "child_items_count" : {{ item.childitemscount | default(0) }},
-        "attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
+        {%- if item.attributes is defined and item.attributes is array -%}
+            "attributes" : {{ item.attributes[0] | default("") | unserialize_array | json_encode | raw}},
+        {%- else -%}
+            "attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
+        {%- endif -%}
         "child_items":
         [
             {%- if (load_children is defined and load_children == true and item.childitems is defined) -%}
