@@ -5,9 +5,7 @@ services:
     zeega.twig.extension.header:
         class: Zeega\CoreBundle\Twig\Extensions\HeaderTwigExtension
         arguments:
-              doctrine: "@doctrine"
-              security: "@security.context"
-              session: "@session"
+            service_container: "@service_container"
         tags:
             - { name: twig.extension }
 
