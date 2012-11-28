@@ -50,8 +50,10 @@ class ParserSoundcloudTag extends ParserAbstract
             if(null !== $itemsJson && is_array($itemsJson) && count($itemsJson) > 0) {
                 echo ($apiUrl). "\n";    
                 foreach($itemsJson as $itemJson) {
+                    $uri = $itemJson['stream_url'] .'?consumer_key='.self::$soundcloudConsumerKey;
+
                     if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($itemJson['permalink_url'], $originalItems)) {
+                        if(TRUE === array_key_exists($uri, $originalItems)) {
                             continue;
                         }
                     } 
@@ -64,8 +66,7 @@ class ParserSoundcloudTag extends ParserAbstract
                     $item->setMediaType('Audio');
                     $item->setLayerType('Audio');
                     $item->setArchive('SoundCloud');
-                    $item->setUri($itemJson['stream_url']);
-                    $item->setUri($item->getUri().'?consumer_key='.self::$soundcloudConsumerKey);
+                    $item->setUri($uri);
                     $item->setAttributionUri($itemJson['permalink_url']);
                     $item->setMediaDateCreated($itemJson['created_at']);
                     $item->setThumbnailUrl($itemJson['waveform_url']);

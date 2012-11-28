@@ -15,6 +15,108 @@
 	width: 700px;
 	margin: 20px auto;
 }
+// hack to keep the scrollbar from showing up on the workspace
+#zeega-frame-workspace::-webkit-scrollbar { 
+    display: none; 
+}
+
+.layer-text.editing
+{
+
+	outline: 1px solid #444;
+
+	.ui-resizable-e
+	{
+		background: transparent;
+		height: 30px;
+		top: 46%;
+		border: 2px solid transparent;
+		right: -13px;
+	}
+
+	#zedit-target
+	{
+		outline: 1px solid #222;
+		padding-bottom: 0.25em;
+		overflow:hidden;
+	}
+
+	.drag-handle
+	{
+		position: absolute;
+		opacity: 0.2;
+		height: 18px;
+		padding: 4px;
+		cursor:move;
+
+		&.drag-handle-nw
+		{
+			top: -10px;
+			left: -10px;
+		}
+
+
+		&.drag-handle-se
+		{
+			bottom : -10px;
+			right: -10px;
+		}
+		&.drag-handle-sw
+		{
+			bottom : -10px;
+			left: -10px;
+		}
+		&.drag-handle-ne
+		{
+			right : -10px;
+			top: -10px;
+		}
+
+		.icon-area
+		{
+			background:#aaa;
+			border-radius: 3px;
+			padding: 2px;
+		}
+
+		
+	}
+
+	&:hover {
+
+		outline: 1px solid #aaa;
+
+		#zedit-target
+		{
+			outline: 1px solid #555;
+		}
+		.ui-resizable-e
+		{
+			background: yellow;
+			border: 2px solid orange;
+		}
+
+		.drag-handle
+		{
+			opacity:1;
+
+			.icon-area
+			{
+				background:yellowGreen;
+			}
+			&:hover .icon-area {
+				background: yellow;
+			}
+		}
+
+	}
+
+}
+
+
+
+
+
 
 
 

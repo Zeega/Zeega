@@ -202,22 +202,18 @@
 				stop : function(e,ui)
 				{
 					//convert to % first // based on parent
-					var topCent = Math.floor(0.5+( ui.position.top / $(this).parent().height() ) * 100);
-					var leftCent = Math.floor(0.5+( ui.position.left / $(this).parent().width() ) * 100);
-					
+					var topCent = (( ui.position.top / $(this).parent().height() ) * 100);
+					var leftCent = (( ui.position.left / $(this).parent().width() ) * 100);
 					//change the dom element back to percentages
-
+					
 					$(this).css({
 						top: topCent+'%',
 						left: leftCent+'%'
 					});
-
 					_this.model.update({
 						top: topCent,
 						left: leftCent
 					});
-					
-					
 					
 				}
 			});
