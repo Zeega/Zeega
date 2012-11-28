@@ -2,8 +2,8 @@ parameters:
 #    zeega_core.example.class: Zeega\CoreBundle\Example
 
 services:
-    zeega.twig.extension.header:
-        class: Zeega\CoreBundle\Twig\Extensions\HeaderTwigExtension
+    zeega.twig.extension:
+        class: Zeega\CoreBundle\Twig\Extensions\ZeegaTwigExtension
         arguments:
             service_container: "@service_container"
         tags:

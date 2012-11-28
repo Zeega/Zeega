@@ -20,7 +20,7 @@ use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class HeaderTwigExtension extends \Twig_Extension
+class ZeegaTwigExtension extends \Twig_Extension
 {
     private $container;
 
