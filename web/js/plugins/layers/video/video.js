@@ -273,16 +273,32 @@
 		
 		onPlay : function()
 		{
+			var _this=this;
+			this.playing=true;
 			this.model.player.play();
+			this.selfCheck=setInterval(function(){
+				if(_this.playing&&_this.model.player.paused()){
+					console.log('triggering play again');
+					_this.model.player.play();
+				}
+			},100);
+			
+			
+							
+
+			
 		},
 
 		onPause : function()
 		{
+			this.playing=false;
 			this.model.player.pause();
 		},
 		
 		onExit : function()
 		{
+			clearInterval(this.selfCheck);
+			this.playing=false;
 			this.model.player.pause();
 		},
 		
