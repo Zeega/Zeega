@@ -262,7 +262,7 @@
 		},
 
 		getDuration: function(){ return this.popcorn.duration() },
-
+		paused: function(){if(this.popcorn){ return this.popcorn.paused();}else{ return true;}},
 		play : function(){ console.log('##		play'); if( this.popcorn && this.popcorn.paused() ) this.popcorn.play() },
 		pause : function(){ if( this.popcorn && !this.popcorn.paused() ) this.popcorn.pause() },
 		playPause : function()
