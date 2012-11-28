@@ -201,25 +201,19 @@
 				
 				stop : function(e,ui)
 				{
-					//var target = $(this).find('._loc_target').length ? $(this).find('._loc_target')[0] : $(this);
-					//var parent = $(this).parent();
-
-					//console.log('targettttt', target);
-
-					//var leftCent = ( ($(target).offset().left - $(parent).offset().left) / $(parent).width() * 100 );
-					//var topCent = ( ($(target).offset().top - $(parent).offset().top) / $(parent).height() * 100 );
 					//convert to % first // based on parent
 					var topCent = (( ui.position.top / $(this).parent().height() ) * 100);
 					var leftCent = (( ui.position.left / $(this).parent().width() ) * 100);
 					//change the dom element back to percentages
-
-					var percents = {
+					
+					$(this).css({
 						top: topCent+'%',
 						left: leftCent+'%'
-					};
-console.log('%%%%', percents);
-					$(this).css( percents );
-					_this.model.update( percents );
+					});
+					_this.model.update({
+						top: topCent,
+						left: leftCent
+					});
 					
 				}
 			});
