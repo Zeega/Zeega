@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\CoreBundle\Twig\Extensions;
 
 use Zeega\DataBundle\Entity\Site;
@@ -9,51 +18,52 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class HeaderTwigExtension extends \Twig_Extension
 {
-	protected $doctrine;
+    private $container;
 
-	public function __construct($doctrine, $securityContext, $session)
-	{
-        $this->doctrine = $doctrine;
-		$this->securityContext = $securityContext;
-		$this->session = $session;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     public function getGlobals()
     {
-        $securityToken = $this->securityContext->getToken();
-        
-        if(isset($securityToken))
-        {
-            $user = $this->securityContext->getToken()->getUser();
-    		if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
-            {
-            	$projects = $this->doctrine->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
+        $request = $this->container->get('request');        
 
-	            return array(
-    				'user_id' => $user->getId(),
-    				'myprojects'=> $projects,
-    				'displayname' => $user->getDisplayName(),
-    			);
-    		}
+        if(!preg_match("/\/api\//",$request->getUri())) {
+            $securityToken = $this->container->get('security.context')->getToken();
+            
+            if(isset($securityToken)) {
+                $user = $this->container->get('security.context')->getToken()->getUser();
+                if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                    $projects = $this->container->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
+
+                    return array(
+                        'user_id' => $user->getId(),
+                        'myprojects'=> $projects,
+                        'displayname' => $user->getDisplayName(),
+                    );
+                }
+            }
         }
-
-        return array(
-			'title' => 'Unknown',
-			'short' => 'Unknown',
-			'user_id' => -1,
-			'myprojects'=> 'Unknown',
-			'displayname' => 'Unknown'
-			);
+        return array();
     }
-	
+
 	public function getFilters()
 	{
         return array(
             'json_encode_entity' => new \Twig_Filter_Method($this, 'entityNormalizer'),
-            'unserialize_array' => new \Twig_Filter_Method($this, 'unserializeArray'),
+            'unserialize_array' => new \Twig_Filter_Method($this, 'unserializeArray')
+        );
+    }
+
+    public function getTests()
+    {
+        return array(
+            'solr_array' => new \Twig_Test_Method($this,'isSolrArray')
         );
     }
 
@@ -63,22 +73,24 @@ class HeaderTwigExtension extends \Twig_Extension
         return $serializer->serialize($arrayObject, 'json');
     }
 
-    public function unserializeArray($arrayObject)
-    {
-    	if(isset($arrayObject)) {
-    	
-    		$arrayObject = unserialize($arrayObject);
-    		if(is_array($arrayObject)){
-    			return $arrayObject;	
-    		}
-    	}
-    	
-    	return array();
+    public function isSolrArray($value) {
+        return isset($value) && is_array($value) && count($value) == 1;
     }
 
+    public function unserializeArray($value)
+    {
+    	if(isset($value) && is_string($value)) {   
+    		$uvalue = unserialize($value);
+    		if(is_array($uvalue)){
+    			return $uvalue;	
+    		}
+    	}
+
+    	return $value;
+    }
 	
 	public function getName()
 	{
-		return 'zeega-header';
+		return 'zeega.twig.extension';
 	}
 }
