@@ -3,6 +3,8 @@
     {% set load_children = false %}
 {% endif %}
 
+{% set is_child = false %}
+
 {% if user_is_admin is defined %}
     {{ _self.show(item,user_is_admin,user,load_children) }}     {# Render the first item by making a call to the show(item) macro#}
 {% else %}

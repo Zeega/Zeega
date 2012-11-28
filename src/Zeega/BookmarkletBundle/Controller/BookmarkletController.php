@@ -79,8 +79,6 @@ class BookmarkletController extends BaseController
         $parserResponse = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("url" => $itemUrl))->getContent();
         $parserResponse = json_decode($parserResponse,true);
         $message = "SORRY! We can't add this item.";
-        $message = $message . "<h2 style=\"margin-bottom:350px;\">Give us a chance to make it up to you by <a href=\"mailto:info@zeega.org\">emailing us</a> and letting us know what you were looking for.</h2>";
-                
         
         if(isset($parserResponse))
         {

@@ -52,6 +52,11 @@ this.zeega.discovery = {
 		this.startRouter();
 		var _this=this;
 		$('#zeega-sort').change(function(){_this.parseSearchUI(); });
+		$('.universe-toggle span').click(function(){
+			$(this).parent().find('span').removeClass('selected');
+			$(this).addClass('selected');
+			_this.parseSearchUI();
+		});
 		
 	},
 	initCollectionsDrawer:function(){
@@ -67,7 +72,7 @@ this.zeega.discovery = {
 	
 			routes: {
 				""				: 'search',
-				":query"		: 'search',
+				":query"		: 'search'
 	
 			},
 	
@@ -81,7 +86,7 @@ this.zeega.discovery = {
 	},
 	
 	
-	queryStringToHash: function (query) {
+	queryStringToObj: function (query) {
 		var query_obj = {};
 		var vars = query.split("&");
 		for (var i=0;i<vars.length;i++) {
@@ -110,6 +115,7 @@ this.zeega.discovery = {
 			query_obj.times.end = query_obj.max_date;
 		}
 
+		if(_.isUndefined(query_obj.universe)) query_obj.universe=0;
 		return query_obj;
 	},
 	
@@ -119,66 +125,31 @@ this.zeega.discovery = {
 					
 					//Update Search Object
 					
-					if (!_.isUndefined(query)) this.searchObject =  this.queryStringToHash(query);
+					if (!_.isUndefined(query)) this.searchObject =  this.queryStringToObj(query);
 					else this.searchObject = {page:1};
 
 					//Update interface
 					
 					this.updateSearchUI(this.searchObject);
 					this.search(this.searchObject);
-					
-					//Load filter if nec, carry out search
-					/*
-					if(sessionStorage.getItem('filterType')=='none'||!_.isUndefined(this.filterModel)) {
-					
-						if (!_.isUndefined(this.searchObject.view_type)) this.switchViewTo(this.searchObject.view_type,true) ;
-						else this.search(this.searchObject);
-					}
-					else{
-					
-						$('.tab-content').find('.btn-group').hide();
-						$('#jda-related-tags').hide();
-						$('#event-button').hide();
-						
-						if(sessionStorage.getItem('filterType')=='user'){
-							this.filterType ="user";
-							var Items = zeega.module("items");
-							this.filterModel = new Users.Model({id:sessionStorage.getItem('filterId')});
-							this.filterModel.fetch({
-								success : function(model, response){
-												_this.resultsView.userFilter = new Users.Views.UserPage({model:model});
-												if (!_.isUndefined(_this.searchObject.view_type)) _this.switchViewTo(_this.searchObject.view_type,true) ;
-												else _this.search(_this.searchObject);
-								},
-								error : function(model, response){
-									console.log('Failed to fetch the user object.');
-									
-								},
-							});
-						}
-						else if(sessionStorage.getItem('filterType')=='collection'){
-							
-							this.filterType ="collection";
-							var Items = zeega.module("items");
-							this.filterModel = new Items.Model({id:sessionStorage.getItem('filterId')});
-							this.filterModel.fetch({
-								success : function(model, response){
-									_this.resultsView.collectionFilter = new Items.Views.CollectionDetails({model:model});
-									if (!_.isUndefined(_this.searchObject.view_type)) _this.switchViewTo(_this.searchObject.view_type,true) ;
-									else _this.search(_this.searchObject);
-								},
-								error : function(model, response){
-									console.log('Failed to fetch the user object.');
-									
-								},
-					
-							});
-						
-						}
-					}
-					*/
-	
-	
+	},
+
+	updateURLHash : function(obj){
+		
+		var hash ='';
+		if( !_.isUndefined(this.viewType)) hash += 'view_type=' + this.viewType + '&';
+		if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
+		if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
+		if( !_.isUndefined(obj.sort) )  hash += 'sort='+ obj.sort + '&';
+		if( !_.isUndefined(obj.universe) )  hash += 'universe='+ obj.universe + '&';
+		if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
+		if( !_.isUndefined(obj.times)&&  !_.isNull(obj.times) )
+		{
+			if( !_.isUndefined(obj.times.start) ) hash += 'min_date='+ obj.times.start + '&';
+			if( !_.isUndefined(obj.times.end) ) hash += 'max_date='+ obj.times.end + '&';
+		}
+		console.log('zeega.discovery.app.updateURLHash',obj,hash);
+		zeega.discovery.app.router.navigate(hash,{trigger:false});
 	},
 	
 	parseSearchUI : function(){
@@ -209,6 +180,9 @@ this.zeega.discovery = {
 
 	
 		
+
+		obj.universe=$('.universe-toggle').find('.selected').data('universe');
+		
 		obj.content = $('#zeega-content-type').val();
 		obj.sort = $('#zeega-sort').val();
 		
@@ -219,7 +193,6 @@ this.zeega.discovery = {
 		
 		this.updateURLHash(obj);
 		this.search(obj);
-	
 	},
 	
 	updateSearchUI : function(obj){
@@ -247,16 +220,20 @@ this.zeega.discovery = {
 			if (textPart.length > 0)
 			{
 				var texts = textPart.split(",");
-				for(var i=0;i<texts.length;i++)
+				for(var j=0;j<texts.length;j++)
 				{
-					var text = texts[i];
+					var text = texts[j];
 					VisualSearch.searchBox.addFacet('text', text, 0);
 				}
 			}
 			
 		}
 		
+		$('.universe-toggle span').removeClass('selected');
+		if(!_.isUndefined(obj.universe)&&obj.universe==1) $('.universe-toggle').find('.universe').addClass('selected');
+		else $('.universe-toggle').find('.just-me').addClass('selected');
 		
+
 		if (!_.isUndefined(obj.content)) $('#zeega-content-type').val(obj.content);
 		else $('#zeega-content-type').val("all");
 		
@@ -264,30 +241,12 @@ this.zeega.discovery = {
 		else $('#zeega-sort').val("relevant");
 		
 		$('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
-		
-		
 	},
 	
-	updateURLHash : function(obj){
-		
-		var hash ='';
-		if( !_.isUndefined(this.viewType)) hash += 'view_type=' + this.viewType + '&';
-		if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
-		if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
-		if( !_.isUndefined(obj.sort) )  hash += 'sort='+ obj.sort + '&';
-		if( !_.isUndefined(obj.mapBounds) )  hash += 'map_bounds='+ encodeURIComponent(obj.mapBounds) + '&';
-		if( !_.isUndefined(obj.times)&&  !_.isNull(obj.times) )
-		{
-			if( !_.isUndefined(obj.times.start) ) hash += 'min_date='+ obj.times.start + '&';
-			if( !_.isUndefined(obj.times.end) ) hash += 'max_date='+ obj.times.end + '&';
-		}
-		console.log('zeega.discovery.app.updateURLHash',obj,hash);
-		zeega.discovery.app.router.navigate(hash,{trigger:false});
 	
-	},
 	
 	search : function(obj){
-	
+		
 		console.log("zeega.discovery.app.search",obj);
 		if(!_.isUndefined(this.filterType)){
 			if(this.filterType=="user"){
@@ -308,7 +267,6 @@ this.zeega.discovery = {
 		this.resultsView.search( obj,true );
 		
 		if (this.currentView == 'event') this.eventMap.load();
-		
 	},
 	
 	switchViewTo : function( view , refresh ){

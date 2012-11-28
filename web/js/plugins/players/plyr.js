@@ -162,8 +162,6 @@
 		},
 		useYoutube : function()
 		{
-			console.log('add YOUTUBE to this shizzzz', this.model)
-			
 			var _this = this;
 			var target = '#media-player-'+ this.model.id;
 			var src = this.model.get('attr').attribution_uri;
@@ -183,9 +181,7 @@
 				_this.popcorn.pause();
 
 				_this.model.trigger('ready', _this.model.id ) ;
-				if(_this.model.get('attr').fade_in==0) _this.volume(_this.model.get('attr').volume);
-				
-				
+				if(_this.model.get('attr').fade_in === 0) _this.volume(_this.model.get('attr').volume);
 				
 			});
 			
@@ -194,7 +190,7 @@
 					_this.popcorn.currentTime( _this.settings.cue_in );
 				}
 			});
-			
+
 		},
 		useFlash : function()
 		{
@@ -261,13 +257,28 @@
 			}
 		},
 
-		getDuration: function(){ return this.popcorn.duration() },
+		getDuration: function(){ return this.popcorn.duration(); },
+		paused: function()
+		{
+			if(this.popcorn)
+			{
+				if( this.popcorn.youtubeObject )
+				{
+					if( this.popcorn.youtubeObject.getPlayerState() == 1 )
+					{
+						return false;
+					}
+					else return true;
+				}
+				else return this.popcorn.paused();
+			}
+			else return true;
 
+		},
 		play : function(){ console.log('##		play'); if( this.popcorn && this.popcorn.paused() ) this.popcorn.play() },
-		pause : function(){ if( this.popcorn && !this.popcorn.paused() ) this.popcorn.pause() },
+		pause : function(){ if( this.popcorn && !this.popcorn.paused() ) this.popcorn.pause(); },
 		playPause : function()
 		{
-			console.log('##		playpause')
 			if(this.popcorn)
 			{
 				if(this.popcorn.paused()) this.popcorn.play();

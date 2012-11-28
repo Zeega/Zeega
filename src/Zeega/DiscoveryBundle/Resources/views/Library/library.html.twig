@@ -2,7 +2,7 @@
 
 {% extends '::editor.base.html.twig' %}
 
-{% block title %}My Media{% endblock %}
+{% block title %}Media Library{% endblock %}
 
 
 
@@ -61,15 +61,15 @@
 			</div>
 
 			<div id='zeega-project-info'>
-				<div id="zeega-project-title">My Media</div>
-				<div id="project-actions" class="menu-bar clearfix">
-					<!--
-					<ul class="pull-left">
-						<li><a id="project-options" class="" href="#"><div class="menu-verbose-title">Just Me</div><i class="icon-tasks icon-white"></i></a></li>
-						<li><a id="project-publish" class="" href="#"><div class="menu-verbose-title">The Universe</div><i class="icon-print icon-white"></i></a></li>
-					</ul>
-					-->
-				</div>
+				<div id="zeega-discovery-title">Media Library</div>
+				
+								
+					<div class="menu-bar menu-dark universe-toggle"  {% if is_granted('ROLE_ADMIN') %}{% else %}style="display:none;"{% endif %}>
+						<span class="just-me" data-universe="0" >Just Me</span>
+						<span class="universe" data-universe="1" >Zeega Community</span>
+					</div>
+
+				
 			</div>
 			
 			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
@@ -104,7 +104,10 @@
 								<option value="video">Video</option>
 								<option value="audio">Audio</option>
 								<option value="collection">Collection</option>
+                                                                {% if is_granted('ROLE_ADMIN') %}
 									<option value="project">Projects</option>
+                                                                {% endif %}
+								<option value="project">Projects</option>
 							</select>
 						</span>
 					</div>

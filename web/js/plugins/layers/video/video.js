@@ -215,8 +215,7 @@
 		},
 		onEnded : function()
 		{
-		
-		
+			this.onPause();
 		},
 		
 		onTimeUpdate : function()
@@ -270,19 +269,45 @@
 			
 			
 		},
+
 		
 		onPlay : function()
 		{
+			var _this=this;
+			var playSuccessCounter = 0;
+
+			this.playing=true;
 			this.model.player.play();
+
+			if(this.selfCheck) this.destroySelfCheck();
+			this.selfCheck=setInterval(function(){
+				if(_this.playing&&_this.model.player.paused()){
+					_this.model.player.play();
+					_this.destroySelfCheck();
+				}
+				else
+				{
+					playSuccessCounter++;
+					if(playSuccessCounter>25) _this.destroySelfCheck();
+				}
+			},100);
+		},
+
+		destroySelfCheck: function()
+		{
+			clearInterval(this.selfCheck);
 		},
 
 		onPause : function()
 		{
+			this.playing=false;
 			this.model.player.pause();
 		},
 		
 		onExit : function()
 		{
+			clearInterval(this.selfCheck);
+			this.playing=false;
 			this.model.player.pause();
 		},
 		

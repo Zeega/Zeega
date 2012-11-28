@@ -13,7 +13,7 @@
 			'click a.edit' : 'editMetadata',
 			'click button.save' : 'saveMetadata',
 			'click button.cancel' : 'cancelEdits',
-			'user-new-project':'newProject',
+			'user-new-project':'newProject'
 		},
 		
 		initialize: function () {
@@ -29,10 +29,10 @@
 			/***************************************************************************
 				BG image with one in user profile
 			***************************************************************************/
-			if (!_.isUndefined(this.model.get("background_image_url")) && this.model.get('background_image_url') != '' ){
+			if (!_.isUndefined(this.model.get("background_image_url")) && this.model.get('background_image_url') !=='' ){
 				$('html').css('background-image', 'url('+ this.model.get("background_image_url")+')');
 			} else{
-				$('html').css('background-image', 'url(http://farm5.staticflickr.com/4096/4827587717_c362a1b42e_b.jpg)');	
+				$('html').css('background-image', 'url(http://farm5.staticflickr.com/4096/4827587717_c362a1b42e_b.jpg)');
 			}
 
 			/***************************************************************************
@@ -41,7 +41,6 @@
 			var template = this.getTemplate();
 			var blanks = this.model.attributes;
 
-			console.log(blanks);
 			var joinDate=new Date(blanks['created_at']);
 			
 			blanks['join_date'] = joinDate.getMonthAbbreviation() + " " + joinDate.getFullYear();
@@ -49,10 +48,15 @@
 			blanks['num_projects'] = blanks['projects'].length;
 			
 			if(blanks['num_projects'] == 1)
-			    blanks['num_projects'] = blanks['num_projects'] + " project";
+				blanks['num_projects'] = blanks['num_projects'] + " project";
 			else
-			    blanks['num_projects'] = blanks['num_projects'] + " projects";
+				blanks['num_projects'] = blanks['num_projects'] + " projects";
             
+            //Should be fixed in database
+			if(_.isUndefined(blanks['thumbnail_url'])||_.isNull(blanks['thumbnail_url'])||blanks['thumbnail_url']==='')blanks['thumbnail_url']="../images/vertov.jpeg";
+			
+			
+			
 			$(this.el).html( _.template( template, blanks ) );
 
 			
@@ -62,7 +66,7 @@
 				_this.fileUpload($(this).attr('id'));
 
 				
-			})
+			});
 			
 
 			return this;
@@ -83,10 +87,10 @@
 				'display_name' : $(this.el).find('.dashboard-name').text(),
 				'bio' : $(this.el).find('.dashboard-bio').text().substring(0,250),
 				'thumbnail_url' : $(this.el).find('.dashboard-profile-photo').attr('src'),
-				'background_image_url' : backgroundImageURL,
+				'background_image_url' : backgroundImageURL
 				 
 				
-			})
+			});
 		},
 		newProject : function(){
 			$('.new-project').trigger('click');
@@ -110,7 +114,7 @@
 		},
 		editMetadata : function()
 		{
-			console.log('edit the metadata!')
+			
 			var _this  = this;
 			
 			this.$el.find('.user-image-upload, .save-data button').show();
@@ -121,7 +125,7 @@
 			
 			
 			
-			return false
+			return false;
 		},
 		
 		fileUpload : function(elementIDName)
@@ -140,28 +144,28 @@
 			if (elementIDName == "user-image-upload-file"){
 				$('.dashboard-profile-photo').fadeTo(500,0.5);
 				$('.profile-image-wrapper').spin('tiny');
-			} 
+			}
 			jQuery.handleError=function(a,b,c,d)
 			{
-				console.log('ERROR UPLOADING',a,b,c,d)
+				console.log('ERROR UPLOADING',a,b,c,d);
 				if (elementIDName == "user-image-upload-file"){
 					$('.dashboard-profile-photo').fadeTo(500,1);
-					$('.profile-image-wrapper').spin(false)
+					$('.profile-image-wrapper').spin(false);
 				}
-				
-				
+
+
 				$('#' + elementIDName).change(function(){
-					console.log('upload image some more!!!!!')
+					
 					_this.fileUpload(elementIDName);
-				})
-				
+				});
+
 			};
-		 	var phpFileURL = elementIDName == "user-image-upload-file" ? 	
-		 						sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
-		 						sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
+			var phpFileURL = elementIDName == "user-image-upload-file" ?
+			sessionStorage.getItem('hostname')+"static/scripts/user_profile.php?id="+this.model.id :
+			sessionStorage.getItem('hostname')+"static/scripts/user_bg.php?id="+this.model.id;
 			$.ajaxFileUpload({
-		
-				url:phpFileURL,		
+
+			url:phpFileURL,
 				secureuri:false,
 				fileElementId:elementIDName,
 				dataType: 'json',
@@ -184,9 +188,9 @@
 						}
 						
 						$('#' + elementIDName).change(function(){
-							console.log('upload image some more!!!!!')
+							
 							_this.fileUpload(elementIDName);
-						})
+						});
 						
 					}
 	
@@ -195,7 +199,7 @@
 				{
 					console.log('ERROR!!',e);
 				}
-			})
+			});
 			
 			return false;
 
@@ -205,11 +209,11 @@
 		
 		getTemplate : function()
 		{
-			html = 	'<div class="span3 author-photo dashboard-photo">'+
+			html = '<div class="span3 author-photo dashboard-photo">'+
 						'<div class="profile-image-wrapper">'+
 							'<img src="<%= thumbnail_url %>" alt="author-photo" width="100%" height="100%" class="dashboard-profile-photo">'+
 						'</div>'+
-						'<div class="gradient" style="height:100%">'+
+						'<div class="gradient" style="height:0px">'+
 						'</div>'+
 					
 					'</div>'+
@@ -219,7 +223,7 @@
 						'<div>'+
 							
 							'<h3 class="dashboard-name" style="width:300px"><%= display_name%></h3>';
-							if (zeegaDashboard.app.editable){ html+=
+							if (zeega.dashboard.app.editable){ html+=
 							'<div style="position:relative">'+
 								'<a class="btn btn-mini btn-inverse edit community-edit-button" href="." style="top:-41px;left:300px"><i class="icon-pencil icon-white"></i> edit</a>'+
 								'<div class="btn-group save-data" style="position:absolute;top:-41px;left:300px">'+
@@ -233,28 +237,28 @@
 							'<h6 style="clear:both; color:#DDD;">Authored <%= num_projects %> since joining in <%= join_date %></h6>'+
 							'<div style="margin-bottom:20px">'+
 								'<p class="card dashboard-bio"><%= bio %></p>';
-								if (zeegaDashboard.app.editable){ html+=
+								if (zeega.dashboard.app.editable){ html+=
 								'<div class="user-image-upload card hide"><label class="control-label" for="user-image-upload-file" style="display:inline">Update your profile picture</label><input id="user-image-upload-file" type="file" size="40" name="imagefile" class="pull-right"></input></div>'+
 								'<div class="user-image-upload card hide"  style="clear:both"><label style="display:inline" class="control-label" for="user-image-upload-background">Update your background picture</label> <input id="user-image-upload-background" type="file" size="40" name="imagefile"  class="pull-right"></input></div>';
 								}
 								
 							html+=
 							'</div>'+
-						'</div>'+	
+						'</div>'+
 						'<div class="shadow" style="height:162px">'+
 						'</div>'+
 					
 					'</div>'+
 					'<div class="span3">';
-						if (zeegaDashboard.app.editable){ html+=
+						if (zeega.dashboard.app.editable){ html+=
 						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
 						}
-					 html+='</div>';
+			html+='</div>';
 			
 			return html;
-		},
+		}
 		
 
 	});
 
-})(zeegaDashboard.module("dashboard"));
+})(zeega.dashboard.module("dashboard"));

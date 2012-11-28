@@ -78,7 +78,7 @@
 					this.$el.find('#controls').append( widthSlider.getControl() )
 										.append( heightSlider.getControl() );
 				}
-			}		
+			}
 			if(!this.model.hidden){
 				
 				var dissolveCheck = new Layer.Views.Lib.Checkbox({
@@ -92,8 +92,8 @@
 					model: this.model,
 					label : 'Opacity',
 					step : 0.01,
-					min : .05,
-					max : 1,
+					min : 0.05,
+					max : 1
 				});
 				
 				var posXSlider = new Layer.Views.Lib.Slider({
@@ -103,7 +103,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
-					step:.1
+					step: 0.1
 				});
 				var posYSlider = new Layer.Views.Lib.Slider({
 					property : 'left',
@@ -112,7 +112,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
-					step:.1
+					step: 0.1
 				});
 				var layoutLabel = new Layer.Views.Lib.SectionLabel({label:'Layout'});
 				
@@ -278,7 +278,7 @@
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title);
 			if(this.model.get('persistent'))this.$el.addClass('persistent');
-			if(this.model.get('continues'))this.$el.addClass('continues');			
+			if(this.model.get('continues'))this.$el.addClass('continues');
 		},
 		
 		/*******************
@@ -334,8 +334,8 @@
 		//	open/close and expanding layer items
 		expand : function( force )
 		{
-			console.log('layer expand!!!', this)
-			if(this.model.hasControls || force==true )
+			console.log('layer expand!!!', this);
+			if(this.model.hasControls || force === true )
 			{
 				if(this.$el.hasClass('layer-open') )
 				{
@@ -348,7 +348,7 @@
 					$('.layer-open').each(function(){
 						var layerID = $(this).data('id');
 						zeega.app.project.layers.get(layerID).trigger('editor_controlsClosed');
-					})
+					});
 					$('.layer-open').removeClass('layer-open');
 					this.$el.addClass('layer-open');
 					this.model.trigger('editor_controlsOpen');

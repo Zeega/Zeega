@@ -25,4 +25,4 @@
 		},
 	});
 
-})(zeegaDashboard.module("dashboard"));
+})(zeega.dashboard.module("dashboard"));

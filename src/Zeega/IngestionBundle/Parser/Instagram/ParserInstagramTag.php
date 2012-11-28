@@ -10,8 +10,6 @@ use \DateTime;
 
 class ParserInstagramTag extends ParserAbstract
 {
-    private static $soundcloudConsumerKey = 'lyCI2ejeGofrnVyfMI18VQ';
-    
     public function load($url, $parameters = null)
     {
         $loadCollectionItems = $parameters["load_child_items"];
@@ -46,7 +44,7 @@ class ParserInstagramTag extends ParserAbstract
 
                 foreach($apiItems["data"] as $apiItem) {
                 	if(TRUE === $checkForDuplicates) {
-                        if(TRUE === array_key_exists($apiItem['link'], $originalItems)) {
+                        if(TRUE === array_key_exists($apiItem['images']['standard_resolution']['url'], $originalItems)) {
                             continue;
                         }
                     } 

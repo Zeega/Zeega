@@ -402,33 +402,13 @@ class ItemRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function findOneByUserIngestedArchive($userId, $ingestedBy, $archive)
-    {
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
-    
-        // search query
-        $qb->select('i.id, i.uri, i.media_date_created')
-            ->from('ZeegaDataBundle:Item', 'i')
-            ->where('i.user_id = :user_id')
-            ->andWhere('i.ingested_by = :ingested_by')
-            ->andWhere('i.archive = :archive')
-            ->setParameter('user_id', $userId)
-            ->setParameter('archive', $archive)
-            ->setParameter('ingested_by', $ingestedBy)
-            ->orderBy('i.id','DESC')      
-            ->setMaxResults(1);            
-        
-        return $qb->getQuery()->getSingleResult();
-    }
-
     public function findUriByUserArchive($userId, $archive, $maxResults = null)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i.attribution_uri')
+        $qb->select('i.uri')
             ->from('ZeegaDataBundle:Item', 'i')
             ->where('i.user_id = :user_id')
             ->andWhere('i.archive = :archive')
