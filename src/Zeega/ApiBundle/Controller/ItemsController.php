@@ -37,12 +37,12 @@ class ItemsController extends BaseController
             $results = $queryResults["items"];
             $resultsCount = $queryResults["total_results"];
         }
-        
+
         $recursiveResults = $query["result_type"] == "recursive" ? true : false;
 
-        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
+        //$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
 
-        return new Response($itemsView);
+        return new Response(json_encode(array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults)));
     }
 
     /**
@@ -71,7 +71,7 @@ class ItemsController extends BaseController
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
         }
         
-        return new Response($itemsView);
+        return new Response($itemView);
     }
 
     //  get_collections GET    /api/items.{_format}
@@ -132,41 +132,13 @@ class ItemsController extends BaseController
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $user = $this->get('security.context')->getToken()->getUser();
-        $userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
-        $userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
-        
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
-        
-        return new Response($itemsView);
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch');
     }
     
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        $query = array();
-        
-        $request = $this->getRequest();
-        //  api global parameters
-        $query["page"]  = $request->query->get('page');      //  string
-        $query["limit"] = $request->query->get('limit');     //  string
-                
-        //  set defaults for missing parameters  
-        if(!isset($query['page']))          $query['page'] = 0;
-        if(!isset($query['limit']))         $query['limit'] = 100;
-        if($query['limit'] > 100)           $query['limit'] = 100;
-        $query["arrayResults"] = true;
-
-         //  execute the query
-        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);                             
-        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);             
-        
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        
-        return new Response($itemsView);
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch');
     }
 
     // get_item_tags GET /api/items/{itemId}/tags.{_format}
@@ -177,7 +149,7 @@ class ItemsController extends BaseController
         $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
         $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
         
-        return new Response($itemsView);
+        return new Response($itemView);
     }
         
     // get_collection_items GET /api/collections/{id}/items.{_format}
@@ -244,7 +216,7 @@ class ItemsController extends BaseController
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
         
-        return new Response($itemsView);
+        return new Response($itemView);
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
@@ -270,7 +242,7 @@ class ItemsController extends BaseController
 
         $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $item));
         
-        return new Response($itemsView);
+        return new Response($itemView);
     }
 
     public function postItemsAction()
@@ -294,7 +266,7 @@ class ItemsController extends BaseController
         
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
-        return new Response($itemsView);
+        return new Response($itemView);
     }
     
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
@@ -341,7 +313,7 @@ class ItemsController extends BaseController
 
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
-        return new Response($itemsView);
+        return new Response($itemView);
     }
     
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
