@@ -18,16 +18,13 @@ use Doctrine\ORM\EntityRepository;
 
 class CoreController extends BaseController
 {
-    
-	public function faqAction()
-	{
-	    $user = $this->get('security.context')->getToken()->getUser();
-
-		return $this->render('ZeegaCoreBundle:Core:faq.html.twig', array('page'=>'faq'));
+    public function faqAction()
+    {
+        return $this->render('ZeegaCoreBundle:Core:faq.html.twig', array('page'=>'faq'));
     } 
-	
- 	public function unsupportedBrowserAction ()
- 	{
- 		return $this->render('ZeegaCoreBundle:Core:unsupportedbrowser.html.twig');
- 	}
+    
+    public function unsupportedBrowserAction ()
+    {
+        return $this->render('ZeegaCoreBundle:Core:unsupportedbrowser.html.twig');
+    }
 }
