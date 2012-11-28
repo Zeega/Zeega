@@ -776,7 +776,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 		{
 			var _this = this;
 			
-			if(this.settings.opacity )
+			if(this.settings.opacity&&false )
 			{
 				this.opacitySlider = new Layer.Views.Lib.Slider({
 					css : false,
@@ -796,7 +796,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 			
 			this.$el.append( _.template( this.getTemplate(), _.extend(this.settings,{'color':this.model.get('attr')[this.settings.property]}) ));
 			
-			if( this.settings.opacity ) this.$el.append( this.opacitySlider.getControl() );
+			if( this.settings.opacity &&false ) this.$el.append( this.opacitySlider.getControl() );
 			
 			this.initHexField();
 			
