@@ -104,7 +104,9 @@
 								<option value="video">Video</option>
 								<option value="audio">Audio</option>
 								<option value="collection">Collection</option>
+                                                                {% if is_granted('ROLE_ADMIN') %}
 									<option value="project">Projects</option>
+                                                                {% endif %}
 							</select>
 						</span>
 					</div>
