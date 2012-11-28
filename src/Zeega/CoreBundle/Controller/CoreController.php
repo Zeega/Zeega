@@ -18,11 +18,6 @@ use Doctrine\ORM\EntityRepository;
 
 class CoreController extends BaseController
 {
-    public function faqAction()
-    {
-        return $this->render('ZeegaCoreBundle:Core:faq.html.twig', array('page'=>'faq'));
-    } 
-    
     public function unsupportedBrowserAction ()
     {
         return $this->render('ZeegaCoreBundle:Core:unsupportedbrowser.html.twig');
