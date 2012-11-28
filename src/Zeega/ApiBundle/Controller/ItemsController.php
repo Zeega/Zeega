@@ -40,9 +40,9 @@ class ItemsController extends BaseController
 
         $recursiveResults = $query["result_type"] == "recursive" ? true : false;
 
-        //$itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
 
-        return new Response(json_encode(array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults)));
+        return new Response($itemView);
     }
 
     /**
@@ -193,9 +193,10 @@ class ItemsController extends BaseController
                 $attributes["limit"] = $limit;
                 $attributes["r_counts"] = $returnCounts;
 
-                return $this->forward('ZeegaApiBundle:Search:search', array(), $attributes); 
+                return $this->forward('ZeegaApiBundle:Items:search', array(), $attributes); 
             } else {
-                return $this->forward('ZeegaApiBundle:Search:search', array(), array("r_items" => 1, "collection" => $item->getId(), "page" => $page, "limit" => $limit)); 
+                throw new Exception("TO-DO this needs to be fixed");
+                //return $this->forward('ZeegaApiBundle:Items:search', array(), array("r_items" => 1, "collection" => $item->getId(), "page" => $page, "limit" => $limit)); 
             }
         }
     }

@@ -20,7 +20,9 @@ class ApiResponseListener
         if($event->getResponse()->getStatusCode() == 200) {
             if (preg_match("/\/api\//",$event->getRequest()->getUri())) {
                 $content = $event->getResponse()->getContent();
-                $event->getResponse()->setContent(preg_replace("/(\n|\r|\s)*/","",$event->getResponse()->getContent()));
+                $content = preg_replace("/(\n|\r)*/","",$content);
+                $content = preg_replace("/\s\s+/", "",$content);
+                $event->getResponse()->setContent($content);
             }
         }
     }

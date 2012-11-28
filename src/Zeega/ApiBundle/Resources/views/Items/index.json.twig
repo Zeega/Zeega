@@ -1,7 +1,4 @@
-{
-{% block header %}{% endblock %}
-"{% block listName %}items{% endblock %}":
-[
+{"items":[
 	{% for item in items %}
 		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}	
 		{%- if loop.index0 < items|length - 1 -%}
@@ -9,24 +6,6 @@
 		{%- endif -%}
     {% endfor %}
 ],
-"{% block totalCountName %}returned_items_count{% endblock %}":
-	{% if items is defined %}
-		{{ items|length }}
-	{% else %}
-		0
-	{% endif %}	
-,
-"{% block countName %}items_count{% endblock %}":
-{% if items_count is defined %}
-	{{ items_count }}
-{% else %}
-	0
-{% endif %}
-,
-"request":
-	{% if request is defined %}
-		{{ request | json_encode | raw}}
-	{% else %}
-	{}
-	{% endif %}
+"returned_items_count":{% if items is defined %}{{ items|length }}{% else %}0{% endif %},
+"items_count":{% if items_count is defined %}{{ items_count }}{% else %}0{% endif %}
 }

@@ -36,22 +36,12 @@ class EditorController extends BaseController
 
 		$sequence = $sequences[0];
 		
-        $session = $this->getRequest()->getSession();
-		$collection_id = $session->get("collection_id");
-		
-		if(isset($collection_id)) {
-			$params['collection'] = $collection_id;			
-			$session->remove("collection_id"); // reads and deletes from session
-		} else {
-			$collection_id = -1;
-		}
-		
-		$params["r_items"] = 1;
+		$params = array();
 		$params["user"] = -1;
 	    $params["data_source"] = "db";
 	    $params["sort"] = "date-desc";
 	
-		$items = $this->forward('ZeegaApiBundle:Search:search', array(), $params)->getContent();
+		$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
 
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
@@ -66,7 +56,6 @@ class EditorController extends BaseController
 				'projectLayers' => $projectLayers,
            		'page'=>'editor',
 				'results' => $items,
-				'collection_id' => $collection_id,
 				'project_data' => $projectData,
 				'user_collections' => $userCollections,
 			));
