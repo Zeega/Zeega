@@ -223,7 +223,7 @@
 					{
 						_this.set({thumbnail_url:e.data});
 						_this.save();
-						console.log('thumbnail returned!!',e.data)
+						//console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
 					}

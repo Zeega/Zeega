@@ -78,7 +78,7 @@
 					this.$el.find('#controls').append( widthSlider.getControl() )
 										.append( heightSlider.getControl() );
 				}
-			}		
+			}
 			if(!this.model.hidden){
 				
 				var dissolveCheck = new Layer.Views.Lib.Checkbox({
@@ -92,8 +92,8 @@
 					model: this.model,
 					label : 'Opacity',
 					step : 0.01,
-					min : .05,
-					max : 1,
+					min : 0.05,
+					max : 1
 				});
 				
 				var posXSlider = new Layer.Views.Lib.Slider({
@@ -103,7 +103,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
-					step:.1
+					step: 0.1
 				});
 				var posYSlider = new Layer.Views.Lib.Slider({
 					property : 'left',
@@ -112,7 +112,7 @@
 					suffix : '%',
 					min : -100,
 					max : 100,
-					step:.1
+					step: 0.1
 				});
 				var layoutLabel = new Layer.Views.Lib.SectionLabel({label:'Layout'});
 				

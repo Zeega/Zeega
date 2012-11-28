@@ -342,6 +342,12 @@ Use this.model.get('attr')[my_setting] instead!!!
 			'keypress .slider-num-input' : 'onKeypress',
 			'click .slider-num-input' : 'onInputClick'
 		},
+
+		init: function()
+		{
+			this.lazySave = _.debounce( this.saveRoutine, 2000 );
+		},
+
 		onInputClick : function()
 		{
 			this.$('.slider-num-input').focus();
@@ -355,10 +361,15 @@ Use this.model.get('attr')[my_setting] instead!!!
 			
 			var _this = this;
 	
-			if(this.settings.property=="top"||this.settings.property=="left"){			
+			if(this.settings.property=="top"||this.settings.property=="left"){
 				this.model.on('update',function(){
-					_this.$el.find('.control-slider').slider('option', {'value':_this.model.get('attr')[_this.settings.property]});
-					_this.$el.find('.slider-num-input').html(_this.model.get('attr')[_this.settings.property]).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+					console.log('update slider pos', _this.model);
+					
+					_this.updateSliderInput( _this.model.get('attr')[_this.settings.property] );
+					/*
+					_this.$('.control-slider').slider('option', {'value':_this.model.get('attr')[_this.settings.property]});
+					_this.$('.slider-num-input').html(_this.model.get('attr')[_this.settings.property]).css({'left': _this.$el.find('a.ui-slider-handle').css('left') });
+					*/
 				});
 			}
 			
@@ -391,10 +402,12 @@ Use this.model.get('attr')[my_setting] instead!!!
 				},
 				change : function(e,ui)
 				{
-					if(e.which==1){
-						
+
+					console.log(e.which);
+					if(e.which==1 || e.which== 37 || e.which== 38 || e.which== 39 || e.which== 40 ){
+						console.log('change event');
 						_this.updateSliderInput(ui.value);
-						_this.saveValue(ui.value)
+						_this.saveValue(ui.value);
 						_this.settings.onChange();
 					}
 					
@@ -424,12 +437,14 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		updateSliderInput : function(value)
 		{
-			this.$el.find('.slider-num-input').html(value).css({'left': this.$el.find('a.ui-slider-handle').css('left') });
+			var rounded = Math.round( value * 100 ) / 100;
+			this.$('.control-slider').slider('option', {'value':rounded});
+			this.$('.slider-num-input').html(rounded).css({'left': this.$el.find('a.ui-slider-handle').css('left') });
 		},
 		
 		insertNumberField : function()
 		{
-			this.$el.find('.control-slider').prepend()
+			this.$el.find('.control-slider').prepend();
 		},
 		
 		getValue : function()
@@ -439,7 +454,6 @@ Use this.model.get('attr')[my_setting] instead!!!
 		
 		onKeypress : function(e)
 		{
-			console.log(e.which)
 			if( e.which == 13 )
 			{
 				this.updateFromInput();
@@ -452,24 +466,29 @@ Use this.model.get('attr')[my_setting] instead!!!
 		updateFromInput : function()
 		{
 			var newValue = parseFloat( this.$el.find('.slider-num-input').text() );
-			console.log(' new value', newValue )
 			this.$el.find('.slider-num-input').blur();
 			this.$el.find('.control-slider').slider('value', newValue);
 			
-			this.saveValue(newValue)
+			this.saveValue(newValue);
 		},
 		
 		saveValue : function(value)
 		{
-			console.log('save',value)
 			if(this.settings.save)
 			{
-				var attr = {};
-				attr[this.settings.property] = value;
-				this.model.update( attr )
-				this.updateVisualElement( value );
+				this.lazySave(value);
 			}
 		},
+
+		saveRoutine : function(value)
+		{
+			console.log('------save routine');
+			var attr = {};
+			attr[this.settings.property] = value;
+			this.model.update( attr );
+			this.updateVisualElement( value );
+		},
+
 		
 		getTemplate : function()
 		{
