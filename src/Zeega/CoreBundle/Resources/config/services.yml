@@ -31,3 +31,5 @@ services:
 
     zeega_query_parser:
         class: Zeega\CoreBundle\Service\QueryParserService
+        arguments: 
+            security: "@security.context"

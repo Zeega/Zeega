@@ -13,6 +13,11 @@ namespace Zeega\CoreBundle\Service;
 
 class QueryParserService
 {
+    public function __construct($securityContext) 
+    {
+        $this->securityContext = $securityContext;
+    }
+
     public function parseRequest($request)
     {
         if(null === $request) {
@@ -95,6 +100,12 @@ class QueryParserService
             $query["page"] = $query["page"] - 1;
         } else {
             $query["page"] = 1;
+        }
+
+        if(isset($query["user"]) && -1 == $query["user"]) {
+            if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+                $query["user"] = $this->securityContext->getToken()->getUser()->getId();
+            }
         }
 
         return $query;

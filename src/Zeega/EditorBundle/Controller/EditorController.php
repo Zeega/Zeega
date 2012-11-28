@@ -37,9 +37,10 @@ class EditorController extends BaseController
 		$sequence = $sequences[0];
 		
 		$params = array();
-		$params["user"] = -1;
+		$params["user"] = $user->getId();
 	    $params["data_source"] = "db";
 	    $params["sort"] = "date-desc";
+	    $params["type"] = "-project AND -collection";
 	
 		$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
 

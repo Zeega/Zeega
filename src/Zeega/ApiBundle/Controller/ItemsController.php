@@ -40,7 +40,7 @@ class ItemsController extends BaseController
 
         $recursiveResults = $query["result_type"] == "recursive" ? true : false;
 
-        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults, 'request' => array('query'=>$query)));
 
         return new Response($itemView);
     }
@@ -132,7 +132,16 @@ class ItemsController extends BaseController
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
-        return $this->forward('ZeegaApiBundle:Items:getItemsSearch');
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $user = $this->get('security.context')->getToken()->getUser();
+        $userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
+        $userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
+        
+        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+        
+        return new Response($itemView);
     }
     
     //  get_collections GET    /api/items.{_format}

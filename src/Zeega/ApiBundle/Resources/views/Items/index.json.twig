@@ -1,4 +1,6 @@
-{"items":[
+{
+    {% if request is defined %}"request": {{ request | json_encode | raw  }},{%- endif -%}
+    "items":[
 	{% for item in items %}
 		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item} %}	
 		{%- if loop.index0 < items|length - 1 -%}

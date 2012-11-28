@@ -13,34 +13,9 @@ class ItemRepository extends EntityRepository
 {
     private function buildSearchQuery($qb, $query)
     {
-		// query string ANDs - works for now; low priority
-        if(isset($query['queryString']))
-        {
-			$queryString = $query['queryString'];
-			if(count($queryString) == 1)
-			{
-				if(strlen($queryString[0]))
-				{
-	            	$qb->where('i.title LIKE :query_string')
-	               		->orWhere('i.media_creator_username LIKE :query_string')
-	               		->orWhere('i.description LIKE :query_string')
-	               		->setParameter('query_string','%' . $queryString[0] . '%');
-				}
-			}
-			else if(count($queryString) > 1)
-			{
-				for($i=0; $i < count($queryString); $i++)
-				{ 
-					$qb->andWhere('i.title LIKE :query_string'.$i . ' OR i.media_creator_username LIKE :query_string'.$i . ' OR i.description LIKE :query_string'.$i)
-	               		->setParameter('query_string'.$i,'%' . $queryString[$i] . '%');            	
-				}
-			}
-        }
-        
-        if(isset($query['userId']))
-      	{
+        if(isset($query['user'])) {
 			$qb->andWhere('i.user_id = ?2')
-			   ->setParameter(2,$query['userId']);
+			   ->setParameter(2,$query['user']);
 		}
 		
 		if(isset($query['collection_id']))
@@ -50,53 +25,21 @@ class ItemRepository extends EntityRepository
                 ->setParameter(3, $query['collection_id']);
 		}
 		
-		if(isset($query['notContentType'])) {
-            if(is_array($query['notContentType'])) {
-                $mediaTypesToExclude = $query['notContentType'];
-                
-                foreach($mediaTypesToExclude as $mediaType) {
-                    if("project" !== $mediaType) {
-                        $mediaType = ucfirst($mediaType);
-                    }
-                    $qb->andWhere("i.media_type <> :not_content_type_$mediaType")->setParameter("not_content_type_$mediaType", $mediaType);
-                }
-            } else {
-                $mediaType = $query['notContentType'];
+		if(isset($query['type'])) {
+            $mediaTypes = explode(" AND ", $query['type']);
+            foreach($mediaTypes as $mediaType) {
                 if("project" !== $mediaType) {
                     $mediaType = ucfirst($mediaType);
                 }
-                
-                $qb->andWhere('i.media_type <> :not_content_type')->setParameter('not_content_type', $mediaType);
+
+                if(preg_match("/-/",$query['type'])) {
+                    $mediaType = str_replace("-","",$mediaType);
+                    $qb->andWhere("i.media_type <> :not_content_type_$mediaType")->setParameter("not_content_type_$mediaType", $mediaType);
+                } else {
+                    $qb->andWhere("i.media_type = :content_type_$mediaType")->setParameter("content_type_$mediaType", $mediaType);
+                }
             }
     	}
-		
-        if(isset($query["contentType"]))
-      	{
-			if(strtoupper($query["contentType"]) == 'COLLECTION')
-            {
-                $qb->andwhere("i.media_type = 'Collection'");
-            }
-            else
-            {
-                $qb->andwhere("i.media_type = :content")->setParameter('content',ucfirst($query["contentType"]));
-            }
-		}
-		
-		if(isset($query['tags']))
-      	{
-			 $qb->innerjoin('i.tags', 'it')
-			    ->innerjoin('it.tag','t')
-                ->andWhere('t.id IN (?5)')
-                ->setParameter(5, $query['tags']);
-		}
-		
-		if(isset($query['tagsName']))
-      	{
-			 $qb->innerjoin('i.tags', 'it')
-			    ->innerjoin('it.tag','t')
-                ->andWhere('t.name IN (:tags_name)')
-                ->setParameter('tags_name', $query['tagsName']);
-		}
 		
 		if(isset($query['earliestDate']))
       	{
@@ -182,29 +125,18 @@ class ItemRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i')
-            ->from('ZeegaDataBundle:Item', 'i')
-       		->setMaxResults($query['limit'])
-       		->setFirstResult($query['limit'] * $query['page']);
+        $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->setMaxResults($query['limit'])->setFirstResult($query['limit'] * $query['page']);
         
-        if(isset($query['sort']))
-      	{
+        if(isset($query['sort'])) {
 	      	$sort = $query['sort'];
-      	 	if($sort == 'date-desc')
-            {
+      	 	if($sort == 'date-desc') {
                 $qb->orderBy('i.date_created','DESC')->groupBy("i.id");
-            }
-            else if($sort == 'date-asc')
-            {
+            } else if($sort == 'date-asc') {
                 $qb->orderBy('i.date_created','ASC')->groupBy("i.id");
-            }
-			else
-			{
+            } else {
 				$qb->orderBy('i.id','DESC');
 			}
-		}
-		else
-		{
+		} else {
 			$qb->orderBy('i.id','DESC');
 		}
 
