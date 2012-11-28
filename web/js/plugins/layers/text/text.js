@@ -198,6 +198,11 @@
 			.prepend('<a class="drag-handle drag-handle-nw drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>')
 			.prepend('<a class="drag-handle drag-handle-se drag-handle-'+ this.model.id +'"><span class="icon-area"><i class="icon-move"></i></span></a>');
 			
+			// blur the contenteditable when the user hovers over the drag handle
+			this.$('.drag-handle').mouseenter(function(){
+				_this.$('#zedit-target').blur();
+			});
+
 		},
 		
 		lazySave : _.debounce( function(){
