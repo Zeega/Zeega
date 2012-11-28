@@ -278,7 +278,7 @@
 			$(this.el).attr('data-id',this.model.id);
 			$(this.el).find('.layer-title').html(this.model.get('attr').title);
 			if(this.model.get('persistent'))this.$el.addClass('persistent');
-			if(this.model.get('continues'))this.$el.addClass('continues');			
+			if(this.model.get('continues'))this.$el.addClass('continues');
 		},
 		
 		/*******************
@@ -334,8 +334,8 @@
 		//	open/close and expanding layer items
 		expand : function( force )
 		{
-			console.log('layer expand!!!', this)
-			if(this.model.hasControls || force==true )
+			console.log('layer expand!!!', this);
+			if(this.model.hasControls || force === true )
 			{
 				if(this.$el.hasClass('layer-open') )
 				{
@@ -348,7 +348,7 @@
 					$('.layer-open').each(function(){
 						var layerID = $(this).data('id');
 						zeega.app.project.layers.get(layerID).trigger('editor_controlsClosed');
-					})
+					});
 					$('.layer-open').removeClass('layer-open');
 					this.$el.addClass('layer-open');
 					this.model.trigger('editor_controlsOpen');
