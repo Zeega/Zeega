@@ -44,11 +44,8 @@
 	Items.Collections.Search = Backbone.Collection.extend({
 		
 		model:Items.Model,
-		base : zeega.discovery.app.apiLocation + 'api/search?',
-		query : {	page:1,
-					r_itemswithcollections: 1,
-					r_tags:1,
-					sort:"date-desc"
+		base : zeega.discovery.app.apiLocation + 'api/items/search?',
+		query : {	page:1
 				},
 				
 		initialize: function(){
@@ -68,14 +65,11 @@
 			var url = this.base;
 			if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += '&q=' + this.query.q.toString();
 			if( !_.isUndefined(this.query.viewType) ) url += '&view_type=' + this.query.viewType;
-			if( !_.isUndefined(this.query.content) ) url += '&content=' + this.query.content;
+			if( !_.isUndefined(this.query.content) ) url += '&type=' + this.query.content;
 			if( !_.isUndefined(this.query.sort) ) url += '&sort=' + this.query.sort;
 			if( !_.isUndefined(this.query.collection) && this.query.collection > 0) url += '&collection=' + this.query.collection;
 			if( !_.isUndefined(this.query.page) ) url += '&page=' + this.query.page;
-			if( !_.isUndefined(this.query.r_items) ) url += '&r_items=' + this.query.r_items;
-			if( !_.isUndefined(this.query.r_tags)) url += '&r_tags=' + this.query.r_tags;
-			if( !_.isUndefined(this.query.r_itemswithcollections) ) url += '&r_itemswithcollections=' + this.query.r_itemswithcollections;
-			if( !_.isUndefined(this.query.r_collections) ) url += '&r_collections=' + this.query.r_collections;
+			if( !_.isUndefined(this.query.r_collections) ) url += '&type=Collection' + this.query.r_collections;
 			if( !_.isUndefined(this.query.times)&&!_.isNull(this.query.times) ){
 				if( !_.isUndefined(this.query.times.start) ) url += '&min_date=' + this.query.times.start;
 				if( !_.isUndefined(this.query.times.end) ) url += '&max_date=' + this.query.times.end;

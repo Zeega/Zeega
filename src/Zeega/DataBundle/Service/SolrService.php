@@ -94,16 +94,8 @@ class SolrService
             $solrQuery->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
         }
                 
-        if(isset($userId) && $userId == -1) { // filter results for the logged user
-            $user = $this->get('security.context')->getToken()->getUser();
-            if(null !== $user) {
-                $userId = $user->getId();
-            }   
-        }
-
-        if(isset($userId)) {
-            $userId = ResponseHelper::escapeSolrQuery($userId);
-            $solrQuery->createFilterQuery('user_id')->setQuery("user_id: $userId");
+        if(isset($query["user"])) {
+            $solrQuery->createFilterQuery('user_id')->setQuery("user_id:".$query["user"]);
         }
         
         // return highly ranked tags for the query
