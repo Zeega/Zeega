@@ -53,15 +53,17 @@ class SolrService
         // text query
         $queryString = '';
         if(isset($query["text"])) {
-            $queryString = "text:(".$query["text"].")";
+            $queryString = self::appendQueryToQueryString($queryString, "text:(".$query["text"].")");
         }        
         
         // tag query
         if(isset($query["tags"])) {
-            if($queryString != '') {
-                $queryString = $queryString . " AND ";
-            }            
-            $queryString = $queryString . "tags_i:(".$query["tags"].")";
+            $queryString = self::appendQueryToQueryString($queryString, "tags_i:(".$query["tags"].")");
+        }
+
+        // return only the items that belong to a collection
+        if(isset($query["collection"])) {    
+            $queryString = self::appendQueryToQueryString($queryString, "parent_item:".$query["collection"]);
         }
         
         //echo '<pre>'; print_r($queryString); echo '</pre>';
@@ -78,10 +80,7 @@ class SolrService
             $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
 
-        // return only the items that belong to a collection
-        if(isset($query["collection"])) {    
-            $solrQuery->createFilterQuery('parent_id')->setQuery("parent_item:".$query["collection"]);
-        }
+        
                                                                                     
         if(isset($query["since"]) && isset($query["before"])) {
             $minDate = new DateTime();
@@ -123,5 +122,13 @@ class SolrService
         }
 
         return array("items" => $responseData["response"]["docs"], "tags" => $tagsArray, "total_results" => $resultset->getNumFound());
+    }
+
+    private function appendQueryToQueryString($queryString, $query) {
+        if(!isset($queryString) || $queryString == '') {
+            return $query;
+        } else {
+            return "$queryString AND $query";
+        }  
     }
 }
