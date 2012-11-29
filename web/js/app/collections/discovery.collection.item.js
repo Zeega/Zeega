@@ -12,13 +12,12 @@
 				this.on('preview_item',this.previewItem,this);
 		},
 		url : function(){
-			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id;
+			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id + '/items';
 			return url;
 		},
 		parse : function(response)
 		{
-			console.log('parsing static collection');
-			return response.items[0].child_items;
+			return response.items;
 			
 		},
 		previewItem : function(itemID)
@@ -35,7 +34,7 @@
 	Items.Collections.Dynamic=Items.Collections.Static.extend({
 		type:'dynamic',
 		url : function(){
-			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id+'/items';
+			var url = zeega.discovery.app.apiLocation + 'api/items/' + this.id + '/items';
 			return url;
 		},
 		parse : function(response)
@@ -72,10 +71,10 @@
 		{
 		
 			var url = this.base;
-			if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += '&q=' + this.query.q.toString();
-			else url+='&sort=date-desc';
+			if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += 'q=' + this.query.q.toString();
+			else url+='sort=date-desc';
 			if( !_.isUndefined(this.query.viewType) ) url += '&view_type=' + this.query.viewType;
-			if( !_.isUndefined(this.query.content) ) url += '&type=' + this.query.content;
+			if( !_.isUndefined(this.query.content) && 'all' !== this.query.content ) url += '&type=' + this.query.content;
 			if( !_.isUndefined(this.query.sort) ) url += '&sort=' + this.query.sort;
 			if( !_.isUndefined(this.query.collection) && this.query.collection > 0) url += '&collection=' + this.query.collection;
 			if( !_.isUndefined(this.query.page) ) url += '&page=' + this.query.page;
