@@ -415,14 +415,16 @@ this.zeegaPlayer = {
 				if(layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.id) return layerID;
 				else return false;
 			});
-			layersToRender = _.difference( _.compact(layersToRender),this.commonLayers[fromFrameID] );
-			// draw and update layer media
-			_.each( layersToRender, function(layerID,z){
-				var layer = _this.layers.get(layerID);
-				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );
-				else layer.trigger('player_play', z );
-			});
 
+			var newLayersToRender = _.difference( _.compact(layersToRender),this.commonLayers[fromFrameID] );
+			// draw and update layer media
+
+			_.each( layersToRender, function(layerID, z){
+				var layer = _this.layers.get(layerID);
+				console.log('------- layer', layer);
+				if( _.contains(newLayersToRender, layerID) ) layer.trigger('player_play', z );
+				else layer.visual.updateZIndex( z );
+			});
 		},
 
 		unrender : function( toFrameID )
