@@ -96,18 +96,15 @@ class QueryParserService
             $query["result_type"] = "plain";
         }
 
-        if(isset($query["data_source"]) && "db" == $query["data_source"]) {
-            if(isset($query["page"]) && $query["page"] > 0) {
-                $query["page"] = $query["page"] - 1;
-            } else {
-                $query["page"] = 0;
-            }
+        if(isset($query["page"]) && $query["page"] > 0) {
+            $query["page"] = $query["page"] - 1;
         } else {
-            if(!isset($query["page"]) || $query["page"] < 1) {
-                $query["page"] = 1;
-            }
+            $query["page"] = 0;
         }
         
+        $query["page"] = (Integer)$query["page"];
+        $query["limit"] = (Integer)$query["limit"];
+
         if(isset($query["user"]) && -1 == $query["user"]) {
             if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
                 $query["user"] = $this->securityContext->getToken()->getUser()->getId();

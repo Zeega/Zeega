@@ -11,13 +11,9 @@
 
 namespace Zeega\ApiBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Zeega\DataBundle\Entity\Item;
-use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
 use Zeega\CoreBundle\Controller\BaseController;
 
 class ItemsController extends BaseController
@@ -38,9 +34,7 @@ class ItemsController extends BaseController
         }
 
         $recursiveResults = $query["result_type"] == "recursive" ? true : false;
-
         $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $results, 'items_count' => $resultsCount, 'load_children' => $recursiveResults, 'request' => array('query'=>$query)));
-
         return new Response($itemView);
     }
 
@@ -63,10 +57,7 @@ class ItemsController extends BaseController
             $loadChildren = $request->query->get('load_children');
             $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
             $parser = $this->get('zeega_parser');
-        
-            // parse the url with the IngestionBundle\Parser\ParserService
             $response = $parser->load($url, $loadChildren);
-
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
         }
         
@@ -76,67 +67,35 @@ class ItemsController extends BaseController
     //  get_collections GET    /api/items.{_format}
     public function getItemsRejectedAction()
     {
-        $query = array();
         $user = $this->get('security.context')->getToken()->getUser();
+        $query = $this->getRequest()->query->all();
+        $query["enabled"] = 0;
+        $query["user"] = $user->getId();
+        $query["type"] = "-project AND -Collection";
 
-        $request = $this->getRequest();
-        //  api global parameters
-        $query["page"]  = $request->query->get('page');      //  string
-        $query["limit"] = $request->query->get('limit');     //  string
-        $query["enabled"] = False;
-        $query["userId"] = $user->getId();
-        $query["notContentType"] = array("project", "Collection");
-                
-        //  set defaults for missing parameters  
-        if(!isset($query['page']))          $query['page'] = 0;
-        if(!isset($query['limit']))         $query['limit'] = 100;
-        
-        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);     
-
-        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);             
-        
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        
-        return new Response($itemsView);
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
 
     //  get_collections GET    /api/items.{_format}
     public function getItemsUnmoderatedAction()
     {
-        $query = array();
         $user = $this->get('security.context')->getToken()->getUser();
-
-        $request = $this->getRequest();
-        //  api global parameters
-        $query["page"]  = $request->query->get('page');      //  string
-        $query["limit"] = $request->query->get('limit');     //  string
+        $query = $this->getRequest()->query->all();
         $query["published"] = 0;
-        $query["enabled"] = True;
-        $query["userId"] = $user->getId();
-        $query["notContentType"] = array("project", "Collection");
-                
-        //  set defaults for missing parameters  
-        if(!isset($query['page']))          $query['page'] = 0;
-        if(!isset($query['limit']))         $query['limit'] = 100;
-        
-        $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);     
+        $query["enabled"] = 1;
+        $query["user"] = $user->getId();
+        $query["type"] = "-project AND -Collection";
 
-        $resultsCount = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->getTotalItems($query);             
-        
-        $itemsView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $queryResults, 'items_count' => $resultsCount));
-        
-        return new Response($itemsView);
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
     
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        
         $user = $this->get('security.context')->getToken()->getUser();
         $userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
         $userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
-        
         $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         
@@ -146,36 +105,16 @@ class ItemsController extends BaseController
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        return $this->forward('ZeegaApiBundle:Items:getItemsSearch');
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $this->getRequest()->query->all());
     }
 
-    // get_item_tags GET /api/items/{itemId}/tags.{_format}
-    public function getItemCollectionsAction($itemId)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $items = $em->getRepository('ZeegaDataBundle:Item')->searchItemsParentsById($itemId);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $items));
-        
-        return new Response($itemView);
-    }
-        
     // get_collection_items GET /api/collections/{id}/items.{_format}
     public function getItemItemsAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $query = array();
-        $request = $this->getRequest();
-
-        $page = $request->query->get('page'); // string
-        $limit = $request->query->get('limit'); // string
-        
         $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
-        
 
         if(null !== $item) {
-            $query = array();
+            $query = $this->getRequest()->query->all();
         
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
@@ -200,17 +139,12 @@ class ItemsController extends BaseController
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
+        // TO-DO - error handling; missing item, etc
         $em = $this->getDoctrine()->getEntityManager();
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
-        
-        if (!$item) {
-            throw $this->createNotFoundException('Unable to find a Collection with the id ' . $item_id);
-        }
-        
         $item->setEnabled(false);
         $item->setDateUpdated(new \DateTime("now"));
         $em->flush();
-        
         $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
         
         return new Response($itemView);
@@ -219,24 +153,14 @@ class ItemsController extends BaseController
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemItemAction($itemId,$childItemId)
     {
+        // TO-DO - error handling; missing item, etc
         $em = $this->getDoctrine()->getEntityManager();
         $item = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$itemId,"enabled"=>1));
         $childItem = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$childItemId,"enabled"=>1));
-
-        if (!$item) {
-            throw $this->createNotFoundException("The item $item does not exist");
-        }
-
-        if (!$childItem) {
-            throw $this->createNotFoundException("The item $childItem does not exist");
-        }
-
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
         $item->setDateUpdated(new \DateTime("now"));
-
         $em->flush();
-
         $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $item));
         
         return new Response($itemView);
@@ -253,14 +177,11 @@ class ItemsController extends BaseController
         }
 
         $user = $this->get('security.context')->getToken()->getUser();
-
         $itemService = $this->get('zeega.item');
         $item = $itemService->parseItem($requestData->all(), $user);
-        
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($item);
         $em->flush();
-        
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
         return new Response($itemView);
@@ -269,15 +190,11 @@ class ItemsController extends BaseController
     // delete_items_tags  DELETE   /api/items/{itemId}/tags/{tagName}.{_format}
     public function deleteItemTagsAction($itemId, $tagName)
     {
+        // TO-DO - error handling; missing item, etc
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getEntityManager();
 
         $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-           
-        if (!$item) {
-            throw $this->createNotFoundException('Unable to find the Item with the id . $itemId');
-        }
-
         $tags = $item->getTags();
         if(isset($tags)) {
             if (in_array($tagName,$tags)) {
@@ -296,18 +213,13 @@ class ItemsController extends BaseController
     public function putItemsAction($item_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $request = $this->getRequest();
         $requestData = $this->getRequest()->request;        
-        
         $user = $this->get('security.context')->getToken()->getUser();
-
         $itemService = $this->get('zeega.item');
         $item = $itemService->parseItem($requestData->all(), $user);
-
         $em->persist($item);
         $em->flush();
-
         $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return new Response($itemView);
@@ -387,81 +299,103 @@ class ItemsController extends BaseController
             return new Response("Unauthorized", 401);
         }
     }
-    
    
     // get_collection_project GET    /api/collections/{id}/project.{_format}
     public function getItemProjectAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $query = array();
-        $request = $this->getRequest();
-        
-        $query["collection_id"]  = $id;
-        $query["page"]  = $request->query->get('page');      //  string
-        $query["limit"] = $request->query->get('limit');     //  string
-        
-        //  set defaults for missing parameters  
-        if(!isset($query['page']))          $query['page'] = 0;
-        if($query['page'] > 0) {
-            $query['page'] = $query['page'] - 1;
-        }    
-        if(!isset($query['limit']))         $query['limit'] = 100;
-        if($query['limit'] > 100)           $query['limit'] = 100;
-
         $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
         
-        //HAMMER
         if(null !== $item) {
             $i=1;
             $frameOrder=array();
             $frames=array();
             $layers=array();
 
+            $queryParser = $this->get('zeega_query_parser');
+            $query = $this->getRequest()->query->all();
+            $query["type"] = "-project";
+
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                $itemAttributes = $item->getAttributes();
-
-                $attributes = $query;
-            
                 if(isset($itemAttributes["tags"])) {
-                    $attributes["tags"] = $itemAttributes["tags"];
+                    if(is_array($itemAttributes["tags"])) {
+                        $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
+                    } else {
+                        $query["tags"] = $itemAttributes["tags"];
+                    }
                 }
-
-                $attributes["r_itemswithcollections"] = 1;                
-                $attributes["user"] = $item->getUserId();
-
-                $queryResults = $this->forward('ZeegaApiBundle:Search:search', array(), $attributes)->getContent(); 
-                $queryResults = json_decode($queryResults,true);
-                $queryResults = $queryResults["items"];
             } else {
-                $queryResults = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
+                $query["collection"]  = $id;
             }
 
+            $query = $queryParser->parseRequest($this->getRequest()->query);
+
+            $solr = $this->get('zeega_solr');
+            $queryResults = $solr->search($query);
+            $queryResults = $queryResults["items"];
+            
             foreach($queryResults as $childItem) {
                 if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf') {
                     $i++;
                     $frameId = (int)$childItem['id'];
                     $frameOrder[]=$frameId;
                     $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-                    $layers[]=array("id"=>$i,"type"=>$childItem['layer_type'],"text"=>$childItem['text'],
-                        "attr"=>array(
-                            "user_id"=>$childItem['user_id'],
-                            "description"=>$childItem['description'],
-                            "title"=>$childItem['title'],
-                            "uri"=>$childItem['uri'],
-                            "thumbnail_url"=>$childItem['thumbnail_url'],
-                            "attribution_uri"=>$childItem['attribution_uri'],
-                            "media_creator_username"=>$childItem['media_creator_username'],
-                            "media_creator_realname"=>$childItem['media_creator_realname'],
-                            "media_date_created"=>$childItem['media_date_created'],
-                            "date_created"=>$childItem['date_created'],
-                            "tags"=>$childItem['tags'],
-                            "media_geo_latitude"=>$childItem['media_geo_latitude'],
-                            "media_geo_longitude"=>$childItem['media_geo_longitude'],
-                            "archive"=>$childItem['archive'],
-                            "media_type"=>$childItem['media_type'],
-                            "layer_type"=>$childItem['layer_type'] 
-                        ));
+                    
+                    $layer = array("id"=>$i,"media_type"=>$childItem['media_type'],"layer_type"=>$childItem['layer_type']);
+                    
+                    if(isset($childItem['text'])) {
+                        $layer["text"] = $childItem['text'];
+                    }
+
+                    $layer["attr"] = array();
+                    $layer["attr"]["user_id"] = $childItem['user_id'];
+                    $layer["attr"]["uri"] = $childItem['uri'];
+                    $layer["attr"]["attribution_uri"] =$childItem['attribution_uri'];
+                    
+                    if(isset($childItem['title_i'])) {
+                        $layer["attr"]["title"] = $childItem['title_i'];
+                    }
+
+                    if(isset($childItem['description_i'])) {
+                        $layer["attr"]["description"] = $childItem['description_i'];
+                    }
+
+                    if(isset($childItem['thumbnail_url'])) {
+                        $layer["attr"]["thumbnail_url"] = $childItem['thumbnail_url'];
+                    }
+
+                    if(isset($childItem['media_creator_username'])) {
+                        $layer["attr"]["media_creator_username"] = $childItem['media_creator_username'];
+                    }
+
+                    if(isset($childItem['media_creator_realname'])) {
+                        $layer["attr"]["media_creator_realname"] = $childItem['media_creator_realname'];
+                    }
+
+                    if(isset($childItem['media_date_created'])) {
+                        $layer["attr"]["media_date_created"] = $childItem['media_date_created'];
+                    }
+
+                    if(isset($childItem['date_created'])) {
+                        $layer["attr"]["date_created"] = $childItem['date_created'];
+                    }
+
+                    if(isset($childItem['tags'])) {
+                        $layer["attr"]["tags"] = $childItem['tags'];
+                    }
+
+                    if(isset($childItem['media_geo_latitude'])) {
+                        $layer["attr"]["media_geo_latitude"] = $childItem['media_geo_latitude'];
+                    }
+
+                    if(isset($childItem['media_geo_longitude'])) {
+                        $layer["attr"]["media_geo_longitude"] = $childItem['media_geo_longitude'];
+                    }
+
+                    if(isset($childItem['archive'])) {
+                        $layer["attr"]["archive"] = $childItem['archive'];
+                    }
+
+                    $layers[] = $layer;
                 }
             }               
             
@@ -473,7 +407,8 @@ class ItemsController extends BaseController
                   'frames'=>$frames,
                   'layers'=>$layers,
                 );
-        return new Response(json_encode($project));
+
+            return new Response(json_encode($project));
         }
     }
 }

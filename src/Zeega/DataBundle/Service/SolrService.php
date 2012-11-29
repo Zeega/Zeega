@@ -32,8 +32,7 @@ class SolrService
 
         $solrQuery = $client->createSelect();
         
-        $solrQuery->setRows($query["limit"] * $query["page"]);
-        $solrQuery->setStart($query["page"]);
+        $solrQuery->setStart($query["limit"] * $query["page"])->setRows($query["limit"]);
 
         if(isset($query["fields"])) {
             $solrQuery->setFields($query["fields"]);
@@ -50,8 +49,15 @@ class SolrService
             }
         }
 
-        // text query
         $queryString = '';
+        if(isset($query["enabled"])) {
+            $queryString = self::appendQueryToQueryString($queryString, "enabled:".$query["enabled"]);
+        }
+
+        if(isset($query["published"])) {
+            $queryString = self::appendQueryToQueryString($queryString, "published:".$query["published"]);
+        } 
+
         if(isset($query["text"])) {
             $queryString = self::appendQueryToQueryString($queryString, "text:(".$query["text"].")");
         }        
@@ -79,8 +85,6 @@ class SolrService
         if(isset($query["geo"]) && $query["geo"] == 1) {
             $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
-
-        
                                                                                     
         if(isset($query["since"]) && isset($query["before"])) {
             $minDate = new DateTime();
