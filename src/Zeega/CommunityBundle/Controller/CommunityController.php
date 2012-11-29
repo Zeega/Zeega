@@ -36,6 +36,8 @@ class CommunityController extends BaseController
     {
         $user = $this->getDoctrine()->getEntityManager()->getRepository('ZeegaDataBundle:User')->findOneById($id);
         $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+        $loggedUser = $this->get('security.context')->getToken()->getUser();
+
         return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user'=>$user, 'logged_user'=>$loggedUser, 'user_projects' => $projects));
     }
     
