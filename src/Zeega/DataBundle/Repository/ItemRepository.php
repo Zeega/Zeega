@@ -273,7 +273,7 @@ class ItemRepository extends EntityRepository
            ->orderBy('i.id','DESC');
 
         // execute the query
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getArrayResult();
     }
     
     public function findUserItems($id)
