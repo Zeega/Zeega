@@ -53,7 +53,7 @@ class QueryParserService
                         }
                     }
                 }
-            } else if($requestKey === "fields") {
+            } else if($requestKey === "fields" && !is_array($requestValue)) {
                 $requestValue = str_replace(' ','',$requestValue);
                 $query[$requestKey] = explode(",", $requestValue);
             } else {

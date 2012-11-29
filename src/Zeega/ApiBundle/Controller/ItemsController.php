@@ -24,9 +24,6 @@ class ItemsController extends BaseController
 {
     public function getItemsSearchAction()
     {
-        //echo "<pre>" . print_r($this->getRequest()->query->all()) . "</pre>";
-        //return new Response();
-        // parse the query
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
 
