@@ -24,6 +24,8 @@ class ItemsController extends BaseController
 {
     public function getItemsSearchAction()
     {
+        //echo "<pre>" . print_r($this->getRequest()->query->all()) . "</pre>";
+        //return new Response();
         // parse the query
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
@@ -171,43 +173,31 @@ class ItemsController extends BaseController
 
         $page = $request->query->get('page'); // string
         $limit = $request->query->get('limit'); // string
-        $returnCounts = $request->query->get('r_counts'); // string
         
-        // set defaults for missing parameters
-        if(!isset($page)) $page = 0;
-        if(!isset($limit)) $limit = 100;
-        if(!isset($returnCounts)) {
-            $returnCounts = 0;
-        }
-
         $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
         
+
         if(null !== $item) {
+            $query = array();
+        
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
 
-                $attributes = array();
-
                 if(isset($itemAttributes["tags"])) {
-                    $attributes["tags"] = $itemAttributes["tags"];
+                    if(is_array($itemAttributes["tags"])) {
+                        $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
+                    } else {
+                        $query["tags"] = $itemAttributes["tags"];
+                    }
                 }
-
-                if(isset($itemAttributes["tags"])) {
-                    $attributes["tags"] = $itemAttributes["tags"];
-                }
-
-                $attributes["r_itemswithcollections"] = 1;                
-                $attributes["user"] = $item->getUserId();
-                $attributes["page"] = $page;
-                $attributes["limit"] = $limit;
-                $attributes["r_counts"] = $returnCounts;
-
-                return $this->forward('ZeegaApiBundle:Items:search', array(), $attributes); 
             } else {
-                throw new Exception("TO-DO this needs to be fixed");
-                //return $this->forward('ZeegaApiBundle:Items:search', array(), array("r_items" => 1, "collection" => $item->getId(), "page" => $page, "limit" => $limit)); 
+                $query["collection"] = $item->getId();
             }
+
+            return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query); 
         }
+
+        return new Response($this->renderView('ZeegaApiBundle:Items:show.json.twig'));
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
