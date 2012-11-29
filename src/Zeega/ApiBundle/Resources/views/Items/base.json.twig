@@ -18,9 +18,21 @@
         "user_id": {{ item.user_id | default("") | json_encode | raw }},
         "username": {{ item.username | default("") | json_encode | raw }},
         "display_name":{{ item.display_name | default("") | json_encode | raw }},
-        "title":{{ item.title | default("") | json_encode | raw}},
-        "description":{{ item.description | default("") | json_encode | raw}},        
-        "text":{{ item.text | default("") | json_encode | raw}},
+        {%- if item.title_i is defined -%}
+            "title":{{ item.title_i | default("") | json_encode | raw}},
+        {%- else -%}
+            "title":{{ item.title | default("") | json_encode | raw}},
+        {%- endif -%}
+        {%- if item.description_i is defined -%}
+            "description":{{ item.description_i | default("") | json_encode | raw}},
+        {%- else -%}
+            "description":{{ item.description | default("") | json_encode | raw}},
+        {%- endif -%}
+        {%- if item.text_i is defined -%}
+            "text":{{ item.text_i | default("") | json_encode | raw}},
+        {%- else -%}
+            "text":{{ item.text | default("") | json_encode | raw}},
+        {%- endif -%}              
         "uri":{{ item.uri | default("") | json_encode | raw}},
         "attribution_uri":{{ item.attribution_uri | default("") | json_encode | raw}},
         "date_created":"{{ item.date_created | default(null) | date("Y-m-d H:i:s") }}",
@@ -42,7 +54,7 @@
         "child_items":
         [
             {%- if (load_children is defined and load_children == true and item.child_items is defined) -%}
-                {% for child in item.childitems %}
+                {% for child in item.child_items %}
                     {# Item is a collection. Render the children by recursively calling the macro #}
                     {{ _self.show(child) }}
                     {%- if loop.index0 < item.child_items|length - 1 -%}
@@ -51,8 +63,12 @@
                 {% endfor %}
             {%- endif -%}
         ],
-        "tags":{{ item.tags | default([ ]) | json_encode | raw}},
-        {%- if (user.id is defined and user.id == item.userid) or (user_is_admin is defined and user_is_admin) -%}
+        {%- if item.tags_i is defined -%}
+            "tags":{{ item.tags_i | default([ ]) | json_encode | raw}},
+        {%- else -%}
+            "tags":{{ item.tags | default([ ]) | json_encode | raw}},
+        {%- endif -%}              
+        {%- if (user.id is defined and user.id == item.user_id) or (user_is_admin is defined and user_is_admin) -%}
             "editable":true
         {%- else -%}
             "editable":false
