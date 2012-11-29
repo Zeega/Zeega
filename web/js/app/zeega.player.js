@@ -421,7 +421,6 @@ this.zeegaPlayer = {
 
 			_.each( layersToRender, function(layerID, z){
 				var layer = _this.layers.get(layerID);
-				console.log('------- layer', layer);
 				if( _.contains(newLayersToRender, layerID) ) layer.trigger('player_play', z );
 				else layer.visual.updateZIndex( z );
 			});
