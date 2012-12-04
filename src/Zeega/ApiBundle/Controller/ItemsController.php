@@ -92,13 +92,39 @@ class ItemsController extends BaseController
     // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $queryParser = $this->get('zeega_query_parser');
+        $query = $queryParser->parseRequest($this->getRequest()->query);
+        $recursiveResults = $query["result_type"] == "recursive" ? true : false;
+
         $userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
         $userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+        $user = $this->get('security.context')->getToken()->getUser();
         
+        if(isset($query["data_source"]) && $query["data_source"] == "db") {
+            $em = $this->getDoctrine()->getEntityManager();
+            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
+            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+        } else {
+            $solr = $this->get('zeega_solr');
+
+            $query = $this->getRequest()->query->all();
+            $query["id"] = $id;
+            $query = $queryParser->parseRequest($query);
+            $queryResults = $solr->search($query);
+            $parentItem = $queryResults["items"][0];
+
+            if(true === $recursiveResults) {
+                $query = $this->getRequest()->query->all();
+                $query["collection"] = $id;
+                $query = $queryParser->parseRequest($query);
+                $queryResults = $solr->search($query);
+
+                $parentItem["child_items"] = $queryResults["items"];        
+            }
+
+            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $parentItem, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+        }
+
         return new Response($itemView);
     }
     

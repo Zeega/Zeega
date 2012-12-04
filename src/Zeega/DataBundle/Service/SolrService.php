@@ -54,6 +54,10 @@ class SolrService
             $queryString = self::appendQueryToQueryString($queryString, "enabled:".$query["enabled"]);
         }
 
+        if(isset($query["id"])) {
+            $queryString = self::appendQueryToQueryString($queryString, "id:".$query["id"]);
+        }
+
         if(isset($query["published"])) {
             $queryString = self::appendQueryToQueryString($queryString, "published:".$query["published"]);
         } 
