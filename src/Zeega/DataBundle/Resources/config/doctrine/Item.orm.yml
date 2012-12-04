@@ -125,9 +125,6 @@ Zeega\DataBundle\Entity\Item:
         published:
             type: boolean
             nullable: false
-        geo_latlng:
-            type: string
-            nullable: true
         ingested_by: 
             type: string
             length: 15
