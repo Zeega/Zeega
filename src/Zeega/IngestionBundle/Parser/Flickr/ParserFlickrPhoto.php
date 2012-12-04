@@ -53,15 +53,24 @@ class ParserFlickrPhoto extends ParserAbstract
 				$sizes[$s['label']]=array('width'=>$s['width'],'height'=>$s['height'],'source'=>$s['source']);
 			}	
 			//return $sizes;
-			$item->setThumbnailUrl($sizes['Square']['source']);
+			
 
 			$attr = array('farm'=>$info['farm'],'server'=>$info['server'],'id'=>$info['id'],'secret'=>$info['secret']);
 			if(isset($sizes['Original'])) $attr['originalsecret']=$info['originalsecret'];
 
 			if(isset($sizes['Large']))$itemSize='Large';
 			elseif(isset($sizes['Original'])) $itemSize='Original';
+			elseif(isset($sizes['Medium 800'])) $itemSize='Medium 800';
+			elseif(isset($sizes['Medium 640'])) $itemSize='Medium 640';
 			elseif(isset($sizes['Medium'])) $itemSize='Medium';
+			elseif(isset($sizes['Small 320'])) $itemSize='Small 320';
 			else $itemSize='Small';
+			
+			if(isset($sizes['Medium'])) $thumbSize='Medium';
+			elseif(isset($sizes['Small 320'])) $thumbSize='Small 320';
+			else $thumbSize='Small';
+
+			$item->setThumbnailUrl($sizes[$thumbSize]['source']);
 
 			if($info['dates']['taken']) $item->setMediaDateCreated(new DateTime($info['dates']['taken']));
 
