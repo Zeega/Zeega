@@ -389,12 +389,12 @@ this.zeegaPlayer = {
 			this.isPlaying = !this.isPlaying;
 			_.each( _.toArray(this.layers), function(layer){
 				layer.visual.playPause();
-			})
+			});
 		},
 
 		isLoaded : function()
 		{
-			var statusArray = _.map(_.toArray(this.layers),function(layer){ return layer.status });
+			var statusArray = _.map(_.toArray(this.layers),function(layer){ return layer.status; });
 			if( _.include(statusArray,'loading') || _.include(statusArray,'waiting') ) return false;
 			else return true;
 		},
@@ -409,20 +409,35 @@ this.zeegaPlayer = {
 			
 			// update arrows
 			this.updateArrows();
-			
+			var linkLayerArray = [];
 			var layersToRender = _.map(this.get('layers'), function(layerID){
 				var layer = _this.layers.get(layerID);
-				if(layer.get('type') != 'Link' || layer.get('attr').from_frame == _this.id) return layerID;
+
+				if( layer.get('type') != 'Link' )
+				{
+					return layerID;
+				}
+				else if( layer.get('attr').from_frame == _this.id )
+				{
+					linkLayerArray.push(layerID);
+					return layerID;
+				}
 				else return false;
 			});
-			layersToRender = _.difference( _.compact(layersToRender),this.commonLayers[fromFrameID] );
-			// draw and update layer media
-			_.each( layersToRender, function(layerID,z){
-				var layer = _this.layers.get(layerID);
-				if( _.include(_this.commonLayers, layerID) ) layer.updateZIndex( z );
-				else layer.trigger('player_play', z );
-			});
 
+			var newLayersToRender = _.difference( _.compact(layersToRender),this.commonLayers[fromFrameID] );
+			
+			newLayersToRender = _.union(newLayersToRender,linkLayerArray);
+			// draw and update layer media
+
+			_.each( layersToRender, function(layerID, z){
+				var layer = _this.layers.get(layerID);
+				if(layer)
+				{
+					if( _.contains(newLayersToRender, layerID) ) layer.trigger('player_play', z );
+					else layer.visual.updateZIndex( z );
+				}
+			});
 		},
 
 		unrender : function( toFrameID )
@@ -430,10 +445,17 @@ this.zeegaPlayer = {
 			var _this = this;
 			this.isPlaying = false;
 
+			console.log('------- unrender vvv');
 			var layersToUnrender = _.without( this.get('layers'), this.commonLayers[toFrameID] );
+			console.log('---- layers to unrender',layersToUnrender);
 			_.each( layersToUnrender, function(layerID){
-				_this.layers.get( layerID ).trigger('player_exit');
-			})
+				var layer = _this.layers.get( layerID );
+				if( layer.get('type') == 'Link')
+				{
+					console.log('====== linklayer. id:',layer.id,'from:', layer.get('attr').from_frame,'to:',layer.get('attr').to_frame, layer.get('attr'));
+				}
+				layer.trigger('player_exit');
+			});
 		},
 
 		renderLoader : function()
@@ -500,7 +522,6 @@ this.zeegaPlayer = {
 			for( var i = 0 ; i < this.PRELOAD_ON_SEQUENCE ; i++)
 			{
 				_.each( targetArray, function(frameID){
-					console.log('each', frameID,zeegaPlayer.app.project,zeegaPlayer.app.project.frames.get(frameID) )
 					var before = zeegaPlayer.app.project.frames.get(frameID).before;
 					var after = zeegaPlayer.app.project.frames.get(frameID).after;
 					var linksOut = zeegaPlayer.app.project.frames.get(frameID).linksOut;
@@ -508,7 +529,7 @@ this.zeegaPlayer = {
 
 					targetArray = _.compact([before,after]);
 					_this.framesToPreload = _.union(_this.framesToPreload,targetArray,linksOut, linksIn);
-				})
+				});
 			}
 			this.framesToPreload = _.uniq(this.framesToPreload);
 
@@ -522,8 +543,16 @@ this.zeegaPlayer = {
 			this.commonLayers = {};
 			_.each( this.framesToPreload, function(frameID){
 				if( _this.id != frameID)
-					_this.commonLayers[frameID] = _.intersection( _this.get('layers'), zeegaPlayer.app.project.frames.get(frameID).get('layers') );
-			})
+				{
+					// we need to first remove link layers from the mix
+					var nonLinkLayers = _.map( _this.get('layers'), function(layerID){
+						var layer = zeegaPlayer.app.project.layers.get(layerID);
+						if(layer.get('type') != 'Link') return layerID;
+						return false;
+					});
+					_this.commonLayers[frameID] = _.intersection( _.compact(nonLinkLayers), zeegaPlayer.app.project.frames.get(frameID).get('layers') );
+				}
+			});
 		},
 		
 		getLinks : function()
@@ -911,6 +940,8 @@ this.zeegaPlayer = {
 		render : function()
 		{
 			var _this = this;
+
+			console.log('---------project data', zeegaPlayer.app.project.toJSON() );
 			this.$el.html( _.template(this.getTemplate(), zeegaPlayer.app.project.toJSON() ) );
 
 			this.$el.find('.progress-types ul').empty();
@@ -960,8 +991,8 @@ this.zeegaPlayer = {
 			html =
 			
 				"<div class='progress-head'>"+
-					"<h3 class='estimate'>Estimated time to experience this project. . .</h3>"+
-					"<h3 class='time'><%= estimated_time %></h3>"+
+					"<h2 class='time' style='color:white'><%= title %></h2>"+
+					"<h3 class='estimate'>by <%= authors %></h3><br/>"+
 				"</div>"+
 				"<div class='progress progress-striped active progress-danger'>"+
 					"<div class='bar' style='width:0'></div>"+
