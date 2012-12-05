@@ -60,7 +60,6 @@
 			});
 
 			this.layers = new Frame.LayerCollection( layerArray );
-			console.log('these are layers', this.layers);
 
 			if( brokenLayers.length )
 			{
