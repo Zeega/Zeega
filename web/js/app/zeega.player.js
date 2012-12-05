@@ -940,6 +940,8 @@ this.zeegaPlayer = {
 		render : function()
 		{
 			var _this = this;
+
+			console.log('---------project data', zeegaPlayer.app.project.toJSON() );
 			this.$el.html( _.template(this.getTemplate(), zeegaPlayer.app.project.toJSON() ) );
 
 			this.$el.find('.progress-types ul').empty();
@@ -989,8 +991,8 @@ this.zeegaPlayer = {
 			html =
 			
 				"<div class='progress-head'>"+
-					"<h3 class='estimate'>Estimated time to experience this project. . .</h3>"+
-					"<h3 class='time'><%= estimated_time %></h3>"+
+					"<h2 class='time' style='color:white'><%= title %></h2>"+
+					"<h3 class='estimate'>by <%= authors %></h3><br/>"+
 				"</div>"+
 				"<div class='progress progress-striped active progress-danger'>"+
 					"<div class='bar' style='width:0'></div>"+
