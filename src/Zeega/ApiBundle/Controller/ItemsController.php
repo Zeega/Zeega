@@ -72,6 +72,7 @@ class ItemsController extends BaseController
         $query["enabled"] = 0;
         $query["user"] = $user->getId();
         $query["type"] = "-project AND -Collection";
+        $query["sort"] = "date-desc";
 
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
@@ -85,6 +86,7 @@ class ItemsController extends BaseController
         $query["enabled"] = 1;
         $query["user"] = $user->getId();
         $query["type"] = "-project AND -Collection";
+        $query["sort"] = "date-desc";
 
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
