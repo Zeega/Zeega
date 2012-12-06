@@ -138,3 +138,7 @@ old_sound_rabbit_mq:
         celery_task:
             connection: default
             exchange_options: {name: 'celery', type: direct}
+
+fos_rest:
+    routing_loader:
+        default_format: json

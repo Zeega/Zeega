@@ -1,5 +1,6 @@
 {# src/Zeega/CommunityBundle/Resources/views/Home/home.html.twig #}
 
+
 {% extends '::base.html.twig' %}
 
 {% block title %}Home{% endblock %}
@@ -9,13 +10,11 @@
 	<!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
 	<style type="text/css">
-	
 		/*
 			Background image code lives here, not in CSS, because this is specific to each page
 			and could be made dynamic too (i.e. randomly picking a different image each load)
 			quite easily. Exposing the code here should be helpful.
 		*/
-	
 		html { 
 		background: url({{asset("images/home/home_vertov.gif")}}) no-repeat center center fixed; 
 		-webkit-background-size: cover;
@@ -24,11 +23,8 @@
 		background-size: cover;
 		
 		}
-		
-	
 	</style>
-	
-	
+
 	<!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
 	{% if app.environment == 'dev' %}
 		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
@@ -37,29 +33,22 @@
 	{% else %}
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
 	{% endif %}
-	
 
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-
-	
-	
 {% endblock %}
 
 {% block scripts %}
-
 	{% if app.environment == 'dev' %}
-	<!-- to load JS libraries separately -->
+		<!-- to load JS libraries separately -->
 		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/home.js') }}"></script>
 	{% else %}
 		<!-- to load single aggregated JS library --> 
 		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/home.js') }}"></script>
 	{% endif %}
 	
-	
 	<script type="text/javascript" language="Javascript">
-		var projectsJSON2 = "{{ projects | e('js') }}"; 
-		var projectsJSON = "\x7B\x0A\x22items\x22\x3A\x0A\x5B\x0A\x09\x09\x0A\x09\x09\x09\x0A\x0A\x09\x09\x09\x09\x7B\x0A\x09\x09\x22id\x22\x20\x3A\x20\x2255121\x22,\x0A\x09\x09\x22site_id\x22\x20\x3A\x20\x22\x22,\x0A\x20\x20\x20\x20\x09\x22user_id\x22\x20\x3A\x201,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22username\x22\x20\x3A\x20\x22admin\x40zeega.org\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22display_name\x22\x20\x3A\x20\x22Admin\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22title\x22\x20\x3A\x20\x22Featured\x20Zeegas\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22description\x22\x20\x3A\x20\x22Second\x20pane\x22,\x09\x09\x0A\x09\x09\x09\x09\x09\x22text\x22\x20\x3A\x20\x22\x22,\x0A\x09\x09\x09\x09\x22uri\x22\x20\x3A\x20\x22default\x22,\x0A\x09\x09\x22attribution_uri\x22\x20\x3A\x20\x22default\x22,\x0A\x09\x09\x22date_created\x22\x20\x3A\x20\x222012\x2D11\x2D07\x2014\x3A31\x3A03\x22,\x0A\x09\x09\x22media_type\x22\x20\x3A\x20\x22Collection\x22,\x0A\x09\x09\x22layer_type\x22\x20\x3A\x20\x22Collection\x22,\x0A\x09\x09\x22archive\x22\x20\x3A\x20\x22default\x22,\x0A\x09\x09\x22thumbnail_url\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fapi.ning.com\x5C\x2Ffiles\x5C\x2FOaY9MTqxyLQq6LFXtvkKWKU3LSvGJXPjSNb1oee5HvCK\x2DZvAQS3D4W\x2AYPqigH2WFGaphyvgt4eD1pGcmD4WXEDnbpiiYAcqp\x5C\x2FSteveDuncan16TibbettsBrookBronxNYC.jpeg\x22,\x0A\x09\x09\x22media_geo_latitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_geo_longitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created_end\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_creator_username\x22\x20\x3A\x20\x22admin\x40zeega.org\x22,\x0A\x09\x09\x22media_creator_realname\x22\x20\x3A\x20\x22Admin\x22,\x0A\x09\x09\x22child_items_count\x22\x20\x3A\x204,\x0A\x09\x09\x22attributes\x22\x20\x3A\x20\x5B\x5D,\x0A\x09\x09\x22child_items\x22\x3A\x0A\x09\x09\x5B\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x09\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x09\x09\x09\x7B\x0A\x09\x09\x22id\x22\x20\x3A\x20\x2256725\x22,\x0A\x09\x09\x22site_id\x22\x20\x3A\x20\x22\x22,\x0A\x20\x20\x20\x20\x09\x22user_id\x22\x20\x3A\x20184,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22username\x22\x20\x3A\x20\x22ahmedmkabil\x40gmail.com\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22display_name\x22\x20\x3A\x20\x22Ahmed\x20Kabil\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22title\x22\x20\x3A\x20\x22If\x20You\x27re\x20Going\x20to\x20San\x20Francisco...\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22description\x22\x20\x3A\x20\x22\x20\x20\x22,\x09\x09\x0A\x09\x09\x09\x09\x09\x09\x09\x09\x09\x22text\x22\x20\x3A\x20\x22\x22,\x0A\x09\x09\x09\x09\x09\x09\x09\x22uri\x22\x20\x3A\x20\x222748\x22,\x0A\x09\x09\x22attribution_uri\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fbeta.zeega.org\x5C\x2F56725\x22,\x0A\x09\x09\x22date_created\x22\x20\x3A\x20\x222012\x2D11\x2D10\x2023\x3A03\x3A00\x22,\x0A\x09\x09\x22media_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22layer_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22archive\x22\x20\x3A\x20\x22zeega\x22,\x0A\x09\x09\x22thumbnail_url\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fupload.wikimedia.org\x5C\x2Fwikipedia\x5C\x2Fcommons\x5C\x2Fd\x5C\x2Fda\x5C\x2FSF_From_Marin_Highlands3.jpg\x22,\x0A\x09\x09\x22media_geo_latitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_geo_longitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created_end\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_creator_username\x22\x20\x3A\x20\x22ahmedmkabil\x40gmail.com\x22,\x0A\x09\x09\x22media_creator_realname\x22\x20\x3A\x20\x22Ahmed\x20Kabil\x22,\x0A\x09\x09\x22child_items_count\x22\x20\x3A\x200,\x0A\x09\x09\x22attributes\x22\x20\x3A\x20\x5B\x5D,\x0A\x09\x09\x22child_items\x22\x3A\x0A\x09\x09\x5B\x09\x09\x09\x09\x5D,\x0A\x09\x09\x22tags\x22\x3A\x0A\x09\x09\x09\x5B\x5D,\x22editable\x22\x20\x3A\x20true,\x0A\x09\x09\x22published\x22\x20\x3A\x20true,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x22enabled\x22\x20\x3A\x20false\x0A\x09\x7D\x0A\x09,\x09\x09\x09\x09\x09\x09\x09\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x09\x09\x09\x7B\x0A\x09\x09\x22id\x22\x20\x3A\x20\x2257516\x22,\x0A\x09\x09\x22site_id\x22\x20\x3A\x20\x22\x22,\x0A\x20\x20\x20\x20\x09\x22user_id\x22\x20\x3A\x203,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22username\x22\x20\x3A\x20\x22jesse\x40zeega.org\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22display_name\x22\x20\x3A\x20\x22Jesse\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22title\x22\x20\x3A\x20\x22Dancing\x20Cat\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22description\x22\x20\x3A\x20\x22\x20\x20\x20\x20\x22,\x09\x09\x0A\x09\x09\x09\x09\x09\x09\x09\x09\x09\x22text\x22\x20\x3A\x20\x22\x22,\x0A\x09\x09\x09\x09\x09\x09\x09\x22uri\x22\x20\x3A\x20\x223001\x22,\x0A\x09\x09\x22attribution_uri\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fbeta.zeega.org\x5C\x2F57516\x22,\x0A\x09\x09\x22date_created\x22\x20\x3A\x20\x222012\x2D11\x2D14\x2011\x3A46\x3A32\x22,\x0A\x09\x09\x22media_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22layer_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22archive\x22\x20\x3A\x20\x22zeega\x22,\x0A\x09\x09\x22thumbnail_url\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2F24.media.tumblr.com\x5C\x2Ftumblr_mdcouukgbq1qg39ewo1_500.gif\x22,\x0A\x09\x09\x22media_geo_latitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_geo_longitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created_end\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_creator_username\x22\x20\x3A\x20\x22jesse\x40zeega.org\x22,\x0A\x09\x09\x22media_creator_realname\x22\x20\x3A\x20\x22Jesse\x22,\x0A\x09\x09\x22child_items_count\x22\x20\x3A\x200,\x0A\x09\x09\x22attributes\x22\x20\x3A\x20\x5B\x5D,\x0A\x09\x09\x22child_items\x22\x3A\x0A\x09\x09\x5B\x09\x09\x09\x09\x5D,\x0A\x09\x09\x22tags\x22\x3A\x0A\x09\x09\x09\x5B\x5D,\x22editable\x22\x20\x3A\x20true,\x0A\x09\x09\x22published\x22\x20\x3A\x20true,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x22enabled\x22\x20\x3A\x20true\x0A\x09\x7D\x0A\x09,\x09\x09\x09\x09\x09\x09\x09\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x09\x09\x09\x7B\x0A\x09\x09\x22id\x22\x20\x3A\x20\x2260463\x22,\x0A\x09\x09\x22site_id\x22\x20\x3A\x20\x22\x22,\x0A\x20\x20\x20\x20\x09\x22user_id\x22\x20\x3A\x201735,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22username\x22\x20\x3A\x20\x22daron.taylor\x40gmail.com\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22display_name\x22\x20\x3A\x20\x22Daron\x20Taylor\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22title\x22\x20\x3A\x20\x22Ellen\x27s\x20Story\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22description\x22\x20\x3A\x20\x22\x20\x20\x20Remembrances\x20of\x20my\x20grandmother.\x20\x20\x20\x22,\x09\x09\x0A\x09\x09\x09\x09\x09\x09\x09\x09\x09\x22text\x22\x20\x3A\x20\x22\x22,\x0A\x09\x09\x09\x09\x09\x09\x09\x22uri\x22\x20\x3A\x20\x223309\x22,\x0A\x09\x09\x22attribution_uri\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fbeta.zeega.org\x5C\x2F60463\x22,\x0A\x09\x09\x22date_created\x22\x20\x3A\x20\x222012\x2D11\x2D26\x2001\x3A56\x3A16\x22,\x0A\x09\x09\x22media_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22layer_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22archive\x22\x20\x3A\x20\x22zeega\x22,\x0A\x09\x09\x22thumbnail_url\x22\x20\x3A\x20\x22https\x3A\x5C\x2F\x5C\x2Fwww.dropbox.com\x5C\x2Fs\x5C\x2Fpihah6p9rxdr8vw\x5C\x2Fbeach.jpg\x3Fdl\x3D1\x22,\x0A\x09\x09\x22media_geo_latitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_geo_longitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created_end\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_creator_username\x22\x20\x3A\x20\x22daron.taylor\x40gmail.com\x22,\x0A\x09\x09\x22media_creator_realname\x22\x20\x3A\x20\x22Daron\x22,\x0A\x09\x09\x22child_items_count\x22\x20\x3A\x200,\x0A\x09\x09\x22attributes\x22\x20\x3A\x20\x5B\x5D,\x0A\x09\x09\x22child_items\x22\x3A\x0A\x09\x09\x5B\x09\x09\x09\x09\x5D,\x0A\x09\x09\x22tags\x22\x3A\x0A\x09\x09\x09\x5B\x5D,\x22editable\x22\x20\x3A\x20true,\x0A\x09\x09\x22published\x22\x20\x3A\x20true,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x22enabled\x22\x20\x3A\x20true\x0A\x09\x7D\x0A\x09,\x09\x09\x09\x09\x09\x09\x09\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x09\x09\x09\x7B\x0A\x09\x09\x22id\x22\x20\x3A\x20\x2266496\x22,\x0A\x09\x09\x22site_id\x22\x20\x3A\x20\x22\x22,\x0A\x20\x20\x20\x20\x09\x22user_id\x22\x20\x3A\x201955,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22username\x22\x20\x3A\x20\x22jason\x40creatived.com\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22display_name\x22\x20\x3A\x20\x22Jason\x20Hatcher\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22title\x22\x20\x3A\x20\x22My\x20First\x20Zeega\x22,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x22description\x22\x20\x3A\x20\x22\x20\x20\x20\x20A\x20guide\x20to\x20building\x20a\x20Zeega.\x20A\x20riff\x20on\x20planning\x20and\x20process.\x20\x20\x22,\x09\x09\x0A\x09\x09\x09\x09\x09\x09\x09\x09\x09\x22text\x22\x20\x3A\x20\x22\x22,\x0A\x09\x09\x09\x09\x09\x09\x09\x22uri\x22\x20\x3A\x20\x223622\x22,\x0A\x09\x09\x22attribution_uri\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2Fbeta.zeega.org\x5C\x2F66496\x22,\x0A\x09\x09\x22date_created\x22\x20\x3A\x20\x222012\x2D12\x2D04\x2020\x3A30\x3A58\x22,\x0A\x09\x09\x22media_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22layer_type\x22\x20\x3A\x20\x22project\x22,\x0A\x09\x09\x22archive\x22\x20\x3A\x20\x22zeega\x22,\x0A\x09\x09\x22thumbnail_url\x22\x20\x3A\x20\x22http\x3A\x5C\x2F\x5C\x2F25.media.tumblr.com\x5C\x2Ftumblr_m20uf4b5f71rt9yyro1_r1_400.gif\x22,\x0A\x09\x09\x22media_geo_latitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_geo_longitude\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_date_created\x22\x20\x3A\x20\x222012\x2D01\x2D02\x2012\x3A00\x3A00\x22,\x0A\x09\x09\x22media_date_created_end\x22\x20\x3A\x20null,\x0A\x09\x09\x22media_creator_username\x22\x20\x3A\x20\x22jason\x40creatived.com\x22,\x0A\x09\x09\x22media_creator_realname\x22\x20\x3A\x20\x22Jason\x20Hatcher\x22,\x0A\x09\x09\x22child_items_count\x22\x20\x3A\x200,\x0A\x09\x09\x22attributes\x22\x20\x3A\x20\x5B\x5D,\x0A\x09\x09\x22child_items\x22\x3A\x0A\x09\x09\x5B\x09\x09\x09\x09\x5D,\x0A\x09\x09\x22tags\x22\x3A\x0A\x09\x09\x09\x5B\x22N\x3B\x22,\x22gif\x22\x5D,\x22editable\x22\x20\x3A\x20true,\x0A\x09\x09\x22published\x22\x20\x3A\x20true,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x22enabled\x22\x20\x3A\x20true\x0A\x09\x7D\x0A\x09\x5D,\x0A\x09\x09\x22tags\x22\x3A\x0A\x09\x09\x09\x5B\x5D,\x22editable\x22\x20\x3A\x20true,\x0A\x09\x09\x22published\x22\x20\x3A\x20true,\x0A\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x22enabled\x22\x20\x3A\x20true\x0A\x09\x7D\x0A\x09\x20\x09\x0A\x09\x5D,\x0A\x09\x22request\x22\x3A\x0A\x09\x09\x09\x09\x7B\x7D\x0A\x09\x09\x7D"; 
+		var projectsJSON = "{{ projects | e('js') }}";
 	</script>
 	
 {% endblock %}
@@ -69,294 +58,127 @@
 {% endblock browser_detection %}
 
 {% block body %}
-<!-- Background Color Div - creates the transparent layer over the background image -->
+	<!-- Background Color Div - creates the transparent layer over the background image -->
 	<div id="background-color-home">
 	</div>
 	<!-- Background Color Div ends -->
 	
 	<!-- Featured Content Begins -->
-	
 	<div class="container new-section">
-	
 		<div class="row">
-	
 			<div class="page-intro span11">
-			
 				<h1>Remake the Internet</h1>
 				<h2>Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs. Join the community and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2><br><br>
-
 				<h2>NEWS: <a href="http://i-docs.org/2012/11/28/the-zeega-revolution/" target="_blank">Zeega Featured on i-docs!</a> </h2>
 				<h2>NEWS: <a href="{{ path('ZeegaCommunityBundle_makeday') }}">Tribeca Hacks Cambridge on Dec. 8th</a> </h2>
 				<h2>NEWS: <a href="{{ path('ZeegaCommunityBundle_news') }}">We're hiring Creative Technologists!</a> </h2>
-
-				
 			</div>
-		
 		</div>
-		
 	</div>
 
 	<br><br><br><br><br><br><br>
-
 	<!-- Featured Content Ends -->
-	
-
-<div class="section-divider">
-	
+	<!-- Special Project Separator Begins -->
+	<div class="section-divider">
 		<div class="shadow">
 		</div>
-		
 		<div class="content">
-	
 			<div class="container">
-			
 				<div class="row">
-		
 					<div class="span8 offset3">
-						
 						<h2 style="padding-bottom: 20px;">Featured Zeegas</h2>
-				
 					</div>
-					
 					<div class="span3">
-					
 					</div>
-					
 				</div>
-		
 			</div>
-		
-			
 		</div>
-	
-	</div>
-	
+	</div>	
 	<!-- Special Project Separator Ends -->
-	
-	
 	<!-- Special Project with Zeegas Begins -->
 	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
 	<div id="featured-zeegas" class="special-project" style="background: url({{ asset('images/productions/amm.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; height: 500px;">
-	
 	<div class="color-overlay" style="background:  no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-color: rgba(252,72,220, .75); ">
-		
 			<div class="container">
-			
 				<div class="row">
-				
-					
 						<div class="valign">
 							<div class="valign-content">	
-					
-
-							
 							</div>
 						</div>
-							
-				
 				</div>
-			
 			</div>
-		
 	</div> <!--color-overlay-->
 	</div>
-	
 	<!-- Special Project with Zeegas Ends -->
-	
+	<!-- Special Project Separator Begins -->
 	<div class="section-divider">
-	
 		<div class="shadow">
 		</div>
-		
 		<div class="content">
-	
 			<div class="container">
-			
 				<div class="row">
-		
 					<div class="span8 offset3">
-						
 						<h2>Featured Localore Production</h2>
-				
 					</div>
-					
 					<div class="span3">
-					
 					</div>
-					
 				</div>
-		
 			</div>
-			
 			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
 		</div>
-	
 	</div>
-
+	<!-- Special Project Separator Ends -->
 	<!-- Special Project Begins -->
 	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
-	<div class="special-project" style="background: url({{ asset('images/productions/amm.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
-		<div class="special-gradient">
-		
-			<div class="container">
-			
-				<div class="row">
-				
-					<div class="span10">
-					
-						<div class="valign" style="width: 800px">
-							<div class="valign-content">	
-					
-								<h1><small>Explore Austin's diverse sonic geography</small><br><a href="http://austinmusicmap.com" target="_blank">Austin Music Map</a></h1>
-								
-							</div>
-						</div>
-						
-					</div>
-				
-				</div>
-			
-			</div>
-		
-		</div>
-	
-	</div>
-	
-	<!-- Special Project Ends -->
-	
-	<div class="section-divider">
-	
-		<div class="shadow">
-		</div>
-		
-		<div class="content">
-	
-			<div class="container">
-			
-				<div class="row">
-		
-					<div class="span8 offset3">
-						
-						<h2>Featured Localore Production</h2>
-				
-					</div>
-					
-					<div class="span3">
-					
-					</div>
-					
-				</div>
-		
-			</div>
-			
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
-		</div>
-	
-	</div>
-
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	
 	<div class="special-project" style="background: url({{ asset('images/productions/planettakeout.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
 		<div class="special-gradient">
-		
 			<div class="container">
-			
 				<div class="row">
-				
 					<div class="span10">
-					
 						<div class="valign" style="width: 800px">
 							<div class="valign-content">	
-					
 								<h1><small>Local Chinese takeouts become spaces for community storytelling</small><br><a href="http://planettakeout.org" target="_blank">Planet Takeout</a></h1>
-								
 							</div>
 						</div>
-						
 					</div>
-				
 				</div>
-			
 			</div>
-		
 		</div>
-	
 	</div>
-	
 	<!-- Special Project Ends -->
-	
+	<!-- Special Project Separator Begins -->
 	<div class="section-divider">
-	
 		<div class="shadow">
 		</div>
-		
 		<div class="content">
-	
 			<div class="container">
-			
 				<div class="row">
-		
 					<div class="span8 offset3">
-						
 						<h2>IDFA 2012 Winner</h2>
-				
 					</div>
-					
 					<div class="span3">
-					
 					</div>
-					
 				</div>
-		
 			</div>
-			
 			<div class="arrow-down"><div class="striped-arrow"></div></div>
-			
 		</div>
-	
 	</div>
-	
-	
+	<!-- Special Project Separator Ends -->		
 	<!-- Special Project Begins -->
-	
 	<div class="special-project" style="background: url({{ asset('images/productions/evpoetry.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-	
 		<div class="special-gradient">
-		
 			<div class="container">
-			
 				<div class="row">
-				
 					<div class="span10">
-					
 						<div class="valign" style="width: 800px">
 							<div class="valign-content">	
-					
 								<h1><small>Tour a neighborhood's cultural history with Jim Jarmusch</small><br><a href="http://eastvillagepoetrywalk.org" target="_blank">East Village Poetry Walk</a></h1>
-								
 							</div>
 						</div>
-						
 					</div>
-				
 				</div>
-			
 			</div>
-		
 		</div>
-	
 	</div>
-	
-
-	
-	
-
 
 {% endblock %}

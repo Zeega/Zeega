@@ -29,6 +29,7 @@ class BookmarkletController extends BaseController
 	public function persistAction()
     {
         $request = $this->getRequest();
+
         $itemUrl = $request->request->get('attribution_uri');
         $mediaType = strtolower($request->request->get('media_type'));
         $layerType = strtolower($request->request->get('layer_type'));
@@ -41,13 +42,13 @@ class BookmarkletController extends BaseController
             	$taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"ingestion");            
             	
             	return new Response($taskId);
+
         	} else {
         		$itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
                 $itemWithChildren = json_decode($itemWithChildren,true);
 
                 if(isset($itemWithChildren)) {
-                    $request->request->set('new_items', $itemWithChildren["items"][0]["child_items"]);
-                    $newItems = $request->request->get('new_items');
+                    $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);
                 }
             }
         } 
@@ -93,12 +94,10 @@ class BookmarkletController extends BaseController
                 // check if the item exists on the database    
                 $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user_id"=>$user->getId(),"attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
                 
-                if(isset($item))
-                {
+                if(isset($item)) {
                     $update = 1;
-                } 
-                else
-                {
+                    $parsedItem["id"] = $item->getId();
+                } else {
                     $update = 0;
                 }    
                 

@@ -1,11 +1,20 @@
 <?php
 
+/*
+* This file is part of Zeega.
+*
+* (c) Zeega <info@zeega.org>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Zeega\CommunityBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Zeega\CoreBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 
-class CommunityController extends Controller
+class CommunityController extends BaseController
 {
     public function authorAction()
     {
@@ -14,8 +23,9 @@ class CommunityController extends Controller
     
     public function homeAction()
     {
-    	//$projects = $this->forward('ZeegaApiBundle:Items:getItem', array("id" => 55121))->getContent();
-        return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('projects' => ''));
+        $queryFields = array("id", "title_i", "thumbnail_url", "attribution_uri");
+        $projects = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("collection" => 55121, "fields" => $queryFields))->getContent();
+        return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('projects' => $projects));
     }
     
     public function topicAction()
@@ -26,19 +36,16 @@ class CommunityController extends Controller
     public function userAction($id)
     {
         $user = $this->getDoctrine()->getEntityManager()->getRepository('ZeegaDataBundle:User')->findOneById($id);
-    	$loggedUser = $this->get('security.context')->getToken()->getUser();
-    	$projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+        $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+        $loggedUser = $this->get('security.context')->getToken()->getUser();
 
         return $this->render('ZeegaCommunityBundle:User:user.html.twig',array('user'=>$user, 'logged_user'=>$loggedUser, 'user_projects' => $projects));
     }
     
     public function dashboardAction()
     {      
-    	//if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
-        //{
-            $userId = $this->get('security.context')->getToken()->getUser()->getId();
-            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId),true), 301);  
-        //}        
+        $userId = $this->get('security.context')->getToken()->getUser()->getId();
+        return $this->redirect($this->generateUrl('ZeegaCommunityBundle_user',array('id'=>$userId),true), 301);  
     }
     
     public function missionAction()
@@ -74,10 +81,15 @@ class CommunityController extends Controller
     {
         return $this->render('ZeegaCommunityBundle:About:news.html.twig');
     }
-	public function featuresAction()
-	 {
+    public function featuresAction()
+    {
         return $this->render('ZeegaCommunityBundle:About:features.html.twig');
     }
+
+    public function faqAction()
+    {
+        return $this->render('ZeegaCommunityBundle:About:faq.html.twig');
+    } 
     
     
     //LEGACY REROUTING –– TO BE MOVED
@@ -85,7 +97,7 @@ class CommunityController extends Controller
     {
        return $this->redirect($this->generateUrl('ZeegaCommunityBundle_news'), 301);  
     }
-	public function legacyhappeningsAction()
+    public function legacyhappeningsAction()
     {
          return $this->redirect($this->generateUrl('ZeegaCommunityBundle_about'), 301);  
     }
@@ -97,8 +109,4 @@ class CommunityController extends Controller
     {
        return $this->redirect($this->generateUrl('ZeegaCommunityBundle_engine'), 301);  
     }
-    
-    
-    
-    
 }

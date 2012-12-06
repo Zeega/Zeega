@@ -50,19 +50,14 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/search?exclude_content=project&r_items=1&sort=date-desc&user=-1";
+			var base = zeega.app.url_prefix + "api/items/search?q=-project AND -collection&sort=date-desc&user=-1";
 		
 			if(this.search.get('query') === '') {
 				base = base + "&data_source=db";
 			}
 			
-			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&content=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
+			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&type=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
-			
-			console.log("search url",url);
-			//temp fix until queuing is set up
-		
-			//if(this.search.get('collection')==''&&this.search.get('page')==1&&this.search.get('query')==''&&this.search.get('content')=='') url = url+"&data_source=db";
 			
 			return url;
 		},
