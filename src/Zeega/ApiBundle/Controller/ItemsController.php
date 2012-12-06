@@ -131,7 +131,10 @@ class ItemsController extends BaseController
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $this->getRequest()->query->all());
+        $query = $this->getRequest()->query->all();
+        $query["sort"] = "date-desc";
+        
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);
     }
 
     // get_collection_items GET /api/collections/{id}/items.{_format}
