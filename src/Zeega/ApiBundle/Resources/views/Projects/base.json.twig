@@ -26,6 +26,8 @@
 			"title" : "{{ sequence.title | default("") }}",
 			"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 			"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
+			"description" : {{sequence.description | default(null) | json_encode | raw}},
+    		"advance_to" : {{sequence.advanceTo | default(null) | json_encode | raw}},
 			"frames" : 
 			[
 			{% for frame in sequence_frames[sequence.id] -%}	
@@ -50,6 +52,7 @@
 			"id" : {{ frame.id | json_encode | raw}},
 			"attr" : {{ frame.attr | default({}) | json_encode | raw}},
 			"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
+			"controllable": {{frame.controllable | default(1) | json_encode | raw}},
 			"layers" : 
 			[
 			{% for layer in frame.layers -%}	

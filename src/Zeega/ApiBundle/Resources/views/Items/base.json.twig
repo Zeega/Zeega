@@ -41,8 +41,8 @@
 		"media_geo_longitude" : {{ item.mediageolongitude | json_encode | raw}},
 		"media_date_created" : {{ item.mediadatecreated is empty ? "null": item.mediadatecreated | date("Y-m-d H:i:s") | json_encode | raw }},
 		"media_date_created_end" : {{ item.mediadatecreatedend is empty ? "null" : item.mediadatecreatedend | date("Y-m-d H:i:s") | json_encode | raw}},
-		"media_creator_username" : "{{ item.mediacreatorusername }}",
-		"media_creator_realname" : "{{ item.mediacreatorrealname }}",
+		"media_creator_username" : {{ item.mediacreatorusername | json_encode | raw}},
+		"media_creator_realname" : {{ item.mediacreatorrealname | json_encode | raw}},
 		"child_items_count" : {{ item.childitemscount | default(0) }},
 		"attributes" : {{ item.attributes | default([ ]) | json_encode | raw}},
 		"child_items":
