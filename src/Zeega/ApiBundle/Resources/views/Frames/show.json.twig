@@ -4,5 +4,5 @@
 		"attr" : {{frame.attr | default([ ]) | json_encode | raw}},
 		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},
 		"layers": {{frame.getLayers | default([ ]) | json_encode | raw}},
-        "controllable": {{frame.getControllable | default(1) | json_encode | raw}}
+        "controllable": {{frame.getControllable | default(true) | json_encode | raw}}
 }

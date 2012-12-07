@@ -45,7 +45,7 @@ Zeega\DataBundle\Entity\Frame:
             nullable: true
         controllable:
             type: boolean
-            nullable: false
+            nullable: true
 
     indexes:
         frame_enabled:
