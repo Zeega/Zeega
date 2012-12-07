@@ -249,4 +249,32 @@ class Frame
     {
         return $this->project;
     }
+    /**
+     * @var boolean $controllable
+     */
+    private $controllable;
+
+
+    /**
+     * Set controllable
+     *
+     * @param boolean $controllable
+     * @return Frame
+     */
+    public function setControllable($controllable)
+    {
+        $this->controllable = $controllable;
+    
+        return $this;
+    }
+
+    /**
+     * Get controllable
+     *
+     * @return boolean 
+     */
+    public function getControllable()
+    {
+        return $this->controllable;
+    }
 }

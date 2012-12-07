@@ -11,6 +11,12 @@ Zeega\DataBundle\Entity\Sequence:
                project_id:
                    referencedColumnName: id
                    onDelete: CASCADE
+    oneToOne:
+        advance:
+            targetEntity: Sequence
+            joinColumn:
+                name: advance_to
+                referencedColumnName: id
     id:
         id:
             type: integer
@@ -31,6 +37,16 @@ Zeega\DataBundle\Entity\Sequence:
         persistent_layers:
             type: array
             nullable: true
+        description:
+            type: string
+            length: 140
+            nullable: true
+        advance_to:
+            type: integer
+            associationKey: true
+            nullable: true
     indexes:
         sequence_enabled:
             columns: [enabled]
+        sequence_project_id_index:
+            columns: [project_id]

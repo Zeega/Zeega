@@ -43,7 +43,12 @@ Zeega\DataBundle\Entity\Frame:
         enabled:
             type: boolean
             nullable: true
+        controllable:
+            type: boolean
+            nullable: false
 
     indexes:
         frame_enabled:
             columns: [enabled]
+        frame_project_id_index:
+            columns: [project_id]

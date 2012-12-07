@@ -199,4 +199,88 @@ class Sequence
     {
         return $this->persistent_layers;
     }
+    /**
+     * @var string $description
+     */
+    private $description;
+
+    /**
+     * @var integer $advance_to
+     */
+    private $advance_to;
+
+    /**
+     * @var Zeega\DataBundle\Entity\Sequence
+     */
+    private $advance;
+
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Sequence
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set advance_to
+     *
+     * @param integer $advanceTo
+     * @return Sequence
+     */
+    public function setAdvanceTo($advanceTo)
+    {
+        $this->advance_to = $advanceTo;
+    
+        return $this;
+    }
+
+    /**
+     * Get advance_to
+     *
+     * @return integer 
+     */
+    public function getAdvanceTo()
+    {
+        return $this->advance_to;
+    }
+
+    /**
+     * Set advance
+     *
+     * @param Zeega\DataBundle\Entity\Sequence $advance
+     * @return Sequence
+     */
+    public function setAdvance(\Zeega\DataBundle\Entity\Sequence $advance = null)
+    {
+        $this->advance = $advance;
+    
+        return $this;
+    }
+
+    /**
+     * Get advance
+     *
+     * @return Zeega\DataBundle\Entity\Sequence 
+     */
+    public function getAdvance()
+    {
+        return $this->advance;
+    }
 }
