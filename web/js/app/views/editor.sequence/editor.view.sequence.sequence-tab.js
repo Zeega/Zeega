@@ -13,14 +13,14 @@
 
 		render : function()
 		{
-			console.log('ss 		sequence render', this)
+			console.log('ss       sequence render', this);
 			var _this = this;
 			this.setElement( $(this.target) );
-			this.$el.html('<ul class="list">')
+			this.$el.html('<ul class="list">');
 			this.collection.each(function(sequence, i){
 				_this.$el.find('.list').append( sequence.tabView.render().el );
 				sequence.tabView.delegateEvents();
-			})
+			});
 			return this;
 		},
 /*
@@ -65,29 +65,29 @@
 		events : {
 			'click .menu-toggler' : 'toggleDropdown',
 			'click .sequence-tab-link' : 'goToSequence',
-			'click .sequence-rename' : 'renameSequence',
+			'click .sequence-options' : 'sequenceOptions',
 			'click .sequence-delete' : 'deleteSequence'
 		},
 	
 		goToSequence : function(e)
 		{
-			if( !this.inFocus ) zeega.app.goToSequence(this.model.id)
+			if( !this.inFocus ) zeega.app.goToSequence(this.model.id);
 			this.closeDropdown();
 			return false;
 		},
 		
 		toggleDropdown : function(e)
 		{
-			this.$el.find('.menu').toggleClass('hide')
+			this.$el.find('.menu').toggleClass('hide');
 			return false;
 		},
 		
 		closeDropdown : function()
 		{
-			this.$el.find('.menu').addClass('hide')
+			this.$el.find('.menu').addClass('hide');
 		},
 		
-		renameSequence : function()
+		sequenceOptions : function()
 		{
 			var _this = this;
 			if( !this.loadedModal )
@@ -95,21 +95,29 @@
 				$('body').append( _.template(this.getModalTemplate(),this.model.attributes) );
 				$('#sequence-modal-'+_this.model.id+' input').focus();
 				$('#sequence-modal-'+this.model.id+' .save').click(function(){
-					_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
-				})
+					_this.saveOptions();
+				});
 				$('#sequence-modal-'+_this.model.id+' input').keypress(function(e){
 					if(e.which == 13)
 					{
-						_this.model.save({'title': $('#sequence-modal-'+_this.model.id+' input').val()} );
-						$('#sequence-modal-'+_this.model.id).modal('hide')
+						_this.saveOptions();
+						$('#sequence-modal-'+_this.model.id).modal('hide');
 					}
-				})
+				});
 			}
-			$('#sequence-modal-'+this.model.id).modal('show')
+			$('#sequence-modal-'+this.model.id).modal('show');
 
 			this.closeDropdown();
 			this.loadedModal = true;
 			return false;
+		},
+
+		saveOptions: function() {
+			this.model.save({
+				'title': $('#sequence-modal-'+this.model.id+' input').val(),
+				'description': $('#sequence-modal-'+this.model.id+' .sequence-description').val(),
+				'advance_to': parseInt( $('#sequence-modal-'+this.model.id+' .sequence-advance').val(), 10)
+			});
 		},
 		
 		deleteSequence : function()
@@ -144,26 +152,53 @@
 				"<ul class='flag-menu'>"+
 					"<a href='#' class='menu-toggle'><i class='icon-cog icon-white'></i></a>"+
 					"<ul class='frame-action-menu'>"+
-						"<li><a class='sequence-rename' href='#' data-action='rename'>Rename Sequence</a></li>"+
+						"<li><a class='sequence-options' href='#' data-action='rename'>Sequence Options</a></li>"+
 						"<li><a class='sequence-delete' href='#' data-action='delete'>Delete Sequence</a></li>"+
 					"</ul>"+
 				"</ul>";
-				
 				
 			return html;
 		},
 		
 		getModalTemplate : function()
 		{
-			var html = 
+			var _this = this;
+			var html =
 			
 				'<div class="modal" id="sequence-modal-<%= id %>">'+
 					'<div class="modal-header">'+
 						'<button class="close" data-dismiss="modal">×</button>'+
-						'<h3>Rename Sequence</h3>'+
+						'<h3>Sequence Options</h3>'+
 					'</div>'+
 					'<div class="modal-body">'+
+						'<label>Title</label>'+
 						'<input type="text" class="input-xlarge sequence-title" value="<%= title %>">'+
+						'<label>Description</label>'+
+						'<textarea class="sequence-description" rows="3"><%= description %></textarea>'+
+						'<label>Advance to sequence</label>'+
+						'<select class="sequence-advance">';
+
+						zeega.app.project.sequences.each(function(sequence){
+
+							if(sequence.id == _this.model.id && _this.model.get('advance_to'))
+							{
+								html+= '<option value="'+ sequence.id +'">'+ sequence.get('title') +' (default)</option>';
+							}
+							else if(sequence.id == _this.model.id && !_this.model.get('advance_to') )
+							{
+								html+= '<option value="'+ sequence.id +'" selected="selected">'+ sequence.get('title') +' (default)</option>';
+							}
+							else if( sequence.id == _this.model.get('advance_to') )
+							{
+								html+= '<option value="'+ sequence.id +'" selected="selected">'+ sequence.get('title') +'</option>';
+							}
+							else
+							{
+								html+= '<option value="'+ sequence.id +'">'+ sequence.get('title') +'</option>';
+							}
+						});
+			html +=
+						'</select>'+
 					'</div>'+
 					'<div class="modal-footer">'+
 						'<a href="#" class="btn" data-dismiss="modal">Close</a>'+
