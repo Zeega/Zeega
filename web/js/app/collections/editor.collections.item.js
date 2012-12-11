@@ -50,7 +50,7 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/items/search?q=-project AND -collection&sort=date-desc&user=-1";
+			var base = zeega.app.url_prefix + "api/items/search?type=-project AND -Collection&sort=date-desc&user=-1";
 		
 			if(this.search.get('query') === '') {
 				base = base + "&data_source=db";

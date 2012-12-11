@@ -72,6 +72,7 @@ class ItemsController extends BaseController
         $query["enabled"] = 0;
         $query["user"] = $user->getId();
         $query["type"] = "-project AND -Collection";
+        $query["sort"] = "date-desc";
 
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
@@ -85,6 +86,7 @@ class ItemsController extends BaseController
         $query["enabled"] = 1;
         $query["user"] = $user->getId();
         $query["type"] = "-project AND -Collection";
+        $query["sort"] = "date-desc";
 
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
@@ -131,7 +133,10 @@ class ItemsController extends BaseController
     //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $this->getRequest()->query->all());
+        $query = $this->getRequest()->query->all();
+        $query["sort"] = "date-desc";
+        
+        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);
     }
 
     // get_collection_items GET /api/collections/{id}/items.{_format}
@@ -177,7 +182,7 @@ class ItemsController extends BaseController
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
-    public function deleteItemItemAction($itemId,$childItemId)
+    public function deleteItemItemsAction($itemId)
     {
         // TO-DO - error handling; missing item, etc
         $em = $this->getDoctrine()->getEntityManager();
@@ -281,7 +286,7 @@ class ItemsController extends BaseController
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
     
             if (isset($newItems)) {
-                $item->setChildItemsCount(count($newItems));
+
                 $item->setDateUpdated(new \DateTime("now"));
         
                 $first = True;
@@ -297,7 +302,8 @@ class ItemsController extends BaseController
                             throw $this->createNotFoundException('Unable to find Item entity.');
                         }    
                         
-                        $childItem->setDateUpdated(new \DateTime("now"));                        
+                        $childItem->setDateUpdated(new \DateTime("now"));
+                        $item->addChildItem($childItem);
                     } else {
                         $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("uri" => $newItem['uri'], "enabled" => 1, "user_id" => $user->getId()));
                         if(isset($existingItem) && count($existingItem) > 0) {
@@ -310,6 +316,7 @@ class ItemsController extends BaseController
                     }
                 }
 
+                $item->setDateUpdated(new \DateTime("now"));
                 $item->setChildItemsCount($item->getChildItems()->count() + count($newItems));
 
                 $em->persist($item);
@@ -331,7 +338,7 @@ class ItemsController extends BaseController
             }
     
             $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-            return new Response($itemsView);
+            return new Response($itemView);
         }
         else
         {

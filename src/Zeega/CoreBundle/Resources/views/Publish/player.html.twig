@@ -52,7 +52,7 @@
 		<script> 
 
 			//session data
-
+                        if (!window.console) console = {log: function() {}};
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('projectId','{{project.getId()}}');

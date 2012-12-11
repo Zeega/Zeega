@@ -93,7 +93,8 @@
 		{% endif %}
 
 		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	
-		<script> 
+		<script>
+                        if (!window.console) console = {log: function() {}}; 
 			sessionStorage.setItem('directory', '{{directory}}');
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
