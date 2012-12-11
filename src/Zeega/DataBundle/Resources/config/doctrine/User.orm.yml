@@ -48,6 +48,10 @@ Zeega\DataBundle\Entity\User:
         idea:
             type: text
             nullable: true
+        api_key:
+            type: string
+            length: 25
+            nullable: true
 
     indexes:
         user_type_index:

@@ -21,6 +21,15 @@ class ItemService
             $item->setChildItemsCount(0);
             $item->setEnabled(true);
             $item->setPublished(false);
+            echo $user;
+            if(!isset($user) && isset($itemArray["user_id"])) {
+                $userId = $itemArray["user_id"];
+
+                if(isset($userId) && ($userId == 760 || $userId == 1311 || $userId == 1)) {
+                    $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
+                }       
+            }
+            
             $item->setUser($user);
         }
         

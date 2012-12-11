@@ -202,7 +202,20 @@ class ItemsController extends BaseController
             return $this->forward('ZeegaApiBundle:Items:putItemItems', array("itemId"=>$requestData->get('id')), array());
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ){
+            $user = $this->get('security.context')->getToken()->getUser(); 
+        } else {
+            if($requestData->has("api_key")) {
+                $apiKey = $requestData->get("api_key");
+                $em = $this->getDoctrine()->getEntityManager();
+                $user = $em->getRepository('ZeegaDataBundle:User')->findOneBy(array("api_key" => $apiKey));
+            }
+        }
+
+        if(!isset($user)) {
+            return new Response("Unauthorized", 401);
+        }
+           
         $itemService = $this->get('zeega.item');
         $item = $itemService->parseItem($requestData->all(), $user);
         $em = $this->getDoctrine()->getEntityManager();
