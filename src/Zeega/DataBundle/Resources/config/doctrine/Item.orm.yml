@@ -149,3 +149,7 @@ Zeega\DataBundle\Entity\Item:
             columns: [uri]
         item_ingested_by_index:
             columns: [ingested_by]
+        item_uri_index:
+            columns: [uri]
+        item_attribution_uri_index:
+            columns: [attribution_uri]

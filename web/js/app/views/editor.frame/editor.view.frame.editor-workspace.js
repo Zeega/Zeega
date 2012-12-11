@@ -347,6 +347,9 @@ the frame's layers. It also includes common frame functions like adding sequence
 					var linkOrder = _.map( $('#zeega-link-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
 					var layerOrder = _.map( $('#zeega-layer-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
 					var order = linkOrder.concat(layerOrder).reverse();
+					
+					console.log('----------- resort', linkOrder, layerOrder, order);
+
 					_this.model.sortLayers( order );
 				}
 			});
