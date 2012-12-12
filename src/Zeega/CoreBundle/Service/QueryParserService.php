@@ -105,9 +105,12 @@ class QueryParserService
         $query["page"] = (Integer)$query["page"];
         $query["limit"] = (Integer)$query["limit"];
 
-        if(isset($query["user"]) && -1 == $query["user"]) {
-            if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-                $query["user"] = $this->securityContext->getToken()->getUser()->getId();
+        if(isset($query["user"])) {
+            $query["user"] = (integer)$query["user"];
+            if(-1 == $query["user"]) {
+                if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+                    $query["user"] = $this->securityContext->getToken()->getUser()->getId();
+                }
             }
         }
 
