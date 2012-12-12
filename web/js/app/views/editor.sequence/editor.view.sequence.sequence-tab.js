@@ -90,23 +90,23 @@
         sequenceOptions : function() {
             var _this = this;
 
-            console.log('sequence Options',this.model.attributes);
             if( !this.loadedModal ) {
                 $('body').append( _.template( this.getModalTemplate(), this.model.toJSON() ) );
-                $('#sequence-modal-'+_this.model.id+' input').focus();
-                $('#sequence-modal-'+this.model.id+' .save').click(function(){
-                    _this.saveOptions();
-                });
-                $('#sequence-modal-'+_this.model.id+' input').keypress(function(e){
-                    if(e.which == 13)
-                    {
-                        _this.saveOptions();
-                        $('#sequence-modal-'+_this.model.id).modal('hide');
-                    }
-                });
             } else {
-                $('#sequence-modal-' + _this.model.id).html( _.template( this.getModalTemplate(), this.model.toJSON() ) );
+                $('#sequence-modal-' + _this.model.id).replaceWith( _.template( this.getModalTemplate(), this.model.toJSON() ) );
             }
+
+            $('#sequence-modal-'+_this.model.id+' input').focus();
+            $('#sequence-modal-'+this.model.id+' .save').click(function(){
+                _this.saveOptions();
+            });
+            $('#sequence-modal-'+_this.model.id+' input').keypress(function(e){
+                if(e.which == 13)
+                {
+                    _this.saveOptions();
+                    $('#sequence-modal-'+_this.model.id).modal('hide');
+                }
+            });
 
             $('#sequence-modal-'+this.model.id).modal('show');
 
