@@ -18,11 +18,11 @@ class ItemRepository extends EntityRepository
 			   ->setParameter(2,$query['user']);
 		}
 		
-		if(isset($query['collection_id']))
+		if(isset($query['collection']))
       	{
 			 $qb->innerjoin('i.parent_items', 'c')
                 ->andWhere('c.id = ?3')
-                ->setParameter(3, $query['collection_id']);
+                ->setParameter(3, $query['collection']);
 		}
 		
 		if(isset($query['type'])) {
@@ -59,12 +59,6 @@ class ItemRepository extends EntityRepository
                 ->setParameter('not_item_id', $query['not_item_id']);
 		}
 		
-		if(isset($query['geo']))
-      	{
-      	     $qb->andWhere($qb->expr()->between('i.media_geo_latitude', $query['geo']['south'], $query['geo']['north']))
-				->andWhere($qb->expr()->between('i.media_geo_longitude', $query['geo']['west'], $query['geo']['east']));
-		}
-
         if(isset($query['enabled'])) {
              $qb->andWhere('i.enabled = :enabled')
                 ->setParameter('enabled', $query['enabled']);

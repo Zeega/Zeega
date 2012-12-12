@@ -68,7 +68,7 @@
         {%- else -%}
             "tags":{{ item.tags | default([ ]) | json_encode | raw}},
         {%- endif -%}              
-        {%- if (user.id is defined and user.id == item.user_id) or (user_is_admin is defined and user_is_admin) -%}
+        {%- if (item.user_id is defined) and (user.id is defined and user.id == item.user_id) or (user_is_admin is defined and user_is_admin) -%}
             "editable":true
         {%- else -%}
             "editable":false

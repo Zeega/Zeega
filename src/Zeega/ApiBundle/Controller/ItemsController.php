@@ -104,8 +104,14 @@ class ItemsController extends BaseController
         
         if(isset($query["data_source"]) && $query["data_source"] == "db") {
             $em = $this->getDoctrine()->getEntityManager();
-            $item = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+            $parentItem = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
+            if(true === $recursiveResults) {
+                $query = $this->getRequest()->query->all();
+                $query["collection"] = $id;
+                $query = $queryParser->parseRequest($query);
+                $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
+                $parentItem["child_items"] = $queryResults;        
+            }
         } else {
             $solr = $this->get('zeega_solr');
 
@@ -126,9 +132,9 @@ class ItemsController extends BaseController
 
                 $parentItem["child_items"] = $queryResults["items"];        
             }
-
-            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $parentItem, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
         }
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $parentItem, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
+
 
         return new Response($itemView);
     }

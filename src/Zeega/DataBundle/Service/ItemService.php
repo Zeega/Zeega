@@ -85,10 +85,14 @@ class ItemService
 
         if(isset($itemArray['media_creator_username'])) {
             $item->setMediaCreatorUsername($itemArray['media_creator_username']);
+        } else {
+            $item->setMediaCreatorUsername($user->getDisplayName());
         }
 
         if(isset($itemArray['media_creator_realname'])) {
             $item->setMediaCreatorRealname($itemArray['media_creator_realname']);
+        } else {
+            $item->setMediaCreatorUsername($user->getDisplayName());
         }
             
         if(isset($itemArray['archive'])) {
