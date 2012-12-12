@@ -86,15 +86,15 @@ class SolrService
             $solrQuery->createFilterQuery('media_type')->setQuery("media_type:(".$query["type"].")");
         }
 
-        if(isset($query["geo"]) && $query["geo"] == 1) {
+        if(isset($query["geo_located"]) && $query["geo_located"] == 1) {
             $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
                                                                                     
         if(isset($query["since"]) && isset($query["before"])) {
-            $minDate = new DateTime();
+            $minDate = new \DateTime();
             $minDate->setTimestamp($query["since"]);
             $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
-            $maxDate = new DateTime();
+            $maxDate = new \DateTime();
             $maxDate->setTimestamp($query["before"]);
             $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
             
