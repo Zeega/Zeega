@@ -376,14 +376,14 @@ class ItemsController extends BaseController
                 $query["collection"]  = $id;
             }
 
-            $query = $queryParser->parseRequest($this->getRequest()->query);
-
+            $query = $queryParser->parseRequest($query);
+            
             $solr = $this->get('zeega_solr');
             $queryResults = $solr->search($query);
             $queryResults = $queryResults["items"];
             
             foreach($queryResults as $childItem) {
-                if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf') {
+                if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf' && $childItem['media_type']!='Document') {
                     $i++;
                     $frameId = (int)$childItem['id'];
                     $frameOrder[]=$frameId;
