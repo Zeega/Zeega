@@ -113,8 +113,11 @@ class ItemsController extends BaseController
             $query["id"] = $id;
             $query = $queryParser->parseRequest($query);
             $queryResults = $solr->search($query);
-            $parentItem = $queryResults["items"][0];
-
+            if(isset($queryResults) && count($queryResults["items"]) > 0) {
+                $parentItem = $queryResults["items"][0];
+            } else {
+                $parentItem = null;
+            }
             if(true === $recursiveResults) {
                 $query = $this->getRequest()->query->all();
                 $query["collection"] = $id;
