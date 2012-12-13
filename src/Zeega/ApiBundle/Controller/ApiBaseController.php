@@ -17,13 +17,13 @@ use Zeega\CoreBundle\Controller\BaseController;
 
 class ApiBaseController extends BaseController
 {
-    protected function getErrorResponse($errorCode)
+    protected function getErrorResponse($errorCode, $errorMessage = null)
     {
-        if(null === $errorCode) {
+        if( null === $errorCode ) {
             throw new \BadFunctionCallException('The errorCode parameter cannot be null');
         }
         
-        switch ($errorCode) {
+        switch ( $errorCode ) {
             case 400:   // bad request
                 $message = "The request could not be understood by the server due to malformed syntax.";
                 break;
@@ -33,6 +33,9 @@ class ApiBaseController extends BaseController
             case 403:
                 $message = "Forbidden";
                 break;
+            case 422:
+                $message = "Unprocessable Entity";
+                break;
             case 500:
                 $message = "Internal Server Error - The server encountered an unexpected condition which prevented it from fulfilling the request.";
                 break;
@@ -41,8 +44,12 @@ class ApiBaseController extends BaseController
                 break;
         }
 
-        $response = new Response("{error: $message }");
-        $response->headers->set('Content-Type', 'application/json');
+        if( null !== $errorMessage) {
+            $response = new Response( json_encode( "{error: $message, details: $errorMessage }" ) );    
+        } else {
+            $response = new Response( "{error: $message }" );    
+        }
+        
         
         return $response; 
     }

@@ -14,9 +14,9 @@ namespace Zeega\ApiBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use Zeega\DataBundle\Entity\Item;
-use Zeega\CoreBundle\Controller\BaseController;
+use Zeega\ApiBundle\Controller\ApiBaseController;
 
-class ItemsController extends BaseController
+class ItemsController extends ApiBaseController
 {
     public function getItemsSearchAction()
     {
@@ -191,17 +191,33 @@ class ItemsController extends BaseController
     }
 
     // delete_collection   DELETE /api/items/{collection_id}.{_format}
-    public function deleteItemItemsAction($itemId)
+    public function deleteItemItemAction($itemId, $childItemId)
     {
-        // TO-DO - error handling; missing item, etc
+        if ( !isset($itemId) || !is_numeric($itemId) ) {
+            return parent::getErrorResponse(422, "The item id parameter is mandatory and has to be an integer");
+        }
+
+        if ( !isset($itemId) || !is_numeric($childItemId) ) {
+            return parent::getErrorResponse(422, "The child item id parameter is mandatory and has to be an integer");
+        }
+
         $em = $this->getDoctrine()->getEntityManager();
-        $item = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$itemId,"enabled"=>1));
-        $childItem = $em->getRepository('ZeegaDataBundle:Item')->findBy(array("id"=>$childItemId,"enabled"=>1));
+        $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $itemId );
+
+        if ( !isset($item) ) {
+            return parent::getErrorResponse(400, "The item with the id $item does not exist");
+        }
+
+        $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
+        if ( !isset($childItem) ) {
+            return parent::getErrorResponse(400, "The child item with the id $childItem does not exist");
+        }
+        
         $item->getChildItems()->removeElement($childItem);
         $item->setChildItemsCount($item->getChildItems()->count());
         $item->setDateUpdated(new \DateTime("now"));
         $em->flush();
-        $itemView = $this->renderView('ZeegaApiBundle:Collections:show.json.twig', array('item' => $item));
+        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
         
         return new Response($itemView);
     }
