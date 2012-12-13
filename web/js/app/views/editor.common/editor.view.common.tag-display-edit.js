@@ -7,20 +7,24 @@
 
 		className : 'tag-viewer',
 		
-		isEditable : true,
+		isEditable : false,
 		editing : false,
 		
 		initialize : function()
 		{
+			this.isEditable = this.model.get('editable');
 		},
 		
 		render : function()
 		{
+
 			var _this = this;
+
 			this.$el.html( this.getTemplate() );
-			_.each( this.model.get('tags'), function(tag,index){
-				_this.$el.find('.tag-list').append(_this.getTagTemplate(tag,index))
-			})
+			_.each( this.model.get('tags'), function( tag, index ){
+				_this.$el.find('.tag-list').append(_this.getTagTemplate(tag,index));
+			});
+
 			return this;
 		},
 		
@@ -52,12 +56,13 @@
 		
 		overTagDelete : function(e)
 		{
-			$('.tag-delete').html('&times;')
+			$('.tag-delete').html('&times;');
 		},
 		outTagDelete : function(e)
 		{
-			$('.tag-delete').html('•')
+			$('.tag-delete').html('•');
 		},
+
 		deleteTag : function(e)
 		{
 			var index = $(e.target).closest('li').data('index');
@@ -70,15 +75,16 @@
 		
 		inputKeypress : function(e)
 		{
-			if(e.which == 13)
-			{
+			var tagArray;
 			
-				var tagArray = this.model.get('tags');
+			if(e.which == 13){
+				tagArray = this.model.get('tags');
 				if(!_.isArray(tagArray)) tagArray =[];
-				tagArray.push(this.$el.find('.tag-input input').val())
+				tagArray.push(this.$el.find('.tag-input input').val());
 				this.model.save('tags',tagArray);
 				this.render();
 				this.$el.find('.tag-input input').focus();
+
 				return false;
 			}
 		},
@@ -97,8 +103,9 @@
 
 		getTemplate : function()
 		{
-			var html = "<ul class='tag-list'></ul>";
-			if(this.isEditable ) html += "<div class='tag-input "+ (this.editing?'':'hide') +"'><input type='text' class='span4' placeholder='add tag and press enter'/></div>";
+			var html = "<ul class='tag-list'></ul>"+
+						"<div class='tag-input'><input type='text' class='span4' placeholder='add a new tag and press enter'/></div>";
+			
 			return html;
 		}
 	});

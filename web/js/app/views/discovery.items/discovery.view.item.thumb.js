@@ -21,7 +21,7 @@
             this.el.id = this.model.id;
 
             if (_.isUndefined(this.options.thumbnail_height)){
-                this.options.thumbnail_height = 120;
+                this.options.thumbnail_height = 160;
             }
             if (_.isUndefined(this.options.fancybox)){
                 this.options.fancybox = true;
