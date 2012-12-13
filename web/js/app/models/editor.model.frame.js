@@ -2,7 +2,17 @@
 
 	Frame.LayerCollection = Backbone.Collection.extend({
 
-		comparator : function( layer ){ return layer.layerIndex }
+		initialize: function() {
+			this.on('add', this.onAdd, this);
+		},
+
+		comparator: function( layer ) {
+			return layer.layerIndex;
+		},
+
+		onAdd: function( layer ) {
+			layer.layerIndex = this.length;
+		}
 	
 	});
 
@@ -60,7 +70,6 @@
 			});
 
 			this.layers = new Frame.LayerCollection( layerArray );
-			console.log('these are layers', this.layers);
 
 			if( brokenLayers.length )
 			{
@@ -109,17 +118,19 @@
 		{
 			var _this = this;
 			//remove layers not referenced from the collection
-			var brokenLayers = _.difference( _.map(this.layers.pluck('id'),function(id){ parseInt(id,10);}),layerIDArray );
-			var brokenLayerModelArray = _.map(brokenLayers, function(layerID){
-				return _this.layers.get(layerID);
+			var brokenLayerModelArray = this.layers.map(function(layer){
+				if( !_.contains(layerIDArray,layer.id) ) return layer;
+				return false;
 			});
-			this.layers.remove(brokenLayerModelArray,{silent:true});
+
+			this.layers.remove( _.compact(brokenLayerModelArray),{silent:true});
 
 			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
 				$('#layer-visual-'+ layer.id).css('z-index', i);
 				layer.layerIndex = i;
 			});
+
 			this.layers.sort();
 			this.updateLayerOrder();
 		},
@@ -172,7 +183,11 @@
 		onNewLayerSave : function( layer )
 		{
 			layer.off('sync', this.onNewLayerSave);
+
 			this.layers.push( layer );
+			
+			console.log('======= save new layer', layer, this.layers );
+
 			zeega.app.project.layers.add( layer );
 		},
 
