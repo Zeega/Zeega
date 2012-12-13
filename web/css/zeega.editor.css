@@ -1241,6 +1241,9 @@ img{max-width:none;}
 #add-media{width:944px;height:195px;padding:30px;border-radius:5px;position:absolute;z-index:100000;top:88px;left:50%;margin-left:-502px;background-color:white;display:none;}
 #add-media.show{display:block;}
 #preview-media .layer-link{border-radius:40px;}
+.ui-resizable-e{width:15px;}
+.ui-resizable-s{height:15px;}
+.ui-resizable-se{height:15px;width:15px;}
 a:link,a:visited,a:active{color:#bbbbbb;}
 a:hover{color:#ddd;text-decoration:none;}
 html{background:url('../../../images/paper-dark.png');}
