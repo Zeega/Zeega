@@ -31,6 +31,15 @@ Zeega\DataBundle\Entity\Sequence:
         persistent_layers:
             type: array
             nullable: true
+        description:
+            type: string
+            length: 140
+            nullable: true
+        advance_to:
+            type: integer
+            nullable: true
     indexes:
         sequence_enabled:
             columns: [enabled]
+        sequence_project_id_index:
+            columns: [project_id]

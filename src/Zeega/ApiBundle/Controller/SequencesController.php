@@ -77,7 +77,15 @@ class SequencesController extends BaseController
         if($request->request->has('persistent_layers')) {
             $sequence->setPersistentLayers($request->request->get('persistent_layers'));
         }
-    	
+        
+	if($request->request->has('description')) {
+            $sequence->setDescription($request->request->get('description'));
+        }
+
+        if($request->request->has('advance_to')) {
+            $sequence->setAdvanceTo($request->request->get('advance_to'));
+        }
+		
         if($request->request->has('frames')) {
             $frames = $request->request->get('frames');
             $i = 0;

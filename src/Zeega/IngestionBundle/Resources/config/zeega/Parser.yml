@@ -73,15 +73,15 @@ zeega.parsers:
             
     soundcloud.com: #order matters (last regex matches any soundlcoud url)
         item_parser:
-            regex: /http:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/
+            regex: /https?:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudSet
         set_parser:
-            regex: /http:\/\/(?:www\.)?soundcloud.com.*/
+            regex: /https?:\/\/(?:www\.)?soundcloud.com.*/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudItem
         tag_parser:
-            regex: /http:\/\/(?:www\.)?soundcloud.com/impossibleregex/
+            regex: /https?:\/\/(?:www\.)?soundcloud.com/impossibleregex/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudTag
     dp.la:

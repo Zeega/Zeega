@@ -2,7 +2,17 @@
 
 	Frame.LayerCollection = Backbone.Collection.extend({
 
-		comparator : function( layer ){ return layer.layerIndex }
+		initialize: function() {
+			this.on('add', this.onAdd, this);
+		},
+
+		comparator: function( layer ) {
+			return layer.layerIndex;
+		},
+
+		onAdd: function( layer ) {
+			layer.layerIndex = this.length;
+		}
 	
 	});
 
@@ -173,7 +183,11 @@
 		onNewLayerSave : function( layer )
 		{
 			layer.off('sync', this.onNewLayerSave);
+
 			this.layers.push( layer );
+			
+			console.log('======= save new layer', layer, this.layers );
+
 			zeega.app.project.layers.add( layer );
 		},
 
