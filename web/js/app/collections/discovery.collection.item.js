@@ -66,7 +66,12 @@
             if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += "q=" + this.query.q.toString();
             else url+="sort=date-desc";
             
-            if( !_.isUndefined(this.query.content) && "all" !== this.query.content ) url += "&type=" + this.query.content;
+            if( !_.isUndefined(this.query.content) && "all" !== this.query.content ){
+                url += "&type=" + this.query.content;
+                if(this.query.content==='project'){
+                    url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,layer_type,display_name,eidtable,published";
+                }
+            }
             if( !_.isUndefined(this.query.sort) ) url += "&sort=" + this.query.sort;
             if( !_.isUndefined(this.query.collection) && this.query.collection > 0) url += "&collection=" + this.query.collection;
             if( !_.isUndefined(this.query.page) ) url += "&page=" + this.query.page;
@@ -77,6 +82,8 @@
             if( _.isUndefined(this.query.universe)||(!_.isUndefined(this.query.universe)&& this.query.universe!=1)){ url += "&user=-1";}
             // console.log("query url: "+ url);
             
+
+
             return url;
         },
     
