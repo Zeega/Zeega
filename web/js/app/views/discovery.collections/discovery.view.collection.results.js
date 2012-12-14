@@ -96,15 +96,21 @@
         },
         
         render : function(){
+            console.log("results rendering");
             var _this = this;
             $("#zeega-results-count").hide();
             
             _this._isRendered = true;
             
-            //if(this.collection.search.page==1)$(".results-wrapper").empty();
+            console.log(this.collection,this.collection.search);
+            //if(this.collection.search && this.collection.search.page==1)$(".results-wrapper").empty();
             $(".results-wrapper").empty();
-           // if(zeega.discovery.app.currentView == "thumb") $("#results-list-wrapper").hide();
-            //else $("#results-thumbnail-wrapper").hide();
+            if(zeega.discovery.app.currentView == "thumb") {
+                $("#results-list-wrapper").hide();
+            }
+            else {
+                $("#results-thumbnail-wrapper").hide();
+            }
                 
             
             var q =0;

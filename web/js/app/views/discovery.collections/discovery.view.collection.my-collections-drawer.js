@@ -10,36 +10,26 @@
         el : $("#zeega-collection-list"),
         
         initialize : function(){
-            
+            var _this = this;
             $("#zeega-collection-list").spin(true);
+            
+            $("#create-collection").click(function(){_this.createCollection(); return false;});
+            $("#create-dynamic-collection").click(function(){_this.createDynamicCollection(); return false;});
 
-            this.collection = new Items.Collections.Search();
-            this.collection.url=zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300";
-            this.collection.parse= function(data){ return data.items;};
-            this.collection.comparator = function(model) { return model.get("title");};
+            this.collection = new Items.Collections.MyCollections();
+            
             this.collection.fetch({
-                    
-                    success : function(collection, response)
-                    {
-                        _this.render();
-                    },
-                    error : function(collection, response)
-                    {
-                        console.log(response);
-                    }
+                 success : function(collection, response){
+                    _this.render();
+                },
+                error : function(collection, response){
+                    console.log(response);
                 }
-            );
-            var _this=this;
+            });
         },
 
         render : function(){
             var _this = this;
-
-        
-            $("#create-collection").click(function(){_this.createCollection(); return false;});
-            $("#create-dynamic-collection").click(function(){_this.createDynamicCollection(); return false;});
-        
-            
             _.each( _.toArray(this.collection), function(item){
                 var itemView = new Items.Views.CollectionListView({model:item});
                 $(_this.el).append(itemView.render().el);

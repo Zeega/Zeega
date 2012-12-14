@@ -52,9 +52,9 @@ jQuery(function($)
     $("#jda-search-button-group,#search-bar").fadeTo("fast",1);
 
     //View buttons toggle
-    $("#zeega-view-buttons button").tooltip({"placement":"bottom", delay: { show: 600, hide: 100 }});
+    $("#zeega-view-toggle button").tooltip({"placement":"bottom", delay: { show: 600, hide: 100 }});
 
-    $("#zeega-view-buttons a").click(function(){ ZeegaDiscovery.switchViewTo( $(this).data("goto-view") , false); return false; });
+    $("#zeega-view-toggle a").click(function(){ ZeegaDiscovery.switchViewTo( $(this).data("goto-view") , false); return false; });
 
 
     $("#zeega-content-type").change(function(){
@@ -66,7 +66,7 @@ jQuery(function($)
     });
 
 
-    $("#jda-go-button").click(function(){
+    $("#go-button").click(function(){
         var e = jQuery.Event("keydown");
         e.which = 13;
 

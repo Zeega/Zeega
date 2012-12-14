@@ -290,14 +290,13 @@ this.zeega.discovery = {
         // console.log("zeega.discovery.app.switchViewTo",view,this.currentView);
 
         this.currentView = view;
-
+        $("#zeega-view-toggle .btn").removeClass("active");
         $(".tab-pane").removeClass("active");
         $(".results-view-wrapper").hide();
         $("#zeega-"+view+"-view").addClass("active");
         $("#results-"+view+"-wrapper").show();
-        $("#zeega-view-buttons .btn").removeClass("active");
         $("#"+view+"-button").addClass("active");
-
+        this.resultsView.render();
         this.updateURLHash( this.searchObject );
     },
         

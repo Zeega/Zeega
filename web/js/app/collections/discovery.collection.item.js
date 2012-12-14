@@ -39,6 +39,18 @@
         }
     });
     
+
+    Items.Collections.MyCollections = Backbone.Collection.extend({
+        mode: Items.Model,
+        url: zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300",
+        comparator: function(model){
+            return model.get('title');
+        },
+        parse: function(data){
+            return data.items;
+        }
+    });
+
     Items.Collections.Search = Backbone.Collection.extend({
         
         model:Items.Model,

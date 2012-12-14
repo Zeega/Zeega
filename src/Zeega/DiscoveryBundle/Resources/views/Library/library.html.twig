@@ -91,10 +91,9 @@
 		</div><!-- zeega action column -->
 		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
 			<div id="zeega-search-wrapper" class='clearfix'>
-				<div class="btn-group" id="zeega-view-buttons">
+				<div class="btn-group" id="zeega-view-toggle">
 					<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse active" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>
 					<a data-goto-view='list'><button id="list-button" class="btn btn-inverse" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
-					<!--	<a data-goto-view='event'><button id="event-button" class="btn btn-inverse" rel="tooltip" title="{% trans %}jda.search.mapview{% endtrans %}" style="border-radius:0 4px 4px 0"><i class="icon-map-marker icon-white"></i></button></a> -->
 				</div>
 				<div id="jda-search-button-group" style="display:none">
 					<div id="search-bar" style="margin-right:5px">
@@ -112,7 +111,7 @@
 							</select>
 						</span>
 					</div>
-					<a href="#" id="jda-go-button" class="btn btn-info btn-large">Go</a>
+					<a href="#" id="go-button" class="btn btn-info btn-large">Go</a>
 				</div>
 			</div>
 		
@@ -139,7 +138,7 @@
 
 		{% block stylesheets %}
 		
-		{% include "ZeegaDiscoveryBundle:Translations:translation.html.twig" %}
+	
 		
 			<!-- css imports -->
 		
