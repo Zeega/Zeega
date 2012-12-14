@@ -19,7 +19,7 @@ class ApiBaseController extends BaseController
 {
     protected function getErrorResponse($errorCode, $errorMessage = null)
     {
-        if( null === $errorCode ) {
+        if ( null === $errorCode ) {
             throw new \BadFunctionCallException('The errorCode parameter cannot be null');
         }
         
@@ -44,13 +44,12 @@ class ApiBaseController extends BaseController
                 break;
         }
 
-        if( null !== $errorMessage) {
-            $response = new Response( json_encode( "{error: $message, details: $errorMessage }" ) );    
+        if ( null !== $errorMessage) {
+            $responseContent = array("code" => $errorCode, "message" => $errorMessage);    
         } else {
-            $response = new Response( "{error: $message }" );    
+            $responseContent = array("code" => $errorCode, "message" => $message);    
         }
         
-        
-        return $response; 
+        return new Response( json_encode($responseContent) );
     }
 }

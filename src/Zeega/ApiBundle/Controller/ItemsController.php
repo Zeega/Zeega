@@ -190,36 +190,57 @@ class ItemsController extends ApiBaseController
         return new Response($itemView);
     }
 
-    // delete_collection   DELETE /api/items/{collection_id}.{_format}
-    public function deleteItemItemAction($itemId, $childItemId)
+    /**
+     * Deletes a child item from an item
+     *
+     * @return Array|response
+     */    
+    public function getItemItemAction($itemId, $childItemId)
     {
-        if ( !isset($itemId) || !is_numeric($itemId) ) {
-            return parent::getErrorResponse(422, "The item id parameter is mandatory and has to be an integer");
-        }
+        try {
+            // parameter validation
+            if ( !isset($itemId) || !is_numeric($itemId) ) {
+                return parent::getErrorResponse(422, "The item id parameter is mandatory and has to be an integer");
+            }        
+            if ( !isset($itemId) || !is_numeric($childItemId) ) {
+                return parent::getErrorResponse(422, "The child item id parameter is mandatory and has to be an integer");
+            }
+            // get the item
+            $em = $this->getDoctrine()->getEntityManager();
+            $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $itemId );
 
-        if ( !isset($itemId) || !is_numeric($childItemId) ) {
-            return parent::getErrorResponse(422, "The child item id parameter is mandatory and has to be an integer");
-        }
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $itemId );
-
-        if ( !isset($item) ) {
-            return parent::getErrorResponse(400, "The item with the id $item does not exist");
-        }
-
-        $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
-        if ( !isset($childItem) ) {
-            return parent::getErrorResponse(400, "The child item with the id $childItem does not exist");
-        }
-        
-        $item->getChildItems()->removeElement($childItem);
-        $item->setChildItemsCount($item->getChildItems()->count());
-        $item->setDateUpdated(new \DateTime("now"));
-        $em->flush();
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-        
-        return new Response($itemView);
+            if ( !isset($item) ) {
+                return parent::getErrorResponse(400, "The item with the id $item does not exist");
+            }
+            // authorization
+            $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
+            $user = $this->getUser($apiKey);
+            echo $user->getId();
+            var_dump($user->getRoles());
+            var_dump( $this->isUserAdmin($user) );
+            var_dump( $this->isItemOwner($item, $user) );
+            if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
+                // get the child item
+                $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
+                if ( !isset($childItem) ) {
+                    return parent::getErrorResponse(400, "The child item with the id $childItem does not exist");
+                }
+                // remove the item from the collection and render the response
+                $item->getChildItems()->removeElement($childItem);
+                $item->setChildItemsCount($item->getChildItems()->count());
+                $item->setDateUpdated(new \DateTime("now"));
+                $em->flush();
+                $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+                
+                return new Response($itemView);
+            } else {
+                return parent::getErrorResponse(403);
+            }
+        } catch ( \BadFunctionCallException $e ) {
+            return parent::getErrorResponse(422, $e->getMessage());
+        } catch (\Exception $e) {
+            return parent::getErrorResponse(500, $e->getMessage());
+        } 
     }
 
     public function postItemsAction()
