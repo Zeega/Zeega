@@ -95,8 +95,8 @@
             
             //if(this.collection.search.page==1)$('.results-wrapper').empty();
             $('.results-wrapper').empty();
-            if(zeega.discovery.app.currentView == 'thumb') $('#results-list-wrapper').hide();
-            else $('#results-thumbnail-wrapper').hide();
+           // if(zeega.discovery.app.currentView == 'thumb') $('#results-list-wrapper').hide();
+            //else $('#results-thumbnail-wrapper').hide();
                 
             
             var q =0;
@@ -121,7 +121,7 @@
             this.updateResultsCounts();
             
             $(this.el).show();
-            $('#zeega-results-wrapper').spin(false);
+            
             zeega.discovery.app.isLoading = false;
             return this;
         },
@@ -141,7 +141,7 @@
         {
         
             console.log("zeega.discovery.app.resultsView.search",obj);
-            $('#zeega-results-wrapper').spin();
+          
             var _this = this;
             
             this.updated = true;
