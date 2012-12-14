@@ -4,14 +4,22 @@
     
     Items.Views.Thumb = Backbone.View.extend({
         
-        tagName : 'li',
+        tagName: "li",
 
-        events : {
-            'click':'previewItem'
+        events: {
+            "click":"previewItem"
         },
+
         previewItem: function()
         {
-            this.model.trigger('preview_item',this.model.id);
+            console.log("triggering preview",this.model);
+            if( this.model.get("media_type")==="Collection" ){
+                zeega.discovery.app.goToCollection(this.model);
+            } else {
+                this.model.trigger( "preview_item", this.model.id );
+            }
+            
+            
             return false;
         },
 
@@ -22,9 +30,6 @@
 
             if (_.isUndefined(this.options.thumbnail_height)){
                 this.options.thumbnail_height = 160;
-            }
-            if (_.isUndefined(this.options.fancybox)){
-                this.options.fancybox = true;
             }
             if(this.options.fancybox||true){
                 $(this.el).addClass('results-thumbnail');
@@ -270,33 +275,18 @@
         },
 
         
-        getImageTemplate : function()
+       
+        getTemplate : function()
         {
             html =
 
 
             '<td class="zeega-list-left-column">'+
-                '<div class="zeega-item-thumbnail"></div>'+
-            '</td>'+
-            '<td class="zeega-list-middle-column">'+
-                '<h3><%= title %></h3><p >by: <%= author %>'+
-                '<p class="jda-item-description"><%= description %></p>'+
-            '</td>'+
-            '<td class="zeega-list-right-column jda-item-date">'+
-                '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-            '</td>';
-            
-
-            
-            return html;
-        },
-        getDefaultTemplate : function()
-        {
-            html =
-
-
-            '<td class="zeega-list-left-column">'+
-                '<div class="zeega-item-thumbnail"></div>'+
+                '<div class="zeega-item-thumbnail">'+
+                    '<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
+                        '<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
+                    '</a>'+
+                '</div>'+
             '</td>'+
             '<td class="zeega-list-middle-column">'+
                 '<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
@@ -310,108 +300,31 @@
             
             return html;
         },
-        getDocumentTemplate : function()
-        {
-            html =
-            
 
-
-            '<td class="span2">'+
-                '<i class="jdicon-document"></i>'+
-                '<div class="item-author item-author-left"><%= author %></div>'+
-            '</td>'+
-            '<td class="jda-item-description">'+
-                '<div class="jda-item-title"><%= title %></div>'+
-                '<div><%= description %></div>'+
-            '</td>'+
-            '<td class="jda-item-date">'+
-                ''+
-                '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-            '</td>';
-
-            
-            return html;
-        },
-        getWebsiteTemplate : function()
-        {
-            html =
-
-            '<td class="zeega-list-left-column">'+
-                '<div class="zeega-item-thumbnail"></div>'+
-            '</td>'+
-            '<td class="zeega-list-middle-column">'+
-                '<h3><%= title %></h3>'+
-                '<p><%= original_url %></p>'+
-                '<p class="jda-item-description"><%= description %></p>'+
-            '</td>'+
-            '<td class="zeega-list-right-column jda-item-date">'+
-                ''+
-                '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-            '</td>';
-            
-            
-            return html;
-        },
-
-        getTestimonialTemplate : function()
-        {
-            html =
-            '<td class="zeega-list-left-column">'+
-                '<div class="zeega-item-thumbnail"></div>'+
-            '</td>'+
-            '<td class="zeega-list-middle-column">'+
-                '<h3><%= title %></h3><p class="jda-item-author">Testimonial by: <%= author %></p>'+
-                '<p class="jda-item-description"><%= description %></p>'+
-            '</td>'+
-            '<td class="zeega-list-right-column jda-item-date">'+
-                '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-            '</td>';
-            return html;
-        },
-        
-    
-        
         getCollectionTemplate : function()
         {
             html =
-
-                '<td class="zeega-list-left-column">'+
-                '<div class="zeega-item-thumbnail"></div>'+
-                '</td>'+
-                '<td class="zeega-list-middle-column">'+
-                    '<h3><%= title %></h3><p>by <a href="#" class="jda-user-link"><%= display_name %></a></p>'+
-                    '<p class="jda-item-description"><%= description %></p>'+
-                '</td>'+
-                '<td class="zeega-list-right-column jda-item-date">'+
-                    ''+
-                '</td>';
-                
-
+            '<td class="zeega-list-left-column">'+
+                '<div class="zeega-item-thumbnail">'+
+                    '<a href="#" class="thumbnail" style="position:relative;width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px;background-color:white">'+
+                        '<img src="<%=thumbnail_url%>" alt="<%=title%>" style="width:<%=thumbnail_width%>px;height:<%=thumbnail_height%>px">'+
+                    '</a>'+
+                '</div>'+
+            '</td>'+
+            '<td class="zeega-list-middle-column">'+
+                '<h3><%= title %></h3><p >by: <%= author %>'+
+                '<p class="jda-item-description"><%= description %></p>'+
+            '</td>'+
+            '<td class="zeega-list-right-column jda-item-date">'+
+                '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
+            '</td>';
+            
 
             
             return html;
         },
-        getDefaultTemplate : function()
-        {
-            html =
-            
 
-                '<td class="zeega-list-left-column">'+
-                    '<div class="zeega-item-thumbnail"></div>'+
-                '</td>'+
-                '<td class="zeega-list-middle-column">'+
-                    '<h3><%= title %></h3><p class="jda-item-author">by: <%= author %></p>'+
-                    '<p class="jda-item-description"><%= description %></p>'+
-                '</td>'+
-                '<td class="zeega-list-right-column jda-item-date">'+
-                    ''+
-                    '<div style="position:relative; height:55px"><p class="jda-user-link bottom" style="margin:0px">via <a href="#" ><%= display_name %></a></p></div>'+
-                '</td>';
-                
 
-            
-            return html;
-        }
         
     });
     

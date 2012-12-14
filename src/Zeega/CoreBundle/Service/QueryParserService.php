@@ -110,6 +110,8 @@ class QueryParserService
             if(-1 == $query["user"]) {
                 if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
                     $query["user"] = $this->securityContext->getToken()->getUser()->getId();
+                } else {
+                    unset($query["user"]);
                 }
             }
         }

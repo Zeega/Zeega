@@ -5,34 +5,40 @@
     
     Items.Collections.Views.Results = Backbone.View.extend({
         
-        el : $('#zeega-results-wrapper'),
+        el : $("#zeega-results-wrapper"),
+        _childViews: [],
+        _collectionChildViews: [],
     
         initialize : function(){
-            this.collection = new Items.Collections.Search();
-            this.collection.on( 'reset', this.reset, this);
-            this._childViews = [];
-            this._collectionChildViews = [];
-        
-
             zeega.discovery.app.isLoading = true;
-
-            this.collection.bind('remove', this.remove, this);
-            this.collection.bind('add', this.add, this);
+            this.collection = new Items.Collections.Search();
+            this.collection.on( "reset", this.reset, this);
+            this.collection.bind("remove", this.remove, this);
+            this.collection.bind("add", this.add, this);
         },
         
         add : function( item ){
         
             var itemView;
-            if(zeega.discovery.app.currentView == 'thumb') itemView = new Items.Views.Thumb({model:item});
-            else itemView = new Items.Views.List({model:item});
+
+            if(zeega.discovery.app.currentView === "thumb"){
+                itemView = new Items.Views.Thumb({model:item});
+            } else{
+                itemView = new Items.Views.List({model:item});
+            }
             this._childViews.push( itemView );
-            if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
-            else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
+            if(zeega.discovery.app.currentView === "thumb"){
+                $("#zeega-items-thumb").append(itemView.render().el);
+            } else if(zeega.discovery.app.currentView === "list"){
+                $("#zeega-items-list").append(itemView.render().el);
+            }
         
         },
         
         remove : function( model ){
-            var deleteIdx = -1;
+            var deleteIdx = -1,
+                removed;
+
             for (var i=0;i<this._childViews.length;i++){
                 var itemView = this._childViews[i];
                 if (itemView.model.id == model.id){
@@ -42,7 +48,7 @@
             }
 
             if (deleteIdx >= 0){
-                var removed = this._childViews.splice(deleteIdx,1);
+                removed = this._childViews.splice(deleteIdx,1);
                 $(this.el).find(removed[0].el).remove();
 
                 this.updateResultsCounts();
@@ -53,7 +59,9 @@
         },
 
         removeCollection : function( model ){
-            var deleteIdx = -1;
+            var deleteIdx = -1,
+                removed;
+
             for (var i=0;i<this._collectionChildViews.length;i++){
                 var itemView = this._collectionChildViews[i];
                 if (itemView.model.id == model.id){
@@ -63,7 +71,7 @@
             }
 
             if (deleteIdx >= 0){
-                var removed = this._collectionChildViews.splice(deleteIdx,1);
+                removed = this._collectionChildViews.splice(deleteIdx,1);
                 $(removed[0].el).remove();
 
                 this.updateResultsCounts();
@@ -81,9 +89,9 @@
             var itemsCount = this.collection.count;
 
             if (collectionsCount !==null){
-                $('.jda-results-collections-count').text( this.addCommas(collectionsCount) );
+                $(".jda-results-collections-count").text( this.addCommas(collectionsCount) );
             }
-            $('.jda-results-items-count').text( this.addCommas(itemsCount) );
+            $(".jda-results-items-count").text( this.addCommas(itemsCount) );
             $("#zeega-results-count-number").html( this.addCommas(itemsCount) );
         },
         
@@ -93,10 +101,10 @@
             
             _this._isRendered = true;
             
-            //if(this.collection.search.page==1)$('.results-wrapper').empty();
-            $('.results-wrapper').empty();
-           // if(zeega.discovery.app.currentView == 'thumb') $('#results-list-wrapper').hide();
-            //else $('#results-thumbnail-wrapper').hide();
+            //if(this.collection.search.page==1)$(".results-wrapper").empty();
+            $(".results-wrapper").empty();
+           // if(zeega.discovery.app.currentView == "thumb") $("#results-list-wrapper").hide();
+            //else $("#results-thumbnail-wrapper").hide();
                 
             
             var q =0;
@@ -104,7 +112,7 @@
             _.each( _.toArray(this.collection), function(item){
                 
                 var itemView;
-                if(zeega.discovery.app.currentView == 'thumb'){
+                if(zeega.discovery.app.currentView == "thumb"){
                     itemView = new Items.Views.Thumb({model:item});
                 } else{
                     
@@ -113,8 +121,8 @@
                 
                 _this._childViews.push( itemView );
                 
-                if(zeega.discovery.app.currentView == 'thumb') $('#zeega-items-thumb').append(itemView.render().el);
-                else if(zeega.discovery.app.currentView == 'list') $('#zeega-items-list').append(itemView.render().el);
+                if(zeega.discovery.app.currentView == "thumb") $("#zeega-items-thumb").append(itemView.render().el);
+                else if(zeega.discovery.app.currentView == "list") $("#zeega-items-list").append(itemView.render().el);
 
             });
 
@@ -140,7 +148,7 @@
         search : function(obj,reset)
         {
         
-            console.log("zeega.discovery.app.resultsView.search",obj);
+            // console.log("zeega.discovery.app.resultsView.search",obj);
           
             var _this = this;
             
@@ -161,7 +169,7 @@
                     
                     VisualSearch.searchBox.disableFacets();
 
-                    $('#zeega-results-count-number').html( _this.addCommas(response["items_count"]));
+                    $("#zeega-results-count-number").html( _this.addCommas(response["items_count"]));
                     _this.renderTags(response.tags);
                     if(_this.collection.query.page==1)_this.render();
                     
@@ -172,14 +180,10 @@
 
                 },
                 error : function(model, response){
-                    console.log('Search failed - model is ' + model);
+                    console.log("Search failed - model is " + model);
                 }
             });
         },
-        
-        
-
-        
         
         setMapBounds : function(bounds)
         {
@@ -193,82 +197,24 @@
 
         },
         clearTags : function(){
-            var currentQ = this.collection.search.q;
+            var newQ,
+                currentQ = this.collection.search.q;
+            
             if (currentQ.indexOf("tag:") >= 0){
-                var newQ = currentQ.substring(0,currentQ.indexOf("tag:"));
+                newQ = currentQ.substring(0,currentQ.indexOf("tag:"));
                 this.collection.search.q = newQ;
-
             }
         },
 
         setStartAndEndTimes : function(startDate, endDate)
         {
             var search = this.collection.search;
+            
             search.times = {};
             search.times.start = startDate;
             search.times.end = endDate;
 
         },
-        
-        getCQLSearchString : function()
-        {
-        
-            var search = this.collection.search;
-        
-            var cqlFilters = [];
-            if( !_.isUndefined(search.times) &&!_.isNull(search.times))
-            {
-                if( !_.isUndefined(search.times.start) )
-                {
-                    startDate = new Date(search.times.start*1000);
-                    startString = startDate.format('yyyy-mm-dd HH:MM:ss');
-                    cqlFilters.push("media_date_created >= '" + startString +"'");
-                }
-                if( !_.isUndefined(search.times.end) )
-                {
-                    endDate = new Date(search.times.end*1000);
-                    endString = endDate.format('yyyy-mm-dd HH:MM:ss');
-                    cqlFilters.push("media_date_created <= '" + endString +"'");
-                }
-            }
-
-            //Tags and Texts are stored in the q property
-            if( !_.isUndefined(search.q) )
-            {
-                var text = search.q;
-                if(text)
-                {
-                    if(cqlFilters.length > 0)
-                    {
-                        var newCqlFilters = [];
-                        var prevCqlFiltersString = cqlFilters.join(" AND ");
-                        newCqlFilters.push(prevCqlFiltersString + " AND (title LIKE '%"+text+"%' OR " + prevCqlFiltersString + " AND media_creator_username LIKE '%"+text+"%' OR " + prevCqlFiltersString + " AND description LIKE '%"+text+"%')");
-                        
-                        cqlFilters = newCqlFilters;
-                    }
-                    else
-                    {
-                        console.log("map search");
-                        cqlFilters.push("(title LIKE '%"+text+"%' OR media_creator_username LIKE '%"+text+"%' OR description LIKE '%"+text+"%')");
-                    }
-                }
-            }
-            if( !_.isUndefined(search.content)&&search.content!="all" )
-            {
-                var capitalizedContent =  search.content.charAt(0).toUpperCase() + search.content.slice(1);
-                cqlFilters.push("media_type='" + capitalizedContent + "'");
-            }
-            if (cqlFilters.length>0)
-            {
-                cqlFilterString = cqlFilters.join(" AND ");
-            }
-            else
-            {
-                cqlFilterString = null;
-            }
-            return cqlFilterString;
-        },
-    
         
         getSearch : function(){
             return this.collection.search;
@@ -277,15 +223,20 @@
         //Formats returned results number
         addCommas : function(nStr)
         {
-            nStr += '';
-            x = nStr.split('.');
+            var x,
+                x1,
+                x2,
+                rgx;
+
+            nStr += "";
+            x = nStr.split(".");
             x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1))
-            {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            x2 = x.length > 1 ? "." + x[1] : "";
+            rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)){
+                x1 = x1.replace(rgx, "$1" + "," + "$2");
             }
+
             return x1 + x2;
         }
         

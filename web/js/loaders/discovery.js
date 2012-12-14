@@ -36,37 +36,26 @@ require (
 			'order!plugins/players/plyr',
 
 			//models
-			
-			'order!app/models/discovery.model.user',
 			'order!app/models/discovery.model.item',
-			'order!app/models/discovery.model.tag',
 			
 			//collections
 			'order!app/collections/discovery.collection.item',
 		
 			
 			//views
-			
-		
-			'order!app/views/discovery.items/discovery.view.item.collection-details',
-			'order!app/views/discovery.items/discovery.view.item.thumb',
-			'order!app/views/discovery.items/discovery.view.item.publish-settings',
-			
-			
+
+			'order!app/views/discovery.items/discovery.view.item',
+
 			'order!app/views/editor.common/editor.view.common.leaflet-map',
 			'order!app/views/editor.common/editor.view.common.tag-display-edit',
 			'order!app/views/editor.item/editor.view.item.viewer',
 			
 			'order!app/views/discovery.collections/discovery.view.collection.results',
 			'order!app/views/discovery.collections/discovery.view.collection.my-collections-drawer',
-			//'order!app/views/discovery.collections/discovery.view.collection.map-popup',
-		
-		
-			'order!app/views/discovery.users/discovery.view.user.user-page',
 			
 				//custom
 			'order!helpers/utils',
-			'order!app/index.discovery',
+			'order!app/index.discovery'
 	
 	],function(){});
 
