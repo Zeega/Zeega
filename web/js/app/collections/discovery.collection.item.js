@@ -71,25 +71,21 @@
 		{
 		
 			var url = this.base;
+			
 			if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += 'q=' + this.query.q.toString();
 			else url+='sort=date-desc';
-			if( !_.isUndefined(this.query.viewType) ) url += '&view_type=' + this.query.viewType;
+			
 			if( !_.isUndefined(this.query.content) && 'all' !== this.query.content ) url += '&type=' + this.query.content;
 			if( !_.isUndefined(this.query.sort) ) url += '&sort=' + this.query.sort;
 			if( !_.isUndefined(this.query.collection) && this.query.collection > 0) url += '&collection=' + this.query.collection;
 			if( !_.isUndefined(this.query.page) ) url += '&page=' + this.query.page;
-			if( !_.isUndefined(this.query.r_collections) ) url += '&type=Collection' + this.query.r_collections;
 			if( !_.isUndefined(this.query.times)&&!_.isNull(this.query.times) ){
 				if( !_.isUndefined(this.query.times.start) ) url += '&min_date=' + this.query.times.start;
 				if( !_.isUndefined(this.query.times.end) ) url += '&max_date=' + this.query.times.end;
 			}
 			if( _.isUndefined(this.query.universe)||(!_.isUndefined(this.query.universe)&& this.query.universe!=1)){ url += '&user=-1';}
-
-			//if( !_.isUndefined(this.query.user) && this.query.user>=-1&& this.query.user!="") url += '&user=' + this.query.user;
-			//if( !_.isUndefined(this.query.username) &&  !_.isNull(this.query.username) &this.query.username.length > 0) url += '&username=' + this.query.username;
-			if(zeega.discovery.app.currentView=='event') url+='&geo_located=1';
-
 			console.log('query url: '+ url);
+			
 			return url;
 		},
 	
