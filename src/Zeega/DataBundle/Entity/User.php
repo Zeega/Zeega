@@ -333,4 +333,32 @@ class User extends BaseUser
     {
         return $this->idea;
     }
+    /**
+     * @var string $api_key
+     */
+    private $api_key;
+
+
+    /**
+     * Set api_key
+     *
+     * @param string $apiKey
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->api_key = $apiKey;
+    
+        return $this;
+    }
+
+    /**
+     * Get api_key
+     *
+     * @return string 
+     */
+    public function getApiKey()
+    {
+        return $this->api_key;
+    }
 }
