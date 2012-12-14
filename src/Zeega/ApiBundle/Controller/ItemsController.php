@@ -215,10 +215,6 @@ class ItemsController extends ApiBaseController
             // authorization
             $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
             $user = $this->getUser($apiKey);
-            echo $user->getId();
-            var_dump($user->getRoles());
-            var_dump( $this->isUserAdmin($user) );
-            var_dump( $this->isItemOwner($item, $user) );
             if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
                 // get the child item
                 $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
