@@ -709,13 +709,15 @@
         
         preview :function()
         {
-            
             this.model.trigger('preview_item',this.model.id);
+            
             return false;
         },
 
         viewCollection: function(){
-            console.log('viewing collection');
+            zeega.discovery.app.goToCollection( this.model );
+            
+            return false;
         },
 
         

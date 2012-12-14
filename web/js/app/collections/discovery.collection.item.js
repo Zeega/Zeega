@@ -53,7 +53,8 @@
 		
 		model:Items.Model,
 		base : zeega.discovery.app.apiLocation + 'api/items/search?',
-		query : {	page:1
+		query : {
+					page: 1
 				},
 				
 		initialize: function(){
@@ -92,21 +93,16 @@
 		setQuery : function(obj, reset)
 		{
 			console.log('items.collection.setquery',this.query,obj);
+			
 			if(reset){
-				this.query = { r_tags:1,page:1,sort:"date-desc" };
-				if(_.isNumber(obj.collection)||_.isNumber(obj.user)) {
-					this.query.r_items=1;
-				} else {
-					this.query.r_itemswithcollections=1;
-				}
-
-				if(_.isNumber(obj.user)) this.query.r_collections=1;
+				this.query = {
+					r_tags:1,
+					page:1,
+					sort:"date-desc"
+				};
 			}
 			
 			_.extend(this.query,obj);
-			
-			console.log(zeega.discovery.app.currentView);
-			if(zeega.discovery.app.currentView=="event") console.log("Range slider values",$("#range-slider").slider( "option", "values" ));
 			
 			console.log("final query",this.query);
 		},

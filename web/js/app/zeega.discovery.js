@@ -39,19 +39,20 @@ this.zeega.discovery = {
 	
 	init : function(){
 		// make item collection
+		
+		var _this=this,
+			Items = zeega.module("items");
+		
 		this.currentFilter=null;
-		
-		var Items = zeega.module("items");
-		
-		
 		this.resultsView = new Items.Collections.Views.Results();
 		this.eventMap ={};
 		this.initCollectionsDrawer();
-		
-		
 		this.startRouter();
-		var _this=this;
+		
 		$('#zeega-sort').change(function(){_this.parseSearchUI(); });
+		$('.collection-clear').click(function(){
+			_this.goToDatabase();
+		});
 		$('.universe-toggle span').click(function(){
 			$(this).parent().find('span').removeClass('selected');
 			$(this).addClass('selected');
@@ -146,8 +147,8 @@ this.zeega.discovery = {
 		
 		var hash ='';
 		if( !_.isUndefined(this.currentView)) hash += 'view_type=' + this.currentView + '&';
-		if( !_.isUndefined(obj.collection)) hash += 'collection=' + this.collection + '&';
-		if( !_.isUndefined(obj.collection_id)) hash += 'collection=' + this.collection_id + '&';
+		if( !_.isUndefined(obj.collection)) hash += 'collection=' + obj.collection + '&';
+		if( !_.isUndefined(obj.collection_title)) hash += 'collection_title=' + obj.collection_title + '&';
 		if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += 'q=' + obj.q + '&';
 		if( !_.isUndefined(obj.content) )  hash += 'content='+ obj.content + '&';
 		if( !_.isUndefined(obj.sort) )  hash += 'sort='+ obj.sort + '&';
@@ -188,7 +189,10 @@ this.zeega.discovery = {
 		obj.text = textQuery;
 		obj.view_type = this.currentView;
 
-	
+		
+		if($('#collection-title').data('id')>0) {
+			this.collection=$('#collection-title').data('id');
+		}
 		
 
 		obj.universe=$('.universe-toggle').find('.selected').data('universe');
@@ -251,13 +255,22 @@ this.zeega.discovery = {
 		else $('#zeega-sort').val("relevant");
 		
 		$('#select-wrap-text').text( $('#zeega-content-type option[value=\''+$('#zeega-content-type').val()+'\']').text() );
+
+		if(!_.isUndefined(obj.collection)){
+			$('.universe-toggle').hide();
+			$('#collection-title').html(obj.collection_title);
+			$('.collection-title-wrapper').show();
+		} else {
+			$('.universe-toggle').show();
+			$('.collection-title-wrapper').hide();
+		}
+
 	},
+
+
 	
 	search : function(obj){
-		
 		this.resultsView.search( obj,true );
-		
-		if (this.currentView == 'event') this.eventMap.load();
 	},
 	
 	switchViewTo : function( view ){
@@ -289,8 +302,54 @@ this.zeega.discovery = {
 		if(doSearch) this.search({ page:1});
 	},
 	
-	goToCollection: function (id){
-	
+	goToDatabase: function(){
+		var searchObj = {
+			page: 1,
+			universe: $('.universe-toggle').find('.selected').data('universe')
+		};
+
+		$('#collection-title').attr({
+				"data-id": -1
+		});
+
+		this.clearSearchFilters(true);
+		this.updateURLHash(searchObj);
+
+		$('.universe-toggle').show();
+		$('.collection-title-wrapper').hide();
+	},
+
+	goToCollection: function (model){
+
+		var searchObj;
+		console.log(model);
+		if( model.get('layer_type') === 'Dynamic' ){
+			searchObj={
+				q: "tag:"+ model.get('attributes').tags,
+				page: 1
+			};
+			this.updateSearchUI(searchObj);
+			this.search(searchObj);
+		} else {
+			searchObj = {
+				page: 1,
+				collection: model.id,
+				collection_title: model.get('title')
+			};
+
+			this.clearSearchFilters(false);
+			this.updateURLHash(searchObj);
+
+
+			$('.universe-toggle').hide();
+			$('#collection-title').html(model.get('title'));
+			$('#collection-title').attr({
+				"data-id": model.id
+			});
+			$('.collection-title-wrapper').show();
+			this.search(searchObj);
+		}
+
 	}
 
 }, Backbone.Events)

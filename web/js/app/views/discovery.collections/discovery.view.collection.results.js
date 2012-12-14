@@ -270,7 +270,9 @@
         },
     
         
-        getSearch : function(){ return this.collection.search },
+        getSearch : function(){
+            return this.collection.search;
+        },
         
         //Formats returned results number
         addCommas : function(nStr)
