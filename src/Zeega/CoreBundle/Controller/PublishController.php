@@ -59,7 +59,7 @@ class PublishController extends BaseController
             }
         }
 
-        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
+        return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
             'project'=>$project,
             'project_data' => $projectData,
         ));
@@ -70,7 +70,7 @@ class PublishController extends BaseController
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 
-        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
+        return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
             'project'=>$project,
             'project_data' => $projectData,
         ));
@@ -81,7 +81,7 @@ class PublishController extends BaseController
     {
         $projectData = $this->forward('ZeegaApiBundle:Items:getItemProject', array("id" => $id))->getContent();
         $project = new Project();
-        return $this->render('ZeegaCoreBundle:Player:player.html.twig', array(
+        return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
             'project'=>$project,
             'project_data'=>$projectData,
         ));
@@ -92,7 +92,7 @@ class PublishController extends BaseController
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
 		if(is_object($project)&&$project->getMediaType()=='project'){}
 		else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        return $this->render('ZeegaCoreBundle:Core:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
+        return $this->render('ZeegaCoreBundle:Publish:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
   	}
 }
 

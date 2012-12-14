@@ -126,7 +126,8 @@ this.zeegaPlayer = {
 			var Layer = zeega.module('layer');
 			var layerArray = [];
 			_.each( this.get('layers'), function( layerData ){
-				var layer = new Layer[layerData.type]( layerData, {player:true} );
+				console.log(layerData);
+				var layer = new Layer[layerData.media_type]( layerData, {player:true} );
 				layer.id = parseInt(layer.id);
 				layerArray.push( layer );
 			});
@@ -827,7 +828,7 @@ this.zeegaPlayer = {
 
 				"</div>"+
 
-				"<div class='player-zeega-icon player-overlay'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/<%= user_id %>' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
+				"<div class='player-zeega-icon player-overlay'><a href='"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+ "user/<%= typeof(user_id)!== 'undefined' ?  user_id : null %>' target='blank' class='zeega-user'><i class='zitem-zeega00 zitem-30 loaded'></i></a></div>"+
 
 				"<div id='preview-left' class='hidden preview-nav-arrow preview-nav'>"+
 					"<div class='arrow-background'></div>"+
@@ -992,7 +993,7 @@ this.zeegaPlayer = {
 			
 				"<div class='progress-head'>"+
 					"<h2 class='time' style='color:white'><%= title %></h2>"+
-					"<h3 class='estimate'>by <%= authors %></h3><br/>"+
+					"<h3 class='estimate'>by <%= typeof(authors)!== 'undefined' ?  authors : '' %></h3><br/>"+
 				"</div>"+
 				"<div class='progress progress-striped active progress-danger'>"+
 					"<div class='bar' style='width:0'></div>"+

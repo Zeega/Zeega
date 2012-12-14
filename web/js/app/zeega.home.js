@@ -31,7 +31,7 @@ this.zeega.home = {
 		var Home = zeega.home.module("home");
 		
 		
-		var projects = new Home.Projects.Collection($.parseJSON(projectsJSON).items[0].child_items);
+		var projects = new Home.Projects.Collection($.parseJSON(projectsJSON).items);
 	
 		
 

@@ -104,6 +104,7 @@ class ParserFacebookSet extends ParserAbstract
         $collection->setMediaCreatorRealname($albumData['from']['name']);
 		$collection->setMediaDateCreated($albumData['created_time']);
 		$collection->setThumbnailUrl($coverData['picture']);
+		$collection->setArchive('Facebook');
 		$itemCount = 0;
 
 		foreach($photoData['data'] as $photoData){
