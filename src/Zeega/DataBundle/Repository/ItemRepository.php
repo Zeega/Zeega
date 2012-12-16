@@ -146,7 +146,7 @@ class ItemRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i,u.display_name')
+        $qb->select('i,u.display_name,u.username')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
             ->orderBy('i.id','DESC')
@@ -154,9 +154,11 @@ class ItemRepository extends EntityRepository
        		->setParameter('id', $id);
         
     	$res = $qb->getQuery()->getArrayResult();
-    	if(isset($res) && count($res) > 0)
-    	{
-    		return $res[0][0];
+    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 3 ) {
+            $result = $res[0][0];
+            $result["display_name"] = $res[0]["display_name"];
+            $result["username"] = $res[0]["username"];
+            return $result;
     	}
     	return null;
     }
