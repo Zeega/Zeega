@@ -20,9 +20,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyBaseControlle
 class BaseController extends SymfonyBaseController
 {
     public function getUser($apiKey = null) {
+        // get the logged user
         $user = parent::getUser();
 
         if ( null === $user ) {
+            // if the logged user doesn't exist, check if there's an api key
             if ( null !== $apiKey ) {
                 $em = $this->getDoctrine()->getEntityManager();
                 $user = $em->getRepository("ZeegaDataBundle:User")->findOneBy( array("api_key" => $apiKey) );
