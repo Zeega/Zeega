@@ -385,7 +385,10 @@ class ItemsController extends ApiBaseController
     public function putItemsAction($itemId)
     {
         try {
-             // authorization
+            if ( !isset($itemId) || !is_numeric($itemId) ) {
+                return parent::getStatusResponse(422, "The item id parameter is mandatory and must be an integer");
+            }    
+            // authorization
             $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
             $user = $this->getUser($apiKey);
             if ( !isset($user) ) {
@@ -393,25 +396,27 @@ class ItemsController extends ApiBaseController
             }
 
             $em = $this->getDoctrine()->getEntityManager();
-            $request = $this->getRequest();
-            $requestData = $this->getRequest()->request;        
-            $user = $this->get('security.context')->getToken()->getUser();
-            $itemService = $this->get('zeega.item');
-            $item = $itemService->parseItem($requestData->all(), $user);
-            
-            if ( !isset($item) ) {
-                return parent::getStatusResponse( 400, "The item with the id $itemId does not exist" );
-            }
+            $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+            if (!$item) {
+                return parent::getStatusResponse( 400, "The child item with the id $itemId does not exist" );
+            }  
 
+            $requestData = $this->getRequest()->request;        
+            $itemService = $this->get('zeega.item');
+            $item = $itemService->parseItem($requestData->all(), $user, $item);
+            
             if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
                 $em->persist($item);
                 $em->flush();
-                $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
+                $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
+                $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array(
+                    "item" => $item,
+                    "editable" => $editable));
+
+                return new Response($itemView);
             } else {
                 return parent::getStatusResponse(403);
             }
-            
-            return new Response($itemView);
         } catch ( \BadFunctionCallException $e ) {
             return parent::getStatusResponse(422, $e->getMessage());
         } catch ( \Exception $e ) {
