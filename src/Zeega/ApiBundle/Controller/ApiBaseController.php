@@ -53,6 +53,6 @@ class ApiBaseController extends BaseController
             $responseContent = array("code" => $statusCode, "message" => $message);    
         }
         
-        return new Response( json_encode($responseContent) );
+        return new Response( json_encode($responseContent) , $statusCode );
     }
 }
