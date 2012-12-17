@@ -14,7 +14,7 @@
 {% macro show(item,user_is_admin,user,load_children) %}    {# Item rendering macro/function #}
     {% if item is not null %}
     {
-        "id":{{ item.id | default(null) | json_encode | raw }},
+        "id":{{ item.id | default("null") }},
         "user_id": {{ item.user_id | default("") | json_encode | raw }},
         "username": {{ item.username | default("") | json_encode | raw }},
         "display_name":{{ item.display_name | default("") | json_encode | raw }},
