@@ -32,6 +32,8 @@ class BaseController extends SymfonyBaseController
                     return $user;
                 }
             }
+        } else {
+            return $user;
         }
 
         return null;
