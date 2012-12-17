@@ -148,20 +148,25 @@ class ItemsController extends ApiBaseController
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);
     }
 
-    // get_collection_items GET /api/collections/{id}/items.{_format}
     public function getItemItemsAction($id)
     {
-        $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
+        try {
+            if ( !isset($id) || !is_numeric($id) ) {
+                return parent::getStatusResponse( 422, "The id parameter is mandatory and must be an integer" );
+            }
 
-        if(null !== $item) {
-            $query = $this->getRequest()->query->all();
-        
+            $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
+
+            if ( !isset($item) ) {
+                return parent::getStatusResponse( 400, "The item with the id $id does not exist" );
+            }
+
+            $query = $this->getRequest()->query->all();        
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
-
                 if(isset($itemAttributes["tags"])) {
                     if(is_array($itemAttributes["tags"])) {
-                        $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
+                        $query["tags"] = implode(" AND ", $itemAttributes["tags"]);
                     } else {
                         $query["tags"] = $itemAttributes["tags"];
                     }
@@ -171,23 +176,35 @@ class ItemsController extends ApiBaseController
             }
 
             return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query); 
+        } catch ( \BadFunctionCallException $e ) {
+            return parent::getStatusResponse( 422, $e->getMessage() );
+        } catch (\Exception $e) {
+            return parent::getStatusResponse( 500, $e->getMessage() );
         }
-
-        return new Response($this->renderView('ZeegaApiBundle:Items:show.json.twig'));
     }
 
-    // delete_collection   DELETE /api/items/{collection_id}.{_format}
     public function deleteItemAction($item_id)
     {
-        // TO-DO - error handling; missing item, etc
-        $em = $this->getDoctrine()->getEntityManager();
-        $item = $em->getRepository('ZeegaDataBundle:Item')->find($item_id);
-        $item->setEnabled(false);
-        $item->setDateUpdated(new \DateTime("now"));
-        $em->flush();
-        $itemView = $this->renderView('ZeegaApiBundle:Items:delete.json.twig', array('item_id' => $item_id, 'status' => "Success"));
-        
-        return new Response($itemView);
+        try {
+            // parameter validation
+            if ( !isset($itemId) || !is_numeric($itemId) ) {
+                return parent::getStatusResponse( 422, "The item id parameter is mandatory and must be an integer" );
+            }
+            $em = $this->getDoctrine()->getEntityManager();
+            $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+            if ( !isset($item) ) {
+                return parent::getStatusResponse( 400, "The item with the id $itemId does not exist" );
+            }
+            $item->setEnabled(false);
+            $item->setDateUpdated( new \DateTime("now") );
+            $em->flush();
+
+            return parent::getStatusResponse( 200 );
+        } catch ( \BadFunctionCallException $e ) {
+            return parent::getStatusResponse( 422, $e->getMessage() );
+        } catch (\Exception $e) {
+            return parent::getStatusResponse( 500, $e->getMessage() );
+        }
     }
 
     /**
@@ -195,31 +212,32 @@ class ItemsController extends ApiBaseController
      *
      * @return Array|response
      */    
-    public function getItemItemAction($itemId, $childItemId)
+    public function deleteItemItemAction($itemId, $childItemId)
     {
         try {
             // parameter validation
             if ( !isset($itemId) || !is_numeric($itemId) ) {
-                return parent::getErrorResponse(422, "The item id parameter is mandatory and has to be an integer");
+                return parent::getStatusResponse(422, "The item id parameter is mandatory and must be an integer");
             }        
-            if ( !isset($itemId) || !is_numeric($childItemId) ) {
-                return parent::getErrorResponse(422, "The child item id parameter is mandatory and has to be an integer");
-            }
+            if ( !isset($childItemId) || !is_numeric($childItemId) ) {
+                return parent::getStatusResponse(422, "The child item id parameter is mandatory and must be an integer");
+            }            
             // get the item
             $em = $this->getDoctrine()->getEntityManager();
             $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $itemId );
 
             if ( !isset($item) ) {
-                return parent::getErrorResponse(400, "The item with the id $item does not exist");
-            }
+                return parent::getStatusResponse(400, "The item with the id $itemId does not exist");
+            }            
             // authorization
             $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
             $user = $this->getUser($apiKey);
+            
             if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
                 // get the child item
                 $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
                 if ( !isset($childItem) ) {
-                    return parent::getErrorResponse(400, "The child item with the id $childItem does not exist");
+                    return parent::getStatusResponse(400, "The child item with the id $childItemId does not exist");
                 }
                 // remove the item from the collection and render the response
                 $item->getChildItems()->removeElement($childItem);
@@ -230,12 +248,13 @@ class ItemsController extends ApiBaseController
                 
                 return new Response($itemView);
             } else {
-                return parent::getErrorResponse(403);
+            
+                return parent::getStatusResponse(403);
             }
         } catch ( \BadFunctionCallException $e ) {
-            return parent::getErrorResponse(422, $e->getMessage());
+            return parent::getStatusResponse(422, $e->getMessage());
         } catch (\Exception $e) {
-            return parent::getErrorResponse(500, $e->getMessage());
+            return parent::getStatusResponse(500, $e->getMessage());
         } 
     }
 
