@@ -478,7 +478,6 @@ class ItemsController extends ApiBaseController
 
                     $item->setDateUpdated(new \DateTime("now"));
                     $item->setChildItemsCount($item->getChildItems()->count() + count($newItems));
-
                     $em->persist($item);
                     $em->flush();
                 }
@@ -490,10 +489,9 @@ class ItemsController extends ApiBaseController
                             $item->getChildItems()->removeElement($childItem);
                         }
                     }
-                    $item->setChildItemsCount($item->getChildItems()->count());
-            
+                    $item->setChildItemsCount($item->getChildItems()->count());            
                     $item->setDateUpdated(new \DateTime("now"));
-            
+                    $em->persist($item);
                     $em->flush();
                 }
             }
