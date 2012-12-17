@@ -17,13 +17,16 @@ use Zeega\CoreBundle\Controller\BaseController;
 
 class ApiBaseController extends BaseController
 {
-    protected function getErrorResponse($errorCode, $errorMessage = null)
+    protected function getStatusResponse($statusCode, $statusMessage = null)
     {
-        if ( null === $errorCode ) {
-            throw new \BadFunctionCallException('The errorCode parameter cannot be null');
+        if ( null === $statusCode ) {
+            throw new \BadFunctionCallException('The statusCode parameter cannot be null');
         }
         
-        switch ( $errorCode ) {
+        switch ( $statusCode ) {
+            case 200:   // bad request
+                $message = "Success";
+                break;            
             case 400:   // bad request
                 $message = "The request could not be understood by the server due to malformed syntax.";
                 break;
@@ -44,10 +47,10 @@ class ApiBaseController extends BaseController
                 break;
         }
 
-        if ( null !== $errorMessage) {
-            $responseContent = array("code" => $errorCode, "message" => $errorMessage);    
+        if ( null !== $statusMessage) {
+            $responseContent = array("code" => $statusCode, "message" => $statusMessage);    
         } else {
-            $responseContent = array("code" => $errorCode, "message" => $message);    
+            $responseContent = array("code" => $statusCode, "message" => $message);    
         }
         
         return new Response( json_encode($responseContent) );
