@@ -91,61 +91,70 @@ class ItemsController extends ApiBaseController
         return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);         
     }
     
-    // get_collection GET    /api/item/{id}.{_format}
     public function getItemAction($id)
     {
-        $queryParser = $this->get('zeega_query_parser');
-        $query = $queryParser->parseRequest($this->getRequest()->query);
-        $recursiveResults = $query["result_type"] == "recursive" ? true : false;
+        try {
+            $queryParser = $this->get("zeega_query_parser");
+            $query = $queryParser->parseRequest( $this->getRequest()->query );
+            $recursiveResults = $query["result_type"] == "recursive" ? true : false;
 
-        $userIsAdmin = $this->get('security.context')->isGranted('ROLE_ADMIN');
-        $userIsAdmin = (isset($userIsAdmin) && (strtolower($userIsAdmin) === "true" || $userIsAdmin === true)) ? true : false;
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        if(isset($query["data_source"]) && $query["data_source"] == "db") {
-            $em = $this->getDoctrine()->getEntityManager();
-            $parentItem = $em->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
-            if(true === $recursiveResults) {
-                $query = $this->getRequest()->query->all();
-                $query["collection"] = $id;
-                $query = $queryParser->parseRequest($query);
-                $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
-                $parentItem["child_items"] = $queryResults;        
-            }
-        } else {
-            $solr = $this->get('zeega_solr');
-
-            $query = $this->getRequest()->query->all();
-            $query["id"] = $id;
-            $query = $queryParser->parseRequest($query);
-            $queryResults = $solr->search($query);
-            if(isset($queryResults) && count($queryResults["items"]) > 0) {
-                $parentItem = $queryResults["items"][0];
+            if( isset($query["data_source"]) && $query["data_source"] == "db" ) {
+                $em = $this->getDoctrine()->getEntityManager();
+                $parentItem = $em->getRepository("ZeegaDataBundle:Item")->findOneByIdWithUser($id);
+                if ( true === $recursiveResults ) {
+                    $query = $this->getRequest()->query->all();
+                    $query["collection"] = $id;
+                    $query = $queryParser->parseRequest($query);
+                    $queryResults = $em->getRepository('ZeegaDataBundle:Item')->searchCollectionItems($query);
+                    $parentItem["child_items"] = $queryResults;
+                }
             } else {
-                $parentItem = null;
-            }
-            if(true === $recursiveResults) {
+                $solr = $this->get("zeega_solr");
+
                 $query = $this->getRequest()->query->all();
-                $query["collection"] = $id;
+                $query["id"] = $id;
                 $query = $queryParser->parseRequest($query);
                 $queryResults = $solr->search($query);
-
-                $parentItem["child_items"] = $queryResults["items"];        
+                if( isset($queryResults) && count($queryResults["items"]) > 0 ) {
+                    $parentItem = $queryResults["items"][0];
+                } else {
+                    $parentItem = null;
+                }
+                if ( true === $recursiveResults ) {
+                    $query = $this->getRequest()->query->all();
+                    $query["collection"] = $id;
+                    $query = $queryParser->parseRequest($query);
+                    $queryResults = $solr->search($query);
+                    $parentItem["child_items"] = $queryResults["items"];
+                }
             }
+
+            $user = $this->getUser();
+            $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
+            $itemView = $this->renderView( "ZeegaApiBundle:Items:show.json.twig", array(
+                "item" => $parentItem, 
+                "editable" => false ) );
+
+            return new Response($itemView);
+        } catch ( \BadFunctionCallException $e ) {
+            return parent::getStatusResponse( 422, $e->getMessage() );
+        } catch (\Exception $e) {
+            return parent::getStatusResponse( 500, $e->getMessage() );
         }
-        $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $parentItem, 'user' => $user, 'user_is_admin' => $userIsAdmin, 'load_children' => true));
-
-
-        return new Response($itemView);
     }
     
-    //  get_collections GET    /api/items.{_format}
     public function getItemsAction()
     {
-        $query = $this->getRequest()->query->all();
-        $query["sort"] = "date-desc";
-        
-        return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);
+        try {
+            $query = $this->getRequest()->query->all();
+            $query["sort"] = "date-desc";
+            
+            return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query);
+        } catch ( \BadFunctionCallException $e ) {
+            return parent::getStatusResponse( 422, $e->getMessage() );
+        } catch (\Exception $e) {
+            return parent::getStatusResponse( 500, $e->getMessage() );
+        }
     }
 
     public function getItemItemsAction($id)
