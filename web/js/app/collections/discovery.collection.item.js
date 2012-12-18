@@ -21,7 +21,6 @@
         },
         previewItem : function(itemID)
         {
-            
             var viewer = new Items.Views.Viewer({collection:this,start:itemID});
             $("body").append(viewer.render().el);
             viewer.renderItemView();
@@ -45,8 +44,7 @@
         }
     });
     
-
-    Items.Collections.MyCollections = Backbone.Collection.extend({
+    Items.Collections.MyCollections = Items.Collections.Static.extend({
         mode: Items.Model,
         url: zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300",
         comparator: function(model){

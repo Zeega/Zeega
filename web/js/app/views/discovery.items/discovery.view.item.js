@@ -578,6 +578,7 @@
         
         preview :function()
         {
+            console.log('triggering preview item');
             this.model.trigger("preview_item",this.model.id);
             
             return false;
