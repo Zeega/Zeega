@@ -38,8 +38,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 			'keypress input' : 'onAdvanceKeypress'
 		},
 
-		linkToNewFrame : function() {
-			if(this.busy != true) {
+		linkToNewFrame : function()
+		{
+			if(this.busy != true)
+			{
 				var _this = this;
 				this.busy = true;
 
@@ -64,7 +66,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		linkToExistingFrame : function() {
+		linkToExistingFrame : function()
+		{
 			if(this.busy != true)
 			{
 				var Modal = zeega.module('modal');
@@ -77,20 +80,24 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		showConnectionConfirm : function() {
+		showConnectionConfirm : function()
+		{
+			console.log('%%		show connection confirm')
 			this.hold.off('sync', this.showConnectionConfirm);
 			this.$el.find('.connection-confirm').show();
 		},
 
-		hideConnectionConfirm : function() {
-			this.$el.find('.connection-confirm').hide();
+		hideConnectionConfirm : function()
+		{
+			this.$el.find('.connection-confirm').hide()
 		},
 		
 		/*
 			make a connection to a new sequence
 		*/
 
-		confirmConnection : function(e) {
+		confirmConnection : function(e)
+		{
 			var _this = this;
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : [this.hold.id] });
@@ -105,13 +112,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		onSequenceSave : function( sequence ) {
+		onSequenceSave : function( sequence )
+		{
 			sequence.off('sync', this.onSequenceSave );
 			sequence.onSaveNew();
 			var info = {
 				to_sequence : sequence.id,
 				to_frame : sequence.get('frames')[0]
-			};
+			}
 			this.hold.update(info);
 			this.hold.trigger('update_link');
 			zeega.app.project.sequences.add(sequence);
@@ -119,7 +127,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.hold = null;
 		},
 
-		connectToSequenceFrame : function( sequenceID, frameID ) {
+		connectToSequenceFrame : function( sequenceID, frameID )
+		{
 			var attr = {
 				from_sequence : zeega.app.currentSequence.id,
 				from_frame : this.model.id,
@@ -128,7 +137,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 			};
 			var hold = this.model.addLayerByType('Link', attr );
 			
-			zeega.app.project.frames.get(attr.to_frame).layers.push(hold);
+			var toFrame = zeega.app.project.frames.get(attr.to_frame);
+			toFrame.layers.push(hold);
+			
+			hold.on('sync', function(){ toFrame.updateLayerOrder(); });
 			this.busy = false;
 			this.$el.find('#link-new-sequence,#link-existing-sequence').removeClass('disabled');
 			this.model.off('connectToSequenceFrame');
@@ -136,7 +148,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		// advance stuffs
 
-		selectAdvanceClick : function() {
+		selectAdvanceClick : function()
+		{
 			this.$el.find('#advance-manual').removeClass('disabled');
 			this.$el.find('#advance-timed').addClass('disabled');
 			this.$el.find('input').addClass('disabled').val('');
@@ -145,14 +158,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 		
-		selectAdvanceTime : function() {
+		selectAdvanceTime : function()
+		{
 			this.$el.find('#advance-manual').addClass('disabled');
 			this.$el.find('#advance-timed').removeClass('disabled');
 			this.$el.find('input').removeClass('disabled').focus();
 			return false;
 		},
 		
-		onAdvanceKeypress : function(e) {
+		onAdvanceKeypress : function(e)
+		{
 			if(e.which == 13)
 			{
 				this.saveAdvance( $(e.target).val() );
@@ -161,7 +176,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			}
 		},
 		
-		saveAdvance : function( time ) {
+		saveAdvance : function( time )
+		{
 			//make sure the value is an actual number before saving and that it's not saving dupe data
 			var time = parseFloat(time*1000);
 			if(_.isNumber(time) && this.model.get('attr').advance != time ) this.model.update({ 'advance' : time });
@@ -225,7 +241,9 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.model.layers.on('remove', this.onRemoveLayer, this );
 		},
 		
-		render : function() {
+		render : function()
+		{
+			console.log('workspace render')
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.setElement( $(this.target) );
@@ -235,10 +253,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			})
 
 			_.each( layersToRender, function(layer,i){
-				if (layer.visual) {
-					layer.visual.render().$el.css('z-index',i);
-					_this.$el.append( layer.visual.render().el );
-				}
+				layer.visual.render().$el.css('z-index',i)
+				_this.$el.append( layer.visual.render().el );
 			});
 
 			this.onLayerEnter();
@@ -266,38 +282,29 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		unrender : function()
 		{
-			this.model.layers.each(function(layer){
-				if ( layer.visual ) {
-					layer.visual.private_onLayerExit();
-				}
-			});
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit() })
 		},
 		
 		onLayerEnter : function()
 		{
-			this.model.layers.each(function(layer) {
-				if (layer.visual) {
-					layer.visual.private_onLayerEnter();
-				}
-			});
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerEnter() })
 		},
 		
 		onAddLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model && layer.visual ) {
+			if(zeega.app.currentFrame == this.model)
+			{
 				this.$el.append( layer.visual.render().el );
-				layer.visual.render().$el.css('z-index', this.model.layers.length);
+				layer.visual.render().$el.css('z-index', this.model.layers.length)
 				layer.visual.private_onLayerEnter();
 			}
 		},
 
 		onRemoveLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model && layer.visual ) {
-				layer.visual.private_onLayerExit();
-			}
+			if(zeega.app.currentFrame == this.model) layer.visual.private_onLayerExit()
 		}
-	});
+	})
 	
 	//move this elsewhere to another file ?
 	Frame.Views.EditorLayerList = Backbone.View.extend({
@@ -317,11 +324,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.setElement( $(this.target) );
 			this.$el.html('<ul class="list">');
 			this.model.layers.each(function(layer){
-				if( !_.isUndefined(layer) && layer.get('type') != 'Link' && layer.controls ) {
+				if( !_.isUndefined(layer) && layer.get('type') != 'Link' )
+				{
 					_this.$('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
-			});
+			})
 			this.makeSortable();
 			return this;
 		},
@@ -336,15 +344,13 @@ the frame's layers. It also includes common frame functions like adding sequence
 				tolerance: 'pointer',
 				update : function()
 				{
-					var linkOrder = _.map( $('#zeega-link-list .list>li'), function( layer ) {
-						return $(layer).data('id');
-					});
-					var layerOrder = _.map( $('#zeega-layer-list .list>li'), function( layer ) {
-						return $(layer).data('id');
-					});
-
+					var linkOrder = _.map( $('#zeega-link-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
+					var layerOrder = _.map( $('#zeega-layer-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
 					var order = linkOrder.concat(layerOrder).reverse();
-					_this.model.sortLayers( _.uniq( order ) );
+					
+					console.log('----------- resort', linkOrder, layerOrder, order);
+
+					_this.model.sortLayers( order );
 				}
 			});
 			this.$el.find('.list').disableSelection();
@@ -352,7 +358,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		onAddLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model && layer.get('type') != 'Link' && layer.controls) {
+			if(zeega.app.currentFrame == this.model && layer.get('type') != 'Link')
+			{
 				this.$el.find('.list').prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			}
@@ -362,7 +369,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		onRemoveLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model && layer.controls) {
+			if(zeega.app.currentFrame == this.model)
+			{
 				layer.controls.private_onLayerExit();
 				layer.controls.remove();
 			}
@@ -379,20 +387,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 						$('#layer-'+layer.id).removeClass('layer-open');
 					}
 				}
-			});
+			})
 		},
 		
 		removeFromEditor : function()
 		{
-			this.model.layers.each(function(layer) {
-				if ( layer.controls ) {
-					layer.controls.private_onLayerExit();
-				}
-			});
+			this.model.layers.each(function(layer){ layer.controls.private_onLayerExit() });
 			this.$el.empty();
 		}
 		
-	});
+	})
 	
 	Frame.Views.EditorLinkLayerList = Backbone.View.extend({
 		
@@ -410,11 +414,12 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.setElement( $(this.target) );
 			this.$el.html('<ul class="list">');
 			this.model.layers.each(function(layer){
-				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) && layer.controls ) {
+				if( !_.isUndefined(layer) && layer.get('type') == 'Link' && layer.get('attr').from_frame == _this.model.id && !_.isUndefined(layer.get('attr').to_frame) )
+				{
 					_this.$el.find('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
-			});
+			})
 			this.makeSortable();
 			return this;
 		},
@@ -429,16 +434,15 @@ the frame's layers. It also includes common frame functions like adding sequence
 				containment: 'parent',
 				cursorAt : {top:1,left:1},
 				tolerance: 'pointer',
-				update : function() {
-					_this.model.updateLayerOrder();
-				}
+				update : function(){ _this.model.updateLayerOrder() }
 			});
 			this.$el.find('.list').disableSelection();
 		},
 		
 		onAddLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model && layer.get('type') == 'Link' && layer.controls ) {
+			if(zeega.app.currentFrame == this.model && layer.get('type') == 'Link')
+			{
 				this.$el.find('.list').prepend( layer.controls.renderControls().el );
 				layer.controls.delegateEvents();
 			}

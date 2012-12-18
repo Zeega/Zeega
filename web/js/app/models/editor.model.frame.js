@@ -2,10 +2,19 @@
 
 	Frame.LayerCollection = Backbone.Collection.extend({
 
-		comparator : function( layer ) {
+		initialize: function() {
+			this.on('add', this.onAdd, this);
+		},
+
+		comparator: function( layer ) {
 			return layer.layerIndex;
+		},
+
+		onAdd: function( layer ) {
+			layer.layerIndex = this.length;
 		}
-	})
+	
+	});
 
 	Frame.Model = Backbone.Model.extend({
 		
@@ -28,11 +37,8 @@
 	
 		initialize : function()
 		{
-			if( this.get('layers') ) this.set({ 'layers' : _.map(this.get('layers'), function(layer) {
-					return parseInt(layer, 10);
-				})
-			});
-			if( this.get('thumbnail_url') === "") this.set('thumbnail_url',this.defaults.thumbnail_url);
+			if( this.get('layers') ) this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer) }) });
+			if(this.get('thumbnail_url')=='') this.set('thumbnail_url',this.defaults.thumbnail_url)
 			
 			//this is the function that only calls updateThumb once after n miliseconds
 			this.updateFrameThumb = _.debounce( this.updateThumb, 2000 );
@@ -43,12 +49,33 @@
 			must be called after the model is created and after the project is fully loaded/parsed
 		*/
 
-		complete : function() {
+		complete : function()
+		{
 			if( !this.get('layers') ) this.set({ layers:[] });
-			var layerArray = this.get('layers').map(function(layerID) {
-				return zeega.app.project.layers.get(layerID);
+			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID); });
+
+			var brokenLayers = [];
+			//validate link layers
+			_.each(layerArray, function(layer){
+				if(!_.isUndefined(layer) && layer.get('type') == 'Link')
+				{
+						console.log('link layer broken', layer, layer.get('attr').to_frame,layer.get('attr').from_frame);
+					if( _.isNull(layer.get('attr').to_frame) || _.isNull(layer.get('attr').from_frame) || !zeega.app.project.frames.get(layer.get('attr').to_frame) || !zeega.app.project.frames.get(layer.get('attr').from_frame) )
+					{
+						console.log('link layer broken', layerArray, layer);
+						brokenLayers.push(layer);
+						//layer.save({type:'Ghost'});
+					}
+				}
 			});
+
 			this.layers = new Frame.LayerCollection( layerArray );
+
+			if( brokenLayers.length )
+			{
+				this.layers.remove(brokenLayers);
+				this.updateLayerOrder();
+			}
 			this.layers.on('add', this.updateLayerOrder, this);
 			this.layers.on('remove', this.updateLayerOrder, this);
 
@@ -71,15 +98,14 @@
 			updates the layer order when a layer is added, removed, or moved
 		*/
 
-		updateLayerOrder : function() {
-			var layerOrder = this.layers.map(function( layer ) {
-				return parseInt( layer.id, 10 );
+		updateLayerOrder : function()
+		{
+			var layerOrder = this.layers.map(function(layer){
+				return parseInt(layer.id,10);
 			});
-			layerOrder = _.compact( layerOrder );
-			if(layerOrder.length === 0) {
-				layerOrder = [false];
-			}
 
+			layerOrder = _.compact( layerOrder );
+			if(layerOrder.length === 0) layerOrder = [false];
 			this.save('layers', layerOrder);
 			this.updateThumb();
 		},
@@ -88,13 +114,23 @@
 			relies on the frame actually being rendered in the dom to work
 		*/
 
-		sortLayers : function( layerIDArray ) {
+		sortLayers : function( layerIDArray )
+		{
 			var _this = this;
-			_.each( layerIDArray, function(layerID, i){
+			//remove layers not referenced from the collection
+			var brokenLayerModelArray = this.layers.map(function(layer){
+				if( !_.contains(layerIDArray,layer.id) ) return layer;
+				return false;
+			});
+
+			this.layers.remove( _.compact(brokenLayerModelArray),{silent:true});
+
+			_.each(layerIDArray, function(layerID, i){
 				var layer = _this.layers.get(layerID);
 				$('#layer-visual-'+ layer.id).css('z-index', i);
 				layer.layerIndex = i;
 			});
+
 			this.layers.sort();
 			this.updateLayerOrder();
 		},
@@ -103,7 +139,8 @@
 			creates a new layer from an item model and adds it to the frame
 		*/
 
-		addItemLayer : function( itemModel ) {
+		addItemLayer : function( itemModel )
+		{
 			var _this = this;
 			var Layer = zeega.module('layer');
 			// make a new layer // this could be more elegant // shouldnt' dump attributes into model!
@@ -117,7 +154,8 @@
 			return newLayer;
 		},
 
-		onFirstLayerSave : function( layer ) {
+		onFirstLayerSave : function( layer )
+		{
 			zeega.app.project.layers.add( layer );
 			this.layers.push( layer );
 			layer.off('sync',this.onFirstLayerSave);
@@ -145,7 +183,11 @@
 		onNewLayerSave : function( layer )
 		{
 			layer.off('sync', this.onNewLayerSave);
+
 			this.layers.push( layer );
+			
+			console.log('======= save new layer', layer, this.layers );
+
 			zeega.app.project.layers.add( layer );
 		},
 
@@ -196,6 +238,7 @@
 					{
 						_this.set({thumbnail_url:e.data});
 						_this.save();
+						//console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
 					}
