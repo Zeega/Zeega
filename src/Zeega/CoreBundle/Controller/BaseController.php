@@ -50,6 +50,19 @@ class BaseController extends SymfonyBaseController
         return false;
     }
 
+    protected function isUserQuery($query, $user)
+    {
+        if( null !== $user && null !== $query) {
+            if ( isset($query["user"]) ) {
+                if( ($query["user"] == -1) || (($query["user"] == $user->getId()))) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
     protected function isInRole($role, $user = null)
     {
         if ( null === $role ) {
