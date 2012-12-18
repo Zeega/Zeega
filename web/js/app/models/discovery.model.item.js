@@ -20,7 +20,14 @@
             }
         },
         url : function(){
-            var url = zeega.discovery.app.apiLocation + "api/items/"+this.id;
+            var url;
+
+            if(_.isUndefined(this.id)){
+                url = zeega.discovery.app.apiLocation + "api/items";
+            } else {
+                url = zeega.discovery.app.apiLocation + "api/items/"+this.id;
+            }
+
             return url;
         }
     });
