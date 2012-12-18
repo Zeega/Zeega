@@ -751,8 +751,8 @@
                     "<label for='collection-title' >Title</label>"+
                     "<input type='text' id='collection-title' class='twocolumn-field span6' value=''/>"+
                     
-                    "<label for='>tags'> class='>twocolumn-label'>Dynamic Query Tag</label>"+
-                    "<input name='>tags'> class='>tagsedit twocolumn-field span6' id='tag-input' value='' />"+
+                    "<label for='tags' class='twocolumn-label'>Dynamic Query Tag</label>"+
+                    "<input name='tags' class='tagsedit twocolumn-field span6' id='tag-input' value='' />"+
                     "<br>"+
                     
                     "<label for='collection-description' class='twocolumn-label'>Description</label>"+
