@@ -31,7 +31,13 @@
     Items.Collections.Dynamic=Items.Collections.Static.extend({
         type:"dynamic",
         url : function(){
-            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items";
+            var url;
+            if(!_.isUndefined(this.id)){
+                url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items";
+            } else {
+                url = zeega.discovery.app.apiLocation + "api/items";
+            }
+            
             return url;
         },
         parse : function(response){
