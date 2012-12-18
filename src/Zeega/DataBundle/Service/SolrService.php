@@ -68,7 +68,7 @@ class SolrService
         
         // tag query
         if(isset($query["tags"])) {
-            $queryString = self::appendQueryToQueryString($queryString, "tags_i:(".$query["tags"].")");
+            $queryString = self::appendQueryToQueryString($queryString, "tags:(".$query["tags"].")");
         }
 
         // return only the items that belong to a collection
@@ -107,7 +107,7 @@ class SolrService
         
         // return highly ranked tags for the query
         $facetComponent = $solrQuery->getFacetSet();               
-        $facetComponent->createFacetField('tags')->setField('tags_i')->setLimit(5)->setMinCount(1);
+        $facetComponent->createFacetField('tags')->setField('tags')->setLimit(5)->setMinCount(1);
 
         // run the query
         $resultset = $client->execute($solrQuery);

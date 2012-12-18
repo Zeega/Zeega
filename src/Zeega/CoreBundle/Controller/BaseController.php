@@ -19,6 +19,69 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyBaseControlle
  */
 class BaseController extends SymfonyBaseController
 {
+    public function getUser($apiKey = null) {
+        // get the logged user
+        $user = parent::getUser();
+
+        if ( null === $user ) {
+            // if the logged user doesn't exist, check if there's an api key
+            if ( null !== $apiKey ) {
+                $em = $this->getDoctrine()->getEntityManager();
+                $user = $em->getRepository("ZeegaDataBundle:User")->findOneBy( array("api_key" => $apiKey) );
+                if( null !== $user ) {
+                    return $user;
+                }
+            }
+        } else {
+            return $user;
+        }
+
+        return null;
+    }
+
+    protected function isItemOwner($item, $user)
+    {
+        if( null !== $user && null !== $item) {
+            if( intval($user->getId()) === intval($item->getUserId()) ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    protected function isInRole($role, $user = null)
+    {
+        if ( null === $role ) {
+            return false;
+        } 
+        if ( !is_string($role) ) {
+            throw new \BadFunctionCallException('The role parameter has to be a string');
+        }
+
+        if ( null === $user ) {
+            if ( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ) {
+                $loggedUserId = $this->container->get('security.context')->getToken()->getUser()->getId();                
+                if ( $this->container->get('security.context')->isGranted($role) ) {
+                    return true;
+                }
+            }
+        } else {
+            $userRoles = $user->getRoles();
+            foreach($userRoles as $userRole) {
+                if ( $userRole === $role ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    protected function isUserAdmin( $user = null )
+    {
+        return $this->isInRole( "ROLE_ADMIN", $user );
+    }
+
     /**
      * Checks the logged user id matches the userId parameters and throws a not authorized
      * exception if the user is not authorized to access the resource.

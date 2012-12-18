@@ -10,7 +10,7 @@ class ItemService
         $this->thumbnailService = $itemService;
     }
 
-    public function parseItem($itemArray, $user, $ingestor = null)
+    public function parseItem($itemArray, $user, $item = null, $ingestor = null)
     {
         if(!isset($item)) {
             $item = new Item();    
