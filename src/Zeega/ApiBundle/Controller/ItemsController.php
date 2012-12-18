@@ -35,7 +35,7 @@ class ItemsController extends ApiBaseController
             }
 
             $user = $this->getUser();
-            $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
+            $editable = $this->isUserAdmin($user) || $this->isUserQuery( $query, $user );
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array(
                 'items' => $results, 
                 'items_count' => $resultsCount, 
