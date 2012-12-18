@@ -599,9 +599,11 @@
                     "<a id='collection-list-thumb' href='#'><img class='collection-list-thumb' src='<%= thumbnail_url %>'/></a>"+
                     "<span class='collection-title'>  <%= title %></span>"+
                     "<span class='pull-right'>"+
-                        "<a href='#' class='view-collection-metadata'><i class='icon-pencil'></i></a>"+
-                        "<a href='#' class='view-collection'><i class='icon-map-marker'></i></a>"+
-                        "<a class='delete-collection' href='#'><i class='icon-trash icon-white'></i></a>"+
+                        
+                        "<a href='#' class='collection-options delete-collection' href='#'><i class='icon-trash icon-white'></i></a>"+
+                        "<a href='#' class='collection-options view-collection-metadata'><i class='icon-pencil icon-white'></i></a>"+
+                        "<a href='#' class='collection-options view-collection'><i style='background-position: -95px -120px;' class='icon-white'></i></a>"+
+
                     "</span>"+
                 "</div>"+
                 "<div class='layer-control-drawer collection'>"+
