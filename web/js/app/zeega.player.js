@@ -126,8 +126,7 @@ this.zeegaPlayer = {
 			var Layer = zeega.module('layer');
 			var layerArray = [];
 			_.each( this.get('layers'), function( layerData ){
-				console.log(layerData);
-				var layer = new Layer[layerData.media_type]( layerData, {player:true} );
+				var layer = new Layer[layerData.type]( layerData, {player:true} );
 				layer.id = parseInt(layer.id);
 				layerArray.push( layer );
 			});
