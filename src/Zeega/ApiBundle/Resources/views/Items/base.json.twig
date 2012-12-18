@@ -16,18 +16,62 @@
         "description":{{ item.description | default("") | json_encode | raw}},
         "text":{{ item.text | default("") | json_encode | raw}},
         "uri":{{ item.uri | default("") | json_encode | raw}},
-        "attribution_uri":{{ item.attribution_uri | default("") | json_encode | raw}},
-        "date_created":"{{ item.date_created | default(null) | date("Y-m-d H:i:s") }}",
-        "media_type":{{ item.media_type | default(null) | json_encode | raw }},
-        "layer_type":{{ item.layer_type | default(null) | json_encode | raw }},
+        {%- if item.attribution_uri is defined -%}
+            "attribution_uri":{{ item.attribution_uri | default("") | json_encode | raw}},
+        {%- else -%}
+            "attribution_uri":{{ item.getAttributionUri | default("") | json_encode | raw}},
+        {%- endif -%}
+        {%- if item.date_created is defined -%}
+            "date_created":"{{ item.date_created | default(null) | date("Y-m-d H:i:s") }}",
+        {%- else -%}
+            "date_created":"{{ item.getDateCreated | default(null) | date("Y-m-d H:i:s") }}",
+        {%- endif -%}
+        {%- if item.media_type is defined -%}
+            "media_type":{{ item.media_type | default(null) | json_encode | raw }},
+        {%- else -%}
+            "media_type":{{ item.getMediaType | default(null) | json_encode | raw }},
+        {%- endif -%}
+        {%- if item.layer_type is defined -%}
+            "layer_type":{{ item.layer_type | default(null) | json_encode | raw }},
+        {%- else -%}
+            "layer_type":{{ item.getLayerType | default(null) | json_encode | raw }},
+        {%- endif -%}                
         "archive":{{ item.archive | default(null) | json_encode | raw }},
-        "thumbnail_url":{{ item.thumbnail_url | default(null) | json_encode | raw}},
-        "media_geo_latitude":{{ item.media_geo_latitude | default(null) | json_encode | raw}},
-        "media_geo_longitude":{{ item.media_geo_longitude | default(null) | json_encode | raw}},
-        "media_date_created":{{ item.media_date_created | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
-        "media_creator_username":{{ item.media_creator_username | default(null) | json_encode | raw }},
-        "media_creator_realname":{{ item.media_creator_realname | default(null) | json_encode | raw }},
-        "child_items_count":{{ item.child_items_count | default(0) }},
+        {%- if item.thumbnail_url is defined -%}
+            "thumbnail_url":{{ item.thumbnail_url | default(null) | json_encode | raw}},
+        {%- else -%}
+            "thumbnail_url":{{ item.getThumbnailUrl | default(null) | json_encode | raw}},
+        {%- endif -%}                        
+        {%- if item.media_geo_latitude is defined -%}
+            "media_geo_latitude":{{ item.media_geo_latitude | default(null) | json_encode | raw}},
+        {%- else -%}
+            "media_geo_latitude":{{ item.getMediaGeoLatitude | default(null) | json_encode | raw}},
+        {%- endif -%}                        
+        {%- if item.media_geo_longitude is defined -%}
+            "media_geo_longitude":{{ item.media_geo_longitude | default(null) | json_encode | raw}},
+        {%- else -%}
+            "media_geo_longitude":{{ item.getMediaGeoLongitude | default(null) | json_encode | raw}},
+        {%- endif -%}                
+        {%- if item.media_date_created is defined -%}
+            "media_date_created":{{ item.media_date_created | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
+        {%- else -%}
+            "media_date_created":{{ item.getMediaDateCreated | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
+        {%- endif -%}
+        {%- if item.media_creator_username is defined -%}
+            "media_creator_username":{{ item.media_creator_username | default(null) | json_encode | raw }},
+        {%- else -%}
+            "media_creator_username":{{ item.getMediaCreatorUsername | default(null) | json_encode | raw }},
+        {%- endif -%}        
+        {%- if item.media_creator_realname is defined -%}
+            "media_creator_realname":{{ item.media_creator_realname | default(null) | json_encode | raw }},
+        {%- else -%}
+            "media_creator_realname":{{ item.getMediaCreatorRealname | default(null) | json_encode | raw }},
+        {%- endif -%}        
+        {%- if item.child_items_count is defined -%}
+            "child_items_count":{{ item.child_items_count | default(0) }},
+        {%- else -%}
+            "child_items_count":{{ item.getChildItemsCount | default(0) }},
+        {%- endif -%}                
         {%- if item.attributes is defined and item.attributes is solr_array -%}
             "attributes":{{ item.attributes[0] | default("") | unserialize_array | json_encode | raw}},
         {%- else -%}
