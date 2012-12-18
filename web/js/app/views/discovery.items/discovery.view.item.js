@@ -660,7 +660,12 @@
                 description:this.$("#collection-description").val(),
                 child_items:[],
                 new_items:[],
-                editable:true
+                editable:true,
+                uri: "default",
+                attribution_uri: "default",
+                archive: "Zeega",
+                media_type: "Collection",
+                layer_type: "Collection"
             });
             this.createCollection();
         },
@@ -732,7 +737,10 @@
                 },
                 child_items:[],
                 new_items:[],
-                editable:true
+                editable:true,
+                uri: "default",
+                attribution_uri: "default",
+                archive: "Zeega"
             });
             console.log(this.attr);
             this.createCollection();
