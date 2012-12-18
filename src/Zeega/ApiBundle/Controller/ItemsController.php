@@ -175,7 +175,7 @@ class ItemsController extends ApiBaseController
             $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
             $itemView = $this->renderView( "ZeegaApiBundle:Items:show.json.twig", array(
                 "item" => $parentItem, 
-                "editable" => false ) );
+                "editable" => $editable ) );
 
             return new Response($itemView);
         } catch ( \BadFunctionCallException $e ) {
