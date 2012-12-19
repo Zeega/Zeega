@@ -63,9 +63,11 @@
 		<a id="zeega-link" href="{{hostname}}{{directory}}{{projectId}}" target="_blank" ></a>
 		<div id="text">
 			<h1>{{project.getTitle()}}</h1>
-			{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
-			{% elseif project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>
-			{% endif %}
+			{% if author != '0' %}	
+				{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
+				{% elseif project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>
+				{% endif %}
+			{% endif %}	
 		</div>
 	</body>
 </html>

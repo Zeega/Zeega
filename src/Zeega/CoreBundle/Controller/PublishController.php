@@ -92,7 +92,11 @@ class PublishController extends BaseController
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
 		if(is_object($project)&&$project->getMediaType()=='project'){}
 		else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        return $this->render('ZeegaCoreBundle:Publish:embed.html.twig', array('project'=>$project, 'projectId'=>$id));
+
+        $request = $this->getRequest();
+        $author = $request->query->get('author');
+
+        return $this->render('ZeegaCoreBundle:Publish:embed.html.twig', array('project'=>$project, 'projectId'=>$id,'author'=>$author));
   	}
 }
 
