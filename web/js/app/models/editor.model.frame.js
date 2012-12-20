@@ -4,6 +4,7 @@
 
 		initialize: function() {
 			this.on('add', this.onAdd, this);
+
 		},
 
 		comparator: function( layer ) {
@@ -53,20 +54,21 @@
 		{
 			if( !this.get('layers') ) this.set({ layers:[] });
 			var layerArray = this.get('layers').map(function(layerID){ return zeega.app.project.layers.get(layerID); });
-
 			var brokenLayers = [];
 			//validate link layers
 			_.each(layerArray, function(layer){
 				if(!_.isUndefined(layer) && layer.get('type') == 'Link')
 				{
-						console.log('link layer broken', layer, layer.get('attr').to_frame,layer.get('attr').from_frame);
 					if( _.isNull(layer.get('attr').to_frame) || _.isNull(layer.get('attr').from_frame) || !zeega.app.project.frames.get(layer.get('attr').to_frame) || !zeega.app.project.frames.get(layer.get('attr').from_frame) )
 					{
-						console.log('link layer broken', layerArray, layer);
 						brokenLayers.push(layer);
 						//layer.save({type:'Ghost'});
 					}
 				}
+			});
+
+			_.each( layerArray, function( layer, i ) {
+				layer.layerIndex = i;
 			});
 
 			this.layers = new Frame.LayerCollection( layerArray );
@@ -98,14 +100,16 @@
 			updates the layer order when a layer is added, removed, or moved
 		*/
 
-		updateLayerOrder : function()
-		{
+		updateLayerOrder: function() {
+			this.layers.sort();
 			var layerOrder = this.layers.map(function(layer){
 				return parseInt(layer.id,10);
 			});
 
 			layerOrder = _.compact( layerOrder );
-			if(layerOrder.length === 0) layerOrder = [false];
+			if(layerOrder.length === 0) {
+				layerOrder = [false];
+			}
 			this.save('layers', layerOrder);
 			this.updateThumb();
 		},
@@ -186,8 +190,6 @@
 
 			this.layers.push( layer );
 			
-			console.log('======= save new layer', layer, this.layers );
-
 			zeega.app.project.layers.add( layer );
 		},
 
@@ -233,12 +235,10 @@
 				var worker = new Worker( sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+'/js/helpers/thumbworker.js');
 			
 				worker.addEventListener('message', function(e) {
-					//console.log(e)
 					if(e.data)
 					{
 						_this.set({thumbnail_url:e.data});
 						_this.save();
-						//console.log('thumbnail returned!!',e.data)
 					}else{
 						_this.trigger('thumbUpdateFail');
 					}
