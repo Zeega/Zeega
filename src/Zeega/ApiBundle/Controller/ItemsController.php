@@ -139,10 +139,11 @@ class ItemsController extends ApiBaseController
             $queryParser = $this->get("zeega_query_parser");
             $query = $queryParser->parseRequest( $this->getRequest()->query );
             $recursiveResults = $query["result_type"] == "recursive" ? true : false;
-
+            $item = null;
+                 
             if( isset($query["data_source"]) && $query["data_source"] == "db" ) {
                 $em = $this->getDoctrine()->getEntityManager();
-                $parentItem = $em->getRepository("ZeegaDataBundle:Item")->findOneByIdWithUser($id);
+                $item = $parentItem = $em->getRepository("ZeegaDataBundle:Item")->findOneByIdWithUser($id);
                 if ( true === $recursiveResults ) {
                     $query = $this->getRequest()->query->all();
                     $query["collection"] = $id;
@@ -158,7 +159,7 @@ class ItemsController extends ApiBaseController
                 $query = $queryParser->parseRequest($query);
                 $queryResults = $solr->search($query);
                 if( isset($queryResults) && count($queryResults["items"]) > 0 ) {
-                    $parentItem = $queryResults["items"][0];
+                    $item = $parentItem = $queryResults["items"][0];
                 } else {
                     $parentItem = null;
                 }
