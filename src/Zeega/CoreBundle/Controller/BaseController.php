@@ -41,9 +41,15 @@ class BaseController extends SymfonyBaseController
 
     protected function isItemOwner($item, $user)
     {
-        if( null !== $user && null !== $item) {
-            if( intval($user->getId()) === intval($item->getUserId()) ) {
-                return true;
+        if( null !== $user ) {
+            if( is_object($item) ) {
+                if ( intval($user->getId()) === intval($item->getUserId()) ) {
+                    return true;
+                }
+            } else if ( is_array($item) && isset($item["user_id"]) ) {
+                if (intval($user->getId()) === intval($item["user_id"]) ) {
+                    return true;
+                }
             }
         }
         
