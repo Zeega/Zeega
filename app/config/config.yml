@@ -15,7 +15,7 @@ framework:
     default_locale: %locale%
     trust_proxy_headers: false # change if the application is behind a proxy
     session:
-        cookie_domain: %session_domain%
+        cookie_domain: ~
         cookie_lifetime:       72000
         handler_id: session.handler.pdo
 
