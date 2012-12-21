@@ -82,7 +82,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		showConnectionConfirm : function()
 		{
-			console.log('%%		show connection confirm')
 			this.hold.off('sync', this.showConnectionConfirm);
 			this.$el.find('.connection-confirm').show();
 		},
@@ -243,7 +242,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 		
 		render : function()
 		{
-			console.log('workspace render')
 			//render each layer into the workspace // except links
 			var _this = this;
 			this.setElement( $(this.target) );
@@ -348,8 +346,6 @@ the frame's layers. It also includes common frame functions like adding sequence
 					var layerOrder = _.map( $('#zeega-layer-list li.layer-list-item'), function(layer){ return $(layer).data('id'); });
 					var order = linkOrder.concat(layerOrder).reverse();
 					
-					console.log('----------- resort', linkOrder, layerOrder, order);
-
 					_this.model.sortLayers( order );
 				}
 			});
