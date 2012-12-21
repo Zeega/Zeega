@@ -7,6 +7,11 @@
 
 {% macro show(item, editable) %}    {# Item rendering macro/function #}
     {% if item is not null %}
+        {% if item.mediatype is defined %}
+            {% set mediatype = item.mediatype %}
+        {% else %}
+            {% set mediatype = item.media_type %}
+        {% endif %}
     {
         "id":{{ item.id | default("null") }},
         "user_id": {{ item.user_id | default("") | json_encode | raw }},
@@ -14,7 +19,11 @@
         "display_name":{{ item.display_name | default("") | json_encode | raw }},
         "title":{{ item.title | default("") | json_encode | raw}},
         "description":{{ item.description | default("") | json_encode | raw}},
-        "text":{{ item.text | default("") | json_encode | raw}},
+        {% if item.text is defined and mediatype == 'project' %}
+            "text" : {{ item.text | raw}},
+        {% else %}
+            "text":{{ item.text | default("") | json_encode | raw}},
+        {%- endif -%}
         "uri":{{ item.uri | default("") | json_encode | raw}},
         {%- if item.attribution_uri is defined -%}
             "attribution_uri":{{ item.attribution_uri | default("") | json_encode | raw}},
