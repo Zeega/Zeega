@@ -235,7 +235,7 @@ class ItemsController extends ApiBaseController
         }
     }
 
-    public function deleteItemAction($item_id)
+    public function deleteItemAction($itemId)
     {
         try {
             // parameter validation
