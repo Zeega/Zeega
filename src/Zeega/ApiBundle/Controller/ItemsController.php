@@ -488,6 +488,8 @@ class ItemsController extends ApiBaseController
                         $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
                         if (isset($childItem))  {
                             $item->getChildItems()->removeElement($childItem);
+                            $childItem->setDateUpdated(new \DateTime("now"));
+                            $em->persist($childItem);
                         }
                     }
                     $item->setChildItemsCount($item->getChildItems()->count());            
