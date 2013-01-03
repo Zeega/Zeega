@@ -17,13 +17,14 @@ class ItemService
             
             // set the defaults
             $item->setDateCreated(new \DateTime("now"));
-            $item->setDateUpdated(new \DateTime("now"));
             $item->setChildItemsCount(0);
             $item->setEnabled(true);
             $item->setPublished(false);
 
             $item->setUser($user);
         }
+        
+        $item->setDateUpdated(new \DateTime("now"));       
         
         // parse the item        
         if(isset($ingestor)) {
