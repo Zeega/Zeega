@@ -12,7 +12,7 @@
         map : null,
         marker : null,
         
-        mapTileURL : 'http://{s}.tiles.mapbox.com/v2/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+        mapTileURL : 'http://{s}.tiles.mapbox.com/v2/zeega.map-h3fb4bgs/{z}/{x}/{y}.png',
         
         initialize : function()
         {
