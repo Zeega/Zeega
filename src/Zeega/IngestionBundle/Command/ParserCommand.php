@@ -51,21 +51,19 @@ class ParserCommand extends ContainerAwareCommand
         $url = $input->getOption('url');
         $userId = $input->getOption('user');
         $resultPath = $input->getOption('result_path');
-        
-        if(null === $url || null === $userId || null === $resultPath) {
+        if ( null === $url || null === $userId || null === $resultPath ) {
             $output->writeln('<info>Please run this operation with the --url, --user and --result_path options.</info>');
-        }
-        else {
+        } else {
             $loadChildren = true;
-
             $parser = $this->getContainer()->get('zeega_parser');
-            $parserResponse = $parser->load($url, $loadChildren, $userId);
-
-            if(isset($parserResponse["items"])) {
+            $parserResponse = $parser->load( $url, $loadChildren, $userId );
+            if ( isset($parserResponse["items"]) ) {
                 $filePath = "$resultPath.json";
-                $temaplate = $this->getContainer()->get('templating')->render("ZeegaApiBundle:Items:index.json.twig",array("items"=>$parserResponse["items"], "load_children" =>true));
-                file_put_contents($filePath, $temaplate);
-                $output->write($filePath);    
+                $temaplate = $this->getContainer()->get('templating')->render( "ZeegaApiBundle:Items:index.json.twig",array(
+                    "items"=>$parserResponse["items"]
+                ) );
+                file_put_contents( $filePath, $temaplate );
+                $output->write( $filePath );    
             }
         }
     }
