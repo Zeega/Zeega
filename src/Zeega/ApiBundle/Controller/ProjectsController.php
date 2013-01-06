@@ -176,6 +176,7 @@ class ProjectsController extends BaseController
 			$item->setDescription($project->getDescription());
 			$item->setThumbnailUrl($project->getCoverImage());
 			$item->setTitle($project->getTitle());
+            $item->setDateUpdated(new \DateTime("now"));
 			$project_json = $project_http->getContent();
 			$item->setText($project_json);
 			$em->persist($item);
