@@ -60,7 +60,7 @@ class PersistCommand extends ContainerAwareCommand
 
             $item = json_decode(file_get_contents($filePath),true);
             $items = $item["items"]; // hammer
-
+            //var_dump($items);
             foreach($items as $item) {
                 $item = self::parseItem($item, $user, $ingestor);
                 $em->persist($item);
