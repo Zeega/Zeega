@@ -12,6 +12,7 @@
 namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyBaseController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Controller is a simple implementation of a Controller that extends the Symfony base controller.

@@ -31,24 +31,27 @@ class ZeegaTwigExtension extends \Twig_Extension
 
     public function getGlobals()
     {
-        $request = $this->container->get('request');        
+        if ( $this->container->hasScope('request') && $this->container->isScopeActive('request') ) {
+            $request = $this->container->get('request');        
 
-        if(!preg_match("/\/api\//",$request->getUri())) {
-            $securityToken = $this->container->get('security.context')->getToken();
-            
-            if(isset($securityToken)) {
-                $user = $this->container->get('security.context')->getToken()->getUser();
-                if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
-                    $projects = $this->container->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
+            if(!preg_match("/\/api\//",$request->getUri())) {
+                $securityToken = $this->container->get('security.context')->getToken();
+                
+                if(isset($securityToken)) {
+                    $user = $this->container->get('security.context')->getToken()->getUser();
+                    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                        $projects = $this->container->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
 
-                    return array(
-                        'user_id' => $user->getId(),
-                        'myprojects'=> $projects,
-                        'displayname' => $user->getDisplayName(),
-                    );
+                        return array(
+                            'user_id' => $user->getId(),
+                            'myprojects'=> $projects,
+                            'displayname' => $user->getDisplayName(),
+                        );
+                    }
                 }
             }
         }
+        
         return array();
     }
 

@@ -176,6 +176,7 @@ class ProjectsController extends BaseController
 			$item->setDescription($project->getDescription());
 			$item->setThumbnailUrl($project->getCoverImage());
 			$item->setTitle($project->getTitle());
+            $item->setDateUpdated(new \DateTime("now"));
 			$project_json = $project_http->getContent();
 			$item->setText($project_json);
 			$em->persist($item);
@@ -197,15 +198,19 @@ class ProjectsController extends BaseController
     	$layer->setProject($project);
 		$request = $this->getRequest();
     	
-    	if($request->request->get('item_id'))
-    	{
-    	    $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($request->request->get('item_id'));
-			$layer->setItem($item);
-		}
 		
 		if($request->request->get("type")) $layer->setType($request->request->get("type"));   	
     	if($request->request->get('text')) $layer->setText($request->request->get('text'));
-		if($request->request->get('attr')) $layer->setAttr($request->request->get('attr'));
+		if($request->request->has('attr')) {
+            $attributes = $request->request->get('attr');
+            $layer->setAttr($attributes);
+            if( isset($attributes["id"]) ) {
+                $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($attributes["id"]);
+                if ( isset($item) ) {
+                    $layer->setItem($item);    
+                }
+            }
+        } 
     	
 		$em->persist($layer);
 		$em->flush();
