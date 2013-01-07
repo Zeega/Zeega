@@ -216,6 +216,7 @@ class ItemsController extends ApiBaseController
             $query = $this->getRequest()->query->all();        
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
+                $query["user"] = $item->getUserId();
                 if(isset($itemAttributes["tags"])) {
                     if(is_array($itemAttributes["tags"])) {
                         $query["tags"] = implode(" AND ", $itemAttributes["tags"]);
