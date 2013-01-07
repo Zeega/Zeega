@@ -524,9 +524,11 @@ class ItemsController extends ApiBaseController
                 $queryParser = $this->get('zeega_query_parser');
                 $query = $this->getRequest()->query->all();
                 $query["type"] = "-project";
+                $itemAttributes = $item->getAttributes();
 
                 if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                     if(isset($itemAttributes["tags"])) {
+                        $query["user"] = $item->getUserId();
                         if(is_array($itemAttributes["tags"])) {
                             $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
                         } else {
@@ -536,7 +538,6 @@ class ItemsController extends ApiBaseController
                 } else {
                     $query["collection"]  = $id;
                 }
-
                 $query = $queryParser->parseRequest($query);
                 
                 $solr = $this->get('zeega_solr');
