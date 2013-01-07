@@ -216,6 +216,7 @@ class ItemsController extends ApiBaseController
             $query = $this->getRequest()->query->all();        
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
+                $query["user"] = $item->getUserId();
                 if(isset($itemAttributes["tags"])) {
                     if(is_array($itemAttributes["tags"])) {
                         $query["tags"] = implode(" AND ", $itemAttributes["tags"]);
@@ -550,7 +551,7 @@ class ItemsController extends ApiBaseController
                         $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
                         
                         $layer = array("id"=>$i,"media_type"=>$childItem['media_type'],"layer_type"=>$childItem['layer_type']);
-                        
+                        $layer["type"] = $layer["media_type"];
                         if(isset($childItem['text'])) {
                             $layer["text"] = $childItem['text'];
                         }
