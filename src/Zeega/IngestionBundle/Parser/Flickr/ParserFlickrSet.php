@@ -37,6 +37,7 @@ class ParserFlickrSet extends ParserAbstract
 		$collection->setDescription($setInfo["description"]);
 		$collection->setMediaType('Collection');
 	    $collection->setLayerType('Flickr');
+        $collection->setArchive('Flickr');
 		$collection->setAttributionUri($url);
 
         $collection->setChildItemsCount($setInfo["count_photos"]);

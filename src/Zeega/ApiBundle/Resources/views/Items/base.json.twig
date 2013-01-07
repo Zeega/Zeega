@@ -1,4 +1,5 @@
-{# Template to render items recursively. #}
+{# Template to render items recursively. Supports arrays and doctrine entities. #}
+{# All the if clauses below are due to doctrine removing underscores from field names and entities #}
 {% if editable is not defined %}
     {% set editable = false %}
 {% endif %}
@@ -11,6 +12,12 @@
             {% set mediatype = item.mediatype %}
         {% else %}
             {% set mediatype = item.media_type %}
+        {% endif %}
+
+        {% if item.child_items is defined %}
+            {% set childitems = item.child_items %}
+        {% elseif item.childitems is defined %}
+            {% set childitems = item.childitems %}
         {% endif %}
     {
         "id":{{ item.id | default("null") }},
@@ -88,11 +95,11 @@
         {%- endif -%}
         "child_items":
         [
-            {%- if (item.child_items is defined) -%}
-                {% for child in item.child_items %}
+            {%- if (childitems is defined) -%}
+                {% for child in childitems %}
                     {# Item is a collection. Render the children by recursively calling the macro #}
                     {{ _self.show(child) }}
-                    {%- if loop.index0 < item.child_items|length - 1 -%}
+                    {%- if loop.index0 < childitems|length - 1 -%}
                     ,
                     {%- endif -%}
                 {% endfor %}

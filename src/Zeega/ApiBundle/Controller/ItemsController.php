@@ -70,12 +70,12 @@ class ItemsController extends ApiBaseController
 
             if(!isset($url)) {
                 $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-            } else {           
+            } else {
                 $loadChildren = $request->query->get('load_children');
                 $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
                 $parser = $this->get('zeega_parser');
                 $response = $parser->load($url, $loadChildren);
-                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"]));
             }
             
             return new Response($itemView);
