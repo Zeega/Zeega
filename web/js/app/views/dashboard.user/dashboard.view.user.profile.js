@@ -251,7 +251,7 @@
 					'</div>'+
 					'<div class="span3">';
 						if (zeega.dashboard.app.editable){ html+=
-						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Start a new project</a>';
+						'<a class="btn btn-info pull-right user-new-project" href="'+$('.new-project').attr('href')+'">Create a New Zeega</a>';
 						}
 			html+='</div>';
 			
