@@ -35,10 +35,7 @@
 							"<img src='"+ zeega.app.url_prefix +"images/drag-zeega.gif' alt='Add to Zeega'/>"+
 						"</a>"+
 						'<ul style="width:393px; float:left">'+
-							'<li>Drag the icon to the right to the Bookmarks Bar within the browser</li>'+
-							'<li>make sure you\'re using the latest version of Google Chrome.</li>'+
-							'<li>Under Chrome\'s view menu, select "Always show Bookmarks Bar"</li>'+
-							'<li> "Add to Zeega" will appear in your Bookmarks Bar. As you find media across the web, click this to open the bookmarklet plugin.</li>'+
+							'Drag the icon to the left to the Bookmarks Bar within the browser. Simply click "Add to Zeega" when viewing any media on Instagram, Flickr, YouTube, SoundCloud. The media will be available for you to use in your Zeega!'
 
 						'</ul>'+
 					'</div>'+
