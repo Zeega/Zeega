@@ -45,9 +45,14 @@
 		{
 			var _this = this;
 			// make persistent layer collection
+			console.log('persist array', this.get('persistent_layers'))
 			var persistentLayers = this.get('persistent_layers').map(function(layerID){
-				zeega.app.project.layers.get(layerID);
+
+				console.log('create persistent', layerID, zeega.app.project.layers.get(layerID),zeega.app.project.layers )
+				return zeega.app.project.layers.get(layerID);
 			});
+						console.log('persist array', persistentLayers)
+
 			var col = Backbone.Collection.extend();
 			this.persistentLayers = new col( persistentLayers );
 			// make frame collection
