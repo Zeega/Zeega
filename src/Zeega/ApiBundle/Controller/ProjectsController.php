@@ -352,7 +352,7 @@ class ProjectsController extends BaseController
             $session = $this->getRequest()->getSession();
             $session->set("collection_id", $request->request->get('collection_id'));
         } else {
-            $title='Untitled Project';    
+            $title='Untitled Zeega';    
         }
         
         $project= new Project();

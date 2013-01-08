@@ -820,8 +820,10 @@ this.zeegaPlayer = {
 				if( zeegaPlayer.app.mode != 'editor' )
 				{
 					html +=
+					"<a href='http://zeega.com'><img style='padding:10px' src='http://alpha.zeega.org/images/zeega-logo.png'</a>"+
 					"<a href='https://twitter.com/intent/tweet?original_referer=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + sessionStorage.getItem('projectId')+"&text=Zeega%20Project%3A%20<%= title %> &url=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +  sessionStorage.getItem('projectId')+"' class='share-twitter pull-right' target='blank'><i class='zitem-twitter zitem-30 loaded'></i></a>"+
 					"<a href='http://www.facebook.com/sharer.php?u=http:"+ sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + sessionStorage.getItem('projectId')+"' class='share-facebook pull-right' target='blank'><i class='zitem-facebook zitem-30 loaded'></i></a>";
+				
 				}
 				html +=
 

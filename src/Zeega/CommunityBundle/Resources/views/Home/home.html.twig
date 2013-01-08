@@ -68,10 +68,49 @@
 		<div class="row">
 			<div class="page-intro span11">
 				<h1>Remake the Internet</h1>
-				<h2>Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs. Join the community and start experimenting now.  {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{ path('fos_user_registration_register') }}">Ready to begin?</a> {% endif %} </h2><br><br>
-				<h2>NEWS: <a href="http://i-docs.org/2012/11/28/the-zeega-revolution/" target="_blank">Zeega Featured on i-docs!</a> </h2>
-				<h2>NEWS: <a href="{{ path('ZeegaCommunityBundle_makeday') }}">Tribeca Hacks Cambridge on Dec. 8th</a> </h2>
-				<h2>NEWS: <a href="{{ path('ZeegaCommunityBundle_news') }}">We're hiring Creative Technologists!</a> </h2>
+				<h2>Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs. With Zeega, anyone can easily mix media from across the web and share it across networks. Join the community and start experimenting now...</h2>
+				<br><br>
+				<!-- Sign Up Button Begins -->
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+				<div class="go-button new-section" style="width: 450px; float: right;">
+
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h4>
+								Sign Up For Zeega!</a>
+								</h4>
+							
+							</div>
+						</div>
+
+				</div>
+				</a> {% endif %}
+				<!-- Sign Up Button Ends -->
+				
+				<!-- Zeegaverse Button Begins -->
+				<a href="http://zeega.com" style="color: white; font-size: 44px;">
+				<div class="go-button new-section" style="width: 450px; float: left;">
+
+						<div class="valign">
+							<div class="valign-content">	
+					
+								<h4>
+								Explore the Zeegaverse!</a>
+								</h4>
+							
+							</div>
+						</div>
+
+				</div>
+				</a>
+				
+				<div style="clear:both;"></div>
+				<!-- Zeegaverse Button Ends -->
+				
+
+				<h2>NEWS: <a href="http://www.fastcocreate.com/1682065/tribeca-film-hackathon-code-as-a-new-language-for-content-creators" target="_blank">Zeega Featured in Fast Company!</a> </h2>
+				<h2>NEWS: <a href="http://i-docs.org/2012/11/28/the-zeega-revolution/" target="_blank">Zeega Featured in i-Docs!</a> </h2>
 			</div>
 		</div>
 	</div>
@@ -79,106 +118,62 @@
 	<br><br><br><br><br><br><br>
 	<!-- Featured Content Ends -->
 	<!-- Special Project Separator Begins -->
-	<div class="section-divider">
-		<div class="shadow">
-		</div>
-		<div class="content">
-			<div class="container">
-				<div class="row">
-					<div class="span8 offset3">
-						<h2 style="padding-bottom: 20px;">Featured Zeegas</h2>
-					</div>
-					<div class="span3">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>	
-	<!-- Special Project Separator Ends -->
-	<!-- Special Project with Zeegas Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	<div id="featured-zeegas" class="special-project" style="background: url({{ asset('images/productions/amm.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; height: 500px;">
-	<div class="color-overlay" style="background:  no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-color: rgba(252,72,220, .75); ">
-			<div class="container">
-				<div class="row">
-						<div class="valign">
-							<div class="valign-content">	
-							</div>
-						</div>
-				</div>
-			</div>
-	</div> <!--color-overlay-->
-	</div>
-	<!-- Special Project with Zeegas Ends -->
-	<!-- Special Project Separator Begins -->
-	<div class="section-divider">
-		<div class="shadow">
-		</div>
-		<div class="content">
-			<div class="container">
-				<div class="row">
-					<div class="span8 offset3">
-						<h2>Featured Localore Production</h2>
-					</div>
-					<div class="span3">
-					</div>
-				</div>
-			</div>
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-		</div>
-	</div>
-	<!-- Special Project Separator Ends -->
-	<!-- Special Project Begins -->
-	<!-- Note: We place the background code in the HTML as it's not a generic style element but one that may be changed and is unique to this page -->
-	<div class="special-project" style="background: url({{ asset('images/productions/planettakeout.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-		<div class="special-gradient">
-			<div class="container">
-				<div class="row">
-					<div class="span10">
-						<div class="valign" style="width: 800px">
-							<div class="valign-content">	
-								<h1><small>Local Chinese takeouts become spaces for community storytelling</small><br><a href="http://planettakeout.org" target="_blank">Planet Takeout</a></h1>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Special Project Ends -->
-	<!-- Special Project Separator Begins -->
-	<div class="section-divider">
-		<div class="shadow">
-		</div>
-		<div class="content">
-			<div class="container">
-				<div class="row">
-					<div class="span8 offset3">
-						<h2>IDFA 2012 Winner</h2>
-					</div>
-					<div class="span3">
-					</div>
-				</div>
-			</div>
-			<div class="arrow-down"><div class="striped-arrow"></div></div>
-		</div>
-	</div>
-	<!-- Special Project Separator Ends -->		
-	<!-- Special Project Begins -->
-	<div class="special-project" style="background: url({{ asset('images/productions/evpoetry.jpg')}}) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-		<div class="special-gradient">
-			<div class="container">
-				<div class="row">
-					<div class="span10">
-						<div class="valign" style="width: 800px">
-							<div class="valign-content">	
-								<h1><small>Tour a neighborhood's cultural history with Jim Jarmusch</small><br><a href="http://eastvillagepoetrywalk.org" target="_blank">East Village Poetry Walk</a></h1>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div id ="home-cards" ></div>
+	<script>
+	
+	var homeCards =[
+		{
+			url:"{{asset("images/home/home_edit.jpg")}}",
+			title:"EDIT WITH DRAG-AND-DROP EASE",
+			subtitle: "Zeega enables anyone to experiment with the web as a creative medium. No programming knowledge required : )",
+			seperator: "Scroll down to learn more"
+		},
+		{
+			url:"{{asset("images/home/home_addmedia.jpg")}}",
+			title:"USE ANY MEDIA YOU WANT",
+			subtitle: "Currently liberated APIs include Dropbox, YouTube, Flickr, SoundCloud, Archive.org, Tumblr and Mapbox.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_expression.jpg")}}",
+			title:"FREEDOM OF EXPRESSION",
+			subtitle: "Set timings. Add text. Use street view. Layer media.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_interface.jpg")}}",
+			title:"INVENT YOUR OWN INTERFACE",
+			subtitle: "Turn any part of an image or video into a link.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_credit.jpg")}}",
+			title:"CREDIT EVERYONE",
+			subtitle: "All media is properly cited to its original author and tracked back to its source location.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_share.jpg")}}",
+			title:"SHARE FULL-SCREEN EXPERIENCES",
+			subtitle: "You can embed your Zeega on any site and it automatically opens in full-screen.",
+			seperator: ""
+		},
+		{
+			url:"{{asset("images/home/home_dziga.jpg")}}",
+			title:"AND THE NAME...",
+			subtitle: "One of our favorite films is <a href='http://www.youtube.com/watch?v=op2sOtF113M&feature=watch-now-button&wide=1' target='_blank'>Man with a Movie Camera</a>, made in 1929 by Dziga Vertov. We changed the spelling slightly.",
+			seperator: ""
+		},
+		{
+			url:"",
+			title:"A CULTURE OF EXPERIMENTATION",
+			subtitle: "Zeega is a community of artists, filmmakers, journalists, educators, designers and other makers passionate about inventing a new medium together.",
+			seperator: ""
+		}
+		
+	
+	]
+	
+	</script>
 
 {% endblock %}
