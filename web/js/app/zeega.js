@@ -297,7 +297,7 @@ this.zeega = {
         this.loadFrame( this.getLeftFrame() );
     },
     
-    loadRightFrame : function(){ this.loadFrame( this.getRightFrame(); ) },
+    loadRightFrame : function(){ this.loadFrame( this.getRightFrame() ); }
 
     
 }, Backbone.Events)
