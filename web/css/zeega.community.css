@@ -1088,10 +1088,10 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .arrow-down div.css-arrow{width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-top:20px solid #eeeeee;margin-left:auto;margin-right:auto;}
 .arrow-down div.striped-arrow{width:40px;height:20px;background-image:url('../img/striped-down-arrow.png');margin-left:auto;margin-right:auto;}
 .section-title{width:100%;border-bottom:#555555;border-bottom-style:solid;border-bottom-width:thin;margin-bottom:10px;text-transform:capitalize;}
-.go-button{width:100%;height:50px;background-color:#46a546;}
+.go-button{width:100%;height:45px;background-color:#ff0000;border-radius:5px;font-size:44px;padding:10px;}
 .go-button .valign{display:table;position:static;height:50px;margin-left:auto;margin-right:auto;color:#ffffff;}
 .go-button .valign .valign-content{display:table-cell;vertical-align:middle;}
-.go-button:hover{background-color:#62bc62;}
+.go-button:hover{background-color:#ff3333;color:#049cdb;}
 .sidebar-button{width:100%;height:50px;background-color:#333333;margin-bottom:10px;}
 .sidebar-button .valign{display:table;position:static;height:50px;margin-left:auto;margin-right:auto;color:#ffffff;}
 .sidebar-button .valign .valign-content{display:table-cell;vertical-align:middle;}
