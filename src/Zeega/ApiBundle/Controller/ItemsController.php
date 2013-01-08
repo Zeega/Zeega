@@ -70,12 +70,12 @@ class ItemsController extends ApiBaseController
 
             if(!isset($url)) {
                 $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-            } else {           
+            } else {
                 $loadChildren = $request->query->get('load_children');
                 $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
                 $parser = $this->get('zeega_parser');
                 $response = $parser->load($url, $loadChildren);
-                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"]));
             }
             
             return new Response($itemView);
@@ -524,9 +524,11 @@ class ItemsController extends ApiBaseController
                 $queryParser = $this->get('zeega_query_parser');
                 $query = $this->getRequest()->query->all();
                 $query["type"] = "-project";
+                $itemAttributes = $item->getAttributes();
 
                 if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                     if(isset($itemAttributes["tags"])) {
+                        $query["user"] = $item->getUserId();
                         if(is_array($itemAttributes["tags"])) {
                             $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
                         } else {
@@ -536,7 +538,6 @@ class ItemsController extends ApiBaseController
                 } else {
                     $query["collection"]  = $id;
                 }
-
                 $query = $queryParser->parseRequest($query);
                 
                 $solr = $this->get('zeega_solr');
