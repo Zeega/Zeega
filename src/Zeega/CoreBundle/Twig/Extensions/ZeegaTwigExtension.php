@@ -77,7 +77,7 @@ class ZeegaTwigExtension extends \Twig_Extension
     }
 
     public function isSolrArray($value) {
-        return isset($value) && is_array($value) && count($value) == 1;
+        return isset($value) && is_array($value) && count($value) == 1 && isset($value[0]);
     }
 
     public function unserializeArray($value)
