@@ -405,7 +405,11 @@ class ItemsController extends ApiBaseController
 
             $requestData = $this->getRequest()->request;        
             $itemService = $this->get('zeega.item');
-            $item = $itemService->parseItem($requestData->all(), $user, $item);
+            $itemRequestData = $requestData->all();
+            if(isset($itemRequestData["child_items"])) {
+                $itemRequestData["child_items"] = null;
+            }
+            $item = $itemService->parseItem($itemRequestData, $user, $item);
             
             if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
                 $em->persist($item);
@@ -605,15 +609,24 @@ class ItemsController extends ApiBaseController
                         if(isset($childItem['archive'])) {
                             $layer["attr"]["archive"] = $childItem['archive'];
                         }
+                        
+                        if(isset($childItem['description'])) {
+                            $layer["attr"]["description"] = $childItem['description'];
+                        }
 
                         $layers[] = $layer;
                     }
                 }               
                 
+                $creator = $item->getMediaCreatorRealname();
+                if(!isset($creator)) {
+                    $creator = $item->getMediaCreatorUsername();
+                }
 
                 $project = array("id"=>$item->getId(),
                       "title"=>$item->getTitle(),
                       "estimated_time"=>"Some time", 
+                      "authors"=>$creator,
                       "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
                       'frames'=>$frames,
                       'layers'=>$layers,
