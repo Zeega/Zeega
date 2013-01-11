@@ -8,7 +8,7 @@ this.zeega = {
         var modules = {};
 
         // Create a new module reference scaffold or load an existing module.
-        return function(name) 
+        return function(name)
         {
             // If this module has already been created, return it.
             if (modules[name]) return modules[name];
@@ -28,8 +28,6 @@ this.zeega = {
     busy : false,
     hold : null,
     
-    //sequenceID : 1,
-    currentFrame : null,
     thumbnailUpdates : true,
     previewMode:false,
     
