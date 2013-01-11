@@ -378,14 +378,12 @@ Use this.model.get('attr')[my_setting] instead!!!
                 max : this.settings.max,
                 value : uiValue,
                 step : this.settings.step,
-                start : function(e,ui)
-                {
+                start : function(e,ui) {
                     _this.settings.onStart();
                     $('#layer-visual-'+_this.model.id).css({'outline':'solid 3px yellow'});
                     
                 },
-                slide : function(e, ui)
-                {
+                slide : function(e, ui) {
                     _this.updateSliderInput(ui.value);
                     _this.updateVisualElement( ui.value );
                     
@@ -394,10 +392,7 @@ Use this.model.get('attr')[my_setting] instead!!!
                     if( !_.isNull( _this.settings.slide ) ) _this.settings.slide();
                     _this.settings.onSlide();
                 },
-                change : function(e,ui)
-                {
-
-                    console.log(e.which);
+                change : function(e,ui) {
                     if(e.which==1 || e.which== 37 || e.which== 38 || e.which== 39 || e.which== 40 ){
                         console.log('change event');
                         _this.updateSliderInput(ui.value);
@@ -731,7 +726,7 @@ Use this.model.get('attr')[my_setting] instead!!!
         getTemplate : function() {
             var html =
             
-            "<select class='font-list'>"+
+            "<select class='font-list' style='width:49%; margin-right:2%'>"+
                 "<option value='Arial' >Arial</option>"+
                 "<option value='Georgia' >Georgia</option>"+
                 "<option value='Verdana' >Verdana</option>"+
@@ -739,9 +734,36 @@ Use this.model.get('attr')[my_setting] instead!!!
                 "<option value='Poiret One' >Poiret One</option>"+
                 "<option value='Trocchi' >Trocchi</option>"+
                 "<option value='Pontano Sans' >Pontano Sans</option>"+
+                "<option value='Fascinate' >Fascinate</option>"+
+                "<option value='Bilbo Swash Caps' >Bilbo Swash Caps</option>"+
+                "<option value='Dosis' >Dosis</option>"+
+                "<option value='Yellowtail' >Yellowtail</option>"+
+                "<option value='Cutive Mono' >Cutive Mono</option>"+
+                "<option value='Codystar' >Codystar</option>"+
+                "<option value='New Rocker' >New Rocker</option>"+
+                "<option value='Cabin Sketch' >Cabin Sketch</option>"+
+                "<option value='Londrina Sketch' >Londrina Sketch</option>"+
+                "<option value='Nova Mono' >Nova Mono</option>"+
+                "<option value='Wendy One' >Wendy One</option>"+
+                "<option value='Londrina Outline' >Londrina Outline</option>"+
+                "<option value='Finger Paint' >Finger Paint</option>"+
+                "<option value='Antic' >Antic</option>"+
+                "<option value='Monofett' >Monofett</option>"+
+                "<option value='Great Vibes' >Great Vibes</option>"+
+                "<option value='Montserrat' >Montserrat</option>"+
+                "<option value='Archivo Black' >Archivo Black</option>"+
+                "<option value='Faster One' >Faster One</option>"+
+                "<option value='Orbitron' >Orbitron</option>"+
+                "<option value='Ewert' >Ewert</option>"+
+                "<option value='Ultra' >Ultra</option>"+
+                "<option value='Aldrich' >Aldrich</option>"+
+                "<option value='Allerta Stencil' >Allerta Stencil</option>"+
+                "<option value='Nobile' >Nobile</option>"+
+                "<option value='Rock Salt' >Rock Salt</option>"+
+                "<option value='Press Start 2P' >Press Start 2P</option>"+
             "</select>"+
 
-            "<select class='size-list'>"+
+            "<select class='size-list' style='width:49%'>"+
                 "<option value='100' >8</option>"+
                 "<option value='125' >10</option>"+
                 "<option value='150' >12</option>"+

@@ -160,8 +160,11 @@
 				_this.lazySave();
 			})
 			.bind('paste', function(e){
-				_this.$('#zedit-target').html( _this.$('#zedit-target').text() );
-				_this.lazySave();
+				console.log('something was pasted!');
+				_.delay(function() {
+					_this.$('#zedit-target').html( _this.$('#zedit-target').text() );
+					_this.lazySave();
+				}, 500);
 			});
 
 			
