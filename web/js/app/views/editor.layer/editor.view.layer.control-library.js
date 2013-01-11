@@ -610,8 +610,7 @@ Use this.model.get('attr')[my_setting] instead!!!
 
         className : 'text-styles',
 
-        render : function()
-        {
+        render : function() {
             var buttonSet = this.getTemplate();
             $(this.el).append( buttonSet );
         },
@@ -623,51 +622,50 @@ Use this.model.get('attr')[my_setting] instead!!!
             'click .clear-styles' : 'clearStyles'
         },
         
-        addBold : function()
-        {
-            if( this.model.visual.$el.find('.style-bold').length  )
+        addBold : function() {
+            if( this.model.visual.$el.find('.style-bold').length  ) {
                 this.model.visual.$el.find('.style-bold').contents().unwrap();
-            else
+            } else {
                 this.model.visual.$el.find('.inner').wrapInner('<span class="style-bold" style="font-weight:bold"/>');
+            }
             this.$el.find('.bold').effect('highlight',{},2000);
             this.saveContent();
         },
         
-        addItalic: function()
-        {
-            if( this.model.visual.$el.find('.style-italic').length  )
+        addItalic: function() {
+            if( this.model.visual.$el.find('.style-italic').length ) {
                 this.model.visual.$el.find('.style-italic').contents().unwrap();
-            else
+            } else {
                 this.model.visual.$el.find('.inner').wrapInner('<span class="style-italic" style="font-style:italic"/>');
+            }
             this.$el.find('.italic').effect('highlight',{},2000);
             this.saveContent();
         },
-        addUnderline : function()
-        {
-            if( this.model.visual.$el.find('.style-underline').length  )
+        addUnderline : function() {
+            if( this.model.visual.$el.find('.style-underline').length ) {
                 this.model.visual.$el.find('.style-underline').contents().unwrap();
-            else
+            } else {
                 this.model.visual.$el.find('.inner').wrapInner('<span class="style-underline" style="text-decoration:underline"/>');
+            }
             this.$el.find('.underline').effect('highlight',{},2000);
             
             this.saveContent();
         },
         
-        saveContent : function()
-        {
+        saveContent : function() {
             var str = this.model.visual.$el.find('#zedit-target').html();
+
             this.model.update({ content : str });
         },
         
-        clearStyles : function()
-        {
+        clearStyles : function() {
             var clean = this.model.get('attr').content.replace(/(<([^>]+)>)/ig, "");
+
             this.model.update({ content : clean });
             this.model.updateContentInPlace();
         },
         
-        getTemplate : function()
-        {
+        getTemplate : function() {
             var html =
             
                 '<div class="btn-group">'+
@@ -686,79 +684,78 @@ Use this.model.get('attr')[my_setting] instead!!!
         
         className : 'font-chooser',
 
-        render : function()
-        {
+        render : function() {
             var buttonSet = this.getTemplate();
             $(this.el).append( buttonSet );
+            this.select( ".font-list", "fontFamily");
+            this.select( ".size-list", "fontSize");
+        },
+
+        select: function( select, attrName ) {
+            var attr = this.model.get("attr")[ attrName ];
+            this.$( select + " option").each(function(){
+                var $this = $(this); // cache this jQuery object to avoid overhead
+
+                if ($this.val() == attr) { // if this option's value is equal to our value
+                    $this.prop("selected", true); // select this option
+                    return false; // break the loop, no need to look further
+                }
+            });
         },
         
         events : {
-            'click .font-list a' : 'changeFont',
-            'click .size-list a' : 'changeSize'
+            'change .font-list': "changeFont",
+            'change .size-list': "changeSize"
         },
         
-        changeFont : function( ui )
-        {
-            this.$el.find('.open').removeClass('open');
-            this.model.visual.$el.find('.style-font-family').contents().unwrap();
-            this.model.visual.$el.find('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(ui.target).data('font-family') +'"/>');
+        changeFont : function( e ) {
+            this.model.visual.$('.style-font-family').contents().unwrap();
+            this.model.visual.$('.inner').wrapInner('<span class="style-font-family" style="font-family:'+ $(e.target).val() +'"/>');
+            this.model.update({ fontFamily : $(e.target).val() });
             this.saveContent();
             return false;
         },
         
-        changeSize : function( e )
-        {
-            this.$el.find('.open').removeClass('open');
-            this.model.visual.$el.css( 'fontSize', $(e.target).data('fontSize')+'%' );
-            this.model.update({ fontSize : $(e.target).data('fontSize') });
+        changeSize : function( e ) {
+            this.model.visual.$el.css( 'fontSize', $(e.target).val() + '%' );
+            this.model.update({ fontSize : $(e.target).val() });
             return false;
         },
         
-        saveContent : function()
-        {
+        saveContent : function() {
             var str = this.model.visual.$el.find('#zedit-target').html();
+
             this.model.update({ content : str });
         },
         
-        getTemplate : function()
-        {
+        getTemplate : function() {
             var html =
             
-            '<div class="clearfix"><div class="btn-group pull-left">'+
-                '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Fonts'+
-                    '<span class="caret"></span>'+
-                '</a>'+
-                '<ul class="dropdown-menu font-list">'+
-                    '<li style="font-family:\'Arial\'"><a href="#" data-font-family="Arial">Arial</a></li>'+
-                    '<li style="font-family:\'Georgia\'"><a href="#" data-font-family="Georgia">Georgia</a></li>'+
-                    '<li style="font-family:\'Verdana\'"><a href="#" data-font-family="Verdana">Verdana</a></li>'+
-                    '<li style="font-family:\'Sorts Mill Goudy\'"><a href="#" data-font-family="Sorts Mill Goudy">Sorts Mill Goudy</a></li>'+
-                    '<li style="font-family:\'Poiret One\'"><a href="#" data-font-family="Poiret One">Poiret One</a></li>'+
-                    '<li style="font-family:\'Trocchi\'"><a href="#" data-font-family="Trocchi">Trocchi</a></li>'+
-                    '<li style="font-family:\'Pontano Sans\'"><a href="#" data-font-family="Pontano Sans">Pontano Sans</a></li>'+
-                '</ul>'+
-            '</div>'+
-            
-            '<div class="btn-group pull-left">'+
-                '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Size'+
-                    '<span class="caret"></span>'+
-                '</a>'+
-                '<ul class="dropdown-menu size-list">'+
-                    '<li><a href="#" data-font-size="100">8</a></li>'+
-                    '<li><a href="#" data-font-size="125">10</a></li>'+
-                    '<li><a href="#" data-font-size="150">12</a></li>'+
-                    '<li><a href="#" data-font-size="175">14</a></li>'+
-                    '<li><a href="#" data-font-size="200">18</a></li>'+
-                    '<li><a href="#" data-font-size="250">24</a></li>'+
-                    '<li><a href="#" data-font-size="375">36</a></li>'+
-                    '<li><a href="#" data-font-size="500">48</a></li>'+
-                    '<li><a href="#" data-font-size="800">72</a></li>'+
-                    '<li><a href="#" data-font-size="1600">144</a></li>'+
-                    '<li><a href="#" data-font-size="2400">200</a></li>'+
-                    '<li><a href="#" data-font-size="3600">300</a></li>'+
-                '</ul>'+
-            '</div></div>';
-                    
+            "<select class='font-list'>"+
+                "<option value='Arial' >Arial</option>"+
+                "<option value='Georgia' >Georgia</option>"+
+                "<option value='Verdana' >Verdana</option>"+
+                "<option value='Sorts Mill Goudy' >Sorts Mill Goudy</option>"+
+                "<option value='Poiret One' >Poiret One</option>"+
+                "<option value='Trocchi' >Trocchi</option>"+
+                "<option value='Pontano Sans' >Pontano Sans</option>"+
+            "</select>"+
+
+            "<select class='size-list'>"+
+                "<option value='100' >8</option>"+
+                "<option value='125' >10</option>"+
+                "<option value='150' >12</option>"+
+                "<option value='175' >14</option>"+
+                "<option value='200' >18</option>"+
+                "<option value='250' >24</option>"+
+                "<option value='375' >36</option>"+
+                "<option value='500' >48</option>"+
+                "<option value='800' >72</option>"+
+                "<option value='1600' >144</option>"+
+                "<option value='2400' >200</option>"+
+                "<option value='3600' >300</option>"+
+            "</select>";
+
             return html;
         }
         
