@@ -12,7 +12,7 @@
 			'content' : 'Text',
 			'left' :30,
 			'top' :40,
-			'color' : '#ffffff',
+			'color' : '#FF4500',
 			'opacity' : 1,
 			'fontSize' : 500,
 			'overflow' : 'visible',
