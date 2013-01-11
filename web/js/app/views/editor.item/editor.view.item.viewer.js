@@ -64,7 +64,14 @@
             "click .go-left" : "goLeft",
             "click .go-right" : "goRight",
             "click #detail-toggle" : "toggleDetail",
-            "click #item-delete":"deleteItem"
+            "click #item-delete": "deleteItem",
+            "click .add-to-frame": "addToFrame"
+        },
+
+        addToFrame : function(){
+
+            zeega.app.currentFrame.addItemLayer( this.inFocus );
+            zeega.app.currentFrame.trigger('layer_added');
         },
         
         toggleDetail : function()
@@ -195,6 +202,7 @@
                     "<div class='row'>"+
                         "<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
                         "<div class='span10 item-viewer-content'>"+
+                             "<a class='add-to-frame' href='#'>add to frame</a>"+
                             "<a class='close primary-close' href='#'>&times;</a>"+
 
                             "<div class='inner-content more-view'></div>"+
@@ -378,20 +386,8 @@
                 html+= "<span><a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></span>";
             }
             html+= "</h2>";
-            if(this.isEditable) {
-                html+=  "<div class='row more-info' >"+
-                            "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
-                            
-                if(this.model.get("published")==2){
-                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
-                } else {
-                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
-                }
-
-                html+= "</div>"+
-                        "</div>";
-            }
-             html+="<div class='row'>"+
+           
+            html+="<div class='row'>"+
                     
                     "<div class='<%= mediaSpan %>'' id='item-media-target'>"+
                         "<div class='padded-content' id='item-media-<%= id %>'></div>"+ //media goes here
@@ -409,8 +405,22 @@
                         "<div class='padded-content clearfix'>"+
                             "<div><strong>Created By:</strong> <%= media_creator_realname %></div>"+
                             "<div><strong>Created On:</strong> <%= date_created.date %></div>"+
-                            "<div><a href='<%= attribution_uri %>'' target='blank'>View Source <i class='icon-share'></i></a></div>"+
-                            "<div>"+
+                            "<div><a href='<%= attribution_uri %>'' target='blank'>View Source <i class='icon-share'></i></a></div>";
+
+             if(this.isEditable) {
+                html+=  "<div class='access-level'>"+
+                            "<strong>Access: </strong>";
+                            
+                if(this.model.get("published")==2){
+                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span>";
+                } else {
+                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span>";
+                }
+
+                html+= "</div>";
+            }
+
+            html+=              "<div>"+
                                 "<div><strong>Tags:</strong></div>"+
                                 "<div class='item-tags'></div>"+
                             "</div>"+
