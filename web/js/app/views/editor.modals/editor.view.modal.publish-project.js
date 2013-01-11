@@ -53,6 +53,7 @@
             this.model.updated = false;
             this.hide();
             if(this.isPublished !== true ){
+                $("#project-publish .menu-verbose-title").html("update");
                 this.model.shareProject();
             }
         },
