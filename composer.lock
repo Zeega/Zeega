@@ -1,5 +1,5 @@
 {
-    "hash": "a9d29b5ccaf60fb274159ea682bae66b",
+    "hash": "275578d8d58478399d1fc3b21797b8bf",
     "packages": [
         {
             "name": "doctrine/common",
@@ -18,14 +18,12 @@
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "1348120518",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common": "lib/"
@@ -68,7 +66,8 @@
                 "eventmanager",
                 "annotations",
                 "persistence"
-            ]
+            ],
+            "time": "2012-09-20 05:55:18"
         },
         {
             "name": "doctrine/dbal",
@@ -88,14 +87,13 @@
                 "php": ">=5.3.2",
                 "doctrine/common": "2.3.*"
             },
-            "time": "1349518912",
+            "time": "2012-10-06 10:21:52",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL": "lib/"
@@ -169,7 +167,6 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Bundle\\DoctrineBundle": ""
@@ -222,9 +219,7 @@
                 "symfony/framework-bundle": ">=2.1.0,<2.3-dev",
                 "doctrine/doctrine-bundle": "1.0.*"
             },
-            "time": "1349789824",
             "type": "symfony-bundle",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Bundle\\MigrationsBundle": ""
@@ -253,7 +248,8 @@
                 "dbal",
                 "migrations",
                 "schema"
-            ]
+            ],
+            "time": "2012-10-09 13:37:04"
         },
         {
             "name": "doctrine/migrations",
@@ -280,9 +276,8 @@
             "suggest": {
                 "symfony/console": "to run the migration from the console"
             },
-            "time": "1349435713",
+            "time": "2012-10-05 11:15:13",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\DBAL\\Migrations": "lib"
@@ -343,7 +338,6 @@
                     "dev-master": "2.3.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Doctrine\\ORM": "lib/"
@@ -398,14 +392,12 @@
                 "php": ">=5.3.2",
                 "symfony/http-foundation": ">=2.0,<2.3-dev"
             },
-            "time": "1347135166",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "0.8.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "FOS\\Rest": ""
@@ -428,7 +420,8 @@
             "homepage": "http://friendsofsymfony.github.com",
             "keywords": [
                 "rest"
-            ]
+            ],
+            "time": "2012-09-08 20:12:46"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -463,7 +456,6 @@
                     "dev-master": "0.9.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "FOS\\RestBundle": ""
@@ -491,6 +483,50 @@
             "homepage": "http://friendsofsymfony.github.com",
             "keywords": [
                 "rest"
+            ]
+        },
+        {
+            "name": "friendsofsymfony/twitter-bundle",
+            "version": "dev-master",
+            "target-dir": "FOS/TwitterBundle",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/FriendsOfSymfony/FOSTwitterBundle.git",
+                "reference": "e2bf6f3458005ee3dc2a2ac901c4014d2ece4fac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/FriendsOfSymfony/FOSTwitterBundle/archive/e2bf6f3458005ee3dc2a2ac901c4014d2ece4fac.zip",
+                "reference": "e2bf6f3458005ee3dc2a2ac901c4014d2ece4fac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/framework-bundle": "2.*",
+                "kertz/twitteroauth": "*",
+                "symfony/security-bundle": ">=2.1,<2.3-dev"
+            },
+            "time": "2013-01-11 16:08:29",
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "FOS\\TwitterBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "FriendsOfSymfony Community",
+                    "homepage": "https://github.com/FriendsOfSymfony/FOSTwitterBundle/contributors"
+                }
+            ],
+            "description": "Symfony FOSTwitterBundle",
+            "homepage": "http://friendsofsymfony.github.com",
+            "keywords": [
+                "Twitter authentication"
             ]
         },
         {
@@ -528,7 +564,6 @@
                     "dev-master": "2.0.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "FOS\\UserBundle": ""
@@ -579,7 +614,6 @@
             },
             "time": "2012-01-02 12:50:26",
             "type": "symfony-bundle",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\AopBundle": ""
@@ -621,7 +655,6 @@
             },
             "time": "2012-01-02 12:40:52",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "CG\\": "src/"
@@ -665,7 +698,6 @@
             },
             "time": "2012-09-06 09:07:54",
             "type": "symfony-bundle",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\DiExtraBundle": ""
@@ -708,7 +740,6 @@
             },
             "time": "2012-01-02 13:32:49",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Metadata\\": "src/"
@@ -771,7 +802,6 @@
             },
             "time": "2012-09-06 09:12:03",
             "type": "symfony-bundle",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\SecurityExtraBundle": ""
@@ -832,7 +862,6 @@
                     "dev-master": "0.9.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JMS\\SerializerBundle": ""
@@ -858,6 +887,32 @@
                 "deserialization",
                 "jaxb"
             ]
+        },
+        {
+            "name": "kertz/twitteroauth",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kertz/twitteroauth",
+                "reference": "30d9fba685516cfeee12bdf0aa50d803f112214b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/kertz/twitteroauth/archive/30d9fba685516cfeee12bdf0aa50d803f112214b.zip",
+                "reference": "30d9fba685516cfeee12bdf0aa50d803f112214b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-08-02 14:24:38",
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "twitteroauth"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/"
         },
         {
             "name": "knplabs/knp-menu",
@@ -886,14 +941,12 @@
                 "silex/silex": "for the integration with your silex application",
                 "twig/twig": "for the TwigRenderer and the integration with your templates"
             },
-            "time": "1339345240",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.1.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Knp\\Menu\\": "src/"
@@ -921,7 +974,8 @@
             "keywords": [
                 "menu",
                 "tree"
-            ]
+            ],
+            "time": "2012-06-10 16:20:40"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -944,7 +998,6 @@
             },
             "time": "2012-05-17 04:56:49",
             "type": "symfony-bundle",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Knp\\Bundle\\MenuBundle": ""
@@ -1004,14 +1057,12 @@
                 "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
                 "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin"
             },
-            "time": "1349004759",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.1-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Assetic": "src/"
@@ -1036,7 +1087,8 @@
                 "assets",
                 "compression",
                 "minification"
-            ]
+            ],
+            "time": "2012-09-30 11:32:39"
         },
         {
             "name": "monolog/monolog",
@@ -1063,14 +1115,12 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server"
             },
-            "time": "1350121319",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.3.x-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Monolog": "src/"
@@ -1092,7 +1142,8 @@
             "keywords": [
                 "log",
                 "logging"
-            ]
+            ],
+            "time": "2012-10-13 09:41:59"
         },
         {
             "name": "nelmio/solarium-bundle",
@@ -1118,7 +1169,6 @@
             },
             "time": "2012-07-31 04:54:55",
             "type": "symfony-bundle",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Nelmio\\SolariumBundle": ""
@@ -1160,7 +1210,6 @@
                 "symfony/yaml": ">=2.0"
             },
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "OldSound\\RabbitMqBundle\\": ""
@@ -1192,7 +1241,6 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\DistributionBundle": ""
@@ -1239,7 +1287,6 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\FrameworkExtraBundle": ""
@@ -1290,7 +1337,6 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Sensio\\Bundle\\GeneratorBundle": ""
@@ -1324,9 +1370,8 @@
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "1343376249",
+            "time": "2012-07-27 08:04:09",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Solarium": "library/"
@@ -1377,14 +1422,12 @@
                 "sonata-project/doctrine-orm-admin-bundle": "dev-master",
                 "sonata-project/intl-bundle": "dev-master"
             },
-            "time": "1350240006",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sonata\\AdminBundle": ""
@@ -1411,7 +1454,8 @@
                 "Admin Generator",
                 "sonata",
                 "bootstrap"
-            ]
+            ],
+            "time": "2012-10-14 18:40:06"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -1436,9 +1480,7 @@
                 "sonata-project/admin-bundle": "dev-master",
                 "sonata-project/cache-bundle": "dev-master"
             },
-            "time": "1350232707",
             "type": "symfony-bundle",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sonata\\BlockBundle": ""
@@ -1463,7 +1505,8 @@
             "keywords": [
                 "sonata",
                 "block"
-            ]
+            ],
+            "time": "2012-10-14 16:38:27"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -1485,9 +1528,8 @@
                 "doctrine/orm": ">=2.2,<2.4-dev",
                 "symfony/symfony": "2.1.*"
             },
-            "time": "1348476029",
+            "time": "2012-09-24 08:40:29",
             "type": "symfony-bundle",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sonata\\DoctrineORMAdminBundle": ""
@@ -1537,9 +1579,7 @@
             "suggest": {
                 "ext-curl": "*"
             },
-            "time": "1346967589",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Exporter": "lib/"
@@ -1563,7 +1603,8 @@
                 "csv",
                 "client",
                 "export"
-            ]
+            ],
+            "time": "2012-09-06 21:39:49"
         },
         {
             "name": "sonata-project/jquery-bundle",
@@ -1584,9 +1625,7 @@
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "2.*"
             },
-            "time": "1346283282",
             "type": "symfony-bundle",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Sonata\\jQueryBundle": ""
@@ -1611,7 +1650,8 @@
             "keywords": [
                 "jquery",
                 "sonata"
-            ]
+            ],
+            "time": "2012-08-29 23:34:42"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1630,14 +1670,12 @@
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1349196829",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "4.2-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "files": [
                     "lib/swift_required.php"
@@ -1660,7 +1698,8 @@
             "keywords": [
                 "mail",
                 "mailer"
-            ]
+            ],
+            "time": "2012-10-02 16:53:49"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -1701,7 +1740,6 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\AsseticBundle": ""
@@ -1758,7 +1796,6 @@
                     "dev-master": "2.1.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\MonologBundle": ""
@@ -1812,7 +1849,6 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Bundle\\SwiftmailerBundle": ""
@@ -1901,7 +1937,6 @@
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -1951,7 +1986,6 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Twig_Extensions_": "lib/"
@@ -1991,14 +2025,12 @@
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1350154884",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.10-dev"
                 }
             },
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
@@ -2021,7 +2053,8 @@
             "homepage": "http://twig.sensiolabs.org",
             "keywords": [
                 "templating"
-            ]
+            ],
+            "time": "2012-10-13 19:01:24"
         },
         {
             "name": "videlalvaro/php-amqplib",
@@ -2040,9 +2073,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1350048962",
             "type": "library",
-            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "PhpAmqpLib": ""
@@ -2059,7 +2090,8 @@
                 "queue",
                 "rabbitmq",
                 "message"
-            ]
+            ],
+            "time": "2012-10-12 13:36:02"
         }
     ],
     "packages-dev": null,
@@ -2071,6 +2103,7 @@
         "sonata-project/admin-bundle": 20,
         "sonata-project/doctrine-orm-admin-bundle": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "oldsound/rabbitmq-bundle": 20
+        "oldsound/rabbitmq-bundle": 20,
+        "friendsofsymfony/twitter-bundle": 20
     }
 }

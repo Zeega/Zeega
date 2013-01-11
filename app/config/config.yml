@@ -142,3 +142,9 @@ old_sound_rabbit_mq:
 fos_rest:
     routing_loader:
         default_format: json
+
+fos_twitter:
+        file: %kernel.root_dir%/../vendor/twitteroauth/twitteroauth/twitteroauth.php
+        consumer_key: 9HVs197WV0BiyBhm4MIg
+        consumer_secret: QsamFAAOFX539HmDHItNiPOhPFOfdQQgBX7PPD7zNA
+        callback_url: http://apache.zeega.org/zeega/web/login_check

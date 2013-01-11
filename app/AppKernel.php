@@ -30,8 +30,8 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle($this),
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
-            //new Sonata\CacheBundle\SonataCacheBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+            new FOS\TwitterBundle\FOSTwitterBundle(),
     
             new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
