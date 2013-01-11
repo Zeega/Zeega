@@ -70,6 +70,8 @@
 
         addToFrame : function(){
 
+            
+            $('.primary-close').trigger('click');
             zeega.app.currentFrame.addItemLayer( this.inFocus );
             zeega.app.currentFrame.trigger('layer_added');
         },
