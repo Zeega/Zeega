@@ -13,6 +13,8 @@
             
             this.index = _.indexOf( ids, this.options.start);
             this.inFocus = this.collection.at(this.index);
+
+            if(!_.isUndefined(this.inFocus.get('text'))) this.inFocus.unset('text');
             this.updateArrows();
             this.initEvents();
         },
@@ -33,6 +35,8 @@
         switchItem : function()
         {
             this.inFocus = this.collection.at(this.index);
+            if(!_.isUndefined(this.inFocus.get('text'))) this.inFocus.unset('text');
+
             this.renderItemView();
             this.inFocus.trigger("after_render");
             this.updateArrows();
@@ -336,6 +340,7 @@
         {
             this.exitEditMode();
             // the save the model
+
             this.model.save({
                 description: this.$el.find(".item-description-text").text(),
                 title: this.$el.find(".viewer-item-title .inner").text()
