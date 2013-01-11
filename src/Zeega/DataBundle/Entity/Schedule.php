@@ -304,4 +304,73 @@ class Schedule
     {
         return $this->archive;
     }
+
+    /**
+     * Set date_created
+     *
+     * @param \DateTime $date_created
+     * @return Schedule
+     */
+    public function setDate_created($date_created)
+    {
+        $this->date_created = $date_created;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_created
+     *
+     * @return \DateTime 
+     */
+    public function getDate_created()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set date_updated
+     *
+     * @param \DateTime $date_updated
+     * @return Schedule
+     */
+    public function setDate_updated($date_updated)
+    {
+        $this->date_updated = $date_updated;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return \DateTime 
+     */
+    public function getDate_updated()
+    {
+        return $this->date_updated;
+    }
+
+    /**
+     * Set status_message
+     *
+     * @param string $status_message
+     * @return Schedule
+     */
+    public function setStatus_message($status_message)
+    {
+        $this->status_message = $status_message;
+    
+        return $this;
+    }
+
+    /**
+     * Get status_message
+     *
+     * @return string 
+     */
+    public function getStatus_message()
+    {
+        return $this->status_message;
+    }
 }

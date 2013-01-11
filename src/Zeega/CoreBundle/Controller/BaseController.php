@@ -81,10 +81,7 @@ class BaseController extends SymfonyBaseController
 
         if ( null === $user ) {
             if ( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ) {
-                $loggedUserId = $this->container->get('security.context')->getToken()->getUser()->getId();                
-                if ( $this->container->get('security.context')->isGranted($role) ) {
-                    return true;
-                }
+                return false;
             }
         } else {
             $userRoles = $user->getRoles();

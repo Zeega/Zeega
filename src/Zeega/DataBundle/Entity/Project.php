@@ -433,4 +433,142 @@ class Project
     {
         return $this->users;
     }
+
+    /**
+     * Set item_id
+     *
+     * @param string $item_id
+     * @return Project
+     */
+    public function setItem_id($item_id)
+    {
+        $this->item_id = $item_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get item_id
+     *
+     * @return string 
+     */
+    public function getItem_id()
+    {
+        return $this->item_id;
+    }
+
+    /**
+     * Set cover_image
+     *
+     * @param string $cover_image
+     * @return Project
+     */
+    public function setCover_image($cover_image)
+    {
+        $this->cover_image = $cover_image;
+    
+        return $this;
+    }
+
+    /**
+     * Get cover_image
+     *
+     * @return string 
+     */
+    public function getCover_image()
+    {
+        return $this->cover_image;
+    }
+
+    /**
+     * Set estimated_time
+     *
+     * @param string $estimated_time
+     * @return Project
+     */
+    public function setEstimated_time($estimated_time)
+    {
+        $this->estimated_time = $estimated_time;
+    
+        return $this;
+    }
+
+    /**
+     * Get estimated_time
+     *
+     * @return string 
+     */
+    public function getEstimated_time()
+    {
+        return $this->estimated_time;
+    }
+
+    /**
+     * Set date_created
+     *
+     * @param \DateTime $date_created
+     * @return Project
+     */
+    public function setDate_created($date_created)
+    {
+        $this->date_created = $date_created;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_created
+     *
+     * @return \DateTime 
+     */
+    public function getDate_created()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set date_updated
+     *
+     * @param \DateTime $date_updated
+     * @return Project
+     */
+    public function setDate_updated($date_updated)
+    {
+        $this->date_updated = $date_updated;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return \DateTime 
+     */
+    public function getDate_updated()
+    {
+        return $this->date_updated;
+    }
+
+    /**
+     * Set date_published
+     *
+     * @param \DateTime $date_published
+     * @return Project
+     */
+    public function setDate_published($date_published)
+    {
+        $this->date_published = $date_published;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_published
+     *
+     * @return \DateTime 
+     */
+    public function getDate_published()
+    {
+        return $this->date_published;
+    }
 }

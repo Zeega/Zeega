@@ -361,4 +361,267 @@ class User extends BaseUser
     {
         return $this->api_key;
     }
+    /**
+     * @var string $twitterID
+     */
+    private $twitterID;
+
+    /**
+     * @var string $twitterUsername
+     */
+    private $twitterUsername;
+
+
+    /**
+     * Set display_name
+     *
+     * @param string $display_name
+     * @return User
+     */
+    public function setDisplay_name($display_name)
+    {
+        $this->display_name = $display_name;
+    
+        return $this;
+    }
+
+    /**
+     * Get display_name
+     *
+     * @return string 
+     */
+    public function getDisplay_name()
+    {
+        return $this->display_name;
+    }
+
+    /**
+     * Set thumb_url
+     *
+     * @param string $thumb_url
+     * @return User
+     */
+    public function setThumb_url($thumb_url)
+    {
+        $this->thumb_url = $thumb_url;
+    
+        return $this;
+    }
+
+    /**
+     * Get thumb_url
+     *
+     * @return string 
+     */
+    public function getThumb_url()
+    {
+        return $this->thumb_url;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $created_at
+     * @return User
+     */
+    public function setCreated_at($created_at)
+    {
+        $this->created_at = $created_at;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreated_at()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set user_type
+     *
+     * @param string $user_type
+     * @return User
+     */
+    public function setUser_type($user_type)
+    {
+        $this->user_type = $user_type;
+    
+        return $this;
+    }
+
+    /**
+     * Get user_type
+     *
+     * @return string 
+     */
+    public function getUser_type()
+    {
+        return $this->user_type;
+    }
+
+    /**
+     * Set location_latitude
+     *
+     * @param float $location_latitude
+     * @return User
+     */
+    public function setLocation_latitude($location_latitude)
+    {
+        $this->location_latitude = $location_latitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get location_latitude
+     *
+     * @return float 
+     */
+    public function getLocation_latitude()
+    {
+        return $this->location_latitude;
+    }
+
+    /**
+     * Set location_longitude
+     *
+     * @param float $location_longitude
+     * @return User
+     */
+    public function setLocation_longitude($location_longitude)
+    {
+        $this->location_longitude = $location_longitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get location_longitude
+     *
+     * @return float 
+     */
+    public function getLocation_longitude()
+    {
+        return $this->location_longitude;
+    }
+
+    /**
+     * Set background_image_url
+     *
+     * @param string $background_image_url
+     * @return User
+     */
+    public function setBackground_image_url($background_image_url)
+    {
+        $this->background_image_url = $background_image_url;
+    
+        return $this;
+    }
+
+    /**
+     * Get background_image_url
+     *
+     * @return string 
+     */
+    public function getBackground_image_url()
+    {
+        return $this->background_image_url;
+    }
+
+    /**
+     * Set dropbox_delta
+     *
+     * @param string $dropbox_delta
+     * @return User
+     */
+    public function setDropbox_delta($dropbox_delta)
+    {
+        $this->dropbox_delta = $dropbox_delta;
+    
+        return $this;
+    }
+
+    /**
+     * Get dropbox_delta
+     *
+     * @return string 
+     */
+    public function getDropbox_delta()
+    {
+        return $this->dropbox_delta;
+    }
+
+    /**
+     * Set api_key
+     *
+     * @param string $api_key
+     * @return User
+     */
+    public function setApi_key($api_key)
+    {
+        $this->api_key = $api_key;
+    
+        return $this;
+    }
+
+    /**
+     * Get api_key
+     *
+     * @return string 
+     */
+    public function getApi_key()
+    {
+        return $this->api_key;
+    }
+
+    /**
+     * Set twitterID
+     *
+     * @param string $twitterID
+     * @return User
+     */
+    public function setTwitterID($twitterID)
+    {
+        $this->twitterID = $twitterID;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterID
+     *
+     * @return string 
+     */
+    public function getTwitterID()
+    {
+        return $this->twitterID;
+    }
+
+    /**
+     * Set twitterUsername
+     *
+     * @param string $twitterUsername
+     * @return User
+     */
+    public function setTwitterUsername($twitterUsername)
+    {
+        $this->twitterUsername = $twitterUsername;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterUsername
+     *
+     * @return string 
+     */
+    public function getTwitterUsername()
+    {
+        return $this->twitterUsername;
+    }
 }

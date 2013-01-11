@@ -9,7 +9,8 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-
+        fos_twitter:
+            id: zeega.twitter.user
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -24,6 +25,13 @@ security:
             logout:
                 path:   /logout
                 target: /
+            anonymous: ~
+            fos_twitter:
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /
+                provider: fos_twitter
+
             anonymous: ~
 
     access_control:

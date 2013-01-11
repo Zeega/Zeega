@@ -1,3 +1,3 @@
-zeega_social_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ZeegaSocialBundle:Default:index }
+connect_twitter:
+    pattern:  /connectTwitter
+    defaults: { _controller: ZeegaSocialBundle:Twitter:connectTwitter }
