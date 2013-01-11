@@ -17,18 +17,18 @@
 			this.collection.each(function(item){
 				_this.$el.find('.list').append( item.databaseView.render().el );
 				item.databaseView.delegateEvents();
-			})
+			});
 			return this;
 		}
 
-	})
+	});
 
 	Items.Views.List = Backbone.View.extend({
 
 		tagName : 'li',
 		className : 'database-asset-list clearfix',
 
-		render: function()                 
+		render: function()
 		{
 			this.$el.html( _.template(this.getTemplate(),this.model.toJSON() ));
 			this.makeDraggable();
@@ -66,7 +66,7 @@
 				},
 				stop : function()
 				{
-					console.log('dragging		stop')
+					console.log('dragging		stop');
 				}
 			});
 		},
@@ -79,7 +79,7 @@
 		//item events
 		previewItem: function()
 		{
-			this.model.trigger('preview_item',this.model.id)
+			this.model.trigger('preview_item',this.model.id);
 		},
 
 		getTemplate : function()
