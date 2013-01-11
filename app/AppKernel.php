@@ -42,7 +42,8 @@ class AppKernel extends Kernel
             new Zeega\EditorBundle\ZeegaEditorBundle(),
             new Zeega\CommunityBundle\ZeegaCommunityBundle(),
             new Zeega\BookmarkletBundle\ZeegaBookmarkletBundle(),
-            new Zeega\UserBundle\ZeegaUserBundle(),            
+            new Zeega\UserBundle\ZeegaUserBundle(),
+            new Zeega\SocialBundle\ZeegaSocialBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

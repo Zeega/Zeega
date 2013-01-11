@@ -1,3 +1,7 @@
+zeega_social:
+    resource: "@ZeegaSocialBundle/Resources/config/routing.yml"
+    prefix:   /
+
 ZeegaUserBundle:
     resource: "@ZeegaUserBundle/Resources/config/routing.yml"
     prefix:   /
