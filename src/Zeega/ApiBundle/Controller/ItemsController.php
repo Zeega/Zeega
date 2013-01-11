@@ -70,12 +70,12 @@ class ItemsController extends ApiBaseController
 
             if(!isset($url)) {
                 $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-            } else {           
+            } else {
                 $loadChildren = $request->query->get('load_children');
                 $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
                 $parser = $this->get('zeega_parser');
                 $response = $parser->load($url, $loadChildren);
-                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"], 'load_children' => $loadChildren));
+                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"]));
             }
             
             return new Response($itemView);
@@ -405,7 +405,11 @@ class ItemsController extends ApiBaseController
 
             $requestData = $this->getRequest()->request;        
             $itemService = $this->get('zeega.item');
-            $item = $itemService->parseItem($requestData->all(), $user, $item);
+            $itemRequestData = $requestData->all();
+            if(isset($itemRequestData["child_items"])) {
+                $itemRequestData["child_items"] = null;
+            }
+            $item = $itemService->parseItem($itemRequestData, $user, $item);
             
             if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
                 $em->persist($item);
@@ -524,9 +528,11 @@ class ItemsController extends ApiBaseController
                 $queryParser = $this->get('zeega_query_parser');
                 $query = $this->getRequest()->query->all();
                 $query["type"] = "-project";
+                $itemAttributes = $item->getAttributes();
 
                 if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                     if(isset($itemAttributes["tags"])) {
+                        $query["user"] = $item->getUserId();
                         if(is_array($itemAttributes["tags"])) {
                             $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
                         } else {
@@ -536,7 +542,6 @@ class ItemsController extends ApiBaseController
                 } else {
                     $query["collection"]  = $id;
                 }
-
                 $query = $queryParser->parseRequest($query);
                 
                 $solr = $this->get('zeega_solr');
@@ -551,7 +556,7 @@ class ItemsController extends ApiBaseController
                         $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
                         
                         $layer = array("id"=>$i,"media_type"=>$childItem['media_type'],"layer_type"=>$childItem['layer_type']);
-                        
+                        $layer["type"] = $layer["media_type"];
                         if(isset($childItem['text'])) {
                             $layer["text"] = $childItem['text'];
                         }
@@ -604,15 +609,24 @@ class ItemsController extends ApiBaseController
                         if(isset($childItem['archive'])) {
                             $layer["attr"]["archive"] = $childItem['archive'];
                         }
+                        
+                        if(isset($childItem['description'])) {
+                            $layer["attr"]["description"] = $childItem['description'];
+                        }
 
                         $layers[] = $layer;
                     }
                 }               
                 
+                $creator = $item->getMediaCreatorRealname();
+                if(!isset($creator)) {
+                    $creator = $item->getMediaCreatorUsername();
+                }
 
                 $project = array("id"=>$item->getId(),
                       "title"=>$item->getTitle(),
                       "estimated_time"=>"Some time", 
+                      "authors"=>$creator,
                       "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
                       'frames'=>$frames,
                       'layers'=>$layers,
