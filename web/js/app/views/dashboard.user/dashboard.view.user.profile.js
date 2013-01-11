@@ -152,7 +152,7 @@
 					$('.dashboard-profile-photo').fadeTo(500,1);
 					$('.profile-image-wrapper').spin(false);
 				}
-
+					$('#unsupported-file').modal('show');
 
 				$('#' + elementIDName).change(function(){
 					
@@ -198,6 +198,8 @@
 				handleError: function (data, status, e)
 				{
 					console.log('ERROR!!',e);
+						$('#unsupported-file').modal('show');
+				
 				}
 			});
 			
@@ -209,7 +211,7 @@
 		
 		getTemplate : function()
 		{
-			html = '<div class="span3 author-photo dashboard-photo">'+
+			var html = '<div class="span3 author-photo dashboard-photo">'+
 						'<div class="profile-image-wrapper">'+
 							'<img src="<%= thumbnail_url %>" alt="author-photo" width="100%" height="100%" class="dashboard-profile-photo">'+
 						'</div>'+
