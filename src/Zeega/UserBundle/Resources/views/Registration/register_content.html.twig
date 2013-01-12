@@ -47,7 +47,7 @@
 	
 			<div class="page-intro span11">
 			
-				<h1>Sign Up to Join the Zeega Community</h1>
+				<h1>Join the Zeega Community!</h1>
 				<h2>What are you making? Tell us a little bit about what you’ve got in mind and we’ll hook you up.</h2>
 			
 			</div>
@@ -101,9 +101,21 @@
 						</div>
 						<div class="row">
 					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Password</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+									{{ form_errors(form.email) }}
+						    		{{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
 						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
 								<p class="sidebar">
-									What are you making? We'd love to hear about it so we can help you make it as awesome as possible.
+									What are you making? We'd love to hear about it so we can help make sure it's as awesome as possible.
 								</p>
 							</div>
 							<div class="span4">
