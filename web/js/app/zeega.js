@@ -119,8 +119,7 @@ this.zeega = {
 */
     },
 
-    goToFrame : function( f )
-    {
+    goToFrame : function( f ){
         var frame;
         if( _.isNumber(f) ) frame = this.project.frames.get(f);
         else frame = f;
@@ -128,8 +127,7 @@ this.zeega = {
         console.log('$$        go to frame', frame);
 
         // if the frame's sequence isn't rendered, then render it
-        if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID )
-        {
+        if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID ){
             var sequence = this.project.sequences.get( frame.sequenceID );
             sequence.renderSequenceFrames();
             if(this.currentSequence) this.currentSequence.trigger('blur');

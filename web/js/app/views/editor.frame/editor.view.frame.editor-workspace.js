@@ -40,8 +40,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 
 		linkToNewFrame : function()
 		{
-			if(this.busy != true)
-			{
+			if ( this.busy !== true ) {
 				var _this = this;
 				this.busy = true;
 
@@ -49,7 +48,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				var fromInfo = {
 					from_sequence : zeega.app.currentSequence.id,
 					from_frame : _this.model.id
-				}
+				};
 
 				this.hold = this.model.addLayerByType('Link', fromInfo );
 				
@@ -66,10 +65,8 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		linkToExistingFrame : function()
-		{
-			if(this.busy != true)
-			{
+		linkToExistingFrame : function() {
+			if( this.busy !== true ) {
 				var Modal = zeega.module('modal');
 				this.linkModal = new Modal.Views.LinkExisting({model:this.model});
 				$('body').append( this.linkModal.render().el );
@@ -80,23 +77,19 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		showConnectionConfirm : function()
-		{
+		showConnectionConfirm : function() {
 			this.hold.off('sync', this.showConnectionConfirm);
 			this.$el.find('.connection-confirm').show();
 		},
 
-		hideConnectionConfirm : function()
-		{
-			this.$el.find('.connection-confirm').hide()
+		hideConnectionConfirm : function() {
+			this.$el.find('.connection-confirm').hide();
 		},
 		
 		/*
 			make a connection to a new sequence
 		*/
-
-		confirmConnection : function(e)
-		{
+		confirmConnection : function( e ) {
 			var _this = this;
 			var Sequence = zeega.module("sequence");
 			var sequence = new Sequence.Model({ 'frame_id' : zeega.app.currentFrame.id, 'layers_to_persist' : [this.hold.id] });
@@ -111,8 +104,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return false;
 		},
 
-		onSequenceSave : function( sequence )
-		{
+		onSequenceSave : function( sequence ) {
 			sequence.off('sync', this.onSequenceSave );
 			sequence.onSaveNew();
 			var info = {
@@ -175,17 +167,14 @@ the frame's layers. It also includes common frame functions like adding sequence
 			}
 		},
 		
-		saveAdvance : function( time )
-		{
+		saveAdvance : function( time ) {
 			//make sure the value is an actual number before saving and that it's not saving dupe data
-			var time = parseFloat(time*1000);
+			time = parseFloat( time * 1000, 10 );
 			if(_.isNumber(time) && this.model.get('attr').advance != time ) this.model.update({ 'advance' : time });
 		},
 
-		onExit : function()
-		{
-			if(this.hold)
-			{
+		onExit : function() {
+			if(this.hold) {
 				this.model.layers.remove( this.hold );
 				this.hold = null;
 				this.busy = false;
@@ -194,27 +183,23 @@ the frame's layers. It also includes common frame functions like adding sequence
 			this.undelegateEvents();
 		},
 
-		getTemplate : function()
-		{
-			var html = 
+		getTemplate: function() {
+			var html =
 
 				"<ul id='link-controls' class='pull-left'>"+
-					"<li><a id='link-new-sequence' href='#'><div class='menu-verbose-title'>Link to New Frame</div><i class='icon-check icon-white'></i></a></li>"+
-					"<li><a id='link-existing-sequence' href='#'><div class='menu-verbose-title'>Link to Existing Frame</div><i class='icon-random icon-white'></i></a></li>"+
+					// "<li><a id='link-new-sequence' href='#'><div class='menu-verbose-title'>Link to New Frame</div><i class='icon-check icon-white'></i></a></li>"+
+					"<li><a id='link-existing-sequence' href='#'><div class='menu-verbose-title'>Link</div><i class='icon-random icon-white'></i></a></li>"+
 					"<li><a id='link-confirm' href='#'><div class='menu-verbose-title'>Confirm</div><i class='icon-ok-sign icon-white'></i></a></li>"+
 				"</ul>"+
 				"<ul id='advance-controls' class='pull-right'>";
 
-				if(this.model.get('attr').advance > 0)
-				{
+				if(this.model.get('attr').advance > 0) {
 					html +=
 						"<li><a id='advance-manual' class='disabled' href='#'><div class='menu-verbose-title'>Manual Advance</div><i class='icon-hand-up icon-white'></i></a></li>"+
 						"<li><a id='advance-timed' href='#'><div class='menu-verbose-title'>Timed Advance</div><i class='icon-time icon-white'></i></a></li>"+
 						"<li><input type='text' placeholder='sec' value='<%= attr.advance/1000 %>'/></li>"+
 					"</ul>";
-				}
-				else
-				{
+				} else {
 					html +=
 						"<li><a id='advance-manual' href='#'><div class='menu-verbose-title'>Manual Advance</div><i class='icon-hand-up icon-white'></i></a></li>"+
 						"<li><a id='advance-timed' class='disabled' href='#'><div class='menu-verbose-title'>Timed Advance</div><i class='icon-time icon-white'></i></a></li>"+
@@ -225,7 +210,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			return html;
 		}
 
-	})
+	});
 
 
 	

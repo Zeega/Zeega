@@ -5,15 +5,12 @@
         
         target : '#zeega-project-sequence-list',
 
-        initialize : function()
-        {
+        initialize : function() {
             this.collection.on('add', this.render, this);
             this.collection.on('remove', this.render, this);
         },
 
-        render : function()
-        {
-            console.log('ss       sequence render', this);
+        render : function() {
             var _this = this;
             this.setElement( $(this.target) );
             this.$el.html('<ul class="list">');
@@ -21,7 +18,24 @@
                 _this.$el.find('.list').append( sequence.tabView.render().el );
                 sequence.tabView.delegateEvents();
             });
+            this.$el.append("<div id='add-sequence'><a href='#'><div class='menu-verbose-title'>add sequence</div></a></div>");
             return this;
+        },
+
+        events: {
+            "click #add-sequence a": "addSequence"
+        },
+
+        addSequence: function() {
+            console.log('add sequence!!');
+            var Sequence = zeega.module("sequence"),
+                sequence = new Sequence.Model();
+
+            this.$el.find('#link-confirm').hide();
+            sequence.on('sync', this.onSequenceSave, this);
+            sequence.save().success(function() {
+                zeega.app.project.sequences.add( sequence );
+            });
         }
 /*
         addSequence : function( seq )
@@ -29,7 +43,7 @@
             this.$el.find('.list').append( seq.tabView.render().el );
         }
 */
-    })
+    });
 
 // model view
     Sequence.Views.SequenceTabs = Backbone.View.extend({

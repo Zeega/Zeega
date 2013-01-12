@@ -4,27 +4,26 @@
 	
 ******************************/
 
-#zeega-project-sequence-list
-{
+#zeega-project-sequence-list {
 	background: rgba(0, 0, 0, 0.2);
+	position: relative;
 
-	&>ul.list
-	{
+	&>ul.list {
 		margin:0;
 		list-style:none;
 		white-space: nowrap;
 		overflow:auto;
 		border-bottom: 5px solid #777;
 
-		&>li
-		{
+		&>li {
 			display: inline-block;
 			position:relative;
 
-			&.active>a{ background-color: #777 }
+			&.active>a {
+				background-color: #777;
+			}
 
-			&>a
-			{
+			&>a {
 				display:block;
 				height:25px;
 				padding: 7px 12px;
@@ -35,11 +34,39 @@
 				font-size: 11px;
 			}
 
-			&:hover .flag-menu{ display:block }
-
+			&:hover .flag-menu {
+				display:block;
+			}
 		}
 	}
 }
+
+#add-sequence {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	text-align: center;
+	line-height: 22px;
+
+	a {
+		height: 100%;
+		position: relative;
+		background: rgba(255, 255, 255, 0.1);
+		font-weight: bold;
+		font-size: 40px;
+		display: block;
+		padding: 0 10px;
+		.menu-verbose-title {
+			font-size: 11px; font-weight: normal;
+		}
+		&:hover {
+			color:#ddd;
+			background:rgba(255, 255, 255, 0.25);
+		}
+	}
+}
+
 
 
 /************* end sequence styles ****************/
