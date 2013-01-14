@@ -19,6 +19,6 @@ class TwitterController extends Controller
 
     public function loginAction()
     {   
-        return new RedirectResponse($this->generateUrl('fos_user_registration_register'));
+        return new RedirectResponse($this->generateUrl('ZeegaCommunityBundle_dashboard'));
     }
 }
