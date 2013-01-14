@@ -13,7 +13,12 @@ class RegistrationFormType extends BaseType
             ->add('display_name',null, array('required' => true))
             ->add('email', 'email')
             ->add('idea')
-            ->add('plainPassword', 'hidden')
+            ->add('plainPassword', 'repeated', array(
+                'type' => 'password',
+                'options' => array('translation_domain' => 'FOSUserBundle'),
+                'invalid_message' => "The passwords don't match. Try again?",
+                'error_bubbling' => true
+            ))
             ->add('locked', 'checkbox', array(
                 'label'     => "I've read and agree to Zeega's terms of use.",
                 'required'  => true,

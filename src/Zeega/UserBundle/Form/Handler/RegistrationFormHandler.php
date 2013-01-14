@@ -24,9 +24,8 @@ class RegistrationFormHandler extends BaseHandler
     protected function onSuccess(UserInterface $user, $confirmation)
     {
 		$user->setUsername($user->getEmail());
-		$user->setPlainPassword(mt_rand());
-		$user->setLocked(true);
-		$user->setEnabled(false);
+		$user->setLocked(false);
+		$user->setEnabled(true);
         $user->setCreatedAt(new \DateTime('now'));
 		
 		$em = $this->container->get('doctrine')->getEntityManager();
