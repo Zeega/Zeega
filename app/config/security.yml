@@ -29,7 +29,7 @@ security:
             fos_twitter:
                 login_path: /login
                 check_path: /login_check
-                default_target_path: /
+                default_target_path: /twitter/login
                 provider: fos_twitter
 
             anonymous: ~
