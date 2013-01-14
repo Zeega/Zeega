@@ -1077,7 +1077,6 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .right-shadow{background:-moz-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);background:-webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(70%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.4)));background:-webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);background:-o-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);background:-ms-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);background:linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#00000000', endColorstr='#66000000', GradientType=1);}
 .xray{background-color:fuchsia;}
 .yray{background-color:purple;}
-*{-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-ms-transition:all 0.2s ease;-o-transition:all 0.2s ease;}
 #background-color{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.7);z-index:-1;}
 #background-color-home{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.6);z-index:-1;}
 #background-color-lighter{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.4);z-index:-1;}
