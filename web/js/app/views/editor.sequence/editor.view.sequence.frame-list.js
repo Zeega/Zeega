@@ -9,8 +9,7 @@
 			this.model.on('blur', this.undelegateEvents, this );
 		},
 
-		render: function()
-		{
+		render: function() {
 			var _this = this;
 			this.setElement( $(this.target) );
 			this.$el.html( this.getTemplate() );
@@ -39,7 +38,6 @@
 				stop : function()
 				{
 					var frameIDArray = _.map( _this.$('.list').children('.frame-thumb') ,function(el){ return parseInt($(el).data('id'),10); });
-					console.log('#####		frameID aray', frameIDArray);
 					_this.model.onFrameReorder( frameIDArray );
 				}
 			});

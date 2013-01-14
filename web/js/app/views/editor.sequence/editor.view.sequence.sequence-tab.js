@@ -27,13 +27,13 @@
         },
 
         addSequence: function() {
-            console.log('add sequence!!');
             var Sequence = zeega.module("sequence"),
                 sequence = new Sequence.Model();
 
             this.$el.find('#link-confirm').hide();
             sequence.on('sync', this.onSequenceSave, this);
             sequence.save().success(function() {
+                sequence.onSaveNew();
                 zeega.app.project.sequences.add( sequence );
             });
         }

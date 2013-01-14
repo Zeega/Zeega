@@ -124,11 +124,10 @@ this.zeega = {
         if( _.isNumber(f) ) frame = this.project.frames.get(f);
         else frame = f;
 
-        console.log('$$        go to frame', frame);
-
         // if the frame's sequence isn't rendered, then render it
         if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID ){
             var sequence = this.project.sequences.get( frame.sequenceID );
+
             sequence.renderSequenceFrames();
             if(this.currentSequence) this.currentSequence.trigger('blur');
             sequence.trigger('focus');
@@ -175,9 +174,7 @@ this.zeega = {
     searchDatabase : function( search, reset ){console.log('searchdatabase:',search,reset); this.items.search(search,reset); },
     refreshDatabase : function(){ this.items.refresh(); },
 
-    returnToFrame : function()
-    {
-        console.log('~~        return to frame', this.currentFrame.id+'', this.currentFrame.get('layers') );
+    returnToFrame : function() {
         
         $('#wrapper').show();
         this.currentFrame.renderWorkspace();
