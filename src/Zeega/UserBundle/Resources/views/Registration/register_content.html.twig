@@ -11,7 +11,7 @@
 		*/
 	
 		html { 
-		background: url({{asset("images/registration/register.gif")}}) no-repeat center center fixed; 
+		background: url({{asset("images/registration/register.jpg")}}) no-repeat center center fixed; 
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -47,8 +47,8 @@
 	
 			<div class="page-intro span11">
 			
-				<h1>Sign Up For A Zeega Invite</h1>
-				<h2>Got an idea? Tell us a little bit about what you’ve got in mind and we’ll add your name to the list. As soon as a spot opens, we’ll invite you in.</h2>
+				<h1>Join the Zeega Community!</h1>
+				<h2>What are you making? Tell us a little bit about what you’ve got in mind and we’ll hook you up.</h2>
 			
 			</div>
 		
@@ -99,11 +99,36 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Password</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+									{{ form_errors(form.plainPassword.first) }}
+						    		{{ form_widget(form.plainPassword.first, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3">
+						    	<label class="control-label" for="youridea"><h4>Password Verification</h4></label>
+							</div>
+							<div class="span4">
+								<div class="required"></div>			
+								<div class="controls">
+									{{ form_errors(form.plainPassword.second) }}
+						    		{{ form_widget(form.plainPassword.second, { 'attr': {'class': 'input-xlarge-custom'} }) }}
+								</div>
+							</div>
+						</div>
 						<div class="row">
 					    	<div class="span3">
 						    	<label class="control-label" for="youridea"><h4>Your Idea</h4></label>
 								<p class="sidebar">
-									Already have something in mind? Tell us a little more, we'd love to hear about it.
+									What are you making? We'd love to hear about it so we can help make sure it's as awesome as possible.
 								</p>
 							</div>
 							<div class="span4">
@@ -132,16 +157,6 @@
 					    <div class="row">
 							<div class="span4 offset3">
 								<button type="submit" class="btn btn-success btn-custom"><h4>Register</h4></button>
-							</div>
-						</div>
-						<div class="row">
-					    	<div class="span3">
-							</div>
-							<div class="span4">
-								<div class="controls">
-						    		{{ form_errors(form.plainPassword) }}
-						    		{{ form_widget(form.plainPassword) }}
-								</div>
 							</div>
 						</div>
 					 </div>
