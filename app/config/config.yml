@@ -152,7 +152,7 @@ fos_rest:
         default_format: json
 
 fos_twitter:
-        file: %kernel.root_dir%/../vendor/twitteroauth/twitteroauth/twitteroauth.php
-        consumer_key: 9HVs197WV0BiyBhm4MIg
-        consumer_secret: QsamFAAOFX539HmDHItNiPOhPFOfdQQgBX7PPD7zNA
-        callback_url: http://apache.zeega.org/zeega/web/login_check
+        file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
+        consumer_key: %twitter_consumer_key%
+        consumer_secret: %twitter_consumer_secret%
+        callback_url: %twitter_callback_url%
