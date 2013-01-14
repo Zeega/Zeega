@@ -34,9 +34,9 @@ class TwitterProvider implements UserProviderInterface
         return $this->userManager->supportsClass($class);
     }   
 
-    public function findUserByTwitterId($twitterID)
+    public function findUserByTwitterUsername($twitterUsername)
     {   
-        return $this->userManager->findUserBy(array('twitterID' => $twitterID));
+        return $this->userManager->findUserBy(array('twitterUsername' => $twitterUsername));
     }   
 
     public function loadUserByUsername($username)
