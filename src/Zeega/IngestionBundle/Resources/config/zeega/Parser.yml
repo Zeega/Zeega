@@ -36,11 +36,11 @@ zeega.parsers:
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Facebook\ParserFacebookSet
 
-    dropbox.com:
-        set_parser:
-            regex: /https?:\/\/(?:www\.)?www.dropbox.com\/home\/Apps\/Zeega/
-            is_set: true
-            parser_class: Zeega\IngestionBundle\Parser\Dropbox\ParserDropboxSet
+    #dropbox.com:
+    #    set_parser:
+    #        regex: /https?:\/\/(?:www\.)?www.dropbox.com\/home\/Apps\/Zeega/
+    #        is_set: true
+    #        parser_class: Zeega\IngestionBundle\Parser\Dropbox\ParserDropboxSet
 
     instagram.com:
         item_parser:
