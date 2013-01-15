@@ -207,9 +207,12 @@
             var html = "<div class='container'>"+
                     "<div class='row'>"+
                         "<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
-                        "<div class='span10 item-viewer-content'>"+
-                             "<a class='add-to-frame' href='#'>add to frame</a>"+
-                            "<a class='close primary-close' href='#'>&times;</a>"+
+                        "<div class='span10 item-viewer-content'>";
+            if(!_.isUndefined(zeega.app)){
+                console.log("FFFFF YAHHHHH",zeega);
+                html+= "<a class='add-to-frame' href='#'>add to frame</a>";
+            }
+            html += "<a class='close primary-close' href='#'>&times;</a>"+
 
                             "<div class='inner-content more-view'></div>"+
 
