@@ -17,6 +17,7 @@
 			'fontSize' : 500,
 			'overflow' : 'visible',
 			'width' : 25,
+			fontFamily: "Arial",
 			//'height' : 10,
 			
 			linkable : true
