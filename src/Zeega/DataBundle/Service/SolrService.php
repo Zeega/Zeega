@@ -75,8 +75,13 @@ class SolrService
         if(isset($query["collection"])) {    
             $queryString = self::appendQueryToQueryString($queryString, "parent_item:".$query["collection"]);
         }
+
+        $mediaDateCreatedQuery = self::createDateIntervalQuery("media_after", "media_before", "media_date_created", $query);
+        $queryString = self::appendQueryToQueryString($queryString, $mediaDateCreatedQuery);
+
+        $dateCreatedQuery = self::createDateIntervalQuery("after", "before", "date_created", $query);
+        $queryString = self::appendQueryToQueryString($queryString, $dateCreatedQuery);
         
-        //echo '<pre>'; print_r($queryString); echo '</pre>';
         if(isset($queryString) && $queryString != '') {
             $solrQuery->setQuery($queryString);
         }
@@ -89,18 +94,7 @@ class SolrService
         if(isset($query["geo_located"]) && $query["geo_located"] == 1) {
             $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
         }
-                                                                                    
-        if(isset($query["since"]) && isset($query["before"])) {
-            $minDate = new \DateTime();
-            $minDate->setTimestamp($query["since"]);
-            $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
-            $maxDate = new \DateTime();
-            $maxDate->setTimestamp($query["before"]);
-            $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
-            
-            $solrQuery->createFilterQuery('media_date_created')->setQuery("media_date_created: [$minDate TO $maxDate]");
-        }
-                
+
         if(isset($query["user"])) {
             $solrQuery->createFilterQuery('user_id')->setQuery("user_id:".$query["user"]);
         }
@@ -113,10 +107,6 @@ class SolrService
         $resultset = $client->execute($solrQuery);
 
         $responseData = $resultset->getData();
-
-        //echo '<pre>'; print_r($responseData["response"]["docs"]); echo '</pre>';
-
-        //echo '<pre>'; echo $resultset->getNumFound(); echo '</pre>';
                 
         // get the tags results
         $facets = $resultset->getFacetSet();
@@ -133,10 +123,42 @@ class SolrService
     }
 
     private function appendQueryToQueryString($queryString, $query) {
+        
         if(!isset($queryString) || $queryString == '') {
             return $query;
+        } else if(!isset($query) || $query == '') {
+            return $queryString;
         } else {
             return "$queryString AND $query";
         }  
+    }
+
+    private function createDateIntervalQuery($minValueElemName, $maxValueElemName, $fieldName, $query) {
+        $minDate = isset($query[$minValueElemName]) ? $query[$minValueElemName] : null;
+        $maxDate = isset($query[$maxValueElemName]) ? $query[$maxValueElemName] : null;
+
+        if (isset($minDate) ) {
+            $minDateTime = new \DateTime();
+            $minDateTime->setTimestamp($minDate);
+            $minDate = $minDateTime;
+            $minDate = $minDate->format('Y-m-d\TH:i:s\Z');
+        }
+
+        if (isset($maxDate) ) {
+            $maxDateTime = new \DateTime();
+            $maxDateTime->setTimestamp($maxDate);
+            $maxDate = $maxDateTime;
+            $maxDate = $maxDate->format('Y-m-d\TH:i:s\Z');
+        }
+ 
+        if ( isset($minDate) && isset($maxDate) ) {
+            return "$fieldName:[$minDate TO $maxDate]";
+        } else if (isset($minDate) ) {
+            return "$fieldName:[$minDate TO *]";
+        } else if (isset($maxDate) ) {
+            return "$fieldName:[* TO $maxDate]";
+        }
+
+        return null;
     }
 }
