@@ -36,7 +36,6 @@
                 published:true,
                 authors : this.$('#publish-project-author').val(),
                 tags : this.$('#tag-input').val().split(" "),
-                //location : this.$el.find('#publish-project-location').val(),
                 estimated_time : this.$('#publish-project-estimated-time').val()
             };
 
@@ -53,7 +52,7 @@
             this.model.updated = false;
             this.hide();
             if(this.isPublished !== true ){
-                $("#project-publish .menu-verbose-title").html("update");
+                $("#project-publish .menu-verbose-title").html("update").addClass('disabled');
                 this.model.shareProject();
             }
         },
@@ -77,16 +76,7 @@
                             
                                 '<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
                                 '<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= authors %>"/>'+
-                                
-                                '<label for="publish-project-estimated-time" class="twocolumn-label">Estimated Time</label>'+
-                                '<input type="text" id="publish-project-estimated-time" class="twocolumn-field span6" value="<%= estimated_time %>"/>'+
-                                
-                                /*
-                                '<p class="twocolumn-pair">'+
-                                '<label for="publish-project-location" class="twocolumn-label">Location</label>'+
-                                '<input type="text" id="publish-project-location" class="twocolumn-field" value="<%= location %>"/>'+
-                                '</p>'+
-                                */
+
                                 
                                 '<label for="tags" class="twocolumn-label">Tags</label>'+
                                 '<input name="tags" class="tagsedit twocolumn-field span6" id="tag-input" value="<%= tags %>" />'+
