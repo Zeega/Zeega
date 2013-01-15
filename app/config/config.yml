@@ -95,7 +95,7 @@ fos_user:
             type: zeega_user_registration
             validation_groups: [ZeegaRegistration]
         confirmation:
-            enabled:    false
+            enabled:    true
 
     resetting:
         token_ttl: 8640000

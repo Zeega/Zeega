@@ -16,8 +16,12 @@ class RegistrationController extends BaseController
         $process = $formHandler->process($confirmationEnabled); // validate the form data
         if ($process) 
         {
-            $user = $form->getData();            
-            $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());            
+            $user = $form->getData();
+            $user->setConfirmationToken(null);
+            $user->setEnabled(true);
+            $user->setLastLogin(new \DateTime());
+            $this->container->get('fos_user.user_manager')->updateUser($user);
+            $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
             $response = new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard'));
             $this->authenticateUser($user, $response);
 
