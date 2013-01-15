@@ -97,6 +97,10 @@
 		
 		onAddLayer : function( layer )
 		{
+			if(layer.get('type')==="Image"&&this.get('cover_image').indexOf("default_cover.png")>0){
+				this.save({'cover_image':layer.get('attr').uri});
+			}
+
 			this.initLayerListeners( layer );
 		},
 		
