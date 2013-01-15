@@ -110,7 +110,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var info = {
 				to_sequence : sequence.id,
 				to_frame : sequence.get('frames')[0]
-			}
+			};
 			this.hold.update(info);
 			this.hold.trigger('update_link');
 			zeega.app.project.sequences.add(sequence);
@@ -233,10 +233,10 @@ the frame's layers. It also includes common frame functions like adding sequence
 			var layersToRender = this.model.layers.filter(function(layer){
 				if( layer.get('type') != 'Link' ) return true;
 				if( layer.get('attr').from_frame == _this.model.id ) return true;
-			})
+			});
 
 			_.each( layersToRender, function(layer,i){
-				layer.visual.render().$el.css('z-index',i)
+				layer.visual.render().$el.css('z-index',i);
 				_this.$el.append( layer.visual.render().el );
 			});
 
@@ -258,19 +258,19 @@ the frame's layers. It also includes common frame functions like adding sequence
 				{
 					ui.draggable.draggable('option','revert',false);
 					_this.model.addItemLayer( zeega.app.draggedItem );
-					_this.model.trigger('layer_added')
+					_this.model.trigger('layer_added');
 				}
 			});
 		},
 
 		unrender : function()
 		{
-			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit() })
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerExit(); });
 		},
 		
 		onLayerEnter : function()
 		{
-			this.model.layers.each(function(layer){ layer.visual.private_onLayerEnter() })
+			this.model.layers.each(function(layer){ layer.visual.private_onLayerEnter(); });
 		},
 		
 		onAddLayer : function( layer )
@@ -278,16 +278,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 			if(zeega.app.currentFrame == this.model)
 			{
 				this.$el.append( layer.visual.render().el );
-				layer.visual.render().$el.css('z-index', this.model.layers.length)
+				layer.visual.render().$el.css('z-index', this.model.layers.length);
 				layer.visual.private_onLayerEnter();
 			}
 		},
 
 		onRemoveLayer : function( layer )
 		{
-			if(zeega.app.currentFrame == this.model) layer.visual.private_onLayerExit()
+			if(zeega.app.currentFrame == this.model) layer.visual.private_onLayerExit();
 		}
-	})
+	});
 	
 	//move this elsewhere to another file ?
 	Frame.Views.EditorLayerList = Backbone.View.extend({
@@ -312,7 +312,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 					_this.$('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
-			})
+			});
 			this.makeSortable();
 			return this;
 		},
@@ -368,16 +368,16 @@ the frame's layers. It also includes common frame functions like adding sequence
 						$('#layer-'+layer.id).removeClass('layer-open');
 					}
 				}
-			})
+			});
 		},
 		
 		removeFromEditor : function()
 		{
-			this.model.layers.each(function(layer){ layer.controls.private_onLayerExit() });
+			this.model.layers.each(function(layer){ layer.controls.private_onLayerExit(); });
 			this.$el.empty();
 		}
 		
-	})
+	});
 	
 	Frame.Views.EditorLinkLayerList = Backbone.View.extend({
 		
@@ -400,7 +400,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 					_this.$el.find('.list').prepend( layer.controls.renderControls().el );
 					layer.controls.delegateEvents();
 				}
-			})
+			});
 			this.makeSortable();
 			return this;
 		},
@@ -415,7 +415,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 				containment: 'parent',
 				cursorAt : {top:1,left:1},
 				tolerance: 'pointer',
-				update : function(){ _this.model.updateLayerOrder() }
+				update : function(){ _this.model.updateLayerOrder(); }
 			});
 			this.$el.find('.list').disableSelection();
 		},
@@ -429,7 +429,7 @@ the frame's layers. It also includes common frame functions like adding sequence
 			}
 		}
 		
-	})
+	});
 	
 
 })(zeega.module("frame"));

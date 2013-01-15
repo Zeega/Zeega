@@ -68,6 +68,9 @@
 			var index = $(e.target).closest('li').data('index');
 			var tagArray = this.model.get('tags');
 			tagArray.splice(index,1);
+			if(!_.isUndefined(this.model.get('text'))){
+                    this.model.unset('text');
+            }
 			this.model.save('tags',tagArray);
 			this.render();
 			return false;
@@ -81,6 +84,9 @@
 				tagArray = this.model.get('tags');
 				if(!_.isArray(tagArray)) tagArray =[];
 				tagArray.push(this.$el.find('.tag-input input').val());
+				if(!_.isUndefined(this.model.get('text'))){
+                    this.model.unset('text');
+                }
 				this.model.save('tags',tagArray);
 				this.render();
 				this.$el.find('.tag-input input').focus();

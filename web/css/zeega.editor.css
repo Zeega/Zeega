@@ -1111,6 +1111,10 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .item-viewer .edit-item-metadata{opacity:0.3;}
 .item-viewer .edit-item-metadata:hover{opacity:1;}
 .item-viewer .editing-field{background:#ccffff;}
+.add-to-frame{position:absolute;right:30px;top:8px;}
+.access-level span{color:rgba(0, 0, 0, 0.5);margin-right:10px;font-weight:bold;cursor:pointer;}
+.access-level span:hover{color:#000000;}
+.access-level .selected{color:#000000;}
 #zeega-project-frame-list{height:75px;background:rgba(0, 0, 0, 0.2);position:relative;}
 #zeega-project-frame-list ul{margin:0;list-style:none;}
 #zeega-project-frame-list>ul{white-space:nowrap;overflow:auto;height:100%;}
