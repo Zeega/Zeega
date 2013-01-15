@@ -129,11 +129,6 @@ class ProjectsController extends BaseController
 				$item->setPublished(true);
                 $item->setEnabled(true);
                 
-                $projectTags = $project->getTags();
-                if ( isset($projectTags) && is_array($projectTags) ) {
-                    $item->setTags($projectTags);    
-                }
-
 				$em->persist($item);
 				$em->flush();
 				
@@ -151,11 +146,22 @@ class ProjectsController extends BaseController
 				// fetch associated item
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
 				
-				
 				$project->setDatePublished($project->getDateUpdated());
 				$em->persist($project);
 				$em->flush();
 			}
+
+            $projectTags = $project->getTags();
+            $itemTags = $item->getTags();
+            
+            if ( isset($projectTags) && is_array($projectTags) ) {
+
+                if ( isset($itemTags) && is_array($itemTags) ) {
+                    $projectTags = array_unique(array_values(array_merge($itemTags, $projectTags))); // oooo
+                }
+
+                $item->setTags($projectTags);
+            }
         
         
 			$item->setMediaCreatorRealname($project->getAuthors());
