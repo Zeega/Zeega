@@ -91,7 +91,7 @@ zeega.parsers:
             parser_class: Zeega\IngestionBundle\Parser\DPLA\ParserDPLASet
     mapbox.com:
         item_parser:
-            regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)#"
+            regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)\##"
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Mapbox\ParserMapboxTiles
     #vimeo.com:
