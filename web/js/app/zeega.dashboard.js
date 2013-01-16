@@ -78,7 +78,7 @@ this.zeega.dashboard = {
               backdrop: 'static'
             });
             $('#intro-video').modal('show');
-            $('#intro-player-wrapper').html("<iframe id='intro-player' src='http://player.vimeo.com/video/50002469?api=1&autoplay=1&portrait=0&byline=0&player_id=player_1'  width='770px' height='440px' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+            $('#intro-player-wrapper').html("<iframe id='intro-player' src='http://player.vimeo.com/video/57549298?api=1&autoplay=1&portrait=0&byline=0&player_id=player_1'  width='770px' height='440px' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
 
             var f = $('#intro-player'),
                 url = f.attr('src').split('?')[0];
