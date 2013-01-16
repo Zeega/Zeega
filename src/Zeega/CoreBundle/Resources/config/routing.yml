@@ -2,6 +2,10 @@ ZeegaCoreBundle_unsupportedBrowser:
     pattern: /browser/notsupported
     defaults: { _controller:  ZeegaCoreBundle:Core:unsupportedBrowser }
 
+ZeegaCoreBundle_channel:
+    pattern: /channel/{tag}
+    defaults: { _controller:  ZeegaCoreBundle:Publish:channel }
+
 ZeegaCoreBundle_frame_publish:
     pattern: /frame/{id}/view
     defaults: { _controller:  ZeegaCoreBundle:Publish:frame }
