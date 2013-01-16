@@ -60,9 +60,10 @@ class PersistCommand extends ContainerAwareCommand
 
             $item = json_decode(file_get_contents($filePath),true);
             $items = $item["items"]; // hammer
-            //var_dump($items);
+            $itemService = $this->getContainer()->get('zeega.item');
+
             foreach($items as $item) {
-                $item = self::parseItem($item, $user, $ingestor);
+                $item = $itemService->parseItem($item, $user);
                 $em->persist($item);
             }
             
@@ -70,101 +71,5 @@ class PersistCommand extends ContainerAwareCommand
 
             $output->writeln($item->getTitle());
         }
-    }
-
-    /**
-     * Parses an array into an item
-     *
-     * @return Item
-     * 
-     */
-    private function parseItem($itemArray, $user, $ingestor)
-    {
-        $title = $itemArray['title'];
-        $description = $itemArray['description'];
-        $text = $itemArray['text'];
-        $uri = $itemArray['uri'];
-        $attributionUri = $itemArray['attribution_uri'];
-        $mediaType = $itemArray['media_type'];
-        $layerType = $itemArray['layer_type'];
-        $thumbnailUrl = $itemArray['thumbnail_url'];
-        $mediaGeoLatitude = $itemArray['media_geo_latitude'];
-        $mediaGeoLongitude = $itemArray['media_geo_longitude'];
-        $mediaDateCreated = $itemArray['media_date_created'];
-        $mediaCreatorUsername = $itemArray['media_creator_username'];
-        $mediaCreatorRealname = $itemArray['media_creator_realname'];
-        $archive = $itemArray['archive'];
-        $attributes = $itemArray['attributes'];
-        $tags = $itemArray['tags'];
-        $published = $itemArray['published'];
-        $childItems = $itemArray['child_items'];
-            
-        $item = new Item();
-        $item->setDateCreated(new \DateTime("now"));
-        $item->setDateUpdated(new \DateTime("now"));
-        $item->setChildItemsCount(0);
-        $item->setUser($user);
-        $item->setIngestedBy($ingestor);
-        
-        if(isset($title)) $item->setTitle($title);
-        if(isset($description)) $item->setDescription($description);
-        if(isset($text)) $item->setText($text);
-        if(isset($uri)) $item->setUri($uri);
-        if(isset($attributionUri)) $item->setAttributionUri($attributionUri);
-        if(isset($mediaType)) $item->setMediaType($mediaType);
-        if(isset($layerType)) $item->setLayerType($layerType);
-        
-        $thumbnailService = $this->getContainer()->get('zeega_thumbnail');
-        
-        if(isset($thumbnailUrl)) {
-            $thumbnail = $thumbnailService->getItemThumbnail($thumbnailUrl, "Image");
-        } else {
-            $thumbnail = $thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
-        } 
-
-        if(null !== $thumbnail) {
-            $item->setThumbnailUrl($thumbnail);
-        }    
-
-        
-        if(isset($mediaGeoLatitude)) $item->setMediaGeoLatitude($mediaGeoLatitude);
-        if(isset($mediaGeoLongitude)) $item->setMediaGeoLongitude($mediaGeoLongitude);
-        
-        if(isset($mediaDateCreated)) {
-            $parsedDate = strtotime($mediaDateCreated);
-            if($parsedDate) {
-                $d = date("Y-m-d h:i:s",$parsedDate);
-                $item->setMediaDateCreated(new \DateTime($d));
-            }
-        }
-
-        if(isset($mediaCreatorUsername)) {
-            $item->setMediaCreatorUsername($mediaCreatorUsername);
-        }
-
-        if(isset($mediaCreatorRealname)) {
-            $item->setMediaCreatorRealname($mediaCreatorRealname);
-        }
-            
-        if(isset($archive)) $item->setArchive($archive);
-        if(isset($itemArray['location'])) $item->setLocation($itemArray['location']);
-        if(isset($itemArray['license'])) $item->setLicense($itemArray['license']);
-        if(isset($attributes)) $item->setAttributes($attributes);
-        if(isset($tags)) $item->setTags($tags);
-        if(isset($published)) $item->setPublished($published);
-        
-        $item->setEnabled(true);
-        $item->setPublished(false);
-        
-        if(isset($itemArray["child_items"])) {
-            foreach($itemArray["child_items"] as $child_item) {
-                $child = self::parseItem($child_item, $user, $ingestor);
-                if(isset($child)) {
-                    $item->addChildItem($child);    
-                }
-            }
-        }
-
-        return $item;
-    }
+    } 
 }
