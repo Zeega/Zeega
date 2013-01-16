@@ -34,14 +34,7 @@
 		<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
 		<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
 		-->
-		
-		{% if app.environment == 'dev' %}
-			<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/standalone_player/bootstrap.less')}}">
-			<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-			<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
-		{% else %}
-			<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.player.css')}}">
-		{% endif %}
+			<link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/debug/index.css') }}">
 		
 		<!--
 		<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
@@ -195,18 +188,15 @@ var BrowserDetect = {
 
 		</script>
 
-		{% if app.environment == 'dev' %}
-		<!-- to load JS libraries separately -->
-			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/standalone-player.js')}}"></script>
-		{% else %}
-			<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/standalone-player.js') }}"></script>
-			<!-- to load single aggregated JS library --> 
-		{% endif %}
-		
+		<script src="{{ asset('js/app/player.standalone/dist/debug/require.js') }}" ></script>
 		
 		
 	</head>
 
 	<body>
+		<div role="main" id="main">
+			<div id='overlays'></div>
+			<div id='player'></div>
+		</div>
 	</body>
 </html>
