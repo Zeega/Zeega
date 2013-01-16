@@ -153,3 +153,5 @@ Zeega\DataBundle\Entity\Item:
             columns: [uri]
         item_attribution_uri_index:
             columns: [attribution_uri]
+        item_date_updated_index:
+            columns: [date_updated]
