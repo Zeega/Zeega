@@ -25,8 +25,6 @@ require(
 	'order!lib/spin',
 	'order!lib/spin-jquery',
 	'order!lib/ajaxfileuploader/ajaxfileupload',
-	//'order!plugins/players/plyr.js',
-
 	//core
 	'order!app/zeega.dashboard',
 	

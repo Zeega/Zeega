@@ -70,36 +70,68 @@ this.zeega.dashboard = {
         this.projectsView = new Dashboard.Project.CollectionView({collection:projects}).render();
 
 
-       //if(projects.length===0){ 
+       if(projects.length===0){
+
+            
+            $('#intro-video').modal({
+              keyboard: false,
+              backdrop: 'static'
+            });
             $('#intro-video').modal('show');
-            $('#intro-player-wrapper').html("<iframe src='http://player.vimeo.com/video/38402247?autoplay=1&portrait=0&byline=0'  width='770px' height='440px' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
-       // }
-        /*  Youtube intro video
+            $('#intro-player-wrapper').html("<iframe id='intro-player' src='http://player.vimeo.com/video/50002469?api=1&autoplay=1&portrait=0&byline=0&player_id=player_1'  width='770px' height='440px' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+
+            var f = $('#intro-player'),
+                url = f.attr('src').split('?')[0];
+                
+
+            // Listen for messages from the player
+            if (window.addEventListener){
+                window.addEventListener('message', onMessageReceived, false);
+            }
+            else {
+                window.attachEvent('onmessage', onMessageReceived, false);
+            }
+
+            // Handle messages received from the player
+            function onMessageReceived(e) {
+                var data = JSON.parse(e.data);
+                console.log(e);
+                switch (data.event) {
+                    case 'ready':
+                        onReady();
+                        break;
+                    case 'finish':
+                        onFinish();
+                        break;
+                }
+            }
+
+
+
+            // Helper function for sending a message to the player
+            var post = function(action, value) {
+                var data = { method: action };
+                
+                if (value) {
+                    data.value = value;
+                }
+                
+                f[0].contentWindow.postMessage(JSON.stringify(data), url);
+            };
+
+            var onReady=function() {
+                post('addEventListener', 'finish');
+            };
+
+            window.onFinish =function() {
+                $('#intro-video').modal('hide');
+            };
+
+         
         
 
-        if(projects.length===0){
-            $('#intro-video').modal('show');
-            var tag = document.createElement('script');
-            tag.src = "//www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            var player;
-            window.onYouTubeIframeAPIReady=function() {
-                player = new YT.Player('intro-player-wrapper', {
-                  height: '100%',
-                  width: '100%',
-                  videoId: 'XjeHkqV7hXA',
-                  playerVars: {
-                    controls:0,
-                    modestbranding:1,
-                     autoplay:1
-                  }
-                 
-                });
-              };
-
         }
-        */
+       
 
         var items = new Dashboard.Items.Collection({type:'unmoderated'});
         items.fetch({success:function(collection,response){
