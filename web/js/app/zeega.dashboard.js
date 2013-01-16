@@ -70,10 +70,13 @@ this.zeega.dashboard = {
         this.projectsView = new Dashboard.Project.CollectionView({collection:projects}).render();
 
 
-        //$('#intro-video .modal-body').html("<iframe class='youtube-player' type='text/html' width='100%' height='100%'' src='http://www.youtube.com/embed/Sh3FvuKAijM' frameborder='0'></iframe>");
+       //if(projects.length===0){ 
+            $('#intro-video').modal('show');
+            $('#intro-player-wrapper').html("<iframe src='http://player.vimeo.com/video/38402247?autoplay=1&portrait=0&byline=0'  width='770px' height='440px' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+       // }
+        /*  Youtube intro video
         
 
-        
         if(projects.length===0){
             $('#intro-video').modal('show');
             var tag = document.createElement('script');
@@ -96,7 +99,8 @@ this.zeega.dashboard = {
               };
 
         }
-        
+        */
+
         var items = new Dashboard.Items.Collection({type:'unmoderated'});
         items.fetch({success:function(collection,response){
         
