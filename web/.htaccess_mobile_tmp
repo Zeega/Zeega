@@ -1,0 +1,31 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app_dev.php [PT,QSA,C]
+
+    RewriteBase /zeega/web
+
+    # Check if this looks like a mobile device
+    # (You could add another [OR] to the second one and add in what you
+    #  had to check, but I believe most mobile devices should send at
+    #  least one of these headers)
+    RewriteCond %{HTTP:x-wap-profile} !^$ [OR]
+    RewriteCond %{HTTP:Profile}       !^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} "acs|alav|alca|amoi|audi|aste|avan|benq|bird|blac|blaz|brew|cell|cldc|cmd-" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "dang|doco|eric|hipt|inno|ipaq|java|jigs|kddi|keji|leno|lg-c|lg-d|lg-g|lge-" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT}  "maui|maxo|midp|mits|mmef|mobi|mot-|moto|mwbp|nec-|newt|noki|opwv" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "palm|pana|pant|pdxg|phil|play|pluc|port|prox|qtek|qwap|sage|sams|sany" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "sch-|sec-|send|seri|sgh-|shar|sie-|siem|smal|smar|sony|sph-|symb|t-mo" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "teli|tim-|tosh|tsm-|upg1|upsi|vk-v|voda|w3cs|wap-|wapa|wapi" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "wapp|wapr|webc|winw|winw|xda|xda-" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "up.browser|up.link|windowssce|iemobile|mini|mmp" [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} "symbian|midp|wap|phone|pocket|mobile|pda|psp" [NC]
+    RewriteCond %{HTTP_USER_AGENT} !macintosh [NC]
+
+    # Check if we're not already on the mobile site
+    RewriteCond %{REQUEST_URI} !mobile
+    # Now redirect to the mobile site
+    RewriteRule ^(.*)$ /zeega/web/mobile [QSA,L]
+    RewriteRule ^(.*)$ app_dev.php [QSA,L]
+    
+</IfModule>
