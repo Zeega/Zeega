@@ -14,7 +14,7 @@ require.config({
 			'order' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/order',
 			'text' : sessionStorage.getItem('hostname') + sessionStorage.getItem('directory')+'js/lib/text'
 		}
-})
+});
 
 require(
 	[
@@ -23,9 +23,8 @@ require(
 	'order!lib/backbone',
 	'order!lib/bootstrap',
 	'order!lib/spin',
-	'order!lib/spin-jquery',	
+	'order!lib/spin-jquery',
 	'order!lib/ajaxfileuploader/ajaxfileupload',
-
 	//core
 	'order!app/zeega.dashboard',
 	
@@ -39,9 +38,9 @@ require(
 	
 	'order!ux/zeega.ux.header',
 	'order!app/index.dashboard'
-    ], 
+    ],
 	function($) {
-		console.log('files loaded')
+		console.log('files loaded');
 		
 	}
 );
