@@ -41,7 +41,13 @@
 	   -->
 
 		<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+		<script>
+			localStorage.api = 'http://dev.zeega.org/joseph/web/api';
+			// localStorage.api = 'http://alpha.zeega.org/api';
+			if (!window.console) console = { log: function() {}};
+		</script>
+
 		<script> 
 
 			//session data
