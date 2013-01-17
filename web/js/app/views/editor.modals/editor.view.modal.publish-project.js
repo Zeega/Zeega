@@ -14,7 +14,9 @@
         {
 
             this.$el.html( _.template( this.getTemplate(), this.model.toJSON() ));
-
+            var Items = zeega.module('items');
+            this.tagsView = new Items.Views.Common.TagDisplay({model:this.model});
+            this.$el.find("#publish-project-tags").html( this.tagsView.render().el );
             return this;
         },
 
@@ -31,13 +33,10 @@
             this.$el.find('#looks-good').html('Publishing...');
             var properties = {
                 title: this.$('#publish-project-title').val(),
+                authors : this.$('#publish-project-author').val(),
                 description : this.$('#publish-project-description').val(),
                 publish_update:1,
-                published:true,
-                authors : this.$('#publish-project-author').val(),
-                tags : this.$('#tag-input').val().split(" "),
-                //location : this.$el.find('#publish-project-location').val(),
-                estimated_time : this.$('#publish-project-estimated-time').val()
+                published:true
             };
 
             this.model.on('sync', this.onPublishSuccess, this);
@@ -53,7 +52,11 @@
             this.model.updated = false;
             this.hide();
             if(this.isPublished !== true ){
+                //should happen w project buttons update
                 $("#project-publish .menu-verbose-title").html("update");
+                $("#project-publish").addClass('disabled');
+                $("#project-options").removeClass('disabled');
+                $("#project-share").removeClass('disabled');
                 this.model.shareProject();
             }
         },
@@ -72,30 +75,22 @@
                                 '<label for="publish-project-title" class="">Title</label>'+
                                 '<input type="text" id="publish-project-title" class="twocolumn-field span6" value="<%= title %>"/>'+
                                 
+                                '<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
+                                '<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= authors %>"/>'+
+
                                 '<label for="publish-project-description" class="twocolumn-label">Description</label>'+
                                 '<textarea id="publish-project-description" class="twocolumn-field span6"> <%= description %> </textarea>'+
                             
-                                '<label for="publish-project-author" class="twocolumn-label">Author(s)</label>'+
-                                '<input type="text" id="publish-project-author" class="twocolumn-field span6" value="<%= authors %>"/>'+
+                               
                                 
-                                '<label for="publish-project-estimated-time" class="twocolumn-label">Estimated Time</label>'+
-                                '<input type="text" id="publish-project-estimated-time" class="twocolumn-field span6" value="<%= estimated_time %>"/>'+
-                                
-                                /*
-                                '<p class="twocolumn-pair">'+
-                                '<label for="publish-project-location" class="twocolumn-label">Location</label>'+
-                                '<input type="text" id="publish-project-location" class="twocolumn-field" value="<%= location %>"/>'+
-                                '</p>'+
-                                */
-                                
-                                '<label for="tags" class="twocolumn-label">Tags</label>'+
-                                '<input name="tags" class="tagsedit twocolumn-field span6" id="tag-input" value="<%= tags %>" />'+
+                                '<label for="publish-project-tags" class="twocolumn-label">Tags</label>'+
+                                '<div id="publish-project-tags"></div>'+
 
                                 //'<label for="preview-images">Choose an image to represent your project</label>'+
                                 //'<div id="preview-images"><%= imageHTML %></div>'+
 
                                 '<div class="publish-footer">'+
-                                    '<button id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Publish <i class="icon-circle-arrow-right icon-white"></i></button>'+
+                                    '<button style="float:right" id="looks-good" data-dismiss="modal"  class="btn btn-success secondary">Publish <i class="icon-circle-arrow-right icon-white"></i></button>'+
                                 '</div>'+
                                     
                             '</div>'+

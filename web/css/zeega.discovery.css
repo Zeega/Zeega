@@ -1127,7 +1127,7 @@ body{background-color:transparent;}
 .universe-toggle span{color:white;padding:3px 5px 3px 5px;margin-right:10px;font-weight:bold;cursor:pointer;}
 .universe-toggle span:hover{background-color:rgba(0, 255, 48, 0.75);}
 .universe-toggle .selected{background-color:rgba(0, 255, 48, 0.75);}
-.item-viewer{position:fixed;top:0;left:0;background-color:rgba(0, 0, 0, 0.5);height:100%;width:100%;z-index:10000;overflow:auto;}
+.item-viewer{position:fixed;top:0;left:0;background-color:rgba(0, 0, 0, 0.8);height:100%;width:100%;z-index:10000;overflow:auto;}
 .item-viewer .container{position:relative;top:10%;height:560px;}
 .item-viewer .viewer-item-title{padding:10px;}
 .item-viewer .item-viewer-content{background:white;border-radius:3px;position:relative;}

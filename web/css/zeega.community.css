@@ -1078,7 +1078,7 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .xray{background-color:fuchsia;}
 .yray{background-color:purple;}
 #background-color{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.7);z-index:-1;}
-#background-color-home{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.6);z-index:-1;}
+#background-color-home{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.4);z-index:-1;}
 #background-color-lighter{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.4);z-index:-1;}
 #background-color-lightest{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;background-color:rgba(0, 0, 0, 0.2);z-index:-1;}
 .new-section{margin-bottom:40px;}

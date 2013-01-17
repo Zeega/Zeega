@@ -207,9 +207,11 @@
             var html = "<div class='container'>"+
                     "<div class='row'>"+
                         "<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
-                        "<div class='span10 item-viewer-content'>"+
-                             "<a class='add-to-frame' href='#'>add to frame</a>"+
-                            "<a class='close primary-close' href='#'>&times;</a>"+
+                        "<div class='span10 item-viewer-content'>";
+            if(!_.isUndefined(zeega.app)){
+                html+= "<a class='add-to-frame' href='#'>add to frame</a>";
+            }
+            html += "<a class='close primary-close' href='#'>&times;</a>"+
 
                             "<div class='inner-content more-view'></div>"+
 
@@ -503,7 +505,7 @@
         getTemplate : function()
         {
             html = "<div id='zeega-embed' style='height:200px; background:url(<%= thumbnail_url %>) no-repeat center center;background-size:cover'>"+
-                    "<a class='zeega-link' target='_blank' href='//alpha.zeega.org/<%= id %>/view' ><img class='pull-left' style='padding-top: 35%; padding-left: 37%;width:60px;position:relative;z-index:2' src='//alpha.zeega.org/images/embed_play.png'></a>"+
+                    "<a class='zeega-link' target='_blank' href='"+sessionStorage.getItem("hostname") + sessionStorage.getItem("directory")+"<%= id %>/view' ><img class='pull-left' style='padding-top: 35%; padding-left: 37%;width:60px;position:relative;z-index:2' src='//alpha.zeega.org/images/embed_play.png'></a>"+
                     "</div>";
             console.log(zeega);
             return html;

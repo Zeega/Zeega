@@ -6,19 +6,23 @@
 
 		defaults : {
 			'cover_image' : 'images/default_cover.png',
-			'estimated_time' : 'the time it takes to eat a sandwhich',
 			'author' : ''
 		},
 		
-		url : function(){ return zeega.app.url_prefix+"api/projects/"+this.id },
+		url : function(){
+
+			return zeega.app.url_prefix+"api/projects/"+this.id;
+
+		},
 		
 		initialize : function( attributes )
 		{
 			_.defaults( this.get('attr'), this.default_attr );
 			
-			if( _.isUndefined(this.get('cover_image')) || this.get('cover_image') == '' )
-				this.set('cover_image','../../../images/default_cover.png')
-			
+			if( _.isUndefined(this.get('cover_image')) || this.get('cover_image') === '' ){
+				this.set('cover_image','../../../images/default_cover.png');
+			}
+				
 			//remove dupe data from the attributes
 			this.unset('sequences',['silent']);
 			this.unset('frames',['silent']);
@@ -30,7 +34,7 @@
 			this.layers.on('add', this.onAddLayer, this);
 			this.frames.on('add', this.onAddFrame, this);
 			
-			console.log('init PROJECT', this, attributes)
+			console.log('init PROJECT', this, attributes);
 		},
 
 		preloadCollections : function(attributes)
@@ -43,8 +47,8 @@
 		completeCollections : function()
 		{
 			// calls the collection functions that need to have the project loaded first
-			this.frames.each(function(frame){ frame.complete() });
-			this.sequences.each(function(sequence){ sequence.complete() });
+			this.frames.each(function(frame){ frame.complete(); });
+			this.sequences.each(function(sequence){ sequence.complete(); });
 		},
 
 		/*	create collections	*/
@@ -93,6 +97,10 @@
 		
 		onAddLayer : function( layer )
 		{
+			if(layer.get('type')==="Image"&&this.get('cover_image').indexOf("default_cover.png")>0){
+				this.save({'cover_image':layer.get('attr').uri});
+			}
+
 			this.initLayerListeners( layer );
 		},
 		
@@ -151,16 +159,16 @@
 		removeLayerFromFrame : function( model )
 		{
 			// if layer is persistent then remove ALL instances from frames
-			if( _.include( this.get('persistLayers'), parseInt(model.id) ) )
+			if( _.include( this.get('persistLayers'), parseInt(model.id,10) ) )
 			{
 				_.each( _.toArray( this.frames.collection ), function(frame){
-					var newLayers = _.without( frame.get('layers'), parseInt(model.id) );
-					if( newLayers.length == 0 ) newLayers = [false];
+					var newLayers = _.without( frame.get('layers'), parseInt(model.id,10) );
+					if( newLayers.length === 0 ) newLayers = [false];
 					frame.set( 'layers' , newLayers );
 					frame.save();
 				});
-				var newPersistLayers = _.without( this.get('persistLayers'), parseInt(model.id) );
-				if( newPersistLayers.length == 0 ) newPersistLayers = [false];
+				var newPersistLayers = _.without( this.get('persistLayers'), parseInt(model.id,10) );
+				if( newPersistLayers.length === 0 ) newPersistLayers = [false];
 				this.set( 'persistLayers', newPersistLayers );
 				this.save();
 				model.destroy();
@@ -168,8 +176,8 @@
 			else
 			{
 				//remove from the current frame layer array
-				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id) );
-				if( layerArray.length == 0 ) layerArray = [false];
+				var layerArray = _.without( zeega.app.currentFrame.get('layers'), parseInt(model.id,10) );
+				if( layerArray.length === 0 ) layerArray = [false];
 				
 				
 				zeega.app.currentFrame.set('layers',layerArray);
@@ -182,7 +190,7 @@
 		destroyOrphanLayers : function()
 		{
 			var _this = this;
-			var layersInCollection = _.map( this.layers.pluck('id'), function(id){return parseInt(id)}); // all layers including orphans
+			var layersInCollection = _.map( this.layers.pluck('id'), function(id){return parseInt(id,10);}); // all layers including orphans
 			var layersInFrames = _.flatten( this.frames.pluck('layers') ); // layers in use
 			var orphanLayerIDs = _.difference( layersInCollection, layersInFrames ); // layers to be nuked
 			_.each( orphanLayerIDs, function(orphanID){
@@ -210,6 +218,7 @@
 		publishProject : function()
 		{
 			console.log(this.updated);
+
 			if(this.get("published"))
 			{
 				if(this.get('date_updated') != this.get('date_published') || this.updated )
@@ -217,7 +226,7 @@
 					this.updated = false;
 					this.on('sync', this.onProjectPublish, this);
 					this.save({'publish_update':1});
-					console.log('already published. published again')
+					console.log('already published. published again');
 				}
 			}
 			else
@@ -226,13 +235,13 @@
 				var view = new Modal.Views.PublishProject({ model:this });
 				$('body').prepend( view.render().el );
 				view.show();
-				console.log('newly publishded good job')
+				console.log('newly publishded good job');
 			}
 		},
 
 		onProjectPublish : function( model, response)
 		{
-			console.log('$$		on project publish', model, response, this.project)
+			console.log('$$		on project publish', model, response, this.project);
 			this.off('sync', this.onProjectPublish);
 			this.set({'publish_update':0});
 			this.trigger('update_buttons');
@@ -242,7 +251,7 @@
 		{
 			if(this.get("published"))
 			{
-				console.log('$$		share project', this)
+				console.log('$$		share project', this);
 				
 				var Modal = zeega.module('modal');
 				var view = new Modal.Views.ShareProject({ model:this });
@@ -270,10 +279,10 @@
 			if( !silent )
 			{
 				this.save({},{
-					success : function(){ _this.trigger('update') }
+					success : function(){ _this.trigger('update'); }
 				});
 			}
-		},
+		}
 		
 	});
 
