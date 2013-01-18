@@ -277,4 +277,96 @@ class Frame
     {
         return $this->controllable;
     }
+
+    /**
+     * Set sequence_id
+     *
+     * @param integer $sequence_id
+     * @return Frame
+     */
+    public function setSequence_id($sequence_id)
+    {
+        $this->sequence_id = $sequence_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get sequence_id
+     *
+     * @return integer 
+     */
+    public function getSequence_id()
+    {
+        return $this->sequence_id;
+    }
+
+    /**
+     * Set sequence_index
+     *
+     * @param integer $sequence_index
+     * @return Frame
+     */
+    public function setSequence_index($sequence_index)
+    {
+        $this->sequence_index = $sequence_index;
+    
+        return $this;
+    }
+
+    /**
+     * Get sequence_index
+     *
+     * @return integer 
+     */
+    public function getSequence_index()
+    {
+        return $this->sequence_index;
+    }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $project_id
+     * @return Frame
+     */
+    public function setProject_id($project_id)
+    {
+        $this->project_id = $project_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProject_id()
+    {
+        return $this->project_id;
+    }
+
+    /**
+     * Set thumbnail_url
+     *
+     * @param string $thumbnail_url
+     * @return Frame
+     */
+    public function setThumbnail_url($thumbnail_url)
+    {
+        $this->thumbnail_url = $thumbnail_url;
+    
+        return $this;
+    }
+
+    /**
+     * Get thumbnail_url
+     *
+     * @return string 
+     */
+    public function getThumbnail_url()
+    {
+        return $this->thumbnail_url;
+    }
 }

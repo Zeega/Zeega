@@ -52,7 +52,9 @@
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "0.9.0",
         "nelmio/solarium-bundle": "1.*",
-        "oldsound/rabbitmq-bundle":"dev-zeega"
+        "oldsound/rabbitmq-bundle":"dev-zeega",
+        "friendsofsymfony/twitter-bundle": "dev-master",
+        "kertz/twitteroauth": "*@dev" 
     },
     "scripts": {
         "post-install-cmd": [

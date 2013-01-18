@@ -84,4 +84,73 @@ class Session
     {
         return $this->session_time;
     }
+
+    /**
+     * Set session_id
+     *
+     * @param string $session_id
+     * @return Session
+     */
+    public function setSession_id($session_id)
+    {
+        $this->session_id = $session_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get session_id
+     *
+     * @return string 
+     */
+    public function getSession_id()
+    {
+        return $this->session_id;
+    }
+
+    /**
+     * Set session_value
+     *
+     * @param string $session_value
+     * @return Session
+     */
+    public function setSession_value($session_value)
+    {
+        $this->session_value = $session_value;
+    
+        return $this;
+    }
+
+    /**
+     * Get session_value
+     *
+     * @return string 
+     */
+    public function getSession_value()
+    {
+        return $this->session_value;
+    }
+
+    /**
+     * Set session_time
+     *
+     * @param integer $session_time
+     * @return Session
+     */
+    public function setSession_time($session_time)
+    {
+        $this->session_time = $session_time;
+    
+        return $this;
+    }
+
+    /**
+     * Get session_time
+     *
+     * @return integer 
+     */
+    public function getSession_time()
+    {
+        return $this->session_time;
+    }
 }

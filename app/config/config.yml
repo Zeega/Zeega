@@ -36,6 +36,14 @@ services:
     session.handler.pdo:
             class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
             arguments: [@pdo, %pdo.db_options%]
+    zeega.twitter.user:
+        class: Zeega\SocialBundle\Security\User\Provider\TwitterProvider
+        arguments:
+            twitter_oauth: "@fos_twitter.api"
+            userManager: "@fos_user.user_manager"
+            validator: "@validator"
+            session: "@session" 
+
 
 # Twig Configuration
 twig:
@@ -144,3 +152,9 @@ old_sound_rabbit_mq:
 fos_rest:
     routing_loader:
         default_format: json
+
+fos_twitter:
+        file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
+        consumer_key: %twitter_consumer_key%
+        consumer_secret: %twitter_consumer_secret%
+        callback_url: %twitter_callback_url%

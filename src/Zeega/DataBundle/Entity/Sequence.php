@@ -283,4 +283,73 @@ class Sequence
     {
         return $this->advance;
     }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $project_id
+     * @return Sequence
+     */
+    public function setProject_id($project_id)
+    {
+        $this->project_id = $project_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProject_id()
+    {
+        return $this->project_id;
+    }
+
+    /**
+     * Set persistent_layers
+     *
+     * @param array $persistent_layers
+     * @return Sequence
+     */
+    public function setPersistent_layers($persistent_layers)
+    {
+        $this->persistent_layers = $persistent_layers;
+    
+        return $this;
+    }
+
+    /**
+     * Get persistent_layers
+     *
+     * @return array 
+     */
+    public function getPersistent_layers()
+    {
+        return $this->persistent_layers;
+    }
+
+    /**
+     * Set advance_to
+     *
+     * @param integer $advance_to
+     * @return Sequence
+     */
+    public function setAdvance_to($advance_to)
+    {
+        $this->advance_to = $advance_to;
+    
+        return $this;
+    }
+
+    /**
+     * Get advance_to
+     *
+     * @return integer 
+     */
+    public function getAdvance_to()
+    {
+        return $this->advance_to;
+    }
 }
