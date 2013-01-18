@@ -120,11 +120,13 @@ sensio_framework_extra:
         annotations: false
 
 nelmio_solarium:
-    adapter:
-        class: Solarium_Client_Adapter_Http
-        host: %solr_host%
-        port: %solr_port%
-        path: %solr_path%
+    clients:
+        default:
+            host: %solr_host%
+            port: %solr_port%
+            path: %solr_path%
+            core: active
+            timeout: 5
 
 old_sound_rabbit_mq:
     connections:
