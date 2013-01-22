@@ -2,7 +2,6 @@ ZeegaCoreBundle_unsupportedBrowser:
     pattern: /browser/notsupported
     defaults: { _controller:  ZeegaCoreBundle:Core:unsupportedBrowser }
 
-
 ZeegaCoreBundle_mobile:
     pattern: /mobile
     defaults: { _controller:  ZeegaCoreBundle:Core:mobile }

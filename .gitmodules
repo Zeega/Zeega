@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 [submodule "web/js/app/player.standalone"]
 	path = web/js/app/player.standalone
+=======
+[submodule "web/js/app/player.mega"]
+	path = web/js/app/player.mega
+>>>>>>> a377cea94d9a90f14d9824e6b8e4fe3c6d888cd3
 	url = git@github.com:Zeega/Zeega-Standalone-Player.git

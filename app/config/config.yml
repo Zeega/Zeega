@@ -98,7 +98,6 @@ fos_user:
             enabled:    true
 
     resetting:
-        token_ttl: 8640000
         form:
             handler: zeega_user.form.handler.resetting
         email:

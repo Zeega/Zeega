@@ -98,7 +98,8 @@ class PublishController extends BaseController
         $params["tags"] = $tag;
         $projectData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
         $project = new Project();
-        return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
+
+        return $this->render('ZeegaCoreBundle:Publish:channel.html.twig', array(
             'project'=>$project,
             'project_data'=>$projectData,
         ));
