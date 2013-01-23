@@ -92,16 +92,19 @@
 		{
 			var _this = this;
 			var contentFilter = $(e.target).data('filter');
+			$('#zeega-item-database-list').scrollTop(0);
 
 			if( contentFilter != 'reset' )
 			{
 				$('#database-flash').html('filtered by: '+ contentFilter );
 				if($('#database-flash').is(':hidden')) $('#database-flash').show('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight(); });
-				zeega.app.items.search.set('content',contentFilter);
+				zeega.app.items.search.set({'content':contentFilter,'add':false,'page':'1'});
+
 			}
 			else
 			{
 				if($('#database-flash').is(':visible')) $('#database-flash').hide('blind',{direction:'vertical'},500, function(){ _this.updateLayerListsContainerHeight(); } );
+				
 				zeega.app.items.search.reset({silent:false});
 				this.onSearchEscape();
 			}
