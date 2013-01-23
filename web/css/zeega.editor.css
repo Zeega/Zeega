@@ -1071,7 +1071,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .layer-control-drawer .control-item-droppable .target.droppable-hover{box-shadow:inset 0 0 20px orangered;}
 .disabled-link-layer{opacity:.5;}
 #zeega-item-database{position:absolute;width:100%;bottom:0;background:url('../../../images/paper-dark.png');border-top:2px solid orangeRed;}
-#zeega-item-database input{width:200px;margin:10px 5px 0 0;background-color:#ddd;}
+#zeega-item-database input{width:170px;margin:10px 5px 0 0;background-color:#ddd;}
 #zeega-item-database .alert{border-radius:0;margin:0;text-align:right;}
 #zeega-item-database-list{background-color:rgba(0, 0, 0, 0.75);min-height:150px;max-height:200px;overflow:auto;position:relative;}
 #zeega-item-database-list>ul{margin:0;list-style:none;overflow:auto;}
@@ -1081,7 +1081,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-item-database-list.grid-view .list .database-item-title{display:none;}
 #zeega-item-database-list.list-view li{float:none;border-bottom:1px solid #444;}
 #zeega-item-database-list.list-view a{float:left;}
-#zeega-item-database-list.list-view .database-item-title{display:block;padding:15px;float:left;color:white;}
+#zeega-item-database-list.list-view .database-item-title{display:block;float:left;color:white;max-width:200px;max-height:50px;padding-left:15px;overflow:hidden;}
 #zeega-item-database-list.list-view .database-item-title h5{color:inherit;}
 .item-viewer{position:fixed;top:0;left:0;background-color:rgba(0, 0, 0, 0.8);height:100%;width:100%;z-index:10000;overflow:auto;}
 .item-viewer .container{position:relative;top:10%;height:550px;}
