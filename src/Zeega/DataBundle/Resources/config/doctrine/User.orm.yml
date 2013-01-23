@@ -52,7 +52,12 @@ Zeega\DataBundle\Entity\User:
             type: string
             length: 25
             nullable: true
-
+        twitterID:
+            type: string
+            nullable: true
+        twitterUsername:
+            type: string
+            nullable: true
     indexes:
         user_type_index:
             columns: [user_type]

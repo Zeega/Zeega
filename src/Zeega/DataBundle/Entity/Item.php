@@ -955,4 +955,415 @@ class Item
     {
         // Add your code here
     }
+
+    /**
+     * Set user_id
+     *
+     * @param integer $user_id
+     * @return Item
+     */
+    public function setUser_id($user_id)
+    {
+        $this->user_id = $user_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get user_id
+     *
+     * @return integer 
+     */
+    public function getUser_id()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * Set attribution_uri
+     *
+     * @param string $attribution_uri
+     * @return Item
+     */
+    public function setAttribution_uri($attribution_uri)
+    {
+        $this->attribution_uri = $attribution_uri;
+    
+        return $this;
+    }
+
+    /**
+     * Get attribution_uri
+     *
+     * @return string 
+     */
+    public function getAttribution_uri()
+    {
+        return $this->attribution_uri;
+    }
+
+    /**
+     * Set date_created
+     *
+     * @param \DateTime $date_created
+     * @return Item
+     */
+    public function setDate_created($date_created)
+    {
+        $this->date_created = $date_created;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_created
+     *
+     * @return \DateTime 
+     */
+    public function getDate_created()
+    {
+        return $this->date_created;
+    }
+
+    /**
+     * Set date_updated
+     *
+     * @param \DateTime $date_updated
+     * @return Item
+     */
+    public function setDate_updated($date_updated)
+    {
+        $this->date_updated = $date_updated;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_updated
+     *
+     * @return \DateTime 
+     */
+    public function getDate_updated()
+    {
+        return $this->date_updated;
+    }
+
+    /**
+     * Set media_type
+     *
+     * @param string $media_type
+     * @return Item
+     */
+    public function setMedia_type($media_type)
+    {
+        $this->media_type = $media_type;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_type
+     *
+     * @return string 
+     */
+    public function getMedia_type()
+    {
+        return $this->media_type;
+    }
+
+    /**
+     * Set layer_type
+     *
+     * @param string $layer_type
+     * @return Item
+     */
+    public function setLayer_type($layer_type)
+    {
+        $this->layer_type = $layer_type;
+    
+        return $this;
+    }
+
+    /**
+     * Get layer_type
+     *
+     * @return string 
+     */
+    public function getLayer_type()
+    {
+        return $this->layer_type;
+    }
+
+    /**
+     * Set thumbnail_url
+     *
+     * @param string $thumbnail_url
+     * @return Item
+     */
+    public function setThumbnail_url($thumbnail_url)
+    {
+        $this->thumbnail_url = $thumbnail_url;
+    
+        return $this;
+    }
+
+    /**
+     * Get thumbnail_url
+     *
+     * @return string 
+     */
+    public function getThumbnail_url()
+    {
+        return $this->thumbnail_url;
+    }
+
+    /**
+     * Set child_items_count
+     *
+     * @param integer $child_items_count
+     * @return Item
+     */
+    public function setChild_items_count($child_items_count)
+    {
+        $this->child_items_count = $child_items_count;
+    
+        return $this;
+    }
+
+    /**
+     * Get child_items_count
+     *
+     * @return integer 
+     */
+    public function getChild_items_count()
+    {
+        return $this->child_items_count;
+    }
+
+    /**
+     * Set media_geo_latitude
+     *
+     * @param float $media_geo_latitude
+     * @return Item
+     */
+    public function setMedia_geo_latitude($media_geo_latitude)
+    {
+        $this->media_geo_latitude = $media_geo_latitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_geo_latitude
+     *
+     * @return float 
+     */
+    public function getMedia_geo_latitude()
+    {
+        return $this->media_geo_latitude;
+    }
+
+    /**
+     * Set media_geo_longitude
+     *
+     * @param float $media_geo_longitude
+     * @return Item
+     */
+    public function setMedia_geo_longitude($media_geo_longitude)
+    {
+        $this->media_geo_longitude = $media_geo_longitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_geo_longitude
+     *
+     * @return float 
+     */
+    public function getMedia_geo_longitude()
+    {
+        return $this->media_geo_longitude;
+    }
+
+    /**
+     * Set media_date_created
+     *
+     * @param \DateTime $media_date_created
+     * @return Item
+     */
+    public function setMedia_date_created($media_date_created)
+    {
+        $this->media_date_created = $media_date_created;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_date_created
+     *
+     * @return \DateTime 
+     */
+    public function getMedia_date_created()
+    {
+        return $this->media_date_created;
+    }
+
+    /**
+     * Set media_creator_username
+     *
+     * @param string $media_creator_username
+     * @return Item
+     */
+    public function setMedia_creator_username($media_creator_username)
+    {
+        $this->media_creator_username = $media_creator_username;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_creator_username
+     *
+     * @return string 
+     */
+    public function getMedia_creator_username()
+    {
+        return $this->media_creator_username;
+    }
+
+    /**
+     * Set media_creator_realname
+     *
+     * @param string $media_creator_realname
+     * @return Item
+     */
+    public function setMedia_creator_realname($media_creator_realname)
+    {
+        $this->media_creator_realname = $media_creator_realname;
+    
+        return $this;
+    }
+
+    /**
+     * Get media_creator_realname
+     *
+     * @return string 
+     */
+    public function getMedia_creator_realname()
+    {
+        return $this->media_creator_realname;
+    }
+
+    /**
+     * Set id_at_source
+     *
+     * @param string $id_at_source
+     * @return Item
+     */
+    public function setId_at_source($id_at_source)
+    {
+        $this->id_at_source = $id_at_source;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_at_source
+     *
+     * @return string 
+     */
+    public function getId_at_source()
+    {
+        return $this->id_at_source;
+    }
+
+    /**
+     * Set ingested_by
+     *
+     * @param string $ingested_by
+     * @return Item
+     */
+    public function setIngested_by($ingested_by)
+    {
+        $this->ingested_by = $ingested_by;
+    
+        return $this;
+    }
+
+    /**
+     * Get ingested_by
+     *
+     * @return string 
+     */
+    public function getIngested_by()
+    {
+        return $this->ingested_by;
+    }
+
+    /**
+     * Add child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $child_items
+     * @return Item
+     */
+    public function addChild_item(\Zeega\DataBundle\Entity\Item $child_items)
+    {
+        $this->child_items[] = $child_items;
+    
+        return $this;
+    }
+
+    /**
+     * Remove child_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $child_items
+     */
+    public function removeChild_item(\Zeega\DataBundle\Entity\Item $child_items)
+    {
+        $this->child_items->removeElement($child_items);
+    }
+
+    /**
+     * Get child_items
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getChild_items()
+    {
+        return $this->child_items;
+    }
+
+    /**
+     * Add parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parent_items
+     * @return Item
+     */
+    public function addParent_item(\Zeega\DataBundle\Entity\Item $parent_items)
+    {
+        $this->parent_items[] = $parent_items;
+    
+        return $this;
+    }
+
+    /**
+     * Remove parent_items
+     *
+     * @param Zeega\DataBundle\Entity\Item $parent_items
+     */
+    public function removeParent_item(\Zeega\DataBundle\Entity\Item $parent_items)
+    {
+        $this->parent_items->removeElement($parent_items);
+    }
+
+    /**
+     * Get parent_items
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getParent_items()
+    {
+        return $this->parent_items;
+    }
 }

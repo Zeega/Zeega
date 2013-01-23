@@ -233,4 +233,27 @@ class Layer
     {
         return $this->enabled;
     }
+
+    /**
+     * Set project_id
+     *
+     * @param integer $project_id
+     * @return Layer
+     */
+    public function setProject_id($project_id)
+    {
+        $this->project_id = $project_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get project_id
+     *
+     * @return integer 
+     */
+    public function getProject_id()
+    {
+        return $this->project_id;
+    }
 }
