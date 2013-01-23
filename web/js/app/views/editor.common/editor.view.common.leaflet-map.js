@@ -109,8 +109,8 @@
                     this.model.unset('text');
             }
             this.model.save({
-                'media_geo_latitude' : e.target.getLatLng().lat,
-                'media_geo_longitude' : e.target.getLatLng().lng
+                'media_geo_latitude' : this.marker.getLatLng().lat,
+                'media_geo_longitude' : this.marker.getLatLng().lng
             });
 
 
@@ -128,12 +128,12 @@
 
                                 _this.map.setView( _this.loc,8);
                                 _this.marker.setLatLng(_this.loc);
-                                /*
-                                    _this.model.save({
-                                        'media_geo_latitude': results[0].geometry.location.lat(),
-                                        'media_geo_longitude': results[0].geometry.location.lng()
-                                    });
-                                */
+                                
+                                _this.model.save({
+                                    'media_geo_latitude': results[0].geometry.location.lat(),
+                                    'media_geo_longitude': results[0].geometry.location.lng()
+                                });
+                            
                             }
                             else console.log("Geocoder failed at address look for "+$(that.el).find('.locator-search-input').val()+": " + status);
                         });
@@ -142,7 +142,10 @@
         
         markerDragged : function(e)
         {
-            
+            this.model.save({
+                'media_geo_latitude' : e.target.getLatLng().lat,
+                'media_geo_longitude' : e.target.getLatLng().lng
+            });
         },
         
         addMapLocation : function()
@@ -152,6 +155,7 @@
             this.render();
             this.renderMap();
             this.makeMapEditable();
+            this.editExistingMap();
         },
         
         getMapTemplate : function()
