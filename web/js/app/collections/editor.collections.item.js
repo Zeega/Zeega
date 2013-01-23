@@ -22,7 +22,7 @@
 			page : 1,
 			content : '',
 			collection : '',
-			user : '1',
+			user : '-1',
 			site : sessionStorage.getItem('siteid'),
 			add : false
 		},
@@ -35,8 +35,11 @@
 		},
 		reset : function( options )
 		{
+
+			var user=this.get('user');
 			var opts = _.extend({silent:true}, options);
 			this.set(this.defaults,opts);
+			this.set({'user':user});
 			this.trigger('search');
 			return this;
 		}
@@ -50,8 +53,12 @@
 
 		url: function()
 		{
-			
-			var base = zeega.app.url_prefix + "api/items/search?sort=date-desc&user=-1";
+			var base;
+			if(this.search.get('user')==-1){
+				base = zeega.app.url_prefix + "api/items/search?sort=date-desc&user=-1";
+			} else {
+				base = zeega.app.url_prefix + "api/items/search?sort=date-desc";
+			}
 
 			if(_.isUndefined(this.search.get('content'))||this.search.get('content')===""){
 				this.search.set({"content":"-project AND -Collection"});
@@ -62,12 +69,8 @@
 			}
 
 
-
-
-			
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&type=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
-			console.log("SEARCH URL",url,this.search.get('content'));
 			return url;
 		},
 
