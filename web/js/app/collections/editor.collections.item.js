@@ -50,15 +50,24 @@
 
 		url: function()
 		{
-			var base = zeega.app.url_prefix + "api/items/search?type=-project AND -Collection&sort=date-desc&user=-1";
-		
+			
+			var base = zeega.app.url_prefix + "api/items/search?sort=date-desc&user=-1";
+
+			if(_.isUndefined(this.search.get('content'))||this.search.get('content')===""){
+				this.search.set({"content":"-project AND -Collection"});
+			}
+			
 			if(this.search.get('query') === '') {
 				base = base + "&data_source=db";
 			}
+
+
+
+
 			
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&type=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';
 			var url = base + _.template( queryTemplate, this.search.toJSON() );
-			
+			console.log("SEARCH URL",url,this.search.get('content'));
 			return url;
 		},
 
