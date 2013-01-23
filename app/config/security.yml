@@ -1,7 +1,7 @@
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
-        
+
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -9,11 +9,8 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        fos_twitter:
+            id: zeega.twitter.user
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -29,27 +26,33 @@ security:
                 path:   /logout
                 target: /
             anonymous: ~
+            #fos_twitter:
+            #    login_path: /login
+            #    check_path: /login_check
+            #    default_target_path: /twitter/login
+            #    provider: fos_twitter
+
+            anonymous: ~
 
     access_control:
         #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
         - { path: ^/[0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register/confirmed, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/projects, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/library, role: ROLE_USER }
         - { path: ^/widget, role: ROLE_USER, requires_channel: https }
         - { path: ^/js/lib, role: ROLE_USER, requires_channel: https }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/browser/notsupported, role: IS_AUTHENTICATED_ANONYMOUSLY }
