@@ -68,12 +68,12 @@
         onFocus : function()
         {
             this.inFocus = true;
-            this.$el.addClass('active')
+            this.$el.addClass('active');
         },
         onBlur : function()
         {
             this.inFocus = false;
-            this.$el.removeClass('active')
+            this.$el.removeClass('active');
         },
     
         events : {
@@ -195,25 +195,21 @@
                         '<label>Advance to sequence</label>'+
                         '<select class="sequence-advance">';
 
-                        zeega.app.project.sequences.each(function(sequence){
+                            if ( this.model.get('advance_to') === null ) {
+                                html += '<option value="null" selected="selected">none</option>';
+                            } else {
+                                html += '<option value="null">none</option>';
+                            }
 
-                            if(sequence.id == _this.model.id && _this.model.get('advance_to'))
-                            {
-                                html+= '<option value="'+ sequence.id +'">'+ sequence.get('title') +' (default)</option>';
-                            }
-                            else if(sequence.id == _this.model.id && !_this.model.get('advance_to') )
-                            {
-                                html+= '<option value="'+ sequence.id +'" selected="selected">'+ sequence.get('title') +' (default)</option>';
-                            }
-                            else if( sequence.id == _this.model.get('advance_to') )
-                            {
+                        zeega.app.project.sequences.each(function( sequence ){
+
+                            if ( this.model.get('advance_to') == sequence.id ) {
                                 html+= '<option value="'+ sequence.id +'" selected="selected">'+ sequence.get('title') +'</option>';
-                            }
-                            else
-                            {
+                            } else {
                                 html+= '<option value="'+ sequence.id +'">'+ sequence.get('title') +'</option>';
                             }
-                        });
+
+                        }, this );
             html +=
                         '</select>'+
                     '</div>'+
