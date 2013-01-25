@@ -7,18 +7,24 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class UserAdmin extends Admin
 {
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('create');
+    }
+
     protected function configureFormFields(FormMapper $formMapper)
     {
 		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin');
         
         $formMapper
             ->add('username')
-			->add('display_name')
+			->add('displayName')
 			->add('bio')
-			->add('thumb_url')
+			->add('thumbUrl')
 			->add('email')
 			->add('email')
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
@@ -29,7 +35,7 @@ class UserAdmin extends Admin
     {
         $datagridMapper
             ->add('email')
-            ->add('display_name')
+            ->add('displayName')
             ->add('locked')            
         ;
     }
@@ -46,7 +52,7 @@ class UserAdmin extends Admin
         $listMapper
             ->addIdentifier('id')
             ->addIdentifier('username')
-			->add('display_name')
+			->add('displayName')
 			->add('email')
             ->add('created_at','datetime')
 			->add('lastLogin')

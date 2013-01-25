@@ -92,7 +92,7 @@ class BookmarkletController extends BaseController
                 $parsedItem = $items[0];
                 
                 // check if the item exists on the database    
-                $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user_id"=>$user->getId(),"attribution_uri" => $parsedItem["attribution_uri"], "enabled" => 1));
+                $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneBy(array("user"=>$user->getId(),"attributionUri" => $parsedItem["attribution_uri"], "enabled" => 1));
                 
                 if(isset($item)) {
                     $update = 1;

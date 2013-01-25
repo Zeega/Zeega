@@ -5,50 +5,81 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Layer
+ * Layer
+ *
+ * @ORM\Table(
+ *      name="layer",
+ *      indexes={
+ *          @ORM\Index(name="layer_enabled", columns={"enabled"})
+ *      }
+ * )
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\LayerRepository")
  */
 class Layer
 {
     /**
-     * @var bigint $id
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer $project_id
-     */
-    private $project_id;
-
-    /**
-     * @var string $type
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=50, nullable=true)
      */
     private $type;
 
     /**
-     * @var string $text
+     * @var string
+     *
+     * @ORM\Column(name="text", type="string", length=1000, nullable=true)
      */
     private $text;
 
     /**
-     * @var array $attr
+     * @var array
+     *
+     * @ORM\Column(name="attr", type="array", nullable=true)
      */
     private $attr;
 
     /**
-     * @var Zeega\DataBundle\Entity\Item
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
+     */
+    private $enabled = true;
+
+    /**
+     * @var \Item
+     *
+     * @ORM\ManyToOne(targetEntity="Item")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * })
      */
     private $item;
 
     /**
-     * @var Zeega\DataBundle\Entity\Project
+     * @var \Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
+     * })
      */
     private $project;
+
 
 
     /**
      * Get id
      *
-     * @return bigint 
+     * @return integer 
      */
     public function getId()
     {
@@ -56,33 +87,16 @@ class Layer
     }
 
     /**
-     * Set project_id
-     *
-     * @param integer $projectId
-     */
-    public function setProjectId($projectId)
-    {
-        $this->project_id = $projectId;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProjectId()
-    {
-        return $this->project_id;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
+     * @return Layer
      */
     public function setType($type)
     {
         $this->type = $type;
+    
+        return $this;
     }
 
     /**
@@ -99,10 +113,13 @@ class Layer
      * Set text
      *
      * @param string $text
+     * @return Layer
      */
     public function setText($text)
     {
         $this->text = $text;
+    
+        return $this;
     }
 
     /**
@@ -119,10 +136,13 @@ class Layer
      * Set attr
      *
      * @param array $attr
+     * @return Layer
      */
     public function setAttr($attr)
     {
         $this->attr = $attr;
+    
+        return $this;
     }
 
     /**
@@ -136,92 +156,16 @@ class Layer
     }
 
     /**
-     * Set item
-     *
-     * @param Zeega\DataBundle\Entity\Item $item
-     */
-    public function setItem(\Zeega\DataBundle\Entity\Item $item)
-    {
-        $this->item = $item;
-    }
-
-    /**
-     * Get item
-     *
-     * @return Zeega\DataBundle\Entity\Item 
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * Set project
-     *
-     * @param Zeega\DataBundle\Entity\Project $project
-     */
-    public function setProject(\Zeega\DataBundle\Entity\Project $project)
-    {
-        $this->project = $project;
-    }
-
-    /**
-     * Get project
-     *
-     * @return Zeega\DataBundle\Entity\Project 
-     */
-    public function getProject()
-    {
-        return $this->project;
-    }
-    /**
-     * @var Zeega\DataBundle\Entity\Frame
-     */
-    private $frames;
-
-    public function __construct()
-    {
-        $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add frames
-     *
-     * @param Zeega\DataBundle\Entity\Frame $frames
-     */
-    public function addFrame(\Zeega\DataBundle\Entity\Frame $frames)
-    {
-        $this->frames[] = $frames;
-    }
-
-    /**
-     * Get frames
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getFrames()
-    {
-        return $this->frames;
-    }
-
-	public function __toString()
-	{
-	    return strval($this->id);
-	}
-    /**
-     * @var boolean $enabled
-     */
-    private $enabled = true;
-
-
-    /**
      * Set enabled
      *
      * @param boolean $enabled
+     * @return Layer
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+    
+        return $this;
     }
 
     /**
@@ -235,25 +179,48 @@ class Layer
     }
 
     /**
-     * Set project_id
+     * Set item
      *
-     * @param integer $project_id
+     * @param \Zeega\DataBundle\Entity\Item $item
      * @return Layer
      */
-    public function setProject_id($project_id)
+    public function setItem(\Zeega\DataBundle\Entity\Item $item = null)
     {
-        $this->project_id = $project_id;
+        $this->item = $item;
     
         return $this;
     }
 
     /**
-     * Get project_id
+     * Get item
      *
-     * @return integer 
+     * @return \Zeega\DataBundle\Entity\Item 
      */
-    public function getProject_id()
+    public function getItem()
     {
-        return $this->project_id;
+        return $this->item;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \Zeega\DataBundle\Entity\Project $project
+     * @return Layer
+     */
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Zeega\DataBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

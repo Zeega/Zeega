@@ -5,152 +5,91 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Session
+ * Session
+ *
+ * @ORM\Table(name="session")
+ * @ORM\Entity
  */
 class Session
 {
     /**
-     * @var string $session_id
-     */
-    private $session_id;
-
-    /**
-     * @var text $session_value
-     */
-    private $session_value;
-
-    /**
-     * @var integer $session_time
-     */
-    private $session_time;
-
-
-    /**
-     * Set session_id
+     * @var string
      *
-     * @param string $sessionId
+     * @ORM\Column(name="session_id", type="string", length=255)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function setSessionId($sessionId)
-    {
-        $this->session_id = $sessionId;
-    }
+    private $sessionId;
 
     /**
-     * Get session_id
+     * @var string
+     *
+     * @ORM\Column(name="session_value", type="text", nullable=false)
+     */
+    private $sessionValue;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="session_time", type="integer", nullable=false)
+     */
+    private $sessionTime;
+
+
+
+    /**
+     * Get sessionId
      *
      * @return string 
      */
     public function getSessionId()
     {
-        return $this->session_id;
+        return $this->sessionId;
     }
 
     /**
-     * Set session_value
+     * Set sessionValue
      *
-     * @param text $sessionValue
+     * @param string $sessionValue
+     * @return Session
      */
     public function setSessionValue($sessionValue)
     {
-        $this->session_value = $sessionValue;
+        $this->sessionValue = $sessionValue;
+    
+        return $this;
     }
 
     /**
-     * Get session_value
+     * Get sessionValue
      *
-     * @return text 
+     * @return string 
      */
     public function getSessionValue()
     {
-        return $this->session_value;
+        return $this->sessionValue;
     }
 
     /**
-     * Set session_time
+     * Set sessionTime
      *
      * @param integer $sessionTime
+     * @return Session
      */
     public function setSessionTime($sessionTime)
     {
-        $this->session_time = $sessionTime;
+        $this->sessionTime = $sessionTime;
+    
+        return $this;
     }
 
     /**
-     * Get session_time
+     * Get sessionTime
      *
      * @return integer 
      */
     public function getSessionTime()
     {
-        return $this->session_time;
-    }
-
-    /**
-     * Set session_id
-     *
-     * @param string $session_id
-     * @return Session
-     */
-    public function setSession_id($session_id)
-    {
-        $this->session_id = $session_id;
-    
-        return $this;
-    }
-
-    /**
-     * Get session_id
-     *
-     * @return string 
-     */
-    public function getSession_id()
-    {
-        return $this->session_id;
-    }
-
-    /**
-     * Set session_value
-     *
-     * @param string $session_value
-     * @return Session
-     */
-    public function setSession_value($session_value)
-    {
-        $this->session_value = $session_value;
-    
-        return $this;
-    }
-
-    /**
-     * Get session_value
-     *
-     * @return string 
-     */
-    public function getSession_value()
-    {
-        return $this->session_value;
-    }
-
-    /**
-     * Set session_time
-     *
-     * @param integer $session_time
-     * @return Session
-     */
-    public function setSession_time($session_time)
-    {
-        $this->session_time = $session_time;
-    
-        return $this;
-    }
-
-    /**
-     * Get session_time
-     *
-     * @return integer 
-     */
-    public function getSession_time()
-    {
-        return $this->session_time;
+        return $this->sessionTime;
     }
 }

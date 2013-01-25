@@ -32,6 +32,11 @@ class ThumbnailService
         {     
             if($mediaType != 'Collection') {                
                 $host = $this->container->getParameter('static_host');
+
+                if( !isset($host) || empty($host) ) {
+                    return null;
+                }
+
                 $thumbnailServerUrl =  $host . "scripts/item.php?url=".$url.'&type='.$mediaType;
                 $thumbnailJSON = file_get_contents($thumbnailServerUrl);
                 

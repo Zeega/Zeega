@@ -13,8 +13,6 @@
             
             this.index = _.indexOf( ids, this.options.start);
             this.inFocus = this.collection.at(this.index);
-
-            if(!_.isUndefined(this.inFocus.get('text'))) this.inFocus.unset('text');
             this.updateArrows();
             this.initEvents();
         },
@@ -35,8 +33,6 @@
         switchItem : function()
         {
             this.inFocus = this.collection.at(this.index);
-            if(!_.isUndefined(this.inFocus.get('text'))) this.inFocus.unset('text');
-
             this.renderItemView();
             this.inFocus.trigger("after_render");
             this.updateArrows();
@@ -68,16 +64,7 @@
             "click .go-left" : "goLeft",
             "click .go-right" : "goRight",
             "click #detail-toggle" : "toggleDetail",
-            "click #item-delete": "deleteItem",
-            "click .add-to-frame": "addToFrame"
-        },
-
-        addToFrame : function(){
-
-            
-            $('.primary-close').trigger('click');
-            zeega.app.currentFrame.addItemLayer( this.inFocus );
-            zeega.app.currentFrame.trigger('layer_added');
+            "click #item-delete":"deleteItem"
         },
         
         toggleDetail : function()
@@ -207,11 +194,8 @@
             var html = "<div class='container'>"+
                     "<div class='row'>"+
                         "<div class='span1 go-left'><a href='#'><div class='arrow arrow-left'></div></a></div>"+
-                        "<div class='span10 item-viewer-content'>";
-            if(!_.isUndefined(zeega.app)){
-                html+= "<a class='add-to-frame' href='#'>add to frame</a>";
-            }
-            html += "<a class='close primary-close' href='#'>&times;</a>"+
+                        "<div class='span10 item-viewer-content'>"+
+                            "<a class='close primary-close' href='#'>&times;</a>"+
 
                             "<div class='inner-content more-view'></div>"+
 
@@ -342,7 +326,6 @@
         {
             this.exitEditMode();
             // the save the model
-
             this.model.save({
                 description: this.$el.find(".item-description-text").text(),
                 title: this.$el.find(".viewer-item-title .inner").text()
@@ -395,8 +378,20 @@
                 html+= "<span><a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></span>";
             }
             html+= "</h2>";
-           
-            html+="<div class='row'>"+
+            if(this.isEditable) {
+                html+=  "<div class='row more-info' >"+
+                            "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
+                            
+                if(this.model.get("published")==2){
+                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
+                } else {
+                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
+                }
+
+                html+= "</div>"+
+                        "</div>";
+            }
+             html+="<div class='row'>"+
                     
                     "<div class='<%= mediaSpan %>'' id='item-media-target'>"+
                         "<div class='padded-content' id='item-media-<%= id %>'></div>"+ //media goes here
@@ -414,22 +409,8 @@
                         "<div class='padded-content clearfix'>"+
                             "<div><strong>Created By:</strong> <%= media_creator_realname %></div>"+
                             "<div><strong>Created On:</strong> <%= date_created.date %></div>"+
-                            "<div><a href='<%= attribution_uri %>'' target='blank'>View Source <i class='icon-share'></i></a></div>";
-
-             if(this.isEditable) {
-                html+=  "<div class='access-level'>"+
-                            "<strong>Access: </strong>";
-                            
-                if(this.model.get("published")==2){
-                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span>";
-                } else {
-                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span>";
-                }
-
-                html+= "</div>";
-            }
-
-            html+=              "<div>"+
+                            "<div><a href='<%= attribution_uri %>'' target='blank'>View Source <i class='icon-share'></i></a></div>"+
+                            "<div>"+
                                 "<div><strong>Tags:</strong></div>"+
                                 "<div class='item-tags'></div>"+
                             "</div>"+

@@ -5,44 +5,94 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Schedule
+ *  Schedule
+ *
+ *  @ORM\Table(
+ *     name="schedule",
+ *     indexes={
+ *          @ORM\Index(name="schedule_status", columns={"status"}),
+ *          @ORM\Index(name="schedule_enabled", columns={"enabled"})
+ *      }
+ *  )
+ *  @ORM\Entity
  */
 class Schedule
 {
     /**
-     * @var integer $id
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var string $query
+     * @var string
+     *
+     * @ORM\Column(name="query", type="string", length=100, nullable=true)
      */
     private $query;
 
     /**
-     * @var \DateTime $date_created
+     * @var string
+     *
+     * @ORM\Column(name="tags", type="string", length=100, nullable=true)
      */
-    private $date_created;
+    private $tags;
 
     /**
-     * @var \DateTime $date_updated
+     * @var string
+     *
+     * @ORM\Column(name="archive", type="string", length=25, nullable=false)
      */
-    private $date_updated;
+    private $archive;
 
     /**
-     * @var string $status
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_created", type="datetime", nullable=false)
+     */
+    private $dateCreated;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_updated", type="datetime", nullable=false)
+     */
+    private $dateUpdated;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=10, nullable=false)
      */
     private $status;
 
     /**
-     * @var boolean $enabled
+     * @var string
+     *
+     * @ORM\Column(name="status_message", type="string", length=255, nullable=true)
      */
-    private $enabled;
+    private $statusMessage;
 
     /**
-     * @var Zeega\DataBundle\Entity\User
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     */
+    private $enabled = true;
+
+    /**
+     * @var \user
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
      */
     private $user;
+
 
 
     /**
@@ -79,49 +129,95 @@ class Schedule
     }
 
     /**
-     * Set date_created
+     * Set tags
+     *
+     * @param string $tags
+     * @return Schedule
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return string 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     * @return Schedule
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    
+        return $this;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
+     * Set dateCreated
      *
      * @param \DateTime $dateCreated
      * @return Schedule
      */
     public function setDateCreated($dateCreated)
     {
-        $this->date_created = $dateCreated;
+        $this->dateCreated = $dateCreated;
     
         return $this;
     }
 
     /**
-     * Get date_created
+     * Get dateCreated
      *
      * @return \DateTime 
      */
     public function getDateCreated()
     {
-        return $this->date_created;
+        return $this->dateCreated;
     }
 
     /**
-     * Set date_updated
+     * Set dateUpdated
      *
      * @param \DateTime $dateUpdated
      * @return Schedule
      */
     public function setDateUpdated($dateUpdated)
     {
-        $this->date_updated = $dateUpdated;
+        $this->dateUpdated = $dateUpdated;
     
         return $this;
     }
 
     /**
-     * Get date_updated
+     * Get dateUpdated
      *
      * @return \DateTime 
      */
     public function getDateUpdated()
     {
-        return $this->date_updated;
+        return $this->dateUpdated;
     }
 
     /**
@@ -145,6 +241,29 @@ class Schedule
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set statusMessage
+     *
+     * @param string $statusMessage
+     * @return Schedule
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->statusMessage = $statusMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get statusMessage
+     *
+     * @return string 
+     */
+    public function getStatusMessage()
+    {
+        return $this->statusMessage;
     }
 
     /**
@@ -173,7 +292,7 @@ class Schedule
     /**
      * Set user
      *
-     * @param Zeega\DataBundle\Entity\User $user
+     * @param \Zeega\DataBundle\Entity\User $user
      * @return Schedule
      */
     public function setUser(\Zeega\DataBundle\Entity\User $user = null)
@@ -186,191 +305,10 @@ class Schedule
     /**
      * Get user
      *
-     * @return Zeega\DataBundle\Entity\User 
+     * @return \Zeega\DataBundle\Entity\User 
      */
     public function getUser()
     {
         return $this->user;
-    }
-    /**
-     * @var string $tags
-     */
-    private $tags;
-
-    /**
-     * @var string $target_service
-     */
-    private $target_service;
-
-    /**
-     * @var string $status_message
-     */
-    private $status_message;
-
-
-    /**
-     * Set tags
-     *
-     * @param string $tags
-     * @return Schedule
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-    
-        return $this;
-    }
-
-    /**
-     * Get tags
-     *
-     * @return string 
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * Set target_service
-     *
-     * @param string $targetService
-     * @return Schedule
-     */
-    public function setTargetService($targetService)
-    {
-        $this->target_service = $targetService;
-    
-        return $this;
-    }
-
-    /**
-     * Get target_service
-     *
-     * @return string 
-     */
-    public function getTargetService()
-    {
-        return $this->target_service;
-    }
-
-    /**
-     * Set status_message
-     *
-     * @param string $statusMessage
-     * @return Schedule
-     */
-    public function setStatusMessage($statusMessage)
-    {
-        $this->status_message = $statusMessage;
-    
-        return $this;
-    }
-
-    /**
-     * Get status_message
-     *
-     * @return string 
-     */
-    public function getStatusMessage()
-    {
-        return $this->status_message;
-    }
-    /**
-     * @var string $archive
-     */
-    private $archive;
-
-
-    /**
-     * Set archive
-     *
-     * @param string $archive
-     * @return Schedule
-     */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    
-        return $this;
-    }
-
-    /**
-     * Get archive
-     *
-     * @return string 
-     */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
-
-    /**
-     * Set date_created
-     *
-     * @param \DateTime $date_created
-     * @return Schedule
-     */
-    public function setDate_created($date_created)
-    {
-        $this->date_created = $date_created;
-    
-        return $this;
-    }
-
-    /**
-     * Get date_created
-     *
-     * @return \DateTime 
-     */
-    public function getDate_created()
-    {
-        return $this->date_created;
-    }
-
-    /**
-     * Set date_updated
-     *
-     * @param \DateTime $date_updated
-     * @return Schedule
-     */
-    public function setDate_updated($date_updated)
-    {
-        $this->date_updated = $date_updated;
-    
-        return $this;
-    }
-
-    /**
-     * Get date_updated
-     *
-     * @return \DateTime 
-     */
-    public function getDate_updated()
-    {
-        return $this->date_updated;
-    }
-
-    /**
-     * Set status_message
-     *
-     * @param string $status_message
-     * @return Schedule
-     */
-    public function setStatus_message($status_message)
-    {
-        $this->status_message = $status_message;
-    
-        return $this;
-    }
-
-    /**
-     * Get status_message
-     *
-     * @return string 
-     */
-    public function getStatus_message()
-    {
-        return $this->status_message;
     }
 }
