@@ -53,7 +53,7 @@ class Project
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var array

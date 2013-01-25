@@ -46,7 +46,7 @@ class Sequence
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var array
@@ -78,8 +78,6 @@ class Sequence
      * })
      */
     private $project;
-
-
 
     /**
      * Get id

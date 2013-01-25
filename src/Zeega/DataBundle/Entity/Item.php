@@ -171,7 +171,7 @@ class Item
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var boolean

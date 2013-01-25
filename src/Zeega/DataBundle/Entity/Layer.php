@@ -52,7 +52,7 @@ class Layer
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var \Item

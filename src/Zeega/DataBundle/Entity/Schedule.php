@@ -81,7 +81,7 @@ class Schedule
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @var \user
