@@ -16,9 +16,9 @@ class UserAdmin extends Admin
         
         $formMapper
             ->add('username')
-			->add('display_name')
+			->add('displayName')
 			->add('bio')
-			->add('thumb_url')
+			->add('thumbUrl')
 			->add('email')
 			->add('email')
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
@@ -29,7 +29,7 @@ class UserAdmin extends Admin
     {
         $datagridMapper
             ->add('email')
-            ->add('display_name')
+            ->add('displayName')
             ->add('locked')            
         ;
     }
@@ -46,7 +46,7 @@ class UserAdmin extends Admin
         $listMapper
             ->addIdentifier('id')
             ->addIdentifier('username')
-			->add('display_name')
+			->add('displayName')
 			->add('email')
             ->add('created_at','datetime')
 			->add('lastLogin')
