@@ -5,40 +5,79 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Sequence
+ * Sequence
+ *
+ * @ORM\Table(
+ *      name="sequence",
+ *      indexes={
+ *          @ORM\Index(name="sequence_enabled", columns={"enabled"}),
+ *          @ORM\Index(name="sequence_project_id_index", columns={"project_id"})
+ *      }
+ * )
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\SequenceRepository")
  */
 class Sequence
 {
     /**
-     * @var integer $id
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer $project_id
-     */
-    private $project_id;
-
-    /**
-     * @var string $frames
-     */
-    private $frames;
-
-    /**
-     * @var string $title
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     private $title;
 
     /**
-     * @var array $attr
+     * @var array
+     *
+     * @ORM\Column(name="attr", type="array", nullable=true)
      */
     private $attr;
 
     /**
-     * @var Zeega\DataBundle\Entity\Project
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
+     */
+    private $enabled = true;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="persistent_layers", type="array", nullable=true)
+     */
+    private $persistentLayers;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=140, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="advance_to", type="integer", nullable=true)
+     */
+    private $advanceTo;
+
+    /**
+     * @var \Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * })
      */
     private $project;
-
 
     /**
      * Get id
@@ -51,53 +90,16 @@ class Sequence
     }
 
     /**
-     * Set project_id
-     *
-     * @param integer $projectId
-     */
-    public function setProjectId($projectId)
-    {
-        $this->project_id = $projectId;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProjectId()
-    {
-        return $this->project_id;
-    }
-
-    /**
-     * Set frames
-     *
-     * @param string $frames
-     */
-    public function setFrames($frames)
-    {
-        $this->frames = $frames;
-    }
-
-    /**
-     * Get frames
-     *
-     * @return string 
-     */
-    public function getFrames()
-    {
-        return $this->frames;
-    }
-
-    /**
      * Set title
      *
      * @param string $title
+     * @return Sequence
      */
     public function setTitle($title)
     {
         $this->title = $title;
+    
+        return $this;
     }
 
     /**
@@ -114,10 +116,13 @@ class Sequence
      * Set attr
      *
      * @param array $attr
+     * @return Sequence
      */
     public function setAttr($attr)
     {
         $this->attr = $attr;
+    
+        return $this;
     }
 
     /**
@@ -131,38 +136,16 @@ class Sequence
     }
 
     /**
-     * Set project
-     *
-     * @param Zeega\DataBundle\Entity\Project $project
-     */
-    public function setProject(\Zeega\DataBundle\Entity\Project $project)
-    {
-        $this->project = $project;
-    }
-
-    /**
-     * Get project
-     *
-     * @return Zeega\DataBundle\Entity\Project 
-     */
-    public function getProject()
-    {
-        return $this->project;
-    }
-    /**
-     * @var boolean $enabled
-     */
-    private $enabled = true;
-
-
-    /**
      * Set enabled
      *
      * @param boolean $enabled
+     * @return Sequence
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+    
+        return $this;
     }
 
     /**
@@ -174,46 +157,29 @@ class Sequence
     {
         return $this->enabled;
     }
-    /**
-     * @var array $persistent_layers
-     */
-    private $persistent_layers;
-
 
     /**
-     * Set persistent_layers
+     * Set persistentLayers
      *
      * @param array $persistentLayers
+     * @return Sequence
      */
     public function setPersistentLayers($persistentLayers)
     {
-        $this->persistent_layers = $persistentLayers;
+        $this->persistentLayers = $persistentLayers;
+    
+        return $this;
     }
 
     /**
-     * Get persistent_layers
+     * Get persistentLayers
      *
      * @return array 
      */
     public function getPersistentLayers()
     {
-        return $this->persistent_layers;
+        return $this->persistentLayers;
     }
-    /**
-     * @var string $description
-     */
-    private $description;
-
-    /**
-     * @var integer $advance_to
-     */
-    private $advance_to;
-
-    /**
-     * @var Zeega\DataBundle\Entity\Sequence
-     */
-    private $advance;
-
 
     /**
      * Set description
@@ -239,117 +205,48 @@ class Sequence
     }
 
     /**
-     * Set advance_to
+     * Set advanceTo
      *
      * @param integer $advanceTo
      * @return Sequence
      */
     public function setAdvanceTo($advanceTo)
     {
-        $this->advance_to = $advanceTo;
+        $this->advanceTo = $advanceTo;
     
         return $this;
     }
 
     /**
-     * Get advance_to
+     * Get advanceTo
      *
      * @return integer 
      */
     public function getAdvanceTo()
     {
-        return $this->advance_to;
+        return $this->advanceTo;
     }
 
     /**
-     * Set advance
+     * Set project
      *
-     * @param Zeega\DataBundle\Entity\Sequence $advance
+     * @param \Zeega\DataBundle\Entity\Project $project
      * @return Sequence
      */
-    public function setAdvance(\Zeega\DataBundle\Entity\Sequence $advance = null)
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
     {
-        $this->advance = $advance;
+        $this->project = $project;
     
         return $this;
     }
 
     /**
-     * Get advance
+     * Get project
      *
-     * @return Zeega\DataBundle\Entity\Sequence 
+     * @return \Zeega\DataBundle\Entity\Project 
      */
-    public function getAdvance()
+    public function getProject()
     {
-        return $this->advance;
-    }
-
-    /**
-     * Set project_id
-     *
-     * @param integer $project_id
-     * @return Sequence
-     */
-    public function setProject_id($project_id)
-    {
-        $this->project_id = $project_id;
-    
-        return $this;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProject_id()
-    {
-        return $this->project_id;
-    }
-
-    /**
-     * Set persistent_layers
-     *
-     * @param array $persistent_layers
-     * @return Sequence
-     */
-    public function setPersistent_layers($persistent_layers)
-    {
-        $this->persistent_layers = $persistent_layers;
-    
-        return $this;
-    }
-
-    /**
-     * Get persistent_layers
-     *
-     * @return array 
-     */
-    public function getPersistent_layers()
-    {
-        return $this->persistent_layers;
-    }
-
-    /**
-     * Set advance_to
-     *
-     * @param integer $advance_to
-     * @return Sequence
-     */
-    public function setAdvance_to($advance_to)
-    {
-        $this->advance_to = $advance_to;
-    
-        return $this;
-    }
-
-    /**
-     * Get advance_to
-     *
-     * @return integer 
-     */
-    public function getAdvance_to()
-    {
-        return $this->advance_to;
+        return $this->project;
     }
 }

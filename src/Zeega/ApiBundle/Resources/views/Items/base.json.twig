@@ -1,93 +1,34 @@
 {# Template to render items recursively. Supports arrays and doctrine entities. #}
 {# All the if clauses below are due to doctrine removing underscores from field names and entities #}
-{% if editable is not defined %}
-    {% set editable = false %}
-{% endif %}
-
 {{ _self.show(item,editable) }}     {# Render the first item by making a call to the show(item) macro#}
 
 {% macro show(item, editable) %}    {# Item rendering macro/function #}
     {% if item is not null %}
-        {% if item.mediatype is defined %}
-            {% set mediatype = item.mediatype %}
-        {% else %}
-            {% set mediatype = item.media_type %}
-        {% endif %}
-
-        {% if item.child_items is defined %}
-            {% set childitems = item.child_items %}
-        {% elseif item.childitems is defined %}
-            {% set childitems = item.childitems %}
-        {% endif %}
     {
         "id":{{ item.id | default("null") }},
-        "user_id": {{ item.user_id | default("") | json_encode | raw }},
+        "user_id": {{ item.userId | default(null) | json_encode | raw }},
         "username": {{ item.username | default("") | json_encode | raw }},
-        "display_name":{{ item.display_name | default("") | json_encode | raw }},
+        "display_name":{{ item.displayName | default("") | json_encode | raw }},
         "title":{{ item.title | default("") | json_encode | raw}},
         "description":{{ item.description | default("") | json_encode | raw}},
-        {% if item.text is defined and item.text is not empty and mediatype == 'project' %}
+        {% if item.text is defined and item.text is not empty and item.mediaType == 'project' %}
             "text" : {{ item.text | raw}},
         {% else %}
             "text":{{ item.text | default("") | json_encode | raw}},
         {%- endif -%}
         "uri":{{ item.uri | default("") | json_encode | raw}},
-        {%- if item.attribution_uri is defined -%}
-            "attribution_uri":{{ item.attribution_uri | default("") | json_encode | raw}},
-        {%- else -%}
-            "attribution_uri":{{ item.getAttributionUri | default("") | json_encode | raw}},
-        {%- endif -%}
-        {%- if item.date_created is defined -%}
-            "date_created":"{{ item.date_created | default(null) | date("Y-m-d H:i:s") }}",
-        {%- else -%}
-            "date_created":"{{ item.getDateCreated | default(null) | date("Y-m-d H:i:s") }}",
-        {%- endif -%}
-        {%- if item.media_type is defined -%}
-            "media_type":{{ item.media_type | default(null) | json_encode | raw }},
-        {%- else -%}
-            "media_type":{{ item.getMediaType | default(null) | json_encode | raw }},
-        {%- endif -%}
-        {%- if item.layer_type is defined -%}
-            "layer_type":{{ item.layer_type | default(null) | json_encode | raw }},
-        {%- else -%}
-            "layer_type":{{ item.getLayerType | default(null) | json_encode | raw }},
-        {%- endif -%}                
+        "attribution_uri":{{ item.attributionUri | default("") | json_encode | raw}},
+        "date_created":"{{ item.dateCreated | default(null) | date("Y-m-d H:i:s") }}",
+        "media_type":{{ item.mediaType | default(null) | json_encode | raw }},
+        "layer_type":{{ item.layerType | default(null) | json_encode | raw }},
         "archive":{{ item.archive | default(null) | json_encode | raw }},
-        {%- if item.thumbnail_url is defined -%}
-            "thumbnail_url":{{ item.thumbnail_url | default(null) | json_encode | raw}},
-        {%- else -%}
-            "thumbnail_url":{{ item.getThumbnailUrl | default(null) | json_encode | raw}},
-        {%- endif -%}                        
-        {%- if item.media_geo_latitude is defined -%}
-            "media_geo_latitude":{{ item.media_geo_latitude | default(null) | json_encode | raw}},
-        {%- else -%}
-            "media_geo_latitude":{{ item.getMediaGeoLatitude | default(null) | json_encode | raw}},
-        {%- endif -%}                        
-        {%- if item.media_geo_longitude is defined -%}
-            "media_geo_longitude":{{ item.media_geo_longitude | default(null) | json_encode | raw}},
-        {%- else -%}
-            "media_geo_longitude":{{ item.getMediaGeoLongitude | default(null) | json_encode | raw}},
-        {%- endif -%}                
-        {%- if item.media_date_created is defined -%}
-            "media_date_created":{{ item.media_date_created | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
-        {%- else -%}
-            "media_date_created":{{ item.getMediaDateCreated | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
-        {%- endif -%}
-        {%- if item.media_creator_username is defined -%}
-            "media_creator_username":{{ item.media_creator_username | default(null) | json_encode | raw }},
-        {%- else -%}
-            "media_creator_username":{{ item.getMediaCreatorUsername | default(null) | json_encode | raw }},
-        {%- endif -%}        
-        {%- if item.media_creator_realname is defined -%}
-            "media_creator_realname":{{ item.media_creator_realname | default(null) | json_encode | raw }},
-        {%- else -%}
-            "media_creator_realname":{{ item.getMediaCreatorRealname | default(null) | json_encode | raw }},
-        {%- endif -%}        
-        {%- if item.child_items_count is defined -%}
-            "child_items_count":{{ item.child_items_count | default(0) }},
-        {%- else -%}
-            "child_items_count":{{ item.getChildItemsCount | default(0) }},
-        {%- endif -%}                
+        "thumbnail_url":{{ item.thumbnailUrl | default(null) | json_encode | raw}},
+        "media_geo_latitude":{{ item.mediaGeoLatitude | default(null) | json_encode | raw}},
+        "media_geo_longitude":{{ item.mediaGeoLongitude | default(null) | json_encode | raw}},
+        "media_date_created":{{ item.mediaDateCreated | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
+        "media_creator_username":{{ item.mediaCreatorUsername | default(null) | json_encode | raw }},
+        "media_creator_realname":{{ item.mediaCreatorRealname | default(null) | json_encode | raw }},
+        "child_items_count":{{ item.childItemsCount | default(0) }},
         {%- if item.attributes is defined and item.attributes is solr_array -%}
             "attributes":{{ item.attributes[0] | default("") | unserialize_array | json_encode | raw}},
         {%- else -%}
@@ -95,11 +36,11 @@
         {%- endif -%}
         "child_items":
         [
-            {%- if (childitems is defined) -%}
-                {% for child in childitems %}
+            {%- if (item.childItems is defined) -%}
+                {% for child in item.childItems %}
                     {# Item is a collection. Render the children by recursively calling the macro #}
                     {{ _self.show(child) }}
-                    {%- if loop.index0 < childitems|length - 1 -%}
+                    {%- if loop.index0 < item.childItems|length - 1 -%}
                     ,
                     {%- endif -%}
                 {% endfor %}

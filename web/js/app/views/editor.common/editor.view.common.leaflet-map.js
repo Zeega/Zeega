@@ -113,7 +113,6 @@
                 'media_geo_longitude' : this.marker.getLatLng().lng
             });
 
-
             return false;
         },
         
@@ -128,12 +127,10 @@
 
                                 _this.map.setView( _this.loc,8);
                                 _this.marker.setLatLng(_this.loc);
-                                
                                 _this.model.save({
                                     'media_geo_latitude': results[0].geometry.location.lat(),
                                     'media_geo_longitude': results[0].geometry.location.lng()
                                 });
-                            
                             }
                             else console.log("Geocoder failed at address look for "+$(that.el).find('.locator-search-input').val()+": " + status);
                         });

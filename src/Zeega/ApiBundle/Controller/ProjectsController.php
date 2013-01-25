@@ -37,9 +37,9 @@ class ProjectsController extends BaseController
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id, "enabled" => true));
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project_id" => $id, "enabled" => true));
-		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id, "enabled" => true));
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $project, "enabled" => true));
+		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project" => $project, "enabled" => true));
+		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $project, "enabled" => true));
 		
 		$sequenceFrames = array();
 		
@@ -305,7 +305,7 @@ class ProjectsController extends BaseController
         }
         else
         {
-            $currFrames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence_id"=>$sequenceId));
+            $currFrames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence"=>$sequenceId));
 
         	$frame = new Frame();
         	$frame->setProject($project);

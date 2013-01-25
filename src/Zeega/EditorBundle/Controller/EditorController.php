@@ -30,9 +30,9 @@ class EditorController extends BaseController
 		
 		$this->authorize($projectOwners[0]->getId());
 		
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project_id" => $id));
+		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
 
-		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project_id" => $id));
+		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
 
 		$sequence = $sequences[0];
 		
@@ -46,8 +46,6 @@ class EditorController extends BaseController
 
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
-		$userCollections = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findUserCollections($user->getId());
-		
 		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
 				'projecttitle'   => $project->getTitle(),
 				'projectid'   =>$project->getId(),
@@ -58,7 +56,6 @@ class EditorController extends BaseController
            		'page'=>'editor',
 				'results' => $items,
 				'project_data' => $projectData,
-				'user_collections' => $userCollections,
 			));
 	} 
 }
