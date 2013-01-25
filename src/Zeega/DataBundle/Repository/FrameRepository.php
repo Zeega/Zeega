@@ -15,7 +15,7 @@ class FrameRepository extends EntityRepository
                     ->add('from', 'ZeegaDataBundle:Frame n')
                     ->add('where', 'n.sequence = :id')
                     ->andWhere('n.enabled = true')
-                    ->orderBy('n.sequence_index','ASC')
+                    ->orderBy('n.sequenceIndex','ASC')
              		->setParameter('id',$id)
              		->getQuery()
              		->getResult();
@@ -29,7 +29,7 @@ class FrameRepository extends EntityRepository
                     ->add('from', 'ZeegaDataBundle:Frame n')
                     ->add('where', 'n.sequence = :id')
                     ->andWhere('n.enabled = true')
-                    ->orderBy('n.sequence_index','ASC')
+                    ->orderBy('n.sequenceIndex','ASC')
              		->setParameter('id',$id)
              		->getQuery()
              		->getResult();
