@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="sequence_project_id_index", columns={"project_id"})
  *      }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\SequenceRepository")
  */
 class Sequence
 {

@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="item_date_updated_index", columns={"date_updated"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\ItemRepository")
  */
 class Item
 {

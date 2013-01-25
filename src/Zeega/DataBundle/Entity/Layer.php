@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="layer_enabled", columns={"enabled"})
  *      }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\LayerRepository")
  */
 class Layer
 {

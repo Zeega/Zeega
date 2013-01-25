@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="project_date_updated", columns={"date_updated"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\ProjectRepository")
  */
 class Project
 {
@@ -131,7 +131,7 @@ class Project
      *   }
      * )
      */
-    private $user;
+    private $users;
 
     /**
      * Constructor

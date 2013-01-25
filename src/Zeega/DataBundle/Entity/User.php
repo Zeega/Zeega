@@ -25,7 +25,30 @@ class User extends BaseUser
      *
      * @ORM\Column(name="display_name", type="string", length=255, nullable=true)
      */
-    private $displayName;
+    protected $displayName;
+
+    /**
+    * Set display_name
+    *
+    * @param string $displayName
+    * @return User
+    */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    
+        return $this;
+    }
+
+    /**
+    * Get display_name
+    *
+    * @return string
+    */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
 
     /**
      * @var string
