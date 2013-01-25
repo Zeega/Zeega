@@ -14,8 +14,8 @@ class ItemRepository extends EntityRepository
     private function buildSearchQuery($qb, $query)
     {
         if(isset($query['user'])) {
-			$qb->andWhere('i.userId = ?2')
-			   ->setParameter(2,$query['user']);
+			$qb->andWhere('i.user = :userId')
+               ->setParameter('userId', $query['user']);
 		}
 		
 		if(isset($query['collection']))
@@ -164,7 +164,7 @@ class ItemRepository extends EntityRepository
         // search query
         $qb->select('i.uri')
             ->from('ZeegaDataBundle:Item', 'i')
-            ->where('i.userId = :user_id')
+            ->where('i.user = :userId')
             ->andWhere('i.archive = :archive')
             ->setParameter('userId', $userId)
             ->setParameter('archive', $archive)
