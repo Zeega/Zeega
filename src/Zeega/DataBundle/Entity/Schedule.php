@@ -94,4 +94,221 @@ class Schedule
     private $user;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set query
+     *
+     * @param string $query
+     * @return Schedule
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+    
+        return $this;
+    }
+
+    /**
+     * Get query
+     *
+     * @return string 
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
+     * Set tags
+     *
+     * @param string $tags
+     * @return Schedule
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return string 
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param string $archive
+     * @return Schedule
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+    
+        return $this;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return string 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param \DateTime $dateCreated
+     * @return Schedule
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
+
+    /**
+     * Set dateUpdated
+     *
+     * @param \DateTime $dateUpdated
+     * @return Schedule
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->dateUpdated = $dateUpdated;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateUpdated
+     *
+     * @return \DateTime 
+     */
+    public function getDateUpdated()
+    {
+        return $this->dateUpdated;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return Schedule
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set statusMessage
+     *
+     * @param string $statusMessage
+     * @return Schedule
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->statusMessage = $statusMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get statusMessage
+     *
+     * @return string 
+     */
+    public function getStatusMessage()
+    {
+        return $this->statusMessage;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return Schedule
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Zeega\DataBundle\Entity\User $user
+     * @return Schedule
+     */
+    public function setUser(\Zeega\DataBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Zeega\DataBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

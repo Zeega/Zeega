@@ -148,4 +148,323 @@ class User extends BaseUser
     {
         $this->project = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set bio
+     *
+     * @param string $bio
+     * @return User
+     */
+    public function setBio($bio)
+    {
+        $this->bio = $bio;
+    
+        return $this;
+    }
+
+    /**
+     * Get bio
+     *
+     * @return string 
+     */
+    public function getBio()
+    {
+        return $this->bio;
+    }
+
+    /**
+     * Set thumbUrl
+     *
+     * @param string $thumbUrl
+     * @return User
+     */
+    public function setThumbUrl($thumbUrl)
+    {
+        $this->thumbUrl = $thumbUrl;
+    
+        return $this;
+    }
+
+    /**
+     * Get thumbUrl
+     *
+     * @return string 
+     */
+    public function getThumbUrl()
+    {
+        return $this->thumbUrl;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return User
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     * @return User
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set locationLatitude
+     *
+     * @param float $locationLatitude
+     * @return User
+     */
+    public function setLocationLatitude($locationLatitude)
+    {
+        $this->locationLatitude = $locationLatitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get locationLatitude
+     *
+     * @return float 
+     */
+    public function getLocationLatitude()
+    {
+        return $this->locationLatitude;
+    }
+
+    /**
+     * Set locationLongitude
+     *
+     * @param float $locationLongitude
+     * @return User
+     */
+    public function setLocationLongitude($locationLongitude)
+    {
+        $this->locationLongitude = $locationLongitude;
+    
+        return $this;
+    }
+
+    /**
+     * Get locationLongitude
+     *
+     * @return float 
+     */
+    public function getLocationLongitude()
+    {
+        return $this->locationLongitude;
+    }
+
+    /**
+     * Set backgroundImageUrl
+     *
+     * @param string $backgroundImageUrl
+     * @return User
+     */
+    public function setBackgroundImageUrl($backgroundImageUrl)
+    {
+        $this->backgroundImageUrl = $backgroundImageUrl;
+    
+        return $this;
+    }
+
+    /**
+     * Get backgroundImageUrl
+     *
+     * @return string 
+     */
+    public function getBackgroundImageUrl()
+    {
+        return $this->backgroundImageUrl;
+    }
+
+    /**
+     * Set dropboxDelta
+     *
+     * @param string $dropboxDelta
+     * @return User
+     */
+    public function setDropboxDelta($dropboxDelta)
+    {
+        $this->dropboxDelta = $dropboxDelta;
+    
+        return $this;
+    }
+
+    /**
+     * Get dropboxDelta
+     *
+     * @return string 
+     */
+    public function getDropboxDelta()
+    {
+        return $this->dropboxDelta;
+    }
+
+    /**
+     * Set idea
+     *
+     * @param string $idea
+     * @return User
+     */
+    public function setIdea($idea)
+    {
+        $this->idea = $idea;
+    
+        return $this;
+    }
+
+    /**
+     * Get idea
+     *
+     * @return string 
+     */
+    public function getIdea()
+    {
+        return $this->idea;
+    }
+
+    /**
+     * Set apiKey
+     *
+     * @param string $apiKey
+     * @return User
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    
+        return $this;
+    }
+
+    /**
+     * Get apiKey
+     *
+     * @return string 
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * Set twitterId
+     *
+     * @param string $twitterId
+     * @return User
+     */
+    public function setTwitterId($twitterId)
+    {
+        $this->twitterId = $twitterId;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterId
+     *
+     * @return string 
+     */
+    public function getTwitterId()
+    {
+        return $this->twitterId;
+    }
+
+    /**
+     * Set twitterUsername
+     *
+     * @param string $twitterUsername
+     * @return User
+     */
+    public function setTwitterUsername($twitterUsername)
+    {
+        $this->twitterUsername = $twitterUsername;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterUsername
+     *
+     * @return string 
+     */
+    public function getTwitterUsername()
+    {
+        return $this->twitterUsername;
+    }
+
+    /**
+     * Add project
+     *
+     * @param \Zeega\DataBundle\Entity\Project $project
+     * @return User
+     */
+    public function addProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project[] = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Remove project
+     *
+     * @param \Zeega\DataBundle\Entity\Project $project
+     */
+    public function removeProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project->removeElement($project);
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
 }

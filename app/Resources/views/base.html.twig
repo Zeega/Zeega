@@ -202,7 +202,6 @@
   	
   	<body> 
 		<div id="wrapper">
-			<a href="{{ path ('ZeegaSocialBundle_twitter_connect')}}">Twitter</a>
 	    	{% block header %}
 				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 					<header>
@@ -453,8 +452,7 @@
 							</div>
 						</div>						
 					</div>					
-				</div>
-
+				</div>					
 				<!-- Non-logged-in Footer Ends -->
 			{% endif %}	
         {% endblock footer %}

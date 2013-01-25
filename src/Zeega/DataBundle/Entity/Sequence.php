@@ -80,4 +80,175 @@ class Sequence
     private $project;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Sequence
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set attr
+     *
+     * @param array $attr
+     * @return Sequence
+     */
+    public function setAttr($attr)
+    {
+        $this->attr = $attr;
+    
+        return $this;
+    }
+
+    /**
+     * Get attr
+     *
+     * @return array 
+     */
+    public function getAttr()
+    {
+        return $this->attr;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return Sequence
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set persistentLayers
+     *
+     * @param array $persistentLayers
+     * @return Sequence
+     */
+    public function setPersistentLayers($persistentLayers)
+    {
+        $this->persistentLayers = $persistentLayers;
+    
+        return $this;
+    }
+
+    /**
+     * Get persistentLayers
+     *
+     * @return array 
+     */
+    public function getPersistentLayers()
+    {
+        return $this->persistentLayers;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Sequence
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set advanceTo
+     *
+     * @param integer $advanceTo
+     * @return Sequence
+     */
+    public function setAdvanceTo($advanceTo)
+    {
+        $this->advanceTo = $advanceTo;
+    
+        return $this;
+    }
+
+    /**
+     * Get advanceTo
+     *
+     * @return integer 
+     */
+    public function getAdvanceTo()
+    {
+        return $this->advanceTo;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \Zeega\DataBundle\Entity\Project $project
+     * @return Sequence
+     */
+    public function setProject(\Zeega\DataBundle\Entity\Project $project)
+    {
+        $this->project = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Zeega\DataBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
 }
