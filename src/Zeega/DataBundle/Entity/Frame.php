@@ -5,368 +5,89 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Frame
+ * Frame
+ *
+ * @ORM\Table(
+ *      name="frame",
+ *      indexes={
+ *          @ORM\Index(name="frame_enabled", columns={"enabled"}),
+ *          @ORM\Index(name="frame_project_id_index", columns={"project_id"})
+ *      }
+ * )
+ * @ORM\Entity
  */
 class Frame
 {
     /**
-     * @var integer $id
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer $sequence_id
+     * @var integer
+     *
+     * @ORM\Column(name="sequence_index", type="integer", nullable=true)
      */
-    private $sequence_id;
+    private $sequenceIndex;
 
     /**
-     * @var integer $sequence_index
-     */
-    private $sequence_index;
-
-    /**
-     * @var array $layers
+     * @var array
+     *
+     * @ORM\Column(name="layers", type="array", nullable=true)
      */
     private $layers;
 
     /**
-     * @var integer $project_id
-     */
-    private $project_id;
-
-    /**
-     * @var array $attr
+     * @var array
+     *
+     * @ORM\Column(name="attr", type="array", nullable=true)
      */
     private $attr;
 
     /**
-     * @var string $thumbnail_url
+     * @var string
+     *
+     * @ORM\Column(name="thumbnail_url", type="string", length=101, nullable=true)
      */
-    private $thumbnail_url;
+    private $thumbnailUrl;
 
     /**
-     * @var boolean $enabled
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean", nullable=true)
      */
-    private $enabled = true;
+    private $enabled;
 
     /**
-     * @var Zeega\DataBundle\Entity\Sequence
+     * @var boolean
+     *
+     * @ORM\Column(name="controllable", type="boolean", nullable=true)
+     */
+    private $controllable;
+
+    /**
+     * @var \Sequence
+     *
+     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sequence_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * })
      */
     private $sequence;
 
     /**
-     * @var Zeega\DataBundle\Entity\Project
+     * @var \Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * })
      */
     private $project;
 
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set sequence_id
-     *
-     * @param integer $sequenceId
-     */
-    public function setSequenceId($sequenceId)
-    {
-        $this->sequence_id = $sequenceId;
-    }
-
-    /**
-     * Get sequence_id
-     *
-     * @return integer 
-     */
-    public function getSequenceId()
-    {
-        return $this->sequence_id;
-    }
-
-    /**
-     * Set sequence_index
-     *
-     * @param integer $sequenceIndex
-     */
-    public function setSequenceIndex($sequenceIndex)
-    {
-        $this->sequence_index = $sequenceIndex;
-    }
-
-    /**
-     * Get sequence_index
-     *
-     * @return integer 
-     */
-    public function getSequenceIndex()
-    {
-        return $this->sequence_index;
-    }
-
-    /**
-     * Set layers
-     *
-     * @param array $layers
-     */
-    public function setLayers($layers)
-    {
-        $this->layers = $layers;
-    }
-
-    /**
-     * Get layers
-     *
-     * @return array 
-     */
-    public function getLayers()
-    {
-        return $this->layers;
-    }
-
-    /**
-     * Set project_id
-     *
-     * @param integer $projectId
-     */
-    public function setProjectId($projectId)
-    {
-        $this->project_id = $projectId;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProjectId()
-    {
-        return $this->project_id;
-    }
-
-    /**
-     * Set attr
-     *
-     * @param array $attr
-     */
-    public function setAttr($attr)
-    {
-        $this->attr = $attr;
-    }
-
-    /**
-     * Get attr
-     *
-     * @return array 
-     */
-    public function getAttr()
-    {
-        return $this->attr;
-    }
-
-    /**
-     * Set thumbnail_url
-     *
-     * @param string $thumbnailUrl
-     */
-    public function setThumbnailUrl($thumbnailUrl)
-    {
-        $this->thumbnail_url = $thumbnailUrl;
-    }
-
-    /**
-     * Get thumbnail_url
-     *
-     * @return string 
-     */
-    public function getThumbnailUrl()
-    {
-        return $this->thumbnail_url;
-    }
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Set sequence
-     *
-     * @param Zeega\DataBundle\Entity\Sequence $sequence
-     */
-    public function setSequence(\Zeega\DataBundle\Entity\Sequence $sequence)
-    {
-        $this->sequence = $sequence;
-    }
-
-    /**
-     * Get sequence
-     *
-     * @return Zeega\DataBundle\Entity\Sequence 
-     */
-    public function getSequence()
-    {
-        return $this->sequence;
-    }
-
-    /**
-     * Set project
-     *
-     * @param Zeega\DataBundle\Entity\Project $project
-     */
-    public function setProject(\Zeega\DataBundle\Entity\Project $project)
-    {
-        $this->project = $project;
-    }
-
-    /**
-     * Get project
-     *
-     * @return Zeega\DataBundle\Entity\Project 
-     */
-    public function getProject()
-    {
-        return $this->project;
-    }
-    /**
-     * @var boolean $controllable
-     */
-    private $controllable;
-
-
-    /**
-     * Set controllable
-     *
-     * @param boolean $controllable
-     * @return Frame
-     */
-    public function setControllable($controllable)
-    {
-        $this->controllable = $controllable;
-    
-        return $this;
-    }
-
-    /**
-     * Get controllable
-     *
-     * @return boolean 
-     */
-    public function getControllable()
-    {
-        return $this->controllable;
-    }
-
-    /**
-     * Set sequence_id
-     *
-     * @param integer $sequence_id
-     * @return Frame
-     */
-    public function setSequence_id($sequence_id)
-    {
-        $this->sequence_id = $sequence_id;
-    
-        return $this;
-    }
-
-    /**
-     * Get sequence_id
-     *
-     * @return integer 
-     */
-    public function getSequence_id()
-    {
-        return $this->sequence_id;
-    }
-
-    /**
-     * Set sequence_index
-     *
-     * @param integer $sequence_index
-     * @return Frame
-     */
-    public function setSequence_index($sequence_index)
-    {
-        $this->sequence_index = $sequence_index;
-    
-        return $this;
-    }
-
-    /**
-     * Get sequence_index
-     *
-     * @return integer 
-     */
-    public function getSequence_index()
-    {
-        return $this->sequence_index;
-    }
-
-    /**
-     * Set project_id
-     *
-     * @param integer $project_id
-     * @return Frame
-     */
-    public function setProject_id($project_id)
-    {
-        $this->project_id = $project_id;
-    
-        return $this;
-    }
-
-    /**
-     * Get project_id
-     *
-     * @return integer 
-     */
-    public function getProject_id()
-    {
-        return $this->project_id;
-    }
-
-    /**
-     * Set thumbnail_url
-     *
-     * @param string $thumbnail_url
-     * @return Frame
-     */
-    public function setThumbnail_url($thumbnail_url)
-    {
-        $this->thumbnail_url = $thumbnail_url;
-    
-        return $this;
-    }
-
-    /**
-     * Get thumbnail_url
-     *
-     * @return string 
-     */
-    public function getThumbnail_url()
-    {
-        return $this->thumbnail_url;
-    }
 }

@@ -5,372 +5,93 @@ namespace Zeega\DataBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Zeega\DataBundle\Entity\Schedule
+ *  Schedule
+ *
+ *  @ORM\Table(
+ *     name="schedule",
+ *     indexes={
+ *          @ORM\Index(name="schedule_status", columns={"status"}),
+ *          @ORM\Index(name="schedule_enabled", columns={"enabled"})
+ *      }
+ *  )
+ *  @ORM\Entity
  */
 class Schedule
 {
     /**
-     * @var integer $id
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var string $query
+     * @var string
+     *
+     * @ORM\Column(name="query", type="string", length=100, nullable=true)
      */
     private $query;
 
     /**
-     * @var \DateTime $date_created
-     */
-    private $date_created;
-
-    /**
-     * @var \DateTime $date_updated
-     */
-    private $date_updated;
-
-    /**
-     * @var string $status
-     */
-    private $status;
-
-    /**
-     * @var boolean $enabled
-     */
-    private $enabled;
-
-    /**
-     * @var Zeega\DataBundle\Entity\User
-     */
-    private $user;
-
-
-    /**
-     * Get id
+     * @var string
      *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set query
-     *
-     * @param string $query
-     * @return Schedule
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-    
-        return $this;
-    }
-
-    /**
-     * Get query
-     *
-     * @return string 
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * Set date_created
-     *
-     * @param \DateTime $dateCreated
-     * @return Schedule
-     */
-    public function setDateCreated($dateCreated)
-    {
-        $this->date_created = $dateCreated;
-    
-        return $this;
-    }
-
-    /**
-     * Get date_created
-     *
-     * @return \DateTime 
-     */
-    public function getDateCreated()
-    {
-        return $this->date_created;
-    }
-
-    /**
-     * Set date_updated
-     *
-     * @param \DateTime $dateUpdated
-     * @return Schedule
-     */
-    public function setDateUpdated($dateUpdated)
-    {
-        $this->date_updated = $dateUpdated;
-    
-        return $this;
-    }
-
-    /**
-     * Get date_updated
-     *
-     * @return \DateTime 
-     */
-    public function getDateUpdated()
-    {
-        return $this->date_updated;
-    }
-
-    /**
-     * Set status
-     *
-     * @param string $status
-     * @return Schedule
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return Schedule
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-    
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Set user
-     *
-     * @param Zeega\DataBundle\Entity\User $user
-     * @return Schedule
-     */
-    public function setUser(\Zeega\DataBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-    
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return Zeega\DataBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-    /**
-     * @var string $tags
+     * @ORM\Column(name="tags", type="string", length=100, nullable=true)
      */
     private $tags;
 
     /**
-     * @var string $target_service
-     */
-    private $target_service;
-
-    /**
-     * @var string $status_message
-     */
-    private $status_message;
-
-
-    /**
-     * Set tags
+     * @var string
      *
-     * @param string $tags
-     * @return Schedule
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-    
-        return $this;
-    }
-
-    /**
-     * Get tags
-     *
-     * @return string 
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * Set target_service
-     *
-     * @param string $targetService
-     * @return Schedule
-     */
-    public function setTargetService($targetService)
-    {
-        $this->target_service = $targetService;
-    
-        return $this;
-    }
-
-    /**
-     * Get target_service
-     *
-     * @return string 
-     */
-    public function getTargetService()
-    {
-        return $this->target_service;
-    }
-
-    /**
-     * Set status_message
-     *
-     * @param string $statusMessage
-     * @return Schedule
-     */
-    public function setStatusMessage($statusMessage)
-    {
-        $this->status_message = $statusMessage;
-    
-        return $this;
-    }
-
-    /**
-     * Get status_message
-     *
-     * @return string 
-     */
-    public function getStatusMessage()
-    {
-        return $this->status_message;
-    }
-    /**
-     * @var string $archive
+     * @ORM\Column(name="archive", type="string", length=25, nullable=false)
      */
     private $archive;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_created", type="datetime", nullable=false)
+     */
+    private $dateCreated;
 
     /**
-     * Set archive
+     * @var \DateTime
      *
-     * @param string $archive
-     * @return Schedule
+     * @ORM\Column(name="date_updated", type="datetime", nullable=false)
      */
-    public function setArchive($archive)
-    {
-        $this->archive = $archive;
-    
-        return $this;
-    }
+    private $dateUpdated;
 
     /**
-     * Get archive
+     * @var string
      *
-     * @return string 
+     * @ORM\Column(name="status", type="string", length=10, nullable=false)
      */
-    public function getArchive()
-    {
-        return $this->archive;
-    }
+    private $status;
 
     /**
-     * Set date_created
+     * @var string
      *
-     * @param \DateTime $date_created
-     * @return Schedule
+     * @ORM\Column(name="status_message", type="string", length=255, nullable=true)
      */
-    public function setDate_created($date_created)
-    {
-        $this->date_created = $date_created;
-    
-        return $this;
-    }
+    private $statusMessage;
 
     /**
-     * Get date_created
+     * @var boolean
      *
-     * @return \DateTime 
+     * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    public function getDate_created()
-    {
-        return $this->date_created;
-    }
+    private $enabled;
 
     /**
-     * Set date_updated
+     * @var \user
      *
-     * @param \DateTime $date_updated
-     * @return Schedule
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
      */
-    public function setDate_updated($date_updated)
-    {
-        $this->date_updated = $date_updated;
-    
-        return $this;
-    }
+    private $user;
 
-    /**
-     * Get date_updated
-     *
-     * @return \DateTime 
-     */
-    public function getDate_updated()
-    {
-        return $this->date_updated;
-    }
 
-    /**
-     * Set status_message
-     *
-     * @param string $status_message
-     * @return Schedule
-     */
-    public function setStatus_message($status_message)
-    {
-        $this->status_message = $status_message;
-    
-        return $this;
-    }
-
-    /**
-     * Get status_message
-     *
-     * @return string 
-     */
-    public function getStatus_message()
-    {
-        return $this->status_message;
-    }
 }
