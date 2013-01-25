@@ -1,0 +1,3 @@
+[submodule "web/js/app/player.mega"]
+	path = web/js/app/player.mega
+	url = git@github.com:Zeega/Zeega-Standalone-Player.git

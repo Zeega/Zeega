@@ -77,13 +77,9 @@ class ProjectsController extends BaseController
 
 		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
-        if (!$project)  {
+        if ( !$project ) {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
-
-        // create json item for project
-        // update item.text with json
-
 
         // update date_published
 		$title = $request_data->get('title');
@@ -94,13 +90,7 @@ class ProjectsController extends BaseController
         $estimatedTime = $request_data->get('estimated_time'); 
         $location = $request_data->get('location');
         $description = $request_data->get('description');
-
-		
-		//
 		$publishUpdate = $request_data->get('publish_update');
-
-
-
 
 		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
@@ -111,43 +101,34 @@ class ProjectsController extends BaseController
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
 
-
         $project->setDateUpdated(new \DateTime("now"));
-        
  
         $em->persist($project);
         $em->flush();
-
-
 		
-		
-		if((isset($publishUpdate)&&$publishUpdate)){
-			
+		if ( (isset($publishUpdate)&&$publishUpdate) ) {			
 			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-        	if (is_null($project->getItemId())) // if this project is not represented in the item table
-       		{
+        	
+            // if this project is not represented in the item table
+            if ( is_null($project->getItemId()) ) {
 				// create new item
 				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
 				$user = $this->get('security.context')->getToken()->getUser();
 				
 				$item = new Item();
 				$item->setDateCreated(new \DateTime("now"));
-				$item->setChildItemsCount(0);
-				$item->setUser($user);
-				
-				$dateUpdated = new \DateTime("now");
-				$dateUpdated->add(new \DateInterval('PT2M'));
-	
-				$item->setDateUpdated($dateUpdated);
+				$item->setDateUpdated(new \DateTime("now"));
+                $item->setChildItemsCount(0);
+				$item->setUser($user);								
 				$item->setUri($projectId);
-			   
 				$item->setMediaType("project");
 				$item->setLayerType("project");
 				$item->setArchive("zeega");
-				$item->setMediaCreatorUsername($user->getUsername());
-				$item->setPublished(1);
+				$item->setMediaCreatorUsername($user->getUsername());				
 				$item->setAttributionUri("http://beta.zeega.org/");
-				$item->setEnabled(true);
+				$item->setPublished(true);
+                $item->setEnabled(true);
+                
 				$em->persist($item);
 				$em->flush();
 				
@@ -165,11 +146,22 @@ class ProjectsController extends BaseController
 				// fetch associated item
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
 				
-				
 				$project->setDatePublished($project->getDateUpdated());
 				$em->persist($project);
 				$em->flush();
 			}
+
+            $projectTags = $project->getTags();
+            $itemTags = $item->getTags();
+            
+            if ( isset($projectTags) && is_array($projectTags) ) {
+
+                if ( isset($itemTags) && is_array($itemTags) ) {
+                    $projectTags = array_unique(array_values(array_merge($itemTags, $projectTags))); // oooo
+                }
+
+                $item->setTags($projectTags);
+            }
         
         
 			$item->setMediaCreatorRealname($project->getAuthors());

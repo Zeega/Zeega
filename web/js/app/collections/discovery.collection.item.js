@@ -85,7 +85,7 @@
             if( !_.isUndefined(this.query.content) && "all" !== this.query.content ){
                 url += "&type=" + this.query.content;
                 if(this.query.content==='project'){
-                    url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,layer_type,display_name,eidtable,published";
+                    url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
                 }
             }
             if( !_.isUndefined(this.query.sort) ) url += "&sort=" + this.query.sort;
