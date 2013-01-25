@@ -41,9 +41,9 @@ class SolrService
         // sort
         if(isset($query["sort"])) {
             if($query["sort"] == 'date-desc') {
-                $solrQuery->addSort('date_created', \Solarium_Query_Select::SORT_DESC);    
+                $solrQuery->addSort('dateCreated', \Solarium_Query_Select::SORT_DESC);    
             } else if($query["sort"] == 'date-asc') {
-                $solrQuery->addSort('date_created', \Solarium_Query_Select::SORT_ASC);       
+                $solrQuery->addSort('dateCreated', \Solarium_Query_Select::SORT_ASC);       
             } else if($query["sort"] == 'id-desc') {
                 $solrQuery->addSort('id', \Solarium_Query_Select::SORT_DESC);
             }
@@ -73,13 +73,13 @@ class SolrService
 
         // return only the items that belong to a collection
         if(isset($query["collection"])) {    
-            $queryString = self::appendQueryToQueryString($queryString, "parent_item:".$query["collection"]);
+            $queryString = self::appendQueryToQueryString($queryString, "parentItem:".$query["collection"]);
         }
 
-        $mediaDateCreatedQuery = self::createDateIntervalQuery("media_after", "media_before", "media_date_created", $query);
+        $mediaDateCreatedQuery = self::createDateIntervalQuery("media_after", "media_before", "mediaDateCreated", $query);
         $queryString = self::appendQueryToQueryString($queryString, $mediaDateCreatedQuery);
 
-        $dateCreatedQuery = self::createDateIntervalQuery("after", "before", "date_created", $query);
+        $dateCreatedQuery = self::createDateIntervalQuery("after", "before", "dateCreated", $query);
         $queryString = self::appendQueryToQueryString($queryString, $dateCreatedQuery);
         
         if(isset($queryString) && $queryString != '') {
@@ -88,15 +88,15 @@ class SolrService
         
         // media type
         if(isset($query["type"])) {
-            $solrQuery->createFilterQuery('media_type')->setQuery("media_type:(".$query["type"].")");
+            $solrQuery->createFilterQuery('mediaType')->setQuery("mediaType:(".$query["type"].")");
         }
 
         if(isset($query["geo_located"]) && $query["geo_located"] == 1) {
-            $solrQuery->createFilterQuery('geo')->setQuery("media_geo_longitude:[-180 TO 180] AND media_geo_latitude:[-90 TO 90]");
+            $solrQuery->createFilterQuery('geo')->setQuery("mediaGeoLongitude:[-180 TO 180] AND mediaGeoLatitude:[-90 TO 90]");
         }
 
         if(isset($query["user"])) {
-            $solrQuery->createFilterQuery('user_id')->setQuery("user_id:".$query["user"]);
+            $solrQuery->createFilterQuery('userId')->setQuery("userId:".$query["user"]);
         }
         
         // return highly ranked tags for the query
