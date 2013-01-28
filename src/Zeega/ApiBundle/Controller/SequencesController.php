@@ -117,6 +117,13 @@ class SequencesController extends BaseController
      	$sequence= $em->getRepository('ZeegaDataBundle:Sequence')->find($sequence_id);
         $sequence->setEnabled(false);
         $em->persist($sequence);
+
+        $sequenceFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence" => $sequence->getId()));
+        foreach($sequenceFrames as $frame) {
+            $frame->setEnabled(false);
+            $em->persist($frame);
+        }
+        
     	$em->flush();
     	return new Response('SUCCESS',200);
     
