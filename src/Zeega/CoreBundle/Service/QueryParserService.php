@@ -56,6 +56,9 @@ class QueryParserService
             } else if($requestKey === "fields" && !is_array($requestValue)) {
                 $requestValue = str_replace(' ','',$requestValue);
                 $query[$requestKey] = explode(",", $requestValue);
+                foreach($query[$requestKey] as &$field) {
+                    $field = self::toCamelCase($field);
+                }
             } else {
                 $query[$requestKey] = $requestValue;
             }
@@ -64,6 +67,13 @@ class QueryParserService
         $query = self::setQueryDefaults($query);
 
         return $query;
+    }
+
+    private function toCamelCase($str) 
+    {
+
+        //return preg_replace('/_([a-z])/', "strtoupper('\\1')", $str);
+        return preg_replace('/\_([a-z])/e', 'strtoupper(\'$1\')', strtolower($str));
     }
 
     private function parseParameterForSolr($parameterValue)
