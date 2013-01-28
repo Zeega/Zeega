@@ -226,7 +226,7 @@ class Item
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Item", inversedBy="parentItems")
+     * @ORM\ManyToMany(targetEntity="Item", inversedBy="parentItems", cascade={"persist"})
      * @ORM\JoinTable(name="collection",
      *      joinColumns={@ORM\JoinColumn(name="id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="child_item_id", referencedColumnName="id")}
@@ -235,7 +235,7 @@ class Item
     private $childItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childtems")
+     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childtems", cascade={"persist"})
      */
     private $parentItems;
     
