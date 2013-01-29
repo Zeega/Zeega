@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.ini }
     - { resource: security.yml }
     - { resource: @ZeegaIngestionBundle/Resources/config/services.yml }
+    - { resource: @ZeegaSocialBundle/Resources/config/services.yml }
 
 framework:
     #esi:             ~
@@ -36,14 +37,6 @@ services:
     session.handler.pdo:
             class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
             arguments: [@pdo, %pdo.db_options%]
-    zeega.twitter.user:
-        class: Zeega\SocialBundle\Security\User\Provider\TwitterProvider
-        arguments:
-            twitter_oauth: "@fos_twitter.api"
-            userManager: "@fos_user.user_manager"
-            validator: "@validator"
-            session: "@session" 
-
 
 # Twig Configuration
 twig:
