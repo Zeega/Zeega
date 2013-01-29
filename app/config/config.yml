@@ -92,7 +92,7 @@ swiftmailer:
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: secured_area
+    firewall_name: main
     user_class: Zeega\DataBundle\Entity\User
     from_email:
         address: %mailer_email%
