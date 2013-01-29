@@ -8,6 +8,7 @@ use FOS\UserBundle\Entity\User as BaseUser;
 /**
  * @ORM\Table(name="zuser")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class User extends BaseUser
 {
@@ -25,30 +26,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="display_name", type="string", length=255, nullable=true)
      */
-    protected $displayName;
-
-    /**
-    * Set display_name
-    *
-    * @param string $displayName
-    * @return User
-    */
-    public function setDisplayName($displayName)
-    {
-        $this->displayName = $displayName;
-    
-        return $this;
-    }
-
-    /**
-    * Get display_name
-    *
-    * @return string
-    */
-    public function getDisplayName()
-    {
-        return $this->displayName;
-    }
+    private $displayName;
 
     /**
      * @var string
@@ -150,6 +128,18 @@ class User extends BaseUser
         $this->project = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /** 
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->setCreatedAt(new \DateTime("now"));
+
+        if( !isset($this->thumbUrl) ) {
+            $this->setThumbUrl("http://static.zeega.org/community/templates/default_profile.jpeg");
+        }
+    }
+
     /**
      * Get id
      *
@@ -158,6 +148,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     * @return User
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string 
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
     }
 
     /**
