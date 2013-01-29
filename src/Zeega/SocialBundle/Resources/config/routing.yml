@@ -2,6 +2,6 @@ ZeegaSocialBundle_twitter_connect:
     pattern:  /twitter/connect
     defaults: { _controller: ZeegaSocialBundle:Twitter:connect }
 
-ZeegaSocialBundle_twitter_login:
-    pattern:  /twitter/login
-    defaults: { _controller: ZeegaSocialBundle:Twitter:login }
+ZeegaSocialBundle_twitter_login_check:
+    pattern:  /twitter/login_check
+    defaults: { _controller: ZeegaSocialBundle:Twitter:securityCheck }
