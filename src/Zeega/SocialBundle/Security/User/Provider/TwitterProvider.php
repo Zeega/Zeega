@@ -64,16 +64,14 @@ class TwitterProvider implements UserProviderInterface
 
             $username = $info->screen_name;
 
-
             $user->setTwitterID($info->id);
             $user->setTwitterUsername($username);
             $user->setUsername($username);
-            $user->setEmail('');
             $user->setDisplayname($info->name);
 
             try {
                 $this->twitter_oauth->decode_json = FALSE;
-                $twitterThumbnail = $this->twitter_oauth->get( "users/profile_image/luisfbrandao",array("size" => "original") );
+                $twitterThumbnail = $this->twitter_oauth->get( "users/profile_image/$username",array("size" => "original") );
                 $url = preg_match('/<a href="(.+)">/', $twitterThumbnail, $match);
                 $imageUrl = parse_url($match[1]);
         
