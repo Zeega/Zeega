@@ -9,6 +9,16 @@ use FOS\UserBundle\Entity\User as BaseUser;
  * @ORM\Table(name="zuser")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="emailCanonical",
+ *         column=@ORM\Column(
+ *             name="email_canonical",
+ *             type="string",
+ *             length=255,
+ *             unique=false
+ *         )
+ *     )
+ * })
  */
 class User extends BaseUser
 {
