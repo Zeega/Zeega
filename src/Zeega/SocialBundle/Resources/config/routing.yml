@@ -5,3 +5,7 @@ ZeegaSocialBundle_twitter_connect:
 ZeegaSocialBundle_twitter_login_check:
     pattern:  /twitter/login_check
     defaults: { _controller: ZeegaSocialBundle:Twitter:securityCheck }
+
+ZeegaSocialBundle_facebook_login_check:
+    pattern:  /facebook/login_check
+    defaults: { _controller: ZeegaSocialBundle:Facebook:securityCheck }
