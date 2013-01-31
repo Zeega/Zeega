@@ -15,7 +15,16 @@ use FOS\UserBundle\Entity\User as BaseUser;
  *             name="email_canonical",
  *             type="string",
  *             length=255,
+ *             nullable=true,
  *             unique=false
+ *         )
+ *     ),
+ *     @ORM\AttributeOverride(name="email",
+ *         column=@ORM\Column(
+ *             name="email",
+ *             type="string",
+ *             length=255,
+ *             nullable=true
  *         )
  *     )
  * })
