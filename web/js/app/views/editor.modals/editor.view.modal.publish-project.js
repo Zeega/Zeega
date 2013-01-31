@@ -34,13 +34,12 @@
             var properties = {
                 title: this.$('#publish-project-title').val(),
                 authors : this.$('#publish-project-author').val(),
-                description : this.$('#publish-project-description').val(),
-                publish_update:1,
-                published:true
+                description : this.$('#publish-project-description').val()
             };
+            this.model.set(properties);
 
-            this.model.on('sync', this.onPublishSuccess, this);
-            this.model.save( properties );
+            this.model.on('publish_success', this.onPublishSuccess, this);
+            this.model.publishProject();
             
             return false;
         },
@@ -48,15 +47,10 @@
         onPublishSuccess : function(model,response)
         {
             console.log('$$        on publish success', model, response, this.model, zeega.app.project);
-            this.model.off('sync', this.onPublishSuccess);
+            this.model.off('publish_success', this.onPublishSuccess);
             this.model.updated = false;
             this.hide();
             if(this.isPublished !== true ){
-                //should happen w project buttons update
-                $("#project-publish .menu-verbose-title").html("update");
-                $("#project-publish").addClass('disabled');
-                $("#project-options").removeClass('disabled');
-                $("#project-share").removeClass('disabled');
                 this.model.shareProject();
             }
         },
