@@ -47,8 +47,7 @@ class MobilePublishController extends BaseController
             ));
         } else {
             return $this->render('ZeegaCoreBundle:MobilePublish:static.html.twig', array(
-                'project'=>$project,
-                'project_data' => $projectData,
+                'project'=>$project
                 
             ));
         }
