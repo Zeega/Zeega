@@ -141,7 +141,7 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook_id", type="string", length=255)
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
      */
     private $facebookId;
 
@@ -515,7 +515,6 @@ class User extends BaseUser
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
-        $this->setUsername($facebookId);
     }
 
     /**
@@ -524,30 +523,5 @@ class User extends BaseUser
     public function getFacebookId()
     {
         return $this->facebookId;
-    }
-
-    /**
-     * @param Array
-     */
-    public function setFBData($fbdata)
-    {
-        if (isset($fbdata['id'])) {
-            $this->setFacebookId($fbdata['id']);
-            $this->addRole('ROLE_FACEBOOK');
-        }
-        if (isset($fbdata['first_name'])) {
-            $this->setDisplayName($fbdata['first_name']);
-        }
-        if (isset($fbdata['last_name'])) {
-            if (isset($this->displayName) ) {
-                $name = $this->getDisplayName() . " " . $fbdata['last_name'];
-            } else {
-                $name = $fbdata['last_name'];
-            }
-            $this->setDisplayName($name);
-        }
-        if (isset($fbdata['email'])) {
-            $this->setEmail($fbdata['email']);
-        }
     }
 }
