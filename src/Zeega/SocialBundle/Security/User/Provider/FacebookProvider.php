@@ -34,35 +34,78 @@ class FacebookProvider implements UserProviderInterface
         return $this->userManager->supportsClass($class);
     }
 
-    public function findUserByFbId($fbId)
-    {
-        return $this->userManager->findUserBy(array('facebookId' => $fbId));
-    }
-
     public function loadUserByUsername($username)
     {
-        $user = $this->findUserByFbId($username);
+        // check if this user registered before using facebook
+        $user = $this->userManager->findUserBy(array('facebookId' => $username));
 
+        // connect to facebook?
         try {
-            $fbdata = $this->facebook->api('/me');
+            $facebookUserData = $this->facebook->api('/me');
         } catch (FacebookApiException $e) {
-            $fbdata = null;
+            $facebookUserData = null;
         }
 
-        if (!empty($fbdata)) {
-            if (empty($user)) {
-                $user = $this->userManager->createUser();
-                $user->setEnabled(true);
-                $user->setPassword('');
+        // TODO use http://developers.facebook.com/docs/api/realtime
+
+        if ( !empty($facebookUserData) ) {
+            // we a have a facebook user
+            if ( empty($user) ) {
+                // the user never logged in with facebook before
+
+                // check if there's a user with the same email
+                if ( isset($facebookUserData['email']) ) {
+                    $user = $this->userManager->findUserBy(array('email' => $facebookUserData['email']));
+                }
+                
+                if( !isset($user) ) {
+                    $user = $this->userManager->createUser();
+                    $user->setEnabled(true);
+                    $user->setPassword('');
+                    
+                    if ( isset($facebookUserData['first_name']) ) {
+                        $user->setDisplayName($facebookUserData['first_name']);
+                    }
+
+                    if ( isset($facebookUserData['last_name']) ) {
+                        $userDisplayName = $user->getDisplayName();
+                        if (isset($userDisplayName) ) {
+                            $name = $userDisplayName . " " . $facebookUserData['last_name'];
+                        } else {
+                            $name = $facebookUserData['last_name'];
+                        }
+                        $user->setDisplayName($name);
+                    }
+                    
+                    if ( isset($facebookUserData['email']) ) {
+                        $user->setEmail($facebookUserData['email']);
+                        $user->setUsername($facebookUserData['email']);
+                    }
+
+
+                    
+                    https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/c42.42.523.523/s200x200/263448_10150686852110483_833221_n.jpg
+                }
             }
+    
+            if (isset($facebookUserData['id'])) {
+                $facebookUserId = $facebookUserData['id'];
+                $user->setFacebookId($facebookUserId);
+                $user->addRole('ROLE_FACEBOOK');
 
-            // TODO use http://developers.facebook.com/docs/api/realtime
-            $user->setFBData($fbdata);
+                $username = $user->getUsername();
+                if ( !isset($username) ) {
+                    $user->setUsername($facebookUserId);
+                }
 
+                $user->setThumbUrl("http://graph.facebook.com/$facebookUserId/picture?width=200&height=200");
+            }
+            
             if (count($this->validator->validate($user, 'Facebook'))) {
                 // TODO: the user was found obviously, but doesnt match our expectations, do something smart
                 throw new UsernameNotFoundException('The facebook user could not be stored');
             }
+
             $this->userManager->updateUser($user);
         }
 
