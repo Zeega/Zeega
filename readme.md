@@ -3,7 +3,7 @@
 Zeega is an open-source HTML5 platform revolutionizing web publishing and interactive storytelling for a future beyond blogs. To read more about Zeega go to [zeega.com](http://zeega.com).
 
 
-## How to sign up to Zeega
+## How to sign up on Zeega
 
 Sign up at [http://alpha.zeega.org/register/](http://alpha.zeega.org/register/).  
 
