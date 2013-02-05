@@ -1,42 +1,42 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block head %}
-	<title>Zeega Alpha</title>
-	<link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
-	
-	<style type="text/css">
-	
-		/*
-			Background image code lives here, not in CSS, because this is specific to each page
-			and could be made dynamic too (i.e. randomly picking a different image each load)
-			quite easily. Exposing the code here should be helpful.
-		*/
-	
-		html { 
-		background: url({{asset("images/registration/login.jpg")}}) no-repeat center center fixed;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-		}
-	
-	</style>
-	
+    <title>Zeega Alpha</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+    
+    <style type="text/css">
+    
+        /*
+            Background image code lives here, not in CSS, because this is specific to each page
+            and could be made dynamic too (i.e. randomly picking a different image each load)
+            quite easily. Exposing the code here should be helpful.
+        */
+    
+        html { 
+        background: url({{asset("images/registration/login.jpg")}}) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+    
+    </style>
+    
 
-	<!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-	{% if app.environment == 'dev' %}
-		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
-	{% else %}
-		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
-	{% endif %}
+    <!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+    {% if app.environment == 'dev' %}
+        <link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+        <script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+        <script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+    {% endif %}
 
-	<link href='https://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
-	<script>
-	function goLogIn(){
+    <link href='https://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
+    <script>
+    function goLogIn(){
         window.location = "{{ path('ZeegaSocialBundle_facebook_login_check') }}";
     }
 
@@ -47,6 +47,16 @@
             });
         }
     }
+    function fbLogin() {
+        FB.login(function(response) {
+          if (response.session) {
+            //user is logged in, reload page
+            window.location = "{{ path('ZeegaSocialBundle_facebook_login_check') }}";
+          } else {
+            // user is not logged in
+          }
+        });
+    }
     </script>
 {% endblock head%}
 
@@ -56,63 +66,66 @@
 
 {% block fos_user_content %}
 <!-- Background Color Div - creates the transparent layer over the background image -->
-	{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
-	<div id="background-color">
-	</div>
-	<!-- Background Color Div ends -->
-	
-	
-	<!-- Page Content Begins -->
-	
-	<div class="container sign-in">
-	
-		<div class='sign-in-head'>
-			<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-			<img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
-			</a>
-		
-			<h2>Remake the Internet</h2>
-		</div>
-		
-		<h2 class='message'>Hello, hello and welcome back!</h2>
-		 
-		{% if error %}
-	        <div class="error" style="color:red">{{ error }}</div>
-	    {% endif %}
-		
-		<form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
-		  <fieldset>
-		  	<div class="control-group">	
-		  		{{ facebook_login_button({'autologoutlink': true}) }}
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-		  		<h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
-		  		
-				<div class="controls">
-					<input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge" style='width:100%'>
-				</div>
-				
-		  		<h4>{{ 'Password'|trans({}, 'FOSUserBundle') }}</h4>
-		  		
-				<div class="controls" style="margin-bottom:0">
-					<input  type="password" id="password" name="_password" class="input-xlarge" style='width:100%'>
-				</div>
-				
-				<div class="pull-right">
+    {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+    <div id="background-color">
+    </div>
+    <!-- Background Color Div ends -->
+    
+    
+    <!-- Page Content Begins -->
+    
+    <div class="container sign-in">
+    
+        <div class='sign-in-head'>
+            <a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
+            <img src="{{ asset('images/zeega-logo-large.png') }}" alt="zeega-logo-large" width="251" height="79">
+            </a>
+        
+            <h2>Remake the Internet</h2>
+        </div>
+        
+        <h2 class='message'>Hello, hello and welcome back!</h2>
+        
+        
+        <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" >Login With Twitter</a> <br/>
+        <a href="#" onclick="fbLogin();">Login With Facebook</a><br/>
 
-					<a href="{{path("fos_user_resetting_request")}}" class="sidebar">Forgot password?</a>
+        {% if error %}
+            <div class="error" style="color:red">{{ error }}</div>
+        {% endif %}
+        
+        <form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
+          <fieldset>
+            <div class="control-group"> 
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
+                
+                <div class="controls">
+                    <input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge" style='width:100%'>
+                </div>
+                
+                <h4>{{ 'Password'|trans({}, 'FOSUserBundle') }}</h4>
+                
+                <div class="controls" style="margin-bottom:0">
+                    <input  type="password" id="password" name="_password" class="input-xlarge" style='width:100%'>
+                </div>
+                
+                <div class="pull-right">
 
-				</div>
-				
-				<div>
-				<button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
-				</div>
+                    <a href="{{path("fos_user_resetting_request")}}" class="sidebar">Forgot password?</a>
 
-				
-		  	</div>
-		  </fieldset>
-		</form>
-	
-	</div>
+                </div>
+                
+                <div>
+                <button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
+                </div>
+
+                
+            </div>
+          </fieldset>
+        </form>
+    
+    </div>
 
 {% endblock fos_user_content %}
 
