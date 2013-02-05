@@ -57,7 +57,8 @@
         "oldsound/rabbitmq-bundle":"dev-zeega",
         "videlalvaro/php-amqplib":"dev-master",
         "friendsofsymfony/twitter-bundle": "dev-master",
-        "kertz/twitteroauth": "*@dev" 
+        "kertz/twitteroauth": "*@dev",
+        "friendsofsymfony/facebook-bundle": "1.1.*"
     },
     "scripts": {
         "post-install-cmd": [

@@ -150,3 +150,10 @@ fos_twitter:
         consumer_key: %twitter_consumer_key%
         consumer_secret: %twitter_consumer_secret%
         callback_url: %twitter_callback_url%
+
+fos_facebook:
+    alias:  facebook
+    app_id: 459848834048078
+    secret: f5b344b91bff03ace4df454e35fca4e4
+    cookie: true
+    permissions: [email, user_birthday, user_location]
