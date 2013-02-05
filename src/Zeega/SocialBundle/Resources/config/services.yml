@@ -10,3 +10,10 @@ services:
             validator: "@validator"
             session: "@session"
             logger: "@logger" 
+    zeega.facebook.user:
+        class: Zeega\SocialBundle\Security\User\Provider\FacebookProvider
+        arguments:
+            facebook: "@fos_facebook.api"
+            userManager: "@fos_user.user_manager"
+            validator: "@validator"
+            logger: "@logger" 

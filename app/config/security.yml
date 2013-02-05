@@ -11,7 +11,9 @@ security:
             id: fos_user.user_provider.username
         fos_twitter:
             id: zeega.twitter.user
-    
+        fos_facebook:
+            id: zeega.facebook.user
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -28,6 +30,12 @@ security:
                 check_path: ZeegaSocialBundle_twitter_login_check
                 default_target_path: /dashboard
                 provider: fos_twitter
+            fos_facebook:
+                app_url: "http://apps.facebook.com/Zeega/"
+                server_url: "http://apache.zeega.oeg/zeega/web"
+                check_path: ZeegaSocialBundle_facebook_login_check
+                default_target_path: /dashboard
+                provider: fos_facebook
             logout:
                 path:   /logout
                 target: /

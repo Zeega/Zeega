@@ -31,6 +31,7 @@ class AppKernel extends Kernel
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new FOS\TwitterBundle\FOSTwitterBundle(),
+            new FOS\FacebookBundle\FOSFacebookBundle(),
     
             new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),

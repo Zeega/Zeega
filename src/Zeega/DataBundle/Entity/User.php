@@ -136,8 +136,15 @@ class User extends BaseUser
      *
      * @ORM\Column(name="twitter_username", type="string", nullable=true)
      */
-
     private $twitterUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     */
+    private $facebookId;
+
     /**
      * Constructor
      */
@@ -499,5 +506,22 @@ class User extends BaseUser
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @param string $facebookId
+     * @return void
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
     }
 }
