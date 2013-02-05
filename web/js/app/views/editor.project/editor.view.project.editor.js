@@ -167,7 +167,16 @@
 		
 		clickPublish : function(e)
 		{
-			if( !$(e.target).closest('a').hasClass('disabled') ) this.model.publishProject(e);
+			if( !$(e.target).closest('a').hasClass('disabled') && this.model.get('published')) {
+				this.model.publishProject(e);
+			} else {
+				var Modal = zeega.module('modal');
+				var view = new Modal.Views.PublishProject({ model:this.model });
+				$('body').prepend( view.render().el );
+				view.show();
+				console.log('newly published good job');
+			}
+
 			return false;
 		},
 		

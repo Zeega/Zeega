@@ -42,6 +42,13 @@ class Project
     private $published;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mobile", type="boolean", nullable=true)
+     */
+    private $mobile;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_created", type="datetime", nullable=false)
@@ -482,5 +489,28 @@ class Project
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set mobile
+     *
+     * @param boolean $mobile
+     * @return Project
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+    
+        return $this;
+    }
+
+    /**
+     * Get mobile
+     *
+     * @return boolean 
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
     }
 }

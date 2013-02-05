@@ -91,6 +91,7 @@ class ProjectsController extends BaseController
         $location = $request_data->get('location');
         $description = $request_data->get('description');
 		$publishUpdate = $request_data->get('publish_update');
+        $mobile = $request_data->get('mobile');
 
 		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
@@ -100,6 +101,7 @@ class ProjectsController extends BaseController
         if(isset($estimatedTime)) $project->setEstimatedTime($estimatedTime);
         if(isset($location)) $project->setLocation($location);
         if(isset($description)) $project->setDescription($description);
+        if(isset($mobile)) $project->setMobile($mobile);
 
         $project->setDateUpdated(new \DateTime("now"));
  
