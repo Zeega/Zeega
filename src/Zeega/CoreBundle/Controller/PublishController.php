@@ -88,7 +88,7 @@ class PublishController extends BaseController
     }
 
 
-       public function channelAction($tag)
+    public function channelAction($tag)
     {
 
         $params = array();

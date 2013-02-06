@@ -4,56 +4,51 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
 
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
         fos_twitter:
             id: zeega.twitter.user
+        fos_facebook:
+            id: zeega.facebook.user
+
     firewalls:
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        secured_area:
+        main:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
                 default_target_path: /dashboard
                 use_forward: true
+                check_path: fos_user_security_check
+            fos_twitter:
+                check_path: ZeegaSocialBundle_twitter_login_check
+                default_target_path: /dashboard
+                provider: fos_twitter
+            fos_facebook:
+                app_url: "http://apps.facebook.com/Zeega/"
+                server_url: "http://apache.zeega.oeg/zeega/web"
+                check_path: ZeegaSocialBundle_facebook_login_check
+                default_target_path: /dashboard
+                provider: fos_facebook
             logout:
                 path:   /logout
                 target: /
-            anonymous: ~
-            #fos_twitter:
-            #    login_path: /login
-            #    check_path: /login_check
-            #    default_target_path: /twitter/login
-            #    provider: fos_twitter
-
-            anonymous: ~
+            anonymous: true     # default is to allow anonymous access to everything
 
     access_control:
-        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
-        - { path: ^/[0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY}
-        - { path: ^/register/confirmed, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/users, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/items, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/projects, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/collection, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/[0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }   # force https for login
+        - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY}                       # this needs to be here; not sure why
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/frames, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/frame, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/library, role: ROLE_USER }
+        - { path: ^/editor/, role: ROLE_USER }
         - { path: ^/widget, role: ROLE_USER, requires_channel: https }
         - { path: ^/js/lib, role: ROLE_USER, requires_channel: https }
-        - { path: ^/layers, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/browser/notsupported, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }

@@ -17,8 +17,8 @@ class TwitterController extends Controller
         return $response;
     }
 
-    public function loginAction()
-    {   
-        return new RedirectResponse($this->generateUrl('ZeegaCommunityBundle_dashboard'));
+    public function securityCheckAction()
+    {
+        // The security layer will intercept this request
     }
 }

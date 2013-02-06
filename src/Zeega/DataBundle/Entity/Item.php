@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  * @ORM\Entity(repositoryClass= "Zeega\DataBundle\Repository\ItemRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Item
 {
@@ -248,6 +249,23 @@ class Item
         $this->parentItems = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    /** 
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->setDateCreated(new \DateTime("now"));
+        $this->setDateUpdated($this->getDateCreated());
+    }
+
+    /** 
+     * @ORM\PreUpdate 
+     */
+    public function onPreUpdate()
+    {
+        $this->setDateUpdated(new \DateTime("now"));
+    }
+
     /**
      * Get id
      *

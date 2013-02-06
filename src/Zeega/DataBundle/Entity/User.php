@@ -8,6 +8,26 @@ use FOS\UserBundle\Entity\User as BaseUser;
 /**
  * @ORM\Table(name="zuser")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="emailCanonical",
+ *         column=@ORM\Column(
+ *             name="email_canonical",
+ *             type="string",
+ *             length=255,
+ *             nullable=true,
+ *             unique=false
+ *         )
+ *     ),
+ *     @ORM\AttributeOverride(name="email",
+ *         column=@ORM\Column(
+ *             name="email",
+ *             type="string",
+ *             length=255,
+ *             nullable=true
+ *         )
+ *     )
+ * })
  */
 class User extends BaseUser
 {
@@ -25,30 +45,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="display_name", type="string", length=255, nullable=true)
      */
-    protected $displayName;
-
-    /**
-    * Set display_name
-    *
-    * @param string $displayName
-    * @return User
-    */
-    public function setDisplayName($displayName)
-    {
-        $this->displayName = $displayName;
-    
-        return $this;
-    }
-
-    /**
-    * Get display_name
-    *
-    * @return string
-    */
-    public function getDisplayName()
-    {
-        return $this->displayName;
-    }
+    private $displayName;
 
     /**
      * @var string
@@ -139,8 +136,15 @@ class User extends BaseUser
      *
      * @ORM\Column(name="twitter_username", type="string", nullable=true)
      */
-
     private $twitterUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     */
+    private $facebookId;
+
     /**
      * Constructor
      */
@@ -148,6 +152,18 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->project = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /** 
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->setCreatedAt(new \DateTime("now"));
+
+        if( !isset($this->thumbUrl) ) {
+            $this->setThumbUrl("http://static.zeega.org/community/templates/default_profile.jpeg");
+        }
     }
 
     /**
@@ -158,6 +174,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     * @return User
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string 
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
     }
 
     /**
@@ -467,5 +506,22 @@ class User extends BaseUser
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @param string $facebookId
+     * @return void
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
     }
 }

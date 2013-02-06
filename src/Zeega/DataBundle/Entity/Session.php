@@ -15,9 +15,8 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="session_id", type="string", length=255)
+     * @ORM\Column(name="session_id", type="string")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $sessionId;
 
