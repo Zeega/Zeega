@@ -58,7 +58,9 @@
         "videlalvaro/php-amqplib":"dev-master",
         "friendsofsymfony/twitter-bundle": "dev-master",
         "kertz/twitteroauth": "*@dev",
-        "friendsofsymfony/facebook-bundle": "1.1.*"
+        "friendsofsymfony/facebook-bundle": "1.1.*",
+        "doctrine/mongodb-odm-bundle": "3.0.*@dev",
+        "doctrine/mongodb-odm": "*@dev"
     },
     "scripts": {
         "post-install-cmd": [
