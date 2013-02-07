@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 
 $loader = include __DIR__.'/../vendor/autoload.php';
 
@@ -12,5 +13,7 @@ if (!function_exists('intl_get_error_code')) {
 }
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+AnnotationDriver::registerAnnotationClasses();
+
 
 return $loader;
