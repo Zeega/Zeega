@@ -549,49 +549,49 @@ class ItemsController extends ApiBaseController
                 $queryResults = $queryResults["items"];
                 
                 foreach($queryResults as $childItem) {
-                    if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf' && $childItem['media_type']!='Document') {
+                    if($childItem['mediaType']!='Collection' && $childItem['mediaType']!='Pdf' && $childItem['mediaType']!='Document') {
                         $i++;
                         $frameId = (int)$childItem['id'];
                         $frameOrder[]=$frameId;
                         $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
                         
-                        $layer = array("id"=>$i,"media_type"=>$childItem['media_type'],"layer_type"=>$childItem['layer_type']);
+                        $layer = array("id"=>$i,"media_type"=>$childItem['mediaType'],"layer_type"=>$childItem['layerType']);
                         $layer["type"] = $layer["media_type"];
                         if(isset($childItem['text'])) {
                             $layer["text"] = $childItem['text'];
                         }
 
                         $layer["attr"] = array();
-                        $layer["attr"]["user_id"] = $childItem['user_id'];
+                        $layer["attr"]["user_id"] = $childItem['userId'];
                         $layer["attr"]["uri"] = $childItem['uri'];
-                        $layer["attr"]["attribution_uri"] =$childItem['attribution_uri'];
+                        $layer["attr"]["attribution_uri"] =$childItem['attributionUri'];
                         
                         if(isset($childItem['title_i'])) {
-                            $layer["attr"]["title"] = $childItem['title_i'];
+                            $layer["attr"]["title"] = $childItem['title'];
                         }
 
                         if(isset($childItem['description_i'])) {
-                            $layer["attr"]["description"] = $childItem['description_i'];
+                            $layer["attr"]["description"] = $childItem['description'];
                         }
 
                         if(isset($childItem['thumbnail_url'])) {
-                            $layer["attr"]["thumbnail_url"] = $childItem['thumbnail_url'];
+                            $layer["attr"]["thumbnail_url"] = $childItem['thumbnailUrl'];
                         }
 
                         if(isset($childItem['media_creator_username'])) {
-                            $layer["attr"]["media_creator_username"] = $childItem['media_creator_username'];
+                            $layer["attr"]["media_creator_username"] = $childItem['mediaCreatorUsername'];
                         }
 
                         if(isset($childItem['media_creator_realname'])) {
-                            $layer["attr"]["media_creator_realname"] = $childItem['media_creator_realname'];
+                            $layer["attr"]["media_creator_realname"] = $childItem['mediaCreatorRealname'];
                         }
 
                         if(isset($childItem['media_date_created'])) {
-                            $layer["attr"]["media_date_created"] = $childItem['media_date_created'];
+                            $layer["attr"]["media_date_created"] = $childItem['mediaDateCreated'];
                         }
 
                         if(isset($childItem['date_created'])) {
-                            $layer["attr"]["date_created"] = $childItem['date_created'];
+                            $layer["attr"]["date_created"] = $childItem['dateCreated'];
                         }
 
                         if(isset($childItem['tags'])) {
@@ -599,11 +599,11 @@ class ItemsController extends ApiBaseController
                         }
 
                         if(isset($childItem['media_geo_latitude'])) {
-                            $layer["attr"]["media_geo_latitude"] = $childItem['media_geo_latitude'];
+                            $layer["attr"]["media_geo_latitude"] = $childItem['mediaGeoLatitude'];
                         }
 
                         if(isset($childItem['media_geo_longitude'])) {
-                            $layer["attr"]["media_geo_longitude"] = $childItem['media_geo_longitude'];
+                            $layer["attr"]["media_geo_longitude"] = $childItem['mediaGeoLongitude'];
                         }
 
                         if(isset($childItem['archive'])) {
