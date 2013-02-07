@@ -23,6 +23,10 @@ use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\Frame;
 use Zeega\DataBundle\Entity\Sequence;
 use Zeega\DataBundle\Entity\Project;
+use Zeega\DataBundle\Document\Project as MongoProject;
+use Zeega\DataBundle\Document\Sequence as MongoSequence;
+use Zeega\DataBundle\Document\Frame as MongoFrame;
+use Zeega\DataBundle\Document\Layer as MongoLayer;
 
 use Zeega\CoreBundle\Controller\BaseController;
 
@@ -36,21 +40,15 @@ class ProjectsController extends BaseController
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $project, "enabled" => true));
-		$frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project" => $project, "enabled" => true));
-		$layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $project, "enabled" => true));
-		
-		$sequenceFrames = array();
-		
-		foreach($sequences as $sequence)
-		{
-			$sequenceId = $sequence->getId();
-			$sequenceFrames[$sequenceId] = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
-		}
-		
-		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
-			'sequences' => $sequences, 'sequence_frames' => $sequenceFrames, 'layers' => $layers, 'frames' => $frames));
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+		$project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        //$sequences = $project->getSequences();
+        $frames = $project->getFrames();
+        $layers = $project->getLayers();
+        
+        
+		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
     } 
@@ -340,36 +338,44 @@ class ProjectsController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
         $request = $this->getRequest();
         
-        if($request->request->get('title'))$title=$request->request->get('title');
-        if($request->request->get('collection_id'))
-        {
-            $session = $this->getRequest()->getSession();
-            $session->set("collection_id", $request->request->get('collection_id'));
+        if( $request->request->has('title') ) {
+            $title = $request->request->get('title');
         } else {
             $title='Untitled Zeega';    
         }
+
+        $frame = new MongoFrame();        
+        $frame->setEnabled(true);
+        $frame->setThumbnailUrl("bananas");
+
+        $layer = new MongoLayer();        
+        $layer->setEnabled(true);
+        $layer->setText("bananas");
+
+        $sequence = new MongoSequence();
+        $sequence->setTitle('Intro Sequence');
+        $sequence->setEnabled(true);
         
-        $project= new Project();
+        $project= new MongoProject();
         $project->setDateCreated(new \DateTime("now"));
         $project->setEnabled(true);
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
-        
-        $sequence = new Sequence();
-        $frame = new Frame();
-        $frame->setSequence($sequence);
-        $frame->setProject($project);
-        $frame->setEnabled(true);
-        $project->addUser($user);
-        $sequence->setProject($project);
-        $sequence->setTitle('Intro Sequence');
-        $sequence->setEnabled(true);
         $project->setTitle($title);
-        $em=$this->getDoctrine()->getEntityManager();
-        $em->persist($sequence);
-        $em->persist($project);
-        $em->persist($frame);
-        $em->flush();
+        
+        $project->addSequences($sequence);
+        $project->addFrames($frame);
+        $project->addLayers($layer);
+        
+        $dm = $this->get('doctrine_mongodb')->getManager();
+
+        $dm->persist($project);
+        $dm->flush();
+
+        $sequence->setFrames(array($frame->getId()));
+        $dm->persist($sequence);
+        $dm->flush();
+
         return new Response($project->getId());
     }
 }

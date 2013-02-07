@@ -1,5 +1,5 @@
 {
-	"id" : {{ project.getId() | default("") }},
+	"id" : {{ project.getId() | default("") | json_encode | raw }},
 	"user_id": {{ project.getUsers()[0].getId() | default("") | json_encode | raw}},
 	"title" : {{ project.getTitle() | default("") | json_encode | raw}},
 	"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
@@ -18,37 +18,28 @@
     "mobile" : {{ project.getMobile() | default(false) | json_encode | raw}},
     "published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}}
-	{% if sequences is defined %}
-	,"sequences" : [
-		
-	    {% for sequence in sequences %}	
+	{% if project.getSequences() is defined %}
+	,"sequences" : [		
+	    {% for sequence in project.getSequences() %}	
 		{
-			"id" : {{ sequence.id | default("") }},
+			"id" : {{ sequence.id | default("") | json_encode | raw}},
 			"title" : "{{ sequence.title | default("") }}",
 			"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 			"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
 			"description" : {{sequence.description | default(null) | json_encode | raw}},
     		"advance_to" : {{sequence.advanceTo | default(null) | json_encode | raw}},
-			"frames" : 
-			[
-			{% for frame in sequence_frames[sequence.id] -%}	
-				{{frame["id"]}}
-			{%- if loop.index0 < sequence_frames[sequence.id]|length - 1 -%}
-			,
-			{%- endif -%}
-			{% endfor %}
-			]
+			"frames" : {{sequence.frames | json_encode | raw}}
 		}
-		{%- if loop.index0 < sequences|length - 1 -%}
+		{%- if loop.index0 < project.getSequences()|length - 1 -%}
 		,
 		{%- endif -%}			
 		{% endfor %}
 	]
 	{%- endif -%}
-	{% if frames is defined %}
+	{% if project.getFrames() is defined %}
 	,"frames" : [
 		
-		{% for frame in frames %}
+		{% for frame in project.getFrames() %}
 		{	
 			"id" : {{ frame.id | json_encode | raw}},
 			"attr" : {{ frame.attr | default({}) | json_encode | raw}},
@@ -56,31 +47,17 @@
 			"controllable": {{frame.controllable | default(true) | json_encode | raw}},
 			"layers" : 
 			[
-			{% for layer in frame.layers -%}	
-				{{layer}}
-			{%- if loop.index0 < frame.layers |length - 1 -%}
-			,
-			{%- endif -%}
-			{% endfor %}
 			]
 		}	
-		{%- if loop.index0 < frames|length - 1 -%}
+		{%- if loop.index0 < project.getFrames()|length - 1 -%}
 		,
 		{%- endif -%}			
 		{% endfor %}
 		
 	]
 	{%- endif -%}
-	{% if layers is defined %}
 	,"layers":[
 		
-		{% for layer in layers %}
-			{% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %}	
-			{%- if loop.index0 < layers|length - 1 -%}
-			,
-			{%- endif -%}
-	    {% endfor %}
 		
 	]
-	{%- endif -%}
 }

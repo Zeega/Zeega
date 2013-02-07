@@ -25,16 +25,17 @@ class EditorController extends BaseController
 	{	
 		$user = $this->get('security.context')->getToken()->getUser();
 		
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$projectOwners = $project->getUsers();
-		
-		$this->authorize($projectOwners[0]->getId());
-		
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
+		//$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		$dm = $this->get('doctrine_mongodb')->getManager();
+		$project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+		//$projectOwners = $project->getUsers();		
+		//$this->authorize($projectOwners[0]->getId());
+				
+		//$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
 
-		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
+		//$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
 
-		$sequence = $sequences[0];
+		//$sequence = $sequences[0];
 		
 		$params = array();
 		$params["user"] = $user->getId();
@@ -50,9 +51,6 @@ class EditorController extends BaseController
 				'projecttitle'   => $project->getTitle(),
 				'projectid'   =>$project->getId(),
 				'project'   =>$project,
-				'sequence'=>$sequence,
-				'sequences'=>$sequences,
-				'projectLayers' => $projectLayers,
            		'page'=>'editor',
 				'results' => $items,
 				'project_data' => $projectData,

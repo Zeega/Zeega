@@ -93,11 +93,22 @@ class Project
      * @MongoDB\EmbedMany(targetDocument="Sequence")
      */
     protected $sequences;
-    
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Frame")
+     */
+    protected $frames;
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Layer")
+     */
+    protected $layers;
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -456,5 +467,45 @@ class Project
     public function getSequences()
     {
         return $this->sequences;
+    }
+
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Document\Frame $frames
+     */
+    public function addFrames(\Zeega\DataBundle\Document\Frame $frames)
+    {
+        $this->frames[] = $frames;
+    }
+
+    /**
+     * Get frames
+     *
+     * @return Doctrine\Common\Collections\Collection $frames
+     */
+    public function getFrames()
+    {
+        return $this->frames;
+    }
+
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Document\Layer $layers
+     */
+    public function addLayers(\Zeega\DataBundle\Document\Layer $layers)
+    {
+        $this->layers[] = $layers;
+    }
+
+    /**
+     * Get layers
+     *
+     * @return Doctrine\Common\Collections\Collection $layers
+     */
+    public function getLayers()
+    {
+        return $this->layers;
     }
 }
