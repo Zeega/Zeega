@@ -118,9 +118,13 @@ this.zeega = {
     },
 
     goToFrame : function( f ){
+        
+        /* MongoDb change
         var frame;
         if( _.isNumber(f) ) frame = this.project.frames.get(f);
         else frame = f;
+        */
+        var frame = this.project.frames.get(f);
 
         // if the frame's sequence isn't rendered, then render it
         if( _.isNull(this.currentSequence) || this.currentSequence.id != frame.sequenceID ){
