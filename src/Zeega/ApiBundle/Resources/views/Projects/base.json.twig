@@ -11,7 +11,7 @@
 	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
 	{% endif %}
     "enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
-    "estimated_time" : {{ project.getEstimatedTime() | default("Some time") | json_encode | raw}},
+    "estimated_time" : {{ project.getEstimatedTime() | default("null") | json_encode | raw}},
     "description" : {{ project.getDescription() | default("") | json_encode | raw}},
     "location" : {{ project.getLocation() | default("") | json_encode | raw}},
     "item_id" : {{ project.getItemId() | default(null) | json_encode | raw}},
