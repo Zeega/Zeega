@@ -261,16 +261,29 @@ class ProjectsController extends BaseController
         return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
     }
     
-    public function postProjectSequencesFramesAction($projectId,$sequenceId)
+    public function postProjectSequencesFramesAction($projectId, $sequenceId)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
-     	$sequence = $em->getRepository('ZeegaDataBundle:Sequence')->find($sequenceId);
-     	
-     	$frame = new Frame();
-    	$frame->setProject($project);
-    	$frame->setSequence($sequence);
-     	
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                        ->field('id')->equals($projectId)
+                        ->field('sequences.id')->equals($sequenceId)
+                        ->select('sequences.$')
+                        ->getQuery()
+                        ->getSingleResult();
+        
+        if ( !isset($project) || !$project instanceof MongoProject) {
+            return new Response("Document does not exist");
+        } 
+
+        $sequences = $project->getSequences();
+
+        if ( !isset($sequences) || $sequences->count() != 1) {
+            return new Response("Sequence does not exist");  
+        }
+
+        $sequence = $sequences[0];
+
      	$request = $this->getRequest();
      	
      	if($request->request->get('duplicate_id'))
@@ -305,34 +318,51 @@ class ProjectsController extends BaseController
         }
         else
         {
-            $currFrames = $em->getRepository('ZeegaDataBundle:Frame')->findBy(array("sequence"=>$sequenceId));
+            $frame = new MongoFrame();
+        	$frame->setSequenceIndex(count($sequence->getFrames()));
+            
+       		if($request->request->get('thumbnail_url')) {
+                $frame->setThumbnailUrl($request->request->get('thumbnail_url'));  
+            } 
 
-        	$frame = new Frame();
-        	$frame->setProject($project);
-        	$frame->setSequence($sequence);
-        	$frame->setSequenceIndex(count($currFrames));
-            $frame->setEnabled(true);
+       		if($request->request->get('attr')) {
+                $frame->setAttr($request->request->get('attr'));  
+            } 
 
-    		$request = $this->getRequest();
+       		if($request->request->get('layers')) {
+                $frame->setLayers($request->request->get('layers'));  
+            } 
 
-       		if($request->request->get('thumbnail_url')) $frame->setThumbnailUrl($request->request->get('thumbnail_url'));
-       		if($request->request->get('attr')) $frame->setAttr($request->request->get('attr'));
-       		if($request->request->get('layers')) $frame->setLayers($request->request->get('layers'));
-                if($request->request->get('layers_to_persist')) $frame->setLayers($request->request->get('layers_to_persist'));
+            if($request->request->get('layers_to_persist')) {
+                $frame->setLayers($request->request->get('layers_to_persist'));    
+            }
         }
         
         $project->setDateUpdated(new \DateTime("now"));
-        
-   		$em->persist($project);
-   		$em->persist($frame);
-   		$em->flush();
-        
-        $frameLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($frame->getLayers());
-    	$frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame, 'layers' => $frameLayers));
+        $project->addFrames($frame);
+
+        $dm->persist($sequence);
+   		$dm->persist($project);
+   		$dm->persist($frame);
+        $dm->flush();
+
+        $currFrames = $sequence->getFrames();
+        if( is_array($currFrames) ) {            
+            array_push($currFrames, $frame->getId());
+            $sequence->setFrames($currFrames);
+        } else {
+            $sequence->setFrames(array($frame->getId()));
+        }
+
+        $dm->persist($sequence);
+        $dm->flush();        
+
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
     	return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
 
+    /* TO-DO: check the double flush */
     public function postProjectAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
@@ -378,4 +408,21 @@ class ProjectsController extends BaseController
 
         return new Response($project->getId());
     }
+
+    public function getProjectSequencesFramesAction($projectId,$sequenceId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                    ->field('id')->equals($projectId)
+                    ->field('sequences.id')->equals($sequenceId)
+                    ->select('sequences.$')
+                    ->getQuery()
+                    ->getSingleResult();
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
+    } 
+
 }
