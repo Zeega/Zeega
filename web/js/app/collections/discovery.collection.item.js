@@ -11,7 +11,7 @@
                 this.on("preview_item",this.previewItem,this);
         },
         url : function(){
-            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items";
+            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items?data_source=db";
             return url;
         },
         parse : function(response)
