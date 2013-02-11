@@ -35,19 +35,10 @@ class ProjectsController extends BaseController
     //  get_collections GET    /api/collections.{_format}
     public function getProjectAction($id)
     {	
-		// very inefficient method
-		// needs to be indexed (i.e. SOLR indexed) for published projects; OK for the editor (only called once when the editor is loaded)
-		
 		$user = $this->get('security.context')->getToken()->getUser();
-
         $dm = $this->get('doctrine_mongodb')->getManager();
 
 		$project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        //$sequences = $project->getSequences();
-        $frames = $project->getFrames();
-        $layers = $project->getLayers();
-        
-        
 		$projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 		
     	return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
@@ -56,12 +47,10 @@ class ProjectsController extends BaseController
     // `delete_project`  [DELETE] /projects/{project_id}
     public function deleteProjectAction($project_id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-     	$project = $em->getRepository('ZeegaDataBundle:Project')->find($project_id);
-        
+    	$dm = $this->get('doctrine_mongodb')->getManager();
+     	$project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);        
     	$project->setEnabled(false);
-
-    	$em->flush();
+    	$dm->flush();
     	return new Response('SUCCESS',200);
     }
     
@@ -182,30 +171,41 @@ class ProjectsController extends BaseController
     
     public function postProjectLayersAction($projectId)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
-     	$project= $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+    	$dm = $this->get('doctrine_mongodb')->getManager();
+     	$project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
     	$project->setDateUpdated(new \DateTime("now"));
 
-    	$layer= new Layer();
-    	$layer->setProject($project);
-		$request = $this->getRequest();
+    	$layer= new MongoLayer();
     	
-		
-		if($request->request->get("type")) $layer->setType($request->request->get("type"));   	
-    	if($request->request->get('text')) $layer->setText($request->request->get('text'));
+        $request = $this->getRequest();    			
+		if($request->request->has("type")) {
+            $layer->setType($request->request->get("type"));      
+        } 
+    	
+        if($request->request->has('text')) {
+            $layer->setText($request->request->get('text'));   
+        }
+
 		if($request->request->has('attr')) {
             $attributes = $request->request->get('attr');
             $layer->setAttr($attributes);
             if( isset($attributes["id"]) ) {
+                /*
                 $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($attributes["id"]);
                 if ( isset($item) ) {
                     $layer->setItem($item);    
                 }
+                */
             }
-        } 
+        }
+
+        $layer = new MongoLayer();        
+        $layer->setEnabled(true);
+
+        $project->addLayers($layer);
     	
-		$em->persist($layer);
-		$em->flush();
+		$dm->persist($layer);
+		$dm->flush();
         
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers`   [POST] /sequences

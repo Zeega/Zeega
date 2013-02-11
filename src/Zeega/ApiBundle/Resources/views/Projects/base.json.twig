@@ -57,7 +57,16 @@
 	]
 	{%- endif -%}
 	,"layers":[
-		
-		
+		{% for layer in project.getLayers() %}
+		{	
+			"id" : {{ layer.getId | json_encode | raw}},
+			"type" : {{layer.getType | default("") | json_encode | raw}},
+			"project_id" : {{ layer.getProjectId | default("") | json_encode | raw}},
+			"attr" : {{layer.attr | default([ ]) | json_encode | raw}}
+		}	
+		{%- if loop.index0 < project.getLayers()|length - 1 -%}
+		,
+		{%- endif -%}			
+		{% endfor %}		
 	]
 }
