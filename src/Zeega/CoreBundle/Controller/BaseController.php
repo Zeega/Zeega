@@ -44,7 +44,7 @@ class BaseController extends SymfonyBaseController
     {
         if( null !== $user ) {
             if( is_object($item) ) {
-                if ( intval($user->getId()) === intval($item->getUserId()) ) {
+                if ( intval($user->getId()) === intval($item->getUser()->getId()) ) {
                     return true;
                 }
             } else if ( is_array($item) && isset($item["user_id"]) ) {
