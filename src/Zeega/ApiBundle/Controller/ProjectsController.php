@@ -57,28 +57,24 @@ class ProjectsController extends BaseController
     // put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putProjectsAction($projectId)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $request = $this->getRequest();
-        $request_data = $this->getRequest()->request;        
-
-		$project = $em->getRepository('ZeegaDataBundle:Project')->find($projectId);
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+		$project = $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
 
         if ( !$project ) {
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
         // update date_published
-		$title = $request_data->get('title');
-        $tags = $request_data->get('tags');
-        $coverImage = $request_data->get('cover_image');
-        $authors = $request_data->get('authors');
-		$published = $request_data->get('published');
-        $estimatedTime = $request_data->get('estimated_time'); 
-        $location = $request_data->get('location');
-        $description = $request_data->get('description');
-		$publishUpdate = $request_data->get('publish_update');
-        $mobile = $request_data->get('mobile');
+		$title = $this->getRequest()->request->get('title');
+        $tags = $this->getRequest()->request->get('tags');
+        $coverImage = $this->getRequest()->request->get('cover_image');
+        $authors = $this->getRequest()->request->get('authors');
+		$published = $this->getRequest()->request->get('published');
+        $estimatedTime = $this->getRequest()->request->get('estimated_time'); 
+        $location = $this->getRequest()->request->get('location');
+        $description = $this->getRequest()->request->get('description');
+		$publishUpdate = $this->getRequest()->request->get('publish_update');
+        $mobile = $this->getRequest()->request->get('mobile');
 
 		if(isset($title) && strlen($title) > 0) $project->setTitle($title);
 		if(isset($authors)) $project->setAuthors($authors);
@@ -92,8 +88,8 @@ class ProjectsController extends BaseController
 
         $project->setDateUpdated(new \DateTime("now"));
  
-        $em->persist($project);
-        $em->flush();
+        $dm->persist($project);
+        $dm->flush();
 		
 		if ( (isset($publishUpdate)&&$publishUpdate) ) {			
 			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
@@ -175,9 +171,9 @@ class ProjectsController extends BaseController
      	$project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
     	$project->setDateUpdated(new \DateTime("now"));
 
-    	$layer= new MongoLayer();
+    	$layer = new MongoLayer();
     	
-        $request = $this->getRequest();    			
+        $request = $this->getRequest();
 		if($request->request->has("type")) {
             $layer->setType($request->request->get("type"));      
         } 
@@ -190,6 +186,7 @@ class ProjectsController extends BaseController
             $attributes = $request->request->get('attr');
             $layer->setAttr($attributes);
             if( isset($attributes["id"]) ) {
+                // TO-DO
                 /*
                 $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($attributes["id"]);
                 if ( isset($item) ) {
@@ -199,7 +196,6 @@ class ProjectsController extends BaseController
             }
         }
 
-        $layer = new MongoLayer();        
         $layer->setEnabled(true);
 
         $project->addLayers($layer);
@@ -210,6 +206,60 @@ class ProjectsController extends BaseController
     	return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers`   [POST] /sequences
     
+    public function putProjectFramesAction($projectId, $frameId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                    ->field('id')->equals($projectId)
+                    ->field('frames.id')->equals($frameId)
+                    ->select('frames.$')
+                    ->getQuery()
+                    ->getSingleResult();
+
+        if ( !isset($project) || !$project instanceof MongoProject) {
+            return new Response("Project does not exist");
+        } 
+
+        $frames = $project->getFrames();
+
+        if ( !isset($frames) || $frames->count() != 1) {
+            return new Response("Frame does not exist");  
+        }
+
+        $frame = $frames[0];
+
+        $thumbnailUrl = $this->getRequest()->request->get('thumbnail_url');
+        $layers = $this->getRequest()->request->get('layers');
+        $attr = $this->getRequest()->request->get('attr');
+
+        if(isset($thumbnailUrl)) {
+            $frame->setThumbnailUrl($thumbnailUrl);  
+        } else {
+            $frame->setThumbnailUrl(NULL);  
+        }
+        
+        if(isset($layers)) {
+            $frame->setLayers(array_filter($layers));
+        } else {
+            $frame->setLayers(NULL);  
+        }
+
+        if(isset($attr)) {
+            $frame->setAttr($attr);  
+        } else {
+            $frame->setAttr(NULL);  
+        }
+
+        $dm->persist($frame);
+        $dm->flush();
+
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+        
+        return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
+    } // `post_sequence_layers`   [POST] /sequences
+    
+
+
     public function postProjectSequencesAction($project_id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -395,7 +445,7 @@ class ProjectsController extends BaseController
         
         $project->addSequences($sequence);
         $project->addFrames($frame);
-        $project->addLayers($layer);
+        //$project->addLayers($layer);
         
         $dm = $this->get('doctrine_mongodb')->getManager();
 
