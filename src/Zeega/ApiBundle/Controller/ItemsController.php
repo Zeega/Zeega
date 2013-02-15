@@ -20,10 +20,6 @@ class ItemsController extends ApiBaseController
 {
     public function getItemsSearchAction()
     {
-        $thumbnailService = $this->get('zeega_thumbnail');
-    
-        $thumbnail = $thumbnailService->getItemThumbnail("http://1.bp.blogspot.com/_3PMY1EuRaSk/TK09te-RBKI/AAAAAAAAAvs/Yyx2_cWrNrE/s1600/hey-whale.jpg");
-        return new Response($thumbnail);
         try {
             $queryParser = $this->get('zeega_query_parser');
             $query = $queryParser->parseRequest($this->getRequest()->query);
