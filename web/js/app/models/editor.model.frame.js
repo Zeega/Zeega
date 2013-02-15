@@ -39,7 +39,7 @@
         initialize : function()
         {
             if( this.get('layers') ){
-                this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return parseInt(layer,10);}) });
+                this.set({ 'layers' : _.map(this.get('layers'), function(layer){ return layer;}) });
             }
             if(this.get('thumbnail_url')===''){
                 this.set('thumbnail_url',this.defaults.thumbnail_url);
@@ -107,7 +107,7 @@
         updateLayerOrder: function() {
             this.layers.sort();
             var layerOrder = this.layers.map(function(layer){
-                return parseInt(layer.id,10);
+                return layer.id;
             });
 
             layerOrder = _.compact( layerOrder );
