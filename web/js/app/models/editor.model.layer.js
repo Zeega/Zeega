@@ -166,7 +166,7 @@
         //remove formatting from titles (esp important for text layer!)
         validate : function(attrs)
         {
-            if( !_.isNumber(attrs.id) ) attrs.id = parseInt( attrs.id,10);
+            //if( !_.isNumber(attrs.id) ) attrs.id = parseInt( attrs.id,10);
             if(attrs.attr.model !== null ) attrs.attr.model = null;
             if( attrs.title ) attrs.title = attrs.title.replace(/(<([^>]+)>)/ig, "");
         }
