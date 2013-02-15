@@ -45,9 +45,7 @@
 			"attr" : {{ frame.attr | default({}) | json_encode | raw}},
 			"thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
 			"controllable": {{frame.controllable | default(true) | json_encode | raw}},
-			"layers" : 
-			[
-			]
+			"layers" : {{frame.layers | json_encode | raw}}
 		}	
 		{%- if loop.index0 < project.getFrames()|length - 1 -%}
 		,
