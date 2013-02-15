@@ -54,4 +54,25 @@ class ThumbnailService
         }
         return null;
     }
+
+    public function getFrameThumbnail($id)
+    {
+        try
+        {     
+            $host = $this->container->getParameter('static_host');
+
+            if( !isset($host) || empty($host) ) {
+                return null;
+            }
+            
+            $thumbnailServerUrl =  "$host/frame/$id";
+            return file_get_contents($thumbnailServerUrl);
+        }
+        catch(Exception $e)
+        {
+            // add log
+            return null;
+        }
+        return null;
+    }
 }
