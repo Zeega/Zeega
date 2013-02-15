@@ -37,7 +37,7 @@
 				}
 
 				var itemType = item.get("media_type");
-				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'widget/persist';
+				item.url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'bookmarklet/persist';
 				item.save({ }, 
 				{
 					success: function(model, response) { 
