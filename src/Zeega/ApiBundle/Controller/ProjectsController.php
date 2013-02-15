@@ -197,7 +197,6 @@ class ProjectsController extends BaseController
         }
 
         $layer->setEnabled(true);
-
         $project->addLayers($layer);
     	
 		$dm->persist($layer);
@@ -212,7 +211,7 @@ class ProjectsController extends BaseController
         $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
                     ->field('id')->equals($projectId)
                     ->field('frames.id')->equals($frameId)
-                    ->select('frames.$')
+                    ->select('frames.$frameId')
                     ->getQuery()
                     ->getSingleResult();
 
@@ -250,15 +249,13 @@ class ProjectsController extends BaseController
             $frame->setAttr(NULL);  
         }
 
-        $dm->persist($frame);
+        $dm->persist($project);
         $dm->flush();
 
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
-    
-
 
     public function postProjectSequencesAction($project_id)
     {
@@ -318,7 +315,7 @@ class ProjectsController extends BaseController
         $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
                         ->field('id')->equals($projectId)
                         ->field('sequences.id')->equals($sequenceId)
-                        ->select('sequences.$')
+                        ->select('sequences.$sequenceId')
                         ->getQuery()
                         ->getSingleResult();
         
@@ -458,21 +455,4 @@ class ProjectsController extends BaseController
 
         return new Response($project->getId());
     }
-
-    public function getProjectSequencesFramesAction($projectId,$sequenceId)
-    {
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        
-        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                    ->field('id')->equals($projectId)
-                    ->field('sequences.id')->equals($sequenceId)
-                    ->select('sequences.$')
-                    ->getQuery()
-                    ->getSingleResult();
-        
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
-        
-        return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
-    } 
-
 }
