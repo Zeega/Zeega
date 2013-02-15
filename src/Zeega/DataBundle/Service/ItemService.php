@@ -67,9 +67,9 @@ class ItemService
         } 
 
         if(isset($itemArray['thumbnail_url'])) {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], "Image");
+            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url']);
         } else {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri());
         } 
 
         if(null !== $thumbnail) {
