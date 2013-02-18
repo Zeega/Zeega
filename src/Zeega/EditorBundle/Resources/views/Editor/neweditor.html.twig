@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>{{project.getTitle()}}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+        <meta name="robots" content="noindex,follow">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- FB -->
+        
+        <meta property="og:site_name" content="Zeega"/>
+        <meta property="og:title" content="{{project.getTitle()}}"/>
+        <meta property="og:description" content="{{project.getDescription()}}"/>
+        <meta property="og:type" content="movie"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
+        {% if project.getThumbnailUrl() is defined %}
+        <meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+        {% elseif project.getCoverImage() is defined %}
+        <meta property="og:image" content="{{project.getCoverImage()}}"/>
+        {% else %}
+        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+        {% endif %}
+            
+        <!-- END FB --> 
+
+        <!-- STYLESHEETS -->
+        <link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        <!-- END STYLESHEETS -->
+
+        <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
+
+        <script>
+            // Session data
+            sessionStorage.setItem('directory', '{{directory}}');
+            sessionStorage.setItem('hostname','{{hostname}}');
+            sessionStorage.setItem('projectId','{{project.getId()}}');
+        
+            // Google analytics
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-33491977-1']);
+            _gaq.push(['_setDomainName', '.zeega.org']); 
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+            // Because IE sucks
+            if ( !window.console ) {
+                console = {log: function() {}};
+            }
+
+            // Project data
+            var projectJSON = "{{ project_data|e('js') }}";
+        </script>
+
+        <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
+        
+    </head>
+
+    <body>
+        <div role="main" id="main">
+            <div id='overlays'></div>
+            <div id='player'></div>
+        </div>
+    </body>
+</html>
