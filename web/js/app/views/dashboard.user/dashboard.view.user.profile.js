@@ -165,8 +165,8 @@
             // sessionStorage.getItem("hostname")+"static/scripts/user_bg.php?id="+this.model.id;
             
             var phpFileURL = elementIDName == "user-image-upload-file" ?
-                sessionStorage.getItem("hostname")+"static/media/web/index.php/image?sizes=46":
-                sessionStorage.getItem("hostname")+"static/media/web/index.php/image?sizes=7";
+                sessionStorage.getItem("hostname")+"kinok/image?sizes=46":
+                sessionStorage.getItem("hostname")+"kinok/image?sizes=7";
 
             
 
