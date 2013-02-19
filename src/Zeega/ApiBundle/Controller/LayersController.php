@@ -49,9 +49,10 @@ class LayersController extends BaseController
     	
 		$em->persist($layer);
 		$em->flush();
-    	//$output=$this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findOneById($layer->getId());
+    	
+        $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
         
-    	return ResponseHelper::encodeAndGetJsonResponse($layer);
+    	return new Response($layerView);
     } // `put_layer`     [PUT] /layers/{layer_id}
 
 
