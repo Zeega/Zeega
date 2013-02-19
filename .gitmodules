@@ -7,3 +7,6 @@
 [submodule "web/js/app/player.mobile"]
 	path = web/js/app/player.mobile
 	url = https://github.com/Zeega/Zeega-Mobile-Player.git
+[submodule "web/js/app/editor"]
+	path = web/js/app/editor
+	url = git@github.com:Zeega/Zeega-Editor.git
