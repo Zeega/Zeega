@@ -282,30 +282,46 @@
         },
         validateMobile :function() {
 
-            //this is rather ad-hock because it filters only single frame zeegas, also current layer and frame list may not reflect actual frame and layer list
+            // This is rather ad-hock because it filters only single frame zeegas, also current layer and frame list may not reflect actual frame and layer list
             var audioLayers=0,
                 unsupportedLayers=0,
                 layerList = this.frames.at(0).get('layers');
 
-            if(this.frames.length>1){
-                return false;
-            }
             
-            console.log(this.frames);
-
+            // This probably won't catch deleted frame bugs
+            
             _.each(_.toArray(this.layers),function(layer){
-                if(_.indexOf(layerList,layer.id)>-1){
-                    if(layer.get('type')==="Audio"){
-                        audioLayers++;
-                    } else if (layer.get('type')!="Text" && layer.get('type')!="Image"){
-                        unsupportedLayers++;
-                    }
+                
+                if(layer.get('type')==="Audio"){
+                    audioLayers++;
+                } else if (layer.get('type')!="Text" && layer.get('type')!="Image"){
+                    unsupportedLayers++;
                 }
+                
             });
 
 
+            
+            // Single frame version checks if layer on frame
+
+            // if(this.frames.length>1){
+            //     return false;
+            // }
+            // _.each(_.toArray(this.layers),function(layer){
+            //     if(_.indexOf(layerList,layer.id)>-1){
+            //         if(layer.get('type')==="Audio"){
+            //             audioLayers++;
+            //         } else if (layer.get('type')!="Text" && layer.get('type')!="Image"){
+            //             unsupportedLayers++;
+            //         }
+            //     }
+            // });
+
+
+
+
             if(audioLayers>1||unsupportedLayers>0) {
-                console.log("Mobile fail", this.layers,audioLayers,unsupportedLayers);
+                console.log("Mobile unsupported", this.layers,audioLayers,unsupportedLayers);
                 return false;
             }
             console.log("Mobile ok", this.layers,audioLayers,unsupportedLayers);
