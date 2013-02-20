@@ -283,18 +283,25 @@
         validateMobile :function() {
 
             // This is rather ad-hock because it filters only single frame zeegas, also current layer and frame list may not reflect actual frame and layer list
-            var audioLayers=0,
-                unsupportedLayers=0,
+            var audioLayers = 0,
+                frameLayers = [],
+                unsupportedLayers = 0,
                 layerList = this.frames.at(0).get('layers');
 
             
-            // This probably won't catch deleted frame bugs
-            
-            _.each(_.toArray(this.layers),function(layer){
+            // This is necessary because layers aren't currently deleted from projects
+
+            _.each( _.toArray( this.frames ),function( frame ){
                 
-                if(layer.get('type')==="Audio"){
+                frameLayers = _.union(frameLayers, frame.get("layers"));
+            });
+            
+            _.each(_.toArray( this.layers ), function( layer ){
+                
+                if( layer.get("type") === "Audio" && _.indexOf(frameLayers,layer.id)>-1){
+                    console.log("existing audio layer", layer.id, frameLayers);
                     audioLayers++;
-                } else if (layer.get('type')!="Text" && layer.get('type')!="Image"){
+                } else if ( layer.get('type') != "Text" && layer.get('type') != "Image" && _.indexOf(frameLayers,layer.id)>-1){
                     unsupportedLayers++;
                 }
                 
