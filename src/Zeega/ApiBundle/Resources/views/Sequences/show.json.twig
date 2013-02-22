@@ -1,6 +1,6 @@
 {
-	"id" : {{ sequence.id | default("") }},
-	"title" : "{{ sequence.title | default("") }}",
+	"id" : {{ sequence.id | default(null) | json_encode | raw}},
+	"title" : {{ sequence.title | default(null) | json_encode | raw}},
 	"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 	"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
     "description" : {{sequence.description | default(null) | json_encode | raw}},
