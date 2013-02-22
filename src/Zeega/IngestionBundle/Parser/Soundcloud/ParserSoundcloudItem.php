@@ -21,7 +21,7 @@ class ParserSoundcloudItem extends ParserAbstract
 		
 		if(!$itemJson["streamable"])
 		{
-			return $this->returnResponse($item, false,"This track is not embeddable and cannot be added to Zeega.");
+			return $this->returnResponse($item, false, false, "This track is not embeddable and cannot be added to Zeega.");
 		}
 		
 		$item = new Item();

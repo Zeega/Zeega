@@ -1,7 +1,7 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block head %}
-    <title>Zeega Alpha</title>
+    <title>Zeega</title>
     <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
     
     <style type="text/css">
@@ -87,8 +87,6 @@
         <h2 class='message'>Hello, hello and welcome back!</h2>
         
         
-        <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" >Login With Twitter</a> <br/>
-        <a href="#" onclick="fbLogin();">Login With Facebook</a><br/>
 
         {% if error %}
             <div class="error" style="color:red">{{ error }}</div>

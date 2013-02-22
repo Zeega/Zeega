@@ -41,7 +41,7 @@ class ParserAbsoluteUrl extends ParserAbstract
 		else
 		{
 		    $item=new Item();
-		    return $this->returnResponse($item, false, "This item cannot be added to Zeega.");
+		    return $this->returnResponse($item, false, false);
 		}
 		
 		$archive = 'Absolute';

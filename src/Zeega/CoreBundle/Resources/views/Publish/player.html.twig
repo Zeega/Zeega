@@ -1,208 +1,72 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-		<title>{{project.getTitle()}}</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-		<meta name="robots" content="noindex,follow">
-		<meta name="description" content="">
-		<meta name="author" content="">
+        <title>{{project.getTitle()}}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+        <meta name="robots" content="noindex,follow">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-		<!-- FB -->
-		
-		<meta property="og:site_name" content="Zeega"/>
-		<meta property="og:title" content="{{project.getTitle()}}"/>
-		<meta property="og:description" content="{{project.getDescription()}}"/>
-		<meta property="og:type" content="movie"/>
-		<meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
-		{% if project.getThumbnailUrl() is defined %}
-		<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-		{% elseif project.getCoverImage() is defined %}
-		<meta property="og:image" content="{{project.getCoverImage()}}"/>
-		{% else %}
-		<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-		{% endif %}
-			
-		<!-- END FB -->	
+        <!-- FB -->
+        
+        <meta property="og:site_name" content="Zeega"/>
+        <meta property="og:title" content="{{project.getTitle()}}"/>
+        <meta property="og:description" content="{{project.getDescription()}}"/>
+        <meta property="og:type" content="movie"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
+        {% if project.getThumbnailUrl() is defined %}
+        <meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+        {% elseif project.getCoverImage() is defined %}
+        <meta property="og:image" content="{{project.getCoverImage()}}"/>
+        {% else %}
+        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+        {% endif %}
+            
+        <!-- END FB --> 
 
+        <!-- STYLESHEETS -->
+        <link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        <!-- END STYLESHEETS -->
 
-		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
-		
-		<!--
-		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}"  type="text/css" media="screen">
-		<link rel="stylesheet" href="{{ asset('css/zeega-bootstrap.css')}}"  type="text/css" media="screen">
-		<link rel="stylesheet" href="{{ asset('css/zeega.css')}}">
-		-->
-			<link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/debug/index.css') }}">
-		
-		<!--
-		<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
-	   -->
+        <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
 
-		<script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
+        <script>
+            // Session data
+            sessionStorage.setItem('directory', '{{directory}}');
+            sessionStorage.setItem('hostname','{{hostname}}');
+            sessionStorage.setItem('projectId','{{project.getId()}}');
+        
+            // Google analytics
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-33491977-1']);
+            _gaq.push(['_setDomainName', '.zeega.org']); 
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
 
-		<script>
-			localStorage.api = 'http://dev.zeega.org/joseph/web/api';
-			// localStorage.api = 'http://alpha.zeega.org/api';
-			if (!window.console) console = { log: function() {}};
-		</script>
+            // Because IE sucks
+            if ( !window.console ) {
+                console = {log: function() {}};
+            }
 
-		<script> 
+            // Project data
+            var projectJSON = "{{ project_data|e('js') }}";
+        </script>
 
-			//session data
-                        if (!window.console) console = {log: function() {}};
-			sessionStorage.setItem('directory', '{{directory}}');
-			sessionStorage.setItem('hostname','{{hostname}}');
-			sessionStorage.setItem('projectId','{{project.getId()}}');
+        <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
+        
+    </head>
 
-var BrowserDetect = {
-	init: function () {
-		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
-		this.version = this.searchVersion(navigator.userAgent)
-			|| this.searchVersion(navigator.appVersion)
-			|| "an unknown version";
-		this.OS = this.searchString(this.dataOS) || "an unknown OS";
-	},
-	searchString: function (data) {
-		for (var i=0;i<data.length;i++)	{
-			var dataString = data[i].string;
-			var dataProp = data[i].prop;
-			this.versionSearchString = data[i].versionSearch || data[i].identity;
-			if (dataString) {
-				if (dataString.indexOf(data[i].subString) != -1)
-					return data[i].identity;
-			}
-			else if (dataProp)
-				return data[i].identity;
-		}
-	},
-	searchVersion: function (dataString) {
-		var index = dataString.indexOf(this.versionSearchString);
-		if (index == -1) return;
-		return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
-	},
-	dataBrowser: [
-		{
-			string: navigator.userAgent,
-			subString: "Chrome",
-			identity: "Chrome"
-		},
-		{ 	string: navigator.userAgent,
-			subString: "OmniWeb",
-			versionSearch: "OmniWeb/",
-			identity: "OmniWeb"
-		},
-		{
-			string: navigator.vendor,
-			subString: "Apple",
-			identity: "Safari",
-			versionSearch: "Version"
-		},
-		{
-			prop: window.opera,
-			identity: "Opera",
-			versionSearch: "Version"
-		},
-		{
-			string: navigator.vendor,
-			subString: "iCab",
-			identity: "iCab"
-		},
-		{
-			string: navigator.vendor,
-			subString: "KDE",
-			identity: "Konqueror"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "Firefox",
-			identity: "Firefox"
-		},
-		{
-			string: navigator.vendor,
-			subString: "Camino",
-			identity: "Camino"
-		},
-		{		// for newer Netscapes (6+)
-			string: navigator.userAgent,
-			subString: "Netscape",
-			identity: "Netscape"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "MSIE",
-			identity: "Explorer",
-			versionSearch: "MSIE"
-		},
-		{
-			string: navigator.userAgent,
-			subString: "Gecko",
-			identity: "Mozilla",
-			versionSearch: "rv"
-		},
-		{ 		// for older Netscapes (4-)
-			string: navigator.userAgent,
-			subString: "Mozilla",
-			identity: "Netscape",
-			versionSearch: "Mozilla"
-		}
-	],
-	dataOS : [
-		{
-			string: navigator.platform,
-			subString: "Win",
-			identity: "Windows"
-		},
-		{
-			string: navigator.platform,
-			subString: "Mac",
-			identity: "Mac"
-		},
-		{
-			   string: navigator.userAgent,
-			   subString: "iPhone",
-			   identity: "iPhone/iPod"
-	    },
-		{
-			string: navigator.platform,
-			subString: "Linux",
-			identity: "Linux"
-		}
-	]
-
-};
-		BrowserDetect.init();			
-		
-
-			//Google analytics
-
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33491977-1']);
-			_gaq.push(['_setDomainName', '.zeega.org']); 
-			_gaq.push(['_trackPageview']);
-
-			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-
-			//Project data
-
-			var projectJSON = "{{ project_data|e('js') }}";
-
-		</script>
-
-		<script src="{{ asset('js/app/player.standalone/dist/debug/require.js') }}" ></script>
-		
-		
-	</head>
-
-	<body>
-		<div role="main" id="main">
-			<div id='overlays'></div>
-			<div id='player'></div>
-		</div>
-	</body>
+    <body>
+        <div role="main" id="main">
+            <div id='overlays'></div>
+            <div id='player'></div>
+        </div>
+    </body>
 </html>

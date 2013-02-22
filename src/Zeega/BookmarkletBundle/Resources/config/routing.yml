@@ -1,21 +1,21 @@
 ZeegaBookmarkletBundle_persist:
-    pattern: /widget/persist
+    pattern: /bookmarklet/persist
     defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:persist }
 
 ZeegaBookmarkletBundle_widget:
-    pattern: /widget/
+    pattern: /bookmarklet/
     defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:open }
     requirements:
         _scheme:  https
 
 ZeegaBookmarkletBundle_widget_secure:
-    pattern: /secure/widget/
+    pattern: /secure/bookmarklet/
     defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:open }
     requirements:
         _scheme:  https
     
 ZeegaBookmarkletBundle_persist_secure:
-    pattern: /secure/widget/persist
+    pattern: /secure/bookmarklet/persist
     defaults: { _controller:  ZeegaBookmarkletBundle:Bookmarklet:persist }
     requirements:
         _scheme:  https

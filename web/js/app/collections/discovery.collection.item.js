@@ -11,7 +11,7 @@
                 this.on("preview_item",this.previewItem,this);
         },
         url : function(){
-            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items";
+            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items?data_source=db";
             return url;
         },
         parse : function(response)
@@ -46,7 +46,7 @@
     
     Items.Collections.MyCollections = Items.Collections.Static.extend({
         mode: Items.Model,
-        url: zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300",
+        url: zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300&data_source=db",
         comparator: function(model){
             return model.get('title');
         },
@@ -86,6 +86,8 @@
                 url += "&type=" + this.query.content;
                 if(this.query.content==='project'){
                     url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
+                } else if (this.query.content==='Collection' && (_.isUndefined(this.query.q) || this.query.q.length == 0)){
+                    url+="&data_source=db";
                 }
             }
             if( !_.isUndefined(this.query.sort) ) url += "&sort=" + this.query.sort;

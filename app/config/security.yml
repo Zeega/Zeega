@@ -49,6 +49,6 @@ security:
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/library, role: ROLE_USER }
         - { path: ^/editor/, role: ROLE_USER }
-        - { path: ^/widget, role: ROLE_USER, requires_channel: https }
+        - { path: ^/bookmarklet, role: ROLE_USER, requires_channel: https }
         - { path: ^/js/lib, role: ROLE_USER, requires_channel: https }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }

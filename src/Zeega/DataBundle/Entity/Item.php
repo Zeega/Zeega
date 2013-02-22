@@ -236,7 +236,7 @@ class Item
     private $childItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childtems", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childItems", cascade={"persist"})
      */
     private $parentItems;
     
