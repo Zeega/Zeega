@@ -40,7 +40,11 @@ class ItemService
         } 
 
         if(isset($itemArray['text'])) {
-            $item->setText($itemArray['text']);  
+            $mediaType = $item->getMediaType();
+            $text = $item->getText();
+            if ( $mediaType !== 'project' || ($mediaType == 'project' && !isset($text)) ) {
+                $item->setText($itemArray['text']);      
+            } 
         } 
 
         if(isset($itemArray['uri'])) {
