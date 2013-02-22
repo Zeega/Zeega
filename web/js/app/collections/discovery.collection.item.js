@@ -84,9 +84,7 @@
             
             if( !_.isUndefined(this.query.content) && "all" !== this.query.content ){
                 url += "&type=" + this.query.content;
-                if(this.query.content==='project'){
-                    url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
-                } else if (this.query.content==='Collection' && (_.isUndefined(this.query.q) || this.query.q.length == 0)){
+                if (this.query.content==='Collection' && (_.isUndefined(this.query.q) || this.query.q.length === 0)){
                     url+="&data_source=db";
                 }
             }
@@ -98,6 +96,8 @@
                 if( !_.isUndefined(this.query.times.end) ) url += "&max_date=" + this.query.times.end;
             }
             if( _.isUndefined(this.query.universe)||(!_.isUndefined(this.query.universe)&& this.query.universe!=1)){ url += "&user=-1";}
+            
+            url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
             // console.log("query url: "+ url);
             
 
