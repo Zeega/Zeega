@@ -68,13 +68,6 @@
             
             $(this.el).html( _.template( template, blanks ) );
 
-            
-
-            //Turn off captions if we don"t want them OR if it"s an image
-            if (!this.options.show_caption || this.model.get("media_type") == "Image"){
-                $(this.el).find(".jda-thumbnail-caption").hide();
-            }
-
 
             //Insert play icon if it"s a video
             if (this.model.get("media_type") == "Video"){
@@ -120,11 +113,14 @@
             
             
 
-            //Replace broken thumbnail images with the media type icon
-            $(this.el).find("img").error(function() {
-            $(_this.el).find("img").replaceWith(    "<i class='jdicon-"+ _this.model.get("media_type").toLowerCase() +
-                                                    "' style='position: absolute;top: 10%;left: 10%;'></i>");
-            });
+            //Hide broken Thumbs
+
+            $(this.el).find("img").on("error", function(e) {
+                $(e.target).hide();
+                $(e.target.parentElement).append(  "[ No Thumb Available ]<br><br>" + _this.model.get("title"));
+            }
+
+            );
 
             
             return this;

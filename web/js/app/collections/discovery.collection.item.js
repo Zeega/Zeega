@@ -86,9 +86,11 @@
                 url += "&type=" + this.query.content;
                 if(this.query.content==='project'){
                     url+="&fields=id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
-                } else if (this.query.content==='Collection' && (_.isUndefined(this.query.q) || this.query.q.length == 0)){
+                } else if (this.query.content==='Collection' && (_.isUndefined(this.query.q) || this.query.q.length === 0)){
                     url+="&data_source=db";
                 }
+            } else {
+                url += "&type=-project";
             }
             if( !_.isUndefined(this.query.sort) ) url += "&sort=" + this.query.sort;
             if( !_.isUndefined(this.query.collection) && this.query.collection > 0) url += "&collection=" + this.query.collection;
