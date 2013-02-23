@@ -102,8 +102,7 @@ class ProjectsController extends BaseController
         $sequence = new MongoSequence();
 
         $frame = new MongoFrame();
-        $frame->setSequence($sequence);
-
+        
         if($request->request->has('layers_to_persist'))
         {
             $layersToPersist = $request->request->get('layers_to_persist');
