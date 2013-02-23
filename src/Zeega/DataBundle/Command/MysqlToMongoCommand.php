@@ -28,6 +28,7 @@ use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Document\User as MongoUser;
 use Zeega\DataBundle\Document\Project as MongoProject;
 use Zeega\DataBundle\Document\Sequence as MongoSequence;
+use Zeega\DataBundle\Document\Frame as MongoFrame;
 
 /**
  * Updates a task status
@@ -44,6 +45,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
              ->setDescription('Moves items from mysql to mongo')
              ->addOption('items', null, InputOption::VALUE_NONE , 'Items')
              ->addOption('users', null, InputOption::VALUE_NONE , 'Items')
+             ->addOption('projects', null, InputOption::VALUE_NONE , 'Items')
              ->addOption('create_project', null, InputOption::VALUE_NONE , 'Creates a project')
              ->setHelp("Help");
     }
@@ -55,6 +57,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
     {
         $items = $input->getOption('items');
         $users = $input->getOption('users');
+        $projects = $input->getOption('projects');
         $createProject = $input->getOption('create_project');
         
         if( $items ) {
@@ -63,7 +66,9 @@ class MysqlToMongoCommand extends ContainerAwareCommand
             self::importUsers($output);
         } else if ( $createProject ) {
             self::createProject($output);
-        } 
+        } else if ( $projects ) {
+            self::importProjects($output);
+        }
     }
 
     private function createProject(OutputInterface $output) {
@@ -182,4 +187,92 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         $dm->flush();        
     }
 
+    private function importProjects(OutputInterface $output)
+    {
+        $output->writeln('<info>Importing projects</info>');
+
+        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+        $mysqlProjects = $em->getRepository('ZeegaDataBundle:Project')->findAll();
+
+        foreach($mysqlProjects as $mysqlProject) {
+            $project = new MongoProject();
+            $project->setTitle($mysqlProject->getTitle());
+            $project->setPublished($mysqlProject->getPublished());
+            $project->setMobile($mysqlProject->getMobile());
+            $project->setDateCreated($mysqlProject->getDateCreated());
+
+            $project->setEnabled($mysqlProject->getEnabled());
+            $project->setTags($mysqlProject->getTags());
+            $project->setAuthors($mysqlProject->getAuthors());
+            $project->setCoverImage($mysqlProject->getCoverImage());
+            $project->setEstimatedTime($mysqlProject->getEstimatedTime());
+
+            $project->setDateUpdated($mysqlProject->getDateUpdated());
+            $project->setItemId($mysqlProject->getItemId());
+            $project->setDescription($mysqlProject->getDescription());
+            $project->setLocation($mysqlProject->getLocation());
+            $project->setDatePublished($mysqlProject->getDatePublished());
+
+            $mysqlSequences = $em->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $mysqlProject->getId()));
+            
+            foreach($mysqlSequences as $seq) {
+                $seqId = $seq->getId();
+                $id = new \MongoId();
+                echo $id;
+                $sequence = new MongoSequence();
+                $sequence->setId($id);
+                $sequence->setTitle($seq->getTitle());
+                $sequence->setAttr($seq->getAttr());
+                $sequence->setEnabled($seq->getEnabled());
+                $sequence->setPersistentLayers($seq->getPersistentLayers());
+                $sequence->setDescription($seq->getDescription());
+                $sequence->setAdvanceTo($seq->getAdvanceTo());
+                
+                $mysqlFrames = $em->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($seqId);
+                $frames = array();
+                foreach($mysqlFrames as $fram) {
+                    $frameId = new \MongoId();
+                    $frame = new MongoFrame();
+                    $frame->setId($frameId);
+                    $frame->setAttr($fram->getAttr());
+                    $frame->setThumbnailUrl($fram->getThumbnailUrl());
+                    $frame->setEnabled($fram->getEnabled());
+                    $frame->setControllable($fram->getControllable());
+                    $project->addFrames($frame);
+                    $frames[] = (string) $frameId;
+
+                    $layersIds = $fram->getLayers();
+                    $layers = array();
+                    if (is_array($layersIds) ) {
+                        foreach($layersIds as $layerId) {
+                            $mySqlLayer = $em->getRepository('ZeegaDataBundle:Layer')->findOnById($layerId);
+
+                            $layerId = new \MongoId();
+                            $layer = new MongoLayer();
+                            $layer->setType($mySqlLayer->getType());
+                            $layer->setText($mySqlLayer->getText());
+                            $layer->setAttr($mySqlLayer->getAttr());
+                            $layer->setEnabled($mySqlLayer->getEnabled());
+
+                            $layers[] = (string) $layerId;
+
+                            $project->addLayers($layer);
+                        }    
+                    }
+                    
+                    $frame->setLayers($layers);
+                    $project->addFrames($frame);
+                }   
+                $sequence->setFrames($frames);
+                $project->addSequences($sequence);
+            }
+
+            //var_dump($project);
+            //return;
+            $dm->persist($project);
+            $dm->flush();
+            return;
+        }
+    }
 }
