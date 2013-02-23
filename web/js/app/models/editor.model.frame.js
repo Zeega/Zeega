@@ -32,7 +32,7 @@
     
         url : function()
         {
-            if( this.isNew() )return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/sequences/'+ zeega.app.currentSequence.id +'/frames';
+            if( this.isNew() )return zeega.app.url_prefix+'api/projects/'+ zeega.app.project.id +'/frames';
             else return zeega.app.url_prefix + 'api/projects/' + zeega.app.project.id + '/frames/'+ this.id;
         },
     

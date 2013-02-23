@@ -13,7 +13,7 @@
         url : function()
         {
             if ( this.isNew() ) return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/sequences';
-            return zeega.app.url_prefix+'api/sequences/' + this.id;
+            return zeega.app.url_prefix + 'api/projects/'+ zeega.app.project.id +'/sequences' + this.id;
         },
                 
         initialize : function( attributes )
