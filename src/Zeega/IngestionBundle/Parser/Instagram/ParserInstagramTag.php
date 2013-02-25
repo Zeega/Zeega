@@ -22,22 +22,23 @@ class ParserInstagramTag extends ParserAbstract
 
         $nextUrl = "https://api.instagram.com/v1/tags/$tags/media/recent?access_token=1907240.f59def8.6a53e4264d87413a8e8cd431430b6e94";
         
+        if(FALSE !== $checkForDuplicates) { // temp check for duplicates [with duplicated code]. transition to max_id / min_id later.
+            $em = $parameters["entityManager"];
+            $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserArchive($user->getId(), "Instagram");
+            
+            if(isset($originalItems)) {
+                $checkForDuplicates = TRUE;
+            } else {
+                $checkForDuplicates = FALSE;    
+            }
+        } else {
+            $checkForDuplicates = FALSE;
+        } 
+        
         while(true) {
             echo $nextUrl;
             $itemsJson = file_get_contents($nextUrl,0,null,null);
-
-            if(FALSE !== $checkForDuplicates) { // temp check for duplicates [with duplicated code]. transition to max_id / min_id later.
-                $em = $parameters["entityManager"];
-                $originalItems = $em->getRepository('ZeegaDataBundle:Item')->findUriByUserArchive($user->getId(), "Instagram");
-                
-                if(isset($originalItems)) {
-                    $checkForDuplicates = TRUE;
-                } else {
-                    $checkForDuplicates = FALSE;    
-                }
-            } else {
-                $checkForDuplicates = FALSE;
-            } 
+            
             if(null !== $itemsJson) {            
                 $apiItems = json_decode($itemsJson,true);
 
