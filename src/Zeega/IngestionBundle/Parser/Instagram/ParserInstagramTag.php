@@ -22,7 +22,8 @@ class ParserInstagramTag extends ParserAbstract
 
         $nextUrl = "https://api.instagram.com/v1/tags/$tags/media/recent?access_token=1907240.f59def8.6a53e4264d87413a8e8cd431430b6e94";
         
-        while(;) {
+        while(true) {
+            echo $nextUrl;
             $itemsJson = file_get_contents($nextUrl,0,null,null);
 
             if(FALSE !== $checkForDuplicates) { // temp check for duplicates [with duplicated code]. transition to max_id / min_id later.
@@ -37,7 +38,6 @@ class ParserInstagramTag extends ParserAbstract
             } else {
                 $checkForDuplicates = FALSE;
             } 
-
             if(null !== $itemsJson) {            
                 $apiItems = json_decode($itemsJson,true);
 
@@ -85,16 +85,13 @@ class ParserInstagramTag extends ParserAbstract
                     }
                 }
 
-                if ( !array_key_exists("pagination", $apiItems) ) {
-                    if ( !array_key_exists("next_url", $apiItems) ) {
-                        break;
-                    }
+                if ( !isset($apiItems["pagination"]) || !isset($apiItems["pagination"]["next_url"]) ) {                    
                     break;
                 }
 
                 $nextUrl = $apiItems["pagination"]["next_url"];
 
-                if( isset($nextUrl) ) {
+                if( !isset($nextUrl) ) {
                     break;
                 }
             } else {
