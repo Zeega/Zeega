@@ -133,6 +133,18 @@ class ItemsController extends ApiBaseController
         }      
     }
     
+    public function getItemsFeaturedAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById("90061");
+        
+        $children = $item->getChildItems();
+        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array(
+            'items' => $children));
+        
+        return new Response($itemView);
+    }
+
     public function getItemAction($id)
     {
         try {
