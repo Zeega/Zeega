@@ -186,7 +186,9 @@
 
                 },
                 error : function(model, response){
-                    console.log("Search failed - model is " + model);
+                    console.log("Search failed - model is ");
+                    console.log(model);
+                     console.log(response);
                 }
             });
         },

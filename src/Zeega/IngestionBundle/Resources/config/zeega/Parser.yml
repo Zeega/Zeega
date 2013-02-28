@@ -2,11 +2,6 @@ imports:
     - { resource: "%kernel.root_dir%/config/parameters.ini" }
 
 zeega.parsers:
-    google.com:
-        item_parser:
-            regex: /http:\/\/(?:books\.)?google.com\/books\?id=([a-zA-Z0-9\-_]+)/
-            is_set: false
-            parser_class: Zeega\IngestionBundle\Parser\GoogleBook\ParserGoogleBook
     flickr.com:
         item_parser:
             regex: "#https?://(?:www\.)?flickr\.com/photos/[^/]+/([0-9]+)#"
@@ -69,7 +64,7 @@ zeega.parsers:
             regex: /https?:\/\/(?:www\.)?youtubeeee.com\/p\/([a-zA-Z0-9\-_]+)/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Youtube\ParserYoutubeTag
-            
+
     soundcloud.com: #order matters (last regex matches any soundlcoud url)
         item_parser:
             regex: /https?:\/\/(?:www\.)?soundcloud.com.*\/sets\/.*/
@@ -83,34 +78,43 @@ zeega.parsers:
             regex: /https?:\/\/(?:www\.)?soundcloud.com/impossibleregex/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Soundcloud\ParserSoundcloudTag
+
+    giphy.com:
+        item_parser:
+            regex: /https?:\/\/(?:www\.)?giphy.com.*\/gifs\/([a-zA-Z0-9\-_]+)/
+            is_set: false
+            parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyItem
+        item_parser_full:
+            regex: /https?:\/\/(?:www\.)?giphy.com.*\/embed\/([a-zA-Z0-9\-_]+)\/*/
+            is_set: false
+            parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyItem
+
     dp.la:
         set_parser:
             regex: /http:\/\/(?:api\.)?dp.la\/.*/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\DPLA\ParserDPLASet
+
     mapbox.com:
         item_parser:
             regex: "#https?:\/\/(?:tiles\.)?mapbox.*\/([^/]+/map/[^/]+)\##"
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Mapbox\ParserMapboxTiles
-    #vimeo.com:
-       # item_parser:
-         #   regex: /http:\/\/(?:www\.)?vimeo.com.*\/([a-zA-Z0-9\-_]+)/
-         #   is_set: false
-         #   parser_class: Zeega\IngestionBundle\Parser\Vimeo\ParserVimeoVideo
+
     archive.org:
         item_parser:
             regex: /http:\/\/(?:www\.)?archive.org\/details.*/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\InternetArchive\ParserInternetArchive
-    documentcloud.org:
-        item_parser:
-            regex: /http:\/\/(?:www\.)?documentcloud.org\/documents.*/
-            is_set: false
-            parser_class: Zeega\IngestionBundle\Parser\DocumentCloud\ParserDocumentCloud
 
     tumblr.com:
         item_parser:
             regex: /http:\/\/([a-zA-Z0-9\-_]+).tumblr.com\/post\/([a-zA-Z0-9\-_]+)/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblr
+
+    google.com:
+        item_parser:
+            regex: /http:\/\/(?:books\.)?google.com\/books\?id=([a-zA-Z0-9\-_]+)/
+            is_set: false
+            parser_class: Zeega\IngestionBundle\Parser\GoogleBook\ParserGoogleBook
