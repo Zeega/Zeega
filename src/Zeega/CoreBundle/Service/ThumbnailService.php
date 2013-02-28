@@ -26,26 +26,57 @@ class ThumbnailService
         $this->doctrine = $doctrine;
     }
 
-    public function getItemThumbnail($url, $mediaType)
+    public function getItemThumbnail($url, $size = 4)
     {
         try
         {     
-            if($mediaType != 'Collection') {                
-                $host = $this->container->getParameter('static_host');
+            $host = $this->container->getParameter('static_host');
 
-                if( !isset($host) || empty($host) ) {
-                    return null;
-                }
-
-                $thumbnailServerUrl =  $host . "scripts/item.php?url=".$url.'&type='.$mediaType;
-                $thumbnailJSON = file_get_contents($thumbnailServerUrl);
-                
-                $zeegaThumbnail = json_decode($thumbnailJSON,true);
-                
-                if(null !== $zeegaThumbnail && array_key_exists("thumbnail_url", $zeegaThumbnail)) {
-                    return $zeegaThumbnail["thumbnail_url"];    
-                }              
+            if( !isset($host) || empty($host) ) {
+                return null;
             }
+
+            $thumbnailServerUrl =  "$host/image?url=$url";
+            $thumbnailJSON = file_get_contents($thumbnailServerUrl);
+            
+            $zeegaThumbnail = json_decode($thumbnailJSON,true);
+            
+            if ( null !== $zeegaThumbnail && is_array($zeegaThumbnail) ) {
+                if($size == 4) {
+                    if ( array_key_exists("image_url_4", $zeegaThumbnail) ) {
+                        return $zeegaThumbnail["image_url_4"];    
+                    }                  
+                } else if($size == 5) {
+                    if ( array_key_exists("image_url_5", $zeegaThumbnail) ) {
+                        return $zeegaThumbnail["image_url_5"];    
+                    }
+                } else if($size == 6) {
+                    if ( array_key_exists("image_url_6", $zeegaThumbnail) ) {
+                        return $zeegaThumbnail["image_url_6"];    
+                    }
+                }    
+            }
+        }
+        catch(Exception $e)
+        {
+            // add log
+            return null;
+        }
+        return null;
+    }
+
+    public function getFrameThumbnail($id)
+    {
+        try
+        {     
+            $host = $this->container->getParameter('static_host');
+
+            if( !isset($host) || empty($host) ) {
+                return null;
+            }
+            
+            $thumbnailServerUrl =  "$host/frame/$id";
+            return file_get_contents($thumbnailServerUrl);
         }
         catch(Exception $e)
         {
