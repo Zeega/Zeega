@@ -12,6 +12,7 @@
 namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Frame;
@@ -58,6 +59,10 @@ class PublishController extends BaseController
                 }
             }
         }
+        
+        if (null === $project || null === $projectData) {
+            return new JsonResponse(array("message" => "Can't find a project with id $id"),200,array("application/json")); 
+        }     
 
         return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
             'project'=>$project,
