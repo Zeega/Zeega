@@ -54,10 +54,6 @@ assetic:
     use_controller: false
     filters:
         cssrewrite: ~
-        # closure:
-        #     jar: %kernel.root_dir%/java/compiler.jar
-        # yui_css:
-        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
 
 # Doctrine Configuration
 doctrine:
@@ -153,7 +149,7 @@ fos_twitter:
 
 fos_facebook:
     alias:  facebook
-    app_id: 459848834048078
-    secret: f5b344b91bff03ace4df454e35fca4e4
+    app_id: %facebook_appid%
+    secret: %facebook_secret%
     cookie: true
     permissions: [email, user_birthday, user_location]
