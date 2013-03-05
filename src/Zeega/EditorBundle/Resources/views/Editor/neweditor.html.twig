@@ -30,21 +30,10 @@
 
         <meta name="zeega" content="zeega-editor"
             data-root="{{directory}}"
-            data-user-id="36"
+            data-user-id="{{user_id}}"
             data-project-id="{{project.getId()}}"
             data-hostname="{{hostname}}"
         />
-
-        <script>
-
-            window.userProjects = [
-                { title: "one", id: 123 },
-                { title: "two", id: 234 },
-                { title: "three", id: 345 },
-                { title: "four", id: 546 },
-            ];
-
-        </script>
 
         <!-- STYLESHEETS -->
         <link rel="stylesheet" href="{{ asset('js/app/editor/vendor/zeegaplayer/dist/debug/css/zeega.css') }}">
@@ -77,6 +66,9 @@
 
             // Project data
             var projectJSON = "{{ project_data|e('js') }}";
+
+            window.userProjects = "{{ projects|e('js') }}";
+            console.log(window.userProjects);
         </script>
 
 <!--
