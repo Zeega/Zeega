@@ -1,5 +1,5 @@
 {
-	"id" : {{ sequence.id | default("") }},
+	"id" : {{ sequence.id | default(null) }},
 	"title" : "{{ sequence.title | default("") }}",
 	"attr" : {{sequence.attr | default({}) | json_encode | raw}},
 	"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
