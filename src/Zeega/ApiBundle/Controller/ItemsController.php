@@ -12,9 +12,10 @@
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Validator\Mapping\Cache\ApcCache;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\ApiBundle\Controller\ApiBaseController;
+
 
 class ItemsController extends ApiBaseController
 {
@@ -135,12 +136,30 @@ class ItemsController extends ApiBaseController
     
     public function getItemsFeaturedAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById("90061");
-        
-        $children = $item->getChildItems();
-        $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array(
-            'items' => $children));
+        $cacheDriver = $this->get('zeega_apc_cache');
+
+        if ($cacheDriver->isEnabled() && $cacheDriver->exists('itemsFeaturedView')) {
+            $itemView = $cacheDriver->fetch('itemsFeaturedView');
+        } else { 
+            $queryParser = $this->get('zeega_query_parser');
+            $query = $queryParser->parseRequest(array("collection" => 90061));
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $parentItems = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+
+            foreach($parentItems as $key => $item) {
+                $parentId = $item["id"];
+                $query = $queryParser->parseRequest(array("collection" => $parentId, "limit"=> 10));
+                $childItems = $em->getRepository("ZeegaDataBundle:Item")->searchItems($query);
+                $parentItems[$key]["childItems"] = $childItems;
+            }
+
+            $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $parentItems));
+            
+            if ( $cacheDriver->isEnabled() ) {
+                $cacheDriver->save('itemsFeaturedView', $itemView, 3600);    
+            }
+        }
         
         return new Response($itemView);
     }
