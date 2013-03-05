@@ -26,18 +26,38 @@
             
         <!-- END FB --> 
 
+        <!-- Zeega metatags -->
+
+        <meta name="zeega" content="zeega-editor"
+            data-root="{{directory}}"
+            data-user-id="36"
+            data-project-id="{{project.getId()}}"
+            data-hostname="{{hostname}}"
+        />
+
+        <script>
+
+            window.userProjects = [
+                { title: "one", id: 123 },
+                { title: "two", id: 234 },
+                { title: "three", id: 345 },
+                { title: "four", id: 546 },
+            ];
+
+        </script>
+
         <!-- STYLESHEETS -->
-        <link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/app/editor/vendor/zeegaplayer/dist/debug/css/zeega.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/app/editor/assets/css/style.css') }}">
         <!-- END STYLESHEETS -->
 
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
 
         <script>
             // Session data
-            sessionStorage.setItem('directory', '{{directory}}');
-            sessionStorage.setItem('hostname','{{hostname}}');
-            sessionStorage.setItem('projectId','{{project.getId()}}');
+            // sessionStorage.setItem('directory', '{{directory}}');
+            // sessionStorage.setItem('hostname','{{hostname}}');
+            // sessionStorage.setItem('projectId','{{project.getId()}}');
         
             // Google analytics
             var _gaq = _gaq || [];
@@ -59,14 +79,15 @@
             var projectJSON = "{{ project_data|e('js') }}";
         </script>
 
-        <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
-        
+<!--
+        <script src="{{ asset('js/app/editor/dist/debug/templates.js') }}"></script>
+        <script data-main="{{ asset('js/app/editor/app/config') }}" src="{{ asset('js/app/editor/vendor/js/libs/require.js') }}"></script>
+-->
+        <script src="{{ asset('js/app/editor/dist/debug/require.js') }}" ></script>
+
     </head>
 
     <body>
-        <div role="main" id="main">
-            <div id='overlays'></div>
-            <div id='player'></div>
-        </div>
+        <div role="main" id="main"></div>
     </body>
 </html>
