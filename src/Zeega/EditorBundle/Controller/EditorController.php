@@ -30,53 +30,49 @@ class EditorController extends BaseController
 		
 		$this->authorize($projectOwners[0]->getId());
 		
-		$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
+		$projectVersion = $project->getVersion();
 
-		$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
+		if (!isset($projectVersion) || $projectVersion < 1.1) {
+			// video editor
+			$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
 
-		$sequence = $sequences[0];
-		
-		$params = array();
-		$params["user"] = $user->getId();
-	    $params["data_source"] = "db";
-	    $params["sort"] = "date-desc";
-	    $params["type"] = "-project AND -collection";
-	
-		$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
+			$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
 
-		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+			$sequence = $sequences[0];
+			
+			$params = array();
+			$params["user"] = $user->getId();
+		    $params["data_source"] = "db";
+		    $params["sort"] = "date-desc";
+		    $params["type"] = "-project AND -collection";
 		
-		return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-				'projecttitle'   => $project->getTitle(),
-				'projectid'   =>$project->getId(),
-				'project'   =>$project,
-				'sequence'=>$sequence,
-				'sequences'=>$sequences,
-				'projectLayers' => $projectLayers,
-           		'page'=>'editor',
-				'results' => $items,
-				'project_data' => $projectData,
-			));
-	} 
+			$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
 
-	public function newEditorAction($id)
-	{	
-		$user = $this->get('security.context')->getToken()->getUser();
+			$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+			
+			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+					'projecttitle'   => $project->getTitle(),
+					'projectid'   =>$project->getId(),
+					'project'   =>$project,
+					'sequence'=>$sequence,
+					'sequences'=>$sequences,
+					'projectLayers' => $projectLayers,
+	           		'page'=>'editor',
+					'results' => $items,
+					'project_data' => $projectData,
+				));
+		} else {
+			// new editor
+			$userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());		
+			$projectOwners = $project->getUsers();		
+			$this->authorize($projectOwners[0]->getId());				
+			$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
-		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-		$userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
-		
-		$projectOwners = $project->getUsers();
-		
-		$this->authorize($projectOwners[0]->getId());
-				
-		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-		
-
-		return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
-				'project'   =>$project,
-				'project_data' => $projectData,
-				'projects' => json_encode($userProjects)
-			));
+			return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
+					'project'   =>$project,
+					'project_data' => $projectData,
+					'projects' => json_encode($userProjects)
+				));	
+		}
 	} 
 }
