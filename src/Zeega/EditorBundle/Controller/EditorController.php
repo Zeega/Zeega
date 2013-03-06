@@ -74,25 +74,26 @@ class EditorController extends BaseController
 					'projects' => json_encode($userProjects)
 				));	
 		}
+    }
+    
+    public function newEditorAction($id)
+    {   
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        public function newEditorAction($id)
-        {   
-            $user = $this->get('security.context')->getToken()->getUser();
+        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        $userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
 
-            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-            $userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
+        $projectOwners = $project->getUsers();
 
-            $projectOwners = $project->getUsers();
+        $this->authorize($projectOwners[0]->getId());
 
-            $this->authorize($projectOwners[0]->getId());
-
-            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+        $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 
 
-            return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
-                'project' =>$project,
-                'project_data' => $projectData,
-                'projects' => json_encode($userProjects)
-                ));
-        } 
+        return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
+            'project' =>$project,
+            'project_data' => $projectData,
+            'projects' => json_encode($userProjects)
+            ));
+    } 
 }
