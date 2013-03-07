@@ -69,11 +69,17 @@ class ItemService
         if(isset($itemArray['media_geo_longitude'])) {
             $item->setMediaGeoLongitude($itemArray['media_geo_longitude']);  
         } 
-
-        if(isset($itemArray['thumbnail_url'])) {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url']);
+        
+        $thumbnailSize = 4;
+        $mediaType = $item->getMediaType();
+        if ( $mediaType === 'project' ) {
+            $thumbnailSize = 6;
+        } 
+        
+        if(isset($itemArray['thumbnail_url'])) {            
+            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], $thumbnailSize);
         } else {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri());
+            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $thumbnailSize);
         } 
 
         if(null !== $thumbnail) {
