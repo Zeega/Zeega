@@ -37,7 +37,10 @@ class ThumbnailService
             }
 
             $thumbnailServerUrl =  "$host/image?url=$url";
-            $thumbnailJSON = file_get_contents($thumbnailServerUrl);
+            $thumbnailJSON = @file_get_contents($thumbnailServerUrl);
+            if (!strpos($http_response_header[0], "200")) { 
+                return null;
+            } 
             
             $zeegaThumbnail = json_decode($thumbnailJSON,true);
             
