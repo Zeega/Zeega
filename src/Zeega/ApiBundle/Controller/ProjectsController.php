@@ -348,7 +348,7 @@ class ProjectsController extends BaseController
         } else {
             $title='Untitled Zeega';    
         }
-
+        var_dump($request->request);
         if($request->request->has('version')) {
             $version = $request->request->get('version');
         } else {

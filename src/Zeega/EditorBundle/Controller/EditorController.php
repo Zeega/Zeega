@@ -15,8 +15,12 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 class EditorController extends BaseController
 {    
 	public function newProjectAction()
-	{
-        $projectId = $this->forward('ZeegaApiBundle:Projects:postProject', array())->getContent();
+	{  
+        if ( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') ) {            
+            $this->getRequest()->request->set('version',1.1);
+        } 
+
+        $projectId = $this->forward('ZeegaApiBundle:Projects:postProject')->getContent();
 
         return $this->redirect($this->generateUrl('ZeegaEditorBundle_editor',array('id'=>$projectId)), 301);          
 	}
