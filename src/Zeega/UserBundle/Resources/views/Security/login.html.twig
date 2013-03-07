@@ -13,11 +13,11 @@
         */
     
         html { 
-        background: url({{asset("images/registration/login.jpg")}}) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
+            background: url({{asset("images/registration/login.jpg")}}) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
         }
     
     </style>
@@ -84,14 +84,19 @@
             <h2>Remake the Internet</h2>
         </div>
         
-        <h2 class='message'>Hello, hello and welcome back!</h2>
         
+<<<<<<< HEAD
         
+=======
+        <a href="#" onclick="fbLogin();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/>
+        <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
+>>>>>>> social
 
         {% if error %}
             <div class="error" style="color:red">{{ error }}</div>
         {% endif %}
         
+        <br><h2 class='message'>Or Login with Email</h2>
         <form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
           <fieldset>
             <div class="control-group"> 
