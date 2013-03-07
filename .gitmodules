@@ -9,4 +9,4 @@
 	url = https://github.com/Zeega/Zeega-Mobile-Player.git
 [submodule "web/js/app/editor"]
 	path = web/js/app/editor
-	url = git@github.com:Zeega/Zeega-Editor.git
+	url = https://github.com/Zeega/Zeega-Editor.git
