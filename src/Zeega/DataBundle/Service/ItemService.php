@@ -66,8 +66,13 @@ class ItemService
         if(isset($itemArray['media_geo_latitude'])) {
             $item->setMediaGeoLatitude($itemArray['media_geo_latitude']);  
         } 
+        
         if(isset($itemArray['media_geo_longitude'])) {
             $item->setMediaGeoLongitude($itemArray['media_geo_longitude']);  
+        }
+
+        if(isset($itemArray['headline'])) {
+            $item->setHeadline($itemArray['headline']);  
         } 
         
         $thumbnailSize = 4;
