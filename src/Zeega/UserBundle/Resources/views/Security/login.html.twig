@@ -85,8 +85,8 @@
         </div>
         
         
-                <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
         <a href="#" onclick="fbLogin();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/>
+        <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
 
         {% if error %}
             <div class="error" style="color:red">{{ error }}</div>

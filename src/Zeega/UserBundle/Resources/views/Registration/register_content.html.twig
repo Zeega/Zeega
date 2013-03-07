@@ -47,8 +47,7 @@
 	
 			<div class="page-intro span11">
 			
-				<h1>Join the Zeega Community!</h1>
-				<h2>What are you making? Tell us a little bit about what you’ve got in mind and we’ll hook you up.</h2>
+				<h1>Join the Zeega Revolution</h1>
 			
 			</div>
 		
@@ -63,13 +62,27 @@
 	
 		<div class="row">
 		
-			<div class="span7">
+			<div class="span7" style="width:980px;">
+
+				<div style="float: left;">
+
+        		<a href="#" onclick="fbLogin();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/><br>
+				<a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
+
+				
+
 			
 				{% for key, message in app.session.getFlashes() %}
 				<div class="{{ key }}">
 				    {{ message|trans({}, 'FOSUserBundle') }}
 				</div>
 				{% endfor %}
+
+				</div>
+
+				<div style="float:right;">
+
+				<h2 class='message'>Or Sign Up with Email</h2><br>
 
 				<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
 					<fieldset>
@@ -114,7 +127,7 @@
 						</div>
 						<div class="row">
 					    	<div class="span3">
-						    	<label class="control-label" for="password-verification"><h4>Password Verification</h4></label>
+						    	<label class="control-label" for="password-verification"><h4>Verify Password</h4></label>
 							</div>
 							<div class="span4">
 								<div class="required"></div>			
@@ -142,6 +155,9 @@
 					 </div>
 				</fieldset>
 				</form>
+
+				</div>
+				<div style="clear:both;"></div>
 			
 			</div>
 			
