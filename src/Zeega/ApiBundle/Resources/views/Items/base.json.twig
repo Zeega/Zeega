@@ -10,6 +10,7 @@
         "username": {{ item.username | default("") | json_encode | raw }},
         "display_name":{{ item.displayName | default("") | json_encode | raw }},
         "title":{{ item.title | default("") | json_encode | raw}},
+        "headline":{{ item.headline | default("") | json_encode | raw}},
         "description":{{ item.description | default("") | json_encode | raw}},
         {% if item.text is defined and item.text is not empty and item.mediaType == 'project' %}
             "text" : {{ item.text | raw}},

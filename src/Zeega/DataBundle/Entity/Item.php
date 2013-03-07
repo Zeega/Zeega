@@ -217,6 +217,13 @@ class Item
     private $duration;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="headline", type="string", length=144, nullable=true)
+     */
+    private $headline;
+
+    /**
      * @var user
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -961,5 +968,28 @@ class Item
     public function getParentItems()
     {
         return $this->parentItems;
+    }
+
+    /**
+     * Set headline
+     *
+     * @param string $headline
+     * @return Item
+     */
+    public function setHeadline($headline)
+    {
+        $this->headline = $headline;
+    
+        return $this;
+    }
+
+    /**
+     * Get headline
+     *
+     * @return string 
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
     }
 }
