@@ -126,6 +126,13 @@ class Project
     private $datePublished;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="version", type="float", nullable=true)
+     */
+    private $version;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="project")
@@ -512,5 +519,28 @@ class Project
     public function getMobile()
     {
         return $this->mobile;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return Project
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+    
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float 
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }

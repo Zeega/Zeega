@@ -348,12 +348,19 @@ class ProjectsController extends BaseController
         } else {
             $title='Untitled Zeega';    
         }
+        var_dump($request->request);
+        if($request->request->has('version')) {
+            $version = $request->request->get('version');
+        } else {
+            $version = 1.0;
+        }
         
         $project= new Project();
         $project->setDateCreated(new \DateTime("now"));
         $project->setEnabled(true);
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
+        $project->setVersion($version);
         
         $sequence = new Sequence();
         $frame = new Frame();
