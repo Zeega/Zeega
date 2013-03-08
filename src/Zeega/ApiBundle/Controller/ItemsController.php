@@ -142,7 +142,7 @@ class ItemsController extends ApiBaseController
             $itemView = $cacheDriver->fetch('itemsFeaturedView');
         } else { 
             $queryParser = $this->get('zeega_query_parser');
-            $query = $queryParser->parseRequest(array("collection" => 90061));
+            $query = $queryParser->parseRequest(array("collection" => 93683));
 
             $em = $this->getDoctrine()->getEntityManager();
             $parentItems = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
