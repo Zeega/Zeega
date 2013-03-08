@@ -87,12 +87,12 @@
                     
                           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-                          <a href="{{ path('ZeegaCommunityBundle_dashboard')}}">{{displayname}}</a>
+                          <a href="{{ path('ZeegaCommunityBundle_user',{"id":user_id})}}">{{displayname}}</a>
 
                           {% else %}
 
-                          <a href="/register">Sign Up</a> |
-                          <a href="/login">Login</a>
+                          <a href="{{ path('fos_user_registration_register')}}">Sign Up</a> |
+                          <a href="{{ path('_security_login')}}">Login</a>
                           
                           {% endif %}
                       </div>
