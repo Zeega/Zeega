@@ -9,7 +9,7 @@ class ProjectRepository extends EntityRepository
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->add('select', 'p')
+        $qb->add('select', 'p,u')
 			->add('from', 'ZeegaDataBundle:Project p')
             ->join('p.users', 'u')
             ->add('where', 'u.id = :userId')
