@@ -5,7 +5,3 @@ ZeegaEditorBundle_new:
 ZeegaEditorBundle_editor:
     pattern: /editor/{id}
     defaults: { _controller:  ZeegaEditorBundle:Editor:editor }
-
-ZeegaEditorBundle_neweditor:
-    pattern: /neweditor/{id}
-    defaults: { _controller:  ZeegaEditorBundle:Editor:newEditor }
