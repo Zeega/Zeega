@@ -301,7 +301,7 @@
                 if( layer.get("type") === "Audio" && _.indexOf(frameLayers,layer.id)>-1){
                     console.log("existing audio layer", layer.id, frameLayers);
                     audioLayers++;
-                } else if ( layer.get('type') != "Text" && layer.get('type') != "Image" && _.indexOf(frameLayers,layer.id)>-1){
+                } else if ( layer.get('type') != "Link" &&  layer.get('type') != "Text" && layer.get('type') != "Image" && _.indexOf(frameLayers,layer.id)>-1){
                     unsupportedLayers++;
                 }
                 
