@@ -24,7 +24,7 @@ class CommunityController extends BaseController
     public function homeAction()
     {
         $queryFields = array("description","tags","id", "title", "thumbnail_url", "attribution_uri");
-        $collections = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("collection" => 93601, "fields" => $queryFields))->getContent();
+        $collections = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("collection" => 94088, "fields" => $queryFields))->getContent();
         return $this->render('ZeegaCommunityBundle:Home:home.html.twig',array('collections' => $collections));
     }
     
