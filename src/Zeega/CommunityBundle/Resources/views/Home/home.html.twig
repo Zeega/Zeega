@@ -1,171 +1,105 @@
 {# src/Zeega/CommunityBundle/Resources/views/Home/home.html.twig #}
 
 
-<!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
+{% extends '::base.html.twig' %}
 
-        <title>Home</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="robots" content="noindex,follow">
-        <meta name="description" content="">
-        <meta name="author" content="">
+{% block title %}Home{% endblock %}
 
-        <meta name="zeega" content="zeega-editor"
+
+{%  block stylesheets %}
+
+<meta name="zeega" content="zeega-editor"
             data-root="{{directory}}"
             data-api= "http:{{hostname}}{{directory}}api/"
         />
 
+    <!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
-        <!-- FB -->
+    <style type="text/css">
+        /*
+            Background image code lives here, not in CSS, because this is specific to each page
+            and could be made dynamic too (i.e. randomly picking a different image each load)
+            quite easily. Exposing the code here should be helpful.
+        */
+        html { 
+        background: url({{asset("images/home/home.jpg")}}) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
         
-            <meta property="og:site_name" content="Zeega"/>
-    <meta property="og:title" content="Zeega"/>
-    <meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
-      <meta property="og:type" content="website"/>
-      <meta property="og:url" content="//zeega.com/"/>
-      <meta property="og:image" content="//zeega.com/images/z-logo-fb.png"/>
+        }
+    </style>
 
-            
-        <!-- END FB --> 
+    <!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
+    {% if app.environment == 'dev' %}
+        <link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+        <script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+        <script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+    {% endif %}
+    <link rel="stylesheet" href="{{ asset('js/app/home/assets/css/style.css') }}">
+    <link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+{% endblock %}
 
-        <!-- Zeega metatags -->
-
-        <!-- STYLESHEETS -->
-       
-        <link rel="stylesheet" href="{{ asset('js/app/home/assets/css/style.css') }}">
-        <!-- END STYLESHEETS -->
-
-        
-
-        <script>
-            // Google Analytics
-
-            // var _gaq = _gaq || [];
-      //       _gaq.push(['_setAccount', 'UA-37456730-1']);
-      //       _gaq.push(['_trackPageview']);
-
-      //       (function() {
-      //           var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      //           ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      //           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      //       })();
-
-            // Because IE sucks
-            if ( !window.console ) {
-                console = {log: function() {}};
-            }
-
-   
-            window.collections = "{{ collections|e('js') }}";
+{% block scripts %}
+      
+     
+      <script src="{{ asset('js/app/home/dist/debug/require.js') }}" ></script>
+       <script src="{{ asset('js/lib/bootstrap.js') }}"></script>
+      
+      <script type="text/javascript" language="Javascript">
+          window.collections = "{{ collections | e('js') }}";
+      </script>
     
-        </script>
+{% endblock %}
 
-        {% include "ZeegaUserBundle:Shared:facebook.html.twig" %}
 
-    </head>
+{% block browser_detection %}
+{% endblock browser_detection %}
 
-    <body>
-         <div class="nav">
-            <div class="row">       
-                  <div class="span6">
-                      <div class="branding"
-                          <a href="/"><img src="assets/img/zeega-logo.png" alt="zeega-logo" width="134" height="43"></a>
-                          <div class="strapline">
-                        Remake the Internet
-                          </div>
-                      </div>
-              </div>
-              
-              <div class="span8">
-                  <div class="navigation">    
-                      <div class="">
-                          <a href="http://blog.zeega.com/about">About </a> |      
-                          <a href="http://zeega.com/team">Team </a> |      
-                          <a href="http://blog.zeega.com" target="_blank">News</a> | 
-                    
-                          {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{% block body %}
+    <!-- Background Color Div - creates the transparent layer over the background image -->
+    <div id="background-color-home">
+    </div>
+    <!-- Background Color Div ends -->
 
-                          <a href="{{ path('ZeegaCommunityBundle_user',{"id":user_id})}}">{{displayname}}</a>
+      <!-- Featured Content Begins -->
+  <div class="container new-section" >
+    <div class="row">
+      <div class="page-intro span11">
+        <h1>Remake the Internet</h1>
+        <h2 style="float:left; width: 523px;">Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs.<br><br>With Zeega, you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.</h2>
 
-                          {% else %}
+        <!-- Sign Up Button Begins -->
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+       
 
-                          <a href="{{ path('fos_user_registration_register')}}">Sign Up</a> |
-                          <a href="{{ path('_security_login')}}">Login</a>
-                          
-                          {% endif %}
-                      </div>
-                  </div>
-              </div>
+        <div class="go-button" style="width: 348px; float: right; margin-top:108px">
 
-          </div>
-        </div>
-        <div class="intro">
-          <div class="row">
-
-            <div class="intro-left">
-
-                <br>
-                <h2>
-                Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs.<br><br>
-
-                With Zeega, you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.
-                </h2>
-
-            </div>
-
-            <div class="intro-right">
-                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                 {% else %}
-
-                <a href="#" onclick="fbLogin();" style="width: 200px;" ><img src="http://zeega.com/images/registration/login-facebook.png" width="200px"/></a><br>
-                <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}"><img src="http://zeega.com/images/registration/login-twitter.png" width="200px"/ ></a> <br/>
-                {% endif %}
-            </div>
-
-            <div style="clear: both;"></div>
-
-          </div>
-        </div>
-        <div role="main" id="main"></div>
-
-            <!-- Footer Begins -->
-        <div class="footer">
+            <div class="valign">
+              <div class="valign-content">  
           
-          <div class="row">       
-          <div class="span6">
-              <div class="branding"
-                  <a href="/"><img src="assets/img/zeegaRedWhite.png" alt="zeega-logo" width="134" height="43"></a>
-                  <div class="strapline">
-                Remake the Internet
-                  </div>
-              </div>
-
-              <div class="bottom-line">
-              <br>
-              &copy; Zeega Inc. 2013<br>
-
-              421 Bryant St <small>*</small> San Francisco CA 94107
-
-              <br> 
-
-              <a href="mailto:info@zeega.com">info@zeega.com</a> <small>*</small> <a href="http://twitter.com/zeega" target="_blank">@zeega</a>  
-               
-
-              <br>
-
-              Accelerated with pride <a href="http://twitter.com/mattervc" target="_blank">@mattervc</a>
-
-              <br>
-              <br>
-              <br>              
-            </div>
-          </div>
-
+                <h3 style ="font-size:37px">
+                Sign Up For Zeega!</a>
+                </h3>
               
-        </div>     
-        <script src="{{ asset('js/app/home/dist/debug/require.js') }}" ></script>
-    </body>
-</html>
+              </div>
+            </div>
 
+        </div>
+        </a> {% endif %}
+        <!-- Sign Up Button Ends -->
+        
+        
+        <div style="clear:both;"></div>
+        <!-- Zeegaverse Button Ends -->
+      </div>
+    </div>
+  </div>
+<div role="main" id="main"></div>   
+
+
+{% endblock %}
