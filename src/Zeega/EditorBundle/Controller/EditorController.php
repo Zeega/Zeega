@@ -30,6 +30,14 @@ class EditorController extends BaseController
 		$user = $this->get('security.context')->getToken()->getUser();
 		
 		$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+
+		if ( !isset($project) ) {
+			 return new Response( json_encode(array(
+			 	"code" => 422, 
+			 	"message" => "The project with the id $id does not exist")), 
+			 422 );
+		}
+
 		$projectOwners = $project->getUsers();
 		
 		$this->authorize($projectOwners[0]->getId());
