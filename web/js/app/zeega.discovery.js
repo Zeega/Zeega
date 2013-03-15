@@ -100,7 +100,9 @@ this.zeega.discovery = {
             query_obj.times.end = query_obj.max_date;
         }
 
-        if(_.isUndefined(query_obj.universe)) query_obj.universe=0;
+        if(_.isUndefined(query_obj.universe)) {
+            query_obj.universe = 1;
+        }
         return query_obj;
     },
     
