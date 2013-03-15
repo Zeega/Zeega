@@ -28,7 +28,7 @@ class BaseController extends SymfonyBaseController
             // if the logged user doesn't exist, check if there's an api key
             if ( null !== $apiKey ) {
                 $em = $this->getDoctrine()->getEntityManager();
-                $user = $em->getRepository("ZeegaDataBundle:User")->findOneBy( array("api_key" => $apiKey) );
+                $user = $em->getRepository("ZeegaDataBundle:User")->findOneBy( array("apiKey" => $apiKey) );
                 if( null !== $user ) {
                     return $user;
                 }
