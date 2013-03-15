@@ -1052,7 +1052,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .right-col{float:right;}
 .collection-description{min-height:20px;}
 .collection-lists-container{overflow:auto;}
-.collection-list-thumb{width:24px;height:18px;}
+.collection-list-thumb{background-color:grey;width:24px;height:18px;}
 .edit-item-metadata{padding-right:5px;}
 #zeega-item-database-list.collection{background:transparent;}
 .layer-control-drawer.collection{padding:0px 0px;}
@@ -1226,6 +1226,7 @@ img{max-width:none;}
 .results-thumbnail{float:left;overflow:hidden;position:relative;margin-left:10px;margin-right:5px;padding-top:5px;padding-bottom:5px;list-style:none;line-height:18px;}
 .results-list-thumbnail{float:left;list-style:none;}
 .list-media{background:white;}
+.collection-label{position:absolute;top:28px;left:45px;font-size:86px;text-shadow:5px 5px 5px black;color:white;opacity:.6;}
 #zeega-view-buttons{width:108px;float:left;margin-right:31px;margin-top:5px;}
 #zeega-project-sequence-list{background:rgba(0, 0, 0, 0.2);}
 #zeega-project-sequence-list>ul.list{margin:0;list-style:none;white-space:nowrap;overflow:auto;border-bottom:5px solid #777;}
