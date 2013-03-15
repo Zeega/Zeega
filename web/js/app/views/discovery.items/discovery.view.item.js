@@ -5,6 +5,7 @@
     Items.Views.Thumb = Backbone.View.extend({
         
         tagName: "li",
+        className: "z-drag results-thumbnail",
 
         events: {
             "click":"previewItem"
@@ -12,7 +13,6 @@
 
         previewItem: function()
         {
-            console.log("triggering preview",this.model);
             if( this.model.get("media_type")==="Collection" ){
                 zeega.discovery.app.goToCollection(this.model);
             } else {
@@ -30,9 +30,6 @@
 
             if (_.isUndefined(this.options.thumbnail_height)){
                 this.options.thumbnail_height = 144;
-            }
-            if(this.options.fancybox||true){
-                $(this.el).addClass("results-thumbnail");
             }
             if (_.isUndefined(this.options.thumbnail_width)){
                 this.options.thumbnail_width = 144;
@@ -96,7 +93,9 @@
                     var drag = $(this).find("a")
                                 .clone()
                                 .css({"z-index":"101"});
+                    console.log(drag);
                     return drag;
+
                 },
 
                 //init the dragged item variable
@@ -111,6 +110,9 @@
             $(this.el).find(".jdicon-small-drag").tooltip({"title":"Drag to add to your collection","placement":"bottom", delay: { show: 600, hide: 100 }});
             $(this.el).find(".label").tooltip({"placement":"bottom", delay: { show: 600, hide: 100 }});
             
+            if(this.model.get("media_type") == "Collection"){
+                $(this.el).find(".thumbnail").append("<span class = 'collection-label'>C</span>");
+            }
             
 
             //Hide broken Thumbs
@@ -149,7 +151,7 @@
     Items.Views.List = Backbone.View.extend({
         
         tagName : "tr",
-        className : "list-media",
+        className : "list-media z-drag",
         
         initialize: function () {
             var _this=this;
@@ -160,7 +162,11 @@
         },
         previewItem: function()
         {
-            this.model.trigger("preview_item",this.model.id);
+            if( this.model.get("media_type")==="Collection" ){
+                zeega.discovery.app.goToCollection(this.model);
+            } else {
+                this.model.trigger( "preview_item", this.model.id );
+            }
             return false;
         },
          
@@ -222,7 +228,36 @@
 
             $(this.el).html( _.template( template, blanks ) );
             
+            if(this.model.get("media_type") == "Collection"){
+                $(this.el).find(".thumbnail").append("<span class = 'collection-label'>C</span>");
+            }
             
+            $(this.el).draggable({
+                cursor : "move",
+                cursorAt : {
+                    top : -5,
+                    left : -5
+                },
+                appendTo : "body",
+                opacity : 0.8,
+                helper : function(){
+                    var drag = $(this).find("a")
+                                .clone()
+                                .css({"z-index":"101"});
+                    console.log(drag);
+                    return drag;
+                },
+
+                //init the dragged item variable
+                start : function()
+                {
+                    $(this).draggable("option","revert",true);
+                    zeega.discovery.app.draggedItem = _this.model;
+                    
+                },
+
+                stop : function(){}
+            });
             
             
             return this;
@@ -245,7 +280,7 @@
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>via <a href='#' ><%= display_name %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>added to Zeega by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
             "</td>";
             
 
@@ -268,7 +303,7 @@
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>via <a href='#' ><%= display_name %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>added to Zeega by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
             "</td>";
             
 
@@ -444,7 +479,7 @@
             else{
                 this.$el.addClass("static-collection");
                 this.$el.droppable({
-                accept : ".results-thumbnail",
+                accept : ".z-drag",
                 hoverClass : "zeega-my-collections-items-dropping",
                 tolerance : "pointer",
                 drop : function( event, ui ){
@@ -466,8 +501,18 @@
                         _this.model.save({new_items:[itemId ]},
                             {
                                 success : function(model, response){
-                                    console.log(model,response,"success");
-                                    $(_this.el).find("#zeega-my-collections-items").removeClass("zeega-my-collections-items-dropping");
+                                    var src;
+
+                                    //$(_this.el).find("#zeega-my-collections-items").removeClass("zeega-my-collections-items-dropping");
+                                    _this.model.url = zeega.discovery.app.apiLocation + "api/items/" + _this.model.id;
+
+                                    //If collection doesn't have thumbnail use from first item dragged
+                                    if(_.isNull(_this.model.get("thumbnail_url"))){
+                                        src = zeega.discovery.app.draggedItem.get("thumbnail_url");
+                                        _this.model.set({thumbnail_url:src}).save();
+                                        $(_this.$el.find(".collection-list-thumb")[0]).attr({"src":src});
+                                    }
+                                    
                                 },
                                 error : function(model, response){
                                     console.log(response);
@@ -487,9 +532,7 @@
                 drop : function(event,ui){
                     ui.draggable.draggable("option","revert",false);
                     var src = $(ui.draggable).find("img").attr("src");
-                    console.log(src);
                     _this.model.set({thumbnail_url:src}).save();
-                    console.log(_this.model);
                     $(_this.$el.find(".collection-list-thumb")[0]).attr({"src":src});
                     return false;
                     

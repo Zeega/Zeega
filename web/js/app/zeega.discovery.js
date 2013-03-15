@@ -34,7 +34,7 @@ this.zeega.discovery = {
     apiLocation : sessionStorage.getItem("hostname") + sessionStorage.getItem("directory"),
     resultsPerPage : 100,
 
-    currentView : "thumb",
+    currentView : "list",
     currentCollection : null,
     
     
@@ -100,7 +100,9 @@ this.zeega.discovery = {
             query_obj.times.end = query_obj.max_date;
         }
 
-        if(_.isUndefined(query_obj.universe)) query_obj.universe=0;
+        if(_.isUndefined(query_obj.universe)) {
+            query_obj.universe = 1;
+        }
         return query_obj;
     },
     
@@ -119,7 +121,7 @@ this.zeega.discovery = {
         if(!_.isUndefined(this.searchObject.view_type)) {
             this.switchViewTo( this.searchObject.view_type );
         } else {
-            this.switchViewTo( "thumb" );
+            this.switchViewTo(this.currentView );
         }
 
         //Update Collection

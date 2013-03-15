@@ -49,7 +49,7 @@
         {
             var itemView = new Items.Views.ViewerContent({model:this.inFocus,state:this.state});
             
-            if(this.inFocus.get("editable")){
+            if(this.inFocus.get("editable") && this.inFocus.get("media_type") != "Collection"){
                 $("#item-delete").show();
             } else {
                 $("#item-delete").hide();
@@ -225,13 +225,19 @@
         
         render : function()
         {
-            var opts = {};
+            var opts = {},
+                date = new Date( this.model.get("date_created"));
+            console.log(date);
+
+
+
             if(this.options.state == "less")
             {
                 opts = {
                     mediaSpan : "span10",
                     moreClass : "hide",
-                    lessClass : ""
+                    lessClass : "",
+                    date : date.toDateString()
                 };
             }
             else
@@ -239,7 +245,8 @@
                 opts = {
                     mediaSpan : "span4",
                     moreClass : "",
-                    lessClass : "hide"
+                    lessClass : "hide",
+                    date : date.toDateString()
                 };
             }
             
@@ -337,7 +344,7 @@
         
         exitEditMode : function()
         {
-            $("#item-delete").show();
+            if(this.model.get("media_type") != "Collection") $("#item-delete").show();
             this.$el.find(".viewer-item-title .inner, .item-description-text").attr("contenteditable",false).removeClass("editing-field");
             this.$el.find(".edit-item-metadata").show();
             this.$el.find(".save-item-metadata, .cancel-item-metadata").hide();
@@ -378,19 +385,22 @@
                 html+= "<span><a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></span>";
             }
             html+= "</h2>";
-            if(this.isEditable) {
-                html+=  "<div class='row more-info' >"+
-                            "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
-                            
-                if(this.model.get("published")==2){
-                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
-                } else {
-                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
-                }
 
-                html+= "</div>"+
-                        "</div>";
-            }
+            //  access control UX
+            // if(this.isEditable) {
+            //     html+=  "<div class='row more-info' >"+
+            //                 "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
+                            
+            //     if(this.model.get("published")==2){
+            //         html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
+            //     } else {
+            //         html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
+            //     }
+
+            //     html+= "</div>"+
+            //             "</div>";
+            // }
+
              html+="<div class='row'>"+
                     
                     "<div class='<%= mediaSpan %>'' id='item-media-target'>"+
@@ -408,7 +418,8 @@
                     "<div class='span4'>"+
                         "<div class='padded-content clearfix'>"+
                             "<div><strong>Created By:</strong> <%= media_creator_realname %></div>"+
-                            "<div><strong>Created On:</strong> <%= date_created.date %></div>"+
+                            "<div><strong>Created On:</strong> <%= date %></div>"+
+                            "<div><strong>Added To Zeega By:</strong> <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank'><%= display_name %></a></div>"+
                             "<div><a href='<%= attribution_uri %>'' target='blank'>View Source <i class='icon-share'></i></a></div>"+
                             "<div>"+
                                 "<div><strong>Tags:</strong></div>"+
