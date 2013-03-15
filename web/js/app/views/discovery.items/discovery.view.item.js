@@ -219,10 +219,10 @@
             }
             
             if (_.isUndefined(blanks["thumbnail_width"])){
-                blanks["thumbnail_width"] = 120;
+                blanks["thumbnail_width"] = 144;
             }
             if (_.isUndefined(blanks["thumbnail_height"])){
-                blanks["thumbnail_height"] = 120;
+                blanks["thumbnail_height"] = 144;
             }
 
 
@@ -276,11 +276,11 @@
                 "</div>"+
             "</td>"+
             "<td class='zeega-list-middle-column'>"+
-                "<h3><%= title %></h3><p class='jda-item-author'>by: <%= author %></p>"+
+                "<h3><%= title %></h3><p class='jda-item-author'>Created By: <%= author %></p>"+
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>added to Zeega by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added By <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
             "</td>";
             
 
@@ -389,8 +389,9 @@
         //item events
         previewItem: function()
         {
-            console.log("preview",this.model.id);
+
             this.model.trigger("preview_item",this.model.id);
+            return false;
         },
 
         getTemplate : function()

@@ -114,7 +114,10 @@ this.zeega.discovery = {
         //Update Search Object
         
         if (!_.isUndefined(query)) this.searchObject =  this.queryStringToObj(query);
-        else this.searchObject = {page:1};
+        else this.searchObject = {
+            page:1,
+            universe:1
+        };
 
         //Update interface
         
@@ -338,6 +341,7 @@ this.zeega.discovery = {
             searchObj={
                 q: "tags:"+ model.get("attributes").tags,
                 page: 1
+
             };
 
             $(".universe-toggle").show();
@@ -348,7 +352,8 @@ this.zeega.discovery = {
             searchObj = {
                 page: 1,
                 collection: model.id,
-                collection_title: model.get("title")
+                collection_title: model.get("title"),
+                universe: $(".universe-toggle").find(".selected").data("universe")
             };
 
             $(".universe-toggle").hide();
