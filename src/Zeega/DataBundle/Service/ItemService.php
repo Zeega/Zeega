@@ -43,7 +43,11 @@ class ItemService
             $mediaType = $item->getMediaType();
             $text = $item->getText();
             if ( $mediaType !== 'project' || ($mediaType == 'project' && !isset($text)) ) {
-                $item->setText($itemArray['text']);      
+                if ( is_array($itemArray['text']) ) {
+                    $item->setText( json_encode($itemArray['text']) );
+                } else {
+                    $item->setText( $itemArray['text'] );
+                }   
             } 
         } 
 
