@@ -12,7 +12,6 @@
 
         previewItem: function()
         {
-            console.log("triggering preview",this.model);
             if( this.model.get("media_type")==="Collection" ){
                 zeega.discovery.app.goToCollection(this.model);
             } else {
@@ -160,7 +159,11 @@
         },
         previewItem: function()
         {
-            this.model.trigger("preview_item",this.model.id);
+            if( this.model.get("media_type")==="Collection" ){
+                zeega.discovery.app.goToCollection(this.model);
+            } else {
+                this.model.trigger( "preview_item", this.model.id );
+            }
             return false;
         },
          
