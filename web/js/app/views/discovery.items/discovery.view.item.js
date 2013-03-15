@@ -466,8 +466,18 @@
                         _this.model.save({new_items:[itemId ]},
                             {
                                 success : function(model, response){
-                                    console.log(model,response,"success");
+                                    var src;
+
                                     $(_this.el).find("#zeega-my-collections-items").removeClass("zeega-my-collections-items-dropping");
+                                    _this.model.url = zeega.discovery.app.apiLocation + "api/items/" + _this.model.id;
+
+                                    //If collection doesn't have thumbnail use from first item dragged
+                                    if(_.isNull(_this.model.get("thumbnail_url"))){
+                                        src = zeega.discovery.app.draggedItem.get("thumbnail_url");
+                                        _this.model.set({thumbnail_url:src}).save();
+                                        $(_this.$el.find(".collection-list-thumb")[0]).attr({"src":src});
+                                    }
+                                    
                                 },
                                 error : function(model, response){
                                     console.log(response);
@@ -487,9 +497,7 @@
                 drop : function(event,ui){
                     ui.draggable.draggable("option","revert",false);
                     var src = $(ui.draggable).find("img").attr("src");
-                    console.log(src);
                     _this.model.set({thumbnail_url:src}).save();
-                    console.log(_this.model);
                     $(_this.$el.find(".collection-list-thumb")[0]).attr({"src":src});
                     return false;
                     
