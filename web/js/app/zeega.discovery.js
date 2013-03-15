@@ -34,7 +34,7 @@ this.zeega.discovery = {
     apiLocation : sessionStorage.getItem("hostname") + sessionStorage.getItem("directory"),
     resultsPerPage : 100,
 
-    currentView : "thumb",
+    currentView : "list",
     currentCollection : null,
     
     
@@ -119,7 +119,7 @@ this.zeega.discovery = {
         if(!_.isUndefined(this.searchObject.view_type)) {
             this.switchViewTo( this.searchObject.view_type );
         } else {
-            this.switchViewTo( "thumb" );
+            this.switchViewTo(this.currentView );
         }
 
         //Update Collection
