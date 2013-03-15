@@ -378,19 +378,22 @@
                 html+= "<span><a href='#' id='edit-description' class='edit-item-metadata <%= moreClass %> more-info'><i class='icon-pencil'></i></a></span>";
             }
             html+= "</h2>";
-            if(this.isEditable) {
-                html+=  "<div class='row more-info' >"+
-                            "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
-                            
-                if(this.model.get("published")==2){
-                    html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
-                } else {
-                    html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
-                }
 
-                html+= "</div>"+
-                        "</div>";
-            }
+            //  access control UX
+            // if(this.isEditable) {
+            //     html+=  "<div class='row more-info' >"+
+            //                 "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
+                            
+            //     if(this.model.get("published")==2){
+            //         html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
+            //     } else {
+            //         html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
+            //     }
+
+            //     html+= "</div>"+
+            //             "</div>";
+            // }
+
              html+="<div class='row'>"+
                     
                     "<div class='<%= mediaSpan %>'' id='item-media-target'>"+
