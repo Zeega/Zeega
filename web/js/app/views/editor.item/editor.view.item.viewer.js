@@ -49,7 +49,7 @@
         {
             var itemView = new Items.Views.ViewerContent({model:this.inFocus,state:this.state});
             
-            if(this.inFocus.get("editable")){
+            if(this.inFocus.get("editable") && this.inFocus.get("media_type") != "Collection"){
                 $("#item-delete").show();
             } else {
                 $("#item-delete").hide();
@@ -337,7 +337,7 @@
         
         exitEditMode : function()
         {
-            $("#item-delete").show();
+            if(this.model.get("media_type") != "Collection") $("#item-delete").show();
             this.$el.find(".viewer-item-title .inner, .item-description-text").attr("contenteditable",false).removeClass("editing-field");
             this.$el.find(".edit-item-metadata").show();
             this.$el.find(".save-item-metadata, .cancel-item-metadata").hide();
