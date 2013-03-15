@@ -597,31 +597,31 @@ class ItemsController extends ApiBaseController
                         $layer["attr"]["uri"] = $childItem['uri'];
                         $layer["attr"]["attribution_uri"] =$childItem['attributionUri'];
                         
-                        if(isset($childItem['title_i'])) {
+                        if(isset($childItem['title'])) {
                             $layer["attr"]["title"] = $childItem['title'];
                         }
 
-                        if(isset($childItem['description_i'])) {
+                        if(isset($childItem['description'])) {
                             $layer["attr"]["description"] = $childItem['description'];
                         }
 
-                        if(isset($childItem['thumbnail_url'])) {
+                        if(isset($childItem['thumbnailUrl'])) {
                             $layer["attr"]["thumbnail_url"] = $childItem['thumbnailUrl'];
                         }
 
-                        if(isset($childItem['media_creator_username'])) {
+                        if(isset($childItem['mediaCreatorUsername'])) {
                             $layer["attr"]["media_creator_username"] = $childItem['mediaCreatorUsername'];
                         }
 
-                        if(isset($childItem['media_creator_realname'])) {
+                        if(isset($childItem['mediaCreatorRealname'])) {
                             $layer["attr"]["media_creator_realname"] = $childItem['mediaCreatorRealname'];
                         }
 
-                        if(isset($childItem['media_date_created'])) {
+                        if(isset($childItem['mediaDateCreated'])) {
                             $layer["attr"]["media_date_created"] = $childItem['mediaDateCreated'];
                         }
 
-                        if(isset($childItem['date_created'])) {
+                        if(isset($childItem['dateCreated'])) {
                             $layer["attr"]["date_created"] = $childItem['dateCreated'];
                         }
 
@@ -629,11 +629,11 @@ class ItemsController extends ApiBaseController
                             $layer["attr"]["tags"] = $childItem['tags'];
                         }
 
-                        if(isset($childItem['media_geo_latitude'])) {
+                        if(isset($childItem['mediaGeoLatitude'])) {
                             $layer["attr"]["media_geo_latitude"] = $childItem['mediaGeoLatitude'];
                         }
 
-                        if(isset($childItem['media_geo_longitude'])) {
+                        if(isset($childItem['mediaGeoLongitude'])) {
                             $layer["attr"]["media_geo_longitude"] = $childItem['mediaGeoLongitude'];
                         }
 
