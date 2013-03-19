@@ -418,9 +418,9 @@
                     "<div class='span4'>"+
                         "<div class='padded-content clearfix'>"+
                             "<div><a href='<%= attribution_uri %>'' target='blank'>View Original <i class='icon-share'></i></a></div>"+
-                            "<div><strong>Added By:</strong> <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank'><%= display_name %></a></div>"+
-                            "<div><strong>Added On:</strong> <%= date %></div>"+
-                            "<div><strong>Created By:</strong> <%= media_creator_realname %></div>"+
+                            "<div><strong>Added by:</strong> <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank'><%= display_name %></a></div>"+
+                            "<div><strong>Added on:</strong> <%= date %></div>"+
+                            "<div><strong>Created by:</strong> <%= media_creator_realname %></div>"+
                             "<div>"+
                                 "<div><strong>Tags:</strong></div>"+
                                 "<div class='item-tags'></div>"+
