@@ -276,11 +276,11 @@
                 "</div>"+
             "</td>"+
             "<td class='zeega-list-middle-column'>"+
-                "<h3><%= title %></h3><p class='jda-item-author'>Created By: <%= author %></p>"+
+                "<h3><%= title %></h3><p class='jda-item-author'>Created by: <%= author %></p>"+
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added By <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
             "</td>";
             
 
@@ -303,7 +303,7 @@
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>added to Zeega by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= display_name %></a></p></div>"+
             "</td>";
             
 
