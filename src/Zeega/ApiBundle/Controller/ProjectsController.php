@@ -338,22 +338,30 @@ class ProjectsController extends BaseController
     public function postProjectAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
+        
+
         $request = $this->getRequest();
         
-        if($request->request->get('title'))$title=$request->request->get('title');
+        if($request->request->get('title')){
+            $title = $request->request->get('title');    
+        } else {
+            $name = explode(  " ", $user->getDisplayName() );
+            $title = $name[ 0 ] . "'s Zeega";
+        }
+
         if($request->request->get('collection_id'))
         {
             $session = $this->getRequest()->getSession();
             $session->set("collection_id", $request->request->get('collection_id'));
-        } else {
-            $title='Untitled Zeega';    
-        }
+        } 
         var_dump($request->request);
         if($request->request->has('version')) {
             $version = $request->request->get('version');
         } else {
             $version = 1.0;
         }
+
+
         
         $project= new Project();
         $project->setDateCreated(new \DateTime("now"));
