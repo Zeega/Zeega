@@ -49,8 +49,19 @@ class EditorController extends BaseController
 		    $params["data_source"] = "db";
 		    $params["sort"] = "date-desc";
 		    $params["type"] = "-project AND -collection";
+
+
+		    $collParams = array();
+			$collParams["user"] = $user->getId();
+		    $collParams["data_source"] = "db";
+		    $collParams["sort"] = "date-desc";
+		    $collParams["type"] = "collection";
+		    $collParams["fields"] = "id,title";
+
 		
 			$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
+
+			$collections = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $collParams)->getContent();
 
 			$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 			
@@ -63,6 +74,7 @@ class EditorController extends BaseController
 					'projectLayers' => $projectLayers,
 	           		'page'=>'editor',
 					'results' => $items,
+					'collections' => $collections,
 					'project_data' => $projectData,
 				));
 		} else {

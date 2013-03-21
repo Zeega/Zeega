@@ -55,13 +55,14 @@
 			<div id='zeega-project-info'></div>
 			
 			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
-				<ul>
+				<div class='zeega-list-header' style="float:left">LAYERS</div>
+				<ul class="pull-right">
 					<li><a href='#' data-layer_type='Text'><div class='menu-verbose-title'>text</div><i class='icon-font icon-white'></i></a></li>
 					<li><a href='#' data-layer_type='Rectangle'><div class='menu-verbose-title'>color</div><i class='icon-th-large icon-white'></i></a></li>
 					<li><a href='#' data-layer_type='Geo'><div class='menu-verbose-title'>streetview</div><i class='icon-map-marker icon-white'></i></a></li>
 					<li><a href='#' data-layer_type='Popup'><div class='menu-verbose-title'>popup</div><i class='icon-share icon-white'></i></a></li>
 				</ul>
-				<div class='zeega-list-header'>LAYERS</div>
+				
 			</div>
 
 			<div class='layer-lists-container'>
@@ -72,19 +73,12 @@
 			<div id='zeega-item-database'>
 				
 				<div class='menu-bar  menu-dark' >
-					<ul>
-						<li><a id='database-tray-toggle' href='#'><div class='menu-verbose-title'>hide</div><i class='icon-chevron-down icon-white'></i></a></li>
-						<!--<li><a href="javascript:dropbox.sync()" id='sync-dropbox'><div class='menu-verbose-title'>dropbox</div><i class='icon-hdd icon-white'></i></a></li>-->
+					<div class='zeega-list-header' style="float:left;">MEDIA</div>
+					<ul class = "pull-right">
+					
+						
 						<li><a href="#" id='add-media-modal'><div class='menu-verbose-title'>add media</div><i class='icon-plus-sign icon-white'></i></a></li>
-						<!--<li><a id="zeega-community-view-toggle" class="my-media" href='#'><div  class='menu-verbose-title'>switch to community media</div><i class='icon-refresh icon-white'></i></a></li>-->
-					</ul>
-					<div class='zeega-list-header'>MEDIA</div>
-				</div>
-
-				<div class='database-tray'>
-					<div class='menu-bar menu-dark clearfix' >
-						<ul class='pull-right'>
-							<li><a id='database-list-view-toggle' href='#'><div class='menu-verbose-title'>List View</div><i class='icon-th-list icon-white'></i></a></li>
+						<li><a id='database-list-view-toggle' href='#'><div class='menu-verbose-title'>List View</div><i class='icon-th-list icon-white'></i></a></li>
 
 
 							<li>
@@ -102,8 +96,21 @@
 								</ul>
 
 							</li>
+
+					</ul>
+					
+				</div>
+
+				<div class='database-tray'>
+					<div class='menu-bar menu-dark clearfix' >
+						<ul class='pull-right'>
+							
 						</ul>
 						<input id='search-input' class='pull-left' style='margin-left:10px' type='text' placeholder='search my media'/>
+						<select value = "-1" id ="collection-selector">
+							<option value = "-1">My media</option>
+							<option value = "1">All media</option>
+						</select>
 					</div>
 
 					<div id='database-flash' class='alert alert-info hide'></div>
@@ -152,6 +159,7 @@
 	<script type="text/javascript" language="Javascript">
 		//bootstrapping data
 		var itemsJSON = "{{ results|e('js') }}";
+		var collectionsJSON = "{{ collections|e('js') }}";
 		var projectJSON = "{{ project_data|e('js') }}";
 	</script>
 			

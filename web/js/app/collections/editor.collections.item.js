@@ -54,10 +54,15 @@
 		url: function()
 		{
 			var base;
-			if(this.search.get('user')==-1){
+			if($("#collection-selector").val() == -1 ){
+				
 				base = zeega.app.url_prefix + "api/items/search?sort=date-desc&user=-1";
-			} else {
+			}  else if($("#collection-selector").val() == 1 ) {
+
 				base = zeega.app.url_prefix + "api/items/search?sort=date-desc";
+			} else {
+				
+				base = zeega.app.url_prefix + "api/items/search?sort=date-desc&collection=" + $("#collection-selector").val();
 			}
 
 			if(_.isUndefined(this.search.get('content'))||this.search.get('content')===""){
@@ -67,6 +72,7 @@
 			if(this.search.get('query') === '') {
 				base = base + "&data_source=db";
 			}
+
 
 
 			var queryTemplate = '&page=<%= page %><% if( query ){ %>&q=<%= query %><% } %><% if(content){ %>&type=<%= content %><% } %><% if(collection){ %>&collection=<%= collection %><% } %>';

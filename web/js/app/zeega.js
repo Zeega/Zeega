@@ -68,14 +68,29 @@ this.zeega = {
 
     initDatabase : function()
     {
-        var Items = zeega.module("items");
+        var itemsBS,
+            collectionsBS,
+            Items = zeega.module("items");
         
-        console.log('!!        database items: ',$.parseJSON(itemsJSON));
+        itemsBS = jQuery.parseJSON(itemsJSON);
 
-        var itemsBS = jQuery.parseJSON(itemsJSON);
         this.items = new Items.Collection(itemsBS.items);
         this.items.totalItemsCount = itemsBS.items_count;
         this.items.itemCollectionView.render();
+
+        //Collection Selector
+
+        collectionsBS = jQuery.parseJSON(collectionsJSON);
+        this.collections = new Items.Collection(collectionsBS.items);
+        this.collections.each(function( collection ){
+            $("#collection-selector").append("<option value = " + collection.id + ">" + collection.get("title") + "</option>" );
+        });
+
+        $("#collection-selector").change( function(){
+            zeega.app.refreshDatabase();
+        });
+
+
     },
 
     initProject : function()
