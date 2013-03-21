@@ -14,7 +14,7 @@
             $("#zeega-collection-list").spin(true);
             
             $("#create-collection").click(function(){_this.createCollection(); return false;});
-            $("#create-dynamic-collection").click(function(){_this.createDynamicCollection(); return false;});
+            $("#create-course-collection").click(function(){_this.createCourseCollection(); return false;});
 
             this.collection = new Items.Collections.MyCollections();
             
@@ -93,10 +93,10 @@
         },
     
     
-        createDynamicCollection : function(){
-            var dynamicCollectionModal= new Items.Views.DynamicCollectionModal({parentView:this});
-            $("body").append(dynamicCollectionModal.render().el);
-            dynamicCollectionModal.show();
+        createCourseCollection : function(){
+            var courseCollectionModal = new Items.Views.CourseCollectionModal({parentView:this});
+            $("body").append(courseCollectionModal.render().el);
+            courseCollectionModal.show();
             return false;
         },
         createCollection : function(){

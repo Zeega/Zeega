@@ -81,7 +81,18 @@ this.zeega = {
         //Collection Selector
 
         collectionsBS = jQuery.parseJSON(collectionsJSON);
-        this.collections = new Items.Collection(collectionsBS.items);
+        
+
+        var MyCollections = Items.Collection.extend({
+            comparator: function( model ){
+                return model.get("title");
+            }
+        });
+
+        this.collections = new MyCollections( collectionsBS.items );
+        this.collections.sort();
+
+
         this.collections.each(function( collection ){
             $("#collection-selector").append("<option value = " + collection.id + ">" + collection.get("title") + "</option>" );
         });

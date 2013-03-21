@@ -474,12 +474,12 @@
                 thumbnail_url : this.model.get("thumbnail_url")
             };
             this.$el.html( _.template( this.getTemplate(), blanks ) );
-            if(this.model.get("layer_type")=="Dynamic"){
-                this.$el.addClass("dynamic-collection");
-            }
-            else{
+            if( this.model.get("layer_type") == "Course"){
+                this.$el.addClass("course-collection");
+            } else {
                 this.$el.addClass("static-collection");
-                this.$el.droppable({
+            }
+            this.$el.droppable({
                 accept : ".z-drag",
                 hoverClass : "zeega-my-collections-items-dropping",
                 tolerance : "pointer",
@@ -509,6 +509,7 @@
 
                                     //If collection doesn't have thumbnail use from first item dragged
                                     if(_.isNull(_this.model.get("thumbnail_url"))){
+                                        console.log(_this.model.get("thumbnail_url")+" ", _this.model);
                                         src = zeega.discovery.app.draggedItem.get("thumbnail_url");
                                         _this.model.set({thumbnail_url:src}).save();
                                         $(_this.$el.find(".collection-list-thumb")[0]).attr({"src":src});
@@ -524,7 +525,7 @@
                     }
                 }
             });
-            }
+            
             
             this.$el.find("#collection-list-thumb").droppable({
                 accept: ".database-asset-list",
@@ -592,8 +593,7 @@
                 if(!this.loaded){
                     this.loaded=true;
                 }
-                    if(this.model.get("layer_type")=="Dynamic") this.children=new Items.Collections.Dynamic([],{id:this.model.id});
-                    else this.children =new Items.Collections.Static([],{id:this.model.id});
+                    this.children = new Items.Collections.Static([],{id:this.model.id});
                     
             
                     this.children.fetch(
@@ -601,7 +601,6 @@
 
                     success : function(collection, response)
                     {
-                        console.log(collection);
                         _this.$el.find("#zeega-item-database-list").empty().append(new Items.Views.DrawerView({collection:_this.children}).render().el);
                     },
                     error : function(model, response)
@@ -760,21 +759,18 @@
     
     });
     
-    Items.Views.DynamicCollectionModal = Items.Views.CollectionModal.extend({
+    Items.Views.CourseCollectionModal = Items.Views.CollectionModal.extend({
 
         parseInput : function(){
             
             this.attr={
-                layer_type:"Dynamic",
+                layer_type:"Course",
                 media_type:"Collection"
             };
             _.extend(this.attr,{
                 title:this.$("#collection-title").val(),
                 description:this.$("#collection-description").val(),
                 published:true,
-                attributes:{
-                    tags:this.$("#tag-input").val()
-                },
                 child_items:[],
                 new_items:[],
                 editable:true,
@@ -794,17 +790,13 @@
             "<div class='modal' id='sequence-modal'>"+
                 "<div class='modal-header'>"+
                     "<button class='close'>×</button>"+
-                    "<h3>Create A New Dynamic Collection</h3>"+
+                    "<h3>Create A New Course</h3>"+
                 "</div>"+
                 
                 "<div class='modal-body clearfix twocolumn-rows'>"+
                     
                     "<label for='collection-title' >Title</label>"+
                     "<input type='text' id='collection-title' class='twocolumn-field span6' value=''/>"+
-                    
-                    "<label for='tags' class='twocolumn-label'>Dynamic Query Tag</label>"+
-                    "<input name='tags' class='tagsedit twocolumn-field span6' id='tag-input' value='' />"+
-                    "<br>"+
                     
                     "<label for='collection-description' class='twocolumn-label'>Description</label>"+
                     "<textarea id='collection-description' class='twocolumn-field span6'></textarea>"+
