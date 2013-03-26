@@ -46,6 +46,7 @@ twig:
         hostname: %hostname%
         directory: %directory%
         web_directory: %web_directory%
+        event_logger_host: %event_logger_host%
 
 # Assetic Configuration
 assetic:
