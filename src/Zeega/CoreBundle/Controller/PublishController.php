@@ -61,7 +61,7 @@ class PublishController extends BaseController
         }
         
         if (null === $project || null === $projectData) {
-            return new JsonResponse(array("message" => "Can't find a project with id $id"),200,array("application/json")); 
+            throw $this->createNotFoundException("The project with the id $id does not exist");
         }     
 
         return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(

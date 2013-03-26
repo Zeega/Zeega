@@ -19,6 +19,7 @@ use Zeega\DataBundle\Entity\Layer;
 use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MobilePublishController extends BaseController
 {
@@ -26,7 +27,7 @@ class MobilePublishController extends BaseController
      
     public function projectAction($id)
     {       
-    	$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
 
         if(null !== $project) {
             if($project->getMediaType()=='project') {
@@ -36,25 +37,24 @@ class MobilePublishController extends BaseController
             }
         }
 
+        if (null === $project || null === $projectData) {
+            throw $this->createNotFoundException("The project with the id $id does not exist");
+        }   
   
-        $d= json_decode($projectData);
+        $projectDataArray = json_decode($projectData, true);
        
-        if($d->mobile){
+        if( is_array($projectDataArray) && isset($projectDataArray["mobile"]) ){
+            
             return $this->render('ZeegaCoreBundle:MobilePublish:player.html.twig', array(
                 'project'=>$project,
-                'project_data' => $projectData,
-                
+                'project_data' => $projectData,                
             ));
         } else {
+
             return $this->render('ZeegaCoreBundle:MobilePublish:static.html.twig', array(
                 'project'=>$project
                 
             ));
-        }
-        
+        }        
     }
-
-
 }
-
-
