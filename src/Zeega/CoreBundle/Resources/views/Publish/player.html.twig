@@ -5,15 +5,17 @@
 
         <title>{{project.getTitle()}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="robots" content="noindex,follow">
-        <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="description" content="{{project.getDescription()}}">
+        <meta name="author" content="{{project.getMediaCreatorRealname()}}">
 
         <!-- FB -->
         
         <meta property="og:site_name" content="Zeega"/>
         <meta property="og:title" content="{{project.getTitle()}}"/>
         <meta property="og:description" content="{{project.getDescription()}}"/>
+        {% if project.getMediaCreatorRealname() is defined %}
+        <meta property="og:author" content="{{project.getMediaCreatorRealname()}}"/>
+        {% endif %}
         <meta property="og:type" content="movie"/>
         <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
         {% if project.getThumbnailUrl() is defined %}
