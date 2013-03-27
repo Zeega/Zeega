@@ -94,8 +94,41 @@ class ItemRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->setMaxResults($query['limit'])->setFirstResult($query['limit'] * $query['page']);
-        
+        $qb->select('i.id, 
+                i.title,
+                i.description,
+                i.text,
+                i.uri,
+                i.attributionUri,
+                i.dateCreated,
+                i.mediaType, 
+                i.layerType,
+                i.thumbnailUrl,
+                i.childItemsCount, 
+                i.mediaGeoLatitude, 
+                i.mediaGeoLongitude,
+                i.mediaDateCreated,
+                i.mediaCreatorUsername,
+                i.mediaCreatorRealname,
+                i.archive,
+                i.location,
+                i.license,
+                i.attributes,
+                i.enabled,
+                i.published,
+                i.tags,
+                i.dateUpdated,
+                i.idAtSource,
+                i.ingestedBy,
+                i.duration,
+                i.headline,
+                u.id as userId, u.displayName, u.username')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->innerjoin('i.user', 'u')
+            ->orderBy('i.id','DESC')
+            ->setMaxResults($query['limit'])
+            ->setFirstResult($query['limit'] * $query['page']);
+
         if(isset($query['sort'])) {
 	      	$sort = $query['sort'];
       	 	if($sort == 'date-desc') {
