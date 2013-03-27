@@ -67,6 +67,7 @@
             <div id='overlays'></div>
             <div id='player'></div>
         </div>
-        <img src="{{event_logger_host}}/INCR/{{project.getId()}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.getId()}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.getId()}}.png" width="1" height="1">
     </body>
 </html>
