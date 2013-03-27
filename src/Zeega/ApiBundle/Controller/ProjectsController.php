@@ -109,8 +109,6 @@ class ProjectsController extends BaseController
         $em->flush();
 		
 		if ( (isset($publishUpdate)&&$publishUpdate) ) {			
-			$project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-        	
             // if this project is not represented in the item table
             if ( is_null($project->getItemId()) ) {
 				// create new item
@@ -165,7 +163,8 @@ class ProjectsController extends BaseController
                 $item->setTags($projectTags);
             }
         
-        
+            $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+            
 			$item->setMediaCreatorRealname($project->getAuthors());
 			$item->setDescription($project->getDescription());
 			$item->setThumbnailUrl($project->getCoverImage());
