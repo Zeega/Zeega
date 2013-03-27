@@ -114,7 +114,8 @@ class ProjectsController extends BaseController
 				// create new item
 				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
 				$user = $this->get('security.context')->getToken()->getUser();
-				
+				$host = "http://" . $this->getRequest()->getHost() . "/";
+
 				$item = new Item();
 				$item->setDateCreated(new \DateTime("now"));
 				$item->setDateUpdated(new \DateTime("now"));
@@ -125,14 +126,14 @@ class ProjectsController extends BaseController
 				$item->setLayerType("project");
 				$item->setArchive("zeega");
 				$item->setMediaCreatorUsername($user->getUsername());				
-				$item->setAttributionUri("http://beta.zeega.org/");
+				$item->setAttributionUri($host);
 				$item->setPublished(true);
                 $item->setEnabled(true);
                 
 				$em->persist($item);
 				$em->flush();
 				
-				$item->setAttributionUri("http://beta.zeega.org/".$item->getId());
+				$item->setAttributionUri($host.$item->getId());
 				$em->persist($item);
 				$em->flush();
 				
@@ -164,7 +165,7 @@ class ProjectsController extends BaseController
             }
         
             $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-            
+
 			$item->setMediaCreatorRealname($project->getAuthors());
 			$item->setDescription($project->getDescription());
 			$item->setThumbnailUrl($project->getCoverImage());
