@@ -62,7 +62,6 @@
         </script>
 
         <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
-        
     </head>
 
     <body>
@@ -70,5 +69,7 @@
             <div id='overlays'></div>
             <div id='player'></div>
         </div>
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.getId()}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.getId()}}.png" width="1" height="1">
     </body>
 </html>

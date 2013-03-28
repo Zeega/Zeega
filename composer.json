@@ -58,7 +58,9 @@
         "videlalvaro/php-amqplib":"dev-master",
         "friendsofsymfony/twitter-bundle": "dev-master",
         "kertz/twitteroauth": "*@dev",
-        "friendsofsymfony/facebook-bundle": "1.1.*"
+        "friendsofsymfony/facebook-bundle": "1.1.*",
+        "snc/redis-bundle": "2.1.x-dev",
+        "predis/predis": "0.8.x"
     },
     "scripts": {
         "post-install-cmd": [
