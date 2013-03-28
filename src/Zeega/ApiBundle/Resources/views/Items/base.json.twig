@@ -10,6 +10,7 @@
         "username": {{ item.username | default("") | json_encode | raw }},
         "display_name":{{ item.displayName | default("") | json_encode | raw }},
         "title":{{ item.title | default("") | json_encode | raw}},
+        "headline":{{ item.headline | default("") | json_encode | raw}},
         "description":{{ item.description | default("") | json_encode | raw}},
         {% if item.text is defined and item.text is not empty and item.mediaType == 'project' %}
             "text" : {{ item.text | raw}},
@@ -49,7 +50,8 @@
         "tags":{{ item.tags | default([ ]) | json_encode | raw}},
         "editable":{{ editable | default(false) | json_encode | raw}},
         "published":{{ item.published | default(false) | json_encode | raw}},
-        "enabled":{{ item.enabled | default(false) | json_encode | raw}}
+        "enabled":{{ item.enabled | default(false) | json_encode | raw}},
+        "views":{{ item.views | default(null) | json_encode | raw}}
     }
     {% else %}
         {}

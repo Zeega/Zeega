@@ -251,43 +251,42 @@ class ProjectsController extends BaseController
 
         $project->setDateUpdated(new \DateTime("now"));
  
-        $dm->persist($project);
-        $dm->flush();
-        
-        if ( (isset($publishUpdate)&&$publishUpdate) ) {            
-            $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
-            
+        $em->persist($project);
+        $em->flush();
+		
+		if ( (isset($publishUpdate)&&$publishUpdate) ) {			
             // if this project is not represented in the item table
             if ( is_null($project->getItemId()) ) {
-                // create new item
-                // should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
-                $user = $this->get('security.context')->getToken()->getUser();
-                
-                $item = new Item();
-                $item->setDateCreated(new \DateTime("now"));
-                $item->setDateUpdated(new \DateTime("now"));
+				// create new item
+				// should this be a call to ItemsController->populateItemWithRequestData, so as not to set Item data outside the ItemsController ?
+				$user = $this->get('security.context')->getToken()->getUser();
+				$host = "http://" . $this->getRequest()->getHost() . "/";
+
+				$item = new Item();
+				$item->setDateCreated(new \DateTime("now"));
+				$item->setDateUpdated(new \DateTime("now"));
                 $item->setChildItemsCount(0);
-                $item->setUser($user);                              
-                $item->setUri($projectId);
-                $item->setMediaType("project");
-                $item->setLayerType("project");
-                $item->setArchive("zeega");
-                $item->setMediaCreatorUsername($user->getUsername());               
-                $item->setAttributionUri("http://beta.zeega.org/");
-                $item->setPublished(true);
+				$item->setUser($user);								
+				$item->setUri($projectId);
+				$item->setMediaType("project");
+				$item->setLayerType("project");
+				$item->setArchive("zeega");
+				$item->setMediaCreatorUsername($user->getUsername());				
+				$item->setAttributionUri($host);
+				$item->setPublished(true);
                 $item->setEnabled(true);
                 
-                $em->persist($item);
-                $em->flush();
-                
-                $item->setAttributionUri("http://beta.zeega.org/".$item->getId());
-                $em->persist($item);
-                $em->flush();
-                
-                $project->setItemId($item->getId());
-                $project->setDatePublished($project->getDateUpdated());
-                $em->persist($project);
-                $em->flush();
+				$em->persist($item);
+				$em->flush();
+				
+				$item->setAttributionUri($host.$item->getId());
+				$em->persist($item);
+				$em->flush();
+				
+				$project->setItemId($item->getId());
+				$project->setDatePublished($project->getDateUpdated());
+				$em->persist($project);
+				$em->flush();
             
             }else{ // if this project is represented in the item table
                 
@@ -311,11 +310,12 @@ class ProjectsController extends BaseController
                 $item->setTags($projectTags);
             }
         
-        
-            $item->setMediaCreatorRealname($project->getAuthors());
-            $item->setDescription($project->getDescription());
-            $item->setThumbnailUrl($project->getCoverImage());
-            $item->setTitle($project->getTitle());
+            $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+
+			$item->setMediaCreatorRealname($project->getAuthors());
+			$item->setDescription($project->getDescription());
+			$item->setThumbnailUrl($project->getCoverImage());
+			$item->setTitle($project->getTitle());
             $item->setDateUpdated(new \DateTime("now"));
             $project_json = $project_http->getContent();
             $item->setText($project_json);

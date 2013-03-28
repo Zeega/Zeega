@@ -24,11 +24,11 @@ ZeegaCoreBundle_embed:
 
 ZeegaCoreBundle_project_main:
     pattern: /{id}
-    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project, mobile: False }
 
 ZeegaCoreBundle_project_mobile:
     pattern: /m/{id}
-    defaults: { _controller:  ZeegaCoreBundle:MobilePublish:project }
+    defaults: { _controller:  ZeegaCoreBundle:Publish:project, mobile: True }
 
 ZeegaCoreBundle_project_oldview:
     pattern: /{id}/view

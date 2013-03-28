@@ -14,7 +14,7 @@ framework:
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     translator: { fallback: en }
     default_locale: %locale%
-    trust_proxy_headers: false # change if the application is behind a proxy
+    trust_proxy_headers: true # change if the application is behind a proxy
     session:
         cookie_domain: ~
         cookie_lifetime:       72000
@@ -46,6 +46,7 @@ twig:
         hostname: %hostname%
         directory: %directory%
         web_directory: %web_directory%
+        event_logger_host: %event_logger_host%
 
 # Assetic Configuration
 assetic:
@@ -54,10 +55,6 @@ assetic:
     use_controller: false
     filters:
         cssrewrite: ~
-        # closure:
-        #     jar: %kernel.root_dir%/java/compiler.jar
-        # yui_css:
-        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
 
 # Doctrine Configuration
 doctrine:
@@ -166,7 +163,14 @@ fos_twitter:
 
 fos_facebook:
     alias:  facebook
-    app_id: 459848834048078
-    secret: f5b344b91bff03ace4df454e35fca4e4
+    app_id: %facebook_appid%
+    secret: %facebook_secret%
     cookie: true
     permissions: [email, user_birthday, user_location]
+
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://%event_logger_host%

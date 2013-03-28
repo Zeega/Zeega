@@ -40,7 +40,18 @@ class ItemService
         } 
 
         if(isset($itemArray['text'])) {
-            $item->setText($itemArray['text']);  
+            $mediaType = $item->getMediaType();
+            $text = $item->getText();
+            if ( $mediaType !== 'project' || ($mediaType == 'project' && !isset($text)) ) {
+                if ( is_array($itemArray['text']) ) {
+                    $itemJson = json_encode($itemArray['text']);
+                    // quick fix to encode integers properly before upgrading to php >= 5.3.3
+                    $itemJson = preg_replace( "/\"(\d+)\"/", '$1', $itemJson );
+                    $item->setText( $itemJson );
+                } else {
+                    $item->setText( $itemArray['text'] );
+                }   
+            } 
         } 
 
         if(isset($itemArray['uri'])) {
@@ -62,14 +73,25 @@ class ItemService
         if(isset($itemArray['media_geo_latitude'])) {
             $item->setMediaGeoLatitude($itemArray['media_geo_latitude']);  
         } 
+        
         if(isset($itemArray['media_geo_longitude'])) {
             $item->setMediaGeoLongitude($itemArray['media_geo_longitude']);  
-        } 
+        }
 
-        if(isset($itemArray['thumbnail_url'])) {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], "Image");
+        if(isset($itemArray['headline'])) {
+            $item->setHeadline($itemArray['headline']);  
+        } 
+        
+        $thumbnailSize = 4;
+        $mediaType = $item->getMediaType();
+        if ( $mediaType === 'project' ) {
+            $thumbnailSize = 6;
+        } 
+        
+        if(isset($itemArray['thumbnail_url'])) {            
+            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], $thumbnailSize);
         } else {
-            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $item->getMediaType());
+            $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $thumbnailSize);
         } 
 
         if(null !== $thumbnail) {

@@ -34,7 +34,7 @@ this.zeega.discovery = {
     apiLocation : sessionStorage.getItem("hostname") + sessionStorage.getItem("directory"),
     resultsPerPage : 100,
 
-    currentView : "thumb",
+    currentView : "list",
     currentCollection : null,
     
     
@@ -100,7 +100,9 @@ this.zeega.discovery = {
             query_obj.times.end = query_obj.max_date;
         }
 
-        if(_.isUndefined(query_obj.universe)) query_obj.universe=0;
+        if(_.isUndefined(query_obj.universe)) {
+            query_obj.universe = 1;
+        }
         return query_obj;
     },
     
@@ -112,14 +114,17 @@ this.zeega.discovery = {
         //Update Search Object
         
         if (!_.isUndefined(query)) this.searchObject =  this.queryStringToObj(query);
-        else this.searchObject = {page:1};
+        else this.searchObject = {
+            page:1,
+            universe:1
+        };
 
         //Update interface
         
         if(!_.isUndefined(this.searchObject.view_type)) {
             this.switchViewTo( this.searchObject.view_type );
         } else {
-            this.switchViewTo( "thumb" );
+            this.switchViewTo(this.currentView );
         }
 
         //Update Collection
@@ -336,6 +341,7 @@ this.zeega.discovery = {
             searchObj={
                 q: "tags:"+ model.get("attributes").tags,
                 page: 1
+
             };
 
             $(".universe-toggle").show();
@@ -346,7 +352,8 @@ this.zeega.discovery = {
             searchObj = {
                 page: 1,
                 collection: model.id,
-                collection_title: model.get("title")
+                collection_title: model.get("title"),
+                universe: $(".universe-toggle").find(".selected").data("universe")
             };
 
             $(".universe-toggle").hide();

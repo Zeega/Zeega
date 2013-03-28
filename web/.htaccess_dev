@@ -1,5 +1,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteRule ^neweditor/assets/(.*)$ js/app/editor/assets/$1 [NC,L]
+    RewriteRule ^editor/assets/(.*)$ js/app/editor/assets/$1 [NC,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app_dev.php [PT,QSA]
 </IfModule>

@@ -998,6 +998,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .navbar-inner{height:40px;}
 .navbar .nav>li>a:hover,.btn-group .btn:hover,.btn-group .btn:focus,.btn-group .btn:active,.btn-group .btn.active{text-shadow:0 0 6px whiteSmoke;}
 .navbar{font-size:13px;}
+.nav{min-width:254px;}
 #footer{position:relative;bottom:0;width:100%;}
 #footer h5{margin:0;margin-top:8px;text-transform:uppercase;font-size:12px;line-height:23px;font-family:'Open Sans Condensed',sans-serif;font-weight:normal;color:inherit;text-rendering:optimizelegibility;}
 #footer a{color:#037FB3;text-decoration:none;}
@@ -1176,10 +1177,11 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .sign-in{width:50%;width:350px;}
 .sign-in .sign-in-head{padding-bottom:10px;border-bottom:#555555;border-bottom-style:solid;border-bottom-width:thin;margin-bottom:10px;}
 .sign-in .sign-in-head h2{margin-top:5px;margin-bottom:0;color:#999999;}
-.sign-in h4{margin-bottom:10px;}
+.sign-in h4{margin-bottom:10px;font-size:17px;}
 .sign-in .message{margin-bottom:20px;}
 .sign-in input{padding:4px 0;}
 .sign-in .input-xlarge{width:390px;}
+.sign-in .login-social img{margin-bottom:10px;width:400px;}
 .card-instructions{height:300px;background-color:#eeeeee;background:-moz-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(204, 204, 204, 0.8)), color-stop(21%, rgba(204, 204, 204, 0.8)), color-stop(100%, rgba(255, 255, 255, 0.8)));background:-webkit-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-o-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:-ms-radial-gradient(center, ellipse cover, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);background:radial-gradient(ellipse at center, rgba(204, 204, 204, 0.8) 0%, rgba(204, 204, 204, 0.8) 21%, rgba(255, 255, 255, 0.8) 100%);filter:progid:dximagetransform.microsoft.gradient(startColorstr='#cccccccc', endColorstr='#ccffffff', GradientType=1);}
 .card-instructions>div:last-child{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;padding-top:10px;padding-left:10px;}
 .card-instructions>div:last-child h6{margin-top:5px;}

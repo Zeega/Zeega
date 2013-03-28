@@ -1,0 +1,27 @@
+<!-- BEGIN Partial view with Facebook login code -->
+ <script>
+    function goLogIn(){
+        window.location = "{{ path('ZeegaSocialBundle_facebook_login_check') }}";
+    }
+
+    function onFbInit() {
+        if (typeof(FB) != 'undefined' && FB != null ) {
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                setTimeout(goLogIn, 500);
+            });
+        }
+    }
+    function fbLogin() {
+        FB.login(function(response) {
+          if (response.session) {
+            //user is logged in, reload page
+            window.location = "{{ path('ZeegaSocialBundle_facebook_login_check') }}";
+          } else {
+            // user is not logged in
+          }
+        });
+    }
+</script>
+
+{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+<!-- END Partial view with Facebook login code -->

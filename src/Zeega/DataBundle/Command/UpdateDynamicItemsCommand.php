@@ -38,7 +38,7 @@ class UpdateDynamicItemsCommand extends ContainerAwareCommand
         $this->setName('zeega:items:update')
              ->setDescription('Updates dynamic collections counts')
              ->addOption('meta_collection_id', null, InputOption::VALUE_REQUIRED, 'Meta collection id')
-             ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Zeega host (example http://alpha.zeega.org')
+             ->addOption('host', null, InputOption::VALUE_REQUIRED, 'Zeega host (example http://zeega.com')
              ->setHelp("Help");
     }
 

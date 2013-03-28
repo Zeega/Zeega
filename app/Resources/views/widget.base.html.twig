@@ -5,7 +5,7 @@
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>{% block title %}Zeega Alpha{% endblock %}</title>
+        <title>{% block title %}Zeega{% endblock %}</title>
         {% block stylesheets %}
             <link rel="icon" type="image/png" href="http://zeega.org/images/zeega.ico">
 			<meta name="robots" content="noindex,follow">
@@ -46,21 +46,16 @@
 		</script>
 				{% if app.environment == 'prod' %}
 			<script type="text/javascript">
-	
-				  	//Google analytics
+                           var _gaq = _gaq || [];
+                           _gaq.push(['_setAccount', 'UA-37456730-1']);
+                           _gaq.push(['_trackPageview']);
 
-				var _gaq = _gaq || [];
-				_gaq.push(['_setAccount', 'UA-33491977-1']);
-				_gaq.push(['_setDomainName', '.zeega.org']); 
-				_gaq.push(['_trackPageview']);
-
-				(function() {
-					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-				})();
-	
-			</script>
+                           (function() {
+                               var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                               ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                           })();
+                        </script>
 		{% endif %}
     </head>
   <body   {% block headerfix %} style="padding-top:10px;" {% endblock %}> 

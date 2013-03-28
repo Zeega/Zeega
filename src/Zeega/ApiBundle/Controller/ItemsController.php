@@ -12,9 +12,10 @@
 namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Validator\Mapping\Cache\ApcCache;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\ApiBundle\Controller\ApiBaseController;
+
 
 class ItemsController extends ApiBaseController
 {
@@ -133,6 +134,36 @@ class ItemsController extends ApiBaseController
         }      
     }
     
+    public function getItemsFeaturedAction()
+    {
+        $cacheDriver = $this->get('zeega_apc_cache');
+
+        if ($cacheDriver->isEnabled() && $cacheDriver->exists('itemsFeaturedView')) {
+            $itemView = $cacheDriver->fetch('itemsFeaturedView');
+        } else { 
+            $queryParser = $this->get('zeega_query_parser');
+            $query = $queryParser->parseRequest(array("collection" => 93683));
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $parentItems = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+
+            foreach($parentItems as $key => $item) {
+                $parentId = $item["id"];
+                $query = $queryParser->parseRequest(array("collection" => $parentId, "limit"=> 10));
+                $childItems = $em->getRepository("ZeegaDataBundle:Item")->searchItems($query);
+                $parentItems[$key]["childItems"] = $childItems;
+            }
+
+            $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $parentItems));
+            
+            if ( $cacheDriver->isEnabled() ) {
+                $cacheDriver->save('itemsFeaturedView', $itemView, 3600);    
+            }
+        }
+        
+        return new Response($itemView);
+    }
+
     public function getItemAction($id)
     {
         try {
@@ -216,7 +247,7 @@ class ItemsController extends ApiBaseController
             $query = $this->getRequest()->query->all();        
             if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                 $itemAttributes = $item->getAttributes();
-                $query["user"] = $item->getUserId();
+                $query["user"] = $item->getUser()->getId();
                 if(isset($itemAttributes["tags"])) {
                     if(is_array($itemAttributes["tags"])) {
                         $query["tags"] = implode(" AND ", $itemAttributes["tags"]);
@@ -532,7 +563,7 @@ class ItemsController extends ApiBaseController
 
                 if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
                     if(isset($itemAttributes["tags"])) {
-                        $query["user"] = $item->getUserId();
+                        $query["user"] = $item->getUser()->getId();
                         if(is_array($itemAttributes["tags"])) {
                             $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
                         } else {
@@ -549,61 +580,61 @@ class ItemsController extends ApiBaseController
                 $queryResults = $queryResults["items"];
                 
                 foreach($queryResults as $childItem) {
-                    if($childItem['media_type']!='Collection' && $childItem['media_type']!='Pdf' && $childItem['media_type']!='Document') {
+                    if($childItem['mediaType']!='Collection' && $childItem['mediaType']!='Pdf' && $childItem['mediaType']!='Document') {
                         $i++;
                         $frameId = (int)$childItem['id'];
                         $frameOrder[]=$frameId;
                         $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
                         
-                        $layer = array("id"=>$i,"media_type"=>$childItem['media_type'],"layer_type"=>$childItem['layer_type']);
+                        $layer = array("id"=>$i,"media_type"=>$childItem['mediaType'],"layer_type"=>$childItem['layerType']);
                         $layer["type"] = $layer["media_type"];
                         if(isset($childItem['text'])) {
                             $layer["text"] = $childItem['text'];
                         }
 
                         $layer["attr"] = array();
-                        $layer["attr"]["user_id"] = $childItem['user_id'];
+                        $layer["attr"]["user_id"] = $childItem['userId'];
                         $layer["attr"]["uri"] = $childItem['uri'];
-                        $layer["attr"]["attribution_uri"] =$childItem['attribution_uri'];
+                        $layer["attr"]["attribution_uri"] =$childItem['attributionUri'];
                         
-                        if(isset($childItem['title_i'])) {
-                            $layer["attr"]["title"] = $childItem['title_i'];
+                        if(isset($childItem['title'])) {
+                            $layer["attr"]["title"] = $childItem['title'];
                         }
 
-                        if(isset($childItem['description_i'])) {
-                            $layer["attr"]["description"] = $childItem['description_i'];
+                        if(isset($childItem['description'])) {
+                            $layer["attr"]["description"] = $childItem['description'];
                         }
 
-                        if(isset($childItem['thumbnail_url'])) {
-                            $layer["attr"]["thumbnail_url"] = $childItem['thumbnail_url'];
+                        if(isset($childItem['thumbnailUrl'])) {
+                            $layer["attr"]["thumbnail_url"] = $childItem['thumbnailUrl'];
                         }
 
-                        if(isset($childItem['media_creator_username'])) {
-                            $layer["attr"]["media_creator_username"] = $childItem['media_creator_username'];
+                        if(isset($childItem['mediaCreatorUsername'])) {
+                            $layer["attr"]["media_creator_username"] = $childItem['mediaCreatorUsername'];
                         }
 
-                        if(isset($childItem['media_creator_realname'])) {
-                            $layer["attr"]["media_creator_realname"] = $childItem['media_creator_realname'];
+                        if(isset($childItem['mediaCreatorRealname'])) {
+                            $layer["attr"]["media_creator_realname"] = $childItem['mediaCreatorRealname'];
                         }
 
-                        if(isset($childItem['media_date_created'])) {
-                            $layer["attr"]["media_date_created"] = $childItem['media_date_created'];
+                        if(isset($childItem['mediaDateCreated'])) {
+                            $layer["attr"]["media_date_created"] = $childItem['mediaDateCreated'];
                         }
 
-                        if(isset($childItem['date_created'])) {
-                            $layer["attr"]["date_created"] = $childItem['date_created'];
+                        if(isset($childItem['dateCreated'])) {
+                            $layer["attr"]["date_created"] = $childItem['dateCreated'];
                         }
 
                         if(isset($childItem['tags'])) {
                             $layer["attr"]["tags"] = $childItem['tags'];
                         }
 
-                        if(isset($childItem['media_geo_latitude'])) {
-                            $layer["attr"]["media_geo_latitude"] = $childItem['media_geo_latitude'];
+                        if(isset($childItem['mediaGeoLatitude'])) {
+                            $layer["attr"]["media_geo_latitude"] = $childItem['mediaGeoLatitude'];
                         }
 
-                        if(isset($childItem['media_geo_longitude'])) {
-                            $layer["attr"]["media_geo_longitude"] = $childItem['media_geo_longitude'];
+                        if(isset($childItem['mediaGeoLongitude'])) {
+                            $layer["attr"]["media_geo_longitude"] = $childItem['mediaGeoLongitude'];
                         }
 
                         if(isset($childItem['archive'])) {

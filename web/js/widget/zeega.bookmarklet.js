@@ -53,7 +53,7 @@ var bm = new bookmarklet({
                         var popupLeft_px = window.outerWidth - windowWidth - 25;
                         popupLeft_px += (window.hasOwnProperty('screenLeft'))?window.screenLeft:window.screenX
                         var popupHeight_px = (window.innerHeight-40);
-                        var zbm_url = localUrlPrefix + "/widget?url=" + target_url;
+                        var zbm_url = localUrlPrefix + "/bookmarklet?url=" + target_url;
                         var zbm_specs = "top=" + popupTop_px + ", left=" + popupLeft_px + ", height=" + popupHeight_px + ",width=460,location=0, menubar=0, status=0, toolbar=0";
                         zeegaBM.specialCases.facebook.window_ref = window.open(zbm_url, "ZeegaBookmarklet", zbm_specs); 
                     },
@@ -146,7 +146,7 @@ var bm = new bookmarklet({
                     overlay.append(highlight);
                     overlay.append(close);
                     
-                    $('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/widget?url="+this.url+"' />").animate({
+                    $('#zeega-overlay').append("<iframe id='zeega-widget-iframe' style='padding: 0px; height: 100%; width:470px; height: 100%; border:solid 1px gray' src='" + localUrlPrefix + "/bookmarklet?url="+this.url+"' />").animate({
                             'width': 470 }, 500, function() {
                                 $('#zeega-cover').fadeOut('slow');
                     });
@@ -164,7 +164,7 @@ var bm = new bookmarklet({
                         drop: function(event, ui) {
                             $('#zeega-highlight').hide(); 
                             var src=ui.draggable.attr('src'); 
-                            $('#zeega-widget-iframe').attr('src',localUrlPrefix +'/widget?url='+encodeURIComponent(src));
+                            $('#zeega-widget-iframe').attr('src',localUrlPrefix +'/bookmarklet?url='+encodeURIComponent(src));
                         }
                     });
             
@@ -220,5 +220,4 @@ function fullFunc(a) {
         document.body.appendChild(c)
     })(a.jqpath)
 };
-
 

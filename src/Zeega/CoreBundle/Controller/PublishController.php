@@ -12,6 +12,7 @@
 namespace Zeega\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityRepository;
 use Zeega\DataBundle\Entity\Project;
 use Zeega\DataBundle\Entity\Frame;
@@ -36,33 +37,42 @@ class PublishController extends BaseController
     	));
     }
      
-    public function projectAction($id)
+    public function projectAction($id, $mobile)
     {       
-    	$project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+    	$projectItem = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
 
-        if(null !== $project) {
-            if($project->getMediaType()=='project') {
-                $projectData = $project->getText();
-            } else {
-                $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-            }
-        } else {
-            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-
-            if(null !== $project) {
-                $publishedProjectId = $project->getItemId();
-
-                if(null !== $publishedProjectId) {
-                    $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($publishedProjectId);
-                    $projectData = $project->getText();
-                }
-            }
+        if(null !== $projectItem) {
+            if($projectItem->getMediaType()=='project') {
+                $projectData = $projectItem->getText();
+            } 
+        } 
+        
+        if (null === $projectItem || null === $projectData) {
+            throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
         }
 
-        return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
-            'project'=>$project,
-            'project_data' => $projectData,
-        ));
+        if ( $mobile ) {
+            $projectDataArray = json_decode($projectData, true);
+       
+            if( is_array($projectDataArray) && isset($projectDataArray["mobile"]) ){
+                
+                return $this->render('ZeegaCoreBundle:Publish:mobile_player.html.twig', array(
+                    'project'=>$projectItem,
+                    'project_data' => $projectData,                
+                ));
+            } else {
+
+                return $this->render('ZeegaCoreBundle:Publish:mobile_not_supported.html.twig', array(
+                    'project'=>$projectItem                
+                ));
+            }    
+        } else {
+            
+            return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
+                'project'=>$projectItem,
+                'project_data' => $projectData
+            ));
+        }
     }
 
     public function projectPreviewAction($id)

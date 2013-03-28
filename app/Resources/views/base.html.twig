@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%" lang="en-US">
     <head>
        	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-       	<title>Zeega::{% block title %}Alpha{% endblock %}</title>
+       	<title>{% block title %}Zeega{% endblock %}</title>
         
 		<meta name="description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web.">
 		<meta name="keywords" content="zeega, storytelling, documentary, interactive">
@@ -21,7 +21,7 @@
 		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
    		<meta property="og:type" content="website"/>
    		<meta property="og:url" content="{{hostname}}"/>
-    	<meta property="og:image" content="{{hostname}}{{ asset('images/z-logo-fb.png')}}"/>
+    	<meta property="og:image" content="{{hostname}}images/z-logo-fb.png"/>
 		<!-- END FB -->	
         
         {% endblock %}
@@ -48,20 +48,18 @@
 		{% endblock stylesheets %}
 		
 		{% if app.environment == 'prod' %}
-			<script type="text/javascript">
-				//Google analytics
+		    <script type="text/javascript">
+                        var _gaq = _gaq || [];
+                        _gaq.push(['_setAccount', 'UA-37456730-1']);
+                        _gaq.push(['_trackPageview']);
 
-				var _gaq = _gaq || [];
-				_gaq.push(['_setAccount', 'UA-33491977-1']);
-				_gaq.push(['_setDomainName', '.zeega.org']); 
-				_gaq.push(['_trackPageview']);
+                        (function() {
+                            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                        })();
 
-				(function() {
-					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-				})();
-			</script>
+                    </script>
 		{% endif %}
 
 		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	
@@ -224,22 +222,23 @@
 											</a>
 											<ul class="dropdown-menu">
 												
-												<li><a href="{{path('ZeegaCommunityBundle_about')}}">Mission</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
-												<!--<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
+												<li><a href="http://blog.zeega.com/about">Mission</a></li>
 												<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
+												<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Labs</a></li>
+												<!--<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 												<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_news')}}">News</a></li>
+												<!--<li><a href="{{path('ZeegaCommunityBundle_news')}}">News</a></li>-->
 												<li class="divider"></li>
 												<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 												<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_faq')}}">FAQ</a></li>
+												<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
 												
 												
 											</ul>
 										</li>
 										{% if is_granted('ROLE_ADMIN') %}
-											<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li><br>
+											<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li>
+											<li><a href="{{ path('ZeegaDiscoveryBundle_library') }}" target="_blank">Library</a></li><br>
 										{% endif %}
 										
 									</ul>
@@ -267,7 +266,7 @@
 										<li class="divider-vertical"></li>
 										
 										<li><a id="header-add-media" href="#">Add Media</a></li>
-										<li><a href="{{ path('ZeegaCommunityBundle_faq')}}">FAQ</a></li>
+										<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
 										<li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Report a Bug<b class="caret"></b></a>
 											<ul class="dropdown-menu bug-report">
@@ -323,20 +322,19 @@
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret" style="vertical-align:middle;border-top:4px solid #037FB3;opacity:1"></b></a>
 											<ul class="dropdown-menu-no-margins dropdown-menu">
 														
-														<li><a href="{{ path('ZeegaCommunityBundle_about')}}">Mission</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
-														<!--<li><a href="{{ path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
+														<li><a href="http://blog.zeega.com/about">Mission</a></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_team')}}">Team</a></li>
+														<li><a href="{{ path('ZeegaCommunityBundle_productions')}}">Labs</a></li>
+														<!--<li><a href="{{ path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 														<li><a href="{{ path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_news')}}">News</a></li>
 														<li class="divider"></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-														<li><a href="{{path('ZeegaCommunityBundle_faq')}}">FAQ</a></li>
+														<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
 														
 														
 													</ul>
-											<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
+                                                                                        <a href="http://blog.zeega.com" target="_blank">Blog</a>											<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
 									</div>
 								</div>
 							</div>
@@ -377,7 +375,7 @@
  						<div class="navbar-inner">
     						<div class="container">
 								<h5> 
-									<a href="http://zeega.org" target="_blank">Zeega</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.com">info [at] zeega.com</a> | <a href="{{path('ZeegaCommunityBundle_faq')}}">FAQ</a> | <a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a> | <a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a> 
+									&copy; <a href="http://zeega.com" target="_blank">Zeega</a> {{ "now"|date("Y")}} |  364a Broadway Cambridge, MA 02139 | <a href="mailto:info@zeega.com">info [at] zeega.com</a> | <a href="http://blog.zeega.com/faq" target="_blank">FAQ</a> | <a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a> | <a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a> | Accelerated with pride <a href = "http://twitter.com/mattervc" target="_blank">@mattervc</a>
 								</h5>
 							</div>
 						</div>
@@ -432,11 +430,13 @@
 								<div class="strapline">
 								Remake the Internet
 								</div>
-								<p><small>Zeega is dedicated to inventing new forms of interactive storytelling. We are passionate about beautiful, surprising, immersive digital experiences that foster curiosity and enrich understanding of the world around us.</small></p>
+								<p><small>Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs.</small></p>
 								<p><small>
-									Send us a message: <a href="mailto:info@zeega.com">info@zeega.com</a><br>
-									Maybe tweet us: <a href="http://www.twitter.com/zeega">@zeega</a><br>
-									Or send a package: 364a Broadway, Cambridge MA 02139
+									<a href="mailto:info@zeega.com">info@zeega.com</a><br>
+									<a href="http://www.twitter.com/zeega">@zeega</a><br>
+									421 Bryant St, San Francisco CA 94107<br>
+									Accelerated with pride <a href = "http://twitter.com/mattervc" target="_blank">@mattervc</a>
+
 								</small></p>
 							</div>
 							<div class="footer-navigation span3 offset6">
@@ -445,7 +445,7 @@
 									<p><a href="{{ path('ZeegaCommunityBundle_about')}}">About</a></p>
 									<p><a href="{{ path('fos_user_registration_register')}}">Sign Up</a></p>
 									<p><a href="{{ path('_security_login')}}">Login</a></p>
-									<p><a href="{{path('ZeegaCommunityBundle_faq')}}">FAQ</a></p>
+									<p><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></p>
 									<p><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></p>
 									<p><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></p>
 								</div>

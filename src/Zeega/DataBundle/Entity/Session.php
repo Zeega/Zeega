@@ -91,4 +91,17 @@ class Session
     {
         return $this->sessionTime;
     }
+
+    /**
+     * Set sessionId
+     *
+     * @param string $sessionId
+     * @return Session
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+    
+        return $this;
+    }
 }

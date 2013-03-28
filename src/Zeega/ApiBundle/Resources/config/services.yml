@@ -2,7 +2,10 @@ parameters:
 #    zeega_api.example.class: Zeega\ApiBundle\Example
 
 services:
-    zeega_api_response_listener:
-        class: Zeega\ApiBundle\Listener\ApiResponseListener
+    zeega_api_listener:
+        class: Zeega\ApiBundle\Listener\ApiListener
+        arguments:
+            security: "@security.context"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

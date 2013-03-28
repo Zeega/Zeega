@@ -94,8 +94,42 @@ class ItemRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i')->from('ZeegaDataBundle:Item', 'i')->setMaxResults($query['limit'])->setFirstResult($query['limit'] * $query['page']);
-        
+        $qb->select('i.id, 
+                i.title,
+                i.description,
+                i.text,
+                i.uri,
+                i.attributionUri,
+                i.dateCreated,
+                i.mediaType, 
+                i.layerType,
+                i.thumbnailUrl,
+                i.childItemsCount, 
+                i.mediaGeoLatitude, 
+                i.mediaGeoLongitude,
+                i.mediaDateCreated,
+                i.mediaCreatorUsername,
+                i.mediaCreatorRealname,
+                i.archive,
+                i.location,
+                i.license,
+                i.attributes,
+                i.enabled,
+                i.published,
+                i.tags,
+                i.dateUpdated,
+                i.idAtSource,
+                i.ingestedBy,
+                i.duration,
+                i.headline,
+                i.views,
+                u.id as userId, u.displayName, u.username')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->innerjoin('i.user', 'u')
+            ->orderBy('i.id','DESC')
+            ->setMaxResults($query['limit'])
+            ->setFirstResult($query['limit'] * $query['page']);
+
         if(isset($query['sort'])) {
 	      	$sort = $query['sort'];
       	 	if($sort == 'date-desc') {
@@ -121,7 +155,7 @@ class ItemRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i,u.displayName,u.username')
+        $qb->select('i,u.displayName,u.username,u.id as userId')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
             ->orderBy('i.id','DESC')
@@ -129,10 +163,11 @@ class ItemRepository extends EntityRepository
        		->setParameter('id', $id);
         
     	$res = $qb->getQuery()->getArrayResult();
-    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 3 ) {
+    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 4 ) {
             $result = $res[0][0];
             $result["displayName"] = $res[0]["displayName"];
             $result["username"] = $res[0]["username"];
+            $result["userId"] = $res[0]["userId"];
             return $result;
     	}
     	return null;
@@ -184,5 +219,19 @@ class ItemRepository extends EntityRepository
         } else {
             return null;
         }
+    }
+
+    public function findInId($ids) {
+        $em = $this->getEntityManager();
+        
+    
+        // search query
+        $qb = $em->createQueryBuilder()
+            ->select('i')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->where('i.id in (:ids)')
+            ->setParameter('ids',$ids);
+        
+        return $qb->getQuery()->getResult(); 
     }
 }

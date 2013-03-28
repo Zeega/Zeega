@@ -19,7 +19,7 @@ ZeegaCommunityBundle_topic:
     defaults: { _controller: ZeegaCommunityBundle:Community:topic }
 
 ZeegaCommunityBundle_user:
-    pattern:  /user/{id}
+    pattern:  /profile/{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:user }
 
 ZeegaCommunityBundle_dashboard:

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
     <head>
        	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-       	<title>Zeega::{% block title %}Alpha{% endblock %}</title>
+       	<title>{% block title %}Zeega{% endblock %}</title>
          
        	<meta name="robots" content="noindex,follow">
 		<meta name="description" content="">
@@ -22,7 +22,7 @@
 		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
    		<meta property="og:type" content="website"/>
    		<meta property="og:url" content="{{hostname}}"/>
-    	<meta property="og:image" content="{{hostname}}{{ asset('images/z-logo-fb.png')}}"/>
+    	<meta property="og:image" content="{{hostname}}images/z-logo-fb.png"/>
 						
 		<!-- END FB -->	
 		
@@ -62,22 +62,18 @@
 		{% endblock %}
 		
 		{% if app.environment == 'prod' %}
-			<script type="text/javascript">
-	
-				  	//Google analytics
+	        <script type="text/javascript">
 
-				var _gaq = _gaq || [];
-				_gaq.push(['_setAccount', 'UA-33491977-1']);
-				_gaq.push(['_setDomainName', '.zeega.org']); 
-				_gaq.push(['_trackPageview']);
+                    var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', 'UA-37456730-1']);
+                    _gaq.push(['_trackPageview']);
 
-				(function() {
-					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-				})();
-	
-			</script>
+                    (function() {
+                        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                     })();
+                </script>
 		{% endif %}
 
 		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	

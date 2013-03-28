@@ -30,7 +30,7 @@
 		openProject:function(){
 			if(!_.isUndefined(window._gaq))  _gaq.push(['_trackEvent', 'Home-Project', 'Play']);
 			
-			window.open(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('id') + '/view','_blank');
+			window.open(sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('id'),'_blank');
 		},
 		render: function(done)
 		{

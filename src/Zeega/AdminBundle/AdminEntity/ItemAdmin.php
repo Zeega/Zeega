@@ -24,6 +24,7 @@ class ItemAdmin extends Admin
         $formMapper
             ->add('title')
             ->add('description')
+            ->add('headline')
             ->add('text')
             ->add('uri')
             ->add('attributionUri')

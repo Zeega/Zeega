@@ -18,7 +18,7 @@ class UserAdmin extends Admin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin');
+		$roles = array('ROLE_USER' => 'User','ROLE_ADMIN'=>'Admin', 'ROLE_CUTTINGEDGE'=>'Cutting Edge');
         
         $formMapper
             ->add('username')

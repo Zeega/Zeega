@@ -217,6 +217,20 @@ class Item
     private $duration;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="headline", type="string", length=144, nullable=true)
+     */
+    private $headline;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="views", type="integer", nullable=true)
+     */
+    private $views;
+
+    /**
      * @var user
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -236,10 +250,11 @@ class Item
     private $childItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childtems", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Item", mappedBy="childItems", cascade={"persist"})
      */
     private $parentItems;
     
+
     /**
      * Constructor
      */
@@ -961,5 +976,51 @@ class Item
     public function getParentItems()
     {
         return $this->parentItems;
+    }
+
+    /**
+     * Set headline
+     *
+     * @param string $headline
+     * @return Item
+     */
+    public function setHeadline($headline)
+    {
+        $this->headline = $headline;
+    
+        return $this;
+    }
+
+    /**
+     * Get headline
+     *
+     * @return string 
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
+    }
+
+    /**
+     * Set views
+     *
+     * @param integer $views
+     * @return Item
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+    
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return integer 
+     */
+    public function getViews()
+    {
+        return $this->views;
     }
 }
