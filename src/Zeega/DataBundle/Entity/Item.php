@@ -224,6 +224,13 @@ class Item
     private $headline;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="views", type="integer", nullable=true)
+     */
+    private $views;
+
+    /**
      * @var user
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -247,6 +254,7 @@ class Item
      */
     private $parentItems;
     
+
     /**
      * Constructor
      */
@@ -991,5 +999,28 @@ class Item
     public function getHeadline()
     {
         return $this->headline;
+    }
+
+    /**
+     * Set views
+     *
+     * @param integer $views
+     * @return Item
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+    
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return integer 
+     */
+    public function getViews()
+    {
+        return $this->views;
     }
 }

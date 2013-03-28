@@ -219,4 +219,18 @@ class ItemRepository extends EntityRepository
             return null;
         }
     }
+
+    public function findInId($ids) {
+        $em = $this->getEntityManager();
+        
+    
+        // search query
+        $qb = $em->createQueryBuilder()
+            ->select('i')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->where('i.id in (:ids)')
+            ->setParameter('ids',$ids);
+        
+        return $qb->getQuery()->getResult(); 
+    }
 }

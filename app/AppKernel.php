@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new FOS\TwitterBundle\FOSTwitterBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
+            new Snc\RedisBundle\SncRedisBundle(),
     
             new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
