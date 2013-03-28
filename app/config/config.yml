@@ -75,9 +75,6 @@ doctrine_mongodb:
     connections:
         default:
             server: %mongodb_host%
-            options:
-                username: %mongodb_user%
-                password: %mongodb_password%
 
     default_database: zeega
     document_managers:
