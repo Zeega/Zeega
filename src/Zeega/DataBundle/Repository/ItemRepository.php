@@ -122,6 +122,7 @@ class ItemRepository extends EntityRepository
                 i.ingestedBy,
                 i.duration,
                 i.headline,
+                i.views,
                 u.id as userId, u.displayName, u.username')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
