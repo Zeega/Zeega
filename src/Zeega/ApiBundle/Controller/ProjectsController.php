@@ -90,51 +90,6 @@ class ProjectsController extends BaseController
 
         return new Response($project->getId());
     }
-
-    // POST api/projects/:id/sequences
-    public function postProjectSequencesAction($projectId)
-    {
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $request = $this->getRequest();
-        $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);        
-        $project->setDateUpdated(new \DateTime("now"));
-        
-        $sequence = new MongoSequence();
-
-        $frame = new MongoFrame();
-        
-        if($request->request->has('layers_to_persist'))
-        {
-            $layersToPersist = $request->request->get('layers_to_persist');
-            $frame->setLayers($layersToPersist);
-        }
-        else if($request->request->has('frame_id'))
-        {
-            $frameId = $request->request->get('frame_id');
-            $previousframe = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($frameId);
-
-            $previousFrameLayers = $previousframe->getLayers();
-            $frame->setLayers($previousFrameLayers);
-        }
-
-        $sequence->setTitle('Sequence '.$sequenceIndex);
-
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($sequence);
-        $em->persist($frame);
-        $em->flush();
-
-        $layers = array();
-        // auch - should work for now, but won't scale for sure
-        $sequenceId = $sequence->getId();
-        $frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($sequenceId);
-        $sequence = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->find($sequence->getId());
-
-        $layers = array();
-
-        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence, 'sequence_frames_complete' =>$frames, 'layers' =>$layers));
-        return ResponseHelper::compressTwigAndGetJsonResponse($sequenceView);
-    }
     
     // POST api/projects/:id/layers
     public function postProjectFramesAction($projectId)
@@ -176,7 +131,7 @@ class ProjectsController extends BaseController
     }  
 
     // POST api/projects/:id/layers
-    public function postProjectLayersAction($projectId)
+    public function postProjectFramesLayersAction($projectId, $frameId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
@@ -251,8 +206,8 @@ class ProjectsController extends BaseController
 
         $project->setDateUpdated(new \DateTime("now"));
  
-        $em->persist($project);
-        $em->flush();
+        $dm->persist($project);
+        $dm->flush();
 		
 		if ( (isset($publishUpdate)&&$publishUpdate) ) {			
             // if this project is not represented in the item table
@@ -424,6 +379,7 @@ class ProjectsController extends BaseController
             $frame->setAttr(NULL);  
         }
 
+        $dm->persist($frame);
         $dm->persist($project);
         $dm->flush();
 
@@ -431,6 +387,56 @@ class ProjectsController extends BaseController
         
         return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
+
+    public function putProjectLayersAction($projectId, $layerId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                    ->field('id')->equals($projectId)
+                    ->select('layers')
+                    ->getQuery()
+                    ->getSingleResult();
+        
+        if ( !isset($project) || !$project instanceof MongoProject) {
+            return new Response("Project does not exist");
+        } 
+
+        $layers = $project->getLayers();
+
+        $layer = $project->getLayers()->filter(
+            function($layr) use ($layerId){
+                return $layr->getId() == $layerId;
+            }
+        )->first();
+        
+        if ( !isset($layer) || !$layer instanceof MongoLayer) {
+            return new Response("Layer does not exist");  
+        }
+
+
+        $text = $this->getRequest()->request->get('text');
+        $attributes = $this->getRequest()->request->get('attr');
+
+        if( isset($text) ) {
+            $layer->setText($text);
+        } else {
+            $layer->setText(NULL);  
+        }
+
+        if( isset($attributes) ) {
+            $layer->setAttr($attributes);  
+        } else {
+            $layer->setAttr(NULL);  
+        }
+        
+        $dm->persist($layer);
+        $dm->flush();
+        
+        $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
+        
+        return new Response($layerView);
+    } // `put_layer`     [PUT] /layers/{layer_id}
+
 
     // DELETE] /projects/{projectId}
     public function deleteProjectAction($projectId)
@@ -441,4 +447,36 @@ class ProjectsController extends BaseController
         $dm->flush();
         return new Response('SUCCESS',200);
     }
+
+    public function postProjectLayersAction($projectId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
+        
+        $project->setDateUpdated(new \DateTime("now"));
+        $layer = new MongoLayer();
+        
+        $request = $this->getRequest();
+        if( $request->request->get("type") ) {
+            $layer->setType($request->request->get("type"));  
+        } 
+
+        if($request->request->get('text')) {
+            $layer->setText($request->request->get('text'));
+        }
+            
+        if($request->request->has('attr')) {
+            $attributes = $request->request->get('attr');
+            $layer->setAttr($attributes);
+        }
+
+        $layer->setEnabled(true);
+        $project->addLayers($layer);
+        
+        $dm->persist($layer);
+        $dm->flush();
+
+        return ResponseHelper::encodeAndGetJsonResponse($layer);
+    } // `post_sequence_layers` [POST] /sequences
+    
 }
