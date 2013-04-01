@@ -63,9 +63,9 @@ class ItemsController extends ApiBaseController
         try {
             $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
             $user = $this->getUser( $apiKey );           
-            if( !isset($user) ) {
-                return parent::getStatusResponse(401);   
-            }             
+            // if( !isset($user) ) {
+            //     return parent::getStatusResponse(401);   
+            // }             
             $request = $this->getRequest();
             $url  = $request->query->get('url');
 
