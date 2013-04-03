@@ -70,34 +70,35 @@
   <div class="container new-section" >
     <div class="row">
       <div class="page-intro span11">
-        <iframe src="http://player.vimeo.com/video/63220637?title=0&amp;byline=0&amp;portrait=0" width="523" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>     
-
-       <h2 style="float: right; text-align: right; width: 348px; margin-top: -5px;">With Zeega, you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.</h2>
+        <iframe src="http://player.vimeo.com/video/63220637" width="600" height="376" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>     
 
         <!-- Sign Up Button Begins -->
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
 
        
-        <div class="go-button" style="width: 348px; float: right; margin-top:-71px">
+        <div style="width: 300px; float: right;">
 
 
-            <div class="valign">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+
+            <div class="valign go-button" style="margin-bottom: 20px; text-align: center;">
               <div class="valign-content"> 
 
-                <h3 style ="font-size:37px">
-                Sign Up For Zeega!</a>
+                <h3 style="size:20px">
+                Sign Up!</a>
                 </h3>
               
               </div>
             </div>
+        </a> {% endif %}
+
+        <h2 style="text-align: right; margin-right: -20px;">With Zeega,<br>you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.</h2>
 
         </div>
-        </a> {% endif %}
-        <!-- Sign Up Button Ends -->
         
+
         
         <div style="clear:both;"></div>
-        <!-- Zeegaverse Button Ends -->
+  
       </div>
     </div>
   </div>
