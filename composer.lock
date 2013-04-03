@@ -29,7 +29,6 @@
                     "Doctrine\\Common": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -68,7 +67,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2012-09-19 22:55:18"
+            "time": "2012-09-20 02:55:18"
         },
         {
             "name": "doctrine/dbal",
@@ -568,7 +567,6 @@
                     "FOS\\UserBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -592,7 +590,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2012-12-22 15:09:34"
+            "time": "2012-12-22 20:09:34"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -681,7 +679,7 @@
                 "annotations",
                 "aop"
             ],
-            "time": "2012-01-02 12:50:26"
+            "time": "2012-01-02 20:50:26"
         },
         {
             "name": "jms/cg",
@@ -721,7 +719,7 @@
             "keywords": [
                 "code generation"
             ],
-            "time": "2012-01-02 12:40:52"
+            "time": "2012-01-02 20:40:52"
         },
         {
             "name": "jms/di-extra-bundle",
@@ -824,7 +822,7 @@
                 "xml",
                 "yaml"
             ],
-            "time": "2012-01-02 13:32:49"
+            "time": "2012-01-02 21:32:49"
         },
         {
             "name": "jms/security-extra-bundle",
@@ -960,7 +958,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kertz/twitteroauth/zipball/30d9fba685516cfeee12bdf0aa50d803f112214b",
+                "url": "https://github.com/kertz/twitteroauth/archive/30d9fba685516cfeee12bdf0aa50d803f112214b.zip",
                 "reference": "30d9fba685516cfeee12bdf0aa50d803f112214b",
                 "shasum": ""
             },
@@ -973,7 +971,6 @@
                     "twitteroauth"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "time": "2012-08-02 14:24:38"
         },
         {
@@ -1094,12 +1091,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "50a24301b40cd7df29a7da4efd5573a9ef4622f8"
+                "reference": "0a55a9ba70bd9250899ad77deceaf8cb9e145371"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/50a24301b40cd7df29a7da4efd5573a9ef4622f8",
-                "reference": "50a24301b40cd7df29a7da4efd5573a9ef4622f8",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/0a55a9ba70bd9250899ad77deceaf8cb9e145371",
+                "reference": "0a55a9ba70bd9250899ad77deceaf8cb9e145371",
                 "shasum": ""
             },
             "require": {
@@ -1157,7 +1154,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-03-25 20:14:55"
+            "time": "2013-04-02 21:36:28"
         },
         {
             "name": "monolog/monolog",
@@ -1485,12 +1482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/snc/SncRedisBundle.git",
-                "reference": "54ed3ba6fd05ba728c5580df3926c96b394c5240"
+                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/54ed3ba6fd05ba728c5580df3926c96b394c5240",
-                "reference": "54ed3ba6fd05ba728c5580df3926c96b394c5240",
+                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
+                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
                 "shasum": ""
             },
             "require": {
@@ -1540,7 +1537,7 @@
                 "redis",
                 "symfony"
             ],
-            "time": "2013-03-24 13:31:13"
+            "time": "2013-03-30 09:44:30"
         },
         {
             "name": "solarium/solarium",
