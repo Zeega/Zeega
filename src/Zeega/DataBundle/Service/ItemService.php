@@ -88,10 +88,10 @@ class ItemService
             $thumbnailSize = 6;
         } 
         
-        if(isset($itemArray['thumbnail_url'])) {            
-            $thumbnail = $this->thumbnailService->getItemThumbnail($itemArray['thumbnail_url'], $thumbnailSize);
-        } else {
+        if(!isset($itemArray['thumbnail_url'])) {            
             $thumbnail = $this->thumbnailService->getItemThumbnail($item->getUri(), $thumbnailSize);
+        } else {
+            $thumbnail = $itemArray['thumbnail_url'];
         } 
 
         if(null !== $thumbnail) {

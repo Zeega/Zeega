@@ -88,6 +88,10 @@ zeega.parsers:
             regex: /https?:\/\/(?:www\.)?giphy.com.*\/embed\/([a-zA-Z0-9\-_]+)\/*/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyItem
+        tag_parser: 
+            regex: /https?:\/\/(?:www\.)?giphy.com.*\/tags\/([a-zA-Z0-9\-_]+)\/*/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyTag
 
     dp.la:
         set_parser:

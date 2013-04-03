@@ -47,7 +47,7 @@
         <base href="/js/app/player.mobile/">
 
         <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/debug/index.css') }}">
-        
+        {% if app.environment == 'prod' %}
         <script> 
             // because windows is the worst
             if (!window.console) console = { log: function() {}};
@@ -65,7 +65,7 @@
             //Project data
             var projectJSON = "{{ project_data|e('js') }}";
         </script>
-
+        {% endif %}
         <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
     </head>
 

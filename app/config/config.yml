@@ -44,6 +44,7 @@ twig:
     strict_variables: %kernel.debug%
     globals:
         hostname: %hostname%
+        media_host: %media_host%
         directory: %directory%
         web_directory: %web_directory%
         event_logger_host: %event_logger_host%
