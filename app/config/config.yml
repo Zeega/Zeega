@@ -47,6 +47,7 @@ twig:
         media_host: %media_host%
         directory: %directory%
         web_directory: %web_directory%
+        event_logger_host: %event_logger_host%
 
 # Assetic Configuration
 assetic:
@@ -154,3 +155,10 @@ fos_facebook:
     secret: %facebook_secret%
     cookie: true
     permissions: [email, user_birthday, user_location]
+
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://%event_logger_host%

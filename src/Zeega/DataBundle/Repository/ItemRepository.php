@@ -122,6 +122,7 @@ class ItemRepository extends EntityRepository
                 i.ingestedBy,
                 i.duration,
                 i.headline,
+                i.views,
                 u.id as userId, u.displayName, u.username')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
@@ -218,5 +219,19 @@ class ItemRepository extends EntityRepository
         } else {
             return null;
         }
+    }
+
+    public function findInId($ids) {
+        $em = $this->getEntityManager();
+        
+    
+        // search query
+        $qb = $em->createQueryBuilder()
+            ->select('i')
+            ->from('ZeegaDataBundle:Item', 'i')
+            ->where('i.id in (:ids)')
+            ->setParameter('ids',$ids);
+        
+        return $qb->getQuery()->getResult(); 
     }
 }
