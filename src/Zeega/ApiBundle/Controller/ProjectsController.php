@@ -293,45 +293,25 @@ class ProjectsController extends BaseController
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         
-        /* wanted doen't work for updates 
-        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                        ->field('id')->equals($projectId)
-                        ->field('sequences.id')->equals($sequenceId)
-                        ->select('sequences.$sequenceId')
-                        ->getQuery()
-                        ->getSingleResult();
-        */
-        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                        ->field('id')->equals($projectId)
-                        ->getQuery()
-                        ->getSingleResult();
-
-        if ( !isset($project) || !$project instanceof MongoProject) {
-            return new Response("Document does not exist");
-        } 
-
-        $sequence = $project->getSequences()->filter(
-            function($seq) use ($sequenceId){
-                return $seq->getId() == $sequenceId;
-            }
-        )->first();
-        
-        if ( !isset($sequence) || !$sequence instanceof MongoSequence) {
-            return new Response("Sequence does not exist");  
-        }
-
+        $sequence = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->findAndUpdate()
+            ->returnNew()
+            ->field('id')->equals($projectId)
+            ->field('sequences.id')->equals($sequenceId)
+            ->field('sequences.id')->equals($sequenceId);
+            
         $request = $this->getRequest();
         if( $this->getRequest()->request->has('frames') ) {
             $frames = $this->getRequest()->request->get('frames');
-            $sequence->setFrames( array_filter($frames) );
+            $sequence->field('sequences.$.frames')->set( array_filter($frames) );
         } else {
-            $sequence->setFrames(NULL);  
+            $sequence->field('sequences.$.frames')->set( null );
         }
         
-        $project->setDateUpdated(new \DateTime("now"));
-
-        $dm->persist($sequence);
-        $dm->flush();
+        $sequence
+            ->field('sequences.$.dateUpdated')->set(new \DateTime("now"))
+            ->getQuery()
+            ->execute();
 
         $frameView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence));
 
