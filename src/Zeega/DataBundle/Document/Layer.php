@@ -35,11 +35,6 @@ class Layer
     protected $enabled = true;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Item", simple=true)
-     */    
-    protected $item;
-
-    /**
      * Get id
      *
      * @return id $id
@@ -135,27 +130,5 @@ class Layer
     public function getEnabled()
     {
         return $this->enabled;
-    }
-
-    /**
-     * Set item
-     *
-     * @param Zeega\DataBundle\Document\Item $item
-     * @return \Layer
-     */
-    public function setItem(\Zeega\DataBundle\Document\Item $item)
-    {
-        $this->item = $item;
-        return $this;
-    }
-
-    /**
-     * Get item
-     *
-     * @return Zeega\DataBundle\Document\Item $item
-     */
-    public function getItem()
-    {
-        return $this->item;
     }
 }

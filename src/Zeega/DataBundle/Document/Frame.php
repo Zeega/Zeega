@@ -49,6 +49,7 @@ class Frame
         $this->id = $id;
         return $this;
     }
+
     /**
      * Get id
      *

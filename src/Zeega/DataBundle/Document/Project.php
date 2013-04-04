@@ -434,9 +434,19 @@ class Project
      *
      * @param Zeega\DataBundle\Document\User $users
      */
-    public function addUsers(\Zeega\DataBundle\Document\User $users)
+    public function addUser(\Zeega\DataBundle\Document\User $users)
     {
         $this->users[] = $users;
+    }
+
+    /**
+    * Remove users
+    *
+    * @param <variableType$users
+    */
+    public function removeUser(\Zeega\DataBundle\Document\User $users)
+    {
+        $this->users->removeElement($users);
     }
 
     /**
@@ -454,9 +464,19 @@ class Project
      *
      * @param Zeega\DataBundle\Document\Sequence $sequences
      */
-    public function addSequences(\Zeega\DataBundle\Document\Sequence $sequences)
+    public function addSequence(\Zeega\DataBundle\Document\Sequence $sequences)
     {
         $this->sequences[] = $sequences;
+    }
+
+    /**
+    * Remove sequences
+    *
+    * @param <variableType$sequences
+    */
+    public function removeSequence(\Zeega\DataBundle\Document\Sequence $sequences)
+    {
+        $this->sequences->removeElement($sequences);
     }
 
     /**
@@ -474,9 +494,19 @@ class Project
      *
      * @param Zeega\DataBundle\Document\Frame $frames
      */
-    public function addFrames(\Zeega\DataBundle\Document\Frame $frames)
+    public function addFrame(\Zeega\DataBundle\Document\Frame $frames)
     {
         $this->frames[] = $frames;
+    }
+
+    /**
+    * Remove frames
+    *
+    * @param <variableType$frames
+    */
+    public function removeFrame(\Zeega\DataBundle\Document\Frame $frames)
+    {
+        $this->frames->removeElement($frames);
     }
 
     /**
@@ -494,9 +524,19 @@ class Project
      *
      * @param Zeega\DataBundle\Document\Layer $layers
      */
-    public function addLayers(\Zeega\DataBundle\Document\Layer $layers)
+    public function addLayer(\Zeega\DataBundle\Document\Layer $layers)
     {
         $this->layers[] = $layers;
+    }
+
+    /**
+    * Remove layers
+    *
+    * @param <variableType$layers
+    */
+    public function removeLayer(\Zeega\DataBundle\Document\Layer $layers)
+    {
+        $this->layers->removeElement($layers);
     }
 
     /**

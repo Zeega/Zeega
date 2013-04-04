@@ -45,16 +45,10 @@ class Sequence
     protected $advanceTo;
 
     /**
-     * @MongoDB\Hash
+     * @MongoDB\Collection(strategy="pushAll")
      */
     protected $frames;
 
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-    
     /**
      * Get id
      *
@@ -200,7 +194,7 @@ class Sequence
     /**
      * Set frames
      *
-     * @param hash $frames
+     * @param collection $frames
      * @return \Sequence
      */
     public function setFrames($frames)
@@ -212,7 +206,7 @@ class Sequence
     /**
      * Get frames
      *
-     * @return hash $frames
+     * @return collection $frames
      */
     public function getFrames()
     {

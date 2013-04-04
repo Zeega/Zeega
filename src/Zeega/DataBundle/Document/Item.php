@@ -754,4 +754,14 @@ class Item
     {
         return $this->user;
     }
+
+    /**
+    * Remove children
+    *
+    * @param <variableType$children
+    */
+    public function removeChildren(\Zeega\DataBundle\Document\Item $children)
+    {
+        $this->children->removeElement($children);
+    }
 }
