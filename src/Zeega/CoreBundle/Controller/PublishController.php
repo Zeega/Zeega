@@ -39,11 +39,11 @@ class PublishController extends BaseController
      
     public function projectAction($id, $mobile)
     {       
-    	$projectItem = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+    	$projectItem = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
 
         if(null !== $projectItem) {
-            if($projectItem->getMediaType()=='project') {
-                $projectData = $projectItem->getText();
+            if($projectItem["mediaType"]=='project') {
+                $projectData = $projectItem["text"];
             } 
         } 
         
@@ -67,14 +67,12 @@ class PublishController extends BaseController
                 ));
             }    
         } else {
-
-
-            $projectData["user_thumbnail"] = $projectItem->getUserThumbnail();
-            $projectData["views"] = $projectItem->getViews();
+            
             
             return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
                 'project'=>$projectItem,
-                'project_data' => $projectData
+                'project_data' => $projectData,
+                //'user_thumbnail' => $projectItem->getUserThumbnail()
             ));
         }
     }

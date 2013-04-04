@@ -35,10 +35,10 @@
             left: 0;
             padding: 0;
             margin: 0;
-            {% if project.getThumbnailUrl() == "../../../images/default_cover.png" %}
+            {% if project.thumbnailUrl == "../../../images/default_cover.png" %}
                 background: url({{ asset('images/static-0.gif') }}) no-repeat center center fixed; 
             {% else %}
-                background: url({{ project.getThumbnailUrl() }}) no-repeat center center fixed; 
+                background: url({{ project.thumbnailUrl }}) no-repeat center center fixed; 
             {% endif %}
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -121,11 +121,11 @@
 
     <div class="content">
         <header>
-            <div class="title">{{ project.getTitle() }}</div>
-            <div class="byline">{{ project.getMediaCreatorRealName() }}</div>
+            <div class="title">{{ project.title }}</div>
+            <div class="byline">{{ project.mediaCreatorRealName }}</div>
         </header>
         <div class="action">
-            <a href="mailto:your@email.com?subject=Check out this Zeega!&body=Enjoy this Zeega by {{ project.getMediaCreatorRealName() }} on a big screen. You'll love it! \nhttp://www.zeega.com/{{ project.getId() }}  \n\n- the friendly folks at Zeega">
+            <a href="mailto:your@email.com?subject=Check out this Zeega!&body=Enjoy this Zeega by {{ project.mediaCreatorRealName }} on a big screen. You'll love it! \nhttp://www.zeega.com/{{ project.id }}  \n\n- the friendly folks at Zeega">
                 <img class="email" src="{{ asset('images/mobile/email-mobile.png') }}"/>
                 <div>This Zeega loves big screens.<br/>Email a link to yourself!</div>
             </a>
