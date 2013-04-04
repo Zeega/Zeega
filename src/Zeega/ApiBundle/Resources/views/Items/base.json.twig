@@ -51,7 +51,7 @@
         "editable":{{ editable | default(false) | json_encode | raw}},
         "published":{{ item.published | default(false) | json_encode | raw}},
         "enabled":{{ item.enabled | default(false) | json_encode | raw}},
-        "views":{{ item.views | default(null) | json_encode | raw}}
+        "views":{{ item.views | default(0) | json_encode | raw}}
     }
     {% else %}
         {}
