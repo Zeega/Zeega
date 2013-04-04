@@ -69,11 +69,8 @@ class ProjectsController extends BaseController
         $frame = new MongoFrame();        
         $frame->setEnabled(true);
         $frame->setThumbnailUrl("bananas");
-
-        $layer = new MongoLayer();        
-        $layer->setEnabled(true);
-        $layer->setText("bananas");
-
+        $frame->setLayers(array());
+        
         $sequence = new MongoSequence();
         $sequence->setTitle('Intro Sequence');
         $sequence->setEnabled(true);
@@ -87,7 +84,6 @@ class ProjectsController extends BaseController
         
         $project->addSequence($sequence);
         $project->addFrame($frame);
-        //$project->addLayers($layer);
         
         $dm = $this->get('doctrine_mongodb')->getManager();
 
@@ -105,13 +101,14 @@ class ProjectsController extends BaseController
     public function postProjectSequencesFramesAction($projectId, $sequenceId)
     {
         /*
-        db.Project.update({_id:ObjectId("515d280220d5cd740c000005"), 
-            'frames._id':ObjectId("515d28d420d5cd5b13000000")},
-            {$push: {frames.$.layers:{ award: 'IBM Fellow', year: 1963, by: 'IBM' }}})
+        db.Project.update({_id:ObjectId("515df03920d5cd2b1b000000"), 
+            'frames._id':ObjectId("515df03920d5cd2b1b000002")},
+            {$push: {frames.$.layers: "test"}, {"layers":{"_id":{"$id":"515df04720d5cd4e1b000001"},"enabled":true}})
         */
         $request = $this->getRequest();
         $frame = array();
         $frame["_id"] = new \MongoId();
+        $frame["layers"] = array();
         
         if ($request->request->has('thumbnail_url')) {
             $frame["thumbnailUrl"] = $request->request->get('thumbnail_url');  
@@ -147,48 +144,38 @@ class ProjectsController extends BaseController
 
     public function postProjectFramesLayersAction($projectId, $frameId)
     {
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        
-        $layer = new MongoLayer();
-        
         $request = $this->getRequest();
+        $layer = array();
+        $layer["_id"] = new \MongoId();
+        
         if($request->request->has("type")) {
-            $layer->setType($request->request->get("type"));      
+            $layer["type"] = $request->request->get("type");
         } 
         
         if($request->request->has('text')) {
-            $layer->setText($request->request->get('text'));   
+            $layer["text"] = $request->request->get('text');   
         }
 
         if($request->request->has('attr')) {
-            $attributes = $request->request->get('attr');
-            $layer->setAttr($attributes);
-            if( isset($attributes["id"]) ) {
-                // TO-DO
-                /*
-                $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->find($attributes["id"]);
-                if ( isset($item) ) {
-                    $layer->setItem($item);    
-                }
-                */
-            }
+            $layer["attr"] = $request->request->get('attr');
         }
 
-        $layer->setEnabled(true);
+        $layer["enabled"] = true;
 
-        $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                    ->update()
-                    ->field('id')->equals($projectId)
-                    ->field('frames.id')->equals($frameId)
-                    ->field('frames.$')->push($layer)
-                    ->getQuery()
-                    ->execute();
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $layer = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->findAndUpdate()
+            ->returnNew()
+            ->field('id')->equals($projectId)
+            ->field('frames.id')->equals($frameId)
+            ->field('frames.$.layers')->push((string)$layer["_id"])
+            ->field('layers')->push($layer)
+            ->getQuery()
+            ->execute();
 
-        
-        $dm->flush();
-        
-        // TO-DO - response
-        return ResponseHelper::encodeAndGetJsonResponse($layer);
+        $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
+
+        return ResponseHelper::compressTwigAndGetJsonResponse($layerView);
     }
 
     // put_collections_items   PUT    /api/collections/{projectId}/items.{_format}

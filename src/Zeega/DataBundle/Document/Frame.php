@@ -20,7 +20,7 @@ class Frame
     protected $sequenceIndex;
 
     /**
-     * @MongoDB\Hash
+     * @MongoDB\Collection(strategy="pushAll")
      */
     protected $layers;
 
@@ -43,12 +43,6 @@ class Frame
      * @MongoDB\Boolean
      */
     protected $controllable;
-
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * Get id
@@ -85,7 +79,7 @@ class Frame
     /**
      * Set layers
      *
-     * @param hash $layers
+     * @param collection $layers
      * @return \Frame
      */
     public function setLayers($layers)
@@ -97,7 +91,7 @@ class Frame
     /**
      * Get layers
      *
-     * @return hash $layers
+     * @return collection $layers
      */
     public function getLayers()
     {
