@@ -43,5 +43,6 @@ class CoreResponseListener
                 $event->getResponse()->headers->setCookie(new Cookie('zauth', '0'));
             }            
         }
+        $event->getResponse()->headers->remove('Cache-Control');
     }
 }
