@@ -42,6 +42,11 @@ zeega.parsers:
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Instagram\ParserInstagramItem
 
+        user_parser:
+            regex: "#https?://instagram\.com/([a-zA-Z0-9\-_]+)#"
+            is_set: false
+            parser_class: Zeega\IngestionBundle\Parser\Instagram\ParserInstagramUser
+  
         tag_parser:
             regex: /instagram-tag-parser/
             is_set: true

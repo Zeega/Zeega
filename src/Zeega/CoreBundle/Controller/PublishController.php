@@ -67,6 +67,10 @@ class PublishController extends BaseController
                 ));
             }    
         } else {
+
+
+            $projectData["user_thumbnail"] = $projectItem->getUserThumbnail();
+            $projectData["views"] = $projectItem->getViews();
             
             return $this->render('ZeegaCoreBundle:Publish:player.html.twig', array(
                 'project'=>$projectItem,
