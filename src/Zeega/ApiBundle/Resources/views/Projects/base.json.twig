@@ -1,23 +1,5 @@
 {
-	"id" : {{ project.getId() | default("") | json_encode | raw }},
-	"user_id": {{ project.getUsers()[0].getId() | default("") | json_encode | raw}},
-	"title" : {{ project.getTitle() | default("") | json_encode | raw}},
-	"date_created" : "{{ project.getDateCreated() is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
-	"date_updated" : "{{ project.getDateUpdated() is empty ? "" : project.getDateUpdated()  | date("U") }}",
-	"date_published" : "{{ project.getDatePublished() is empty ? "" : project.getDatePublished()  | date("U") }}",
-    "tags" : {{ project.getTags() | default("") | json_encode | raw}},
-	"authors" : {{ project.getAuthors() | default("") | json_encode | raw}},
-	{% if project.getCoverImage is not empty %}
-	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}},
-	{% endif %}
-    "enabled" : {{ project.getEnabled() | default(false) | json_encode | raw}},
-    "estimated_time" : {{ project.getEstimatedTime() | default("null") | json_encode | raw}},
-    "description" : {{ project.getDescription() | default("") | json_encode | raw}},
-    "location" : {{ project.getLocation() | default("") | json_encode | raw}},
-    "item_id" : {{ project.getItemId() | default(null) | json_encode | raw}},
-    "mobile" : {{ project.getMobile() | default(false) | json_encode | raw}},
-    "published" : {{ project.getPublished() | default(false) | json_encode | raw}},
-	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}}
+	"id" : {{ project.getId | default("") | json_encode | raw }}
 	{% if project.getSequences() is defined %}
 	,"sequences" : [		
 	    {% for sequence in project.getSequences() %}	
@@ -36,10 +18,9 @@
 		{% endfor %}
 	]
 	{%- endif -%}
-	{% if project.getFrames() is defined %}
 	,"frames" : [
-		
-		{% for frame in project.getFrames() %}
+		{{project.frames}}
+		{% for frame in project.getFrames %}
 		{	
 			"id" : {{ frame.id | json_encode | raw}},
 			"attr" : {{ frame.attr | default({}) | json_encode | raw}},
@@ -53,7 +34,6 @@
 		{% endfor %}
 		
 	]
-	{%- endif -%}
 	,"layers":[
 		{% for layer in project.getLayers() %}
 		{	

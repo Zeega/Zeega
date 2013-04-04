@@ -38,7 +38,17 @@ class ProjectsController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        //$project = $dm->getRepository('ZeegaDataBundle:Project')->find($id);
+        
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->find()
+            ->field('id')->equals($id)
+            ->getQuery()
+            ->getSingleResult();
+
+        
+        //return new Response(json_encode($project));
+
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($projectView);
@@ -75,8 +85,8 @@ class ProjectsController extends BaseController
         $project->setAuthors($user->getDisplayName());
         $project->setTitle($title);
         
-        $project->addSequences($sequence);
-        $project->addFrames($frame);
+        $project->addSequence($sequence);
+        $project->addFrame($frame);
         //$project->addLayers($layer);
         
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -92,51 +102,53 @@ class ProjectsController extends BaseController
     }
     
     // POST api/projects/:id/layers
-    public function postProjectFramesAction($projectId)
+    public function postProjectSequencesFramesAction($projectId, $sequenceId)
     {
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
-        $project->setDateUpdated(new \DateTime("now"));
-
-        $layer = new MongoLayer();
-        
+        /*
+        db.Project.update({_id:ObjectId("515d280220d5cd740c000005"), 
+            'frames._id':ObjectId("515d28d420d5cd5b13000000")},
+            {$push: {frames.$.layers:{ award: 'IBM Fellow', year: 1963, by: 'IBM' }}})
+        */
         $request = $this->getRequest();
-        $frame = new MongoFrame();
+        $frame = array();
+        $frame["id"] = new \MongoId();
         
-        if($request->request->get('thumbnail_url')) {
-            $frame->setThumbnailUrl($request->request->get('thumbnail_url'));  
+        if ($request->request->has('thumbnail_url')) {
+            $frame["thumbnailUrl"] = $request->request->get('thumbnail_url');  
         } 
 
-        if($request->request->get('attr')) {
-            $frame->setAttr($request->request->get('attr'));  
+        if ($request->request->has('attr')) {
+            $frame["attr"] = $request->request->get('attr');  
         } 
 
-        if($request->request->get('layers')) {
-            $frame->setLayers($request->request->get('layers'));  
+        if ($request->request->has('layers')) {
+            $frame["layers"] = $request->request->get('layers');  
         } 
 
-        if($request->request->get('layers_to_persist')) {
-            $frame->setLayers($request->request->get('layers_to_persist'));    
+        if ($request->request->has('layers_to_persist')) {
+            $frame["layers"] = $request->request->get('layers_to_persist');    
         }
 
-        $project->addFrames($frame);
-
-        $dm->persist($frame);
-        $dm->flush();        
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $frame = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->findAndUpdate()
+            ->returnNew()
+            ->field('id')->equals($projectId)
+            ->field('sequences.id')->equals($sequenceId)
+            ->field('sequences.$.frames')->push((string)$frame["id"])
+            ->field('frames')->push($frame)
+            ->getQuery()
+            ->execute();
 
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
         return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
-
     }  
 
-    // POST api/projects/:id/layers
     public function postProjectFramesLayersAction($projectId, $frameId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
-        $project->setDateUpdated(new \DateTime("now"));
-
+        
         $layer = new MongoLayer();
         
         $request = $this->getRequest();
@@ -163,9 +175,16 @@ class ProjectsController extends BaseController
         }
 
         $layer->setEnabled(true);
-        $project->addLayers($layer);
+
+        $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                    ->update()
+                    ->field('id')->equals($projectId)
+                    ->field('frames.id')->equals($frameId)
+                    ->field('frames.$')->push($layer)
+                    ->getQuery()
+                    ->execute();
+
         
-        $dm->persist($layer);
         $dm->flush();
         
         // TO-DO - response
