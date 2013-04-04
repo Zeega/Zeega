@@ -7,6 +7,7 @@
     {
         "id":{{ item.id | default("null") }},
         "user_id": {{ item.userId | default(null) | json_encode | raw }},
+        "user_thumbnail":{{ item.userThumbnail | default("") | json_encode | raw }},
         "username": {{ item.username | default("") | json_encode | raw }},
         "display_name":{{ item.displayName | default("") | json_encode | raw }},
         "title":{{ item.title | default("") | json_encode | raw}},
