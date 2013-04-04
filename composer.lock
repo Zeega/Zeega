@@ -268,12 +268,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/mongodb-odm.git",
-                "reference": "33f0032fa03d89c0da085e49f3b72cf273d37c61"
+                "reference": "40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/33f0032fa03d89c0da085e49f3b72cf273d37c61",
-                "reference": "33f0032fa03d89c0da085e49f3b72cf273d37c61",
+                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe",
+                "reference": "40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe",
                 "shasum": ""
             },
             "require": {
@@ -310,7 +310,7 @@
                     "homepage": "http://avalanche123.com"
                 },
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -333,7 +333,7 @@
                 "odm",
                 "persistence"
             ],
-            "time": "2013-03-28 00:30:25"
+            "time": "2013-04-02 20:15:08"
         },
         {
             "name": "doctrine/mongodb-odm-bundle",
@@ -342,12 +342,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMongoDBBundle.git",
-                "reference": "b7b9ff90d826b69fa1592aaf461c75c38387c99f"
+                "reference": "48dccfd9078d20dffa60761b7a6ae9efcb0ac49a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/b7b9ff90d826b69fa1592aaf461c75c38387c99f",
-                "reference": "b7b9ff90d826b69fa1592aaf461c75c38387c99f",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/48dccfd9078d20dffa60761b7a6ae9efcb0ac49a",
+                "reference": "48dccfd9078d20dffa60761b7a6ae9efcb0ac49a",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +403,7 @@
                 "persistence",
                 "symfony"
             ],
-            "time": "2013-03-18 20:29:08"
+            "time": "2013-04-05 17:15:42"
         },
         {
             "name": "doctrine/orm",
@@ -1307,12 +1307,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "50a24301b40cd7df29a7da4efd5573a9ef4622f8"
+                "reference": "0a55a9ba70bd9250899ad77deceaf8cb9e145371"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/50a24301b40cd7df29a7da4efd5573a9ef4622f8",
-                "reference": "50a24301b40cd7df29a7da4efd5573a9ef4622f8",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/0a55a9ba70bd9250899ad77deceaf8cb9e145371",
+                "reference": "0a55a9ba70bd9250899ad77deceaf8cb9e145371",
                 "shasum": ""
             },
             "require": {
@@ -1370,7 +1370,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-03-25 20:14:55"
+            "time": "2013-04-02 21:36:28"
         },
         {
             "name": "monolog/monolog",
@@ -1700,12 +1700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/snc/SncRedisBundle.git",
-                "reference": "54ed3ba6fd05ba728c5580df3926c96b394c5240"
+                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/54ed3ba6fd05ba728c5580df3926c96b394c5240",
-                "reference": "54ed3ba6fd05ba728c5580df3926c96b394c5240",
+                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
+                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
                 "shasum": ""
             },
             "require": {
@@ -1755,7 +1755,7 @@
                 "redis",
                 "symfony"
             ],
-            "time": "2013-03-24 13:31:13"
+            "time": "2013-03-30 09:44:30"
         },
         {
             "name": "solarium/solarium",
@@ -1806,12 +1806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "25ce399e05dbf8685111003780aecbcc2ef968cc"
+                "reference": "839771a96dfcabf22d434e5dc6722b3bc88a6320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/25ce399e05dbf8685111003780aecbcc2ef968cc",
-                "reference": "25ce399e05dbf8685111003780aecbcc2ef968cc",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/839771a96dfcabf22d434e5dc6722b3bc88a6320",
+                "reference": "839771a96dfcabf22d434e5dc6722b3bc88a6320",
                 "shasum": ""
             },
             "require": {
@@ -1873,7 +1873,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2013-03-27 16:46:49"
+            "time": "2013-04-05 09:00:56"
         },
         {
             "name": "sonata-project/block-bundle",
