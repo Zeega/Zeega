@@ -17,31 +17,35 @@
         <link href="assets/splashs/splash_iphone_2x.png" rel="apple-touch-startup-image" sizes="640x960" media="(device-height: 480px)">
 
 
-        <title>{{project.getTitle()}}</title>
+         <title>{{project.title}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="robots" content="noindex,follow">
-        <meta name="description" content="{{project.getDescription()}}">
-        <meta name="author" content="{{project.getMediaCreatorRealname()}}">
+        <meta name="description" content="{{project.description}}">
+        <meta name="author" content="{{project.mediaCreatorRealname}}">
 
         <!-- FB -->
+        
         <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="{{project.getTitle()}}"/>
-        <meta property="og:description" content="{{project.getDescription()}}"/>
+        <meta property="og:title" content="{{project.title}}"/>
+        <meta property="og:description" content="{{project.description}}"/>
+        {% if project.mediaCreatorRealname is defined %}
+        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
+        {% endif %}
         <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
-        {% if project.getThumbnailUrl() is defined %}
-        <meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-        {% elseif project.getCoverImage() is defined %}
-        <meta property="og:image" content="{{project.getCoverImage()}}"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+        {% if project.thumbnailUrl is defined %}
+        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
+        {% elseif project.coverImage is defined %}
+        <meta property="og:image" content="{{project.coverImage}}"/>
         {% else %}
         <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
         {% endif %}
+            
         <!-- END FB --> 
 
         <meta name="zeega" content="zeega-mobile"
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
-            data-project-id="{{project.getId()}}"
+            data-project-id="{{project.id}}"
         />
 
         <base href="/js/app/player.mobile/">
@@ -71,7 +75,7 @@
 
     <body>
         <div role="main" id="main"></div>
-        <img src="http://{{event_logger_host}}:7379/INCR/{{project.getId()}}.png" width="1" height="1">
-        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.getId()}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.id}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.id}}.png" width="1" height="1">
     </body>
 </html>
