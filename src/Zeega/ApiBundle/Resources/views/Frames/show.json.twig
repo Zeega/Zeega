@@ -1,5 +1,5 @@
 {
-		"id" : {{ frame.getId.id | json_encode | raw }},
+		"id" : {{ frame.getId | json_encode | raw }},
 		"project_id" : {{frame.getProject.id | default([ ]) | json_encode | raw}},
 		"attr" : {{frame.attr | default([ ]) | json_encode | raw}},
 		"thumbnail_url" : {{ frame.getThumbnailUrl | default("") | json_encode | raw}},

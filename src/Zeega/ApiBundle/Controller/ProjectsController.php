@@ -38,14 +38,14 @@ class ProjectsController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
         $dm = $this->get('doctrine_mongodb')->getManager();
 
-        //$project = $dm->getRepository('ZeegaDataBundle:Project')->find($id);
-        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->find($id);
+        /*
         $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
             ->find()
             ->field('id')->equals($id)
             ->getQuery()
             ->getSingleResult();
-
+        */
         
         //return new Response(json_encode($project));
 
@@ -111,7 +111,7 @@ class ProjectsController extends BaseController
         */
         $request = $this->getRequest();
         $frame = array();
-        $frame["id"] = new \MongoId();
+        $frame["_id"] = new \MongoId();
         
         if ($request->request->has('thumbnail_url')) {
             $frame["thumbnailUrl"] = $request->request->get('thumbnail_url');  
@@ -135,7 +135,7 @@ class ProjectsController extends BaseController
             ->returnNew()
             ->field('id')->equals($projectId)
             ->field('sequences.id')->equals($sequenceId)
-            ->field('sequences.$.frames')->push((string)$frame["id"])
+            ->field('sequences.$.frames')->push((string)$frame["_id"])
             ->field('frames')->push($frame)
             ->getQuery()
             ->execute();

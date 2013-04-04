@@ -19,7 +19,6 @@
 	]
 	{%- endif -%}
 	,"frames" : [
-		{{project.frames}}
 		{% for frame in project.getFrames %}
 		{	
 			"id" : {{ frame.id | json_encode | raw}},
