@@ -33,13 +33,15 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
         <!-- END STYLESHEETS -->
 
+
+        <meta name="zeega" content="zeega-player"
+        data-user-thumbnail="{{project.getUserThumbnail()}}"
+        data-views="{{project.getViews()}}"
+         />
+         
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
 
         <script>
-            // Session data
-            sessionStorage.setItem('directory', '{{directory}}');
-            sessionStorage.setItem('hostname','{{hostname}}');
-            sessionStorage.setItem('projectId','{{project.getId()}}');
         {% if app.environment == 'prod' %}
             // Google analytics
             var _gaq = _gaq || [];
