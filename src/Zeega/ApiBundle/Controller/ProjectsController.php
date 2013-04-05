@@ -346,7 +346,7 @@ class ProjectsController extends BaseController
             $title = $request->request->get('title');    
         } else {
             $name = explode(  " ", $user->getDisplayName() );
-            $title = $name[ 0 ] . "'s Zeega";
+            $title = $name[ 0 ] . "'s Awesome Zeega!!";
         }
 
         if($request->request->get('collection_id'))
