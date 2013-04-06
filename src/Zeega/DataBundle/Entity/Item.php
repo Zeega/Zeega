@@ -11,7 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  *      name="item",
  *      indexes={
  *          @ORM\Index(name="media_date_created_index", columns={"media_date_created"}),
+ *          @ORM\Index(name="item_media_type_index", columns={"media_type"}),
  *          @ORM\Index(name="item_type_index", columns={"layer_type"}),
+ *          @ORM\Index(name="item_archive_index", columns={"archive"}),
  *          @ORM\Index(name="item_enabled_index", columns={"enabled"}),
  *          @ORM\Index(name="item_description_index", columns={"description"}),
  *          @ORM\Index(name="item_ingested_by_index", columns={"ingested_by"}),
