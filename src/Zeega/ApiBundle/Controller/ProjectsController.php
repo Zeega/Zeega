@@ -127,16 +127,15 @@ class ProjectsController extends BaseController
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $frame = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->findAndUpdate()
-            ->returnNew()
+        $frameQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->update()
             ->field('id')->equals($projectId)
             ->field('sequences.id')->equals($sequenceId)
             ->field('sequences.$.frames')->push((string)$frame["_id"])
             ->field('frames')->push($frame)
             ->getQuery()
             ->execute();
-
+        $frame["id"] = (string)$frame["_id"];
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
         return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
@@ -163,16 +162,17 @@ class ProjectsController extends BaseController
         $layer["enabled"] = true;
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $layer = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->findAndUpdate()
-            ->returnNew()
+        $layerQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->update()
             ->field('id')->equals($projectId)
             ->field('frames.id')->equals($frameId)
             ->field('frames.$.layers')->push((string)$layer["_id"])
             ->field('layers')->push($layer)
             ->getQuery()
             ->execute();
-
+        
+        $layer["id"] = (string)$layer["_id"];
+        
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
 
         return ResponseHelper::compressTwigAndGetJsonResponse($layerView);
@@ -318,7 +318,6 @@ class ProjectsController extends BaseController
         return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
     } // `post_sequence_layers`   [POST] /sequences
 
-    
     public function putProjectFramesAction($projectId, $frameId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
