@@ -101,7 +101,7 @@ class ProjectsController extends BaseController
     public function postProjectSequencesFramesAction($projectId, $sequenceId)
     {
         /*
-        db.Project.update({_id:ObjectId("515df03920d5cd2b1b000000"), 
+        db.Project.update({_id:ObjectId("51616b4720d5cdbb30000000"), 
             'frames._id':ObjectId("515df03920d5cd2b1b000002")},
             {$push: {frames.$.layers: "test"}, {"layers":{"_id":{"$id":"515df04720d5cd4e1b000001"},"enabled":true}})
         */
@@ -377,47 +377,32 @@ class ProjectsController extends BaseController
     public function putProjectLayersAction($projectId, $layerId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                    ->field('id')->equals($projectId)
-                    ->select('layers')
-                    ->getQuery()
-                    ->getSingleResult();
         
-        if ( !isset($project) || !$project instanceof MongoProject) {
-            return new Response("Project does not exist");
-        } 
-
-        $layers = $project->getLayers();
-
-        $layer = $project->getLayers()->filter(
-            function($layr) use ($layerId){
-                return $layr->getId() == $layerId;
-            }
-        )->first();
+        $layer = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->findAndUpdate()
+            ->returnNew()
+            ->field('id')->equals($projectId)
+            ->field('layers.id')->equals($layerId);
         
-        if ( !isset($layer) || !$layer instanceof MongoLayer) {
-            return new Response("Layer does not exist");  
-        }
-
-
         $text = $this->getRequest()->request->get('text');
         $attributes = $this->getRequest()->request->get('attr');
 
         if( isset($text) ) {
-            $layer->setText($text);
+            $layer->field('layers.$.text')->set($text);
         } else {
-            $layer->setText(NULL);  
+            $layer->field('layers.$.text')->set(null);
         }
 
         if( isset($attributes) ) {
-            $layer->setAttr($attributes);  
+            $layer->field('layers.$.attr')->set($attributes);
         } else {
-            $layer->setAttr(NULL);  
+            $layer->field('layers.$.attr')->set(null);
         }
         
-        $dm->persist($layer);
-        $dm->flush();
-        
+        $layer->getQuery()
+            ->execute();
+
+
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
         
         return new Response($layerView);
@@ -457,7 +442,7 @@ class ProjectsController extends BaseController
         }
 
         $layer->setEnabled(true);
-        $project->addLayers($layer);
+        $project->addLayer($layer);
         
         $dm->persist($layer);
         $dm->flush();
