@@ -10,7 +10,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Layer
 {
     /**
-     * @MongoDB\Id(strategy="auto")
+     * @MongoDB\Id
      */
     protected $id;
 
@@ -33,6 +33,17 @@ class Layer
      * @MongoDB\Boolean
      */
     protected $enabled = true;
+
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * Get id

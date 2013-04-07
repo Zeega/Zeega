@@ -10,7 +10,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Frame
 {
     /**
-     * @MongoDB\Id(strategy="auto")
+     * @MongoDB\Id
      */
     protected $id;
 
@@ -52,6 +52,17 @@ class Frame
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
