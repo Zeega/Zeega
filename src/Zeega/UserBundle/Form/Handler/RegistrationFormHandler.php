@@ -28,7 +28,7 @@ class RegistrationFormHandler extends BaseHandler
 		$user->setEnabled(true);
         $user->setCreatedAt(new \DateTime('now'));
 		
-		$em = $this->container->get('doctrine')->getEntityManager();
+		$em = $this->container->get('doctrine.odm.mongodb.document_manager');
         		
         parent::onSuccess($user, $confirmation);
     }

@@ -10,7 +10,7 @@ class RegistrationFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('display_name',null, array('required' => true))
+            ->add('displayName',null, array('required' => true))
             ->add('email', 'email')
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',

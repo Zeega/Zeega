@@ -5,23 +5,6 @@
         http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
     <class name="FOS\UserBundle\Model\User">
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-            <option name="fields">usernameCanonical</option>
-            <option name="message">fos_user.username.already_used</option>
-            <option name="groups">
-                <value>ZeegaRegistration</value>
-            </option>
-        </constraint>
-
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-            <option name="fields">emailCanonical</option>
-            <option name="message">fos_user.email.already_used</option>
-            <option name="groups">
-                <value>ZeegaRegistration</value>
-                <value>Profile</value>
-            </option>
-        </constraint>
-	
         <property name="email">
             <constraint name="NotBlank">
                 <option name="message">fos_user.email.blank</option>
