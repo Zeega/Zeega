@@ -26,14 +26,6 @@ parameters:
         db_data_col: session_value
         db_time_col: session_time  
 
-services:    
-    pdo:
-        class: PDO
-        arguments:
-            - "%database_type%:dbname=%database_name%;host=%database_host%"
-            - %database_user%
-            - %database_password%
-
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
