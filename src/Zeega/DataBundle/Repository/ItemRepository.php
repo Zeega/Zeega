@@ -3,13 +3,13 @@
 // src/Zeega/\CoreBundle\/Repository/ItemRepository.php
 namespace Zeega\DataBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\Common\Collections;
 use DateInterval;
 use Doctrine\ORM\Query\ResultSetMapping;
 use DateTime;
 
-class ItemRepository extends EntityRepository
+class ItemRepository extends DocumentRepository
 {
     private function buildSearchQuery($qb, $query)
     {
