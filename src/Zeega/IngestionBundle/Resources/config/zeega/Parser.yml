@@ -121,6 +121,10 @@ zeega.parsers:
             regex: /http:\/\/([a-zA-Z0-9\-_]+).tumblr.com\/post\/([a-zA-Z0-9\-_]+)/
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblr
+        tag_parser:
+            regex: /http:\/\/([a-zA-Z0-9\-_]+).tumblr.com\/tagged\/([a-zA-Z0-9\-_]+)/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblrTag
 
     google.com:
         item_parser:
