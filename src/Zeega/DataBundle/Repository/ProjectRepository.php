@@ -2,35 +2,30 @@
 
 namespace Zeega\DataBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 
-class ProjectRepository extends EntityRepository
+class ProjectRepository extends DocumentRepository
 {
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->add('select', 'p,u')
-			->add('from', 'ZeegaDataBundle:Project p')
-            ->join('p.users', 'u')
-            ->add('where', 'u.id = :userId')
-            ->setParameter('userId',$userId)
-            ->andwhere('p.enabled = true')
-            ->orderBy('p.id','DESC');
- 				       
- 		if(null !== $published) {
- 	        $qb->andwhere('p.published = :published')->setParameter('published', $published);
+        $qb = $this->createQueryBuilder('Project')
+            ->find()
+            ->field('user.id')->equals($userId);
+        
+        if(null !== $published) {
+ 	        $qb->field('published')->equals($published);
  		}
 
         if(null !== $limit) {
-            $qb->setMaxResults($limit);
+            $qb->limit($limit);
         }
 
- 		return $qb->getQuery()->getResult();
+ 		return $qb->getQuery()->execute();
     }
 
     public function findProjectsByUserSmall($userId)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->createQueryBuilder();
         $qb->select('p.id, p.title')
             ->add('from', 'ZeegaDataBundle:Project p')
             ->join('p.users', 'u')
