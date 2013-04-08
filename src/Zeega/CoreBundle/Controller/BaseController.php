@@ -145,4 +145,20 @@ class BaseController extends SymfonyBaseController
 
         throw new AccessDeniedException();
     }
+
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine.odm.mongodb.document_manager')) {
+            throw new \LogicException('The DoctrineOdmBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine.odm.mongodb.document_manager');
+    }
 }
