@@ -56,21 +56,6 @@ assetic:
     filters:
         cssrewrite: ~
 
-# Doctrine Configuration
-doctrine:
-    dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  utf8
-        mapping_types:
-            geometry: string  
-    orm:
-        auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
-
 doctrine_mongodb:
     connections:
         default:
@@ -91,9 +76,9 @@ swiftmailer:
     password:  %mailer_password%
 
 fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    db_driver: mongodb # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Zeega\DataBundle\Entity\User
+    user_class: Zeega\DataBundle\Document\User
     from_email:
         address: %mailer_email%
         sender_name: Zeega
@@ -110,16 +95,6 @@ fos_user:
             handler: zeega_user.form.handler.resetting
         email:
             template: ZeegaUserBundle:Email:resetting.email.twig
-
-sonata_block:
-    default_contexts: [cms]
-    blocks:
-        sonata.admin.block.admin_list:
-            contexts:   [admin]
-
-        sonata.block.service.text:
-        sonata.block.service.action:
-        sonata.block.service.rss:
 
 # fos rest requirement
 sensio_framework_extra:

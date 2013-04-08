@@ -6,16 +6,16 @@ ZeegaUserBundle:
     resource: "@ZeegaUserBundle/Resources/config/routing.yml"
     prefix:   /
 
-ZeegaAdminBundle:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
-    prefix:   /
+#ZeegaAdminBundle:
+#    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+#    prefix:   /
 
 api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
     type: rest
 
-admin:
-    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
+#admin:
+#    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
 
 ZeegaBookmarkletBundle:
     resource: "@ZeegaBookmarkletBundle/Resources/config/routing.yml"
