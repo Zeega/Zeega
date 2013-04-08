@@ -33,7 +33,7 @@ class UsersController extends BaseController
      */    
     public function getUserAction($id)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
         
         if($id == -1)
@@ -71,7 +71,7 @@ class UsersController extends BaseController
             $limit = 100;    
         }        
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
         
         if($id == -1)
@@ -114,7 +114,7 @@ class UsersController extends BaseController
  	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
     public function putUsersAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine();
 		$loggedUser = $this->get('security.context')->getToken()->getUser();
 		
 		if(!isset($loggedUser) || $loggedUser->getId() != $id)
@@ -149,7 +149,7 @@ class UsersController extends BaseController
     
     public function postUserProfileimageAction($id)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine();
 		$loggedUser = $this->get('security.context')->getToken()->getUser();
 		
 		if(!isset($loggedUser) || $loggedUser->getId() != $id)
