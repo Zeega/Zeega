@@ -18,7 +18,6 @@ framework:
     session:
         cookie_domain: ~
         cookie_lifetime:       72000
-        handler_id: session.handler.pdo
 
 parameters:
     pdo.db_options:
@@ -34,9 +33,6 @@ services:
             - "%database_type%:dbname=%database_name%;host=%database_host%"
             - %database_user%
             - %database_password%
-    session.handler.pdo:
-            class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-            arguments: [@pdo, %pdo.db_options%]
 
 # Twig Configuration
 twig:

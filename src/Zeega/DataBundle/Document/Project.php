@@ -86,9 +86,9 @@ class Project
     protected $datePublished;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="User", simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="User")
      */    
-    protected $users;   
+    protected $user;   
 
     /**
      * @MongoDB\EmbedMany(targetDocument="Sequence")
@@ -442,36 +442,6 @@ class Project
     }
 
     /**
-     * Add users
-     *
-     * @param Zeega\DataBundle\Document\User $users
-     */
-    public function addUser(\Zeega\DataBundle\Document\User $users)
-    {
-        $this->users[] = $users;
-    }
-
-    /**
-    * Remove users
-    *
-    * @param <variableType$users
-    */
-    public function removeUser(\Zeega\DataBundle\Document\User $users)
-    {
-        $this->users->removeElement($users);
-    }
-
-    /**
-     * Get users
-     *
-     * @return Doctrine\Common\Collections\Collection $users
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
-    /**
      * Add sequences
      *
      * @param Zeega\DataBundle\Document\Sequence $sequences
@@ -559,5 +529,27 @@ class Project
     public function getLayers()
     {
         return $this->layers;
+    }
+
+    /**
+     * Set users
+     *
+     * @param Zeega\DataBundle\Document\User $users
+     * @return \Project
+     */
+    public function setUser(\Zeega\DataBundle\Document\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Zeega\DataBundle\Document\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

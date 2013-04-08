@@ -25,15 +25,13 @@ class ProjectRepository extends DocumentRepository
 
     public function findProjectsByUserSmall($userId)
     {
-        $qb = $this->createQueryBuilder();
-        $qb->select('p.id, p.title')
-            ->add('from', 'ZeegaDataBundle:Project p')
-            ->join('p.users', 'u')
-            ->add('where', 'u.id = :userId')
-            ->setParameter('userId',$userId)
-            ->andwhere('p.enabled = true')
-            ->orderBy('p.id','DESC');
-                       
-        return $qb->getQuery()->getArrayResult();
+        $qb = $this->createQueryBuilder('Project')
+            ->find()
+            ->select('id', 'title')
+            ->field('user.id')->equals($userId)
+            ->field('enabled')->equals(true)
+            ->sort('id', 'desc');
+
+        return $qb->getQuery()->execute();
     }
 }

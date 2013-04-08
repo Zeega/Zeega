@@ -1,6 +1,7 @@
 {
     "id" : {{ project.id | default("") | json_encode | raw }},
-    "user_id": {{ project.users()[0].getId() | default("") | json_encode | raw}},
+    "user_id": {{ project.user.id | default("") | json_encode | raw}},
+    "username": {{ project.user.displayName | default("") | json_encode | raw}},
     "title" : {{ project.title | default("") | json_encode | raw}},
     "date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
     "date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("U") }}",

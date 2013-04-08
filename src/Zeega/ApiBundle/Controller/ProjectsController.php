@@ -67,6 +67,7 @@ class ProjectsController extends BaseController
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
         $project->setTitle($title);
+        $project->setUser($user);
         
         $project->addSequence($sequence);
         $project->addFrame($frame);

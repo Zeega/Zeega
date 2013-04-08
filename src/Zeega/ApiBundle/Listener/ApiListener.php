@@ -32,21 +32,6 @@ class ApiListener
             $requestUri = $event->getRequest()->getUri();
             $requestMethod = $event->getRequest()->getMethod();
 
-            if ($requestMethod !== "GET") {
-                $token = $this->context->getToken();
-                if( isset( $token ) ) {
-                    $user = $token->getUser();
-                    if( !isset( $user ) || "anon." === $user) {
-                        if ( !$event->getRequest()->query->has('api_key') ) {
-
-                        $event->setResponse(new Response(json_encode(array(
-                            "code" => 401,
-                            "message" => "The request requires user authentication")), 
-                        401));
-                        }
-                    }
-                }
-            }
         }
     }
 

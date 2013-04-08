@@ -50,7 +50,7 @@ class EditorController extends BaseController
 
 		// new editor
 		$userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());		
-		$projectOwners = $project->getUsers();		
+		$projectOwners = $project->getUser();		
 		$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
 		
 		return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
