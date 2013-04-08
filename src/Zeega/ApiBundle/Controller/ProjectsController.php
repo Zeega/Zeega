@@ -307,6 +307,26 @@ class ProjectsController extends BaseController
         } else {
             $sequence->field('sequences.$.frames')->set( null );
         }
+
+        if($request->request->has('title')) {
+            $sequence->field('sequences.$.title')->set( $request->request->get('title') );
+        }
+
+        if($request->request->has('attr')) {
+            $sequence->field('sequences.$.attr')->set( $request->request->get('attr') );
+        }
+            
+        if($request->request->has('persistent_layers')) {
+            $sequence->field('sequences.$.persistentLayers')->set( $request->request->get('persistent_layers') );
+        }
+        
+        if($request->request->has('description')) {
+            $sequence->field('sequences.$.description')->set( $request->request->get('description') );
+        }
+
+        if($request->request->has('advance_to')) {
+            $sequence->field('sequences.$.advanceTo')->set( $request->request->get('advance_to') );
+        }
         
         $sequence
             ->field('sequences.$.dateUpdated')->set(new \DateTime("now"))
@@ -448,5 +468,21 @@ class ProjectsController extends BaseController
 
         return ResponseHelper::encodeAndGetJsonResponse($layer);
     } // `post_sequence_layers` [POST] /sequences
-    
+
+    public function getProjectCloneAction($projectId) 
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->field("id")->equals($projectId)
+            ->hydrate(false)
+            ->getQuery()
+            ->execute();
+        print_r($project);
+        return new Response();
+        $newProject = clone $project;
+        $project->setId(null);
+        $dm->persist($newProject);
+        $dm->flush();
+        return new Response($project->getId(),200);   
+    }
 }
