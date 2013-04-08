@@ -35,7 +35,7 @@ class CommunityController extends BaseController
     
     public function userAction($id)
     {
-        $user = $this->getDoctrine()->getEntityManager()->getRepository('ZeegaDataBundle:User')->findOneById($id);
+        $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneById($id);
         $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
 
