@@ -40,7 +40,12 @@ class ItemRepository extends DocumentRepository
                 }
             }
     	}
-		
+		if(isset($query['archive']))
+        {
+             $qb->andWhere('i.archive = :archive')
+                ->setParameter('archive', $query['archive']);
+        }
+
 		if(isset($query['earliestDate']))
       	{
 			 $qb->andWhere('i.mediaDateCreated >= ?6')
@@ -123,7 +128,7 @@ class ItemRepository extends DocumentRepository
                 i.duration,
                 i.headline,
                 i.views,
-                u.id as userId, u.displayName, u.username')
+                u.id as userId, u.displayName, u.username, u.thumbUrl as userThumbnail')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
             ->orderBy('i.id','DESC')
@@ -155,7 +160,7 @@ class ItemRepository extends DocumentRepository
         $qb = $em->createQueryBuilder();
     
         // search query
-        $qb->select('i,u.displayName,u.username,u.id as userId')
+        $qb->select('i,u.displayName,u.username,u.id as userId, u.thumbUrl')
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
             ->orderBy('i.id','DESC')
@@ -163,11 +168,12 @@ class ItemRepository extends DocumentRepository
        		->setParameter('id', $id);
         
     	$res = $qb->getQuery()->getArrayResult();
-    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 4 ) {
+    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 5 ) {
             $result = $res[0][0];
             $result["displayName"] = $res[0]["displayName"];
             $result["username"] = $res[0]["username"];
             $result["userId"] = $res[0]["userId"];
+            $result["userThumbnail"] = $res[0]["thumbUrl"];
             return $result;
     	}
     	return null;

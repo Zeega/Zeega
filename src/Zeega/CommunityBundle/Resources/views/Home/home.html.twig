@@ -70,32 +70,35 @@
   <div class="container new-section" >
     <div class="row">
       <div class="page-intro span11">
-        <h1>Remake the Internet</h1>
-        <h2 style="float:left; width: 523px;">Zeega is revolutionizing web publishing and interactive storytelling for a future beyond blogs.<br><br>With Zeega, you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.</h2>
+        <iframe src="http://player.vimeo.com/video/63220637" width="600" height="376" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>     
 
         <!-- Sign Up Button Begins -->
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+
        
+        <div style="width: 300px; float: right;">
 
-        <div class="go-button" style="width: 348px; float: right; margin-top:108px">
 
-            <div class="valign">
-              <div class="valign-content">  
-          
-                <h3 style ="font-size:37px">
-                Sign Up For Zeega!</a>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+
+            <div class="valign go-button" style="margin-bottom: 40px; text-align: center;">
+              <div class="valign-content"> 
+
+                <h3 style="size:20px">
+                Sign Up!</a>
                 </h3>
               
               </div>
             </div>
+        </a> {% endif %}
+
+        <h2 style="text-align: right; margin-right: -20px;">With Zeega,<br>you can use any media in the cloud, transform the entire screen into your playground, and share your interactive creations with the world.</h2>
 
         </div>
-        </a> {% endif %}
-        <!-- Sign Up Button Ends -->
         
+
         
         <div style="clear:both;"></div>
-        <!-- Zeegaverse Button Ends -->
+  
       </div>
     </div>
   </div>
