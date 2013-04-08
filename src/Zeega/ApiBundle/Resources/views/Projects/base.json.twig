@@ -1,6 +1,22 @@
 {
-	"id" : {{ project.getId | default("") | json_encode | raw }}
-	{% if project.getSequences() is defined %}
+	"id" : {{ project.id | default("") | json_encode | raw }},
+	"user_id": {{ project.users()[0].getId() | default("") | json_encode | raw}},
+	"title" : {{ project.title | default("") | json_encode | raw}},
+	"date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
+	"date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("U") }}",
+	"date_published" : "{{ project.datePublished is empty ? "" : project.getDatePublished()  | date("U") }}",
+    "tags" : {{ project.tags | default("") | json_encode | raw}},
+	"authors" : {{ project.authors | default("") | json_encode | raw}},
+	"cover_image" : {{ project.coverImage | default(null) | json_encode | raw}},
+    "enabled" : {{ project.enabled | default(false) | json_encode | raw}},
+    "estimated_time" : {{ project.estimatedTime | default("Some time") | json_encode | raw}},
+    "description" : {{ project.description | default("") | json_encode | raw}},
+    "location" : {{ project.location | default("") | json_encode | raw}},
+    "item_id" : {{ project.itemId | default(null) | json_encode | raw}},
+    "mobile" : {{ project.mobile | default(false) | json_encode | raw}},
+    "published" : {{ project.published | default(false) | json_encode | raw}},
+	"cover_image" : {{ project.coverImage | default("") | json_encode | raw}}
+	{% if project.getSequences is defined %}
 	,"sequences" : [		
 	    {% for sequence in project.getSequences() %}	
 		{
