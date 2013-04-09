@@ -3,25 +3,25 @@
     <head>
         <meta charset="utf-8">
 
-        <title>{{project.getTitle()}}</title>
+        <title>{{project.title}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="description" content="{{project.getDescription()}}">
-        <meta name="author" content="{{project.getMediaCreatorRealname()}}">
+        <meta name="description" content="{{project.description}}">
+        <meta name="author" content="{{project.mediaCreatorRealname}}">
 
         <!-- FB -->
         
         <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="{{project.getTitle()}}"/>
-        <meta property="og:description" content="{{project.getDescription()}}"/>
-        {% if project.getMediaCreatorRealname() is defined %}
-        <meta property="og:author" content="{{project.getMediaCreatorRealname()}}"/>
+        <meta property="og:title" content="{{project.title}}"/>
+        <meta property="og:description" content="{{project.description}}"/>
+        {% if project.mediaCreatorRealname is defined %}
+        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
         {% endif %}
         <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
-        {% if project.getThumbnailUrl() is defined %}
-        <meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-        {% elseif project.getCoverImage() is defined %}
-        <meta property="og:image" content="{{project.getCoverImage()}}"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+        {% if project.thumbnailUrl is defined %}
+        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
+        {% elseif project.coverImage is defined %}
+        <meta property="og:image" content="{{project.coverImage}}"/>
         {% else %}
         <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
         {% endif %}
@@ -33,14 +33,18 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
         <!-- END STYLESHEETS -->
 
+
+        <meta name="zeega" content="zeega-player"
+            data-user-thumbnail="{{project.userThumbnail}}"
+            data-views="{{project.views}}"
+            data-directory="{{directory}}"
+            data-hostname="{{hostname}}"
+         />
+         
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
 
         <script>
-            // Session data
-            sessionStorage.setItem('directory', '{{directory}}');
-            sessionStorage.setItem('hostname','{{hostname}}');
-            sessionStorage.setItem('projectId','{{project.getId()}}');
-        
+        {% if app.environment == 'prod' %}
             // Google analytics
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-37456730-1']);
@@ -51,7 +55,9 @@
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
-        
+        {% endif %}
+
+
             // Because IE sucks
             if ( !window.console ) {
                 console = {log: function() {}};
@@ -69,7 +75,7 @@
             <div id='overlays'></div>
             <div id='player'></div>
         </div>
-        <img src="http://{{event_logger_host}}:7379/INCR/{{project.getId()}}.png" width="1" height="1">
-        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.getId()}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.id}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.id}}.png" width="1" height="1">
     </body>
 </html>

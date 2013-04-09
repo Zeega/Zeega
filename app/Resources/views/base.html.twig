@@ -27,13 +27,7 @@
         {% endblock %}
          
         {% block stylesheets %}			
-		
-		<link rel="stylesheet" href="{{ asset('css/visualsearch-datauri.css')}}"  type="text/css" media="screen">
-		<link rel="stylesheet" href="{{ asset('js/lib/jquery/ui/css/custom-theme/jquery-ui-1.8.14.custom.css')}}" type="text/css" media="screen" />
-		<link rel="stylesheet" href="{{ asset('css/zeega.fancybox.css')}}" />
-		<link rel="stylesheet" href="{{ asset('js/lib/farbtastic/farbtastic.css')}}" />
-		<link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
-				
+	
 			{% if app.environment == 'dev' %}
 				<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/editor/bootstrap.less')}}">
 				<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
@@ -62,7 +56,7 @@
                     </script>
 		{% endif %}
 
-		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	
+
 		<script>
 			if (!window.console) console = {log: function() {}}; 
 			sessionStorage.setItem('directory', '{{directory}}');
@@ -72,125 +66,7 @@
 		
 		{% block browser_detection %}
 		<script>
-			var BrowserDetect = {
-				init: function () {
-					this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
-					this.version = this.searchVersion(navigator.userAgent)
-						|| this.searchVersion(navigator.appVersion)
-						|| "an unknown version";
-					this.OS = this.searchString(this.dataOS) || "an unknown OS";
-					this.isMobile = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
-				},
-				searchString: function (data) {
-					for (var i=0;i<data.length;i++)	{
-						var dataString = data[i].string;
-						var dataProp = data[i].prop;
-						this.versionSearchString = data[i].versionSearch || data[i].identity;
-						if (dataString) {
-							if (dataString.indexOf(data[i].subString) != -1)
-								return data[i].identity;
-						}
-						else if (dataProp)
-							return data[i].identity;
-					}
-				},
-				searchVersion: function (dataString) {
-					var index = dataString.indexOf(this.versionSearchString);
-					if (index == -1) return;
-					return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
-				},
-				dataBrowser: [
-					{
-						string: navigator.userAgent,
-						subString: "Chrome",
-						identity: "Chrome"
-					},
-					{ 	string: navigator.userAgent,
-						subString: "OmniWeb",
-						versionSearch: "OmniWeb/",
-						identity: "OmniWeb"
-					},
-					{
-						string: navigator.vendor,
-						subString: "Apple",
-						identity: "Safari",
-						versionSearch: "Version"
-					},
-					{
-						prop: window.opera,
-						identity: "Opera",
-						versionSearch: "Version"
-					},
-					{
-						string: navigator.vendor,
-						subString: "iCab",
-						identity: "iCab"
-					},
-					{
-						string: navigator.vendor,
-						subString: "KDE",
-						identity: "Konqueror"
-					},
-					{
-						string: navigator.userAgent,
-						subString: "Firefox",
-						identity: "Firefox"
-					},
-					{
-						string: navigator.vendor,
-						subString: "Camino",
-						identity: "Camino"
-					},
-					{		// for newer Netscapes (6+)
-						string: navigator.userAgent,
-						subString: "Netscape",
-						identity: "Netscape"
-					},
-					{
-						string: navigator.userAgent,
-						subString: "MSIE",
-						identity: "Explorer",
-						versionSearch: "MSIE"
-					},
-					{
-						string: navigator.userAgent,
-						subString: "Gecko",
-						identity: "Mozilla",
-						versionSearch: "rv"
-					},
-					{ 		// for older Netscapes (4-)
-						string: navigator.userAgent,
-						subString: "Mozilla",
-						identity: "Netscape",
-						versionSearch: "Mozilla"
-					}
-				],
-				dataOS : [
-					{
-						string: navigator.platform,
-						subString: "Win",
-						identity: "Windows"
-					},
-					{
-						string: navigator.platform,
-						subString: "Mac",
-						identity: "Mac"
-					},
-					{
-						   string: navigator.userAgent,
-						   subString: "iPhone",
-						   identity: "iPhone/iPod"
-				    },
-					{
-						string: navigator.platform,
-						subString: "Linux",
-						identity: "Linux"
-					}
-				]
-
-			};
-					
-			BrowserDetect.init();
+			var BrowserDetect={init:function(){this.browser=this.searchString(this.dataBrowser)||"An unknown browser";this.version=this.searchVersion(navigator.userAgent)||this.searchVersion(navigator.appVersion)||"an unknown version";this.OS=this.searchString(this.dataOS)||"an unknown OS";this.isMobile=navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)},searchString:function(e){for(var t=0;t<e.length;t++){var n=e[t].string;var r=e[t].prop;this.versionSearchString=e[t].versionSearch||e[t].identity;if(n){if(n.indexOf(e[t].subString)!=-1)return e[t].identity}else if(r)return e[t].identity}},searchVersion:function(e){var t=e.indexOf(this.versionSearchString);if(t==-1)return;return parseFloat(e.substring(t+this.versionSearchString.length+1))},dataBrowser:[{string:navigator.userAgent,subString:"Chrome",identity:"Chrome"},{string:navigator.userAgent,subString:"OmniWeb",versionSearch:"OmniWeb/",identity:"OmniWeb"},{string:navigator.vendor,subString:"Apple",identity:"Safari",versionSearch:"Version"},{prop:window.opera,identity:"Opera",versionSearch:"Version"},{string:navigator.vendor,subString:"iCab",identity:"iCab"},{string:navigator.vendor,subString:"KDE",identity:"Konqueror"},{string:navigator.userAgent,subString:"Firefox",identity:"Firefox"},{string:navigator.vendor,subString:"Camino",identity:"Camino"},{string:navigator.userAgent,subString:"Netscape",identity:"Netscape"},{string:navigator.userAgent,subString:"MSIE",identity:"Explorer",versionSearch:"MSIE"},{string:navigator.userAgent,subString:"Gecko",identity:"Mozilla",versionSearch:"rv"},{string:navigator.userAgent,subString:"Mozilla",identity:"Netscape",versionSearch:"Mozilla"}],dataOS:[{string:navigator.platform,subString:"Win",identity:"Windows"},{string:navigator.platform,subString:"Mac",identity:"Mac"},{string:navigator.userAgent,subString:"iPhone",identity:"iPhone/iPod"},{string:navigator.platform,subString:"Linux",identity:"Linux"}]};BrowserDetect.init();
 		</script>
 		{% endblock browser_detection %}
 		
@@ -224,14 +100,12 @@
 												
 												<li><a href="http://blog.zeega.com/about">Mission</a></li>
 												<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Labs</a></li>
-												<!--<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 												<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-												<!--<li><a href="{{path('ZeegaCommunityBundle_news')}}">News</a></li>-->
+												<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
 												<li class="divider"></li>
 												<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 												<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-												<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
+												
 												
 												
 											</ul>
@@ -246,7 +120,7 @@
 									<ul class="nav pull-right">
 										<li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-												Zeegas
+												My Zeegas
 												<b class="caret"></b>
 											</a>
 											<ul class="dropdown-menu">
@@ -265,38 +139,13 @@
 										
 										<li class="divider-vertical"></li>
 										
-										<li><a id="header-add-media" href="#">Add Media</a></li>
+										
 										<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
-										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown">Report a Bug<b class="caret"></b></a>
-											<ul class="dropdown-menu bug-report">
-												<li class='bug-unsubmitted'>
-													<div><label>Zeega is an experimental creature. We need your help to make it better! Let us know if something is misbehaving by sending us a brief description of what's wrong:</label></div>
-													<textarea class='bug-description' rows='3'></textarea>
-													<p><i class='icon-ok-sign'></i> a link to the current view will be included automatically</p>
-												</li>
-												<li class='bug-unsubmitted' >
-													<label>Your email (optional):</label>
-													<input class='bug-email' type='text'></input>
-												<li class='bug-unsubmitted'>
-													<button class='btn btn-success submit-bug'>submit</button>
-												</li>
-												<li class='bug-submitted'>
-													<h2>Thanks for your feedback!!</h2>
-													<h3 style='padding-left:80px'>the Zeega team</h3>
-													<br>
-												</li>
-												<li class='bug-submitted'>
-													<button class='btn btn-success close-bug '>close</button>
-												</li>
-												
-											</ul>
-									</li>
 										<li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='icon-user icon-white'></i> {{displayname}}<b class="caret"></b></a>
 											<ul class="dropdown-menu">
 
-												<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}">User Profile</a></li>
+												<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}">My Profile</a></li>
 												<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
 											</ul>
 										</li>
@@ -324,13 +173,12 @@
 														
 														<li><a href="http://blog.zeega.com/about">Mission</a></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_team')}}">Team</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_productions')}}">Labs</a></li>
-														<!--<li><a href="{{ path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
 														<li><a href="{{ path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
+														<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
 														<li class="divider"></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
 														<li><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-														<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
+														
 														
 														
 													</ul>

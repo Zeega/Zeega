@@ -346,7 +346,7 @@ class ProjectsController extends BaseController
             $title = $request->request->get('title');    
         } else {
             $name = explode(  " ", $user->getDisplayName() );
-            $title = $name[ 0 ] . "'s Zeega";
+            $title = $name[ 0 ] . "'s Awesome Zeega!!";
         }
 
         if($request->request->get('collection_id'))
@@ -385,6 +385,58 @@ class ProjectsController extends BaseController
         $em->persist($project);
         $em->persist($frame);
         $em->flush();
+
+
+
+        
+        // Create Published Item
+        $projectId = $project->getId();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $host = "http://" . $this->getRequest()->getHost() . "/";
+
+        $item = new Item();
+        $item->setDateCreated(new \DateTime("now"));
+        $item->setDateUpdated(new \DateTime("now"));
+        $item->setChildItemsCount(0);
+        $item->setUser($user);                              
+        $item->setUri($projectId);
+        $item->setMediaType("project");
+        $item->setLayerType("project");
+        $item->setArchive("zeega");
+        $item->setMediaCreatorUsername($user->getUsername());               
+        $item->setAttributionUri($host);
+        $item->setPublished(true);
+        $item->setEnabled(true);
+        
+        $em->persist($item);
+        $em->flush();
+        
+        $item->setAttributionUri($host.$item->getId());
+        $em->persist($item);
+        $em->flush();
+        
+        $project->setItemId($item->getId());
+        $project->setDatePublished($project->getDateUpdated());
+        $em->persist($project);
+        $em->flush();
+    
+        $project_http = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $projectId));
+
+        $item->setMediaCreatorRealname($project->getAuthors());
+        $item->setDescription($project->getDescription());
+        $item->setThumbnailUrl($project->getCoverImage());
+        $item->setTitle($project->getTitle());
+        $item->setDateUpdated(new \DateTime("now"));
+        $project_json = $project_http->getContent();
+        $item->setText($project_json);
+        $em->persist($item);
+        $em->flush();
+            
+        //End Item Creation
+
+
+
+
         return new Response($project->getId());
     }
 }
