@@ -40,7 +40,12 @@ class ItemRepository extends EntityRepository
                 }
             }
     	}
-		
+		if(isset($query['archive']))
+        {
+             $qb->andWhere('i.archive = :archive')
+                ->setParameter('archive', $query['archive']);
+        }
+
 		if(isset($query['earliestDate']))
       	{
 			 $qb->andWhere('i.mediaDateCreated >= ?6')
