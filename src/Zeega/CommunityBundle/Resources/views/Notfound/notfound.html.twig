@@ -47,11 +47,17 @@
 {% block scripts %}
 
 	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
 	
-	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
-	
-	
+	{% if app.environment == 'dev' %}
+	<!-- to load JS libraries separately -->
+		<script data-main="{{ asset('js/loaders/header') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	{% else %}
+		<!-- to load single aggregated JS library --> 
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/header.js') }}"></script>
+	{% endif %}
+
+
+
 {% endblock %}
 
 {% block body %}
