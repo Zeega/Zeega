@@ -40,6 +40,7 @@ class PersistCommand extends ContainerAwareCommand
              ->addOption('file_path', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('user', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
              ->addOption('ingestor', null, InputOption::VALUE_REQUIRED, 'Url of the item or collection to be ingested')
+             ->addOption('check_for_duplicates', null, InputOption::VALUE_NONE,'If set, items that already exist on the database will not be imported')
              ->setHelp("Help");
     }
 
@@ -51,25 +52,50 @@ class PersistCommand extends ContainerAwareCommand
         $filePath = $input->getOption('file_path');
         $userId = $input->getOption('user');
         $ingestor = $input->getOption('ingestor');
-        
+        $duplicateCheck = $input->getOption('check_for_duplicates');
+
         if(null === $filePath || null === $userId || null === $ingestor) {
             $output->writeln('<info>Please run the operation with the --file_path, --ingestor and --user options to execute</info>');
         } else {
             $em = $this->getContainer()->get('doctrine')->getEntityManager();
             $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);
 
+            if( !isset($user) ) {
+                $output->writeln("<error>Aborting</error>");
+                $output->writeln("<error>The user provided does not exist</error>");
+                return;
+            }
+
             $item = json_decode(file_get_contents($filePath),true);
             $items = $item["items"]; // hammer
+            if( !isset($item["items"]) ) {
+                $output->writeln("<error>Aborting</error>");
+                $output->writeln("<error>The file provided doesn't seem to have an items array. Wrong format?</error>");
+                return;
+            }
+
             $itemService = $this->getContainer()->get('zeega.item');
+            $count = 0;
 
             foreach($items as $item) {
+                if( $duplicateCheck ) {
+                    $dbItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array("uri"=>$item["uri"], "user"=>$user));
+                    if( isset ($dbItem) ) {
+                        continue;
+                    }
+                } 
+                $count++;
                 $item = $itemService->parseItem($item, $user);
                 $em->persist($item);
+
+                if ($count % 100 == 0) {
+                    $em->flush();
+                }
             }
             
-            $em->flush($item);
+            $em->flush();
 
-            $output->writeln($item->getTitle());
+            $output->writeln("<info>Ingestion complete. $count items added to the database.</info>");
         }
     } 
 }
