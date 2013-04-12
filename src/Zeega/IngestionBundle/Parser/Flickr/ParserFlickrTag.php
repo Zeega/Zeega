@@ -54,7 +54,6 @@ class ParserFlickrTag extends ParserAbstract
             $checkForDuplicates = FALSE;
         } 
 
-        echo $checkForDuplicates;
 		$f = new \Phpflickr_Phpflickr("97ac5e379fbf4df38a357f9c0943e140");
         $currentPage = 1;
         $items = array();

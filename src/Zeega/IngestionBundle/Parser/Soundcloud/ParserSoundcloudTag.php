@@ -48,7 +48,6 @@ class ParserSoundcloudTag extends ParserAbstract
             $itemsJson = json_decode($itemsJson,true);
             
             if(null !== $itemsJson && is_array($itemsJson) && count($itemsJson) > 0) {
-                echo ($apiUrl). "\n";    
                 foreach($itemsJson as $itemJson) {
                     $uri = $itemJson['stream_url'] .'?consumer_key='.self::$soundcloudConsumerKey;
 
