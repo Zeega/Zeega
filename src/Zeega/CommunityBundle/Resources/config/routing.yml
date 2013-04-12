@@ -8,7 +8,7 @@ ZeegaCommunityBundle_author:
 
 ZeegaCommunityBundle_home:
     pattern:  /
-    defaults: { _controller: ZeegaCommunityBundle:Community:home }
+    defaults: { _controller: ZeegaCommunityBundle:Community:productions }
 
 ZeegaCommunityBundle_features:
     pattern:  /features
