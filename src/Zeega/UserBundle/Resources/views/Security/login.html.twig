@@ -62,15 +62,12 @@
             <h2>Make the web you want</h2>
         </div>
         
-        
-        <a href="#" onclick="fbLogin();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/>
-        <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
 
         {% if error %}
             <div class="error" style="color:red">{{ error }}</div>
         {% endif %}
         
-        <br><h2 class='message'>Or Login with Email</h2>
+       
         <form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
           <fieldset>
             <div class="control-group"> 
