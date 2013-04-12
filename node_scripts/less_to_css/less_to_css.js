@@ -5,23 +5,23 @@ var less = require('less'),
         console.log("-------");
         console.log("Converting less files to css");
         var	config = [
-            			{
-                		    input: 'web/css/less/editor/',
-                		    output: '../../zeega.editor.css'
-                		},
-                		{
-                		    input: '../../less/discovery/',
-                		    output: '../../zeega.discovery.css'
-                		},
-                		{
-                		    input: '../community/',
-                		    output: '../../zeega.community.css'
-                		},
-                		{
-                		    input: '../standalone_player/',
-                		    output: '../../zeega.player.css'
-                		},
-                	];
+                {
+                    input: 'web/css/less/editor/',
+                    output: '../../zeega.editor.css'
+                },
+                {
+                    input: '../../less/discovery/',
+                    output: '../../zeega.discovery.css'
+                },
+                {
+                    input: '../community/',
+                    output: '../../zeega.community.css'
+                },
+                {
+                    input: '../standalone_player/',
+                    output: '../../zeega.player.css'
+                }
+            ];
         
         config.forEach(function(config) {
             var inputDirectory = config.input;
@@ -40,7 +40,7 @@ var less = require('less'),
             });
           
         });
-    }
+    };
     
 
 exports.run = compile;
