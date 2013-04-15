@@ -78,13 +78,15 @@
         <div style="width: 300px; float: right;">
 
 
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}{% else %} 
+
+        <a href="{{path('fos_user_registration_register')}}" style="color: white; font-size: 44px;">
 
             <div class="valign go-button" style="margin-bottom: 40px; text-align: center;">
               <div class="valign-content"> 
 
                 <h3 style="size:20px">
-                Sign Up!</a>
+                Sign Up!
                 </h3>
               
               </div>
