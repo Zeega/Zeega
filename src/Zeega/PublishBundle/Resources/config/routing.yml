@@ -1,35 +1,35 @@
-ZeegaPublishBunde_channel:
+ZeegaPublishBundle_channel:
     pattern: /channel/{tag}
-    defaults: { _controller:  ZeegaPublishBunde:Publish:channel }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:channel }
 
-ZeegaPublishBunde_frame_publish:
+ZeegaPublishBundle_frame_publish:
     pattern: /frame/{id}/view
-    defaults: { _controller:  ZeegaPublishBunde:Publish:frame }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:frame }
 
-ZeegaPublishBunde_collection_publish:
+ZeegaPublishBundle_collection_publish:
     pattern: /collection/{id}/view
-    defaults: { _controller:  ZeegaPublishBunde:Publish:collection }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:collection }
 
-ZeegaPublishBunde_embed:
+ZeegaPublishBundle_embed:
     pattern: /{id}/embed
-    defaults: { _controller:  ZeegaPublishBunde:Publish:embed }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:embed }
 
-ZeegaPublishBunde_project_main:
+ZeegaPublishBundle_project_main:
     pattern: /{id}
-    defaults: { _controller:  ZeegaPublishBunde:Publish:project, mobile: False }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
 
-ZeegaPublishBunde_project_mobile:
+ZeegaPublishBundle_project_mobile:
     pattern: /m/{id}
-    defaults: { _controller:  ZeegaPublishBunde:Publish:project, mobile: True }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: True }
 
-ZeegaPublishBunde_project_oldview:
+ZeegaPublishBundle_project_oldview:
     pattern: /{id}/view
-    defaults: { _controller:  ZeegaPublishBunde:Publish:project }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
 
-ZeegaPublishBunde_project_altview:
+ZeegaPublishBundle_project_altview:
     pattern: /project/{id}/view
-    defaults: { _controller:  ZeegaPublishBunde:Publish:project }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
 
-ZeegaPublishBunde_project_preview:
+ZeegaPublishBundle_project_preview:
     pattern: /projects/{id}/preview
-    defaults: { _controller:  ZeegaPublishBunde:Publish:projectPreview }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:projectPreview }

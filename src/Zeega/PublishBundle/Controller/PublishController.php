@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Zeega\CoreBundle\Controller;
+namespace Zeega\PublishBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
