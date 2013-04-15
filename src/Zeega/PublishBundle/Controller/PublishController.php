@@ -30,16 +30,16 @@ class PublishController extends BaseController
         $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($layersId);
         $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame, 'layers'=>$layers));
 
-     	return $this->render('ZeegaPublishBundle:Frame:frame.html.twig', array(
-			'frameId'=> $frame->getId(),
-			'frame'=>$frameTemplate,
-			'layers'=>$layers
-    	));
+        return $this->render('ZeegaPublishBundle:Frame:frame.html.twig', array(
+            'frameId'=> $frame->getId(),
+            'frame'=>$frameTemplate,
+            'layers'=>$layers
+        ));
     }
      
     public function projectAction($id, $mobile)
     {       
-    	$projectItem = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
+        $projectItem = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneByIdWithUser($id);
 
         if(null !== $projectItem) {
             if($projectItem["mediaType"]=='project') {
@@ -120,14 +120,14 @@ class PublishController extends BaseController
     public function embedAction ($id)
     {
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-		if(is_object($project)&&$project->getMediaType()=='project'){}
-		else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        if(is_object($project)&&$project->getMediaType()=='project'){}
+        else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 
         $request = $this->getRequest();
         $author = $request->query->get('author');
 
         return $this->render('ZeegaPublishBundle:Player:embed.html.twig', array('project'=>$project, 'projectId'=>$id,'author'=>$author));
-  	}
+    }
 }
 
 
