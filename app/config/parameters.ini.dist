@@ -32,12 +32,6 @@
     google_id         =                                 ; google id for analytics
     google_secret     =                                 ; google secret for analytics
 
-    rabbitmq_host     =                                 ; rabbitmq settings (under development)
-    rabbitmq_port     =
-    rabbitmq_vhost    =
-    rabbitmq_user     =
-    rabbitmq_password =
-
-    queueing_enabled  = false
-
     static_host       = http://static.zeega.org/staging/
+
+    media_host        = na

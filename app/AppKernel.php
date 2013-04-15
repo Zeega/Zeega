@@ -29,7 +29,6 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle($this),
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
-            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new FOS\TwitterBundle\FOSTwitterBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
             new Snc\RedisBundle\SncRedisBundle(),
