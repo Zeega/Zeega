@@ -139,8 +139,6 @@ class ProjectsController extends BaseController
 				
 				$project->setItemId($item->getId());
 				$project->setDatePublished($project->getDateUpdated());
-				$em->persist($project);
-				$em->flush();
             
        		}else{ // if this project is represented in the item table
 				
@@ -148,9 +146,12 @@ class ProjectsController extends BaseController
 				$item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($project->getItemId());
 				
 				$project->setDatePublished($project->getDateUpdated());
-				$em->persist($project);
-				$em->flush();
+				
 			}
+
+            $project->setPublished( true );
+            $em->persist($project);
+            $em->flush();
 
             $projectTags = $project->getTags();
             $itemTags = $item->getTags();
