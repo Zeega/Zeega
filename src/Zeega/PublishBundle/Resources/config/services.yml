@@ -1,0 +1,7 @@
+parameters:
+#    zeega_publish.example.class: Zeega\PublishBundle\Example
+
+services:
+#    zeega_publish.example:
+#        class: %zeega_publish.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

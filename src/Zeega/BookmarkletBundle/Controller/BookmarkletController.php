@@ -33,25 +33,13 @@ class BookmarkletController extends BaseController
         $itemUrl = $request->request->get('attribution_uri');
         $mediaType = strtolower($request->request->get('media_type'));
         $layerType = strtolower($request->request->get('layer_type'));
-        $isQueueingEnabled = $this->container->getParameter('queueing_enabled');
 
-        if($mediaType == "collection") {
-        	if(TRUE == $isQueueingEnabled && $layerType !== "dropbox" && $layerType !== "facebook") {
-            	$user = $this->get('security.context')->getToken()->getUser();
-            	$queue = $this->get('zeega_queue');
-            	$taskId = $queue->enqueueTask("zeega.tasks.ingest",array($itemUrl,$user->getId()),"ingestion");            
-            	
-            	return new Response($taskId);
+		$itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
+        $itemWithChildren = json_decode($itemWithChildren,true);
 
-        	} else {
-        		$itemWithChildren = $this->forward('ZeegaApiBundle:Items:getItemsParser', array(), array("load_children" => true,"url" => $itemUrl))->getContent();
-                $itemWithChildren = json_decode($itemWithChildren,true);
-
-                if(isset($itemWithChildren)) {
-                    $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);
-                }
-            }
-        } 
+        if(isset($itemWithChildren)) {
+            $request->request->set('child_items', $itemWithChildren["items"][0]["child_items"]);
+        }
 		
 		return $this->forward('ZeegaApiBundle:Items:postItems', array(), array());
     }
