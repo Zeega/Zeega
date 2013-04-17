@@ -1,7 +1,3 @@
-zeega_publish:
-    resource: "@ZeegaPublishBundle/Resources/config/routing.yml"
-    prefix:   /
-
 zeega_social:
     resource: "@ZeegaSocialBundle/Resources/config/routing.yml"
     prefix:   /
@@ -43,6 +39,10 @@ ZeegaDataBundle:
 
 ZeegaCoreBundle:
     resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+zeega_publish:
+    resource: "@ZeegaPublishBundle/Resources/config/routing.yml"
     prefix:   /
 
 
