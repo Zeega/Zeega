@@ -149,3 +149,13 @@ snc_redis:
             type: predis
             alias: default
             dsn: redis://%event_logger_host%
+
+doctrine_mongodb:
+    connections:
+        default:
+            server: %mongodb_host%
+
+    default_database: zeega
+    document_managers:
+        default:
+            auto_mapping: true

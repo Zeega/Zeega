@@ -33,7 +33,9 @@
         "kertz/twitteroauth": "*@dev",
         "friendsofsymfony/facebook-bundle": "1.1.*",
         "snc/redis-bundle": "2.1.x-dev",
-        "predis/predis": "0.8.x"
+        "predis/predis": "0.8.x",
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "doctrine/mongodb-odm-bundle": "3.0.*@dev"
     },
     "scripts": {
         "post-install-cmd": [
