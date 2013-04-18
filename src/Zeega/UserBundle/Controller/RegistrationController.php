@@ -20,6 +20,7 @@ class RegistrationController extends BaseController
             $user->setConfirmationToken(null);
             $user->setEnabled(true);
             $user->setLastLogin(new \DateTime());
+            $user->addRole("ROLE_CUTTINGEDGE");
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
             $response = new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard'));
