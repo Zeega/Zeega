@@ -13,3 +13,6 @@
 [submodule "web/js/app/home"]
 	path = web/js/app/home
 	url = https://github.com/Zeega/Zeega-Home.git
+[submodule "web/js/app/player.standalone_1_0"]
+	path = web/js/app/player.standalone_1_0
+	url = https://github.com/Zeega/Zeega-Standalone-Player.git

@@ -67,13 +67,25 @@ class PublishController extends BaseController
                 ));
             }    
         } else {
+            $projectDataArray = json_decode($projectData, true);
             
-            
-            return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
-                'project'=>$projectItem,
-                'project_data' => $projectData,
-                //'user_thumbnail' => $projectItem->getUserThumbnail()
-            ));
+            if( isset( $projectDataArray['version'] ) ){
+               $projectVersion = $projectDataArray['version']; 
+            } else {
+                $projectVersion = 1;
+            }
+
+            if ( $projectVersion < 1.1) {
+                return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
+                    'project'=>$projectItem,
+                    'project_data' => $projectData
+                ));
+            } else {
+                return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
+                    'project'=>$projectItem,
+                    'project_data' => $projectData
+                ));
+            }
         }
     }
 

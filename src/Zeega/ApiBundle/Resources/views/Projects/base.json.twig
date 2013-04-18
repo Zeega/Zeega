@@ -16,6 +16,7 @@
     "location" : {{ project.getLocation() | default("") | json_encode | raw}},
     "item_id" : {{ project.getItemId() | default(null) | json_encode | raw}},
     "mobile" : {{ project.getMobile() | default(false) | json_encode | raw}},
+    "version" : {{ project.getVersion() | default(null) | json_encode | raw}},
     "published" : {{ project.getPublished() | default(false) | json_encode | raw}},
 	"cover_image" : {{ project.getCoverImage() | default("") | json_encode | raw}}
 	{% if sequences is defined %}

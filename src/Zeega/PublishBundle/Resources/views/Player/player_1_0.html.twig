@@ -29,7 +29,8 @@
         <!-- END FB --> 
 
         <!-- STYLESHEETS -->
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        <link rel="stylesheet" href="{{ asset('js/lib/leaflet/leaflet.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone_1_0/dist/release/index.css') }}">
         <!-- END STYLESHEETS -->
 
 
@@ -66,7 +67,7 @@
             var projectJSON = "{{ project_data|e('js') }}";
         </script>
 
-        <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
+        <script src="{{ asset('js/app/player.standalone_1_0/dist/release/require.js') }}" ></script>
     </head>
 
     <body>
