@@ -25,10 +25,11 @@ use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Document\Item as MongoItem;
 use Zeega\DataBundle\Entity\User;
-use Zeega\DataBundle\Document\User as MongoUser;
 use Zeega\DataBundle\Document\Project as MongoProject;
 use Zeega\DataBundle\Document\Sequence as MongoSequence;
 use Zeega\DataBundle\Document\Frame as MongoFrame;
+use Zeega\DataBundle\Document\Layer as MongoLayer;
+use Zeega\DataBundle\Document\User as MongoUser;
 
 /**
  * Updates a task status
@@ -189,117 +190,140 @@ class MysqlToMongoCommand extends ContainerAwareCommand
 
     private function importProjects(OutputInterface $output)
     {
-        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        $sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $project, "enabled" => true));
-        $frames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findBy(array("project" => $project, "enabled" => true));
-        $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $project, "enabled" => true));
-        
-        $sequencesFrames = array();
-        
-        $sequencesIdTranslation = array();
-        $framesIdTranslation = array();
-
-        foreach($sequences as $sequence)
-        {
-            $sequenceId = $sequence->getId();
-            $currSequenceFrames = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($sequenceId);
-
-            foreach($currSequenceFrames as $oldFrameId) {
-                $oldFrameId = $frame;
-                $newFrameId = new \MongoId();
-                $framesIdTranslation[$oldFrameId] = $newFrameId;
-                array_push($sequencesFrames, $newFrameId);
-            }
-        }
-        
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project, 
-            'sequences' => $sequences, 'sequence_frames' => $sequenceFrames, 'layers' => $layers, 'frames' => $frames));
-        
- 
-        $output->writeln('<info>Importing projects</info>');
-
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-        $mysqlProjects = $em->getRepository('ZeegaDataBundle:Project')->findAll();
+        $users = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:User')->findAll();
+        
+        foreach($users as $user) {
+            $oldUserId = $user->getId();
+            if ($oldUserId < 13) {
+                continue;
+            }
+            $mongoUser = $dm->getRepository('ZeegaDataBundle:User')->findOneBy(array("oldId"=>$oldUserId));
 
-        foreach($mysqlProjects as $mysqlProject) {
-            $project = new MongoProject();
-            $project->setTitle($mysqlProject->getTitle());
-            $project->setPublished($mysqlProject->getPublished());
-            $project->setMobile($mysqlProject->getMobile());
-            $project->setDateCreated($mysqlProject->getDateCreated());
-
-            $project->setEnabled($mysqlProject->getEnabled());
-            $project->setTags($mysqlProject->getTags());
-            $project->setAuthors($mysqlProject->getAuthors());
-            $project->setCoverImage($mysqlProject->getCoverImage());
-            $project->setEstimatedTime($mysqlProject->getEstimatedTime());
-
-            $project->setDateUpdated($mysqlProject->getDateUpdated());
-            $project->setItemId($mysqlProject->getItemId());
-            $project->setDescription($mysqlProject->getDescription());
-            $project->setLocation($mysqlProject->getLocation());
-            $project->setDatePublished($mysqlProject->getDatePublished());
-
-            $mysqlSequences = $em->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $mysqlProject->getId()));
-            
-            foreach($mysqlSequences as $seq) {
-                $seqId = $seq->getId();
-                $id = new \MongoId();
-                echo $id;
-                $sequence = new MongoSequence();
-                $sequence->setId($id);
-                $sequence->setTitle($seq->getTitle());
-                $sequence->setAttr($seq->getAttr());
-                $sequence->setEnabled($seq->getEnabled());
-                $sequence->setPersistentLayers($seq->getPersistentLayers());
-                $sequence->setDescription($seq->getDescription());
-                $sequence->setAdvanceTo($seq->getAdvanceTo());
-                
-                $mysqlFrames = $em->getRepository('ZeegaDataBundle:Frame')->findFramesBySequenceId($seqId);
-                $frames = array();
-                foreach($mysqlFrames as $fram) {
-                    $frameId = new \MongoId();
-                    $frame = new MongoFrame();
-                    $frame->setId($frameId);
-                    $frame->setAttr($fram->getAttr());
-                    $frame->setThumbnailUrl($fram->getThumbnailUrl());
-                    $frame->setEnabled($fram->getEnabled());
-                    $frame->setControllable($fram->getControllable());
-                    $project->addFrames($frame);
-                    $frames[] = (string) $frameId;
-
-                    $layersIds = $fram->getLayers();
-                    $layers = array();
-                    if (is_array($layersIds) ) {
-                        foreach($layersIds as $layerId) {
-                            $mySqlLayer = $em->getRepository('ZeegaDataBundle:Layer')->findOnById($layerId);
-
-                            $layerId = new \MongoId();
-                            $layer = new MongoLayer();
-                            $layer->setType($mySqlLayer->getType());
-                            $layer->setText($mySqlLayer->getText());
-                            $layer->setAttr($mySqlLayer->getAttr());
-                            $layer->setEnabled($mySqlLayer->getEnabled());
-
-                            $layers[] = (string) $layerId;
-
-                            $project->addLayers($layer);
-                        }    
-                    }
-                    
-                    $frame->setLayers($layers);
-                    $project->addFrames($frame);
-                }   
-                $sequence->setFrames($frames);
-                $project->addSequences($sequence);
+            if (!isset($mongoUser) ) {
+                $output->writeln("New User id " . $user->getId());
+                $mongoUser = new MongoUser();
+                $mongoUser->setId(new \MongoId());
+                $mongoUser->setOldId($user->getId());
+                $mongoUser->setUsername($user->getUsername());
+                $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
+                $mongoUser->setEmail($user->getEmail());
+                $mongoUser->setEmailCanonical($user->getEmailCanonical());
+                $mongoUser->setDisplayName($user->getDisplayName());
+                $mongoUser->setBio($user->getBio());
+                $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
+                $mongoUser->setTwitterId($user->getTwitterId());
+                $mongoUser->setTwitterUsername($user->getTwitterUsername());
+                $mongoUser->setFacebookId($user->getFacebookId());
+                $dm->persist($mongoUser);
+                $dm->flush();                
             }
 
-            //var_dump($project);
-            //return;
-            $dm->persist($project);
-            $dm->flush();
-            return;
+            
+            $userProjects = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
+
+            foreach($userProjects as $userProject) {
+                
+                $id = $userProject["id"];
+
+                if ($oldUserId == 12 || $id > 632) {
+                    continue;
+                }
+
+                $project = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+                $sequences = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $project, "enabled" => true));
+                $frames = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findBy(array("project" => $project, "enabled" => true));
+                $layers = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $project, "enabled" => true));
+                
+                $output->writeln($project->getId());
+
+                $sequencesFrames = array();
+                
+                $layersIdTranslation = array();
+
+                $mongoProject = new MongoProject();
+                $mongoProject->setId(new \MongoId());
+                $mongoProject->setId(new \MongoId());
+                $mongoProject->setTitle($project->getTitle());
+                $mongoProject->setMobile($project->getMobile());
+                $mongoProject->setDateCreated($project->getDateCreated());
+                $mongoProject->setEnabled($project->getEnabled());
+                $mongoProject->setTags($project->getTags());
+                $mongoProject->setAuthors($project->getAuthors());
+                $mongoProject->setCoverImage($project->getCoverImage());
+                $mongoProject->setEstimatedTime($project->getEstimatedTime());
+                $mongoProject->setDateUpdated($project->getDateUpdated());
+                $mongoProject->setDescription($project->getDescription());
+                $mongoProject->setLocation($project->getLocation());
+                $mongoProject->setDatePublished($project->getDatePublished());
+                $mongoProject->setOldProjectId($project->getId());
+                $mongoProject->setUser($mongoUser);
+
+
+                $projectItemId = $project->getItemId();
+
+                if (isset($projectItemId)) {
+                    $mongoProject->setOldProjectPublishedId($projectItemId);
+                }
+
+                // TO-DO - SET USER
+
+                foreach($sequences as $seq) {
+                    
+                    $mongoSequence = new MongoSequence();
+                    $mongoSequence->setId(new \MongoId());
+                    $mongoSequence->setTitle($seq->getTitle());
+                    $mongoSequence->setAttr($seq->getAttr());
+                    $mongoSequence->setPersistentLayers($seq->getPersistentLayers());
+                    $mongoSequence->setEnabled($seq->getEnabled());
+                    $mongoSequence->setDescription($seq->getDescription());
+                    $mongoSequence->setAdvanceTo($seq->getAdvanceTo());
+                    
+                    $seqId = $seq->getId();
+                    $currSequenceFramesIds = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($seqId);
+
+                    foreach($currSequenceFramesIds as $oldFrameId) {
+                        $oldFrame = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findOneById($oldFrameId);
+                        
+                        $mongoFrame = new MongoFrame();
+                        $mongoFrame->setId(new \MongoId());
+                        $mongoFrame->setAttr($oldFrame->getAttr());
+                        $mongoFrame->setThumbnailUrl($oldFrame->getThumbnailUrl());
+                        $mongoFrame->setControllable($oldFrame->getControllable());
+                        $mongoFrameLayersIds = array();
+
+                        $oldFrameLayersIds = $oldFrame->getLayers();
+                        
+                        if (isset($oldFrameLayersIds)) {
+                            foreach($oldFrameLayersIds as $oldLayerId) {
+                                if (isset($oldLayerId) ) {
+                                    $oldLayer = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Layer')->findOneById($oldLayerId);
+                                    if (!isset($layersIdTranslation[$oldLayerId]) && isset($oldLayer)) {                            
+                                        $mongoLayer = new MongoLayer();
+                                        $mongoLayer->setId(new \MongoId());
+                                        $mongoLayer->setAttr($oldLayer->getAttr());
+                                        $mongoLayer->setType($oldLayer->getType());
+                                        $mongoLayer->setText($oldLayer->getText());
+                                        $mongoLayer->setEnabled(true);
+                                        $mongoProject->addLayer($mongoLayer);
+                                        $layersIdTranslation[$oldLayerId] = $mongoLayer->getId();
+                                    }
+
+                                    array_push($mongoFrameLayersIds, (string)$layersIdTranslation[$oldLayerId]); 
+                                }
+                                $mongoFrame->setLayers($mongoFrameLayersIds);
+                            }    
+                        }
+                        
+                        $mongoProject->addFrame($mongoFrame);
+                    }
+                    $mongoProject->addSequence($mongoSequence);
+                }
+                
+                $dm->persist($mongoProject);
+                $dm->flush();
+            }
         }
+    
     }
 }
