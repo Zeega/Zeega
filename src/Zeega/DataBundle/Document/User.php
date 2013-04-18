@@ -85,12 +85,28 @@ class User extends BaseUser
      */
     protected $facebookId;
 
+    /**
+     * @MongoDB\Int
+     */
+    protected $oldId;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
     }
 
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    
     /**
      * Get id
      *
@@ -407,5 +423,27 @@ class User extends BaseUser
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * Set oldId
+     *
+     * @param int $oldId
+     * @return \User
+     */
+    public function setOldId($oldId)
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+    /**
+     * Get oldId
+     *
+     * @return int $oldId
+     */
+    public function getOldId()
+    {
+        return $this->oldId;
     }
 }

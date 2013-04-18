@@ -86,6 +86,24 @@ class Project
     protected $datePublished;
 
     /**
+     *
+     * @MongoDB\Float
+     */
+    private $version;
+
+    /**
+     *
+     * @MongoDB\Int
+     */
+    private $oldProjectId;
+
+    /**
+     *
+     * @MongoDB\Int
+     */
+    private $oldProjectPublishedId;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */    
     protected $user;   
@@ -551,5 +569,71 @@ class Project
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return \Project
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float $version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set oldProjectId
+     *
+     * @param int $oldProjectId
+     * @return \Project
+     */
+    public function setOldProjectId($oldProjectId)
+    {
+        $this->oldProjectId = $oldProjectId;
+        return $this;
+    }
+
+    /**
+     * Get oldProjectId
+     *
+     * @return int $oldProjectId
+     */
+    public function getOldProjectId()
+    {
+        return $this->oldProjectId;
+    }
+
+    /**
+     * Set oldProjectPublishedId
+     *
+     * @param int $oldProjectPublishedId
+     * @return \Project
+     */
+    public function setOldProjectPublishedId($oldProjectPublishedId)
+    {
+        $this->oldProjectPublishedId = $oldProjectPublishedId;
+        return $this;
+    }
+
+    /**
+     * Get oldProjectPublishedId
+     *
+     * @return int $oldProjectPublishedId
+     */
+    public function getOldProjectPublishedId()
+    {
+        return $this->oldProjectPublishedId;
     }
 }

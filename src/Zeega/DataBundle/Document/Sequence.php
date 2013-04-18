@@ -54,6 +54,17 @@ class Sequence
      *
      * @return id $id
      */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
     public function getId()
     {
         return $this->id;
