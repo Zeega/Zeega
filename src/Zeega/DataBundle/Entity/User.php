@@ -524,4 +524,37 @@ class User extends BaseUser
     {
         return $this->facebookId;
     }
+
+    /**
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExpiresAt()
+    {
+        return $this->expiresAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCredentialsExpired()
+    {
+        return $this->credentialsExpired;
+    }
+
 }

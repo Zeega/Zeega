@@ -446,4 +446,30 @@ class User extends BaseUser
     {
         return $this->oldId;
     }
+
+    // DELETE
+
+    /**
+     * Set salt
+     *
+     * @param string $oldId
+     * @return \User
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+        return $this;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $oldId
+     * @return \User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
 }

@@ -31,8 +31,8 @@ use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
 use Zeega\DataBundle\Document\User as MongoUser;
 
-set_error_handler(create_function('$e', 'echo "Uncaught error \n";'));
-set_exception_handler(create_function('$e', 'echo "Uncaught exception \n";'));
+//set_error_handler(create_function('$e', 'echo "Uncaught error \n";'));
+//set_exception_handler(create_function('$e', 'echo "Uncaught exception \n";'));
 /**
  * Updates a task status
  *
@@ -74,28 +74,6 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         }
     }
 
-    private function createProject(OutputInterface $output) {
-        $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-
-        $mongoUser = new MongoUser();
-        $dm->persist($mongoUser);
-        $dm->flush();
-
-
-        $mongoSequence = new MongoSequence();
-        $mongoSequence->setTitle('sequence yo');
-
-        $mongoProject = new MongoProject();
-        $mongoProject->addUsers($mongoUser);
-        $mongoProject->addSequences($mongoSequence);
-        $dm->persist($mongoProject);
-        $dm->flush();
-
-        $mItem = $dm->getRepository('ZeegaDataBundle:Project')->findOneBy(array("users"=>$mongoUser->getId()));
-
-        echo $mItem->getId();
-    }
-
     private function importUsers(OutputInterface $output)
     {
         $output->writeln('<info>Importing users</info>');
@@ -104,90 +82,52 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
         $mysqlUsers = $em->getRepository('ZeegaDataBundle:User')->findAll();
 
-        foreach($mysqlUsers as $user) {            
-            $dm->persist($user);
-        }
-        $dm->flush();
-    }
-
-    private function importItems(OutputInterface $output)
-    {
-        $output->writeln('<info>Importing items</info>');
-
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
-        $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-        $mysqlItems = $em->getRepository('ZeegaDataBundle:Item')->findAll();
-
-        foreach($mysqlItems as $item) {            
-            $mItem = $dm->getRepository('ZeegaDataBundle:Item')->findOneBy(array("uri"=>$item->getUri()));
-            if(!isset($mItem)) {
-                $mongoItem = new MongoItem();
-                $mongoItem->setTitle($item->getTitle());
-                $mongoItem->setDescription($item->getDescription());
-                $mongoItem->setText($item->getText());
-                $mongoItem->setUri($item->getUri());
-                $mongoItem->setAttributionUri($item->getAttributionUri());
-                $mongoItem->setDateCreated($item->getDateCreated());
-                $mongoItem->setMediaType($item->getMediaType());
-                $mongoItem->setLayerType($item->getLayerType());
-                $mongoItem->setThumbnailUrl($item->getThumbnailUrl());
-                $mongoItem->setMediaGeoLatitude($item->getMediaGeoLatitude());
-                $mongoItem->setMediaDateCreated($item->getMediaDateCreated());
-                $mongoItem->setMediaCreatorUsername($item->getMediaCreatorUsername());
-                $mongoItem->setArchive($item->getArchive());
-                $mongoItem->setLocation($item->getLocation());
-                $mongoItem->setLicense($item->getLicense());
-                $mongoItem->setAttributes($item->getAttributes());
-                $mongoItem->setEnabled($item->getEnabled());
-                $mongoItem->setPublished($item->getPublished());
-                $mongoItem->setTags($item->getTags());
-                $mongoItem->setDateUpdated($item->getDateUpdated());
-                $mongoItem->setIngestedBy($item->getIngestedBy());
-                $mongoItem->setDuration($item->getDuration());
-
-                $dm->persist($mongoItem);
-                $dm->flush();
-
-                $childItems = $item->getChildItems();
-                if( isset($childItems) ) {
-                    foreach($childItems as $childItem) {
-
-                        $mChildItem = $dm->getRepository('ZeegaDataBundle:Item')->findOneBy(array("uri"=>$childItem->getUri()));
-
-                        if(!isset($mChildItem)) {
-                            $mChildItem = new MongoItem();
-                            $mChildItem->setTitle($childItem->getTitle());
-                            $mChildItem->setDescription($childItem->getDescription());
-                            $mChildItem->setText($childItem->getText());
-                            $mChildItem->setUri($childItem->getUri());
-                            $mChildItem->setAttributionUri($childItem->getAttributionUri());
-                            $mChildItem->setDateCreated($childItem->getDateCreated());
-                            $mChildItem->setMediaType($childItem->getMediaType());
-                            $mChildItem->setLayerType($childItem->getLayerType());
-                            $mChildItem->setThumbnailUrl($childItem->getThumbnailUrl());
-                            $mChildItem->setMediaGeoLatitude($childItem->getMediaGeoLatitude());
-                            $mChildItem->setMediaDateCreated($childItem->getMediaDateCreated());
-                            $mChildItem->setMediaCreatorUsername($childItem->getMediaCreatorUsername());
-                            $mChildItem->setArchive($childItem->getArchive());
-                            $mChildItem->setLocation($childItem->getLocation());
-                            $mChildItem->setLicense($childItem->getLicense());
-                            $mChildItem->setAttributes($childItem->getAttributes());
-                            $mChildItem->setEnabled($childItem->getEnabled());
-                            $mChildItem->setPublished($childItem->getPublished());
-                            $mChildItem->setTags($childItem->getTags());
-                            $mChildItem->setDateUpdated($childItem->getDateUpdated());
-                            $mChildItem->setIngestedBy($childItem->getIngestedBy());
-                            $mChildItem->setDuration($childItem->getDuration());
-                        }
-
-                        $mongoItem->addChildItems($mChildItem);
-                    }    
-                }
-                $dm->persist($mongoItem);
-                $dm->flush();
+        foreach($mysqlUsers as $user) {
+            $mongoUser = $dm->getRepository('ZeegaDataBundle:User')->findOneByOldId($user->getId());
+            
+            if (!isset($mongoUser)) {
+                break;
             }
+            
+            $mongoUser->setOldId($user->getId());
+            $mongoUser->setUsername($user->getUsername());
+            $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
+            $mongoUser->setEmail($user->getEmail());
+            $mongoUser->setEmailCanonical($user->getEmailCanonical());
+            $mongoUser->setEnabled($user->isEnabled());
+            $mongoUser->setSalt($user->getSalt());
+            $mongoUser->setPassword($user->getPassword());
+            $lastLogin = $user->getLastLogin();
+            if(isset($lastLogin)) {
+                $mongoUser->setLastLogin($lastLogin);    
+            }            
+            $mongoUser->setLocked($user->isLocked());
+            $mongoUser->setExpired($user->isExpired());
+            $mongoUser->setConfirmationToken($user->getConfirmationToken());
+            $mongoUser->setPasswordRequestedAt($user->getPasswordRequestedAt());
+            $mongoUser->setRoles($user->getRoles());
+            $mongoUser->setCredentialsExpired($user->getCredentialsExpired());
+            $mongoUser->setDisplayName($user->getDisplayName());
+            $mongoUser->setBio($user->getBio());
+            $mongoUser->setThumbUrl($user->getThumbUrl());
+            $mongoUser->setCreatedAt($user->getCreatedAt());
+            $mongoUser->setLocation($user->getLocation());
+            $mongoUser->setLocationLatitude($user->getLocationLatitude());
+            $mongoUser->setLocationLongitude($user->getLocationLongitude());
+            $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
+            $mongoUser->setDropboxDelta($user->getDropboxDelta());
+            $mongoUser->setIdea($user->getIdea());
+            $mongoUser->setApiKey($user->getApiKey());
+            $mongoUser->setTwitterId($user->getTwitterId());
+            $mongoUser->setTwitterUsername($user->getTwitterUsername());
+            $mongoUser->setFacebookId($user->getFacebookId());
+            $oldId = $user->getId();
+            $newId = $mongoUser->getId();
+            echo "Old id $oldId - new id $newId \n";
+            $dm->persist($mongoUser);
+            $dm->flush();
         }
-        $dm->flush();        
+        
     }
 
     private function importProjects(OutputInterface $output)
@@ -196,8 +136,12 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         $users = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:User')->findAll();
         
         foreach($users as $user) {
+
             $oldUserId = $user->getId();
 
+            if($oldUserId < 128) {
+                continue;
+            }
                 $output->writeln("New User id " . $user->getId());
                 $mongoUser = new MongoUser();
                 $mongoUser->setId(new \MongoId());
@@ -293,7 +237,15 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                                     if (!isset($layersIdTranslation[$oldLayerId]) && isset($oldLayer)) {                            
                                         $mongoLayer = new MongoLayer();
                                         $mongoLayer->setId(new \MongoId());
-                                        $mongoLayer->setAttr($oldLayer->getAttr());
+                                        $layerAttr = $oldLayer->getAttr();
+                                        $layerAttrJson = json_encode($layerAttr);
+                                        //echo $layerAttrJson;
+                                        if ($layerAttrJson == FALSE) {
+                                            $output->writeln("Project $id has broken layers");
+                                            continue;
+                                        }
+
+                                        $mongoLayer->setAttr($layerAttr);    
                                         $mongoLayer->setType($oldLayer->getType());
                                         $mongoLayer->setText($oldLayer->getText());
                                         $mongoLayer->setEnabled(true);
@@ -301,7 +253,10 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                                         $layersIdTranslation[$oldLayerId] = $mongoLayer->getId();
                                     }
 
-                                    array_push($mongoFrameLayersIds, (string)$layersIdTranslation[$oldLayerId]); 
+                                    if (isset($layersIdTranslation[$oldLayerId])) {
+                                        array_push($mongoFrameLayersIds, (string)$layersIdTranslation[$oldLayerId]);     
+                                    }
+                                    
                                 }
                                 $mongoFrame->setLayers($mongoFrameLayersIds);
                             }    
