@@ -152,6 +152,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->project = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = array('ROLE_EDITOR_V1.1');
     }
 
     /** 
