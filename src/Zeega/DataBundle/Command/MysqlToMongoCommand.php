@@ -31,6 +31,8 @@ use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
 use Zeega\DataBundle\Document\User as MongoUser;
 
+set_error_handler(create_function('$e', 'echo "Uncaught error \n";'));
+set_exception_handler(create_function('$e', 'echo "Uncaught exception \n";'));
 /**
  * Updates a task status
  *
@@ -195,12 +197,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         
         foreach($users as $user) {
             $oldUserId = $user->getId();
-            if ($oldUserId < 13) {
-                continue;
-            }
-            $mongoUser = $dm->getRepository('ZeegaDataBundle:User')->findOneBy(array("oldId"=>$oldUserId));
 
-            if (!isset($mongoUser) ) {
                 $output->writeln("New User id " . $user->getId());
                 $mongoUser = new MongoUser();
                 $mongoUser->setId(new \MongoId());
@@ -217,7 +214,6 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 $mongoUser->setFacebookId($user->getFacebookId());
                 $dm->persist($mongoUser);
                 $dm->flush();                
-            }
 
             
             $userProjects = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
@@ -225,10 +221,6 @@ class MysqlToMongoCommand extends ContainerAwareCommand
             foreach($userProjects as $userProject) {
                 
                 $id = $userProject["id"];
-
-                if ($oldUserId == 12 || $id > 632) {
-                    continue;
-                }
 
                 $project = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findOneById($id);
                 $sequences = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $project, "enabled" => true));
