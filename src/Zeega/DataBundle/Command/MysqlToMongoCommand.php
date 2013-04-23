@@ -134,34 +134,54 @@ class MysqlToMongoCommand extends ContainerAwareCommand
     {
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
         $users = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:User')->findAll();
-        
+
         foreach($users as $user) {
 
             $oldUserId = $user->getId();
 
-            if($oldUserId < 128) {
+            if ( $oldUserId < 2649 )
                 continue;
-            }
-                $output->writeln("New User id " . $user->getId());
-                $mongoUser = new MongoUser();
-                $mongoUser->setId(new \MongoId());
-                $mongoUser->setOldId($user->getId());
-                $mongoUser->setUsername($user->getUsername());
-                $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
-                $mongoUser->setEmail($user->getEmail());
-                $mongoUser->setEmailCanonical($user->getEmailCanonical());
-                $mongoUser->setDisplayName($user->getDisplayName());
-                $mongoUser->setBio($user->getBio());
-                $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
-                $mongoUser->setTwitterId($user->getTwitterId());
-                $mongoUser->setTwitterUsername($user->getTwitterUsername());
-                $mongoUser->setFacebookId($user->getFacebookId());
-                $dm->persist($mongoUser);
-                $dm->flush();                
 
+            $output->writeln("New User id " . $user->getId());
+            $mongoUser = new MongoUser();
+            $mongoUser->setOldId($user->getId());
+            $mongoUser->setUsername($user->getUsername());
+            $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
+            $mongoUser->setEmail($user->getEmail());
+            $mongoUser->setEmailCanonical($user->getEmailCanonical());
+            $mongoUser->setEnabled($user->isEnabled());
+            $mongoUser->setSalt($user->getSalt());
+            $mongoUser->setPassword($user->getPassword());
+            $lastLogin = $user->getLastLogin();
+            if(isset($lastLogin)) {
+                $mongoUser->setLastLogin($lastLogin);    
+            }            
+            $mongoUser->setLocked($user->isLocked());
+            $mongoUser->setExpired($user->isExpired());
+            $mongoUser->setConfirmationToken($user->getConfirmationToken());
+            $mongoUser->setPasswordRequestedAt($user->getPasswordRequestedAt());
+            $mongoUser->setRoles($user->getRoles());
+            $mongoUser->setCredentialsExpired($user->getCredentialsExpired());
+            $mongoUser->setDisplayName($user->getDisplayName());
+            $mongoUser->setBio($user->getBio());
+            $mongoUser->setThumbUrl($user->getThumbUrl());
+            $mongoUser->setCreatedAt($user->getCreatedAt());
+            $mongoUser->setLocation($user->getLocation());
+            $mongoUser->setLocationLatitude($user->getLocationLatitude());
+            $mongoUser->setLocationLongitude($user->getLocationLongitude());
+            $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
+            $mongoUser->setDropboxDelta($user->getDropboxDelta());
+            $mongoUser->setIdea($user->getIdea());
+            $mongoUser->setApiKey($user->getApiKey());
+            $mongoUser->setTwitterId($user->getTwitterId());
+            $mongoUser->setTwitterUsername($user->getTwitterUsername());
+            $mongoUser->setFacebookId($user->getFacebookId());
+            $dm->persist($mongoUser);
+            $dm->flush();                
             
+            //$output->writeln("Getting user projects");
             $userProjects = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
-
+            //$output->writeln("Got the projects");
             foreach($userProjects as $userProject) {
                 
                 $id = $userProject["id"];
@@ -209,20 +229,20 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                     $mongoSequence = new MongoSequence();
                     $mongoSequence->setId(new \MongoId());
                     $mongoSequence->setTitle($seq->getTitle());
-                    $mongoSequence->setAttr($seq->getAttr());
-                    $mongoSequence->setPersistentLayers($seq->getPersistentLayers());
                     $mongoSequence->setEnabled($seq->getEnabled());
                     $mongoSequence->setDescription($seq->getDescription());
                     $mongoSequence->setAdvanceTo($seq->getAdvanceTo());
                     
                     $seqId = $seq->getId();
                     $currSequenceFramesIds = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($seqId);
-
+                    $sequenceFrames = array();
                     foreach($currSequenceFramesIds as $oldFrameId) {
                         $oldFrame = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findOneById($oldFrameId);
                         
                         $mongoFrame = new MongoFrame();
                         $mongoFrame->setId(new \MongoId());
+                        array_push($sequenceFrames, (string)$mongoFrame->getId());
+
                         $mongoFrame->setAttr($oldFrame->getAttr());
                         $mongoFrame->setThumbnailUrl($oldFrame->getThumbnailUrl());
                         $mongoFrame->setControllable($oldFrame->getControllable());
@@ -264,11 +284,69 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                         
                         $mongoProject->addFrame($mongoFrame);
                     }
+                    $oldSequenceAttr = $seq->getAttr();
+
+                    if(isset($oldSequenceAttr)) {
+                        if(isset($oldSequenceAttr["soundtrack"])) {
+                            $soundtrackLayerId = $oldSequenceAttr["soundtrack"];
+                            if (isset($layersIdTranslation[$soundtrackLayerId])) {
+                                $oldSequenceAttr["soundtrack"] = (string)$layersIdTranslation[$soundtrackLayerId];    
+                            }                            
+                        }
+
+                        if(isset($oldSequenceAttr["persistent_layers"])) {
+                            $oldPersistentLayersIds = $oldSequenceAttr["persistent_layers"];
+
+                            if (is_array)
+                            $newPersistentLayersIds = array();
+                            foreach($oldPersistentLayersIds as $oldPersistentLayer) {
+                                array_push($newPersistentLayersIds, (string)$layersIdTranslation[$oldPersistentLayer]);
+                            }
+                            $oldSequenceAttr["persistent_layers"] = $newPersistentLayersIds;
+                        }
+                        $mongoSequence->setAttr($oldSequenceAttr);
+                    }
+
+                    $oldPersistentLayersIds = $seq->getPersistentLayers();
+                    if(isset($oldPersistentLayersIds)) {
+                        $newPersistentLayersIds = array();
+                        foreach($oldPersistentLayersIds as $oldPersistentLayer) {
+                            if (!isset($layersIdTranslation[$oldPersistentLayer])) {                            
+                                $oldLayer = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Layer')->findOneById($oldPersistentLayer);
+                                if (isset($oldLayer)) {
+                                    $mongoLayer = new MongoLayer();
+                                    $mongoLayer->setId(new \MongoId());
+                                    $layerAttr = $oldLayer->getAttr();
+                                    $layerAttrJson = json_encode($layerAttr);
+                                    //echo $layerAttrJson;
+                                    if ($layerAttrJson == FALSE) {
+                                        $output->writeln("Project $id has broken layers");
+                                        continue;
+                                    }
+
+                                    $mongoLayer->setAttr($layerAttr);    
+                                    $mongoLayer->setType($oldLayer->getType());
+                                    $mongoLayer->setText($oldLayer->getText());
+                                    $mongoLayer->setEnabled(true);
+                                    $mongoProject->addLayer($mongoLayer);
+                                    $layersIdTranslation[$oldLayerId] = $mongoLayer->getId();    
+                                }                                
+                            }
+                            if (isset($layersIdTranslation[$oldPersistentLayer])) {
+                                array_push($newPersistentLayersIds, (string)$layersIdTranslation[$oldPersistentLayer]);    
+                            }                            
+                        }
+                        $oldSequenceAttr["persistent_layers"] = $newPersistentLayersIds;
+                        $mongoSequence->setPersistentLayers($newPersistentLayersIds);
+                    }
+                    
+                    $mongoSequence->setFrames($sequenceFrames);
                     $mongoProject->addSequence($mongoSequence);
                 }
-                
+                //$output->writeln("Saving the new project");
                 $dm->persist($mongoProject);
                 $dm->flush();
+                //$output->writeln("New project saved");
             }
         }
     
