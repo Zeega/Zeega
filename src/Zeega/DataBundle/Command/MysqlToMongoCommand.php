@@ -22,7 +22,6 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 use Zeega\CoreBundle\Helpers\ResponseHelper;
-use Zeega\DataBundle\Entity\Item;
 use Zeega\DataBundle\Document\Item as MongoItem;
 use Zeega\DataBundle\Entity\User;
 use Zeega\DataBundle\Document\Project as MongoProject;
@@ -50,6 +49,8 @@ class MysqlToMongoCommand extends ContainerAwareCommand
              ->addOption('users', null, InputOption::VALUE_NONE , 'Items')
              ->addOption('projects', null, InputOption::VALUE_NONE , 'Items')
              ->addOption('create_project', null, InputOption::VALUE_NONE , 'Creates a project')
+             ->addOption('fix_users', null, InputOption::VALUE_NONE , 'Creates a project')
+             ->addOption('min_user_id', null, InputOption::VALUE_OPTIONAL, 'Minimum user_id')
              ->setHelp("Help");
     }
 
@@ -62,7 +63,9 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         $users = $input->getOption('users');
         $projects = $input->getOption('projects');
         $createProject = $input->getOption('create_project');
-        
+        $minUserId = $input->getOption('min_user_id');
+        $fixUsers = $input->getOption('fix_users');
+
         if( $items ) {
             self::importItems($output);
         } else if ( $users ) {
@@ -70,7 +73,9 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         } else if ( $createProject ) {
             self::createProject($output);
         } else if ( $projects ) {
-            self::importProjects($output);
+            self::importProjects($output, $minUserId);
+        } else if ( $fixUsers ) {
+            self::fixProjectsUser($output);
         }
     }
 
@@ -126,21 +131,26 @@ class MysqlToMongoCommand extends ContainerAwareCommand
             echo "Old id $oldId - new id $newId \n";
             $dm->persist($mongoUser);
             $dm->flush();
+            $dm->clear();
         }
         
     }
 
-    private function importProjects(OutputInterface $output)
+    private function importProjects(OutputInterface $output, $minUserId)
     {
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-        $users = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:User')->findAll();
+        $users = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:User')
+            ->createQueryBuilder("u")
+            ->select('u')
+            ->where("u.id >= $minUserId")
+            ->add('orderBy', 'u.id ASC')
+            ->setMaxResults(2000)
+            ->getQuery()
+            ->getResult();
 
         foreach($users as $user) {
 
             $oldUserId = $user->getId();
-
-            if ( $oldUserId < 2649 )
-                continue;
 
             $output->writeln("New User id " . $user->getId());
             $mongoUser = new MongoUser();
@@ -346,9 +356,68 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 //$output->writeln("Saving the new project");
                 $dm->persist($mongoProject);
                 $dm->flush();
+                $dm->clear();
                 //$output->writeln("New project saved");
             }
         }
     
+    }
+
+    private function fixProjectsUser(OutputInterface $output) {
+        /*$dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+        $minId = 1;
+        $maxId = 100;
+        $increment = 100;
+
+        while (1) {
+            $mongoUsers = $dm->createQueryBuilder('ZeegaDataBundle:User')
+                ->field('oldId')->gt($minId)
+                ->field('oldId')->lt($maxId)
+                ->getQuery()
+                ->execute();
+
+            if (!isset($mongoUsers)) {
+                break;
+            }   
+
+            foreach($mongoUsers as $mongoUser) {
+                $id = $mongoUser->getId();
+                $oldId = $mongoUser->getOldId();
+                $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
+                    ->field('userId')->equals($oldId)
+                    ->getQuery()
+                    ->execute();
+
+                foreach($userItems as $userItem) {
+                    $userItem->setUser($mongoUser);
+                    $dm->persist($userItem);
+                }
+                $dm->flush();
+
+                echo "$id - $oldId \n";
+            }
+            $dm->clear();
+            $minId = $minId + $increment;
+            $maxId = $maxId + $increment; 
+        }*/
+        $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+        $mongoUsers = $dm->getRepository('ZeegaDataBundle:User')->findAll();
+
+        foreach($mongoUsers as $mongoUser) {
+            $id = $mongoUser->getId();
+            $oldId = $mongoUser->getOldId();
+            $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
+                ->field('userId')->equals($oldId)
+                ->getQuery()
+                ->execute();
+
+            foreach($userItems as $userItem) {
+                $userItem->setUser($mongoUser);
+                $dm->persist($userItem);
+            }
+            $dm->flush();
+            echo "$id - $oldId \n";
+            $dm->clear();
+        }      
     }
 }

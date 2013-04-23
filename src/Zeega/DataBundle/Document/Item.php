@@ -150,6 +150,12 @@ class Item
      * @MongoDB\ReferenceOne(targetDocument="User", simple=true)
      */    
     protected $user;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $userId;
+
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
