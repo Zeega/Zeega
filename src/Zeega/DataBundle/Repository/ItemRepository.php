@@ -47,7 +47,6 @@ class ItemRepository extends DocumentRepository
     public function searchItems($query)
     {   
         $qb = $this->createQueryBuilder('Item')
-                ->find('enabled:0')
                 ->eagerCursor(true)
                 ->limit($query['limit'])
                 ->skip($query['limit'] * $query['page']);

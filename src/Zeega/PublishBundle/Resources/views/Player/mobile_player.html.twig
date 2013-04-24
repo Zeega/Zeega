@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- standard viewport tag to set the viewport to the device's width
+            , Android 2.3 devices need this so 100% width works properly and
+            doesn't allow children to blow up the viewport width-->
+        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
+        <!-- width=device-width causes the iPhone 5 to letterbox the app, so
+            we want to exclude it for iPhone 5 to allow full screen apps -->
+        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" />
+        <!-- provide the splash screens for iPhone 5 and previous -->
+        <link href="assets/splashs/splash_1096.png" rel="apple-touch-startup-image" media="(device-height: 568px)">
+        <link href="assets/splashs/splash_iphone_2x.png" rel="apple-touch-startup-image" sizes="640x960" media="(device-height: 480px)">
+
+
+         <title>{{project.title}}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+        <meta name="description" content="{{project.description}}">
+        <meta name="author" content="{{project.mediaCreatorRealname}}">
+
+        <!-- FB -->
+        
+        <meta property="og:site_name" content="Zeega"/>
+        <meta property="og:title" content="{{project.title}}"/>
+        <meta property="og:description" content="{{project.description}}"/>
+        {% if project.mediaCreatorRealname is defined %}
+        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
+        {% endif %}
+        <meta property="og:type" content="movie"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+        {% if project.thumbnailUrl is defined %}
+        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
+        {% elseif project.coverImage is defined %}
+        <meta property="og:image" content="{{project.coverImage}}"/>
+        {% else %}
+        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+        {% endif %}
+            
+        <!-- END FB --> 
+
+        <meta name="zeega" content="zeega-mobile"
+            data-directory="{{directory}}"
+            data-hostname="{{hostname}}"
+            data-project-id="{{project.id}}"
+            data-user-thumbnail="{{project.userThumbnail}}"
+            data-views="{{project.views}}"
+        />
+
+        <base href="/js/app/player.mobile/">
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/debug/index.css') }}">
+        {% if app.environment == 'prod' %}
+        <script> 
+            // because windows is the worst
+            if (!window.console) console = { log: function() {}};
+            //Google analytics
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-37456730-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+            //Project data
+            var projectJSON = "{{ project_data|e('js') }}";
+        </script>
+        {% endif %}
+        <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
+    </head>
+
+    <body>
+        <div role="main" id="main"></div>
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.id}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.id}}.png" width="1" height="1">
+    </body>
+</html>

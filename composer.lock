@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "faca6b4a232fec770554032fcb634e1c",
+    "hash": "b817809188f9684334c5cc9ccb2e7912",
     "packages": [
         {
             "name": "doctrine/common",
@@ -1375,28 +1375,6 @@
             "time": "2013-01-07 10:35:43"
         },
         {
-            "name": "oldsound/rabbitmq-bundle",
-            "version": "dev-zeega",
-            "target-dir": "OldSound/RabbitMqBundle",
-            "source": {
-                "type": "git",
-                "url": "git://github.com/luisbrandao/RabbitMqBundle.git",
-                "reference": "dev-zeega"
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/framework-bundle": ">=2.0",
-                "symfony/yaml": ">=2.0",
-                "videlalvaro/php-amqplib": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OldSound\\RabbitMqBundle\\": ""
-                }
-            }
-        },
-        {
             "name": "predis/predis",
             "version": "v0.8.3",
             "source": {
@@ -2099,47 +2077,6 @@
                 "templating"
             ],
             "time": "2013-04-08 12:40:11"
-        },
-        {
-            "name": "videlalvaro/php-amqplib",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/videlalvaro/php-amqplib.git",
-                "reference": "4eba006b48d44cadb1724d14c6e0a63e26685deb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/4eba006b48d44cadb1724d14c6e0a63e26685deb",
-                "reference": "4eba006b48d44cadb1724d14c6e0a63e26685deb",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PhpAmqpLib": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Alvaro Videla"
-                }
-            ],
-            "description": "This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
-            "homepage": "https://github.com/videlalvaro/php-amqplib/",
-            "keywords": [
-                "message",
-                "queue",
-                "rabbitmq"
-            ],
-            "time": "2013-04-19 13:55:24"
         }
     ],
     "packages-dev": [
@@ -2152,8 +2089,6 @@
     "stability-flags": {
         "twig/extensions": 20,
         "kriswallsmith/assetic": 20,
-        "oldsound/rabbitmq-bundle": 20,
-        "videlalvaro/php-amqplib": 20,
         "friendsofsymfony/twitter-bundle": 20,
         "kertz/twitteroauth": 20,
         "doctrine/mongodb-odm": 20,

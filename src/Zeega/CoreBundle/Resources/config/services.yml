@@ -9,13 +9,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    zeega_queue:
-        class: Zeega\CoreBundle\Service\QueueingService
-        arguments: 
-            security: "@security.context"
-            doctrine: "@doctrine_mongodb"
-            rabbitmq: "@old_sound_rabbit_mq.celery_task_producer"
-
     zeega_thumbnail:
         class: Zeega\CoreBundle\Service\ThumbnailService
         arguments: 

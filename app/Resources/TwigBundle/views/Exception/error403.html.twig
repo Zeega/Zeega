@@ -1,9 +1,4 @@
-	{# src/Zeega/CommunityBundle/Resources/views/Notfound/notfound.html.twig #}
-
-
-
-
-	
+{# src/Zeega/CommunityBundle/Resources/views/Notfound/notfound.html.twig #}
 
 {% extends '::base.html.twig' %}
 
@@ -11,7 +6,7 @@
 
 
 {%  block stylesheets %}
-	<!--- FOR DEVELOPMENT ONLY -- Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
+	<!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
 	<style type="text/css">
 	
@@ -34,9 +29,14 @@
 	</style>
 	
 	
-	<!-- Less -- LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-	<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-
+	{% if app.environment == 'dev' %}
+		<link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
+		<script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
+		<script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+	{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+	{% endif %}
+	
 	<link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 
@@ -47,54 +47,17 @@
 {% block scripts %}
 
 	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script data-main="{{ asset('js/loaders/home') }}" src="{{ asset('js/lib/require.js') }}"></script>
 	
-	<script type="text/javascript" language="Javascript" src="{{ asset('js/lib/less-1.3.0.min.js') }}"></script>
-	
-	
-{% endblock %}
+	{% if app.environment == 'dev' %}
+	<!-- to load JS libraries separately -->
+		<script data-main="{{ asset('js/loaders/header') }}" src="{{ asset('js/lib/require.js') }}"></script>
+	{% else %}
+		<!-- to load single aggregated JS library --> 
+		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/header.js') }}"></script>
+	{% endif %}
 
-{% block header %}
-<header>
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				
-				<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-					<img src="{{ asset('images/zeega-logo-header.png') }}"/>
-				</a>
-				
-				<ul class="nav">
-					
-				
-					
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							About
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							
-							<li><a href="{{path('ZeegaCommunityBundle_about')}}">Mission</a></li>
-							<li><a href="{{path('ZeegaCommunityBundle_productions')}}">Productions</a></li>
-							<!--<li><a href="{{path('ZeegaCommunityBundle_engine')}}">Engine</a></li>-->
-							<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
-							<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-							<li><a href="{{path('ZeegaCommunityBundle_news')}}">News</a></li>
-							<li class="divider"></li>
-							<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
-							<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-							<li><a href="{{path('ZeegaCommunityBundle_faq')}}">FAQ</a></li>
-							
-							
-						</ul>
-					</li>
-				</ul>
-				
-			</div>
-		</div>
-	</div>
-</header>
+
+
 {% endblock %}
 
 {% block body %}
@@ -112,8 +75,10 @@
 	
 			<div class="page-intro span11">
 			
-				<h1>SORRY! Something went wrong.</h1>
+				<h1>SORRY! We can't find the page you requested.</h1>
 				<h2 style="margin-bottom:350px;">Give us a chance to make it up to you by <a href="mailto:info@zeega.org">emailing us</a> and letting us know what you were looking for.</h2>
+				
+			
 			</div>
 		
 		</div>
@@ -127,4 +92,3 @@
 
 
 {% endblock %}
-

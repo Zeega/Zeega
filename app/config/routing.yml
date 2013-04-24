@@ -41,6 +41,10 @@ ZeegaCoreBundle:
     resource: "@ZeegaCoreBundle/Resources/config/routing.yml"
     prefix:   /
 
+zeega_publish:
+    resource: "@ZeegaPublishBundle/Resources/config/routing.yml"
+    prefix:   /
+
 
 # Internal routing configuration to handle ESI
 #_internal:

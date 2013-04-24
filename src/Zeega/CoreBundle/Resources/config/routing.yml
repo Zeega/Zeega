@@ -6,38 +6,3 @@ ZeegaCoreBundle_mobile:
     pattern: /mobile
     defaults: { _controller:  ZeegaCoreBundle:Core:mobile }
 
-ZeegaCoreBundle_channel:
-    pattern: /channel/{tag}
-    defaults: { _controller:  ZeegaCoreBundle:Publish:channel }
-
-ZeegaCoreBundle_frame_publish:
-    pattern: /frame/{id}/view
-    defaults: { _controller:  ZeegaCoreBundle:Publish:frame }
-
-ZeegaCoreBundle_collection_publish:
-    pattern: /collection/{id}/view
-    defaults: { _controller:  ZeegaCoreBundle:Publish:collection }
-
-ZeegaCoreBundle_embed:
-    pattern: /{id}/embed
-    defaults: { _controller:  ZeegaCoreBundle:Publish:embed }
-
-ZeegaCoreBundle_project_main:
-    pattern: /{id}
-    defaults: { _controller:  ZeegaCoreBundle:Publish:project, mobile: False }
-
-ZeegaCoreBundle_project_mobile:
-    pattern: /m/{id}
-    defaults: { _controller:  ZeegaCoreBundle:Publish:project, mobile: True }
-
-ZeegaCoreBundle_project_oldview:
-    pattern: /{id}/view
-    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
-
-ZeegaCoreBundle_project_altview:
-    pattern: /project/{id}/view
-    defaults: { _controller:  ZeegaCoreBundle:Publish:project }
-
-ZeegaCoreBundle_project_preview:
-    pattern: /projects/{id}/preview
-    defaults: { _controller:  ZeegaCoreBundle:Publish:projectPreview }

@@ -48,7 +48,6 @@ class ParserSoundcloudTag extends ParserAbstract
             $itemsJson = json_decode($itemsJson,true);
             
             if(null !== $itemsJson && is_array($itemsJson) && count($itemsJson) > 0) {
-                echo ($apiUrl). "\n";    
                 foreach($itemsJson as $itemJson) {
                     $uri = $itemJson['stream_url'] .'?consumer_key='.self::$soundcloudConsumerKey;
 
@@ -69,7 +68,13 @@ class ParserSoundcloudTag extends ParserAbstract
                     $item->setUri($uri);
                     $item->setAttributionUri($itemJson['permalink_url']);
                     $item->setMediaDateCreated($itemJson['created_at']);
-                    $item->setThumbnailUrl($itemJson['waveform_url']);
+                    if( !is_null( $itemJson['artwork_url'] )){
+                        $item->setThumbnailUrl( $itemJson['artwork_url'] );
+                    } else if( !is_null( $itemJson['user']['avatar_url'] )){
+                        $item->setThumbnailUrl( $itemJson['user']['avatar_url'] );
+                    } else {
+                        $item->setThumbnailUrl( $itemJson['waveform_url'] );
+                    }
                     $item->setChildItemsCount(0);
                     $item->setLicense($itemJson['license']);
                     

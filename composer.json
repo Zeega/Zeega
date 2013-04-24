@@ -1,36 +1,11 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "name": "Zeega",
+    "license": "Affero GPL",
+    "type": "project",
+    "description": "HTML5 platform revolutionizing web publishing and interactive storytelling for the immersive web.",
     "autoload": {
         "psr-0": { "": "src/" }
     },
-     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "oldsound/rabbitmq-bundle",
-                "version": "dev-zeega",
-                "target-dir": "OldSound/RabbitMqBundle",
-                "source": {
-                    "type": "git",
-                    "url": "git://github.com/luisbrandao/RabbitMqBundle.git",
-                    "reference": "dev-zeega"
-                },
-                "require": {
-                    "php": ">=5.3.0",
-                    "symfony/framework-bundle": ">=2.0",
-                    "videlalvaro/php-amqplib": "dev-master",
-                    "symfony/yaml": ">=2.0"
-                },
-                "installation-source": "source",
-                "autoload": {
-                    "psr-0": {
-                        "OldSound\\RabbitMqBundle\\": ""
-                    }
-                }
-            }
-        }
-    ],
     "require": {
        "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
@@ -49,8 +24,6 @@
         "friendsofsymfony/user-bundle": "1.3.1",
         "friendsofsymfony/rest-bundle": "0.9.0",
         "nelmio/solarium-bundle": "1.*",
-        "oldsound/rabbitmq-bundle":"dev-zeega",
-        "videlalvaro/php-amqplib":"dev-master",
         "friendsofsymfony/twitter-bundle": "dev-master",
         "kertz/twitteroauth": "*@dev",
         "friendsofsymfony/facebook-bundle": "1.1.*",
