@@ -60,6 +60,17 @@ class Sequence
     }
 
     /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+    
+    /**
      * Set title
      *
      * @param string $title
