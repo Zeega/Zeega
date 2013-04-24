@@ -54,12 +54,14 @@ class ProjectsController extends BaseController
             $title='Untitled Zeega';
         }
 
-        $frame = new MongoFrame();        
+        $frame = new MongoFrame();
+        $frame->setId(new \MongoId());
         $frame->setEnabled(true);
         $frame->setLayers(array());
         
         $sequence = new MongoSequence();
         $sequence->setEnabled(true);
+        $sequence->setFrames(array((string)$frame->getId()));
         
         $project= new MongoProject();
         $project->setDateCreated(new \DateTime("now"));
