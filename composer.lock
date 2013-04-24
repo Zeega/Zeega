@@ -1,4 +1,8 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
     "hash": "faca6b4a232fec770554032fcb634e1c",
     "packages": [
         {
@@ -268,22 +272,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/mongodb-odm.git",
-                "reference": "40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe"
+                "reference": "4bbe42acdba2aa97c19e87af67c595af3f9d7901"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe",
-                "reference": "40f7cdb2ba3bab4d9a598d0e0bd4fdfcc2abaafe",
+                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/4bbe42acdba2aa97c19e87af67c595af3f9d7901",
+                "reference": "4bbe42acdba2aa97c19e87af67c595af3f9d7901",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": ">=2.2.0,<2.5-dev",
                 "doctrine/mongodb": "1.0.*",
                 "php": ">=5.3.2",
-                "symfony/console": ">=2.0-dev,<2.3-dev"
+                "symfony/console": ">=2.0,<3.0"
             },
             "require-dev": {
-                "symfony/yaml": ">=2.0-dev,<2.3-dev"
+                "symfony/yaml": ">=2.0,<3.0"
             },
             "suggest": {
                 "symfony/yaml": "Enables the YAML metadata mapping driver"
@@ -310,7 +314,7 @@
                     "homepage": "http://avalanche123.com"
                 },
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -333,7 +337,7 @@
                 "odm",
                 "persistence"
             ],
-            "time": "2013-04-02 20:15:08"
+            "time": "2013-04-16 16:35:08"
         },
         {
             "name": "doctrine/mongodb-odm-bundle",
@@ -342,25 +346,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMongoDBBundle.git",
-                "reference": "48dccfd9078d20dffa60761b7a6ae9efcb0ac49a"
+                "reference": "dc2e72484496c539c1feb39de27aadcd809496fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/48dccfd9078d20dffa60761b7a6ae9efcb0ac49a",
-                "reference": "48dccfd9078d20dffa60761b7a6ae9efcb0ac49a",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMongoDBBundle/zipball/dc2e72484496c539c1feb39de27aadcd809496fd",
+                "reference": "dc2e72484496c539c1feb39de27aadcd809496fd",
                 "shasum": ""
             },
             "require": {
                 "doctrine/mongodb-odm": ">=1.0-beta5,<1.1",
                 "php": ">=5.3.2",
-                "symfony/doctrine-bridge": ">=2.1,<2.3-dev",
-                "symfony/framework-bundle": ">=2.1,<2.3-dev",
-                "symfony/options-resolver": ">=2.1,<2.3-dev"
+                "symfony/doctrine-bridge": ">=2.1,<3.0",
+                "symfony/framework-bundle": ">=2.1,<3.0",
+                "symfony/options-resolver": ">=2.1,<3.0"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "@dev",
-                "symfony/form": ">=2.1,<2.3-dev",
-                "symfony/yaml": ">=2.1,<2.3-dev"
+                "symfony/form": ">=2.1,<3.0",
+                "symfony/yaml": ">=2.1,<3.0"
             },
             "suggest": {
                 "doctrine/data-fixtures": "Load data fixtures"
@@ -387,7 +391,7 @@
                     "homepage": "http://avalanche123.com"
                 },
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -403,7 +407,7 @@
                 "persistence",
                 "symfony"
             ],
-            "time": "2013-04-05 17:15:42"
+            "time": "2013-04-11 04:16:06"
         },
         {
             "name": "doctrine/orm",
@@ -1587,23 +1591,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/snc/SncRedisBundle.git",
-                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7"
+                "reference": "5961c090df948ab857fdfa71c7d9c7e1568faa98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
-                "reference": "5d7bbed5a2e47aca35da272522b75d2a0a5fbba7",
+                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5961c090df948ab857fdfa71c7d9c7e1568faa98",
+                "reference": "5961c090df948ab857fdfa71c7d9c7e1568faa98",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": ">=2.1.0,<2.3-dev",
-                "symfony/yaml": ">=2.1.0,<2.3-dev"
+                "symfony/framework-bundle": ">=2.1.0,<2.4-dev",
+                "symfony/yaml": ">=2.1.0,<2.4-dev"
             },
             "require-dev": {
                 "doctrine/common": ">=2.2",
                 "predis/predis": "0.8.*",
-                "symfony/console": ">=2.1.0,<2.3-dev"
+                "symfony/console": ">=2.1.0,<2.4-dev"
             },
             "suggest": {
                 "monolog/monolog": "If you want to use the monolog redis handler.",
@@ -1642,7 +1646,7 @@
                 "redis",
                 "symfony"
             ],
-            "time": "2013-03-30 09:44:30"
+            "time": "2013-04-20 08:02:19"
         },
         {
             "name": "solarium/solarium",
@@ -2102,12 +2106,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/videlalvaro/php-amqplib.git",
-                "reference": "e56148a7c32ee9c639887834c444a94cce2a6323"
+                "reference": "4eba006b48d44cadb1724d14c6e0a63e26685deb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/e56148a7c32ee9c639887834c444a94cce2a6323",
-                "reference": "e56148a7c32ee9c639887834c444a94cce2a6323",
+                "url": "https://api.github.com/repos/videlalvaro/php-amqplib/zipball/4eba006b48d44cadb1724d14c6e0a63e26685deb",
+                "reference": "4eba006b48d44cadb1724d14c6e0a63e26685deb",
                 "shasum": ""
             },
             "require": {
@@ -2135,7 +2139,7 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2013-03-21 13:02:32"
+            "time": "2013-04-19 13:55:24"
         }
     ],
     "packages-dev": [
