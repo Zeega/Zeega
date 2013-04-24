@@ -38,56 +38,67 @@ class Item
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="attribution_uri")
      */
     protected $attributionUri;
 
     /**
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_created")
      */
     protected $dateCreated;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="media_type")
      */
     protected $mediaType;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="layer_type")
      */
     protected $layerType;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="thumbnail_url")
      */
     protected $thumbnailUrl;
 
     /**
      * @MongoDB\Int
+     * @MongoDB\Field(name="child_items_count")
      */
     protected $childItemsCount;
 
     /**
      * @MongoDB\Float
+     * @MongoDB\Field(name="media_geo_latitude")
      */
     protected $mediaGeoLatitude;
 
     /**
      * @MongoDB\Float
+     * @MongoDB\Field(name="media_geo_longitude")
      */
     protected $mediaGeoLongitude;
 
     /**
      * @MongoDB\Date
+     * @MongoDB\Field(name="media_date_created")
      */
     protected $mediaDateCreated;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="media_creator_username")
      */
     protected $mediaCreatorUsername;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="media_creator_realname")
      */
     protected $mediaCreatorRealname;
 
