@@ -1,31 +1,27 @@
 <?php
 
 // src/Zeega/\CoreBundle\/Repository/ItemRepository.php
-namespace Zeega\DataBundle\Repository;
+/*namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Doctrine\Common\Collections;
 use DateInterval;
 use Doctrine\ORM\Query\ResultSetMapping;
 use DateTime;
+*/
+namespace Zeega\DataBundle\Repository;
+
+use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class ItemRepository extends DocumentRepository
 {
     private function buildSearchQuery($qb, $query)
     {
         if(isset($query['user'])) {
-			$qb->andWhere('i.user = :userId')
-               ->setParameter('userId', $query['user']);
-		}
-		
-		if(isset($query['collection']))
-      	{
-			 $qb->innerjoin('i.parentItems', 'c')
-                ->andWhere('c.id = ?3')
-                ->setParameter(3, $query['collection']);
-		}
-		
-		if(isset($query['type'])) {
+            $qb->field('user')->equals($query['user']);
+        }
+                
+        if(isset($query['type'])) {
             $mediaTypes = explode(" AND ", $query['type']);
             foreach($mediaTypes as $mediaType) {
                 if("project" !== $mediaType) {
@@ -34,126 +30,65 @@ class ItemRepository extends DocumentRepository
 
                 if(preg_match("/-/",$query['type'])) {
                     $mediaType = str_replace("-","",$mediaType);
-                    $qb->andWhere("i.mediaType <> :not_content_type_$mediaType")->setParameter("not_content_type_$mediaType", $mediaType);
+                    $qb->field('mediaType')->notEqual($mediaType);
                 } else {
-                    $qb->andWhere("i.mediaType = :content_type_$mediaType")->setParameter("content_type_$mediaType", $mediaType);
+                    $qb->field('mediaType')->equals($mediaType);
                 }
             }
-    	}
-		if(isset($query['archive']))
-        {
-             $qb->andWhere('i.archive = :archive')
-                ->setParameter('archive', $query['archive']);
         }
-
-		if(isset($query['earliestDate']))
-      	{
-			 $qb->andWhere('i.mediaDateCreated >= ?6')
-			    ->setParameter(6, $query['earliestDate']);
-		}
         
-        if(isset($query['latestDate']))
-      	{
-			 $qb->andWhere('i.mediaDateCreated <= ?7')
-			    ->setParameter(7, $query['latestDate']);
-		}
-		
-		if(isset($query['not_item_id']))
-      	{
-			 $qb->andWhere('i.id <> (:not_item_id)')
-                ->setParameter('not_item_id', $query['not_item_id']);
-		}
-		
-        if(isset($query['enabled'])) {
-             $qb->andWhere('i.enabled = :enabled')
-                ->setParameter('enabled', $query['enabled']);
+        if (isset($query['archive'])) {
+             $qb->field('archive')->equals($query['archive']);
         }
-
-        if(isset($query['published'])) {
-             $qb->andWhere('i.published = :published')
-                ->setParameter('published', $query['published']);
-        }
-		
-		return $qb;
+        
+        return $qb;
     }
-   
-	public function getTotalItems($query)
-	{
-		
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb->select('COUNT(i)')
-	       ->from('ZeegaDataBundle:Item', 'i');
-		   
-	    $qb = $this->buildSearchQuery($qb, $query);
-		$qb->andWhere('i.mediaType <> :count_filter')->setParameter('count_filter', 'Collection');
-		
-		return intval($qb->getQuery()->getSingleScalarResult());
-		
-		//return 0;
-	}
-	
-    //  api/search
+
     public function searchItems($query)
     {   
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
-    
-        // search query
-        $qb->select('i.id, 
-                i.title,
-                i.description,
-                i.text,
-                i.uri,
-                i.attributionUri,
-                i.dateCreated,
-                i.mediaType, 
-                i.layerType,
-                i.thumbnailUrl,
-                i.childItemsCount, 
-                i.mediaGeoLatitude, 
-                i.mediaGeoLongitude,
-                i.mediaDateCreated,
-                i.mediaCreatorUsername,
-                i.mediaCreatorRealname,
-                i.archive,
-                i.location,
-                i.license,
-                i.attributes,
-                i.enabled,
-                i.published,
-                i.tags,
-                i.dateUpdated,
-                i.idAtSource,
-                i.ingestedBy,
-                i.duration,
-                i.headline,
-                i.views,
-                u.id as userId, u.displayName, u.username, u.thumbUrl as userThumbnail')
-            ->from('ZeegaDataBundle:Item', 'i')
-            ->innerjoin('i.user', 'u')
-            ->orderBy('i.id','DESC')
-            ->setMaxResults($query['limit'])
-            ->setFirstResult($query['limit'] * $query['page']);
+        $qb = $this->createQueryBuilder('Item')
+                ->find('enabled:0')
+                ->eagerCursor(true)
+                ->limit($query['limit'])
+                ->skip($query['limit'] * $query['page']);
 
         if(isset($query['sort'])) {
-	      	$sort = $query['sort'];
-      	 	if($sort == 'date-desc') {
-                $qb->orderBy('i.dateCreated','DESC')->groupBy("i.id");
+            $sort = $query['sort'];
+            if($sort == 'date-desc') {
+                $qb->sort('dateCreated','DESC');
             } else if($sort == 'date-asc') {
-                $qb->orderBy('i.dateCreated','ASC')->groupBy("i.id");
+                $qb->sort('dateCreated','ASC');
             } else {
-				$qb->orderBy('i.id','DESC');
-			}
-		} else {
-			$qb->orderBy('i.id','DESC');
-		}
+                $qb->sort('id','DESC');
+            }
+        } else {
+            $qb->sort('id','DESC');
+        }
 
         $qb = $this->buildSearchQuery($qb, $query);
         
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->execute();
     }
-	
-	//  api/search
+    
+    /*
+    public function getTotalItems($query)
+    {
+        
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('COUNT(i)')
+           ->from('ZeegaDataBundle:Item', 'i');
+           
+        $qb = $this->buildSearchQuery($qb, $query);
+        $qb->andWhere('i.mediaType <> :count_filter')->setParameter('count_filter', 'Collection');
+        
+        return intval($qb->getQuery()->getSingleScalarResult());
+        
+        //return 0;
+    }
+    
+    //  api/search
+    
+    //  api/search
     public function findOneByIdWithUser($id)
     {   
         $em = $this->getEntityManager();
@@ -164,39 +99,39 @@ class ItemRepository extends DocumentRepository
             ->from('ZeegaDataBundle:Item', 'i')
             ->innerjoin('i.user', 'u')
             ->orderBy('i.id','DESC')
-       		->where('i.id = :id')
-       		->setParameter('id', $id);
+            ->where('i.id = :id')
+            ->setParameter('id', $id);
         
-    	$res = $qb->getQuery()->getArrayResult();
-    	if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 5 ) {
+        $res = $qb->getQuery()->getArrayResult();
+        if(isset($res) && is_array($res) && count($res) == 1 && count($res[0]) == 5 ) {
             $result = $res[0][0];
             $result["displayName"] = $res[0]["displayName"];
             $result["username"] = $res[0]["username"];
             $result["userId"] = $res[0]["userId"];
             $result["userThumbnail"] = $res[0]["thumbUrl"];
             return $result;
-    	}
-    	return null;
+        }
+        return null;
     }
-	
+    
     //  api/search
     public function searchCollectionItems($query)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         // search query
-		$qb->select('i')
-	       ->from('ZeegaDataBundle:Item', 'i')
+        $qb->select('i')
+           ->from('ZeegaDataBundle:Item', 'i')
            ->orderBy('i.id','ASC')
-       	   ->setMaxResults($query['limit'])
-       	   ->setFirstResult($query['limit'] * $query['page']);
+           ->setMaxResults($query['limit'])
+           ->setFirstResult($query['limit'] * $query['page']);
 
-	    $qb = $this->buildSearchQuery($qb, $query);
+        $qb = $this->buildSearchQuery($qb, $query);
 
         // execute the query
         return $qb->getQuery()->getArrayResult();
     }
-	
+    
     public function findUriByUserArchive($userId, $archive, $maxResults = null)
     {
         $em = $this->getEntityManager();
@@ -240,4 +175,5 @@ class ItemRepository extends DocumentRepository
         
         return $qb->getQuery()->getResult(); 
     }
+    */
 }
