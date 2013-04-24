@@ -5,7 +5,7 @@
 {% macro show(item, editable) %}    {# Item rendering macro/function #}
     {% if item is not null %}
     {
-        "id":{{ item.id | default("null") }},
+        "id":{{ item.id | default("null") | json_encode | raw}},
         "user_id": {{ item.userId | default(null) | json_encode | raw }},
         "user_thumbnail":{{ item.userThumbnail | default("") | json_encode | raw }},
         "username": {{ item.username | default("") | json_encode | raw }},
