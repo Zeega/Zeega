@@ -111,6 +111,7 @@
 											</ul>
 										</li>
 										{% if is_granted('ROLE_ADMIN') %}
+											<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li>
 											<li><a href="{{ path('ZeegaDiscoveryBundle_library') }}" target="_blank">Library</a></li><br>
 										{% endif %}
 										

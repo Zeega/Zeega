@@ -22,13 +22,13 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
 
             new FOS\UserBundle\FOSUserBundle(),                        
-            /*
+            
             new Sonata\BlockBundle\SonataBlockBundle(),
             new Sonata\jQueryBundle\SonatajQueryBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
-            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\DoctrineMongoDBAdminBundle\SonataDoctrineMongoDBAdminBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),      
-            */
+            
             new JMS\SerializerBundle\JMSSerializerBundle($this),
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
@@ -37,7 +37,7 @@ class AppKernel extends Kernel
             new Snc\RedisBundle\SncRedisBundle(),
     
             new Zeega\ApiBundle\ZeegaApiBundle(),
-            //new Zeega\AdminBundle\ZeegaAdminBundle(),
+            new Zeega\AdminBundle\ZeegaAdminBundle(),
             new Zeega\CoreBundle\ZeegaCoreBundle(),
             new Zeega\DataBundle\ZeegaDataBundle(),
             new Zeega\IngestionBundle\ZeegaIngestionBundle(),

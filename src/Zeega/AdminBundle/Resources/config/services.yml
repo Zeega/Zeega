@@ -4,11 +4,17 @@ parameters:
 services:
     zeega.admin.user:
         class: Zeega\AdminBundle\AdminEntity\UserAdmin
-        arguments: [null, Zeega\DataBundle\Entity\User, ZeegaAdminBundle:UserAdmin]
+        arguments:
+            - ~
+            - Zeega\DataBundle\Document\User
+            - 'SonataAdminBundle:CRUD'
         tags:
-            - { name: sonata.admin, alias: zeega_admin_user, manager_type: orm, group: General, label: Users}
+            - { name: sonata.admin, alias: zeega_admin_user, manager_type: doctrine_mongodb, group: General, label: Users}
     zeega.admin.item:
         class: Zeega\AdminBundle\AdminEntity\ItemAdmin
-        arguments: [null, Zeega\DataBundle\Entity\Item, null]
+        arguments:
+            - ~
+            - Zeega\DataBundle\Document\Item
+            - 'SonataAdminBundle:CRUD'
         tags:
-            - { name: sonata.admin, manager_type: orm, group: General, label: Items}
+            - { name: sonata.admin, manager_type: doctrine_mongodb, group: General, label: Items}
