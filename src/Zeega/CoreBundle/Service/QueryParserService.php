@@ -116,7 +116,7 @@ class QueryParserService
         $query["limit"] = (Integer)$query["limit"];
 
         if(isset($query["user"])) {
-            $query["user"] = (integer)$query["user"];
+            $query["user"] = $query["user"];
             if(-1 == $query["user"]) {
                 if($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
                     $query["user"] = $this->securityContext->getToken()->getUser()->getId();
