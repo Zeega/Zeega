@@ -26,6 +26,7 @@ services:
         class: Zeega\CoreBundle\Service\QueryParserService
         arguments: 
             security: "@security.context"
+            doctrine: "@doctrine_mongodb"
 
     zeega_apc_cache:
         class: Zeega\CoreBundle\Service\ApcCacheService
