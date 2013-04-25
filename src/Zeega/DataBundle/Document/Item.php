@@ -153,6 +153,11 @@ class Item
     private $duration;
 
     /**
+     * @MongoDB\String
+     */
+    private $headline;
+
+    /**
      * @MongoDB\ReferenceMany(targetDocument="Item", simple="true")
      */
     private $children;
@@ -776,5 +781,27 @@ class Item
     public function removeChildren(\Zeega\DataBundle\Document\Item $children)
     {
         $this->children->removeElement($children);
+    }
+
+    /**
+     * Set headline
+     *
+     * @param string $headline
+     * @return \Item
+     */
+    public function setHeadline($headline)
+    {
+        $this->headline = $headline;
+        return $this;
+    }
+
+    /**
+     * Get headline
+     *
+     * @return string $headline
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
     }
 }
