@@ -41,24 +41,14 @@ class ParserService
 	        
 	        foreach ($availableParsers as $parserName => $parserConfig) {                                     // loop over all domain parsers
     			if (preg_match($parserConfig["regex"], $url, $matches)) {                                     
-                    $em = $this->doctrine->getEntityManager();                                                
-                        			    
     			    if(isset($parserConfig["parameters"]) && count($parserConfig["parameters"]) > 0) {        // we have a match - let's check if there are extra parameters defined in the config file
     			        $parameters = $parserConfig["parameters"];
     			    } else {
     			        $parameters = array();
     			    }
-    				
-                    if($userId != -1) {                                                                       // load the user if a user id was provided
-                        $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($userId);             
-                    } else {
-                        $user = $this->securityContext->getToken()->getUser();    
-                    }
                                                                                                               // TO-DO: check for null user
     				$parameters["regex_matches"] = $matches;                                                  // add the regex matches from above to the parameters array
     				$parameters["load_child_items"] = $loadChildItems;                                        // load a single item vs load all them (initial display vs ingestion)
-    				$parameters["user"] = $user;                                                              // add the user to the parameters to avoid injecting it in all the parsers
-    				$parameters["entityManager"] = $em;                                                       // add the em to the parameters to avoid injecting it in all the parsers
 
     				$parserClass = $parserConfig["parser_class"];                                             // get the parser class name
                     $parserMethod = new ReflectionMethod($parserClass, 'load');                               // instantiate the parser class using reflection
