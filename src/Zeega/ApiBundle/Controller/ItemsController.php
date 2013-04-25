@@ -429,7 +429,7 @@ class ItemsController extends ApiBaseController
             return parent::getStatusResponse(500, $e->getMessage());
         }      
     }
-   
+    /*
     // get_collection_project GET    /api/collections/{id}/project.{_format}
     public function getItemProjectAction($id)
     {
@@ -557,4 +557,5 @@ class ItemsController extends ApiBaseController
             return parent::getStatusResponse(500, $e->getMessage());
         }   
     }
+    */
 }

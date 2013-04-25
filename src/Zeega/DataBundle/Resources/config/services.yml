@@ -3,10 +3,10 @@ parameters:
     zeega_item.class: Zeega\DataBundle\Service\ItemService
 
 services:
-    zeega_solr:
-        class: %zeega_solr.class%
-        arguments:
-            solr: "@solarium.client"
+#    zeega_solr:
+#        class: %zeega_solr.class%
+#        arguments:
+#            solr: "@solarium.client"
 
     zeega.item:
         class: %zeega_item.class%

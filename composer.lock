@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e901641ad808a604cb86951243016d74",
+    "hash": "4ca691ef19954396bc2ac89c975178ad",
     "packages": [
         {
             "name": "doctrine/common",
@@ -408,76 +408,6 @@
                 "symfony"
             ],
             "time": "2013-04-11 04:16:06"
-        },
-        {
-            "name": "doctrine/orm",
-            "version": "2.3.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "2.3.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2.3.3",
-                "reference": "2.3.3",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "2.3.*",
-                "ext-pdo": "*",
-                "php": ">=5.3.2",
-                "symfony/console": "2.*"
-            },
-            "suggest": {
-                "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
-            },
-            "bin": [
-                "bin/doctrine",
-                "bin/doctrine.php"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Doctrine\\ORM": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                }
-            ],
-            "description": "Object-Relational-Mapper for PHP",
-            "homepage": "http://www.doctrine-project.org",
-            "keywords": [
-                "database",
-                "orm"
-            ],
-            "time": "2013-03-24 20:43:58"
         },
         {
             "name": "facebook/php-sdk",
@@ -1433,61 +1363,6 @@
             "time": "2012-08-29 11:53:20"
         },
         {
-            "name": "nelmio/solarium-bundle",
-            "version": "v1.1.0",
-            "target-dir": "Nelmio/SolariumBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nelmio/NelmioSolariumBundle",
-                "reference": "v1.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/nelmio/NelmioSolariumBundle/archive/v1.1.0.zip",
-                "reference": "v1.1.0",
-                "shasum": ""
-            },
-            "require": {
-                "solarium/solarium": ">=2.4,<2.5",
-                "symfony/framework-bundle": "2.*"
-            },
-            "require-dev": {
-                "symfony/yaml": "2.*"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Nelmio\\SolariumBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nelmio",
-                    "homepage": "http://nelm.io"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://github.com/nelmio/NelmioSolariumBundle/contributors"
-                }
-            ],
-            "description": "Integration with solarium solr client.",
-            "keywords": [
-                "search",
-                "solarium",
-                "solr"
-            ],
-            "time": "2013-01-07 10:35:43"
-        },
-        {
             "name": "predis/predis",
             "version": "v0.8.3",
             "source": {
@@ -1738,48 +1613,6 @@
                 "symfony"
             ],
             "time": "2013-04-20 08:02:19"
-        },
-        {
-            "name": "solarium/solarium",
-            "version": "2.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/basdenooijer/solarium",
-                "reference": "2.4.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/basdenooijer/solarium/zipball/2.4.1",
-                "reference": "2.4.1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Solarium": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "NewBSD"
-            ],
-            "authors": [
-                {
-                    "name": "See GitHub contributors",
-                    "homepage": "https://github.com/basdenooijer/solarium/contributors"
-                }
-            ],
-            "description": "PHP Solr client",
-            "homepage": "http://www.solarium-project.org",
-            "keywords": [
-                "php",
-                "search",
-                "solr"
-            ],
-            "time": "2013-02-11 13:12:43"
         },
         {
             "name": "sonata-project/admin-bundle",
