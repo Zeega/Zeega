@@ -24,7 +24,9 @@ class ItemsController extends ApiBaseController
         try {
             $queryParser = $this->get('zeega_query_parser');
             $query = $queryParser->parseRequest($this->getRequest()->query);
-
+            //if(isset($query["user"])) {
+            //    $query["user"] = $this->getUser();
+            //}
             $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
             $resultsCount = 0;
             //var_dump($results);
