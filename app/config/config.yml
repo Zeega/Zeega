@@ -50,7 +50,7 @@ doctrine_mongodb:
         default:
             server: %mongodb_host%
 
-    default_database: zeeganew
+    default_database: zeega
     document_managers:
         default:
             auto_mapping: true
