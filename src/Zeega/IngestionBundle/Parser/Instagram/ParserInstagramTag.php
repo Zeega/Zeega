@@ -3,7 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\Instagram;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 use Symfony\Component\HttpFoundation\Response;
 
 use \DateTime;

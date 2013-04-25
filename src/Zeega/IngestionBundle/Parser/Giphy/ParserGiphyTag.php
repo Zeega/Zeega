@@ -3,7 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\Giphy;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 use Symfony\Component\HttpFoundation\Response;
 
 use \DateTime;
@@ -37,7 +37,6 @@ class ParserGiphyTag extends ParserAbstract
                         $item->setArchive("Giphy");
                         $item->setUri( $itemJson["image_original_url"] );
                         $item->setAttributionUri($itemJson["bitly_gif_url"]);
-                        //$item->setMediaDateCreated(DateTime::createFromFormat("U", $itemJson["date"]));                    
                         $item->setThumbnailUrl($itemJson["image_fixed_height_still_url"]);
 
                          array_push($items,$item);
