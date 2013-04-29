@@ -140,7 +140,7 @@ class ProjectsController extends BaseController
         }
 
         if( $this->getRequest()->request->has('mobile') ) {
-            $project->setMobile( $this->getRequest()->request->set('mobile') );
+            $project->setMobile( $this->getRequest()->request->get('mobile') );
         }
 
         $dm->persist($project);
