@@ -12,6 +12,7 @@ use DateTime;
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Zeega\DataBundle\Document\Item;
 
 class ItemRepository extends DocumentRepository
 {
@@ -45,29 +46,46 @@ class ItemRepository extends DocumentRepository
     }
 
     public function searchItems($query)
-    {   
-        $qb = $this->createQueryBuilder('Item')
-                ->field('user')->prime(true)
-                ->eagerCursor(true)
-                ->limit($query['limit'])
-                ->skip($query['limit'] * $query['page']);
+    {  
+        if ( isset($query["text"]) ) {
+            $connection = $this->getDocumentManager()->getConnection();
+            $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
+            $results = $connection->selectDatabase($database)->prime(true)->command(array("text" => "Item", "search" => $query["text"]));            
+            $items = array();
 
-        if(isset($query['sort'])) {
-            $sort = $query['sort'];
-            if($sort == 'date-desc') {
-                $qb->sort('dateCreated','DESC');
-            } else if($sort == 'date-asc') {
-                $qb->sort('dateCreated','ASC');
+            if ( isset($results) && isset($results["results"]) ) {
+                foreach($results["results"] as $result) {            
+                    $item = new Item();
+                    $this->getDocumentManager()->getHydratorFactory()->hydrate($item, $result["obj"]);
+                    array_push($items,$item);    
+                }    
+            }            
+            
+            return $items;
+        } else {        
+            $qb = $this->createQueryBuilder('Item')
+                    ->field('user')->prime(true)
+                    ->eagerCursor(true)
+                    ->limit($query['limit'])
+                    ->skip($query['limit'] * $query['page']);
+
+            if(isset($query['sort'])) {
+                $sort = $query['sort'];
+                if($sort == 'date-desc') {
+                    $qb->sort('dateCreated','DESC');
+                } else if($sort == 'date-asc') {
+                    $qb->sort('dateCreated','ASC');
+                } else {
+                    $qb->sort('id','DESC');
+                }
             } else {
                 $qb->sort('id','DESC');
             }
-        } else {
-            $qb->sort('id','DESC');
-        }
 
-        $qb = $this->buildSearchQuery($qb, $query);
-        
-        return $qb->getQuery()->execute();
+            $qb = $this->buildSearchQuery($qb, $query);
+            
+            return $qb->getQuery()->execute();
+        }
     }
     
     /*
