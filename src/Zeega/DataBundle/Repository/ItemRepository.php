@@ -48,16 +48,30 @@ class ItemRepository extends DocumentRepository
     public function searchItems($query)
     {  
         if ( isset($query["text"]) ) {
+            $command = array("text" => "Item", "search" => $query["text"]);
+            $filter = array();
+
+            if ( isset($query["user"]) ) {
+                $filter["user"] = new \MongoId($query["user"]);
+            }
+
+            if ( isset($query["type"]) ) {
+                $filter["media_type"] = $query["type"];
+                // negation { $ne: "Audio" }}
+            }
+
+            $command["filter"] = $filter;
+
             $connection = $this->getDocumentManager()->getConnection();
             $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
-            $results = $connection->selectDatabase($database)->prime(true)->command(array("text" => "Item", "search" => $query["text"]));            
+            $results = $connection->selectDatabase($database)->command($command);
             $items = array();
 
             if ( isset($results) && isset($results["results"]) ) {
                 foreach($results["results"] as $result) {            
                     $item = new Item();
                     $this->getDocumentManager()->getHydratorFactory()->hydrate($item, $result["obj"]);
-                    array_push($items,$item);    
+                    array_push($items,$item);
                 }    
             }            
             
