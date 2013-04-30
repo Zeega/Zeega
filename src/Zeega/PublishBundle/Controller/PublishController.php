@@ -51,30 +51,40 @@ class PublishController extends BaseController
             throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
         }
 
+
+
+        $projectDataArray = json_decode($projectData, true);
+            
+        if( isset( $projectDataArray['version'] ) ){
+           $projectVersion = $projectDataArray['version']; 
+        } else {
+            $projectVersion = 1;
+        }
+
         if ( $mobile ) {
-            $projectDataArray = json_decode($projectData, true);
-       
-            if( is_array($projectDataArray) && isset($projectDataArray["mobile"]) ){
-                
-                return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
-                    'project'=>$projectItem,
-                    'project_data' => $projectData,                
-                ));
+            if ( $projectVersion < 1.1) {
+                if( is_array($projectDataArray) && isset($projectDataArray["mobile"]) ){
+                    
+                    return $this->render('ZeegaPublishBundle:Player:mobile_player_1_0.html.twig', array(
+                        'project'=>$projectItem,
+                        'project_data' => $projectData,                
+                    ));
+                } else {
+
+                    return $this->render('ZeegaPublishBundle:Player:mobile_not_supported.html.twig', array(
+                        'project'=>$projectItem                
+                    ));
+                }
             } else {
 
-                return $this->render('ZeegaPublishBundle:Player:mobile_not_supported.html.twig', array(
-                    'project'=>$projectItem                
-                ));
+                return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
+                        'project'=>$projectItem,
+                        'project_data' => $projectData,                
+                    ));
+
             }    
         } else {
-            $projectDataArray = json_decode($projectData, true);
             
-            if( isset( $projectDataArray['version'] ) ){
-               $projectVersion = $projectDataArray['version']; 
-            } else {
-                $projectVersion = 1;
-            }
-
             if ( $projectVersion < 1.1) {
                 return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
                     'project'=>$projectItem,
