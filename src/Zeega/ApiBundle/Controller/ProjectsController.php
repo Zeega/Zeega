@@ -389,8 +389,8 @@ class ProjectsController extends BaseController
 
 
 
-        if( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') )
-
+        if( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') ||
+            $this->container->get('security.context')->isGranted('ROLE_EDITOR_V1.1') )
         {
             // Create Published Item
             $projectId = $project->getId();
