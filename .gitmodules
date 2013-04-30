@@ -16,3 +16,6 @@
 [submodule "web/js/app/player.standalone_1_0"]
 	path = web/js/app/player.standalone_1_0
 	url = https://github.com/Zeega/Zeega-Standalone-Player.git
+[submodule "web/js/app/player.mobile_1_0"]
+	path = web/js/app/player.mobile_1_0
+	url = https://github.com/Zeega/Zeega-Mobile-Player.git
