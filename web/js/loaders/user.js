@@ -34,7 +34,6 @@ require(
 	'order!app/collections/dashboard.collection.project',
 	'order!app/views/dashboard.user/dashboard.view.user.profile',
 	'order!app/views/dashboard.project/dashboard.view.project',
-	'order!app/views/dashboard.item/dashboard.view.item',
 	
 	'order!ux/zeega.ux.header',
 	'order!app/index.dashboard'

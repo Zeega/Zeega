@@ -62,7 +62,6 @@ class ParserSoundcloudItem extends ParserAbstract
             $item->setThumbnailUrl( $itemJson['waveform_url'] );
         }
 
-		$item->setThumbnailUrl($itemJson['artwork_url']);
 		$item->setChildItemsCount(0);
 
 		$item->setLicense($itemJson['license']);
