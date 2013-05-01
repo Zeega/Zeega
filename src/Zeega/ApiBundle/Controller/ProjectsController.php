@@ -175,7 +175,8 @@ class ProjectsController extends BaseController
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         
-        $sequence = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+        $sequencesQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->select('sequences')
             ->findAndUpdate()
             ->returnNew()
             ->field('id')->equals($projectId)
@@ -185,39 +186,43 @@ class ProjectsController extends BaseController
         $request = $this->getRequest();
         if( $this->getRequest()->request->has('frames') ) {
             $frames = $this->getRequest()->request->get('frames');
-            $sequence->field('sequences.$.frames')->set( array_filter($frames) );
+            $sequencesQuery->field('sequences.$.frames')->set( array_filter($frames) );
         } else {
-            $sequence->field('sequences.$.frames')->set( null );
+            $sequencesQuery->field('sequences.$.frames')->set( null );
         }
 
         if($request->request->has('title')) {
-            $sequence->field('sequences.$.title')->set( $request->request->get('title') );
+            $sequencesQuery->field('sequences.$.title')->set( $request->request->get('title') );
         }
 
         if($request->request->has('attr')) {
-            $sequence->field('sequences.$.attr')->set( $request->request->get('attr') );
+            $sequencesQuery->field('sequences.$.attr')->set( $request->request->get('attr') );
         }
             
         if($request->request->has('persistent_layers')) {
-            $sequence->field('sequences.$.persistentLayers')->set( $request->request->get('persistent_layers') );
+            $sequencesQuery->field('sequences.$.persistentLayers')->set( $request->request->get('persistent_layers') );
         }
         
         if($request->request->has('description')) {
-            $sequence->field('sequences.$.description')->set( $request->request->get('description') );
+            $sequencesQuery->field('sequences.$.description')->set( $request->request->get('description') );
         }
 
         if($request->request->has('advance_to')) {
-            $sequence->field('sequences.$.advanceTo')->set( $request->request->get('advance_to') );
+            $sequencesQuery->field('sequences.$.advanceTo')->set( $request->request->get('advance_to') );
         }
         
-        $sequence
-            ->field('sequences.$.dateUpdated')->set(new \DateTime("now"))
-            ->getQuery()
-            ->execute();
+        $sequencesQuery->field('sequences.$.dateUpdated')->set(new \DateTime("now"));
+        
+        $project = $sequencesQuery->getQuery()->execute();
+        $sequence = $project->getSequences()->filter(
+            function($seq) use ($sequenceId){
+                return $seq->getId() == $sequenceId;
+            }
+        )->first();
 
-        $frameView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence));
+        $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence));
 
-        return ResponseHelper::compressTwigAndGetJsonResponse($frameView);
+        return new Response($sequenceView);
     }
 
     /**
@@ -400,7 +405,9 @@ class ProjectsController extends BaseController
         $dm->persist($layer);
         $dm->flush();
 
-        return new Response($layer);
+        $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
+
+        return new Response($layerView);
     }
 
     /**
@@ -413,7 +420,8 @@ class ProjectsController extends BaseController
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         
-        $layer = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+        $projectQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+            ->select('layers')
             ->findAndUpdate()
             ->returnNew()
             ->field('id')->equals($projectId)
@@ -423,18 +431,20 @@ class ProjectsController extends BaseController
         $attributes = $this->getRequest()->request->get('attr');
 
         if( isset($text) ) {
-            $layer->field('layers.$.text')->set($text);
-        } else {
-            $layer->field('layers.$.text')->set(null);
-        }
+            $projectQuery->field('layers.$.text')->set($text);
+        } 
 
         if( isset($attributes) ) {
-            $layer->field('layers.$.attr')->set($attributes);
-        } else {
-            $layer->field('layers.$.attr')->set(null);
+            $projectQuery->field('layers.$.attr')->set($attributes);
         }
         
-        $layer->getQuery()->execute();
+        $layers = $projectQuery->getQuery()->execute();
+        $layer = $layers->getLayers()->filter(
+            function($layr) use ($layerId){
+                return $layr->getId() == $layerId;
+            }
+        )->first();
+
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
         
         return new Response($layerView);
