@@ -77,7 +77,6 @@
 
     <body>
         <div role="main" id="main"></div>
-        <img src="http://{{event_logger_host}}:7379/INCR/{{project.id}}.png" width="1" height="1">
-        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.id}}.png" width="1" height="1">
+        {% include '::eventlogger.base.html.twig' %}
     </body>
 </html>
