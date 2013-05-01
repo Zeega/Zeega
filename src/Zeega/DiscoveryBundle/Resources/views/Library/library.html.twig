@@ -14,13 +14,11 @@
 {% block body %}
 
 <div id='zeega-editor-main'>
-
-		<div id='zeega-action-column'>
-			<div id='zeega-primary-nav' class='menu-bar menu-dark menu-tall'>
+		<div id='zeega-primary-nav' class='menu-bar menu-dark'>
 				<ul>
 					<li class='menu-branding'><a href='{{path('ZeegaCommunityBundle_home')}}' class='zeega-primary-logo'><img src='{{ asset('images/zeega-logo-header.png') }}'/></a></li>
 				</ul>
-				<ul class='pull-right'>
+				<ul>
 
 					<li>
 
@@ -59,37 +57,11 @@
 
 
 			</div>
-
-			<div id='zeega-project-info'>
-				<div id="zeega-discovery-title">Media Library</div>
-				
-								
-					<div class="menu-bar menu-dark universe-toggle"  >
-						<span class="universe" data-universe="1" >Community</span>
-						<span class="just-me" data-universe="0" >Just Me</span>
-					</div>
 					<div class="menu-bar menu-dark collection-title-wrapper"  >
 						<span id="collection-title" data-id="-1" >A sample Collection</span>
 						<span class="collection-clear">x</span>
 					</div>
-
-				
-			</div>
-			
-			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
-				<div class='zeega-list-header' style="float:left; text-align:left;">MY COLLECTIONS</div>
-				<ul style="float:right;">
-					<li><a href="#" id="create-collection" data-layer_type="Geo"><div class="menu-verbose-title">New</div><i  style = "background-position: -407px -97px;" class="icon-white"></i></a></li>
-					<li><a href="#" id="create-dynamic-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i style = "background-position: -239px 0;"  class="icon-white"></i></a></li>
-				</ul>	
-			</div>
-
-			<div class='collection-lists-container'  style="max-height:-webkit-calc(100% - 123px);">
-				<div  class='collection-list'><ul id='zeega-collection-list' style ='margin:0;'></ul></div>
-			</div>
-
-		</div><!-- zeega action column -->
-		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
+		<div id='zeega-library-search-line'>
 			<div id="zeega-search-wrapper" class='clearfix'>
 				<div class="btn-group" id="zeega-view-toggle">
 					<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
@@ -109,12 +81,21 @@
 								<option value="Collection">Collection</option>
 								<option value="project">Zeegas</option>
 							</select>
-						</span>
+						</span>						
 					</div>
+					<div class="pull-left">
 					<a href="#" id="go-button" class="btn btn-info btn-large">Go</a>
+					</div>
+					<div class="pull-left universe-toggle">
+							<span class="universe" data-universe="1" >Community</span>
+							<span class="just-me" data-universe="0" >Just Me</span>
+					</div>
 				</div>
+				
 			</div>
-		
+		</div>
+
+		<div id='zeega-library-search-results' style='width: 100%;'>
 			<div id='zeega-results-wrapper' style="max-height:-webkit-calc(100% - 50px);">
 				<div class="results-view-wrapper" id="results-thumb-wrapper">
 					<ul id="zeega-items-thumb" class="results-wrapper" ></ul>
@@ -122,14 +103,9 @@
 				<div class="results-view-wrapper"  id="results-list-wrapper" >
 					<table id="zeega-items-list" class="table results-wrapper"></table>
 				</div>
-				
 			</div>
-
 		</div>
-
 	</div>
-
-    
 
 {% endblock %}
 
