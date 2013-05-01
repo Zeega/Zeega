@@ -86,6 +86,16 @@ class Project
     protected $datePublished;
 
     /**
+     * @MongoDB\Float
+     */
+    protected $version;
+    
+    /**
+     * @MongoDB\Int
+     */
+    protected $views;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */    
     protected $user;   
@@ -551,5 +561,49 @@ class Project
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return \Project
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float $version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set views
+     *
+     * @param int $views
+     * @return \Project
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return int $views
+     */
+    public function getViews()
+    {
+        return $this->views;
     }
 }
