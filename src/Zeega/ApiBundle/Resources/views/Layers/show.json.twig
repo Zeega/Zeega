@@ -1,6 +1,6 @@
 {
 "id":{{ layer.id | default(null) | json_encode | raw}},
-"type":{{layer.type | default("") | json_encode | raw}},
+"type":{{layer.getType | default("") | json_encode | raw}},
 "attr":{{layer.attr | default([ ]) | json_encode | raw}},
 "enabled":{{layer.enabled | default(false) | json_encode | raw}}
 }
