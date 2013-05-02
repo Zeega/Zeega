@@ -36,30 +36,22 @@ class UsersController extends BaseController
     	$em = $this->getDoctrine();
         $loggedUser = $this->get('security.context')->getToken()->getUser();
         
-        if($id == -1)
-        {
+        if($id == -1) {
         	$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $loggedUser, 'editable' => true));
-        }
-        else
-        {
+        } else {
 			$user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
-			if(!isset($user))
-			{
+			if( !isset($user) ) {
 			    $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig');
-			}
-			else
-			{
-			    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId())
-    			{
+			} else {
+			    if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') && $loggedUser->getId() == $user->getId()) {
     				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => true));
-    			}
-    			else
-    			{
+    			} else {
     				$userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => false));
     			}
     		}
         }
-        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+
+        return new Response($userView);
  	}
  	
     public function getUserProjectsAction($id)
@@ -108,7 +100,7 @@ class UsersController extends BaseController
 			}
         }
         
-        return ResponseHelper::compressTwigAndGetJsonResponse($userView);
+        return new Response($userView);
     }
  	
  	// put_collections_items   PUT    /api/collections/{project_id}/items.{_format}
