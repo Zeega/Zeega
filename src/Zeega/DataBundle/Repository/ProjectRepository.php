@@ -14,14 +14,14 @@ class ProjectRepository extends DocumentRepository
             ->field('user.id')->equals($userId);
         
         if(null !== $published) {
- 	        $qb->field('published')->equals($published);
- 		}
+            $qb->field('published')->equals($published);
+        }
 
         if(null !== $limit) {
             $qb->limit($limit);
         }
 
- 		return $qb->getQuery()->execute();
+        return $qb->getQuery()->execute();
     }
 
     public function findProjectsByUserSmall($userId)
