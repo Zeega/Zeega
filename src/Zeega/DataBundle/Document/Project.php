@@ -32,6 +32,7 @@ class Project
 
     /**
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_created")
      */
     protected $dateCreated;
 
@@ -52,21 +53,25 @@ class Project
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="cover_image")
      */
     protected $coverImage;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="estimated_time")
      */
     protected $estimatedTime;
 
     /**
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_updated")
      */
     protected $dateUpdated;
 
     /**
      * @MongoDB\String
+     * @MongoDB\Field(name="item_id")
      */
     protected $itemId;
 
@@ -82,6 +87,7 @@ class Project
 
     /**
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_published")
      */
     protected $datePublished;
 
