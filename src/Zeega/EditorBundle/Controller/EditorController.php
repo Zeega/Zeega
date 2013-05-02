@@ -16,9 +16,10 @@ class EditorController extends BaseController
 {    
 	public function newProjectAction()
 	{  
-        if ( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') ) {            
-            $this->getRequest()->request->set('version',1.1);
-        } 
+            if ( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') ||
+               $this->container->get('security.context')->isGranted('ROLE_EDITOR_V1.1') ) {  
+                 $this->getRequest()->request->set('version',1.1);
+            } 
 
         $projectId = $this->forward('ZeegaApiBundle:Projects:postProject')->getContent();
 
