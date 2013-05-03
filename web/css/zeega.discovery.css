@@ -1246,7 +1246,7 @@ body{min-width:980px;}
 #go-button{padding:9px 9px;}
 #search-bar h5{line-height:18px;height:44px;color:rgba(255, 255, 255, 0.85);}
 #search-bar select{opacity:0;-moz-opacity:0;filter:alpha(opacity=0);width:150px;}
-#select-wrap{height:36px;position:absolute;top:6px;left:460px;font-size:1.2em;font-weight:bold;color:#999;width:140px;border-left:1px solid #CCC;border-right:1px solid #CCC;font-variant:small-caps;font-family:Arial,sans-serif;}
+#select-wrap{height:36px;position:absolute;top:42px;left:460px;font-size:1.2em;font-weight:bold;color:#999;width:140px;border-left:1px solid #CCC;border-right:1px solid #CCC;font-variant:small-caps;font-family:Arial,sans-serif;}
 #select-wrap-text{position:absolute;top:6px;left:20px;}
 #publish-project-modal-step1 label{font-weight:bold;}
 #publish-project-modal-step1 .tagsinput{height:150px;}
