@@ -990,6 +990,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .navbar-inner{height:40px;}
 .navbar .nav>li>a:hover,.btn-group .btn:hover,.btn-group .btn:focus,.btn-group .btn:active,.btn-group .btn.active{text-shadow:0 0 6px whiteSmoke;}
 .navbar{font-size:13px;}
+.navbar #user-new-project{color:white;padding:4px 10px 4px;}
+.navbar #user-new-project:hover{background-color:#2f96b4;}
 .nav{min-width:254px;}
 #footer{position:relative;bottom:0;width:100%;}
 #footer h5{margin:0;margin-top:8px;text-transform:uppercase;font-size:12px;line-height:23px;font-family:'Open Sans Condensed',sans-serif;font-weight:normal;color:inherit;text-rendering:optimizelegibility;}
