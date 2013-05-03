@@ -5,22 +5,5 @@
 	"persistent_layers" : {{sequence.persistentLayers | default([]) | json_encode | raw}},
     "description" : {{sequence.description | default(null) | json_encode | raw}},
     "advance_to" : {{sequence.advanceTo | default(null) | json_encode | raw}},
-	"frames" : 
-	[
-	{%- if sequence_frames is defined -%}
-        {%- for frame in sequence_frames -%}	
-		{{frame.id}}
-	{%- if loop.index0 < sequence_frames|length - 1 -%}
-	,
-        {%- endif -%}
-	{% endfor %}
-        {%- elseif sequence_frames_complete is defined -%}
-        {%- for frame in sequence_frames_complete -%}   
-            {% include 'ZeegaApiBundle:Frames:show.json.twig' with {'frame': frame} %}  
-            {%- if loop.index0 < sequence_frames_complete|length - 1 -%}
-            ,
-            {%- endif -%}
-        {% endfor %}
-        {%- endif -%}
-	]
+	"frames" : {{sequence.frames | default([]) | json_encode | raw}}, 
 }
