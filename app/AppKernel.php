@@ -35,7 +35,8 @@ class AppKernel extends Kernel
             new FOS\TwitterBundle\FOSTwitterBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
             new Snc\RedisBundle\SncRedisBundle(),
-    
+            new Kunstmaan\SentryBundle\KunstmaanSentryBundle(),   
+ 
             new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
             new Zeega\CoreBundle\ZeegaCoreBundle(),
