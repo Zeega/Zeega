@@ -72,12 +72,15 @@
 
             window.userProjects = "{{ projects|e('js') }}";
         </script>
+    
+    {% if app.environment == 'prod' %}
+        <script src="{{ asset('js/app/editor/dist/release/require.js') }}" ></script>
 
-<!--
-        <script src="{{ asset('js/app/editor/dist/debug/templates.js') }}"></script>
-        <script data-main="{{ asset('js/app/editor/app/config') }}" src="{{ asset('js/app/editor/vendor/js/libs/require.js') }}"></script>
--->
-        <script src="{{ asset('js/app/editor/dist/debug/require.js') }}" ></script>
+    {% else %}
+
+         <script src="{{ asset('js/app/editor/dist/debug/require.js') }}" ></script>
+
+    {% endif %}
 
     </head>
 
