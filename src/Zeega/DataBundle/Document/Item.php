@@ -37,68 +37,68 @@ class Item
     protected $uri;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="attribution_uri")
+     * @MongoDB\String     
      */
     protected $attributionUri;
 
     /**
-     * @MongoDB\Date
      * @MongoDB\Field(name="date_created")
+     * @MongoDB\Date
      */
     protected $dateCreated;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="media_type")
+     * @MongoDB\String
      */
     protected $mediaType;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="layer_type")
+     * @MongoDB\String
      */
     protected $layerType;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="thumbnail_url")
+     * @MongoDB\String
      */
     protected $thumbnailUrl;
 
     /**
-     * @MongoDB\Int
      * @MongoDB\Field(name="child_items_count")
+     * @MongoDB\Int
      */
     protected $childItemsCount;
 
     /**
-     * @MongoDB\Float
      * @MongoDB\Field(name="media_geo_latitude")
+     * @MongoDB\Float
      */
     protected $mediaGeoLatitude;
 
     /**
-     * @MongoDB\Float
      * @MongoDB\Field(name="media_geo_longitude")
+     * @MongoDB\Float
      */
     protected $mediaGeoLongitude;
 
     /**
-     * @MongoDB\Date
      * @MongoDB\Field(name="media_date_created")
+     * @MongoDB\Date
      */
     protected $mediaDateCreated;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="media_creator_username")
+     * @MongoDB\String
      */
     protected $mediaCreatorUsername;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="media_creator_realname")
+     * @MongoDB\String
      */
     protected $mediaCreatorRealname;
 
@@ -138,14 +138,10 @@ class Item
     private $tags;
 
     /**
+     * @MongoDB\Field(name="date_updated")
      * @MongoDB\Date
      */
     private $dateUpdated;
-
-    /**
-     * @MongoDB\String
-     */
-    private $ingestedBy;
 
     /**
      * @MongoDB\Int
@@ -685,28 +681,6 @@ class Item
     public function getDateUpdated()
     {
         return $this->dateUpdated;
-    }
-
-    /**
-     * Set ingestedBy
-     *
-     * @param string $ingestedBy
-     * @return \Item
-     */
-    public function setIngestedBy($ingestedBy)
-    {
-        $this->ingestedBy = $ingestedBy;
-        return $this;
-    }
-
-    /**
-     * Get ingestedBy
-     *
-     * @return string $ingestedBy
-     */
-    public function getIngestedBy()
-    {
-        return $this->ingestedBy;
     }
 
     /**

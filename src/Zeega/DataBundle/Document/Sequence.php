@@ -30,6 +30,7 @@ class Sequence
     protected $enabled = true;
 
     /**
+     * @MongoDB\Field(name="persistent_layers")
      * @MongoDB\Hash
      */
     protected $persistentLayers;
@@ -40,6 +41,12 @@ class Sequence
     protected $description;
 
     /**
+     * @MongoDB\String
+     */
+    protected $soundtrack;
+
+    /**
+     * @MongoDB\Field(name="advance_to")
      * @MongoDB\Int
      */
     protected $advanceTo;
@@ -222,5 +229,27 @@ class Sequence
     public function getFrames()
     {
         return $this->frames;
+    }
+
+    /**
+     * Set soundtrack
+     *
+     * @param string $soundtrack
+     * @return self
+     */
+    public function setSoundtrack($soundtrack)
+    {
+        $this->soundtrack = $soundtrack;
+        return $this;
+    }
+
+    /**
+     * Get soundtrack
+     *
+     * @return string $soundtrack
+     */
+    public function getSoundtrack()
+    {
+        return $this->soundtrack;
     }
 }

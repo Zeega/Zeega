@@ -31,8 +31,8 @@ class Project
     protected $mobile;
 
     /**
-     * @MongoDB\Date
      * @MongoDB\Field(name="date_created")
+     * @MongoDB\Date     
      */
     protected $dateCreated;
 
@@ -52,8 +52,8 @@ class Project
     protected $authors;
 
     /**
-     * @MongoDB\String
      * @MongoDB\Field(name="cover_image")
+     * @MongoDB\String     
      */
     protected $coverImage;
 
@@ -64,8 +64,8 @@ class Project
     protected $estimatedTime;
 
     /**
-     * @MongoDB\Date
      * @MongoDB\Field(name="date_updated")
+     * @MongoDB\Date
      */
     protected $dateUpdated;
 
@@ -86,8 +86,8 @@ class Project
     protected $location;
 
     /**
-     * @MongoDB\Date
      * @MongoDB\Field(name="date_published")
+     * @MongoDB\Date
      */
     protected $datePublished;
 
@@ -218,7 +218,7 @@ class Project
     /**
      * Set dateCreated
      *
-     * @param date $dateCreated
+     * @param string $dateCreated
      * @return \Project
      */
     public function setDateCreated($dateCreated)
@@ -230,7 +230,7 @@ class Project
     /**
      * Get dateCreated
      *
-     * @return date $dateCreated
+     * @return string $dateCreated
      */
     public function getDateCreated()
     {
@@ -350,7 +350,7 @@ class Project
     /**
      * Set dateUpdated
      *
-     * @param date $dateUpdated
+     * @param string $dateUpdated
      * @return \Project
      */
     public function setDateUpdated($dateUpdated)
@@ -362,7 +362,7 @@ class Project
     /**
      * Get dateUpdated
      *
-     * @return date $dateUpdated
+     * @return string $dateUpdated
      */
     public function getDateUpdated()
     {
@@ -438,7 +438,7 @@ class Project
     /**
      * Set datePublished
      *
-     * @param date $datePublished
+     * @param string $datePublished
      * @return \Project
      */
     public function setDatePublished($datePublished)
@@ -450,11 +450,77 @@ class Project
     /**
      * Get datePublished
      *
-     * @return date $datePublished
+     * @return string $datePublished
      */
     public function getDatePublished()
     {
         return $this->datePublished;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return \Project
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float $version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set views
+     *
+     * @param int $views
+     * @return \Project
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return int $views
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Zeega\DataBundle\Document\User $user
+     * @return \Project
+     */
+    public function setUser(\Zeega\DataBundle\Document\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Zeega\DataBundle\Document\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -545,71 +611,5 @@ class Project
     public function getLayers()
     {
         return $this->layers;
-    }
-
-    /**
-     * Set users
-     *
-     * @param Zeega\DataBundle\Document\User $users
-     * @return \Project
-     */
-    public function setUser(\Zeega\DataBundle\Document\User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * Get users
-     *
-     * @return Zeega\DataBundle\Document\User $user
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set version
-     *
-     * @param float $version
-     * @return \Project
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
-     * Get version
-     *
-     * @return float $version
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set views
-     *
-     * @param int $views
-     * @return \Project
-     */
-    public function setViews($views)
-    {
-        $this->views = $views;
-        return $this;
-    }
-
-    /**
-     * Get views
-     *
-     * @return int $views
-     */
-    public function getViews()
-    {
-        return $this->views;
     }
 }
