@@ -71,6 +71,17 @@
         {% block player_script %}
         <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
         {% endblock player_script %}
+        <script src="//d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js"></script>
+        <script>
+        Raven.captureMessage('hello world!')
+
+// capture an exception
+try {
+    errorThrowingCode();
+} catch(err) {
+    Raven.captureException(err);
+}
+        </script>
     </head>
 
     <body>
