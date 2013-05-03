@@ -3,8 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\AbsoluteUrl;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Tag;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 use \DateTime;
 use SimpleXMLElement;
