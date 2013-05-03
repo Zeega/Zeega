@@ -33,7 +33,9 @@
         "sonata-project/doctrine-mongodb-admin-bundle": "2.1.*@dev",
         "sonata-project/jquery-bundle": "1.8.*",
         "sonata-project/exporter": "1.*",
-        "sonata-project/block-bundle": "2.1.*"
+        "sonata-project/block-bundle": "2.1.*",
+        "kunstmaan/sentry-bundle": "2.2.*@dev",
+        "raven/raven": "dev-master@dev" 
     },
     "scripts": {
         "post-install-cmd": [
