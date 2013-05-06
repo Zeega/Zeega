@@ -11,7 +11,8 @@ class ProjectRepository extends DocumentRepository
         $qb = $this->createQueryBuilder('Project')
             ->select('user','id','title','uri', 'coverImage', 'authors', 'dateCreated')
             ->eagerCursor(true)
-            ->field('user.id')->equals($userId);
+            ->field('user.id')->equals($userId)
+            ->sort('dateCreated','DESC');
         
         if(null !== $published) {
             $qb->field('published')->equals($published);
