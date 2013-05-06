@@ -22,7 +22,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 use Zeega\CoreBundle\Helpers\ResponseHelper;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 /**
  * Saves an item or a set of items on the database.

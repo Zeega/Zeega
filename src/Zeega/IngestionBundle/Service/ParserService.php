@@ -3,10 +3,6 @@
 namespace Zeega\IngestionBundle\Service;
 
 use Zeega\IngestionBundle\Parser\AbsoluteUrl\ParserAbsoluteUrl;
-use Zeega\DataBundle\Entity\Site;
-use Zeega\DataBundle\Entity\User;
-use Zeega\DataBundle\Entity\Tag;
-use Zeega\DataBundle\Entity\Item;
 use Symfony\Component\Yaml\Parser;
 use \ReflectionMethod;
 

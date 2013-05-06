@@ -12,7 +12,7 @@
 namespace Zeega\IngestionBundle\Parser\Flickr;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 use \DateTime;
 

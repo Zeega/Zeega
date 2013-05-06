@@ -3,7 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\DocumentCloud;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 use \DateTime;
 

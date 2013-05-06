@@ -60,7 +60,6 @@ class ParserInstagramTag extends ParserAbstract
                     $item->setAttributionUri($apiItem['link']);
                     $item->setMediaDateCreated(DateTime::createFromFormat('U', $apiItem['created_time']));                    
                     $item->setThumbnailUrl($apiItem['images']['thumbnail']['url']);
-                    $item->setIdAtSource($apiItem['id']);
                     
                     $tags = $apiItem["tags"];                            
                     if(isset($tags)) {

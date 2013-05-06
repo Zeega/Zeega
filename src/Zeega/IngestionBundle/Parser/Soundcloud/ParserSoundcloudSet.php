@@ -3,7 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\Soundcloud;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 use \DateTime;
 

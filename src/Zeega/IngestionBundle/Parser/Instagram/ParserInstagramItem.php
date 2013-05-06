@@ -3,7 +3,7 @@
 namespace Zeega\IngestionBundle\Parser\Instagram;
 
 use Zeega\IngestionBundle\Parser\Base\ParserAbstract;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 use Symfony\Component\HttpFoundation\Response;
 
 use \DateTime;
@@ -39,7 +39,6 @@ class ParserInstagramItem extends ParserAbstract
                 $item->setAttributionUri($mediaDetails['link']);
                 $item->setMediaDateCreated(DateTime::createFromFormat('U', $mediaDetails['created_time']));                    
                 $item->setThumbnailUrl($mediaDetails['images']['thumbnail']['url']);
-                $item->setIdAtSource($mediaDetails['id']);
                 
                 $tags = $mediaDetails["tags"];                            
                 if(isset($tags)) {
