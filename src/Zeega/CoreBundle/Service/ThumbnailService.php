@@ -68,7 +68,7 @@ class ThumbnailService
         return null;
     }
 
-    public function getFrameThumbnail($id)
+    public function getFrameThumbnail($projectId, $frameId)
     {
         try
         {     
@@ -78,7 +78,7 @@ class ThumbnailService
                 return null;
             }
             
-            $thumbnailServerUrl =  "$host/frame/$id";
+            $thumbnailServerUrl =  "$host/projects/$projectId/frames/$frameId";
             return file_get_contents($thumbnailServerUrl);
         }
         catch(Exception $e)

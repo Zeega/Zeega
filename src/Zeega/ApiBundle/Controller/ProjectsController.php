@@ -371,6 +371,42 @@ class ProjectsController extends BaseController
         return new Response($layerView);
     }
 
+    public function postProjectFramesThumbnailAction($projectId, $frameId)
+    {
+        $thumbnailService = $this->get('zeega_thumbnail');
+        $thumbnail = $thumbnailService->getFrameThumbnail($projectId, $frameId);
+
+        if ( isset($thumbnail) ) {
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
+                    ->field('id')->equals($projectId)
+                    ->select('frames')
+                    ->getQuery()
+                    ->getSingleResult();
+
+            if ( !isset($project) || !$project instanceof MongoProject) {
+                return null;
+            } 
+
+            $frames = $project->getFrames();
+            $frame = $project->getFrames()->filter(
+                function($fram) use ($frameId){
+                    return $fram->getId() == $frameId;
+                }
+            )->first();
+        
+            if ( !isset($frame) || !$frame instanceof MongoFrame) {
+                return null;  
+            }
+            
+            $frame->setThumbnailUrl($thumbnail);
+            $dm->persist($frame);
+            $dm->flush();
+        }
+
+        return new Response($thumbnail);        
+    }
+
     /**
      * Create a global layer
      * Route: POST api/projects/:id/layers

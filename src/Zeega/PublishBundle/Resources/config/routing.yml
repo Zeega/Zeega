@@ -3,7 +3,7 @@ ZeegaPublishBundle_channel:
     defaults: { _controller:  ZeegaPublishBundle:Publish:channel }
 
 ZeegaPublishBundle_frame_publish:
-    pattern: /frame/{id}/view
+    pattern: /projects/{projectId}/frames/{frameId}
     defaults: { _controller:  ZeegaPublishBundle:Publish:frame }
 
 ZeegaPublishBundle_collection_publish:

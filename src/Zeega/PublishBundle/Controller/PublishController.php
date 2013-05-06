@@ -23,17 +23,15 @@ use Zeega\CoreBundle\Controller\BaseController;
 
 class PublishController extends BaseController
 {
-    public function frameAction($id)
+    public function frameAction($projectId, $frameId)
     {
-        $frame = $this->getDoctrine()->getRepository('ZeegaDataBundle:Frame')->find($id);
-        $layersId = $frame->getLayers();
-        $layers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findByMultipleIds($layersId);
-        $frameTemplate = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame'=>$frame, 'layers'=>$layers));
+        $frameAndLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectFrameWithLayers($projectId, $frameId);
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frameAndLayers["frame"]));
 
         return $this->render('ZeegaPublishBundle:Frame:frame.html.twig', array(
-            'frameId'=> $frame->getId(),
-            'frame'=>$frameTemplate,
-            'layers'=>$layers
+            'frameId'=> $frameAndLayers["frame"]->getId(),
+            'frame'=>$frameView,
+            'layers'=>$frameAndLayers["layers"]
         ));
     }
      

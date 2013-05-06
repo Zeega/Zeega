@@ -36,4 +36,70 @@ class ProjectRepository extends DocumentRepository
         
         return iterator_to_array($results);
     }
+
+    public function findProjectFrame($projectId, $frameId) {
+        $project = $this->createQueryBuilder('ZeegaDataBundle:Project')
+                ->field('id')->equals($projectId)
+                ->eagerCursor(true)
+                ->select('frames')
+                ->getQuery()
+                ->getSingleResult();
+
+        if ( !isset($project) || !$project instanceof MongoProject) {
+            return null;
+        } 
+
+        $frames = $project->getFrames();
+        $frame = $project->getFrames()->filter(
+            function($fram) use ($frameId){
+                return $fram->getId() == $frameId;
+            }
+        )->first();
+        
+        if ( !isset($frame) || !$frame instanceof MongoFrame) {
+            return null;  
+        } else {
+            return $frame;
+        }
+    }
+
+    public function findProjectFrameWithLayers($projectId, $frameId) {
+        $project = $this->createQueryBuilder('ZeegaDataBundle:Project')
+                ->field('id')->equals($projectId)
+                ->select('frames','layers')
+                ->eagerCursor(true)
+                ->getQuery()
+                ->getSingleResult();
+
+        if ( !isset($project) ) {
+            return "null";
+        } 
+
+        
+        $frame = $project->getFrames()->filter(
+            function($fram) use ($frameId){
+                return $fram->getId() == $frameId;
+            }
+        )->first();
+        
+        if ( !isset($frame) ) {
+            return null;  
+        } 
+
+        $layersIds = $frame->getLayers();
+
+        if ( isset($layersIds) && is_array($layersIds) ) {
+            $layers = $project->getLayers()->filter(
+                function($layr) use ($layersIds){
+                    return in_array($layr->getId(), $layersIds);
+                }
+            );
+
+            if ( isset($layers) ) {
+                return array("frame"=> $frame, "layers" => $layers);
+            }
+        }
+
+        return array("frame"=> $frame, "layers" => array());
+    }
 }
