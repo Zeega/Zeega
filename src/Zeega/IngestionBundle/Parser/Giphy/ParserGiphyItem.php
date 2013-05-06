@@ -33,8 +33,14 @@ class ParserGiphyItem extends ParserAbstract
                     $item->setArchive('Giphy');
                     $item->setUri("http://media.giphy.com/media/$id/original.gif");
                     $item->setAttributionUri($mediaDetails['bitly_gif_url']);
-                    $item->setMediaDateCreated(DateTime::createFromFormat('U', $mediaDetails['date']));                    
-                    $item->setThumbnailUrl($mediaDetails['thumbnail_still_url']);
+                    
+                    if ( isset($mediaDetails['date']) ) {
+                        $item->setMediaDateCreated(DateTime::createFromFormat('U', $mediaDetails['date']));                    
+                    } else if ( isset($mediaDetails['tumblr_date']) ) {
+                        $item->setMediaDateCreated(DateTime::createFromFormat('U', $mediaDetails['tumblr_date']));
+                    }
+                    
+                    $item->setThumbnailUrl($mediaDetails['image_fixed_width_still_url']);
                     
                     $tags = $mediaDetails["tags"]; 
                     if(isset($tags)) {
