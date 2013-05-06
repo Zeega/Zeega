@@ -4,12 +4,7 @@ namespace Zeega\BookmarkletBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Zeega\DataBundle\Entity\Media;
-use Zeega\DataBundle\Entity\Metadata;
-use Zeega\DataBundle\Entity\Tag;
-use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\User;
-use Zeega\CoreBundle\Helpers\ResponseHelper;
+use Zeega\DataBundle\Document\Item;
 use Zeega\CoreBundle\Controller\BaseController;
 use Imagick;
 use DateTime;

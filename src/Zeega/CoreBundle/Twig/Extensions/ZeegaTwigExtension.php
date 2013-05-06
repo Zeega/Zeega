@@ -11,8 +11,6 @@
 
 namespace Zeega\CoreBundle\Twig\Extensions;
 
-use Zeega\DataBundle\Entity\Site;
-use Zeega\DataBundle\Entity\User;
 use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;

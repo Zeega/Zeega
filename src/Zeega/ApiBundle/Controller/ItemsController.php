@@ -13,7 +13,7 @@ namespace Zeega\ApiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Mapping\Cache\ApcCache;
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 use Zeega\ApiBundle\Controller\ApiBaseController;
 
 

@@ -13,9 +13,6 @@ namespace Zeega\CoreBundle\Service;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Zeega\DataBundle\Entity\Item;
-use Zeega\CoreBundle\Helpers\ItemCustomNormalizer;
-use Zeega\CoreBundle\Helpers\ResponseHelper;
 use Zeega\CoreBundle\Controller\BaseController;
 
 class ThumbnailService
