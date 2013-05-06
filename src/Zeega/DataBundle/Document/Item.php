@@ -37,68 +37,68 @@ class Item
     protected $uri;
 
     /**
+     * @MongoDB\String
      * @MongoDB\Field(name="attribution_uri")
-     * @MongoDB\String     
      */
     protected $attributionUri;
 
     /**
-     * @MongoDB\Field(name="date_created")
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_created")
      */
     protected $dateCreated;
 
     /**
-     * @MongoDB\Field(name="media_type")
      * @MongoDB\String
+     * @MongoDB\Field(name="media_type")
      */
     protected $mediaType;
 
     /**
-     * @MongoDB\Field(name="layer_type")
      * @MongoDB\String
+     * @MongoDB\Field(name="layer_type")
      */
     protected $layerType;
 
     /**
-     * @MongoDB\Field(name="thumbnail_url")
      * @MongoDB\String
+     * @MongoDB\Field(name="thumbnail_url")
      */
     protected $thumbnailUrl;
 
     /**
-     * @MongoDB\Field(name="child_items_count")
      * @MongoDB\Int
+     * @MongoDB\Field(name="child_items_count")
      */
     protected $childItemsCount;
 
     /**
-     * @MongoDB\Field(name="media_geo_latitude")
      * @MongoDB\Float
+     * @MongoDB\Field(name="media_geo_latitude")
      */
     protected $mediaGeoLatitude;
 
     /**
-     * @MongoDB\Field(name="media_geo_longitude")
      * @MongoDB\Float
+     * @MongoDB\Field(name="media_geo_longitude")
      */
     protected $mediaGeoLongitude;
 
     /**
-     * @MongoDB\Field(name="media_date_created")
      * @MongoDB\Date
+     * @MongoDB\Field(name="media_date_created")
      */
     protected $mediaDateCreated;
 
     /**
-     * @MongoDB\Field(name="media_creator_username")
      * @MongoDB\String
+     * @MongoDB\Field(name="media_creator_username")
      */
     protected $mediaCreatorUsername;
 
-    /**
-     * @MongoDB\Field(name="media_creator_realname")
+    /**     
      * @MongoDB\String
+     * @MongoDB\Field(name="media_creator_realname")
      */
     protected $mediaCreatorRealname;
 
@@ -138,8 +138,8 @@ class Item
     private $tags;
 
     /**
-     * @MongoDB\Field(name="date_updated")
      * @MongoDB\Date
+     * @MongoDB\Field(name="date_updated")
      */
     private $dateUpdated;
 
