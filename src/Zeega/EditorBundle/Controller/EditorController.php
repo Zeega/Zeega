@@ -1,10 +1,6 @@
 <?php
 namespace Zeega\EditorBundle\Controller;
 
-use Zeega\DataBundle\Entity\Item;
-use Zeega\DataBundle\Entity\Sequence;
-use Zeega\DataBundle\Entity\Project;
-use Zeega\DataBundle\Entity\User;
 use Zeega\CoreBundle\Controller\BaseController;
 
 use Symfony\Component\HttpFoundation\Response;

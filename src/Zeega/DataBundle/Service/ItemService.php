@@ -1,7 +1,7 @@
 <?php
 namespace Zeega\DataBundle\Service;
 
-use Zeega\DataBundle\Entity\Item;
+use Zeega\DataBundle\Document\Item;
 
 class ItemService
 {
