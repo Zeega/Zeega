@@ -250,9 +250,9 @@ class ItemsController extends ApiBaseController
 
             $itemService = $this->get('zeega.item');
             $item = $itemService->parseItem($requestData->all(), $user);
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($item);
-            $em->flush();
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $dm->persist($item);
+            $dm->flush();
             $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
 
             return new Response($itemView);
