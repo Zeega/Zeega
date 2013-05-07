@@ -122,7 +122,7 @@ class ProjectsController extends BaseController
         }
 
         if( $this->getRequest()->request->has('cover_image') ) {
-            $project->setCoverImage( $this->getRequest()->request->get('authors') );
+            $project->setCoverImage( $this->getRequest()->request->get('cover_image') );
         }
 
         if( $this->getRequest()->request->has('authors') ) {
