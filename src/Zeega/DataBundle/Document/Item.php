@@ -37,68 +37,57 @@ class Item
     protected $uri;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="attribution_uri")
+     * @MongoDB\Field(type="string",name="attribution_uri")
      */
     protected $attributionUri;
 
     /**
-     * @MongoDB\Date
-     * @MongoDB\Field(name="date_created")
+     * @MongoDB\Field(type="date",name="date_created")
      */
     protected $dateCreated;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="media_type")
+     * @MongoDB\Field(type="string",name="media_type")
      */
     protected $mediaType;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="layer_type")
+     * @MongoDB\Field(type="string",name="layer_type")
      */
     protected $layerType;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="thumbnail_url")
+     * @MongoDB\Field(type="string",name="thumbnail_url")
      */
     protected $thumbnailUrl;
 
     /**
-     * @MongoDB\Int
-     * @MongoDB\Field(name="child_items_count")
+     * @MongoDB\Field(type="int",name="child_items_count")
      */
     protected $childItemsCount;
 
     /**
-     * @MongoDB\Float
-     * @MongoDB\Field(name="media_geo_latitude")
+     * @MongoDB\Field(type="float",name="media_geo_latitude")
      */
     protected $mediaGeoLatitude;
 
     /**
-     * @MongoDB\Float
-     * @MongoDB\Field(name="media_geo_longitude")
+     * @MongoDB\Field(type="float",name="media_geo_longitude")
      */
     protected $mediaGeoLongitude;
 
     /**
-     * @MongoDB\Date
-     * @MongoDB\Field(name="media_date_created")
+     * @MongoDB\Field(type="date",name="media_date_created")
      */
     protected $mediaDateCreated;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="media_creator_username")
+     * @MongoDB\Field(type="string",name="media_creator_username")
      */
     protected $mediaCreatorUsername;
 
     /**     
-     * @MongoDB\String
-     * @MongoDB\Field(name="media_creator_realname")
+     * @MongoDB\Field(type="string",name="media_creator_realname")
      */
     protected $mediaCreatorRealname;
 
@@ -138,8 +127,7 @@ class Item
     private $tags;
 
     /**
-     * @MongoDB\Date
-     * @MongoDB\Field(name="date_updated")
+     * @MongoDB\Field(type="date",name="date_updated")
      */
     private $dateUpdated;
 

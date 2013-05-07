@@ -31,8 +31,7 @@ class Project
     protected $mobile;
 
     /**
-     * @MongoDB\Field(name="date_created")
-     * @MongoDB\Date     
+     * @MongoDB\Field(type="date",name="date_created")
      */
     protected $dateCreated;
 
@@ -52,26 +51,22 @@ class Project
     protected $authors;
 
     /**
-     * @MongoDB\Field(name="cover_image")
-     * @MongoDB\String     
+     * @MongoDB\Field(type="string",name="cover_image")
      */
     protected $coverImage;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="estimated_time")
+     * @MongoDB\Field(type="string",name="estimated_time")
      */
     protected $estimatedTime;
 
     /**
-     * @MongoDB\Field(name="date_updated")
-     * @MongoDB\Date
+     * @MongoDB\Field(type="date",name="date_updated")
      */
     protected $dateUpdated;
 
     /**
-     * @MongoDB\String
-     * @MongoDB\Field(name="item_id")
+     * @MongoDB\Field(type="string",name="item_id")
      */
     protected $itemId;
 
@@ -86,8 +81,7 @@ class Project
     protected $location;
 
     /**
-     * @MongoDB\Field(name="date_published")
-     * @MongoDB\Date
+     * @MongoDB\Field(type="date",name="date_published")
      */
     protected $datePublished;
 
