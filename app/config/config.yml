@@ -17,7 +17,7 @@ framework:
     trusted_proxies:  [184.106.132.157]
     session:
         cookie_domain: ~
-        cookie_lifetime:       72000
+        cookie_lifetime:       1440000
 
 parameters:
     pdo.db_options:

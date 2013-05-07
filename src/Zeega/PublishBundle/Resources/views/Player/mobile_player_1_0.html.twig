@@ -50,14 +50,15 @@
             data-views="{{project.views}}"
         />
 
-        <base href="/js/app/player.mobile/">
+        <base href="/js/app/player.mobile_1_0/">
 
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/debug/index.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile_1_0/dist/release/index.css') }}">
         
         <script> 
             // because windows is the worst
             if (!window.console) console = { log: function() {}};
             
+
             {% if app.environment == 'prod' %}
             //Google analytics
             var _gaq = _gaq || [];
@@ -70,16 +71,17 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
             {% endif %}
+            
             //Project data
             var projectJSON = "{{ project_data|e('js') }}";
         </script>
         
-        <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
-        <script src="//d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js"></script>
+        <script src="{{ asset('js/app/player.mobile_1_0/dist/release/require.js') }}" ></script>
     </head>
 
     <body>
         <div role="main" id="main"></div>
-        {% include '::eventlogger.base.html.twig' %}
+        <img src="http://{{event_logger_host}}:7379/INCR/{{project.id}}.png" width="1" height="1">
+        <img src="http://{{event_logger_host}}:7379/SADD/update/{{project.id}}.png" width="1" height="1">
     </body>
 </html>

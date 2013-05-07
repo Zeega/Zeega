@@ -46,8 +46,6 @@ class PublishController extends BaseController
         }
         
         if ( $mobile ) {
-            
-       
             if( $isProjectMobile ){
                 
                 return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
@@ -61,7 +59,6 @@ class PublishController extends BaseController
                 ));
             }    
         } else {
-
             if ( $projectVersion < 1.1) {
                 return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
                     'project'=>$project,
