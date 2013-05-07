@@ -54,6 +54,12 @@ class ProjectsController extends BaseController
             $title='Untitled Zeega';
         }
 
+        if( $request->request->has('version')) {
+            $version = $request->request->get('version');
+        } else {
+            $version = 1.0;
+        }
+
         $frame = new MongoFrame();
         $frame->setId(new \MongoId());
         $frame->setEnabled(true);
@@ -70,7 +76,7 @@ class ProjectsController extends BaseController
         $project->setAuthors($user->getDisplayName());
         $project->setTitle($title);
         $project->setUser($user);
-        
+        $project->setVersion($version);
         $project->addSequence($sequence);
         $project->addFrame($frame);
         
