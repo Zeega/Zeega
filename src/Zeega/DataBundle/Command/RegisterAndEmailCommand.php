@@ -37,7 +37,7 @@ class RegisterAndEmailCommand extends ContainerAwareCommand
     {
         $this->setName('zeega:register_users')
              ->setDescription('Updates item views counts with data from Redis')
-             ->addOption('csv_path', null, InputOption::VALUE_OPTIONAL, 'Set counts from a csv file')
+             ->addOption('json_path', null, InputOption::VALUE_OPTIONAL, 'Set counts from a csv file')
              ->setHelp("Help");
     }
 
@@ -46,7 +46,7 @@ class RegisterAndEmailCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $csvPath = $input->getOption('csv_path');
+        $csvPath = $input->getOption('json_path');
 
         $itemsToUpdate = array();
         $itemsToUpdateIds = array();
@@ -57,13 +57,14 @@ class RegisterAndEmailCommand extends ContainerAwareCommand
         if( null !== $csvPath ) {
             $row = 1;
             if (($handle = fopen($csvPath, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 0, ",")) !== FALSE) {
-                    $row++;
-                    if (count($data) >= 2) {
-                        
-                        $email = $data[0];
-                        $displayName = $data[1];
-                        
+                
+                while ( ! feof( $handle ) ) {
+                    $line = fgets( $handle );
+                    $line = json_decode($line);
+                    
+                    if ( isset($line) ) {
+                        $email = $line[0];
+                        $displayName = $line[1];
                         $em = $this->getContainer()->get('doctrine')->getEntityManager();
                         $user = $em->getRepository('ZeegaDataBundle:User')->findOneByEmail($email);
 
@@ -95,9 +96,18 @@ class RegisterAndEmailCommand extends ContainerAwareCommand
                                     ->setBody($this->getContainer()->get('templating')->render('ZeegaUserBundle:Email:autoregistration.email.twig', 
                                         array('name' => $user->getDisplayName(), 'link' => $activationUrl)),'text/html')
                                 ;
-                            
+                            $row++;
+                            echo "Sending email to $email : $displayName \n";
+                        
                             $this->getContainer()->get('mailer')->send($message);
+                        } else {
+                            echo "Existing Zeega user $email : $displayName \n";
                         }
+                    }
+
+                    if ($row == 500) {
+                        fclose($handle);
+                        return;
                     }
                 }
                 fclose($handle);
