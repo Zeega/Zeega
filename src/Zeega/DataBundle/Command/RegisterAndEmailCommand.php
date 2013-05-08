@@ -89,7 +89,7 @@ class RegisterAndEmailCommand extends ContainerAwareCommand
                             $activationUrl = "http:" . $hostname . $hostDirectory ."resetting/reset/" . $user->getConfirmationToken();
 
                             $message = \Swift_Message::newInstance()
-                                    ->setSubject('Welcome to Zeega!')
+                                    ->setSubject('Welcome to the New Zeega!')
                                     ->setFrom(array('noreply@zeega.com'=>'Zeega'))
                                     ->setTo($user->getEmail())
                                     ->setBody($this->getContainer()->get('templating')->render('ZeegaUserBundle:Email:autoregistration.email.twig', 
