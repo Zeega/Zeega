@@ -1,5 +1,36 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+
+{% block header %}
+                
+        <!-- Header & Nav Begins -->
+        <div class="container header new-section">
+            <div class="row">       
+                <div class="span6">
+                    <a href="{{ path('ZeegaCommunityBundle_home')}}"><img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43"></a>
+                    <div class="strapline">
+                    Make the web you want
+                    </div>
+                </div>
+                
+                <div class="span8">
+                    <div class="navigation">    
+                        <div>
+                            <a href="http://blog.zeega.com/about">About</a>
+                            <a href="http://blog.zeega.com" target="_blank">Blog</a>
+                            <a href='{{path('fos_user_security_login')}}'>Login</a>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>              
+        </div>
+        <!-- Header & Nav Ends -->
+
+{% endblock header %}
+
+
+
 {% block stylesheets %}
     
     <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
@@ -14,7 +45,7 @@
         */
     
         html { 
-        background: url( '{{ asset('images/registration/request.gif') }}') no-repeat center center fixed;  
+        background: url( '{{ asset('images/registration/register.jpg') }}') no-repeat center center fixed;  
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
@@ -41,5 +72,6 @@
 {% endblock stylesheets %}
 
 {% block fos_user_content %}
-{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
 {% endblock fos_user_content %}
+
