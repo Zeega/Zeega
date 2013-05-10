@@ -84,7 +84,8 @@ class EditorController extends BaseController
 			return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
 					'project'   =>$project,
 					'project_data' => $projectData,
-					'projects' => json_encode($userProjects)
+					'projects' => json_encode($userProjects),
+					'user_thumbnail'=>$user->getThumbUrl()
 				));	
 		}
     }
