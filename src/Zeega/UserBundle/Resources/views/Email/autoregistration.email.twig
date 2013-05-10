@@ -561,7 +561,7 @@
                     <tbody><tr>
                         
                         <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;">
-                         {% if name is defined %}
+                         {% if name is defined and name is not empty %}
                             <p dir="ltr" style="line-height: 1.15;margin-top: 0pt;margin-bottom: 0pt;color: #505050;font-family: Helvetica;font-size: 14px;text-align: left;">
     <b id="docs-internal-guid-422b5efb-7c0c-8f48-1150-b4e3a2f20224" style="font-weight: normal;"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">Dear </span></b><b id="docs-internal-guid-422b5efb-7c0c-8f48-1150-b4e3a2f20224" style="font-weight: normal;"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">{{name}}</span></b></p>
     {% else %}
