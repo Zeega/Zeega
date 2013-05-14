@@ -9,10 +9,10 @@ class ProjectRepository extends DocumentRepository
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
         $qb = $this->createQueryBuilder('Project')
-            ->select('user','id','title','uri', 'coverImage', 'authors', 'dateCreated')
+            ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created')
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
-            ->sort('dateCreated','DESC');
+            ->sort('date_created','DESC');
         
         if(null !== $published) {
             $qb->field('published')->equals($published);
