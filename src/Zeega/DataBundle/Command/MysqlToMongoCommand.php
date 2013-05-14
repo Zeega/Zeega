@@ -90,10 +90,10 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         foreach($mysqlUsers as $user) {
             $mongoUser = $dm->getRepository('ZeegaDataBundle:User')->findOneByOldId($user->getId());
             
-            if (!isset($mongoUser)) {
-                break;
+            if (isset($mongoUser)) {
+                continue;
             }
-            
+            $mongoUser = new MongoUser();
             $mongoUser->setOldId($user->getId());
             $mongoUser->setUsername($user->getUsername());
             $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
@@ -356,9 +356,11 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 //$output->writeln("Saving the new project");
                 $dm->persist($mongoProject);
                 $dm->flush();
-                $dm->clear();
+                
                 //$output->writeln("New project saved");
             }
+
+            $dm->clear();
         }
     
     }
@@ -407,15 +409,23 @@ class MysqlToMongoCommand extends ContainerAwareCommand
             $id = $mongoUser->getId();
             $oldId = $mongoUser->getOldId();
             $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
-                ->field('userId')->equals($oldId)
+                ->field('userId')->equals((string)$oldId)
+                ->field('user')->notEqual(null)
                 ->getQuery()
                 ->execute();
 
             foreach($userItems as $userItem) {
-                $userItem->setUser($mongoUser);
-                $dm->persist($userItem);
+                $currUser = $userItem->getUser();
+                $itemId = $userItem->getId();
+                if (!isset($currUser)) {
+                    
+                    echo "Updating item $itemId \n";
+                    $userItem->setUser($mongoUser);
+                    $dm->persist($userItem);
+                    $dm->flush();
+                }                
             }
-            $dm->flush();
+            
             echo "$id - $oldId \n";
             $dm->clear();
         }      
