@@ -42,6 +42,24 @@
             
         <!-- END FB --> 
 
+
+        <!-- Twitter -->
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@zeega">
+        {% if project.title == "" %}
+        <meta name="twitter:title" content="">
+        {% else %}
+        <meta name="twitter:title" content="A Zeega by {{project.displayName}} -- {{project.title}}">
+        {% endif %}
+        <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
+        <meta name="twitter:creator" content="">
+        <meta name="twitter:image:src" content="{{project.thumbnailUrl}}">
+        <meta name="twitter:domain" content="zeega.com">
+
+        <!-- End Twitter -->
+
+
         <meta name="zeega" content="zeega-mobile"
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
