@@ -14,6 +14,16 @@ class Project
      * @MongoDB\Id(strategy="auto")
      */
     protected $id;
+    
+    /**
+     * @MongoDB\Field(type="int",name="rdbms_id")
+     */
+    protected $rdbmsId;
+
+    /**
+     * @MongoDB\Field(type="int",name="rdbms_id_published")
+     */
+    protected $rdbmsIdPublished;
 
     /**
      * @MongoDB\String
@@ -66,7 +76,7 @@ class Project
     protected $dateUpdated;
 
     /**
-     * @MongoDB\Field(type="string",name="item_id")
+     * @MongoDB\Field(type="int",name="item_id")
      */
     protected $itemId;
 
@@ -605,5 +615,93 @@ class Project
     public function getLayers()
     {
         return $this->layers;
+    }
+
+    /**
+     * Set idInteger
+     *
+     * @param int $idInteger
+     * @return self
+     */
+    public function setIdInteger($idInteger)
+    {
+        $this->idInteger = $idInteger;
+        return $this;
+    }
+
+    /**
+     * Get idInteger
+     *
+     * @return int $idInteger
+     */
+    public function getIdInteger()
+    {
+        return $this->idInteger;
+    }
+
+    /**
+     * Set idPublishedInteger
+     *
+     * @param int $idPublishedInteger
+     * @return self
+     */
+    public function setIdPublishedInteger($idPublishedInteger)
+    {
+        $this->idPublishedInteger = $idPublishedInteger;
+        return $this;
+    }
+
+    /**
+     * Get idPublishedInteger
+     *
+     * @return int $idPublishedInteger
+     */
+    public function getIdPublishedInteger()
+    {
+        return $this->idPublishedInteger;
+    }
+
+    /**
+     * Set rdbmsId
+     *
+     * @param int $rdbmsId
+     * @return self
+     */
+    public function setRdbmsId($rdbmsId)
+    {
+        $this->rdbmsId = $rdbmsId;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsId
+     *
+     * @return int $rdbmsId
+     */
+    public function getRdbmsId()
+    {
+        return $this->rdbmsId;
+    }
+
+    /**
+     * Set rdbmsIdPublished
+     *
+     * @param int $rdbmsIdPublished
+     * @return self
+     */
+    public function setRdbmsIdPublished($rdbmsIdPublished)
+    {
+        $this->rdbmsIdPublished = $rdbmsIdPublished;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsIdPublished
+     *
+     * @return int $rdbmsIdPublished
+     */
+    public function getRdbmsIdPublished()
+    {
+        return $this->rdbmsIdPublished;
     }
 }

@@ -16,7 +16,12 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\Field(type="int",name="rdbms_id")
+     */
+    protected $rdbmsId;
+
+    /**     
+     * @MongoDB\Field(type="string",name="display_name")
      */
     protected $displayName;
 
@@ -25,13 +30,13 @@ class User extends BaseUser
      */
     protected $bio;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="thumb_url")
      */
     protected $thumbUrl;
 
-    /**
-     * @MongoDB\Date
+    /**     
+     * @MongoDB\Field(type="date",name="media_creator_realname")
      */
     protected $createdAt;
 
@@ -40,23 +45,23 @@ class User extends BaseUser
      */
     protected $location;
 
-    /**
-     * @MongoDB\Float
+    /**     
+     * @MongoDB\Field(type="float",name="location_latitude")
      */
     protected $locationLatitude;
 
-    /**
-     * @MongoDB\Float
+    /**     
+     * @MongoDB\Field(type="float",name="location_longitude")
      */
     protected $locationLongitude;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="background_image_url")
      */
     protected $backgroundImageUrl;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="dropbox_delta")
      */
     protected $dropboxDelta;
 
@@ -65,23 +70,23 @@ class User extends BaseUser
      */
     protected $idea;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="api_key")
      */
     protected $apiKey;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="twitter_id")
      */
     protected $twitterId;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="twitter_username")
      */
     protected $twitterUsername;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="facebook_id")
      */
     protected $facebookId;
 
@@ -407,5 +412,49 @@ class User extends BaseUser
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * Set idInteger
+     *
+     * @param int $idInteger
+     * @return self
+     */
+    public function setIdInteger($idInteger)
+    {
+        $this->idInteger = $idInteger;
+        return $this;
+    }
+
+    /**
+     * Get idInteger
+     *
+     * @return int $idInteger
+     */
+    public function getIdInteger()
+    {
+        return $this->idInteger;
+    }
+
+    /**
+     * Set rdbmsId
+     *
+     * @param int $rdbmsId
+     * @return self
+     */
+    public function setRdbmsId($rdbmsId)
+    {
+        $this->rdbmsId = $rdbmsId;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsId
+     *
+     * @return int $rdbmsId
+     */
+    public function getRdbmsId()
+    {
+        return $this->rdbmsId;
     }
 }

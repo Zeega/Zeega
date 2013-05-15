@@ -17,6 +17,16 @@ class Item
     protected $id;
 
     /**
+     * @MongoDB\Field(type="int",name="rdbms_id")
+     */
+    protected $rdbmsId;
+
+    /**
+     * @MongoDB\Field(type="int",name="rdbms_user_id")
+     */
+    protected $rdbmsUserId;
+    
+    /**
      * @MongoDB\String
      */
     protected $title;
@@ -765,5 +775,71 @@ class Item
     public function getHeadline()
     {
         return $this->headline;
+    }
+
+    /**
+     * Set idInteger
+     *
+     * @param int $idInteger
+     * @return self
+     */
+    public function setIdInteger($idInteger)
+    {
+        $this->idInteger = $idInteger;
+        return $this;
+    }
+
+    /**
+     * Get idInteger
+     *
+     * @return int $idInteger
+     */
+    public function getIdInteger()
+    {
+        return $this->idInteger;
+    }
+
+    /**
+     * Set rdbmsId
+     *
+     * @param int $rdbmsId
+     * @return self
+     */
+    public function setRdbmsId($rdbmsId)
+    {
+        $this->rdbmsId = $rdbmsId;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsId
+     *
+     * @return int $rdbmsId
+     */
+    public function getRdbmsId()
+    {
+        return $this->rdbmsId;
+    }
+
+    /**
+     * Set rdbmsUserId
+     *
+     * @param int $rdbmsUserId
+     * @return self
+     */
+    public function setRdbmsUserId($rdbmsUserId)
+    {
+        $this->rdbmsUserId = $rdbmsUserId;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsUserId
+     *
+     * @return int $rdbmsUserId
+     */
+    public function getRdbmsUserId()
+    {
+        return $this->rdbmsUserId;
     }
 }

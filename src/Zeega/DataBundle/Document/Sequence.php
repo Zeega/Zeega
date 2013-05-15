@@ -29,9 +29,8 @@ class Sequence
      */
     protected $enabled = true;
 
-    /**
-     * @MongoDB\Field(name="persistent_layers")
-     * @MongoDB\Hash
+    /**     
+     * @MongoDB\Field(type="hash",name="persistent_layers")
      */
     protected $persistentLayers;
 
@@ -45,9 +44,8 @@ class Sequence
      */
     protected $soundtrack;
 
-    /**
-     * @MongoDB\Field(name="advance_to")
-     * @MongoDB\Int
+    /**     
+     * @MongoDB\Field(type="int",name="advance_to")
      */
     protected $advanceTo;
 

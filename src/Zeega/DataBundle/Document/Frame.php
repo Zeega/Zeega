@@ -14,8 +14,8 @@ class Frame
      */
     protected $id;
 
-    /**
-     * @MongoDB\Int
+    /**     
+     * @MongoDB\Field(type="int",name="sequence_index")
      */
     protected $sequenceIndex;
 
@@ -29,8 +29,8 @@ class Frame
      */
     protected $attr;
 
-    /**
-     * @MongoDB\String
+    /**     
+     * @MongoDB\Field(type="string",name="thumbnail_url")
      */
     protected $thumbnailUrl;
 
