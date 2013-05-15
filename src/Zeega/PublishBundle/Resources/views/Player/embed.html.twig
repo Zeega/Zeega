@@ -1,91 +1,154 @@
 <!doctype html>
 <html>
 	<head>
-		<title>{{project.getTitle()}}</title> 
-		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-		
-		
-		<!-- FB -->
-		
-		<meta property="og:site_name" content="Zeega"/>
-		<meta property="og:title" content="{{project.getTitle()}}"/>
-		<meta property="og:description" content="{{project.getDescription()}}"/>
-   		<meta property="og:type" content="movie"/>
-   		<meta property="og:url" content="{{hostname}}{{directory}}{{projectId}}"/>
-    	{% if project.getThumbnailUrl() is defined %}
-			<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-		{% elseif project.getCoverImage() is defined %}
-			<meta property="og:image" content="{{project.getCoverImage()}}"/>
-		{% else %}
-			<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-		{% endif %}
-			
-
+		<title>{{project.title}}</title> 
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset("images/zeega.ico")}}"> 	
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-
-		<!-- END FB -->		
 
     
 		<style type="text/css">
-			body {margin:0px}
+			body {
+					margin:0px
+					width: 100%;
+					height: 100%;
+			}
+
 			html {
-				{% if project.getThumbnailUrl() is defined %}
-				background: url({{project.getThumbnailUrl()}}) no-repeat center center fixed;
-				{% elseif project.getCoverImage() is defined %}
-				background: url({{project.getCoverImage()}}) no-repeat center center fixed;
-				{% else %}
-				background: url({{asset('images/default_cover.png')}}) no-repeat center center fixed;
-				{% endif %}
-				
+				font-family: "Helvetica", sans-serif;
+				background: url({{project.thumbnailUrl}}) no-repeat center center fixed;
 				-webkit-background-size: cover;
 				-moz-background-size: cover;
 				-o-background-size: cover;
 				background-size: cover;
 				color:white;
 			}
-			
-			h1 {
-				padding:10px;
-				font-family: 'Open Sans Condensed',sans-serif;
-			}
-			h2 {
-				font-size:12px; 
-				padding:10px;
-				font-family: 'Open Sans Condensed',sans-serif;
-			}
-			#text{width:100%;background-color:rgba(0,0,0,.5); position: absolute; bottom: 10%; }
-			a{ width:100%; height:100%; z-index:1000; position:absolute;background:url({{ asset('images/embed_play.png')}}) center center no-repeat; background-size:12%;}
+		
+    		.info-overlay{
+		        position: absolute;
+		        bottom: 0;
+		        left: 0;
+		        right: 0;
+		        background: rgba(0, 0, 0, 0.5);
+		        overflow-x:hidden;
+		        padding: 10px;
+		        border-radius: 0 0 2px 2px;
+		        color: white;
+		        text-shadow: rgba(0, 0, 0, 0.498039) 2px 2px 12px;
+		    }
+
+	        .left-column{
+	            float:left;
+	            margin-right: 10px;
+	        }
+            .profile-token{
+                border-radius: 28px;
+                height: 50px;
+                width: 50px;
+                overflow: hidden;
+                float: left;
+                border: 3px solid orangered;
+                
+            }
+
+            .profile-token img {
+                    width: 100%;
+            }
+       
+                    
+        
+	        .right-column{
+	            height: 56px;
+	            position: relative;
+	            float:left;
+	            min-width: 200px;
+	        }
+            
+            .profile-name{
+                font-size: 0.7em;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+            }
+            
+            .profile-name a{
+                text-decoration: none;
+                color: orangered;
+            }
+                    
+            h1{
+                font-size: .9em;
+                margin: 0;
+            }
+   
+
+		    .play{
+		        width: 150px;
+		        height: 80px;
+		        display: block;
+		        top: 40%;
+		        position: absolute;
+		        left: 0;
+		        right: 0;
+		        margin: auto;
+		        background: rgba(0, 0, 0, 0.5);
+		        border-radius: 50px;
+		        padding: 5px 5px 3px 5px;
+		        background-image: url({{hostname}}{{directory}}images/start-button.png);
+		        background-position: center;
+		        background-size: 93%;
+		        background-repeat: no-repeat;
+		        opacity:0.8;
+		        cursor: pointer;
+		    }
+		    .play:hover{
+		    	opacity:1;
+		    }
+
 		</style>	
 
+		{% if app.environment == "prod" %}
+		    <script type="text/javascript">
+		        var _gaq = _gaq || [];
+		        _gaq.push(["_setAccount", "UA-37456730-1"]);
+		        _gaq.push(["_trackPageview"]);
+
+		        (function() {
+		            var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+		            ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+		            var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+		        })();
+
+		    </script>
+		{% endif %}
 	
-		{% if app.environment == 'prod' %}
- 				    <script type="text/javascript">
-                        var _gaq = _gaq || [];
-                        _gaq.push(['_setAccount', 'UA-37456730-1']);
-                        _gaq.push(['_trackPageview']);
-
-                        (function() {
-                            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                        })();
-
-                    </script>
-   
-        {% endif %}
+		
 
 	</head>
 
 	<body id="zeega-embed" >
 		
-		<a id="zeega-link" href="{{hostname}}{{directory}}{{projectId}}"></a>
-		<div id="text">
-			<h1>{{project.getTitle()}}</h1>
-			{% if author != '0' %}	
-				{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
-				{% elseif project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>
-				{% endif %}
-			{% endif %}	
-		</div>
+		<a id="zeega-link" href="{{hostname}}{{directory}}{{project.id}}"></a>
+            <div class="info-overlay">
+                <div class="left-column">
+                  <a href="/profile/{{ project.userId }}" >
+                    <div class="profile-token"><img src="{{ project.userThumbnail }}"></div>
+                   </a>
+                </div>
+                <div class="right-column">
+                  <h1 class = "caption">{{ project.title }}</h1>
+                  
+                  <div class="profile-name">
+                    <a href="/profile/{{project.userId}}" >
+                      {{ project.displayName }}
+                    </a>
+                  </div>
+                  
+                </div>
+                  
+            
+            </div>
+        <a href="{{hostname}}{{directory}}{{project.id}}" class="play"></a>
+
+      
 	</body>
 </html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{{project.getTitle()}}</title> 
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+		
+		
+		<!-- FB -->
+		
+		<meta property="og:site_name" content="Zeega"/>
+		<meta property="og:title" content="{{project.getTitle()}}"/>
+		<meta property="og:description" content="{{project.getDescription()}}"/>
+   		<meta property="og:type" content="movie"/>
+   		<meta property="og:url" content="{{hostname}}{{directory}}{{projectId}}"/>
+    	{% if project.getThumbnailUrl() is defined %}
+			<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+		{% elseif project.getCoverImage() is defined %}
+			<meta property="og:image" content="{{project.getCoverImage()}}"/>
+		{% else %}
+			<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+		{% endif %}
+			
+
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+		<!-- END FB -->		
+
+    
+		<style type="text/css">
+			body {margin:0px}
+			html {
+				{% if project.getThumbnailUrl() is defined %}
+				background: url({{project.getThumbnailUrl()}}) no-repeat center center fixed;
+				{% elseif project.getCoverImage() is defined %}
+				background: url({{project.getCoverImage()}}) no-repeat center center fixed;
+				{% else %}
+				background: url({{asset('images/default_cover.png')}}) no-repeat center center fixed;
+				{% endif %}
+				
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				color:white;
+			}
+			
+			h1 {
+				padding:10px;
+				font-family: 'Open Sans Condensed',sans-serif;
+			}
+			h2 {
+				font-size:12px; 
+				padding:10px;
+				font-family: 'Open Sans Condensed',sans-serif;
+			}
+			#text{width:100%;background-color:rgba(0,0,0,.5); position: absolute; bottom: 10%; }
+			a{ width:100%; height:100%; z-index:1000; position:absolute;background:url({{ asset('images/embed_play.png')}}) center center no-repeat; background-size:12%;}
+		</style>	
+
+	
+		{% if app.environment == 'prod' %}
+ 				    <script type="text/javascript">
+                        var _gaq = _gaq || [];
+                        _gaq.push(['_setAccount', 'UA-37456730-1']);
+                        _gaq.push(['_trackPageview']);
+
+                        (function() {
+                            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                        })();
+
+                    </script>
+   
+        {% endif %}
+
+	</head>
+
+	<body id="zeega-embed" >
+		
+		<a id="zeega-link" href="{{hostname}}{{directory}}{{projectId}}"></a>
+		<div id="text">
+			<h1>{{project.getTitle()}}</h1>
+			{% if author != '0' %}	
+				{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
+				{% elseif project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>
+				{% endif %}
+			{% endif %}	
+		</div>
+	</body>
+</html>
