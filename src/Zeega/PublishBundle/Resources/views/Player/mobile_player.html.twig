@@ -27,11 +27,8 @@
         <meta property="og:site_name" content="Zeega"/>
         <meta property="og:title" content="{{project.title}}"/>
         <meta property="og:description" content="{{project.description}}"/>
-        {% if project.mediaCreatorRealname is defined %}
-        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
-        {% endif %}
         <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+        <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
         {% if project.thumbnailUrl is defined %}
         <meta property="og:image" content="{{project.thumbnailUrl}}"/>
         {% elseif project.coverImage is defined %}
