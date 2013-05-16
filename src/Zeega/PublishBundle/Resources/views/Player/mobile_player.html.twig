@@ -27,11 +27,8 @@
         <meta property="og:site_name" content="Zeega"/>
         <meta property="og:title" content="{{project.title}}"/>
         <meta property="og:description" content="{{project.description}}"/>
-        {% if project.mediaCreatorRealname is defined %}
-        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
-        {% endif %}
         <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+        <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
         {% if project.thumbnailUrl is defined %}
         <meta property="og:image" content="{{project.thumbnailUrl}}"/>
         {% elseif project.coverImage is defined %}
@@ -41,6 +38,24 @@
         {% endif %}
             
         <!-- END FB --> 
+
+
+        <!-- Twitter -->
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@zeega">
+        {% if project.title == "" %}
+        <meta name="twitter:title" content="">
+        {% else %}
+        <meta name="twitter:title" content="A Zeega by {{project.displayName}} &#9658; {{project.title}}">
+        {% endif %}
+        <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
+        <meta name="twitter:creator" content="">
+        <meta name="twitter:image:src" content="{{project.thumbnailUrl}}">
+        <meta name="twitter:domain" content="zeega.com">
+
+        <!-- End Twitter -->
+
 
         <meta name="zeega" content="zeega-mobile"
             data-directory="{{directory}}"

@@ -47,13 +47,18 @@ class PublishController extends BaseController
         
         if ( $mobile ) {
             if( $isProjectMobile ){
-                
-                return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
-                    'project'=>$project,
-                    'project_data' => $projectData                
-                ));
+                if ( $projectVersion < 1.1) {                
+                    return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
+                        'project'=>$project,
+                        'project_data' => $projectData                
+                    ));
+                } else {
+                    return $this->render("ZeegaPublishBundle:Player:mobile_player_1_0.html.twig", array(
+                        "project"=>$project,
+                        "project_data" => $projectData,                
+                    ));            
+                }
             } else {
-
                 return $this->render('ZeegaPublishBundle:Player:mobile_not_supported.html.twig', array(
                     'project'=>$project                
                 ));
@@ -78,20 +83,20 @@ class PublishController extends BaseController
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 
-        return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
-            'project'=>$project,
-            'project_data' => $projectData,
+        return $this->render("ZeegaPublishBundle:Player:player.html.twig", array(
+            "project"=>$project,
+            "project_data" => $projectData,
         ));
     }
 
      
     public function collectionAction($id)
     {
-        $projectData = $this->forward('ZeegaApiBundle:Items:getItemProject', array("id" => $id))->getContent();
+        $projectData = $this->forward("ZeegaApiBundle:Items:getItemProject", array("id" => $id))->getContent();
         $project = new Project();
-        return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
-            'project'=>$project,
-            'project_data'=>$projectData,
+        return $this->render("ZeegaPublishBundle:Player:player.html.twig", array(
+            "project"=>$project,
+            "project_data"=>$projectData,
         ));
     }
 
@@ -104,25 +109,50 @@ class PublishController extends BaseController
         $params["sort"] = "date-desc";
         $params["type"] = "project";
         $params["tags"] = $tag;
-        $projectData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
+        $projectData = $this->forward("ZeegaApiBundle:Items:getItemsSearch", array(), $params)->getContent();
         $project = new Project();
 
-        return $this->render('ZeegaPublishBundle:Player:channel.html.twig', array(
-            'project'=>$project,
-            'project_data'=>$projectData,
+        return $this->render("ZeegaPublishBundle:Player:channel.html.twig", array(
+            "project"=>$project,
+            "project_data"=>$projectData,
         ));
     }
      
     public function embedAction ($id)
     {
-        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-        if(is_object($project)&&$project->getMediaType()=='project'){}
-        else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        $projectItem = $this->getDoctrine()->getRepository("ZeegaDataBundle:Item")->findOneByIdWithUser($id);
 
-        $request = $this->getRequest();
-        $author = $request->query->get('author');
+        if(null !== $projectItem) {
+            if($projectItem["mediaType"]=="project") {
+                $projectData = $projectItem["text"];
+            } 
+        } 
+        
+        if (null === $projectItem || null === $projectData) {
+            throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
+        }
 
-        return $this->render('ZeegaPublishBundle:Player:embed.html.twig', array('project'=>$project, 'projectId'=>$id,'author'=>$author));
+
+
+        $projectDataArray = json_decode($projectData, true);
+            
+        if( isset( $projectDataArray["version"] ) ){
+           $projectVersion = $projectDataArray["version"]; 
+        } else {
+            $projectVersion = 1;
+        }
+        if ( $projectVersion < 1.1) {
+            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
+            if(is_object($project)&&$project->getMediaType()=='project'){}
+            else  $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+
+            $request = $this->getRequest();
+            $author = $request->query->get('author');
+
+            return $this->render('ZeegaPublishBundle:Player:embed_1_0.html.twig', array('project'=>$project, 'projectId'=>$id,'author'=>$author));
+        } else {
+            return $this->render("ZeegaPublishBundle:Player:embed.html.twig", array("project"=>$projectItem ));
+        }
     }
 }
 
