@@ -51,11 +51,6 @@ class Project
     protected $enabled = true;
 
     /**
-     * @MongoDB\Hash
-     */
-    protected $tags;
-
-    /**
      * @MongoDB\String
      */
     protected $authors;
@@ -124,12 +119,19 @@ class Project
      * @MongoDB\EmbedMany(targetDocument="Layer")
      */
     protected $layers;
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Tag")
+     */
+    protected $tags;
+
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
         $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
         $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -261,28 +263,6 @@ class Project
     public function getEnabled()
     {
         return $this->enabled;
-    }
-
-    /**
-     * Set tags
-     *
-     * @param hash $tags
-     * @return \Project
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-        return $this;
-    }
-
-    /**
-     * Get tags
-     *
-     * @return hash $tags
-     */
-    public function getTags()
-    {
-        return $this->tags;
     }
 
     /**
@@ -703,5 +683,35 @@ class Project
     public function getRdbmsIdPublished()
     {
         return $this->rdbmsIdPublished;
+    }
+
+    /**
+     * Add tags
+     *
+     * @param Zeega\DataBundle\Document\Tag $tags
+     */
+    public function addTag(\Zeega\DataBundle\Document\Tag $tags)
+    {
+        $this->tags[] = $tags;
+    }
+
+    /**
+    * Remove tags
+    *
+    * @param <variableType$tags
+    */
+    public function removeTag(\Zeega\DataBundle\Document\Tag $tags)
+    {
+        $this->tags->removeElement($tags);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return Doctrine\Common\Collections\Collection $tags
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

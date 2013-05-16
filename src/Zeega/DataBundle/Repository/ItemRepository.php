@@ -41,6 +41,10 @@ class ItemRepository extends DocumentRepository
         if (isset($query['archive'])) {
              $qb->field('archive')->equals($query['archive']);
         }
+
+        if (isset($query['tags'])) {
+             $qb->field('tags')->equals($query['tags']);
+        }
         
         return $qb;
     }

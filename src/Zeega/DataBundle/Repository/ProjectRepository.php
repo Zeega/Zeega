@@ -38,6 +38,23 @@ class ProjectRepository extends DocumentRepository
         return iterator_to_array($results);
     }
 
+    public function findByQuery($query)
+    {
+        $qb = $this->createQueryBuilder('Project')
+                    ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
+                    ->field('user')->prime(true)
+                    ->eagerCursor(true)
+                    ->limit($query['limit'])
+                    ->skip($query['limit'] * $query['page'])
+                    ->sort('created_at','DESC');
+
+        if (isset($query["tags"])) {
+            $qb->field('tags.name')->equals($query["tags"]);
+        }
+
+        return $qb->getQuery()->execute();    
+    }
+
     public function findProjectFrame($projectId, $frameId) {
         $project = $this->createQueryBuilder('ZeegaDataBundle:Project')
                 ->field('id')->equals($projectId)

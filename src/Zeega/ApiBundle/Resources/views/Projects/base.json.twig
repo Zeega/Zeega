@@ -7,6 +7,16 @@
 "date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("U") }}",
 "date_published" : "{{ project.datePublished is empty ? "" : project.getDatePublished()  | date("U") }}",
 "tags" : {{ project.tags | default("") | json_encode | raw}},
+{% if project.getTags is defined %}
+"tags" : [        
+    {% for tag in project.getTags() %}    
+    {{ tag.name | json_encode | raw}}
+    {%- if loop.index0 < project.getTags()|length - 1 -%}
+    ,
+    {%- endif -%}           
+    {% endfor %}
+],
+{%- endif -%}
 "authors" : {{ project.authors | default("") | json_encode | raw}},
 "cover_image" : {{ project.coverImage | default(null) | json_encode | raw}},
 "enabled" : {{ project.enabled | default(false) | json_encode | raw}},

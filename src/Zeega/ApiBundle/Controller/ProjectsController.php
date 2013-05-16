@@ -27,6 +27,22 @@ class ProjectsController extends BaseController
      *
      * @return Project|response
      */   
+    public function getProjectsSearchAction()
+    {   
+        $queryParser = $this->get('zeega_query_parser');
+        $query = $queryParser->parseRequest($this->getRequest()->query);
+        $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findByQuery($query);
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array('projects' => $results));
+
+        return new Response($projectView);
+    } 
+
+    /**
+     * Get a project
+     * Route: GET api/projects/:id
+     *
+     * @return Project|response
+     */   
     public function getProjectAction($id)
     {   
         $user = $this->get('security.context')->getToken()->getUser();
