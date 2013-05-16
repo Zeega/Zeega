@@ -84,7 +84,6 @@ class FacebookProvider implements UserProviderInterface
 
 
                     
-                    https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc6/c42.42.523.523/s200x200/263448_10150686852110483_833221_n.jpg
                 }
             }
     
