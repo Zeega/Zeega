@@ -1,0 +1,11 @@
+{
+    {% if request is defined %}"request": {{ request | json_encode | raw  }},{%- endif -%}
+    "projects":[
+    {% for project in projects %}
+        {% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %}    
+        {%- if loop.index0 < projects|length - 1 -%}
+        ,
+        {%- endif -%}
+    {% endfor %}
+]
+}
