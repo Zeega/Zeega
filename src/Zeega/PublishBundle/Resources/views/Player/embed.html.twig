@@ -130,7 +130,7 @@
 		<a id="zeega-link" href="{{hostname}}{{directory}}{{project.id}}"></a>
             <div class="info-overlay">
                 <div class="left-column">
-                  <a href="/profile/{{ project.userId }}" >
+                  <a href="/profile/{{ project.userId }}"  target="blank" >
                     <div class="profile-token"><img src="{{ project.userThumbnail }}"></div>
                    </a>
                 </div>
@@ -138,7 +138,7 @@
                   <h1 class = "caption">{{ project.title }}</h1>
                   
                   <div class="profile-name">
-                    <a href="/profile/{{project.userId}}" >
+                    <a href="/profile/{{project.userId}}" target="blank" >
                       {{ project.displayName }}
                     </a>
                   </div>
