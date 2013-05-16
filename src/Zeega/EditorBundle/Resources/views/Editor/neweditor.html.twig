@@ -32,11 +32,11 @@
             data-root="{{directory}}"
             data-hostname="{{hostname}}"
             data-editor="editor"
-            data-user-id="{{user_id}}"
-            data-user-name="{{displayname}}"
+            data-user-id="{{project.user.getId}}"
+            data-user-name="{{project.user.displayname}}"
             data-media-root="{{media_host}}"
-            data-project-id="{{project.getId()}}"
-            data-user-thumbnail="{{user_thumbnail}}"
+            data-project-id="{{project.getId}}"
+            data-user-thumbnail="{{project.user.getThumbUrl}}"
         />
 
         <!-- STYLESHEETS -->
