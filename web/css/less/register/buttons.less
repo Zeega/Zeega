@@ -1,0 +1,94 @@
+.btnz {
+
+    background: url(../images/register/tiny-stripes-dark.png);
+    background-color: #666;
+    border-radius: 2px;
+    padding: 5px 10px;
+    font-size: 15px;
+    top: 0;
+    height: 20px;
+    color: white;
+    text-align: center;
+    font-family: "futura", sans-serif;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.25);
+    text-decoration: none;
+    
+    .transition( all, 0.5s );
+
+    &.btnz-fullwidth {
+        display:block;
+    }
+
+    &:link,
+    &:visited {
+        color: white;
+    }
+
+    &:hover {
+        background-color: orange;
+        color: white;
+        // .transition( all, 0.5s );
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    &.btnz-blue {
+        background-color: #06C;
+
+        &:hover {
+            background-color: #6FF;
+        }
+    }
+
+    &.btnz-light {
+        background-color: white;
+        border: 1px solid #ccc;
+
+        &.active {
+            background-color: lightblue
+        }
+    }
+
+    &.btnz-submit {
+        background-color: rgba(50, 205, 50, 0.75);
+        padding-left: 20px;
+        padding-right: 20px;
+
+        &.btnz-inactive {
+            background-color: #DDD;
+            &:hover {
+                background-color: #DDD;
+                box-shadow: none;
+            }
+        }
+
+        &:hover {
+            background-color: #6FF;
+        }
+    }
+
+    &.btnz-facebook {
+        background-color: rgb(58,88,157);
+    }
+
+    &.btnz-twitter {
+        background-color: rgb(59,142,206);
+    }
+}
+
+.social-signin-facebook,
+.social-signin-twitter {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    background-size: 50px 25px;
+    background-image: url('../images/register/social-signin.png');
+    position: relative;
+    top: 4px;
+}
+
+.social-signin-facebook {
+}
+
+.social-signin-twitter {
+    background-position: -25px 0;
+}

@@ -1,77 +1,153 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <meta id="viewport" name="viewport" content="
+            width=320;
+            initial-scale=1.0;
+            maximum-scale=1.0;
+            user-scalable=0;"
+        />
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.register.css')}}">
+
+        <style>
+
+            html, body {
+                width: 100%;
+            }
+
+            body {
+                background: url(../img/tiny-stripes.png);
+                height: auto;
+                width: auto;
+            }
+
+            fieldset {
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-family: "Futura", sans-serif;
+                font-weight: normal;
+            }
+
+            h2 {
+                margin: 10px 0;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .container-inner {
+                background: rgba(255,255,255,0.85);
+                background-image: url(assets/img/tiny-stripes.png);
+                border: 1px solid white;
+                margin: 0 auto;
+                margin-top: 40px;
+                padding: 20px;
+                border-radius: 2px;
+            }
+
+            .btnz {
+                font-size: 1em;
+                width: auto;
+                display: block;
+            }
+
+            .container h1,
+            .container h3 {
+                margin: 0 0 20px 0;
+            }
+
+            .col-middle {
+                text-align: center;
+            }
+
+            .col-left .btnz {
+                display: block;
+                padding-bottom: 18px;
+                text-align: left;
+                margin-bottom: 10px
+            }
 
 
-{% block header %}
-                
-        <!-- Header & Nav Begins -->
-        <div class="container header new-section">
-            <div class="row">       
-                <div class="span6">
-                    <a href="{{ path('ZeegaCommunityBundle_home')}}"><img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43"></a>
-                    <div class="strapline">
-                    Make the web you want
+            input {
+                display: block;
+                width: -calc(100% - 21px);
+                width: -webkit-calc(100% - 21px);
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                font-size: 1.1em;
+                padding: 5px 10px;
+                border-radius: 2px;
+            }
+
+            .login-link {
+                display: inline-block;
+                margin-bottom: 10px;
+            }
+
+            .login-link img {
+                width: 100%;
+            }
+
+            .fine-print {
+                font-size: 10px;
+                color: #999;
+            }
+
+        </style>
+
+         {% include "FOSUserBundle:Shared:facebook.html.twig" %}
+    </head>
+    <body>
+
+        <a href="http://www.zeega.com" class="ZEEGA-tab">
+            <span class="ZTab-logo"></span>
+        </a>
+
+        <div class="container">
+            <div class="container-inner clearfix">
+
+                <div class="upper clearfix">
+                    <h1>Sign Up</h1>
+                    <div class="col-left">
+                        <a href="#" onclick="fbLogin();" class="btnz btnz-facebook"><i class="social-signin-facebook"></i> Sign Up With Facebook</a>
+                        <a href="{{ path('ZeegaSocialBundle_twitter_connect') }}" class="btnz btnz-twitter"><i class="social-signin-twitter"></i> Sign Up With Twitter</a>
                     </div>
+                    <div class="col-middle"><h2>or</h2></div>
+                    <form id="register" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+                        <fieldset>
+                            <div class="col-right">
+                                <input type="email" name="email" placeholder="Your Email Address">
+                                <input type="password" name="password" placeholder="Create a Password">
+                                <a href="#" onclick="document.getElementById('register').submit();" class="btnz btnz-submit">Do it!</a>
+                                <p class="fine-print">by creating an account, you are agreeing to abide by our <a href="#">terms of service</a></p>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
-                
-                <div class="span8">
-                    <div class="navigation">    
-                        <div>
-                            <a href="http://blog.zeega.com/about">About</a>
-                            <a href="http://blog.zeega.com" target="_blank">Blog</a>
-                            <a href='{{path('fos_user_security_login')}}'>Login</a>
-                        </div>
-                    </div>
+
+                <div class="lower">
+                    <h5>already have an account? <a href="#">Sign In</a></h5>
                 </div>
-        
-            </div>              
+            </div>
         </div>
-        <!-- Header & Nav Ends -->
 
-{% endblock header %}
-
-
-
-{% block stylesheets %}
-    
-    <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
-    
-
-    <style type="text/css">
-    
-        /*
-            Background image code lives here, not in CSS, because this is specific to each page
-            and could be made dynamic too (i.e. randomly picking a different image each load)
-            quite easily. Exposing the code here should be helpful.
-        */
-    
-        html { 
-        background: url( '{{ asset('images/registration/register.jpg') }}') no-repeat center center fixed;  
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-        }
-    
-    </style>
-
-    {% if app.environment == 'dev' %}
-                <link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-                <script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-                <script> /* Provisory for dev environment: */ localStorage.clear(); </script>
-    {% else %}
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
-    {% endif %}
-
-
-
-
-    <link href='http://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-
-    
-{% endblock stylesheets %}
-
-{% block fos_user_content %}
-    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
-{% endblock fos_user_content %}
-
+        
+    </body>
+</html>

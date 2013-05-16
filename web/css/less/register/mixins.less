@@ -1,0 +1,12 @@
+.transition( @property, @sec ) {
+    transition: @property @sec;
+    -webkit-transition: @property @sec;
+}
+
+.clearfix {
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+}

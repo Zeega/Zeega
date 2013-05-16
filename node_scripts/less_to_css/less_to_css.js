@@ -20,6 +20,10 @@ var less = require('less'),
                 {
                     input: '../standalone_player/',
                     output: '../../zeega.player.css'
+                },
+                {
+                    input: '../register/',
+                    output: '../../zeega.register.css'
                 }
             ];
         
