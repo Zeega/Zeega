@@ -1,68 +1,76 @@
 {% extends "FOSUserBundle:Registration:register_base.html.twig" %}
 
 {% block style %}
-         <style>
+        <style>
+
+            html, body {
+                width: 100%;
+            }
+
+            body {
+                background: url(../img/tiny-stripes.png);
+                height: auto;
+                width: auto;
+            }
+
             fieldset {
                 border: none;
                 margin: 0;
                 padding: 0;
             }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-family: "Futura", sans-serif;
+                font-weight: normal;
+            }
+
+            h2 {
+                margin: 10px 0;
+            }
+
             .container {
                 padding: 20px;
             }
 
             .container-inner {
-                width: 960px;
                 background: rgba(255,255,255,0.85);
+                background-image: url(assets/img/tiny-stripes.png);
+                border: 1px solid white;
                 margin: 0 auto;
-                margin-top: 70px;
-                padding: 40px 20px;
+                margin-top: 40px;
+                padding: 20px;
                 border-radius: 2px;
             }
 
-            .container .btnz {
-                font-size: 1.5em;
+            .btnz {
+                font-size: 1em;
+                width: auto;
+                display: block;
             }
 
-            .container h1 {
-                margin: 0 0 60px 0;
-            }
-
+            .container h1,
             .container h3 {
-                margin: 0 0 1em 0;
+                margin: 0 0 20px 0;
             }
 
-            .col-left {
-                float: left;
-                width: 46%;
+            .col-middle {
+                text-align: center;
             }
 
             .col-left .btnz {
-                width: 75%;
                 display: block;
                 padding-bottom: 18px;
                 text-align: left;
                 margin-bottom: 10px
             }
 
-            .col-left .btnz .social-signin-twitter,
-            .col-left .btnz .social-signin-facebook {
-                margin: 0 10px;
-            }
-
-            .col-middle {
-                float: left;
-            }
-
-            .col-right {
-                float: right;
-                width: 45%;
-            }
 
             input {
+                display: block;
+                width: -calc(100% - 21px);
+                width: -webkit-calc(100% - 21px);
                 margin-bottom: 10px;
                 border: 1px solid #ccc;
-                width: 75%;
                 font-size: 1.1em;
                 padding: 5px 10px;
                 border-radius: 2px;
@@ -70,7 +78,6 @@
 
             .login-link {
                 display: inline-block;
-                width: 75%;
                 margin-bottom: 10px;
             }
 
@@ -82,13 +89,10 @@
                 font-size: 10px;
                 color: #999;
             }
-
             .errors ul {
-                width: 300px;
+                width: 300px ;
                 color: red;
-                padding-left: 58%;
             }
 
         </style>
-            
     {% endblock %}
