@@ -44,7 +44,6 @@
             else this.draggable=true;
             
             this.model.set({thumbnail_width:this.options.thumbnail_width, thumbnail_height:this.options.thumbnail_height});
-
         },
 
         render: function(done)

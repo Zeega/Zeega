@@ -45,7 +45,6 @@ this.zeega.discovery = {
             Items = zeega.module("items");
         
         this.resultsView = new Items.Collections.Views.Results();
-        this.myCollectionsDrawer = new Items.Collections.Views.MyCollectionsDrawer();
         this.startRouter();
         
     },
@@ -149,8 +148,6 @@ this.zeega.discovery = {
         
         var hash ="";
         if( !_.isUndefined(this.currentView)) hash += "view_type=" + this.currentView + "&";
-        if( !_.isUndefined(obj.collection)) hash += "collection=" + obj.collection + "&";
-        if( !_.isUndefined(obj.collection_title)) hash += "collection_title=" + obj.collection_title + "&";
         if( !_.isUndefined(obj.q) && obj.q.length > 0) hash += "q=" + obj.q + "&";
         if( !_.isUndefined(obj.content) )  hash += "content="+ obj.content + "&";
         if( !_.isUndefined(obj.sort) )  hash += "sort="+ obj.sort + "&";
@@ -171,7 +168,7 @@ this.zeega.discovery = {
         var facets = VisualSearch.searchQuery.models;
             
         var obj={};
-        var tagQuery = "tags:";
+        var tagQuery = "";
         var textQuery = "";
 
         _.each(facets, function(facet){
@@ -182,23 +179,20 @@ this.zeega.discovery = {
                     textQuery=textQuery.replace(/^#/, "");
                     break;
                 case "tag":
-                    tagQuery = (tagQuery.length > 5) ? tagQuery + ", " + facet.get("value") : tagQuery + facet.get("value");
+                    tagQuery = (tagQuery.length > 0) ? tagQuery + ", " + facet.get("value") : tagQuery + facet.get("value");
                     tagQuery=tagQuery.replace(/^#/, "");
                     break;
             }
         });
             
-        obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 5 ? " " : "") + (tagQuery.length > 5 ? tagQuery : "");
+        obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 0 ? " " : "") + (tagQuery.length > 0 ? tagQuery : "");
+        
+        if(obj.q !== ""){
+            obj.q = "tags:" + obj.q;
+        }
+
         obj.text = textQuery;
         obj.view_type = this.currentView;
-
-        if(!_.isNull(this.currentCollection)) {
-            obj.collection=this.currentCollection.id;
-            obj.collection_title=this.currentCollection.get("title");
-        }
-        
-
-        obj.universe=$(".universe-toggle").find(".selected").data("universe");
         
         obj.content = $("#zeega-content-type").val();
         obj.sort = $("#zeega-sort").val();
@@ -253,34 +247,14 @@ this.zeega.discovery = {
             
         }
         
-        // Zeega Community Toggle
 
-        $(".universe-toggle span").removeClass("selected");
-        if(!_.isUndefined(obj.universe)&&obj.universe==1) $(".universe-toggle").find(".universe").addClass("selected");
-        else $(".universe-toggle").find(".just-me").addClass("selected");
-        
         // Content Type
 
         if (!_.isUndefined(obj.content)) $("#zeega-content-type").val(obj.content);
         else $("#zeega-content-type").val("all");
         $("#select-wrap-text").text( $("#zeega-content-type option[value=\""+$("#zeega-content-type").val()+"\"]").text() );
         
-        // Sort
 
-        // if (!_.isUndefined(obj.sort)) $("#zeega-sort").val(obj.sort);
-        // else $("#zeega-sort").val("relevant");
-        
-
-        //Collection
-
-        if(!_.isNull(this.currentCollection)){
-            $(".universe-toggle").hide();
-            $("#collection-title").html(obj.collection_title);
-            $(".collection-title-wrapper").show();
-        } else {
-            $(".universe-toggle").show();
-            $(".collection-title-wrapper").hide();
-        }
     },
 
 

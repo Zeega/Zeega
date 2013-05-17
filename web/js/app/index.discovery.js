@@ -96,9 +96,4 @@ jQuery(function($)
     
     $(".collection-clear").click( function(){ ZeegaDiscovery.goToDatabase(); } );
 
-    $(".universe-toggle span").click(function(){
-        $(this).parent().find("span").removeClass("selected");
-        $(this).addClass("selected");
-        ZeegaDiscovery.parseSearchUI();
-    });
 });

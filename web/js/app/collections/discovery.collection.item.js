@@ -2,64 +2,10 @@
 
     Items.Collections=Items.Collections||{};
 
-    Items.Collections.Static=Backbone.Collection.extend({
-        
-        model:Items.Model,
-        type:"static",
-        initialize: function(models,options){
-                _.extend(this,options);
-                this.on("preview_item",this.previewItem,this);
-        },
-        url : function(){
-            var url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items?data_source=db";
-            url+="&fields=media_geo_latitude,media_geo_longitude,media_creator_username,media_creator_realname,id,attribution_uri,thumbnail_url,uri,title,description,date_created,media_type,tags,layer_type,display_name,eidtable,published";
-            return url;
-        },
-        parse : function(response)
-        {
-            return response.items;
-            
-        },
-        previewItem : function(itemID)
-        {
-            var viewer = new Items.Views.Viewer({collection:this,start:itemID});
-            $("body").append(viewer.render().el);
-            viewer.renderItemView();
-        }
-    });
-
-    Items.Collections.Dynamic=Items.Collections.Static.extend({
-        type:"dynamic",
-        url : function(){
-            var url;
-            if(!_.isUndefined(this.id)){
-                url = zeega.discovery.app.apiLocation + "api/items/" + this.id + "/items";
-            } else {
-                url = zeega.discovery.app.apiLocation + "api/items";
-            }
-            
-            return url;
-        },
-        parse : function(response){
-            return response.items;
-        }
-    });
-    
-    Items.Collections.MyCollections = Items.Collections.Static.extend({
-        mode: Items.Model,
-        url: zeega.discovery.app.apiLocation + "api/items/search?q=type:Collection,user:-1&limit=300&data_source=db",
-        comparator: function(model){
-            return model.get('title');
-        },
-        parse: function(data){
-            return data.items;
-        }
-    });
-
     Items.Collections.Search = Backbone.Collection.extend({
         
         model:Items.Model,
-        base : zeega.discovery.app.apiLocation + "api/items/search?",
+        base : zeega.discovery.app.apiLocation + "api/",
         query : {
                     page: 1
                 },
@@ -67,18 +13,17 @@
         initialize: function(){
             this.on("preview_item",this.previewItem,this);
         },
-        
-        previewItem : function(itemID)
-        {
-            var viewer = new Items.Views.Viewer({collection:this,start:itemID});
-            $("body").append(viewer.render().el);
-            viewer.renderItemView();
-        },
     
         url : function()
         {
-        
-            var url = this.base;
+            var url;
+
+            if(!_.isUndefined(this.query.content) && this.query.content == "project"){
+                url = this.base+"projects/search?";
+            } else {
+                url = this.base+"items/search?";
+            }
+            
             
             if( !_.isUndefined(this.query.q) && this.query.q.length > 0) url += "q=" + this.query.q.toString();
             else url+="sort=date-desc";
@@ -132,10 +77,23 @@
     
         parse : function(response)
         {
-            this.tags=response.tags;
-            this.count = response.items_count;
             
-            return response.items;
+           if(!_.isUndefined(this.query.content) && this.query.content == "project"){
+                this.count = response.projects.length;
+
+                _.each(response.projects, function(project){
+                    project.thumbnail_url = project.cover_image;
+                    project.attribution_uri = zeega.discovery.app.apiLocation + project.id;
+                    project.media_creator_realname = project.username;
+                    project.media_type = "project";
+                });
+
+                return response.projects;
+            } else {
+                this.count = response.items_count;
+                return response.items;
+            }
+            
         },
         
         previewItem : function(itemID)
