@@ -45,7 +45,12 @@
                     <div class="col-middle"><h2>or</h2></div>
                     
                         <div class="col-right">
+                            {% if mobile %}
+                            <form id="register" action="{{ path('fos_user_registration_mobile') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+                            {% else %}
                             <form id="register" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+                            {% endif %}
+                            
                                 <fieldset>
                                 
                                 {{ form_errors(form.display_name) }}
@@ -54,12 +59,8 @@
                                 {{ form_errors(form.email) }}
                                 {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
                                 
-                                {{ form_errors(form.plainPassword.first) }}
-                                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
-                                <div style="display:none;">
-                                    {{ form_errors(form.plainPassword.second) }}
-                                    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
-                                </div>
+                                {{ form_errors(form.plainPassword) }}
+                                {{ form_widget(form.plainPassword, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
                                 <br>
                                 <a href="#" onclick="document.getElementById('register').submit();" class="btnz btnz-submit">Do it!</a>
                                 <p class="fine-print">by creating an account, you are agreeing to abide by our <a href="{{path("ZeegaCommunityBundle_terms")}}">terms of service</a></p>

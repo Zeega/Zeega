@@ -29,8 +29,20 @@ class RegistrationController extends BaseController
         }
 		
 		// user registration in progress or there are errors on the form -> render the registration page
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
-            'form' => $form->createView(),
-        ));
+
+        $route = $this->container->get('request')->get('_route');
+
+        if ($route == "fos_user_registration_mobile") {
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register_mobile.html.'.$this->getEngine(), array(
+                'form' => $form->createView(),
+                'mobile' => True
+            ));
+        } else {
+            return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
+                'form' => $form->createView(),
+                'mobile' => False
+            ));
+        }
+        
     }
 }
