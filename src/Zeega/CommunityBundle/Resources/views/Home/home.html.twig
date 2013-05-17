@@ -71,10 +71,9 @@
     <div class="row">
       <div class="page-intro span11">
       
-
-      <iframe src="http:{{hostname}}{{directory}}{{topZeega.id}}/embed" width="600" height="376" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
-
- 
+      {% if topZeega is defined and topZeega is not null %}
+        <iframe src="http:{{hostname}}{{directory}}{{topZeega.id}}/embed" width="600" height="376" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+      {% endif %}
 
         <!-- Sign Up Button Begins -->
 
