@@ -31,7 +31,7 @@ class ParserGiphyTag extends ParserAbstract
                         $id = $itemJson["id"];
 
                         $item = new Item();
-                        $item->setMediaCreatorUsername("Unknown");
+                        $item->setMediaCreatorUsername($itemJson["images"]["original"]["width"] .",".$itemJson["images"]["original"]["height"] );
                         $item->setMediaCreatorRealname("Unknown");
                         $item->setMediaType("Image");
                         $item->setLayerType("Image");
@@ -39,8 +39,12 @@ class ParserGiphyTag extends ParserAbstract
                         $item->setUri( $itemJson["images"]["original"]["url"] );
                         $item->setAttributionUri($itemJson["bitly_gif_url"]);
                         //$item->setMediaDateCreated(DateTime::createFromFormat("U", $itemJson["date"]));                    
-                        $item->setThumbnailUrl( $itemJson["images"]["fixed_height"]["url"]);
-
+                        
+                        if( (integer) $itemJson["images"]["fixed_width_still"]["width"] >  200 || (integer) $itemJson["images"]["fixed_width_still"]["height"] >  200 ){
+                            $item->setThumbnailUrl( $itemJson["images"]["fixed_height_still"]["url"]);
+                        } else {
+                            $item->setThumbnailUrl( $itemJson["images"]["fixed_width_still"]["url"]);
+                        }
                          array_push($items,$item);
                     }
 
