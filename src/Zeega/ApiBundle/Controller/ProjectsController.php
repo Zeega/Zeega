@@ -32,7 +32,7 @@ class ProjectsController extends BaseController
         $queryParser = $this->get('zeega_query_parser');
         $query = $queryParser->parseRequest($this->getRequest()->query);
         $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findByQuery($query);
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array('projects' => $results));
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array('projects' => $results, 'request' => array('query'=>$query)));
 
         return new Response($projectView);
     } 
