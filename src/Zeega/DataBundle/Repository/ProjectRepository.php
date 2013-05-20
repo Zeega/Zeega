@@ -41,4 +41,63 @@ class ProjectRepository extends EntityRepository
                        
         return $qb->getQuery()->getArrayResult();
     }
+
+
+    public function findProjectsCountByDates( $dateBegin, $dateEnd )
+    {
+
+        
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('Count(p)')
+            ->add('from', 'ZeegaDataBundle:Project p')
+            ->add('where', 'p.published = 1')
+            ->andwhere('p.dateCreated < :dateEnd')
+            ->andwhere('p.dateCreated > :dateBegin')
+            ->setParameters(array('dateEnd' => $dateEnd, 'dateBegin' => $dateBegin ));
+                      
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function findActiveUsersCountByDates( $dateBegin, $dateEnd, $new = null, $numZeegas = null )
+    {
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('Count( Distinct u.id )')
+            ->add('from', 'ZeegaDataBundle:Project p')
+            ->join('p.users', 'u')
+            ->add('where', 'p.published = 1')
+            ->andwhere('p.dateCreated < :dateEnd')
+            ->andwhere('p.dateCreated > :dateBegin')
+            ->setParameters(array('dateEnd' => $dateEnd, 'dateBegin' => $dateBegin ));
+          
+        if(null !== $new){
+            $qb->andwhere('u.createdAt < :dateEnd')
+               ->andwhere('u.createdAt > :dateBegin');
+
+        }
+        if(null !== $numZeegas){
+            $qb->andWhere('(Select count(i) of ZeegaDataBundle:Item i where i.enabled=true And i.user = u.id And i.mediaType = :project ) > :numZeegas')
+                ->setParameter("numZeegas", $numZeegas)
+                ->setParameter("project", "project");
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findNewUsersCountByDates( $dateBegin, $dateEnd )
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('Count( u )')
+            ->add('from', 'ZeegaDataBundle:User u')
+            ->where('u.createdAt < :dateEnd')
+            ->andwhere('u.createdAt > :dateBegin')
+            ->setParameters(array('dateEnd' => $dateEnd, 'dateBegin' => $dateBegin ));
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+
+
 }
