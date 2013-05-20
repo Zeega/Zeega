@@ -81,7 +81,7 @@
 					<header>
 						<div class="navbar navbar-fixed-top">
 							<div class="navbar-inner">
-								<div class="container">
+								<div class="container" style="width:960px;">
 									
 									<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
 										<img src="{{ asset('images/zeega-logo-header.png') }}"/>
@@ -118,12 +118,15 @@
 									</ul>
 									
 									<ul class="nav pull-right">
-										<li><a id="user-new-project" class="btn btn-info pull-right" href="{{path('ZeegaEditorBundle_new')}}" >Create a New Zeega!</a></li>
-										<li class="divider-vertical"></li>
+										
+										{% if user_projects is defined %}
+										{% else %}
+										<li ><a id="user-new-project" class="btn btn-info pull-right" href="{{path('ZeegaEditorBundle_new')}}" >Create a New Zeega!</a></li>
+										<li class="divider-vertical" ></li>
+										{% endif %}
 										
 										
-										
-										<li class="dropdown">
+										<li class="dropdown" style="float:right;">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='icon-user icon-white'></i> {{displayname}}<b class="caret"></b></a>
 											<ul class="dropdown-menu">
 

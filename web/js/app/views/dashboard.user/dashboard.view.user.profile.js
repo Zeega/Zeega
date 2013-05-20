@@ -12,7 +12,7 @@
             
             "click a.edit" : "editMetadata",
             "click button.save" : "saveMetadata",
-            "click button.cancel" : "cancelEdits",
+            "click button.cancel" : "cancelEdits"
         },
         
         initialize: function () {
@@ -251,7 +251,7 @@
                             "<h3 class='dashboard-name' style='width:300px'><%= display_name%></h3>";
                             if (zeega.dashboard.app.editable){ html+=
                             "<div style='position:relative'>"+
-                                "<a class='btn btn-mini btn-inverse edit community-edit-button' href='.' style='top:-41px;left:300px'><i class='icon-pencil icon-white'></i> edit</a>"+
+                                "<a class='btn btn-mini btn-inverse edit community-edit-button' href='.' style='top:-41px;left:300px'><i class='icon-pencil icon-white'></i>Edit Profile</a>"+
                                 "<div class='btn-group save-data' style='position:absolute;top:-41px;left:300px'>"+
                                         "<button class='btn btn-inverse btn-mini save hide' style='margin-top: 10px;margin-left:8px'>save</button>"+
                                         "<button class='btn btn-mini cancel hide' style='margin-top: 10px'>cancel</button>"+
@@ -276,6 +276,10 @@
                     
                     "</div>"+
                     "<div class='span3'>";
+
+                    if(zeega.dashboard.app.editable){
+                        html+= "<div class= 'new-zeega'> <a id='user-new-project' class='btn btn-info pull-right' href='"+ sessionStorage.getItem('hostname')+sessionStorage.getItem('directory')+"project/new' >Create a New Zeega!</a></div>";
+                    }
             html+="</div>";
             
             return html;
