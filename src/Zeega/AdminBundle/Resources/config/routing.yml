@@ -6,3 +6,8 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
+
+analytics:
+    pattern:  /analytics/{detail}
+    defaults: { _controller: ZeegaAdminBundle:Analytics:index}
