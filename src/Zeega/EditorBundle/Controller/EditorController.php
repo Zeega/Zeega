@@ -40,27 +40,25 @@ class EditorController extends BaseController
         $projectVersion = $project->getVersion();
 
         if (!isset($projectVersion) || $projectVersion < 1.1) {
-            /*
-            // video editor
-            $sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
+            // temporary fix to support the old editor
+            // TO-DO: exception / null handling and fallback response if something goes wrong
+            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();            
 
-            $projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
+            $projectJson = json_decode($projectData, true);
 
+            $sequences = $projectJson["sequences"];
             $sequence = $sequences[0];
-            
+            $projectLayers = $projectJson["layers"];
+
             $params = array();
             $params["user"] = $user->getId();
-            $params["data_source"] = "db";
             $params["sort"] = "date-desc";
-            $params["type"] = "-project AND -collection";
         
             $items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
 
-            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-            
             return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-                    'projecttitle'   => $project->getTitle(),
-                    'projectid'   =>$project->getId(),
+                    'projecttitle'   => $projectJson["title"],
+                    'projectid'   => $projectJson["id"],
                     'project'   =>$project,
                     'sequence'=>$sequence,
                     'sequences'=>$sequences,
@@ -69,8 +67,6 @@ class EditorController extends BaseController
                     'results' => $items,
                     'project_data' => $projectData,
                 ));
-            */
-            return new Response("old editor goes here; some newer projects are missing the 1.1 version and need to updated");
         } else {
             // new editor
             $userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());        
