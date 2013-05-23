@@ -16,8 +16,9 @@ class ParserGiphyTag extends ParserAbstract
             if ( isset($parameters["regex_matches"][1]) ) {
                 $tag = $parameters["regex_matches"][1];
 
-                $embedApiUrl = "http://giphy.com/api/gifs?tag=$tag&page=1&size=50";
-                
+                //$embedApiUrl = "http://giphy.com/api/gifs?tag=$tag&page=1&size=50";
+                $embedApiUrl = "http://api.giphy.com/v1/gifs/search?q=$tag&api_key=Uy5fohPTSnze8";
+
                 $embedInfo = file_get_contents($embedApiUrl,0,null,null);
                 $embedInfo = json_decode($embedInfo,true);
                 
@@ -30,15 +31,20 @@ class ParserGiphyTag extends ParserAbstract
                         $id = $itemJson["id"];
 
                         $item = new Item();
-                        $item->setMediaCreatorUsername("Unknown");
+                        $item->setMediaCreatorUsername($itemJson["images"]["original"]["width"] .",".$itemJson["images"]["original"]["height"] );
                         $item->setMediaCreatorRealname("Unknown");
                         $item->setMediaType("Image");
                         $item->setLayerType("Image");
                         $item->setArchive("Giphy");
-                        $item->setUri( $itemJson["image_original_url"] );
+                        $item->setUri( $itemJson["images"]["original"]["url"] );
                         $item->setAttributionUri($itemJson["bitly_gif_url"]);
-                        $item->setThumbnailUrl($itemJson["image_fixed_height_still_url"]);
 
+                        
+                        if( (integer) $itemJson["images"]["fixed_width_still"]["width"] >  200 || (integer) $itemJson["images"]["fixed_width_still"]["height"] >  200 ){
+                            $item->setThumbnailUrl( $itemJson["images"]["fixed_height_still"]["url"]);
+                        } else {
+                            $item->setThumbnailUrl( $itemJson["images"]["fixed_width_still"]["url"]);
+                        }
                          array_push($items,$item);
                     }
 

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <meta id="viewport" name="viewport" content="
+            width=320;
+            initial-scale=1.0;
+            maximum-scale=1.0;
+            user-scalable=0;"
+        />
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.register.css')}}">
+
+        {% block style %}
+        {% endblock %}
+
+        {% include "FOSUserBundle:Shared:facebook.html.twig" %}
+    </head>
+    <body>
+
+        <a href="http://www.zeega.com" class="ZEEGA-tab">
+            <span class="ZTab-logo"></span>
+        </a>
+
+        <div class="container">
+            <div class="container-inner clearfix">
+
+                <div class="upper clearfix">
+                    <h1>Join Zeega!</h1>
+                    <div class="errors">{{ form_errors(form) }}</div>
+                    <div class="col-left">
+                        <a href="#" onclick="fbLogin();" class="btnz btnz-facebook"><i class="social-signin-facebook"></i> Sign Up With Facebook</a>
+                        <a href="{{ path('ZeegaSocialBundle_twitter_connect') }}" class="btnz btnz-twitter"><i class="social-signin-twitter"></i> Sign Up With Twitter</a>
+                    </div>
+                    <div class="col-middle"><h2>or</h2></div>
+                    
+                        <div class="col-right">
+                            {% if mobile %}
+                            <form id="register" action="{{ path('fos_user_registration_mobile') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+                            {% else %}
+                            <form id="register" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-vertical">
+                            {% endif %}
+                            
+                                <fieldset>
+                                
+                                {{ form_errors(form.display_name) }}
+                                {{ form_widget(form.display_name, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
+
+                                {{ form_errors(form.email) }}
+                                {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
+                                
+                                {{ form_errors(form.plainPassword) }}
+                                {{ form_widget(form.plainPassword, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
+                                <br>
+                                <a href="#" onclick="document.getElementById('register').submit();" class="btnz btnz-submit">Do it!</a>
+                                <p class="fine-print">by creating an account, you are agreeing to abide by our <a href="{{path("ZeegaCommunityBundle_terms")}}">terms of service</a></p>
+                                {{ form_rest(form) }}
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lower">
+                    <h5>already have an account? <a href="{{path("fos_user_security_login")}}">Sign In</a></h5>
+                </div>
+            </div>
+        </div>
+
+        
+    </body>
+</html>

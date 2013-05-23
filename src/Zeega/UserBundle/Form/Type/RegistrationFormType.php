@@ -10,13 +10,11 @@ class RegistrationFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('displayName',null, array('required' => true))
-            ->add('email', 'email')
-            ->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
-                'invalid_message' => "The passwords don't match. Try again?",
-                'error_bubbling' => true
+            ->add('display_name',null, array('required' => true))
+            ->add('email', 'email', array('required' => true))
+            ->add('plainPassword', 'password', array(
+                'error_bubbling' => true,
+                'required' => true
             ));
     }
 
