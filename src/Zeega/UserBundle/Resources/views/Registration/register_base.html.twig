@@ -13,10 +13,10 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <meta id="viewport" name="viewport" content="
-            width=320;
-            initial-scale=1.0;
-            maximum-scale=1.0;
-            user-scalable=0;"
+            width=320,
+            initial-scale=1.0,
+            maximum-scale=1.0,
+            user-scalable=0"
         />
 
         <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.register.css')}}">
@@ -25,6 +25,14 @@
         {% endblock %}
 
         {% include "FOSUserBundle:Shared:facebook.html.twig" %}
+
+        <script>
+            document.body.addEventListener("keydown", function(event){
+                if(event.keyCode == 13 ){
+                    document.getElementById('register').submit(); 
+                }
+            });
+        </script>
     </head>
     <body>
 
