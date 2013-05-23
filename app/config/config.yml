@@ -16,8 +16,7 @@ framework:
     default_locale: %locale%
     trusted_proxies:  [184.106.132.157]
     session:
-        cookie_domain: ~
-        cookie_lifetime:       1440000
+        handler_id: snc_redis.session.handler
 
 parameters:
     pdo.db_options:
@@ -117,11 +116,18 @@ fos_facebook:
     permissions: [email, user_birthday, user_location]
 
 snc_redis:
+    session:
+        client: session
+        ttl: 1440000
     clients:
         default:
             type: predis
             alias: default
             dsn: redis://%event_logger_host%
+        session:
+            type: predis
+            alias: session
+            dsn: redis://%session_logger_host%
 
 sonata_block:
     default_contexts: [cms]
