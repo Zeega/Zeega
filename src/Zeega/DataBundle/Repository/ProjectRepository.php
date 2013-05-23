@@ -59,7 +59,7 @@ class ProjectRepository extends EntityRepository
     }
 
 
-    public function findActiveUsersCountByDates( $dateBegin, $dateEnd, $new = null, $numZeegas = null )
+    public function findActiveUsersCountByDates( $dateBegin, $dateEnd, $new = null, $numZeegas = null, $datePrevious = null )
     {
 
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -77,9 +77,14 @@ class ProjectRepository extends EntityRepository
 
         }
         if(null !== $numZeegas){
-            $qb->andWhere('(Select count(i) of ZeegaDataBundle:Item i where i.enabled=true And i.user = u.id And i.mediaType = :project ) > :numZeegas')
+            $qb->andWhere('(Select count(i) of ZeegaDataBundle:Item i where i.dateCreated > :dateBegin AND i.dateCreated < :dateEnd And i.enabled=true And i.user = u.id And i.mediaType = :project ) > :numZeegas')
                 ->setParameter("numZeegas", $numZeegas)
                 ->setParameter("project", "project");
+        }
+
+        if(null !== $datePrevious ){
+            $qb->andWhere('(Select count(j) of ZeegaDataBundle:Item j where j.dateCreated > :datePrevious AND j.dateCreated < :dateBegin And j.enabled=true And j.user = u.id And j.mediaType = :project ) > :numZeegas')
+                ->setParameter("datePrevious", $datePrevious );
         }
 
         return $qb->getQuery()->getResult();

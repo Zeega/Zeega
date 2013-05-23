@@ -49,12 +49,19 @@ table tr {
 	text-align: center;
 	padding-left:20px;
 }
+
+table tr :first-child{
+	max-width:200px;
+}
+
 table td:first-child {
 	text-align: left;
 	padding-left:20px;
 	border-left: 0;
 }
 table td {
+
+	max-width:50px;
 	padding:18px;
 	border-top: 1px solid #ffffff;
 	border-bottom:1px solid #e0e0e0;
@@ -130,10 +137,12 @@ table tr:last-child td:last-child {
 	<td>Date</td>
 	<td>Zeegas</td> 
 	<td>All New Users</td>
-	<td>New Users w/ 1+ Zeega</td>
-	<td>New Users w/ >1 Zeega</td>
-	<td>Users w/ 1+ Zeega</td>
-	<td>Users w/ >1 Zeega</td>
+	<td>New Users w at least one Zeega</td>
+	<td>New Users w more than one Zeega</td>
+	<td>Users w at least one Zeega</td>
+	<td>Users w more than one Zeega</td>
+	<td>Users w at least one Zeega this week and the previous week</td>
+	<td>Users w at least one Zeega this week and during the previous 4 weeks</td>
 </tr>
 {% for week in weekly %}
 <tr>
@@ -144,6 +153,8 @@ table tr:last-child td:last-child {
 	<td>{{ week.activeNewUsersCount }}</td>
 	<td>{{ week.usersCount }} </td> 
 	<td>{{ week.activeUsersCount }}</td>
+	<td>{{ week.activeReturningUsersCount }}</td>
+	<td>{{ week.activeLongReturningUsersCount }}</td>
 </tr>
 {% endfor %}
 <br><br>
@@ -158,10 +169,10 @@ table tr:last-child td:last-child {
 	<td>Date</td>
 	<td>Zeegas</td> 
 	<td>New Users</td>
-	<td>New Users w/ 1+ Zeega</td>
-	<td>New Users w/ >1 Zeega</td>
-	<td>Users w/ 1+ Zeega</td> 
-	<td>Users w/ >1 Zeega</td>
+	<td>New Users w at least one Zeega</td>
+	<td>New Users w more than one Zeega</td>
+	<td>Users w at least one Zeega</td>
+	<td>Users w more than one Zeega</td>
 </tr>
 {% for day in daily %}
 <tr>

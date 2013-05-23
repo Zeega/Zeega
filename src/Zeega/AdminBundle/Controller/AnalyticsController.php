@@ -31,7 +31,7 @@ class AnalyticsController extends BaseController
 
             } else {
 
-                $initialTime = mktime ( 0, 0, 0, 1, 1, 2013 );
+                $initialTime = mktime ( 0, 0, 0, 1, 7, 2013 );
             }
             
             $t = $initialTime;
@@ -65,6 +65,8 @@ class AnalyticsController extends BaseController
 
                 if( $i % 7 == 0 ){
                     $dateWeekEnd = date("Y-m-d H:i:s",  $t + 7*24*60*60 );
+                    $weekPrevious = date("Y-m-d H:i:s",  $t - 7*24*60*60 );
+                    $fourWeekPrevious = date("Y-m-d H:i:s",  $t - 4*7*24*60*60 );
 
                     $countZeegas = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( $dateBegin, $dateWeekEnd );
                     $countAllNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findNewUsersCountByDates( $dateBegin, $dateWeekEnd );
@@ -74,6 +76,14 @@ class AnalyticsController extends BaseController
                     $countNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true );
                     $countActiveUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 1 );
                     $countActiveNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true, 1 );
+                    
+
+                    
+
+                    $countActiveReturningUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $weekPrevious );
+                    $countActiveLongReturningUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $fourWeekPrevious );
+
+
                     $weekly [ $i / 7 ] = array( 
                         "date" => "Week of ".date('M d, Y', $t ), 
                         "count" => $countZeegas[0][1],
@@ -81,7 +91,9 @@ class AnalyticsController extends BaseController
                         "usersCount" => $countUsers[0][1], 
                         "newUsersCount" => $countNewUsers[0][1], 
                         "activeUsersCount" => $countActiveUsers[0][1], 
-                        "activeNewUsersCount" => $countActiveNewUsers[0][1], 
+                        "activeNewUsersCount" => $countActiveNewUsers[0][1],
+                        "activeReturningUsersCount" => $countActiveReturningUsers[0][1],
+                        "activeLongReturningUsersCount" => $countActiveLongReturningUsers[0][1],
                         "dateBegin" => $dateBegin,
                         "dateEnd" => $dateEnd
                     );
