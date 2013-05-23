@@ -54,7 +54,7 @@ class CommunityController extends BaseController
     public function dashboardAction()
     {      
         $userId = $this->get("security.context")->getToken()->getUser()->getId();
-        $projects = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findProjectsByUserSmall( $userId );
+        $projects = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsByUserSmall( $userId );
 
         if( count($projects) == 0 ){
             return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array(), true), 301);  
