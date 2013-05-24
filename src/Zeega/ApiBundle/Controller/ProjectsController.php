@@ -66,8 +66,6 @@ class ProjectsController extends BaseController
         
         if( $request->request->has('title') ) {
             $title = $request->request->get('title');
-        } else {
-            $title='Untitled Zeega';
         }
 
         if( $request->request->has('version')) {
